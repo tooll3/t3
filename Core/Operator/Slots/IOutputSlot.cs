@@ -2,20 +2,19 @@ using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace T3.Core.Operator.Slots
+namespace T3.Core.Operator.Slots;
+
+public interface IOutputSlot
 {
-    public interface IOutputSlot
-    {
-        Guid Id { get; }
-    }
+    Guid Id { get; }
+}
 
-    public interface IOutputData
-    {
-        Type DataType { get; }
+public interface IOutputData
+{
+    Type DataType { get; }
 
-        // serialization
-        void ToJson(JsonTextWriter writer);
-        void ReadFromJson(JToken json);
-        bool Assign(IOutputData outputData);
-    }
+    // serialization
+    void ToJson(JsonTextWriter writer);
+    void ReadFromJson(JToken json);
+    bool Assign(IOutputData outputData);
 }

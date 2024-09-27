@@ -8,441 +8,440 @@ using Int3 = T3.Core.DataTypes.Vector.Int3;
 
 // ReSharper disable RedundantNameQualifier
 
-namespace T3.Core.Utils
+namespace T3.Core.Utils;
+
+public static class ValueUtils
 {
-    public static class ValueUtils
-    {
-        /// <summary>
-        /// Defines which values types can be blended and thus be part of presets and snapshots.
-        /// </summary>
-        public static readonly Dictionary<Type, Func<InputValue, InputValue, float, InputValue>> BlendMethods =
-            new()
+    /// <summary>
+    /// Defines which values types can be blended and thus be part of presets and snapshots.
+    /// </summary>
+    public static readonly Dictionary<Type, Func<InputValue, InputValue, float, InputValue>> BlendMethods =
+        new()
+            {
                 {
-                    {
-                        typeof(float), (a, b, t) =>
-                                       {
-                                           if (a is not InputValue<float> aValue || b is not InputValue<float> bValue)
-                                               return null;
+                    typeof(float), (a, b, t) =>
+                                   {
+                                       if (a is not InputValue<float> aValue || b is not InputValue<float> bValue)
+                                           return null;
 
-                                           var r = MathUtils.Lerp(aValue.Value, bValue.Value, t);
-                                           return new InputValue<float>(r);
-                                       }
-                    },
-                    {
-                        typeof(Vector2), (a, b, t) =>
-                                         {
-                                             if (a is not InputValue<Vector2> aValue || b is not InputValue<Vector2> bValue)
-                                                 return null;
-
-                                             var r = MathUtils.Lerp(aValue.Value, bValue.Value, t);
-                                             return new InputValue<Vector2>(r);
-                                         }
-                    },
-                    {
-                        typeof(Vector3), (a, b, t) =>
-                                         {
-                                             if (a is not InputValue<Vector3> aValue || b is not InputValue<Vector3> bValue)
-                                                 return null;
-
-                                             var r = MathUtils.Lerp(aValue.Value, bValue.Value, t);
-                                             return new InputValue<Vector3>(r);
-                                         }
-                    },
-                    {
-                        typeof(Vector4), (a, b, t) =>
-                                         {
-                                             if (a is not InputValue<Vector4> aValue || b is not InputValue<Vector4> bValue)
-                                                 return null;
-
-                                             var r = MathUtils.Lerp(aValue.Value, bValue.Value, t);
-                                             return new InputValue<Vector4>(r);
-                                         }
-                    },
-
-                    {
-                        typeof(Quaternion), (a, b, t) =>
-                                            {
-                                                if (a is not InputValue<Quaternion> aValue || b is not InputValue<Quaternion> bValue)
-                                                    return null;
-
-                                                var r = Quaternion.Slerp(aValue.Value, bValue.Value, t);
-                                                return new InputValue<Quaternion>(r);
-                                            }
-                    },
-                    {
-                        typeof(int), (a, b, t) =>
+                                       var r = MathUtils.Lerp(aValue.Value, bValue.Value, t);
+                                       return new InputValue<float>(r);
+                                   }
+                },
+                {
+                    typeof(Vector2), (a, b, t) =>
                                      {
-                                         if (a is not InputValue<int> aValue || b is not InputValue<int> bValue)
+                                         if (a is not InputValue<Vector2> aValue || b is not InputValue<Vector2> bValue)
                                              return null;
 
                                          var r = MathUtils.Lerp(aValue.Value, bValue.Value, t);
-                                         return new InputValue<int>(r);
+                                         return new InputValue<Vector2>(r);
                                      }
-                    },
+                },
+                {
+                    typeof(Vector3), (a, b, t) =>
+                                     {
+                                         if (a is not InputValue<Vector3> aValue || b is not InputValue<Vector3> bValue)
+                                             return null;
 
-                    {
-                        typeof(Int3), (a, b, t) =>
+                                         var r = MathUtils.Lerp(aValue.Value, bValue.Value, t);
+                                         return new InputValue<Vector3>(r);
+                                     }
+                },
+                {
+                    typeof(Vector4), (a, b, t) =>
+                                     {
+                                         if (a is not InputValue<Vector4> aValue || b is not InputValue<Vector4> bValue)
+                                             return null;
+
+                                         var r = MathUtils.Lerp(aValue.Value, bValue.Value, t);
+                                         return new InputValue<Vector4>(r);
+                                     }
+                },
+
+                {
+                    typeof(Quaternion), (a, b, t) =>
+                                        {
+                                            if (a is not InputValue<Quaternion> aValue || b is not InputValue<Quaternion> bValue)
+                                                return null;
+
+                                            var r = Quaternion.Slerp(aValue.Value, bValue.Value, t);
+                                            return new InputValue<Quaternion>(r);
+                                        }
+                },
+                {
+                    typeof(int), (a, b, t) =>
+                                 {
+                                     if (a is not InputValue<int> aValue || b is not InputValue<int> bValue)
+                                         return null;
+
+                                     var r = MathUtils.Lerp(aValue.Value, bValue.Value, t);
+                                     return new InputValue<int>(r);
+                                 }
+                },
+
+                {
+                    typeof(Int3), (a, b, t) =>
+                                  {
+                                      if (a is not InputValue<Int3> aValue || b is not InputValue<Int3> bValue)
+                                          return null;
+
+                                      var r = new Int3(MathUtils.Lerp(aValue.Value.X, bValue.Value.X, t),
+                                                       MathUtils.Lerp(aValue.Value.Y, bValue.Value.Y, t),
+                                                       MathUtils.Lerp(aValue.Value.Z, bValue.Value.Z, t)
+                                                      );
+                                      return new InputValue<Int3>(r);
+                                  }
+                },
+
+                {
+                    typeof(Int2), (a, b, t) =>
+                                  {
+                                      if (a is not InputValue<Int2> aValue || b is not InputValue<Int2> bValue)
+                                          return null;
+
+                                      var r = new Int2(MathUtils.Lerp(aValue.Value.Width, bValue.Value.Width, t),
+                                                       MathUtils.Lerp(aValue.Value.Height, bValue.Value.Height, t)
+                                                      );
+                                      return new InputValue<Int2>(r);
+                                  }
+                },
+
+                {
+                    typeof(bool), (aValue, bValue, t) =>
+                                  {
+                                      if (aValue is not InputValue<bool> aValue2 || bValue is not InputValue<bool> bValue2)
+                                          return null;
+
+                                      var a = aValue2.Value;
+                                      var b = bValue2.Value;
+
+                                      var r = a == b ? a :
+                                              t <= 0.5f ? a : b;
+
+                                      return new InputValue<bool>(r);
+                                  }
+                },
+                {
+                    typeof(Gradient), (aGradient, bGradient, t) =>
                                       {
-                                          if (a is not InputValue<Int3> aValue || b is not InputValue<Int3> bValue)
+                                          if (aGradient is not InputValue<Gradient> aGradient2 || bGradient is not InputValue<Gradient> bGradient2)
                                               return null;
 
-                                          var r = new Int3(MathUtils.Lerp(aValue.Value.X, bValue.Value.X, t),
-                                                           MathUtils.Lerp(aValue.Value.Y, bValue.Value.Y, t),
-                                                           MathUtils.Lerp(aValue.Value.Z, bValue.Value.Z, t)
-                                                          );
-                                          return new InputValue<Int3>(r);
-                                      }
-                    },
+                                          Gradient gradientA = aGradient2.Value;
+                                          Gradient gradientB = bGradient2.Value;
 
-                    {
-                        typeof(Int2), (a, b, t) =>
-                                      {
-                                          if (a is not InputValue<Int2> aValue || b is not InputValue<Int2> bValue)
-                                              return null;
-
-                                          var r = new Int2(MathUtils.Lerp(aValue.Value.Width, bValue.Value.Width, t),
-                                                           MathUtils.Lerp(aValue.Value.Height, bValue.Value.Height, t)
-                                                          );
-                                          return new InputValue<Int2>(r);
-                                      }
-                    },
-
-                    {
-                        typeof(bool), (aValue, bValue, t) =>
-                                      {
-                                          if (aValue is not InputValue<bool> aValue2 || bValue is not InputValue<bool> bValue2)
-                                              return null;
-
-                                          var a = aValue2.Value;
-                                          var b = bValue2.Value;
-
-                                          var r = a == b ? a :
-                                                  t <= 0.5f ? a : b;
-
-                                          return new InputValue<bool>(r);
-                                      }
-                    },
-                    {
-                        typeof(Gradient), (aGradient, bGradient, t) =>
+                                          // Blend if possible
+                                          if (gradientA.Interpolation == gradientB.Interpolation
+                                              && gradientA.Steps.Count == gradientB.Steps.Count)
                                           {
-                                              if (aGradient is not InputValue<Gradient> aGradient2 || bGradient is not InputValue<Gradient> bGradient2)
-                                                  return null;
-
-                                              Gradient gradientA = aGradient2.Value;
-                                              Gradient gradientB = bGradient2.Value;
-
-                                              // Blend if possible
-                                              if (gradientA.Interpolation == gradientB.Interpolation
-                                                  && gradientA.Steps.Count == gradientB.Steps.Count)
+                                              Gradient newGradient = gradientA.TypedClone();
+                                              for (int index = 0; index < gradientA.Steps.Count; index++)
                                               {
-                                                  Gradient newGradient = gradientA.TypedClone();
-                                                  for (int index = 0; index < gradientA.Steps.Count; index++)
-                                                  {
-                                                      //Log.Debug("Blending gradient steps...");
-                                                      var stepA = gradientA.Steps[index];
-                                                      var stepB = gradientB.Steps[index];
-                                                      newGradient.Steps[index].NormalizedPosition =
-                                                          MathUtils.Lerp(stepA.NormalizedPosition, stepB.NormalizedPosition, t);
-                                                      newGradient.Steps[index].Color = MathUtils.Lerp(stepA.Color, stepB.Color, t);
-                                                  }
-
-                                                  return new InputValue<Gradient>(newGradient);
+                                                  //Log.Debug("Blending gradient steps...");
+                                                  var stepA = gradientA.Steps[index];
+                                                  var stepB = gradientB.Steps[index];
+                                                  newGradient.Steps[index].NormalizedPosition =
+                                                      MathUtils.Lerp(stepA.NormalizedPosition, stepB.NormalizedPosition, t);
+                                                  newGradient.Steps[index].Color = MathUtils.Lerp(stepA.Color, stepB.Color, t);
                                               }
 
-                                              // If not possible, just switch between the two gradients
-                                              return t < 0.5 ? aGradient2.Clone() : bGradient2.Clone();
+                                              return new InputValue<Gradient>(newGradient);
                                           }
-                    },
-                };
 
-        public static readonly Dictionary<Type, Func<InputValue, string>> ToStringMethods =
-            new()
-                {
-                    { typeof(float), v => v is not InputValue<float> vv ? string.Empty : $"{vv.Value:0.000}" },
-                    { typeof(Vector2), v => v is not InputValue<System.Numerics.Vector2> vv ? string.Empty : $"{vv.Value.X:0.00} {vv.Value.Y:0.00}" },
-                    {
-                        typeof(Vector3),
-                        v => v is not InputValue<System.Numerics.Vector3> vv ? string.Empty : $"{vv.Value.X:0.00} {vv.Value.Y:0.00} {vv.Value.Z:0.00} "
-                    },
-                    {
-                        typeof(Vector4),
-                        v => v is not InputValue<System.Numerics.Vector4> vv
-                                 ? string.Empty
-                                 : $"{vv.Value.X:0.00} {vv.Value.Y:0.00} {vv.Value.Z:0.00} {vv.Value.W:0.00} "
-                    },
-                    { typeof(int), v => v is not InputValue<int> vv ? string.Empty : $"{vv.Value}" },
-                };
+                                          // If not possible, just switch between the two gradients
+                                          return t < 0.5 ? aGradient2.Clone() : bGradient2.Clone();
+                                      }
+                },
+            };
 
-        /// <summary>
-        /// A set of functions that mix n values with blend factors
-        /// </summary>
-        /// <remarks>
-        /// Note that Quaternions can't be easily weight blended.
-        /// </remarks>
-        public static readonly Dictionary<Type, Func<InputValue[], float[], InputValue>> WeightedBlendMethods =
-            new()
+    public static readonly Dictionary<Type, Func<InputValue, string>> ToStringMethods =
+        new()
+            {
+                { typeof(float), v => v is not InputValue<float> vv ? string.Empty : $"{vv.Value:0.000}" },
+                { typeof(Vector2), v => v is not InputValue<System.Numerics.Vector2> vv ? string.Empty : $"{vv.Value.X:0.00} {vv.Value.Y:0.00}" },
                 {
-                    {
-                        typeof(float), (values, weights) =>
+                    typeof(Vector3),
+                    v => v is not InputValue<System.Numerics.Vector3> vv ? string.Empty : $"{vv.Value.X:0.00} {vv.Value.Y:0.00} {vv.Value.Z:0.00} "
+                },
+                {
+                    typeof(Vector4),
+                    v => v is not InputValue<System.Numerics.Vector4> vv
+                             ? string.Empty
+                             : $"{vv.Value.X:0.00} {vv.Value.Y:0.00} {vv.Value.Z:0.00} {vv.Value.W:0.00} "
+                },
+                { typeof(int), v => v is not InputValue<int> vv ? string.Empty : $"{vv.Value}" },
+            };
+
+    /// <summary>
+    /// A set of functions that mix n values with blend factors
+    /// </summary>
+    /// <remarks>
+    /// Note that Quaternions can't be easily weight blended.
+    /// </remarks>
+    public static readonly Dictionary<Type, Func<InputValue[], float[], InputValue>> WeightedBlendMethods =
+        new()
+            {
+                {
+                    typeof(float), (values, weights) =>
+                                   {
+                                       var sum = 0f;
+                                       for (var index = 0; index < values.Length; index++)
                                        {
-                                           var sum = 0f;
-                                           for (var index = 0; index < values.Length; index++)
-                                           {
-                                               var inputV = values[index];
-                                               if (inputV is not InputValue<float> v)
-                                                   continue;
+                                           var inputV = values[index];
+                                           if (inputV is not InputValue<float> v)
+                                               continue;
 
-                                               sum += v.Value * weights[index];
-                                           }
-
-                                           return new InputValue<float>(sum);
+                                           sum += v.Value * weights[index];
                                        }
-                    },
-                    {
-                        typeof(Vector2), (values, weights) =>
-                                         {
-                                             var sum = Vector2.Zero;
-                                             for (var index = 0; index < values.Length; index++)
-                                             {
-                                                 var inputV = values[index];
-                                                 if (inputV is not InputValue<Vector2> v)
-                                                     continue;
 
-                                                 sum += v.Value * weights[index];
-                                             }
-
-                                             return new InputValue<Vector2>(sum);
-                                         }
-                    },
-                    {
-                        typeof(Vector3), (values, weights) =>
-                                         {
-                                             var sum = Vector3.Zero;
-                                             for (var index = 0; index < values.Length; index++)
-                                             {
-                                                 var inputV = values[index];
-                                                 if (inputV is not InputValue<Vector3> v)
-                                                     continue;
-
-                                                 sum += v.Value * weights[index];
-                                             }
-
-                                             return new InputValue<Vector3>(sum);
-                                         }
-                    },
-                    {
-                        typeof(Vector4), (values, weights) =>
-                                         {
-                                             if (values.Length == 1)
-                                                 return values[0];
-
-                                             var sum = Vector4.Zero;
-                                             for (var index = 0; index < values.Length; index++)
-                                             {
-                                                 var inputV = values[index];
-                                                 if (inputV is not InputValue<Vector4> v)
-                                                     continue;
-
-                                                 sum += v.Value * weights[index];
-                                             }
-
-                                             return new InputValue<Vector4>(sum);
-                                         }
-                    },
-
-                    {
-                        typeof(int), (values, weights) =>
+                                       return new InputValue<float>(sum);
+                                   }
+                },
+                {
+                    typeof(Vector2), (values, weights) =>
                                      {
-                                         var sum = 0f;
+                                         var sum = Vector2.Zero;
                                          for (var index = 0; index < values.Length; index++)
                                          {
                                              var inputV = values[index];
-                                             if (inputV is not InputValue<int> v)
+                                             if (inputV is not InputValue<Vector2> v)
                                                  continue;
 
                                              sum += v.Value * weights[index];
                                          }
 
-                                         return new InputValue<int>((int)(sum + 0.5f));
+                                         return new InputValue<Vector2>(sum);
                                      }
-                    },
-                    {
-                        typeof(Int2), (values, weights) =>
-                                      {
-                                          var sum = new Vector2();
-                                          for (var index = 0; index < values.Length; index++)
-                                          {
-                                              var inputV = values[index];
-                                              if (inputV is not InputValue<Int2> v)
-                                                  continue;
-
-                                              sum += new Vector2(v.Value.Width * weights[index],
-                                                                 v.Value.Height * weights[index]);
-                                          }
-
-                                          return new InputValue<Int2>(new Int2((int)(sum.X + 0.5f),
-                                                                               (int)(sum.Y + 0.5f)));
-                                      }
-                    },
-                    {
-                        typeof(Int3), (values, weights) =>
-                                      {
-                                          var sum = new Vector3();
-                                          for (var index = 0; index < values.Length; index++)
-                                          {
-                                              var inputV = values[index];
-                                              if (inputV is not InputValue<Int3> v)
-                                                  continue;
-
-                                              sum += new Vector3(v.Value.X * weights[index],
-                                                                 v.Value.Y * weights[index],
-                                                                 v.Value.Z * weights[index]);
-                                          }
-
-                                          return new InputValue<Int3>(new Int3((int)(sum.X + 0.5f),
-                                                                               (int)(sum.Y + 0.5f),
-                                                                               (int)(sum.Z + 0.5f)));
-                                      }
-                    },
-                   
-                    {
-                        typeof(Gradient), (gradients, weights) =>
-                                          {
-                                              var tempGradients = new List<Gradient>(gradients.Length);
-                                              var bestIndex = -1;
-                                              var bestWeight = float.PositiveInfinity;
-                                              var isBlendable = true;
-
-                                              for (var index = 0; index < gradients.Length; index++)
-                                              {
-                                                  var inputV = gradients[index];
-                                                  if (inputV is not InputValue<Gradient> v)
-                                                      continue;
-
-                                                  if (weights[index] < bestWeight)
-                                                  {
-                                                      bestIndex = index;
-                                                      bestWeight = weights[index];
-                                                  }
-
-                                                  if (index > 0)
-                                                  {
-                                                      if (v.Value.Interpolation != tempGradients[0].Interpolation
-                                                          || v.Value.Steps.Count != tempGradients[0].Steps.Count)
-                                                      {
-                                                          isBlendable = false;
-                                                      }
-                                                  }
-
-                                                  tempGradients.Add(v.Value);
-                                              }
-
-                                              if (isBlendable)
-                                              {
-                                                  var newGradient = tempGradients[0].TypedClone();
-                                                  for (var stepIndex = 0; stepIndex < tempGradients[0].Steps.Count; stepIndex++)
-                                                  {
-                                                      var step = tempGradients[0].Steps[stepIndex];
-                                                      var color = step.Color * weights[0];
-                                                      var position = step.NormalizedPosition * weights[0];
-                                                      for (var index = 1; index < tempGradients.Count; index++)
-                                                      {
-                                                          color += tempGradients[index].Steps[stepIndex].Color * weights[index];
-                                                          position += tempGradients[index].Steps[stepIndex].NormalizedPosition * weights[index];
-                                                      }
-                                                      
-                                                      newGradient.Steps[stepIndex].NormalizedPosition = position.Clamp(0,1);
-                                                      newGradient.Steps[stepIndex].Color = color;
-                                                  }
-
-                                                  return new InputValue<Gradient>(newGradient);
-                                              }
-
-                                              return bestIndex >= 0
-                                                         ? new InputValue<Gradient>(tempGradients[bestIndex])
-                                                         : null;
-                                          }
-                    },
-                };
-
-        public static readonly Dictionary<Type, Func<InputValue, InputValue, bool>> CompareFunctions =
-            new()
+                },
                 {
-                    {
-                        typeof(float), (a, b) =>
-                                       {
-                                           if (a is not InputValue<float> aValue || b is not InputValue<float> bValue)
-                                               return false;
-
-                                           return Math.Abs(aValue.Value - bValue.Value) < float.Epsilon;
-                                       }
-                    },
-                    {
-                        typeof(Vector2), (a, b) =>
-                                         {
-                                             if (a is not InputValue<Vector2> aValue || b is not InputValue<Vector2> bValue)
-                                                 return false;
-
-                                             return aValue.Value == bValue.Value;
-                                         }
-                    },
-                    {
-                        typeof(Vector3), (a, b) =>
-                                         {
-                                             if (a is not InputValue<Vector3> aValue || b is not InputValue<Vector3> bValue)
-                                                 return false;
-
-                                             return aValue.Value == bValue.Value;
-                                         }
-                    },
-                    {
-                        typeof(Vector4), (a, b) =>
-                                         {
-                                             if (a is not InputValue<Vector4> aValue || b is not InputValue<Vector4> bValue)
-                                                 return false;
-
-                                             return aValue.Value == bValue.Value;
-                                         }
-                    },
-
-                    {
-                        typeof(Quaternion), (a, b) =>
-                                            {
-                                                if (a is not InputValue<Quaternion> aValue || b is not InputValue<Quaternion> bValue)
-                                                    return false;
-
-                                                return aValue.Value == bValue.Value;
-                                            }
-                    },
-                    {
-                        typeof(int), (a, b) =>
+                    typeof(Vector3), (values, weights) =>
                                      {
-                                         if (a is not InputValue<int> aValue || b is not InputValue<int> bValue)
+                                         var sum = Vector3.Zero;
+                                         for (var index = 0; index < values.Length; index++)
+                                         {
+                                             var inputV = values[index];
+                                             if (inputV is not InputValue<Vector3> v)
+                                                 continue;
+
+                                             sum += v.Value * weights[index];
+                                         }
+
+                                         return new InputValue<Vector3>(sum);
+                                     }
+                },
+                {
+                    typeof(Vector4), (values, weights) =>
+                                     {
+                                         if (values.Length == 1)
+                                             return values[0];
+
+                                         var sum = Vector4.Zero;
+                                         for (var index = 0; index < values.Length; index++)
+                                         {
+                                             var inputV = values[index];
+                                             if (inputV is not InputValue<Vector4> v)
+                                                 continue;
+
+                                             sum += v.Value * weights[index];
+                                         }
+
+                                         return new InputValue<Vector4>(sum);
+                                     }
+                },
+
+                {
+                    typeof(int), (values, weights) =>
+                                 {
+                                     var sum = 0f;
+                                     for (var index = 0; index < values.Length; index++)
+                                     {
+                                         var inputV = values[index];
+                                         if (inputV is not InputValue<int> v)
+                                             continue;
+
+                                         sum += v.Value * weights[index];
+                                     }
+
+                                     return new InputValue<int>((int)(sum + 0.5f));
+                                 }
+                },
+                {
+                    typeof(Int2), (values, weights) =>
+                                  {
+                                      var sum = new Vector2();
+                                      for (var index = 0; index < values.Length; index++)
+                                      {
+                                          var inputV = values[index];
+                                          if (inputV is not InputValue<Int2> v)
+                                              continue;
+
+                                          sum += new Vector2(v.Value.Width * weights[index],
+                                                             v.Value.Height * weights[index]);
+                                      }
+
+                                      return new InputValue<Int2>(new Int2((int)(sum.X + 0.5f),
+                                                                           (int)(sum.Y + 0.5f)));
+                                  }
+                },
+                {
+                    typeof(Int3), (values, weights) =>
+                                  {
+                                      var sum = new Vector3();
+                                      for (var index = 0; index < values.Length; index++)
+                                      {
+                                          var inputV = values[index];
+                                          if (inputV is not InputValue<Int3> v)
+                                              continue;
+
+                                          sum += new Vector3(v.Value.X * weights[index],
+                                                             v.Value.Y * weights[index],
+                                                             v.Value.Z * weights[index]);
+                                      }
+
+                                      return new InputValue<Int3>(new Int3((int)(sum.X + 0.5f),
+                                                                           (int)(sum.Y + 0.5f),
+                                                                           (int)(sum.Z + 0.5f)));
+                                  }
+                },
+                   
+                {
+                    typeof(Gradient), (gradients, weights) =>
+                                      {
+                                          var tempGradients = new List<Gradient>(gradients.Length);
+                                          var bestIndex = -1;
+                                          var bestWeight = float.PositiveInfinity;
+                                          var isBlendable = true;
+
+                                          for (var index = 0; index < gradients.Length; index++)
+                                          {
+                                              var inputV = gradients[index];
+                                              if (inputV is not InputValue<Gradient> v)
+                                                  continue;
+
+                                              if (weights[index] < bestWeight)
+                                              {
+                                                  bestIndex = index;
+                                                  bestWeight = weights[index];
+                                              }
+
+                                              if (index > 0)
+                                              {
+                                                  if (v.Value.Interpolation != tempGradients[0].Interpolation
+                                                      || v.Value.Steps.Count != tempGradients[0].Steps.Count)
+                                                  {
+                                                      isBlendable = false;
+                                                  }
+                                              }
+
+                                              tempGradients.Add(v.Value);
+                                          }
+
+                                          if (isBlendable)
+                                          {
+                                              var newGradient = tempGradients[0].TypedClone();
+                                              for (var stepIndex = 0; stepIndex < tempGradients[0].Steps.Count; stepIndex++)
+                                              {
+                                                  var step = tempGradients[0].Steps[stepIndex];
+                                                  var color = step.Color * weights[0];
+                                                  var position = step.NormalizedPosition * weights[0];
+                                                  for (var index = 1; index < tempGradients.Count; index++)
+                                                  {
+                                                      color += tempGradients[index].Steps[stepIndex].Color * weights[index];
+                                                      position += tempGradients[index].Steps[stepIndex].NormalizedPosition * weights[index];
+                                                  }
+                                                      
+                                                  newGradient.Steps[stepIndex].NormalizedPosition = position.Clamp(0,1);
+                                                  newGradient.Steps[stepIndex].Color = color;
+                                              }
+
+                                              return new InputValue<Gradient>(newGradient);
+                                          }
+
+                                          return bestIndex >= 0
+                                                     ? new InputValue<Gradient>(tempGradients[bestIndex])
+                                                     : null;
+                                      }
+                },
+            };
+
+    public static readonly Dictionary<Type, Func<InputValue, InputValue, bool>> CompareFunctions =
+        new()
+            {
+                {
+                    typeof(float), (a, b) =>
+                                   {
+                                       if (a is not InputValue<float> aValue || b is not InputValue<float> bValue)
+                                           return false;
+
+                                       return Math.Abs(aValue.Value - bValue.Value) < float.Epsilon;
+                                   }
+                },
+                {
+                    typeof(Vector2), (a, b) =>
+                                     {
+                                         if (a is not InputValue<Vector2> aValue || b is not InputValue<Vector2> bValue)
                                              return false;
 
                                          return aValue.Value == bValue.Value;
                                      }
-                    },
+                },
+                {
+                    typeof(Vector3), (a, b) =>
+                                     {
+                                         if (a is not InputValue<Vector3> aValue || b is not InputValue<Vector3> bValue)
+                                             return false;
 
-                    {
-                        typeof(Int3), (a, b) =>
-                                      {
-                                          if (a is not InputValue<Int3> aValue || b is not InputValue<Int3> bValue)
-                                              return false;
+                                         return aValue.Value == bValue.Value;
+                                     }
+                },
+                {
+                    typeof(Vector4), (a, b) =>
+                                     {
+                                         if (a is not InputValue<Vector4> aValue || b is not InputValue<Vector4> bValue)
+                                             return false;
 
-                                          return aValue.Value == bValue.Value;
-                                      }
-                    },
+                                         return aValue.Value == bValue.Value;
+                                     }
+                },
 
-                    {
-                        typeof(Int2), (a, b) =>
-                                      {
-                                          if (a is not InputValue<Int2> aValue || b is not InputValue<Int2> bValue)
-                                              return false;
+                {
+                    typeof(Quaternion), (a, b) =>
+                                        {
+                                            if (a is not InputValue<Quaternion> aValue || b is not InputValue<Quaternion> bValue)
+                                                return false;
 
-                                          return aValue.Value == bValue.Value;
-                                      }
-                    },
-                };
-    }
+                                            return aValue.Value == bValue.Value;
+                                        }
+                },
+                {
+                    typeof(int), (a, b) =>
+                                 {
+                                     if (a is not InputValue<int> aValue || b is not InputValue<int> bValue)
+                                         return false;
+
+                                     return aValue.Value == bValue.Value;
+                                 }
+                },
+
+                {
+                    typeof(Int3), (a, b) =>
+                                  {
+                                      if (a is not InputValue<Int3> aValue || b is not InputValue<Int3> bValue)
+                                          return false;
+
+                                      return aValue.Value == bValue.Value;
+                                  }
+                },
+
+                {
+                    typeof(Int2), (a, b) =>
+                                  {
+                                      if (a is not InputValue<Int2> aValue || b is not InputValue<Int2> bValue)
+                                          return false;
+
+                                      return aValue.Value == bValue.Value;
+                                  }
+                },
+            };
 }

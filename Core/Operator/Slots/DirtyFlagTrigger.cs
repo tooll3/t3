@@ -1,12 +1,11 @@
 using System;
 
-namespace T3.Core.Operator.Slots
+namespace T3.Core.Operator.Slots;
+
+[Flags]
+public enum DirtyFlagTrigger : byte
 {
-    [Flags]
-    public enum DirtyFlagTrigger : byte
-    {
-        None = 0,
-        Always = 0x1,
-        Animated = 0x2,
-    }
+    None = 0,
+    Always = 0x1,
+    Animated = 0x2,
 }

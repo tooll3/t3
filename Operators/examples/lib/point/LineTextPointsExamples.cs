@@ -1,12 +1,10 @@
-namespace examples.lib.point
+namespace examples.lib.point;
+
+[Guid("c49ebc17-b730-4e86-9ea7-2c404e4be3ad")]
+public class LineTextPointsExamples : Instance<LineTextPointsExamples>
 {
-	[Guid("c49ebc17-b730-4e86-9ea7-2c404e4be3ad")]
-    public class LineTextPointsExamples : Instance<LineTextPointsExamples>
-    {
-        [Output(Guid = "0e338840-5515-42cc-b944-91dd73177b8d")]
-        public readonly Slot<Texture2D> ColorBuffer = new();
+    [Output(Guid = "0e338840-5515-42cc-b944-91dd73177b8d")]
+    public readonly Slot<Texture2D> ColorBuffer = new();
 
 
-    }
 }
-

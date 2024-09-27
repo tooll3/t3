@@ -1,8 +1,7 @@
-﻿namespace T3.Core.Logging
+﻿namespace T3.Core.Logging;
+
+public interface IRenderStatsProvider
 {
-    public interface IRenderStatsProvider
-    {
-        IEnumerable<(string, int)> GetStats();
-        void StartNewFrame();
-    }
+    IEnumerable<(string, int)> GetStats();
+    void StartNewFrame();
 }

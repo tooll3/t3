@@ -1,46 +1,45 @@
 using System.Drawing;
 
-namespace T3.SystemUi
-{
-    public interface IEditorSystemUiService : ICoreSystemUiService
-    {
-        public void EnableDpiAwareScaling();
-        public void SetClipboardText(string text);
-        public string GetClipboardText();
-        public IFilePicker CreateFilePicker();
-        public IReadOnlyList<IScreen> AllScreens { get; }
-    }
-    
-    // mimics System.Windows.Forms.Screen
-    public interface IScreen 
-    {
-        public int BitsPerPixel { get; }
-        public Rectangle Bounds { get; }
-        public Rectangle WorkingArea { get; }
-        public string DeviceName { get; }
-        public bool Primary { get; }
-    }
+namespace T3.SystemUi;
 
-    public interface IFilePicker : IDisposable
-    {
-        // implements an interface for OpenFileDialog
-        public string FileName { get; set; }
-        public string Filter { get; set; }
-        public string InitialDirectory { get; set; }
-        public bool Multiselect { get; set; }
-        public bool RestoreDirectory { get; set; }
-        public bool ShowHelp { get; set; }
-        public bool ShowReadOnly { get; set; }
-        public string Title { get; set; }
-        public bool ValidateNames { get; set; }
+public interface IEditorSystemUiService : ICoreSystemUiService
+{
+    public void EnableDpiAwareScaling();
+    public void SetClipboardText(string text);
+    public string GetClipboardText();
+    public IFilePicker CreateFilePicker();
+    public IReadOnlyList<IScreen> AllScreens { get; }
+}
+    
+// mimics System.Windows.Forms.Screen
+public interface IScreen 
+{
+    public int BitsPerPixel { get; }
+    public Rectangle Bounds { get; }
+    public Rectangle WorkingArea { get; }
+    public string DeviceName { get; }
+    public bool Primary { get; }
+}
+
+public interface IFilePicker : IDisposable
+{
+    // implements an interface for OpenFileDialog
+    public string FileName { get; set; }
+    public string Filter { get; set; }
+    public string InitialDirectory { get; set; }
+    public bool Multiselect { get; set; }
+    public bool RestoreDirectory { get; set; }
+    public bool ShowHelp { get; set; }
+    public bool ShowReadOnly { get; set; }
+    public string Title { get; set; }
+    public bool ValidateNames { get; set; }
         
-        /// <summary>
-        /// Returns true if the user confirmed a choice
-        /// </summary>
-        /// <returns></returns>
-        public bool ChooseFile();
-        public bool CheckFileExists { get; set; }
-        public bool CheckPathExists { get; set; }
-        public int FilterIndex { get; set; }
-    }
+    /// <summary>
+    /// Returns true if the user confirmed a choice
+    /// </summary>
+    /// <returns></returns>
+    public bool ChooseFile();
+    public bool CheckFileExists { get; set; }
+    public bool CheckPathExists { get; set; }
+    public int FilterIndex { get; set; }
 }

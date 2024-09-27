@@ -1,8 +1,7 @@
 ﻿using System;
 
-namespace T3.Core.DataTypes
+namespace T3.Core.DataTypes;
+
+public interface IEditableInputType : ICloneable
 {
-    public interface IEditableInputType : ICloneable
-    {
-    }
 }

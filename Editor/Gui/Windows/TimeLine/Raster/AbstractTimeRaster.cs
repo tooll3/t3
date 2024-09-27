@@ -5,117 +5,116 @@ using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
-namespace T3.Editor.Gui.Windows.TimeLine.Raster
+namespace T3.Editor.Gui.Windows.TimeLine.Raster;
+
+public abstract class AbstractTimeRaster : IValueSnapAttractor
 {
-    public abstract class AbstractTimeRaster : IValueSnapAttractor
-    {
-        public abstract void Draw(Playback playback, float unitsPerSeconds);
-        protected abstract string BuildLabel(Raster raster, double timeInSeconds);
+    public abstract void Draw(Playback playback, float unitsPerSeconds);
+    protected abstract string BuildLabel(Raster raster, double timeInSeconds);
         
-        protected double UnitsPerSecond { get; set; } = 1;
+    protected double UnitsPerSecond { get; set; } = 1;
 
-        protected virtual IEnumerable<Raster> GetRastersForScale(double invertedScale, out float fadeFactor)
-        {
-            var density = UserSettings.Config.TimeRasterDensity * 0.02f;
-            var scaleRange = ScaleRanges.FirstOrDefault(range => range.ScaleMax > invertedScale / density);
-            fadeFactor = scaleRange == null
-                             ? 1
-                             : 1 - (float)MathUtils.RemapAndClamp(invertedScale, scaleRange.ScaleMin * density, scaleRange.ScaleMax * density, 0, 1);
+    protected virtual IEnumerable<Raster> GetRastersForScale(double invertedScale, out float fadeFactor)
+    {
+        var density = UserSettings.Config.TimeRasterDensity * 0.02f;
+        var scaleRange = ScaleRanges.FirstOrDefault(range => range.ScaleMax > invertedScale / density);
+        fadeFactor = scaleRange == null
+                         ? 1
+                         : 1 - (float)MathUtils.RemapAndClamp(invertedScale, scaleRange.ScaleMin * density, scaleRange.ScaleMax * density, 0, 1);
 
-            return scaleRange?.Rasters;
-        }
+        return scaleRange?.Rasters;
+    }
 
-        protected void DrawTimeTicks(double scale, double scroll, ICanvas canvas)
-        {
-            if (!(scale > Epsilon))
-                return;
+    protected void DrawTimeTicks(double scale, double scroll, ICanvas canvas)
+    {
+        if (!(scale > Epsilon))
+            return;
 
-            var drawList = ImGui.GetWindowDrawList();
-            var topLeft = canvas.WindowPos + new Vector2(ImGui.GetScrollX(), ImGui.GetScrollY());
-            var viewHeight = canvas.WindowSize.Y;
-            var width = canvas.WindowSize.X;
+        var drawList = ImGui.GetWindowDrawList();
+        var topLeft = canvas.WindowPos + new Vector2(ImGui.GetScrollX(), ImGui.GetScrollY());
+        var viewHeight = canvas.WindowSize.Y;
+        var width = canvas.WindowSize.X;
 
-            _usedPositions.Clear();
+        _usedPositions.Clear();
 
             
-            var invertedScale = 1 / scale;
+        var invertedScale = 1 / scale;
 
-            var rasters = GetRastersForScale(invertedScale, out var fadeFactor);
+        var rasters = GetRastersForScale(invertedScale, out var fadeFactor);
 
-            if (rasters == null)
-                return;
+        if (rasters == null)
+            return;
 
-            ImGui.PushFont(Fonts.FontSmall);
+        ImGui.PushFont(Fonts.FontSmall);
 
-            // Debug string 
-            //ImGui.GetForegroundDrawList().AddText(topLeft, Color.Green, $"{UserSettings.Config.TimeRasterDensity /scale:0.00000}");
+        // Debug string 
+        //ImGui.GetForegroundDrawList().AddText(topLeft, Color.Green, $"{UserSettings.Config.TimeRasterDensity /scale:0.00000}");
             
-            foreach (var raster in rasters)
+        foreach (var raster in rasters)
+        {
+            double t = -scroll % raster.Spacing;
+
+            var lineAlpha = raster.FadeLines ? fadeFactor : 1;
+            var lineColor = UiColors.GridLines.Fade(lineAlpha);
+
+            var textAlpha = raster.FadeLabels ? fadeFactor : 1;
+            var textColor = UiColors.Text.Fade(textAlpha);
+
+            while (t / invertedScale < width)
             {
-                double t = -scroll % raster.Spacing;
+                var xIndex = (int)(t / invertedScale);
 
-                var lineAlpha = raster.FadeLines ? fadeFactor : 1;
-                var lineColor = UiColors.GridLines.Fade(lineAlpha);
-
-                var textAlpha = raster.FadeLabels ? fadeFactor : 1;
-                var textColor = UiColors.Text.Fade(textAlpha);
-
-                while (t / invertedScale < width)
+                if (xIndex > 0 && xIndex < width && !_usedPositions.ContainsKey(xIndex))
                 {
-                    var xIndex = (int)(t / invertedScale);
+                    var timeInUnits = t + scroll;
 
-                    if (xIndex > 0 && xIndex < width && !_usedPositions.ContainsKey(xIndex))
+                    _usedPositions[xIndex] = timeInUnits / UnitsPerSecond;
+
+
+                    drawList.AddRectFilled(
+                                           new Vector2(topLeft.X + xIndex, topLeft.Y),
+                                           new Vector2(topLeft.X + xIndex + 1, topLeft.Y + viewHeight), lineColor);
+
+                    if (raster.Label != "")
                     {
-                        var timeInUnits = t + scroll;
+                        var output = BuildLabel(raster, timeInUnits);
 
-                        _usedPositions[xIndex] = timeInUnits / UnitsPerSecond;
-
-
-                        drawList.AddRectFilled(
-                                               new Vector2(topLeft.X + xIndex, topLeft.Y),
-                                               new Vector2(topLeft.X + xIndex + 1, topLeft.Y + viewHeight), lineColor);
-
-                        if (raster.Label != "")
-                        {
-                            var output = BuildLabel(raster, timeInUnits);
-
-                            var p = topLeft + new Vector2(xIndex + 1, viewHeight - 17);
-                            drawList.AddText(p, textColor, output);
-                        }
+                        var p = topLeft + new Vector2(xIndex + 1, viewHeight - 17);
+                        drawList.AddText(p, textColor, output);
                     }
-
-                    t += raster.Spacing;
                 }
+
+                t += raster.Spacing;
             }
-
-            ImGui.PopFont();
         }
 
-        #region implement snap attractor
+        ImGui.PopFont();
+    }
 
-        public virtual SnapResult CheckForSnap(double time, float canvasScale)
-        {
-            return ValueSnapHandler.FindSnapResult(time, _usedPositions.Values, canvasScale);
-        }
-        #endregion
+    #region implement snap attractor
 
-        private readonly Dictionary<int, double> _usedPositions = new();
-        protected List<ScaleRange> ScaleRanges;
-        private const double Epsilon = 0.00001f;
+    public virtual SnapResult CheckForSnap(double time, float canvasScale)
+    {
+        return ValueSnapHandler.FindSnapResult(time, _usedPositions.Values, canvasScale);
+    }
+    #endregion
 
-        protected class ScaleRange
-        {
-            public double ScaleMin { get; set; }
-            public double ScaleMax { get; set; }
-            public List<Raster> Rasters { get; set; }
-        }
+    private readonly Dictionary<int, double> _usedPositions = new();
+    protected List<ScaleRange> ScaleRanges;
+    private const double Epsilon = 0.00001f;
 
-        public struct Raster
-        {
-            public string Label { get; set; }
-            public double Spacing { get; set; }
-            public bool FadeLabels { get; set; }
-            public bool FadeLines { get; set; }
-        }
+    protected class ScaleRange
+    {
+        public double ScaleMin { get; set; }
+        public double ScaleMax { get; set; }
+        public List<Raster> Rasters { get; set; }
+    }
+
+    public struct Raster
+    {
+        public string Label { get; set; }
+        public double Spacing { get; set; }
+        public bool FadeLabels { get; set; }
+        public bool FadeLines { get; set; }
     }
 }

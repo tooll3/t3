@@ -1,12 +1,10 @@
-namespace examples.user.still.katsu
+namespace examples.user.still.katsu;
+
+[Guid("edf2f2fb-eaa3-4845-865d-679c5b1a0930")]
+public class _KatsumakiResearch : Instance<_KatsumakiResearch>
 {
-	[Guid("edf2f2fb-eaa3-4845-865d-679c5b1a0930")]
-    public class _KatsumakiResearch : Instance<_KatsumakiResearch>
-    {
-        [Output(Guid = "00fa3e80-aabb-41db-b744-b2275918a3cc")]
-        public readonly Slot<Texture2D> ImgOutput = new();
+    [Output(Guid = "00fa3e80-aabb-41db-b744-b2275918a3cc")]
+    public readonly Slot<Texture2D> ImgOutput = new();
 
 
-    }
 }
-

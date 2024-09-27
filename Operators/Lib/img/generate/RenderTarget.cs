@@ -6,541 +6,540 @@ using T3.Core.Utils;
 using Device = SharpDX.Direct3D11.Device;
 using Utilities = T3.Core.Utils.Utilities;
 
-namespace lib.img.generate
+namespace lib.img.generate;
+
+[Guid("f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1")]
+public class RenderTarget : Instance<RenderTarget>, IRenderStatsProvider
 {
-	[Guid("f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1")]
-    public class RenderTarget : Instance<RenderTarget>, IRenderStatsProvider
+    [Output(Guid = "7A4C4FEB-BE2F-463E-96C6-CD9A6BAD77A2")]
+    public readonly Slot<Texture2D> ColorBuffer = new();
+
+    [Output(Guid = "8bb0b18f-4fad-4348-a4fa-95b40c4167a4")]
+    public readonly Slot<Texture2D> DepthBuffer = new();
+
+    [Output(Guid = "152312A6-729B-49CB-9AC5-A63105694A6B")]
+    public readonly Slot<Texture2D> VelocityBuffer = new();
+
+    public RenderTarget()
     {
-        [Output(Guid = "7A4C4FEB-BE2F-463E-96C6-CD9A6BAD77A2")]
-        public readonly Slot<Texture2D> ColorBuffer = new();
+        ColorBuffer.UpdateAction += Update;
+        DepthBuffer.UpdateAction += Update;
+        SetupResolveShaderResources();
 
-        [Output(Guid = "8bb0b18f-4fad-4348-a4fa-95b40c4167a4")]
-        public readonly Slot<Texture2D> DepthBuffer = new();
-
-        [Output(Guid = "152312A6-729B-49CB-9AC5-A63105694A6B")]
-        public readonly Slot<Texture2D> VelocityBuffer = new();
-
-        public RenderTarget()
+        lock (_lock)
         {
-            ColorBuffer.UpdateAction += Update;
-            DepthBuffer.UpdateAction += Update;
-            SetupResolveShaderResources();
-
-            lock (_lock)
+            if (!_registeredStats)
             {
-                if (!_registeredStats)
-                {
-                    RenderStatsCollector.RegisterProvider(this);
-                    _registeredStats = true;
-                }
+                RenderStatsCollector.RegisterProvider(this);
+                _registeredStats = true;
             }
         }
+    }
 
-        private const int MaximumTexture2DSize = SharpDX.Direct3D11.Resource.MaximumTexture2DSize;
+    private const int MaximumTexture2DSize = SharpDX.Direct3D11.Resource.MaximumTexture2DSize;
 
-        private void Update(EvaluationContext context)
+    private void Update(EvaluationContext context)
+    {
+        var device = ResourceManager.Device;
+            
+        Int2 size = Resolution.GetValue(context);
+        bool generateMips = GenerateMips.GetValue(context);
+        var withDepthBuffer = WithDepthBuffer.GetValue(context);
+        var clear = Clear.GetValue(context);
+        var clearColor = ClearColor.GetValue(context);
+        var reference = TextureReference.GetValue(context);
+        var enableUpdate = EnableUpdate.GetValue(context);
+            
+        if (size.Width == 0 || size.Height == 0)
         {
-            var device = ResourceManager.Device;
-            
-            Int2 size = Resolution.GetValue(context);
-            bool generateMips = GenerateMips.GetValue(context);
-            var withDepthBuffer = WithDepthBuffer.GetValue(context);
-            var clear = Clear.GetValue(context);
-            var clearColor = ClearColor.GetValue(context);
-            var reference = TextureReference.GetValue(context);
-            var enableUpdate = EnableUpdate.GetValue(context);
-            
-            if (size.Width == 0 || size.Height == 0)
-            {
-                size = context.RequestedResolution;
-            }
-            
-            if (size.Width <= 0 || size.Height <= 0 || size.Width > MaximumTexture2DSize || size.Height > MaximumTexture2DSize)
-            {
-                Log.Warning("Ignoring invalid texture size: " + size, this);
-                return;
-            }
-
-            _sampleCount = Multisampling.GetValue(context).Clamp(1, 32);
-
-            var textureFormat = TextureFormat.GetValue(context);
-            if (textureFormat == Format.Unknown)
-            {
-                Log.Warning("Texture format unknown is not supported. Falling back to default", this);
-                textureFormat = TextureFormat.TypedDefaultValue.Value;
-                TextureFormat.SetTypedInputValue(textureFormat);
-            }
-            
-            var formatChanged = UpdateTextures(device, size, textureFormat, withDepthBuffer ? Format.R32_Typeless : Format.Unknown, generateMips);
-
-            if (formatChanged || enableUpdate)
-            {
-                var deviceContext = device.ImmediateContext;
-
-                // Save settings in context
-                var prevRequestedResolution = context.RequestedResolution;
-                var prevViewports = deviceContext.Rasterizer.GetViewports<RawViewportF>();
-                var prevTargets = deviceContext.OutputMerger.GetRenderTargets(2, out var prevDepthStencilView);
-                var prevObjectToWorld = context.ObjectToWorld;
-                var prevWorldToCamera = context.WorldToCamera;
-                var prevCameraToClipSpace = context.CameraToClipSpace;
-                var keepCameraBypass = context.BypassCameras;
-                var keepBackgroundColor = context.BackgroundColor;
-                var keepForegroundColor = context.ForegroundColor;
-                context.BypassCameras = false; 
-                context.BackgroundColor = Vector4.One;
-                context.ForegroundColor = Vector4.One;
-                
-                
-                deviceContext.Rasterizer.SetViewport(new SharpDX.Viewport(0, 0, size.Width, size.Height, 0.0f, 1.0f));
-                deviceContext.OutputMerger.SetTargets(_multiSampledDepthBufferDsv, _multiSampledColorBufferRtv);
-
-                // Clear
-
-                if (clear || !_wasClearedOnce)
-                {
-                    try
-                    {
-                        deviceContext.ClearRenderTargetView(_multiSampledColorBufferRtv, new SharpDX.Color(clearColor.X, clearColor.Y, clearColor.Z, clearColor.W));
-                        if (_multiSampledDepthBufferDsv != null)
-                        {
-                            deviceContext.ClearDepthStencilView(_multiSampledDepthBufferDsv, DepthStencilClearFlags.Depth, 1.0f, 0);
-                        }
-
-                        _wasClearedOnce = true;
-                    } 
-                    catch
-                    {
-                        Log.Error($"{Parent.Symbol.Name}: Error clearing actual render target.", this);
-                    }
-                }
-                
-                
-
-                // Set default values for new sub tree
-                context.RequestedResolution = size;
-                context.SetDefaultCamera();
-
-                if (TextureReference.IsConnected && TextureReference != null)
-                {
-                    reference.ColorTexture = ColorTexture;
-                    reference.DepthTexture = DepthTexture;
-                }
-
-                // Render
-                Command.GetValue(context);
-
-                // Restore context
-                context.BypassCameras = keepCameraBypass;
-                context.ObjectToWorld = prevObjectToWorld;
-                context.WorldToCamera = prevWorldToCamera;
-                context.CameraToClipSpace = prevCameraToClipSpace;
-                context.RequestedResolution = prevRequestedResolution;
-                context.BackgroundColor = keepBackgroundColor;
-                context.ForegroundColor = keepForegroundColor;
-                deviceContext.Rasterizer.SetViewports(prevViewports);
-                deviceContext.OutputMerger.SetTargets(prevDepthStencilView, prevTargets);
-                
-
-                if (_sampleCount > 1)
-                {
-                    try
-                    {
-                        device.ImmediateContext.ResolveSubresource(_multiSampledColorBuffer,
-                                                                   0,
-                                                                   _resolvedColorBuffer, 0,
-                                                                   _resolvedColorBuffer.Description.Format);
-
-                        if (withDepthBuffer)
-                        {
-                            ResolveDepthBuffer();
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Error("resolving render target buffer failed:" + e.Message, this);
-                    }
-                }
-                
-                if (generateMips)
-                {
-                    try
-                    {
-                        deviceContext.GenerateMips(DownSamplingRequired ? _resolvedColorBufferSrv : _multiSampledColorBufferSrv);
-                    }
-                    catch (SEHException e)
-                    {
-                        Log.Warning("Failed to generate mipmaps: " + e.Message);
-                    }
-                }
-
-                // Clean up ref counts for RTVs
-                for (int i = 0; i < prevTargets.Length; i++)
-                {
-                    prevTargets[i]?.Dispose();
-                }
-
-                prevDepthStencilView?.Dispose();
-            }
-            
-            ColorBuffer.Value = ColorTexture;
-            ColorBuffer.DirtyFlag.Clear();
-            DepthBuffer.Value = DepthTexture;
-            DepthBuffer.DirtyFlag.Clear();
-            
-            VelocityBuffer.DirtyFlag.Clear();
-
-            _statsCount++;
-            _statsCountPixels += size.Height * size.Width;
-            if (withDepthBuffer)
-            {
-                _statsCountPixels += size.Height * size.Width;
-            }
-
-            if (_sampleCount > 1)
-                _statsCountWithMsaa++;
-            
+            size = context.RequestedResolution;
         }
-        
-        private void SetupResolveShaderResources()
+            
+        if (size.Width <= 0 || size.Height <= 0 || size.Width > MaximumTexture2DSize || size.Height > MaximumTexture2DSize)
         {
-            if (_resolveComputeShaderResource != null)
-                return;
-            
-            const string sourcePath = @"dx11\resolve-multisampled-depth-buffer-cs.hlsl";
-            const string entryPoint = "main";
-
-            _resolveComputeShaderResource = ResourceManager.CreateShaderResource<ComputeShader>(sourcePath, this, () => entryPoint);
-            
-            if (_resolveComputeShaderResource.Value == null)
-            {
-                Log.Error("Failed to load resolve shader", this);
-            }
+            Log.Warning("Ignoring invalid texture size: " + size, this);
+            return;
         }
-        
-        private void ResolveDepthBuffer()
+
+        _sampleCount = Multisampling.GetValue(context).Clamp(1, 32);
+
+        var textureFormat = TextureFormat.GetValue(context);
+        if (textureFormat == Format.Unknown)
         {
-            var resolveShader = _resolveComputeShaderResource.Value;
-            if (resolveShader == null)
-                return;
+            Log.Warning("Texture format unknown is not supported. Falling back to default", this);
+            textureFormat = TextureFormat.TypedDefaultValue.Value;
+            TextureFormat.SetTypedInputValue(textureFormat);
+        }
             
-            var device = ResourceManager.Device;
+        var formatChanged = UpdateTextures(device, size, textureFormat, withDepthBuffer ? Format.R32_Typeless : Format.Unknown, generateMips);
+
+        if (formatChanged || enableUpdate)
+        {
             var deviceContext = device.ImmediateContext;
-            var csStage = deviceContext.ComputeShader;
-            var prevShader = csStage.Get();
-            var prevUavs = csStage.GetUnorderedAccessViews(0, 1);
-            var prevSrvs = csStage.GetShaderResources(0, 1);
 
-            csStage.Set(resolveShader);
+            // Save settings in context
+            var prevRequestedResolution = context.RequestedResolution;
+            var prevViewports = deviceContext.Rasterizer.GetViewports<RawViewportF>();
+            var prevTargets = deviceContext.OutputMerger.GetRenderTargets(2, out var prevDepthStencilView);
+            var prevObjectToWorld = context.ObjectToWorld;
+            var prevWorldToCamera = context.WorldToCamera;
+            var prevCameraToClipSpace = context.CameraToClipSpace;
+            var keepCameraBypass = context.BypassCameras;
+            var keepBackgroundColor = context.BackgroundColor;
+            var keepForegroundColor = context.ForegroundColor;
+            context.BypassCameras = false; 
+            context.BackgroundColor = Vector4.One;
+            context.ForegroundColor = Vector4.One;
+                
+                
+            deviceContext.Rasterizer.SetViewport(new SharpDX.Viewport(0, 0, size.Width, size.Height, 0.0f, 1.0f));
+            deviceContext.OutputMerger.SetTargets(_multiSampledDepthBufferDsv, _multiSampledColorBufferRtv);
 
-            const int threadNumX = 16, threadNumY = 16;
-            csStage.SetShaderResource(0, _multiSampledDepthBufferSrv);
-            csStage.SetUnorderedAccessView(0, _resolvedDepthBufferUav, 0);
-            int dispatchCountX = (_multiSampledDepthBuffer.Description.Width / threadNumX) + 1;
-            int dispatchCountY = (_multiSampledDepthBuffer.Description.Height / threadNumY) + 1;
-            deviceContext.Dispatch(dispatchCountX, dispatchCountY, 1);
-            
-            // Restore prev setup
-            csStage.SetUnorderedAccessView(0, prevUavs[0]);
-            csStage.SetShaderResource(0, prevSrvs[0]);
-            csStage.Set(prevShader);
-        }
-        
-        
-        private bool UpdateTextures(Device device, Int2 size, Format colorFormat, Format depthFormat, bool generateMips)
-        {
-            int w = Math.Max(size.Width, size.Height);
-            int mipLevels = generateMips ? (int)MathUtils.Log2(w) + 1 : 1;
-            var multiSampleTexture2dMipLevels=  DownSamplingRequired ? 1 : mipLevels;
-            // Log.Debug($"miplevel: {mipLevels}, w: {w}", this);
-            bool wasChanged= false;
+            // Clear
 
-            bool colorFormatChanged = _multiSampledColorBuffer == null
-                                      || _multiSampledColorBuffer.Description.Format != colorFormat
-                                      || _multiSampledColorBuffer.Description.MipLevels != multiSampleTexture2dMipLevels
-                                      || _multiSampledColorBuffer.Description.Width != size.Width
-                                      || _multiSampledColorBuffer.Description.Height != size.Height
-                                      || _multiSampledColorBuffer.Description.SampleDescription.Count != _sampleCount;
-
-            //bool useMultiSampling = _sampleCount > 1;
-
-            if (colorFormatChanged)
+            if (clear || !_wasClearedOnce)
             {
-                wasChanged = true;
-                // Color / Multi sampling
-                Utilities.Dispose(ref _multiSampledColorBufferSrv);
-                Utilities.Dispose(ref _multiSampledColorBufferRtv);
-                Utilities.Dispose(ref _multiSampledColorBuffer);
-
                 try
                 {
-                    
-                    var texture2DDescription = new Texture2DDescription
-                                                   {
-                                                       ArraySize = 1,
-                                                       BindFlags = BindFlags.RenderTarget | BindFlags.ShaderResource,
-                                                       CpuAccessFlags = CpuAccessFlags.None,
-                                                       Format = colorFormat,
-                                                       Width = size.Width,
-                                                       Height = size.Height,
-                                                       MipLevels = !DownSamplingRequired ? mipLevels : 1,
-                                                       OptionFlags = !DownSamplingRequired && generateMips 
-                                                                         ? ResourceOptionFlags.GenerateMipMaps 
-                                                                         : ResourceOptionFlags.None,
-                                                       SampleDescription = new SampleDescription(_sampleCount, 0),
-                                                       Usage = ResourceUsage.Default,
-                                                   };
-                    _multiSampledColorBuffer = Texture2D.CreateTexture2D(texture2DDescription);
+                    deviceContext.ClearRenderTargetView(_multiSampledColorBufferRtv, new SharpDX.Color(clearColor.X, clearColor.Y, clearColor.Z, clearColor.W));
+                    if (_multiSampledDepthBufferDsv != null)
+                    {
+                        deviceContext.ClearDepthStencilView(_multiSampledDepthBufferDsv, DepthStencilClearFlags.Depth, 1.0f, 0);
+                    }
 
-                    _multiSampledColorBufferSrv = new ShaderResourceView(device, _multiSampledColorBuffer);
-                    _multiSampledColorBufferRtv = new RenderTargetView(device, _multiSampledColorBuffer,
-                                                                       new RenderTargetViewDescription
-                                                                           {
-                                                                               Format = colorFormat,
-                                                                               Dimension = DownSamplingRequired
-                                                                                               ? RenderTargetViewDimension.Texture2DMultisampled
-                                                                                               : RenderTargetViewDimension.Texture2D
-                                                                           });
+                    _wasClearedOnce = true;
+                } 
+                catch
+                {
+                    Log.Error($"{Parent.Symbol.Name}: Error clearing actual render target.", this);
+                }
+            }
+                
+                
 
-                    //_multiSampledColorBufferRtv = new RenderTargetView(device, _multiSampledColorBuffer);
-                    _wasClearedOnce = false;
+            // Set default values for new sub tree
+            context.RequestedResolution = size;
+            context.SetDefaultCamera();
+
+            if (TextureReference.IsConnected && TextureReference != null)
+            {
+                reference.ColorTexture = ColorTexture;
+                reference.DepthTexture = DepthTexture;
+            }
+
+            // Render
+            Command.GetValue(context);
+
+            // Restore context
+            context.BypassCameras = keepCameraBypass;
+            context.ObjectToWorld = prevObjectToWorld;
+            context.WorldToCamera = prevWorldToCamera;
+            context.CameraToClipSpace = prevCameraToClipSpace;
+            context.RequestedResolution = prevRequestedResolution;
+            context.BackgroundColor = keepBackgroundColor;
+            context.ForegroundColor = keepForegroundColor;
+            deviceContext.Rasterizer.SetViewports(prevViewports);
+            deviceContext.OutputMerger.SetTargets(prevDepthStencilView, prevTargets);
+                
+
+            if (_sampleCount > 1)
+            {
+                try
+                {
+                    device.ImmediateContext.ResolveSubresource(_multiSampledColorBuffer,
+                                                               0,
+                                                               _resolvedColorBuffer, 0,
+                                                               _resolvedColorBuffer.Description.Format);
+
+                    if (withDepthBuffer)
+                    {
+                        ResolveDepthBuffer();
+                    }
                 }
                 catch (Exception e)
                 {
-                    Log.Error("Error creating color render target." + e.Message, this);
-                    Utilities.Dispose(ref _multiSampledColorBufferSrv);
-                    Utilities.Dispose(ref _multiSampledColorBufferRtv);
-                    Utilities.Dispose(ref _multiSampledColorBuffer);
+                    Log.Error("resolving render target buffer failed:" + e.Message, this);
                 }
-
-                // Color / Down sampled
-                if (_resolvedColorBuffer != null)
+            }
+                
+            if (generateMips)
+            {
+                try
                 {
+                    deviceContext.GenerateMips(DownSamplingRequired ? _resolvedColorBufferSrv : _multiSampledColorBufferSrv);
+                }
+                catch (SEHException e)
+                {
+                    Log.Warning("Failed to generate mipmaps: " + e.Message);
+                }
+            }
+
+            // Clean up ref counts for RTVs
+            for (int i = 0; i < prevTargets.Length; i++)
+            {
+                prevTargets[i]?.Dispose();
+            }
+
+            prevDepthStencilView?.Dispose();
+        }
+            
+        ColorBuffer.Value = ColorTexture;
+        ColorBuffer.DirtyFlag.Clear();
+        DepthBuffer.Value = DepthTexture;
+        DepthBuffer.DirtyFlag.Clear();
+            
+        VelocityBuffer.DirtyFlag.Clear();
+
+        _statsCount++;
+        _statsCountPixels += size.Height * size.Width;
+        if (withDepthBuffer)
+        {
+            _statsCountPixels += size.Height * size.Width;
+        }
+
+        if (_sampleCount > 1)
+            _statsCountWithMsaa++;
+            
+    }
+        
+    private void SetupResolveShaderResources()
+    {
+        if (_resolveComputeShaderResource != null)
+            return;
+            
+        const string sourcePath = @"dx11\resolve-multisampled-depth-buffer-cs.hlsl";
+        const string entryPoint = "main";
+
+        _resolveComputeShaderResource = ResourceManager.CreateShaderResource<ComputeShader>(sourcePath, this, () => entryPoint);
+            
+        if (_resolveComputeShaderResource.Value == null)
+        {
+            Log.Error("Failed to load resolve shader", this);
+        }
+    }
+        
+    private void ResolveDepthBuffer()
+    {
+        var resolveShader = _resolveComputeShaderResource.Value;
+        if (resolveShader == null)
+            return;
+            
+        var device = ResourceManager.Device;
+        var deviceContext = device.ImmediateContext;
+        var csStage = deviceContext.ComputeShader;
+        var prevShader = csStage.Get();
+        var prevUavs = csStage.GetUnorderedAccessViews(0, 1);
+        var prevSrvs = csStage.GetShaderResources(0, 1);
+
+        csStage.Set(resolveShader);
+
+        const int threadNumX = 16, threadNumY = 16;
+        csStage.SetShaderResource(0, _multiSampledDepthBufferSrv);
+        csStage.SetUnorderedAccessView(0, _resolvedDepthBufferUav, 0);
+        int dispatchCountX = (_multiSampledDepthBuffer.Description.Width / threadNumX) + 1;
+        int dispatchCountY = (_multiSampledDepthBuffer.Description.Height / threadNumY) + 1;
+        deviceContext.Dispatch(dispatchCountX, dispatchCountY, 1);
+            
+        // Restore prev setup
+        csStage.SetUnorderedAccessView(0, prevUavs[0]);
+        csStage.SetShaderResource(0, prevSrvs[0]);
+        csStage.Set(prevShader);
+    }
+        
+        
+    private bool UpdateTextures(Device device, Int2 size, Format colorFormat, Format depthFormat, bool generateMips)
+    {
+        int w = Math.Max(size.Width, size.Height);
+        int mipLevels = generateMips ? (int)MathUtils.Log2(w) + 1 : 1;
+        var multiSampleTexture2dMipLevels=  DownSamplingRequired ? 1 : mipLevels;
+        // Log.Debug($"miplevel: {mipLevels}, w: {w}", this);
+        bool wasChanged= false;
+
+        bool colorFormatChanged = _multiSampledColorBuffer == null
+                                  || _multiSampledColorBuffer.Description.Format != colorFormat
+                                  || _multiSampledColorBuffer.Description.MipLevels != multiSampleTexture2dMipLevels
+                                  || _multiSampledColorBuffer.Description.Width != size.Width
+                                  || _multiSampledColorBuffer.Description.Height != size.Height
+                                  || _multiSampledColorBuffer.Description.SampleDescription.Count != _sampleCount;
+
+        //bool useMultiSampling = _sampleCount > 1;
+
+        if (colorFormatChanged)
+        {
+            wasChanged = true;
+            // Color / Multi sampling
+            Utilities.Dispose(ref _multiSampledColorBufferSrv);
+            Utilities.Dispose(ref _multiSampledColorBufferRtv);
+            Utilities.Dispose(ref _multiSampledColorBuffer);
+
+            try
+            {
+                    
+                var texture2DDescription = new Texture2DDescription
+                                               {
+                                                   ArraySize = 1,
+                                                   BindFlags = BindFlags.RenderTarget | BindFlags.ShaderResource,
+                                                   CpuAccessFlags = CpuAccessFlags.None,
+                                                   Format = colorFormat,
+                                                   Width = size.Width,
+                                                   Height = size.Height,
+                                                   MipLevels = !DownSamplingRequired ? mipLevels : 1,
+                                                   OptionFlags = !DownSamplingRequired && generateMips 
+                                                                     ? ResourceOptionFlags.GenerateMipMaps 
+                                                                     : ResourceOptionFlags.None,
+                                                   SampleDescription = new SampleDescription(_sampleCount, 0),
+                                                   Usage = ResourceUsage.Default,
+                                               };
+                _multiSampledColorBuffer = Texture2D.CreateTexture2D(texture2DDescription);
+
+                _multiSampledColorBufferSrv = new ShaderResourceView(device, _multiSampledColorBuffer);
+                _multiSampledColorBufferRtv = new RenderTargetView(device, _multiSampledColorBuffer,
+                                                                   new RenderTargetViewDescription
+                                                                       {
+                                                                           Format = colorFormat,
+                                                                           Dimension = DownSamplingRequired
+                                                                                           ? RenderTargetViewDimension.Texture2DMultisampled
+                                                                                           : RenderTargetViewDimension.Texture2D
+                                                                       });
+
+                //_multiSampledColorBufferRtv = new RenderTargetView(device, _multiSampledColorBuffer);
+                _wasClearedOnce = false;
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error creating color render target." + e.Message, this);
+                Utilities.Dispose(ref _multiSampledColorBufferSrv);
+                Utilities.Dispose(ref _multiSampledColorBufferRtv);
+                Utilities.Dispose(ref _multiSampledColorBuffer);
+            }
+
+            // Color / Down sampled
+            if (_resolvedColorBuffer != null)
+            {
+                Utilities.Dispose(ref _resolvedColorBufferSrv);
+                Utilities.Dispose(ref _resolvedColorBufferRtv);
+                Utilities.Dispose(ref _resolvedColorBuffer);
+            }
+
+            if (DownSamplingRequired)
+            {
+                try
+                {
+                    _resolvedColorBuffer = Texture2D.CreateTexture2D(
+                                                                     new Texture2DDescription
+                                                                         {
+                                                                             ArraySize = 1,
+                                                                             BindFlags = BindFlags.RenderTarget | BindFlags.ShaderResource | BindFlags.UnorderedAccess,
+                                                                             CpuAccessFlags = CpuAccessFlags.None,
+                                                                             Format = colorFormat,
+                                                                             Width = size.Width,
+                                                                             Height = size.Height,
+                                                                             MipLevels = mipLevels,
+                                                                             OptionFlags =
+                                                                                 generateMips ? ResourceOptionFlags.GenerateMipMaps : ResourceOptionFlags.None,
+                                                                             SampleDescription = new SampleDescription(1, 0),
+                                                                             Usage = ResourceUsage.Default
+                                                                         });
+                    _resolvedColorBufferSrv = new ShaderResourceView(device, _resolvedColorBuffer);
+                    _resolvedColorBufferRtv = new RenderTargetView(device, _resolvedColorBuffer);
+                    _wasClearedOnce = false;
+                }
+                catch
+                {
+                    Log.Error("Error creating color render target.", this);
                     Utilities.Dispose(ref _resolvedColorBufferSrv);
                     Utilities.Dispose(ref _resolvedColorBufferRtv);
                     Utilities.Dispose(ref _resolvedColorBuffer);
                 }
-
-                if (DownSamplingRequired)
-                {
-                    try
-                    {
-                        _resolvedColorBuffer = Texture2D.CreateTexture2D(
-                                                             new Texture2DDescription
-                                                                 {
-                                                                     ArraySize = 1,
-                                                                     BindFlags = BindFlags.RenderTarget | BindFlags.ShaderResource | BindFlags.UnorderedAccess,
-                                                                     CpuAccessFlags = CpuAccessFlags.None,
-                                                                     Format = colorFormat,
-                                                                     Width = size.Width,
-                                                                     Height = size.Height,
-                                                                     MipLevels = mipLevels,
-                                                                     OptionFlags =
-                                                                         generateMips ? ResourceOptionFlags.GenerateMipMaps : ResourceOptionFlags.None,
-                                                                     SampleDescription = new SampleDescription(1, 0),
-                                                                     Usage = ResourceUsage.Default
-                                                                 });
-                        _resolvedColorBufferSrv = new ShaderResourceView(device, _resolvedColorBuffer);
-                        _resolvedColorBufferRtv = new RenderTargetView(device, _resolvedColorBuffer);
-                        _wasClearedOnce = false;
-                    }
-                    catch
-                    {
-                        Log.Error("Error creating color render target.", this);
-                        Utilities.Dispose(ref _resolvedColorBufferSrv);
-                        Utilities.Dispose(ref _resolvedColorBufferRtv);
-                        Utilities.Dispose(ref _resolvedColorBuffer);
-                    }
-                }
-
-                _wasClearedOnce = false;
             }
 
-            var depthRequired = depthFormat != Format.Unknown;
-            var depthInitialized = _multiSampledDepthBuffer != null;
+            _wasClearedOnce = false;
+        }
 
-            bool depthFormatChanged = (_multiSampledDepthBuffer == null)
-                                      || _multiSampledDepthBuffer.Description.Width != size.Width
-                                      || _multiSampledDepthBuffer.Description.Height != size.Height
-                                      || _multiSampledDepthBuffer.Description.SampleDescription.Count != _sampleCount
-                                      || _multiSampledDepthBuffer.Description.Format != depthFormat;
+        var depthRequired = depthFormat != Format.Unknown;
+        var depthInitialized = _multiSampledDepthBuffer != null;
+
+        bool depthFormatChanged = (_multiSampledDepthBuffer == null)
+                                  || _multiSampledDepthBuffer.Description.Width != size.Width
+                                  || _multiSampledDepthBuffer.Description.Height != size.Height
+                                  || _multiSampledDepthBuffer.Description.SampleDescription.Count != _sampleCount
+                                  || _multiSampledDepthBuffer.Description.Format != depthFormat;
                 
             
-            if (depthFormatChanged || (!depthRequired && depthInitialized))
+        if (depthFormatChanged || (!depthRequired && depthInitialized))
+        {
+            Utilities.Dispose(ref _multiSampledDepthBufferDsv);
+            Utilities.Dispose(ref _multiSampledDepthBufferSrv);
+            Utilities.Dispose(ref _multiSampledDepthBuffer);
+            Utilities.Dispose(ref _resolvedDepthBufferUav);
+            Utilities.Dispose(ref _resolvedDepthBuffer);
+        }
+
+        if (depthRequired && (depthFormatChanged || !depthInitialized))
+        {
+            wasChanged = true;
+            // Depth / Multi sampled
+            try
+            {
+                _multiSampledDepthBuffer = Texture2D.CreateTexture2D(
+                                                                     new Texture2DDescription
+                                                                         {
+                                                                             ArraySize = 1,
+                                                                             BindFlags = BindFlags.DepthStencil | BindFlags.ShaderResource,
+                                                                             CpuAccessFlags = CpuAccessFlags.None,
+                                                                             Format = Format.R32_Typeless,
+                                                                             Width = size.Width,
+                                                                             Height = size.Height,
+                                                                             MipLevels = DownSamplingRequired ? 1: mipLevels,
+                                                                             OptionFlags = ResourceOptionFlags.None,
+                                                                             SampleDescription = new SampleDescription(_sampleCount, 0),
+                                                                             Usage = ResourceUsage.Default
+                                                                         });
+
+                _multiSampledDepthBufferDsv = new DepthStencilView(device,
+                                                                   _multiSampledDepthBuffer,
+                                                                   new DepthStencilViewDescription
+                                                                       {
+                                                                           Format = Format.D32_Float,
+                                                                           Dimension = DownSamplingRequired
+                                                                                           ? DepthStencilViewDimension.Texture2DMultisampled
+                                                                                           : DepthStencilViewDimension.Texture2D
+                                                                       });
+                if (DownSamplingRequired)
+                {
+                    var viewDesc = new ShaderResourceViewDescription
+                                       {
+                                           Format = Format.R32_Float,
+                                           Dimension = ShaderResourceViewDimension.Texture2DMultisampled
+                                       };
+                    _multiSampledDepthBufferSrv = new ShaderResourceView(device, _multiSampledDepthBuffer, viewDesc);
+                }
+            }
+            catch
             {
                 Utilities.Dispose(ref _multiSampledDepthBufferDsv);
                 Utilities.Dispose(ref _multiSampledDepthBufferSrv);
                 Utilities.Dispose(ref _multiSampledDepthBuffer);
-                Utilities.Dispose(ref _resolvedDepthBufferUav);
-                Utilities.Dispose(ref _resolvedDepthBuffer);
+                Log.Error("Error  creating multisampled depth/stencil buffer.", this);
             }
 
-            if (depthRequired && (depthFormatChanged || !depthInitialized))
+            if (DownSamplingRequired)
             {
-                wasChanged = true;
-                // Depth / Multi sampled
                 try
                 {
-                    _multiSampledDepthBuffer = Texture2D.CreateTexture2D(
-                                                             new Texture2DDescription
-                                                                 {
-                                                                     ArraySize = 1,
-                                                                     BindFlags = BindFlags.DepthStencil | BindFlags.ShaderResource,
-                                                                     CpuAccessFlags = CpuAccessFlags.None,
-                                                                     Format = Format.R32_Typeless,
-                                                                     Width = size.Width,
-                                                                     Height = size.Height,
-                                                                     MipLevels = DownSamplingRequired ? 1: mipLevels,
-                                                                     OptionFlags = ResourceOptionFlags.None,
-                                                                     SampleDescription = new SampleDescription(_sampleCount, 0),
-                                                                     Usage = ResourceUsage.Default
-                                                                 });
+                    _resolvedDepthBuffer = Texture2D.CreateTexture2D(
+                                                                     new Texture2DDescription
+                                                                         {
+                                                                             ArraySize = 1,
+                                                                             BindFlags = BindFlags.ShaderResource | BindFlags.UnorderedAccess,
+                                                                             CpuAccessFlags = CpuAccessFlags.None,
+                                                                             Format = Format.R32_Float,
+                                                                             Width = size.Width,
+                                                                             Height = size.Height,
+                                                                             MipLevels = mipLevels,
+                                                                             OptionFlags = ResourceOptionFlags.None,
+                                                                             SampleDescription = new SampleDescription(1, 0),
+                                                                             Usage = ResourceUsage.Default
+                                                                         });
 
-                    _multiSampledDepthBufferDsv = new DepthStencilView(device,
-                                                                       _multiSampledDepthBuffer,
-                                                                       new DepthStencilViewDescription
-                                                                           {
-                                                                               Format = Format.D32_Float,
-                                                                               Dimension = DownSamplingRequired
-                                                                                               ? DepthStencilViewDimension.Texture2DMultisampled
-                                                                                               : DepthStencilViewDimension.Texture2D
-                                                                           });
-                    if (DownSamplingRequired)
-                    {
-                        var viewDesc = new ShaderResourceViewDescription
-                                           {
-                                               Format = Format.R32_Float,
-                                               Dimension = ShaderResourceViewDimension.Texture2DMultisampled
-                                           };
-                        _multiSampledDepthBufferSrv = new ShaderResourceView(device, _multiSampledDepthBuffer, viewDesc);
-                    }
+                    _resolvedDepthBufferUav = new UnorderedAccessView(device, _resolvedDepthBuffer);
                 }
                 catch
                 {
-                    Utilities.Dispose(ref _multiSampledDepthBufferDsv);
-                    Utilities.Dispose(ref _multiSampledDepthBufferSrv);
-                    Utilities.Dispose(ref _multiSampledDepthBuffer);
-                    Log.Error("Error  creating multisampled depth/stencil buffer.", this);
-                }
-
-                if (DownSamplingRequired)
-                {
-                    try
-                    {
-                        _resolvedDepthBuffer = Texture2D.CreateTexture2D(
-                                                             new Texture2DDescription
-                                                                 {
-                                                                     ArraySize = 1,
-                                                                     BindFlags = BindFlags.ShaderResource | BindFlags.UnorderedAccess,
-                                                                     CpuAccessFlags = CpuAccessFlags.None,
-                                                                     Format = Format.R32_Float,
-                                                                     Width = size.Width,
-                                                                     Height = size.Height,
-                                                                     MipLevels = mipLevels,
-                                                                     OptionFlags = ResourceOptionFlags.None,
-                                                                     SampleDescription = new SampleDescription(1, 0),
-                                                                     Usage = ResourceUsage.Default
-                                                                 });
-
-                        _resolvedDepthBufferUav = new UnorderedAccessView(device, _resolvedDepthBuffer);
-                    }
-                    catch
-                    {
-                        Utilities.Dispose(ref _resolvedDepthBufferUav);
-                        Utilities.Dispose(ref _resolvedDepthBuffer);
-                        Log.Error("Error creating depth/stencil downsampling buffer.", this);
-                    }
+                    Utilities.Dispose(ref _resolvedDepthBufferUav);
+                    Utilities.Dispose(ref _resolvedDepthBuffer);
+                    Log.Error("Error creating depth/stencil downsampling buffer.", this);
                 }
             }
-
-            return wasChanged;
         }
 
-        private enum Samples
-        {
-            No_MSAA = 1,
-            MSAA_2Samples =2,
-            MSAA_4Samples = 4,
-            MSAA_8Samples = 8,
-        }
-        
-        private Texture2D _multiSampledColorBuffer;
-        private ShaderResourceView _multiSampledColorBufferSrv;
-        private RenderTargetView _multiSampledColorBufferRtv;
-
-        private Texture2D _resolvedColorBuffer;
-        private ShaderResourceView _resolvedColorBufferSrv;
-        private RenderTargetView _resolvedColorBufferRtv;
-
-        private Texture2D _multiSampledDepthBuffer;
-        private DepthStencilView _multiSampledDepthBufferDsv;
-        private ShaderResourceView _multiSampledDepthBufferSrv;
-
-        private Texture2D _resolvedDepthBuffer;
-        private UnorderedAccessView _resolvedDepthBufferUav;
-
-        private bool _wasClearedOnce;
-
-        private Texture2D ColorTexture => _sampleCount > 1 ? _resolvedColorBuffer : _multiSampledColorBuffer ;
-        private Texture2D DepthTexture => _sampleCount > 1 ? _resolvedDepthBuffer : _multiSampledDepthBuffer;
-        private bool DownSamplingRequired => _sampleCount > 1;
-        private int _sampleCount;
-
-        [Input(Guid = "4da253b7-4953-439a-b03f-1d515a78bddf")]
-        public readonly InputSlot<Command> Command = new();
-
-        [Input(Guid = "03749b41-cc3c-4f38-aea6-d7cea19fc073")]
-        public readonly InputSlot<Int2> Resolution = new();
-
-        [Input(Guid = "aacafc4d-f47f-4893-9a6e-98db306a8901")]
-        public readonly InputSlot<bool> Clear = new();
-        
-        [Input(Guid = "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f")]
-        public readonly InputSlot<Vector4> ClearColor = new();
-        
-        [Input(Guid = "E882E0F0-03F9-46E6-AC7A-709E6FA66613", MappedType = typeof(Samples))]
-        public readonly InputSlot<int> Multisampling = new();
-        
-        [Input(Guid = "ec46bef4-8dce-4eb4-bfe8-e35a5ac416ec")]
-        public readonly InputSlot<Format> TextureFormat = new();
-
-        // [Input(Guid = "2d54adbb-04c7-4f92-babd-9822953aa4cd")]
-        // public readonly InputSlot<SharpDX.DXGI.Format> DepthFormat = new InputSlot<SharpDX.DXGI.Format>();
-        
-        [Input(Guid = "6EA4F801-FF52-4266-A41F-B9EF02C68510")]
-        public readonly InputSlot<bool> WithDepthBuffer = new();
-        
-
-        [Input(Guid = "f0cf3325-4967-4419-9beb-036cd6dbfd6a")]
-        public readonly InputSlot<bool> GenerateMips = new();
-
-        [Input(Guid = "07AD28AD-FF5F-4CA9-B7BB-F7F8B16A6434")]
-        public readonly InputSlot<RenderTargetReference> TextureReference = new();
-        
-        [Input(Guid = "ABEBB02B-BCAA-42C7-8EB8-DA3C1B2FC840")]
-        public readonly InputSlot<bool> EnableUpdate = new();
-
-        public IEnumerable<(string, int)> GetStats()
-        {
-            yield return ("RenderTargets", _statsCount);
-            yield return ("with MSAA", _statsCountWithMsaa);
-            yield return ("pixels", _statsCountPixels);
-        }
-
-        private static readonly object _lock = new ();
-        
-        public void StartNewFrame()
-        {
-            _statsCount = 0;
-            _statsCountPixels = 0;
-            _statsCountWithMsaa = 0;
-        }
-        
-        private static int _statsCount;
-        private static int _statsCountWithMsaa;
-        private static int _statsCountPixels;
-        private static bool _registeredStats;
-
-        private static Resource<ComputeShader> _resolveComputeShaderResource;
+        return wasChanged;
     }
+
+    private enum Samples
+    {
+        No_MSAA = 1,
+        MSAA_2Samples =2,
+        MSAA_4Samples = 4,
+        MSAA_8Samples = 8,
+    }
+        
+    private Texture2D _multiSampledColorBuffer;
+    private ShaderResourceView _multiSampledColorBufferSrv;
+    private RenderTargetView _multiSampledColorBufferRtv;
+
+    private Texture2D _resolvedColorBuffer;
+    private ShaderResourceView _resolvedColorBufferSrv;
+    private RenderTargetView _resolvedColorBufferRtv;
+
+    private Texture2D _multiSampledDepthBuffer;
+    private DepthStencilView _multiSampledDepthBufferDsv;
+    private ShaderResourceView _multiSampledDepthBufferSrv;
+
+    private Texture2D _resolvedDepthBuffer;
+    private UnorderedAccessView _resolvedDepthBufferUav;
+
+    private bool _wasClearedOnce;
+
+    private Texture2D ColorTexture => _sampleCount > 1 ? _resolvedColorBuffer : _multiSampledColorBuffer ;
+    private Texture2D DepthTexture => _sampleCount > 1 ? _resolvedDepthBuffer : _multiSampledDepthBuffer;
+    private bool DownSamplingRequired => _sampleCount > 1;
+    private int _sampleCount;
+
+    [Input(Guid = "4da253b7-4953-439a-b03f-1d515a78bddf")]
+    public readonly InputSlot<Command> Command = new();
+
+    [Input(Guid = "03749b41-cc3c-4f38-aea6-d7cea19fc073")]
+    public readonly InputSlot<Int2> Resolution = new();
+
+    [Input(Guid = "aacafc4d-f47f-4893-9a6e-98db306a8901")]
+    public readonly InputSlot<bool> Clear = new();
+        
+    [Input(Guid = "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f")]
+    public readonly InputSlot<Vector4> ClearColor = new();
+        
+    [Input(Guid = "E882E0F0-03F9-46E6-AC7A-709E6FA66613", MappedType = typeof(Samples))]
+    public readonly InputSlot<int> Multisampling = new();
+        
+    [Input(Guid = "ec46bef4-8dce-4eb4-bfe8-e35a5ac416ec")]
+    public readonly InputSlot<Format> TextureFormat = new();
+
+    // [Input(Guid = "2d54adbb-04c7-4f92-babd-9822953aa4cd")]
+    // public readonly InputSlot<SharpDX.DXGI.Format> DepthFormat = new InputSlot<SharpDX.DXGI.Format>();
+        
+    [Input(Guid = "6EA4F801-FF52-4266-A41F-B9EF02C68510")]
+    public readonly InputSlot<bool> WithDepthBuffer = new();
+        
+
+    [Input(Guid = "f0cf3325-4967-4419-9beb-036cd6dbfd6a")]
+    public readonly InputSlot<bool> GenerateMips = new();
+
+    [Input(Guid = "07AD28AD-FF5F-4CA9-B7BB-F7F8B16A6434")]
+    public readonly InputSlot<RenderTargetReference> TextureReference = new();
+        
+    [Input(Guid = "ABEBB02B-BCAA-42C7-8EB8-DA3C1B2FC840")]
+    public readonly InputSlot<bool> EnableUpdate = new();
+
+    public IEnumerable<(string, int)> GetStats()
+    {
+        yield return ("RenderTargets", _statsCount);
+        yield return ("with MSAA", _statsCountWithMsaa);
+        yield return ("pixels", _statsCountPixels);
+    }
+
+    private static readonly object _lock = new ();
+        
+    public void StartNewFrame()
+    {
+        _statsCount = 0;
+        _statsCountPixels = 0;
+        _statsCountWithMsaa = 0;
+    }
+        
+    private static int _statsCount;
+    private static int _statsCountWithMsaa;
+    private static int _statsCountPixels;
+    private static bool _registeredStats;
+
+    private static Resource<ComputeShader> _resolveComputeShaderResource;
 }

@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 
-namespace T3.Core.Operator.Slots
+namespace T3.Core.Operator.Slots;
+
+public interface IMultiInputSlot : IInputSlot
 {
-    public interface IMultiInputSlot : IInputSlot
-    {
-        IReadOnlyList<ISlot> GetCollectedInputs();
-    }
+    IReadOnlyList<ISlot> GetCollectedInputs();
 }

@@ -7,98 +7,97 @@ using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.UiModel;
 
-namespace T3.Editor.Gui.Windows.Variations
+namespace T3.Editor.Gui.Windows.Variations;
+
+internal class SnapshotCanvas : VariationBaseCanvas
 {
-    internal class SnapshotCanvas : VariationBaseCanvas
+    private protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForSnapshots;
+    private protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForSnapshots;
+
+    public virtual void DrawToolbarFunctions()
     {
-        private protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForSnapshots;
-        private protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForSnapshots;
+        var s = ImGui.GetFrameHeight();
 
-        public virtual void DrawToolbarFunctions()
+        if (CustomComponents.IconButton(Icon.Plus, new Vector2(s, s)))
         {
-            var s = ImGui.GetFrameHeight();
-
-            if (CustomComponents.IconButton(Icon.Plus, new Vector2(s, s)))
-            {
-                CreateVariation();
-            }
+            CreateVariation();
         }
+    }
 
-        protected override string GetTitle()
+    protected override string GetTitle()
+    {
+        return VariationHandling.ActiveInstanceForSnapshots != null 
+                   ? $"...for {VariationHandling.ActiveInstanceForSnapshots.Symbol.Name}" 
+                   : string.Empty;
+    }
+
+    protected override void DrawAdditionalContextMenuContent(Instance InstanceForBlendOperations)
+    {
+        var oneSelected = CanvasElementSelection.SelectedElements.Count == 1;
+        var oneOrMoreSelected = CanvasElementSelection.SelectedElements.Count > 0;
+
+        var graphWindow = GraphWindow.Focused;
+        if (graphWindow == null)
+            return;
+
+        var nodeSelection = graphWindow.GraphCanvas.NodeSelection;
+
+        if (ImGui.MenuItem("Select affected Operators",
+                           "",
+                           false,
+                           oneOrMoreSelected))
         {
-            return VariationHandling.ActiveInstanceForSnapshots != null 
-                       ? $"...for {VariationHandling.ActiveInstanceForSnapshots.Symbol.Name}" 
-                       : string.Empty;
-        }
+            nodeSelection.Clear();
 
-        protected override void DrawAdditionalContextMenuContent(Instance InstanceForBlendOperations)
-        {
-            var oneSelected = CanvasElementSelection.SelectedElements.Count == 1;
-            var oneOrMoreSelected = CanvasElementSelection.SelectedElements.Count > 0;
-
-            var graphWindow = GraphWindow.Focused;
-            if (graphWindow == null)
-                return;
-
-            var nodeSelection = graphWindow.GraphCanvas.NodeSelection;
-
-            if (ImGui.MenuItem("Select affected Operators",
-                               "",
-                               false,
-                               oneOrMoreSelected))
+            foreach (var element in CanvasElementSelection.SelectedElements)
             {
-                nodeSelection.Clear();
+                if (element is not Variation selectedVariation)
+                    continue;
 
-                foreach (var element in CanvasElementSelection.SelectedElements)
+                var parentSymbolUi = InstanceForBlendOperations.Symbol.GetSymbolUi();
+
+                foreach (var symbolChildUi in parentSymbolUi.ChildUis.Values)
                 {
-                    if (element is not Variation selectedVariation)
+                    if (!selectedVariation.ParameterSetsForChildIds.ContainsKey(symbolChildUi.Id))
                         continue;
 
-                    var parentSymbolUi = InstanceForBlendOperations.Symbol.GetSymbolUi();
-
-                    foreach (var symbolChildUi in parentSymbolUi.ChildUis.Values)
-                    {
-                        if (!selectedVariation.ParameterSetsForChildIds.ContainsKey(symbolChildUi.Id))
-                            continue;
-
-                        if (InstanceForBlendOperations.Children.TryGetValue(symbolChildUi.Id, out var instance))
-                            nodeSelection.AddSelection(symbolChildUi, instance);
-                    }
+                    if (InstanceForBlendOperations.Children.TryGetValue(symbolChildUi.Id, out var instance))
+                        nodeSelection.AddSelection(symbolChildUi, instance);
                 }
-
-                FitViewToSelectionHandling.FitViewToSelection();
             }
 
-            if (ImGui.MenuItem("Remove selected Ops from Variations",
-                               "",
-                               false,
-                               oneOrMoreSelected))
-            {
-                var selectedInstances = nodeSelection.GetSelectedInstances().ToList();
-                var selectedThumbnails = new List<Variation>();
-                foreach (var thumbnail in CanvasElementSelection.SelectedElements)
-                {
-                    if (thumbnail is Variation v)
-                    {
-                        selectedThumbnails.Add(v);
-                    }
-                }
-
-                VariationHandling.RemoveInstancesFromVariations(selectedInstances.Select(i=> i.SymbolChildId), selectedThumbnails);
-            }
+            FitViewToSelectionHandling.FitViewToSelection();
         }
 
-        private void CreateVariation()
+        if (ImGui.MenuItem("Remove selected Ops from Variations",
+                           "",
+                           false,
+                           oneOrMoreSelected))
         {
-            var newVariation = VariationHandling.CreateOrUpdateSnapshotVariation();
-            if (newVariation == null)
-                return;
+            var selectedInstances = nodeSelection.GetSelectedInstances().ToList();
+            var selectedThumbnails = new List<Variation>();
+            foreach (var thumbnail in CanvasElementSelection.SelectedElements)
+            {
+                if (thumbnail is Variation v)
+                {
+                    selectedThumbnails.Add(v);
+                }
+            }
 
-            PoolForBlendOperations.SaveVariationsToFile();
-            CanvasElementSelection.SetSelection(newVariation);
-            ResetView();
-            TriggerThumbnailUpdate();
-            VariationThumbnail.VariationForRenaming = newVariation;
+            VariationHandling.RemoveInstancesFromVariations(selectedInstances.Select(i=> i.SymbolChildId), selectedThumbnails);
         }
+    }
+
+    private void CreateVariation()
+    {
+        var newVariation = VariationHandling.CreateOrUpdateSnapshotVariation();
+        if (newVariation == null)
+            return;
+
+        PoolForBlendOperations.SaveVariationsToFile();
+        CanvasElementSelection.SetSelection(newVariation);
+        ResetView();
+        TriggerThumbnailUpdate();
+        VariationThumbnail.VariationForRenaming = newVariation;
     }
 }

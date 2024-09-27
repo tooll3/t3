@@ -4,42 +4,41 @@ using T3.Core.DataTypes;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.TableView;
 
-namespace T3.Editor.Gui.OutputUi
+namespace T3.Editor.Gui.OutputUi;
+
+public class StructuredListOutputUi : OutputUi<StructuredList>
 {
-    public class StructuredListOutputUi : OutputUi<StructuredList>
+    public override IOutputUi Clone()
     {
-        public override IOutputUi Clone()
-        {
-            return new StringListOutputUi()
-                       {
-                           OutputDefinition = OutputDefinition,
-                           PosOnCanvas = PosOnCanvas,
-                           Size = Size
-                       };
-        }
+        return new StringListOutputUi()
+                   {
+                       OutputDefinition = OutputDefinition,
+                       PosOnCanvas = PosOnCanvas,
+                       Size = Size
+                   };
+    }
         
-        protected override void DrawTypedValue(ISlot slot)
+    protected override void DrawTypedValue(ISlot slot)
+    {
+        if (slot is Slot<StructuredList> typedSlot)
         {
-            if (slot is Slot<StructuredList> typedSlot)
+            var list = typedSlot.Value;
+            if (list == null)
             {
-                var list = typedSlot.Value;
-                if (list == null)
-                {
-                    ImGui.TextUnformatted("NULL?");
-                }
-                else
-                {
-                    var modified = TableList.Draw(typedSlot.Value);
-                    if (modified)
-                    {
-                        typedSlot.DirtyFlag.Invalidate();
-                    }
-                }
+                ImGui.TextUnformatted("NULL?");
             }
             else
             {
-                Debug.Assert(false);
+                var modified = TableList.Draw(typedSlot.Value);
+                if (modified)
+                {
+                    typedSlot.DirtyFlag.Invalidate();
+                }
             }
+        }
+        else
+        {
+            Debug.Assert(false);
         }
     }
 }

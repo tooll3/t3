@@ -3,39 +3,38 @@ using ImGuiNET;
 using T3.Core.DataTypes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Editor.Gui.OutputUi
+namespace T3.Editor.Gui.OutputUi;
+
+public class PointArrayOutputUi : OutputUi<Point[]>
 {
-    public class PointArrayOutputUi : OutputUi<Point[]>
+    public override IOutputUi Clone()
     {
-        public override IOutputUi Clone()
-        {
-            return new PointArrayOutputUi()
-                       {
-                           OutputDefinition = OutputDefinition,
-                           PosOnCanvas = PosOnCanvas,
-                           Size = Size
-                       };
-        }
+        return new PointArrayOutputUi()
+                   {
+                       OutputDefinition = OutputDefinition,
+                       PosOnCanvas = PosOnCanvas,
+                       Size = Size
+                   };
+    }
         
-        protected override void DrawTypedValue(ISlot slot)
+    protected override void DrawTypedValue(ISlot slot)
+    {
+        if (slot is Slot<Point[]> typedSlot)
         {
-            if (slot is Slot<Point[]> typedSlot)
-            {
-                var v = typedSlot.Value;
+            var v = typedSlot.Value;
 
-                if (v == null)
-                    return;
+            if (v == null)
+                return;
 
-                for (var index = 0; index < v.Length && index < 50; index++)
-                {
-                    var position = v[index].Position;
-                    ImGui.TextUnformatted($"{position}");
-                }
-            }
-            else
+            for (var index = 0; index < v.Length && index < 50; index++)
             {
-                Debug.Assert(false);
+                var position = v[index].Position;
+                ImGui.TextUnformatted($"{position}");
             }
+        }
+        else
+        {
+            Debug.Assert(false);
         }
     }
 }

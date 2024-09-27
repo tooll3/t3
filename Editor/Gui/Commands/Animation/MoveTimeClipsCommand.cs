@@ -6,106 +6,105 @@ using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.UiModel;
 
-namespace T3.Editor.Gui.Commands.Animation
+namespace T3.Editor.Gui.Commands.Animation;
+
+public class MoveTimeClipsCommand : ICommand
 {
-    public class MoveTimeClipsCommand : ICommand
-    {
-        public string Name => "Move Time Clip";
-        public bool IsUndoable => true;
+    public string Name => "Move Time Clip";
+    public bool IsUndoable => true;
         
-        private class  Entry
-        {
-            public Guid Id { get; set; }
-            public TimeRange TimeRange { get; set; }
-            public TimeRange SourceRange { get; set; }
-            public int LayerIndex { get; set; }
-        }
+    private class  Entry
+    {
+        public Guid Id { get; set; }
+        public TimeRange TimeRange { get; set; }
+        public TimeRange SourceRange { get; set; }
+        public int LayerIndex { get; set; }
+    }
 
-        private readonly Entry[] _entries;
-        private readonly Instance _compositionOp;
+    private readonly Entry[] _entries;
+    private readonly Instance _compositionOp;
 
-        public MoveTimeClipsCommand(Instance compositionOp, IReadOnlyList<ITimeClip> clips)
+    public MoveTimeClipsCommand(Instance compositionOp, IReadOnlyList<ITimeClip> clips)
+    {
+        _compositionOp = compositionOp;
+        _entries = new Entry[clips.Count()];
+        for (var i = 0; i < _entries.Length; i++)
         {
-            _compositionOp = compositionOp;
-            _entries = new Entry[clips.Count()];
-            for (var i = 0; i < _entries.Length; i++)
-            {
-                var clip = clips[i];
-                var entry = new Entry
+            var clip = clips[i];
+            var entry = new Entry
                             {
                                 Id = clip.Id,
                                 TimeRange =clip.TimeRange.Clone(),
                                 SourceRange =clip.SourceRange.Clone(),
                                 LayerIndex = clip.LayerIndex,
                             };
-                _entries[i] = entry;
-            }
+            _entries[i] = entry;
         }
+    }
         
 
-        public void StoreCurrentValues()
+    public void StoreCurrentValues()
+    {
+        foreach (var clip in Structure.GetAllTimeClips(_compositionOp))
         {
-            foreach (var clip in Structure.GetAllTimeClips(_compositionOp))
-            {
-                var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
-                if (selectedEntry == null)
-                    continue;
+            var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
+            if (selectedEntry == null)
+                continue;
 
-                selectedEntry.TimeRange = clip.TimeRange.Clone();
-                selectedEntry.SourceRange = clip.SourceRange.Clone();
-                selectedEntry.LayerIndex = clip.LayerIndex;
-            }            
+            selectedEntry.TimeRange = clip.TimeRange.Clone();
+            selectedEntry.SourceRange = clip.SourceRange.Clone();
+            selectedEntry.LayerIndex = clip.LayerIndex;
+        }            
+    }
+
+
+    public void Undo()
+    {
+        bool changed = false;
+        foreach (var clip in Structure.GetAllTimeClips(_compositionOp))
+        {
+            var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
+            if (selectedEntry == null)
+                continue;
+
+            clip.TimeRange = selectedEntry.TimeRange.Clone();
+            clip.SourceRange = selectedEntry.SourceRange.Clone();
+            clip.LayerIndex = selectedEntry.LayerIndex;
+            changed = true;
         }
 
-
-        public void Undo()
+        if (changed)
         {
-            bool changed = false;
-            foreach (var clip in Structure.GetAllTimeClips(_compositionOp))
-            {
-                var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
-                if (selectedEntry == null)
-                    continue;
-
-                clip.TimeRange = selectedEntry.TimeRange.Clone();
-                clip.SourceRange = selectedEntry.SourceRange.Clone();
-                clip.LayerIndex = selectedEntry.LayerIndex;
-                changed = true;
-            }
-
-            if (changed)
-            {
-                _compositionOp.GetSymbolUi().FlagAsModified();
-            }
+            _compositionOp.GetSymbolUi().FlagAsModified();
         }
+    }
 
-        public void Do()
-        {
-            var allTimeClips = Structure.GetAllTimeClips(_compositionOp).ToList();
+    public void Do()
+    {
+        var allTimeClips = Structure.GetAllTimeClips(_compositionOp).ToList();
             
-            bool changed = false;
-            foreach (var clip in allTimeClips)
-            {
-                var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
-                if (selectedEntry == null)
-                    continue;
+        bool changed = false;
+        foreach (var clip in allTimeClips)
+        {
+            var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
+            if (selectedEntry == null)
+                continue;
                 
-                clip.TimeRange = selectedEntry.TimeRange.Clone();
-                clip.SourceRange = selectedEntry.SourceRange.Clone();
-                clip.LayerIndex = selectedEntry.LayerIndex;
+            clip.TimeRange = selectedEntry.TimeRange.Clone();
+            clip.SourceRange = selectedEntry.SourceRange.Clone();
+            clip.LayerIndex = selectedEntry.LayerIndex;
 
-                while (clip.IsClipOverlappingOthers(allTimeClips))
-                {
-                    clip.LayerIndex++;
-                }
-                
-                changed = true;
-            }
-
-            if (changed)
+            while (clip.IsClipOverlappingOthers(allTimeClips))
             {
-                _compositionOp.GetSymbolUi().FlagAsModified();
+                clip.LayerIndex++;
             }
+                
+            changed = true;
+        }
+
+        if (changed)
+        {
+            _compositionOp.GetSymbolUi().FlagAsModified();
         }
     }
 }

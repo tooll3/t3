@@ -2,124 +2,123 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-namespace Utils
+namespace Utils;
+
+public class BmFontDescription
 {
-    public class BmFontDescription
+    public static bool TryInitializeFromFile(string filepath, [NotNullWhen(true)] out BmFontDescription? fontDescription)
     {
-        public static bool TryInitializeFromFile(string filepath, [NotNullWhen(true)] out BmFontDescription? fontDescription)
+        if (_fontDescriptionForFilePaths == null || filepath == null)
         {
-            if (_fontDescriptionForFilePaths == null || filepath == null)
-            {
-                fontDescription = null;
-                return false;
-            }
+            fontDescription = null;
+            return false;
+        }
 
-            if (_fontDescriptionForFilePaths.TryGetValue(filepath, out var font))
-            {
-                fontDescription = font;
-                return true;
-            }
-            
-            Font bmFont;
-            try
-            {
-                var serializer = new XmlSerializer(typeof(Font));
-                var stream = new FileStream(filepath, FileMode.Open);
-                bmFont = (Font)serializer.Deserialize(stream);
-                Log.Debug("loaded font with character count:" + bmFont.Chars.Length);
-                stream.Close();
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Failed to load font {filepath} " + e + "\n" + e.Message);
-                fontDescription = null;
-                return false;
-            }
-
-            fontDescription = new BmFontDescription(bmFont);
-            _fontDescriptionForFilePaths[filepath] = fontDescription;
-            
-            
+        if (_fontDescriptionForFilePaths.TryGetValue(filepath, out var font))
+        {
+            fontDescription = font;
             return true;
         }
-
-        private BmFontDescription(Font bmFont)
+            
+        Font bmFont;
+        try
         {
-            BmFont = bmFont;
-            Padding = Paddings.FromString(bmFont.Info.Padding);
-            
-            foreach (var c in bmFont.Chars)
-            {
-                InfoForCharacter[c.Id] = c;
-            }
-            
-            foreach (var kerning in bmFont.Kernings)
-            {
-                var key = (kerning.First << 16 | kerning.Second);
-                var value = kerning.Amount;
-                KerningForPairs[key] = value;
-            }
+            var serializer = new XmlSerializer(typeof(Font));
+            var stream = new FileStream(filepath, FileMode.Open);
+            bmFont = (Font)serializer.Deserialize(stream);
+            Log.Debug("loaded font with character count:" + bmFont.Chars.Length);
+            stream.Close();
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to load font {filepath} " + e + "\n" + e.Message);
+            fontDescription = null;
+            return false;
         }
 
-        public float GetKerning(int leftCharId, int rightCharId)
-        {
-            if (leftCharId == 0)
-                return 0;
+        fontDescription = new BmFontDescription(bmFont);
+        _fontDescriptionForFilePaths[filepath] = fontDescription;
             
-            var key = leftCharId << 16 | rightCharId;
-            if (KerningForPairs.TryGetValue(key, out var kerning2))
-            {
-                return kerning2;
-            }
+            
+        return true;
+    }
+
+    private BmFontDescription(Font bmFont)
+    {
+        BmFont = bmFont;
+        Padding = Paddings.FromString(bmFont.Info.Padding);
+            
+        foreach (var c in bmFont.Chars)
+        {
+            InfoForCharacter[c.Id] = c;
+        }
+            
+        foreach (var kerning in bmFont.Kernings)
+        {
+            var key = (kerning.First << 16 | kerning.Second);
+            var value = kerning.Amount;
+            KerningForPairs[key] = value;
+        }
+    }
+
+    public float GetKerning(int leftCharId, int rightCharId)
+    {
+        if (leftCharId == 0)
             return 0;
-        }
-
-        public readonly Paddings Padding;
-        public readonly Font BmFont;
-        public readonly Dictionary<int, float> KerningForPairs = new();
-        public readonly Dictionary<int, FontChar> InfoForCharacter = new();
-        private static readonly Dictionary<string, BmFontDescription> _fontDescriptionForFilePaths = new();
-        
-        public enum HorizontalAligns
-        {
-            Left,
-            Center,
-            Right,
-        }
-
-        public enum VerticalAligns
-        {
-            Top,
-            Middle,
-            Bottom,
-        }
-
-        public struct Paddings
-        {
-            public static Paddings FromString(string str)
-            {
-                if (string.IsNullOrEmpty(str))
-                    return _zeroPadding;
-
-                var newPadding = new Paddings();
-                var values = str.Split(",");
-                if (values.Length != 4)
-                    return _zeroPadding;
-                
-                newPadding.Up = float.TryParse(values[0], out var upPadding) ? upPadding : 0; 
-                newPadding.Right = float.TryParse(values[1], out var rightPadding) ? rightPadding : 0;
-                newPadding.Down = float.TryParse(values[2], out var downPadding) ? downPadding : 0;
-                newPadding.Left = float.TryParse(values[3], out var leftPadding) ? leftPadding : 0;
-
-                return newPadding;
-            }
             
-            public float Up;
-            public float Right;
-            public float Down;
-            public float Left;
-
-            private static readonly Paddings _zeroPadding = default;
+        var key = leftCharId << 16 | rightCharId;
+        if (KerningForPairs.TryGetValue(key, out var kerning2))
+        {
+            return kerning2;
         }
+        return 0;
+    }
+
+    public readonly Paddings Padding;
+    public readonly Font BmFont;
+    public readonly Dictionary<int, float> KerningForPairs = new();
+    public readonly Dictionary<int, FontChar> InfoForCharacter = new();
+    private static readonly Dictionary<string, BmFontDescription> _fontDescriptionForFilePaths = new();
+        
+    public enum HorizontalAligns
+    {
+        Left,
+        Center,
+        Right,
+    }
+
+    public enum VerticalAligns
+    {
+        Top,
+        Middle,
+        Bottom,
+    }
+
+    public struct Paddings
+    {
+        public static Paddings FromString(string str)
+        {
+            if (string.IsNullOrEmpty(str))
+                return _zeroPadding;
+
+            var newPadding = new Paddings();
+            var values = str.Split(",");
+            if (values.Length != 4)
+                return _zeroPadding;
+                
+            newPadding.Up = float.TryParse(values[0], out var upPadding) ? upPadding : 0; 
+            newPadding.Right = float.TryParse(values[1], out var rightPadding) ? rightPadding : 0;
+            newPadding.Down = float.TryParse(values[2], out var downPadding) ? downPadding : 0;
+            newPadding.Left = float.TryParse(values[3], out var leftPadding) ? leftPadding : 0;
+
+            return newPadding;
+        }
+            
+        public float Up;
+        public float Right;
+        public float Down;
+        public float Left;
+
+        private static readonly Paddings _zeroPadding = default;
     }
 }

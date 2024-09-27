@@ -1,129 +1,128 @@
 ﻿using ImGuiNET;
 using T3.Editor.Gui.Styling;
 
-namespace T3.Editor.Gui.Windows
+namespace T3.Editor.Gui.Windows;
+
+/// <summary>
+/// A base class that unifies how windows are rendered and persisted
+/// </summary>
+public abstract class Window
 {
-    /// <summary>
-    /// A base class that unifies how windows are rendered and persisted
-    /// </summary>
-    public abstract class Window
+    public bool AllowMultipleInstances = false;
+    public ImGuiWindowFlags WindowFlags;
+
+    protected bool PreventWindowDragging = true;
+
+    public abstract IReadOnlyList<Window> GetInstances();
+
+    protected virtual string WindowDisplayTitle => Config.Title;
+
+    public void Draw()
     {
-        public bool AllowMultipleInstances = false;
-        public ImGuiWindowFlags WindowFlags;
+        UpdateBeforeDraw();
 
-        protected bool PreventWindowDragging = true;
+        if (!Config.Visible)
+            return;
 
-        public abstract IReadOnlyList<Window> GetInstances();
-
-        protected virtual string WindowDisplayTitle => Config.Title;
-
-        public void Draw()
+        if (!_wasVisible)
         {
-            UpdateBeforeDraw();
+            ImGui.SetNextWindowSize(new Vector2(550, 450));
+            _wasVisible = true;
+        }
 
-            if (!Config.Visible)
-                return;
+        var hideFrameBorder = (WindowFlags & ImGuiWindowFlags.NoMove) != ImGuiWindowFlags.None;
+        if (hideFrameBorder)
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0);
 
-            if (!_wasVisible)
+        if (ImGui.Begin(WindowDisplayTitle, ref Config.Visible, WindowFlags))
+        {
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowPaddingForWindows);
+            // Prevent window header from becoming invisible 
+            var windowPos = ImGui.GetWindowPos();
+            if (windowPos.X <= 0) windowPos.X = 0;
+            if (windowPos.Y <= 0) windowPos.Y = 0;
+            ImGui.SetWindowPos(windowPos);
+
+            var preventMouseScrolling = T3Ui.MouseWheelFieldWasHoveredLastFrame ? ImGuiWindowFlags.NoScrollWithMouse : ImGuiWindowFlags.None;
+            if (PreventWindowDragging)
+                ImGui.BeginChild("inner", ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin(), false,
+                                 ImGuiWindowFlags.NoMove | preventMouseScrolling | WindowFlags);
+
+            var idBefore = ImGui.GetID("");
+            DrawContent();
+            var idAfter = ImGui.GetID("");
+            if (idBefore != idAfter)
             {
-                ImGui.SetNextWindowSize(new Vector2(550, 450));
-                _wasVisible = true;
+                Log.Warning($"Inconsistent ImGui-ID after rendering {this}  {idBefore} != {idAfter}");
             }
 
-            var hideFrameBorder = (WindowFlags & ImGuiWindowFlags.NoMove) != ImGuiWindowFlags.None;
-            if (hideFrameBorder)
-                ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0);
+            if (PreventWindowDragging)
+                ImGui.EndChild();
 
-            if (ImGui.Begin(WindowDisplayTitle, ref Config.Visible, WindowFlags))
-            {
-                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowPaddingForWindows);
-                // Prevent window header from becoming invisible 
-                var windowPos = ImGui.GetWindowPos();
-                if (windowPos.X <= 0) windowPos.X = 0;
-                if (windowPos.Y <= 0) windowPos.Y = 0;
-                ImGui.SetWindowPos(windowPos);
-
-                var preventMouseScrolling = T3Ui.MouseWheelFieldWasHoveredLastFrame ? ImGuiWindowFlags.NoScrollWithMouse : ImGuiWindowFlags.None;
-                if (PreventWindowDragging)
-                    ImGui.BeginChild("inner", ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin(), false,
-                                     ImGuiWindowFlags.NoMove | preventMouseScrolling | WindowFlags);
-
-                var idBefore = ImGui.GetID("");
-                DrawContent();
-                var idAfter = ImGui.GetID("");
-                if (idBefore != idAfter)
-                {
-                    Log.Warning($"Inconsistent ImGui-ID after rendering {this}  {idBefore} != {idAfter}");
-                }
-
-                if (PreventWindowDragging)
-                    ImGui.EndChild();
-
-                ImGui.PopStyleVar(); // innerWindowPadding
-                ImGui.End();
-            }
-
-            if (!Config.Visible)
-            {
-                Close();
-            }
-
-            if (hideFrameBorder)
-                ImGui.PopStyleVar();
+            ImGui.PopStyleVar(); // innerWindowPadding
+            ImGui.End();
         }
 
-        private bool _wasVisible;
-
-        public void DrawMenuItemToggle()
+        if (!Config.Visible)
         {
-            if (AllowMultipleInstances)
-            {
-                var menuTitle = string.IsNullOrEmpty(MenuTitle) 
-                                    ? $"Open new {Config.Title} Window"
-                                    : MenuTitle;
-                if (ImGui.MenuItem(menuTitle))
-                {
-                    AddAnotherInstance();
-                }
-            }
-            else
-            {
-                var menuTitle = string.IsNullOrEmpty(MenuTitle) 
-                                    ? Config.Title 
-                                    : MenuTitle;
-
-                if (ImGui.MenuItem(menuTitle, "", Config.Visible))
-                {
-                    Config.Visible = !Config.Visible;
-                }
-
-                if (!Config.Visible)
-                    Close();
-            }
-        }
-        
-        protected abstract void DrawContent();
-
-        protected virtual void UpdateBeforeDraw()
-        {
-        }
-       
-        protected virtual void Close()
-        {
+            Close();
         }
 
-        protected virtual void AddAnotherInstance()
-        {
-        }
-
-        public class WindowConfig
-        {
-            public string Title;
-            public bool Visible;
-        }
-
-        internal WindowConfig Config = new();
-
-        protected string MenuTitle;
+        if (hideFrameBorder)
+            ImGui.PopStyleVar();
     }
+
+    private bool _wasVisible;
+
+    public void DrawMenuItemToggle()
+    {
+        if (AllowMultipleInstances)
+        {
+            var menuTitle = string.IsNullOrEmpty(MenuTitle) 
+                                ? $"Open new {Config.Title} Window"
+                                : MenuTitle;
+            if (ImGui.MenuItem(menuTitle))
+            {
+                AddAnotherInstance();
+            }
+        }
+        else
+        {
+            var menuTitle = string.IsNullOrEmpty(MenuTitle) 
+                                ? Config.Title 
+                                : MenuTitle;
+
+            if (ImGui.MenuItem(menuTitle, "", Config.Visible))
+            {
+                Config.Visible = !Config.Visible;
+            }
+
+            if (!Config.Visible)
+                Close();
+        }
+    }
+        
+    protected abstract void DrawContent();
+
+    protected virtual void UpdateBeforeDraw()
+    {
+    }
+       
+    protected virtual void Close()
+    {
+    }
+
+    protected virtual void AddAnotherInstance()
+    {
+    }
+
+    public class WindowConfig
+    {
+        public string Title;
+        public bool Visible;
+    }
+
+    internal WindowConfig Config = new();
+
+    protected string MenuTitle;
 }

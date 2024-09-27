@@ -6,95 +6,94 @@ using T3.Editor.Gui.Commands.Animation;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.TimeLine;
 
-namespace T3.Editor.Gui.Interaction.Animation
+namespace T3.Editor.Gui.Interaction.Animation;
+
+internal class AnimationOperations
 {
-    internal class AnimationOperations
+    public static List<VDefinition> InsertKeyframeToCurves(IEnumerable<Curve> curves, double time, float increment = 0)
     {
-        public static List<VDefinition> InsertKeyframeToCurves(IEnumerable<Curve> curves, double time, float increment = 0)
-        {
-            var commands = new List<ICommand>();
+        var commands = new List<ICommand>();
             
-            var newKeyframes = new List<VDefinition>(4);
-            foreach (var curve in curves)
+        var newKeyframes = new List<VDefinition>(4);
+        foreach (var curve in curves)
+        {
+            var value = curve.GetSampledValue(time);
+
+            var newKey =  curve.TryGetPreviousKey(time, out var foundKey) 
+                              ? foundKey.Clone() 
+                              : new VDefinition();
+
+
+            newKey.Value = value + increment;
+            newKey.U = time;
+
+            var command = new AddKeyframesCommand(curve, newKey);
+            command.Do();
+            commands.Add(command);
+            newKeyframes.Add(newKey);
+        }
+            
+        var marcoCommand = new MacroCommand("Insert Keyframe", commands);
+        UndoRedoStack.Add(marcoCommand);
+            
+        return newKeyframes;
+    }
+
+    public static void RemoveKeyframeFromCurves(IEnumerable<Curve> curves, double time)
+    {
+        var commands = new List<ICommand>();
+        foreach (var curve in curves)
+        {
+            var key = curve.GetV(time);
+            if (key != null)
             {
-                var value = curve.GetSampledValue(time);
-
-                var newKey =  curve.TryGetPreviousKey(time, out var foundKey) 
-                                  ? foundKey.Clone() 
-                                  : new VDefinition();
-
-
-                newKey.Value = value + increment;
-                newKey.U = time;
-
-                var command = new AddKeyframesCommand(curve, newKey);
-                command.Do();
+                var command = new DeleteKeyframeCommand(curve, key);
                 commands.Add(command);
-                newKeyframes.Add(newKey);
             }
-            
-            var marcoCommand = new MacroCommand("Insert Keyframe", commands);
-            UndoRedoStack.Add(marcoCommand);
-            
-            return newKeyframes;
         }
+        UndoRedoStack.AddAndExecute(new MacroCommand("Delete keyframes", commands));
+    }
 
-        public static void RemoveKeyframeFromCurves(IEnumerable<Curve> curves, double time)
+    public static void DeleteSelectedKeyframesFromAnimationParameters(HashSet<VDefinition> selectedKeyframes,
+                                                                      IEnumerable<TimeLineCanvas.AnimationParameter> animationParameters,
+                                                                      Instance compositionOp)
+    {
+        var commands = new List<ICommand>();
+        var selectKeyframesForCurve = new List<VDefinition>();
+            
+        foreach (var param in animationParameters)
         {
-            var commands = new List<ICommand>();
-            foreach (var curve in curves)
+            foreach (var curve in param.Curves)
             {
-                var key = curve.GetV(time);
-                if (key != null)
+                selectKeyframesForCurve.Clear();
+                //var allSelected = true;
+                var vDefinitions = curve.GetVDefinitions().ToList();
+                foreach (var keyframe in vDefinitions)
                 {
-                    var command = new DeleteKeyframeCommand(curve, key);
-                    commands.Add(command);
+                    if (!selectedKeyframes.Contains(keyframe))
+                    {
+                        continue;
+                    }
+                    selectKeyframesForCurve.Add(keyframe);
                 }
-            }
-            UndoRedoStack.AddAndExecute(new MacroCommand("Delete keyframes", commands));
-        }
 
-        public static void DeleteSelectedKeyframesFromAnimationParameters(HashSet<VDefinition> selectedKeyframes,
-                                                                          IEnumerable<TimeLineCanvas.AnimationParameter> animationParameters,
-                                                                          Instance compositionOp)
-        {
-            var commands = new List<ICommand>();
-            var selectKeyframesForCurve = new List<VDefinition>();
-            
-            foreach (var param in animationParameters)
-            {
-                foreach (var curve in param.Curves)
+                var allSelected = selectKeyframesForCurve.Count == vDefinitions.Count;
+                if (allSelected)
                 {
-                    selectKeyframesForCurve.Clear();
-                    //var allSelected = true;
-                    var vDefinitions = curve.GetVDefinitions().ToList();
-                    foreach (var keyframe in vDefinitions)
-                    {
-                        if (!selectedKeyframes.Contains(keyframe))
-                        {
-                            continue;
-                        }
-                        selectKeyframesForCurve.Add(keyframe);
-                    }
-
-                    var allSelected = selectKeyframesForCurve.Count == vDefinitions.Count;
-                    if (allSelected)
-                    {
-                        commands.Add(new RemoveAnimationsCommand(compositionOp.Symbol.Animator, new []{param.Input} ));
-                    }
-                    else
-                    {
-                        foreach (var keyframe in selectKeyframesForCurve)
-                        {
-                            commands.Add(new DeleteKeyframeCommand(curve, keyframe));
-                            selectedKeyframes.Remove(keyframe);
-                        }
-                    }
-
+                    commands.Add(new RemoveAnimationsCommand(compositionOp.Symbol.Animator, new []{param.Input} ));
                 }
+                else
+                {
+                    foreach (var keyframe in selectKeyframesForCurve)
+                    {
+                        commands.Add(new DeleteKeyframeCommand(curve, keyframe));
+                        selectedKeyframes.Remove(keyframe);
+                    }
+                }
+
             }
-            
-            UndoRedoStack.AddAndExecute(new MacroCommand("Delete keyframes", commands));
         }
+            
+        UndoRedoStack.AddAndExecute(new MacroCommand("Delete keyframes", commands));
     }
 }

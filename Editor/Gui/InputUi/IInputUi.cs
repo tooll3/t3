@@ -7,49 +7,48 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Selection;
 using T3.Editor.UiModel;
 
-namespace T3.Editor.Gui.InputUi
+namespace T3.Editor.Gui.InputUi;
+
+[Flags]
+public enum InputEditStateFlags
 {
-    [Flags]
-    public enum InputEditStateFlags
-    {
-        Nothing = 0x0,
-        Started = 0x1,
-        Modified = 0x2,
-        Finished = 0x4,
-        ShowOptions = 0x8,
-        ResetToDefault = 0x10,
-        ModifiedAndFinished = Modified | Finished
-    }
+    Nothing = 0x0,
+    Started = 0x1,
+    Modified = 0x2,
+    Finished = 0x4,
+    ShowOptions = 0x8,
+    ResetToDefault = 0x10,
+    ModifiedAndFinished = Modified | Finished
+}
 
-    public enum Relevancy
-    {
-        Required,
-        Relevant,
-        Optional
-    }
+public enum Relevancy
+{
+    Required,
+    Relevant,
+    Optional
+}
 
-    public interface IInputUi : ISelectableCanvasObject
-    {
-        SymbolUi Parent { get; set; }
-        Symbol.InputDefinition InputDefinition { get; set; }
-        Type Type { get; }
-        Relevancy Relevancy { get; set; }
-        string GroupTitle { get; set; }
+public interface IInputUi : ISelectableCanvasObject
+{
+    SymbolUi Parent { get; set; }
+    Symbol.InputDefinition InputDefinition { get; set; }
+    Type Type { get; }
+    Relevancy Relevancy { get; set; }
+    string GroupTitle { get; set; }
         
-        /**Insert a vertical padding */
-        bool AddPadding { get; set; }
-        bool IsAnimatable { get; }
+    /**Insert a vertical padding */
+    bool AddPadding { get; set; }
+    bool IsAnimatable { get; }
 
-        string Description { get; set; }
+    string Description { get; set; }
         
-        void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator, double time);
+    void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator, double time);
         
-        InputEditStateFlags DrawParameterEdit(IInputSlot input, SymbolUi compositionUi, SymbolUi.Child symbolChildUi, bool hideNonEssentials, bool skipIfDefault);
-        string GetSlotValue(IInputSlot inputSlot);
-        void DrawSettings();
+    InputEditStateFlags DrawParameterEdit(IInputSlot input, SymbolUi compositionUi, SymbolUi.Child symbolChildUi, bool hideNonEssentials, bool skipIfDefault);
+    string GetSlotValue(IInputSlot inputSlot);
+    void DrawSettings();
 
-        IInputUi Clone();
-        void Write(JsonTextWriter writer);
-        void Read(JToken inputToken);
-    }
+    IInputUi Clone();
+    void Write(JsonTextWriter writer);
+    void Read(JToken inputToken);
 }
