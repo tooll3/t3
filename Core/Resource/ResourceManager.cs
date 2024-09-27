@@ -32,8 +32,10 @@ public static partial class ResourceManager
             resourceContainer = null;
             return false;
         }
+        
+        relativePath.ToForwardSlashesUnsafe();
             
-        if (relativePath.StartsWith('/'))
+        if (relativePath.StartsWith('/')) // todo: this will be the only way to reference resources in the future?
         {
             return HandleAlias(relativePath, packages, out absolutePath, out resourceContainer, isFolder);
         }
@@ -95,6 +97,7 @@ public static partial class ResourceManager
             if (Exists(path, isFolder))
             {
                 absolutePath = path;
+                absolutePath.ToForwardSlashesUnsafe();
                 resourceContainer = package;
                 return true;
             }
@@ -109,8 +112,6 @@ public static partial class ResourceManager
     {
         var relativePathAliased = relative.AsSpan(1);
         var aliasEnd = relativePathAliased.IndexOf('/');
-        if (aliasEnd == -1)
-            aliasEnd = relativePathAliased.IndexOf('\\');
 
         if (aliasEnd == -1)
         {
@@ -163,6 +164,7 @@ public static partial class ResourceManager
                 if (Exists(path, isFolder))
                 {
                     absolutePath = path;
+                    absolutePath.ToForwardSlashesUnsafe();
                     return true;
                 }
             }
@@ -178,6 +180,7 @@ public static partial class ResourceManager
             SharedResourcePackages.Add(resourcePackage);
             
         ShaderPackages.Add(resourcePackage);
+        resourcePackage.ResourcesFolder.ToForwardSlashesUnsafe();
     }
         
     internal static void RemoveSharedResourceFolder(IResourcePackage resourcePackage)

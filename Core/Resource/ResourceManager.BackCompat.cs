@@ -144,6 +144,7 @@ public static partial class ResourceManager
             if (newPath.StartsWith(folder))
             {
                 relativePath = '/' + Path.Combine(package.Alias, newPath[folder.Length..]);
+                relativePath.ToForwardSlashesUnsafe();
                 return true;
             }
         }

@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 
@@ -73,6 +75,12 @@ public static partial class ResourceManager
         filterAcceptsShaders = mightAcceptShaders && shaderFilters.Length > 0 || fileExtensionFilter.Any(x => x.EndsWith('*'));
     }
     
+    /// <summary>
+    /// Method to enumerate all files in a package that match the given filters. If a file matches any of the filters, it will be included.
+    /// Potentially performance-critical.
+    /// </summary>
+    /// <returns>Matching file path formatted by PathMode provided</returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     private static IEnumerable<string> AllMatchingPathsIn(IResourcePackage package, bool useFolder, PathMode pathMode, string[] filters)
     {
         Func<string, string, SearchOption, IEnumerable<string>> searchFunc = useFolder
@@ -81,38 +89,88 @@ public static partial class ResourceManager
         
         foreach (var path in searchFunc(package.ResourcesFolder, "*", SearchOption.AllDirectories))
         {
-            var pathSpan = path.AsSpan();
-            var lastSlashIndex = pathSpan.LastIndexOf(Path.DirectorySeparatorChar);
-            
-            var fileNameSpan = lastSlashIndex == -1 ? pathSpan : pathSpan[(lastSlashIndex + 1)..];
-            var fileName = fileNameSpan.ToString();
+            path.ToForwardSlashesUnsafe();
+            var lastSlashIndex = path.LastIndexOf('/');
+            var endIndexExclusive = path.Length;
+            var range  = lastSlashIndex == -1 ? new Range(0, endIndexExclusive) : new Range(lastSlashIndex + 1, endIndexExclusive);
+            var fileNameSpan = path.AsSpan()[range];
+
+            var passed = false;
             
             foreach (var filter in filters)
             {
-                if (!StringUtils.MatchesSearchFilter(fileName, filter, true))
+                if (!StringUtils.MatchesSearchFilter(fileNameSpan, filter, true))
                     continue;
                 
                 if (filter.EndsWith('*'))
                 {
-                    if (PathIsShader(fileName))
+                    if (PathIsShader(fileNameSpan))
                         continue;
                 }
-                
-                // return the path in the requested format
-                yield return pathMode switch
-                                 {
-                                     PathMode.Absolute => path.Replace('\\', '/'),
-                                     PathMode.Relative => path[(package.ResourcesFolder.Length + 1)..].Replace('\\', '/'),
-                                     PathMode.Aliased  => $"/{package.Alias}/{path.AsSpan()[(package.ResourcesFolder.Length + 1)..]}".Replace('\\', '/'),
-                                     PathMode.Raw      => path,
-                                     _                 => throw new ArgumentOutOfRangeException(nameof(pathMode), pathMode, null)
-                                 };
+
+                passed = true;
+                break;
             }
+
+            if (!passed) 
+                continue;
+            
+            // return the path in the requested format
+            string result;
+            switch (pathMode)
+            {
+                case PathMode.Absolute:
+                    result = path;
+                    break;
+                    
+                // the following caches reduce the number of string allocations significantly when iterating
+                case PathMode.Relative:
+                    if(!_relativePathsCache.TryGetValue(path, out result))
+                    {
+                        result = path[(package.ResourcesFolder.Length + 1)..];
+                        _relativePathsCache.TryAdd(path, result);
+                    }
+                    break;
+                case PathMode.Aliased:
+                    if(!_aliasedPathsCache.TryGetValue(path, out result))
+                    {
+                        result = $"/{package.Alias}/{path.AsSpan()[(package.ResourcesFolder.Length + 1)..]}";
+                        _aliasedPathsCache.TryAdd(path, result);
+                    }
+                    break;
+                case PathMode.Raw:
+                    result = path;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(pathMode), pathMode, null);
+            }
+
+            yield return result;
+        }
+        
+        CheckSizeOf(_relativePathsCache);
+        CheckSizeOf(_aliasedPathsCache);
+
+        yield break;
+
+        static void CheckSizeOf(ConcurrentDictionary<string, string> pathCache)
+        {
+            // in situations where files are continuously generated, this could result in a memory leak,
+            // so we naively clear the cache when it reaches a certain size
+            if (pathCache.Count <= MaxPathCacheSize) 
+                return;
+            
+            Log.Warning($"Path cache exceeded {MaxPathCacheSize} entries. Beware of huge GC pause.");
+            pathCache.Clear();
         }
     }
+
+    private static readonly ConcurrentDictionary<string, string> _aliasedPathsCache = new();
+    private static readonly ConcurrentDictionary<string, string> _relativePathsCache = new();
+    private const int MaxPathCacheSize = 1_000_000; // 1 million path entries ~= 320MB, so this would basically never happen but would
     
     public const string DefaultShaderFilter = "*.hlsl";
-    private static bool PathIsShader(string path) => StringUtils.MatchesSearchFilter(path, DefaultShaderFilter, true);
+    private static bool PathIsShader(ReadOnlySpan<char> path) => StringUtils.MatchesSearchFilter(path, DefaultShaderFilter, true);
 }
 
 public static class ResourceExtensions
