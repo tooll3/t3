@@ -329,9 +329,9 @@ public static class T3Ui
                 
                 ImGui.Separator();
                 
-                if(ImGui.BeginMenu("Load Project", !IsCurrentlySaving))
+                if(ImGui.BeginMenu("Load Project", !IsCurrentlySaving && EditableSymbolProject.AllProjects.Any(x => x.HasHome)))
                 {
-                    foreach (var package in SymbolPackage.AllPackages.Cast<EditorSymbolPackage>())
+                    foreach (var package in EditableSymbolProject.AllProjects)
                     {
                         if (!package.HasHome)
                             continue;
