@@ -56,6 +56,13 @@ public static partial class ResourceManager
                    : allFiles;
     }
     
+    /// <summary>
+    /// Simplifies the filters to only include the ones that are relevant for the given query, removing any that are redundant or irrelevant
+    /// </summary>
+    /// <param name="isFolder">If the query is searching for files or folders</param>
+    /// <param name="fileExtensionFilter"></param>
+    /// <param name="filterAcceptsShaders">Whether or not the output filters can accept shader types</param>
+    /// <param name="shaderFilters">Filters ending in shader extension (.hlsl)</param>
     private static void CullFilters(bool isFolder, ref string[] fileExtensionFilter, out bool filterAcceptsShaders, out string[] shaderFilters)
     {
         const string shaderExtension = ".hlsl";
@@ -167,7 +174,7 @@ public static partial class ResourceManager
 
     private static readonly ConcurrentDictionary<string, string> _aliasedPathsCache = new();
     private static readonly ConcurrentDictionary<string, string> _relativePathsCache = new();
-    private const int MaxPathCacheSize = 1_000_000; // 1 million path entries ~= 320MB, so this would basically never happen but would
+    private const int MaxPathCacheSize = 1_000_000; // 1 million path entries ~= 320MB + dictionary cache overhead
     
     public const string DefaultShaderFilter = "*.hlsl";
     private static bool PathIsShader(ReadOnlySpan<char> path) => StringUtils.MatchesSearchFilter(path, DefaultShaderFilter, true);

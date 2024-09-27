@@ -165,7 +165,15 @@ public sealed class ResourceFileWatcher : IDisposable
     private void OnFileChanged(object sender, FileSystemEventArgs e)
     {
         e.FullPath.ToForwardSlashesUnsafe();
-        var fileKey = new FileKey(e.FullPath, e.ChangeType, e is RenamedEventArgs);
+        var isRenamed = false;
+
+        if (e is RenamedEventArgs renamedArgs)
+        {
+            renamedArgs.OldFullPath.ToForwardSlashesUnsafe();
+            isRenamed = true;
+        }
+        
+        var fileKey = new FileKey(e.FullPath, e.ChangeType, isRenamed);
         lock (_eventLock)
         {
             _newFileEvents[fileKey] = new FileWatchDetails(DateTime.UtcNow.Ticks, e);

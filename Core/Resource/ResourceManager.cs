@@ -43,7 +43,7 @@ public static partial class ResourceManager
         RelativePathBackwardsCompatibility(relativePath, out var isAbsolute, out var backCompatRanges);
         if (isAbsolute)
         {
-            absolutePath = relativePath;
+            absolutePath = relativePath.ToForwardSlashes();
             resourceContainer = null;
             return Exists(absolutePath, isFolder);
         }

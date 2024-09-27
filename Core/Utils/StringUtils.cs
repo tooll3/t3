@@ -361,5 +361,6 @@ public static class StringUtils
         str.ReplaceCharUnsafe('\\', '/');
     }
     
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static string ToForwardSlashes(this string str) => str.Replace('\\', '/');
 }
