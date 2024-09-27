@@ -1,5 +1,4 @@
 using SharpDX.Direct3D11;
-using SharpDX.DXGI;
 using T3.Core.Utils;
 using Utilities = T3.Core.Utils.Utilities;
 
@@ -55,7 +54,7 @@ public class _ComputeLightOcclusions : Instance<_ComputeLightOcclusions>
         immediateContext.CopyResource(inputImage, _imageWithCpuAccess);
 
         // Gets a pointer to the image data, and denies the GPU access to that subresource.            
-        immediateContext.MapSubresource(_imageWithCpuAccess, 0, 0, MapMode.Read, SharpDX.Direct3D11.MapFlags.None, out var sourceStream);
+        immediateContext.MapSubresource(_imageWithCpuAccess, 0, 0, MapMode.Read, MapFlags.None, out var sourceStream);
 
         using var stream = sourceStream;
         float result = 0;

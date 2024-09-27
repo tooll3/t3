@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using T3.Core.Utils;
 
 namespace lib.anim;

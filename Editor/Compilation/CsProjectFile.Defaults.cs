@@ -64,8 +64,10 @@ internal sealed partial class CsProjectFile
 
     private readonly record struct Using(string Name, string? Alias = null, bool Static = false);
 
+    // Goal: No operator should need a Using statement for a slot type or operator duplication
     private static readonly Using[] DefaultUsingStatements =
         [
+            // default System includes
             new (Name: "System"),
             new (Name: "System.Numerics"),
             new (Name: "System.Linq"),
@@ -78,6 +80,8 @@ internal sealed partial class CsProjectFile
             new (Name: "System.Net.Http"),
             new (Name: "System.Threading.Tasks"),
             new (Name: "System.IO"),
+            
+            // T3 convenience includes
             new (Name: "T3.Core.Logging"),
             new (Name: "System.Runtime.InteropServices"),
             new (Name: "T3.Core.Operator"),
@@ -87,7 +91,7 @@ internal sealed partial class CsProjectFile
             new (Name: "T3.Core.Operator.Interfaces"),
             new (Name: "T3.Core.Resource"),
             
-            new (Name: "T3.Core.DataTypes.Texture2D", Alias: "Texture2D"),
+            // SharpDX types
             new (Name: "SharpDX.Direct3D11.Buffer", Alias: "Buffer"),
             new (Name: "SharpDX.Direct3D11.ShaderResourceView", Alias: "ShaderResourceView"),
             new (Name: "SharpDX.Direct3D11.UnorderedAccessView", Alias: "UnorderedAccessView"),
@@ -97,6 +101,33 @@ internal sealed partial class CsProjectFile
             new (Name: "SharpDX.Direct3D11.Filter", Alias: "Filter"),
             new (Name: "SharpDX.DXGI.Format", Alias: "Format"),
             new (Name: "SharpDX.Direct3D11.Texture2DDescription", Alias: "Texture2DDescription"),
+            new (Name: "SharpDX.Direct3D11.Texture3DDescription", Alias: "Texture3DDescription"),
+            new (Name: "SharpDX.Direct3D11.RenderTargetBlendDescription", Alias: "RenderTargetBlendDescription"),
+            new (Name: "SharpDX.Direct3D11.SamplerState", Alias: "SamplerState"),
+            new (Name: "SharpDX.Direct3D11.UnorderedAccessViewBufferFlags", Alias: "UnorderedAccessViewBufferFlags"),
+            new (Name: "SharpDX.Mathematics.Interop.RawRectangle", Alias: "RawRectangle"),
+            new (Name: "SharpDX.Mathematics.Interop.RawViewportF", Alias: "RawViewportF"),
+            new (Name: "SharpDX.Direct3D11.ResourceUsage", Alias: "ResourceUsage"),
+            new (Name: "SharpDX.Direct3D11.ResourceOptionFlags", Alias: "ResourceOptionFlags"),
+            new (Name: "SharpDX.Direct3D11.InputLayout", Alias: "InputLayout"),
+            new (Name: "SharpDX.Direct3D.PrimitiveTopology", Alias: "PrimitiveTopology"),
+            new (Name: "SharpDX.Direct3D11.BlendState", Alias: "BlendState"),
+            new (Name: "SharpDX.Direct3D11.Comparison", Alias: "Comparison"),
+            new (Name: "SharpDX.Direct3D11.BlendOption", Alias: "BlendOption"),
+            new (Name: "SharpDX.Direct3D11.BlendOperation", Alias: "BlendOperation"),
+            new (Name: "SharpDX.Direct3D11.BindFlags", Alias: "BindFlags"),
+            new (Name: "SharpDX.Direct3D11.ColorWriteMaskFlags", Alias: "ColorWriteMaskFlags"),
+            new (Name: "SharpDX.Direct3D11.CpuAccessFlags", Alias: "CpuAccessFlags"),
+            new (Name: "SharpDX.Direct3D11.DepthStencilView", Alias: "DepthStencilView"),
+            new (Name: "SharpDX.Direct3D11.DepthStencilState", Alias: "DepthStencilState"),
+            new (Name: "SharpDX.Direct3D11.RenderTargetView", Alias: "RenderTargetView"),
+            new (Name: "SharpDX.Direct3D11.RasterizerState", Alias: "RasterizerState"),
+            
+            
+            // T3 types
+            new (Name: "T3.Core.DataTypes.Point", Alias: "Point"),
+            new (Name: "T3.Core.DataTypes.Texture2D", Alias: "Texture2D"),
+            new (Name: "T3.Core.DataTypes.Texture3D", Alias: "Texture3D"),
             new (Name: "System.Numerics.Vector2", Alias: "Vector2"),
             new (Name: "System.Numerics.Vector3", Alias: "Vector3"),
             new (Name: "System.Numerics.Vector4", Alias: "Vector4"),

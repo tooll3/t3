@@ -1,5 +1,3 @@
-using Point = T3.Core.DataTypes.Point;
-
 namespace lib.point._cpu;
 
 [Guid("a98d7796-6e09-45d1-a372-f3ea55abd359")]

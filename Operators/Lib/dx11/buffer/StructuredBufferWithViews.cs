@@ -1,5 +1,3 @@
-using SharpDX.Direct3D11;
-
 namespace lib.dx11.buffer;
 
 [Guid("b6c5be1d-b133-45e9-a269-8047ea0d6ad7")]

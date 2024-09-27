@@ -1,4 +1,3 @@
-using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
 
 namespace lib.dx11.draw;

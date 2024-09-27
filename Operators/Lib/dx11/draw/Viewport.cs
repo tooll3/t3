@@ -1,5 +1,3 @@
-using SharpDX.Mathematics.Interop;
-
 namespace lib.dx11.draw;
 
 [Guid("1f23db4a-871e-42a9-9255-49b956993eb1")]

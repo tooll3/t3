@@ -1,6 +1,5 @@
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
-using Point = T3.Core.DataTypes.Point;
 
 namespace lib.point.generate;
 

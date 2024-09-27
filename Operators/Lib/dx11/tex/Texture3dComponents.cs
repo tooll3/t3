@@ -13,7 +13,7 @@ public class Texture3dComponents : Instance<Texture3dComponents>
     public readonly Slot<UnorderedAccessView> UnorderedAccessView = new();
         
     [Output(Guid = "bc7cfc1c-db71-4fd4-ba37-ede980400aa1")]
-    public readonly Slot<SharpDX.Direct3D11.RenderTargetView> RenderTargetView = new();
+    public readonly Slot<RenderTargetView> RenderTargetView = new();
 
     public Texture3dComponents()
     {

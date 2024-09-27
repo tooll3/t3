@@ -1,7 +1,5 @@
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
-using SharpDX.DXGI;
-using SharpDX.Mathematics.Interop;
 using T3.Core.Utils;
 using Device = SharpDX.Direct3D11.Device;
 using Utilities = T3.Core.Utils.Utilities;
@@ -36,7 +34,7 @@ public class RenderTarget : Instance<RenderTarget>, IRenderStatsProvider
         }
     }
 
-    private const int MaximumTexture2DSize = SharpDX.Direct3D11.Resource.MaximumTexture2DSize;
+    private const int MaximumTexture2DSize = Resource.MaximumTexture2DSize;
 
     private void Update(EvaluationContext context)
     {
@@ -505,7 +503,7 @@ public class RenderTarget : Instance<RenderTarget>, IRenderStatsProvider
     public readonly InputSlot<Format> TextureFormat = new();
 
     // [Input(Guid = "2d54adbb-04c7-4f92-babd-9822953aa4cd")]
-    // public readonly InputSlot<SharpDX.DXGI.Format> DepthFormat = new InputSlot<SharpDX.DXGI.Format>();
+    // public readonly InputSlot<Format> DepthFormat = new InputSlot<Format>();
         
     [Input(Guid = "6EA4F801-FF52-4266-A41F-B9EF02C68510")]
     public readonly InputSlot<bool> WithDepthBuffer = new();

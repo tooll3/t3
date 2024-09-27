@@ -1,7 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-using SharpDX.Direct3D11;
-using Texture3D = T3.Core.DataTypes.Texture3D;
-
 namespace lib.dx11.tex;
 
 [Guid("fc1ef086-c160-4174-8e60-a4eda931163d")]

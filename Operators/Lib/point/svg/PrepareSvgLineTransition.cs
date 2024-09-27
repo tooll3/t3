@@ -1,6 +1,5 @@
 using T3.Core.Animation;
 using T3.Core.Utils;
-using Point = T3.Core.DataTypes.Point;
 
 
 namespace lib.point.svg;

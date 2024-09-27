@@ -1,4 +1,3 @@
-using System.Net.Http;
 using SharpDX.WIC;
 using T3.Core.Utils;
 

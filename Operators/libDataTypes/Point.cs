@@ -1,12 +1,10 @@
 using SharpDX;
-using SharpDX.Direct3D11;
 using T3.Core.Utils;
-using Point = T3.Core.DataTypes.Point;
 
-namespace lib.point.generate;
+namespace lib.types;
 
 [Guid("9989f539-f86c-4508-83d7-3fc0e559f502")]
-public class APoint : Instance<APoint>, ITransformable
+public class Point : Instance<Point>, ITransformable
 {
     [Output(Guid = "5915D7E2-054D-4917-86BD-25AD1BEB1754")]
     public readonly Slot<BufferWithViews> Buffer = new();
@@ -15,16 +13,16 @@ public class APoint : Instance<APoint>, ITransformable
     public readonly Slot<StructuredList> ResultList = new();
         
     [Output(Guid = "8698D60D-8CD9-4A3F-9001-19DAC29028CC")]
-    public readonly Slot<Vector3> OutPosition = new();
+    public readonly Slot<System.Numerics.Vector3> OutPosition = new();
         
         
-    public APoint()
+    public Point()
     {
         UpdateBuffer(); // Force update when application starts (needed for executable export)
         Buffer.UpdateAction += UpdateWithBuffer;
         ResultList.UpdateAction += Update;
         OutPosition.UpdateAction += Update;
-        _pointListWithSeparator.TypedElements[1] = Point.Separator();
+        _pointListWithSeparator.TypedElements[1] = T3.Core.DataTypes.Point.Separator();
 
     }
         
@@ -48,7 +46,7 @@ public class APoint : Instance<APoint>, ITransformable
         var pos = Position.GetValue(context);
         _addSeparator = AddSeparator.GetValue(context);
 
-        var rot = Quaternion.CreateFromAxisAngle(Vector3.Normalize( RotationAxis.GetValue(context)), RotationAngle.GetValue(context) * MathUtils.ToRad);
+        var rot = Quaternion.CreateFromAxisAngle(System.Numerics.Vector3.Normalize( RotationAxis.GetValue(context)), RotationAngle.GetValue(context) * MathUtils.ToRad);
         var array = _addSeparator ? _pointListWithSeparator : _pointList;
         OutPosition.Value = pos;
         array.TypedElements[0].Position = pos;
@@ -75,7 +73,7 @@ public class APoint : Instance<APoint>, ITransformable
 
             try
             {
-                ResourceManager.SetupStructuredBuffer(data, source.TotalSizeInBytes, Point.Stride, ref _buffer);
+                ResourceManager.SetupStructuredBuffer(data, source.TotalSizeInBytes, T3.Core.DataTypes.Point.Stride, ref _buffer);
             }
             catch (Exception e)
             {
@@ -93,18 +91,18 @@ public class APoint : Instance<APoint>, ITransformable
         }
     }
 
-    private readonly StructuredList<Point> _pointListWithSeparator = new(2);
-    private readonly StructuredList<Point> _pointList = new(1);
+    private readonly StructuredList<T3.Core.DataTypes.Point> _pointListWithSeparator = new(2);
+    private readonly StructuredList<T3.Core.DataTypes.Point> _pointList = new(1);
         
     private Buffer _buffer;
     private readonly BufferWithViews _bufferWithViews = new() ;
     private bool _addSeparator;
         
     [Input(Guid = "a0a453db-d8f1-415a-9a98-3c88a25b15e7")]
-    public readonly InputSlot<Vector3> Position = new();
+    public readonly InputSlot<System.Numerics.Vector3> Position = new();
 
     [Input(Guid = "55a3370f-1768-414f-b38d-4accc5e93914")]
-    public readonly InputSlot<Vector3> RotationAxis = new();
+    public readonly InputSlot<System.Numerics.Vector3> RotationAxis = new();
 
     [Input(Guid = "E9859381-EB88-4856-91C5-60D30AC6035A")]
     public readonly InputSlot<float> RotationAngle = new();
@@ -113,10 +111,10 @@ public class APoint : Instance<APoint>, ITransformable
     public readonly InputSlot<float> W = new();
         
     [Input(Guid = "34AD759E-9A81-4D7E-9024-5ABACC279895")]
-    public readonly InputSlot<Vector4> Color = new();
+    public readonly InputSlot<System.Numerics.Vector4> Color = new();
 
     [Input(Guid = "130B5C11-66DD-4C0E-AC67-924554BAD2D8")]
-    public readonly InputSlot<Vector3> Extend = new();
+    public readonly InputSlot<System.Numerics.Vector3> Extend = new();
         
     [Input(Guid = "CA12DF13-7529-4EDE-B6FC-CE8AEBA4F33E")]
     public readonly InputSlot<float> Selected = new();

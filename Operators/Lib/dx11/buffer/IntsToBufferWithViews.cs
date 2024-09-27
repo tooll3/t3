@@ -1,5 +1,4 @@
 using SharpDX;
-using SharpDX.Direct3D11;
 
 namespace lib.dx11.buffer;
 

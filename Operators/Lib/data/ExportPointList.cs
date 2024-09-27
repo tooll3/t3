@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using Point = T3.Core.DataTypes.Point;
 
 namespace lib.data;
 

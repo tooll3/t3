@@ -22,7 +22,7 @@ public class UavFromTexture2d : Instance<UavFromTexture2d>
             
         try
         {
-            if (texture.Description.BindFlags.HasFlag(SharpDX.Direct3D11.BindFlags.UnorderedAccess))
+            if (texture.Description.BindFlags.HasFlag(BindFlags.UnorderedAccess))
             {
                 UnorderedAccessView.Value?.Dispose();
                 UnorderedAccessView.Value = new UnorderedAccessView(ResourceManager.Device, texture); // todo: create via resource manager

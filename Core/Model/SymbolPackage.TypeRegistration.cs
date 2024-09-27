@@ -395,6 +395,7 @@ public partial class SymbolPackage
                      });        
 
 
+        // todo - add these to CsProject as DefaultUsings dynamically
         
         // sharpdx types
         RegisterType(typeof(SharpDX.Direct3D.PrimitiveTopology), "PrimitiveTopology",

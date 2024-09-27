@@ -30,5 +30,5 @@ public class RenderQuad : Instance<RenderQuad>
     public readonly InputSlot<bool> EnableDepthWrite = new();
 
     [Input(Guid = "9fbee6ee-5933-48f6-84f0-1da5e4b744b2")]
-    public readonly InputSlot<SharpDX.Direct3D11.Comparison> Comparison = new();
+    public readonly InputSlot<Comparison> Comparison = new();
 }

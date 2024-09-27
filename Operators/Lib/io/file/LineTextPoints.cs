@@ -5,7 +5,6 @@ using Svg;
 using Svg.Pathing;
 using Svg.Transforms;
 using T3.Core.Utils;
-using Point = T3.Core.DataTypes.Point;
 
 // ReSharper disable TooWideLocalVariableScope
 // ReSharper disable CheckNamespace

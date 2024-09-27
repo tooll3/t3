@@ -1,8 +1,5 @@
-using System.Runtime.CompilerServices;
 using SharpDX;
-using SharpDX.Direct3D11;
 using T3.Core.Utils;
-using Point = T3.Core.DataTypes.Point;
 
 namespace lib.dx11.buffer;
 

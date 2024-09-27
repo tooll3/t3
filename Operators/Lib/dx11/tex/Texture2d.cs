@@ -1,7 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-using SharpDX.Direct3D11;
-using SharpDX.DXGI;
-
 namespace lib.dx11.tex;
 
 [Guid("f52db9a4-fde9-49ca-9ef7-131825c34e65")]

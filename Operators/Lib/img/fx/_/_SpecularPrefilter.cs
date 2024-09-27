@@ -156,7 +156,7 @@ public class _SpecularPrefilter : Instance<_SpecularPrefilter>
 
         // Input Assembler
         var previousTopology = device.ImmediateContext.InputAssembler.PrimitiveTopology;
-        device.ImmediateContext.InputAssembler.PrimitiveTopology = SharpDX.Direct3D.PrimitiveTopology.TriangleList;
+        device.ImmediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
 
         _prevBlendState = device.ImmediateContext.OutputMerger.GetBlendState(out _prevBlendFactor, out _prevSampleMask);
         device.ImmediateContext.OutputMerger.BlendState = DefaultRenderingStates.DisabledBlendState;

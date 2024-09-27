@@ -1,5 +1,4 @@
 using SharpDX.Direct3D11;
-using SharpDX.Mathematics.Interop;
 using T3.Core.Utils;
 
 namespace lib._3d.transform;
