@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.generate
 {
 	[Guid("945014cf-ba0b-40b3-85f9-f7deed70fa8d")]
@@ -10,10 +5,10 @@ namespace lib.point.generate
     {
 
         [Output(Guid = "2a23b42c-ec03-401a-842a-6bdc0c633b7e")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new();
+        public readonly Slot<BufferWithViews> OutBuffer = new();
 
         [Input(Guid = "f22a4834-6333-4ed5-b07d-237692c61dc6")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new();
+        public readonly InputSlot<BufferWithViews> GPoints = new();
 
         [Input(Guid = "9a3998f9-f68a-4f8f-84dc-643e89f8c4f2")]
         public readonly InputSlot<int> TrailLength = new();

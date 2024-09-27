@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.Lib.img.generate
@@ -11,10 +6,10 @@ namespace lib.Lib.img.generate
     public class NGonGradient : Instance<NGonGradient>
     {
         [Output(Guid = "2cf9e9eb-9f08-43d3-bcde-7a05df13969b")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "ee415be6-d478-44a8-b6b5-f315d1fde694")]
-        public readonly InputSlot<System.Numerics.Vector2> Position = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Position = new InputSlot<Vector2>();
 
         [Input(Guid = "15a72217-4a3e-4e03-a767-0494ea1943f7")]
         public readonly InputSlot<float> Sides = new InputSlot<float>();
@@ -32,7 +27,7 @@ namespace lib.Lib.img.generate
         public readonly InputSlot<float> Rotate = new InputSlot<float>();
 
         [Input(Guid = "08937f41-a722-4d5b-8cf6-0b7d48323af4")]
-        public readonly MultiInputSlot<T3.Core.DataTypes.Gradient> Gradients = new MultiInputSlot<T3.Core.DataTypes.Gradient>();
+        public readonly MultiInputSlot<Gradient> Gradients = new MultiInputSlot<Gradient>();
 
         [Input(Guid = "134a9879-54f7-4b9c-8494-195a159d6428")]
         public readonly InputSlot<float> Width = new InputSlot<float>();
@@ -47,13 +42,13 @@ namespace lib.Lib.img.generate
         public readonly InputSlot<bool> Repeat = new InputSlot<bool>();
 
         [Input(Guid = "df44d68a-1631-4f05-a616-242fab419e57")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
 
         [Input(Guid = "60a0fd35-a64a-4710-b7ba-68d03887ca14", MappedType = typeof(SharedEnums.RgbBlendModes))]
         public readonly InputSlot<int> BlendMode = new InputSlot<int>();
 
         [Input(Guid = "4bfe03f0-f1c3-47c0-98c3-873087e40c17")]
-        public readonly InputSlot<T3.Core.DataTypes.Vector.Int2> Resolution = new InputSlot<T3.Core.DataTypes.Vector.Int2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "3bc236ab-c5f8-4dee-b933-84cf627118ef")]
         public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();

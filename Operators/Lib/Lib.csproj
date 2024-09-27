@@ -1,25 +1,66 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RootNamespace>lib</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <VersionPrefix>1.0.3</VersionPrefix>
+    <VersionPrefix>1.0.4</VersionPrefix>
     <HomeGuid>00000000-0000-0000-0000-000000000000</HomeGuid>
     <EditorVersion>3.9.1</EditorVersion>
     <IsEditorOnly>false</IsEditorOnly>
-      <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
+    <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
   </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\Core\Core.csproj" Private="false" PrivateAssets="all"/>
-        <ProjectReference Include="..\..\Serialization\Serialization.csproj" Private="false" PrivateAssets="all"/>
-        <ProjectReference Include="..\..\SystemUi\SystemUi.csproj" Private="false" PrivateAssets="all"/>
-        <ProjectReference Include="..\..\Logging\Logging.csproj" Private="false" PrivateAssets="all"/>
+        <Using Include="System"/>
+        <Using Include="System.Numerics"/>
+        <Using Include="System.Linq"/>
+        <Using Include="System.Linq.Enumerable" Static="True"/>
+        <Using Include="System.Collections"/>
+        <Using Include="System.Linq.Expressions"/>
+        <Using Include="System.Collections.Generic"/>
+        <Using Include="System.Text"/>
+        <Using Include="System.Threading.Tasks"/>
+        <Using Include="System.IO"/>
+        <Using Include="T3.Core.Logging"/>
+        <Using Include="System.Runtime.InteropServices"/>
+        <Using Include="T3.Core.Operator"/>
+        <Using Include="T3.Core.Operator.Attributes"/>
+        <Using Include="T3.Core.Operator.Slots"/>
+        <Using Include="T3.Core.DataTypes"/>
+        <Using Include="T3.Core.Operator.Slots"/>
+        <Using Include="T3.Core.Operator.Interfaces"/>
+        <Using Include="T3.Core.Resource"/>
+        <Using Include="T3.Core.DataTypes.Texture2D" Alias="Texture2D"/>
+        <Using Include="SharpDX.Direct3D11.Buffer" Alias="Buffer"/>
+        <Using Include="SharpDX.Direct3D11.ShaderResourceView" Alias="ShaderResourceView"/>
+        <Using Include="SharpDX.Direct3D11.CullMode" Alias="CullMode"/>
+        <Using Include="SharpDX.Direct3D11.FillMode" Alias="FillMode"/>
+        <Using Include="SharpDX.Direct3D11.TextureAddressMode" Alias="TextureAddressMode"/>
+        <Using Include="SharpDX.Direct3D11.Filter" Alias="Filter"/>
+        <Using Alias="Vector2" Include="System.Numerics.Vector2"/>
+        <Using Alias="Vector3" Include="System.Numerics.Vector3"/>
+        <Using Alias="Vector4" Include="System.Numerics.Vector4"/>
+        <Using Alias="Matrix4x4" Include="System.Numerics.Matrix4x4"/>
+        <Using Alias="Quaternion" Include="System.Numerics.Quaternion"/>
+        <Using Include="T3.Core.DataTypes.Vector.Int2" Alias="Int2"/>
+        <Using Include="T3.Core.DataTypes.Vector.Int3" Alias="Int3"/>
+        <Using Include="T3.Core.DataTypes.Vector.Int4" Alias="Int4"/>
+        <Using Include="T3.Core.Resource.ResourceManager" Alias="ResourceManager"/>
+        <Using Alias="ComputeShader" Include="T3.Core.DataTypes.ComputeShader"/>
+        <Using Alias="PixelShader" Include="T3.Core.DataTypes.PixelShader"/>
+        <Using Alias="VertexShader" Include="T3.Core.DataTypes.VertexShader"/>
+        <Using Alias="GeometryShader" Include="T3.Core.DataTypes.GeometryShader"/>
     </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Core.csproj" Private="false" PrivateAssets="all" />
+    <ProjectReference Include="..\..\Serialization\Serialization.csproj" Private="false" PrivateAssets="all" />
+    <ProjectReference Include="..\..\SystemUi\SystemUi.csproj" Private="false" PrivateAssets="all" />
+    <ProjectReference Include="..\..\Logging\Logging.csproj" Private="false" PrivateAssets="all" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Rug.Osc" Version="1.2.5" />
     <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0030" />

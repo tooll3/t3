@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.generate
 {
 	[Guid("3352d3a1-ab04-4d0a-bb43-da69095b73fd")]
@@ -12,7 +6,7 @@ namespace lib.point.generate
     {
 
         [Output(Guid = "d7605a96-adc6-4a2b-9ba4-33adef3b7f4c")]
-        public readonly TransformCallbackSlot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new();
+        public readonly TransformCallbackSlot<BufferWithViews> OutBuffer = new();
 
         public RadialPoints()
         {
@@ -35,10 +29,10 @@ namespace lib.point.generate
         public readonly InputSlot<float> RadiusOffset = new();
 
         [Input(Guid = "ca84209e-d821-40c6-b23c-38fc4bbd47b0")]
-        public readonly InputSlot<System.Numerics.Vector3> Center = new();
+        public readonly InputSlot<Vector3> Center = new();
 
         [Input(Guid = "f6986f68-851b-4cd1-ae59-bf189aa1698e")]
-        public readonly InputSlot<System.Numerics.Vector3> Offset = new();
+        public readonly InputSlot<Vector3> Offset = new();
 
         [Input(Guid = "5a3347a2-ba87-4b38-a1a8-94bd0ef70f48")]
         public readonly InputSlot<float> StartAngle = new();
@@ -50,7 +44,7 @@ namespace lib.point.generate
         public readonly InputSlot<bool> CloseCircleLine = new();
 
         [Input(Guid = "6df5829e-a534-4620-bcd5-9324f94b4f54")]
-        public readonly InputSlot<System.Numerics.Vector3> Axis = new();
+        public readonly InputSlot<Vector3> Axis = new();
 
         [Input(Guid = "3ee710be-8954-431b-8d3a-38f7f03f0f02")]
         public readonly InputSlot<float> W = new();
@@ -59,13 +53,13 @@ namespace lib.point.generate
         public readonly InputSlot<float> WOffset = new();
 
         [Input(Guid = "01a62754-7629-487d-a43a-f0cd2fbfafce")]
-        public readonly InputSlot<System.Numerics.Vector3> OrientationAxis = new();
+        public readonly InputSlot<Vector3> OrientationAxis = new();
 
         [Input(Guid = "cd917c3d-489e-4e4d-b5dc-eacc846d82ef")]
         public readonly InputSlot<float> OrientationAngle = new();
 
         [Input(Guid = "ef8d1fe2-8470-4113-8d20-40a92d0dab97")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
     }
 }
 

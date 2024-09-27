@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.generate
 {
 	[Guid("dc34c54b-f856-4fd2-a182-68fd75189d7d")]
@@ -14,19 +7,19 @@ namespace lib.img.generate
         public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "2c6a429d-5a38-4457-94d5-8994e7d1242d")]
-        public readonly InputSlot<System.Numerics.Vector4> ColorA = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> ColorA = new InputSlot<Vector4>();
 
         [Input(Guid = "5d02399d-dcfa-41c0-bc6b-59833389b580")]
-        public readonly InputSlot<System.Numerics.Vector4> ColorB = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> ColorB = new InputSlot<Vector4>();
 
         [Input(Guid = "3abec2c0-a46b-439a-8b00-21e3e9a36933")]
-        public readonly InputSlot<System.Numerics.Vector2> Direction = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Direction = new InputSlot<Vector2>();
 
         [Input(Guid = "4109631f-850a-4d65-a3b9-47e168884c41")]
-        public readonly InputSlot<System.Numerics.Vector2> Offset = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Offset = new InputSlot<Vector2>();
 
         [Input(Guid = "3949fce5-e285-4787-9db6-0ef2e533b15e")]
-        public readonly InputSlot<System.Numerics.Vector2> Stretch = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Stretch = new InputSlot<Vector2>();
 
         [Input(Guid = "f5233be8-dfdf-463b-af49-029f3459bbeb")]
         public readonly InputSlot<float> Scale = new InputSlot<float>();
@@ -44,7 +37,7 @@ namespace lib.img.generate
         public readonly InputSlot<int> Method = new InputSlot<int>();
 
         [Input(Guid = "bff37ed2-cc5a-47fa-9363-65bb1d5eb2fa")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
 
         [Input(Guid = "d2e58300-b054-4df5-b3e8-5d7fb36d1ebc")]
         public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();

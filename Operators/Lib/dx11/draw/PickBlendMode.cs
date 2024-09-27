@@ -1,7 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.dx11.draw

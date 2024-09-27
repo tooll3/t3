@@ -1,14 +1,3 @@
-using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
-using T3.Core.DataTypes;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
-using T3.Core.Resource;
-using Texture2D = T3.Core.DataTypes.Texture2D;
-
 namespace lib.img.generate
 {
     [Guid("0b3436db-e283-436e-ba85-2f3a1de76a9d")]

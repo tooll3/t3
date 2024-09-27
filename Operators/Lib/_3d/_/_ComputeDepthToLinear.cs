@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d._
 {
 	[Guid("ade1d03d-db80-41ad-bcfa-8a2b900e9d41")]
@@ -25,7 +19,7 @@ namespace lib._3d._
         public readonly InputSlot<Texture2D> OutputTexture = new();
 
         [Input(Guid = "7e1e99e1-3e2a-4960-bcc3-5b7e8e6ae95c")]
-        public readonly InputSlot<System.Numerics.Vector2> OutRange = new();
+        public readonly InputSlot<Vector2> OutRange = new();
 
         [Input(Guid = "831c97ad-40c1-4687-b536-f549bbbccf6f")]
         public readonly InputSlot<bool> ClampOutput = new();

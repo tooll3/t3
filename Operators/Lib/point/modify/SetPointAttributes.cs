@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.modify
 {
 	[Guid("86b61bcf-4eaa-4f77-a535-8a1dc876aada")]
@@ -23,13 +17,13 @@ namespace lib.point.modify
         public readonly InputSlot<bool> SetPosition = new InputSlot<bool>();
 
         [Input(Guid = "8c2da7f6-4dd1-4691-b1a2-0640d4676750")]
-        public readonly InputSlot<System.Numerics.Vector3> Position = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> Position = new InputSlot<Vector3>();
 
         [Input(Guid = "1709c405-238e-4de8-9e3f-714f2740c7f6")]
         public readonly InputSlot<bool> SetRotation = new InputSlot<bool>();
 
         [Input(Guid = "cd16d07c-8487-4fdf-bf06-b5b8c8fea3c1")]
-        public readonly InputSlot<System.Numerics.Vector3> RotationAxis = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> RotationAxis = new InputSlot<Vector3>();
 
         [Input(Guid = "79177005-4d7b-462b-9308-a22865598266")]
         public readonly InputSlot<float> RotationAngle = new InputSlot<float>();
@@ -38,7 +32,7 @@ namespace lib.point.modify
         public readonly InputSlot<bool> SetExtend = new InputSlot<bool>();
 
         [Input(Guid = "ef3adb10-b987-4dc9-b2eb-55d80a71a305")]
-        public readonly InputSlot<System.Numerics.Vector3> Extend = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> Extend = new InputSlot<Vector3>();
 
         [Input(Guid = "35b5e37b-8d84-40ca-9995-c7ccde13d76e")]
         public readonly InputSlot<bool> SetW = new InputSlot<bool>();
@@ -50,7 +44,7 @@ namespace lib.point.modify
         public readonly InputSlot<bool> SetColor = new InputSlot<bool>();
 
         [Input(Guid = "b4c4414d-e24d-4456-8c7d-00eb9de89de9")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> Color = new InputSlot<Vector4>();
 
         [Input(Guid = "282478b1-4951-4302-a7fa-4b1cafd93018")]
         public readonly InputSlot<bool> SetSelected = new InputSlot<bool>();

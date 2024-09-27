@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.exec
 {
 	[Guid("936e4324-bea2-463a-b196-6064a2d8a6b2")]

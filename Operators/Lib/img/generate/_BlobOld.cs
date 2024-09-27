@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.img.generate
@@ -19,16 +13,16 @@ namespace lib.img.generate
         public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "bbda1c8c-fa81-43ef-b773-f7ecfb8968e1")]
-        public readonly InputSlot<System.Numerics.Vector4> Fill = new();
+        public readonly InputSlot<Vector4> Fill = new();
 
         [Input(Guid = "de54f18b-6a1e-4610-8d6d-58897df6959b")]
-        public readonly InputSlot<System.Numerics.Vector4> Background = new();
+        public readonly InputSlot<Vector4> Background = new();
 
         [Input(Guid = "8a908810-2482-4088-8b21-a7ee15531e64")]
-        public readonly InputSlot<System.Numerics.Vector2> Size = new();
+        public readonly InputSlot<Vector2> Size = new();
 
         [Input(Guid = "325461c8-2892-4e8d-8d3b-0eea1bcc03f9")]
-        public readonly InputSlot<System.Numerics.Vector2> Position = new();
+        public readonly InputSlot<Vector2> Position = new();
 
         [Input(Guid = "41f4065a-0b65-4dda-9cd3-ef7802ed170b")]
         public readonly InputSlot<float> Round = new();

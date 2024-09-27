@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.fx
 {
     [Guid("e34c88f6-815e-4ce1-a6a8-59e2c8101849")]
@@ -34,10 +28,10 @@ namespace lib.img.fx
         public readonly InputSlot<float> DirectionBias = new InputSlot<float>();
 
         [Input(Guid = "c6f0a794-ba0f-44cf-95cb-9ec6484f9f02")]
-        public readonly InputSlot<System.Numerics.Vector2> ScrollOffset = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> ScrollOffset = new InputSlot<Vector2>();
 
         [Input(Guid = "22afde68-08c5-438f-9425-fe255b2e079f")]
-        public readonly InputSlot<System.Numerics.Vector2> ScrollBiasAndGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> ScrollBiasAndGain = new InputSlot<Vector2>();
 
         [Input(Guid = "7a8684c9-ee81-49c1-ad13-d91d62799efb")]
         public readonly InputSlot<float> RandomPhase = new InputSlot<float>();
@@ -52,10 +46,10 @@ namespace lib.img.fx
         public readonly InputSlot<float> Feather = new InputSlot<float>();
 
         [Input(Guid = "5cae4d6e-d441-42f7-8e17-3aeb58719f08")]
-        public readonly InputSlot<System.Numerics.Vector4> GapColor = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> GapColor = new InputSlot<Vector4>();
 
         [Input(Guid = "be07242e-39fc-4631-ab6e-3023c9444406")]
-        public readonly InputSlot<T3.Core.DataTypes.Gradient> Gradient = new InputSlot<T3.Core.DataTypes.Gradient>();
+        public readonly InputSlot<Gradient> Gradient = new InputSlot<Gradient>();
 
         [Input(Guid = "ee2bc31a-a67f-4bec-bce7-0a70db88082c")]
         public readonly InputSlot<int> ColorMode = new InputSlot<int>();

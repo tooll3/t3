@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.mesh._
 {
 	[Guid("f8b12b4f-c10b-4e8b-9a69-344dbe8a063e")]
@@ -29,7 +23,7 @@ namespace lib._3d.mesh._
         public readonly InputSlot<bool> ShowVerticeSelection = new();
 
         [Input(Guid = "5db2dd45-3581-4f92-80f3-b52681c94be5")]
-        public readonly InputSlot<System.Numerics.Vector4> MeshColor = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> MeshColor = new InputSlot<Vector4>();
 
         [Input(Guid = "23a23cd6-95c5-4f0e-bb30-d14d6e4bf146")]
         public readonly InputSlot<float> TBNAxisSize = new InputSlot<float>();

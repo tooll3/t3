@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using System.Numerics;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.modify
 {
 	[Guid("ec0675d7-6b72-4b15-b141-80bdd2367cd8")]
@@ -11,10 +5,10 @@ namespace lib.point.modify
     {
 
         [Output(Guid = "172dcbd2-a475-4514-8620-38f07a0ea4aa")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> Output = new();
+        public readonly Slot<BufferWithViews> Output = new();
 
         [Input(Guid = "cb157c8e-98f1-46e9-b197-d17dea896e30")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
+        public readonly InputSlot<BufferWithViews> Points = new InputSlot<BufferWithViews>();
 
         [Input(Guid = "82384eba-1d7a-41c8-a703-9184c961d766")]
         public readonly InputSlot<float> Amount = new InputSlot<float>();

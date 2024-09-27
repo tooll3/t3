@@ -5,10 +5,6 @@ using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 using Int3 = T3.Core.DataTypes.Vector.Int3;
-using Quaternion = System.Numerics.Quaternion;
-using Vector2 = System.Numerics.Vector2;
-using Vector3 = System.Numerics.Vector3;
-using Vector4 = System.Numerics.Vector4;
 
 // ReSharper disable RedundantNameQualifier
 

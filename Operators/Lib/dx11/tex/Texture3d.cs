@@ -1,13 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
-using T3.Core.DataTypes;
 using SharpDX.DXGI;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using Texture3D = T3.Core.DataTypes.Texture3D;
 
 namespace lib.dx11.tex
@@ -18,7 +11,7 @@ namespace lib.dx11.tex
         // [Output(Guid = "27495e79-5229-4a2d-b780-52265c3085ea")]
         // public readonly Slot<Texture2D> Texture = new Slot<Texture2D>();
         [Output(Guid = "3cbfceaa-4fa1-44e9-8c43-aff7dba7f871")]
-        public readonly Slot<T3.Core.DataTypes.Texture3dWithViews> OutputTexture = new(new T3.Core.DataTypes.Texture3dWithViews());
+        public readonly Slot<Texture3dWithViews> OutputTexture = new(new Texture3dWithViews());
 
         private Texture3D _texture3d;
         

@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.use
 {
 	[Guid("085b7841-9502-4b49-896e-3b1fa023f1bf")]
@@ -29,7 +22,7 @@ namespace lib.img.use
         public readonly InputSlot<bool> GenerateMips = new();
 
         [Input(Guid = "099eae25-7cca-4da2-956f-c1a5bd67e764")]
-        public readonly InputSlot<T3.Core.DataTypes.Curve> RemapRoughness = new();
+        public readonly InputSlot<Curve> RemapRoughness = new();
     }
 }
 

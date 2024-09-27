@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
-using Vector3 = System.Numerics.Vector3;
 
 namespace T3.Core.Operator.Interfaces
 {

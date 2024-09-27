@@ -1,17 +1,10 @@
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Resource;
-
 namespace lib.dx11.buffer
 {
 	[Guid("38e88910-6063-41d1-840b-8aeeb0eeccc0")]
     public class ResolutionConstBuffer : Instance<ResolutionConstBuffer>
     {
         [Output(Guid = "{FE020A5C-91E1-441F-BE0D-AB5900D150EB}")]
-        public readonly Slot<SharpDX.Direct3D11.Buffer> Buffer = new();
+        public readonly Slot<Buffer> Buffer = new();
 
         public ResolutionConstBuffer()
         {

@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.dx11.tex
 {
 	[Guid("09641970-b03a-431f-b3c6-5d8df824dde8")]
@@ -13,7 +7,7 @@ namespace lib.dx11.tex
         public readonly Slot<Texture3D> Texture = new();
 
         [Output(Guid = "4f9b2aeb-9bfd-400b-8839-45bec3ce2543")]
-        public readonly Slot<SharpDX.Direct3D11.ShaderResourceView> ShaderResourceView = new();
+        public readonly Slot<ShaderResourceView> ShaderResourceView = new();
 
         [Output(Guid = "45bef676-b9c1-45d2-964c-4a505471675b")]
         public readonly Slot<SharpDX.Direct3D11.UnorderedAccessView> UnorderedAccessView = new();
@@ -42,6 +36,6 @@ namespace lib.dx11.tex
         }
 
         [Input(Guid = "29ded573-c67a-4f19-a988-8cd6473c98a6")]
-        public readonly InputSlot<T3.Core.DataTypes.Texture3dWithViews> Input = new();
+        public readonly InputSlot<Texture3dWithViews> Input = new();
     }
 }

@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point._internal
 {
 	[Guid("b1352ba6-1164-4b44-9b69-a9eb802ea77d")]

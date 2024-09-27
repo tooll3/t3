@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.dx11.tex
 {
 	[Guid("9733f5e1-4514-46de-9e7c-bd3912932d1b")]

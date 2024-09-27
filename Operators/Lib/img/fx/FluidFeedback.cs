@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using Texture2D = T3.Core.DataTypes.Texture2D;
-
 namespace lib.img.fx
 {
 	[Guid("f9d453d1-04d9-43ef-9189-50008f93bcc2")]
@@ -38,7 +31,7 @@ namespace lib.img.fx
         public readonly InputSlot<float> SampleDistance = new();
 
         [Input(Guid = "4109af01-5c9a-4a9f-af7f-87fbcdcece3d")]
-        public readonly InputSlot<System.Numerics.Vector2> Offset = new();
+        public readonly InputSlot<Vector2> Offset = new();
 
         [Input(Guid = "806221f8-6e31-45ec-b62e-5baac6c1fd54")]
         public readonly InputSlot<float> DisplaceOffset = new();

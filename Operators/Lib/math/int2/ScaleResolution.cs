@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.math.int2
 {
 	[Guid("eb818dd0-0c9c-40ee-b76e-2148f958b987")]
@@ -47,7 +41,7 @@ namespace lib.math.int2
         public readonly InputSlot<Int2> Resolution = new();
 
         [Input(Guid = "94703070-18A3-41A7-B8E7-53D6E24D84CF")]
-        public readonly InputSlot< System.Numerics.Vector2> Factor = new();
+        public readonly InputSlot< Vector2> Factor = new();
         
         [Input(Guid = "D14B7C37-E012-4659-98E9-226AB97291BE")]
         public readonly InputSlot<bool> ClampToValidTextureSize = new();

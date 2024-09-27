@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.mesh._
 {
 	[Guid("e0849edd-ea1b-4657-b22d-5aa646318aa8")]

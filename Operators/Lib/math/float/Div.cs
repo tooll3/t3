@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.math.@float
 {
 	[Guid("15fb88b2-81a1-43b8-97ba-41221293bb07")]

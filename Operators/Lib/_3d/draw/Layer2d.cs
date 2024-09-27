@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib._3d.draw
@@ -26,7 +20,7 @@ namespace lib._3d.draw
         public Action<Instance, EvaluationContext> TransformCallback { get; set; }
 
         [Input(Guid = "a384be77-c5fc-47b3-9ec3-960db9f9bae9")]
-        public readonly InputSlot<System.Numerics.Vector2> Position = new();
+        public readonly InputSlot<Vector2> Position = new();
 
         [Input(Guid = "4ac0a4d8-367c-4ece-9c1d-7abfbb2bfe27")]
         public readonly InputSlot<float> PositionZ = new();
@@ -35,7 +29,7 @@ namespace lib._3d.draw
         public readonly InputSlot<float> Rotate = new();
 
         [Input(Guid = "4618d8e0-2718-4373-a071-88ec1843b0c8")]
-        public readonly InputSlot<System.Numerics.Vector2> Stretch = new();
+        public readonly InputSlot<Vector2> Stretch = new();
         
         [Input(Guid = "38f34034-b36f-4351-84e1-1a4f96e03fc6")]
         public readonly InputSlot<float> Scale = new();
@@ -44,7 +38,7 @@ namespace lib._3d.draw
         public readonly InputSlot<int> ScaleMode = new();
         
         [Input(Guid = "ed4f8c30-7b71-4649-97e6-710a718039b0")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "c8d0e44e-acd1-4045-b565-e1ce0b722e70", MappedType = typeof(SharedEnums.BlendModes))]
         public readonly InputSlot<int> BlendMode = new();

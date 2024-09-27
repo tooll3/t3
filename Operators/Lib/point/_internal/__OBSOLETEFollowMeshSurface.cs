@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point._internal
 {
 	[Guid("5e3648c0-3446-4f8f-b7ce-32d4a54b39de")]
@@ -10,10 +5,10 @@ namespace lib.point._internal
     {
 
         [Output(Guid = "2be6338b-ed84-4720-8c73-dae4f115d8e6")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> Output = new();
+        public readonly Slot<BufferWithViews> Output = new();
 
         [Input(Guid = "715051f4-e326-46c4-a5a3-8265c69c12dd")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new();
+        public readonly InputSlot<BufferWithViews> Points = new();
 
         [Input(Guid = "fee83a79-8128-444f-812e-91f9851fca3a")]
         public readonly InputSlot<float> Speed = new();
@@ -37,7 +32,7 @@ namespace lib.point._internal
         public readonly InputSlot<bool> Reset = new();
 
         [Input(Guid = "a3883c55-787e-47d2-ad69-2c2baf7ff546")]
-        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> Mesh = new();
+        public readonly InputSlot<MeshBuffers> Mesh = new();
     }
 }
 

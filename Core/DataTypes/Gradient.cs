@@ -7,7 +7,6 @@ using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Core.Utils.CubicSplines;
 using T3.Serialization;
-using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Core.DataTypes
 {

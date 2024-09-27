@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using Texture2D = T3.Core.DataTypes.Texture2D;
-
 namespace lib.img.fx
 {
 	[Guid("04ac6a30-a2ad-4e43-8954-94dc852b0602")]
@@ -30,10 +23,10 @@ namespace lib.img.fx
         public readonly InputSlot<float> BlurAmount = new();
 
         [Input(Guid = "47ec468d-b984-4653-879d-a08875a90d19")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "b2ee3011-3187-4093-ab7d-30ec81c8ccc9")]
-        public readonly InputSlot<System.Numerics.Vector4> OrgColor = new();
+        public readonly InputSlot<Vector4> OrgColor = new();
 
     }
 }

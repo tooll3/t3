@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.math.vec2
 {
 	[Guid("0946c48b-85d8-4072-8f21-11d17cc6f6cf")]
@@ -21,13 +16,13 @@ namespace lib.math.vec2
 
         private void Update(EvaluationContext context)
         {
-            System.Numerics.Vector2 value = Value.GetValue(context);
+            Vector2 value = Value.GetValue(context);
             X.Value = value.X;
             Y.Value = value.Y;
         }
 
         [Input(Guid = "36F14238-5BB8-4521-9533-F4D1E8FB802B")]
-        public readonly InputSlot<System.Numerics.Vector2> Value = new();
+        public readonly InputSlot<Vector2> Value = new();
 
     }
 }

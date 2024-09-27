@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.postfx
 {
 	[Guid("13d5260d-4e50-48f8-909c-7d84d6f0a43f")]
@@ -22,16 +16,16 @@ namespace lib._3d.postfx
         public readonly InputSlot<Texture2D> DepthBuffer = new();
 
         [Input(Guid = "602f3004-59ef-4065-a9a6-3c14fab79c6c")]
-        public readonly InputSlot<System.Numerics.Vector2> NearFarRange = new();
+        public readonly InputSlot<Vector2> NearFarRange = new();
 
         [Input(Guid = "40e22707-5c08-4c64-adcb-080b50aeb4f6")]
-        public readonly InputSlot<System.Numerics.Vector2> NearFarClip = new();
+        public readonly InputSlot<Vector2> NearFarClip = new();
 
         [Input(Guid = "12cd23ef-82ea-41b3-a8da-72bb66018d86")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "e54a0202-19ab-42f8-bd7d-ae2881d58ea2")]
-        public readonly InputSlot<System.Numerics.Vector2> BoostShadows = new();
+        public readonly InputSlot<Vector2> BoostShadows = new();
 
         [Input(Guid = "c310f731-bc13-44e7-a827-d8e4f996ff99")]
         public readonly InputSlot<float> Passes = new();
@@ -46,7 +40,7 @@ namespace lib._3d.postfx
         public readonly InputSlot<float> MultiplyOriginal = new();
 
         [Input(Guid = "c7c1d642-851e-41a8-895d-df28b5bb770e")]
-        public readonly InputSlot<System.Numerics.Vector2> NoiseOffset = new();
+        public readonly InputSlot<Vector2> NoiseOffset = new();
 
     }
 }

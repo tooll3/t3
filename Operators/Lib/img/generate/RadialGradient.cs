@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.img.generate
@@ -27,7 +21,7 @@ namespace lib.img.generate
         public readonly InputSlot<float> Offset = new InputSlot<float>();
 
         [Input(Guid = "5e93ba7d-a33d-4574-a438-a13c03361c29")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
 
         [Input(Guid = "6c1dc695-1c0a-47fe-aea1-e3abec904883")]
         public readonly InputSlot<bool> PingPong = new InputSlot<bool>();
@@ -36,7 +30,7 @@ namespace lib.img.generate
         public readonly InputSlot<bool> Repeat = new InputSlot<bool>();
 
         [Input(Guid = "1cf83367-7a34-4369-86d8-77dd4fe48d63")]
-        public readonly InputSlot<System.Numerics.Vector2> Center = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Center = new InputSlot<Vector2>();
 
         [Input(Guid = "dc383dbd-9dab-4bb2-8c6e-7f094e28d8a9")]
         public readonly InputSlot<bool> PolarOrientation = new InputSlot<bool>();

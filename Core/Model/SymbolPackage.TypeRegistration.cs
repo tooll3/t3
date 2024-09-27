@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -18,7 +19,6 @@ using T3.Serialization;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Int3 = T3.Core.DataTypes.Vector.Int3;
 using Point = T3.Core.DataTypes.Point;
-using Vector4 = System.Numerics.Vector4;
 using GeometryShader = T3.Core.DataTypes.GeometryShader;
 using ComputeShader = T3.Core.DataTypes.ComputeShader;
 using PixelShader = T3.Core.DataTypes.PixelShader;

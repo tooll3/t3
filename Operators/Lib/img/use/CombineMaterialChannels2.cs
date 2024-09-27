@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.use
 {
 	[Guid("3d0ad320-1055-4f71-b3c0-0e77261ca587")]
@@ -16,19 +10,19 @@ namespace lib.img.use
         public readonly InputSlot<Texture2D> ImageA = new();
 
         [Input(Guid = "8e959b1a-5f19-4962-a595-468370f42965")]
-        public readonly InputSlot<System.Numerics.Vector4> ColorA = new();
+        public readonly InputSlot<Vector4> ColorA = new();
 
         [Input(Guid = "cca1cccc-b89c-4d08-8976-60740fab37ef")]
         public readonly InputSlot<Texture2D> ImageB = new();
 
         [Input(Guid = "0338198a-0f30-4c54-84bd-49838515de57")]
-        public readonly InputSlot<System.Numerics.Vector4> ColorB = new();
+        public readonly InputSlot<Vector4> ColorB = new();
 
         [Input(Guid = "af0ee1f7-e78f-4ed8-a1c4-ef0928f6a69c")]
         public readonly InputSlot<Texture2D> ImageC = new();
 
         [Input(Guid = "99ff61d9-feed-4631-8833-9d108818260e")]
-        public readonly InputSlot<System.Numerics.Vector4> ColorC = new();
+        public readonly InputSlot<Vector4> ColorC = new();
 
         //[Input(Guid = "c8c55f97-dbbd-4095-b2a1-d0a257bad1ea")]
         //public readonly InputSlot<int> SelectChannel_R = new InputSlot<int>();

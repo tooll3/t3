@@ -1,11 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d._
 {
 	[Guid("484bec1b-e441-440a-85b4-b3865c57b4ed")]

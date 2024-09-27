@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.particle.force
 {
     [Guid("fbe1a703-f372-4236-9f20-5d0b69183843")]
@@ -27,13 +21,13 @@ namespace lib.point.particle.force
         public readonly InputSlot<int> VolumeShape = new InputSlot<int>();
 
         [Input(Guid = "e3485fea-3a75-47f9-9a7d-ea69f4feb5f6")]
-        public readonly InputSlot<System.Numerics.Vector3> VolumeCenter = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> VolumeCenter = new InputSlot<Vector3>();
 
         [Input(Guid = "721c500b-ae7c-4249-a374-1bcf6ae13abd")]
-        public readonly InputSlot<System.Numerics.Vector3> VolumeRotate = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> VolumeRotate = new InputSlot<Vector3>();
 
         [Input(Guid = "a75686be-909f-42fd-88f1-005e2fcd9f70")]
-        public readonly InputSlot<System.Numerics.Vector3> VolumeStretch = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> VolumeStretch = new InputSlot<Vector3>();
 
         [Input(Guid = "60eb8c10-93fa-487b-9eda-1767b485bb21")]
         public readonly InputSlot<float> VolumeScale = new InputSlot<float>();
@@ -57,7 +51,7 @@ namespace lib.point.particle.force
         public readonly InputSlot<float> Repulsion = new InputSlot<float>();
 
         [Input(Guid = "0db5c531-721d-403e-9154-e31f6be20ec6")]
-        public readonly InputSlot<T3.Core.Operator.GizmoVisibility> GizmoVisibility = new InputSlot<T3.Core.Operator.GizmoVisibility>();
+        public readonly InputSlot<GizmoVisibility> GizmoVisibility = new InputSlot<GizmoVisibility>();
 
         [Input(Guid = "2ab85ac3-819d-4e3e-891a-7f27af627fdf")]
         public readonly InputSlot<bool> InvertVolume = new InputSlot<bool>();

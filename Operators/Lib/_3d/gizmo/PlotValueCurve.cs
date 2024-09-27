@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.gizmo
 {
 	[Guid("92f3193e-a7dd-4417-b569-129823607fbe")]
@@ -17,7 +11,7 @@ namespace lib._3d.gizmo
         public readonly InputSlot<float> Value = new();
 
         [Input(Guid = "04c1a4d9-66f0-4d64-aed0-9b960c2bcbb7")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "622420b3-d5d5-4514-962e-6eaa04f34484")]
         public readonly InputSlot<string> Label = new();

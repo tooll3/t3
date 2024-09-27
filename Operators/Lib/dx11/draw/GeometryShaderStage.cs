@@ -1,11 +1,4 @@
-using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using T3.Core.Resource;
-using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace lib.dx11.draw
 {
@@ -61,7 +54,7 @@ namespace lib.dx11.draw
         private ShaderResourceView[] _prevShaderResourceViews;
 
         [Input(Guid = "2A217F9D-2F9F-418A-8568-F767905384D5")]
-        public readonly InputSlot<T3.Core.DataTypes.GeometryShader> GeometryShader = new();
+        public readonly InputSlot<GeometryShader> GeometryShader = new();
 
         [Input(Guid = "380b3ea4-aab8-4e19-bd31-9af3aef834b4")]
         public readonly MultiInputSlot<Buffer> ConstantBuffers = new();

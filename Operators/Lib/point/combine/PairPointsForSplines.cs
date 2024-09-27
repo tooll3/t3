@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.combine
 {
 	[Guid("5c7b6f3e-d3d5-4cfa-b30e-1a8cb6dbb4ad")]
@@ -10,13 +5,13 @@ namespace lib.point.combine
     {
 
         [Output(Guid = "03404861-1a6f-413a-a3f8-b6316722f0c3")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new();
+        public readonly Slot<BufferWithViews> OutBuffer = new();
 
         [Input(Guid = "d1a8aa7c-673a-4505-b614-b02742ea812f")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new();
+        public readonly InputSlot<BufferWithViews> GPoints = new();
 
         [Input(Guid = "565c6d6e-6f80-4017-9ad8-4d7dddd667b6")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GTargets = new();
+        public readonly InputSlot<BufferWithViews> GTargets = new();
 
         [Input(Guid = "df3111f5-83fc-452d-8b54-3801070b049b")]
         public readonly InputSlot<bool> SetWTo01 = new();
@@ -25,7 +20,7 @@ namespace lib.point.combine
         public readonly InputSlot<int> Segments = new();
 
         [Input(Guid = "5acb2824-a372-4c75-9896-c242fc753d6d")]
-        public readonly InputSlot<System.Numerics.Vector3> TangentDirection = new();
+        public readonly InputSlot<Vector3> TangentDirection = new();
 
         [Input(Guid = "0dd04da6-3b16-4aad-8421-78dc24d0dc68")]
         public readonly InputSlot<float> TangentA = new();

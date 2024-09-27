@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.generate
 {
 	[Guid("b882a5d0-f5ae-40a4-8c42-5b25e5775def")]
@@ -17,19 +10,19 @@ namespace lib.img.generate
         public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "6f4215a5-bd04-4151-b468-e06424c560a6")]
-        public readonly InputSlot<System.Numerics.Vector4> Fill = new();
+        public readonly InputSlot<Vector4> Fill = new();
 
         [Input(Guid = "0a7100e7-e67e-4a59-86a1-fcb872e8daaf")]
-        public readonly InputSlot<System.Numerics.Vector4> FillB = new();
+        public readonly InputSlot<Vector4> FillB = new();
 
         [Input(Guid = "df99e74d-4add-4600-a7c7-d6db74b0186a")]
-        public readonly InputSlot<System.Numerics.Vector4> Background = new();
+        public readonly InputSlot<Vector4> Background = new();
 
         [Input(Guid = "7551f216-17a7-4818-9cb0-6490e38fcb44")]
-        public readonly InputSlot<System.Numerics.Vector2> Size = new();
+        public readonly InputSlot<Vector2> Size = new();
 
         [Input(Guid = "a49d6b13-2308-49bd-aac6-fde8f07e426d")]
-        public readonly InputSlot<System.Numerics.Vector2> Offset = new();
+        public readonly InputSlot<Vector2> Offset = new();
 
         [Input(Guid = "52243bdc-6dce-46b9-95d9-af90cde3d56f")]
         public readonly InputSlot<float> Scale = new();

@@ -1,9 +1,3 @@
-using System.Numerics;
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using Utils;
 
@@ -13,7 +7,7 @@ namespace lib._3d._
     public class _RenderFontBuffer : Instance<_RenderFontBuffer>
     {
         [Output(Guid = "3D2F53A3-F1F0-489B-B20B-BADB09CDAEBE")]
-        public readonly Slot<SharpDX.Direct3D11.Buffer> Buffer = new();
+        public readonly Slot<Buffer> Buffer = new();
 
         [Output(Guid = "A0ECA9CE-35AA-497D-B5C9-CDE52A7C8D58")]
         public readonly Slot<int> VertexCount = new();

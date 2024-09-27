@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.transform
 {
     [Guid("ac185a9e-02c4-4ee0-b55e-4e7384c09d0c")]
@@ -10,19 +5,19 @@ namespace lib.point.transform
     {
 
         [Output(Guid = "d47c5841-f33a-4b4f-b969-4d56c7fb7446")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> ResultPoints = new();
+        public readonly Slot<BufferWithViews> ResultPoints = new();
 
         [Input(Guid = "6e5bc8a8-fac6-450c-826e-188bb20ada43")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> SourcePoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
+        public readonly InputSlot<BufferWithViews> SourcePoints = new InputSlot<BufferWithViews>();
 
         [Input(Guid = "000e00d8-4f53-4a39-abd9-d2495ffff11d")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> TargetPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
+        public readonly InputSlot<BufferWithViews> TargetPoints = new InputSlot<BufferWithViews>();
 
         [Input(Guid = "b7ebf5a0-bd74-412d-a70f-c8c2fe01d108")]
-        public readonly InputSlot<System.Numerics.Vector3> Extent = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> Extent = new InputSlot<Vector3>();
 
         [Input(Guid = "ad797f3a-296d-4170-99ba-a27422f0d909")]
-        public readonly InputSlot<System.Numerics.Vector3> Pivot = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> Pivot = new InputSlot<Vector3>();
 
         [Input(Guid = "8cb0597f-1d57-4cc1-8079-0ad73dacf491", MappedType = typeof(SourceAlignments))]
         public readonly InputSlot<int> SourceAlignment = new InputSlot<int>();
@@ -40,7 +35,7 @@ namespace lib.point.transform
         public readonly InputSlot<int> AtBoundaries = new InputSlot<int>();
 
         [Input(Guid = "b5f78276-986e-45ca-b360-c4e40c338157")]
-        public readonly InputSlot<T3.Core.Operator.GizmoVisibility> Visibility = new InputSlot<T3.Core.Operator.GizmoVisibility>();
+        public readonly InputSlot<GizmoVisibility> Visibility = new InputSlot<GizmoVisibility>();
 
         
         private enum SourceAlignments

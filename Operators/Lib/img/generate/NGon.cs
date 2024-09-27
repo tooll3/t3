@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.img.generate
@@ -18,10 +12,10 @@ namespace lib.img.generate
         public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
 
         [Input(Guid = "1e13694f-18ad-4cd7-8cae-a5c692904edc")]
-        public readonly InputSlot<System.Numerics.Vector4> Fill = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> Fill = new InputSlot<Vector4>();
 
         [Input(Guid = "a3dcbd9b-63ea-45dc-b761-7b4f6ddcba14")]
-        public readonly InputSlot<System.Numerics.Vector4> Background = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> Background = new InputSlot<Vector4>();
 
         [Input(Guid = "e7a99144-1f59-42ae-bdac-906ca1e54e0d")]
         public readonly InputSlot<float> Sides = new InputSlot<float>();
@@ -45,7 +39,7 @@ namespace lib.img.generate
         public readonly InputSlot<float> FeatherBias = new InputSlot<float>();
 
         [Input(Guid = "ac8bbd32-bf05-489f-a2b8-3b11f68704f8")]
-        public readonly InputSlot<System.Numerics.Vector2> Position = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Position = new InputSlot<Vector2>();
 
         [Input(Guid = "7613bc20-d400-440d-b6a5-5f60ce61a33c")]
         public readonly InputSlot<float> Rotate = new InputSlot<float>();

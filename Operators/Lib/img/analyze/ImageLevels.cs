@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.analyze
 {
 	[Guid("592a2b6f-d4e3-43e0-9e73-034cca3b3900")]
@@ -16,7 +10,7 @@ namespace lib.img.analyze
         public readonly InputSlot<Texture2D> Texture2d = new();
 
         [Input(Guid = "1224b62e-5fca-41e9-a388-4c13c1458d56")]
-        public readonly InputSlot<System.Numerics.Vector2> Center = new();
+        public readonly InputSlot<Vector2> Center = new();
 
         [Input(Guid = "48e80f45-9685-4ded-aa1c-d05e16658c5a")]
         public readonly InputSlot<float> Width = new();

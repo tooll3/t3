@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib._3d.draw
@@ -15,10 +9,10 @@ namespace lib._3d.draw
         public readonly Slot<Command> Output = new();
 
         [Input(Guid = "40e840c7-b707-4f63-8ae8-bd7498d34f54")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
+        public readonly InputSlot<BufferWithViews> GPoints = new InputSlot<BufferWithViews>();
 
         [Input(Guid = "43527e99-7da1-459a-b51d-0addeeb6786a")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> Color = new InputSlot<Vector4>();
 
         [Input(Guid = "93561534-b33e-4e72-9601-36216031e5d2")]
         public readonly InputSlot<float> Size = new InputSlot<float>();
@@ -33,10 +27,10 @@ namespace lib._3d.draw
         public readonly InputSlot<int> BlendMode = new InputSlot<int>();
 
         [Input(Guid = "821e86ce-9118-429d-94d8-d30f5df9e455")]
-        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> Mesh = new InputSlot<T3.Core.DataTypes.MeshBuffers>();
+        public readonly InputSlot<MeshBuffers> Mesh = new InputSlot<MeshBuffers>();
 
         [Input(Guid = "3ba54ff1-0c53-4f8d-92f0-20de48144b82")]
-        public readonly InputSlot<SharpDX.Direct3D11.CullMode> CullMode = new InputSlot<SharpDX.Direct3D11.CullMode>();
+        public readonly InputSlot<CullMode> CullMode = new InputSlot<CullMode>();
 
         [Input(Guid = "5ff607e0-a3db-4ece-93dc-3713669def9e")]
         public readonly InputSlot<bool> UseWForSize = new InputSlot<bool>();
@@ -51,7 +45,7 @@ namespace lib._3d.draw
         public readonly InputSlot<bool> UseStretch = new InputSlot<bool>();
 
         [Input(Guid = "8cdea8a6-7e39-433d-a616-2f64e5e04ed7")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> ChunkIndices = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
+        public readonly InputSlot<BufferWithViews> ChunkIndices = new InputSlot<BufferWithViews>();
 
         [Input(Guid = "fc846c4a-ac50-4260-8267-4484ced2d22f")]
         public readonly InputSlot<bool> UpdateDrawData = new InputSlot<bool>();

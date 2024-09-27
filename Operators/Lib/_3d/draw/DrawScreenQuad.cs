@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib._3d.draw
@@ -17,7 +12,7 @@ namespace lib._3d.draw
         public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "4e8fecd0-00ca-404e-a9d4-1cb0d3e044f1")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "a680706a-3e0f-4b93-9953-05df8d32109a")]
         public readonly InputSlot<float> Width = new();
@@ -35,10 +30,10 @@ namespace lib._3d.draw
         public readonly InputSlot<bool> EnableDepthWrite = new();
 
         [Input(Guid = "6fd86a21-d06c-4edb-bbe2-39d7411e46d1")]
-        public readonly InputSlot<System.Numerics.Vector2> Position = new();
+        public readonly InputSlot<Vector2> Position = new();
 
         [Input(Guid = "81f7acd7-6704-404b-b8be-9e77d2117fcc")]
-        public readonly InputSlot<SharpDX.Direct3D11.Filter> Filter = new();
+        public readonly InputSlot<Filter> Filter = new();
     }
 }
 

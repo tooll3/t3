@@ -1,18 +1,7 @@
-using System.Runtime.InteropServices;
 using SharpDX;
 using SharpDX.Direct3D11;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
-using T3.Core.Logging;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using Point = T3.Core.DataTypes.Point;
-using Quaternion = System.Numerics.Quaternion;
-using Vector3 = System.Numerics.Vector3;
-using Vector4 = System.Numerics.Vector4;
 
 namespace lib.point.generate
 {
@@ -107,7 +96,7 @@ namespace lib.point.generate
         private readonly StructuredList<Point> _pointListWithSeparator = new(2);
         private readonly StructuredList<Point> _pointList = new(1);
         
-        private SharpDX.Direct3D11.Buffer _buffer;
+        private Buffer _buffer;
         private readonly BufferWithViews _bufferWithViews = new() ;
         private bool _addSeparator;
         

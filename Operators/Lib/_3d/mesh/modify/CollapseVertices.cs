@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.mesh.modify
 {
     [Guid("52d0df91-7464-4fff-9173-72c0ee29fced")]
@@ -12,7 +6,7 @@ namespace lib._3d.mesh.modify
     {
 
         [Output(Guid = "370afe95-3672-4aa9-b6c9-363e2ea02cc6")]
-        public readonly TransformCallbackSlot<T3.Core.DataTypes.MeshBuffers> Result = new();
+        public readonly TransformCallbackSlot<MeshBuffers> Result = new();
         
         
         public CollapseVertices()
@@ -38,22 +32,22 @@ namespace lib._3d.mesh.modify
         public readonly InputSlot<float> GridSize = new InputSlot<float>();
 
         [Input(Guid = "0842b182-57da-44f4-97bc-60f0e771015e")]
-        public readonly InputSlot<System.Numerics.Vector3> GridOffset = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> GridOffset = new InputSlot<Vector3>();
 
         [Input(Guid = "350aa9d5-90cd-44ac-8740-9864727e9e4f", MappedType = typeof(Shapes))]
         public readonly InputSlot<int> VolumeShape = new InputSlot<int>();
 
         [Input(Guid = "6b27418e-f0e4-4ff5-8b1c-d5979f837e16")]
-        public readonly InputSlot<System.Numerics.Vector3> Center = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> Center = new InputSlot<Vector3>();
 
         [Input(Guid = "a4436ed0-0013-4ed9-b789-9f96a03e7571")]
-        public readonly InputSlot<System.Numerics.Vector3> Stretch = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> Stretch = new InputSlot<Vector3>();
 
         [Input(Guid = "052ddd9e-e4d4-4c68-b31c-1adf82696dda")]
         public readonly InputSlot<float> Scale = new InputSlot<float>();
 
         [Input(Guid = "df1ae7cb-f21b-4825-b3fa-074fcd23ff4e")]
-        public readonly InputSlot<System.Numerics.Vector3> Rotate = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> Rotate = new InputSlot<Vector3>();
 
         [Input(Guid = "e781d07d-55ba-4227-9747-d0a0b60b47e8")]
         public readonly InputSlot<float> FallOff = new InputSlot<float>();
@@ -65,7 +59,7 @@ namespace lib._3d.mesh.modify
         public readonly InputSlot<float> Extend = new InputSlot<float>();
 
         [Input(Guid = "3a0c49ff-832a-45d0-bc3d-8b11a75654bc")]
-        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> InputMesh = new InputSlot<T3.Core.DataTypes.MeshBuffers>();
+        public readonly InputSlot<MeshBuffers> InputMesh = new InputSlot<MeshBuffers>();
 
 
         

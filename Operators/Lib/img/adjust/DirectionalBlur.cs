@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.adjust
 {
 	[Guid("1192ae86-b174-4b58-9cc6-38afb666ce35")]
@@ -35,7 +28,7 @@ namespace lib.img.adjust
         public readonly InputSlot<Int2> Resolution = new();
 
         [Input(Guid = "6c0cca14-6a0e-4a04-a67b-cbb134d90d03")]
-        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> Wrap = new();
+        public readonly InputSlot<TextureAddressMode> Wrap = new();
 
         [Input(Guid = "fd99fc97-43a8-4a04-8e17-95c2abc289fc")]
         public readonly InputSlot<Texture2D> FxTextures = new();

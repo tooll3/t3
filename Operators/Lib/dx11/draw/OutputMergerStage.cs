@@ -1,11 +1,5 @@
-using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
-using T3.Core.DataTypes;
 using SharpDX.Mathematics.Interop;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace lib.dx11.draw
@@ -97,7 +91,7 @@ namespace lib.dx11.draw
         public readonly InputSlot<BlendState> BlendState = new();
 
         [Input(Guid = "CCEE2EC3-586F-4396-8B20-CC99484E1B64")]
-        public readonly InputSlot<System.Numerics.Vector4> BlendFactor = new();
+        public readonly InputSlot<Vector4> BlendFactor = new();
 
         [Input(Guid = "03166157-1E18-4513-8AF5-398C6F4FCB1E")]
         public readonly InputSlot<int> BlendSampleMask = new();

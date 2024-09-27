@@ -1,21 +1,9 @@
-using System.Runtime.InteropServices;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
-using T3.Core.Resource;
 using T3.Core.Utils;
-using Buffer = SharpDX.Direct3D11.Buffer;
 using Utilities = T3.Core.Utils.Utilities;
-using Vector2 = System.Numerics.Vector2;
-using PixelShader = T3.Core.DataTypes.PixelShader;
-using VertexShader = T3.Core.DataTypes.VertexShader;
-using GeometryShader = T3.Core.DataTypes.GeometryShader;
-using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace lib.img.fx._
 {

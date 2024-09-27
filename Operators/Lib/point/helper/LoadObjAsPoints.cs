@@ -1,12 +1,4 @@
-using System.Runtime.InteropServices;
-using System.Numerics;
-using T3.Core.DataTypes;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 
@@ -68,7 +60,7 @@ namespace lib.point.helper
             }
 
             // Prepare sorting
-            var sortedVertexIndices = Enumerable.Range(0, mesh.Positions.Count).ToList();
+            var sortedVertexIndices = Range(0, mesh.Positions.Count).ToList();
             var sorting = Sorting.GetValue(context);
 
             if (sorting != (int)ObjMesh.SortDirections.Ignore)

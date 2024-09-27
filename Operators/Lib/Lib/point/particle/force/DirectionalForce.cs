@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.particle.force
 {
     [Guid("0f1bf849-949e-4462-a7af-ecb2ff3cd109")]
@@ -15,13 +10,13 @@ namespace lib.point.particle.force
         public readonly InputSlot<float> Amount = new InputSlot<float>();
 
         [Input(Guid = "56b551e9-47aa-4d19-954b-367c4d96e5d8")]
-        public readonly InputSlot<System.Numerics.Vector3> Direction = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> Direction = new InputSlot<Vector3>();
 
         [Input(Guid = "fc7131da-a2d1-49c2-bcf7-ebc409347cb6")]
         public readonly InputSlot<float> RandomAmount = new InputSlot<float>();
 
         [Input(Guid = "d69efb70-71d7-4628-bd27-249f43f34676")]
-        public readonly InputSlot<T3.Core.Operator.GizmoVisibility> ShowGizmo = new InputSlot<T3.Core.Operator.GizmoVisibility>();
+        public readonly InputSlot<GizmoVisibility> ShowGizmo = new InputSlot<GizmoVisibility>();
         
         
         private enum Modes {

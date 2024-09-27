@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.sim
 {
 	[Guid("9c378944-9a57-4ae4-a88e-36c07244bcf7")]
@@ -10,13 +5,13 @@ namespace lib.point.sim
     {
 
         [Output(Guid = "d41c5cd6-1902-4fb9-9639-6513906cef79")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new();
+        public readonly Slot<BufferWithViews> OutBuffer = new();
 
         [Input(Guid = "2c31a936-3b5a-4c85-ad9d-7a575453bb0d")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new();
+        public readonly InputSlot<BufferWithViews> GPoints = new();
 
         [Input(Guid = "cc7cf8dc-13f4-4442-94b5-2c7cda64776c")]
-        public readonly InputSlot<System.Numerics.Vector3> Center = new();
+        public readonly InputSlot<Vector3> Center = new();
 
         [Input(Guid = "2cce4aac-2d41-4c0d-a046-9a5529b912b1")]
         public readonly InputSlot<float> Radius = new();
@@ -34,7 +29,7 @@ namespace lib.point.sim
         public readonly InputSlot<float> Variation = new();
 
         [Input(Guid = "ce7b6d6d-9b0e-4c4e-99da-3c5af57e35cd")]
-        public readonly InputSlot<System.Numerics.Vector3> Gravity = new();
+        public readonly InputSlot<Vector3> Gravity = new();
 
         [Input(Guid = "f3d5f8b5-c882-4098-afcb-0f86f5cd7964")]
         public readonly InputSlot<float> ForceDecayRate = new();

@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.transform
 {
 	[Guid("20338d1c-e4d3-4208-8f65-e1b720b8b563")]
@@ -14,7 +8,7 @@ namespace lib.point.transform
         
         
         [Output(Guid = "f2321270-09ec-4335-87da-0f829c40c61e")]
-        public readonly TransformCallbackSlot<T3.Core.DataTypes.BufferWithViews> Output = new();
+        public readonly TransformCallbackSlot<BufferWithViews> Output = new();
 
         public TransformSomePoints()
         {
@@ -26,16 +20,16 @@ namespace lib.point.transform
         public Action<Instance, EvaluationContext> TransformCallback { get; set; }
 
         [Input(Guid = "e6fcfecd-6ebe-479b-9454-fb40e9a2b9d0")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new();
+        public readonly InputSlot<BufferWithViews> Points = new();
 
         [Input(Guid = "47997c7d-c1a7-444d-ba6b-d1dcbe935efb")]
-        public readonly InputSlot<System.Numerics.Vector3> Translation = new();
+        public readonly InputSlot<Vector3> Translation = new();
 
         [Input(Guid = "a0de0994-8870-4ff4-add2-04e235ec9a91")]
-        public readonly InputSlot<System.Numerics.Vector3> Rotation = new();
+        public readonly InputSlot<Vector3> Rotation = new();
 
         [Input(Guid = "deebe64c-54d7-4d21-9a08-57aa1e39a094")]
-        public readonly InputSlot<System.Numerics.Vector3> Scale = new();
+        public readonly InputSlot<Vector3> Scale = new();
 
         [Input(Guid = "d1e74275-2f54-48d2-a376-1f34b1bde52e")]
         public readonly InputSlot<float> UniformScale = new();

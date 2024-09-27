@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.generate
 {
 	[Guid("bf7fcd04-0cf6-4518-86cc-48f74483d98d")]
@@ -17,16 +10,16 @@ namespace lib.img.generate
         public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "a20d31a3-115f-4d38-a988-2a41f6e5cbea")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "d4c20bfc-3943-4c5d-a8f8-5175fa152e91")]
-        public readonly InputSlot<System.Numerics.Vector4> Background = new();
+        public readonly InputSlot<Vector4> Background = new();
 
         [Input(Guid = "ee2f51f9-38bb-4613-b234-173218cb3aae")]
-        public readonly InputSlot<System.Numerics.Vector2> Position = new();
+        public readonly InputSlot<Vector2> Position = new();
 
         [Input(Guid = "c608e4c4-c545-45ed-8e37-95a53f6871d0")]
-        public readonly InputSlot<System.Numerics.Vector2> Stretch = new();
+        public readonly InputSlot<Vector2> Stretch = new();
 
         [Input(Guid = "d2401798-593b-4cc3-85d8-3570ddec1f2a")]
         public readonly InputSlot<float> Scale = new();
@@ -38,7 +31,7 @@ namespace lib.img.generate
         public readonly InputSlot<float> Round = new();
 
         [Input(Guid = "d4f79203-401a-4f6e-8f83-74a3d61c0177")]
-        public readonly InputSlot<System.Numerics.Vector4> StrokeColor = new();
+        public readonly InputSlot<Vector4> StrokeColor = new();
 
         [Input(Guid = "80bd2460-c28d-490c-981b-77a6e89f3983")]
         public readonly InputSlot<float> Stroke = new();

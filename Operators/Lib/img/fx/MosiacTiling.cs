@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.fx
 {
 	[Guid("c68fbb84-2f56-4aed-97ab-3c2df0ec700b")]
@@ -19,10 +13,10 @@ namespace lib.img.fx
         public readonly InputSlot<Texture2D> FxTextures = new InputSlot<Texture2D>();
 
         [Input(Guid = "732f95f6-c0f3-4cee-bd0c-c8144b5b4c63")]
-        public readonly InputSlot<System.Numerics.Vector2> Center = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Center = new InputSlot<Vector2>();
 
         [Input(Guid = "746e0a30-8367-476e-97c9-f767aa47f6ad")]
-        public readonly InputSlot<System.Numerics.Vector2> Stretch = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Stretch = new InputSlot<Vector2>();
 
         [Input(Guid = "1ca6763a-cc17-499d-bfe5-aeac815bd8bb")]
         public readonly InputSlot<float> Size = new InputSlot<float>();
@@ -43,7 +37,7 @@ namespace lib.img.fx
         public readonly InputSlot<float> Feather = new InputSlot<float>();
 
         [Input(Guid = "2f80e505-4543-44e8-8799-fe0c13a91a51")]
-        public readonly InputSlot<System.Numerics.Vector4> GapColor = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> GapColor = new InputSlot<Vector4>();
 
         [Input(Guid = "b243743d-ea21-427b-befb-7130d9c3157a")]
         public readonly InputSlot<float> MixOriginal = new InputSlot<float>();

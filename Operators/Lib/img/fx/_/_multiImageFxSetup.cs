@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.fx._
 {
 	[Guid("a2567844-3314-48de-bda7-7904b5546535")]
@@ -29,10 +22,10 @@ namespace lib.img.fx._
         public readonly InputSlot<Int2> Resolution = new();
 
         [Input(Guid = "a5cb5bda-0fb2-4863-bd8d-9ac09135fc30")]
-        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> WrapMode = new();
+        public readonly InputSlot<TextureAddressMode> WrapMode = new();
 
         [Input(Guid = "fe1695b3-54db-4b53-8987-3216bcf59da9")]
-        public readonly InputSlot<System.Numerics.Vector4> ClearColor = new();
+        public readonly InputSlot<Vector4> ClearColor = new();
 
         [Input(Guid = "440e471b-9f67-435c-9e21-304cd57728aa")]
         public readonly InputSlot<bool> GenerateMips = new();

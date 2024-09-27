@@ -1,11 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using Texture2D = T3.Core.DataTypes.Texture2D;
-
 namespace lib.img.fx.obsolete
 {
 	[Guid("d75de240-28a1-48cc-9b8f-388272188023")]
@@ -36,7 +28,7 @@ namespace lib.img.fx.obsolete
         public readonly InputSlot<Int2> Resolution = new();
 
         [Input(Guid = "949dc09e-9782-4876-b4d3-d2ffa3a87a0a")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
     }
 }

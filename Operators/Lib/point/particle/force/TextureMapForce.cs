@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.particle.force
 {
 	[Guid("4f5999c9-8ade-4e31-8379-afb7db56e170")]
@@ -19,7 +13,7 @@ namespace lib.point.particle.force
         public readonly InputSlot<float> Amount = new InputSlot<float>();
 
         [Input(Guid = "b04d0d69-f322-4481-9166-ca812eb35d99")]
-        public readonly InputSlot<System.Numerics.Vector2> AmountXY = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> AmountXY = new InputSlot<Vector2>();
 
         [Input(Guid = "faad9c30-9500-49bd-9b62-3f00ab536f35")]
         public readonly InputSlot<float> AmountVariation = new InputSlot<float>();
@@ -37,7 +31,7 @@ namespace lib.point.particle.force
         public readonly InputSlot<float> SpinVariation = new InputSlot<float>();
 
         [Input(Guid = "41491794-082d-4394-b6c2-efb4780623ea")]
-        public readonly InputSlot<System.Numerics.Vector2> VariationBiasGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> VariationBiasGain = new InputSlot<Vector2>();
 
         [Input(Guid = "0de3d1e6-63d4-4dbf-a426-cbd4e6019c45")]
         public readonly InputSlot<float> ViewConfinement = new InputSlot<float>();

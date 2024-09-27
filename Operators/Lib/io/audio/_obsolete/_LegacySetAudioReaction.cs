@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.io.audio._obsolete
 {
 	[Guid("dd00cb1b-1c0e-4e79-9ea2-4b23686c6f37")]

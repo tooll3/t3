@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib._3d.draw
@@ -18,7 +12,7 @@ namespace lib._3d.draw
         public readonly InputSlot<BufferWithViews> GPoints = new();
 
         [Input(Guid = "ba7befdf-270b-4ac0-bfc2-7543e2c3097b")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "0af05ab4-0d77-4f01-a79b-691f58f702ef")]
         public readonly InputSlot<float> Size = new();

@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using System.Numerics;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.exec.context
 {
 	[Guid("6c1271a0-058f-4ff0-940b-f196e5debdf7")]

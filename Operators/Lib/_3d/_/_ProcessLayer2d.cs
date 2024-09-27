@@ -1,16 +1,5 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
-using Quaternion = System.Numerics.Quaternion;
-using Vector2 = System.Numerics.Vector2;
-using Vector3 = System.Numerics.Vector3;
-using Vector4 = System.Numerics.Vector4;
 
 namespace lib._3d._
 {

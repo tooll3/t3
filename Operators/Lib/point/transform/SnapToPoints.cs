@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.transform
 {
 	[Guid("5822b0d8-32ed-4db3-975b-0e8fb8d7dd17")]
@@ -10,7 +5,7 @@ namespace lib.point.transform
     {
 
         [Output(Guid = "d92815b8-4a13-4970-80ef-ef59858a43f6")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new();
+        public readonly Slot<BufferWithViews> OutBuffer = new();
 
         [Input(Guid = "b663670f-f805-4c2e-8f05-e4ccb644ffad")]
         public readonly InputSlot<int> BlendMode = new();
@@ -25,10 +20,10 @@ namespace lib.point.transform
         public readonly InputSlot<float> MaxAmount = new();
 
         [Input(Guid = "aeb6072f-4275-4822-a3e0-fb1f59615dd9")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> PointsA_ = new();
+        public readonly InputSlot<BufferWithViews> PointsA_ = new();
 
         [Input(Guid = "1abba695-f044-459b-9c89-20441a32fa6b")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> PointsB_ = new();
+        public readonly InputSlot<BufferWithViews> PointsB_ = new();
     }
 }
 

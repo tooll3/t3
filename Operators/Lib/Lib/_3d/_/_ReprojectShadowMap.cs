@@ -1,11 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
-
 namespace lib._3d._
 {
     [Guid("e6df0d5d-bf6c-4672-801e-7a3270bd359b")]
@@ -16,7 +8,7 @@ namespace lib._3d._
 
         
         [Input(Guid = "0a8d40f1-c032-4c60-ac46-f7c6fd501f61")]
-        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> Mesh = new();
+        public readonly InputSlot<MeshBuffers> Mesh = new();
 
         [Input(Guid = "b95865f0-ae7a-4290-aebb-43bc6f277474")]
         public readonly InputSlot<Texture2D> Texture = new();
@@ -28,7 +20,7 @@ namespace lib._3d._
         public readonly InputSlot<Int2> Resolution = new();
 
         [Input(Guid = "cc8bc844-60ff-4976-ae70-d207400b42b6")]
-        public readonly InputSlot<System.Numerics.Vector4> ClearColor = new();
+        public readonly InputSlot<Vector4> ClearColor = new();
 
         [Input(Guid = "68e0c6a1-991a-4553-a919-b00a6aad5f4c")]
         public readonly InputSlot<SharpDX.DXGI.Format> TextureFormat = new();

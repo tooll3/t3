@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using System.Numerics;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.math.@bool
 {
 	[Guid("ed0f5188-8888-453e-8db4-20d87d18e9f4")]

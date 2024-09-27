@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using Texture2D = T3.Core.DataTypes.Texture2D;
-
 namespace lib.img.fx
 {
 	[Guid("33424f7f-ea2d-4753-bbc3-8df00830c4b5")]
@@ -41,7 +34,7 @@ namespace lib.img.fx
         public readonly InputSlot<float> Rotate = new();
 
         [Input(Guid = "482fba6b-f92e-418c-a8f4-8da0f546c4a6")]
-        public readonly InputSlot<System.Numerics.Vector2> Offset = new();
+        public readonly InputSlot<Vector2> Offset = new();
 
         [Input(Guid = "b454ebb9-6b27-46b1-962e-15e658c8f6a2")]
         public readonly InputSlot<float> ShiftHue = new();

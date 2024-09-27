@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.point.draw.legacy
@@ -14,22 +9,22 @@ namespace lib.point.draw.legacy
         public readonly Slot<Command> Output = new();
 
         [Input(Guid = "82230324-b1cd-41ba-8d03-933c939001ad")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "c25ab214-7fb3-4595-8740-96471df44905")]
-        public readonly InputSlot<System.Numerics.Vector2> Stretch = new();
+        public readonly InputSlot<Vector2> Stretch = new();
 
         [Input(Guid = "b1a7da14-d6bd-4862-ad69-dfa7ae1cfbb8")]
         public readonly InputSlot<float> Size = new();
 
         [Input(Guid = "6fb70409-1cdd-488d-b7bb-aeb8ffaf084c")]
-        public readonly InputSlot<System.Numerics.Vector2> Offset = new();
+        public readonly InputSlot<Vector2> Offset = new();
 
         [Input(Guid = "4be3c132-1318-426e-a2ed-9534110ca03f")]
         public readonly InputSlot<float> Rotate = new();
 
         [Input(Guid = "c15a2562-824d-416a-91fd-6bab0380ff0f")]
-        public readonly InputSlot<System.Numerics.Vector3> RotateAxis = new();
+        public readonly InputSlot<Vector3> RotateAxis = new();
 
         [Input(Guid = "1dfc889d-ed5b-4e82-b29c-a1b9079b8fa8")]
         public readonly InputSlot<bool> ApplyPointOrientation = new();

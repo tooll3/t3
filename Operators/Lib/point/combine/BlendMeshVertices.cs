@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.combine
 {
 	[Guid("93e2f11a-18a2-4dcb-86df-c452d340b409")]
@@ -10,13 +5,13 @@ namespace lib.point.combine
     {
 
         [Output(Guid = "27258c56-6421-4800-a057-26c9c2ede324")]
-        public readonly Slot<T3.Core.DataTypes.MeshBuffers> BlendedMesh = new();
+        public readonly Slot<MeshBuffers> BlendedMesh = new();
 
         [Input(Guid = "a7ef92db-87c9-4cf3-bd62-f8cb858d9ed9")]
-        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> MeshA = new InputSlot<T3.Core.DataTypes.MeshBuffers>();
+        public readonly InputSlot<MeshBuffers> MeshA = new InputSlot<MeshBuffers>();
 
         [Input(Guid = "44acb67a-a443-4c11-8939-2b76132f8dbf")]
-        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> MeshB = new InputSlot<T3.Core.DataTypes.MeshBuffers>();
+        public readonly InputSlot<MeshBuffers> MeshB = new InputSlot<MeshBuffers>();
 
         [Input(Guid = "add0fd7b-fa76-4788-8940-d1949a44b342")]
         public readonly InputSlot<float> BlendValue = new InputSlot<float>();

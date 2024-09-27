@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.io.audio
 {
 	[Guid("e712e801-863d-45c5-9ef8-fbe90dcb8375")]

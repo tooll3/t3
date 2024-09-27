@@ -1,15 +1,10 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.math.vec4
 {
 	[Guid("82a5f040-926b-4970-9da2-aa36de94b436")]
     public class RgbaToColor : Instance<RgbaToColor>
     {
         [Output(Guid = "ce1c3293-99ed-4309-b040-92931ee706d1")]
-        public readonly Slot<System.Numerics.Vector4> Result = new();
+        public readonly Slot<Vector4> Result = new();
 
         public RgbaToColor()
         {
@@ -18,7 +13,7 @@ namespace lib.math.vec4
 
         private void Update(EvaluationContext context)
         {
-            Result.Value = new System.Numerics.Vector4(R.GetValue(context), G.GetValue(context), B.GetValue(context), A.GetValue(context));
+            Result.Value = new Vector4(R.GetValue(context), G.GetValue(context), B.GetValue(context), A.GetValue(context));
         }
         
         [Input(Guid = "5f2de1d3-6803-4f56-aaf1-9e29b4d81eb8")]

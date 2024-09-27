@@ -1,16 +1,10 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.generate
 {
     [Guid("722e79cc-47bc-42cc-8fce-2e06f36f8caa")]
     public class PointsOnImage : Instance<PointsOnImage>
     {
         [Output(Guid = "7c8567c9-1456-4040-ad43-4cc8a96efbaf")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutputPoints = new();
+        public readonly Slot<BufferWithViews> OutputPoints = new();
 
         [Input(Guid = "065bb5be-e5ee-4ed6-8521-a0969fcb6f4f")]
         public readonly InputSlot<bool> IsEnabled = new InputSlot<bool>();
@@ -19,7 +13,7 @@ namespace lib.point.generate
         public readonly InputSlot<int> Count = new InputSlot<int>();
 
         [Input(Guid = "effde91f-2cbc-4400-b1fb-17677c538fe6")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
 
         [Input(Guid = "71d1e34f-bf8c-4e24-87b2-177bb3249b12")]
         public readonly InputSlot<float> ScatterWithinPixel = new InputSlot<float>();
@@ -34,7 +28,7 @@ namespace lib.point.generate
         public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
 
         [Input(Guid = "1d0e573e-f733-4715-afe3-f96950f29aa4")]
-        public readonly InputSlot<System.Numerics.Vector4> ColorWeight = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> ColorWeight = new InputSlot<Vector4>();
 
         [Input(Guid = "a970dad9-e5e9-4756-a84c-86737cce7e8f")]
         public readonly InputSlot<float> ClampThreshold = new InputSlot<float>();

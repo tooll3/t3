@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.fx
 {
 	[Guid("46daab0e-e957-413e-826c-0699569d0e07")]
@@ -15,7 +8,7 @@ namespace lib.img.fx
         public readonly InputSlot<string> ShaderCode = new();
 
         [Input(Guid = "674cabbd-cf31-46ac-9a1a-4f6bd727c977")]
-        public readonly InputSlot<System.Numerics.Vector2> Center = new();
+        public readonly InputSlot<Vector2> Center = new();
 
         [Input(Guid = "3d84725a-594b-46d8-aa21-eec99026115d")]
         public readonly InputSlot<float> A = new();

@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.exec._experimental
 {
 	[Guid("f19a9234-cd23-4229-a794-aa9d97ad8027")]
@@ -19,7 +13,7 @@ namespace lib.exec._experimental
         public readonly InputSlot<string> Labels = new();
 
         [Input(Guid = "3cb0dfab-deaa-4ed4-ba45-ac63e886e212")]
-        public readonly InputSlot<System.Numerics.Vector2> Stretch = new();
+        public readonly InputSlot<Vector2> Stretch = new();
 
         [Input(Guid = "b1cdb551-0045-42d4-a6ba-fa8aa0f1f98f", MappedType = typeof(ViewModes))]
         public readonly InputSlot<int> Mode = new();

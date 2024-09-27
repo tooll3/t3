@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using Texture2D = T3.Core.DataTypes.Texture2D;
-
 namespace lib.exec
 {
 	[Guid("6c2f8241-9f4b-451e-8a1d-871631d21163")]

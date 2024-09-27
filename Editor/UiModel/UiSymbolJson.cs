@@ -22,19 +22,27 @@ namespace T3.Editor.UiModel
         
         public static void WriteSymbolUi(SymbolUi symbolUi, JsonTextWriter writer)
         {
-            writer.WriteStartObject();
+            try
+            {
+                writer.WriteStartObject();
 
-            writer.WriteValue(JsonKeys.Id, symbolUi.Symbol.Id);
-            writer.WriteComment(symbolUi.Symbol.Name);
+                writer.WriteValue(JsonKeys.Id, symbolUi.Symbol.Id);
+                writer.WriteComment(symbolUi.Symbol.Name);
 
-            writer.WriteObject(JsonKeys.Description, symbolUi.Description);
+                writer.WriteObject(JsonKeys.Description, symbolUi.Description);
 
-            WriteInputUis(symbolUi, writer);
-            WriteChildUis(symbolUi, writer);
-            WriteOutputUis(symbolUi, writer);
-            WriteAnnotations(symbolUi, writer);
-            WriteLinks(symbolUi, writer);
-            writer.WriteEndObject();
+                WriteInputUis(symbolUi, writer);
+                WriteChildUis(symbolUi, writer);
+                WriteOutputUis(symbolUi, writer);
+                WriteAnnotations(symbolUi, writer);
+                WriteLinks(symbolUi, writer);
+                writer.WriteEndObject();
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Error writing symbol ui for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id} to json: {e}");
+                throw;
+            }
         }
 
         private static void WriteInputUis(SymbolUi symbolUi, JsonTextWriter writer)

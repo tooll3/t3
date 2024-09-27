@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using System.Numerics;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.color
 {
 	[Guid("185452c6-f299-42a3-b618-c6aa00d66c62")]

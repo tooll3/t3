@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.point.draw.legacy
@@ -14,10 +9,10 @@ namespace lib.point.draw.legacy
         public readonly Slot<Command> Output = new();
 
         [Input(Guid = "2548a5d8-b2ab-4783-9298-c2e261d390f0")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "1a9e522a-38fb-478f-9f45-d3846cf401c2")]
-        public readonly InputSlot<System.Numerics.Vector2> Stretch = new();
+        public readonly InputSlot<Vector2> Stretch = new();
 
         [Input(Guid = "0e4e5d78-8fe1-4b84-a0ab-d21f9704ccda")]
         public readonly InputSlot<float> Scale = new();

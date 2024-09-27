@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.dx11.buffer
 {
 	[Guid("590a0b0b-c847-433c-8ffa-602ed0ae8f28")]

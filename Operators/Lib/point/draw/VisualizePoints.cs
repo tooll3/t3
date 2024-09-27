@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.draw
 {
 	[Guid("37bdbafc-d14c-4b81-91c3-8f63c3b63812")]
@@ -34,7 +28,7 @@ namespace lib.point.draw
         public readonly InputSlot<float> LineThickness = new();
 
         [Input(Guid = "c4332cb5-4dbc-4dd1-a738-cee8a3098c17")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "40a04de8-54aa-4f66-acea-80ffc4dab7bd")]
         public readonly InputSlot<float> PointSize = new();

@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.transform
 {
 	[Guid("1a8d2a8d-d189-472f-bab3-d645a63c7aff")]
@@ -55,10 +49,10 @@ namespace lib._3d.transform
         public readonly InputSlot<Command> Command = new();
         
         [Input(Guid = "3f580113-4117-4f87-9a7e-c151f26fa1ed")]
-        public readonly InputSlot<System.Numerics.Vector3> Translation = new();
+        public readonly InputSlot<Vector3> Translation = new();
         
         [Input(Guid = "b48ff02f-f8cf-4daf-9c57-5c74c491b05a")]
-        public readonly InputSlot<System.Numerics.Vector3> Scale = new();
+        public readonly InputSlot<Vector3> Scale = new();
 
         [Input(Guid = "22e755fd-235f-40ac-b9c3-4ae948164870")]
         public readonly InputSlot<float> UniformScale = new();

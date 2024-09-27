@@ -1,22 +1,13 @@
-using System.Runtime.InteropServices;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.MediaFoundation;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.DataTypes.DataSet;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator.Interfaces;
 using T3.Core.Utils;
-using ResourceManager = T3.Core.Resource.ResourceManager;
-using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace lib.img.video
 {
@@ -321,7 +312,7 @@ namespace lib.img.video
                                                           // _SRGB doesn't work :/ Getting invalid argument exception later in TransferVideoFrame
                                                           AudioCategory = SharpDX.Multimedia.AudioStreamCategory.GameMedia,
                                                           AudioEndpointRole = SharpDX.Multimedia.AudioEndpointRole.Multimedia,
-                                                          VideoOutputFormat = (int)SharpDX.DXGI.Format.B8G8R8A8_UNorm
+                                                          VideoOutputFormat = (int)Format.B8G8R8A8_UNorm
                                                       };
 
                 var device = ResourceManager.Device;
@@ -343,7 +334,7 @@ namespace lib.img.video
                 var attributes = new MediaEngineAttributes
                                      {
                                          DxgiManager = _dxgiDeviceManager,
-                                         VideoOutputFormat = (int)SharpDX.DXGI.Format.B8G8R8A8_UNorm
+                                         VideoOutputFormat = (int)Format.B8G8R8A8_UNorm
                                          //VideoOutputFormat = (int)SharpDX.DXGI.Format.NV12                                     
                                      };
 
@@ -375,7 +366,7 @@ namespace lib.img.video
                                                                 ArraySize = 1,
                                                                 BindFlags = BindFlags.RenderTarget | BindFlags.ShaderResource | BindFlags.UnorderedAccess,
                                                                 CpuAccessFlags = CpuAccessFlags.None,
-                                                                Format = SharpDX.DXGI.Format.B8G8R8A8_UNorm,
+                                                                Format = Format.B8G8R8A8_UNorm,
                                                                 Width = size.Width,
                                                                 Height = size.Height,
                                                                 MipLevels = 0,

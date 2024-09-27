@@ -9,7 +9,7 @@ using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
-using Vector3 = System.Numerics.Vector3;
+
 using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Editor.Gui.Windows.Exploration

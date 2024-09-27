@@ -1,10 +1,5 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using System.Net;
 using Rug.Osc;
-using T3.Core.Operator.Interfaces;
 
 namespace lib.io.osc
 {
@@ -12,7 +7,7 @@ namespace lib.io.osc
     public class OscOutput : Instance<OscOutput>, IStatusProvider
     {
         [Output(Guid = "a6679d6c-fc34-4588-ab20-5079ad8f8a03")]
-        public readonly Slot<T3.Core.DataTypes.Command> Result = new();
+        public readonly Slot<Command> Result = new();
 
         public OscOutput()
         {

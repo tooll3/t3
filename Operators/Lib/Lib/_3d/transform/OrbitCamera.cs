@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using System.Numerics;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
@@ -174,10 +167,10 @@ namespace lib._3d.transform
         public CameraDefinition CameraDefinition => _cameraDefinition;
 
         [Input(Guid = "33752356-8348-4938-8f73-6257e6bb1c1f")]
-        public readonly InputSlot<T3.Core.DataTypes.Command> Command = new InputSlot<T3.Core.DataTypes.Command>();
+        public readonly InputSlot<Command> Command = new InputSlot<Command>();
 
         [Input(Guid = "ACF14901-3373-4B0C-8567-03EA0051A21F")]
-        public readonly InputSlot<System.Numerics.Vector3> CameraTargetPosition = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> CameraTargetPosition = new InputSlot<Vector3>();
 
         [Input(Guid = "21f595ad-0808-48f1-bdd8-118d1527944c")]
         public readonly InputSlot<float> FOV = new InputSlot<float>();
@@ -192,19 +185,19 @@ namespace lib._3d.transform
         public readonly InputSlot<float> SpinOffset = new InputSlot<float>();
 
         [Input(Guid = "8B75047F-03B7-4619-8869-2906E66731D1")]
-        public readonly InputSlot<System.Numerics.Vector2> OrbitAngleAndWobble = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> OrbitAngleAndWobble = new InputSlot<Vector2>();
 
         [Input(Guid = "1AF76B2E-CFFE-4E3F-8793-C7A59D00430B")]
-        public readonly InputSlot<System.Numerics.Vector2> AimRollAngleAndWobble = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> AimRollAngleAndWobble = new InputSlot<Vector2>();
 
         [Input(Guid = "4D2D2D2D-00BD-4DF9-B209-62F0C7926C38")]
-        public readonly InputSlot<System.Numerics.Vector2> AimPitchAngleAndWobble = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> AimPitchAngleAndWobble = new InputSlot<Vector2>();
 
         [Input(Guid = "066CD0E7-DE72-4E04-BF13-686CCC301C5A")]
-        public readonly InputSlot<System.Numerics.Vector2> AimYawAngleAndWobble = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> AimYawAngleAndWobble = new InputSlot<Vector2>();
 
         [Input(Guid = "7412E22C-1F15-4471-883B-4FCD792146F7")]
-        public readonly InputSlot<System.Numerics.Vector2> SpinAngleAndWobble = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> SpinAngleAndWobble = new InputSlot<Vector2>();
 
         [Input(Guid = "B6BF6FE1-6733-46C0-A274-FAB2A950F606")]
         public readonly InputSlot<float> WobbleSpeed = new InputSlot<float>();
@@ -219,20 +212,20 @@ namespace lib._3d.transform
         public readonly InputSlot<int> Seed = new InputSlot<int>();
 
         [Input(Guid = "353e2f08-a55f-48ce-ae65-53d5d081b6f0")]
-        public readonly InputSlot<System.Numerics.Vector2> NearFarClip = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> NearFarClip = new InputSlot<Vector2>();
 
         [Input(Guid = "C81B91C6-2D06-4E3E-97BD-01D60F5F0F7D")]
-        public readonly InputSlot<System.Numerics.Vector3> RotationOffset = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> RotationOffset = new InputSlot<Vector3>();
         
         [Input(Guid = "11B13DB2-3C91-4199-8245-50AF200E3A9D")]
-        public readonly InputSlot<System.Numerics.Vector3> PositionOffset = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> PositionOffset = new InputSlot<Vector3>();
         
         
         [Input(Guid = "bd1bc8a5-72ce-42b0-8914-4f6e124a18ae")]
         public readonly InputSlot<float> AspectRatio = new InputSlot<float>();
 
         [Input(Guid = "f51b38d7-2380-457f-897d-2429b2ad6ac3")]
-        public readonly InputSlot<System.Numerics.Vector3> Up = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> Up = new InputSlot<Vector3>();
         
         [Input(Guid = "46AA9CE1-EC54-43C5-AD5E-2CA679A254FD")]
         public readonly InputSlot<float> OverrideTime = new();

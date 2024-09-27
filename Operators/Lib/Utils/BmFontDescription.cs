@@ -1,7 +1,6 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
-using T3.Core.Logging;
 
 namespace Utils
 {

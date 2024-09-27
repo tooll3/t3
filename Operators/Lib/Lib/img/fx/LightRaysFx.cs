@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.fx
 {
     [Guid("53ff1a68-e888-444f-9ccc-23239c94d6db")]
@@ -19,7 +13,7 @@ namespace lib.img.fx
         public readonly InputSlot<Texture2D> TextureFX = new InputSlot<Texture2D>();
 
         [Input(Guid = "7d60c1e1-4924-48e8-991f-df83370c9a30")]
-        public readonly InputSlot<System.Numerics.Vector2> Direction = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Direction = new InputSlot<Vector2>();
 
         [Input(Guid = "c661ae7d-1cac-482f-b200-2d47946c22db")]
         public readonly InputSlot<int> Samples = new InputSlot<int>();
@@ -28,7 +22,7 @@ namespace lib.img.fx
         public readonly InputSlot<float> Length = new InputSlot<float>();
 
         [Input(Guid = "af5bfaf5-4d4f-4a51-9316-7dfd508e4fdb")]
-        public readonly InputSlot<System.Numerics.Vector4> RayColor = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> RayColor = new InputSlot<Vector4>();
 
         [Input(Guid = "b26c20c8-ec60-4215-a53a-3e21cd98ea03")]
         public readonly InputSlot<float> Decay = new InputSlot<float>();

@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.mesh.modify
 {
 	[Guid("68e0d0cb-1e57-4e9c-9f22-bd7927ddb4c5")]
@@ -10,10 +5,10 @@ namespace lib._3d.mesh.modify
     {
 
         [Output(Guid = "69a94ae6-21f3-4c04-bb7d-98fb469463bb")]
-        public readonly Slot<T3.Core.DataTypes.MeshBuffers> Result = new();
+        public readonly Slot<MeshBuffers> Result = new();
 
         [Input(Guid = "b55aeb9b-5286-476a-b8f0-86cb96e41310")]
-        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> InputMesh = new();
+        public readonly InputSlot<MeshBuffers> InputMesh = new();
 
         [Input(Guid = "fd3f8225-3d33-40d3-af15-ae768e2c67ad")]
         public readonly InputSlot<bool> RecomputeIndices = new();

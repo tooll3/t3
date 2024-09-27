@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using System.Numerics;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.transform
 {
 	[Guid("a6e12383-09b6-4bbd-a4bb-8908598c3409")]

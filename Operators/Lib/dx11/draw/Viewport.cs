@@ -1,8 +1,4 @@
-using System.Runtime.InteropServices;
 using SharpDX.Mathematics.Interop;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 
 namespace lib.dx11.draw
 {

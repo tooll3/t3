@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.math.@float
 {
 	[Guid("5202d3f6-c970-4006-933d-3c60d6c202dc")]
@@ -20,11 +14,11 @@ namespace lib.math.@float
         private void Update(EvaluationContext context)
         {
             var v = Value.GetValue(context);
-            var mod = ModuloValue.GetValue(context);
+            var mod2 = ModuloValue.GetValue(context);
 
-            if (mod != 0)
+            if (mod2 != 0)
             {
-                Result.Value = v - mod * (float)Math.Floor(v/mod);
+                Result.Value = v - mod2 * (float)Math.Floor(v/mod2);
             }
             else
             {

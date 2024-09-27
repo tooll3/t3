@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.generate
 {
 	[Guid("cb28a67e-80cb-460a-8130-00e3cd85b7c2")]
@@ -17,34 +10,34 @@ namespace lib.img.generate
         public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "ce9797b3-223a-42cd-84aa-51346e8aa422")]
-        public readonly InputSlot<System.Numerics.Vector4> Background = new();
+        public readonly InputSlot<Vector4> Background = new();
 
         [Input(Guid = "e40dd98b-339a-49e8-ab2e-7a47fc7118f5")]
-        public readonly InputSlot<System.Numerics.Vector4> Foreground = new();
+        public readonly InputSlot<Vector4> Foreground = new();
 
         [Input(Guid = "8102e92f-b353-49b6-aab2-e78332fbdc9b")]
-        public readonly InputSlot<System.Numerics.Vector4> Highlight = new();
+        public readonly InputSlot<Vector4> Highlight = new();
 
         [Input(Guid = "6e5d8458-e108-47d7-9f91-74851e9703a4")]
-        public readonly InputSlot<System.Numerics.Vector2> Splits = new();
+        public readonly InputSlot<Vector2> Splits = new();
 
         [Input(Guid = "a2bc64ce-c6c4-4fa1-a30c-288882a2bb84")]
-        public readonly InputSlot<System.Numerics.Vector2> SplitB = new();
+        public readonly InputSlot<Vector2> SplitB = new();
 
         [Input(Guid = "7e96e51d-5ed9-4e94-82e5-0f7a8ae62cce")]
-        public readonly InputSlot<System.Numerics.Vector2> SplitC = new();
+        public readonly InputSlot<Vector2> SplitC = new();
 
         [Input(Guid = "094f0b30-347a-4079-b6e4-cedf85063250")]
-        public readonly InputSlot<System.Numerics.Vector2> SplitProbability = new();
+        public readonly InputSlot<Vector2> SplitProbability = new();
 
         [Input(Guid = "b00ecb8e-5990-4bab-afe9-265e13dcfe4a")]
-        public readonly InputSlot<System.Numerics.Vector2> ScrollSpeed = new();
+        public readonly InputSlot<Vector2> ScrollSpeed = new();
 
         [Input(Guid = "71f15e21-e169-46b2-9ce5-e81efc92e220")]
-        public readonly InputSlot<System.Numerics.Vector2> ScrollProbability = new();
+        public readonly InputSlot<Vector2> ScrollProbability = new();
 
         [Input(Guid = "2d79a3fc-7e2a-41a3-a7c5-d3325f85c975")]
-        public readonly InputSlot<System.Numerics.Vector2> Padding = new();
+        public readonly InputSlot<Vector2> Padding = new();
 
         [Input(Guid = "316798ed-d1de-4374-9416-0f08a9a2ca6f")]
         public readonly InputSlot<float> Contrast = new();

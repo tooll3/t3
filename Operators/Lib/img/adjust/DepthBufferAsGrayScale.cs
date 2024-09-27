@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.adjust
 {
 	[Guid("2d62dd4b-9597-4569-a09e-495abf880e34")]
@@ -16,10 +10,10 @@ namespace lib.img.adjust
         public readonly InputSlot<Texture2D> Texture2d = new();
 
         [Input(Guid = "482e7931-cc65-49bd-ac56-8724b83a4e6a")]
-        public readonly InputSlot<System.Numerics.Vector2> NearFarRange = new();
+        public readonly InputSlot<Vector2> NearFarRange = new();
 
         [Input(Guid = "41f15d72-577a-4e13-bfec-e60443930fd1")]
-        public readonly InputSlot<System.Numerics.Vector2> OutputRange = new();
+        public readonly InputSlot<Vector2> OutputRange = new();
 
         [Input(Guid = "379bee6d-ba65-4a53-9d9e-8dded21f351a")]
         public readonly InputSlot<bool> ClampOutput = new();

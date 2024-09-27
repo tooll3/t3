@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.sprite
@@ -23,7 +18,7 @@ namespace lib.sprite
         public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "62dd6e4f-5cf5-4bd9-9683-8b9ed5d423f6")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "3602d9c6-6477-4a29-af63-2fb12c7efbb6")]
         public readonly InputSlot<float> Size = new();
@@ -38,7 +33,7 @@ namespace lib.sprite
         public readonly InputSlot<int> BlendMod = new();
 
         [Input(Guid = "9324404a-a4e3-46cf-b79a-722c6ab46fff")]
-        public readonly InputSlot<SharpDX.Direct3D11.CullMode> Culling = new();
+        public readonly InputSlot<CullMode> Culling = new();
         
         private enum TextureModes
         {

@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.postfx
 {
     [Guid("574d636f-64e6-4f07-ac17-49754d2c3599")]
@@ -20,7 +14,7 @@ namespace lib._3d.postfx
         public readonly InputSlot<Texture2D> DepthMap = new();
 
         [Input(Guid = "370e5f20-a349-4a15-b7e2-342f9ece0b07")]
-        public readonly InputSlot<System.Numerics.Vector2> NearFarRange = new();
+        public readonly InputSlot<Vector2> NearFarRange = new();
 
         [Input(Guid = "a2a707cf-67ed-4107-8d06-1e28cbf539f8")]
         public readonly InputSlot<int> LightIndex = new InputSlot<int>();

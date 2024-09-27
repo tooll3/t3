@@ -1,11 +1,3 @@
-using System.Numerics;
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using T3.Core.Resource;
-using Buffer = SharpDX.Direct3D11.Buffer;
-
 namespace lib.img.fx._
 {
 	[Guid("1ba08d52-c8ec-479a-8dc0-95d92da36577")]

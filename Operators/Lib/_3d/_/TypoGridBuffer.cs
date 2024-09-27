@@ -1,18 +1,10 @@
-using System.Numerics;
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using T3.Core.Resource;
-
 namespace lib._3d._
 {
 	[Guid("fa45d013-5a1c-45a0-9b05-a4a4edfb06f9")]
     public class TypoGridBuffer : Instance<TypoGridBuffer>
     {
         [Output(Guid = "{6e6e8ce0-2b62-41f5-893d-9a20219faf82}")]
-        public readonly Slot<SharpDX.Direct3D11.Buffer> Buffer = new();
+        public readonly Slot<Buffer> Buffer = new();
 
         [Output(Guid = "{B8CF7AB8-BE34-4C0B-AFFC-CE09748FD6F1}")]
         public readonly Slot<int> VertexCount = new();

@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.point.draw
@@ -17,7 +12,7 @@ namespace lib.point.draw
         public readonly InputSlot<BufferWithViews> GPoints = new();
 
         [Input(Guid = "f5b4e08b-a49a-47ac-838d-577b621005b2")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "68ebd395-5e00-4aeb-acfb-312899c4907c")]
         public readonly InputSlot<float> Size = new();

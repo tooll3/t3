@@ -1,6 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-using Vector3 = System.Numerics.Vector3;
-using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Core.Rendering;
 

@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.gizmo
 {
 	[Guid("1998f949-5c0a-4f39-82cf-b0bda31f7f21")]
@@ -19,7 +13,7 @@ namespace lib._3d.gizmo
         public readonly InputSlot<float> InnerRadius = new InputSlot<float>();
 
         [Input(Guid = "188c2244-e55a-4c55-be93-cccbd6fd4e41")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> Color = new InputSlot<Vector4>();
 
 
     }

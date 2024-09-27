@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.helper
 {
 	[Guid("18251874-5d5a-4384-8dcd-fcf297e54886")]
@@ -10,10 +5,10 @@ namespace lib.point.helper
     {
 
         [Output(Guid = "bb886ff1-31a9-47aa-a39a-fa60ebb6c2d6")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> Output = new();
+        public readonly Slot<BufferWithViews> Output = new();
 
         [Input(Guid = "3b193782-2a56-4031-a0c6-9ebb576e66a5")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
+        public readonly InputSlot<BufferWithViews> Points = new InputSlot<BufferWithViews>();
 
         [Input(Guid = "519d77c0-5605-433a-b8ce-6d84f99edd7b")]
         public readonly InputSlot<int> Count = new InputSlot<int>();

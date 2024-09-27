@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d._
 {
 	[Guid("393da0ad-00ef-4a9c-bd53-9314bb16b08b")]
@@ -25,25 +19,25 @@ namespace lib._3d._
         public readonly InputSlot<float> RandomizeSize = new();
 
         [Input(Guid = "89744c45-4963-4266-a395-af24c51babdc")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "70c2be48-d896-4312-a98f-029077a35af4")]
-        public readonly InputSlot<System.Numerics.Vector4> RandomizeColor = new();
+        public readonly InputSlot<Vector4> RandomizeColor = new();
 
         [Input(Guid = "a1518a4f-322b-4ea5-9af6-2c535c6c589d")]
         public readonly InputSlot<int> RandomSeed = new();
 
         [Input(Guid = "d8f07d6b-f053-4348-972c-819e4a043faa")]
-        public readonly InputSlot<System.Numerics.Vector2> PositionFactor = new();
+        public readonly InputSlot<Vector2> PositionFactor = new();
 
         [Input(Guid = "03cafdc8-c009-418a-a24a-526a358d5cf3")]
         public readonly InputSlot<int> FxZoneMode = new();
 
         [Input(Guid = "9447da2e-f9b6-4fc9-a523-c7db580d272b")]
-        public readonly InputSlot<System.Numerics.Vector2> EdgeFxZone = new();
+        public readonly InputSlot<Vector2> EdgeFxZone = new();
 
         [Input(Guid = "c822325b-c19c-4a69-a9a6-7a2b2d09264d")]
-        public readonly InputSlot<System.Numerics.Vector2> InnerFxZone = new();
+        public readonly InputSlot<Vector2> InnerFxZone = new();
 
         [Input(Guid = "49bce40f-13cd-4210-8102-6cc74308be52")]
         public readonly InputSlot<float> FxZoneScale = new();

@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
-
 namespace lib.exec.context
 {
 	[Guid("e6072ecf-30d2-4c52-afa1-3b195d61617b")]

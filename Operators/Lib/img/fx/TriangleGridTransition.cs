@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.fx
 {
 	[Guid("da8ebc61-87cf-44ff-888e-994c8628ddb7")]
@@ -22,13 +16,13 @@ namespace lib.img.fx
         public readonly InputSlot<float> EffectRotation = new InputSlot<float>();
 
         [Input(Guid = "8d4e1265-8479-4525-adbc-fe5c31d9984a")]
-        public readonly InputSlot<System.Numerics.Vector2> EffectCenter = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> EffectCenter = new InputSlot<Vector2>();
 
         [Input(Guid = "846f8b1e-e6bb-4e6a-a42c-f83636fd4b6f")]
-        public readonly InputSlot<System.Numerics.Vector4> Fill = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> Fill = new InputSlot<Vector4>();
 
         [Input(Guid = "e97a432e-4996-41b0-8ae8-10c9f2d15bc4")]
-        public readonly InputSlot<System.Numerics.Vector4> Background = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> Background = new InputSlot<Vector4>();
 
         [Input(Guid = "6164020b-3059-4ce5-8a8f-a56150b8a6be")]
         public readonly InputSlot<float> Divisions = new InputSlot<float>();
@@ -43,10 +37,10 @@ namespace lib.img.fx
         public readonly InputSlot<float> Scatter = new InputSlot<float>();
 
         [Input(Guid = "5baee095-f7fe-4a07-a01d-cbb2f3c2f3bc")]
-        public readonly InputSlot<T3.Core.DataTypes.Vector.Int2> Resolution = new InputSlot<T3.Core.DataTypes.Vector.Int2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "0c6065b9-eb20-4a37-9d70-419d1c8912a6")]
-        public readonly InputSlot<System.Numerics.Vector2> Center = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Center = new InputSlot<Vector2>();
 
         [Input(Guid = "659de0cb-82d8-45a9-b99d-748b3c56e8e8")]
         public readonly InputSlot<float> MixOriginal = new InputSlot<float>();

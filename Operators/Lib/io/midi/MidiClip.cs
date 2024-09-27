@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using NAudio.Midi;
 
 
@@ -126,7 +120,7 @@ namespace lib.io.midi
 
         private void ClearTracks()
         {
-            _lastTrackEventIndices = Enumerable.Repeat(-1, _midiFile.Tracks).ToList();
+            _lastTrackEventIndices = Repeat(-1, _midiFile.Tracks).ToList();
 
             foreach (var k in _channels.Keys)
             {

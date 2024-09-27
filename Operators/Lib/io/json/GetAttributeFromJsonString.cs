@@ -1,11 +1,5 @@
-using System.Runtime.InteropServices;
 using System.Data;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using Newtonsoft.Json;
-using T3.Core.Operator.Interfaces;
 
 namespace lib.io.json
 {

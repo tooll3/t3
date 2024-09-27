@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.fx
 {
 	[Guid("42e6319e-669c-4524-8d0d-9416a86afdb3")]
@@ -17,13 +10,13 @@ namespace lib.img.fx
         public readonly InputSlot<Texture2D> ImageA = new();
 
         [Input(Guid = "9e093ac2-0dc0-4791-bb27-36d1f6ea1c47")]
-        public readonly InputSlot<System.Numerics.Vector4> Fill = new();
+        public readonly InputSlot<Vector4> Fill = new();
 
         [Input(Guid = "66509dd9-372b-4351-ad18-d7713d75cc01")]
-        public readonly InputSlot<System.Numerics.Vector4> Background = new();
+        public readonly InputSlot<Vector4> Background = new();
 
         [Input(Guid = "8c6c08b8-0aa2-492a-b6e7-f49be41b3e6b")]
-        public readonly InputSlot<System.Numerics.Vector2> Offset = new();
+        public readonly InputSlot<Vector2> Offset = new();
 
         [Input(Guid = "c7502cc9-bfe4-40d1-9b85-c6f59a15e675")]
         public readonly InputSlot<Int2> FontCharSize = new();
@@ -53,7 +46,7 @@ namespace lib.img.fx
         public readonly InputSlot<bool> GenerateMips = new();
 
         [Input(Guid = "a842bd72-abb2-4207-8397-7e727aaa6c63")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
 
     }
 }

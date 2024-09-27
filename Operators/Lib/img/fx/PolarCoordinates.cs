@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.fx
 {
 	[Guid("941410e5-2023-43c6-87b1-55386bb048ac")]
@@ -17,7 +10,7 @@ namespace lib.img.fx
         public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "4c07b8bd-c78d-44ce-bb95-8114284af2bf")]
-        public readonly InputSlot<System.Numerics.Vector2> Center = new();
+        public readonly InputSlot<Vector2> Center = new();
 
         [Input(Guid = "83f2dc32-5830-4558-9137-f6805f3f6ff6")]
         public readonly InputSlot<float> Radius = new();
@@ -32,7 +25,7 @@ namespace lib.img.fx
         public readonly InputSlot<float> Twist = new();
 
         [Input(Guid = "4bd38d2f-0c52-456f-9938-b1f571c719fe")]
-        public readonly InputSlot<System.Numerics.Vector2> Stretch = new();
+        public readonly InputSlot<Vector2> Stretch = new();
 
         [Input(Guid = "caa14f08-f004-4af8-a448-116e21106d5b")]
         public readonly InputSlot<Int2> Resolution = new();

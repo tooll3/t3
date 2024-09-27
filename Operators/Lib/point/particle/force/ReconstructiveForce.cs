@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.particle.force
 {
 	[Guid("eeec02e2-7db9-4132-935a-4caf03c828c6")]
@@ -28,16 +22,16 @@ namespace lib.point.particle.force
         public Action<Instance, EvaluationContext> TransformCallback { get; set; }
 
         [Input(Guid = "6be3ff09-439f-4506-86d9-27e70422bb41")]
-        public readonly InputSlot<System.Numerics.Vector3> VolumeCenter = new();
+        public readonly InputSlot<Vector3> VolumeCenter = new();
 
         [Input(Guid = "4b253a7c-0e50-477d-8eee-4f4c9a5608e9")]
-        public readonly InputSlot<System.Numerics.Vector3> VolumeStretch = new();
+        public readonly InputSlot<Vector3> VolumeStretch = new();
 
         [Input(Guid = "def19ffe-41d3-44a3-9b32-2ae9bb2f2fe4")]
         public readonly InputSlot<float> VolumeScale = new();
 
         [Input(Guid = "9b3a6a71-829e-47cd-87f2-fe87d7848120")]
-        public readonly InputSlot<System.Numerics.Vector3> VolumeRotate = new();
+        public readonly InputSlot<Vector3> VolumeRotate = new();
 
         [Input(Guid = "77a64b13-445c-4d77-82ca-204f67c2f2cf")]
         public readonly InputSlot<float> FallOff = new();
@@ -52,7 +46,7 @@ namespace lib.point.particle.force
         public readonly InputSlot<int> DistanceMode = new();
 
         [Input(Guid = "2a8f498f-b91e-41ad-a7d2-8082d5e72f39")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> TargetPoints = new();
+        public readonly InputSlot<BufferWithViews> TargetPoints = new();
 
         [Input(Guid = "b5f61cd0-ad6f-45fe-ad0f-8a7a716b7c8f")]
         public readonly InputSlot<GizmoVisibility> GizmoVisibility = new();

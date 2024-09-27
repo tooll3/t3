@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.dx11._
@@ -27,13 +21,13 @@ namespace lib.dx11._
         public readonly InputSlot<Int2> Resolution = new();
 
         [Input(Guid = "c80d3700-ceb6-43d0-9ffd-f4854e67a41d")]
-        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> Wrap = new();
+        public readonly InputSlot<TextureAddressMode> Wrap = new();
 
         [Input(Guid = "432c1a23-bf28-4595-923f-6c5a442fa90a")]
         public readonly InputSlot<SharpDX.DXGI.Format> OutputFormat = new();
 
         [Input(Guid = "499e7ff0-3b6a-414b-be19-03c615931ab8")]
-        public readonly InputSlot<System.Numerics.Vector4> BufferColor = new();
+        public readonly InputSlot<Vector4> BufferColor = new();
 
         [Input(Guid = "3ca67d25-72ec-487b-91b3-ece912b76462")]
         public readonly InputSlot<bool> GenerateMipmaps = new();

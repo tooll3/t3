@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.fx
 {
 	[Guid("8bede700-4e3e-42d8-8097-9744abdb8ad3")]
@@ -22,13 +16,13 @@ namespace lib.img.fx
         public readonly InputSlot<float> Displacement = new InputSlot<float>();
 
         [Input(Guid = "3a3acfbd-dca7-4f8a-b862-90eae2bc41ca")]
-        public readonly InputSlot<System.Numerics.Vector2> Center = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Center = new InputSlot<Vector2>();
 
         [Input(Guid = "f942fc0d-ed5f-4594-8690-d464c5b12ed8")]
         public readonly InputSlot<float> Shading = new InputSlot<float>();
 
         [Input(Guid = "17c45c4e-590e-4de6-90c2-befe2f89831d")]
-        public readonly InputSlot<System.Numerics.Vector4> ShadeColor = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> ShadeColor = new InputSlot<Vector4>();
 
     }
 }

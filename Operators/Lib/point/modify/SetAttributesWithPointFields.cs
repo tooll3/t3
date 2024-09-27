@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.modify
 {
     [Guid("21b0a346-f214-449f-ae27-7bfbe5395d66")]
@@ -10,7 +5,7 @@ namespace lib.point.modify
     {
 
         [Output(Guid = "1e4de159-c526-44b4-9d31-e1aec95b9bad")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> Output = new();
+        public readonly Slot<BufferWithViews> Output = new();
 
         [Input(Guid = "7485a1bc-0983-4348-a7d7-d723e92eecd9")]
         public readonly InputSlot<float> Amount = new InputSlot<float>();
@@ -22,7 +17,7 @@ namespace lib.point.modify
         public readonly InputSlot<float> OffsetRange = new InputSlot<float>();
 
         [Input(Guid = "3c70a819-d813-4ebd-9e5b-c185fac70ea2")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
 
         [Input(Guid = "46238904-91b9-47ab-bf90-9392fb034dc3")]
         public readonly InputSlot<float> Variation = new InputSlot<float>();
@@ -34,7 +29,7 @@ namespace lib.point.modify
         public readonly InputSlot<int> ColorMode = new InputSlot<int>();
 
         [Input(Guid = "959d8403-74d0-4f8b-b2f8-28ba0d26a3e6")]
-        public readonly InputSlot<T3.Core.DataTypes.Gradient> Gradient = new InputSlot<T3.Core.DataTypes.Gradient>();
+        public readonly InputSlot<Gradient> Gradient = new InputSlot<Gradient>();
 
         [Input(Guid = "9e69c4d8-3432-4afa-965f-55faffc35d32")]
         public readonly InputSlot<float> AffectPosition = new InputSlot<float>();
@@ -43,7 +38,7 @@ namespace lib.point.modify
         public readonly InputSlot<float> AffectOrientation = new InputSlot<float>();
 
         [Input(Guid = "f4eff9af-3f65-4603-9432-45c97978c92f")]
-        public readonly InputSlot<System.Numerics.Vector3> OrientationUpVector = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> OrientationUpVector = new InputSlot<Vector3>();
 
         [Input(Guid = "ea732975-c8c7-4210-b2ea-0e73298c54d1")]
         public readonly InputSlot<float> AffectW = new InputSlot<float>();
@@ -55,13 +50,13 @@ namespace lib.point.modify
         public readonly InputSlot<bool> WCurveAffectsWeight = new InputSlot<bool>();
 
         [Input(Guid = "d3d92fe5-9a56-45f6-acc7-67370d744c0e")]
-        public readonly InputSlot<T3.Core.DataTypes.Curve> WCurve = new InputSlot<T3.Core.DataTypes.Curve>();
+        public readonly InputSlot<Curve> WCurve = new InputSlot<Curve>();
 
         [Input(Guid = "cfc0c91e-4cb6-4408-a463-21209d7d4742")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
+        public readonly InputSlot<BufferWithViews> Points = new InputSlot<BufferWithViews>();
 
         [Input(Guid = "df08c590-c398-4b92-aa09-ab57abc42aaf")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> FieldPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
+        public readonly InputSlot<BufferWithViews> FieldPoints = new InputSlot<BufferWithViews>();
 
         private enum WModes
         {

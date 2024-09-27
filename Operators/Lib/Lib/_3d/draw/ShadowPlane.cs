@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.draw
 {
     [Guid("d38fe24e-be01-4a22-9595-b06bc906bf49")]
@@ -26,19 +20,19 @@ namespace lib._3d.draw
         public readonly InputSlot<int> Resolution = new InputSlot<int>();
 
         [Input(Guid = "f192118e-ea03-4233-a7b5-93f0fa380e93")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> Color = new InputSlot<Vector4>();
 
         [Input(Guid = "7a330847-eb4d-4b18-8f55-d220351537a7")]
         public readonly InputSlot<float> BlurRadius = new InputSlot<float>();
 
         [Input(Guid = "ad589e97-e1db-4557-8a46-f6618f3c969b")]
-        public readonly InputSlot<System.Numerics.Vector2> BlurDistribution = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> BlurDistribution = new InputSlot<Vector2>();
 
         [Input(Guid = "bcfc6e35-6427-46fd-9902-189e88651ebe")]
-        public readonly InputSlot<System.Numerics.Vector3> Center = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> Center = new InputSlot<Vector3>();
 
         [Input(Guid = "48974f83-203f-4c35-896f-c1e0820214cf")]
-        public readonly InputSlot<System.Numerics.Vector3> Rotation = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> Rotation = new InputSlot<Vector3>();
 
         private enum Resolutions
         {

@@ -1,11 +1,7 @@
-using System.Runtime.InteropServices;
 using SharpDX;
 using SharpDX.Direct3D11;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using T3.Core.Resource;
-//using Buffer = SharpDX.Direct3D11.Buffer;
+
+// SharpDX.Direct3D11.Buffer;
 //using Utilities = T3.Core.Utils.Utilities;
 
 namespace lib.math.@float
@@ -14,7 +10,7 @@ namespace lib.math.@float
     public class IntsToBuffer : Instance<IntsToBuffer>
     {
         [Output(Guid = "f5531ffb-dbde-45d3-af2a-bd90bcbf3710")]
-        public readonly Slot<SharpDX.Direct3D11.Buffer> Result = new();
+        public readonly Slot<Buffer> Result = new();
 
         public IntsToBuffer()
         {
@@ -55,7 +51,7 @@ namespace lib.math.@float
                                              SizeInBytes = size,
                                              BindFlags = BindFlags.ConstantBuffer
                                          };
-                    Result.Value = new SharpDX.Direct3D11.Buffer(device, data, bufferDesc);
+                    Result.Value = new Buffer(device, data, bufferDesc);
                 }
                 else
                 {

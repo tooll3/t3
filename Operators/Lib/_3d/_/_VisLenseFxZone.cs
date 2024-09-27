@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d._
 {
 	[Guid("4f0506ac-6a72-4e35-96f0-0f331d8f6cca")]
@@ -13,13 +7,13 @@ namespace lib._3d._
         public readonly Slot<Command> Output = new();
 
         [Input(Guid = "2aa0b998-c8a0-4017-9002-23bd7b29d042")]
-        public readonly InputSlot<System.Numerics.Vector2> InnerFxZone = new();
+        public readonly InputSlot<Vector2> InnerFxZone = new();
 
         [Input(Guid = "5e718a12-e4d3-42e8-bc9b-4e6a849812dc")]
-        public readonly InputSlot<System.Numerics.Vector2> EdgeFxZone = new();
+        public readonly InputSlot<Vector2> EdgeFxZone = new();
 
         [Input(Guid = "b4aec340-9a7b-4f7b-b33c-e7ae2f61cf2b")]
-        public readonly InputSlot<System.Numerics.Vector2> MatteBoxZone = new();
+        public readonly InputSlot<Vector2> MatteBoxZone = new();
 
 
     }

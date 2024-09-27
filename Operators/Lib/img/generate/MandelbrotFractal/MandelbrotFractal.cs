@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace Types.user.pixtur.MandelbrotFractal
 {
     [Guid("27e58fae-2b3d-404e-b9cd-307cb6ad4906")]
@@ -22,7 +16,7 @@ namespace Types.user.pixtur.MandelbrotFractal
         public readonly InputSlot<float> Scale = new InputSlot<float>();
 
         [Input(Guid = "fa2fd0f7-45eb-44d9-b1de-cc45903fc2d4")]
-        public readonly InputSlot<System.Numerics.Vector2> Offset = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Offset = new InputSlot<Vector2>();
 
         [Input(Guid = "4fe49e0c-3a46-4a79-944e-0cfb8d31ebb2")]
         public readonly InputSlot<float> ColorScale = new InputSlot<float>();

@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.point.draw
@@ -18,7 +12,7 @@ namespace lib.point.draw
         public readonly InputSlot<BufferWithViews> GPoints = new();
 
         [Input(Guid = "22a23dbc-0222-441d-8435-b630dcd77acb")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "d41169ee-4e53-4198-b56a-b4b771cc3dfd")]
         public readonly InputSlot<float> Width = new();
@@ -33,7 +27,7 @@ namespace lib.point.draw
         public readonly InputSlot<int> TextureMode = new();
 
         [Input(Guid = "3198a61e-94b3-42c4-a2ae-822456db8bdd")]
-        public readonly InputSlot<System.Numerics.Vector2> TextureRange = new();
+        public readonly InputSlot<Vector2> TextureRange = new();
 
         [Input(Guid = "1ce27f43-3664-44e6-9a0b-5fcca3a5b9fe")]
         public readonly InputSlot<bool> EnableDepthWrite = new();

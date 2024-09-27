@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.fx
 {
 	[Guid("a2ea3af5-d78b-46b4-84db-09d31f042798")]
@@ -13,7 +7,7 @@ namespace lib.img.fx
         public readonly Slot<Texture2D> ColorBuffer = new();
 
         [Input(Guid = "36e16cc0-3c9e-4615-9ac0-2d2f07150deb")]
-        public readonly MultiInputSlot<T3.Core.DataTypes.Command> Command = new();
+        public readonly MultiInputSlot<Command> Command = new();
 
         [Input(Guid = "73ba7691-784f-4706-8a88-9305f723c4cc")]
         public readonly InputSlot<float> Displacement = new();
@@ -37,7 +31,7 @@ namespace lib.img.fx
         public readonly InputSlot<float> Rotate = new();
 
         [Input(Guid = "19e5420c-6d48-4d5b-a0db-e2ee361f8f31")]
-        public readonly InputSlot<System.Numerics.Vector2> Offset = new();
+        public readonly InputSlot<Vector2> Offset = new();
 
         [Input(Guid = "19f7822f-e8df-4990-950b-2a39f62c59c0")]
         public readonly InputSlot<float> ShiftHue = new();
@@ -55,10 +49,10 @@ namespace lib.img.fx
         public readonly InputSlot<bool> Reset = new();
 
         [Input(Guid = "4232af30-de5f-4fd6-af92-d704e26f6850")]
-        public readonly InputSlot<System.Numerics.Vector2> LuminosityRange = new();
+        public readonly InputSlot<Vector2> LuminosityRange = new();
 
         [Input(Guid = "0eeae01b-80d6-4267-bdf5-a6df2533ffe9")]
-        public readonly InputSlot<System.Numerics.Vector2> ChromaRange = new();
+        public readonly InputSlot<Vector2> ChromaRange = new();
 
         [Input(Guid = "c7f25ad5-1907-4851-8057-7c73f82da1be")]
         public readonly InputSlot<float> RangeClamping = new();

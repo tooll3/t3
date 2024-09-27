@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.rendering
 {
 	[Guid("9c67a8c8-839f-4f67-a949-08cb38b9dffd")]
@@ -28,13 +21,13 @@ namespace lib._3d.rendering
         public readonly InputSlot<Command> Command = new();
 
         [Input(Guid = "f6d96a01-dc90-49c7-9152-a6a42bb05218")]
-        public readonly InputSlot<System.Numerics.Vector3> Position = new();
+        public readonly InputSlot<Vector3> Position = new();
 
         [Input(Guid = "98155900-1bb9-427a-9c4e-0988fec806cd")]
         public readonly InputSlot<float> Intensity = new();
 
         [Input(Guid = "ff3442c5-95c8-4bd6-a492-cb4a9a597ea1")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "f3ca8d13-4e24-4718-a59c-6a1b9a2a3c04")]
         public readonly InputSlot<bool> IsEnabled = new();

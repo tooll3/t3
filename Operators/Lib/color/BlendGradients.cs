@@ -1,10 +1,4 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
-using Vector4 = System.Numerics.Vector4;
 
 namespace lib.color
 {

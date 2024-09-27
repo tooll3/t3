@@ -1,14 +1,5 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using SharpDX.Direct3D11;
-using T3.Core.DataTypes;
-using T3.Core.Logging;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Resource;
 using T3.Core.Utils;
-using Buffer = SharpDX.Direct3D11.Buffer;
 using Utilities = T3.Core.Utils.Utilities;
 
 namespace lib._3d._
@@ -77,7 +68,7 @@ namespace lib._3d._
                 
                 immediateContext.MapSubresource(previousBuffer,
                                                 MapMode.Read,
-                                                SharpDX.Direct3D11.MapFlags.None,
+                                                MapFlags.None,
                                                 out var int32Stream);
                 
                 int32Stream.Seek(index * sizeof(int), SeekOrigin.Begin);

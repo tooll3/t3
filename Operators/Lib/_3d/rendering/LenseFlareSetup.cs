@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.rendering
 {
 	[Guid("eb4d5014-2619-4368-a1b8-521db8372243")]
@@ -22,7 +16,7 @@ namespace lib._3d.rendering
         public readonly InputSlot<int> LightIndex = new();
 
         [Input(Guid = "aab1250a-de9c-4bfd-ab0f-8d4eed8b57e2")]
-        public readonly InputSlot<System.Numerics.Vector4> RandomizeColor = new();
+        public readonly InputSlot<Vector4> RandomizeColor = new();
 
 
     }

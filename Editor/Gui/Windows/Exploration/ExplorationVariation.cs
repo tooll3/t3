@@ -6,7 +6,7 @@ using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
-using Vector3 = System.Numerics.Vector3;
+
 using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Editor.Gui.Windows.Exploration

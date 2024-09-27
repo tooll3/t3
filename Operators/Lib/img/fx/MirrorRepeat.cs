@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.fx
 {
 	[Guid("06621b4b-43be-4ef9-80d0-f1b36fa4dbd1")]
@@ -31,16 +25,16 @@ namespace lib.img.fx
         public readonly InputSlot<float> OffsetEdge = new InputSlot<float>();
 
         [Input(Guid = "5a5fc5e7-4fec-4146-9183-161fff71ee97")]
-        public readonly InputSlot<System.Numerics.Vector2> Offsetimage = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Offsetimage = new InputSlot<Vector2>();
 
         [Input(Guid = "341ee76d-f431-40e8-ba14-aa4e0a1f10c4")]
         public readonly InputSlot<float> ShadeAmount = new InputSlot<float>();
 
         [Input(Guid = "5309f31b-bb18-4ec6-8a40-f1e3f83fb239")]
-        public readonly InputSlot<System.Numerics.Vector4> ShadeColor = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> ShadeColor = new InputSlot<Vector4>();
 
         [Input(Guid = "6809a355-47fc-4e27-98a2-956dcc7f41ef")]
-        public readonly InputSlot<T3.Core.DataTypes.Vector.Int2> Resolution = new InputSlot<T3.Core.DataTypes.Vector.Int2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
     }
 }
 

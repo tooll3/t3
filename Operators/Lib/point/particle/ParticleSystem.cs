@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.particle
 {
 	[Guid("e44ae9b6-cd56-4224-8a5d-118eda4cd3f4")]
@@ -10,10 +5,10 @@ namespace lib.point.particle
     {
 
         [Output(Guid = "51b9c6bd-b7cc-48a4-979b-3febcac914c2")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new();
+        public readonly Slot<BufferWithViews> OutBuffer = new();
 
         [Input(Guid = "ba08e719-a1d1-4ac6-9c8c-076478a65a81")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> EmitPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
+        public readonly InputSlot<BufferWithViews> EmitPoints = new InputSlot<BufferWithViews>();
 
         [Input(Guid = "7a320c47-14ed-4637-928b-25f87bd32c26")]
         public readonly InputSlot<bool> Emit = new InputSlot<bool>();

@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.modify
 {
 	[Guid("dd586355-64b3-4e96-af6d-b4927595dee7")]
@@ -10,10 +5,10 @@ namespace lib.point.modify
     {
 
         [Output(Guid = "bea6aa18-e751-4ce7-b7d7-b7a026c8e019")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> Output = new();
+        public readonly Slot<BufferWithViews> Output = new();
 
         [Input(Guid = "3f5abde2-66e1-4b04-9bff-5a19a58aab86")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new();
+        public readonly InputSlot<BufferWithViews> Points = new();
 
         [Input(Guid = "5894156a-cc31-4236-908c-de0e5385fd84")]
         public readonly InputSlot<float> Amount = new();
@@ -28,7 +23,7 @@ namespace lib.point.modify
         public readonly InputSlot<float> Variation = new();
 
         [Input(Guid = "c2df1fa3-88e1-4be2-954e-8c44edd9d421")]
-        public readonly InputSlot<System.Numerics.Vector3> AmountDistribution = new();
+        public readonly InputSlot<Vector3> AmountDistribution = new();
 
         [Input(Guid = "97c25ec6-ef71-42f8-9352-52baf2ce41a4")]
         public readonly InputSlot<float> RotationLookupDistance = new();
@@ -37,10 +32,10 @@ namespace lib.point.modify
         public readonly InputSlot<float> UseWAsWeight = new();
 
         [Input(Guid = "2d229dc7-a7ec-4fae-b84c-5eea6b91e18a")]
-        public readonly InputSlot<System.Numerics.Vector3> NoiseOffset = new();
+        public readonly InputSlot<Vector3> NoiseOffset = new();
 
         [Input(Guid = "30ceafce-455a-449c-9ffd-928280d7a862")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
     }
 }
 

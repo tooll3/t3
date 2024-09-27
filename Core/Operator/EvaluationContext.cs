@@ -10,8 +10,6 @@ using T3.Core.Rendering.Material;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 using Texture2D = T3.Core.DataTypes.Texture2D;
-using Vector3 = System.Numerics.Vector3;
-using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Core.Operator
 {

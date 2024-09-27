@@ -1,14 +1,6 @@
-using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using T3.Core.DataTypes;
 using SharpDX.DXGI;
-using T3.Core.Logging;
-using T3.Core.Resource;
 using T3.Core.Utils;
-using Texture2D = T3.Core.DataTypes.Texture2D;
 using Utilities = T3.Core.Utils.Utilities;
 
 namespace lib._3d.postfx
@@ -75,7 +67,7 @@ namespace lib._3d.postfx
                 {
                     try
                     {
-                        sourceStream.Seek( sizeof(float) * lightIndex, System.IO.SeekOrigin.Begin);
+                        sourceStream.Seek( sizeof(float) * lightIndex, SeekOrigin.Begin);
                         result = sourceStream.Read<float>();
                     }
                     catch (Exception e)

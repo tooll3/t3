@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.generate
 {
 	[Guid("1a241222-200b-417d-a8c7-131e3b48cc36")]
@@ -10,7 +5,7 @@ namespace lib.point.generate
     {
 
         [Output(Guid = "c20f4675-6387-45da-b14f-8d0a3af5e672")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new();
+        public readonly Slot<BufferWithViews> OutBuffer = new();
 
         // public RadialGPoints()
         // {
@@ -31,7 +26,7 @@ namespace lib.point.generate
         public readonly InputSlot<float> Radius = new();
 
         [Input(Guid = "21140fe1-9fb5-4a79-b03a-7deac242fba2")]
-        public readonly InputSlot<System.Numerics.Vector3> Center = new();
+        public readonly InputSlot<Vector3> Center = new();
 
         [Input(Guid = "813df416-a783-433c-9645-921c885c9840")]
         public readonly InputSlot<float> StartAngle = new();

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Numerics;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace T3.Core.DataTypes
 {

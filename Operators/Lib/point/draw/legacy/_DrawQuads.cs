@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.point.draw.legacy
@@ -18,13 +12,13 @@ namespace lib.point.draw.legacy
         public readonly InputSlot<BufferWithViews> GPoints = new();
 
         [Input(Guid = "edf0f842-5ab8-4366-83d1-972653056220")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "f02e81bb-441f-4d78-9e6c-71f931b6bb5c")]
-        public readonly InputSlot<System.Numerics.Vector2> Offset = new();
+        public readonly InputSlot<Vector2> Offset = new();
 
         [Input(Guid = "9cb2ad14-dac0-44f2-a87d-3ae29c8a7d97")]
-        public readonly InputSlot<System.Numerics.Vector2> Stretch = new();
+        public readonly InputSlot<Vector2> Stretch = new();
 
         [Input(Guid = "2bf3f3ef-43f4-4fbb-ac8c-c6b3777aa3ed")]
         public readonly InputSlot<float> Size = new();
@@ -36,7 +30,7 @@ namespace lib.point.draw.legacy
         public readonly InputSlot<float> Rotate = new();
 
         [Input(Guid = "94116342-bc50-42ed-934b-7dd408eafe45")]
-        public readonly InputSlot<System.Numerics.Vector3> RotateAxis = new();
+        public readonly InputSlot<Vector3> RotateAxis = new();
 
         [Input(Guid = "ae975647-36f6-494c-b4f1-3289e4d8c03e")]
         public readonly InputSlot<Texture2D> Texture_ = new();
@@ -57,7 +51,7 @@ namespace lib.point.draw.legacy
         public readonly InputSlot<bool> EnableDepthTest = new();
 
         [Input(Guid = "64837573-d5d1-4cc2-9dd2-337649308cb0")]
-        public readonly InputSlot<SharpDX.Direct3D11.CullMode> CullMode = new();
+        public readonly InputSlot<CullMode> CullMode = new();
     }
 }
 

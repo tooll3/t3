@@ -1,11 +1,3 @@
-using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using Buffer = SharpDX.Direct3D11.Buffer;
-
 namespace lib.dx11.tex
 {
 	[Guid("bc489196-9a30-4580-af6f-dc059f226da1")]

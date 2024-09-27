@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.generate
 {
 	[Guid("3ee8f66d-68df-43c1-b0eb-407259bf7e86")]
@@ -12,7 +6,7 @@ namespace lib.point.generate
     {
 
         [Output(Guid = "eb8c79d4-d147-419c-a606-4bbe7b71933f")]
-        public readonly TransformCallbackSlot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new();
+        public readonly TransformCallbackSlot<BufferWithViews> OutBuffer = new();
 
         
         public GridPoints()
@@ -36,25 +30,25 @@ namespace lib.point.generate
         public readonly InputSlot<int> CountZ = new();
 
         [Input(Guid = "37a11e3d-e353-4b0f-a052-356582e235b0")]
-        public readonly InputSlot<System.Numerics.Vector3> Size = new();
+        public readonly InputSlot<Vector3> Size = new();
 
         [Input(Guid = "940133dd-4e45-4a78-8b13-8831e30f78b8")]
         public readonly InputSlot<float> Scale = new();
 
         [Input(Guid = "0f053c34-c9ef-46b7-9c73-fff9984a3d5e")]
-        public readonly InputSlot<System.Numerics.Vector3> Center = new();
+        public readonly InputSlot<Vector3> Center = new();
 
         [Input(Guid = "70459c2d-8686-4709-9a12-1ea36d1b08d2")]
         public readonly InputSlot<float> W = new();
 
         [Input(Guid = "e2019c63-f498-4ccb-a2cc-ea2ade0c540b")]
-        public readonly InputSlot<System.Numerics.Vector3> OrientationAxis = new();
+        public readonly InputSlot<Vector3> OrientationAxis = new();
 
         [Input(Guid = "28f5fea3-b7c1-4e46-84d5-47b5f311be80")]
         public readonly InputSlot<float> OrientationAngle = new();
 
         [Input(Guid = "d910b40e-6bee-4e1a-82a9-625b89fc27eb")]
-        public readonly InputSlot<System.Numerics.Vector3> Pivot = new();
+        public readonly InputSlot<Vector3> Pivot = new();
 
         [Input(Guid = "9748853e-5f13-45c9-bca6-d07b07185aab", MappedType = typeof(SizeModes))]
         public readonly InputSlot<int> SizeMode = new();
@@ -63,7 +57,7 @@ namespace lib.point.generate
         public readonly InputSlot<int> Tiling = new();
 
         [Input(Guid = "aa19b556-660b-4267-be44-30c30d85314e")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> Color = new InputSlot<Vector4>();
 
         private enum SizeModes
         {

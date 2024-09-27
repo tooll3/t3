@@ -1,9 +1,4 @@
-using System.Runtime.InteropServices;
-using System.Numerics;
 using T3.Core.Animation;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.math.@float
@@ -56,7 +51,7 @@ namespace lib.math.@float
         private double _lastEvalTime;
 
         [Input(Guid = "5ec00ae8-1cd5-418f-bd9f-1b925df08466")]
-        public readonly InputSlot<System.Numerics.Vector2> Value = new ();
+        public readonly InputSlot<Vector2> Value = new ();
 
         [Input(Guid = "9c8180fd-3e62-4fed-ad9a-c5c5b284e5e9")]
         public readonly InputSlot<float> Tension = new ();

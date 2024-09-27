@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.fx
 {
 	[Guid("6820b166-1782-43b9-bc5c-6b4f63b16f86")]
@@ -31,13 +25,13 @@ namespace lib.img.fx
         public readonly InputSlot<float> Twist = new InputSlot<float>();
 
         [Input(Guid = "03298545-a5d6-44d5-bb7c-4747172d2667")]
-        public readonly InputSlot<System.Numerics.Vector2> Direction = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Direction = new InputSlot<Vector2>();
 
         [Input(Guid = "9d5e3055-c17e-4013-963d-e17c76b707c1")]
-        public readonly InputSlot<System.Numerics.Vector4> HighlightColor = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> HighlightColor = new InputSlot<Vector4>();
 
         [Input(Guid = "9c9e9e49-2f3a-4746-ac1f-c5fb1b3dd96b")]
-        public readonly InputSlot<System.Numerics.Vector4> MidColor = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> MidColor = new InputSlot<Vector4>();
 
         [Input(Guid = "d162a7e1-1906-45bc-a896-10ee2c2483fe")]
         public readonly InputSlot<float> BlurRadius = new InputSlot<float>();
@@ -46,7 +40,7 @@ namespace lib.img.fx
         public readonly InputSlot<float> SampleRadius = new InputSlot<float>();
 
         [Input(Guid = "3c615aa0-61b7-43c5-bea3-8d1110b4f5cd")]
-        public readonly InputSlot<T3.Core.DataTypes.Vector.Int2> Resolution = new InputSlot<T3.Core.DataTypes.Vector.Int2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
     }
 }

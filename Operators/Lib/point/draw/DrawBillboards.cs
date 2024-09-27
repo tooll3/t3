@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.point.draw
@@ -18,7 +12,7 @@ namespace lib.point.draw
         public readonly InputSlot<float> Scale = new InputSlot<float>();
 
         [Input(Guid = "7df44a8d-af20-400f-b8a7-4b2200f55ec1")]
-        public readonly InputSlot<System.Numerics.Vector2> Stretch = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Stretch = new InputSlot<Vector2>();
 
         [Input(Guid = "3247ff54-e470-466a-a70c-cdba1e264f6b")]
         public readonly InputSlot<bool> UseWForScale = new InputSlot<bool>();
@@ -27,7 +21,7 @@ namespace lib.point.draw
         public readonly InputSlot<bool> UseExtend = new InputSlot<bool>();
 
         [Input(Guid = "4763d03c-7fae-4466-870c-693bb1acb9a0")]
-        public readonly InputSlot<System.Numerics.Vector3> Offset = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> Offset = new InputSlot<Vector3>();
 
         [Input(Guid = "909bdbcd-620c-479e-b150-cb7adfbfffe8", MappedType = typeof(Orientations))]
         public readonly InputSlot<int> Orientation = new InputSlot<int>();
@@ -36,7 +30,7 @@ namespace lib.point.draw
         public readonly InputSlot<float> RotateZ = new InputSlot<float>();
 
         [Input(Guid = "f9c698ae-3b59-4f1d-8497-c668f5037795")]
-        public readonly InputSlot<System.Numerics.Vector3> RotationAxis = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> RotationAxis = new InputSlot<Vector3>();
 
         [Input(Guid = "a9e64a2e-6a88-4c36-9e02-95ca710ea86e")]
         public readonly InputSlot<float> Randomize = new InputSlot<float>();
@@ -45,7 +39,7 @@ namespace lib.point.draw
         public readonly InputSlot<float> RandomPhase = new InputSlot<float>();
 
         [Input(Guid = "76c52e1f-1767-4635-86a1-93e44cc2a487")]
-        public readonly InputSlot<System.Numerics.Vector3> RandomPosition = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> RandomPosition = new InputSlot<Vector3>();
 
         [Input(Guid = "80edea41-7f4e-492e-bf73-270df9b225be")]
         public readonly InputSlot<float> RandomRotate = new InputSlot<float>();
@@ -54,7 +48,7 @@ namespace lib.point.draw
         public readonly InputSlot<float> RandomScale = new InputSlot<float>();
 
         [Input(Guid = "211c4e91-e667-4cb7-a7b2-81081cd780cb")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> Color = new InputSlot<Vector4>();
 
         [Input(Guid = "6ac9265b-c6ae-47dc-a605-993d685edf90", MappedType = typeof(DistributionModes))]
         public readonly InputSlot<int> ColorVariationMode = new InputSlot<int>();
@@ -96,7 +90,7 @@ namespace lib.point.draw
         public readonly InputSlot<int> FxTextureMode = new InputSlot<int>();
 
         [Input(Guid = "2e116e07-ee18-4b2a-a708-b0dca510a8dd")]
-        public readonly InputSlot<System.Numerics.Vector4> FxTextureAmount = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> FxTextureAmount = new InputSlot<Vector4>();
 
         [Input(Guid = "860b2023-9c77-47aa-9a9b-8fbc735835d4", MappedType = typeof(SharedEnums.BlendModes))]
         public readonly InputSlot<int> BlendMode = new InputSlot<int>();

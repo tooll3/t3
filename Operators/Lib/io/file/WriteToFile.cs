@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.io.file
 {
 	[Guid("0db15e2d-b457-44d7-bb58-ace0a0708073")]

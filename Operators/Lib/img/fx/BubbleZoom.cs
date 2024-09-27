@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.fx
 {
 	[Guid("ca3f3c1b-6f22-4bf3-b06b-d2b0d85a8881")]
@@ -17,7 +10,7 @@ namespace lib.img.fx
         public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "277c5e50-7d0f-416f-ba14-69ba407802dc")]
-        public readonly InputSlot<System.Numerics.Vector2> Center = new();
+        public readonly InputSlot<Vector2> Center = new();
 
         [Input(Guid = "5bb5934d-28a8-4bd3-a146-f0ecb804170a")]
         public readonly InputSlot<float> ScaleFactor = new();
@@ -35,7 +28,7 @@ namespace lib.img.fx
         public readonly InputSlot<Int2> Resolution = new();
 
         [Input(Guid = "0ce5b753-bcc0-4102-b011-64e603a50567")]
-        public readonly InputSlot<T3.Core.DataTypes.Gradient> Gradient = new();
+        public readonly InputSlot<Gradient> Gradient = new();
     }
 }
 

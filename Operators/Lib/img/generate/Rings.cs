@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.img.generate
@@ -18,19 +12,19 @@ namespace lib.img.generate
         public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "2323ca7b-af43-4630-af27-78c9ad4c9dcc")]
-        public readonly InputSlot<System.Numerics.Vector4> Fill = new();
+        public readonly InputSlot<Vector4> Fill = new();
 
         [Input(Guid = "6a169837-8d59-4874-82e5-78de530c58ce")]
-        public readonly InputSlot<System.Numerics.Vector4> Background = new();
+        public readonly InputSlot<Vector4> Background = new();
 
         [Input(Guid = "57adbae0-c35e-42b2-857e-28cbb6e9dbc7")]
-        public readonly InputSlot<System.Numerics.Vector4> Highlight = new();
+        public readonly InputSlot<Vector4> Highlight = new();
 
         [Input(Guid = "eeabbad9-a4a5-4ee6-9e53-c0012e339b77")]
-        public readonly InputSlot<System.Numerics.Vector2> Radius = new();
+        public readonly InputSlot<Vector2> Radius = new();
 
         [Input(Guid = "b8ea3c63-d55d-47d9-97f9-bdbf7cec5e05")]
-        public readonly InputSlot<System.Numerics.Vector2> Position = new();
+        public readonly InputSlot<Vector2> Position = new();
 
         [Input(Guid = "f74b3fd6-eee4-4218-9771-3f04c38e4ff1")]
         public readonly InputSlot<float> Count = new();
@@ -45,16 +39,16 @@ namespace lib.img.generate
         public readonly InputSlot<float> Offset = new();
 
         [Input(Guid = "7c751a95-2bc5-4bef-b729-fc133af3132f")]
-        public readonly InputSlot<System.Numerics.Vector2> _Segments = new();
+        public readonly InputSlot<Vector2> _Segments = new();
 
         [Input(Guid = "0556c0a1-bdbf-4a20-a9a7-8ab7effb087f")]
-        public readonly InputSlot<System.Numerics.Vector2> _Twist = new();
+        public readonly InputSlot<Vector2> _Twist = new();
 
         [Input(Guid = "1dc466f8-3baa-46d9-a05c-831de0b4590a")]
-        public readonly InputSlot<System.Numerics.Vector2> _Thickness = new();
+        public readonly InputSlot<Vector2> _Thickness = new();
 
         [Input(Guid = "d5d2bf78-af34-4202-8d2f-7f96e05a3a61")]
-        public readonly InputSlot<System.Numerics.Vector2> _Ratio = new();
+        public readonly InputSlot<Vector2> _Ratio = new();
 
         [Input(Guid = "a7eb1998-baba-445a-abcf-c1befd205c3c")]
         public readonly InputSlot<float> _FillRatio = new();

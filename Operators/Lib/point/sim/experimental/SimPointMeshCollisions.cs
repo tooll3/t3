@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.sim.experimental
 {
 	[Guid("281b69e8-01ee-4a62-a9ed-8508c5355c6c")]
@@ -10,10 +5,10 @@ namespace lib.point.sim.experimental
     {
 
         [Output(Guid = "e6e49b7a-1510-47e8-a51a-7b684b4d1c1c")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new();
+        public readonly Slot<BufferWithViews> OutBuffer = new();
 
         [Input(Guid = "8f2d6bb8-5242-4f21-b356-7785b6b0ff4e")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> PointsA_ = new();
+        public readonly InputSlot<BufferWithViews> PointsA_ = new();
 
         [Input(Guid = "61c55a9d-a2b9-4d60-84f4-ffd639d0d724")]
         public readonly InputSlot<float> Bouncyness = new();
@@ -28,7 +23,7 @@ namespace lib.point.sim.experimental
         public readonly InputSlot<bool> IsEnabled = new();
 
         [Input(Guid = "a4f2c0e6-1011-4793-933b-b9f0a332bbba")]
-        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> Mesh = new();
+        public readonly InputSlot<MeshBuffers> Mesh = new();
     }
 }
 

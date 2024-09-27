@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.@string
 {
 	[Guid("de9f1dfd-05ec-466f-9f5f-46e7e8da219a")]

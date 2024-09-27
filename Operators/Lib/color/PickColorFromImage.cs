@@ -1,17 +1,8 @@
-using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using SharpDX.DXGI;
 using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
-using T3.Core.Resource;
 using T3.Core.Utils;
-using Texture2D = T3.Core.DataTypes.Texture2D;
 using Utilities = T3.Core.Utils.Utilities;
-using Vector2 = System.Numerics.Vector2;
-using Vector4 = System.Numerics.Vector4;
 
 namespace lib.color
 {
@@ -135,7 +126,7 @@ namespace lib.color
                     case Format.R32G32B32A32_Float:
                         try
                         {
-                            sourceStream.Seek(row * sourceDataBox.RowPitch + 16 * column, System.IO.SeekOrigin.Begin);
+                            sourceStream.Seek(row * sourceDataBox.RowPitch + 16 * column, SeekOrigin.Begin);
                             var r = sourceStream.Read<float>();
                             var g = sourceStream.Read<float>();
                             var b = sourceStream.Read<float>();

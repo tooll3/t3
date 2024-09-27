@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using Buffer = SharpDX.Direct3D11.Buffer;
-
 namespace lib.exec
 {
 	[Guid("010aca02-263a-471c-b407-025b023f7f60")]

@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.particle.force
 {
 	[Guid("7eefe668-d290-4673-b766-39c98b9ba12e")]

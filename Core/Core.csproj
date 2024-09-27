@@ -28,6 +28,14 @@
         <PackageReference Include="SharpDX.MediaFoundation" Version="4.2.0"/>
         <PackageReference Include="SharpDX.XInput" Version="4.2.0" />
     </ItemGroup>
+    
+    <ItemGroup>
+        <Using Alias="Vector2" Include="System.Numerics.Vector2"/>
+        <Using Alias="Vector3" Include="System.Numerics.Vector3"/>
+        <Using Alias="Vector4" Include="System.Numerics.Vector4"/>
+        <Using Alias="Matrix4x4" Include="System.Numerics.Matrix4x4"/>
+        <Using Alias="Quaternion" Include="System.Numerics.Quaternion"/>
+    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Logging\Logging.csproj"/>

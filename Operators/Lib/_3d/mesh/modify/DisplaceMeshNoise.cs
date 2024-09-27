@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.mesh.modify
 {
 	[Guid("b5709297-c714-4019-9d0b-6982590b5590")]
@@ -10,10 +5,10 @@ namespace lib._3d.mesh.modify
     {
 
         [Output(Guid = "b91689eb-4274-4534-9f95-515a93c57ebe")]
-        public readonly Slot<T3.Core.DataTypes.MeshBuffers> Result = new();
+        public readonly Slot<MeshBuffers> Result = new();
 
         [Input(Guid = "fb86f0d6-1e5c-478f-b723-9f9462e2966c")]
-        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> InputMesh = new();
+        public readonly InputSlot<MeshBuffers> InputMesh = new();
 
         [Input(Guid = "b7559321-2dbe-4fe0-ab86-52532d008980")]
         public readonly InputSlot<float> Amount = new();
@@ -28,7 +23,7 @@ namespace lib._3d.mesh.modify
         public readonly InputSlot<float> Variation = new();
 
         [Input(Guid = "e02379a9-fadf-46d4-a6c2-74264e91b5a6")]
-        public readonly InputSlot<System.Numerics.Vector3> AmountDistribution = new();
+        public readonly InputSlot<Vector3> AmountDistribution = new();
 
         [Input(Guid = "08e2222f-6de1-46a8-bbdc-da83251f424e")]
         public readonly InputSlot<float> RotationLookupDistance = new();

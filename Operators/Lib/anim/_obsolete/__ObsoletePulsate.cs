@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.anim._obsolete
 {
 	[Guid("ffed6f9e-2495-4cf3-9cda-740ecec75d10")]

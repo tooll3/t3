@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.fx
 {
 	[Guid("e4e608e7-1248-4d73-910c-e8bfbb34251b")]
@@ -16,7 +10,7 @@ namespace lib.img.fx
         public readonly InputSlot<float> ShouldReset = new();
 
         [Input(Guid = "a9d8c898-545e-4c0e-af61-6d2251209460")]
-        public readonly InputSlot<System.Numerics.Vector2> Gravity = new();
+        public readonly InputSlot<Vector2> Gravity = new();
 
         [Input(Guid = "3520474e-1341-4b49-a4ce-247b52ae3fe7")]
         public readonly InputSlot<float> BorderStrength = new();
@@ -40,7 +34,7 @@ namespace lib.img.fx
         public readonly InputSlot<Texture2D> FxTexture = new();
 
         [Input(Guid = "75c2f9b1-b252-424b-ab8b-7fa543e20138")]
-        public readonly InputSlot<System.Numerics.Vector4> ApplyFxTexture = new();
+        public readonly InputSlot<Vector4> ApplyFxTexture = new();
 
     }
 }

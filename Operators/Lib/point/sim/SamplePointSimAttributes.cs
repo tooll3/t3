@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.sim
 {
 	[Guid("e85f0fcb-303e-4d21-b592-ad4578286336")]
@@ -12,7 +5,7 @@ namespace lib.point.sim
 ,ITransformable
     {
         [Output(Guid = "03f3201d-a921-4853-9029-7901cf0cffea")]
-        public readonly TransformCallbackSlot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new();
+        public readonly TransformCallbackSlot<BufferWithViews> OutBuffer = new();
 
         public SamplePointSimAttributes()
         {
@@ -25,7 +18,7 @@ namespace lib.point.sim
         public Action<Instance, EvaluationContext> TransformCallback { get; set; }
         
         [Input(Guid = "d153e6a4-1ec9-4164-b39a-032e142ba7aa")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new();
+        public readonly InputSlot<BufferWithViews> GPoints = new();
 
         [Input(Guid = "106471ad-4c27-472b-b5c9-4534ceb77b7e", MappedType = typeof(Attributes))]
         public readonly InputSlot<int> Brightness = new();
@@ -67,16 +60,16 @@ namespace lib.point.sim
         public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "57e60306-a398-432b-ac02-9e6334608264")]
-        public readonly InputSlot<System.Numerics.Vector3> Center = new();
+        public readonly InputSlot<Vector3> Center = new();
 
         [Input(Guid = "2d2c9755-9bef-465b-8934-5f2d8a0193ca")]
-        public readonly InputSlot<System.Numerics.Vector2> TextureScale = new();
+        public readonly InputSlot<Vector2> TextureScale = new();
 
         [Input(Guid = "5b7a1e63-6e09-448f-ac7e-78e1e8278a90")]
-        public readonly InputSlot<System.Numerics.Vector3> TextureRotate = new();
+        public readonly InputSlot<Vector3> TextureRotate = new();
 
         [Input(Guid = "152ee687-aefc-4261-8a3e-a01b3fe4e78f")]
-        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> TextureMode = new();
+        public readonly InputSlot<TextureAddressMode> TextureMode = new();
 
         [Input(Guid = "42c3ba03-75c4-4c8e-b953-9f1cb7ed0b02")]
         public readonly InputSlot<GizmoVisibility> Visibility = new();

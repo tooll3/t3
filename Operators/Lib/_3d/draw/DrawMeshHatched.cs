@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.draw
 {
 	[Guid("c757cde3-511c-44cb-af62-39156557daa6")]
@@ -13,10 +7,10 @@ namespace lib._3d.draw
         public readonly Slot<Command> Output = new();
 
         [Input(Guid = "42042144-1ca7-41c7-92b8-21ea1136698a")]
-        public readonly InputSlot<System.Numerics.Vector4> ColorHighlight = new();
+        public readonly InputSlot<Vector4> ColorHighlight = new();
 
         [Input(Guid = "204a3776-c191-48b1-b502-2efc45adec67")]
-        public readonly InputSlot<System.Numerics.Vector4> ColorShade = new();
+        public readonly InputSlot<Vector4> ColorShade = new();
 
         [Input(Guid = "61eb78f5-d36e-479e-938f-a4fa4b31a1b6")]
         public readonly InputSlot<float> LineWidth = new();
@@ -37,7 +31,7 @@ namespace lib._3d.draw
         public readonly InputSlot<Gradient> Shading = new();
 
         [Input(Guid = "a9021b39-f236-4e29-98d7-e7805ceaa82f")]
-        public readonly InputSlot<SharpDX.Direct3D11.CullMode> Culling = new();
+        public readonly InputSlot<CullMode> Culling = new();
 
         [Input(Guid = "db54450a-2648-4cea-99ef-d2e0a083a4de")]
         public readonly InputSlot<bool> EnableZTest = new();

@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.adjust
 {
 	[Guid("a29cf1c8-d9cd-4a5d-b06c-597cbeb5b33d")]
@@ -23,7 +16,7 @@ namespace lib.img.adjust
         public readonly InputSlot<Int2> TopBottom = new();
 
         [Input(Guid = "3b62379a-de94-4be1-8471-357710ba14c3")]
-        public readonly InputSlot<System.Numerics.Vector4> PaddingColor = new();
+        public readonly InputSlot<Vector4> PaddingColor = new();
 
     }
 }

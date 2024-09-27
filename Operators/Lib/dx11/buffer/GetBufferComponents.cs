@@ -1,9 +1,4 @@
-using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 
 namespace lib.dx11.buffer
 {
@@ -11,7 +6,7 @@ namespace lib.dx11.buffer
     public class GetBufferComponents : Instance<GetBufferComponents>
     {
         [Output(Guid = "a7d11905-eb9e-42a4-a077-11d2c1cb41b2")] 
-        public readonly Slot<SharpDX.Direct3D11.Buffer> Buffer = new();
+        public readonly Slot<Buffer> Buffer = new();
 
         [Output(Guid = "1368ab8e-d75e-429f-8ecd-0944f3ede9ab")]
         public readonly Slot<ShaderResourceView> ShaderResourceView = new();
@@ -102,7 +97,7 @@ namespace lib.dx11.buffer
         }
         
         [Input(Guid = "7a13b834-21e5-4cef-ad5b-23c3770ea763")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> BufferWithViews = new();
+        public readonly InputSlot<BufferWithViews> BufferWithViews = new();
         
         [Input(Guid = "AC0F9D07-B93D-45D3-8B3F-A4B2F7240AE0")]
         public readonly InputSlot<bool> LogWarnings = new();

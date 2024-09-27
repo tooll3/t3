@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
 using T3.Core.Rendering.Material;
 using T3.Core.Utils;
 
@@ -88,7 +81,7 @@ namespace lib._3d.draw
         public readonly InputSlot<MeshBuffers> Mesh = new InputSlot<MeshBuffers>();
 
         [Input(Guid = "8c9dee45-d165-48c8-b8dd-b7f47e77fd00")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> Color = new InputSlot<Vector4>();
 
         [Input(Guid = "4748d9ab-58a4-41d7-a2ee-6f7dfed86211")]
         public readonly InputSlot<float> AlphaCutOff = new InputSlot<float>();

@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.math.floats
 {
 	[Guid("efb9ecfc-5aa2-45f1-87b0-1455d7702aa7")]
@@ -56,6 +50,6 @@ namespace lib.math.floats
 
         
         [Input(Guid = "4B0D7BBC-E29A-4E06-BD80-93413419634C")]
-        public readonly MultiInputSlot<System.Numerics.Vector2> InputAndOutputPairs = new();
+        public readonly MultiInputSlot<Vector2> InputAndOutputPairs = new();
     }
 }

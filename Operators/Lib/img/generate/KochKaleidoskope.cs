@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.generate
 {
 	[Guid("f7366bdc-86b2-4951-8788-3826126ed8c2")]
@@ -20,10 +13,10 @@ namespace lib.img.generate
         public readonly InputSlot<float> Scale = new();
 
         [Input(Guid = "912cfd4d-5bef-4fdc-abfc-2f5bf8239875")]
-        public readonly InputSlot<System.Numerics.Vector2> Center = new();
+        public readonly InputSlot<Vector2> Center = new();
 
         [Input(Guid = "0b6c67e6-338e-4bb3-bcee-5cc9e2045824")]
-        public readonly InputSlot<System.Numerics.Vector2> Offset = new();
+        public readonly InputSlot<Vector2> Offset = new();
 
         [Input(Guid = "a1b3ae23-cb29-4e3e-93b6-fd4f1efadbf1")]
         public readonly InputSlot<float> Angle = new();

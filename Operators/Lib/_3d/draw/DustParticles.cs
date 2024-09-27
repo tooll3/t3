@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib._3d.draw
@@ -23,16 +18,16 @@ namespace lib._3d.draw
         public readonly InputSlot<float> WrapSize = new InputSlot<float>();
 
         [Input(Guid = "e3a995dc-ec77-439c-8aed-e47df5e2b923")]
-        public readonly InputSlot<System.Numerics.Vector3> OffsetVolume = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> OffsetVolume = new InputSlot<Vector3>();
 
         [Input(Guid = "e92432c8-6ceb-494b-9cf4-b21191567b29")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> Color = new InputSlot<Vector4>();
 
         [Input(Guid = "70f0f867-a4de-44da-b8e3-a7e95e1740a3")]
         public readonly InputSlot<float> Size = new InputSlot<float>();
 
         [Input(Guid = "9ef1f3f7-da31-408b-b563-7d6c089278c7")]
-        public readonly InputSlot<System.Numerics.Vector3> Gravity = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> Gravity = new InputSlot<Vector3>();
 
         [Input(Guid = "0744e03b-9df3-4a5e-9cfa-f522d9d946ea")]
         public readonly InputSlot<float> NoiseAmount = new InputSlot<float>();
@@ -50,7 +45,7 @@ namespace lib._3d.draw
         public readonly InputSlot<int> TrailLength = new InputSlot<int>();
 
         [Input(Guid = "fd8340d5-b604-4605-9c3a-a57477d85919")]
-        public readonly InputSlot<System.Numerics.Vector4> TrailColor = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> TrailColor = new InputSlot<Vector4>();
 
         [Input(Guid = "31cfdca2-7f14-4c88-93ca-6f160829ca78")]
         public readonly InputSlot<float> TrailWidth = new InputSlot<float>();

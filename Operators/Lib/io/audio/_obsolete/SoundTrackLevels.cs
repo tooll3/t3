@@ -1,10 +1,6 @@
-using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using T3.Core.Animation;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
+
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace lib.io.audio._obsolete

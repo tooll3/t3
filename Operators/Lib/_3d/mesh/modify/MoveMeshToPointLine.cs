@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.mesh.modify
 {
 	[Guid("c6dd42a7-d3a3-4405-b64a-159bcf3beab8")]
@@ -10,13 +5,13 @@ namespace lib._3d.mesh.modify
     {
 
         [Output(Guid = "cf032071-fedc-45aa-9dbc-7b70f61e14dc")]
-        public readonly Slot<T3.Core.DataTypes.MeshBuffers> Result = new();
+        public readonly Slot<MeshBuffers> Result = new();
 
         [Input(Guid = "2d550543-d102-454e-b9f3-ff7d7832bba9")]
-        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> InputMesh = new();
+        public readonly InputSlot<MeshBuffers> InputMesh = new();
 
         [Input(Guid = "1016ebbc-5d8b-428d-8f78-6a3e11b7705c")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new();
+        public readonly InputSlot<BufferWithViews> Points = new();
 
         [Input(Guid = "c51d7f13-290c-48f9-b7ad-053d20e037b2")]
         public readonly InputSlot<float> Range = new();

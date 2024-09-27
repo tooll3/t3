@@ -1,11 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.dx11.tex
 {
 	[Guid("daec568f-f7b4-4d81-a401-34d62462daab")]
@@ -15,7 +7,7 @@ namespace lib.dx11.tex
         public readonly Slot<Int2> Size = new();
 
         [Output(Guid = "895C3BDD-38A8-4613-A8B2-503EC9D493C8")]
-        public readonly Slot<System.Numerics.Vector2> SizeFloat = new();
+        public readonly Slot<Vector2> SizeFloat = new();
 
         [Output(Guid = "E54A3185-2E19-466B-9A1E-52A05A947FCD")]
         public readonly Slot<int> TotalSize = new();
@@ -84,7 +76,7 @@ namespace lib.dx11.tex
                 IsTextureValid.DirtyFlag.Trigger = DirtyFlagTrigger.None;
             }
 
-            SizeFloat.Value = new System.Numerics.Vector2(Size.Value.Width, Size.Value.Height);
+            SizeFloat.Value = new Vector2(Size.Value.Width, Size.Value.Height);
             TotalSize.Value = Size.Value.Width * Size.Value.Height;
             
             Size.DirtyFlag.Clear();

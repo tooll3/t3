@@ -4,7 +4,6 @@ using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core.Resource;
-using Vector4 = System.Numerics.Vector4;
 using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace T3.Core.Rendering.Material;

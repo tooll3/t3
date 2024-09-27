@@ -1,18 +1,8 @@
-using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using SharpDX;
 using SharpDX.Direct3D11;
-using T3.Core.DataTypes;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
-using Buffer = SharpDX.Direct3D11.Buffer;
 using Point = T3.Core.DataTypes.Point;
-using Quaternion = System.Numerics.Quaternion;
-using Vector3 = System.Numerics.Vector3;
 
 namespace lib.dx11.buffer
 {
@@ -206,7 +196,7 @@ namespace lib.dx11.buffer
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static System.Numerics.Vector4 SampleLinearColors(float t, ref Point[] points)
+        public static Vector4 SampleLinearColors(float t, ref Point[] points)
         {
             int i;
 
@@ -232,7 +222,7 @@ namespace lib.dx11.buffer
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static System.Numerics.Vector3 SampleCubicBezier(float t, float curvature, ref Point[] points)
+        public static Vector3 SampleCubicBezier(float t, float curvature, ref Point[] points)
         {
             int i;
 

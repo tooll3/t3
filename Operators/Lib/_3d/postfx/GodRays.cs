@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.postfx
 {
 	[Guid("e1c294b5-1ea8-435e-a437-26d280d3c2f4")]
@@ -22,13 +16,13 @@ namespace lib._3d.postfx
         public readonly InputSlot<Object> CameraReference = new InputSlot<Object>();
 
         [Input(Guid = "58c08101-ac16-4aed-aa84-259853734116")]
-        public readonly InputSlot<System.Numerics.Vector3> LightPosition = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> LightPosition = new InputSlot<Vector3>();
 
         [Input(Guid = "6063bb2b-2255-4a0b-a222-7b8dd8397918")]
-        public readonly InputSlot<System.Numerics.Vector4> RayColor = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> RayColor = new InputSlot<Vector4>();
 
         [Input(Guid = "2f365f2a-8a2e-472c-af15-9352b54e2009")]
-        public readonly InputSlot<System.Numerics.Vector4> OriginalColor = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> OriginalColor = new InputSlot<Vector4>();
 
         [Input(Guid = "59568136-2903-4fd5-a504-8a6308a2a2dc")]
         public readonly InputSlot<int> Samples = new InputSlot<int>();

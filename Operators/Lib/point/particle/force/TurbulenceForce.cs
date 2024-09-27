@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.particle.force
 {
 	[Guid("3f8376f2-b89a-4ab4-b6dc-a3e8bf88c0a5")]
@@ -25,7 +20,7 @@ namespace lib.point.particle.force
         public readonly InputSlot<float> Variation = new();
 
         [Input(Guid = "dfa6e67f-140b-4f96-bfb7-a8897edce28f")]
-        public readonly InputSlot<System.Numerics.Vector3> AmountDistribution = new();
+        public readonly InputSlot<Vector3> AmountDistribution = new();
 
         [Input(Guid = "ebf8276f-2df8-4e70-ba57-30288fb184d1")]
         public readonly InputSlot<bool> UseCurlNoise = new();

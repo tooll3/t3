@@ -1,7 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.math.@float
@@ -31,7 +27,7 @@ namespace lib.math.@float
                 _averagedValues = new float[list.Count];
                 _lastValues = new float[list.Count];
                 _output = new List<float>(list.Count);
-                _output.AddRange(Enumerable.Repeat(0f, list.Count));
+                _output.AddRange(Repeat(0f, list.Count));
             }
 
             int index2 = 0;

@@ -1,18 +1,7 @@
-using System.Runtime.InteropServices;
-using System.Numerics;
 using Newtonsoft.Json;
 using T3.Core.Animation;
-using T3.Core.DataTypes;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Serialization;
 using T3.SystemUi;
-using Point = T3.Core.DataTypes.Point;
-using Vector2 = System.Numerics.Vector2;
-using Vector3 = System.Numerics.Vector3;
-using Vector4 = System.Numerics.Vector4;
 
 // ReSharper disable RedundantNameQualifier
 

@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.rendering
 {
 	[Guid("9d71d46c-f3d8-4bf4-a104-38c0b37cc88b")]
@@ -14,7 +8,7 @@ namespace lib._3d.rendering
         public readonly Slot<Texture2D> OutputColor = new Slot<Texture2D>();
 
         [Input(Guid = "2097d7c0-604b-4909-8cf1-ca9793dc53ec")]
-        public readonly InputSlot<T3.Core.DataTypes.Command> InputCommand = new InputSlot<T3.Core.DataTypes.Command>();
+        public readonly InputSlot<Command> InputCommand = new InputSlot<Command>();
 
         [Input(Guid = "9e35ef34-0b02-40f6-93d5-5163346d681a")]
         public readonly InputSlot<int> Dimension = new InputSlot<int>();

@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.fx._
 {
 	[Guid("5b999887-19df-4e91-9f58-1df2d8f1440b")]
@@ -32,10 +25,10 @@ namespace lib.img.fx._
         public readonly InputSlot<Int2> Resolution = new();
 
         [Input(Guid = "1f30e247-bcf8-43d0-b91f-7d87bd4f6d11")]
-        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> WrapMode = new();
+        public readonly InputSlot<TextureAddressMode> WrapMode = new();
 
         [Input(Guid = "38509eb8-5d3f-4f27-a8fa-5752aa86f1a5")]
-        public readonly InputSlot<System.Numerics.Vector4> ClearColor = new();
+        public readonly InputSlot<Vector4> ClearColor = new();
 
         [Input(Guid = "9d3927cf-4062-40cf-8643-c9a64adcc9cb")]
         public readonly InputSlot<bool> BlendEnabled = new();

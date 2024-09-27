@@ -1,15 +1,10 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.math.vec3
 {
 	[Guid("185958a3-be54-499d-a105-cad22c0dd448")]
     public class EulerToAxisAngle : Instance<EulerToAxisAngle>
     {
         [Output(Guid = "bf1ea1fa-cd5d-4bdf-b0cc-34042e4fd8df")]
-        public readonly Slot<System.Numerics.Vector3> Axis = new();
+        public readonly Slot<Vector3> Axis = new();
 
         [Output(Guid = "7A400997-BCFC-4575-BC08-FBEFD5807F27")]
         public readonly Slot<float> Angle = new();
@@ -58,13 +53,13 @@ namespace lib.math.vec3
                 z /= norm;
             }
 
-            Axis.Value = new System.Numerics.Vector3((float)x, (float)y, (float)z);
+            Axis.Value = new Vector3((float)x, (float)y, (float)z);
             Angle.Value = (float)angle;
             Axis.DirtyFlag.Clear();
             Angle.DirtyFlag.Clear();
         }
 
         [Input(Guid = "30AB9590-D1E2-4926-BF01-B7395A719056")]
-        public readonly InputSlot<System.Numerics.Vector3> Rotation = new();
+        public readonly InputSlot<Vector3> Rotation = new();
     }
 }

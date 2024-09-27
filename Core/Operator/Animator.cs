@@ -13,9 +13,6 @@ using T3.Serialization;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 using Int3 = T3.Core.DataTypes.Vector.Int3;
-using Vector2 = System.Numerics.Vector2;
-using Vector3 = System.Numerics.Vector3;
-using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Core.Operator
 {
@@ -91,11 +88,11 @@ namespace T3.Core.Operator
             {
                 case Slot<float> floatInputSlot:
                     return AddCurvesForFloatValue(inputSlot, new[] { floatInputSlot.Value }, originalCurves);
-                case Slot<System.Numerics.Vector2> vector2InputSlot:
+                case Slot<Vector2> vector2InputSlot:
                     return AddCurvesForFloatValue(inputSlot, vector2InputSlot.Value.ToArray(), originalCurves);
-                case Slot<System.Numerics.Vector3> vector3InputSlot:
+                case Slot<Vector3> vector3InputSlot:
                     return AddCurvesForFloatValue(inputSlot, vector3InputSlot.Value.ToArray(), originalCurves);
-                case Slot<System.Numerics.Vector4> vector4InputSlot:
+                case Slot<Vector4> vector4InputSlot:
                     return AddCurvesForFloatValue(inputSlot, vector4InputSlot.Value.ToArray(), originalCurves);
                 case Slot<int> intInputSlot:
                     return AddCurvesForIntValue(inputSlot, new []{intInputSlot.Value}, originalCurves);

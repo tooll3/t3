@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.fx
 {
 	[Guid("1b149f1f-529c-4418-ac9d-3871f24a9e38")]
@@ -43,10 +37,10 @@ namespace lib.img.fx
         public readonly InputSlot<float> SampleOffset = new();
 
         [Input(Guid = "1ff7d454-b8fb-470f-beee-ec7521db8a7f")]
-        public readonly InputSlot<System.Numerics.Vector2> DisplaceMapOffset = new();
+        public readonly InputSlot<Vector2> DisplaceMapOffset = new();
 
         [Input(Guid = "6e772174-813d-4baa-b6b5-27e197b547ac")]
-        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> WrapMode = new();
+        public readonly InputSlot<TextureAddressMode> WrapMode = new();
 
         [Input(Guid = "6a5c120f-7c04-439b-ad2d-6f78ceb3b378", MappedType = typeof(DisplaceModes))]
         public readonly InputSlot<int> DisplaceMode = new();

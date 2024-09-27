@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.img.generate
@@ -36,7 +30,7 @@ namespace lib.img.generate
         public readonly InputSlot<float> Rotation = new InputSlot<float>();
 
         [Input(Guid = "abf3456d-35bc-49ec-9aa6-c5571fbb209a")]
-        public readonly InputSlot<System.Numerics.Vector2> Center = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Center = new InputSlot<Vector2>();
 
         [Input(Guid = "c38647f6-c6ea-40a0-b872-0df6d4168c05")]
         public readonly InputSlot<float> Offset = new InputSlot<float>();
@@ -45,7 +39,7 @@ namespace lib.img.generate
         public readonly InputSlot<int> OffsetMode = new InputSlot<int>();
 
         [Input(Guid = "1c70e502-90cc-4285-92ca-ec3d200967eb")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
 
         [Input(Guid = "1d0cf561-858d-4510-95c4-f3ad9148355d", MappedType = typeof(SharedEnums.RgbBlendModes))]
         public readonly InputSlot<int> BlendMode = new InputSlot<int>();

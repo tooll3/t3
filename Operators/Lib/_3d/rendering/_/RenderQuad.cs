@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib._3d.rendering._
@@ -17,7 +12,7 @@ namespace lib._3d.rendering._
         public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "018dab29-db3b-49ee-872b-9042c4c0bced")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "105d474f-a54e-4350-8de6-8bfd4dc0b0dd")]
         public readonly InputSlot<float> Width = new();

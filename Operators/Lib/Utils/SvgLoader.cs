@@ -1,6 +1,5 @@
 #nullable enable
 using Svg;
-using T3.Core.Resource;
 
 namespace lib.Utils;
 

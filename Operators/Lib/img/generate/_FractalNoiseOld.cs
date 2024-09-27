@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.generate
 {
 	[Guid("97eb35ec-2825-4f63-8fdf-3fe38fa9e652")]
@@ -14,16 +7,16 @@ namespace lib.img.generate
         public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "6fe3a975-6bb5-4cf1-9a24-6cf04ac800b6")]
-        public readonly InputSlot<System.Numerics.Vector4> ColorA = new();
+        public readonly InputSlot<Vector4> ColorA = new();
 
         [Input(Guid = "a966d9a1-b36f-4f85-b918-8651ea7d055d")]
-        public readonly InputSlot<System.Numerics.Vector4> ColorB = new();
+        public readonly InputSlot<Vector4> ColorB = new();
 
         [Input(Guid = "06241d83-1ff8-460a-b363-db3204384838")]
-        public readonly InputSlot<System.Numerics.Vector2> Offset = new();
+        public readonly InputSlot<Vector2> Offset = new();
 
         [Input(Guid = "2381e8e4-a4e5-4691-9059-3b2096146970")]
-        public readonly InputSlot<System.Numerics.Vector2> Stretch = new();
+        public readonly InputSlot<Vector2> Stretch = new();
 
         [Input(Guid = "59bde7a3-0952-46a8-8285-40f0a00488e6")]
         public readonly InputSlot<float> Scale = new();
@@ -38,7 +31,7 @@ namespace lib.img.generate
         public readonly InputSlot<Int2> Resolution = new();
 
         [Input(Guid = "120f0ce7-8560-477d-8e71-5bcbeae932c0")]
-        public readonly InputSlot<System.Numerics.Vector3> WarpOffset = new();
+        public readonly InputSlot<Vector3> WarpOffset = new();
 
         [Input(Guid = "6ae1817e-eeeb-4bc9-802f-00fc26303023")]
         public readonly InputSlot<int> Iterations = new();

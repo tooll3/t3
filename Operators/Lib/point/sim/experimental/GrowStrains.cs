@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.sim.experimental
 {
 	[Guid("98df563e-fd59-4458-a490-b7b7604ec1f3")]
@@ -10,13 +5,13 @@ namespace lib.point.sim.experimental
     {
 
         [Output(Guid = "e7303155-e0c6-4b0c-91a9-1b3f944c77e7")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new();
+        public readonly Slot<BufferWithViews> OutBuffer = new();
 
         [Input(Guid = "b5849477-6a5a-47cd-8be2-684e95816559")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new();
+        public readonly InputSlot<BufferWithViews> GPoints = new();
 
         [Input(Guid = "08b98003-d96d-41e0-a88e-6912da407811")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GTargets = new();
+        public readonly InputSlot<BufferWithViews> GTargets = new();
 
         [Input(Guid = "6c39d992-67fb-4f89-a7de-a5e38e4a68fe")]
         public readonly InputSlot<float> Variation = new();
@@ -31,7 +26,7 @@ namespace lib.point.sim.experimental
         public readonly InputSlot<float> NoisePhase = new();
 
         [Input(Guid = "6977957b-97fa-413f-8867-3dba8868792f")]
-        public readonly InputSlot<System.Numerics.Vector3> NoiseDistribution = new();
+        public readonly InputSlot<Vector3> NoiseDistribution = new();
 
         [Input(Guid = "8350ff91-6e7c-4968-85b7-d39bc76558a6")]
         public readonly InputSlot<float> NoiseRotationLookUp = new();

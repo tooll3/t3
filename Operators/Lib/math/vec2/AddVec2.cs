@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using System.Numerics;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.math.vec2
 {
 	[Guid("3b42b2dc-09dd-4f7a-9cf8-5988f26fbda8")]

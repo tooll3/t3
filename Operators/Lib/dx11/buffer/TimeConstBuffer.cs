@@ -1,9 +1,4 @@
-using System.Runtime.InteropServices;
 using T3.Core.Animation;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 
 namespace lib.dx11.buffer
 {
@@ -11,7 +6,7 @@ namespace lib.dx11.buffer
     public class TimeConstBuffer : Instance<TimeConstBuffer>
     {
         [Output(Guid = "{6C118567-8827-4422-86CC-4D4D00762D87}", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<SharpDX.Direct3D11.Buffer> Buffer = new();
+        public readonly Slot<Buffer> Buffer = new();
 
         public TimeConstBuffer()
         {

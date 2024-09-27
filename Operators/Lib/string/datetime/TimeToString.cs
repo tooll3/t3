@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.@string.datetime
 {
 	[Guid("075612b1-8760-4858-ad6b-6c85a7716794")]

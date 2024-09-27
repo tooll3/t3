@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using System.Numerics;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.generate
 {
 	[Guid("b2267122-4223-4eff-8ae4-91d149df535c")]

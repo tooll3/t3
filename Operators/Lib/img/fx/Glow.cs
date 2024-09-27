@@ -1,10 +1,4 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
-using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace lib.img.fx
 {
@@ -33,7 +27,7 @@ namespace lib.img.fx
         public readonly InputSlot<float> Threshold = new InputSlot<float>();
 
         [Input(Guid = "7f6dba80-bf4e-4e55-bd9a-ac1e2a077898")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> Color = new InputSlot<Vector4>();
 
         [Input(Guid = "353ac2ee-aed3-4614-adf5-e1328768fd0b")]
         public readonly InputSlot<float> Samples = new InputSlot<float>();

@@ -1,15 +1,10 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.modify
 {
 	[Guid("7af59063-88d2-4697-985c-e09b8c77a43f")]
     public class PointAttributeFromNoise : Instance<PointAttributeFromNoise>
     {
         [Output(Guid = "bcf4be5a-e3ea-48da-a06d-c206041f8d41")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new();
+        public readonly Slot<BufferWithViews> OutBuffer = new();
 
         // public SamplePointAttributes()
         // {
@@ -23,7 +18,7 @@ namespace lib.point.modify
         //public Action<ITransformable, EvaluationContext> TransformCallback { get => OutBuffer.TransformCallback; set => OutBuffer.TransformCallback = value; }
         
         [Input(Guid = "47c5b5cc-e48e-4111-a9a2-4e3ccebe8964")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new();
+        public readonly InputSlot<BufferWithViews> GPoints = new();
 
         [Input(Guid = "a092b2fb-df64-4b6a-89ff-a8fe7bc1de05", MappedType = typeof(Attributes))]
         public readonly InputSlot<int> Brightness = new();
@@ -62,7 +57,7 @@ namespace lib.point.modify
         public readonly InputSlot<float> BlueOffset = new();
 
         [Input(Guid = "b0c96c9c-ae16-4781-9642-5dd84dbe9fe2")]
-        public readonly InputSlot<System.Numerics.Vector3> Center = new();
+        public readonly InputSlot<Vector3> Center = new();
 
         [Input(Guid = "f966e78b-b4e5-4d26-a239-febe24f12bd7")]
         public readonly InputSlot<float> Phase = new();
@@ -74,7 +69,7 @@ namespace lib.point.modify
         public readonly InputSlot<float> Amount = new();
 
         [Input(Guid = "0148ae7c-9c69-4dc1-9132-df243f0b31c7")]
-        public readonly InputSlot<T3.Core.DataTypes.Gradient> RemapNoise = new();
+        public readonly InputSlot<Gradient> RemapNoise = new();
 
         [Input(Guid = "6e45fd16-cae7-4a74-8571-8e96e8a15bdb")]
         public readonly InputSlot<bool> UseRemapCurve = new();

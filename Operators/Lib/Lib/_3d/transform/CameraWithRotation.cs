@@ -1,11 +1,3 @@
-using System.Runtime.InteropServices;
-using System.Numerics;
-using T3.Core.DataTypes;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
@@ -144,26 +136,26 @@ namespace lib.Lib._3d.transform
         public Matrix4x4 LastObjectToWorld { get; set; }
 
         // Implement ICamera 
-        public System.Numerics.Vector3 CameraPosition { get { return Position.Value; } set { Animator.UpdateVector3InputValue(Position, value); } }
-        public System.Numerics.Vector3 CameraTarget { get => _target; set { Log.Warning("Can't set Rotation camera target"); } }
+        public Vector3 CameraPosition { get { return Position.Value; } set { Animator.UpdateVector3InputValue(Position, value); } }
+        public Vector3 CameraTarget { get => _target; set { Log.Warning("Can't set Rotation camera target"); } }
         
         [Input(Guid = "3e155fc2-9a11-46d1-8da5-36793140ae3f")]
         public readonly InputSlot<Command> Command = new();
 
         [Input(Guid = "6bd84cf7-e89f-4e48-84ca-63fe5bab6291")]
-        public readonly InputSlot<System.Numerics.Vector3> Position = new();
+        public readonly InputSlot<Vector3> Position = new();
 
         [Input(Guid = "E5756357-6EDC-4C1C-BCEE-BD160EB2EC62", MappedType = typeof(RotationModes))]
         public readonly InputSlot<int> RotationMode = new();
 
         [Input(Guid = "D4087018-EB4B-4EFC-9387-4B1D2D81A395")]
-        public readonly InputSlot<System.Numerics.Vector3> Rotation = new();
+        public readonly InputSlot<Vector3> Rotation = new();
 
         [Input(Guid = "7054CB41-0641-4C50-88A9-27EEA0472B52")]
-        public readonly InputSlot<System.Numerics.Vector3> RotationFactor = new();
+        public readonly InputSlot<Vector3> RotationFactor = new();
 
         [Input(Guid = "0FE2745D-5A87-47E1-84D4-544E96DF42A7")]
-        public readonly InputSlot<System.Numerics.Vector3> RotationOffset2 = new();
+        public readonly InputSlot<Vector3> RotationOffset2 = new();
 
         // [Input(Guid = "66fa647e-c0f9-495d-8074-64fe05cf1977")]
         // public readonly InputSlot<System.Numerics.Vector3> Target = new();
@@ -180,26 +172,26 @@ namespace lib.Lib._3d.transform
         // --- offset
 
         [Input(Guid = "d386ca2c-6ffe-4871-a1f4-f713b383e892")]
-        public readonly InputSlot<System.Numerics.Vector3> PositionOffset = new();
+        public readonly InputSlot<Vector3> PositionOffset = new();
 
         [Input(Guid = "55c59681-f50b-44bc-80bc-3039b73b1c00")]
         public readonly InputSlot<bool> AlsoOffsetTarget = new();
 
         [Input(Guid = "325b86e7-3d2a-4eeb-95d3-3138696a8a94")]
-        public readonly InputSlot<System.Numerics.Vector3> RotationOffset = new();
+        public readonly InputSlot<Vector3> RotationOffset = new();
 
         [Input(Guid = "2ba9e2c0-f494-49aa-9030-172177f06eda")]
-        public readonly InputSlot<System.Numerics.Vector2> ViewportShift = new();
+        public readonly InputSlot<Vector2> ViewportShift = new();
 
         // --- options
 
         [Input(Guid = "766a9e48-9f3b-4204-973c-751bb7180400")]
-        public readonly InputSlot<System.Numerics.Vector2> NearFarClip = new();
+        public readonly InputSlot<Vector2> NearFarClip = new();
 
         [Input(Guid = "d5761f3a-b2d0-435d-900c-3ff185373269")]
         public readonly InputSlot<float> AspectRatio = new();
 
         [Input(Guid = "1b672745-d0fd-4611-862f-f27f59d3d416")]
-        public readonly InputSlot<System.Numerics.Vector3> Up = new();
+        public readonly InputSlot<Vector3> Up = new();
     }
 }

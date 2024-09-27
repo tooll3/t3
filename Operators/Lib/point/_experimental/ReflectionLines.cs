@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point._experimental
 {
 	[Guid("b5515341-24ef-48ff-b832-d40e8189c6a4")]
@@ -10,13 +5,13 @@ namespace lib.point._experimental
     {
 
         [Output(Guid = "d4437c90-9a13-4f35-a83f-b27dde3c4681")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new();
+        public readonly Slot<BufferWithViews> OutBuffer = new();
 
         [Input(Guid = "57917b87-9aa4-416b-8417-fc2ac9e849b0")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new();
+        public readonly InputSlot<BufferWithViews> GPoints = new();
 
         [Input(Guid = "517fa007-bf56-497f-be87-2574ff9125c6")]
-        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> Mesh = new();
+        public readonly InputSlot<MeshBuffers> Mesh = new();
 
         [Input(Guid = "25c7cc14-9422-4f47-b996-0e7d4ff0de69")]
         public readonly InputSlot<int> StepCount = new();

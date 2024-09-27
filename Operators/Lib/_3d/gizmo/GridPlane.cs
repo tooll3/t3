@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.gizmo
 {
 	[Guid("935e6597-3d9f-4a79-b4a6-600e8f28861e")]
@@ -13,7 +7,7 @@ namespace lib._3d.gizmo
         public readonly Slot<Command> Output = new();
 
         [Input(Guid = "c0f652b8-80fb-4bd2-b6cd-cfc459f9fcc5")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "39a74407-5447-45fd-8fc5-5f96bd8bbdfb")]
         public readonly InputSlot<float> Size = new();
@@ -22,7 +16,7 @@ namespace lib._3d.gizmo
         public readonly InputSlot<float> Scale = new();
 
         [Input(Guid = "a8e8da31-b4e0-4710-8292-2f27175c5f6b")]
-        public readonly InputSlot<System.Numerics.Vector3> Rotation = new();
+        public readonly InputSlot<Vector3> Rotation = new();
     }
 }
 

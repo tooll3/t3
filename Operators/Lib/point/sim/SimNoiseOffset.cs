@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.sim
 {
 	[Guid("5f846187-e109-45d1-97e0-ae95e3e7d9ba")]
@@ -10,10 +5,10 @@ namespace lib.point.sim
     {
 
         [Output(Guid = "cf976e9a-ea57-44f7-aeb9-f57f2e712b41")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new();
+        public readonly Slot<BufferWithViews> OutBuffer = new();
 
         [Input(Guid = "679d6321-a5d7-41cc-a191-5e6cf353dfc4")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new();
+        public readonly InputSlot<BufferWithViews> GPoints = new();
 
         [Input(Guid = "cc98bda7-34a5-4c18-9b9e-fabe51b02d71")]
         public readonly InputSlot<float> Amount = new();
@@ -28,7 +23,7 @@ namespace lib.point.sim
         public readonly InputSlot<float> Variation = new();
 
         [Input(Guid = "7f73e109-b13a-4114-b2a5-fe9e86270893")]
-        public readonly InputSlot<System.Numerics.Vector3> AmountDistribution = new();
+        public readonly InputSlot<Vector3> AmountDistribution = new();
 
         [Input(Guid = "41ee0e65-e2dc-4bf7-af40-bc90517c6c23")]
         public readonly InputSlot<float> RotLookupDistance = new();

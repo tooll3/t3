@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.particle.force
 {
     [Guid("26bb382c-5e3d-49ae-b17e-5bd49b083d9a")]
@@ -33,10 +28,10 @@ namespace lib.point.particle.force
         public readonly InputSlot<float> RandomPhase = new InputSlot<float>();
 
         [Input(Guid = "6dada5f7-252c-4af4-8c2f-f5352bbc3597")]
-        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> MeshBuffers = new InputSlot<T3.Core.DataTypes.MeshBuffers>();
+        public readonly InputSlot<MeshBuffers> MeshBuffers = new InputSlot<MeshBuffers>();
 
         [Input(Guid = "de70d11c-93cb-494a-9516-c8a5989c2617")]
-        public readonly InputSlot<T3.Core.Operator.GizmoVisibility> ShowGizmo = new InputSlot<T3.Core.Operator.GizmoVisibility>();
+        public readonly InputSlot<GizmoVisibility> ShowGizmo = new InputSlot<GizmoVisibility>();
         
         
         private enum Modes {

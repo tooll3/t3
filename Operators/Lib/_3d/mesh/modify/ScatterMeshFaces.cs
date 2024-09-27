@@ -1,18 +1,13 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.mesh.modify
 {
 	[Guid("daacabd8-0338-4998-898f-94580abd8eac")]
     public class ScatterMeshFaces : Instance<ScatterMeshFaces>
     {
         [Output(Guid = "485badd0-a01d-4838-a516-5db8867d2e04")]
-        public readonly Slot<T3.Core.DataTypes.MeshBuffers> Result = new();
+        public readonly Slot<MeshBuffers> Result = new();
 
         [Input(Guid = "d2ca131d-1bab-47ce-b0e7-382c61d6a176")]
-        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> InputMesh = new();
+        public readonly InputSlot<MeshBuffers> InputMesh = new();
 
         [Input(Guid = "a795f91b-75e7-4b95-a8c7-28cbbe17fc04", MappedType = typeof(Directions))]
         public readonly InputSlot<int> Direction = new();
@@ -51,7 +46,7 @@ namespace lib._3d.mesh.modify
         public readonly InputSlot<bool> UseVertexSelection = new();
 
         [Input(Guid = "9ed2888a-b2f9-4d7d-bd6f-804459e23da2")]
-        public readonly InputSlot<System.Numerics.Vector3> AmountDistribution = new();
+        public readonly InputSlot<Vector3> AmountDistribution = new();
         
         
         private enum Directions

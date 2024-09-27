@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib._3d.draw
@@ -17,13 +12,13 @@ namespace lib._3d.draw
         public readonly InputSlot<MeshBuffers> Mesh = new();
 
         [Input(Guid = "5100a9db-ee56-4023-9fb0-36cbfb439734")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "922cf855-2676-4a96-9d90-622791a6a423", MappedType = typeof(SharedEnums.BlendModes))]
         public readonly InputSlot<int> BlendMode = new();
 
         [Input(Guid = "8d223463-edff-45fb-9ead-6650a911cebd")]
-        public readonly InputSlot<SharpDX.Direct3D11.CullMode> Culling = new();
+        public readonly InputSlot<CullMode> Culling = new();
 
         [Input(Guid = "c004d3c2-de74-48ee-9504-d7de7fe1e554")]
         public readonly InputSlot<bool> EnableZTest = new();
@@ -44,7 +39,7 @@ namespace lib._3d.draw
         public readonly InputSlot<float> BlurLevel = new();
 
         [Input(Guid = "48da47d3-8d30-4e85-8ecc-8c07894c54b4")]
-        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> TextureWrap = new InputSlot<SharpDX.Direct3D11.TextureAddressMode>();
+        public readonly InputSlot<TextureAddressMode> TextureWrap = new InputSlot<TextureAddressMode>();
 
     }
 }

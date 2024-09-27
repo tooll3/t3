@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d._
 {
 	[Guid("ad28819d-be62-4ed7-932a-fc861562983d")]
@@ -23,19 +16,19 @@ namespace lib._3d._
         public readonly InputSlot<Int2> GridSize = new();
 
         [Input(Guid = "3ab49a26-3168-486a-be7e-35883659e0ef")]
-        public readonly InputSlot<System.Numerics.Vector2> CellSize = new();
+        public readonly InputSlot<Vector2> CellSize = new();
 
         [Input(Guid = "d58039a7-12f2-46fa-b778-bfbb69027691")]
-        public readonly InputSlot<System.Numerics.Vector2> CellPadding = new();
+        public readonly InputSlot<Vector2> CellPadding = new();
 
         [Input(Guid = "0b5244ef-3588-48c4-9e26-195409fbaac8")]
-        public readonly InputSlot<System.Numerics.Vector2> TextOffset = new();
+        public readonly InputSlot<Vector2> TextOffset = new();
 
         [Input(Guid = "7f86c4ea-48d1-4d3a-9a5a-cfbca0da4daa")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "b49b85c9-9cc8-4118-a145-3d514108d3e2")]
-        public readonly InputSlot<System.Numerics.Vector3> DisplaceAmount = new();
+        public readonly InputSlot<Vector3> DisplaceAmount = new();
 
         [Input(Guid = "94312d3c-ac74-4965-9874-ddd96d1437ff")]
         public readonly InputSlot<bool> WrapText = new();
@@ -44,7 +37,7 @@ namespace lib._3d._
         public readonly InputSlot<float> OverrideScale = new();
 
         [Input(Guid = "98b5699a-60fb-436e-93f1-d301a471dfe1")]
-        public readonly InputSlot<System.Numerics.Vector4> HighlightColor = new();
+        public readonly InputSlot<Vector4> HighlightColor = new();
 
         [Input(Guid = "b1a5ff6b-dfa4-4fac-b676-e2ba38d6a9f8")]
         public readonly InputSlot<string> HighlightChars = new();

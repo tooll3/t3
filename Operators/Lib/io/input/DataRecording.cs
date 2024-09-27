@@ -1,10 +1,4 @@
-using System.Runtime.InteropServices;
 using T3.Core.DataTypes.DataSet;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
 
 namespace lib.io.input
 {

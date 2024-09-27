@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.adjust
 {
 	[Guid("55411442-d538-48bf-ab78-b8c24c85aa46")]
@@ -16,7 +10,7 @@ namespace lib.img.adjust
         public readonly InputSlot<Texture2D> Texture2d = new();
 
         [Input(Guid = "8cb24377-04ad-4bf3-b191-00a0f7af9989")]
-        public readonly InputSlot<System.Numerics.Vector4> Colorize = new();
+        public readonly InputSlot<Vector4> Colorize = new();
 
         [Input(Guid = "74d63ccb-7ae5-45d9-af69-ad91b8582407")]
         public readonly InputSlot<float> Exposure = new();
@@ -31,7 +25,7 @@ namespace lib.img.adjust
         public readonly InputSlot<float> OrangeTeal = new();
 
         [Input(Guid = "008b025e-64eb-44c3-8959-dc8ac5dc2cbb")]
-        public readonly InputSlot<System.Numerics.Vector2> PreventClamping = new();
+        public readonly InputSlot<Vector2> PreventClamping = new();
 
         [Input(Guid = "edcc911a-fa64-49fd-84d0-6fc0286c77db")]
         public readonly InputSlot<float> Brightness = new();
@@ -43,7 +37,7 @@ namespace lib.img.adjust
         public readonly InputSlot<float> Vignette = new();
 
         [Input(Guid = "689fdfbe-e78d-42f8-af0b-ae8159dec216")]
-        public readonly InputSlot<System.Numerics.Vector4> Background = new();
+        public readonly InputSlot<Vector4> Background = new();
 
     }
 }

@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.fx
 {
 	[Guid("ecf2c782-4461-4a94-8995-067425e3f84b")]
@@ -16,7 +10,7 @@ namespace lib.img.fx
         public readonly InputSlot<Texture2D> Texture2d = new();
 
         [Input(Guid = "1df828ad-2d74-47fc-9f0e-10f4ce10b170")]
-        public readonly InputSlot<System.Numerics.Vector2> Center = new();
+        public readonly InputSlot<Vector2> Center = new();
 
         [Input(Guid = "b9e78f18-51e8-4440-b8a4-9338f14a5668")]
         public readonly InputSlot<float> Size = new();

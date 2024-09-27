@@ -1,10 +1,3 @@
-using System.Numerics;
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.data
@@ -47,7 +40,7 @@ namespace lib.data
             var point = pointList.TypedElements[index.Mod(pointList.NumElements)];
             Position.Value = point.Position;
             W.Value = point.W;
-            Orientation.Value = new System.Numerics.Vector4(point.Orientation.X, point.Orientation.Y, point.Orientation.Z, point.Orientation.W);
+            Orientation.Value = new Vector4(point.Orientation.X, point.Orientation.Y, point.Orientation.Z, point.Orientation.W);
         }
         
         [Input(Guid = "e35d2024-704e-42b4-8835-a53fa439a2bc")]

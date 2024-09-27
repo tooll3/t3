@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.mesh.generate
 {
 	[Guid("816336a8-e214-4d2c-b8f9-05b1aa3ff2e2")]
@@ -10,13 +5,13 @@ namespace lib._3d.mesh.generate
     {
 
         [Output(Guid = "79ba19e0-13c3-40c7-8e0a-f190b03e95b0")]
-        public readonly Slot<T3.Core.DataTypes.MeshBuffers> Output2 = new();
+        public readonly Slot<MeshBuffers> Output2 = new();
 
         [Input(Guid = "4d31be7a-3011-4fdf-9c63-425387b9bbfc")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> RailPoints = new();
+        public readonly InputSlot<BufferWithViews> RailPoints = new();
 
         [Input(Guid = "5e2ada8d-10fa-419d-a377-0b504437fd72")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> ProfilePoints = new();
+        public readonly InputSlot<BufferWithViews> ProfilePoints = new();
 
         [Input(Guid = "7c24f499-8021-4c67-9790-5cc7efb83287")]
         public readonly InputSlot<bool> UseWAsWidth = new();

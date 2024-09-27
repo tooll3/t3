@@ -3,7 +3,7 @@ using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core.Logging;
 using T3.Core.Resource;
-using Vector3 = System.Numerics.Vector3;
+
 
 namespace T3.Core.Rendering
 {

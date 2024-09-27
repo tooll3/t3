@@ -1,22 +1,10 @@
-using System.Runtime.InteropServices;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
-using T3.Core.DataTypes;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
-using Color = SharpDX.Color;
-using ComputeShader = T3.Core.DataTypes.ComputeShader;
 using Device = SharpDX.Direct3D11.Device;
-using Texture2D = T3.Core.DataTypes.Texture2D;
 using Utilities = T3.Core.Utils.Utilities;
-using Vector4 = System.Numerics.Vector4;
 
 namespace lib.img.generate
 {
@@ -113,7 +101,7 @@ namespace lib.img.generate
                 {
                     try
                     {
-                        deviceContext.ClearRenderTargetView(_multiSampledColorBufferRtv, new Color(clearColor.X, clearColor.Y, clearColor.Z, clearColor.W));
+                        deviceContext.ClearRenderTargetView(_multiSampledColorBufferRtv, new SharpDX.Color(clearColor.X, clearColor.Y, clearColor.Z, clearColor.W));
                         if (_multiSampledDepthBufferDsv != null)
                         {
                             deviceContext.ClearDepthStencilView(_multiSampledDepthBufferDsv, DepthStencilClearFlags.Depth, 1.0f, 0);

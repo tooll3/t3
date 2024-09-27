@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.adjust
 {
 	[Guid("da93f7d1-ef91-4b4a-9708-2d9b1baa4c14")]
@@ -17,7 +10,7 @@ namespace lib.img.adjust
         public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
 
         [Input(Guid = "c45d487b-3221-44c7-bf9e-b982a65280f6")]
-        public readonly InputSlot<T3.Core.DataTypes.Gradient> Gradient = new InputSlot<T3.Core.DataTypes.Gradient>();
+        public readonly InputSlot<Gradient> Gradient = new InputSlot<Gradient>();
 
         [Input(Guid = "e3363c0e-819a-45e2-8202-439bcce64d69",MappedType = typeof(Modes))]
         public readonly InputSlot<int> Mode = new InputSlot<int>();
@@ -26,13 +19,13 @@ namespace lib.img.adjust
         public readonly InputSlot<float> Exposure = new InputSlot<float>();
 
         [Input(Guid = "97771732-56fb-4e0c-915d-c79321ba27b5")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
 
         [Input(Guid = "b1763a8b-aa98-4e00-a47c-a5d0d750ae6e")]
         public readonly InputSlot<float> Cycle = new InputSlot<float>();
 
         [Input(Guid = "eb070a0b-703d-43cc-a877-cf9e371ebd05")]
-        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> WrapMode = new InputSlot<SharpDX.Direct3D11.TextureAddressMode>();
+        public readonly InputSlot<TextureAddressMode> WrapMode = new InputSlot<TextureAddressMode>();
 
         [Input(Guid = "7777f86d-dbf7-44d4-9da4-99a819038095")]
         public readonly InputSlot<bool> DontColorAlpha = new InputSlot<bool>();

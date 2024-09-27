@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.sim._legacy
 {
 	[Guid("69c3b4ce-490a-48d4-b1d0-56dd6bf7a9a8")]
@@ -10,10 +5,10 @@ namespace lib.point.sim._legacy
     {
 
         [Output(Guid = "9495dbae-0e49-449c-ab4a-58e267974385")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new();
+        public readonly Slot<BufferWithViews> OutBuffer = new();
 
         [Input(Guid = "2038b006-b5a3-472d-870b-d1a3623dfc0c")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new();
+        public readonly InputSlot<BufferWithViews> GPoints = new();
 
         [Input(Guid = "495e9766-0e5f-4ab7-abc1-c06b2edfe55d")]
         public readonly InputSlot<float> Drag = new();

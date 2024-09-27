@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.use
 {
 	[Guid("9f43f769-d32a-4f49-92ac-e0be3ba250cf")]
@@ -16,13 +10,13 @@ namespace lib.img.use
         public readonly InputSlot<Texture2D> ImageA = new InputSlot<Texture2D>();
 
         [Input(Guid = "6541c1ac-ba84-4a46-a6df-8ab52455c57b")]
-        public readonly InputSlot<System.Numerics.Vector4> ColorA = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> ColorA = new InputSlot<Vector4>();
 
         [Input(Guid = "c7c524cf-e31e-4bac-8f77-58bd61b337de")]
         public readonly InputSlot<Texture2D> ImageB = new InputSlot<Texture2D>();
 
         [Input(Guid = "70dc133e-800a-4cd0-a159-2cbab4c322cb")]
-        public readonly InputSlot<System.Numerics.Vector4> ColorB = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> ColorB = new InputSlot<Vector4>();
 
         [Input(Guid = "fc5f1d08-3997-4ba3-ac59-d86e4e501fb0", MappedType = typeof(RgbBlendModes))]
         public readonly InputSlot<int> BlendMode = new InputSlot<int>();
@@ -40,7 +34,7 @@ namespace lib.img.use
         public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
 
         [Input(Guid = "93e63b73-e572-4bb2-bbbd-11bbffad89e7")]
-        public readonly InputSlot<T3.Core.DataTypes.Vector.Int2> Resolution = new InputSlot<T3.Core.DataTypes.Vector.Int2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         private enum RgbBlendModes
         {

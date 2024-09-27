@@ -1,17 +1,10 @@
 #nullable enable
-using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Numerics;
 using lib.Utils;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using Svg;
 using Svg.Pathing;
 using Svg.Transforms;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using Point = T3.Core.DataTypes.Point;
 

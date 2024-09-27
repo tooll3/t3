@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib._3d.rendering._
@@ -14,7 +9,7 @@ namespace lib._3d.rendering._
         public readonly Slot<Command> Output = new();
 
         [Input(Guid = "3c028f98-5130-4cb0-b09b-eca193a8382b")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> Color = new InputSlot<Vector4>();
 
         [Input(Guid = "b84b107c-5179-48b2-ab2e-eb0b847fbb1e")]
         public readonly InputSlot<float> Size = new InputSlot<float>();
@@ -26,7 +21,7 @@ namespace lib._3d.rendering._
         public readonly InputSlot<bool> EnableDepthWrite = new InputSlot<bool>();
 
         [Input(Guid = "2366c1cb-3d0d-4b76-8d21-648c05fcc996")]
-        public readonly InputSlot<T3.Core.DataTypes.Vector.Int2> TextureCells = new InputSlot<T3.Core.DataTypes.Vector.Int2>();
+        public readonly InputSlot<Int2> TextureCells = new InputSlot<Int2>();
 
         [Input(Guid = "6800d879-88fb-4e66-97dc-f0e63e0bdd17")]
         public readonly MultiInputSlot<StructuredList> LenseFlareDefinitions = new MultiInputSlot<StructuredList>();

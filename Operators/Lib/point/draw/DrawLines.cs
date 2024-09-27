@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.point.draw
@@ -17,7 +12,7 @@ namespace lib.point.draw
         public readonly InputSlot<BufferWithViews> GPoints = new();
 
         [Input(Guid = "75419a73-8a3e-4538-9a1d-e3b0ce7f8561")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "df158fcf-3042-48cf-8383-7bf4c1bcb8a6")]
         public readonly InputSlot<float> Size = new();
@@ -50,7 +45,7 @@ namespace lib.point.draw
         public readonly InputSlot<float> UvScale = new();
 
         [Input(Guid = "ba83a66f-5a4c-4355-abb2-d4b7cd55d542")]
-        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> WrapMode = new();
+        public readonly InputSlot<TextureAddressMode> WrapMode = new();
     }
 }
 

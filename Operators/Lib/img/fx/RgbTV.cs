@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.fx
 {
 	[Guid("5972a57b-73cd-49b2-8b24-96636a4c294b")]
@@ -50,7 +43,7 @@ namespace lib.img.fx
         public readonly InputSlot<float> Gaps = new();
 
         [Input(Guid = "5f536f1f-49da-435d-a02b-002a3673c240")]
-        public readonly InputSlot<System.Numerics.Vector2> PatternBlur = new();
+        public readonly InputSlot<Vector2> PatternBlur = new();
 
         [Input(Guid = "f76c6202-34dc-4c10-adab-c10cb7665fed")]
         public readonly InputSlot<float> GlitchAmount = new();

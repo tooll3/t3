@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.img.generate
@@ -20,19 +15,19 @@ namespace lib.img.generate
         public readonly InputSlot<float> Rotation = new InputSlot<float>();
 
         [Input(Guid = "e155a2f2-2b21-49b5-9bd4-0c363684d93f")]
-        public readonly InputSlot<System.Numerics.Vector2> Center = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Center = new InputSlot<Vector2>();
 
         [Input(Guid = "06f28039-d349-4f5f-a68f-6009886e180b")]
-        public readonly InputSlot<System.Numerics.Vector2> Size = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Size = new InputSlot<Vector2>();
 
         [Input(Guid = "5a164383-4f9d-4978-bfcb-a1c48b9b8f34")]
         public readonly InputSlot<float> UniformScale = new InputSlot<float>();
 
         [Input(Guid = "06553d30-0a71-435b-8796-b61db670fbc6")]
-        public readonly InputSlot<System.Numerics.Vector4> CornersRadius = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> CornersRadius = new InputSlot<Vector4>();
 
         [Input(Guid = "5e7cd523-0c39-42e4-a4e9-05cc20477296")]
-        public readonly InputSlot<T3.Core.DataTypes.Gradient> Gradient = new InputSlot<T3.Core.DataTypes.Gradient>();
+        public readonly InputSlot<Gradient> Gradient = new InputSlot<Gradient>();
 
         [Input(Guid = "94d46ad8-7dd6-490c-ade4-a527c7ee9d05")]
         public readonly InputSlot<float> GradientWidth = new InputSlot<float>();
@@ -47,13 +42,13 @@ namespace lib.img.generate
         public readonly InputSlot<bool> Repeat = new InputSlot<bool>();
 
         [Input(Guid = "94516412-20a6-41a9-a036-a3b5ed67b04a")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
 
         [Input(Guid = "63241bae-bfe6-415f-9288-ffcf1be15fc6", MappedType = typeof(SharedEnums.RgbBlendModes))]
         public readonly InputSlot<int> BlendMode = new InputSlot<int>();
 
         [Input(Guid = "70641015-e77b-4a75-b3f2-eb3534cceead")]
-        public readonly InputSlot<T3.Core.DataTypes.Vector.Int2> Resolution = new InputSlot<T3.Core.DataTypes.Vector.Int2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
     }
 }
 

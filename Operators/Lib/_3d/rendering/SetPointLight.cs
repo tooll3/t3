@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.rendering
 {
 	[Guid("4912ba82-460a-4229-884d-6b647d64b08c")]
@@ -36,13 +30,13 @@ namespace lib._3d.rendering
         public readonly InputSlot<Command> Command = new();
 
         [Input(Guid = "f46ed192-1f6c-415e-8fe3-6d4909859f6b")]
-        public readonly InputSlot<System.Numerics.Vector3> Position = new();
+        public readonly InputSlot<Vector3> Position = new();
 
         [Input(Guid = "747e043b-39e9-420c-8314-b7d1ba5d61de")]
         public readonly InputSlot<float> Intensity = new();
 
         [Input(Guid = "7b77b6fb-e8bd-42a7-8fb9-5d411f9a0da6")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "e825e0b5-4c04-4ce6-9aef-7d099e9d2430")]
         public readonly InputSlot<float> Range = new();

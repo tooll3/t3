@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.postfx
 {
 	[Guid("196e14c7-3a71-4afd-a53b-e51d0fe8f414")]
@@ -31,7 +25,7 @@ namespace lib._3d.postfx
         public readonly InputSlot<float> ClampEffect = new();
 
         [Input(Guid = "2ac4c1a2-c53e-4b78-90fc-15c0b69c8b28")]
-        public readonly InputSlot<System.Numerics.Vector3> VelocityOffset = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> VelocityOffset = new InputSlot<Vector3>();
 
     }
 }

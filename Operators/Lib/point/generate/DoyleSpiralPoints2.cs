@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.generate
 {
 	[Guid("eaeb8937-f6ff-4a4a-8f00-27484285cd2d")]
@@ -12,7 +6,7 @@ namespace lib.point.generate
     {
 
         [Output(Guid = "197b9371-876f-4809-b030-bb1a7b622312")]
-        public readonly TransformCallbackSlot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new();
+        public readonly TransformCallbackSlot<BufferWithViews> OutBuffer = new();
 
         
         public DoyleSpiralPoints2()
@@ -57,10 +51,10 @@ namespace lib.point.generate
         public readonly InputSlot<float> CenterSizeScale = new InputSlot<float>();
 
         [Input(Guid = "1e099abf-0378-43a4-899c-ade1828e42a6")]
-        public readonly InputSlot<System.Numerics.Vector3> Center = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> Center = new InputSlot<Vector3>();
 
         [Input(Guid = "4f0a45cb-7d9b-4021-9977-471215c377a6")]
-        public readonly InputSlot<System.Numerics.Vector3> OrientationAxis = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> OrientationAxis = new InputSlot<Vector3>();
 
         [Input(Guid = "b8a087a7-2a72-45e8-9adf-938cca729651")]
         public readonly InputSlot<float> OrientationAngle = new InputSlot<float>();

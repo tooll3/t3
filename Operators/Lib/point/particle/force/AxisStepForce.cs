@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.particle.force
 {
 	[Guid("2cc44046-2702-40d5-ab42-8b36ff3d6ca7")]
@@ -25,13 +20,13 @@ namespace lib.point.particle.force
         public readonly InputSlot<float> SelectRatio = new();
 
         [Input(Guid = "4701df38-3ec8-4133-ba40-afdf859e8f2f")]
-        public readonly InputSlot<System.Numerics.Vector3> AxisDistribution = new();
+        public readonly InputSlot<Vector3> AxisDistribution = new();
 
         [Input(Guid = "25e77db3-6ccb-4857-8dd6-e5c19395d85b")]
         public readonly InputSlot<float> AddOriginalVelocity = new();
 
         [Input(Guid = "f5e93296-efe1-42e0-add8-f8b6298fe183")]
-        public readonly InputSlot<System.Numerics.Vector3> StrengthDistribution = new();
+        public readonly InputSlot<Vector3> StrengthDistribution = new();
 
         [Input(Guid = "ab591dbc-b521-4ef0-b1e2-d03ff27b959e", MappedType = typeof(Spaces))]
         public readonly InputSlot<int> AxisSpace = new();

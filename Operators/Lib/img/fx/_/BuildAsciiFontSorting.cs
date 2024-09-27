@@ -1,13 +1,7 @@
-using System.Runtime.InteropServices;
 using System.Drawing;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
-using Texture2D = T3.Core.DataTypes.Texture2D;
 using Utilities = T3.Core.Utils.Utilities;
 
 namespace lib.img.fx._

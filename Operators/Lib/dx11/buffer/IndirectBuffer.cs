@@ -1,9 +1,4 @@
-using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 
 namespace lib.dx11.buffer
 {
@@ -11,7 +6,7 @@ namespace lib.dx11.buffer
     public class IndirectBuffer : Instance<IndirectBuffer>
     {
         [Output(Guid = "837133D3-308C-48AA-9AFE-B9EB09E76A69")]
-        public readonly Slot<SharpDX.Direct3D11.Buffer> Buffer = new();
+        public readonly Slot<Buffer> Buffer = new();
 
         public IndirectBuffer()
         {
@@ -35,7 +30,7 @@ namespace lib.dx11.buffer
                                  StructureByteStride = stride
                              };
             
-            Buffer.Value ??= new SharpDX.Direct3D11.Buffer(ResourceManager.Device, bufferDesc);
+            Buffer.Value ??= new Buffer(ResourceManager.Device, bufferDesc);
         }
 
         [Input(Guid = "38D649D2-861B-4302-A879-973D6405A4DE")]

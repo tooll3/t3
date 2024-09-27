@@ -1,6 +1,4 @@
 #nullable enable
-using T3.Core.Operator.Interfaces;
-
 namespace lib.Utils;
 
 public class DefaultShaderStatusProvider : IStatusProvider

@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.draw
 {
 	[Guid("cb89ed1d-03ea-4880-bfa0-1dd723e4bdab")]
@@ -25,7 +19,7 @@ namespace lib._3d.draw
         public readonly InputSlot<float> Scale = new();
 
         [Input(Guid = "8feb4ec2-acc6-4a46-852b-70c4f156f6de")]
-        public readonly InputSlot<System.Numerics.Vector2> Position = new();
+        public readonly InputSlot<Vector2> Position = new();
 
         [Input(Guid = "651d479c-a3d4-4d18-bdcd-2400e2cdb56b")]
         public readonly InputSlot<float> RandomOffset = new();
@@ -34,10 +28,10 @@ namespace lib._3d.draw
         public readonly InputSlot<string> FolderWithImages = new();
 
         [Input(Guid = "3cb08250-213c-4fa6-b9a0-1c92bf01ad6e")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "cabb74b7-72c3-4916-8096-5890fc8e7023")]
-        public readonly InputSlot<System.Numerics.Vector4> BackgroundColor = new();
+        public readonly InputSlot<Vector4> BackgroundColor = new();
 
         [Input(Guid = "0f7305c9-4372-4e62-82ff-a377bcbffc12")]
         public readonly InputSlot<int> ScaleMode = new();

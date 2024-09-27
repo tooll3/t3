@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.draw
 {
 	[Guid("44d57201-addf-455c-9e31-709b018ba29f")]
@@ -35,7 +29,7 @@ namespace lib.point.draw
         public readonly InputSlot<Gradient> ColorOverLifetime = new();
 
         [Input(Guid = "df2076a1-1d25-4112-b0e6-2987541786d9")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "5f64292f-24ac-4a6c-ac3f-402468b0391b")]
         public readonly InputSlot<float> LineWidth = new();

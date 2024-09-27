@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.mesh.modify
 {
     [Guid("a8fd7522-7874-4411-ad8d-b2e7a20bc4ac")]
@@ -11,7 +5,7 @@ namespace lib._3d.mesh.modify
 ,ITransformable
     {
         [Output(Guid = "233d4a02-5e7c-40d1-9a89-4b5e2414900b")]
-        public readonly TransformCallbackSlot<T3.Core.DataTypes.MeshBuffers> Result = new();
+        public readonly TransformCallbackSlot<MeshBuffers> Result = new();
         
         public DeformMesh()
         {
@@ -24,7 +18,7 @@ namespace lib._3d.mesh.modify
         public Action<Instance, EvaluationContext> TransformCallback { get; set; }
 
         [Input(Guid = "b3593825-1ff5-4a5f-86cb-379a23471a4d")]
-        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> Mesh = new InputSlot<T3.Core.DataTypes.MeshBuffers>();
+        public readonly InputSlot<MeshBuffers> Mesh = new InputSlot<MeshBuffers>();
 
         [Input(Guid = "3af8bfb8-a2d8-4919-98f5-5431798d927a")]
         public readonly InputSlot<bool> UseVertexSelection = new InputSlot<bool>();
@@ -39,7 +33,7 @@ namespace lib._3d.mesh.modify
         public readonly InputSlot<float> Radius = new InputSlot<float>();
 
         [Input(Guid = "cf8e1065-164d-4ba9-8c60-9ab545aaaee2")]
-        public readonly InputSlot<System.Numerics.Vector3> Pivot = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> Pivot = new InputSlot<Vector3>();
 
         [Input(Guid = "10d0502e-1a9d-4d8f-a516-2b2b465849bf")]
         public readonly InputSlot<float> Taper = new InputSlot<float>();
@@ -48,7 +42,7 @@ namespace lib._3d.mesh.modify
         public readonly InputSlot<int> TaperAxis = new InputSlot<int>();
 
         [Input(Guid = "408f6526-8fef-41b9-8de6-a20ae81a2037")]
-        public readonly InputSlot<System.Numerics.Vector2> AmountPerAxis = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> AmountPerAxis = new InputSlot<Vector2>();
 
         [Input(Guid = "c67fa5cb-97b2-4146-a6c1-0ea84a03f703")]
         public readonly InputSlot<float> Twist = new InputSlot<float>();
@@ -57,7 +51,7 @@ namespace lib._3d.mesh.modify
         public readonly InputSlot<int> TwistAxis = new InputSlot<int>();
 
         [Input(Guid = "6323532f-f548-4faa-9c21-826ee4d44090")]
-        public readonly InputSlot<System.Numerics.Vector3> TwistPivot = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> TwistPivot = new InputSlot<Vector3>();
 
 
         private enum SetAxis

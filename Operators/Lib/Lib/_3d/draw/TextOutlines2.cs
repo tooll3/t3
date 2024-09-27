@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.draw
 {
     [Guid("84e9333f-38d2-422f-abf5-bf3929f01c7e")]
@@ -43,10 +36,10 @@ namespace lib._3d.draw
         public readonly InputSlot<string> InputText = new InputSlot<string>();
 
         [Input(Guid = "4da54683-460e-4af6-a729-5c631e22285a")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> Color = new InputSlot<Vector4>();
 
         [Input(Guid = "9c2089a2-266d-4022-b23d-4c67a8a19788")]
-        public readonly InputSlot<System.Numerics.Vector2> Position = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Position = new InputSlot<Vector2>();
 
         [Input(Guid = "b15018a7-6c61-4cee-88fa-a43684ef5cc4")]
         public readonly InputSlot<float> OutsideLine = new InputSlot<float>();
@@ -73,7 +66,7 @@ namespace lib._3d.draw
         public readonly InputSlot<int> HorizontalAlign = new InputSlot<int>();
 
         [Input(Guid = "a827c2c6-3286-4488-9a90-ed38c4184e6a")]
-        public readonly InputSlot<SharpDX.Direct3D11.CullMode> CullMode = new InputSlot<SharpDX.Direct3D11.CullMode>();
+        public readonly InputSlot<CullMode> CullMode = new InputSlot<CullMode>();
 
         [Input(Guid = "2cb6bb45-a74a-4eba-a2f0-2895e8e38b07")]
         public readonly InputSlot<bool> EnableZTest = new InputSlot<bool>();

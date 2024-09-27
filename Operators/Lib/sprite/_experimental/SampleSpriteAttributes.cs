@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
-
 namespace lib.sprite._experimental
 {
 	[Guid("4670ff79-f630-478c-8f3f-513e1f2b5913")]
@@ -12,7 +5,7 @@ namespace lib.sprite._experimental
 ,ITransformable
     {
         [Output(Guid = "7d977f4b-8e79-46bf-a2b0-a1bb44cd249d")]
-        public readonly TransformCallbackSlot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new();
+        public readonly TransformCallbackSlot<BufferWithViews> OutBuffer = new();
 
         public SampleSpriteAttributes()
         {
@@ -25,10 +18,10 @@ namespace lib.sprite._experimental
         public Action<Instance, EvaluationContext> TransformCallback { get; set; }
 
         [Input(Guid = "df943375-bba4-4f90-a3e2-5226aaf4069d")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new();
+        public readonly InputSlot<BufferWithViews> GPoints = new();
 
         [Input(Guid = "40da9800-2f7a-46c0-86f6-731b39a10003")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Sprites = new();
+        public readonly InputSlot<BufferWithViews> Sprites = new();
 
         [Input(Guid = "1940c248-bafb-4089-80fb-d6d4178af3e9")]
         public readonly InputSlot<int> Brightness = new();
@@ -70,16 +63,16 @@ namespace lib.sprite._experimental
         public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "4e2bdf5e-9584-442a-b0f2-91b94955ebd5")]
-        public readonly InputSlot<System.Numerics.Vector3> Center = new();
+        public readonly InputSlot<Vector3> Center = new();
 
         [Input(Guid = "2286ff57-abdc-43b4-80ac-4acb509ab3b5")]
-        public readonly InputSlot<System.Numerics.Vector2> TextureScale = new();
+        public readonly InputSlot<Vector2> TextureScale = new();
 
         [Input(Guid = "d6dd78d8-55a7-4e1e-8321-b206c7ba668f")]
-        public readonly InputSlot<System.Numerics.Vector3> TextureRotate = new();
+        public readonly InputSlot<Vector3> TextureRotate = new();
 
         [Input(Guid = "ef5d0f4a-6ef2-4735-8373-847ba87f598d")]
-        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> TextureMode = new();
+        public readonly InputSlot<TextureAddressMode> TextureMode = new();
 
         [Input(Guid = "1081643f-efab-43e3-87c9-58b6953f3338")]
         public readonly InputSlot<GizmoVisibility> Visibility = new();

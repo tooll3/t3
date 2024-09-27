@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.generate
 {
 	[Guid("1fec51bc-4de7-400a-8910-db39f4129579")]
@@ -16,25 +10,25 @@ namespace lib.img.generate
         public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "90620390-0fc4-4f2f-9c8f-04c6a75ee19e")]
-        public readonly InputSlot<System.Numerics.Vector4> TextColor = new();
+        public readonly InputSlot<Vector4> TextColor = new();
 
         [Input(Guid = "79d612f0-0b6e-47a8-9e9b-ee2894c85cc8")]
-        public readonly InputSlot<System.Numerics.Vector4> LineColor = new();
+        public readonly InputSlot<Vector4> LineColor = new();
 
         [Input(Guid = "dd187262-d769-4694-8ca4-a2c88a4667fd")]
-        public readonly InputSlot<System.Numerics.Vector4> Highlight = new();
+        public readonly InputSlot<Vector4> Highlight = new();
 
         [Input(Guid = "3343385a-18eb-413e-a6b3-fe4d20a13260")]
-        public readonly InputSlot<System.Numerics.Vector4> OriginalImage = new();
+        public readonly InputSlot<Vector4> OriginalImage = new();
 
         [Input(Guid = "2b0bf570-d839-4514-9e70-0956f4ffb8f7")]
-        public readonly InputSlot<System.Numerics.Vector2> CellSize = new();
+        public readonly InputSlot<Vector2> CellSize = new();
 
         [Input(Guid = "72a70b15-0342-427a-8c2f-e02ef31b2677")]
-        public readonly InputSlot<System.Numerics.Vector2> CellRange = new();
+        public readonly InputSlot<Vector2> CellRange = new();
 
         [Input(Guid = "fee40e14-e8b1-4bfa-abe1-9de7a6ed43f1")]
-        public readonly InputSlot<System.Numerics.Vector2> Position = new();
+        public readonly InputSlot<Vector2> Position = new();
 
         [Input(Guid = "d4adfa55-97d8-4c42-a2fc-4c89f6c43c8f")]
         public readonly InputSlot<float> Offset = new();

@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.fx
 {
 	[Guid("43f15919-f6c3-4a10-9092-00973fc8e821")]
@@ -32,22 +26,22 @@ namespace lib.img.fx
         public readonly InputSlot<float> Threshold = new InputSlot<float>();
 
         [Input(Guid = "5e591643-7c92-4fbb-8e14-4954f9493236")]
-        public readonly InputSlot<System.Numerics.Vector2> Stretch = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Stretch = new InputSlot<Vector2>();
 
         [Input(Guid = "531556ad-5d4d-4110-b8ea-be1fd6d443fd")]
-        public readonly InputSlot<System.Numerics.Vector2> Offset = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Offset = new InputSlot<Vector2>();
 
         [Input(Guid = "990ac61f-09b7-42ad-a2ed-4fa27b7e491b")]
-        public readonly InputSlot<System.Numerics.Vector2> Scatter = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Scatter = new InputSlot<Vector2>();
 
         [Input(Guid = "2e5c0cd5-8c34-49b1-b67e-1a6bc006b2b2")]
-        public readonly InputSlot<System.Numerics.Vector2> ScatterStretch = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> ScatterStretch = new InputSlot<Vector2>();
 
         [Input(Guid = "2866ef59-644d-4af5-bb95-0d028b01bb47")]
-        public readonly InputSlot<System.Numerics.Vector2> ScatterOffset = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> ScatterOffset = new InputSlot<Vector2>();
 
         [Input(Guid = "1bd2e0bd-6902-44e3-93ce-da352973ca8d")]
-        public readonly InputSlot<System.Numerics.Vector4> Colorize = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> Colorize = new InputSlot<Vector4>();
 
         [Input(Guid = "6a1efc82-7ca4-4c79-a3f9-f16b568c3131")]
         public readonly InputSlot<float> ColorRatio = new InputSlot<float>();
@@ -56,7 +50,7 @@ namespace lib.img.fx
         public readonly InputSlot<int> Seed = new InputSlot<int>();
 
         [Input(Guid = "26c70c16-ba58-4dfe-93e6-e39bd6442485")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> OverridePoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
+        public readonly InputSlot<BufferWithViews> OverridePoints = new InputSlot<BufferWithViews>();
 
         [Input(Guid = "3fdfce77-8622-4fcf-a7cf-e4bfbabc280c", MappedType = typeof(Modes))]
         public readonly InputSlot<int> Mode = new InputSlot<int>();

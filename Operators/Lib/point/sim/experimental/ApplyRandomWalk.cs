@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.sim.experimental
 {
 	[Guid("f925e9b9-5c7a-4fbf-9572-b11fe2d54d6c")]
@@ -10,10 +5,10 @@ namespace lib.point.sim.experimental
     {
 
         [Output(Guid = "22ce9fc5-d23d-4141-8a81-c07ad824ed5e")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new();
+        public readonly Slot<BufferWithViews> OutBuffer = new();
 
         [Input(Guid = "4b3bb61b-a9f6-4c53-9af7-707984f7ff18")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new();
+        public readonly InputSlot<BufferWithViews> GPoints = new();
 
         [Input(Guid = "7ce4b12c-224c-41ad-a42d-770df1ee4a67")]
         public readonly InputSlot<bool> TriggerStep = new();
@@ -37,10 +32,10 @@ namespace lib.point.sim.experimental
         public readonly InputSlot<float> RandomRotateAngle = new();
 
         [Input(Guid = "87b7a45e-dad8-4d5b-93af-7ed743ac8237")]
-        public readonly InputSlot<System.Numerics.Vector2> AreaEdgeRange = new();
+        public readonly InputSlot<Vector2> AreaEdgeRange = new();
 
         [Input(Guid = "b4cabe59-4166-490c-be8d-12eb9d5fe3c4")]
-        public readonly InputSlot<System.Numerics.Vector2> AreaCenter = new();
+        public readonly InputSlot<Vector2> AreaCenter = new();
 
         [Input(Guid = "2b7fd9ed-4d08-4d0e-8258-41c7606c182f")]
         public readonly InputSlot<int> Seed = new();

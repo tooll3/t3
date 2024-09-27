@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.rendering
 {
 	[Guid("f3b66187-34b2-4018-8380-279f9f296ded")]
@@ -32,7 +26,7 @@ namespace lib._3d.rendering
         public readonly InputSlot<float> BackgroundBlur = new();
 
         [Input(Guid = "650aa9a6-4aa6-4928-be76-3f1f825aa773")]
-        public readonly InputSlot<System.Numerics.Vector4> BackgroundColor = new();
+        public readonly InputSlot<Vector4> BackgroundColor = new();
 
         [Input(Guid = "0299761d-7397-4a2f-b591-81fadb404a92")]
         public readonly InputSlot<float> BackgroundDistance = new();

@@ -1,12 +1,4 @@
-using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
-using T3.Core.DataTypes;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using T3.Core.Resource;
-using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace lib.dx11.tex
 {
@@ -31,7 +23,7 @@ namespace lib.dx11.tex
 
                     if ((texture.Description.BindFlags & BindFlags.RenderTarget) > 0)
                     {
-                        if (_srv == null || _srv.Resource != (SharpDX.Direct3D11.Resource)texture)
+                        if (_srv == null || _srv.Resource != (Resource)texture)
                         {
                             _srv?.Dispose();
                             texture.CreateShaderResourceView(ref _srv, null);

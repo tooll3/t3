@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.fx
 {
 	[Guid("cbbb011c-f2bc-460e-86d0-48e49ed377fd")]
@@ -28,10 +22,10 @@ namespace lib.img.fx
         public readonly InputSlot<float> Extend = new();
 
         [Input(Guid = "0d589063-aadf-47e5-8eb0-1c9beba104d0")]
-        public readonly InputSlot<System.Numerics.Vector4> BackgroundColor = new();
+        public readonly InputSlot<Vector4> BackgroundColor = new();
 
         [Input(Guid = "3c0a4fe5-25ae-4732-806f-7b7c1eb56da9")]
-        public readonly InputSlot<System.Numerics.Vector4> StreakColor = new();
+        public readonly InputSlot<Vector4> StreakColor = new();
 
         [Input(Guid = "cf4d392f-426a-4451-b752-25009e843a63")]
         public readonly InputSlot<float> GradientBias = new();

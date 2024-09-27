@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.analyze
 {
 	[Guid("0e13e34f-c07b-4ada-8c87-6b89f4ed8b41")]
@@ -34,7 +27,7 @@ namespace lib.img.analyze
         public readonly InputSlot<float> Rotate = new InputSlot<float>();
 
         [Input(Guid = "beada8f0-cece-4526-aa29-3546bebd276a")]
-        public readonly InputSlot<System.Numerics.Vector2> Center = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Center = new InputSlot<Vector2>();
 
         [Input(Guid = "99171ae6-fb07-4121-bf23-e97f30b33be5")]
         public readonly InputSlot<float> IntensityRange = new InputSlot<float>();

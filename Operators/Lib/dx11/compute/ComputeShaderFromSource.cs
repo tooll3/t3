@@ -1,10 +1,4 @@
-using System.Runtime.InteropServices;
 using lib.Utils;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
 using ComputeShaderT3 = T3.Core.DataTypes.ComputeShader;
 
 namespace lib.dx11.compute

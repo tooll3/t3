@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib._3d.rendering._
 {
 	[Guid("95558338-81a5-4ecc-9d5c-1c6fb5f6f4fa")]
@@ -16,7 +10,7 @@ namespace lib._3d.rendering._
         public readonly InputSlot<BufferWithViews> SpriteBuffer = new();
 
         [Input(Guid = "333c119c-79d0-410c-a20a-5d035a7192ee")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "ce8b4cc8-95bd-429d-a170-8ba7edeafea6")]
         public readonly InputSlot<float> Size = new();

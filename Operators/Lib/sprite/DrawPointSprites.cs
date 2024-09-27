@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace lib.sprite
@@ -23,7 +18,7 @@ namespace lib.sprite
         public readonly InputSlot<Texture2D> Texture_ = new InputSlot<Texture2D>();
 
         [Input(Guid = "c694946c-37b6-4792-8fc5-4204ede69f90")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> Color = new InputSlot<Vector4>();
 
         [Input(Guid = "cf7692c9-d6bd-4e93-b89c-14ab507b6da5")]
         public readonly InputSlot<float> Size = new InputSlot<float>();

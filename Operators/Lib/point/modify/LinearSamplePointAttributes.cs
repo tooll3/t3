@@ -1,19 +1,13 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.point.modify
 {
 	[Guid("bb4803d2-0c23-470a-94a8-c477e4f7dd8c")]
     public class LinearSamplePointAttributes : Instance<LinearSamplePointAttributes>
     {
         [Output(Guid = "47c23c59-fee8-4c77-a479-8f5684a3cd5c")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new ();
+        public readonly Slot<BufferWithViews> OutBuffer = new ();
         
         [Input(Guid = "36ca4c5d-5178-4b0c-9fdd-8752e819ff5b")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new();
+        public readonly InputSlot<BufferWithViews> GPoints = new();
 
         [Input(Guid = "5363156c-b07c-4726-adb6-c14200713366", MappedType = typeof(Attributes))]
         public readonly InputSlot<int> Brightness = new();

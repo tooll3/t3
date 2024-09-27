@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.img.generate
 {
 	[Guid("5cf7a1e2-7369-4e74-a7a9-b0eae61bdc21")]
@@ -20,16 +13,16 @@ namespace lib.img.generate
         public readonly InputSlot<float> TextureBlend = new InputSlot<float>();
 
         [Input(Guid = "a9111412-3369-4848-af48-8a96f5697c84")]
-        public readonly InputSlot<System.Numerics.Vector4> ColorA = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> ColorA = new InputSlot<Vector4>();
 
         [Input(Guid = "f9899540-e495-41cb-87da-302d1bf090ac")]
-        public readonly InputSlot<System.Numerics.Vector4> ColorB = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<Vector4> ColorB = new InputSlot<Vector4>();
 
         [Input(Guid = "f29bca1f-d563-4dd3-8386-ab791f4b423e")]
-        public readonly InputSlot<System.Numerics.Vector2> Offset = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Offset = new InputSlot<Vector2>();
 
         [Input(Guid = "1607d859-89e9-44b3-a92e-135c562d302e")]
-        public readonly InputSlot<System.Numerics.Vector2> Stretch = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Stretch = new InputSlot<Vector2>();
 
         [Input(Guid = "f4a32527-da4d-49af-aeb0-ed9c5c28ac04")]
         public readonly InputSlot<float> Scale = new InputSlot<float>();
@@ -41,10 +34,10 @@ namespace lib.img.generate
         public readonly InputSlot<float> Phase = new InputSlot<float>();
 
         [Input(Guid = "bb34cad3-1676-4df1-86f3-d713df5ccda6")]
-        public readonly InputSlot<System.Numerics.Vector2> Clamping = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> Clamping = new InputSlot<Vector2>();
 
         [Input(Guid = "dce72235-839e-41f1-a2a4-e19f0ef66e5c")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
 
         [Input(Guid = "b4277cab-d286-410f-81be-ff4d53a9eca9", MappedType = typeof(Methods))]
         public readonly InputSlot<int> Method = new InputSlot<int>();

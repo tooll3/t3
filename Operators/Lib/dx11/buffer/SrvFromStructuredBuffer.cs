@@ -1,12 +1,6 @@
-using System.Runtime.InteropServices;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 
 namespace lib.dx11.buffer
 {
@@ -54,6 +48,6 @@ namespace lib.dx11.buffer
         }
 
         [Input(Guid = "BD65EF2C-F32A-4279-BB5C-7F6467B23283")]
-        public readonly InputSlot<SharpDX.Direct3D11.Buffer> Buffer = new();
+        public readonly InputSlot<Buffer> Buffer = new();
     }
 }

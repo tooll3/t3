@@ -16,7 +16,7 @@ using GraphicsMath = T3.Core.Utils.Geometry.GraphicsMath;
 using Plane = System.Numerics.Plane;
 using Quaternion = System.Numerics.Quaternion;
 using Vector2 = System.Numerics.Vector2;
-using Vector3 = System.Numerics.Vector3;
+
 using Vector4 = System.Numerics.Vector4;
 using Ray = T3.Core.Utils.Geometry.Ray;
 

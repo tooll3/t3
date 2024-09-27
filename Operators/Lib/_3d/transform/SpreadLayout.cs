@@ -1,14 +1,5 @@
-using System.Runtime.InteropServices;
-using System.Numerics;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
-using Quaternion = System.Numerics.Quaternion;
-using Vector3 = System.Numerics.Vector3;
 
 namespace lib._3d.transform
 {

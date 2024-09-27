@@ -1,11 +1,4 @@
-using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using T3.Core.Resource;
-using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace lib.dx11.draw
 {

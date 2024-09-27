@@ -1,11 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using Texture2D = T3.Core.DataTypes.Texture2D;
-
 namespace lib.img.generate
 {
 	[Guid("8e6ed99c-a3e0-42c0-9f81-a89b1e340757")]
@@ -21,10 +13,10 @@ namespace lib.img.generate
         public readonly InputSlot<float> StrokeSize = new();
 
         [Input(Guid = "31f3942e-bac5-407f-ad44-6d09920754d9")]
-        public readonly InputSlot<System.Numerics.Vector4> StrokeColor = new();
+        public readonly InputSlot<Vector4> StrokeColor = new();
 
         [Input(Guid = "44b88a09-6374-4180-9bc9-713ccfbb36f0")]
-        public readonly InputSlot<System.Numerics.Vector4> Background = new();
+        public readonly InputSlot<Vector4> Background = new();
 
         [Input(Guid = "2ded8235-157d-486b-a997-87d09d18f998")]
         public readonly InputSlot<string> Filename = new();
