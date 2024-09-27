@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿#nullable enable
+using System.Text.RegularExpressions;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction.Connections;
@@ -165,17 +166,27 @@ internal sealed class SymbolFilter
             MatchingSymbolUis.Add(symbolUi);
         }
 
-        MatchingSymbolUis = MatchingSymbolUis.OrderBy(s => ComputeRelevancy(s, _symbolFilterString, ""))
+        EditorSymbolPackage? currentProject = null;
+        Instance? composition = null;
+
+        if (GraphWindow.Focused != null)
+        {
+            currentProject = GraphWindow.Focused.Package;
+            composition = GraphWindow.Focused.CompositionOp;
+        }
+        
+        MatchingSymbolUis = MatchingSymbolUis.OrderBy(s => ComputeRelevancy(s, _symbolFilterString, currentProject, composition))
                                              .Reverse()
                                              .Take(limit)
                                              .ToList();
     }
 
-    private double ComputeRelevancy(SymbolUi symbolUi, string query, string currentProjectName)
+    private double ComputeRelevancy(SymbolUi symbolUi, string query, EditorSymbolPackage? currentProject, Instance? composition)
     {
         float relevancy = 1;
 
-        var symbolName = symbolUi.Symbol.Name;
+        var symbol = symbolUi.Symbol;
+        var symbolName = symbol.Name;
 
         if (symbolName.Equals(query, StringComparison.InvariantCultureIgnoreCase))
         {
@@ -208,7 +219,7 @@ internal sealed class SymbolFilter
         }
 
         // Add usage count (the following statement is slow and should be cached)
-        var count = SymbolAnalysis.InformationForSymbolIds.TryGetValue(symbolUi.Symbol.Id, out var info)
+        var count = SymbolAnalysis.InformationForSymbolIds.TryGetValue(symbol.Id, out var info)
                         ? info.UsageCount
                         : 0;
 
@@ -238,18 +249,18 @@ internal sealed class SymbolFilter
             relevancy *= 5f;
         }
 
-        if (!string.IsNullOrEmpty(symbolUi.Symbol.Namespace))
+        if (!string.IsNullOrEmpty(symbol.Namespace))
         {
-            if (symbolUi.Symbol.Namespace.Contains("dx11")
-                || symbolUi.Symbol.Namespace.Contains("_"))
+            if (symbol.Namespace.Contains("dx11")
+                || symbol.Namespace.Contains("_"))
                 relevancy *= 0.1f;
 
-            if (symbolUi.Symbol.Namespace.StartsWith("lib"))
+            if (symbol.Namespace.StartsWith("lib"))
             {
                 relevancy *= 3f;
             }
 
-            if (symbolUi.Symbol.Namespace.StartsWith("examples"))
+            if (symbol.Namespace.StartsWith("examples"))
             {
                 relevancy *= 2f;
             }
@@ -265,33 +276,52 @@ internal sealed class SymbolFilter
             relevancy *= 0.01f;
         }
 
-        // TODO: Implement
-        // if (IsCompositionOperatorInNamespaceOf(symbolUi))
-        // {
-        //     relevancy *= 1.9;
-        // }
-        // else if (!IsCompositionOperatorAProjectOperator && symbolUi.Namespace.StartsWith(@"projects.") && symbolUi.Namespace.Split('.').Length == 2)
-        // {
-        //     relevancy *= 1.9;
-        // }
+        var symbolId = symbol.Id;
+        var symbolPackage = symbol.SymbolPackage;
+        if (currentProject != null)
+        {
+            // mega-boost symbols from the same package as the current project
+            if (currentProject == symbolPackage)
+            {
+                relevancy *= 5f;
+            }
+            
+            // or boost symbols from related namespaces
+            else if (symbol.Namespace!.StartsWith(currentProject.RootNamespace))
+            {
+                relevancy *= 1.9f;
+            }
+        }
 
-        // TODO: Implement
-        // Bump up operators from same namespace as current project
-        // var projectName = GetProjectFromNamespace(symbolUi.Namespace);
-        // if (projectName != null && projectName == currentProjectName)
-        //     relevancy *= 5;
+        if (composition != null)
+        {
+            var compositionSymbol = composition.Symbol;
+            var compositionPackage = compositionSymbol.SymbolPackage;
+            
+            // boost symbols from the same package as composition, or from related namespaces
+            if (compositionPackage.Symbols.ContainsKey(symbolId) || symbolPackage.RootNamespace.StartsWith(compositionPackage.RootNamespace))
+            {
+                relevancy *= 1.9f;
+            }
+        }
+
+        // boost user symbols
+        if (symbolPackage is EditableSymbolProject)
+        {
+            relevancy *= 1.9f;
+        }
 
         // Bump operators with matching connections 
         var matchingConnectionsCount = 0;
         if (_sourceInputHash != 0)
         {
-            foreach (var inputDefinition in symbolUi.Symbol.InputDefinitions.FindAll(i => i.DefaultValue.ValueType == FilterInputType))
+            foreach (var inputDefinition in symbol.InputDefinitions.FindAll(i => i.DefaultValue.ValueType == FilterInputType))
             {
                 var connectionHash = _sourceInputHash * 31 + inputDefinition.Id.GetHashCode();
 
                 if (SymbolAnalysis.ConnectionHashCounts.TryGetValue(connectionHash, out var connectionCount))
                 {
-                    //Log.Debug($" <{connectionCount}x> --> {symbolUi.Symbol.Name}");
+                    //Log.Debug($" <{connectionCount}x> --> {symbol.Name}");
                     matchingConnectionsCount += connectionCount;
                 }
             }
@@ -299,13 +329,13 @@ internal sealed class SymbolFilter
             
         if (_targetInputHash != 0)
         {
-            foreach (var outputDefinition in symbolUi.Symbol.OutputDefinitions.FindAll(o => o.ValueType == FilterOutputType))
+            foreach (var outputDefinition in symbol.OutputDefinitions.FindAll(o => o.ValueType == FilterOutputType))
             {
                 var connectionHash = outputDefinition.Id.GetHashCode() * 31 + _targetInputHash;
 
                 if (SymbolAnalysis.ConnectionHashCounts.TryGetValue(connectionHash, out var connectionCount))
                 {
-                    //Log.Debug($"  {symbolUi.Symbol.Name} --> <{connectionCount}x>");
+                    //Log.Debug($"  {symbol.Name} --> <{connectionCount}x>");
                     matchingConnectionsCount += connectionCount;
                 }
             }
@@ -314,7 +344,7 @@ internal sealed class SymbolFilter
         if (matchingConnectionsCount > 0)
         {
             relevancy *= 1 + MathF.Pow(matchingConnectionsCount, 0.33f) * 4f;
-            //Log.Debug($"Bump relevancy {symbolUi.Symbol.Name}  {oldRelevancy:0.00} -> {relevancy:0.00}");
+            //Log.Debug($"Bump relevancy {symbol.Name}  {oldRelevancy:0.00} -> {relevancy:0.00}");
         }
 
         return relevancy;
