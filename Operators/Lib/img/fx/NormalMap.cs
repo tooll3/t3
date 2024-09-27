@@ -25,7 +25,7 @@ namespace lib.img.fx
         public readonly InputSlot<int> Mode = new();
 
         [Input(Guid = "4d25b1db-daeb-4b5e-b2bc-8681f332b092")]
-        public readonly InputSlot<SharpDX.DXGI.Format> OutputFormat = new InputSlot<SharpDX.DXGI.Format>();
+        public readonly InputSlot<Format> OutputFormat = new InputSlot<Format>();
         
         
         private enum Modes

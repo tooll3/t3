@@ -37,10 +37,13 @@
         <Using Include="T3.Core.DataTypes.Texture2D" Alias="Texture2D"/>
         <Using Include="SharpDX.Direct3D11.Buffer" Alias="Buffer"/>
         <Using Include="SharpDX.Direct3D11.ShaderResourceView" Alias="ShaderResourceView"/>
+        <Using Include="SharpDX.Direct3D11.UnorderedAccessView" Alias="UnorderedAccessView"/>
         <Using Include="SharpDX.Direct3D11.CullMode" Alias="CullMode"/>
         <Using Include="SharpDX.Direct3D11.FillMode" Alias="FillMode"/>
         <Using Include="SharpDX.Direct3D11.TextureAddressMode" Alias="TextureAddressMode"/>
         <Using Include="SharpDX.Direct3D11.Filter" Alias="Filter"/>
+        <Using Include="SharpDX.DXGI.Format" Alias="Format"/>
+        <Using Include="SharpDX.Direct3D11.Texture2DDescription" Alias="Texture2DDescription"/>
         <Using Alias="Vector2" Include="System.Numerics.Vector2"/>
         <Using Alias="Vector3" Include="System.Numerics.Vector3"/>
         <Using Alias="Vector4" Include="System.Numerics.Vector4"/>

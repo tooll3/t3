@@ -24,7 +24,7 @@ namespace lib.dx11._
         public readonly InputSlot<TextureAddressMode> Wrap = new();
 
         [Input(Guid = "432c1a23-bf28-4595-923f-6c5a442fa90a")]
-        public readonly InputSlot<SharpDX.DXGI.Format> OutputFormat = new();
+        public readonly InputSlot<Format> OutputFormat = new();
 
         [Input(Guid = "499e7ff0-3b6a-414b-be19-03c615931ab8")]
         public readonly InputSlot<Vector4> BufferColor = new();

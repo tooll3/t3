@@ -28,7 +28,7 @@ namespace lib.img.fx._
         public readonly InputSlot<bool> GenerateMips = new();
 
         [Input(Guid = "35f3b28b-2210-4f27-813a-5c857940d09c")]
-        public readonly InputSlot<SharpDX.DXGI.Format> TextureFormat = new InputSlot<SharpDX.DXGI.Format>();
+        public readonly InputSlot<Format> TextureFormat = new InputSlot<Format>();
     }
 }
 

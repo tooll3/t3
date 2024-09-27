@@ -10,7 +10,7 @@ namespace lib.img.adjust
         public readonly InputSlot<Texture2D> Texture2d = new();
 
         [Input(Guid = "3f7b713d-2808-4312-87b4-707cb891b567")]
-        public readonly InputSlot<SharpDX.DXGI.Format> Format = new();
+        public readonly InputSlot<Format> Format = new();
 
         [Input(Guid = "88623684-a5e4-4415-8458-648761e834e1")]
         public readonly InputSlot<bool> GenerateMipMaps = new();

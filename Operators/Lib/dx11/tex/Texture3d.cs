@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using SharpDX.Direct3D11;
-using SharpDX.DXGI;
 using Texture3D = T3.Core.DataTypes.Texture3D;
 
 namespace lib.dx11.tex

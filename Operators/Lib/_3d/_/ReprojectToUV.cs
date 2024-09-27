@@ -26,7 +26,7 @@ namespace lib._3d._
         public readonly InputSlot<Vector4> ClearColor = new();
 
         [Input(Guid = "e52b254e-e13b-4df8-81d4-35867aeb188e")]
-        public readonly InputSlot<SharpDX.DXGI.Format> TextureFormat = new();
+        public readonly InputSlot<Format> TextureFormat = new();
 
 
         

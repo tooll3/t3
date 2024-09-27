@@ -16,7 +16,7 @@ namespace lib.img.adjust
         public readonly InputSlot<bool> GenerateMipmaps = new();
 
         [Input(Guid = "caa374cf-d07a-4af9-89a0-42597e11a6ff")]
-        public readonly InputSlot<SharpDX.DXGI.Format> OutputFormat = new();
+        public readonly InputSlot<Format> OutputFormat = new();
 
         private enum Modes
         {

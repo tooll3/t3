@@ -1,5 +1,3 @@
-using UnorderedAccessView = SharpDX.Direct3D11.UnorderedAccessView;
-
 namespace lib.dx11.tex
 {
 	[Guid("84e02044-3011-4a5e-b76a-c904d9b4557f")]

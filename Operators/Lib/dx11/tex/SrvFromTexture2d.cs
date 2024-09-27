@@ -1,6 +1,5 @@
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
-using SharpDX.DXGI;
 using T3.Core.Utils;
 
 namespace lib.dx11.tex
