@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace examples.user.wake.summer2022.elements
 {
 	[Guid("74ddc8f9-831e-4a82-945d-a9f5c53c040c")]

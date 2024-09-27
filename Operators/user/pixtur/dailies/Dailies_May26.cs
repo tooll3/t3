@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace user.pixtur.dailies
 {
 	[Guid("b138fb48-9c1f-429f-bdbf-4693d84ef0e2")]

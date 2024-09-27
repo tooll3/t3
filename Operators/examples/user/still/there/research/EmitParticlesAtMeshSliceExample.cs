@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace examples.user.still.there.research
 {
 	[Guid("ccafae36-6001-4ee8-b0b5-76c1adebcdde")]

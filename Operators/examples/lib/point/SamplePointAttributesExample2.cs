@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace examples.lib.point
 {
 	[Guid("01ebb7a3-9caa-4259-aaa1-c79248b39325")]

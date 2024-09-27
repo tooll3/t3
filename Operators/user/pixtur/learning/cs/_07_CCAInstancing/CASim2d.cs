@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace user.pixtur.learning.cs._07_CCAInstancing
 {
 	[Guid("63090462-3237-465e-a12c-25c8bbfaaa8c")]

@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace examples.user.still.there.scenes
 {
 	[Guid("6231f780-c66f-452d-ba1c-4b5e21efc97d")]

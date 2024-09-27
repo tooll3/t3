@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace examples.user.newemka980.Examples
 {
     [Guid("82159382-64e7-4aef-bc23-6a0f0f40f18d")]

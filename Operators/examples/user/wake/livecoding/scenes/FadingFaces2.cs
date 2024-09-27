@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace Types.user.wake.livecoding.scenes
 {
     [Guid("abbb6ec1-f8ea-474d-a492-6857af84dd71")]

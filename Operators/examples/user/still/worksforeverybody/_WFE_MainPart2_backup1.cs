@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace examples.user.still.worksforeverybody
 {
 	[Guid("d3e1ff33-8e76-4348-ac4a-cd537dfeb33f")]

@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace user.pixtur.vj.avjam24.scene
 {
 	[Guid("669ecc91-d4fa-4f11-8cdd-f9533e6b8b4b")]

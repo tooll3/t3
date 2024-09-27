@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace examples.user.wake.livecoding.helpers
 {
     [Guid("58060f7a-2890-4cbe-8ca9-dab4ab15dccd")]

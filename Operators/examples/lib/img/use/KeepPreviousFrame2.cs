@@ -1,13 +1,4 @@
-using System.Runtime.InteropServices;
-using System;
-using SharpDX.Direct3D11;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
-using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace examples.lib.img.use
 {

@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace examples.user.wake.mary
 {
 	[Guid("ba2a8670-e0c3-4e7b-9382-d1c0938ba2b3")]

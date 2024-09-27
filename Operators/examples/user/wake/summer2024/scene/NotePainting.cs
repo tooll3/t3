@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace Types.user.wake.summer2024.scene
 {
     [Guid("15566742-6e21-4ebb-bb35-fa1949fa4e4a")]

@@ -1,30 +1,12 @@
-using System.Runtime.InteropServices;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Numerics;
-using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
-using T3.Core.DataTypes;
 using SharpDX.DXGI;
 using SharpDX.WIC;
 using SharpGLTF.Schema2;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 using T3.Core.Rendering.Material;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 using Scene = SharpGLTF.Schema2.Scene;
-using Texture2D = T3.Core.DataTypes.Texture2D;
-using ComputeShader = T3.Core.DataTypes.ComputeShader;
 
 namespace user.pixtur.research.gltf;
 

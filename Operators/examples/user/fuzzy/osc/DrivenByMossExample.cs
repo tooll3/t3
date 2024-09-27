@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace examples.user.fuzzy.osc
 {
     [Guid("245de58f-d3d0-4c57-ba27-1b884b7f6b31")]

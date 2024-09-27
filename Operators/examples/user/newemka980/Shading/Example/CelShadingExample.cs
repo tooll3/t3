@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace examples.user.newemka980.Shading.Example
 {
 	[Guid("652a6c86-3af2-4bed-9370-912f57690a2c")]

@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace examples.lib._3d.draw
 {
 	[Guid("78ee50b0-910b-4edc-b8cd-5c24b2f1b7d9")]

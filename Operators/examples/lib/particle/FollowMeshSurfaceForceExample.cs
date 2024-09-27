@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace Types.examples.lib.point.particle
 {
     [Guid("16235faf-61b7-474f-bdc7-f7abe3c538eb")]

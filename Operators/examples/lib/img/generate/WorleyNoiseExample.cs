@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace examples.lib.img.generate
 {
     [Guid("e3c3942b-451e-4e71-b6d8-ca5a6acd7ce1")]

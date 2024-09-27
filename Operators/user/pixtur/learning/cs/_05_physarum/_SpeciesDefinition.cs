@@ -1,9 +1,3 @@
-using System.Numerics;
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 using BreedList = T3.Core.DataTypes.StructuredList<user.pixtur.learning.cs._05_physarum._SpeciesDefinition.Breed>;
 

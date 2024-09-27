@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace Types.user.wake.summer2024.scenes
 {
     [Guid("47da8125-359e-40b7-8cf6-1880c51147f6")]

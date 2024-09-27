@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace user.pixtur.GlobeControlTest
 {
 	[Guid("61f2cf41-b520-4830-bc59-0d9b1d226274")]

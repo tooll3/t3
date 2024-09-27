@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace user.pixtur.learning.cs._01_cca
 {
 	[Guid("393fedbb-f442-43ac-bcfa-e618e77591dc")]

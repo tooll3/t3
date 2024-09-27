@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace user.pixtur.project.lazers
 {
 	[Guid("c6f1bd33-7a38-43d0-bfaf-337cf59fcdb9")]

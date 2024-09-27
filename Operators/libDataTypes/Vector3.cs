@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.types
 {
 	[Guid("94a5de3b-ee6a-43d3-8d21-7b8fe94b042b")]

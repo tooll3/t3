@@ -1,11 +1,3 @@
-using System.Runtime.InteropServices;
-using System;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
-
 namespace user.pixtur.research
 {
 	[Guid("97ded8ca-bdcf-4cb8-a791-a05ba4393888")]

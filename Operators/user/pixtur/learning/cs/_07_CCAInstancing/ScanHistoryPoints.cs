@@ -1,10 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using Texture2D = T3.Core.DataTypes.Texture2D;
-
 namespace user.pixtur.learning.cs._07_CCAInstancing
 {
 	[Guid("23ff34cd-7db7-4999-a0d1-bc3dfdb1f863")]

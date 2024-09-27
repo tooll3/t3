@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace examples.lib._3d.rendering
 {
 	[Guid("5b86e841-548d-4dbd-a39b-6361e28e23f5")]

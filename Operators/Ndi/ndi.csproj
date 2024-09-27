@@ -14,6 +14,52 @@
     <IsEditorOnly>false</IsEditorOnly>
     <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
   </PropertyGroup>
+    <ItemGroup>
+        <Using Include="System"/>
+        <Using Include="System.Numerics"/>
+        <Using Include="System.Linq"/>
+        <Using Include="System.Linq.Enumerable" Static="True"/>
+        <Using Include="System.Collections"/>
+        <Using Include="System.Linq.Expressions"/>
+        <Using Include="System.Collections.Generic"/>
+        <Using Include="System.Text"/>
+        <Using Include="System.Net"/>
+        <Using Include="System.Net.Http"/>
+        <Using Include="System.Threading.Tasks"/>
+        <Using Include="System.IO"/>
+        <Using Include="T3.Core.Logging"/>
+        <Using Include="System.Runtime.InteropServices"/>
+        <Using Include="T3.Core.Operator"/>
+        <Using Include="T3.Core.Operator.Attributes"/>
+        <Using Include="T3.Core.Operator.Slots"/>
+        <Using Include="T3.Core.DataTypes"/>
+        <Using Include="T3.Core.Operator.Interfaces"/>
+        <Using Include="T3.Core.Resource"/>
+
+        <Using Alias="Texture2D" Include="T3.Core.DataTypes.Texture2D"/>
+        <Using Alias="Buffer" Include="SharpDX.Direct3D11.Buffer"/>
+        <Using Alias="ShaderResourceView" Include="SharpDX.Direct3D11.ShaderResourceView"/>
+        <Using Alias="UnorderedAccessView" Include="SharpDX.Direct3D11.UnorderedAccessView"/>
+        <Using Alias="CullMode" Include="SharpDX.Direct3D11.CullMode"/>
+        <Using Alias="FillMode" Include="SharpDX.Direct3D11.FillMode"/>
+        <Using Alias="TextureAddressMode" Include="SharpDX.Direct3D11.TextureAddressMode"/>
+        <Using Alias="Filter" Include="SharpDX.Direct3D11.Filter"/>
+        <Using Alias="Format" Include="SharpDX.DXGI.Format"/>
+        <Using Alias="Texture2DDescription" Include="SharpDX.Direct3D11.Texture2DDescription"/>
+        <Using Alias="Vector2" Include="System.Numerics.Vector2"/>
+        <Using Alias="Vector3" Include="System.Numerics.Vector3"/>
+        <Using Alias="Vector4" Include="System.Numerics.Vector4"/>
+        <Using Alias="Matrix4x4" Include="System.Numerics.Matrix4x4"/>
+        <Using Alias="Quaternion" Include="System.Numerics.Quaternion"/>
+        <Using Alias="Int2" Include="T3.Core.DataTypes.Vector.Int2"/>
+        <Using Alias="Int3" Include="T3.Core.DataTypes.Vector.Int3"/>
+        <Using Alias="Int4" Include="T3.Core.DataTypes.Vector.Int4"/>
+        <Using Alias="ResourceManager" Include="T3.Core.Resource.ResourceManager"/>
+        <Using Alias="ComputeShader" Include="T3.Core.DataTypes.ComputeShader"/>
+        <Using Alias="PixelShader" Include="T3.Core.DataTypes.PixelShader"/>
+        <Using Alias="VertexShader" Include="T3.Core.DataTypes.VertexShader"/>
+        <Using Alias="GeometryShader" Include="T3.Core.DataTypes.GeometryShader"/>
+    </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../../Core/Core.csproj" Private="false" PrivateAssets="all"/>
     <ProjectReference Include="../../Logging/Logging.csproj" Private="false" PrivateAssets="all"/>

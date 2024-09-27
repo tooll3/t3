@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace user.pixtur.project.@genuary24_03
 {
 	[Guid("c9464818-294a-44d9-bcba-ec447d43ba52")]

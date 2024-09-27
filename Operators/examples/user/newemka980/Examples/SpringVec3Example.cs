@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace examples.user.newemka980.Examples
 {
     [Guid("e92bdb18-4a42-4a92-aacc-45765e5862bf")]

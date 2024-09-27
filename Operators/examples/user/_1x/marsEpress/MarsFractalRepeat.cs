@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace examples.user._1x.marsEpress
 {
     [Guid("92cdd8e1-5f31-4636-9ed3-f59a1e018586")]

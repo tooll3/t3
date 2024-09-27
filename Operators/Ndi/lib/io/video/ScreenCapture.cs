@@ -1,10 +1,4 @@
-using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace Operators.Types.t3.operators.types
@@ -24,7 +18,7 @@ namespace Operators.Types.t3.operators.types
         private OutputDuplication dup;
         private int currentScreenIndex = -1;
 
-        private SharpDX.Direct3D11.Texture2D currentScreen;
+        private Texture2D currentScreen;
 
         public ScreenCapture()
         {
@@ -87,7 +81,7 @@ namespace Operators.Types.t3.operators.types
                         var desc = newTexture.Description;
                         desc.OptionFlags = SharpDX.Direct3D11.ResourceOptionFlags.None;
                         desc.BindFlags = SharpDX.Direct3D11.BindFlags.ShaderResource;
-                        currentScreen = new SharpDX.Direct3D11.Texture2D(device, desc);
+                        currentScreen = Texture2D.CreateTexture2D(desc);
                         //using (var newTex = new SharpDX.Direct3D11.Texture2D((SharpDX.Direct3D11.Device)device, desc))
                         //{
                         //    currentScreen = new Texture2dReadView(newTex, device.ResourceFactory.ResourceTracker);

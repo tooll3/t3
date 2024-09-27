@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace examples.user.ff.pc.elements
 {
     [Guid("ffe6b076-f561-4230-a0c3-282fb4d58383")]

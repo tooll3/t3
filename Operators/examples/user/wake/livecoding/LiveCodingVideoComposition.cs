@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace examples.user.wake.livecoding
 {
     [Guid("7a5c2f3b-c27a-47d1-8fc8-a9d7b508b9ce")]

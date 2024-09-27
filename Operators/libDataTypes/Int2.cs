@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace lib.types
 {
 	[Guid("f1218934-f874-4f70-a077-0ebe7d12104d")]
@@ -35,7 +30,7 @@ namespace lib.types
         public Slot<T3.Core.DataTypes.Vector.Int2> OutputSlot => Result;
         public void SetTypedInputValuesTo(T3.Core.DataTypes.Vector.Int2 value, out IEnumerable<IInputSlot> changedInputs)
         {
-            changedInputs = new IInputSlot[] { X, Y };
+            changedInputs = [X, Y];
             
             X.TypedInputValue.Value = value.X;
             Y.TypedInputValue.Value = value.Y;

@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace examples.templates
 {
 	[Guid("38fd2e32-53f6-49ce-9aa7-28f3ac433dd8")]

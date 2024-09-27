@@ -1,6 +1,4 @@
-using T3.Core.Resource;
-
-namespace examples;
+namespace lib.types;
 
 // ReSharper disable once UnusedType.Global
 public class ShareDefinition : IShareResources

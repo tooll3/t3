@@ -1,9 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-
 namespace user.pixtur.learning.cs._05_physarum
 {
 	[Guid("796a66ff-93e7-4bf7-81c0-0fee903262b8")]

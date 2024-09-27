@@ -1,14 +1,3 @@
-using System.Runtime.InteropServices;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using T3.Core.Resource;
-using Buffer = SharpDX.Direct3D11.Buffer;
-using ComputeShader = T3.Core.DataTypes.ComputeShader;
-
 namespace examples.user.cynic.research
 {
 	[Guid("94a85a93-7d5c-401c-930c-c3a97a32932f")]

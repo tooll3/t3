@@ -1,5 +1,3 @@
-using T3.Core.Resource;
-
 namespace user.pixtur;
 
 // ReSharper disable once UnusedType.Global

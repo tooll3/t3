@@ -1,5 +1,3 @@
-using T3.Core.Resource;
-
 namespace examples;
 
 // ReSharper disable once UnusedType.Global

@@ -23,6 +23,8 @@
         <Using Include="System.Linq.Expressions"/>
         <Using Include="System.Collections.Generic"/>
         <Using Include="System.Text"/>
+        <Using Include="System.Net"/>
+        <Using Include="System.Net.Http"/>
         <Using Include="System.Threading.Tasks"/>
         <Using Include="System.IO"/>
         <Using Include="T3.Core.Logging"/>
@@ -31,7 +33,6 @@
         <Using Include="T3.Core.Operator.Attributes"/>
         <Using Include="T3.Core.Operator.Slots"/>
         <Using Include="T3.Core.DataTypes"/>
-        <Using Include="T3.Core.Operator.Slots"/>
         <Using Include="T3.Core.Operator.Interfaces"/>
         <Using Include="T3.Core.Resource"/>
         

@@ -1,13 +1,3 @@
-using System.Runtime.InteropServices;
-using System;
-using System.Collections.Generic;
-using T3.Core.DataTypes;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
-
 namespace Types.user.pixtur.vj.helpers
 {
     [Guid("8fb63c4d-80a8-4023-b55b-7f97bffbee48")]
