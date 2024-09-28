@@ -1,7 +1,7 @@
 using T3.Core.Animation;
 using T3.Core.Utils;
 
-namespace lib.anim;
+namespace Lib.anim;
 
 [Guid("95d586a2-ee14-4ff5-a5bb-40c497efde95")]
 public class TriggerAnim : Instance<TriggerAnim>

@@ -1,4 +1,4 @@
-namespace lib._3d.mesh.modify;
+namespace Lib._3d.mesh.modify;
 
 [Guid("0f61b638-7bda-4331-944a-50fdca401223")]
 public class FlipNormals : Instance<FlipNormals>

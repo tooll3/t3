@@ -1,4 +1,4 @@
-namespace lib.img.adjust;
+namespace Lib.img.adjust;
 
 [Guid("51968877-03e7-472d-9b43-95bc8aeda3bc")]
 public class ChannelMixer : Instance<ChannelMixer>

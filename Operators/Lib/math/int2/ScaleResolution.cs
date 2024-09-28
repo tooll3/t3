@@ -1,4 +1,4 @@
-namespace lib.math.int2;
+namespace Lib.math.int2;
 
 [Guid("eb818dd0-0c9c-40ee-b76e-2148f958b987")]
 public class ScaleResolution : Instance<ScaleResolution>

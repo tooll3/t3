@@ -1,6 +1,6 @@
 using System.Xml.Serialization;
 
-namespace Utils;
+namespace Lib.Utils;
 
 public class BmFontDescription
 {

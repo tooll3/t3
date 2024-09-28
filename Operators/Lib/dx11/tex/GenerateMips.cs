@@ -1,6 +1,6 @@
 using SharpDX.Direct3D11;
 
-namespace lib.dx11.tex;
+namespace Lib.dx11.tex;
 
 [Guid("32a6a351-6d22-4915-aa0e-e0483b7f4e76")]
 public class GenerateMips : Instance<GenerateMips>

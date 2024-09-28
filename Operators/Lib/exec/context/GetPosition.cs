@@ -1,6 +1,6 @@
 using T3.Core.Utils.Geometry;
 
-namespace lib.exec.context;
+namespace Lib.exec.context;
 
 [Guid("b7731197-b922-4ed8-8e22-bc7596c64f6c")]
 public class GetPosition : Instance<GetPosition>

@@ -1,7 +1,7 @@
 using T3.Core.Animation;
 using T3.Core.Utils;
 
-namespace lib.io.time.vj;
+namespace Lib.io.time.vj;
 
 [Guid("f5158500-39e4-481e-aa4f-f7dbe8cbe0fa")]
 public class SetBpm : Instance<SetBpm>

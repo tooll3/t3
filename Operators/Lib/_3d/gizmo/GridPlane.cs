@@ -1,4 +1,4 @@
-namespace lib._3d.gizmo;
+namespace Lib._3d.gizmo;
 
 [Guid("935e6597-3d9f-4a79-b4a6-600e8f28861e")]
 public class GridPlane : Instance<GridPlane>

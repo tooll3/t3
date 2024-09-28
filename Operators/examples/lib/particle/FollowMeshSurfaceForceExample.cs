@@ -1,4 +1,4 @@
-namespace Types.examples.lib.point.particle;
+namespace Examples.lib.particle;
 
 [Guid("16235faf-61b7-474f-bdc7-f7abe3c538eb")]
 public class FollowMeshSurfaceForceExample : Instance<FollowMeshSurfaceForceExample>

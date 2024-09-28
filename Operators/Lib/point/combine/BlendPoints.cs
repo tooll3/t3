@@ -1,4 +1,4 @@
-namespace lib.point.combine;
+namespace Lib.point.combine;
 
 [Guid("2dc5c9d1-ea93-4597-a4d9-7b610aad603a")]
 public class BlendPoints : Instance<BlendPoints>

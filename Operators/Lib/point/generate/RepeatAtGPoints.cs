@@ -1,4 +1,4 @@
-namespace lib.point.generate;
+namespace Lib.point.generate;
 
 [Guid("780edb20-f83f-494c-ab17-7015e2311250")]
 public class RepeatAtGPoints : Instance<RepeatAtGPoints>

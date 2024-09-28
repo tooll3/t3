@@ -1,4 +1,4 @@
-namespace examples.user.still.worksforeverybody.scenes;
+namespace Examples.user.still.worksforeverybody.scenes;
 
 [Guid("d71f9aa0-687f-4537-9154-eed685a8ecc2")]
 public class TVIntroScene : Instance<TVIntroScene>

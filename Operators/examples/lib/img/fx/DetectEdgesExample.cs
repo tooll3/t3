@@ -1,4 +1,4 @@
-namespace examples.lib.img.fx;
+namespace Examples.lib.img.fx;
 
 [Guid("5f381544-0b6d-4e78-802a-c959c9686836")]
 public class DetectEdgesExample : Instance<DetectEdgesExample>

@@ -1,4 +1,4 @@
-namespace examples.user.cynic.research;
+namespace Examples.user.cynic.research;
 
 [Guid("94a85a93-7d5c-401c-930c-c3a97a32932f")]
 public class GpuSorter : Instance<GpuSorter>

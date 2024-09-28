@@ -3,7 +3,7 @@ using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 
 
-namespace lib._3d.mesh.generate;
+namespace Lib._3d.mesh.generate;
 
 [Guid("9d6dbf28-9983-4584-abba-6281ce51d583")]
 public class QuadMesh : Instance<QuadMesh>

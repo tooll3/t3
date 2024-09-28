@@ -1,4 +1,4 @@
-namespace lib.dx11.draw;
+namespace Lib.dx11.draw;
 
 [Guid("fbd7f0f0-36a3-4fbb-91e1-cb33d4666d09")]
 public class Rasterizer : Instance<Rasterizer>

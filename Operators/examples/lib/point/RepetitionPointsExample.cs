@@ -1,4 +1,4 @@
-namespace examples.lib.point;
+namespace Examples.lib.point;
 
 [Guid("79a791ce-2490-4daa-a2a7-b4c024ecd735")]
 public class RepetitionPointsExample : Instance<RepetitionPointsExample>

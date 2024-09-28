@@ -1,4 +1,4 @@
-namespace lib.point._internal;
+namespace Lib.point._internal;
 
 [Guid("b1352ba6-1164-4b44-9b69-a9eb802ea77d")]
 public class _ExecuteParticleUpdate : Instance<_ExecuteParticleUpdate>

@@ -1,4 +1,4 @@
-namespace examples.user.still.there;
+namespace Examples.user.still.there;
 
 [Guid("44d744da-cf4e-43e5-853a-126cfed6c865")]
 public class AscendingTogether : Instance<AscendingTogether>

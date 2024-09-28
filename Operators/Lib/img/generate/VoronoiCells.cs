@@ -1,4 +1,4 @@
-namespace lib.img.generate;
+namespace Lib.img.generate;
 
 [Guid("ba059fe1-3397-4950-9ddd-e328f0c2e0bd")]
 public class VoronoiCells : Instance<VoronoiCells>

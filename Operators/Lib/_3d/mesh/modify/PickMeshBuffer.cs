@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib._3d.mesh.modify;
+namespace Lib._3d.mesh.modify;
 
 [Guid("845371ef-a5c2-4ca2-8315-ea2b62f63ee2")]
 public class PickMeshBuffer : Instance<PickMeshBuffer>

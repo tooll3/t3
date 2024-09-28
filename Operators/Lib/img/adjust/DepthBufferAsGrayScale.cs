@@ -1,4 +1,4 @@
-namespace lib.img.adjust;
+namespace Lib.img.adjust;
 
 [Guid("2d62dd4b-9597-4569-a09e-495abf880e34")]
 public class DepthBufferAsGrayScale : Instance<DepthBufferAsGrayScale>

@@ -1,4 +1,4 @@
-namespace examples.user.still.there.research;
+namespace Examples.user.still.there.research;
 
 [Guid("ccafae36-6001-4ee8-b0b5-76c1adebcdde")]
 public class EmitParticlesAtMeshSliceExample : Instance<EmitParticlesAtMeshSliceExample>

@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib._3d.draw;
+namespace Lib._3d.draw;
 
 [Guid("d8c5330f-59b5-4907-b845-a02def3042fa")]
 public class Layer2d : Instance<Layer2d>, ITransformable

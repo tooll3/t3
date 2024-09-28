@@ -1,4 +1,4 @@
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("46daab0e-e957-413e-826c-0699569d0e07")]
 public class CustomPixelShader : Instance<CustomPixelShader>

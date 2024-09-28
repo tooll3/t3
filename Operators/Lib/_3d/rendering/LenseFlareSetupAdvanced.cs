@@ -1,4 +1,4 @@
-namespace lib._3d.rendering;
+namespace Lib._3d.rendering;
 
 [Guid("8f4ca295-7268-44a2-94b0-4e974fac22a4")]
 public class LenseFlareSetupAdvanced : Instance<LenseFlareSetupAdvanced>

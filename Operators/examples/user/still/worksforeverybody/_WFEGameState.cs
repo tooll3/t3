@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace examples.user.still.worksforeverybody;
+namespace Examples.user.still.worksforeverybody;
 
 [Guid("1dfc9f6d-effa-407b-8f8d-5adf62504205")]
 public class _WFEGameState : Instance<_WFEGameState>

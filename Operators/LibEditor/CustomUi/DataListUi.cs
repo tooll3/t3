@@ -1,10 +1,12 @@
-using System.Numerics;
 using ImGuiNET;
-using lib.data;
+using Lib.data;
 using T3.Core.Operator;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using Types;
+using Types.Collections;
+using Vector2 = System.Numerics.Vector2;
 
 namespace libEditor.CustomUi;
 

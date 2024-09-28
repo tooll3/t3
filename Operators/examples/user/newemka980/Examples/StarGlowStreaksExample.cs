@@ -1,4 +1,4 @@
-namespace examples.user.newemka980.Examples;
+namespace Examples.user.newemka980.Examples;
 
 [Guid("4fdd6f40-c099-4caa-a05b-67c8a45961bb")]
 public class StarGlowStreaksExample : Instance<StarGlowStreaksExample>

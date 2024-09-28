@@ -1,4 +1,4 @@
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("e4e608e7-1248-4d73-910c-e8bfbb34251b")]
 public class SimpleLiquid : Instance<SimpleLiquid>

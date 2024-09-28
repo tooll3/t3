@@ -1,4 +1,4 @@
-namespace examples.user.still.worksforeverybody.elements;
+namespace Examples.user.still.worksforeverybody.elements;
 
 [Guid("b60f2321-0df5-42a7-bdcf-4660bbe549d6")]
 public class WipOverlay : Instance<WipOverlay>

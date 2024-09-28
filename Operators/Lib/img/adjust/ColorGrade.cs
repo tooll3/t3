@@ -1,4 +1,4 @@
-namespace lib.img.adjust;
+namespace Lib.img.adjust;
 
 [Guid("42d86738-d644-47c8-ab92-cc426d958e51")]
 public class ColorGrade : Instance<ColorGrade>

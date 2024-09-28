@@ -1,6 +1,6 @@
 using T3.Core.Animation;
 
-namespace lib.io.time.vj;
+namespace Lib.io.time.vj;
 
 [Guid("6ae8ebb8-3174-463d-9ffb-e14e12eb3029")]
 public class GetBpm : Instance<GetBpm>

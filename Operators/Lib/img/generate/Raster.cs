@@ -1,4 +1,4 @@
-namespace lib.img.generate;
+namespace Lib.img.generate;
 
 [Guid("4f89b41b-1643-442b-bec8-9f9ef2173baa")]
 public class Raster : Instance<Raster>

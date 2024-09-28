@@ -1,4 +1,4 @@
-namespace lib.anim;
+namespace Lib.anim;
 
 [Guid("49796f63-27a8-4714-ba69-2073488ca833")]
 public class OscillateVec2 : Instance<OscillateVec2>

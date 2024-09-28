@@ -1,6 +1,6 @@
 using T3.SystemUi;
 
-namespace lib.io.input;
+namespace Lib.io.input;
 
 [Guid("2b00bb7a-92cc-41e5-a5f6-bc3e8b16c5eb")]
 public class KeyboardInput : Instance<KeyboardInput>

@@ -1,4 +1,4 @@
-namespace lib.math.@int;
+namespace Lib.math.@int;
 
 [Guid("7934f11d-c95c-41ae-b282-6e568b9c5f30")]
 public class SubInts : Instance<SubInts>

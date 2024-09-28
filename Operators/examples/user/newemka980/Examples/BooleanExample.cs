@@ -1,4 +1,4 @@
-namespace examples.user.newemka980.Examples;
+namespace Examples.user.newemka980.Examples;
 
 [Guid("9913adf3-8fe5-4d85-95ab-f04439c6edcb")]
 public class BooleanExample : Instance<BooleanExample>

@@ -1,4 +1,4 @@
-namespace examples.lib.point;
+namespace Examples.lib.point;
 
 [Guid("c7f87607-dea2-4250-bd51-65fb6e12872d")]
 public class DrawQuadsExample : Instance<DrawQuadsExample>

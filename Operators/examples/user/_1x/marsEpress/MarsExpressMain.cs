@@ -1,4 +1,4 @@
-namespace examples.user._1x.marsEpress;
+namespace Examples.user._1x.marsEpress;
 
 [Guid("ee4065db-3b30-4b1f-95e1-127c41a9d185")]
 public class MarsExpressMain : Instance<MarsExpressMain>

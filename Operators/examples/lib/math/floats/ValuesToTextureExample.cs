@@ -1,4 +1,4 @@
-namespace examples.lib.math.floats;
+namespace Examples.lib.math.floats;
 
 [Guid("805d5196-f253-4fb6-9c5e-d69915b56328")]
 public class ValuesToTextureExample : Instance<ValuesToTextureExample>

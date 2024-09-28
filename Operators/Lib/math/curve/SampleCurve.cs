@@ -1,4 +1,4 @@
-namespace lib.math.curve;
+namespace Lib.math.curve;
 
 [Guid("b724ea74-d5d7-4928-9cd1-7a7850e4e179")]
 public class SampleCurve : Instance<SampleCurve>

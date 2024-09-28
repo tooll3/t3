@@ -1,7 +1,7 @@
 using T3.Core.Animation;
 using T3.Core.Utils;
 
-namespace lib.io.time;
+namespace Lib.io.time;
 
 [Guid("31ab98ec-5e79-4667-9a85-2fb168f41fa1")]
 public class AbletonLinkSync : Instance<AbletonLinkSync>, IStatusProvider

@@ -1,4 +1,4 @@
-namespace lib._3d.gizmo._;
+namespace Lib._3d.gizmo.@_;
 
 [Guid("dd353ac7-1f11-4dd6-aff5-5c557c695512")]
 public class _VisualizeTBN : Instance<_VisualizeTBN>

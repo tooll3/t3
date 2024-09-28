@@ -1,4 +1,4 @@
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("c6014c28-c6ab-4b4e-b6bf-0cee92fb4b40")]
 public class ConvertEquirectangle : Instance<ConvertEquirectangle>

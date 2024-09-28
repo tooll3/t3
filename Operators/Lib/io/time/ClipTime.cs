@@ -1,4 +1,4 @@
-namespace lib.io.time;
+namespace Lib.io.time;
 
 [Guid("83b8fc42-a200-4c3d-85dc-035b4f478069")]
 public class ClipTime : Instance<ClipTime>

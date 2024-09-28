@@ -1,4 +1,4 @@
-namespace examples.user.still.pinky;
+namespace Examples.user.still.pinky;
 
 [Guid("ace28a0c-b71a-41eb-bd50-b57da38a23ce")]
 public class PinkyDemo : Instance<PinkyDemo>

@@ -1,4 +1,4 @@
-namespace lib.img.generate;
+namespace Lib.img.generate;
 
 [Guid("8e6ed99c-a3e0-42c0-9f81-a89b1e340757")]
 public class Sketch : Instance<Sketch>

@@ -1,4 +1,4 @@
-namespace examples.user.wake.livecoding.helpers;
+namespace Examples.user.wake.livecoding.helpers;
 
 [Guid("58060f7a-2890-4cbe-8ca9-dab4ab15dccd")]
 public class _SwitchSyncTriggers : Instance<_SwitchSyncTriggers>

@@ -88,7 +88,7 @@ internal static class SymbolModificationInputs
     public static bool DrawSymbolNameAndNamespaceInputs(ref string newTypeName, ref string newNamespace, EditableSymbolProject destinationProject,
                                                         out bool isValid)
     {
-        var changed = DrawNamespaceInput(ref newNamespace, destinationProject, out var namespaceCorrect);
+        var changed = DrawNamespaceInput(ref newNamespace, destinationProject, false, out var namespaceCorrect);
         //ImGui.SetCursorPosX(250 + 20); // Not sure how else to layout this
         ImGui.SameLine();
         ImGui.Spacing();
@@ -104,10 +104,10 @@ internal static class SymbolModificationInputs
         ImGui.PopFont();
     }
 
-    public static bool DrawNamespaceInput(ref string newNamespace, EditableSymbolProject destinationProject, out bool isValid)
+    public static bool DrawNamespaceInput(ref string newNamespace, EditableSymbolProject destinationProject, bool needsToBeUnique, out bool isValid)
     {
         var rootNamespace = destinationProject.CsProjectFile.RootNamespace;
-        var isNamespaceCorrect = IsNamespaceCorrect(newNamespace, rootNamespace);
+        var isNamespaceCorrect = IsNamespaceCorrect(newNamespace, rootNamespace, needsToBeUnique);
 
         DrawLabel("Namespace");
         ImGui.SameLine();
@@ -125,15 +125,15 @@ internal static class SymbolModificationInputs
 
         if (changed)
         {
-            isNamespaceCorrect = IsNamespaceCorrect(newNamespace, rootNamespace);
+            isNamespaceCorrect = IsNamespaceCorrect(newNamespace, rootNamespace, needsToBeUnique);
         }
             
         isValid = isNamespaceCorrect;
         return changed;
 
-        static bool IsNamespaceCorrect(string newNamespace, string rootNamespace)
+        static bool IsNamespaceCorrect(string newNamespace, string rootNamespace, bool needsToBeUnique)
         {
-            return newNamespace != null && newNamespace.StartsWith(rootNamespace!) && GraphUtils.IsNamespaceValid(newNamespace, out _);
+            return newNamespace != null && newNamespace.StartsWith(rootNamespace!) && GraphUtils.IsNamespaceValid(newNamespace, needsToBeUnique, out _);
         }
     }
 

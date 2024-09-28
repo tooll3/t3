@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib._3d._;
+namespace Lib._3d.@_;
 
 [Guid("1cfe41c7-972e-4243-9ae4-a510ac038191")]
 public class _LenseFlareHoopPosition : Instance<_LenseFlareHoopPosition>

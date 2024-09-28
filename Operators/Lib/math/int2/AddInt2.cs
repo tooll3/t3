@@ -1,4 +1,4 @@
-namespace lib.math.int2;
+namespace Lib.math.int2;
 
 [Guid("40f0b1c9-9f87-489c-a6b9-ff9a5bd263ec")]
 public class AddInt2 : Instance<AddInt2>

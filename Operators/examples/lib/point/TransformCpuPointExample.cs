@@ -1,4 +1,4 @@
-namespace examples.lib.point;
+namespace Examples.lib.point;
 
 [Guid("69020cd2-de9a-4150-bac5-b547301e7bc8")]
 public class TransformCpuPointExample : Instance<TransformCpuPointExample>

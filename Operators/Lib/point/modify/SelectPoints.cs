@@ -1,4 +1,4 @@
-namespace lib.point.modify;
+namespace Lib.point.modify;
 
 [Guid("371d72b8-69d4-4ced-beda-271386ad2fd6")]
 public class SelectPoints : Instance<SelectPoints>, ITransformable

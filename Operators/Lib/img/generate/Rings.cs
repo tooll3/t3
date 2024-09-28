@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.img.generate;
+namespace Lib.img.generate;
 
 [Guid("d002bd90-5921-48b0-a940-a8d0c779f674")]
 public class Rings : Instance<Rings>

@@ -1,4 +1,4 @@
-namespace lib._3d.mesh.modify;
+namespace Lib._3d.mesh.modify;
 
 [Guid("b5709297-c714-4019-9d0b-6982590b5590")]
 public class DisplaceMeshNoise : Instance<DisplaceMeshNoise>

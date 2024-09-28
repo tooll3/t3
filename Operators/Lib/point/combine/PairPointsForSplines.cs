@@ -1,4 +1,4 @@
-namespace lib.point.combine;
+namespace Lib.point.combine;
 
 [Guid("5c7b6f3e-d3d5-4cfa-b30e-1a8cb6dbb4ad")]
 public class PairPointsForSplines : Instance<PairPointsForSplines>

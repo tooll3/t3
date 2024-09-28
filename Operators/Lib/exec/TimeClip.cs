@@ -1,4 +1,4 @@
-namespace lib.exec;
+namespace Lib.exec;
 
 [Guid("3036067a-a4c2-434b-b0e3-ac95c5c943f4")]
 public class TimeClip : Instance<TimeClip>

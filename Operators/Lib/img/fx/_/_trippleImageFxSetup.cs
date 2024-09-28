@@ -1,4 +1,4 @@
-namespace lib.img.fx._;
+namespace Lib.img.fx.@_;
 
 [Guid("5b999887-19df-4e91-9f58-1df2d8f1440b")]
 public class _trippleImageFxSetup : Instance<_trippleImageFxSetup>

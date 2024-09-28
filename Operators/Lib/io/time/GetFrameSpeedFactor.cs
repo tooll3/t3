@@ -1,4 +1,4 @@
-namespace lib.io.time;
+namespace Lib.io.time;
 
 [Guid("3be62864-30dd-4531-9980-28b634296e47")]
 public class GetFrameSpeedFactor : Instance<GetFrameSpeedFactor>

@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.math.vec3;
+namespace Lib.math.vec3;
 
 [Guid("baa8cd75-5621-42ba-a79c-b008b7caa141")]
 public class RoundVec3 : Instance<RoundVec3>

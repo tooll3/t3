@@ -1,4 +1,4 @@
-namespace lib.math.floats;
+namespace Lib.math.floats;
 
 [Guid("919beb6b-4798-45fc-83bd-8203a9b26e8e")]
 public class DeltaSinceLastFrame : Instance<DeltaSinceLastFrame>

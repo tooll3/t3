@@ -1,4 +1,4 @@
-namespace lib.point.modify;
+namespace Lib.point.modify;
 
 [Guid("15f056a3-ee8b-41a2-92c9-eb85153f8200")]
 public class _RandomizePoints_Legacy1 : Instance<_RandomizePoints_Legacy1>

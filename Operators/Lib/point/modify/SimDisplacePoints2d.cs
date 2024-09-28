@@ -1,4 +1,4 @@
-namespace lib.point.modify;
+namespace Lib.point.modify;
 
 [Guid("9d6cc9a3-980f-46ae-bf79-02fc1f49c480")]
 public class SimDisplacePoints2d : Instance<SimDisplacePoints2d>

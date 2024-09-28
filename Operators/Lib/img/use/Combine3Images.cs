@@ -1,4 +1,4 @@
-namespace lib.img.use;
+namespace Lib.img.use;
 
 [Guid("1d958538-98e7-4053-b1e2-3b9f1bc4faa9")]
 public class Combine3Images : Instance<Combine3Images>

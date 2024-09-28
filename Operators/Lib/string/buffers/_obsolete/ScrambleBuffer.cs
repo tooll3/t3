@@ -1,6 +1,6 @@
 using SharpDX;
 
-namespace lib.@string.buffers._obsolete;
+namespace Lib.@string.buffers._obsolete;
 
 [Guid("bf76bc78-74e1-45c3-9c67-de50262a48ae")]
 public class ScrambleBuffer : Instance<ScrambleBuffer>

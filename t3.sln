@@ -48,7 +48,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "examples", "Operators\examp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectUpdater", "ProjectUpdater\ProjectUpdater.csproj", "{BC115749-F975-4C6C-90BC-C6E5F3C1AD31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libDataTypes", "Operators\libDataTypes\libDataTypes.csproj", "{B7B3A11C-E651-42B3-958A-F04312FB8D19}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeOperators", "Operators\TypeOperators\TypeOperators.csproj", "{B7B3A11C-E651-42B3-958A-F04312FB8D19}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ndi", "Operators\Ndi\ndi.csproj", "{6E582F0F-903E-4B6A-A647-D19C31AA52DB}"
 EndProject

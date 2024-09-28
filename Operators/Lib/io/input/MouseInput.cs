@@ -1,7 +1,7 @@
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 
-namespace lib.io.input;
+namespace Lib.io.input;
 
 [Guid("eff2ffff-dc39-4b90-9b1c-3c0a9a0108c6")]
 public class MouseInput : Instance<MouseInput>

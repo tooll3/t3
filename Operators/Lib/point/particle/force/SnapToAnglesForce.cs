@@ -1,4 +1,4 @@
-namespace lib.point.particle.force;
+namespace Lib.point.particle.force;
 
 [Guid("7eefe668-d290-4673-b766-39c98b9ba12e")]
 public class SnapToAnglesForce : Instance<SnapToAnglesForce>

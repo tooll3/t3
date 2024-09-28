@@ -1,4 +1,4 @@
-namespace lib.point.modify;
+namespace Lib.point.modify;
 
 [Guid("e570b2e6-6e35-4a14-ade6-f377494fe96d")]
 public class ClearSomePoints : Instance<ClearSomePoints>

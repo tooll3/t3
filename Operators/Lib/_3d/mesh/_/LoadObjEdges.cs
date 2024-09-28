@@ -1,6 +1,6 @@
 using T3.Core.Rendering;
 
-namespace lib._3d.mesh._;
+namespace Lib._3d.mesh.@_;
 
 [Guid("dd3d7e16-f33e-4fb0-89c6-4d8cbc9d702f")]
 public class LoadObjEdges : Instance<LoadObjEdges>, IDescriptiveFilename

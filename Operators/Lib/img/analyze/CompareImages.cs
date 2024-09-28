@@ -1,4 +1,4 @@
-namespace lib.img.analyze;
+namespace Lib.img.analyze;
 
 [Guid("0e13e34f-c07b-4ada-8c87-6b89f4ed8b41")]
 public class CompareImages : Instance<CompareImages>

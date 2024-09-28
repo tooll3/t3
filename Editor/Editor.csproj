@@ -108,7 +108,7 @@
         <ItemGroup>
             <!-- This is a list of all the built-in operator projects. 'Include' refers to project directory, 'SubFolder' to export subfolder -->
             <Lib Include="$(Ops)/lib/$(RelativeBuildFolder)/**" SubFolder="lib"/>
-            <LibDataTypes Include="$(Ops)/libDataTypes/$(RelativeBuildFolder)/**" SubFolder="libDataTypes"/>
+            <TypeOperators Include="$(Ops)/TypeOperators/$(RelativeBuildFolder)/**" SubFolder="TypeOperators"/>
             <LibEditor Include="$(Ops)/LibEditor/$(RelativeBuildFolder)/**" SubFolder="LibEditor"/>
             <Examples Include="$(Ops)/examples/$(RelativeBuildFolder)/**" SubFolder="examples"/>
             <Unsplash Include="$(Ops)/unsplash/$(RelativeBuildFolder)/**" SubFolder="unsplash"/>
@@ -117,7 +117,7 @@
         </ItemGroup>
 
         <!-- Copy Dlls and symbols using the items and subfolders defined above -->
-        <Copy SourceFiles="@(Lib);@(LibDataTypes);@(LibEditor);@(Examples);@(Unsplash);@(Ndi);@(pixtur)"
+        <Copy SourceFiles="@(Lib);@(TypeOperators);@(LibEditor);@(Examples);@(Unsplash);@(Ndi);@(pixtur)"
               DestinationFolder="$(ExportFolder)/%(SubFolder)/%(RecursiveDir)"
               SkipUnchangedFiles="true"
               UseHardlinksIfPossible="true"/>

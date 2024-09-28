@@ -1,4 +1,4 @@
-namespace lib.dx11.draw;
+namespace Lib.dx11.draw;
 
 [Guid("9d1266c5-23db-439f-a475-8000fdd1c318")]
 public class InputAssemblerStage : Instance<InputAssemblerStage>

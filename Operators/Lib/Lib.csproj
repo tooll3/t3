@@ -4,7 +4,7 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <RootNamespace>lib</RootNamespace>
+    <RootNamespace>Lib</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
@@ -121,7 +121,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup Label="OperatorPackages">
-    <Operators Include="lib.types" Version="1.0.0" ResourcesOnly="False" />
+    <Operators Include="Types" Version="1.0.0" ResourcesOnly="False" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="io\video\" />

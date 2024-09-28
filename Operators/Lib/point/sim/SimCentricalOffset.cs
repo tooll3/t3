@@ -1,4 +1,4 @@
-namespace lib.point.sim;
+namespace Lib.point.sim;
 
 [Guid("87915d7b-f2aa-45da-80f9-bd1f6033d387")]
 public class SimCentricalOffset : Instance<SimCentricalOffset>

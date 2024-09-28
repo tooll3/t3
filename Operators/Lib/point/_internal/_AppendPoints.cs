@@ -1,4 +1,4 @@
-namespace lib.point._internal;
+namespace Lib.point._internal;
 
 [Guid("9d3d0582-5e55-4268-9649-07d4dd11d792")]
 public class _AppendPoints : Instance<_AppendPoints>

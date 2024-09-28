@@ -1,6 +1,6 @@
 using System.Numerics;
 using ImGuiNET;
-using lib.anim;
+using Lib.anim;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Utils;

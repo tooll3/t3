@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.point.draw;
+namespace Lib.point.draw;
 
 [Guid("66f5a6af-b4a5-46ef-b1e5-4cdd035b6539")]
 public class DrawLinesBuildup : Instance<DrawLinesBuildup>

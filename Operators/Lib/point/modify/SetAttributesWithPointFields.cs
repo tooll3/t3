@@ -1,4 +1,4 @@
-namespace lib.point.modify;
+namespace Lib.point.modify;
 
 [Guid("21b0a346-f214-449f-ae27-7bfbe5395d66")]
 public class SetAttributesWithPointFields : Instance<SetAttributesWithPointFields>

@@ -1,4 +1,4 @@
-namespace examples.howto;
+namespace Examples.howto;
 
 [Guid("e6a11c29-11f9-49a3-9eff-463a93503420")]
 public class HowToUsePoints : Instance<HowToUsePoints>

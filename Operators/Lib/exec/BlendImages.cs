@@ -1,4 +1,4 @@
-namespace lib.exec;
+namespace Lib.exec;
 
 [Guid("48781d5a-d67f-4b9f-8554-35185ddb6c5c")]
 public class BlendImages : Instance<BlendImages>

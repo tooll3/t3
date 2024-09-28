@@ -1,4 +1,4 @@
-namespace Types.user.wake.summer2024.elements;
+namespace Examples.user.wake.summer2024.elements;
 
 [Guid("52282884-fa27-428d-ba8f-eeaf4d69e00a")]
 public class LiveCodingVideoSource : Instance<LiveCodingVideoSource>

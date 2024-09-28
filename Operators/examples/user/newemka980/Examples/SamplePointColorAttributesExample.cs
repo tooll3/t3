@@ -1,4 +1,4 @@
-namespace examples.user.newemka980.Examples;
+namespace Examples.user.newemka980.Examples;
 
 [Guid("f4528476-298d-42b7-8138-3916bea2da6e")]
 public class SamplePointColorAttributesExample : Instance<SamplePointColorAttributesExample>

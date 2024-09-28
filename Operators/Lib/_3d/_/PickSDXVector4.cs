@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib._3d._;
+namespace Lib._3d.@_;
 
 [Guid("a83f2e4f-cb4d-4a6f-9f7a-2ea7fdfab54b")]
 public class PickSDXVector4 : Instance<PickSDXVector4>

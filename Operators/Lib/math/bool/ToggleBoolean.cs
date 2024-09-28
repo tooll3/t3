@@ -1,4 +1,4 @@
-namespace lib.math.@bool;
+namespace Lib.math.@bool;
 
 [Guid("3f6a85be-a837-4681-9c2d-5c87e838f25a")]
 public class ToggleBoolean : Instance<ToggleBoolean>

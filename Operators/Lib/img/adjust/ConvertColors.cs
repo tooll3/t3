@@ -1,4 +1,4 @@
-namespace lib.img.adjust;
+namespace Lib.img.adjust;
 
 [Guid("d5516087-f7dd-44d4-a7e1-3c18767de921")]
 public class ConvertColors : Instance<ConvertColors>

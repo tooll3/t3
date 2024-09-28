@@ -1,4 +1,4 @@
-namespace lib.point.combine;
+namespace Lib.point.combine;
 
 [Guid("4dd8a618-eb3b-40af-9851-89c50683d83e")]
 public class CombineBuffers : Instance<CombineBuffers>

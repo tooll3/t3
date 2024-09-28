@@ -55,7 +55,7 @@ public class RenameNamespaceDialog : ModalDialog
         if (ImGui.IsWindowAppearing())
             ImGui.SetKeyboardFocusHere();
 
-        _ = SymbolModificationInputs.DrawNamespaceInput(ref _nameSpace, _projectToCopyTo, out var namespaceValid);
+        _ = SymbolModificationInputs.DrawNamespaceInput(ref _nameSpace, _projectToCopyTo, false, out var namespaceValid);
 
         CustomComponents.HelpText("Careful now. This operator might affect a lot of operator definitions");
         ImGui.Spacing();

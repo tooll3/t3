@@ -1,7 +1,7 @@
 using System.Globalization;
 using T3.Core.Utils;
 
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("8171c2f5-96df-41f6-884c-dbd004ae8a17")]
 public class ValueToRate : Instance<ValueToRate>

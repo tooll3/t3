@@ -1,4 +1,4 @@
-namespace examples.user.still.there.helpers;
+namespace Examples.user.still.there.helpers;
 
 [Guid("73a55607-c892-4a85-946b-e37354c4c0e4")]
 public class DrawParticles : Instance<DrawParticles>

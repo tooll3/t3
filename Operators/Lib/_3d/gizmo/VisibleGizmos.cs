@@ -1,6 +1,6 @@
 using T3.SystemUi;
 
-namespace lib._3d.gizmo;
+namespace Lib._3d.gizmo;
 
 [Guid("d61d7192-9ca3-494e-91e2-10a530ee9375")]
 public class VisibleGizmos : Instance<VisibleGizmos>

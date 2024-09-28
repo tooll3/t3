@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.@string;
+namespace Lib.@string;
 
 [Guid("acdd78b1-4e66-4fd0-a36b-5318670fefd4")]
 public class ChangeCase : Instance<ChangeCase>

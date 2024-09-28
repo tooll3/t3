@@ -1,7 +1,7 @@
+using Lib.Utils;
 using T3.Core.Utils;
-using Utils;
 
-namespace lib._3d._;
+namespace Lib._3d.@_;
 
 [Guid("c5707b79-859b-4d53-92e0-cbed53aae648")]
 public class _RenderFontBuffer : Instance<_RenderFontBuffer>

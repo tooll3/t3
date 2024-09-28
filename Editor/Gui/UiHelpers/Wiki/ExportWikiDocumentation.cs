@@ -24,7 +24,7 @@ public static class ExportWikiDocumentation
             try
             {
                 Symbol symbol = symbolUi.Symbol;
-                if (!symbol.Namespace.StartsWith("lib."))
+                if (!symbol.Namespace.StartsWith("Lib."))
                     continue;
 
                 if (symbol.Name.StartsWith("_"))

@@ -1,7 +1,7 @@
+using Lib.Utils;
 using T3.Core.Utils;
-using Utils;
 
-namespace lib.sprite;
+namespace Lib.sprite;
 
 [Guid("1a6a58ea-c63a-4c99-aa9d-aeaeb01662f4")]
 public class TextSprites : Instance<TextSprites>

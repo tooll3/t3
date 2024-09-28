@@ -1,4 +1,4 @@
-namespace lib.img.generate;
+namespace Lib.img.generate;
 
 [Guid("5a0b0485-7a55-4bf4-ae23-04f51d890334")]
 public class FractalNoise : Instance<FractalNoise>

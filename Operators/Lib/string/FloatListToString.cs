@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace lib.@string;
+namespace Lib.@string;
 
 [Guid("abf1ec99-049d-474c-9023-5302d5a5c804")]
 public class FloatListToString : Instance<FloatListToString>

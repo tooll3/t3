@@ -255,7 +255,7 @@ internal sealed class SymbolFilter
                 || symbol.Namespace.Contains("_"))
                 relevancy *= 0.1f;
 
-            if (symbol.Namespace.StartsWith("lib"))
+            if (symbol.Namespace.StartsWith("Lib"))
             {
                 relevancy *= 3f;
             }

@@ -1,7 +1,7 @@
 using T3.Core.Animation;
 using T3.Core.Utils;
 
-namespace lib.math.@bool;
+namespace Lib.math.@bool;
 
 [Guid("146fae64-18da-4183-9794-a322f47c669e")]
 public class HasValueChanged : Instance<HasValueChanged>

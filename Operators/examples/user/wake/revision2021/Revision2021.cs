@@ -1,4 +1,4 @@
-namespace examples.user.wake.revision2021;
+namespace Examples.user.wake.revision2021;
 
 [Guid("93184ac2-d545-4611-a941-d5e8769c999b")]
 public class Revision2021 : Instance<Revision2021>

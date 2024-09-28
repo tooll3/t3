@@ -1,4 +1,4 @@
-namespace lib.sprite._experimental;
+namespace Lib.sprite._experimental;
 
 [Guid("4670ff79-f630-478c-8f3f-513e1f2b5913")]
 public class SampleSpriteAttributes : Instance<SampleSpriteAttributes>

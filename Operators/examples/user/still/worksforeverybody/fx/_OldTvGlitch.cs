@@ -1,4 +1,4 @@
-namespace examples.user.still.worksforeverybody.fx;
+namespace Examples.user.still.worksforeverybody.fx;
 
 [Guid("cb28de70-6111-4f64-b6ee-f52b1a35b44a")]
 public class _OldTvGlitch : Instance<_OldTvGlitch>

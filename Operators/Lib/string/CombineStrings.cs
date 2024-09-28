@@ -1,4 +1,4 @@
-namespace lib.@string;
+namespace Lib.@string;
 
 [Guid("48ab9824-76ca-4238-800f-9cf95311e6c0")]
 public class CombineStrings : Instance<CombineStrings>

@@ -1,4 +1,4 @@
-namespace lib.point._internal;
+namespace Lib.point._internal;
 
 [Guid("f61ceb9b-74f8-4883-88ea-7e6c35b63bbd")]
 public class _BuildSpatialHashMap : Instance<_BuildSpatialHashMap>

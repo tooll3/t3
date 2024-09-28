@@ -1,4 +1,4 @@
-namespace lib._3d.postfx;
+namespace Lib._3d.postfx;
 
 [Guid("53d3eebd-4ead-4965-b26d-10a8bbd48182")]
 public class DepthOfField : Instance<DepthOfField>

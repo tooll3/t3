@@ -1,4 +1,4 @@
-namespace lib.img.fx._;
+namespace Lib.img.fx.@_;
 
 [Guid("a2567844-3314-48de-bda7-7904b5546535")]
 public class _multiImageFxSetup : Instance<_multiImageFxSetup>

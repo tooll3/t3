@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib._3d.transform;
+namespace Lib._3d.transform;
 
 [Guid("e3ff58e2-847a-4c97-947c-cfbcf8f9c79d")]
 public class BlendCameras : Instance<BlendCameras>, IStatusProvider

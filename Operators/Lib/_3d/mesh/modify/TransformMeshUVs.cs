@@ -1,4 +1,4 @@
-namespace lib._3d.mesh.modify;
+namespace Lib._3d.mesh.modify;
 
 [Guid("208a86b5-55cc-460a-86e6-2b17da818494")]
 public class TransformMeshUVs : Instance<TransformMeshUVs>

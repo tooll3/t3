@@ -1,4 +1,4 @@
-namespace lib.math.@bool;
+namespace Lib.math.@bool;
 
 [Guid("a18ae2d3-1735-40b8-bebb-65a6788bc872")]
 public class And : Instance<And>

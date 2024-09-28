@@ -1,7 +1,7 @@
 using T3.Core.Rendering;
 using T3.Core.Rendering.Material;
 
-namespace lib.dx11.draw._internal;
+namespace Lib.dx11.draw._internal;
 
 [Guid("6e32756e-4267-47f1-bad0-56ee8f58b070")]
 /// <summary>

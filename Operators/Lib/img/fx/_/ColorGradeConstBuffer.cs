@@ -1,4 +1,4 @@
-namespace lib.img.fx._;
+namespace Lib.img.fx.@_;
 
 [Guid("1ba08d52-c8ec-479a-8dc0-95d92da36577")]
 public class ColorGradeConstBuffer : Instance<ColorGradeConstBuffer>

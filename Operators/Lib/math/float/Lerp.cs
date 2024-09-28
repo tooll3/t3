@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("1f5294e1-9d0b-4cd5-9d65-14c8bbf59e61")]
 public class Lerp : Instance<Lerp>

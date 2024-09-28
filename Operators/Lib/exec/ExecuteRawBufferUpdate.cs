@@ -1,4 +1,4 @@
-namespace lib.exec;
+namespace Lib.exec;
 
 [Guid("010aca02-263a-471c-b407-025b023f7f60")]
 public class ExecuteRawBufferUpdate : Instance<ExecuteRawBufferUpdate>

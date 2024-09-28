@@ -1,4 +1,4 @@
-namespace examples.user.still.worksforeverybody;
+namespace Examples.user.still.worksforeverybody;
 
 [Guid("4895a804-84df-4642-a2d3-db34a268d887")]
 public class DoyleSpiralPoints : Instance<DoyleSpiralPoints>

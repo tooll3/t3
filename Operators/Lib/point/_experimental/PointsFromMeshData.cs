@@ -1,4 +1,4 @@
-namespace lib.point._experimental;
+namespace Lib.point._experimental;
 
 [Guid("7d302c05-9898-4c56-a894-1f8f44b9b920")]
 public class PointsFromMeshData : Instance<PointsFromMeshData>

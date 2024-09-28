@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.anim._obsolete;
+namespace Lib.anim._obsolete;
 
 [Guid("23794a1f-372d-484b-ac31-9470d0e77819")]
 public class _Jitter2d : Instance<_Jitter2d>

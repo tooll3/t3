@@ -1,4 +1,4 @@
-namespace examples.lib.img.generate;
+namespace Examples.lib.img.generate;
 
 [Guid("d71a564b-44c7-42a6-b0ca-05d5f512be14")]
 public class RyojiPattern1Example : Instance<RyojiPattern1Example>

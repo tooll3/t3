@@ -3,7 +3,7 @@ using Operators.Utils;
 using T3.Core.Animation;
 using T3.Core.Utils;
 
-namespace lib.io.midi;
+namespace Lib.io.midi;
 
 [Guid("642cec4f-d4e0-4d0a-8dc3-6ca8339b5f89")]
 public class MidiNoteOutput : Instance<MidiNoteOutput>, MidiConnectionManager.IMidiConsumer, ICustomDropdownHolder,IStatusProvider

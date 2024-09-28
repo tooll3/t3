@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.point._cpu;
+namespace Lib.point._cpu;
 
 [Guid("a38626d8-3145-4aa9-820f-ca16b3411985")]
 public class RadialPointsCpu : Instance<RadialPointsCpu>

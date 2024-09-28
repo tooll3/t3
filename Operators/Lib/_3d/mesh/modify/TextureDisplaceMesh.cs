@@ -1,4 +1,4 @@
-namespace lib._3d.mesh.modify;
+namespace Lib._3d.mesh.modify;
 
 [Guid("a368035f-2697-4ba5-a7bd-484eeb54c39b")]
 public class TextureDisplaceMesh : Instance<TextureDisplaceMesh> ,ITransformable

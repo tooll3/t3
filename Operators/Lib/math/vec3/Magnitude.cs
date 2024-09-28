@@ -1,4 +1,4 @@
-namespace lib.math.vec3;
+namespace Lib.math.vec3;
 
 [Guid("99ce9535-23a3-4570-a98c-8d2262cb8755")]
 public class Magnitude : Instance<Magnitude>

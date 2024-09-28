@@ -401,6 +401,14 @@ public abstract partial class SymbolPackage : IResourcePackage
     protected virtual void OnDependenciesChanged()
     {
     }
+
+    public bool OwnsNamespace(string namespaceName)
+    {
+        return namespaceName == RootNamespace 
+               || namespaceName.StartsWith(RootNamespace)
+               || AssemblyInformation.Namespaces.Contains(namespaceName)
+               || AssemblyInformation.Namespaces.Any(x => namespaceName.StartsWith(x));
+    }
 }
 
 public record DependencyCounter

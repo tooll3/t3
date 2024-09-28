@@ -1,4 +1,4 @@
-namespace lib._3d.rendering;
+namespace Lib._3d.rendering;
 
 [Guid("9d71d46c-f3d8-4bf4-a104-38c0b37cc88b")]
 public class Equirectangle : Instance<Equirectangle>

@@ -1,4 +1,4 @@
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("06621b4b-43be-4ef9-80d0-f1b36fa4dbd1")]
 public class MirrorRepeat : Instance<MirrorRepeat>

@@ -6,7 +6,7 @@
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
     <VersionPrefix>1.0.8</VersionPrefix>
-    <RootNamespace>lib.Editor</RootNamespace>
+    <RootNamespace>Lib.Editor</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
     <HomeGuid>00000000-0000-0000-0000-000000000000</HomeGuid>
     <EditorVersion>3.9.1</EditorVersion>
@@ -18,7 +18,7 @@
     <ProjectReference Include="..\..\Editor\Editor.csproj" Private="false" PrivateAssets="all" />
     <ProjectReference Include="..\..\SystemUi\SystemUi.csproj" />
     <ProjectReference Include="..\lib\Lib.csproj" Private="false" PrivateAssets="all" />
-    <ProjectReference Include="..\libDataTypes\libDataTypes.csproj" Private="false" PrivateAssets="all" />
+    <ProjectReference Include="..\TypeOperators\TypeOperators.csproj" Private="false" PrivateAssets="all" />
     <ProjectReference Include="..\..\Logging\Logging.csproj" Private="false" PrivateAssets="all" />
   </ItemGroup>
   <!-- Include Resources/** into output/Resources -->
@@ -43,7 +43,7 @@
   </ItemGroup>
   <ItemGroup Label="OperatorPackages">
     <Operators Include="lib" Version="1.0.0" ResourcesOnly="False" />
-    <Operators Include="lib.types" Version="1.0.0" ResourcesOnly="False" />
+    <Operators Include="Types" Version="1.0.0" ResourcesOnly="False" />
   </ItemGroup>
   <Target Name="CreatePackageInfo" AfterTargets="AfterBuild">
     <ItemGroup Label="Define json structure of referenced operator packages">

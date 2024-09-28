@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.point.particle;
+namespace Lib.point.particle;
 
 [Guid("87f68a6d-e13d-49b7-ab0c-c24c0cefd453")]
 public class SwitchParticleForce : Instance<SwitchParticleForce>

@@ -1,4 +1,4 @@
-namespace lib._3d._;
+namespace Lib._3d.@_;
 
 [Guid("4f0506ac-6a72-4e35-96f0-0f331d8f6cca")]
 public class _VisLenseFxZone : Instance<_VisLenseFxZone>

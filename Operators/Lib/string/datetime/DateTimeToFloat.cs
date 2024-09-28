@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.@string.datetime;
+namespace Lib.@string.datetime;
 
 [Guid("10acf0aa-2cb3-446b-b837-b6abe24d44da")]
 public class DateTimeToFloat : Instance<DateTimeToFloat>

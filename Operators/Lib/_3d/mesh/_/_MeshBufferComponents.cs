@@ -1,4 +1,4 @@
-namespace lib._3d.mesh._;
+namespace Lib._3d.mesh.@_;
 
 [Guid("5b9f1d97-4e10-4f31-ba83-4cbf7be9719b")]
 public class _MeshBufferComponents : Instance<_MeshBufferComponents>, IStatusProvider

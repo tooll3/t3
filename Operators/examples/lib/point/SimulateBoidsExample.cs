@@ -1,4 +1,4 @@
-namespace examples.lib.point;
+namespace Examples.lib.point;
 
 [Guid("abdf2c06-2b93-4938-afac-6d737a1c1be5")]
 public class SimulateBoidsExample : Instance<SimulateBoidsExample>

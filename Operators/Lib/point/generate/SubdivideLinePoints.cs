@@ -1,4 +1,4 @@
-namespace lib.point.generate;
+namespace Lib.point.generate;
 
 [Guid("c7f100bf-05a0-44af-9cf4-c5a1b5937e33")]
 public class SubdivideLinePoints : Instance<SubdivideLinePoints>

@@ -1,4 +1,4 @@
-namespace examples.lib._3d.draw;
+namespace Examples.lib._3d.draw;
 
 [Guid("78ee50b0-910b-4edc-b8cd-5c24b2f1b7d9")]
 public class DrawRibbonsExample : Instance<DrawRibbonsExample>

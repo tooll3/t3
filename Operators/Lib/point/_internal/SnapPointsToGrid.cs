@@ -1,4 +1,4 @@
-namespace lib.point._internal;
+namespace Lib.point._internal;
 
 [Guid("bc88304a-a2c7-4df9-93d8-b7dfecbce3de")]
 public class SnapPointsToGrid : Instance<SnapPointsToGrid>

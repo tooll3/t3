@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace lib.@string;
+namespace Lib.@string;
 
 [Guid("7baaa83d-5c09-42a0-b7bc-35dbcfa5156d")]
 public class PickStringPart : Instance<PickStringPart>

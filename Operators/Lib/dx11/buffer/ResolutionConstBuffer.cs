@@ -1,4 +1,4 @@
-namespace lib.dx11.buffer;
+namespace Lib.dx11.buffer;
 
 [Guid("38e88910-6063-41d1-840b-8aeeb0eeccc0")]
 public class ResolutionConstBuffer : Instance<ResolutionConstBuffer>

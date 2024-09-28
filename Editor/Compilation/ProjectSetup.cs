@@ -76,7 +76,7 @@ internal static partial class ProjectSetup
         var releaseInfo = release.ReleaseInfo;
         forceRecompile = forceRecompile 
                          || releaseInfo == null 
-                         || !releaseInfo.EditorVersion.Matches(Program.Version) && !releaseInfo.RootNamespace.StartsWith("lib");
+                         || !releaseInfo.EditorVersion.Matches(Program.Version) && (!releaseInfo.RootNamespace.StartsWith("Lib") && !releaseInfo.RootNamespace.StartsWith("Types") && !releaseInfo.RootNamespace.StartsWith("Examples")); // force recompile if the project was authored with a different version of the editor
         
         var success = forceRecompile
                           ? csProj.TryRecompile(out _, true) || csProj.TryLoadLatestAssembly() // recompile - if failed, load latest

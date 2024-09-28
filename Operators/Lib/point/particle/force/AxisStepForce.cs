@@ -1,4 +1,4 @@
-namespace lib.point.particle.force;
+namespace Lib.point.particle.force;
 
 [Guid("2cc44046-2702-40d5-ab42-8b36ff3d6ca7")]
 public class AxisStepForce : Instance<AxisStepForce>

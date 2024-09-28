@@ -1,4 +1,4 @@
-namespace lib.point.modify;
+namespace Lib.point.modify;
 
 [Guid("dd586355-64b3-4e96-af6d-b4927595dee7")]
 public class AddNoise : Instance<AddNoise>

@@ -1,4 +1,4 @@
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("a2ea3af5-d78b-46b4-84db-09d31f042798")]
 public class AdvancedFeedback2 : Instance<AdvancedFeedback2>

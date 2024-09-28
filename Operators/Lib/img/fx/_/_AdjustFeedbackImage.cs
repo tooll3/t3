@@ -1,4 +1,4 @@
-namespace lib.img.fx._;
+namespace Lib.img.fx.@_;
 
 [Guid("d31a8463-0699-46d7-8e96-9abc6adb997d")]
 public class _AdjustFeedbackImage : Instance<_AdjustFeedbackImage>

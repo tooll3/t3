@@ -3,7 +3,7 @@ using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 
 
-namespace lib._3d.rendering._;
+namespace Lib._3d.rendering.@_;
 
 [Guid("5b538cf5-e3b6-4674-b23e-ab55fc59ada6")]
 public class GetCamProperties2 : Instance<GetCamProperties2>

@@ -1,4 +1,4 @@
-namespace lib._3d._;
+namespace Lib._3d.@_;
 
 [Guid("1de05a51-4a22-44cd-a584-6f1ae1c0e8d1")]
 public class ReuseCamera2 : Instance<ReuseCamera2>

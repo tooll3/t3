@@ -1,4 +1,4 @@
-namespace lib.point.draw;
+namespace Lib.point.draw;
 
 [Guid("76cd7578-0f97-49a6-938a-caeaa98deaac")]
 public class ChunkInstancingExample : Instance<ChunkInstancingExample>

@@ -1,4 +1,4 @@
-namespace examples.lib.point;
+namespace Examples.lib.point;
 
 [Guid("c49ebc17-b730-4e86-9ea7-2c404e4be3ad")]
 public class LineTextPointsExamples : Instance<LineTextPointsExamples>

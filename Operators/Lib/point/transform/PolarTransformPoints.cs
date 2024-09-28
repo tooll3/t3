@@ -1,4 +1,4 @@
-namespace lib.point.transform;
+namespace Lib.point.transform;
 
 [Guid("3d255f3e-d2e2-4f61-a03d-5af7043fabfc")]
 public class PolarTransformPoints : Instance<PolarTransformPoints>

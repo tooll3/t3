@@ -1,4 +1,4 @@
-namespace examples.lib.img.fx;
+namespace Examples.lib.img.fx;
 
 [Guid("a2612284-7b74-449e-903e-536eaab4833f")]
 public class HoneyCombTilesExample : Instance<HoneyCombTilesExample>

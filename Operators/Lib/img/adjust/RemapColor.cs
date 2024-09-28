@@ -1,4 +1,4 @@
-namespace lib.img.adjust;
+namespace Lib.img.adjust;
 
 [Guid("da93f7d1-ef91-4b4a-9708-2d9b1baa4c14")]
 public class RemapColor : Instance<RemapColor>

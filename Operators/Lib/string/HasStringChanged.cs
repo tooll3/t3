@@ -1,4 +1,4 @@
-namespace lib.@string;
+namespace Lib.@string;
 
 [Guid("de9f1dfd-05ec-466f-9f5f-46e7e8da219a")]
 public class HasStringChanged : Instance<HasStringChanged>

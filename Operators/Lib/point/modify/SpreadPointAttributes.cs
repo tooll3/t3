@@ -1,4 +1,4 @@
-namespace lib.point.modify;
+namespace Lib.point.modify;
 
 [Guid("191e5057-4da4-447e-b7cf-e9e0ed8c5dd8")]
 public class SpreadPointAttributes : Instance<SpreadPointAttributes>

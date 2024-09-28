@@ -1,4 +1,4 @@
-namespace lib.point._internal;
+namespace Lib.point._internal;
 
 [Guid("705df4fe-8f91-4b1e-a7d1-432011ffcb3f")]
 public class _SetParticleSystemComponents : Instance<_SetParticleSystemComponents>

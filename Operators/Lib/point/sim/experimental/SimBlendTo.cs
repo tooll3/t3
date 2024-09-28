@@ -1,4 +1,4 @@
-namespace lib.point.sim.experimental;
+namespace Lib.point.sim.experimental;
 
 [Guid("4ba8019b-f265-4e41-8722-4ee0c2c64ba9")]
 public class SimBlendTo : Instance<SimBlendTo>

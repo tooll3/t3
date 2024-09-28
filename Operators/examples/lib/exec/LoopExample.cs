@@ -1,4 +1,4 @@
-namespace examples.lib.exec;
+namespace Examples.lib.exec;
 
 [Guid("a3945dbe-d5be-4f0f-a904-8ee287d14a9f")]
 public class LoopExample : Instance<LoopExample>

@@ -1,4 +1,4 @@
-namespace lib.math.vec2;
+namespace Lib.math.vec2;
 
 [Guid("d1a66374-f0e8-4ef5-adf4-2871ec549d2a")]
 public class Int2ToVector2 : Instance<Int2ToVector2>

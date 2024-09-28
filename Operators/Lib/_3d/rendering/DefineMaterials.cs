@@ -1,6 +1,6 @@
 using T3.Core.Rendering.Material;
 
-namespace lib._3d.rendering;
+namespace Lib._3d.rendering;
 
 [Guid("0bd77dd6-a93a-4e2e-b69b-bbeb73cb5ae9")]
 public class DefineMaterials : Instance<DefineMaterials>

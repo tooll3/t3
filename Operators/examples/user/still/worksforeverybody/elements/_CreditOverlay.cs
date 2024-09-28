@@ -1,4 +1,4 @@
-namespace examples.user.still.worksforeverybody.elements;
+namespace Examples.user.still.worksforeverybody.elements;
 
 [Guid("cea732a4-c4c2-40df-a0ff-f209125e7c99")]
 public class _CreditOverlay : Instance<_CreditOverlay>

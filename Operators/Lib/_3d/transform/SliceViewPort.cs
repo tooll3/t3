@@ -1,7 +1,7 @@
 using SharpDX.Direct3D11;
 using T3.Core.Utils;
 
-namespace lib._3d.transform;
+namespace Lib._3d.transform;
 
 [Guid("8b888408-e472-4bf9-be25-17a3dd8b90fd")]
 public class SliceViewPort : Instance<SliceViewPort>

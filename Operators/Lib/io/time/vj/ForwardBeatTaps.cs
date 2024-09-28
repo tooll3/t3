@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.io.time.vj;
+namespace Lib.io.time.vj;
 
 [Guid("79db48d8-38d3-47ca-9c9b-85dde2fa660d")]
 public class ForwardBeatTaps : Instance<ForwardBeatTaps>

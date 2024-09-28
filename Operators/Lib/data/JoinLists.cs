@@ -1,4 +1,4 @@
-namespace lib.data;
+namespace Lib.data;
 
 [Guid("0b99ab8b-5d61-49da-9851-9ad723cad3ae")]
 public class JoinLists : Instance<JoinLists>

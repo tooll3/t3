@@ -1,4 +1,4 @@
-namespace lib.math.int2;
+namespace Lib.math.int2;
 
 [Guid("8e9a45db-a631-4c92-aea9-c252ea6e9708")]
 public class MaxInt2 : Instance<MaxInt2>

@@ -1,4 +1,4 @@
-namespace examples.user.wake.strings;
+namespace Examples.user.wake.strings;
 
 [Guid("4c6d2682-e92a-46c1-9f16-19d61fb1fce5")]
 public class DulcimerMain : Instance<DulcimerMain>

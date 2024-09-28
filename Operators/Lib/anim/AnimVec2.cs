@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.anim;
+namespace Lib.anim;
 
 [Guid("af79ee8c-d08d-4dca-b478-b4542ed69ad8")]
 public class AnimVec2 : Instance<AnimVec2>

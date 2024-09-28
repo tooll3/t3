@@ -1,4 +1,4 @@
-namespace examples.user.cynic.research;
+namespace Examples.user.cynic.research;
 
 [Guid("791742c6-38e6-42ed-ad2a-d4c89584ac64")]
 public class VoxelizeMesh : Instance<VoxelizeMesh>

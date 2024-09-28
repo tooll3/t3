@@ -1,4 +1,4 @@
-namespace lib._3d._;
+namespace Lib._3d.@_;
 
 [Guid("08d526d0-d5e5-4fc9-a039-98189721d2b8")]
 public class _ComputeBRDFLookup : Instance<_ComputeBRDFLookup>

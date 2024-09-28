@@ -1,4 +1,4 @@
-namespace lib.point._cpu;
+namespace Lib.point._cpu;
 
 [Guid("a98d7796-6e09-45d1-a372-f3ea55abd359")]
 public class LinePointsCpu : Instance<LinePointsCpu>

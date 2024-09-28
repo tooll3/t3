@@ -1,7 +1,7 @@
 using SharpDX.Mathematics.Interop;
 using T3.Core.Utils;
 
-namespace lib.dx11.draw;
+namespace Lib.dx11.draw;
 
 [Guid("5efaf208-ba62-42ce-b3df-059b37fc1382")]
 public class OutputMergerStage : Instance<OutputMergerStage> {

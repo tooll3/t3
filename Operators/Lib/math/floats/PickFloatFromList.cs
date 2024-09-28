@@ -1,4 +1,4 @@
-namespace lib.math.floats;
+namespace Lib.math.floats;
 
 [Guid("0841cdd4-0106-4f4e-826b-8de23bb5b5f0")]
 public class PickFloatFromList : Instance<PickFloatFromList>

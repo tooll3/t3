@@ -1,4 +1,4 @@
-namespace lib.data;
+namespace Lib.data;
 
 [Guid("dd201330-6eab-43b9-b601-2e491ab18feb")]
 public class Iterator : Instance<Iterator>

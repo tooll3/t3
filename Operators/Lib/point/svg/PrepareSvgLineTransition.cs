@@ -2,7 +2,7 @@ using T3.Core.Animation;
 using T3.Core.Utils;
 
 
-namespace lib.point.svg;
+namespace Lib.point.svg;
 
 [Guid("b7345438-f3f4-4ad3-9c57-6076ed0e9399")]
 public class PrepareSvgLineTransition : Instance<PrepareSvgLineTransition>

@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace lib.data;
+namespace Lib.data;
 
 [Guid("d5607e3b-15e8-402c-8d54-b29e40415ab0")]
 public class ExportPointList : Instance<ExportPointList>

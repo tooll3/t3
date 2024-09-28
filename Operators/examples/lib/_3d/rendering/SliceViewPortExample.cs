@@ -1,4 +1,4 @@
-namespace examples.lib._3d.rendering;
+namespace Examples.lib._3d.rendering;
 
 [Guid("81337795-7e15-4335-a067-6d2c54a7b4b8")]
 public class SliceViewPortExample : Instance<SliceViewPortExample>

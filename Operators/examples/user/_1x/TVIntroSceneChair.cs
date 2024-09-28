@@ -1,4 +1,4 @@
-namespace examples.user._1x;
+namespace Examples.user._1x;
 
 [Guid("e830b91b-80cc-4fc7-9b9f-52b47c95fc85")]
 public class TVIntroSceneChair : Instance<TVIntroSceneChair>

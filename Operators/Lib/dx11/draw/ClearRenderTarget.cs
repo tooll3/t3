@@ -1,6 +1,6 @@
 using SharpDX.Mathematics.Interop;
 
-namespace lib.dx11.draw;
+namespace Lib.dx11.draw;
 
 [Guid("e3596381-c118-4e2e-a482-83049a9f74af")]
 public class ClearRenderTarget : Instance<ClearRenderTarget>

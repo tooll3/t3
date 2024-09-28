@@ -1,4 +1,4 @@
-namespace lib.math.@bool;
+namespace Lib.math.@bool;
 
 [Guid("9db2fcbf-54b9-4222-878b-80d1a0dc6edf")]
 public class BoolToFloat : Instance<BoolToFloat>

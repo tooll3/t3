@@ -1,4 +1,4 @@
-namespace lib.point.generate;
+namespace Lib.point.generate;
 
 [Guid("4ae9e2f5-7cb3-40b0-a662-0662e8cb7c68")]
 public class LinePoints : Instance<LinePoints>

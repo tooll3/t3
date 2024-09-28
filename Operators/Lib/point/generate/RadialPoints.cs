@@ -1,4 +1,4 @@
-namespace lib.point.generate;
+namespace Lib.point.generate;
 
 [Guid("3352d3a1-ab04-4d0a-bb43-da69095b73fd")]
 public class RadialPoints : Instance<RadialPoints>

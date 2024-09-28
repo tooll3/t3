@@ -1,4 +1,4 @@
-namespace examples.user._1x;
+namespace Examples.user._1x;
 
 [Guid("2496ff9d-2953-4ed0-9550-b4d2ce322fa7")]
 public class ProceduralMoon1x : Instance<ProceduralMoon1x>

@@ -1,4 +1,4 @@
-namespace examples.user.still.there.research;
+namespace Examples.user.still.there.research;
 
 [Guid("0f0488f7-7f1a-4464-a6b1-86bc52a4b217")]
 public class Scene2 : Instance<Scene2>

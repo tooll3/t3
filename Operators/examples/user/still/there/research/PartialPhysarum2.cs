@@ -1,4 +1,4 @@
-namespace examples.user.still.there.research;
+namespace Examples.user.still.there.research;
 
 [Guid("0998c5a8-8771-4161-801d-e14507c2e89c")]
 public class PartialPhysarum2 : Instance<PartialPhysarum2>

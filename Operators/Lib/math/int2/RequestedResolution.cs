@@ -1,4 +1,4 @@
-namespace lib.math.int2;
+namespace Lib.math.int2;
 
 [Guid("c0a26813-bc97-4c42-b051-53a9a5913331")]
 public class RequestedResolution : Instance<RequestedResolution>

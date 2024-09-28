@@ -1,4 +1,4 @@
-namespace lib.math.floats;
+namespace Lib.math.floats;
 
 [Guid("5c5d855c-3167-40a3-b4c3-e7b27b0d61cf")]
 public class FloatsToList : Instance<FloatsToList>

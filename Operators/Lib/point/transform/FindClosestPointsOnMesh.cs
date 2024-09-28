@@ -1,4 +1,4 @@
-namespace lib.point.transform;
+namespace Lib.point.transform;
 
 [Guid("58afd953-d3fd-44a9-b54b-ccb287edc40c")]
 public class FindClosestPointsOnMesh : Instance<FindClosestPointsOnMesh>

@@ -1,4 +1,4 @@
-namespace examples.user.wake.revision2021;
+namespace Examples.user.wake.revision2021;
 
 [Guid("18d9721b-e170-4f4d-b630-30445aba5e20")]
 public class FadingFacesRev2021 : Instance<FadingFacesRev2021>

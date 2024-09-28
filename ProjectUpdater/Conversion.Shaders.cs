@@ -8,8 +8,8 @@ internal sealed partial class Conversion
     {
         var relativePath = Path.GetRelativePath(originalRootDirectory, filePath);
         var newPath = Path.Combine(newRootDirectory, ResourceManager.ResourcesSubfolder, relativePath);
-        fileContents = fileContents.Replace("lib/", "")
-                                   .Replace(@"lib\\", "");
-        return new FileChangeInfo(newPath, fileContents.Replace("lib/shared", "shared"));
+        fileContents = fileContents.Replace("Lib/", "")
+                                   .Replace(@"Lib\\", "");
+        return new FileChangeInfo(newPath, fileContents.Replace("Lib/shared", "shared"));
     }
 }

@@ -1,4 +1,4 @@
-namespace lib.math.vec3;
+namespace Lib.math.vec3;
 
 [Guid("4af1080c-3133-4070-a440-4cf2f4cc10a1")]
 public class Vec3Distance : Instance<Vec3Distance>

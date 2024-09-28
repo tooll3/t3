@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace examples.user.newemka980.StarGlowStreaks;
+namespace Examples.user.newemka980.StarGlowStreaks;
 
 [Guid("ecbb40c4-aef4-49a8-ac89-e82c3a09862f")]
 public class StarGlowStreaks : Instance<StarGlowStreaks>

@@ -1,7 +1,7 @@
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 
-namespace lib._3d._;
+namespace Lib._3d.@_;
 
 [Guid("17324ce1-8920-4653-ac67-c211ad507a81")]
 public class TransformMatrix : Instance<TransformMatrix>

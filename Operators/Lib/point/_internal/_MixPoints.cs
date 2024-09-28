@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.point._internal;
+namespace Lib.point._internal;
 
 [Guid("bdd982c4-dfc4-48d6-888a-f067081dbe8e")]
 public class _MixPoints : Instance<_MixPoints>

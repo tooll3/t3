@@ -3,7 +3,7 @@ using T3.Core.Animation;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
-namespace lib.io.audio._obsolete;
+namespace Lib.io.audio._obsolete;
 
 [Guid("a9e77500-ccb5-45b9-9f17-0d9bf9b58fb5")]
 public class SoundTrackLevels : Instance<SoundTrackLevels>

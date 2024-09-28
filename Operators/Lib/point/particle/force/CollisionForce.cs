@@ -1,4 +1,4 @@
-namespace lib.point.particle.force;
+namespace Lib.point.particle.force;
 
 [Guid("ed0bc47a-31ef-400b-b4e4-5552a859b309")]
 public class CollisionForce : Instance<CollisionForce>

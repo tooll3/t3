@@ -1,4 +1,4 @@
-namespace lib.math.@bool;
+namespace Lib.math.@bool;
 
 [Guid("9786dec1-b0fc-49d7-bf79-c9a1d457f386")]
 public class Or : Instance<Or>

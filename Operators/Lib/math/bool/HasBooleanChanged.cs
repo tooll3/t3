@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.math.@bool;
+namespace Lib.math.@bool;
 
 [Guid("57351603-f472-445f-b94b-e8f538f85517")]
 public class HasBooleanChanged : Instance<HasBooleanChanged>

@@ -1,7 +1,7 @@
 using System;
 using System.Numerics;
 using ImGuiNET;
-using lib.io.audio;
+using Lib.io.audio;
 using T3.Core.Audio;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;

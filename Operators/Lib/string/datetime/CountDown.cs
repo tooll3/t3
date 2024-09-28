@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace lib.@string.datetime;
+namespace Lib.@string.datetime;
 
 [Guid("e4a38f3c-bd4c-406a-9979-bb683d79b39b")]
 public class CountDown : Instance<CountDown>

@@ -1,6 +1,6 @@
 using T3.Core.Animation;
 
-namespace lib.io.time;
+namespace Lib.io.time;
 
 [Guid("fcd32cac-6544-42a3-8a14-203b8ca3559e")]
 public class SetPlaybackSpeed : Instance<SetPlaybackSpeed>

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Numerics;
 using ImGuiNET;
-using lib.io.midi;
+using Lib.io.midi;
 using T3.Core.Operator;
 using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.UiHelpers;

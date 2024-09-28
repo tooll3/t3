@@ -1,7 +1,7 @@
 using T3.Core.IO;
 using T3.Core.Utils;
 
-namespace lib.io.input;
+namespace Lib.io.input;
 
 [Guid("d69e0f2e-8fe2-478b-ba4e-2a55a92670ae")]
 public class Gamepad : Instance<Gamepad>, IStatusProvider

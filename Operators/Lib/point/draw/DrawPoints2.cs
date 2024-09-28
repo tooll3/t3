@@ -1,4 +1,4 @@
-namespace lib.point.draw;
+namespace Lib.point.draw;
 
 [Guid("8eb09af4-d3c5-4fcc-b7f9-5d9367a02a2f")]
 public class DrawPoints2 : Instance<DrawPoints2>

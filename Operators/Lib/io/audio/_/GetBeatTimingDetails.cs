@@ -1,7 +1,7 @@
 using System.Reflection;
 using T3.Core.Audio;
 
-namespace lib.io.audio._;
+namespace Lib.io.audio.@_;
 
 [Guid("712c50e8-7cba-4b29-bde4-1d860ab6b701")]
 public class GetBeatTimingDetails : Instance<GetBeatTimingDetails>

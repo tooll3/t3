@@ -1,4 +1,4 @@
-namespace lib.img.adjust;
+namespace Lib.img.adjust;
 
 [Guid("946da16c-f536-4887-b764-af9468f22c0f")]
 public class Blur : Instance<Blur>

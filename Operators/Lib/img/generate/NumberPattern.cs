@@ -1,4 +1,4 @@
-namespace lib.img.generate;
+namespace Lib.img.generate;
 
 [Guid("1fec51bc-4de7-400a-8910-db39f4129579")]
 public class NumberPattern : Instance<NumberPattern>

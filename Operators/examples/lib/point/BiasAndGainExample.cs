@@ -1,4 +1,4 @@
-namespace examples.lib.point;
+namespace Examples.lib.point;
 
 [Guid("e6d19a14-54b7-4554-8e92-9001b2530937")]
 public class BiasAndGainExample : Instance<BiasAndGainExample>

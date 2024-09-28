@@ -1,4 +1,4 @@
-namespace lib.math.@int;
+namespace Lib.math.@int;
 
 [Guid("0bee3ec6-7e0d-471b-9ef7-ab9c22c6883b")]
 public class DateTimeInSecs : Instance<DateTimeInSecs>

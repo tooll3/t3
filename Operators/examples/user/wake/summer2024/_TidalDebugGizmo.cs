@@ -1,4 +1,4 @@
-namespace Types.user.wake.summer2024;
+namespace Examples.user.wake.summer2024;
 
 [Guid("9fb0c9a1-5d76-47bc-8749-17aa8d13e4e4")]
 public class _TidalDebugGizmo : Instance<_TidalDebugGizmo>

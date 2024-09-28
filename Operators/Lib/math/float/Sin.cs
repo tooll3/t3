@@ -1,4 +1,4 @@
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("6ab63114-6477-4ab2-a071-a66a64a6d2b9")]
 public class Sin : Instance<Sin>

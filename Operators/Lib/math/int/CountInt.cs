@@ -1,4 +1,4 @@
-namespace lib.math.@int;
+namespace Lib.math.@int;
 
 [Guid("0e1d5f4b-3ba0-4e71-aa26-7308b6df214d")]
 public class CountInt : Instance<CountInt>

@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.io.file;
+namespace Lib.io.file;
 
 [Guid("f90fcd0a-eab9-4e2a-b393-e8d3a0380823")]
 public class FilesInFolder : Instance<FilesInFolder>

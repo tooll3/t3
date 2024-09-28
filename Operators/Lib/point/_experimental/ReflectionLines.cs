@@ -1,4 +1,4 @@
-namespace lib.point._experimental;
+namespace Lib.point._experimental;
 
 [Guid("b5515341-24ef-48ff-b832-d40e8189c6a4")]
 public class ReflectionLines : Instance<ReflectionLines>

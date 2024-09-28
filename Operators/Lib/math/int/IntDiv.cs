@@ -1,4 +1,4 @@
-namespace lib.math.@int;
+namespace Lib.math.@int;
 
 [Guid("eae8b8af-ce79-4e0a-9777-2dd0a99c18cb")]
 public class IntDiv : Instance<IntDiv>

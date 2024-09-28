@@ -1,4 +1,4 @@
-namespace lib._3d.gizmo;
+namespace Lib._3d.gizmo;
 
 [Guid("cdf5dd6a-73dc-4779-a366-df19b69071a6")]
 public class DrawCamGizmos : Instance<DrawCamGizmos>

@@ -1,4 +1,4 @@
-namespace examples.user.community;
+namespace Examples.user.community;
 
 [Guid("9e243276-1807-49f7-9e78-29b582aafb39")]
 public class PlayAtlas : Instance<PlayAtlas>

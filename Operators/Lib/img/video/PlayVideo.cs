@@ -7,7 +7,7 @@ using T3.Core.Audio;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.Utils;
 
-namespace lib.img.video;
+namespace Lib.img.video;
 
 /**
  * This code is strongly inspired by

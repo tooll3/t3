@@ -1,4 +1,4 @@
-namespace lib.point.sim.experimental;
+namespace Lib.point.sim.experimental;
 
 [Guid("03aa5f28-3f74-4feb-aa6a-36cdb2d7f0d9")]
 public class SimFollowMeshSurface : Instance<SimFollowMeshSurface>

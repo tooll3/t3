@@ -1,4 +1,4 @@
-namespace lib.dx11._;
+namespace Lib.dx11.@_;
 
 [Guid("b4a8a055-6ae3-4b56-8b65-1b7b5f87d19a")]
 public class FirstValidBuffer : Instance<FirstValidBuffer>

@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.anim;
+namespace Lib.anim;
 
 [Guid("743e18c7-eed5-40df-9a86-7caa996d94a2")]
 public class KeepBoolean : Instance<KeepBoolean>

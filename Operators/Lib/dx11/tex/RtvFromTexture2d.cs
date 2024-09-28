@@ -1,7 +1,7 @@
 using SharpDX.Direct3D11;
 using T3.Core.Utils;
 
-namespace lib.dx11.tex;
+namespace Lib.dx11.tex;
 
 [Guid("57a1ee33-702a-41ad-a17e-b43033d58638")]
 public class RtvFromTexture2d : Instance<RtvFromTexture2d>, IStatusProvider

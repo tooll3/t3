@@ -1,4 +1,4 @@
-namespace lib.io.file;
+namespace Lib.io.file;
 
 [Guid("0db15e2d-b457-44d7-bb58-ace0a0708073")]
 public class WriteToFile : Instance<WriteToFile>

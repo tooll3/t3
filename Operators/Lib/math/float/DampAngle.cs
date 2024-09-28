@@ -1,7 +1,7 @@
 using T3.Core.Animation;
 using T3.Core.Utils;
 
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("9757618d-e72a-4507-8352-6f824b56cc58")]
 public class DampAngle : Instance<DampAngle>

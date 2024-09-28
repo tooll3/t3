@@ -1,4 +1,4 @@
-namespace examples.lib._3d.mesh;
+namespace Examples.lib._3d.mesh;
 
 [Guid("70e97e6b-3ddf-4a88-b080-c63fdbd251c9")]
 public class UVsViewerExample : Instance<UVsViewerExample>

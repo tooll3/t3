@@ -1,4 +1,4 @@
-namespace lib.math.int2;
+namespace Lib.math.int2;
 
 [Guid("c6d50423-54ea-4c9d-b547-eb78cc2c950c")]
 public class ScaleSize : Instance<ScaleSize>

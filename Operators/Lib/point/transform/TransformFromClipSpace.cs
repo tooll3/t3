@@ -1,4 +1,4 @@
-namespace lib.point.transform;
+namespace Lib.point.transform;
 
 [Guid("81377edc-0a42-4bb1-9440-2f2433d5757f")]
 public class TransformFromClipSpace : Instance<TransformFromClipSpace>

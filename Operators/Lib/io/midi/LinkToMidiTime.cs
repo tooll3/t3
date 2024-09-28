@@ -1,4 +1,4 @@
-namespace lib.io.midi;
+namespace Lib.io.midi;
 
 [Guid("3f10f526-d8ca-4f67-95a4-d703b713088e")]
 public class LinkToMidiTime : Instance<LinkToMidiTime>

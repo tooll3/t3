@@ -1,4 +1,4 @@
-namespace examples.user.still.there;
+namespace Examples.user.still.there;
 
 [Guid("5ea8bc54-d1f6-4748-9839-e3e4415a5608")]
 public class ThereDemo : Instance<ThereDemo>

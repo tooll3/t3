@@ -1,7 +1,7 @@
 using T3.Core.Rendering.Material;
 using T3.Core.Utils;
 
-namespace lib._3d.draw;
+namespace Lib._3d.draw;
 
 [Guid("a3c5471e-079b-4d4b-886a-ec02d6428ff6")]
 public class DrawMesh : Instance<DrawMesh>, ICustomDropdownHolder, ICompoundWithUpdate

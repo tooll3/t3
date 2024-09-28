@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.math.vec2;
+namespace Lib.math.vec2;
 
 [Guid("310e174e-ea52-4c54-90e6-72dc8320118a")]
 public class GridPosition : Instance<GridPosition>

@@ -1,4 +1,4 @@
-namespace examples.lib.img.adjust;
+namespace Examples.lib.img.adjust;
 
 [Guid("737a41db-bf35-4f66-8600-a083f0157cd5")]
 public class ColorGradeDepthExample : Instance<ColorGradeDepthExample>

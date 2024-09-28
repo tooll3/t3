@@ -1,4 +1,4 @@
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("cbbb011c-f2bc-460e-86d0-48e49ed377fd")]
 public class SortPixelGlitch : Instance<SortPixelGlitch>

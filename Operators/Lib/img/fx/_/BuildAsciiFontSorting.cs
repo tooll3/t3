@@ -2,7 +2,7 @@ using System.Drawing;
 using T3.Core.Utils;
 using Utilities = T3.Core.Utils.Utilities;
 
-namespace lib.img.fx._;
+namespace Lib.img.fx.@_;
 
 [Guid("b536f791-ae9a-45a7-a153-e2f36a65cfb3")]
 public class BuildAsciiFontSorting : Instance<BuildAsciiFontSorting>

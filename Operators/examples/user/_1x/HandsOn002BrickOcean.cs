@@ -1,4 +1,4 @@
-namespace examples.user._1x;
+namespace Examples.user._1x;
 
 [Guid("e21c202f-9b93-456d-aeba-7232d9600572")]
 public class HandsOn002BrickOcean : Instance<HandsOn002BrickOcean>

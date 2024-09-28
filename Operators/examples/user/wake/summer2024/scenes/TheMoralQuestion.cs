@@ -1,4 +1,4 @@
-namespace Types.user.wake.summer2024.scenes;
+namespace Examples.user.wake.summer2024.scenes;
 
 [Guid("74c9d0f5-146e-4dbd-9888-303aac958dbb")]
 public class TheMoralQuestion : Instance<TheMoralQuestion>

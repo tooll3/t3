@@ -1,4 +1,4 @@
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("5202d3f6-c970-4006-933d-3c60d6c202dc")]
 public class Modulo : Instance<Modulo>

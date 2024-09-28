@@ -1,4 +1,4 @@
-namespace lib.img.generate;
+namespace Lib.img.generate;
 
 [Guid("b882a5d0-f5ae-40a4-8c42-5b25e5775def")]
 public class FraserGrid : Instance<FraserGrid>

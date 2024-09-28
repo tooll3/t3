@@ -1,6 +1,6 @@
 using T3.Core.DataTypes.DataSet;
 
-namespace lib.io.input;
+namespace Lib.io.input;
 
 [Guid("4023bcbf-74a6-4e50-a12e-4c22be5dbbdf")]
 public class DataRecording : Instance<DataRecording>,  IStatusProvider, ICustomDropdownHolder

@@ -1,4 +1,4 @@
-namespace examples.user._1x.marsEpress;
+namespace Examples.user._1x.marsEpress;
 
 [Guid("92cdd8e1-5f31-4636-9ed3-f59a1e018586")]
 public class MarsFractalRepeat : Instance<MarsFractalRepeat>

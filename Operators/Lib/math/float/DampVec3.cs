@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("671f8151-9ec1-4f02-9ad1-b8a2d70d3d68")]
 public class DampVec3 : Instance<DampVec3>

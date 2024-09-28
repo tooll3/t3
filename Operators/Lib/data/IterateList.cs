@@ -1,4 +1,4 @@
-namespace lib.data;
+namespace Lib.data;
 
 [Guid("8b285708-3f20-4957-9eb2-bb40e0d320ee")]
 public class IterateList : Instance<IterateList>

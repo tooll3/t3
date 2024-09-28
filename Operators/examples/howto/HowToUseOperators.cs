@@ -1,4 +1,4 @@
-namespace examples.howto;
+namespace Examples.howto;
 
 [Guid("fc3a89d4-e7ea-45d8-b1c5-41170c7cd2b8")]
 public class HowToUseOperators: Instance<HowToUseOperators>

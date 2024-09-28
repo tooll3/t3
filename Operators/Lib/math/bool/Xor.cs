@@ -1,4 +1,4 @@
-namespace lib.math.@bool;
+namespace Lib.math.@bool;
 
 [Guid("0d4f4e07-5cb2-4d80-bf8e-3deadf968724")]
 public class Xor : Instance<Xor>

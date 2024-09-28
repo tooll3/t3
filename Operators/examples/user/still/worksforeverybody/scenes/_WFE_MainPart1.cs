@@ -1,4 +1,4 @@
-namespace examples.user.still.worksforeverybody.scenes;
+namespace Examples.user.still.worksforeverybody.scenes;
 
 [Guid("5f5b787e-dc9b-4d0e-a826-13ce6fd38afd")]
 public class _WFE_MainPart1 : Instance<_WFE_MainPart1>

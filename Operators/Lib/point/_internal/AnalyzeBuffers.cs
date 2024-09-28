@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.point._internal;
+namespace Lib.point._internal;
 
 [Guid("7ad3a38a-9f04-43ba-a16f-6982b87dd2d4")]
 public class AnalyzeBuffers : Instance<AnalyzeBuffers>

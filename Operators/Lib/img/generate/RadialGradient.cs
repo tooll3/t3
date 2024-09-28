@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.img.generate;
+namespace Lib.img.generate;
 
 [Guid("82ad8911-c930-4851-803d-3f24422445bc")]
 public class RadialGradient : Instance<RadialGradient>

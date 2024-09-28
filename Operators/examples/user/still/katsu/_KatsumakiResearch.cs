@@ -1,4 +1,4 @@
-namespace examples.user.still.katsu;
+namespace Examples.user.still.katsu;
 
 [Guid("edf2f2fb-eaa3-4845-865d-679c5b1a0930")]
 public class _KatsumakiResearch : Instance<_KatsumakiResearch>

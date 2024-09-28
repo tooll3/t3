@@ -1,4 +1,4 @@
-namespace examples.user.fuzzy.osc;
+namespace Examples.user.fuzzy.osc;
 
 [Guid("245de58f-d3d0-4c57-ba27-1b884b7f6b31")]
 public class DrivenByMossExample : Instance<DrivenByMossExample>

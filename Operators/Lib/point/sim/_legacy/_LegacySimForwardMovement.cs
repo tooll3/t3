@@ -1,4 +1,4 @@
-namespace lib.point.sim._legacy;
+namespace Lib.point.sim._legacy;
 
 [Guid("69c3b4ce-490a-48d4-b1d0-56dd6bf7a9a8")]
 public class _LegacySimForwardMovement : Instance<_LegacySimForwardMovement>

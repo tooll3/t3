@@ -1,4 +1,4 @@
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("ae0c87d6-2b1e-4e28-b0d0-8611a2f7e152")]
 public class Round : Instance<Round>

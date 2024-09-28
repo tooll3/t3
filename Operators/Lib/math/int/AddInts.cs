@@ -1,4 +1,4 @@
-namespace lib.math.@int;
+namespace Lib.math.@int;
 
 [Guid("ab73a49e-c548-437d-a4ab-b3fa41e30097")]
 public class AddInts : Instance<AddInts>

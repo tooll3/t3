@@ -1,7 +1,7 @@
 using T3.Core.Rendering;
 using T3.Core.Utils;
 
-namespace lib._3d.rendering;
+namespace Lib._3d.rendering;
 
 [Guid("74cbfce0-f8b8-46a1-b5d6-38477d4eec99")]
 public class SetFog : Instance<SetFog>

@@ -1,4 +1,4 @@
-namespace lib.img.generate;
+namespace Lib.img.generate;
 
 [Guid("5cf7a1e2-7369-4e74-a7a9-b0eae61bdc21")]
 public class WorleyNoise : Instance<WorleyNoise>

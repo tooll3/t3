@@ -1,4 +1,4 @@
-namespace examples.user.still.worksforeverybody;
+namespace Examples.user.still.worksforeverybody;
 
 [Guid("3f7f8975-a7bb-47e6-96f7-061deb418e18")]
 public class _WFEGameUi : Instance<_WFEGameUi>

@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("549ec76b-cc65-47b7-ad41-0abe93e86fe3")]
 public class SmoothStep : Instance<SmoothStep>

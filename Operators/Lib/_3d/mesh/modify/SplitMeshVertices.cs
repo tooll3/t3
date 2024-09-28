@@ -1,4 +1,4 @@
-namespace lib._3d.mesh.modify;
+namespace Lib._3d.mesh.modify;
 
 [Guid("3f0f0c40-482d-4d79-a201-b4651a0cd3a8")]
 public class SplitMeshVertices : Instance<SplitMeshVertices>

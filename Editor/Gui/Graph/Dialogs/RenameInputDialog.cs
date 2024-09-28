@@ -27,7 +27,7 @@ public class RenameInputDialog : ModalDialog
         FormInputs.SetIndentToLeft();
         var symbol = _symbol;
         FormInputs.AddHint($"Careful! This operation will modify the definition of {symbol.Name}.");
-        if (symbol.Namespace.StartsWith("lib"))
+        if (symbol.Namespace.StartsWith("Lib"))
         {
             FormInputs.AddHint("This is library Operator. Modifying it might prevent migrating your projects to future versions of Tooll");
         }

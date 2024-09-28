@@ -1,4 +1,4 @@
-namespace lib.point.transform;
+namespace Lib.point.transform;
 
 [Guid("acc71a14-daad-4b36-b0bc-cf0a796cc5d9")]
 public class OrientPoints : Instance<OrientPoints>

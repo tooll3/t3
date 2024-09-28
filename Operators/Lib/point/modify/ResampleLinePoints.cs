@@ -1,4 +1,4 @@
-namespace lib.point.modify;
+namespace Lib.point.modify;
 
 [Guid("13ff9adb-2634-4129-8bb4-4fb764d38be6")]
 public class ResampleLinePoints : Instance<ResampleLinePoints>

@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.color;
+namespace Lib.color;
 
 [Guid("6b7c541a-ca36-4f21-ac95-89e874820c5a")]
 public class BlendColors : Instance<BlendColors>

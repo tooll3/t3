@@ -1,4 +1,4 @@
-namespace examples.user._1x;
+namespace Examples.user._1x;
 
 [Guid("27eb35ad-837a-43d6-a4bd-e8dfe3661070")]
 public class AlexLineTest : Instance<AlexLineTest>

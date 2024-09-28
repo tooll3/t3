@@ -1,6 +1,6 @@
 using T3.Core.Animation;
 
-namespace lib.dx11.buffer;
+namespace Lib.dx11.buffer;
 
 [Guid("de8bc97a-8ef0-4d4a-9ffa-88046a2daf40")]
 public class TimeConstBuffer : Instance<TimeConstBuffer>

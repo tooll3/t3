@@ -1,4 +1,4 @@
-namespace lib.img.generate;
+namespace Lib.img.generate;
 
 [Guid("cb28a67e-80cb-460a-8130-00e3cd85b7c2")]
 public class RyojiPattern2 : Instance<RyojiPattern2>

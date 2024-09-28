@@ -1,4 +1,4 @@
-namespace lib.point._internal;
+namespace Lib.point._internal;
 
 [Guid("0814a593-80ab-416f-a3ca-eef78b0a9c0c")]
 public class WrapPointPosition : Instance<WrapPointPosition>

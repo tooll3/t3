@@ -1,4 +1,4 @@
-namespace examples.lib.img.fx;
+namespace Examples.lib.img.fx;
 
 [Guid("db89bacd-db5a-4d52-a073-ed141f413f8d")]
 public class OpticalFlowExample : Instance<OpticalFlowExample>

@@ -1,4 +1,4 @@
-namespace examples.user.wake.livecoding.helpers;
+namespace Examples.user.wake.livecoding.helpers;
 
 [Guid("beefc0da-79f1-4dd2-8002-668099818d5d")]
 public class VisualizeBeatTick : Instance<VisualizeBeatTick>

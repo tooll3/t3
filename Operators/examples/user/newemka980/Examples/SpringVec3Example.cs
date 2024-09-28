@@ -1,4 +1,4 @@
-namespace examples.user.newemka980.Examples;
+namespace Examples.user.newemka980.Examples;
 
 [Guid("e92bdb18-4a42-4a92-aacc-45765e5862bf")]
 public class SpringVec3Example : Instance<SpringVec3Example>

@@ -2,7 +2,7 @@ using SharpDX.Direct3D11;
 using T3.Core.Utils;
 using Utilities = T3.Core.Utils.Utilities;
 
-namespace lib._3d._;
+namespace Lib._3d.@_;
 
 [Guid("11ebbb25-984a-4772-b720-b8c7e5214a83")]
 public class _ReadIntFromGpuBuffer : Instance<_ReadIntFromGpuBuffer>,IStatusProvider

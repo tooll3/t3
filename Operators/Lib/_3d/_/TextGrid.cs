@@ -1,4 +1,4 @@
-namespace lib._3d._;
+namespace Lib._3d.@_;
 
 [Guid("ad28819d-be62-4ed7-932a-fc861562983d")]
 public class TextGrid : Instance<TextGrid>

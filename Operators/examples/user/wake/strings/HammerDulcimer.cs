@@ -1,4 +1,4 @@
-namespace examples.user.wake.strings;
+namespace Examples.user.wake.strings;
 
 [Guid("d1432885-5d16-49ec-afb9-845d0f3efcb8")]
 public class HammerDulcimer : Instance<HammerDulcimer>

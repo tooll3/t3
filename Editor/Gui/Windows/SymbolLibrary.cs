@@ -211,7 +211,7 @@ public class SymbolLibrary : Window
                 _allLibSymbols = new List<Symbol>();
                 foreach (var s in EditorSymbolPackage.AllSymbols)
                 {
-                    if (s.Namespace.StartsWith("lib.") && !s.Name.StartsWith("_"))
+                    if (s.Namespace.StartsWith("Lib.") && !s.Name.StartsWith("_"))
                         _allLibSymbols.Add(s);
                 }
             }
@@ -219,7 +219,7 @@ public class SymbolLibrary : Window
             // Filter 
             var limit = (int)(_allLibSymbols.Count * _promptComplexity).Clamp(1, _allLibSymbols.Count - 1);
             var keep = _filter.SearchString;
-            _filter.SearchString = "lib.";
+            _filter.SearchString = "Lib.";
             _filter.UpdateIfNecessary(null, true, limit);
             _filter.SearchString = keep;
         }
@@ -258,7 +258,7 @@ public class SymbolLibrary : Window
         {
             ImGui.PushID(subtree.Name);
             ImGui.SetNextItemWidth(10);
-            if (subtree.Name == "lib" && !_openedLibFolderOnce)
+            if (subtree.Name == "Lib" && !_openedLibFolderOnce)
             {
                 ImGui.SetNextItemOpen(true);
                 _openedLibFolderOnce = true;

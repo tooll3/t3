@@ -1,4 +1,4 @@
-namespace examples.user.newemka980.Shading.Example;
+namespace Examples.user.newemka980.Shading.Example;
 
 [Guid("652a6c86-3af2-4bed-9370-912f57690a2c")]
 public class CelShadingExample : Instance<CelShadingExample>

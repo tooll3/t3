@@ -1,4 +1,4 @@
-namespace examples.lib.point;
+namespace Examples.lib.point;
 
 [Guid("93292762-bc39-4b66-ace0-583f461abf76")]
 public class DrawBillboardsExample : Instance<DrawBillboardsExample>

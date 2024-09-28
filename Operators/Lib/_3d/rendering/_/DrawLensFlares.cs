@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib._3d.rendering._;
+namespace Lib._3d.rendering.@_;
 
 [Guid("de173d83-66e6-4363-a478-4336100c2dbd")]
 public class DrawLensFlares : Instance<DrawLensFlares>

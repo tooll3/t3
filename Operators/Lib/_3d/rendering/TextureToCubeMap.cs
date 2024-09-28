@@ -1,4 +1,4 @@
-namespace lib._3d.rendering;
+namespace Lib._3d.rendering;
 
 [Guid("e85d98cf-9240-4f5d-8df6-35425d325778")]
 public class TextureToCubeMap : Instance<TextureToCubeMap>

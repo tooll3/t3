@@ -1,4 +1,4 @@
-namespace lib.point.draw;
+namespace Lib.point.draw;
 
 [Guid("37bdbafc-d14c-4b81-91c3-8f63c3b63812")]
 public class VisualizePoints : Instance<VisualizePoints>

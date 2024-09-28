@@ -1,4 +1,4 @@
-namespace examples.lib.point;
+namespace Examples.lib.point;
 
 [Guid("2fcb6afc-2d82-47a5-a6dd-39c85348b8c4")]
 public class SelectPointsExample : Instance<SelectPointsExample>

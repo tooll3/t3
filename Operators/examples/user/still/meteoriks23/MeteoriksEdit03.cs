@@ -1,4 +1,4 @@
-namespace examples.user.still.meteoriks23;
+namespace Examples.user.still.meteoriks23;
 
 [Guid("7d58e562-3465-4b7f-a153-fffed2d150d5")]
 public class MeteoriksEdit03 : Instance<MeteoriksEdit03>

@@ -1,4 +1,4 @@
-namespace lib._3d.mesh.modify;
+namespace Lib._3d.mesh.modify;
 
 [Guid("037c89b0-f5d3-4509-b574-c34fa8ec21f3")]
 public class CrossLinePoints : Instance<CrossLinePoints>

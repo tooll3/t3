@@ -1,4 +1,4 @@
-namespace lib.point.particle.force;
+namespace Lib.point.particle.force;
 
 [Guid("26bb382c-5e3d-49ae-b17e-5bd49b083d9a")]
 public class FollowMeshSurfaceForce : Instance<FollowMeshSurfaceForce>

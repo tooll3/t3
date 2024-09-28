@@ -1,6 +1,6 @@
 using T3.Core.Utils.Geometry;
 
-namespace lib._3d._;
+namespace Lib._3d.@_;
 
 [Guid("3dae14a8-3d0b-432f-b951-bdd7afd7e5f8")]
 public class ApplyCamMatrices : Instance<ApplyCamMatrices>

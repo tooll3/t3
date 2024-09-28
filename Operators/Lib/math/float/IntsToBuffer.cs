@@ -4,7 +4,7 @@ using SharpDX.Direct3D11;
 // SharpDX.Direct3D11.Buffer;
 //using Utilities = T3.Core.Utils.Utilities;
 
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("2eb20a76-f8f7-49e9-93a5-1e5981122b50")]
 public class IntsToBuffer : Instance<IntsToBuffer>

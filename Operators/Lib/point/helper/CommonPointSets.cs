@@ -1,7 +1,7 @@
 //using SharpDX;
 using T3.Core.Utils;
 
-namespace lib.point.helper;
+namespace Lib.point.helper;
 
 [Guid("353f63fc-e613-43ca-b037-02d7b9f4e935")]
 public class CommonPointSets : Instance<CommonPointSets>

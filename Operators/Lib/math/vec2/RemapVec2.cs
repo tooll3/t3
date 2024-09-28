@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.math.vec2;
+namespace Lib.math.vec2;
 
 [Guid("03c157ef-f0bc-4a2e-b862-775c6e886997")]
 public class RemapVec2 : Instance<RemapVec2>

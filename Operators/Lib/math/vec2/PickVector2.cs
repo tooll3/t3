@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.math.vec2;
+namespace Lib.math.vec2;
 
 [Guid("1cd2f5b1-bc54-4405-8ee6-d1acf59ebe14")]
 public class PickVector2 : Instance<PickVector2>

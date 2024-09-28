@@ -2,7 +2,7 @@ using SharpDX;
 using SharpDX.Direct3D11;
 using Utilities = T3.Core.Utils.Utilities;
 
-namespace lib.dx11.buffer;
+namespace Lib.dx11.buffer;
 
 [Guid("724da755-2d0c-42ab-8335-8c88ec5fb078")]
 public class FloatsToBuffer : Instance<FloatsToBuffer>

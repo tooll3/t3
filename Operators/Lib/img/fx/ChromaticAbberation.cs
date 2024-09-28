@@ -1,4 +1,4 @@
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("8a203866-148d-4785-ae0e-61328b7646bb")]
 public class ChromaticAbberation : Instance<ChromaticAbberation>

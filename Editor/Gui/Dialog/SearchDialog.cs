@@ -144,7 +144,7 @@ public class SearchDialog : ModalDialog
         ImGui.PushID(symbolHash);
         {
             var symbolNamespace = instance.Symbol.Namespace;
-            var isRelevantNamespace = symbolNamespace.StartsWith("lib.")
+            var isRelevantNamespace = symbolNamespace.StartsWith("Lib.")
                                       || symbolNamespace.StartsWith("examples.lib.");
 
             var color = instance.Symbol.OutputDefinitions.Count > 0

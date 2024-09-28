@@ -1,4 +1,4 @@
-namespace lib._3d.draw;
+namespace Lib._3d.draw;
 
 [Guid("cb89ed1d-03ea-4880-bfa0-1dd723e4bdab")]
 public class FadingSlideShow : Instance<FadingSlideShow>

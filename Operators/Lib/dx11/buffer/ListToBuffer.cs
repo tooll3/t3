@@ -1,6 +1,6 @@
 using SharpDX;
 
-namespace lib.dx11.buffer;
+namespace Lib.dx11.buffer;
 
 [Guid("7e28c796-85e7-47ee-99bb-9599284dbeeb")]
 public class ListToBuffer : Instance<ListToBuffer>

@@ -1,4 +1,4 @@
-namespace lib._3d.mesh.generate;
+namespace Lib._3d.mesh.generate;
 
 [Guid("816336a8-e214-4d2c-b8f9-05b1aa3ff2e2")]
 public class ExtrudeCurves : Instance<ExtrudeCurves>

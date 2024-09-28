@@ -1,4 +1,4 @@
-namespace examples.user.wake.livecoding;
+namespace Examples.user.wake.livecoding;
 
 [Guid("7a5c2f3b-c27a-47d1-8fc8-a9d7b508b9ce")]
 public class LiveCodingVideoComposition : Instance<LiveCodingVideoComposition>

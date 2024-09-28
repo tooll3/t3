@@ -1,4 +1,4 @@
-namespace examples.lib.img.use;
+namespace Examples.lib.img.use;
 
 [Guid("1fdd634f-4c6a-4615-b75a-0c46732c9826")]
 public class UseRenderTargetExample : Instance<UseRenderTargetExample>

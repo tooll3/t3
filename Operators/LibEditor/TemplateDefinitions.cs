@@ -4,11 +4,12 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using lib.dx11._;
-using lib.dx11.compute;
+using Lib.dx11._;
+using Lib.dx11.compute;
 using T3.Core.Logging;
 using T3.Core.SystemUi;
 using T3.Editor.Gui.Templates;
+using Types.Gfx;
 
 namespace libEditor;
 

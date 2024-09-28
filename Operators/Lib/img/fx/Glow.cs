@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("d392d4af-4c78-4f4a-bc3f-4c54c8c73538")]
 public class Glow : Instance<Glow>

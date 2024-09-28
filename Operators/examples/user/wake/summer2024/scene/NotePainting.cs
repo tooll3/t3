@@ -1,4 +1,4 @@
-namespace Types.user.wake.summer2024.scene;
+namespace Examples.user.wake.summer2024.scene;
 
 [Guid("15566742-6e21-4ebb-bb35-fa1949fa4e4a")]
 public class NotePainting : Instance<NotePainting>

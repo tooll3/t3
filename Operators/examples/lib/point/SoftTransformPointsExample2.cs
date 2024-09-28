@@ -1,4 +1,4 @@
-namespace examples.lib.point;
+namespace Examples.lib.point;
 
 [Guid("a1384530-671b-4a6a-b17c-89480bc2f23a")]
 public class SoftTransformPointsExample2 : Instance<SoftTransformPointsExample2>

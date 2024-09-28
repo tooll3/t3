@@ -1,4 +1,4 @@
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("58aa74af-32aa-4c46-8bb5-5811f16bf7f8")]
 public class Pow : Instance<Pow>

@@ -73,7 +73,7 @@ internal static partial class GraphUtils
 
     public static bool IsNewSymbolNameValid(string newSymbolName, string destinationNamespace, SymbolPackage destinationPackage, [NotNullWhen(false)] out string? reason)
     {
-        var isNamespaceValid = IsNamespaceValid(destinationNamespace, out var namespaceComponents);
+        var isNamespaceValid = IsNamespaceValid(destinationNamespace, false, out var namespaceComponents);
         if (!isNamespaceValid)
         {
             reason = "Namespace must be a valid C# namespace";
@@ -153,11 +153,16 @@ internal static partial class GraphUtils
     private static bool IsIdentifierValidNotEmpty(string className) => IdentifierValidator.Value.IsValidIdentifier(className);
     public static bool IsValidProjectName(string userName) => IdentifierValidator.Value.IsValidIdentifier(userName);
 
-    public static bool IsNamespaceValid(string namespaceName, out string[] namespaceComponents)
+    public static bool IsNamespaceValid(string namespaceName, bool needsToBeUnique, out string[] namespaceComponents)
     {
         namespaceComponents = namespaceName.Split('.');
         return ValidTypeNameSpacePattern.IsMatch(namespaceName)
-               && !namespaceComponents.Any(x => x.Length == 0 || ReservedWords.Contains(x));
+               && !namespaceComponents.Any(x => x.Length == 0
+                                                || ReservedWords.Contains(x)
+                                           /* || char.IsLower(x[0])*/) // enforce PascalCase
+               && (!needsToBeUnique
+                   || !SymbolPackage.AllPackages.Any(x => x.OwnsNamespace(namespaceName) // namespace is already owned by another package
+                                                          || x.RootNamespace.StartsWith(namespaceName))); // namespace is the name of a larger namespace the package owns a part of - this is not allowed
     }
 
     private static readonly Regex ValidTypeNameSpacePattern = NamespaceRegex();

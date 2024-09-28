@@ -1,7 +1,7 @@
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 
-namespace lib._3d.transform;
+namespace Lib._3d.transform;
 
 [Guid("e07550cf-033a-443d-b6f3-73eb71c72d9d")]
 public class SpreadLayout : Instance<SpreadLayout>

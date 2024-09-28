@@ -8,7 +8,7 @@ using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-using String = lib.types.String;
+using String = Types.Values.String;
 
 namespace libEditor.CustomUi;
 

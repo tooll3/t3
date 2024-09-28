@@ -1,4 +1,4 @@
-namespace lib.img.adjust;
+namespace Lib.img.adjust;
 
 [Guid("025b32e9-b570-45be-ae84-50424982aae3")]
 public class ToneMapping : Instance<ToneMapping>

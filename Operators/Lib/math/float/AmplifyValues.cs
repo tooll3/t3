@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("4def850e-3627-46d8-ae2b-58b513843885")]
 public class AmplifyValues : Instance<AmplifyValues>

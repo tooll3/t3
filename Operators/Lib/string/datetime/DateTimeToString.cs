@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace lib.@string.datetime;
+namespace Lib.@string.datetime;
 
 [Guid("c1c3725a-0745-4ce1-874b-839810c2124c")]
 public class DateTimeToString : Instance<DateTimeToString>

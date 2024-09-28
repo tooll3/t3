@@ -1,7 +1,7 @@
 using T3.Core.Audio;
 using T3.Core.Utils;
 
-namespace lib.io.audio;
+namespace Lib.io.audio;
 
 [Guid("b72d968b-0045-408d-a2f9-5c739c692a66")]
 public class AudioFrequencies : Instance<AudioFrequencies>

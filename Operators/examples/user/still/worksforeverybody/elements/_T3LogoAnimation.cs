@@ -1,4 +1,4 @@
-namespace examples.user.still.worksforeverybody.elements;
+namespace Examples.user.still.worksforeverybody.elements;
 
 [Guid("37b19195-5781-4f8d-af7b-c9ef6a4d146d")]
 public class _T3LogoAnimation : Instance<_T3LogoAnimation>

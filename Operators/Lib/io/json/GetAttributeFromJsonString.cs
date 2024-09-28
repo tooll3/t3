@@ -1,7 +1,7 @@
 using System.Data;
 using Newtonsoft.Json;
 
-namespace lib.io.json;
+namespace Lib.io.json;
 
 [Guid("43783ad9-72a0-4928-bb86-c89aae5c5d85")]
 public class GetAttributeFromJsonString : Instance<GetAttributeFromJsonString>, IStatusProvider

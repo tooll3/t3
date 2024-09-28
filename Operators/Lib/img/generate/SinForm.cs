@@ -1,4 +1,4 @@
-namespace lib.img.generate;
+namespace Lib.img.generate;
 
 [Guid("0626aba2-ed0c-40c4-9b50-2e729d0d8d86")]
 public class SinForm : Instance<SinForm>

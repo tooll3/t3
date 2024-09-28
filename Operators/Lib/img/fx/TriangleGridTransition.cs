@@ -1,4 +1,4 @@
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("da8ebc61-87cf-44ff-888e-994c8628ddb7")]
 public class TriangleGridTransition : Instance<TriangleGridTransition>

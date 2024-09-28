@@ -1,7 +1,7 @@
 using NAudio.Midi;
 
 
-namespace lib.io.midi;
+namespace Lib.io.midi;
 
 [Guid("a3ceb788-4055-4556-961b-63b7221f93e7")]
 public class MidiClip : Instance<MidiClip>

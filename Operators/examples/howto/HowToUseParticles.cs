@@ -1,4 +1,4 @@
-namespace examples.howto;
+namespace Examples.howto;
 
 [Guid("812561d8-cbb5-40c3-a53e-3c3f0ad2352e")]
 public class HowToUseParticles : Instance<HowToUseParticles>

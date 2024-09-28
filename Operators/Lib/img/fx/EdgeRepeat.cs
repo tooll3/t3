@@ -1,4 +1,4 @@
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("72e627e9-f570-4936-92b1-b12ed8d6004e")]
 public class EdgeRepeat : Instance<EdgeRepeat>

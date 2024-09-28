@@ -1,4 +1,4 @@
-namespace examples.lib.point;
+namespace Examples.lib.point;
 
 [Guid("3096f86e-e850-4f76-80de-1996fc811285")]
 public class LoadObjAsPointsExample : Instance<LoadObjAsPointsExample>

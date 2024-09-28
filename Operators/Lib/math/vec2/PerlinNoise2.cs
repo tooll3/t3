@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.math.vec2;
+namespace Lib.math.vec2;
 
 [Guid("ccc06dd6-4eec-4d17-af0b-4f1700e7887a")]
 public class PerlinNoise2 : Instance<PerlinNoise2>

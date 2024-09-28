@@ -1,4 +1,4 @@
-namespace lib.dx11.draw;
+namespace Lib.dx11.draw;
 
 [Guid("c676b9c7-06d7-4ee0-8ffc-9bee96c5dc18")]
 public class DrawInstancedIndirect: Instance<DrawInstancedIndirect>

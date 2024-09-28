@@ -1,7 +1,7 @@
 using T3.Core.Animation;
 using T3.Core.Utils;
 
-namespace lib.io.time;
+namespace Lib.io.time;
 
 [Guid("c6d22dc3-a6ff-4a6f-aa14-8be6595da2b1")]
 public class SetPlaybackTime : Instance<SetPlaybackTime>

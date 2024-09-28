@@ -1,4 +1,4 @@
-namespace lib.img.fx._;
+namespace Lib.img.fx.@_;
 
 [Guid("fd5ac393-02a4-43ae-8cdf-64a947abbafa")]
 public class UseTextureReference : Instance<UseTextureReference>

@@ -1,4 +1,4 @@
-namespace Types.user.wake.summer2024.scenes;
+namespace Examples.user.wake.summer2024.scenes;
 
 [Guid("1bcfb192-cfd4-4ab3-a3f5-9405ec364f60")]
 public class TheGrid : Instance<TheGrid>

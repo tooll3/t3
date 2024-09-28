@@ -1,4 +1,4 @@
-namespace lib.point.sim;
+namespace Lib.point.sim;
 
 [Guid("10507c42-1240-47cc-9569-5e3f1c733e99")]
 public class PointSimulation : Instance<PointSimulation>

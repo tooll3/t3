@@ -1,4 +1,4 @@
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("15fb88b2-81a1-43b8-97ba-41221293bb07")]
 public class Div : Instance<Div>

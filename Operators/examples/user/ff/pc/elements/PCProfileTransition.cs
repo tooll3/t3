@@ -1,4 +1,4 @@
-namespace examples.user.ff.pc.elements;
+namespace Examples.user.ff.pc.elements;
 
 [Guid("a85870e1-6b18-40db-96e2-076536d5a521")]
 public class PCProfileTransition : Instance<PCProfileTransition>

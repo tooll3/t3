@@ -1,7 +1,7 @@
 #nullable enable
 using Svg;
 
-namespace lib.Utils;
+namespace Lib.Utils;
 
 public static class SvgLoader
 {

@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib._3d._;
+namespace Lib._3d.@_;
 
 [Guid("947ad81e-47da-46c3-9b1d-8e578174d876")]
 public class DefineLensFlare : Instance<DefineLensFlare>

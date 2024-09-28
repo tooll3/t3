@@ -5,7 +5,7 @@ using T3.SystemUi;
 
 // ReSharper disable RedundantNameQualifier
 
-namespace lib.point._experimental;
+namespace Lib.point._experimental;
 
 [Guid("b238b288-6e9b-4b91-bac9-3d7566416028")]
 public class _SketchImpl : Instance<_SketchImpl>

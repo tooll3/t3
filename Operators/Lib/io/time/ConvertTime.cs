@@ -1,7 +1,7 @@
 using T3.Core.Animation;
 using T3.Core.Utils;
 
-namespace lib.io.time;
+namespace Lib.io.time;
 
 [Guid("0cd18cbb-e138-4b4b-a800-175fc39c61bf")]
 public class ConvertTime : Instance<ConvertTime>, IStatusProvider

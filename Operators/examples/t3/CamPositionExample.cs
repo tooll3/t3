@@ -1,4 +1,4 @@
-namespace examples.t3;
+namespace Examples.t3;
 
 [Guid("5fb11919-0eef-4cee-bddf-bf30e0a98ad9")]
 public class CamPositionExample : Instance<CamPositionExample>

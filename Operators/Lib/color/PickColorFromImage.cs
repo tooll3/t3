@@ -3,7 +3,7 @@ using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
 using Utilities = T3.Core.Utils.Utilities;
 
-namespace lib.color;
+namespace Lib.color;
 
 [Guid("42703423-1414-489e-aac2-21a3d7204262")]
 public class PickColorFromImage : Instance<PickColorFromImage>

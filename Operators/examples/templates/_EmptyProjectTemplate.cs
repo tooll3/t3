@@ -1,4 +1,4 @@
-namespace examples.templates;
+namespace Examples.templates;
 
 [Guid("fe8aeb9b-61ac-4a0e-97ee-4833233ac9d1")]
 public class _EmptyProjectTemplate : Instance<_EmptyProjectTemplate>

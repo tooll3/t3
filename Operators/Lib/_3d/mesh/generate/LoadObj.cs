@@ -3,7 +3,7 @@ using T3.Core.Utils;
 
 // ReSharper disable RedundantNameQualifier
 
-namespace lib._3d.mesh.generate;
+namespace Lib._3d.mesh.generate;
 
 [Guid("be52b670-9749-4c0d-89f0-d8b101395227")]
 public class LoadObj : Instance<LoadObj>, IDescriptiveFilename, IStatusProvider

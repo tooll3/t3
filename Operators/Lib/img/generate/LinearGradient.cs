@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.img.generate;
+namespace Lib.img.generate;
 
 [Guid("2c3d2c26-ac45-42e9-8f13-6ea338333568")]
 public class LinearGradient : Instance<LinearGradient>

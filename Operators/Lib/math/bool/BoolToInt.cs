@@ -1,4 +1,4 @@
-namespace lib.math.@bool;
+namespace Lib.math.@bool;
 
 [Guid("cd43942a-887e-4e34-bc54-0c2e5e8bc2af")]
 public class BoolToInt : Instance<BoolToInt>

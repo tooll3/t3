@@ -1,4 +1,4 @@
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("ca3f3c1b-6f22-4bf3-b06b-d2b0d85a8881")]
 public class BubbleZoom : Instance<BubbleZoom>

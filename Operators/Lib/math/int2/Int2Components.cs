@@ -1,4 +1,4 @@
-namespace lib.math.int2;
+namespace Lib.math.int2;
 
 [Guid("f86358e0-2573-4acd-9a90-e95108e8a4da")]
 public class Int2Components : Instance<Int2Components>

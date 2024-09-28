@@ -1,4 +1,4 @@
-namespace lib.point.transform;
+namespace Lib.point.transform;
 
 [Guid("697bbc2d-0b2e-4013-bbc3-d58a28a79f31")]
 public class SoftTransformPoints : Instance<SoftTransformPoints>, ITransformable

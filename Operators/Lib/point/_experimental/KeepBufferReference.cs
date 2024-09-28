@@ -1,4 +1,4 @@
-namespace lib.point._experimental;
+namespace Lib.point._experimental;
 
 [Guid("9cdcfa49-609d-4a64-ae97-8f98567075d1")]
 public class KeepBufferReference : Instance<KeepBufferReference>

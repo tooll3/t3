@@ -1,4 +1,4 @@
-namespace lib.point.sim.experimental;
+namespace Lib.point.sim.experimental;
 
 [Guid("98df563e-fd59-4458-a490-b7b7604ec1f3")]
 public class GrowStrains : Instance<GrowStrains>

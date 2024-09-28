@@ -1,4 +1,4 @@
-namespace lib.img.fx._;
+namespace Lib.img.fx.@_;
 
 [Guid("49549c3e-b09e-4633-86c6-1ac075f56b69")]
 public class UseFallbackBuffer : Instance<UseFallbackBuffer>

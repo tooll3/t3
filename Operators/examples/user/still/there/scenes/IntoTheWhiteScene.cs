@@ -1,4 +1,4 @@
-namespace examples.user.still.there.scenes;
+namespace Examples.user.still.there.scenes;
 
 [Guid("6231f780-c66f-452d-ba1c-4b5e21efc97d")]
 public class IntoTheWhiteScene : Instance<IntoTheWhiteScene>

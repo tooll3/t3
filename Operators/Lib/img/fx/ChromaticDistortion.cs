@@ -1,4 +1,4 @@
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("ecf2c782-4461-4a94-8995-067425e3f84b")]
 public class ChromaticDistortion : Instance<ChromaticDistortion>

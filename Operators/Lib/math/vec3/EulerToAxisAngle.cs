@@ -1,4 +1,4 @@
-namespace lib.math.vec3;
+namespace Lib.math.vec3;
 
 [Guid("185958a3-be54-499d-a105-cad22c0dd448")]
 public class EulerToAxisAngle : Instance<EulerToAxisAngle>

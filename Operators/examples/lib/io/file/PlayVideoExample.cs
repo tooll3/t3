@@ -1,4 +1,4 @@
-namespace examples.lib.io.file;
+namespace Examples.lib.io.file;
 
 [Guid("1d56e2c6-9199-41e7-9404-24f4f6b75044")]
 public class PlayVideoExample : Instance<PlayVideoExample>

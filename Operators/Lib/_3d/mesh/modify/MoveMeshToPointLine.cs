@@ -1,4 +1,4 @@
-namespace lib._3d.mesh.modify;
+namespace Lib._3d.mesh.modify;
 
 [Guid("c6dd42a7-d3a3-4405-b64a-159bcf3beab8")]
 public class MoveMeshToPointLine : Instance<MoveMeshToPointLine>

@@ -1,4 +1,4 @@
-namespace lib.point.particle.force;
+namespace Lib.point.particle.force;
 
 [Guid("eeec02e2-7db9-4132-935a-4caf03c828c6")]
 public class ReconstructiveForce : Instance<ReconstructiveForce>

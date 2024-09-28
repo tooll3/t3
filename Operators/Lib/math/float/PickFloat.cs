@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("63e6e642-827b-4518-ac64-9ab0a8d4391e")]
 public class PickFloat : Instance<PickFloat>

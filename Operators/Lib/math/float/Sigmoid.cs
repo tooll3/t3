@@ -1,4 +1,4 @@
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("fc56f945-ba04-4d10-a516-68a479147016")]
 public class Sigmoid : Instance<Sigmoid>

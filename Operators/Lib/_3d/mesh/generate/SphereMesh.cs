@@ -3,7 +3,7 @@ using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 
 
-namespace lib._3d.mesh.generate;
+namespace Lib._3d.mesh.generate;
 
 [Guid("5fb3dafe-aed4-4fff-a5b9-c144ea023d35")]
 public class SphereMesh : Instance<SphereMesh>

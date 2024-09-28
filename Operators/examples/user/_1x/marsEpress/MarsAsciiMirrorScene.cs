@@ -1,4 +1,4 @@
-namespace examples.user._1x.marsEpress;
+namespace Examples.user._1x.marsEpress;
 
 [Guid("df176113-ccc4-43e7-a462-5f37fff72fd2")]
 public class MarsAsciiMirrorScene : Instance<MarsAsciiMirrorScene>

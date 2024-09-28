@@ -1,7 +1,7 @@
 using T3.Core.Rendering.Material;
 using Utilities = T3.Core.Utils.Utilities;
 
-namespace lib._3d.rendering;
+namespace Lib._3d.rendering;
 
 [Guid("0ed2bee3-641f-4b08-8685-df1506e9af3c")]
 public class SetMaterial : Instance<SetMaterial>

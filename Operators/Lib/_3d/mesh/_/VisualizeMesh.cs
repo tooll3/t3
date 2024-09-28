@@ -1,4 +1,4 @@
-namespace lib._3d.mesh._;
+namespace Lib._3d.mesh.@_;
 
 [Guid("f8b12b4f-c10b-4e8b-9a69-344dbe8a063e")]
 public class VisualizeMesh : Instance<VisualizeMesh>

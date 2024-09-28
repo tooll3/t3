@@ -1,4 +1,4 @@
-namespace examples.user.still.there.research;
+namespace Examples.user.still.there.research;
 
 [Guid("ef88a1f2-a541-4c7d-a6c7-ce6f768db2f5")]
 public class CameraSetupTest : Instance<CameraSetupTest>

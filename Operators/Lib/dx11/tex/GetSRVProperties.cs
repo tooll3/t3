@@ -1,4 +1,4 @@
-namespace lib.dx11.tex;
+namespace Lib.dx11.tex;
 
 [Guid("bc489196-9a30-4580-af6f-dc059f226da1")]
 public class GetSRVProperties : Instance<GetSRVProperties>

@@ -1,4 +1,4 @@
-namespace examples.user.wake.summer2022.elements;
+namespace Examples.user.wake.summer2022.elements;
 
 [Guid("8f58aae2-e30b-4239-b5c0-8da09c1e84c1")]
 public class WakeSplashes : Instance<WakeSplashes>

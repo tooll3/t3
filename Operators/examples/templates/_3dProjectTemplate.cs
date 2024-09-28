@@ -1,4 +1,4 @@
-namespace examples.templates;
+namespace Examples.templates;
 
 [Guid("38fd2e32-53f6-49ce-9aa7-28f3ac433dd8")]
 public class _3dProjectTemplate : Instance<_3dProjectTemplate>

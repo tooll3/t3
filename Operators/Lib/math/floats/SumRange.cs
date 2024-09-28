@@ -1,4 +1,4 @@
-namespace lib.math.floats;
+namespace Lib.math.floats;
 
 [Guid("d3a19896-230f-458f-b4ba-e448f63f0d51")]
 public class SumRange : Instance<SumRange>

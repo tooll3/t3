@@ -1,4 +1,4 @@
-namespace lib.img.generate;
+namespace Lib.img.generate;
 
 [Guid("bf7fcd04-0cf6-4518-86cc-48f74483d98d")]
 public class RoundedRect : Instance<RoundedRect>

@@ -1,4 +1,4 @@
-namespace lib.img.analyze;
+namespace Lib.img.analyze;
 
 [Guid("787f44a8-8c51-4cfa-a7d5-7014d11b6a28")]
 public class GetImageBrightness : Instance<GetImageBrightness>

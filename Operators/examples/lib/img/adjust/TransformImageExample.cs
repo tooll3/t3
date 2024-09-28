@@ -1,4 +1,4 @@
-namespace examples.lib.img.adjust;
+namespace Examples.lib.img.adjust;
 
 [Guid("af89cc41-67ab-4ef8-8a63-ce0de82d8652")]
 public class TransformImageExample : Instance<TransformImageExample>

@@ -1,4 +1,4 @@
-namespace lib.math.@bool;
+namespace Lib.math.@bool;
 
 [Guid("3a6fd508-0272-4c18-96b8-bc2387d3b2fd")]
 public class All : Instance<All>

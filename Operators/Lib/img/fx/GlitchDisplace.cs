@@ -1,4 +1,4 @@
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("43f15919-f6c3-4a10-9092-00973fc8e821")]
 public class GlitchDisplace : Instance<GlitchDisplace>

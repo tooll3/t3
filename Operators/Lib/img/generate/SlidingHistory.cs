@@ -1,4 +1,4 @@
-namespace lib.img.generate;
+namespace Lib.img.generate;
 
 [Guid("1b69d98a-0b38-4563-aa43-aac5b8395c2b")]
 public class SlidingHistory : Instance<SlidingHistory>

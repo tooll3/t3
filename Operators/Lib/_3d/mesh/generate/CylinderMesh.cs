@@ -3,7 +3,7 @@ using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 
 
-namespace lib._3d.mesh.generate;
+namespace Lib._3d.mesh.generate;
 
 [Guid("5777a005-bbae-48d6-b633-5e998ca76c91")]
 public class CylinderMesh : Instance<CylinderMesh>

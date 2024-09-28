@@ -1,7 +1,7 @@
 using SharpDX;
 using T3.Core.Utils;
 
-namespace lib.dx11.buffer;
+namespace Lib.dx11.buffer;
 
 [Guid("edecd98f-209b-423d-8201-0fd7d590c4cf")]
 public class SplinePoints : Instance<SplinePoints>

@@ -1,4 +1,4 @@
-namespace lib.@string.list;
+namespace Lib.@string.list;
 
 [Guid("a0fcf7ed-1f14-4a8b-a57e-99e5b2407b1b")]
 public class SplitString : Instance<SplitString>

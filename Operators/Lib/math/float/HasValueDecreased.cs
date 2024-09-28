@@ -1,4 +1,4 @@
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("f376121a-2360-4232-9724-0db6937062c3")]
 public class HasValueDecreased : Instance<HasValueDecreased>

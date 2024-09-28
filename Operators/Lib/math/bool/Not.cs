@@ -1,4 +1,4 @@
-namespace lib.math.@bool;
+namespace Lib.math.@bool;
 
 [Guid("51648ecd-05ee-40b3-b562-8518ada70918")]
 public class Not : Instance<Not>

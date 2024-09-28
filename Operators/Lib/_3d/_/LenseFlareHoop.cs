@@ -1,4 +1,4 @@
-namespace lib._3d._;
+namespace Lib._3d.@_;
 
 [Guid("393da0ad-00ef-4a9c-bd53-9314bb16b08b")]
 public class LenseFlareHoop : Instance<LenseFlareHoop>

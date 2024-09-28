@@ -1,4 +1,4 @@
-namespace lib.point.generate;
+namespace Lib.point.generate;
 
 [Guid("25db2a97-38b2-4503-8842-fab3922d7a6c")]
 public class PointTrail : Instance<PointTrail>

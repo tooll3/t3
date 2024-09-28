@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.exec.context;
+namespace Lib.exec.context;
 
 [Guid("470db771-c7f2-4c52-8897-d3a9b9fc6a4e")]
 public class GetIntVar : Instance<GetIntVar>, ICustomDropdownHolder

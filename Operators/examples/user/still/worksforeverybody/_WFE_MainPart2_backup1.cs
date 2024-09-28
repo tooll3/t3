@@ -1,4 +1,4 @@
-namespace examples.user.still.worksforeverybody;
+namespace Examples.user.still.worksforeverybody;
 
 [Guid("d3e1ff33-8e76-4348-ac4a-cd537dfeb33f")]
 public class _WFE_MainPart2_backup1 : Instance<_WFE_MainPart2_backup1>

@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.color;
+namespace Lib.color;
 
 [Guid("b9999f07-da19-45b9-ae12-f9d0662c694c")]
 public class BlendGradients : Instance<BlendGradients>

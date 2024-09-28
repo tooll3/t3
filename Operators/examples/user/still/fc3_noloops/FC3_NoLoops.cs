@@ -1,4 +1,4 @@
-namespace examples.user.still.fc3_noloops;
+namespace Examples.user.still.fc3_noloops;
 
 [Guid("88aa2a40-5841-48b7-8e95-907ee6b70270")]
 public class FC3_NoLoops : Instance<FC3_NoLoops>

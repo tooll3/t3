@@ -1,4 +1,4 @@
-namespace lib.point.sim.experimental;
+namespace Lib.point.sim.experimental;
 
 [Guid("281b69e8-01ee-4a62-a9ed-8508c5355c6c")]
 public class SimPointMeshCollisions : Instance<SimPointMeshCollisions>

@@ -1,4 +1,4 @@
-namespace lib.io.audio;
+namespace Lib.io.audio;
 
 [Guid("e712e801-863d-45c5-9ef8-fbe90dcb8375")]
 /// <summary>

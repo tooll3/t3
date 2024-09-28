@@ -1,7 +1,7 @@
 using SharpDX;
 using SharpDX.Direct3D11;
 
-namespace Utils;
+namespace Lib.Utils;
 
 public class GpuQuery : IDisposable
 {

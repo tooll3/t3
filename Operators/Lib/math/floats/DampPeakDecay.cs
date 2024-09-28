@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.math.floats;
+namespace Lib.math.floats;
 
 [Guid("ef3a1411-e88c-43a8-83b4-931fdbf16c75")]
 public class DampPeakDecay : Instance<DampPeakDecay>

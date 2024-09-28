@@ -1,7 +1,7 @@
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 
-namespace lib._3d.transform;
+namespace Lib._3d.transform;
 
 [Guid("284d2183-197d-47fd-b130-873cced78b1c")]
 public class Transform : Instance<Transform>, ITransformable

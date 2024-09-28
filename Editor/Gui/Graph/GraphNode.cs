@@ -292,7 +292,7 @@ internal class GraphNode
                     if (ImGui.IsWindowFocused() || ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup))
                     {
                         var blocked = false;
-                        if (UserSettings.Config.WarnBeforeLibEdit && instance.Symbol.Namespace.StartsWith("lib."))
+                        if (UserSettings.Config.WarnBeforeLibEdit && instance.Symbol.Namespace.StartsWith("Lib."))
                         {
                             if (UserSettings.Config.WarnBeforeLibEdit)
                             {

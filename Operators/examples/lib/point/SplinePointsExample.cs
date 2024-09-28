@@ -1,4 +1,4 @@
-namespace examples.lib.point;
+namespace Examples.lib.point;
 
 [Guid("eb7bd521-c84b-45ad-88c6-a1ed79e64806")]
 public class SplinePointsExample : Instance<SplinePointsExample>

@@ -1,4 +1,4 @@
-namespace lib.@string.datetime;
+namespace Lib.@string.datetime;
 
 [Guid("075612b1-8760-4858-ad6b-6c85a7716794")]
 public class TimeToString : Instance<TimeToString>

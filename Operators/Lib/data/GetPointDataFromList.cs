@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.data;
+namespace Lib.data;
 
 [Guid("1de7b1be-cab6-4beb-a837-4c817562efb2")]
 public class GetPointDataFromList : Instance<GetPointDataFromList>

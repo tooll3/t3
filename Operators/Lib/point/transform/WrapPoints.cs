@@ -1,4 +1,4 @@
-namespace lib.point.transform;
+namespace Lib.point.transform;
 
 [Guid("b263a6a1-0872-4223-80e7-5e09f4aea19d")]
 public class WrapPoints : Instance<WrapPoints>

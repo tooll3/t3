@@ -1,4 +1,4 @@
-namespace lib._3d.rendering;
+namespace Lib._3d.rendering;
 
 [Guid("9c67a8c8-839f-4f67-a949-08cb38b9dffd")]
 public class PointLight : Instance<PointLight>, ITransformable

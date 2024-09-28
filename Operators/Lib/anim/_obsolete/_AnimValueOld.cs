@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.anim._obsolete;
+namespace Lib.anim._obsolete;
 
 [Guid("c5e39c67-256f-4cb9-a635-b62a0d9c796c")]
 public class _AnimValueOld : Instance<_AnimValueOld>

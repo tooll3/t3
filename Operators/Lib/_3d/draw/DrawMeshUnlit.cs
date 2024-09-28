@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib._3d.draw;
+namespace Lib._3d.draw;
 
 [Guid("4499dcb1-c936-49ed-861b-2ad8ae58cb28")]
 public class DrawMeshUnlit : Instance<DrawMeshUnlit>

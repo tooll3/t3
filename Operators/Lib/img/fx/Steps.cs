@@ -1,4 +1,4 @@
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("4cdc0f90-6ce9-4a03-9cd0-efeddee70567")]
 public class Steps : Instance<Steps>

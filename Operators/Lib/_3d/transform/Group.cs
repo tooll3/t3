@@ -3,7 +3,7 @@ using T3.Core.DataTypes.DataSet;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 
-namespace lib._3d.transform;
+namespace Lib._3d.transform;
 
 [Guid("a3f64d34-1fab-4230-86b3-1c3deba3f90b")]
 public class Group : Instance<Group>

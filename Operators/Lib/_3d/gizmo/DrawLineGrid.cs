@@ -1,4 +1,4 @@
-namespace lib._3d.gizmo;
+namespace Lib._3d.gizmo;
 
 [Guid("296dddbd-250b-4801-a039-bcb3cd555774")]
 public class DrawLineGrid : Instance<DrawLineGrid>

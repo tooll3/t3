@@ -1,4 +1,4 @@
-namespace lib.point.particle;
+namespace Lib.point.particle;
 
 [Guid("e44ae9b6-cd56-4224-8a5d-118eda4cd3f4")]
 public class ParticleSystem : Instance<ParticleSystem>

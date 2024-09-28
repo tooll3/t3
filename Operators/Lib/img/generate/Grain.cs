@@ -1,4 +1,4 @@
-namespace lib.img.generate;
+namespace Lib.img.generate;
 
 [Guid("b5102fba-f05b-43fc-aa1d-613fe1d68ad2")]
 public class Grain : Instance<Grain>

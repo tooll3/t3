@@ -1,4 +1,4 @@
-namespace lib.math.vec4;
+namespace Lib.math.vec4;
 
 [Guid("b15e4950-5c72-4655-84bc-c00647319030")]
 public class Vector4Components : Instance<Vector4Components>

@@ -1,4 +1,4 @@
-namespace lib.img.generate;
+namespace Lib.img.generate;
 
 [Guid("1a411be2-1757-4019-8ce2-e29f808ed839")]
 public class CheckerBoard : Instance<CheckerBoard>

@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("7ff47023-622e-4834-8de5-2438d56c09bd")]
 public class DetectPulse : Instance<DetectPulse>

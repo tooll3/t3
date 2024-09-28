@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.point.draw.legacy;
+namespace Lib.point.draw.legacy;
 
 [Guid("071c9aad-ecbf-47bf-b2f6-c43e8212d5b1")]
 public class _DrawBillboardsOld : Instance<_DrawBillboardsOld>

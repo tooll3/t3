@@ -1,6 +1,6 @@
 using T3.Operators.Utils;
 
-namespace lib.io.audio;
+namespace Lib.io.audio;
 
 [Guid("ecbafbeb-c14b-4507-953f-80bc6676d077")]
 public class _SetAudioAnalysis : Instance<_SetAudioAnalysis>

@@ -1,4 +1,4 @@
-namespace examples.lib._3d.rendering;
+namespace Examples.lib._3d.rendering;
 
 [Guid("e20f492c-490f-4297-a9c8-0e5aab14f9c1")]
 public class ShadowPlaneExample : Instance<ShadowPlaneExample>

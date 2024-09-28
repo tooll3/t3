@@ -27,7 +27,6 @@ internal sealed class NewProjectDialog : ModalDialog
 
         if (BeginDialog("Create new project"))
         {
-
             // Name and namespace
             string namespaceWarningText = null;
             bool namespaceCorrect = true;
@@ -36,10 +35,10 @@ internal sealed class NewProjectDialog : ModalDialog
                 namespaceCorrect = false;
                 namespaceWarningText = $"Namespace must be within the \"{_userName}\" namespace";
             }
-            else if(!GraphUtils.IsNamespaceValid(_newNamespace, out _))
+            else if(!GraphUtils.IsNamespaceValid(_newNamespace, true, out _))
             {
                 namespaceCorrect = false;
-                namespaceWarningText = "Namespace must be a valid C# namespace";
+                namespaceWarningText = "Namespace must be a valid and unique C# namespace";
             }
                 
             FormInputs.AddStringInput("Namespace", ref _newNamespace, 

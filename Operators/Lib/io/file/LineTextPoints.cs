@@ -1,6 +1,6 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using lib.Utils;
+using Lib.Utils;
 using Svg;
 using Svg.Pathing;
 using Svg.Transforms;
@@ -9,7 +9,7 @@ using T3.Core.Utils;
 // ReSharper disable TooWideLocalVariableScope
 // ReSharper disable CheckNamespace
 
-namespace lib.io.file;
+namespace Lib.io.file;
 
 [Guid("3d862455-6a7b-4bf6-a159-e4f7cdba6062")]
 /**

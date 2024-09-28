@@ -1,4 +1,4 @@
-namespace examples.lib._3d.mesh.generate;
+namespace Examples.lib._3d.mesh.generate;
 
 [Guid("a469ca9f-a7f9-46b8-b34c-0a1c109e1222")]
 public class ExtrudeCurvesExample : Instance<ExtrudeCurvesExample>

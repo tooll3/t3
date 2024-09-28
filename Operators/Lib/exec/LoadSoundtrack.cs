@@ -1,4 +1,4 @@
-namespace lib.exec;
+namespace Lib.exec;
 
 [Guid("72b6327d-4304-48bb-b9b5-15705352c225")]
 public class LoadSoundtrack : Instance<LoadSoundtrack>

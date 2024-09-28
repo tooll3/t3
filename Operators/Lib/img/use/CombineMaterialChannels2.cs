@@ -1,4 +1,4 @@
-namespace lib.img.use;
+namespace Lib.img.use;
 
 [Guid("3d0ad320-1055-4f71-b3c0-0e77261ca587")]
 public class CombineMaterialChannels2 : Instance<CombineMaterialChannels2>

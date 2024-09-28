@@ -3,7 +3,7 @@ using Operators.Utils;
 using T3.Core.Animation;
 using T3.Core.Utils;
 
-namespace lib.io.midi;
+namespace Lib.io.midi;
 
 [Guid("59a0458e-2f3a-4856-96cd-32936f783cc5")]
 public class MidiInput : Instance<MidiInput>, MidiConnectionManager.IMidiConsumer, IStatusProvider

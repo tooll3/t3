@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.@string;
+namespace Lib.@string;
 
 [Guid("a9784e5e-7696-49a0-bb77-2302587ede59")]
 public class PickString : Instance<PickString>

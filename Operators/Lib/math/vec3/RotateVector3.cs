@@ -1,4 +1,4 @@
-namespace lib.math.vec3;
+namespace Lib.math.vec3;
 
 [Guid("ce7c2103-3669-4c7a-ba61-a10428b9d467")]
 public class RotateVector3 : Instance<RotateVector3>

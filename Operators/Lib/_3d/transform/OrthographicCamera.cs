@@ -2,7 +2,7 @@ using T3.Core.Rendering;
 using T3.Core.Utils.Geometry;
 
 
-namespace lib._3d.transform;
+namespace Lib._3d.transform;
 
 [Guid("954af16f-b37b-4e64-a965-4bec02b9179e")]
 public class OrthographicCamera : Instance<OrthographicCamera>, ICamera, ICameraPropertiesProvider

@@ -1,6 +1,6 @@
 using T3.Core.Animation;
 
-namespace lib.io.time;
+namespace Lib.io.time;
 
 [Guid("862de1a8-f630-4823-8860-7afa918bb1bc")]
 public class RunTime : Instance<RunTime>

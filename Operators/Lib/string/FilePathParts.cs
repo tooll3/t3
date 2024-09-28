@@ -1,4 +1,4 @@
-namespace lib.@string;
+namespace Lib.@string;
 
 [Guid("42c556fb-014b-4ac5-b390-f426ab415aa7")]
 public class FilePathParts : Instance<FilePathParts>, IStatusProvider

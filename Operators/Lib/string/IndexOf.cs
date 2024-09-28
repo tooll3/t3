@@ -1,4 +1,4 @@
-namespace lib.@string;
+namespace Lib.@string;
 
 [Guid("fc0a5e68-9915-4323-b2a4-2491fa5d59a9")]
 public class IndexOf : Instance<IndexOf>

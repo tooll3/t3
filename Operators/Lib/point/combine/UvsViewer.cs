@@ -1,4 +1,4 @@
-namespace lib.point.combine;
+namespace Lib.point.combine;
 
 [Guid("68cf773d-30ac-4ae0-bc1e-b7a17ea322bb")]
 public class UVsViewer : Instance<UVsViewer>

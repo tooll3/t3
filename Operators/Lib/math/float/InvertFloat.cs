@@ -1,4 +1,4 @@
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("97032147-ba0c-4454-b878-1048d8faea05")]
 public class InvertFloat : Instance<InvertFloat>

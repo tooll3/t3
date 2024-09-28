@@ -1,4 +1,4 @@
-namespace lib.point._experimental;
+namespace Lib.point._experimental;
 
 [Guid("46749ae5-ef10-43e7-a712-5cbd7a1d4398")]
 public class TraceContourLines : Instance<TraceContourLines>

@@ -1,4 +1,4 @@
-namespace lib.math.@int;
+namespace Lib.math.@int;
 
 [Guid("17db8a36-079d-4c83-8a2a-7ea4c1aa49e6")]
 public class IntToFloat : Instance<IntToFloat>

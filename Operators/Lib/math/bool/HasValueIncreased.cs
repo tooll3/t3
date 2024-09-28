@@ -1,4 +1,4 @@
-namespace lib.math.@bool;
+namespace Lib.math.@bool;
 
 [Guid("c513c58d-e45c-408d-a0b8-250c9af31545")]
 public class HasValueIncreased : Instance<HasValueIncreased>

@@ -5,7 +5,7 @@ using T3.Core.Rendering;
 using T3.Core.Utils;
 using Utilities = T3.Core.Utils.Utilities;
 
-namespace lib.img.fx._;
+namespace Lib.img.fx.@_;
 
 [Guid("cc3cc712-9e87-49c6-b04b-49a12cf2ba75")]
 public class _SpecularPrefilter : Instance<_SpecularPrefilter>

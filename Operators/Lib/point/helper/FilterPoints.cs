@@ -1,4 +1,4 @@
-namespace lib.point.helper;
+namespace Lib.point.helper;
 
 [Guid("18251874-5d5a-4384-8dcd-fcf297e54886")]
 public class FilterPoints : Instance<FilterPoints>

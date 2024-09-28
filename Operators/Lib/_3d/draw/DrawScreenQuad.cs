@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib._3d.draw;
+namespace Lib._3d.draw;
 
 [Guid("5a2752e8-95ae-4d76-b903-1f52ef43bcdc")]
 public class DrawScreenQuad : Instance<DrawScreenQuad>

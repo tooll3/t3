@@ -1,4 +1,4 @@
-namespace lib.img.adjust;
+namespace Lib.img.adjust;
 
 [Guid("2ab1bbef-8322-4638-8b1d-7e31aaa6a457")]
 public class KeyColor : Instance<KeyColor>

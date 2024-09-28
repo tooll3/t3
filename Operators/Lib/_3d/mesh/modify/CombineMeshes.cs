@@ -1,4 +1,4 @@
-namespace lib._3d.mesh.modify;
+namespace Lib._3d.mesh.modify;
 
 [Guid("c276f4eb-f19c-405b-b247-3db159677571")]
 public class CombineMeshes : Instance<CombineMeshes>

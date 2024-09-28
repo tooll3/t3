@@ -1,4 +1,4 @@
-namespace lib.point.particle.force;
+namespace Lib.point.particle.force;
 
 [Guid("4f5999c9-8ade-4e31-8379-afb7db56e170")]
 public class TextureMapForce : Instance<TextureMapForce>

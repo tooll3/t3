@@ -1,7 +1,7 @@
 //using SharpDX;
 using T3.Core.Utils;
 
-namespace lib.point._cpu;
+namespace Lib.point._cpu;
 
 [Guid("5f2df291-4667-474e-9e84-3b64d4cc0555")]
 public class TransformCpuPoint : Instance<TransformCpuPoint>

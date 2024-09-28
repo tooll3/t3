@@ -1,7 +1,7 @@
 using System.Reflection;
 using T3.Core.Utils;
 
-namespace lib.data;
+namespace Lib.data;
 
 [Guid("f83bd8ce-ca66-4d31-9f2f-65066f15a3b2")]
 public class GetIteratedFloat : Instance<GetIteratedFloat>

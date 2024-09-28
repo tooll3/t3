@@ -1,4 +1,4 @@
-namespace lib.dx11.tex;
+namespace Lib.dx11.tex;
 
 [Guid("9733f5e1-4514-46de-9e7c-bd3912932d1b")]
 public class ShowTexture3d : Instance<ShowTexture3d>

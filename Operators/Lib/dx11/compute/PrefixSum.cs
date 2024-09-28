@@ -1,4 +1,4 @@
-namespace lib.dx11.compute;
+namespace Lib.dx11.compute;
 
 [Guid("d35a403b-7e6e-4725-a344-6e8008a4e1e1")]
 public class PrefixSum : Instance<PrefixSum>

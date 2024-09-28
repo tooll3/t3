@@ -1,4 +1,4 @@
-namespace lib.exec;
+namespace Lib.exec;
 
 [Guid("3631c727-36a0-4f26-ae76-ee9c100efc33")]
 public class Loop : Instance<Loop>

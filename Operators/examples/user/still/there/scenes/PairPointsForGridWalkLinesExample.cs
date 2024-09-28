@@ -1,4 +1,4 @@
-namespace examples.user.still.there.scenes;
+namespace Examples.user.still.there.scenes;
 
 [Guid("44f364ed-0dee-4586-a60b-77572cc8f2b7")]
 public class PairPointsForGridWalkLinesExample : Instance<PairPointsForGridWalkLinesExample>

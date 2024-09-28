@@ -1,6 +1,6 @@
 using T3.Core.Animation;
 
-namespace lib.io.time;
+namespace Lib.io.time;
 
 [Guid("5af2405c-35f4-46bf-90db-bb99b0c4a43e")]
 public class LastFrameDuration : Instance<LastFrameDuration>

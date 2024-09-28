@@ -1,4 +1,4 @@
-namespace lib._3d.mesh.generate;
+namespace Lib._3d.mesh.generate;
 
 [Guid("ab496711-8b99-4463-aac9-b41fdf46608d")]
 public class RepeatMeshAtPoints : Instance<RepeatMeshAtPoints>

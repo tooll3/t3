@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.math.@bool;
+namespace Lib.math.@bool;
 
 [Guid("0bec016a-5e1b-467a-8273-368d4d6b9935")]
 public class Trigger : Instance<Trigger>

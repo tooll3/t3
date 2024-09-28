@@ -1,4 +1,4 @@
-namespace examples.user.ff.pc;
+namespace Examples.user.ff.pc;
 
 [Guid("500ee741-bd04-4e13-9e40-53ec72af1bea")]
 public class MeetChris2 : Instance<MeetChris2>

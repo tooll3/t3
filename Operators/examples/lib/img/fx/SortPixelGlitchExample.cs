@@ -1,4 +1,4 @@
-namespace examples.lib.img.fx;
+namespace Examples.lib.img.fx;
 
 [Guid("26aa6110-def1-4140-9d1e-de3621aeae10")]
 public class SortPixelGlitchExample : Instance<SortPixelGlitchExample>

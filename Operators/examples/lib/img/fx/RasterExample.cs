@@ -1,4 +1,4 @@
-namespace examples.lib.img.fx;
+namespace Examples.lib.img.fx;
 
 [Guid("014b8d6f-c7f2-43b5-84a8-033356e440ef")]
 public class RasterExample : Instance<RasterExample>

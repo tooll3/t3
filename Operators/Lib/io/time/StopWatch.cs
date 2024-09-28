@@ -1,7 +1,7 @@
 using T3.Core.Animation;
 using T3.Core.Utils;
 
-namespace lib.io.time;
+namespace Lib.io.time;
 
 [Guid("485af23d-543e-44a7-b29f-693ed9533ab5")]
 public class StopWatch : Instance<StopWatch>

@@ -1,4 +1,4 @@
-namespace lib.exec._experimental;
+namespace Lib.exec._experimental;
 
 [Guid("603c68a7-77e8-4b64-b4f3-d4423e654a38")]
 public class RepeatWithMotionBlur : Instance<RepeatWithMotionBlur>

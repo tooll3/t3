@@ -1,4 +1,4 @@
-namespace lib.io.audio._obsolete;
+namespace Lib.io.audio._obsolete;
 
 [Guid("dd00cb1b-1c0e-4e79-9ea2-4b23686c6f37")]
 public class _LegacySetAudioReaction : Instance<_LegacySetAudioReaction>

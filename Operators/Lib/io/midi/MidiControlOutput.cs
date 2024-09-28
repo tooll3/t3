@@ -2,7 +2,7 @@ using NAudio.Midi;
 using Operators.Utils;
 using T3.Core.Utils;
 
-namespace Operators.Lib.io.midi;
+namespace Lib.io.midi;
 
 [Guid("a59c583b-dbc2-495c-a9b1-e64fc1e5d532")]
 public class MidiControlOutput : Instance<MidiControlOutput>, MidiConnectionManager.IMidiConsumer, ICustomDropdownHolder,IStatusProvider

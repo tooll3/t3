@@ -1,4 +1,4 @@
-namespace examples.lib._3d.gizmo;
+namespace Examples.lib._3d.gizmo;
 
 [Guid("523bf3f7-d8f6-459b-a7fb-f681dce9e697")]
 public class LocatorExample : Instance<LocatorExample>

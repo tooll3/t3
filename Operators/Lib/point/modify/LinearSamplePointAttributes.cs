@@ -1,4 +1,4 @@
-namespace lib.point.modify;
+namespace Lib.point.modify;
 
 [Guid("bb4803d2-0c23-470a-94a8-c477e4f7dd8c")]
 public class LinearSamplePointAttributes : Instance<LinearSamplePointAttributes>

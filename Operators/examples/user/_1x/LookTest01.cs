@@ -1,4 +1,4 @@
-namespace examples.user._1x;
+namespace Examples.user._1x;
 
 [Guid("5d3ef365-dbeb-4d0a-b4b3-954e945d119f")]
 public class LookTest01 : Instance<LookTest01>

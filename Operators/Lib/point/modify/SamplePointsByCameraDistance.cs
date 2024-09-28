@@ -1,4 +1,4 @@
-namespace lib.point.modify;
+namespace Lib.point.modify;
 
 [Guid("0f40e5e5-e406-4f87-854b-fbdd670b5504")]
 public class SamplePointsByCameraDistance : Instance<SamplePointsByCameraDistance>

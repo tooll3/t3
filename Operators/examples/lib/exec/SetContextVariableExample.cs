@@ -1,4 +1,4 @@
-namespace examples.lib.exec;
+namespace Examples.lib.exec;
 
 [Guid("cce36a29-8f66-492d-bf8f-b924fa1ae384")]
 public class SetContextVariableExample : Instance<SetContextVariableExample>

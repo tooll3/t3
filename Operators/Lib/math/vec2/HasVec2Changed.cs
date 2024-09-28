@@ -1,7 +1,7 @@
 using T3.Core.Animation;
 using T3.Core.Utils;
 
-namespace lib.math.vec2;
+namespace Lib.math.vec2;
 
 [Guid("cba315e4-6113-4a2e-969e-e4c2e914c293")]
 public class HasVec2Changed : Instance<HasVec2Changed>

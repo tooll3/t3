@@ -1,7 +1,7 @@
 using SharpDX.WIC;
 using T3.Core.Utils;
 
-namespace lib.img.generate;
+namespace Lib.img.generate;
 
 [Guid("61ec6355-bd7d-4abb-aa44-b01b7d658e23")]
 public class LoadImageFromUrl : Instance<LoadImageFromUrl>

@@ -1,4 +1,4 @@
-namespace lib.img.use;
+namespace Lib.img.use;
 
 [Guid("7da55d23-0bd1-457b-a036-9b6b51d2e34b")]
 public class BlendWithMask : Instance<BlendWithMask>

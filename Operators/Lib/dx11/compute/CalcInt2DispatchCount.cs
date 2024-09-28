@@ -1,4 +1,4 @@
-namespace lib.dx11.compute;
+namespace Lib.dx11.compute;
 
 [Guid("cc11774e-82dd-409f-97fb-5be3f2746f9d")]
 public class CalcInt2DispatchCount : Instance<CalcInt2DispatchCount>

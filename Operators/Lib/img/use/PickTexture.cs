@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.img.use;
+namespace Lib.img.use;
 
 [Guid("e6070817-cf2e-4430-87e0-bf3dd15afdb5")]
 public class PickTexture : Instance<PickTexture>

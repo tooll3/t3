@@ -1,4 +1,4 @@
-namespace examples.user.cynic.research;
+namespace Examples.user.cynic.research;
 
 [Guid("5b234754-2b45-46db-becb-86f0bb547608")]
 public class NearFarCoc : Instance<NearFarCoc>

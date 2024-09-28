@@ -1,4 +1,4 @@
-namespace lib.math.int2;
+namespace Lib.math.int2;
 
 [Guid("58d86d45-f32d-4ddb-8eab-180161e05b2a")]
 // Todo - deprecate?

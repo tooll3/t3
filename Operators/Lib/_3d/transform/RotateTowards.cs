@@ -1,7 +1,7 @@
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 
-namespace lib._3d.transform;
+namespace Lib._3d.transform;
 
 [Guid("8373c170-a140-4ce4-b59b-47f42fb71700")]
 public class RotateTowards : Instance<RotateTowards>

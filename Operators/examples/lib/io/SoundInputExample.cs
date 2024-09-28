@@ -1,4 +1,4 @@
-namespace examples.lib.io;
+namespace Examples.lib.io;
 
 [Guid("012119bf-aeec-4134-b7aa-6bc7f9816800")]
 public class SoundInputExample : Instance<SoundInputExample>

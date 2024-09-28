@@ -1,4 +1,4 @@
-namespace lib.point.sim;
+namespace Lib.point.sim;
 
 [Guid("5f846187-e109-45d1-97e0-ae95e3e7d9ba")]
 public class SimNoiseOffset : Instance<SimNoiseOffset>

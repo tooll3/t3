@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.sprite;
+namespace Lib.sprite;
 
 [Guid("122cbf32-b3e5-4db7-b18d-f2af5b10419c")]
 public class DrawPointSpritesShaded : Instance<DrawPointSpritesShaded>

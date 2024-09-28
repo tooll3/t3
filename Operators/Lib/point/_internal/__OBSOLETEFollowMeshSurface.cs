@@ -1,4 +1,4 @@
-namespace lib.point._internal;
+namespace Lib.point._internal;
 
 [Guid("5e3648c0-3446-4f8f-b7ce-32d4a54b39de")]
 public class __OBSOLETEFollowMeshSurface : Instance<__OBSOLETEFollowMeshSurface>

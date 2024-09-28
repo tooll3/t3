@@ -5,7 +5,7 @@ using SharpDX.MediaFoundation;
 using T3.Core.Audio;
 using T3.Core.Utils;
 
-namespace lib.img.video;
+namespace Lib.img.video;
 
 [Guid("04c1a6dc-3042-48a8-81d2-0a5a162016dc")]
 /**

@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.anim;
+namespace Lib.anim;
 
 [Guid("94a392e6-3e03-4ccf-a114-e6fafa263b4f")]
 public class SequenceAnim : Instance<SequenceAnim>

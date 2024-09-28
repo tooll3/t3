@@ -1,4 +1,4 @@
-namespace examples;
+namespace Examples;
 
 // ReSharper disable once UnusedType.Global
 public class ShareDefinition : IShareResources

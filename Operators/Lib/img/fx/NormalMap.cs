@@ -1,4 +1,4 @@
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("01458940-287f-4d31-9906-998efa9a2641")]
 public class NormalMap : Instance<NormalMap>

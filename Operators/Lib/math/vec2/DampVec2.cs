@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.math.vec2;
+namespace Lib.math.vec2;
 
 [Guid("fb801f10-8f84-4f69-9f7e-66cc7f6b7878")]
 public class DampVec2 : Instance<DampVec2>

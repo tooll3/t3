@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.anim;
+namespace Lib.anim;
 
 [Guid("587dbb73-fd79-4481-a79e-f77055abda9a")]
 public class FreezeValue : Instance<FreezeValue>

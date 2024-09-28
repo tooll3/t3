@@ -1,4 +1,4 @@
-namespace lib.math.vec2;
+namespace Lib.math.vec2;
 
 [Guid("3b42b2dc-09dd-4f7a-9cf8-5988f26fbda8")]
 public class AddVec2 : Instance<AddVec2>

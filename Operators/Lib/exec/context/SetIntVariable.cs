@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.exec.context;
+namespace Lib.exec.context;
 
 [Guid("7953f704-ebee-498b-8bdd-a2c201dfe278")]
 public class SetIntVariable : Instance<SetIntVariable>

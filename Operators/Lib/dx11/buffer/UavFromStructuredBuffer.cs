@@ -1,4 +1,4 @@
-namespace lib.dx11.buffer;
+namespace Lib.dx11.buffer;
 
 [Guid("0b5b14bf-c850-493a-afb1-72643926e214")]
 public class UavFromStructuredBuffer : Instance<UavFromStructuredBuffer>

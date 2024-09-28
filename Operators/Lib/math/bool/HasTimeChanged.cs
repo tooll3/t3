@@ -1,4 +1,4 @@
-namespace lib.math.@bool;
+namespace Lib.math.@bool;
 
 [Guid("2443b2fd-c397-4ea6-9588-b595f918cf01")]
 public class HasTimeChanged : Instance<HasTimeChanged>

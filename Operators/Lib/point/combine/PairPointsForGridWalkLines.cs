@@ -1,4 +1,4 @@
-namespace lib.point.combine;
+namespace Lib.point.combine;
 
 [Guid("ec8111b7-09d4-411e-9409-4e877d14371d")]
 public class PairPointsForGridWalkLines : Instance<PairPointsForGridWalkLines>

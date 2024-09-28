@@ -1,4 +1,4 @@
-namespace examples.user.still.worksforeverybody.elements;
+namespace Examples.user.still.worksforeverybody.elements;
 
 [Guid("4aaa90f5-b9ea-4654-957d-dace5850c776")]
 public class _DoubleArrowLinePoint : Instance<_DoubleArrowLinePoint>

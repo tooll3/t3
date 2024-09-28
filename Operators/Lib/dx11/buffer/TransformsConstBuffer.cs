@@ -1,6 +1,6 @@
 using T3.Core.Rendering;
 
-namespace lib.dx11.buffer;
+namespace Lib.dx11.buffer;
 
 [Guid("a60adc26-d7c6-4615-af78-8d2d6da46b79")]
 public class TransformsConstBuffer : Instance<TransformsConstBuffer>

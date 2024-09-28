@@ -1,4 +1,4 @@
-namespace examples.user.still.insomnia;
+namespace Examples.user.still.insomnia;
 
 [Guid("f05356b6-3456-4a1b-988c-0c8f89fb4816")]
 public class SomniDemo : Instance<SomniDemo>

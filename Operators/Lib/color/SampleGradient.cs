@@ -1,4 +1,4 @@
-namespace lib.color;
+namespace Lib.color;
 
 [Guid("8211249d-7a26-4ad0-8d84-56da72a5c536")]
 public class SampleGradient : Instance<SampleGradient>, IExtractedInput<Gradient>

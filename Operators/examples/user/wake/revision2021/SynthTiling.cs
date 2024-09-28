@@ -1,4 +1,4 @@
-namespace examples.user.wake.revision2021;
+namespace Examples.user.wake.revision2021;
 
 [Guid("d6304632-a8c5-4029-8087-dc992b1f899c")]
 public class SynthTiling : Instance<SynthTiling>

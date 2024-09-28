@@ -1,4 +1,4 @@
-namespace lib._3d.mesh.modify;
+namespace Lib._3d.mesh.modify;
 
 [Guid("97ffb173-f4cc-4143-a479-80cf3465cc7e")]
 public class MeshProjectUV : Instance<MeshProjectUV>

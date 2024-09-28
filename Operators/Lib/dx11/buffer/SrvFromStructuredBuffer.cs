@@ -1,7 +1,7 @@
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 
-namespace lib.dx11.buffer;
+namespace Lib.dx11.buffer;
 
 [Guid("8c41b312-6628-411c-a61d-604413b73a72")]
 public class SrvFromStructuredBuffer : Instance<SrvFromStructuredBuffer>

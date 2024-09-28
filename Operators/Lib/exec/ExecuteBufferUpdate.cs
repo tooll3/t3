@@ -1,4 +1,4 @@
-namespace lib.exec;
+namespace Lib.exec;
 
 [Guid("58351c8f-4a73-448e-b7bb-69412e71bd76")]
 public class ExecuteBufferUpdate : Instance<ExecuteBufferUpdate>

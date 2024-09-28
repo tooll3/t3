@@ -1,4 +1,4 @@
-namespace examples.lib._3d.rendering;
+namespace Examples.lib._3d.rendering;
 
 [Guid("5317ade3-d4df-480d-872d-a17c63909da0")]
 public class CameraExample : Instance<CameraExample>

@@ -1,4 +1,4 @@
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("c160f925-0a66-4505-a569-cadd878dbb6f")]
 public class Add : Instance<Add>

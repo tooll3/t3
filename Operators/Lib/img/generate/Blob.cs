@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.img.generate;
+namespace Lib.img.generate;
 
 [Guid("27b0e1af-cb2e-4603-83f9-5c9b042d87e6")]
 public class Blob : Instance<Blob>

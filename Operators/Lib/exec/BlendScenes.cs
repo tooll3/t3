@@ -1,4 +1,4 @@
-namespace lib.exec;
+namespace Lib.exec;
 
 [Guid("6e67d136-9285-48c6-a557-0a07361fc847")]
 public class BlendScenes : Instance<BlendScenes>

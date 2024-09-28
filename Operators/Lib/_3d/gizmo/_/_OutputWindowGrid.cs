@@ -1,4 +1,4 @@
-namespace lib._3d.gizmo._;
+namespace Lib._3d.gizmo.@_;
 
 [Guid("e5588101-5686-4b02-ab7d-e58199ba552e")]
 public class _OutputWindowGrid : Instance<_OutputWindowGrid>

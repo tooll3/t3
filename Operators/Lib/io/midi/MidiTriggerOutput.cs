@@ -2,7 +2,8 @@ using NAudio.Midi;
 using Operators.Utils;
 using T3.Core.Animation;
 using T3.Core.Utils;
-namespace Operators.Lib.io.midi;
+
+namespace Lib.io.midi;
 
 [Guid("61c11adb-94f0-4dc7-9611-c22c40709cf4")]
 public class MidiTriggerOutput : Instance<MidiTriggerOutput>, MidiConnectionManager.IMidiConsumer, ICustomDropdownHolder,IStatusProvider

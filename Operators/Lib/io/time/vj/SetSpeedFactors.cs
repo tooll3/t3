@@ -1,4 +1,4 @@
-namespace lib.io.time.vj;
+namespace Lib.io.time.vj;
 
 [Guid("61dc8ba5-8aa6-4003-8d8c-8bce27f56a67")]
 public class SetSpeedFactors : Instance<SetSpeedFactors>

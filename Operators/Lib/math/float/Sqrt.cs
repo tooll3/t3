@@ -1,4 +1,4 @@
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("24b56330-b9c5-4454-a398-0500b0422ce1")]
 public class Sqrt : Instance<Sqrt>

@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.anim;
+namespace Lib.anim;
 
 [Guid("ea7b8491-2f8e-4add-b0b1-fd068ccfed0d")]
 [SuppressMessage("ReSharper", "InconsistentNaming")]

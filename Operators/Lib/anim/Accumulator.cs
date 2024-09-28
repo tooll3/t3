@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.anim;
+namespace Lib.anim;
 
 [Guid("90b2c6d2-e9a6-4910-b42d-94202f07be27")]
 public class Accumulator : Instance<Accumulator>

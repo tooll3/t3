@@ -1,4 +1,4 @@
-namespace lib.math.@int;
+namespace Lib.math.@int;
 
 [Guid("9a34f503-709b-42e0-a25f-bc74573afa6b")]
 public class IsIntEven : Instance<IsIntEven>

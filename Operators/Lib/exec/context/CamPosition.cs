@@ -1,5 +1,5 @@
 
-namespace lib.exec.context;
+namespace Lib.exec.context;
 
 [Guid("2ed26fb7-fe66-4ed6-8b8d-230d87ae5c77")]
 public class CamPosition : Instance<CamPosition>

@@ -1,4 +1,4 @@
-namespace Types.user.wake.summer2024;
+namespace Examples.user.wake.summer2024;
 
 [Guid("d86c172f-bc6d-4bdb-9be8-3ee34b89fcc3")]
 public class VJWakeLiveCoding : Instance<VJWakeLiveCoding>

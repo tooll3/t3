@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.@string;
+namespace Lib.@string;
 
 [Guid("96ccea19-c37f-4ee4-8dd2-5abdb347f5a1")]
 public class WrapString : Instance<WrapString>

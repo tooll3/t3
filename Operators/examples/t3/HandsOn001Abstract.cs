@@ -1,4 +1,4 @@
-namespace examples.t3;
+namespace Examples.t3;
 
 [Guid("03408590-c8a4-4eb8-a237-bc8d9e1686c2")]
 public class HandsOn001Abstract : Instance<HandsOn001Abstract>

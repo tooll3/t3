@@ -1,4 +1,4 @@
-namespace Types.user.pixtur.MandelbrotFractal;
+namespace Lib.img.generate.MandelbrotFractal;
 
 [Guid("27e58fae-2b3d-404e-b9cd-307cb6ad4906")]
 public class MandelbrotFractal : Instance<MandelbrotFractal>

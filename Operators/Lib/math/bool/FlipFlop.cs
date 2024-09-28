@@ -2,7 +2,7 @@
 
 // ReSharper disable InconsistentNaming
 
-namespace lib.math.@bool;
+namespace Lib.math.@bool;
 
 [Guid("ec1ba1fb-ceb7-4d4f-86b4-389589c7e6f0")]
 public class FlipFlop : Instance<FlipFlop>

@@ -1,4 +1,4 @@
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("55b13dee-89f8-404f-b2fe-43d5e8c54536")]
 public class Floor : Instance<Floor>

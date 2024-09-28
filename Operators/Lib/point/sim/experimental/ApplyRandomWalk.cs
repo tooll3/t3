@@ -1,4 +1,4 @@
-namespace lib.point.sim.experimental;
+namespace Lib.point.sim.experimental;
 
 [Guid("f925e9b9-5c7a-4fbf-9572-b11fe2d54d6c")]
 public class ApplyRandomWalk : Instance<ApplyRandomWalk>

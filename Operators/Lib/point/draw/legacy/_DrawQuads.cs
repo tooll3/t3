@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.point.draw.legacy;
+namespace Lib.point.draw.legacy;
 
 [Guid("16d10dc8-63b9-4ddf-90b8-41caef99d945")]
 public class _DrawQuads : Instance<_DrawQuads>

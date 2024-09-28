@@ -1,4 +1,4 @@
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("4b207e35-64b4-4833-977c-da6c7154a081")]
 public class Sharpen : Instance<Sharpen>

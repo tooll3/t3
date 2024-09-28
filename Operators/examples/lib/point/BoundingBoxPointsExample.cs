@@ -1,4 +1,4 @@
-namespace examples.lib.point;
+namespace Examples.lib.point;
 
 [Guid("7bd3aab4-009f-4c5e-95c9-88f3d08b6893")]
 public class BoundingBoxPointsExample : Instance<BoundingBoxPointsExample>

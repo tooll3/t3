@@ -1,4 +1,4 @@
-namespace lib.exec.context;
+namespace Lib.exec.context;
 
 [Guid("2a0c932a-eb81-4a7d-aeac-836a23b0b789")]
 public class SetFloatVar : Instance<SetFloatVar>

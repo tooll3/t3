@@ -1,4 +1,4 @@
-namespace lib.point.transform;
+namespace Lib.point.transform;
 
 [Guid("20338d1c-e4d3-4208-8f65-e1b720b8b563")]
 public class TransformSomePoints : Instance<TransformSomePoints>

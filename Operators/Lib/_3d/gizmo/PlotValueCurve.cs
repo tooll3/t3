@@ -1,4 +1,4 @@
-namespace lib._3d.gizmo;
+namespace Lib._3d.gizmo;
 
 [Guid("92f3193e-a7dd-4417-b569-129823607fbe")]
 public class PlotValueCurve : Instance<PlotValueCurve>

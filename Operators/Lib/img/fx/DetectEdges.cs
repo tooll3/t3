@@ -1,4 +1,4 @@
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("2a5475c8-9e16-409f-8c40-a3063e045d38")]
 public class DetectEdges : Instance<DetectEdges>

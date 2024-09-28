@@ -1,4 +1,4 @@
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("61c70843-08ea-4249-ba90-9971493e45d1")]
 public class Cos : Instance<Cos>

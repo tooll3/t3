@@ -1,4 +1,4 @@
-namespace examples.user.wake.summer2022.elements;
+namespace Examples.user.wake.summer2022.elements;
 
 [Guid("32feb968-6196-43ea-be23-958c21e884bc")]
 public class PartTitle : Instance<PartTitle>

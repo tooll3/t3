@@ -1,4 +1,4 @@
-namespace examples.lib.sprites;
+namespace Examples.lib.sprites;
 
 [Guid("876e870a-2e34-4adb-bdc9-878b312e633b")]
 public class DrawPointSpritesShadedExample : Instance<DrawPointSpritesShadedExample>

@@ -2,7 +2,7 @@ using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.Utils;
 
-namespace lib.io.audio;
+namespace Lib.io.audio;
 
 [Guid("03477b9a-860e-4887-81c3-5fe51621122c")]
 public class AudioReaction : Instance<AudioReaction>

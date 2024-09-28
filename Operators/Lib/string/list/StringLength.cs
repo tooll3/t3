@@ -1,4 +1,4 @@
-namespace lib.@string.list;
+namespace Lib.@string.list;
 
 [Guid("4c496e8d-2a83-4493-a7a4-fdad29ef3f7d")]
 public class StringLength : Instance<StringLength>

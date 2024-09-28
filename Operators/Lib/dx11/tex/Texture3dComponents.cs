@@ -1,4 +1,4 @@
-namespace lib.dx11.tex;
+namespace Lib.dx11.tex;
 
 [Guid("09641970-b03a-431f-b3c6-5d8df824dde8")]
 public class Texture3dComponents : Instance<Texture3dComponents>

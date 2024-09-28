@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace lib.@string;
+namespace Lib.@string;
 
 [Guid("416a1c8d-4143-4de7-bcf9-466c4009112a")]
 public class IntToString : Instance<IntToString>

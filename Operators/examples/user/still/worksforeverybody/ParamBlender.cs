@@ -1,4 +1,4 @@
-namespace examples.user.still.worksforeverybody;
+namespace Examples.user.still.worksforeverybody;
 
 [Guid("957961ad-797c-48ac-b9d6-7f2fa2ce17eb")]
 public class ParamBlender : Instance<ParamBlender>

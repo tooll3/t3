@@ -2,7 +2,7 @@ using T3.Core.Rendering;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 
-namespace lib._3d.mesh.generate;
+namespace Lib._3d.mesh.generate;
 
 [Guid("1b9977be-70cf-4dbd-8af1-1459596b6527")]
 public class NGonMesh : Instance<NGonMesh>

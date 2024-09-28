@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.dx11.buffer;
+namespace Lib.dx11.buffer;
 
 [Guid("e6bbbeef-08d8-4105-b84d-39edadb549c0")]
 public class PickBuffer : Instance<PickBuffer>

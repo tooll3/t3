@@ -2,7 +2,7 @@ using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using T3.Core.Utils;
 
-namespace lib.dx11.tex;
+namespace Lib.dx11.tex;
 
 [Guid("c2078514-cf1d-439c-a732-0d7b31b5084a")]
 public class SrvFromTexture2d : Instance<SrvFromTexture2d>

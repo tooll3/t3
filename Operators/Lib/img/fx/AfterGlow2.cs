@@ -1,4 +1,4 @@
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("04ac6a30-a2ad-4e43-8954-94dc852b0602")]
 public class AfterGlow2 : Instance<AfterGlow2>

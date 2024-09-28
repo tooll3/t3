@@ -1,6 +1,6 @@
 using T3.Operators.Utils;
 
-namespace lib.io.audio._obsolete;
+namespace Lib.io.audio._obsolete;
 
 [Guid("f8aed421-5e0e-4d1f-993c-1801153ebba8")]
 public class _LegacyAudioReaction : Instance<_LegacyAudioReaction>

@@ -1,4 +1,4 @@
-namespace lib.point.particle.force;
+namespace Lib.point.particle.force;
 
 [Guid("3f8376f2-b89a-4ab4-b6dc-a3e8bf88c0a5")]
 public class TurbulenceForce : Instance<TurbulenceForce>

@@ -1,4 +1,4 @@
-namespace lib._3d._;
+namespace Lib._3d.@_;
 
 [Guid("fa45d013-5a1c-45a0-9b05-a4a4edfb06f9")]
 public class TypoGridBuffer : Instance<TypoGridBuffer>

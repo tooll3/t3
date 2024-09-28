@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.point.combine;
+namespace Lib.point.combine;
 
 [Guid("e9a0bdfd-6f6e-41e2-8c0c-cd5fee26e359")]
 public class PickPointList : Instance<PickPointList>

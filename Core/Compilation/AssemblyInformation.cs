@@ -38,6 +38,8 @@ public sealed class AssemblyInformation
     public IReadOnlyDictionary<Guid, OperatorTypeInfo> OperatorTypeInfo => _operatorTypeInfo;
     private readonly ConcurrentDictionary<Guid, OperatorTypeInfo> _operatorTypeInfo = new();
     private Dictionary<string, Type>? _types;
+    public IReadOnlySet<string> Namespaces => _namespaces;
+    private readonly HashSet<string> _namespaces = new();
 
     internal bool ShouldShareResources;
     public readonly bool IsEditorOnly;
@@ -120,6 +122,10 @@ public sealed class AssemblyInformation
                 Log.Error($"Null type in assembly {assembly.FullName}");
                 continue;
             }
+            
+            var nsp = type.Namespace;
+            if(nsp != null)
+                _namespaces.Add(nsp);
             
             var name = type.FullName;
             if (name == null)
@@ -347,6 +353,7 @@ public sealed class AssemblyInformation
         lock (_assemblyLock)
         {
             _types?.Clear();
+            _namespaces.Clear();
             _assemblyUnsafe = null;
 
             var context = _loadContextUnsafe;

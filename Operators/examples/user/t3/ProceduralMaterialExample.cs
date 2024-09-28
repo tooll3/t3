@@ -1,4 +1,4 @@
-namespace examples.user.t3;
+namespace Examples.user.t3;
 
 [Guid("8fc90e3e-169b-41ba-a76a-51e74f183eb4")]
 public class ProceduralMaterialExample : Instance<ProceduralMaterialExample>

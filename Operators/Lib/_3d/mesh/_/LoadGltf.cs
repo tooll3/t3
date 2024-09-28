@@ -2,7 +2,7 @@ using SharpGLTF.Schema2;
 using T3.Core.Rendering;
 using T3.Core.Utils.Geometry;
 
-namespace lib._3d.mesh._;
+namespace Lib._3d.mesh.@_;
 
 [Guid("92b18d2b-1022-488f-ab8e-a4dcca346a23")]
 public class LoadGltf : Instance<LoadGltf>, IDescriptiveFilename, IStatusProvider

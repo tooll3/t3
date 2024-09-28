@@ -1,4 +1,4 @@
-namespace lib.img.use;
+namespace Lib.img.use;
 
 [Guid("b5b6c046-3c8e-478a-b423-899872c2e1c4")]
 public class KeepPreviousFrame : Instance<KeepPreviousFrame>

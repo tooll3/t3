@@ -1,4 +1,4 @@
-namespace lib.point.draw;
+namespace Lib.point.draw;
 
 [Guid("44d57201-addf-455c-9e31-709b018ba29f")]
 public class DrawConnectionLines : Instance<DrawConnectionLines>

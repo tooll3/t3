@@ -1,4 +1,4 @@
-namespace lib._3d.mesh.modify;
+namespace Lib._3d.mesh.modify;
 
 [Guid("52d0df91-7464-4fff-9173-72c0ee29fced")]
 public class CollapseVertices : Instance<CollapseVertices>

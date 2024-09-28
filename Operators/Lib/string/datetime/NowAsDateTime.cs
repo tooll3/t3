@@ -1,4 +1,4 @@
-namespace lib.@string.datetime;
+namespace Lib.@string.datetime;
 
 [Guid("bd8d684c-96ae-4864-84fd-ca87f98ce1a4")]
 public class NowAsDateTime : Instance<NowAsDateTime>

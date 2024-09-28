@@ -2,7 +2,7 @@ using SharpDX;
 using T3.Core.Utils;
 using Utilities = T3.Core.Utils.Utilities;
 
-namespace lib.math.floats;
+namespace Lib.math.floats;
 
 [Guid("55cc0f79-96c9-482e-9794-934dc0f87708")]
 public class ValuesToTexture : Instance<ValuesToTexture>

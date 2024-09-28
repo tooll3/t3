@@ -1,4 +1,4 @@
-namespace examples.user.still.there.scenes;
+namespace Examples.user.still.there.scenes;
 
 [Guid("ec9d9b04-9f86-49f9-9463-f5ba04e4ee00")]
 public class PartialCredits : Instance<PartialCredits>

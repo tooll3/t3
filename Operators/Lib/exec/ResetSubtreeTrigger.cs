@@ -1,4 +1,4 @@
-namespace lib.exec;
+namespace Lib.exec;
 
 [Guid("38b85057-fbcb-4ab1-9b40-cfb090750150")]
 public class ResetSubtreeTrigger : Instance<ResetSubtreeTrigger>

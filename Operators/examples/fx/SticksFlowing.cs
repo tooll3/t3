@@ -1,4 +1,4 @@
-namespace examples.fx;
+namespace Examples.fx;
 
 [Guid("064c1f38-8b6d-44f0-aae3-32dd3916e2e9")]
 public class SticksFlowing : Instance<SticksFlowing>

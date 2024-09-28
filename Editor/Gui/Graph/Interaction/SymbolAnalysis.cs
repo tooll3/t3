@@ -70,7 +70,7 @@ public static class SymbolAnalysis
                           LacksAllParameterDescription = symbolUi.InputUis.Count > 2 && symbolUi.InputUis.Values.All(i => string.IsNullOrWhiteSpace(i.Description)),
                           LacksSomeParameterDescription = symbolUi.InputUis.Count > 2 && symbolUi.InputUis.Values.Any(i => string.IsNullOrWhiteSpace(i.Description)),
                           LacksParameterGrouping = symbolUi.InputUis.Count > 4 && !symbolUi.InputUis.Values.Any(i => i.AddPadding || !string.IsNullOrEmpty(i.GroupTitle)),
-                          IsLibOperator = symbolUi.Symbol.Namespace.StartsWith("lib.") && !symbolUi.Symbol.Name.StartsWith("_") && !symbolUi.Symbol.Namespace.Contains("._"),
+                          IsLibOperator = symbolUi.Symbol.Namespace.StartsWith("Lib.") && !symbolUi.Symbol.Name.StartsWith("_") && !symbolUi.Symbol.Namespace.Contains("._"),
                       };
                 
         }

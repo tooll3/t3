@@ -1,4 +1,4 @@
-namespace lib.math.@int;
+namespace Lib.math.@int;
 
 [Guid("cf3268d7-4f3d-47bd-8cb5-0214c75432ec")]
 public class ModInt : Instance<ModInt>

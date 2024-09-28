@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib._3d.draw;
+namespace Lib._3d.draw;
 
 [Guid("42cb88bc-beb8-4d89-ac99-44b77be5f03e")]
 public class DrawMeshAtPoints : Instance<DrawMeshAtPoints>

@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("10673c38-8c7e-4aa1-8dcd-3f2711c709b5")]
 public class Random : Instance<Random>

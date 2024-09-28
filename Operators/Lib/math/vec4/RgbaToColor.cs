@@ -1,4 +1,4 @@
-namespace lib.math.vec4;
+namespace Lib.math.vec4;
 
 [Guid("82a5f040-926b-4970-9da2-aa36de94b436")]
 public class RgbaToColor : Instance<RgbaToColor>

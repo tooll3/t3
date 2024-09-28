@@ -1,4 +1,4 @@
-namespace examples.user.still.worksforeverybody.fx;
+namespace Examples.user.still.worksforeverybody.fx;
 
 [Guid("6854e04f-8b60-41b2-a369-ca0b715c4df3")]
 public class CafeWallPattern : Instance<CafeWallPattern>

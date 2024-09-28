@@ -1,6 +1,6 @@
 using System.Numerics;
 using ImGuiNET;
-using lib.anim._obsolete;
+using Lib.anim._obsolete;
 using T3.Core.Operator;
 using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.UiHelpers;

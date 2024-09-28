@@ -1,4 +1,4 @@
-namespace examples.user.community.effect;
+namespace Examples.user.community.effect;
 
 [Guid("dbd8e542-730a-4417-badf-acc721a3eca8")]
 public class ChangesScannerFx : Instance<ChangesScannerFx>

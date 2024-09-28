@@ -1,7 +1,7 @@
 using T3.Core.DataTypes.DataSet;
 using T3.Core.Utils;
 
-namespace lib.io.input;
+namespace Lib.io.input;
 
 [Guid("2d1c9633-b66e-4958-913c-116ae36963a5")]
 public class MidiRecording : Instance<MidiRecording>

@@ -1,4 +1,4 @@
-namespace lib.point.generate;
+namespace Lib.point.generate;
 
 [Guid("2467e1ed-f7fc-4c90-8230-b80ba6b42a2d")]
 public class MeshVerticesToPoints : Instance<MeshVerticesToPoints>

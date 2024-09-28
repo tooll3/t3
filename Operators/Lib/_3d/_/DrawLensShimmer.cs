@@ -1,4 +1,4 @@
-namespace lib._3d._;
+namespace Lib._3d.@_;
 
 [Guid("c87b140b-1109-4eff-bf77-98bff3fc3e17")]
 public class DrawLensShimmer : Instance<DrawLensShimmer>

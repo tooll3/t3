@@ -1,4 +1,4 @@
-namespace lib.dx11._;
+namespace Lib.dx11.@_;
 
 [Guid("db73b47d-3d42-4b17-b8fd-08b6f1286716")]
 public class FirstValidTexture : Instance<FirstValidTexture>

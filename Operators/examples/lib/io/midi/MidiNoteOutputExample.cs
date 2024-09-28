@@ -1,4 +1,4 @@
-namespace examples.lib.io.midi;
+namespace Examples.lib.io.midi;
 
 [Guid("cb2cdd1d-811a-4a30-a5bc-289f36c31028")]
 public class MidiNoteOutputExample : Instance<MidiNoteOutputExample>

@@ -1,4 +1,4 @@
-namespace examples.lib.point;
+namespace Examples.lib.point;
 
 [Guid("25d26231-730e-4376-b256-e34eca6290ce")]
 public class GetPointDataFromListExample : Instance<GetPointDataFromListExample>

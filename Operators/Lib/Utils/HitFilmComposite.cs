@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace Operators.Utils;
+namespace Lib.Utils;
 
 public static class HitFilmComposite
 {

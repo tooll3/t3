@@ -1,4 +1,4 @@
-namespace examples.user.still.insomnia;
+namespace Examples.user.still.insomnia;
 
 [Guid("41dbfc2d-06e7-40b2-a2f3-720fb1d28ed8")]
 public class InsomniaLenseFlares : Instance<InsomniaLenseFlares>

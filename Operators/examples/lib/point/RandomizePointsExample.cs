@@ -1,4 +1,4 @@
-namespace examples.lib.point;
+namespace Examples.lib.point;
 
 [Guid("e555a0ca-8c81-4436-9f77-8c7a327d7379")]
 public class RandomizePointsExample : Instance<RandomizePointsExample>

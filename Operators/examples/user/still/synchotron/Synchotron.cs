@@ -1,4 +1,4 @@
-namespace examples.user.still.synchotron;
+namespace Examples.user.still.synchotron;
 
 [Guid("02625eeb-7f7d-4c48-af5b-13d9a2079b3b")]
 public class Synchotron : Instance<Synchotron>

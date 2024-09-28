@@ -1,4 +1,4 @@
-namespace lib.img.generate;
+namespace Lib.img.generate;
 
 [Guid("dc34c54b-f856-4fd2-a182-68fd75189d7d")]
 public class ShardNoise : Instance<ShardNoise>

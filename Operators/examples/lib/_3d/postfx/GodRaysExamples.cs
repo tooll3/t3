@@ -1,4 +1,4 @@
-namespace examples.lib._3d.postfx;
+namespace Examples.lib._3d.postfx;
 
 [Guid("4b8b7567-a9d2-4956-813d-91e542e1f661")]
 public class GodRaysExamples : Instance<GodRaysExamples>

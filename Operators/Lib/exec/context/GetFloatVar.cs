@@ -1,4 +1,4 @@
-namespace lib.exec.context;
+namespace Lib.exec.context;
 
 [Guid("e6072ecf-30d2-4c52-afa1-3b195d61617b")]
 public class GetFloatVar : Instance<GetFloatVar>, ICustomDropdownHolder

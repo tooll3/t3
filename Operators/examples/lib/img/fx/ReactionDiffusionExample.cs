@@ -1,4 +1,4 @@
-namespace examples.lib.img.fx;
+namespace Examples.lib.img.fx;
 
 [Guid("ddf3077b-6273-4023-88e5-2948312e012b")]
 public class ReactionDiffusionExample : Instance<ReactionDiffusionExample>

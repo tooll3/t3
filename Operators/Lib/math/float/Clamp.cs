@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("c3a18346-930c-4242-9e42-aa9b3a439395")]
 public class Clamp : Instance<Clamp>

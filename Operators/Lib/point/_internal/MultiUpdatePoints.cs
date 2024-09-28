@@ -1,4 +1,4 @@
-namespace lib.point._internal;
+namespace Lib.point._internal;
 
 [Guid("62c89469-7194-486a-87cd-c3e6bc0cf5d2")]
 public class MultiUpdatePoints : Instance<MultiUpdatePoints>

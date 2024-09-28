@@ -1,6 +1,6 @@
 using T3.Core.Rendering.Material;
 
-namespace lib._3d.rendering._;
+namespace Lib._3d.rendering.@_;
 
 [Guid("ca4fe8c4-cf61-4196-84e4-d69dc8869a25")]
 public class GetPbrParameters : Instance<GetPbrParameters>

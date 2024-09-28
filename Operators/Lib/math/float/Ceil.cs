@@ -1,4 +1,4 @@
-namespace lib.math.@float;
+namespace Lib.math.@float;
 
 [Guid("7129684e-bf84-4c8b-996e-baba68094585")]
 public class Ceil : Instance<Ceil>

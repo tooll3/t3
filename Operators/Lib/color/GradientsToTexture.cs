@@ -2,7 +2,7 @@ using SharpDX;
 using T3.Core.Utils;
 using Utilities = T3.Core.Utils.Utilities;
 
-namespace lib.color;
+namespace Lib.color;
 
 [Guid("2c53eee7-eb38-449b-ad2a-d7a674952e5b")]
 public class GradientsToTexture : Instance<GradientsToTexture>

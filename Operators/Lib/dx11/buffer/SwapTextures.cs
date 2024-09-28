@@ -1,4 +1,4 @@
-namespace lib.dx11.buffer;
+namespace Lib.dx11.buffer;
 
 [Guid("590a0b0b-c847-433c-8ffa-602ed0ae8f28")]
 public class SwapTextures : Instance<SwapTextures>

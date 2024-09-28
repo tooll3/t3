@@ -1,7 +1,7 @@
 using T3.Core.Rendering;
 using T3.Core.Utils;
 
-namespace lib._3d.mesh.generate;
+namespace Lib._3d.mesh.generate;
 
 [Guid("a835ab86-29c1-438e-a7f7-2e297108bfd5")]
 public class TorusMesh : Instance<TorusMesh>

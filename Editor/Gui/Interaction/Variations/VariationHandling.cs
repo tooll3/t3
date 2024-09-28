@@ -63,7 +63,7 @@ internal static class VariationHandling
             ActiveInstanceForSnapshots = activeCompositionInstance;
 
             // Prevent variations for library operators
-            if (activeCompositionInstance.Symbol.Namespace.StartsWith("lib."))
+            if (activeCompositionInstance.Symbol.Namespace.StartsWith("Lib."))
             {
                 ActivePoolForSnapshots = null;
             }

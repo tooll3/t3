@@ -1,4 +1,4 @@
-namespace lib.img.adjust;
+namespace Lib.img.adjust;
 
 [Guid("55411442-d538-48bf-ab78-b8c24c85aa46")]
 public class AdjustColors : Instance<AdjustColors>

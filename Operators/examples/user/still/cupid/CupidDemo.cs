@@ -1,4 +1,4 @@
-namespace examples.user.still.cupid;
+namespace Examples.user.still.cupid;
 
 [Guid("442d40e3-7c00-4161-a606-79c2fe6c36c1")]
 public class CupidDemo : Instance<CupidDemo>

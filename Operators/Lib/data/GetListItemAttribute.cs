@@ -1,7 +1,7 @@
 using System.Reflection;
 using T3.Core.Utils;
 
-namespace lib.data;
+namespace Lib.data;
 
 [Guid("37794826-a099-4af3-90f4-1e49092a09e1")]
 public class GetListItemAttribute : Instance<GetListItemAttribute>

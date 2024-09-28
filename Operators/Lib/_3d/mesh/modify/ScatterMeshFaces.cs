@@ -1,4 +1,4 @@
-namespace lib._3d.mesh.modify;
+namespace Lib._3d.mesh.modify;
 
 [Guid("daacabd8-0338-4998-898f-94580abd8eac")]
 public class ScatterMeshFaces : Instance<ScatterMeshFaces>

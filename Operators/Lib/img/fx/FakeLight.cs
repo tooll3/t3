@@ -1,4 +1,4 @@
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("6820b166-1782-43b9-bc5c-6b4f63b16f86")]
 public class FakeLight : Instance<FakeLight>

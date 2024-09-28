@@ -1,4 +1,4 @@
-namespace lib.point._internal;
+namespace Lib.point._internal;
 
 [Guid("3737cd30-c79a-4282-897a-7d2a44076c65")]
 public class _OffsetPoints : Instance<_OffsetPoints>

@@ -1,4 +1,4 @@
-namespace lib.img.analyze;
+namespace Lib.img.analyze;
 
 [Guid("592a2b6f-d4e3-43e0-9e73-034cca3b3900")]
 public class ImageLevels : Instance<ImageLevels>

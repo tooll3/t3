@@ -1,4 +1,4 @@
-namespace lib.math.@int;
+namespace Lib.math.@int;
 
 [Guid("6a4edb6a-5ced-4356-9090-4bf770cdeb52")]
 public class MultiplyInt : Instance<MultiplyInt>

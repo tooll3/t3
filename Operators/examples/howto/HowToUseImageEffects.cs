@@ -1,4 +1,4 @@
-namespace examples.howto;
+namespace Examples.howto;
 
 [Guid("649d4542-4165-4129-9484-dd8fb8663e15")]
 public class HowToUseImageEffects : Instance<HowToUseImageEffects>

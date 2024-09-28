@@ -1,4 +1,4 @@
-namespace lib.io.midi;
+namespace Lib.io.midi;
 
 [Guid("fd5467c7-c75d-4755-8885-fd1ff1f07c95")]
 public class SelectFloatFromDict : Instance<SelectFloatFromDict>, IStatusProvider, ICustomDropdownHolder

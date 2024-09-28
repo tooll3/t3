@@ -1,4 +1,4 @@
-namespace examples.user.fuzzy.osc;
+namespace Examples.user.fuzzy.osc;
 
 [Guid("48e284ff-cfcc-4d6c-83d4-256c9380de61")]
 public class OscOutputExample : Instance<OscOutputExample>

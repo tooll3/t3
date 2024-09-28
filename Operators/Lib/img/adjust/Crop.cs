@@ -1,4 +1,4 @@
-namespace lib.img.adjust;
+namespace Lib.img.adjust;
 
 [Guid("a29cf1c8-d9cd-4a5d-b06c-597cbeb5b33d")]
 public class Crop : Instance<Crop>

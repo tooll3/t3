@@ -1,7 +1,7 @@
-using lib.dx11.buffer;
+using Lib.dx11.buffer;
 using T3.Core.Rendering;
 
-namespace lib._3d.rendering._;
+namespace Lib._3d.rendering.@_;
 
 [Guid("843c9378-6836-4f39-b676-06fd2828af3e")]
 public class GetCamTransformBuffer : Instance<GetCamTransformBuffer>

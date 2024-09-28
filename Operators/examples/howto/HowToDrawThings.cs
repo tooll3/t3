@@ -1,4 +1,4 @@
-namespace examples.howto;
+namespace Examples.howto;
 
 [Guid("40757a26-1cd8-477c-a774-7463aadd6f0f")]
 public class HowToDrawThings : Instance<HowToDrawThings>

@@ -3,7 +3,7 @@ using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 
 
-namespace lib._3d.mesh.generate;
+namespace Lib._3d.mesh.generate;
 
 [Guid("c47ab830-aae7-4f8f-b67c-9119bcbaf7df")]
 public class CubeMesh : Instance<CubeMesh>

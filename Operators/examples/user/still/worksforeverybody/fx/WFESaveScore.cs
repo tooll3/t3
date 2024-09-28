@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Utils;
 
-namespace examples.user.still.worksforeverybody.fx;
+namespace Examples.user.still.worksforeverybody.fx;
 
 [Guid("40676c51-ecca-4bc3-bd4a-eeb80fc0b937")]
 public class WFESaveScore : Instance<WFESaveScore>

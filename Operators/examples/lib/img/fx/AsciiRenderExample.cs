@@ -1,4 +1,4 @@
-namespace examples.lib.img.fx;
+namespace Examples.lib.img.fx;
 
 [Guid("2ff86df2-6492-4996-bd5e-fc12ec2e0947")]
 public class AsciiRenderExample : Instance<AsciiRenderExample>

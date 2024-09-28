@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.point._cpu;
+namespace Lib.point._cpu;
 
 [Guid("688230de-a3fc-4740-a12d-9e2f98cad60a")]
 public class SampleSplinePoint : Instance<SampleSplinePoint>

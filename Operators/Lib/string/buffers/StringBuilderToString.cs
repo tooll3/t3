@@ -1,4 +1,4 @@
-namespace lib.@string.buffers;
+namespace Lib.@string.buffers;
 
 [Guid("c5f1292a-e692-422b-9261-b5ae3451cd7c")]
 public class StringBuilderToString : Instance<StringBuilderToString>

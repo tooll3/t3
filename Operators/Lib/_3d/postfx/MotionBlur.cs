@@ -1,4 +1,4 @@
-namespace lib._3d.postfx;
+namespace Lib._3d.postfx;
 
 [Guid("196e14c7-3a71-4afd-a53b-e51d0fe8f414")]
 public class MotionBlur : Instance<MotionBlur>

@@ -1,4 +1,4 @@
-namespace lib.dx11.tex;
+namespace Lib.dx11.tex;
 
 [Guid("daec568f-f7b4-4d81-a401-34d62462daab")]
 public class GetTextureSize : Instance<GetTextureSize>

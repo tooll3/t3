@@ -1,4 +1,4 @@
-namespace examples.lib._3d.rendering;
+namespace Examples.lib._3d.rendering;
 
 [Guid("442995fa-3d89-4d6c-b006-77f825f4e3ed")]
 public class LenseFlareExample : Instance<LenseFlareExample>

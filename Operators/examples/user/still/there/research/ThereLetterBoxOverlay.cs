@@ -1,4 +1,4 @@
-namespace examples.user.still.there.research;
+namespace Examples.user.still.there.research;
 
 [Guid("2d388f2b-3d07-4cbd-a86a-63c5cb83ed26")]
 public class ThereLetterBoxOverlay : Instance<ThereLetterBoxOverlay>

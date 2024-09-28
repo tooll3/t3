@@ -1,4 +1,4 @@
-namespace lib.point.combine;
+namespace Lib.point.combine;
 
 [Guid("93e2f11a-18a2-4dcb-86df-c452d340b409")]
 public class BlendMeshVertices : Instance<BlendMeshVertices>

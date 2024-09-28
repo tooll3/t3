@@ -1,4 +1,4 @@
-namespace examples.lib.point;
+namespace Examples.lib.point;
 
 [Guid("b64b8677-a6be-4071-b350-249aa3984f93")]
 public class SnapToAnglesForceExample : Instance<SnapToAnglesForceExample>

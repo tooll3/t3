@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib._3d.rendering;
+namespace Lib._3d.rendering;
 
 [Guid("54ba8673-ff58-48d1-ae2e-ee2b83bc6860")]
 public class IntToWrapmode : Instance<IntToWrapmode>

@@ -1,4 +1,4 @@
-namespace examples.lib.math;
+namespace Examples.lib.math;
 
 [Guid("04b8f508-2101-42dc-8d91-60b585bc561e")]
 public class SpringExample : Instance<SpringExample>

@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using Operators.Utils;
 using Rug.Osc;
 
-namespace lib.io.osc;
+namespace Lib.io.osc;
 
 [Guid("3a1d7ea0-5445-4df0-b08a-6596e53f815a")]
 public class OscInput : Instance<OscInput>, OscConnectionManager.IOscConsumer, IStatusProvider, ICustomDropdownHolder

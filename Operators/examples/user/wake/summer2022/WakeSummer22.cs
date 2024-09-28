@@ -1,4 +1,4 @@
-namespace examples.user.wake.summer2022;
+namespace Examples.user.wake.summer2022;
 
 [Guid("5f305acf-4e8f-4bc8-945a-cbf4f325a9cd")]
 public class WakeSummer22 : Instance<WakeSummer22>

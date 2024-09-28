@@ -1,4 +1,4 @@
-namespace lib.point.sim;
+namespace Lib.point.sim;
 
 [Guid("e85f0fcb-303e-4d21-b592-ad4578286336")]
 public class SamplePointSimAttributes : Instance<SamplePointSimAttributes>

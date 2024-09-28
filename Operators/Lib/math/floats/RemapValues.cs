@@ -1,4 +1,4 @@
-namespace lib.math.floats;
+namespace Lib.math.floats;
 
 [Guid("efb9ecfc-5aa2-45f1-87b0-1455d7702aa7")]
 public class RemapValues : Instance<RemapValues>

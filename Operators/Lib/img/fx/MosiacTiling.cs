@@ -1,4 +1,4 @@
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("c68fbb84-2f56-4aed-97ab-3c2df0ec700b")]
 public class MosiacTiling : Instance<MosiacTiling>

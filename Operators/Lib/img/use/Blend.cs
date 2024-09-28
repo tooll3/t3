@@ -1,4 +1,4 @@
-namespace lib.img.use;
+namespace Lib.img.use;
 
 [Guid("9f43f769-d32a-4f49-92ac-e0be3ba250cf")]
 public class Blend : Instance<Blend>

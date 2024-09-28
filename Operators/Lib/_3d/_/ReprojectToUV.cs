@@ -1,4 +1,4 @@
-namespace lib._3d._;
+namespace Lib._3d.@_;
 
 [Guid("4238439e-a6b4-4390-9984-e6ebf19c3a69")]
 public class ReprojectToUV : Instance<ReprojectToUV>

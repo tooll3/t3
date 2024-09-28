@@ -1,4 +1,4 @@
-namespace Types.user.wake.livecoding.scenes;
+namespace Examples.user.wake.livecoding.scenes;
 
 [Guid("abbb6ec1-f8ea-474d-a492-6857af84dd71")]
 public class FadingFaces2 : Instance<FadingFaces2>

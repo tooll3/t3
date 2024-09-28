@@ -1,4 +1,4 @@
-namespace examples.lib.img.fx;
+namespace Examples.lib.img.fx;
 
 [Guid("ea7536a2-f69b-4964-a04c-4474bfacfa56")]
 public class PixelateExample : Instance<PixelateExample>

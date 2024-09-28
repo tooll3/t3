@@ -1,4 +1,4 @@
-namespace lib.img.fx;
+namespace Lib.img.fx;
 
 [Guid("1b149f1f-529c-4418-ac9d-3871f24a9e38")]
 public class Displace : Instance<Displace>

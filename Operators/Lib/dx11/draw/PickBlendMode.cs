@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.dx11.draw;
+namespace Lib.dx11.draw;
 
 [Guid("fd9bffd3-5c57-462f-8761-85f94c5a629b")]
 public class PickBlendMode : Instance<PickBlendMode>

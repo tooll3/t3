@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.point.draw;
+namespace Lib.point.draw;
 
 [Guid("ffd94e5a-bc98-4e70-84d8-cce831e6925f")]
 public class DrawPoints : Instance<DrawPoints>

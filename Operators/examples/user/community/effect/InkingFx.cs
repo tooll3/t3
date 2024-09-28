@@ -1,4 +1,4 @@
-namespace examples.user.community.effect;
+namespace Examples.user.community.effect;
 
 [Guid("9484cda8-a5ab-414d-a5bd-9a413796c7ab")]
 public class InkingFx : Instance<InkingFx>

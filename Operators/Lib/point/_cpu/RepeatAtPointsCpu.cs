@@ -1,5 +1,5 @@
 
-namespace lib.point._cpu;
+namespace Lib.point._cpu;
 
 [Guid("478522e1-5683-4db1-a7dc-db59838eca2a")]
 public class RepeatAtPointsCpu : Instance<RepeatAtPointsCpu>

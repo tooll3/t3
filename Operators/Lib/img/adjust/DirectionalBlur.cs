@@ -1,4 +1,4 @@
-namespace lib.img.adjust;
+namespace Lib.img.adjust;
 
 [Guid("1192ae86-b174-4b58-9cc6-38afb666ce35")]
 public class DirectionalBlur : Instance<DirectionalBlur>

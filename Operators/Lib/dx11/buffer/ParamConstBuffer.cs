@@ -1,4 +1,4 @@
-namespace lib.dx11.buffer;
+namespace Lib.dx11.buffer;
 
 [Guid("c30542d5-609c-452a-9168-78964a3a0927")]
 public class ParamConstBuffer : Instance<ParamConstBuffer>

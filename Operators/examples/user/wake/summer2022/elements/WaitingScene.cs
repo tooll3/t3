@@ -1,4 +1,4 @@
-namespace examples.user.wake.summer2022.elements;
+namespace Examples.user.wake.summer2022.elements;
 
 [Guid("73496aee-5c15-4cfb-9303-c5c66df7caff")]
 public class WaitingScene : Instance<WaitingScene>

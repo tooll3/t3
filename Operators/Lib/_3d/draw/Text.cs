@@ -1,4 +1,4 @@
-namespace lib._3d.draw;
+namespace Lib._3d.draw;
 
 [Guid("fd31d208-12fe-46bf-bfa3-101211f8f497")]
 public class Text : Instance<Text>, ITransformable

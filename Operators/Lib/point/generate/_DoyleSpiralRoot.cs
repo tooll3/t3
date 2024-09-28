@@ -1,4 +1,4 @@
-namespace lib.point.generate;
+namespace Lib.point.generate;
 
 [Guid("b2267122-4223-4eff-8ae4-91d149df535c")]
 public class _DoyleSpiralRoot : Instance<_DoyleSpiralRoot>

@@ -1,4 +1,4 @@
-namespace examples.user.still.worksforeverybody;
+namespace Examples.user.still.worksforeverybody;
 
 [Guid("00485ce8-d342-4c97-aac3-1af8a7f03897")]
 public class WorksForEverybody : Instance<WorksForEverybody>

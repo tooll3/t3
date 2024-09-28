@@ -1,4 +1,4 @@
-namespace Types.user.pixtur.projects.Mappi2;
+namespace Examples.lib.point;
 
 [Guid("7644e221-9785-414b-905d-31fd68ec080c")]
 public class SetAttributesWithPointFieldsExamples : Instance<SetAttributesWithPointFieldsExamples>

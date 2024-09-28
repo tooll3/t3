@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.io.time;
+namespace Lib.io.time;
 
 [Guid("9cb4d49e-135b-400b-a035-2b02c5ea6a72")]
 public class Time : Instance<Time>

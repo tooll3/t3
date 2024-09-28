@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.@string.buffers;
+namespace Lib.@string.buffers;
 
 [Guid("7dff2da3-30e3-4ad9-bfc6-d6800f90fca8")]
 public class StringInsert : Instance<StringInsert>

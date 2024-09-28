@@ -1,4 +1,4 @@
-namespace examples.user.newemka980.Shading;
+namespace Examples.user.newemka980.Shading;
 
 [Guid("dcacc281-92c6-4e47-8eea-91fa8954ed86")]
 public class DrawMeshCelShading : Instance<DrawMeshCelShading>

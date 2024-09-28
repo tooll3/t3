@@ -1,4 +1,4 @@
-namespace lib.img.generate;
+namespace Lib.img.generate;
 
 [Guid("0b3436db-e283-436e-ba85-2f3a1de76a9d")]
 public class LoadImage : Instance<LoadImage>, IDescriptiveFilename

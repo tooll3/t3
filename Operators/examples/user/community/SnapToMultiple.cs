@@ -1,4 +1,4 @@
-namespace examples.user.community;
+namespace Examples.user.community;
 
 [Guid("c3090c65-194a-4f95-9b70-d003f54103f7")]
 public class SnapToMultiple : Instance<SnapToMultiple>

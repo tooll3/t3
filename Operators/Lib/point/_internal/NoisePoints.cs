@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace lib.point._internal;
+namespace Lib.point._internal;
 
 [Guid("a3bc1b8c-6bd9-4117-880e-afb9765e3104")]
 public class NoisePoints : Instance<NoisePoints>

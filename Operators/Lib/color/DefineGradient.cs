@@ -1,4 +1,4 @@
-namespace lib.color;
+namespace Lib.color;
 
 [Guid("185452c6-f299-42a3-b618-c6aa00d66c62")]
 public class DefineGradient : Instance<DefineGradient>

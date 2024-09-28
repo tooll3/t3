@@ -1,4 +1,4 @@
-namespace examples.lib.point;
+namespace Examples.lib.point;
 
 [Guid("78413b72-9c04-41e7-93cc-7fc75aff99b5")]
 public class PointAttributeFromNoiseExample : Instance<PointAttributeFromNoiseExample>

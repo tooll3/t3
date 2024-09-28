@@ -1,7 +1,7 @@
 using T3.Core.Animation;
 using T3.Core.Utils;
 
-namespace lib.exec;
+namespace Lib.exec;
 
 [Guid("53127485-e2c7-4be8-aff2-da5790799593")]
 public class LogMessage : Instance<LogMessage>

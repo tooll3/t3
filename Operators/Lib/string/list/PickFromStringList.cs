@@ -1,4 +1,4 @@
-namespace lib.@string.list;
+namespace Lib.@string.list;
 
 [Guid("ef357e66-24e9-4f54-8d86-869db74602f4")]
 public class PickFromStringList : Instance<PickFromStringList>
