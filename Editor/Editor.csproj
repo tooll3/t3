@@ -21,6 +21,7 @@
         <DebugType>full</DebugType>
     </PropertyGroup>
 
+    <!-- ======================= Nuget References =========================== -->
     <ItemGroup>
         <PackageReference Include="ImGui.NET" Version="1.89.9.3" />
         <PackageReference Include="Microsoft.Build" Version="17.9.5" />
@@ -36,7 +37,9 @@
             <NoWarn>NU1701</NoWarn>
         </PackageReference>
     </ItemGroup>
+    <!-- ===============================//======================================= -->
 
+    <!-- ======================= Project References =========================== -->
     <ItemGroup>
         <ProjectReference Include="..\Core\Core.csproj"/>
         <ProjectReference Include="..\Logging\Logging.csproj"/>
@@ -44,8 +47,10 @@
         <ProjectReference Include="..\ProcessRunner\ProcessRunner.csproj" />
         <ProjectReference Include="..\SilkWindows\SilkWindows.csproj" />
     </ItemGroup>
+    <!-- ===============================//======================================= -->
 
 
+    <!-- ======================= Native Dependencies =========================== -->
     <!--This copies all files in the `dependencies` folder *directly* into the output directory-->
     <ItemGroup>
         <Content Include="../Dependencies/**/*" Visible="false">
@@ -53,8 +58,10 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
+    <!-- =================================//===================================== -->
 
 
+    <!-- ======================= Defaults =========================== -->
     <!--This copies all files in the `.Defaults` folder into the output/.t3 folder-->
     <ItemGroup>
         <DefaultUserConfigs Include="../.Defaults/**/*"/>
@@ -66,35 +73,58 @@
               UseHardlinksIfPossible="true"
               DestinationFiles="@(DefaultUserConfigs->'$(OutputPath)/.t3/%(RecursiveDir)%(Filename)%(Extension)')"/>
     </Target>
+    <!-- ==========================//================================ -->
 
+    <!-- ======================= Resources =========================== -->
     <!-- This copies t3/Resources into the output directory -->
     <ItemGroup>
         <Resources Include="../Resources/**/*" Visible="false"/>
     </ItemGroup>
-
+    
     <Target Name="CopyResources" AfterTargets="AfterBuild">
         <Copy SourceFiles="@(Resources)"
               SkipUnchangedFiles="true"
               UseHardlinksIfPossible="true"
               DestinationFiles="@(Resources->'$(OutputPath)/Resources/%(RecursiveDir)%(Filename)%(Extension)')"/>
     </Target>
+    <!-- ===========================//=============================== -->
     
+    <!-- ===================== Define build output paths ==================== -->
+    <!-- This creates a local variable for us to target the right build version based on the default paths associated with Debug/Release builds, --> 
+    <!-- along with the target framework (e.g. net8.0-windows, net8.0, etc) -->
     <PropertyGroup>
         <RelativeBuildFolder>bin/$(Configuration)/$(TargetFramework)</RelativeBuildFolder>
     </PropertyGroup>
+    <!-- ===============================//================================== -->
+    
+    <!-- ====================== Player ============================ -->
+    <!-- This builds the Player project - Unnecessary with the proper Build configurations in IDE, but it's nicer to have it here -->
+    <Target Name="BuildPlayer" AfterTargets="AfterBuild">
+        <MSBuild Projects="../Player/Player.csproj" Targets="Build" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+    </Target>
 
-    <!-- This copies ../Player build into the output directory -->
+    <!-- This copies the Player build into the output directory -->
+    <!-- Notice the similarities (and differences) between this and the CopyLibs target below -->
     <ItemGroup>
         <Player Include="../Player/$(RelativeBuildFolder)/**/*" Visible="false"/>
     </ItemGroup>
-
     <Target Name="CopyPlayer" AfterTargets="AfterBuild">
         <Copy SourceFiles="@(Player)"
               SkipUnchangedFiles="true"
               UseHardlinksIfPossible="true"
               DestinationFiles="@(Player->'$(OutputPath)/Player/%(RecursiveDir)%(Filename)%(Extension)')"/>
     </Target>
+    <!-- =========================//=============================== -->
+    
+    <!-- ====================== Build LibEditor (Symbol Uis) ============================ -->
+    <!-- This builds the LibEditor project - LibEditor depends on this project so we must build it before copying it in -->
+    <Target Name="BuildLibEditor" AfterTargets="AfterBuild">
+        <MSBuild Projects="../Operators/LibEditor/libEditor.csproj" Targets="Build" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+    </Target>
+    <!-- ===================================//=========================================== -->
+    
 
+    <!-- ======================== Operator Packages ========================== -->
     <!-- This copies built-in operator projects into the output directory -->
     <!-- There might be a better (and less manual) way to do this, but this is the best we have right now. -->
     <Target Name="CopyLibs" AfterTargets="AfterBuild" Condition=" '$(Configuration)' == 'Release' ">
@@ -104,7 +134,7 @@
             <UserOps>../Operators/user</UserOps>
             <ExportFolder>$(OutputPath)/Operators</ExportFolder>
         </PropertyGroup>
-
+        
         <ItemGroup>
             <!-- This is a list of all the built-in operator projects. 'Include' refers to project directory, 'SubFolder' to export subfolder -->
             <Lib Include="$(Ops)/lib/$(RelativeBuildFolder)/**" SubFolder="lib"/>
@@ -122,5 +152,6 @@
               SkipUnchangedFiles="true"
               UseHardlinksIfPossible="true"/>
     </Target>
+    <!-- ==================================//====================================== -->
 
 </Project>
