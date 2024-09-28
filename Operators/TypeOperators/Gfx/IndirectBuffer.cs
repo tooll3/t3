@@ -3,7 +3,7 @@ using SharpDX.Direct3D11;
 namespace Types.Gfx;
 
 [Guid("5a88fa27-16ad-454f-a08d-5e65dd75cefe")]
-public class IndirectBuffer : Instance<IndirectBuffer>
+public sealed class IndirectBuffer : Instance<IndirectBuffer>
 {
     [Output(Guid = "837133D3-308C-48AA-9AFE-B9EB09E76A69")]
     public readonly Slot<Buffer> Buffer = new();

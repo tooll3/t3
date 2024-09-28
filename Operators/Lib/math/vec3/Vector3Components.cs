@@ -1,7 +1,7 @@
 namespace Lib.math.vec3;
 
 [Guid("a8083b41-951e-41f2-bb8a-9b511da26102")]
-public class Vector3Components : Instance<Vector3Components>
+internal sealed class Vector3Components : Instance<Vector3Components>
 {
     [Output(Guid = "2F05B628-8FC0-46DC-B312-9B107B8CA4A2")]
     public readonly Slot<float> X = new();

@@ -5,7 +5,7 @@ using Utilities = T3.Core.Utils.Utilities;
 namespace Lib.color;
 
 [Guid("2c53eee7-eb38-449b-ad2a-d7a674952e5b")]
-public class GradientsToTexture : Instance<GradientsToTexture>
+internal sealed class GradientsToTexture : Instance<GradientsToTexture>
 {
     [Output(Guid = "7ad741ec-274d-493c-994f-1a125b96a6e9")]
     public readonly Slot<Texture2D> GradientsTexture = new();

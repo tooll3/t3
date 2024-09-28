@@ -1,7 +1,7 @@
 namespace Lib.point.transform;
 
 [Guid("ffbbef55-3149-48c1-95cf-cad691ce15fe")]
-public class BoundPoints : Instance<BoundPoints>
+internal sealed class BoundPoints : Instance<BoundPoints>
 {
 
     [Output(Guid = "f5a9bf63-6a41-47ee-9670-b432d50c957d")]

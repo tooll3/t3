@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.floats;
 
 [Guid("a52070ce-7110-439c-84e7-01f2a883b83f")]
-public class ComposeVec3FromList : Instance<ComposeVec3FromList>
+internal sealed class ComposeVec3FromList : Instance<ComposeVec3FromList>
 {
     [Output(Guid = "78B4E13F-78BD-4478-9263-2C77D9284A07")]
     public readonly Slot<Vector3> Result = new();

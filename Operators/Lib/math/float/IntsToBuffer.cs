@@ -7,7 +7,7 @@ using SharpDX.Direct3D11;
 namespace Lib.math.@float;
 
 [Guid("2eb20a76-f8f7-49e9-93a5-1e5981122b50")]
-public class IntsToBuffer : Instance<IntsToBuffer>
+internal sealed class IntsToBuffer : Instance<IntsToBuffer>
 {
     [Output(Guid = "f5531ffb-dbde-45d3-af2a-bd90bcbf3710")]
     public readonly Slot<Buffer> Result = new();

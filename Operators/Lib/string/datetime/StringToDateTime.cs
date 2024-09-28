@@ -1,7 +1,7 @@
 namespace Lib.@string.datetime;
 
 [Guid("a78a07f8-cf75-4a72-8952-b9ba40d6983f")]
-public class StringToDateTime : Instance<StringToDateTime>, IStatusProvider
+internal sealed class StringToDateTime : Instance<StringToDateTime>, IStatusProvider
 {
     [Output(Guid = "8D2981DD-AC26-4CC0-8646-DEFB7196085C")]
     public readonly Slot<DateTime> Output = new();

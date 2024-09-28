@@ -1,7 +1,7 @@
 namespace Lib.point.sim;
 
 [Guid("e85f0fcb-303e-4d21-b592-ad4578286336")]
-public class SamplePointSimAttributes : Instance<SamplePointSimAttributes>
+internal sealed class SamplePointSimAttributes : Instance<SamplePointSimAttributes>
                                        ,ITransformable
 {
     [Output(Guid = "03f3201d-a921-4853-9029-7901cf0cffea")]

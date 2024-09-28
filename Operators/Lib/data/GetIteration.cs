@@ -1,7 +1,7 @@
 namespace Lib.data;
 
 [Guid("4c088b67-be47-4599-bd64-5f277abb0113")]
-public class GetIteration : Instance<GetIteration>
+internal sealed class GetIteration : Instance<GetIteration>
 {
     [Output(Guid = "c3a199dc-993c-4f43-a4aa-f355e6584a64", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<float> Progress = new();

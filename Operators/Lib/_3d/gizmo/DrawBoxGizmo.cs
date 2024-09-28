@@ -1,7 +1,7 @@
 namespace Lib._3d.gizmo;
 
 [Guid("9123651a-5df8-4f85-9e14-2068f33e2ff1")]
-public class DrawBoxGizmo : Instance<DrawBoxGizmo>
+internal sealed class DrawBoxGizmo : Instance<DrawBoxGizmo>
 {
     [Output(Guid = "9e1e233f-bd4a-461b-983d-90a4d88ef286")]
     public readonly Slot<Command> Output = new();

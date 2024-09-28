@@ -3,7 +3,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib._3d.@_;
 
 [Guid("195afff5-13f6-4c5d-af49-655a4f92c2f8")]
-public class ApplyTransformMatrix : Instance<ApplyTransformMatrix>
+internal sealed class ApplyTransformMatrix : Instance<ApplyTransformMatrix>
 {
     [Output(Guid = "51334471-d9fe-4574-8541-f87b67f2deab")]
     public readonly Slot<Command> Output = new();

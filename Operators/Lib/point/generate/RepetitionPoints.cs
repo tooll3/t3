@@ -4,7 +4,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib.point.generate;
 
 [Guid("73d99108-f49a-48fb-aa5d-707c00abb1c2")]
-public class RepetitionPoints : Instance<RepetitionPoints>
+internal sealed class RepetitionPoints : Instance<RepetitionPoints>
 {
     [Output(Guid = "46c3b7f4-3590-46d7-871f-b98685f62c07")]
     public readonly Slot<StructuredList> ResultList = new();

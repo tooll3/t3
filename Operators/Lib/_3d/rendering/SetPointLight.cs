@@ -1,7 +1,7 @@
 namespace Lib._3d.rendering;
 
 [Guid("4912ba82-460a-4229-884d-6b647d64b08c")]
-public class SetPointLight : Instance<SetPointLight>
+internal sealed class SetPointLight : Instance<SetPointLight>
 {
     [Output(Guid = "d8c0cd0c-90e9-44fa-9f11-dda5a5b47239", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Command> Output = new();

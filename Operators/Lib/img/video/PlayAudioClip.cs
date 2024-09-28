@@ -4,7 +4,7 @@ using T3.Core.Audio;
 namespace Lib.img.video;
 
 [Guid("c2b2758a-5b3e-465a-87b7-c6a13d3fba48")]
-public class PlayAudioClip : Instance<PlayAudioClip>, IStatusProvider
+internal sealed class PlayAudioClip : Instance<PlayAudioClip>, IStatusProvider
 {
     [Output(Guid = "93B2B489-A522-439E-AC9E-8D47C073D721", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<Command> Result = new();

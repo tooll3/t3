@@ -1,7 +1,7 @@
 namespace Lib.math.@int;
 
 [Guid("f99cb938-205d-4605-8c17-e0be67f25d98")]
-public class GetAPrime : Instance<GetAPrime>
+internal sealed class GetAPrime : Instance<GetAPrime>
 {
     [Output(Guid = "219AF347-49C8-4CED-A689-6E6ED0E49710")]
     public readonly Slot<int> Result = new();

@@ -1,7 +1,7 @@
 namespace Lib.dx11.@_;
 
 [Guid("db73b47d-3d42-4b17-b8fd-08b6f1286716")]
-public class FirstValidTexture : Instance<FirstValidTexture>
+internal sealed class FirstValidTexture : Instance<FirstValidTexture>
 {
     [Output(Guid = "3d3d2dbd-dadc-492d-bf03-b780b21e738e")]
     public readonly Slot<Texture2D> Output = new();

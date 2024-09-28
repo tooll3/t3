@@ -1,7 +1,7 @@
 namespace Lib._3d.postfx;
 
 [Guid("574d636f-64e6-4f07-ac17-49754d2c3599")]
-public class GetPointLightOccclusion : Instance<GetPointLightOccclusion>
+internal sealed class GetPointLightOccclusion : Instance<GetPointLightOccclusion>
 {
     [Output(Guid = "21ef57a3-de27-4e31-8693-e38e693f8948")]
     public readonly Slot<float> Occlusion = new Slot<float>();

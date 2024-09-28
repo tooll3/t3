@@ -1,7 +1,7 @@
 namespace Lib._3d.rendering;
 
 [Guid("9d71d46c-f3d8-4bf4-a104-38c0b37cc88b")]
-public class Equirectangle : Instance<Equirectangle>
+internal sealed class Equirectangle : Instance<Equirectangle>
 {
 
     [Output(Guid = "52dacae9-3407-4748-adb3-dc691178e9bc")]

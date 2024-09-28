@@ -1,7 +1,7 @@
 namespace Lib.point.particle.force;
 
 [Guid("3f8376f2-b89a-4ab4-b6dc-a3e8bf88c0a5")]
-public class TurbulenceForce : Instance<TurbulenceForce>
+internal sealed class TurbulenceForce : Instance<TurbulenceForce>
 {
 
     [Output(Guid = "e5bbe22e-e3f6-4f1f-9db0-fc7632c10639")]

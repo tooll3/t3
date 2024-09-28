@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 namespace Lib.data;
 
 [Guid("d5607e3b-15e8-402c-8d54-b29e40415ab0")]
-public class ExportPointList : Instance<ExportPointList>
+internal sealed class ExportPointList : Instance<ExportPointList>
 {
     [Output(Guid = "ba3d861e-3e22-4cea-9070-b7f53059cf87")]
     public readonly Slot<StructuredList> Result = new();

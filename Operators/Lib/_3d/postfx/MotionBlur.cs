@@ -1,7 +1,7 @@
 namespace Lib._3d.postfx;
 
 [Guid("196e14c7-3a71-4afd-a53b-e51d0fe8f414")]
-public class MotionBlur : Instance<MotionBlur>
+internal sealed class MotionBlur : Instance<MotionBlur>
 {
     [Output(Guid = "1b237829-8cfd-4039-a6c5-8ca3dbb225f7")]
     public readonly Slot<Texture2D> Output = new();

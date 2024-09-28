@@ -1,7 +1,7 @@
 namespace Lib.math.@int;
 
 [Guid("cf3268d7-4f3d-47bd-8cb5-0214c75432ec")]
-public class ModInt : Instance<ModInt>
+internal sealed class ModInt : Instance<ModInt>
 {
     [Output(Guid = "8FED46E4-B9DF-4D56-B098-9C9A17775139")]
     public readonly Slot<int> Result = new();

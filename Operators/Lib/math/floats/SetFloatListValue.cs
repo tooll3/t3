@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.floats;
 
 [Guid("2ba45de7-c111-4c9f-9d19-8a17130dbcc8")]
-public class SetFloatListValue : Instance<SetFloatListValue>
+internal sealed class SetFloatListValue : Instance<SetFloatListValue>
 {
     [Output(Guid = "85bb4be8-b56d-4f00-89e2-89fa111a3636", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<List<float>> Result = new();

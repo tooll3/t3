@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace Lib.io.json;
 
 [Guid("43783ad9-72a0-4928-bb86-c89aae5c5d85")]
-public class GetAttributeFromJsonString : Instance<GetAttributeFromJsonString>, IStatusProvider
+internal sealed class GetAttributeFromJsonString : Instance<GetAttributeFromJsonString>, IStatusProvider
 {
     [Output(Guid = "6fd32e9f-4d75-4243-ad8e-314ff738f76d")]
     public readonly Slot<string> Result = new();

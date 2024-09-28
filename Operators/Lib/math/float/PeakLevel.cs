@@ -3,7 +3,7 @@ using T3.Core.Animation;
 namespace Lib.math.@float;
 
 [Guid("d3fb5baf-43f8-4983-a1d9-42f4005a3af0")]
-public class PeakLevel : Instance<PeakLevel>
+internal sealed class PeakLevel : Instance<PeakLevel>
 {
     [Output(Guid = "6fe37109-0177-4823-9466-eaa49adb19d4", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<float> AttackLevel = new();

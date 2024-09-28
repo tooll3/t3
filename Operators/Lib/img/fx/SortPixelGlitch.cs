@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("cbbb011c-f2bc-460e-86d0-48e49ed377fd")]
-public class SortPixelGlitch : Instance<SortPixelGlitch>
+internal sealed class SortPixelGlitch : Instance<SortPixelGlitch>
 {
     [Output(Guid = "5d93420b-af9c-45bb-8f48-0318b2718d88")]
     public readonly Slot<Texture2D> Output = new();

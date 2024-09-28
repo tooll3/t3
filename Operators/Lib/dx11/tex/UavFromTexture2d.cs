@@ -1,7 +1,7 @@
 namespace Lib.dx11.tex;
 
 [Guid("84e02044-3011-4a5e-b76a-c904d9b4557f")]
-public class UavFromTexture2d : Instance<UavFromTexture2d>
+internal sealed class UavFromTexture2d : Instance<UavFromTexture2d>
 {
     [Output(Guid = "{83D2DCFD-3850-45D8-BB1B-93FE9C9F4334}")]
     public readonly Slot<UnorderedAccessView> UnorderedAccessView = new();

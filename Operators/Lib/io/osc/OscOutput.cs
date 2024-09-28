@@ -3,7 +3,7 @@ using Rug.Osc;
 namespace Lib.io.osc;
 
 [Guid("4e99da86-482f-4037-8664-b2371526d632")]
-public class OscOutput : Instance<OscOutput>, IStatusProvider
+internal sealed class OscOutput : Instance<OscOutput>, IStatusProvider
 {
     [Output(Guid = "a6679d6c-fc34-4588-ab20-5079ad8f8a03")]
     public readonly Slot<Command> Result = new();

@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.@string.buffers;
 
 [Guid("7dff2da3-30e3-4ad9-bfc6-d6800f90fca8")]
-public class StringInsert : Instance<StringInsert>
+internal sealed class StringInsert : Instance<StringInsert>
 {
     [Output(Guid = "3f9aa46b-e9d5-43fd-b463-fcdd48ded406")]
     public readonly Slot<string> Result = new();

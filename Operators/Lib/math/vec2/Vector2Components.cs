@@ -1,7 +1,7 @@
 namespace Lib.math.vec2;
 
 [Guid("0946c48b-85d8-4072-8f21-11d17cc6f6cf")]
-public class Vector2Components : Instance<Vector2Components>
+internal sealed class Vector2Components : Instance<Vector2Components>
 {
     [Output(Guid = "1cee5adb-8c3c-4575-bdd6-5669c04d55ce")]
     public readonly Slot<float> X = new();

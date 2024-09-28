@@ -1,7 +1,7 @@
 namespace Lib.img.adjust;
 
 [Guid("025b32e9-b570-45be-ae84-50424982aae3")]
-public class ToneMapping : Instance<ToneMapping>
+internal sealed class ToneMapping : Instance<ToneMapping>
 {
     [Output(Guid = "05c886f7-2c2c-4fe8-8b66-d6967dc43367")]
     public readonly Slot<Texture2D> Output = new();

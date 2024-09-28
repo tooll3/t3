@@ -4,7 +4,7 @@ using SharpDX.Direct3D11;
 namespace Types.Gfx;
 
 [Guid("064ca51f-47ab-4cb7-95f2-e537b68e137e")]
-public class BlendState : Instance<BlendState>
+public sealed class BlendState : Instance<BlendState>
 {
     [Output(Guid = "6EF6C44B-EE22-4C64-9910-4F7595C41897")]
     public readonly Slot<SharpDX.Direct3D11.BlendState> Value = new();

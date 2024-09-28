@@ -1,7 +1,7 @@
 namespace Lib.img.fx.@_;
 
 [Guid("cc34a183-3978-4b6b-8ef1-dd8102410816")]
-public class _multiImageFxSetupStatic : Instance<_multiImageFxSetupStatic>
+internal sealed class _multiImageFxSetupStatic : Instance<_multiImageFxSetupStatic>
 {
     [Output(Guid = "76b6c677-12db-4404-aff7-ee3391d2d831")]
     public readonly Slot<Texture2D> Output = new();

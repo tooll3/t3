@@ -1,7 +1,7 @@
 namespace Lib.dx11.tex;
 
 [Guid("9733f5e1-4514-46de-9e7c-bd3912932d1b")]
-public class ShowTexture3d : Instance<ShowTexture3d>
+internal sealed class ShowTexture3d : Instance<ShowTexture3d>
 {
     [Output(Guid = "f5d05816-108d-4acf-a1f8-e1fbbfac2adb")]
     public readonly Slot<Texture3dWithViews> TextureOutput = new();

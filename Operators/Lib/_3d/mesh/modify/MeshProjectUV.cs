@@ -1,7 +1,7 @@
 namespace Lib._3d.mesh.modify;
 
 [Guid("97ffb173-f4cc-4143-a479-80cf3465cc7e")]
-public class MeshProjectUV : Instance<MeshProjectUV>
+internal sealed class MeshProjectUV : Instance<MeshProjectUV>
                             ,ITransformable
 {
     [Output(Guid = "84C6619E-4264-4D16-B870-5413D986F08A")]

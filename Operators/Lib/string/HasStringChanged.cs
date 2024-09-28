@@ -1,7 +1,7 @@
 namespace Lib.@string;
 
 [Guid("de9f1dfd-05ec-466f-9f5f-46e7e8da219a")]
-public class HasStringChanged : Instance<HasStringChanged>
+internal sealed class HasStringChanged : Instance<HasStringChanged>
 {
     [Output(Guid = "e89cfe71-4246-4580-a42c-01d1263cd1c9")]
     public readonly Slot<bool> HasChanged = new();

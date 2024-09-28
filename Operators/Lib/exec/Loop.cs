@@ -1,7 +1,7 @@
 namespace Lib.exec;
 
 [Guid("3631c727-36a0-4f26-ae76-ee9c100efc33")]
-public class Loop : Instance<Loop>
+internal sealed class Loop : Instance<Loop>
 {
     [Output(Guid = "5685cbc4-fe19-4f0e-95a3-147d1fbbad15")]
     public readonly Slot<Command> Output = new();

@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib._3d.draw;
 
 [Guid("d8c5330f-59b5-4907-b845-a02def3042fa")]
-public class Layer2d : Instance<Layer2d>, ITransformable
+internal sealed class Layer2d : Instance<Layer2d>, ITransformable
 {
     [Output(Guid = "e4a8d926-7abd-4d2a-82a1-b7d140cb457f")]
     public readonly TransformCallbackSlot<Command> Output = new();

@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.vec2;
 
 [Guid("ccc06dd6-4eec-4d17-af0b-4f1700e7887a")]
-public class PerlinNoise2 : Instance<PerlinNoise2>
+internal sealed class PerlinNoise2 : Instance<PerlinNoise2>
 {
     [Output(Guid = "2B60892B-BE0E-46C0-B30B-562E34BD92A5")]
     public readonly Slot<Vector2> Result = new();

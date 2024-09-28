@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib._3d.draw;
 
 [Guid("a3c5471e-079b-4d4b-886a-ec02d6428ff6")]
-public class DrawMesh : Instance<DrawMesh>, ICustomDropdownHolder, ICompoundWithUpdate
+internal sealed class DrawMesh : Instance<DrawMesh>, ICustomDropdownHolder, ICompoundWithUpdate
 {
     [Output(Guid = "53b3fdca-9d5e-4808-a02f-4aa743cd8456")]
     public readonly Slot<Command> Output = new();

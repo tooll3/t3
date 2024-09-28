@@ -1,7 +1,7 @@
 namespace Lib.point.generate;
 
 [Guid("945014cf-ba0b-40b3-85f9-f7deed70fa8d")]
-public class PointTrail2 : Instance<PointTrail2>
+internal sealed class PointTrail2 : Instance<PointTrail2>
 {
 
     [Output(Guid = "2a23b42c-ec03-401a-842a-6bdc0c633b7e")]

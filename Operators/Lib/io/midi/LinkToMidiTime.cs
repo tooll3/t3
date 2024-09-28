@@ -1,7 +1,7 @@
 namespace Lib.io.midi;
 
 [Guid("3f10f526-d8ca-4f67-95a4-d703b713088e")]
-public class LinkToMidiTime : Instance<LinkToMidiTime>
+internal sealed class LinkToMidiTime : Instance<LinkToMidiTime>
 {
     [Output(Guid = "c9e7a901-caa7-4eba-bacf-9eaea2fa85cb")]
     public readonly Slot<Command> Commands = new();

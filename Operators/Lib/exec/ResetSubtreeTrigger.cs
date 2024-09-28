@@ -1,7 +1,7 @@
 namespace Lib.exec;
 
 [Guid("38b85057-fbcb-4ab1-9b40-cfb090750150")]
-public class ResetSubtreeTrigger : Instance<ResetSubtreeTrigger>
+internal sealed class ResetSubtreeTrigger : Instance<ResetSubtreeTrigger>
 {
     [Output(Guid = "0CF2EF2A-D47A-461A-A7EF-7279C5A17883", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Command> Output = new();

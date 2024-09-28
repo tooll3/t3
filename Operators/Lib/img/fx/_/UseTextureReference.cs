@@ -1,7 +1,7 @@
 namespace Lib.img.fx.@_;
 
 [Guid("fd5ac393-02a4-43ae-8cdf-64a947abbafa")]
-public class UseTextureReference : Instance<UseTextureReference>
+internal sealed class UseTextureReference : Instance<UseTextureReference>
 {
     [Output(Guid = "CB9850B3-119A-4839-B79F-A882112503C6")]
     public readonly Slot<RenderTargetReference> Reference = new();

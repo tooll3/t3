@@ -1,7 +1,7 @@
 namespace Lib.img.adjust;
 
 [Guid("51968877-03e7-472d-9b43-95bc8aeda3bc")]
-public class ChannelMixer : Instance<ChannelMixer>
+internal sealed class ChannelMixer : Instance<ChannelMixer>
 {
     [Output(Guid = "9cedcad7-1c8d-4aee-9168-67deae14248d")]
     public readonly Slot<Texture2D> Output = new();

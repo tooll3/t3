@@ -1,7 +1,7 @@
 namespace Lib.point.draw;
 
 [Guid("37bdbafc-d14c-4b81-91c3-8f63c3b63812")]
-public class VisualizePoints : Instance<VisualizePoints>
+internal sealed class VisualizePoints : Instance<VisualizePoints>
 {
     [Output(Guid = "b0294b73-58a9-4d79-b3e2-caaed304109d", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Command> Output = new();

@@ -1,7 +1,7 @@
 namespace Lib.img.adjust;
 
 [Guid("1e29f81b-0c05-4784-b3ac-c475ce510159")]
-public class MakeTileableImage : Instance<MakeTileableImage>
+internal sealed class MakeTileableImage : Instance<MakeTileableImage>
 {
 
     [Output(Guid = "970d1691-47f4-43ce-937d-cad6a9c13922")]

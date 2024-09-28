@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.math.@float;
 
 [Guid("8171c2f5-96df-41f6-884c-dbd004ae8a17")]
-public class ValueToRate : Instance<ValueToRate>
+internal sealed class ValueToRate : Instance<ValueToRate>
 {
     [Output(Guid = "c21800d0-ee83-43f6-8f1c-9cee2e495056")]
     public readonly Slot<float> Result = new();

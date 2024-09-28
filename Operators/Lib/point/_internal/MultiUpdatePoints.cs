@@ -1,7 +1,7 @@
 namespace Lib.point._internal;
 
 [Guid("62c89469-7194-486a-87cd-c3e6bc0cf5d2")]
-public class MultiUpdatePoints : Instance<MultiUpdatePoints>
+internal sealed class MultiUpdatePoints : Instance<MultiUpdatePoints>
 {
     [Output(Guid = "5556392D-8884-4922-B5AD-AFA474E36C02")]
     public readonly Slot<BufferWithViews> Result = new();

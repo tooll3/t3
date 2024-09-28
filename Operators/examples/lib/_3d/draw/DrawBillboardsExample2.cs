@@ -1,7 +1,7 @@
 namespace Examples.lib._3d.draw;
 
 [Guid("c1348a39-276f-4fe6-9210-f9f605cb0ece")]
-public class DrawBillboardsExample2 : Instance<DrawBillboardsExample2>
+ internal sealed class DrawBillboardsExample2 : Instance<DrawBillboardsExample2>
 {
     [Output(Guid = "50b6aca4-2bfe-4008-a1cf-aa7065576fb2")]
     public readonly Slot<Texture2D> ColorBuffer = new();

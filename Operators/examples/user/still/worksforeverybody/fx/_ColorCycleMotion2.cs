@@ -1,7 +1,7 @@
 namespace Examples.user.still.worksforeverybody.fx;
 
 [Guid("7b18587a-e75a-47c0-88de-c92ac6442c4c")]
-public class _ColorCycleMotion2 : Instance<_ColorCycleMotion2>
+internal sealed class _ColorCycleMotion2 : Instance<_ColorCycleMotion2>
 {
     [Output(Guid = "0340f641-d087-42e6-831f-ae6083d834b1")]
     public readonly Slot<Command> Result = new();

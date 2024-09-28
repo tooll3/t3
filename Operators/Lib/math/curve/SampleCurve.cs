@@ -1,7 +1,7 @@
 namespace Lib.math.curve;
 
 [Guid("b724ea74-d5d7-4928-9cd1-7a7850e4e179")]
-public class SampleCurve : Instance<SampleCurve>
+public sealed class SampleCurve : Instance<SampleCurve>
 {
     [Output(Guid = "fc51bee8-091c-4c66-a7df-12f6f69e3783")]
     public readonly Slot<float> Result = new();

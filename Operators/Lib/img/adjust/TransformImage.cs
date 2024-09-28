@@ -10,7 +10,7 @@ enum WrapModes
 }
 
 [Guid("32e18957-3812-4f64-8663-18454518d005")]
-public class TransformImage : Instance<TransformImage>
+internal sealed class TransformImage : Instance<TransformImage>
 {
     [Output(Guid = "54831ac3-d747-4cdf-9520-3cfd651158bf")]
     public readonly Slot<Texture2D> TextureOutput = new();

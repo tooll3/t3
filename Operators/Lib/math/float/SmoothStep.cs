@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.@float;
 
 [Guid("549ec76b-cc65-47b7-ad41-0abe93e86fe3")]
-public class SmoothStep : Instance<SmoothStep>
+internal sealed class SmoothStep : Instance<SmoothStep>
 {
     [Output(Guid = "7caa79cf-1a5a-42cc-b245-5937cd83e8dc")]
     public readonly Slot<float> Result = new();

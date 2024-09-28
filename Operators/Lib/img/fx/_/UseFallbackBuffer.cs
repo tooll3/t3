@@ -1,7 +1,7 @@
 namespace Lib.img.fx.@_;
 
 [Guid("49549c3e-b09e-4633-86c6-1ac075f56b69")]
-public class UseFallbackBuffer : Instance<UseFallbackBuffer>
+internal sealed class UseFallbackBuffer : Instance<UseFallbackBuffer>
 {
     [Output(Guid = "EF014AE5-962F-4A7B-9DCB-9E26863DD074")]
     public readonly Slot<BufferWithViews> Output = new();

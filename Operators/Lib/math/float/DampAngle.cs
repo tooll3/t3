@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.math.@float;
 
 [Guid("9757618d-e72a-4507-8352-6f824b56cc58")]
-public class DampAngle : Instance<DampAngle>
+internal sealed class DampAngle : Instance<DampAngle>
 {
     [Output(Guid = "bdc667e1-2557-4f66-aeb3-d9deccb888f9")]
     public readonly Slot<float> Result = new();

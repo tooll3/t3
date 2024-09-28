@@ -1,7 +1,7 @@
 namespace Lib._3d.rendering.@_;
 
 [Guid("dee8f2de-5cbd-4ca7-9449-d6c74197546e")]
-public class GetTextureFromContext : Instance<GetTextureFromContext>
+internal sealed class GetTextureFromContext : Instance<GetTextureFromContext>
 {
     [Output(Guid = "C7CAC361-00D9-48D4-BE48-311551F3D449", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Texture2D> Output = new();

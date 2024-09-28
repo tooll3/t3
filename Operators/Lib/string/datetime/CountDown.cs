@@ -3,7 +3,7 @@ using System.Globalization;
 namespace Lib.@string.datetime;
 
 [Guid("e4a38f3c-bd4c-406a-9979-bb683d79b39b")]
-public class CountDown : Instance<CountDown>
+internal sealed class CountDown : Instance<CountDown>
 {
     [Output(Guid = "511af1e0-9ada-46a2-8c14-0e18db506f95", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<string> Output = new();

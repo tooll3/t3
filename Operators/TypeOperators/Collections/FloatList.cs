@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Types.Collections;
 
 [Guid("7ba0451c-9b8d-46a7-bfac-9dcb15e00023")]
-public class FloatList : Instance<FloatList>
+public sealed class FloatList : Instance<FloatList>
 {
     [Output(Guid = "918a871a-1ed6-4d40-a73e-05dbb3399b38")]
     public readonly Slot<List<float>> Result = new(new List<float>(20));

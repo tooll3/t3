@@ -1,7 +1,7 @@
 namespace Examples.user._1x;
 
 [Guid("2496ff9d-2953-4ed0-9550-b4d2ce322fa7")]
-public class ProceduralMoon1x : Instance<ProceduralMoon1x>
+ internal sealed class ProceduralMoon1x : Instance<ProceduralMoon1x>
 {
     [Output(Guid = "e712ab39-2cfd-4b5e-94b8-4b2119e41139")]
     public readonly Slot<Texture2D> ColorBuffer = new Slot<Texture2D>();

@@ -1,7 +1,7 @@
 namespace Lib.exec;
 
 [Guid("48781d5a-d67f-4b9f-8554-35185ddb6c5c")]
-public class BlendImages : Instance<BlendImages>
+internal sealed class BlendImages : Instance<BlendImages>
 {
 
     [Output(Guid = "83ad8874-210d-461f-b7ce-dfd7ff6338f9")]

@@ -1,7 +1,7 @@
 namespace Lib.img.fx.@_;
 
 [Guid("d31a8463-0699-46d7-8e96-9abc6adb997d")]
-public class _AdjustFeedbackImage : Instance<_AdjustFeedbackImage>
+internal sealed class _AdjustFeedbackImage : Instance<_AdjustFeedbackImage>
 {
     [Output(Guid = "ab287fb8-750a-4b46-96f5-8ddddeb46a5f")]
     public readonly Slot<Texture2D> TextureOutput = new();

@@ -1,7 +1,7 @@
 namespace Lib.math.@bool;
 
 [Guid("cd43942a-887e-4e34-bc54-0c2e5e8bc2af")]
-public class BoolToInt : Instance<BoolToInt>
+internal sealed class BoolToInt : Instance<BoolToInt>
 {
     [Output(Guid = "b0cfa6f9-3c3d-4499-b21a-5904d1cb3bd7")]
     public readonly Slot<int> Result = new();

@@ -1,7 +1,7 @@
 namespace Lib._3d.@_;
 
 [Guid("393da0ad-00ef-4a9c-bd53-9314bb16b08b")]
-public class LenseFlareHoop : Instance<LenseFlareHoop>
+internal sealed class LenseFlareHoop : Instance<LenseFlareHoop>
 {
     [Output(Guid = "8ee4b3e9-0e1a-4e8e-8fa8-db515c7f24e9")]
     public readonly Slot<Command> Output = new();

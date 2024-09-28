@@ -5,6 +5,7 @@ using Lib.dx11;
 using Lib.exec.context;
 using Lib.io.audio;
 using Lib.io.midi;
+using Lib.io.osc;
 using Lib.math.@bool;
 using Lib.math.curve;
 using Lib.math.@float;
@@ -56,6 +57,10 @@ public class UiRegistration : IEditorUiExtension
         CustomChildUiRegistry.Register(typeof(AudioReaction), AudioReactionUi.DrawChildUi, _types);
         CustomChildUiRegistry.Register(typeof(GpuMeasure), GpuMeasureUi.DrawChildUi, _types);
         CustomChildUiRegistry.Register(typeof(DataList), DataListUi.DrawChildUi, _types);
+        
+        //CustomChildUiRegistry.Register(typeof(SelectFloatFromDict), SelectFloatFromDictUi.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(SelectVec2FromDict), SelectVec2FromDictUi.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(SelectBoolFromFloatDict), SelectBoolFromFloatDictUi.DrawChildUi, _types);
 
         PlaybackUtils.BpmProvider = BpmProvider.Instance;
         PlaybackUtils.TapProvider = TapProvider.Instance;

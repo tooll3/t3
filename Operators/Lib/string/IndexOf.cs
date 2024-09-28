@@ -1,7 +1,7 @@
 namespace Lib.@string;
 
 [Guid("fc0a5e68-9915-4323-b2a4-2491fa5d59a9")]
-public class IndexOf : Instance<IndexOf>
+internal sealed class IndexOf : Instance<IndexOf>
 {
     [Input(Guid = "841784c4-0ca7-41cd-8d79-bbe4989e0842")]
     public readonly InputSlot<string> OriginalString = new();

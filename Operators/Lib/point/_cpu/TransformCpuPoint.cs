@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.point._cpu;
 
 [Guid("5f2df291-4667-474e-9e84-3b64d4cc0555")]
-public class TransformCpuPoint : Instance<TransformCpuPoint>
+internal sealed class TransformCpuPoint : Instance<TransformCpuPoint>
 {
     [Output(Guid = "fe7ab3fe-5a9f-45b1-ae8d-5a78d6822501")]
     public readonly Slot<StructuredList> ResultPoint = new();

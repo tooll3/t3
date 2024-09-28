@@ -1,7 +1,7 @@
 namespace Lib.math.int2;
 
 [Guid("c0a26813-bc97-4c42-b051-53a9a5913331")]
-public class RequestedResolution : Instance<RequestedResolution>
+internal sealed class RequestedResolution : Instance<RequestedResolution>
 {
     [Output(Guid = "dd1c6ce4-fb30-47b6-8325-5f645279ef2d", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Int2> Size = new();

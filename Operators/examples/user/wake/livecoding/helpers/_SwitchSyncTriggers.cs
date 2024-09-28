@@ -1,7 +1,7 @@
 namespace Examples.user.wake.livecoding.helpers;
 
 [Guid("58060f7a-2890-4cbe-8ca9-dab4ab15dccd")]
-public class _SwitchSyncTriggers : Instance<_SwitchSyncTriggers>
+ internal sealed class _SwitchSyncTriggers : Instance<_SwitchSyncTriggers>
 {
     [Output(Guid = "8b09e16e-899b-4933-b88a-95e506a533f3")]
     public readonly Slot<bool> Selected = new();

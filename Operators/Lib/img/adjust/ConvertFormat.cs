@@ -1,7 +1,7 @@
 namespace Lib.img.adjust;
 
 [Guid("e1cd1cdf-3982-4bb3-b080-9f0a851566d7")]
-public class ConvertFormat : Instance<ConvertFormat>
+internal sealed class ConvertFormat : Instance<ConvertFormat>
 {
     [Output(Guid = "8acb5759-a93a-4f45-a19b-99e24792fe19")]
     public readonly Slot<Texture2D> Output = new();

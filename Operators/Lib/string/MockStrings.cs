@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.@string;
 
 [Guid("3af25959-fd3f-4608-b521-5860d82554df")]
-public class MockStrings : Instance<MockStrings>
+internal sealed class MockStrings : Instance<MockStrings>
 {
     [Output(Guid = "461d8e3a-b4db-4a12-94c5-c791e347e51f")]
     public readonly Slot<string> Result = new();

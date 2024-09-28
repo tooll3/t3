@@ -1,7 +1,7 @@
 namespace Lib.img.analyze;
 
 [Guid("0e13e34f-c07b-4ada-8c87-6b89f4ed8b41")]
-public class CompareImages : Instance<CompareImages>
+internal sealed class CompareImages : Instance<CompareImages>
                             ,ITransformable
 {
     [Output(Guid = "2d59fec4-af4e-4db2-bc11-3685f31e9de5")]

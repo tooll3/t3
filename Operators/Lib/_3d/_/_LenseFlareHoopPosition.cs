@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib._3d.@_;
 
 [Guid("1cfe41c7-972e-4243-9ae4-a510ac038191")]
-public class _LenseFlareHoopPosition : Instance<_LenseFlareHoopPosition>
+internal sealed class _LenseFlareHoopPosition : Instance<_LenseFlareHoopPosition>
 {
     // [Output(Guid = "bc8076b8-0079-487f-b0ef-d2bc9baacdb3")]
     // public readonly Slot<StructuredList> OutBuffer = new Slot<StructuredList>();

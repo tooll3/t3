@@ -1,7 +1,7 @@
 namespace Lib.point.sim._legacy;
 
 [Guid("dc3d1571-ad9f-46aa-bed9-df2f4e1c7040")]
-public class LegacyParticleSimulation : Instance<LegacyParticleSimulation>
+internal sealed class LegacyParticleSimulation : Instance<LegacyParticleSimulation>
 {
 
     [Output(Guid = "fd2f84af-0925-418e-b3fa-edec6fa19df3")]

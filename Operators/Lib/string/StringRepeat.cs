@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.@string;
 
 [Guid("04d0d6d7-8c40-4d18-aa44-6806c51fe139")]
-public class StringRepeat : Instance<StringRepeat>
+internal sealed class StringRepeat : Instance<StringRepeat>
 {
     [Output(Guid = "568d04ca-3b13-4ed3-93f9-f0fbf804d96e")]
     public readonly Slot<string> Result = new();

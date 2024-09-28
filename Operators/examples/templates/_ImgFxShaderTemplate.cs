@@ -1,7 +1,7 @@
 namespace Examples.templates;
 
 [Guid("fdd58452-ecb4-458d-9f5b-9bce356d5125")]
-public class _ImgFxShaderTemplate : Instance<_ImgFxShaderTemplate>
+internal sealed class _ImgFxShaderTemplate : Instance<_ImgFxShaderTemplate>
 {
     [Output(Guid = "46381071-48e7-4ae7-a5c2-63bcd0fba47b")]
     public readonly Slot<Texture2D> TextureOutput = new();

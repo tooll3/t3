@@ -1,7 +1,7 @@
 namespace Lib.point.transform;
 
 [Guid("81377edc-0a42-4bb1-9440-2f2433d5757f")]
-public class TransformFromClipSpace : Instance<TransformFromClipSpace>
+internal sealed class TransformFromClipSpace : Instance<TransformFromClipSpace>
 {
     [Output(Guid = "fa70200b-cfcb-4efe-afbd-48cefea1ca39")]
     public readonly Slot<BufferWithViews> Output = new();

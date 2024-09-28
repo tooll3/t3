@@ -1,7 +1,7 @@
 namespace Lib.point.generate;
 
 [Guid("4ae9e2f5-7cb3-40b0-a662-0662e8cb7c68")]
-public class LinePoints : Instance<LinePoints>
+internal sealed class LinePoints : Instance<LinePoints>
 {
 
     [Output(Guid = "68514ced-4368-459a-80e9-463a808bff0b")]

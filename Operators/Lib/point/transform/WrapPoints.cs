@@ -1,7 +1,7 @@
 namespace Lib.point.transform;
 
 [Guid("b263a6a1-0872-4223-80e7-5e09f4aea19d")]
-public class WrapPoints : Instance<WrapPoints>
+internal sealed class WrapPoints : Instance<WrapPoints>
 {
 
     [Output(Guid = "189921cd-cc7b-4d26-83b5-726815d3617c")]

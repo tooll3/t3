@@ -1,7 +1,7 @@
 namespace Lib.exec;
 
 [Guid("6e67d136-9285-48c6-a557-0a07361fc847")]
-public class BlendScenes : Instance<BlendScenes>
+internal sealed class BlendScenes : Instance<BlendScenes>
 {
     [Output(Guid = "bb6e9504-2e2c-413a-a455-5dd4ef41e3cb")]
     public readonly Slot<Command> Output = new();

@@ -1,7 +1,7 @@
 namespace Lib._3d.postfx;
 
 [Guid("e1c294b5-1ea8-435e-a437-26d280d3c2f4")]
-public class GodRays : Instance<GodRays>
+internal sealed class GodRays : Instance<GodRays>
 {
     [Output(Guid = "28bf4abe-e9a9-4302-bcca-67a6957b43a7")]
     public readonly Slot<Texture2D> TextureOutput = new();

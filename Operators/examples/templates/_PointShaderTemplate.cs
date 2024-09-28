@@ -1,7 +1,7 @@
 namespace Examples.templates;
 
 [Guid("0db659a4-d0ba-4d23-acac-aea5ba5b57dc")]
-public class _PointShaderTemplate : Instance<_PointShaderTemplate>
+internal sealed class _PointShaderTemplate : Instance<_PointShaderTemplate>
 {
 
     [Output(Guid = "30ecabbb-4efe-487a-9eba-e371c9d23662")]

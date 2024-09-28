@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib._3d.draw;
 
 [Guid("0e313329-74fb-4f2a-b1c2-136e1ecf9b3e")]
-public class DrawMeshChunksAtPoints : Instance<DrawMeshChunksAtPoints>
+internal sealed class DrawMeshChunksAtPoints : Instance<DrawMeshChunksAtPoints>
 {
     [Output(Guid = "aec2ae24-3b64-48ae-a61c-49291829f284", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Command> Output = new();

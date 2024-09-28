@@ -1,7 +1,7 @@
 namespace Lib.img.fx.@_;
 
 [Guid("5b999887-19df-4e91-9f58-1df2d8f1440b")]
-public class _trippleImageFxSetup : Instance<_trippleImageFxSetup>
+internal sealed class _trippleImageFxSetup : Instance<_trippleImageFxSetup>
 {
     [Output(Guid = "86db735f-56fb-41b5-af15-5f55411d3ca7")]
     public readonly Slot<Texture2D> Output = new();

@@ -1,7 +1,7 @@
 namespace Lib._3d.@_;
 
 [Guid("08d526d0-d5e5-4fc9-a039-98189721d2b8")]
-public class _ComputeBRDFLookup : Instance<_ComputeBRDFLookup>
+internal sealed class _ComputeBRDFLookup : Instance<_ComputeBRDFLookup>
 {
 
     [Output(Guid = "21e0ee79-8e98-45aa-86e9-194ca6d70989")]

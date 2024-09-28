@@ -1,7 +1,7 @@
 namespace Lib.math.@bool;
 
 [Guid("9786dec1-b0fc-49d7-bf79-c9a1d457f386")]
-public class Or : Instance<Or>
+internal sealed class Or : Instance<Or>
 {
     [Output(Guid = "FC297EE7-2B25-4C34-98A4-3F2058040FF7")]
     public readonly Slot<bool> Result = new();

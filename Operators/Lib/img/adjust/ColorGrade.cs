@@ -1,7 +1,7 @@
 namespace Lib.img.adjust;
 
 [Guid("42d86738-d644-47c8-ab92-cc426d958e51")]
-public class ColorGrade : Instance<ColorGrade>
+internal sealed class ColorGrade : Instance<ColorGrade>
 {
     [Output(Guid = "1680781d-af5e-4b77-beb6-3e4a12d73d59")]
     public readonly Slot<Texture2D> Output = new();

@@ -1,7 +1,7 @@
 namespace Lib.dx11.draw;
 
 [Guid("b956f707-2a33-4330-b7ff-9c91edbcf041")]
-public class SetPixelAndVertexShaderStage : Instance<SetPixelAndVertexShaderStage>
+internal sealed class SetPixelAndVertexShaderStage : Instance<SetPixelAndVertexShaderStage>
 {
     [Output(Guid = "805e271d-b9c5-45a2-9040-f30c68b06ea6")]
     public readonly Slot<Command> Output = new(new Command());

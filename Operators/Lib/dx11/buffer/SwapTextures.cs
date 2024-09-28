@@ -1,7 +1,7 @@
 namespace Lib.dx11.buffer;
 
 [Guid("590a0b0b-c847-433c-8ffa-602ed0ae8f28")]
-public class SwapTextures : Instance<SwapTextures>
+internal sealed class SwapTextures : Instance<SwapTextures>
 {
     [Output(Guid = "699B819E-E807-425F-8195-DD1E45E993DC")]
     public readonly Slot<Texture2D> TextureA = new();

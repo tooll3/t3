@@ -1,7 +1,7 @@
 namespace Lib._3d.draw;
 
 [Guid("cb89ed1d-03ea-4880-bfa0-1dd723e4bdab")]
-public class FadingSlideShow : Instance<FadingSlideShow>
+internal sealed class FadingSlideShow : Instance<FadingSlideShow>
 {
     [Output(Guid = "fd703cd6-ed0a-473b-9620-d5b5f5547774")]
     public readonly Slot<Command> Output = new();

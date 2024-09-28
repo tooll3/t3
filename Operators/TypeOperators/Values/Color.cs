@@ -1,7 +1,7 @@
 namespace Types.Values;
 
 [Guid("70176d3c-825c-40b3-8121-a465735518fe")]
-public class Color : Instance<Color>, IExtractedInput<System.Numerics.Vector4>
+public sealed class Color : Instance<Color>//, IExtractedInput<System.Numerics.Vector4> // todo: allow more than one type to be extracted to a given type? or have colors operate nicer with vecs
 {
     [Output(Guid = "fae78369-9db9-4b00-94f2-89e7581db426")]
     public readonly Slot<System.Numerics.Vector4> Output = new();

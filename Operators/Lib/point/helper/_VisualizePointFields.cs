@@ -1,7 +1,7 @@
 namespace Lib.point.helper;
 
 [Guid("a53a0643-8daa-49c2-9c8c-34cfe5ad8030")]
-public class _VisualizePointFields : Instance<_VisualizePointFields>
+internal sealed class _VisualizePointFields : Instance<_VisualizePointFields>
 {
     [Output(Guid = "b4869782-4b4c-4250-8bdc-54a4c74ec1c0")]
     public readonly Slot<Command> Output = new Slot<Command>();

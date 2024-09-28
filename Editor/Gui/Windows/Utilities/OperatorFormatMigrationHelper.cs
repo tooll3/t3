@@ -98,7 +98,7 @@ static class OperatorFormatMigrationHelper
                 
                 // Insert Guid() attribute to class
                 var symbolName = Path.GetFileNameWithoutExtension(filepath);
-                newContent = newContent.Replace($"public class {symbolName}",
+                newContent = newContent.Replace($"public sealed class {symbolName}",
                                                 $"[Guid(\"{operatorGuid}\")]\n    public class {symbolName}");
                 
                 // insert interop using

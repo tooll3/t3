@@ -1,7 +1,7 @@
 namespace Lib.point.transform;
 
 [Guid("ac185a9e-02c4-4ee0-b55e-4e7384c09d0c")]
-public class MovePointsToCurveSpace : Instance<MovePointsToCurveSpace>
+internal sealed class MovePointsToCurveSpace : Instance<MovePointsToCurveSpace>
 {
 
     [Output(Guid = "d47c5841-f33a-4b4f-b969-4d56c7fb7446")]

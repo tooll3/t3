@@ -1,7 +1,7 @@
 namespace Lib.@string.buffers;
 
 [Guid("c5f1292a-e692-422b-9261-b5ae3451cd7c")]
-public class StringBuilderToString : Instance<StringBuilderToString>
+internal sealed class StringBuilderToString : Instance<StringBuilderToString>
 {
     [Output(Guid = "71C4AA96-9A20-494A-9A28-6DD33A867ED2")]
     public readonly Slot<string> String = new();

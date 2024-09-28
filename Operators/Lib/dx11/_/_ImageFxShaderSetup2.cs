@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.dx11.@_;
 
 [Guid("2b20afce-2b54-4bcc-ba0e-e456a0d92833")]
-public class _ImageFxShaderSetup2 : Instance<_ImageFxShaderSetup2>
+internal sealed class _ImageFxShaderSetup2 : Instance<_ImageFxShaderSetup2>
 {
     [Output(Guid = "36e01dc9-0680-4af5-9329-0ac6a5f78f8c")]
     public readonly Slot<Texture2D> TextureOutput = new();

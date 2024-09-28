@@ -1,7 +1,7 @@
 namespace Types.Gfx;
 
 [Guid("75306997-4329-44e9-a17a-050dae532182")]
-public class PixelShaderStage : Instance<PixelShaderStage>
+public sealed class PixelShaderStage : Instance<PixelShaderStage>
 {
     [Output(Guid = "76E7AD5D-A31D-4B1F-9C42-B63C5161117C")]
     public readonly Slot<Command> Output = new(new Command());

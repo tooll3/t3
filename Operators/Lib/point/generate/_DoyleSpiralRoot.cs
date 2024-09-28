@@ -1,7 +1,7 @@
 namespace Lib.point.generate;
 
 [Guid("b2267122-4223-4eff-8ae4-91d149df535c")]
-public class _DoyleSpiralRoot : Instance<_DoyleSpiralRoot>
+internal sealed class _DoyleSpiralRoot : Instance<_DoyleSpiralRoot>
 {
     [Output(Guid = "CA14BDE7-B1A4-4E42-B685-6126AE724D64")]
     public readonly Slot<Vector2> A = new();

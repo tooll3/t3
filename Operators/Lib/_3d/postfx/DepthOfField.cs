@@ -1,7 +1,7 @@
 namespace Lib._3d.postfx;
 
 [Guid("53d3eebd-4ead-4965-b26d-10a8bbd48182")]
-public class DepthOfField : Instance<DepthOfField>
+internal sealed class DepthOfField : Instance<DepthOfField>
 {
 
     [Output(Guid = "a54cc25b-9ea2-4012-b462-16c565718cf8")]

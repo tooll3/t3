@@ -3,7 +3,7 @@ using GeometryShaderT3 = T3.Core.DataTypes.GeometryShader;
 namespace Types.Gfx;
 
 [Guid("a908cc64-e8cb-490c-ae45-c2c5fbfcedfb")]
-public class GeometryShader : Instance<GeometryShader>, IShaderOperator<GeometryShaderT3>, IStatusProvider
+public sealed class GeometryShader : Instance<GeometryShader>, IShaderOperator<GeometryShaderT3>, IStatusProvider
 {
     [Output(Guid = "85B65C27-D5B3-4FE1-88AF-B1F6ABAA4515")]
     public readonly Slot<GeometryShaderT3> Shader = new();

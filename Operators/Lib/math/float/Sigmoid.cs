@@ -1,7 +1,7 @@
 namespace Lib.math.@float;
 
 [Guid("fc56f945-ba04-4d10-a516-68a479147016")]
-public class Sigmoid : Instance<Sigmoid>
+internal sealed class Sigmoid : Instance<Sigmoid>
 {
     [Output(Guid = "00b2d450-f19f-4deb-b88a-7c75972c0962")]
     public readonly Slot<float> Result = new();

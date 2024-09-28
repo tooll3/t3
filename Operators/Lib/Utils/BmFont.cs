@@ -20,7 +20,7 @@ freely, subject to the following restrictions:
 namespace Lib.Utils;
 
 [XmlRoot("font")]
-public class Font
+public sealed class Font
 {
     [XmlElement("info")]
     public FontInfo Info { get; set; }
@@ -41,7 +41,7 @@ public class Font
     public FontKerning[] Kernings { get; set; }
 }
 
-public class FontInfo
+public sealed class FontInfo
 {
     [XmlAttribute("face")]
     public string Face { get; set; }
@@ -77,7 +77,7 @@ public class FontInfo
     public int Outline { get; set; }
 }
 
-public class FontCommon
+public sealed class FontCommon
 {
     [XmlAttribute("lineHeight")]
     public Int32 LineHeight { get; set; }
@@ -107,7 +107,7 @@ public class FontCommon
     public Int32 BlueChnl { get; set; }
 }
 
-public class FontPage
+public sealed class FontPage
 {
     [XmlAttribute("id")]
     public Int32 Id { get; set; }
@@ -116,7 +116,7 @@ public class FontPage
     public string File { get; set; }
 }
 
-public class FontChar
+public sealed class FontChar
 {
     [XmlAttribute("id")]
     public Int32 Id { get; set; }
@@ -149,7 +149,7 @@ public class FontChar
     public Int32 Channel { get; set; }
 }
 
-public class FontKerning
+public sealed class FontKerning
 {
     [XmlAttribute("first")]
     public Int32 First { get; set; }

@@ -10,7 +10,7 @@ using T3.Core.Utils;
 namespace t3.ndi;
 
 [Guid("7567c3b0-9d91-40d2-899d-3a95b481d023")]
-public class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDropdownHolder
+public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDropdownHolder
 {
     [Output(Guid = "85F1AF38-074E-475D-94F5-F48079979509", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<Texture2D> Texture = new();

@@ -1,7 +1,7 @@
 namespace Lib._3d.mesh.modify;
 
 [Guid("0f61b638-7bda-4331-944a-50fdca401223")]
-public class FlipNormals : Instance<FlipNormals>
+internal sealed class FlipNormals : Instance<FlipNormals>
 {
     [Output(Guid = "83268faa-5360-43af-9f85-eaec02574272")]
     public readonly Slot<MeshBuffers> Result = new();

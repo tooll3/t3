@@ -1,7 +1,7 @@
 namespace Lib.point.draw;
 
 [Guid("8eb09af4-d3c5-4fcc-b7f9-5d9367a02a2f")]
-public class DrawPoints2 : Instance<DrawPoints2>
+internal sealed class DrawPoints2 : Instance<DrawPoints2>
 {
     [Output(Guid = "d5f9af38-0b67-42e3-b175-40a34a4dce00")]
     public readonly Slot<Command> Output = new();

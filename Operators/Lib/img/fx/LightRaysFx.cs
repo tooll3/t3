@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("53ff1a68-e888-444f-9ccc-23239c94d6db")]
-public class LightRaysFx : Instance<LightRaysFx>
+internal sealed class LightRaysFx : Instance<LightRaysFx>
 {
     [Output(Guid = "bdc413f2-9a15-4333-baba-aa57f73dda1a")]
     public readonly Slot<Texture2D> Output = new();

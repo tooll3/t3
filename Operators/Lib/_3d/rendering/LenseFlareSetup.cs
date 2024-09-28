@@ -1,7 +1,7 @@
 namespace Lib._3d.rendering;
 
 [Guid("eb4d5014-2619-4368-a1b8-521db8372243")]
-public class LenseFlareSetup : Instance<LenseFlareSetup>
+internal sealed class LenseFlareSetup : Instance<LenseFlareSetup>
 {
     [Output(Guid = "27af7a2d-8bef-413f-9b41-381a3c9022de")]
     public readonly Slot<Command> Output = new();

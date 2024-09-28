@@ -1,7 +1,7 @@
 namespace Lib.data;
 
 [Guid("8b285708-3f20-4957-9eb2-bb40e0d320ee")]
-public class IterateList : Instance<IterateList>
+internal sealed class IterateList : Instance<IterateList>
 {
     [Output(Guid = "6FD6E8AB-7F90-4693-BE5C-391DE9027362")]
     public readonly Slot<Command> Result = new();

@@ -1,7 +1,7 @@
 namespace Lib._3d.mesh.generate;
 
 [Guid("ab496711-8b99-4463-aac9-b41fdf46608d")]
-public class RepeatMeshAtPoints : Instance<RepeatMeshAtPoints>
+internal sealed class RepeatMeshAtPoints : Instance<RepeatMeshAtPoints>
 {
     [Output(Guid = "df775b6c-d4ca-42f2-9ebd-6d5397b13ab0")]
     public readonly Slot<MeshBuffers> Result = new();

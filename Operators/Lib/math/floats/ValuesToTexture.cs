@@ -5,7 +5,7 @@ using Utilities = T3.Core.Utils.Utilities;
 namespace Lib.math.floats;
 
 [Guid("55cc0f79-96c9-482e-9794-934dc0f87708")]
-public class ValuesToTexture : Instance<ValuesToTexture>
+internal sealed class ValuesToTexture : Instance<ValuesToTexture>
 {
     [Output(Guid = "f01099a0-a196-4689-9900-edac07908714")]
     public readonly Slot<Texture2D> CurveTexture = new();

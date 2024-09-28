@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.anim._obsolete;
 
 [Guid("3b0eb327-6ad8-424f-bca7-ccbfa2c9a986")]
-public class _Jitter : Instance<_Jitter>
+public sealed class _Jitter : Instance<_Jitter>
 {
     [Output(Guid = "0307A381-FE96-4988-89B1-FD6DC0274119", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<float> Result = new();

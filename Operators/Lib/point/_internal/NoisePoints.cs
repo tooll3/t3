@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.point._internal;
 
 [Guid("a3bc1b8c-6bd9-4117-880e-afb9765e3104")]
-public class NoisePoints : Instance<NoisePoints>
+internal sealed class NoisePoints : Instance<NoisePoints>
 {
     [Output(Guid = "25c89e66-e8ee-4600-9d2f-009b7d9e75ca")]
     public readonly Slot<Point[]> Result = new();

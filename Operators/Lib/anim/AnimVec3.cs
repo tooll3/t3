@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.anim;
 
 [Guid("7814fd81-b8d0-4edf-b828-5165f5657344")]
-public class AnimVec3 : Instance<AnimVec3>
+public sealed class AnimVec3 : Instance<AnimVec3>
 {
     [Output(Guid = "A77BAA35-3CD9-44D3-9F75-2A4F95FBD595", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<Vector3> Result = new();

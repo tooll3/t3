@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.io.time.vj;
 
 [Guid("79db48d8-38d3-47ca-9c9b-85dde2fa660d")]
-public class ForwardBeatTaps : Instance<ForwardBeatTaps>
+internal sealed class ForwardBeatTaps : Instance<ForwardBeatTaps>
 {
     [Output(Guid = "71d05d91-d18b-44b3-a469-392739fd6941")]
     public readonly Slot<Command> Result = new();

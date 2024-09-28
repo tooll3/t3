@@ -4,7 +4,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib._3d.@_;
 
 [Guid("d8699da1-13aa-42f7-816a-88abb1d0ba06")]
-public class _ProcessLayer2d : Instance<_ProcessLayer2d>
+internal sealed class _ProcessLayer2d : Instance<_ProcessLayer2d>
 {
     [Output(Guid = "D81A2DB8-D72D-48B1-9201-0EE87822097E", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<Vector4[]> Result = new();

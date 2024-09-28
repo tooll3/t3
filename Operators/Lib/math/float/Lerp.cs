@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.@float;
 
 [Guid("1f5294e1-9d0b-4cd5-9d65-14c8bbf59e61")]
-public class Lerp : Instance<Lerp>
+internal sealed class Lerp : Instance<Lerp>
 {
     [Output(Guid = "762ee8f9-52b5-4a0e-aa1e-b41fbb6d7d22")]
     public readonly Slot<float> Result = new();

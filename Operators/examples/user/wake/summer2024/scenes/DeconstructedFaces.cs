@@ -1,7 +1,7 @@
 namespace Examples.user.wake.summer2024.scenes;
 
 [Guid("0b8e41cf-4692-4522-8491-601fa1851a24")]
-public class DeconstructedFaces : Instance<DeconstructedFaces>
+ internal sealed class DeconstructedFaces : Instance<DeconstructedFaces>
 {
     [Output(Guid = "02e02b5e-5a2f-4892-a229-24fab5d8683b")]
     public readonly Slot<Command> Output = new Slot<Command>();

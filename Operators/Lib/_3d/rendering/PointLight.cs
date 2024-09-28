@@ -1,7 +1,7 @@
 namespace Lib._3d.rendering;
 
 [Guid("9c67a8c8-839f-4f67-a949-08cb38b9dffd")]
-public class PointLight : Instance<PointLight>, ITransformable
+internal sealed class PointLight : Instance<PointLight>, ITransformable
 {
     [Output(Guid = "32b87a4d-bef3-4646-be76-8f8224ebd5c2")]
     public readonly TransformCallbackSlot<Command> Output = new();

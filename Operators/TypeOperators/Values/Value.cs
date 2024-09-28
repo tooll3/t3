@@ -1,7 +1,7 @@
 namespace Types.Values;
 
 [Guid("5d7d61ae-0a41-4ffa-a51d-93bab665e7fe")]
-public class Value : Instance<Value>, IExtractedInput<float>
+public sealed class Value : Instance<Value>, IExtractedInput<float>
 {
     [Output(Guid = "f83f1835-477e-4bb6-93f0-14bf273b8e94")]
     public readonly Slot<float> Result = new();

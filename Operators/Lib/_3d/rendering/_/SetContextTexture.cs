@@ -3,7 +3,7 @@ using T3.Core.Rendering.Material;
 namespace Lib._3d.rendering.@_;
 
 [Guid("944d1903-cd23-49ca-9b0d-2fc73bfcfd30")]
-public class SetContextTexture : Instance<SetContextTexture>
+internal sealed class SetContextTexture : Instance<SetContextTexture>
 {
     [Output(Guid = "db61864d-0dd4-44bf-9722-0b9ce7e8fdd4")]
     public readonly Slot<Command> Output = new();

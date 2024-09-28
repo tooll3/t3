@@ -1,7 +1,7 @@
 namespace Lib.point._internal;
 
 [Guid("b1352ba6-1164-4b44-9b69-a9eb802ea77d")]
-public class _ExecuteParticleUpdate : Instance<_ExecuteParticleUpdate>
+internal sealed class _ExecuteParticleUpdate : Instance<_ExecuteParticleUpdate>
 {
     [Output(Guid = "8788AEB6-E339-43D9-930B-8AF3BF703B7A")]
     public readonly Slot<ParticleSystem> Output2 = new ();

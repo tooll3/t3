@@ -1,7 +1,7 @@
 namespace Lib._3d.draw;
 
 [Guid("d38fe24e-be01-4a22-9595-b06bc906bf49")]
-public class ShadowPlane : Instance<ShadowPlane>
+internal sealed class ShadowPlane : Instance<ShadowPlane>
 {
     [Output(Guid = "e7622351-6afd-41dd-b9c7-bddc1e25e128")]
     public readonly Slot<Command> Output = new Slot<Command>();

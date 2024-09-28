@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.color;
 
 [Guid("6b7c541a-ca36-4f21-ac95-89e874820c5a")]
-public class BlendColors : Instance<BlendColors>
+internal sealed class BlendColors : Instance<BlendColors>
 {
     [Output(Guid = "66ce8660-253c-4a0b-8aec-f7a56751a1e4")]
     public readonly Slot<Vector4> Color = new();

@@ -3,7 +3,7 @@ using VertexShaderT3 = T3.Core.DataTypes.VertexShader;
 namespace Types.Gfx;
 
 [Guid("646f5988-0a76-4996-a538-ba48054fd0ad")]
-public class VertexShader : Instance<VertexShader>, IDescriptiveFilename, IStatusProvider, IShaderOperator<VertexShaderT3>
+public sealed class VertexShader : Instance<VertexShader>, IDescriptiveFilename, IStatusProvider, IShaderOperator<VertexShaderT3>
 {
     [Output(Guid = "ED31838B-14B5-4875-A0FC-DC427E874362")]
     public readonly Slot<VertexShaderT3> Shader = new();

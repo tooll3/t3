@@ -4,7 +4,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib._3d.@_;
 
 [Guid("17324ce1-8920-4653-ac67-c211ad507a81")]
-public class TransformMatrix : Instance<TransformMatrix>
+internal sealed class TransformMatrix : Instance<TransformMatrix>
 {
     [Output(Guid = "751E97DE-C418-48C7-823E-D4660073A559")]
     public readonly Slot<Vector4[]> Result = new();

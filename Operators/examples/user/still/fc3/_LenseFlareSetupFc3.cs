@@ -1,7 +1,7 @@
 namespace Examples.user.still.fc3;
 
 [Guid("6d594c55-a180-4742-8182-20b38929bab5")]
-public class _LenseFlareSetupFc3 : Instance<_LenseFlareSetupFc3>
+internal sealed class _LenseFlareSetupFc3 : Instance<_LenseFlareSetupFc3>
 {
     [Output(Guid = "476d24e7-2e66-48fe-bde3-8c6e12a44492")]
     public readonly Slot<Command> Output = new();

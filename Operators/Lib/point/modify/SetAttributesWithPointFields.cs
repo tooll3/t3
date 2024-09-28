@@ -1,7 +1,7 @@
 namespace Lib.point.modify;
 
 [Guid("21b0a346-f214-449f-ae27-7bfbe5395d66")]
-public class SetAttributesWithPointFields : Instance<SetAttributesWithPointFields>
+internal sealed class SetAttributesWithPointFields : Instance<SetAttributesWithPointFields>
 {
 
     [Output(Guid = "1e4de159-c526-44b4-9d31-e1aec95b9bad")]

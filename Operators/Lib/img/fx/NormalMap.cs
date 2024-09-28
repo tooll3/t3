@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("01458940-287f-4d31-9906-998efa9a2641")]
-public class NormalMap : Instance<NormalMap>
+internal sealed class NormalMap : Instance<NormalMap>
 {
     [Output(Guid = "b1fa156b-a959-42f8-9a81-30a667d60554")]
     public readonly Slot<Texture2D> Output = new();

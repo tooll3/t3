@@ -1,7 +1,7 @@
 namespace Lib.img.fx.obsolete;
 
 [Guid("d75de240-28a1-48cc-9b8f-388272188023")]
-public class AfterGlow : Instance<AfterGlow>
+internal sealed class AfterGlow : Instance<AfterGlow>
 {
     [Output(Guid = "93c699c3-6d32-4425-8a00-6ce472bb808b")]
     public readonly Slot<Texture2D> Output = new();

@@ -1,7 +1,7 @@
 namespace Lib.dx11.compute;
 
 [Guid("eb68addb-ec59-416f-8608-ff9d2319f3a3")]
-public class CalcDispatchCount : Instance<CalcDispatchCount>
+internal sealed class CalcDispatchCount : Instance<CalcDispatchCount>
 {
     [Output(Guid = "35c0e513-812f-49e2-96fa-17541751c19b")]
     public readonly Slot<Int3> DispatchCount = new();

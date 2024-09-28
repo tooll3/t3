@@ -1,7 +1,7 @@
 namespace Examples.user.cynic.research;
 
 [Guid("94a85a93-7d5c-401c-930c-c3a97a32932f")]
-public class GpuSorter : Instance<GpuSorter>
+ internal sealed class GpuSorter : Instance<GpuSorter>
 {
     [Output(Guid = "14e52376-e375-495d-a466-74731457b189")]
     public readonly Slot<Command> Command = new();

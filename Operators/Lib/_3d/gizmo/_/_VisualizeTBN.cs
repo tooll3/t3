@@ -1,7 +1,7 @@
 namespace Lib._3d.gizmo.@_;
 
 [Guid("dd353ac7-1f11-4dd6-aff5-5c557c695512")]
-public class _VisualizeTBN : Instance<_VisualizeTBN>
+internal sealed class _VisualizeTBN : Instance<_VisualizeTBN>
 {
     [Output(Guid = "82fc9f76-6a6d-4464-a94d-e28a06d82205")]
     public readonly Slot<Command> Output = new();

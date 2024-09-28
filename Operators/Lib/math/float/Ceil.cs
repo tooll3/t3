@@ -1,7 +1,7 @@
 namespace Lib.math.@float;
 
 [Guid("7129684e-bf84-4c8b-996e-baba68094585")]
-public class Ceil : Instance<Ceil>
+internal sealed class Ceil : Instance<Ceil>
 {
     [Output(Guid = "bc97d61a-0e23-469c-83d9-4a687c8e0016")]
     public readonly Slot<float> Result = new();

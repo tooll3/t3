@@ -1,7 +1,7 @@
 namespace Lib._3d.transform;
 
 [Guid("c3d35057-2544-4b82-b2de-b70fe205662b")]
-public class Shear : Instance<Shear>
+internal sealed class Shear : Instance<Shear>
 {
     [Output(Guid = "e928344e-02a5-4049-bc43-403dac8d805b")]
     public readonly Slot<Command> Output = new();

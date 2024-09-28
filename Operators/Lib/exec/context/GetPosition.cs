@@ -3,7 +3,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib.exec.context;
 
 [Guid("b7731197-b922-4ed8-8e22-bc7596c64f6c")]
-public class GetPosition : Instance<GetPosition>
+internal sealed class GetPosition : Instance<GetPosition>
 {
     [Output(Guid = "C809C405-81D3-44CA-A39C-C8DFA6AB3205")]
     public readonly Slot<Command> UpdateCommand = new();

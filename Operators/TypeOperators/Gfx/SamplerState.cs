@@ -4,7 +4,7 @@ using SharpDX.Direct3D11;
 namespace Types.Gfx;
 
 [Guid("9515d59d-0bd5-406b-96da-6a5f60215700")]
-public class SamplerState : Instance<SamplerState>
+public sealed class SamplerState : Instance<SamplerState>
 {
     [Output(Guid = "{0E45C596-C80F-4927-941F-E3199401AA10}")]
     public readonly Slot<SharpDX.Direct3D11.SamplerState> Value = new();

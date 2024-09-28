@@ -1,7 +1,7 @@
 namespace Lib.math.@int;
 
 [Guid("9a34f503-709b-42e0-a25f-bc74573afa6b")]
-public class IsIntEven : Instance<IsIntEven>
+internal sealed class IsIntEven : Instance<IsIntEven>
 {
     [Output(Guid = "B69BC0BA-010D-4268-93F4-D5F682AF00D5")]
     public readonly Slot<bool> Result = new();

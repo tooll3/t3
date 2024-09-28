@@ -6,7 +6,7 @@ using T3.Core.Utils;
 namespace Lib.io.midi;
 
 [Guid("642cec4f-d4e0-4d0a-8dc3-6ca8339b5f89")]
-public class MidiNoteOutput : Instance<MidiNoteOutput>, MidiConnectionManager.IMidiConsumer, ICustomDropdownHolder,IStatusProvider
+internal sealed class MidiNoteOutput : Instance<MidiNoteOutput>, MidiConnectionManager.IMidiConsumer, ICustomDropdownHolder,IStatusProvider
 {
     [Output(Guid = "2CB961E5-C188-4190-B02B-753784CAFCA3")]
     public readonly Slot<Command> Result = new();

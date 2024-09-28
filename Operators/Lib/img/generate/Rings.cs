@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.img.generate;
 
 [Guid("d002bd90-5921-48b0-a940-a8d0c779f674")]
-public class Rings : Instance<Rings>
+internal sealed class Rings : Instance<Rings>
 {
     [Output(Guid = "ee4053c2-10a4-4cf5-83ea-be4a8e12b80f")]
     public readonly Slot<Texture2D> TextureOutput = new();

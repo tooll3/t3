@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.floats;
 
 [Guid("32a1d28e-23bc-44a8-becc-b52972464526")]
-public class KeepFloatValues : Instance<KeepFloatValues>
+internal sealed class KeepFloatValues : Instance<KeepFloatValues>
 {
     [Output(Guid = "62b18ce3-1ffe-475e-9955-6f72c2fe6e18")]
     public readonly Slot<List<float>> Result = new(new List<float>(20));

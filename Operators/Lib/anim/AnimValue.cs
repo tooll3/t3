@@ -4,7 +4,7 @@ namespace Lib.anim;
 
 [Guid("ea7b8491-2f8e-4add-b0b1-fd068ccfed0d")]
 [SuppressMessage("ReSharper", "InconsistentNaming")]
-public class AnimValue : Instance<AnimValue>
+public sealed class AnimValue : Instance<AnimValue>
 {
     [Output(Guid = "ae4addf0-08cf-4b25-9515-4fef9359d183",DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<float> Result = new();

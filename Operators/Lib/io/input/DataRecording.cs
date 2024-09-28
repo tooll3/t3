@@ -3,7 +3,7 @@ using T3.Core.DataTypes.DataSet;
 namespace Lib.io.input;
 
 [Guid("4023bcbf-74a6-4e50-a12e-4c22be5dbbdf")]
-public class DataRecording : Instance<DataRecording>,  IStatusProvider, ICustomDropdownHolder
+internal sealed class DataRecording : Instance<DataRecording>,  IStatusProvider, ICustomDropdownHolder
 {
     [Output(Guid = "8c911387-bb2f-4d72-8528-b9f2d8cfe250")]
     public readonly Slot<DataSet> DataSet = new();

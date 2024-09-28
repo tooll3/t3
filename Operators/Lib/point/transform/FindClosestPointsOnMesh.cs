@@ -1,7 +1,7 @@
 namespace Lib.point.transform;
 
 [Guid("58afd953-d3fd-44a9-b54b-ccb287edc40c")]
-public class FindClosestPointsOnMesh : Instance<FindClosestPointsOnMesh>
+internal sealed class FindClosestPointsOnMesh : Instance<FindClosestPointsOnMesh>
 {
 
     [Output(Guid = "fdf76150-0448-470b-bf31-c3844f7b84f3")]

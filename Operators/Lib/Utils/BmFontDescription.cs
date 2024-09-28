@@ -2,7 +2,7 @@ using System.Xml.Serialization;
 
 namespace Lib.Utils;
 
-public class BmFontDescription
+internal sealed class BmFontDescription
 {
     public static bool TryInitializeFromFile(string filepath, [NotNullWhen(true)] out BmFontDescription? fontDescription)
     {

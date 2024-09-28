@@ -1,7 +1,7 @@
 namespace Lib.point._experimental;
 
 [Guid("46749ae5-ef10-43e7-a712-5cbd7a1d4398")]
-public class TraceContourLines : Instance<TraceContourLines>
+internal sealed class TraceContourLines : Instance<TraceContourLines>
                                 ,ITransformable
 {
     [Output(Guid = "5c2dc61d-012f-478a-ae4d-583ef4696e2d")]

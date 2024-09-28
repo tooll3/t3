@@ -1,7 +1,7 @@
 namespace Lib.math.vec3;
 
 [Guid("185958a3-be54-499d-a105-cad22c0dd448")]
-public class EulerToAxisAngle : Instance<EulerToAxisAngle>
+internal sealed class EulerToAxisAngle : Instance<EulerToAxisAngle>
 {
     [Output(Guid = "bf1ea1fa-cd5d-4bdf-b0cc-34042e4fd8df")]
     public readonly Slot<Vector3> Axis = new();

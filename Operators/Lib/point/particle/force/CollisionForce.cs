@@ -1,7 +1,7 @@
 namespace Lib.point.particle.force;
 
 [Guid("ed0bc47a-31ef-400b-b4e4-5552a859b309")]
-public class CollisionForce : Instance<CollisionForce>
+internal sealed class CollisionForce : Instance<CollisionForce>
 {
 
     [Output(Guid = "8c9461b8-9152-4389-938e-2ff67a6451ed")]

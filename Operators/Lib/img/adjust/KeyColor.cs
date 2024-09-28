@@ -1,7 +1,7 @@
 namespace Lib.img.adjust;
 
 [Guid("2ab1bbef-8322-4638-8b1d-7e31aaa6a457")]
-public class KeyColor : Instance<KeyColor>
+internal sealed class KeyColor : Instance<KeyColor>
 {
     [Output(Guid = "1d5f3a4c-227d-4875-a2ad-0ef445a675fe")]
     public readonly Slot<Texture2D> Output = new();

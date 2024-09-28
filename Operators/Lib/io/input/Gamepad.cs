@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.io.input;
 
 [Guid("d69e0f2e-8fe2-478b-ba4e-2a55a92670ae")]
-public class Gamepad : Instance<Gamepad>, IStatusProvider
+internal sealed class Gamepad : Instance<Gamepad>, IStatusProvider
 {
     [Output(Guid = "64E9DEC6-2B3A-4D7E-A174-991C8A8B929E", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<Dict<float>> State = new();

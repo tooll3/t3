@@ -1,7 +1,7 @@
 namespace Types.Gfx;
 
 [Guid("a9600440-4203-4315-bdb1-4dfd603b4515")]
-public class VertexShaderStage : Instance<VertexShaderStage>
+public sealed class VertexShaderStage : Instance<VertexShaderStage>
 {
     [Output(Guid = "65B394A9-06DC-4D9B-8819-15394EDE2997")]
     public readonly Slot<Command> Output = new(new Command());

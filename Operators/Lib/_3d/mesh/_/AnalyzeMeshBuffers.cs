@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib._3d.mesh.@_;
 
 [Guid("e43370a7-dafd-48b0-bac6-f30ea1bcf4cb")]
-public class AnalyzeMeshBuffers : Instance<AnalyzeMeshBuffers>
+internal sealed class AnalyzeMeshBuffers : Instance<AnalyzeMeshBuffers>
 {
     [Output(Guid = "bbf576df-f319-4419-9067-d8e364e375af")]
     public readonly Slot<int> MeshBufferCount = new();

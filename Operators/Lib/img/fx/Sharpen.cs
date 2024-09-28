@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("4b207e35-64b4-4833-977c-da6c7154a081")]
-public class Sharpen : Instance<Sharpen>
+internal sealed class Sharpen : Instance<Sharpen>
 {
     [Output(Guid = "d412319c-42be-480d-a4e5-60b5b5b1722d")]
     public readonly Slot<Texture2D> TextureOutput = new();

@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.math.@bool;
 
 [Guid("f997d943-7a71-4fdf-b182-7a521a73ba27")]
-public class DelayBoolean : Instance<DelayBoolean>
+internal sealed class DelayBoolean : Instance<DelayBoolean>
 {
     [Output(Guid = "377beba4-b9bb-4e76-aa81-b37f27b40bd9", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<bool> DelayedTrigger = new();

@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.img.generate;
 
 [Guid("2c3d2c26-ac45-42e9-8f13-6ea338333568")]
-public class LinearGradient : Instance<LinearGradient>
+internal sealed class LinearGradient : Instance<LinearGradient>
 {
     [Output(Guid = "d140f068-d71e-4af5-a563-ab599dae5dbf")]
     public readonly Slot<Texture2D> TextureOutput = new();

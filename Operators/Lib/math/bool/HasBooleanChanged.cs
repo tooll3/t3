@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.@bool;
 
 [Guid("57351603-f472-445f-b94b-e8f538f85517")]
-public class HasBooleanChanged : Instance<HasBooleanChanged>
+internal sealed class HasBooleanChanged : Instance<HasBooleanChanged>
 {
     [Output(Guid = "7c50b4ec-3ae8-45a0-8a66-d21d3f38de12")]
     public readonly Slot<bool> HasChanged = new();

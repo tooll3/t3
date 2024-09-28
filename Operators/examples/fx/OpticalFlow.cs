@@ -1,7 +1,7 @@
 namespace Examples.fx;
 
 [Guid("0309e746-c356-4c7b-af05-93136a2607de")]
-public class OpticalFlow : Instance<OpticalFlow>
+ internal sealed class OpticalFlow : Instance<OpticalFlow>
 {
     [Output(Guid = "4969429f-c7f6-441e-94ab-2a5a12e4cb11")]
     public readonly Slot<Texture2D> TextureOutput = new();

@@ -4,7 +4,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib._3d.transform;
 
 [Guid("284d2183-197d-47fd-b130-873cced78b1c")]
-public class Transform : Instance<Transform>, ITransformable
+internal sealed class Transform : Instance<Transform>, ITransformable
 {
     [Output(Guid = "2D329133-29B9-4F56-B5A6-5FF7D83638FA")]
     public readonly Slot<Command> Output = new();

@@ -1,7 +1,7 @@
 namespace Lib._3d.rendering.@_;
 
 [Guid("270c37b6-7633-4952-bade-a3ea2300583c")]
-public class GetRenderTargetReference : Instance<GetRenderTargetReference>
+internal sealed class GetRenderTargetReference : Instance<GetRenderTargetReference>
 {
     public GetRenderTargetReference()
     {

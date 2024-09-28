@@ -1,7 +1,7 @@
 namespace Lib.img.fx.@_;
 
 [Guid("d40966c3-2369-40f2-8202-e5c8ab6d9cc0")]
-public class BlurWithMask : Instance<BlurWithMask>
+internal sealed class BlurWithMask : Instance<BlurWithMask>
 {
     [Output(Guid = "8d199a8d-b02e-4fa2-8f7d-b156e4302fe3")]
     public readonly Slot<Texture2D> TextureOutput = new();

@@ -1,7 +1,7 @@
 namespace Lib.math.floats;
 
 [Guid("affe33d0-b86a-4327-aae7-880553b4b7dc")]
-public class FloatListLength : Instance<FloatListLength>
+internal sealed class FloatListLength : Instance<FloatListLength>
 {
     [Output(Guid = "f74b00d3-5585-48bd-be56-f0abfe4b6665")]
     public readonly Slot<int> Length = new();

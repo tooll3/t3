@@ -1,7 +1,7 @@
 namespace Lib.img.adjust;
 
 [Guid("da93f7d1-ef91-4b4a-9708-2d9b1baa4c14")]
-public class RemapColor : Instance<RemapColor>
+internal sealed class RemapColor : Instance<RemapColor>
 {
     [Output(Guid = "16e37306-05e1-4de6-babd-80a8d1472a2f")]
     public readonly Slot<Texture2D> TextureOutput = new();

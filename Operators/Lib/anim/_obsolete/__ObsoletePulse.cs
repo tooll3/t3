@@ -1,7 +1,7 @@
 namespace Lib.anim._obsolete;
 
 [Guid("5952d7b4-29ac-41fb-9324-287392d55048")]
-public class __ObsoletePulse : Instance<__ObsoletePulse>
+internal sealed class __ObsoletePulse : Instance<__ObsoletePulse>
 {
     [Output (Guid = "56020950-21f1-4868-b753-07c5ad1d22e8", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<float> Result = new();

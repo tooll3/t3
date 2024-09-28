@@ -4,7 +4,7 @@ using T3.Core.Rendering;
 namespace Lib._3d.rendering.@_;
 
 [Guid("843c9378-6836-4f39-b676-06fd2828af3e")]
-public class GetCamTransformBuffer : Instance<GetCamTransformBuffer>
+internal sealed class GetCamTransformBuffer : Instance<GetCamTransformBuffer>
 {
     [Output(Guid = "FB108D2D-04B0-427D-888D-79EB7EBF1E96", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Buffer> Buffer = new();

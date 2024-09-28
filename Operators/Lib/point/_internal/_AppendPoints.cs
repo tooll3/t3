@@ -1,7 +1,7 @@
 namespace Lib.point._internal;
 
 [Guid("9d3d0582-5e55-4268-9649-07d4dd11d792")]
-public class _AppendPoints : Instance<_AppendPoints>
+internal sealed class _AppendPoints : Instance<_AppendPoints>
 {
 
     [Output(Guid = "02610e60-ae30-46c8-bbab-00ee5b1078d3")]

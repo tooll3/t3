@@ -1,7 +1,7 @@
 namespace Lib._3d.rendering.@_;
 
 [Guid("d32a5484-880c-41d4-88ea-6ee1a3e61f0b")]
-public class ContextCBuffers : Instance<ContextCBuffers>
+internal sealed class ContextCBuffers : Instance<ContextCBuffers>
 {
     [Output(Guid = "d4171c74-5a90-4fe9-8334-10f9701c284c", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<Buffer> FogParameters = new();

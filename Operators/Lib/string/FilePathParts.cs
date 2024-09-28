@@ -1,7 +1,7 @@
 namespace Lib.@string;
 
 [Guid("42c556fb-014b-4ac5-b390-f426ab415aa7")]
-public class FilePathParts : Instance<FilePathParts>, IStatusProvider
+internal sealed class FilePathParts : Instance<FilePathParts>, IStatusProvider
 {
     [Output(Guid = "A628FB9E-7647-4FEE-838D-F17395E15148")]
     public readonly Slot<string> Directory = new();

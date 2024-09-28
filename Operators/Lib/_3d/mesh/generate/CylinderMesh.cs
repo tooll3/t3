@@ -6,7 +6,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib._3d.mesh.generate;
 
 [Guid("5777a005-bbae-48d6-b633-5e998ca76c91")]
-public class CylinderMesh : Instance<CylinderMesh>
+internal sealed class CylinderMesh : Instance<CylinderMesh>
 {
     [Output(Guid = "b4bed6e3-bef5-4601-99bd-f85bf1a956f5")]
     public readonly Slot<MeshBuffers> Data = new();

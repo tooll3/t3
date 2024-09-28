@@ -1,7 +1,7 @@
 namespace Lib.anim;
 
 [Guid("49796f63-27a8-4714-ba69-2073488ca833")]
-public class OscillateVec2 : Instance<OscillateVec2>
+internal sealed class OscillateVec2 : Instance<OscillateVec2>
 {
     [Output(Guid = "9DF7498C-543F-46F3-B331-AE8F143A2A65")]
     public readonly Slot<Vector2> Result = new();

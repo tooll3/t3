@@ -5,7 +5,7 @@ using T3.Core.Utils;
 namespace Lib.point.svg;
 
 [Guid("b7345438-f3f4-4ad3-9c57-6076ed0e9399")]
-public class PrepareSvgLineTransition : Instance<PrepareSvgLineTransition>
+internal sealed class PrepareSvgLineTransition : Instance<PrepareSvgLineTransition>
 {
     [Output(Guid = "adcfd192-23a3-48c1-ae21-e7d36e055673")]
     public readonly Slot<StructuredList> ResultList = new();

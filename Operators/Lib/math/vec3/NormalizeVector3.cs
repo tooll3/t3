@@ -1,7 +1,7 @@
 namespace Lib.math.vec3;
 
 [Guid("7805285e-e74b-48f5-8228-20bbb178e828")]
-public class NormalizeVector3 : Instance<NormalizeVector3>
+internal sealed class NormalizeVector3 : Instance<NormalizeVector3>
 {
     [Output(Guid = "1535925c-45d9-43d6-bf0a-ce7547c6bc4f")]
     public readonly Slot<Vector3> Result = new();

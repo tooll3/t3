@@ -1,7 +1,7 @@
 namespace Types.Gfx;
 
 [Guid("a8a0e6c4-1f49-4ed8-8d0b-e7aa6cdf8a87")]
-public class StructuredBuffer : Instance<StructuredBuffer>
+public sealed class StructuredBuffer : Instance<StructuredBuffer>
 {
     [Output(Guid = "C10E66C8-C887-4A82-B557-642990581767")]
     public readonly Slot<Buffer> Buffer = new();

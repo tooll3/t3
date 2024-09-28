@@ -1,7 +1,7 @@
 namespace Lib.io.time;
 
 [Guid("3be62864-30dd-4531-9980-28b634296e47")]
-public class GetFrameSpeedFactor : Instance<GetFrameSpeedFactor>
+internal sealed class GetFrameSpeedFactor : Instance<GetFrameSpeedFactor>
 {
     [Output(Guid = "d5de5667-82f7-4556-9b44-5e6ebdcfdd4d", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<float> FrameSpeedFactor = new();

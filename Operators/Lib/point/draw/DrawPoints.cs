@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.point.draw;
 
 [Guid("ffd94e5a-bc98-4e70-84d8-cce831e6925f")]
-public class DrawPoints : Instance<DrawPoints>
+internal sealed class DrawPoints : Instance<DrawPoints>
 {
     [Output(Guid = "b73347d9-9d9f-4929-b9df-e2d6db722856")]
     public readonly Slot<Command> Output = new();

@@ -1,7 +1,7 @@
 namespace Lib.exec.context;
 
 [Guid("2a0c932a-eb81-4a7d-aeac-836a23b0b789")]
-public class SetFloatVar : Instance<SetFloatVar>
+public sealed class SetFloatVar : Instance<SetFloatVar>
 {
     [Output(Guid = "9c0c1734-453e-4f88-b20a-47c7e34b7caa")]
     public readonly Slot<Command> Output = new();

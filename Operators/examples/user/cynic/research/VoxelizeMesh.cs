@@ -1,7 +1,7 @@
 namespace Examples.user.cynic.research;
 
 [Guid("791742c6-38e6-42ed-ad2a-d4c89584ac64")]
-public class VoxelizeMesh : Instance<VoxelizeMesh>
+internal sealed class VoxelizeMesh : Instance<VoxelizeMesh>
 {
     [Output(Guid = "2e743321-d4f2-4f5f-a8a0-f11ddde74695")]
     public readonly Slot<Command> Output = new();

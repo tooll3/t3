@@ -5,7 +5,7 @@ using SharpDX.Direct3D11;
 namespace Operators.Ndi.lib.io.video;
 
 [Guid("9412d0f4-dab8-4145-9719-10395e154fa7")]
-public class NdiOutput : Instance<NdiOutput>, IStatusProvider
+public sealed class NdiOutput : Instance<NdiOutput>, IStatusProvider
 {
     [Output(Guid = "3c0ae0e5-a2af-4437-b7fa-8ad300cb8b8b", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Texture2D> TextureOutput = new();

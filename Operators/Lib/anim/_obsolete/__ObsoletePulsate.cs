@@ -1,7 +1,7 @@
 namespace Lib.anim._obsolete;
 
 [Guid("ffed6f9e-2495-4cf3-9cda-740ecec75d10")]
-public class __ObsoletePulsate : Instance<__ObsoletePulsate>
+internal sealed class __ObsoletePulsate : Instance<__ObsoletePulsate>
 {
     [Output (Guid = "CB128B17-6855-440D-8539-BFD437E4193C")]
     public readonly Slot<float> Result = new();

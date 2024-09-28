@@ -1,7 +1,7 @@
 namespace Examples.user.wake.livecoding.helpers;
 
 [Guid("92750028-5fac-4e6d-84fe-f779f6d0ae33")]
-public class FadingSlideShowSoftEdge : Instance<FadingSlideShowSoftEdge>
+ internal sealed class FadingSlideShowSoftEdge : Instance<FadingSlideShowSoftEdge>
 {
     [Output(Guid = "dbfb113d-8d9e-481c-8048-2bd069f3b4b8")]
     public readonly Slot<Command> Output = new();

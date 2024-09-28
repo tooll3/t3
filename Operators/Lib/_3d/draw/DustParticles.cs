@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib._3d.draw;
 
 [Guid("d14233a2-8240-47d3-bb92-0854f6d3b218")]
-public class DustParticles : Instance<DustParticles>
+internal sealed class DustParticles : Instance<DustParticles>
 {
     [Output(Guid = "846bc771-7367-48e2-8389-206e2ee5c063")]
     public readonly Slot<Command> Output = new();

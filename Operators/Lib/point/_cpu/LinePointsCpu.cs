@@ -1,7 +1,7 @@
 namespace Lib.point._cpu;
 
 [Guid("a98d7796-6e09-45d1-a372-f3ea55abd359")]
-public class LinePointsCpu : Instance<LinePointsCpu>
+internal sealed class LinePointsCpu : Instance<LinePointsCpu>
 {
     [Output(Guid = "ba2e400c-8880-4a4e-9e5b-983ef4846165")]
     public readonly Slot<StructuredList> ResultList = new();

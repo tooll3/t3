@@ -3,7 +3,7 @@ using SharpDX.Mathematics.Interop;
 namespace Lib.dx11.draw;
 
 [Guid("e3596381-c118-4e2e-a482-83049a9f74af")]
-public class ClearRenderTarget : Instance<ClearRenderTarget>
+internal sealed class ClearRenderTarget : Instance<ClearRenderTarget>
 {
     [Output(Guid = "A6C06F65-1738-4DD0-9D0F-728864FF521B", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Command> Output = new();

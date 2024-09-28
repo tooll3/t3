@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.dx11.buffer;
 
 [Guid("e6bbbeef-08d8-4105-b84d-39edadb549c0")]
-public class PickBuffer : Instance<PickBuffer>
+internal sealed class PickBuffer : Instance<PickBuffer>
 {
     [Output(Guid = "32D2645B-B627-437A-AFEC-7E728E2B54F5")]
     public readonly Slot<BufferWithViews> Output = new();

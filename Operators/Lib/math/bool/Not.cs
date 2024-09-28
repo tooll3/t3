@@ -1,7 +1,7 @@
 namespace Lib.math.@bool;
 
 [Guid("51648ecd-05ee-40b3-b562-8518ada70918")]
-public class Not : Instance<Not>
+internal sealed class Not : Instance<Not>
 {
     [Output(Guid = "0274f62a-b3a2-49e3-a486-043ee71f366b")]
     public readonly Slot<bool> Result = new();

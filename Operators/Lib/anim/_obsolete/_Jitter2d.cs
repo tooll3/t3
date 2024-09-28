@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.anim._obsolete;
 
 [Guid("23794a1f-372d-484b-ac31-9470d0e77819")]
-public class _Jitter2d : Instance<_Jitter2d>
+public sealed class _Jitter2d : Instance<_Jitter2d>
 {
     [Output(Guid = "4f1fa28e-f010-48d5-bef1-51bceac17649", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<Vector2> NewPosition = new();

@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("f9d453d1-04d9-43ef-9189-50008f93bcc2")]
-public class FluidFeedback : Instance<FluidFeedback>
+internal sealed class FluidFeedback : Instance<FluidFeedback>
 {
     [Output(Guid = "b9baba42-18b6-4792-929d-bf628ce8a488")]
     public readonly Slot<Texture2D> ColorBuffer = new();

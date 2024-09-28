@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.vec2;
 
 [Guid("310e174e-ea52-4c54-90e6-72dc8320118a")]
-public class GridPosition : Instance<GridPosition>
+internal sealed class GridPosition : Instance<GridPosition>
 {
     [Output(Guid = "bf470007-4c7c-4915-a402-98bf6cead2dc")]
     public readonly Slot<Vector2> Position = new();

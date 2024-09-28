@@ -1,7 +1,7 @@
 namespace Lib.img.adjust;
 
 [Guid("d5516087-f7dd-44d4-a7e1-3c18767de921")]
-public class ConvertColors : Instance<ConvertColors>
+internal sealed class ConvertColors : Instance<ConvertColors>
 {
     [Output(Guid = "49e4972f-e360-4bc3-b780-032d5e985540")]
     public readonly Slot<Texture2D> Output = new();

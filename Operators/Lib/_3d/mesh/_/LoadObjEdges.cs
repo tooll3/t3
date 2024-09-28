@@ -3,7 +3,7 @@ using T3.Core.Rendering;
 namespace Lib._3d.mesh.@_;
 
 [Guid("dd3d7e16-f33e-4fb0-89c6-4d8cbc9d702f")]
-public class LoadObjEdges : Instance<LoadObjEdges>, IDescriptiveFilename
+internal sealed class LoadObjEdges : Instance<LoadObjEdges>, IDescriptiveFilename
 {
     [Output(Guid = "C0D0420D-84E6-4C57-8E88-D2B04DB26B89")]
     public readonly Slot<StructuredList> Data = new();

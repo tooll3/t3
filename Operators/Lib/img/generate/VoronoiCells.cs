@@ -1,7 +1,7 @@
 namespace Lib.img.generate;
 
 [Guid("ba059fe1-3397-4950-9ddd-e328f0c2e0bd")]
-public class VoronoiCells : Instance<VoronoiCells>
+internal sealed class VoronoiCells : Instance<VoronoiCells>
 {
     [Output(Guid = "3c91677f-ceb1-4c14-9eda-90ccb70f12a1")]
     public readonly Slot<Texture2D> TextureOutput = new();

@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 namespace Lib.@string;
 
 [Guid("b7910fc6-c3b2-4daf-93cd-010dcfe22a57")]
-public class SearchAndReplace : Instance<SearchAndReplace>
+internal sealed class SearchAndReplace : Instance<SearchAndReplace>
 {
     [Output(Guid = "15672e8f-c483-432e-8ced-f2bd18c1be67")]
     public readonly Slot<string> Result = new();

@@ -5,7 +5,7 @@ using T3.Core.Utils;
 namespace Lib.io.audio;
 
 [Guid("03477b9a-860e-4887-81c3-5fe51621122c")]
-public class AudioReaction : Instance<AudioReaction>
+public sealed class AudioReaction : Instance<AudioReaction>
 {
     [Output(Guid = "E1749C60-41F0-4E8F-9317-909EF31EEEF1", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<float> Level = new();

@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.vec2;
 
 [Guid("1cd2f5b1-bc54-4405-8ee6-d1acf59ebe14")]
-public class PickVector2 : Instance<PickVector2>
+internal sealed class PickVector2 : Instance<PickVector2>
 {
     [Output(Guid = "8c28230f-0ff8-4158-b6db-33ffe7b64ad5")]
     public readonly Slot<Vector2> Selected = new();

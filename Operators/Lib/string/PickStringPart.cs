@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 namespace Lib.@string;
 
 [Guid("7baaa83d-5c09-42a0-b7bc-35dbcfa5156d")]
-public class PickStringPart : Instance<PickStringPart>
+internal sealed class PickStringPart : Instance<PickStringPart>
 {
     [Output(Guid = "62368C06-7815-47BC-9B0D-3024A2907E01")]
     public readonly Slot<string> Fragments = new();

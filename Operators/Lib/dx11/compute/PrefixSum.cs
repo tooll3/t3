@@ -1,7 +1,7 @@
 namespace Lib.dx11.compute;
 
 [Guid("d35a403b-7e6e-4725-a344-6e8008a4e1e1")]
-public class PrefixSum : Instance<PrefixSum>
+internal sealed class PrefixSum : Instance<PrefixSum>
 {
     [Output(Guid = "a0801b0a-3447-4179-aa12-8b4b088868d2")]
     public readonly Slot<Command> Output = new();

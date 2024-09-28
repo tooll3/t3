@@ -6,7 +6,7 @@ using T3.Core.Utils;
 namespace Examples.user.still.worksforeverybody.fx;
 
 [Guid("3246cf5a-3c9b-4765-89d1-68852a3dd7a1")]
-public class SaveParameterSet : Instance<SaveParameterSet>
+internal sealed class SaveParameterSet : Instance<SaveParameterSet>
 {
     [Output(Guid = "90F4D983-685E-499B-B121-0D7F34669490")]
     public readonly Slot<StructuredList> Points = new();

@@ -1,7 +1,7 @@
 namespace Types.Values;
 
 [Guid("ed0f5188-8888-453e-8db4-20d87d18e9f4")]
-public class Boolean : Instance<Boolean>
+public sealed class Boolean : Instance<Boolean>
 {
     [Output(Guid = "97A91F72-1E40-412C-911E-70B142E16925")]
     public readonly Slot<bool> Result = new();

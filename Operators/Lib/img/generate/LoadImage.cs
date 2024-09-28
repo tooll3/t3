@@ -1,7 +1,7 @@
 namespace Lib.img.generate;
 
 [Guid("0b3436db-e283-436e-ba85-2f3a1de76a9d")]
-public class LoadImage : Instance<LoadImage>, IDescriptiveFilename
+internal sealed class LoadImage : Instance<LoadImage>, IDescriptiveFilename
 {
     [Output(Guid = "{E0C4FEDD-5C2F-46C8-B67D-5667435FB037}")]
     public readonly Slot<Texture2D> Texture = new();

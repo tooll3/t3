@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.io.audio;
 
 [Guid("b72d968b-0045-408d-a2f9-5c739c692a66")]
-public class AudioFrequencies : Instance<AudioFrequencies>
+internal sealed class AudioFrequencies : Instance<AudioFrequencies>
 {
     [Output(Guid = "B3EFDF25-4692-456D-AA48-563CFB0B9DEB", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<List<float>> FftBuffer = new();

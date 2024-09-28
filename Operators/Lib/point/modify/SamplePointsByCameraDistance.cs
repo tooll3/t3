@@ -1,7 +1,7 @@
 namespace Lib.point.modify;
 
 [Guid("0f40e5e5-e406-4f87-854b-fbdd670b5504")]
-public class SamplePointsByCameraDistance : Instance<SamplePointsByCameraDistance>
+internal sealed class SamplePointsByCameraDistance : Instance<SamplePointsByCameraDistance>
 {
 
     [Output(Guid = "7aeca2d3-c8aa-421f-91df-5a9df06a3040")]

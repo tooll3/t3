@@ -1,7 +1,7 @@
 namespace Lib.point.transform;
 
 [Guid("7f6c64fe-ca2e-445e-a9b4-c70291ce354e")]
-public class TransformPoints : Instance<TransformPoints>, ITransformable
+internal sealed class TransformPoints : Instance<TransformPoints>, ITransformable
 {
     [Output(Guid = "ba17981e-ef9f-46f1-a653-6d50affa8838")]
     public readonly TransformCallbackSlot<BufferWithViews> Output = new();

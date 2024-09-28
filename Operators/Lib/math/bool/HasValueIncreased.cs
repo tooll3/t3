@@ -1,7 +1,7 @@
 namespace Lib.math.@bool;
 
 [Guid("c513c58d-e45c-408d-a0b8-250c9af31545")]
-public class HasValueIncreased : Instance<HasValueIncreased>
+internal sealed class HasValueIncreased : Instance<HasValueIncreased>
 {
     [Output(Guid = "598E38D5-2347-4B93-A7A4-A23190D95DCD")]
     public readonly Slot<bool> HasIncreased = new();

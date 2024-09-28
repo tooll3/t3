@@ -1,7 +1,7 @@
 namespace Lib._3d.gizmo;
 
 [Guid("296dddbd-250b-4801-a039-bcb3cd555774")]
-public class DrawLineGrid : Instance<DrawLineGrid>
+internal sealed class DrawLineGrid : Instance<DrawLineGrid>
 {
     [Output(Guid = "d542b5bf-5e9b-4beb-8cbf-f2fff294423f")]
     public readonly Slot<Command> Output = new();

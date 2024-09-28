@@ -1,7 +1,7 @@
 namespace Examples.user.ff.pc.elements;
 
 [Guid("ffe6b076-f561-4230-a0c3-282fb4d58383")]
-public class PageTitle : Instance<PageTitle>
+ internal sealed class PageTitle : Instance<PageTitle>
 {
 
     [Output(Guid = "3ef7072f-bf0c-4e87-9525-69e19c4ddfdd")]

@@ -8,7 +8,7 @@ using T3.SystemUi;
 namespace Lib.point._experimental;
 
 [Guid("b238b288-6e9b-4b91-bac9-3d7566416028")]
-public class _SketchImpl : Instance<_SketchImpl>
+internal sealed class _SketchImpl : Instance<_SketchImpl>
 {
     [Output(Guid = "EB2272B3-8B4A-46B1-A193-8B10BDC2B038")]
     public readonly Slot<object> OutPages = new();
@@ -307,7 +307,7 @@ public class _SketchImpl : Instance<_SketchImpl>
 
     private bool IsOpSelected => MouseInput.SelectedChildId == Parent.SymbolChildId;
 
-    public class Page
+    internal sealed class Page
     {
         public int WriteIndex;
         public double Time;

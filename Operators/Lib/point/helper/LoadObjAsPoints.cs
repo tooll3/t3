@@ -5,7 +5,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib.point.helper;
 
 [Guid("ad651447-75e7-4491-a56a-f737d70c0522")]
-public class LoadObjAsPoints : Instance<LoadObjAsPoints>
+internal sealed class LoadObjAsPoints : Instance<LoadObjAsPoints>
 {
     // [Output(Guid = "02c14b5e-e187-4897-8163-85d2f6383c1c")]
     // public readonly Slot<BufferWithViews> VertexBuffer = new Slot<BufferWithViews>();

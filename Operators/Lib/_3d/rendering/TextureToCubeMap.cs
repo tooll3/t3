@@ -1,7 +1,7 @@
 namespace Lib._3d.rendering;
 
 [Guid("e85d98cf-9240-4f5d-8df6-35425d325778")]
-public class TextureToCubeMap : Instance<TextureToCubeMap>
+internal sealed class TextureToCubeMap : Instance<TextureToCubeMap>
 {
 
     [Output(Guid = "a3c61268-e57c-4ab0-939c-6fc4da0fc574")]

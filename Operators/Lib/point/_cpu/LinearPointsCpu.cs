@@ -6,7 +6,7 @@ using T3.Core.Utils;
 namespace Lib.point._cpu;
 
 [Guid("796a5efb-2ccf-4cae-b01c-d3f20a070181")]
-public class LinearPointsCpu : Instance<LinearPointsCpu>
+internal sealed class LinearPointsCpu : Instance<LinearPointsCpu>
 {
     [Output(Guid = "C8E35D0A-7B10-42D8-9984-006502195FDE")]
     public readonly Slot<StructuredList> PointList = new();

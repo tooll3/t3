@@ -1,7 +1,7 @@
 namespace Examples.user.cynic.research;
 
 [Guid("5b234754-2b45-46db-becb-86f0bb547608")]
-public class NearFarCoc : Instance<NearFarCoc>
+internal sealed class NearFarCoc : Instance<NearFarCoc>
 {
     [Output(Guid = "a0490fe9-eb0a-4fa8-a322-79e61d93e264")]
     public readonly Slot<Command> Output = new();

@@ -1,7 +1,7 @@
 namespace Examples.user.still.worksforeverybody;
 
 [Guid("3f7f8975-a7bb-47e6-96f7-061deb418e18")]
-public class _WFEGameUi : Instance<_WFEGameUi>
+internal sealed class _WFEGameUi : Instance<_WFEGameUi>
 {
     [Output(Guid = "9f6bd5f3-eb31-40de-894a-51d55b4e0fa3")]
     public readonly Slot<Command> Output = new();

@@ -1,7 +1,7 @@
 namespace Lib.math.vec4;
 
 [Guid("82a5f040-926b-4970-9da2-aa36de94b436")]
-public class RgbaToColor : Instance<RgbaToColor>
+internal sealed class RgbaToColor : Instance<RgbaToColor>
 {
     [Output(Guid = "ce1c3293-99ed-4309-b040-92931ee706d1")]
     public readonly Slot<Vector4> Result = new();

@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.img.fx;
 
 [Guid("299e9912-2a6a-40ea-aa31-4c357bbec125")]
-public class Dither : Instance<Dither>
+internal sealed class Dither : Instance<Dither>
 {
     [Output(Guid = "dac50008-a681-4e9a-8a71-e5f4f49a8eb5")]
     public readonly Slot<Texture2D> TextureOutput = new();

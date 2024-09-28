@@ -1,7 +1,7 @@
 namespace Lib.point.sim.experimental;
 
 [Guid("4ba8019b-f265-4e41-8722-4ee0c2c64ba9")]
-public class SimBlendTo : Instance<SimBlendTo>
+internal sealed class SimBlendTo : Instance<SimBlendTo>
 {
 
     [Output(Guid = "fbee285f-3954-4321-9178-8f870698367f")]

@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.@string;
 
 [Guid("acdd78b1-4e66-4fd0-a36b-5318670fefd4")]
-public class ChangeCase : Instance<ChangeCase>
+internal sealed class ChangeCase : Instance<ChangeCase>
 {
     [Output(Guid = "ecf66a1e-45e5-4e0c-ac9e-a784a9339153")]
     public readonly Slot<string> Result = new();

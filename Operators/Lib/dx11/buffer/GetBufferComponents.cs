@@ -1,7 +1,7 @@
 namespace Lib.dx11.buffer;
 
 [Guid("80dff680-5abf-484a-b9e0-81d72f3b7aa4")]
-public class GetBufferComponents : Instance<GetBufferComponents>
+internal sealed class GetBufferComponents : Instance<GetBufferComponents>
 {
     [Output(Guid = "a7d11905-eb9e-42a4-a077-11d2c1cb41b2")] 
     public readonly Slot<Buffer> Buffer = new();

@@ -1,7 +1,7 @@
 namespace Lib.@string.list;
 
 [Guid("a0fcf7ed-1f14-4a8b-a57e-99e5b2407b1b")]
-public class SplitString : Instance<SplitString>
+internal sealed class SplitString : Instance<SplitString>
 {
     [Output(Guid = "52745502-3b69-4b2e-be47-d2660fe08e48")]
     public readonly Slot<List<string>> Fragments = new();

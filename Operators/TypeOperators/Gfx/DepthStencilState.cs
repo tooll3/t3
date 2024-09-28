@@ -4,7 +4,7 @@ using SharpDX.Direct3D11;
 namespace Types.Gfx;
 
 [Guid("04858a08-f0fe-4536-9152-686659f0ab58")]
-public class DepthStencilState : Instance<DepthStencilState>
+public sealed class DepthStencilState : Instance<DepthStencilState>
 {
     [Output(Guid = "26E300CD-2DBE-49F2-AAB5-A60317DF5434")]
     public readonly Slot<SharpDX.Direct3D11.DepthStencilState> DepthState = new();

@@ -6,7 +6,7 @@ using Utilities = T3.Core.Utils.Utilities;
 namespace Lib.color;
 
 [Guid("42703423-1414-489e-aac2-21a3d7204262")]
-public class PickColorFromImage : Instance<PickColorFromImage>
+internal sealed class PickColorFromImage : Instance<PickColorFromImage>
 {
     [Output(Guid = "4f0c5c55-74b3-46d9-bbbc-4aad5dc14ea3")]
     public readonly Slot<Vector4> Output = new();

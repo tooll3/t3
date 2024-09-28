@@ -1,7 +1,7 @@
 namespace Types.NET;
 
 [Guid("fcdc3089-2df5-467b-841b-7745efaf13db")]
-public class StringBuilder : Instance<StringBuilder>
+public sealed class StringBuilder : Instance<StringBuilder>
 {
     [Output(Guid = "DEB52613-01FC-428D-B2D1-4BE7B6767FAD")]
     public readonly Slot<System.Text.StringBuilder> Builder = new();

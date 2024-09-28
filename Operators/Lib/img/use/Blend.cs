@@ -1,7 +1,7 @@
 namespace Lib.img.use;
 
 [Guid("9f43f769-d32a-4f49-92ac-e0be3ba250cf")]
-public class Blend : Instance<Blend>
+internal sealed class Blend : Instance<Blend>
 {
     [Output(Guid = "536fae14-b814-498c-a6b4-07775de36991")]
     public readonly Slot<Texture2D> Output = new();

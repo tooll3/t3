@@ -1,7 +1,7 @@
 namespace Examples.user.wake.summer2024.elements;
 
 [Guid("52282884-fa27-428d-ba8f-eeaf4d69e00a")]
-public class LiveCodingVideoSource : Instance<LiveCodingVideoSource>
+ internal sealed class LiveCodingVideoSource : Instance<LiveCodingVideoSource>
 {
     [Output(Guid = "63660f7f-c5ea-4a0c-b155-7cb5d8eab222")]
     public readonly Slot<Command> Output = new Slot<Command>();

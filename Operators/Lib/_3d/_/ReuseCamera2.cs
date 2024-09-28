@@ -1,7 +1,7 @@
 namespace Lib._3d.@_;
 
 [Guid("1de05a51-4a22-44cd-a584-6f1ae1c0e8d1")]
-public class ReuseCamera2 : Instance<ReuseCamera2>
+internal sealed class ReuseCamera2 : Instance<ReuseCamera2>
 {
     [Output(Guid = "04c676d4-012b-44ef-b3b2-6b7d7f09d490")]
     public readonly Slot<Command> Output = new();

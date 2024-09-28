@@ -6,7 +6,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib._3d.transform;
 
 [Guid("a3f64d34-1fab-4230-86b3-1c3deba3f90b")]
-public class Group : Instance<Group>
+internal sealed class Group : Instance<Group>
                     ,ITransformable
 {
     [Output(Guid = "977ca2f4-cddb-4b9a-82b2-ff66453bbf9b")]

@@ -3,7 +3,7 @@ using ComputeShaderT3 = T3.Core.DataTypes.ComputeShader;
 namespace Types.Gfx;
 
 [Guid("4e5bc624-9cda-46a8-9681-7fd412ea3893")]
-public class ComputeShaderFromSource : Instance<ComputeShaderFromSource>, IStatusProvider, IShaderCodeOperator<ComputeShaderT3>
+public sealed class ComputeShaderFromSource : Instance<ComputeShaderFromSource>, IStatusProvider, IShaderCodeOperator<ComputeShaderT3>
 {
     [Output(Guid = "190e262f-6554-4b34-b5b6-6617a98ab123")]
     public readonly Slot<ComputeShaderT3> Shader = new();

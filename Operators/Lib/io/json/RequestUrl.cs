@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.io.json;
 
 [Guid("6535edc3-a4ed-46c7-ae71-d3974612b448")]
-public class RequestUrl : Instance<RequestUrl>
+internal sealed class RequestUrl : Instance<RequestUrl>
 {
     [Output(Guid = "664c217c-8c7e-4bc8-870e-409f6f67ad33")]
     public readonly Slot<string> Result = new();

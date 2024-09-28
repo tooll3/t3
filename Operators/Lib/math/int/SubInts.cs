@@ -1,7 +1,7 @@
 namespace Lib.math.@int;
 
 [Guid("7934f11d-c95c-41ae-b282-6e568b9c5f30")]
-public class SubInts : Instance<SubInts>
+internal sealed class SubInts : Instance<SubInts>
 {
     [Output(Guid = "e66c9218-06dc-4e8d-9f30-9d81f22e39ba")]
     public readonly Slot<int> Result = new();

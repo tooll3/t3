@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.anim._obsolete;
 
 [Guid("c5e39c67-256f-4cb9-a635-b62a0d9c796c")]
-public class _AnimValueOld : Instance<_AnimValueOld>
+internal sealed class _AnimValueOld : Instance<_AnimValueOld>
 {
     [Output(Guid = "c47e8843-6e8d-4eaf-a554-874b3af9ee63", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<float> Result = new();

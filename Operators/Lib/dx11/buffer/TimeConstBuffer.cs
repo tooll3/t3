@@ -3,7 +3,7 @@ using T3.Core.Animation;
 namespace Lib.dx11.buffer;
 
 [Guid("de8bc97a-8ef0-4d4a-9ffa-88046a2daf40")]
-public class TimeConstBuffer : Instance<TimeConstBuffer>
+internal sealed class TimeConstBuffer : Instance<TimeConstBuffer>
 {
     [Output(Guid = "{6C118567-8827-4422-86CC-4D4D00762D87}", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<Buffer> Buffer = new();

@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib._3d.@_;
 
 [Guid("5914f00f-6600-42a2-bbd5-4201053058ec")]
-public class GetLightPosition : Instance<GetLightPosition>
+internal sealed class GetLightPosition : Instance<GetLightPosition>
 {
     [Output(Guid = "598EA068-AAA0-43A7-BA58-A8021370CA90", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<Vector3> Position = new();

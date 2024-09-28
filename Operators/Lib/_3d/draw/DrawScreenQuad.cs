@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib._3d.draw;
 
 [Guid("5a2752e8-95ae-4d76-b903-1f52ef43bcdc")]
-public class DrawScreenQuad : Instance<DrawScreenQuad>
+internal sealed class DrawScreenQuad : Instance<DrawScreenQuad>
 {
     [Output(Guid = "3c8116a2-2686-41ba-8bfd-d1b3fb929b02")]
     public readonly Slot<Command> Output = new();

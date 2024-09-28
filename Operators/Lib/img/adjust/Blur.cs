@@ -1,7 +1,7 @@
 namespace Lib.img.adjust;
 
 [Guid("946da16c-f536-4887-b764-af9468f22c0f")]
-public class Blur : Instance<Blur>
+internal sealed class Blur : Instance<Blur>
 {
     [Output(Guid = "fa46b9f0-46d6-4ab3-8406-409e1dc5e9a4")]
     public readonly Slot<Texture2D> TextureOutput = new();

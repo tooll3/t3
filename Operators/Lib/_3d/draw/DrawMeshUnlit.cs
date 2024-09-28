@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib._3d.draw;
 
 [Guid("4499dcb1-c936-49ed-861b-2ad8ae58cb28")]
-public class DrawMeshUnlit : Instance<DrawMeshUnlit>
+internal sealed class DrawMeshUnlit : Instance<DrawMeshUnlit>
 {
     [Output(Guid = "0e5c4ba6-278c-4c3c-96d8-00b706c5605b")]
     public readonly Slot<Command> Output = new();

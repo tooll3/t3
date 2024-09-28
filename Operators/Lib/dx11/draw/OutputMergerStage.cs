@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.dx11.draw;
 
 [Guid("5efaf208-ba62-42ce-b3df-059b37fc1382")]
-public class OutputMergerStage : Instance<OutputMergerStage> {
+internal sealed class OutputMergerStage : Instance<OutputMergerStage> {
     [Output(Guid = "CEE8C3F0-64EA-4E4D-B967-EC7E3688DD03")]
     public readonly Slot<Command> Output = new(new Command());
 

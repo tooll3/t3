@@ -5,7 +5,7 @@ using Utilities = T3.Core.Utils.Utilities;
 namespace Lib._3d.@_;
 
 [Guid("11ebbb25-984a-4772-b720-b8c7e5214a83")]
-public class _ReadIntFromGpuBuffer : Instance<_ReadIntFromGpuBuffer>,IStatusProvider
+internal sealed class _ReadIntFromGpuBuffer : Instance<_ReadIntFromGpuBuffer>,IStatusProvider
 {
     [Output(Guid = "63DB213C-98DA-4CC7-BA56-F534A7D9CD76")]
     public readonly Slot<Command> Execute = new();

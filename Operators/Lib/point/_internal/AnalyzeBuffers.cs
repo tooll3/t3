@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.point._internal;
 
 [Guid("7ad3a38a-9f04-43ba-a16f-6982b87dd2d4")]
-public class AnalyzeBuffers : Instance<AnalyzeBuffers>
+internal sealed class AnalyzeBuffers : Instance<AnalyzeBuffers>
 {
     [Output(Guid = "4906B2CE-7AAF-4025-B48E-49E6D660C13B")]
     public readonly Slot<int> BufferCount = new();

@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.@float;
 
 [Guid("f0acd1a4-7a98-43ab-a807-6d1bd3e92169")]
-public class Remap : Instance<Remap>
+public sealed class Remap : Instance<Remap>
 {
     [Output(Guid = "de6e6f65-cb51-49f1-bb90-34ed1ec963c1")]
     public readonly Slot<float> Result = new();

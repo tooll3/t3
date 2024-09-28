@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.@string;
 
 [Guid("7b21f10b-3548-4a23-95df-360addaeb03d")]
-public class BuildRandomString : Instance<BuildRandomString>
+internal sealed class BuildRandomString : Instance<BuildRandomString>
 {
     [Output(Guid = "ABA9EB42-5AF0-4165-A2BD-FDFCD4340484", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<string> Result = new();

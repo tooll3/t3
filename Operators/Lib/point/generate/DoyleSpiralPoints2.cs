@@ -1,7 +1,7 @@
 namespace Lib.point.generate;
 
 [Guid("eaeb8937-f6ff-4a4a-8f00-27484285cd2d")]
-public class DoyleSpiralPoints2 : Instance<DoyleSpiralPoints2>
+internal sealed class DoyleSpiralPoints2 : Instance<DoyleSpiralPoints2>
                                  ,ITransformable
 {
 

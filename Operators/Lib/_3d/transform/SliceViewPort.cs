@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib._3d.transform;
 
 [Guid("8b888408-e472-4bf9-be25-17a3dd8b90fd")]
-public class SliceViewPort : Instance<SliceViewPort>
+internal sealed class SliceViewPort : Instance<SliceViewPort>
 {
     [Output(Guid = "ba5c7143-d37b-494f-acd8-1ad139215f63")]
     public readonly Slot<Command> Output = new(new Command());

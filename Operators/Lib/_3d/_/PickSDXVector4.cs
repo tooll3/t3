@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib._3d.@_;
 
 [Guid("a83f2e4f-cb4d-4a6f-9f7a-2ea7fdfab54b")]
-public class PickSDXVector4 : Instance<PickSDXVector4>
+internal sealed class PickSDXVector4 : Instance<PickSDXVector4>
 {
     [Output(Guid = "B0A0DD4C-90BB-49E9-BA83-E96C3FAB2929")]
     public readonly Slot<float> Value1 = new();

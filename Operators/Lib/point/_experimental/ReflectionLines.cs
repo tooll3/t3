@@ -1,7 +1,7 @@
 namespace Lib.point._experimental;
 
 [Guid("b5515341-24ef-48ff-b832-d40e8189c6a4")]
-public class ReflectionLines : Instance<ReflectionLines>
+internal sealed class ReflectionLines : Instance<ReflectionLines>
 {
 
     [Output(Guid = "d4437c90-9a13-4f35-a83f-b27dde3c4681")]

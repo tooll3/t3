@@ -13,7 +13,7 @@ namespace Lib.img.video;
  *
  * https://github.com/vvvv/VL.Video.MediaFoundation/blob/master/src/VideoPlayer.cs
  */
-public class PlayVideoClip : Instance<PlayVideoClip>
+internal sealed class PlayVideoClip : Instance<PlayVideoClip>
 {
     [Output(Guid = "eb954aeb-535b-4b22-ac49-858f71bdaac4", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<Texture2D> Texture = new();

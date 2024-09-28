@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("da8ebc61-87cf-44ff-888e-994c8628ddb7")]
-public class TriangleGridTransition : Instance<TriangleGridTransition>
+internal sealed class TriangleGridTransition : Instance<TriangleGridTransition>
 {
     [Output(Guid = "64932d5a-de45-49c2-8ce2-fcde79d6627c")]
     public readonly Slot<Texture2D> TextureOutput = new();

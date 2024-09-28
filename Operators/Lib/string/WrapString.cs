@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.@string;
 
 [Guid("96ccea19-c37f-4ee4-8dd2-5abdb347f5a1")]
-public class WrapString : Instance<WrapString>
+internal sealed class WrapString : Instance<WrapString>
 {
     [Output(Guid = "83571519-ade1-4508-bf4c-c3d734cf5603")]
     public readonly Slot<string> Result = new();

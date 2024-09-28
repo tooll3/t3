@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Examples.user.still.worksforeverybody;
 
 [Guid("1dfc9f6d-effa-407b-8f8d-5adf62504205")]
-public class _WFEGameState : Instance<_WFEGameState>
+internal sealed class _WFEGameState : Instance<_WFEGameState>
 {
 
     [Output(Guid = "BFEEC4E7-01AC-47A2-83F4-67EC8D1456EC")]

@@ -1,7 +1,7 @@
 namespace Lib.point.combine;
 
 [Guid("5c7b6f3e-d3d5-4cfa-b30e-1a8cb6dbb4ad")]
-public class PairPointsForSplines : Instance<PairPointsForSplines>
+internal sealed class PairPointsForSplines : Instance<PairPointsForSplines>
 {
 
     [Output(Guid = "03404861-1a6f-413a-a3f8-b6316722f0c3")]

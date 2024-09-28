@@ -1,7 +1,7 @@
 namespace Lib.point._internal;
 
 [Guid("705df4fe-8f91-4b1e-a7d1-432011ffcb3f")]
-public class _SetParticleSystemComponents : Instance<_SetParticleSystemComponents>
+internal sealed class _SetParticleSystemComponents : Instance<_SetParticleSystemComponents>
 {
     [Output(Guid = "9d729d46-06e2-4152-a5d7-3368ae5d737a")]
     public readonly Slot<Command> Output = new();

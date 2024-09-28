@@ -1,7 +1,7 @@
 namespace Lib.point.sim.experimental;
 
 [Guid("98df563e-fd59-4458-a490-b7b7604ec1f3")]
-public class GrowStrains : Instance<GrowStrains>
+internal sealed class GrowStrains : Instance<GrowStrains>
 {
 
     [Output(Guid = "e7303155-e0c6-4b0c-91a9-1b3f944c77e7")]

@@ -1,7 +1,7 @@
 namespace Lib._3d.mesh.modify;
 
 [Guid("037c89b0-f5d3-4509-b574-c34fa8ec21f3")]
-public class CrossLinePoints : Instance<CrossLinePoints>
+internal sealed class CrossLinePoints : Instance<CrossLinePoints>
 {
     [Output(Guid = "8dfd5a8b-ee85-4e95-ab54-622e2478d0ab")]
     public readonly Slot<BufferWithViews> OutBuffer = new();

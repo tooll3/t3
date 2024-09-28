@@ -1,7 +1,7 @@
 namespace Lib.img.generate;
 
 [Guid("bf7fcd04-0cf6-4518-86cc-48f74483d98d")]
-public class RoundedRect : Instance<RoundedRect>
+internal sealed class RoundedRect : Instance<RoundedRect>
 {
     [Output(Guid = "babd085b-5099-4ddb-87d6-ab9d983067f1")]
     public readonly Slot<Texture2D> TextureOutput = new();

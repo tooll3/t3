@@ -1,7 +1,7 @@
 namespace Lib.@string;
 
 [Guid("dd7fa7ee-266a-43c8-b29f-3357488b26be")]
-public class AnimRandomString : Instance<AnimRandomString>
+internal sealed class AnimRandomString : Instance<AnimRandomString>
 {
     [Output(Guid = "3a769380-1586-4d7f-a881-e509d5c14c1b")]
     public readonly Slot<string> Fragments = new();

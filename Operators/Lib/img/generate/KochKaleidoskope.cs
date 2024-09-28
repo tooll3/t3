@@ -1,7 +1,7 @@
 namespace Lib.img.generate;
 
 [Guid("f7366bdc-86b2-4951-8788-3826126ed8c2")]
-public class KochKaleidoskope : Instance<KochKaleidoskope>
+internal sealed class KochKaleidoskope : Instance<KochKaleidoskope>
 {
     [Output(Guid = "15711a30-7d0c-40f4-be68-e2e75c5b4dc5")]
     public readonly Slot<Texture2D> TextureOutput = new();

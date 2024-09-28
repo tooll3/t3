@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.img.use;
 
 [Guid("e6070817-cf2e-4430-87e0-bf3dd15afdb5")]
-public class PickTexture : Instance<PickTexture>
+internal sealed class PickTexture : Instance<PickTexture>
 {
     [Output(Guid = "D2F29AC9-EC9E-43AB-8F3F-2C4CD7FC9444")]
     public readonly Slot<Texture2D> Selected = new();

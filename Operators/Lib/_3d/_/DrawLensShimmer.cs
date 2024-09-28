@@ -1,7 +1,7 @@
 namespace Lib._3d.@_;
 
 [Guid("c87b140b-1109-4eff-bf77-98bff3fc3e17")]
-public class DrawLensShimmer : Instance<DrawLensShimmer>
+internal sealed class DrawLensShimmer : Instance<DrawLensShimmer>
 {
     [Output(Guid = "e44490fc-bf15-4e36-8b81-4d7c45949dbc")]
     public readonly Slot<Command> Output = new();

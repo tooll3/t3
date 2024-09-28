@@ -1,7 +1,7 @@
 namespace Lib._3d.@_;
 
 [Guid("2cd650a1-5b77-4040-895b-6049dc09206e")]
-public class _DepthOfField : Instance<_DepthOfField>
+internal sealed class _DepthOfField : Instance<_DepthOfField>
 {
     [Output(Guid = "6771dc30-32e5-49af-a059-58de21e5155e")]
     public readonly Slot<Command> Output = new();

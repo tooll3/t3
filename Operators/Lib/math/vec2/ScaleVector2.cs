@@ -1,7 +1,7 @@
 namespace Lib.math.vec2;
 
 [Guid("4bbc6fac-789d-496e-9833-a0af78c31c98")]
-public class ScaleVector2 : Instance<ScaleVector2>
+internal sealed class ScaleVector2 : Instance<ScaleVector2>
 {
     [Output(Guid = "b45d4180-d43a-4b0f-8218-6d4d7f5c56a8")]
     public readonly Slot<Vector2> Result = new();

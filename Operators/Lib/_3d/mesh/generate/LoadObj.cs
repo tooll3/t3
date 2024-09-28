@@ -6,7 +6,7 @@ using T3.Core.Utils;
 namespace Lib._3d.mesh.generate;
 
 [Guid("be52b670-9749-4c0d-89f0-d8b101395227")]
-public class LoadObj : Instance<LoadObj>, IDescriptiveFilename, IStatusProvider
+internal sealed class LoadObj : Instance<LoadObj>, IDescriptiveFilename, IStatusProvider
 {
     [Output(Guid = "1F4E7CAC-1F62-4633-B0F3-A3017A026753")]
     public readonly Slot<MeshBuffers> Data = new();

@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("4cdc0f90-6ce9-4a03-9cd0-efeddee70567")]
-public class Steps : Instance<Steps>
+internal sealed class Steps : Instance<Steps>
 {
     [Output(Guid = "b2c389a0-6f8c-4e64-b3d5-09b549ae32c1")]
     public readonly Slot<Texture2D> TextureOutput = new();

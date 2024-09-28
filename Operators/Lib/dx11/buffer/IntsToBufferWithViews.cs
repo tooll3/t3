@@ -3,7 +3,7 @@ using SharpDX;
 namespace Lib.dx11.buffer;
 
 [Guid("c036b4f2-97bf-40f1-b4d5-c2067a4fa97f")]
-public class IntsToBufferWithViews : Instance<IntsToBufferWithViews>
+internal sealed class IntsToBufferWithViews : Instance<IntsToBufferWithViews>
 {
     [Output(Guid = "54b2df2e-3cc4-4dac-99d6-44a37842be60")]
     public readonly Slot<BufferWithViews> OutBuffer = new();

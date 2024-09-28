@@ -1,7 +1,7 @@
 namespace Lib._3d.mesh.modify;
 
 [Guid("026e6917-6e6f-4ee3-b2d4-58f4f1de74c9")]
-public class TransformMesh : Instance<TransformMesh>, ITransformable
+internal sealed class TransformMesh : Instance<TransformMesh>, ITransformable
 {
     [Output(Guid = "9ff1bfed-4554-4c55-9557-8b318ac47afe")]
     public readonly TransformCallbackSlot<MeshBuffers> Result = new();

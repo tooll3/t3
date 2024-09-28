@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.math.vec3;
 
 [Guid("841e4072-4138-4dda-b156-b01ec3a8f9ae")]
-public class HasVec3Changed : Instance<HasVec3Changed>
+internal sealed class HasVec3Changed : Instance<HasVec3Changed>
 {
     [Output(Guid = "3c76da29-7290-438b-bb9a-7ab576f6b30f")]
     public readonly Slot<bool> HasChanged = new();

@@ -1,7 +1,7 @@
 namespace Lib._3d.mesh.modify;
 
 [Guid("a368035f-2697-4ba5-a7bd-484eeb54c39b")]
-public class TextureDisplaceMesh : Instance<TextureDisplaceMesh> ,ITransformable
+internal sealed class TextureDisplaceMesh : Instance<TextureDisplaceMesh> ,ITransformable
 {
     // [Output(Guid = "5092c4a1-8c57-42ef-834e-f4c50876a8ed")]
     // public readonly TransformCallbackSlot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new TransformCallbackSlot<T3.Core.DataTypes.BufferWithViews>();

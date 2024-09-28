@@ -1,7 +1,7 @@
 namespace Lib.math.@float;
 
 [Guid("f376121a-2360-4232-9724-0db6937062c3")]
-public class HasValueDecreased : Instance<HasValueDecreased>
+internal sealed class HasValueDecreased : Instance<HasValueDecreased>
 {
     [Output(Guid = "2de049e8-77d3-4f01-9ba2-63ddeee935ba")]
     public readonly Slot<bool> HasDecreased = new();

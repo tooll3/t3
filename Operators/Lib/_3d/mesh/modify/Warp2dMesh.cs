@@ -1,7 +1,7 @@
 namespace Lib._3d.mesh.modify;
 
 [Guid("99435f7a-4969-4a0e-83f5-404ee6a0cfa2")]
-public class Warp2dMesh : Instance<Warp2dMesh>
+internal sealed class Warp2dMesh : Instance<Warp2dMesh>
 {
 
     [Output(Guid = "ee5ce4f1-a518-4545-b2ce-64005fade7a8")]

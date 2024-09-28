@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("ee398291-674c-409b-aab8-9ca843ce6cef")]
-public class HoneyCombTiles : Instance<HoneyCombTiles>
+internal sealed class HoneyCombTiles : Instance<HoneyCombTiles>
 {
     [Output(Guid = "2c2d62c4-3735-40a4-bc97-eaecf7e4cb7f")]
     public readonly Slot<Texture2D> TextureOutput = new();

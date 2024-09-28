@@ -1,7 +1,7 @@
 namespace Lib.dx11.draw;
 
 [Guid("fbd7f0f0-36a3-4fbb-91e1-cb33d4666d09")]
-public class Rasterizer : Instance<Rasterizer>
+internal sealed class Rasterizer : Instance<Rasterizer>
 {
     [Output(Guid = "C723AD69-FF0C-47B2-9327-BD27C0D7B6D1")]
     public readonly Slot<Command> Output = new(new Command());

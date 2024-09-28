@@ -1,7 +1,7 @@
 namespace Examples.user.wake.revision2021;
 
 [Guid("18d9721b-e170-4f4d-b630-30445aba5e20")]
-public class FadingFacesRev2021 : Instance<FadingFacesRev2021>
+ internal sealed class FadingFacesRev2021 : Instance<FadingFacesRev2021>
 {
 
     [Input(Guid = "71eb23a5-dde7-42bd-916a-5278343b64ad")]

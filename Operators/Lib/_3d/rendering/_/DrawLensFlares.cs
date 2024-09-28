@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib._3d.rendering.@_;
 
 [Guid("de173d83-66e6-4363-a478-4336100c2dbd")]
-public class DrawLensFlares : Instance<DrawLensFlares>
+internal sealed class DrawLensFlares : Instance<DrawLensFlares>
 {
     [Output(Guid = "0e87c2a6-3ab8-41f5-ad78-ccc8e6df67e8")]
     public readonly Slot<Command> Output = new();

@@ -1,7 +1,7 @@
 namespace Lib.math.@int;
 
 [Guid("62f7408a-a34a-459a-bd7d-bb349196df9b")]
-public class HasIntChanged : Instance<HasIntChanged>
+internal sealed class HasIntChanged : Instance<HasIntChanged>
 {
     [Output(Guid = "d8ce2d08-4fd3-4a56-92c3-469d661dab8b", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<bool> HasChanged = new();

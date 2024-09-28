@@ -1,7 +1,7 @@
 namespace Lib.point.transform;
 
 [Guid("acc71a14-daad-4b36-b0bc-cf0a796cc5d9")]
-public class OrientPoints : Instance<OrientPoints>
+internal sealed class OrientPoints : Instance<OrientPoints>
 {
 
     [Output(Guid = "23a08560-9764-42a1-a889-dd8839476747")]

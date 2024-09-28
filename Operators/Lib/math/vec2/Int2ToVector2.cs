@@ -1,7 +1,7 @@
 namespace Lib.math.vec2;
 
 [Guid("d1a66374-f0e8-4ef5-adf4-2871ec549d2a")]
-public class Int2ToVector2 : Instance<Int2ToVector2>
+internal sealed class Int2ToVector2 : Instance<Int2ToVector2>
 {
     [Output(Guid = "ea84de7c-7381-4689-90c2-586308d3b15d")]
     public readonly Slot<Vector2> Result = new();

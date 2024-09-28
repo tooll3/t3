@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib._3d.@_;
 
 [Guid("947ad81e-47da-46c3-9b1d-8e578174d876")]
-public class DefineLensFlare : Instance<DefineLensFlare>
+internal sealed class DefineLensFlare : Instance<DefineLensFlare>
 {
     [Output(Guid = "B26730FF-B1FF-40A7-91AF-B10026ED4C32", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<StructuredList> OutBuffer = new();

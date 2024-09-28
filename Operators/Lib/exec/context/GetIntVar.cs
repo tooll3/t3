@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.exec.context;
 
 [Guid("470db771-c7f2-4c52-8897-d3a9b9fc6a4e")]
-public class GetIntVar : Instance<GetIntVar>, ICustomDropdownHolder
+public sealed class GetIntVar : Instance<GetIntVar>, ICustomDropdownHolder
 {
     [Output(Guid = "B306B216-630C-4611-90FD-52FF322EBD00", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<int> Result = new();

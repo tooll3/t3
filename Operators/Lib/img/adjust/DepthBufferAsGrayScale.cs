@@ -1,7 +1,7 @@
 namespace Lib.img.adjust;
 
 [Guid("2d62dd4b-9597-4569-a09e-495abf880e34")]
-public class DepthBufferAsGrayScale : Instance<DepthBufferAsGrayScale>
+internal sealed class DepthBufferAsGrayScale : Instance<DepthBufferAsGrayScale>
 {
     [Output(Guid = "bbb34e6c-ac3d-40e3-959d-124ea0bcac3d")]
     public readonly Slot<Texture2D> Output = new();

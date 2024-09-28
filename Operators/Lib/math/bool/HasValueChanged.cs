@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.math.@bool;
 
 [Guid("146fae64-18da-4183-9794-a322f47c669e")]
-public class HasValueChanged : Instance<HasValueChanged>
+internal sealed class HasValueChanged : Instance<HasValueChanged>
 {
     [Output(Guid = "35ab8188-77a1-4cd9-b2ad-c503034e49f9", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<bool> HasChanged = new();

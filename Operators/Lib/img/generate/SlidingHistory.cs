@@ -1,7 +1,7 @@
 namespace Lib.img.generate;
 
 [Guid("1b69d98a-0b38-4563-aa43-aac5b8395c2b")]
-public class SlidingHistory : Instance<SlidingHistory>
+internal sealed class SlidingHistory : Instance<SlidingHistory>
 {
     [Output(Guid = "724ecde4-fd33-4a59-a8df-51cb21e70bd3")]
     public readonly Slot<Texture2D> Output = new();

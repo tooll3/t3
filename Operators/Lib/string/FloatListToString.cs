@@ -3,7 +3,7 @@ using System.Globalization;
 namespace Lib.@string;
 
 [Guid("abf1ec99-049d-474c-9023-5302d5a5c804")]
-public class FloatListToString : Instance<FloatListToString>
+internal sealed class FloatListToString : Instance<FloatListToString>
 {
     [Output(Guid = "fcd2597b-31cb-443e-a9a9-6647bc406763")]
     public readonly Slot<string> Output = new();

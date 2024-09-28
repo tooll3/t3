@@ -1,7 +1,7 @@
 namespace Lib.img.generate;
 
 [Guid("b882a5d0-f5ae-40a4-8c42-5b25e5775def")]
-public class FraserGrid : Instance<FraserGrid>
+internal sealed class FraserGrid : Instance<FraserGrid>
 {
     [Output(Guid = "de51ef93-049b-44df-9ea4-996929d8fa59")]
     public readonly Slot<Texture2D> TextureOutput = new();

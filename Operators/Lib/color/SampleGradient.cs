@@ -1,7 +1,7 @@
 namespace Lib.color;
 
 [Guid("8211249d-7a26-4ad0-8d84-56da72a5c536")]
-public class SampleGradient : Instance<SampleGradient>, IExtractedInput<Gradient>
+public sealed class SampleGradient : Instance<SampleGradient>, IExtractedInput<Gradient>
 {
         
     [Output(Guid = "963611E7-F55E-4C94-96E6-34E195558A2B")]

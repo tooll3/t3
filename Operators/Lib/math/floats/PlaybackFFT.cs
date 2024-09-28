@@ -5,7 +5,7 @@ using T3.Core.Utils;
 namespace Lib.math.floats;
 
 [Guid("cda108a1-db4f-4a0a-ae4d-d50e9aade467")]
-public class PlaybackFFT : Instance<PlaybackFFT>
+internal sealed class PlaybackFFT : Instance<PlaybackFFT>
 {
     [Output(Guid = "2d0f5713-9620-4bc7-a792-a7b8e622554a", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<List<float>> Result = new(new List<float>(256));

@@ -1,7 +1,7 @@
 namespace Lib.math.@bool;
 
 [Guid("2443b2fd-c397-4ea6-9588-b595f918cf01")]
-public class HasTimeChanged : Instance<HasTimeChanged>
+internal sealed class HasTimeChanged : Instance<HasTimeChanged>
 {
     [Output(Guid = "4883b1ec-16c1-422f-8db6-c74c3d48e5be", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<bool> HasChanged = new();

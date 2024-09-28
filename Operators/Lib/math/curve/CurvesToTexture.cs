@@ -5,7 +5,7 @@ using Utilities = T3.Core.Utils.Utilities;
 namespace Lib.math.curve;
 
 [Guid("ab511978-bad5-4b69-90b2-c028447fe9f7")]
-public class CurvesToTexture : Instance<CurvesToTexture>
+internal sealed class CurvesToTexture : Instance<CurvesToTexture>
 {
     [Output(Guid = "0322FFC8-84BD-4AA3-A59E-DEF5B212D4A1")]
     public readonly Slot<Texture2D> CurveTexture = new();

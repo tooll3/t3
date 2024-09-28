@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("1b149f1f-529c-4418-ac9d-3871f24a9e38")]
-public class Displace : Instance<Displace>
+internal sealed class Displace : Instance<Displace>
 {
     [Output(Guid = "0faa056c-b1d6-4e1f-a9be-b0791f3bae84")]
     public readonly Slot<Texture2D> Output = new();

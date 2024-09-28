@@ -5,7 +5,7 @@ using T3.Core.Utils;
 namespace Lib.math.@bool;
 
 [Guid("f38311df-d356-4385-8535-96f52a71d53e")]
-public class FlipBool : Instance<FlipBool>
+internal sealed class FlipBool : Instance<FlipBool>
 {
     [Output(Guid = "1ff6a7a5-142f-41f9-9802-f6875fbccd44")]
     public readonly Slot<bool> Result = new();

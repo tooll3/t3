@@ -1,7 +1,7 @@
 namespace Lib.math.@int;
 
 [Guid("d1530d89-32b9-4e16-97fe-c08d095d9d03")]
-public class MinInt : Instance<MinInt>
+internal sealed class MinInt : Instance<MinInt>
 {
     [Output(Guid = "82ff7dfe-e65f-415b-989c-8b478650b5d7")]
     public readonly Slot<int> Result = new();

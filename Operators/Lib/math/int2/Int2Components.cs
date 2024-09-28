@@ -1,7 +1,7 @@
 namespace Lib.math.int2;
 
 [Guid("f86358e0-2573-4acd-9a90-e95108e8a4da")]
-public class Int2Components : Instance<Int2Components>
+internal sealed class Int2Components : Instance<Int2Components>
 {
     [Output(Guid = "CD0BD085-DD4A-46A5-BF00-39A199434B30")]
     public readonly Slot<int> Width = new();

@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib._3d.@_;
 
 [Guid("c5707b79-859b-4d53-92e0-cbed53aae648")]
-public class _RenderFontBuffer : Instance<_RenderFontBuffer>
+internal sealed class _RenderFontBuffer : Instance<_RenderFontBuffer>
 {
     [Output(Guid = "3D2F53A3-F1F0-489B-B20B-BADB09CDAEBE")]
     public readonly Slot<Buffer> Buffer = new();

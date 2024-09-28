@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("6820b166-1782-43b9-bc5c-6b4f63b16f86")]
-public class FakeLight : Instance<FakeLight>
+internal sealed class FakeLight : Instance<FakeLight>
 {
     [Output(Guid = "27e1e1b6-89e0-4dca-98e1-5989286f6331")]
     public readonly Slot<Texture2D> Output = new();

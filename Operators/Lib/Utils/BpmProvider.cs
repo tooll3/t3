@@ -2,7 +2,7 @@ using T3.Core.IO;
 
 namespace Lib.Utils;
 
-public class BpmProvider : IBpmProvider
+public sealed class BpmProvider : IBpmProvider
 {
     public static readonly BpmProvider Instance = new();
     

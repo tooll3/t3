@@ -1,7 +1,7 @@
 namespace Lib.dx11.draw._internal;
 
 [Guid("5b127401-600c-4247-9d59-2f6ff359ba85")]
-public class _GetSceneDefinitionPoints : Instance<_GetSceneDefinitionPoints>
+internal sealed class _GetSceneDefinitionPoints : Instance<_GetSceneDefinitionPoints>
 {
     // [Output(Guid = "8a1e3bc8-a7bd-40b5-a4cf-241c13bddbfb")]
     // public readonly Slot<Command> Output = new();

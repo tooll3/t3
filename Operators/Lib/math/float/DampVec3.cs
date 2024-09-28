@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.@float;
 
 [Guid("671f8151-9ec1-4f02-9ad1-b8a2d70d3d68")]
-public class DampVec3 : Instance<DampVec3>
+internal sealed class DampVec3 : Instance<DampVec3>
 {
     [Output(Guid = "87C0CCAE-46DA-460E-BE9D-C4B4E5753D0B", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<Vector3> Result = new();

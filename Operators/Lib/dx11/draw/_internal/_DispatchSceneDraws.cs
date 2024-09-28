@@ -18,7 +18,7 @@ namespace Lib.dx11.draw._internal;
 /// - Sorting draw order to draw batches of matching materials, meshes etc points.  
 /// 
 /// </summary>
-public class _DispatchSceneDraws : Instance<_DispatchSceneDraws>
+internal sealed class _DispatchSceneDraws : Instance<_DispatchSceneDraws>
 {
     [Output(Guid = "bda1583a-f5ea-4c3b-ae7d-0bac614d29ec")]
     public readonly Slot<Command> Output = new();

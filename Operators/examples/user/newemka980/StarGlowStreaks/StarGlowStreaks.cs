@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Examples.user.newemka980.StarGlowStreaks;
 
 [Guid("ecbb40c4-aef4-49a8-ac89-e82c3a09862f")]
-public class StarGlowStreaks : Instance<StarGlowStreaks>
+internal sealed class StarGlowStreaks : Instance<StarGlowStreaks>
 {
     [Output(Guid = "a256b06b-1500-4189-9820-906addbf387e")]
     public readonly Slot<Texture2D> TextureOutput = new();

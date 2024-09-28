@@ -1,7 +1,7 @@
 namespace Lib.math.@int;
 
 [Guid("f833d070-97d7-4c2b-974a-fd116c88ec38")]
-public class TryParseInt : Instance<TryParseInt>
+internal sealed class TryParseInt : Instance<TryParseInt>
 {
     [Output(Guid = "b494af0a-0010-4729-8b7e-cb9e8922545a")]
     public readonly Slot<int> Result = new();

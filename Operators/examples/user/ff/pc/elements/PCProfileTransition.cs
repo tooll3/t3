@@ -1,7 +1,7 @@
 namespace Examples.user.ff.pc.elements;
 
 [Guid("a85870e1-6b18-40db-96e2-076536d5a521")]
-public class PCProfileTransition : Instance<PCProfileTransition>
+ internal sealed class PCProfileTransition : Instance<PCProfileTransition>
 {
     [Output(Guid = "df1297ac-fd7a-44ae-bf18-c37b6a0c8c4d")]
     public readonly Slot<Command> Output = new();

@@ -1,7 +1,7 @@
 namespace Examples.fx;
 
 [Guid("bd0f7059-021d-4dd1-8168-01e1e552fb04")]
-public class OpticalFlow2 : Instance<OpticalFlow2>
+ internal sealed class OpticalFlow2 : Instance<OpticalFlow2>
 {
 
     [Output(Guid = "0dca196f-bd3b-4cc1-ac5f-929f2a6dfdce")]

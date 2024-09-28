@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.@float;
 
 [Guid("436e93a8-03c0-4366-8d9a-2245e5bcaa6c")]
-public class PerlinNoise : Instance<PerlinNoise>
+internal sealed class PerlinNoise : Instance<PerlinNoise>
 {
     [Output(Guid = "4a62f8ae-cb15-4e63-ad8d-749bdf24982c")]
     public readonly Slot<float> Result = new();

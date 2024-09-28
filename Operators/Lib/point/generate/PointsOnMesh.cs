@@ -1,7 +1,7 @@
 namespace Lib.point.generate;
 
 [Guid("17188f49-1243-4511-a46c-1804cae10768")]
-public class PointsOnMesh : Instance<PointsOnMesh>
+internal sealed class PointsOnMesh : Instance<PointsOnMesh>
 {
 
     [Output(Guid = "414724f2-1c7f-406a-a209-cfb3f6ad0265")]

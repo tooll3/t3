@@ -1,7 +1,7 @@
 namespace Lib.io.midi;
 
 [Guid("fd5467c7-c75d-4755-8885-fd1ff1f07c95")]
-public class SelectFloatFromDict : Instance<SelectFloatFromDict>, IStatusProvider, ICustomDropdownHolder
+public sealed class SelectFloatFromDict : Instance<SelectFloatFromDict>, IStatusProvider, ICustomDropdownHolder
 {
     [Output(Guid = "4b281a08-46e9-4036-9a80-29caf11e3b6c")]
     public readonly Slot<float> Result = new(0f);

@@ -1,7 +1,7 @@
 namespace Lib.point.modify;
 
 [Guid("7af59063-88d2-4697-985c-e09b8c77a43f")]
-public class PointAttributeFromNoise : Instance<PointAttributeFromNoise>
+internal sealed class PointAttributeFromNoise : Instance<PointAttributeFromNoise>
 {
     [Output(Guid = "bcf4be5a-e3ea-48da-a06d-c206041f8d41")]
     public readonly Slot<BufferWithViews> OutBuffer = new();

@@ -1,7 +1,7 @@
 namespace Lib.dx11.draw;
 
 [Guid("b0212daa-7fba-4f6a-851c-3dd9e2e8a23e")]
-public class ShowTexture2d : Instance<ShowTexture2d>
+internal sealed class ShowTexture2d : Instance<ShowTexture2d>
 {
     [Output(Guid = "{996A44A6-005B-421F-85A4-A3CCA425044E}", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Texture2D> TextureOutput = new();

@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("2a5475c8-9e16-409f-8c40-a3063e045d38")]
-public class DetectEdges : Instance<DetectEdges>
+internal sealed class DetectEdges : Instance<DetectEdges>
 {
     [Output(Guid = "caf8af48-8819-49b4-890b-89545c8c0ff5")]
     public readonly Slot<Texture2D> TextureOutput = new();

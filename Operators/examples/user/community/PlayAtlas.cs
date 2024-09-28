@@ -1,7 +1,7 @@
 namespace Examples.user.community;
 
 [Guid("9e243276-1807-49f7-9e78-29b582aafb39")]
-public class PlayAtlas : Instance<PlayAtlas>
+internal sealed class PlayAtlas : Instance<PlayAtlas>
 {
 
     [Input(Guid = "6bffaa67-be6d-43cc-9890-75d0a1c51d75")]

@@ -1,7 +1,7 @@
 namespace Lib.point.modify;
 
 [Guid("3d958f08-9c0f-45eb-a252-de880b5834f3")]
-public class CustomPointShader : Instance<CustomPointShader>,ITransformable
+internal sealed class CustomPointShader : Instance<CustomPointShader>,ITransformable
 {
     public CustomPointShader()
     {

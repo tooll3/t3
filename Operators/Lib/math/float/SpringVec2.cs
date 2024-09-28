@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.math.@float;
 
 [Guid("4ee040a3-e5dd-42f0-8f7e-0275d7c72538")]
-public class SpringVec2 : Instance<SpringVec2>
+internal sealed class SpringVec2 : Instance<SpringVec2>
 {
     [Output(Guid = "de2a9765-9274-4b8c-bb74-0bc8bee673a8", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<Vector2> Result = new();

@@ -1,7 +1,7 @@
 namespace Lib.exec;
 
 [Guid("72b6327d-4304-48bb-b9b5-15705352c225")]
-public class LoadSoundtrack : Instance<LoadSoundtrack>
+internal sealed class LoadSoundtrack : Instance<LoadSoundtrack>
 {
     [Output(Guid = "a9d725ec-57dc-4e25-9e25-a6dc2ff2b056")]
     public readonly Slot<Command> Output = new();

@@ -1,7 +1,7 @@
 namespace Lib.sprite._experimental;
 
 [Guid("4670ff79-f630-478c-8f3f-513e1f2b5913")]
-public class SampleSpriteAttributes : Instance<SampleSpriteAttributes>
+internal sealed class SampleSpriteAttributes : Instance<SampleSpriteAttributes>
                                      ,ITransformable
 {
     [Output(Guid = "7d977f4b-8e79-46bf-a2b0-a1bb44cd249d")]

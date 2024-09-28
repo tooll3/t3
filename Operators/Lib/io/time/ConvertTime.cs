@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.io.time;
 
 [Guid("0cd18cbb-e138-4b4b-a800-175fc39c61bf")]
-public class ConvertTime : Instance<ConvertTime>, IStatusProvider
+internal sealed class ConvertTime : Instance<ConvertTime>, IStatusProvider
 {
     [Output(Guid = "2ccb0dad-0d47-4169-9351-97b96e55ad26")]
     public readonly Slot<float> Result = new();

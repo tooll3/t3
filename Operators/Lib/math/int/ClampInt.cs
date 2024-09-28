@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.@int;
 
 [Guid("5f734c25-9f1a-436c-b56c-7e0a1e07fdda")]
-public class ClampInt : Instance<ClampInt>
+internal sealed class ClampInt : Instance<ClampInt>
 {
     [Output(Guid = "E6AAE72F-8C22-4133-BA0D-C3635751D715")]
     public readonly Slot<int> Result = new();

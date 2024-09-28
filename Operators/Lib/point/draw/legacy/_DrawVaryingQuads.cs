@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.point.draw.legacy;
 
 [Guid("ffc0a7ed-fe61-4188-8db9-0b0f07c6b981")]
-public class _DrawVaryingQuads : Instance<_DrawVaryingQuads>
+internal sealed class _DrawVaryingQuads : Instance<_DrawVaryingQuads>
 {
     [Output(Guid = "65bf6652-0187-4c5f-8e1f-ccc4254b843b")]
     public readonly Slot<Command> Output = new();

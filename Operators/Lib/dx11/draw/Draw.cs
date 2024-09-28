@@ -1,7 +1,7 @@
 namespace Lib.dx11.draw;
 
 [Guid("9b28e6b9-1d1f-42d8-8a9e-33497b1df820")]
-public class Draw : Instance<Draw>, IRenderStatsProvider
+internal sealed class Draw : Instance<Draw>, IRenderStatsProvider
 {
     [Output(Guid = "49B28DC3-FCD1-4067-BC83-E1CC848AE55C")]
     public readonly Slot<Command> Output = new();

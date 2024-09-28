@@ -1,7 +1,7 @@
 namespace Examples.user.community;
 
 [Guid("c3090c65-194a-4f95-9b70-d003f54103f7")]
-public class SnapToMultiple : Instance<SnapToMultiple>
+internal sealed class SnapToMultiple : Instance<SnapToMultiple>
 {
     [Output(Guid = "87a311ce-238c-472c-b43e-e4ed5268bbc5")]
     public readonly Slot<int> Result = new();

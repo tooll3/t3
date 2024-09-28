@@ -8,7 +8,7 @@ namespace Lib.io.audio;
 /// This is an older implementation. A slighted updated
 /// algorithm can be found in <see cref="Interaction.Timing.BpmDetection"/>
 /// </summary>
-public class DetectBeatOffset : Instance<DetectBeatOffset>
+internal sealed class DetectBeatOffset : Instance<DetectBeatOffset>
 {
     [Output(Guid = "c53fb442-4dd7-473c-8a1f-1adaabe3bcf7")]
     public readonly Slot<List<float>> Measurements = new();

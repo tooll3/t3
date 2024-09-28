@@ -1,7 +1,7 @@
 namespace Lib._3d.mesh.modify;
 
 [Guid("daacabd8-0338-4998-898f-94580abd8eac")]
-public class ScatterMeshFaces : Instance<ScatterMeshFaces>
+internal sealed class ScatterMeshFaces : Instance<ScatterMeshFaces>
 {
     [Output(Guid = "485badd0-a01d-4838-a516-5db8867d2e04")]
     public readonly Slot<MeshBuffers> Result = new();

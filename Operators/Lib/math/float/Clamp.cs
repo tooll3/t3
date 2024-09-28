@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.@float;
 
 [Guid("c3a18346-930c-4242-9e42-aa9b3a439395")]
-public class Clamp : Instance<Clamp>
+internal sealed class Clamp : Instance<Clamp>
 {
     [Output(Guid = "7267b39a-bc11-450c-950e-e87701156546")]
     public readonly Slot<float> Result = new();

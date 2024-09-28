@@ -1,7 +1,7 @@
 namespace Examples.user.still.worksforeverybody.scenes;
 
 [Guid("1026538b-f021-43f0-b6bd-dda89c57de94")]
-public class _WfeFinalPart : Instance<_WfeFinalPart>
+internal sealed class _WfeFinalPart : Instance<_WfeFinalPart>
 {
 
     [Output(Guid = "4d077ee1-277d-474d-889e-30db32471ce8")]

@@ -1,7 +1,7 @@
 namespace Examples.user.still.there.research;
 
 [Guid("ccafae36-6001-4ee8-b0b5-76c1adebcdde")]
-public class EmitParticlesAtMeshSliceExample : Instance<EmitParticlesAtMeshSliceExample>
+internal sealed class EmitParticlesAtMeshSliceExample : Instance<EmitParticlesAtMeshSliceExample>
 {
     [Output(Guid = "c50025cd-95d0-4aa4-b9fe-6088b5c9cda6")]
     public readonly Slot<Texture2D> TextureOutput = new();

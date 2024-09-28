@@ -7,7 +7,7 @@ using T3.Core.Utils;
 namespace Examples.user.still.worksforeverybody.fx;
 
 [Guid("40676c51-ecca-4bc3-bd4a-eeb80fc0b937")]
-public class WFESaveScore : Instance<WFESaveScore>
+internal sealed class WFESaveScore : Instance<WFESaveScore>
 {
     [Output(Guid = "54E534A7-3659-486C-8B27-67296D1DB7CC")]
     public readonly Slot<List<string>> Results = new();

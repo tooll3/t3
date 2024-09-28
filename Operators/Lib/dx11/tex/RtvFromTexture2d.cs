@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.dx11.tex;
 
 [Guid("57a1ee33-702a-41ad-a17e-b43033d58638")]
-public class RtvFromTexture2d : Instance<RtvFromTexture2d>, IStatusProvider
+internal sealed class RtvFromTexture2d : Instance<RtvFromTexture2d>, IStatusProvider
 {
     [Output(Guid = "515E87C9-4CF8-4948-BA64-F6261F7FE5FC")]
     public readonly Slot<RenderTargetView> RenderTargetView = new();

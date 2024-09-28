@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("46daab0e-e957-413e-826c-0699569d0e07")]
-public class CustomPixelShader : Instance<CustomPixelShader>
+internal sealed class CustomPixelShader : Instance<CustomPixelShader>
 {
 
     [Input(Guid = "8c3ffefe-8721-4dde-b252-22eb8be02d3f")]

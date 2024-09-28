@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("06621b4b-43be-4ef9-80d0-f1b36fa4dbd1")]
-public class MirrorRepeat : Instance<MirrorRepeat>
+internal sealed class MirrorRepeat : Instance<MirrorRepeat>
 {
     [Output(Guid = "7dc02a27-bc05-447f-9053-a44a60123980")]
     public readonly Slot<Texture2D> TextureOutput = new();

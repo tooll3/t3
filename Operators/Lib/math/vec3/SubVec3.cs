@@ -1,7 +1,7 @@
 namespace Lib.math.vec3;
 
 [Guid("3021300c-7f56-49c1-bcaf-92447b716dad")]
-public class SubVec3 : Instance<SubVec3>
+internal sealed class SubVec3 : Instance<SubVec3>
 {
     [Output(Guid = "75606f1e-3bd6-4ae0-b9d2-f8dc953ec212")]
     public readonly Slot<Vector3> Result = new();

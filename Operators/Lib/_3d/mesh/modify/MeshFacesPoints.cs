@@ -1,7 +1,7 @@
 namespace Lib._3d.mesh.modify;
 
 [Guid("58a490b1-eb8a-4102-906a-f74a79c0ad1c")]
-public class MeshFacesPoints : Instance<MeshFacesPoints>
+internal sealed class MeshFacesPoints : Instance<MeshFacesPoints>
 {
 
     [Output(Guid = "f40d8abc-a97c-4dba-8811-b19042db1c66")]

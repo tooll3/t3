@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.exec;
 
 [Guid("53127485-e2c7-4be8-aff2-da5790799593")]
-public class LogMessage : Instance<LogMessage>
+internal sealed class LogMessage : Instance<LogMessage>
 {
     [Output(Guid = "8d6a6d3d-c814-41bc-b770-5a54dfdeb6a2", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Command> Output = new();

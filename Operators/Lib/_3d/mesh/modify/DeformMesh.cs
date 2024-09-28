@@ -1,7 +1,7 @@
 namespace Lib._3d.mesh.modify;
 
 [Guid("a8fd7522-7874-4411-ad8d-b2e7a20bc4ac")]
-public class DeformMesh : Instance<DeformMesh>
+internal sealed class DeformMesh : Instance<DeformMesh>
                          ,ITransformable
 {
     [Output(Guid = "233d4a02-5e7c-40d1-9a89-4b5e2414900b")]

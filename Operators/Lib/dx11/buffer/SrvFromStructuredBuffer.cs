@@ -4,7 +4,7 @@ using SharpDX.Direct3D11;
 namespace Lib.dx11.buffer;
 
 [Guid("8c41b312-6628-411c-a61d-604413b73a72")]
-public class SrvFromStructuredBuffer : Instance<SrvFromStructuredBuffer>
+internal sealed class SrvFromStructuredBuffer : Instance<SrvFromStructuredBuffer>
 {
     [Output(Guid = "2A1FCDF6-9416-45B2-96CA-A9D6D2692278")]
     public readonly Slot<ShaderResourceView> ShaderResourceView = new();

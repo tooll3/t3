@@ -1,7 +1,7 @@
 namespace Lib.io.file;
 
 [Guid("0db15e2d-b457-44d7-bb58-ace0a0708073")]
-public class WriteToFile : Instance<WriteToFile>
+internal sealed class WriteToFile : Instance<WriteToFile>
 {
     [Output(Guid = "b5627217-63cf-49c6-b864-3f9af74b7a94")]
     public readonly Slot<string> Result = new();

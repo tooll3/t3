@@ -1,7 +1,7 @@
 namespace Lib.math.@float;
 
 [Guid("15fb88b2-81a1-43b8-97ba-41221293bb07")]
-public class Div : Instance<Div>
+internal sealed class Div : Instance<Div>
 {
     [Output(Guid = "866642e7-17dd-4375-9d5e-2e3747a554c2")]
     public readonly Slot<float> Result = new();

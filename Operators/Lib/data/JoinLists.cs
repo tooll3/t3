@@ -1,7 +1,7 @@
 namespace Lib.data;
 
 [Guid("0b99ab8b-5d61-49da-9851-9ad723cad3ae")]
-public class JoinLists : Instance<JoinLists>
+internal sealed class JoinLists : Instance<JoinLists>
 {
     [Output(Guid = "35C71BF9-4636-46CB-BB99-387653755044")]
     public readonly Slot<StructuredList> Result = new();

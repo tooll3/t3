@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.@bool;
 
 [Guid("0bec016a-5e1b-467a-8273-368d4d6b9935")]
-public class Trigger : Instance<Trigger>
+public sealed class Trigger : Instance<Trigger>
 {
     [Output(Guid = "2451ea62-9915-4ec1-a65e-4d44a3758fa8")]
     public readonly Slot<bool> Result = new();

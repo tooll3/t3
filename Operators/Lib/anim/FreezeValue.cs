@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.anim;
 
 [Guid("587dbb73-fd79-4481-a79e-f77055abda9a")]
-public class FreezeValue : Instance<FreezeValue>
+internal sealed class FreezeValue : Instance<FreezeValue>
 {
     [Output(Guid = "5bf37afc-d45a-42d0-8f87-905fb5ee013d")]
     public readonly Slot<float> Result = new();

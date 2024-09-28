@@ -1,7 +1,7 @@
 namespace Lib._3d.mesh.@_;
 
 [Guid("5b9f1d97-4e10-4f31-ba83-4cbf7be9719b")]
-public class _MeshBufferComponents : Instance<_MeshBufferComponents>, IStatusProvider
+internal sealed class _MeshBufferComponents : Instance<_MeshBufferComponents>, IStatusProvider
 {
     [Output(Guid = "0C5E2EC1-AB60-43CE-B823-3DF096FF9A28")]
     public readonly Slot<BufferWithViews> Vertices = new();

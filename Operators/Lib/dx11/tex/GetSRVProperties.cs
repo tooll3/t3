@@ -1,7 +1,7 @@
 namespace Lib.dx11.tex;
 
 [Guid("bc489196-9a30-4580-af6f-dc059f226da1")]
-public class GetSRVProperties : Instance<GetSRVProperties>
+internal sealed class GetSRVProperties : Instance<GetSRVProperties>
 {
     [Output(Guid = "431B39FD-4B62-478B-BBFA-4346102C3F61")]
     public readonly Slot<int> ElementCount = new();

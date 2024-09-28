@@ -1,7 +1,7 @@
 namespace Lib._3d.mesh.modify;
 
 [Guid("b5709297-c714-4019-9d0b-6982590b5590")]
-public class DisplaceMeshNoise : Instance<DisplaceMeshNoise>
+internal sealed class DisplaceMeshNoise : Instance<DisplaceMeshNoise>
 {
 
     [Output(Guid = "b91689eb-4274-4534-9f95-515a93c57ebe")]

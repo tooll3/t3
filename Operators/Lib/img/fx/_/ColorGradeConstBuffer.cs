@@ -1,7 +1,7 @@
 namespace Lib.img.fx.@_;
 
 [Guid("1ba08d52-c8ec-479a-8dc0-95d92da36577")]
-public class ColorGradeConstBuffer : Instance<ColorGradeConstBuffer>
+internal sealed class ColorGradeConstBuffer : Instance<ColorGradeConstBuffer>
 {
     [Output(Guid = "c63a8582-726d-4a18-a256-48ccf13f1289", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Buffer> Buffer = new();

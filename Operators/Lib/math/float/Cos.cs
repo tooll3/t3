@@ -1,7 +1,7 @@
 namespace Lib.math.@float;
 
 [Guid("61c70843-08ea-4249-ba90-9971493e45d1")]
-public class Cos : Instance<Cos>
+internal sealed class Cos : Instance<Cos>
 {
     [Output(Guid = "4480F970-9E51-456A-8D66-D501FCA2C15B")]
     public readonly Slot<float> Result = new();

@@ -1,7 +1,7 @@
 namespace Lib._3d.@_;
 
 [Guid("ade1d03d-db80-41ad-bcfa-8a2b900e9d41")]
-public class _ComputeDepthToLinear : Instance<_ComputeDepthToLinear>
+internal sealed class _ComputeDepthToLinear : Instance<_ComputeDepthToLinear>
 {
     [Output(Guid = "eff29dae-87c5-43a4-856b-51ac3abf567a")]
     public readonly Slot<Command> Output = new();

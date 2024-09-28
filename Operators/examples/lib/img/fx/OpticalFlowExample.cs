@@ -1,7 +1,7 @@
 namespace Examples.lib.img.fx;
 
 [Guid("db89bacd-db5a-4d52-a073-ed141f413f8d")]
-public class OpticalFlowExample : Instance<OpticalFlowExample>
+ internal sealed class OpticalFlowExample : Instance<OpticalFlowExample>
 {
     [Output(Guid = "350937d6-d52a-4d9e-8b35-b07a750eb179")]
     public readonly Slot<Texture2D> ColorBuffer = new();

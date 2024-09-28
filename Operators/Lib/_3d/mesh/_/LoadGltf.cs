@@ -5,7 +5,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib._3d.mesh.@_;
 
 [Guid("92b18d2b-1022-488f-ab8e-a4dcca346a23")]
-public class LoadGltf : Instance<LoadGltf>, IDescriptiveFilename, IStatusProvider
+internal sealed class LoadGltf : Instance<LoadGltf>, IDescriptiveFilename, IStatusProvider
 {
     [Output(Guid = "47588d3a-28fe-4417-9ffc-2e79e59d2540")]
     public readonly Slot<MeshBuffers> Data = new();

@@ -1,7 +1,7 @@
 namespace Lib.dx11.draw;
 
 [Guid("c676b9c7-06d7-4ee0-8ffc-9bee96c5dc18")]
-public class DrawInstancedIndirect: Instance<DrawInstancedIndirect>
+internal sealed class DrawInstancedIndirect: Instance<DrawInstancedIndirect>
 {
     [Output(Guid = "3A8880AF-BBBF-4560-B0C7-6E643A20FC20", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Command> Output = new();

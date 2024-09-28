@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.@float;
 
 [Guid("4def850e-3627-46d8-ae2b-58b513843885")]
-public class AmplifyValues : Instance<AmplifyValues>
+internal sealed class AmplifyValues : Instance<AmplifyValues>
 {
     [Output(Guid = "341496D9-D292-41BA-B2E7-468F03FE0BBB")]
     public readonly Slot<List<float>> Output = new();

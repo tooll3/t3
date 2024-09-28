@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("42e6319e-669c-4524-8d0d-9416a86afdb3")]
-public class AsciiRender : Instance<AsciiRender>
+internal sealed class AsciiRender : Instance<AsciiRender>
 {
     [Output(Guid = "b0b6a771-e1a4-4681-a8be-8ed7ac1f66c4")]
     public readonly Slot<Texture2D> Output = new();

@@ -5,7 +5,7 @@
 namespace Lib.point._experimental;
 
 [Guid("271e397e-051c-473f-968f-a2251fed65d1")]
-public class _GetSketchPoints : Instance<_GetSketchPoints>
+internal sealed class _GetSketchPoints : Instance<_GetSketchPoints>
 {
     [Output(Guid = "9b1adfd0-2a94-438e-a0b9-6f6ae69f5690")]
     public readonly Slot<StructuredList> PointList = new();

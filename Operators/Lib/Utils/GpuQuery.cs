@@ -3,7 +3,7 @@ using SharpDX.Direct3D11;
 
 namespace Lib.Utils;
 
-public class GpuQuery : IDisposable
+internal sealed class GpuQuery : IDisposable
 {
     public GpuQuery(Device device, QueryDescription desc)
     {

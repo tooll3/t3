@@ -1,7 +1,7 @@
 namespace Lib.point.modify;
 
 [Guid("dd586355-64b3-4e96-af6d-b4927595dee7")]
-public class AddNoise : Instance<AddNoise>
+internal sealed class AddNoise : Instance<AddNoise>
 {
 
     [Output(Guid = "bea6aa18-e751-4ce7-b7d7-b7a026c8e019")]

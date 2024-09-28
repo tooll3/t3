@@ -1,7 +1,7 @@
 namespace Examples.user.still.there.fx;
 
 [Guid("c0feef61-8cec-4418-8889-4001cbe1a957")]
-public class _PhysrumAgents2 : Instance<_PhysrumAgents2>
+internal sealed class _PhysrumAgents2 : Instance<_PhysrumAgents2>
 {
     [Output(Guid = "9dd9d899-c1b2-4c63-b338-b779b2278f86")]
     public readonly Slot<Texture2D> ImgOutput = new();

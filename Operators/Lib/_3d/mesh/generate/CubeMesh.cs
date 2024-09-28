@@ -6,7 +6,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib._3d.mesh.generate;
 
 [Guid("c47ab830-aae7-4f8f-b67c-9119bcbaf7df")]
-public class CubeMesh : Instance<CubeMesh>
+internal sealed class CubeMesh : Instance<CubeMesh>
 {
     [Output(Guid = "35660e2b-5005-44a2-bf57-db9a3f1b791d")]
     public readonly Slot<MeshBuffers> Data = new();

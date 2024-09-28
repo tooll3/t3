@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.dx11.buffer;
 
 [Guid("edecd98f-209b-423d-8201-0fd7d590c4cf")]
-public class SplinePoints : Instance<SplinePoints>
+internal sealed class SplinePoints : Instance<SplinePoints>
 {
     [Output(Guid = "28b45955-1e05-43a9-87b6-44eabc30bea7")]
     public readonly Slot<BufferWithViews> OutBuffer = new();
@@ -110,7 +110,7 @@ public class SplinePoints : Instance<SplinePoints>
     public readonly MultiInputSlot<StructuredList> Points = new();
 }
 
-public class BezierSpline
+internal sealed class BezierSpline
 {
     public static Point[] SamplePointsEvenly(int count, int preSampleSteps, float curvature, Vector3 upVector, ref Point[] sourcePoints)
     {

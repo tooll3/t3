@@ -1,7 +1,7 @@
 namespace Lib.point._experimental;
 
 [Guid("7d302c05-9898-4c56-a894-1f8f44b9b920")]
-public class PointsFromMeshData : Instance<PointsFromMeshData>
+internal sealed class PointsFromMeshData : Instance<PointsFromMeshData>
 {
 
     [Output(Guid = "b5907b75-97f7-484a-8bb1-5e81a0fd114d")]

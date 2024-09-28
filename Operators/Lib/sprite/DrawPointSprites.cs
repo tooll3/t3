@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.sprite;
 
 [Guid("9d494c7e-f94c-477f-aeb3-7fa70788f225")]
-public class DrawPointSprites : Instance<DrawPointSprites>
+internal sealed class DrawPointSprites : Instance<DrawPointSprites>
 {
     [Output(Guid = "d08f138b-e440-4b2a-a8f1-60dc412d872b")]
     public readonly Slot<Command> Output = new();

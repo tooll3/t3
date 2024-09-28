@@ -1,7 +1,7 @@
 namespace Lib.point.combine;
 
 [Guid("ab6ab34f-4c6e-41ef-af69-48bb9393651b")]
-public class PairPointsForLines : Instance<PairPointsForLines>
+internal sealed class PairPointsForLines : Instance<PairPointsForLines>
 {
 
     [Output(Guid = "943d1c32-e4e7-4502-8927-543b13ed0283")]

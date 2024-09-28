@@ -4,7 +4,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib.io.input;
 
 [Guid("eff2ffff-dc39-4b90-9b1c-3c0a9a0108c6")]
-public class MouseInput : Instance<MouseInput>
+internal sealed class MouseInput : Instance<MouseInput>
 {
     [Output(Guid = "CDC87CE1-FAB8-4B96-9137-9965E064BFA3", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<Vector2> Position = new();

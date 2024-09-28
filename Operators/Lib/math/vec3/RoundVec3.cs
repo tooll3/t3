@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.vec3;
 
 [Guid("baa8cd75-5621-42ba-a79c-b008b7caa141")]
-public class RoundVec3 : Instance<RoundVec3>
+internal sealed class RoundVec3 : Instance<RoundVec3>
 {
     [Output(Guid = "610e09be-54e8-40a6-9cef-e4da953a4e78")]
     public readonly Slot<Vector3> Result = new();

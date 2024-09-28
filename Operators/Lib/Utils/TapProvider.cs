@@ -2,7 +2,7 @@ using T3.Core.IO;
 
 namespace Lib.Utils;
 
-public class TapProvider : ITapProvider
+public sealed class TapProvider : ITapProvider
 {
     public static readonly TapProvider Instance = new();
 

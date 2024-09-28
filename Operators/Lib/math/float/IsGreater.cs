@@ -1,7 +1,7 @@
 namespace Lib.math.@float;
 
 [Guid("52c92cd8-241e-4d79-aebc-b60b092f7941")]
-public class IsGreater : Instance<IsGreater>
+internal sealed class IsGreater : Instance<IsGreater>
 {
     [Output(Guid = "67e68f72-9bcb-4012-91f3-47d16a8efbaf")]
     public readonly Slot<bool> Result = new();

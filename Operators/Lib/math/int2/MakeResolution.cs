@@ -2,7 +2,7 @@ namespace Lib.math.int2;
 
 [Guid("58d86d45-f32d-4ddb-8eab-180161e05b2a")]
 // Todo - deprecate?
-public class MakeResolution : Instance<MakeResolution>
+internal sealed class MakeResolution : Instance<MakeResolution>
 {
     [Output(Guid = "d1b59769-5f6f-41a3-9cba-4dff05e0a4b6")]
     public readonly Slot<Int2> Size = new();

@@ -1,7 +1,7 @@
 namespace Examples.lib.point;
 
 [Guid("e555a0ca-8c81-4436-9f77-8c7a327d7379")]
-public class RandomizePointsExample : Instance<RandomizePointsExample>
+ internal sealed class RandomizePointsExample : Instance<RandomizePointsExample>
 {
     [Output(Guid = "d078d68a-e19e-48c9-912d-47e2cb906b42")]
     public readonly Slot<Texture2D> ImgOutput = new Slot<Texture2D>();

@@ -1,7 +1,7 @@
 namespace Types.Gfx;
 
 [Guid("38ee7546-8d7d-463c-aeea-e482d7ca3f30")]
-public class RenderTargetBlendDescription : Instance<RenderTargetBlendDescription>
+public sealed class RenderTargetBlendDescription : Instance<RenderTargetBlendDescription>
 {
     [Output(Guid = "228E1DC2-944E-4235-BF2D-2EB3F895858C")]
     public readonly Slot<SharpDX.Direct3D11.RenderTargetBlendDescription> Output = new();

@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.dx11.draw;
 
 [Guid("179093f6-d3ef-43bc-a5af-1df2379ec081")]
-public class SwitchBlendState : Instance<SwitchBlendState>
+internal sealed class SwitchBlendState : Instance<SwitchBlendState>
 {
     [Output(Guid = "0608B46B-4778-4F95-B688-3A749F9664AE")]
     public readonly Slot<BlendState> Output = new();

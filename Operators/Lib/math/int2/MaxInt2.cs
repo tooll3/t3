@@ -1,7 +1,7 @@
 namespace Lib.math.int2;
 
 [Guid("8e9a45db-a631-4c92-aea9-c252ea6e9708")]
-public class MaxInt2 : Instance<MaxInt2>
+internal sealed class MaxInt2 : Instance<MaxInt2>
 {
     [Output(Guid = "1D58BFF5-0FDF-4A42-ABF6-22FD8B74237F")]
     public readonly Slot<Int2> MaxSize = new();

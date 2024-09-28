@@ -1,7 +1,7 @@
 namespace Examples.user.wake.summer2022;
 
 [Guid("90b20942-810b-480c-a19e-a41296cac9e6")]
-public class WS1_Searching : Instance<WS1_Searching>
+ internal sealed class WS1_Searching : Instance<WS1_Searching>
 {
     [Output(Guid = "8902091c-9eee-4a4e-a55e-67768ba3465a")]
     public readonly Slot<Command> Output = new();

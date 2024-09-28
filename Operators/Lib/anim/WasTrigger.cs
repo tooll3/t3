@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.anim;
 
 [Guid("d21652e9-4dc3-4ece-9205-51fced56c3bd")]
-public class WasTrigger : Instance<WasTrigger>
+internal sealed class WasTrigger : Instance<WasTrigger>
 {
     [Output(Guid = "bbbfa448-3499-4d88-8fe4-0caea4c270fd", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<bool> WasTriggered = new();

@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.point._cpu;
 
 [Guid("688230de-a3fc-4740-a12d-9e2f98cad60a")]
-public class SampleSplinePoint : Instance<SampleSplinePoint>
+internal sealed class SampleSplinePoint : Instance<SampleSplinePoint>
 {
     [Output(Guid = "C1FCC3A4-BB4C-4EE5-925F-1CC498F352DA")]
     public readonly Slot<Command> Output = new();

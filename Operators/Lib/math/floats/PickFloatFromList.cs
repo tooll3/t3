@@ -1,7 +1,7 @@
 namespace Lib.math.floats;
 
 [Guid("0841cdd4-0106-4f4e-826b-8de23bb5b5f0")]
-public class PickFloatFromList : Instance<PickFloatFromList>
+internal sealed class PickFloatFromList : Instance<PickFloatFromList>
 {
     [Output(Guid = "{EC2286AF-3EE0-4AF0-AA23-272D4B3710E0}")]
     public readonly Slot<float> Selected = new();

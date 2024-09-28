@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("ecf2c782-4461-4a94-8995-067425e3f84b")]
-public class ChromaticDistortion : Instance<ChromaticDistortion>
+internal sealed class ChromaticDistortion : Instance<ChromaticDistortion>
 {
     [Output(Guid = "418fdcb7-03e8-4292-94e3-f614c1c1a538")]
     public readonly Slot<Texture2D> Output = new();

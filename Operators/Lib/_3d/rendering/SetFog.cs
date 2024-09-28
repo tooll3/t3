@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib._3d.rendering;
 
 [Guid("74cbfce0-f8b8-46a1-b5d6-38477d4eec99")]
-public class SetFog : Instance<SetFog>
+internal sealed class SetFog : Instance<SetFog>
 {
     [Output(Guid = "7c2134d1-45c6-4dc7-b591-a4a5113f5747")]
     public readonly Slot<Command> Output = new();

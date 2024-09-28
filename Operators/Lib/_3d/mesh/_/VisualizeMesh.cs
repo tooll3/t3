@@ -1,7 +1,7 @@
 namespace Lib._3d.mesh.@_;
 
 [Guid("f8b12b4f-c10b-4e8b-9a69-344dbe8a063e")]
-public class VisualizeMesh : Instance<VisualizeMesh>
+internal sealed class VisualizeMesh : Instance<VisualizeMesh>
 {
     [Output(Guid = "5aa00627-91e7-449a-90e5-9f6df0d3eb14")]
     public readonly Slot<Command> Output = new();

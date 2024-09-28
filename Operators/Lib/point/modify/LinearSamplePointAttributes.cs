@@ -1,7 +1,7 @@
 namespace Lib.point.modify;
 
 [Guid("bb4803d2-0c23-470a-94a8-c477e4f7dd8c")]
-public class LinearSamplePointAttributes : Instance<LinearSamplePointAttributes>
+internal sealed class LinearSamplePointAttributes : Instance<LinearSamplePointAttributes>
 {
     [Output(Guid = "47c23c59-fee8-4c77-a479-8f5684a3cd5c")]
     public readonly Slot<BufferWithViews> OutBuffer = new ();

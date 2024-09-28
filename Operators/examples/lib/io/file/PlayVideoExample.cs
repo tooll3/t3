@@ -1,7 +1,7 @@
 namespace Examples.lib.io.file;
 
 [Guid("1d56e2c6-9199-41e7-9404-24f4f6b75044")]
-public class PlayVideoExample : Instance<PlayVideoExample>
+ internal sealed class PlayVideoExample : Instance<PlayVideoExample>
 {
     [Output(Guid = "36bf11a1-668d-41f0-8107-d6304b82430f")]
     public readonly Slot<Texture2D> ColorBuffer = new();

@@ -1,7 +1,7 @@
 namespace Lib._3d.@_;
 
 [Guid("e6df0d5d-bf6c-4672-801e-7a3270bd359b")]
-public class _ReprojectShadowMap : Instance<_ReprojectShadowMap>
+internal sealed class _ReprojectShadowMap : Instance<_ReprojectShadowMap>
 {
     [Output(Guid = "5d59930e-6cf7-46f5-b28f-c4c4682877bd")]
     public readonly Slot<Texture2D> TextureOutput = new();

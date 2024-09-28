@@ -1,7 +1,7 @@
 namespace Examples.user.wake.revision2021;
 
 [Guid("eb13f8e8-0fe1-47f0-8e86-45f85cf2f0f6")]
-public class RevisionPanic : Instance<RevisionPanic>
+ internal sealed class RevisionPanic : Instance<RevisionPanic>
 {
 
     [Output(Guid = "bf45ca13-829b-46e4-ba46-886e3890c1be")]

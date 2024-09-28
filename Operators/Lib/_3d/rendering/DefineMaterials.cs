@@ -3,7 +3,7 @@ using T3.Core.Rendering.Material;
 namespace Lib._3d.rendering;
 
 [Guid("0bd77dd6-a93a-4e2e-b69b-bbeb73cb5ae9")]
-public class DefineMaterials : Instance<DefineMaterials>
+internal sealed class DefineMaterials : Instance<DefineMaterials>
 {
     [Output(Guid = "9e5f90f2-370c-4aef-8819-c3c5c7e5edc2")]
     public readonly Slot<Command> Output = new();

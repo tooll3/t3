@@ -8,7 +8,7 @@ using Utilities = T3.Core.Utils.Utilities;
 namespace Lib.img.fx.@_;
 
 [Guid("cc3cc712-9e87-49c6-b04b-49a12cf2ba75")]
-public class _SpecularPrefilter : Instance<_SpecularPrefilter>
+internal sealed class _SpecularPrefilter : Instance<_SpecularPrefilter>
 {
     [Output(Guid = "5dab6e1b-6136-45a9-bd63-1e18eafc20b7")]
     public readonly Slot<Texture2D> FilteredCubeMap = new();

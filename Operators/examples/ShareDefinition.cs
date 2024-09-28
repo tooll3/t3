@@ -1,7 +1,7 @@
 namespace Examples;
 
 // ReSharper disable once UnusedType.Global
-public class ShareDefinition : IShareResources
+internal sealed class ShareDefinition : IShareResources
 {
     // ReSharper disable once EmptyConstructor
     public ShareDefinition(){}

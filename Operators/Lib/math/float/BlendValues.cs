@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.@float;
 
 [Guid("a1341063-f893-4447-93cd-63cfe514495e")]
-public class BlendValues : Instance<BlendValues>
+internal sealed class BlendValues : Instance<BlendValues>
 {
     [Output(Guid = "b9e4e703-f797-4750-8a1d-d82c6953ea09")]
     public readonly Slot<float> Result = new();

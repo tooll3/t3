@@ -1,7 +1,7 @@
 namespace Types.Collections;
 
 [Guid("bfe540ef-f8ad-45a2-b557-cd419d9c8e44")]
-public class DataList : Instance<DataList>
+public sealed class DataList : Instance<DataList>
 {
     [Output(Guid = "d117b613-c41b-42ce-889d-502a8c779fff")]
     public readonly Slot<StructuredList> Result = new();

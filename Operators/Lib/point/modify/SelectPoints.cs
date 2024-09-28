@@ -1,7 +1,7 @@
 namespace Lib.point.modify;
 
 [Guid("371d72b8-69d4-4ced-beda-271386ad2fd6")]
-public class SelectPoints : Instance<SelectPoints>, ITransformable
+internal sealed class SelectPoints : Instance<SelectPoints>, ITransformable
 {
     [Output(Guid = "d81a0df4-54b4-4587-8f0f-32a740261d73")]
     public readonly TransformCallbackSlot<BufferWithViews> Result2 = new();

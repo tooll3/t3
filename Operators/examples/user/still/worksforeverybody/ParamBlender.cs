@@ -1,7 +1,7 @@
 namespace Examples.user.still.worksforeverybody;
 
 [Guid("957961ad-797c-48ac-b9d6-7f2fa2ce17eb")]
-public class ParamBlender : Instance<ParamBlender>
+internal sealed class ParamBlender : Instance<ParamBlender>
 {
 
     [Output(Guid = "eea2e2e1-540f-4388-a626-b9885c77a29c")]

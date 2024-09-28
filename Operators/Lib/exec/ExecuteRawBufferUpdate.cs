@@ -1,7 +1,7 @@
 namespace Lib.exec;
 
 [Guid("010aca02-263a-471c-b407-025b023f7f60")]
-public class ExecuteRawBufferUpdate : Instance<ExecuteRawBufferUpdate>
+internal sealed class ExecuteRawBufferUpdate : Instance<ExecuteRawBufferUpdate>
 {
     [Output(Guid = "DA3CD196-9454-438B-91B0-95486347902C")]
     public readonly Slot<Buffer> Output = new();

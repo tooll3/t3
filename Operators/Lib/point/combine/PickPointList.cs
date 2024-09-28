@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.point.combine;
 
 [Guid("e9a0bdfd-6f6e-41e2-8c0c-cd5fee26e359")]
-public class PickPointList : Instance<PickPointList>
+internal sealed class PickPointList : Instance<PickPointList>
 {
     [Output(Guid = "205F066B-8214-437A-9D7C-8665F6E8E979")]
     public readonly Slot<BufferWithViews> Selected = new();

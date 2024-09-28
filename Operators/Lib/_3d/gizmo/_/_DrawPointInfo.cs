@@ -1,7 +1,7 @@
 namespace Lib._3d.gizmo.@_;
 
 [Guid("ff5b93e3-d29f-489f-8cca-cb12cd1af65d")]
-public class _DrawPointInfo : Instance<_DrawPointInfo>
+internal sealed class _DrawPointInfo : Instance<_DrawPointInfo>
 {
 
     [Output(Guid = "c4f6184c-adca-4637-ba22-3ece7efbd8dc")]

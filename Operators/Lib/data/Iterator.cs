@@ -1,7 +1,7 @@
 namespace Lib.data;
 
 [Guid("dd201330-6eab-43b9-b601-2e491ab18feb")]
-public class Iterator : Instance<Iterator>
+internal sealed class Iterator : Instance<Iterator>
 {
     //[Output(Guid = "6a7857cf-902a-4a26-bb76-7e2dd83717fd")]
     //public readonly Slot<StructuredList> Result = new Slot<StructuredList>();

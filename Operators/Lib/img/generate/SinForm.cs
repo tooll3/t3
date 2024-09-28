@@ -1,7 +1,7 @@
 namespace Lib.img.generate;
 
 [Guid("0626aba2-ed0c-40c4-9b50-2e729d0d8d86")]
-public class SinForm : Instance<SinForm>
+internal sealed class SinForm : Instance<SinForm>
 {
     [Output(Guid = "719c0dbb-788c-4156-b776-b893ff616416")]
     public readonly Slot<Texture2D> TextureOutput = new();

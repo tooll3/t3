@@ -7,7 +7,7 @@ using Utilities = T3.Core.Utils.Utilities;
 namespace Lib.img.generate;
 
 [Guid("f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1")]
-public class RenderTarget : Instance<RenderTarget>, IRenderStatsProvider
+internal sealed class RenderTarget : Instance<RenderTarget>, IRenderStatsProvider
 {
     [Output(Guid = "7A4C4FEB-BE2F-463E-96C6-CD9A6BAD77A2")]
     public readonly Slot<Texture2D> ColorBuffer = new();

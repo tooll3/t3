@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.io.time;
 
 [Guid("32325c5b-53f7-4414-b4dd-a436e45528b0")]
-public class SetCommandTime : Instance<SetCommandTime>
+internal sealed class SetCommandTime : Instance<SetCommandTime>
 {
        
     [Output(Guid = "FE01C3B6-72E2-494E-8511-6D50C527463F")]

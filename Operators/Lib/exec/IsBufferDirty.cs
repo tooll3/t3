@@ -1,7 +1,7 @@
 namespace Lib.exec;
 
 [Guid("02b84d90-aa4e-4cf9-94d5-feb5d7ca731e")]
-public class IsBufferDirty : Instance<IsBufferDirty>
+internal sealed class IsBufferDirty : Instance<IsBufferDirty>
 {
     [Output(Guid = "b3f19e80-8c09-4e38-9b6d-fc864facd34a")]
     public readonly Slot<bool> HasChanged = new();

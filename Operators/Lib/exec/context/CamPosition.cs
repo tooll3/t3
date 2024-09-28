@@ -2,7 +2,7 @@
 namespace Lib.exec.context;
 
 [Guid("2ed26fb7-fe66-4ed6-8b8d-230d87ae5c77")]
-public class CamPosition : Instance<CamPosition>
+internal sealed class CamPosition : Instance<CamPosition>
 {
         
     [Output(Guid = "51BEC9E0-2E6E-49B6-885C-2AA0F3AC37E3", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]

@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.sprite;
 
 [Guid("1a6a58ea-c63a-4c99-aa9d-aeaeb01662f4")]
-public class TextSprites : Instance<TextSprites>
+internal sealed class TextSprites : Instance<TextSprites>
 {
     [Output(Guid = "89685AC6-6A97-403C-8334-E685A4CCCDA0")]
     public readonly Slot<BufferWithViews> PointBuffer = new();

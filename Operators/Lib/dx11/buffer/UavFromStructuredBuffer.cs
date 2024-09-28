@@ -1,7 +1,7 @@
 namespace Lib.dx11.buffer;
 
 [Guid("0b5b14bf-c850-493a-afb1-72643926e214")]
-public class UavFromStructuredBuffer : Instance<UavFromStructuredBuffer>
+internal sealed class UavFromStructuredBuffer : Instance<UavFromStructuredBuffer>
 {
     [Output(Guid = "7C9A5943-3DEB-4400-BDB2-99F56DD1976C")]
     public readonly Slot<UnorderedAccessView> UnorderedAccessView = new();

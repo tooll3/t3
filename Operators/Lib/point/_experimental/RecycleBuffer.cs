@@ -1,7 +1,7 @@
 namespace Lib.point._experimental;
 
 [Guid("9a36d1c3-cf55-4f3a-ae09-2f54eecb4642")]
-public class RecycleBuffer : Instance<RecycleBuffer>, IStatusProvider
+internal sealed class RecycleBuffer : Instance<RecycleBuffer>, IStatusProvider
 {
     [Output(Guid = "49E481DF-E23B-4D1B-AE94-2ACC67C56F9E")]
     public readonly Slot<object> Reference = new();

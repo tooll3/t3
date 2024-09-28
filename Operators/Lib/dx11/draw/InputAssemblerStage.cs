@@ -1,7 +1,7 @@
 namespace Lib.dx11.draw;
 
 [Guid("9d1266c5-23db-439f-a475-8000fdd1c318")]
-public class InputAssemblerStage : Instance<InputAssemblerStage>
+internal sealed class InputAssemblerStage : Instance<InputAssemblerStage>
 {
     [Output(Guid = "18CAE035-C050-4F98-9E5E-B3A6DB70DDA7")]
     public readonly Slot<Command> Output = new(new Command());

@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.@string.list;
 
 [Guid("56eda8f4-09fc-48a3-ab1d-fbff4f4b6438")]
-public class KeepStrings : Instance<KeepStrings>
+internal sealed class KeepStrings : Instance<KeepStrings>
 {
     [Output(Guid = "5e1b1aad-2fe2-49f3-9954-a35dc7b3ec25")]
     public readonly Slot<List<string>> Strings = new();

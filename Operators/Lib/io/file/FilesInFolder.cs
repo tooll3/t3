@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.io.file;
 
 [Guid("f90fcd0a-eab9-4e2a-b393-e8d3a0380823")]
-public class FilesInFolder : Instance<FilesInFolder>
+internal sealed class FilesInFolder : Instance<FilesInFolder>
 {
     [Output(Guid = "99bd5b48-7a28-44a7-91e4-98b33cfda20f")]
     public readonly Slot<List<string>> Files = new();

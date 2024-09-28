@@ -1,7 +1,7 @@
 namespace Lib._3d.rendering;
 
 [Guid("f3b66187-34b2-4018-8380-279f9f296ded")]
-public class SetEnvironment : Instance<SetEnvironment>
+internal sealed class SetEnvironment : Instance<SetEnvironment>
 {
     [Output(Guid = "1f8cbdfd-ffcd-4604-b4b4-5f1184daf138")]
     public readonly Slot<Command> Output = new();

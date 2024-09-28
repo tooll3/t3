@@ -1,7 +1,7 @@
 namespace Lib.math.int2;
 
 [Guid("c6d50423-54ea-4c9d-b547-eb78cc2c950c")]
-public class ScaleSize : Instance<ScaleSize>
+internal sealed class ScaleSize : Instance<ScaleSize>
 {
     [Output(Guid = "c2c27def-70f2-4f07-9796-11b62e5329e2")]
     public readonly Slot<Int2> Result = new();

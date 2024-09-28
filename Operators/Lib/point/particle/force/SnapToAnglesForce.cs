@@ -1,7 +1,7 @@
 namespace Lib.point.particle.force;
 
 [Guid("7eefe668-d290-4673-b766-39c98b9ba12e")]
-public class SnapToAnglesForce : Instance<SnapToAnglesForce>
+internal sealed class SnapToAnglesForce : Instance<SnapToAnglesForce>
 {
 
     [Output(Guid = "501b3c20-3998-4f7d-ae0c-76d7f879954f")]

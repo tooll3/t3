@@ -1,7 +1,7 @@
 namespace Lib._3d.transform;
 
 [Guid("e64f95e4-c045-400f-98ca-7c020ad46174")]
-public class Switch : Instance<Switch>
+internal sealed class Switch : Instance<Switch>
 {
     [Output(Guid = "9300b07e-977d-47b0-908e-c4b1e5e53a64")]
     public readonly Slot<Command> Output = new();

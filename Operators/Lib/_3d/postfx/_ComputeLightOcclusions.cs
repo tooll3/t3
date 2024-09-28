@@ -5,7 +5,7 @@ using Utilities = T3.Core.Utils.Utilities;
 namespace Lib._3d.postfx;
 
 [Guid("de0e54c3-631b-4a01-a8a7-8cdff2e07e55")]
-public class _ComputeLightOcclusions : Instance<_ComputeLightOcclusions>
+internal sealed class _ComputeLightOcclusions : Instance<_ComputeLightOcclusions>
 {
     [Output(Guid = "D6A7B2CF-740E-4B52-8BB2-BC786F2C39AB")]
     public readonly Slot<float> Output = new();

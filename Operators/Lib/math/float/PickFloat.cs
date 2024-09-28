@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.@float;
 
 [Guid("63e6e642-827b-4518-ac64-9ab0a8d4391e")]
-public class PickFloat : Instance<PickFloat>
+internal sealed class PickFloat : Instance<PickFloat>
 {
     [Output(Guid = "72ADD436-84AA-4332-B061-BE8D50981C77")]
     public readonly Slot<float> Selected = new();

@@ -1,7 +1,7 @@
 namespace Lib.@string;
 
 [Guid("48ab9824-76ca-4238-800f-9cf95311e6c0")]
-public class CombineStrings : Instance<CombineStrings>
+internal sealed class CombineStrings : Instance<CombineStrings>
 {
     [Output(Guid = "{E47BF25E-351A-44E6-84C6-AD3ABC93531A}")]
     public readonly Slot<string> Result = new();

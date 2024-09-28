@@ -1,7 +1,7 @@
 namespace Lib._3d.transform;
 
 [Guid("1a8d2a8d-d189-472f-bab3-d645a63c7aff")]
-public class ShiftCamera : Instance<ShiftCamera>
+internal sealed class ShiftCamera : Instance<ShiftCamera>
 {
     [Output(Guid = "4525b575-31ee-4e6a-9f9b-4b0e3127e493")]
     public readonly Slot<Command> Output = new();

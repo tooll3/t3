@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.point.helper;
 
 [Guid("353f63fc-e613-43ca-b037-02d7b9f4e935")]
-public class CommonPointSets : Instance<CommonPointSets>
+internal sealed class CommonPointSets : Instance<CommonPointSets>
 {
     [Output(Guid = "2e45df97-e5c9-454d-b6ea-569c16cc04d5")]
     public readonly Slot<StructuredList> CpuBuffer = new();

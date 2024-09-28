@@ -1,7 +1,7 @@
 namespace Lib.point.sim.experimental;
 
 [Guid("03aa5f28-3f74-4feb-aa6a-36cdb2d7f0d9")]
-public class SimFollowMeshSurface : Instance<SimFollowMeshSurface>
+internal sealed class SimFollowMeshSurface : Instance<SimFollowMeshSurface>
 {
 
     [Output(Guid = "124342ba-0117-4969-90d4-8085a9a42e52")]

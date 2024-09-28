@@ -1,7 +1,7 @@
 namespace Lib._3d.mesh.modify;
 
 [Guid("68e0d0cb-1e57-4e9c-9f22-bd7927ddb4c5")]
-public class RecomputeNormals : Instance<RecomputeNormals>
+internal sealed class RecomputeNormals : Instance<RecomputeNormals>
 {
 
     [Output(Guid = "69a94ae6-21f3-4c04-bb7d-98fb469463bb")]

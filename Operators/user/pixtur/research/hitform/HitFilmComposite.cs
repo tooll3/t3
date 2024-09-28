@@ -4,7 +4,7 @@ namespace Operators.Utils;
 
 public static class HitFilmComposite
 {
-    public class Vec3
+    internal sealed class Vec3
     {
         [XmlAttribute("X")]
         public double X { get; set; }
@@ -16,7 +16,7 @@ public static class HitFilmComposite
         public double Z { get; set; }
     }
     
-    public class Keyframe
+    internal sealed class Keyframe
     {
         [XmlAttribute("Time")]
         public double Time { get; set; }
@@ -24,7 +24,7 @@ public static class HitFilmComposite
         public Vec3 Position { get; set; }
     }
     
-    public class Layer
+    internal sealed class Layer
     {
         [XmlAttribute("type")]
         public string Type { get; set; }
@@ -34,12 +34,12 @@ public static class HitFilmComposite
     }
     
     [XmlRoot("BiffCompositeShot")]
-    public class BiffCompositeShot
+    internal sealed class BiffCompositeShot
     {
         public CompositionAsset CompositionAsset { get; set; }
     }
     
-    public class CompositionAsset
+    internal sealed class CompositionAsset
     {
         [XmlAttribute("Version")]
         public int Version { get; set; }
@@ -47,12 +47,12 @@ public static class HitFilmComposite
         public Layers Layers { get; set; }
     }
     
-    public class Layers
+    internal sealed class Layers
     {
         public CameraLayer CameraLayer { get; set; }
     }
     
-    public class CameraLayer
+    internal sealed class CameraLayer
     {
         [XmlAttribute("Version")]
         public int Version { get; set; }
@@ -60,7 +60,7 @@ public static class HitFilmComposite
         public LayerBase LayerBase { get; set; }
     }
     
-    public class LayerBase
+    internal sealed class LayerBase
     {
         [XmlAttribute("Version")]
         public int Version { get; set; }
@@ -91,7 +91,7 @@ public static class HitFilmComposite
         public PropertyManager PropertyManager { get; set; }
     }
     
-    public class PropertyManager
+    internal sealed class PropertyManager
     {
         [XmlElement("position")]
         public Vec3Property Position { get; set; }
@@ -107,7 +107,7 @@ public static class HitFilmComposite
     }
     
     
-    public class Vec3Property
+    internal sealed class Vec3Property
     {
         [XmlAttribute("Type")]
         public int Type { get; set; }
@@ -126,13 +126,13 @@ public static class HitFilmComposite
     }
     
     
-    public class Vec3b
+    internal sealed class Vec3b
     {
         [XmlElement("FXPoint3_32f")]
         public FXPoint3 Point { get; set; }
     }
     
-    public class ScalarProperty
+    internal sealed class ScalarProperty
     {
         [XmlAttribute("Type")]
         public int Type { get; set; }
@@ -147,7 +147,7 @@ public static class HitFilmComposite
         public ScalarAnimation Animation { get; set; }
     }
     
-    public class FXPoint3
+    internal sealed class FXPoint3
     {
         [XmlAttribute("X")]
         public float X { get; set; }
@@ -159,19 +159,19 @@ public static class HitFilmComposite
         public float Z { get; set; }
     }
     
-    public class Animation
+    internal sealed class Animation
     {
         [XmlElement("Key")]
         public List<Vec3Key> Keys { get; set; }
     }
     
-    public class ScalarAnimation
+    internal sealed class ScalarAnimation
     {
         [XmlElement("Key")]
         public List<ScalarKey> Keys { get; set; }
     }
     
-    public class Vec3Key
+    internal sealed class Vec3Key
     {
         [XmlAttribute("Type")]
         public int Type { get; set; }
@@ -183,7 +183,7 @@ public static class HitFilmComposite
         public Vec3Value Value { get; set; }
     }
     
-    public class Vec3Value
+    internal sealed class Vec3Value
     {
         [XmlElement("FXPoint3_32f")]
         public FXPoint3 Point { get; set; }
@@ -192,7 +192,7 @@ public static class HitFilmComposite
         public FXPoint3 Orientation { get; set; }
     }
     
-    public class ScalarKey
+    internal sealed class ScalarKey
     {
         [XmlAttribute("Type")]
         public int Type { get; set; }
@@ -204,7 +204,7 @@ public static class HitFilmComposite
         public float Value { get; set; }
     }
     
-    public class TransformationKey
+    internal sealed class TransformationKey
     {
         public double TimeInSeconds;
         public Vector3 Position;
@@ -212,7 +212,7 @@ public static class HitFilmComposite
         public Vector3 Orientation;
     }
     
-    public static class HitFilm
+    internal static class HitFilm
     {
         public static bool Load(string filePath, out List<TransformationKey> orderedKeys)
         {

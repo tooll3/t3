@@ -6,7 +6,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib._3d.mesh.generate;
 
 [Guid("9d6dbf28-9983-4584-abba-6281ce51d583")]
-public class QuadMesh : Instance<QuadMesh>
+internal sealed class QuadMesh : Instance<QuadMesh>
 {
     [Output(Guid = "9c86f704-a28f-4d2a-b7c0-15648f982462")]
     public readonly Slot<MeshBuffers> Data = new();

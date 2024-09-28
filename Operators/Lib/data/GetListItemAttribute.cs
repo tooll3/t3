@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.data;
 
 [Guid("37794826-a099-4af3-90f4-1e49092a09e1")]
-public class GetListItemAttribute : Instance<GetListItemAttribute>
+internal sealed class GetListItemAttribute : Instance<GetListItemAttribute>
 {
     [Output(Guid = "0C83599F-1E0F-4BBF-B662-56B4CA5099B0", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<float> Result = new();

@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.vec3;
 
 [Guid("a40cb2a4-5e4c-41ef-b70d-40fa04adafbb")]
-public class LerpVec3 : Instance<LerpVec3>
+internal sealed class LerpVec3 : Instance<LerpVec3>
 {
     [Output(Guid = "D5116FBE-1D04-48CE-B948-56EF184A5FD6")]
     public readonly Slot<Vector3> Result = new();

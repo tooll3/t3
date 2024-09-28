@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("a2ea3af5-d78b-46b4-84db-09d31f042798")]
-public class AdvancedFeedback2 : Instance<AdvancedFeedback2>
+internal sealed class AdvancedFeedback2 : Instance<AdvancedFeedback2>
 {
     [Output(Guid = "451bf2c8-8daf-403b-a064-c7252b03c74d")]
     public readonly Slot<Texture2D> ColorBuffer = new();

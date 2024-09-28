@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.anim;
 
 [Guid("94a392e6-3e03-4ccf-a114-e6fafa263b4f")]
-public class SequenceAnim : Instance<SequenceAnim>
+public sealed class SequenceAnim : Instance<SequenceAnim>
 {
     [Output(Guid = "99f24d0d-bda5-44a5-afd1-cb144ba313e6", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<float> Result = new();

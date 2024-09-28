@@ -1,7 +1,7 @@
 namespace Lib.img.generate;
 
 [Guid("5a0b0485-7a55-4bf4-ae23-04f51d890334")]
-public class FractalNoise : Instance<FractalNoise>
+internal sealed class FractalNoise : Instance<FractalNoise>
 {
     [Output(Guid = "c85e033e-794c-4943-bf5d-545555df9360")]
     public readonly Slot<Texture2D> TextureOutput = new();

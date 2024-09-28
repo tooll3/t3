@@ -1,7 +1,7 @@
 namespace Lib.img.use;
 
 [Guid("b5b6c046-3c8e-478a-b423-899872c2e1c4")]
-public class KeepPreviousFrame : Instance<KeepPreviousFrame>
+internal sealed class KeepPreviousFrame : Instance<KeepPreviousFrame>
 {
     [Output(Guid = "4cf4e43b-0f1f-41f7-9ba3-acab3b1160cb")]
     public readonly Slot<Texture2D> TextureA = new();

@@ -5,7 +5,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib._3d.transform;
 
 [Guid("954af16f-b37b-4e64-a965-4bec02b9179e")]
-public class OrthographicCamera : Instance<OrthographicCamera>, ICamera, ICameraPropertiesProvider
+internal sealed class OrthographicCamera : Instance<OrthographicCamera>, ICamera, ICameraPropertiesProvider
 {
     [Output(Guid = "93241f33-8a3e-4bba-8852-ca5d4d4523aa", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Command> Output = new();

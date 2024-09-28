@@ -1,7 +1,7 @@
 namespace Lib.math.@int;
 
 [Guid("475ea08b-0810-483f-bc6d-8b5d566cb8a2")]
-public class IntAdd : Instance<IntAdd>
+internal sealed class IntAdd : Instance<IntAdd>
 {
     [Output(Guid = "5e7233e6-7928-41a4-8f3f-b7d074614546")]
     public readonly Slot<int> Result = new();

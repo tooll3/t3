@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.@float;
 
 [Guid("7ff47023-622e-4834-8de5-2438d56c09bd")]
-public class DetectPulse : Instance<DetectPulse>
+internal sealed class DetectPulse : Instance<DetectPulse>
 {
     [Output(Guid = "b3254af8-03c6-41af-a775-5724aaaa91ef")]
     public readonly Slot<bool> HasChanged = new();

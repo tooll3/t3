@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("c6014c28-c6ab-4b4e-b6bf-0cee92fb4b40")]
-public class ConvertEquirectangle : Instance<ConvertEquirectangle>
+internal sealed class ConvertEquirectangle : Instance<ConvertEquirectangle>
 {
     [Output(Guid = "000b79eb-b390-4b6b-9fdc-b99f12bc308d")]
     public readonly Slot<Texture2D> ColorBuffer = new Slot<Texture2D>();

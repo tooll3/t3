@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.math.@float;
 
 [Guid("af9c5db8-7144-4164-b605-b287aaf71bf6")]
-public class Damp : Instance<Damp>
+internal sealed class Damp : Instance<Damp>
 {
     [Output(Guid = "aacea92a-c166-46dc-b775-d28baf9820f5", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<float> Result = new();

@@ -1,7 +1,7 @@
 namespace Lib.point.sim._legacy;
 
 [Guid("69c3b4ce-490a-48d4-b1d0-56dd6bf7a9a8")]
-public class _LegacySimForwardMovement : Instance<_LegacySimForwardMovement>
+internal sealed class _LegacySimForwardMovement : Instance<_LegacySimForwardMovement>
 {
 
     [Output(Guid = "9495dbae-0e49-449c-ab4a-58e267974385")]

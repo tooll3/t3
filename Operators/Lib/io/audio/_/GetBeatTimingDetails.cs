@@ -4,7 +4,7 @@ using T3.Core.Audio;
 namespace Lib.io.audio.@_;
 
 [Guid("712c50e8-7cba-4b29-bde4-1d860ab6b701")]
-public class GetBeatTimingDetails : Instance<GetBeatTimingDetails>
+internal sealed class GetBeatTimingDetails : Instance<GetBeatTimingDetails>
 {
         
     //[Output(Guid = "b20573fe-7a7e-48e1-9370-744288ca6e32", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]

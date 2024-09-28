@@ -1,7 +1,7 @@
 namespace Lib.math.int2;
 
 [Guid("eb818dd0-0c9c-40ee-b76e-2148f958b987")]
-public class ScaleResolution : Instance<ScaleResolution>
+internal sealed class ScaleResolution : Instance<ScaleResolution>
 {
     [Output(Guid = "83b4187e-e4a6-45a4-816f-6d5cb75021d5")]
     public readonly Slot<Int2> Size = new();

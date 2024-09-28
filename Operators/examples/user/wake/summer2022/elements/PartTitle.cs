@@ -1,7 +1,7 @@
 namespace Examples.user.wake.summer2022.elements;
 
 [Guid("32feb968-6196-43ea-be23-958c21e884bc")]
-public class PartTitle : Instance<PartTitle>
+ internal sealed class PartTitle : Instance<PartTitle>
 {
 
     [Output(Guid = "fc8b650a-0539-44e4-a110-3995fecc711d")]

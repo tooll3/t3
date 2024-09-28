@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("5972a57b-73cd-49b2-8b24-96636a4c294b")]
-public class RgbTV : Instance<RgbTV>
+internal sealed class RgbTV : Instance<RgbTV>
 {
     [Output(Guid = "22eac013-881d-486a-8041-5cae32b8dca1")]
     public readonly Slot<Texture2D> TextureOutput = new();

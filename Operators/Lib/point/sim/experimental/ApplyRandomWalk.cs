@@ -1,7 +1,7 @@
 namespace Lib.point.sim.experimental;
 
 [Guid("f925e9b9-5c7a-4fbf-9572-b11fe2d54d6c")]
-public class ApplyRandomWalk : Instance<ApplyRandomWalk>
+internal sealed class ApplyRandomWalk : Instance<ApplyRandomWalk>
 {
 
     [Output(Guid = "22ce9fc5-d23d-4141-8a81-c07ad824ed5e")]

@@ -1,7 +1,7 @@
 namespace Lib.point.generate;
 
 [Guid("722e79cc-47bc-42cc-8fce-2e06f36f8caa")]
-public class PointsOnImage : Instance<PointsOnImage>
+internal sealed class PointsOnImage : Instance<PointsOnImage>
 {
     [Output(Guid = "7c8567c9-1456-4040-ad43-4cc8a96efbaf")]
     public readonly Slot<BufferWithViews> OutputPoints = new();

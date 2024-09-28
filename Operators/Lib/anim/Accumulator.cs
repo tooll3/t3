@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.anim;
 
 [Guid("90b2c6d2-e9a6-4910-b42d-94202f07be27")]
-public class Accumulator : Instance<Accumulator>
+internal sealed class Accumulator : Instance<Accumulator>
 {
     [Output(Guid = "A999F93C-E51A-4325-BAE2-BFAB830B868D", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<float> Result = new();

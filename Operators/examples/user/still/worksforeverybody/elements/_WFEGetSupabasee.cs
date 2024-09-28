@@ -3,7 +3,7 @@ using System.Net.Http.Headers;
 namespace Examples.user.still.worksforeverybody.elements;
 
 [Guid("5cc6cc51-75ab-474d-b0b8-aaa03ea77326")]
-public class _WFEGetSupabasee : Instance<_WFEGetSupabasee>
+internal sealed class _WFEGetSupabasee : Instance<_WFEGetSupabasee>
 {
     [Output(Guid = "D6DACC5B-726E-48C4-A6CD-76C0581DB809")]
     public readonly Slot<string> Result = new();

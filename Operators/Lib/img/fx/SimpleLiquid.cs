@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("e4e608e7-1248-4d73-910c-e8bfbb34251b")]
-public class SimpleLiquid : Instance<SimpleLiquid>
+internal sealed class SimpleLiquid : Instance<SimpleLiquid>
 {
     [Output(Guid = "9397f264-fde0-4806-b287-5cac9fd638b1")]
     public readonly Slot<Texture2D> ColorBuffer = new();

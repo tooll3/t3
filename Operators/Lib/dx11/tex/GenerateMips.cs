@@ -3,7 +3,7 @@ using SharpDX.Direct3D11;
 namespace Lib.dx11.tex;
 
 [Guid("32a6a351-6d22-4915-aa0e-e0483b7f4e76")]
-public class GenerateMips : Instance<GenerateMips>
+internal sealed class GenerateMips : Instance<GenerateMips>
 {
     [Output(Guid = "ac14864f-3288-4cab-87a0-636cee626a2b")]
     public readonly Slot<Texture2D> TextureWithMips = new();

@@ -4,7 +4,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib._3d.transform;
 
 [Guid("e07550cf-033a-443d-b6f3-73eb71c72d9d")]
-public class SpreadLayout : Instance<SpreadLayout>
+internal sealed class SpreadLayout : Instance<SpreadLayout>
                            ,ITransformable
 {
     [Output(Guid = "60c25429-be91-4552-b1fe-b08479793abe")]

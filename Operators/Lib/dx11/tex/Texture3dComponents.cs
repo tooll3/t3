@@ -1,7 +1,7 @@
 namespace Lib.dx11.tex;
 
 [Guid("09641970-b03a-431f-b3c6-5d8df824dde8")]
-public class Texture3dComponents : Instance<Texture3dComponents>
+internal sealed class Texture3dComponents : Instance<Texture3dComponents>
 {
     [Output(Guid = "a3772275-af0b-48e6-a3f8-ecd7c4c6eda4")]
     public readonly Slot<Texture3D> Texture = new();

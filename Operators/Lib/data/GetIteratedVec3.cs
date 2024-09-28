@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.data;
 
 [Guid("d86e9585-d233-455a-9059-fa93debfed01")]
-public class GetIteratedVec3 : Instance<GetIteratedVec3>
+internal sealed class GetIteratedVec3 : Instance<GetIteratedVec3>
 {
     [Output(Guid = "E9839288-05DB-41E7-8326-3BE4F65F2410", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<Vector3> Result = new();

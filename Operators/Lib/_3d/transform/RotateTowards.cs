@@ -4,7 +4,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib._3d.transform;
 
 [Guid("8373c170-a140-4ce4-b59b-47f42fb71700")]
-public class RotateTowards : Instance<RotateTowards>
+internal sealed class RotateTowards : Instance<RotateTowards>
 {
     [Output(Guid = "772609fe-ec92-43a9-b8c6-9055bbf0310b")]
     public readonly Slot<Command> Output = new();

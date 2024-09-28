@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.exec.context;
 
 [Guid("7953f704-ebee-498b-8bdd-a2c201dfe278")]
-public class SetIntVariable : Instance<SetIntVariable>
+internal sealed class SetIntVariable : Instance<SetIntVariable>
 {
     [Output(Guid = "7d806685-4678-4dfc-9dbc-36fdfa0c7a59")]
     public readonly Slot<Command> Output = new();

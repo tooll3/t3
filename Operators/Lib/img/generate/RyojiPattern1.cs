@@ -1,7 +1,7 @@
 namespace Lib.img.generate;
 
 [Guid("3ee3597d-dbf1-43a2-89d9-2f7b099112c7")]
-public class RyojiPattern1 : Instance<RyojiPattern1>
+internal sealed class RyojiPattern1 : Instance<RyojiPattern1>
 {
     [Output(Guid = "78c2770e-7764-49bb-bd34-a14afbd7e6fc")]
     public readonly Slot<Texture2D> TextureOutput = new();

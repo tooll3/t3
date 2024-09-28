@@ -1,7 +1,7 @@
 namespace Examples.user.still.worksforeverybody.fx;
 
 [Guid("6854e04f-8b60-41b2-a369-ca0b715c4df3")]
-public class CafeWallPattern : Instance<CafeWallPattern>
+internal sealed class CafeWallPattern : Instance<CafeWallPattern>
 {
     [Output(Guid = "cdf70feb-2cb0-44cd-bf4b-38c7af917029")]
     public readonly Slot<Texture2D> TextureOutput = new();

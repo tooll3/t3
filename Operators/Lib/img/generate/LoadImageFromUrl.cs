@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.img.generate;
 
 [Guid("61ec6355-bd7d-4abb-aa44-b01b7d658e23")]
-public class LoadImageFromUrl : Instance<LoadImageFromUrl>
+internal sealed class LoadImageFromUrl : Instance<LoadImageFromUrl>
 {
     [Output(Guid = "316fe874-5178-4068-a233-6c6ecf70c49e")]
     public readonly Slot<Texture2D> Texture = new();

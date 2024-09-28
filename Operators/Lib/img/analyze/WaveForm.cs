@@ -1,7 +1,7 @@
 namespace Lib.img.analyze;
 
 [Guid("92e28e50-bd40-4f93-ba92-8f69cded6ec1")]
-public class WaveForm : Instance<WaveForm>
+internal sealed class WaveForm : Instance<WaveForm>
 {
     [Output(Guid = "d81d0fd1-3ba0-4576-8fea-d37fb6ec5548")]
     public readonly Slot<Texture2D> ImgOutput = new();

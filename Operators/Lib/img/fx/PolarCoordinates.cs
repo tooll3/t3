@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("941410e5-2023-43c6-87b1-55386bb048ac")]
-public class PolarCoordinates : Instance<PolarCoordinates>
+internal sealed class PolarCoordinates : Instance<PolarCoordinates>
 {
     [Output(Guid = "1758e789-809c-430a-a5c8-22fd8bbe5e54")]
     public readonly Slot<Texture2D> TextureOutput = new();

@@ -1,7 +1,7 @@
 namespace Lib.exec._experimental;
 
 [Guid("f19a9234-cd23-4229-a794-aa9d97ad8027")]
-public class DrawAsSplitView : Instance<DrawAsSplitView>
+internal sealed class DrawAsSplitView : Instance<DrawAsSplitView>
 {
     [Output(Guid = "65456554-355b-41a3-893e-960d28113f53")]
     public readonly Slot<Command> Output = new();

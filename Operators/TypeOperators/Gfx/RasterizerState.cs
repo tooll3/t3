@@ -3,7 +3,7 @@ using SharpDX.Direct3D11;
 namespace Types.Gfx;
 
 [Guid("c7283335-ef57-46ad-9538-abbade65845a")]
-public class RasterizerState : Instance<RasterizerState>
+public sealed class RasterizerState : Instance<RasterizerState>
 {
     [Output(Guid = "B409694A-0980-4992-8525-01871B940CD7")]
     public readonly Slot<SharpDX.Direct3D11.RasterizerState> Value = new();

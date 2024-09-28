@@ -1,7 +1,7 @@
 namespace Types.Gfx;
 
 [Guid("4abd5f2e-3296-4d71-8462-faa203091b1d")]
-public class GeometryShaderStage : Instance<GeometryShaderStage>
+public sealed class GeometryShaderStage : Instance<GeometryShaderStage>
 {
     [Output(Guid = "07198b7f-62bc-400e-9e7f-848460b96e38")]
     public readonly Slot<Command> Output = new(new Command());

@@ -1,7 +1,7 @@
 namespace Lib.img.use;
 
 [Guid("0989e44b-f543-4b9a-a08e-5058d0032259")]
-public class RenderWithMotionBlur : Instance<RenderWithMotionBlur>
+internal sealed class RenderWithMotionBlur : Instance<RenderWithMotionBlur>
 {
     [Output(Guid = "351ecd6a-1b91-49c1-8497-16e115941e63")]
     public readonly Slot<Texture2D> Output = new();

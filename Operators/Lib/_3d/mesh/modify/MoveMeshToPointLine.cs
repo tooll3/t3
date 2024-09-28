@@ -1,7 +1,7 @@
 namespace Lib._3d.mesh.modify;
 
 [Guid("c6dd42a7-d3a3-4405-b64a-159bcf3beab8")]
-public class MoveMeshToPointLine : Instance<MoveMeshToPointLine>
+internal sealed class MoveMeshToPointLine : Instance<MoveMeshToPointLine>
 {
 
     [Output(Guid = "cf032071-fedc-45aa-9dbc-7b70f61e14dc")]

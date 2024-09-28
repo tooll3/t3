@@ -1,7 +1,7 @@
 namespace Lib.point.generate;
 
 [Guid("3ee8f66d-68df-43c1-b0eb-407259bf7e86")]
-public class GridPoints : Instance<GridPoints>
+internal sealed class GridPoints : Instance<GridPoints>
                          ,ITransformable
 {
 

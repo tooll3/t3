@@ -1,7 +1,7 @@
 namespace Lib.point.particle.force;
 
 [Guid("eeec02e2-7db9-4132-935a-4caf03c828c6")]
-public class ReconstructiveForce : Instance<ReconstructiveForce>
+internal sealed class ReconstructiveForce : Instance<ReconstructiveForce>
                                   ,ITransformable
 {
     [Output(Guid = "4b7931a8-aace-41e8-ba38-db68d03d5cc2")]

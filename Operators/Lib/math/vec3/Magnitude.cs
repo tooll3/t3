@@ -1,7 +1,7 @@
 namespace Lib.math.vec3;
 
 [Guid("99ce9535-23a3-4570-a98c-8d2262cb8755")]
-public class Magnitude : Instance<Magnitude>
+internal sealed class Magnitude : Instance<Magnitude>
 {
     [Output(Guid = "72788ABC-5ED7-456D-A13E-E56021D7D5F4")]
     public readonly Slot<float> Result = new ();

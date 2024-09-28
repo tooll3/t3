@@ -5,7 +5,7 @@ using Utilities = T3.Core.Utils.Utilities;
 namespace Lib.dx11.buffer;
 
 [Guid("724da755-2d0c-42ab-8335-8c88ec5fb078")]
-public class FloatsToBuffer : Instance<FloatsToBuffer>
+internal sealed class FloatsToBuffer : Instance<FloatsToBuffer>
 {
     [Output(Guid = "f5531ffb-dbde-45d3-af2a-bd90bcbf3710")]
     public readonly Slot<Buffer> Buffer = new();

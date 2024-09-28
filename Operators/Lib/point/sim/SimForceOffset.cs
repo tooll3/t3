@@ -1,7 +1,7 @@
 namespace Lib.point.sim;
 
 [Guid("9c378944-9a57-4ae4-a88e-36c07244bcf7")]
-public class SimForceOffset : Instance<SimForceOffset>
+internal sealed class SimForceOffset : Instance<SimForceOffset>
 {
 
     [Output(Guid = "d41c5cd6-1902-4fb9-9639-6513906cef79")]

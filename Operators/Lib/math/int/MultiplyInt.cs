@@ -1,7 +1,7 @@
 namespace Lib.math.@int;
 
 [Guid("6a4edb6a-5ced-4356-9090-4bf770cdeb52")]
-public class MultiplyInt : Instance<MultiplyInt>
+internal sealed class MultiplyInt : Instance<MultiplyInt>
 {
     [Output(Guid = "5E847363-142D-4DA9-A5B3-3A7AA2541BED")]
     public readonly Slot<int> Result = new();

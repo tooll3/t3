@@ -1,7 +1,7 @@
 namespace Types.Values;
 
 [Guid("f2e323bd-f881-41a8-81e2-e8f2ac1984dc")]
-public class Vector4 : Instance<Vector4>, IExtractedInput<System.Numerics.Vector4>
+public sealed class Vector4 : Instance<Vector4>, IExtractedInput<System.Numerics.Vector4>
 {
     [Output(Guid = "14CDC3DD-F229-4F8F-B953-4F9D587D6F58")]
     public readonly Slot<System.Numerics.Vector4> Result = new();

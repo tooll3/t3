@@ -16,7 +16,7 @@ namespace Lib.io.file;
  * This operator is a compromise: Please also review the additional documentation
  * on the wiki: https://github.com/tooll3/t3/wiki/SvgLineFonts
  */
-public class LineTextPoints : Instance<LineTextPoints>
+internal sealed class LineTextPoints : Instance<LineTextPoints>
 {
     [Output(Guid = "618e9151-cd91-4aa6-9d91-4bb51610cc8b")]
     public readonly Slot<StructuredList> ResultList = new();
@@ -553,7 +553,7 @@ internal sealed class LineFont
 
     private static readonly List<Point> _tempPoints = new(100); // Reuse to avoid GC
 
-    public class Glyph
+    internal sealed class Glyph
     {
         //public char Char;
         public float AdvanceX = 10;
@@ -567,7 +567,7 @@ internal sealed class LineFont
     }
 }
 
-public class GraphicsPathEntry
+internal sealed class GraphicsPathEntry
 {
     public GraphicsPath GraphicsPath;
     public bool NeedsClosing;

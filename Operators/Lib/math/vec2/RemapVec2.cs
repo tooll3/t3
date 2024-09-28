@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.vec2;
 
 [Guid("03c157ef-f0bc-4a2e-b862-775c6e886997")]
-public class RemapVec2 : Instance<RemapVec2>
+internal sealed class RemapVec2 : Instance<RemapVec2>
 {
     [Output(Guid = "101E81C8-0A9A-4BEC-9BE6-ACA50C8468D3")]
     public readonly Slot<Vector2> Result = new();

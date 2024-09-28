@@ -1,7 +1,7 @@
 namespace Lib.img.generate;
 
 [Guid("1a411be2-1757-4019-8ce2-e29f808ed839")]
-public class CheckerBoard : Instance<CheckerBoard>
+internal sealed class CheckerBoard : Instance<CheckerBoard>
 {
     [Output(Guid = "9dd9dbeb-b506-4d10-97b7-34feaab91f07")]
     public readonly Slot<Texture2D> TextureOutput = new();

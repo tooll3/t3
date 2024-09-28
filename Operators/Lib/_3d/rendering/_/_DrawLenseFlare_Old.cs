@@ -1,7 +1,7 @@
 namespace Lib._3d.rendering.@_;
 
 [Guid("95558338-81a5-4ecc-9d5c-1c6fb5f6f4fa")]
-public class _DrawLenseFlare_Old : Instance<_DrawLenseFlare_Old>
+internal sealed class _DrawLenseFlare_Old : Instance<_DrawLenseFlare_Old>
 {
     [Output(Guid = "d2d834bd-00f4-46a0-ad20-3f399e107229")]
     public readonly Slot<Command> Output = new();

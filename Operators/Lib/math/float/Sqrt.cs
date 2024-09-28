@@ -1,7 +1,7 @@
 namespace Lib.math.@float;
 
 [Guid("24b56330-b9c5-4454-a398-0500b0422ce1")]
-public class Sqrt : Instance<Sqrt>
+internal sealed class Sqrt : Instance<Sqrt>
 {
     [Output(Guid = "915a7042-4bdc-4238-a59e-04eed3020f12")]
     public readonly Slot<float> Result = new();

@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.io.time;
 
 [Guid("9cb4d49e-135b-400b-a035-2b02c5ea6a72")]
-public class Time : Instance<Time>
+internal sealed class Time : Instance<Time>
 {
     [Output(Guid = "b20573fe-7a7e-48e1-9370-744288ca6e32", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<float> TimeInBars = new();

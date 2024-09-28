@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("1fa725a1-dab6-4a2a-8a4d-6efdfba5cf05")]
-public class Pixelate : Instance<Pixelate>
+internal sealed class Pixelate : Instance<Pixelate>
 {
     [Output(Guid = "47e693ca-a695-4f95-9f02-9b76894ee91c")]
     public readonly Slot<Texture2D> TextureOutput = new();

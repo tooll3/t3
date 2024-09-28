@@ -1,7 +1,7 @@
 namespace Lib._3d.@_;
 
 [Guid("fa45d013-5a1c-45a0-9b05-a4a4edfb06f9")]
-public class TypoGridBuffer : Instance<TypoGridBuffer>
+internal sealed class TypoGridBuffer : Instance<TypoGridBuffer>
 {
     [Output(Guid = "{6e6e8ce0-2b62-41f5-893d-9a20219faf82}")]
     public readonly Slot<Buffer> Buffer = new();

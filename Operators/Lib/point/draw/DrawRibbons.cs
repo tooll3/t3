@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.point.draw;
 
 [Guid("37a747b0-ec0e-4ebc-83dd-2e03022ad100")]
-public class DrawRibbons : Instance<DrawRibbons>
+internal sealed class DrawRibbons : Instance<DrawRibbons>
 {
     [Output(Guid = "324f8114-dae9-4cc8-aa88-021d84dbaf79", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Command> Output = new();

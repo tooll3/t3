@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.floats;
 
 [Guid("ef3a1411-e88c-43a8-83b4-931fdbf16c75")]
-public class DampPeakDecay : Instance<DampPeakDecay>
+internal sealed class DampPeakDecay : Instance<DampPeakDecay>
 {
     [Output(Guid = "A60A2E7B-99B7-489A-A662-301A6E71A885", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<float> Result = new();

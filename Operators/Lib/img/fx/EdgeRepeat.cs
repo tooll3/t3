@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("72e627e9-f570-4936-92b1-b12ed8d6004e")]
-public class EdgeRepeat : Instance<EdgeRepeat>
+internal sealed class EdgeRepeat : Instance<EdgeRepeat>
 {
     [Output(Guid = "f2e7625f-7918-4b0f-8b51-4304dde13bc6")]
     public readonly Slot<Texture2D> TextureOutput = new();

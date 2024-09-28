@@ -6,7 +6,7 @@ using T3.Core.Animation;
 namespace Lib.io.audio._obsolete;
 
 [Guid("a9e77500-ccb5-45b9-9f17-0d9bf9b58fb5")]
-public class SoundTrackLevels : Instance<SoundTrackLevels>
+internal sealed class SoundTrackLevels : Instance<SoundTrackLevels>
 {
     [Output(Guid = "CFAD7CDE-8E78-4983-924A-0A50F15EF747", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<float> Level = new();

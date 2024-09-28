@@ -1,7 +1,7 @@
 namespace Lib.point.modify;
 
 [Guid("191e5057-4da4-447e-b7cf-e9e0ed8c5dd8")]
-public class SpreadPointAttributes : Instance<SpreadPointAttributes>
+internal sealed class SpreadPointAttributes : Instance<SpreadPointAttributes>
 {
 
     [Output(Guid = "39c62e1e-7c63-4a88-9923-3f7f5fffbfbf")]

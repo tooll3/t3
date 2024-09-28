@@ -1,7 +1,7 @@
 namespace Lib.point.combine;
 
 [Guid("93e2f11a-18a2-4dcb-86df-c452d340b409")]
-public class BlendMeshVertices : Instance<BlendMeshVertices>
+internal sealed class BlendMeshVertices : Instance<BlendMeshVertices>
 {
 
     [Output(Guid = "27258c56-6421-4800-a057-26c9c2ede324")]

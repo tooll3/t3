@@ -1,7 +1,7 @@
 namespace Examples.user.wake.summer2024.scene;
 
 [Guid("15566742-6e21-4ebb-bb35-fa1949fa4e4a")]
-public class NotePainting : Instance<NotePainting>
+ internal sealed class NotePainting : Instance<NotePainting>
 {
     [Output(Guid = "a6934560-7a8d-434d-9a8a-e030be9f622b")]
     public readonly Slot<Texture2D> ColorBuffer = new Slot<Texture2D>();

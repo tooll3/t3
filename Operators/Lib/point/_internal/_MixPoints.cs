@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.point._internal;
 
 [Guid("bdd982c4-dfc4-48d6-888a-f067081dbe8e")]
-public class _MixPoints : Instance<_MixPoints>
+internal sealed class _MixPoints : Instance<_MixPoints>
 {
     [Output(Guid = "5bf5f55e-9099-4413-b17a-f49d042cb4ca")]
     public readonly Slot<Point[]> Result = new();

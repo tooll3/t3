@@ -1,7 +1,7 @@
 namespace Examples.user.still.worksforeverybody.elements;
 
 [Guid("9df0e38e-ccf1-405a-ab18-6586e652cdf1")]
-public class _ParamBlendingOverlay : Instance<_ParamBlendingOverlay>
+internal sealed class _ParamBlendingOverlay : Instance<_ParamBlendingOverlay>
 {
     [Output(Guid = "9158ca50-6368-4266-9985-0f60b3e2b560")]
     public readonly Slot<Command> Output = new();

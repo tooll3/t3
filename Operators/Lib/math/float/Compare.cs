@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.@float;
 
 [Guid("026869ee-b62f-481e-aadf-f8a1db77fe65")]
-public class Compare : Instance<Compare>
+internal sealed class Compare : Instance<Compare>
 {
     [Output(Guid = "7149C7D2-242F-4D57-AC21-19E86700708A")]
     public readonly Slot<bool> IsTrue = new();

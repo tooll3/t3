@@ -1,7 +1,7 @@
 namespace Lib.exec;
 
 [Guid("7a09136e-18b2-46b7-afff-8ef999e3965d")]
-public class ExecuteOnce : Instance<ExecuteOnce>
+internal sealed class ExecuteOnce : Instance<ExecuteOnce>
 {
     [Output(Guid = "5D73EBE6-9AA0-471A-AE6B-3F5BFD5A0F9C")]
     public readonly Slot<Command> Output = new();

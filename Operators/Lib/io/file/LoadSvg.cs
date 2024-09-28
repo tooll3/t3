@@ -10,7 +10,7 @@ using T3.Core.Utils;
 namespace Lib.io.file;
 
 [Guid("e8d94dd7-eb54-42fe-a7b1-b43543dd457e")]
-public class LoadSvg : Instance<LoadSvg>
+internal sealed class LoadSvg : Instance<LoadSvg>
 {
     [Output(Guid = "e21e3843-7d63-4db2-9234-77664e872a0f")]
     public readonly Slot<StructuredList> ResultList = new();

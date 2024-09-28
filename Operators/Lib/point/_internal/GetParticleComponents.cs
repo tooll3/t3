@@ -1,7 +1,7 @@
 namespace Lib.point._internal;
 
 [Guid("e62c1fa0-6fcd-49f5-9cf8-d3081c8a5917")]
-public class GetParticleComponents : Instance<GetParticleComponents>, IStatusProvider
+internal sealed class GetParticleComponents : Instance<GetParticleComponents>, IStatusProvider
 {
     [Output(Guid = "231FEEFD-B07D-4FCD-9BD1-B74D0CD765B5", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<UnorderedAccessView> ParticlesUav = new();

@@ -1,7 +1,7 @@
 namespace Lib._3d.postfx;
 
 [Guid("13d5260d-4e50-48f8-909c-7d84d6f0a43f")]
-public class SSAO : Instance<SSAO>
+internal sealed class SSAO : Instance<SSAO>
 {
     [Output(Guid = "9be415b6-b7f0-4b8f-8d93-c147ef8d0d44")]
     public readonly Slot<Texture2D> Output = new();

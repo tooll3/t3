@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.io.input;
 
 [Guid("2d1c9633-b66e-4958-913c-116ae36963a5")]
-public class MidiRecording : Instance<MidiRecording>
+internal sealed class MidiRecording : Instance<MidiRecording>
 {
     [Output(Guid = "f89b5a87-a757-4f10-aa13-396c2cd9829b")]
     public readonly Slot<DataSet> DataSet = new();

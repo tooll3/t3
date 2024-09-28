@@ -1,7 +1,7 @@
 namespace Lib.point.sim;
 
 [Guid("10507c42-1240-47cc-9569-5e3f1c733e99")]
-public class PointSimulation : Instance<PointSimulation>
+internal sealed class PointSimulation : Instance<PointSimulation>
 {
 
     [Output(Guid = "5bc395fd-1e77-402f-88da-b9727f3c1b98")]

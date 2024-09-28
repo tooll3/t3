@@ -5,7 +5,7 @@
 namespace Lib.math.@bool;
 
 [Guid("ec1ba1fb-ceb7-4d4f-86b4-389589c7e6f0")]
-public class FlipFlop : Instance<FlipFlop>
+internal sealed class FlipFlop : Instance<FlipFlop>
 {
     [Output(Guid = "c49bcf90-dee5-4132-b791-27f023be5d93")]
     public readonly Slot<bool> Result = new();

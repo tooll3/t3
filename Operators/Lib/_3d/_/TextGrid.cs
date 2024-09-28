@@ -1,7 +1,7 @@
 namespace Lib._3d.@_;
 
 [Guid("ad28819d-be62-4ed7-932a-fc861562983d")]
-public class TextGrid : Instance<TextGrid>
+internal sealed class TextGrid : Instance<TextGrid>
 {
     [Output(Guid = "982bd425-e781-42ad-9c58-f026fb6f193c", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Command> Output = new();

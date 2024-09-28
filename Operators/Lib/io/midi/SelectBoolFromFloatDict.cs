@@ -1,8 +1,8 @@
 namespace Lib.io.midi;
 
 [Guid("05295c65-7dfd-4570-866e-9b5c4e735569")]
-public class SelectBoolFromFloatDict : Instance<SelectBoolFromFloatDict>
-                                      ,IStatusProvider,ICustomDropdownHolder
+public sealed class SelectBoolFromFloatDict : Instance<SelectBoolFromFloatDict>
+                                             ,IStatusProvider,ICustomDropdownHolder
 {
 
     [Output(Guid = "2C0F90BB-E7C8-43A7-A43F-9BAB5222753B")]

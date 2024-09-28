@@ -5,7 +5,7 @@ using T3.Core.Utils;
 namespace Lib.dx11.tex;
 
 [Guid("c2078514-cf1d-439c-a732-0d7b31b5084a")]
-public class SrvFromTexture2d : Instance<SrvFromTexture2d>
+internal sealed class SrvFromTexture2d : Instance<SrvFromTexture2d>
 {
     [Output(Guid = "{DC71F39F-3FBA-4FC6-B8EF-CE57C82BF78E}")]
     public readonly Slot<ShaderResourceView> ShaderResourceView = new();

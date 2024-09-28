@@ -1,7 +1,7 @@
 namespace Lib.point.generate;
 
 [Guid("a71dc141-2b99-4e63-887c-6408b0f0b83c")]
-public class HexGridPoints : Instance<HexGridPoints>
+internal sealed class HexGridPoints : Instance<HexGridPoints>
                             ,ITransformable
 {
 

@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Types.Gfx;
 
 [Guid("8bef116d-7d1c-4c1b-b902-25c1d5e925a9")]
-public class ComputeShaderStage : Instance<ComputeShaderStage>, IRenderStatsProvider
+public sealed class ComputeShaderStage : Instance<ComputeShaderStage>, IRenderStatsProvider
 {
     [Output(Guid = "{C382284F-7E37-4EB0-B284-BC735247F26B}")]
     public readonly Slot<Command> Output = new();

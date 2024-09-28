@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.io.time;
 
 [Guid("c6d22dc3-a6ff-4a6f-aa14-8be6595da2b1")]
-public class SetPlaybackTime : Instance<SetPlaybackTime>
+internal sealed class SetPlaybackTime : Instance<SetPlaybackTime>
 {
     [Output(Guid = "0bd5fcb8-72fa-40d5-a922-63a2e7551a88")]
     public readonly Slot<Command> Commands = new();

@@ -1,7 +1,7 @@
 namespace Lib._3d.gizmo;
 
 [Guid("92f3193e-a7dd-4417-b569-129823607fbe")]
-public class PlotValueCurve : Instance<PlotValueCurve>
+internal sealed class PlotValueCurve : Instance<PlotValueCurve>
 {
     [Output(Guid = "2af722b5-3af1-448a-9d0b-2a8463744a99")]
     public readonly Slot<Command> Output = new();

@@ -1,7 +1,7 @@
 namespace Lib._3d.gizmo;
 
 [Guid("348652c3-abf5-4fe9-873b-89d1acaaf0ff")]
-public class Locator : Instance<Locator>, ITransformable
+internal sealed class Locator : Instance<Locator>, ITransformable
 {
     [Output(Guid = "357c4c25-2b08-4470-84b1-9707a3d8e56e")]
     public readonly TransformCallbackSlot<Command> Output = new();

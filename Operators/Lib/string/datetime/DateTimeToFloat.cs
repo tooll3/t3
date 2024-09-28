@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.@string.datetime;
 
 [Guid("10acf0aa-2cb3-446b-b837-b6abe24d44da")]
-public class DateTimeToFloat : Instance<DateTimeToFloat>
+internal sealed class DateTimeToFloat : Instance<DateTimeToFloat>
 {
     [Output(Guid = "E07DC943-B32B-4037-9E84-0E50B4B67D05")]
     public readonly Slot<float> Output = new ();

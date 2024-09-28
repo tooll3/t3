@@ -3,7 +3,7 @@ using T3.Operators.Utils;
 namespace Lib.io.audio._obsolete;
 
 [Guid("f8aed421-5e0e-4d1f-993c-1801153ebba8")]
-public class _LegacyAudioReaction : Instance<_LegacyAudioReaction>
+internal sealed class _LegacyAudioReaction : Instance<_LegacyAudioReaction>
 {
     [Output(Guid = "2aa4d0cb-c49d-41ce-aa74-794cc8682590", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<float> Level = new();

@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib._3d.rendering;
 
 [Guid("54ba8673-ff58-48d1-ae2e-ee2b83bc6860")]
-public class IntToWrapmode : Instance<IntToWrapmode>
+internal sealed class IntToWrapmode : Instance<IntToWrapmode>
 {
     [Output(Guid = "D3E48911-F6A6-439F-B34A-84FE9D75B388")]
     public readonly Slot<TextureAddressMode> Selected = new();

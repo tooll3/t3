@@ -7,7 +7,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib._3d.transform;
 
 [Guid("6415ed0e-3692-45e2-8e70-fe0cf4d29ebc")]
-public class OrbitCamera : Instance<OrbitCamera>
+internal sealed class OrbitCamera : Instance<OrbitCamera>
                          , ICameraPropertiesProvider, ICamera
 {
     [Output(Guid = "14a63b62-5fbb-4f82-8cf3-d0faf279eff8", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]

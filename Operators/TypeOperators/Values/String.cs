@@ -1,7 +1,7 @@
 namespace Types.Values;
 
 [Guid("5880cbc3-a541-4484-a06a-0e6f77cdbe8e")]
-public class String : Instance<String>, IExtractedInput<string>
+public sealed class String : Instance<String>, IExtractedInput<string>
 {
     [Output(Guid = "dd9d8718-addc-49b1-bd33-aac22b366f94")]
     public readonly Slot<string> Result = new();

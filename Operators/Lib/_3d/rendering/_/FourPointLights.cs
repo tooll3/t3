@@ -1,7 +1,7 @@
 namespace Lib._3d.rendering.@_;
 
 [Guid("d062c1c2-a7d1-4d4d-a9b1-e0e96df02385")]
-public class FourPointLights : Instance<FourPointLights>
+internal sealed class FourPointLights : Instance<FourPointLights>
 {
     [Output(Guid = "27c44461-0f69-4046-9c44-cc70d4ce7818")]
     public readonly Slot<Command> Output = new();

@@ -1,7 +1,7 @@
 namespace Lib.point.modify;
 
 [Guid("13ff9adb-2634-4129-8bb4-4fb764d38be6")]
-public class ResampleLinePoints : Instance<ResampleLinePoints>
+internal sealed class ResampleLinePoints : Instance<ResampleLinePoints>
 {
 
     [Output(Guid = "28cba376-7037-4d8c-bc4b-a8c747687f03")]

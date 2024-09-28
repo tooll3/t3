@@ -1,7 +1,7 @@
 namespace Lib.exec.context;
 
 [Guid("e6072ecf-30d2-4c52-afa1-3b195d61617b")]
-public class GetFloatVar : Instance<GetFloatVar>, ICustomDropdownHolder
+public sealed class GetFloatVar : Instance<GetFloatVar>, ICustomDropdownHolder
 {
     [Output(Guid = "e368ba33-827e-4e08-aa19-ba894b40906a", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<float> Result = new();

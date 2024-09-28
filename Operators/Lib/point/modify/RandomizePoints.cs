@@ -1,7 +1,7 @@
 namespace Lib.point.modify;
 
 [Guid("ec0675d7-6b72-4b15-b141-80bdd2367cd8")]
-public class RandomizePoints : Instance<RandomizePoints>
+internal sealed class RandomizePoints : Instance<RandomizePoints>
 {
 
     [Output(Guid = "172dcbd2-a475-4514-8620-38f07a0ea4aa")]

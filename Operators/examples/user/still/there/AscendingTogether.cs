@@ -1,7 +1,7 @@
 namespace Examples.user.still.there;
 
 [Guid("44d744da-cf4e-43e5-853a-126cfed6c865")]
-public class AscendingTogether : Instance<AscendingTogether>
+internal sealed class AscendingTogether : Instance<AscendingTogether>
 {
 
     [Output(Guid = "858daa1d-d3f4-4ce3-a711-5efa0ecfb1f7")]

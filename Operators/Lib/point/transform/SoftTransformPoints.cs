@@ -1,7 +1,7 @@
 namespace Lib.point.transform;
 
 [Guid("697bbc2d-0b2e-4013-bbc3-d58a28a79f31")]
-public class SoftTransformPoints : Instance<SoftTransformPoints>, ITransformable
+internal sealed class SoftTransformPoints : Instance<SoftTransformPoints>, ITransformable
 {
 
     [Output(Guid = "b3309ed0-574f-4907-b477-4a1cf98b2fe5")]

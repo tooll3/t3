@@ -1,7 +1,7 @@
 namespace Lib.math.@float;
 
 [Guid("62cdbff3-cb29-4745-92b1-02490e35345d")]
-public class TryParse : Instance<TryParse>
+internal sealed class TryParse : Instance<TryParse>
 {
     [Output(Guid = "3e780cb0-eef5-4880-98b4-2004b573ddb6")]
     public readonly Slot<float> Result = new();

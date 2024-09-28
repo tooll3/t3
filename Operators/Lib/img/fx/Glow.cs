@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.img.fx;
 
 [Guid("d392d4af-4c78-4f4a-bc3f-4c54c8c73538")]
-public class Glow : Instance<Glow>
+internal sealed class Glow : Instance<Glow>
 {
     [Output(Guid = "2ce1453b-432b-4d12-8fb7-d883e3d0c136")]
     public readonly Slot<Texture2D> ImgOutput = new();

@@ -3,7 +3,7 @@ using T3.Core.Animation;
 namespace Lib.io.time;
 
 [Guid("fcd32cac-6544-42a3-8a14-203b8ca3559e")]
-public class SetPlaybackSpeed : Instance<SetPlaybackSpeed>
+internal sealed class SetPlaybackSpeed : Instance<SetPlaybackSpeed>
 {
     [Output(Guid = "80fc0900-074f-43b8-a053-991159b7f56e")]
     public readonly Slot<Command> Commands = new();

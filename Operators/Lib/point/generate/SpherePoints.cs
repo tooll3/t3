@@ -1,7 +1,7 @@
 namespace Lib.point.generate;
 
 [Guid("1a241222-200b-417d-a8c7-131e3b48cc36")]
-public class SpherePoints : Instance<SpherePoints>
+internal sealed class SpherePoints : Instance<SpherePoints>
 {
 
     [Output(Guid = "c20f4675-6387-45da-b14f-8d0a3af5e672")]

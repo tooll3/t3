@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.io.time;
 
 [Guid("485af23d-543e-44a7-b29f-693ed9533ab5")]
-public class StopWatch : Instance<StopWatch>
+internal sealed class StopWatch : Instance<StopWatch>
 {
     [Output(Guid = "617afbbc-8199-43c0-b630-4563e65959ef", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<float> Delta = new();

@@ -3,7 +3,7 @@ using T3.SystemUi;
 namespace Lib._3d.gizmo;
 
 [Guid("d61d7192-9ca3-494e-91e2-10a530ee9375")]
-public class VisibleGizmos : Instance<VisibleGizmos>
+internal sealed class VisibleGizmos : Instance<VisibleGizmos>
 {
     [Output(Guid = "6c29ce06-0512-4815-bc83-ab2e095c0455")]
     public readonly Slot<Command> Output = new();

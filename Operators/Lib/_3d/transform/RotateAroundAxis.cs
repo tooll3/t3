@@ -1,7 +1,7 @@
 namespace Lib._3d.transform;
 
 [Guid("a6e12383-09b6-4bbd-a4bb-8908598c3409")]
-public class RotateAroundAxis : Instance<RotateAroundAxis>
+internal sealed class RotateAroundAxis : Instance<RotateAroundAxis>
 {
     [Output(Guid = "1974f1bc-c3e3-4ea8-8b1e-72e9e1032a68")]
     public readonly Slot<Command> Output = new();

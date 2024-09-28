@@ -1,7 +1,7 @@
 namespace Lib.point._internal;
 
 [Guid("bc88304a-a2c7-4df9-93d8-b7dfecbce3de")]
-public class SnapPointsToGrid : Instance<SnapPointsToGrid>
+internal sealed class SnapPointsToGrid : Instance<SnapPointsToGrid>
 {
 
     [Output(Guid = "b7bc82a2-f095-490a-91e3-276431d5eb87")]

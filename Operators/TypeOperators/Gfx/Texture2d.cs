@@ -1,7 +1,7 @@
 namespace Types.Gfx;
 
 [Guid("f52db9a4-fde9-49ca-9ef7-131825c34e65")]
-public class Texture2d : Instance<Texture2d>
+public sealed class Texture2d : Instance<Texture2d>
 {
     [Output(Guid = "{007129E4-0EAE-4CB9-A142-90C1C171A5FB}")]
     public readonly Slot<Texture2D> Texture = new();

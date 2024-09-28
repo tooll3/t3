@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.point.draw.legacy;
 
 [Guid("16d10dc8-63b9-4ddf-90b8-41caef99d945")]
-public class _DrawQuads : Instance<_DrawQuads>
+internal sealed class _DrawQuads : Instance<_DrawQuads>
 {
     [Output(Guid = "5c6f0299-16bd-4553-9ca1-e8d7c7634b37", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Command> Output = new();

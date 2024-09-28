@@ -1,7 +1,7 @@
 namespace Lib.math.floats;
 
 [Guid("efb9ecfc-5aa2-45f1-87b0-1455d7702aa7")]
-public class RemapValues : Instance<RemapValues>
+internal sealed class RemapValues : Instance<RemapValues>
 {
     [Output(Guid = "18bd8395-7116-425c-b580-1ce944beda65")]
     public readonly Slot<float> Result = new();

@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Operators.Types.t3.operators.types;
 
 [Guid("80032e95-90ec-486d-92a4-ff3d225e556e")]
-public class ScreenCapture : Instance<ScreenCapture>
+public sealed class ScreenCapture : Instance<ScreenCapture>
 {
     [Output(Guid = "16D64181-ABFE-4B34-98C3-87B88D049E50", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Texture2D> TextureOutput = new();

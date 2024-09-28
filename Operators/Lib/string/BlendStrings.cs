@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.@string;
 
 [Guid("98bd1491-6e69-4ae0-9fc1-0be8e6a72d32")]
-public class BlendStrings : Instance<BlendStrings>
+internal sealed class BlendStrings : Instance<BlendStrings>
 {
     [Output(Guid = "1bb629bb-dd30-48df-b6b4-3245af10dc09")]
     public readonly Slot<string> Result = new();

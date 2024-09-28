@@ -1,7 +1,7 @@
 namespace Lib._3d.draw;
 
 [Guid("c757cde3-511c-44cb-af62-39156557daa6")]
-public class DrawMeshHatched : Instance<DrawMeshHatched>
+internal sealed class DrawMeshHatched : Instance<DrawMeshHatched>
 {
     [Output(Guid = "56b8a7fc-2d23-4e25-84cb-a3b25b832935")]
     public readonly Slot<Command> Output = new();

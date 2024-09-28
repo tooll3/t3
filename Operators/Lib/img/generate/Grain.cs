@@ -1,7 +1,7 @@
 namespace Lib.img.generate;
 
 [Guid("b5102fba-f05b-43fc-aa1d-613fe1d68ad2")]
-public class Grain : Instance<Grain>
+internal sealed class Grain : Instance<Grain>
 {
     [Output(Guid = "df388f27-f5b6-417b-87a7-a6a59b625128")]
     public readonly Slot<Texture2D> TextureOutput = new();

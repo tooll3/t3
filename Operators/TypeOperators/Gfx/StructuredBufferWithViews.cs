@@ -1,7 +1,7 @@
 namespace Types.Gfx;
 
 [Guid("b6c5be1d-b133-45e9-a269-8047ea0d6ad7")]
-public class StructuredBufferWithViews : Instance<StructuredBufferWithViews>
+public sealed class StructuredBufferWithViews : Instance<StructuredBufferWithViews>
 {
 
     [Output(Guid = "c997268d-6709-49de-980e-64d7a47504f7")]

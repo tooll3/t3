@@ -1,7 +1,7 @@
 namespace Lib.point.generate;
 
 [Guid("2467e1ed-f7fc-4c90-8230-b80ba6b42a2d")]
-public class MeshVerticesToPoints : Instance<MeshVerticesToPoints>
+internal sealed class MeshVerticesToPoints : Instance<MeshVerticesToPoints>
 {
 
     [Output(Guid = "53089fc7-3f0b-46c4-81e1-04ecbb92efce")]

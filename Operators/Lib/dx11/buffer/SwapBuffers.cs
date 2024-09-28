@@ -1,7 +1,7 @@
 namespace Lib.dx11.buffer;
 
 [Guid("020573c5-acaa-442e-9b1b-01338b0f4b62")]
-public class SwapBuffers : Instance<SwapBuffers>
+internal sealed class SwapBuffers : Instance<SwapBuffers>
 {
     [Output(Guid = "908EB00E-8951-4412-9112-1C10E806D57D")]
     public readonly Slot<BufferWithViews> BufferA = new();

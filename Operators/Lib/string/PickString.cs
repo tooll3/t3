@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.@string;
 
 [Guid("a9784e5e-7696-49a0-bb77-2302587ede59")]
-public class PickString : Instance<PickString>
+internal sealed class PickString : Instance<PickString>
 {
     [Output(Guid = "74104EB6-DFC2-4AD2-9600-91C5A33855D4")]
     public readonly Slot<string> Selected = new();

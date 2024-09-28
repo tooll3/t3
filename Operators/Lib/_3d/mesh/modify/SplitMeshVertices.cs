@@ -1,7 +1,7 @@
 namespace Lib._3d.mesh.modify;
 
 [Guid("3f0f0c40-482d-4d79-a201-b4651a0cd3a8")]
-public class SplitMeshVertices : Instance<SplitMeshVertices>
+internal sealed class SplitMeshVertices : Instance<SplitMeshVertices>
 {
 
     [Output(Guid = "7873a4c0-04ff-41b5-bf5e-66ae745c3918")]

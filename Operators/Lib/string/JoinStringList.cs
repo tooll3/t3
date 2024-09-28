@@ -1,7 +1,7 @@
 namespace Lib.@string;
 
 [Guid("51943340-70b1-4bb5-8cb9-0e79d366a57b")]
-public class JoinStringList : Instance<JoinStringList>, IStatusProvider
+internal sealed class JoinStringList : Instance<JoinStringList>, IStatusProvider
 {
     [Output(Guid = "ef105688-3e28-47c3-8b8e-5fda3bde3090")]
     public readonly Slot<string> Result = new();

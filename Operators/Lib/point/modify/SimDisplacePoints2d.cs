@@ -1,7 +1,7 @@
 namespace Lib.point.modify;
 
 [Guid("9d6cc9a3-980f-46ae-bf79-02fc1f49c480")]
-public class SimDisplacePoints2d : Instance<SimDisplacePoints2d>
+internal sealed class SimDisplacePoints2d : Instance<SimDisplacePoints2d>
                                   ,ITransformable
 {
     [Output(Guid = "314a5657-ab4e-4dac-8eeb-a6bb3122af45")]

@@ -1,7 +1,7 @@
 namespace Lib.point.generate;
 
 [Guid("69bd6cd3-85b2-4a6c-9184-ab25045a51aa")]
-public class BoundingBoxPoints : Instance<BoundingBoxPoints>
+internal sealed class BoundingBoxPoints : Instance<BoundingBoxPoints>
 {
 
     [Output(Guid = "921d43ce-6167-409b-9748-d6f59daa1cde")]

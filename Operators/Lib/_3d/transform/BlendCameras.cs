@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib._3d.transform;
 
 [Guid("e3ff58e2-847a-4c97-947c-cfbcf8f9c79d")]
-public class BlendCameras : Instance<BlendCameras>, IStatusProvider
+internal sealed class BlendCameras : Instance<BlendCameras>, IStatusProvider
 {
     [Output(Guid = "d0a6f926-c4ed-4cc9-917d-942f8c34fd65")]
     public readonly Slot<Command> Output = new();

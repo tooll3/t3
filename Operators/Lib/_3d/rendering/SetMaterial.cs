@@ -4,7 +4,7 @@ using Utilities = T3.Core.Utils.Utilities;
 namespace Lib._3d.rendering;
 
 [Guid("0ed2bee3-641f-4b08-8685-df1506e9af3c")]
-public class SetMaterial : Instance<SetMaterial>
+internal sealed class SetMaterial : Instance<SetMaterial>
 {
     [Output(Guid = "d80e1028-a48d-4171-8c8c-e6856bd2143d")]
     public readonly Slot<Command> Output = new();

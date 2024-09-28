@@ -5,7 +5,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib._3d.transform;
 
 [Guid("9e27c32d-b187-4b7c-9761-0c5bb4ae3c45")]
-public class CameraWithRotation : Instance<CameraWithRotation>, ICameraPropertiesProvider, ICamera
+internal sealed class CameraWithRotation : Instance<CameraWithRotation>, ICameraPropertiesProvider, ICamera
 {
     [Output(Guid = "70395556-2008-43ec-a73d-b4b35ae8ce58")]
     public readonly Slot<Command> Output = new();

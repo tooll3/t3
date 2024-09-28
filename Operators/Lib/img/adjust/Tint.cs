@@ -1,7 +1,7 @@
 namespace Lib.img.adjust;
 
 [Guid("d9a71078-8296-4a07-b7de-250d4e2b95ac")]
-public class Tint : Instance<Tint>
+internal sealed class Tint : Instance<Tint>
 {
     [Output(Guid = "ce2fb7bd-6204-4b07-ab35-42bcb7aeaffe")]
     public readonly Slot<Texture2D> Output = new();

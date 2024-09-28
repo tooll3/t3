@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.floats;
 
 [Guid("50bf9e01-6912-4ab7-b233-660ce67bca25")]
-public class SmoothValues : Instance<SmoothValues>
+internal sealed class SmoothValues : Instance<SmoothValues>
 {
     [Output(Guid = "38FBB674-1EF9-47D0-BDEC-9E1E728F6D92")]
     public readonly Slot<List<float>> Result = new();

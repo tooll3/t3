@@ -1,7 +1,7 @@
 namespace Lib._3d.@_;
 
 [Guid("4f0506ac-6a72-4e35-96f0-0f331d8f6cca")]
-public class _VisLenseFxZone : Instance<_VisLenseFxZone>
+internal sealed class _VisLenseFxZone : Instance<_VisLenseFxZone>
 {
     [Output(Guid = "0b911435-15e6-417c-bc27-390310c8e7ad")]
     public readonly Slot<Command> Output = new();

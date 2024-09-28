@@ -5,7 +5,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib._3d.mesh.generate;
 
 [Guid("1b9977be-70cf-4dbd-8af1-1459596b6527")]
-public class NGonMesh : Instance<NGonMesh>
+internal sealed class NGonMesh : Instance<NGonMesh>
 {
     [Output(Guid = "9c949c29-9dc1-4ded-94ce-1e86317a5233")]
     public readonly Slot<MeshBuffers> Data = new();

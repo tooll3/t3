@@ -1,7 +1,7 @@
 namespace Lib._3d.mesh.modify;
 
 [Guid("6184ac2d-c17d-47de-a314-15e1c670f969")]
-public class SelectVertices : Instance<SelectVertices>, ITransformable
+internal sealed class SelectVertices : Instance<SelectVertices>, ITransformable
 {
 
     [Output(Guid = "b8cb2689-25bf-46c4-8454-77cb39a1f8cb")]

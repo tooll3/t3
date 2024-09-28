@@ -1,7 +1,7 @@
 namespace Lib.img.generate;
 
 [Guid("dc34c54b-f856-4fd2-a182-68fd75189d7d")]
-public class ShardNoise : Instance<ShardNoise>
+internal sealed class ShardNoise : Instance<ShardNoise>
 {
     [Output(Guid = "7aa58fd2-2bf4-41a3-8eea-269a082c93a8")]
     public readonly Slot<Texture2D> TextureOutput = new();

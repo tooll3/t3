@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.dx11.draw;
 
 [Guid("fd9bffd3-5c57-462f-8761-85f94c5a629b")]
-public class PickBlendMode : Instance<PickBlendMode>
+internal sealed class PickBlendMode : Instance<PickBlendMode>
 {
 
     [Output(Guid = "a42dd1c5-886c-4fa9-bf69-8b6321a48930")]

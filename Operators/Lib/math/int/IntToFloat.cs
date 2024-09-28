@@ -1,7 +1,7 @@
 namespace Lib.math.@int;
 
 [Guid("17db8a36-079d-4c83-8a2a-7ea4c1aa49e6")]
-public class IntToFloat : Instance<IntToFloat>
+internal sealed class IntToFloat : Instance<IntToFloat>
 {
     [Output(Guid = "DB1073A1-B9D8-4D52-BC5C-7AE8C0EE1AC3")]
     public readonly Slot<float> Result = new();

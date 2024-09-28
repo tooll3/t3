@@ -1,7 +1,7 @@
 namespace Lib.img.generate;
 
 [Guid("4f89b41b-1643-442b-bec8-9f9ef2173baa")]
-public class Raster : Instance<Raster>
+internal sealed class Raster : Instance<Raster>
 {
     [Output(Guid = "44a192a6-ece7-4501-81d6-d0cc1d50bb93")]
     public readonly Slot<Texture2D> TextureOutput = new();

@@ -1,7 +1,7 @@
 namespace Lib.point.modify;
 
 [Guid("86b61bcf-4eaa-4f77-a535-8a1dc876aada")]
-public class SetPointAttributes : Instance<SetPointAttributes>
+internal sealed class SetPointAttributes : Instance<SetPointAttributes>
 {
 
     [Output(Guid = "9bc53d1e-64bf-4373-9367-66ffa41447bd")]

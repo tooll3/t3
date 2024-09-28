@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.vec3;
 
 [Guid("fc201df2-8b05-4567-9f24-0d9128aa8507")]
-public class BlendVector3 : Instance<BlendVector3>
+internal sealed class BlendVector3 : Instance<BlendVector3>
 {
     [Output(Guid = "A24028C7-5611-4F86-9580-B8D9DDF2CA25")]
     public readonly Slot<Vector3> Result = new();

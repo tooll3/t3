@@ -1,7 +1,7 @@
 namespace Lib._3d.mesh.@_;
 
 [Guid("e0849edd-ea1b-4657-b22d-5aa646318aa8")]
-public class _AssembleMeshBuffers : Instance<_AssembleMeshBuffers>
+internal sealed class _AssembleMeshBuffers : Instance<_AssembleMeshBuffers>
 {
     [Output(Guid = "D71893DD-6CA2-4AB7-9E04-0BD7285ECCFB")]
     public readonly Slot<MeshBuffers> MeshBuffers = new();

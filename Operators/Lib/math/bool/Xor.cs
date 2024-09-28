@@ -1,7 +1,7 @@
 namespace Lib.math.@bool;
 
 [Guid("0d4f4e07-5cb2-4d80-bf8e-3deadf968724")]
-public class Xor : Instance<Xor>
+internal sealed class Xor : Instance<Xor>
 {
     [Output(Guid = "8b34d471-3688-4109-aad7-4e76811ed26e")]
     public readonly Slot<bool> Result = new();

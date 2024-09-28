@@ -1,7 +1,7 @@
 namespace Lib.img.generate;
 
 [Guid("5cf7a1e2-7369-4e74-a7a9-b0eae61bdc21")]
-public class WorleyNoise : Instance<WorleyNoise>
+internal sealed class WorleyNoise : Instance<WorleyNoise>
 {
     [Output(Guid = "59ca5836-cd4a-4c2d-b721-c392c332f798")]
     public readonly Slot<Texture2D> TextureOutput = new ();

@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("43f15919-f6c3-4a10-9092-00973fc8e821")]
-public class GlitchDisplace : Instance<GlitchDisplace>
+internal sealed class GlitchDisplace : Instance<GlitchDisplace>
 {
 
     [Output(Guid = "4808ce68-4785-4d25-a2e2-68f6c89ae577")]

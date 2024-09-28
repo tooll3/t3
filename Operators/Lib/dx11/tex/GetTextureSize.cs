@@ -1,7 +1,7 @@
 namespace Lib.dx11.tex;
 
 [Guid("daec568f-f7b4-4d81-a401-34d62462daab")]
-public class GetTextureSize : Instance<GetTextureSize>
+internal sealed class GetTextureSize : Instance<GetTextureSize>
 {
     [Output(Guid = "be16d5d3-4d21-4d5a-9e4c-c7b2779b6bdc")]
     public readonly Slot<Int2> Size = new();

@@ -1,7 +1,7 @@
 namespace Lib.img.adjust;
 
 [Guid("1192ae86-b174-4b58-9cc6-38afb666ce35")]
-public class DirectionalBlur : Instance<DirectionalBlur>
+internal sealed class DirectionalBlur : Instance<DirectionalBlur>
 {
     [Output(Guid = "c57e38ab-a802-498c-b0f7-cad86e6426a3")]
     public readonly Slot<Texture2D> TextureOutput = new();

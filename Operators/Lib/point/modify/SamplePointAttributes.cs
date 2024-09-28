@@ -1,7 +1,7 @@
 namespace Lib.point.modify;
 
 [Guid("b3de7a93-e921-4e43-8a56-6c84b2d18b74")]
-public class SamplePointAttributes : Instance<SamplePointAttributes>, ITransformable
+internal sealed class SamplePointAttributes : Instance<SamplePointAttributes>, ITransformable
 {
     [Output(Guid = "bdc65f4c-6eac-44bf-af39-6655605b8fae")]
     public readonly TransformCallbackSlot<BufferWithViews> OutBuffer = new();

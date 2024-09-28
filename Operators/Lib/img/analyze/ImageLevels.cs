@@ -1,7 +1,7 @@
 namespace Lib.img.analyze;
 
 [Guid("592a2b6f-d4e3-43e0-9e73-034cca3b3900")]
-public class ImageLevels : Instance<ImageLevels>
+internal sealed class ImageLevels : Instance<ImageLevels>
 {
     [Output(Guid = "ae9ebfa0-3528-489b-9c07-090f26dd6968")]
     public readonly Slot<Texture2D> Output = new();

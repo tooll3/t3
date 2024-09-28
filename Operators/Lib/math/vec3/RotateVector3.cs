@@ -1,7 +1,7 @@
 namespace Lib.math.vec3;
 
 [Guid("ce7c2103-3669-4c7a-ba61-a10428b9d467")]
-public class RotateVector3 : Instance<RotateVector3>
+internal sealed class RotateVector3 : Instance<RotateVector3>
 {
     [Output(Guid = "473ef336-d525-4d33-921b-d4cdaf11c73b")]
     public readonly Slot<Vector3> Result = new();

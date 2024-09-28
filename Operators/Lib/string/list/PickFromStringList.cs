@@ -1,7 +1,7 @@
 namespace Lib.@string.list;
 
 [Guid("ef357e66-24e9-4f54-8d86-869db74602f4")]
-public class PickFromStringList : Instance<PickFromStringList>
+internal sealed class PickFromStringList : Instance<PickFromStringList>
 {
     [Output(Guid = "467bb46e-3391-48a7-b0eb-f7fd9d77b60f")]
     public readonly Slot<string> Selected = new();

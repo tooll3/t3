@@ -1,7 +1,7 @@
 namespace Examples.user.still.worksforeverybody.scenes;
 
 [Guid("1cdedb32-f23b-4649-b4d3-9e158ef9be40")]
-public class TVIntroSceneSetup : Instance<TVIntroSceneSetup>
+internal sealed class TVIntroSceneSetup : Instance<TVIntroSceneSetup>
 {
     [Output(Guid = "087b8484-23cc-45e8-9290-3a98f07bd87a")]
     public readonly Slot<Texture2D> TextureOutput = new();

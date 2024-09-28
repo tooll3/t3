@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("8a203866-148d-4785-ae0e-61328b7646bb")]
-public class ChromaticAbberation : Instance<ChromaticAbberation>
+internal sealed class ChromaticAbberation : Instance<ChromaticAbberation>
 {
     [Output(Guid = "8af0d916-9708-422b-8fb7-39ef59c82d7f")]
     public readonly Slot<Texture2D> TextureOutput = new();

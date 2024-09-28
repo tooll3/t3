@@ -1,7 +1,7 @@
 namespace Lib._3d.gizmo;
 
 [Guid("cdf5dd6a-73dc-4779-a366-df19b69071a6")]
-public class DrawCamGizmos : Instance<DrawCamGizmos>
+internal sealed class DrawCamGizmos : Instance<DrawCamGizmos>
 {
     [Output(Guid = "6cee53fc-92df-4a9e-b519-da857bdf9419")]
     public readonly Slot<Command> Output = new();

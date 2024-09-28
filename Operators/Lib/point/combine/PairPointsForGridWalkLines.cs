@@ -1,7 +1,7 @@
 namespace Lib.point.combine;
 
 [Guid("ec8111b7-09d4-411e-9409-4e877d14371d")]
-public class PairPointsForGridWalkLines : Instance<PairPointsForGridWalkLines>
+internal sealed class PairPointsForGridWalkLines : Instance<PairPointsForGridWalkLines>
 {
 
     [Output(Guid = "066cbe56-b3f9-4b09-ba81-5cf1ee3d9206")]

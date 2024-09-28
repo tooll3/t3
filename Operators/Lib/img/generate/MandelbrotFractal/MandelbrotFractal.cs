@@ -1,7 +1,7 @@
 namespace Lib.img.generate.MandelbrotFractal;
 
 [Guid("27e58fae-2b3d-404e-b9cd-307cb6ad4906")]
-public class MandelbrotFractal : Instance<MandelbrotFractal>
+internal sealed class MandelbrotFractal : Instance<MandelbrotFractal>
 {
     [Output(Guid = "70703977-c5bb-4e41-9f8b-2e6e8903d434")]
     public readonly Slot<Texture2D> TextureOutput = new();

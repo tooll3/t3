@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("8bede700-4e3e-42d8-8097-9744abdb8ad3")]
-public class DistortAndShade : Instance<DistortAndShade>
+internal sealed class DistortAndShade : Instance<DistortAndShade>
 {
     [Output(Guid = "5a639fac-b8e1-495b-a82f-e4877133b06f")]
     public readonly Slot<Texture2D> Output = new();

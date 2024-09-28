@@ -1,7 +1,7 @@
 namespace Lib.point.particle;
 
 [Guid("e44ae9b6-cd56-4224-8a5d-118eda4cd3f4")]
-public class ParticleSystem : Instance<ParticleSystem>
+internal sealed class ParticleSystem : Instance<ParticleSystem>
 {
 
     [Output(Guid = "51b9c6bd-b7cc-48a4-979b-3febcac914c2")]

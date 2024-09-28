@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib.anim;
 
 [Guid("127e1eb9-aca9-4f8e-b0c9-b709c8a0745a")]
-public class FindKeyframes : Instance<FindKeyframes>, IStatusProvider
+internal sealed class FindKeyframes : Instance<FindKeyframes>, IStatusProvider
 {
     [Output(Guid = "58a74e28-3c7f-43f1-a1a7-ece11bb3a8f8")]
     public readonly Slot<float> Time = new();

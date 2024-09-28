@@ -5,7 +5,7 @@ using T3.Core.Utils;
 namespace Lib.io.midi;
 
 [Guid("01d33d21-d75e-4c22-bfe6-088e1ee4a5e8")]
-public class MidiPitchbendOutput : Instance<MidiPitchbendOutput>, MidiConnectionManager.IMidiConsumer, ICustomDropdownHolder,IStatusProvider
+internal sealed class MidiPitchbendOutput : Instance<MidiPitchbendOutput>, MidiConnectionManager.IMidiConsumer, ICustomDropdownHolder,IStatusProvider
 {
     [Output(Guid = "402D1D43-5EAB-46F0-88C9-2C978E4223E8")]
     public readonly Slot<Command> Result = new();

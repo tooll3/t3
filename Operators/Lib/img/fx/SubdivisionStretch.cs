@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("e34c88f6-815e-4ce1-a6a8-59e2c8101849")]
-public class SubdivisionStretch : Instance<SubdivisionStretch>
+internal sealed class SubdivisionStretch : Instance<SubdivisionStretch>
 {
     [Output(Guid = "d8ec6fe5-ee96-4eaa-ba1f-05c67cdf0f0b")]
     public readonly Slot<Texture2D> TextureOutput = new();

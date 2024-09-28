@@ -1,7 +1,7 @@
 namespace Lib.img.adjust;
 
 [Guid("a29cf1c8-d9cd-4a5d-b06c-597cbeb5b33d")]
-public class Crop : Instance<Crop>
+internal sealed class Crop : Instance<Crop>
 {
     [Output(Guid = "0f7a4421-97d7-48d0-8a99-a7cc84356be2")]
     public readonly Slot<Texture2D> Output = new();

@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib._3d.mesh.modify;
 
 [Guid("845371ef-a5c2-4ca2-8315-ea2b62f63ee2")]
-public class PickMeshBuffer : Instance<PickMeshBuffer>
+internal sealed class PickMeshBuffer : Instance<PickMeshBuffer>
 {
     [Output(Guid = "2F4733F8-ADF1-4A6D-B207-5EE2D566CAE3")]
     public readonly Slot<MeshBuffers> Output = new();

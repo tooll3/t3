@@ -1,7 +1,7 @@
 namespace Lib.img.generate;
 
 [Guid("f2a0a8d9-e2dc-476b-ac97-de13101a6fdb")]
-public class ZollnerPattern : Instance<ZollnerPattern>
+internal sealed class ZollnerPattern : Instance<ZollnerPattern>
 {
     [Output(Guid = "16393dfd-962c-4dbb-b698-c2099143d98c")]
     public readonly Slot<Texture2D> TextureOutput = new();

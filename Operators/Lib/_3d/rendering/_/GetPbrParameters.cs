@@ -3,7 +3,7 @@ using T3.Core.Rendering.Material;
 namespace Lib._3d.rendering.@_;
 
 [Guid("ca4fe8c4-cf61-4196-84e4-d69dc8869a25")]
-public class GetPbrParameters : Instance<GetPbrParameters>
+internal sealed class GetPbrParameters : Instance<GetPbrParameters>
 {
     [Output(Guid = "3D2EBD10-2670-46B7-8F1A-9475A81A516D", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Buffer> PbrParameterBuffer = new();

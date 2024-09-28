@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib._3d.mesh.generate;
 
 [Guid("a835ab86-29c1-438e-a7f7-2e297108bfd5")]
-public class TorusMesh : Instance<TorusMesh>
+internal sealed class TorusMesh : Instance<TorusMesh>
 {
     [Output(Guid = "f8f17f87-56f2-4411-b9bf-b9193b9aa90d")]
     public readonly Slot<MeshBuffers> Data = new();

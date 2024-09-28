@@ -1,7 +1,7 @@
 namespace Lib.point.particle.force;
 
 [Guid("4f5999c9-8ade-4e31-8379-afb7db56e170")]
-public class TextureMapForce : Instance<TextureMapForce>
+internal sealed class TextureMapForce : Instance<TextureMapForce>
 {
     [Output(Guid = "5142beac-9e32-47d3-a29b-e0e8dd189269")]
     public readonly Slot<T3.Core.DataTypes.ParticleSystem> Particles = new();

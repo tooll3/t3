@@ -3,7 +3,7 @@
 namespace Lib.anim;
 
 [Guid("8a6ab5ec-caa6-4baa-a9d1-2079af22685c")]
-public class OscillateVec3 : Instance<OscillateVec3>
+internal sealed class OscillateVec3 : Instance<OscillateVec3>
 {
     [Output(Guid = "525D6B20-9779-46FD-AD43-8D89E35BF405", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<Vector3> Result = new();

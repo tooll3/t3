@@ -1,7 +1,7 @@
 namespace Lib.math.@bool;
 
 [Guid("3f6a85be-a837-4681-9c2d-5c87e838f25a")]
-public class ToggleBoolean : Instance<ToggleBoolean>
+internal sealed class ToggleBoolean : Instance<ToggleBoolean>
 {
     [Output(Guid = "D6FDBE01-B25C-4E8A-A134-DADB192B1864")]
     public readonly Slot<bool> Result = new();

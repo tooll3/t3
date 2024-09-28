@@ -5,7 +5,7 @@ using T3.Core.Utils;
 namespace Lib.anim;
 
 [Guid("11882635-4757-4cac-a024-70bb4e8b504c")]
-public class Counter : Instance<Counter>
+public sealed class Counter : Instance<Counter>
 {
     [Output(Guid = "c53e3a03-3a6d-4547-abbf-7901b5045539", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<float> Result = new();

@@ -4,7 +4,7 @@ using NAudio.Midi;
 namespace Lib.io.midi;
 
 [Guid("a3ceb788-4055-4556-961b-63b7221f93e7")]
-public class MidiClip : Instance<MidiClip>
+internal sealed class MidiClip : Instance<MidiClip>
 {
     [Output(Guid = "04BFDF5C-7D05-469A-89BE-525F27186F69", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly TimeClipSlot<Dict<float>> Values = new();

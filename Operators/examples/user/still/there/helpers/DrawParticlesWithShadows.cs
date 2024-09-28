@@ -1,7 +1,7 @@
 namespace Examples.user.still.there.helpers;
 
 [Guid("b1ffe4dd-d734-4392-a644-7c587979066e")]
-public class DrawParticlesWithShadows : Instance<DrawParticlesWithShadows>
+internal sealed class DrawParticlesWithShadows : Instance<DrawParticlesWithShadows>
 {
     [Output(Guid = "09cbb463-d3bf-46d8-867f-3fe3dbc3a79b")]
     public readonly Slot<Command> Output = new();

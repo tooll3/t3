@@ -3,7 +3,7 @@ using T3.Core.Animation;
 namespace Lib.io.time.vj;
 
 [Guid("6ae8ebb8-3174-463d-9ffb-e14e12eb3029")]
-public class GetBpm : Instance<GetBpm>
+internal sealed class GetBpm : Instance<GetBpm>
 {
     [Output(Guid = "551EBFF2-2044-4F28-A6BA-2384A74C8919")]
     public readonly Slot<float> Result = new();

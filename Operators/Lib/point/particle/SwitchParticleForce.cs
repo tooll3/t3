@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.point.particle;
 
 [Guid("87f68a6d-e13d-49b7-ab0c-c24c0cefd453")]
-public class SwitchParticleForce : Instance<SwitchParticleForce>
+internal sealed class SwitchParticleForce : Instance<SwitchParticleForce>
 {
     [Output(Guid = "84B9A857-89B3-4B30-A5E7-152063088773")]
     public readonly Slot<T3.Core.DataTypes.ParticleSystem> Selected = new();

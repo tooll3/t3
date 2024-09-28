@@ -1,7 +1,7 @@
 namespace Lib._3d.@_;
 
 [Guid("4238439e-a6b4-4390-9984-e6ebf19c3a69")]
-public class ReprojectToUV : Instance<ReprojectToUV>
+internal sealed class ReprojectToUV : Instance<ReprojectToUV>
 {
     [Output(Guid = "7d2fc5fe-0e1c-4132-9322-e08b3638bf83")]
     public readonly Slot<Texture2D> TextureOutput = new();

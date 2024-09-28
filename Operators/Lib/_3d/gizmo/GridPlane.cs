@@ -1,7 +1,7 @@
 namespace Lib._3d.gizmo;
 
 [Guid("935e6597-3d9f-4a79-b4a6-600e8f28861e")]
-public class GridPlane : Instance<GridPlane>
+internal sealed class GridPlane : Instance<GridPlane>
 {
     [Output(Guid = "1eb82dc0-2e66-4c3c-a3e8-1b246886e59f")]
     public readonly Slot<Command> Output = new();

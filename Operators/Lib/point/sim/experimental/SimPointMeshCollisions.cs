@@ -1,7 +1,7 @@
 namespace Lib.point.sim.experimental;
 
 [Guid("281b69e8-01ee-4a62-a9ed-8508c5355c6c")]
-public class SimPointMeshCollisions : Instance<SimPointMeshCollisions>
+internal sealed class SimPointMeshCollisions : Instance<SimPointMeshCollisions>
 {
 
     [Output(Guid = "e6e49b7a-1510-47e8-a51a-7b684b4d1c1c")]

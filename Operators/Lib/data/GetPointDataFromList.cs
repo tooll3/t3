@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.data;
 
 [Guid("1de7b1be-cab6-4beb-a837-4c817562efb2")]
-public class GetPointDataFromList : Instance<GetPointDataFromList>
+internal sealed class GetPointDataFromList : Instance<GetPointDataFromList>
 {
     [Output(Guid = "84FDAB7B-E9DA-4A15-8EA6-D5E9593C924F")]
     public readonly Slot<Vector3> Position = new ();

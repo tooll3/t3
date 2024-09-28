@@ -1,7 +1,7 @@
 namespace Lib.point.transform;
 
 [Guid("3d255f3e-d2e2-4f61-a03d-5af7043fabfc")]
-public class PolarTransformPoints : Instance<PolarTransformPoints>
+internal sealed class PolarTransformPoints : Instance<PolarTransformPoints>
                                    ,ITransformable
 {
     [Output(Guid = "62a9bc7b-4678-409a-8e26-7f6377b72cb0")]

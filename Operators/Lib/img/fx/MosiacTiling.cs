@@ -1,7 +1,7 @@
 namespace Lib.img.fx;
 
 [Guid("c68fbb84-2f56-4aed-97ab-3c2df0ec700b")]
-public class MosiacTiling : Instance<MosiacTiling>
+internal sealed class MosiacTiling : Instance<MosiacTiling>
 {
     [Output(Guid = "0ce69c7f-29c9-461b-b593-402c4f9131e8")]
     public readonly Slot<Texture2D> TextureOutput = new();

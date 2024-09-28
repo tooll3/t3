@@ -1,7 +1,7 @@
 namespace Lib.dx11.buffer;
 
 [Guid("c30542d5-609c-452a-9168-78964a3a0927")]
-public class ParamConstBuffer : Instance<ParamConstBuffer>
+internal sealed class ParamConstBuffer : Instance<ParamConstBuffer>
 {
     [Output(Guid = "{89957A76-09F1-4448-B23E-39DFDD0AA5B0}", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Buffer> Buffer = new();

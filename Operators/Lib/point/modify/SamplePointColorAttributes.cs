@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.point.modify;
 
 [Guid("056ea55a-91a2-4b55-bcce-e44cc8602623")]
-public class SamplePointColorAttributes : Instance<SamplePointColorAttributes>
+internal sealed class SamplePointColorAttributes : Instance<SamplePointColorAttributes>
                                          ,ITransformable
 {
     [Output(Guid = "8a18f42d-6563-4731-bff0-d85210d3fbee")]

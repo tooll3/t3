@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.anim;
 
 [Guid("743e18c7-eed5-40df-9a86-7caa996d94a2")]
-public class KeepBoolean : Instance<KeepBoolean>
+internal sealed class KeepBoolean : Instance<KeepBoolean>
 {
     [Output(Guid = "7CE44DDD-369A-48EE-AC25-8D1A57D1021F")]
     public readonly Slot<bool> Result = new();

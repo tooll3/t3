@@ -1,7 +1,7 @@
 namespace Lib.img.use;
 
 [Guid("1d958538-98e7-4053-b1e2-3b9f1bc4faa9")]
-public class Combine3Images : Instance<Combine3Images>
+internal sealed class Combine3Images : Instance<Combine3Images>
 {
     [Output(Guid = "d45d6948-5482-4585-9c05-5d32f99b2558")]
     public readonly Slot<Texture2D> Output = new();

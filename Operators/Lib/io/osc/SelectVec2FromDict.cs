@@ -1,7 +1,7 @@
 namespace Lib.io.osc;
 
 [Guid("96b1e8f3-0b42-4a01-b82b-44ccbd857400")]
-public class SelectVec2FromDict : Instance<SelectVec2FromDict>, ICustomDropdownHolder
+public sealed class SelectVec2FromDict : Instance<SelectVec2FromDict>, ICustomDropdownHolder
 {
     [Output(Guid = "7FF4E818-695D-4FFF-AA23-544D623EADFE")]
     public readonly Slot<Vector2> Result = new();

@@ -1,7 +1,7 @@
 namespace Lib.math.@float;
 
 [Guid("97032147-ba0c-4454-b878-1048d8faea05")]
-public class InvertFloat : Instance<InvertFloat>
+internal sealed class InvertFloat : Instance<InvertFloat>
 {
     [Output(Guid = "b383231e-c952-4b0d-adf3-b97c61c02053")]
     public readonly Slot<float> Result = new();

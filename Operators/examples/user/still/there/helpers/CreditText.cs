@@ -1,7 +1,7 @@
 namespace Examples.user.still.there.helpers;
 
 [Guid("7b1093bb-33ec-4fa4-a102-9a28002b511c")]
-public class CreditText : Instance<CreditText>
+internal sealed class CreditText : Instance<CreditText>
 {
     private enum HorizontalAligns
     {

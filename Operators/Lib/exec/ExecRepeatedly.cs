@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.exec;
 
 [Guid("46420979-1e56-4de3-a6ca-0447be1b9813")]
-public class ExecRepeatedly : Instance<ExecRepeatedly>
+internal sealed class ExecRepeatedly : Instance<ExecRepeatedly>
 {
     [Output(Guid = "5008c453-89ae-456b-9468-917abcb0af2e")]
     public readonly Slot<Command> Output = new();

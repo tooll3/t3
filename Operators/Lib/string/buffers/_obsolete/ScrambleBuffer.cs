@@ -3,7 +3,7 @@ using SharpDX;
 namespace Lib.@string.buffers._obsolete;
 
 [Guid("bf76bc78-74e1-45c3-9c67-de50262a48ae")]
-public class ScrambleBuffer : Instance<ScrambleBuffer>
+internal sealed class ScrambleBuffer : Instance<ScrambleBuffer>
 {
     [Output(Guid = "f460db31-2603-4468-ac68-d1a3b93c41da", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<StringBuilder> Builder = new();

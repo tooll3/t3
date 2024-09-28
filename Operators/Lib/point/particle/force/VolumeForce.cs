@@ -1,7 +1,7 @@
 namespace Lib.point.particle.force;
 
 [Guid("fbe1a703-f372-4236-9f20-5d0b69183843")]
-public class VolumeForce : Instance<VolumeForce>
+internal sealed class VolumeForce : Instance<VolumeForce>
                           ,ITransformable
 {
     [Output(Guid = "13B7DBBC-D418-4BD5-A8A1-182DF2071A25")]

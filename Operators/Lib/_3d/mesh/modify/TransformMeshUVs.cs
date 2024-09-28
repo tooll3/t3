@@ -1,7 +1,7 @@
 namespace Lib._3d.mesh.modify;
 
 [Guid("208a86b5-55cc-460a-86e6-2b17da818494")]
-public class TransformMeshUVs : Instance<TransformMeshUVs>
+internal sealed class TransformMeshUVs : Instance<TransformMeshUVs>
 {
 
     [Output(Guid = "1030db1a-e5d0-4eac-9f3d-cc1e8d3867c7")]

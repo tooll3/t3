@@ -1,7 +1,7 @@
 namespace Lib.io.time.vj;
 
 [Guid("61dc8ba5-8aa6-4003-8d8c-8bce27f56a67")]
-public class SetSpeedFactors : Instance<SetSpeedFactors>
+internal sealed class SetSpeedFactors : Instance<SetSpeedFactors>
 {
     [Output(Guid = "8d7b0260-85d4-4c76-938f-4e027cc0e337")]
     public readonly Slot<Command> OutputCommand = new();

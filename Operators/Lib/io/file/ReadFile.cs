@@ -1,7 +1,7 @@
 namespace Lib.io.file;
 
 [Guid("5f71d2f8-98c8-4502-8f40-2ea4a1e18cca")]
-public class ReadFile : Instance<ReadFile>
+internal sealed class ReadFile : Instance<ReadFile>
 {
     [Output(Guid = "d792d3b4-b800-41f1-9d69-6ee55751ad37")]
     public readonly Slot<string> Result = new();

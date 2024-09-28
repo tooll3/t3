@@ -1,7 +1,7 @@
 namespace Lib._3d.mesh.modify;
 
 [Guid("79c01289-f3a9-4bea-8e95-a6b5f89b752d")]
-public class DisplaceMesh : Instance<DisplaceMesh>
+internal sealed class DisplaceMesh : Instance<DisplaceMesh>
 {
 
     [Output(Guid = "d2e47ad5-8830-4e55-97f0-302358b46358")]

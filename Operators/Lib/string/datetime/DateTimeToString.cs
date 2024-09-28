@@ -3,7 +3,7 @@ using System.Globalization;
 namespace Lib.@string.datetime;
 
 [Guid("c1c3725a-0745-4ce1-874b-839810c2124c")]
-public class DateTimeToString : Instance<DateTimeToString>
+internal sealed class DateTimeToString : Instance<DateTimeToString>
 {
     [Output(Guid = "75ad6b31-2460-47fb-aa75-019e50e0fd44")]
     public readonly Slot<string> Output = new();

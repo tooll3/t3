@@ -1,7 +1,7 @@
 namespace Examples.user.still.insomnia;
 
 [Guid("41dbfc2d-06e7-40b2-a2f3-720fb1d28ed8")]
-public class InsomniaLenseFlares : Instance<InsomniaLenseFlares>
+internal sealed class InsomniaLenseFlares : Instance<InsomniaLenseFlares>
 {
     [Output(Guid = "b0ff0358-97cc-4952-a231-6c50b4038d7c")]
     public readonly Slot<Command> Output = new();

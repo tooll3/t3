@@ -5,7 +5,7 @@ using Utilities = T3.Core.Utils.Utilities;
 namespace Lib.img.fx.@_;
 
 [Guid("b536f791-ae9a-45a7-a153-e2f36a65cfb3")]
-public class BuildAsciiFontSorting : Instance<BuildAsciiFontSorting>
+internal sealed class BuildAsciiFontSorting : Instance<BuildAsciiFontSorting>
 {
     [Output(Guid = "684a6260-5bc5-40e7-8610-b0aa24d9a23d")]
     public readonly Slot<Texture2D> MappingTexture = new();

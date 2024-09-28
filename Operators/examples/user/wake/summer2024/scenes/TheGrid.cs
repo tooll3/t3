@@ -1,7 +1,7 @@
 namespace Examples.user.wake.summer2024.scenes;
 
 [Guid("1bcfb192-cfd4-4ab3-a3f5-9405ec364f60")]
-public class TheGrid : Instance<TheGrid>
+ internal sealed class TheGrid : Instance<TheGrid>
 {
     [Output(Guid = "2f5d61ae-640c-4479-915a-8bf732233f01")]
     public readonly Slot<Command> Output = new Slot<Command>();

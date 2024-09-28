@@ -1,7 +1,7 @@
 namespace Lib.dx11.draw;
 
 [Guid("1f23db4a-871e-42a9-9255-49b956993eb1")]
-public class Viewport : Instance<Viewport>
+internal sealed class Viewport : Instance<Viewport>
 {
     [Output(Guid = "C543AF89-018E-4540-9F65-32CF6688CD42")]
     public readonly Slot<RawViewportF> Output = new();

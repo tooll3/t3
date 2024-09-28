@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.color;
 
 [Guid("b9999f07-da19-45b9-ae12-f9d0662c694c")]
-public class BlendGradients : Instance<BlendGradients>
+internal sealed class BlendGradients : Instance<BlendGradients>
 {
     [Output(Guid = "D457933E-6642-471E-807A-6C22008BBD0C")]
     public readonly Slot<Gradient> Result = new();

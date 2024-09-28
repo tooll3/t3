@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Types.Values;
 
 [Guid("9989f539-f86c-4508-83d7-3fc0e559f502")]
-public class Point : Instance<Point>, ITransformable
+public sealed class Point : Instance<Point>, ITransformable
 {
     [Output(Guid = "5915D7E2-054D-4917-86BD-25AD1BEB1754")]
     public readonly Slot<BufferWithViews> Buffer = new();

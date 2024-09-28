@@ -3,7 +3,7 @@ using PixelShaderD3D = T3.Core.DataTypes.PixelShader;
 namespace Types.Gfx;
 
 [Guid("9f784a4a-857f-41ad-afc1-0de08c1cfec6")]
-public class PixelShaderFromSource : Instance<PixelShaderFromSource>, IShaderCodeOperator<PixelShaderD3D>, IStatusProvider
+public sealed class PixelShaderFromSource : Instance<PixelShaderFromSource>, IShaderCodeOperator<PixelShaderD3D>, IStatusProvider
 {
     [Output(Guid = "C513F15D-3A7E-4501-B825-EF3E585293C7")]
     public readonly Slot<PixelShaderD3D> PixelShader = new();

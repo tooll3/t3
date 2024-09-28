@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.math.vec2;
 
 [Guid("fb801f10-8f84-4f69-9f7e-66cc7f6b7878")]
-public class DampVec2 : Instance<DampVec2>
+internal sealed class DampVec2 : Instance<DampVec2>
 {
     [Output(Guid = "A49381B7-F05B-48E6-9205-B10D81DF9671")]
     public readonly Slot<Vector2> Result = new();

@@ -1,7 +1,7 @@
 namespace Lib.color;
 
 [Guid("1677fd74-6e54-479a-b478-c2ac77288f9c")]
-public class HSBToColor : Instance<HSBToColor>
+internal sealed class HSBToColor : Instance<HSBToColor>
 {
     [Output(Guid = "A73DC8D3-ECC5-454A-999A-1C79442FF2E2")]
     public readonly Slot<Vector4> Color = new();

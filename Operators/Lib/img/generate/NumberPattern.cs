@@ -1,7 +1,7 @@
 namespace Lib.img.generate;
 
 [Guid("1fec51bc-4de7-400a-8910-db39f4129579")]
-public class NumberPattern : Instance<NumberPattern>
+internal sealed class NumberPattern : Instance<NumberPattern>
 {
     [Output(Guid = "569ef449-6919-4e6f-880e-6f26c6fd2a5e")]
     public readonly Slot<Texture2D> TextureOutput = new();

@@ -1,7 +1,7 @@
 namespace Examples.user._1x;
 
 [Guid("e21c202f-9b93-456d-aeba-7232d9600572")]
-public class HandsOn002BrickOcean : Instance<HandsOn002BrickOcean>
+ internal sealed class HandsOn002BrickOcean : Instance<HandsOn002BrickOcean>
 {
 
     [Output(Guid = "e0fb287e-3f8e-4387-9fca-09ff034a55c1")]

@@ -6,7 +6,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib._3d.rendering.@_;
 
 [Guid("5b538cf5-e3b6-4674-b23e-ab55fc59ada6")]
-public class GetCamProperties2 : Instance<GetCamProperties2>
+internal sealed class GetCamProperties2 : Instance<GetCamProperties2>
 {
     [Output(Guid = "013B08CB-AF63-4FAC-BA28-DE5D1F5A869C")]
     public readonly Slot<Vector3> Position = new();

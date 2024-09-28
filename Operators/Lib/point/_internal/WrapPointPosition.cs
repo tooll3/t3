@@ -1,7 +1,7 @@
 namespace Lib.point._internal;
 
 [Guid("0814a593-80ab-416f-a3ca-eef78b0a9c0c")]
-public class WrapPointPosition : Instance<WrapPointPosition>
+internal sealed class WrapPointPosition : Instance<WrapPointPosition>
 {
 
     [Output(Guid = "2889b8bf-5bb2-48f8-8fe0-02f95282c5f1")]

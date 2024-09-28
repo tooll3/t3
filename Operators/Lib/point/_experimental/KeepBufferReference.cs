@@ -1,7 +1,7 @@
 namespace Lib.point._experimental;
 
 [Guid("9cdcfa49-609d-4a64-ae97-8f98567075d1")]
-public class KeepBufferReference : Instance<KeepBufferReference>
+internal sealed class KeepBufferReference : Instance<KeepBufferReference>
 {
     [Output(Guid = "437C53CC-F949-4369-A2BE-F7C66557EEA7")]
     public readonly Slot<BufferWithViews> Result = new();

@@ -1,7 +1,7 @@
 namespace Lib.dx11.buffer;
 
 [Guid("38e88910-6063-41d1-840b-8aeeb0eeccc0")]
-public class ResolutionConstBuffer : Instance<ResolutionConstBuffer>
+internal sealed class ResolutionConstBuffer : Instance<ResolutionConstBuffer>
 {
     [Output(Guid = "{FE020A5C-91E1-441F-BE0D-AB5900D150EB}")]
     public readonly Slot<Buffer> Buffer = new();

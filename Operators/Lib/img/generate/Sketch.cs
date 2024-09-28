@@ -1,7 +1,7 @@
 namespace Lib.img.generate;
 
 [Guid("8e6ed99c-a3e0-42c0-9f81-a89b1e340757")]
-public class Sketch : Instance<Sketch>
+internal sealed class Sketch : Instance<Sketch>
 {
     [Output(Guid = "8cedd2ef-75a2-46d9-8a07-02491389a89f")]
     public readonly Slot<Texture2D> ColorBuffer = new();

@@ -4,7 +4,7 @@ using T3.Core.Utils;
 namespace Lib._3d.transform;
 
 [Guid("746d886c-5ab6-44b1-bb15-f3ce2fadf7e6")]
-public class Camera : Instance<Camera>, ICamera, ICameraPropertiesProvider
+internal sealed class Camera : Instance<Camera>, ICamera, ICameraPropertiesProvider
 {
     [Output(Guid = "2E1742D8-9BA3-4236-A0CD-A2B02C9F5924")]
     public readonly Slot<Command> Output = new();

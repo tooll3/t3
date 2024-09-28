@@ -1,7 +1,7 @@
 namespace Examples.user._1x.marsEpress;
 
 [Guid("92cdd8e1-5f31-4636-9ed3-f59a1e018586")]
-public class MarsFractalRepeat : Instance<MarsFractalRepeat>
+ internal sealed class MarsFractalRepeat : Instance<MarsFractalRepeat>
 {
     [Output(Guid = "786c3367-e7df-4811-a735-946e3b3d9ff3")]
     public readonly Slot<Command> Output = new();

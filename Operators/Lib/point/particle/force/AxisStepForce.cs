@@ -1,7 +1,7 @@
 namespace Lib.point.particle.force;
 
 [Guid("2cc44046-2702-40d5-ab42-8b36ff3d6ca7")]
-public class AxisStepForce : Instance<AxisStepForce>
+internal sealed class AxisStepForce : Instance<AxisStepForce>
 {
 
     [Output(Guid = "2b56d43b-1d92-4895-81f0-e30fdac5e6ef")]

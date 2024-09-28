@@ -1,7 +1,7 @@
 namespace Lib.dx11.@_;
 
 [Guid("bd0b9c5b-c611-42d0-8200-31af9661f189")]
-public class _ImageFxShaderSetupStatic : Instance<_ImageFxShaderSetupStatic>
+public sealed class _ImageFxShaderSetupStatic : Instance<_ImageFxShaderSetupStatic>
 {
     [Output(Guid = "d49f10dc-6617-4541-96d3-b58b0266b631")]
     public readonly Slot<Texture2D> TextureOutput = new();

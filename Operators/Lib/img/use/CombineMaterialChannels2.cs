@@ -1,7 +1,7 @@
 namespace Lib.img.use;
 
 [Guid("3d0ad320-1055-4f71-b3c0-0e77261ca587")]
-public class CombineMaterialChannels2 : Instance<CombineMaterialChannels2>
+internal sealed class CombineMaterialChannels2 : Instance<CombineMaterialChannels2>
 {
     [Output(Guid = "f80ea674-b8fe-497c-9628-b4a3653e2723")]
     public readonly Slot<Texture2D> Output = new();

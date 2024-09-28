@@ -3,7 +3,7 @@ using T3.Operators.Utils;
 namespace Lib.io.audio;
 
 [Guid("ecbafbeb-c14b-4507-953f-80bc6676d077")]
-public class _SetAudioAnalysis : Instance<_SetAudioAnalysis>
+internal sealed class _SetAudioAnalysis : Instance<_SetAudioAnalysis>
 {
     [Output(Guid = "4a483388-f54e-4403-8ab8-6b75cc9ba7bf")]
     public readonly Slot<Command> Output = new();

@@ -1,7 +1,7 @@
 namespace Lib.point.particle.force;
 
 [Guid("26bb382c-5e3d-49ae-b17e-5bd49b083d9a")]
-public class FollowMeshSurfaceForce : Instance<FollowMeshSurfaceForce>
+internal sealed class FollowMeshSurfaceForce : Instance<FollowMeshSurfaceForce>
 {
     [Output(Guid = "390a17cf-c8df-47c2-baa8-cd4f3aff658f")]
     public readonly Slot<T3.Core.DataTypes.ParticleSystem> Particles = new();
