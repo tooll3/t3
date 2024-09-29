@@ -240,6 +240,12 @@ public abstract partial class SymbolPackage : IResourcePackage
                 removedSymbolIds.Remove(guid);
 
                 symbol.UpdateTypeWithoutUpdatingDefinitionsOrInstances(type, this);
+                if (symbol == null)
+                {
+                    Log.Error($"Skipping update of invalid symbol {guid}.");
+                    return;
+                }
+                
                 updatedSymbols.Add(symbol);
             }
             else
