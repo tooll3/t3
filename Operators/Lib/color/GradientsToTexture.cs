@@ -88,10 +88,6 @@ internal sealed class GradientsToTexture : Instance<GradientsToTexture>
             }
             else
             {
-                    
-
-                    
-                    
                 for (var sampleIndex = 0; sampleIndex < sampleCount; sampleIndex++)
                 {
                     var f = sampleIndex / (sampleCount - 1f);
@@ -129,7 +125,7 @@ internal sealed class GradientsToTexture : Instance<GradientsToTexture>
     public readonly MultiInputSlot<Gradient> Gradients = new();
         
     [Input(Guid = "1F1838E4-8502-4AC4-A8DF-DCB4CAE57DA4")]
-    public readonly MultiInputSlot<int> Resolution = new();
+    public readonly InputSlot<int> Resolution = new();
         
     [Input(Guid = "65B83219-4E3F-4A3E-A35B-705E8658CC7B", MappedType = typeof(Directions))]
     public readonly InputSlot<int> Direction = new();

@@ -67,7 +67,7 @@ internal sealed class AdvancedFeedback2 : Instance<AdvancedFeedback2>
     public readonly InputSlot<float> TwirlNoiseSpeed = new();
 
     [Input(Guid = "3c93af8c-5658-4466-8301-95799b650e2b")]
-    public readonly MultiInputSlot<float> AddBlurred = new();
+    public readonly InputSlot<float> AddBlurred = new();
 
     [Input(Guid = "e294f6ac-04c4-489b-8d26-615c8971ce11")]
     public readonly InputSlot<bool> IsEnabled = new();

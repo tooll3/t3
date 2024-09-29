@@ -35,7 +35,7 @@ internal sealed class RandomizePoints : Instance<RandomizePoints>
     public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
 
     [Input(Guid = "362FCD1A-444A-417B-B49F-EE1BABAEE998")]
-    public readonly MultiInputSlot<float> UseSelection = new MultiInputSlot<float>();
+    public readonly InputSlot<float> UseSelection = new InputSlot<float>();
 
     [Input(Guid = "9b4cc2f7-97f0-4b70-9773-d33ab4b893d1", MappedType = typeof(OffsetModes))]
     public readonly InputSlot<int> OffsetMode = new InputSlot<int>();

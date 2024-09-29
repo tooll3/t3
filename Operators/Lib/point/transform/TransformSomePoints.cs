@@ -65,7 +65,7 @@ internal sealed class TransformSomePoints : Instance<TransformSomePoints>
     public readonly InputSlot<float> Scatter = new();
 
     [Input(Guid = "4313cb43-3b76-4a48-a052-79a3a26bfe79")]
-    public readonly MultiInputSlot<bool> OnlyKeepTake = new();
+    public readonly InputSlot<bool> OnlyKeepTake = new();
 
     [Input(Guid = "85856e10-0998-4fc3-aa0d-d715c3da9b2a")]
     public readonly InputSlot<float> TestParam = new();

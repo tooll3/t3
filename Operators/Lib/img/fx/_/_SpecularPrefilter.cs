@@ -432,9 +432,9 @@ internal sealed class _SpecularPrefilter : Instance<_SpecularPrefilter>
     public readonly MultiInputSlot<SamplerState> SamplerStates = new();
 
     [Input(Guid = "9D792412-D1F0-45F9-ABD6-4EAB79719924")]
-    public readonly MultiInputSlot<bool> UpdateLive = new();
+    public readonly InputSlot<bool> UpdateLive = new();
         
     [Input(Guid = "663BE4F2-AE53-4A4F-A825-D4D8A30161AD")]
-    public readonly MultiInputSlot<float> QualityFactor = new();
+    public readonly InputSlot<float> QualityFactor = new();
 
 }
