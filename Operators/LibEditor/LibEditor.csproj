@@ -42,7 +42,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup Label="OperatorPackages">
-    <Operators Include="lib" Version="1.0.0" ResourcesOnly="False" />
+    <Operators Include="Lib" Version="1.0.0" ResourcesOnly="False" />
     <Operators Include="Types" Version="1.0.0" ResourcesOnly="False" />
   </ItemGroup>
   <Target Name="CreatePackageInfo" AfterTargets="AfterBuild">
