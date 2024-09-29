@@ -18,7 +18,9 @@
     
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.9.1"/>
-        <PackageReference Include="SharpDX.Desktop" Version="4.2.0" />
+        <PackageReference Include="SharpDX.Desktop" Version="4.2.0" >
+            <NoWarn>NU1701</NoWarn>
+        </PackageReference>
     </ItemGroup>
 
     <!--This copies all files in the `dependencies` folder *directly* into the output directory-->

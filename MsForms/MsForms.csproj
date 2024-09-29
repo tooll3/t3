@@ -12,11 +12,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Windows.Forms" Version="4.0.0"/>
+        <PackageReference Include="System.Windows.Forms" Version="4.0.0">
+            <NoWarn>NU1701</NoWarn>
+        </PackageReference>
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\SystemUi\SystemUi.csproj" Private="false" PrivateAssets="all"/>
-      <ProjectReference Include="..\Logging\Logging.csproj" Private="false" PrivateAssets="all"/>
+        <ProjectReference Include="..\SystemUi\SystemUi.csproj" Private="false" PrivateAssets="all" />
+        <ProjectReference Include="..\Logging\Logging.csproj" Private="false" PrivateAssets="all" />
     </ItemGroup>
 
 </Project>

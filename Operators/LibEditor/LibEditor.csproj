@@ -18,7 +18,8 @@
     <ProjectReference Include="..\..\Editor\Editor.csproj" Private="false" PrivateAssets="all" />
     <ProjectReference Include="..\..\SystemUi\SystemUi.csproj" />
     <ProjectReference Include="..\lib\Lib.csproj" Private="false" PrivateAssets="all" />
-    <ProjectReference Include="..\TypeOperators\TypeOperators.csproj" Private="false" PrivateAssets="all" />
+    <ProjectReference Include="..\TypeOperators\TypeOperators.csproj" Private="false"
+      PrivateAssets="all" />
     <ProjectReference Include="..\..\Logging\Logging.csproj" Private="false" PrivateAssets="all" />
   </ItemGroup>
   <!-- Include Resources/** into output/Resources -->
@@ -49,29 +50,30 @@
     <ItemGroup Label="Define json structure of referenced operator packages">
       <OpPacks Include="@(Operators)">
         <OpPackageInfoJson>
-                    {
-                    "Identity": "%(Identity)",
-                    "Version": "%(Version)",
-                    "ResourcesOnly": "%(ResourcesOnly)"
-                    }
-                </OpPackageInfoJson>
+          {
+          "Identity": "%(Identity)",
+          "Version": "%(Version)",
+          "ResourcesOnly": "%(ResourcesOnly)"
+          }
+        </OpPackageInfoJson>
       </OpPacks>
     </ItemGroup>
     <PropertyGroup>
       <OperatorReferenceArray>@(OpPacks -> '%(OpPackageInfoJson)', ',')</OperatorReferenceArray>
       <OperatorPackageInfoJson>{
-                "AssemblyFileName": "$(AssemblyName)",
-                "HomeGuid": "$(HomeGuid)",
-                "RootNamespace": "$(RootNamespace)",
-                "Version": "$(VersionPrefix)",
-                "EditorVersion": "$(EditorVersion)",
-                "IsEditorOnly": "$(IsEditorOnly)",
-                "OperatorPackages":
-                [$(OperatorReferenceArray)
-                ]
-                }
-            </OperatorPackageInfoJson>
+        "AssemblyFileName": "$(AssemblyName)",
+        "HomeGuid": "$(HomeGuid)",
+        "RootNamespace": "$(RootNamespace)",
+        "Version": "$(VersionPrefix)",
+        "EditorVersion": "$(EditorVersion)",
+        "IsEditorOnly": "$(IsEditorOnly)",
+        "OperatorPackages":
+        [$(OperatorReferenceArray)
+        ]
+        }
+      </OperatorPackageInfoJson>
     </PropertyGroup>
-    <WriteLinesToFile File="$(OutputPath)/OperatorPackage.json" Lines="$(OperatorPackageInfoJson)" Overwrite="True" Encoding="UTF-8" />
+    <WriteLinesToFile File="$(OutputPath)/OperatorPackage.json" Lines="$(OperatorPackageInfoJson)"
+      Overwrite="True" Encoding="UTF-8" />
   </Target>
 </Project>

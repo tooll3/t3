@@ -21,7 +21,9 @@
         <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="8.0.0" />
         <PackageReference Include="NAudio.Midi" Version="2.2.1" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="Rug.Osc" Version="1.2.5" />
+        <PackageReference Include="Rug.Osc" Version="1.2.5">
+            <NoWarn>NU1701</NoWarn>
+        </PackageReference>
         <PackageReference Include="SharpDX.D3DCompiler" Version="4.2.0" />
         <PackageReference Include="SharpDX.Direct2D1" Version="4.2.0" />
         <PackageReference Include="SharpDX.Direct3D11" Version="4.2.0" />
