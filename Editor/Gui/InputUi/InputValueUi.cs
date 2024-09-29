@@ -776,7 +776,12 @@ internal static class InputArea
         if (!InputsAndOutputs.AddInputToSymbol(input.Name, input.IsMultiInput, input.DefaultValue.ValueType, composition.Symbol))
             return;
 
-        var updatedComposition = selection.GetSelectedComposition()!;
+        var updatedComposition = selection.GetSelectedComposition();
+        if (updatedComposition == null)
+        {
+            Log.Error("Can't find composition to publish input to");
+            return;            
+        }
 
         var newInputDefinition = updatedComposition.Symbol.InputDefinitions.SingleOrDefault(i => i.Name == input.Name);
         if (newInputDefinition == null)
