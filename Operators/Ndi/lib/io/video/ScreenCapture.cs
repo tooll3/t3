@@ -100,7 +100,7 @@ public sealed class ScreenCapture : Instance<ScreenCapture>
     }
 
     #region IDisposable Support
-    public new void Dispose()
+    public void Dispose()
     {
         Utilities.Dispose(ref currentScreen);
         Utilities.Dispose(ref dup);

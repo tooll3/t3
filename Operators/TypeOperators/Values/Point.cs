@@ -27,10 +27,10 @@ public sealed class Point : Instance<Point>, ITransformable
     }
         
     IInputSlot ITransformable.TranslationInput => Position;
-    IInputSlot ITransformable.RotationInput => null;
-    IInputSlot ITransformable.ScaleInput => null;
+    IInputSlot? ITransformable.RotationInput => null;
+    IInputSlot? ITransformable.ScaleInput => null;
 
-    public Action<Instance, EvaluationContext> TransformCallback { get; set; }
+    public Action<Instance, EvaluationContext>? TransformCallback { get; set; }
 
     private void UpdateWithBuffer(EvaluationContext context)
     {
@@ -94,7 +94,7 @@ public sealed class Point : Instance<Point>, ITransformable
     private readonly StructuredList<T3.Core.DataTypes.Point> _pointListWithSeparator = new(2);
     private readonly StructuredList<T3.Core.DataTypes.Point> _pointList = new(1);
         
-    private Buffer _buffer;
+    private Buffer? _buffer;
     private readonly BufferWithViews _bufferWithViews = new() ;
     private bool _addSeparator;
         

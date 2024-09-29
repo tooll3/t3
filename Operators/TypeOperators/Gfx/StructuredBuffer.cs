@@ -4,7 +4,7 @@ namespace Types.Gfx;
 public sealed class StructuredBuffer : Instance<StructuredBuffer>
 {
     [Output(Guid = "C10E66C8-C887-4A82-B557-642990581767")]
-    public readonly Slot<Buffer> Buffer = new();
+    public readonly Slot<Buffer?> Buffer = new();
 
     public StructuredBuffer()
     {
@@ -18,7 +18,7 @@ public sealed class StructuredBuffer : Instance<StructuredBuffer>
 
         if (sizeInBytes <= 0)
             return;
-
+        
         ResourceManager.SetupStructuredBuffer(sizeInBytes, stride, ref Buffer.Value);
     }
 

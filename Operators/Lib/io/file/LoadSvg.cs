@@ -137,7 +137,7 @@ internal sealed class LoadSvg : Instance<LoadSvg>
         return Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), (float)(Math.Atan2(p1.X - p2.X, -(p1.Y - p2.Y)) + Math.PI / 2));
     }
 
-    private List<GraphicsPathEntry> ConvertAllNodesIntoGraphicPaths(IEnumerable<SvgElement> nodes, bool importAsLines)
+    private static List<GraphicsPathEntry> ConvertAllNodesIntoGraphicPaths(IEnumerable<SvgElement> nodes, bool importAsLines)
     {
         var paths = new List<GraphicsPathEntry>();
 
@@ -145,7 +145,7 @@ internal sealed class LoadSvg : Instance<LoadSvg>
 
         foreach (var node in nodes)
         {
-            GraphicsPath newPath = null;
+            GraphicsPath? newPath = null;
             switch (node)
             {
                 case SvgPath svgPath:
@@ -242,11 +242,12 @@ internal sealed class LoadSvg : Instance<LoadSvg>
     [Input(Guid = "2BB64740-ED2F-4295-923D-D585D70197E7")]
     public readonly InputSlot<float> ReduceFactor = new();
 
+    [SuppressMessage("ReSharper", "UnusedMember.Local")]
     private enum ImportModes
     {
         Lines,
         Points,
     }
 
-    private static ISvgRenderer _svgRenderer;
+    private static ISvgRenderer? _svgRenderer;
 }

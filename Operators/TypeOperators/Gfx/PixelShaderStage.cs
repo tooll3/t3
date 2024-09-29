@@ -44,8 +44,11 @@ public sealed class PixelShaderStage : Instance<PixelShaderStage>
         var psStage = deviceContext.PixelShader;
 
         psStage.Set(_prevPixelShader);
-        psStage.SetConstantBuffers(0, _prevConstantBuffers.Length, _prevConstantBuffers);
-        psStage.SetShaderResources(0, _prevShaderResourceViews.Length, _prevShaderResourceViews);
+        if (_prevConstantBuffers != null)
+            psStage.SetConstantBuffers(0, _prevConstantBuffers.Length, _prevConstantBuffers);
+        
+        if (_prevShaderResourceViews != null)
+            psStage.SetShaderResources(0, _prevShaderResourceViews.Length, _prevShaderResourceViews);
         psStage.SetSamplers(0, _prevSamplerStates.Length, _prevSamplerStates);
     }
 
@@ -53,9 +56,9 @@ public sealed class PixelShaderStage : Instance<PixelShaderStage>
     private ShaderResourceView[] _shaderResourceViews = new ShaderResourceView[0];
     private SharpDX.Direct3D11.SamplerState[] _samplerStates = new SharpDX.Direct3D11.SamplerState[0];
 
-    private SharpDX.Direct3D11.PixelShader _prevPixelShader;
-    private Buffer[] _prevConstantBuffers;
-    private ShaderResourceView[] _prevShaderResourceViews;
+    private SharpDX.Direct3D11.PixelShader? _prevPixelShader;
+    private Buffer[]? _prevConstantBuffers;
+    private ShaderResourceView[]? _prevShaderResourceViews;
     private SharpDX.Direct3D11.SamplerState[] _prevSamplerStates = new SharpDX.Direct3D11.SamplerState[0];
 
     [Input(Guid = "C4E91BC6-1691-4EB4-AED5-DD4CAE528149")]

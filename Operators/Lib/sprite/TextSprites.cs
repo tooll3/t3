@@ -1,3 +1,4 @@
+#nullable enable
 using Lib.Utils;
 using T3.Core.Utils;
 
@@ -27,7 +28,7 @@ internal sealed class TextSprites : Instance<TextSprites>
         PointBuffer.UpdateAction += Update;
     }
 
-    private bool TryGenerateFont(FileResource file, BmFontDescription? currentValue, out BmFontDescription? newValue, out string? failureReason)
+    private bool TryGenerateFont(FileResource file, BmFontDescription? currentValue, [NotNullWhen(true)]out BmFontDescription? newValue, [NotNullWhen(false)]out string? failureReason)
     {
         var absolutePath = file.AbsolutePath;
         if (BmFontDescription.TryInitializeFromFile(absolutePath, out var potentialValue))
@@ -37,7 +38,7 @@ internal sealed class TextSprites : Instance<TextSprites>
             if (TryUpdateTexture(imageFilePath))
             {
                 newValue = potentialValue;
-                failureReason = null;
+                failureReason = string.Empty;
                 return true;
             }
 
@@ -66,7 +67,7 @@ internal sealed class TextSprites : Instance<TextSprites>
         {
             _texture.Dispose();
             _texture = null;
-            Texture.Value = null;
+            Texture.Value = null!;
         }
             
         _texture = ResourceManager.CreateTextureResource(imageFilePath, this);
@@ -75,8 +76,11 @@ internal sealed class TextSprites : Instance<TextSprites>
         if (success)
         {
             var tex = _texture.Value;
-            tex.Name = imageFilePath;
-            UpdateTexture(tex);
+            if (tex != null)
+            {
+                tex.Name = imageFilePath;
+                UpdateTexture(tex);
+            }
         }
             
         Texture.DirtyFlag.Clear();
@@ -203,10 +207,7 @@ internal sealed class TextSprites : Instance<TextSprites>
                                    );
             pivot *= scaleFactor;
 
-            var isVisible = charInfo.Width != 0 || charInfo.Height != 0;
-            //if (isVisible)
-            {
-                _sprites.Add(
+            _sprites.Add(
                              new Sprite
                                  {
                                      Width = charInfo.Width * scaleFactor,
@@ -221,18 +222,17 @@ internal sealed class TextSprites : Instance<TextSprites>
                                      Extra = 0
                                  });
 
-                _points.Add(new Point
-                                {
-                                    Position = center,
-                                    W = 1,
-                                    Orientation = Quaternion.Identity,
-                                    Selected = 1,
-                                    Stretch = Vector3.One,
-                                    Color = Vector4.One,
-                                });
-                outputIndex++;
-                currentLineCharacterCount++;
-            }
+            _points.Add(new Point
+                            {
+                                Position = center,
+                                W = 1,
+                                Orientation = Quaternion.Identity,
+                                Selected = 1,
+                                Stretch = Vector3.One,
+                                Color = Vector4.One,
+                            });
+            outputIndex++;
+            currentLineCharacterCount++;
 
             cursorX += charInfo.XAdvance;
             cursorX += characterSpacing;

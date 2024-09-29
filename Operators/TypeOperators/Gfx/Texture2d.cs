@@ -6,7 +6,6 @@ public sealed class Texture2d : Instance<Texture2d>
     [Output(Guid = "{007129E4-0EAE-4CB9-A142-90C1C171A5FB}")]
     public readonly Slot<Texture2D> Texture = new();
 
-    private Texture2D _texture2dResource;
 
     public Texture2d()
     {
@@ -79,6 +78,9 @@ public sealed class Texture2d : Instance<Texture2d>
             return false;
         }
     }
+    
+    private Texture2D? _texture2dResource;
+
 
     [Input(Guid = "{B77088A9-2676-4CAA-809A-5E0F120D25D7}")]
     public readonly InputSlot<Int2> Size = new();

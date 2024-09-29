@@ -426,7 +426,7 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
     }
 
     // TODO: clarify if this is called.
-    public new void Dispose()
+    public void Dispose()
     {
         Dispose(true);
 

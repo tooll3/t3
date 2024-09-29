@@ -38,7 +38,7 @@ public sealed class SamplerState : Instance<SamplerState>
         }
         catch (SharpDXException e)
         {
-            Log.Error($"{Parent.Symbol.Name}.SamplerStateOp: Invalid sampler state " + e.Message);
+            Log.Error($"{Parent?.Symbol.Name}.SamplerStateOp: Invalid sampler state " + e.Message);
             if (Value.Value == null)
             {
                 // there was no previous valid sampler state, so set default sampler state

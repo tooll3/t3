@@ -1,3 +1,4 @@
+#nullable enable
 using T3.Core.Rendering;
 using T3.Core.Utils;
 
@@ -9,7 +10,7 @@ namespace Lib._3d.mesh.generate;
 internal sealed class LoadObj : Instance<LoadObj>, IDescriptiveFilename, IStatusProvider
 {
     [Output(Guid = "1F4E7CAC-1F62-4633-B0F3-A3017A026753")]
-    public readonly Slot<MeshBuffers> Data = new();
+    public readonly Slot<MeshBuffers?> Data = new();
 
     public LoadObj()
     {
@@ -18,7 +19,7 @@ internal sealed class LoadObj : Instance<LoadObj>, IDescriptiveFilename, IStatus
         Data.UpdateAction += Update;
     }
 
-    private bool TryCreateResource(FileResource file, MeshDataSet? currentValue, out MeshDataSet? newValue, out string? failureReason)
+    private bool TryCreateResource(FileResource file,  MeshDataSet? currentValue, [NotNullWhen(true)] out MeshDataSet? newValue, [NotNullWhen(false)]out string? failureReason)
     {
         var absolutePath = file.AbsolutePath;
         if (_useGpuCaching)
@@ -82,8 +83,8 @@ internal sealed class LoadObj : Instance<LoadObj>, IDescriptiveFilename, IStatus
             _resource.MarkFileAsChanged();
         }
 
-        _warningMessage = null;
-            
+        _warningMessage = string.Empty;
+
         Data.Value = _resource.GetValue(context)?.DataBuffers;
     }
 
@@ -126,7 +127,7 @@ internal sealed class LoadObj : Instance<LoadObj>, IDescriptiveFilename, IStatus
                                                         };
                 }
 
-                Buffer vertexBuffer = null;
+                Buffer? vertexBuffer = null;
 
                 ResourceManager.SetupStructuredBuffer(vertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride,
                                                       ref vertexBuffer);
@@ -150,7 +151,7 @@ internal sealed class LoadObj : Instance<LoadObj>, IDescriptiveFilename, IStatus
                                    reversedLookup[v3Index]);
                 }
 
-                Buffer indexBuffer = null;
+                Buffer? indexBuffer = null;
                 const int stride = 3 * 4;
                 ResourceManager.SetupStructuredBuffer(indexBufferData, stride * faceCount, stride, ref indexBuffer);
                 ResourceManager.CreateStructuredBufferSrv(indexBuffer, ref indexBufferWithViews.Srv);
@@ -187,7 +188,7 @@ internal sealed class LoadObj : Instance<LoadObj>, IDescriptiveFilename, IStatus
         return _warningMessage;
     }
 
-    private string _warningMessage;
+    private string _warningMessage = string.Empty;
         
         
     private static readonly Dictionary<string, MeshDataSet> _meshBufferCache = new();
@@ -208,6 +209,6 @@ internal sealed class LoadObj : Instance<LoadObj>, IDescriptiveFilename, IStatus
     public readonly InputSlot<float> ScaleFactor = new();
 
     private readonly Resource<MeshDataSet> _resource;
-    public IEnumerable<string> FileFilter => FileFilters;
-    private static readonly string[] FileFilters = ["*.obj"];
+    public IEnumerable<string> FileFilter => _fileFilters;
+    private static readonly string[] _fileFilters = ["*.obj"];
 }

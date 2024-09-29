@@ -12,7 +12,7 @@ namespace T3.Editor.Gui.Styling;
 /// </summary>
 /// <remarks>
 /// Sadly, the implementation of this component is a single horrible hack.
-/// It's probably the single most ugly peace of ImGui code in the whole codebase.
+/// It's probably the single most ugly piece of ImGui code in the whole codebase.
 /// also see:
 /// https://github.com/ocornut/imgui/issues/718
 /// https://github.com/ocornut/imgui/issues/3725
@@ -26,7 +26,7 @@ public static class InputWithTypeAheadSearch
         
     public static bool Draw<T>(Args<T> args, ref string filter, out T selected, bool outlineOnly=false)
     {
-        var inputId = ImGui.GetID(args.Label);
+        var inputId = ImGui.GetID(args.Label); 
         var isSearchResultWindowOpen = inputId == _activeInputId;
 
         if (isSearchResultWindowOpen)

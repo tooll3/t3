@@ -15,7 +15,7 @@ public sealed class PixelShader : Instance<PixelShader>, IDescriptiveFilename, I
     {
         ShaderOperatorImpl.Initialize();
     }
-    public void OnShaderUpdate(EvaluationContext context, PixelShaderT3 shader)
+    public void OnShaderUpdate(EvaluationContext context, PixelShaderT3? shader)
     {
     }
 
@@ -30,8 +30,8 @@ public sealed class PixelShader : Instance<PixelShader>, IDescriptiveFilename, I
     [Input(Guid = "BE9B3DC1-7122-4B3D-B936-CCCF2581B69E")]
     public readonly InputSlot<string> DebugName = new();
 
-    public IEnumerable<string> FileFilter => FileFilters;
-    private static readonly string[] FileFilters = ["*.frag", "*.frag.hlsl", ResourceManager.DefaultShaderFilter];
+    public IEnumerable<string> FileFilter => _fileFilters;
+    private static readonly string[] _fileFilters = ["*.frag", "*.frag.hlsl", ResourceManager.DefaultShaderFilter];
 
     #region IShaderOperator implementation
     private IShaderOperator<PixelShaderT3> ShaderOperatorImpl => this;
@@ -39,7 +39,7 @@ public sealed class PixelShader : Instance<PixelShader>, IDescriptiveFilename, I
     InputSlot<string> IShaderOperator<PixelShaderT3>.EntryPoint => EntryPoint;
     InputSlot<string> IShaderOperator<PixelShaderT3>.DebugName => DebugName;
     Slot<PixelShaderT3> IShaderOperator<PixelShaderT3>.ShaderSlot => Shader;
-    string IShaderOperator<PixelShaderT3>.CachedEntryPoint { get; set; }
+    string? IShaderOperator<PixelShaderT3>.CachedEntryPoint { get; set; }
     #endregion
         
     #region IStatusProvider implementation

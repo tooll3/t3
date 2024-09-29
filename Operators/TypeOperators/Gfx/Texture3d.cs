@@ -8,7 +8,6 @@ public sealed class Texture3d : Instance<Texture3d>
     [Output(Guid = "3cbfceaa-4fa1-44e9-8c43-aff7dba7f871")]
     public readonly Slot<Texture3dWithViews> OutputTexture = new(new Texture3dWithViews());
 
-    private Texture3D _texture3d;
         
     public Texture3d()
     {
@@ -77,6 +76,9 @@ public sealed class Texture3d : Instance<Texture3d>
         // unchanged
         return false;
     }
+    
+    private Texture3D? _texture3d;
+
 
     [Input(Guid = "dca953d6-bdc1-42eb-9a4d-5974c42cf45b")]
     public readonly InputSlot<Int3> Size = new();

@@ -1,5 +1,5 @@
+#nullable enable
 using SharpDX.Direct3D11;
-using SharpDX.DXGI;
 using SharpDX.WIC;
 using SharpGLTF.Schema2;
 using T3.Core.Rendering;
@@ -34,7 +34,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
 
     private void Update(EvaluationContext context)
     {
-        _lastErrorMessage = null;
+        _lastErrorMessage = string.Empty;
 
         var materialNeedsUpdate = OffsetRoughness.DirtyFlag.IsDirty || OffsetMetallic.DirtyFlag.IsDirty;
 
@@ -66,8 +66,10 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         if (LoadFileIfRequired(filePath, out var newSetup))
         {
             ResultSetup.Value?.Dispose();
-            Setup.SetTypedInputValue(newSetup); //TODO: this is weird. 
-            ResultSetup.Value = newSetup;
+            
+            // TODO: Need to clarify of null reference types are allowed for slot values
+            Setup.SetTypedInputValue(newSetup!); //TODO: this is weird. 
+            ResultSetup.Value = newSetup!;
         }
 
         if (ResultSetup?.Value?.Dispatches != null && ResultSetup.Value.Dispatches.Count > 0)
@@ -102,7 +104,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         Log.Debug("Destroying LoadGltfScene");
     }
 
-    private bool LoadFileIfRequired(string path, out SceneSetup sceneSetup)
+    private bool LoadFileIfRequired(string path, out SceneSetup? sceneSetup)
     {
         sceneSetup = null;
 
@@ -203,13 +205,13 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         ParseChildrenIntoChunks(modelDefaultScene.VisualChildren, rootNode, ref counters, ref meshDataSet, ref meshBufferReference);
 
         // Create actual mesh buffers
-        var faceCount = meshDataSet.IndexBufferData.Length;
+        var faceCount = meshDataSet.IndexBufferData!.Length;
         var indexBufferData = meshDataSet.IndexBufferData;
         
-        var verticesCount = meshDataSet.VertexBufferData.Length;
+        var verticesCount = meshDataSet.VertexBufferData!.Length;
         var vertexBufferData = meshDataSet.VertexBufferData;
         
-        var chunkCount = meshDataSet.ChunksDefs.Count;
+        var chunkCount = meshDataSet.ChunksDefs!.Count;
         var chunkBufferData = meshDataSet.ChunksDefs.ToArray();
         
         ResourceManager.SetupStructuredBuffer(indexBufferData, 3 * 4 * faceCount, 3 * 4, ref meshBufferReference.IndicesBuffer.Buffer);
@@ -236,11 +238,11 @@ public class LoadGltfScene : Instance<LoadGltfScene>
     }
     
     
-    private class MeshDataSet
+    private sealed class MeshDataSet
     {
-        public PbrVertex[] VertexBufferData;
-        public Int3[] IndexBufferData;
-        public List<MeshChunkDef> ChunksDefs;
+        public PbrVertex[]? VertexBufferData;
+        public Int3[]? IndexBufferData;
+        public List<MeshChunkDef>? ChunksDefs;
     }
 
     
@@ -251,7 +253,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         public int FaceCount;
     }
     
-    private void ComputeTotalMeshCounts(IEnumerable<Node> visualChildren, ref MeshDataCounts totalCounts, ref HashSet<MeshPrimitive> collectedMeshPrimitives)
+    private void ComputeTotalMeshCounts(IEnumerable<Node?> visualChildren, ref MeshDataCounts totalCounts, ref HashSet<MeshPrimitive> collectedMeshPrimitives)
     {
         foreach (var child in visualChildren)
         {
@@ -266,6 +268,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                     if(!collectedMeshPrimitives.Add(meshPrimitive))
                         continue;
                     
+                    // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
                     if(meshPrimitive == null)
                         continue;
 
@@ -300,12 +303,12 @@ public class LoadGltfScene : Instance<LoadGltfScene>
      * TODO: This is work in progress!
      * This will only add the mesh data to the meshDataSet, but not generate buffers.
      */
-    private void ParseChildrenIntoChunks(IEnumerable<Node> visualChildren, SceneSetup.SceneNode parentNode, ref MeshDataCounts counters,
+    private void ParseChildrenIntoChunks(IEnumerable<Node?> visualChildren, SceneSetup.SceneNode parentNode, ref MeshDataCounts counters,
                                          ref MeshDataSet meshData, ref MeshBuffers meshBufferReference)
     {
         foreach (var child in visualChildren)
         {
-            if (child == null)
+            if (child == null || meshData.VertexBufferData == null || meshData.IndexBufferData == null || meshData.ChunksDefs == null)
                 continue;
             
             var t = child.LocalTransform.GetDecomposed();
@@ -342,10 +345,9 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                         
                         if (!GetMeshDataFromPrimitive(meshPrimitive, out var vertexBufferData, out var indexBufferData, out var message))
                             continue;
-                        
-                        
+
                         Array.Copy(vertexBufferData, 0, meshData.VertexBufferData, counters.VertexCount, vertexBufferData.Length);
-                        
+
                         for(var faceIndex=0; faceIndex<indexBufferData.Length; faceIndex++)
                         {
                             
@@ -400,7 +402,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
     }
     
     
-    private void ParseChildren(IEnumerable<Node> visualChildren, SceneSetup.SceneNode parentNode)
+    private void ParseChildren(IEnumerable<Node?> visualChildren, SceneSetup.SceneNode parentNode)
     {
         foreach (var child in visualChildren)
         {
@@ -454,7 +456,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                     
                     Log.Debug($" mesh:{child.Name} {child.Mesh?.Name}  {meshIndex}");
                     
-                    SceneSetup.SceneMaterial materialDef = GetOrCreateMaterialDefinition(meshPrimitive.Material);
+                    var materialDef = GetOrCreateMaterialDefinition(meshPrimitive.Material);
 
                     //Log.Debug("Material: " + materialDef);
 
@@ -483,14 +485,14 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         }
     }
     
-    public IEnumerable<string> FileFilter => FileFilters;
-    private static readonly string[] FileFilters = ["*.gltf"];
+    public IEnumerable<string> FileFilter => _fileFilters;
+    private static readonly string[] _fileFilters = ["*.gltf"];
 
     #region Asset extraction
     /// <summary>
     /// Extract gltf material definitions so we can later create a PbrMaterial from this data.
     /// </summary>
-    private SceneSetup.SceneMaterial GetOrCreateMaterialDefinition(Material gltfMaterial)
+    private SceneSetup.SceneMaterial? GetOrCreateMaterialDefinition(Material? gltfMaterial)
     {
         if (gltfMaterial == null)
             return null;
@@ -512,10 +514,10 @@ public class LoadGltfScene : Instance<LoadGltfScene>
 
         var normalSrv = PbrMaterial.DefaultNormalSrv;
 
-        ShaderResourceView occlusionSrv = null;
-        ShaderResourceView metallicRoughnessSrv = null;
-        Texture2D metallicRoughnessTexture = null;
-        Texture2D occlusionTexture = null;
+        ShaderResourceView? occlusionSrv = null;
+        ShaderResourceView? metallicRoughnessSrv = null;
+        Texture2D? metallicRoughnessTexture = null;
+        Texture2D? occlusionTexture = null;
 
         var roughness = 0.5f;
         var metallic = 0f;
@@ -643,8 +645,6 @@ public class LoadGltfScene : Instance<LoadGltfScene>
     /// </summary>
     private static void PrepareCombineShaderResources(Instance instance, bool forceUpdate = false)
     {
-        const string debugName = "combine-channel-textures";
-        
         if (_combineChannelsComputeShaderResource == null)
         {
             const string sourcePath = @"cs\CombineGltfChannels-cs.hlsl";
@@ -692,11 +692,11 @@ public class LoadGltfScene : Instance<LoadGltfScene>
     /// <summary>
     /// Fall back to default texture if nothing set. Otherwise use shader to create new texture.
     /// </summary>
-    private void TryCreateRoughnessMetallicOcclusionTexture(Texture2D metallicRoughnessTexture,
-                                                            ShaderResourceView metallicRoughnessSrv,
-                                                            Texture2D occlusionTexture,
-                                                            ShaderResourceView occlusionSrv,
-                                                            out ShaderResourceView resultSrv)
+    private void TryCreateRoughnessMetallicOcclusionTexture(Texture2D? metallicRoughnessTexture,
+                                                            ShaderResourceView? metallicRoughnessSrv,
+                                                            Texture2D? occlusionTexture,
+                                                            ShaderResourceView? occlusionSrv,
+                                                            out ShaderResourceView? resultSrv)
     {
         if (metallicRoughnessSrv == null && occlusionSrv == null)
         {
@@ -738,8 +738,11 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         var prevSamplers = csStage.GetSamplers(0, 1);
 
         // Set Shader
-        var convertShader = _combineChannelsComputeShaderResource.Value;
-        csStage.Set(convertShader);
+        if (_combineChannelsComputeShaderResource != null)
+        {
+            var convertShader = _combineChannelsComputeShaderResource.Value;
+            csStage.Set(convertShader);
+        }
 
         var srvs = new[] { metallicRoughnessSrv, occlusionSrv };
         csStage.SetShaderResources(0, srvs);
@@ -781,13 +784,13 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         csStage.Set(prevShader);
     }
 
-    private static Resource<T3.Core.DataTypes.ComputeShader> _combineChannelsComputeShaderResource;
+    private static Resource<T3.Core.DataTypes.ComputeShader>? _combineChannelsComputeShaderResource;
 
     /// <summary>
     /// Tries to create a texture from a gltf material channel.
     /// </summary>
-    private static bool TryCreateTextureFromChannel(Material gltfMaterial, MaterialChannel channel, out Texture2D texture, out ShaderResourceView srv,
-                                                    ShaderResourceView fallbackSrv)
+    private static bool TryCreateTextureFromChannel(Material gltfMaterial, MaterialChannel channel,  out Texture2D? texture, out ShaderResourceView? srv,
+                                                    ShaderResourceView? fallbackSrv)
     {
         texture = null;
         srv = fallbackSrv;
@@ -820,13 +823,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
             // imagingFactory.Dispose();
 
             srv = new ShaderResourceView(ResourceManager.Device, texture);
-            if (srv == null)
-            {
-                return false;
-            }
-
-            if (srv != null)
-                ResourceManager.Device.ImmediateContext.GenerateMips(srv);
+            ResourceManager.Device.ImmediateContext.GenerateMips(srv);
 
             return true;
         }
@@ -842,7 +839,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
     {
         // TODO: return cached mesh to reuse buffer
         newMesh = new MeshBuffers();
-        message = null;
+        message = string.Empty;
         
         if (!GetMeshDataFromPrimitive(meshPrimitive, out var vertexBufferData, out var indexBufferData, out message))
             return false;
@@ -897,14 +894,14 @@ public class LoadGltfScene : Instance<LoadGltfScene>
             var positions = positionAccessor.AsVector3Array();
 
             // Collect normals
-            Vector3[] normals = null;
+            Vector3[]? normals = null;
             if (vertexAccessors.TryGetValue("NORMAL", out var normalAccess))
             {
                 normals = normalAccess.AsVector3Array().ToArray();
             }
 
             // Collect texture coords
-            Vector2[] texCoords = null;
+            Vector2[]? texCoords = null;
             if (vertexAccessors.TryGetValue("TEXCOORD_0", out var texAccess))
             {
                 texCoords = texAccess.AsVector2Array().ToArray();
@@ -1008,7 +1005,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
             }
         }
         
-        message = null;
+        message = string.Empty;
         return true;
     }
     #endregion
@@ -1020,13 +1017,13 @@ public class LoadGltfScene : Instance<LoadGltfScene>
     private bool _combineBuffer;
     private float _offsetRoughness;
     private float _offsetMetallic;
-    private static SamplerState _combineChannelsSampler;
+    private static SamplerState? _combineChannelsSampler;
     private bool _updateTriggered;
 
     #region implement graph node interfaces
     InputSlot<string> IDescriptiveFilename.SourcePathSlot => Path;
 
-    private string _lastFilePath;
+    private string _lastFilePath = string.Empty;
 
     IStatusProvider.StatusLevel IStatusProvider.GetStatusLevel()
     {
@@ -1044,7 +1041,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         Log.Warning(_lastErrorMessage, this);
     }
 
-    private string _lastErrorMessage;
+    private string _lastErrorMessage = string.Empty;
     #endregion
 
     [Input(Guid = "292e80cf-ba31-4a50-9bf4-83712430f811")]

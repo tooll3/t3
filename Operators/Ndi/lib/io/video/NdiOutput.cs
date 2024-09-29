@@ -204,7 +204,7 @@ public sealed class NdiOutput : Instance<NdiOutput>, IStatusProvider
         }
     }
 
-    public new void Dispose()
+    public void Dispose()
     {
         ReleaseCpuData();
     }

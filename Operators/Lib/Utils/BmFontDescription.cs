@@ -1,3 +1,4 @@
+#nullable enable
 using System.Xml.Serialization;
 
 namespace Lib.Utils;
@@ -6,24 +7,27 @@ internal sealed class BmFontDescription
 {
     public static bool TryInitializeFromFile(string filepath, [NotNullWhen(true)] out BmFontDescription? fontDescription)
     {
-        if (_fontDescriptionForFilePaths == null || filepath == null)
-        {
-            fontDescription = null;
-            return false;
-        }
-
         if (_fontDescriptionForFilePaths.TryGetValue(filepath, out var font))
         {
             fontDescription = font;
             return true;
         }
-            
-        Font bmFont;
+
+        fontDescription = null;
+        
+        Font? bmFont;
         try
         {
             var serializer = new XmlSerializer(typeof(Font));
             var stream = new FileStream(filepath, FileMode.Open);
-            bmFont = (Font)serializer.Deserialize(stream);
+            
+            bmFont = (Font?)serializer.Deserialize(stream);
+            if (bmFont == null)
+            {
+                Log.Error("Failed to load font " + filepath);
+                return false;
+            }
+            
             Log.Debug("loaded font with character count:" + bmFont.Chars.Length);
             stream.Close();
         }
@@ -36,8 +40,6 @@ internal sealed class BmFontDescription
 
         fontDescription = new BmFontDescription(bmFont);
         _fontDescriptionForFilePaths[filepath] = fontDescription;
-            
-            
         return true;
     }
 

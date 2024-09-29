@@ -35,7 +35,7 @@ public sealed class ComputeShaderStage : Instance<ComputeShaderStage>, IRenderSt
         Uavs.GetValues(ref _uavs, context);
         int counter = UavBufferCounter.GetValue(context);
 
-        if (_uavs.Length == 0 || _uavs[0] == null || _cs == null)
+        if (_uavs.Length == 0 || _cs == null)
             return;
 
         csStage.Set(_cs);
@@ -86,7 +86,7 @@ public sealed class ComputeShaderStage : Instance<ComputeShaderStage>, IRenderSt
         _statsDispatchCount += dispatchCount.X * dispatchCount.Y * dispatchCount.Z;
     }
 
-    private SharpDX.Direct3D11.ComputeShader _cs;
+    private SharpDX.Direct3D11.ComputeShader? _cs;
     private Buffer[] _constantBuffers = new Buffer[0];
     private ShaderResourceView[] _shaderResourceViews = new ShaderResourceView[0];
     private SharpDX.Direct3D11.SamplerState[] _samplerStates = new SharpDX.Direct3D11.SamplerState[0];

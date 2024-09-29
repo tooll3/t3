@@ -44,17 +44,20 @@ public sealed class VertexShaderStage : Instance<VertexShaderStage>
         var deviceContext = ResourceManager.Device.ImmediateContext;
         var vsStage = deviceContext.VertexShader;
         vsStage.Set(_prevVertexShader);
-        vsStage.SetConstantBuffers(0, _prevConstantBuffers.Length, _prevConstantBuffers);
-        vsStage.SetShaderResources(0, _prevShaderResourceViews.Length, _prevShaderResourceViews);
+        if(_prevConstantBuffers != null)
+            vsStage.SetConstantBuffers(0, _prevConstantBuffers.Length, _prevConstantBuffers);
+        
+        if(_prevShaderResourceViews != null)
+            vsStage.SetShaderResources(0, _prevShaderResourceViews.Length, _prevShaderResourceViews);
     }
 
     private Buffer[] _constantBuffers = new Buffer[0];
     private ShaderResourceView[] _shaderResourceViews = new ShaderResourceView[0];
     private SharpDX.Direct3D11.SamplerState[] _samplerStates = new SharpDX.Direct3D11.SamplerState[0];
 
-    private SharpDX.Direct3D11.VertexShader _prevVertexShader;
-    private Buffer[] _prevConstantBuffers;
-    private ShaderResourceView[] _prevShaderResourceViews;
+    private SharpDX.Direct3D11.VertexShader? _prevVertexShader;
+    private Buffer[]? _prevConstantBuffers;
+    private ShaderResourceView[]? _prevShaderResourceViews;
 
     [Input(Guid = "B1C236E5-6757-4D77-9911-E3ACD5EA9FE9")]
     public readonly InputSlot<T3.Core.DataTypes.VertexShader> VertexShader = new();

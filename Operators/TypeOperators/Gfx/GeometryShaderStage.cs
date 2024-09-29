@@ -40,16 +40,20 @@ public sealed class GeometryShaderStage : Instance<GeometryShaderStage>
         var deviceContext = ResourceManager.Device.ImmediateContext;
         var vsStage = deviceContext.GeometryShader;
         vsStage.Set(_prevGeometryShader);
-        vsStage.SetConstantBuffers(0, _prevConstantBuffers.Length, _prevConstantBuffers);
-        vsStage.SetShaderResources(0, _prevShaderResourceViews.Length, _prevShaderResourceViews);
+        
+        if (_prevConstantBuffers != null)
+            vsStage.SetConstantBuffers(0, _prevConstantBuffers.Length, _prevConstantBuffers);
+        
+        if (_prevShaderResourceViews != null)
+            vsStage.SetShaderResources(0, _prevShaderResourceViews.Length, _prevShaderResourceViews);
     }
 
     private Buffer[] _constantBuffers = new Buffer[0];
     private ShaderResourceView[] _shaderResourceViews = new ShaderResourceView[0];
 
-    private SharpDX.Direct3D11.GeometryShader _prevGeometryShader;
-    private Buffer[] _prevConstantBuffers;
-    private ShaderResourceView[] _prevShaderResourceViews;
+    private SharpDX.Direct3D11.GeometryShader? _prevGeometryShader;
+    private Buffer[]? _prevConstantBuffers;
+    private ShaderResourceView[]? _prevShaderResourceViews;
 
     [Input(Guid = "2A217F9D-2F9F-418A-8568-F767905384D5")]
     public readonly InputSlot<T3.Core.DataTypes.GeometryShader> GeometryShader = new();

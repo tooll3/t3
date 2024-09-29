@@ -1,6 +1,8 @@
+#nullable enable
 using T3.Core.Rendering;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
+// ReSharper disable InconsistentNaming
 
 namespace Lib.point.helper;
 
@@ -23,7 +25,7 @@ internal sealed class LoadObjAsPoints : Instance<LoadObjAsPoints>
         _meshResource.AddDependentSlots(Points);
     }
 
-    private bool TryLoadMesh(FileResource file, ObjMesh? currentValue, out ObjMesh? newValue, out string? failureReason)
+    private bool TryLoadMesh(FileResource file,  ObjMesh? currentValue, [NotNullWhen(true)] out ObjMesh? newValue,[NotNullWhen(false)] out string? failureReason)
     {
         var absolutePath = file.AbsolutePath;
             
@@ -330,7 +332,7 @@ internal sealed class LoadObjAsPoints : Instance<LoadObjAsPoints>
 
 
     private StructuredList<Point> _points = new(0);
-    private Resource<ObjMesh> _meshResource;
+    private readonly Resource<ObjMesh> _meshResource;
 
     enum Modes
     {

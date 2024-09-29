@@ -28,8 +28,8 @@ public sealed class GeometryShader : Instance<GeometryShader>, IShaderOperator<G
     Slot<GeometryShaderT3> IShaderOperator<GeometryShaderT3>.ShaderSlot => Shader;
     InputSlot<string> IShaderOperator<GeometryShaderT3>.EntryPoint => EntryPoint;
     InputSlot<string> IShaderOperator<GeometryShaderT3>.DebugName => DebugName;
-    string IShaderOperator<GeometryShaderT3>.CachedEntryPoint { get; set; }
-    void IShaderOperator<GeometryShaderT3>.OnShaderUpdate(EvaluationContext context, GeometryShaderT3 shader)
+    string? IShaderOperator<GeometryShaderT3>.CachedEntryPoint { get; set; }
+    void IShaderOperator<GeometryShaderT3>.OnShaderUpdate(EvaluationContext context, GeometryShaderT3? shader)
     {
             
     }

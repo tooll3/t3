@@ -259,6 +259,7 @@ public static class HitFilmComposite
                 }
                 
                 transformKey.Position = new Vector3(key.Value.Point.X, key.Value.Point.Y, key.Value.Point.Z);
+                transformKey.Target = Vector3.Zero;
             }
             
             foreach(var key in pm.Orientation.Animation.Keys)

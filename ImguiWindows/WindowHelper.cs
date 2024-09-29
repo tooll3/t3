@@ -1,4 +1,3 @@
-using System.Drawing;
 using System.Numerics;
 using ImguiWindows;
 using Silk.NET.Core.Native;
@@ -108,21 +107,20 @@ public sealed class WindowHelper
     
     private void DebugMouse(string callsite)
     {
-        return;
-        var mice = _inputContext!.Mice;
-        int mCounter = 0;
-        int wCounter = 0;
-        foreach(var mouse in mice)
-        {
-            mCounter++;
-            foreach (var wheel in mouse.ScrollWheels)
-            {
-                wCounter++;
-                Console.WriteLine($"scroll in mouse {mouse.Name} ({mCounter}, {wCounter}) at {callsite}:" + wheel.Y);
-            }
-            
-            wCounter = 0;
-        }
+        // var mice = _inputContext!.Mice;
+        // int mCounter = 0;
+        // int wCounter = 0;
+        // foreach(var mouse in mice)
+        // {
+        //     mCounter++;
+        //     foreach (var wheel in mouse.ScrollWheels)
+        //     {
+        //         wCounter++;
+        //         Console.WriteLine($"scroll in mouse {mouse.Name} ({mCounter}, {wCounter}) at {callsite}:" + wheel.Y);
+        //     }
+        //     
+        //     wCounter = 0;
+        // }
     }
     
     private void OnLoad()
@@ -159,7 +157,7 @@ public sealed class WindowHelper
     
     private readonly object _graphicsContextLock;
     private readonly IWindowImplementation _windowImpl;
-    private IWindow _window;
+    private IWindow _window = null!;
     private IInputContext? _inputContext;
     private NativeAPI? _graphicsContext;
     private readonly FontPack? _fontPack;

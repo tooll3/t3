@@ -5,7 +5,7 @@ public sealed class StructuredBufferWithViews : Instance<StructuredBufferWithVie
 {
 
     [Output(Guid = "c997268d-6709-49de-980e-64d7a47504f7")]
-    public readonly Slot<BufferWithViews> BufferWithViews = new();
+    public readonly Slot<BufferWithViews?> BufferWithViews = new();
 
     public StructuredBufferWithViews()
     {

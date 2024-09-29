@@ -44,7 +44,7 @@ public sealed class BlendState : Instance<BlendState>
         } 
     }
 
-    private List<Slot<SharpDX.Direct3D11.RenderTargetBlendDescription>> _connectedDescriptions;
+    private List<Slot<SharpDX.Direct3D11.RenderTargetBlendDescription>> _connectedDescriptions = [];
 
     [Input(Guid = "63D0E4E8-FA00-4059-A11B-6A31E66757DC")]
     public readonly MultiInputSlot<SharpDX.Direct3D11.RenderTargetBlendDescription> RenderTargets = new();
