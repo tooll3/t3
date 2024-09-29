@@ -75,7 +75,7 @@ public static class SymbolUiJson
         writer.WritePropertyName(JsonKeys.SymbolChildUis);
         writer.WriteStartArray();
 
-        foreach (var childUi in symbolUi.ChildUis.Values)
+        foreach (var childUi in symbolUi.ChildUis.Values.OrderBy(x => x.Id))
         {
             writer.WriteStartObject(); // child entry
             writer.WriteObject(JsonKeys.ChildId, childUi.Id);
@@ -152,7 +152,7 @@ public static class SymbolUiJson
         writer.WritePropertyName(JsonKeys.Annotations);
         writer.WriteStartArray();
 
-        foreach (var annotation in symbolUi.Annotations.Values)
+        foreach (var annotation in symbolUi.Annotations.Values.OrderBy(x => x.Id))
         {
             writer.WriteStartObject();
             writer.WriteObject(JsonKeys.Id, annotation.Id);
@@ -180,7 +180,7 @@ public static class SymbolUiJson
         writer.WritePropertyName(JsonKeys.Links);
         writer.WriteStartArray();
 
-        foreach (var link in symbolUi.Links.Values)
+        foreach (var link in symbolUi.Links.Values.OrderBy(x=> x.Id))
         {
             writer.WriteStartObject();
             writer.WriteObject(JsonKeys.Id, link.Id.ToString());

@@ -23,7 +23,7 @@ public static class SymbolJson
         writer.WriteComment(symbol.Name);
 
         WriteSymbolInputs(symbol.InputDefinitions, writer);
-        WriteSymbolChildren(symbol.Children.Values, writer);
+        WriteSymbolChildren(symbol.Children.Values.OrderBy(x => x.Id), writer);
         WriteConnections(symbol.Connections, writer);
         symbol.PlaybackSettings?.WriteToJson(writer);
         symbol.Animator.Write(writer);
