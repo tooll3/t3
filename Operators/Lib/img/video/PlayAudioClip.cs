@@ -1,3 +1,4 @@
+#nullable enable
 using T3.Core.Animation;
 using T3.Core.Audio;
 
@@ -17,12 +18,12 @@ internal sealed class PlayAudioClip : Instance<PlayAudioClip>, IStatusProvider
         _audioClipResource.AddDependentSlots(Result);
     }
 
-    private bool TryCreateClip(FileResource file, AudioClip? currentValue, out AudioClip? newValue, out string failureReason)
+    private bool TryCreateClip(FileResource file, AudioClip? currentValue, [NotNullWhen(true)] out AudioClip? newClip, out string failureReason)
     {
         var fileInfo = file.FileInfo;
         if (fileInfo is { Exists: true })
         {
-            newValue = new AudioClip
+            newClip = new AudioClip
                            {
                                FilePath = Path.GetCurrentValue(),
                                StartTime = 0,
@@ -33,12 +34,12 @@ internal sealed class PlayAudioClip : Instance<PlayAudioClip>, IStatusProvider
                                Id = Guid.NewGuid(),
                            };
                 
-            failureReason = null;
-            _errorMessageForStatus = null;
+            failureReason = string.Empty;
+            _errorMessageForStatus = string.Empty;
             return true;
         }
 
-        newValue = null;
+        newClip = null;
         failureReason = $"File not found: {Path.GetCurrentValue()}";
         _errorMessageForStatus = failureReason;
         return false;
@@ -86,7 +87,7 @@ internal sealed class PlayAudioClip : Instance<PlayAudioClip>, IStatusProvider
         return _errorMessageForStatus;
     }
         
-    private string _errorMessageForStatus;
+    private string _errorMessageForStatus = string.Empty;
 
         
     [Input(Guid = "e0c927f9-5528-49c5-b457-5aea51f51628")]

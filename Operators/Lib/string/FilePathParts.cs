@@ -33,7 +33,7 @@ internal sealed class FilePathParts : Instance<FilePathParts>, IStatusProvider
                 Directory.Value = Path.GetDirectoryName(path);
                 Extension.Value = Path.GetExtension(path);
                 FilenameWithoutExtension.Value = Path.GetFileNameWithoutExtension(path);
-                _errorMessageForStatus = null;
+                _errorMessageForStatus = string.Empty;
                 return;
             }
             catch (Exception e)
