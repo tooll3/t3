@@ -71,14 +71,14 @@ public sealed class SamplerState : Instance<SamplerState>
     public readonly InputSlot<int> MaximumAnisotropy = new();
 
     [Input(Guid = "{393A3E40-5C58-48C7-84D2-C4E8D03F7373}")]
-    public InputSlot<Comparison> ComparisonFunction = new();
+    public readonly InputSlot<Comparison> ComparisonFunction = new();
 
     //        [Input(Guid = "{5A6E8282-EBF6-4641-9574-A29E04F08B2E}")]
     //        public InputSlot<RawColor4> BorderColor = new InputSlot<RawColor4>();
 
     [Input(Guid = "{05531EF5-72AA-4868-915F-A40D26DA9E80}")]
-    public InputSlot<float> MinimumLod = new();
+    public readonly InputSlot<float> MinimumLod = new();
 
     [Input(Guid = "{7D5346DB-DF9C-4BCE-9F39-065983253A7F}")]
-    public InputSlot<float> MaximumLod = new();
+    public readonly InputSlot<float> MaximumLod = new();
 }

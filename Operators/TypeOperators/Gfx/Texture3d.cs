@@ -94,8 +94,8 @@ public sealed class Texture3d : Instance<Texture3d>
     public readonly InputSlot<BindFlags> BindFlags = new();
 
     [Input(Guid = "cfd3cfbf-7429-42f9-abc9-0e0e173f0297")]
-    public InputSlot<CpuAccessFlags> CpuAccessFlags = new();
+    public readonly InputSlot<CpuAccessFlags> CpuAccessFlags = new();
 
     [Input(Guid = "1884edfa-622b-4b96-a081-95dc361e79f3")]
-    public InputSlot<ResourceOptionFlags> ResourceOptionFlags = new();
+    public readonly InputSlot<ResourceOptionFlags> ResourceOptionFlags = new();
 }

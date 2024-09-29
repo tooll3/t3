@@ -101,8 +101,8 @@ public sealed class Texture2d : Instance<Texture2d>
     public readonly InputSlot<BindFlags> BindFlags = new();
 
     [Input(Guid = "{DA0D06BD-F5CC-400B-8E79-35756DF9B2D5}")]
-    public InputSlot<CpuAccessFlags> CpuAccessFlags = new();
+    public readonly InputSlot<CpuAccessFlags> CpuAccessFlags = new();
 
     [Input(Guid = "{2C9E4CB0-0333-439E-ABCC-1148A840A260}")]
-    public InputSlot<ResourceOptionFlags> ResourceOptionFlags = new();
+    public readonly InputSlot<ResourceOptionFlags> ResourceOptionFlags = new();
 }
