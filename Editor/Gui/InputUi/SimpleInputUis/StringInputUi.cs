@@ -336,20 +336,27 @@ public class StringInputUi : InputValueUi<string>
         base.DrawSettings();
         FormInputs.AddVerticalSpace();
 
+        FormInputs.DrawFieldSetHeader("Usage");
+        //var tmpForRef = selectedInputUi.Relevancy;
+        //if (FormInputs.AddEnumDropdown(ref tmpForRef, null, defaultValue: Relevancy.Optional))
+        //{
         {
             var tmpForRef = Usage;
-            if (FormInputs.AddEnumDropdown(ref tmpForRef, "Usage"))
+            if (FormInputs.AddEnumDropdown(ref tmpForRef, null))
                 Usage = tmpForRef;
         }
 
+        
         if (Usage == UsageType.FilePath)
         {
+            FormInputs.DrawFieldSetHeader("File Filter");
+            
             var tmp = FileFilter;
             var warning = !string.IsNullOrEmpty(tmp) && !tmp.Contains('|')
                               ? "Filter must include at least one | symbol.\nPlease read tooltip for examples"
                               : null;
 
-            if (FormInputs.AddStringInput("File Filter", ref tmp, null, warning,
+            if (FormInputs.AddStringInput("##File Filter", ref tmp, null, warning,
                                           "This will only work for file FilePath-Mode.\nThe filter has to be in following format:\n\n Your Description (*.ext)|*.ext"))
             {
                 FileFilter = tmp;

@@ -317,10 +317,7 @@ public static class FormInputs
             ImGui.SetKeyboardFocusHere(-1);
         }
         ImGui.PopStyleVar();
-
-            
-        AppendTooltip(tooltip);
-
+        
         if (string.IsNullOrEmpty(value) && !string.IsNullOrEmpty(placeHolder))
         {
             var drawList = ImGui.GetWindowDrawList();
