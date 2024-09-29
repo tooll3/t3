@@ -3,24 +3,10 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "cd2b1f6f-1964-4d15-92e0-57b77584301b"/*From*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "37b9a120-f79d-481c-bea2-a48e3b2a05b7"/*To*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
-    },
-    {
-      "InputId": "a670bd01-b3bb-4795-9f86-2ab9010f2bec"/*W*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
       }
     },
     {
@@ -35,6 +21,20 @@
       "Position": {
         "X": -200.0,
         "Y": 180.0
+      }
+    },
+    {
+      "InputId": "a670bd01-b3bb-4795-9f86-2ab9010f2bec"/*W*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "cd2b1f6f-1964-4d15-92e0-57b77584301b"/*From*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
       }
     }
   ],

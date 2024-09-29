@@ -12,17 +12,10 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "9bd67947-4f48-44a0-8374-84f4df4162f4"/*LinePoints*/,
-      "Position": {
-        "X": 150.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "ChildId": "e59ceadf-42bf-4ed2-8052-deb8fd66a738"/*APoint*/,
+      "ChildId": "291e1d12-6430-4ae2-bba4-74d667e0a7e5"/*Point*/,
       "Position": {
         "X": 0.0,
-        "Y": 43.0
+        "Y": 86.0
       }
     },
     {
@@ -33,14 +26,14 @@
       }
     },
     {
-      "ChildId": "291e1d12-6430-4ae2-bba4-74d667e0a7e5"/*APoint*/,
+      "ChildId": "9bd67947-4f48-44a0-8374-84f4df4162f4"/*LinePoints*/,
       "Position": {
-        "X": 0.0,
-        "Y": 86.0
+        "X": 150.0,
+        "Y": 0.0
       }
     },
     {
-      "ChildId": "b00cc844-3239-4e4c-8061-895392327deb"/*APoint*/,
+      "ChildId": "b00cc844-3239-4e4c-8061-895392327deb"/*Point*/,
       "Position": {
         "X": 0.0,
         "Y": 129.0
@@ -51,6 +44,13 @@
       "Position": {
         "X": 300.0,
         "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "e59ceadf-42bf-4ed2-8052-deb8fd66a738"/*Point*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 43.0
       }
     }
   ],

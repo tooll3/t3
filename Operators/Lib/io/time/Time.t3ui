@@ -3,14 +3,6 @@
   "Description": "Returns the current time from the \"context\".\n\nIn most situations this will be the playback time in bars (not seconds!) as number. But this could also be overridden by [SetCommandTime], [TimeClip], during beat tapping, or during rendering an image sequence. Like many music applications, Tooll uses bars to represent time. This allows to easily sync animations to varying soundtracks or BPM-rates. At 120 Beats per Minute 1 bar is equivalent to 2 seconds.\n\nTips:\n\n- Add a [Modulo] or other math operators to repeat a time range.\n- Consider using [AnimValue] for other deterministic time values.\n- If you want to restart the timer during playback, try the [Modulo] operator.\n- Consider [RunTime] to get time time since application start.\n\nAKA: clock, seconds, bars\n\nAlso see [Accumulator] for a similar Operator.\nFor a variant that does not count up linearly but in steps, [Counter]",
   "InputUis": [
     {
-      "InputId": "8da7d58d-10a5-4378-8f44-b98f87ec2697"/*Mode*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      },
-      "Description": "Selects the time representation used:\n\n- LocalFxTimeInBars: Use context time in bars (not seconds!) with applied Idle Motion.\n- LocalTimeInBars: Use context time, without Idle Motion.\n- LocalTimeInSec: Use the current BPM to convert to seconds.\n- PlaybackTimeInBars: Ignore time overrides."
-    },
-    {
       "InputId": "2d9c040d-5244-40ac-8090-d8d57323487b"/*SpeedFactor*/,
       "Position": {
         "X": -200.0,
@@ -20,6 +12,14 @@
       "Min": -5.0,
       "Max": 5.0,
       "Format": "{0:0.000} ×"
+    },
+    {
+      "InputId": "8da7d58d-10a5-4378-8f44-b98f87ec2697"/*Mode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Description": "Selects the time representation used:\n\n- LocalFxTimeInBars: Use context time in bars (not seconds!) with applied Idle Motion.\n- LocalTimeInBars: Use context time, without Idle Motion.\n- LocalTimeInSec: Use the current BPM to convert to seconds.\n- PlaybackTimeInBars: Ignore time overrides."
     }
   ],
   "SymbolChildUis": [],

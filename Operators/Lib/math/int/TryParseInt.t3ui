@@ -3,19 +3,19 @@
   "Description": "Tries to parse a string to an integer, if failing, the default value is used instead.",
   "InputUis": [
     {
+      "InputId": "45002dd0-6035-4126-847f-d588b31389c5"/*Default*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
       "InputId": "f8ce4dca-088f-48de-8613-5b83caeb8c2f"/*String*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
       },
       "Usage": "Default"
-    },
-    {
-      "InputId": "45002dd0-6035-4126-847f-d588b31389c5"/*Default*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      }
     }
   ],
   "SymbolChildUis": [],

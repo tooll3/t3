@@ -2,14 +2,6 @@
   "Id": "3d958f08-9c0f-45eb-a252-de880b5834f3"/*CustomPointShader*/,
   "Inputs": [
     {
-      "Id": "e77660e2-0fd0-45ea-8e0b-c607a757bb49"/*Points*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "e9712b03-e7aa-4fe5-b5cf-f2c5d0c0b0df"/*ShaderCode*/,
-      "DefaultValue": "p.Position += Center;\np.Position.y += sin(6*f * A+B);"
-    },
-    {
       "Id": "01898885-4140-4435-bb44-a7a6f6f32657"/*Center*/,
       "DefaultValue": {
         "X": 0.0,
@@ -18,11 +10,11 @@
       }
     },
     {
-      "Id": "a5c7863e-9c26-4109-9851-3244086b0ccc"/*A*/,
+      "Id": "20226539-a481-4df6-8dc7-cc65de915ea9"/*D*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "e5a7649f-684e-4938-8ae3-7289f5b9ff45"/*B*/,
+      "Id": "a5c7863e-9c26-4109-9851-3244086b0ccc"/*A*/,
       "DefaultValue": 0.0
     },
     {
@@ -30,84 +22,44 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "20226539-a481-4df6-8dc7-cc65de915ea9"/*D*/,
+      "Id": "dfbb9327-6cd2-41d3-8b2b-0abd7716471b"/*IgnoreTemplate*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "e5a7649f-684e-4938-8ae3-7289f5b9ff45"/*B*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "dfbb9327-6cd2-41d3-8b2b-0abd7716471b"/*IgnoreTemplate*/,
-      "DefaultValue": false
+      "Id": "e77660e2-0fd0-45ea-8e0b-c607a757bb49"/*Points*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "e9712b03-e7aa-4fe5-b5cf-f2c5d0c0b0df"/*ShaderCode*/,
+      "DefaultValue": "p.Position += Center;\np.Position.y += sin(6*f * A+B);"
     }
   ],
   "Children": [
     {
-      "Id": "923b292d-3deb-4321-9c6e-bfd707c0e4a4"/*FloatsToBuffer*/,
-      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
+      "Id": "00233c4e-712c-4ae7-a884-5038193374ce"/*Vector3Components*/,
+      "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "f7af296d-a1ff-424e-9980-5742352f90ad"/*TransformsConstBuffer*/,
-      "SymbolId": "a60adc26-d7c6-4615-af78-8d2d6da46b79",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "86162a63-b1ec-4eeb-bc0a-4d243c4c5a7f"/*BoolToInt*/,
-      "SymbolId": "cd43942a-887e-4e34-bc54-0c2e5e8bc2af",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "80aa8d51-03a2-4125-a1d9-2d98c6903255"/*GetSRVProperties*/,
-      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "bec21040-6f05-4470-8e03-1e410a7c1f29"/*StructuredBufferWithViews*/,
-      "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
+      "Id": "02b1203f-262e-4dc8-9afb-8fa41805ae0c"/*ExecuteBufferUpdate*/,
+      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
       "InputValues": [
         {
-          "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
-          "Type": "System.Int32",
-          "Value": 64
+          "Id": "6887f319-cf3f-4e87-9a8c-a7c912dbf5ad"/*IsEnabled*/,
+          "Type": "System.Boolean",
+          "Value": true
         }
       ],
       "Outputs": []
     },
     {
-      "Id": "1c79c2d7-3fa5-41f7-8b3d-a379a1fb1be2"/*SearchAndReplace*/,
-      "SymbolId": "b7910fc6-c3b2-4daf-93cd-010dcfe22a57",
-      "InputValues": [
-        {
-          "Id": "4fe3f641-1c36-4970-be71-dafb5632fb53"/*SearchPattern*/,
-          "Type": "System.String",
-          "Value": "#include \"snippet\""
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "b9c402df-567e-4b3e-be14-d79991ebabef"/*GetBufferComponents*/,
+      "Id": "1265512f-1090-4c86-a676-582cecb0652e"/*GetBufferComponents*/,
       "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "312b9084-61d9-402b-b0b2-53db34287232"/*String*/,
-      "SymbolId": "5880cbc3-a541-4484-a06a-0e6f77cdbe8e",
-      "InputValues": [
-        {
-          "Id": "ceeae47b-d792-471d-a825-49e22749b7b9"/*InputString*/,
-          "Type": "System.String",
-          "Value": "    Point p = SourcePoints[i.x];\n\n    ResultPoints[i.x].position = p.position + float3(0,0.1,0);\n    ResultPoints[i.x].rotation = p.rotation;\n    ResultPoints[i.x].w =  p.w ;"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "434dc073-61f8-4ac7-b3a3-1a878844e6cf"/*PickString*/,
-      "SymbolId": "a9784e5e-7696-49a0-bb77-2302587ede59",
       "InputValues": [],
       "Outputs": []
     },
@@ -128,8 +80,38 @@
       "Outputs": []
     },
     {
-      "Id": "1265512f-1090-4c86-a676-582cecb0652e"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "Id": "1c79c2d7-3fa5-41f7-8b3d-a379a1fb1be2"/*SearchAndReplace*/,
+      "SymbolId": "b7910fc6-c3b2-4daf-93cd-010dcfe22a57",
+      "InputValues": [
+        {
+          "Id": "4fe3f641-1c36-4970-be71-dafb5632fb53"/*SearchPattern*/,
+          "Type": "System.String",
+          "Value": "#include \"snippet\""
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "312b9084-61d9-402b-b0b2-53db34287232"/*String*/,
+      "SymbolId": "5880cbc3-a541-4484-a06a-0e6f77cdbe8e",
+      "InputValues": [
+        {
+          "Id": "ceeae47b-d792-471d-a825-49e22749b7b9"/*InputString*/,
+          "Type": "System.String",
+          "Value": "    Point p = SourcePoints[i.x];\n\n    ResultPoints[i.x].position = p.position + float3(0,0.1,0);\n    ResultPoints[i.x].rotation = p.rotation;\n    ResultPoints[i.x].w =  p.w ;"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "39438d7f-efd6-4508-8daf-6c1476ebcd33"/*TimeConstBuffer*/,
+      "SymbolId": "de8bc97a-8ef0-4d4a-9ffa-88046a2daf40",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "434dc073-61f8-4ac7-b3a3-1a878844e6cf"/*PickString*/,
+      "SymbolId": "a9784e5e-7696-49a0-bb77-2302587ede59",
       "InputValues": [],
       "Outputs": []
     },
@@ -140,43 +122,20 @@
       "Outputs": []
     },
     {
-      "Id": "39438d7f-efd6-4508-8daf-6c1476ebcd33"/*TimeConstBuffer*/,
-      "SymbolId": "de8bc97a-8ef0-4d4a-9ffa-88046a2daf40",
+      "Id": "80aa8d51-03a2-4125-a1d9-2d98c6903255"/*GetSRVProperties*/,
+      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "f4ca3a15-0bf3-4944-9db4-6c6dc8e88c24"/*ComputeShaderFromSource*/,
-      "SymbolId": "4e5bc624-9cda-46a8-9681-7fd412ea3893",
-      "InputValues": [
-        {
-          "Id": "a8ee59c3-cb62-42e5-a3c9-f4968876c9cc"/*Code*/,
-          "Type": "System.String",
-          "Value": "#include \"lib/shared/hash-functions.hlsl\"\n#include \"lib/shared/point.hlsl\"\n\ncbuffer Params : register(b1)\n{\n    float A;\n    float B;\n    float C;\n    float D;\n    float E;\n}\n\nStructuredBuffer<Point> SourcePoints : t0;        \nRWStructuredBuffer<Point> ResultPoints : u0;   \n\n[numthreads(64,1,1)]\nvoid main(uint3 i : SV_DispatchThreadID)\n{\n    uint numStructs, stride;\n    SourcePoints.GetDimensions(numStructs, stride);\n    if(i.x >= numStructs) {    \n        return;\n    }\n\n    Point p = SourcePoints[i.x];\n\n    ResultPoints[i.x].position = p.position + float3(0,0.1,0);\n    ResultPoints[i.x].rotation = p.rotation;\n    ResultPoints[i.x].w =  p.w ;\n}\n"
-        },
-        {
-          "Id": "08399b7a-a390-4a11-83eb-36ac68f76bc6"/*DebugName*/,
-          "Type": "System.String",
-          "Value": "custom"
-        }
-      ],
+      "Id": "86162a63-b1ec-4eeb-bc0a-4d243c4c5a7f"/*BoolToInt*/,
+      "SymbolId": "cd43942a-887e-4e34-bc54-0c2e5e8bc2af",
+      "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "02b1203f-262e-4dc8-9afb-8fa41805ae0c"/*ExecuteBufferUpdate*/,
-      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
-      "InputValues": [
-        {
-          "Id": "6887f319-cf3f-4e87-9a8c-a7c912dbf5ad"/*IsEnabled*/,
-          "Type": "System.Boolean",
-          "Value": true
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "00233c4e-712c-4ae7-a884-5038193374ce"/*Vector3Components*/,
-      "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
+      "Id": "923b292d-3deb-4321-9c6e-bfd707c0e4a4"/*FloatsToBuffer*/,
+      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
       "InputValues": [],
       "Outputs": []
     },
@@ -190,6 +149,47 @@
           "Value": "#include \"lib/shared/hash-functions.hlsl\"\n#include \"lib/shared/point.hlsl\"\n#include \"lib/shared/quat-functions.hlsl\"\n\ncbuffer Params : register(b1)\n{\n    float3 Center;\n    float A;\n    float B;\n    float C;\n    float D;\n}\n\nStructuredBuffer<Point> SourcePoints : t0;        \nRWStructuredBuffer<Point> ResultPoints : u0;   \n\n[numthreads(64,1,1)]\nvoid main(uint3 DTId : SV_DispatchThreadID)\n{\n    uint i = DTId.x;\n    uint numStructs, stride;\n    SourcePoints.GetDimensions(numStructs, stride);\n    if(i >= numStructs) {    \n        return;\n    }\n\n   float f = (float)i / numStructs;\n   Point p = SourcePoints[i];\n\n#include \"snippet\"\n\nResultPoints[i] = p;\n}\n"
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "b9c402df-567e-4b3e-be14-d79991ebabef"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "bec21040-6f05-4470-8e03-1e410a7c1f29"/*StructuredBufferWithViews*/,
+      "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
+      "InputValues": [
+        {
+          "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
+          "Type": "System.Int32",
+          "Value": 64
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "f4ca3a15-0bf3-4944-9db4-6c6dc8e88c24"/*ComputeShaderFromSource*/,
+      "SymbolId": "4e5bc624-9cda-46a8-9681-7fd412ea3893",
+      "InputValues": [
+        {
+          "Id": "08399b7a-a390-4a11-83eb-36ac68f76bc6"/*DebugName*/,
+          "Type": "System.String",
+          "Value": "custom"
+        },
+        {
+          "Id": "a8ee59c3-cb62-42e5-a3c9-f4968876c9cc"/*Code*/,
+          "Type": "System.String",
+          "Value": "#include \"lib/shared/hash-functions.hlsl\"\n#include \"lib/shared/point.hlsl\"\n\ncbuffer Params : register(b1)\n{\n    float A;\n    float B;\n    float C;\n    float D;\n    float E;\n}\n\nStructuredBuffer<Point> SourcePoints : t0;        \nRWStructuredBuffer<Point> ResultPoints : u0;   \n\n[numthreads(64,1,1)]\nvoid main(uint3 i : SV_DispatchThreadID)\n{\n    uint numStructs, stride;\n    SourcePoints.GetDimensions(numStructs, stride);\n    if(i.x >= numStructs) {    \n        return;\n    }\n\n    Point p = SourcePoints[i.x];\n\n    ResultPoints[i.x].position = p.position + float3(0,0.1,0);\n    ResultPoints[i.x].rotation = p.rotation;\n    ResultPoints[i.x].w =  p.w ;\n}\n"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "f7af296d-a1ff-424e-9980-5742352f90ad"/*TransformsConstBuffer*/,
+      "SymbolId": "a60adc26-d7c6-4615-af78-8d2d6da46b79",
+      "InputValues": [],
       "Outputs": []
     }
   ],

@@ -3,6 +3,14 @@
   "Description": "",
   "InputUis": [
     {
+      "InputId": "2b616fb0-2966-45a9-a0cc-da960ca509cf"/*EntryPoint*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    },
+    {
       "InputId": "a192e8cc-2874-4f02-bbf1-4622e99666e1"/*ShaderSource*/,
       "Relevancy": "Required",
       "Position": {
@@ -10,14 +18,6 @@
         "Y": 45.866936
       },
       "Usage": "Multiline"
-    },
-    {
-      "InputId": "2b616fb0-2966-45a9-a0cc-da960ca509cf"/*EntryPoint*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      },
-      "Usage": "Default"
     },
     {
       "InputId": "baa49d7d-127c-4c93-ae90-7e4db3598af9"/*DebugName*/,

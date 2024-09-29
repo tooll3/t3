@@ -2,21 +2,48 @@
   "Id": "4f89b41b-1643-442b-bec8-9f9ef2173baa"/*Raster*/,
   "Inputs": [
     {
-      "Id": "fd22eaf6-ed3c-4e63-985c-3a3756ecaef2"/*Resolution*/,
+      "Id": "0d0944a4-b5f6-4df5-8ef6-cbfe70fbae94"/*Background*/,
       "DefaultValue": {
-        "X": 0,
-        "Y": 0
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0,
+        "W": 0.0
       }
     },
     {
-      "Id": "b32e1383-07c4-4dc4-859d-e7fb19261bce"/*Offset*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0
-      }
+      "Id": "2221e831-12dd-4c9f-8533-48b9f96e60ab"/*Scale*/,
+      "DefaultValue": 4.0
+    },
+    {
+      "Id": "27ce4875-b4da-4a44-a959-37c81c1600b8"/*DotSize*/,
+      "DefaultValue": 0.05333333
+    },
+    {
+      "Id": "3329cd25-e7b9-47da-88e0-5dd7b6e324fa"/*GreenToLineWidth*/,
+      "DefaultValue": 0.0
     },
     {
       "Id": "52d36eba-d789-41a0-bdf4-9ca6b3e32530"/*Rotate*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "54252e04-8f91-4ea5-91a6-f1f66f6da0a6"/*Feather*/,
+      "DefaultValue": 0.02
+    },
+    {
+      "Id": "6b0bdd9a-248d-410f-9b0e-de20df937775"/*MixOriginal*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "81b697d6-64b4-47ae-beee-84445b1e7240"/*LineWidth*/,
+      "DefaultValue": 0.053333342
+    },
+    {
+      "Id": "82e9ecfc-a000-4cdd-b856-0928228a3afa"/*LineRatio*/,
+      "DefaultValue": 0.75
+    },
+    {
+      "Id": "92f52517-8ebc-4c89-af0a-b0bc5abc0439"/*BlueToLineRatio*/,
       "DefaultValue": 0.0
     },
     {
@@ -25,10 +52,6 @@
         "X": 32.0,
         "Y": 32.0
       }
-    },
-    {
-      "Id": "2221e831-12dd-4c9f-8533-48b9f96e60ab"/*Scale*/,
-      "DefaultValue": 4.0
     },
     {
       "Id": "a4350111-7ca8-4ce7-b494-3e82cc679999"/*Color*/,
@@ -40,52 +63,47 @@
       }
     },
     {
-      "Id": "0d0944a4-b5f6-4df5-8ef6-cbfe70fbae94"/*Background*/,
+      "Id": "b32e1383-07c4-4dc4-859d-e7fb19261bce"/*Offset*/,
       "DefaultValue": {
         "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0,
-        "W": 0.0
+        "Y": 0.0
       }
-    },
-    {
-      "Id": "27ce4875-b4da-4a44-a959-37c81c1600b8"/*DotSize*/,
-      "DefaultValue": 0.05333333
-    },
-    {
-      "Id": "81b697d6-64b4-47ae-beee-84445b1e7240"/*LineWidth*/,
-      "DefaultValue": 0.053333342
-    },
-    {
-      "Id": "82e9ecfc-a000-4cdd-b856-0928228a3afa"/*LineRatio*/,
-      "DefaultValue": 0.75
-    },
-    {
-      "Id": "54252e04-8f91-4ea5-91a6-f1f66f6da0a6"/*Feather*/,
-      "DefaultValue": 0.02
-    },
-    {
-      "Id": "cce27287-9774-436c-9e90-1becb42d8f95"/*Image*/,
-      "DefaultValue": null
     },
     {
       "Id": "c1378bbd-70df-4b6e-876f-5f1f1c59a617"/*RedToDotSize*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "3329cd25-e7b9-47da-88e0-5dd7b6e324fa"/*GreenToLineWidth*/,
-      "DefaultValue": 0.0
+      "Id": "cce27287-9774-436c-9e90-1becb42d8f95"/*Image*/,
+      "DefaultValue": null
     },
     {
-      "Id": "92f52517-8ebc-4c89-af0a-b0bc5abc0439"/*BlueToLineRatio*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "6b0bdd9a-248d-410f-9b0e-de20df937775"/*MixOriginal*/,
-      "DefaultValue": 1.0
+      "Id": "fd22eaf6-ed3c-4e63-985c-3a3756ecaef2"/*Resolution*/,
+      "DefaultValue": {
+        "X": 0,
+        "Y": 0
+      }
     }
   ],
   "Children": [
+    {
+      "Id": "34207fc4-fea9-4299-9cb9-94ebf4e0139d"/*Vector4Components*/,
+      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "7e1f7a5b-6c83-4b42-88ea-acebe2329a35"/*Vector4Components*/,
+      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "9d826906-2c65-46c1-bef9-8b6a9a94cf77"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
+      "InputValues": [],
+      "Outputs": []
+    },
     {
       "Id": "ee1617ac-5c8c-492b-947c-991edf26c8a4"/*_ImageFxShaderSetupStatic*/,
       "SymbolId": "bd0b9c5b-c611-42d0-8200-31af9661f189",
@@ -106,24 +124,6 @@
           "Value": true
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "7e1f7a5b-6c83-4b42-88ea-acebe2329a35"/*Vector4Components*/,
-      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "34207fc4-fea9-4299-9cb9-94ebf4e0139d"/*Vector4Components*/,
-      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "9d826906-2c65-46c1-bef9-8b6a9a94cf77"/*Vector2Components*/,
-      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
-      "InputValues": [],
       "Outputs": []
     },
     {

@@ -3,18 +3,18 @@
   "Description": "Switches between different point buffers.",
   "InputUis": [
     {
+      "InputId": "8b418dcd-e7cd-4bce-a69e-a9a543426bfe"/*Index*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
       "InputId": "c00f5af4-efb6-4a9d-b0ad-d8dbc69eed23"/*Input*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
-    },
-    {
-      "InputId": "8b418dcd-e7cd-4bce-a69e-a9a543426bfe"/*Index*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
       }
     }
   ],

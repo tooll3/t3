@@ -2,23 +2,31 @@
   "Id": "ea7b8491-2f8e-4add-b0b1-fd068ccfed0d"/*AnimValue*/,
   "Inputs": [
     {
-      "Id": "4cf5d20b-7335-4584-b246-c260ac5cdf4f"/*Shape*/,
-      "DefaultValue": 1
-    },
-    {
       "Id": "48005727-0158-4795-ad70-8410c27fd01d"/*Rate*/,
       "DefaultValue": 1.0
     },
     {
-      "Id": "8327e7ec-4370-4a3e-bd69-db3f4aa4b1d7"/*Ratio*/,
-      "DefaultValue": 1.0
+      "Id": "4cf5d20b-7335-4584-b246-c260ac5cdf4f"/*Shape*/,
+      "DefaultValue": 1
     },
     {
       "Id": "68f14205-f48d-4b44-823d-138eb61767b5"/*Phase*/,
       "DefaultValue": 0.0
     },
     {
+      "Id": "738f6cfb-8b71-423c-b897-824c20397e5a"/*AllowSpeedFactor*/,
+      "DefaultValue": 1
+    },
+    {
       "Id": "79917ef7-64ca-4825-9c6a-c9b2a7f6ff86"/*Amplitude*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "7b4992ba-30f7-42e5-b04b-ae4ec0be810e"/*OverrideTime*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "8327e7ec-4370-4a3e-bd69-db3f4aa4b1d7"/*Ratio*/,
       "DefaultValue": 1.0
     },
     {
@@ -28,14 +36,6 @@
     {
       "Id": "f12fee9a-dd91-40c2-9aa5-ea34804a858d"/*Bias*/,
       "DefaultValue": 0.5
-    },
-    {
-      "Id": "7b4992ba-30f7-42e5-b04b-ae4ec0be810e"/*OverrideTime*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "738f6cfb-8b71-423c-b897-824c20397e5a"/*AllowSpeedFactor*/,
-      "DefaultValue": 1
     }
   ],
   "Children": [],

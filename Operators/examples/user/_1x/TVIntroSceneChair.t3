@@ -3,49 +3,9 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "c30a24d2-911f-447c-bc38-1f7526e2cd20"/*Group*/,
-      "SymbolId": "a3f64d34-1fab-4230-86b3-1c3deba3f90b",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "f1dcb003-fd70-43c8-acbf-d0bbafb9e674"/*Transform*/,
-      "SymbolId": "284d2183-197d-47fd-b130-873cced78b1c",
-      "InputValues": [
-        {
-          "Id": "b4a8c16d-5a0f-4867-ae03-92a675abe709"/*Translation*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 0.0,
-            "Y": 0.04490152,
-            "Z": 0.0
-          }
-        },
-        {
-          "Id": "712adb09-d249-4c91-86db-3fedf6b05971"/*Rotation*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 0.0,
-            "Y": -90.0,
-            "Z": 0.0
-          }
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "11eaf8aa-bce8-4acb-8ed3-ea4fb76e3d57"/*TransformMesh*/,
       "SymbolId": "026e6917-6e6f-4ee3-b2d4-58f4f1de74c9",
       "InputValues": [
-        {
-          "Id": "da607ebd-6fec-4ae8-bf91-b70dcb794557"/*Translation*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": -0.03428358,
-            "Y": 0.046415355,
-            "Z": 0.1624253
-          }
-        },
         {
           "Id": "1168094f-1eee-4ed7-95e2-9459e6171e08"/*Rotation*/,
           "Type": "System.Numerics.Vector3",
@@ -56,79 +16,26 @@
           }
         },
         {
+          "Id": "86791d0a-97c3-413a-89d9-aa2ddd40ce4a"/*UniformScale*/,
+          "Type": "System.Single",
+          "Value": 1.9999999
+        },
+        {
+          "Id": "da607ebd-6fec-4ae8-bf91-b70dcb794557"/*Translation*/,
+          "Type": "System.Numerics.Vector3",
+          "Value": {
+            "X": -0.03428358,
+            "Y": 0.046415355,
+            "Z": 0.1624253
+          }
+        },
+        {
           "Id": "f37c11a5-b210-4e83-8ebd-64ea49ee9b96"/*Scale*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 1.6000001,
             "Y": 1.0,
             "Z": 1.0
-          }
-        },
-        {
-          "Id": "86791d0a-97c3-413a-89d9-aa2ddd40ce4a"/*UniformScale*/,
-          "Type": "System.Single",
-          "Value": 1.9999999
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "f6dfa88a-4b4b-4115-a1c9-b7d5aec34be1"/*QuadMesh*/,
-      "SymbolId": "9d6dbf28-9983-4584-abba-6281ce51d583",
-      "InputValues": [
-        {
-          "Id": "18a5f3be-92a7-438c-b32b-e0da7c7a5736"/*Segments*/,
-          "Type": "T3.Core.DataTypes.Vector.Int2",
-          "Value": {
-            "X": 3,
-            "Y": 3
-          }
-        },
-        {
-          "Id": "0295dd65-95b4-4e02-8d61-4622f59d4fc4"/*Stretch*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 1.0,
-            "Y": 1.0
-          }
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "c44daf2b-90c9-4c49-8a37-2b4df17e60a3"/*DrawMesh*/,
-      "SymbolId": "a3c5471e-079b-4d4b-886a-ec02d6428ff6",
-      "InputValues": [
-        {
-          "Id": "9e957f4a-6502-4905-8d97-331f8b54097c"/*Culling*/,
-          "Type": "SharpDX.Direct3D11.CullMode",
-          "Value": "None"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "8bf05765-3008-45cc-8556-0d41f66d75ce"/*SetMaterial*/,
-      "SymbolId": "0ed2bee3-641f-4b08-8685-df1506e9af3c",
-      "InputValues": [
-        {
-          "Id": "9ff5ade2-cfa7-4616-ad89-356f3248e04f"/*BaseColor*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0,
-            "W": 1.0
-          }
-        },
-        {
-          "Id": "2c91c306-1815-4b22-a70f-746232f024d7"/*EmissiveColor*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0,
-            "W": 1.0
           }
         }
       ],
@@ -162,6 +69,90 @@
       "Outputs": []
     },
     {
+      "Id": "8bf05765-3008-45cc-8556-0d41f66d75ce"/*SetMaterial*/,
+      "SymbolId": "0ed2bee3-641f-4b08-8685-df1506e9af3c",
+      "InputValues": [
+        {
+          "Id": "2c91c306-1815-4b22-a70f-746232f024d7"/*EmissiveColor*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          }
+        },
+        {
+          "Id": "9ff5ade2-cfa7-4616-ad89-356f3248e04f"/*BaseColor*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          }
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "a6a70fe7-1ab8-4b23-802c-2d4da08fcd90"/*SetMaterial*/,
+      "SymbolId": "0ed2bee3-641f-4b08-8685-df1506e9af3c",
+      "InputValues": [
+        {
+          "Id": "108ff533-f205-4989-b894-acf48e3cc1db"/*Metal*/,
+          "Type": "System.Single",
+          "Value": 0.5999999
+        },
+        {
+          "Id": "2c91c306-1815-4b22-a70f-746232f024d7"/*EmissiveColor*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          }
+        },
+        {
+          "Id": "e14dcc43-7c18-4ed7-ad39-dfeab10e3d33"/*Roughness*/,
+          "Type": "System.Single",
+          "Value": 0.6999999
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "c1de8bc7-5984-4287-a5b6-797a2ff7db34"/*LoadObj*/,
+      "SymbolId": "be52b670-9749-4c0d-89f0-d8b101395227",
+      "InputValues": [
+        {
+          "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
+          "Type": "System.String",
+          "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\chair-02.obj"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "c30a24d2-911f-447c-bc38-1f7526e2cd20"/*Group*/,
+      "SymbolId": "a3f64d34-1fab-4230-86b3-1c3deba3f90b",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "c44daf2b-90c9-4c49-8a37-2b4df17e60a3"/*DrawMesh*/,
+      "SymbolId": "a3c5471e-079b-4d4b-886a-ec02d6428ff6",
+      "InputValues": [
+        {
+          "Id": "9e957f4a-6502-4905-8d97-331f8b54097c"/*Culling*/,
+          "Type": "SharpDX.Direct3D11.CullMode",
+          "Value": "None"
+        }
+      ],
+      "Outputs": []
+    },
+    {
       "Id": "d4aa120d-b043-4247-98c1-e3c2fcbebc3c"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [
@@ -169,6 +160,31 @@
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
           "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\chair-01.png"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "f1dcb003-fd70-43c8-acbf-d0bbafb9e674"/*Transform*/,
+      "SymbolId": "284d2183-197d-47fd-b130-873cced78b1c",
+      "InputValues": [
+        {
+          "Id": "712adb09-d249-4c91-86db-3fedf6b05971"/*Rotation*/,
+          "Type": "System.Numerics.Vector3",
+          "Value": {
+            "X": 0.0,
+            "Y": -90.0,
+            "Z": 0.0
+          }
+        },
+        {
+          "Id": "b4a8c16d-5a0f-4867-ae03-92a675abe709"/*Translation*/,
+          "Type": "System.Numerics.Vector3",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.04490152,
+            "Z": 0.0
+          }
         }
       ],
       "Outputs": []
@@ -191,40 +207,24 @@
       "Outputs": []
     },
     {
-      "Id": "a6a70fe7-1ab8-4b23-802c-2d4da08fcd90"/*SetMaterial*/,
-      "SymbolId": "0ed2bee3-641f-4b08-8685-df1506e9af3c",
+      "Id": "f6dfa88a-4b4b-4115-a1c9-b7d5aec34be1"/*QuadMesh*/,
+      "SymbolId": "9d6dbf28-9983-4584-abba-6281ce51d583",
       "InputValues": [
         {
-          "Id": "2c91c306-1815-4b22-a70f-746232f024d7"/*EmissiveColor*/,
-          "Type": "System.Numerics.Vector4",
+          "Id": "0295dd65-95b4-4e02-8d61-4622f59d4fc4"/*Stretch*/,
+          "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0,
-            "W": 1.0
+            "X": 1.0,
+            "Y": 1.0
           }
         },
         {
-          "Id": "e14dcc43-7c18-4ed7-ad39-dfeab10e3d33"/*Roughness*/,
-          "Type": "System.Single",
-          "Value": 0.6999999
-        },
-        {
-          "Id": "108ff533-f205-4989-b894-acf48e3cc1db"/*Metal*/,
-          "Type": "System.Single",
-          "Value": 0.5999999
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "c1de8bc7-5984-4287-a5b6-797a2ff7db34"/*LoadObj*/,
-      "SymbolId": "be52b670-9749-4c0d-89f0-d8b101395227",
-      "InputValues": [
-        {
-          "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
-          "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\chair-02.obj"
+          "Id": "18a5f3be-92a7-438c-b32b-e0da7c7a5736"/*Segments*/,
+          "Type": "T3.Core.DataTypes.Vector.Int2",
+          "Value": {
+            "X": 3,
+            "Y": 3
+          }
         }
       ],
       "Outputs": []

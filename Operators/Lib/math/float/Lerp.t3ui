@@ -3,15 +3,6 @@
   "Description": "Blends between two values (lerp). Also see [BlendValues] to blend between more values and [Remap] to blend between two value ranges.",
   "InputUis": [
     {
-      "InputId": "f5904a0e-f7a6-4fd3-b8f3-8ecccd9363d7"/*A*/,
-      "Position": {
-        "X": 36.0,
-        "Y": 334.0
-      },
-      "Min": -100.0,
-      "Max": 100.0
-    },
-    {
       "InputId": "1aed2c36-696a-4508-a8b6-3546ca570997"/*B*/,
       "Position": {
         "X": 197.0,
@@ -34,6 +25,15 @@
         "X": 197.0,
         "Y": 418.0
       }
+    },
+    {
+      "InputId": "f5904a0e-f7a6-4fd3-b8f3-8ecccd9363d7"/*A*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
     }
   ],
   "SymbolChildUis": [],

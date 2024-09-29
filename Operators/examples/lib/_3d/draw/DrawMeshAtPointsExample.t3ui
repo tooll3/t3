@@ -4,10 +4,10 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "ec957247-0313-4679-b495-e18eb64aa71e"/*DrawMeshAtPoints*/,
+      "ChildId": "000a42bd-1658-44f9-811e-9a471e2786f0"/*RenderTarget*/,
       "Position": {
-        "X": 257.3291,
-        "Y": 67.248535
+        "X": 720.6748,
+        "Y": 42.02365
       }
     },
     {
@@ -19,11 +19,10 @@
       }
     },
     {
-      "ChildId": "e5315f37-a88a-479a-88c3-f00f1e32affd"/*RadialPoints*/,
-      "Comment": "Notice how we disabled CloseCircleLine. Since we don't draw lines we don't need to repeat the start and end points.\n\nWe also adjust the orientation angle with a random axis and adjust the orientation angle so that the Torus are aligned at the z-axis.",
+      "ChildId": "6906d1df-5cf6-4f75-9175-aea46a969dd9"/*SetFog*/,
       "Position": {
-        "X": 107.3291,
-        "Y": 67.248535
+        "X": 570.6748,
+        "Y": 22.717285
       }
     },
     {
@@ -31,13 +30,6 @@
       "Position": {
         "X": -42.6709,
         "Y": 67.248535
-      }
-    },
-    {
-      "ChildId": "d48cb405-e06e-4cc2-89ca-17f3ae0885f3"/*Execute*/,
-      "Position": {
-        "X": 420.6748,
-        "Y": 22.717285
       }
     },
     {
@@ -49,17 +41,25 @@
       }
     },
     {
-      "ChildId": "000a42bd-1658-44f9-811e-9a471e2786f0"/*RenderTarget*/,
+      "ChildId": "d48cb405-e06e-4cc2-89ca-17f3ae0885f3"/*Execute*/,
       "Position": {
-        "X": 720.6748,
-        "Y": 42.02365
+        "X": 420.6748,
+        "Y": 22.717285
       }
     },
     {
-      "ChildId": "6906d1df-5cf6-4f75-9175-aea46a969dd9"/*SetFog*/,
+      "ChildId": "e5315f37-a88a-479a-88c3-f00f1e32affd"/*RadialPoints*/,
+      "Comment": "Notice how we disabled CloseCircleLine. Since we don't draw lines we don't need to repeat the start and end points.\n\nWe also adjust the orientation angle with a random axis and adjust the orientation angle so that the Torus are aligned at the z-axis.",
       "Position": {
-        "X": 570.6748,
-        "Y": 22.717285
+        "X": 107.3291,
+        "Y": 67.248535
+      }
+    },
+    {
+      "ChildId": "ec957247-0313-4679-b495-e18eb64aa71e"/*DrawMeshAtPoints*/,
+      "Position": {
+        "X": 257.3291,
+        "Y": 67.248535
       }
     }
   ],

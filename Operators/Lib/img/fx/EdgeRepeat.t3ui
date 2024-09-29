@@ -18,13 +18,6 @@
       }
     },
     {
-      "InputId": "b9859a88-4dd1-4221-9884-0a6e8cec9da4"/*Background*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 89.999985
-      }
-    },
-    {
       "InputId": "549020f5-e405-4f78-a973-9e9fb3c9c25e"/*LineColor*/,
       "Position": {
         "X": -200.0,
@@ -32,23 +25,13 @@
       }
     },
     {
-      "InputId": "fb9e226b-866a-4228-bad9-bc7908bfc442"/*Center*/,
+      "InputId": "881e04f7-1014-4e87-81c9-f4791086e57d"/*LineThickness*/,
       "Position": {
         "X": -222.20561,
-        "Y": 278.48233
-      },
-      "AddPadding": "True",
-      "Min": -2.0,
-      "Max": 2.0
-    },
-    {
-      "InputId": "b77a3329-c938-4dd3-bf3b-8774db187ef5"/*Width*/,
-      "Position": {
-        "X": -222.20561,
-        "Y": 323.4823
+        "Y": 458.4823
       },
       "Min": 0.0,
-      "Max": 2.0,
+      "Max": 1000.0,
       "Clamp": true
     },
     {
@@ -63,14 +46,21 @@
       "Format": "{0:0.0}°"
     },
     {
-      "InputId": "881e04f7-1014-4e87-81c9-f4791086e57d"/*LineThickness*/,
+      "InputId": "b77a3329-c938-4dd3-bf3b-8774db187ef5"/*Width*/,
       "Position": {
         "X": -222.20561,
-        "Y": 458.4823
+        "Y": 323.4823
       },
       "Min": 0.0,
-      "Max": 1000.0,
+      "Max": 2.0,
       "Clamp": true
+    },
+    {
+      "InputId": "b9859a88-4dd1-4221-9884-0a6e8cec9da4"/*Background*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 89.999985
+      }
     },
     {
       "InputId": "c30a5d00-681c-490d-80d4-d58577cd65db"/*Resolution*/,
@@ -79,6 +69,16 @@
         "Y": 572.6613
       },
       "AddPadding": "True"
+    },
+    {
+      "InputId": "fb9e226b-866a-4228-bad9-bc7908bfc442"/*Center*/,
+      "Position": {
+        "X": -222.20561,
+        "Y": 278.48233
+      },
+      "AddPadding": "True",
+      "Min": -2.0,
+      "Max": 2.0
     }
   ],
   "SymbolChildUis": [
@@ -87,13 +87,6 @@
       "Position": {
         "X": -25.082056,
         "Y": 29.952059
-      }
-    },
-    {
-      "ChildId": "f7d47c1b-cc8e-492f-a12b-d608406ba557"/*Vector4Components*/,
-      "Position": {
-        "X": -25.082056,
-        "Y": 85.952194
       }
     },
     {
@@ -120,6 +113,13 @@
       "Position": {
         "X": -25.082056,
         "Y": 141.9522
+      }
+    },
+    {
+      "ChildId": "f7d47c1b-cc8e-492f-a12b-d608406ba557"/*Vector4Components*/,
+      "Position": {
+        "X": -25.082056,
+        "Y": 85.952194
       }
     }
   ],

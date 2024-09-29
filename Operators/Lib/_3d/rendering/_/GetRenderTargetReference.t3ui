@@ -3,11 +3,11 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "f8e86ae6-f5c8-4de1-a4ed-58b43c2fe7f5"/*ColorTexture*/,
+      "InputId": "290cd1e8-4793-4a65-ad90-3578b4410973"/*TextureReference*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,
-        "Y": 0.0
+        "Y": 90.0
       }
     },
     {
@@ -18,11 +18,11 @@
       }
     },
     {
-      "InputId": "290cd1e8-4793-4a65-ad90-3578b4410973"/*TextureReference*/,
+      "InputId": "f8e86ae6-f5c8-4de1-a4ed-58b43c2fe7f5"/*ColorTexture*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,
-        "Y": 90.0
+        "Y": 0.0
       }
     }
   ],

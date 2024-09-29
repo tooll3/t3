@@ -11,18 +11,18 @@
       }
     },
     {
+      "InputId": "3dc564ad-b534-4170-92a2-bf860d3604cb"/*EnableSwap*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
       "InputId": "de95e30b-896e-4880-b940-82863554ce02"/*BufferBInput*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
-    },
-    {
-      "InputId": "3dc564ad-b534-4170-92a2-bf860d3604cb"/*EnableSwap*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
       }
     }
   ],

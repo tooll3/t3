@@ -3,17 +3,17 @@
   "Description": "Converts time between seconds and bars.",
   "InputUis": [
     {
-      "InputId": "dd9b7590-9d1f-4a3a-afe7-fa37fefd5798"/*Time*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "3ad320b9-d1bc-4bdb-b5c8-20caa721621b"/*Mode*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "dd9b7590-9d1f-4a3a-afe7-fa37fefd5798"/*Time*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
       }
     }
   ],

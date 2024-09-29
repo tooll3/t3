@@ -4,79 +4,9 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "d48d439e-d2d3-4e52-a7f8-0fe718dc37c3"/*DrawMesh*/,
-      "Position": {
-        "X": 600.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "ChildId": "f507b370-6041-4420-beb3-93006d0c8b71"/*TorusMesh*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "ChildId": "85a55e6d-bd3d-4217-a595-8fc069819d8b"/*SplitMeshVertices*/,
-      "Position": {
-        "X": 150.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "ChildId": "5abdbd6f-0451-40bb-ab67-2f556e882231"/*ScatterMeshFaces*/,
-      "Position": {
-        "X": 450.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "ChildId": "84eb662c-5fb0-4677-a752-fe3d6d32fa8c"/*SelectVertices*/,
-      "Position": {
-        "X": 300.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "ChildId": "c9368b68-ec0c-41b9-a693-00fb9774904c"/*OscillateVec3*/,
-      "Position": {
-        "X": 150.0,
-        "Y": 63.0
-      }
-    },
-    {
-      "ChildId": "aa4b309a-c3a0-4350-8a60-46f466c013d6"/*PointLight*/,
-      "Position": {
-        "X": 750.0,
-        "Y": 0.0
-      }
-    },
-    {
       "ChildId": "03401d5a-95d1-4508-90fe-54d896457a06"/*SetMaterial*/,
       "Position": {
         "X": 900.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "ChildId": "94a599ad-0cf9-4ae2-99a2-f32a723b1f4a"/*SetEnvironment*/,
-      "Position": {
-        "X": 1208.2487,
-        "Y": 317.49216
-      }
-    },
-    {
-      "ChildId": "cff96ffa-947c-4386-8068-1221242c7bc9"/*SetFog*/,
-      "Position": {
-        "X": 1050.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "ChildId": "c4d88a72-1e8b-40c0-aadd-fbb34a1762ac"/*OrbitCamera*/,
-      "Position": {
-        "X": 1350.0,
         "Y": 0.0
       }
     },
@@ -88,10 +18,45 @@
       }
     },
     {
+      "ChildId": "5abdbd6f-0451-40bb-ab67-2f556e882231"/*ScatterMeshFaces*/,
+      "Position": {
+        "X": 450.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "6f18ece8-5ba8-4567-93cc-67ae9c3d69cd"/*SSAO*/,
+      "Position": {
+        "X": 1650.0,
+        "Y": 0.0
+      }
+    },
+    {
       "ChildId": "8335aa13-e80d-4e11-990c-c047b59eee8d"/*Glow*/,
       "Position": {
         "X": 1800.0,
         "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "84eb662c-5fb0-4677-a752-fe3d6d32fa8c"/*SelectVertices*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "85a55e6d-bd3d-4217-a595-8fc069819d8b"/*SplitMeshVertices*/,
+      "Position": {
+        "X": 150.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "94a599ad-0cf9-4ae2-99a2-f32a723b1f4a"/*SetEnvironment*/,
+      "Position": {
+        "X": 1208.2487,
+        "Y": 317.49216
       }
     },
     {
@@ -109,10 +74,45 @@
       }
     },
     {
-      "ChildId": "6f18ece8-5ba8-4567-93cc-67ae9c3d69cd"/*SSAO*/,
+      "ChildId": "aa4b309a-c3a0-4350-8a60-46f466c013d6"/*PointLight*/,
       "Position": {
-        "X": 1650.0,
+        "X": 750.0,
         "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "c4d88a72-1e8b-40c0-aadd-fbb34a1762ac"/*OrbitCamera*/,
+      "Position": {
+        "X": 1350.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "c9368b68-ec0c-41b9-a693-00fb9774904c"/*OscillateVec3*/,
+      "Position": {
+        "X": 150.0,
+        "Y": 63.0
+      }
+    },
+    {
+      "ChildId": "cff96ffa-947c-4386-8068-1221242c7bc9"/*SetFog*/,
+      "Position": {
+        "X": 1050.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "d48d439e-d2d3-4e52-a7f8-0fe718dc37c3"/*DrawMesh*/,
+      "Position": {
+        "X": 600.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "e63acbba-d489-4080-ac8f-97a86a1ee45a"/*TransformMesh*/,
+      "Position": {
+        "X": -6.0032654,
+        "Y": -137.53348
       }
     },
     {
@@ -123,10 +123,10 @@
       }
     },
     {
-      "ChildId": "e63acbba-d489-4080-ac8f-97a86a1ee45a"/*TransformMesh*/,
+      "ChildId": "f507b370-6041-4420-beb3-93006d0c8b71"/*TorusMesh*/,
       "Position": {
-        "X": -6.0032654,
-        "Y": -137.53348
+        "X": 0.0,
+        "Y": 0.0
       }
     }
   ],

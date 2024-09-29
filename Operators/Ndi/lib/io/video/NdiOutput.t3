@@ -2,6 +2,10 @@
   "Id": "9412d0f4-dab8-4145-9719-10395e154fa7"/*NdiOutput*/,
   "Inputs": [
     {
+      "Id": "15ddab7a-aad4-49eb-9e56-70714e10679f"/*Texture*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "740db4c4-4182-4743-a713-5a45855499d9"/*SenderName*/,
       "DefaultValue": "Tooll3"
     },

@@ -11,11 +11,12 @@
       "Usage": "FilePath"
     },
     {
-      "InputId": "d02f41a6-1a6b-4a6e-8d6c-a28873c79f2c"/*Setup*/,
+      "InputId": "49237499-9b1e-4371-afac-4e3394868370"/*OffsetMetallic*/,
       "Position": {
         "X": 51.512096,
-        "Y": 226.99597
-      }
+        "Y": 361.99597
+      },
+      "Description": "This is a temporary offset that probably will become obsolete soon."
     },
     {
       "InputId": "57f129ae-0b2e-465d-8c0e-f6259fdd37ce"/*CombineBuffer*/,
@@ -25,10 +26,10 @@
       }
     },
     {
-      "InputId": "ef7075e9-4bc2-442e-8e0c-e03667ff2e0a"/*TriggerUpdate*/,
+      "InputId": "d02f41a6-1a6b-4a6e-8d6c-a28873c79f2c"/*Setup*/,
       "Position": {
         "X": 51.512096,
-        "Y": 271.99597
+        "Y": 226.99597
       }
     },
     {
@@ -40,12 +41,11 @@
       "Description": "This is a temporary offset that probably will become obsolete soon."
     },
     {
-      "InputId": "49237499-9b1e-4371-afac-4e3394868370"/*OffsetMetallic*/,
+      "InputId": "ef7075e9-4bc2-442e-8e0c-e03667ff2e0a"/*TriggerUpdate*/,
       "Position": {
         "X": 51.512096,
-        "Y": 361.99597
-      },
-      "Description": "This is a temporary offset that probably will become obsolete soon."
+        "Y": 271.99597
+      }
     },
     {
       "InputId": "fb325383-754a-4702-aff2-c19e16363460"/*MeshChildIndex*/,

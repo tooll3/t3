@@ -3,25 +3,17 @@
   "Description": "Loads an image sequence from a folder.",
   "InputUis": [
     {
-      "InputId": "a1e08fde-2d9b-4a2d-bf09-a5e54ad8cfa0"/*FilePath*/,
+      "InputId": "25215a7e-1e38-4370-8845-cbf422a7eb92"/*TriggerUpdate*/,
       "Position": {
         "X": -834.8699,
-        "Y": -121.4061
-      },
-      "Usage": "DirectoryPath"
+        "Y": 13.593903
+      }
     },
     {
       "InputId": "5c510853-f87d-4ebf-be0a-78d06d970be2"/*FrameRate*/,
       "Position": {
         "X": -834.8699,
         "Y": -31.406097
-      }
-    },
-    {
-      "InputId": "25215a7e-1e38-4370-8845-cbf422a7eb92"/*TriggerUpdate*/,
-      "Position": {
-        "X": -834.8699,
-        "Y": 13.593903
       }
     },
     {
@@ -33,14 +25,36 @@
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
+    },
+    {
+      "InputId": "a1e08fde-2d9b-4a2d-bf09-a5e54ad8cfa0"/*FilePath*/,
+      "Position": {
+        "X": -834.8699,
+        "Y": -121.4061
+      },
+      "Usage": "DirectoryPath"
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "c9937e67-dc65-4f44-9b3e-fc2a160c704e"/*FilesInFolder*/,
+      "ChildId": "0ea364e4-e158-4d3e-8889-c84ebdf6e39d"/*TimeToString*/,
+      "Position": {
+        "X": -409.29373,
+        "Y": 299.75244
+      }
+    },
+    {
+      "ChildId": "160185d9-d0dd-4127-b3cd-9821be524e3c"/*FloatToString*/,
       "Position": {
         "X": -29.626038,
-        "Y": 0.41168213
+        "Y": 125.41168
+      }
+    },
+    {
+      "ChildId": "1e11e1e6-db51-481b-b6b8-95d58523b7d9"/*CompareImages*/,
+      "Position": {
+        "X": -172.70784,
+        "Y": 494.66608
       }
     },
     {
@@ -51,10 +65,10 @@
       }
     },
     {
-      "ChildId": "faba6557-4c87-4ff9-8b8e-c6905f2b4973"/*Multiply*/,
+      "ChildId": "5491d337-5724-4f20-969e-7cdca220a446"/*PickFromStringList*/,
       "Position": {
-        "X": -179.62604,
-        "Y": 43.411682
+        "X": 120.37396,
+        "Y": 0.41168213
       }
     },
     {
@@ -65,16 +79,16 @@
       }
     },
     {
-      "ChildId": "5491d337-5724-4f20-969e-7cdca220a446"/*PickFromStringList*/,
+      "ChildId": "a7141bee-87ed-4e99-bc5a-8be6a348fc6d"/*LoadImage*/,
       "Position": {
-        "X": 120.37396,
+        "X": 270.37396,
         "Y": 0.41168213
       }
     },
     {
-      "ChildId": "a7141bee-87ed-4e99-bc5a-8be6a348fc6d"/*LoadImage*/,
+      "ChildId": "c9937e67-dc65-4f44-9b3e-fc2a160c704e"/*FilesInFolder*/,
       "Position": {
-        "X": 270.37396,
+        "X": -29.626038,
         "Y": 0.41168213
       }
     },
@@ -93,13 +107,6 @@
       }
     },
     {
-      "ChildId": "1e11e1e6-db51-481b-b6b8-95d58523b7d9"/*CompareImages*/,
-      "Position": {
-        "X": -172.70784,
-        "Y": 494.66608
-      }
-    },
-    {
       "ChildId": "f3ba9356-53c5-4f40-b18d-f66bab7f219b"/*Text*/,
       "Position": {
         "X": 120.37396,
@@ -107,17 +114,10 @@
       }
     },
     {
-      "ChildId": "160185d9-d0dd-4127-b3cd-9821be524e3c"/*FloatToString*/,
+      "ChildId": "faba6557-4c87-4ff9-8b8e-c6905f2b4973"/*Multiply*/,
       "Position": {
-        "X": -29.626038,
-        "Y": 125.41168
-      }
-    },
-    {
-      "ChildId": "0ea364e4-e158-4d3e-8889-c84ebdf6e39d"/*TimeToString*/,
-      "Position": {
-        "X": -409.29373,
-        "Y": 299.75244
+        "X": -179.62604,
+        "Y": 43.411682
       }
     }
   ],

@@ -2,6 +2,18 @@
   "Id": "dc34c54b-f856-4fd2-a182-68fd75189d7d"/*ShardNoise*/,
   "Inputs": [
     {
+      "Id": "0b76c7f3-32b0-4aa0-a17d-16cb8bde5f80"/*Rate*/,
+      "DefaultValue": 2.0
+    },
+    {
+      "Id": "12d39fbe-cea2-44af-acf7-901df793e0c4"/*Phase*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "1583d95b-da27-4d12-9937-8cd99a61bb18"/*GenerateMips*/,
+      "DefaultValue": false
+    },
+    {
       "Id": "2c6a429d-5a38-4457-94d5-8994e7d1242d"/*ColorA*/,
       "DefaultValue": {
         "X": 1E-06,
@@ -11,12 +23,14 @@
       }
     },
     {
-      "Id": "5d02399d-dcfa-41c0-bc6b-59833389b580"/*ColorB*/,
+      "Id": "35852bd6-be0a-4dae-b078-b6db734ca772"/*Method*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "3949fce5-e285-4787-9db6-0ef2e533b15e"/*Stretch*/,
       "DefaultValue": {
-        "X": 1.0,
-        "Y": 0.99999,
-        "Z": 0.99999,
-        "W": 1.0
+        "X": 2.0,
+        "Y": 2.0
       }
     },
     {
@@ -34,31 +48,17 @@
       }
     },
     {
-      "Id": "3949fce5-e285-4787-9db6-0ef2e533b15e"/*Stretch*/,
-      "DefaultValue": {
-        "X": 2.0,
-        "Y": 2.0
-      }
-    },
-    {
-      "Id": "f5233be8-dfdf-463b-af49-029f3459bbeb"/*Scale*/,
-      "DefaultValue": 10.0
-    },
-    {
       "Id": "58ff3aee-7ced-4634-ac4a-871d67d96b57"/*Sharpen*/,
       "DefaultValue": 1.0
     },
     {
-      "Id": "12d39fbe-cea2-44af-acf7-901df793e0c4"/*Phase*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "0b76c7f3-32b0-4aa0-a17d-16cb8bde5f80"/*Rate*/,
-      "DefaultValue": 2.0
-    },
-    {
-      "Id": "35852bd6-be0a-4dae-b078-b6db734ca772"/*Method*/,
-      "DefaultValue": 0
+      "Id": "5d02399d-dcfa-41c0-bc6b-59833389b580"/*ColorB*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 0.99999,
+        "Z": 0.99999,
+        "W": 1.0
+      }
     },
     {
       "Id": "bff37ed2-cc5a-47fa-9363-65bb1d5eb2fa"/*BiasAndGain*/,
@@ -75,20 +75,20 @@
       }
     },
     {
-      "Id": "1583d95b-da27-4d12-9937-8cd99a61bb18"/*GenerateMips*/,
-      "DefaultValue": false
+      "Id": "f5233be8-dfdf-463b-af49-029f3459bbeb"/*Scale*/,
+      "DefaultValue": 10.0
     }
   ],
   "Children": [
     {
-      "Id": "8e211e82-ac46-4689-b6b9-2a7ef1e7b204"/*Vector4Components*/,
-      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "Id": "02ac7c20-56b0-4f23-a9ab-3c4bce5b1089"/*Value*/,
+      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "02ac7c20-56b0-4f23-a9ab-3c4bce5b1089"/*Value*/,
-      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
+      "Id": "13702d11-e23f-4a8c-a21e-61851e731d65"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
       "InputValues": [],
       "Outputs": []
     },
@@ -110,7 +110,7 @@
       "Outputs": []
     },
     {
-      "Id": "9e20de28-68d3-4df3-8773-44d36641383f"/*Vector2Components*/,
+      "Id": "2bda7620-504d-4c77-81cb-7f3f861b3e6a"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
@@ -128,20 +128,20 @@
       "Outputs": []
     },
     {
+      "Id": "8e211e82-ac46-4689-b6b9-2a7ef1e7b204"/*Vector4Components*/,
+      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "9e20de28-68d3-4df3-8773-44d36641383f"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "e4f5138c-b10a-438b-b1ee-ee27f30c5ff4"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "2bda7620-504d-4c77-81cb-7f3f861b3e6a"/*Vector2Components*/,
-      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "13702d11-e23f-4a8c-a21e-61851e731d65"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
       "InputValues": [],
       "Outputs": []
     }

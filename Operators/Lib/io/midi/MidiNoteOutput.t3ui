@@ -3,27 +3,11 @@
   "Description": "Send Midi notes to the selected device on the given channel. The velocity is provided either as an integer between 0 and 127 or as a normalized float value between 0.0 and 1.0\n\nWhen NoteWhileTriggered is selected, a note is played while the TriggerSend input is boolean \"true\". When it turns \"false\" a NoteOff command is sent to the receiving device.\nWhen NoteFixedDuration is selected, a note starts when the TriggerSend input is boolean \"true\" and ends after the time in DurationInSecs has passed or if another new note is triggered (to prevent overlapping or hanging notes).\n\nThis node can be used in combination with [MidiControlOutput], [MidiPitchbendOutput] and [MidiTriggerOutput] to create generative music or control hardware.",
   "InputUis": [
     {
-      "InputId": "e1c1c77a-a6af-4565-b345-f788bf268b2b"/*TriggerSend*/,
-      "Position": {
-        "X": 197.0,
-        "Y": 598.0
-      }
-    },
-    {
       "InputId": "0e9e5c88-5fa4-40e4-8b02-ca2e9510057f"/*SendMode*/,
       "Position": {
         "X": 197.0,
         "Y": 553.0
       }
-    },
-    {
-      "InputId": "97a4f0d3-e691-4c2c-b731-7e4afc77eed2"/*Device*/,
-      "Position": {
-        "X": 197.0,
-        "Y": 508.0
-      },
-      "AddPadding": "True",
-      "Usage": "CustomDropdown"
     },
     {
       "InputId": "4b63108c-c5b7-42b9-acdf-6bac0e882d08"/*ChannelNumber*/,
@@ -36,6 +20,16 @@
       "Clamp": true
     },
     {
+      "InputId": "5a99b601-328a-4238-9841-ab6022a932f5"/*VelocityFloat*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 733.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
       "InputId": "90221c60-c7ac-4470-affb-e4fb22712ee5"/*NoteNumber*/,
       "Position": {
         "X": 197.0,
@@ -44,6 +38,15 @@
       "Min": 0,
       "Max": 127,
       "Clamp": true
+    },
+    {
+      "InputId": "97a4f0d3-e691-4c2c-b731-7e4afc77eed2"/*Device*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 508.0
+      },
+      "AddPadding": "True",
+      "Usage": "CustomDropdown"
     },
     {
       "InputId": "a33619fa-bb33-4649-a714-285c5cce15dc"/*Velocity*/,
@@ -63,14 +66,11 @@
       }
     },
     {
-      "InputId": "5a99b601-328a-4238-9841-ab6022a932f5"/*VelocityFloat*/,
+      "InputId": "e1c1c77a-a6af-4565-b345-f788bf268b2b"/*TriggerSend*/,
       "Position": {
         "X": 197.0,
-        "Y": 733.0
-      },
-      "Min": 0.0,
-      "Max": 1.0,
-      "Clamp": true
+        "Y": 598.0
+      }
     },
     {
       "InputId": "eddb2482-f818-491b-a4e5-af0e163dba53"/*DurationInSecs*/,

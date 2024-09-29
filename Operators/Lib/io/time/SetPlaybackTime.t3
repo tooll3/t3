@@ -2,8 +2,8 @@
   "Id": "c6d22dc3-a6ff-4a6f-aa14-8be6595da2b1"/*SetPlaybackTime*/,
   "Inputs": [
     {
-      "Id": "68c3bd6d-aebf-4a0c-bb73-04c9997ebae9"/*SubGraph*/,
-      "DefaultValue": null
+      "Id": "16b2b1f5-4087-4e77-902b-3cdde1b22179"/*ShowLogMessages*/,
+      "DefaultValue": false
     },
     {
       "Id": "24cf475d-a5b7-46b5-92cf-1ffcefb0693e"/*TimeInBars*/,
@@ -14,11 +14,11 @@
       "DefaultValue": 0
     },
     {
-      "Id": "bd88e545-743e-4caa-8fd1-e1f7f3c78b21"/*Enabled*/,
-      "DefaultValue": false
+      "Id": "68c3bd6d-aebf-4a0c-bb73-04c9997ebae9"/*SubGraph*/,
+      "DefaultValue": null
     },
     {
-      "Id": "16b2b1f5-4087-4e77-902b-3cdde1b22179"/*ShowLogMessages*/,
+      "Id": "bd88e545-743e-4caa-8fd1-e1f7f3c78b21"/*Enabled*/,
       "DefaultValue": false
     }
   ],

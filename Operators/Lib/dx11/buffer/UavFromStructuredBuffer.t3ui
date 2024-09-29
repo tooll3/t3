@@ -3,14 +3,14 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "5d888f13-0ad8-4034-99ca-da36c8fb261c"/*Buffer*/,
+      "InputId": "13b85721-7126-47bb-ab4f-096eae59e412"/*BufferFlags*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
       }
     },
     {
-      "InputId": "13b85721-7126-47bb-ab4f-096eae59e412"/*BufferFlags*/,
+      "InputId": "5d888f13-0ad8-4034-99ca-da36c8fb261c"/*Buffer*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0

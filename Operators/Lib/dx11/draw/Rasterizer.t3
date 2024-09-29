@@ -6,11 +6,11 @@
       "DefaultValue": null
     },
     {
-      "Id": "73945e5d-3c3c-4742-b341-a061b0dc116f"/*Viewports*/,
+      "Id": "3f71be22-9dc2-4e47-8b3a-1ef3c9ecbd9d"/*ScissorRectangles*/,
       "DefaultValue": null
     },
     {
-      "Id": "3f71be22-9dc2-4e47-8b3a-1ef3c9ecbd9d"/*ScissorRectangles*/,
+      "Id": "73945e5d-3c3c-4742-b341-a061b0dc116f"/*Viewports*/,
       "DefaultValue": null
     }
   ],

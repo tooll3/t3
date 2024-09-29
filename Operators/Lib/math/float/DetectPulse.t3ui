@@ -3,10 +3,17 @@
   "Description": "Detects if rapid changes within an input signal exceed a threshold. This can be useful for detecting beats in OSC or audio signals.",
   "InputUis": [
     {
-      "InputId": "c0b97bc3-1f93-4678-b93f-d364374fd40a"/*Value*/,
+      "InputId": "2cf8d9e3-a984-4760-88cd-5dc2c8b66d7b"/*MinTimeBetweenHits*/,
       "Position": {
         "X": -200.0,
-        "Y": 0.0
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "4424863b-b25c-449a-8ac9-16796617af7b"/*Damping*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
       }
     },
     {
@@ -20,17 +27,10 @@
       "Scale": 0.001
     },
     {
-      "InputId": "4424863b-b25c-449a-8ac9-16796617af7b"/*Damping*/,
+      "InputId": "c0b97bc3-1f93-4678-b93f-d364374fd40a"/*Value*/,
       "Position": {
         "X": -200.0,
-        "Y": 45.0
-      }
-    },
-    {
-      "InputId": "2cf8d9e3-a984-4760-88cd-5dc2c8b66d7b"/*MinTimeBetweenHits*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 135.0
+        "Y": 0.0
       }
     }
   ],

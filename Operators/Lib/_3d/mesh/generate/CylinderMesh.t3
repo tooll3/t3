@@ -2,40 +2,32 @@
   "Id": "5777a005-bbae-48d6-b633-5e998ca76c91"/*CylinderMesh*/,
   "Inputs": [
     {
-      "Id": "8d290afb-2574-4afa-a545-a0d3588f89f6"/*Radius*/,
-      "DefaultValue": 0.5
-    },
-    {
-      "Id": "4c91b66c-670d-45ff-94cc-01d1a68cd040"/*RadiusOffset*/,
+      "Id": "1d1ce8c4-fd3c-4d69-be0e-679247a811c9"/*Twist*/,
       "DefaultValue": 0.0
-    },
-    {
-      "Id": "57f3310c-6ed2-4a52-af72-43e083f73360"/*Height*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "4dd4c4f0-c6b7-4ee8-92e2-cb8df6131e0a"/*Rows*/,
-      "DefaultValue": 1
     },
     {
       "Id": "321693a5-4e2c-47a0-a42e-95cbdc6ebf80"/*Columns*/,
       "DefaultValue": 32
     },
     {
-      "Id": "db5e3c51-5765-44d8-a61b-a7b552fce5b3"/*CapSegments*/,
+      "Id": "4c7e0f67-a35b-4a23-b640-b0375c1a3259"/*Rotation*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "4c91b66c-670d-45ff-94cc-01d1a68cd040"/*RadiusOffset*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "4dd4c4f0-c6b7-4ee8-92e2-cb8df6131e0a"/*Rows*/,
       "DefaultValue": 1
     },
     {
-      "Id": "c29b5881-85bc-4d29-bc72-6dd36730fa8f"/*Spin*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "1d1ce8c4-fd3c-4d69-be0e-679247a811c9"/*Twist*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "91fd4fbf-1cec-4d89-8014-ceed0021a5ee"/*Fill*/,
-      "DefaultValue": 360.0
+      "Id": "57f3310c-6ed2-4a52-af72-43e083f73360"/*Height*/,
+      "DefaultValue": 1.0
     },
     {
       "Id": "66332a91-e0c2-442a-99f6-347dedaed72e"/*Center*/,
@@ -50,12 +42,20 @@
       "DefaultValue": 0.5
     },
     {
-      "Id": "4c7e0f67-a35b-4a23-b640-b0375c1a3259"/*Rotation*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      }
+      "Id": "8d290afb-2574-4afa-a545-a0d3588f89f6"/*Radius*/,
+      "DefaultValue": 0.5
+    },
+    {
+      "Id": "91fd4fbf-1cec-4d89-8014-ceed0021a5ee"/*Fill*/,
+      "DefaultValue": 360.0
+    },
+    {
+      "Id": "c29b5881-85bc-4d29-bc72-6dd36730fa8f"/*Spin*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "db5e3c51-5765-44d8-a61b-a7b552fce5b3"/*CapSegments*/,
+      "DefaultValue": 1
     }
   ],
   "Children": [],

@@ -3,11 +3,10 @@
   "Description": "A small helper to visualize the extend of point fields.\nOnly useful for examples.",
   "InputUis": [
     {
-      "InputId": "b9a71525-a923-47fd-b3ef-8bce4837042b"/*FieldPointsBuffer*/,
-      "Relevancy": "Required",
+      "InputId": "587a630d-8163-4304-911f-d8f8ea781106"/*Range*/,
       "Position": {
-        "X": -277.31134,
-        "Y": -6.2125244
+        "X": -289.645,
+        "Y": 266.61554
       }
     },
     {
@@ -18,48 +17,35 @@
       }
     },
     {
-      "InputId": "587a630d-8163-4304-911f-d8f8ea781106"/*Range*/,
-      "Position": {
-        "X": -289.645,
-        "Y": 266.61554
-      }
-    },
-    {
       "InputId": "83727898-5fc0-40df-a199-830cda49d9b6"/*Offset*/,
       "Position": {
         "X": -289.645,
         "Y": 311.61554
       }
+    },
+    {
+      "InputId": "b9a71525-a923-47fd-b3ef-8bce4837042b"/*FieldPointsBuffer*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -277.31134,
+        "Y": -6.2125244
+      }
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "5ca2f482-804b-4037-ba59-769364b3f416"/*Draw Field Points*/,
-      "Position": {
-        "X": 666.89514,
-        "Y": 1.3433228
-      }
-    },
-    {
-      "ChildId": "938e051f-9776-4d01-b63a-55b21323d827"/*RepeatAtGPoints*/,
-      "Comment": "Draw some rings to visualize the field extend.",
-      "Position": {
-        "X": 366.89514,
-        "Y": 57.343323
-      }
-    },
-    {
-      "ChildId": "e41b68f7-b7ca-4c41-9133-f44779251245"/*RadialPoints*/,
+      "ChildId": "163d09dc-98aa-4048-9054-39e287d1706d"/*RepeatAtGPoints*/,
+      "Comment": "Clone multiple points with varient Size and Opacity on these points.",
       "Position": {
         "X": 216.89514,
-        "Y": 126.34332
+        "Y": 57.343323
       }
     },
     {
-      "ChildId": "9b4b3abd-9c7d-486d-8bc8-f6bb77d8f87f"/*DrawLines*/,
+      "ChildId": "234bb14a-8a9c-47d6-8f71-10f4b3791909"/*RepeatAtGPoints*/,
       "Position": {
-        "X": 516.89514,
-        "Y": 57.343323
+        "X": 366.89514,
+        "Y": -11.656677
       }
     },
     {
@@ -71,11 +57,10 @@
       }
     },
     {
-      "ChildId": "163d09dc-98aa-4048-9054-39e287d1706d"/*RepeatAtGPoints*/,
-      "Comment": "Clone multiple points with varient Size and Opacity on these points.",
+      "ChildId": "5ca2f482-804b-4037-ba59-769364b3f416"/*Draw Field Points*/,
       "Position": {
-        "X": 216.89514,
-        "Y": 57.343323
+        "X": 666.89514,
+        "Y": 1.3433228
       }
     },
     {
@@ -86,17 +71,11 @@
       }
     },
     {
-      "ChildId": "234bb14a-8a9c-47d6-8f71-10f4b3791909"/*RepeatAtGPoints*/,
+      "ChildId": "938e051f-9776-4d01-b63a-55b21323d827"/*RepeatAtGPoints*/,
+      "Comment": "Draw some rings to visualize the field extend.",
       "Position": {
         "X": 366.89514,
-        "Y": -11.656677
-      }
-    },
-    {
-      "ChildId": "c633178a-3862-4c96-a62e-d14ff4eeea81"/*CommonPointSets*/,
-      "Position": {
-        "X": 217.0633,
-        "Y": 8.524017
+        "Y": 57.343323
       }
     },
     {
@@ -111,6 +90,27 @@
       "Position": {
         "X": 17.555267,
         "Y": -153.66971
+      }
+    },
+    {
+      "ChildId": "9b4b3abd-9c7d-486d-8bc8-f6bb77d8f87f"/*DrawLines*/,
+      "Position": {
+        "X": 516.89514,
+        "Y": 57.343323
+      }
+    },
+    {
+      "ChildId": "c633178a-3862-4c96-a62e-d14ff4eeea81"/*CommonPointSets*/,
+      "Position": {
+        "X": 217.0633,
+        "Y": 8.524017
+      }
+    },
+    {
+      "ChildId": "e41b68f7-b7ca-4c41-9133-f44779251245"/*RadialPoints*/,
+      "Position": {
+        "X": 216.89514,
+        "Y": 126.34332
       }
     }
   ],

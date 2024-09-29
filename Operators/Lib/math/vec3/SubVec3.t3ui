@@ -3,17 +3,17 @@
   "Description": "Subtracts two vectors",
   "InputUis": [
     {
-      "InputId": "b1fe7da6-169a-4c09-839d-0d494606d527"/*Input1*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "1c78d0e2-88b1-46d3-a575-ec088b293450"/*Input2*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "b1fe7da6-169a-4c09-839d-0d494606d527"/*Input1*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
       }
     }
   ],

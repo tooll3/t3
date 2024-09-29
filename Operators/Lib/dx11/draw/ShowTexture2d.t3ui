@@ -3,17 +3,17 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "5a3e1fa0-21fc-4c2e-a4bb-45a311f24c00"/*Command*/,
-      "Position": {
-        "X": -79.47779,
-        "Y": 46.200253
-      }
-    },
-    {
       "InputId": "5095c803-fa2a-408c-ab56-8057e49648d5"/*Texture*/,
       "Position": {
         "X": -79.47779,
         "Y": -3.7997475
+      }
+    },
+    {
+      "InputId": "5a3e1fa0-21fc-4c2e-a4bb-45a311f24c00"/*Command*/,
+      "Position": {
+        "X": -79.47779,
+        "Y": 46.200253
       }
     }
   ],

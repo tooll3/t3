@@ -2,14 +2,6 @@
   "Id": "c47ab830-aae7-4f8f-b67c-9119bcbaf7df"/*CubeMesh*/,
   "Inputs": [
     {
-      "Id": "e445a6da-0b66-46ae-ad2b-650e9cc50798"/*Segments*/,
-      "DefaultValue": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
-      }
-    },
-    {
       "Id": "97c9849e-751c-49a9-823d-0af839fa503e"/*Stretch*/,
       "DefaultValue": {
         "X": 1.0,
@@ -22,7 +14,15 @@
       "DefaultValue": 1.0
     },
     {
-      "Id": "febfae90-13e8-4f0a-8ccf-b8825ea525f8"/*Pivot*/,
+      "Id": "e445a6da-0b66-46ae-ad2b-650e9cc50798"/*Segments*/,
+      "DefaultValue": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      }
+    },
+    {
+      "Id": "e641c244-9dc8-444d-8dee-c3e9b710f9db"/*Rotation*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,
@@ -38,7 +38,7 @@
       }
     },
     {
-      "Id": "e641c244-9dc8-444d-8dee-c3e9b710f9db"/*Rotation*/,
+      "Id": "febfae90-13e8-4f0a-8ccf-b8825ea525f8"/*Pivot*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,

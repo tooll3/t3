@@ -2,10 +2,6 @@
   "Id": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1"/*RenderTarget*/,
   "Inputs": [
     {
-      "Id": "4da253b7-4953-439a-b03f-1d515a78bddf"/*Command*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "03749b41-cc3c-4f38-aea6-d7cea19fc073"/*Resolution*/,
       "DefaultValue": {
         "X": 0,
@@ -13,7 +9,15 @@
       }
     },
     {
-      "Id": "aacafc4d-f47f-4893-9a6e-98db306a8901"/*Clear*/,
+      "Id": "07ad28ad-ff5f-4ca9-b7bb-f7f8b16a6434"/*TextureReference*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "4da253b7-4953-439a-b03f-1d515a78bddf"/*Command*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "6ea4f801-ff52-4266-a41f-b9ef02c68510"/*WithDepthBuffer*/,
       "DefaultValue": true
     },
     {
@@ -26,6 +30,14 @@
       }
     },
     {
+      "Id": "aacafc4d-f47f-4893-9a6e-98db306a8901"/*Clear*/,
+      "DefaultValue": true
+    },
+    {
+      "Id": "abebb02b-bcaa-42c7-8eb8-da3c1b2fc840"/*EnableUpdate*/,
+      "DefaultValue": true
+    },
+    {
       "Id": "e882e0f0-03f9-46e6-ac7a-709e6fa66613"/*Multisampling*/,
       "DefaultValue": 4
     },
@@ -34,20 +46,8 @@
       "DefaultValue": "R16G16B16A16_Float"
     },
     {
-      "Id": "6ea4f801-ff52-4266-a41f-b9ef02c68510"/*WithDepthBuffer*/,
-      "DefaultValue": true
-    },
-    {
       "Id": "f0cf3325-4967-4419-9beb-036cd6dbfd6a"/*GenerateMips*/,
       "DefaultValue": false
-    },
-    {
-      "Id": "07ad28ad-ff5f-4ca9-b7bb-f7f8b16a6434"/*TextureReference*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "abebb02b-bcaa-42c7-8eb8-da3c1b2fc840"/*EnableUpdate*/,
-      "DefaultValue": true
     }
   ],
   "Children": [],

@@ -2,20 +2,20 @@
   "Id": "bd0f7059-021d-4dd1-8168-01e1e552fb04"/*OpticalFlow2*/,
   "Inputs": [
     {
-      "Id": "f07bae81-5e2d-4d50-a22c-424434d8bbba"/*Scale*/,
-      "DefaultValue": 0
-    },
-    {
       "Id": "7b952ebd-7d63-4b74-8aa2-977c23d0487d"/*Lod*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "7cae97b4-f83e-4862-8be4-6ca7142aeb1f"/*Image2*/,
+      "DefaultValue": null
     },
     {
       "Id": "e2dfcaa4-6e1f-4eee-9052-f4e036bc39fb"/*Image1*/,
       "DefaultValue": null
     },
     {
-      "Id": "7cae97b4-f83e-4862-8be4-6ca7142aeb1f"/*Image2*/,
-      "DefaultValue": null
+      "Id": "f07bae81-5e2d-4d50-a22c-424434d8bbba"/*Scale*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [
@@ -36,6 +36,11 @@
       "SymbolId": "0309e746-c356-4c7b-af05-93136a2607de",
       "InputValues": [
         {
+          "Id": "587e2f2b-fd6a-4382-b1c2-99a5963d41ac"/*VisualizationScale*/,
+          "Type": "System.Single",
+          "Value": 50.0
+        },
+        {
           "Id": "a1eba7f5-e2f1-46cb-8982-ae9cb1b7531b"/*Lod*/,
           "Type": "System.Single",
           "Value": 2.0
@@ -44,11 +49,6 @@
           "Id": "fa54b5d3-5a98-4cc1-b848-6e5b3632af6c"/*VisualizeResult*/,
           "Type": "System.Boolean",
           "Value": true
-        },
-        {
-          "Id": "587e2f2b-fd6a-4382-b1c2-99a5963d41ac"/*VisualizationScale*/,
-          "Type": "System.Single",
-          "Value": 50.0
         }
       ],
       "Outputs": []

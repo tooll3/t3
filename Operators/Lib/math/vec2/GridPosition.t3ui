@@ -3,17 +3,17 @@
   "Description": "Converts an index to a grid raster position and sizes that can be used to draw a [Layer2d].\nThis can be helpful for procedural graphical designs.\nPlease check the example below.",
   "InputUis": [
     {
-      "InputId": "854731fb-bbc9-48e7-9bcb-45bc53340945"/*A*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "2fa305b7-42fc-44fa-bfcf-219916f93eef"/*RasterSize*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "854731fb-bbc9-48e7-9bcb-45bc53340945"/*A*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
       }
     },
     {

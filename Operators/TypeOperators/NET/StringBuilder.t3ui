@@ -3,14 +3,6 @@
   "Description": "Sends the predefined (or incoming) string to the output when a trigger is activated\n\nThe output of this operator is made for [StringBuilderToString]",
   "InputUis": [
     {
-      "InputId": "f5c0b04e-8c4e-43ba-ae19-79f80c0f830d"/*ClearTrigger*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      },
-      "Description": "If this trigger is activated, the 'InitialString' is output (or updated)"
-    },
-    {
       "InputId": "85f3d00c-005d-4c2f-bf41-f5b5c672f286"/*InitialString*/,
       "Position": {
         "X": -200.0,
@@ -18,6 +10,14 @@
       },
       "Description": "String to be sent to the [StringBuilderToString]",
       "Usage": "Default"
+    },
+    {
+      "InputId": "f5c0b04e-8c4e-43ba-ae19-79f80c0f830d"/*ClearTrigger*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Description": "If this trigger is activated, the 'InitialString' is output (or updated)"
     }
   ],
   "SymbolChildUis": [],

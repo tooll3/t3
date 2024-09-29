@@ -3,25 +3,18 @@
   "Description": "A simple color keyer.",
   "InputUis": [
     {
+      "InputId": "52942004-3a62-4c2d-95c0-0c18e531983e"/*WeightHue*/,
+      "Position": {
+        "X": -39.329453,
+        "Y": 803.59656
+      }
+    },
+    {
       "InputId": "645e7d14-d4f8-46db-a5bc-b47136a00af5"/*Texture2d*/,
       "Relevancy": "Required",
       "Position": {
         "X": -40.1006,
         "Y": 507.03662
-      }
-    },
-    {
-      "InputId": "8d07d9ad-fe83-4b40-bebd-21c563d6d6ac"/*Key*/,
-      "Position": {
-        "X": -39.329453,
-        "Y": 623.59656
-      }
-    },
-    {
-      "InputId": "abadeee0-5ebb-4e5a-ae92-fcafb20f52a1"/*Background*/,
-      "Position": {
-        "X": -39.329453,
-        "Y": 713.59656
       }
     },
     {
@@ -35,17 +28,10 @@
       "Scale": 0.02
     },
     {
-      "InputId": "52942004-3a62-4c2d-95c0-0c18e531983e"/*WeightHue*/,
-      "Position": {
-        "X": -39.329453,
-        "Y": 803.59656
-      }
-    },
-    {
-      "InputId": "d044302c-d87f-4ee7-b24d-11b3508a91c1"/*WeightSaturation*/,
+      "InputId": "749654ec-1203-4f28-be9b-e3d3e2bff9d2"/*Choke*/,
       "Position": {
         "X": -41.019333,
-        "Y": 903.51697
+        "Y": 1083.517
       }
     },
     {
@@ -56,6 +42,13 @@
       }
     },
     {
+      "InputId": "8d07d9ad-fe83-4b40-bebd-21c563d6d6ac"/*Key*/,
+      "Position": {
+        "X": -39.329453,
+        "Y": 623.59656
+      }
+    },
+    {
       "InputId": "91e604d7-aed0-4fb9-9690-ab60a74c4df5"/*Amplify*/,
       "Position": {
         "X": -41.019333,
@@ -63,17 +56,24 @@
       }
     },
     {
+      "InputId": "abadeee0-5ebb-4e5a-ae92-fcafb20f52a1"/*Background*/,
+      "Position": {
+        "X": -39.329453,
+        "Y": 713.59656
+      }
+    },
+    {
+      "InputId": "d044302c-d87f-4ee7-b24d-11b3508a91c1"/*WeightSaturation*/,
+      "Position": {
+        "X": -41.019333,
+        "Y": 903.51697
+      }
+    },
+    {
       "InputId": "e32268a7-8527-4d0d-b9ba-11c23cb07dd2"/*Return*/,
       "Position": {
         "X": -41.019333,
         "Y": 1038.517
-      }
-    },
-    {
-      "InputId": "749654ec-1203-4f28-be9b-e3d3e2bff9d2"/*Choke*/,
-      "Position": {
-        "X": -41.019333,
-        "Y": 1083.517
       }
     }
   ],
@@ -86,10 +86,10 @@
       }
     },
     {
-      "ChildId": "c0354bce-5eb8-4a4f-ad53-bae7d42bce68"/*Vector4Components*/,
+      "ChildId": "67e730f9-8c0c-42b4-88e5-5adaf87100f8"/*_ImageFxShaderSetupStatic*/,
       "Position": {
-        "X": 261.9446,
-        "Y": 633.09564
+        "X": 504.8459,
+        "Y": 508.03625
       }
     },
     {
@@ -100,10 +100,10 @@
       }
     },
     {
-      "ChildId": "67e730f9-8c0c-42b4-88e5-5adaf87100f8"/*_ImageFxShaderSetupStatic*/,
+      "ChildId": "c0354bce-5eb8-4a4f-ad53-bae7d42bce68"/*Vector4Components*/,
       "Position": {
-        "X": 504.8459,
-        "Y": 508.03625
+        "X": 261.9446,
+        "Y": 633.09564
       }
     }
   ],

@@ -2,7 +2,7 @@
   "Id": "3dae14a8-3d0b-432f-b951-bdd7afd7e5f8"/*ApplyCamMatrices*/,
   "Inputs": [
     {
-      "Id": "aad90ca4-5085-4b90-bf58-b87bdc852d62"/*Command*/,
+      "Id": "6dd0ec68-5b73-4c19-8043-1ca91bbd0af3"/*CamToClipSpaceRows*/,
       "DefaultValue": null
     },
     {
@@ -10,7 +10,7 @@
       "DefaultValue": null
     },
     {
-      "Id": "6dd0ec68-5b73-4c19-8043-1ca91bbd0af3"/*CamToClipSpaceRows*/,
+      "Id": "aad90ca4-5085-4b90-bf58-b87bdc852d62"/*Command*/,
       "DefaultValue": null
     }
   ],

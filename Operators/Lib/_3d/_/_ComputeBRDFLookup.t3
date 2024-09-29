@@ -27,6 +27,18 @@
       "Outputs": []
     },
     {
+      "Id": "26f76886-eff3-406f-bd30-3fefd23d7144"/*CalcInt2DispatchCount*/,
+      "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "578b2323-856f-4c06-a720-6e358e95baa7"/*UavFromTexture2d*/,
+      "SymbolId": "84e02044-3011-4a5e-b76a-c904d9b4557f",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "658d89e8-3dc8-4430-80c6-b547bc5500ac"/*ExecuteTextureUpdate*/,
       "SymbolId": "6c2f8241-9f4b-451e-8a1d-871631d21163",
       "InputValues": [],
@@ -69,18 +81,6 @@
           "Value": "ShaderResource, UnorderedAccess"
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "578b2323-856f-4c06-a720-6e358e95baa7"/*UavFromTexture2d*/,
-      "SymbolId": "84e02044-3011-4a5e-b76a-c904d9b4557f",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "26f76886-eff3-406f-bd30-3fefd23d7144"/*CalcInt2DispatchCount*/,
-      "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
-      "InputValues": [],
       "Outputs": []
     }
   ],

@@ -4,9 +4,9 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "930b1775-8da5-4b77-88af-5c6763c94fc2"/*AdjustColors*/,
+      "ChildId": "1be545b5-3755-496c-9b6f-fd57aa88cf3e"/*FakeLight*/,
       "Position": {
-        "X": 1746.1715,
+        "X": 1896.1715,
         "Y": 1585.2502
       },
       "SnapshotGroupIndex": "1"
@@ -25,21 +25,6 @@
       "SnapshotGroupIndex": "1"
     },
     {
-      "ChildId": "97a2982d-e43f-418b-892b-548c1ab803e1"/*_SpeciesDefinition*/,
-      "Position": {
-        "X": 1287.3531,
-        "Y": 1628.2502
-      },
-      "SnapshotGroupIndex": "1"
-    },
-    {
-      "ChildId": "e3c18501-2e85-49b0-b13f-cda324282b8e"/*ListToBuffer*/,
-      "Position": {
-        "X": 1437.3531,
-        "Y": 1628.2502
-      }
-    },
-    {
       "ChildId": "8b2ecb58-cf15-4acb-a46c-0c359641486a"/*_SpeciesDefinition*/,
       "Position": {
         "X": 1287.3531,
@@ -48,18 +33,26 @@
       "SnapshotGroupIndex": "1"
     },
     {
-      "ChildId": "1be545b5-3755-496c-9b6f-fd57aa88cf3e"/*FakeLight*/,
+      "ChildId": "930b1775-8da5-4b77-88af-5c6763c94fc2"/*AdjustColors*/,
       "Position": {
-        "X": 1896.1715,
+        "X": 1746.1715,
         "Y": 1585.2502
       },
       "SnapshotGroupIndex": "1"
     },
     {
-      "ChildId": "f461e1a5-1fb1-4b78-86c7-64ffd1f42e54"/*Divisions*/,
+      "ChildId": "97a2982d-e43f-418b-892b-548c1ab803e1"/*_SpeciesDefinition*/,
       "Position": {
-        "X": 1437.3531,
-        "Y": 1734.2502
+        "X": 1287.3531,
+        "Y": 1628.2502
+      },
+      "SnapshotGroupIndex": "1"
+    },
+    {
+      "ChildId": "b89c181b-f9e7-45dd-9181-3aaa58947995"/*MidiInput*/,
+      "Position": {
+        "X": 1362.3131,
+        "Y": 1433.4001
       }
     },
     {
@@ -78,10 +71,17 @@
       }
     },
     {
-      "ChildId": "b89c181b-f9e7-45dd-9181-3aaa58947995"/*MidiInput*/,
+      "ChildId": "e3c18501-2e85-49b0-b13f-cda324282b8e"/*ListToBuffer*/,
       "Position": {
-        "X": 1362.3131,
-        "Y": 1433.4001
+        "X": 1437.3531,
+        "Y": 1628.2502
+      }
+    },
+    {
+      "ChildId": "f461e1a5-1fb1-4b78-86c7-64ffd1f42e54"/*Divisions*/,
+      "Position": {
+        "X": 1437.3531,
+        "Y": 1734.2502
       }
     }
   ],

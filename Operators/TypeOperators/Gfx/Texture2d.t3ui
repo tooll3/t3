@@ -3,8 +3,7 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "b77088a9-2676-4caa-809a-5e0f120d25d7"/*Size*/,
-      "Relevancy": "Required",
+      "InputId": "2c9e4cb0-0333-439e-abcc-1148a840a260"/*ResourceOptionFlags*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
@@ -18,13 +17,6 @@
       }
     },
     {
-      "InputId": "940d3d3c-607a-460c-a7fe-22876960d706"/*ArraySize*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "67cd82c3-504b-4c80-8c49-5b303733ed52"/*Format*/,
       "Position": {
         "X": 0.0,
@@ -32,7 +24,22 @@
       }
     },
     {
+      "InputId": "940d3d3c-607a-460c-a7fe-22876960d706"/*ArraySize*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
       "InputId": "98353ef2-a18d-43e5-8828-ed8bd182ddd1"/*ResourceUsage*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "b77088a9-2676-4caa-809a-5e0f120d25d7"/*Size*/,
+      "Relevancy": "Required",
       "Position": {
         "X": 0.0,
         "Y": 0.0
@@ -47,13 +54,6 @@
     },
     {
       "InputId": "da0d06bd-f5cc-400b-8e79-35756df9b2d5"/*CpuAccessFlags*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "InputId": "2c9e4cb0-0333-439e-abcc-1148a840a260"/*ResourceOptionFlags*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0

@@ -3,18 +3,18 @@
   "Description": "Picks one of the connected textures. Only the selected connection will be updated.",
   "InputUis": [
     {
+      "InputId": "29e289be-e735-4dd4-8826-5e434cc995fa"/*Index*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
       "InputId": "6c935163-1729-4df0-a981-610b4aa7c6a3"/*Input*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
-    },
-    {
-      "InputId": "29e289be-e735-4dd4-8826-5e434cc995fa"/*Index*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
       }
     }
   ],

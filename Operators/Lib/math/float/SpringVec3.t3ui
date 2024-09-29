@@ -3,14 +3,6 @@
   "Description": "This is the vector 3 version of [Spring] \n\nSimilar op: [SpringVec2] [DampVec3]",
   "InputUis": [
     {
-      "InputId": "5afee6d8-0697-43ab-9005-7be99cf928b6"/*Value*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": 36.0,
-        "Y": 334.0
-      }
-    },
-    {
       "InputId": "211d1e8c-594c-4265-8846-e08e4f1c7743"/*Tension*/,
       "Position": {
         "X": 36.0,
@@ -22,14 +14,12 @@
       "Clamp": true
     },
     {
-      "InputId": "df280e09-04fd-4ff2-a868-4840a3b6386c"/*Strength*/,
+      "InputId": "5afee6d8-0697-43ab-9005-7be99cf928b6"/*Value*/,
+      "Relevancy": "Required",
       "Position": {
         "X": 36.0,
-        "Y": 424.0
-      },
-      "Min": 0.01,
-      "Max": 5.0,
-      "Clamp": true
+        "Y": 334.0
+      }
     },
     {
       "InputId": "74013738-aec5-4d4f-a5c7-7f1db8e3169c"/*UseAppRunTime*/,
@@ -38,6 +28,16 @@
         "Y": 469.0
       },
       "GroupTitle": "Advanced"
+    },
+    {
+      "InputId": "df280e09-04fd-4ff2-a868-4840a3b6386c"/*Strength*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 424.0
+      },
+      "Min": 0.01,
+      "Max": 5.0,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [],

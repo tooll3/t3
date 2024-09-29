@@ -2,18 +2,6 @@
   "Id": "cc3cc712-9e87-49c6-b04b-49a12cf2ba75"/*_SpecularPrefilter*/,
   "Inputs": [
     {
-      "Id": "9f7926aa-ac69-4963-af1d-342ad06fc278"/*CubeMap*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "d7c5e69e-9da0-44f1-baf7-a9d2a91ca41c"/*VertexShader*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "2a217f9d-2f9f-418a-8568-f767905384d5"/*GeometryShader*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "04d1b56f-8655-4d6c-9bdc-a84057a199d0"/*PixelShader*/,
       "DefaultValue": null
     },
@@ -22,20 +10,32 @@
       "DefaultValue": null
     },
     {
-      "Id": "86d3eee1-a4b2-4f23-9c5e-39830c90d0da"/*Exposure*/,
+      "Id": "2a217f9d-2f9f-418a-8568-f767905384d5"/*GeometryShader*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "663be4f2-ae53-4a4f-a825-d4d8a30161ad"/*QualityFactor*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "b994bff4-d1ac-4a30-a6dc-dc7bbe05d15d"/*SamplerStates*/,
-      "DefaultValue": null
+      "Id": "86d3eee1-a4b2-4f23-9c5e-39830c90d0da"/*Exposure*/,
+      "DefaultValue": 0.0
     },
     {
       "Id": "9d792412-d1f0-45f9-abd6-4eab79719924"/*UpdateLive*/,
       "DefaultValue": false
     },
     {
-      "Id": "663be4f2-ae53-4a4f-a825-d4d8a30161ad"/*QualityFactor*/,
-      "DefaultValue": 0.0
+      "Id": "9f7926aa-ac69-4963-af1d-342ad06fc278"/*CubeMap*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "b994bff4-d1ac-4a30-a6dc-dc7bbe05d15d"/*SamplerStates*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "d7c5e69e-9da0-44f1-baf7-a9d2a91ca41c"/*VertexShader*/,
+      "DefaultValue": null
     }
   ],
   "Children": [],

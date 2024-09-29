@@ -2,12 +2,12 @@
   "Id": "0dbc4f3f-8fdb-402b-a7cb-6949cf21a98a"/*VideoClipLayer*/,
   "Inputs": [
     {
-      "Id": "31721e18-556b-452b-a8aa-18dbd44af74d"/*Path*/,
-      "DefaultValue": ""
-    },
-    {
       "Id": "28f27625-37fe-409a-b6c1-d4eabf6c1eb8"/*Volume*/,
       "DefaultValue": 1.0
+    },
+    {
+      "Id": "31721e18-556b-452b-a8aa-18dbd44af74d"/*Path*/,
+      "DefaultValue": ""
     },
     {
       "Id": "5eb10090-ae6a-4ae7-9fbd-5bd9ffd13b1b"/*ResyncThreshold*/,
@@ -15,23 +15,6 @@
     }
   ],
   "Children": [
-    {
-      "Id": "a054b8bc-67ad-4610-92a9-d51d1d57aab4"/*Layer2d*/,
-      "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
-      "InputValues": [
-        {
-          "Id": "a83bdfb1-c92d-4844-9e43-8ce09959fae9"/*EnableDepthTest*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
-          "Id": "022f1959-a62b-49de-817a-3930bc8ec32b"/*EnableDepthWrite*/,
-          "Type": "System.Boolean",
-          "Value": false
-        }
-      ],
-      "Outputs": []
-    },
     {
       "Id": "49676bbc-9566-479e-87ff-68741dedf878"/*_VideoFormatConversion*/,
       "SymbolId": "7845ec24-e249-4c6a-84e3-63422ede1a1d",
@@ -52,6 +35,23 @@
           "Id": "0e255347-08bc-4363-9ffa-ab863a1cea8e"/*Path*/,
           "Type": "System.String",
           "Value": "C:\\Users\\pixtur\\Videos\\Foundation\\Foundation.S01E08.The.Missing.Piece.1080p.ATVP.WEB-DL.DDP5.1.H.264-CasStudio.mkv"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "a054b8bc-67ad-4610-92a9-d51d1d57aab4"/*Layer2d*/,
+      "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
+      "InputValues": [
+        {
+          "Id": "022f1959-a62b-49de-817a-3930bc8ec32b"/*EnableDepthWrite*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
+          "Id": "a83bdfb1-c92d-4844-9e43-8ce09959fae9"/*EnableDepthTest*/,
+          "Type": "System.Boolean",
+          "Value": true
         }
       ],
       "Outputs": []

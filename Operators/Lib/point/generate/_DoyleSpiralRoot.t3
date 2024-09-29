@@ -2,12 +2,12 @@
   "Id": "b2267122-4223-4eff-8ae4-91d149df535c"/*_DoyleSpiralRoot*/,
   "Inputs": [
     {
-      "Id": "e0ee8c5d-d8c2-4856-858c-d25570a71679"/*P*/,
-      "DefaultValue": 0.0
-    },
-    {
       "Id": "8a4c30b3-a189-4fa1-adc5-66e7a68c75ba"/*Q*/,
       "DefaultValue": 1.0
+    },
+    {
+      "Id": "e0ee8c5d-d8c2-4856-858c-d25570a71679"/*P*/,
+      "DefaultValue": 0.0
     }
   ],
   "Children": [],

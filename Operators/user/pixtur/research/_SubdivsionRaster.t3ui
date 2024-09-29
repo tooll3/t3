@@ -3,6 +3,20 @@
   "Description": "An internal experiment to use [Raster] to overlay subdivision grid.",
   "InputUis": [
     {
+      "InputId": "3332b1e1-282d-4c41-9fe3-e609611ade51"/*LineWidth*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "70a7d763-a8b3-45e7-8f7a-24ec27a31ba6"/*Texture*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
       "InputId": "971d44e4-fc34-4dc2-9e94-e6cc202b1ef6"/*Int2*/,
       "Position": {
         "X": -200.0,
@@ -15,28 +29,14 @@
         "X": -200.0,
         "Y": 45.0
       }
-    },
-    {
-      "InputId": "70a7d763-a8b3-45e7-8f7a-24ec27a31ba6"/*Texture*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
-      }
-    },
-    {
-      "InputId": "3332b1e1-282d-4c41-9fe3-e609611ade51"/*LineWidth*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 135.0
-      }
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "9efa8dc4-cc14-48e3-9d93-6bcad8c6d323"/*Raster*/,
+      "ChildId": "010223e0-702f-4f84-aea6-8bde396e798a"/*GetTextureSize*/,
       "Position": {
-        "X": 1437.2872,
-        "Y": 360.86005
+        "X": 17.36499,
+        "Y": 160.85797
       }
     },
     {
@@ -47,31 +47,10 @@
       }
     },
     {
-      "ChildId": "c1aed6f3-9428-4758-9fc6-2ec03f1403de"/*Vector2Components*/,
+      "ChildId": "1ba0eceb-d764-4d4d-9de6-1fe30656c545"/*FloatToInt*/,
       "Position": {
-        "X": 264.8817,
-        "Y": 268.46576
-      }
-    },
-    {
-      "ChildId": "d90a2a47-a268-469e-8ed9-8504c356d6d6"/*Div*/,
-      "Position": {
-        "X": 451.2157,
-        "Y": 187.55103
-      }
-    },
-    {
-      "ChildId": "9a3d885f-953b-41f3-a4a0-8131b010bfc3"/*Vector2*/,
-      "Position": {
-        "X": 660.23206,
-        "Y": 230.47748
-      }
-    },
-    {
-      "ChildId": "010223e0-702f-4f84-aea6-8bde396e798a"/*GetTextureSize*/,
-      "Position": {
-        "X": 17.36499,
-        "Y": 160.85797
+        "X": 793.7311,
+        "Y": 95.61932
       }
     },
     {
@@ -89,6 +68,27 @@
       }
     },
     {
+      "ChildId": "96e55107-c8d9-4894-b5dc-ec79fea532e5"/*BoolToFloat*/,
+      "Position": {
+        "X": 1054.8429,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "9a3d885f-953b-41f3-a4a0-8131b010bfc3"/*Vector2*/,
+      "Position": {
+        "X": 660.23206,
+        "Y": 230.47748
+      }
+    },
+    {
+      "ChildId": "9efa8dc4-cc14-48e3-9d93-6bcad8c6d323"/*Raster*/,
+      "Position": {
+        "X": 1437.2872,
+        "Y": 360.86005
+      }
+    },
+    {
       "ChildId": "ad86c10a-1364-42a3-a404-567cc27c5e63"/*IsIntEven*/,
       "Position": {
         "X": 923.7311,
@@ -96,10 +96,10 @@
       }
     },
     {
-      "ChildId": "1ba0eceb-d764-4d4d-9de6-1fe30656c545"/*FloatToInt*/,
+      "ChildId": "b01e6cfb-4d50-4664-963b-787d2bf18b6a"/*FloatToInt*/,
       "Position": {
-        "X": 793.7311,
-        "Y": 95.61932
+        "X": 794.8429,
+        "Y": 0.0
       }
     },
     {
@@ -107,6 +107,20 @@
       "Position": {
         "X": 1053.7311,
         "Y": 95.61932
+      }
+    },
+    {
+      "ChildId": "c1aed6f3-9428-4758-9fc6-2ec03f1403de"/*Vector2Components*/,
+      "Position": {
+        "X": 264.8817,
+        "Y": 268.46576
+      }
+    },
+    {
+      "ChildId": "d90a2a47-a268-469e-8ed9-8504c356d6d6"/*Div*/,
+      "Position": {
+        "X": 451.2157,
+        "Y": 187.55103
       }
     },
     {
@@ -120,20 +134,6 @@
       "ChildId": "fe57e268-861a-4f99-b66a-4cea615e8377"/*IsIntEven*/,
       "Position": {
         "X": 924.8429,
-        "Y": 0.0
-      }
-    },
-    {
-      "ChildId": "b01e6cfb-4d50-4664-963b-787d2bf18b6a"/*FloatToInt*/,
-      "Position": {
-        "X": 794.8429,
-        "Y": 0.0
-      }
-    },
-    {
-      "ChildId": "96e55107-c8d9-4894-b5dc-ec79fea532e5"/*BoolToFloat*/,
-      "Position": {
-        "X": 1054.8429,
         "Y": 0.0
       }
     }

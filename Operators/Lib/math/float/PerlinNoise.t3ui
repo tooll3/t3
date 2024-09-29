@@ -3,13 +3,31 @@
   "Description": "Generates a continuously and randomly changing value in the predefined range based on Perlin Noise / Gradient Noise.\n\nUseful to create random looking animations e.g. flickering light, wind, fire, camshake, changing colors etc.\n\nThis creates PerlinNoise in 1 dimension. See [PerlinNoise2] and [PerlinNoise3] for Operators with more dimensions",
   "InputUis": [
     {
-      "InputId": "eabbaf77-5f74-4303-9453-6fa44facc5db"/*OverrideTime*/,
-      "Relevancy": "Required",
+      "InputId": "296d0f7f-d484-4781-b01f-48839def0324"/*BiasAndGain*/,
       "Position": {
         "X": -2.7436478,
-        "Y": -144.5552
+        "Y": -54.555206
       },
-      "Description": "Input for a value to override the time"
+      "Description": "Defines bias and gain, which can be used to weight the ranges (both in terms of time and intensity) in which the values are most likely to fluctuate",
+      "AddPadding": "True",
+      "UseVec2Control": "BiasAndGain"
+    },
+    {
+      "InputId": "557ae817-ec36-4866-8fed-64490e9255be"/*RangeMax*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": 125.44479
+      },
+      "Description": "Defines the highest value of the noise."
+    },
+    {
+      "InputId": "b112705e-3ec3-4904-b978-bc784d9b2f94"/*RangeMin*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": 80.44479
+      },
+      "GroupTitle": "Output Range",
+      "Description": "Defines the lowest value of the noise."
     },
     {
       "InputId": "b7434932-aeea-407e-bb00-22337a21f293"/*Frequency*/,
@@ -19,6 +37,15 @@
       },
       "GroupTitle": "Complexity",
       "Description": "Defines the frequency. A high frequency generates more variation per time unit."
+    },
+    {
+      "InputId": "bd43ee20-1ff1-4c49-ac87-87ca4a1fe66f"/*Seed*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": -99.55521
+      },
+      "GroupTitle": "Options",
+      "Description": "Defines the seed for the randomness. Two exactly identical copies of the operator with different seeds always create different results."
     },
     {
       "InputId": "c6286f1c-00a3-40af-94dd-66375ed0343f"/*Octaves*/,
@@ -38,40 +65,13 @@
       "Description": "Multiplier for the intensity of the highest and lowest value."
     },
     {
-      "InputId": "b112705e-3ec3-4904-b978-bc784d9b2f94"/*RangeMin*/,
+      "InputId": "eabbaf77-5f74-4303-9453-6fa44facc5db"/*OverrideTime*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -2.7436478,
-        "Y": 80.44479
+        "Y": -144.5552
       },
-      "GroupTitle": "Output Range",
-      "Description": "Defines the lowest value of the noise."
-    },
-    {
-      "InputId": "557ae817-ec36-4866-8fed-64490e9255be"/*RangeMax*/,
-      "Position": {
-        "X": -2.7436478,
-        "Y": 125.44479
-      },
-      "Description": "Defines the highest value of the noise."
-    },
-    {
-      "InputId": "296d0f7f-d484-4781-b01f-48839def0324"/*BiasAndGain*/,
-      "Position": {
-        "X": -2.7436478,
-        "Y": -54.555206
-      },
-      "Description": "Defines bias and gain, which can be used to weight the ranges (both in terms of time and intensity) in which the values are most likely to fluctuate",
-      "AddPadding": "True",
-      "UseVec2Control": "BiasAndGain"
-    },
-    {
-      "InputId": "bd43ee20-1ff1-4c49-ac87-87ca4a1fe66f"/*Seed*/,
-      "Position": {
-        "X": -2.7436478,
-        "Y": -99.55521
-      },
-      "GroupTitle": "Options",
-      "Description": "Defines the seed for the randomness. Two exactly identical copies of the operator with different seeds always create different results."
+      "Description": "Input for a value to override the time"
     }
   ],
   "SymbolChildUis": [],

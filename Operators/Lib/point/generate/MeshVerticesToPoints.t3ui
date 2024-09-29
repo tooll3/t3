@@ -3,6 +3,14 @@
   "Description": "Creates a point at each vertex of the connected mesh.\nIntended as a helper method to analyze meshes.\n\nUseful combinations [LoadObj], [DrawPoints] and grouped with [DrawMesh] with Fillmode set to 'Wireframe' (similar to [VisualizeMesh])\n\nSimilar Operators:\nTo create a point at each face center of the connected mesh [MeshFacesPoints] can be used.\nTo get evenly distributed points on a mesh [PointsOnMesh] can be used.\n\n ",
   "InputUis": [
     {
+      "InputId": "664b9a97-0709-40d5-b0a0-651092e658af"/*OffsetByTBN*/,
+      "Position": {
+        "X": -494.06952,
+        "Y": 916.0951
+      },
+      "Description": "Moves the points along one of the axes of the normal"
+    },
+    {
       "InputId": "b990cf29-00a5-4e39-8687-4502c7c7eebc"/*Mesh*/,
       "Relevancy": "Required",
       "Position": {
@@ -19,14 +27,6 @@
       },
       "Description": "Defines W / the size of the points.",
       "AddPadding": "True"
-    },
-    {
-      "InputId": "664b9a97-0709-40d5-b0a0-651092e658af"/*OffsetByTBN*/,
-      "Position": {
-        "X": -494.06952,
-        "Y": 916.0951
-      },
-      "Description": "Moves the points along one of the axes of the normal"
     }
   ],
   "SymbolChildUis": [
@@ -38,10 +38,59 @@
       }
     },
     {
+      "ChildId": "174d4182-fc54-4b8a-84f8-c8e60e100be4"/*StructuredBufferWithViews*/,
+      "Position": {
+        "X": 102.82695,
+        "Y": 808.916
+      }
+    },
+    {
+      "ChildId": "48ca6106-7219-4a6d-929a-dfa139408872"/*_MeshBufferComponents*/,
+      "Position": {
+        "X": -344.06952,
+        "Y": 871.0951
+      }
+    },
+    {
       "ChildId": "7692424a-cec6-46d9-b46a-29eb3f302371"/*ComputeShaderStage*/,
       "Position": {
         "X": 447.47772,
         "Y": 537.90735
+      }
+    },
+    {
+      "ChildId": "9b93a50e-2de0-4a01-b771-f6f69c56ed1e"/*GetBufferComponents*/,
+      "Position": {
+        "X": -194.06953,
+        "Y": 871.0951
+      }
+    },
+    {
+      "ChildId": "9d9b0cfd-e1e8-463f-ba33-6d507d5480a1"/*CalcDispatchCount*/,
+      "Position": {
+        "X": 116.033554,
+        "Y": 576.29614
+      }
+    },
+    {
+      "ChildId": "aeea0963-3b77-4104-bb51-afb7c10c1a2d"/*Vector3Components*/,
+      "Position": {
+        "X": 129.62483,
+        "Y": 645.29614
+      }
+    },
+    {
+      "ChildId": "c8b056cf-e7c8-4ee0-9484-606e0d97ab77"/*ExecuteBufferUpdate*/,
+      "Position": {
+        "X": 597.4777,
+        "Y": 537.90735
+      }
+    },
+    {
+      "ChildId": "c8ce730b-91cf-4fe4-8cca-cdabc801350c"/*GetSRVProperties*/,
+      "Position": {
+        "X": -47.17305,
+        "Y": 808.916
       }
     },
     {
@@ -57,59 +106,10 @@
       }
     },
     {
-      "ChildId": "c8b056cf-e7c8-4ee0-9484-606e0d97ab77"/*ExecuteBufferUpdate*/,
-      "Position": {
-        "X": 597.4777,
-        "Y": 537.90735
-      }
-    },
-    {
-      "ChildId": "9d9b0cfd-e1e8-463f-ba33-6d507d5480a1"/*CalcDispatchCount*/,
-      "Position": {
-        "X": 116.033554,
-        "Y": 576.29614
-      }
-    },
-    {
-      "ChildId": "174d4182-fc54-4b8a-84f8-c8e60e100be4"/*StructuredBufferWithViews*/,
-      "Position": {
-        "X": 102.82695,
-        "Y": 808.916
-      }
-    },
-    {
       "ChildId": "ea922783-8791-445e-99dd-23138ac1680a"/*GetBufferComponents*/,
       "Position": {
         "X": 260.47894,
         "Y": 740.59924
-      }
-    },
-    {
-      "ChildId": "9b93a50e-2de0-4a01-b771-f6f69c56ed1e"/*GetBufferComponents*/,
-      "Position": {
-        "X": -194.06953,
-        "Y": 871.0951
-      }
-    },
-    {
-      "ChildId": "c8ce730b-91cf-4fe4-8cca-cdabc801350c"/*GetSRVProperties*/,
-      "Position": {
-        "X": -47.17305,
-        "Y": 808.916
-      }
-    },
-    {
-      "ChildId": "48ca6106-7219-4a6d-929a-dfa139408872"/*_MeshBufferComponents*/,
-      "Position": {
-        "X": -344.06952,
-        "Y": 871.0951
-      }
-    },
-    {
-      "ChildId": "aeea0963-3b77-4104-bb51-afb7c10c1a2d"/*Vector3Components*/,
-      "Position": {
-        "X": 129.62483,
-        "Y": 645.29614
       }
     }
   ],

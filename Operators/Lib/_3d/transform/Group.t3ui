@@ -3,21 +3,25 @@
   "Description": "Groups a sequence of incoming draw commands.\n\nAlthough similar to [Execute] it also allows to [Transform] and override the color multiply for all operators further down (I.e. left) in the graph.\n",
   "InputUis": [
     {
-      "InputId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"/*Commands*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "InputId": "9e24c5d1-191a-4c1a-b88e-03df826fffc0"/*Translation*/,
+      "InputId": "25eb87f8-43b6-46fa-8066-3fdc1efb5e01"/*UniformScale*/,
       "Position": {
         "X": 0.0,
-        "Y": 0.0
+        "Y": 45.0
       },
-      "GroupTitle": "Transformations",
-      "Description": "Moves the incoming subgraph\n\nX (-left / +right), \nY (-down / + up), \nZ (-forward/+backwards)\n"
+      "Description": "Uniformly scales the incoming subgraph\n",
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Format": "{0:0.000} ×"
+    },
+    {
+      "InputId": "35a18838-b095-431f-a3af-2dba81dcc16f"/*ForceColorUpdate*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 180.0
+      },
+      "GroupTitle": "Additional Options",
+      "Description": "Forces constant updating if the colors animation is ignored."
     },
     {
       "InputId": "4e15eb7a-3872-4f26-93e3-1dd38bce01a5"/*Rotation*/,
@@ -37,18 +41,6 @@
         "Y": 0.0
       },
       "Description": "Scales the incoming subgraph in the following directions:\n\nX: Width\nY: Height\nZ: Depth\n"
-    },
-    {
-      "InputId": "25eb87f8-43b6-46fa-8066-3fdc1efb5e01"/*UniformScale*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 45.0
-      },
-      "Description": "Uniformly scales the incoming subgraph\n",
-      "AddPadding": "True",
-      "Min": 0.0,
-      "Max": 1.0,
-      "Format": "{0:0.000} ×"
     },
     {
       "InputId": "83d80b87-df2e-4a7e-8bb3-6d5f041a60e4"/*IsEnabled*/,
@@ -72,13 +64,21 @@
       "Clamp": true
     },
     {
-      "InputId": "35a18838-b095-431f-a3af-2dba81dcc16f"/*ForceColorUpdate*/,
+      "InputId": "9e24c5d1-191a-4c1a-b88e-03df826fffc0"/*Translation*/,
       "Position": {
         "X": 0.0,
-        "Y": 180.0
+        "Y": 0.0
       },
-      "GroupTitle": "Additional Options",
-      "Description": "Forces constant updating if the colors animation is ignored."
+      "GroupTitle": "Transformations",
+      "Description": "Moves the incoming subgraph\n\nX (-left / +right), \nY (-down / + up), \nZ (-forward/+backwards)\n"
+    },
+    {
+      "InputId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"/*Commands*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
     },
     {
       "InputId": "b864bb2d-a9fd-4e63-8d3d-b0cc8da6a13c"/*EnableProfiling*/,

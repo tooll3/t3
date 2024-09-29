@@ -3,17 +3,17 @@
   "Description": "You can use [PointCloudFromObj] to load an object and then get points on its surface.",
   "InputUis": [
     {
-      "InputId": "1f4184f4-c186-43f4-9c01-e7af9c2e4920"/*Data*/,
-      "Position": {
-        "X": -418.0527,
-        "Y": 1575.149
-      }
-    },
-    {
       "InputId": "0f0652a0-8f5d-4f5c-ba1a-5bd3bd9a8f44"/*Count*/,
       "Position": {
         "X": -418.0527,
         "Y": 1620.149
+      }
+    },
+    {
+      "InputId": "1f4184f4-c186-43f4-9c01-e7af9c2e4920"/*Data*/,
+      "Position": {
+        "X": -418.0527,
+        "Y": 1575.149
       }
     },
     {
@@ -36,10 +36,50 @@
       }
     },
     {
+      "ChildId": "4e28922a-4f67-466b-b723-3d9263b25f5a"/*ClampInt*/,
+      "Position": {
+        "X": 52.755146,
+        "Y": 1695.4822
+      }
+    },
+    {
       "ChildId": "705afc26-571a-4cc5-a62b-2295ccc29875"/*ComputeShaderStage*/,
       "Position": {
         "X": 995.0206,
         "Y": 1294.5314
+      }
+    },
+    {
+      "ChildId": "7b86f16a-7d0c-4b92-b190-7e89e34821ff"/*TransformsConstBuffer*/,
+      "Position": {
+        "X": 608.56104,
+        "Y": 1443.3618
+      }
+    },
+    {
+      "ChildId": "8fcd4515-f588-4210-b43c-42e00a066b69"/*StructuredBufferWithViews*/,
+      "Position": {
+        "X": 465.00024,
+        "Y": 1836.0068
+      }
+    },
+    {
+      "ChildId": "915a0c62-8a36-4c6c-b21b-e254256506d8"/*FloatsToBuffer*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 133.98141,
+        "Y": 229.21771
+      },
+      "Position": {
+        "X": 676.88007,
+        "Y": 1575.2834
+      }
+    },
+    {
+      "ChildId": "a154b5cd-e86b-4320-b6ab-830ba1b95026"/*GetBufferComponents*/,
+      "Position": {
+        "X": 650.01245,
+        "Y": 1263.9095
       }
     },
     {
@@ -57,50 +97,10 @@
       }
     },
     {
-      "ChildId": "8fcd4515-f588-4210-b43c-42e00a066b69"/*StructuredBufferWithViews*/,
-      "Position": {
-        "X": 465.00024,
-        "Y": 1836.0068
-      }
-    },
-    {
-      "ChildId": "a154b5cd-e86b-4320-b6ab-830ba1b95026"/*GetBufferComponents*/,
-      "Position": {
-        "X": 650.01245,
-        "Y": 1263.9095
-      }
-    },
-    {
-      "ChildId": "915a0c62-8a36-4c6c-b21b-e254256506d8"/*FloatsToBuffer*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 133.98141,
-        "Y": 229.21771
-      },
-      "Position": {
-        "X": 676.88007,
-        "Y": 1575.2834
-      }
-    },
-    {
       "ChildId": "cb28fdc1-7158-4c59-95b1-16effedfbba8"/*IntToFloat*/,
       "Position": {
         "X": 309.42343,
         "Y": 1628.4305
-      }
-    },
-    {
-      "ChildId": "4e28922a-4f67-466b-b723-3d9263b25f5a"/*ClampInt*/,
-      "Position": {
-        "X": 52.755146,
-        "Y": 1695.4822
-      }
-    },
-    {
-      "ChildId": "7b86f16a-7d0c-4b92-b190-7e89e34821ff"/*TransformsConstBuffer*/,
-      "Position": {
-        "X": 608.56104,
-        "Y": 1443.3618
       }
     }
   ],

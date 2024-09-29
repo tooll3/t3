@@ -2,15 +2,6 @@
   "Id": "1ba08d52-c8ec-479a-8dc0-95d92da36577"/*ColorGradeConstBuffer*/,
   "Inputs": [
     {
-      "Id": "7834d068-e09f-4a10-8fca-ae73692836fc"/*Param1*/,
-      "DefaultValue": {
-        "X": 1.0,
-        "Y": 1.0,
-        "Z": 1.0,
-        "W": 1.0
-      }
-    },
-    {
       "Id": "49b2f2c5-c170-4afc-99ca-0487d2fa66e4"/*Param2*/,
       "DefaultValue": {
         "X": 1.0,
@@ -20,7 +11,7 @@
       }
     },
     {
-      "Id": "e0e761af-2541-47e1-9bbc-4364489a5334"/*Param3*/,
+      "Id": "7834d068-e09f-4a10-8fca-ae73692836fc"/*Param1*/,
       "DefaultValue": {
         "X": 1.0,
         "Y": 1.0,
@@ -30,6 +21,15 @@
     },
     {
       "Id": "d2c37218-81b7-45f5-ad56-dadda3c37197"/*Param4*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
+        "W": 1.0
+      }
+    },
+    {
+      "Id": "e0e761af-2541-47e1-9bbc-4364489a5334"/*Param3*/,
       "DefaultValue": {
         "X": 1.0,
         "Y": 1.0,

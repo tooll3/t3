@@ -3,17 +3,10 @@
   "Description": "Generate a list of points by repeating a transform operation.\nThis can be very useful in combination with [DrawMeshAtPoints].\n\nAlso, by driving the Offset parameter with an LFO, you can produce seamlessly animated endless scenes. This can be useful for VJ projects.",
   "InputUis": [
     {
-      "InputId": "81ea19e7-97dc-461d-8eb0-7e9091cc1fc3"/*Count*/,
+      "InputId": "283f9939-7b04-4733-8130-edcf34305fe5"/*Pivot*/,
       "Position": {
         "X": -200.0,
-        "Y": 225.0
-      }
-    },
-    {
-      "InputId": "4213911b-4103-481f-85c6-9bccac116264"/*StartPosition*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
+        "Y": 45.0
       }
     },
     {
@@ -32,6 +25,13 @@
       "AddPadding": "True"
     },
     {
+      "InputId": "4213911b-4103-481f-85c6-9bccac116264"/*StartPosition*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
       "InputId": "5956a2c7-addc-409a-87d8-62e67da212f4"/*Scale*/,
       "Position": {
         "X": -200.0,
@@ -39,17 +39,17 @@
       }
     },
     {
+      "InputId": "81ea19e7-97dc-461d-8eb0-7e9091cc1fc3"/*Count*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
+    },
+    {
       "InputId": "af208e67-43bb-4c09-8076-859e7fefa93f"/*Rotate*/,
       "Position": {
         "X": -200.0,
         "Y": 360.0
-      }
-    },
-    {
-      "InputId": "283f9939-7b04-4733-8130-edcf34305fe5"/*Pivot*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
       }
     },
     {

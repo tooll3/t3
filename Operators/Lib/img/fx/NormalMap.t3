@@ -6,12 +6,20 @@
       "DefaultValue": null
     },
     {
-      "Id": "ab21289c-f91c-4991-a7e5-ecb0c0954f02"/*Impact*/,
-      "DefaultValue": 1.0
-    },
-    {
       "Id": "3e9bce35-7de1-42de-80e5-8eec29e92422"/*SampleRadius*/,
       "DefaultValue": 2.0
+    },
+    {
+      "Id": "4d25b1db-daeb-4b5e-b2bc-8681f332b092"/*OutputFormat*/,
+      "DefaultValue": "R16G16B16A16_Float"
+    },
+    {
+      "Id": "82464caa-a407-4f6d-a062-cef322d131f0"/*Twist*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "ab21289c-f91c-4991-a7e5-ecb0c0954f02"/*Impact*/,
+      "DefaultValue": 1.0
     },
     {
       "Id": "b16de87a-4099-42fe-9a73-97d8fa112d4d"/*Resolution*/,
@@ -21,16 +29,8 @@
       }
     },
     {
-      "Id": "82464caa-a407-4f6d-a062-cef322d131f0"/*Twist*/,
-      "DefaultValue": 0.0
-    },
-    {
       "Id": "cf7e6f41-cc6e-46dd-8779-1273326a5a53"/*Mode*/,
       "DefaultValue": 0
-    },
-    {
-      "Id": "4d25b1db-daeb-4b5e-b2bc-8681f332b092"/*OutputFormat*/,
-      "DefaultValue": "R16G16B16A16_Float"
     }
   ],
   "Children": [

@@ -13,45 +13,10 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "b2d979cf-39d1-427c-82f9-7d2aeafd2245"/*ComputeShader*/,
-      "Position": {
-        "X": 81.83806,
-        "Y": 516.8489
-      }
-    },
-    {
-      "ChildId": "99f61513-879b-4fd5-9fc4-ff914b470b3d"/*ComputeShaderStage*/,
-      "Position": {
-        "X": 475.10886,
-        "Y": 524.0607
-      }
-    },
-    {
       "ChildId": "07d9ba05-8c69-43c1-b6bf-c2158fa577d5"/*GetSRVProperties*/,
       "Position": {
         "X": -73.12926,
         "Y": 695.17487
-      }
-    },
-    {
-      "ChildId": "69ffd097-1f14-4328-9916-5f0f00f75b2f"/*ExecuteBufferUpdate*/,
-      "Position": {
-        "X": 625.1089,
-        "Y": 524.0607
-      }
-    },
-    {
-      "ChildId": "e2506e04-0e2b-43dd-b6e1-d1a5f842084f"/*CalcDispatchCount*/,
-      "Position": {
-        "X": 250.26355,
-        "Y": 575.8797
-      }
-    },
-    {
-      "ChildId": "812bb75c-df6c-4eae-8f21-f20fade8d4cd"/*StructuredBufferWithViews*/,
-      "Position": {
-        "X": 106.920654,
-        "Y": 1073.6066
       }
     },
     {
@@ -69,13 +34,6 @@
       }
     },
     {
-      "ChildId": "ef8bcd8f-162d-481a-b147-5dee6cf893cf"/*_MeshBufferComponents*/,
-      "Position": {
-        "X": -407.85938,
-        "Y": 773.0897
-      }
-    },
-    {
       "ChildId": "5f552a6e-2365-4c8f-97ad-094ba7f4c25e"/*_AssembleMeshBuffers*/,
       "Position": {
         "X": 775.1089,
@@ -83,10 +41,52 @@
       }
     },
     {
+      "ChildId": "69ffd097-1f14-4328-9916-5f0f00f75b2f"/*ExecuteBufferUpdate*/,
+      "Position": {
+        "X": 625.1089,
+        "Y": 524.0607
+      }
+    },
+    {
+      "ChildId": "812bb75c-df6c-4eae-8f21-f20fade8d4cd"/*StructuredBufferWithViews*/,
+      "Position": {
+        "X": 106.920654,
+        "Y": 1073.6066
+      }
+    },
+    {
+      "ChildId": "99f61513-879b-4fd5-9fc4-ff914b470b3d"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 475.10886,
+        "Y": 524.0607
+      }
+    },
+    {
+      "ChildId": "b2d979cf-39d1-427c-82f9-7d2aeafd2245"/*ComputeShader*/,
+      "Position": {
+        "X": 81.83806,
+        "Y": 516.8489
+      }
+    },
+    {
       "ChildId": "d92b11c5-1ef4-4d82-8d37-8a48c0b724fb"/*PBRVertex.Stride*/,
       "Position": {
         "X": -43.079346,
         "Y": 1073.6066
+      }
+    },
+    {
+      "ChildId": "e2506e04-0e2b-43dd-b6e1-d1a5f842084f"/*CalcDispatchCount*/,
+      "Position": {
+        "X": 250.26355,
+        "Y": 575.8797
+      }
+    },
+    {
+      "ChildId": "ef8bcd8f-162d-481a-b147-5dee6cf893cf"/*_MeshBufferComponents*/,
+      "Position": {
+        "X": -407.85938,
+        "Y": 773.0897
       }
     }
   ],

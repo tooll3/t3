@@ -3,6 +3,24 @@
   "Description": "This effect is based on Koch snowflake fractal curve.\nAngle starts working with Steps set to 2 and above.\n\nFor a much simpler version see: [MirrorRepeat] or [TransformImage]\n\nSimilar effects or interesting combinations: [MosaicTiling] [VoronoiCells] [SubdivisionStretch]",
   "InputUis": [
     {
+      "InputId": "05d0a5b2-a7a6-45c5-969a-f00150558a30"/*Rotate*/,
+      "Position": {
+        "X": -307.04523,
+        "Y": 428.1638
+      },
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
+    },
+    {
+      "InputId": "0b6c67e6-338e-4bb3-bcee-5cc9e2045824"/*Offset*/,
+      "Position": {
+        "X": -308.4377,
+        "Y": 204.1156
+      },
+      "UseVec2Control": "Position"
+    },
+    {
       "InputId": "362bcc93-74a0-40fb-a19f-bff8b7246c34"/*Image*/,
       "Position": {
         "X": -308.4377,
@@ -17,6 +35,13 @@
       }
     },
     {
+      "InputId": "8866edf5-9f58-4da5-abd1-b4e25607bedc"/*Resolution*/,
+      "Position": {
+        "X": -319.7906,
+        "Y": 576.5936
+      }
+    },
+    {
       "InputId": "912cfd4d-5bef-4fdc-abfc-2f5bf8239875"/*Center*/,
       "Position": {
         "X": -308.4377,
@@ -25,12 +50,11 @@
       "UseVec2Control": "Position"
     },
     {
-      "InputId": "0b6c67e6-338e-4bb3-bcee-5cc9e2045824"/*Offset*/,
+      "InputId": "9618504d-bfbd-4d3d-b4d4-03a7064f0fea"/*ShadeSteps*/,
       "Position": {
-        "X": -308.4377,
-        "Y": 204.1156
-      },
-      "UseVec2Control": "Position"
+        "X": -307.04523,
+        "Y": 338.16394
+      }
     },
     {
       "InputId": "a1b3ae23-cb29-4e3e-93b6-fd4f1efadbf1"/*Angle*/,
@@ -50,36 +74,12 @@
       "Clamp": true
     },
     {
-      "InputId": "9618504d-bfbd-4d3d-b4d4-03a7064f0fea"/*ShadeSteps*/,
-      "Position": {
-        "X": -307.04523,
-        "Y": 338.16394
-      }
-    },
-    {
-      "InputId": "05d0a5b2-a7a6-45c5-969a-f00150558a30"/*Rotate*/,
-      "Position": {
-        "X": -307.04523,
-        "Y": 428.1638
-      },
-      "Min": -180.0,
-      "Max": 180.0,
-      "Format": "{0:0.0}°"
-    },
-    {
       "InputId": "d2e12b96-7be3-4b31-bcdd-c882543a6ca6"/*ShadeFolds*/,
       "Position": {
         "X": -319.7906,
         "Y": 531.5936
       },
       "Scale": 0.001
-    },
-    {
-      "InputId": "8866edf5-9f58-4da5-abd1-b4e25607bedc"/*Resolution*/,
-      "Position": {
-        "X": -319.7906,
-        "Y": 576.5936
-      }
     }
   ],
   "SymbolChildUis": [
@@ -96,13 +96,6 @@
       }
     },
     {
-      "ChildId": "fe93448f-4cf0-4ed9-9d1c-910543c4ccd7"/*Vector2Components*/,
-      "Position": {
-        "X": -178.43771,
-        "Y": 148.1156
-      }
-    },
-    {
       "ChildId": "1f364656-3082-4ff4-b7ad-fdfa5bf5cfd2"/*Vector2Components*/,
       "Position": {
         "X": -178.43771,
@@ -114,6 +107,13 @@
       "Position": {
         "X": -177.04524,
         "Y": 293.16394
+      }
+    },
+    {
+      "ChildId": "fe93448f-4cf0-4ed9-9d1c-910543c4ccd7"/*Vector2Components*/,
+      "Position": {
+        "X": -178.43771,
+        "Y": 148.1156
       }
     }
   ],

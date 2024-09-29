@@ -3,13 +3,6 @@
   "Description": "Analyzes the incoming value changes and outputs information about the peaks\n\nOutput:\n1. attack level (float): Attack level\n2. foundPeak (bool): Did the incoming value just reach a peak True / False\n3. timeSincePeak (float): How much time has passed since the last peak\n4. movingSum (float): Passing on the incoming value",
   "InputUis": [
     {
-      "InputId": "88ed25d3-ab67-47da-ad38-2f0126ce0492"/*Value*/,
-      "Position": {
-        "X": 36.0,
-        "Y": 334.0
-      }
-    },
-    {
       "InputId": "279c4f32-2f8a-4679-afe4-bbf14cf6ba05"/*Threshold*/,
       "Position": {
         "X": 197.0,
@@ -17,6 +10,13 @@
       },
       "Description": "Threshold value for the height of the peak from which it is recognized as a peak (e.g. to be able to filter out noise)",
       "AddPadding": "True"
+    },
+    {
+      "InputId": "88ed25d3-ab67-47da-ad38-2f0126ce0492"/*Value*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      }
     },
     {
       "InputId": "d38d54b4-d15c-40c3-a5f1-6546f444965c"/*MinTimeBetweenPeaks*/,

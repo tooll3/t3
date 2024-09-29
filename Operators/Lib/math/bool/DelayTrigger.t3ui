@@ -3,6 +3,13 @@
   "Description": "Delays the change of a boolean flag. This can be useful for implementing interactions where a value needs to stay true for a minimum duration. In \"DelayTrue\" mode, it will immediately switch to true but delay switching back to false. Note: This is NOT a queue. Frequent changes of the incoming signal can lead to the delayed state filtering out changes within the delay duration. In vvvv, this op is called a MonoFlop.",
   "InputUis": [
     {
+      "InputId": "1d86c7d6-95c1-416c-a643-28745e099a53"/*TimeMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
       "InputId": "ab225218-f4b6-4ab6-be28-f2526da4b1a0"/*Trigger*/,
       "Relevancy": "Required",
       "Position": {
@@ -22,13 +29,6 @@
       "Position": {
         "X": -200.0,
         "Y": 90.0
-      }
-    },
-    {
-      "InputId": "1d86c7d6-95c1-416c-a643-28745e099a53"/*TimeMode*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 135.0
       }
     }
   ],

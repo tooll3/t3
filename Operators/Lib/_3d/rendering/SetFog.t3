@@ -2,16 +2,16 @@
   "Id": "74cbfce0-f8b8-46a1-b5d6-38477d4eec99"/*SetFog*/,
   "Inputs": [
     {
-      "Id": "afadb109-37b2-49aa-8c32-627cc35fd574"/*Command*/,
-      "DefaultValue": null
+      "Id": "53479387-1c04-4fbc-b093-043075495e10"/*Bias*/,
+      "DefaultValue": 2.0
     },
     {
       "Id": "7a331539-33ea-48b9-8930-daf93dd33d7c"/*Distance*/,
       "DefaultValue": 10.0
     },
     {
-      "Id": "53479387-1c04-4fbc-b093-043075495e10"/*Bias*/,
-      "DefaultValue": 2.0
+      "Id": "afadb109-37b2-49aa-8c32-627cc35fd574"/*Command*/,
+      "DefaultValue": null
     },
     {
       "Id": "ef8c86ee-16c0-446e-9ce0-c6342adbf32a"/*Color*/,

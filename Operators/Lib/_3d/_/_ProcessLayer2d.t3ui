@@ -3,19 +3,18 @@
   "Description": "Internal operator that prepares attribute for rendering a quad as a Layer2d.\nWe reimplemented this functionality c# for performance optimization.",
   "InputUis": [
     {
-      "InputId": "674e048e-5a6c-4d3e-b1e0-e44603775e02"/*PositionXy*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "0060afe4-642b-4da4-b6a5-acfab84de205"/*PositionZ*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "1ecd57a7-f5dd-49ea-b950-acb86af78ff9"/*RotationZ*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
       }
     },
     {
@@ -27,18 +26,11 @@
       }
     },
     {
-      "InputId": "91191320-fb10-4ae7-908c-2e2a03027f9e"/*Scale*/,
+      "InputId": "39122251-dbc0-449e-8a56-5305cbbc3daa"/*ImageTexture*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 135.0
-      }
-    },
-    {
-      "InputId": "1ecd57a7-f5dd-49ea-b950-acb86af78ff9"/*RotationZ*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 225.0
       }
     },
     {
@@ -50,7 +42,15 @@
       }
     },
     {
-      "InputId": "39122251-dbc0-449e-8a56-5305cbbc3daa"/*ImageTexture*/,
+      "InputId": "674e048e-5a6c-4d3e-b1e0-e44603775e02"/*PositionXy*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "91191320-fb10-4ae7-908c-2e2a03027f9e"/*Scale*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,

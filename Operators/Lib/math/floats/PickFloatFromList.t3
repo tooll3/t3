@@ -2,6 +2,10 @@
   "Id": "0841cdd4-0106-4f4e-826b-8de23bb5b5f0"/*PickFloatFromList*/,
   "Inputs": [
     {
+      "Id": "2f87e21a-a1bd-4e2a-948c-2fa35245998d"/*Index*/,
+      "DefaultValue": 0
+    },
+    {
       "Id": "329ba6a4-5b84-43fc-8899-0c04465844da"/*Input*/,
       "DefaultValue": {
         "Values": [
@@ -9,10 +13,6 @@
           17.0
         ]
       }
-    },
-    {
-      "Id": "2f87e21a-a1bd-4e2a-948c-2fa35245998d"/*Index*/,
-      "DefaultValue": 0
     }
   ],
   "Children": [],

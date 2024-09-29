@@ -2,28 +2,8 @@
   "Id": "7b21f10b-3548-4a23-95df-360addaeb03d"/*BuildRandomString*/,
   "Inputs": [
     {
-      "Id": "ce436e27-05a5-431d-9aa2-920dbff639a7"/*WriteMode*/,
-      "DefaultValue": 0
-    },
-    {
-      "Id": "77a5604a-034a-4352-bd46-be3cb57f90b7"/*Clear*/,
-      "DefaultValue": false
-    },
-    {
       "Id": "095202bf-118f-4c4c-802e-7916bc290a60"/*Insert*/,
       "DefaultValue": true
-    },
-    {
-      "Id": "f977faaf-1840-4a75-9bc5-43176f2e88e9"/*JumpToRandomPos*/,
-      "DefaultValue": false
-    },
-    {
-      "Id": "960179bd-286f-4629-bbcb-cd31aa9c9ae2"/*InsertString*/,
-      "DefaultValue": "Tooll likes Cats."
-    },
-    {
-      "Id": "8eee8067-1a4e-4372-93d0-2dbc368aa45a"/*Separator*/,
-      "DefaultValue": " "
     },
     {
       "Id": "1559c0e9-ba56-447f-8241-03d8d59ac205"/*OverwriteOffset*/,
@@ -34,28 +14,48 @@
       "DefaultValue": 1000
     },
     {
-      "Id": "875cbfa9-ffa8-4204-810c-c04f5f421441"/*WrapLines*/,
-      "DefaultValue": 1
+      "Id": "3ea4f12e-7184-45bc-a523-ef6a2e1c5c3d"/*ScrambleSeed*/,
+      "DefaultValue": 0
     },
     {
-      "Id": "bd941c4b-18a8-4687-85a8-3fe53b4f6213"/*WrapLineColumn*/,
-      "DefaultValue": 60
+      "Id": "77a5604a-034a-4352-bd46-be3cb57f90b7"/*Clear*/,
+      "DefaultValue": false
     },
     {
       "Id": "7dabd7c8-5c2b-4be2-b1b6-bf8b8fcbfd8d"/*ScrambleRatio*/,
       "DefaultValue": 0.0
     },
     {
+      "Id": "875cbfa9-ffa8-4204-810c-c04f5f421441"/*WrapLines*/,
+      "DefaultValue": 1
+    },
+    {
+      "Id": "8eee8067-1a4e-4372-93d0-2dbc368aa45a"/*Separator*/,
+      "DefaultValue": " "
+    },
+    {
       "Id": "9253b148-325b-427a-819e-1ae1b1019ade"/*Scramble*/,
       "DefaultValue": false
     },
     {
-      "Id": "3ea4f12e-7184-45bc-a523-ef6a2e1c5c3d"/*ScrambleSeed*/,
-      "DefaultValue": 0
+      "Id": "960179bd-286f-4629-bbcb-cd31aa9c9ae2"/*InsertString*/,
+      "DefaultValue": "Tooll likes Cats."
+    },
+    {
+      "Id": "bd941c4b-18a8-4687-85a8-3fe53b4f6213"/*WrapLineColumn*/,
+      "DefaultValue": 60
     },
     {
       "Id": "ccfac8a9-0954-4869-a47c-b66c714f6545"/*OverrideBuilder*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "ce436e27-05a5-431d-9aa2-920dbff639a7"/*WriteMode*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "f977faaf-1840-4a75-9bc5-43176f2e88e9"/*JumpToRandomPos*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

@@ -3,13 +3,6 @@
   "Description": "Using a hash table algorithm to look for nearest neighbors and experiment with point-to-point interaction.",
   "InputUis": [
     {
-      "InputId": "8e35d7a7-433d-478f-b202-bd757f4d5d72"/*PointsA_*/,
-      "Position": {
-        "X": 1461.3999,
-        "Y": -1047.3477
-      }
-    },
-    {
       "InputId": "15f43187-123d-4d40-8bcc-70c8c8b0392f"/*CellSize*/,
       "Position": {
         "X": 1469.0317,
@@ -26,21 +19,42 @@
         "X": 1469.0317,
         "Y": -302.91595
       }
+    },
+    {
+      "InputId": "8e35d7a7-433d-478f-b202-bd757f4d5d72"/*PointsA_*/,
+      "Position": {
+        "X": 1461.3999,
+        "Y": -1047.3477
+      }
     }
   ],
   "SymbolChildUis": [
-    {
-      "ChildId": "acb54290-1d30-43c0-bbae-9c203901352d"/*ExecuteBufferUpdate*/,
-      "Position": {
-        "X": 3864.9243,
-        "Y": -1064.4623
-      }
-    },
     {
       "ChildId": "0527bd0b-8250-4caf-9aa3-139999609092"/*GetBufferComponents*/,
       "Position": {
         "X": 2349.8088,
         "Y": -608.5108
+      }
+    },
+    {
+      "ChildId": "0cce5ecf-1888-4318-bdb5-b79037b8df0a"/*ConnectPoints*/,
+      "Position": {
+        "X": 2842.8103,
+        "Y": -808.0109
+      }
+    },
+    {
+      "ChildId": "2b7e849d-fac8-45ae-bc4e-62351aedd7c4"/*SnapPointsToGrid*/,
+      "Position": {
+        "X": 2410.4592,
+        "Y": -1.2914124
+      }
+    },
+    {
+      "ChildId": "35679191-eccd-442c-b73e-3f3b4087d5a6"/*DrawLines*/,
+      "Position": {
+        "X": 2710.4592,
+        "Y": -1.2914124
       }
     },
     {
@@ -56,59 +70,10 @@
       }
     },
     {
-      "ChildId": "5e05cf2d-a490-4489-b0da-518e8237a188"/*FloatsToBuffer*/,
-      "Position": {
-        "X": 2349.8088,
-        "Y": -716.5108
-      }
-    },
-    {
-      "ChildId": "baabde7b-39f3-4343-8436-84a4b3796463"/*ComputeShader*/,
-      "Position": {
-        "X": 2398.3806,
-        "Y": -852.00385
-      }
-    },
-    {
-      "ChildId": "0cce5ecf-1888-4318-bdb5-b79037b8df0a"/*ConnectPoints*/,
-      "Position": {
-        "X": 2842.8103,
-        "Y": -808.0109
-      }
-    },
-    {
       "ChildId": "46844f17-7992-4c1a-87ac-18cf006bba2a"/*CalcDispatchCount*/,
       "Position": {
         "X": 2544.0042,
         "Y": -814.0849
-      }
-    },
-    {
-      "ChildId": "893b7fc5-b150-4879-8da4-5ba3f96e0eda"/*_BuildSpatialHashMap*/,
-      "Position": {
-        "X": 2580.179,
-        "Y": -751.66205
-      }
-    },
-    {
-      "ChildId": "5e1253e4-b0ed-4438-a13c-964c5448c111"/*DrawPoints*/,
-      "Position": {
-        "X": 2710.4592,
-        "Y": -173.29141
-      }
-    },
-    {
-      "ChildId": "c197e03e-256f-4623-b1ce-4ddd228018a1"/*Execute*/,
-      "Position": {
-        "X": 2860.4592,
-        "Y": -173.29141
-      }
-    },
-    {
-      "ChildId": "d2e19a47-5a81-4c24-be71-c589238b19f4"/*APoint*/,
-      "Position": {
-        "X": 2110.4592,
-        "Y": -133.29141
       }
     },
     {
@@ -119,17 +84,38 @@
       }
     },
     {
+      "ChildId": "5e05cf2d-a490-4489-b0da-518e8237a188"/*FloatsToBuffer*/,
+      "Position": {
+        "X": 2349.8088,
+        "Y": -716.5108
+      }
+    },
+    {
+      "ChildId": "5e1253e4-b0ed-4438-a13c-964c5448c111"/*DrawPoints*/,
+      "Position": {
+        "X": 2710.4592,
+        "Y": -173.29141
+      }
+    },
+    {
+      "ChildId": "717e05a8-9daf-4e20-9a18-5d30e449034a"/*DrawPoints*/,
+      "Position": {
+        "X": 2713.0593,
+        "Y": -98.11658
+      }
+    },
+    {
+      "ChildId": "893b7fc5-b150-4879-8da4-5ba3f96e0eda"/*_BuildSpatialHashMap*/,
+      "Position": {
+        "X": 2580.179,
+        "Y": -751.66205
+      }
+    },
+    {
       "ChildId": "90565683-1d1b-4161-b716-d1b29de5ee0b"/*Vector3Components*/,
       "Position": {
         "X": 2170.1716,
         "Y": -682.2021
-      }
-    },
-    {
-      "ChildId": "c8440056-8779-4ab8-9fc2-f710a50ebce0"/*RepeatAtGPoints*/,
-      "Position": {
-        "X": 2560.4592,
-        "Y": -1.2914124
       }
     },
     {
@@ -140,20 +126,6 @@
       }
     },
     {
-      "ChildId": "35679191-eccd-442c-b73e-3f3b4087d5a6"/*DrawLines*/,
-      "Position": {
-        "X": 2710.4592,
-        "Y": -1.2914124
-      }
-    },
-    {
-      "ChildId": "2b7e849d-fac8-45ae-bc4e-62351aedd7c4"/*SnapPointsToGrid*/,
-      "Position": {
-        "X": 2410.4592,
-        "Y": -1.2914124
-      }
-    },
-    {
       "ChildId": "a864758b-27fb-4731-8a1f-282d8c086cb4"/*ScaleVector3*/,
       "Position": {
         "X": 2191.8433,
@@ -161,10 +133,38 @@
       }
     },
     {
-      "ChildId": "717e05a8-9daf-4e20-9a18-5d30e449034a"/*DrawPoints*/,
+      "ChildId": "acb54290-1d30-43c0-bbae-9c203901352d"/*ExecuteBufferUpdate*/,
       "Position": {
-        "X": 2713.0593,
-        "Y": -98.11658
+        "X": 3864.9243,
+        "Y": -1064.4623
+      }
+    },
+    {
+      "ChildId": "baabde7b-39f3-4343-8436-84a4b3796463"/*ComputeShader*/,
+      "Position": {
+        "X": 2398.3806,
+        "Y": -852.00385
+      }
+    },
+    {
+      "ChildId": "c197e03e-256f-4623-b1ce-4ddd228018a1"/*Execute*/,
+      "Position": {
+        "X": 2860.4592,
+        "Y": -173.29141
+      }
+    },
+    {
+      "ChildId": "c8440056-8779-4ab8-9fc2-f710a50ebce0"/*RepeatAtGPoints*/,
+      "Position": {
+        "X": 2560.4592,
+        "Y": -1.2914124
+      }
+    },
+    {
+      "ChildId": "d2e19a47-5a81-4c24-be71-c589238b19f4"/*Point*/,
+      "Position": {
+        "X": 2110.4592,
+        "Y": -133.29141
       }
     }
   ],

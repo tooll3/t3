@@ -3,6 +3,13 @@
   "Description": "",
   "InputUis": [
     {
+      "InputId": "2d2087bc-29a1-4b7f-909d-17d412fe1da5"/*Phase*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
       "InputId": "52953760-435e-4f11-8e65-c9d46bc40076"/*Scale*/,
       "Position": {
         "X": -200.0,
@@ -24,21 +31,14 @@
       }
     },
     {
-      "InputId": "2d2087bc-29a1-4b7f-909d-17d412fe1da5"/*Phase*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 180.0
-      }
-    },
-    {
-      "InputId": "dee89ad4-1516-40d0-a682-98e05a8b7c12"/*Thickness*/,
+      "InputId": "cb697476-36df-44ae-bd1d-138cc49467c2"/*Count*/,
       "Position": {
         "X": -200.0,
         "Y": 225.0
       }
     },
     {
-      "InputId": "cb697476-36df-44ae-bd1d-138cc49467c2"/*Count*/,
+      "InputId": "dee89ad4-1516-40d0-a682-98e05a8b7c12"/*Thickness*/,
       "Position": {
         "X": -200.0,
         "Y": 225.0

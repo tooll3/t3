@@ -2,7 +2,7 @@
   "Id": "8b285708-3f20-4957-9eb2-bb40e0d320ee"/*IterateList*/,
   "Inputs": [
     {
-      "Id": "a5e1551b-697e-4316-a95e-315a39b69c76"/*List*/,
+      "Id": "1d09c5e2-19d1-4622-a06d-4ffd3124343c"/*IterateCommands*/,
       "DefaultValue": null
     },
     {
@@ -10,7 +10,7 @@
       "DefaultValue": null
     },
     {
-      "Id": "1d09c5e2-19d1-4622-a06d-4ffd3124343c"/*IterateCommands*/,
+      "Id": "a5e1551b-697e-4316-a95e-315a39b69c76"/*List*/,
       "DefaultValue": null
     }
   ],

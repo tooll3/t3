@@ -3,13 +3,6 @@
   "Description": "Defines a value that is multiplied onto the incoming Vec3",
   "InputUis": [
     {
-      "InputId": "de6bfe5a-ebcd-4da6-8c8a-79989a31dd9f"/*A*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "2218624e-2f7b-4bc6-9c36-447c371a6cd7"/*B*/,
       "Position": {
         "X": -200.0,
@@ -23,6 +16,13 @@
         "Y": 45.0
       },
       "AddPadding": "True"
+    },
+    {
+      "InputId": "de6bfe5a-ebcd-4da6-8c8a-79989a31dd9f"/*A*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
     }
   ],
   "SymbolChildUis": [],

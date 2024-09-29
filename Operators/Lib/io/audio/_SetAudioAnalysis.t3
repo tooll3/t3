@@ -2,7 +2,15 @@
   "Id": "ecbafbeb-c14b-4507-953f-80bc6676d077"/*_SetAudioAnalysis*/,
   "Inputs": [
     {
+      "Id": "04b13eb6-83ed-441e-8856-4ddcad898324"/*TimeSinceHiHat*/,
+      "DefaultValue": 0.0
+    },
+    {
       "Id": "546f31c1-edb4-4ee9-a5e7-4c66687ae74a"/*TimeSinceBeat*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "6d2973a9-0afd-4131-b8b3-430ed9e63f72"/*AccumulatedHiHat*/,
       "DefaultValue": 0.0
     },
     {
@@ -10,19 +18,11 @@
       "DefaultValue": 0
     },
     {
-      "Id": "f65ef8e7-92cf-4a93-922b-b746a550f554"/*BeatSum*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "04b13eb6-83ed-441e-8856-4ddcad898324"/*TimeSinceHiHat*/,
-      "DefaultValue": 0.0
-    },
-    {
       "Id": "d5ac7d01-f402-4cab-a25d-5f5488d537ea"/*HiHatCount*/,
       "DefaultValue": 0
     },
     {
-      "Id": "6d2973a9-0afd-4131-b8b3-430ed9e63f72"/*AccumulatedHiHat*/,
+      "Id": "f65ef8e7-92cf-4a93-922b-b746a550f554"/*BeatSum*/,
       "DefaultValue": 0.0
     }
   ],

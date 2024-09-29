@@ -3,30 +3,11 @@
   "Description": "This a work around to playback audio clips without syncing.",
   "InputUis": [
     {
-      "InputId": "e0c927f9-5528-49c5-b457-5aea51f51628"/*Path*/,
-      "Position": {
-        "X": 51.512096,
-        "Y": 46.995968
-      },
-      "Usage": "FilePath",
-      "FileFilter": "All Files|*.*|Audio files (mp3,wav,ogg)|*.mp3;*.wav;*.ogg"
-    },
-    {
       "InputId": "7abb80b8-5ea3-48f3-9f28-19daca9b8648"/*TimeInSecs*/,
       "Position": {
         "X": 51.512096,
         "Y": 91.99597
       }
-    },
-    {
-      "InputId": "b8610a84-ea18-486c-8dbe-208c19a9db28"/*Volume*/,
-      "Position": {
-        "X": 51.512096,
-        "Y": 136.99597
-      },
-      "Min": 0.0,
-      "Max": 1.0,
-      "Clamp": true
     },
     {
       "InputId": "86cf4c08-242d-4491-871e-eaccdb628238"/*IsPlaying*/,
@@ -41,6 +22,25 @@
         "X": 51.512096,
         "Y": 226.99597
       }
+    },
+    {
+      "InputId": "b8610a84-ea18-486c-8dbe-208c19a9db28"/*Volume*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 136.99597
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "e0c927f9-5528-49c5-b457-5aea51f51628"/*Path*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 46.995968
+      },
+      "Usage": "FilePath",
+      "FileFilter": "All Files|*.*|Audio files (mp3,wav,ogg)|*.mp3;*.wav;*.ogg"
     }
   ],
   "SymbolChildUis": [],

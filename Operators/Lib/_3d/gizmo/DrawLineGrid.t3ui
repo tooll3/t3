@@ -3,13 +3,6 @@
   "Description": "Renders a grid of lines in the given scaling. \nThis might be useful for debugging or to use as content.",
   "InputUis": [
     {
-      "InputId": "5767a3be-9ac1-4ad5-9529-aea00d3143ea"/*UniformScale*/,
-      "Position": {
-        "X": -344.79285,
-        "Y": 204.38275
-      }
-    },
-    {
       "InputId": "0480e529-b790-4c6f-a993-2efdbfda35e4"/*Color*/,
       "Position": {
         "X": -344.79285,
@@ -20,13 +13,6 @@
       "Clamp": true
     },
     {
-      "InputId": "a4ea3140-3397-4989-98ee-3cf02d11f242"/*Size*/,
-      "Position": {
-        "X": -344.79285,
-        "Y": 294.38275
-      }
-    },
-    {
       "InputId": "0b8c7835-078c-4990-8db5-edccd26018c9"/*BlendMod*/,
       "Position": {
         "X": -344.79285,
@@ -34,10 +20,24 @@
       }
     },
     {
+      "InputId": "5767a3be-9ac1-4ad5-9529-aea00d3143ea"/*UniformScale*/,
+      "Position": {
+        "X": -344.79285,
+        "Y": 204.38275
+      }
+    },
+    {
       "InputId": "5e7da35a-6537-4fc1-9f23-faab82c8eeaa"/*Segments*/,
       "Position": {
         "X": -344.79285,
         "Y": 384.38275
+      }
+    },
+    {
+      "InputId": "a4ea3140-3397-4989-98ee-3cf02d11f242"/*Size*/,
+      "Position": {
+        "X": -344.79285,
+        "Y": 294.38275
       }
     }
   ],
@@ -50,34 +50,6 @@
       }
     },
     {
-      "ChildId": "6e820e56-1b24-465b-a073-93ca51cca07b"/*LinePoints*/,
-      "Position": {
-        "X": -188.20523,
-        "Y": 42.807922
-      }
-    },
-    {
-      "ChildId": "c333138d-bc14-4d6d-bdeb-7d1640bc08ad"/*RepeatAtGPoints*/,
-      "Position": {
-        "X": -38.20523,
-        "Y": -13.192078
-      }
-    },
-    {
-      "ChildId": "f40a2e1f-f213-4a21-bde3-5241103cb075"/*DrawLines*/,
-      "Position": {
-        "X": 111.79477,
-        "Y": -13.192078
-      }
-    },
-    {
-      "ChildId": "e482aab6-6911-4f50-a0f6-b5c8b6f8e0a8"/*Transform*/,
-      "Position": {
-        "X": 275.08972,
-        "Y": 77.28531
-      }
-    },
-    {
       "ChildId": "19edcaaa-6c26-470d-8f72-72db86cc30dd"/*Transform*/,
       "Position": {
         "X": 600.0,
@@ -85,10 +57,17 @@
       }
     },
     {
-      "ChildId": "ca5809cf-2b79-44af-8752-0a06d4170e36"/*Multiply*/,
+      "ChildId": "6e820e56-1b24-465b-a073-93ca51cca07b"/*LinePoints*/,
       "Position": {
-        "X": -194.79291,
-        "Y": 204.38275
+        "X": -188.20523,
+        "Y": 42.807922
+      }
+    },
+    {
+      "ChildId": "7dca1326-b172-416e-9e11-e93ed8146bc4"/*Execute*/,
+      "Position": {
+        "X": 100.0,
+        "Y": 100.0
       }
     },
     {
@@ -99,52 +78,31 @@
       }
     },
     {
-      "ChildId": "6c7ec64e-5a50-41ef-ab96-0ce22b142e19"/*LinePoints*/,
+      "ChildId": "c333138d-bc14-4d6d-bdeb-7d1640bc08ad"/*RepeatAtGPoints*/,
       "Position": {
-        "X": -85.60065,
-        "Y": -406.2367
+        "X": -38.20523,
+        "Y": -13.192078
       }
     },
     {
-      "ChildId": "86a6ce04-74f0-4b06-8672-13e17f212957"/*RepeatAtGPoints*/,
+      "ChildId": "ca5809cf-2b79-44af-8752-0a06d4170e36"/*Multiply*/,
       "Position": {
-        "X": 64.39923,
-        "Y": -406.2367
+        "X": -194.79291,
+        "Y": 204.38275
       }
     },
     {
-      "ChildId": "8f977942-7d6a-4017-85a8-3710fbcc1966"/*LinePoints*/,
+      "ChildId": "e482aab6-6911-4f50-a0f6-b5c8b6f8e0a8"/*Transform*/,
       "Position": {
-        "X": -85.60065,
-        "Y": -363.2367
+        "X": 275.08972,
+        "Y": 77.28531
       }
     },
     {
-      "ChildId": "9a91a699-6d16-411b-9022-bf3fba371f6a"/*TransformPoints*/,
+      "ChildId": "f40a2e1f-f213-4a21-bde3-5241103cb075"/*DrawLines*/,
       "Position": {
-        "X": 236.46844,
-        "Y": -338.30212
-      }
-    },
-    {
-      "ChildId": "09726b5d-cc33-47ed-b3b1-420fc3b86002"/*CombineBuffers*/,
-      "Position": {
-        "X": 380.34943,
-        "Y": -405.57104
-      }
-    },
-    {
-      "ChildId": "b718c835-88b5-4822-a033-008f8980bcfe"/*DrawLines*/,
-      "Position": {
-        "X": 530.34955,
-        "Y": -405.57104
-      }
-    },
-    {
-      "ChildId": "3b7b832f-f339-420f-bb64-936c6c81f72d"/*Int2Components*/,
-      "Position": {
-        "X": -209.06122,
-        "Y": -155.22006
+        "X": 111.79477,
+        "Y": -13.192078
       }
     }
   ],

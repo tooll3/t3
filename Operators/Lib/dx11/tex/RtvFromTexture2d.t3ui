@@ -3,18 +3,18 @@
   "Description": "",
   "InputUis": [
     {
+      "InputId": "00fc3534-0c07-41c2-9d56-3484d9b3a41f"/*ArrayIndex*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      }
+    },
+    {
       "InputId": "73cf7c5d-cf0c-49db-91e8-dafe812e0232"/*Texture*/,
       "Relevancy": "Required",
       "Position": {
         "X": 0.0,
         "Y": 0.0
-      }
-    },
-    {
-      "InputId": "00fc3534-0c07-41c2-9d56-3484d9b3a41f"/*ArrayIndex*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 45.0
       }
     }
   ],

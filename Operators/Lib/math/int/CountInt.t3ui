@@ -3,38 +3,10 @@
   "Description": "A helper operator that counts evaluations as an integer.",
   "InputUis": [
     {
-      "InputId": "bfd95809-61d2-49eb-85d4-ff9e36b2d158"/*TriggerIncrement*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "InputId": "6ebe2842-a8fc-4800-8296-c8664c804e3c"/*TriggerDecrement*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      }
-    },
-    {
       "InputId": "01027ce6-f4ca-44b6-a8ec-e4ab96280864"/*TriggerReset*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
-    },
-    {
-      "InputId": "518a8bd6-d830-4f73-ac83-49be2fd4b09d"/*OnlyCountChanges*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
-      }
-    },
-    {
-      "InputId": "abe64676-ccf7-4163-b4da-26d8b7179af4"/*Delta*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 180.0
       }
     },
     {
@@ -49,6 +21,34 @@
       "Position": {
         "X": -200.0,
         "Y": 180.0
+      }
+    },
+    {
+      "InputId": "518a8bd6-d830-4f73-ac83-49be2fd4b09d"/*OnlyCountChanges*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "6ebe2842-a8fc-4800-8296-c8664c804e3c"/*TriggerDecrement*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "abe64676-ccf7-4163-b4da-26d8b7179af4"/*Delta*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "bfd95809-61d2-49eb-85d4-ff9e36b2d158"/*TriggerIncrement*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
       }
     }
   ],

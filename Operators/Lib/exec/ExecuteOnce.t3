@@ -2,12 +2,12 @@
   "Id": "7a09136e-18b2-46b7-afff-8ef999e3965d"/*ExecuteOnce*/,
   "Inputs": [
     {
-      "Id": "7450033d-5797-40c9-b6c4-b6e8d27fe501"/*Command*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "2049d44d-81a4-493b-a630-a1b273a4e6f9"/*Trigger*/,
       "DefaultValue": false
+    },
+    {
+      "Id": "7450033d-5797-40c9-b6c4-b6e8d27fe501"/*Command*/,
+      "DefaultValue": null
     }
   ],
   "Children": [],

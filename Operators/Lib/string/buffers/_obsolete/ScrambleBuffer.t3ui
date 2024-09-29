@@ -3,11 +3,17 @@
   "Description": "An obsolete string experiment. \n\nPlease consider [RandomStringBuilder].\n",
   "InputUis": [
     {
-      "InputId": "c80a289a-e0d5-459f-b79e-fff72757b416"/*StringBuilder*/,
-      "Relevancy": "Required",
+      "InputId": "10a1209a-15f1-42ac-b105-2ccbc0f4ff4d"/*FillDirection*/,
       "Position": {
         "X": -200.0,
-        "Y": 0.0
+        "Y": 315.0
+      }
+    },
+    {
+      "InputId": "262511b2-3a96-4600-8325-0fe84568b42f"/*TriggerFillJump*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
       }
     },
     {
@@ -25,13 +31,6 @@
       }
     },
     {
-      "InputId": "b5deeff1-7188-4742-a438-cb3ce1afde59"/*TriggerChop*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 180.0
-      }
-    },
-    {
       "InputId": "aa458c22-a874-4200-af62-0da94d82631f"/*TriggerFill*/,
       "Position": {
         "X": -200.0,
@@ -39,10 +38,18 @@
       }
     },
     {
-      "InputId": "262511b2-3a96-4600-8325-0fe84568b42f"/*TriggerFillJump*/,
+      "InputId": "b5deeff1-7188-4742-a438-cb3ce1afde59"/*TriggerChop*/,
       "Position": {
         "X": -200.0,
-        "Y": 270.0
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "c80a289a-e0d5-459f-b79e-fff72757b416"/*StringBuilder*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
       }
     },
     {
@@ -52,13 +59,6 @@
         "Y": 270.0
       },
       "Usage": "Default"
-    },
-    {
-      "InputId": "10a1209a-15f1-42ac-b105-2ccbc0f4ff4d"/*FillDirection*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 315.0
-      }
     }
   ],
   "SymbolChildUis": [],

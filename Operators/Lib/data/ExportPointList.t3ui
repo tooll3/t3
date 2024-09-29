@@ -3,19 +3,19 @@
   "Description": "A proof-of-concept / research operator that can be useful for exporting PointList to JSON files.",
   "InputUis": [
     {
-      "InputId": "b0dceb47-4ee5-481f-a310-173c336f4fbe"/*TriggerSave*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      }
-    },
-    {
       "InputId": "043e9707-98fe-420c-a546-292459c2fcca"/*FilePath*/,
       "Position": {
         "X": -200.0,
         "Y": 90.0
       },
       "Usage": "Default"
+    },
+    {
+      "InputId": "b0dceb47-4ee5-481f-a310-173c336f4fbe"/*TriggerSave*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
     },
     {
       "InputId": "b2158c69-e671-4110-b398-59c323359d2d"/*FilterDoubleNaN*/,

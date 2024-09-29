@@ -4,6 +4,20 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
+      "ChildId": "138449b9-477f-4710-a2b5-40a8b1261230"/*ShardNoise*/,
+      "Position": {
+        "X": -1452.6702,
+        "Y": -301.72137
+      }
+    },
+    {
+      "ChildId": "217f4573-d912-42bc-9806-f7800e7e4dc3"/*BoolToInt*/,
+      "Position": {
+        "X": -833.5519,
+        "Y": -456.4306
+      }
+    },
+    {
       "ChildId": "2184a662-0d56-45c6-831d-edc976dd806d"/*Text*/,
       "Position": {
         "X": -1601.1404,
@@ -11,16 +25,44 @@
       }
     },
     {
-      "ChildId": "7223da1c-d8d6-4627-b940-f350e53138cd"/*Blur*/,
+      "ChildId": "322cc3c7-2281-4d84-8da2-bfef532155d2"/*HasTimeChanged*/,
       "Position": {
-        "X": -1733.5519,
-        "Y": -544.3398
+        "X": -983.5519,
+        "Y": -456.4306
+      }
+    },
+    {
+      "ChildId": "39270c01-073e-4b39-b40a-51b0d1c05772"/*Time*/,
+      "Position": {
+        "X": -1601.1404,
+        "Y": -167.88678
+      }
+    },
+    {
+      "ChildId": "4f92d61f-1b3f-4dad-bb38-f3d1a0fe23ef"/*RenderTarget*/,
+      "Position": {
+        "X": -475.84436,
+        "Y": -612.8398
       }
     },
     {
       "ChildId": "518cf20c-5559-496a-ac20-8e1a92e1fa9b"/*DrawScreenQuad*/,
       "Position": {
         "X": -833.5519,
+        "Y": -542.4306
+      }
+    },
+    {
+      "ChildId": "5549f1f5-67e5-404b-880b-4db1f1a64de2"/*Blend*/,
+      "Position": {
+        "X": -1269.0175,
+        "Y": -294.07318
+      }
+    },
+    {
+      "ChildId": "577a038a-92ba-4e14-b5b1-db48bb86b859"/*TransformImage*/,
+      "Position": {
+        "X": -1283.5519,
         "Y": -542.4306
       }
     },
@@ -32,43 +74,17 @@
       }
     },
     {
-      "ChildId": "39270c01-073e-4b39-b40a-51b0d1c05772"/*Time*/,
+      "ChildId": "7223da1c-d8d6-4627-b940-f350e53138cd"/*Blur*/,
       "Position": {
-        "X": -1601.1404,
-        "Y": -167.88678
-      }
-    },
-    {
-      "ChildId": "9503bcba-c1d5-401f-a339-87ed5eb27bff"/*Blur*/,
-      "Position": {
-        "X": -1433.5519,
+        "X": -1733.5519,
         "Y": -544.3398
       }
     },
     {
-      "ChildId": "577a038a-92ba-4e14-b5b1-db48bb86b859"/*TransformImage*/,
+      "ChildId": "857fe2b9-5743-4f83-a725-3e2cdcb6fd32"/*AnimValue*/,
       "Position": {
-        "X": -1283.5519,
-        "Y": -542.4306
-      }
-    },
-    {
-      "ChildId": "ef031805-82d2-4fcc-8456-2c23a703eefa"/*Sharpen*/,
-      "Style": "Expanded",
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
-      "Position": {
-        "X": -1583.5519,
-        "Y": -544.3398
-      }
-    },
-    {
-      "ChildId": "138449b9-477f-4710-a2b5-40a8b1261230"/*ShardNoise*/,
-      "Position": {
-        "X": -1452.6702,
-        "Y": -301.72137
+        "X": -1743.6857,
+        "Y": -475.3975
       }
     },
     {
@@ -84,17 +100,10 @@
       }
     },
     {
-      "ChildId": "217f4573-d912-42bc-9806-f7800e7e4dc3"/*BoolToInt*/,
+      "ChildId": "9503bcba-c1d5-401f-a339-87ed5eb27bff"/*Blur*/,
       "Position": {
-        "X": -833.5519,
-        "Y": -456.4306
-      }
-    },
-    {
-      "ChildId": "322cc3c7-2281-4d84-8da2-bfef532155d2"/*HasTimeChanged*/,
-      "Position": {
-        "X": -983.5519,
-        "Y": -456.4306
+        "X": -1433.5519,
+        "Y": -544.3398
       }
     },
     {
@@ -105,31 +114,22 @@
       }
     },
     {
-      "ChildId": "5549f1f5-67e5-404b-880b-4db1f1a64de2"/*Blend*/,
-      "Position": {
-        "X": -1269.0175,
-        "Y": -294.07318
-      }
-    },
-    {
-      "ChildId": "857fe2b9-5743-4f83-a725-3e2cdcb6fd32"/*AnimValue*/,
-      "Position": {
-        "X": -1743.6857,
-        "Y": -475.3975
-      }
-    },
-    {
-      "ChildId": "e4003e13-5ea5-4b94-ad68-2628bf4b1fa8"/*UseRenderTarget*/,
+      "ChildId": "e4003e13-5ea5-4b94-ad68-2628bf4b1fa8"/*UseTextureReference*/,
       "Position": {
         "X": -1921.052,
         "Y": -606.61615
       }
     },
     {
-      "ChildId": "4f92d61f-1b3f-4dad-bb38-f3d1a0fe23ef"/*RenderTarget*/,
+      "ChildId": "ef031805-82d2-4fcc-8456-2c23a703eefa"/*Sharpen*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
       "Position": {
-        "X": -475.84436,
-        "Y": -612.8398
+        "X": -1583.5519,
+        "Y": -544.3398
       }
     }
   ],

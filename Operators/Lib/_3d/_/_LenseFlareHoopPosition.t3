@@ -2,29 +2,23 @@
   "Id": "1cfe41c7-972e-4243-9ae4-a510ac038191"/*_LenseFlareHoopPosition*/,
   "Inputs": [
     {
-      "Id": "a2408edd-6629-47e2-89c3-a6626218e049"/*LightIndex*/,
-      "DefaultValue": 0
-    },
-    {
-      "Id": "2dffe933-1c5a-46df-aa7e-4e41a4cb2017"/*Distance*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "b28c80c4-e713-4635-a256-23211ea4bea9"/*Size*/,
-      "DefaultValue": 0.0
+      "Id": "0ebf8ac6-e075-47c9-ba7a-8a2fd7b0e342"/*PositionFactor*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0
+      }
     },
     {
       "Id": "0f5d8113-64cb-4022-a4b0-9f3ea4bd2596"/*RandomizeSize*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "b6163e2d-1344-4ac5-9704-98e849d3248e"/*Color*/,
-      "DefaultValue": {
-        "X": 1.0,
-        "Y": 1.0,
-        "Z": 1.0,
-        "W": 1.0
-      }
+      "Id": "2dffe933-1c5a-46df-aa7e-4e41a4cb2017"/*Distance*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "64f0b189-1d1e-4c9c-bf6a-9c42072352cd"/*FxZoneBrightness*/,
+      "DefaultValue": 0.0
     },
     {
       "Id": "92dec9db-e1b0-4f9e-aba5-b7e8900d5bc8"/*RandomizeColor*/,
@@ -33,17 +27,6 @@
         "Y": 0.0,
         "Z": 0.0,
         "W": 0.0
-      }
-    },
-    {
-      "Id": "e658e0ac-282b-4a56-bdf0-9b7efadc7e02"/*RandomSeed*/,
-      "DefaultValue": 0
-    },
-    {
-      "Id": "0ebf8ac6-e075-47c9-ba7a-8a2fd7b0e342"/*PositionFactor*/,
-      "DefaultValue": {
-        "X": 1.0,
-        "Y": 1.0
       }
     },
     {
@@ -58,19 +41,36 @@
       }
     },
     {
-      "Id": "f080db28-3d87-4525-8807-619a7a1c72fc"/*InnerFxZone*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0
-      }
+      "Id": "a2408edd-6629-47e2-89c3-a6626218e049"/*LightIndex*/,
+      "DefaultValue": 0
     },
     {
       "Id": "a2f601e5-1b11-49ea-8d5e-d98dfea91ae5"/*FxZoneScale*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "64f0b189-1d1e-4c9c-bf6a-9c42072352cd"/*FxZoneBrightness*/,
+      "Id": "b28c80c4-e713-4635-a256-23211ea4bea9"/*Size*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "b6163e2d-1344-4ac5-9704-98e849d3248e"/*Color*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
+        "W": 1.0
+      }
+    },
+    {
+      "Id": "e658e0ac-282b-4a56-bdf0-9b7efadc7e02"/*RandomSeed*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "f080db28-3d87-4525-8807-619a7a1c72fc"/*InnerFxZone*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
     }
   ],
   "Children": [],

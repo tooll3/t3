@@ -6,35 +6,18 @@
       "DefaultValue": null
     },
     {
-      "Id": "b25d483f-1fdf-4d76-974c-8e781a405914"/*Enable*/,
-      "DefaultValue": true
-    },
-    {
       "Id": "7f255460-3a71-42e7-a372-629d39433ae8"/*HasFrameChanged*/,
       "DefaultValue": false
+    },
+    {
+      "Id": "b25d483f-1fdf-4d76-974c-8e781a405914"/*Enable*/,
+      "DefaultValue": true
     }
   ],
   "Children": [
     {
-      "Id": "561b5bdf-b288-490b-a518-592ccc610415"/*CountInt*/,
-      "SymbolId": "0e1d5f4b-3ba0-4e71-aa26-7308b6df214d",
-      "InputValues": [
-        {
-          "Id": "bfd95809-61d2-49eb-85d4-ff9e36b2d158"/*TriggerIncrement*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
-          "Id": "2ff3d674-90d7-4c8f-8551-aad9992540db"/*Modulo*/,
-          "Type": "System.Int32",
-          "Value": 2
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "3e77b2db-62e9-4c38-b58b-ea8d2d65a78c"/*DelayTrigger*/,
-      "SymbolId": "fbd9ac37-4427-4852-95d7-d8383fefbe36",
+      "Id": "13868df6-23fa-48b3-baff-b875a272a770"/*CompareImages*/,
+      "SymbolId": "0e13e34f-c07b-4ada-8c87-6b89f4ed8b41",
       "InputValues": [],
       "Outputs": []
     },
@@ -51,26 +34,60 @@
       "Outputs": []
     },
     {
-      "Id": "13868df6-23fa-48b3-baff-b875a272a770"/*CompareImages*/,
-      "SymbolId": "0e13e34f-c07b-4ada-8c87-6b89f4ed8b41",
+      "Id": "296b01f0-d957-4b89-a306-153db7689cf9"/*ConvertFormat*/,
+      "SymbolId": "e1cd1cdf-3982-4bb3-b080-9f0a851566d7",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "af6e6ff0-c9ba-439a-8e33-6e50cd2d57d0"/*All*/,
-      "SymbolId": "3a6fd508-0272-4c18-96b8-bc2387d3b2fd",
+      "Id": "3e77b2db-62e9-4c38-b58b-ea8d2d65a78c"/*DelayTrigger*/,
+      "SymbolId": "fbd9ac37-4427-4852-95d7-d8383fefbe36",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "ee5c7fc2-1f66-4332-9435-bab700083e68"/*Not*/,
-      "SymbolId": "51648ecd-05ee-40b3-b562-8518ada70918",
+      "Id": "52a67f36-0c14-49be-80ee-f741484f1a47"/*SwapTextures*/,
+      "SymbolId": "590a0b0b-c847-433c-8ffa-602ed0ae8f28",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "8f38eb6c-d619-4a10-a777-89ca8f511917"/*All*/,
-      "SymbolId": "3a6fd508-0272-4c18-96b8-bc2387d3b2fd",
+      "Id": "561b5bdf-b288-490b-a518-592ccc610415"/*CountInt*/,
+      "SymbolId": "0e1d5f4b-3ba0-4e71-aa26-7308b6df214d",
+      "InputValues": [
+        {
+          "Id": "2ff3d674-90d7-4c8f-8551-aad9992540db"/*Modulo*/,
+          "Type": "System.Int32",
+          "Value": 2
+        },
+        {
+          "Id": "bfd95809-61d2-49eb-85d4-ff9e36b2d158"/*TriggerIncrement*/,
+          "Type": "System.Boolean",
+          "Value": false
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "5a270e2c-8dfc-40e4-b967-5dd787424592"/*ConvertFormat*/,
+      "SymbolId": "e1cd1cdf-3982-4bb3-b080-9f0a851566d7",
+      "InputValues": [
+        {
+          "Id": "3f7b713d-2808-4312-87b4-707cb891b567"/*Format*/,
+          "Type": "SharpDX.DXGI.Format",
+          "Value": "R16G16B16A16_Float"
+        },
+        {
+          "Id": "88623684-a5e4-4415-8458-648761e834e1"/*GenerateMipMaps*/,
+          "Type": "System.Boolean",
+          "Value": false
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "5bf7014b-4351-4754-b670-48a32669d905"/*CompareInt*/,
+      "SymbolId": "05cf9ea7-045d-421f-8ed3-2c2f6b325a46",
       "InputValues": [],
       "Outputs": []
     },
@@ -92,37 +109,20 @@
       "Outputs": []
     },
     {
-      "Id": "52a67f36-0c14-49be-80ee-f741484f1a47"/*SwapTextures*/,
-      "SymbolId": "590a0b0b-c847-433c-8ffa-602ed0ae8f28",
+      "Id": "8f38eb6c-d619-4a10-a777-89ca8f511917"/*All*/,
+      "SymbolId": "3a6fd508-0272-4c18-96b8-bc2387d3b2fd",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "5bf7014b-4351-4754-b670-48a32669d905"/*CompareInt*/,
-      "SymbolId": "05cf9ea7-045d-421f-8ed3-2c2f6b325a46",
+      "Id": "af6e6ff0-c9ba-439a-8e33-6e50cd2d57d0"/*All*/,
+      "SymbolId": "3a6fd508-0272-4c18-96b8-bc2387d3b2fd",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "5a270e2c-8dfc-40e4-b967-5dd787424592"/*ConvertFormat*/,
-      "SymbolId": "e1cd1cdf-3982-4bb3-b080-9f0a851566d7",
-      "InputValues": [
-        {
-          "Id": "3f7b713d-2808-4312-87b4-707cb891b567"/*Format*/,
-          "Type": "SharpDX.DXGI.Format",
-          "Value": "R16G16B16A16_Float"
-        },
-        {
-          "Id": "88623684-a5e4-4415-8458-648761e834e1"/*GenerateMipMaps*/,
-          "Type": "System.Boolean",
-          "Value": false
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "296b01f0-d957-4b89-a306-153db7689cf9"/*ConvertFormat*/,
-      "SymbolId": "e1cd1cdf-3982-4bb3-b080-9f0a851566d7",
+      "Id": "ee5c7fc2-1f66-4332-9435-bab700083e68"/*Not*/,
+      "SymbolId": "51648ecd-05ee-40b3-b562-8518ada70918",
       "InputValues": [],
       "Outputs": []
     }

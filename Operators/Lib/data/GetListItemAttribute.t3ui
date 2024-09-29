@@ -3,14 +3,6 @@
   "Description": "Fetches a float from a list item attribute via Reflection. This is slow.",
   "InputUis": [
     {
-      "InputId": "9cf1ae77-1e80-443a-bb07-f545c3d2e71d"/*DataList*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "09f5501d-5f51-4406-b0cd-4c3e572a376f"/*ItemIndex*/,
       "Position": {
         "X": -200.0,
@@ -22,6 +14,14 @@
       "Position": {
         "X": -200.0,
         "Y": 90.0
+      }
+    },
+    {
+      "InputId": "9cf1ae77-1e80-443a-bb07-f545c3d2e71d"/*DataList*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
       }
     },
     {

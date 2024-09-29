@@ -2,19 +2,19 @@
   "Id": "fb801f10-8f84-4f69-9f7e-66cc7f6b7878"/*DampVec2*/,
   "Inputs": [
     {
-      "Id": "e5d132e7-018e-4b37-a49b-8274ac988311"/*Value*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
       "Id": "dc4a8e1c-9399-4e06-a3d8-168839085f02"/*Damping*/,
       "DefaultValue": 0.95
     },
     {
       "Id": "e5a9f11d-dc51-45bb-9ae0-3ddb6119527d"/*Method*/,
       "DefaultValue": 0
+    },
+    {
+      "Id": "e5d132e7-018e-4b37-a49b-8274ac988311"/*Value*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
     }
   ],
   "Children": [],

@@ -3,13 +3,17 @@
   "Description": "A powerful image generation effect that splits an image into smaller and smaller fragments. The splits occur horizontal or vertical within the giving split range.\n\nThis effect is especially nice, because it can be animated either with the RandomPhase parameter or with the ScrollOffset. Combining it with an incoming image is also great, because it can produce great glitch effects.\n\nIt's similar to [RyojiPattern] and [RyojiPattern2] but produces more random results. Check out the presets and parameter documentation.\n\n\nFor similar effects or interesting combinations see: [MosaicTiling] [VoronoiCells] [SubdivisionStretch] [HoneyCombTiles] [TriangleGridTransition] [Dither] [AsciiRender]",
   "InputUis": [
     {
-      "InputId": "40bc83fb-a3a4-4bfd-b131-8ecf2908b1a3"/*Image*/,
-      "Relevancy": "Required",
+      "InputId": "22afde68-08c5-438f-9425-fe255b2e079f"/*ScrollBiasAndGain*/,
       "Position": {
-        "X": 132.69783,
-        "Y": -84.86365
+        "X": 135.46915,
+        "Y": 656.903
       },
-      "Description": "A source image from which each cell samples its color."
+      "Description": "Controls the distribution of scroll speeds of each cell.",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true,
+      "Format": "{0:0.000}",
+      "UseVec2Control": "BiasAndGain"
     },
     {
       "InputId": "32d082f5-d6e1-4068-bcd9-a01977ed72df"/*MaxSubdivisions*/,
@@ -21,12 +25,32 @@
       "Description": "The maximum number of splits applied to the image. "
     },
     {
-      "InputId": "71c99158-cf0e-4ceb-82ee-5ef5685441b3"/*Threshold*/,
+      "InputId": "3e164af6-1cb3-45b3-a319-e562789d73f7"/*Feather*/,
       "Position": {
-        "X": 122.82417,
-        "Y": 199.68631
+        "X": 129.52394,
+        "Y": 872.58185
       },
-      "Description": "The chance that the cell is no longer sub-divided. If 0, every cell will be subdivided until MaxSubdivisions is reached.",
+      "Description": "Controls the sharpness of the gap. Negative numbers will invert the gap direction.",
+      "Min": -0.01,
+      "Max": 0.01
+    },
+    {
+      "InputId": "40bc83fb-a3a4-4bfd-b131-8ecf2908b1a3"/*Image*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 132.69783,
+        "Y": -84.86365
+      },
+      "Description": "A source image from which each cell samples its color."
+    },
+    {
+      "InputId": "5cae4d6e-d441-42f7-8e17-3aeb58719f08"/*GapColor*/,
+      "Position": {
+        "X": 125.62532,
+        "Y": 960.1348
+      },
+      "GroupTitle": "Colors",
+      "Description": "Color of the gap.",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -41,27 +65,6 @@
       "AddPadding": "True"
     },
     {
-      "InputId": "d30b5542-d564-46e1-9f9e-987351eb425b"/*SplitCenter*/,
-      "Position": {
-        "X": 137.93623,
-        "Y": 388.84256
-      },
-      "Description": "The position where a cell is split (0.5 is center).\n",
-      "Min": 0.0,
-      "Max": 1.0
-    },
-    {
-      "InputId": "c8550e83-bd37-4db3-a859-4a6bcd64a63c"/*SplitCenterVariation*/,
-      "Position": {
-        "X": 137.93623,
-        "Y": 433.84256
-      },
-      "Description": "A random amount added to the split position. This will be animated with the RandomPhase parameter.",
-      "Min": 0.0,
-      "Max": 1.0,
-      "Format": "{0:0.000}"
-    },
-    {
       "InputId": "6d3c2c76-df35-411a-8e25-450dc9cd6f4e"/*DirectionBias*/,
       "Position": {
         "X": 137.93623,
@@ -73,29 +76,15 @@
       "Format": "{0:0.000}"
     },
     {
-      "InputId": "c6f0a794-ba0f-44cf-95cb-9ec6484f9f02"/*ScrollOffset*/,
+      "InputId": "71c99158-cf0e-4ceb-82ee-5ef5685441b3"/*Threshold*/,
       "Position": {
-        "X": 128.874,
-        "Y": 589.01996
+        "X": 122.82417,
+        "Y": 199.68631
       },
-      "GroupTitle": "Scrolling",
-      "Description": "Add a scroll offset to every cell. This can be nicely combined with [AudioReaction] in AccumulativeSum mode.",
-      "Min": -2.0,
-      "Max": 2.0,
-      "UseVec2Control": "Position"
-    },
-    {
-      "InputId": "22afde68-08c5-438f-9425-fe255b2e079f"/*ScrollBiasAndGain*/,
-      "Position": {
-        "X": 135.46915,
-        "Y": 656.903
-      },
-      "Description": "Controls the distribution of scroll speeds of each cell.",
+      "Description": "The chance that the cell is no longer sub-divided. If 0, every cell will be subdivided until MaxSubdivisions is reached.",
       "Min": 0.0,
       "Max": 1.0,
-      "Clamp": true,
-      "Format": "{0:0.000}",
-      "UseVec2Control": "BiasAndGain"
+      "Clamp": true
     },
     {
       "InputId": "7a8684c9-ee81-49c1-ad13-d91d62799efb"/*RandomPhase*/,
@@ -126,28 +115,6 @@
       "Max": 0.1
     },
     {
-      "InputId": "3e164af6-1cb3-45b3-a319-e562789d73f7"/*Feather*/,
-      "Position": {
-        "X": 129.52394,
-        "Y": 872.58185
-      },
-      "Description": "Controls the sharpness of the gap. Negative numbers will invert the gap direction.",
-      "Min": -0.01,
-      "Max": 0.01
-    },
-    {
-      "InputId": "5cae4d6e-d441-42f7-8e17-3aeb58719f08"/*GapColor*/,
-      "Position": {
-        "X": 125.62532,
-        "Y": 960.1348
-      },
-      "GroupTitle": "Colors",
-      "Description": "Color of the gap.",
-      "Min": 0.0,
-      "Max": 1.0,
-      "Clamp": true
-    },
-    {
       "InputId": "be07242e-39fc-4631-ab6e-3023c9444406"/*Gradient*/,
       "Position": {
         "X": 105.86447,
@@ -156,12 +123,37 @@
       "Description": "Provides an additional color palette. This colors are then multiplied onto the image color.\n\nTry using this with RandomColor mode and hold interpolation of the gradient to create Piet Mondrian like designs."
     },
     {
-      "InputId": "ee2bc31a-a67f-4bec-bce7-0a70db88082c"/*ColorMode*/,
+      "InputId": "c6f0a794-ba0f-44cf-95cb-9ec6484f9f02"/*ScrollOffset*/,
       "Position": {
-        "X": 109.6633,
-        "Y": 1246.5812
+        "X": 128.874,
+        "Y": 589.01996
       },
-      "Description": "Controls how the colors are picked from the gradient: \n\nSteps: use the cells subdivision count\nRandom: Pick a random color for each cell."
+      "GroupTitle": "Scrolling",
+      "Description": "Add a scroll offset to every cell. This can be nicely combined with [AudioReaction] in AccumulativeSum mode.",
+      "Min": -2.0,
+      "Max": 2.0,
+      "UseVec2Control": "Position"
+    },
+    {
+      "InputId": "c8550e83-bd37-4db3-a859-4a6bcd64a63c"/*SplitCenterVariation*/,
+      "Position": {
+        "X": 137.93623,
+        "Y": 433.84256
+      },
+      "Description": "A random amount added to the split position. This will be animated with the RandomPhase parameter.",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Format": "{0:0.000}"
+    },
+    {
+      "InputId": "d30b5542-d564-46e1-9f9e-987351eb425b"/*SplitCenter*/,
+      "Position": {
+        "X": 137.93623,
+        "Y": 388.84256
+      },
+      "Description": "The position where a cell is split (0.5 is center).\n",
+      "Min": 0.0,
+      "Max": 1.0
     },
     {
       "InputId": "d90350a0-9fa8-4747-805b-ba7ab8125595"/*Use4xMSAA*/,
@@ -171,14 +163,22 @@
       },
       "GroupTitle": "Additional Options",
       "Description": "Apply a rotated grid super sampling (RGSS) to avoid flickering of edges. This requires the effect to be rendered 4 times and has a significant performance overhead. Only enable if flickering is a problem."
+    },
+    {
+      "InputId": "ee2bc31a-a67f-4bec-bce7-0a70db88082c"/*ColorMode*/,
+      "Position": {
+        "X": 109.6633,
+        "Y": 1246.5812
+      },
+      "Description": "Controls how the colors are picked from the gradient: \n\nSteps: use the cells subdivision count\nRandom: Pick a random color for each cell."
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "ffc5ada5-8129-48ad-8196-1e5d3eff2a74"/*Vector4Components*/,
+      "ChildId": "0349d0d5-ff4b-41c4-813d-32e7dbf71202"/*GradientsToTexture*/,
       "Position": {
-        "X": 331.7135,
-        "Y": 909.64825
+        "X": 519.92615,
+        "Y": 138.49385
       }
     },
     {
@@ -189,45 +189,10 @@
       }
     },
     {
-      "ChildId": "8229aec5-9664-485b-ac36-4ace21a8e29a"/*_multiImageFxSetup*/,
-      "Position": {
-        "X": 683.3281,
-        "Y": 27.355812
-      }
-    },
-    {
       "ChildId": "0f0073ed-6ec7-46ae-8af5-43d6cf0c2e45"/*FirstValidTexture*/,
       "Position": {
         "X": 445.59695,
         "Y": -100.06676
-      }
-    },
-    {
-      "ChildId": "c13fd46b-ae1c-44d3-9570-5b448df02196"/*BoolToFloat*/,
-      "Position": {
-        "X": 299.3652,
-        "Y": 356.63977
-      }
-    },
-    {
-      "ChildId": "0349d0d5-ff4b-41c4-813d-32e7dbf71202"/*GradientsToTexture*/,
-      "Position": {
-        "X": 519.92615,
-        "Y": 138.49385
-      }
-    },
-    {
-      "ChildId": "f5c8743c-b144-4427-9514-98fc5e19f6a8"/*IntToFloat*/,
-      "Position": {
-        "X": 295.70197,
-        "Y": 756.4457
-      }
-    },
-    {
-      "ChildId": "49ca111d-0abe-4099-a2da-d072acfed728"/*IntToFloat*/,
-      "Position": {
-        "X": 325.40088,
-        "Y": 1238.2512
       }
     },
     {
@@ -245,10 +210,10 @@
       }
     },
     {
-      "ChildId": "da5c8406-a897-46d3-ad8e-dc4641bd6c51"/*Vector2Components*/,
+      "ChildId": "49ca111d-0abe-4099-a2da-d072acfed728"/*IntToFloat*/,
       "Position": {
-        "X": 285.46912,
-        "Y": 656.903
+        "X": 325.40088,
+        "Y": 1238.2512
       }
     },
     {
@@ -256,6 +221,41 @@
       "Position": {
         "X": 332.30554,
         "Y": 1324.4791
+      }
+    },
+    {
+      "ChildId": "8229aec5-9664-485b-ac36-4ace21a8e29a"/*_multiImageFxSetup*/,
+      "Position": {
+        "X": 683.3281,
+        "Y": 27.355812
+      }
+    },
+    {
+      "ChildId": "c13fd46b-ae1c-44d3-9570-5b448df02196"/*BoolToFloat*/,
+      "Position": {
+        "X": 299.3652,
+        "Y": 356.63977
+      }
+    },
+    {
+      "ChildId": "da5c8406-a897-46d3-ad8e-dc4641bd6c51"/*Vector2Components*/,
+      "Position": {
+        "X": 285.46912,
+        "Y": 656.903
+      }
+    },
+    {
+      "ChildId": "f5c8743c-b144-4427-9514-98fc5e19f6a8"/*IntToFloat*/,
+      "Position": {
+        "X": 295.70197,
+        "Y": 756.4457
+      }
+    },
+    {
+      "ChildId": "ffc5ada5-8129-48ad-8196-1e5d3eff2a74"/*Vector4Components*/,
+      "Position": {
+        "X": 331.7135,
+        "Y": 909.64825
       }
     }
   ],

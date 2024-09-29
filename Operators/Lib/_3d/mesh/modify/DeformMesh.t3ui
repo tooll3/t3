@@ -3,11 +3,18 @@
   "Description": "Spherize, Taper and Twist. It works better if your mesh has a high density of vertices.\n(such as a [CubeMesh] with 64 segments on each axis for example)",
   "InputUis": [
     {
-      "InputId": "b3593825-1ff5-4a5f-86cb-379a23471a4d"/*Mesh*/,
-      "Relevancy": "Required",
+      "InputId": "10d0502e-1a9d-4d8f-a516-2b2b465849bf"/*Taper*/,
       "Position": {
-        "X": -557.8594,
-        "Y": 773.0897
+        "X": -565.2654,
+        "Y": 1211.0723
+      },
+      "GroupTitle": "Taper "
+    },
+    {
+      "InputId": "161f293c-1d7f-4543-befe-0b4bd676483a"/*Radius*/,
+      "Position": {
+        "X": -565.2654,
+        "Y": 1121.0723
       }
     },
     {
@@ -18,42 +25,19 @@
       }
     },
     {
-      "InputId": "aa003a1b-929d-4776-b816-608771242177"/*ShowPivots*/,
+      "InputId": "408f6526-8fef-41b9-8de6-a20ae81a2037"/*AmountPerAxis*/,
       "Position": {
         "X": -565.2654,
-        "Y": 1031.0723
+        "Y": 1301.0723
       }
     },
     {
-      "InputId": "f6efc4a6-5267-40aa-82d3-e1b67d852fa8"/*Spherize*/,
+      "InputId": "6323532f-f548-4faa-9c21-826ee4d44090"/*TwistPivot*/,
       "Position": {
-        "X": -565.2654,
-        "Y": 1076.0723
+        "X": -567.0597,
+        "Y": 1438.6211
       },
-      "GroupTitle": "Spherize"
-    },
-    {
-      "InputId": "161f293c-1d7f-4543-befe-0b4bd676483a"/*Radius*/,
-      "Position": {
-        "X": -565.2654,
-        "Y": 1121.0723
-      }
-    },
-    {
-      "InputId": "cf8e1065-164d-4ba9-8c60-9ab545aaaee2"/*Pivot*/,
-      "Position": {
-        "X": -565.2654,
-        "Y": 1166.0723
-      },
-      "Description": "Pink cross, center of Spherize"
-    },
-    {
-      "InputId": "10d0502e-1a9d-4d8f-a516-2b2b465849bf"/*Taper*/,
-      "Position": {
-        "X": -565.2654,
-        "Y": 1211.0723
-      },
-      "GroupTitle": "Taper "
+      "Description": "Blue cross, origin of twist deformation"
     },
     {
       "InputId": "a53aad5d-7bc5-4cbb-8a59-90cf8c346992"/*TaperAxis*/,
@@ -63,10 +47,18 @@
       }
     },
     {
-      "InputId": "408f6526-8fef-41b9-8de6-a20ae81a2037"/*AmountPerAxis*/,
+      "InputId": "aa003a1b-929d-4776-b816-608771242177"/*ShowPivots*/,
       "Position": {
         "X": -565.2654,
-        "Y": 1301.0723
+        "Y": 1031.0723
+      }
+    },
+    {
+      "InputId": "b3593825-1ff5-4a5f-86cb-379a23471a4d"/*Mesh*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -557.8594,
+        "Y": 773.0897
       }
     },
     {
@@ -76,6 +68,14 @@
         "Y": 1348.6211
       },
       "GroupTitle": "Twist"
+    },
+    {
+      "InputId": "cf8e1065-164d-4ba9-8c60-9ab545aaaee2"/*Pivot*/,
+      "Position": {
+        "X": -565.2654,
+        "Y": 1166.0723
+      },
+      "Description": "Pink cross, center of Spherize"
     },
     {
       "InputId": "ebf1167b-1519-4ca9-bfa6-87472889966b"/*TwistAxis*/,
@@ -88,27 +88,27 @@
       "Clamp": true
     },
     {
-      "InputId": "6323532f-f548-4faa-9c21-826ee4d44090"/*TwistPivot*/,
+      "InputId": "f6efc4a6-5267-40aa-82d3-e1b67d852fa8"/*Spherize*/,
       "Position": {
-        "X": -567.0597,
-        "Y": 1438.6211
+        "X": -565.2654,
+        "Y": 1076.0723
       },
-      "Description": "Blue cross, origin of twist deformation"
+      "GroupTitle": "Spherize"
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "e56f8933-bb16-440f-be33-817d23cfc6f1"/*ComputeShader*/,
+      "ChildId": "0f0598ab-969b-484a-a47c-bbae9ac7e003"/*TransformMatrix*/,
       "Position": {
-        "X": 106.335434,
-        "Y": 516.8489
+        "X": -139.42453,
+        "Y": 863.94855
       }
     },
     {
-      "ChildId": "5e625dbd-46e1-41ca-a2f6-02d0559115c0"/*ComputeShaderStage*/,
+      "ChildId": "16047c0e-a4c6-44f2-81a2-47a4fe9e1f90"/*__padding*/,
       "Position": {
-        "X": 475.10886,
-        "Y": 524.0607
+        "X": 99.39505,
+        "Y": 935.47876
       }
     },
     {
@@ -124,73 +124,10 @@
       }
     },
     {
-      "ChildId": "d4894000-5804-489e-a463-54288f569617"/*GetSRVProperties*/,
+      "ChildId": "21f51a4f-b6d1-4a60-a9e1-f2ca28f00646"/*Transform*/,
       "Position": {
-        "X": -73.12926,
-        "Y": 695.17487
-      }
-    },
-    {
-      "ChildId": "367ec172-90e6-41b3-8bff-d946ab5e4bc1"/*ExecuteBufferUpdate*/,
-      "Position": {
-        "X": 625.1089,
-        "Y": 524.0607
-      }
-    },
-    {
-      "ChildId": "5c294e26-8e37-4bf1-bbab-c701b6d88cdc"/*CalcDispatchCount*/,
-      "Position": {
-        "X": 250.26355,
-        "Y": 575.8797
-      }
-    },
-    {
-      "ChildId": "9a3526f8-0ca2-445d-b54d-950034a27e17"/*StructuredBufferWithViews*/,
-      "Position": {
-        "X": 106.920654,
-        "Y": 1073.6066
-      }
-    },
-    {
-      "ChildId": "a5517829-8774-441d-84b1-c4fddc0f001b"/*GetBufferComponents*/,
-      "Position": {
-        "X": -250.68524,
-        "Y": 727.7284
-      }
-    },
-    {
-      "ChildId": "d7b1614a-de32-4721-ac4f-552dd4b49081"/*GetBufferComponents*/,
-      "Position": {
-        "X": 279.3053,
-        "Y": 1021.7268
-      }
-    },
-    {
-      "ChildId": "0f0598ab-969b-484a-a47c-bbae9ac7e003"/*TransformMatrix*/,
-      "Position": {
-        "X": -139.42453,
-        "Y": 863.94855
-      }
-    },
-    {
-      "ChildId": "a0d7bdf2-eac7-4dc9-a397-0d8df55782aa"/*_MeshBufferComponents*/,
-      "Position": {
-        "X": -407.85938,
-        "Y": 773.0897
-      }
-    },
-    {
-      "ChildId": "8137d62a-98c5-4a31-81f4-687e43405843"/*_AssembleMeshBuffers*/,
-      "Position": {
-        "X": 1013.5509,
-        "Y": 527.55255
-      }
-    },
-    {
-      "ChildId": "533d512b-056f-4806-80d7-17716e924d2d"/*PBRVertex.Stride*/,
-      "Position": {
-        "X": -43.079346,
-        "Y": 1073.6066
+        "X": 672.6749,
+        "Y": 1324.2261
       }
     },
     {
@@ -208,17 +145,17 @@
       }
     },
     {
+      "ChildId": "367ec172-90e6-41b3-8bff-d946ab5e4bc1"/*ExecuteBufferUpdate*/,
+      "Position": {
+        "X": 625.1089,
+        "Y": 524.0607
+      }
+    },
+    {
       "ChildId": "37401e06-d35b-4dbb-a1f8-f352dd654196"/*IntToFloat*/,
       "Position": {
         "X": -323.10114,
         "Y": 1385.4272
-      }
-    },
-    {
-      "ChildId": "b4a84ba9-a1fe-4d40-8a27-b5cb9565663c"/*RecomputeNormals*/,
-      "Position": {
-        "X": 1175.0238,
-        "Y": 521.5665
       }
     },
     {
@@ -229,45 +166,24 @@
       }
     },
     {
-      "ChildId": "16047c0e-a4c6-44f2-81a2-47a4fe9e1f90"/*__padding*/,
+      "ChildId": "533d512b-056f-4806-80d7-17716e924d2d"/*PBRVertex.Stride*/,
       "Position": {
-        "X": 99.39505,
-        "Y": 935.47876
+        "X": -43.079346,
+        "Y": 1073.6066
       }
     },
     {
-      "ChildId": "bd899e65-fce3-421c-acaf-8b76952bca58"/*ExecuteBufferUpdate*/,
+      "ChildId": "5c294e26-8e37-4bf1-bbab-c701b6d88cdc"/*CalcDispatchCount*/,
       "Position": {
-        "X": 840.44604,
-        "Y": 532.13086
+        "X": 250.26355,
+        "Y": 575.8797
       }
     },
     {
-      "ChildId": "cc7da543-60ed-4050-8ee0-c66e033577b5"/*CommonPointSets*/,
+      "ChildId": "5e625dbd-46e1-41ca-a2f6-02d0559115c0"/*ComputeShaderStage*/,
       "Position": {
-        "X": 319.56744,
-        "Y": 1184.7712
-      }
-    },
-    {
-      "ChildId": "cc39cc3f-0755-41be-8cc9-8a4ed6ff0422"/*DrawLines*/,
-      "Position": {
-        "X": 469.56744,
-        "Y": 1184.7712
-      }
-    },
-    {
-      "ChildId": "aa1c1e91-945c-4374-98b3-5f9060999109"/*Transform*/,
-      "Position": {
-        "X": 619.56744,
-        "Y": 1184.7712
-      }
-    },
-    {
-      "ChildId": "887c00e4-f481-4390-847e-343e54bbd3fa"/*Vector3Components*/,
-      "Position": {
-        "X": -52.40454,
-        "Y": 1502.3657
+        "X": 475.10886,
+        "Y": 524.0607
       }
     },
     {
@@ -278,10 +194,59 @@
       }
     },
     {
-      "ChildId": "21f51a4f-b6d1-4a60-a9e1-f2ca28f00646"/*Transform*/,
+      "ChildId": "8137d62a-98c5-4a31-81f4-687e43405843"/*_AssembleMeshBuffers*/,
       "Position": {
-        "X": 672.6749,
-        "Y": 1324.2261
+        "X": 1013.5509,
+        "Y": 527.55255
+      }
+    },
+    {
+      "ChildId": "887c00e4-f481-4390-847e-343e54bbd3fa"/*Vector3Components*/,
+      "Position": {
+        "X": -52.40454,
+        "Y": 1502.3657
+      }
+    },
+    {
+      "ChildId": "9a3526f8-0ca2-445d-b54d-950034a27e17"/*StructuredBufferWithViews*/,
+      "Position": {
+        "X": 106.920654,
+        "Y": 1073.6066
+      }
+    },
+    {
+      "ChildId": "a0d7bdf2-eac7-4dc9-a397-0d8df55782aa"/*_MeshBufferComponents*/,
+      "Position": {
+        "X": -407.85938,
+        "Y": 773.0897
+      }
+    },
+    {
+      "ChildId": "a5517829-8774-441d-84b1-c4fddc0f001b"/*GetBufferComponents*/,
+      "Position": {
+        "X": -250.68524,
+        "Y": 727.7284
+      }
+    },
+    {
+      "ChildId": "aa1c1e91-945c-4374-98b3-5f9060999109"/*Transform*/,
+      "Position": {
+        "X": 619.56744,
+        "Y": 1184.7712
+      }
+    },
+    {
+      "ChildId": "b4a84ba9-a1fe-4d40-8a27-b5cb9565663c"/*RecomputeNormals*/,
+      "Position": {
+        "X": 1175.0238,
+        "Y": 521.5665
+      }
+    },
+    {
+      "ChildId": "bd899e65-fce3-421c-acaf-8b76952bca58"/*ExecuteBufferUpdate*/,
+      "Position": {
+        "X": 840.44604,
+        "Y": 532.13086
       }
     },
     {
@@ -289,6 +254,41 @@
       "Position": {
         "X": 826.70514,
         "Y": 1215.1003
+      }
+    },
+    {
+      "ChildId": "cc39cc3f-0755-41be-8cc9-8a4ed6ff0422"/*DrawLines*/,
+      "Position": {
+        "X": 469.56744,
+        "Y": 1184.7712
+      }
+    },
+    {
+      "ChildId": "cc7da543-60ed-4050-8ee0-c66e033577b5"/*CommonPointSets*/,
+      "Position": {
+        "X": 319.56744,
+        "Y": 1184.7712
+      }
+    },
+    {
+      "ChildId": "d4894000-5804-489e-a463-54288f569617"/*GetSRVProperties*/,
+      "Position": {
+        "X": -73.12926,
+        "Y": 695.17487
+      }
+    },
+    {
+      "ChildId": "d7b1614a-de32-4721-ac4f-552dd4b49081"/*GetBufferComponents*/,
+      "Position": {
+        "X": 279.3053,
+        "Y": 1021.7268
+      }
+    },
+    {
+      "ChildId": "e56f8933-bb16-440f-be33-817d23cfc6f1"/*ComputeShader*/,
+      "Position": {
+        "X": 106.335434,
+        "Y": 516.8489
       }
     },
     {

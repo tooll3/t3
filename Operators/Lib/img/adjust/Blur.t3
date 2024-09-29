@@ -2,20 +2,24 @@
   "Id": "946da16c-f536-4887-b764-af9468f22c0f"/*Blur*/,
   "Inputs": [
     {
-      "Id": "c115fd60-86c5-425f-975b-0b5e92c0f42b"/*Image*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "99188668-b6ac-468b-a892-cd020a3862b2"/*Size*/,
-      "DefaultValue": 1.0
+      "Id": "03e6c20c-6b8a-422e-bba1-1cefddc645fd"/*Offset*/,
+      "DefaultValue": 0.0
     },
     {
       "Id": "3c8b43be-430f-4afe-8244-5282be49bfbc"/*Samples*/,
       "DefaultValue": 8.0
     },
     {
-      "Id": "03e6c20c-6b8a-422e-bba1-1cefddc645fd"/*Offset*/,
-      "DefaultValue": 0.0
+      "Id": "99188668-b6ac-468b-a892-cd020a3862b2"/*Size*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "9c944546-1363-4e3b-b706-31a4b750db2c"/*Wrap*/,
+      "DefaultValue": "MirrorOnce"
+    },
+    {
+      "Id": "c115fd60-86c5-425f-975b-0b5e92c0f42b"/*Image*/,
+      "DefaultValue": null
     },
     {
       "Id": "d1421b9f-ddde-426a-9d68-32d3a41bf881"/*Opacity*/,
@@ -27,73 +31,20 @@
         "X": 0,
         "Y": 0
       }
-    },
-    {
-      "Id": "9c944546-1363-4e3b-b706-31a4b750db2c"/*Wrap*/,
-      "DefaultValue": "MirrorOnce"
     }
   ],
   "Children": [
     {
-      "Id": "8a1e1b10-b102-4fd3-945c-09da4385f356"/*Div*/,
-      "SymbolId": "15fb88b2-81a1-43b8-97ba-41221293bb07",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "a663161b-a214-41a0-87d0-7c642e39e1f7"/*Value*/,
-      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "4c68857a-b51f-4980-a734-e93d082349a5"/*_ImageFxShaderSetup2*/,
-      "SymbolId": "2b20afce-2b54-4bcc-ba0e-e456a0d92833",
+      "Id": "182b10f8-0d60-4d18-b442-75431f9beca4"/*Resources\lib\img\fx\Blur.hlsl*/,
+      "SymbolId": "bd0b9c5b-c611-42d0-8200-31af9661f189",
+      "Name": "Resources\\lib\\img\\fx\\Blur.hlsl",
       "InputValues": [
         {
-          "Id": "16dce9bc-02d9-48f8-b07e-94a9af48d27b"/*Source*/,
+          "Id": "1e4e274b-60b2-4fe8-b275-ebef80d520a7"/*Source*/,
           "Type": "System.String",
           "Value": "Resources\\lib\\img\\fx\\Blur.hlsl"
-        },
-        {
-          "Id": "c80d3700-ceb6-43d0-9ffd-f4854e67a41d"/*Wrap*/,
-          "Type": "SharpDX.Direct3D11.TextureAddressMode",
-          "Value": "Clamp"
-        },
-        {
-          "Id": "9911dc7e-cd3b-4c58-a5d0-2e9abc8e528a"/*BlendMode*/,
-          "Type": "System.Int32",
-          "Value": 4
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "65e8c351-25ad-4205-b589-d154ffa993e7"/*_ImageFxShaderSetup2*/,
-      "SymbolId": "2b20afce-2b54-4bcc-ba0e-e456a0d92833",
-      "InputValues": [
-        {
-          "Id": "16dce9bc-02d9-48f8-b07e-94a9af48d27b"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\Blur.hlsl"
-        },
-        {
-          "Id": "c80d3700-ceb6-43d0-9ffd-f4854e67a41d"/*Wrap*/,
-          "Type": "SharpDX.Direct3D11.TextureAddressMode",
-          "Value": "Clamp"
-        },
-        {
-          "Id": "9911dc7e-cd3b-4c58-a5d0-2e9abc8e528a"/*BlendMode*/,
-          "Type": "System.Int32",
-          "Value": 4
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "68b65d39-c6d1-4c23-8b5a-321640ed50ad"/*GetTextureSize*/,
-      "SymbolId": "daec568f-f7b4-4d81-a401-34d62462daab",
-      "InputValues": [],
       "Outputs": []
     },
     {
@@ -110,12 +61,6 @@
       "Outputs": []
     },
     {
-      "Id": "a3bdc17e-c073-4df0-a204-b08df50ce0a4"/*Vector2Components*/,
-      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "3d331fa5-2020-432f-8fc4-40fa10c23cec"/*Resources\lib\img\fx\Blur.hlsl*/,
       "SymbolId": "bd0b9c5b-c611-42d0-8200-31af9661f189",
       "Name": "Resources\\lib\\img\\fx\\Blur.hlsl",
@@ -126,6 +71,74 @@
           "Value": "Resources\\lib\\img\\fx\\Blur.hlsl"
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "4c68857a-b51f-4980-a734-e93d082349a5"/*_ImageFxShaderSetup2*/,
+      "SymbolId": "2b20afce-2b54-4bcc-ba0e-e456a0d92833",
+      "InputValues": [
+        {
+          "Id": "16dce9bc-02d9-48f8-b07e-94a9af48d27b"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\img\\fx\\Blur.hlsl"
+        },
+        {
+          "Id": "9911dc7e-cd3b-4c58-a5d0-2e9abc8e528a"/*BlendMode*/,
+          "Type": "System.Int32",
+          "Value": 4
+        },
+        {
+          "Id": "c80d3700-ceb6-43d0-9ffd-f4854e67a41d"/*Wrap*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "Clamp"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "65e8c351-25ad-4205-b589-d154ffa993e7"/*_ImageFxShaderSetup2*/,
+      "SymbolId": "2b20afce-2b54-4bcc-ba0e-e456a0d92833",
+      "InputValues": [
+        {
+          "Id": "16dce9bc-02d9-48f8-b07e-94a9af48d27b"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\img\\fx\\Blur.hlsl"
+        },
+        {
+          "Id": "9911dc7e-cd3b-4c58-a5d0-2e9abc8e528a"/*BlendMode*/,
+          "Type": "System.Int32",
+          "Value": 4
+        },
+        {
+          "Id": "c80d3700-ceb6-43d0-9ffd-f4854e67a41d"/*Wrap*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "Clamp"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "68b65d39-c6d1-4c23-8b5a-321640ed50ad"/*GetTextureSize*/,
+      "SymbolId": "daec568f-f7b4-4d81-a401-34d62462daab",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "8a1e1b10-b102-4fd3-945c-09da4385f356"/*Div*/,
+      "SymbolId": "15fb88b2-81a1-43b8-97ba-41221293bb07",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "a3bdc17e-c073-4df0-a204-b08df50ce0a4"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "a663161b-a214-41a0-87d0-7c642e39e1f7"/*Value*/,
+      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -140,19 +153,6 @@
             "X": 0.0,
             "Y": 1.0
           }
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "182b10f8-0d60-4d18-b442-75431f9beca4"/*Resources\lib\img\fx\Blur.hlsl*/,
-      "SymbolId": "bd0b9c5b-c611-42d0-8200-31af9661f189",
-      "Name": "Resources\\lib\\img\\fx\\Blur.hlsl",
-      "InputValues": [
-        {
-          "Id": "1e4e274b-60b2-4fe8-b275-ebef80d520a7"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\Blur.hlsl"
         }
       ],
       "Outputs": []

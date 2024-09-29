@@ -3,44 +3,11 @@
   "Description": "Creates a Voronoi cell pattern based on an incoming image.\n\nFor similar effects or interesting combinations see: [MosaicTiling] [VoronoiCells] [SubdivisionStretch] [HoneyCombTiles] [TriangleGridTransition] [Dither] [AsciiRender]",
   "InputUis": [
     {
-      "InputId": "f5bad014-1895-4490-8c00-4c775db54716"/*Image*/,
+      "InputId": "29791375-afb4-4612-9e44-a60eed50ea9b"/*Phase*/,
       "Position": {
-        "X": -198.16037,
-        "Y": -12.877563
+        "X": -193.60469,
+        "Y": 425.42743
       }
-    },
-    {
-      "InputId": "fd554dbb-113f-4722-af28-4e1ec39852cc"/*EdgeColor*/,
-      "Position": {
-        "X": -198.16037,
-        "Y": 32.12242
-      },
-      "Description": "Defines the color of the edges",
-      "AddPadding": "True"
-    },
-    {
-      "InputId": "c81900c4-3478-4a53-b6e6-4e9a09c81a91"/*Background*/,
-      "Position": {
-        "X": -198.16037,
-        "Y": 77.12242
-      }
-    },
-    {
-      "InputId": "b0e1cd04-9377-4ab0-9c4e-8780f4efa271"/*Scale*/,
-      "Position": {
-        "X": -198.16037,
-        "Y": 167.12242
-      },
-      "GroupTitle": "Settings",
-      "Description": "Defines the scaling of the effect / the amount of voronoi-cells visible"
-    },
-    {
-      "InputId": "7328bfec-fad5-4262-9c10-fad57bd39e2e"/*EdgeWidth*/,
-      "Position": {
-        "X": -198.16037,
-        "Y": 212.12242
-      },
-      "Description": "Defines the thickness of the edges"
     },
     {
       "InputId": "2bd55eb6-8bca-4f34-bc0e-d1223f47b410"/*Animated*/,
@@ -60,26 +27,59 @@
       "Description": "Defines the resolution of the output image"
     },
     {
-      "InputId": "29791375-afb4-4612-9e44-a60eed50ea9b"/*Phase*/,
+      "InputId": "7328bfec-fad5-4262-9c10-fad57bd39e2e"/*EdgeWidth*/,
       "Position": {
-        "X": -193.60469,
-        "Y": 425.42743
+        "X": -198.16037,
+        "Y": 212.12242
+      },
+      "Description": "Defines the thickness of the edges"
+    },
+    {
+      "InputId": "b0e1cd04-9377-4ab0-9c4e-8780f4efa271"/*Scale*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": 167.12242
+      },
+      "GroupTitle": "Settings",
+      "Description": "Defines the scaling of the effect / the amount of voronoi-cells visible"
+    },
+    {
+      "InputId": "c81900c4-3478-4a53-b6e6-4e9a09c81a91"/*Background*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": 77.12242
       }
+    },
+    {
+      "InputId": "f5bad014-1895-4490-8c00-4c775db54716"/*Image*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": -12.877563
+      }
+    },
+    {
+      "InputId": "fd554dbb-113f-4722-af28-4e1ec39852cc"/*EdgeColor*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": 32.12242
+      },
+      "Description": "Defines the color of the edges",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
-    {
-      "ChildId": "ac5f45de-7b15-4563-8d92-cb54f065a808"/*Vector4Components*/,
-      "Position": {
-        "X": -20.37726,
-        "Y": 12.897135
-      }
-    },
     {
       "ChildId": "513b1255-f9c5-4a08-bf30-db3a1641ade0"/*Vector4Components*/,
       "Position": {
         "X": -20.37726,
         "Y": 68.89713
+      }
+    },
+    {
+      "ChildId": "558e8dd4-f524-4798-817b-743837996458"/*BoolToFloat*/,
+      "Position": {
+        "X": -20.37726,
+        "Y": 124.89713
       }
     },
     {
@@ -95,10 +95,10 @@
       }
     },
     {
-      "ChildId": "558e8dd4-f524-4798-817b-743837996458"/*BoolToFloat*/,
+      "ChildId": "ac5f45de-7b15-4563-8d92-cb54f065a808"/*Vector4Components*/,
       "Position": {
         "X": -20.37726,
-        "Y": 124.89713
+        "Y": 12.897135
       }
     }
   ],

@@ -10,19 +10,19 @@
       }
     },
     {
-      "InputId": "ba53b274-62ca-40a2-b8d2-87d08f0bc259"/*Vertices*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "892838c5-fa5a-418e-81d6-a3a523819324"/*Indices*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "ba53b274-62ca-40a2-b8d2-87d08f0bc259"/*Vertices*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
       }
     }
   ],

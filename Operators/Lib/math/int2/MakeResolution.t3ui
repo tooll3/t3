@@ -3,20 +3,20 @@
   "Description": "Creates and int2 from two single ints\n\nTechnically the same as [int2] with different naming",
   "InputUis": [
     {
-      "InputId": "e04cbaaf-d130-4185-9be7-daadafe9d402"/*Width*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      },
-      "Description": "X Value defines the width"
-    },
-    {
       "InputId": "419b142a-2c32-4938-8eb8-3706546f543e"/*Height*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
       },
       "Description": "Y value defines the height"
+    },
+    {
+      "InputId": "e04cbaaf-d130-4185-9be7-daadafe9d402"/*Width*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Description": "X Value defines the width"
     }
   ],
   "SymbolChildUis": [],

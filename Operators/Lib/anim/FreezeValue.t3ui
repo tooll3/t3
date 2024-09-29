@@ -11,17 +11,17 @@
       }
     },
     {
-      "InputId": "b53df009-a0eb-46c9-90db-04d8ccdb0ae4"/*Freeze*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 180.0
-      }
-    },
-    {
       "InputId": "9ad1267b-6d0a-43f4-a4e9-0f77659ddd44"/*Mode*/,
       "Position": {
         "X": -200.0,
         "Y": 225.0
+      }
+    },
+    {
+      "InputId": "b53df009-a0eb-46c9-90db-04d8ccdb0ae4"/*Freeze*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
       }
     }
   ],

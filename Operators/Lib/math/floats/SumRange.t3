@@ -2,14 +2,6 @@
   "Id": "d3a19896-230f-458f-b4ba-e448f63f0d51"/*SumRange*/,
   "Inputs": [
     {
-      "Id": "865d1fd4-b225-4651-bc01-c43f071b8b42"/*LowerLimit*/,
-      "DefaultValue": 0
-    },
-    {
-      "Id": "646e17f6-5a98-42c7-8d3b-26ccb02d3e68"/*UpperLimit*/,
-      "DefaultValue": 999999
-    },
-    {
       "Id": "056eba13-3ea9-4d0f-a45d-fce1ffaf403c"/*Input*/,
       "DefaultValue": {
         "Values": [
@@ -17,6 +9,14 @@
           17.0
         ]
       }
+    },
+    {
+      "Id": "646e17f6-5a98-42c7-8d3b-26ccb02d3e68"/*UpperLimit*/,
+      "DefaultValue": 999999
+    },
+    {
+      "Id": "865d1fd4-b225-4651-bc01-c43f071b8b42"/*LowerLimit*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [],

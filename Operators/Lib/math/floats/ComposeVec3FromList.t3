@@ -2,6 +2,10 @@
   "Id": "a52070ce-7110-439c-84e7-01f2a883b83f"/*ComposeVec3FromList*/,
   "Inputs": [
     {
+      "Id": "3bff7193-765c-4962-95f5-3e659ed18ed0"/*IndexForZ*/,
+      "DefaultValue": 0
+    },
+    {
       "Id": "5166e16a-7366-4907-8b9d-5a9f81a93864"/*Input*/,
       "DefaultValue": {
         "Values": [
@@ -12,14 +16,6 @@
     },
     {
       "Id": "6bdf6f11-01a9-45dd-9318-a447d799c8b8"/*IndexForX*/,
-      "DefaultValue": 0
-    },
-    {
-      "Id": "b74c8e3a-3952-47e9-a41e-4f1d78e3f3bf"/*IndexForY*/,
-      "DefaultValue": 0
-    },
-    {
-      "Id": "3bff7193-765c-4962-95f5-3e659ed18ed0"/*IndexForZ*/,
       "DefaultValue": 0
     },
     {
@@ -39,6 +35,10 @@
     {
       "Id": "b529d322-b7a4-4711-8391-e71f196b90b5"/*SpringDamping*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "b74c8e3a-3952-47e9-a41e-4f1d78e3f3bf"/*IndexForY*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [],

@@ -2,11 +2,7 @@
   "Id": "73d99108-f49a-48fb-aa5d-707c00abb1c2"/*RepetitionPoints*/,
   "Inputs": [
     {
-      "Id": "81ea19e7-97dc-461d-8eb0-7e9091cc1fc3"/*Count*/,
-      "DefaultValue": 0
-    },
-    {
-      "Id": "4213911b-4103-481f-85c6-9bccac116264"/*StartPosition*/,
+      "Id": "283f9939-7b04-4733-8130-edcf34305fe5"/*Pivot*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,
@@ -26,11 +22,7 @@
       }
     },
     {
-      "Id": "5956a2c7-addc-409a-87d8-62e67da212f4"/*Scale*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "af208e67-43bb-4c09-8076-859e7fefa93f"/*Rotate*/,
+      "Id": "4213911b-4103-481f-85c6-9bccac116264"/*StartPosition*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,
@@ -38,7 +30,15 @@
       }
     },
     {
-      "Id": "283f9939-7b04-4733-8130-edcf34305fe5"/*Pivot*/,
+      "Id": "5956a2c7-addc-409a-87d8-62e67da212f4"/*Scale*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "81ea19e7-97dc-461d-8eb0-7e9091cc1fc3"/*Count*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "af208e67-43bb-4c09-8076-859e7fefa93f"/*Rotate*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,

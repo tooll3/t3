@@ -3,20 +3,6 @@
   "Description": "Tip: Hold Shift for snapping. Press F to extend the view to the selection.",
   "InputUis": [
     {
-      "InputId": "83c5a68a-2685-4506-8d79-d0db7d739102"/*Curves*/,
-      "Position": {
-        "X": 36.0,
-        "Y": 334.0
-      }
-    },
-    {
-      "InputId": "74a9437b-a3cd-46c8-aa14-7c45fa629933"/*ExportGrayScale*/,
-      "Position": {
-        "X": 36.0,
-        "Y": 379.0
-      }
-    },
-    {
       "InputId": "63c7f648-7e02-4e0b-aaee-3a4c6869d75f"/*SampleSize*/,
       "Position": {
         "X": 36.0,
@@ -28,6 +14,20 @@
       "Position": {
         "X": 36.0,
         "Y": 469.0
+      }
+    },
+    {
+      "InputId": "74a9437b-a3cd-46c8-aa14-7c45fa629933"/*ExportGrayScale*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 379.0
+      }
+    },
+    {
+      "InputId": "83c5a68a-2685-4506-8d79-d0db7d739102"/*Curves*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
       }
     }
   ],

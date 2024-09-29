@@ -3,25 +3,35 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "873bdb1f-a95c-4a7f-a14e-3948d2ad1bec"/*Multiply*/,
-      "SymbolId": "17b60044-9125-4961-8a79-ca94697b3726",
+      "Id": "0cd474ee-4620-4167-a567-fcf56a296f6b"/*OscOutput*/,
+      "SymbolId": "4e99da86-482f-4037-8664-b2371526d632",
       "InputValues": [
         {
-          "Id": "5ae4bb07-4214-4ec3-a499-24d9f6d404a5"/*B*/,
-          "Type": "System.Single",
-          "Value": 128.0
+          "Id": "6c0e07ba-7ea6-4dab-af0b-61cf9cb74ad7"/*Port*/,
+          "Type": "System.Int32",
+          "Value": 8000
+        },
+        {
+          "Id": "9016e418-7761-4916-aafb-c95599f77f38"/*Address*/,
+          "Type": "System.String",
+          "Value": "/track/1/name"
+        },
+        {
+          "Id": "98f38caa-4f79-425c-ab46-22d7dbe62978"/*IpAddress*/,
+          "Type": "System.String",
+          "Value": "127.0.0.1"
         }
       ],
       "Outputs": []
     },
     {
-      "Id": "7644ee08-d19c-4e21-a24b-e1bd08f2b9d8"/*Remap*/,
-      "SymbolId": "f0acd1a4-7a98-43ab-a807-6d1bd3e92169",
+      "Id": "1cff6553-ccf8-46ac-94a5-d4139a11d14e"/*AnimValue*/,
+      "SymbolId": "ea7b8491-2f8e-4add-b0b1-fd068ccfed0d",
       "InputValues": [
         {
-          "Id": "252276fb-8de1-42cc-ba41-07d6862015bd"/*RangeOutMax*/,
+          "Id": "48005727-0158-4795-ad70-8410c27fd01d"/*Rate*/,
           "Type": "System.Single",
-          "Value": 0.6
+          "Value": 1.0
         }
       ],
       "Outputs": []
@@ -39,21 +49,45 @@
       "Outputs": []
     },
     {
-      "Id": "f146c02a-a838-4b84-9fac-7b26f91210c9"/*Counter*/,
-      "SymbolId": "11882635-4757-4cac-a024-70bb4e8b504c",
+      "Id": "32d91674-bee5-40d0-b18c-f6940c9082b6"/*HasValueDecreased*/,
+      "SymbolId": "f376121a-2360-4232-9724-0db6937062c3",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "1cff6553-ccf8-46ac-94a5-d4139a11d14e"/*AnimValue*/,
-      "SymbolId": "ea7b8491-2f8e-4add-b0b1-fd068ccfed0d",
+      "Id": "7644ee08-d19c-4e21-a24b-e1bd08f2b9d8"/*Remap*/,
+      "SymbolId": "f0acd1a4-7a98-43ab-a807-6d1bd3e92169",
       "InputValues": [
         {
-          "Id": "48005727-0158-4795-ad70-8410c27fd01d"/*Rate*/,
+          "Id": "252276fb-8de1-42cc-ba41-07d6862015bd"/*RangeOutMax*/,
           "Type": "System.Single",
-          "Value": 1.0
+          "Value": 0.6
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "7af4d555-a4e4-434f-8a56-2a388edb1e23"/*FloatToInt*/,
+      "SymbolId": "06b4728e-852c-491a-a89d-647f7e0b5415",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "873bdb1f-a95c-4a7f-a14e-3948d2ad1bec"/*Multiply*/,
+      "SymbolId": "17b60044-9125-4961-8a79-ca94697b3726",
+      "InputValues": [
+        {
+          "Id": "5ae4bb07-4214-4ec3-a499-24d9f6d404a5"/*B*/,
+          "Type": "System.Single",
+          "Value": 128.0
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "ac803da7-52d3-4796-80ac-31b5abdd2d48"/*SplitString*/,
+      "SymbolId": "a0fcf7ed-1f14-4a8b-a57e-99e5b2407b1b",
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -67,11 +101,6 @@
       "SymbolId": "4e99da86-482f-4037-8664-b2371526d632",
       "InputValues": [
         {
-          "Id": "98f38caa-4f79-425c-ab46-22d7dbe62978"/*IpAddress*/,
-          "Type": "System.String",
-          "Value": "127.0.0.1"
-        },
-        {
           "Id": "6c0e07ba-7ea6-4dab-af0b-61cf9cb74ad7"/*Port*/,
           "Type": "System.Int32",
           "Value": 8000
@@ -80,35 +109,18 @@
           "Id": "9016e418-7761-4916-aafb-c95599f77f38"/*Address*/,
           "Type": "System.String",
           "Value": "/track/1/volume"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "0cd474ee-4620-4167-a567-fcf56a296f6b"/*OscOutput*/,
-      "SymbolId": "4e99da86-482f-4037-8664-b2371526d632",
-      "InputValues": [
+        },
         {
           "Id": "98f38caa-4f79-425c-ab46-22d7dbe62978"/*IpAddress*/,
           "Type": "System.String",
           "Value": "127.0.0.1"
-        },
-        {
-          "Id": "6c0e07ba-7ea6-4dab-af0b-61cf9cb74ad7"/*Port*/,
-          "Type": "System.Int32",
-          "Value": 8000
-        },
-        {
-          "Id": "9016e418-7761-4916-aafb-c95599f77f38"/*Address*/,
-          "Type": "System.String",
-          "Value": "/track/1/name"
         }
       ],
       "Outputs": []
     },
     {
-      "Id": "32d91674-bee5-40d0-b18c-f6940c9082b6"/*HasValueDecreased*/,
-      "SymbolId": "f376121a-2360-4232-9724-0db6937062c3",
+      "Id": "c6e83411-b934-430f-bf45-ff139141ae2f"/*PickFromStringList*/,
+      "SymbolId": "ef357e66-24e9-4f54-8d86-869db74602f4",
       "InputValues": [],
       "Outputs": []
     },
@@ -125,12 +137,6 @@
       "Outputs": []
     },
     {
-      "Id": "7af4d555-a4e4-434f-8a56-2a388edb1e23"/*FloatToInt*/,
-      "SymbolId": "06b4728e-852c-491a-a89d-647f7e0b5415",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "e83ed529-2b19-4a5c-ab6d-5305e90884f6"/*String*/,
       "SymbolId": "5880cbc3-a541-4484-a06a-0e6f77cdbe8e",
       "InputValues": [
@@ -143,18 +149,6 @@
       "Outputs": []
     },
     {
-      "Id": "ac803da7-52d3-4796-80ac-31b5abdd2d48"/*SplitString*/,
-      "SymbolId": "a0fcf7ed-1f14-4a8b-a57e-99e5b2407b1b",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "c6e83411-b934-430f-bf45-ff139141ae2f"/*PickFromStringList*/,
-      "SymbolId": "ef357e66-24e9-4f54-8d86-869db74602f4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "eb428fce-5ffc-4531-979c-7ebbd6d54bae"/*MockStrings*/,
       "SymbolId": "3af25959-fd3f-4608-b521-5860d82554df",
       "InputValues": [
@@ -164,6 +158,12 @@
           "Value": 8
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "f146c02a-a838-4b84-9fac-7b26f91210c9"/*Counter*/,
+      "SymbolId": "11882635-4757-4cac-a024-70bb4e8b504c",
+      "InputValues": [],
       "Outputs": []
     }
   ],

@@ -2,32 +2,12 @@
   "Id": "b5102fba-f05b-43fc-aa1d-613fe1d68ad2"/*Grain*/,
   "Inputs": [
     {
-      "Id": "4525c76c-cdcf-47f3-aa96-335cfc5b5c1b"/*Image*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "195da7e0-5279-4900-80cd-5635e96ab454"/*Amount*/,
       "DefaultValue": 0.05
     },
     {
-      "Id": "903c0270-dc46-402e-8088-8db8368a6dfb"/*Color*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "d24cce46-dd3f-4047-a33f-50abbca89cc4"/*Exponent*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "87a78859-5f0c-41af-8564-ac691b8f1950"/*Brightness*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "f1334f45-4335-4198-9b6e-ab9e8384aa32"/*Speed*/,
-      "DefaultValue": 5.0
-    },
-    {
-      "Id": "edb719cd-be40-4758-9c13-98cf14d1a5c5"/*Scale*/,
-      "DefaultValue": 0.0
+      "Id": "4525c76c-cdcf-47f3-aa96-335cfc5b5c1b"/*Image*/,
+      "DefaultValue": null
     },
     {
       "Id": "61bb0df6-6c8a-4f3a-b7f4-9d979377cab8"/*Resolution*/,
@@ -39,6 +19,26 @@
     {
       "Id": "74ca5916-20ee-4a1f-a41e-342c12d2126a"/*GenerateMipmaps*/,
       "DefaultValue": false
+    },
+    {
+      "Id": "87a78859-5f0c-41af-8564-ac691b8f1950"/*Brightness*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "903c0270-dc46-402e-8088-8db8368a6dfb"/*Color*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "d24cce46-dd3f-4047-a33f-50abbca89cc4"/*Exponent*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "edb719cd-be40-4758-9c13-98cf14d1a5c5"/*Scale*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "f1334f45-4335-4198-9b6e-ab9e8384aa32"/*Speed*/,
+      "DefaultValue": 5.0
     }
   ],
   "Children": [

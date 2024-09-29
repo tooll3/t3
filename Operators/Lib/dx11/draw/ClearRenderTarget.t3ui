@@ -3,14 +3,14 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "d73d2fe7-1af4-48d6-9ad3-f8c87c3369d6"/*ClearColor*/,
+      "InputId": "25c0c15c-5b95-4fe3-8d59-4e127fce1cf2"/*RenderTarget*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
       }
     },
     {
-      "InputId": "25c0c15c-5b95-4fe3-8d59-4e127fce1cf2"/*RenderTarget*/,
+      "InputId": "d73d2fe7-1af4-48d6-9ad3-f8c87c3369d6"/*ClearColor*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0

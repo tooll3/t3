@@ -3,18 +3,18 @@
   "Description": "Converts a DateTime into different float values like normalized time of day (between 0 ... 1), day of the year, etc.",
   "InputUis": [
     {
+      "InputId": "5d9065a3-a124-4261-b5a9-25d969e30f73"/*OutputMapping*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
       "InputId": "7b432357-225c-499e-9109-61168b4be4a7"/*Value*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
-    },
-    {
-      "InputId": "5d9065a3-a124-4261-b5a9-25d969e30f73"/*OutputMapping*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
       }
     },
     {

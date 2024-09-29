@@ -3,20 +3,6 @@
   "Description": "The basis for the Fräser spiral illusion.\n\nOriginally programmed for [WorksForEverybody]\n\nOther interesting patterns can be generated with [SinForm] [ZollnerPattern] [FraserGrid] [Raster] [CheckerBoard] [RyojiPattern2] [RyojiPattern1]",
   "InputUis": [
     {
-      "InputId": "22d7ec5a-ba4e-4d2e-b15b-4de172b26e1e"/*Image*/,
-      "Position": {
-        "X": -198.16037,
-        "Y": -12.877563
-      }
-    },
-    {
-      "InputId": "6f4215a5-bd04-4151-b468-e06424c560a6"/*Fill*/,
-      "Position": {
-        "X": -198.16037,
-        "Y": 32.122437
-      }
-    },
-    {
       "InputId": "0a7100e7-e67e-4a59-86a1-fcb872e8daaf"/*FillB*/,
       "Position": {
         "X": -198.16037,
@@ -25,38 +11,6 @@
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
-    },
-    {
-      "InputId": "df99e74d-4add-4600-a7c7-d6db74b0186a"/*Background*/,
-      "Position": {
-        "X": -223.4553,
-        "Y": 429.05206
-      }
-    },
-    {
-      "InputId": "7551f216-17a7-4818-9cb0-6490e38fcb44"/*Size*/,
-      "Position": {
-        "X": -223.4553,
-        "Y": 474.05212
-      }
-    },
-    {
-      "InputId": "a49d6b13-2308-49bd-aac6-fde8f07e426d"/*Offset*/,
-      "Position": {
-        "X": -223.4553,
-        "Y": 519.05206
-      }
-    },
-    {
-      "InputId": "52243bdc-6dce-46b9-95d9-af90cde3d56f"/*Scale*/,
-      "Position": {
-        "X": -223.4553,
-        "Y": 564.05206
-      },
-      "Min": -10.0,
-      "Max": 10.0,
-      "Scale": 0.1,
-      "Format": "{0:0.000} ×"
     },
     {
       "InputId": "1dad9264-32a0-4476-a4af-c7eb9a5a5fec"/*Rotate*/,
@@ -70,13 +24,29 @@
       "Format": "{0:0.000}°"
     },
     {
-      "InputId": "84afcc08-74ae-4218-8250-2a0c72130f41"/*Feather*/,
+      "InputId": "22d7ec5a-ba4e-4d2e-b15b-4de172b26e1e"/*Image*/,
       "Position": {
-        "X": -219.05618,
-        "Y": 780.9896
+        "X": -198.16037,
+        "Y": -12.877563
+      }
+    },
+    {
+      "InputId": "28111fbf-92ea-4674-9b65-0def5a7252cd"/*BarWidth*/,
+      "Position": {
+        "X": -198.85258,
+        "Y": 1039.4314
       },
       "Min": 0.0,
-      "Max": 0.1
+      "Max": 1.0
+    },
+    {
+      "InputId": "31d0e3ab-5aaf-4bf2-8d50-ac3c58026a51"/*BorderWidth*/,
+      "Position": {
+        "X": -198.85258,
+        "Y": 1129.4314
+      },
+      "Min": 0.0,
+      "Max": 1.0
     },
     {
       "InputId": "40ea5583-313d-4a48-82f4-d52bfa7c9e17"/*RotateShapes*/,
@@ -98,41 +68,52 @@
       "Max": 1.0
     },
     {
-      "InputId": "28111fbf-92ea-4674-9b65-0def5a7252cd"/*BarWidth*/,
+      "InputId": "52243bdc-6dce-46b9-95d9-af90cde3d56f"/*Scale*/,
       "Position": {
-        "X": -198.85258,
-        "Y": 1039.4314
+        "X": -223.4553,
+        "Y": 564.05206
+      },
+      "Min": -10.0,
+      "Max": 10.0,
+      "Scale": 0.1,
+      "Format": "{0:0.000} ×"
+    },
+    {
+      "InputId": "6f4215a5-bd04-4151-b468-e06424c560a6"/*Fill*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": 32.122437
+      }
+    },
+    {
+      "InputId": "7551f216-17a7-4818-9cb0-6490e38fcb44"/*Size*/,
+      "Position": {
+        "X": -223.4553,
+        "Y": 474.05212
+      }
+    },
+    {
+      "InputId": "75c859fa-9dad-4da3-994c-7232811d5ede"/*Resolution*/,
+      "Position": {
+        "X": -195.6851,
+        "Y": 1497.3857
+      }
+    },
+    {
+      "InputId": "84afcc08-74ae-4218-8250-2a0c72130f41"/*Feather*/,
+      "Position": {
+        "X": -219.05618,
+        "Y": 780.9896
       },
       "Min": 0.0,
-      "Max": 1.0
+      "Max": 0.1
     },
     {
-      "InputId": "31d0e3ab-5aaf-4bf2-8d50-ac3c58026a51"/*BorderWidth*/,
+      "InputId": "a49d6b13-2308-49bd-aac6-fde8f07e426d"/*Offset*/,
       "Position": {
-        "X": -198.85258,
-        "Y": 1129.4314
-      },
-      "Min": 0.0,
-      "Max": 1.0
-    },
-    {
-      "InputId": "bf6d5734-8fa7-455f-a207-55a6501722e6"/*RowSwift*/,
-      "Position": {
-        "X": -198.85258,
-        "Y": 1174.4314
-      },
-      "Min": -1.0,
-      "Max": 1.0
-    },
-    {
-      "InputId": "bde3ed03-b704-4948-8d54-886593aa148f"/*RAffects_BarWidth*/,
-      "Position": {
-        "X": -197.88463,
-        "Y": 1264.1416
-      },
-      "Min": -1.0,
-      "Max": 1.0,
-      "Format": "{0:0.000} ±"
+        "X": -223.4553,
+        "Y": 519.05206
+      }
     },
     {
       "InputId": "a4a70b12-ab9b-4c53-a93c-6f2460228e1e"/*GAffects_ShapeSize*/,
@@ -155,14 +136,52 @@
       "Format": "{0:0.000} ±"
     },
     {
-      "InputId": "75c859fa-9dad-4da3-994c-7232811d5ede"/*Resolution*/,
+      "InputId": "bde3ed03-b704-4948-8d54-886593aa148f"/*RAffects_BarWidth*/,
       "Position": {
-        "X": -195.6851,
-        "Y": 1497.3857
+        "X": -197.88463,
+        "Y": 1264.1416
+      },
+      "Min": -1.0,
+      "Max": 1.0,
+      "Format": "{0:0.000} ±"
+    },
+    {
+      "InputId": "bf6d5734-8fa7-455f-a207-55a6501722e6"/*RowSwift*/,
+      "Position": {
+        "X": -198.85258,
+        "Y": 1174.4314
+      },
+      "Min": -1.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "df99e74d-4add-4600-a7c7-d6db74b0186a"/*Background*/,
+      "Position": {
+        "X": -223.4553,
+        "Y": 429.05206
       }
     }
   ],
   "SymbolChildUis": [
+    {
+      "ChildId": "18f9f5a6-5d49-453f-9f0d-19def39aadee"/*_ImageFxShaderSetupStatic*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 110.08065,
+        "Y": 1758.3761
+      },
+      "Position": {
+        "X": 670.3224,
+        "Y": -24.92865
+      }
+    },
+    {
+      "ChildId": "66efaa6b-726d-4773-b021-7b68bfb16e0a"/*Vector4Components*/,
+      "Position": {
+        "X": -31.066011,
+        "Y": 68.89713
+      }
+    },
     {
       "ChildId": "758b0f52-8f11-4e57-8b78-888b2237a0a6"/*Vector4Components*/,
       "Position": {
@@ -189,25 +208,6 @@
       "Position": {
         "X": -27.883774,
         "Y": 506.75793
-      }
-    },
-    {
-      "ChildId": "18f9f5a6-5d49-453f-9f0d-19def39aadee"/*_ImageFxShaderSetupStatic*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 110.08065,
-        "Y": 1758.3761
-      },
-      "Position": {
-        "X": 670.3224,
-        "Y": -24.92865
-      }
-    },
-    {
-      "ChildId": "66efaa6b-726d-4773-b021-7b68bfb16e0a"/*Vector4Components*/,
-      "Position": {
-        "X": -31.066011,
-        "Y": 68.89713
       }
     }
   ],

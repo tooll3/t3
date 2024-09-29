@@ -20,14 +20,6 @@
       "AddPadding": "True"
     },
     {
-      "InputId": "a331bfbb-8876-4e27-94b3-782e64efd72a"/*Scale*/,
-      "Position": {
-        "X": -277.8811,
-        "Y": 491.51312
-      },
-      "Description": "Scales the size of the box linearly"
-    },
-    {
       "InputId": "83bb304e-3ed3-405f-92c7-58d263d9aafc"/*Position*/,
       "Position": {
         "X": -277.8811,
@@ -35,20 +27,35 @@
       },
       "Description": "Defines the position of the box in 3D space",
       "AddPadding": "True"
+    },
+    {
+      "InputId": "a331bfbb-8876-4e27-94b3-782e64efd72a"/*Scale*/,
+      "Position": {
+        "X": -277.8811,
+        "Y": 491.51312
+      },
+      "Description": "Scales the size of the box linearly"
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "f4ff6b52-e845-48c4-a4ef-9ef89540d3bf"/*CommonPointSets*/,
-      "Position": {
-        "X": -267.5323,
-        "Y": 181.46854
-      }
-    },
-    {
       "ChildId": "421378da-3588-4908-9381-9500ea714ed6"/*DrawLines*/,
       "Position": {
         "X": -5.320343,
+        "Y": 187.84421
+      }
+    },
+    {
+      "ChildId": "5af09ec2-0177-46fc-a4e4-3460ea1c5c68"/*ScaleVector3*/,
+      "Position": {
+        "X": -14.64386,
+        "Y": 437.13956
+      }
+    },
+    {
+      "ChildId": "7bfc1937-0189-4593-a359-7a2c1b94d7b6"/*SetFog*/,
+      "Position": {
+        "X": 294.67966,
         "Y": 187.84421
       }
     },
@@ -60,17 +67,10 @@
       }
     },
     {
-      "ChildId": "7bfc1937-0189-4593-a359-7a2c1b94d7b6"/*SetFog*/,
+      "ChildId": "f4ff6b52-e845-48c4-a4ef-9ef89540d3bf"/*CommonPointSets*/,
       "Position": {
-        "X": 294.67966,
-        "Y": 187.84421
-      }
-    },
-    {
-      "ChildId": "5af09ec2-0177-46fc-a4e4-3460ea1c5c68"/*ScaleVector3*/,
-      "Position": {
-        "X": -14.64386,
-        "Y": 437.13956
+        "X": -267.5323,
+        "Y": 181.46854
       }
     }
   ],

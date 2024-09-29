@@ -3,11 +3,16 @@
   "Description": "Makes an incoming image tileable based on linear edge Falloff.\n\nThis can be used to repeat an imported or generated texture infinitely without any obviously visible borders.\n\nAlso see [MakeTileableImageAdvanced] for a version with more options.",
   "InputUis": [
     {
-      "InputId": "f09d6911-dd5f-4dac-a475-3ea291f04dfe"/*ImageA*/,
+      "InputId": "0cf0b6ec-93e4-4e08-939c-5588267c3991"/*TilingMode*/,
       "Position": {
         "X": -532.8175,
-        "Y": -35.7612
-      }
+        "Y": 54.2388
+      },
+      "Description": "Defines how the image is tiled:\n\n0 = No Tiling\n1 = horizontal tiling only\n2 = vertical tiling only\n3 = Vertical and horizontal tiling",
+      "Min": 0,
+      "Max": 3,
+      "Scale": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "e0f2826f-867d-461b-b1ec-95d30d592539"/*EdgeFallOff*/,
@@ -23,27 +28,14 @@
       "Clamp": true
     },
     {
-      "InputId": "0cf0b6ec-93e4-4e08-939c-5588267c3991"/*TilingMode*/,
+      "InputId": "f09d6911-dd5f-4dac-a475-3ea291f04dfe"/*ImageA*/,
       "Position": {
         "X": -532.8175,
-        "Y": 54.2388
-      },
-      "Description": "Defines how the image is tiled:\n\n0 = No Tiling\n1 = horizontal tiling only\n2 = vertical tiling only\n3 = Vertical and horizontal tiling",
-      "Min": 0,
-      "Max": 3,
-      "Scale": 1.0,
-      "Clamp": true
+        "Y": -35.7612
+      }
     }
   ],
   "SymbolChildUis": [
-    {
-      "ChildId": "829e2974-8da8-4067-a7e3-f2fdf07c3238"/*BlendWithMask*/,
-      "Comment": "We're blending in the first texture with the mask to hide the seam.",
-      "Position": {
-        "X": 195.14307,
-        "Y": -297.79492
-      }
-    },
     {
       "ChildId": "071cc25c-fdc7-447b-b1cb-a55a385569d0"/*TransformImage*/,
       "Comment": "Now you can spot the vertical seam.\nIt's because we're shifting the texture on the X axis. And the texture wrapping mode is set to Wrap. \n",
@@ -60,11 +52,11 @@
       }
     },
     {
-      "ChildId": "ecfe2689-aeb5-4ae6-9f8f-1a66e4bdc89c"/*TransformImage*/,
-      "Comment": "It's time to take care of the horizontal seam",
+      "ChildId": "5b0b07e7-d749-48fd-8937-f4851eeb3870"/*BlendWithMask*/,
+      "Comment": "Now this texture can be repeated to the infinite",
       "Position": {
-        "X": 432.18115,
-        "Y": 368.80255
+        "X": -39.93097,
+        "Y": 948.2187
       }
     },
     {
@@ -76,10 +68,18 @@
       }
     },
     {
-      "ChildId": "d2ceb93f-c6a7-4f6f-967f-6647ad2478a3"/*LinearGradient*/,
+      "ChildId": "829e2974-8da8-4067-a7e3-f2fdf07c3238"/*BlendWithMask*/,
+      "Comment": "We're blending in the first texture with the mask to hide the seam.",
       "Position": {
-        "X": 374.1277,
-        "Y": 561.48364
+        "X": 195.14307,
+        "Y": -297.79492
+      }
+    },
+    {
+      "ChildId": "835e9c38-d08b-4d97-a9f7-28edfb84285d"/*LinearGradient*/,
+      "Position": {
+        "X": -262.01712,
+        "Y": 1066.5345
       }
     },
     {
@@ -98,18 +98,18 @@
       }
     },
     {
-      "ChildId": "5b0b07e7-d749-48fd-8937-f4851eeb3870"/*BlendWithMask*/,
-      "Comment": "Now this texture can be repeated to the infinite",
+      "ChildId": "d2ceb93f-c6a7-4f6f-967f-6647ad2478a3"/*LinearGradient*/,
       "Position": {
-        "X": -39.93097,
-        "Y": 948.2187
+        "X": 374.1277,
+        "Y": 561.48364
       }
     },
     {
-      "ChildId": "835e9c38-d08b-4d97-a9f7-28edfb84285d"/*LinearGradient*/,
+      "ChildId": "ecfe2689-aeb5-4ae6-9f8f-1a66e4bdc89c"/*TransformImage*/,
+      "Comment": "It's time to take care of the horizontal seam",
       "Position": {
-        "X": -262.01712,
-        "Y": 1066.5345
+        "X": 432.18115,
+        "Y": 368.80255
       }
     }
   ],

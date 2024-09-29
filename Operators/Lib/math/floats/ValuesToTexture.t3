@@ -12,24 +12,24 @@
       "DefaultValue": true
     },
     {
-      "Id": "ca67bfaf-ede7-43ba-b279-fc1ddfbe2ffa"/*RangeStart*/,
-      "DefaultValue": 0
-    },
-    {
-      "Id": "db868176-d51c-41aa-bafe-68c3e50e725e"/*RangeEnd*/,
-      "DefaultValue": 100
-    },
-    {
-      "Id": "cc812393-f080-4e17-a525-15b09f8acdd0"/*Gain*/,
-      "DefaultValue": 1.0
-    },
-    {
       "Id": "51545316-69fc-441f-b59f-44979e32972c"/*Pow*/,
       "DefaultValue": 1.0
     },
     {
       "Id": "63e90d86-5ad5-4333-8b99-7f8d285c4913"/*Direction*/,
       "DefaultValue": 0
+    },
+    {
+      "Id": "ca67bfaf-ede7-43ba-b279-fc1ddfbe2ffa"/*RangeStart*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "cc812393-f080-4e17-a525-15b09f8acdd0"/*Gain*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "db868176-d51c-41aa-bafe-68c3e50e725e"/*RangeEnd*/,
+      "DefaultValue": 100
     }
   ],
   "Children": [],

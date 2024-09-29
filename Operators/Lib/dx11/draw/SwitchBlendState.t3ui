@@ -3,18 +3,18 @@
   "Description": "Switches between different blend state operations.",
   "InputUis": [
     {
+      "InputId": "232a10e8-0357-4adc-935b-9cb1b7938730"/*Index*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      }
+    },
+    {
       "InputId": "a737bb60-d98b-4405-914c-7df91a58d8bc"/*BlendStates*/,
       "Relevancy": "Required",
       "Position": {
         "X": 0.0,
         "Y": 90.0
-      }
-    },
-    {
-      "InputId": "232a10e8-0357-4adc-935b-9cb1b7938730"/*Index*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 45.0
       }
     }
   ],

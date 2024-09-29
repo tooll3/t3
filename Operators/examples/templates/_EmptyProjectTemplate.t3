@@ -3,12 +3,6 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "de3f931a-c1c4-4942-9677-20dabdfb328a"/*RenderTarget*/,
-      "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "a9babb73-eb31-427d-8cc6-3f6cf98d9eca"/*Text*/,
       "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
       "InputValues": [
@@ -18,6 +12,12 @@
           "Value": "None"
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "de3f931a-c1c4-4942-9677-20dabdfb328a"/*RenderTarget*/,
+      "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
+      "InputValues": [],
       "Outputs": []
     }
   ],

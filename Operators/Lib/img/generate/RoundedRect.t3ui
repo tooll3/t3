@@ -3,60 +3,12 @@
   "Description": "Generates a rounded rectangle.\n\nCan be customised to create a variety of shapes, similarly to [Blob].\n\nAKA: rectangle, square, ellipse, circle, rings, blob, vignette\n\nTips:\n\nSimilar Ops: [NGon] [RoundedRect] [Rings] [RadialGradient] [LinearGradient] [Blob]",
   "InputUis": [
     {
-      "InputId": "6b6887d4-ebaa-4489-b993-5027789ce1c7"/*Image*/,
+      "InputId": "07e57992-ea38-4e3b-8d69-cb4e99ae587c"/*Resolution*/,
       "Position": {
-        "X": -195.9,
-        "Y": -128.16379
+        "X": -202.27362,
+        "Y": 731.44977
       },
-      "Description": "Image to use as a background for the shape.\nDrawn behind the background color."
-    },
-    {
-      "InputId": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Color*/,
-      "Position": {
-        "X": -195.9,
-        "Y": -83.16377
-      },
-      "Description": "Fill color of the shape."
-    },
-    {
-      "InputId": "d4c20bfc-3943-4c5d-a8f8-5175fa152e91"/*Background*/,
-      "Position": {
-        "X": -195.9,
-        "Y": 6.8362274
-      },
-      "Description": "Background color of the shape."
-    },
-    {
-      "InputId": "ee2f51f9-38bb-4613-b234-173218cb3aae"/*Position*/,
-      "Position": {
-        "X": -212.96689,
-        "Y": 77.20885
-      },
-      "GroupTitle": "Position",
-      "Description": "Center position.",
-      "Min": -1.0,
-      "Max": 1.0,
-      "UseVec2Control": "Position"
-    },
-    {
-      "InputId": "c608e4c4-c545-45ed-8e37-95a53f6871d0"/*Stretch*/,
-      "Position": {
-        "X": -212.96689,
-        "Y": 122.20885
-      },
-      "Description": "Stretches the shape non-uniformly.",
-      "Min": -1.0,
-      "Max": 1.0,
-      "UseVec2Control": "Position"
-    },
-    {
-      "InputId": "d2401798-593b-4cc3-85d8-3570ddec1f2a"/*Scale*/,
-      "Position": {
-        "X": -212.96689,
-        "Y": 167.20885
-      },
-      "Description": "Scales the shape uniformly.",
-      "Format": "{0:0.000} ×"
+      "Description": "Output resolution in pixels. Set to 0 for dynamic resolution."
     },
     {
       "InputId": "202340b4-0629-40a1-9399-0cda047df116"/*Rotate*/,
@@ -71,45 +23,6 @@
       "Format": "{0:0.000}°"
     },
     {
-      "InputId": "ef3d0313-50a1-42d3-b3cb-e8ea1b93cd34"/*Round*/,
-      "Position": {
-        "X": -213.01299,
-        "Y": 377.50833
-      },
-      "GroupTitle": "Shape",
-      "Description": "Rounds corners of the shape.\nA value of 0 will create sharp corners, and 1 will create a pill shape.",
-      "Min": 0.0,
-      "Max": 1.0
-    },
-    {
-      "InputId": "d4f79203-401a-4f6e-8f83-74a3d61c0177"/*StrokeColor*/,
-      "Position": {
-        "X": -213.01299,
-        "Y": 422.50833
-      },
-      "Description": "Color used by the shape stroke."
-    },
-    {
-      "InputId": "80bd2460-c28d-490c-981b-77a6e89f3983"/*Stroke*/,
-      "Position": {
-        "X": -213.01299,
-        "Y": 467.50833
-      },
-      "Description": "Stroke (outline) thickness.",
-      "Min": 0.0,
-      "Max": 1.0
-    },
-    {
-      "InputId": "be43e160-f9a0-4991-b764-2b5e533b37cc"/*Feather*/,
-      "Position": {
-        "X": -207.812,
-        "Y": 520.39954
-      },
-      "Description": "Feather edges to reduce pixel artifacts.\nCan also be used to blur the shape.\nSet to a negative value to create a vignette.",
-      "Min": -1.0,
-      "Max": 1.0
-    },
-    {
       "InputId": "574e7268-27aa-46b6-a13f-8ab63f5990d9"/*FeatherBias*/,
       "Position": {
         "X": -207.812,
@@ -122,12 +35,51 @@
       "Scale": 0.1
     },
     {
-      "InputId": "07e57992-ea38-4e3b-8d69-cb4e99ae587c"/*Resolution*/,
+      "InputId": "6b6887d4-ebaa-4489-b993-5027789ce1c7"/*Image*/,
       "Position": {
-        "X": -202.27362,
-        "Y": 731.44977
+        "X": -195.9,
+        "Y": -128.16379
       },
-      "Description": "Output resolution in pixels. Set to 0 for dynamic resolution."
+      "Description": "Image to use as a background for the shape.\nDrawn behind the background color."
+    },
+    {
+      "InputId": "80bd2460-c28d-490c-981b-77a6e89f3983"/*Stroke*/,
+      "Position": {
+        "X": -213.01299,
+        "Y": 467.50833
+      },
+      "Description": "Stroke (outline) thickness.",
+      "Min": 0.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Color*/,
+      "Position": {
+        "X": -195.9,
+        "Y": -83.16377
+      },
+      "Description": "Fill color of the shape."
+    },
+    {
+      "InputId": "be43e160-f9a0-4991-b764-2b5e533b37cc"/*Feather*/,
+      "Position": {
+        "X": -207.812,
+        "Y": 520.39954
+      },
+      "Description": "Feather edges to reduce pixel artifacts.\nCan also be used to blur the shape.\nSet to a negative value to create a vignette.",
+      "Min": -1.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "c608e4c4-c545-45ed-8e37-95a53f6871d0"/*Stretch*/,
+      "Position": {
+        "X": -212.96689,
+        "Y": 122.20885
+      },
+      "Description": "Stretches the shape non-uniformly.",
+      "Min": -1.0,
+      "Max": 1.0,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "c9c66f57-5c8c-4481-9b9d-a8aa8569ac12"/*GenerateMips*/,
@@ -136,9 +88,64 @@
         "Y": 776.44977
       },
       "Description": "Generate mipmaps (scaled-down versions of this image for use in situations where many small copies are shown on screen.)\nWill increase memory usage."
+    },
+    {
+      "InputId": "d2401798-593b-4cc3-85d8-3570ddec1f2a"/*Scale*/,
+      "Position": {
+        "X": -212.96689,
+        "Y": 167.20885
+      },
+      "Description": "Scales the shape uniformly.",
+      "Format": "{0:0.000} ×"
+    },
+    {
+      "InputId": "d4c20bfc-3943-4c5d-a8f8-5175fa152e91"/*Background*/,
+      "Position": {
+        "X": -195.9,
+        "Y": 6.8362274
+      },
+      "Description": "Background color of the shape."
+    },
+    {
+      "InputId": "d4f79203-401a-4f6e-8f83-74a3d61c0177"/*StrokeColor*/,
+      "Position": {
+        "X": -213.01299,
+        "Y": 422.50833
+      },
+      "Description": "Color used by the shape stroke."
+    },
+    {
+      "InputId": "ee2f51f9-38bb-4613-b234-173218cb3aae"/*Position*/,
+      "Position": {
+        "X": -212.96689,
+        "Y": 77.20885
+      },
+      "GroupTitle": "Position",
+      "Description": "Center position.",
+      "Min": -1.0,
+      "Max": 1.0,
+      "UseVec2Control": "Position"
+    },
+    {
+      "InputId": "ef3d0313-50a1-42d3-b3cb-e8ea1b93cd34"/*Round*/,
+      "Position": {
+        "X": -213.01299,
+        "Y": 377.50833
+      },
+      "GroupTitle": "Shape",
+      "Description": "Rounds corners of the shape.\nA value of 0 will create sharp corners, and 1 will create a pill shape.",
+      "Min": 0.0,
+      "Max": 1.0
     }
   ],
   "SymbolChildUis": [
+    {
+      "ChildId": "17626164-1e7e-46cd-9904-caf0c6b6113c"/*Vector2Components*/,
+      "Position": {
+        "X": -31.638813,
+        "Y": 187.50772
+      }
+    },
     {
       "ChildId": "3b04103f-1853-4ca8-b753-ce42d42e16c0"/*Vector4Components*/,
       "Position": {
@@ -158,13 +165,6 @@
       "Position": {
         "X": -31.638813,
         "Y": 131.50772
-      }
-    },
-    {
-      "ChildId": "17626164-1e7e-46cd-9904-caf0c6b6113c"/*Vector2Components*/,
-      "Position": {
-        "X": -31.638813,
-        "Y": 187.50772
       }
     },
     {

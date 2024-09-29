@@ -3,20 +3,11 @@
   "Description": "An internal implementation of the Text operator that generates a sprite buffer that is then being rendered.",
   "InputUis": [
     {
-      "InputId": "f2dd87b1-7f37-4b02-871b-b2e35972f246"/*Text*/,
+      "InputId": "14829eac-ba59-4d31-90dc-53c7fc56cc30"/*VerticalAlign*/,
       "Position": {
         "X": -200.0,
-        "Y": 0.0
-      },
-      "Usage": "Multiline"
-    },
-    {
-      "InputId": "e827fdd1-20ca-473c-99ee-b839563690e9"/*Filepath*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      },
-      "Usage": "FilePath"
+        "Y": 315.0
+      }
     },
     {
       "InputId": "1cde902d-5eaa-4144-b579-85f54717356b"/*Color*/,
@@ -30,13 +21,6 @@
       "Position": {
         "X": -200.0,
         "Y": 405.0
-      }
-    },
-    {
-      "InputId": "e05e143e-8d4c-4de7-8c9c-7fa7755009d3"/*Spacing*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 180.0
       }
     },
     {
@@ -54,17 +38,10 @@
       }
     },
     {
-      "InputId": "ffd2233a-8f3e-426b-815b-8071e4c779ab"/*Slant*/,
+      "InputId": "e05e143e-8d4c-4de7-8c9c-7fa7755009d3"/*Spacing*/,
       "Position": {
         "X": -200.0,
-        "Y": 270.0
-      }
-    },
-    {
-      "InputId": "14829eac-ba59-4d31-90dc-53c7fc56cc30"/*VerticalAlign*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 315.0
+        "Y": 180.0
       }
     },
     {
@@ -72,6 +49,29 @@
       "Position": {
         "X": -200.0,
         "Y": 360.0
+      }
+    },
+    {
+      "InputId": "e827fdd1-20ca-473c-99ee-b839563690e9"/*Filepath*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Usage": "FilePath"
+    },
+    {
+      "InputId": "f2dd87b1-7f37-4b02-871b-b2e35972f246"/*Text*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "Multiline"
+    },
+    {
+      "InputId": "ffd2233a-8f3e-426b-815b-8071e4c779ab"/*Slant*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
       }
     }
   ],

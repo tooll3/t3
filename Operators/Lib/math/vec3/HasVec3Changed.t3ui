@@ -10,10 +10,10 @@
       }
     },
     {
-      "InputId": "a5b87ffd-0710-4dc6-8eb7-f40a92fae0ef"/*Threshold*/,
+      "InputId": "56a9a9df-6e45-4124-b9fe-a157fef8f40a"/*PreventContinuedChanges*/,
       "Position": {
         "X": -200.0,
-        "Y": 45.0
+        "Y": 180.0
       }
     },
     {
@@ -24,17 +24,17 @@
       }
     },
     {
+      "InputId": "a5b87ffd-0710-4dc6-8eb7-f40a92fae0ef"/*Threshold*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
       "InputId": "b6d0899b-9c65-4622-af80-43a9a34110f2"/*MinTimeBetweenHits*/,
       "Position": {
         "X": -200.0,
         "Y": 135.0
-      }
-    },
-    {
-      "InputId": "56a9a9df-6e45-4124-b9fe-a157fef8f40a"/*PreventContinuedChanges*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 180.0
       }
     }
   ],

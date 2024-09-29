@@ -3,12 +3,62 @@
   "Description": "Creates audio reaction from audio inputs.",
   "InputUis": [
     {
+      "InputId": "02f71a92-d5c8-4dd7-af5f-da12330f60eb"/*Threshold*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "1139b245-76b4-4f51-a263-ee1a1371073f"/*Bias*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 405.0
+      }
+    },
+    {
+      "InputId": "1d3a1132-e8b9-4c04-99bf-80f6f1530309"/*WindowWidth*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
       "InputId": "44409811-1a0f-4be6-83ea-b2f040ebf08b"/*InputBand*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
       },
       "GroupTitle": "Input"
+    },
+    {
+      "InputId": "80294096-ae64-471a-bcf1-622684e06d56"/*Output*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      },
+      "GroupTitle": "Output"
+    },
+    {
+      "InputId": "aece14b8-88e0-4817-8204-b79159db8102"/*MinTimeBetweenHits*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 405.0
+      }
+    },
+    {
+      "InputId": "b1c43d3b-f425-4d62-9d48-07ccb5d08707"/*Amplitude*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 360.0
+      }
+    },
+    {
+      "InputId": "d138c961-b163-428a-9479-2130f1e46314"/*Reset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      }
     },
     {
       "InputId": "f3d7c7fd-4280-4fb4-9f9a-c39b28d1a72b"/*WindowCenter*/,
@@ -25,56 +75,6 @@
       "Position": {
         "X": -200.0,
         "Y": 90.0
-      }
-    },
-    {
-      "InputId": "1d3a1132-e8b9-4c04-99bf-80f6f1530309"/*WindowWidth*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 135.0
-      }
-    },
-    {
-      "InputId": "02f71a92-d5c8-4dd7-af5f-da12330f60eb"/*Threshold*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 180.0
-      }
-    },
-    {
-      "InputId": "aece14b8-88e0-4817-8204-b79159db8102"/*MinTimeBetweenHits*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 405.0
-      }
-    },
-    {
-      "InputId": "80294096-ae64-471a-bcf1-622684e06d56"/*Output*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 225.0
-      },
-      "GroupTitle": "Output"
-    },
-    {
-      "InputId": "b1c43d3b-f425-4d62-9d48-07ccb5d08707"/*Amplitude*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 360.0
-      }
-    },
-    {
-      "InputId": "1139b245-76b4-4f51-a263-ee1a1371073f"/*Bias*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 405.0
-      }
-    },
-    {
-      "InputId": "d138c961-b163-428a-9479-2130f1e46314"/*Reset*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 270.0
       }
     }
   ],

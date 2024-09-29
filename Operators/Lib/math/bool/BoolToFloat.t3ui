@@ -3,13 +3,12 @@
   "Description": "Allows the conversion of a Boolean value into a float value with predefined values\n\nAlso see [Boolean] / [Value]",
   "InputUis": [
     {
-      "InputId": "253b9ae4-fac5-4641-bf0c-d8614606a840"/*BoolValue*/,
-      "Relevancy": "Relevant",
+      "InputId": "0a53a4ff-4dfb-455a-b70b-0d7eed5e5f22"/*ForTrue*/,
       "Position": {
         "X": 0.0,
-        "Y": 0.0
+        "Y": 90.0
       },
-      "Description": "Input / definition of the boolean to be converted"
+      "Description": "Defines which float value is output for 'True' or 1"
     },
     {
       "InputId": "24ffa0a7-9195-4b38-9c88-37cf4c3afc36"/*ForFalse*/,
@@ -21,12 +20,13 @@
       "Description": "Defines which float value is output for 'False' or 0"
     },
     {
-      "InputId": "0a53a4ff-4dfb-455a-b70b-0d7eed5e5f22"/*ForTrue*/,
+      "InputId": "253b9ae4-fac5-4641-bf0c-d8614606a840"/*BoolValue*/,
+      "Relevancy": "Relevant",
       "Position": {
         "X": 0.0,
-        "Y": 90.0
+        "Y": 0.0
       },
-      "Description": "Defines which float value is output for 'True' or 1"
+      "Description": "Input / definition of the boolean to be converted"
     }
   ],
   "SymbolChildUis": [],

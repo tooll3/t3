@@ -3,17 +3,10 @@
   "Description": "Checks if users hits key on right time and computes score.",
   "InputUis": [
     {
-      "InputId": "d6bd6745-16f7-4dc4-90ce-8ce22d899633"/*TriggerReset*/,
+      "InputId": "163da70f-3aaa-4321-b575-dff9f5772b30"/*SceneIndex*/,
       "Position": {
         "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "InputId": "efa3009a-5d0b-4925-bf3a-40c7699721e8"/*IsActive*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
+        "Y": 135.0
       }
     },
     {
@@ -25,22 +18,7 @@
       }
     },
     {
-      "InputId": "163da70f-3aaa-4321-b575-dff9f5772b30"/*SceneIndex*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 135.0
-      }
-    },
-    {
       "InputId": "587a682a-69a1-43b4-8f3e-ee2667a092ac"/*ScoreForScene*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 180.0
-      }
-    },
-    {
-      "InputId": "a808906f-ee1b-4d18-b132-b4a11a71905e"/*PerfectTime*/,
-      "Relevancy": "Relevant",
       "Position": {
         "X": -200.0,
         "Y": 180.0
@@ -54,10 +32,32 @@
       }
     },
     {
+      "InputId": "a808906f-ee1b-4d18-b132-b4a11a71905e"/*PerfectTime*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "d6bd6745-16f7-4dc4-90ce-8ce22d899633"/*TriggerReset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
       "InputId": "e7672d3a-a5d3-449b-9a6d-1224c0aeab4f"/*TimeDifferenceAmplify*/,
       "Position": {
         "X": -200.0,
         "Y": 270.0
+      }
+    },
+    {
+      "InputId": "efa3009a-5d0b-4925-bf3a-40c7699721e8"/*IsActive*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
       }
     }
   ],

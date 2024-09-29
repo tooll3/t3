@@ -4,38 +4,24 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "80381820-80e8-4777-ab87-df8e23007f15"/*RenderTarget*/,
+      "ChildId": "10ba18d6-3fb2-4dfa-92b6-5a962b368d2a"/*_FadeFade2*/,
       "Position": {
-        "X": 3380.6016,
-        "Y": 100.18021
+        "X": 2805.5305,
+        "Y": -8.273804
       }
     },
     {
-      "ChildId": "56e995bb-aa05-401c-b1e8-9e50118ce679"/*Execute*/,
+      "ChildId": "10c58821-d00c-4eb7-b07b-b54288b8aaba"/*_PointingFingers*/,
       "Position": {
-        "X": 3230.6016,
-        "Y": 100.18021
+        "X": 2923.8406,
+        "Y": 176.3548
       }
     },
     {
-      "ChildId": "ee536f28-99c8-40e6-853a-b16b3b12bc29"/*SetVJVariables*/,
+      "ChildId": "257f80f5-587b-4a57-bf99-8aa891497c97"/*_Wreckage*/,
       "Position": {
-        "X": 3530.6016,
-        "Y": 100.18021
-      }
-    },
-    {
-      "ChildId": "869cbc6b-784a-4e9a-ba6a-f5a7e7315805"/*MasterFade*/,
-      "Position": {
-        "X": 3065.803,
-        "Y": 625.24274
-      }
-    },
-    {
-      "ChildId": "b5c700d4-3e2d-4e5d-a13a-d5d3d0f91c47"/*BlendColors*/,
-      "Position": {
-        "X": 2915.803,
-        "Y": 625.24274
+        "X": 2861.3623,
+        "Y": -181.45036
       }
     },
     {
@@ -47,24 +33,24 @@
       "SnapshotGroupIndex": "1"
     },
     {
-      "ChildId": "ce167dd1-d944-4719-bd17-6e12508738a9"/*Switch*/,
+      "ChildId": "3cf42e29-f4e4-474d-b997-ca30b56cc61e"/*MidiInput*/,
       "Position": {
-        "X": 3080.6016,
+        "X": 3135.454,
+        "Y": 899.9712
+      }
+    },
+    {
+      "ChildId": "56e995bb-aa05-401c-b1e8-9e50118ce679"/*Execute*/,
+      "Position": {
+        "X": 3230.6016,
         "Y": 100.18021
       }
     },
     {
-      "ChildId": "f2b50d5d-d85a-41df-95d8-ee85bb383a23"/*MidiInput*/,
+      "ChildId": "648c8cc7-b7ae-4217-afc2-3d513765f8e3"/*Layer2d*/,
       "Position": {
-        "X": 2765.803,
-        "Y": 625.24274
-      }
-    },
-    {
-      "ChildId": "828ec064-8141-4666-bfb8-86ff69ea405b"/*WaitingScene2*/,
-      "Position": {
-        "X": 2923.8406,
-        "Y": -38.645203
+        "X": 2833.1584,
+        "Y": 279.46408
       }
     },
     {
@@ -82,24 +68,24 @@
       }
     },
     {
-      "ChildId": "10c58821-d00c-4eb7-b07b-b54288b8aaba"/*_PointingFingers*/,
+      "ChildId": "80381820-80e8-4777-ab87-df8e23007f15"/*RenderTarget*/,
+      "Position": {
+        "X": 3380.6016,
+        "Y": 100.18021
+      }
+    },
+    {
+      "ChildId": "828ec064-8141-4666-bfb8-86ff69ea405b"/*WaitingScene2*/,
       "Position": {
         "X": 2923.8406,
-        "Y": 176.3548
+        "Y": -38.645203
       }
     },
     {
-      "ChildId": "10ba18d6-3fb2-4dfa-92b6-5a962b368d2a"/*_FadeFade2*/,
+      "ChildId": "869cbc6b-784a-4e9a-ba6a-f5a7e7315805"/*MasterFade*/,
       "Position": {
-        "X": 2805.5305,
-        "Y": -8.273804
-      }
-    },
-    {
-      "ChildId": "e10bee91-87c2-4008-a6f3-0b092e2aab8c"/*_AVColorRings*/,
-      "Position": {
-        "X": 2731.6282,
-        "Y": 131.58325
+        "X": 3065.803,
+        "Y": 625.24274
       }
     },
     {
@@ -110,24 +96,38 @@
       }
     },
     {
-      "ChildId": "648c8cc7-b7ae-4217-afc2-3d513765f8e3"/*Layer2d*/,
+      "ChildId": "b5c700d4-3e2d-4e5d-a13a-d5d3d0f91c47"/*BlendColors*/,
       "Position": {
-        "X": 2833.1584,
-        "Y": 279.46408
+        "X": 2915.803,
+        "Y": 625.24274
       }
     },
     {
-      "ChildId": "3cf42e29-f4e4-474d-b997-ca30b56cc61e"/*MidiInput*/,
+      "ChildId": "ce167dd1-d944-4719-bd17-6e12508738a9"/*Switch*/,
       "Position": {
-        "X": 3135.454,
-        "Y": 899.9712
+        "X": 3080.6016,
+        "Y": 100.18021
       }
     },
     {
-      "ChildId": "257f80f5-587b-4a57-bf99-8aa891497c97"/*_Wreckage*/,
+      "ChildId": "e10bee91-87c2-4008-a6f3-0b092e2aab8c"/*_AVColorRings*/,
       "Position": {
-        "X": 2861.3623,
-        "Y": -181.45036
+        "X": 2731.6282,
+        "Y": 131.58325
+      }
+    },
+    {
+      "ChildId": "ee536f28-99c8-40e6-853a-b16b3b12bc29"/*SetVJVariables*/,
+      "Position": {
+        "X": 3530.6016,
+        "Y": 100.18021
+      }
+    },
+    {
+      "ChildId": "f2b50d5d-d85a-41df-95d8-ee85bb383a23"/*MidiInput*/,
+      "Position": {
+        "X": 2765.803,
+        "Y": 625.24274
       }
     }
   ],

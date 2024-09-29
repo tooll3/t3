@@ -35,6 +35,20 @@
   ],
   "SymbolChildUis": [
     {
+      "ChildId": "1e1042c2-096e-4830-b516-524737a97307"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 484.3389,
+        "Y": 312.407
+      }
+    },
+    {
+      "ChildId": "47474927-19ae-4c3f-b6df-38fa535c1e64"/*GetSRVProperties*/,
+      "Position": {
+        "X": 64.20232,
+        "Y": 381.3481
+      }
+    },
+    {
       "ChildId": "88bb9f9a-2372-4146-87e6-fdd79020749a"/*ComputeShader*/,
       "Position": {
         "X": 64.20232,
@@ -42,10 +56,10 @@
       }
     },
     {
-      "ChildId": "1e1042c2-096e-4830-b516-524737a97307"/*ComputeShaderStage*/,
+      "ChildId": "999dd83c-deb8-435a-b581-6aed8687309f"/*GetBufferComponents*/,
       "Position": {
-        "X": 484.3389,
-        "Y": 312.407
+        "X": -92.42416,
+        "Y": 444.56506
       }
     },
     {
@@ -61,17 +75,10 @@
       }
     },
     {
-      "ChildId": "47474927-19ae-4c3f-b6df-38fa535c1e64"/*GetSRVProperties*/,
+      "ChildId": "bbd99c67-1cc8-493a-8c45-aa1f944d1d6d"/*HasValueIncreased*/,
       "Position": {
-        "X": 64.20232,
-        "Y": 381.3481
-      }
-    },
-    {
-      "ChildId": "e9b718af-96d7-40aa-af64-2ec1f9a591ac"/*ExecuteBufferUpdate*/,
-      "Position": {
-        "X": 835.0588,
-        "Y": 341.18228
+        "X": 87.54233,
+        "Y": 883.2104
       }
     },
     {
@@ -82,30 +89,23 @@
       }
     },
     {
-      "ChildId": "999dd83c-deb8-435a-b581-6aed8687309f"/*GetBufferComponents*/,
+      "ChildId": "da0fc2e1-4698-475d-8448-2cb4679ad14a"/*And*/,
       "Position": {
-        "X": -92.42416,
-        "Y": 444.56506
+        "X": 237.54233,
+        "Y": 883.2104
+      }
+    },
+    {
+      "ChildId": "e9b718af-96d7-40aa-af64-2ec1f9a591ac"/*ExecuteBufferUpdate*/,
+      "Position": {
+        "X": 835.0588,
+        "Y": 341.18228
       }
     },
     {
       "ChildId": "f4140bfe-485a-4d76-b1c1-b23459e2a0aa"/*Time*/,
       "Position": {
         "X": -62.457672,
-        "Y": 883.2104
-      }
-    },
-    {
-      "ChildId": "bbd99c67-1cc8-493a-8c45-aa1f944d1d6d"/*HasValueIncreased*/,
-      "Position": {
-        "X": 87.54233,
-        "Y": 883.2104
-      }
-    },
-    {
-      "ChildId": "da0fc2e1-4698-475d-8448-2cb4679ad14a"/*And*/,
-      "Position": {
-        "X": 237.54233,
         "Y": 883.2104
       }
     }

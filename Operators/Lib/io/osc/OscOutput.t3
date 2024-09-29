@@ -2,36 +2,36 @@
   "Id": "4e99da86-482f-4037-8664-b2371526d632"/*OscOutput*/,
   "Inputs": [
     {
-      "Id": "3cca3654-2428-4526-8ed6-d1fa088c0bf9"/*SendTrigger*/,
+      "Id": "13b11154-c8f0-453e-a64e-80d602319b73"/*OnlySendChanges*/,
       "DefaultValue": true
     },
     {
-      "Id": "98f38caa-4f79-425c-ab46-22d7dbe62978"/*IpAddress*/,
-      "DefaultValue": "127.0.0.1"
+      "Id": "3cca3654-2428-4526-8ed6-d1fa088c0bf9"/*SendTrigger*/,
+      "DefaultValue": true
     },
     {
       "Id": "6c0e07ba-7ea6-4dab-af0b-61cf9cb74ad7"/*Port*/,
       "DefaultValue": 9000
     },
     {
+      "Id": "827c7ae2-c129-4d04-a715-328c0a86bf8a"/*Values*/,
+      "DefaultValue": 0.0
+    },
+    {
       "Id": "9016e418-7761-4916-aafb-c95599f77f38"/*Address*/,
       "DefaultValue": "/tooll3"
     },
     {
-      "Id": "fdb1d27b-9a9d-47ab-8dbf-7e1bab5b4a24"/*Reconnect*/,
-      "DefaultValue": false
-    },
-    {
-      "Id": "827c7ae2-c129-4d04-a715-328c0a86bf8a"/*Values*/,
-      "DefaultValue": 0.0
+      "Id": "98f38caa-4f79-425c-ab46-22d7dbe62978"/*IpAddress*/,
+      "DefaultValue": "127.0.0.1"
     },
     {
       "Id": "d5e9e9be-093b-4d57-9070-9b2cf33aa45b"/*Strings*/,
       "DefaultValue": "Hello, my name is ..."
     },
     {
-      "Id": "13b11154-c8f0-453e-a64e-80d602319b73"/*OnlySendChanges*/,
-      "DefaultValue": true
+      "Id": "fdb1d27b-9a9d-47ab-8dbf-7e1bab5b4a24"/*Reconnect*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

@@ -3,17 +3,17 @@
   "Description": "An advanced option that allows you to slow down the playback (including audio). This might be useful in some situations, though some details might not work as expected.",
   "InputUis": [
     {
-      "InputId": "4fdef030-d1d1-403a-b16c-a414f63fc913"/*SubGraph*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      }
-    },
-    {
       "InputId": "10f14ef0-7399-4a85-96ad-f445903eec1d"/*SpeedFactor*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
+      }
+    },
+    {
+      "InputId": "4fdef030-d1d1-403a-b16c-a414f63fc913"/*SubGraph*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
       }
     },
     {

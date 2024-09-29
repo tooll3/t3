@@ -3,18 +3,18 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "f7108b07-ff8e-43c4-8c8a-2e4a0345ad2d"/*ImageSequenceClip*/,
+      "Id": "31851d51-c3c5-4a4c-a4e3-ad22d718396a"/*ImageSequenceClip*/,
       "SymbolId": "927a77d5-7bf0-477b-b288-4bb48d4980cd",
       "InputValues": [
-        {
-          "Id": "a1e08fde-2d9b-4a2d-bf09-a5e54ad8cfa0"/*FilePath*/,
-          "Type": "System.String",
-          "Value": "Resources\\user\\1x\\mars-express\\sequence"
-        },
         {
           "Id": "25215a7e-1e38-4370-8845-cbf422a7eb92"/*TriggerUpdate*/,
           "Type": "System.Boolean",
           "Value": false
+        },
+        {
+          "Id": "a1e08fde-2d9b-4a2d-bf09-a5e54ad8cfa0"/*FilePath*/,
+          "Type": "System.String",
+          "Value": "Resources\\user\\1x\\mars-express\\sequence"
         }
       ],
       "Outputs": [
@@ -24,14 +24,14 @@
             "Type": "T3.Core.Animation.TimeClip",
             "TimeClip": {
               "TimeRange": {
-                "Start": 0.0,
-                "End": 15.3575
+                "Start": 30.474417,
+                "End": 35.747528
               },
               "SourceRange": {
-                "Start": 0.0,
-                "End": 15.357504
+                "Start": 30.474417,
+                "End": 35.747528
               },
-              "LayerIndex": 1
+              "LayerIndex": 0
             }
           }
         }
@@ -44,13 +44,19 @@
       "Outputs": []
     },
     {
+      "Id": "6e35fa27-3a22-4c4c-96e5-78bc656e3671"/*Execute*/,
+      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "d825ee6b-89e8-4488-b2df-ff3d50528432"/*MarsAsciiMirrorScene*/,
       "SymbolId": "df176113-ccc4-43e7-a462-5f37fff72fd2",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "6e35fa27-3a22-4c4c-96e5-78bc656e3671"/*Execute*/,
+      "Id": "e06cac0f-bd55-487c-b86a-0db0c8202167"/*Execute*/,
       "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
       "InputValues": [],
       "Outputs": []
@@ -80,18 +86,18 @@
       ]
     },
     {
-      "Id": "31851d51-c3c5-4a4c-a4e3-ad22d718396a"/*ImageSequenceClip*/,
+      "Id": "f7108b07-ff8e-43c4-8c8a-2e4a0345ad2d"/*ImageSequenceClip*/,
       "SymbolId": "927a77d5-7bf0-477b-b288-4bb48d4980cd",
       "InputValues": [
-        {
-          "Id": "a1e08fde-2d9b-4a2d-bf09-a5e54ad8cfa0"/*FilePath*/,
-          "Type": "System.String",
-          "Value": "Resources\\user\\1x\\mars-express\\sequence"
-        },
         {
           "Id": "25215a7e-1e38-4370-8845-cbf422a7eb92"/*TriggerUpdate*/,
           "Type": "System.Boolean",
           "Value": false
+        },
+        {
+          "Id": "a1e08fde-2d9b-4a2d-bf09-a5e54ad8cfa0"/*FilePath*/,
+          "Type": "System.String",
+          "Value": "Resources\\user\\1x\\mars-express\\sequence"
         }
       ],
       "Outputs": [
@@ -101,24 +107,18 @@
             "Type": "T3.Core.Animation.TimeClip",
             "TimeClip": {
               "TimeRange": {
-                "Start": 30.474417,
-                "End": 35.747528
+                "Start": 0.0,
+                "End": 15.3575
               },
               "SourceRange": {
-                "Start": 30.474417,
-                "End": 35.747528
+                "Start": 0.0,
+                "End": 15.357504
               },
-              "LayerIndex": 0
+              "LayerIndex": 1
             }
           }
         }
       ]
-    },
-    {
-      "Id": "e06cac0f-bd55-487c-b86a-0db0c8202167"/*Execute*/,
-      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
-      "InputValues": [],
-      "Outputs": []
     }
   ],
   "Connections": [

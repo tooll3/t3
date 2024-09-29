@@ -3,20 +3,20 @@
   "Description": "Joins the members of a string with a separator.",
   "InputUis": [
     {
-      "InputId": "db366216-b485-48bf-b267-56344b317cf7"/*Input*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "89350e3c-2b83-4720-bfa1-d4adc6cc02fa"/*Separator*/,
       "Position": {
         "X": 0.0,
         "Y": 45.0
       },
       "Usage": "Default"
+    },
+    {
+      "InputId": "db366216-b485-48bf-b267-56344b317cf7"/*Input*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
     }
   ],
   "SymbolChildUis": [],

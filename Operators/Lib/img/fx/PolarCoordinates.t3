@@ -2,8 +2,11 @@
   "Id": "941410e5-2023-43c6-87b1-55386bb048ac"/*PolarCoordinates*/,
   "Inputs": [
     {
-      "Id": "dfa1d71d-2964-41c2-bb04-86a39c36ce6e"/*Image*/,
-      "DefaultValue": null
+      "Id": "4bd38d2f-0c52-456f-9938-b1f571c719fe"/*Stretch*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0
+      }
     },
     {
       "Id": "4c07b8bd-c78d-44ce-bb95-8114284af2bf"/*Center*/,
@@ -13,27 +16,20 @@
       }
     },
     {
-      "Id": "83f2dc32-5830-4558-9137-f6805f3f6ff6"/*Radius*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "d796cbc2-26b4-4805-b1b7-bd23b42d1984"/*RadialBias*/,
-      "DefaultValue": 1.0
+      "Id": "627847c4-5ba3-4852-bb09-2b0d99e05451"/*Twist*/,
+      "DefaultValue": 0.0
     },
     {
       "Id": "6f17f1b4-0b5e-4934-8be1-c8198443fac3"/*RadialOffset*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "627847c4-5ba3-4852-bb09-2b0d99e05451"/*Twist*/,
-      "DefaultValue": 0.0
+      "Id": "83f2dc32-5830-4558-9137-f6805f3f6ff6"/*Radius*/,
+      "DefaultValue": 1.0
     },
     {
-      "Id": "4bd38d2f-0c52-456f-9938-b1f571c719fe"/*Stretch*/,
-      "DefaultValue": {
-        "X": 1.0,
-        "Y": 1.0
-      }
+      "Id": "bfcb7f48-517a-4791-96fa-4aa26862839b"/*Mode*/,
+      "DefaultValue": 0
     },
     {
       "Id": "caa14f08-f004-4af8-a448-116e21106d5b"/*Resolution*/,
@@ -43,14 +39,19 @@
       }
     },
     {
-      "Id": "bfcb7f48-517a-4791-96fa-4aa26862839b"/*Mode*/,
-      "DefaultValue": 0
+      "Id": "d796cbc2-26b4-4805-b1b7-bd23b42d1984"/*RadialBias*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "dfa1d71d-2964-41c2-bb04-86a39c36ce6e"/*Image*/,
+      "DefaultValue": null
     }
   ],
   "Children": [
     {
-      "Id": "872a5ad8-bfc8-4185-9728-114421de2bab"/*Vector2Components*/,
-      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
+      "Id": "33e714dd-8965-43ae-beac-d69d3eaa4b74"/*Padding*/,
+      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
+      "Name": "Padding",
       "InputValues": [],
       "Outputs": []
     },
@@ -61,15 +62,8 @@
       "Outputs": []
     },
     {
-      "Id": "978a7d86-a94f-43c1-9fae-7699b66372e5"/*Vector2Components*/,
+      "Id": "872a5ad8-bfc8-4185-9728-114421de2bab"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "33e714dd-8965-43ae-beac-d69d3eaa4b74"/*Padding*/,
-      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
-      "Name": "Padding",
       "InputValues": [],
       "Outputs": []
     },
@@ -88,6 +82,12 @@
           "Value": "R16G16B16A16_Float"
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "978a7d86-a94f-43c1-9fae-7699b66372e5"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
+      "InputValues": [],
       "Outputs": []
     }
   ],

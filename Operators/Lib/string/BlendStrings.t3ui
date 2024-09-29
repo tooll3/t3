@@ -3,6 +3,13 @@
   "Description": "Blends two strings with a scrambling animation similar to a airport flight display board.",
   "InputUis": [
     {
+      "InputId": "2efd4a0c-958c-49f6-86cb-f8d9fd6fb308"/*Blend*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 135.0
+      }
+    },
+    {
       "InputId": "3197934e-d0ed-4a81-9dc1-2cc63d97ac6f"/*InputTextA*/,
       "Relevancy": "Relevant",
       "Position": {
@@ -10,6 +17,13 @@
         "Y": 45.0
       },
       "Usage": "Multiline"
+    },
+    {
+      "InputId": "c3e0cde4-fecf-4802-a287-a173a6a12518"/*BlendSpread*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 180.0
+      }
     },
     {
       "InputId": "ccc21ecc-2877-4fe7-8d78-f7e2a708d762"/*InputTextB*/,
@@ -21,24 +35,10 @@
       "Usage": "Multiline"
     },
     {
-      "InputId": "2efd4a0c-958c-49f6-86cb-f8d9fd6fb308"/*Blend*/,
+      "InputId": "d70da276-c047-42db-a921-5c1263613cbb"/*MaxLength*/,
       "Position": {
         "X": 0.0,
-        "Y": 135.0
-      }
-    },
-    {
-      "InputId": "c3e0cde4-fecf-4802-a287-a173a6a12518"/*BlendSpread*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 180.0
-      }
-    },
-    {
-      "InputId": "dc4e5b79-53e5-463a-92ad-d9bb1f2b0495"/*Scramble*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 180.0
+        "Y": 270.0
       }
     },
     {
@@ -49,10 +49,10 @@
       }
     },
     {
-      "InputId": "d70da276-c047-42db-a921-5c1263613cbb"/*MaxLength*/,
+      "InputId": "dc4e5b79-53e5-463a-92ad-d9bb1f2b0495"/*Scramble*/,
       "Position": {
         "X": 0.0,
-        "Y": 270.0
+        "Y": 180.0
       }
     }
   ],

@@ -3,17 +3,17 @@
   "Description": "Executes the subgraph only once. This can be useful for initializing buffers or resetting states.",
   "InputUis": [
     {
-      "InputId": "7450033d-5797-40c9-b6c4-b6e8d27fe501"/*Command*/,
-      "Position": {
-        "X": -65.335785,
-        "Y": -64.29319
-      }
-    },
-    {
       "InputId": "2049d44d-81a4-493b-a630-a1b273a4e6f9"/*Trigger*/,
       "Position": {
         "X": -60.470352,
         "Y": 41.356163
+      }
+    },
+    {
+      "InputId": "7450033d-5797-40c9-b6c4-b6e8d27fe501"/*Command*/,
+      "Position": {
+        "X": -65.335785,
+        "Y": -64.29319
       }
     }
   ],

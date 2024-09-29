@@ -3,24 +3,10 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "a2408edd-6629-47e2-89c3-a6626218e049"/*LightIndex*/,
+      "InputId": "0ebf8ac6-e075-47c9-ba7a-8a2fd7b0e342"/*PositionFactor*/,
       "Position": {
         "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "InputId": "2dffe933-1c5a-46df-aa7e-4e41a4cb2017"/*Distance*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      }
-    },
-    {
-      "InputId": "b28c80c4-e713-4635-a256-23211ea4bea9"/*Size*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
+        "Y": 315.0
       }
     },
     {
@@ -31,10 +17,17 @@
       }
     },
     {
-      "InputId": "b6163e2d-1344-4ac5-9704-98e849d3248e"/*Color*/,
+      "InputId": "2dffe933-1c5a-46df-aa7e-4e41a4cb2017"/*Distance*/,
       "Position": {
         "X": -200.0,
-        "Y": 180.0
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "64f0b189-1d1e-4c9c-bf6a-9c42072352cd"/*FxZoneBrightness*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 540.0
       }
     },
     {
@@ -42,20 +35,6 @@
       "Position": {
         "X": -200.0,
         "Y": 225.0
-      }
-    },
-    {
-      "InputId": "e658e0ac-282b-4a56-bdf0-9b7efadc7e02"/*RandomSeed*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 270.0
-      }
-    },
-    {
-      "InputId": "0ebf8ac6-e075-47c9-ba7a-8a2fd7b0e342"/*PositionFactor*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 315.0
       }
     },
     {
@@ -73,10 +52,10 @@
       }
     },
     {
-      "InputId": "f080db28-3d87-4525-8807-619a7a1c72fc"/*InnerFxZone*/,
+      "InputId": "a2408edd-6629-47e2-89c3-a6626218e049"/*LightIndex*/,
       "Position": {
         "X": -200.0,
-        "Y": 450.0
+        "Y": 0.0
       }
     },
     {
@@ -87,10 +66,31 @@
       }
     },
     {
-      "InputId": "64f0b189-1d1e-4c9c-bf6a-9c42072352cd"/*FxZoneBrightness*/,
+      "InputId": "b28c80c4-e713-4635-a256-23211ea4bea9"/*Size*/,
       "Position": {
         "X": -200.0,
-        "Y": 540.0
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "b6163e2d-1344-4ac5-9704-98e849d3248e"/*Color*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "e658e0ac-282b-4a56-bdf0-9b7efadc7e02"/*RandomSeed*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      }
+    },
+    {
+      "InputId": "f080db28-3d87-4525-8807-619a7a1c72fc"/*InnerFxZone*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 450.0
       }
     }
   ],

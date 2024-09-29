@@ -13,25 +13,24 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "29e02a09-9161-42a0-b055-b92d9fb68b9b"/*HasIntChanged*/,
+      "ChildId": "04edba45-b503-4f6c-b33e-a29d471c54cf"/*PlayVideo*/,
       "Position": {
-        "X": 232.24878,
-        "Y": 388.72302
+        "X": 93.77759,
+        "Y": 915.17413
       }
     },
     {
-      "ChildId": "39064685-0e9f-479b-a254-e43cdf9dc52f"/*PlayVideo*/,
+      "ChildId": "06767f17-9860-42c4-ac2e-6fe377e0ada8"/*SetMaterial*/,
       "Position": {
-        "X": -8.364563,
-        "Y": 80.0
-      }
-    },
-    {
-      "ChildId": "cba7d7aa-dc89-48be-b1f0-f4362b802c92"/*GridPoints*/,
-      "Comment": "We create an XY grid of points.",
-      "Position": {
-        "X": 600.0,
+        "X": 1200.0,
         "Y": 166.0
+      }
+    },
+    {
+      "ChildId": "0ddc3103-e552-4ec0-97b0-373b20c189a4"/*CommonPointSets*/,
+      "Position": {
+        "X": 693.7776,
+        "Y": 1166.1742
       }
     },
     {
@@ -43,70 +42,10 @@
       }
     },
     {
-      "ChildId": "215d38c7-2aec-4b7d-9883-94d95ce4e3e9"/*Group*/,
-      "Position": {
-        "X": 1350.0,
-        "Y": 110.0
-      }
-    },
-    {
-      "ChildId": "4c773ea9-a098-459b-a0ea-5224dd98bb3b"/*Layer2d*/,
-      "Comment": "Fade out original image. ",
-      "Position": {
-        "X": 1200.0,
-        "Y": 110.0
-      }
-    },
-    {
       "ChildId": "10b9298d-d0be-4d12-a344-24f69ad89bd5"/*Amount*/,
       "Position": {
         "X": 750.0,
         "Y": 229.0
-      }
-    },
-    {
-      "ChildId": "2e46a895-ae87-4943-9a25-2e8712aefe37"/*Rings*/,
-      "Comment": "Apply some random rotating segments for testing.\n\nAlso note that this automatically converts the video's BGRA format to RGBA.",
-      "Position": {
-        "X": 291.63544,
-        "Y": 40.0
-      }
-    },
-    {
-      "ChildId": "b9f6e8de-6284-4380-8c9c-5849a8300f45"/*Time*/,
-      "Position": {
-        "X": 141.63544,
-        "Y": 103.0
-      }
-    },
-    {
-      "ChildId": "3e0f9ed8-42bb-4470-bebc-34f63be09327"/*SamplePointSimAttributes*/,
-      "Comment": "Sample the optical flow texture and apply the values as offsets to the current point positions.\n\nNotice that this is the \"Sim\" version SamplePointAttributes: It does NOT create a new buffer but manipulates the original \"simulation\" buffer. Thus, this setup is similar to a particle system.",
-      "Position": {
-        "X": 900.0,
-        "Y": 166.0
-      }
-    },
-    {
-      "ChildId": "31e06c35-9609-43b0-9ac9-64be1a441d91"/*RenderTarget*/,
-      "Position": {
-        "X": 1500.0,
-        "Y": 110.0
-      }
-    },
-    {
-      "ChildId": "a6150640-917b-4805-ac9e-536598b4a37d"/*DrawPointsShaded*/,
-      "Comment": "We use shaded points here, to make overlapping points more readable.",
-      "Position": {
-        "X": 1050.0,
-        "Y": 166.0
-      }
-    },
-    {
-      "ChildId": "06767f17-9860-42c4-ac2e-6fe377e0ada8"/*SetMaterial*/,
-      "Position": {
-        "X": 1200.0,
-        "Y": 166.0
       }
     },
     {
@@ -117,32 +56,17 @@
       }
     },
     {
-      "ChildId": "81b93cd2-a150-4073-9596-72cc379daf69"/*ImageLevels*/,
+      "ChildId": "1fc6361f-5c43-4b5c-bb33-cf2d50690001"/*Layer2d*/,
       "Position": {
-        "X": 767.9281,
-        "Y": 500.77332
+        "X": 1151.7695,
+        "Y": 835.17413
       }
     },
     {
-      "ChildId": "04edba45-b503-4f6c-b33e-a29d471c54cf"/*PlayVideo*/,
+      "ChildId": "215d38c7-2aec-4b7d-9883-94d95ce4e3e9"/*Group*/,
       "Position": {
-        "X": 93.77759,
-        "Y": 915.17413
-      }
-    },
-    {
-      "ChildId": "85c3d46f-616d-4470-81c2-53933c9b992b"/*Time*/,
-      "Position": {
-        "X": -56.222412,
-        "Y": 915.17413
-      }
-    },
-    {
-      "ChildId": "5e542058-f818-46fc-9a0b-53b081936d0d"/*OpticalFlow*/,
-      "Comment": "We feed both frames into the optical flow detection.",
-      "Position": {
-        "X": 543.7776,
-        "Y": 1057.1742
+        "X": 1350.0,
+        "Y": 110.0
       }
     },
     {
@@ -154,18 +78,25 @@
       }
     },
     {
-      "ChildId": "566c5a9b-555c-4274-baf6-25d3e55704cd"/*KeepPreviousFrame2*/,
-      "Comment": "The last version of [KeepPreviousFrame] didn't work correctly with non 60fps footage.",
+      "ChildId": "29e02a09-9161-42a0-b055-b92d9fb68b9b"/*HasIntChanged*/,
       "Position": {
-        "X": 393.7776,
-        "Y": 875.17413
+        "X": 232.24878,
+        "Y": 388.72302
       }
     },
     {
-      "ChildId": "cbc9f786-19e2-43f5-90f9-2beaf2b050ab"/*GridPoints*/,
+      "ChildId": "2e46a895-ae87-4943-9a25-2e8712aefe37"/*Rings*/,
+      "Comment": "Apply some random rotating segments for testing.\n\nAlso note that this automatically converts the video's BGRA format to RGBA.",
       "Position": {
-        "X": 693.7776,
-        "Y": 1014.17413
+        "X": 291.63544,
+        "Y": 40.0
+      }
+    },
+    {
+      "ChildId": "31e06c35-9609-43b0-9ac9-64be1a441d91"/*RenderTarget*/,
+      "Position": {
+        "X": 1500.0,
+        "Y": 110.0
       }
     },
     {
@@ -177,24 +108,25 @@
       }
     },
     {
-      "ChildId": "a87d1393-301b-48be-8a8c-028a9bf1732e"/*TextureMapForce*/,
+      "ChildId": "39064685-0e9f-479b-a254-e43cdf9dc52f"/*PlayVideo*/,
       "Position": {
-        "X": 693.7776,
-        "Y": 1057.1742
+        "X": -8.364563,
+        "Y": 80.0
       }
     },
     {
-      "ChildId": "d5e9c363-4567-4a67-8e69-7c9d57722aed"/*Group*/,
+      "ChildId": "3e0f9ed8-42bb-4470-bebc-34f63be09327"/*SamplePointSimAttributes*/,
+      "Comment": "Sample the optical flow texture and apply the values as offsets to the current point positions.\n\nNotice that this is the \"Sim\" version SamplePointAttributes: It does NOT create a new buffer but manipulates the original \"simulation\" buffer. Thus, this setup is similar to a particle system.",
       "Position": {
-        "X": 1592.623,
-        "Y": 822.47424
+        "X": 900.0,
+        "Y": 166.0
       }
     },
     {
-      "ChildId": "1fc6361f-5c43-4b5c-bb33-cf2d50690001"/*Layer2d*/,
+      "ChildId": "42564df3-855f-4fd3-b6bc-64785046885a"/*DrawLines*/,
       "Position": {
-        "X": 1151.7695,
-        "Y": 835.17413
+        "X": 1293.7776,
+        "Y": 1014.17413
       }
     },
     {
@@ -206,17 +138,34 @@
       }
     },
     {
-      "ChildId": "0ddc3103-e552-4ec0-97b0-373b20c189a4"/*CommonPointSets*/,
+      "ChildId": "4c773ea9-a098-459b-a0ea-5224dd98bb3b"/*Layer2d*/,
+      "Comment": "Fade out original image. ",
       "Position": {
-        "X": 693.7776,
-        "Y": 1166.1742
+        "X": 1200.0,
+        "Y": 110.0
       }
     },
     {
-      "ChildId": "9b1c328b-c37e-404e-812d-b689aeb2fd48"/*TransformPoints*/,
+      "ChildId": "4dc73458-f9c5-45a3-af3b-bfee74772a06"/*KeepPreviousFrame2*/,
       "Position": {
-        "X": 843.7776,
-        "Y": 1166.1742
+        "X": 450.0,
+        "Y": 382.0
+      }
+    },
+    {
+      "ChildId": "566c5a9b-555c-4274-baf6-25d3e55704cd"/*KeepPreviousFrame2*/,
+      "Comment": "The last version of [KeepPreviousFrame] didn't work correctly with non 60fps footage.",
+      "Position": {
+        "X": 393.7776,
+        "Y": 875.17413
+      }
+    },
+    {
+      "ChildId": "5e542058-f818-46fc-9a0b-53b081936d0d"/*OpticalFlow*/,
+      "Comment": "We feed both frames into the optical flow detection.",
+      "Position": {
+        "X": 543.7776,
+        "Y": 1057.1742
       }
     },
     {
@@ -227,9 +176,60 @@
       }
     },
     {
-      "ChildId": "42564df3-855f-4fd3-b6bc-64785046885a"/*DrawLines*/,
+      "ChildId": "81b93cd2-a150-4073-9596-72cc379daf69"/*ImageLevels*/,
       "Position": {
-        "X": 1293.7776,
+        "X": 767.9281,
+        "Y": 500.77332
+      }
+    },
+    {
+      "ChildId": "85c3d46f-616d-4470-81c2-53933c9b992b"/*Time*/,
+      "Position": {
+        "X": -56.222412,
+        "Y": 915.17413
+      }
+    },
+    {
+      "ChildId": "9b1c328b-c37e-404e-812d-b689aeb2fd48"/*TransformPoints*/,
+      "Position": {
+        "X": 843.7776,
+        "Y": 1166.1742
+      }
+    },
+    {
+      "ChildId": "a6150640-917b-4805-ac9e-536598b4a37d"/*DrawPointsShaded*/,
+      "Comment": "We use shaded points here, to make overlapping points more readable.",
+      "Position": {
+        "X": 1050.0,
+        "Y": 166.0
+      }
+    },
+    {
+      "ChildId": "a87d1393-301b-48be-8a8c-028a9bf1732e"/*TextureMapForce*/,
+      "Position": {
+        "X": 693.7776,
+        "Y": 1057.1742
+      }
+    },
+    {
+      "ChildId": "b9f6e8de-6284-4380-8c9c-5849a8300f45"/*Time*/,
+      "Position": {
+        "X": 141.63544,
+        "Y": 103.0
+      }
+    },
+    {
+      "ChildId": "cba7d7aa-dc89-48be-b1f0-f4362b802c92"/*GridPoints*/,
+      "Comment": "We create an XY grid of points.",
+      "Position": {
+        "X": 600.0,
+        "Y": 166.0
+      }
+    },
+    {
+      "ChildId": "cbc9f786-19e2-43f5-90f9-2beaf2b050ab"/*GridPoints*/,
+      "Position": {
+        "X": 693.7776,
         "Y": 1014.17413
       }
     },
@@ -241,10 +241,10 @@
       }
     },
     {
-      "ChildId": "4dc73458-f9c5-45a3-af3b-bfee74772a06"/*KeepPreviousFrame2*/,
+      "ChildId": "d5e9c363-4567-4a67-8e69-7c9d57722aed"/*Group*/,
       "Position": {
-        "X": 450.0,
-        "Y": 382.0
+        "X": 1592.623,
+        "Y": 822.47424
       }
     }
   ],

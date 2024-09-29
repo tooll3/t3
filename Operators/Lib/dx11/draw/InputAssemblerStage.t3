@@ -6,11 +6,11 @@
       "DefaultValue": "TriangleList"
     },
     {
-      "Id": "b8e07473-60f9-4f5e-995d-7165ef8f7993"/*InputLayout*/,
+      "Id": "4a1703d4-5958-4ede-a755-79a12fe85f3b"/*VertexBuffers*/,
       "DefaultValue": null
     },
     {
-      "Id": "4a1703d4-5958-4ede-a755-79a12fe85f3b"/*VertexBuffers*/,
+      "Id": "b8e07473-60f9-4f5e-995d-7165ef8f7993"/*InputLayout*/,
       "DefaultValue": null
     },
     {

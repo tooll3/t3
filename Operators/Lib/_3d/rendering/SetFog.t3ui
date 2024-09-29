@@ -3,11 +3,14 @@
   "Description": "Adds Fog to the incoming scene.\n\nProTip: If large meshes (for example a \"quadmesh\" as a ground plane) are not properly obscured by the fog, one possible reason could be that the tessellation is not high enough.\n\nAlso see [SetEnvironment] and [DepthBufferAsGrayScale]",
   "InputUis": [
     {
-      "InputId": "afadb109-37b2-49aa-8c32-627cc35fd574"/*Command*/,
+      "InputId": "53479387-1c04-4fbc-b093-043075495e10"/*Bias*/,
       "Position": {
         "X": -200.0,
-        "Y": 0.0
-      }
+        "Y": 90.0
+      },
+      "Description": "Defines the thickness and gradations of the fog.\n\nA lower bias creates thin fog. \nMeaning that the distance between the beginning of the fog until it becomes dense is very long. \n\nA high bias creates dense fog.\nThe area in which it completely obscures the view is only a short distance behind the area in which it begins.\n",
+      "Min": 0.0,
+      "Max": 10.0
     },
     {
       "InputId": "7a331539-33ea-48b9-8930-daf93dd33d7c"/*Distance*/,
@@ -22,14 +25,11 @@
       "Scale": 0.1
     },
     {
-      "InputId": "53479387-1c04-4fbc-b093-043075495e10"/*Bias*/,
+      "InputId": "afadb109-37b2-49aa-8c32-627cc35fd574"/*Command*/,
       "Position": {
         "X": -200.0,
-        "Y": 90.0
-      },
-      "Description": "Defines the thickness and gradations of the fog.\n\nA lower bias creates thin fog. \nMeaning that the distance between the beginning of the fog until it becomes dense is very long. \n\nA high bias creates dense fog.\nThe area in which it completely obscures the view is only a short distance behind the area in which it begins.\n",
-      "Min": 0.0,
-      "Max": 10.0
+        "Y": 0.0
+      }
     },
     {
       "InputId": "ef8c86ee-16c0-446e-9ce0-c6342adbf32a"/*Color*/,

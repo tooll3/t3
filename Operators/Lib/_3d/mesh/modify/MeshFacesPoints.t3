@@ -2,12 +2,8 @@
   "Id": "58a490b1-eb8a-4102-906a-f74a79c0ad1c"/*MeshFacesPoints*/,
   "Inputs": [
     {
-      "Id": "bad1db42-201c-4d3b-8e62-82e812a8388f"/*InputMesh*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "9361aeff-d96f-400c-8837-7d98fb6da99e"/*W*/,
-      "DefaultValue": 100.0
+      "Id": "13184872-063b-473a-bf3d-68cd1356a261"/*StretchZ*/,
+      "DefaultValue": 1.0
     },
     {
       "Id": "67b24f6d-61d1-49df-9e86-4555474f91b4"/*OffsetByTBN*/,
@@ -18,8 +14,12 @@
       }
     },
     {
-      "Id": "13184872-063b-473a-bf3d-68cd1356a261"/*StretchZ*/,
-      "DefaultValue": 1.0
+      "Id": "9361aeff-d96f-400c-8837-7d98fb6da99e"/*W*/,
+      "DefaultValue": 100.0
+    },
+    {
+      "Id": "bad1db42-201c-4d3b-8e62-82e812a8388f"/*InputMesh*/,
+      "DefaultValue": null
     },
     {
       "Id": "ffe056e2-c937-4d91-a2ad-73e7988ea994"/*Color*/,
@@ -33,39 +33,14 @@
   ],
   "Children": [
     {
-      "Id": "731a874d-edcf-4696-ba28-74eb2b99c345"/*StructuredBufferWithViews*/,
-      "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
-      "InputValues": [
-        {
-          "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
-          "Type": "System.Int32",
-          "Value": 32
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "64a97ffa-5d37-4f71-8600-ce1b96356fec"/*ExecuteBufferUpdate*/,
-      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "0c932816-d258-4b9d-bd8f-45e00d568847"/*FloatsToBuffer*/,
       "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "bc6b09a9-48f4-47e3-9dc1-f173c6b8fbbb"/*GetVertices*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "Name": "GetVertices",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "becb3679-ebff-4ab8-9110-8560e2bc94cc"/*Vector3Components*/,
-      "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
+      "Id": "3fc45ea2-d624-44a7-8d4b-101350281789"/*GetSRVProperties*/,
+      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
       "InputValues": [],
       "Outputs": []
     },
@@ -77,6 +52,49 @@
           "Id": "7773837e-104a-4b3d-a41f-cadbd9249af2"/*Float*/,
           "Type": "System.Single",
           "Value": 1.0
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "5a875125-82e9-41ed-9248-2692d05d1e5a"/*GetIndices*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "Name": "GetIndices",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "5e4a88a1-7a40-4ecb-8690-272f33a98488"/*Vector4Components*/,
+      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "64a97ffa-5d37-4f71-8600-ce1b96356fec"/*ExecuteBufferUpdate*/,
+      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "66fa7660-485c-4c3e-a770-1be56f146f48"/*IntValue*/,
+      "SymbolId": "cc07b314-4582-4c2c-84b8-bb32f59fc09b",
+      "InputValues": [
+        {
+          "Id": "4515c98e-05bc-4186-8773-4d2b31a8c323"/*Int*/,
+          "Type": "System.Int32",
+          "Value": 64
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "731a874d-edcf-4696-ba28-74eb2b99c345"/*StructuredBufferWithViews*/,
+      "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
+      "InputValues": [
+        {
+          "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
+          "Type": "System.Int32",
+          "Value": 32
         }
       ],
       "Outputs": []
@@ -94,14 +112,33 @@
       "Outputs": []
     },
     {
-      "Id": "5e4a88a1-7a40-4ecb-8690-272f33a98488"/*Vector4Components*/,
-      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "Id": "811deaa0-7f9c-49a4-b722-6126179566e9"/*CalcDispatchCount*/,
+      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "3fc45ea2-d624-44a7-8d4b-101350281789"/*GetSRVProperties*/,
-      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
+      "Id": "a60671a7-e9f8-43ed-a965-bbf8c05650d8"/*_MeshBufferComponents*/,
+      "SymbolId": "5b9f1d97-4e10-4f31-ba83-4cbf7be9719b",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "bc6b09a9-48f4-47e3-9dc1-f173c6b8fbbb"/*GetVertices*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "Name": "GetVertices",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "becb3679-ebff-4ab8-9110-8560e2bc94cc"/*Vector3Components*/,
+      "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "d1870851-3e14-42eb-8aa2-45335642570b"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
       "InputValues": [],
       "Outputs": []
     },
@@ -119,43 +156,6 @@
           }
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "811deaa0-7f9c-49a4-b722-6126179566e9"/*CalcDispatchCount*/,
-      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "66fa7660-485c-4c3e-a770-1be56f146f48"/*IntValue*/,
-      "SymbolId": "cc07b314-4582-4c2c-84b8-bb32f59fc09b",
-      "InputValues": [
-        {
-          "Id": "4515c98e-05bc-4186-8773-4d2b31a8c323"/*Int*/,
-          "Type": "System.Int32",
-          "Value": 64
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "d1870851-3e14-42eb-8aa2-45335642570b"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "5a875125-82e9-41ed-9248-2692d05d1e5a"/*GetIndices*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "Name": "GetIndices",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "a60671a7-e9f8-43ed-a965-bbf8c05650d8"/*_MeshBufferComponents*/,
-      "SymbolId": "5b9f1d97-4e10-4f31-ba83-4cbf7be9719b",
-      "InputValues": [],
       "Outputs": []
     }
   ],

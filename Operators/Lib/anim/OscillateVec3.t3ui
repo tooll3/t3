@@ -3,6 +3,40 @@
   "Description": "A helper that combines 3 sin waves into a vector\n\nSimilar Operators [OscillateVec2] [AnimValue] [AnimVec2] [AnimVec3]",
   "InputUis": [
     {
+      "InputId": "0c53c29e-7e33-40b3-8825-945e55c84ad5"/*Offset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      },
+      "Description": "Increases / decreases the values of the curves on the vertical axis up and down"
+    },
+    {
+      "InputId": "4c94a39e-88d9-4b7f-bbbf-42e80f9627ef"/*Amplitude*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Description": "Increases the highest and lowest point of the curves",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "8ce12440-49a0-4b0b-afea-bfbbaa4f899d"/*Period*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      },
+      "Description": "Increases / decreases the time it takes to draw a curve for each curve",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "9505b4aa-0ee1-4d0a-b215-f17194c71be4"/*AmplitudeScale*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      },
+      "Description": "Uniformly scales the amplitude of all curves"
+    },
+    {
       "InputId": "9a54d73f-0cd4-4ba2-afc2-8e8bc156c6ba"/*SpeedFactor*/,
       "Position": {
         "X": -200.0,
@@ -19,46 +53,12 @@
       "Description": "Input to override the standard time"
     },
     {
-      "InputId": "4c94a39e-88d9-4b7f-bbbf-42e80f9627ef"/*Amplitude*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      },
-      "Description": "Increases the highest and lowest point of the curves",
-      "AddPadding": "True"
-    },
-    {
-      "InputId": "9505b4aa-0ee1-4d0a-b215-f17194c71be4"/*AmplitudeScale*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
-      },
-      "Description": "Uniformly scales the amplitude of all curves"
-    },
-    {
-      "InputId": "8ce12440-49a0-4b0b-afea-bfbbaa4f899d"/*Period*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 135.0
-      },
-      "Description": "Increases / decreases the time it takes to draw a curve for each curve",
-      "AddPadding": "True"
-    },
-    {
       "InputId": "b3b06a36-ea91-4b26-88ac-dede32123ee6"/*Phase*/,
       "Position": {
         "X": -200.0,
         "Y": 180.0
       },
       "Description": "Moves the phase of the curves back and forth on the time axis"
-    },
-    {
-      "InputId": "0c53c29e-7e33-40b3-8825-945e55c84ad5"/*Offset*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 225.0
-      },
-      "Description": "Increases / decreases the values of the curves on the vertical axis up and down"
     }
   ],
   "SymbolChildUis": [],

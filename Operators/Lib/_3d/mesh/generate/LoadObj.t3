@@ -6,20 +6,20 @@
       "DefaultValue": "Resources\\common\\meshes\\marblePlayer.obj"
     },
     {
-      "Id": "ffd22736-a600-4c97-a4a4-ad3526b8b35c"/*UseGPUCaching*/,
-      "DefaultValue": false
-    },
-    {
-      "Id": "ddd22736-a600-4c97-a4a4-ad3526b8b35c"/*ClearGPUCache*/,
-      "DefaultValue": false
-    },
-    {
       "Id": "aa19e71d-329c-448b-901c-565bf8c0da4f"/*SortVertices*/,
       "DefaultValue": 6
     },
     {
       "Id": "c39a61b3-fb6b-4611-8f13-273f13c9c491"/*ScaleFactor*/,
       "DefaultValue": 1.0
+    },
+    {
+      "Id": "ddd22736-a600-4c97-a4a4-ad3526b8b35c"/*ClearGPUCache*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "ffd22736-a600-4c97-a4a4-ad3526b8b35c"/*UseGPUCaching*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

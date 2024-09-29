@@ -2,12 +2,12 @@
   "Id": "0d4f4e07-5cb2-4d80-bf8e-3deadf968724"/*Xor*/,
   "Inputs": [
     {
-      "Id": "efce4921-6e52-4eca-982e-ddd8d2e8f181"/*A*/,
-      "DefaultValue": false
-    },
-    {
       "Id": "cc0fdde0-a5a9-4fbd-b85b-ddfba37a85ac"/*B*/,
       "DefaultValue": true
+    },
+    {
+      "Id": "efce4921-6e52-4eca-982e-ddd8d2e8f181"/*A*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

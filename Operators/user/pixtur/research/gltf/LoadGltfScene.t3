@@ -6,6 +6,14 @@
       "DefaultValue": "Resources\\examples\\assets\\DamagedHelmet.glb"
     },
     {
+      "Id": "49237499-9b1e-4371-afac-4e3394868370"/*OffsetMetallic*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "57f129ae-0b2e-465d-8c0e-f6259fdd37ce"/*CombineBuffer*/,
+      "DefaultValue": false
+    },
+    {
       "Id": "d02f41a6-1a6b-4a6e-8d6c-a28873c79f2c"/*Setup*/,
       "DefaultValue": {
         "SceneSetup": {
@@ -14,20 +22,12 @@
       }
     },
     {
-      "Id": "57f129ae-0b2e-465d-8c0e-f6259fdd37ce"/*CombineBuffer*/,
-      "DefaultValue": false
-    },
-    {
-      "Id": "ef7075e9-4bc2-442e-8e0c-e03667ff2e0a"/*TriggerUpdate*/,
-      "DefaultValue": false
-    },
-    {
       "Id": "d7ae3173-c490-47cf-8d4b-4c25102f6904"/*OffsetRoughness*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "49237499-9b1e-4371-afac-4e3394868370"/*OffsetMetallic*/,
-      "DefaultValue": 0.0
+      "Id": "ef7075e9-4bc2-442e-8e0c-e03667ff2e0a"/*TriggerUpdate*/,
+      "DefaultValue": false
     },
     {
       "Id": "fb325383-754a-4702-aff2-c19e16363460"/*MeshChildIndex*/,

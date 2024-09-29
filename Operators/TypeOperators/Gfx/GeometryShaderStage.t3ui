@@ -17,14 +17,14 @@
       }
     },
     {
-      "InputId": "d17f9020-a7ad-4419-b11a-c48667cfc52e"/*ShaderResources*/,
+      "InputId": "7173630b-d7fd-4aa1-9398-d7e028e5df03"/*SamplerStates*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
       }
     },
     {
-      "InputId": "7173630b-d7fd-4aa1-9398-d7e028e5df03"/*SamplerStates*/,
+      "InputId": "d17f9020-a7ad-4419-b11a-c48667cfc52e"/*ShaderResources*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0

@@ -2,12 +2,12 @@
   "Id": "e9a0bdfd-6f6e-41e2-8c0c-cd5fee26e359"/*PickPointList*/,
   "Inputs": [
     {
-      "Id": "c00f5af4-efb6-4a9d-b0ad-d8dbc69eed23"/*Input*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "8b418dcd-e7cd-4bce-a69e-a9a543426bfe"/*Index*/,
       "DefaultValue": 0
+    },
+    {
+      "Id": "c00f5af4-efb6-4a9d-b0ad-d8dbc69eed23"/*Input*/,
+      "DefaultValue": null
     }
   ],
   "Children": [],

@@ -3,19 +3,19 @@
   "Description": "Wraps a string a column width",
   "InputUis": [
     {
+      "InputId": "545629c0-c027-4e7c-888c-8e0589940d9d"/*WrapColumn*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 90.0
+      }
+    },
+    {
       "InputId": "85ad6b56-45eb-484e-b7d9-a93d52f8e54d"/*InputText*/,
       "Position": {
         "X": 0.0,
         "Y": 45.0
       },
       "Usage": "Default"
-    },
-    {
-      "InputId": "545629c0-c027-4e7c-888c-8e0589940d9d"/*WrapColumn*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 90.0
-      }
     },
     {
       "InputId": "9a474693-b2f2-4293-bb52-2f9401a0c928"/*Mode*/,

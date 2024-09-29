@@ -6,19 +6,37 @@
       "DefaultValue": null
     },
     {
-      "Id": "3ed0658d-8193-4225-85ca-9663a2980c21"/*PointsB*/,
-      "DefaultValue": null
+      "Id": "14c297b7-9bc6-4fda-84e1-40ac6a574d2b"/*PairingMethod*/,
+      "DefaultValue": 0
     },
     {
       "Id": "183fee93-ce5b-4e65-9fa6-74e28b102ae2"/*BlendFactor*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "14c297b7-9bc6-4fda-84e1-40ac6a574d2b"/*PairingMethod*/,
-      "DefaultValue": 0
+      "Id": "3ed0658d-8193-4225-85ca-9663a2980c21"/*PointsB*/,
+      "DefaultValue": null
     }
   ],
   "Children": [
+    {
+      "Id": "15c144bc-3d4a-4f6a-84af-fd5064489a3b"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "2b9eb84c-03f3-4c49-b9eb-86abcc1e46f0"/*ExecuteBufferUpdate*/,
+      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "2d7a3a05-e4b3-4c2a-a0f9-22886aeb6572"/*GetSRVProperties*/,
+      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
+      "InputValues": [],
+      "Outputs": []
+    },
     {
       "Id": "3d30b582-43cd-4987-9298-c623899e0b00"/*GetSRVProperties*/,
       "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
@@ -26,15 +44,15 @@
       "Outputs": []
     },
     {
-      "Id": "b36a949a-dd2c-490e-9d48-480fb9f648b0"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "15c144bc-3d4a-4f6a-84af-fd5064489a3b"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
+      "Id": "4f762afb-bf16-45d8-946e-74a8e8fceb17"/*HasTimeChanged*/,
+      "SymbolId": "2443b2fd-c397-4ea6-9588-b595f918cf01",
+      "InputValues": [
+        {
+          "Id": "bc112889-77a8-4967-a9b7-683b7c7017fe"/*Mode*/,
+          "Type": "System.Int32",
+          "Value": 3
+        }
+      ],
       "Outputs": []
     },
     {
@@ -66,19 +84,13 @@
       "Outputs": []
     },
     {
-      "Id": "2d7a3a05-e4b3-4c2a-a0f9-22886aeb6572"/*GetSRVProperties*/,
-      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "4f762afb-bf16-45d8-946e-74a8e8fceb17"/*HasTimeChanged*/,
-      "SymbolId": "2443b2fd-c397-4ea6-9588-b595f918cf01",
+      "Id": "6d8dd534-2ad6-4d5a-a772-d7e7164e0cba"/*ComputeShader*/,
+      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
       "InputValues": [
         {
-          "Id": "bc112889-77a8-4967-a9b7-683b7c7017fe"/*Mode*/,
-          "Type": "System.Int32",
-          "Value": 3
+          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\points\\combine\\SimBlendTo.hlsl"
         }
       ],
       "Outputs": []
@@ -90,14 +102,14 @@
       "Outputs": []
     },
     {
-      "Id": "c7f0ae66-b1b6-46cd-829f-50de8aa50482"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "Id": "b36a949a-dd2c-490e-9d48-480fb9f648b0"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "2b9eb84c-03f3-4c49-b9eb-86abcc1e46f0"/*ExecuteBufferUpdate*/,
-      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
+      "Id": "c7f0ae66-b1b6-46cd-829f-50de8aa50482"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
       "InputValues": [],
       "Outputs": []
     },
@@ -111,18 +123,6 @@
       "Id": "dde3c4cf-0c93-47e4-ae42-3051b66617ef"/*IntToFloat*/,
       "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
       "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "6d8dd534-2ad6-4d5a-a772-d7e7164e0cba"/*ComputeShader*/,
-      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
-      "InputValues": [
-        {
-          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\points\\combine\\SimBlendTo.hlsl"
-        }
-      ],
       "Outputs": []
     }
   ],

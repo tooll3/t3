@@ -11,34 +11,6 @@
       }
     },
     {
-      "ChildId": "c5160e61-bee2-42eb-818e-089a9ef0ae5d"/*DrawPoints*/,
-      "Position": {
-        "X": 633.35236,
-        "Y": 0.0
-      }
-    },
-    {
-      "ChildId": "c1a51960-b649-46d4-9589-dddc6f3ef7f9"/*FilterPoints*/,
-      "Position": {
-        "X": 299.9999,
-        "Y": 83.569336
-      }
-    },
-    {
-      "ChildId": "7cb227e5-c654-4e6e-af7e-feea20aec4f0"/*PointsToCPU*/,
-      "Position": {
-        "X": 483.35236,
-        "Y": 186.0
-      }
-    },
-    {
-      "ChildId": "8705f675-cc45-4587-b6e8-c1459bf858e2"/*GetPointDataFromList*/,
-      "Position": {
-        "X": 633.35236,
-        "Y": 186.0
-      }
-    },
-    {
       "ChildId": "14d045a5-25e2-4ebf-9116-f22f6f51b5c5"/*Camera*/,
       "Position": {
         "X": 933.35236,
@@ -46,10 +18,10 @@
       }
     },
     {
-      "ChildId": "8017e708-b07a-4534-a57d-fb3b365c7e43"/*DampVec3*/,
+      "ChildId": "4bfca9eb-9373-44bc-92dc-835cb3548701"/*Execute*/,
       "Position": {
         "X": 783.35236,
-        "Y": 186.0
+        "Y": 0.0
       }
     },
     {
@@ -60,10 +32,31 @@
       }
     },
     {
-      "ChildId": "4bfca9eb-9373-44bc-92dc-835cb3548701"/*Execute*/,
+      "ChildId": "75458cd6-2d25-4bb9-a667-dfb2c6caf577"/*RenderTarget*/,
+      "Position": {
+        "X": 1099.0173,
+        "Y": 11.404541
+      }
+    },
+    {
+      "ChildId": "7cb227e5-c654-4e6e-af7e-feea20aec4f0"/*PointsToCPU*/,
+      "Position": {
+        "X": 483.35236,
+        "Y": 186.0
+      }
+    },
+    {
+      "ChildId": "8017e708-b07a-4534-a57d-fb3b365c7e43"/*DampVec3*/,
       "Position": {
         "X": 783.35236,
-        "Y": 0.0
+        "Y": 186.0
+      }
+    },
+    {
+      "ChildId": "8705f675-cc45-4587-b6e8-c1459bf858e2"/*GetPointDataFromList*/,
+      "Position": {
+        "X": 633.35236,
+        "Y": 186.0
       }
     },
     {
@@ -81,10 +74,17 @@
       }
     },
     {
-      "ChildId": "75458cd6-2d25-4bb9-a667-dfb2c6caf577"/*RenderTarget*/,
+      "ChildId": "c1a51960-b649-46d4-9589-dddc6f3ef7f9"/*FilterPoints*/,
       "Position": {
-        "X": 1099.0173,
-        "Y": 11.404541
+        "X": 299.9999,
+        "Y": 83.569336
+      }
+    },
+    {
+      "ChildId": "c5160e61-bee2-42eb-818e-089a9ef0ae5d"/*DrawPoints*/,
+      "Position": {
+        "X": 633.35236,
+        "Y": 0.0
       }
     }
   ],

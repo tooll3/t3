@@ -3,6 +3,13 @@
   "Description": "Composes a Vector3 by selecting floats from a list.\nThis can be useful for converting data from OSC messages into positions or rotations.",
   "InputUis": [
     {
+      "InputId": "3bff7193-765c-4962-95f5-3e659ed18ed0"/*IndexForZ*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 135.0
+      }
+    },
+    {
       "InputId": "5166e16a-7366-4907-8b9d-5a9f81a93864"/*Input*/,
       "Position": {
         "X": 0.0,
@@ -14,20 +21,6 @@
       "Position": {
         "X": 0.0,
         "Y": 45.0
-      }
-    },
-    {
-      "InputId": "b74c8e3a-3952-47e9-a41e-4f1d78e3f3bf"/*IndexForY*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 90.0
-      }
-    },
-    {
-      "InputId": "3bff7193-765c-4962-95f5-3e659ed18ed0"/*IndexForZ*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 135.0
       }
     },
     {
@@ -49,6 +42,13 @@
       "Position": {
         "X": 0.0,
         "Y": 270.0
+      }
+    },
+    {
+      "InputId": "b74c8e3a-3952-47e9-a41e-4f1d78e3f3bf"/*IndexForY*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 90.0
       }
     }
   ],

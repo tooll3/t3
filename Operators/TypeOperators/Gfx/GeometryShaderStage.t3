@@ -10,11 +10,11 @@
       "DefaultValue": null
     },
     {
-      "Id": "d17f9020-a7ad-4419-b11a-c48667cfc52e"/*ShaderResources*/,
+      "Id": "7173630b-d7fd-4aa1-9398-d7e028e5df03"/*SamplerStates*/,
       "DefaultValue": null
     },
     {
-      "Id": "7173630b-d7fd-4aa1-9398-d7e028e5df03"/*SamplerStates*/,
+      "Id": "d17f9020-a7ad-4419-b11a-c48667cfc52e"/*ShaderResources*/,
       "DefaultValue": null
     }
   ],

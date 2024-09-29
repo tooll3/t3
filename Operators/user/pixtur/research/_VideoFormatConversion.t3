@@ -12,18 +12,6 @@
   ],
   "Children": [
     {
-      "Id": "b4c81a44-0891-4d51-85a0-553e8a210c94"/*CalcInt2DispatchCount*/,
-      "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "4832c6ed-11b1-4e90-96a3-09d91eaa08c6"/*SrvFromTexture2d*/,
-      "SymbolId": "c2078514-cf1d-439c-a732-0d7b31b5084a",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "014998dd-3b42-43b9-9ee8-b9d60ed95470"/*ComputeShader*/,
       "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
       "InputValues": [
@@ -36,9 +24,25 @@
       "Outputs": []
     },
     {
-      "Id": "35c2260c-b5b2-4dd0-b93a-adb08cf6f385"/*ExecuteTextureUpdate*/,
-      "SymbolId": "6c2f8241-9f4b-451e-8a1d-871631d21163",
-      "InputValues": [],
+      "Id": "14a39e6d-6847-4a57-8aa1-9329e2bd98fa"/*SamplerState*/,
+      "SymbolId": "9515d59d-0bd5-406b-96da-6a5f60215700",
+      "InputValues": [
+        {
+          "Id": "93d8bf26-5067-4ccc-b4cb-e03970686462"/*AddressW*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "Mirror"
+        },
+        {
+          "Id": "e7c95fd5-14d1-434f-a140-f22ef69076ab"/*AddressU*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "Mirror"
+        },
+        {
+          "Id": "fdeb503f-09c6-48d1-8853-7426f68cdec3"/*AddressV*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "Mirror"
+        }
+      ],
       "Outputs": []
     },
     {
@@ -54,14 +58,14 @@
       "Outputs": []
     },
     {
-      "Id": "dce42014-be5f-450e-809d-f7594572b48a"/*UavFromTexture2d*/,
-      "SymbolId": "84e02044-3011-4a5e-b76a-c904d9b4557f",
+      "Id": "35c2260c-b5b2-4dd0-b93a-adb08cf6f385"/*ExecuteTextureUpdate*/,
+      "SymbolId": "6c2f8241-9f4b-451e-8a1d-871631d21163",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "f4f6123c-4bd0-463b-bd4f-9f1ec216b480"/*FloatsToBuffer*/,
-      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
+      "Id": "4832c6ed-11b1-4e90-96a3-09d91eaa08c6"/*SrvFromTexture2d*/,
+      "SymbolId": "c2078514-cf1d-439c-a732-0d7b31b5084a",
       "InputValues": [],
       "Outputs": []
     },
@@ -69,14 +73,6 @@
       "Id": "6d97517f-50cb-4174-84da-f5076cb72a94"/*Texture2d*/,
       "SymbolId": "f52db9a4-fde9-49ca-9ef7-131825c34e65",
       "InputValues": [
-        {
-          "Id": "b77088a9-2676-4caa-809a-5e0f120d25d7"/*Size*/,
-          "Type": "T3.Core.DataTypes.Vector.Int2",
-          "Value": {
-            "X": 256,
-            "Y": 256
-          }
-        },
         {
           "Id": "58ff26e7-6beb-44cb-910b-fe467402cee9"/*MipLevels*/,
           "Type": "System.Int32",
@@ -88,6 +84,14 @@
           "Value": "R32G32_Float"
         },
         {
+          "Id": "b77088a9-2676-4caa-809a-5e0f120d25d7"/*Size*/,
+          "Type": "T3.Core.DataTypes.Vector.Int2",
+          "Value": {
+            "X": 256,
+            "Y": 256
+          }
+        },
+        {
           "Id": "cfebc37f-6813-416a-9073-e48d31074115"/*BindFlags*/,
           "Type": "SharpDX.Direct3D11.BindFlags",
           "Value": "ShaderResource, UnorderedAccess"
@@ -96,31 +100,20 @@
       "Outputs": []
     },
     {
-      "Id": "14a39e6d-6847-4a57-8aa1-9329e2bd98fa"/*SamplerStateOp*/,
-      "SymbolId": "9515d59d-0bd5-406b-96da-6a5f60215700",
-      "InputValues": [
-        {
-          "Id": "e7c95fd5-14d1-434f-a140-f22ef69076ab"/*AddressU*/,
-          "Type": "SharpDX.Direct3D11.TextureAddressMode",
-          "Value": "Mirror"
-        },
-        {
-          "Id": "fdeb503f-09c6-48d1-8853-7426f68cdec3"/*AddressV*/,
-          "Type": "SharpDX.Direct3D11.TextureAddressMode",
-          "Value": "Mirror"
-        },
-        {
-          "Id": "93d8bf26-5067-4ccc-b4cb-e03970686462"/*AddressW*/,
-          "Type": "SharpDX.Direct3D11.TextureAddressMode",
-          "Value": "Mirror"
-        }
-      ],
+      "Id": "b4c81a44-0891-4d51-85a0-553e8a210c94"/*CalcInt2DispatchCount*/,
+      "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
+      "InputValues": [],
       "Outputs": []
     },
     {
       "Id": "c7ac6729-fb17-4e8e-88ef-df9a92a345c4"/*ComputeShaderStage*/,
       "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
       "InputValues": [
+        {
+          "Id": "1495157d-601f-4054-84e2-29ebebb461d8"/*DispatchCallCount*/,
+          "Type": "System.Int32",
+          "Value": 1
+        },
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
           "Type": "T3.Core.DataTypes.Vector.Int3",
@@ -129,13 +122,20 @@
             "Y": 30,
             "Z": 1
           }
-        },
-        {
-          "Id": "1495157d-601f-4054-84e2-29ebebb461d8"/*DispatchCallCount*/,
-          "Type": "System.Int32",
-          "Value": 1
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "dce42014-be5f-450e-809d-f7594572b48a"/*UavFromTexture2d*/,
+      "SymbolId": "84e02044-3011-4a5e-b76a-c904d9b4557f",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "f4f6123c-4bd0-463b-bd4f-9f1ec216b480"/*FloatsToBuffer*/,
+      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
+      "InputValues": [],
       "Outputs": []
     }
   ],

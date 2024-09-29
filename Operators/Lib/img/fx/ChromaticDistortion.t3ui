@@ -3,29 +3,12 @@
   "Description": "Simulates an imaging error of optical camera lenses that manifests itself as blurring or discoloration at the outer edges.\n\nAlso see [ChromaticAbberation]\n\nUseful Ops for a PostFX Pipeline: [MotionBlur] [DepthOfField] [ChromaticAbberation] [Glow] [Grain] [Blur]",
   "InputUis": [
     {
-      "InputId": "6297675f-891c-4c06-8685-de3a1a3ffe9b"/*Texture2d*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -8.08049,
-        "Y": 292.35626
-      }
-    },
-    {
       "InputId": "1df828ad-2d74-47fc-9f0e-10f4ce10b170"/*Center*/,
       "Position": {
         "X": 32.025677,
         "Y": 573.3099
       },
       "Description": "Offsets the center of the effect.",
-      "AddPadding": "True"
-    },
-    {
-      "InputId": "b9e78f18-51e8-4440-b8a4-9338f14a5668"/*Size*/,
-      "Position": {
-        "X": 32.025677,
-        "Y": 618.3099
-      },
-      "Description": "Controls the intensity of the effect.",
       "AddPadding": "True"
     },
     {
@@ -41,6 +24,15 @@
       "Clamp": true
     },
     {
+      "InputId": "2bd2c6b9-93ce-4de9-9ee5-0b35f4f2719e"/*SampleCount*/,
+      "Position": {
+        "X": 32.025677,
+        "Y": 843.30994
+      },
+      "GroupTitle": "Advanced Options",
+      "Description": "Controls the fidelity of the effect.\nHigher numbers create smoother results at the cost of rendering speed."
+    },
+    {
       "InputId": "48e1129c-d6cc-4018-a6ee-5266244edd7f"/*Distort*/,
       "Position": {
         "X": 32.025677,
@@ -54,15 +46,21 @@
       "Clamp": true
     },
     {
-      "InputId": "e0344f32-479e-48b6-9473-26ef59d22a66"/*DistortOffset*/,
+      "InputId": "6297675f-891c-4c06-8685-de3a1a3ffe9b"/*Texture2d*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -8.08049,
+        "Y": 292.35626
+      }
+    },
+    {
+      "InputId": "b9e78f18-51e8-4440-b8a4-9338f14a5668"/*Size*/,
       "Position": {
         "X": 32.025677,
-        "Y": 753.31
+        "Y": 618.3099
       },
-      "Description": "Uniformly scales the image to fix unwanted effects at the edges when using \"distort\" setting.",
-      "Min": 0.1,
-      "Max": 2.0,
-      "Clamp": true
+      "Description": "Controls the intensity of the effect.",
+      "AddPadding": "True"
     },
     {
       "InputId": "cb3ba878-127a-44cd-9aea-7c43e32a090a"/*ScaleImage*/,
@@ -73,28 +71,18 @@
       "Description": "Uniformly scales the image without cutting the edges."
     },
     {
-      "InputId": "2bd2c6b9-93ce-4de9-9ee5-0b35f4f2719e"/*SampleCount*/,
+      "InputId": "e0344f32-479e-48b6-9473-26ef59d22a66"/*DistortOffset*/,
       "Position": {
         "X": 32.025677,
-        "Y": 843.30994
+        "Y": 753.31
       },
-      "GroupTitle": "Advanced Options",
-      "Description": "Controls the fidelity of the effect.\nHigher numbers create smoother results at the cost of rendering speed."
+      "Description": "Uniformly scales the image to fix unwanted effects at the edges when using \"distort\" setting.",
+      "Min": 0.1,
+      "Max": 2.0,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [
-    {
-      "ChildId": "660bb2f9-03c8-486e-8f19-f914e422970c"/*_ImageFxShaderSetup2*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 134.97804,
-        "Y": 481.95227
-      },
-      "Position": {
-        "X": 581.6164,
-        "Y": 395.31955
-      }
-    },
     {
       "ChildId": "3046212d-e195-4dfc-bef3-51ef04025251"/*Vector2Components*/,
       "Position": {
@@ -107,6 +95,18 @@
       "Position": {
         "X": 254.58136,
         "Y": 861.00995
+      }
+    },
+    {
+      "ChildId": "660bb2f9-03c8-486e-8f19-f914e422970c"/*_ImageFxShaderSetup2*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 134.97804,
+        "Y": 481.95227
+      },
+      "Position": {
+        "X": 581.6164,
+        "Y": 395.31955
       }
     }
   ],

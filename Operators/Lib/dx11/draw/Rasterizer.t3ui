@@ -10,14 +10,14 @@
       }
     },
     {
-      "InputId": "73945e5d-3c3c-4742-b341-a061b0dc116f"/*Viewports*/,
+      "InputId": "3f71be22-9dc2-4e47-8b3a-1ef3c9ecbd9d"/*ScissorRectangles*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
       }
     },
     {
-      "InputId": "3f71be22-9dc2-4e47-8b3a-1ef3c9ecbd9d"/*ScissorRectangles*/,
+      "InputId": "73945e5d-3c3c-4742-b341-a061b0dc116f"/*Viewports*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0

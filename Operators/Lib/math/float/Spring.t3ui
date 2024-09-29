@@ -12,6 +12,17 @@
       "Description": "Value Input"
     },
     {
+      "InputId": "7b130212-e567-4fd3-89aa-0b833c2ae490"/*Strength*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 424.0
+      },
+      "Description": "Defines the strength of the spring.\nHigher values produce faster and longer bouncing.",
+      "Min": 0.01,
+      "Max": 5.0,
+      "Clamp": true
+    },
+    {
       "InputId": "8cd61153-9e93-42bf-9fb6-ad29988e780f"/*Tension*/,
       "Position": {
         "X": 36.0,
@@ -21,17 +32,6 @@
       "Description": "Defines the rigidity of the spring.\nLower values produce slower and more intense bounce.",
       "Min": 0.01,
       "Max": 1.0,
-      "Clamp": true
-    },
-    {
-      "InputId": "7b130212-e567-4fd3-89aa-0b833c2ae490"/*Strength*/,
-      "Position": {
-        "X": 36.0,
-        "Y": 424.0
-      },
-      "Description": "Defines the strength of the spring.\nHigher values produce faster and longer bouncing.",
-      "Min": 0.01,
-      "Max": 5.0,
       "Clamp": true
     },
     {

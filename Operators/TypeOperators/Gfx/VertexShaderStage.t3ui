@@ -3,14 +3,7 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "b1c236e5-6757-4d77-9911-e3acd5ea9fe9"/*VertexShader*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "InputId": "bba8f6eb-7cff-435b-ab47-febf58dd8fba"/*ConstantBuffers*/,
+      "InputId": "2bc7584d-a347-4954-9120-c1841af76650"/*SamplerStates*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
@@ -24,7 +17,14 @@
       }
     },
     {
-      "InputId": "2bc7584d-a347-4954-9120-c1841af76650"/*SamplerStates*/,
+      "InputId": "b1c236e5-6757-4d77-9911-e3acd5ea9fe9"/*VertexShader*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "bba8f6eb-7cff-435b-ab47-febf58dd8fba"/*ConstantBuffers*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0

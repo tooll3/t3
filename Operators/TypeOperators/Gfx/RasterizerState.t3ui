@@ -1,16 +1,18 @@
 {
-  "Id": "c7283335-ef57-46ad-9538-abbade65845a"/*RasterizerStateOp*/,
+  "Id": "c7283335-ef57-46ad-9538-abbade65845a"/*RasterizerState*/,
   "Description": "",
   "InputUis": [
     {
-      "InputId": "03f3bc7f-3949-4a97-88cf-04e162cfa2f7"/*CullMode*/,
+      "InputId": "03c80c25-b0b1-45c2-b67b-60906fe47fbe"/*SlopeScaledDepthBias*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
-      }
+      },
+      "Min": -100.0,
+      "Max": 100.0
     },
     {
-      "InputId": "a2193aa0-e217-4248-a8dc-360cb89a613b"/*DepthBias*/,
+      "InputId": "03f3bc7f-3949-4a97-88cf-04e162cfa2f7"/*CullMode*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
@@ -26,14 +28,7 @@
       "Max": 100.0
     },
     {
-      "InputId": "78c9b432-a2b8-4aea-81e4-0cd5086b3b94"/*FillMode*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 45.0
-      }
-    },
-    {
-      "InputId": "eeb75a91-2402-44be-bb9d-b620e34085ed"/*AntialiasedLineEnabled*/,
+      "InputId": "31319fb4-8663-4908-95b8-e5d5a95f15b2"/*FrontCounterClockwise*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
@@ -47,7 +42,14 @@
       }
     },
     {
-      "InputId": "31319fb4-8663-4908-95b8-e5d5a95f15b2"/*FrontCounterClockwise*/,
+      "InputId": "78c9b432-a2b8-4aea-81e4-0cd5086b3b94"/*FillMode*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "a2193aa0-e217-4248-a8dc-360cb89a613b"/*DepthBias*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
@@ -68,19 +70,17 @@
       }
     },
     {
-      "InputId": "03c80c25-b0b1-45c2-b67b-60906fe47fbe"/*SlopeScaledDepthBias*/,
+      "InputId": "eeb75a91-2402-44be-bb9d-b620e34085ed"/*AntialiasedLineEnabled*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
-      },
-      "Min": -100.0,
-      "Max": 100.0
+      }
     }
   ],
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "b409694a-0980-4992-8525-01871b940cd7"/*RasterizerState*/,
+      "OutputId": "b409694a-0980-4992-8525-01871b940cd7"/*Value*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0

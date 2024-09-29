@@ -3,17 +3,17 @@
   "Description": "Adds two Vec3 variables together",
   "InputUis": [
     {
-      "InputId": "f933c566-cbb2-4d2c-9e3b-f7ad3b2f7292"/*Input1*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "08624ca6-8b69-48f5-8896-a483b403778e"/*Input2*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "f933c566-cbb2-4d2c-9e3b-f7ad3b2f7292"/*Input1*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
       }
     }
   ],

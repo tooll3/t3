@@ -3,19 +3,19 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "dfc3c909-ae13-4364-b9db-c594dad1bee4"/*Command*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "8cac9f22-c6a1-4ced-9733-fe366eafb5c4"/*CameraReference*/,
       "Relevancy": "Required",
       "Position": {
         "X": 0.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "dfc3c909-ae13-4364-b9db-c594dad1bee4"/*Command*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
       }
     }
   ],

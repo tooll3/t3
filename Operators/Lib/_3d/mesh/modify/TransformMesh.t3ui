@@ -3,23 +3,6 @@
   "Description": "Generates a new set of transformed vertices for a mesh.",
   "InputUis": [
     {
-      "InputId": "c2c9afc7-3474-40c3-be82-b9f48c92a2c5"/*Mesh*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -557.8594,
-        "Y": 773.0897
-      }
-    },
-    {
-      "InputId": "da607ebd-6fec-4ae8-bf91-b70dcb794557"/*Translation*/,
-      "Position": {
-        "X": -557.6606,
-        "Y": 867.47046
-      },
-      "GroupTitle": "Transform Mesh",
-      "Description": "Moves the incoming mesh\n\nX (-left / +right), \nY (-down / + up), \nZ (-forward/+backwards)\n"
-    },
-    {
       "InputId": "1168094f-1eee-4ed7-95e2-9459e6171e08"/*Rotation*/,
       "Position": {
         "X": -557.6606,
@@ -31,12 +14,13 @@
       "Format": "{0:0.0}°"
     },
     {
-      "InputId": "f37c11a5-b210-4e83-8ebd-64ea49ee9b96"/*Scale*/,
+      "InputId": "71531810-78ab-449e-bb13-bfe5fe3d2a69"/*UseVertexSelection*/,
       "Position": {
         "X": -557.6606,
-        "Y": 957.47064
+        "Y": 1047.4706
       },
-      "Description": "Scales the incoming subgraph in the following directions:\n\nX: Width\nY: Height\nZ: Depth\n"
+      "Description": "Defines whether only selected vertices should be affected by the manipulation",
+      "AddPadding": "True"
     },
     {
       "InputId": "86791d0a-97c3-413a-89d9-aa2ddd40ce4a"/*UniformScale*/,
@@ -48,13 +32,12 @@
       "AddPadding": "True"
     },
     {
-      "InputId": "71531810-78ab-449e-bb13-bfe5fe3d2a69"/*UseVertexSelection*/,
+      "InputId": "c2c9afc7-3474-40c3-be82-b9f48c92a2c5"/*Mesh*/,
+      "Relevancy": "Required",
       "Position": {
-        "X": -557.6606,
-        "Y": 1047.4706
-      },
-      "Description": "Defines whether only selected vertices should be affected by the manipulation",
-      "AddPadding": "True"
+        "X": -557.8594,
+        "Y": 773.0897
+      }
     },
     {
       "InputId": "ccd89dd2-1baa-4a0c-8ec3-5a0e77551379"/*Pivot*/,
@@ -64,9 +47,40 @@
       },
       "GroupTitle": "Transform Pivot",
       "Description": "Moves the Pivot (center point) of the incoming subgraph:\n\nX (-left / +right) \nY (-down / + up) \nZ (-forward/+backwards)\n\nThe Pivot Point determines the location of the incoming subgraph Gizmo. Transforming its location can make it easier to perform transformations around the position you want.\n"
+    },
+    {
+      "InputId": "da607ebd-6fec-4ae8-bf91-b70dcb794557"/*Translation*/,
+      "Position": {
+        "X": -557.6606,
+        "Y": 867.47046
+      },
+      "GroupTitle": "Transform Mesh",
+      "Description": "Moves the incoming mesh\n\nX (-left / +right), \nY (-down / + up), \nZ (-forward/+backwards)\n"
+    },
+    {
+      "InputId": "f37c11a5-b210-4e83-8ebd-64ea49ee9b96"/*Scale*/,
+      "Position": {
+        "X": -557.6606,
+        "Y": 957.47064
+      },
+      "Description": "Scales the incoming subgraph in the following directions:\n\nX: Width\nY: Height\nZ: Depth\n"
     }
   ],
   "SymbolChildUis": [
+    {
+      "ChildId": "020d3da9-7ca7-4709-8869-a3e0d075a2d5"/*CalcDispatchCount*/,
+      "Position": {
+        "X": 250.26355,
+        "Y": 575.8797
+      }
+    },
+    {
+      "ChildId": "0dfb8c38-16c2-4604-8e32-ecb9cb7642aa"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 475.10886,
+        "Y": 524.0607
+      }
+    },
     {
       "ChildId": "1c233d4c-fb3c-47ac-9461-55b7ee4dc323"/*ComputeShader*/,
       "Position": {
@@ -75,10 +89,45 @@
       }
     },
     {
-      "ChildId": "0dfb8c38-16c2-4604-8e32-ecb9cb7642aa"/*ComputeShaderStage*/,
+      "ChildId": "331e7588-3b1d-4f76-8021-b22147cd7972"/*BoolToFloat*/,
       "Position": {
-        "X": 475.10886,
+        "X": 129.3053,
+        "Y": 979.00183
+      }
+    },
+    {
+      "ChildId": "3f67b99a-f4c7-4b45-ba29-0e4f7c00444f"/*GetBufferComponents*/,
+      "Position": {
+        "X": 279.3053,
+        "Y": 1021.7268
+      }
+    },
+    {
+      "ChildId": "52ea84e0-0daa-4c24-b50f-848a492d4df4"/*ExecuteBufferUpdate*/,
+      "Position": {
+        "X": 625.1089,
         "Y": 524.0607
+      }
+    },
+    {
+      "ChildId": "55f0a2a3-093b-426a-8955-f225413a96c7"/*GetSRVProperties*/,
+      "Position": {
+        "X": -73.12926,
+        "Y": 695.17487
+      }
+    },
+    {
+      "ChildId": "58f46406-99ac-4552-ab39-5100ea0242e2"/*GetBufferComponents*/,
+      "Position": {
+        "X": -250.68524,
+        "Y": 727.7284
+      }
+    },
+    {
+      "ChildId": "7d9f0525-6ecc-4a74-9ae1-8f697b5b8aa0"/*_MeshBufferComponents*/,
+      "Position": {
+        "X": -407.85938,
+        "Y": 773.0897
       }
     },
     {
@@ -94,45 +143,10 @@
       }
     },
     {
-      "ChildId": "55f0a2a3-093b-426a-8955-f225413a96c7"/*GetSRVProperties*/,
+      "ChildId": "a616e533-23fa-424a-8eb4-d0d1b43b9482"/*PBRVertex.Stride*/,
       "Position": {
-        "X": -73.12926,
-        "Y": 695.17487
-      }
-    },
-    {
-      "ChildId": "52ea84e0-0daa-4c24-b50f-848a492d4df4"/*ExecuteBufferUpdate*/,
-      "Position": {
-        "X": 625.1089,
-        "Y": 524.0607
-      }
-    },
-    {
-      "ChildId": "020d3da9-7ca7-4709-8869-a3e0d075a2d5"/*CalcDispatchCount*/,
-      "Position": {
-        "X": 250.26355,
-        "Y": 575.8797
-      }
-    },
-    {
-      "ChildId": "fb5aa285-2f39-4fdb-b00b-5114d61223ff"/*StructuredBufferWithViews*/,
-      "Position": {
-        "X": 106.920654,
+        "X": -43.079346,
         "Y": 1073.6066
-      }
-    },
-    {
-      "ChildId": "58f46406-99ac-4552-ab39-5100ea0242e2"/*GetBufferComponents*/,
-      "Position": {
-        "X": -250.68524,
-        "Y": 727.7284
-      }
-    },
-    {
-      "ChildId": "3f67b99a-f4c7-4b45-ba29-0e4f7c00444f"/*GetBufferComponents*/,
-      "Position": {
-        "X": 279.3053,
-        "Y": 1021.7268
       }
     },
     {
@@ -143,13 +157,6 @@
       }
     },
     {
-      "ChildId": "7d9f0525-6ecc-4a74-9ae1-8f697b5b8aa0"/*_MeshBufferComponents*/,
-      "Position": {
-        "X": -407.85938,
-        "Y": 773.0897
-      }
-    },
-    {
       "ChildId": "d44f886a-f752-48f5-b2a1-1eb20858e81d"/*_AssembleMeshBuffers*/,
       "Position": {
         "X": 775.1089,
@@ -157,17 +164,10 @@
       }
     },
     {
-      "ChildId": "a616e533-23fa-424a-8eb4-d0d1b43b9482"/*PBRVertex.Stride*/,
+      "ChildId": "fb5aa285-2f39-4fdb-b00b-5114d61223ff"/*StructuredBufferWithViews*/,
       "Position": {
-        "X": -43.079346,
+        "X": 106.920654,
         "Y": 1073.6066
-      }
-    },
-    {
-      "ChildId": "331e7588-3b1d-4f76-8021-b22147cd7972"/*BoolToFloat*/,
-      "Position": {
-        "X": 129.3053,
-        "Y": 979.00183
       }
     }
   ],

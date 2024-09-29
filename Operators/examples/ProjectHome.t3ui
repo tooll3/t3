@@ -4,25 +4,10 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "d31691f2-3f93-474e-9327-b28281c057f3"/*FluidFeedback*/,
-      "Comment": "A simple feedback effect. \n\nNote that generating live preset thumbnails with feedbacks is not supported.",
+      "ChildId": "018e0408-fac8-42f0-a17c-b9c0bb5ab5b7"/*SampleGradient*/,
+      "Comment": "Here we sample a gradient with that value.\n\nYou can use the upper area for dragging the operator and the lower area for adjust the gradients.\nAlso try to right-click the lower area to open the context menu with presets and further options.\n\nTip: You can remove a step from the gradient by dragging it down until the remove icon appears.",
       "Position": {
-        "X": -280.53003,
-        "Y": 390.34015
-      }
-    },
-    {
-      "ChildId": "64fe5405-7f98-4303-b2a5-f53db065740c"/*TorusMesh*/,
-      "Position": {
-        "X": -730.5311,
-        "Y": 453.34015
-      }
-    },
-    {
-      "ChildId": "dda89242-8a90-4442-b3df-ed2d855e32a4"/*DrawMesh*/,
-      "Comment": "We use the color sampled from the gradient to draw a torus mesh.",
-      "Position": {
-        "X": -580.53,
+        "X": -730.53064,
         "Y": 390.34015
       }
     },
@@ -34,24 +19,17 @@
       }
     },
     {
-      "ChildId": "018e0408-fac8-42f0-a17c-b9c0bb5ab5b7"/*SampleGradient*/,
-      "Comment": "Here we sample a gradient with that value.\n\nYou can use the upper area for dragging the operator and the lower area for adjust the gradients.\nAlso try to right-click the lower area to open the context menu with presets and further options.\n\nTip: You can remove a step from the gradient by dragging it down until the remove icon appears.",
+      "ChildId": "39c5ce1c-e6af-45ba-8f34-f9d4089ad7b3"/*DulcimerMain*/,
       "Position": {
-        "X": -730.53064,
-        "Y": 390.34015
+        "X": -530.6958,
+        "Y": 775.2037
       }
     },
     {
-      "ChildId": "ecaa1d12-625b-46c0-9148-454dfc40b576"/*HowToUseTooll*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 176.34798,
-        "Y": 61.01957
-      },
-      "Comment": "Double click this operator to open an quick interactive tutorials.",
+      "ChildId": "64fe5405-7f98-4303-b2a5-f53db065740c"/*TorusMesh*/,
       "Position": {
-        "X": -500.54578,
-        "Y": 154.50812
+        "X": -730.5311,
+        "Y": 453.34015
       }
     },
     {
@@ -69,9 +47,9 @@
       }
     },
     {
-      "ChildId": "acbc034c-3c0d-4f7e-ac09-39cfd702f601"/*HowToUseImageEffects*/,
+      "ChildId": "91042db3-81d6-4a17-8cef-423811aabb17"/*HowToUsePoints*/,
       "Position": {
-        "X": -775.672,
+        "X": -325.672,
         "Y": 672.6001
       }
     },
@@ -83,9 +61,9 @@
       }
     },
     {
-      "ChildId": "91042db3-81d6-4a17-8cef-423811aabb17"/*HowToUsePoints*/,
+      "ChildId": "9a40eb4f-cda2-4772-8a02-8f85ff4f13c2"/*HowToUseParticles*/,
       "Position": {
-        "X": -325.672,
+        "X": -175.672,
         "Y": 672.6001
       }
     },
@@ -98,40 +76,44 @@
       }
     },
     {
-      "ChildId": "9a40eb4f-cda2-4772-8a02-8f85ff4f13c2"/*HowToUseParticles*/,
+      "ChildId": "acbc034c-3c0d-4f7e-ac09-39cfd702f601"/*HowToUseImageEffects*/,
       "Position": {
-        "X": -175.672,
+        "X": -775.672,
         "Y": 672.6001
       }
     },
     {
-      "ChildId": "39c5ce1c-e6af-45ba-8f34-f9d4089ad7b3"/*DulcimerMain*/,
+      "ChildId": "d31691f2-3f93-474e-9327-b28281c057f3"/*FluidFeedback*/,
+      "Comment": "A simple feedback effect. \n\nNote that generating live preset thumbnails with feedbacks is not supported.",
       "Position": {
-        "X": -530.6958,
-        "Y": 775.2037
+        "X": -280.53003,
+        "Y": 390.34015
+      }
+    },
+    {
+      "ChildId": "dda89242-8a90-4442-b3df-ed2d855e32a4"/*DrawMesh*/,
+      "Comment": "We use the color sampled from the gradient to draw a torus mesh.",
+      "Position": {
+        "X": -580.53,
+        "Y": 390.34015
+      }
+    },
+    {
+      "ChildId": "ecaa1d12-625b-46c0-9148-454dfc40b576"/*HowToUseTooll*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 176.34798,
+        "Y": 61.01957
+      },
+      "Comment": "Double click this operator to open an quick interactive tutorials.",
+      "Position": {
+        "X": -500.54578,
+        "Y": 154.50812
       }
     }
   ],
   "OutputUis": [],
   "Annotations": [
-    {
-      "Id": "b81c6d34-6ca0-4cf8-aeb5-49e6bdeae95a",
-      "Title": "# Welcome to Tooll3 v3.9\n",
-      "Color": {
-        "X": 0.78723407,
-        "Y": 0.60785824,
-        "Z": 0.36570093,
-        "W": 1.0
-      },
-      "Position": {
-        "X": -953.1327,
-        "Y": 0.17022705
-      },
-      "Size": {
-        "X": 935.97754,
-        "Y": 721.02435
-      }
-    },
     {
       "Id": "589f0a56-7537-4b0e-9305-ec21b76ae7fa",
       "Title": "This short tutorial will guide you through the first steps.\n\n1. Select the operator.\n2. You will see its output in the Output-Window.\n3. Double-click it, for an interactive tutorial \nthat will guide you through Tooll's user interface.",
@@ -185,15 +167,33 @@
         "X": 909.0123,
         "Y": 203.57906
       }
+    },
+    {
+      "Id": "b81c6d34-6ca0-4cf8-aeb5-49e6bdeae95a",
+      "Title": "# Welcome to Tooll3 v3.9\n",
+      "Color": {
+        "X": 0.78723407,
+        "Y": 0.60785824,
+        "Z": 0.36570093,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -953.1327,
+        "Y": 0.17022705
+      },
+      "Size": {
+        "X": 935.97754,
+        "Y": 721.02435
+      }
     }
   ],
   "Links": [
     {
-      "Id": "fa46757f-62c7-4121-ab5c-c148b1da656f",
-      "Title": "15min Introduction",
-      "Description": "A short video tutorial that will guide you through the user interface.",
-      "LinkUrl": "https://youtu.be/_zvzX0fZ8sc?feature=shared",
-      "LinkType": "TutorialVideo"
+      "Id": "9a34d3da-4b02-4e28-8b84-9f4525514ef3",
+      "Title": "Discord",
+      "Description": "You can always visit our discord channel.",
+      "LinkUrl": "https://discord.gg/YmSyQdeH3S",
+      "LinkType": "Other"
     },
     {
       "Id": "f6ab2a6b-4627-48bc-95ae-3906563435a6",
@@ -203,11 +203,11 @@
       "LinkType": "Documentation"
     },
     {
-      "Id": "9a34d3da-4b02-4e28-8b84-9f4525514ef3",
-      "Title": "Discord",
-      "Description": "You can always visit our discord channel.",
-      "LinkUrl": "https://discord.gg/YmSyQdeH3S",
-      "LinkType": "Other"
+      "Id": "fa46757f-62c7-4121-ab5c-c148b1da656f",
+      "Title": "15min Introduction",
+      "Description": "A short video tutorial that will guide you through the user interface.",
+      "LinkUrl": "https://youtu.be/_zvzX0fZ8sc?feature=shared",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

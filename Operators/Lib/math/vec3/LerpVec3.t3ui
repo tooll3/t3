@@ -3,13 +3,6 @@
   "Description": "Blends between two values (Lerp).\n\nAlso see:\n- [BlendVector3] to blend between more Vector3s.",
   "InputUis": [
     {
-      "InputId": "a7fe900a-958d-4f79-9df7-d30b31bfb71b"/*A*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "41159b82-5215-4915-b433-1f2b3f18547f"/*B*/,
       "Position": {
         "X": -200.0,
@@ -21,6 +14,13 @@
       "Position": {
         "X": 197.0,
         "Y": 373.0
+      }
+    },
+    {
+      "InputId": "a7fe900a-958d-4f79-9df7-d30b31bfb71b"/*A*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
       }
     },
     {

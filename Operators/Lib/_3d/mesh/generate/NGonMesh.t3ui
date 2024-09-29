@@ -14,25 +14,6 @@
       "Max": 100
     },
     {
-      "InputId": "9dbf0c3d-4762-41f6-94b8-26acbd1531c1"/*Radius*/,
-      "Position": {
-        "X": -199.74533,
-        "Y": 179.66893
-      },
-      "Description": "Defines the Radius\n"
-    },
-    {
-      "InputId": "deee0efc-949e-41da-bdb1-d80dbb6ac6e2"/*Stretch*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      },
-      "Description": "Scales the Mesh\nX: Width\nY: Height",
-      "Min": 0.0,
-      "Max": 1.0,
-      "UseVec2Control": "Position"
-    },
-    {
       "InputId": "69a2e8c2-2c88-4969-8beb-66fe8ff4af18"/*Center*/,
       "Position": {
         "X": -199.74533,
@@ -40,6 +21,14 @@
       },
       "GroupTitle": "Orientation",
       "Description": "Transforms the position of the pivot"
+    },
+    {
+      "InputId": "9dbf0c3d-4762-41f6-94b8-26acbd1531c1"/*Radius*/,
+      "Position": {
+        "X": -199.74533,
+        "Y": 179.66893
+      },
+      "Description": "Defines the Radius\n"
     },
     {
       "InputId": "b819ad07-6229-4b8d-b8b6-a2a89b7c81d8"/*Rotation*/,
@@ -58,6 +47,17 @@
       },
       "Description": "Select different UV Methods",
       "AddPadding": "True"
+    },
+    {
+      "InputId": "deee0efc-949e-41da-bdb1-d80dbb6ac6e2"/*Stretch*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Description": "Scales the Mesh\nX: Width\nY: Height",
+      "Min": 0.0,
+      "Max": 1.0,
+      "UseVec2Control": "Position"
     }
   ],
   "SymbolChildUis": [],

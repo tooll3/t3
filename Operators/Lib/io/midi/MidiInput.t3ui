@@ -3,37 +3,6 @@
   "Description": "Provides input from connected MIDI devices. By default, the MIDI range from 0 to 127 is mapped to an output range from 0 to 1, which can be adjusted with the parameters. \nFor smoothing the otput, damping is enabled by default. Reduce the damping parameter to improve latency. \n\nIf you want to react to a range for controls (i.e., to the range of keys on a keyboard), you can use the ControlRange parameter. \nIf this is something other than [0, 0], we map its range to the OutputRange (e.g., you could map two octaves of your keyboard to output values from 0 to 1). \n\nTo support controllers that have controllers and note buttons with overlapping control IDs (like the APC Mini), we distinguish between different event types.\n\nUseful combinations: [FloatToInt] [BooltoFloat] [BoolToInt] [FlipFlop] [HasBooleanChanged] [TriggerAnim]\n\nAlso see: [MouseInput] [KeyboardInput]",
   "InputUis": [
     {
-      "InputId": "aad1e576-f144-423f-83b5-5694b1119c23"/*OutputRange*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 225.0
-      }
-    },
-    {
-      "InputId": "4636d6cf-8233-4281-8840-5ba079b5f1a6"/*DefaultOutputValue*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 270.0
-      }
-    },
-    {
-      "InputId": "ca3ce08d-6a19-4ad5-9435-08b050753311"/*Damping*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 405.0
-      },
-      "Min": 0.0,
-      "Max": 1.0,
-      "Clamp": true
-    },
-    {
-      "InputId": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      }
-    },
-    {
       "InputId": "044168eb-791c-405f-867f-3d5702924165"/*EventType*/,
       "Position": {
         "X": -200.0,
@@ -49,11 +18,56 @@
       "Usage": "Default"
     },
     {
+      "InputId": "4636d6cf-8233-4281-8840-5ba079b5f1a6"/*DefaultOutputValue*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      }
+    },
+    {
+      "InputId": "6c15e743-9a70-47e7-a0a4-75636817e441"/*PrintLogMessages*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 360.0
+      }
+    },
+    {
+      "InputId": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
       "InputId": "9b0d32de-c53c-4df6-8b29-5e68a5a9c5f9"/*Channel*/,
       "Position": {
         "X": -200.0,
         "Y": 135.0
       }
+    },
+    {
+      "InputId": "aad1e576-f144-423f-83b5-5694b1119c23"/*OutputRange*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
+    },
+    {
+      "InputId": "ac35e75a-bec5-497c-9c68-6b809b12cd8b"/*ResetToDefaultTrigger*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 405.0
+      }
+    },
+    {
+      "InputId": "ca3ce08d-6a19-4ad5-9435-08b050753311"/*Damping*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 405.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "df81b7b3-f39e-4e5d-8b97-f29dd576a76d"/*Control*/,
@@ -67,20 +81,6 @@
       "Position": {
         "X": -200.0,
         "Y": 495.0
-      }
-    },
-    {
-      "InputId": "6c15e743-9a70-47e7-a0a4-75636817e441"/*PrintLogMessages*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 360.0
-      }
-    },
-    {
-      "InputId": "ac35e75a-bec5-497c-9c68-6b809b12cd8b"/*ResetToDefaultTrigger*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 405.0
       }
     }
   ],

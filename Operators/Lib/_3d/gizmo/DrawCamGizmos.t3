@@ -2,15 +2,21 @@
   "Id": "cdf5dd6a-73dc-4779-a366-df19b69071a6"/*DrawCamGizmos*/,
   "Inputs": [
     {
-      "Id": "f322ca22-8200-449c-b09b-618cddf488d3"/*Visibility*/,
-      "DefaultValue": "Inherit"
-    },
-    {
       "Id": "d8ac3b98-5738-41f2-8398-f832103f1dc1"/*Size*/,
       "DefaultValue": 2.41
+    },
+    {
+      "Id": "f322ca22-8200-449c-b09b-618cddf488d3"/*Visibility*/,
+      "DefaultValue": "Inherit"
     }
   ],
   "Children": [
+    {
+      "Id": "1ad18650-648d-43e8-8ca2-b5a098b87ecb"/*FloatToInt*/,
+      "SymbolId": "06b4728e-852c-491a-a89d-647f7e0b5415",
+      "InputValues": [],
+      "Outputs": []
+    },
     {
       "Id": "22483fad-a590-42a3-a020-58da3284ce96"/*Transform*/,
       "SymbolId": "284d2183-197d-47fd-b130-873cced78b1c",
@@ -24,8 +30,8 @@
       "Outputs": []
     },
     {
-      "Id": "35ccb0fa-e5e7-408b-a246-06837985deb1"/*_CameraGizmo*/,
-      "SymbolId": "b601be85-fa85-4358-9541-7e97341bf6b3",
+      "Id": "2f1c1089-2995-420a-9e5f-bd08b1fc240f"/*VisibleGizmos*/,
+      "SymbolId": "d61d7192-9ca3-494e-91e2-10a530ee9375",
       "InputValues": [],
       "Outputs": []
     },
@@ -42,8 +48,20 @@
       "Outputs": []
     },
     {
-      "Id": "2f1c1089-2995-420a-9e5f-bd08b1fc240f"/*VisibleGizmos*/,
-      "SymbolId": "d61d7192-9ca3-494e-91e2-10a530ee9375",
+      "Id": "35ccb0fa-e5e7-408b-a246-06837985deb1"/*_CameraGizmo*/,
+      "SymbolId": "b601be85-fa85-4358-9541-7e97341bf6b3",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "4e6ecf5b-43fa-400f-a99c-57aaf5c107f8"/*ApplyCamMatrices*/,
+      "SymbolId": "3dae14a8-3d0b-432f-b951-bdd7afd7e5f8",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "5f05b4a1-38e7-4f72-a9d8-c8bf6af9a6b6"/*Loop*/,
+      "SymbolId": "3631c727-36a0-4f26-ae76-ee9c100efc33",
       "InputValues": [],
       "Outputs": []
     },
@@ -54,14 +72,14 @@
       "Outputs": []
     },
     {
-      "Id": "d162d2d2-40c8-48aa-8493-d8784fe9a5b6"/*GetFloatVar*/,
-      "SymbolId": "e6072ecf-30d2-4c52-afa1-3b195d61617b",
+      "Id": "b29e8494-19fb-4274-9a43-2ea9c7d66b19"/*DrawMesh*/,
+      "SymbolId": "a3c5471e-079b-4d4b-886a-ec02d6428ff6",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "5f05b4a1-38e7-4f72-a9d8-c8bf6af9a6b6"/*Loop*/,
-      "SymbolId": "3631c727-36a0-4f26-ae76-ee9c100efc33",
+      "Id": "d162d2d2-40c8-48aa-8493-d8784fe9a5b6"/*GetFloatVar*/,
+      "SymbolId": "e6072ecf-30d2-4c52-afa1-3b195d61617b",
       "InputValues": [],
       "Outputs": []
     },
@@ -93,24 +111,6 @@
           }
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "b29e8494-19fb-4274-9a43-2ea9c7d66b19"/*DrawMesh*/,
-      "SymbolId": "a3c5471e-079b-4d4b-886a-ec02d6428ff6",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "4e6ecf5b-43fa-400f-a99c-57aaf5c107f8"/*ApplyCamMatrices*/,
-      "SymbolId": "3dae14a8-3d0b-432f-b951-bdd7afd7e5f8",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "1ad18650-648d-43e8-8ca2-b5a098b87ecb"/*FloatToInt*/,
-      "SymbolId": "06b4728e-852c-491a-a89d-647f7e0b5415",
-      "InputValues": [],
       "Outputs": []
     }
   ],

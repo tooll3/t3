@@ -2,14 +2,6 @@
   "Id": "a40cb2a4-5e4c-41ef-b70d-40fa04adafbb"/*LerpVec3*/,
   "Inputs": [
     {
-      "Id": "a7fe900a-958d-4f79-9df7-d30b31bfb71b"/*A*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      }
-    },
-    {
       "Id": "41159b82-5215-4915-b433-1f2b3f18547f"/*B*/,
       "DefaultValue": {
         "X": 0.0,
@@ -20,6 +12,14 @@
     {
       "Id": "86af9964-8ee4-4d94-b96f-f8b61e821563"/*F*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "a7fe900a-958d-4f79-9df7-d30b31bfb71b"/*A*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
     },
     {
       "Id": "f79d512c-b066-49d1-96c5-bf320f0082a6"/*Clamp*/,

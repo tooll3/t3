@@ -3,12 +3,14 @@
   "Description": "Returns a subString of the connect string. \nThis can be useful for trimming a string to a maximun length.",
   "InputUis": [
     {
-      "InputId": "e7f79746-ff87-478e-9755-a8c7b1c34354"/*InputText*/,
+      "InputId": "1910639e-5a41-4258-9d63-962dda5ea299"/*Length*/,
       "Position": {
         "X": 0.0,
-        "Y": 45.0
+        "Y": 180.0
       },
-      "Usage": "Default"
+      "Min": 0,
+      "Max": 100000,
+      "Clamp": true
     },
     {
       "InputId": "8bed669e-1141-433f-a8a5-ecbde812462b"/*Start*/,
@@ -18,14 +20,12 @@
       }
     },
     {
-      "InputId": "1910639e-5a41-4258-9d63-962dda5ea299"/*Length*/,
+      "InputId": "e7f79746-ff87-478e-9755-a8c7b1c34354"/*InputText*/,
       "Position": {
         "X": 0.0,
-        "Y": 180.0
+        "Y": 45.0
       },
-      "Min": 0,
-      "Max": 100000,
-      "Clamp": true
+      "Usage": "Default"
     }
   ],
   "SymbolChildUis": [],

@@ -2,8 +2,24 @@
   "Id": "2ab1bbef-8322-4638-8b1d-7e31aaa6a457"/*KeyColor*/,
   "Inputs": [
     {
+      "Id": "52942004-3a62-4c2d-95c0-0c18e531983e"/*WeightHue*/,
+      "DefaultValue": 10.0
+    },
+    {
       "Id": "645e7d14-d4f8-46db-a5bc-b47136a00af5"/*Texture2d*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "6a4efded-cf95-439c-bb4c-4b3c41165f4a"/*Exposure*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "749654ec-1203-4f28-be9b-e3d3e2bff9d2"/*Choke*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "85826060-b94d-4f65-bf35-cad8fd8eb508"/*WeightBrightness*/,
+      "DefaultValue": 10.0
     },
     {
       "Id": "8d07d9ad-fe83-4b40-bebd-21c563d6d6ac"/*Key*/,
@@ -15,6 +31,10 @@
       }
     },
     {
+      "Id": "91e604d7-aed0-4fb9-9690-ab60a74c4df5"/*Amplify*/,
+      "DefaultValue": 0.0
+    },
+    {
       "Id": "abadeee0-5ebb-4e5a-ae92-fcafb20f52a1"/*Background*/,
       "DefaultValue": {
         "X": 1E-06,
@@ -24,37 +44,17 @@
       }
     },
     {
-      "Id": "6a4efded-cf95-439c-bb4c-4b3c41165f4a"/*Exposure*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "52942004-3a62-4c2d-95c0-0c18e531983e"/*WeightHue*/,
-      "DefaultValue": 10.0
-    },
-    {
       "Id": "d044302c-d87f-4ee7-b24d-11b3508a91c1"/*WeightSaturation*/,
       "DefaultValue": 5.0
     },
     {
-      "Id": "85826060-b94d-4f65-bf35-cad8fd8eb508"/*WeightBrightness*/,
-      "DefaultValue": 10.0
-    },
-    {
-      "Id": "91e604d7-aed0-4fb9-9690-ab60a74c4df5"/*Amplify*/,
-      "DefaultValue": 0.0
-    },
-    {
       "Id": "e32268a7-8527-4d0d-b9ba-11c23cb07dd2"/*Return*/,
       "DefaultValue": 0
-    },
-    {
-      "Id": "749654ec-1203-4f28-be9b-e3d3e2bff9d2"/*Choke*/,
-      "DefaultValue": 0.0
     }
   ],
   "Children": [
     {
-      "Id": "c0354bce-5eb8-4a4f-ad53-bae7d42bce68"/*Vector4Components*/,
+      "Id": "3b090021-f6b7-44e7-8519-2dd0e20a5d62"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
@@ -78,7 +78,7 @@
       "Outputs": []
     },
     {
-      "Id": "3b090021-f6b7-44e7-8519-2dd0e20a5d62"/*Vector4Components*/,
+      "Id": "c0354bce-5eb8-4a4f-ad53-bae7d42bce68"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []

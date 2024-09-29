@@ -19,15 +19,6 @@
       "Description": "Defines gradient B"
     },
     {
-      "InputId": "edabc753-2cca-4f8d-8f14-2b25479c2188"/*BlendMode*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
-      },
-      "GroupTitle": "Settings",
-      "Description": "Defines the mode with which the colors of the gradients are merged"
-    },
-    {
       "InputId": "c21371d6-1735-43d4-96ff-d04cbce0fec9"/*MixFactor*/,
       "Position": {
         "X": -200.0,
@@ -38,6 +29,15 @@
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
+    },
+    {
+      "InputId": "edabc753-2cca-4f8d-8f14-2b25479c2188"/*BlendMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      },
+      "GroupTitle": "Settings",
+      "Description": "Defines the mode with which the colors of the gradients are merged"
     }
   ],
   "SymbolChildUis": [],

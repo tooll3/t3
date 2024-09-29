@@ -3,18 +3,17 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "bf5f239e-8f6b-4fea-86d2-95e3add1a28c"/*Image*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": 132.69783,
-        "Y": -15.624207
-      }
-    },
-    {
       "InputId": "4583d292-de66-4bff-abe6-5c2f5920b18b"/*SampleRadius*/,
       "Position": {
         "X": 132.69783,
         "Y": 29.375793
+      }
+    },
+    {
+      "InputId": "5927064b-5119-4b92-b90f-e30034761c03"/*Color*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 164.3758
       }
     },
     {
@@ -32,10 +31,11 @@
       }
     },
     {
-      "InputId": "5927064b-5119-4b92-b90f-e30034761c03"/*Color*/,
+      "InputId": "bf5f239e-8f6b-4fea-86d2-95e3add1a28c"/*Image*/,
+      "Relevancy": "Required",
       "Position": {
         "X": 132.69783,
-        "Y": 164.3758
+        "Y": -15.624207
       }
     },
     {

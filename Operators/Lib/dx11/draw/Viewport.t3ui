@@ -3,7 +3,7 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "65647489-4ad9-4d8c-8b4f-eeb726846488"/*X*/,
+      "InputId": "33da799a-eff2-4e0a-9f8b-7f65ca03a350"/*Y*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
@@ -12,7 +12,16 @@
       "Max": 100.0
     },
     {
-      "InputId": "33da799a-eff2-4e0a-9f8b-7f65ca03a350"/*Y*/,
+      "InputId": "4f926315-5826-42cd-b35f-48db63e8d20e"/*MaxDepth*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    },
+    {
+      "InputId": "65647489-4ad9-4d8c-8b4f-eeb726846488"/*X*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
@@ -42,15 +51,6 @@
     },
     {
       "InputId": "e378460f-44d2-4d73-97de-34ccfacb11a3"/*MinDepth*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      },
-      "Min": -100.0,
-      "Max": 100.0
-    },
-    {
-      "InputId": "4f926315-5826-42cd-b35f-48db63e8d20e"/*MaxDepth*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0

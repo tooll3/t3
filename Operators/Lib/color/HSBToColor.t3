@@ -2,16 +2,16 @@
   "Id": "1677fd74-6e54-479a-b478-c2ac77288f9c"/*HSBToColor*/,
   "Inputs": [
     {
+      "Id": "115e3d92-2e91-447d-ba81-18a508d3d36a"/*Brightness*/,
+      "DefaultValue": 0.50000006
+    },
+    {
       "Id": "2c1adb2b-36bd-4ca0-8fbb-e7571163a98d"/*Hue*/,
       "DefaultValue": 0.0
     },
     {
       "Id": "9ee22450-f03f-40dd-8090-ce24d9bd04ed"/*Saturation*/,
       "DefaultValue": 0.0
-    },
-    {
-      "Id": "115e3d92-2e91-447d-ba81-18a508d3d36a"/*Brightness*/,
-      "DefaultValue": 0.50000006
     },
     {
       "Id": "fb8c2263-804d-4204-80aa-ba21bbefdd8e"/*Alpha*/,

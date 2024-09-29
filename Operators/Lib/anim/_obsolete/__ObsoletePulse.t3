@@ -2,12 +2,12 @@
   "Id": "5952d7b4-29ac-41fb-9324-287392d55048"/*__ObsoletePulse*/,
   "Inputs": [
     {
-      "Id": "a8d06cd6-ca17-404f-9852-a45ce35da623"/*Trigger*/,
-      "DefaultValue": false
-    },
-    {
       "Id": "168efb4d-e4cb-4264-b845-b6ede38c1919"/*Amplitude*/,
       "DefaultValue": 1.0
+    },
+    {
+      "Id": "a8d06cd6-ca17-404f-9852-a45ce35da623"/*Trigger*/,
+      "DefaultValue": false
     },
     {
       "Id": "fb8cf1db-a1ac-4563-aca0-73a4726d46a4"/*Decay*/,

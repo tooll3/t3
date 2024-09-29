@@ -3,11 +3,10 @@
   "Description": "Applies a polar coordinate transformation that converts between circular and rectangular coordinates. In other words, it wraps and unwraps round images.",
   "InputUis": [
     {
-      "InputId": "dfa1d71d-2964-41c2-bb04-86a39c36ce6e"/*Image*/,
-      "Relevancy": "Required",
+      "InputId": "4bd38d2f-0c52-456f-9938-b1f571c719fe"/*Stretch*/,
       "Position": {
         "X": 132.69783,
-        "Y": -15.624207
+        "Y": 344.3758
       }
     },
     {
@@ -21,20 +20,10 @@
       "Scale": 0.001
     },
     {
-      "InputId": "83f2dc32-5830-4558-9137-f6805f3f6ff6"/*Radius*/,
+      "InputId": "627847c4-5ba3-4852-bb09-2b0d99e05451"/*Twist*/,
       "Position": {
         "X": 132.69783,
-        "Y": 74.37579
-      },
-      "Min": 0.0,
-      "Max": 1.0,
-      "Scale": 0.01
-    },
-    {
-      "InputId": "d796cbc2-26b4-4805-b1b7-bd23b42d1984"/*RadialBias*/,
-      "Position": {
-        "X": 132.69783,
-        "Y": 164.3758
+        "Y": 254.3758
       }
     },
     {
@@ -45,17 +34,20 @@
       }
     },
     {
-      "InputId": "627847c4-5ba3-4852-bb09-2b0d99e05451"/*Twist*/,
+      "InputId": "83f2dc32-5830-4558-9137-f6805f3f6ff6"/*Radius*/,
       "Position": {
         "X": 132.69783,
-        "Y": 254.3758
-      }
+        "Y": 74.37579
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Scale": 0.01
     },
     {
-      "InputId": "4bd38d2f-0c52-456f-9938-b1f571c719fe"/*Stretch*/,
+      "InputId": "bfcb7f48-517a-4791-96fa-4aa26862839b"/*Mode*/,
       "Position": {
         "X": 132.69783,
-        "Y": 344.3758
+        "Y": 434.3758
       }
     },
     {
@@ -66,31 +58,27 @@
       }
     },
     {
-      "InputId": "bfcb7f48-517a-4791-96fa-4aa26862839b"/*Mode*/,
+      "InputId": "d796cbc2-26b4-4805-b1b7-bd23b42d1984"/*RadialBias*/,
       "Position": {
         "X": 132.69783,
-        "Y": 434.3758
+        "Y": 164.3758
+      }
+    },
+    {
+      "InputId": "dfa1d71d-2964-41c2-bb04-86a39c36ce6e"/*Image*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 132.69783,
+        "Y": -15.624207
       }
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "91c5c3c3-9df6-4c01-bf3a-57085d6ccf8f"/*_ImageFxShaderSetupStatic*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 94.37823,
-        "Y": 258.05994
-      },
+      "ChildId": "33e714dd-8965-43ae-beac-d69d3eaa4b74"/*Padding*/,
       "Position": {
-        "X": 511.94125,
-        "Y": -102.45227
-      }
-    },
-    {
-      "ChildId": "978a7d86-a94f-43c1-9fae-7699b66372e5"/*Vector2Components*/,
-      "Position": {
-        "X": 298.5258,
-        "Y": 33.04373
+        "X": 369.5064,
+        "Y": 283.64453
       }
     },
     {
@@ -108,10 +96,22 @@
       }
     },
     {
-      "ChildId": "33e714dd-8965-43ae-beac-d69d3eaa4b74"/*Padding*/,
+      "ChildId": "91c5c3c3-9df6-4c01-bf3a-57085d6ccf8f"/*_ImageFxShaderSetupStatic*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 94.37823,
+        "Y": 258.05994
+      },
       "Position": {
-        "X": 369.5064,
-        "Y": 283.64453
+        "X": 511.94125,
+        "Y": -102.45227
+      }
+    },
+    {
+      "ChildId": "978a7d86-a94f-43c1-9fae-7699b66372e5"/*Vector2Components*/,
+      "Position": {
+        "X": 298.5258,
+        "Y": 33.04373
       }
     }
   ],

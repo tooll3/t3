@@ -3,11 +3,10 @@
   "Description": "Checks if the change of the incoming vector exceeded the given threshold.",
   "InputUis": [
     {
-      "InputId": "8c6af96b-c2eb-43b7-b3c3-eecc8e40117d"/*Value*/,
-      "Relevancy": "Required",
+      "InputId": "36c294ef-3b4c-43fa-a21a-07393d888899"/*PreventContinuedChanges*/,
       "Position": {
         "X": -200.0,
-        "Y": 0.0
+        "Y": 180.0
       }
     },
     {
@@ -18,17 +17,18 @@
       }
     },
     {
+      "InputId": "8c6af96b-c2eb-43b7-b3c3-eecc8e40117d"/*Value*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
       "InputId": "ad325a4a-63ca-455d-9ff6-13fe0727bc4c"/*MinTimeBetweenHits*/,
       "Position": {
         "X": -200.0,
         "Y": 135.0
-      }
-    },
-    {
-      "InputId": "36c294ef-3b4c-43fa-a21a-07393d888899"/*PreventContinuedChanges*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 180.0
       }
     }
   ],

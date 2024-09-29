@@ -12,6 +12,14 @@
       "Usage": "Default"
     },
     {
+      "InputId": "d7820c58-22fd-492a-81fe-870ab1912b0a"/*RowIndex*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 136.99597
+      },
+      "Description": "Defines the row index (starting with 0) from which the string should be output"
+    },
+    {
       "InputId": "dadd353a-2195-4b52-80d2-88288c55b0e4"/*ColumnName*/,
       "Position": {
         "X": 51.512096,
@@ -20,14 +28,6 @@
       "Description": "Defines the column from which the string should be output",
       "AddPadding": "True",
       "Usage": "Default"
-    },
-    {
-      "InputId": "d7820c58-22fd-492a-81fe-870ab1912b0a"/*RowIndex*/,
-      "Position": {
-        "X": 51.512096,
-        "Y": 136.99597
-      },
-      "Description": "Defines the row index (starting with 0) from which the string should be output"
     }
   ],
   "SymbolChildUis": [],

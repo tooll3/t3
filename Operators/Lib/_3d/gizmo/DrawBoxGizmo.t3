@@ -19,46 +19,23 @@
       }
     },
     {
-      "Id": "a331bfbb-8876-4e27-94b3-782e64efd72a"/*Scale*/,
-      "DefaultValue": 1.0
-    },
-    {
       "Id": "83bb304e-3ed3-405f-92c7-58d263d9aafc"/*Position*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,
         "Z": 0.0
       }
+    },
+    {
+      "Id": "a331bfbb-8876-4e27-94b3-782e64efd72a"/*Scale*/,
+      "DefaultValue": 1.0
     }
   ],
   "Children": [
     {
-      "Id": "f4ff6b52-e845-48c4-a4ef-9ef89540d3bf"/*CommonPointSets*/,
-      "SymbolId": "353f63fc-e613-43ca-b037-02d7b9f4e935",
-      "InputValues": [
-        {
-          "Id": "2ba96aee-ff89-41bd-90c5-c6c36907b6e4"/*Set*/,
-          "Type": "System.Int32",
-          "Value": 2
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "5af09ec2-0177-46fc-a4e4-3460ea1c5c68"/*ScaleVector3*/,
-      "SymbolId": "646d6a5d-a1d7-471e-86ab-e1fb2542a2c2",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "421378da-3588-4908-9381-9500ea714ed6"/*DrawLines*/,
       "SymbolId": "836f211f-b387-417c-8316-658e0dc6e117",
       "InputValues": [
-        {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
-          "Type": "System.Single",
-          "Value": 0.018000001
-        },
         {
           "Id": "9ba2aa59-e55b-4ebe-aa98-0f79ed77c7aa"/*EnableZTest*/,
           "Type": "System.Boolean",
@@ -68,8 +45,19 @@
           "Id": "c9cf2182-1297-463c-b5c1-d4ee7ad0895c"/*EnableZWrite*/,
           "Type": "System.Boolean",
           "Value": true
+        },
+        {
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Type": "System.Single",
+          "Value": 0.018000001
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "5af09ec2-0177-46fc-a4e4-3460ea1c5c68"/*ScaleVector3*/,
+      "SymbolId": "646d6a5d-a1d7-471e-86ab-e1fb2542a2c2",
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -88,6 +76,18 @@
       "Id": "a7d8c1eb-d5d9-4a26-8541-8ec59e51639e"/*Transform*/,
       "SymbolId": "284d2183-197d-47fd-b130-873cced78b1c",
       "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "f4ff6b52-e845-48c4-a4ef-9ef89540d3bf"/*CommonPointSets*/,
+      "SymbolId": "353f63fc-e613-43ca-b037-02d7b9f4e935",
+      "InputValues": [
+        {
+          "Id": "2ba96aee-ff89-41bd-90c5-c6c36907b6e4"/*Set*/,
+          "Type": "System.Int32",
+          "Value": 2
+        }
+      ],
       "Outputs": []
     }
   ],

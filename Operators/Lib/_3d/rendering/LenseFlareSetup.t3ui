@@ -3,6 +3,15 @@
   "Description": "Pre-made complex light flare setups with various styles.\n\nRequire at least one [PointLight] on the left side or within the same group / graph.",
   "InputUis": [
     {
+      "InputId": "5dd9abed-da33-4f80-ba83-a817d2105add"/*RandomSeed*/,
+      "Position": {
+        "X": -393.9452,
+        "Y": 316.34497
+      },
+      "Description": "Automatically creates different combinations / styles of LenseFlares.\n\nElements include: Centerglow, Star, Color, Sprites, Iris, Sparkle and Shimmer settings.",
+      "AddPadding": "True"
+    },
+    {
       "InputId": "6485746d-1f22-4c39-bbc5-773e29feb4c0"/*Brightness*/,
       "Position": {
         "X": -393.9452,
@@ -11,12 +20,12 @@
       "Description": "Controls the brightness of the Lenseflare in relation to the intensity of the light source."
     },
     {
-      "InputId": "5dd9abed-da33-4f80-ba83-a817d2105add"/*RandomSeed*/,
+      "InputId": "aab1250a-de9c-4bfd-ab0f-8d4eed8b57e2"/*RandomizeColor*/,
       "Position": {
         "X": -393.9452,
-        "Y": 316.34497
+        "Y": 406.34497
       },
-      "Description": "Automatically creates different combinations / styles of LenseFlares.\n\nElements include: Centerglow, Star, Color, Sprites, Iris, Sparkle and Shimmer settings.",
+      "Description": "Select a color to tint various elements.",
       "AddPadding": "True"
     },
     {
@@ -27,44 +36,21 @@
       },
       "Description": "Select the Index / ID of the Pointlight to which the Lenseflare is attached.",
       "AddPadding": "True"
-    },
-    {
-      "InputId": "aab1250a-de9c-4bfd-ab0f-8d4eed8b57e2"/*RandomizeColor*/,
-      "Position": {
-        "X": -393.9452,
-        "Y": 406.34497
-      },
-      "Description": "Select a color to tint various elements.",
-      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "8689f584-ae3b-4656-b496-de71ff780ec6"/*Execute*/,
-      "Position": {
-        "X": 581.49744,
-        "Y": 246.7948
-      }
-    },
-    {
-      "ChildId": "6c380cf7-db29-436d-9e42-4b4256c68ce6"/*CenterGlow*/,
-      "Position": {
-        "X": -48.905273,
-        "Y": 492.85422
-      }
-    },
-    {
-      "ChildId": "d24a89aa-626b-40af-8f49-9e7da61e7db7"/*_DrawLenseFlare_Old*/,
-      "Position": {
-        "X": 401.09473,
-        "Y": 492.85422
-      }
-    },
-    {
-      "ChildId": "556b52e6-4b8c-437c-a829-143bf503ef00"/*ListToBuffer*/,
+      "ChildId": "26a1e12a-2444-4e48-9552-aa6f200243ae"/*NGon*/,
       "Position": {
         "X": 251.09473,
-        "Y": 492.85422
+        "Y": 1082.8545
+      }
+    },
+    {
+      "ChildId": "30b2e657-776e-4810-aade-42da88a9136b"/*Multiply*/,
+      "Position": {
+        "X": -271.44345,
+        "Y": 1056.6156
       }
     },
     {
@@ -75,6 +61,20 @@
       }
     },
     {
+      "ChildId": "4dbb0179-291b-4a49-8465-a8c821d78a8a"/*Star*/,
+      "Position": {
+        "X": -48.905273,
+        "Y": 574.8542
+      }
+    },
+    {
+      "ChildId": "556b52e6-4b8c-437c-a829-143bf503ef00"/*ListToBuffer*/,
+      "Position": {
+        "X": 251.09473,
+        "Y": 492.85422
+      }
+    },
+    {
       "ChildId": "61116fd9-ea0d-4622-b147-2fdf2266cfd1"/*DrawLensShimmer*/,
       "Position": {
         "X": 399.4942,
@@ -82,16 +82,37 @@
       }
     },
     {
-      "ChildId": "ed595f01-9089-42f7-ad86-2cf6b50e49e8"/*Shimmer*/,
+      "ChildId": "6c380cf7-db29-436d-9e42-4b4256c68ce6"/*CenterGlow*/,
       "Position": {
-        "X": -50.5058,
-        "Y": 1234.3978
+        "X": -48.905273,
+        "Y": 492.85422
+      }
+    },
+    {
+      "ChildId": "740c40f1-c864-4cc2-bb5c-af8c4bc1a4c3"/*Sparkle*/,
+      "Position": {
+        "X": -48.905273,
+        "Y": 1145.8547
       }
     },
     {
       "ChildId": "78d1c6aa-1983-40ff-a753-23f5780b7aa7"/*Digital*/,
       "Position": {
         "X": -48.905273,
+        "Y": 250.85422
+      }
+    },
+    {
+      "ChildId": "8689f584-ae3b-4656-b496-de71ff780ec6"/*Execute*/,
+      "Position": {
+        "X": 581.49744,
+        "Y": 246.7948
+      }
+    },
+    {
+      "ChildId": "a17c05e5-30e2-46c6-a101-34654a72dcea"/*ListToBuffer*/,
+      "Position": {
+        "X": 251.09473,
         "Y": 250.85422
       }
     },
@@ -103,10 +124,10 @@
       }
     },
     {
-      "ChildId": "740c40f1-c864-4cc2-bb5c-af8c4bc1a4c3"/*Sparkle*/,
+      "ChildId": "c4b0dc54-87d5-4f86-9f9d-a089a03ac10c"/*DefineLensFlare*/,
       "Position": {
         "X": -48.905273,
-        "Y": 1145.8547
+        "Y": 738.8541
       }
     },
     {
@@ -117,10 +138,10 @@
       }
     },
     {
-      "ChildId": "a17c05e5-30e2-46c6-a101-34654a72dcea"/*ListToBuffer*/,
+      "ChildId": "d24a89aa-626b-40af-8f49-9e7da61e7db7"/*_DrawLenseFlare_Old*/,
       "Position": {
-        "X": 251.09473,
-        "Y": 250.85422
+        "X": 401.09473,
+        "Y": 492.85422
       }
     },
     {
@@ -131,31 +152,17 @@
       }
     },
     {
-      "ChildId": "4dbb0179-291b-4a49-8465-a8c821d78a8a"/*Star*/,
-      "Position": {
-        "X": -48.905273,
-        "Y": 574.8542
-      }
-    },
-    {
-      "ChildId": "ff748efc-1326-4e8e-b827-04b7964544a2"/*MultiIris*/,
-      "Position": {
-        "X": -48.905273,
-        "Y": 903.854
-      }
-    },
-    {
-      "ChildId": "26a1e12a-2444-4e48-9552-aa6f200243ae"/*NGon*/,
-      "Position": {
-        "X": 251.09473,
-        "Y": 1082.8545
-      }
-    },
-    {
       "ChildId": "e76b5f35-0005-4e13-be21-cb7903490aa2"/*ListToBuffer*/,
       "Position": {
         "X": 251.09473,
         "Y": 903.854
+      }
+    },
+    {
+      "ChildId": "ed595f01-9089-42f7-ad86-2cf6b50e49e8"/*Shimmer*/,
+      "Position": {
+        "X": -50.5058,
+        "Y": 1234.3978
       }
     },
     {
@@ -173,17 +180,10 @@
       }
     },
     {
-      "ChildId": "c4b0dc54-87d5-4f86-9f9d-a089a03ac10c"/*DefineLensFlare*/,
+      "ChildId": "ff748efc-1326-4e8e-b827-04b7964544a2"/*MultiIris*/,
       "Position": {
         "X": -48.905273,
-        "Y": 738.8541
-      }
-    },
-    {
-      "ChildId": "30b2e657-776e-4810-aade-42da88a9136b"/*Multiply*/,
-      "Position": {
-        "X": -271.44345,
-        "Y": 1056.6156
+        "Y": 903.854
       }
     }
   ],

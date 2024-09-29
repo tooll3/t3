@@ -3,33 +3,16 @@
   "Description": "A box gradient using the signed distance field \"Box - Exact\" desbribed  in the \"2D distance functions\" article on Inigo Quilez's website. \n\nBased on [RadialGradient]\n\n2D, SDF, sdBox, [RoundedRect]",
   "InputUis": [
     {
-      "InputId": "71cd9153-da17-47f0-9251-80bdef8906b3"/*Image*/,
-      "Position": {
-        "X": -267.11908,
-        "Y": -283.68253
-      },
-      "GroupTitle": "Additional Features"
-    },
-    {
-      "InputId": "1dd6cf1e-d374-40d5-b51f-21b91deb3802"/*Rotation*/,
+      "InputId": "06553d30-0a71-435b-8796-b61db670fbc6"/*CornersRadius*/,
       "Position": {
         "X": -270.7163,
-        "Y": 71.82593
+        "Y": 26.825928
       },
-      "Min": -180.0,
-      "Max": 180.0,
-      "Format": "{0:0.0}°"
-    },
-    {
-      "InputId": "e155a2f2-2b21-49b5-9bd4-0c363684d93f"/*Center*/,
-      "Position": {
-        "X": -277.04544,
-        "Y": -152.62457
-      },
-      "GroupTitle": "Shape",
-      "Min": -0.5,
-      "Max": 0.5,
-      "UseVec2Control": "Position"
+      "Description": "top left, top right, bottom right, bottom left",
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "06f28039-d349-4f5f-a68f-6009886e180b"/*Size*/,
@@ -43,6 +26,16 @@
       "UseVec2Control": "Position"
     },
     {
+      "InputId": "1dd6cf1e-d374-40d5-b51f-21b91deb3802"/*Rotation*/,
+      "Position": {
+        "X": -270.7163,
+        "Y": 71.82593
+      },
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
+    },
+    {
       "InputId": "5a164383-4f9d-4978-bfcb-a1c48b9b8f34"/*UniformScale*/,
       "Position": {
         "X": -270.7163,
@@ -53,18 +46,6 @@
       "Format": "{0:0.000} ×"
     },
     {
-      "InputId": "06553d30-0a71-435b-8796-b61db670fbc6"/*CornersRadius*/,
-      "Position": {
-        "X": -270.7163,
-        "Y": 26.825928
-      },
-      "Description": "top left, top right, bottom right, bottom left",
-      "AddPadding": "True",
-      "Min": 0.0,
-      "Max": 1.0,
-      "Clamp": true
-    },
-    {
       "InputId": "5e7cd523-0c39-42e4-a4e9-05cc20477296"/*Gradient*/,
       "Position": {
         "X": -267.11908,
@@ -72,6 +53,47 @@
       },
       "GroupTitle": "Style",
       "AddPadding": "True"
+    },
+    {
+      "InputId": "63241bae-bfe6-415f-9288-ffcf1be15fc6"/*BlendMode*/,
+      "Position": {
+        "X": -270.7163,
+        "Y": 493.503
+      },
+      "GroupTitle": "Optoins"
+    },
+    {
+      "InputId": "70641015-e77b-4a75-b3f2-eb3534cceead"/*Resolution*/,
+      "Position": {
+        "X": -270.2631,
+        "Y": 577.8617
+      }
+    },
+    {
+      "InputId": "71cd9153-da17-47f0-9251-80bdef8906b3"/*Image*/,
+      "Position": {
+        "X": -267.11908,
+        "Y": -283.68253
+      },
+      "GroupTitle": "Additional Features"
+    },
+    {
+      "InputId": "8f50765e-3d85-4814-a99a-ecdff18c97e7"/*Repeat*/,
+      "Position": {
+        "X": -270.7163,
+        "Y": 363.82593
+      }
+    },
+    {
+      "InputId": "94516412-20a6-41a9-a036-a3b5ed67b04a"/*BiasAndGain*/,
+      "Position": {
+        "X": -270.7163,
+        "Y": 419.82593
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true,
+      "UseVec2Control": "BiasAndGain"
     },
     {
       "InputId": "94d46ad8-7dd6-490c-ade4-a527c7ee9d05"/*GradientWidth*/,
@@ -99,52 +121,23 @@
       }
     },
     {
-      "InputId": "8f50765e-3d85-4814-a99a-ecdff18c97e7"/*Repeat*/,
+      "InputId": "e155a2f2-2b21-49b5-9bd4-0c363684d93f"/*Center*/,
       "Position": {
-        "X": -270.7163,
-        "Y": 363.82593
-      }
-    },
-    {
-      "InputId": "94516412-20a6-41a9-a036-a3b5ed67b04a"/*BiasAndGain*/,
-      "Position": {
-        "X": -270.7163,
-        "Y": 419.82593
+        "X": -277.04544,
+        "Y": -152.62457
       },
-      "Min": 0.0,
-      "Max": 1.0,
-      "Clamp": true,
-      "UseVec2Control": "BiasAndGain"
-    },
-    {
-      "InputId": "63241bae-bfe6-415f-9288-ffcf1be15fc6"/*BlendMode*/,
-      "Position": {
-        "X": -270.7163,
-        "Y": 493.503
-      },
-      "GroupTitle": "Optoins"
-    },
-    {
-      "InputId": "70641015-e77b-4a75-b3f2-eb3534cceead"/*Resolution*/,
-      "Position": {
-        "X": -270.2631,
-        "Y": 577.8617
-      }
+      "GroupTitle": "Shape",
+      "Min": -0.5,
+      "Max": 0.5,
+      "UseVec2Control": "Position"
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "3b46ece1-a7be-42f1-a3e4-c4bda3a03169"/*Vector2Components*/,
+      "ChildId": "0094265a-6359-4b3a-b5be-3562f05f8d45"/*Vector2Components*/,
       "Position": {
         "X": -127.04544,
-        "Y": -152.62457
-      }
-    },
-    {
-      "ChildId": "decf22da-532e-4d45-acb0-4d1072d9921e"/*GradientsToTexture*/,
-      "Position": {
-        "X": -131.32559,
-        "Y": -233.28627
+        "Y": -96.62457
       }
     },
     {
@@ -155,10 +148,39 @@
       }
     },
     {
+      "ChildId": "06fadd69-478c-4583-b86e-3c7091a24edd"/*IntToFloat*/,
+      "Position": {
+        "X": -121.629974,
+        "Y": 511.77606
+      }
+    },
+    {
+      "ChildId": "1e874625-65bf-47cd-8024-93c7b4c8b140"/*Vector4Components*/,
+      "Comment": "Connection order (top left, top right, bottom right, bottom left) ",
+      "Position": {
+        "X": -123.87378,
+        "Y": -15.746948
+      }
+    },
+    {
+      "ChildId": "3b46ece1-a7be-42f1-a3e4-c4bda3a03169"/*Vector2Components*/,
+      "Position": {
+        "X": -127.04544,
+        "Y": -152.62457
+      }
+    },
+    {
       "ChildId": "45b30540-b3b5-4790-ba75-f9fee6bf4e36"/*BoolToFloat*/,
       "Position": {
         "X": -120.71631,
         "Y": 374.82593
+      }
+    },
+    {
+      "ChildId": "4810224c-6cc8-456b-b364-6a580b560e9f"/*Vector2Components*/,
+      "Position": {
+        "X": -120.71631,
+        "Y": 430.82593
       }
     },
     {
@@ -174,32 +196,10 @@
       }
     },
     {
-      "ChildId": "06fadd69-478c-4583-b86e-3c7091a24edd"/*IntToFloat*/,
+      "ChildId": "decf22da-532e-4d45-acb0-4d1072d9921e"/*GradientsToTexture*/,
       "Position": {
-        "X": -121.629974,
-        "Y": 511.77606
-      }
-    },
-    {
-      "ChildId": "4810224c-6cc8-456b-b364-6a580b560e9f"/*Vector2Components*/,
-      "Position": {
-        "X": -120.71631,
-        "Y": 430.82593
-      }
-    },
-    {
-      "ChildId": "0094265a-6359-4b3a-b5be-3562f05f8d45"/*Vector2Components*/,
-      "Position": {
-        "X": -127.04544,
-        "Y": -96.62457
-      }
-    },
-    {
-      "ChildId": "1e874625-65bf-47cd-8024-93c7b4c8b140"/*Vector4Components*/,
-      "Comment": "Connection order (top left, top right, bottom right, bottom left) ",
-      "Position": {
-        "X": -123.87378,
-        "Y": -15.746948
+        "X": -131.32559,
+        "Y": -233.28627
       }
     }
   ],

@@ -1,10 +1,8 @@
 {
-  "Name": "GetRenderTargetReference",
-  "Id": "270c37b6-7633-4952-bade-a3ea2300583c",
-  "Namespace": "lib.3d.rendering._",
+  "Id": "270c37b6-7633-4952-bade-a3ea2300583c"/*GetRenderTargetReference*/,
   "Inputs": [
     {
-      "Id": "f8e86ae6-f5c8-4de1-a4ed-58b43c2fe7f5"/*ColorTexture*/,
+      "Id": "290cd1e8-4793-4a65-ad90-3578b4410973"/*TextureReference*/,
       "DefaultValue": null
     },
     {
@@ -12,7 +10,7 @@
       "DefaultValue": null
     },
     {
-      "Id": "290cd1e8-4793-4a65-ad90-3578b4410973"/*TextureReference*/,
+      "Id": "f8e86ae6-f5c8-4de1-a4ed-58b43c2fe7f5"/*ColorTexture*/,
       "DefaultValue": null
     }
   ],

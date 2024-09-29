@@ -3,18 +3,18 @@
   "Description": "Tone mapping is the process of converting high dynamic range (HDR) imagery to a displayable format, adjusting the contrast and brightness to make it visually appealing while preserving details in both highlights and shadows.",
   "InputUis": [
     {
+      "InputId": "37d4e1e6-e5a0-40b6-ada9-9481f5a807de"/*Mode*/,
+      "Position": {
+        "X": 153.79459,
+        "Y": 431.24347
+      }
+    },
+    {
       "InputId": "72e51856-bc8f-4bcf-a6d8-6c7b4f8b0583"/*Texture2d*/,
       "Relevancy": "Required",
       "Position": {
         "X": 122.85706,
         "Y": 276.69968
-      }
-    },
-    {
-      "InputId": "37d4e1e6-e5a0-40b6-ada9-9481f5a807de"/*Mode*/,
-      "Position": {
-        "X": 153.79459,
-        "Y": 431.24347
       }
     },
     {
@@ -34,6 +34,13 @@
   ],
   "SymbolChildUis": [
     {
+      "ChildId": "46d18eb7-013b-4f6f-8e86-2b37a0313fd2"/*_ImageFxShaderSetupStatic*/,
+      "Position": {
+        "X": 604.3195,
+        "Y": 265.85956
+      }
+    },
+    {
       "ChildId": "5e4ffbe2-74e8-440c-9939-6cefd81665db"/*IntToFloat*/,
       "Position": {
         "X": 303.7946,
@@ -45,13 +52,6 @@
       "Position": {
         "X": 303.7946,
         "Y": 476.2435
-      }
-    },
-    {
-      "ChildId": "46d18eb7-013b-4f6f-8e86-2b37a0313fd2"/*_ImageFxShaderSetupStatic*/,
-      "Position": {
-        "X": 604.3195,
-        "Y": 265.85956
       }
     }
   ],

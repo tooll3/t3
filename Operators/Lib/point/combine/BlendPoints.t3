@@ -2,38 +2,62 @@
   "Id": "2dc5c9d1-ea93-4597-a4d9-7b610aad603a"/*BlendPoints*/,
   "Inputs": [
     {
+      "Id": "91b903a2-5127-431b-ab66-d5a38ce1693c"/*PointsB_*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "97904d2e-ae67-4ab4-9201-7902a85d12f3"/*PointsA_*/,
       "DefaultValue": null
     },
     {
-      "Id": "91b903a2-5127-431b-ab66-d5a38ce1693c"/*PointsB_*/,
-      "DefaultValue": null
+      "Id": "acef877d-214d-4ca0-ac11-95fa59d1f6fc"/*Pairing*/,
+      "DefaultValue": 0
     },
     {
       "Id": "ba7ffda2-f9f6-440d-a174-7339844835fa"/*BlendValue*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "ee8e9e15-ce18-4034-abc6-dd56108c8a02"/*Scatter*/,
-      "DefaultValue": 0.0
+      "Id": "bdb712a8-3dbc-458a-887a-5add51813196"/*RangeWidth*/,
+      "DefaultValue": 0.5
     },
     {
       "Id": "c5480ce5-a8ba-4a26-8cee-c28e442020b7"/*BlendMode*/,
       "DefaultValue": 0
     },
     {
-      "Id": "bdb712a8-3dbc-458a-887a-5add51813196"/*RangeWidth*/,
-      "DefaultValue": 0.5
-    },
-    {
-      "Id": "acef877d-214d-4ca0-ac11-95fa59d1f6fc"/*Pairing*/,
-      "DefaultValue": 0
+      "Id": "ee8e9e15-ce18-4034-abc6-dd56108c8a02"/*Scatter*/,
+      "DefaultValue": 0.0
     }
   ],
   "Children": [
     {
+      "Id": "0bc3f50e-f47c-44bd-9f19-5a144f745b14"/*GetSRVProperties*/,
+      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "0da93e22-c63d-4efe-96db-ff346c79a706"/*GetBufferComponents*/,
       "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "2eb9e20b-521f-4630-8085-2c32bda1bbdb"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "4c7d82ca-42ed-4968-8150-7c6378a7a6ca"/*ExecuteBufferUpdate*/,
+      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "4fee13a9-9e54-48a9-b6a4-fbf73d710aad"/*CalcDispatchCount*/,
+      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
       "InputValues": [],
       "Outputs": []
     },
@@ -44,14 +68,8 @@
       "Outputs": []
     },
     {
-      "Id": "be16bd14-c623-47e2-8944-ce90f98e2728"/*GetBufferComponents*/,
+      "Id": "951f2698-ceac-42de-9401-5f58672fcc2e"/*GetBufferComponents*/,
       "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "2eb9e20b-521f-4630-8085-2c32bda1bbdb"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
       "InputValues": [],
       "Outputs": []
     },
@@ -72,6 +90,12 @@
       "Outputs": []
     },
     {
+      "Id": "be16bd14-c623-47e2-8944-ce90f98e2728"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "c8193c86-0696-49c7-a3a3-7f676ebdef0c"/*ComputeShader*/,
       "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
       "InputValues": [
@@ -81,30 +105,6 @@
           "Value": "Resources\\lib\\points\\combine\\BlendPoints.hlsl"
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "4c7d82ca-42ed-4968-8150-7c6378a7a6ca"/*ExecuteBufferUpdate*/,
-      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "4fee13a9-9e54-48a9-b6a4-fbf73d710aad"/*CalcDispatchCount*/,
-      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "ec56cf28-5896-4dfb-a701-b3b33e659935"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "951f2698-ceac-42de-9401-5f58672fcc2e"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
       "Outputs": []
     },
     {
@@ -120,8 +120,8 @@
       "Outputs": []
     },
     {
-      "Id": "0bc3f50e-f47c-44bd-9f19-5a144f745b14"/*GetSRVProperties*/,
-      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
+      "Id": "ec56cf28-5896-4dfb-a701-b3b33e659935"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
       "InputValues": [],
       "Outputs": []
     }

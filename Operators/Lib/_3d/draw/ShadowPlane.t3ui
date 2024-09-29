@@ -3,23 +3,6 @@
   "Description": "Creates a Plane that is transparent except for a realtime rendered Shadowmap.\n\nSee [ShadowPlaneExample] on how to use it.",
   "InputUis": [
     {
-      "InputId": "7a51aab1-7de2-4bc2-bfb6-bd32aca0381c"/*Command*/,
-      "Position": {
-        "X": -446.21228,
-        "Y": 3.6385498
-      },
-      "Description": "Everything connected here will cast a shadow onto the ShadowPlane"
-    },
-    {
-      "InputId": "5a2f2521-c521-48a9-99c9-3916413c7938"/*PlaneSize*/,
-      "Position": {
-        "X": -446.21228,
-        "Y": 93.63855
-      },
-      "Description": "Can be used to scale the ShadowPlane if shadows are cut off too early",
-      "AddPadding": "True"
-    },
-    {
       "InputId": "16527748-fe55-4ced-b08d-6c94377c5563"/*FOV*/,
       "Position": {
         "X": -446.21228,
@@ -37,15 +20,20 @@
       "Description": "Sets the resolution of the 'ShadowMap'"
     },
     {
-      "InputId": "f192118e-ea03-4233-a7b5-93f0fa380e93"/*Color*/,
+      "InputId": "48974f83-203f-4c35-896f-c1e0820214cf"/*Rotation*/,
       "Position": {
         "X": -446.21228,
-        "Y": 228.63855
+        "Y": 408.63855
+      }
+    },
+    {
+      "InputId": "5a2f2521-c521-48a9-99c9-3916413c7938"/*PlaneSize*/,
+      "Position": {
+        "X": -446.21228,
+        "Y": 93.63855
       },
-      "Description": "Defines the Color and Opacity of the shadow.",
-      "Min": 0.0,
-      "Max": 1.0,
-      "Clamp": true
+      "Description": "Can be used to scale the ShadowPlane if shadows are cut off too early",
+      "AddPadding": "True"
     },
     {
       "InputId": "7a330847-eb4d-4b18-8f55-d220351537a7"/*BlurRadius*/,
@@ -57,6 +45,14 @@
       "Description": "Defines how strongly the shadows are blurred",
       "Min": 0.0,
       "Max": 10.0
+    },
+    {
+      "InputId": "7a51aab1-7de2-4bc2-bfb6-bd32aca0381c"/*Command*/,
+      "Position": {
+        "X": -446.21228,
+        "Y": 3.6385498
+      },
+      "Description": "Everything connected here will cast a shadow onto the ShadowPlane"
     },
     {
       "InputId": "ad589e97-e1db-4557-8a46-f6618f3c969b"/*BlurDistribution*/,
@@ -80,19 +76,23 @@
       "Description": "Defines the Position of the ShadowPlane.\nThe default is slightly above the ground.\n"
     },
     {
-      "InputId": "48974f83-203f-4c35-896f-c1e0820214cf"/*Rotation*/,
+      "InputId": "f192118e-ea03-4233-a7b5-93f0fa380e93"/*Color*/,
       "Position": {
         "X": -446.21228,
-        "Y": 408.63855
-      }
+        "Y": 228.63855
+      },
+      "Description": "Defines the Color and Opacity of the shadow.",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "c3bbd5df-1c84-4700-b747-5a2dd57c0fe3"/*QuadMesh*/,
+      "ChildId": "21fd0395-3f6d-4deb-b15f-329ee0342d3e"/*RgbaToColor*/,
       "Position": {
-        "X": 485.50848,
-        "Y": 356.1574
+        "X": 168.00555,
+        "Y": 541.9274
       }
     },
     {
@@ -103,10 +103,17 @@
       }
     },
     {
-      "ChildId": "cb92bd05-f9b5-4c64-a4c2-f63a0a568a6a"/*RenderTarget*/,
+      "ChildId": "442f9150-9b6f-4d00-a8d0-68ba6794b0fc"/*Vec3Distance*/,
       "Position": {
-        "X": 183.84106,
-        "Y": 20.145874
+        "X": 127.35327,
+        "Y": -151.25143
+      }
+    },
+    {
+      "ChildId": "60f3216c-536c-4a91-863d-4dbbdd4d4b30"/*GetLightPosition*/,
+      "Position": {
+        "X": -201.21283,
+        "Y": -251.2857
       }
     },
     {
@@ -117,17 +124,10 @@
       }
     },
     {
-      "ChildId": "e218adc7-158f-4ce7-9656-4bad200aa9ed"/*BlurWithMask*/,
+      "ChildId": "7b77ca3c-8bf8-4c85-a87f-386c607e4d6f"/*Remap*/,
       "Position": {
-        "X": 667.1459,
-        "Y": -10.27417
-      }
-    },
-    {
-      "ChildId": "f4e38789-0288-451c-b5d2-807b7c9e55c0"/*DrawMeshUnlit*/,
-      "Position": {
-        "X": 1099.445,
-        "Y": 19.716095
+        "X": 262.50357,
+        "Y": -139.28036
       }
     },
     {
@@ -138,37 +138,9 @@
       }
     },
     {
-      "ChildId": "b08b37fa-cbc2-4bcd-a099-2c9580c80d68"/*Int2*/,
+      "ChildId": "a7d40340-c658-4e8d-ae2e-25e2b1c13bb4"/*Loop*/,
       "Position": {
-        "X": -3.0855713,
-        "Y": 105.51059
-      }
-    },
-    {
-      "ChildId": "ed79cfab-16b0-4e11-a497-0a633c8d75e1"/*Vector2Components*/,
-      "Position": {
-        "X": -14.119766,
-        "Y": 461.99835
-      }
-    },
-    {
-      "ChildId": "df2f1f45-7ee3-4359-b841-3c1021d21859"/*RgbaToColor*/,
-      "Position": {
-        "X": 168.00555,
-        "Y": 459.92743
-      }
-    },
-    {
-      "ChildId": "21fd0395-3f6d-4deb-b15f-329ee0342d3e"/*RgbaToColor*/,
-      "Position": {
-        "X": 168.00555,
-        "Y": 541.9274
-      }
-    },
-    {
-      "ChildId": "a9645285-fcb3-4deb-b406-ab1e055713d3"/*_ReprojectShadowMap*/,
-      "Position": {
-        "X": 949.44495,
+        "X": 1249.445,
         "Y": 19.716095
       }
     },
@@ -180,31 +152,24 @@
       }
     },
     {
-      "ChildId": "f893bd18-c49e-4c42-93cf-11de03ca1740"/*Int2*/,
+      "ChildId": "a9645285-fcb3-4deb-b406-ab1e055713d3"/*_ReprojectShadowMap*/,
       "Position": {
-        "X": 813.81494,
-        "Y": 126.92261
-      }
-    },
-    {
-      "ChildId": "dc8ae76a-f88e-4f52-b7ff-41e368d10d25"/*DefineLensFlare*/,
-      "Position": {
-        "X": 797.22205,
-        "Y": 784.865
-      }
-    },
-    {
-      "ChildId": "60f3216c-536c-4a91-863d-4dbbdd4d4b30"/*GetLightPosition*/,
-      "Position": {
-        "X": -201.21283,
-        "Y": -251.2857
-      }
-    },
-    {
-      "ChildId": "a7d40340-c658-4e8d-ae2e-25e2b1c13bb4"/*Loop*/,
-      "Position": {
-        "X": 1249.445,
+        "X": 949.44495,
         "Y": 19.716095
+      }
+    },
+    {
+      "ChildId": "b08b37fa-cbc2-4bcd-a099-2c9580c80d68"/*Int2*/,
+      "Position": {
+        "X": -3.0855713,
+        "Y": 105.51059
+      }
+    },
+    {
+      "ChildId": "c3bbd5df-1c84-4700-b747-5a2dd57c0fe3"/*QuadMesh*/,
+      "Position": {
+        "X": 485.50848,
+        "Y": 356.1574
       }
     },
     {
@@ -215,23 +180,58 @@
       }
     },
     {
-      "ChildId": "442f9150-9b6f-4d00-a8d0-68ba6794b0fc"/*Vec3Distance*/,
+      "ChildId": "cb92bd05-f9b5-4c64-a4c2-f63a0a568a6a"/*RenderTarget*/,
       "Position": {
-        "X": 127.35327,
-        "Y": -151.25143
+        "X": 183.84106,
+        "Y": 20.145874
+      }
+    },
+    {
+      "ChildId": "dc8ae76a-f88e-4f52-b7ff-41e368d10d25"/*DefineLensFlare*/,
+      "Position": {
+        "X": 797.22205,
+        "Y": 784.865
+      }
+    },
+    {
+      "ChildId": "df2f1f45-7ee3-4359-b841-3c1021d21859"/*RgbaToColor*/,
+      "Position": {
+        "X": 168.00555,
+        "Y": 459.92743
+      }
+    },
+    {
+      "ChildId": "e218adc7-158f-4ce7-9656-4bad200aa9ed"/*BlurWithMask*/,
+      "Position": {
+        "X": 667.1459,
+        "Y": -10.27417
+      }
+    },
+    {
+      "ChildId": "ed79cfab-16b0-4e11-a497-0a633c8d75e1"/*Vector2Components*/,
+      "Position": {
+        "X": -14.119766,
+        "Y": 461.99835
+      }
+    },
+    {
+      "ChildId": "f4e38789-0288-451c-b5d2-807b7c9e55c0"/*DrawMeshUnlit*/,
+      "Position": {
+        "X": 1099.445,
+        "Y": 19.716095
+      }
+    },
+    {
+      "ChildId": "f893bd18-c49e-4c42-93cf-11de03ca1740"/*Int2*/,
+      "Position": {
+        "X": 813.81494,
+        "Y": 126.92261
       }
     },
     {
       "ChildId": "fc5df852-d0df-49c3-9d22-d348fa100493"/*Add*/,
       "Position": {
         "X": 412.50357,
-        "Y": -139.28036
-      }
-    },
-    {
-      "ChildId": "7b77ca3c-8bf8-4c85-a87f-386c607e4d6f"/*Remap*/,
-      "Position": {
-        "X": 262.50357,
         "Y": -139.28036
       }
     }

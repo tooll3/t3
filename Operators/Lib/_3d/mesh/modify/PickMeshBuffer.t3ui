@@ -3,18 +3,18 @@
   "Description": "Switch between different mesh buffers",
   "InputUis": [
     {
+      "InputId": "076afdcc-c9af-4875-b97a-d8132996b35a"/*Index*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
       "InputId": "7bb6f999-214a-448a-a7f7-be447113785e"/*Input*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
-    },
-    {
-      "InputId": "076afdcc-c9af-4875-b97a-d8132996b35a"/*Index*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
       }
     }
   ],

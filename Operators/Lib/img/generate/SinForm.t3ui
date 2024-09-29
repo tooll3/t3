@@ -3,63 +3,13 @@
   "Description": "Generates a sine curve with various parameters\n\nThe presets show various application possibilities for different patterns\n\n\nOther interesting patterns can be generated with [SinForm] [ZollnerPattern] [FraserGrid] [Raster] [CheckerBoard] [RyojiPattern2] [RyojiPattern1]",
   "InputUis": [
     {
-      "InputId": "7eca4ec2-40f1-4699-8c1f-9e196917df67"/*Resolution*/,
+      "InputId": "199467aa-ac7a-4851-94b8-9e0f5f64d6c0"/*Rotate*/,
       "Position": {
-        "X": -198.16037,
-        "Y": -57.877563
-      }
-    },
-    {
-      "InputId": "5ac1e50d-21af-40e8-ba0b-45a3e8cdd75d"/*Image*/,
-      "Position": {
-        "X": -198.16037,
-        "Y": -12.877563
+        "X": -256.46817,
+        "Y": 438.18356
       },
-      "Description": "Custom input for a background image"
-    },
-    {
-      "InputId": "ea8656ce-a75d-4cfd-9deb-cd3a36294399"/*Fill*/,
-      "Position": {
-        "X": -198.16037,
-        "Y": 32.122437
-      },
-      "GroupTitle": "Color",
-      "Description": "Defines the color of the line"
-    },
-    {
-      "InputId": "924c36ab-7d36-4a3c-8dd2-72648fda1711"/*Background*/,
-      "Position": {
-        "X": -198.16037,
-        "Y": 77.12242
-      },
-      "Description": "Defines the background color"
-    },
-    {
-      "InputId": "c6fbd3b2-45da-40bc-958a-8ab13b8cdf2b"/*LineWidth*/,
-      "Position": {
-        "X": -247.17827,
-        "Y": 210.70657
-      },
-      "GroupTitle": "Appearance",
-      "Description": "Defines the thickness of the lines"
-    },
-    {
-      "InputId": "aa818499-5322-47f4-b08d-d21bbd0b72c8"/*Fade*/,
-      "Position": {
-        "X": -247.17827,
-        "Y": 255.70657
-      },
-      "Description": "Defines the smoothness of the lines edges",
-      "Scale": 0.1
-    },
-    {
-      "InputId": "78259bce-6e58-424c-9d06-5eea1f37606a"/*Size*/,
-      "Position": {
-        "X": -255.77164,
-        "Y": 305.35715
-      },
-      "Description": "Scales the lines on the x and y axis",
-      "AddPadding": "True"
+      "Description": "Rotates the line",
+      "Scale": 0.5
     },
     {
       "InputId": "23101a83-14d3-489e-a613-39439fb9a20e"/*Offset*/,
@@ -68,15 +18,6 @@
         "Y": 350.35727
       },
       "Description": "Transforms the position of the line"
-    },
-    {
-      "InputId": "199467aa-ac7a-4851-94b8-9e0f5f64d6c0"/*Rotate*/,
-      "Position": {
-        "X": -256.46817,
-        "Y": 438.18356
-      },
-      "Description": "Rotates the line",
-      "Scale": 0.5
     },
     {
       "InputId": "33f88b64-3d8f-4b07-afdc-18d3b3eb63c8"/*Copies*/,
@@ -95,23 +36,68 @@
         "Y": 565.6686
       },
       "Description": "Offsets the duplicated lines"
+    },
+    {
+      "InputId": "5ac1e50d-21af-40e8-ba0b-45a3e8cdd75d"/*Image*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": -12.877563
+      },
+      "Description": "Custom input for a background image"
+    },
+    {
+      "InputId": "78259bce-6e58-424c-9d06-5eea1f37606a"/*Size*/,
+      "Position": {
+        "X": -255.77164,
+        "Y": 305.35715
+      },
+      "Description": "Scales the lines on the x and y axis",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "7eca4ec2-40f1-4699-8c1f-9e196917df67"/*Resolution*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": -57.877563
+      }
+    },
+    {
+      "InputId": "924c36ab-7d36-4a3c-8dd2-72648fda1711"/*Background*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": 77.12242
+      },
+      "Description": "Defines the background color"
+    },
+    {
+      "InputId": "aa818499-5322-47f4-b08d-d21bbd0b72c8"/*Fade*/,
+      "Position": {
+        "X": -247.17827,
+        "Y": 255.70657
+      },
+      "Description": "Defines the smoothness of the lines edges",
+      "Scale": 0.1
+    },
+    {
+      "InputId": "c6fbd3b2-45da-40bc-958a-8ab13b8cdf2b"/*LineWidth*/,
+      "Position": {
+        "X": -247.17827,
+        "Y": 210.70657
+      },
+      "GroupTitle": "Appearance",
+      "Description": "Defines the thickness of the lines"
+    },
+    {
+      "InputId": "ea8656ce-a75d-4cfd-9deb-cd3a36294399"/*Fill*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": 32.122437
+      },
+      "GroupTitle": "Color",
+      "Description": "Defines the color of the line"
     }
   ],
   "SymbolChildUis": [
-    {
-      "ChildId": "a09a8895-394a-49e9-a5d5-a0bde791fecb"/*Vector4Components*/,
-      "Position": {
-        "X": -20.37726,
-        "Y": 12.897135
-      }
-    },
-    {
-      "ChildId": "9494915c-75ff-44ba-9923-d05995988fa6"/*Vector4Components*/,
-      "Position": {
-        "X": -20.37726,
-        "Y": 68.89713
-      }
-    },
     {
       "ChildId": "89a92adc-48a3-4698-afbc-cacd7346904b"/*_ImageFxShaderSetup2*/,
       "Style": "Resizable",
@@ -125,10 +111,24 @@
       }
     },
     {
+      "ChildId": "9494915c-75ff-44ba-9923-d05995988fa6"/*Vector4Components*/,
+      "Position": {
+        "X": -20.37726,
+        "Y": 68.89713
+      }
+    },
+    {
       "ChildId": "9d91b028-3e3e-40a9-99cf-16e6bcc57b1f"/*Vector2Components*/,
       "Position": {
         "X": -63.666214,
         "Y": 196.418
+      }
+    },
+    {
+      "ChildId": "a09a8895-394a-49e9-a5d5-a0bde791fecb"/*Vector4Components*/,
+      "Position": {
+        "X": -20.37726,
+        "Y": 12.897135
       }
     },
     {

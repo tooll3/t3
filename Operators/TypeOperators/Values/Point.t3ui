@@ -1,0 +1,89 @@
+{
+  "Id": "9989f539-f86c-4508-83d7-3fc0e559f502"/*Point*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "130b5c11-66dd-4c0e-ac67-924554bad2d8"/*Extend*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
+    },
+    {
+      "InputId": "2d7d85ce-7b5e-4e86-bae2-88a7c4f7a2e5"/*W*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "34ad759e-9a81-4d7e-9024-5abacc279895"/*Color*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "53cde701-435f-42e4-b598-db0e607a238c"/*AddSeparator*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
+      }
+    },
+    {
+      "InputId": "55a3370f-1768-414f-b38d-4accc5e93914"/*RotationAxis*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "a0a453db-d8f1-415a-9a98-3c88a25b15e7"/*Position*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "ca12df13-7529-4ede-b6fc-ce8aeba4f33e"/*Selected*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      }
+    },
+    {
+      "InputId": "e9859381-eb88-4856-91c5-60d30ac6035a"/*RotationAngle*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "5915d7e2-054d-4917-86bd-25ad1beb1754"/*Buffer*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    },
+    {
+      "OutputId": "d9c04756-8922-496d-8380-120f280ef65b"/*ResultList*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 300.0
+      }
+    },
+    {
+      "OutputId": "8698d60d-8cd9-4a3f-9001-19dac29028cc"/*OutPosition*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 400.0
+      }
+    }
+  ]
+}

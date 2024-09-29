@@ -1,15 +1,13 @@
 {
-  "Name": "SelectBoolFromFloatDict",
-  "Id": "05295c65-7dfd-4570-866e-9b5c4e735569",
-  "Namespace": "lib.io.midi",
+  "Id": "05295c65-7dfd-4570-866e-9b5c4e735569"/*SelectBoolFromFloatDict*/,
   "Inputs": [
-    {
-      "Id": "e09e3a45-e1de-430f-93ef-9d2412b22cda"/*DictionaryInput*/,
-      "DefaultValue": null
-    },
     {
       "Id": "132db9de-cffe-4379-af85-2aca18b4f6e0"/*Select*/,
       "DefaultValue": ""
+    },
+    {
+      "Id": "e09e3a45-e1de-430f-93ef-9d2412b22cda"/*DictionaryInput*/,
+      "DefaultValue": null
     }
   ],
   "Children": [],

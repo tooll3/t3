@@ -3,10 +3,31 @@
   "Description": "A simple shader that creates a Cafe Wall optical illusion pattern.",
   "InputUis": [
     {
+      "InputId": "0199068d-c826-4b08-9987-8e480ce064a7"/*RAffects_Ratio*/,
+      "Position": {
+        "X": -197.88463,
+        "Y": 1264.1416
+      }
+    },
+    {
+      "InputId": "0480f95d-3ab6-4d53-8452-bd79a5438d71"/*BAffects_RowShift*/,
+      "Position": {
+        "X": -197.88463,
+        "Y": 1354.1416
+      }
+    },
+    {
       "InputId": "2ac6c8b8-ebf5-4653-b390-da008c4be0e6"/*Image*/,
       "Position": {
         "X": -198.16037,
         "Y": -12.877563
+      }
+    },
+    {
+      "InputId": "38a04ab5-b0d7-4c69-9647-fc86534892af"/*RowSwift*/,
+      "Position": {
+        "X": -219.05618,
+        "Y": 915.98956
       }
     },
     {
@@ -24,20 +45,20 @@
       }
     },
     {
-      "InputId": "a5e7133e-5ba6-4f01-9a2f-a8fb591aae54"/*EdgeColor*/,
-      "Position": {
-        "X": -213.89873,
-        "Y": 353.00214
-      },
-      "Min": 0.0,
-      "Max": 1.0,
-      "Clamp": true
-    },
-    {
-      "InputId": "78082902-ffb0-47c2-a611-6c1ca8d2a599"/*Stretch*/,
+      "InputId": "6415887f-bae9-4e2c-a5d1-cc09f9d6c6bd"/*Rotate*/,
       "Position": {
         "X": -223.4553,
-        "Y": 474.05212
+        "Y": 609.0521
+      },
+      "Min": -180.0,
+      "Max": 180.0,
+      "Scale": 0.01
+    },
+    {
+      "InputId": "6a34fae1-0c39-4a3a-bc72-1f8fde957b27"/*GAffects_EdgeWidth*/,
+      "Position": {
+        "X": -197.88463,
+        "Y": 1309.1416
       }
     },
     {
@@ -48,24 +69,35 @@
       }
     },
     {
-      "InputId": "f334560f-d745-4a1e-9df6-e0acba043d31"/*Scale*/,
+      "InputId": "78082902-ffb0-47c2-a611-6c1ca8d2a599"/*Stretch*/,
       "Position": {
         "X": -223.4553,
-        "Y": 564.05206
-      },
-      "Min": -10.0,
-      "Max": 10.0,
-      "Scale": 0.1
+        "Y": 474.05212
+      }
     },
     {
-      "InputId": "6415887f-bae9-4e2c-a5d1-cc09f9d6c6bd"/*Rotate*/,
+      "InputId": "9bc1afbb-d9e5-4bc8-afa9-2cbba0215a5a"/*AmplifyIllusion*/,
       "Position": {
-        "X": -223.4553,
-        "Y": 609.0521
+        "X": -195.6851,
+        "Y": 1542.3857
+      }
+    },
+    {
+      "InputId": "a5e7133e-5ba6-4f01-9a2f-a8fb591aae54"/*EdgeColor*/,
+      "Position": {
+        "X": -213.89873,
+        "Y": 353.00214
       },
-      "Min": -180.0,
-      "Max": 180.0,
-      "Scale": 0.01
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "c1c35717-7ea6-4507-bb7f-bfc827e0446e"/*Ratio*/,
+      "Position": {
+        "X": -219.05618,
+        "Y": 825.9896
+      }
     },
     {
       "InputId": "c98d3ff9-f4d7-482e-90bc-fe1b32382766"/*Feather*/,
@@ -78,10 +110,10 @@
       "Scale": 0.02
     },
     {
-      "InputId": "c1c35717-7ea6-4507-bb7f-bfc827e0446e"/*Ratio*/,
+      "InputId": "d3827fcf-ccee-471e-8cbd-1ffd2155be40"/*Resolution*/,
       "Position": {
-        "X": -219.05618,
-        "Y": 825.9896
+        "X": -195.6851,
+        "Y": 1497.3857
       }
     },
     {
@@ -92,49 +124,43 @@
       }
     },
     {
-      "InputId": "38a04ab5-b0d7-4c69-9647-fc86534892af"/*RowSwift*/,
+      "InputId": "f334560f-d745-4a1e-9df6-e0acba043d31"/*Scale*/,
       "Position": {
-        "X": -219.05618,
-        "Y": 915.98956
-      }
-    },
-    {
-      "InputId": "0199068d-c826-4b08-9987-8e480ce064a7"/*RAffects_Ratio*/,
-      "Position": {
-        "X": -197.88463,
-        "Y": 1264.1416
-      }
-    },
-    {
-      "InputId": "6a34fae1-0c39-4a3a-bc72-1f8fde957b27"/*GAffects_EdgeWidth*/,
-      "Position": {
-        "X": -197.88463,
-        "Y": 1309.1416
-      }
-    },
-    {
-      "InputId": "0480f95d-3ab6-4d53-8452-bd79a5438d71"/*BAffects_RowShift*/,
-      "Position": {
-        "X": -197.88463,
-        "Y": 1354.1416
-      }
-    },
-    {
-      "InputId": "d3827fcf-ccee-471e-8cbd-1ffd2155be40"/*Resolution*/,
-      "Position": {
-        "X": -195.6851,
-        "Y": 1497.3857
-      }
-    },
-    {
-      "InputId": "9bc1afbb-d9e5-4bc8-afa9-2cbba0215a5a"/*AmplifyIllusion*/,
-      "Position": {
-        "X": -195.6851,
-        "Y": 1542.3857
-      }
+        "X": -223.4553,
+        "Y": 564.05206
+      },
+      "Min": -10.0,
+      "Max": 10.0,
+      "Scale": 0.1
     }
   ],
   "SymbolChildUis": [
+    {
+      "ChildId": "02038aa7-232e-4ea2-9e9b-9807d6fab2a7"/*_ImageFxShaderSetupStatic*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 110.08065,
+        "Y": 1758.3761
+      },
+      "Position": {
+        "X": 670.3224,
+        "Y": -24.92865
+      }
+    },
+    {
+      "ChildId": "0684c35d-4869-4dd3-96fb-7db9f4d4346c"/*Vector4Components*/,
+      "Position": {
+        "X": -57.463623,
+        "Y": 400.46973
+      }
+    },
+    {
+      "ChildId": "40f8d6b7-e0d6-4306-9ec9-fad07551910d"/*Vector2Components*/,
+      "Position": {
+        "X": -27.883774,
+        "Y": 506.75793
+      }
+    },
     {
       "ChildId": "9bd84539-04a6-439d-b8ca-aca0422d9404"/*Vector4Components*/,
       "Position": {
@@ -154,32 +180,6 @@
       "Position": {
         "X": -27.883774,
         "Y": 450.75793
-      }
-    },
-    {
-      "ChildId": "40f8d6b7-e0d6-4306-9ec9-fad07551910d"/*Vector2Components*/,
-      "Position": {
-        "X": -27.883774,
-        "Y": 506.75793
-      }
-    },
-    {
-      "ChildId": "02038aa7-232e-4ea2-9e9b-9807d6fab2a7"/*_ImageFxShaderSetupStatic*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 110.08065,
-        "Y": 1758.3761
-      },
-      "Position": {
-        "X": 670.3224,
-        "Y": -24.92865
-      }
-    },
-    {
-      "ChildId": "0684c35d-4869-4dd3-96fb-7db9f4d4346c"/*Vector4Components*/,
-      "Position": {
-        "X": -57.463623,
-        "Y": 400.46973
       }
     }
   ],

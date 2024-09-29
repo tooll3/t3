@@ -3,14 +3,6 @@
   "Description": "Combines Vertex and Pixel shader stages.",
   "InputUis": [
     {
-      "InputId": "7a9ae929-7001-42ef-b7f2-f2e03bbb7206"/*VertexShader*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "59864da4-3658-4d7d-830e-6ef0d3cbb505"/*PixelShader*/,
       "Relevancy": "Required",
       "Position": {
@@ -19,8 +11,16 @@
       }
     },
     {
-      "InputId": "9571b16e-72d1-4544-aa98-8a08b63bb5f6"/*ConstantBuffers*/,
+      "InputId": "60bae25c-64fe-40df-a2e6-a99297a92e0b"/*SamplerStates*/,
       "Relevancy": "Relevant",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "7a9ae929-7001-42ef-b7f2-f2e03bbb7206"/*VertexShader*/,
+      "Relevancy": "Required",
       "Position": {
         "X": 0.0,
         "Y": 0.0
@@ -35,7 +35,7 @@
       }
     },
     {
-      "InputId": "60bae25c-64fe-40df-a2e6-a99297a92e0b"/*SamplerStates*/,
+      "InputId": "9571b16e-72d1-4544-aa98-8a08b63bb5f6"/*ConstantBuffers*/,
       "Relevancy": "Relevant",
       "Position": {
         "X": 0.0,

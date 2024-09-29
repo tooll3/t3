@@ -3,26 +3,17 @@
   "Description": "A node to combine 3 input images into the RGBA channels of a new one.\n\nAll blend ops and similar: [BlendImages] [Blend] [BlendWithMask] [Combine3Images]",
   "InputUis": [
     {
-      "InputId": "81e08eab-9428-435b-a710-6cede1549834"/*ImageA*/,
-      "Relevancy": "Required",
+      "InputId": "08b639cb-7cbd-4a1f-8609-c50df879fd91"/*SelectChannel_G*/,
       "Position": {
         "X": -48.61692,
-        "Y": 46.240692
+        "Y": 361.2407
       }
     },
     {
-      "InputId": "a3d1ab20-fbfb-4123-a877-09050edae8bf"/*ColorA*/,
+      "InputId": "0aa7851e-1845-4cd0-98fd-25d2a77a35a7"/*SelectAlphaChannel*/,
       "Position": {
-        "X": -48.61692,
-        "Y": 91.24069
-      }
-    },
-    {
-      "InputId": "d42bf975-9789-40d8-9a7e-c83b157603fb"/*ImageB*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -48.61692,
-        "Y": 136.24069
+        "X": -47.30455,
+        "Y": 490.80215
       }
     },
     {
@@ -30,6 +21,21 @@
       "Position": {
         "X": -48.61692,
         "Y": 181.24069
+      }
+    },
+    {
+      "InputId": "2b6f8853-5836-45d5-800b-c56e1c59e3c9"/*GenerateMips*/,
+      "Position": {
+        "X": -47.30455,
+        "Y": 535.8021
+      }
+    },
+    {
+      "InputId": "81e08eab-9428-435b-a710-6cede1549834"/*ImageA*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -48.61692,
+        "Y": 46.240692
       }
     },
     {
@@ -41,27 +47,10 @@
       }
     },
     {
-      "InputId": "f6438d7e-da04-4e43-a8f1-2c18b6aff948"/*ColorC*/,
+      "InputId": "a3d1ab20-fbfb-4123-a877-09050edae8bf"/*ColorA*/,
       "Position": {
         "X": -48.61692,
-        "Y": 271.2407
-      },
-      "Min": 0.0,
-      "Max": 1.0,
-      "Clamp": true
-    },
-    {
-      "InputId": "c8c55f97-dbbd-4095-b2a1-d0a257bad1ea"/*SelectChannel_R*/,
-      "Position": {
-        "X": -48.61692,
-        "Y": 316.2407
-      }
-    },
-    {
-      "InputId": "08b639cb-7cbd-4a1f-8609-c50df879fd91"/*SelectChannel_G*/,
-      "Position": {
-        "X": -48.61692,
-        "Y": 361.2407
+        "Y": 91.24069
       }
     },
     {
@@ -72,18 +61,29 @@
       }
     },
     {
-      "InputId": "0aa7851e-1845-4cd0-98fd-25d2a77a35a7"/*SelectAlphaChannel*/,
+      "InputId": "c8c55f97-dbbd-4095-b2a1-d0a257bad1ea"/*SelectChannel_R*/,
       "Position": {
-        "X": -47.30455,
-        "Y": 490.80215
+        "X": -48.61692,
+        "Y": 316.2407
       }
     },
     {
-      "InputId": "2b6f8853-5836-45d5-800b-c56e1c59e3c9"/*GenerateMips*/,
+      "InputId": "d42bf975-9789-40d8-9a7e-c83b157603fb"/*ImageB*/,
+      "Relevancy": "Required",
       "Position": {
-        "X": -47.30455,
-        "Y": 535.8021
+        "X": -48.61692,
+        "Y": 136.24069
       }
+    },
+    {
+      "InputId": "f6438d7e-da04-4e43-a8f1-2c18b6aff948"/*ColorC*/,
+      "Position": {
+        "X": -48.61692,
+        "Y": 271.2407
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [
@@ -95,10 +95,17 @@
       }
     },
     {
-      "ChildId": "d03465c6-3992-4155-bfb9-9a9ce198f8aa"/*Vector4Components*/,
+      "ChildId": "1e731012-0301-4abb-bf52-0da9df687717"/*IntToFloat*/,
       "Position": {
-        "X": 122.33575,
-        "Y": 154.58716
+        "X": 125.19737,
+        "Y": 366.10223
+      }
+    },
+    {
+      "ChildId": "1f7560ad-98c1-4cdf-82c5-09d4e374abd2"/*IntToFloat*/,
+      "Position": {
+        "X": 125.19737,
+        "Y": 422.10223
       }
     },
     {
@@ -106,13 +113,6 @@
       "Position": {
         "X": 125.19737,
         "Y": 478.10223
-      }
-    },
-    {
-      "ChildId": "f697ae9b-bfab-4cef-b43f-6c3800d242e7"/*Vector4Components*/,
-      "Position": {
-        "X": 125.19737,
-        "Y": 254.10223
       }
     },
     {
@@ -135,17 +135,17 @@
       }
     },
     {
-      "ChildId": "1e731012-0301-4abb-bf52-0da9df687717"/*IntToFloat*/,
+      "ChildId": "d03465c6-3992-4155-bfb9-9a9ce198f8aa"/*Vector4Components*/,
       "Position": {
-        "X": 125.19737,
-        "Y": 366.10223
+        "X": 122.33575,
+        "Y": 154.58716
       }
     },
     {
-      "ChildId": "1f7560ad-98c1-4cdf-82c5-09d4e374abd2"/*IntToFloat*/,
+      "ChildId": "f697ae9b-bfab-4cef-b43f-6c3800d242e7"/*Vector4Components*/,
       "Position": {
         "X": 125.19737,
-        "Y": 422.10223
+        "Y": 254.10223
       }
     }
   ],

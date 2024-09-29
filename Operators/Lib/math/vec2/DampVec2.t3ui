@@ -3,13 +3,6 @@
   "Description": "Smooths the incoming Vector2.",
   "InputUis": [
     {
-      "InputId": "e5d132e7-018e-4b37-a49b-8274ac988311"/*Value*/,
-      "Position": {
-        "X": 36.0,
-        "Y": 469.0
-      }
-    },
-    {
       "InputId": "dc4a8e1c-9399-4e06-a3d8-168839085f02"/*Damping*/,
       "Position": {
         "X": 36.0,
@@ -24,6 +17,13 @@
       "Position": {
         "X": 36.0,
         "Y": 424.0
+      }
+    },
+    {
+      "InputId": "e5d132e7-018e-4b37-a49b-8274ac988311"/*Value*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 469.0
       }
     }
   ],

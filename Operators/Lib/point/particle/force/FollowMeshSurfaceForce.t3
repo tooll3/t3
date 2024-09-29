@@ -1,28 +1,6 @@
 {
-  "Name": "FollowMeshSurfaceForce",
-  "Id": "26bb382c-5e3d-49ae-b17e-5bd49b083d9a",
-  "Namespace": "lib.point.particle.force",
+  "Id": "26bb382c-5e3d-49ae-b17e-5bd49b083d9a"/*FollowMeshSurfaceForce*/,
   "Inputs": [
-    {
-      "Id": "a962fea7-b59f-49f4-83f0-a7e8b625e57c"/*Amount*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "ac33e215-86cc-4659-bc87-e0d3c2325aa7"/*RandomizeSpeed*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "5052523a-9e7b-4ae3-9d9d-ff16e0241cdc"/*SurfaceDistance*/,
-      "DefaultValue": 0.02
-    },
-    {
-      "Id": "bbd372b8-5a0d-4dd6-a2dd-13049722e1a1"/*RandomSurfaceDistance*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "b19de430-98f0-45c8-87c0-67d563ae5b5a"/*Spin*/,
-      "DefaultValue": 0.0
-    },
     {
       "Id": "1951e2f8-29f5-461f-beca-2535b186956a"/*RandomSpin*/,
       "DefaultValue": 0.0
@@ -32,8 +10,28 @@
       "DefaultValue": 0.0
     },
     {
+      "Id": "5052523a-9e7b-4ae3-9d9d-ff16e0241cdc"/*SurfaceDistance*/,
+      "DefaultValue": 0.02
+    },
+    {
       "Id": "6dada5f7-252c-4af4-8c2f-f5352bbc3597"/*MeshBuffers*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "a962fea7-b59f-49f4-83f0-a7e8b625e57c"/*Amount*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "ac33e215-86cc-4659-bc87-e0d3c2325aa7"/*RandomizeSpeed*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "b19de430-98f0-45c8-87c0-67d563ae5b5a"/*Spin*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "bbd372b8-5a0d-4dd6-a2dd-13049722e1a1"/*RandomSurfaceDistance*/,
+      "DefaultValue": 0.0
     },
     {
       "Id": "de70d11c-93cb-494a-9516-c8a5989c2617"/*ShowGizmo*/,
@@ -42,65 +40,14 @@
   ],
   "Children": [
     {
-      "Id": "ddf76754-b657-4bc4-b2bb-1eb085449137"/*ComputeShader*/,
-      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
-      "InputValues": [
-        {
-          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\particles\\FollowMeshSurfaceForce.hlsl"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "75255e40-32f4-4bb7-95dd-afc2c54b72b2"/*ComputeShaderStage*/,
-      "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
-      "InputValues": [
-        {
-          "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "T3.Core.DataTypes.Vector.Int3",
-          "Value": {
-            "X": 64,
-            "Y": 1,
-            "Z": 1
-          }
-        },
-        {
-          "Id": "0105aca4-5fd5-40c8-82a5-e919bb7dd507"/*UavBufferCounter*/,
-          "Type": "System.Int32",
-          "Value": 2
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "36abc672-593a-49e1-af79-3e1a3c71d874"/*FloatsToBuffer*/,
-      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
+      "Id": "06ab436b-d0ae-47d6-b1c6-530fb0e3f15b"/*_MeshBufferComponents*/,
+      "SymbolId": "5b9f1d97-4e10-4f31-ba83-4cbf7be9719b",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "9dd5d134-01a3-4d2d-99fa-63dada7a89f1"/*CalcDispatchCount*/,
-      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "fca6eade-c211-4401-9bd2-71291d805ae6"/*HasTimeChanged*/,
-      "SymbolId": "2443b2fd-c397-4ea6-9588-b595f918cf01",
-      "InputValues": [
-        {
-          "Id": "bc112889-77a8-4967-a9b7-683b7c7017fe"/*Mode*/,
-          "Type": "System.Int32",
-          "Value": 3
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "5c78d3e7-1e04-45c9-adb3-725233294e93"/*VisibleGizmos*/,
-      "SymbolId": "d61d7192-9ca3-494e-91e2-10a530ee9375",
+      "Id": "12f77d3b-5532-4b29-853d-eb3eadf96931"/*IntsToBuffer*/,
+      "SymbolId": "2eb20a76-f8f7-49e9-93a5-1e5981122b50",
       "InputValues": [],
       "Outputs": []
     },
@@ -117,8 +64,35 @@
       "Outputs": []
     },
     {
-      "Id": "efb89a83-cb37-4067-97b7-861aaa0f337a"/*_ExecuteParticleUpdate*/,
-      "SymbolId": "b1352ba6-1164-4b44-9b69-a9eb802ea77d",
+      "Id": "2a730c0e-27dc-43e0-ba8b-9909bfb33fdc"/*DrawMesh*/,
+      "SymbolId": "a3c5471e-079b-4d4b-886a-ec02d6428ff6",
+      "InputValues": [
+        {
+          "Id": "2c4b5f3a-e9ec-432e-b1ae-6d999ae44f1b"/*FillMode*/,
+          "Type": "System.Int32",
+          "Value": 2
+        },
+        {
+          "Id": "8c9dee45-d165-48c8-b8dd-b7f47e77fd00"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 1.0,
+            "Y": 0.204,
+            "Z": 0.589,
+            "W": 0.67
+          }
+        },
+        {
+          "Id": "9e957f4a-6502-4905-8d97-331f8b54097c"/*Culling*/,
+          "Type": "SharpDX.Direct3D11.CullMode",
+          "Value": "None"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "36abc672-593a-49e1-af79-3e1a3c71d874"/*FloatsToBuffer*/,
+      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
       "InputValues": [],
       "Outputs": []
     },
@@ -126,6 +100,63 @@
       "Id": "5801c4a0-f440-4773-b12b-2ee8abd1bda6"/*GetParticleComponents*/,
       "SymbolId": "e62c1fa0-6fcd-49f5-9cf8-d3081c8a5917",
       "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "5c78d3e7-1e04-45c9-adb3-725233294e93"/*VisibleGizmos*/,
+      "SymbolId": "d61d7192-9ca3-494e-91e2-10a530ee9375",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "630acf93-3c38-4e97-9ddb-d44ab3579450"/*Indices*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "Name": "Indices",
+      "InputValues": [],
+      "Outputs": [
+        {
+          "Id": "f03246a7-e39f-4a41-a0c3-22bc976a6000"/*Indices*/,
+          "DirtyFlagTrigger": "Animated"
+        }
+      ]
+    },
+    {
+      "Id": "75255e40-32f4-4bb7-95dd-afc2c54b72b2"/*ComputeShaderStage*/,
+      "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
+      "InputValues": [
+        {
+          "Id": "0105aca4-5fd5-40c8-82a5-e919bb7dd507"/*UavBufferCounter*/,
+          "Type": "System.Int32",
+          "Value": 2
+        },
+        {
+          "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
+          "Type": "T3.Core.DataTypes.Vector.Int3",
+          "Value": {
+            "X": 64,
+            "Y": 1,
+            "Z": 1
+          }
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "9dd5d134-01a3-4d2d-99fa-63dada7a89f1"/*CalcDispatchCount*/,
+      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "ddf76754-b657-4bc4-b2bb-1eb085449137"/*ComputeShader*/,
+      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
+      "InputValues": [
+        {
+          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\particles\\FollowMeshSurfaceForce.hlsl"
+        }
+      ],
       "Outputs": []
     },
     {
@@ -141,52 +172,19 @@
       ]
     },
     {
-      "Id": "630acf93-3c38-4e97-9ddb-d44ab3579450"/*Indices*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "Name": "Indices",
-      "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "f03246a7-e39f-4a41-a0c3-22bc976a6000"/*Indices*/,
-          "DirtyFlagTrigger": "Animated"
-        }
-      ]
-    },
-    {
-      "Id": "06ab436b-d0ae-47d6-b1c6-530fb0e3f15b"/*_MeshBufferComponents*/,
-      "SymbolId": "5b9f1d97-4e10-4f31-ba83-4cbf7be9719b",
+      "Id": "efb89a83-cb37-4067-97b7-861aaa0f337a"/*_ExecuteParticleUpdate*/,
+      "SymbolId": "b1352ba6-1164-4b44-9b69-a9eb802ea77d",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "12f77d3b-5532-4b29-853d-eb3eadf96931"/*IntsToBuffer*/,
-      "SymbolId": "2eb20a76-f8f7-49e9-93a5-1e5981122b50",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "2a730c0e-27dc-43e0-ba8b-9909bfb33fdc"/*DrawMesh*/,
-      "SymbolId": "a3c5471e-079b-4d4b-886a-ec02d6428ff6",
+      "Id": "fca6eade-c211-4401-9bd2-71291d805ae6"/*HasTimeChanged*/,
+      "SymbolId": "2443b2fd-c397-4ea6-9588-b595f918cf01",
       "InputValues": [
         {
-          "Id": "8c9dee45-d165-48c8-b8dd-b7f47e77fd00"/*Color*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 1.0,
-            "Y": 0.204,
-            "Z": 0.589,
-            "W": 0.67
-          }
-        },
-        {
-          "Id": "2c4b5f3a-e9ec-432e-b1ae-6d999ae44f1b"/*FillMode*/,
+          "Id": "bc112889-77a8-4967-a9b7-683b7c7017fe"/*Mode*/,
           "Type": "System.Int32",
-          "Value": 2
-        },
-        {
-          "Id": "9e957f4a-6502-4905-8d97-331f8b54097c"/*Culling*/,
-          "Type": "SharpDX.Direct3D11.CullMode",
-          "Value": "None"
+          "Value": 3
         }
       ],
       "Outputs": []

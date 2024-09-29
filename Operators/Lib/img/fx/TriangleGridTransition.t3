@@ -2,23 +2,38 @@
   "Id": "da8ebc61-87cf-44ff-888e-994c8628ddb7"/*TriangleGridTransition*/,
   "Inputs": [
     {
-      "Id": "5a5bed81-c48d-43dd-a6b0-fc7964f90f2d"/*Image*/,
-      "DefaultValue": null
+      "Id": "0c6065b9-eb20-4a37-9d70-419d1c8912a6"/*Center*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
     },
     {
       "Id": "36a9b777-0201-4cec-9c6f-d5ec09e92b3a"/*ImageB*/,
       "DefaultValue": null
     },
     {
-      "Id": "dab4e3df-aaa6-411c-83f6-e4c730b740ce"/*EffectRotation*/,
-      "DefaultValue": 45.0
+      "Id": "5a5bed81-c48d-43dd-a6b0-fc7964f90f2d"/*Image*/,
+      "DefaultValue": null
     },
     {
-      "Id": "8d4e1265-8479-4525-adbc-fe5c31d9984a"/*EffectCenter*/,
+      "Id": "5baee095-f7fe-4a07-a01d-cbb2f3c2f3bc"/*Resolution*/,
       "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 0,
+        "Y": 0
       }
+    },
+    {
+      "Id": "6164020b-3059-4ce5-8a8f-a56150b8a6be"/*Divisions*/,
+      "DefaultValue": 20.0
+    },
+    {
+      "Id": "659de0cb-82d8-45a9-b99d-748b3c56e8e8"/*MixOriginal*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "82a572d3-a39f-4ab3-bc17-804d3098d1c1"/*EffectFalloff*/,
+      "DefaultValue": 0.25
     },
     {
       "Id": "846f8b1e-e6bb-4e6a-a42c-f83636fd4b6f"/*Fill*/,
@@ -30,6 +45,25 @@
       }
     },
     {
+      "Id": "8c652498-33c7-4faa-a8c0-3f3d296474c8"/*LineThickness*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "8d4e1265-8479-4525-adbc-fe5c31d9984a"/*EffectCenter*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "d99d5c03-2563-41e6-9bfe-bd61a7fed37d"/*Scatter*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "dab4e3df-aaa6-411c-83f6-e4c730b740ce"/*EffectRotation*/,
+      "DefaultValue": 45.0
+    },
+    {
       "Id": "e97a432e-4996-41b0-8ae8-10c9f2d15bc4"/*Background*/,
       "DefaultValue": {
         "X": 0.0,
@@ -37,52 +71,18 @@
         "Z": 0.0,
         "W": 0.0
       }
-    },
-    {
-      "Id": "6164020b-3059-4ce5-8a8f-a56150b8a6be"/*Divisions*/,
-      "DefaultValue": 20.0
-    },
-    {
-      "Id": "82a572d3-a39f-4ab3-bc17-804d3098d1c1"/*EffectFalloff*/,
-      "DefaultValue": 0.25
-    },
-    {
-      "Id": "8c652498-33c7-4faa-a8c0-3f3d296474c8"/*LineThickness*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "d99d5c03-2563-41e6-9bfe-bd61a7fed37d"/*Scatter*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "5baee095-f7fe-4a07-a01d-cbb2f3c2f3bc"/*Resolution*/,
-      "DefaultValue": {
-        "X": 0,
-        "Y": 0
-      }
-    },
-    {
-      "Id": "0c6065b9-eb20-4a37-9d70-419d1c8912a6"/*Center*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "Id": "659de0cb-82d8-45a9-b99d-748b3c56e8e8"/*MixOriginal*/,
-      "DefaultValue": 0.0
     }
   ],
   "Children": [
     {
-      "Id": "2aabe6fd-31e3-4c2f-9e5f-98b3c1cb86ff"/*Value*/,
-      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
+      "Id": "11459d6e-e6e3-4972-90a8-5b37f057cb95"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "86f9b6cf-1e04-4958-bc9f-4ef6f5cc525d"/*Vector4Components*/,
-      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "Id": "2aabe6fd-31e3-4c2f-9e5f-98b3c1cb86ff"/*Value*/,
+      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
       "InputValues": [],
       "Outputs": []
     },
@@ -99,19 +99,19 @@
       "Outputs": []
     },
     {
-      "Id": "eb737384-491f-47d1-9fb7-a7aa046cd9e6"/*Vector2Components*/,
-      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "82047030-92cc-4372-b77e-e056fbb5a3c0"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "11459d6e-e6e3-4972-90a8-5b37f057cb95"/*Vector2Components*/,
+      "Id": "86f9b6cf-1e04-4958-bc9f-4ef6f5cc525d"/*Vector4Components*/,
+      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "eb737384-491f-47d1-9fb7-a7aa046cd9e6"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []

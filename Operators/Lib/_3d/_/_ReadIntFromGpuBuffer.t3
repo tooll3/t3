@@ -1,7 +1,5 @@
 {
-  "Name": "_ReadIntFromGpuBuffer",
-  "Id": "11ebbb25-984a-4772-b720-b8c7e5214a83",
-  "Namespace": "lib.3d._",
+  "Id": "11ebbb25-984a-4772-b720-b8c7e5214a83"/*_ReadIntFromGpuBuffer*/,
   "Inputs": [
     {
       "Id": "1319eba8-8f22-47d7-b8ed-2871b2f95e9b"/*InputBuffer*/,

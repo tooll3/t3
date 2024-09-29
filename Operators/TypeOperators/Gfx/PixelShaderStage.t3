@@ -2,7 +2,11 @@
   "Id": "75306997-4329-44e9-a17a-050dae532182"/*PixelShaderStage*/,
   "Inputs": [
     {
-      "Id": "c4e91bc6-1691-4eb4-aed5-dd4cae528149"/*SamplerStates*/,
+      "Id": "1b9be6eb-96c8-4b1c-b854-99b64eaf5618"/*PixelShader*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "50052906-4691-4a84-a69d-a109044b5300"/*ShaderResources*/,
       "DefaultValue": null
     },
     {
@@ -10,11 +14,7 @@
       "DefaultValue": null
     },
     {
-      "Id": "1b9be6eb-96c8-4b1c-b854-99b64eaf5618"/*PixelShader*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "50052906-4691-4a84-a69d-a109044b5300"/*ShaderResources*/,
+      "Id": "c4e91bc6-1691-4eb4-aed5-dd4cae528149"/*SamplerStates*/,
       "DefaultValue": null
     }
   ],

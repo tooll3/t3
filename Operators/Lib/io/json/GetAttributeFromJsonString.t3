@@ -6,12 +6,12 @@
       "DefaultValue": "https://cataas.com/cat"
     },
     {
-      "Id": "dadd353a-2195-4b52-80d2-88288c55b0e4"/*ColumnName*/,
-      "DefaultValue": ""
-    },
-    {
       "Id": "d7820c58-22fd-492a-81fe-870ab1912b0a"/*RowIndex*/,
       "DefaultValue": 0
+    },
+    {
+      "Id": "dadd353a-2195-4b52-80d2-88288c55b0e4"/*ColumnName*/,
+      "DefaultValue": ""
     }
   ],
   "Children": [],

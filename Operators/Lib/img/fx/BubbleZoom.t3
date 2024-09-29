@@ -6,34 +6,8 @@
       "DefaultValue": null
     },
     {
-      "Id": "277c5e50-7d0f-416f-ba14-69ba407802dc"/*Center*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "Id": "5bb5934d-28a8-4bd3-a146-f0ecb804170a"/*ScaleFactor*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "1e93d2b1-d21c-44bd-a96c-9844b9a89c8f"/*Width*/,
-      "DefaultValue": 1.0
-    },
-    {
       "Id": "064b98dc-60f8-4019-a40c-21cb3bed9f4a"/*Radius*/,
       "DefaultValue": 0.5
-    },
-    {
-      "Id": "e5a5d0cf-447b-471f-871a-f3237a760df2"/*Bias*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "412055dc-88f7-4def-ac8e-76f7f424f905"/*Resolution*/,
-      "DefaultValue": {
-        "X": 0,
-        "Y": 0
-      }
     },
     {
       "Id": "0ce5b753-bcc0-4102-b011-64e603a50567"/*Gradient*/,
@@ -64,13 +38,68 @@
           ]
         }
       }
+    },
+    {
+      "Id": "1e93d2b1-d21c-44bd-a96c-9844b9a89c8f"/*Width*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "277c5e50-7d0f-416f-ba14-69ba407802dc"/*Center*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "412055dc-88f7-4def-ac8e-76f7f424f905"/*Resolution*/,
+      "DefaultValue": {
+        "X": 0,
+        "Y": 0
+      }
+    },
+    {
+      "Id": "5bb5934d-28a8-4bd3-a146-f0ecb804170a"/*ScaleFactor*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "e5a5d0cf-447b-471f-871a-f3237a760df2"/*Bias*/,
+      "DefaultValue": 0.0
     }
   ],
   "Children": [
     {
+      "Id": "14682724-90f1-4596-8c32-ee64c0208f08"/*BoolToInt*/,
+      "SymbolId": "cd43942a-887e-4e34-bc54-0c2e5e8bc2af",
+      "InputValues": [
+        {
+          "Id": "c644165f-3901-4dbf-8091-05f958e668e5"/*BoolValue*/,
+          "Type": "System.Boolean",
+          "Value": false
+        }
+      ],
+      "Outputs": []
+    },
+    {
       "Id": "523b7aec-d6f1-4982-8e10-02da1c410d89"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "61289140-6786-4534-b6e3-6130f3c4ca54"/*_multiImageFxSetup*/,
+      "SymbolId": "a2567844-3314-48de-bda7-7904b5546535",
+      "InputValues": [
+        {
+          "Id": "7f14d0e3-1159-434d-b038-74644948937c"/*ShaderPath*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\img\\fx\\BubbleZoom.hlsl"
+        },
+        {
+          "Id": "a5cb5bda-0fb2-4863-bd8d-9ac09135fc30"/*WrapMode*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "Clamp"
+        }
+      ],
       "Outputs": []
     },
     {
@@ -107,35 +136,6 @@
               ]
             }
           }
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "61289140-6786-4534-b6e3-6130f3c4ca54"/*_multiImageFxSetup*/,
-      "SymbolId": "a2567844-3314-48de-bda7-7904b5546535",
-      "InputValues": [
-        {
-          "Id": "7f14d0e3-1159-434d-b038-74644948937c"/*ShaderPath*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\BubbleZoom.hlsl"
-        },
-        {
-          "Id": "a5cb5bda-0fb2-4863-bd8d-9ac09135fc30"/*WrapMode*/,
-          "Type": "SharpDX.Direct3D11.TextureAddressMode",
-          "Value": "Clamp"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "14682724-90f1-4596-8c32-ee64c0208f08"/*BoolToInt*/,
-      "SymbolId": "cd43942a-887e-4e34-bc54-0c2e5e8bc2af",
-      "InputValues": [
-        {
-          "Id": "c644165f-3901-4dbf-8091-05f958e668e5"/*BoolValue*/,
-          "Type": "System.Boolean",
-          "Value": false
         }
       ],
       "Outputs": []

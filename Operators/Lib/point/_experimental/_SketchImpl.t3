@@ -2,19 +2,20 @@
   "Id": "b238b288-6e9b-4b91-bac9-3d7566416028"/*_SketchImpl*/,
   "Inputs": [
     {
-      "Id": "c427f009-7e04-4168-82e6-5ebe2640204d"/*MousePos*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "Id": "520a2023-7450-4314-9cac-850d6d692461"/*IsMouseButtonDown*/,
-      "DefaultValue": false
+      "Id": "0fa40e27-c7ca-4bb9-88c6-ced917dfec12"/*OverridePageIndex*/,
+      "DefaultValue": -1
     },
     {
       "Id": "1057313c-006a-4f12-8828-07447337898b"/*BrushSize*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "51641425-a2c6-4480-ac8f-2e6d2cbc300a"/*FilePath*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "520a2023-7450-4314-9cac-850d6d692461"/*IsMouseButtonDown*/,
+      "DefaultValue": false
     },
     {
       "Id": "ae7fb135-c216-4f34-b73f-5115417e916b"/*BrushColor*/,
@@ -26,12 +27,11 @@
       }
     },
     {
-      "Id": "51641425-a2c6-4480-ac8f-2e6d2cbc300a"/*FilePath*/,
-      "DefaultValue": ""
-    },
-    {
-      "Id": "0fa40e27-c7ca-4bb9-88c6-ced917dfec12"/*OverridePageIndex*/,
-      "DefaultValue": -1
+      "Id": "c427f009-7e04-4168-82e6-5ebe2640204d"/*MousePos*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
     }
   ],
   "Children": [],

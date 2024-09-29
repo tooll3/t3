@@ -11,6 +11,13 @@
       }
     },
     {
+      "InputId": "14a0ee21-309a-44cc-bc00-3d7d5594de01"/*ApplyAs*/,
+      "Position": {
+        "X": -201.25842,
+        "Y": 280.9818
+      }
+    },
+    {
       "InputId": "3ba30914-444c-43a9-b936-87d5d98898cd"/*Texture*/,
       "Position": {
         "X": -200.0,
@@ -36,41 +43,13 @@
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
-    },
-    {
-      "InputId": "14a0ee21-309a-44cc-bc00-3d7d5594de01"/*ApplyAs*/,
-      "Position": {
-        "X": -201.25842,
-        "Y": 280.9818
-      }
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "945a41f1-b4ff-474c-8de5-ade6fda08d14"/*SetFloatVar*/,
+      "ChildId": "4f65db0d-bd6b-4564-9605-895c80baf11d"/*PickFloat*/,
       "Position": {
-        "X": 300.0,
-        "Y": 183.21118
-      }
-    },
-    {
-      "ChildId": "cbbabef4-d1d7-4b11-88f3-193e6f2e1f2b"/*ValueToRate*/,
-      "Position": {
-        "X": -28.062653,
-        "Y": 212.24585
-      }
-    },
-    {
-      "ChildId": "836b32e0-5749-44aa-a1dc-27deeccc4073"/*SetFloatVar*/,
-      "Position": {
-        "X": 300.0,
-        "Y": 100.21118
-      }
-    },
-    {
-      "ChildId": "afa6fe54-9018-4451-9daf-fe560e12e718"/*ValueToRate*/,
-      "Position": {
-        "X": 0.0,
+        "X": 150.0,
         "Y": 87.626465
       }
     },
@@ -87,6 +66,20 @@
       }
     },
     {
+      "ChildId": "836b32e0-5749-44aa-a1dc-27deeccc4073"/*SetFloatVar*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 100.21118
+      }
+    },
+    {
+      "ChildId": "945a41f1-b4ff-474c-8de5-ade6fda08d14"/*SetFloatVar*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 183.21118
+      }
+    },
+    {
       "ChildId": "95fee365-c63e-49a4-8214-a7db2baeab83"/*ExecuteTextureUpdate*/,
       "Position": {
         "X": 778.0138,
@@ -94,9 +87,9 @@
       }
     },
     {
-      "ChildId": "4f65db0d-bd6b-4564-9605-895c80baf11d"/*PickFloat*/,
+      "ChildId": "afa6fe54-9018-4451-9daf-fe560e12e718"/*ValueToRate*/,
       "Position": {
-        "X": 150.0,
+        "X": 0.0,
         "Y": 87.626465
       }
     },
@@ -105,6 +98,13 @@
       "Position": {
         "X": 150.0,
         "Y": 183.21118
+      }
+    },
+    {
+      "ChildId": "cbbabef4-d1d7-4b11-88f3-193e6f2e1f2b"/*ValueToRate*/,
+      "Position": {
+        "X": -28.062653,
+        "Y": 212.24585
       }
     }
   ],

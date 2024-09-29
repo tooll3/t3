@@ -3,6 +3,43 @@
   "Description": "",
   "InputUis": [
     {
+      "InputId": "11ba5bbc-4873-489f-85b7-35080f0988cf"/*SideRadius*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "211fd6ee-26a9-4e15-85ba-4a22e865545d"/*MoveToComfort*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
+      }
+    },
+    {
+      "InputId": "4dd19c0b-10c1-43fa-a3e2-970b4f9c6162"/*SideAngle*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      },
+      "Scale": 0.1
+    },
+    {
+      "InputId": "6eb81dc2-88b5-4ba7-9f82-fe2389dc2926"/*BaseMovement*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
+    },
+    {
+      "InputId": "8367cbad-6214-4167-855b-9f704bb46ac3"/*RotateToComfort*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 360.0
+      },
+      "Scale": 0.1
+    },
+    {
       "InputId": "8c4e188c-18ab-4f69-a60a-14a8e5a12f91"/*ComfortZones*/,
       "Position": {
         "X": -200.0,
@@ -17,32 +54,10 @@
       }
     },
     {
-      "InputId": "4dd19c0b-10c1-43fa-a3e2-970b4f9c6162"/*SideAngle*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
-      },
-      "Scale": 0.1
-    },
-    {
-      "InputId": "11ba5bbc-4873-489f-85b7-35080f0988cf"/*SideRadius*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 135.0
-      }
-    },
-    {
       "InputId": "e95c5f4d-df12-42f6-a879-8e26540b03ac"/*FrontRadius*/,
       "Position": {
         "X": -200.0,
         "Y": 180.0
-      }
-    },
-    {
-      "InputId": "6eb81dc2-88b5-4ba7-9f82-fe2389dc2926"/*BaseMovement*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 225.0
       }
     },
     {
@@ -52,21 +67,6 @@
         "Y": 270.0
       },
       "Scale": 0.01
-    },
-    {
-      "InputId": "211fd6ee-26a9-4e15-85ba-4a22e865545d"/*MoveToComfort*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 315.0
-      }
-    },
-    {
-      "InputId": "8367cbad-6214-4167-855b-9f704bb46ac3"/*RotateToComfort*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 360.0
-      },
-      "Scale": 0.1
     }
   ],
   "SymbolChildUis": [],

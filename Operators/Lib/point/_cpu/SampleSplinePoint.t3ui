@@ -3,14 +3,6 @@
   "Description": "Samples a position of the incoming spline.",
   "InputUis": [
     {
-      "InputId": "d3aca17d-cb4a-4f7b-acdf-eaeb25016bc6"/*SubTree*/,
-      "Relevancy": "Relevant",
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "73c4a495-d846-4762-9efd-fc47364920c1"/*U*/,
       "Position": {
         "X": -200.0,
@@ -23,6 +15,14 @@
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "d3aca17d-cb4a-4f7b-acdf-eaeb25016bc6"/*SubTree*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
       }
     }
   ],

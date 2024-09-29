@@ -1,7 +1,5 @@
 {
-  "Name": "Sharpen",
-  "Id": "4b207e35-64b4-4833-977c-da6c7154a081",
-  "Namespace": "lib.img.fx",
+  "Id": "4b207e35-64b4-4833-977c-da6c7154a081"/*Sharpen*/,
   "Inputs": [
     {
       "Id": "cdc10025-36a4-4fae-ad59-110ea9343cb0"/*Image*/,

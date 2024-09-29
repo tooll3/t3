@@ -3,17 +3,17 @@
   "Description": "Returns a boolean that gets reset to false on the next frame.",
   "InputUis": [
     {
-      "InputId": "e7c1f0af-da6d-4e33-ac86-7dc96bfe7eb3"/*BoolValue*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "6ad61e57-1073-483e-a0dd-96a9033aa39b"/*OnlyOnDown*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "e7c1f0af-da6d-4e33-ac86-7dc96bfe7eb3"/*BoolValue*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
       }
     },
     {

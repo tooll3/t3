@@ -2,32 +2,32 @@
   "Id": "98bd1491-6e69-4ae0-9fc1-0be8e6a72d32"/*BlendStrings*/,
   "Inputs": [
     {
-      "Id": "3197934e-d0ed-4a81-9dc1-2cc63d97ac6f"/*InputTextA*/,
-      "DefaultValue": ""
-    },
-    {
-      "Id": "ccc21ecc-2877-4fe7-8d78-f7e2a708d762"/*InputTextB*/,
-      "DefaultValue": ""
-    },
-    {
       "Id": "2efd4a0c-958c-49f6-86cb-f8d9fd6fb308"/*Blend*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "3197934e-d0ed-4a81-9dc1-2cc63d97ac6f"/*InputTextA*/,
+      "DefaultValue": ""
     },
     {
       "Id": "c3e0cde4-fecf-4802-a287-a173a6a12518"/*BlendSpread*/,
       "DefaultValue": 0.5
     },
     {
-      "Id": "dc4e5b79-53e5-463a-92ad-d9bb1f2b0495"/*Scramble*/,
-      "DefaultValue": 0.0
+      "Id": "ccc21ecc-2877-4fe7-8d78-f7e2a708d762"/*InputTextB*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "d70da276-c047-42db-a921-5c1263613cbb"/*MaxLength*/,
+      "DefaultValue": 1000
     },
     {
       "Id": "d95e112f-b89a-4aa1-954b-10521c0a3815"/*ScrambleSeed*/,
       "DefaultValue": 0
     },
     {
-      "Id": "d70da276-c047-42db-a921-5c1263613cbb"/*MaxLength*/,
-      "DefaultValue": 1000
+      "Id": "dc4e5b79-53e5-463a-92ad-d9bb1f2b0495"/*Scramble*/,
+      "DefaultValue": 0.0
     }
   ],
   "Children": [],

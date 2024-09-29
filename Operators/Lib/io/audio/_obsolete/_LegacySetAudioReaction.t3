@@ -2,12 +2,12 @@
   "Id": "dd00cb1b-1c0e-4e79-9ea2-4b23686c6f37"/*_LegacySetAudioReaction*/,
   "Inputs": [
     {
-      "Id": "d243af8f-7b1d-4110-912b-2c430726becc"/*Command*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "a8900010-bf6d-44e4-bd72-28427a5dadd8"/*InputSource*/,
       "DefaultValue": 1
+    },
+    {
+      "Id": "d243af8f-7b1d-4110-912b-2c430726becc"/*Command*/,
+      "DefaultValue": null
     }
   ],
   "Children": [
@@ -24,14 +24,14 @@
       "Outputs": []
     },
     {
-      "Id": "a7a36d51-2b6d-459d-a211-3015c475d363"/*_AnalyzeSound*/,
-      "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
+      "Id": "a3f5be43-ac3b-4e5b-a433-292c9ebcfe1f"/*Execute*/,
+      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "a3f5be43-ac3b-4e5b-a433-292c9ebcfe1f"/*Execute*/,
-      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
+      "Id": "a7a36d51-2b6d-459d-a211-3015c475d363"/*_AnalyzeSound*/,
+      "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
       "InputValues": [],
       "Outputs": []
     }

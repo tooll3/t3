@@ -3,13 +3,6 @@
   "Description": "Generates a static random value based on a seed in the predefined range.",
   "InputUis": [
     {
-      "InputId": "f2513ead-7022-4774-8767-7f33d1b92b26"/*Seed*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "48762e06-8377-464b-8fb9-c7d3b51c3f8e"/*Min*/,
       "Position": {
         "X": 0.0,
@@ -34,6 +27,13 @@
       },
       "Description": "(This seems to be broken at the moment)\nDefines whether, if multiple values are output, they are all identical or unique",
       "AddPadding": "True"
+    },
+    {
+      "InputId": "f2513ead-7022-4774-8767-7f33d1b92b26"/*Seed*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
     }
   ],
   "SymbolChildUis": [],

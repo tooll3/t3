@@ -4,57 +4,32 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "9cfd2aa2-ac87-46e7-b788-09179301546c"/*Sphere Scale*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 165.44008,
-        "Y": 41.479992
-      },
-      "Position": {
-        "X": -231.7171,
-        "Y": -132.6312
-      }
-    },
-    {
-      "ChildId": "8d29863f-4f96-4a44-9daf-fe46de1be45c"/*TriggerAnim*/,
+      "ChildId": "0242f027-8cc7-4fa4-ae84-63b763387164"/*TriggerAnim*/,
+      "Comment": "Combined with Boolean this operator allows to achieve simple tweening animations.",
       "Position": {
         "X": -22.62378,
-        "Y": -69.056885
+        "Y": -125.056885
       }
     },
     {
-      "ChildId": "d6dc0525-a0c8-4c0a-9f39-b0e0ca040a80"/*CubeMesh*/,
+      "ChildId": "06d672a5-b3e3-49d5-8f33-ca23760da885"/*Execute*/,
       "Position": {
-        "X": 152.29294,
-        "Y": -68.73239
-      }
-    },
-    {
-      "ChildId": "baf44f68-80a0-4874-8f86-e8d81b794e5d"/*DrawMesh*/,
-      "Position": {
-        "X": 302.29294,
-        "Y": -68.73239
-      }
-    },
-    {
-      "ChildId": "a88febeb-cf85-4f48-9322-949e517df07b"/*Camera*/,
-      "Position": {
-        "X": 1633.8733,
-        "Y": -496.49817
-      }
-    },
-    {
-      "ChildId": "eafe3858-5912-439f-9cc9-a0fff91de654"/*RenderTarget*/,
-      "Position": {
-        "X": 2144.2244,
+        "X": 1994.2245,
         "Y": -295.20413
       }
     },
     {
-      "ChildId": "e9b9ca99-cacb-4cfc-8562-7b1c32c7fa2f"/*Boolean*/,
+      "ChildId": "0923573a-b464-4bd7-838a-bea92d726719"/*Switch*/,
       "Position": {
-        "X": -8.917313,
-        "Y": -432.5373
+        "X": 1834.6418,
+        "Y": -476.54932
+      }
+    },
+    {
+      "ChildId": "22e396f6-e1aa-4882-876e-fc0a4f5042a2"/*Damp*/,
+      "Position": {
+        "X": 1333.3594,
+        "Y": -380.24008
       }
     },
     {
@@ -65,11 +40,154 @@
       }
     },
     {
-      "ChildId": "f6c0d3a1-fed6-4425-bd4c-1f4f1fda980b"/*BoolToInt*/,
-      "Comment": "In order to switch between cameras this operator convert the bool value to an integer",
+      "ChildId": "2c958555-a713-4ba9-9da4-1b5ddb8db609"/*Transform*/,
       "Position": {
-        "X": 1650.5682,
-        "Y": -427.56726
+        "X": 469.59998,
+        "Y": -11.380524
+      }
+    },
+    {
+      "ChildId": "31aff188-cbdd-48a8-96c1-9a4c9ff303d8"/*Green Light*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 165.44008,
+        "Y": 41.479992
+      },
+      "Position": {
+        "X": -234.02333,
+        "Y": -269.58472
+      }
+    },
+    {
+      "ChildId": "31b3f02e-edd4-4112-8b51-10863512cdfc"/*Spin the Cube*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 165.44008,
+        "Y": 41.479992
+      },
+      "Position": {
+        "X": -231.7171,
+        "Y": -9.671204
+      }
+    },
+    {
+      "ChildId": "32a1c0c4-4c83-4ee3-a4ed-184b98a808fc"/*Title*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 166.5999,
+        "Y": 36.476162
+      },
+      "Position": {
+        "X": -229.83662,
+        "Y": 60.26956
+      }
+    },
+    {
+      "ChildId": "3dce2aee-10cd-4819-a168-64037be06924"/*Transform*/,
+      "Position": {
+        "X": 469.59998,
+        "Y": -78.78357
+      }
+    },
+    {
+      "ChildId": "4aab0aa6-df68-44cc-a2ee-d42eb5dd4814"/*TextureToCubeMap*/,
+      "Position": {
+        "X": 770.7882,
+        "Y": 101.50278
+      }
+    },
+    {
+      "ChildId": "50cd345e-655f-4112-beab-d6f4b7e87a46"/*Text*/,
+      "Position": {
+        "X": 1815.8817,
+        "Y": -255.45908
+      }
+    },
+    {
+      "ChildId": "5f678e84-ca4e-4a8b-adcf-d71ed044af91"/*TriggerAnim*/,
+      "Position": {
+        "X": -22.62378,
+        "Y": -13.056885
+      }
+    },
+    {
+      "ChildId": "76556de7-9829-4f35-8506-481cd5c69bff"/*Green light*/,
+      "Position": {
+        "X": 1203.1672,
+        "Y": -292.2083
+      }
+    },
+    {
+      "ChildId": "7eb5cf55-1e2f-4daf-bbca-f3270d4dfe6c"/*Red light*/,
+      "Position": {
+        "X": 1352.0043,
+        "Y": -229.75375
+      }
+    },
+    {
+      "ChildId": "804da4a2-fd1d-4cdc-ae28-cccc98e6e4d4"/*SetMaterial*/,
+      "Position": {
+        "X": 619.6,
+        "Y": -75.56235
+      }
+    },
+    {
+      "ChildId": "873423ef-89b8-4b2f-8d53-b5d04c09de24"/*Ambient light*/,
+      "Position": {
+        "X": 1483.3594,
+        "Y": -380.24008
+      }
+    },
+    {
+      "ChildId": "878b0716-6751-4e0f-8e82-b6f8013b98b7"/*Red Light*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 165.44008,
+        "Y": 41.479992
+      },
+      "Position": {
+        "X": -234.02333,
+        "Y": -208.10474
+      }
+    },
+    {
+      "ChildId": "8d29863f-4f96-4a44-9daf-fe46de1be45c"/*TriggerAnim*/,
+      "Position": {
+        "X": -22.62378,
+        "Y": -69.056885
+      }
+    },
+    {
+      "ChildId": "8d5706f4-a17e-43bf-a596-2dce31e72271"/*OrbitCamera*/,
+      "Position": {
+        "X": 1633.8733,
+        "Y": -552.49817
+      }
+    },
+    {
+      "ChildId": "905d091a-27fb-411a-8567-21cb1ee1fdb5"/*BLue light*/,
+      "Position": {
+        "X": 1060.8812,
+        "Y": -334.89014
+      }
+    },
+    {
+      "ChildId": "98aa74d2-22d1-40ec-bb47-7d994ad7a1a0"/*DrawMesh*/,
+      "Position": {
+        "X": 302.29294,
+        "Y": -135.73239
+      }
+    },
+    {
+      "ChildId": "9cfd2aa2-ac87-46e7-b788-09179301546c"/*Sphere Scale*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 165.44008,
+        "Y": 41.479992
+      },
+      "Position": {
+        "X": -231.7171,
+        "Y": -132.6312
       }
     },
     {
@@ -85,11 +203,25 @@
       }
     },
     {
-      "ChildId": "0242f027-8cc7-4fa4-ae84-63b763387164"/*TriggerAnim*/,
-      "Comment": "Combined with Boolean this operator allows to achieve simple tweening animations.",
+      "ChildId": "9d521ba9-86d8-4738-9650-2e4dc7e094fe"/*All*/,
+      "Comment": "With this operator, we are checking if all lights are on within the scene.",
       "Position": {
-        "X": -22.62378,
-        "Y": -125.056885
+        "X": 899.8698,
+        "Y": -403.2147
+      }
+    },
+    {
+      "ChildId": "a88febeb-cf85-4f48-9322-949e517df07b"/*Camera*/,
+      "Position": {
+        "X": 1633.8733,
+        "Y": -496.49817
+      }
+    },
+    {
+      "ChildId": "acebb657-21d4-4991-967e-02dc9f68a40a"/*TriggerAnim*/,
+      "Position": {
+        "X": -22.441467,
+        "Y": -298.86893
       }
     },
     {
@@ -97,41 +229,6 @@
       "Position": {
         "X": 619.6,
         "Y": -19.562347
-      }
-    },
-    {
-      "ChildId": "ca5a96d4-055c-4b14-b565-11bfebc4946f"/*SetEnvironment*/,
-      "Position": {
-        "X": 919.6,
-        "Y": -75.56235
-      }
-    },
-    {
-      "ChildId": "905d091a-27fb-411a-8567-21cb1ee1fdb5"/*BLue light*/,
-      "Position": {
-        "X": 1060.8812,
-        "Y": -334.89014
-      }
-    },
-    {
-      "ChildId": "4aab0aa6-df68-44cc-a2ee-d42eb5dd4814"/*TextureToCubeMap*/,
-      "Position": {
-        "X": 770.7882,
-        "Y": 101.50278
-      }
-    },
-    {
-      "ChildId": "7eb5cf55-1e2f-4daf-bbca-f3270d4dfe6c"/*Red light*/,
-      "Position": {
-        "X": 1352.0043,
-        "Y": -229.75375
-      }
-    },
-    {
-      "ChildId": "76556de7-9829-4f35-8506-481cd5c69bff"/*Green light*/,
-      "Position": {
-        "X": 1203.1672,
-        "Y": -292.2083
       }
     },
     {
@@ -148,138 +245,17 @@
       }
     },
     {
-      "ChildId": "31aff188-cbdd-48a8-96c1-9a4c9ff303d8"/*Green Light*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 165.44008,
-        "Y": 41.479992
-      },
-      "Position": {
-        "X": -234.02333,
-        "Y": -269.58472
-      }
-    },
-    {
-      "ChildId": "878b0716-6751-4e0f-8e82-b6f8013b98b7"/*Red Light*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 165.44008,
-        "Y": 41.479992
-      },
-      "Position": {
-        "X": -234.02333,
-        "Y": -208.10474
-      }
-    },
-    {
-      "ChildId": "acebb657-21d4-4991-967e-02dc9f68a40a"/*TriggerAnim*/,
-      "Position": {
-        "X": -22.441467,
-        "Y": -298.86893
-      }
-    },
-    {
-      "ChildId": "98aa74d2-22d1-40ec-bb47-7d994ad7a1a0"/*DrawMesh*/,
+      "ChildId": "baf44f68-80a0-4874-8f86-e8d81b794e5d"/*DrawMesh*/,
       "Position": {
         "X": 302.29294,
-        "Y": -135.73239
+        "Y": -68.73239
       }
     },
     {
-      "ChildId": "804da4a2-fd1d-4cdc-ae28-cccc98e6e4d4"/*SetMaterial*/,
+      "ChildId": "bda7c7c8-4faf-4b06-a424-a10d38bb77c5"/*BoolToFloat*/,
       "Position": {
-        "X": 619.6,
-        "Y": -75.56235
-      }
-    },
-    {
-      "ChildId": "edab65d4-7ce0-499e-b6cf-7a8d32cf01b9"/*Group*/,
-      "Position": {
-        "X": 769.6,
-        "Y": -75.56235
-      }
-    },
-    {
-      "ChildId": "8d5706f4-a17e-43bf-a596-2dce31e72271"/*OrbitCamera*/,
-      "Position": {
-        "X": 1633.8733,
-        "Y": -552.49817
-      }
-    },
-    {
-      "ChildId": "0923573a-b464-4bd7-838a-bea92d726719"/*Switch*/,
-      "Position": {
-        "X": 1834.6418,
-        "Y": -476.54932
-      }
-    },
-    {
-      "ChildId": "3dce2aee-10cd-4819-a168-64037be06924"/*Transform*/,
-      "Position": {
-        "X": 469.59998,
-        "Y": -78.78357
-      }
-    },
-    {
-      "ChildId": "2c958555-a713-4ba9-9da4-1b5ddb8db609"/*Transform*/,
-      "Position": {
-        "X": 469.59998,
-        "Y": -11.380524
-      }
-    },
-    {
-      "ChildId": "50cd345e-655f-4112-beab-d6f4b7e87a46"/*Text*/,
-      "Position": {
-        "X": 1815.8817,
-        "Y": -255.45908
-      }
-    },
-    {
-      "ChildId": "06d672a5-b3e3-49d5-8f33-ca23760da885"/*Execute*/,
-      "Position": {
-        "X": 1994.2245,
-        "Y": -295.20413
-      }
-    },
-    {
-      "ChildId": "31b3f02e-edd4-4112-8b51-10863512cdfc"/*Spin the Cube*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 165.44008,
-        "Y": 41.479992
-      },
-      "Position": {
-        "X": -231.7171,
-        "Y": -9.671204
-      }
-    },
-    {
-      "ChildId": "5f678e84-ca4e-4a8b-adcf-d71ed044af91"/*TriggerAnim*/,
-      "Position": {
-        "X": -22.62378,
-        "Y": -13.056885
-      }
-    },
-    {
-      "ChildId": "cc76c369-5ed5-4155-a8ef-6362cc806770"/*Rotation*/,
-      "Position": {
-        "X": 319.59998,
-        "Y": -11.380524
-      }
-    },
-    {
-      "ChildId": "873423ef-89b8-4b2f-8d53-b5d04c09de24"/*Ambient light*/,
-      "Position": {
-        "X": 1483.3594,
+        "X": 1183.3594,
         "Y": -380.24008
-      }
-    },
-    {
-      "ChildId": "9d521ba9-86d8-4738-9650-2e4dc7e094fe"/*All*/,
-      "Comment": "With this operator, we are checking if all lights are on within the scene.",
-      "Position": {
-        "X": 899.8698,
-        "Y": -403.2147
       }
     },
     {
@@ -291,17 +267,24 @@
       }
     },
     {
-      "ChildId": "bda7c7c8-4faf-4b06-a424-a10d38bb77c5"/*BoolToFloat*/,
+      "ChildId": "ca5a96d4-055c-4b14-b565-11bfebc4946f"/*SetEnvironment*/,
       "Position": {
-        "X": 1183.3594,
-        "Y": -380.24008
+        "X": 919.6,
+        "Y": -75.56235
       }
     },
     {
-      "ChildId": "22e396f6-e1aa-4882-876e-fc0a4f5042a2"/*Damp*/,
+      "ChildId": "cc76c369-5ed5-4155-a8ef-6362cc806770"/*Rotation*/,
       "Position": {
-        "X": 1333.3594,
-        "Y": -380.24008
+        "X": 319.59998,
+        "Y": -11.380524
+      }
+    },
+    {
+      "ChildId": "d6dc0525-a0c8-4c0a-9f39-b0e0ca040a80"/*CubeMesh*/,
+      "Position": {
+        "X": 152.29294,
+        "Y": -68.73239
       }
     },
     {
@@ -312,22 +295,24 @@
       }
     },
     {
-      "ChildId": "32a1c0c4-4c83-4ee3-a4ed-184b98a808fc"/*Title*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 166.5999,
-        "Y": 36.476162
-      },
+      "ChildId": "e9b9ca99-cacb-4cfc-8562-7b1c32c7fa2f"/*Boolean*/,
       "Position": {
-        "X": -229.83662,
-        "Y": 60.26956
+        "X": -8.917313,
+        "Y": -432.5373
       }
     },
     {
-      "ChildId": "f8a550ea-5a96-4119-bd95-75228b774b10"/*Vector2*/,
+      "ChildId": "eafe3858-5912-439f-9cc9-a0fff91de654"/*RenderTarget*/,
       "Position": {
-        "X": 1515.8817,
-        "Y": -255.45908
+        "X": 2144.2244,
+        "Y": -295.20413
+      }
+    },
+    {
+      "ChildId": "edab65d4-7ce0-499e-b6cf-7a8d32cf01b9"/*Group*/,
+      "Position": {
+        "X": 769.6,
+        "Y": -75.56235
       }
     },
     {
@@ -342,6 +327,21 @@
       "Position": {
         "X": 1515.8817,
         "Y": -117.459076
+      }
+    },
+    {
+      "ChildId": "f6c0d3a1-fed6-4425-bd4c-1f4f1fda980b"/*BoolToInt*/,
+      "Comment": "In order to switch between cameras this operator convert the bool value to an integer",
+      "Position": {
+        "X": 1650.5682,
+        "Y": -427.56726
+      }
+    },
+    {
+      "ChildId": "f8a550ea-5a96-4119-bd95-75228b774b10"/*Vector2*/,
+      "Position": {
+        "X": 1515.8817,
+        "Y": -255.45908
       }
     }
   ],

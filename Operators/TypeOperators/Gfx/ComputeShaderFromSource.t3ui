@@ -3,6 +3,14 @@
   "Description": "",
   "InputUis": [
     {
+      "InputId": "08399b7a-a390-4a11-83eb-36ac68f76bc6"/*DebugName*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    },
+    {
       "InputId": "a8ee59c3-cb62-42e5-a3c9-f4968876c9cc"/*Code*/,
       "Relevancy": "Required",
       "Position": {
@@ -13,14 +21,6 @@
     },
     {
       "InputId": "d1cbd9eb-5e5a-499d-b7af-0cfe283f896b"/*EntryPoint*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      },
-      "Usage": "Default"
-    },
-    {
-      "InputId": "08399b7a-a390-4a11-83eb-36ac68f76bc6"/*DebugName*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0

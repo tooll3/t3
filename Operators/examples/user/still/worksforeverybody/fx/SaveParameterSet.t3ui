@@ -3,10 +3,10 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "d6a017af-df4e-4532-8a4a-208df224d60a"/*TriggerSaveParameters*/,
+      "InputId": "4aa59a00-b56e-4634-ad96-a72eac3eb859"/*SceneIndex*/,
       "Position": {
         "X": -200.0,
-        "Y": 0.0
+        "Y": 45.0
       }
     },
     {
@@ -17,10 +17,10 @@
       }
     },
     {
-      "InputId": "4aa59a00-b56e-4634-ad96-a72eac3eb859"/*SceneIndex*/,
+      "InputId": "d6a017af-df4e-4532-8a4a-208df224d60a"/*TriggerSaveParameters*/,
       "Position": {
         "X": -200.0,
-        "Y": 45.0
+        "Y": 0.0
       }
     }
   ],

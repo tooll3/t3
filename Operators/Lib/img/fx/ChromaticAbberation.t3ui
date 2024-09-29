@@ -3,12 +3,15 @@
   "Description": "Simulates an imaging error of optical camera lenses that manifests itself as blurring or discoloration at the outer edges.\n\nAlso see [ChromaticDistortion]\n\nUseful Ops for a PostFX Pipeline: [MotionBlur] [DepthOfField] [ChromaticAbberation] [Glow] [Grain] [Blur]",
   "InputUis": [
     {
-      "InputId": "b62aece4-8098-475b-a4d3-469f81a58207"/*Image*/,
-      "Relevancy": "Required",
+      "InputId": "361a838a-7bf1-4fd2-8e0e-77edcef11965"/*Strength*/,
       "Position": {
         "X": 132.69783,
-        "Y": -15.624207
-      }
+        "Y": 74.37579
+      },
+      "Description": "Controls the intensity of discoloration at the edges of the image.",
+      "Min": -2.0,
+      "Max": 2.0,
+      "Clamp": true
     },
     {
       "InputId": "4c51b5f5-5307-45a7-9641-25f572627926"/*Size*/,
@@ -19,17 +22,6 @@
       "Description": "Controls how far the individual colors are shifted away from each other at the edges of the image.",
       "Min": 0.1,
       "Max": 20.0,
-      "Clamp": true
-    },
-    {
-      "InputId": "361a838a-7bf1-4fd2-8e0e-77edcef11965"/*Strength*/,
-      "Position": {
-        "X": 132.69783,
-        "Y": 74.37579
-      },
-      "Description": "Controls the intensity of discoloration at the edges of the image.",
-      "Min": -2.0,
-      "Max": 2.0,
       "Clamp": true
     },
     {
@@ -53,9 +45,24 @@
       "Min": -2.0,
       "Max": 1.0,
       "Clamp": true
+    },
+    {
+      "InputId": "b62aece4-8098-475b-a4d3-469f81a58207"/*Image*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 132.69783,
+        "Y": -15.624207
+      }
     }
   ],
   "SymbolChildUis": [
+    {
+      "ChildId": "a978b641-0aee-40ff-b880-6409489ff863"/*IntToFloat*/,
+      "Position": {
+        "X": 293.77438,
+        "Y": 131.91797
+      }
+    },
     {
       "ChildId": "e214dd0d-2a6f-40d8-a3c0-c3d18fd4e346"/*_ImageFxShaderSetupStatic*/,
       "Style": "Resizable",
@@ -66,13 +73,6 @@
       "Position": {
         "X": 511.94125,
         "Y": -102.45227
-      }
-    },
-    {
-      "ChildId": "a978b641-0aee-40ff-b880-6409489ff863"/*IntToFloat*/,
-      "Position": {
-        "X": 293.77438,
-        "Y": 131.91797
       }
     }
   ],

@@ -20,36 +20,17 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "c7ac6729-fb17-4e8e-88ef-df9a92a345c4"/*ComputeShaderStage*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 145.98775,
-        "Y": 323.73776
-      },
-      "Position": {
-        "X": 773.83105,
-        "Y": 68.32178
-      }
-    },
-    {
-      "ChildId": "14a39e6d-6847-4a57-8aa1-9329e2bd98fa"/*SamplerStateOp*/,
-      "Position": {
-        "X": 450.29614,
-        "Y": 219.5039
-      }
-    },
-    {
-      "ChildId": "f4f6123c-4bd0-463b-bd4f-9f1ec216b480"/*FloatsToBuffer*/,
-      "Position": {
-        "X": 450.29614,
-        "Y": 111.50391
-      }
-    },
-    {
       "ChildId": "014998dd-3b42-43b9-9ee8-b9d60ed95470"/*ComputeShader*/,
       "Position": {
         "X": 450.29614,
         "Y": 55.503906
+      }
+    },
+    {
+      "ChildId": "14a39e6d-6847-4a57-8aa1-9329e2bd98fa"/*SamplerState*/,
+      "Position": {
+        "X": 450.29614,
+        "Y": 219.5039
       }
     },
     {
@@ -60,17 +41,10 @@
       }
     },
     {
-      "ChildId": "4832c6ed-11b1-4e90-96a3-09d91eaa08c6"/*SrvFromTexture2d*/,
+      "ChildId": "30de0b1e-7c1d-4efd-b6e2-58ec929a305c"/*GetTextureSize*/,
       "Position": {
-        "X": 9.353027,
-        "Y": 314.90723
-      }
-    },
-    {
-      "ChildId": "dce42014-be5f-450e-809d-f7594572b48a"/*UavFromTexture2d*/,
-      "Position": {
-        "X": 456.6272,
-        "Y": 521.84717
+        "X": 0.0,
+        "Y": 376.31104
       }
     },
     {
@@ -81,10 +55,10 @@
       }
     },
     {
-      "ChildId": "30de0b1e-7c1d-4efd-b6e2-58ec929a305c"/*GetTextureSize*/,
+      "ChildId": "4832c6ed-11b1-4e90-96a3-09d91eaa08c6"/*SrvFromTexture2d*/,
       "Position": {
-        "X": 0.0,
-        "Y": 376.31104
+        "X": 9.353027,
+        "Y": 314.90723
       }
     },
     {
@@ -99,6 +73,32 @@
       "Position": {
         "X": 600.29614,
         "Y": 55.503906
+      }
+    },
+    {
+      "ChildId": "c7ac6729-fb17-4e8e-88ef-df9a92a345c4"/*ComputeShaderStage*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 145.98775,
+        "Y": 323.73776
+      },
+      "Position": {
+        "X": 773.83105,
+        "Y": 68.32178
+      }
+    },
+    {
+      "ChildId": "dce42014-be5f-450e-809d-f7594572b48a"/*UavFromTexture2d*/,
+      "Position": {
+        "X": 456.6272,
+        "Y": 521.84717
+      }
+    },
+    {
+      "ChildId": "f4f6123c-4bd0-463b-bd4f-9f1ec216b480"/*FloatsToBuffer*/,
+      "Position": {
+        "X": 450.29614,
+        "Y": 111.50391
       }
     }
   ],

@@ -17,27 +17,6 @@
       }
     },
     {
-      "InputId": "ca67bfaf-ede7-43ba-b279-fc1ddfbe2ffa"/*RangeStart*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      }
-    },
-    {
-      "InputId": "db868176-d51c-41aa-bafe-68c3e50e725e"/*RangeEnd*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
-      }
-    },
-    {
-      "InputId": "cc812393-f080-4e17-a525-15b09f8acdd0"/*Gain*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 135.0
-      }
-    },
-    {
       "InputId": "51545316-69fc-441f-b59f-44979e32972c"/*Pow*/,
       "Position": {
         "X": -200.0,
@@ -49,6 +28,27 @@
       "Position": {
         "X": -200.0,
         "Y": 225.0
+      }
+    },
+    {
+      "InputId": "ca67bfaf-ede7-43ba-b279-fc1ddfbe2ffa"/*RangeStart*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "cc812393-f080-4e17-a525-15b09f8acdd0"/*Gain*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "db868176-d51c-41aa-bafe-68c3e50e725e"/*RangeEnd*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
       }
     }
   ],

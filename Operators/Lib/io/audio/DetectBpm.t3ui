@@ -3,10 +3,10 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "3d2d523e-6578-488c-92fa-9e2a3a773e11"/*LowerLimit*/,
+      "InputId": "17208fff-ab9a-46aa-ab1c-a1ae426ca5df"/*HighestBpm*/,
       "Position": {
         "X": 0.0,
-        "Y": 0.0
+        "Y": 90.0
       }
     },
     {
@@ -14,6 +14,20 @@
       "Position": {
         "X": 0.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "3d2d523e-6578-488c-92fa-9e2a3a773e11"/*LowerLimit*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "7ba20a6a-13f9-47a2-9d46-b8ac59210f08"/*FftInput*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
       }
     },
     {
@@ -31,24 +45,10 @@
       }
     },
     {
-      "InputId": "17208fff-ab9a-46aa-ab1c-a1ae426ca5df"/*HighestBpm*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 90.0
-      }
-    },
-    {
       "InputId": "f50cd488-9914-491d-9861-621a9c93019d"/*LockItFactor*/,
       "Position": {
         "X": 0.0,
         "Y": 135.0
-      }
-    },
-    {
-      "InputId": "7ba20a6a-13f9-47a2-9d46-b8ac59210f08"/*FftInput*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
       }
     }
   ],

@@ -2,16 +2,17 @@
   "Id": "8bede700-4e3e-42d8-8097-9744abdb8ad3"/*DistortAndShade*/,
   "Inputs": [
     {
-      "Id": "824e1ad4-0d33-458f-aefe-f3780ab06529"/*ImageA*/,
-      "DefaultValue": null
+      "Id": "17c45c4e-590e-4de6-90c2-befe2f89831d"/*ShadeColor*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
+        "W": 1.0
+      }
     },
     {
       "Id": "2596e8fb-00aa-4704-9978-a880c1016c18"/*ImageB*/,
       "DefaultValue": null
-    },
-    {
-      "Id": "84cea304-79d9-4f8c-a171-584897b9b468"/*Displacement*/,
-      "DefaultValue": 0.5
     },
     {
       "Id": "3a3acfbd-dca7-4f8a-b862-90eae2bc41ca"/*Center*/,
@@ -21,24 +22,39 @@
       }
     },
     {
-      "Id": "f942fc0d-ed5f-4594-8690-d464c5b12ed8"/*Shading*/,
-      "DefaultValue": 0.0
+      "Id": "824e1ad4-0d33-458f-aefe-f3780ab06529"/*ImageA*/,
+      "DefaultValue": null
     },
     {
-      "Id": "17c45c4e-590e-4de6-90c2-befe2f89831d"/*ShadeColor*/,
-      "DefaultValue": {
-        "X": 1.0,
-        "Y": 1.0,
-        "Z": 1.0,
-        "W": 1.0
-      }
+      "Id": "84cea304-79d9-4f8c-a171-584897b9b468"/*Displacement*/,
+      "DefaultValue": 0.5
+    },
+    {
+      "Id": "f942fc0d-ed5f-4594-8690-d464c5b12ed8"/*Shading*/,
+      "DefaultValue": 0.0
     }
   ],
   "Children": [
     {
-      "Id": "32776b15-aad9-4677-9714-40f113c6883f"/*ColorGrade*/,
-      "SymbolId": "42d86738-d644-47c8-ab92-cc426d958e51",
-      "InputValues": [],
+      "Id": "0391973e-ae4b-4676-b974-c4d3cdd8a20c"/*_multiImageFxSetup*/,
+      "SymbolId": "a2567844-3314-48de-bda7-7904b5546535",
+      "InputValues": [
+        {
+          "Id": "7f14d0e3-1159-434d-b038-74644948937c"/*ShaderPath*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\img\\fx\\DistortAndShade.hlsl"
+        },
+        {
+          "Id": "a5cb5bda-0fb2-4863-bd8d-9ac09135fc30"/*WrapMode*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "Mirror"
+        },
+        {
+          "Id": "bcc7fb78-1ac3-46f7-be46-885233420e80"/*FloatParams*/,
+          "Type": "System.Single",
+          "Value": 0.33
+        }
+      ],
       "Outputs": []
     },
     {
@@ -48,7 +64,7 @@
       "Outputs": []
     },
     {
-      "Id": "c64e8840-3d50-4bbf-887d-e4735eec446c"/*ColorGrade*/,
+      "Id": "32776b15-aad9-4677-9714-40f113c6883f"/*ColorGrade*/,
       "SymbolId": "42d86738-d644-47c8-ab92-cc426d958e51",
       "InputValues": [],
       "Outputs": []
@@ -60,25 +76,9 @@
       "Outputs": []
     },
     {
-      "Id": "0391973e-ae4b-4676-b974-c4d3cdd8a20c"/*_multiImageFxSetup*/,
-      "SymbolId": "a2567844-3314-48de-bda7-7904b5546535",
-      "InputValues": [
-        {
-          "Id": "7f14d0e3-1159-434d-b038-74644948937c"/*ShaderPath*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\DistortAndShade.hlsl"
-        },
-        {
-          "Id": "bcc7fb78-1ac3-46f7-be46-885233420e80"/*FloatParams*/,
-          "Type": "System.Single",
-          "Value": 0.33
-        },
-        {
-          "Id": "a5cb5bda-0fb2-4863-bd8d-9ac09135fc30"/*WrapMode*/,
-          "Type": "SharpDX.Direct3D11.TextureAddressMode",
-          "Value": "Mirror"
-        }
-      ],
+      "Id": "c64e8840-3d50-4bbf-887d-e4735eec446c"/*ColorGrade*/,
+      "SymbolId": "42d86738-d644-47c8-ab92-cc426d958e51",
+      "InputValues": [],
       "Outputs": []
     }
   ],

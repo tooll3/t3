@@ -3,6 +3,13 @@
   "Description": "Collects the input string to a list.",
   "InputUis": [
     {
+      "InputId": "1b777f1e-e219-4b8f-b185-94466c280881"/*MaxCount*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
       "InputId": "26adb8d2-14e7-4006-99ed-bcbbede8352a"/*NewString*/,
       "Relevancy": "Relevant",
       "Position": {
@@ -10,20 +17,6 @@
         "Y": 45.0
       },
       "Usage": "Default"
-    },
-    {
-      "InputId": "d045f941-7035-4a84-b0b0-2691477ef375"/*InsertTrigger*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 90.0
-      }
-    },
-    {
-      "InputId": "1b777f1e-e219-4b8f-b185-94466c280881"/*MaxCount*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 135.0
-      }
     },
     {
       "InputId": "2ff583b8-8b3e-4441-aa60-7365f4c54320"/*ClearTrigger*/,
@@ -52,6 +45,13 @@
       "Position": {
         "X": 0.0,
         "Y": 0.0
+      }
+    },
+    {
+      "InputId": "d045f941-7035-4a84-b0b0-2691477ef375"/*InsertTrigger*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 90.0
       }
     }
   ],

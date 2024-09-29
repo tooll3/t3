@@ -1,7 +1,5 @@
 {
-  "Name": "UseTextureReference",
-  "Id": "fd5ac393-02a4-43ae-8cdf-64a947abbafa",
-  "Namespace": "lib.img.fx._",
+  "Id": "fd5ac393-02a4-43ae-8cdf-64a947abbafa"/*UseTextureReference*/,
   "Inputs": [],
   "Children": [],
   "Connections": []

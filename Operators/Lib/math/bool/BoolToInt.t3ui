@@ -3,17 +3,17 @@
   "Description": "Returns different integer values depending on if a boolean is true or false. With its default values, it converts a boolean into 0 for false and 1 for true.",
   "InputUis": [
     {
-      "InputId": "c644165f-3901-4dbf-8091-05f958e668e5"/*BoolValue*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "9b64f287-d14a-493e-a1c7-dcbcdc703849"/*ResultForFalse*/,
       "Position": {
         "X": 0.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "c644165f-3901-4dbf-8091-05f958e668e5"/*BoolValue*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
       }
     },
     {

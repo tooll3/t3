@@ -2,11 +2,11 @@
   "Id": "d3fb5baf-43f8-4983-a1d9-42f4005a3af0"/*PeakLevel*/,
   "Inputs": [
     {
-      "Id": "88ed25d3-ab67-47da-ad38-2f0126ce0492"/*Value*/,
+      "Id": "279c4f32-2f8a-4679-afe4-bbf14cf6ba05"/*Threshold*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "279c4f32-2f8a-4679-afe4-bbf14cf6ba05"/*Threshold*/,
+      "Id": "88ed25d3-ab67-47da-ad38-2f0126ce0492"/*Value*/,
       "DefaultValue": 0.0
     },
     {

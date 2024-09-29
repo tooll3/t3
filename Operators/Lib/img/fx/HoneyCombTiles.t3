@@ -2,17 +2,19 @@
   "Id": "ee398291-674c-409b-aab8-9ca843ce6cef"/*HoneyCombTiles*/,
   "Inputs": [
     {
-      "Id": "452fb0e1-34c1-4042-9a7c-30bf8dd4cb3c"/*Image*/,
-      "DefaultValue": null
+      "Id": "00ffc593-d62e-4f40-8957-906b444b8f3b"/*Divisions*/,
+      "DefaultValue": 20.0
     },
     {
-      "Id": "dc8c94e6-97d9-4aa5-9edd-5a8d01e4f7c4"/*Fill*/,
+      "Id": "03afbb91-a64f-48bc-a306-b378a068aca8"/*Resolution*/,
       "DefaultValue": {
-        "X": 1.0,
-        "Y": 1.0,
-        "Z": 1.0,
-        "W": 1.0
+        "X": 0,
+        "Y": 0
       }
+    },
+    {
+      "Id": "0c227ab3-3394-40fb-9274-d857a2293d35"/*Rotation*/,
+      "DefaultValue": 0.0
     },
     {
       "Id": "165b0ad5-1fde-4f8d-871e-f1498a419887"/*Background*/,
@@ -24,6 +26,14 @@
       }
     },
     {
+      "Id": "228b8705-92c7-467b-ab0f-eee60a618c72"/*MixOriginal*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "452fb0e1-34c1-4042-9a7c-30bf8dd4cb3c"/*Image*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "4ba0a4d2-44c8-4c8e-95d1-7b1fbda6975b"/*Center*/,
       "DefaultValue": {
         "X": 0.0,
@@ -31,89 +41,24 @@
       }
     },
     {
-      "Id": "0c227ab3-3394-40fb-9274-d857a2293d35"/*Rotation*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "00ffc593-d62e-4f40-8957-906b444b8f3b"/*Divisions*/,
-      "DefaultValue": 20.0
+      "Id": "dc8c94e6-97d9-4aa5-9edd-5a8d01e4f7c4"/*Fill*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
+        "W": 1.0
+      }
     },
     {
       "Id": "e635d5cd-8250-4722-a11a-ffe27a922f3e"/*LineThickness*/,
       "DefaultValue": 0.0
-    },
-    {
-      "Id": "228b8705-92c7-467b-ab0f-eee60a618c72"/*MixOriginal*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "03afbb91-a64f-48bc-a306-b378a068aca8"/*Resolution*/,
-      "DefaultValue": {
-        "X": 0,
-        "Y": 0
-      }
     }
   ],
   "Children": [
     {
-      "Id": "c290c47c-f70d-4298-aa31-959eebbc050d"/*_multiImageFxSetup*/,
-      "SymbolId": "a2567844-3314-48de-bda7-7904b5546535",
-      "InputValues": [
-        {
-          "Id": "7f14d0e3-1159-434d-b038-74644948937c"/*ShaderPath*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\HexGridDisplace.hlsl"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "b14b3243-34df-4ba9-8fec-07e4b5d75d07"/*CurvesToTexture*/,
-      "SymbolId": "ab511978-bad5-4b69-90b2-c028447fe9f7",
-      "InputValues": [
-        {
-          "Id": "83c5a68a-2685-4506-8d79-d0db7d739102"/*Curves*/,
-          "Type": "T3.Core.DataTypes.Curve",
-          "Value": {
-            "Curve": {
-              "PreCurve": "Constant",
-              "PostCurve": "Constant",
-              "Keys": [
-                {
-                  "Time": 0.0,
-                  "Value": 0.0,
-                  "InType": "Spline",
-                  "OutType": "Spline",
-                  "InEditMode": "Smooth",
-                  "OutEditMode": "Smooth",
-                  "InTangentAngle": 0.0,
-                  "OutTangentAngle": 3.141592653589793
-                },
-                {
-                  "Time": 0.4,
-                  "Value": 0.7818491458892822,
-                  "InType": "Spline",
-                  "OutType": "Spline",
-                  "InEditMode": "Smooth",
-                  "OutEditMode": "Smooth",
-                  "InTangentAngle": 6.78247239555768,
-                  "OutTangentAngle": 3.640879741967887
-                },
-                {
-                  "Time": 1.0,
-                  "Value": 1.0000000149011612,
-                  "InType": "Linear",
-                  "OutType": "Linear",
-                  "InEditMode": "Linear",
-                  "OutEditMode": "Linear",
-                  "InTangentAngle": 0.348725445048627,
-                  "OutTangentAngle": -2.792867208541166
-                }
-              ]
-            }
-          }
-        }
-      ],
+      "Id": "24484531-b3a5-4dd3-96bb-16fd467672b4"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -167,6 +112,61 @@
       "Outputs": []
     },
     {
+      "Id": "88d47200-0bc0-4a4b-a815-871b743404cb"/*Vector4Components*/,
+      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "b14b3243-34df-4ba9-8fec-07e4b5d75d07"/*CurvesToTexture*/,
+      "SymbolId": "ab511978-bad5-4b69-90b2-c028447fe9f7",
+      "InputValues": [
+        {
+          "Id": "83c5a68a-2685-4506-8d79-d0db7d739102"/*Curves*/,
+          "Type": "T3.Core.DataTypes.Curve",
+          "Value": {
+            "Curve": {
+              "PreCurve": "Constant",
+              "PostCurve": "Constant",
+              "Keys": [
+                {
+                  "Time": 0.0,
+                  "Value": 0.0,
+                  "InType": "Spline",
+                  "OutType": "Spline",
+                  "InEditMode": "Smooth",
+                  "OutEditMode": "Smooth",
+                  "InTangentAngle": 0.0,
+                  "OutTangentAngle": 3.141592653589793
+                },
+                {
+                  "Time": 0.4,
+                  "Value": 0.7818491458892822,
+                  "InType": "Spline",
+                  "OutType": "Spline",
+                  "InEditMode": "Smooth",
+                  "OutEditMode": "Smooth",
+                  "InTangentAngle": 6.78247239555768,
+                  "OutTangentAngle": 3.640879741967887
+                },
+                {
+                  "Time": 1.0,
+                  "Value": 1.0000000149011612,
+                  "InType": "Linear",
+                  "OutType": "Linear",
+                  "InEditMode": "Linear",
+                  "OutEditMode": "Linear",
+                  "InTangentAngle": 0.348725445048627,
+                  "OutTangentAngle": -2.792867208541166
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "Outputs": []
+    },
+    {
       "Id": "b851a1e4-ab55-41fb-a242-a28d5d9f63d1"/*CurvesToTexture*/,
       "SymbolId": "ab511978-bad5-4b69-90b2-c028447fe9f7",
       "InputValues": [
@@ -216,15 +216,15 @@
       "Outputs": []
     },
     {
-      "Id": "88d47200-0bc0-4a4b-a815-871b743404cb"/*Vector4Components*/,
-      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "24484531-b3a5-4dd3-96bb-16fd467672b4"/*Vector2Components*/,
-      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
-      "InputValues": [],
+      "Id": "c290c47c-f70d-4298-aa31-959eebbc050d"/*_multiImageFxSetup*/,
+      "SymbolId": "a2567844-3314-48de-bda7-7904b5546535",
+      "InputValues": [
+        {
+          "Id": "7f14d0e3-1159-434d-b038-74644948937c"/*ShaderPath*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\img\\fx\\HexGridDisplace.hlsl"
+        }
+      ],
       "Outputs": []
     },
     {

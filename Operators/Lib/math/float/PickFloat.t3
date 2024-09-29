@@ -2,12 +2,12 @@
   "Id": "63e6e642-827b-4518-ac64-9ab0a8d4391e"/*PickFloat*/,
   "Inputs": [
     {
-      "Id": "d7ef7f1a-a6bd-4f94-a29a-bb19e2854001"/*FloatValues*/,
-      "DefaultValue": 0.0
-    },
-    {
       "Id": "465b4fc3-899c-4b97-9892-f237fa6613e8"/*Index*/,
       "DefaultValue": 0
+    },
+    {
+      "Id": "d7ef7f1a-a6bd-4f94-a29a-bb19e2854001"/*FloatValues*/,
+      "DefaultValue": 0.0
     }
   ],
   "Children": [],

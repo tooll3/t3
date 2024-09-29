@@ -3,6 +3,20 @@
   "Description": "This operator has been deprecated.\n\nPlease consider using [AnimValue] or [TriggerAnim].",
   "InputUis": [
     {
+      "InputId": "1154b0a7-e244-43ff-a80b-9d099be85053"/*Speed*/,
+      "Position": {
+        "X": -58.288685,
+        "Y": 98.02955
+      }
+    },
+    {
+      "InputId": "399c783c-7db2-4173-87c6-ffc2bb9cc859"/*Intensity*/,
+      "Position": {
+        "X": -57.850426,
+        "Y": 88.96694
+      }
+    },
+    {
       "InputId": "3b60db67-3a12-44c3-91ba-5517f74879d6"/*BeatTime*/,
       "Position": {
         "X": -58.288685,
@@ -17,20 +31,6 @@
       },
       "Min": 0.0,
       "Max": 1.0
-    },
-    {
-      "InputId": "1154b0a7-e244-43ff-a80b-9d099be85053"/*Speed*/,
-      "Position": {
-        "X": -58.288685,
-        "Y": 98.02955
-      }
-    },
-    {
-      "InputId": "399c783c-7db2-4173-87c6-ffc2bb9cc859"/*Intensity*/,
-      "Position": {
-        "X": -57.850426,
-        "Y": 88.96694
-      }
     }
   ],
   "SymbolChildUis": [],

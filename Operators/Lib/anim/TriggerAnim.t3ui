@@ -3,25 +3,10 @@
   "Description": "Generate interactive animation values than can be triggered with a boolean value.\nIt offers a variety of shapes and modes.\n\nTips:\n- Hold CTRL to directly manipulate rate and shape in the graph.\n- Have a look at [HowToAnimate] to get some ideas on how to use this.\n\nAn example setup might be:\n\n[HasValueIIncreased]->[TriggerAnim]->[SampleGradient]->[Blob]",
   "InputUis": [
     {
-      "InputId": "62949257-adb3-4c67-ac0a-d37ee28da81b"/*Trigger*/,
-      "Relevancy": "Relevant",
+      "InputId": "06e511d2-891a-4f81-b49e-327410a2cb95"/*TimeMode*/,
       "Position": {
         "X": -200.0,
         "Y": 360.0
-      }
-    },
-    {
-      "InputId": "c0fa79d5-2c49-4d40-998f-4eb0101ae050"/*Shape*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "InputId": "9913fcea-3994-40d6-84a1-d56525b31c43"/*AnimMode*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 405.0
       }
     },
     {
@@ -34,10 +19,10 @@
       "Max": 10.0
     },
     {
-      "InputId": "3ad8e756-7720-4f43-85da-efe1af364cfe"/*Base*/,
+      "InputId": "214e244a-9e95-4292-81f5-cd0199f05c66"/*Delay*/,
       "Position": {
         "X": -200.0,
-        "Y": 450.0
+        "Y": 180.0
       }
     },
     {
@@ -48,10 +33,25 @@
       }
     },
     {
-      "InputId": "214e244a-9e95-4292-81f5-cd0199f05c66"/*Delay*/,
+      "InputId": "3ad8e756-7720-4f43-85da-efe1af364cfe"/*Base*/,
       "Position": {
         "X": -200.0,
-        "Y": 180.0
+        "Y": 450.0
+      }
+    },
+    {
+      "InputId": "62949257-adb3-4c67-ac0a-d37ee28da81b"/*Trigger*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": -200.0,
+        "Y": 360.0
+      }
+    },
+    {
+      "InputId": "9913fcea-3994-40d6-84a1-d56525b31c43"/*AnimMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 405.0
       }
     },
     {
@@ -66,10 +66,10 @@
       "Clamp": true
     },
     {
-      "InputId": "06e511d2-891a-4f81-b49e-327410a2cb95"/*TimeMode*/,
+      "InputId": "c0fa79d5-2c49-4d40-998f-4eb0101ae050"/*Shape*/,
       "Position": {
         "X": -200.0,
-        "Y": 360.0
+        "Y": 0.0
       }
     },
     {

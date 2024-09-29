@@ -3,15 +3,6 @@
   "Description": "Creates flat 2D Text as an Object in 3D Space from bitmap fonts.\nFor each Character a quad mesh is generated. [TextSprites] can be used to manipulate these generated Objects.\n\nAny String Operator like [AString], [RandomString] etc. can be used as string input.\n\nThe Fonts used consist of a BmFont font definition file and the matching MSDF (multichannel distance field) texture",
   "InputUis": [
     {
-      "InputId": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
-      "Position": {
-        "X": -436.39325,
-        "Y": 175.66428
-      },
-      "Description": "String / Input for the text to be drawn",
-      "Usage": "Multiline"
-    },
-    {
       "InputId": "0e5f05b4-5e8a-4f6d-8cac-03b04649eb67"/*Color*/,
       "Position": {
         "X": -437.69647,
@@ -20,23 +11,13 @@
       "Description": "defines which color the surfaces of the letters have"
     },
     {
-      "InputId": "989e6950-fd32-4d0b-97c2-d03264cb2db5"/*Shadow*/,
+      "InputId": "28be4e86-6761-4d07-80bf-abf6f82897e4"/*CullMode*/,
       "Position": {
-        "X": -437.69647,
-        "Y": 338.73972
+        "X": -448.00687,
+        "Y": 833.57916
       },
-      "Description": "Defines the color / opacity of the shadow that appears as an outline\nColors brighter than 1 create a glow effect"
-    },
-    {
-      "InputId": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
-      "Position": {
-        "X": -438.90158,
-        "Y": 425.33575
-      },
-      "Description": "Offsets the position of the Text element",
-      "AddPadding": "True",
-      "Scale": 0.01,
-      "UseVec2Control": "Position"
+      "GroupTitle": "Draw Options",
+      "Description": "Defines whether / which surface is rendered invisible"
     },
     {
       "InputId": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
@@ -50,15 +31,20 @@
       "FileFilter": "Fonts (*.fnt)|*.fnt"
     },
     {
-      "InputId": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
+      "InputId": "7a76d5aa-1f44-4238-9333-7c2951becc31"/*EnableZTest*/,
       "Position": {
-        "X": -437.7634,
-        "Y": 537.487
+        "X": -448.00687,
+        "Y": 878.57916
       },
-      "Description": "Uniformly scales the Text",
-      "Min": 0.0,
-      "Max": 500.0,
-      "Scale": 1.0
+      "Description": "Activates / deactivates whether the text covers / is covered by other elements."
+    },
+    {
+      "InputId": "82cc31ff-3307-4b6d-be70-16e471c2ffc9"/*HorizontalAlign*/,
+      "Position": {
+        "X": -448.00687,
+        "Y": 788.57916
+      },
+      "Description": "Defines where the pivot is located in the horizontal position"
     },
     {
       "InputId": "835d7f17-9de4-4612-a2f0-01c1346cdf1a"/*Spacing*/,
@@ -72,12 +58,12 @@
       "Scale": 0.1
     },
     {
-      "InputId": "eaf9dc37-e70f-4197-895c-b5607456b4a2"/*LineHeight*/,
+      "InputId": "989e6950-fd32-4d0b-97c2-d03264cb2db5"/*Shadow*/,
       "Position": {
-        "X": -448.00687,
-        "Y": 698.57904
+        "X": -437.69647,
+        "Y": 338.73972
       },
-      "Description": "Defines the space between the lines, if there are more than 1"
+      "Description": "Defines the color / opacity of the shadow that appears as an outline\nColors brighter than 1 create a glow effect"
     },
     {
       "InputId": "ae7f7e83-fa18-44fd-b639-3bd0dbd3ac06"/*VerticalAlign*/,
@@ -89,102 +75,46 @@
       "Description": "Defines how high the letters are in relation to the pivot.\n\nTop: The pivot point is on the row line\nMiddle: The letters are centered above the pivot\nBottom: The pivot is at the bottom of the letters such as 'y' 'g' etc."
     },
     {
-      "InputId": "82cc31ff-3307-4b6d-be70-16e471c2ffc9"/*HorizontalAlign*/,
+      "InputId": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
       "Position": {
-        "X": -448.00687,
-        "Y": 788.57916
+        "X": -437.7634,
+        "Y": 537.487
       },
-      "Description": "Defines where the pivot is located in the horizontal position"
+      "Description": "Uniformly scales the Text",
+      "Min": 0.0,
+      "Max": 500.0,
+      "Scale": 1.0
     },
     {
-      "InputId": "28be4e86-6761-4d07-80bf-abf6f82897e4"/*CullMode*/,
+      "InputId": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
       "Position": {
-        "X": -448.00687,
-        "Y": 833.57916
+        "X": -438.90158,
+        "Y": 425.33575
       },
-      "GroupTitle": "Draw Options",
-      "Description": "Defines whether / which surface is rendered invisible"
+      "Description": "Offsets the position of the Text element",
+      "AddPadding": "True",
+      "Scale": 0.01,
+      "UseVec2Control": "Position"
     },
     {
-      "InputId": "7a76d5aa-1f44-4238-9333-7c2951becc31"/*EnableZTest*/,
+      "InputId": "eaf9dc37-e70f-4197-895c-b5607456b4a2"/*LineHeight*/,
       "Position": {
         "X": -448.00687,
-        "Y": 878.57916
+        "Y": 698.57904
       },
-      "Description": "Activates / deactivates whether the text covers / is covered by other elements."
+      "Description": "Defines the space between the lines, if there are more than 1"
+    },
+    {
+      "InputId": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
+      "Position": {
+        "X": -436.39325,
+        "Y": 175.66428
+      },
+      "Description": "String / Input for the text to be drawn",
+      "Usage": "Multiline"
     }
   ],
   "SymbolChildUis": [
-    {
-      "ChildId": "8991cb54-67d6-4dc9-b4fa-7861e367d737"/*TransformsConstBuffer*/,
-      "Position": {
-        "X": 513.2376,
-        "Y": 283.13544
-      }
-    },
-    {
-      "ChildId": "d52a235c-65dd-4ab3-a153-61b02eea3867"/*VertexShader*/,
-      "Position": {
-        "X": 513.2376,
-        "Y": 197.13544
-      }
-    },
-    {
-      "ChildId": "0f187149-0932-4a8f-ae00-86513c0a4d51"/*RasterizerStateOp*/,
-      "Position": {
-        "X": -298.00687,
-        "Y": 833.57916
-      }
-    },
-    {
-      "ChildId": "f28e2537-bf94-4c58-91ba-89518574c24a"/*PixelShader*/,
-      "Position": {
-        "X": 513.2376,
-        "Y": 240.13544
-      }
-    },
-    {
-      "ChildId": "c2075c9d-ddb6-4db9-8690-f093ca36fe97"/*Rasterizer*/,
-      "Position": {
-        "X": 765.782,
-        "Y": 385.06052
-      }
-    },
-    {
-      "ChildId": "2e0462df-06bc-4854-a4a3-e6057f4a72d1"/*InputAssemblerStage*/,
-      "Position": {
-        "X": 768.9238,
-        "Y": 162.5781
-      }
-    },
-    {
-      "ChildId": "0ac06af7-96fe-4761-a0d7-f7c253ecfc48"/*LoadImage*/,
-      "Position": {
-        "X": 366.6356,
-        "Y": 756.9915
-      }
-    },
-    {
-      "ChildId": "65008714-e069-4dc6-b4b6-a4c73229daa9"/*SamplerStateOp*/,
-      "Position": {
-        "X": 513.2376,
-        "Y": 326.13544
-      }
-    },
-    {
-      "ChildId": "8eaabe25-84fd-4d9e-bb33-200cd6c65e9d"/*OutputMergerStage*/,
-      "Position": {
-        "X": 765.782,
-        "Y": 452.06052
-      }
-    },
-    {
-      "ChildId": "ebc4cfb8-952d-487e-b89f-b3274cc60a73"/*Execute*/,
-      "Position": {
-        "X": 918.9238,
-        "Y": 162.5781
-      }
-    },
     {
       "ChildId": "0618fcf2-ff9e-41bc-93e2-f4059b0d1eff"/*Vector4Components*/,
       "Style": "Resizable",
@@ -198,17 +128,24 @@
       }
     },
     {
-      "ChildId": "4f27bf70-0d11-483f-b9e8-1e509b8493f4"/*FloatsToBuffer*/,
+      "ChildId": "0ac06af7-96fe-4761-a0d7-f7c253ecfc48"/*LoadImage*/,
       "Position": {
-        "X": 220.39441,
-        "Y": 220.39821
+        "X": 366.6356,
+        "Y": 756.9915
       }
     },
     {
-      "ChildId": "40b536a8-4a74-4e18-8522-c6a137984463"/*SrvFromStructuredBuffer*/,
+      "ChildId": "0c3c9def-c419-4d1d-9a7f-58941a5cae8f"/*GetForegroundColor*/,
       "Position": {
-        "X": 361.2107,
-        "Y": 496.4714
+        "X": -246.58395,
+        "Y": 255.00177
+      }
+    },
+    {
+      "ChildId": "0f187149-0932-4a8f-ae00-86513c0a4d51"/*RasterizerState*/,
+      "Position": {
+        "X": -298.00687,
+        "Y": 833.57916
       }
     },
     {
@@ -226,10 +163,52 @@
       }
     },
     {
+      "ChildId": "2b65ff72-e36b-45c9-a7ae-e6d016c6ed83"/*PickBlendMode*/,
+      "Position": {
+        "X": -298.00687,
+        "Y": 945.57916
+      }
+    },
+    {
+      "ChildId": "2e0462df-06bc-4854-a4a3-e6057f4a72d1"/*InputAssemblerStage*/,
+      "Position": {
+        "X": 768.9238,
+        "Y": 162.5781
+      }
+    },
+    {
       "ChildId": "395e0473-ce2f-46e4-be5f-e38682ee3b8c"/*SearchAndReplace*/,
       "Position": {
         "X": 216.63559,
         "Y": 756.9915
+      }
+    },
+    {
+      "ChildId": "40b536a8-4a74-4e18-8522-c6a137984463"/*SrvFromStructuredBuffer*/,
+      "Position": {
+        "X": 361.2107,
+        "Y": 496.4714
+      }
+    },
+    {
+      "ChildId": "4f27bf70-0d11-483f-b9e8-1e509b8493f4"/*FloatsToBuffer*/,
+      "Position": {
+        "X": 220.39441,
+        "Y": 220.39821
+      }
+    },
+    {
+      "ChildId": "65008714-e069-4dc6-b4b6-a4c73229daa9"/*SamplerState*/,
+      "Position": {
+        "X": 513.2376,
+        "Y": 326.13544
+      }
+    },
+    {
+      "ChildId": "673bf3f1-d8c2-468a-87c3-0e6a11ecbf26"/*BlendColors*/,
+      "Position": {
+        "X": -103.04382,
+        "Y": 222.54092
       }
     },
     {
@@ -245,31 +224,31 @@
       }
     },
     {
-      "ChildId": "7ac21b66-d617-460a-af7b-f109b830e639"/*DepthStencilStateOp*/,
+      "ChildId": "7ac21b66-d617-460a-af7b-f109b830e639"/*DepthStencilState*/,
       "Position": {
         "X": -298.00687,
         "Y": 889.57916
       }
     },
     {
-      "ChildId": "2b65ff72-e36b-45c9-a7ae-e6d016c6ed83"/*PickBlendMode*/,
+      "ChildId": "8991cb54-67d6-4dc9-b4fa-7861e367d737"/*TransformsConstBuffer*/,
       "Position": {
-        "X": -298.00687,
-        "Y": 945.57916
+        "X": 513.2376,
+        "Y": 283.13544
       }
     },
     {
-      "ChildId": "673bf3f1-d8c2-468a-87c3-0e6a11ecbf26"/*BlendColors*/,
+      "ChildId": "8eaabe25-84fd-4d9e-bb33-200cd6c65e9d"/*OutputMergerStage*/,
       "Position": {
-        "X": -103.04382,
-        "Y": 222.54092
+        "X": 765.782,
+        "Y": 452.06052
       }
     },
     {
-      "ChildId": "0c3c9def-c419-4d1d-9a7f-58941a5cae8f"/*GetForegroundColor*/,
+      "ChildId": "9fee529f-0ddb-415b-ab27-6fab96fff7d8"/*SetPixelAndVertexShaderStage*/,
       "Position": {
-        "X": -246.58395,
-        "Y": 255.00177
+        "X": 765.782,
+        "Y": 212.06052
       }
     },
     {
@@ -280,10 +259,31 @@
       }
     },
     {
-      "ChildId": "9fee529f-0ddb-415b-ab27-6fab96fff7d8"/*SetPixelAndVertexShaderStage*/,
+      "ChildId": "c2075c9d-ddb6-4db9-8690-f093ca36fe97"/*Rasterizer*/,
       "Position": {
         "X": 765.782,
-        "Y": 212.06052
+        "Y": 385.06052
+      }
+    },
+    {
+      "ChildId": "d52a235c-65dd-4ab3-a153-61b02eea3867"/*VertexShader*/,
+      "Position": {
+        "X": 513.2376,
+        "Y": 197.13544
+      }
+    },
+    {
+      "ChildId": "ebc4cfb8-952d-487e-b89f-b3274cc60a73"/*Execute*/,
+      "Position": {
+        "X": 918.9238,
+        "Y": 162.5781
+      }
+    },
+    {
+      "ChildId": "f28e2537-bf94-4c58-91ba-89518574c24a"/*PixelShader*/,
+      "Position": {
+        "X": 513.2376,
+        "Y": 240.13544
       }
     }
   ],

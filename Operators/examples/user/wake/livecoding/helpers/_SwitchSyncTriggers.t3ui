@@ -11,20 +11,20 @@
       }
     },
     {
-      "InputId": "5236ee24-44db-462c-b9fa-c3c842ceb0fa"/*SimulatedTrigger*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      }
-    },
-    {
       "InputId": "2cff056f-1886-46a1-9e8c-998d5bdec279"/*IsSimulationVariable*/,
       "Position": {
         "X": -200.0,
         "Y": 90.0
       },
       "Usage": "Default"
+    },
+    {
+      "InputId": "5236ee24-44db-462c-b9fa-c3c842ceb0fa"/*SimulatedTrigger*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
     }
   ],
   "SymbolChildUis": [],

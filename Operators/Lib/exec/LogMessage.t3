@@ -6,16 +6,16 @@
       "DefaultValue": null
     },
     {
+      "Id": "42a673ee-c323-401c-b5d9-8d8f9dbebc2b"/*LogLevel*/,
+      "DefaultValue": 1
+    },
+    {
       "Id": "8483c153-627c-4154-8fbe-3611ca788701"/*OnlyOnChanges*/,
       "DefaultValue": false
     },
     {
       "Id": "acd53819-c248-4c95-a1a5-92a583e9b49b"/*Message*/,
       "DefaultValue": ""
-    },
-    {
-      "Id": "42a673ee-c323-401c-b5d9-8d8f9dbebc2b"/*LogLevel*/,
-      "DefaultValue": 1
     }
   ],
   "Children": [],

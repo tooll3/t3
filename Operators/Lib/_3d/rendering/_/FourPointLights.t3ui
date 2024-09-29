@@ -33,16 +33,16 @@
       }
     },
     {
-      "ChildId": "b25d805b-9859-4c77-8f67-9fe7a7a1fbae"/*PointLight*/,
+      "ChildId": "b16f386f-22f8-47c8-9e77-0d5aeb3ac03d"/*PointLight*/,
       "Position": {
-        "X": 267.33948,
+        "X": 397.33948,
         "Y": 90.694626
       }
     },
     {
-      "ChildId": "b16f386f-22f8-47c8-9e77-0d5aeb3ac03d"/*PointLight*/,
+      "ChildId": "b25d805b-9859-4c77-8f67-9fe7a7a1fbae"/*PointLight*/,
       "Position": {
-        "X": 397.33948,
+        "X": 267.33948,
         "Y": 90.694626
       }
     }

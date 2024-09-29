@@ -2,11 +2,7 @@
   "Id": "a9600440-4203-4315-bdb1-4dfd603b4515"/*VertexShaderStage*/,
   "Inputs": [
     {
-      "Id": "b1c236e5-6757-4d77-9911-e3acd5ea9fe9"/*VertexShader*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "bba8f6eb-7cff-435b-ab47-febf58dd8fba"/*ConstantBuffers*/,
+      "Id": "2bc7584d-a347-4954-9120-c1841af76650"/*SamplerStates*/,
       "DefaultValue": null
     },
     {
@@ -14,7 +10,11 @@
       "DefaultValue": null
     },
     {
-      "Id": "2bc7584d-a347-4954-9120-c1841af76650"/*SamplerStates*/,
+      "Id": "b1c236e5-6757-4d77-9911-e3acd5ea9fe9"/*VertexShader*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "bba8f6eb-7cff-435b-ab47-febf58dd8fba"/*ConstantBuffers*/,
       "DefaultValue": null
     }
   ],

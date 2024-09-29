@@ -3,19 +3,19 @@
   "Description": "This operator currently has no function. Use [LoadGltfScene] in combination with [DrawScene] instead.",
   "InputUis": [
     {
+      "InputId": "38232f5a-71a6-4213-bf04-ab80a0e448db"/*ChildIndex*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 181.99597
+      }
+    },
+    {
       "InputId": "6e0fa62a-a8e1-4d0b-a5b1-80876ff636c0"/*Path*/,
       "Position": {
         "X": 51.512096,
         "Y": 46.995968
       },
       "Usage": "FilePath"
-    },
-    {
-      "InputId": "38232f5a-71a6-4213-bf04-ab80a0e448db"/*ChildIndex*/,
-      "Position": {
-        "X": 51.512096,
-        "Y": 181.99597
-      }
     }
   ],
   "SymbolChildUis": [],

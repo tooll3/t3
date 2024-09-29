@@ -3,30 +3,6 @@
   "Description": "Creates an afterglow effect for moving images\n\nOther Useful Ops for a PostFX Pipeline: [MotionBlur] [DepthOfField] [ChromaticAbberation] [Glow] [Grain] [Blur]\n\nAll Feedback Ops: [FluidFeedback] [AdvancedFeedback] [AdvancedFeedback2]",
   "InputUis": [
     {
-      "InputId": "f06e5ede-f7ff-48ed-b2cf-9a87ef5932ec"/*Image*/,
-      "Position": {
-        "X": -463.38632,
-        "Y": 19.525131
-      }
-    },
-    {
-      "InputId": "ec6f2f37-05f7-41ad-8a42-2e6974cce0cd"/*DecayRate*/,
-      "Position": {
-        "X": -463.38632,
-        "Y": 64.52513
-      },
-      "GroupTitle": "Settings",
-      "Description": "Defines how quickly the afterglow fades"
-    },
-    {
-      "InputId": "edc5e4e1-b4fc-4f1a-a080-ddbe2ca18a55"/*GlowImpact*/,
-      "Position": {
-        "X": -463.38632,
-        "Y": 109.52513
-      },
-      "Description": "Controls the intensity of a glow effect"
-    },
-    {
       "InputId": "41165195-b54b-46b2-a928-1347870e8af9"/*BlurAmount*/,
       "Position": {
         "X": -463.38632,
@@ -53,14 +29,66 @@
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
+    },
+    {
+      "InputId": "ec6f2f37-05f7-41ad-8a42-2e6974cce0cd"/*DecayRate*/,
+      "Position": {
+        "X": -463.38632,
+        "Y": 64.52513
+      },
+      "GroupTitle": "Settings",
+      "Description": "Defines how quickly the afterglow fades"
+    },
+    {
+      "InputId": "edc5e4e1-b4fc-4f1a-a080-ddbe2ca18a55"/*GlowImpact*/,
+      "Position": {
+        "X": -463.38632,
+        "Y": 109.52513
+      },
+      "Description": "Controls the intensity of a glow effect"
+    },
+    {
+      "InputId": "f06e5ede-f7ff-48ed-b2cf-9a87ef5932ec"/*Image*/,
+      "Position": {
+        "X": -463.38632,
+        "Y": 19.525131
+      }
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "924f69f5-f982-4915-babb-f469d86f1fb5"/*Blur*/,
+      "ChildId": "0e24e124-3008-42f6-8cd6-fa57d10ffc86"/*ScaleSize*/,
       "Position": {
-        "X": -59.421463,
-        "Y": -74.66409
+        "X": -113.294495,
+        "Y": -267.82825
+      }
+    },
+    {
+      "ChildId": "130b531b-bd24-426e-a195-68dacebda931"/*Layer2d*/,
+      "Position": {
+        "X": 653.82135,
+        "Y": 193.19391
+      }
+    },
+    {
+      "ChildId": "167dd6c5-5f2f-4a87-80f0-be85821faa56"/*Execute*/,
+      "Position": {
+        "X": 330.73816,
+        "Y": -73.50508
+      }
+    },
+    {
+      "ChildId": "1cb10f4e-ee9a-47ba-8861-c012dd70431d"/*DrawScreenQuad*/,
+      "Position": {
+        "X": 154.7395,
+        "Y": -78.36172
+      }
+    },
+    {
+      "ChildId": "244cbb37-4bff-4dff-b73b-e835b6dd58e4"/*GetTextureSize*/,
+      "Position": {
+        "X": -298.17957,
+        "Y": -273.58572
       }
     },
     {
@@ -71,10 +99,24 @@
       }
     },
     {
-      "ChildId": "167dd6c5-5f2f-4a87-80f0-be85821faa56"/*Execute*/,
+      "ChildId": "5e367fc1-c868-458a-9c67-63a7cf2711ce"/*Blend*/,
       "Position": {
-        "X": 330.73816,
-        "Y": -73.50508
+        "X": 903.40436,
+        "Y": -162.44989
+      }
+    },
+    {
+      "ChildId": "8f32ce94-cb0a-40ec-ad5c-7ee0e224c478"/*Execute*/,
+      "Position": {
+        "X": 837.0786,
+        "Y": 109.53183
+      }
+    },
+    {
+      "ChildId": "924f69f5-f982-4915-babb-f469d86f1fb5"/*Blur*/,
+      "Position": {
+        "X": -59.421463,
+        "Y": -74.66409
       }
     },
     {
@@ -92,52 +134,10 @@
       }
     },
     {
-      "ChildId": "130b531b-bd24-426e-a195-68dacebda931"/*Layer2d*/,
-      "Position": {
-        "X": 653.82135,
-        "Y": 193.19391
-      }
-    },
-    {
       "ChildId": "e7ea3c78-ac73-46a6-a2ce-e5080ca2c553"/*Layer2d*/,
       "Position": {
         "X": 707.0786,
         "Y": 109.53183
-      }
-    },
-    {
-      "ChildId": "8f32ce94-cb0a-40ec-ad5c-7ee0e224c478"/*Execute*/,
-      "Position": {
-        "X": 837.0786,
-        "Y": 109.53183
-      }
-    },
-    {
-      "ChildId": "1cb10f4e-ee9a-47ba-8861-c012dd70431d"/*DrawScreenQuad*/,
-      "Position": {
-        "X": 154.7395,
-        "Y": -78.36172
-      }
-    },
-    {
-      "ChildId": "5e367fc1-c868-458a-9c67-63a7cf2711ce"/*Blend*/,
-      "Position": {
-        "X": 903.40436,
-        "Y": -162.44989
-      }
-    },
-    {
-      "ChildId": "244cbb37-4bff-4dff-b73b-e835b6dd58e4"/*GetTextureSize*/,
-      "Position": {
-        "X": -298.17957,
-        "Y": -273.58572
-      }
-    },
-    {
-      "ChildId": "0e24e124-3008-42f6-8cd6-fa57d10ffc86"/*ScaleSize*/,
-      "Position": {
-        "X": -113.294495,
-        "Y": -267.82825
       }
     }
   ],

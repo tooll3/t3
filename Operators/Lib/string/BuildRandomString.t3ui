@@ -3,48 +3,11 @@
   "Description": "Produces a wide selection of text writer effects that \ncan be linked to AudioReactions. Interesting Setups are\n\n[MockStrings]->[GetStringPart]->[ScrambleString]",
   "InputUis": [
     {
-      "InputId": "ce436e27-05a5-431d-9aa2-920dbff639a7"/*WriteMode*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "InputId": "77a5604a-034a-4352-bd46-be3cb57f90b7"/*Clear*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 405.0
-      }
-    },
-    {
       "InputId": "095202bf-118f-4c4c-802e-7916bc290a60"/*Insert*/,
       "Position": {
         "X": -200.0,
         "Y": 135.0
       }
-    },
-    {
-      "InputId": "f977faaf-1840-4a75-9bc5-43176f2e88e9"/*JumpToRandomPos*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 315.0
-      }
-    },
-    {
-      "InputId": "960179bd-286f-4629-bbcb-cd31aa9c9ae2"/*InsertString*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 180.0
-      },
-      "Usage": "Default"
-    },
-    {
-      "InputId": "8eee8067-1a4e-4372-93d0-2dbc368aa45a"/*Separator*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 180.0
-      },
-      "Usage": "Default"
     },
     {
       "InputId": "1559c0e9-ba56-447f-8241-03d8d59ac205"/*OverwriteOffset*/,
@@ -61,17 +24,17 @@
       }
     },
     {
-      "InputId": "875cbfa9-ffa8-4204-810c-c04f5f421441"/*WrapLines*/,
+      "InputId": "3ea4f12e-7184-45bc-a523-ef6a2e1c5c3d"/*ScrambleSeed*/,
       "Position": {
         "X": -200.0,
-        "Y": 360.0
+        "Y": 225.0
       }
     },
     {
-      "InputId": "bd941c4b-18a8-4687-85a8-3fe53b4f6213"/*WrapLineColumn*/,
+      "InputId": "77a5604a-034a-4352-bd46-be3cb57f90b7"/*Clear*/,
       "Position": {
         "X": -200.0,
-        "Y": 45.0
+        "Y": 405.0
       }
     },
     {
@@ -82,6 +45,21 @@
       }
     },
     {
+      "InputId": "875cbfa9-ffa8-4204-810c-c04f5f421441"/*WrapLines*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 360.0
+      }
+    },
+    {
+      "InputId": "8eee8067-1a4e-4372-93d0-2dbc368aa45a"/*Separator*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      },
+      "Usage": "Default"
+    },
+    {
       "InputId": "9253b148-325b-427a-819e-1ae1b1019ade"/*Scramble*/,
       "Position": {
         "X": -200.0,
@@ -89,10 +67,18 @@
       }
     },
     {
-      "InputId": "3ea4f12e-7184-45bc-a523-ef6a2e1c5c3d"/*ScrambleSeed*/,
+      "InputId": "960179bd-286f-4629-bbcb-cd31aa9c9ae2"/*InsertString*/,
       "Position": {
         "X": -200.0,
-        "Y": 225.0
+        "Y": 180.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "bd941c4b-18a8-4687-85a8-3fe53b4f6213"/*WrapLineColumn*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
       }
     },
     {
@@ -100,6 +86,20 @@
       "Position": {
         "X": -200.0,
         "Y": 90.0
+      }
+    },
+    {
+      "InputId": "ce436e27-05a5-431d-9aa2-920dbff639a7"/*WriteMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "f977faaf-1840-4a75-9bc5-43176f2e88e9"/*JumpToRandomPos*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
       }
     }
   ],

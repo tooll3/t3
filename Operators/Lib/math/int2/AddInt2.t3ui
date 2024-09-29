@@ -3,17 +3,17 @@
   "Description": "Adds two int2",
   "InputUis": [
     {
-      "InputId": "c14e4756-c8cc-42fc-af70-3473d9c6c861"/*Input1*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "9b56ca60-d55c-44ff-bbbb-726d4beb60a8"/*Input2*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "c14e4756-c8cc-42fc-af70-3473d9c6c861"/*Input1*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
       }
     }
   ],

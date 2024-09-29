@@ -3,17 +3,17 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "6ffec88a-f5b9-4d2f-8b03-a2d3da9c6b8c"/*SourcePoints*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "26ea6e28-e093-484c-9635-5c4ac0efdfb7"/*DestinationsPoints*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "6ffec88a-f5b9-4d2f-8b03-a2d3da9c6b8c"/*SourcePoints*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
       }
     }
   ],

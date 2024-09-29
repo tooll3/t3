@@ -10,6 +10,13 @@
       }
     },
     {
+      "InputId": "42a673ee-c323-401c-b5d9-8d8f9dbebc2b"/*LogLevel*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
       "InputId": "8483c153-627c-4154-8fbe-3611ca788701"/*OnlyOnChanges*/,
       "Position": {
         "X": -200.0,
@@ -23,13 +30,6 @@
         "Y": 0.0
       },
       "Usage": "Default"
-    },
-    {
-      "InputId": "42a673ee-c323-401c-b5d9-8d8f9dbebc2b"/*LogLevel*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
-      }
     }
   ],
   "SymbolChildUis": [],

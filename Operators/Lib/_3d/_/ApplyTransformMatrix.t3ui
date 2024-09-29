@@ -3,19 +3,19 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "f7d28833-d894-446f-9402-e8ac74794870"/*Command*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": 15.714638,
-        "Y": 12.576044
-      }
-    },
-    {
       "InputId": "c3b1ba6c-4306-4ae4-9429-d1f2461e2e8c"/*TransformRows*/,
       "Relevancy": "Required",
       "Position": {
         "X": 15.714638,
         "Y": 57.576042
+      }
+    },
+    {
+      "InputId": "f7d28833-d894-446f-9402-e8ac74794870"/*Command*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 15.714638,
+        "Y": 12.576044
       }
     }
   ],

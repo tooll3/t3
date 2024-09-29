@@ -2,15 +2,15 @@
   "Id": "1cd2f5b1-bc54-4405-8ee6-d1acf59ebe14"/*PickVector2*/,
   "Inputs": [
     {
+      "Id": "dad7d212-e895-44d9-83cc-69fb11898aec"/*Index*/,
+      "DefaultValue": 0
+    },
+    {
       "Id": "f210558a-4f9e-4e94-bbd4-ef73da498614"/*Input*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0
       }
-    },
-    {
-      "Id": "dad7d212-e895-44d9-83cc-69fb11898aec"/*Index*/,
-      "DefaultValue": 0
     }
   ],
   "Children": [],

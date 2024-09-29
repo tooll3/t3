@@ -3,17 +3,17 @@
   "Description": "Combines two boolean values with a not operation.",
   "InputUis": [
     {
-      "InputId": "efce4921-6e52-4eca-982e-ddd8d2e8f181"/*A*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "cc0fdde0-a5a9-4fbd-b85b-ddfba37a85ac"/*B*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "efce4921-6e52-4eca-982e-ddd8d2e8f181"/*A*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
       }
     }
   ],

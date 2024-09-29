@@ -3,17 +3,17 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "914ea6e8-abc6-4294-b895-8bfbe5afea0e"/*Vec4Params*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "49556d12-4cd1-4341-b9d8-c356668d296c"/*Params*/,
       "Relevancy": "Required",
       "Position": {
         "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "914ea6e8-abc6-4294-b895-8bfbe5afea0e"/*Vec4Params*/,
+      "Position": {
+        "X": -200.0,
         "Y": 0.0
       }
     }

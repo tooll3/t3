@@ -10,6 +10,15 @@
       }
     },
     {
+      "InputId": "28f27625-37fe-409a-b6c1-d4eabf6c1eb8"/*Volume*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      },
+      "Description": "Defines the volume of the sound output",
+      "AddPadding": "True"
+    },
+    {
       "InputId": "31721e18-556b-452b-a8aa-18dbd44af74d"/*Path*/,
       "Position": {
         "X": -200.0,
@@ -18,15 +27,6 @@
       "Description": "Path to the videofile",
       "AddPadding": "True",
       "Usage": "FilePath"
-    },
-    {
-      "InputId": "28f27625-37fe-409a-b6c1-d4eabf6c1eb8"/*Volume*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
-      },
-      "Description": "Defines the volume of the sound output",
-      "AddPadding": "True"
     },
     {
       "InputId": "5eb10090-ae6a-4ae7-9fbd-5bd9ffd13b1b"/*ResyncThreshold*/,

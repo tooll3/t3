@@ -3,11 +3,17 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "5c0e9c96-9aba-4757-ae1f-cc50fb6173f1"/*ComputeShader*/,
-      "Relevancy": "Required",
+      "InputId": "0105aca4-5fd5-40c8-82a5-e919bb7dd507"/*UavBufferCounter*/,
       "Position": {
-        "X": 111.54843,
-        "Y": 14.742786
+        "X": 106.01553,
+        "Y": 352.0835
+      }
+    },
+    {
+      "InputId": "1495157d-601f-4054-84e2-29ebebb461d8"/*DispatchCallCount*/,
+      "Position": {
+        "X": 106.01553,
+        "Y": 397.0835
       }
     },
     {
@@ -26,13 +32,6 @@
       }
     },
     {
-      "InputId": "88938b09-d5a7-437c-b6e1-48a5b375d756"/*ShaderResources*/,
-      "Position": {
-        "X": 106.01553,
-        "Y": 202.0835
-      }
-    },
-    {
       "InputId": "4047c9e7-1edb-4c71-b85c-c1b87058c81c"/*SamplerStates*/,
       "Position": {
         "X": 106.01553,
@@ -47,17 +46,18 @@
       }
     },
     {
-      "InputId": "0105aca4-5fd5-40c8-82a5-e919bb7dd507"/*UavBufferCounter*/,
+      "InputId": "5c0e9c96-9aba-4757-ae1f-cc50fb6173f1"/*ComputeShader*/,
+      "Relevancy": "Required",
       "Position": {
-        "X": 106.01553,
-        "Y": 352.0835
+        "X": 111.54843,
+        "Y": 14.742786
       }
     },
     {
-      "InputId": "1495157d-601f-4054-84e2-29ebebb461d8"/*DispatchCallCount*/,
+      "InputId": "88938b09-d5a7-437c-b6e1-48a5b375d756"/*ShaderResources*/,
       "Position": {
         "X": 106.01553,
-        "Y": 397.0835
+        "Y": 202.0835
       }
     }
   ],

@@ -10,6 +10,14 @@
       }
     },
     {
+      "InputId": "6ee4be4b-e0e9-40aa-afec-088b425791f1"/*Search*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    },
+    {
       "InputId": "8f164aa3-962a-4b08-970e-cb730ca10f9b"/*ApiToken*/,
       "Position": {
         "X": -200.0,
@@ -23,14 +31,6 @@
         "X": -200.0,
         "Y": 45.0
       }
-    },
-    {
-      "InputId": "6ee4be4b-e0e9-40aa-afec-088b425791f1"/*Search*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      },
-      "Usage": "Default"
     },
     {
       "InputId": "a506693e-2859-4d9d-ab85-0a0f51cc2da9"/*CollectionId*/,

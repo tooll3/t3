@@ -3,44 +3,6 @@
   "Description": "Also called Voronoi noise and cellular noise.\nIt allows to create nice textures, from organic to science fiction spaceship hull. \n\nIt has various methods like:\n* Manhattan Worley\n* Chebyshev Worley\n\nCombine it with [Steps] or / and [DetectEdges] for example. \n\nAvailable Noise Ops [WorleyNoise] [FractalNoise] [ShardNoise]",
   "InputUis": [
     {
-      "InputId": "7c4d90e2-a31e-4663-a4bd-da9be8fbdaf4"/*Texture*/,
-      "Position": {
-        "X": -217.45303,
-        "Y": -145.67249
-      }
-    },
-    {
-      "InputId": "57903730-3c40-41c0-96a2-c0127d8281c4"/*TextureBlend*/,
-      "Position": {
-        "X": -218.26428,
-        "Y": 535.4367
-      }
-    },
-    {
-      "InputId": "a9111412-3369-4848-af48-8a96f5697c84"/*ColorA*/,
-      "Position": {
-        "X": -217.45303,
-        "Y": -100.67249
-      }
-    },
-    {
-      "InputId": "f9899540-e495-41cb-87da-302d1bf090ac"/*ColorB*/,
-      "Position": {
-        "X": -217.45303,
-        "Y": -55.672493
-      }
-    },
-    {
-      "InputId": "f29bca1f-d563-4dd3-8386-ab791f4b423e"/*Offset*/,
-      "Position": {
-        "X": -217.45303,
-        "Y": -10.672493
-      },
-      "Min": -1.0,
-      "Max": 1.0,
-      "UseVec2Control": "Position"
-    },
-    {
       "InputId": "1607d859-89e9-44b3-a92e-135c562d302e"/*Stretch*/,
       "Position": {
         "X": -217.45303,
@@ -51,10 +13,17 @@
       "UseVec2Control": "Position"
     },
     {
-      "InputId": "f4a32527-da4d-49af-aeb0-ed9c5c28ac04"/*Scale*/,
+      "InputId": "37fa6406-e29c-482d-9682-70cb2faea92d"/*Phase*/,
       "Position": {
         "X": -217.45303,
-        "Y": 79.32751
+        "Y": 124.32751
+      }
+    },
+    {
+      "InputId": "57903730-3c40-41c0-96a2-c0127d8281c4"/*TextureBlend*/,
+      "Position": {
+        "X": -218.26428,
+        "Y": 535.4367
       }
     },
     {
@@ -65,10 +34,38 @@
       }
     },
     {
-      "InputId": "37fa6406-e29c-482d-9682-70cb2faea92d"/*Phase*/,
+      "InputId": "7b1a1f18-a1d4-4737-9c06-21f263277140"/*Resolution*/,
+      "Position": {
+        "X": -218.26428,
+        "Y": 355.4367
+      }
+    },
+    {
+      "InputId": "7b7e1f3b-7e5c-46af-9e2e-536cb1909867"/*GenerateMips*/,
+      "Position": {
+        "X": -218.26428,
+        "Y": 445.4367
+      }
+    },
+    {
+      "InputId": "7c4d90e2-a31e-4663-a4bd-da9be8fbdaf4"/*Texture*/,
       "Position": {
         "X": -217.45303,
-        "Y": 124.32751
+        "Y": -145.67249
+      }
+    },
+    {
+      "InputId": "a9111412-3369-4848-af48-8a96f5697c84"/*ColorA*/,
+      "Position": {
+        "X": -217.45303,
+        "Y": -100.67249
+      }
+    },
+    {
+      "InputId": "b4277cab-d286-410f-81be-ff4d53a9eca9"/*Method*/,
+      "Position": {
+        "X": -218.26428,
+        "Y": 310.4367
       }
     },
     {
@@ -90,40 +87,43 @@
       "UseVec2Control": "BiasAndGain"
     },
     {
-      "InputId": "b4277cab-d286-410f-81be-ff4d53a9eca9"/*Method*/,
+      "InputId": "f29bca1f-d563-4dd3-8386-ab791f4b423e"/*Offset*/,
       "Position": {
-        "X": -218.26428,
-        "Y": 310.4367
+        "X": -217.45303,
+        "Y": -10.672493
+      },
+      "Min": -1.0,
+      "Max": 1.0,
+      "UseVec2Control": "Position"
+    },
+    {
+      "InputId": "f4a32527-da4d-49af-aeb0-ed9c5c28ac04"/*Scale*/,
+      "Position": {
+        "X": -217.45303,
+        "Y": 79.32751
       }
     },
     {
-      "InputId": "7b1a1f18-a1d4-4737-9c06-21f263277140"/*Resolution*/,
+      "InputId": "f9899540-e495-41cb-87da-302d1bf090ac"/*ColorB*/,
       "Position": {
-        "X": -218.26428,
-        "Y": 355.4367
-      }
-    },
-    {
-      "InputId": "7b7e1f3b-7e5c-46af-9e2e-536cb1909867"/*GenerateMips*/,
-      "Position": {
-        "X": -218.26428,
-        "Y": 445.4367
+        "X": -217.45303,
+        "Y": -55.672493
       }
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "59ce5d61-1550-4485-9c47-2a68dccb650a"/*Vector4Components*/,
+      "ChildId": "13e5bf4c-06da-473a-b518-52c754fdefea"/*IntToFloat*/,
       "Position": {
-        "X": -25.082056,
-        "Y": 29.952059
+        "X": -37.642,
+        "Y": 306.9386
       }
     },
     {
-      "ChildId": "9861bccf-8b51-4e73-bb03-9471c4e4c239"/*Vector4Components*/,
+      "ChildId": "1981ff03-a761-4c44-860b-802eecaf82f9"/*Vector2Components*/,
       "Position": {
-        "X": -25.082056,
-        "Y": 85.952194
+        "X": -37.642,
+        "Y": 362.9386
       }
     },
     {
@@ -134,10 +134,38 @@
       }
     },
     {
+      "ChildId": "59ce5d61-1550-4485-9c47-2a68dccb650a"/*Vector4Components*/,
+      "Position": {
+        "X": -25.082056,
+        "Y": 29.952059
+      }
+    },
+    {
       "ChildId": "7e567021-90e8-4a6f-a32e-1a25f8155708"/*Vector2Components*/,
       "Position": {
         "X": -30.598349,
         "Y": 147.01015
+      }
+    },
+    {
+      "ChildId": "8bc72402-4981-4142-a466-3919d5171b79"/*RandomizePoints*/,
+      "Position": {
+        "X": 896.23193,
+        "Y": 743.1868
+      }
+    },
+    {
+      "ChildId": "8c23ca41-ce69-4516-89e8-a8fd4bfffe60"/*Vector2Components*/,
+      "Position": {
+        "X": -37.642,
+        "Y": 250.9386
+      }
+    },
+    {
+      "ChildId": "9861bccf-8b51-4e73-bb03-9471c4e4c239"/*Vector4Components*/,
+      "Position": {
+        "X": -25.082056,
+        "Y": 85.952194
       }
     },
     {
@@ -150,34 +178,6 @@
       "Position": {
         "X": 534.65594,
         "Y": -296.42657
-      }
-    },
-    {
-      "ChildId": "13e5bf4c-06da-473a-b518-52c754fdefea"/*IntToFloat*/,
-      "Position": {
-        "X": -37.642,
-        "Y": 306.9386
-      }
-    },
-    {
-      "ChildId": "8c23ca41-ce69-4516-89e8-a8fd4bfffe60"/*Vector2Components*/,
-      "Position": {
-        "X": -37.642,
-        "Y": 250.9386
-      }
-    },
-    {
-      "ChildId": "8bc72402-4981-4142-a466-3919d5171b79"/*RandomizePoints*/,
-      "Position": {
-        "X": 896.23193,
-        "Y": 743.1868
-      }
-    },
-    {
-      "ChildId": "1981ff03-a761-4c44-860b-802eecaf82f9"/*Vector2Components*/,
-      "Position": {
-        "X": -37.642,
-        "Y": 362.9386
       }
     }
   ],

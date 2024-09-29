@@ -3,21 +3,6 @@
   "Description": "Can be used to wrap positions around a cubic volume, e.g., around the current camera position.",
   "InputUis": [
     {
-      "InputId": "dbe72c8b-6cc2-454b-83db-712f0cd4211c"/*GPoints*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -238.81335,
-        "Y": 566.684
-      }
-    },
-    {
-      "InputId": "fb569f81-c8d3-4330-8035-6bde4e0bd710"/*Position*/,
-      "Position": {
-        "X": -238.81335,
-        "Y": 611.684
-      }
-    },
-    {
       "InputId": "1d054b2e-1e1b-4899-a003-0d6e000d2d8d"/*Size*/,
       "Position": {
         "X": -233.76004,
@@ -37,21 +22,43 @@
         "X": -233.76004,
         "Y": 787.2818
       }
+    },
+    {
+      "InputId": "dbe72c8b-6cc2-454b-83db-712f0cd4211c"/*GPoints*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -238.81335,
+        "Y": 566.684
+      }
+    },
+    {
+      "InputId": "fb569f81-c8d3-4330-8035-6bde4e0bd710"/*Position*/,
+      "Position": {
+        "X": -238.81335,
+        "Y": 611.684
+      }
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "a6273b02-4df0-4efd-ad1e-ffea319e0356"/*ComputeShader*/,
+      "ChildId": "05aa7d10-61bc-4367-8725-6516df8562f2"/*BoolToFloat*/,
       "Position": {
-        "X": 61.013245,
-        "Y": 301.01743
+        "X": 60.47794,
+        "Y": 897.4007
       }
     },
     {
-      "ChildId": "eaa82489-3ed9-4b8a-b857-b3a14797d20e"/*ComputeShaderStage*/,
+      "ChildId": "54a32572-a01e-4386-8184-4257ed3a5018"/*TransformsConstBuffer*/,
       "Position": {
-        "X": 483.2537,
-        "Y": 316.74768
+        "X": 245.84155,
+        "Y": 788.5999
+      }
+    },
+    {
+      "ChildId": "605f8c94-a19b-4012-b603-258639e55d97"/*GetSRVProperties*/,
+      "Position": {
+        "X": 64.20232,
+        "Y": 381.3481
       }
     },
     {
@@ -67,10 +74,10 @@
       }
     },
     {
-      "ChildId": "605f8c94-a19b-4012-b603-258639e55d97"/*GetSRVProperties*/,
+      "ChildId": "6990aeab-3425-4ecd-9540-ec329f3af0bf"/*Vector3Components*/,
       "Position": {
-        "X": 64.20232,
-        "Y": 381.3481
+        "X": 71.86014,
+        "Y": 611.572
       }
     },
     {
@@ -78,6 +85,20 @@
       "Position": {
         "X": 682.4039,
         "Y": 360.61105
+      }
+    },
+    {
+      "ChildId": "9a2914f8-917c-46ed-b9fa-045b83d87da0"/*BoolToFloat*/,
+      "Position": {
+        "X": 71.86014,
+        "Y": 723.572
+      }
+    },
+    {
+      "ChildId": "a6273b02-4df0-4efd-ad1e-ffea319e0356"/*ComputeShader*/,
+      "Position": {
+        "X": 61.013245,
+        "Y": 301.01743
       }
     },
     {
@@ -95,13 +116,6 @@
       }
     },
     {
-      "ChildId": "6990aeab-3425-4ecd-9540-ec329f3af0bf"/*Vector3Components*/,
-      "Position": {
-        "X": 71.86014,
-        "Y": 611.572
-      }
-    },
-    {
       "ChildId": "e313fd36-402f-45c7-b829-1077340b328b"/*Vector3Components*/,
       "Position": {
         "X": 71.86014,
@@ -109,24 +123,10 @@
       }
     },
     {
-      "ChildId": "9a2914f8-917c-46ed-b9fa-045b83d87da0"/*BoolToFloat*/,
+      "ChildId": "eaa82489-3ed9-4b8a-b857-b3a14797d20e"/*ComputeShaderStage*/,
       "Position": {
-        "X": 71.86014,
-        "Y": 723.572
-      }
-    },
-    {
-      "ChildId": "54a32572-a01e-4386-8184-4257ed3a5018"/*TransformsConstBuffer*/,
-      "Position": {
-        "X": 245.84155,
-        "Y": 788.5999
-      }
-    },
-    {
-      "ChildId": "05aa7d10-61bc-4367-8725-6516df8562f2"/*BoolToFloat*/,
-      "Position": {
-        "X": 60.47794,
-        "Y": 897.4007
+        "X": 483.2537,
+        "Y": 316.74768
       }
     }
   ],

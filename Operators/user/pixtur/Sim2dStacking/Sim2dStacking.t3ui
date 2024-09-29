@@ -3,13 +3,6 @@
   "Description": "Experimenting with physics simulation for points.",
   "InputUis": [
     {
-      "InputId": "c2ccf891-a94c-4176-8b90-bf47cb240773"/*Position*/,
-      "Position": {
-        "X": -547.75336,
-        "Y": 540.2987
-      }
-    },
-    {
       "InputId": "30e25647-54d8-417b-a7af-a62c2b39b37b"/*Amount*/,
       "Position": {
         "X": -547.75336,
@@ -23,6 +16,13 @@
         "X": -623.7695,
         "Y": 816.04364
       }
+    },
+    {
+      "InputId": "c2ccf891-a94c-4176-8b90-bf47cb240773"/*Position*/,
+      "Position": {
+        "X": -547.75336,
+        "Y": 540.2987
+      }
     }
   ],
   "SymbolChildUis": [
@@ -34,10 +34,10 @@
       }
     },
     {
-      "ChildId": "cb3c48d0-a3fa-48fc-bb57-12b50aef1cc2"/*ComputeShaderStage*/,
+      "ChildId": "29803238-3cac-4c9d-8a67-40b32063d0a1"/*CalcDispatchCount*/,
       "Position": {
-        "X": 395.8524,
-        "Y": 501.43842
+        "X": 214.33832,
+        "Y": 503.18958
       }
     },
     {
@@ -48,17 +48,10 @@
       }
     },
     {
-      "ChildId": "b067e26b-50fb-4287-af8b-8d1706e706c6"/*ExecuteBufferUpdate*/,
+      "ChildId": "66fa1753-c9ba-4f20-a130-63df6cf8d4d8"/*GetBufferComponents*/,
       "Position": {
-        "X": 605.88324,
-        "Y": 893.9409
-      }
-    },
-    {
-      "ChildId": "29803238-3cac-4c9d-8a67-40b32063d0a1"/*CalcDispatchCount*/,
-      "Position": {
-        "X": 214.33832,
-        "Y": 503.18958
+        "X": -446.97894,
+        "Y": 808.3369
       }
     },
     {
@@ -69,10 +62,17 @@
       }
     },
     {
-      "ChildId": "66fa1753-c9ba-4f20-a130-63df6cf8d4d8"/*GetBufferComponents*/,
+      "ChildId": "b067e26b-50fb-4287-af8b-8d1706e706c6"/*ExecuteBufferUpdate*/,
       "Position": {
-        "X": -446.97894,
-        "Y": 808.3369
+        "X": 605.88324,
+        "Y": 893.9409
+      }
+    },
+    {
+      "ChildId": "cb3c48d0-a3fa-48fc-bb57-12b50aef1cc2"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 395.8524,
+        "Y": 501.43842
       }
     }
   ],
@@ -86,6 +86,24 @@
     }
   ],
   "Annotations": [
+    {
+      "Id": "6af48460-08ee-4fbe-8c73-1107230a7d27",
+      "Title": "This is the shader you want to edit. Select it, then click [Edit] in Parameter Window...",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -40.266907,
+        "Y": 264.7015
+      },
+      "Size": {
+        "X": 299.4341,
+        "Y": 162.31216
+      }
+    },
     {
       "Id": "e1ce4442-518c-4b67-8272-b033afc8b5fe",
       "Title": "Convert input parameters into a buffer for the shader.",
@@ -120,24 +138,6 @@
       "Size": {
         "X": 604.9596,
         "Y": 229.38458
-      }
-    },
-    {
-      "Id": "6af48460-08ee-4fbe-8c73-1107230a7d27",
-      "Title": "This is the shader you want to edit. Select it, then click [Edit] in Parameter Window...",
-      "Color": {
-        "X": 0.6,
-        "Y": 0.6,
-        "Z": 0.6,
-        "W": 1.0
-      },
-      "Position": {
-        "X": -40.266907,
-        "Y": 264.7015
-      },
-      "Size": {
-        "X": 299.4341,
-        "Y": 162.31216
       }
     }
   ]

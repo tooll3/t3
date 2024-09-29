@@ -3,6 +3,13 @@
   "Description": "Holds the \"activated\" state of a boolean. Also check [DelayTrigger].",
   "InputUis": [
     {
+      "InputId": "1e8c11a9-d0fc-4016-9428-bed7fbd0bf68"/*DefaultValue*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
       "InputId": "44678eb5-8320-4ac9-b757-e0f6f94f5274"/*Trigger*/,
       "Relevancy": "Required",
       "Position": {
@@ -15,13 +22,6 @@
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
-    },
-    {
-      "InputId": "1e8c11a9-d0fc-4016-9428-bed7fbd0bf68"/*DefaultValue*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
       }
     }
   ],

@@ -3,11 +3,11 @@
   "Description": "Iterates over the elements of a structured list",
   "InputUis": [
     {
-      "InputId": "a5e1551b-697e-4316-a95e-315a39b69c76"/*List*/,
+      "InputId": "1d09c5e2-19d1-4622-a06d-4ffd3124343c"/*IterateCommands*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,
-        "Y": 0.0
+        "Y": 45.0
       }
     },
     {
@@ -18,11 +18,11 @@
       }
     },
     {
-      "InputId": "1d09c5e2-19d1-4622-a06d-4ffd3124343c"/*IterateCommands*/,
+      "InputId": "a5e1551b-697e-4316-a95e-315a39b69c76"/*List*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,
-        "Y": 45.0
+        "Y": 0.0
       }
     }
   ],

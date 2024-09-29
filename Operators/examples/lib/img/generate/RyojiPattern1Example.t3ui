@@ -4,37 +4,16 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "d8c274ef-5bb0-4706-9dd6-bc1e39ebca02"/*RyojiPattern1*/,
+      "ChildId": "1f825751-27ad-44c0-9c8a-73c2063b929c"/*TriggerAnim*/,
       "Position": {
-        "X": 450.0,
+        "X": 150.0,
         "Y": 153.0
-      }
-    },
-    {
-      "ChildId": "e9cbe991-e4f9-4cad-9184-ec8b1a6f4c03"/*TorusMesh*/,
-      "Position": {
-        "X": 450.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "ChildId": "76c0472a-c867-4133-b637-d0c082833807"/*DrawMeshUnlit*/,
-      "Position": {
-        "X": 600.0,
-        "Y": 0.0
       }
     },
     {
       "ChildId": "26b5d65c-6db4-4590-8525-03266e000752"/*OrbitCamera*/,
       "Position": {
         "X": 750.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "ChildId": "70eb40e7-a073-49f0-93a0-659e2af78681"/*RenderTarget*/,
-      "Position": {
-        "X": 900.0,
         "Y": 0.0
       }
     },
@@ -46,6 +25,20 @@
       }
     },
     {
+      "ChildId": "70eb40e7-a073-49f0-93a0-659e2af78681"/*RenderTarget*/,
+      "Position": {
+        "X": 900.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "76c0472a-c867-4133-b637-d0c082833807"/*DrawMeshUnlit*/,
+      "Position": {
+        "X": 600.0,
+        "Y": 0.0
+      }
+    },
+    {
       "ChildId": "ad7710c7-522a-4451-8f16-29024ce191ff"/*AnimValue*/,
       "Position": {
         "X": 0.0,
@@ -53,10 +46,17 @@
       }
     },
     {
-      "ChildId": "1f825751-27ad-44c0-9c8a-73c2063b929c"/*TriggerAnim*/,
+      "ChildId": "d8c274ef-5bb0-4706-9dd6-bc1e39ebca02"/*RyojiPattern1*/,
       "Position": {
-        "X": 150.0,
+        "X": 450.0,
         "Y": 153.0
+      }
+    },
+    {
+      "ChildId": "e9cbe991-e4f9-4cad-9184-ec8b1a6f4c03"/*TorusMesh*/,
+      "Position": {
+        "X": 450.0,
+        "Y": 0.0
       }
     },
     {

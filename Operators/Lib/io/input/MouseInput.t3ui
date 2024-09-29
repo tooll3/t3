@@ -3,14 +3,6 @@
   "Description": "Allows the real-time manipulation of any values using the mouse / trackpad\n\nIf the mouse pointer is moved over the output window, the values of the X and Y axes of the mouse movements are evaluated and can control any functions. The left mouse button can also be evaluated as a boolean.\n\nUseful combinations: [Vec2ToVec3] [Vector2Components] [BoolToFloat] [Transform] [TransformMesh]\n\nAlso see: [KeyboardInput] [MidiInput]",
   "InputUis": [
     {
-      "InputId": "49775cc2-35b7-4c9f-a502-59fe8fbbe2a7"/*DoUpdate*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      },
-      "Description": "Allows forcing permanent updating"
-    },
-    {
       "InputId": "1327525c-716c-43e4-a5d1-58cf35440462"/*OutputMode*/,
       "Position": {
         "X": -200.0,
@@ -18,6 +10,14 @@
       },
       "Description": "Defines the method in which the pointer position is to be evaluated.",
       "AddPadding": "True"
+    },
+    {
+      "InputId": "49775cc2-35b7-4c9f-a502-59fe8fbbe2a7"/*DoUpdate*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Description": "Allows forcing permanent updating"
     },
     {
       "InputId": "6b1e81bd-2430-4439-ad0c-859b2433c38b"/*Scale*/,

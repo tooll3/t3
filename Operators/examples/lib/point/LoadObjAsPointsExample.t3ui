@@ -11,34 +11,6 @@
       }
     },
     {
-      "ChildId": "4463778d-bb71-4bba-8b7b-81163e369ec0"/*LoadObjAsPoints*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "ChildId": "3f7b5aa5-bbf2-4a3e-99b6-ecc8c068bab6"/*SoftTransformPoints*/,
-      "Position": {
-        "X": 300.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "ChildId": "68f82425-6764-47d7-a9ea-74daca6f230c"/*OrbitCamera*/,
-      "Position": {
-        "X": 626.49023,
-        "Y": 3.9899902
-      }
-    },
-    {
-      "ChildId": "e327c066-9d5f-48eb-8423-ba0dcb6a4ca8"/*RenderTarget*/,
-      "Position": {
-        "X": 776.49023,
-        "Y": 3.9899902
-      }
-    },
-    {
       "ChildId": "2b0b88d7-dae5-4ee8-bb75-de94ece27af4"/*_AnimValueOld*/,
       "Position": {
         "X": 0.0,
@@ -53,10 +25,38 @@
       }
     },
     {
+      "ChildId": "3f7b5aa5-bbf2-4a3e-99b6-ecc8c068bab6"/*SoftTransformPoints*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "4463778d-bb71-4bba-8b7b-81163e369ec0"/*LoadObjAsPoints*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "68f82425-6764-47d7-a9ea-74daca6f230c"/*OrbitCamera*/,
+      "Position": {
+        "X": 626.49023,
+        "Y": 3.9899902
+      }
+    },
+    {
       "ChildId": "ad5ad6d8-aeb2-4073-b718-eef07d9399ee"/*_AnimValueOld*/,
       "Position": {
         "X": 150.0,
         "Y": 132.0
+      }
+    },
+    {
+      "ChildId": "e327c066-9d5f-48eb-8423-ba0dcb6a4ca8"/*RenderTarget*/,
+      "Position": {
+        "X": 776.49023,
+        "Y": 3.9899902
       }
     },
     {

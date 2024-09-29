@@ -3,11 +3,12 @@
   "Description": "Illustrates how to build a diagram from lines and texts.",
   "InputUis": [
     {
-      "InputId": "c4019870-2fa0-4ddc-b30f-a5de66d4980d"/*ShowIndex*/,
+      "InputId": "64577bef-d074-4439-b797-85ca5519bab5"/*Input2*/,
       "Position": {
-        "X": -443.88858,
-        "Y": -191.38242
-      }
+        "X": -446.8453,
+        "Y": 95.13632
+      },
+      "Usage": "Default"
     },
     {
       "InputId": "b5fae52e-45eb-4d15-a5ca-d14c222741c1"/*Input*/,
@@ -18,98 +19,27 @@
       "Usage": "Default"
     },
     {
+      "InputId": "c4019870-2fa0-4ddc-b30f-a5de66d4980d"/*ShowIndex*/,
+      "Position": {
+        "X": -443.88858,
+        "Y": -191.38242
+      }
+    },
+    {
       "InputId": "ff6eec00-c597-45d7-8868-beaf2ec2cd5b"/*Input3*/,
       "Position": {
         "X": -446.8453,
         "Y": -2.4179993
       },
       "Usage": "Default"
-    },
-    {
-      "InputId": "64577bef-d074-4439-b797-85ca5519bab5"/*Input2*/,
-      "Position": {
-        "X": -446.8453,
-        "Y": 95.13632
-      },
-      "Usage": "Default"
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "f9938de0-78bd-41c1-a4e0-b580056155dc"/*RadialPoints*/,
-      "Position": {
-        "X": -442.8424,
-        "Y": -284.74084
-      }
-    },
-    {
-      "ChildId": "e9f3d737-8f13-45fa-9546-a51589476b9e"/*DrawLines*/,
+      "ChildId": "1e6496be-6037-4124-b825-7b846ee8c42d"/*Damp*/,
       "Position": {
         "X": 338.36172,
-        "Y": 104.792175
-      }
-    },
-    {
-      "ChildId": "56084799-8913-410c-bc5a-ab867dba15a1"/*Text*/,
-      "Position": {
-        "X": 338.36172,
-        "Y": -175.20782
-      }
-    },
-    {
-      "ChildId": "bcb4fbe3-4007-4cff-a194-3cfae4a895ea"/*Transform*/,
-      "Position": {
-        "X": 638.3617,
-        "Y": 104.792175
-      }
-    },
-    {
-      "ChildId": "2c78d72c-16cb-4ee4-a199-3eb105d2345e"/*Execute*/,
-      "Position": {
-        "X": 961.92267,
-        "Y": -214.31006
-      }
-    },
-    {
-      "ChildId": "7d2754d9-a072-479f-8320-fa2765840d4f"/*Transform*/,
-      "Position": {
-        "X": 638.3617,
-        "Y": -63.207825
-      }
-    },
-    {
-      "ChildId": "444b61e1-fe8d-4d85-9112-4edbbb931d4a"/*Transform*/,
-      "Position": {
-        "X": 638.3617,
-        "Y": -231.20782
-      }
-    },
-    {
-      "ChildId": "369772d1-c9e7-4e4c-b822-2efd30866fa3"/*DrawLines*/,
-      "Position": {
-        "X": 338.36172,
-        "Y": -63.207825
-      }
-    },
-    {
-      "ChildId": "5ad358f9-4cc9-42cf-85e2-53cd98b45611"/*DrawLines*/,
-      "Position": {
-        "X": 338.36172,
-        "Y": -231.20782
-      }
-    },
-    {
-      "ChildId": "dc25b793-c40a-4ba3-af6a-abe122e6357f"/*Text*/,
-      "Position": {
-        "X": 338.36172,
-        "Y": 160.79218
-      }
-    },
-    {
-      "ChildId": "52a1cd89-cfd5-415d-8dd5-182b3e004cb2"/*Text*/,
-      "Position": {
-        "X": 338.36172,
-        "Y": -7.2078247
+        "Y": -119.207825
       }
     },
     {
@@ -120,38 +50,24 @@
       }
     },
     {
-      "ChildId": "a7bdcd11-2ea8-4a18-9921-7b143bcfa895"/*Execute*/,
+      "ChildId": "2c78d72c-16cb-4ee4-a199-3eb105d2345e"/*Execute*/,
       "Position": {
-        "X": 488.36172,
-        "Y": 104.792175
+        "X": 961.92267,
+        "Y": -214.31006
       }
     },
     {
-      "ChildId": "9e99e519-90cf-4417-ae3f-eaa511813e55"/*Execute*/,
+      "ChildId": "2e602f7f-b98d-4b60-8ed7-105d99200388"/*BoolToFloat*/,
       "Position": {
-        "X": 488.36172,
-        "Y": -231.20782
+        "X": 188.36171,
+        "Y": 48.792175
       }
     },
     {
-      "ChildId": "919357ea-8142-430e-b636-ea0c77cacf52"/*ScaleVector3*/,
-      "Position": {
-        "X": 488.36172,
-        "Y": -119.207825
-      }
-    },
-    {
-      "ChildId": "1e6496be-6037-4124-b825-7b846ee8c42d"/*Damp*/,
+      "ChildId": "369772d1-c9e7-4e4c-b822-2efd30866fa3"/*DrawLines*/,
       "Position": {
         "X": 338.36172,
-        "Y": -119.207825
-      }
-    },
-    {
-      "ChildId": "f3b5c007-4a51-4738-b67a-947eab9fe97c"/*Compare*/,
-      "Position": {
-        "X": 49.955856,
-        "Y": -120.664764
+        "Y": -63.207825
       }
     },
     {
@@ -162,24 +78,66 @@
       }
     },
     {
-      "ChildId": "f7172034-2c8a-44b8-9857-71405d2923f7"/*BoolToFloat*/,
+      "ChildId": "444b61e1-fe8d-4d85-9112-4edbbb931d4a"/*Transform*/,
+      "Position": {
+        "X": 638.3617,
+        "Y": -231.20782
+      }
+    },
+    {
+      "ChildId": "52a1cd89-cfd5-415d-8dd5-182b3e004cb2"/*Text*/,
+      "Position": {
+        "X": 338.36172,
+        "Y": -7.2078247
+      }
+    },
+    {
+      "ChildId": "56084799-8913-410c-bc5a-ab867dba15a1"/*Text*/,
+      "Position": {
+        "X": 338.36172,
+        "Y": -175.20782
+      }
+    },
+    {
+      "ChildId": "5ad358f9-4cc9-42cf-85e2-53cd98b45611"/*DrawLines*/,
+      "Position": {
+        "X": 338.36172,
+        "Y": -231.20782
+      }
+    },
+    {
+      "ChildId": "7d2754d9-a072-479f-8320-fa2765840d4f"/*Transform*/,
+      "Position": {
+        "X": 638.3617,
+        "Y": -63.207825
+      }
+    },
+    {
+      "ChildId": "882e8f41-7cc8-4225-ad9f-c256c9eb840f"/*BoolToFloat*/,
       "Position": {
         "X": 188.36172,
+        "Y": 216.79218
+      }
+    },
+    {
+      "ChildId": "919357ea-8142-430e-b636-ea0c77cacf52"/*ScaleVector3*/,
+      "Position": {
+        "X": 488.36172,
         "Y": -119.207825
       }
     },
     {
-      "ChildId": "e064bcb2-27c6-4d63-a5d1-8c0cb63eb771"/*ScaleVector3*/,
+      "ChildId": "9e99e519-90cf-4417-ae3f-eaa511813e55"/*Execute*/,
       "Position": {
         "X": 488.36172,
-        "Y": 48.792175
+        "Y": -231.20782
       }
     },
     {
-      "ChildId": "afbb0b39-ac1b-4007-87f9-d49c1d520fbf"/*Damp*/,
+      "ChildId": "a7bdcd11-2ea8-4a18-9921-7b143bcfa895"/*Execute*/,
       "Position": {
-        "X": 338.36172,
-        "Y": 48.792175
+        "X": 488.36172,
+        "Y": 104.792175
       }
     },
     {
@@ -190,9 +148,9 @@
       }
     },
     {
-      "ChildId": "2e602f7f-b98d-4b60-8ed7-105d99200388"/*BoolToFloat*/,
+      "ChildId": "afbb0b39-ac1b-4007-87f9-d49c1d520fbf"/*Damp*/,
       "Position": {
-        "X": 188.36171,
+        "X": 338.36172,
         "Y": 48.792175
       }
     },
@@ -204,17 +162,17 @@
       }
     },
     {
-      "ChildId": "dd05874b-e5e0-4f37-a8ad-636683963b86"/*ScaleVector3*/,
-      "Position": {
-        "X": 488.36172,
-        "Y": 216.79218
-      }
-    },
-    {
       "ChildId": "b62b6997-1a99-43f0-acde-1e4f346e389e"/*Damp*/,
       "Position": {
         "X": 338.36172,
         "Y": 216.79218
+      }
+    },
+    {
+      "ChildId": "bcb4fbe3-4007-4cff-a194-3cfae4a895ea"/*Transform*/,
+      "Position": {
+        "X": 638.3617,
+        "Y": 104.792175
       }
     },
     {
@@ -225,10 +183,52 @@
       }
     },
     {
-      "ChildId": "882e8f41-7cc8-4225-ad9f-c256c9eb840f"/*BoolToFloat*/,
+      "ChildId": "dc25b793-c40a-4ba3-af6a-abe122e6357f"/*Text*/,
+      "Position": {
+        "X": 338.36172,
+        "Y": 160.79218
+      }
+    },
+    {
+      "ChildId": "dd05874b-e5e0-4f37-a8ad-636683963b86"/*ScaleVector3*/,
+      "Position": {
+        "X": 488.36172,
+        "Y": 216.79218
+      }
+    },
+    {
+      "ChildId": "e064bcb2-27c6-4d63-a5d1-8c0cb63eb771"/*ScaleVector3*/,
+      "Position": {
+        "X": 488.36172,
+        "Y": 48.792175
+      }
+    },
+    {
+      "ChildId": "e9f3d737-8f13-45fa-9546-a51589476b9e"/*DrawLines*/,
+      "Position": {
+        "X": 338.36172,
+        "Y": 104.792175
+      }
+    },
+    {
+      "ChildId": "f3b5c007-4a51-4738-b67a-947eab9fe97c"/*Compare*/,
+      "Position": {
+        "X": 49.955856,
+        "Y": -120.664764
+      }
+    },
+    {
+      "ChildId": "f7172034-2c8a-44b8-9857-71405d2923f7"/*BoolToFloat*/,
       "Position": {
         "X": 188.36172,
-        "Y": 216.79218
+        "Y": -119.207825
+      }
+    },
+    {
+      "ChildId": "f9938de0-78bd-41c1-a4e0-b580056155dc"/*RadialPoints*/,
+      "Position": {
+        "X": -442.8424,
+        "Y": -284.74084
       }
     }
   ],

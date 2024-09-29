@@ -2,8 +2,8 @@
   "Id": "79db48d8-38d3-47ca-9c9b-85dde2fa660d"/*ForwardBeatTaps*/,
   "Inputs": [
     {
-      "Id": "89576f05-3f3d-48d1-ab63-f3c16c85db63"/*SubTree*/,
-      "DefaultValue": null
+      "Id": "2e18ae65-044e-443d-9288-7a9bb6864514"/*SlideSyncTimeOffset*/,
+      "DefaultValue": 0.0
     },
     {
       "Id": "37da48ac-a7c5-47c8-9fb3-82d4403b2ba0"/*TriggerBeatTap*/,
@@ -14,8 +14,8 @@
       "DefaultValue": false
     },
     {
-      "Id": "2e18ae65-044e-443d-9288-7a9bb6864514"/*SlideSyncTimeOffset*/,
-      "DefaultValue": 0.0
+      "Id": "89576f05-3f3d-48d1-ab63-f3c16c85db63"/*SubTree*/,
+      "DefaultValue": null
     }
   ],
   "Children": [],

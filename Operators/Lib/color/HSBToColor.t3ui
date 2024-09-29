@@ -3,6 +3,15 @@
   "Description": "Creates an RGBA color from HSB settings",
   "InputUis": [
     {
+      "InputId": "115e3d92-2e91-447d-ba81-18a508d3d36a"/*Brightness*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Min": 0.0,
+      "Max": 100.0
+    },
+    {
       "InputId": "2c1adb2b-36bd-4ca0-8fbb-e7571163a98d"/*Hue*/,
       "Position": {
         "X": 0.0,
@@ -20,15 +29,6 @@
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
-    },
-    {
-      "InputId": "115e3d92-2e91-447d-ba81-18a508d3d36a"/*Brightness*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      },
-      "Min": 0.0,
-      "Max": 100.0
     },
     {
       "InputId": "fb8c2263-804d-4204-80aa-ba21bbefdd8e"/*Alpha*/,

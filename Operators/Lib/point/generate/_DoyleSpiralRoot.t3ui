@@ -3,15 +3,6 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "e0ee8c5d-d8c2-4856-858c-d25570a71679"/*P*/,
-      "Position": {
-        "X": 36.0,
-        "Y": 334.0
-      },
-      "Min": -100.0,
-      "Max": 100.0
-    },
-    {
       "InputId": "8a4c30b3-a189-4fa1-adc5-66e7a68c75ba"/*Q*/,
       "Position": {
         "X": 197.0,
@@ -20,6 +11,15 @@
       "Min": -100.0,
       "Max": 100.0,
       "Scale": 0.01
+    },
+    {
+      "InputId": "e0ee8c5d-d8c2-4856-858c-d25570a71679"/*P*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
     }
   ],
   "SymbolChildUis": [],

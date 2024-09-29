@@ -3,14 +3,6 @@
   "Description": "A helper gizmo that can uses a fragment shader to draw smooth grid lines.\n\nThis is what is visible in the viewport when \"show gizmo and floor grid\" is activated in an output window.\n\nAlso known as: Floor Grid, grid, coordinate system, graticule, \n\nIf you want to apply Fog consider using [DrawLineGrid] which uses line geometry.",
   "InputUis": [
     {
-      "InputId": "c0f652b8-80fb-4bd2-b6cd-cfc459f9fcc5"/*Color*/,
-      "Position": {
-        "X": -271.31342,
-        "Y": 173.57768
-      },
-      "Description": "Defines the color of the grid"
-    },
-    {
       "InputId": "39a74407-5447-45fd-8fc5-5f96bd8bbdfb"/*Size*/,
       "Position": {
         "X": -272.47134,
@@ -35,28 +27,46 @@
       },
       "GroupTitle": "Rotate",
       "Description": "Rotates the grid around its own axis\n\nNotice: The shader does not currently support all orientations and produces unpredictable results at some angles"
+    },
+    {
+      "InputId": "c0f652b8-80fb-4bd2-b6cd-cfc459f9fcc5"/*Color*/,
+      "Position": {
+        "X": -271.31342,
+        "Y": 173.57768
+      },
+      "Description": "Defines the color of the grid"
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "f88d926a-4dfa-4160-9ca9-4a882eabcc74"/*VertexShader*/,
+      "ChildId": "03ef5880-fb89-4796-a021-cc35803bf57b"/*Execute*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 114.093414,
+        "Y": 496.73483
+      },
       "Position": {
-        "X": 44.91298,
-        "Y": 2.3654957
+        "X": 522.5306,
+        "Y": -61.082287
       }
     },
     {
-      "ChildId": "6a42140e-ba87-4aa3-adcf-5a04ba183257"/*TransformsConstBuffer*/,
+      "ChildId": "0586daed-b34a-46bf-951b-b32869cd0a29"/*Draw*/,
       "Position": {
-        "X": -91.41687,
-        "Y": 74.11656
+        "X": 92.97354,
+        "Y": 512.5575
       }
     },
     {
-      "ChildId": "e9ca366b-32e7-4c81-a1b4-19053e89d99c"/*RasterizerStateOp*/,
+      "ChildId": "20c6ab84-17d5-4cc1-a281-4f239c6d2cea"/*FloatsToBuffer*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 116.1401,
+        "Y": 128.82043
+      },
       "Position": {
-        "X": 203.7669,
-        "Y": 125.0
+        "X": 8.686496,
+        "Y": 173.57768
       }
     },
     {
@@ -67,24 +77,38 @@
       }
     },
     {
-      "ChildId": "c5e54bdf-21f9-437a-8b89-36ec3269fc81"/*VertexShaderStage*/,
+      "ChildId": "389a3707-f861-465d-8035-b11b725adacb"/*Transform*/,
       "Position": {
-        "X": 329.06284,
-        "Y": -13.448727
+        "X": 718.67993,
+        "Y": 237.36185
       }
     },
     {
-      "ChildId": "f8c4bac9-9344-4db9-83a0-10004e665cb6"/*PixelShaderStage*/,
+      "ChildId": "4b8041c3-0d36-4ef0-bd03-7e8e2376237d"/*DepthStencilState*/,
       "Position": {
-        "X": 333.7669,
-        "Y": 181.0
+        "X": -15.64028,
+        "Y": 604.9596
       }
     },
     {
-      "ChildId": "f968037a-e683-4707-b9bf-837189c478a3"/*InputAssemblerStage*/,
+      "ChildId": "6a42140e-ba87-4aa3-adcf-5a04ba183257"/*TransformsConstBuffer*/,
       "Position": {
-        "X": 329.06284,
-        "Y": -56.448727
+        "X": -91.41687,
+        "Y": 74.11656
+      }
+    },
+    {
+      "ChildId": "6d9f2c25-008e-41ea-abd6-be36ab58afc8"/*RenderTargetBlendDescription*/,
+      "Position": {
+        "X": -242.65402,
+        "Y": 409.7088
+      }
+    },
+    {
+      "ChildId": "7d616c65-2354-433d-9e88-994da512c3a4"/*BlendState*/,
+      "Position": {
+        "X": -111.366425,
+        "Y": 396.4303
       }
     },
     {
@@ -102,51 +126,6 @@
       }
     },
     {
-      "ChildId": "7d616c65-2354-433d-9e88-994da512c3a4"/*BlendStateOp*/,
-      "Position": {
-        "X": -111.366425,
-        "Y": 396.4303
-      }
-    },
-    {
-      "ChildId": "6d9f2c25-008e-41ea-abd6-be36ab58afc8"/*RenderTargetBlendDesc*/,
-      "Position": {
-        "X": -242.65402,
-        "Y": 409.7088
-      }
-    },
-    {
-      "ChildId": "0586daed-b34a-46bf-951b-b32869cd0a29"/*Draw*/,
-      "Position": {
-        "X": 92.97354,
-        "Y": 512.5575
-      }
-    },
-    {
-      "ChildId": "03ef5880-fb89-4796-a021-cc35803bf57b"/*Execute*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 114.093414,
-        "Y": 496.73483
-      },
-      "Position": {
-        "X": 522.5306,
-        "Y": -61.082287
-      }
-    },
-    {
-      "ChildId": "20c6ab84-17d5-4cc1-a281-4f239c6d2cea"/*FloatsToBuffer*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 116.1401,
-        "Y": 128.82043
-      },
-      "Position": {
-        "X": 8.686496,
-        "Y": 173.57768
-      }
-    },
-    {
       "ChildId": "b3a0b21b-77a1-494a-86f4-707730bff4fd"/*Vector4Components*/,
       "Position": {
         "X": -141.3135,
@@ -154,17 +133,38 @@
       }
     },
     {
-      "ChildId": "389a3707-f861-465d-8035-b11b725adacb"/*Transform*/,
+      "ChildId": "c5e54bdf-21f9-437a-8b89-36ec3269fc81"/*VertexShaderStage*/,
       "Position": {
-        "X": 718.67993,
-        "Y": 237.36185
+        "X": 329.06284,
+        "Y": -13.448727
       }
     },
     {
-      "ChildId": "4b8041c3-0d36-4ef0-bd03-7e8e2376237d"/*DepthStencilStateOp*/,
+      "ChildId": "e9ca366b-32e7-4c81-a1b4-19053e89d99c"/*RasterizerState*/,
       "Position": {
-        "X": -15.64028,
-        "Y": 604.9596
+        "X": 203.7669,
+        "Y": 125.0
+      }
+    },
+    {
+      "ChildId": "f88d926a-4dfa-4160-9ca9-4a882eabcc74"/*VertexShader*/,
+      "Position": {
+        "X": 44.91298,
+        "Y": 2.3654957
+      }
+    },
+    {
+      "ChildId": "f8c4bac9-9344-4db9-83a0-10004e665cb6"/*PixelShaderStage*/,
+      "Position": {
+        "X": 333.7669,
+        "Y": 181.0
+      }
+    },
+    {
+      "ChildId": "f968037a-e683-4707-b9bf-837189c478a3"/*InputAssemblerStage*/,
+      "Position": {
+        "X": 329.06284,
+        "Y": -56.448727
       }
     }
   ],

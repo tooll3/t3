@@ -3,16 +3,6 @@
   "Description": "Adds two float values and outputs the result as a float\n\nIf more values are to be added, there is also [Sum]",
   "InputUis": [
     {
-      "InputId": "e3550929-8905-4cdf-bc85-c31e97da4baa"/*Input1*/,
-      "Relevancy": "Relevant",
-      "Position": {
-        "X": 36.0,
-        "Y": 334.0
-      },
-      "Min": -100.0,
-      "Max": 100.0
-    },
-    {
       "InputId": "993d59bb-1fc0-4857-a36d-629b0e7aa0d2"/*Input2*/,
       "Relevancy": "Relevant",
       "Position": {
@@ -22,6 +12,16 @@
       "Min": -100.0,
       "Max": 100.0,
       "Scale": 0.01
+    },
+    {
+      "InputId": "e3550929-8905-4cdf-bc85-c31e97da4baa"/*Input1*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
     }
   ],
   "SymbolChildUis": [],

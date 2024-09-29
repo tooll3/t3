@@ -1,13 +1,13 @@
 {
-  "Id": "064ca51f-47ab-4cb7-95f2-e537b68e137e"/*BlendStateOp*/,
+  "Id": "064ca51f-47ab-4cb7-95f2-e537b68e137e"/*BlendState*/,
   "Inputs": [
-    {
-      "Id": "63d0e4e8-fa00-4059-a11b-6a31e66757dc"/*RenderTargets*/,
-      "DefaultValue": null
-    },
     {
       "Id": "3ca79807-00c9-471a-ac44-525a05740fed"/*AlphaToCoverageEnable*/,
       "DefaultValue": false
+    },
+    {
+      "Id": "63d0e4e8-fa00-4059-a11b-6a31e66757dc"/*RenderTargets*/,
+      "DefaultValue": null
     },
     {
       "Id": "873ad863-dec6-4b4b-9d81-89d5fa11beec"/*IndependentBlendEnable*/,

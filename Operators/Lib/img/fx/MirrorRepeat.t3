@@ -2,35 +2,12 @@
   "Id": "06621b4b-43be-4ef9-80d0-f1b36fa4dbd1"/*MirrorRepeat*/,
   "Inputs": [
     {
-      "Id": "25bdfb83-a61c-448c-a909-527f1bb73740"/*Image*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "149a9d1c-b76e-4256-8f5d-a261923a9ae5"/*RotateMirror*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "8caa4f2b-bfab-455e-a594-09b0cfb500fc"/*RotateImage*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "e39e2fd3-6820-4353-b098-44127303bb51"/*Width*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "bb6c1508-1849-4c40-b609-06ddfe62a6ea"/*Offset*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "bb67b53b-2d0b-42f5-b2be-26c28f869b71"/*OffsetEdge*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "5a5fc5e7-4fec-4146-9183-161fff71ee97"/*Offsetimage*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0
-      }
+      "Id": "25bdfb83-a61c-448c-a909-527f1bb73740"/*Image*/,
+      "DefaultValue": null
     },
     {
       "Id": "341ee76d-f431-40e8-ba14-aa4e0a1f10c4"/*ShadeAmount*/,
@@ -46,43 +23,37 @@
       }
     },
     {
+      "Id": "5a5fc5e7-4fec-4146-9183-161fff71ee97"/*Offsetimage*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
       "Id": "6809a355-47fc-4e27-98a2-956dcc7f41ef"/*Resolution*/,
       "DefaultValue": {
         "X": -1,
         "Y": -1
       }
+    },
+    {
+      "Id": "8caa4f2b-bfab-455e-a594-09b0cfb500fc"/*RotateImage*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "bb67b53b-2d0b-42f5-b2be-26c28f869b71"/*OffsetEdge*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "bb6c1508-1849-4c40-b609-06ddfe62a6ea"/*Offset*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "e39e2fd3-6820-4353-b098-44127303bb51"/*Width*/,
+      "DefaultValue": 1.0
     }
   ],
   "Children": [
-    {
-      "Id": "b85b427c-c066-41d7-8820-e2300e0fd1bd"/*__alignment*/,
-      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
-      "Name": "__alignment",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "c91e9ae0-33be-4fb1-887a-d28e56297915"/*_ImageFxShaderSetup2*/,
-      "SymbolId": "2b20afce-2b54-4bcc-ba0e-e456a0d92833",
-      "InputValues": [
-        {
-          "Id": "16dce9bc-02d9-48f8-b07e-94a9af48d27b"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\MirrorRepeat.hlsl"
-        },
-        {
-          "Id": "c80d3700-ceb6-43d0-9ffd-f4854e67a41d"/*Wrap*/,
-          "Type": "SharpDX.Direct3D11.TextureAddressMode",
-          "Value": "Mirror"
-        },
-        {
-          "Id": "9911dc7e-cd3b-4c58-a5d0-2e9abc8e528a"/*BlendMode*/,
-          "Type": "System.Int32",
-          "Value": 4
-        }
-      ],
-      "Outputs": []
-    },
     {
       "Id": "2ce8961c-0ed3-4006-9f56-3e0e9dc5086d"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
@@ -121,14 +92,43 @@
       "Outputs": []
     },
     {
-      "Id": "fd6b29f1-326e-451b-af40-0f25a0df5cf5"/*Vector2Components*/,
-      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
+      "Id": "944097d1-2a7d-4654-a595-3e149eb8b725"/*Vector4Components*/,
+      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "944097d1-2a7d-4654-a595-3e149eb8b725"/*Vector4Components*/,
-      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "Id": "b85b427c-c066-41d7-8820-e2300e0fd1bd"/*__alignment*/,
+      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
+      "Name": "__alignment",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "c91e9ae0-33be-4fb1-887a-d28e56297915"/*_ImageFxShaderSetup2*/,
+      "SymbolId": "2b20afce-2b54-4bcc-ba0e-e456a0d92833",
+      "InputValues": [
+        {
+          "Id": "16dce9bc-02d9-48f8-b07e-94a9af48d27b"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\img\\fx\\MirrorRepeat.hlsl"
+        },
+        {
+          "Id": "9911dc7e-cd3b-4c58-a5d0-2e9abc8e528a"/*BlendMode*/,
+          "Type": "System.Int32",
+          "Value": 4
+        },
+        {
+          "Id": "c80d3700-ceb6-43d0-9ffd-f4854e67a41d"/*Wrap*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "Mirror"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "fd6b29f1-326e-451b-af40-0f25a0df5cf5"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     }

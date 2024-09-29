@@ -2,33 +2,33 @@
   "Id": "7bc42ff0-2987-4dff-ab48-0eb4ab11f149"/*Sim2dStacking*/,
   "Inputs": [
     {
-      "Id": "c2ccf891-a94c-4176-8b90-bf47cb240773"/*Position*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      }
-    },
-    {
       "Id": "30e25647-54d8-417b-a7af-a62c2b39b37b"/*Amount*/,
       "DefaultValue": 1.0
     },
     {
       "Id": "a64c3cfc-03c7-4b33-9011-42b7073ff46d"/*Points*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "c2ccf891-a94c-4176-8b90-bf47cb240773"/*Position*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
     }
   ],
   "Children": [
     {
-      "Id": "b067e26b-50fb-4287-af8b-8d1706e706c6"/*ExecuteBufferUpdate*/,
-      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "66fa1753-c9ba-4f20-a130-63df6cf8d4d8"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
+      "Id": "0bd2d528-fdbc-4321-b35d-97dfda65ea82"/*ComputeShader*/,
+      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
+      "InputValues": [
+        {
+          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\user\\pixtur\\Sim2dStacking\\shader\\Sim2dStacking.hlsl"
+        }
+      ],
       "Outputs": []
     },
     {
@@ -44,8 +44,20 @@
       "Outputs": []
     },
     {
+      "Id": "66fa1753-c9ba-4f20-a130-63df6cf8d4d8"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "703a7f5c-0e87-4b4d-b05d-18ff40145cfd"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "b067e26b-50fb-4287-af8b-8d1706e706c6"/*ExecuteBufferUpdate*/,
+      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
       "InputValues": [],
       "Outputs": []
     },
@@ -61,18 +73,6 @@
             "Y": 1,
             "Z": 1
           }
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "0bd2d528-fdbc-4321-b35d-97dfda65ea82"/*ComputeShader*/,
-      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
-      "InputValues": [
-        {
-          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\Sim2dStacking\\shader\\Sim2dStacking.hlsl"
         }
       ],
       "Outputs": []

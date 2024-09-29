@@ -4,9 +4,9 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "6c8ba904-bad8-4f94-b78c-4716c6655c9c"/*GridPoints*/,
+      "ChildId": "1215b8fd-061e-48be-9f20-80ebfe2cb3fb"/*AddNoise*/,
       "Position": {
-        "X": 196.24048,
+        "X": 346.24048,
         "Y": 47.240234
       }
     },
@@ -18,23 +18,9 @@
       }
     },
     {
-      "ChildId": "1215b8fd-061e-48be-9f20-80ebfe2cb3fb"/*AddNoise*/,
+      "ChildId": "53670e8d-e802-4ee2-a5f8-5c6315ede657"/*Glow*/,
       "Position": {
-        "X": 346.24048,
-        "Y": 47.240234
-      }
-    },
-    {
-      "ChildId": "e0576380-4ec9-4f79-9c79-4dcc56a416da"/*Time*/,
-      "Position": {
-        "X": 196.24048,
-        "Y": 90.240234
-      }
-    },
-    {
-      "ChildId": "66aac097-57fd-4192-aee8-1ace9b435ccc"/*RandomizePoints*/,
-      "Position": {
-        "X": 496.24048,
+        "X": 1246.2405,
         "Y": 47.240234
       }
     },
@@ -46,6 +32,20 @@
       }
     },
     {
+      "ChildId": "66aac097-57fd-4192-aee8-1ace9b435ccc"/*RandomizePoints*/,
+      "Position": {
+        "X": 496.24048,
+        "Y": 47.240234
+      }
+    },
+    {
+      "ChildId": "6c8ba904-bad8-4f94-b78c-4716c6655c9c"/*GridPoints*/,
+      "Position": {
+        "X": 196.24048,
+        "Y": 47.240234
+      }
+    },
+    {
       "ChildId": "8ab46d05-da21-4ace-9e42-de9a415f6838"/*RenderTarget*/,
       "Position": {
         "X": 946.2405,
@@ -53,23 +53,23 @@
       }
     },
     {
-      "ChildId": "e0af0373-802f-4745-aebd-e8dd12ed57ca"/*DepthOfField*/,
-      "Position": {
-        "X": 1096.2405,
-        "Y": 47.240234
-      }
-    },
-    {
-      "ChildId": "53670e8d-e802-4ee2-a5f8-5c6315ede657"/*Glow*/,
-      "Position": {
-        "X": 1246.2405,
-        "Y": 47.240234
-      }
-    },
-    {
       "ChildId": "9700ab66-778d-472c-9767-cdfb74f43d4f"/*Grain*/,
       "Position": {
         "X": 1396.2405,
+        "Y": 47.240234
+      }
+    },
+    {
+      "ChildId": "e0576380-4ec9-4f79-9c79-4dcc56a416da"/*Time*/,
+      "Position": {
+        "X": 196.24048,
+        "Y": 90.240234
+      }
+    },
+    {
+      "ChildId": "e0af0373-802f-4745-aebd-e8dd12ed57ca"/*DepthOfField*/,
+      "Position": {
+        "X": 1096.2405,
         "Y": 47.240234
       }
     }

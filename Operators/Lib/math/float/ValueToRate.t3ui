@@ -3,6 +3,14 @@
   "Description": "Converts a value to a rate.\n\nCan also be used with [MockStrings] to select between various other groups of numbers such as primes.",
   "InputUis": [
     {
+      "InputId": "1ad90698-0d84-488b-b969-4d727e173aff"/*Rates*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 379.0
+      },
+      "Usage": "Multiline"
+    },
+    {
       "InputId": "4f2dad75-0f45-498a-9a1a-7571dc9f0b09"/*Value*/,
       "Position": {
         "X": 36.0,
@@ -12,14 +20,6 @@
       "Max": 1.0,
       "Scale": 0.01,
       "Clamp": true
-    },
-    {
-      "InputId": "1ad90698-0d84-488b-b969-4d727e173aff"/*Rates*/,
-      "Position": {
-        "X": 36.0,
-        "Y": 379.0
-      },
-      "Usage": "Multiline"
     }
   ],
   "SymbolChildUis": [],

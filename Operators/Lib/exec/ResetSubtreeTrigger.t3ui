@@ -3,14 +3,14 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "7cc4e43b-18a2-4564-a511-05eb0d8ec7d2"/*Command*/,
+      "InputId": "2975f7be-f21f-4ff4-b477-8fcc19d5f808"/*Trigger*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
       }
     },
     {
-      "InputId": "2975f7be-f21f-4ff4-b477-8fcc19d5f808"/*Trigger*/,
+      "InputId": "7cc4e43b-18a2-4564-a511-05eb0d8ec7d2"/*Command*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0

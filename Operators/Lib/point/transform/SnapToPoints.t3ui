@@ -3,10 +3,11 @@
   "Description": "Generate a new point buffer with points snapped to other points if the distance is below a threshold.",
   "InputUis": [
     {
-      "InputId": "b663670f-f805-4c2e-8f05-e4ccb644ffad"/*BlendMode*/,
+      "InputId": "1abba695-f044-459b-9c89-20441a32fa6b"/*PointsB_*/,
+      "Relevancy": "Required",
       "Position": {
-        "X": -448.6706,
-        "Y": 720.16473
+        "X": -452.71265,
+        "Y": 962.453
       }
     },
     {
@@ -39,15 +40,28 @@
       }
     },
     {
-      "InputId": "1abba695-f044-459b-9c89-20441a32fa6b"/*PointsB_*/,
-      "Relevancy": "Required",
+      "InputId": "b663670f-f805-4c2e-8f05-e4ccb644ffad"/*BlendMode*/,
       "Position": {
-        "X": -452.71265,
-        "Y": 962.453
+        "X": -448.6706,
+        "Y": 720.16473
       }
     }
   ],
   "SymbolChildUis": [
+    {
+      "ChildId": "110b515b-9166-4bcc-b870-ac6105c4c933"/*GetBufferComponents*/,
+      "Position": {
+        "X": -322.71265,
+        "Y": 906.453
+      }
+    },
+    {
+      "ChildId": "2d2b7169-1225-402d-94d7-058cc125978e"/*ExecuteBufferUpdate*/,
+      "Position": {
+        "X": 641.2465,
+        "Y": 646.7957
+      }
+    },
     {
       "ChildId": "495be13d-caab-473e-b33d-f7a155d90275"/*ComputeShader*/,
       "Position": {
@@ -56,10 +70,17 @@
       }
     },
     {
-      "ChildId": "edc5c54f-dedf-456b-8040-a4878c08560e"/*ComputeShaderStage*/,
+      "ChildId": "5007c81c-5eb1-460e-8d2c-e3e3068b4402"/*IntToFloat*/,
       "Position": {
-        "X": 476.9748,
-        "Y": 540.99335
+        "X": -318.6706,
+        "Y": 720.16473
+      }
+    },
+    {
+      "ChildId": "5674e6a9-d1f2-4163-ab72-a1dba31b9141"/*GetBufferComponents*/,
+      "Position": {
+        "X": 273.32104,
+        "Y": 1152.4597
       }
     },
     {
@@ -75,38 +96,10 @@
       }
     },
     {
-      "ChildId": "5007c81c-5eb1-460e-8d2c-e3e3068b4402"/*IntToFloat*/,
-      "Position": {
-        "X": -318.6706,
-        "Y": 720.16473
-      }
-    },
-    {
       "ChildId": "95b3f1e4-f414-47db-8b1d-6cc076f694f8"/*GetSRVProperties*/,
       "Position": {
         "X": -74.3291,
         "Y": 856.58276
-      }
-    },
-    {
-      "ChildId": "2d2b7169-1225-402d-94d7-058cc125978e"/*ExecuteBufferUpdate*/,
-      "Position": {
-        "X": 641.2465,
-        "Y": 646.7957
-      }
-    },
-    {
-      "ChildId": "e620bc75-cb4a-4d6f-a190-e9e8ec984fd2"/*CalcDispatchCount*/,
-      "Position": {
-        "X": 288.56805,
-        "Y": 583.2457
-      }
-    },
-    {
-      "ChildId": "110b515b-9166-4bcc-b870-ac6105c4c933"/*GetBufferComponents*/,
-      "Position": {
-        "X": -322.71265,
-        "Y": 906.453
       }
     },
     {
@@ -124,10 +117,17 @@
       }
     },
     {
-      "ChildId": "5674e6a9-d1f2-4163-ab72-a1dba31b9141"/*GetBufferComponents*/,
+      "ChildId": "e620bc75-cb4a-4d6f-a190-e9e8ec984fd2"/*CalcDispatchCount*/,
       "Position": {
-        "X": 273.32104,
-        "Y": 1152.4597
+        "X": 288.56805,
+        "Y": 583.2457
+      }
+    },
+    {
+      "ChildId": "edc5c54f-dedf-456b-8040-a4878c08560e"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 476.9748,
+        "Y": 540.99335
       }
     }
   ],

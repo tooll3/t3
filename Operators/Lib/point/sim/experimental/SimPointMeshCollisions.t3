@@ -2,19 +2,7 @@
   "Id": "281b69e8-01ee-4a62-a9ed-8508c5355c6c"/*SimPointMeshCollisions*/,
   "Inputs": [
     {
-      "Id": "8f2d6bb8-5242-4f21-b356-7785b6b0ff4e"/*PointsA_*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "61c55a9d-a2b9-4d60-84f4-ffd639d0d724"/*Bouncyness*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "7bc189be-25c6-44f2-b787-9e06d3dfa0b8"/*ClampAccelleration*/,
-      "DefaultValue": 0.1
-    },
-    {
-      "Id": "d164bae5-b843-4378-ace6-d28ea04a3020"/*Damping*/,
       "DefaultValue": 1.0
     },
     {
@@ -22,15 +10,38 @@
       "DefaultValue": true
     },
     {
+      "Id": "7bc189be-25c6-44f2-b787-9e06d3dfa0b8"/*ClampAccelleration*/,
+      "DefaultValue": 0.1
+    },
+    {
+      "Id": "8f2d6bb8-5242-4f21-b356-7785b6b0ff4e"/*PointsA_*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "a4f2c0e6-1011-4793-933b-b9f0a332bbba"/*Mesh*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "d164bae5-b843-4378-ace6-d28ea04a3020"/*Damping*/,
+      "DefaultValue": 1.0
     }
   ],
   "Children": [
     {
-      "Id": "320e2f0e-668d-4b04-8e06-575c86620ffb"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
+      "Id": "134175e5-b173-408f-8cb1-bac85067414f"/*ComputeShader*/,
+      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
+      "InputValues": [
+        {
+          "Id": "8ad9e58d-a767-4a5f-bfbf-d082b80901d6"/*EntryPoint*/,
+          "Type": "System.String",
+          "Value": "main"
+        },
+        {
+          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\points\\sim\\SimPointMeshCollisions.hlsl"
+        }
+      ],
       "Outputs": []
     },
     {
@@ -43,6 +54,48 @@
           "Value": 1
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "320e2f0e-668d-4b04-8e06-575c86620ffb"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "33ccb8b3-2b9b-4a84-b473-abc070ad7e0a"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "780ab989-d360-4da1-b364-e5cd25632111"/*ExecuteBufferUpdate*/,
+      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "8170fd79-6dcd-4688-b120-b8207e4ae282"/*FloatsToBuffer*/,
+      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "9932b8d6-c9b3-4bb8-a218-2a1c8aff0628"/*_MeshBufferComponents*/,
+      "SymbolId": "5b9f1d97-4e10-4f31-ba83-4cbf7be9719b",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "9ae8cef2-2b1a-444c-a15f-12f957ed1502"/*Execute*/,
+      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "d4b5ec72-3d12-4e22-b6b4-3cc929e80cd4"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -59,59 +112,6 @@
           }
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "9ae8cef2-2b1a-444c-a15f-12f957ed1502"/*Execute*/,
-      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "9932b8d6-c9b3-4bb8-a218-2a1c8aff0628"/*_MeshBufferComponents*/,
-      "SymbolId": "5b9f1d97-4e10-4f31-ba83-4cbf7be9719b",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "d4b5ec72-3d12-4e22-b6b4-3cc929e80cd4"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "780ab989-d360-4da1-b364-e5cd25632111"/*ExecuteBufferUpdate*/,
-      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "33ccb8b3-2b9b-4a84-b473-abc070ad7e0a"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "134175e5-b173-408f-8cb1-bac85067414f"/*ComputeShader*/,
-      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
-      "InputValues": [
-        {
-          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\points\\sim\\SimPointMeshCollisions.hlsl"
-        },
-        {
-          "Id": "8ad9e58d-a767-4a5f-bfbf-d082b80901d6"/*EntryPoint*/,
-          "Type": "System.String",
-          "Value": "main"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "8170fd79-6dcd-4688-b120-b8207e4ae282"/*FloatsToBuffer*/,
-      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
-      "InputValues": [],
       "Outputs": []
     }
   ],

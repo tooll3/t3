@@ -3,18 +3,18 @@
   "Description": "Takes in a list of Vector2 and picks the y component of the pair where X is closest to LookupValue.",
   "InputUis": [
     {
-      "InputId": "9871ad71-30b0-4454-9418-0916fd58afa8"/*InputValue*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "4b0d7bbc-e29a-4e06-bd80-93413419634c"/*InputAndOutputPairs*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "9871ad71-30b0-4454-9418-0916fd58afa8"/*InputValue*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
       }
     }
   ],

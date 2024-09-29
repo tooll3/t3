@@ -6,12 +6,12 @@
       "DefaultValue": false
     },
     {
-      "Id": "5236ee24-44db-462c-b9fa-c3c842ceb0fa"/*SimulatedTrigger*/,
-      "DefaultValue": false
-    },
-    {
       "Id": "2cff056f-1886-46a1-9e8c-998d5bdec279"/*IsSimulationVariable*/,
       "DefaultValue": "IsSimulation"
+    },
+    {
+      "Id": "5236ee24-44db-462c-b9fa-c3c842ceb0fa"/*SimulatedTrigger*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

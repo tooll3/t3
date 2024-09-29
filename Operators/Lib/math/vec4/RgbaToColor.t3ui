@@ -3,23 +3,23 @@
   "Description": "Creates a Color from 4 values (RGBA)\n\nSimilar to [AColor] and [PickColor] and the same as [Vector4]\nAlternative with more functions: [SampleGradient]\n\n\nFor the opposite see [Vector4Components]\n\nAlso see: [HSBToColor]\n",
   "InputUis": [
     {
-      "InputId": "5f2de1d3-6803-4f56-aaf1-9e29b4d81eb8"/*R*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      },
-      "Description": "Red",
-      "Min": 0.0,
-      "Max": 1.0,
-      "Clamp": true
-    },
-    {
       "InputId": "0742e707-1557-4f66-98d9-3f277416b7a3"/*G*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
       },
       "Description": "Green",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "5f2de1d3-6803-4f56-aaf1-9e29b4d81eb8"/*R*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Description": "Red",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true

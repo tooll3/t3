@@ -3,6 +3,13 @@
   "Description": "Builds a list of float values (e.g., a Cycle buffer) but collects float values at the beginning of the list.",
   "InputUis": [
     {
+      "InputId": "519133d3-0440-4c8a-8bc8-75aa17219ad5"/*BufferLength*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
       "InputId": "a5ed1db1-2dc9-43b2-97c3-cd416d07089b"/*Value*/,
       "Position": {
         "X": -200.0,
@@ -11,13 +18,6 @@
     },
     {
       "InputId": "c84aa4cf-ce04-43e2-8d88-4ce3b8a7155e"/*AddValueToList*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      }
-    },
-    {
-      "InputId": "519133d3-0440-4c8a-8bc8-75aa17219ad5"/*BufferLength*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0

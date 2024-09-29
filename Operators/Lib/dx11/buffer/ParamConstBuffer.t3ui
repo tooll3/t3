@@ -21,7 +21,7 @@
       "Max": 100.0
     },
     {
-      "InputId": "e3f6e24d-97d7-4679-8a4c-c7ada2e01022"/*Param3*/,
+      "InputId": "b2208d3a-f321-4f4b-81de-6eb3026fe39c"/*Param4*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
@@ -30,7 +30,7 @@
       "Max": 100.0
     },
     {
-      "InputId": "b2208d3a-f321-4f4b-81de-6eb3026fe39c"/*Param4*/,
+      "InputId": "e3f6e24d-97d7-4679-8a4c-c7ada2e01022"/*Param3*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0

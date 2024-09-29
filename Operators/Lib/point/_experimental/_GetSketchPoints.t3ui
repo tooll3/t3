@@ -3,17 +3,17 @@
   "Description": "An internal operator that gets the points of a selected sketch page.\nThis is required for onion skin rendering of sketch pages.",
   "InputUis": [
     {
-      "InputId": "c7c71de4-a9a8-4194-b490-ab48004565d1"/*Pages*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 135.0
-      }
-    },
-    {
       "InputId": "1b8d9a00-f337-431e-bab3-24d45ed9d191"/*PageIndex*/,
       "Position": {
         "X": -200.0,
         "Y": 90.0
+      }
+    },
+    {
+      "InputId": "c7c71de4-a9a8-4194-b490-ab48004565d1"/*Pages*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
       }
     },
     {

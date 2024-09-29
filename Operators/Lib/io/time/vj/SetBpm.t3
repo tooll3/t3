@@ -2,12 +2,12 @@
   "Id": "f5158500-39e4-481e-aa4f-f7dbe8cbe0fa"/*SetBpm*/,
   "Inputs": [
     {
-      "Id": "9cc32da8-f939-4ad3-b381-6df8338a371b"/*SubGraph*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "721c34b5-bb06-49e0-a71e-2aebbf2557e0"/*BpmRate*/,
       "DefaultValue": 120.0
+    },
+    {
+      "Id": "9cc32da8-f939-4ad3-b381-6df8338a371b"/*SubGraph*/,
+      "DefaultValue": null
     },
     {
       "Id": "fbf10760-b559-4e9c-b8dc-ce61d3f21c82"/*TriggerUpdate*/,

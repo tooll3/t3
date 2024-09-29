@@ -2,12 +2,8 @@
   "Id": "5efaf208-ba62-42ce-b3df-059b37fc1382"/*OutputMergerStage*/,
   "Inputs": [
     {
-      "Id": "394d374f-2125-4ecb-8a69-cc7b2c3c6cb7"/*DepthStencilView*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "9c131da6-ad56-4e15-9730-754096b3b765"/*RenderTargetViews*/,
-      "DefaultValue": null
+      "Id": "03166157-1e18-4513-8af5-398c6f4fcb1e"/*BlendSampleMask*/,
+      "DefaultValue": 0
     },
     {
       "Id": "0ed97939-643b-445e-879c-e18c4430aa03"/*UnorderedAccessViews*/,
@@ -18,11 +14,15 @@
       "DefaultValue": null
     },
     {
+      "Id": "394d374f-2125-4ecb-8a69-cc7b2c3c6cb7"/*DepthStencilView*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "6c7907d7-70f7-4db7-83ea-22ee48610994"/*DepthStencilReference*/,
       "DefaultValue": 0
     },
     {
-      "Id": "e0bc9cf8-42c8-4632-b958-7a96f6d03ba2"/*BlendState*/,
+      "Id": "9c131da6-ad56-4e15-9730-754096b3b765"/*RenderTargetViews*/,
       "DefaultValue": null
     },
     {
@@ -35,8 +35,8 @@
       }
     },
     {
-      "Id": "03166157-1e18-4513-8af5-398c6f4fcb1e"/*BlendSampleMask*/,
-      "DefaultValue": 0
+      "Id": "e0bc9cf8-42c8-4632-b958-7a96f6d03ba2"/*BlendState*/,
+      "DefaultValue": null
     }
   ],
   "Children": [],

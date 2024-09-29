@@ -3,6 +3,14 @@
   "Description": "Modifies the Viewport and projection matrix to help drawing grid cells. \n\nIn the simplest form this can be used to limit the rendering to a letter box format (I.e. with black bars on top and bottom).\nIn a more complex setup it can be combined with Loop to draw a grid of render passes. See example for more details.",
   "InputUis": [
     {
+      "InputId": "0ec5edfc-426c-40bb-a68e-80e4caa4c7bf"/*CellIndex*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
       "InputId": "21532b24-fed2-403b-abb1-6faa19311366"/*SubGraph*/,
       "Relevancy": "Required",
       "Position": {
@@ -11,11 +19,10 @@
       }
     },
     {
-      "InputId": "0ec5edfc-426c-40bb-a68e-80e4caa4c7bf"/*CellIndex*/,
-      "Relevancy": "Required",
+      "InputId": "354eb18c-aba0-43e6-b534-c119176547ff"/*Mode*/,
       "Position": {
         "X": -200.0,
-        "Y": 45.0
+        "Y": 90.0
       }
     },
     {
@@ -30,13 +37,6 @@
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
-    },
-    {
-      "InputId": "354eb18c-aba0-43e6-b534-c119176547ff"/*Mode*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
       }
     }
   ],

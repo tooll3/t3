@@ -3,14 +3,6 @@
   "Description": "Adds information about the current particle system to the context, as it can be accessed by particle effects operators.",
   "InputUis": [
     {
-      "InputId": "13583f72-3f77-4be0-b596-b8dbd27ca19c"/*PointsSimBuffer*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
-      }
-    },
-    {
       "InputId": "083c9379-fc0a-4d35-b056-1a639f739321"/*SpeedFactor*/,
       "Relevancy": "Required",
       "Position": {
@@ -19,7 +11,8 @@
       }
     },
     {
-      "InputId": "f3ab1099-3a0d-409e-aa18-89219e85e01f"/*InitializeVelocityFactor*/,
+      "InputId": "13583f72-3f77-4be0-b596-b8dbd27ca19c"/*PointsSimBuffer*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 90.0
@@ -31,6 +24,13 @@
       "Position": {
         "X": -200.0,
         "Y": 0.0
+      }
+    },
+    {
+      "InputId": "f3ab1099-3a0d-409e-aa18-89219e85e01f"/*InitializeVelocityFactor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
       }
     }
   ],

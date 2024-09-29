@@ -3,86 +3,13 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "f2b8c30b-4d9b-4676-b944-1650c101d9b8"/*MidiInput*/,
-      "SymbolId": "59a0458e-2f3a-4856-96cd-32936f783cc5",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "86c38124-205a-49ca-838a-f0e54abdb05f"/*MidiOutput*/,
-      "SymbolId": "f9f4281b-92ee-430d-a930-6b588a5cb9a9",
+      "Id": "07ee757f-78b5-401a-8e0d-b44654d54649"/*ModInt*/,
+      "SymbolId": "cf3268d7-4f3d-47bd-8cb5-0214c75432ec",
       "InputValues": [
         {
-          "Id": "9efa1be1-f102-4457-a69b-2aef59f6b845"/*TriggerSend*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
-          "Id": "ec4d83b6-78eb-4cac-826b-cafb0be3f604"/*SendMode*/,
+          "Id": "ccdea113-c046-4ec2-b1fb-30d6e15db7ce"/*Mod*/,
           "Type": "System.Int32",
-          "Value": 0
-        },
-        {
-          "Id": "adea6968-35ef-436a-bc2d-d9433b623df6"/*Device*/,
-          "Type": "System.String",
-          "Value": "X-TOUCH MINI"
-        },
-        {
-          "Id": "a7e1eac2-5602-4c40-8519-19ca53763c76"/*ChannelNumber*/,
-          "Type": "System.Int32",
-          "Value": 1
-        },
-        {
-          "Id": "0fff2ce2-defa-442c-a089-4b12e7d71620"/*NoteOrController*/,
-          "Type": "System.Int32",
-          "Value": 40
-        },
-        {
-          "Id": "a10e3f7b-d132-49ca-9f6d-726d5e699443"/*Velocity127*/,
-          "Type": "System.Int32",
-          "Value": 1
-        },
-        {
-          "Id": "abe9393e-282e-4de0-8f86-541fa955658f"/*DurationInSecs*/,
-          "Type": "System.Single",
-          "Value": 9.9
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "3fa0d03c-ea6a-4589-8fd4-6d16ba3026a1"/*MidiOutput*/,
-      "SymbolId": "f9f4281b-92ee-430d-a930-6b588a5cb9a9",
-      "InputValues": [
-        {
-          "Id": "9efa1be1-f102-4457-a69b-2aef59f6b845"/*TriggerSend*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
-          "Id": "ec4d83b6-78eb-4cac-826b-cafb0be3f604"/*SendMode*/,
-          "Type": "System.Int32",
-          "Value": 0
-        },
-        {
-          "Id": "adea6968-35ef-436a-bc2d-d9433b623df6"/*Device*/,
-          "Type": "System.String",
-          "Value": "X-TOUCH MINI"
-        },
-        {
-          "Id": "a7e1eac2-5602-4c40-8519-19ca53763c76"/*ChannelNumber*/,
-          "Type": "System.Int32",
-          "Value": 1
-        },
-        {
-          "Id": "0fff2ce2-defa-442c-a089-4b12e7d71620"/*NoteOrController*/,
-          "Type": "System.Int32",
-          "Value": 42
-        },
-        {
-          "Id": "a10e3f7b-d132-49ca-9f6d-726d5e699443"/*Velocity127*/,
-          "Type": "System.Int32",
-          "Value": 7
+          "Value": 16
         }
       ],
       "Outputs": []
@@ -94,19 +21,31 @@
       "Outputs": []
     },
     {
-      "Id": "771c849c-a071-4939-a02e-a5a5676758b8"/*FloatToInt*/,
-      "SymbolId": "06b4728e-852c-491a-a89d-647f7e0b5415",
+      "Id": "157b4208-44d0-4b06-9ad9-072932e08270"/*RenderTarget*/,
+      "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "07ee757f-78b5-401a-8e0d-b44654d54649"/*ModInt*/,
+      "Id": "2732a4bc-e9b7-4b5a-8ace-56d63f80edf8"/*ModInt*/,
       "SymbolId": "cf3268d7-4f3d-47bd-8cb5-0214c75432ec",
       "InputValues": [
         {
           "Id": "ccdea113-c046-4ec2-b1fb-30d6e15db7ce"/*Mod*/,
           "Type": "System.Int32",
           "Value": 16
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "2c85346b-3a63-4ea8-b29b-991e3aeff2b2"/*AnimValue*/,
+      "SymbolId": "ea7b8491-2f8e-4add-b0b1-fd068ccfed0d",
+      "InputValues": [
+        {
+          "Id": "48005727-0158-4795-ad70-8410c27fd01d"/*Rate*/,
+          "Type": "System.Single",
+          "Value": 0.5
         }
       ],
       "Outputs": []
@@ -124,19 +63,50 @@
       "Outputs": []
     },
     {
-      "Id": "ba687aab-205f-4207-a446-f8c1e0e53cee"/*RadialPoints*/,
-      "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
-      "InputValues": [],
+      "Id": "3e54cf99-4cf0-4637-87c2-56d8f9770e61"/*AddInts*/,
+      "SymbolId": "ab73a49e-c548-437d-a4ab-b3fa41e30097",
+      "InputValues": [
+        {
+          "Id": "d5efbe02-8f33-42e9-a205-859c218acbec"/*Input2*/,
+          "Type": "System.Int32",
+          "Value": 8
+        }
+      ],
       "Outputs": []
     },
     {
-      "Id": "755b6cb5-a8d6-4b69-84e5-5e104631a24b"/*CountInt*/,
-      "SymbolId": "0e1d5f4b-3ba0-4e71-aa26-7308b6df214d",
+      "Id": "3fa0d03c-ea6a-4589-8fd4-6d16ba3026a1"/*MidiOutput*/,
+      "SymbolId": "f9f4281b-92ee-430d-a930-6b588a5cb9a9",
       "InputValues": [
         {
-          "Id": "2ff3d674-90d7-4c8f-8551-aad9992540db"/*Modulo*/,
+          "Id": "0fff2ce2-defa-442c-a089-4b12e7d71620"/*NoteOrController*/,
           "Type": "System.Int32",
-          "Value": 127
+          "Value": 42
+        },
+        {
+          "Id": "9efa1be1-f102-4457-a69b-2aef59f6b845"/*TriggerSend*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
+          "Id": "a10e3f7b-d132-49ca-9f6d-726d5e699443"/*Velocity127*/,
+          "Type": "System.Int32",
+          "Value": 7
+        },
+        {
+          "Id": "a7e1eac2-5602-4c40-8519-19ca53763c76"/*ChannelNumber*/,
+          "Type": "System.Int32",
+          "Value": 1
+        },
+        {
+          "Id": "adea6968-35ef-436a-bc2d-d9433b623df6"/*Device*/,
+          "Type": "System.String",
+          "Value": "X-TOUCH MINI"
+        },
+        {
+          "Id": "ec4d83b6-78eb-4cac-826b-cafb0be3f604"/*SendMode*/,
+          "Type": "System.Int32",
+          "Value": 0
         }
       ],
       "Outputs": []
@@ -154,41 +124,9 @@
       "Outputs": []
     },
     {
-      "Id": "3e54cf99-4cf0-4637-87c2-56d8f9770e61"/*AddInts*/,
-      "SymbolId": "ab73a49e-c548-437d-a4ab-b3fa41e30097",
-      "InputValues": [
-        {
-          "Id": "d5efbe02-8f33-42e9-a205-859c218acbec"/*Input2*/,
-          "Type": "System.Int32",
-          "Value": 8
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "6210458f-73f3-4e6a-bbcb-262d5df1f3e7"/*MidiOutput*/,
       "SymbolId": "f9f4281b-92ee-430d-a930-6b588a5cb9a9",
       "InputValues": [
-        {
-          "Id": "9efa1be1-f102-4457-a69b-2aef59f6b845"/*TriggerSend*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
-          "Id": "ec4d83b6-78eb-4cac-826b-cafb0be3f604"/*SendMode*/,
-          "Type": "System.Int32",
-          "Value": 0
-        },
-        {
-          "Id": "adea6968-35ef-436a-bc2d-d9433b623df6"/*Device*/,
-          "Type": "System.String",
-          "Value": "X-TOUCH MINI"
-        },
-        {
-          "Id": "a7e1eac2-5602-4c40-8519-19ca53763c76"/*ChannelNumber*/,
-          "Type": "System.Int32",
-          "Value": 11
-        },
         {
           "Id": "0fff2ce2-defa-442c-a089-4b12e7d71620"/*NoteOrController*/,
           "Type": "System.Int32",
@@ -200,14 +138,143 @@
           "Value": 0.0
         },
         {
+          "Id": "9efa1be1-f102-4457-a69b-2aef59f6b845"/*TriggerSend*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
           "Id": "a10e3f7b-d132-49ca-9f6d-726d5e699443"/*Velocity127*/,
           "Type": "System.Int32",
           "Value": 0
         },
         {
+          "Id": "a7e1eac2-5602-4c40-8519-19ca53763c76"/*ChannelNumber*/,
+          "Type": "System.Int32",
+          "Value": 11
+        },
+        {
           "Id": "abe9393e-282e-4de0-8f86-541fa955658f"/*DurationInSecs*/,
           "Type": "System.Single",
           "Value": 86.0
+        },
+        {
+          "Id": "adea6968-35ef-436a-bc2d-d9433b623df6"/*Device*/,
+          "Type": "System.String",
+          "Value": "X-TOUCH MINI"
+        },
+        {
+          "Id": "ec4d83b6-78eb-4cac-826b-cafb0be3f604"/*SendMode*/,
+          "Type": "System.Int32",
+          "Value": 0
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "6a3b2da0-636a-4bb4-87a2-24fd336d7088"/*MidiOutput*/,
+      "SymbolId": "f9f4281b-92ee-430d-a930-6b588a5cb9a9",
+      "InputValues": [
+        {
+          "Id": "0fff2ce2-defa-442c-a089-4b12e7d71620"/*NoteOrController*/,
+          "Type": "System.Int32",
+          "Value": 127
+        },
+        {
+          "Id": "9efa1be1-f102-4457-a69b-2aef59f6b845"/*TriggerSend*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
+          "Id": "a10e3f7b-d132-49ca-9f6d-726d5e699443"/*Velocity127*/,
+          "Type": "System.Int32",
+          "Value": 1
+        },
+        {
+          "Id": "a7e1eac2-5602-4c40-8519-19ca53763c76"/*ChannelNumber*/,
+          "Type": "System.Int32",
+          "Value": 11
+        },
+        {
+          "Id": "adea6968-35ef-436a-bc2d-d9433b623df6"/*Device*/,
+          "Type": "System.String",
+          "Value": "X-TOUCH MINI"
+        },
+        {
+          "Id": "ec4d83b6-78eb-4cac-826b-cafb0be3f604"/*SendMode*/,
+          "Type": "System.Int32",
+          "Value": 2
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "6abefeae-0823-4631-9585-4246d309fa7c"/*AnimValue*/,
+      "SymbolId": "ea7b8491-2f8e-4add-b0b1-fd068ccfed0d",
+      "InputValues": [
+        {
+          "Id": "48005727-0158-4795-ad70-8410c27fd01d"/*Rate*/,
+          "Type": "System.Single",
+          "Value": 0.5
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "755b6cb5-a8d6-4b69-84e5-5e104631a24b"/*CountInt*/,
+      "SymbolId": "0e1d5f4b-3ba0-4e71-aa26-7308b6df214d",
+      "InputValues": [
+        {
+          "Id": "2ff3d674-90d7-4c8f-8551-aad9992540db"/*Modulo*/,
+          "Type": "System.Int32",
+          "Value": 127
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "771c849c-a071-4939-a02e-a5a5676758b8"/*FloatToInt*/,
+      "SymbolId": "06b4728e-852c-491a-a89d-647f7e0b5415",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "86c38124-205a-49ca-838a-f0e54abdb05f"/*MidiOutput*/,
+      "SymbolId": "f9f4281b-92ee-430d-a930-6b588a5cb9a9",
+      "InputValues": [
+        {
+          "Id": "0fff2ce2-defa-442c-a089-4b12e7d71620"/*NoteOrController*/,
+          "Type": "System.Int32",
+          "Value": 40
+        },
+        {
+          "Id": "9efa1be1-f102-4457-a69b-2aef59f6b845"/*TriggerSend*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
+          "Id": "a10e3f7b-d132-49ca-9f6d-726d5e699443"/*Velocity127*/,
+          "Type": "System.Int32",
+          "Value": 1
+        },
+        {
+          "Id": "a7e1eac2-5602-4c40-8519-19ca53763c76"/*ChannelNumber*/,
+          "Type": "System.Int32",
+          "Value": 1
+        },
+        {
+          "Id": "abe9393e-282e-4de0-8f86-541fa955658f"/*DurationInSecs*/,
+          "Type": "System.Single",
+          "Value": 9.9
+        },
+        {
+          "Id": "adea6968-35ef-436a-bc2d-d9433b623df6"/*Device*/,
+          "Type": "System.String",
+          "Value": "X-TOUCH MINI"
+        },
+        {
+          "Id": "ec4d83b6-78eb-4cac-826b-cafb0be3f604"/*SendMode*/,
+          "Type": "System.Int32",
+          "Value": 0
         }
       ],
       "Outputs": []
@@ -225,68 +292,9 @@
       "Outputs": []
     },
     {
-      "Id": "d48efee0-a26d-4c54-9827-cf2e6d95506d"/*DrawPoints*/,
-      "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
+      "Id": "ba687aab-205f-4207-a446-f8c1e0e53cee"/*RadialPoints*/,
+      "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "fb4d3357-1635-4066-ab14-85e91bc2c4db"/*MidiOutput*/,
-      "SymbolId": "f9f4281b-92ee-430d-a930-6b588a5cb9a9",
-      "InputValues": [
-        {
-          "Id": "9efa1be1-f102-4457-a69b-2aef59f6b845"/*TriggerSend*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
-          "Id": "ec4d83b6-78eb-4cac-826b-cafb0be3f604"/*SendMode*/,
-          "Type": "System.Int32",
-          "Value": 0
-        },
-        {
-          "Id": "adea6968-35ef-436a-bc2d-d9433b623df6"/*Device*/,
-          "Type": "System.String",
-          "Value": "X-TOUCH MINI"
-        },
-        {
-          "Id": "a7e1eac2-5602-4c40-8519-19ca53763c76"/*ChannelNumber*/,
-          "Type": "System.Int32",
-          "Value": 11
-        },
-        {
-          "Id": "0fff2ce2-defa-442c-a089-4b12e7d71620"/*NoteOrController*/,
-          "Type": "System.Int32",
-          "Value": 8
-        },
-        {
-          "Id": "61ccd308-0006-42de-b190-c006e99b5871"/*Velocity*/,
-          "Type": "System.Single",
-          "Value": 0.0161
-        },
-        {
-          "Id": "a10e3f7b-d132-49ca-9f6d-726d5e699443"/*Velocity127*/,
-          "Type": "System.Int32",
-          "Value": 2
-        },
-        {
-          "Id": "abe9393e-282e-4de0-8f86-541fa955658f"/*DurationInSecs*/,
-          "Type": "System.Single",
-          "Value": 86.0
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "2732a4bc-e9b7-4b5a-8ace-56d63f80edf8"/*ModInt*/,
-      "SymbolId": "cf3268d7-4f3d-47bd-8cb5-0214c75432ec",
-      "InputValues": [
-        {
-          "Id": "ccdea113-c046-4ec2-b1fb-30d6e15db7ce"/*Mod*/,
-          "Type": "System.Int32",
-          "Value": 16
-        }
-      ],
       "Outputs": []
     },
     {
@@ -296,26 +304,9 @@
       "Outputs": []
     },
     {
-      "Id": "2c85346b-3a63-4ea8-b29b-991e3aeff2b2"/*AnimValue*/,
-      "SymbolId": "ea7b8491-2f8e-4add-b0b1-fd068ccfed0d",
-      "InputValues": [
-        {
-          "Id": "48005727-0158-4795-ad70-8410c27fd01d"/*Rate*/,
-          "Type": "System.Single",
-          "Value": 0.5
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "cb35bfff-a612-4b05-a819-cdaa43ec0ace"/*MidiInput*/,
       "SymbolId": "59a0458e-2f3a-4856-96cd-32936f783cc5",
       "InputValues": [
-        {
-          "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
         {
           "Id": "044168eb-791c-405f-867f-3d5702924165"/*EventType*/,
           "Type": "System.Int32",
@@ -325,6 +316,11 @@
           "Id": "23c34f4c-4ba3-4834-8d51-3e3909751f84"/*Device*/,
           "Type": "System.String",
           "Value": "X-TOUCH MINI"
+        },
+        {
+          "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
+          "Type": "System.Boolean",
+          "Value": false
         },
         {
           "Id": "9b0d32de-c53c-4df6-8b29-5e68a5a9c5f9"/*Channel*/,
@@ -340,41 +336,40 @@
       "Outputs": []
     },
     {
-      "Id": "157b4208-44d0-4b06-9ad9-072932e08270"/*RenderTarget*/,
-      "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
+      "Id": "d48efee0-a26d-4c54-9827-cf2e6d95506d"/*DrawPoints*/,
+      "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "6abefeae-0823-4631-9585-4246d309fa7c"/*AnimValue*/,
-      "SymbolId": "ea7b8491-2f8e-4add-b0b1-fd068ccfed0d",
-      "InputValues": [
-        {
-          "Id": "48005727-0158-4795-ad70-8410c27fd01d"/*Rate*/,
-          "Type": "System.Single",
-          "Value": 0.5
-        }
-      ],
+      "Id": "f2b8c30b-4d9b-4676-b944-1650c101d9b8"/*MidiInput*/,
+      "SymbolId": "59a0458e-2f3a-4856-96cd-32936f783cc5",
+      "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "6a3b2da0-636a-4bb4-87a2-24fd336d7088"/*MidiOutput*/,
+      "Id": "fb4d3357-1635-4066-ab14-85e91bc2c4db"/*MidiOutput*/,
       "SymbolId": "f9f4281b-92ee-430d-a930-6b588a5cb9a9",
       "InputValues": [
+        {
+          "Id": "0fff2ce2-defa-442c-a089-4b12e7d71620"/*NoteOrController*/,
+          "Type": "System.Int32",
+          "Value": 8
+        },
+        {
+          "Id": "61ccd308-0006-42de-b190-c006e99b5871"/*Velocity*/,
+          "Type": "System.Single",
+          "Value": 0.0161
+        },
         {
           "Id": "9efa1be1-f102-4457-a69b-2aef59f6b845"/*TriggerSend*/,
           "Type": "System.Boolean",
           "Value": true
         },
         {
-          "Id": "ec4d83b6-78eb-4cac-826b-cafb0be3f604"/*SendMode*/,
+          "Id": "a10e3f7b-d132-49ca-9f6d-726d5e699443"/*Velocity127*/,
           "Type": "System.Int32",
           "Value": 2
-        },
-        {
-          "Id": "adea6968-35ef-436a-bc2d-d9433b623df6"/*Device*/,
-          "Type": "System.String",
-          "Value": "X-TOUCH MINI"
         },
         {
           "Id": "a7e1eac2-5602-4c40-8519-19ca53763c76"/*ChannelNumber*/,
@@ -382,14 +377,19 @@
           "Value": 11
         },
         {
-          "Id": "0fff2ce2-defa-442c-a089-4b12e7d71620"/*NoteOrController*/,
-          "Type": "System.Int32",
-          "Value": 127
+          "Id": "abe9393e-282e-4de0-8f86-541fa955658f"/*DurationInSecs*/,
+          "Type": "System.Single",
+          "Value": 86.0
         },
         {
-          "Id": "a10e3f7b-d132-49ca-9f6d-726d5e699443"/*Velocity127*/,
+          "Id": "adea6968-35ef-436a-bc2d-d9433b623df6"/*Device*/,
+          "Type": "System.String",
+          "Value": "X-TOUCH MINI"
+        },
+        {
+          "Id": "ec4d83b6-78eb-4cac-826b-cafb0be3f604"/*SendMode*/,
           "Type": "System.Int32",
-          "Value": 1
+          "Value": 0
         }
       ],
       "Outputs": []

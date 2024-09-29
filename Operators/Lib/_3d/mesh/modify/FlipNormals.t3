@@ -8,16 +8,27 @@
   ],
   "Children": [
     {
-      "Id": "d92b11c5-1ef4-4d82-8d37-8a48c0b724fb"/*PBRVertex.Stride*/,
-      "SymbolId": "cc07b314-4582-4c2c-84b8-bb32f59fc09b",
-      "Name": "PBRVertex.Stride",
-      "InputValues": [
-        {
-          "Id": "4515c98e-05bc-4186-8773-4d2b31a8c323"/*Int*/,
-          "Type": "System.Int32",
-          "Value": 64
-        }
-      ],
+      "Id": "07d9ba05-8c69-43c1-b6bf-c2158fa577d5"/*GetSRVProperties*/,
+      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "3f2e7e43-8e1c-4d2f-8a56-2715164e948c"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "5cabf556-9310-4217-82a0-db1a9b57360d"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "5f552a6e-2365-4c8f-97ad-094ba7f4c25e"/*_AssembleMeshBuffers*/,
+      "SymbolId": "e0849edd-ea1b-4657-b22d-5aa646318aa8",
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -27,9 +38,15 @@
       "Outputs": []
     },
     {
-      "Id": "3f2e7e43-8e1c-4d2f-8a56-2715164e948c"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
+      "Id": "812bb75c-df6c-4eae-8f21-f20fade8d4cd"/*StructuredBufferWithViews*/,
+      "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
+      "InputValues": [
+        {
+          "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
+          "Type": "System.Int32",
+          "Value": 32
+        }
+      ],
       "Outputs": []
     },
     {
@@ -61,9 +78,16 @@
       "Outputs": []
     },
     {
-      "Id": "07d9ba05-8c69-43c1-b6bf-c2158fa577d5"/*GetSRVProperties*/,
-      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
-      "InputValues": [],
+      "Id": "d92b11c5-1ef4-4d82-8d37-8a48c0b724fb"/*PBRVertex.Stride*/,
+      "SymbolId": "cc07b314-4582-4c2c-84b8-bb32f59fc09b",
+      "Name": "PBRVertex.Stride",
+      "InputValues": [
+        {
+          "Id": "4515c98e-05bc-4186-8773-4d2b31a8c323"/*Int*/,
+          "Type": "System.Int32",
+          "Value": 64
+        }
+      ],
       "Outputs": []
     },
     {
@@ -73,32 +97,8 @@
       "Outputs": []
     },
     {
-      "Id": "812bb75c-df6c-4eae-8f21-f20fade8d4cd"/*StructuredBufferWithViews*/,
-      "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
-      "InputValues": [
-        {
-          "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
-          "Type": "System.Int32",
-          "Value": 32
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "ef8bcd8f-162d-481a-b147-5dee6cf893cf"/*_MeshBufferComponents*/,
       "SymbolId": "5b9f1d97-4e10-4f31-ba83-4cbf7be9719b",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "5f552a6e-2365-4c8f-97ad-094ba7f4c25e"/*_AssembleMeshBuffers*/,
-      "SymbolId": "e0849edd-ea1b-4657-b22d-5aa646318aa8",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "5cabf556-9310-4217-82a0-db1a9b57360d"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
       "InputValues": [],
       "Outputs": []
     }

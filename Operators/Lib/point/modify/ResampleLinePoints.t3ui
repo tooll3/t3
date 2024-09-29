@@ -3,27 +3,12 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "78f5d842-960f-4885-a65b-defd04871091"/*Points*/,
-      "Relevancy": "Required",
+      "InputId": "14524523-801d-4c70-9f42-af4f8d37be8a"/*RotationUpVector*/,
       "Position": {
-        "X": -570.3106,
-        "Y": 594.0847
-      }
-    },
-    {
-      "InputId": "e731ef71-b172-4308-b7d2-a59fa55b266a"/*Count*/,
-      "Position": {
-        "X": -551.46265,
-        "Y": 670.3659
+        "X": -564.35547,
+        "Y": 1158.043
       },
-      "Description": "The number of resulting points."
-    },
-    {
-      "InputId": "58980e30-204b-40e2-9610-8482ff01a57c"/*SampleMode*/,
-      "Position": {
-        "X": -551.46265,
-        "Y": 715.3659
-      }
+      "Description": "When using the \"Recompute\" rotation mode, this will be used as the up-vector to compute the normal direction of the line.\nThis basically defines how the line twists around its forward direction.\n\nIf the direction of the approaches the up vector, the result becomes unstable because of gimbal lock."
     },
     {
       "InputId": "354e468d-d38a-49ba-b2f3-8e522723d43f"/*SampleRange*/,
@@ -44,6 +29,30 @@
       "Max": 1.0
     },
     {
+      "InputId": "3e2be2bd-ffe9-4758-828d-5d6f4e1f1581"/*Rotation*/,
+      "Position": {
+        "X": -564.35547,
+        "Y": 1113.043
+      },
+      "GroupTitle": "Rotation",
+      "Description": "Defines how rotation of the interpolated points is computed. \nThis rotation can be relevant when resulting points are used for instantiating or repeating other points.\n\nIn some situations, the rotation is already inconsistent, e.g. when the position of the points has be randomized without adjusting the rotation. In this case, recomputing the rotation from the line's tangent can be helpful."
+    },
+    {
+      "InputId": "58980e30-204b-40e2-9610-8482ff01a57c"/*SampleMode*/,
+      "Position": {
+        "X": -551.46265,
+        "Y": 715.3659
+      }
+    },
+    {
+      "InputId": "78f5d842-960f-4885-a65b-defd04871091"/*Points*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -570.3106,
+        "Y": 594.0847
+      }
+    },
+    {
       "InputId": "aba0b64e-5438-41a6-8421-8820024ed329"/*Samples*/,
       "Position": {
         "X": -557.2406,
@@ -55,21 +64,12 @@
       "Clamp": true
     },
     {
-      "InputId": "3e2be2bd-ffe9-4758-828d-5d6f4e1f1581"/*Rotation*/,
+      "InputId": "e731ef71-b172-4308-b7d2-a59fa55b266a"/*Count*/,
       "Position": {
-        "X": -564.35547,
-        "Y": 1113.043
+        "X": -551.46265,
+        "Y": 670.3659
       },
-      "GroupTitle": "Rotation",
-      "Description": "Defines how rotation of the interpolated points is computed. \nThis rotation can be relevant when resulting points are used for instantiating or repeating other points.\n\nIn some situations, the rotation is already inconsistent, e.g. when the position of the points has be randomized without adjusting the rotation. In this case, recomputing the rotation from the line's tangent can be helpful."
-    },
-    {
-      "InputId": "14524523-801d-4c70-9f42-af4f8d37be8a"/*RotationUpVector*/,
-      "Position": {
-        "X": -564.35547,
-        "Y": 1158.043
-      },
-      "Description": "When using the \"Recompute\" rotation mode, this will be used as the up-vector to compute the normal direction of the line.\nThis basically defines how the line twists around its forward direction.\n\nIf the direction of the approaches the up vector, the result becomes unstable because of gimbal lock."
+      "Description": "The number of resulting points."
     }
   ],
   "SymbolChildUis": [
@@ -88,10 +88,10 @@
       }
     },
     {
-      "ChildId": "7e2e09d8-7edc-4735-95db-e586ea0b0991"/*FloatsToBuffer*/,
+      "ChildId": "21d57cfb-98f1-436b-b7ed-dd12a5409522"/*Vector3Components*/,
       "Position": {
-        "X": 232.65718,
-        "Y": 675.3694
+        "X": -414.35547,
+        "Y": 1158.043
       }
     },
     {
@@ -102,24 +102,10 @@
       }
     },
     {
-      "ChildId": "c7c1e709-7fb9-45a8-854a-02d1993fb12b"/*CalcDispatchCount*/,
+      "ChildId": "7e2e09d8-7edc-4735-95db-e586ea0b0991"/*FloatsToBuffer*/,
       "Position": {
-        "X": 121.54491,
-        "Y": 562.4695
-      }
-    },
-    {
-      "ChildId": "f08341af-deaa-46c3-a359-5dd2df156d80"/*StructuredBufferWithViews*/,
-      "Position": {
-        "X": 88.67059,
-        "Y": 1330.228
-      }
-    },
-    {
-      "ChildId": "bd38b39c-f8c1-4b26-a31b-064b529b8898"/*GetBufferComponents*/,
-      "Position": {
-        "X": -419.65558,
-        "Y": 590.20135
+        "X": 232.65718,
+        "Y": 675.3694
       }
     },
     {
@@ -130,13 +116,6 @@
       }
     },
     {
-      "ChildId": "fba3a6f5-d1fa-4af7-afa0-d00dfce61806"/*ClampInt*/,
-      "Position": {
-        "X": -388.86264,
-        "Y": 650.20593
-      }
-    },
-    {
       "ChildId": "986f4ea6-52e8-4aba-bf1c-5bb740e43f2e"/*Vector2Components*/,
       "Position": {
         "X": -401.46265,
@@ -144,17 +123,11 @@
       }
     },
     {
-      "ChildId": "cb9508c2-eaa5-4fa0-935e-4fd37cf07b00"/*IntsToBuffer*/,
+      "ChildId": "9a86664c-4888-4d3d-83f4-cecfedf45dac"/*ClampInt*/,
+      "Comment": "clamp to 10 samples because this gets slow FAST.",
       "Position": {
-        "X": 246.24411,
-        "Y": 954.8529
-      }
-    },
-    {
-      "ChildId": "21d57cfb-98f1-436b-b7ed-dd12a5409522"/*Vector3Components*/,
-      "Position": {
-        "X": -414.35547,
-        "Y": 1158.043
+        "X": -407.2406,
+        "Y": 852.46857
       }
     },
     {
@@ -165,11 +138,38 @@
       }
     },
     {
-      "ChildId": "9a86664c-4888-4d3d-83f4-cecfedf45dac"/*ClampInt*/,
-      "Comment": "clamp to 10 samples because this gets slow FAST.",
+      "ChildId": "bd38b39c-f8c1-4b26-a31b-064b529b8898"/*GetBufferComponents*/,
       "Position": {
-        "X": -407.2406,
-        "Y": 852.46857
+        "X": -419.65558,
+        "Y": 590.20135
+      }
+    },
+    {
+      "ChildId": "c7c1e709-7fb9-45a8-854a-02d1993fb12b"/*CalcDispatchCount*/,
+      "Position": {
+        "X": 121.54491,
+        "Y": 562.4695
+      }
+    },
+    {
+      "ChildId": "cb9508c2-eaa5-4fa0-935e-4fd37cf07b00"/*IntsToBuffer*/,
+      "Position": {
+        "X": 246.24411,
+        "Y": 954.8529
+      }
+    },
+    {
+      "ChildId": "f08341af-deaa-46c3-a359-5dd2df156d80"/*StructuredBufferWithViews*/,
+      "Position": {
+        "X": 88.67059,
+        "Y": 1330.228
+      }
+    },
+    {
+      "ChildId": "fba3a6f5-d1fa-4af7-afa0-d00dfce61806"/*ClampInt*/,
+      "Position": {
+        "X": -388.86264,
+        "Y": 650.20593
       }
     }
   ],

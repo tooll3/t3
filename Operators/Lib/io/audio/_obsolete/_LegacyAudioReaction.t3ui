@@ -3,6 +3,13 @@
   "Description": "Can be used to drive float parameters through audio reaction. This requires [SetAudioReaction] to be added first.",
   "InputUis": [
     {
+      "InputId": "0e04d1f8-3bbd-46b1-bde6-46bcdfdbe3aa"/*UseModulo*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
       "InputId": "15f841f5-5153-4383-90b9-f6a4f72d5d6b"/*Band*/,
       "Position": {
         "X": -200.0,
@@ -17,13 +24,6 @@
       }
     },
     {
-      "InputId": "ec0fe09b-b925-4b14-8186-8c32b65af9bb"/*Amplitude*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
-      }
-    },
-    {
       "InputId": "e7fac507-ad85-48f4-89d3-76600ff519ec"/*Decay*/,
       "Position": {
         "X": -200.0,
@@ -31,10 +31,10 @@
       }
     },
     {
-      "InputId": "0e04d1f8-3bbd-46b1-bde6-46bcdfdbe3aa"/*UseModulo*/,
+      "InputId": "ec0fe09b-b925-4b14-8186-8c32b65af9bb"/*Amplitude*/,
       "Position": {
         "X": -200.0,
-        "Y": 180.0
+        "Y": 90.0
       }
     }
   ],

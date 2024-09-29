@@ -3,18 +3,18 @@
   "Description": "Returns the current element of the [IterateList] ",
   "InputUis": [
     {
-      "InputId": "6cb78896-c571-4ee8-a624-46de9a917f4b"/*List*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "5802fa92-a8b2-44ec-b4cc-47e63d41b345"/*SubTree*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "6cb78896-c571-4ee8-a624-46de9a917f4b"/*List*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
       }
     }
   ],

@@ -6,12 +6,12 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "8cd61153-9e93-42bf-9fb6-ad29988e780f"/*Tension*/,
-      "DefaultValue": 0.25
-    },
-    {
       "Id": "7b130212-e567-4fd3-89aa-0b833c2ae490"/*Strength*/,
       "DefaultValue": 0.5
+    },
+    {
+      "Id": "8cd61153-9e93-42bf-9fb6-ad29988e780f"/*Tension*/,
+      "DefaultValue": 0.25
     },
     {
       "Id": "bafae88a-4000-442f-9698-7d4d50e3eccf"/*UseAppRunTime*/,

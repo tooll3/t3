@@ -3,14 +3,6 @@
   "Description": "Applies a rotation to the transform matrix.",
   "InputUis": [
     {
-      "InputId": "7fee8751-6784-49d2-9862-c8fd3759e82f"/*Command*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": 15.714638,
-        "Y": 12.576044
-      }
-    },
-    {
       "InputId": "12e6ea95-f7e9-450b-815f-5891e9ceeaf7"/*Angle*/,
       "Relevancy": "Relevant",
       "Position": {
@@ -25,6 +17,14 @@
       "Position": {
         "X": 0.0,
         "Y": 0.0
+      }
+    },
+    {
+      "InputId": "7fee8751-6784-49d2-9862-c8fd3759e82f"/*Command*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 15.714638,
+        "Y": 12.576044
       }
     }
   ],

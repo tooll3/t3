@@ -3,28 +3,21 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "d243af8f-7b1d-4110-912b-2c430726becc"/*Command*/,
-      "Position": {
-        "X": -289.94696,
-        "Y": 73.12234
-      }
-    },
-    {
       "InputId": "a8900010-bf6d-44e4-bd72-28427a5dadd8"/*InputSource*/,
       "Position": {
         "X": -289.94696,
         "Y": 118.12234
       }
+    },
+    {
+      "InputId": "d243af8f-7b1d-4110-912b-2c430726becc"/*Command*/,
+      "Position": {
+        "X": -289.94696,
+        "Y": 73.12234
+      }
     }
   ],
   "SymbolChildUis": [
-    {
-      "ChildId": "a7a36d51-2b6d-459d-a211-3015c475d363"/*_AnalyzeSound*/,
-      "Position": {
-        "X": -171.27321,
-        "Y": 224.7528
-      }
-    },
     {
       "ChildId": "753abb28-3707-49ab-8781-e1612220d3d3"/*SetFloatVar*/,
       "Position": {
@@ -37,6 +30,13 @@
       "Position": {
         "X": 212.33075,
         "Y": 64.50675
+      }
+    },
+    {
+      "ChildId": "a7a36d51-2b6d-459d-a211-3015c475d363"/*_AnalyzeSound*/,
+      "Position": {
+        "X": -171.27321,
+        "Y": 224.7528
       }
     }
   ],

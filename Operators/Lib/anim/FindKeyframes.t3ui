@@ -3,6 +3,20 @@
   "Description": "Experimental operator to access keyframe times of another operator instance. This can be useful to build interactive usecases that rely on setting the playback time.",
   "InputUis": [
     {
+      "InputId": "1cb78283-ac4e-44ed-ad40-0a208a4db099"/*CurveIndex*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "1e606db7-7ff8-4cc8-9156-a88d7c27a662"/*WrapIndex*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 463.0
+      }
+    },
+    {
       "InputId": "3ad320b9-d1bc-4bdb-b5c8-20caa721621b"/*Mode*/,
       "Position": {
         "X": 197.0,
@@ -17,27 +31,6 @@
       }
     },
     {
-      "InputId": "1e606db7-7ff8-4cc8-9156-a88d7c27a662"/*WrapIndex*/,
-      "Position": {
-        "X": 197.0,
-        "Y": 463.0
-      }
-    },
-    {
-      "InputId": "f5fa41fb-e11f-47fa-b9f8-18620daa1ae6"/*OpIndex*/,
-      "Position": {
-        "X": 197.0,
-        "Y": 463.0
-      }
-    },
-    {
-      "InputId": "1cb78283-ac4e-44ed-ad40-0a208a4db099"/*CurveIndex*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "b8611c46-420f-45b0-93e3-be10806a6c57"/*AnimatedOp*/,
       "Relevancy": "Required",
       "Position": {
@@ -47,6 +40,13 @@
       "Min": -100.0,
       "Max": 100.0,
       "Scale": 0.01
+    },
+    {
+      "InputId": "f5fa41fb-e11f-47fa-b9f8-18620daa1ae6"/*OpIndex*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 463.0
+      }
     }
   ],
   "SymbolChildUis": [],

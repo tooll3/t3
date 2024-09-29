@@ -2,6 +2,10 @@
   "Id": "f8aed421-5e0e-4d1f-993c-1801153ebba8"/*_LegacyAudioReaction*/,
   "Inputs": [
     {
+      "Id": "0e04d1f8-3bbd-46b1-bde6-46bcdfdbe3aa"/*UseModulo*/,
+      "DefaultValue": 0
+    },
+    {
       "Id": "15f841f5-5153-4383-90b9-f6a4f72d5d6b"/*Band*/,
       "DefaultValue": 0
     },
@@ -10,16 +14,12 @@
       "DefaultValue": 1
     },
     {
-      "Id": "ec0fe09b-b925-4b14-8186-8c32b65af9bb"/*Amplitude*/,
-      "DefaultValue": 1.0
-    },
-    {
       "Id": "e7fac507-ad85-48f4-89d3-76600ff519ec"/*Decay*/,
       "DefaultValue": 1.0
     },
     {
-      "Id": "0e04d1f8-3bbd-46b1-bde6-46bcdfdbe3aa"/*UseModulo*/,
-      "DefaultValue": 0
+      "Id": "ec0fe09b-b925-4b14-8186-8c32b65af9bb"/*Amplitude*/,
+      "DefaultValue": 1.0
     }
   ],
   "Children": [],

@@ -3,14 +3,12 @@
   "Description": "Clamps an input float between two values.\nCan be used to find minimum or maximum values.\n\nAKA: Min, Max\n\nTips:\n- ",
   "InputUis": [
     {
-      "InputId": "eb002b5d-b938-4b03-b2ea-26252ae051cd"/*Value*/,
+      "InputId": "54c0e659-7fda-459f-9938-deeee0cfa11c"/*Max*/,
       "Position": {
-        "X": 36.0,
-        "Y": 334.0
+        "X": 197.0,
+        "Y": 373.0
       },
-      "Description": "Input value to clamp. Will be output if it falls between the Min and Max values.",
-      "Min": -100.0,
-      "Max": 100.0
+      "Description": "Upper bound. If Value is above this, the operator will output this instead."
     },
     {
       "InputId": "7224ad5c-d179-4eab-b52d-72e277d007ae"/*Min*/,
@@ -23,12 +21,14 @@
       "Max": 100.0
     },
     {
-      "InputId": "54c0e659-7fda-459f-9938-deeee0cfa11c"/*Max*/,
+      "InputId": "eb002b5d-b938-4b03-b2ea-26252ae051cd"/*Value*/,
       "Position": {
-        "X": 197.0,
-        "Y": 373.0
+        "X": 36.0,
+        "Y": 334.0
       },
-      "Description": "Upper bound. If Value is above this, the operator will output this instead."
+      "Description": "Input value to clamp. Will be output if it falls between the Min and Max values.",
+      "Min": -100.0,
+      "Max": 100.0
     }
   ],
   "SymbolChildUis": [],

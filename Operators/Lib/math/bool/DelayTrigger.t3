@@ -2,6 +2,10 @@
   "Id": "fbd9ac37-4427-4852-95d7-d8383fefbe36"/*DelayTrigger*/,
   "Inputs": [
     {
+      "Id": "1d86c7d6-95c1-416c-a643-28745e099a53"/*TimeMode*/,
+      "DefaultValue": 6
+    },
+    {
       "Id": "ab225218-f4b6-4ab6-be28-f2526da4b1a0"/*Trigger*/,
       "DefaultValue": false
     },
@@ -12,10 +16,6 @@
     {
       "Id": "da8498e1-a466-435b-9750-80a751dea6c6"/*Mode*/,
       "DefaultValue": 0
-    },
-    {
-      "Id": "1d86c7d6-95c1-416c-a643-28745e099a53"/*TimeMode*/,
-      "DefaultValue": 6
     }
   ],
   "Children": [],

@@ -3,15 +3,6 @@
   "Description": "Loads a URL and outputs the source text as a string.\n\nHint: The string contains what you see when you open the URL with a browser and select 'View Page Source'\n\nUseful combinations: [PickStringPart]\n\nAlso see [LoadImageFromUrl] [GetAttributeFromJsonString]",
   "InputUis": [
     {
-      "InputId": "8c7a6493-af56-4a03-a41f-796e30902cfd"/*Url*/,
-      "Position": {
-        "X": 51.512096,
-        "Y": 46.995968
-      },
-      "Description": "Defines the URL which should be contacted\ne.g. https://cataas.com/cat",
-      "Usage": "Default"
-    },
-    {
       "InputId": "4dc9def5-958b-4a9c-8755-827bf4e5eaa6"/*TriggerRequest*/,
       "Position": {
         "X": 51.512096,
@@ -19,6 +10,15 @@
       },
       "Description": "triggers a refresh of the defined URL to update the result",
       "AddPadding": "True"
+    },
+    {
+      "InputId": "8c7a6493-af56-4a03-a41f-796e30902cfd"/*Url*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 46.995968
+      },
+      "Description": "Defines the URL which should be contacted\ne.g. https://cataas.com/cat",
+      "Usage": "Default"
     }
   ],
   "SymbolChildUis": [],

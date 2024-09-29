@@ -3,17 +3,18 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "f07bae81-5e2d-4d50-a22c-424434d8bbba"/*Scale*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "7b952ebd-7d63-4b74-8aa2-977c23d0487d"/*Lod*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "7cae97b4-f83e-4862-8be4-6ca7142aeb1f"/*Image2*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
       }
     },
     {
@@ -25,27 +26,14 @@
       }
     },
     {
-      "InputId": "7cae97b4-f83e-4862-8be4-6ca7142aeb1f"/*Image2*/,
-      "Relevancy": "Required",
+      "InputId": "f07bae81-5e2d-4d50-a22c-424434d8bbba"/*Scale*/,
       "Position": {
         "X": -200.0,
-        "Y": 135.0
+        "Y": 0.0
       }
     }
   ],
   "SymbolChildUis": [
-    {
-      "ChildId": "58c3c991-1cd3-4fec-b970-ef690a4b5b6b"/*OpticalFlow*/,
-      "Style": "Expanded",
-      "Size": {
-        "X": 110.0,
-        "Y": 88.0
-      },
-      "Position": {
-        "X": 339.92276,
-        "Y": 54.66855
-      }
-    },
     {
       "ChildId": "00bc702f-2c52-4256-88b3-3829d02f9d7e"/*SticksFlowing*/,
       "Style": "Expanded",
@@ -56,6 +44,18 @@
       "Position": {
         "X": 543.12933,
         "Y": -268.58627
+      }
+    },
+    {
+      "ChildId": "58c3c991-1cd3-4fec-b970-ef690a4b5b6b"/*OpticalFlow*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 88.0
+      },
+      "Position": {
+        "X": 339.92276,
+        "Y": 54.66855
       }
     },
     {

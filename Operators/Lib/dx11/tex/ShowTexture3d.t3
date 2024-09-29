@@ -2,11 +2,11 @@
   "Id": "9733f5e1-4514-46de-9e7c-bd3912932d1b"/*ShowTexture3d*/,
   "Inputs": [
     {
-      "Id": "bf5321e1-56b5-49ee-bd83-7c949bafef16"/*Command*/,
+      "Id": "59cb775e-6dc5-4228-88c9-0ba11439cf56"/*Texture*/,
       "DefaultValue": null
     },
     {
-      "Id": "59cb775e-6dc5-4228-88c9-0ba11439cf56"/*Texture*/,
+      "Id": "bf5321e1-56b5-49ee-bd83-7c949bafef16"/*Command*/,
       "DefaultValue": null
     }
   ],

@@ -4,18 +4,33 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "f40d65c9-5182-464b-977d-68bd35e3ee5d"/*ParticleSystem*/,
-      "Comment": "1. Slightly increase Drag here to stabilize things.\n2. Change emit mode to allow rendering connected lines.",
-      "Position": {
-        "X": 1050.0001,
-        "Y": 69.0
-      }
-    },
-    {
       "ChildId": "053572c8-0c45-423b-a2bc-5ff962b104b3"/*SetFog*/,
       "Position": {
         "X": 1522.7395,
         "Y": 74.20999
+      }
+    },
+    {
+      "ChildId": "139c08ba-5fa7-4b1d-9b53-f4f1c936dfe1"/*AnimValue*/,
+      "Position": {
+        "X": 750.0001,
+        "Y": 69.0
+      }
+    },
+    {
+      "ChildId": "22d30a22-07db-45d8-9a02-498b3bf2c439"/*RadialPoints*/,
+      "Comment": "We emit a bunch of points for aligned orientation axis so their z-axis can be use for initial velocity in [ParticleSystem].",
+      "Position": {
+        "X": 900.0001,
+        "Y": 69.0
+      }
+    },
+    {
+      "ChildId": "36cc16e3-95d3-4da2-83f4-93c3e49dbaf5"/*ImageLevels*/,
+      "Comment": "As usual [ImageLevels] is your friend to understand what's going on.\n\nWhat we can see here:\n\n1. Most of the values are \"blue\" - This indicates the Z-axis is high the the normal is pointing towards the camera.\n2. Some values at the edges have Red and Green components (with less Blue). This values are changing betwen NormalMap.Twist is animated.\n3. You see the slight gradient created by the [Glow].",
+      "Position": {
+        "X": 916.23846,
+        "Y": 309.82355
       }
     },
     {
@@ -34,10 +49,31 @@
       }
     },
     {
-      "ChildId": "fce3192d-fdfa-47ab-a49d-3df41f8f4352"/*NormalMap*/,
-      "Comment": "In this essential step, we convert the brightness gradient into a signed normal map.\n\n\"Signed\"  means the texture contains NEGATIVE value. Please check the [ImageLevels] below to see how this looks.\n\nAlso note, that we twist the resulting normals to create accelerations towards to away from the letters.",
+      "ChildId": "660e0cce-3b5f-4c8b-ab8b-a42e0b250903"/*Group*/,
       "Position": {
-        "X": 750.0001,
+        "X": 1672.7395,
+        "Y": 5.2099915
+      }
+    },
+    {
+      "ChildId": "6e8df7c2-ed5e-4d12-a225-938c56396cca"/*OrbitCamera*/,
+      "Position": {
+        "X": 1672.7395,
+        "Y": 74.20999
+      }
+    },
+    {
+      "ChildId": "7e46845f-c3ae-4b3c-85dc-2d1a9b8f22be"/*RenderTarget*/,
+      "Position": {
+        "X": 1964.0991,
+        "Y": 32.304962
+      }
+    },
+    {
+      "ChildId": "899959b8-dbb3-46eb-a09e-76e2229e0126"/*RenderTarget*/,
+      "Comment": "Render it into a texture...",
+      "Position": {
+        "X": 300.0001,
         "Y": 175.0
       }
     },
@@ -50,11 +86,10 @@
       }
     },
     {
-      "ChildId": "899959b8-dbb3-46eb-a09e-76e2229e0126"/*RenderTarget*/,
-      "Comment": "Render it into a texture...",
+      "ChildId": "9612edcd-8ec7-4299-a70c-9037bc8a7509"/*DrawLines*/,
       "Position": {
-        "X": 300.0001,
-        "Y": 175.0
+        "X": 1201.4443,
+        "Y": 138.16283
       }
     },
     {
@@ -66,35 +101,6 @@
       }
     },
     {
-      "ChildId": "dae77668-55cc-493c-bc5f-e36320c6f067"/*AnimValue*/,
-      "Position": {
-        "X": 600.0001,
-        "Y": 354.0
-      }
-    },
-    {
-      "ChildId": "22d30a22-07db-45d8-9a02-498b3bf2c439"/*RadialPoints*/,
-      "Comment": "We emit a bunch of points for aligned orientation axis so their z-axis can be use for initial velocity in [ParticleSystem].",
-      "Position": {
-        "X": 900.0001,
-        "Y": 69.0
-      }
-    },
-    {
-      "ChildId": "139c08ba-5fa7-4b1d-9b53-f4f1c936dfe1"/*AnimValue*/,
-      "Position": {
-        "X": 750.0001,
-        "Y": 69.0
-      }
-    },
-    {
-      "ChildId": "6e8df7c2-ed5e-4d12-a225-938c56396cca"/*OrbitCamera*/,
-      "Position": {
-        "X": 1672.7395,
-        "Y": 74.20999
-      }
-    },
-    {
       "ChildId": "c00e2aa5-b1ae-4e1f-a0df-20a45eb0087b"/*Execute*/,
       "Position": {
         "X": 1822.7395,
@@ -102,25 +108,10 @@
       }
     },
     {
-      "ChildId": "660e0cce-3b5f-4c8b-ab8b-a42e0b250903"/*Group*/,
+      "ChildId": "dae77668-55cc-493c-bc5f-e36320c6f067"/*AnimValue*/,
       "Position": {
-        "X": 1672.7395,
-        "Y": 5.2099915
-      }
-    },
-    {
-      "ChildId": "7e46845f-c3ae-4b3c-85dc-2d1a9b8f22be"/*RenderTarget*/,
-      "Position": {
-        "X": 1964.0991,
-        "Y": 32.304962
-      }
-    },
-    {
-      "ChildId": "36cc16e3-95d3-4da2-83f4-93c3e49dbaf5"/*ImageLevels*/,
-      "Comment": "As usual [ImageLevels] is your friend to understand what's going on.\n\nWhat we can see here:\n\n1. Most of the values are \"blue\" - This indicates the Z-axis is high the the normal is pointing towards the camera.\n2. Some values at the edges have Red and Green components (with less Blue). This values are changing betwen NormalMap.Twist is animated.\n3. You see the slight gradient created by the [Glow].",
-      "Position": {
-        "X": 916.23846,
-        "Y": 309.82355
+        "X": 600.0001,
+        "Y": 354.0
       }
     },
     {
@@ -132,17 +123,26 @@
       }
     },
     {
-      "ChildId": "9612edcd-8ec7-4299-a70c-9037bc8a7509"/*DrawLines*/,
-      "Position": {
-        "X": 1201.4443,
-        "Y": 138.16283
-      }
-    },
-    {
       "ChildId": "eccd54df-ca63-4738-a758-e4e881ea9595"/*Group*/,
       "Position": {
         "X": 1372.7395,
         "Y": 74.20999
+      }
+    },
+    {
+      "ChildId": "f40d65c9-5182-464b-977d-68bd35e3ee5d"/*ParticleSystem*/,
+      "Comment": "1. Slightly increase Drag here to stabilize things.\n2. Change emit mode to allow rendering connected lines.",
+      "Position": {
+        "X": 1050.0001,
+        "Y": 69.0
+      }
+    },
+    {
+      "ChildId": "fce3192d-fdfa-47ab-a49d-3df41f8f4352"/*NormalMap*/,
+      "Comment": "In this essential step, we convert the brightness gradient into a signed normal map.\n\n\"Signed\"  means the texture contains NEGATIVE value. Please check the [ImageLevels] below to see how this looks.\n\nAlso note, that we twist the resulting normals to create accelerations towards to away from the letters.",
+      "Position": {
+        "X": 750.0001,
+        "Y": 175.0
       }
     }
   ],

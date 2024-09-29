@@ -3,14 +3,6 @@
   "Description": "Damps (i.e. smoothens or filters) an incoming float value.\n\nOther damping functions: [Damp], [DampAngle], [DampVec2] and [DampFloatList].",
   "InputUis": [
     {
-      "InputId": "7e5ddfa7-b305-4744-a7ef-0f70c2b9741e"/*Value*/,
-      "Position": {
-        "X": 36.0,
-        "Y": 469.0
-      },
-      "Description": "Input value to be dampened.\n"
-    },
-    {
       "InputId": "490fc348-1b5d-47da-852b-8fd6d272b0b5"/*Damping*/,
       "Position": {
         "X": 36.0,
@@ -20,6 +12,14 @@
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
+    },
+    {
+      "InputId": "7e5ddfa7-b305-4744-a7ef-0f70c2b9741e"/*Value*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 469.0
+      },
+      "Description": "Input value to be dampened.\n"
     },
     {
       "InputId": "d0918492-8d43-4762-b21f-fd1bcd2f0473"/*Method*/,

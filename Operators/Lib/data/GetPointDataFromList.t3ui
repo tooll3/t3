@@ -3,18 +3,18 @@
   "Description": "Returns Position, Rotation and W from a point.\nThis can be useful if combined with [PointsToCPU].",
   "InputUis": [
     {
-      "InputId": "e35d2024-704e-42b4-8835-a53fa439a2bc"/*ItemIndex*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      }
-    },
-    {
       "InputId": "b478510f-eb33-4cf0-be0c-80ecea34e40d"/*DataList*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 0.0
+      }
+    },
+    {
+      "InputId": "e35d2024-704e-42b4-8835-a53fa439a2bc"/*ItemIndex*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
       }
     }
   ],

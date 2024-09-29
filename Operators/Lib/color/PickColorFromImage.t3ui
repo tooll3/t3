@@ -3,14 +3,6 @@
   "Description": "Gets the color of a certain position in the texture",
   "InputUis": [
     {
-      "InputId": "3b8c51c9-c544-47eb-9d70-4bd6b161be2d"/*InputImage*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      }
-    },
-    {
       "InputId": "27c1b604-4883-4b20-83e1-c435bf9d5499"/*Position*/,
       "Position": {
         "X": -200.0,
@@ -18,6 +10,14 @@
       },
       "GroupTitle": "Picker Settings",
       "Description": "Defines the point of the image whose color is output on the X and Y axis.\nX: 0 Left / 1 Right\nY: 0 Top / 1 Bottom"
+    },
+    {
+      "InputId": "3b8c51c9-c544-47eb-9d70-4bd6b161be2d"/*InputImage*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
     },
     {
       "InputId": "84ff0ce4-443d-438d-8fc7-6d6ede75d67b"/*AlwaysUpdate*/,

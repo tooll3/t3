@@ -3,17 +3,17 @@
   "Description": "Manipulate a value in a float list",
   "InputUis": [
     {
-      "InputId": "f6ea6675-b0e5-442e-8d6e-6d862b200cca"/*Mode*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "2f21b0a8-bc10-4bcb-8545-077a3b8243df"/*TriggerSet*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "2ffc3e9f-ef41-4c6a-aae7-a8e9008a096b"/*Value*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
       }
     },
     {
@@ -31,10 +31,10 @@
       }
     },
     {
-      "InputId": "2ffc3e9f-ef41-4c6a-aae7-a8e9008a096b"/*Value*/,
+      "InputId": "f6ea6675-b0e5-442e-8d6e-6d862b200cca"/*Mode*/,
       "Position": {
         "X": -200.0,
-        "Y": 180.0
+        "Y": 0.0
       }
     }
   ],

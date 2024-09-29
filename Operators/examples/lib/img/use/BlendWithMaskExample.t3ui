@@ -11,10 +11,10 @@
       }
     },
     {
-      "ChildId": "f5b22ec9-e184-4dc9-b0cf-6ed03202e0b0"/*BlendWithMask*/,
+      "ChildId": "1fd6d96e-75db-4845-8aa0-29be8160225f"/*Time*/,
       "Position": {
-        "X": 300.0,
-        "Y": 0.0
+        "X": 0.0,
+        "Y": 306.0
       }
     },
     {
@@ -32,10 +32,10 @@
       }
     },
     {
-      "ChildId": "1fd6d96e-75db-4845-8aa0-29be8160225f"/*Time*/,
+      "ChildId": "f5b22ec9-e184-4dc9-b0cf-6ed03202e0b0"/*BlendWithMask*/,
       "Position": {
-        "X": 0.0,
-        "Y": 306.0
+        "X": 300.0,
+        "Y": 0.0
       }
     }
   ],

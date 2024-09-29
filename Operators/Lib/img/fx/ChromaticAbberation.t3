@@ -2,16 +2,12 @@
   "Id": "8a203866-148d-4785-ae0e-61328b7646bb"/*ChromaticAbberation*/,
   "Inputs": [
     {
-      "Id": "b62aece4-8098-475b-a4d3-469f81a58207"/*Image*/,
-      "DefaultValue": null
+      "Id": "361a838a-7bf1-4fd2-8e0e-77edcef11965"/*Strength*/,
+      "DefaultValue": 1.0
     },
     {
       "Id": "4c51b5f5-5307-45a7-9641-25f572627926"/*Size*/,
       "DefaultValue": 5.0
-    },
-    {
-      "Id": "361a838a-7bf1-4fd2-8e0e-77edcef11965"/*Strength*/,
-      "DefaultValue": 1.0
     },
     {
       "Id": "4e03d06a-d19b-463f-bbbd-b64d24c04b9e"/*SampleCount*/,
@@ -20,6 +16,10 @@
     {
       "Id": "6dd98990-82a7-4f68-aef1-ff34d1825b3b"/*Distort*/,
       "DefaultValue": -0.1
+    },
+    {
+      "Id": "b62aece4-8098-475b-a4d3-469f81a58207"/*Image*/,
+      "DefaultValue": null
     }
   ],
   "Children": [
@@ -44,14 +44,14 @@
           "Value": "Clamp"
         },
         {
-          "Id": "ff7cb999-aa3a-4e11-b9c8-d027bdb55ff6"/*OutputFormat*/,
-          "Type": "SharpDX.DXGI.Format",
-          "Value": "R16G16B16A16_Float"
-        },
-        {
           "Id": "480d6c19-a33c-48b3-b9fa-aaf8bd31e6d9"/*GenerateMips*/,
           "Type": "System.Boolean",
           "Value": false
+        },
+        {
+          "Id": "ff7cb999-aa3a-4e11-b9c8-d027bdb55ff6"/*OutputFormat*/,
+          "Type": "SharpDX.DXGI.Format",
+          "Value": "R16G16B16A16_Float"
         }
       ],
       "Outputs": []

@@ -11,18 +11,18 @@
       }
     },
     {
+      "InputId": "2fa4755e-1e0b-4458-a53d-c455c10ae9a6"/*Mode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
+    },
+    {
       "InputId": "5a571583-7544-4a79-9211-ab1225260e71"/*Freeze*/,
       "Relevancy": "Relevant",
       "Position": {
         "X": -200.0,
         "Y": 180.0
-      }
-    },
-    {
-      "InputId": "2fa4755e-1e0b-4458-a53d-c455c10ae9a6"/*Mode*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 225.0
       }
     }
   ],

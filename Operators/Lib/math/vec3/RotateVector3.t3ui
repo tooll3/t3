@@ -3,6 +3,13 @@
   "Description": "Rotates a vector around an axis.",
   "InputUis": [
     {
+      "InputId": "351b4e46-397d-41dd-ad89-6ce200e36e2d"/*Axis*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
       "InputId": "56229f73-cbe2-4279-a659-d70d32e0df59"/*VectorA*/,
       "Position": {
         "X": -200.0,
@@ -14,13 +21,6 @@
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
-    },
-    {
-      "InputId": "351b4e46-397d-41dd-ad89-6ce200e36e2d"/*Axis*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
       }
     },
     {

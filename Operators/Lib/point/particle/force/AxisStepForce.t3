@@ -2,15 +2,11 @@
   "Id": "2cc44046-2702-40d5-ab42-8b36ff3d6ca7"/*AxisStepForce*/,
   "Inputs": [
     {
-      "Id": "7a0aaade-2cf4-45f8-85aa-1133278899ad"/*ApplyTrigger*/,
-      "DefaultValue": true
-    },
-    {
-      "Id": "a28e97a1-8bcf-4701-a8bb-97d69f91bc4b"/*Strength*/,
-      "DefaultValue": 1.0
-    },
-    {
       "Id": "1f642c68-fca9-4552-bb23-9d066f4b2dda"/*RandomizeStrength*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "25e77db3-6ccb-4857-8dd6-e5c19395d85b"/*AddOriginalVelocity*/,
       "DefaultValue": 0.0
     },
     {
@@ -26,8 +22,16 @@
       }
     },
     {
-      "Id": "25e77db3-6ccb-4857-8dd6-e5c19395d85b"/*AddOriginalVelocity*/,
-      "DefaultValue": 0.0
+      "Id": "7a0aaade-2cf4-45f8-85aa-1133278899ad"/*ApplyTrigger*/,
+      "DefaultValue": true
+    },
+    {
+      "Id": "a28e97a1-8bcf-4701-a8bb-97d69f91bc4b"/*Strength*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "ab591dbc-b521-4ef0-b1e2-d03ff27b959e"/*AxisSpace*/,
+      "DefaultValue": 0
     },
     {
       "Id": "f5e93296-efe1-42e0-add8-f8b6298fe183"/*StrengthDistribution*/,
@@ -38,19 +42,75 @@
       }
     },
     {
-      "Id": "ab591dbc-b521-4ef0-b1e2-d03ff27b959e"/*AxisSpace*/,
-      "DefaultValue": 0
-    },
-    {
       "Id": "f6e3e1df-6f72-4c5f-a10e-771e5d7c9fa0"/*Seed*/,
       "DefaultValue": 0
     }
   ],
   "Children": [
     {
+      "Id": "1a044a96-1d28-4477-a0be-4f7b81b459db"/*Modulo*/,
+      "SymbolId": "5202d3f6-c970-4006-933d-3c60d6c202dc",
+      "InputValues": [
+        {
+          "Id": "62a8185f-32c0-41d2-b8be-d8c1d7178c00"/*ModuloValue*/,
+          "Type": "System.Single",
+          "Value": 51524.125
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "1f2f6065-c472-4f07-993c-dd84fdcddbb1"/*BoolToFloat*/,
+      "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "2093e56c-1385-45a4-82b4-f635936a5d18"/*Multiply*/,
+      "SymbolId": "17b60044-9125-4961-8a79-ca94697b3726",
+      "InputValues": [
+        {
+          "Id": "5ae4bb07-4214-4ec3-a499-24d9f6d404a5"/*B*/,
+          "Type": "System.Single",
+          "Value": 60.0
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "27f522cb-6d02-4915-9dc0-a213fb339cdd"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "2ada0814-b5f2-46c8-832d-700aff939588"/*FloatToInt*/,
+      "SymbolId": "06b4728e-852c-491a-a89d-647f7e0b5415",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "33423401-3712-4af1-af81-36dc43f8d197"/*Execute*/,
+      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "3c66576c-d7c3-44c5-adce-a7a04d67a565"/*FloatsToBuffer*/,
       "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
       "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "4bdd95bf-1fe8-4c36-83ba-340dd788f5f6"/*ComputeShader*/,
+      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
+      "InputValues": [
+        {
+          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\particles\\AxisStepForce.hlsl"
+        }
+      ],
       "Outputs": []
     },
     {
@@ -63,6 +123,30 @@
           "Value": 3
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "771a8476-9db5-43de-a52a-3ceb0fc01541"/*CalcDispatchCount*/,
+      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "7ae7087e-1cd6-477a-9941-1d0b5104cb7e"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "ab61b753-8b8a-44c7-8d37-25e2c35265e6"/*Vector3Components*/,
+      "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "ad2acce7-711c-4247-a714-18155fab7943"/*GetParticleComponents*/,
+      "SymbolId": "e62c1fa0-6fcd-49f5-9cf8-d3081c8a5917",
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -84,66 +168,6 @@
       "Outputs": []
     },
     {
-      "Id": "ab61b753-8b8a-44c7-8d37-25e2c35265e6"/*Vector3Components*/,
-      "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "2ada0814-b5f2-46c8-832d-700aff939588"/*FloatToInt*/,
-      "SymbolId": "06b4728e-852c-491a-a89d-647f7e0b5415",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "f9933aa7-28ed-4006-a985-998a3b9e6eb0"/*Time*/,
-      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "771a8476-9db5-43de-a52a-3ceb0fc01541"/*CalcDispatchCount*/,
-      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "4bdd95bf-1fe8-4c36-83ba-340dd788f5f6"/*ComputeShader*/,
-      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
-      "InputValues": [
-        {
-          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\particles\\AxisStepForce.hlsl"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "1f2f6065-c472-4f07-993c-dd84fdcddbb1"/*BoolToFloat*/,
-      "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "7ae7087e-1cd6-477a-9941-1d0b5104cb7e"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "27f522cb-6d02-4915-9dc0-a213fb339cdd"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "ad2acce7-711c-4247-a714-18155fab7943"/*GetParticleComponents*/,
-      "SymbolId": "e62c1fa0-6fcd-49f5-9cf8-d3081c8a5917",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "e211f42e-485c-4480-8564-c11f4c54a909"/*ComputeShaderStage*/,
       "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
       "InputValues": [
@@ -160,33 +184,9 @@
       "Outputs": []
     },
     {
-      "Id": "2093e56c-1385-45a4-82b4-f635936a5d18"/*Multiply*/,
-      "SymbolId": "17b60044-9125-4961-8a79-ca94697b3726",
-      "InputValues": [
-        {
-          "Id": "5ae4bb07-4214-4ec3-a499-24d9f6d404a5"/*B*/,
-          "Type": "System.Single",
-          "Value": 60.0
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "33423401-3712-4af1-af81-36dc43f8d197"/*Execute*/,
-      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
+      "Id": "f9933aa7-28ed-4006-a985-998a3b9e6eb0"/*Time*/,
+      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
       "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "1a044a96-1d28-4477-a0be-4f7b81b459db"/*Modulo*/,
-      "SymbolId": "5202d3f6-c970-4006-933d-3c60d6c202dc",
-      "InputValues": [
-        {
-          "Id": "62a8185f-32c0-41d2-b8be-d8c1d7178c00"/*ModuloValue*/,
-          "Type": "System.Single",
-          "Value": 51524.125
-        }
-      ],
       "Outputs": []
     }
   ],

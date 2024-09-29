@@ -2,16 +2,8 @@
   "Id": "4912ba82-460a-4229-884d-6b647d64b08c"/*SetPointLight*/,
   "Inputs": [
     {
-      "Id": "d46d2cb6-9ab9-4640-a3d4-e70e643bd3b4"/*Command*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "f46ed192-1f6c-415e-8fe3-6d4909859f6b"/*Position*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      }
+      "Id": "0318dcc8-3e8a-4a3e-a0fd-239b55183ee9"/*Decay*/,
+      "DefaultValue": 2.0
     },
     {
       "Id": "747e043b-39e9-420c-8314-b7d1ba5d61de"/*Intensity*/,
@@ -27,12 +19,20 @@
       }
     },
     {
+      "Id": "d46d2cb6-9ab9-4640-a3d4-e70e643bd3b4"/*Command*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "e825e0b5-4c04-4ce6-9aef-7d099e9d2430"/*Range*/,
       "DefaultValue": 100.0
     },
     {
-      "Id": "0318dcc8-3e8a-4a3e-a0fd-239b55183ee9"/*Decay*/,
-      "DefaultValue": 2.0
+      "Id": "f46ed192-1f6c-415e-8fe3-6d4909859f6b"/*Position*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
     }
   ],
   "Children": [],

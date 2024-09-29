@@ -3,20 +3,20 @@
   "Description": "A small helper that converts at float value from a dict to a boolean.",
   "InputUis": [
     {
-      "InputId": "e09e3a45-e1de-430f-93ef-9d2412b22cda"/*DictionaryInput*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "132db9de-cffe-4379-af85-2aca18b4f6e0"/*Select*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
       },
       "Usage": "CustomDropdown"
+    },
+    {
+      "InputId": "e09e3a45-e1de-430f-93ef-9d2412b22cda"/*DictionaryInput*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
     }
   ],
   "SymbolChildUis": [],

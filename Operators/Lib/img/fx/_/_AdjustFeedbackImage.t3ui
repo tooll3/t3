@@ -3,13 +3,6 @@
   "Description": "An internal image processing step that adjusts and stabilizes the values of a feedback buffer. ",
   "InputUis": [
     {
-      "InputId": "b781c374-5fb7-4f4f-ae6d-78f9bfcd72c6"/*Image*/,
-      "Position": {
-        "X": 132.69783,
-        "Y": -15.624207
-      }
-    },
-    {
       "InputId": "1b29262b-d7b6-4df2-abb1-bf35aa7729a2"/*LimitDarks*/,
       "Position": {
         "X": 132.69783,
@@ -20,20 +13,20 @@
       "Scale": 0.01
     },
     {
-      "InputId": "b255a67e-90d1-45f0-b3a5-45e860b9a2e4"/*LimitBrights*/,
+      "InputId": "76b8422f-e0e3-4a6b-922d-0e6f1fc44658"/*SampleRadius*/,
       "Position": {
-        "X": 136.60469,
-        "Y": 74.05339
+        "X": 133.35062,
+        "Y": 394.5058
       },
       "Min": 0.0,
-      "Max": 10.0,
+      "Max": 50.0,
       "Scale": 0.01
     },
     {
-      "InputId": "a46a797a-9e6e-452f-bc5e-82f8ac2a6fc0"/*ShiftBrightness*/,
+      "InputId": "77666ad2-1505-4474-aa79-a66d8f2a0eba"/*ShiftSaturation*/,
       "Position": {
-        "X": 136.60469,
-        "Y": 164.05339
+        "X": 133.35062,
+        "Y": 259.5058
       },
       "Scale": 0.001
     },
@@ -46,12 +39,29 @@
       "Scale": 0.1
     },
     {
-      "InputId": "77666ad2-1505-4474-aa79-a66d8f2a0eba"/*ShiftSaturation*/,
+      "InputId": "a46a797a-9e6e-452f-bc5e-82f8ac2a6fc0"/*ShiftBrightness*/,
       "Position": {
-        "X": 133.35062,
-        "Y": 259.5058
+        "X": 136.60469,
+        "Y": 164.05339
       },
       "Scale": 0.001
+    },
+    {
+      "InputId": "b255a67e-90d1-45f0-b3a5-45e860b9a2e4"/*LimitBrights*/,
+      "Position": {
+        "X": 136.60469,
+        "Y": 74.05339
+      },
+      "Min": 0.0,
+      "Max": 10.0,
+      "Scale": 0.01
+    },
+    {
+      "InputId": "b781c374-5fb7-4f4f-ae6d-78f9bfcd72c6"/*Image*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": -15.624207
+      }
     },
     {
       "InputId": "c089eef2-2c29-481e-9777-9917a34345ad"/*AmplifyEdges*/,
@@ -59,16 +69,6 @@
         "X": 133.35062,
         "Y": 349.5058
       }
-    },
-    {
-      "InputId": "76b8422f-e0e3-4a6b-922d-0e6f1fc44658"/*SampleRadius*/,
-      "Position": {
-        "X": 133.35062,
-        "Y": 394.5058
-      },
-      "Min": 0.0,
-      "Max": 50.0,
-      "Scale": 0.01
     }
   ],
   "SymbolChildUis": [

@@ -2,12 +2,12 @@
   "Id": "000e08d0-669f-48df-9083-7aa0a43bbc05"/*GpuMeasure*/,
   "Inputs": [
     {
-      "Id": "76c017f1-5474-44a5-b881-d581f7038ca5"/*Command*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "0c7ec1ae-e8d0-4acb-8050-44768f827b56"/*Enabled*/,
       "DefaultValue": true
+    },
+    {
+      "Id": "76c017f1-5474-44a5-b881-d581f7038ca5"/*Command*/,
+      "DefaultValue": null
     },
     {
       "Id": "e430cc80-9003-4a56-af5d-f5820434c074"/*LogToConsole*/,

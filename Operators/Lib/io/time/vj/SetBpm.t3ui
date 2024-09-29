@@ -3,18 +3,18 @@
   "Description": "DANGER: Overriding the BPM rate will interfere with your playback and animation speed. \n\nOnly use this operator if you know what you're doing (e.g., in VJ-set context where the BPM rate is provided by an external source like MIDI or OSC)",
   "InputUis": [
     {
+      "InputId": "721c34b5-bb06-49e0-a71e-2aebbf2557e0"/*BpmRate*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
       "InputId": "9cc32da8-f939-4ad3-b381-6df8338a371b"/*SubGraph*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
-    },
-    {
-      "InputId": "721c34b5-bb06-49e0-a71e-2aebbf2557e0"/*BpmRate*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
       }
     },
     {

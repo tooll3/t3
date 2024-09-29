@@ -10,12 +10,12 @@
       "DefaultValue": 2
     },
     {
-      "Id": "9cb908ad-0800-4b88-b256-c6cc2b84ab6c"/*FragmentStart*/,
-      "DefaultValue": 0
-    },
-    {
       "Id": "7520db6d-7855-40e1-bb81-ead290815435"/*FragmentCount*/,
       "DefaultValue": 1
+    },
+    {
+      "Id": "9cb908ad-0800-4b88-b256-c6cc2b84ab6c"/*FragmentStart*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [],

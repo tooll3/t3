@@ -3,14 +3,6 @@
   "Description": "Building a spatial hashmap can be an important basis for complex simulations that require nearest neighbor search.\nThe implementation is based on work by Guillaume Boissé and involves multiple compute buffers and calculating an exclusive prefix sum.\n\nSome documentation can be found here: https://www.figma.com/file/wBNGUlaACjaCDOTdeBvBvR/ComputeShader-Ideas?node-id=8%3A0",
   "InputUis": [
     {
-      "InputId": "4bae9eaa-42d8-4c1c-8776-3abebcce20e2"/*PointsA_*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": 404.84814,
-        "Y": 709.10516
-      }
-    },
-    {
       "InputId": "22f9737b-b3b4-4455-a4ec-8d61ab7abc6c"/*CellSize*/,
       "Position": {
         "X": 444.31647,
@@ -20,14 +12,29 @@
       "Max": 100.0,
       "Scale": 0.01,
       "Clamp": true
+    },
+    {
+      "InputId": "4bae9eaa-42d8-4c1c-8776-3abebcce20e2"/*PointsA_*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 404.84814,
+        "Y": 709.10516
+      }
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "8e391859-097a-42f0-84cc-03521c79a51c"/*GetSRVProperties*/,
+      "ChildId": "02f136be-1912-45cb-98e9-4880f0b4bd86"/*Clear*/,
       "Position": {
-        "X": 725.456,
-        "Y": 752.282
+        "X": 1413.1151,
+        "Y": 903.26495
+      }
+    },
+    {
+      "ChildId": "083ec96e-a7b8-4f97-a203-15dd76b0ccba"/*Count*/,
+      "Position": {
+        "X": 1945.9032,
+        "Y": 1161.2839
       }
     },
     {
@@ -38,78 +45,10 @@
       }
     },
     {
-      "ChildId": "eb884c6d-8be0-4d52-9894-bdf0b3f5bdc3"/*CellCount*/,
+      "ChildId": "178429cd-57d1-4a8e-a665-edfbb98f0c6a"/*CalcDispatchCount*/,
       "Position": {
-        "X": 580.9463,
-        "Y": 977.384
-      }
-    },
-    {
-      "ChildId": "d6617889-06c7-4996-845f-7acc5158193a"/*ComputeShader*/,
-      "Position": {
-        "X": 1067.2267,
-        "Y": 930.7165
-      }
-    },
-    {
-      "ChildId": "02f136be-1912-45cb-98e9-4880f0b4bd86"/*Clear*/,
-      "Position": {
-        "X": 1413.1151,
-        "Y": 903.26495
-      }
-    },
-    {
-      "ChildId": "dda3dd38-1bad-4add-9a6d-0ef20847b0a6"/*FloatsToBuffer*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 110.86372,
-        "Y": 44.69636
-      },
-      "Position": {
-        "X": 1203.1113,
-        "Y": 1046.0126
-      }
-    },
-    {
-      "ChildId": "ceb9ec75-8a5c-4c1f-9bce-8db80a108abb"/*CalcDispatchCount*/,
-      "Position": {
-        "X": 1210.7473,
-        "Y": 962.24005
-      }
-    },
-    {
-      "ChildId": "57fd2baf-62cf-4ce4-a6ba-50473a0a7085"/*ParticleGridBuffer*/,
-      "Position": {
-        "X": 1032.3702,
-        "Y": 1742.6031
-      }
-    },
-    {
-      "ChildId": "2b30d631-991b-45f4-9a69-83ee8d590ced"/*GetBufferComponents*/,
-      "Position": {
-        "X": 1182.3704,
-        "Y": 1742.6031
-      }
-    },
-    {
-      "ChildId": "c8f75754-6036-4404-b8cc-d08be7a6a01e"/*ParticleGridCellBuffer*/,
-      "Position": {
-        "X": 1032.3702,
-        "Y": 1798.6019
-      }
-    },
-    {
-      "ChildId": "c7f781c4-aa85-464d-a629-73f371ed0469"/*GetBufferComponents*/,
-      "Position": {
-        "X": 1182.3704,
-        "Y": 1809.6019
-      }
-    },
-    {
-      "ChildId": "f450b0c3-85da-493c-ad59-b9d624dfb13c"/*ParticleGridHashBuffer*/,
-      "Position": {
-        "X": 1008.1256,
-        "Y": 1889.3672
+        "X": 1735.6475,
+        "Y": 1184.5764
       }
     },
     {
@@ -120,17 +59,10 @@
       }
     },
     {
-      "ChildId": "b28ef13f-9b9f-4169-b334-98460c606f46"/*ParticleGridCountBuffer*/,
+      "ChildId": "2b30d631-991b-45f4-9a69-83ee8d590ced"/*GetBufferComponents*/,
       "Position": {
-        "X": 1008.1256,
-        "Y": 1945.3673
-      }
-    },
-    {
-      "ChildId": "b0ddf1e5-ba6f-446d-b877-5e504b9b8ebe"/*GetBufferComponents*/,
-      "Position": {
-        "X": 1157.5068,
-        "Y": 1967.5732
+        "X": 1182.3704,
+        "Y": 1742.6031
       }
     },
     {
@@ -141,29 +73,38 @@
       }
     },
     {
-      "ChildId": "baf5d18a-e410-4287-a630-433358ce0314"/*Execute*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 110.0,
-        "Y": 490.9287
-      },
+      "ChildId": "5482af90-715e-44dd-a31e-f5e871a5b38f"/*CellEntries*/,
       "Position": {
-        "X": 2709.0825,
-        "Y": 1007.9415
+        "X": 580.9463,
+        "Y": 1020.3842
       }
     },
     {
-      "ChildId": "b18f495f-d0b1-4a20-9795-4a37f436f756"/*ComputeShader*/,
+      "ChildId": "57fd2baf-62cf-4ce4-a6ba-50473a0a7085"/*ParticleGridBuffer*/,
       "Position": {
-        "X": 1542.494,
-        "Y": 1120.3671
+        "X": 1032.3702,
+        "Y": 1742.6031
       }
     },
     {
-      "ChildId": "083ec96e-a7b8-4f97-a203-15dd76b0ccba"/*Count*/,
+      "ChildId": "8b1ad3df-5bd1-4945-b42e-e8dca5ad3580"/*PrefixSum*/,
       "Position": {
-        "X": 1945.9032,
-        "Y": 1161.2839
+        "X": 1952.7804,
+        "Y": 2001.784
+      }
+    },
+    {
+      "ChildId": "8e391859-097a-42f0-84cc-03521c79a51c"/*GetSRVProperties*/,
+      "Position": {
+        "X": 725.456,
+        "Y": 752.282
+      }
+    },
+    {
+      "ChildId": "a7502316-2af6-4b82-8338-306610b856c5"/*MultiplyInt*/,
+      "Position": {
+        "X": 730.9463,
+        "Y": 977.384
       }
     },
     {
@@ -179,17 +120,43 @@
       }
     },
     {
-      "ChildId": "178429cd-57d1-4a8e-a665-edfbb98f0c6a"/*CalcDispatchCount*/,
+      "ChildId": "b0ddf1e5-ba6f-446d-b877-5e504b9b8ebe"/*GetBufferComponents*/,
       "Position": {
-        "X": 1735.6475,
-        "Y": 1184.5764
+        "X": 1157.5068,
+        "Y": 1967.5732
       }
     },
     {
-      "ChildId": "f5cfa01d-25ab-4065-8308-0b71f08ef76b"/*ComputeShader*/,
+      "ChildId": "b18f495f-d0b1-4a20-9795-4a37f436f756"/*ComputeShader*/,
       "Position": {
-        "X": 2097.1125,
-        "Y": 1425.086
+        "X": 1542.494,
+        "Y": 1120.3671
+      }
+    },
+    {
+      "ChildId": "b28ef13f-9b9f-4169-b334-98460c606f46"/*ParticleGridCountBuffer*/,
+      "Position": {
+        "X": 1008.1256,
+        "Y": 1945.3673
+      }
+    },
+    {
+      "ChildId": "ba25d171-0086-470a-8334-836b130e1c2d"/*CalcDispatchCount*/,
+      "Position": {
+        "X": 2230.7056,
+        "Y": 1483.8842
+      }
+    },
+    {
+      "ChildId": "baf5d18a-e410-4287-a630-433358ce0314"/*Execute*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 110.0,
+        "Y": 490.9287
+      },
+      "Position": {
+        "X": 2709.0825,
+        "Y": 1007.9415
       }
     },
     {
@@ -197,6 +164,53 @@
       "Position": {
         "X": 2440.9614,
         "Y": 1460.5917
+      }
+    },
+    {
+      "ChildId": "c7f781c4-aa85-464d-a629-73f371ed0469"/*GetBufferComponents*/,
+      "Position": {
+        "X": 1182.3704,
+        "Y": 1809.6019
+      }
+    },
+    {
+      "ChildId": "c8f75754-6036-4404-b8cc-d08be7a6a01e"/*ParticleGridCellBuffer*/,
+      "Position": {
+        "X": 1032.3702,
+        "Y": 1798.6019
+      }
+    },
+    {
+      "ChildId": "ceb9ec75-8a5c-4c1f-9bce-8db80a108abb"/*CalcDispatchCount*/,
+      "Position": {
+        "X": 1210.7473,
+        "Y": 962.24005
+      }
+    },
+    {
+      "ChildId": "d6617889-06c7-4996-845f-7acc5158193a"/*ComputeShader*/,
+      "Position": {
+        "X": 1067.2267,
+        "Y": 930.7165
+      }
+    },
+    {
+      "ChildId": "dda3dd38-1bad-4add-9a6d-0ef20847b0a6"/*FloatsToBuffer*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 110.86372,
+        "Y": 44.69636
+      },
+      "Position": {
+        "X": 1203.1113,
+        "Y": 1046.0126
+      }
+    },
+    {
+      "ChildId": "eb884c6d-8be0-4d52-9894-bdf0b3f5bdc3"/*CellCount*/,
+      "Position": {
+        "X": 580.9463,
+        "Y": 977.384
       }
     },
     {
@@ -212,31 +226,17 @@
       }
     },
     {
-      "ChildId": "ba25d171-0086-470a-8334-836b130e1c2d"/*CalcDispatchCount*/,
+      "ChildId": "f450b0c3-85da-493c-ad59-b9d624dfb13c"/*ParticleGridHashBuffer*/,
       "Position": {
-        "X": 2230.7056,
-        "Y": 1483.8842
+        "X": 1008.1256,
+        "Y": 1889.3672
       }
     },
     {
-      "ChildId": "8b1ad3df-5bd1-4945-b42e-e8dca5ad3580"/*PrefixSum*/,
+      "ChildId": "f5cfa01d-25ab-4065-8308-0b71f08ef76b"/*ComputeShader*/,
       "Position": {
-        "X": 1952.7804,
-        "Y": 2001.784
-      }
-    },
-    {
-      "ChildId": "a7502316-2af6-4b82-8338-306610b856c5"/*MultiplyInt*/,
-      "Position": {
-        "X": 730.9463,
-        "Y": 977.384
-      }
-    },
-    {
-      "ChildId": "5482af90-715e-44dd-a31e-f5e871a5b38f"/*CellEntries*/,
-      "Position": {
-        "X": 580.9463,
-        "Y": 1020.3842
+        "X": 2097.1125,
+        "Y": 1425.086
       }
     }
   ],

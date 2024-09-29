@@ -2,11 +2,7 @@
   "Id": "284d2183-197d-47fd-b130-873cced78b1c"/*Transform*/,
   "Inputs": [
     {
-      "Id": "dcd066ce-ac44-4e76-85b3-78821245d9dc"/*Command*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "b4a8c16d-5a0f-4867-ae03-92a675abe709"/*Translation*/,
+      "Id": "712adb09-d249-4c91-86db-3fedf6b05971"/*Rotation*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,
@@ -14,7 +10,19 @@
       }
     },
     {
-      "Id": "712adb09-d249-4c91-86db-3fedf6b05971"/*Rotation*/,
+      "Id": "95c8bef2-504c-42a1-93ba-dc7e38c0dd49"/*Pivot*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "a7b1e667-bce3-4e76-a5b1-0955c118d0fc"/*UniformScale*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "b4a8c16d-5a0f-4867-ae03-92a675abe709"/*Translation*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,
@@ -30,16 +38,8 @@
       }
     },
     {
-      "Id": "a7b1e667-bce3-4e76-a5b1-0955c118d0fc"/*UniformScale*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "95c8bef2-504c-42a1-93ba-dc7e38c0dd49"/*Pivot*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      }
+      "Id": "dcd066ce-ac44-4e76-85b3-78821245d9dc"/*Command*/,
+      "DefaultValue": null
     }
   ],
   "Children": [],

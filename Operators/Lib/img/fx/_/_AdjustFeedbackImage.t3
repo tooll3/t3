@@ -2,19 +2,15 @@
   "Id": "d31a8463-0699-46d7-8e96-9abc6adb997d"/*_AdjustFeedbackImage*/,
   "Inputs": [
     {
-      "Id": "b781c374-5fb7-4f4f-ae6d-78f9bfcd72c6"/*Image*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "1b29262b-d7b6-4df2-abb1-bf35aa7729a2"/*LimitDarks*/,
       "DefaultValue": 1.0
     },
     {
-      "Id": "b255a67e-90d1-45f0-b3a5-45e860b9a2e4"/*LimitBrights*/,
+      "Id": "76b8422f-e0e3-4a6b-922d-0e6f1fc44658"/*SampleRadius*/,
       "DefaultValue": 1.0
     },
     {
-      "Id": "a46a797a-9e6e-452f-bc5e-82f8ac2a6fc0"/*ShiftBrightness*/,
+      "Id": "77666ad2-1505-4474-aa79-a66d8f2a0eba"/*ShiftSaturation*/,
       "DefaultValue": 0.0
     },
     {
@@ -22,16 +18,20 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "77666ad2-1505-4474-aa79-a66d8f2a0eba"/*ShiftSaturation*/,
+      "Id": "a46a797a-9e6e-452f-bc5e-82f8ac2a6fc0"/*ShiftBrightness*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "b255a67e-90d1-45f0-b3a5-45e860b9a2e4"/*LimitBrights*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "b781c374-5fb7-4f4f-ae6d-78f9bfcd72c6"/*Image*/,
+      "DefaultValue": null
     },
     {
       "Id": "c089eef2-2c29-481e-9777-9917a34345ad"/*AmplifyEdges*/,
       "DefaultValue": 0.0
-    },
-    {
-      "Id": "76b8422f-e0e3-4a6b-922d-0e6f1fc44658"/*SampleRadius*/,
-      "DefaultValue": 1.0
     }
   ],
   "Children": [

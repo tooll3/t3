@@ -3,18 +3,18 @@
   "Description": "Returns the dimensions (resolution) of the connected texture in pixels.\n\nIt can also check if the texture is valid or undefined (i.e., Null).",
   "InputUis": [
     {
+      "InputId": "52b2f067-5619-4d8d-a982-58668a8dc6a4"/*OverrideSize*/,
+      "Position": {
+        "X": -163.63019,
+        "Y": 29.70758
+      }
+    },
+    {
       "InputId": "8b15d8e1-10c7-41e1-84db-a85e31e0c909"/*Texture*/,
       "Relevancy": "Required",
       "Position": {
         "X": -163.63019,
         "Y": -15.29242
-      }
-    },
-    {
-      "InputId": "52b2f067-5619-4d8d-a982-58668a8dc6a4"/*OverrideSize*/,
-      "Position": {
-        "X": -163.63019,
-        "Y": 29.70758
       }
     }
   ],

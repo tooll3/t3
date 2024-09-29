@@ -3,6 +3,13 @@
   "Description": "Composes a transformation matrix from translate, scale and rotation that can be used inside shaders",
   "InputUis": [
     {
+      "InputId": "279730b7-c427-4924-9fde-77eb65a3076c"/*Pivot*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      }
+    },
+    {
       "InputId": "3b817e6c-f532-4a8c-a2ff-a00dc926eeb2"/*Translation*/,
       "Relevancy": "Required",
       "Position": {
@@ -19,14 +26,6 @@
       }
     },
     {
-      "InputId": "58b9dfb6-0596-4f0d-baf6-7fb3ae426c94"/*Scale*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
-      }
-    },
-    {
       "InputId": "566f1619-1de0-4b41-b167-7fc261730d62"/*UniformScale*/,
       "Relevancy": "Relevant",
       "Position": {
@@ -35,17 +34,11 @@
       }
     },
     {
-      "InputId": "f53f3311-e1fc-418b-8861-74adc175d5fa"/*Shear*/,
+      "InputId": "58b9dfb6-0596-4f0d-baf6-7fb3ae426c94"/*Scale*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
-        "Y": 225.0
-      }
-    },
-    {
-      "InputId": "279730b7-c427-4924-9fde-77eb65a3076c"/*Pivot*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 270.0
+        "Y": 90.0
       }
     },
     {
@@ -53,6 +46,13 @@
       "Position": {
         "X": -200.0,
         "Y": 180.0
+      }
+    },
+    {
+      "InputId": "f53f3311-e1fc-418b-8861-74adc175d5fa"/*Shear*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
       }
     }
   ],

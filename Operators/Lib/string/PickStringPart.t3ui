@@ -19,18 +19,18 @@
       }
     },
     {
+      "InputId": "7520db6d-7855-40e1-bb81-ead290815435"/*FragmentCount*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 135.0
+      }
+    },
+    {
       "InputId": "9cb908ad-0800-4b88-b256-c6cc2b84ab6c"/*FragmentStart*/,
       "Relevancy": "Relevant",
       "Position": {
         "X": 0.0,
         "Y": 90.0
-      }
-    },
-    {
-      "InputId": "7520db6d-7855-40e1-bb81-ead290815435"/*FragmentCount*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 135.0
       }
     }
   ],

@@ -2,8 +2,36 @@
   "Id": "03477b9a-860e-4887-81c3-5fe51621122c"/*AudioReaction*/,
   "Inputs": [
     {
+      "Id": "02f71a92-d5c8-4dd7-af5f-da12330f60eb"/*Threshold*/,
+      "DefaultValue": 0.5
+    },
+    {
+      "Id": "1139b245-76b4-4f51-a263-ee1a1371073f"/*Bias*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "1d3a1132-e8b9-4c04-99bf-80f6f1530309"/*WindowWidth*/,
+      "DefaultValue": 0.2
+    },
+    {
       "Id": "44409811-1a0f-4be6-83ea-b2f040ebf08b"/*InputBand*/,
       "DefaultValue": 4
+    },
+    {
+      "Id": "80294096-ae64-471a-bcf1-622684e06d56"/*Output*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "aece14b8-88e0-4817-8204-b79159db8102"/*MinTimeBetweenHits*/,
+      "DefaultValue": 0.05
+    },
+    {
+      "Id": "b1c43d3b-f425-4d62-9d48-07ccb5d08707"/*Amplitude*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "d138c961-b163-428a-9479-2130f1e46314"/*Reset*/,
+      "DefaultValue": false
     },
     {
       "Id": "f3d7c7fd-4280-4fb4-9f9a-c39b28d1a72b"/*WindowCenter*/,
@@ -12,34 +40,6 @@
     {
       "Id": "f920a79d-c946-4a78-9e68-f64fc3c4a696"/*WindowEdge*/,
       "DefaultValue": 0.05
-    },
-    {
-      "Id": "1d3a1132-e8b9-4c04-99bf-80f6f1530309"/*WindowWidth*/,
-      "DefaultValue": 0.2
-    },
-    {
-      "Id": "02f71a92-d5c8-4dd7-af5f-da12330f60eb"/*Threshold*/,
-      "DefaultValue": 0.5
-    },
-    {
-      "Id": "aece14b8-88e0-4817-8204-b79159db8102"/*MinTimeBetweenHits*/,
-      "DefaultValue": 0.05
-    },
-    {
-      "Id": "80294096-ae64-471a-bcf1-622684e06d56"/*Output*/,
-      "DefaultValue": 0
-    },
-    {
-      "Id": "b1c43d3b-f425-4d62-9d48-07ccb5d08707"/*Amplitude*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "1139b245-76b4-4f51-a263-ee1a1371073f"/*Bias*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "d138c961-b163-428a-9479-2130f1e46314"/*Reset*/,
-      "DefaultValue": false
     }
   ],
   "Children": [],

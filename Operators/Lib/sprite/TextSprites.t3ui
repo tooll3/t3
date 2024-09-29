@@ -3,21 +3,12 @@
   "Description": "Creates Points and Sprites from a text that can be animated and then rendered with [DrawPointSprites] or [DrawPointSpritesShaded].\n\nThis operator is an advanced solution that loads a BmFont font definition and the matching MSDF (multichannel distance field) texture and generates a set of buffers.\nThis buffers can then be modified and combined with other operators.\n\nThe Point - buffer includes position, orientation and W (size).\nThe Sprite - buffer contains additional attributes for rendering like texture UV coordinates for characters, pivot, size and layout information.\n\nSome tips:\n- You might replace the Point buffer with another buffer (e.g. [RadialPoints].\n- For rending basic text usage consider using [Text].\n\nCheck the examples.",
   "InputUis": [
     {
-      "InputId": "f2dd87b1-7f37-4b02-871b-b2e35972f246"/*Text*/,
+      "InputId": "14829eac-ba59-4d31-90dc-53c7fc56cc30"/*VerticalAlign*/,
       "Position": {
         "X": -200.0,
-        "Y": 0.0
+        "Y": 315.0
       },
-      "Usage": "Multiline"
-    },
-    {
-      "InputId": "e827fdd1-20ca-473c-99ee-b839563690e9"/*Filepath*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      },
-      "AddPadding": "True",
-      "Usage": "FilePath"
+      "GroupTitle": "Align"
     },
     {
       "InputId": "1cde902d-5eaa-4144-b579-85f54717356b"/*Color*/,
@@ -38,18 +29,12 @@
       }
     },
     {
-      "InputId": "e05e143e-8d4c-4de7-8c9c-7fa7755009d3"/*Spacing*/,
+      "InputId": "7094d22f-dcf9-4fd0-9570-7243e3284cf4"/*OffsetBaseLine*/,
       "Position": {
         "X": -200.0,
-        "Y": 180.0
-      }
-    },
-    {
-      "InputId": "9eb4e13f-0fe3-4ed9-9df1-814f075a05da"/*LineHeight*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 225.0
-      }
+        "Y": 405.0
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "77a79a37-6151-4a35-be4d-415a91b0e651"/*Position*/,
@@ -61,12 +46,18 @@
       "Scale": 0.001
     },
     {
-      "InputId": "14829eac-ba59-4d31-90dc-53c7fc56cc30"/*VerticalAlign*/,
+      "InputId": "9eb4e13f-0fe3-4ed9-9df1-814f075a05da"/*LineHeight*/,
       "Position": {
         "X": -200.0,
-        "Y": 315.0
-      },
-      "GroupTitle": "Align"
+        "Y": 225.0
+      }
+    },
+    {
+      "InputId": "e05e143e-8d4c-4de7-8c9c-7fa7755009d3"/*Spacing*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
     },
     {
       "InputId": "e43bc887-d425-4f9c-8a86-a32c761de0cc"/*HorizontalAlign*/,
@@ -76,12 +67,21 @@
       }
     },
     {
-      "InputId": "7094d22f-dcf9-4fd0-9570-7243e3284cf4"/*OffsetBaseLine*/,
+      "InputId": "e827fdd1-20ca-473c-99ee-b839563690e9"/*Filepath*/,
       "Position": {
         "X": -200.0,
-        "Y": 405.0
+        "Y": 45.0
       },
-      "AddPadding": "True"
+      "AddPadding": "True",
+      "Usage": "FilePath"
+    },
+    {
+      "InputId": "f2dd87b1-7f37-4b02-871b-b2e35972f246"/*Text*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "Multiline"
     }
   ],
   "SymbolChildUis": [],

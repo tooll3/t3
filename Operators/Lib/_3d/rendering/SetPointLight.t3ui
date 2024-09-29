@@ -3,19 +3,12 @@
   "Description": "Adds a point light into the scene which illuminated geometry using a combination of \"Color\", \"Intensity\" and \"Decay\".\n\nBeware that [SetEnvironment] also affects the lighting in your scene, even if you are not using it, because every scene is always lit by a Default CubeMap (that can be deactivated by manually adding a [SetEnvironment]).\n\nCurrently a maximum of 8 Pointlights can be used in your scene. For example by daisychaining them right before your graph goes into the camera.\n",
   "InputUis": [
     {
-      "InputId": "d46d2cb6-9ab9-4640-a3d4-e70e643bd3b4"/*Command*/,
+      "InputId": "0318dcc8-3e8a-4a3e-a0fd-239b55183ee9"/*Decay*/,
       "Position": {
         "X": -199.39244,
-        "Y": 13.366531
-      }
-    },
-    {
-      "InputId": "f46ed192-1f6c-415e-8fe3-6d4909859f6b"/*Position*/,
-      "Position": {
-        "X": -199.39244,
-        "Y": 58.36653
+        "Y": 238.36653
       },
-      "Description": "Changes the position of the PointLight:\n\nX (-left / +right), \nY (-down / + up), \nZ (-forward/+backwards)",
+      "Description": "Controls how far the light shines into the scene.\n\nA low decay setting means the light is shining far.\nA high decay setting means the light reaches a short distance.",
       "AddPadding": "True"
     },
     {
@@ -35,6 +28,13 @@
       "Description": "Sets the color of the light."
     },
     {
+      "InputId": "d46d2cb6-9ab9-4640-a3d4-e70e643bd3b4"/*Command*/,
+      "Position": {
+        "X": -199.39244,
+        "Y": 13.366531
+      }
+    },
+    {
       "InputId": "e825e0b5-4c04-4ce6-9aef-7d099e9d2430"/*Range*/,
       "Position": {
         "X": -199.39244,
@@ -44,12 +44,12 @@
       "AddPadding": "True"
     },
     {
-      "InputId": "0318dcc8-3e8a-4a3e-a0fd-239b55183ee9"/*Decay*/,
+      "InputId": "f46ed192-1f6c-415e-8fe3-6d4909859f6b"/*Position*/,
       "Position": {
         "X": -199.39244,
-        "Y": 238.36653
+        "Y": 58.36653
       },
-      "Description": "Controls how far the light shines into the scene.\n\nA low decay setting means the light is shining far.\nA high decay setting means the light reaches a short distance.",
+      "Description": "Changes the position of the PointLight:\n\nX (-left / +right), \nY (-down / + up), \nZ (-forward/+backwards)",
       "AddPadding": "True"
     }
   ],

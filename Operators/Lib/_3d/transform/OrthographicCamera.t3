@@ -2,24 +2,16 @@
   "Id": "954af16f-b37b-4e64-a965-4bec02b9179e"/*OrthographicCamera*/,
   "Inputs": [
     {
-      "Id": "4f5832eb-23a0-4cdf-8144-3537578e3e26"/*Command*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "a0a28003-d6b5-4af5-9444-acf7af18ab4e"/*Position*/,
-      "DefaultValue": {
-        "X": -0.0015059264,
-        "Y": 0.0014562709,
-        "Z": 10.0
-      }
-    },
-    {
       "Id": "1399ce7f-9352-4976-b02e-7e7102b14db5"/*Target*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,
         "Z": 0.0
       }
+    },
+    {
+      "Id": "4f5832eb-23a0-4cdf-8144-3537578e3e26"/*Command*/,
+      "DefaultValue": null
     },
     {
       "Id": "7b181495-ebd6-48c1-a866-b7b8337ef10d"/*Up*/,
@@ -30,8 +22,11 @@
       }
     },
     {
-      "Id": "e4761300-f383-4d4c-9aa0-7d7ab7997973"/*Roll*/,
-      "DefaultValue": 0.0
+      "Id": "8042eb60-ca86-42b3-a338-d733c3cbb1fb"/*Size*/,
+      "DefaultValue": {
+        "X": 50.0,
+        "Y": 50.0
+      }
     },
     {
       "Id": "9326957b-bc25-4f89-a833-9b8bb415d8ef"/*NearFarClip*/,
@@ -41,11 +36,16 @@
       }
     },
     {
-      "Id": "8042eb60-ca86-42b3-a338-d733c3cbb1fb"/*Size*/,
+      "Id": "a0a28003-d6b5-4af5-9444-acf7af18ab4e"/*Position*/,
       "DefaultValue": {
-        "X": 50.0,
-        "Y": 50.0
+        "X": -0.0015059264,
+        "Y": 0.0014562709,
+        "Z": 10.0
       }
+    },
+    {
+      "Id": "e4761300-f383-4d4c-9aa0-7d7ab7997973"/*Roll*/,
+      "DefaultValue": 0.0
     }
   ],
   "Children": [],

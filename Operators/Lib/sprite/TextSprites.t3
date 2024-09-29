@@ -2,12 +2,8 @@
   "Id": "1a6a58ea-c63a-4c99-aa9d-aeaeb01662f4"/*TextSprites*/,
   "Inputs": [
     {
-      "Id": "f2dd87b1-7f37-4b02-871b-b2e35972f246"/*Text*/,
-      "DefaultValue": "Tooll loves Sprites!"
-    },
-    {
-      "Id": "e827fdd1-20ca-473c-99ee-b839563690e9"/*Filepath*/,
-      "DefaultValue": "Resources\\fonts\\Roboto-Black.fnt"
+      "Id": "14829eac-ba59-4d31-90dc-53c7fc56cc30"/*VerticalAlign*/,
+      "DefaultValue": 1
     },
     {
       "Id": "1cde902d-5eaa-4144-b579-85f54717356b"/*Color*/,
@@ -23,12 +19,8 @@
       "DefaultValue": 50.0
     },
     {
-      "Id": "e05e143e-8d4c-4de7-8c9c-7fa7755009d3"/*Spacing*/,
+      "Id": "7094d22f-dcf9-4fd0-9570-7243e3284cf4"/*OffsetBaseLine*/,
       "DefaultValue": 0.0
-    },
-    {
-      "Id": "9eb4e13f-0fe3-4ed9-9df1-814f075a05da"/*LineHeight*/,
-      "DefaultValue": 1.0
     },
     {
       "Id": "77a79a37-6151-4a35-be4d-415a91b0e651"/*Position*/,
@@ -39,16 +31,24 @@
       }
     },
     {
-      "Id": "14829eac-ba59-4d31-90dc-53c7fc56cc30"/*VerticalAlign*/,
-      "DefaultValue": 1
+      "Id": "9eb4e13f-0fe3-4ed9-9df1-814f075a05da"/*LineHeight*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "e05e143e-8d4c-4de7-8c9c-7fa7755009d3"/*Spacing*/,
+      "DefaultValue": 0.0
     },
     {
       "Id": "e43bc887-d425-4f9c-8a86-a32c761de0cc"/*HorizontalAlign*/,
       "DefaultValue": 1
     },
     {
-      "Id": "7094d22f-dcf9-4fd0-9570-7243e3284cf4"/*OffsetBaseLine*/,
-      "DefaultValue": 0.0
+      "Id": "e827fdd1-20ca-473c-99ee-b839563690e9"/*Filepath*/,
+      "DefaultValue": "Resources\\fonts\\Roboto-Black.fnt"
+    },
+    {
+      "Id": "f2dd87b1-7f37-4b02-871b-b2e35972f246"/*Text*/,
+      "DefaultValue": "Tooll loves Sprites!"
     }
   ],
   "Children": [],

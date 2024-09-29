@@ -4,6 +4,34 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
+      "ChildId": "11eaf8aa-bce8-4acb-8ed3-ea4fb76e3d57"/*TransformMesh*/,
+      "Position": {
+        "X": 150.0,
+        "Y": 420.05737
+      }
+    },
+    {
+      "ChildId": "479ca1f5-2aad-42ff-ba23-72b247a548ba"/*_BlobOld*/,
+      "Position": {
+        "X": 330.3213,
+        "Y": 329.01953
+      }
+    },
+    {
+      "ChildId": "8bf05765-3008-45cc-8556-0d41f66d75ce"/*SetMaterial*/,
+      "Position": {
+        "X": 581.1074,
+        "Y": 413.69653
+      }
+    },
+    {
+      "ChildId": "a6a70fe7-1ab8-4b23-802c-2d4da08fcd90"/*SetMaterial*/,
+      "Position": {
+        "X": 597.792,
+        "Y": 109.26807
+      }
+    },
+    {
       "ChildId": "c1de8bc7-5984-4287-a5b6-797a2ff7db34"/*LoadObj*/,
       "Position": {
         "X": 33.679688,
@@ -11,16 +39,16 @@
       }
     },
     {
-      "ChildId": "c44daf2b-90c9-4c49-8a37-2b4df17e60a3"/*DrawMesh*/,
+      "ChildId": "c30a24d2-911f-447c-bc38-1f7526e2cd20"/*Group*/,
       "Position": {
-        "X": 297.79297,
-        "Y": 109.26807
+        "X": 806.77734,
+        "Y": 272.64307
       }
     },
     {
-      "ChildId": "a6a70fe7-1ab8-4b23-802c-2d4da08fcd90"/*SetMaterial*/,
+      "ChildId": "c44daf2b-90c9-4c49-8a37-2b4df17e60a3"/*DrawMesh*/,
       "Position": {
-        "X": 597.792,
+        "X": 297.79297,
         "Y": 109.26807
       }
     },
@@ -39,20 +67,6 @@
       }
     },
     {
-      "ChildId": "c30a24d2-911f-447c-bc38-1f7526e2cd20"/*Group*/,
-      "Position": {
-        "X": 806.77734,
-        "Y": 272.64307
-      }
-    },
-    {
-      "ChildId": "f6dfa88a-4b4b-4115-a1c9-b7d5aec34be1"/*QuadMesh*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 420.05737
-      }
-    },
-    {
       "ChildId": "f653fd61-9f9d-4c5a-b8c2-f8278c6d933d"/*DrawMesh*/,
       "Position": {
         "X": 299.99902,
@@ -60,23 +74,9 @@
       }
     },
     {
-      "ChildId": "8bf05765-3008-45cc-8556-0d41f66d75ce"/*SetMaterial*/,
+      "ChildId": "f6dfa88a-4b4b-4115-a1c9-b7d5aec34be1"/*QuadMesh*/,
       "Position": {
-        "X": 581.1074,
-        "Y": 413.69653
-      }
-    },
-    {
-      "ChildId": "479ca1f5-2aad-42ff-ba23-72b247a548ba"/*_BlobOld*/,
-      "Position": {
-        "X": 330.3213,
-        "Y": 329.01953
-      }
-    },
-    {
-      "ChildId": "11eaf8aa-bce8-4acb-8ed3-ea4fb76e3d57"/*TransformMesh*/,
-      "Position": {
-        "X": 150.0,
+        "X": 0.0,
         "Y": 420.05737
       }
     }

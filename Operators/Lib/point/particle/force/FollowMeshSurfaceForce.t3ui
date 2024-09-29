@@ -3,6 +3,41 @@
   "Description": "Contains particles close the a surface of a simple(!) mesh geometry.",
   "InputUis": [
     {
+      "InputId": "1951e2f8-29f5-461f-beca-2535b186956a"/*RandomSpin*/,
+      "Position": {
+        "X": 582.98804,
+        "Y": 673.8364
+      },
+      "Description": "A continues random offset onto the spin. This can lead to more natural looking effects."
+    },
+    {
+      "InputId": "235158be-dc6f-45ad-81fa-8b1b2ef0e1bd"/*RandomPhase*/,
+      "Position": {
+        "X": 582.98804,
+        "Y": 808.8363
+      },
+      "GroupTitle": "Options",
+      "Description": "Can be used to animate the random offsets mentioned above."
+    },
+    {
+      "InputId": "5052523a-9e7b-4ae3-9d9d-ff16e0241cdc"/*SurfaceDistance*/,
+      "Position": {
+        "X": 582.98804,
+        "Y": 718.8363
+      },
+      "Description": "The distance above the surface the particles will try to maintain.\n\nNote: The effect does not work well with negative distances.",
+      "Min": 0.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "6dada5f7-252c-4af4-8c2f-f5352bbc3597"/*MeshBuffers*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 418.37402,
+        "Y": 967.823
+      }
+    },
+    {
       "InputId": "a962fea7-b59f-49f4-83f0-a7e8b625e57c"/*Amount*/,
       "Position": {
         "X": 582.98804,
@@ -22,24 +57,6 @@
       "Description": "A random factor on the target speed."
     },
     {
-      "InputId": "5052523a-9e7b-4ae3-9d9d-ff16e0241cdc"/*SurfaceDistance*/,
-      "Position": {
-        "X": 582.98804,
-        "Y": 718.8363
-      },
-      "Description": "The distance above the surface the particles will try to maintain.\n\nNote: The effect does not work well with negative distances.",
-      "Min": 0.0,
-      "Max": 1.0
-    },
-    {
-      "InputId": "bbd372b8-5a0d-4dd6-a2dd-13049722e1a1"/*RandomSurfaceDistance*/,
-      "Position": {
-        "X": 582.98804,
-        "Y": 763.8364
-      },
-      "Description": "A random offset on the target surface distance."
-    },
-    {
       "InputId": "b19de430-98f0-45c8-87c0-67d563ae5b5a"/*Spin*/,
       "Position": {
         "X": 582.98804,
@@ -49,29 +66,12 @@
       "Description": "Add a random rotation. This could be useful for wiggling or veine like motions."
     },
     {
-      "InputId": "1951e2f8-29f5-461f-beca-2535b186956a"/*RandomSpin*/,
+      "InputId": "bbd372b8-5a0d-4dd6-a2dd-13049722e1a1"/*RandomSurfaceDistance*/,
       "Position": {
         "X": 582.98804,
-        "Y": 673.8364
+        "Y": 763.8364
       },
-      "Description": "A continues random offset onto the spin. This can lead to more natural looking effects."
-    },
-    {
-      "InputId": "235158be-dc6f-45ad-81fa-8b1b2ef0e1bd"/*RandomPhase*/,
-      "Position": {
-        "X": 582.98804,
-        "Y": 808.8363
-      },
-      "GroupTitle": "Options",
-      "Description": "Can be used to animate the random offsets mentioned above."
-    },
-    {
-      "InputId": "6dada5f7-252c-4af4-8c2f-f5352bbc3597"/*MeshBuffers*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": 418.37402,
-        "Y": 967.823
-      }
+      "Description": "A random offset on the target surface distance."
     },
     {
       "InputId": "de70d11c-93cb-494a-9516-c8a5989c2617"/*ShowGizmo*/,
@@ -83,83 +83,6 @@
     }
   ],
   "SymbolChildUis": [
-    {
-      "ChildId": "ddf76754-b657-4bc4-b2bb-1eb085449137"/*ComputeShader*/,
-      "Position": {
-        "X": 732.9881,
-        "Y": 452.83636
-      }
-    },
-    {
-      "ChildId": "75255e40-32f4-4bb7-95dd-afc2c54b72b2"/*ComputeShaderStage*/,
-      "Position": {
-        "X": 1134.8295,
-        "Y": 427.7593
-      }
-    },
-    {
-      "ChildId": "36abc672-593a-49e1-af79-3e1a3c71d874"/*FloatsToBuffer*/,
-      "Position": {
-        "X": 732.9881,
-        "Y": 538.83636
-      }
-    },
-    {
-      "ChildId": "9dd5d134-01a3-4d2d-99fa-63dada7a89f1"/*CalcDispatchCount*/,
-      "Position": {
-        "X": 957.9282,
-        "Y": 509.55298
-      }
-    },
-    {
-      "ChildId": "fca6eade-c211-4401-9bd2-71291d805ae6"/*HasTimeChanged*/,
-      "Position": {
-        "X": 1285.4594,
-        "Y": 555.24744
-      }
-    },
-    {
-      "ChildId": "5c78d3e7-1e04-45c9-adb3-725233294e93"/*VisibleGizmos*/,
-      "Position": {
-        "X": 718.374,
-        "Y": 922.82306
-      }
-    },
-    {
-      "ChildId": "2053080a-fcad-42ae-b30b-a7feef007300"/*Execute*/,
-      "Position": {
-        "X": 1284.8295,
-        "Y": 427.7593
-      }
-    },
-    {
-      "ChildId": "efb89a83-cb37-4067-97b7-861aaa0f337a"/*_ExecuteParticleUpdate*/,
-      "Position": {
-        "X": 1434.8295,
-        "Y": 427.7593
-      }
-    },
-    {
-      "ChildId": "5801c4a0-f440-4773-b12b-2ee8abd1bda6"/*GetParticleComponents*/,
-      "Position": {
-        "X": 732.9881,
-        "Y": 495.83636
-      }
-    },
-    {
-      "ChildId": "e7d643d9-0e97-4e46-b5b6-e3ae53a6bc1d"/*Vertices*/,
-      "Position": {
-        "X": 711.3287,
-        "Y": 1014.1052
-      }
-    },
-    {
-      "ChildId": "630acf93-3c38-4e97-9ddb-d44ab3579450"/*Indices*/,
-      "Position": {
-        "X": 711.3287,
-        "Y": 1070.1052
-      }
-    },
     {
       "ChildId": "06ab436b-d0ae-47d6-b1c6-530fb0e3f15b"/*_MeshBufferComponents*/,
       "Position": {
@@ -175,10 +98,87 @@
       }
     },
     {
+      "ChildId": "2053080a-fcad-42ae-b30b-a7feef007300"/*Execute*/,
+      "Position": {
+        "X": 1284.8295,
+        "Y": 427.7593
+      }
+    },
+    {
       "ChildId": "2a730c0e-27dc-43e0-ba8b-9909bfb33fdc"/*DrawMesh*/,
       "Position": {
         "X": 568.374,
         "Y": 967.823
+      }
+    },
+    {
+      "ChildId": "36abc672-593a-49e1-af79-3e1a3c71d874"/*FloatsToBuffer*/,
+      "Position": {
+        "X": 732.9881,
+        "Y": 538.83636
+      }
+    },
+    {
+      "ChildId": "5801c4a0-f440-4773-b12b-2ee8abd1bda6"/*GetParticleComponents*/,
+      "Position": {
+        "X": 732.9881,
+        "Y": 495.83636
+      }
+    },
+    {
+      "ChildId": "5c78d3e7-1e04-45c9-adb3-725233294e93"/*VisibleGizmos*/,
+      "Position": {
+        "X": 718.374,
+        "Y": 922.82306
+      }
+    },
+    {
+      "ChildId": "630acf93-3c38-4e97-9ddb-d44ab3579450"/*Indices*/,
+      "Position": {
+        "X": 711.3287,
+        "Y": 1070.1052
+      }
+    },
+    {
+      "ChildId": "75255e40-32f4-4bb7-95dd-afc2c54b72b2"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 1134.8295,
+        "Y": 427.7593
+      }
+    },
+    {
+      "ChildId": "9dd5d134-01a3-4d2d-99fa-63dada7a89f1"/*CalcDispatchCount*/,
+      "Position": {
+        "X": 957.9282,
+        "Y": 509.55298
+      }
+    },
+    {
+      "ChildId": "ddf76754-b657-4bc4-b2bb-1eb085449137"/*ComputeShader*/,
+      "Position": {
+        "X": 732.9881,
+        "Y": 452.83636
+      }
+    },
+    {
+      "ChildId": "e7d643d9-0e97-4e46-b5b6-e3ae53a6bc1d"/*Vertices*/,
+      "Position": {
+        "X": 711.3287,
+        "Y": 1014.1052
+      }
+    },
+    {
+      "ChildId": "efb89a83-cb37-4067-97b7-861aaa0f337a"/*_ExecuteParticleUpdate*/,
+      "Position": {
+        "X": 1434.8295,
+        "Y": 427.7593
+      }
+    },
+    {
+      "ChildId": "fca6eade-c211-4401-9bd2-71291d805ae6"/*HasTimeChanged*/,
+      "Position": {
+        "X": 1285.4594,
+        "Y": 555.24744
       }
     }
   ],

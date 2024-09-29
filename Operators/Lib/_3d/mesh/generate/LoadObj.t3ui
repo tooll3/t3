@@ -14,23 +14,6 @@
       "FileFilter": "OBJ-Files|*.obj"
     },
     {
-      "InputId": "ffd22736-a600-4c97-a4a4-ad3526b8b35c"/*UseGPUCaching*/,
-      "Position": {
-        "X": 51.512096,
-        "Y": 91.99597
-      },
-      "GroupTitle": "Advanced Options...",
-      "Description": "toggle GPU Caching"
-    },
-    {
-      "InputId": "ddd22736-a600-4c97-a4a4-ad3526b8b35c"/*ClearGPUCache*/,
-      "Position": {
-        "X": 51.512096,
-        "Y": 181.99597
-      },
-      "Description": "enable and disable to clear gpu cache"
-    },
-    {
       "InputId": "aa19e71d-329c-448b-901c-565bf8c0da4f"/*SortVertices*/,
       "Position": {
         "X": 51.512096,
@@ -50,6 +33,23 @@
       "Max": 1000.0,
       "Scale": 0.01,
       "Clamp": true
+    },
+    {
+      "InputId": "ddd22736-a600-4c97-a4a4-ad3526b8b35c"/*ClearGPUCache*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 181.99597
+      },
+      "Description": "enable and disable to clear gpu cache"
+    },
+    {
+      "InputId": "ffd22736-a600-4c97-a4a4-ad3526b8b35c"/*UseGPUCaching*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 91.99597
+      },
+      "GroupTitle": "Advanced Options...",
+      "Description": "toggle GPU Caching"
     }
   ],
   "SymbolChildUis": [],

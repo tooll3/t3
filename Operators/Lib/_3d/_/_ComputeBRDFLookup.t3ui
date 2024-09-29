@@ -12,13 +12,6 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "85a5c91b-0531-4e68-9dd5-f2bbc0ccd7e8"/*ComputeShader*/,
-      "Position": {
-        "X": 14.589912,
-        "Y": 74.043884
-      }
-    },
-    {
       "ChildId": "1ae5cbfa-5887-4059-a134-10749e67ec3e"/*ComputeShaderStage*/,
       "Style": "Resizable",
       "Size": {
@@ -38,13 +31,6 @@
       }
     },
     {
-      "ChildId": "a4b1ca57-3583-4f42-aec8-45711e313a08"/*Texture2d*/,
-      "Position": {
-        "X": -154.66321,
-        "Y": 253.57977
-      }
-    },
-    {
       "ChildId": "578b2323-856f-4c06-a720-6e358e95baa7"/*UavFromTexture2d*/,
       "Position": {
         "X": 185.80084,
@@ -56,6 +42,20 @@
       "Position": {
         "X": 543.7523,
         "Y": 44.14441
+      }
+    },
+    {
+      "ChildId": "85a5c91b-0531-4e68-9dd5-f2bbc0ccd7e8"/*ComputeShader*/,
+      "Position": {
+        "X": 14.589912,
+        "Y": 74.043884
+      }
+    },
+    {
+      "ChildId": "a4b1ca57-3583-4f42-aec8-45711e313a08"/*Texture2d*/,
+      "Position": {
+        "X": -154.66321,
+        "Y": 253.57977
       }
     }
   ],

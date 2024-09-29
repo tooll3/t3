@@ -3,6 +3,13 @@
   "Description": "This will iterate over the length of all line segments and compute offsets into W.\nDrawLines can then use this offset for animation effects.\n\nSpread:\n0 - ",
   "InputUis": [
     {
+      "InputId": "0bcfbd7a-c01b-409f-a661-135dd27e8580"/*RandomizeDuration*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
       "InputId": "5fd5eea5-b7ab-406f-8c10-8435d59297b5"/*Spread*/,
       "Position": {
         "X": -200.0,
@@ -10,10 +17,10 @@
       }
     },
     {
-      "InputId": "c1fa1a4e-8884-4a6f-ac80-f22d3b5dfe2f"/*SpreadMode*/,
+      "InputId": "82b2e8d3-40c2-4a4c-a9ad-806d5097a8fd"/*SourcePoints*/,
       "Position": {
         "X": -200.0,
-        "Y": 90.0
+        "Y": 0.0
       }
     },
     {
@@ -24,17 +31,10 @@
       }
     },
     {
-      "InputId": "0bcfbd7a-c01b-409f-a661-135dd27e8580"/*RandomizeDuration*/,
+      "InputId": "c1fa1a4e-8884-4a6f-ac80-f22d3b5dfe2f"/*SpreadMode*/,
       "Position": {
         "X": -200.0,
-        "Y": 180.0
-      }
-    },
-    {
-      "InputId": "82b2e8d3-40c2-4a4c-a9ad-806d5097a8fd"/*SourcePoints*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
+        "Y": 90.0
       }
     }
   ],

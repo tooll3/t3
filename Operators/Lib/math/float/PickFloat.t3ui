@@ -3,15 +3,6 @@
   "Description": "Picks a value from the connected float inputs.",
   "InputUis": [
     {
-      "InputId": "d7ef7f1a-a6bd-4f94-a29a-bb19e2854001"/*FloatValues*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      },
-      "Description": "Input for one or more Float values"
-    },
-    {
       "InputId": "465b4fc3-899c-4b97-9892-f237fa6613e8"/*Index*/,
       "Position": {
         "X": -200.0,
@@ -19,6 +10,15 @@
       },
       "Description": "Selects which of the connected values is used as an output",
       "AddPadding": "True"
+    },
+    {
+      "InputId": "d7ef7f1a-a6bd-4f94-a29a-bb19e2854001"/*FloatValues*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Description": "Input for one or more Float values"
     }
   ],
   "SymbolChildUis": [],

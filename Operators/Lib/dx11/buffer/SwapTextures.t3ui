@@ -3,19 +3,19 @@
   "Description": "A helper that swaps texture buffers. This can be useful for implementing buffer buffering in compute shader effects.",
   "InputUis": [
     {
-      "InputId": "9dd14a67-afdb-4cd4-bdd5-9fcd565bc65d"/*TextureAInput*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "3efa9405-7078-4924-8050-52885d6b67ec"/*TextureBInput*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "9dd14a67-afdb-4cd4-bdd5-9fcd565bc65d"/*TextureAInput*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
       }
     },
     {

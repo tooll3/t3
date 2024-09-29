@@ -10,14 +10,14 @@
       }
     },
     {
-      "InputId": "b8e07473-60f9-4f5e-995d-7165ef8f7993"/*InputLayout*/,
+      "InputId": "4a1703d4-5958-4ede-a755-79a12fe85f3b"/*VertexBuffers*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
       }
     },
     {
-      "InputId": "4a1703d4-5958-4ede-a755-79a12fe85f3b"/*VertexBuffers*/,
+      "InputId": "b8e07473-60f9-4f5e-995d-7165ef8f7993"/*InputLayout*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0

@@ -3,6 +3,34 @@
   "Inputs": [],
   "Children": [
     {
+      "Id": "06246b83-0aeb-433a-b116-9dbac1d0a7f4"/*FilesInFolder*/,
+      "SymbolId": "f90fcd0a-eab9-4e2a-b393-e8d3a0380823",
+      "InputValues": [
+        {
+          "Id": "8b746651-16a5-4274-85db-0168d30c86b2"/*Filter*/,
+          "Type": "System.String",
+          "Value": ".jpg"
+        },
+        {
+          "Id": "ca9778e7-072c-4304-9043-eeb2dc4ca5d7"/*Folder*/,
+          "Type": "System.String",
+          "Value": "Resources\\images"
+        },
+        {
+          "Id": "e14a4aae-e253-4d14-80ef-a90271cd306a"/*TriggerUpdate*/,
+          "Type": "System.Boolean",
+          "Value": false
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "51d34f0d-5fee-434a-8bdd-e70a9d3586f0"/*PickFromStringList*/,
+      "SymbolId": "ef357e66-24e9-4f54-8d86-869db74602f4",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "7270fe74-0c1c-4d88-86fc-360c166fb644"/*Counter*/,
       "SymbolId": "11882635-4757-4cac-a024-70bb4e8b504c",
       "InputValues": [
@@ -15,42 +43,14 @@
       "Outputs": []
     },
     {
-      "Id": "b181d253-7343-4a9e-bca6-fe70fefe3951"/*FloatToInt*/,
-      "SymbolId": "06b4728e-852c-491a-a89d-647f7e0b5415",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "51d34f0d-5fee-434a-8bdd-e70a9d3586f0"/*PickFromStringList*/,
-      "SymbolId": "ef357e66-24e9-4f54-8d86-869db74602f4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "06246b83-0aeb-433a-b116-9dbac1d0a7f4"/*FilesInFolder*/,
-      "SymbolId": "f90fcd0a-eab9-4e2a-b393-e8d3a0380823",
-      "InputValues": [
-        {
-          "Id": "ca9778e7-072c-4304-9043-eeb2dc4ca5d7"/*Folder*/,
-          "Type": "System.String",
-          "Value": "Resources\\images"
-        },
-        {
-          "Id": "8b746651-16a5-4274-85db-0168d30c86b2"/*Filter*/,
-          "Type": "System.String",
-          "Value": ".jpg"
-        },
-        {
-          "Id": "e14a4aae-e253-4d14-80ef-a90271cd306a"/*TriggerUpdate*/,
-          "Type": "System.Boolean",
-          "Value": false
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "99855e3f-01dc-44c1-b82c-118151eda1ad"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "b181d253-7343-4a9e-bca6-fe70fefe3951"/*FloatToInt*/,
+      "SymbolId": "06b4728e-852c-491a-a89d-647f7e0b5415",
       "InputValues": [],
       "Outputs": []
     }

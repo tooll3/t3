@@ -2,12 +2,12 @@
   "Id": "025b32e9-b570-45be-ae84-50424982aae3"/*ToneMapping*/,
   "Inputs": [
     {
-      "Id": "72e51856-bc8f-4bcf-a6d8-6c7b4f8b0583"/*Texture2d*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "37d4e1e6-e5a0-40b6-ada9-9481f5a807de"/*Mode*/,
       "DefaultValue": 0
+    },
+    {
+      "Id": "72e51856-bc8f-4bcf-a6d8-6c7b4f8b0583"/*Texture2d*/,
+      "DefaultValue": null
     },
     {
       "Id": "be44974c-2685-40ff-86b6-bdf1cc38eee4"/*CorrectGamma*/,
@@ -19,18 +19,6 @@
     }
   ],
   "Children": [
-    {
-      "Id": "b5befc31-b387-40f0-8866-1804e4565e92"/*BoolToFloat*/,
-      "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "5e4ffbe2-74e8-440c-9939-6cefd81665db"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
-      "InputValues": [],
-      "Outputs": []
-    },
     {
       "Id": "46d18eb7-013b-4f6f-8e86-2b37a0313fd2"/*_ImageFxShaderSetupStatic*/,
       "SymbolId": "bd0b9c5b-c611-42d0-8200-31af9661f189",
@@ -51,6 +39,18 @@
           "Value": "R8G8B8A8_UNorm"
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "5e4ffbe2-74e8-440c-9939-6cefd81665db"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "b5befc31-b387-40f0-8866-1804e4565e92"/*BoolToFloat*/,
+      "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
+      "InputValues": [],
       "Outputs": []
     }
   ],

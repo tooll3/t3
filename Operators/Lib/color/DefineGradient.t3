@@ -2,6 +2,14 @@
   "Id": "185452c6-f299-42a3-b618-c6aa00d66c62"/*DefineGradient*/,
   "Inputs": [
     {
+      "Id": "2823fed8-9b37-4521-a37c-fcc3b9c4e6f2"/*Color3Pos*/,
+      "DefaultValue": -1.0
+    },
+    {
+      "Id": "35470c79-275b-4a88-bc4b-4681a35d804d"/*Color1Pos*/,
+      "DefaultValue": 0.0
+    },
+    {
       "Id": "4723c177-9941-4fcb-9d5a-9a4ed18f3b5f"/*Color1*/,
       "DefaultValue": {
         "X": 1E-06,
@@ -9,10 +17,6 @@
         "Z": 9.9999E-07,
         "W": 1.0
       }
-    },
-    {
-      "Id": "35470c79-275b-4a88-bc4b-4681a35d804d"/*Color1Pos*/,
-      "DefaultValue": 0.0
     },
     {
       "Id": "97147836-0858-4fd0-9532-a5636ff8567d"/*Color2*/,
@@ -24,8 +28,12 @@
       }
     },
     {
-      "Id": "fe6c6818-4aa9-439f-91fa-98db8c6dc1e6"/*Color2Pos*/,
-      "DefaultValue": 1.0
+      "Id": "c3c4d160-61bd-483a-ada8-0395d160a009"/*Color4Pos*/,
+      "DefaultValue": -1.0
+    },
+    {
+      "Id": "e3ef0e14-6ed1-482e-bd31-0c9cba5aa126"/*Interpolation*/,
+      "DefaultValue": 0
     },
     {
       "Id": "f62eacf0-5237-4f20-9fb2-c59b63b24dad"/*Color3*/,
@@ -37,10 +45,6 @@
       }
     },
     {
-      "Id": "2823fed8-9b37-4521-a37c-fcc3b9c4e6f2"/*Color3Pos*/,
-      "DefaultValue": -1.0
-    },
-    {
       "Id": "f90bf3a5-3ad0-4dfe-82e0-1630cd8e27d7"/*Color4*/,
       "DefaultValue": {
         "X": 1.0,
@@ -50,12 +54,8 @@
       }
     },
     {
-      "Id": "c3c4d160-61bd-483a-ada8-0395d160a009"/*Color4Pos*/,
-      "DefaultValue": -1.0
-    },
-    {
-      "Id": "e3ef0e14-6ed1-482e-bd31-0c9cba5aa126"/*Interpolation*/,
-      "DefaultValue": 0
+      "Id": "fe6c6818-4aa9-439f-91fa-98db8c6dc1e6"/*Color2Pos*/,
+      "DefaultValue": 1.0
     }
   ],
   "Children": [],

@@ -3,6 +3,60 @@
   "Description": "Adds a depth of field effect.\n\nHint: Use a [Locator] and its DistanceToCamera output to use automatic focus distance.\n\nUseful Ops for a PostFX Pipeline: [MotionBlur] [DepthOfField] [ChromaticAbberation] [Glow] [Grain] [Blur]",
   "InputUis": [
     {
+      "InputId": "1592e94b-a20d-463c-baec-5fb5dfa85532"/*BackgroundColor*/,
+      "Position": {
+        "X": -416.71564,
+        "Y": 104.20382
+      },
+      "Description": "Defines the BackgroundColor.",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "22f5e8db-0b80-47dc-b30b-4bc49d9fad59"/*Command*/,
+      "Position": {
+        "X": -422.11786,
+        "Y": 794.3843
+      },
+      "Description": "Internal Input.",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "3655d507-96b3-4ded-9cef-886ea703ca89"/*Amount*/,
+      "Position": {
+        "X": -416.71564,
+        "Y": 14.203831
+      },
+      "Description": "Controls the intensity of the blur.\n\nAreas that are further away from the focus point are proportionally more blurred.",
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 20.0
+    },
+    {
+      "InputId": "40de51d8-91dd-461d-a7be-d4096313eec2"/*NearFarRange*/,
+      "Position": {
+        "X": -416.71564,
+        "Y": 194.20383
+      },
+      "Description": "Defines the near and far range of the scene which is affected by the effect."
+    },
+    {
+      "InputId": "493c40f0-21e6-466b-afc2-eff570229c86"/*MaxSamples*/,
+      "Position": {
+        "X": -416.71564,
+        "Y": 149.20383
+      },
+      "Description": "Controls the fidelity of the effect.\nHigher numbers create smoother results at the cost of rendering speed.",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "97b76d02-e735-4e93-88ad-5c9b8766a63c"/*FocusDistance*/,
+      "Position": {
+        "X": -416.71564,
+        "Y": 59.20383
+      },
+      "Description": "Controls how far away from the camera the area is which is not affected by the blur.\n\nProTip: Use a higher \"Amount\" to make it easier to identify the area of your scene that are in focus. Or use a [Locator] to have a visual helper to define the FocusPoint."
+    },
+    {
       "InputId": "bc1685a8-0a92-460f-85ca-7f096db965f0"/*TextureBuffer*/,
       "Relevancy": "Required",
       "Position": {
@@ -17,75 +71,14 @@
         "X": -425.7929,
         "Y": -67.3403
       }
-    },
-    {
-      "InputId": "3655d507-96b3-4ded-9cef-886ea703ca89"/*Amount*/,
-      "Position": {
-        "X": -416.71564,
-        "Y": 14.203831
-      },
-      "Description": "Controls the intensity of the blur.\n\nAreas that are further away from the focus point are proportionally more blurred.",
-      "AddPadding": "True",
-      "Min": 0.0,
-      "Max": 20.0
-    },
-    {
-      "InputId": "97b76d02-e735-4e93-88ad-5c9b8766a63c"/*FocusDistance*/,
-      "Position": {
-        "X": -416.71564,
-        "Y": 59.20383
-      },
-      "Description": "Controls how far away from the camera the area is which is not affected by the blur.\n\nProTip: Use a higher \"Amount\" to make it easier to identify the area of your scene that are in focus. Or use a [Locator] to have a visual helper to define the FocusPoint."
-    },
-    {
-      "InputId": "1592e94b-a20d-463c-baec-5fb5dfa85532"/*BackgroundColor*/,
-      "Position": {
-        "X": -416.71564,
-        "Y": 104.20382
-      },
-      "Description": "Defines the BackgroundColor.",
-      "AddPadding": "True"
-    },
-    {
-      "InputId": "493c40f0-21e6-466b-afc2-eff570229c86"/*MaxSamples*/,
-      "Position": {
-        "X": -416.71564,
-        "Y": 149.20383
-      },
-      "Description": "Controls the fidelity of the effect.\nHigher numbers create smoother results at the cost of rendering speed.",
-      "AddPadding": "True"
-    },
-    {
-      "InputId": "40de51d8-91dd-461d-a7be-d4096313eec2"/*NearFarRange*/,
-      "Position": {
-        "X": -416.71564,
-        "Y": 194.20383
-      },
-      "Description": "Defines the near and far range of the scene which is affected by the effect."
-    },
-    {
-      "InputId": "22f5e8db-0b80-47dc-b30b-4bc49d9fad59"/*Command*/,
-      "Position": {
-        "X": -422.11786,
-        "Y": 794.3843
-      },
-      "Description": "Internal Input.",
-      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "22807a28-d947-447e-9927-d0b97f91d2a5"/*RenderTarget*/,
+      "ChildId": "08a2f7ff-75ba-4205-ac81-799ebf89d715"/*Execute*/,
       "Position": {
-        "X": -124.12303,
-        "Y": 734.44336
-      }
-    },
-    {
-      "ChildId": "e532ea8f-b9bb-4abc-ad86-75bb1553a244"/*Linear Depth*/,
-      "Position": {
-        "X": 469.5114,
-        "Y": 166.79362
+        "X": 1498.8717,
+        "Y": -532.98376
       }
     },
     {
@@ -96,17 +89,10 @@
       }
     },
     {
-      "ChildId": "cab20538-64c5-4057-954f-8bde7cfdf2d9"/*Output*/,
+      "ChildId": "12d640da-9b93-4441-9259-47c1b73c98f6"/*BlurSize*/,
       "Position": {
-        "X": 469.49814,
-        "Y": 320.87775
-      }
-    },
-    {
-      "ChildId": "2928b9be-0f22-4dcf-a1f9-a3ad02524b62"/*GetTextureSize*/,
-      "Position": {
-        "X": 244.92278,
-        "Y": 204.29565
+        "X": 493.41315,
+        "Y": -226.64093
       }
     },
     {
@@ -114,41 +100,6 @@
       "Position": {
         "X": 1710.5306,
         "Y": -537.4955
-      }
-    },
-    {
-      "ChildId": "08a2f7ff-75ba-4205-ac81-799ebf89d715"/*Execute*/,
-      "Position": {
-        "X": 1498.8717,
-        "Y": -532.98376
-      }
-    },
-    {
-      "ChildId": "dc3fa637-da4e-4df5-ac50-913e732d3f47"/*Vector2Components*/,
-      "Position": {
-        "X": 133.22345,
-        "Y": -495.14658
-      }
-    },
-    {
-      "ChildId": "edfb0083-3f2f-4c1e-8db7-2fe1877194cd"/*UseFallbackTexture*/,
-      "Position": {
-        "X": 88.5379,
-        "Y": 409.83316
-      }
-    },
-    {
-      "ChildId": "6a8ae91d-4ab1-4166-b8c3-967ca282466c"/*UseFallbackTexture*/,
-      "Position": {
-        "X": 117.64966,
-        "Y": 693.3439
-      }
-    },
-    {
-      "ChildId": "f6c88a1e-d7bc-4ef4-b67c-539828f15e8c"/*ComputeShader*/,
-      "Position": {
-        "X": 460.39453,
-        "Y": -799.61255
       }
     },
     {
@@ -164,17 +115,10 @@
       }
     },
     {
-      "ChildId": "a8300bda-2b36-42c2-99c3-9fc160794f3c"/*SamplerStateOp*/,
+      "ChildId": "22807a28-d947-447e-9927-d0b97f91d2a5"/*RenderTarget*/,
       "Position": {
-        "X": 955.73596,
-        "Y": -325.94788
-      }
-    },
-    {
-      "ChildId": "a80a1063-74d8-48da-9ba3-9d60fe70e631"/*UavFromTexture2d*/,
-      "Position": {
-        "X": 984.34546,
-        "Y": -280.8286
+        "X": -124.12303,
+        "Y": 734.44336
       }
     },
     {
@@ -185,17 +129,10 @@
       }
     },
     {
-      "ChildId": "e38bd592-f2d2-4174-ae4e-3055367f8707"/*SrvFromTexture2d*/,
+      "ChildId": "2928b9be-0f22-4dcf-a1f9-a3ad02524b62"/*GetTextureSize*/,
       "Position": {
-        "X": 928.18616,
-        "Y": -437.9478
-      }
-    },
-    {
-      "ChildId": "69fb303a-8c89-43d6-9f90-a24d78141de8"/*FloatsToBuffer*/,
-      "Position": {
-        "X": 938.27057,
-        "Y": -616.11395
+        "X": 244.92278,
+        "Y": 204.29565
       }
     },
     {
@@ -206,6 +143,20 @@
       }
     },
     {
+      "ChildId": "69fb303a-8c89-43d6-9f90-a24d78141de8"/*FloatsToBuffer*/,
+      "Position": {
+        "X": 938.27057,
+        "Y": -616.11395
+      }
+    },
+    {
+      "ChildId": "6a8ae91d-4ab1-4166-b8c3-967ca282466c"/*UseFallbackTexture*/,
+      "Position": {
+        "X": 117.64966,
+        "Y": 693.3439
+      }
+    },
+    {
       "ChildId": "956fa559-a8e2-4650-9c26-a17af65e4f62"/*CalcInt2DispatchCount*/,
       "Position": {
         "X": 609.2146,
@@ -213,10 +164,31 @@
       }
     },
     {
-      "ChildId": "12d640da-9b93-4441-9259-47c1b73c98f6"/*BlurSize*/,
+      "ChildId": "a80a1063-74d8-48da-9ba3-9d60fe70e631"/*UavFromTexture2d*/,
       "Position": {
-        "X": 493.41315,
-        "Y": -226.64093
+        "X": 984.34546,
+        "Y": -280.8286
+      }
+    },
+    {
+      "ChildId": "a8300bda-2b36-42c2-99c3-9fc160794f3c"/*SamplerState*/,
+      "Position": {
+        "X": 955.73596,
+        "Y": -325.94788
+      }
+    },
+    {
+      "ChildId": "cab20538-64c5-4057-954f-8bde7cfdf2d9"/*Output*/,
+      "Position": {
+        "X": 469.49814,
+        "Y": 320.87775
+      }
+    },
+    {
+      "ChildId": "cb5a5789-f357-4ffc-a4a3-aa4306212d95"/*Multiply*/,
+      "Position": {
+        "X": 246.25958,
+        "Y": -334.77716
       }
     },
     {
@@ -227,10 +199,38 @@
       }
     },
     {
-      "ChildId": "cb5a5789-f357-4ffc-a4a3-aa4306212d95"/*Multiply*/,
+      "ChildId": "dc3fa637-da4e-4df5-ac50-913e732d3f47"/*Vector2Components*/,
       "Position": {
-        "X": 246.25958,
-        "Y": -334.77716
+        "X": 133.22345,
+        "Y": -495.14658
+      }
+    },
+    {
+      "ChildId": "e38bd592-f2d2-4174-ae4e-3055367f8707"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 928.18616,
+        "Y": -437.9478
+      }
+    },
+    {
+      "ChildId": "e532ea8f-b9bb-4abc-ad86-75bb1553a244"/*Linear Depth*/,
+      "Position": {
+        "X": 469.5114,
+        "Y": 166.79362
+      }
+    },
+    {
+      "ChildId": "edfb0083-3f2f-4c1e-8db7-2fe1877194cd"/*UseFallbackTexture*/,
+      "Position": {
+        "X": 88.5379,
+        "Y": 409.83316
+      }
+    },
+    {
+      "ChildId": "f6c88a1e-d7bc-4ef4-b67c-539828f15e8c"/*ComputeShader*/,
+      "Position": {
+        "X": 460.39453,
+        "Y": -799.61255
       }
     }
   ],

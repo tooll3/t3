@@ -4,65 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "e524d8fa-2032-40d9-b72c-ad8002323fb2"/*Camera*/,
-      "Comment": "Note the that the [Locator] ignores the projection matrix created by cameras.\n\nSo to project a position to screenspace you'll need another another solution. ",
-      "Position": {
-        "X": 1143.1587,
-        "Y": -123.91278
-      }
-    },
-    {
-      "ChildId": "f8ee8314-77ec-44cd-a794-8d5577ca629f"/*Transform*/,
-      "Position": {
-        "X": 435.1338,
-        "Y": -136.27292
-      }
-    },
-    {
-      "ChildId": "e2487ec2-7a33-441b-bce4-fd3955b66685"/*DrawMesh*/,
-      "Position": {
-        "X": -1.1390991,
-        "Y": -142.8801
-      }
-    },
-    {
-      "ChildId": "1bf87b7f-51e1-4ad1-9485-e8b549bf0b4c"/*PerlinNoise3*/,
-      "Position": {
-        "X": 285.1338,
-        "Y": -10.272919
-      }
-    },
-    {
-      "ChildId": "c37e7979-a8d9-44bb-82ca-539ae91b6c1c"/*PerlinNoise3*/,
-      "Position": {
-        "X": 285.1338,
-        "Y": 32.72708
-      }
-    },
-    {
-      "ChildId": "3d8329ab-e12d-4f1a-be48-7c8efbf91497"/*Group*/,
-      "Position": {
-        "X": 148.86084,
-        "Y": -142.8801
-      }
-    },
-    {
-      "ChildId": "d8f09adb-3799-48c2-81b6-74098c3895ec"/*Locator*/,
-      "Comment": "With the scene transformation we render this locator. \n\nIt keeps its last worldspace position and provides it as an output.",
-      "Position": {
-        "X": -82.0349,
-        "Y": 127.52045
-      }
-    },
-    {
-      "ChildId": "82be7223-a9fb-4821-b2c1-452e01386e30"/*Group*/,
-      "Position": {
-        "X": 843.1588,
-        "Y": -123.91278
-      }
-    },
-    {
-      "ChildId": "182f6998-76a5-4434-a0c7-ac340f4a75a7"/*APoint*/,
+      "ChildId": "182f6998-76a5-4434-a0c7-ac340f4a75a7"/*Point*/,
       "Comment": "We can use this position to create a point for some complex constrution...",
       "Position": {
         "X": 287.6535,
@@ -70,17 +12,10 @@
       }
     },
     {
-      "ChildId": "9017ede9-7990-4d1c-9620-63f2185c5307"/*PairPointsForLines*/,
+      "ChildId": "1bf87b7f-51e1-4ad1-9485-e8b549bf0b4c"/*PerlinNoise3*/,
       "Position": {
-        "X": 437.6535,
-        "Y": 193.98416
-      }
-    },
-    {
-      "ChildId": "3caa391f-121d-47a2-a783-f2cbf7d9029b"/*DrawLines*/,
-      "Position": {
-        "X": 587.6535,
-        "Y": 193.98416
+        "X": 285.1338,
+        "Y": -10.272919
       }
     },
     {
@@ -98,25 +33,10 @@
       }
     },
     {
-      "ChildId": "c284f325-c82b-45c6-8b20-7be9e5add4da"/*OscillateVec3*/,
-      "Position": {
-        "X": 435.1338,
-        "Y": -10.272919
-      }
-    },
-    {
       "ChildId": "2d957eec-f3e0-492c-9e52-b1f37328e78a"/*RenderTarget*/,
       "Position": {
         "X": 1299.3555,
         "Y": -106.34003
-      }
-    },
-    {
-      "ChildId": "9dad1123-eda7-46a4-9243-eaca78c7920e"/*Group*/,
-      "Comment": "...or to position another group in \"screen space\" before the translation.",
-      "Position": {
-        "X": 592.8827,
-        "Y": 295.18222
       }
     },
     {
@@ -127,17 +47,16 @@
       }
     },
     {
-      "ChildId": "79b3984a-9195-4711-bf48-0542c5f257f1"/*PointLight*/,
-      "Comment": "We use the locator position to position a light source and place it in front of all geometry.",
+      "ChildId": "3caa391f-121d-47a2-a783-f2cbf7d9029b"/*DrawLines*/,
       "Position": {
-        "X": 993.1587,
-        "Y": -123.91278
+        "X": 587.6535,
+        "Y": 193.98416
       }
     },
     {
-      "ChildId": "d3658165-01c6-480b-a02b-2388b396e489"/*TorusMesh*/,
+      "ChildId": "3d8329ab-e12d-4f1a-be48-7c8efbf91497"/*Group*/,
       "Position": {
-        "X": -151.1391,
+        "X": 148.86084,
         "Y": -142.8801
       }
     },
@@ -149,6 +68,21 @@
       }
     },
     {
+      "ChildId": "79b3984a-9195-4711-bf48-0542c5f257f1"/*PointLight*/,
+      "Comment": "We use the locator position to position a light source and place it in front of all geometry.",
+      "Position": {
+        "X": 993.1587,
+        "Y": -123.91278
+      }
+    },
+    {
+      "ChildId": "82be7223-a9fb-4821-b2c1-452e01386e30"/*Group*/,
+      "Position": {
+        "X": 843.1588,
+        "Y": -123.91278
+      }
+    },
+    {
       "ChildId": "8388adc1-a5d1-4d4b-8931-b1e4ef26547e"/*DrawMesh*/,
       "Position": {
         "X": 442.8827,
@@ -156,10 +90,76 @@
       }
     },
     {
+      "ChildId": "9017ede9-7990-4d1c-9620-63f2185c5307"/*PairPointsForLines*/,
+      "Position": {
+        "X": 437.6535,
+        "Y": 193.98416
+      }
+    },
+    {
       "ChildId": "98c9e58d-de0d-4606-9cc0-5e3a85f4a15e"/*Transform*/,
       "Position": {
         "X": 592.8827,
         "Y": 377.18222
+      }
+    },
+    {
+      "ChildId": "9dad1123-eda7-46a4-9243-eaca78c7920e"/*Group*/,
+      "Comment": "...or to position another group in \"screen space\" before the translation.",
+      "Position": {
+        "X": 592.8827,
+        "Y": 295.18222
+      }
+    },
+    {
+      "ChildId": "c284f325-c82b-45c6-8b20-7be9e5add4da"/*OscillateVec3*/,
+      "Position": {
+        "X": 435.1338,
+        "Y": -10.272919
+      }
+    },
+    {
+      "ChildId": "c37e7979-a8d9-44bb-82ca-539ae91b6c1c"/*PerlinNoise3*/,
+      "Position": {
+        "X": 285.1338,
+        "Y": 32.72708
+      }
+    },
+    {
+      "ChildId": "d3658165-01c6-480b-a02b-2388b396e489"/*TorusMesh*/,
+      "Position": {
+        "X": -151.1391,
+        "Y": -142.8801
+      }
+    },
+    {
+      "ChildId": "d8f09adb-3799-48c2-81b6-74098c3895ec"/*Locator*/,
+      "Comment": "With the scene transformation we render this locator. \n\nIt keeps its last worldspace position and provides it as an output.",
+      "Position": {
+        "X": -82.0349,
+        "Y": 127.52045
+      }
+    },
+    {
+      "ChildId": "e2487ec2-7a33-441b-bce4-fd3955b66685"/*DrawMesh*/,
+      "Position": {
+        "X": -1.1390991,
+        "Y": -142.8801
+      }
+    },
+    {
+      "ChildId": "e524d8fa-2032-40d9-b72c-ad8002323fb2"/*Camera*/,
+      "Comment": "Note the that the [Locator] ignores the projection matrix created by cameras.\n\nSo to project a position to screenspace you'll need another another solution. ",
+      "Position": {
+        "X": 1143.1587,
+        "Y": -123.91278
+      }
+    },
+    {
+      "ChildId": "f8ee8314-77ec-44cd-a794-8d5577ca629f"/*Transform*/,
+      "Position": {
+        "X": 435.1338,
+        "Y": -136.27292
       }
     }
   ],

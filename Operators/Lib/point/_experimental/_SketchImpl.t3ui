@@ -3,17 +3,10 @@
   "Description": "Internal implementation for Sketching.",
   "InputUis": [
     {
-      "InputId": "c427f009-7e04-4168-82e6-5ebe2640204d"/*MousePos*/,
+      "InputId": "0fa40e27-c7ca-4bb9-88c6-ced917dfec12"/*OverridePageIndex*/,
       "Position": {
         "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "InputId": "520a2023-7450-4314-9cac-850d6d692461"/*IsMouseButtonDown*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
+        "Y": 270.0
       }
     },
     {
@@ -21,6 +14,21 @@
       "Position": {
         "X": -200.0,
         "Y": 180.0
+      }
+    },
+    {
+      "InputId": "51641425-a2c6-4480-ac8f-2e6d2cbc300a"/*FilePath*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "520a2023-7450-4314-9cac-850d6d692461"/*IsMouseButtonDown*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
       }
     },
     {
@@ -34,18 +42,10 @@
       "Clamp": true
     },
     {
-      "InputId": "51641425-a2c6-4480-ac8f-2e6d2cbc300a"/*FilePath*/,
+      "InputId": "c427f009-7e04-4168-82e6-5ebe2640204d"/*MousePos*/,
       "Position": {
         "X": -200.0,
-        "Y": 225.0
-      },
-      "Usage": "Default"
-    },
-    {
-      "InputId": "0fa40e27-c7ca-4bb9-88c6-ced917dfec12"/*OverridePageIndex*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 270.0
+        "Y": 0.0
       }
     }
   ],

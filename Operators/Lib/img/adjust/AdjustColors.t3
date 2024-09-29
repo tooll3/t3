@@ -2,8 +2,36 @@
   "Id": "55411442-d538-48bf-ab78-b8c24c85aa46"/*AdjustColors*/,
   "Inputs": [
     {
-      "Id": "c325d01a-5232-4696-9b58-e24f72779597"/*Texture2d*/,
-      "DefaultValue": null
+      "Id": "008b025e-64eb-44c3-8959-dc8ac5dc2cbb"/*PreventClamping*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 5.0
+      }
+    },
+    {
+      "Id": "090c56b2-bbed-447e-baa1-5993b4e12ddc"/*Vignette*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "42d296cf-6c53-4da9-bef8-da36c4ca3aea"/*Hue*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "4a10edf1-9bb4-4bd5-8455-357618f68ca9"/*OrangeTeal*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "689fdfbe-e78d-42f8-af0b-ae8159dec216"/*Background*/,
+      "DefaultValue": {
+        "X": 1E-06,
+        "Y": 9.9999E-07,
+        "Z": 9.9999E-07,
+        "W": 1.0
+      }
+    },
+    {
+      "Id": "74d63ccb-7ae5-45d9-af69-ad91b8582407"/*Exposure*/,
+      "DefaultValue": 1.0
     },
     {
       "Id": "8cb24377-04ad-4bf3-b191-00a0f7af9989"/*Colorize*/,
@@ -15,48 +43,20 @@
       }
     },
     {
-      "Id": "74d63ccb-7ae5-45d9-af69-ad91b8582407"/*Exposure*/,
-      "DefaultValue": 1.0
+      "Id": "c325d01a-5232-4696-9b58-e24f72779597"/*Texture2d*/,
+      "DefaultValue": null
     },
     {
       "Id": "e3395a18-619b-4fcc-b16c-c04d1df8afd9"/*Contrast*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "f6753ecc-a97e-4854-9f27-09bb9000858c"/*Saturation*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "4a10edf1-9bb4-4bd5-8455-357618f68ca9"/*OrangeTeal*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "008b025e-64eb-44c3-8959-dc8ac5dc2cbb"/*PreventClamping*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 5.0
-      }
-    },
-    {
       "Id": "edcc911a-fa64-49fd-84d0-6fc0286c77db"/*Brightness*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "42d296cf-6c53-4da9-bef8-da36c4ca3aea"/*Hue*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "090c56b2-bbed-447e-baa1-5993b4e12ddc"/*Vignette*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "689fdfbe-e78d-42f8-af0b-ae8159dec216"/*Background*/,
-      "DefaultValue": {
-        "X": 1E-06,
-        "Y": 9.9999E-07,
-        "Z": 9.9999E-07,
-        "W": 1.0
-      }
+      "Id": "f6753ecc-a97e-4854-9f27-09bb9000858c"/*Saturation*/,
+      "DefaultValue": 1.0
     }
   ],
   "Children": [

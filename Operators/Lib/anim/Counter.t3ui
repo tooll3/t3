@@ -3,42 +3,6 @@
   "Description": "A very versatile operator that uses beat time to increment values periodically / in steps.\n\nNote that you can adjust many properties directly within the graph while holding CTRL+key.\n\nFor a variant that does not count up in steps but linearly see [Time] or [Accumulator].\n\nUseful combinations: [Trigger] [MidiInput] [KeyboardInput]",
   "InputUis": [
     {
-      "InputId": "eefdb8ca-68e7-4e39-b302-22eb8930fb8c"/*TriggerIncrement*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "InputId": "7bfbae6b-fa0b-4e5a-8040-e0be3600afeb"/*TriggerReset*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      }
-    },
-    {
-      "InputId": "754cebe3-ab6c-4877-9c32-c67fbae9e4c2"/*StartValue*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
-      }
-    },
-    {
-      "InputId": "bca3f7b2-a093-4cb3-89a5-0e2681760607"/*Increment*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 135.0
-      },
-      "AddPadding": "True"
-    },
-    {
-      "InputId": "73b493cb-91d1-4d4f-b9a8-005017ecac8f"/*Modulo*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 180.0
-      }
-    },
-    {
       "InputId": "286cbbfb-796d-499f-93d3-d467512110be"/*Rate*/,
       "Position": {
         "X": -200.0,
@@ -53,10 +17,46 @@
       }
     },
     {
+      "InputId": "73b493cb-91d1-4d4f-b9a8-005017ecac8f"/*Modulo*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "754cebe3-ab6c-4877-9c32-c67fbae9e4c2"/*StartValue*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "7bfbae6b-fa0b-4e5a-8040-e0be3600afeb"/*TriggerReset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
       "InputId": "b04d475b-a898-421b-bf26-ae5cf982a351"/*Blending*/,
       "Position": {
         "X": -200.0,
         "Y": 270.0
+      }
+    },
+    {
+      "InputId": "bca3f7b2-a093-4cb3-89a5-0e2681760607"/*Increment*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      },
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "c386b9e0-a987-4d11-9171-2971fa759827"/*AllowSpeedFactor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 360.0
       }
     },
     {
@@ -67,10 +67,10 @@
       }
     },
     {
-      "InputId": "c386b9e0-a987-4d11-9171-2971fa759827"/*AllowSpeedFactor*/,
+      "InputId": "eefdb8ca-68e7-4e39-b302-22eb8930fb8c"/*TriggerIncrement*/,
       "Position": {
         "X": -200.0,
-        "Y": 360.0
+        "Y": 0.0
       }
     }
   ],

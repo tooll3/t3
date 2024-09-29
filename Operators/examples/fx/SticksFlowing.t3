@@ -2,12 +2,12 @@
   "Id": "064c1f38-8b6d-44f0-aae3-32dd3916e2e9"/*SticksFlowing*/,
   "Inputs": [
     {
-      "Id": "dd68faab-fd9c-4939-bba2-388249965678"/*Image*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "9dc910c7-810f-4787-946c-d0cc811d294d"/*Scale*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "dd68faab-fd9c-4939-bba2-388249965678"/*Image*/,
+      "DefaultValue": null
     }
   ],
   "Children": [

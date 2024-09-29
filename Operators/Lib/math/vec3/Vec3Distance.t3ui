@@ -3,17 +3,17 @@
   "Description": "Computes the distance between two vectors. (I.e. substract two positions)",
   "InputUis": [
     {
-      "InputId": "eecb6054-ecb8-4b22-a685-6740ed1cfe5c"/*Input1*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "c4094f11-d93d-4497-b1ce-1faa8bc1d1b0"/*Input2*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "eecb6054-ecb8-4b22-a685-6740ed1cfe5c"/*Input1*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
       }
     }
   ],

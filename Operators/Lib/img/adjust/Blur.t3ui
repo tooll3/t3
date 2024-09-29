@@ -3,23 +3,13 @@
   "Description": "Blurs the incoming image\n\nUseful Ops for a PostFX Pipeline: [MotionBlur] [DepthOfField] [ChromaticAbberation] [Glow] [Grain] [Blur]",
   "InputUis": [
     {
-      "InputId": "c115fd60-86c5-425f-975b-0b5e92c0f42b"/*Image*/,
-      "Relevancy": "Required",
+      "InputId": "03e6c20c-6b8a-422e-bba1-1cefddc645fd"/*Offset*/,
       "Position": {
         "X": -308.4377,
-        "Y": 58.11561
-      }
-    },
-    {
-      "InputId": "99188668-b6ac-468b-a892-cd020a3862b2"/*Size*/,
-      "Position": {
-        "X": -308.4377,
-        "Y": 103.11561
+        "Y": 193.1156
       },
-      "Description": "Defines the strength / radius of the blur",
-      "AddPadding": "True",
-      "Min": 0.0,
-      "Max": 20.0
+      "GroupTitle": "Advanced Settings",
+      "Description": "Offsets the brightness of the image"
     },
     {
       "InputId": "3c8b43be-430f-4afe-8244-5282be49bfbc"/*Samples*/,
@@ -33,13 +23,32 @@
       "Clamp": true
     },
     {
-      "InputId": "03e6c20c-6b8a-422e-bba1-1cefddc645fd"/*Offset*/,
+      "InputId": "99188668-b6ac-468b-a892-cd020a3862b2"/*Size*/,
       "Position": {
         "X": -308.4377,
-        "Y": 193.1156
+        "Y": 103.11561
       },
-      "GroupTitle": "Advanced Settings",
-      "Description": "Offsets the brightness of the image"
+      "Description": "Defines the strength / radius of the blur",
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 20.0
+    },
+    {
+      "InputId": "9c944546-1363-4e3b-b706-31a4b750db2c"/*Wrap*/,
+      "Position": {
+        "X": -308.4377,
+        "Y": 328.1156
+      },
+      "Description": "Defines what is displayed at the edge of the image or how it is repeated should it be cut off / offset over its borders.",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "c115fd60-86c5-425f-975b-0b5e92c0f42b"/*Image*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -308.4377,
+        "Y": 58.11561
+      }
     },
     {
       "InputId": "d1421b9f-ddde-426a-9d68-32d3a41bf881"/*Opacity*/,
@@ -57,18 +66,30 @@
       },
       "Description": "Overwrites / redefines the resolution of the incoming image",
       "AddPadding": "True"
-    },
-    {
-      "InputId": "9c944546-1363-4e3b-b706-31a4b750db2c"/*Wrap*/,
-      "Position": {
-        "X": -308.4377,
-        "Y": 328.1156
-      },
-      "Description": "Defines what is displayed at the edge of the image or how it is repeated should it be cut off / offset over its borders.",
-      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
+    {
+      "ChildId": "182b10f8-0d60-4d18-b442-75431f9beca4"/*Resources\lib\img\fx\Blur.hlsl*/,
+      "Position": {
+        "X": 793.38324,
+        "Y": 565.9022
+      }
+    },
+    {
+      "ChildId": "24ba6f99-4bcd-4e84-b4cc-147f4cee2c63"/*WidthToHeight*/,
+      "Position": {
+        "X": -73.05734,
+        "Y": 219.62434
+      }
+    },
+    {
+      "ChildId": "3d331fa5-2020-432f-8fc4-40fa10c23cec"/*Resources\lib\img\fx\Blur.hlsl*/,
+      "Position": {
+        "X": 526.80054,
+        "Y": 535.7032
+      }
+    },
     {
       "ChildId": "4c68857a-b51f-4980-a734-e93d082349a5"/*_ImageFxShaderSetup2*/,
       "Style": "Resizable",
@@ -94,31 +115,10 @@
       }
     },
     {
-      "ChildId": "dd5731e9-069c-410f-98ca-ef958c5b1ce8"/*Vertical*/,
-      "Position": {
-        "X": 161.46207,
-        "Y": 405.48312
-      }
-    },
-    {
-      "ChildId": "24ba6f99-4bcd-4e84-b4cc-147f4cee2c63"/*WidthToHeight*/,
-      "Position": {
-        "X": -73.05734,
-        "Y": 219.62434
-      }
-    },
-    {
       "ChildId": "68b65d39-c6d1-4c23-8b5a-321640ed50ad"/*GetTextureSize*/,
       "Position": {
         "X": -245.48831,
         "Y": -70.23182
-      }
-    },
-    {
-      "ChildId": "a3bdc17e-c073-4df0-a204-b08df50ce0a4"/*Vector2Components*/,
-      "Position": {
-        "X": -53.872154,
-        "Y": -75.83326
       }
     },
     {
@@ -129,6 +129,13 @@
       }
     },
     {
+      "ChildId": "a3bdc17e-c073-4df0-a204-b08df50ce0a4"/*Vector2Components*/,
+      "Position": {
+        "X": -53.872154,
+        "Y": -75.83326
+      }
+    },
+    {
       "ChildId": "a663161b-a214-41a0-87d0-7c642e39e1f7"/*Value*/,
       "Position": {
         "X": -73.05734,
@@ -136,17 +143,10 @@
       }
     },
     {
-      "ChildId": "3d331fa5-2020-432f-8fc4-40fa10c23cec"/*Resources\lib\img\fx\Blur.hlsl*/,
+      "ChildId": "dd5731e9-069c-410f-98ca-ef958c5b1ce8"/*Vertical*/,
       "Position": {
-        "X": 526.80054,
-        "Y": 535.7032
-      }
-    },
-    {
-      "ChildId": "182b10f8-0d60-4d18-b442-75431f9beca4"/*Resources\lib\img\fx\Blur.hlsl*/,
-      "Position": {
-        "X": 793.38324,
-        "Y": 565.9022
+        "X": 161.46207,
+        "Y": 405.48312
       }
     }
   ],

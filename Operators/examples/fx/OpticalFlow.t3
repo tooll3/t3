@@ -2,11 +2,15 @@
   "Id": "0309e746-c356-4c7b-af05-93136a2607de"/*OpticalFlow*/,
   "Inputs": [
     {
-      "Id": "93227e69-35c7-4db6-bc6e-e655f2f8226a"/*Image*/,
+      "Id": "394c0b8a-0d6e-4740-bd33-28c651b1471d"/*Image2*/,
       "DefaultValue": null
     },
     {
-      "Id": "394c0b8a-0d6e-4740-bd33-28c651b1471d"/*Image2*/,
+      "Id": "587e2f2b-fd6a-4382-b1c2-99a5963d41ac"/*VisualizationScale*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "93227e69-35c7-4db6-bc6e-e655f2f8226a"/*Image*/,
       "DefaultValue": null
     },
     {
@@ -14,16 +18,12 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "fa54b5d3-5a98-4cc1-b848-6e5b3632af6c"/*VisualizeResult*/,
-      "DefaultValue": false
-    },
-    {
-      "Id": "587e2f2b-fd6a-4382-b1c2-99a5963d41ac"/*VisualizationScale*/,
-      "DefaultValue": 0.0
-    },
-    {
       "Id": "c54cd59c-7b60-4044-b178-1faa9b279138"/*Amount*/,
       "DefaultValue": 1.0
+    },
+    {
+      "Id": "dc54082f-0e94-471e-8aca-4573c167fda3"/*OutputMethod*/,
+      "DefaultValue": 0
     },
     {
       "Id": "ea2841c1-62bf-4826-8861-6e1c482a0fcd"/*ClampRange*/,
@@ -33,20 +33,20 @@
       }
     },
     {
-      "Id": "dc54082f-0e94-471e-8aca-4573c167fda3"/*OutputMethod*/,
-      "DefaultValue": 0
+      "Id": "fa54b5d3-5a98-4cc1-b848-6e5b3632af6c"/*VisualizeResult*/,
+      "DefaultValue": false
     }
   ],
   "Children": [
     {
-      "Id": "6430eba4-ccdf-43a4-a33d-e6a51c0e936a"/*Vector2Components*/,
-      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
+      "Id": "3021ecf6-f11f-4cb3-820f-a6ad9178377f"/*BoolToInt*/,
+      "SymbolId": "cd43942a-887e-4e34-bc54-0c2e5e8bc2af",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "c2239b41-be2a-4dff-bf45-969c6a8b2808"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "Id": "6430eba4-ccdf-43a4-a33d-e6a51c0e936a"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     },
@@ -69,6 +69,12 @@
       "Outputs": []
     },
     {
+      "Id": "c2239b41-be2a-4dff-bf45-969c6a8b2808"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "ec44e4a4-22a5-482f-a336-ed1e0e11a4ac"/*_multiImageFxSetupStatic*/,
       "SymbolId": "cc34a183-3978-4b6b-8ef1-dd8102410816",
       "InputValues": [
@@ -78,12 +84,6 @@
           "Value": "Resources\\lib\\img\\fx\\OpticalFlowSticks.hlsl"
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "3021ecf6-f11f-4cb3-820f-a6ad9178377f"/*BoolToInt*/,
-      "SymbolId": "cd43942a-887e-4e34-bc54-0c2e5e8bc2af",
-      "InputValues": [],
       "Outputs": []
     }
   ],

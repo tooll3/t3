@@ -1,7 +1,5 @@
 {
-  "Name": "KeepBufferReference",
-  "Id": "9cdcfa49-609d-4a64-ae97-8f98567075d1",
-  "Namespace": "lib.point._experimental",
+  "Id": "9cdcfa49-609d-4a64-ae97-8f98567075d1"/*KeepBufferReference*/,
   "Inputs": [
     {
       "Id": "1904c4c7-3288-42fb-a5cb-b76e38780376"/*Buffer*/,

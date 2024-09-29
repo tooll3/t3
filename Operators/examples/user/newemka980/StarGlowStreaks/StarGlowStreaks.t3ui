@@ -3,25 +3,10 @@
   "Description": "Renders streaks onto the incoming image. You can use the threshold to limit the range that is used for streaks. Also, check out the presets.",
   "InputUis": [
     {
-      "InputId": "afcba3d4-b7db-40bd-919a-d4f49b1bf7fc"/*Image*/,
-      "Relevancy": "Required",
+      "InputId": "069a3776-3084-4a13-aee3-dd9fe6c6c9e1"/*GlareModes*/,
       "Position": {
         "X": 132.69783,
-        "Y": -105.62421
-      }
-    },
-    {
-      "InputId": "87148268-6d28-4d71-a2b5-b1ec0fb66685"/*Color*/,
-      "Position": {
-        "X": 132.69783,
-        "Y": -60.624207
-      }
-    },
-    {
-      "InputId": "c643292c-5612-408a-9fd6-ce31e4de3f56"/*Range*/,
-      "Position": {
-        "X": 132.69783,
-        "Y": -15.624207
+        "Y": 344.3758
       }
     },
     {
@@ -29,20 +14,6 @@
       "Position": {
         "X": 132.69783,
         "Y": 29.375793
-      }
-    },
-    {
-      "InputId": "8c1d41ff-02e8-481b-a21a-56d1c519d920"/*Threshold*/,
-      "Position": {
-        "X": 132.69783,
-        "Y": 74.37579
-      }
-    },
-    {
-      "InputId": "dd0e21b8-91a6-4853-9907-e0f675a05a5d"/*BlendMode*/,
-      "Position": {
-        "X": 132.69783,
-        "Y": 209.3758
       }
     },
     {
@@ -56,6 +27,20 @@
       "Clamp": true
     },
     {
+      "InputId": "87148268-6d28-4d71-a2b5-b1ec0fb66685"/*Color*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": -60.624207
+      }
+    },
+    {
+      "InputId": "8c1d41ff-02e8-481b-a21a-56d1c519d920"/*Threshold*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 74.37579
+      }
+    },
+    {
       "InputId": "943f048f-4938-4cde-9ac3-c7de5242450e"/*Quality*/,
       "Position": {
         "X": 132.69783,
@@ -64,31 +49,48 @@
       "Description": "Experimental! 0 = Best quality , 7  = Lowest quality \nYou need to activate GenerateMips on the RenderTarget if you want to use the lower qualities.\nAs it's based on MipMaps, a lower quality should be less expensive. \n"
     },
     {
-      "InputId": "069a3776-3084-4a13-aee3-dd9fe6c6c9e1"/*GlareModes*/,
+      "InputId": "afcba3d4-b7db-40bd-919a-d4f49b1bf7fc"/*Image*/,
+      "Relevancy": "Required",
       "Position": {
         "X": 132.69783,
-        "Y": 344.3758
+        "Y": -105.62421
+      }
+    },
+    {
+      "InputId": "c643292c-5612-408a-9fd6-ce31e4de3f56"/*Range*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": -15.624207
+      }
+    },
+    {
+      "InputId": "dd0e21b8-91a6-4853-9907-e0f675a05a5d"/*BlendMode*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 209.3758
       }
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "8b86e66b-7245-492d-a137-e6a273ad04ec"/*_ImageFxShaderSetupStatic*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 94.37823,
-        "Y": 258.05994
-      },
-      "Position": {
-        "X": 511.94125,
-        "Y": -102.45227
-      }
-    },
-    {
       "ChildId": "082b3f61-9776-4f4c-88b6-48a1115bfd2f"/*Vector4Components*/,
       "Position": {
         "X": 282.6978,
         "Y": -60.624207
+      }
+    },
+    {
+      "ChildId": "1ca64aaa-f551-43e5-ab8a-15500a780e57"/*IntToFloat*/,
+      "Position": {
+        "X": 323.30304,
+        "Y": 282.00095
+      }
+    },
+    {
+      "ChildId": "376c5ecf-a87b-434e-9eef-d6c6b2cfbd1a"/*IntToFloat*/,
+      "Position": {
+        "X": 323.30304,
+        "Y": 226.00095
       }
     },
     {
@@ -106,17 +108,15 @@
       }
     },
     {
-      "ChildId": "376c5ecf-a87b-434e-9eef-d6c6b2cfbd1a"/*IntToFloat*/,
+      "ChildId": "8b86e66b-7245-492d-a137-e6a273ad04ec"/*_ImageFxShaderSetupStatic*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 94.37823,
+        "Y": 258.05994
+      },
       "Position": {
-        "X": 323.30304,
-        "Y": 226.00095
-      }
-    },
-    {
-      "ChildId": "1ca64aaa-f551-43e5-ab8a-15500a780e57"/*IntToFloat*/,
-      "Position": {
-        "X": 323.30304,
-        "Y": 282.00095
+        "X": 511.94125,
+        "Y": -102.45227
       }
     }
   ],

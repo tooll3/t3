@@ -18,10 +18,10 @@
       }
     },
     {
-      "InputId": "88623684-a5e4-4415-8458-648761e834e1"/*GenerateMipMaps*/,
+      "InputId": "7e308e6d-fcff-46b2-a6d7-460edb33ef80"/*ScaleFactor*/,
       "Position": {
         "X": 236.08261,
-        "Y": 597.3333
+        "Y": 687.3333
       }
     },
     {
@@ -32,35 +32,14 @@
       }
     },
     {
-      "InputId": "7e308e6d-fcff-46b2-a6d7-460edb33ef80"/*ScaleFactor*/,
+      "InputId": "88623684-a5e4-4415-8458-648761e834e1"/*GenerateMipMaps*/,
       "Position": {
         "X": 236.08261,
-        "Y": 687.3333
+        "Y": 597.3333
       }
     }
   ],
   "SymbolChildUis": [
-    {
-      "ChildId": "d60df57f-308d-45b0-8125-3f3d5f28f030"/*SrvFromTexture2d*/,
-      "Position": {
-        "X": 1083.8844,
-        "Y": 373.3405
-      }
-    },
-    {
-      "ChildId": "305c0faa-2b26-444c-a152-cf1c69e8640b"/*GetTextureSize*/,
-      "Position": {
-        "X": 631.65125,
-        "Y": 454.85413
-      }
-    },
-    {
-      "ChildId": "e178ddf6-492e-4f03-89f6-31f0ce6cd3b8"/*ComputeShader*/,
-      "Position": {
-        "X": 920.99304,
-        "Y": 230.38715
-      }
-    },
     {
       "ChildId": "0516fdda-9803-4fef-80c9-02b98e768107"/*ComputeShaderStage*/,
       "Position": {
@@ -76,17 +55,31 @@
       }
     },
     {
-      "ChildId": "e39c886b-6ea7-43aa-8442-a766ec5ea061"/*Texture2d*/,
+      "ChildId": "1ce4ecda-776d-4fa6-bcd0-f7cbfe25ea9c"/*ScaleSize*/,
       "Position": {
-        "X": 1392.3016,
-        "Y": 596.6234
+        "X": 781.65125,
+        "Y": 454.85413
       }
     },
     {
-      "ChildId": "bea8b06b-784d-4949-9e05-91f7934d0ad7"/*UavFromTexture2d*/,
+      "ChildId": "2eb42bc0-4598-4fbc-acb6-2c43c94a7ee6"/*ComputeShaderStage*/,
       "Position": {
-        "X": 1541.4395,
-        "Y": 550.78284
+        "X": 1725.7344,
+        "Y": 796.02
+      }
+    },
+    {
+      "ChildId": "305c0faa-2b26-444c-a152-cf1c69e8640b"/*GetTextureSize*/,
+      "Position": {
+        "X": 631.65125,
+        "Y": 454.85413
+      }
+    },
+    {
+      "ChildId": "50b4c672-739d-4710-97a2-a6408980a24b"/*BoolToInt*/,
+      "Position": {
+        "X": 843.44104,
+        "Y": 1174.0858
       }
     },
     {
@@ -104,17 +97,10 @@
       }
     },
     {
-      "ChildId": "2eb42bc0-4598-4fbc-acb6-2c43c94a7ee6"/*ComputeShaderStage*/,
+      "ChildId": "6bd5358e-c7cc-4d09-b68c-a28003d4af7c"/*UavFromTexture2d*/,
       "Position": {
-        "X": 1725.7344,
-        "Y": 796.02
-      }
-    },
-    {
-      "ChildId": "9838cfc2-c798-406f-b3d3-5cdf6ef99ca6"/*ExecuteTextureUpdate*/,
-      "Position": {
-        "X": 1875.7344,
-        "Y": 796.02
+        "X": 1531.5865,
+        "Y": 883.8379
       }
     },
     {
@@ -125,10 +111,10 @@
       }
     },
     {
-      "ChildId": "6bd5358e-c7cc-4d09-b68c-a28003d4af7c"/*UavFromTexture2d*/,
+      "ChildId": "9838cfc2-c798-406f-b3d3-5cdf6ef99ca6"/*ExecuteTextureUpdate*/,
       "Position": {
-        "X": 1531.5865,
-        "Y": 883.8379
+        "X": 1875.7344,
+        "Y": 796.02
       }
     },
     {
@@ -139,17 +125,31 @@
       }
     },
     {
-      "ChildId": "50b4c672-739d-4710-97a2-a6408980a24b"/*BoolToInt*/,
+      "ChildId": "bea8b06b-784d-4949-9e05-91f7934d0ad7"/*UavFromTexture2d*/,
       "Position": {
-        "X": 843.44104,
-        "Y": 1174.0858
+        "X": 1541.4395,
+        "Y": 550.78284
       }
     },
     {
-      "ChildId": "1ce4ecda-776d-4fa6-bcd0-f7cbfe25ea9c"/*ScaleSize*/,
+      "ChildId": "d60df57f-308d-45b0-8125-3f3d5f28f030"/*SrvFromTexture2d*/,
       "Position": {
-        "X": 781.65125,
-        "Y": 454.85413
+        "X": 1083.8844,
+        "Y": 373.3405
+      }
+    },
+    {
+      "ChildId": "e178ddf6-492e-4f03-89f6-31f0ce6cd3b8"/*ComputeShader*/,
+      "Position": {
+        "X": 920.99304,
+        "Y": 230.38715
+      }
+    },
+    {
+      "ChildId": "e39c886b-6ea7-43aa-8442-a766ec5ea061"/*Texture2d*/,
+      "Position": {
+        "X": 1392.3016,
+        "Y": 596.6234
       }
     }
   ],
@@ -163,24 +163,6 @@
     }
   ],
   "Annotations": [
-    {
-      "Id": "e7d777d9-106f-4ced-a406-082776548839",
-      "Title": "No MipMaps",
-      "Color": {
-        "X": 0.6,
-        "Y": 0.6,
-        "Z": 0.6,
-        "W": 1.0
-      },
-      "Position": {
-        "X": 1332.3016,
-        "Y": 336.72363
-      },
-      "Size": {
-        "X": 756.4064,
-        "Y": 368.89978
-      }
-    },
     {
       "Id": "82c00fc8-d20d-48ac-bf7f-ecb576ed151a",
       "Title": "With MipMaps",
@@ -197,6 +179,24 @@
       "Size": {
         "X": 724.1478,
         "Y": 299.81787
+      }
+    },
+    {
+      "Id": "e7d777d9-106f-4ced-a406-082776548839",
+      "Title": "No MipMaps",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 1332.3016,
+        "Y": 336.72363
+      },
+      "Size": {
+        "X": 756.4064,
+        "Y": 368.89978
       }
     }
   ]
