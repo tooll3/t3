@@ -3,6 +3,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -145,6 +146,15 @@ public abstract partial class SymbolPackage : IResourcePackage
             }
         }
 
+        // Todo: This is an attempt to narrow down the cause of the null references in updatedSymbols
+        if (updatedSymbols.Any(s => s == null))
+        {
+            var message = $"Found null references in updated symbols for {AssemblyInformation.Name}";
+            Debug.Assert(false, message);
+            Log.Error(message);
+            updatedSymbols = updatedSymbols.Where(x => x != null).ToList();
+        }
+        
         // sort for instance refresh optimization
         var updatedSymbolsSorted = updatedSymbols
                               .OrderBy(symbol =>
