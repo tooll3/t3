@@ -1,6 +1,5 @@
 ﻿using System;
-using T3.Core.Resource;
-using T3.Core.Utils;
+using T3.Serialization;
 
 namespace T3.Core.IO
 {
@@ -10,13 +9,15 @@ namespace T3.Core.IO
     public class Settings<T> where T : class, new()
     {
         public static T Config;
+        public static T Defaults;
 
         protected Settings(string filepath, bool saveOnQuit)
         {
             if(saveOnQuit)
                 AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
 
-            Config = Utilities.TryLoadingJson<T>(filepath) ?? new T();
+            Defaults = new T();
+            Config = JsonUtils.TryLoadingJson<T>(filepath) ?? new T();
             _filepath = filepath;
             _instance = this;
         }
@@ -28,7 +29,7 @@ namespace T3.Core.IO
 
         public static void Save()
         {
-            Utilities.SaveJson(Config, _instance._filepath);
+            JsonUtils.SaveJson(Config, _instance._filepath);
         }
 
         private static Settings<T> _instance;

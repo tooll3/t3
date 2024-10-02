@@ -1,6 +1,6 @@
 {
   "Id": "3b42b2dc-09dd-4f7a-9cf8-5988f26fbda8"/*AddVec2*/,
-  "Description": "",
+  "Description": "Adds two Vec2 variables together",
   "InputUis": [
     {
       "InputId": "4c37316d-618b-40b8-a8e3-73fa02f289b0"/*Input1*/,

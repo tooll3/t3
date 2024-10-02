@@ -1,6 +1,6 @@
 {
   "Id": "fd5467c7-c75d-4755-8885-fd1ff1f07c95"/*SelectFloatFromDict*/,
-  "Description": "Parses a dictionary and converts a single value to a float",
+  "Description": "Parses a dictionary and converts a single value to a float.",
   "InputUis": [
     {
       "InputId": "126d52eb-cdf9-48e6-ac77-bb6e90700c56"/*DictionaryInput*/,
@@ -16,7 +16,7 @@
         "X": -200.0,
         "Y": 45.0
       },
-      "Usage": "Default"
+      "Usage": "CustomDropdown"
     }
   ],
   "SymbolChildUis": [],

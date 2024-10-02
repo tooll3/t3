@@ -15,7 +15,7 @@
     /// This enumeration is directly derived from <see cref="System.Windows.Forms.Keys"/>.
     /// Make sure to not confuse these with ImGuiKey enumeration.
     /// </summary>
-    public enum Key
+    public enum Key // Todo: can we make this frontend-agnostic?
     {
         D0 = 48,
         D1 = 49,
@@ -60,7 +60,7 @@
         // RightShift,
         // LeftCtrl,
         ShiftKey = 16,
-        CtrlKey = 16,
+        CtrlKey = 17,
         End = 0x23,
         Home = 0x24,        
         F1 = 112,
@@ -84,12 +84,22 @@
         Return = 13,
         CapsLock = 20,
         Esc = 27,
-        Minus = 187,
+        Equal = 187,
+        Minus = 189,
         Space = 32,
         SquareBracketLeft = 219,
         SquareBracketRight = 221,
         Comma = 188,
         Period = 190,
-        Slash = 191
+        Slash = 191,
+        Pipe = 192,
+        Alt = 18,
+        Ins= 45,
+        PageUp = 33,
+        PageDown = 34,
+        Semicolon = 186,
+        Apostrophe = 226,
+        HashTag = 220,
+        
     }
 }

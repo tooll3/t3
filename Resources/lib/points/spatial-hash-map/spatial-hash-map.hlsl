@@ -2,6 +2,7 @@
 // This code is derived after Guillaume Boissé 
 
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/points/spatial-hash-map/hash-map-settings.hlsl" 
 
@@ -19,12 +20,9 @@ cbuffer Params : register(b0)
 }
 
 #define THREADS_PER_GROUP 256
-//static const uint            ParticleGridEntryCount = 4;
-//static const uint            ParticleGridCellCount = 20;
-//static const uint            ParticleGridCellCount = 2000;
-//static const uint            ParticleGridEntryCount = 16;
-
  
+
+
 bool ParticleGridInsert(in uint index, in float3 position)
 {
     uint i;
@@ -54,54 +52,7 @@ bool ParticleGridInsert(in uint index, in float3 position)
     return true;
 }
 
-bool ParticleGridFind(in float3 position, out uint2 entry)
-{
-    uint i;
-    position+=100*CellSize;
-    int3 cell = int3(position / CellSize);
-    uint cellIndex = (pcg(cell.x + pcg(cell.y + pcg(cell.z))) % ParticleGridCellCount);
-    uint hashValue = max(xxhash(cell.x + xxhash(cell.y + xxhash(cell.z))), 1);
-    uint cellBegin = cellIndex * ParticleGridEntryCount;
-    uint cellEnd = cellBegin + ParticleGridEntryCount;
-    for(i = cellBegin; i < cellEnd; ++i)
-    {
-        const uint entryValue = HashGridCells[i];
-        if(entryValue == hashValue)
-            break;  // found existing entry
-        if(entryValue == 0)
-            i = cellEnd;
-    }
-    if(i >= cellEnd)
-        return false;
-    entry.x = CellRangeIndices[i];
-    entry.y = CellPointCounts[i] + entry.x;
-    return true;
-}
 
-bool GridFind(in float3 position, out uint startIndex, out uint endIndex)
-{
-    position+=100 * CellSize;
-    uint i;
-    int3 cell = int3(position / CellSize);
-    uint cellIndex = (pcg(cell.x + pcg(cell.y + pcg(cell.z))) % ParticleGridCellCount);
-    uint hashValue = max(xxhash(cell.x + xxhash(cell.y + xxhash(cell.z))), 1);
-    uint cellBegin = cellIndex * ParticleGridEntryCount;
-    uint cellEnd = cellBegin + ParticleGridEntryCount;
-    for(i = cellBegin; i < cellEnd; ++i)
-    {
-        const uint entryValue = HashGridCells[i];
-        if(entryValue == hashValue)
-            break;  // found existing entry
-        if(entryValue == 0)
-            i = cellEnd;
-    }
-    if(i >= cellEnd)
-        return false;
-
-    startIndex = CellRangeIndices[i];
-    endIndex = CellPointCounts[i] + startIndex;
-    return true;
-}
 
 //----------------------------------------------------------------------
 
@@ -124,7 +75,7 @@ void CountParticlesPerCell(uint DTid : SV_DispatchThreadID, uint _GI: SV_GroupIn
         return; // out of bounds
 
     //const uint particleIndex = aliveIndexBuffer[DTid.x];
-    const float3 position = _points[DTid.x].position;
+    const float3 position = _points[DTid.x].Position;
 
     if(!ParticleGridInsert(DTid.x, position))
         PointCellIndices[DTid.x] = uint2(uint(-1), 0);

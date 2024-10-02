@@ -4,10 +4,13 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.UiHelpers
 {
@@ -62,29 +65,37 @@ namespace T3.Editor.Gui.UiHelpers
             {
                 var color = symbol.OutputDefinitions.Count > 0
                                 ? TypeUiRegistry.GetPropertiesForType(symbol.OutputDefinitions[0]?.ValueType).Color
-                                : Color.Gray;
+                                : UiColors.Gray;
 
-                ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(color).Rgba);
-                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, ColorVariations.OperatorHover.Apply(color).Rgba);
-                ImGui.PushStyleColor(ImGuiCol.ButtonActive, ColorVariations.OperatorInputZone.Apply(color).Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.OperatorBackground.Apply(color).Rgba);
+                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, ColorVariations.OperatorBackgroundHover.Apply(color).Rgba);
+                ImGui.PushStyleColor(ImGuiCol.ButtonActive, ColorVariations.OperatorBackgroundHover.Apply(color).Rgba);
                 ImGui.PushStyleColor(ImGuiCol.Text, ColorVariations.OperatorLabel.Apply(color).Rgba);
 
                 if (ImGui.Button(symbol.Name))
                 {
                     //_selectedSymbol = symbol;
                 }
-                
+
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
+                }
+
                 ImGui.PopStyleColor(4);
                 HandleDragAndDropForSymbolItem(symbol);
 
-                if (SymbolAnalysis.InformationForSymbolIds.TryGetValue(symbol.Id, out var info))
+                if (SymbolAnalysis.DetailsInitialized && SymbolAnalysis.InformationForSymbolIds.TryGetValue(symbol.Id, out var info))
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
-                    ListSymbolSetWithTooltip("  (needs {0}/", "  (",  info.RequiredSymbolIds);
-                    ListSymbolSetWithTooltip("used by {0})  ", "NOT USED)  ",  info.DependingSymbolIds);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                    ListSymbolSetWithTooltip("  (needs {0}/", "  (", info.RequiredSymbolIds);
+                    if (ListSymbolSetWithTooltip("used by {0})  ", "NOT USED)  ", info.DependingSymbolIds))
+                    {
+                        SymbolLibrary._symbolUsageReference = symbol;
+                    }
+
                     ImGui.PopStyleColor();
                 }
-
 
                 if (SymbolUiRegistry.Entries.TryGetValue(symbol.Id, out var symbolUi))
                 {
@@ -106,7 +117,7 @@ namespace T3.Editor.Gui.UiHelpers
                 if (ExampleSymbolLinking.ExampleSymbols.TryGetValue(symbol.Id, out var examples))
                 {
                     ImGui.PushFont(Fonts.FontSmall);
-                    ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
+                    ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f * ImGui.GetStyle().Alpha);
                     for (var index = 0; index < examples.Count; index++)
                     {
                         var exampleId = examples[index];
@@ -118,16 +129,16 @@ namespace T3.Editor.Gui.UiHelpers
                     ImGui.PopStyleVar();
                     ImGui.PopFont();
                 }
-
             }
             ImGui.PopID();
         }
 
-        private static void ListSymbolSetWithTooltip(string setTitleFormat, string emptySetTitle, HashSet<Guid> symbolIdSet)
+        private static bool ListSymbolSetWithTooltip(string setTitleFormat, string emptySetTitle, HashSet<Guid> symbolIdSet)
         {
+            var activated = false;
             ImGui.PushID(setTitleFormat);
             ImGui.SameLine();
-            
+
             if (symbolIdSet.Count == 0)
             {
                 ImGui.TextUnformatted(emptySetTitle);
@@ -141,9 +152,15 @@ namespace T3.Editor.Gui.UiHelpers
                     ListSymbols(symbolIdSet);
                     ImGui.EndTooltip();
                 }
+
+                if (ImGui.IsItemClicked())
+                {
+                    activated = true;
+                }
             }
-            
+
             ImGui.PopID();
+            return activated;
         }
 
         private static void ListSymbols(HashSet<Guid> valueRequiredSymbolIds)
@@ -159,10 +176,40 @@ namespace T3.Editor.Gui.UiHelpers
             }
         }
 
+        private static bool IsSymbolCurrentCompositionOrAParent(Symbol symbol)
+        {
+            var comp = GraphWindow.GetPrimaryGraphWindow()?.GraphCanvas?.CompositionOp;
+            if (comp == null)
+            {
+                return true;
+            }
+
+            if (comp.Symbol == symbol)
+            {
+                return true;
+            }
+
+            var instance = comp;
+            while (instance != null)
+            {
+                if (instance.Symbol == symbol)
+                    return true;
+
+                instance = instance.Parent;
+            }
+
+            return false;
+        }
+
         public static void HandleDragAndDropForSymbolItem(Symbol symbol)
         {
             if (ImGui.IsItemActive())
             {
+                if (IsSymbolCurrentCompositionOrAParent(symbol))
+                {
+                    return;
+                }
+
                 if (ImGui.BeginDragDropSource())
                 {
                     if (_dropData == new IntPtr(0))
@@ -180,13 +227,21 @@ namespace T3.Editor.Gui.UiHelpers
             }
             else if (ImGui.IsItemDeactivated())
             {
+                if (ImGui.GetMouseDragDelta().Length() < 4)
+                {
+                    if (NodeSelection.GetSelectedChildUis().Count() == 1)
+                    {
+                        ConnectionMaker.InsertSymbolInstance(symbol);
+                    }
+                }
+
                 _dropData = new IntPtr(0);
             }
         }
 
         private static readonly NamespaceTreeNode _treeNode = new(NamespaceTreeNode.RootNodeId);
 
-        private static IntPtr _dropData = new IntPtr(0);
+        private static IntPtr _dropData = new(0);
         private static string _guidSting;
     }
 }

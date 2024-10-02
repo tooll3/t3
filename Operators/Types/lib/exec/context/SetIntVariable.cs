@@ -1,11 +1,9 @@
 using System;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_7953f704_ebee_498b_8bdd_a2c201dfe278
@@ -19,11 +17,7 @@ namespace T3.Operators.Types.Id_7953f704_ebee_498b_8bdd_a2c201dfe278
         {
             Output.UpdateAction = Update;
         }
-
-        // private T GetEnumFromInput<T>(InputSlot<int> slot, EvaluationContext context) where T:Enum 
-        // {
-        //     return (T)slot.GetValue(context).Clamp(0, Enum.GetValues(typeof(T)).Length - 1);
-        // }
+        
         
         private int ClampForEnum<T>(int i) where T:Enum 
         {
@@ -34,45 +28,44 @@ namespace T3.Operators.Types.Id_7953f704_ebee_498b_8bdd_a2c201dfe278
         {
             var name = VariableName.GetValue(context);
             var newValue = Value.GetValue(context);
+            var clearAfterExecution = ClearAfterExecution.GetValue(context);
 
-            var logLevel = LogLevel.GetValue(context).ClampForEnum<LogLevels>();
+            var logLevel =  LogLevel.GetEnumValue<LogLevels>(context);
             
             if (string.IsNullOrEmpty(name))
             {
-                if(logLevel >= (int)LogLevels.Warnings) 
+                if((int)logLevel >= (int)LogLevels.Warnings) 
                     Log.Warning($"Can't set variable with invalid name {name}", this);
                 
                 return;
             }
-            
-            if (!SubGraph.IsConnected)
-            {
-                if(logLevel >= (int)LogLevels.Warnings) 
-                    Log.Warning($"No subgraph defined for variable {name}", this);
-                
-                context.IntVariables[name] = newValue;
-            }
-            else
+
+            if (SubGraph.IsConnected)
             {
                 var hadPreviousValue = context.IntVariables.TryGetValue(name, out var previous);
                 context.IntVariables[name] = newValue;
-                
+
                 SubGraph.GetValue(context);
-                
+
                 if (hadPreviousValue)
                 {
-                    if(logLevel >= (int)LogLevels.Changes) 
+                    if ((int)logLevel >= (int)LogLevels.Changes)
                         Log.Debug($"Changing {name} from {previous} -> {newValue}", this);
-                    
+
                     context.IntVariables[name] = previous;
                 }
                 else
                 {
-                    if(logLevel >= (int)LogLevels.AllUpdates) 
+                    if ((int)logLevel >= (int)LogLevels.AllUpdates)
                         Log.Debug($"Setting {name} to {newValue}", this);
-                    
-                    context.IntVariables.Remove(name);
+
+                    if(!clearAfterExecution)
+                        context.IntVariables.Remove(name);
                 }
+            }
+            else
+            {
+                context.IntVariables[name] = newValue;
             }
         }
 
@@ -89,6 +82,8 @@ namespace T3.Operators.Types.Id_7953f704_ebee_498b_8bdd_a2c201dfe278
         [Input(Guid = "4AB2A742-7F3F-4D96-B67E-73E14B4A8F47", MappedType = typeof(LogLevels))]
         public readonly InputSlot<int> LogLevel = new();
 
+        [Input(Guid = "DA431996-4C4C-4CDC-9723-9116BBB5440C")]
+        public readonly InputSlot<bool> ClearAfterExecution = new ();
 
         private enum LogLevels
         {

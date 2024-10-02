@@ -1,26 +1,25 @@
 using System;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using System.IO;
-using System.Net;
 using SharpDX.WIC;
 using System.Net.Http;
 using System.Threading.Tasks;
 using T3.Core.Resource;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_61ec6355_bd7d_4abb_aa44_b01b7d658e23
 {
     public class LoadImageFromUrl : Instance<LoadImageFromUrl>
     {
         [Output(Guid = "316fe874-5178-4068-a233-6c6ecf70c49e")]
-        public readonly Slot<Texture2D> Texture = new Slot<Texture2D>();
+        public readonly Slot<Texture2D> Texture = new();
 
         [Output(Guid = "a843ab64-0b99-4c4f-9644-cc9bb771981d")]
-        public readonly Slot<ShaderResourceView> ShaderResourceView = new Slot<ShaderResourceView>();
+        public readonly Slot<ShaderResourceView> ShaderResourceView = new();
 
         public LoadImageFromUrl()
         {
@@ -28,11 +27,21 @@ namespace T3.Operators.Types.Id_61ec6355_bd7d_4abb_aa44_b01b7d658e23
             ShaderResourceView.UpdateAction = UpdateShaderResourceView;
         }
 
+        private bool _triggerUpdate;
+        
         private void UpdateShaderResourceView(EvaluationContext context)
         {
+            var wasUpdated = MathUtils.WasTriggered(TriggerUpdate.GetValue(context), ref _triggerUpdate);
+            
             var url = Url.GetValue(context);
-            if (url != _url && !string.IsNullOrEmpty(url))
+            if (wasUpdated || url != _url && !string.IsNullOrEmpty(url))
             {
+                if (wasUpdated && !TriggerUpdate.IsConnected)
+                {
+                    TriggerUpdate.SetTypedInputValue(false);
+                }
+                    
+                    
                 _url = url;
                 HttpClient httpClient = null;
                 Dispose();
@@ -84,11 +93,11 @@ namespace T3.Operators.Types.Id_61ec6355_bd7d_4abb_aa44_b01b7d658e23
                     return streamResponse;
                 }
                 // 404 etc.
-                Log.Info($"No success loading {url}: {response.StatusCode}");
+                Log.Info($"No success loading {url}: {response.StatusCode}", this);
                 return null;
             } catch (Exception e)
             {
-                Log.Info($"Failed to load URL : {e.Message}");
+                Log.Info($"Failed to load URL : {e.Message}", this);
                 return null;
             }
         }
@@ -99,38 +108,36 @@ namespace T3.Operators.Types.Id_61ec6355_bd7d_4abb_aa44_b01b7d658e23
             lock (this)
             {
                 _image = null;
-                using (var memStream = new MemoryStream())
+                using var memStream = new MemoryStream();
+                try
                 {
-                    try
+                    if (streamResponse != null)
                     {
-                        if (streamResponse != null)
-                        {
-                            streamResponse.CopyTo(memStream);
+                        streamResponse.CopyTo(memStream);
 
-                            Log.Debug($"Finished loading URL {_url}", this);
+                        Log.Debug($"Finished loading URL {_url}", this);
 
-                            ImagingFactory factory = new ImagingFactory();
-                            memStream.Position = 0;
-                            var bitmapDecoder = new BitmapDecoder(factory, memStream, DecodeOptions.CacheOnDemand);
-                            var formatConverter = new FormatConverter(factory);
-                            var bitmapFrameDecode = bitmapDecoder.GetFrame(0);
-                            formatConverter.Initialize(bitmapFrameDecode, SharpDX.WIC.PixelFormat.Format32bppPRGBA, BitmapDitherType.None, null, 0.0,
-                                                       BitmapPaletteType.Custom);
+                        ImagingFactory factory = new ImagingFactory();
+                        memStream.Position = 0;
+                        var bitmapDecoder = new BitmapDecoder(factory, memStream, DecodeOptions.CacheOnDemand);
+                        var formatConverter = new FormatConverter(factory);
+                        var bitmapFrameDecode = bitmapDecoder.GetFrame(0);
+                        formatConverter.Initialize(bitmapFrameDecode, SharpDX.WIC.PixelFormat.Format32bppRGBA, BitmapDitherType.None, null, 0.0,
+                                                   BitmapPaletteType.Custom);
 
-                            _image?.Dispose();
-                            _image = ResourceManager.CreateTexture2DFromBitmap(ResourceManager.Device, formatConverter);
-                            _image.DebugName = _url;
-                            bitmapFrameDecode.Dispose();
-                            bitmapDecoder.Dispose();
-                            formatConverter.Dispose();
-                            factory.Dispose();
-                            Texture.DirtyFlag.Invalidate();
-                        }
+                        _image?.Dispose();
+                        _image = ResourceManager.CreateTexture2DFromBitmap(ResourceManager.Device, formatConverter);
+                        _image.DebugName = _url;
+                        bitmapFrameDecode.Dispose();
+                        bitmapDecoder.Dispose();
+                        formatConverter.Dispose();
+                        factory.Dispose();
+                        Texture.DirtyFlag.Invalidate();
                     }
-                    catch (Exception e)
-                    {
-                        Log.Info($"Failed to decode image data: {e.Message}");
-                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Info($"Failed to decode image data: {e.Message}", this);
                 }
             }
         }
@@ -140,6 +147,9 @@ namespace T3.Operators.Types.Id_61ec6355_bd7d_4abb_aa44_b01b7d658e23
         private string _url;
 
         [Input(Guid = "21b2e219-0b2a-4323-b288-f39ed791e676")]
-        public readonly InputSlot<string> Url = new InputSlot<string>();
+        public readonly InputSlot<string> Url = new();
+        
+        [Input(Guid = "710BA03D-D26E-496A-B6CD-68ABB2E9F369")]
+        public readonly InputSlot<bool> TriggerUpdate = new();        
     }
 }

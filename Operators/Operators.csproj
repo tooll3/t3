@@ -3,24 +3,26 @@
   <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <!-- These lines need to be enabled when building a stand alone version 
+    <!-- These lines need to be enabled when building a stand alone version  -->
     <PackageVersion>0.0.0</PackageVersion>
     <AssemblyVersion>0.0.0.0</AssemblyVersion>
     <FileVersion>0.0.0.0</FileVersion>
-    -->
+    <!-- -->
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\Logging\Logging.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CppSharp" Version="1.0.1" />
-    <PackageReference Include="ManagedBass" Version="3.1.0" />
-    <PackageReference Include="ManagedBass.Wasapi" Version="3.1.0" />
+    <PackageReference Include="ManagedBass" Version="3.1.1" />
+    <PackageReference Include="ManagedBass.Wasapi" Version="3.1.1" />
     <PackageReference Include="NAudio" Version="2.1.0" />
+    <PackageReference Include="NDILibDotNet6" Version="1.0.11" />
     <PackageReference Include="OpenGL.Net" Version="0.8.4">
-        <NoWarn>NU1701</NoWarn>
+      <NoWarn>NU1701</NoWarn>
     </PackageReference>
 
     <PackageReference Include="Rug.Osc" Version="1.2.5">
@@ -29,7 +31,8 @@
 
     <PackageReference Include="SharpDX.Direct3D11" Version="4.2.0" />
     <PackageReference Include="SharpDX.MediaFoundation" Version="4.2.0" />
-    <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0026" />
+    <PackageReference Include="SharpDX.XInput" Version="4.2.0" />
+    <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0031" />
     <PackageReference Include="Svg" Version="3.3.0" />
     <PackageReference Include="unsplasharp.api" Version="0.7.0" />
   </ItemGroup>

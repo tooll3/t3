@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -147,7 +148,7 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
         }
         #endregion
         
-        private readonly Dictionary<int, double> _usedPositions = new Dictionary<int, double>();
+        private readonly Dictionary<int, double> _usedPositions = new();
         private const double Epsilon = 0.001f;
     }
 }

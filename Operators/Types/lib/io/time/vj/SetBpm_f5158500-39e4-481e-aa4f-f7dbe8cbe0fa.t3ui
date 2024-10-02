@@ -1,9 +1,10 @@
 {
   "Id": "f5158500-39e4-481e-aa4f-f7dbe8cbe0fa"/*SetBpm*/,
-  "Description": "DANGER: Overriding the BPM-rate will interfere with your playback and animation speed. \n\nOnly use this operator, if you know what you're doing (e.g. in VJ-set context where the bpm-rate is provided by an external source like MIDI or OSC)",
+  "Description": "DANGER: Overriding the BPM rate will interfere with your playback and animation speed. \n\nOnly use this operator if you know what you're doing (e.g., in VJ-set context where the BPM rate is provided by an external source like MIDI or OSC)",
   "InputUis": [
     {
       "InputId": "9cc32da8-f939-4ad3-b381-6df8338a371b"/*SubGraph*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 45.0

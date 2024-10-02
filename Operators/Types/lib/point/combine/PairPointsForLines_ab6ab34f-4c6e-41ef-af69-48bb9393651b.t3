@@ -24,7 +24,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\combine\\pair-points-for-lines.hlsl"
+          "Value": "Resources\\lib\\points\\combine\\PairPointsForLines.hlsl"
         }
       ],
       "Outputs": []
@@ -35,7 +35,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 64,
             "Y": 1,
@@ -88,7 +88,7 @@
       "Outputs": []
     },
     {
-      "Id": "c76b9c7a-e2d0-4d73-8e7e-1810e5fd7c63"/*StructuredBuffer2*/,
+      "Id": "c76b9c7a-e2d0-4d73-8e7e-1810e5fd7c63"/*StructuredBufferWithViews*/,
       "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
         {
@@ -142,7 +142,7 @@
       "Outputs": []
     },
     {
-      "Id": "e570e928-c031-453f-8904-dd379f149c72"/*BoolToFloats*/,
+      "Id": "e570e928-c031-453f-8904-dd379f149c72"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
@@ -256,6 +256,12 @@
       "SourceSlotId": "431b39fd-4b62-478b-bbfa-4346102c3f61",
       "TargetParentOrChildId": "9a9332f5-d567-480e-b83a-02ab35292757",
       "TargetSlotId": "01809b63-4b4a-47be-9588-98d5998ddb0c"
+    },
+    {
+      "SourceParentOrChildId": "29e66d1a-b327-42f6-b023-e7a7aa7eaea5",
+      "SourceSlotId": "6d7a9493-6210-462a-b9c2-525b925de6c8",
+      "TargetParentOrChildId": "c76b9c7a-e2d0-4d73-8e7e-1810e5fd7c63",
+      "TargetSlotId": "0016dd87-8756-4a97-a0da-096e1a879c05"
     },
     {
       "SourceParentOrChildId": "31a7d687-b674-4364-8e17-e459bc9b9ffa",

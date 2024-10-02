@@ -20,11 +20,11 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
                 new (0.125f, "1/8"),
                 new (0.25f, "1/4"),
                 new (0.5f, "1/2"),
-                new (1, "1"),
-                new (4, "x4"),
-                new (8, "x8"),
-                new (16, "x16"),
-                new (32, "x32"),
+                new (1, "1×"),
+                new (4, "4×"),
+                new (8, "8×"),
+                new (16, "16×"),
+                new (32, "32×"),
             };
 
         public static int FindClosestRateIndex(float rate)

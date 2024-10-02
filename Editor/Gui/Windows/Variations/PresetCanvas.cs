@@ -9,19 +9,19 @@ namespace T3.Editor.Gui.Windows.Variations
 {
     public class PresetCanvas : VariationBaseCanvas
     {
-        public override void DrawToolbarFunctions()
+        public virtual void DrawToolbarFunctions()
         {
             var s = ImGui.GetFrameHeight();
             if (VariationHandling.ActivePoolForPresets == null)
                 return;
             
-            if (CustomComponents.IconButton(Icon.Plus, "##addbutton", new Vector2(s, s)))
+            if (CustomComponents.IconButton(Icon.Plus, new Vector2(s, s)))
             {
-                CreateVariation();
+                CreatePreset();
             }
         }
 
-        public override string GetTitle()
+        protected override string GetTitle()
         {
             if (VariationHandling.ActiveInstanceForPresets == null)
                 return "";
@@ -36,19 +36,20 @@ namespace T3.Editor.Gui.Windows.Variations
         {
         }
 
-        public override Variation CreateVariation()
+        private void CreatePreset()
         {
+            var nextInsertionPosition = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.Variations);
             var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetForInstanceSymbol(VariationHandling.ActiveInstanceForPresets);
             if (newVariation != null)
             {
-                newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.Variations);
+                newVariation.PosOnCanvas = nextInsertionPosition;
                 VariationThumbnail.VariationForRenaming = newVariation;
+                VariationHandling.ActivePoolForPresets.SaveVariationsToFile();
             }
 
             Selection.SetSelection(newVariation);
             ResetView();
             TriggerThumbnailUpdate();
-            return newVariation;
         }
     }
 }

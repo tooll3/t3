@@ -1,0 +1,70 @@
+{
+  "Id": "90b2c6d2-e9a6-4910-b42d-94202f07be27"/*Accumulator*/,
+  "Description": "Accumulates a value with the incoming rate.\n\nNote that the increment is a rate that get multiplied with the current frame duration: With an increment of 1 you have a full value change of 1 unit after one second.\n\nSimilar to [Time].\nFor a variant that does not count up linearly / smooth but in steps, see [Counter]",
+  "InputUis": [
+    {
+      "InputId": "f647a803-1635-4dcd-bb4d-a7817789a3e2"/*Accumulate*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "7caf37ec-ed34-4711-b02c-e136d070fff7"/*Running*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 373.0
+      }
+    },
+    {
+      "InputId": "052f9cd1-4b3e-483f-b628-c356f58ff87e"/*Increment*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      },
+      "Description": "Defines how quickly / intensively the accumulator counts up",
+      "AddPadding": "True",
+      "Min": -100.0,
+      "Max": 100.0
+    },
+    {
+      "InputId": "26f05385-3c48-499a-bc30-69bad0a2218c"/*StartValue*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 328.0
+      },
+      "Description": "Defines the number with which the accumulator starts counting.\n\nNotice: On the fly changes are only applied after the reset trigger has been used",
+      "AddPadding": "True",
+      "Min": -100.0,
+      "Max": 100.0,
+      "Scale": 0.01
+    },
+    {
+      "InputId": "9f1d76d2-c3dd-4035-a37c-300eb011331b"/*ResetTrigger*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 373.0
+      },
+      "Description": "Resets the accumulator"
+    },
+    {
+      "InputId": "4d90cd4b-8e11-4b86-a668-26810af029b3"/*Modulo*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 418.0
+      },
+      "Description": "Additional modulo that can be useful to make the values loop.\nThis parameter is ignored when 0.",
+      "AddPadding": "True"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "a999f93c-e51a-4325-bae2-bfab830b868d"/*Result*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 138.0
+      }
+    }
+  ]
+}

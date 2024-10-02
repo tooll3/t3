@@ -1,8 +1,6 @@
-using System;
-using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using T3.Core;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -16,7 +14,7 @@ namespace T3.Operators.Types.Id_fc1ef086_c160_4174_8e60_a4eda931163d
         // [Output(Guid = "27495e79-5229-4a2d-b780-52265c3085ea")]
         // public readonly Slot<Texture2D> Texture = new Slot<Texture2D>();
         [Output(Guid = "3cbfceaa-4fa1-44e9-8c43-aff7dba7f871")]
-        public readonly Slot<Core.DataTypes.Texture3dWithViews> OutputTexture = new Slot<Core.DataTypes.Texture3dWithViews>(new Core.DataTypes.Texture3dWithViews());
+        public readonly Slot<Core.DataTypes.Texture3dWithViews> OutputTexture = new(new Core.DataTypes.Texture3dWithViews());
 
         private uint _textureResId;
 
@@ -30,7 +28,7 @@ namespace T3.Operators.Types.Id_fc1ef086_c160_4174_8e60_a4eda931163d
             Int3 size = Size.GetValue(context);
             if (size.X < 1 || size.Y < 1 || size.Z < 1)
             {
-                Log.Warning($"Requested invalid texture resolution: {size}");
+                Log.Warning($"Requested invalid texture resolution: {size}", this);
                 return;
             }
 
@@ -57,24 +55,24 @@ namespace T3.Operators.Types.Id_fc1ef086_c160_4174_8e60_a4eda931163d
         }
 
         [Input(Guid = "dca953d6-bdc1-42eb-9a4d-5974c42cf45b")]
-        public readonly InputSlot<Int3> Size = new InputSlot<Int3>();
+        public readonly InputSlot<Int3> Size = new();
 
         [Input(Guid = "2e0fd6be-0c9e-4624-803c-178d1d80ea43")]
-        public readonly InputSlot<int> MipLevels = new InputSlot<int>();
+        public readonly InputSlot<int> MipLevels = new();
 
         [Input(Guid = "ce649059-f136-4d32-81c6-23d7b55f3378")]
-        public readonly InputSlot<Format> Format = new InputSlot<Format>();
+        public readonly InputSlot<Format> Format = new();
 
         [Input(Guid = "7db98a0e-2589-425b-95eb-d7614e82ed93")]
-        public readonly InputSlot<ResourceUsage> ResourceUsage = new InputSlot<ResourceUsage>();
+        public readonly InputSlot<ResourceUsage> ResourceUsage = new();
 
         [Input(Guid = "b824dbd6-272d-4744-a20d-5afa5caa9209")]
-        public readonly InputSlot<BindFlags> BindFlags = new InputSlot<BindFlags>();
+        public readonly InputSlot<BindFlags> BindFlags = new();
 
         [Input(Guid = "cfd3cfbf-7429-42f9-abc9-0e0e173f0297")]
-        public InputSlot<CpuAccessFlags> CpuAccessFlags = new InputSlot<CpuAccessFlags>();
+        public InputSlot<CpuAccessFlags> CpuAccessFlags = new();
 
         [Input(Guid = "1884edfa-622b-4b96-a081-95dc361e79f3")]
-        public InputSlot<ResourceOptionFlags> ResourceOptionFlags = new InputSlot<ResourceOptionFlags>();
+        public InputSlot<ResourceOptionFlags> ResourceOptionFlags = new();
     }
 }

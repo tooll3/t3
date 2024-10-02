@@ -1,0 +1,19 @@
+{
+  "Name": "JoinStringList",
+  "Id": "51943340-70b1-4bb5-8cb9-0e79d366a57b",
+  "Namespace": "lib.string",
+  "Inputs": [
+    {
+      "Id": "db366216-b485-48bf-b267-56344b317cf7"/*Input*/,
+      "DefaultValue": {
+        "Values": []
+      }
+    },
+    {
+      "Id": "89350e3c-2b83-4720-bfa1-d4adc6cc02fa"/*Separator*/,
+      "DefaultValue": "\\n"
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

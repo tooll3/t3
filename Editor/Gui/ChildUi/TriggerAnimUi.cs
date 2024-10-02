@@ -6,6 +6,7 @@ using T3.Core.Utils;
 using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95;
 
 namespace T3.Editor.Gui.ChildUi
@@ -45,8 +46,8 @@ namespace T3.Editor.Gui.ChildUi
 
             if (h > 14)
             {
-                ValueLabel.Draw(drawList, graphRect, new Vector2(1, 0), anim.EndValue);
-                ValueLabel.Draw(drawList, graphRect, new Vector2(1, 1), anim.StartValue);
+                ValueLabel.Draw(drawList, graphRect, new Vector2(1, 0), anim.Amplitude);
+                ValueLabel.Draw(drawList, graphRect, new Vector2(1, 1), anim.Base);
             }
             
             // Graph dragging to edit Bias and Ratio
@@ -97,17 +98,17 @@ namespace T3.Editor.Gui.ChildUi
                 // Horizontal line
                 var lh1 = graphRect.Min + Vector2.UnitY * h / 2;
                 var lh2 = new Vector2(graphRect.Max.X, lh1.Y + 1);
-                drawList.AddRectFilled(lh1, lh2, T3Style.Colors.GraphAxis);
+                drawList.AddRectFilled(lh1, lh2, UiColors.WidgetAxis);
 
                 // Vertical start line 
                 var lv1 = graphRect.Min + Vector2.UnitX * (int)(graphWidth * relativeX);
                 var lv2 = new Vector2(lv1.X + 1, graphRect.Max.Y);
-                drawList.AddRectFilled(lv1, lv2, T3Style.Colors.GraphAxis);
+                drawList.AddRectFilled(lv1, lv2, UiColors.WidgetAxis);
 
                 // Fragment line 
                 var cycleWidth = graphWidth * (1 - relativeX); 
                 var dx = new Vector2(((float)anim.LastFraction * duration + delay) * cycleWidth - 1, 0);
-                drawList.AddRectFilled(lv1 + dx, lv2 + dx, T3Style.Colors.GraphActiveLine);
+                drawList.AddRectFilled(lv1 + dx, lv2 + dx, UiColors.WidgetActiveLine);
 
                 // Draw graph
                 //        lv
@@ -116,22 +117,31 @@ namespace T3.Editor.Gui.ChildUi
                 //  0-----1 - - - - - -   lh
                 //        |
                 //        |
+                
+                
+                var shapeValue = anim.Shape.IsConnected 
+                                ? anim.Shape.Value 
+                                :anim.Shape.TypedInputValue.Value;
+                var shapeIndex = shapeValue.Clamp(0, Enum.GetNames<TriggerAnim.Shapes>().Length -1 );
 
                 for (var i = 0; i < GraphListSteps; i++)
                 {
                     var f = (float)i / GraphListSteps;
                     var fragment = f * (1 + previousCycleFragment) - previousCycleFragment;
                     GraphLinePoints[i] = new Vector2((f * duration +  delay) * graphWidth,
-                                                     (0.5f - anim.CalcNormalizedValueForFraction(fragment) / 2) * h
+                                                     (0.5f - anim.CalcNormalizedValueForFraction(fragment, shapeIndex) / 2) * h
                                                     ) + graphRect.Min;
                 }
 
-                var curveLineColor = highlightEditable ? T3Style.Colors.GraphLineHover : T3Style.Colors.GraphLine;
+                var curveLineColor = highlightEditable ? UiColors.WidgetLineHover : UiColors.WidgetLine;
                 drawList.AddPolyline(ref GraphLinePoints[0], GraphListSteps, curveLineColor, ImDrawFlags.None, 1.5f);
             }
             drawList.PopClipRect();
             ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
+            return SymbolChildUi.CustomUiResult.Rendered 
+                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph 
+                   | SymbolChildUi.CustomUiResult.PreventInputLabels
+                   | SymbolChildUi.CustomUiResult.PreventTooltip;
         }
 
         private static float _dragStartBias;

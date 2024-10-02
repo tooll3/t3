@@ -1,13 +1,17 @@
 {
   "Id": "3a1d7ea0-5445-4df0-b08a-6596e53f815a"/*OscInput*/,
-  "Description": "",
+  "Description": "Receives OSC input from a connected server. \n\nIn most scenarios it is useful to record some input messages and then pick the relevant addresses by using a [SelectFloatFromDict] or [SelectVec2FromDict] operator.\n\nYou might want to adjust the default OSC port in the settings window to see a visual indication of incoming messages in the timeline bar.",
   "InputUis": [
     {
       "InputId": "87efd3c4-f2df-4996-924f-12c631bad8d8"/*Port*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "OSC port to listen on. \n\nChanging this parameter will discard recorded values and reconnect.",
+      "Min": 0,
+      "Max": 65335,
+      "Clamp": true
     },
     {
       "InputId": "17d1fe47-430a-4465-92aa-92a4effb515f"/*Address*/,
@@ -15,52 +19,108 @@
         "X": -200.0,
         "Y": 45.0
       },
-      "Usage": "Default"
-    },
-    {
-      "InputId": "4636d6cf-8233-4281-8840-5ba079b5f1a6"/*DefaultOutputValue*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
-      }
-    },
-    {
-      "InputId": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 180.0
-      }
+      "GroupTitle": "Filter value",
+      "Description": "An optional filter to the collected OSC addresses. The first match to this filter will be used for the float output parameter.\n\nThis can be useful to directly pick a channel without the need to insert an [SelectFloatFromDict] operator.\n\nThis list is automatically filled with all addresses used by incoming OSC message after connecting to that port. This list is shared between all OscInput operators listing to that port. \nNext to the address there is an indicator for the data-type of that address. E.g. <ff> for a vec2 or <ddd> for a double precision Vec3.",
+      "Usage": "CustomDropdown"
     },
     {
       "InputId": "6c15e743-9a70-47e7-a0a4-75636817e441"/*PrintLogMessages*/,
       "Position": {
         "X": -200.0,
         "Y": 225.0
+      },
+      "GroupTitle": "Options",
+      "Description": "Logs all received OSC messages to the console window which can be very useful for debugging.\n\nEnabling it can have a performance impact, it can lead to excessive log output.  Tip: You can click on console log message to jump to the Operator that printed the message."
+    },
+    {
+      "InputId": "8014a7a6-cacb-4206-a5b4-87c14235a20c"/*UseKeyValuePairs*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      },
+      "GroupTitle": "Key Value Pairs",
+      "Description": "Many applications (e.g. Super Collider) send their data bundled as a list of key value pairs. Enabling this option will use the keys as another segment of the address path."
+    },
+    {
+      "InputId": "8e5d30a3-5878-4f64-9eb4-ad5782a957bf"/*SearchFilterKey*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
+      },
+      "Description": "This is an additional method of filtering OSC messages: \n\nIf KeyValue pairs are enabled only messages which have a key with the given pattern will be filtered.",
+      "Usage": "Default"
+    },
+    {
+      "InputId": "dbf1c777-d399-49bc-acb0-335cd1f7fa81"/*SearchPattern*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 360.0
+      },
+      "Description": "This is a regular expression pattern, so it can not only match single strings but a range of values.",
+      "Usage": "Default"
+    },
+    {
+      "InputId": "3b179ff2-172a-4fda-8e26-7bb3e80628d0"/*IsListening*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 405.0
       }
+    },
+    {
+      "InputId": "d9470564-3629-49fc-b9a2-4ea8b5af6b60"/*GroupKeysAsPaths*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 450.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "abc7817d-25dc-479b-984e-73b49d9ade5f"/*FilterKeys*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 495.0
+      },
+      "Usage": "Default"
     }
   ],
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "5544b675-0de2-4a28-97d0-1a67349152fc"/*FirstResult*/,
-      "Position": {
-        "X": 133.0,
-        "Y": 38.0
-      }
-    },
-    {
-      "OutputId": "1e2ec3d2-b242-4e6f-8d15-290584315aa9"/*Results*/,
+      "OutputId": "1e2ec3d2-b242-4e6f-8d15-290584315aa9"/*Values*/,
       "Position": {
         "X": 133.0,
         "Y": 138.0
       }
     },
     {
-      "OutputId": "8f426b4a-ad49-4ab9-80ee-3df9f5a5aff6"/*LastMessageTime*/,
+      "OutputId": "f697732e-46f3-4037-afc5-56f396bd70ad"/*Contents*/,
       "Position": {
         "X": 133.0,
-        "Y": 238.0
+        "Y": 338.0
       }
+    },
+    {
+      "OutputId": "3291e15a-1900-4252-8591-d016281527f0"/*WasTrigger*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 438.0
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "a3d23b48-e04d-4d53-80cc-d671a3a5428a",
+      "Title": "Video Tutorial",
+      "Description": "This example illustrates how to build a quick drawing application with OSC input.",
+      "LinkUrl": "https://youtu.be/4xxhQ1JX-ls?si=MGq4M5VoxY7D6_l8",
+      "LinkType": "TutorialVideo"
+    },
+    {
+      "Id": "84f695fc-5269-4224-8b6b-cdd67be98190",
+      "Title": "Documentation on OSC",
+      "Description": "",
+      "LinkUrl": "https://github.com/tooll3/t3/wiki/help.OSC",
+      "LinkType": "Documentation"
     }
   ]
 }

@@ -60,7 +60,7 @@
         {
           "Id": "78fb7501-74d9-4a27-8db2-596f25482c87"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\3d\\mesh\\render-mesh.hlsl"
+          "Value": "Resources\\lib\\3d\\mesh\\mesh-Draw.hlsl"
         },
         {
           "Id": "9a8b500e-c3b1-4be1-8270-202ef3f90793"/*EntryPoint*/,
@@ -104,7 +104,7 @@
         {
           "Id": "24646f06-1509-43ce-94c6-eeb608ad97cd"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\3d\\mesh\\render-mesh.hlsl"
+          "Value": "Resources\\lib\\3d\\mesh\\mesh-Draw.hlsl"
         },
         {
           "Id": "501338b3-f432-49a5-bdbd-bcf209671305"/*EntryPoint*/,
@@ -156,7 +156,7 @@
       "Outputs": []
     },
     {
-      "Id": "39e1a1e9-9705-4030-99b0-844c2de1d577"/*Vector4ToFloat4*/,
+      "Id": "39e1a1e9-9705-4030-99b0-844c2de1d577"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [
         {
@@ -547,8 +547,8 @@
       "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
     },
     {
-      "SourceParentOrChildId": "0e91bbdb-7e1c-497b-bd80-88010a3dfe5b",
-      "SourceSlotId": "e4a8d926-7abd-4d2a-82a1-b7d140cb457f",
+      "SourceParentOrChildId": "4f2ff03e-19e9-4492-bb8d-38a0d65f14cf",
+      "SourceSlotId": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1",
       "TargetParentOrChildId": "28a4d21e-db74-4460-ba8b-bb00e5166954",
       "TargetSlotId": "183cd865-7939-4110-8192-f112fff3cc60"
     },

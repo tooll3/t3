@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SharpDX;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
-using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Helpers;
+using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
@@ -40,7 +42,7 @@ namespace T3.Editor.Gui.Windows.Exploration
 
             foreach (var p in ValuesForParameters.Keys)
             {
-                instances.Add(NodeOperations.GetInstanceFromIdPath(p.InstanceIdPath));
+                instances.Add(Structure.GetInstanceFromIdPath(p.InstanceIdPath));
             }
 
             return instances.ToList();
@@ -80,7 +82,7 @@ namespace T3.Editor.Gui.Windows.Exploration
 
         public static ExplorationVariation Mix(IEnumerable<VariationParameter> variationParameters,
                                     IReadOnlyCollection<Tuple<ExplorationVariation, float>> neighboursAndWeights, float scatter,
-                                    GridCell cell = new GridCell())
+                                    GridCell cell = new())
         {
             // Collect neighbours
             var valuesForParameters = new Dictionary<VariationParameter, InputValue>();
@@ -211,8 +213,15 @@ namespace T3.Editor.Gui.Windows.Exploration
 
             foreach (var (param, value) in ValuesForParameters)
             {
-                var newCommand = new ChangeInputValueCommand(param.Instance.Parent.Symbol, param.SymbolChildUi.Id, param.Input, value);
-                commands.Add(newCommand);
+                try
+                {
+                    var newCommand = new ChangeInputValueCommand(param.Instance.Parent.Symbol, param.SymbolChildUi.Id, param.Input, value);
+                    commands.Add(newCommand);
+                }
+                catch (Exception)
+                {
+                    Log.Warning("Skipping no longer valid variation parameter");
+                }
             }
 
             return new MacroCommand("Set Preset Values", commands);
@@ -220,8 +229,8 @@ namespace T3.Editor.Gui.Windows.Exploration
 
         public class VariationParameter
         {
-            public List<Guid> InstanceIdPath = new List<Guid>();
-            public Instance Instance => NodeOperations.GetInstanceFromIdPath(InstanceIdPath);
+            public List<Guid> InstanceIdPath = new();
+            public Instance Instance => Structure.GetInstanceFromIdPath(InstanceIdPath);
             public SymbolChildUi SymbolChildUi;
             public IInputSlot InputSlot { get; set; }
             public SymbolChild.Input Input;
@@ -237,7 +246,7 @@ namespace T3.Editor.Gui.Windows.Exploration
 
         public readonly Dictionary<VariationParameter, InputValue> ValuesForParameters;
 
-        private static readonly Random Random = new Random();
+        private static readonly Random Random = new();
         private ICommand _changeCommand;
     }
 }

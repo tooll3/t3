@@ -1,0 +1,21 @@
+{
+  "Name": "MouseInput",
+  "Id": "eff2ffff-dc39-4b90-9b1c-3c0a9a0108c6",
+  "Namespace": "lib.io.input",
+  "Inputs": [
+    {
+      "Id": "49775cc2-35b7-4c9f-a502-59fe8fbbe2a7"/*DoUpdate*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "1327525c-716c-43e4-a5d1-58cf35440462"/*OutputMode*/,
+      "DefaultValue": 1
+    },
+    {
+      "Id": "6b1e81bd-2430-4439-ad0c-859b2433c38b"/*Scale*/,
+      "DefaultValue": 1.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

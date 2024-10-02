@@ -34,7 +34,7 @@ namespace T3.Editor.Gui.Commands.Graph
         {
             var inputParentSymbol = SymbolRegistry.Entries[_inputParentSymbolId];
             var symbolChild = inputParentSymbol.Children.Single(child => child.Id == _childId);
-            var input = symbolChild.InputValues[_inputId];
+            var input = symbolChild.Inputs[_inputId];
 
             if (shouldBeDefault)
             {

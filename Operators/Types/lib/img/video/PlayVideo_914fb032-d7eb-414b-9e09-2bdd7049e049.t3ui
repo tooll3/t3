@@ -1,0 +1,88 @@
+{
+  "Id": "914fb032-d7eb-414b-9e09-2bdd7049e049"/*PlayVideo*/,
+  "Description": "Uses Windows Media Foundation to play a video file. To ensure seek precision while editing, it enforces seeking if timeline playback is paused. If timeline playback is running, it will only seek if the video playback drift exceeds the resync threshold. If this threshold is too small, playback will stutter. If it's excessively large, syncing might be off.\n\n[SetCommandTime] can be used to control / offset the video playback and speed: [PlayVideo] -> [Layer2D] -> [SetCommandTime]\n\nImportant: Media Foundation returns textures in BGRA format. This might not work for some draw operators like [Layer2d]. Please insert a [ConvertFormat] operator to convert the format.\n\nNote: If this is flickering, you can try to deactivate Idle Motion from the timline control bar.\n\n",
+  "InputUis": [
+    {
+      "InputId": "0e255347-08bc-4363-9ffa-ab863a1cea8e"/*Path*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 46.995968
+      },
+      "Description": "Path to the videofile",
+      "Usage": "FilePath",
+      "FileFilter": "All Files|*.*|Video files (mp4,webm,mpeg,m4v,mkv)|*.mp4;*.webm;*.mpeg;*.m4v;*.mkv"
+    },
+    {
+      "InputId": "2fecfbb4-f7d9-4c53-95ae-b64ccbb6fbad"/*Volume*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 91.99597
+      },
+      "Description": "Defines the volume of the sound output",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "e9c15b3f-8c4a-411d-b9b3-795d64d6bd20"/*ResyncThreshold*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 136.99597
+      },
+      "Description": "Threshold for timing resyncing"
+    },
+    {
+      "InputId": "48e62a3c-a903-4a9b-a44a-148c6c07ac1e"/*OverrideTimeInSecs*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 181.99597
+      },
+      "Description": "Defines whether the video is shifted forwards or backwards in time"
+    },
+    {
+      "InputId": "21b5671b-862f-4cea-a355-fa019996c936"/*Loop*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 226.99597
+      },
+      "Description": "When activated, the video is repeated endlessly",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "b62c208c-3735-4130-87de-8c03c8a9b5fa"/*IsPreciseAtPlayback*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 271.99597
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "fa56b47f-1b16-45d5-80cd-32c5a872acf4"/*Texture*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "2f16be73-226b-47e7-b7ee-bf4f3738fa13"/*Duration*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    },
+    {
+      "OutputId": "c89ea3ae-82ff-4791-b755-7b7d9eddf8a7"/*HasCompleted*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 200.0
+      }
+    },
+    {
+      "OutputId": "732fc715-a8b5-438f-a607-ee1b8b080c04"/*UpdateCount*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 300.0
+      }
+    }
+  ]
+}

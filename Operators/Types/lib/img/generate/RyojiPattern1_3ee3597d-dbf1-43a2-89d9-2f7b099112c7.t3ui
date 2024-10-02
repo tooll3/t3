@@ -1,5 +1,6 @@
 {
   "Id": "3ee3597d-dbf1-43a2-89d9-2f7b099112c7"/*RyojiPattern1*/,
+  "Description": "Generates animated patterns inspired by Ryoji Ikeda. It subdivides the image into smaller and smaller segments and can produce a wide variety of effects. Please check the presets and the example.\n\nFor a version with more options see: [RyojiPattern2]\n\nOther interesting patterns can be generated with [SinForm] [ZollnerPattern] [FraserGrid] [Raster] [CheckerBoard] [RyojiPattern2] [RyojiPattern1]",
   "InputUis": [
     {
       "InputId": "b5b92db7-0278-466a-b5bd-caa79655cde1"/*Image*/,
@@ -13,7 +14,8 @@
       "Position": {
         "X": -201.84563,
         "Y": 8.092045
-      }
+      },
+      "GroupTitle": "Colors"
     },
     {
       "InputId": "3500901a-8783-4a6e-ad04-12a24021c11a"/*Foreground*/,
@@ -30,11 +32,20 @@
       }
     },
     {
+      "InputId": "19a0d33c-4c0e-40ce-8344-5ae17cf081e5"/*Iterations*/,
+      "Position": {
+        "X": -201.84563,
+        "Y": 143.09204
+      },
+      "GroupTitle": "Segmentation"
+    },
+    {
       "InputId": "c4891643-ed6a-4af6-9a2f-02917cf26f24"/*Splits*/,
       "Position": {
         "X": -201.84563,
         "Y": 188.09204
       },
+      "AddPadding": "True",
       "Scale": 0.1
     },
     {
@@ -75,86 +86,72 @@
       "Max": 1.0
     },
     {
-      "InputId": "19a0d33c-4c0e-40ce-8344-5ae17cf081e5"/*Iterations*/,
-      "Position": {
-        "X": -201.84563,
-        "Y": 458.09204
-      }
-    },
-    {
       "InputId": "f628c5b7-0278-4d60-80ad-6670cd284cf3"/*Seed*/,
       "Position": {
-        "X": -201.84563,
-        "Y": 503.092
+        "X": -207.62389,
+        "Y": 583.1625
       },
       "Scale": 1.0
     },
     {
       "InputId": "79feb076-bce0-43eb-9d82-89d4159886ee"/*ForgroundRatio*/,
       "Position": {
-        "X": -201.84563,
-        "Y": 548.09204
+        "X": -207.62389,
+        "Y": 628.1625
       },
+      "GroupTitle": "Additional Options...",
       "Min": 0.0,
       "Max": 1.0
     },
     {
       "InputId": "55db762f-64e0-425f-a5ac-01f3edce113e"/*HighlightProbability*/,
       "Position": {
-        "X": -201.84563,
-        "Y": 593.09204
+        "X": -207.62389,
+        "Y": 673.1625
       }
     },
     {
       "InputId": "c776bea2-25ce-4687-b2b8-c1909c3cf774"/*MixOriginal*/,
       "Position": {
-        "X": -201.84563,
-        "Y": 638.09204
+        "X": -207.62389,
+        "Y": 718.1625
       }
     },
     {
       "InputId": "a55d2480-2807-48b2-80f2-eb750a99dc17"/*HighlightSeed*/,
       "Position": {
-        "X": -201.84563,
-        "Y": 683.09204
+        "X": -207.62389,
+        "Y": 763.1625
       }
     },
     {
       "InputId": "dc471f4a-167c-4283-b4fc-55a2e453316e"/*Resolution*/,
       "Position": {
-        "X": -201.84563,
-        "Y": 728.09204
+        "X": -207.62389,
+        "Y": 808.1625
       }
     },
     {
       "InputId": "9c7227b6-e13e-4895-bbd3-8b92463cdecf"/*GenerateMipmaps*/,
       "Position": {
-        "X": -201.84563,
-        "Y": 773.09204
+        "X": -207.62389,
+        "Y": 853.1625
       }
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "66d6c4ef-6b9a-468a-98a9-862362945850"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "66d6c4ef-6b9a-468a-98a9-862362945850"/*Vector4Components*/,
       "Position": {
         "X": -13.804397,
         "Y": 33.416046
       }
     },
     {
-      "ChildId": "fa231b23-ad2d-4082-804f-9489e27abe5d"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "fa231b23-ad2d-4082-804f-9489e27abe5d"/*Vector4Components*/,
       "Position": {
         "X": -13.804397,
-        "Y": 78.41618
+        "Y": 89.41618
       }
     },
     {
@@ -170,66 +167,42 @@
       }
     },
     {
-      "ChildId": "ca157645-9e0b-4166-8151-60c53ab86ccb"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "ca157645-9e0b-4166-8151-60c53ab86ccb"/*Vector2Components*/,
       "Position": {
         "X": -13.804397,
-        "Y": 190.41618
+        "Y": 201.41618
       }
     },
     {
-      "ChildId": "5b6562db-76d6-4907-bd27-82175342e596"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "5b6562db-76d6-4907-bd27-82175342e596"/*Vector2Components*/,
       "Position": {
         "X": -13.804397,
-        "Y": 246.41621
+        "Y": 257.4162
       }
     },
     {
-      "ChildId": "503052e3-fc4b-40a7-a27b-d2146a487903"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "503052e3-fc4b-40a7-a27b-d2146a487903"/*Vector4Components*/,
       "Position": {
         "X": -13.804397,
-        "Y": 134.41618
+        "Y": 145.41618
       }
     },
     {
-      "ChildId": "90518119-afb7-4432-a290-860c0699081f"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "90518119-afb7-4432-a290-860c0699081f"/*Vector2Components*/,
       "Position": {
         "X": -13.804397,
-        "Y": 302.4162
+        "Y": 313.4162
       }
     },
     {
-      "ChildId": "a5f0011f-2ae1-437e-89cf-37609de862d2"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "a5f0011f-2ae1-437e-89cf-37609de862d2"/*Vector2Components*/,
       "Position": {
         "X": -13.804397,
         "Y": 345.4162
       }
     },
     {
-      "ChildId": "c6268984-b834-42a9-a31f-77b4de44b27b"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "c6268984-b834-42a9-a31f-77b4de44b27b"/*Vector2Components*/,
       "Position": {
         "X": -13.804397,
         "Y": 401.4162

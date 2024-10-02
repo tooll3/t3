@@ -1,6 +1,6 @@
 {
   "Id": "ae0c87d6-2b1e-4e28-b0d0-8611a2f7e152"/*Round*/,
-  "Description": "Adanced version of rounding. See https://www.desmos.com/calculator/rojg8taxot for more additional details.",
+  "Description": "Advanced version of rounding. See https://www.desmos.com/calculator/rojg8taxot for more additional details.\n\nAlso see [Ceil] & [Floor]",
   "InputUis": [
     {
       "InputId": "e911807f-b3a7-44e9-82d2-f04608b39ec3"/*Value*/,
@@ -17,6 +17,7 @@
         "X": 197.0,
         "Y": 328.0
       },
+      "AddPadding": "True",
       "Min": -100.0,
       "Max": 100.0
     },

@@ -10,6 +10,10 @@
     {
       "Id": "d2c934bb-de5c-449c-adf8-7a2f48082e9c"/*NewTime*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "efa8c97d-769c-4a26-b442-e702ac74a1f4"/*OffsetMode*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [],

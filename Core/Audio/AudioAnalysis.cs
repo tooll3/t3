@@ -1,7 +1,6 @@
 ﻿using System;
 using ManagedBass;
-using T3.Core.IO;
-using T3.Core.Resource;
+using T3.Core.Animation;
 using T3.Core.Utils;
 
 namespace T3.Core.Audio
@@ -12,25 +11,20 @@ namespace T3.Core.Audio
     /// </summary>
     public static class AudioAnalysis
     {
-        public enum InputModes
+        public static void CompleteFrame(Playback playback)
         {
-            Soundtrack,
-            WasapiDevice,
-        }
+            // if (playback.Settings is { AudioSource: PlaybackSettings.AudioSources.ExternalDevice })
+            // {
+            //     WasapiAudioInput.CompleteFrame();
+            // }
 
-        public static void CompleteFrame()
-        {
-            if (InputMode == InputModes.WasapiDevice)
-            {
-                WasapiAudioInput.CompleteFrame();
-            }
-            
+            var gainFactor = playback.Settings?.AudioGainFactor ?? 1;
             var lastTargetIndex = -1;
 
             for (var binIndex = 0; binIndex < FftHalfSize; binIndex++)
             {
-                var gain = FftGainBuffer[binIndex];
-                var gainDb = (gain <= 0.000001f) ? float.NegativeInfinity : (20 * MathF.Log10(gain));
+                var gain = FftGainBuffer[binIndex] * gainFactor;
+                var gainDb = gain <= 0.000001f ? float.NegativeInfinity : 20 * MathF.Log10(gain);
 
                 var normalizedValue = MathUtils.RemapAndClamp(gainDb, -80, 0, 0, 1);
                 FftNormalizedBuffer[binIndex] = normalizedValue ;
@@ -52,19 +46,27 @@ namespace T3.Core.Audio
             for (var bandIndex = 0; bandIndex < FrequencyBandCount; bandIndex++)
             {
                 var lastPeak = FrequencyBandPeaks[bandIndex];
-                var decayed = lastPeak * ProjectSettings.Config.AudioDecayFactor;
+
+                var decayFactor = playback.Settings?.AudioDecayFactor ?? 1;
+                var decayed =  lastPeak * decayFactor;
                 var currentValue = FrequencyBands[bandIndex];
                 var newPeak = MathF.Max(decayed, currentValue);
                 FrequencyBandPeaks[bandIndex] = newPeak;
 
                 const float attackAmplification = 4;
                 var newAttack = (newPeak - lastPeak).Clamp(0, 1000) * attackAmplification;
-                var lastAttackDecayed = FrequencyBandAttacks[bandIndex] * ProjectSettings.Config.AudioDecayFactor; 
+                var lastAttackDecayed = FrequencyBandAttacks[bandIndex] * decayFactor; 
                 FrequencyBandAttacks[bandIndex] = MathF.Max(newAttack, lastAttackDecayed);
                 FrequencyBandAttackPeaks[bandIndex] = MathF.Max(FrequencyBandAttackPeaks[bandIndex]*0.995f, FrequencyBandAttacks[bandIndex]);
             }
         }
 
+        
+        /// <summary>
+        /// To convert the fft-buffer into a logarithmic tonal scale similar to the octaves on a keyboard
+        /// we have to accumulate the fft-values into bins of increasing width. This method generated a look-up
+        /// mapping between fft-value and frequency bin.
+        /// </summary>
         private static int[] InitializeBandsLookupsTable()
         {
             var r = new int[FftHalfSize];
@@ -75,7 +77,7 @@ namespace T3.Core.Audio
             for (var i = 0; i < FftHalfSize; i++)
             {
                 var bandIndex = NoBandIndex;
-                var freq = ((float)i / FftHalfSize) * (48000f / 2f);
+                var freq = (float)i / FftHalfSize * (48000f / 2f);
 
                 switch (i)
                 {
@@ -89,26 +91,23 @@ namespace T3.Core.Audio
                     default:
                     {
                         var octave = MathF.Log2(freq / lowestBandFrequency);
-                        var octaveNormalized = (octave) / (maxOctave);
+                        var octaveNormalized = octave / maxOctave;
                         bandIndex = (int)(octaveNormalized * FrequencyBandCount);
                         if (bandIndex >= FrequencyBandCount)
                             bandIndex = NoBandIndex;
                         break;
                     }
                 }
-                //Log.Warning($" #{i}  band {bandIndex}  {freq}hz");
                 r[i] = bandIndex;
             }
 
             return r;
         }
         
-        private static int[] _bandIndexForFftBinIndices = InitializeBandsLookupsTable();
+        private static readonly int[] _bandIndexForFftBinIndices = InitializeBandsLookupsTable();
         private const int NoBandIndex = -1;
- 
-        public static InputModes InputMode = InputModes.Soundtrack;
 
-        public const int FrequencyBandCount = 32;
+        private const int FrequencyBandCount = 32;
         public static readonly float[] FrequencyBands = new float[FrequencyBandCount];
         public static readonly float[] FrequencyBandPeaks = new float[FrequencyBandCount];
         
@@ -126,8 +125,7 @@ namespace T3.Core.Audio
         public static readonly float[] FftNormalizedBuffer = new float[FftHalfSize];
         
         public const DataFlags BassFlagForFftBufferSize = DataFlags.FFT2048;
-        public const int FftHalfSize = 1024; // Half the fft resolution
+        public const int FftHalfSize = 1024; 
 
-        public static float AudioLevel;
     }
 }

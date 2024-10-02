@@ -1,5 +1,3 @@
-using T3.Core;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -9,7 +7,7 @@ namespace T3.Operators.Types.Id_e8d2b4ac_0ba2_400f_9c82_e5dd15a23d32
     public class Once : Instance<Once>
     {
         [Output(Guid = "68389552-6d8a-433b-a75f-18e76435519b", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
-        public readonly Slot<bool> OutputTrigger = new Slot<bool>();
+        public readonly Slot<bool> OutputTrigger = new();
 
         public Once()
         {
@@ -21,16 +19,11 @@ namespace T3.Operators.Types.Id_e8d2b4ac_0ba2_400f_9c82_e5dd15a23d32
             OutputTrigger.Value = Trigger.DirtyFlag.IsDirty;
             if (Trigger.DirtyFlag.IsDirty)
             {
-                Log.Info("ExecuteOnce triggered " + OutputTrigger.Value);
                 Trigger.DirtyFlag.Clear();
-            }
-            else
-            {
-                //Log.Info("Once non dirty path");
             }
         }
 
         [Input(Guid = "1da5310b-ecad-4f5b-871f-b0321a521ef6")]
-        public readonly InputSlot<bool> Trigger = new InputSlot<bool>(true);
+        public readonly InputSlot<bool> Trigger = new(true);
     }
 }

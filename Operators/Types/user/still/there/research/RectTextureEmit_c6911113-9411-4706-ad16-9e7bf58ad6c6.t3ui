@@ -58,10 +58,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "46ba5511-1fd5-47c8-b553-94959eb73c57"/*TimeConstBuffer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -141.59712,
         "Y": 73.06404
@@ -69,10 +65,6 @@
     },
     {
       "ChildId": "b37019b5-5136-4c19-8149-cf36ccdce1bf"/*ComputeShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -132.36252,
         "Y": -57.58226
@@ -92,10 +84,6 @@
     },
     {
       "ChildId": "3db6c216-8258-43cc-8c2c-746dfad55d74"/*Execute*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
       "Position": {
         "X": 594.0627,
         "Y": 45.609104
@@ -103,10 +91,6 @@
     },
     {
       "ChildId": "6f178696-0522-41f3-8f33-a25d9e942912"/*TransformsConstBuffer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -141.59712,
         "Y": 116.06403
@@ -114,10 +98,6 @@
     },
     {
       "ChildId": "87652999-8644-49b9-8d77-7f2caf276565"/*SrvFromTexture2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -141.59712,
         "Y": 159.06401
@@ -125,21 +105,13 @@
     },
     {
       "ChildId": "4b3f2bd8-2eb4-4c4f-9e36-bd30d5456e79"/*CalcDispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 46.604153,
         "Y": 6.0889482
       }
     },
     {
-      "ChildId": "3a78efe0-08c5-4f15-b1ea-5e78de5a5fee"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "3a78efe0-08c5-4f15-b1ea-5e78de5a5fee"/*Vector2Components*/,
       "Position": {
         "X": -642.79395,
         "Y": 515.88385
@@ -159,21 +131,13 @@
     },
     {
       "ChildId": "c3888584-619d-45e5-8a7f-2a7d835ff29b"/*IntToFloat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -642.79395,
         "Y": 627.8837
       }
     },
     {
-      "ChildId": "f32eab49-394a-4d27-9af0-5200b2e83b55"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "f32eab49-394a-4d27-9af0-5200b2e83b55"/*Vector2Components*/,
       "Position": {
         "X": -642.79395,
         "Y": 571.8839
@@ -181,32 +145,20 @@
     },
     {
       "ChildId": "c0e95029-8121-4859-bb1c-3ef2857250ce"/*SamplerStateOp*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -90.9507,
         "Y": 461.98312
       }
     },
     {
-      "ChildId": "05cc7adf-a1b5-46ef-a934-2d4dbf65144e"/*BoundingBox*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
+      "ChildId": "05cc7adf-a1b5-46ef-a934-2d4dbf65144e"/*DrawBoxGizmo*/,
       "Position": {
         "X": 195.12466,
         "Y": 691.2227
       }
     },
     {
-      "ChildId": "c4a2d6f5-03d0-41ea-a53f-71d331a2ef2b"/*Vector3ToFloat3*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "c4a2d6f5-03d0-41ea-a53f-71d331a2ef2b"/*Vector3Components*/,
       "Position": {
         "X": -642.79395,
         "Y": 683.8836
@@ -214,10 +166,6 @@
     },
     {
       "ChildId": "399cf694-d516-4a71-8485-51bcad2216b4"/*VisibleGizmos*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 325.12466,
         "Y": 691.2227
@@ -225,10 +173,6 @@
     },
     {
       "ChildId": "2db5a5a5-7d22-480f-a070-f7a8be860e1c"/*IntToFloat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -651.2335,
         "Y": 769.85297
@@ -236,10 +180,6 @@
     },
     {
       "ChildId": "83b14812-2ef6-4aba-aaa3-f95254399d27"/*UseFallbackTexture*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": -463.1766,
         "Y": 36.68618
@@ -247,10 +187,6 @@
     },
     {
       "ChildId": "462c3c0c-edea-40e5-a205-2dc8a834a315"/*RenderTarget*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -734.4842,
         "Y": 136.89038

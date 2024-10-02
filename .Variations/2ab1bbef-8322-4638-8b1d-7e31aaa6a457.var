@@ -1,0 +1,118 @@
+{
+  "Id": "2ab1bbef-8322-4638-8b1d-7e31aaa6a457",
+  "Variations": [
+    {
+      "Id": "1ce43b31-91e1-4151-9143-3ebd28a607d6",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "GreenScreen1",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "8d07d9ad-fe83-4b40-bebd-21c563d6d6ac": {
+            "X": 0.17254902,
+            "Y": 0.5921569,
+            "Z": 0.18039216,
+            "W": 1.0
+          },
+          "52942004-3a62-4c2d-95c0-0c18e531983e": 30.0,
+          "d044302c-d87f-4ee7-b24d-11b3508a91c1": 8.0,
+          "85826060-b94d-4f65-bf35-cad8fd8eb508": 8.0,
+          "91e604d7-aed0-4fb9-9690-ab60a74c4df5": 3.25,
+          "e32268a7-8527-4d0d-b9ba-11c23cb07dd2": 0,
+          "749654ec-1203-4f28-be9b-e3d3e2bff9d2": 0.3
+        }
+      }
+    },
+    {
+      "Id": "209a9133-1b0b-4119-ae75-a9fb7073ed70",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "GreenScreen1",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "8d07d9ad-fe83-4b40-bebd-21c563d6d6ac": {
+            "X": 0.34117648,
+            "Y": 0.7607844,
+            "Z": 0.45098042,
+            "W": 1.0
+          },
+          "52942004-3a62-4c2d-95c0-0c18e531983e": 14.0,
+          "d044302c-d87f-4ee7-b24d-11b3508a91c1": 5.15,
+          "85826060-b94d-4f65-bf35-cad8fd8eb508": 8.2,
+          "91e604d7-aed0-4fb9-9690-ab60a74c4df5": 2.08,
+          "e32268a7-8527-4d0d-b9ba-11c23cb07dd2": 0
+        }
+      }
+    },
+    {
+      "Id": "4b7dda16-880a-4ec2-9325-6821c44deda4",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "Mask",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "8d07d9ad-fe83-4b40-bebd-21c563d6d6ac": {
+            "X": 0.0,
+            "Y": 0.8470589,
+            "Z": 0.0,
+            "W": 1.0
+          },
+          "abadeee0-5ebb-4e5a-ae92-fcafb20f52a1": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          },
+          "52942004-3a62-4c2d-95c0-0c18e531983e": 11.0,
+          "d044302c-d87f-4ee7-b24d-11b3508a91c1": 0.98,
+          "85826060-b94d-4f65-bf35-cad8fd8eb508": 2.29,
+          "e32268a7-8527-4d0d-b9ba-11c23cb07dd2": 2
+        }
+      }
+    },
+    {
+      "Id": "f43de817-c172-47a5-b20e-42d2347c9559",
+      "IsPreset": true,
+      "ActivationIndex": 4,
+      "Title": "MakeGreenWhite",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "8d07d9ad-fe83-4b40-bebd-21c563d6d6ac": {
+            "X": 0.17254902,
+            "Y": 0.5921569,
+            "Z": 0.18039216,
+            "W": 1.0
+          },
+          "abadeee0-5ebb-4e5a-ae92-fcafb20f52a1": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 1.0
+          },
+          "52942004-3a62-4c2d-95c0-0c18e531983e": 30.0,
+          "d044302c-d87f-4ee7-b24d-11b3508a91c1": 8.0,
+          "85826060-b94d-4f65-bf35-cad8fd8eb508": 8.0,
+          "91e604d7-aed0-4fb9-9690-ab60a74c4df5": 3.25,
+          "e32268a7-8527-4d0d-b9ba-11c23cb07dd2": 1,
+          "749654ec-1203-4f28-be9b-e3d3e2bff9d2": 0.3
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "Id": "f9f4281b-92ee-430d-a930-6b588a5cb9a9"/*MidiOutput*/,
+  "Description": "Send notes or controller change events to the selected device. This operator is experimental. The velocity is given as a normalized float value between 0 and 1.",
+  "InputUis": [
+    {
+      "InputId": "9efa1be1-f102-4457-a69b-2aef59f6b845"/*TriggerSend*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 598.0
+      }
+    },
+    {
+      "InputId": "ec4d83b6-78eb-4cac-826b-cafb0be3f604"/*SendMode*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 553.0
+      }
+    },
+    {
+      "InputId": "adea6968-35ef-436a-bc2d-d9433b623df6"/*Device*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 508.0
+      },
+      "AddPadding": "True",
+      "Usage": "CustomDropdown"
+    },
+    {
+      "InputId": "a7e1eac2-5602-4c40-8519-19ca53763c76"/*ChannelNumber*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 373.0
+      },
+      "Min": 1,
+      "Max": 16,
+      "Clamp": true
+    },
+    {
+      "InputId": "0fff2ce2-defa-442c-a089-4b12e7d71620"/*NoteOrController*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 418.0
+      },
+      "Min": 0,
+      "Max": 127,
+      "Clamp": true
+    },
+    {
+      "InputId": "61ccd308-0006-42de-b190-c006e99b5871"/*Velocity*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 688.0
+      }
+    },
+    {
+      "InputId": "abe9393e-282e-4de0-8f86-541fa955658f"/*DurationInSecs*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 733.0
+      }
+    },
+    {
+      "InputId": "a10e3f7b-d132-49ca-9f6d-726d5e699443"/*Velocity127*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 778.0
+      },
+      "Min": -1,
+      "Max": 127,
+      "Clamp": true
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "670c784c-de53-46f4-b93a-a1f07aa8f18e"/*Result*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using ImGuiNET;
-using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
@@ -40,7 +40,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                                                       && Regex.IsMatch(_nameSpace, @"^[\d\w_\.]+$")
                                                       ))
                 {
-                    NodeOperations.RenameNameSpaces(_node, _nameSpace);
+                    GraphOperations.RenameNameSpaces(_node, _nameSpace);
                     Close();
                 }
 

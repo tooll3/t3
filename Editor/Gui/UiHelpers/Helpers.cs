@@ -1,5 +1,7 @@
+using System;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 
@@ -29,6 +31,9 @@ namespace T3.Editor.Gui.UiHelpers
         /// </summary>
         public static void DebugRect(Vector2 screenMin, Vector2 screenMax, string label = "")
         {
+            if (string.IsNullOrEmpty(label))
+                return;
+            
             var overlayDrawlist = ImGui.GetForegroundDrawList();
             overlayDrawlist.AddRect(screenMin, screenMax, Color.Green);
             overlayDrawlist.AddText(new Vector2(screenMin.X, screenMax.Y), Color.Green, label);
@@ -38,6 +43,9 @@ namespace T3.Editor.Gui.UiHelpers
         {
             var overlayDrawlist = ImGui.GetForegroundDrawList();
             overlayDrawlist.AddRect(screenMin, screenMax, color);
+            if (string.IsNullOrEmpty(label))
+                return;
+            
             overlayDrawlist.AddText(new Vector2(screenMin.X, screenMax.Y), color, label);
         }
 
@@ -47,7 +55,7 @@ namespace T3.Editor.Gui.UiHelpers
         public static void DebugItemRect(string label = "", uint color = 0xff20ff80)
         {
             if (T3Ui.ItemRegionsVisible)
-                DebugRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), color, label);
+                DebugRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), new Color(color), label);
         }
         
 
@@ -73,6 +81,37 @@ namespace T3.Editor.Gui.UiHelpers
                 ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
         }
         private static bool _keepNavEnableKeyboard;
+
+        public static string GetReadableRelativeTime(DateTime? timeOfLastBackup)
+        {
+            if (timeOfLastBackup == null)
+                return "Unknown time";
+
+            var timeSinceLastBack = DateTime.Now - timeOfLastBackup;
+            var minutes = timeSinceLastBack.Value.TotalMinutes;
+            if (minutes < 120)
+            {
+                return $"{minutes:0} minutes ago";
+            }
+
+            var hours = timeSinceLastBack.Value.TotalHours;
+            if (hours < 30)
+            {
+                return $"{hours:0.0} hours ago";
+            }
+
+            var days = timeSinceLastBack.Value.TotalDays;
+            return $"{days:0.0} days ago";
+        }
+        
+        public static Color RandomColorForHash(int channelHash)
+        {
+            var foreGroundBrightness = UiColors.ForegroundFull.V;
+            var randomHue = (Math.Abs(channelHash) % 357) / 360f;
+            var randomSaturation = (channelHash % 13) / 13f / 3f + 0.4f;
+            var randomChannelColor = Color.FromHSV(randomHue, randomSaturation, foreGroundBrightness, 1);
+            return randomChannelColor;
+        }
     }
 
     /// <summary>
@@ -112,12 +151,12 @@ namespace T3.Editor.Gui.UiHelpers
             return new Vector2(Max.X - Min.X, Max.Y - Min.Y);
         }
 
-        public float GetWidth()
+        public readonly float GetWidth()
         {
             return Max.X - Min.X;
         }
 
-        public float GetHeight()
+        public readonly float GetHeight()
         {
             return Max.Y - Min.Y;
         }

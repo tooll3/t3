@@ -1,0 +1,410 @@
+{
+  "Id": "c87b140b-1109-4eff-bf77-98bff3fc3e17"/*DrawLensShimmer*/,
+  "Description": "Draw a lense flare shimmer effect at the given points.\nIt requires a single [DefineLenseFlare] sprite with a large size indeally in the center of the light.\n\nThe effect has two different styles sharing the same parameter but resulting in completely different looks. This is a 2d fragment shader rendered on the sprite quad. This means that higher complexity does not affect the performance.",
+  "InputUis": [
+    {
+      "InputId": "04ea959f-9f20-4c77-80f4-ff1460b1a209"/*Style*/,
+      "Position": {
+        "X": -603.1012,
+        "Y": 169.14426
+      },
+      "Description": "Define the draw style:\n\nSparkle: a band of lines pointing towards the light.\nShimmer: a batch fo lights rays radiating from the center."
+    },
+    {
+      "InputId": "3ba2f274-43c5-4c2c-aaa3-474b3f178fbc"/*Segments*/,
+      "Position": {
+        "X": -603.1012,
+        "Y": 214.14426
+      },
+      "Description": "How often the band is divided into segments. It has no affect on rendering performance but can increase aliasing.\n\nAlso check the MultiSampling parameter.",
+      "Min": 0.0,
+      "Max": 1000.0
+    },
+    {
+      "InputId": "a2785b57-abcc-442e-90c7-cd120d3255ab"/*SegmentFill*/,
+      "Position": {
+        "X": -603.1012,
+        "Y": 259.14426
+      },
+      "Description": "How each segment is filled. Higher values will focus the segment resulting in narrower strokes."
+    },
+    {
+      "InputId": "338a0765-027c-4f49-a5de-38c1ab1035ef"/*JitterWidths*/,
+      "Position": {
+        "X": -605.65857,
+        "Y": 305.8485
+      },
+      "GroupTitle": "Randomization",
+      "Description": "An animated variation to the width of each segment. ",
+      "Min": 0.0,
+      "Max": 10.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "724d28d3-5b04-4e82-9d4f-01e7d42b9577"/*JitterLength*/,
+      "Position": {
+        "X": -605.65857,
+        "Y": 350.8485
+      },
+      "Description": "An animated variation to the length / distance of each segment from the center.",
+      "Min": -1.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "d0b327fa-f48a-44cd-aa01-161b1c61bdc1"/*JitterBrightness*/,
+      "Position": {
+        "X": -605.65857,
+        "Y": 395.8485
+      },
+      "Description": "An animation variation to the brightness of each segment."
+    },
+    {
+      "InputId": "f1561cc1-3d5a-4caf-899e-fc0c81eed15b"/*JitterColors*/,
+      "Position": {
+        "X": -604.6796,
+        "Y": 461.91714
+      },
+      "Description": "An animated variation to the color of each segment."
+    },
+    {
+      "InputId": "1191708c-9cdb-4331-8886-1742193f532e"/*AnimationSpeed*/,
+      "Position": {
+        "X": -604.6796,
+        "Y": 506.91714
+      },
+      "Description": "Speed of the variations. Use 0 to pause the animation.",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "f9070783-1989-4fcd-9db1-f370f36be71e"/*AnimationOffset*/,
+      "Position": {
+        "X": -604.6796,
+        "Y": 551.91724
+      },
+      "Description": "An offset to the animation. With a paused animation speed this can be used as a random seed."
+    },
+    {
+      "InputId": "66aeff41-c6af-4a06-9813-e526308968c2"/*CircularCompletion*/,
+      "Position": {
+        "X": -605.4723,
+        "Y": 670.01764
+      },
+      "GroupTitle": "Circular Completion",
+      "Description": "Defines how large of an angle of the band is fully visible.",
+      "Min": 0.0,
+      "Max": 360.0,
+      "Format": "{0:0.0}°"
+    },
+    {
+      "InputId": "647fcd91-534c-4433-a338-e1ac77ec5f2b"/*CircularCompletionEdge*/,
+      "Position": {
+        "X": -605.4723,
+        "Y": 715.01764
+      },
+      "Description": "Fall off of the visible region of the circle.",
+      "Min": 0.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
+    },
+    {
+      "InputId": "a9e7091e-d0d3-414e-8c17-9f06cd568e24"/*CompletionAffectsLength*/,
+      "Position": {
+        "X": -605.4723,
+        "Y": 760.01764
+      },
+      "Description": "Shrinks the ray length towards to center at the edge of the circle completion. This can be useful to define \"sparkle hoops\".\n"
+    },
+    {
+      "InputId": "bab504e1-dce7-4264-b1c8-40ec14202305"/*CoreBrightness*/,
+      "Position": {
+        "X": -889.2751,
+        "Y": 1053.7615
+      },
+      "GroupTitle": "Colors",
+      "Description": "Additional brightness to the center. Only relevant for Shimmer style"
+    },
+    {
+      "InputId": "793ce198-9956-4dc9-9a4b-393208143f49"/*ShimmerGradient*/,
+      "Position": {
+        "X": -889.2751,
+        "Y": 1098.7615
+      }
+    },
+    {
+      "InputId": "384bd5d5-55a4-4d0f-895b-b2e5cac51e95"/*SparkleGradient*/,
+      "Position": {
+        "X": -888.3239,
+        "Y": 1175.1492
+      }
+    },
+    {
+      "InputId": "7c6c2ad1-b7d5-4496-822e-1720356b59d7"/*MultiSampling4x*/,
+      "Position": {
+        "X": -889.7514,
+        "Y": 1344.698
+      },
+      "GroupTitle": "Options",
+      "Description": "Computes the affect with 4x multisampling (using RGSS).\n\nThis adds significant performance overhead."
+    },
+    {
+      "InputId": "c1f2801c-7bda-4b55-943a-0a01d0e6ca2d"/*SpriteDefinition*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -631.8739,
+        "Y": 1760.6858
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "32d5bdee-fdbc-4650-bfde-bdb036a5311c"/*TransformsConstBuffer*/,
+      "Position": {
+        "X": 512.6854,
+        "Y": 45.583923
+      }
+    },
+    {
+      "ChildId": "6c1af6e2-c233-4929-8fde-4a9c077b2094"/*VertexShader*/,
+      "Position": {
+        "X": 512.6854,
+        "Y": 2.5839233
+      }
+    },
+    {
+      "ChildId": "39c88437-3b20-47cb-b567-611f1f766696"/*RasterizerStateOp*/,
+      "Position": {
+        "X": 794.2416,
+        "Y": 469.58304
+      }
+    },
+    {
+      "ChildId": "6a927c87-ccfe-4d28-998c-09be6ccd8004"/*PixelShader*/,
+      "Position": {
+        "X": 512.6854,
+        "Y": 131.58394
+      }
+    },
+    {
+      "ChildId": "eb0a8598-de1b-4081-96c6-a16ddc55d63f"/*Rasterizer*/,
+      "Position": {
+        "X": 924.2416,
+        "Y": 469.58304
+      }
+    },
+    {
+      "ChildId": "51ab2047-2001-4847-992f-0b724f4dd717"/*InputAssemblerStage*/,
+      "Position": {
+        "X": 928.6103,
+        "Y": -133.03604
+      }
+    },
+    {
+      "ChildId": "803a59fd-95b7-4360-a5fc-9f7ebbc27992"/*SamplerStateOp*/,
+      "Position": {
+        "X": 512.6854,
+        "Y": 174.58394
+      }
+    },
+    {
+      "ChildId": "111717c2-24ce-45c7-920f-58c1d4f0575b"/*Execute*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 83.240456,
+        "Y": 833.34656
+      },
+      "Position": {
+        "X": 1148.1035,
+        "Y": -120.59539
+      }
+    },
+    {
+      "ChildId": "8d257af8-b8ab-479b-a517-8e2b118d1176"/*FloatsToBuffer*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 146.8828,
+        "Y": 773.94226
+      },
+      "Position": {
+        "X": -87.900635,
+        "Y": 138.62064
+      }
+    },
+    {
+      "ChildId": "8d187acd-0b21-40c4-88bb-912ebd00731e"/*TimeConstBuffer*/,
+      "Position": {
+        "X": 512.6854,
+        "Y": 88.58392
+      }
+    },
+    {
+      "ChildId": "a876fbf2-68cf-4404-9da2-d6979df0b4fd"/*Draw*/,
+      "Position": {
+        "X": 921.52747,
+        "Y": 726.3246
+      }
+    },
+    {
+      "ChildId": "acf3a6ff-ddc5-4d72-b6ad-68c3fd99252f"/*PickBlendMode*/,
+      "Position": {
+        "X": 794.2416,
+        "Y": 568.583
+      }
+    },
+    {
+      "ChildId": "45af4d1f-2f42-43bd-8a1a-766b32d68cdc"/*MultiplyInt*/,
+      "Position": {
+        "X": 791.52747,
+        "Y": 726.3246
+      }
+    },
+    {
+      "ChildId": "ab78fd43-2d05-4431-995c-3a92cc2bc77f"/*GetSRVProperties*/,
+      "Position": {
+        "X": 531.52747,
+        "Y": 726.3246
+      }
+    },
+    {
+      "ChildId": "2a1070ec-71a9-4a61-8d77-3b7c9b52dbd9"/*ClampInt*/,
+      "Position": {
+        "X": 661.52747,
+        "Y": 726.3246
+      }
+    },
+    {
+      "ChildId": "e131a540-68da-4cdc-98d2-13df41e2a0d7"/*GetBufferComponents*/,
+      "Position": {
+        "X": -154.77246,
+        "Y": 1759.1777
+      }
+    },
+    {
+      "ChildId": "b5e3aaec-50fe-4575-966b-c53f7416724f"/*OutputMergerStage*/,
+      "Position": {
+        "X": 924.2416,
+        "Y": 525.583
+      }
+    },
+    {
+      "ChildId": "e3f611f2-b14b-4753-967c-071630b438d4"/*DepthStencilStateOp*/,
+      "Position": {
+        "X": 794.2416,
+        "Y": 525.583
+      }
+    },
+    {
+      "ChildId": "4df74dff-e2b5-4a04-9b49-1097b65a43ed"/*LoadImage*/,
+      "Position": {
+        "X": 629.4187,
+        "Y": 1629.2338
+      }
+    },
+    {
+      "ChildId": "7dc3191d-ec0c-4739-aa69-0a7e9f636db0"/*Time*/,
+      "Position": {
+        "X": -454.67944,
+        "Y": 506.91714
+      }
+    },
+    {
+      "ChildId": "b7e41d3b-78c2-4ea0-8af9-8329ecc19955"/*Grain*/,
+      "Position": {
+        "X": 256.7118,
+        "Y": 685.1091
+      }
+    },
+    {
+      "ChildId": "e3bbdc9d-5073-46b8-ae82-049bdafe7dac"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 406.7118,
+        "Y": 685.1091
+      }
+    },
+    {
+      "ChildId": "7a9206f9-8434-4b10-a97f-4d9b69d67dc8"/*Add*/,
+      "Position": {
+        "X": -304.67944,
+        "Y": 506.91714
+      }
+    },
+    {
+      "ChildId": "cae9532f-8011-4e68-af1c-d78c11c907dd"/*RequestedResolution*/,
+      "Position": {
+        "X": -627.21533,
+        "Y": 1378.206
+      }
+    },
+    {
+      "ChildId": "6b62b628-7b8b-4052-8e54-8cc4cecffd5d"/*IntToFloat*/,
+      "Position": {
+        "X": -443.86633,
+        "Y": 1357.9231
+      }
+    },
+    {
+      "ChildId": "852e263c-b7dd-45de-be9d-0f07b09f5238"/*IntToFloat*/,
+      "Position": {
+        "X": -443.86633,
+        "Y": 1413.9233
+      }
+    },
+    {
+      "ChildId": "f60e170d-95bd-48b8-9d46-48e5aecfc5c3"/*BoolToFloat*/,
+      "Position": {
+        "X": -739.7514,
+        "Y": 1344.698
+      }
+    },
+    {
+      "ChildId": "a7c9d661-b7bb-4075-ad87-74be8d428c22"/*GradientsToTexture*/,
+      "Position": {
+        "X": 321.08078,
+        "Y": 1525.6074
+      }
+    },
+    {
+      "ChildId": "6db5c3ac-03a1-4176-9e0f-5bbe7c130498"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 471.08078,
+        "Y": 1525.6074
+      }
+    },
+    {
+      "ChildId": "0a53445a-fef7-46fe-a3ec-5855195f3778"/*IntToFloat*/,
+      "Position": {
+        "X": -453.1012,
+        "Y": 169.14426
+      }
+    },
+    {
+      "ChildId": "436ba998-298d-42bf-94bd-bfb815641eb1"/*ClampedSampler*/,
+      "Position": {
+        "X": 514.44464,
+        "Y": 239.54507
+      }
+    },
+    {
+      "ChildId": "4149cedc-0c5b-4828-b920-7a396e198f68"/*ListToBuffer*/,
+      "Position": {
+        "X": -304.77246,
+        "Y": 1759.1777
+      }
+    },
+    {
+      "ChildId": "50e30136-7670-4386-92f1-7af162d903c7"/*SetPixelAndVertexShaderStage*/,
+      "Position": {
+        "X": 928.6103,
+        "Y": -90.03604
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "e44490fc-bf15-4e36-8b81-4d7c45949dbc"/*Output*/,
+      "Position": {
+        "X": 1693.3767,
+        "Y": 109.5778
+      }
+    }
+  ]
+}

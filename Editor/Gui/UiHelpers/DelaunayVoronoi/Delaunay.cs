@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DelaunayVoronoi;
 
 namespace T3.Editor.Gui.UiHelpers.DelaunayVoronoi
 {

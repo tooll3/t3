@@ -1,7 +1,9 @@
 {
-  "MainOperatorName": "CarpeDiem",
-  "AudioResyncThreshold": 0.02,
-  "AudioInputDeviceName": "",
-  "AudioGainFactor": 1.0,
-  "AudioDecayFactor": 0.884
+  "TimeClipSuspending": true,
+  "MainOperatorName": "Pulsarium",
+  "AudioResyncThreshold": 0.04,
+  "EnablePlaybackControlWithKeyboard": true,
+  "WindowedMode": false,
+  "LimitMidiDeviceCapture": null,
+  "DefaultOscPort": 8000
 }

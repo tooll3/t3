@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Text.RegularExpressions;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.IO;
+using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 
@@ -14,6 +16,25 @@ namespace T3.Editor.Gui.Styling
 {
     internal static class CustomComponents
     {
+        /// <summary>
+        /// This needs to be called once a frame
+        /// </summary>
+        public static void BeginFrame()
+        {
+            var frameDuration = 1 / ImGui.GetIO().Framerate;
+            if (FrameStats.Last.SomethingWithTooltipHovered)
+            {
+                _toolTipHoverDelay -= frameDuration;
+                _timeSinceTooltipHover = 0;
+            }
+            else
+            {
+                _timeSinceTooltipHover += frameDuration;
+                if(_timeSinceTooltipHover > 0.2)
+                    _toolTipHoverDelay = 0.6f;
+            }
+        }
+        
         public static bool JogDial(string label, ref double delta, Vector2 size)
         {
             ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1, 0.5f));
@@ -24,7 +45,7 @@ namespace T3.Editor.Gui.Styling
             {
                 var center = (ImGui.GetItemRectMin() + ImGui.GetItemRectMax()) * 0.5f;
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
-                ImGui.GetForegroundDrawList().AddCircle(center, 100, Color.Gray, 50);
+                ImGui.GetForegroundDrawList().AddCircle(center, 100, UiColors.Gray, 50);
                 isActive = true;
 
                 var pLast = io.MousePos - io.MouseDelta - center;
@@ -59,12 +80,12 @@ namespace T3.Editor.Gui.Styling
             var size = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
             var contentMin = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos();
 
-            var pos = new Vector2(contentMin.X, contentMin.Y + size.Y - offsetFromBottom - thickness);
+            var pos = new Vector2(contentMin.X, contentMin.Y + size.Y - offsetFromBottom - thickness-1);
             ImGui.SetCursorScreenPos(pos);
 
-            ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0, 0, 0, 1));
-            ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0, 0, 0, 1));
-            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0.5f, 0.5f, 0.5f, 1));
+            ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundGaps.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.BackgroundActive.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundActive.Rgba);
 
             ImGui.Button("##Splitter", new Vector2(-1, thickness));
 
@@ -97,9 +118,10 @@ namespace T3.Editor.Gui.Styling
             var clicked = false;
             if (isSelected)
             {
-                ImGui.PushStyleColor(ImGuiCol.Button, Color.Gray.Rgba);
-                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Gray.Rgba);
-                ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Gray.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Button, UiColors.Text.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.Text.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.Text.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.WindowBackground.Rgba);
             }
 
             if (ImGui.Button(label, size) || trigger)
@@ -110,7 +132,7 @@ namespace T3.Editor.Gui.Styling
 
             if (wasSelected)
             {
-                ImGui.PopStyleColor(3);
+                ImGui.PopStyleColor(4);
             }
 
             return clicked;
@@ -118,17 +140,17 @@ namespace T3.Editor.Gui.Styling
 
         public static bool ToggleIconButton(Icon icon, string label, ref bool isSelected, Vector2 size, bool trigger = false)
         {
-            var wasSelected = isSelected;
             var clicked = false;
 
-            var stateColor = isSelected ? new Color(1f, 1, 1f, 1f) : new Color(0, 0, 0, 1f);
-            ImGui.PushStyleColor(ImGuiCol.Text, stateColor.Rgba);
+            var stateTextColor = isSelected
+                                 ? UiColors.StatusActivated.Rgba
+                                 : UiColors.TextDisabled.Rgba;
+            ImGui.PushStyleColor(ImGuiCol.Text, stateTextColor);
 
-
-            var padding = string.IsNullOrEmpty(label) ?  new Vector2(0.1f, 0.5f) :  new Vector2(0.5f, 0.5f);
+            var padding = string.IsNullOrEmpty(label) ? new Vector2(0.1f, 0.5f) : new Vector2(0.5f, 0.5f);
             ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, padding);
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-            
+
             ImGui.PushFont(Icons.IconFont);
 
             if (ImGui.Button($"{(char)icon}##label", size))
@@ -138,45 +160,179 @@ namespace T3.Editor.Gui.Styling
             }
 
             ImGui.PopFont();
-            
-            var labelPos = ImGui.GetItemRectMin() + new Vector2(16 , ImGui.GetItemRectSize().Y/2);
-            //ImGui.GetWindowDrawList().AddText(labelPos, stateColor, label);
 
             ImGui.PopStyleVar(2);
-            
-            // if (IconButton(icon, label, size) || trigger)
-            // {
-            // }
-
             ImGui.PopStyleColor(1);
 
             return clicked;
         }
 
-        public static bool IconButton(Icon icon, string label, Vector2 size)
+        public enum ButtonStates
         {
+            Normal,
+            Dimmed,
+            Disabled,
+            Activated,
+            NeedsAttention,
+        }
+
+        public static bool FloatingIconButton(Icon icon, Vector2 size)
+        {
+            if (size == Vector2.Zero)
+            {
+                var h = ImGui.GetFrameHeight();
+                size = new Vector2(h,h);
+            }
             ImGui.PushFont(Icons.IconFont);
             ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.5f));
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
+            ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Transparent.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Transparent.Rgba);
             
-            var clicked = ImGui.Button(""+(char)icon, size);
-
+            var clicked = ImGui.Button( ((char)icon).ToString(), size);
+            
+            ImGui.PopStyleColor(3);
             ImGui.PopStyleVar(2);
             ImGui.PopFont();
             return clicked;
         }
 
-        public static void ContextMenuForItem(Action drawMenuItems, string title = null, string id = "context_menu", ImGuiPopupFlags flags = ImGuiPopupFlags.MouseButtonRight)
+        public static bool StateButton(string label, ButtonStates state = ButtonStates.Normal)
         {
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.BackgroundButtonActivated.Rgba);
+
+            if (state != ButtonStates.Normal)
+            {
+                ImGui.PushStyleColor(ImGuiCol.Text, GetStateColor(state).Rgba);
+                if (state == ButtonStates.Activated)
+                {
+                    ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundButtonActivated.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundButtonActivated.Fade(0.8f).Rgba);
+                }
+            }
+
+            ImGui.AlignTextToFramePadding();
+            var clicked = ImGui.Button(label);
+
+            if (state != ButtonStates.Normal)
+                ImGui.PopStyleColor();
+            
+            if (state == ButtonStates.Activated)
+                ImGui.PopStyleColor(2);
+
+            ImGui.PopStyleColor(1);
+            return clicked;
+        }
+        
+        public static bool IconButton(Icon icon, Vector2 size, ButtonStates state = ButtonStates.Normal, bool triggered =false)
+        {
+            if (size == Vector2.Zero)
+            {
+                var h = ImGui.GetFrameHeight();
+                size = new Vector2(h,h);
+            }
+            ImGui.PushFont(Icons.IconFont);
+            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.5f));
+            ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
+            
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.BackgroundButtonActivated.Rgba);
+            
+            if (state != ButtonStates.Normal)
+            {
+                ImGui.PushStyleColor(ImGuiCol.Text, GetStateColor(state).Rgba);
+                if (state == ButtonStates.Activated)
+                {
+                    ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundButtonActivated.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundButtonActivated.Fade(0.8f).Rgba);
+                }
+            }
+
+            var clicked = ImGui.Button("" + (char)icon, size) || triggered;
+
+            if (state != ButtonStates.Normal)
+                ImGui.PopStyleColor();
+            
+            if (state == ButtonStates.Activated)
+                ImGui.PopStyleColor(2);
+
+            ImGui.PopStyleColor(1);
+            ImGui.PopStyleVar(2);
+            ImGui.PopFont();
+            return clicked;
+        }
+
+        public static bool IconButton(string id, Icon icon, float width, ImDrawFlags corners= ImDrawFlags.RoundCornersNone, ButtonStates state = ButtonStates.Normal, bool triggered =false)
+        {
+            var iconColor = GetStateColor(state);
+
+            var size = new Vector2(width, ImGui.GetFrameHeight());
+            if (width == 0)
+                size.X = size.Y;
+            
+            triggered |= ImGui.InvisibleButton(id, size);
+            
+            var dl = ImGui.GetWindowDrawList();
+            dl.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), GetButtonStateBackgroundColor(),7, corners);            
+            
+            Icons.DrawIconOnLastItem(icon, iconColor);
+            return triggered;
+        }
+
+        private static Color GetStateColor(ButtonStates state)
+        {
+            return state switch
+                       {
+                           ButtonStates.Dimmed         => UiColors.TextMuted.Fade(0.5f),
+                           ButtonStates.Disabled       => UiColors.TextDisabled,
+                           ButtonStates.Activated      => UiColors.StatusActivated,
+                           ButtonStates.NeedsAttention => UiColors.StatusAttention,
+                           _                           => UiColors.Text
+                       };
+        }
+
+        private static Color GetButtonStateBackgroundColor()
+        {
+            Color backgroundColor;
+
+            if (ImGui.IsItemActive())
+            {
+                backgroundColor = ImGuiCol.ButtonActive.GetStyleColor();
+            }
+            else if (ImGui.IsItemHovered())
+            {
+                backgroundColor = ImGuiCol.ButtonHovered.GetStyleColor();
+            }
+            else
+            {
+                backgroundColor = ImGuiCol.Button.GetStyleColor();
+            }
+
+            return backgroundColor;
+        }
+
+        public static void ContextMenuForItem(Action drawMenuItems, string title = null, string id = "context_menu",
+                                              ImGuiPopupFlags flags = ImGuiPopupFlags.MouseButtonRight)
+        {
+
+            // prevent context menu from opening when dragging
+            {
+                var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickThreshold;
+                if (wasDraggingRight)
+                    return;
+            }
+            
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
 
             if (ImGui.BeginPopupContextItem(id, flags))
             {
+                FrameStats.Current.IsItemContextMenuOpen = true;
                 if (title != null)
                 {
-                    ImGui.PushFont(Fonts.FontLarge);
+                    ImGui.PushFont(Fonts.FontSmall);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Gray.Rgba);
                     ImGui.TextUnformatted(title);
+                    ImGui.PopStyleColor();
                     ImGui.PopFont();
                 }
 
@@ -184,31 +340,17 @@ namespace T3.Editor.Gui.Styling
                 ImGui.EndPopup();
             }
 
-            ImGui.PopStyleVar(2);
-        }
-
-        public static void PopUp(Action drawContent, string id = "context_menu")
-        {
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
-            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
-
-            if (ImGui.BeginPopupContextItem(id))
-            {
-                drawContent?.Invoke();
-                ImGui.EndPopup();
-            }
-
-            ImGui.PopStyleVar(2);
+            ImGui.PopStyleVar(1);
         }
 
         public static void DrawContextMenuForScrollCanvas(Action drawMenuContent, ref bool contextMenuIsOpen)
         {
-            // This is a horrible hack to distinguish right mouse click from right mouse drag
-            //var rightMouseDragDelta = (ImGui.GetIO().MouseClickedPos[1] - ImGui.GetIO().MousePos).Length();
-            var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickThreshold;
-
             if (!contextMenuIsOpen)
             {
+                if (FrameStats.Current.IsItemContextMenuOpen)
+                    return;
+                
+                var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickThreshold;
                 if (wasDraggingRight)
                     return;
 
@@ -216,10 +358,10 @@ namespace T3.Editor.Gui.Styling
                     return;
             }
 
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
 
-            if (ImGui.BeginPopupContextWindow("context_menu"))
+
+            if (ImGui.BeginPopupContextWindow("windows_context_menu"))
             {
                 ImGui.GetMousePosOnOpeningCurrentPopup();
                 contextMenuIsOpen = true;
@@ -232,7 +374,7 @@ namespace T3.Editor.Gui.Styling
                 contextMenuIsOpen = false;
             }
 
-            ImGui.PopStyleVar(2);
+            ImGui.PopStyleVar(1);
         }
 
         public static bool DisablableButton(string label, bool isEnabled, bool enableTriggerWithReturn = false)
@@ -263,10 +405,24 @@ namespace T3.Editor.Gui.Styling
         public static void HelpText(string text)
         {
             ImGui.PushFont(Fonts.FontSmall);
-            ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
-            ImGui.TextUnformatted(text);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+            //ImGui.TextUnformatted(text);
+            ImGui.TextWrapped(text);
             ImGui.PopStyleColor();
             ImGui.PopFont();
+            ImGui.Dummy(new Vector2(0,4 * T3Ui.DisplayScaleFactor));
+        }
+
+        public static void SmallGroupHeader(string text)
+        {
+            FormInputs.AddVerticalSpace(5);
+            ImGui.PushFont(Fonts.FontSmall);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+            ImGui.SetCursorPosX(4);
+            ImGui.TextUnformatted(text.ToUpperInvariant());
+            ImGui.PopStyleColor();
+            ImGui.PopFont();
+            FormInputs.AddVerticalSpace(2);
         }
 
         /// <summary>
@@ -275,7 +431,7 @@ namespace T3.Editor.Gui.Styling
         public static void HintLabel(string label)
         {
             ImGui.PushFont(Fonts.FontSmall);
-            ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Gray.Rgba);
             ImGui.TextUnformatted(label);
             ImGui.PopStyleColor();
             ImGui.PopFont();
@@ -303,55 +459,6 @@ namespace T3.Editor.Gui.Styling
             drawList.PopClipRect();
         }
 
-        public static void DrawSplitter(bool splitVertically, float thickness, ref float size0, ref float size1, float minSize0, float minSize1)
-        {
-            var backupPos = ImGui.GetCursorPos();
-            if (splitVertically)
-                ImGui.SetCursorPosY(backupPos.Y + size0);
-            else
-                ImGui.SetCursorPosX(backupPos.X + size0);
-
-            ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0, 0, 0, 1));
-
-            // We don't draw while active/pressed because as we move the panes the splitter button will be 1 frame late
-            ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0, 0, 0, 1));
-            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0.6f, 0.6f, 0.6f, 0.10f));
-            ImGui.Button("##Splitter", new Vector2(!splitVertically ? thickness : -1.0f, splitVertically ? thickness : -1.0f));
-            ImGui.PopStyleColor(3);
-
-            ImGui.SetItemAllowOverlap(); // This is to allow having other buttons OVER our splitter. 
-
-            if (ImGui.IsAnyItemHovered())
-            {
-                ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNS);
-            }
-
-            if (ImGui.IsItemActive())
-            {
-                var mouseDelta = splitVertically ? ImGui.GetIO().MouseDelta.Y : ImGui.GetIO().MouseDelta.X;
-
-                //// Minimum pane size
-                //if (mouse_delta < min_size0 - size0)
-                //    mouse_delta = min_size0 - size0;
-                //if (mouse_delta > size1 - min_size1)
-                //    mouse_delta = size1 - min_size1;
-
-                // Apply resize
-                size0 += mouseDelta;
-                size1 -= mouseDelta;
-            }
-
-            ImGui.SetCursorPos(backupPos);
-        }
-
-        public static void DrawContentRegion()
-        {
-            ImGui.GetForegroundDrawList().AddRect(
-                                                  ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos(),
-                                                  ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos(),
-                                                  Color.White);
-        }
-        
         public static bool EmptyWindowMessage(string message, string buttonLabel = null)
         {
             var center = (ImGui.GetWindowContentRegionMax() + ImGui.GetWindowContentRegionMin()) / 2 + ImGui.GetWindowPos();
@@ -360,69 +467,71 @@ namespace T3.Editor.Gui.Styling
             var lineCount = lines.Length;
             if (!string.IsNullOrEmpty(buttonLabel))
                 lineCount++;
-            
+
             var textLineHeight = ImGui.GetTextLineHeight();
             var y = center.Y - lineCount * textLineHeight / 2;
             var drawList = ImGui.GetWindowDrawList();
 
-            var emptyMessageColor = new Color(0.3f);
+            var emptyMessageColor = UiColors.TextMuted;
 
             foreach (var line in lines)
             {
-                var textSize = ImGui.CalcTextSize(line);
-                var position = new Vector2(center.X - textSize.X / 2, y);
-                drawList.AddText(position, emptyMessageColor, line);
+                if (!string.IsNullOrEmpty(line))
+                {
+                    var textSize = ImGui.CalcTextSize(line);
+                    var position = new Vector2(center.X - textSize.X / 2, y);
+                    drawList.AddText(position, emptyMessageColor, line);
+                }
                 y += textLineHeight;
             }
 
-            
             if (!string.IsNullOrEmpty(buttonLabel))
             {
                 y += 10;
-                var style = ImGui.GetStyle(); 
+                var style = ImGui.GetStyle();
                 var textSize = ImGui.CalcTextSize(buttonLabel) + style.FramePadding;
                 var position = new Vector2(center.X - textSize.X / 2, y);
                 ImGui.SetCursorScreenPos(position);
                 return ImGui.Button(buttonLabel);
             }
+
             return false;
         }
 
-
-        public static void TooltipForLastItem(string message, string additionalNotes = null, bool useHoverDelay = true)
+        public static void TooltipForLastItem(Color color, string message, string additionalNotes = null, bool useHoverDelay = true)
         {
-            if (!ImGui.IsAnyItemHovered())
-            {
-                _hoverStartTime = -1;
-                return;
-            }
-
             if (!ImGui.IsItemHovered())
                 return;
+            
+            FrameStats.Current.SomethingWithTooltipHovered = true;
+            if (!useHoverDelay)
+                _toolTipHoverDelay = 0;
 
-            if (_hoverStartTime <= 0)
-                _hoverStartTime = ImGui.GetTime();
-
-            var hoverDuration = ImGui.GetTime() - _hoverStartTime;
-            if (useHoverDelay && !(hoverDuration > UserSettings.Config.TooltipDelay))
+            if (_toolTipHoverDelay > 0)
                 return;
-
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
+            
             ImGui.BeginTooltip();
             ImGui.PushTextWrapPos(300);
-            ImGui.TextUnformatted(message);
+            ImGui.TextColored(color, message);
             if (!string.IsNullOrEmpty(additionalNotes))
             {
-                ImGui.TextColored(Color.Gray, additionalNotes);
+                ImGui.TextColored(color.Fade(0.7f), additionalNotes);
             }
+
             ImGui.PopTextWrapPos();
 
             ImGui.EndTooltip();
-            ImGui.PopStyleVar();
         }
 
-        private static double _hoverStartTime;
+        public static void TooltipForLastItem(string message, string additionalNotes = null, bool useHoverDelay = true)
+        {
+            TooltipForLastItem(UiColors.Text, message, additionalNotes, useHoverDelay);
+        }
 
+        private static double _toolTipHoverDelay;
+        private static double _timeSinceTooltipHover;
+
+        // TODO: this should be merged with FormInputs.SegmentedEnumButton
         public static bool DrawSegmentedToggle(ref int currentIndex, List<string> options)
         {
             var changed = false;
@@ -434,8 +543,8 @@ namespace T3.Editor.Gui.Styling
                 ImGui.SameLine(0);
                 ImGui.PushFont(isActive ? Fonts.FontBold : Fonts.FontNormal);
                 ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
-                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.White.Fade(0.1f).Rgba);
-                ImGui.PushStyleColor(ImGuiCol.Text, isActive ? Color.White : Color.White.Fade(0.5f).Rgba);
+                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.ForegroundFull.Fade(0.1f).Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, isActive ? UiColors.ForegroundFull : UiColors.ForegroundFull.Fade(0.5f).Rgba);
 
                 if (ImGui.Button(option))
                 {
@@ -453,268 +562,185 @@ namespace T3.Editor.Gui.Styling
             return changed;
         }
 
-
-        public static bool DrawCheckboxParameter(string label, ref bool value, string tooltip= null)
+        public static bool AddSegmentedIconButton<T>(ref T selectedValue, List<Icon> icons) where T : struct, Enum
         {
-            var modified = ImGui.Checkbox(label, ref value);
-            if (!string.IsNullOrEmpty(tooltip))
+            //DrawInputLabel(label);
+
+            var modified = false;
+            var selectedValueString = selectedValue.ToString();
+            var isFirst = true;
+            var enums = Enum.GetValues<T>();
+            //Debug.Assert(enums.Length != icons.Count,"Icon enum mismatch");
+                
+                
+            for (var index = 0; index < enums.Length; index++)
             {
-                TooltipForLastItem(tooltip);
+                var icon = icons[index];
+                var value = enums[index];
+                var name = Enum.GetName(value);
+                if (!isFirst)
+                {
+                    ImGui.SameLine();
+                }
+
+                var isSelected = selectedValueString == value.ToString();
+                
+                var clicked = DrawIconToggle(name, icon, ref isSelected);
+                if (clicked)
+                {
+                    modified = true;
+                    selectedValue = value;
+                }
+
+                if (isSelected)
+                {
+                    var min = ImGui.GetItemRectMin();
+                    var max = ImGui.GetItemRectMax();
+                    var drawList = ImGui.GetWindowDrawList();
+                    drawList.AddRectFilled(new Vector2(min.X-2, max.Y), new Vector2(max.X +2, max.Y +2) , UiColors.StatusActivated);
+                    
+                }
+                
+                isFirst = false;
             }
+
             return modified;
+        }
+
+        public static bool DrawIconToggle(string name, Icon iconOff, Icon iconOn, ref bool isSelected, bool needsAttention = false, bool isEnabled= true)
+        {
+            var clicked = ImGui.InvisibleButton(name, new Vector2(17, 17));
+            if (!isEnabled)
+            {
+                Icons.DrawIconOnLastItem(isSelected ? iconOn : iconOff, isSelected ? (needsAttention ? UiColors.StatusAttention: UiColors.BackgroundActive) 
+                                                                            : UiColors.TextDisabled.Fade(0.5f));
+                return false;
+            }
+            
+            Icons.DrawIconOnLastItem(isSelected ? iconOn : iconOff, isSelected ? (needsAttention ? UiColors.StatusAttention: UiColors.BackgroundActive) : UiColors.TextMuted);
+            if (clicked)
+                isSelected = !isSelected;
+            
+            return clicked;
         }
         
-        public static bool DrawFloatParameter(string label, ref float value, float min = float.NegativeInfinity, float max = float.PositiveInfinity, float scale = 0.01f, bool clamp = false, string tooltip= null)
+        public static bool DrawIconToggle(string name, Icon icon, ref bool isSelected, bool needsAttention = false)
         {
-            var labelSize = ImGui.CalcTextSize(label);
-            const float leftPadding = 200;
-            var p = ImGui.GetCursorPos();
-            ImGui.SetCursorPosX(MathF.Max(leftPadding - labelSize.X, 0) + 10);
-            ImGui.AlignTextToFramePadding();
+            var clicked = ImGui.InvisibleButton(name, new Vector2(17, 17));
+            Icons.DrawIconOnLastItem(icon, isSelected ? (needsAttention ? UiColors.StatusAttention: UiColors.BackgroundActive) : UiColors.TextMuted);
+            if (clicked)
+                isSelected = !isSelected;
             
-            ImGui.TextUnformatted(label);
-            ImGui.SetCursorPos(p);
-
-            ImGui.SameLine();
-            ImGui.SetCursorPosX(leftPadding + 20);
-            ImGui.PushID(label);
-            var size = new Vector2(150, ImGui.GetFrameHeight());
-            var result = SingleValueEdit.Draw(ref value, size, min, max, clamp, scale);
-            ImGui.PopID();
-            var modified = (result & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing;
-
-            if (!string.IsNullOrEmpty(tooltip))
-            {
-                TooltipForLastItem(tooltip);
-            }
-            
-            return modified;
-        }
-        
-        public static bool DrawIntParameter(string label, ref int value, int min = int.MinValue, int max = int.MaxValue, float scale = 1)
-        {
-            var labelSize = ImGui.CalcTextSize(label);
-            const float leftPadding = 200;
-            var p = ImGui.GetCursorPos();
-            ImGui.SetCursorPosX(MathF.Max(leftPadding - labelSize.X, 0) + 10);
-            ImGui.AlignTextToFramePadding();
-            
-            ImGui.TextUnformatted(label);
-
-            ImGui.SetCursorPos(p);
-
-            ImGui.SameLine();
-            ImGui.SetCursorPosX(leftPadding + 20);
-
-            ImGui.PushID(label);
-            var size = new Vector2(150, ImGui.GetFrameHeight());
-            var result = SingleValueEdit.Draw(ref value, size, min, max, true, scale);
-            ImGui.PopID();
-            var modified = (result & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing;
-            return modified;
+            return clicked;
         }
 
-        public static bool DrawStringParameter(string label, 
-                                               ref string value, 
-                                               string placeHolder = null, 
-                                               string warning=null,  
-                                               FileOperations.FilePickerTypes showFilePicker = FileOperations.FilePickerTypes.None)
+        public static bool DrawInputFieldWithPlaceholder(string placeHolderLabel, ref string value, float width = 0, bool showClear= true,  ImGuiInputTextFlags inputFlags= ImGuiInputTextFlags.None)
         {
-            const float leftPadding = 200;
-            const float spacing = 20;
-            var isFilePickerVisible = showFilePicker != FileOperations.FilePickerTypes.None;
-            float spaceForFilePicker = isFilePickerVisible ? 30 : 0;
-            var labelSize = ImGui.CalcTextSize(label);
-
-            var p = ImGui.GetCursorPos();
-            ImGui.SetCursorPosX( MathF.Max(leftPadding - labelSize.X,0)+10);
-            ImGui.AlignTextToFramePadding();
-
-            var cleanedLabel = label.Split(ImGuiIdSpecifier)[0];
-            ImGui.TextUnformatted(cleanedLabel);
-
-            ImGui.SetCursorPos(p);
-            
-            ImGui.SameLine();
-            ImGui.SetCursorPosX(leftPadding + spacing);
-            
-            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X- 50 - spaceForFilePicker);
-            
+            var notEmpty = !string.IsNullOrEmpty(value);
             var wasNull = value == null;
             if (wasNull)
                 value = string.Empty;
-            
-            var modified = ImGui.InputText("##" + label, ref value, 1000);
+
+            ImGui.SetNextItemWidth(width - FormInputs.ParameterSpacing - (notEmpty ? ImGui.GetFrameHeight():0));
+            var modified = ImGui.InputText("##" + placeHolderLabel, ref value, 1000, inputFlags);
             if (!modified && wasNull)
                 value = null;
 
-            if (string.IsNullOrEmpty(value) && !string.IsNullOrEmpty(placeHolder))
+            if (notEmpty)
+            {
+                if (showClear)
+                {
+                    ImGui.SameLine(0,0);
+                    if (ImGui.Button("×" + "##" + placeHolderLabel))
+                    {
+                        value = null;
+                        modified = true;
+                    }
+                }
+            }
+            else
             {
                 var drawList = ImGui.GetWindowDrawList();
                 var minPos = ImGui.GetItemRectMin();
                 var maxPos = ImGui.GetItemRectMax();
-                drawList.PushClipRect(minPos,maxPos);
-                drawList.AddText(minPos + new Vector2(8,3), Color.White.Fade(0.25f), placeHolder);
+                drawList.PushClipRect(minPos, maxPos);
+                drawList.AddText(minPos + new Vector2(8, 5), UiColors.ForegroundFull.Fade(0.25f), placeHolderLabel);
                 drawList.PopClipRect();
             }
 
-            
-            if (isFilePickerVisible)
-            {
-                modified |= FileOperations.DrawFileSelector(showFilePicker, ref value);                
-            } 
-
-            if (!string.IsNullOrEmpty(warning))
-            {
-                ImGui.Indent(leftPadding + spacing);
-                ImGui.PushFont(Fonts.FontSmall);
-                ImGui.PushStyleColor(ImGuiCol.Text, Color.Red.Rgba);
-                ImGui.TextUnformatted(warning);
-                ImGui.PopStyleColor();
-                ImGui.PopFont();
-                ImGui.Unindent(leftPadding + spacing);
-            }
-            
             return modified;
         }
 
-        public static bool DrawEnumParameter<T>(ref int index, string label)
+        /// <summary>
+        /// Draws a frame that indicates if the current window is focused.
+        /// This is useful for windows that have window specific keyboard short cuts.
+        /// </summary>
+        public static void DrawWindowFocusFrame()
         {
-            // Label
-            var labelSize = ImGui.CalcTextSize(label);
-
-            var p = ImGui.GetCursorPos();
-            ImGui.SetCursorPosX(MathF.Max(200 - labelSize.X, 0) + 10);
-            ImGui.AlignTextToFramePadding();
-
-            string cleanedLabel = label.Split(ImGuiIdSpecifier)[0];
-            ImGui.TextUnformatted(cleanedLabel);
-
-            ImGui.SetCursorPos(p);
-
-            // Dropdown
-            ImGui.SameLine();
-            ImGui.SetCursorPosX(220);
-            var size = new Vector2(150, ImGui.GetFrameHeight());
+            if (!ImGui.IsWindowFocused())
+                return;
             
-            Type enumType = typeof(T);
-            var values = Enum.GetValues(enumType);
-
-            var valueNames = new string[values.Length];
-            for (var i = 0; i < values.Length; i++)
-            {
-                var v = values.GetValue(i);
-                valueNames[i] = v != null
-                                    ? Enum.GetName(typeof(T), v)
-                                    : "?? undefined";
-            }
-
-            ImGui.SetNextItemWidth(size.X);
-            // FIXME: using only "##dropdown" did not allow for multiple combos (see for example renderSequenceWindow.cs)
-            // so we add the type and label here - but this is only a temporary hack...
-            var modified = ImGui.Combo($"##dropDown{enumType}{label}", ref index, valueNames, valueNames.Length, valueNames.Length);
-            return modified;
+            var min = ImGui.GetWindowPos();
+            ImGui.GetWindowDrawList().AddRect(min, min+ImGui.GetWindowSize() + new Vector2(0,0) , UiColors.ForegroundFull.Fade(0.2f));
         }
 
-        private const string ImGuiIdSpecifier = "##";
-    }
-
-    public static class InputWithTypeAheadSearch
-    {
-        public static bool Draw(string id, ref string text, IOrderedEnumerable<string> items)
+        public static string HumanReadablePascalCase(string f)
         {
-            
-            if (_isSearchResultWindowOpen)
-            {
-                if (ImGui.IsKeyPressed((ImGuiKey)Key.CursorDown, true))
-                {
-                    if (_lastTypeAheadResults.Count > 0)
-                    {
-                        _selectedResultIndex++;
-                        _selectedResultIndex %= _lastTypeAheadResults.Count;
-                    }
-                }
-                else if (ImGui.IsKeyPressed((ImGuiKey)Key.CursorUp, true))
-                {
-                    if (_lastTypeAheadResults.Count > 0)
-                    {
-                        _selectedResultIndex--;
-                        if (_selectedResultIndex < 0)
-                            _selectedResultIndex = _lastTypeAheadResults.Count - 1;
-                    }
-                }
-            }
-            
-            var wasChanged = ImGui.InputText(id, ref text, 256);
-
-            if (ImGui.IsItemActivated())
-            {
-                _lastTypeAheadResults.Clear();
-                _selectedResultIndex = -1;
-                THelpers.DisableImGuiKeyboardNavigation();
-            }
-
-            var isItemDeactivated = ImGui.IsItemDeactivated();
-            
-            // We defer exit to get clicks on opened popup list
-            var lostFocus = isItemDeactivated || ImGui.IsKeyDown((ImGuiKey)Key.Esc);
-            
-            if ( ImGui.IsItemActive() || _isSearchResultWindowOpen)
-            {
-                _isSearchResultWindowOpen = true;
-
-                ImGui.SetNextWindowPos(new Vector2(ImGui.GetItemRectMin().X, ImGui.GetItemRectMax().Y));
-                ImGui.SetNextWindowSize(new Vector2(ImGui.GetItemRectSize().X, 0));
-                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(7, 7));
-                if (ImGui.Begin("##typeAheadSearchPopup", ref _isSearchResultWindowOpen,
-                                ImGuiWindowFlags.NoTitleBar 
-                                | ImGuiWindowFlags.NoMove 
-                                | ImGuiWindowFlags.NoResize 
-                                | ImGuiWindowFlags.Tooltip 
-                                | ImGuiWindowFlags.NoFocusOnAppearing 
-                                | ImGuiWindowFlags.ChildWindow
-                                ))
-                {
-                    _lastTypeAheadResults.Clear();
-                    int index = 0;
-                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Gray.Rgba);
-                    foreach (var word in items)
-                    {
-                        if (word != null && word != text && word.Contains(text))
-                        {
-                            var isSelected = index == _selectedResultIndex;
-                            ImGui.Selectable(word, isSelected);
-                            
-                            if (ImGui.IsItemClicked() || (isSelected && ImGui.IsKeyPressed((ImGuiKey)Key.Return)))
-                            {
-                                text = word;
-                                wasChanged = true;
-                                _isSearchResultWindowOpen = false;
-                            }
-
-                            _lastTypeAheadResults.Add(word);
-                            if (++index > 30)
-                                break;
-                        }
-                    }
-                    ImGui.PopStyleColor();
-                }
-
-                ImGui.End();
-                ImGui.PopStyleVar();
-            }
-
-            if (lostFocus)
-            {
-                THelpers.RestoreImGuiKeyboardNavigation();
-                _isSearchResultWindowOpen = false;
-            }
-
-            return wasChanged;
+            return Regex.Replace(f, "(\\B[A-Z])", " $1");
         }
+        
+        public static bool RoundedButton(string id, float width, ImDrawFlags roundedCorners)
+        {
+            var size = new Vector2(width, ImGui.GetFrameHeight());
+            if (width == 0)
+                size.X = size.Y;
+            
+            var clicked= ImGui.InvisibleButton(id, size);
+            var dl = ImGui.GetWindowDrawList();
+            var color = ImGui.IsItemHovered() ? ImGuiCol.ButtonHovered.GetStyleColor() : ImGuiCol.Button.GetStyleColor();
+            dl.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), color,7, roundedCorners);
+            return clicked;
+        }
+        
+        
+        private static Vector2 _dragScrollStart;
+        public static bool IsDragScrolling => _draggedWindowObject != null;
+        //private static uint _scrollingId;
+        private static object _draggedWindowObject;
 
-        private static readonly List<string> _lastTypeAheadResults = new();
-        private static int _selectedResultIndex = 0;
-        private static bool _isSearchResultWindowOpen;
+        public static bool IsAnotherWindowDragScrolling(object windowObject)
+        {
+            return _draggedWindowObject != null && _draggedWindowObject != windowObject;
+        }
+        
+        public static void HandleDragScrolling(object windowObject)
+        {
+            //var currentId = ImGui.GetID("");
+
+            if (_draggedWindowObject == windowObject)
+            {
+                if (ImGui.IsMouseReleased(ImGuiMouseButton.Right))
+                {
+                    //IsDragScrolling = false;
+                    _draggedWindowObject = null;
+                }
+                
+                if (ImGui.IsMouseDragging(ImGuiMouseButton.Right))
+                {
+                    ImGui.SetScrollY(_dragScrollStart.Y - ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Y);
+                }
+
+                return;
+            }
+            
+            
+            if ( ImGui.IsWindowHovered() && !T3Ui.DragFieldWasHoveredLastFrame && ImGui.IsMouseClicked(ImGuiMouseButton.Right))
+            {
+                _dragScrollStart = new Vector2(ImGui.GetScrollX(),  ImGui.GetScrollY());
+                //IsDragScrolling = true;
+                _draggedWindowObject = windowObject;
+            }
+        }
     }
+    
 }

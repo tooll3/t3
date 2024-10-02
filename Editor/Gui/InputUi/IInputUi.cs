@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Selection;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.InputUi
 {
@@ -32,12 +33,17 @@ namespace T3.Editor.Gui.InputUi
         Symbol.InputDefinition InputDefinition { get; set; }
         Type Type { get; }
         Relevancy Relevancy { get; set; }
+        string GroupTitle { get; set; }
+        
+        /**Insert a vertical padding */
+        bool AddPadding { get; set; }
         bool IsAnimatable { get; }
 
-
+        string Description { get; set; }
+        
         void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator, double time);
         
-        InputEditStateFlags DrawInputEdit(IInputSlot input, SymbolUi compositionUi, SymbolChildUi symbolChildUi);
+        InputEditStateFlags DrawParameterEdit(IInputSlot input, SymbolUi compositionUi, SymbolChildUi symbolChildUi, bool hideNonEssentials, bool skipIfDefault);
         string GetSlotValue(IInputSlot inputSlot);
         void DrawSettings();
 

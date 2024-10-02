@@ -1,8 +1,10 @@
 {
   "Id": "946da16c-f536-4887-b764-af9468f22c0f"/*Blur*/,
+  "Description": "Blurs the incoming image\n\nUseful Ops for a PostFX Pipeline: [MotionBlur] [DepthOfField] [ChromaticAbberation] [Glow] [Grain] [Blur]",
   "InputUis": [
     {
       "InputId": "c115fd60-86c5-425f-975b-0b5e92c0f42b"/*Image*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -308.4377,
         "Y": 58.11561
@@ -13,7 +15,11 @@
       "Position": {
         "X": -308.4377,
         "Y": 103.11561
-      }
+      },
+      "Description": "Defines the strength / radius of the blur",
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 20.0
     },
     {
       "InputId": "3c8b43be-430f-4afe-8244-5282be49bfbc"/*Samples*/,
@@ -21,49 +27,48 @@
         "X": -308.4377,
         "Y": 148.1156
       },
-      "Min": 0.0
+      "Description": "Defines the number of iterations with which the image is blurred. \n\nHigher values produce higher quality at the cost of computing speed.",
+      "Min": 0.0,
+      "Max": 100.0,
+      "Clamp": true
     },
     {
       "InputId": "03e6c20c-6b8a-422e-bba1-1cefddc645fd"/*Offset*/,
       "Position": {
         "X": -308.4377,
         "Y": 193.1156
-      }
+      },
+      "GroupTitle": "Advanced Settings",
+      "Description": "Offsets the brightness of the image"
     },
     {
-      "InputId": "d1421b9f-ddde-426a-9d68-32d3a41bf881"/*Glow*/,
+      "InputId": "d1421b9f-ddde-426a-9d68-32d3a41bf881"/*Opacity*/,
       "Position": {
         "X": -308.4377,
         "Y": 238.1156
-      }
+      },
+      "Description": "Changes the opacity / gamma of the image"
     },
     {
       "InputId": "e4e5e654-d570-4dea-ad16-f4eb1018ff2f"/*Resolution*/,
       "Position": {
         "X": -308.4377,
         "Y": 283.1156
-      }
+      },
+      "Description": "Overwrites / redefines the resolution of the incoming image",
+      "AddPadding": "True"
     },
     {
       "InputId": "9c944546-1363-4e3b-b706-31a4b750db2c"/*Wrap*/,
       "Position": {
         "X": -308.4377,
         "Y": 328.1156
-      }
+      },
+      "Description": "Defines what is displayed at the edge of the image or how it is repeated should it be cut off / offset over its borders.",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
-    {
-      "ChildId": "fd12816a-56a1-482d-9e44-4d2f8cd3c781"/*LoadImage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -387.58182,
-        "Y": -111.196335
-      }
-    },
     {
       "ChildId": "4c68857a-b51f-4980-a734-e93d082349a5"/*_ImageFxShaderSetup2*/,
       "Style": "Resizable",
@@ -72,8 +77,8 @@
         "Y": 166.0
       },
       "Position": {
-        "X": 322.6886,
-        "Y": -66.33882
+        "X": 410.55597,
+        "Y": -229.1864
       }
     },
     {
@@ -84,74 +89,64 @@
         "Y": 203.54987
       },
       "Position": {
-        "X": 562.0887,
-        "Y": 242.17671
+        "X": 769.92786,
+        "Y": -200.39159
       }
     },
     {
       "ChildId": "dd5731e9-069c-410f-98ca-ef958c5b1ce8"/*Vertical*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
-        "X": -73.03811,
-        "Y": 436.59805
+        "X": 161.46207,
+        "Y": 405.48312
       }
     },
     {
       "ChildId": "24ba6f99-4bcd-4e84-b4cc-147f4cee2c63"/*WidthToHeight*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
-        "X": -76.21942,
-        "Y": 237.54283
+        "X": -73.05734,
+        "Y": 219.62434
       }
     },
     {
       "ChildId": "68b65d39-c6d1-4c23-8b5a-321640ed50ad"/*GetTextureSize*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
-        "X": -367.15515,
-        "Y": 534.3595
+        "X": -245.48831,
+        "Y": -70.23182
       }
     },
     {
-      "ChildId": "a3bdc17e-c073-4df0-a204-b08df50ce0a4"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "a3bdc17e-c073-4df0-a204-b08df50ce0a4"/*Vector2Components*/,
       "Position": {
-        "X": -237.15517,
-        "Y": 534.3595
+        "X": -53.872154,
+        "Y": -75.83326
       }
     },
     {
       "ChildId": "8a1e1b10-b102-4fd3-945c-09da4385f356"/*Div*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
-        "X": -70.73477,
-        "Y": 525.5146
+        "X": 112.54825,
+        "Y": -84.67817
       }
     },
     {
       "ChildId": "a663161b-a214-41a0-87d0-7c642e39e1f7"/*Value*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
-        "X": -26.056568,
-        "Y": 329.4329
+        "X": -73.05734,
+        "Y": 262.62433
+      }
+    },
+    {
+      "ChildId": "3d331fa5-2020-432f-8fc4-40fa10c23cec"/*Resources\lib\img\fx\Blur.hlsl*/,
+      "Position": {
+        "X": 526.80054,
+        "Y": 535.7032
+      }
+    },
+    {
+      "ChildId": "182b10f8-0d60-4d18-b442-75431f9beca4"/*Resources\lib\img\fx\Blur.hlsl*/,
+      "Position": {
+        "X": 793.38324,
+        "Y": 565.9022
       }
     }
   ],
@@ -159,8 +154,8 @@
     {
       "OutputId": "fa46b9f0-46d6-4ab3-8406-409e1dc5e9a4"/*TextureOutput*/,
       "Position": {
-        "X": 683.74274,
-        "Y": 98.292076
+        "X": 1109.2988,
+        "Y": 273.33807
       }
     }
   ]

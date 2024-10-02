@@ -71,7 +71,7 @@
       "Outputs": []
     },
     {
-      "Id": "0dcaf7fa-ce0b-4bc5-a8ac-9859ba1c2235"/*Float3ToVector3*/,
+      "Id": "0dcaf7fa-ce0b-4bc5-a8ac-9859ba1c2235"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [
         {
@@ -95,11 +95,11 @@
       "Outputs": []
     },
     {
-      "Id": "a30b643f-e4a2-4ae7-88dc-310a85219e58"/*BoundingBox*/,
+      "Id": "a30b643f-e4a2-4ae7-88dc-310a85219e58"/*DrawBoxGizmo*/,
       "SymbolId": "9123651a-5df8-4f85-9e14-2068f33e2ff1",
       "InputValues": [
         {
-          "Id": "6f95e60a-f259-45fa-b23f-ce284cc9275e"/*Size*/,
+          "Id": "6f95e60a-f259-45fa-b23f-ce284cc9275e"/*Stretch*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.15666667,
@@ -135,11 +135,11 @@
       "Outputs": []
     },
     {
-      "Id": "55001b5b-de8a-4585-adcd-02c2195f2346"/*BoundingBox*/,
+      "Id": "55001b5b-de8a-4585-adcd-02c2195f2346"/*DrawBoxGizmo*/,
       "SymbolId": "9123651a-5df8-4f85-9e14-2068f33e2ff1",
       "InputValues": [
         {
-          "Id": "6f95e60a-f259-45fa-b23f-ce284cc9275e"/*Size*/,
+          "Id": "6f95e60a-f259-45fa-b23f-ce284cc9275e"/*Stretch*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.1,
@@ -163,11 +163,11 @@
       "Outputs": []
     },
     {
-      "Id": "89201ab2-f582-46ac-b7c2-d104d584fb1b"/*BoundingBox*/,
+      "Id": "89201ab2-f582-46ac-b7c2-d104d584fb1b"/*DrawBoxGizmo*/,
       "SymbolId": "9123651a-5df8-4f85-9e14-2068f33e2ff1",
       "InputValues": [
         {
-          "Id": "6f95e60a-f259-45fa-b23f-ce284cc9275e"/*Size*/,
+          "Id": "6f95e60a-f259-45fa-b23f-ce284cc9275e"/*Stretch*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.1,
@@ -204,11 +204,11 @@
       "Outputs": []
     },
     {
-      "Id": "f560aa68-75fd-47f6-ae33-1f73c6a14e1b"/*BoundingBox*/,
+      "Id": "f560aa68-75fd-47f6-ae33-1f73c6a14e1b"/*DrawBoxGizmo*/,
       "SymbolId": "9123651a-5df8-4f85-9e14-2068f33e2ff1",
       "InputValues": [
         {
-          "Id": "6f95e60a-f259-45fa-b23f-ce284cc9275e"/*Size*/,
+          "Id": "6f95e60a-f259-45fa-b23f-ce284cc9275e"/*Stretch*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.1,

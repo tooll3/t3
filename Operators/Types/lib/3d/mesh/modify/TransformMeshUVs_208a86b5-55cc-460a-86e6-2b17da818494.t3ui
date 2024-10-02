@@ -1,57 +1,74 @@
 {
   "Id": "208a86b5-55cc-460a-86e6-2b17da818494"/*TransformMeshUVs*/,
-  "Description": "",
+  "Description": "Manipulates the existing UV coordinates of a mesh to change the mapping of textures.\n\nBecomes visible with [DrawMesh].\n\nTo overwrite existing UV Coordinates with planar mapping see [MeshProjectUV] \n\n\nAlso see [ReprojectToUV].",
   "InputUis": [
     {
       "InputId": "b9e7efdf-98d6-4d5a-94e8-16f38cfe4e55"/*InputMesh*/,
+      "Relevancy": "Required",
       "Position": {
-        "X": -78.940186,
-        "Y": 2525.8523
+        "X": 187.80597,
+        "Y": 2798.411
       }
     },
     {
       "InputId": "b8409f71-d2e3-4fb3-91dc-abf96b55379f"/*Translate*/,
       "Position": {
-        "X": -78.940186,
-        "Y": 2570.8523
-      }
-    },
-    {
-      "InputId": "4b8a067d-8630-485e-b390-1fca7cc06323"/*Stretch*/,
-      "Position": {
-        "X": -78.940186,
-        "Y": 2615.8523
-      }
-    },
-    {
-      "InputId": "d2d278d9-7933-49ea-83c2-3566f5a13d1f"/*Scale*/,
-      "Position": {
-        "X": -78.940186,
-        "Y": 2660.8523
-      }
+        "X": 187.80597,
+        "Y": 2843.411
+      },
+      "GroupTitle": "Transform",
+      "Description": "Moves the UV coordinates linearly"
     },
     {
       "InputId": "da73250e-fcf2-4fe9-9a84-a1d139a0390c"/*Rotate*/,
       "Position": {
-        "X": -78.940186,
-        "Y": 2705.8523
-      }
+        "X": 187.80597,
+        "Y": 2888.411
+      },
+      "Description": "Rotates the UV coordinates",
+      "Min": -90.0,
+      "Max": 90.0,
+      "Format": "{0:0.0}°"
+    },
+    {
+      "InputId": "4b8a067d-8630-485e-b390-1fca7cc06323"/*Stretch*/,
+      "Position": {
+        "X": 187.80597,
+        "Y": 2933.411
+      },
+      "Description": "Scales the UV coordinates linearly per axis"
+    },
+    {
+      "InputId": "d2d278d9-7933-49ea-83c2-3566f5a13d1f"/*Uniformscale*/,
+      "Position": {
+        "X": 187.80597,
+        "Y": 2978.411
+      },
+      "Description": "Scales the UV coordinates linearly",
+      "AddPadding": "True"
     },
     {
       "InputId": "888017f2-3ac2-464b-ae6f-9f8caf53ba6d"/*UseVertexSelection*/,
       "Position": {
-        "X": -78.940186,
-        "Y": 2750.8523
-      }
+        "X": 194.30124,
+        "Y": 3059.135
+      },
+      "Description": "Defines whether only selected vertices should be affected by the manipulation",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "590e24cc-00cc-4c9a-8f96-850857686c4a"/*Pivot*/,
+      "Position": {
+        "X": 194.30124,
+        "Y": 3104.135
+      },
+      "GroupTitle": "Transform Pivot",
+      "Description": "Moves the center point of the UV manipulations for rotations or scaling"
     }
   ],
   "SymbolChildUis": [
     {
       "ChildId": "a458119a-e846-41b7-9da6-b61a87adff35"/*ComputeShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 1056.7341,
         "Y": 2580.4563
@@ -59,10 +76,6 @@
     },
     {
       "ChildId": "ba12ef38-43e2-4126-b766-9f6ee30d1cd8"/*ComputeShaderStage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 127.0
-      },
       "Position": {
         "X": 1422.1832,
         "Y": 2610.9385
@@ -72,20 +85,16 @@
       "ChildId": "e84b912f-b4d8-4d80-9aa4-64a0a64d4338"/*FloatsToBuffer*/,
       "Style": "Resizable",
       "Size": {
-        "X": 108.263535,
-        "Y": 209.40137
+        "X": 105.83121,
+        "Y": 132.53978
       },
       "Position": {
-        "X": 1125.3193,
-        "Y": 2960.539
+        "X": 1219.6938,
+        "Y": 2932.324
       }
     },
     {
       "ChildId": "0d5d4d66-490c-44a1-a67f-f90fa4f0ead8"/*GetSRVProperties*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 873.94507,
         "Y": 2782.0527
@@ -93,10 +102,6 @@
     },
     {
       "ChildId": "97627ad1-9d5d-42ba-ac82-7181de4236b9"/*ExecuteBufferUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 1625.2101,
         "Y": 2645.3838
@@ -104,32 +109,20 @@
     },
     {
       "ChildId": "4d7e6822-ebc9-49e5-9897-2584e3821cde"/*CalcDispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 1200.6622,
         "Y": 2639.4873
       }
     },
     {
-      "ChildId": "e90282b4-074d-43c2-bf64-f280261c38e8"/*StructuredBuffer2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
+      "ChildId": "e90282b4-074d-43c2-bf64-f280261c38e8"/*StructuredBufferWithViews*/,
       "Position": {
-        "X": 1068.049,
-        "Y": 3291.4697
+        "X": 1042.104,
+        "Y": 3172.2854
       }
     },
     {
       "ChildId": "77f92fd2-3e86-42a7-bf51-33cf19b28aca"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 720.9523,
         "Y": 2713.1797
@@ -137,76 +130,20 @@
     },
     {
       "ChildId": "001f506d-92ca-4812-866e-958a19875c10"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
-        "X": 1240.4336,
-        "Y": 3239.5898
+        "X": 1214.4886,
+        "Y": 3120.4055
       }
     },
     {
       "ChildId": "5e6dcd3c-b73c-4276-82ea-8702de443923"/*TransformMatrix*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
       "Position": {
-        "X": 807.71155,
-        "Y": 3003.4172
-      }
-    },
-    {
-      "ChildId": "6e74e176-af87-4fea-8467-ce642e403e43"/*PickSDXVector4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 995.31934,
-        "Y": 2960.539
-      }
-    },
-    {
-      "ChildId": "08a8f4fc-8841-40a4-91f5-8d211e17dfca"/*PickSDXVector4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 995.31934,
-        "Y": 3016.5393
-      }
-    },
-    {
-      "ChildId": "b8355bcd-caba-4e0b-81af-104105cfc399"/*PickSDXVector4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 995.31934,
-        "Y": 3072.539
-      }
-    },
-    {
-      "ChildId": "34df4cd9-ccb2-48e3-a5f1-8debfdbb8d56"/*PickSDXVector4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 995.31934,
-        "Y": 3128.539
+        "X": 1069.6938,
+        "Y": 2932.324
       }
     },
     {
       "ChildId": "9e07663c-36c6-4139-9030-2689f4cbc543"/*_MeshBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 448.87473,
         "Y": 2863.3635
@@ -214,35 +151,23 @@
     },
     {
       "ChildId": "e4d2de76-0e54-4f29-8553-199b0417a185"/*_AssembleMeshBuffers*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
-        "X": 1886.5524,
-        "Y": 2699.5967
+        "X": 1775.2101,
+        "Y": 2645.3838
       }
     },
     {
       "ChildId": "87b39624-ec6c-40f7-a66f-51de42fff19f"/*IntValue*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
-        "X": 799.12915,
-        "Y": 3358.8755
+        "X": 892.104,
+        "Y": 3172.2854
       }
     },
     {
-      "ChildId": "fd753508-f28a-4626-9dda-16d0877b4945"/*BoolToFloats*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "fd753508-f28a-4626-9dda-16d0877b4945"/*BoolToFloat*/,
       "Position": {
-        "X": 792.9597,
-        "Y": 3240.3013
+        "X": 1069.6938,
+        "Y": 3040.324
       }
     }
   ],
@@ -250,8 +175,8 @@
     {
       "OutputId": "1030db1a-e5d0-4eac-9f3d-cc1e8d3867c7"/*Result*/,
       "Position": {
-        "X": 2126.8977,
-        "Y": 2670.738
+        "X": 1925.2101,
+        "Y": 2645.3838
       }
     }
   ]

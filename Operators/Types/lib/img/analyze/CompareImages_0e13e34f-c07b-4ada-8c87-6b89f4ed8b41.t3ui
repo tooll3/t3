@@ -1,21 +1,21 @@
 {
   "Id": "0e13e34f-c07b-4ada-8c87-6b89f4ed8b41"/*CompareImages*/,
-  "Description": "A simple helper to verify an image effect before and after. \nIt show",
+  "Description": "A simple helper to verify an image effect before and after. It shows...",
   "InputUis": [
-    {
-      "InputId": "78c3486a-3a82-4e61-81fd-3da904fd7aed"/*Texture2d2*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -1086.1727,
-        "Y": -73.2712
-      }
-    },
     {
       "InputId": "5537a990-0d27-4e91-912e-8f913a734722"/*Texture2d*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -1086.1727,
-        "Y": -28.271202
+        "X": -680.5391,
+        "Y": -140.30246
+      }
+    },
+    {
+      "InputId": "78c3486a-3a82-4e61-81fd-3da904fd7aed"/*Texture2d2*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -680.5391,
+        "Y": -95.30245
       }
     },
     {
@@ -23,14 +23,18 @@
       "Position": {
         "X": -704.83606,
         "Y": 404.13895
-      }
+      },
+      "Min": -90.0,
+      "Max": 90.0,
+      "Format": "{0:0.0}°"
     },
     {
       "InputId": "beada8f0-cece-4526-aa29-3546bebd276a"/*Center*/,
       "Position": {
         "X": -704.83606,
         "Y": 449.13895
-      }
+      },
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "99171ae6-fb07-4121-bf23-e97f30b33be5"/*IntensityRange*/,
@@ -46,101 +50,156 @@
   "SymbolChildUis": [
     {
       "ChildId": "cb1a1a5f-7f73-4ea7-a41b-05b940d6efdd"/*BlendWithMask*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
-        "X": 543.1086,
-        "Y": -184.26198
-      }
-    },
-    {
-      "ChildId": "d913c37f-f329-45d0-bc0a-2d608b2407ec"/*LinearGradient*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
-      "Position": {
-        "X": 396.9453,
-        "Y": 233.0386
+        "X": 554.94946,
+        "Y": 51.24156
       }
     },
     {
       "ChildId": "6e8977c1-a074-43d3-bf04-03b0e652ea7d"/*ImageLevels*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
       "Position": {
-        "X": 212.78096,
-        "Y": -218.79279
+        "X": 225.08046,
+        "Y": -161.52538
       }
     },
     {
       "ChildId": "5ace9239-b6e9-4af5-bc3d-ce792e60a42a"/*ImageLevels*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
       "Position": {
-        "X": 211.52359,
-        "Y": 40.612865
+        "X": 248.25317,
+        "Y": 14.382973
       }
     },
     {
       "ChildId": "64bb700f-e972-417c-aacc-e7aea17960cb"/*Add*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
-        "X": 62.78096,
-        "Y": -218.79279
-      }
-    },
-    {
-      "ChildId": "79b457fa-dabc-4c87-9151-9a0f679d7b95"/*ScaleVector2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -253.51266,
-        "Y": 641.2245
+        "X": -151.6745,
+        "Y": -60.474228
       }
     },
     {
       "ChildId": "2a350f7f-e7f5-49c3-a958-fd23bd3d6f03"/*LinearGradient*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
-        "X": 722.82794,
-        "Y": 148.27399
-      }
-    },
-    {
-      "ChildId": "fddecb5e-8ffb-4f99-95d9-07335a9aa4e7"/*WaveForm*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 787.0037,
-        "Y": 467.65067
+        "X": 734.4227,
+        "Y": 214.06238
       }
     },
     {
       "ChildId": "9adef827-09cc-4193-8e22-e999dcfcfeb6"/*ExecuteTextureUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
-        "X": 835.9145,
-        "Y": -440.55975
+        "X": 910.4224,
+        "Y": -48.497055
+      }
+    },
+    {
+      "ChildId": "d367341d-8182-459d-bdb5-bf77bc6b6e64"/*Multiply*/,
+      "Position": {
+        "X": -318.4217,
+        "Y": 222.14062
+      }
+    },
+    {
+      "ChildId": "cc365cd7-c07d-4f4d-a00b-d55614cd3dd3"/*GetTextureSize*/,
+      "Position": {
+        "X": -642.37036,
+        "Y": 56.661514
+      }
+    },
+    {
+      "ChildId": "441c22af-90ee-451d-bd69-dd3d7a67368e"/*GetTextureSize*/,
+      "Position": {
+        "X": -667.38916,
+        "Y": 160.60776
+      }
+    },
+    {
+      "ChildId": "c44f0322-c14c-492f-991e-e3002147af79"/*Int2Components*/,
+      "Position": {
+        "X": -492.37027,
+        "Y": 56.661514
+      }
+    },
+    {
+      "ChildId": "c0cdf21d-f70c-4ffe-8d22-da287f921dae"/*Int2Components*/,
+      "Position": {
+        "X": -517.38904,
+        "Y": 160.60776
+      }
+    },
+    {
+      "ChildId": "879cf494-8ab7-4d11-bf20-43a8600dd584"/*IntToFloat*/,
+      "Position": {
+        "X": -344.25073,
+        "Y": 56.036438
+      }
+    },
+    {
+      "ChildId": "63b96d8a-20b0-49d0-bb77-8d4bd7ba68b3"/*IntToFloat*/,
+      "Position": {
+        "X": -352.24088,
+        "Y": 126.86246
+      }
+    },
+    {
+      "ChildId": "f0e88957-0de8-4541-bf36-d0d8a4ea7f19"/*Div*/,
+      "Position": {
+        "X": -203.0058,
+        "Y": 92.910126
+      }
+    },
+    {
+      "ChildId": "79969d58-8a77-4f02-8f51-ff6a386083d3"/*CheckerBoard*/,
+      "Position": {
+        "X": 257.54102,
+        "Y": 195.32397
+      }
+    },
+    {
+      "ChildId": "cdbb267b-eba2-42ad-be10-c54aac8b702a"/*TransformImage*/,
+      "Position": {
+        "X": 407.54102,
+        "Y": 195.32397
+      }
+    },
+    {
+      "ChildId": "0d83b04e-c55e-4eac-9eb0-fc9ff913884d"/*Vector2Components*/,
+      "Position": {
+        "X": -173.30954,
+        "Y": 568.74646
+      }
+    },
+    {
+      "ChildId": "91d1d097-e4df-4d72-9f1c-b04e9d734455"/*Vector2*/,
+      "Position": {
+        "X": 202.10709,
+        "Y": 564.0593
+      }
+    },
+    {
+      "ChildId": "056c3881-d368-498f-b2bd-7e166682d2ea"/*Multiply*/,
+      "Position": {
+        "X": 31.217651,
+        "Y": 631.1955
+      }
+    },
+    {
+      "ChildId": "1bdac5b9-aca2-4f67-a9ee-90da850f0ada"/*Vector2Components*/,
+      "Position": {
+        "X": -177.08759,
+        "Y": 298.78152
+      }
+    },
+    {
+      "ChildId": "85226d91-6a79-43ba-bf79-3e8042454e09"/*Multiply*/,
+      "Position": {
+        "X": -1.7385406,
+        "Y": 252.2255
+      }
+    },
+    {
+      "ChildId": "404bd112-06cc-4363-8cb7-5e8e1c484935"/*Vector2*/,
+      "Position": {
+        "X": 257.54102,
+        "Y": 238.32397
       }
     }
   ],
@@ -148,8 +207,8 @@
     {
       "OutputId": "2d59fec4-af4e-4db2-bc11-3685f31e9de5"/*TextureOutput*/,
       "Position": {
-        "X": 1245.9105,
-        "Y": -153.24353
+        "X": 1050.9429,
+        "Y": 152.81244
       }
     }
   ]

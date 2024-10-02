@@ -1,48 +1,52 @@
-using System;
+using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_c8590f8f_cca1_434a_a880_67bb91920e1a
+namespace T3.Operators.Types.Id_27b0e1af_cb2e_4603_83f9_5c9b042d87e6
 {
     public class Blob : Instance<Blob>
     {
-        [Output(Guid = "1d2a7948-4c89-407a-a98f-9810f60ef75e")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new Slot<SharpDX.Direct3D11.Texture2D>();
+        [Output(Guid = "b882de23-5b94-4791-af13-e195211cffb3")]
+        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
 
 
-        [Input(Guid = "630d4d0b-d4ca-4987-93ca-7eb782ebccc6")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        [Input(Guid = "8cc15ea0-074f-40ed-813d-b93f48681094")]
+        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
 
-        [Input(Guid = "bbda1c8c-fa81-43ef-b773-f7ecfb8968e1")]
-        public readonly InputSlot<System.Numerics.Vector4> Fill = new InputSlot<System.Numerics.Vector4>();
+        [Input(Guid = "d2b0dd99-c289-4c1b-9335-c29a6b4a6ba3")]
+        public readonly InputSlot<System.Numerics.Vector4> Color = new();
 
-        [Input(Guid = "de54f18b-6a1e-4610-8d6d-58897df6959b")]
-        public readonly InputSlot<System.Numerics.Vector4> Background = new InputSlot<System.Numerics.Vector4>();
+        [Input(Guid = "fd05c355-7afa-4af6-9529-d4071d145d3b")]
+        public readonly InputSlot<System.Numerics.Vector4> Background = new();
 
-        [Input(Guid = "8a908810-2482-4088-8b21-a7ee15531e64")]
-        public readonly InputSlot<System.Numerics.Vector2> Size = new InputSlot<System.Numerics.Vector2>();
+        [Input(Guid = "7daacb43-54de-47d2-afcd-694f6afce59d")]
+        public readonly InputSlot<System.Numerics.Vector2> Position = new();
 
-        [Input(Guid = "325461c8-2892-4e8d-8d3b-0eea1bcc03f9")]
-        public readonly InputSlot<System.Numerics.Vector2> Position = new InputSlot<System.Numerics.Vector2>();
+        [Input(Guid = "37da22d0-56ca-444a-9c9d-27a70283b7c0")]
+        public readonly InputSlot<System.Numerics.Vector2> Stretch = new();
 
-        [Input(Guid = "41f4065a-0b65-4dda-9cd3-ef7802ed170b")]
-        public readonly InputSlot<float> Round = new InputSlot<float>();
+        [Input(Guid = "33f31c62-b0ea-42f9-a226-d0f5154731ee")]
+        public readonly InputSlot<float> Scale = new();
 
-        [Input(Guid = "8846aa50-e4d0-433c-9e5b-013a93f17f79")]
-        public readonly InputSlot<float> Feather = new InputSlot<float>();
+        [Input(Guid = "f0c128b1-27a1-42e0-a8a4-6fd94d527c05")]
+        public readonly InputSlot<float> Feather = new();
 
-        [Input(Guid = "2d3a7e9a-9efe-486a-8c33-10a5a16dc17b")]
-        public readonly InputSlot<float> FeatherBias = new InputSlot<float>();
+        [Input(Guid = "0c49c872-852a-4f15-8cde-f3cda743c28e")]
+        public readonly InputSlot<float> FeatherBias = new();
 
-        [Input(Guid = "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        [Input(Guid = "e45f325d-cf2d-4972-aea6-9545aec66ea7")]
+        public readonly InputSlot<Int2> Resolution = new();
 
-        [Input(Guid = "8232e748-5fc2-488d-8559-ac9ff621f95d")]
-        public readonly InputSlot<float> Rotate = new InputSlot<float>();
+        [Input(Guid = "77544b82-e897-4e69-bfaf-e861891d1fd4")]
+        public readonly InputSlot<float> Rotate = new();
 
-        [Input(Guid = "fca535e3-ea35-455f-b4ef-0a9d7feacef8")]
-        public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
+        [Input(Guid = "89ca8093-8d13-471d-bfb4-613b13bc084d")]
+        public readonly InputSlot<bool> GenerateMips = new();
+
+        [Input(Guid = "a9d505ce-2cb1-4911-acc3-c509e1eebc2b", MappedType = typeof(SharedEnums.RgbBlendModes))]
+        public readonly InputSlot<int> BlendMode = new();
     }
 }
 

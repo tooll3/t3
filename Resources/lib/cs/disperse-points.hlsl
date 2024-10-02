@@ -1,58 +1,21 @@
 #include "lib/shared/point.hlsl"
-#include "lib/shared/hash-functions.hlsl"
-
-StructuredBuffer<uint> particleGridBuffer :register(t0);
-StructuredBuffer<uint> particleGridCellBuffer :register(t1);
-StructuredBuffer<uint> particleGridHashBuffer :register(t2);
-StructuredBuffer<uint> particleGridCountBuffer :register(t3);
-StructuredBuffer<uint> particleGridIndexBuffer :register(t4);
-
+#include "lib/shared/quat-functions.hlsl"
+ 
 RWStructuredBuffer<Point> points :register(u0);
-
-
-#define THREADS_PER_GROUP 512
 
 cbuffer Params : register(b0)
 {
     float Threshold;
     float Dispersion;
-    float ParticleGridCellSize;
+    float CellSize;
     float ClampAccelleration;
     float Time;
 }
 
-static const uint            ParticleGridEntryCount = 32;
-static const uint            ParticleGridCellCount = 10000;
-//static const float           ParticleGridCellSize = 0.1f;
+#include "lib/points/spatial-hash-map/spatial-hash-map-lookup.hlsl"
 
 
-
-bool ParticleGridFind(in float3 position, out uint startIndex, out uint endIndex)
-{
-    uint i;
-    int3 cell = int3(position / ParticleGridCellSize);
-    uint cellIndex = (pcg(cell.x + pcg(cell.y + pcg(cell.z))) % ParticleGridCellCount);
-    uint hashValue = max(xxhash(cell.x + xxhash(cell.y + xxhash(cell.z))), 1);
-    uint cellBegin = cellIndex * ParticleGridEntryCount;
-    uint cellEnd = cellBegin + ParticleGridEntryCount;
-    for(i = cellBegin; i < cellEnd; ++i)
-    {
-        const uint entryValue = particleGridHashBuffer[i];
-        if(entryValue == hashValue)
-            break;  // found existing entry
-        if(entryValue == 0)
-            i = cellEnd;
-    }
-    if(i >= cellEnd)
-        return false;
-    startIndex = particleGridIndexBuffer[i];
-    endIndex = particleGridCountBuffer[i] + startIndex;
-    return true;
-}
-
-
-
-[numthreads( THREADS_PER_GROUP, 1, 1 )]
+[numthreads( 16, 1, 1 )]
 void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
 {
     uint pointCount, stride;
@@ -61,27 +24,29 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
     if(DTid.x >= pointCount)
         return; // out of bounds
 
-
-    float3 position = points[DTid.x].position;
-    float3 jitter = (hash33u( uint3(DTid.x, DTid.x + 134775813U, DTid.x + 1664525U) + position * 1000 + Time % 123 ) -0.5f)  * ParticleGridCellSize * 2;
-    position+= jitter;
+    float3 position = points[DTid.x].Position;
+    //float3 jitter = (hash33u( uint3(DTid.x, DTid.x + 134775813U, DTid.x + 1664525U) + Time % 123.12 ) -0.5f)  * CellSize * 1;
+    float3 jitter = (hash33u( uint3(DTid.x, DTid.x + 134775813U, DTid.x + 1664525U + (int)(Time * 123.12)) ) -0.5f)  * CellSize * 2;
+    //float3 jitter = (hash31( Time * 1234.37) - 0.5f) * CellSize * 1;
+    float3 searchPos = position + jitter;
 
     uint startIndex, endIndex;
-    if(ParticleGridFind(position, startIndex, endIndex)) 
+    if(GridFind(searchPos, startIndex, endIndex)) 
     {
         const uint particleCount = endIndex - startIndex;
         int count =0;
-        float3 sumPosition = 0;
+        float3 sumForces = 0;
 
-        endIndex = max(startIndex + 32 , endIndex);
+        endIndex = min(startIndex + 64 , endIndex);
+        //return;
 
         for(uint i=startIndex; i < endIndex; ++i) 
         {
-            uint pointIndex = particleGridBuffer[i];
+            uint pointIndex = CellPointIndices[i];
             if( pointIndex == DTid.x)
                 continue;
 
-            float3 otherPos = points[pointIndex].position;
+            float3 otherPos = points[pointIndex].Position;
             float3 direction = position - otherPos;
             float distance = length(direction);
             if(distance <= 0.0001) {
@@ -90,21 +55,23 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
 
             if(distance > Threshold)
                 continue;
-            
-            float fallOff = max(pow(((distance)/Threshold), 0.5), 0.0001);
-            direction *= fallOff;
-            float l = length(direction);
-            direction /=l;
-            direction *= min(l, ClampAccelleration);
 
-            sumPosition += direction;
+            float force = (Threshold - distance) / Threshold;
+            force = pow(force,2);
+
+            sumForces += direction * force;
             count++;
         }
 
-        if(count > 0) {
+        if(count > 0) 
+        {
+            float acceleration = length(sumForces);
+            float3 direction = sumForces / acceleration;
+            
 
-            sumPosition /= count;
-            points[DTid.x].position += sumPosition * Dispersion;
+            //sumForces /= count;
+            points[DTid.x].Position += direction * (Dispersion * 0.01) * clamp(acceleration, 0, ClampAccelleration);
+            //points[DTid.x].w = min(count,3) * 1;
         }
     }
 }

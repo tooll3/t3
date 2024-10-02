@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using T3.Core.Animation;
+using T3.Core.DataTypes;
+using T3.Editor.Gui.Windows.TimeLine;
 
 namespace T3.Editor.Gui.Commands.Animation
 {
@@ -9,11 +10,13 @@ namespace T3.Editor.Gui.Commands.Animation
         public string Name => "Move keyframes";
         public bool IsUndoable => true;
 
-        private readonly Dictionary<VDefinition, VDefinition> _originalDefForReferences = new Dictionary<VDefinition, VDefinition>();
-        private readonly Dictionary<VDefinition, VDefinition> _newDefForReferences = new Dictionary<VDefinition, VDefinition>();
+        private readonly Dictionary<VDefinition, VDefinition> _originalDefForReferences = new();
+        private readonly Dictionary<VDefinition, VDefinition> _newDefForReferences = new();
+        private readonly IEnumerable<Curve> _curves;
 
-        public ChangeKeyframesCommand(Guid compositionSymbolId, IEnumerable<VDefinition> vDefinitions)
+        public ChangeKeyframesCommand(IEnumerable<VDefinition> vDefinitions, IEnumerable<Curve> curves)
         {
+            _curves = curves;
             foreach (var def in vDefinitions)
             {
                 _originalDefForReferences[def] = def.Clone();
@@ -34,7 +37,10 @@ namespace T3.Editor.Gui.Commands.Animation
             {
                 referencedDefinition.CopyValuesFrom(orgDef);
             }
+
+            UpdateAllTangents();
         }
+
 
         public void Do()
         {
@@ -42,6 +48,19 @@ namespace T3.Editor.Gui.Commands.Animation
             {
                 referencedDefinition.CopyValuesFrom(newDef);
             }
+            
+            UpdateAllTangents();
+        }
+        
+        
+        private void UpdateAllTangents()
+        {
+            foreach (var c in _curves)
+            {
+                c.UpdateTangents();
+            }
+
+            AnimationParameterEditing.CurvesTablesNeedsRefresh = true;
         }
     }
 }

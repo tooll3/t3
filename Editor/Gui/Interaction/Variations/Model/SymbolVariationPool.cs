@@ -16,7 +16,7 @@ using T3.Editor.Gui.Commands.Variations;
 namespace T3.Editor.Gui.Interaction.Variations.Model
 {
     /// <summary>
-    /// Collects all presets and variations for a symbol 
+    /// Collects all presets and variations for a symbol.
     /// </summary>
     public class SymbolVariationPool
     {
@@ -27,12 +27,12 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
         public static SymbolVariationPool InitVariationPoolForSymbol(Guid compositionId)
         {
-            var newPool = new SymbolVariationPool()
+            var newPool = new SymbolVariationPool
                               {
-                                  SymbolId = compositionId
+                                  SymbolId = compositionId,
+                                  Variations = LoadVariations(compositionId)
                               };
 
-            newPool.Variations = LoadVariations(compositionId);
             return newPool;
         }
 
@@ -46,7 +46,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
                 return new List<Variation>();
             }
 
-            Log.Info($"Reading presets definition for : {compositionId}");
+            //Log.Info($"Reading presets definition for : {compositionId}");
 
             using var sr = new StreamReader(filepath);
             using var jsonReader = new JsonTextReader(sr);
@@ -55,7 +55,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
             try
             {
-                var jToken = JToken.ReadFrom(jsonReader);
+                var jToken = JToken.ReadFrom(jsonReader, SymbolJson.LoadSettings);
                 var jArray = (JArray)jToken["Variations"];
                 if (jArray != null)
                 {
@@ -91,9 +91,6 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
         public void SaveVariationsToFile()
         {
-            if (Variations.Count == 0)
-                return;
-
             CreateFolderIfNotExists(VariationsFolder);
             
             var filePath = GetFilePathForVariationId(SymbolId);
@@ -108,7 +105,6 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
                 writer.WriteValue("Id", SymbolId);
 
-                // Presets
                 {
                     writer.WritePropertyName("Variations");
                     writer.WriteStartArray();
@@ -151,12 +147,24 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
         public void Apply(Instance instance, Variation variation)
         {
             StopHover();
+            ActiveVariation = variation;
 
             var command = variation.IsPreset
                               ? CreateApplyPresetCommand(instance, variation)
                               : CreateApplyVariationCommand(instance, variation);
-            ;
+            UpdateActiveStateForVariation(variation.ActivationIndex);
+
             UndoRedoStack.AddAndExecute(command);
+        }
+
+        public void UpdateActiveStateForVariation(int variationIndex)
+        {
+            foreach (var v in Variations)
+            {
+                v.State = v.ActivationIndex == variationIndex ? Variation.States.Active : Variation.States.InActive;
+            }
+
+            //variation.State = Variation.States.Active;
         }
 
         public void BeginHover(Instance instance, Variation variation)
@@ -183,6 +191,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
             _activeBlendCommand = CreateBlendTowardsVariationCommand(instance, variation, blend);
             _activeBlendCommand.Do();
+            UpdateActiveStateForVariation(variation.ActivationIndex);
         }
         
 
@@ -277,7 +286,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
             var command = new AddPresetOrVariationCommand(instance.Symbol, newVariation);
             UndoRedoStack.AddAndExecute(command);
-            SaveVariationsToFile();
+            //SaveVariationsToFile();
             return newVariation;
         }
 
@@ -286,7 +295,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
             var changeSets = new Dictionary<Guid, Dictionary<Guid, InputValue>>();
             if (instances == null || instances.Count == 0)
             {
-                Log.Warning("Not instances to create variation for");
+                Log.Warning("No instances to create variation for");
                 return null;
             }
 
@@ -344,6 +353,54 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
             SaveVariationsToFile();
             return newVariation;
         }
+        
+        public void UpdateVariationPropertiesForInstances(Variation variation, List<Instance> instances)
+        {
+            if (instances == null || instances.Count == 0)
+            {
+                Log.Warning("No instances to create variation for");
+                return;
+            }
+
+            foreach (var instance in instances)
+            {
+                if (instance.Parent.Symbol.Id != SymbolId)
+                {
+                    Log.Error($"Instance {instance.SymbolChildId} is not a child of VariationPool operator {SymbolId}");
+                    return;
+                }
+
+                var changeSet = new Dictionary<Guid, InputValue>();
+                var hasAnimatableParameters = false;
+
+                foreach (var input in instance.Inputs)
+                {
+                    if (!ValueUtils.BlendMethods.ContainsKey(input.Input.Value.ValueType))
+                        continue;
+
+                    hasAnimatableParameters = true;
+
+                    if (input.Input.IsDefault)
+                    {
+                        continue;
+                    }
+
+                    if (ValueUtils.BlendMethods.ContainsKey(input.Input.Value.ValueType))
+                    {
+                        changeSet[input.Id] = input.Input.Value.Clone();
+                    }
+                }
+
+                if (!hasAnimatableParameters)
+                    continue;
+
+                // Write new changeset
+                variation.ParameterSetsForChildIds[instance.SymbolChildId] = changeSet;
+            }
+            
+            SaveVariationsToFile();
+        }
+        
 
         public void DeleteVariation(Variation variation)
         {
@@ -385,7 +442,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
                     continue;
                 }
 
-                foreach (var input in symbolChild.InputValues.Values)
+                foreach (var input in symbolChild.Inputs.Values)
                 {
                     if (!ValueUtils.BlendMethods.TryGetValue(input.Value.ValueType, out var blendFunction))
                         continue;
@@ -479,7 +536,6 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
         private static MacroCommand CreateBlendTowardsVariationCommand(Instance compositionInstance, Variation variation, float blend)
         {
             var commands = new List<ICommand>();
-            //var parentSymbol = compositionInstance.Parent.Symbol;
             if (!variation.IsSnapshot)
                 return null;
             

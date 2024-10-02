@@ -1,0 +1,57 @@
+{
+  "Name": "_DispatchSceneDraws",
+  "Id": "6e32756e-4267-47f1-bad0-56ee8f58b070",
+  "Namespace": "lib.dx11.draw._internal",
+  "Inputs": [
+    {
+      "Id": "dad22148-b87f-439a-9219-785bee63991c"/*SceneSetup*/,
+      "DefaultValue": {
+        "SceneSetup": {
+          "NodeSettings": []
+        }
+      }
+    },
+    {
+      "Id": "7a9ae929-7001-42ef-b7f2-f2e03bbb7206"/*VertexShader*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "59864da4-3658-4d7d-830e-6ef0d3cbb505"/*PixelShader*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "27405ecf-4994-4e67-8604-d86426345344"/*PrefilteredSpecular*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "3c19533b-c59a-470b-8712-073e71813c0c"/*BrdfLookup*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "60bae25c-64fe-40df-a2e6-a99297a92e0b"/*SamplerStates*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "af6c8349-f48e-4c5a-87fc-33421e255117"/*TransformBuffer*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "883aeabc-19c8-4754-bb3b-9152b491ffa7"/*FloatParameterBuffer*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "8dc3e6e7-0eef-4082-9dc8-4379a901e56b"/*FogParameterBuffer*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "db81ba63-8b7b-425c-9d6a-8f3caf0be70f"/*PointLightBuffer*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "46aee96f-a74e-491c-ae02-843ef62124f7"/*UseSceneMaterials*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

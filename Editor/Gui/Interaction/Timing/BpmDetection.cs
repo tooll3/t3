@@ -169,7 +169,7 @@ namespace T3.Editor.Gui.Interaction.Timing
             return sum;
         }
 
-        private int _addedSampleCount = 0;
+        private int _addedSampleCount;
         
         private const int FramesPerSecond = 60;
         private const int FftResolution = 512;
@@ -178,8 +178,8 @@ namespace T3.Editor.Gui.Interaction.Timing
 
         private int SampleBufferSize => (int)SampleDurationInSec.Clamp(1, 60) * FramesPerSecond;
         
-        private List<float> _sampleBuffer = new List<float>();
-        private float[] _smoothedSampleBuffer = new float[0];
-        private List<float> _bpmEnergies = new List<float>(128);
+        private List<float> _sampleBuffer = new();
+        private float[] _smoothedSampleBuffer = Array.Empty<float>();
+        private List<float> _bpmEnergies = new(128);
     }
 }

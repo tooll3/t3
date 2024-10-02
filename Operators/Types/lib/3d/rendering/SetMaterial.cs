@@ -1,10 +1,11 @@
+using System;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.DataTypes;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Rendering;
+using T3.Core.Rendering.Material;
 using T3.Core.Resource;
 using Utilities = T3.Core.Utils.Utilities;
 using Vector4 = System.Numerics.Vector4;
@@ -14,111 +15,135 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
 {
     public class SetMaterial : Instance<SetMaterial>
     {
-        [Output(Guid = "d80e1028-a48d-4171-8c8c-e6856bd2143d", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
-        public readonly Slot<Command> Output = new Slot<Command>();
+        [Output(Guid = "d80e1028-a48d-4171-8c8c-e6856bd2143d")]
+        public readonly Slot<Command> Output = new();
 
+        [Output(Guid = "51612678-3573-4D40-A423-9E23FC72EA44")]
+        public readonly Slot<PbrMaterial> Reference = new();
+        
         public SetMaterial()
         {
             Output.UpdateAction = Update;
+            Reference.UpdateAction = Update;
         }
-
-        private Buffer _parameterBuffer = null;
-
+        
         private void Update(EvaluationContext context)
         {
-            // Parameters
-            var parameterBufferContent = new PbrMaterialParams
-                                             {
-                                                 BaseColor = BaseColor.GetValue(context),
-                                                 EmissiveColor = EmissiveColor.GetValue(context),
-                                                 Roughness = Roughness.GetValue(context),
-                                                 Specular = Specular.GetValue(context),
-                                                 Metal = Metal.GetValue(context)
-                                             };
+            var parameterBufferNeedsUpdate = BaseColor.DirtyFlag.IsDirty ||
+                                             EmissiveColor.DirtyFlag.IsDirty ||
+                                             Roughness.DirtyFlag.IsDirty ||
+                                             Specular.DirtyFlag.IsDirty ||
+                                             Metal.DirtyFlag.IsDirty ||
+                                             _pbrMaterial == null;
+            
+            _pbrMaterial ??= new PbrMaterial();
+            
+            if (parameterBufferNeedsUpdate)
+            {
+                _pbrMaterial.Parameters.BaseColor = BaseColor.GetValue(context);
+                _pbrMaterial.Parameters.EmissiveColor = EmissiveColor.GetValue(context);
+                _pbrMaterial.Parameters.Roughness = Roughness.GetValue(context);
+                _pbrMaterial.Parameters.Specular = Specular.GetValue(context);
+                _pbrMaterial.Parameters.Metal = Metal.GetValue(context);
 
-            ResourceManager.SetupConstBuffer(parameterBufferContent, ref _parameterBuffer);
+                _pbrMaterial.UpdateParameterBuffer();
+            }
 
-            // Textures
-            var resourceManager = ResourceManager.Instance();
-            var device = ResourceManager.Device;
+            UpdateSrv(BaseColorMap, context, ref _pbrMaterial.AlbedoMapSrv, PbrMaterial.DefaultAlbedoColorSrv);
+            UpdateSrv(NormalMap, context, ref _pbrMaterial.NormalSrv, PbrMaterial.DefaultNormalSrv);
+            UpdateSrv(EmissiveColorMap, context, ref _pbrMaterial.EmissiveMapSrv, PbrMaterial.DefaultEmissiveColorSrv);
+            UpdateSrv(RoughnessMetallicOcclusionMap, context, ref _pbrMaterial.RoughnessMetallicOcclusionSrv, PbrMaterial.DefaultRoughnessMetallicOcclusionSrv);
 
-            Utilities.Dispose(ref _baseColorMapSrv);
-            var tex = BaseColorMap.GetValue(context) ?? PbrContextSettings.WhitePixelTexture;
-            _baseColorMapSrv = new ShaderResourceView(device, tex);
-            var prevAlbedoColorMap = context.PbrMaterialTextures.AlbedoColorMap;
+            var previousMaterial = context.PbrMaterial;
+            context.PbrMaterial = _pbrMaterial;
             
-            
-            context.PbrMaterialTextures.AlbedoColorMap = _baseColorMapSrv;
+            var isValid = _pbrMaterial != null;
 
-            Utilities.Dispose(ref _normalMapSrv);
-            var tex2 = NormalMap.GetValue(context) ?? PbrContextSettings.NormalFallbackTexture;
-            _normalMapSrv = new ShaderResourceView(device, tex2);
-            var prevNormalMap = context.PbrMaterialTextures.NormalMap;
-            
-            
-            context.PbrMaterialTextures.NormalMap = _normalMapSrv;
+            if (isValid)
+            {
+                _pbrMaterial.Name = MaterialId.GetValue(context);
+                context.Materials.Add(_pbrMaterial);
+            } 
 
-            Utilities.Dispose(ref _rsmoMapSrv);
-            var tex3 = RoughnessSpecularMetallicOcclusionMap.GetValue(context) ?? PbrContextSettings.RsmoFallbackTexture;
-            _rsmoMapSrv = new ShaderResourceView(device, tex3);
-            var prevRoughnessSpecularMetallicOcclusionMap = context.PbrMaterialTextures.RoughnessSpecularMetallicOcclusionMap;
-            
-            
-            context.PbrMaterialTextures.RoughnessSpecularMetallicOcclusionMap = _rsmoMapSrv;
-
-            Utilities.Dispose(ref _emissiveColorMapSrv);
-            var tex4 = EmissiveColorMap.GetValue(context) ?? PbrContextSettings.WhitePixelTexture;
-            _emissiveColorMapSrv = new ShaderResourceView(device, tex4);
-            var prevEmissiveColorMap = context.PbrMaterialTextures.EmissiveColorMap;
-            
-            context.PbrMaterialTextures.EmissiveColorMap = _emissiveColorMapSrv;
-
-            var previousParameters = context.PbrMaterialParams;
-            context.PbrMaterialParams = _parameterBuffer;
-            
             SubTree.GetValue(context);
             
-            context.PbrMaterialParams = previousParameters;
-            context.PbrMaterialTextures.AlbedoColorMap = prevAlbedoColorMap;
-            context.PbrMaterialTextures.NormalMap = prevNormalMap;
-            context.PbrMaterialTextures.RoughnessSpecularMetallicOcclusionMap = prevRoughnessSpecularMetallicOcclusionMap;
-            context.PbrMaterialTextures.EmissiveColorMap = prevEmissiveColorMap;
+            if(isValid)
+                context.Materials.RemoveAt(context.Materials.Count - 1);
+            
+            // TODO: replace with stack
+            context.PbrMaterial = previousMaterial;
+
+            Reference.Value = _pbrMaterial;
+            Reference.DirtyFlag.Clear();
         }
 
-        private ShaderResourceView _baseColorMapSrv;
-        private ShaderResourceView _rsmoMapSrv;
-        private ShaderResourceView _normalMapSrv;
-        private ShaderResourceView _emissiveColorMapSrv;
+        private void UpdateSrv(InputSlot<Texture2D> textureInputSlot, EvaluationContext context, ref ShaderResourceView currentSrv, ShaderResourceView defaultSrv)
+        {
+            var textureChanged = textureInputSlot.DirtyFlag.IsDirty;
+            var needsUpdate = textureChanged || currentSrv == null;
 
+            if (!needsUpdate)
+                return;
+
+            if(currentSrv != defaultSrv)
+                Utilities.Dispose(ref currentSrv);
+
+            var changedTexture = textureInputSlot.GetValue(context);
+
+            if (changedTexture == null || changedTexture.IsDisposed)
+            {
+                currentSrv = defaultSrv;
+                return;
+            }
+
+            try
+            {
+                var srv = new ShaderResourceView(ResourceManager.Device, changedTexture);
+                currentSrv = srv;
+            }
+            catch (Exception e)
+            {
+                Log.Warning($"Failed to create SRV for {textureInputSlot.Input.Name} texture {e.Message}", this);
+                currentSrv = defaultSrv;
+            }
+        }
+
+        private PbrMaterial _pbrMaterial;
+
+        
         [Input(Guid = "2a585a23-b60c-4c8b-8cfa-9ab2a8b04c7a")]
-        public readonly InputSlot<Command> SubTree = new InputSlot<Command>();
+        public readonly InputSlot<Command> SubTree = new();
 
         [Input(Guid = "9FF5ADE2-CFA7-4616-AD89-356F3248E04F")]
-        public readonly InputSlot<Vector4> BaseColor = new InputSlot<Vector4>();
+        public readonly InputSlot<Vector4> BaseColor = new();
 
         [Input(Guid = "0EB51DF1-570A-4AC6-BAE6-5E03D6E66CEB")]
-        public readonly InputSlot<Texture2D> BaseColorMap = new InputSlot<Texture2D>();
+        public readonly InputSlot<Texture2D> BaseColorMap = new();
 
         [Input(Guid = "2C91C306-1815-4B22-A70F-746232F024D7")]
-        public readonly InputSlot<Vector4> EmissiveColor = new InputSlot<Vector4>();
+        public readonly InputSlot<Vector4> EmissiveColor = new();
 
         [Input(Guid = "6D859756-0243-42C5-973D-6DE2DCDC5609")]
-        public readonly InputSlot<Texture2D> EmissiveColorMap = new InputSlot<Texture2D>();
+        public readonly InputSlot<Texture2D> EmissiveColorMap = new();
         
         [Input(Guid = "9D5CA726-28B0-4F3D-A5AA-F0AE3E2043A9")]
-        public readonly InputSlot<float> Specular = new InputSlot<float>();
+        public readonly InputSlot<float> Specular = new();
 
         [Input(Guid = "E14DCC43-7C18-4ED7-AD39-DFEAB10E3D33")]
-        public readonly InputSlot<float> Roughness = new InputSlot<float>();
+        public readonly InputSlot<float> Roughness = new();
 
         [Input(Guid = "108FF533-F205-4989-B894-ACF48E3CC1DB")]
-        public readonly InputSlot<float> Metal = new InputSlot<float>();
+        public readonly InputSlot<float> Metal = new();
 
         [Input(Guid = "600BBC24-6B3A-4AC4-9CEB-702E71C839E9")]
-        public readonly InputSlot<Texture2D> NormalMap = new InputSlot<Texture2D>();
+        public readonly InputSlot<Texture2D> NormalMap = new();
 
         [Input(Guid = "C8003FBD-C6CE-440C-9F1F-6B15B5EE5274")]
-        public readonly InputSlot<Texture2D> RoughnessSpecularMetallicOcclusionMap = new InputSlot<Texture2D>();
+        public readonly InputSlot<Texture2D> RoughnessMetallicOcclusionMap = new();
+
+        [Input(Guid = "71E289F0-382B-4D0F-A2E0-701C7019A360")]
+        public readonly InputSlot<string> MaterialId = new();
+
 
     }
 }

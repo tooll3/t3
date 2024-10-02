@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using T3.Editor.Gui.Graph;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Commands.Annotations
 {
@@ -11,8 +12,8 @@ namespace T3.Editor.Gui.Commands.Annotations
         private SymbolUi _symbolUi;
         private Annotation _newAnnotation;
         
-        private readonly Dictionary<Annotation, Annotation> _originalDefForReferences = new Dictionary<Annotation, Annotation>();
-        private readonly Dictionary<Annotation, Annotation> _newDefForReferences = new Dictionary<Annotation, Annotation>();
+        private readonly Dictionary<Annotation, Annotation> _originalDefForReferences = new();
+        private readonly Dictionary<Annotation, Annotation> _newDefForReferences = new();
 
         public AddAnnotationCommand(SymbolUi symbolUi, Annotation annotation)
         {

@@ -1,6 +1,6 @@
 {
   "Id": "862de1a8-f630-4823-8860-7afa918bb1bc"/*RunTime*/,
-  "Description": "Returns the application runtime in seconds.\n\nThis is rarely useful. Consider using [Time].\n",
+  "Description": "Returns the application runtime in seconds. This is rarely useful. Consider using [Time].",
   "InputUis": [],
   "SymbolChildUis": [],
   "OutputUis": [

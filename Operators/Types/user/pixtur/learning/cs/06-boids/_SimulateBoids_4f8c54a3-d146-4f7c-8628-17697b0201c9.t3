@@ -59,7 +59,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 30,
             "Y": 30,
@@ -201,6 +201,11 @@
       "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
       "InputValues": [
         {
+          "Id": "aacafc4d-f47f-4893-9a6e-98db306a8901"/*Clear*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
           "Id": "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f"/*ClearColor*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
@@ -209,11 +214,6 @@
             "Z": 0.0,
             "W": 1.0
           }
-        },
-        {
-          "Id": "aacafc4d-f47f-4893-9a6e-98db306a8901"/*Clear*/,
-          "Type": "System.Boolean",
-          "Value": false
         }
       ],
       "Outputs": []
@@ -231,7 +231,7 @@
       "Outputs": []
     },
     {
-      "Id": "21385d2f-79da-4751-a2f9-eb7b5f9d5a99"/*DrawQuads*/,
+      "Id": "21385d2f-79da-4751-a2f9-eb7b5f9d5a99"/*_DrawQuads*/,
       "SymbolId": "16d10dc8-63b9-4ddf-90b8-41caef99d945",
       "InputValues": [
         {
@@ -288,7 +288,7 @@
       "Outputs": []
     },
     {
-      "Id": "a41ba362-1ec4-4ead-b123-5b53faf9a60b"/*Vector2ToFloat2*/,
+      "Id": "a41ba362-1ec4-4ead-b123-5b53faf9a60b"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
@@ -376,6 +376,11 @@
       "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
       "InputValues": [
         {
+          "Id": "38f34034-b36f-4351-84e1-1a4f96e03fc6"/*Scale*/,
+          "Type": "System.Single",
+          "Value": 1.9300001
+        },
+        {
           "Id": "ed4f8c30-7b71-4649-97e6-710a718039b0"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
@@ -384,17 +389,12 @@
             "Z": 0.0,
             "W": 0.04
           }
-        },
-        {
-          "Id": "38f34034-b36f-4351-84e1-1a4f96e03fc6"/*Size*/,
-          "Type": "System.Single",
-          "Value": 1.9300001
         }
       ],
       "Outputs": []
     },
     {
-      "Id": "c90db993-1a38-4a39-90f4-f432e91bfa1f"/*Blob*/,
+      "Id": "c90db993-1a38-4a39-90f4-f432e91bfa1f"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
@@ -409,10 +409,10 @@
         },
         {
           "Id": "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 16,
-            "Height": 16
+            "X": 16,
+            "Y": 16
           }
         }
       ],
@@ -423,7 +423,7 @@
       "SymbolId": "4f89b41b-1643-442b-bec8-9f9ef2173baa",
       "InputValues": [
         {
-          "Id": "a4350111-7ca8-4ce7-b494-3e82cc679999"/*Fill*/,
+          "Id": "a4350111-7ca8-4ce7-b494-3e82cc679999"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 0.11613051,
@@ -611,7 +611,7 @@
           "Value": 0.019
         },
         {
-          "Id": "c9cf2182-1297-463c-b5c1-d4ee7ad0895c"/*EnableDepthWrite*/,
+          "Id": "c9cf2182-1297-463c-b5c1-d4ee7ad0895c"/*EnableZWrite*/,
           "Type": "System.Boolean",
           "Value": false
         }
@@ -667,7 +667,7 @@
           }
         },
         {
-          "Id": "7e86bf8f-1d9d-4212-bf9f-987a03b55565"/*TextureScale*/,
+          "Id": "7e86bf8f-1d9d-4212-bf9f-987a03b55565"/*Stretch*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 2.0,
@@ -692,7 +692,7 @@
       "Outputs": []
     },
     {
-      "Id": "5eb1a5ed-8959-42b7-a671-3d66f7430118"/*Blob*/,
+      "Id": "5eb1a5ed-8959-42b7-a671-3d66f7430118"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
@@ -735,10 +735,10 @@
         },
         {
           "Id": "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 128,
-            "Height": 32
+            "X": 128,
+            "Y": 32
           }
         }
       ],
@@ -957,7 +957,7 @@
       "Outputs": []
     },
     {
-      "Id": "9c079b5b-7dd6-4f4b-80ec-76d9b6d1add5"/*Blob*/,
+      "Id": "9c079b5b-7dd6-4f4b-80ec-76d9b6d1add5"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
@@ -1009,7 +1009,7 @@
       "Outputs": []
     },
     {
-      "Id": "dde1f52f-9c3a-4bc2-b567-a6ffcc998834"/*DrawQuads*/,
+      "Id": "dde1f52f-9c3a-4bc2-b567-a6ffcc998834"/*_DrawQuads*/,
       "SymbolId": "16d10dc8-63b9-4ddf-90b8-41caef99d945",
       "InputValues": [
         {
@@ -1023,19 +1023,19 @@
           }
         },
         {
-          "Id": "9cb2ad14-dac0-44f2-a87d-3ae29c8a7d97"/*Stretch*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 1.47,
-            "Y": 0.32
-          }
-        },
-        {
           "Id": "f02e81bb-441f-4d78-9e6c-71f931b6bb5c"/*Offset*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": -1.0,
             "Y": 0.0
+          }
+        },
+        {
+          "Id": "9cb2ad14-dac0-44f2-a87d-3ae29c8a7d97"/*Stretch*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 1.47,
+            "Y": 0.32
           }
         },
         {
@@ -1110,7 +1110,7 @@
           }
         },
         {
-          "Id": "7e86bf8f-1d9d-4212-bf9f-987a03b55565"/*TextureScale*/,
+          "Id": "7e86bf8f-1d9d-4212-bf9f-987a03b55565"/*Stretch*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 2.0,
@@ -1315,6 +1315,11 @@
           }
         },
         {
+          "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
+          "Type": "System.String",
+          "Value": "Resources\\fonts\\Roboto-Light.fnt"
+        },
+        {
           "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
           "Type": "System.Single",
           "Value": 40.0
@@ -1328,11 +1333,6 @@
           "Id": "82cc31ff-3307-4b6d-be70-16e471c2ffc9"/*HorizontalAlign*/,
           "Type": "System.Int32",
           "Value": 0
-        },
-        {
-          "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
-          "Type": "System.String",
-          "Value": "Resources\\fonts\\Roboto-Light.fnt"
         }
       ],
       "Outputs": []

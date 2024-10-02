@@ -2,11 +2,7 @@ using System.Collections.Generic;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using System;
 using System.Linq;
-using T3.Core;
-using T3.Core.Logging;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_4def850e_3627_46d8_ae2b_58b513843885
@@ -14,7 +10,7 @@ namespace T3.Operators.Types.Id_4def850e_3627_46d8_ae2b_58b513843885
     public class AmplifyValues : Instance<AmplifyValues>
     {
         [Output(Guid = "341496D9-D292-41BA-B2E7-468F03FE0BBB")]
-        public readonly Slot<List<float>> Output = new Slot<List<float>>();
+        public readonly Slot<List<float>> Output = new();
 
         public AmplifyValues()
         {
@@ -84,21 +80,21 @@ namespace T3.Operators.Types.Id_4def850e_3627_46d8_ae2b_58b513843885
         
         private float[] _averagedValues = new float[0];
         private float[] _lastValues = new float[0];
-        private List<float> _output = new List<float>();
+        private List<float> _output = new();
 
         [Input(Guid = "2C6C16E9-2037-4B5E-A4AC-6C5AAB0FC582")]
-        public readonly InputSlot<float> Smoothing = new InputSlot<float>(0);
+        public readonly InputSlot<float> Smoothing = new(0);
 
         [Input(Guid = "DCF2D659-7B51-4A87-8378-CA01419E4B7C")]
-        public readonly InputSlot<float> MixAverage = new InputSlot<float>(0);
+        public readonly InputSlot<float> MixAverage = new(0);
 
         [Input(Guid = "38D415D3-2AC1-4256-929D-CFDB3FA5C7A9")]
-        public readonly InputSlot<float> MixCurrent = new InputSlot<float>(0);
+        public readonly InputSlot<float> MixCurrent = new(0);
 
         [Input(Guid = "C8F0B975-676F-46A4-B7EF-39D385C82CEF")]
-        public readonly InputSlot<float> MixAboveAverage = new InputSlot<float>(0);
+        public readonly InputSlot<float> MixAboveAverage = new(0);
 
         [Input(Guid = "813a6eab-947d-47a0-af8e-7a92c880d338")]
-        public readonly InputSlot<List<float>> Input = new InputSlot<List<float>>(new List<float>(20));
+        public readonly InputSlot<List<float>> Input = new(new List<float>(20));
     }
 }

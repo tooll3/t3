@@ -5,7 +5,7 @@
   "Inputs": [
     {
       "Id": "5794d63a-3ef7-42c5-b726-e814ea9093e3"/*InputString*/,
-      "DefaultValue": "Aber Hallo"
+      "DefaultValue": "ten plus eleven is 21"
     }
   ],
   "Children": [],

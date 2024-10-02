@@ -1,21 +1,15 @@
-using System;
-using SharpDX;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
-using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace T3.Operators.Types.Id_6c2f8241_9f4b_451e_8a1d_871631d21163
 {
     public class ExecuteTextureUpdate : Instance<ExecuteTextureUpdate>
     {
         [Output(Guid = "C955F2A2-9823-4844-AC11-98EA07DC50AA")]
-        public readonly Slot<Texture2D> Output = new Slot<Texture2D>();
+        public readonly Slot<Texture2D> Output = new();
 
         public ExecuteTextureUpdate()
         {
@@ -24,12 +18,10 @@ namespace T3.Operators.Types.Id_6c2f8241_9f4b_451e_8a1d_871631d21163
 
         private void Update(EvaluationContext context)
         {
-            if (TriggerTexture.IsConnected && !TriggerTexture.DirtyFlag.IsDirty)
+            var isEnabled = IsEnabled.GetValue(context);
+            if (!isEnabled || TriggerTexture.IsConnected && !TriggerTexture.DirtyFlag.IsDirty)
             {
                 Output.DirtyFlag.Clear();
-                // UpdateCommands.DirtyFlag.Clear();
-                // TriggerTexture.DirtyFlag.Clear();
-
                 return;
             }
             
@@ -46,12 +38,15 @@ namespace T3.Operators.Types.Id_6c2f8241_9f4b_451e_8a1d_871631d21163
         }
 
         [Input(Guid = "088ddcee-1407-4cd8-85bc-6704b8ea73b1")]
-        public readonly InputSlot<Command> UpdateCommands = new InputSlot<Command>();
+        public readonly InputSlot<Command> UpdateCommands = new();
         
         [Input(Guid = "5599A8AC-0686-4FA8-806C-52A44F910F11")]
-        public readonly InputSlot<Texture2D> Texture = new InputSlot<Texture2D>();
+        public readonly InputSlot<Texture2D> Texture = new();
         
         [Input(Guid = "DC3BD757-300B-416A-92F9-B9C976EF7206")]
-        public readonly InputSlot<Texture2D> TriggerTexture = new InputSlot<Texture2D>();
+        public readonly InputSlot<Texture2D> TriggerTexture = new();
+        
+        [Input(Guid = "6B1C2262-F7B1-4ABD-B787-D03240245431")]
+        public readonly InputSlot<bool> IsEnabled = new();
     }
 }

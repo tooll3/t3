@@ -1,5 +1,5 @@
 using System;
-using SharpDX;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -9,42 +9,50 @@ namespace T3.Operators.Types.Id_daec568f_f7b4_4d81_a401_34d62462daab
 {
     public class GetTextureSize : Instance<GetTextureSize>
     {
-        [Output(Guid = "be16d5d3-4d21-4d5a-9e4c-c7b2779b6bdc", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<SharpDX.Size2> Size = new Slot<SharpDX.Size2>();
+        [Output(Guid = "be16d5d3-4d21-4d5a-9e4c-c7b2779b6bdc")]
+        public readonly Slot<Int2> Size = new();
 
-        [Output(Guid = "895C3BDD-38A8-4613-A8B2-503EC9D493C8", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<System.Numerics.Vector2> SizeFloat = new Slot<System.Numerics.Vector2>();
+        [Output(Guid = "895C3BDD-38A8-4613-A8B2-503EC9D493C8")]
+        public readonly Slot<System.Numerics.Vector2> SizeFloat = new();
 
-        [Output(Guid = "E54A3185-2E19-466B-9A1E-52A05A947FCD", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<int> TotalSize = new Slot<int>();
+        [Output(Guid = "E54A3185-2E19-466B-9A1E-52A05A947FCD")]
+        public readonly Slot<int> TotalSize = new();
+
+        [Output(Guid = "209BF938-E317-4F9C-8906-265C2AFAE1E5")]
+        public readonly Slot<bool> IsTextureValid = new ();
+
 
         public GetTextureSize()
         {
             Size.UpdateAction = Update;
             SizeFloat.UpdateAction = Update;
-            //Size.DirtyFlag.Trigger = DirtyFlagTrigger.Always;
+            TotalSize.UpdateAction = Update;
+            IsTextureValid.UpdateAction = Update;
         }
 
         private void Update(EvaluationContext context)
         {
-            var fallbackSize = OverrideSize.GetValue(context);
-
-            var useContext = fallbackSize.Width < 0 || fallbackSize.Height < 0;
-
             var texture = Texture.GetValue(context);
-            if (useContext)
+            IsTextureValid.Value = texture != null;
+            
+            var overrideResolution = OverrideSize.GetValue(context);
+            
+            // Log.Debug("is texture valid: " + IsTextureValid, this);
+            var useContextResolution = overrideResolution.Width < 0 || overrideResolution.Height < 0;
+            // Log.Debug(" UseContextResolution:" + useContextResolution);
+            
+            if (!useContextResolution && overrideResolution.Width > 0 && overrideResolution.Height > 0)
             {
-                Size.Value = context.RequestedResolution;
-            }
-            else if (fallbackSize.Width > 0 && fallbackSize.Height > 0)
-            {
-                Size.Value = fallbackSize;
+                //Log.Debug($" use override size: {overrideResolution}", this);
+                Size.Value = overrideResolution;
             }
             else if (texture != null)
             {
+                // Log.Debug(" texture is none", this);
                 try
                 {
-                    Size.Value = new Size2(texture.Description.Width, texture.Description.Height);
+                    Size.Value = new Int2(texture.Description.Width, texture.Description.Height);
+                    //Log.Debug($" use texture size: {Size.Value} {useContextResolution}", this);
                 }
                 catch (Exception e)
                 {
@@ -53,25 +61,42 @@ namespace T3.Operators.Types.Id_daec568f_f7b4_4d81_a401_34d62462daab
             }
             else
             {
+                useContextResolution = true;
+            }
+            
+            if (useContextResolution)
+            {
+                //Log.Debug($"Set to animated resolution to : {context.RequestedResolution}", this);
                 Size.Value = context.RequestedResolution;
-                //Size.Value = new Size2(0,0);
+                Size.DirtyFlag.Trigger =      DirtyFlagTrigger.Animated;
+                SizeFloat.DirtyFlag.Trigger = DirtyFlagTrigger.Animated;
+                TotalSize.DirtyFlag.Trigger = DirtyFlagTrigger.Animated;
+                IsTextureValid.DirtyFlag.Trigger = DirtyFlagTrigger.Animated;
+            }
+            else
+            {
+                //Log.Debug("Set to none", this);
+                Size.DirtyFlag.Trigger =      DirtyFlagTrigger.None;
+                SizeFloat.DirtyFlag.Trigger = DirtyFlagTrigger.None;
+                TotalSize.DirtyFlag.Trigger = DirtyFlagTrigger.None;
+                IsTextureValid.DirtyFlag.Trigger = DirtyFlagTrigger.None;
             }
 
             SizeFloat.Value = new System.Numerics.Vector2(Size.Value.Width, Size.Value.Height);
             TotalSize.Value = Size.Value.Width * Size.Value.Height;
+            
+            Size.DirtyFlag.Clear();
+            TotalSize.DirtyFlag.Clear();
+            SizeFloat.DirtyFlag.Clear();
+            Texture.DirtyFlag.Clear();
+            IsTextureValid.DirtyFlag.Clear();
         }
-
-        private enum Modes
-        {
-            UseExplicit,
-            UseRequestedFromContext,
-            UseRequestedFromInputTexture,
-        }
+        
 
         [Input(Guid = "8b15d8e1-10c7-41e1-84db-a85e31e0c909")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new();
 
         [Input(Guid = "52b2f067-5619-4d8d-a982-58668a8dc6a4")]
-        public readonly InputSlot<SharpDX.Size2> OverrideSize = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> OverrideSize = new();
     }
 }

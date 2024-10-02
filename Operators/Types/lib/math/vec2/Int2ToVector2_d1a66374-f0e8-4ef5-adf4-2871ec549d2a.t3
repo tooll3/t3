@@ -6,8 +6,8 @@
     {
       "Id": "5c493d16-cc75-4cd5-96d9-eca3adeaccd9"/*Int2*/,
       "DefaultValue": {
-        "Width": 0,
-        "Height": 0
+        "X": 0,
+        "Y": 0
       }
     }
   ],

@@ -135,7 +135,7 @@ namespace T3.Editor.Gui.Interaction.Snapping
                 return;
 
             var opacity = (1 - ((float)(ImGui.GetTime() - _lastSnapTime) / SnapIndicatorDuration).Clamp(0, 1)) * 0.4f;
-            var color = Color.Orange;
+            var color = UiColors.StatusAnimated;
             color.Rgba.W = opacity;
 
             switch (mode)
@@ -162,7 +162,7 @@ namespace T3.Editor.Gui.Interaction.Snapping
             VerticalLinesForU,
         }
         
-        private readonly List<IValueSnapAttractor> _snapAttractors = new List<IValueSnapAttractor>();
+        private readonly List<IValueSnapAttractor> _snapAttractors = new();
         private double _lastSnapPosition;
         private double _lastSnapTime;
     }

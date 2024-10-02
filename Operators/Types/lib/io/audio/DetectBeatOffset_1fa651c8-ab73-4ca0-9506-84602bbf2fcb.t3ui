@@ -4,9 +4,10 @@
   "InputUis": [
     {
       "InputId": "09628f30-9148-477e-a375-a7e661952ee5"/*FftInput*/,
+      "Relevancy": "Required",
       "Position": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": -6.0125656,
+        "Y": 54.259773
       }
     }
   ],
@@ -17,6 +18,20 @@
       "Position": {
         "X": 0.0,
         "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "68794f45-9537-4e88-91d7-6c4e93205bbc"/*Peak*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    },
+    {
+      "OutputId": "819469c8-7178-4712-9eb5-7bc7aefa32d8"/*Confidence*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 200.0
       }
     }
   ]

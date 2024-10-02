@@ -34,7 +34,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\modify\\offset-points.hlsl"
+          "Value": "Resources\\lib\\points\\modify\\OffsetPoints.hlsl"
         }
       ],
       "Outputs": []
@@ -45,7 +45,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 64,
             "Y": 1,
@@ -80,13 +80,13 @@
       "Outputs": []
     },
     {
-      "Id": "48299422-55cf-473a-be65-d590135876a3"/*Vector3ToFloat3*/,
+      "Id": "48299422-55cf-473a-be65-d590135876a3"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "9cacc0f8-f0dc-4a7b-a067-5647f34227c0"/*StructuredBuffer2*/,
+      "Id": "9cacc0f8-f0dc-4a7b-a067-5647f34227c0"/*StructuredBufferWithViews*/,
       "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
         {
@@ -152,6 +152,12 @@
       "SourceSlotId": "4b7cc2cc-8f7b-4460-8beb-8a4eea101ef6",
       "TargetParentOrChildId": "830f9d44-c33d-4638-bcbc-32db47d756e7",
       "TargetSlotId": "7a13b834-21e5-4cef-ad5b-23c3770ea763"
+    },
+    {
+      "SourceParentOrChildId": "830f9d44-c33d-4638-bcbc-32db47d756e7",
+      "SourceSlotId": "6d7a9493-6210-462a-b9c2-525b925de6c8",
+      "TargetParentOrChildId": "9cacc0f8-f0dc-4a7b-a067-5647f34227c0",
+      "TargetSlotId": "0016dd87-8756-4a97-a0da-096e1a879c05"
     },
     {
       "SourceParentOrChildId": "e7bd2fa5-04e5-4d00-bc13-5ca826868b19",

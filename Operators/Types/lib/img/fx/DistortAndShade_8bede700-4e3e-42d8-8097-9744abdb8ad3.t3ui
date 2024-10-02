@@ -1,5 +1,6 @@
 {
   "Id": "8bede700-4e3e-42d8-8097-9744abdb8ad3"/*DistortAndShade*/,
+  "Description": "Uses two images to distort (create a bevel / emboss effect) that can look like textured glass\n\nAlso see [Displace]\n\nFor similar effects see: [Steps] [DetectEdges] [FakeLight]",
   "InputUis": [
     {
       "InputId": "824e1ad4-0d33-458f-aefe-f3780ab06529"/*ImageA*/,
@@ -18,32 +19,38 @@
       }
     },
     {
-      "InputId": "17c45c4e-590e-4de6-90c2-befe2f89831d"/*ShadeColor*/,
-      "Position": {
-        "X": -230.70581,
-        "Y": 304.56647
-      }
-    },
-    {
       "InputId": "84cea304-79d9-4f8c-a171-584897b9b468"/*Displacement*/,
       "Position": {
-        "X": -230.70581,
-        "Y": 349.56647
-      }
-    },
-    {
-      "InputId": "f942fc0d-ed5f-4594-8690-d464c5b12ed8"/*Shading*/,
-      "Position": {
-        "X": -230.70581,
-        "Y": 394.56647
-      }
+        "X": -236.10194,
+        "Y": 117.53226
+      },
+      "GroupTitle": "Settings",
+      "Description": "Controls the direction and intensity of the effect"
     },
     {
       "InputId": "3a3acfbd-dca7-4f8a-b862-90eae2bc41ca"/*Center*/,
       "Position": {
-        "X": -230.70581,
-        "Y": 439.56647
-      }
+        "X": -236.10194,
+        "Y": 162.53226
+      },
+      "Description": "Shifts the direction from which image A is distorted by image B"
+    },
+    {
+      "InputId": "f942fc0d-ed5f-4594-8690-d464c5b12ed8"/*Shading*/,
+      "Position": {
+        "X": -237.45099,
+        "Y": 262.8106
+      },
+      "Description": "Controls the visibility / brightness of image B"
+    },
+    {
+      "InputId": "17c45c4e-590e-4de6-90c2-befe2f89831d"/*ShadeColor*/,
+      "Position": {
+        "X": -237.45099,
+        "Y": 307.8106
+      },
+      "GroupTitle": "Settings",
+      "Description": "Defines a color which is multiplied with Image B\n\n(Only visible when the 'shading' value is increased)"
     }
   ],
   "SymbolChildUis": [
@@ -61,10 +68,6 @@
     },
     {
       "ChildId": "c64e8840-3d50-4bbf-887d-e4735eec446c"/*ColorGrade*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -65.81404,
         "Y": -145.8522
@@ -72,32 +75,20 @@
     },
     {
       "ChildId": "32776b15-aad9-4677-9714-40f113c6883f"/*ColorGrade*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -35.40545,
         "Y": -61.59488
       }
     },
     {
-      "ChildId": "3c2648f9-bf02-44b7-9a2e-9920c5e8e8dd"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "3c2648f9-bf02-44b7-9a2e-9920c5e8e8dd"/*Vector2Components*/,
       "Position": {
         "X": -61.060883,
         "Y": 439.8447
       }
     },
     {
-      "ChildId": "0edf16eb-4f2b-4d4d-9290-681d5446c4a1"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "0edf16eb-4f2b-4d4d-9290-681d5446c4a1"/*Vector4Components*/,
       "Position": {
         "X": -100.70581,
         "Y": 304.56647

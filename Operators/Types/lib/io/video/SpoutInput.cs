@@ -4,7 +4,6 @@ using SpoutDX;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -186,7 +185,7 @@ namespace T3.Operators.Types.Id_25307357_6f6c_45b1_a38d_de635510a845
             }
             catch (Exception e)
             {
-                Log.Debug("Initialization of Spout failed. Are Spout.dll and SpoutDX.dll present in the executable folder?");
+                Log.Debug("Initialization of Spout failed. Are Spout.dll and SpoutDX.dll present in the executable folder?", this);
                 Log.Debug(e.ToString());
                 _spoutDX?.ReleaseReceiver();
                 _spoutDX?.CloseDirectX11();

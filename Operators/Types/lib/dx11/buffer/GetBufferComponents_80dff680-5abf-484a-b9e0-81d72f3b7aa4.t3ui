@@ -3,6 +3,14 @@
   "InputUis": [
     {
       "InputId": "7a13b834-21e5-4cef-ad5b-23c3770ea763"/*BufferWithViews*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "ac0f9d07-b93d-45d3-8b3f-a4b2f7240ae0"/*LogWarnings*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
@@ -30,6 +38,27 @@
       "Position": {
         "X": -14.9051485,
         "Y": 106.77506
+      }
+    },
+    {
+      "OutputId": "d7918fd8-906e-424d-8c5c-9631941cfc9d"/*Length*/,
+      "Position": {
+        "X": -7.0460706,
+        "Y": 206.77505
+      }
+    },
+    {
+      "OutputId": "6d7a9493-6210-462a-b9c2-525b925de6c8"/*Stride*/,
+      "Position": {
+        "X": -7.0460706,
+        "Y": 306.77505
+      }
+    },
+    {
+      "OutputId": "5dcc43ac-4fb9-49c3-a093-0a59a002fb6c"/*IsValid*/,
+      "Position": {
+        "X": -7.0460706,
+        "Y": 406.77505
       }
     }
   ]

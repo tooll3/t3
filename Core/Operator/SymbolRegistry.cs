@@ -5,7 +5,7 @@ namespace T3.Core.Operator
 {
     public static class SymbolRegistry //: IDisposable
     {
-        public static Dictionary<Guid, Symbol> Entries { get; } = new Dictionary<Guid, Symbol>();
+        public static Dictionary<Guid, Symbol> Entries { get; } = new();
 
 //         public void Dispose()
 //         {

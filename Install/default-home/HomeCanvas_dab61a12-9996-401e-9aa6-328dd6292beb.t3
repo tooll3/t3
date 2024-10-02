@@ -1,11 +1,11 @@
 {
-  "Name": "Dashboard",
+  "Name": "HomeCanvas",
   "Id": "dab61a12-9996-401e-9aa6-328dd6292beb",
   "Namespace": "user.t3",
   "Inputs": [],
   "Children": [
     {
-      "Id": "eb3041f4-dcf1-4ef7-948e-c18ee0a29bc8"/*PartialMain*/,
+      "Id": "eb3041f4-dcf1-4ef7-948e-c18ee0a29bc8"/*ThereDemo*/,
       "SymbolId": "5ea8bc54-d1f6-4748-9839-e3e4415a5608",
       "InputValues": [],
       "Outputs": []
@@ -52,7 +52,7 @@
       "Outputs": []
     },
     {
-      "Id": "2fe00e23-ee4a-4234-a0dc-213b9a6ca9fe"/*RandomCamera*/,
+      "Id": "2fe00e23-ee4a-4234-a0dc-213b9a6ca9fe"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
@@ -64,7 +64,7 @@
       "Outputs": []
     },
     {
-      "Id": "bc999d1e-4b76-43f1-9e3d-8f51b9d22871"/*AnimValue*/,
+      "Id": "bc999d1e-4b76-43f1-9e3d-8f51b9d22871"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [],
       "Outputs": []

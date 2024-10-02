@@ -1,4 +1,6 @@
-﻿using ImGuiNET;
+﻿using System.Numerics;
+using ImGuiNET;
+using T3.Core.Operator;
 
 namespace T3.Editor.Gui.InputUi.SimpleInputUis
 {
@@ -16,7 +18,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                    };
         }
 
-        protected override InputEditStateFlags DrawEditControl(string name, ref T value)
+        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref T value, bool readOnly)
         {
             ImGui.TextUnformatted(""); // Print an empty text to force layout to next line
             return InputEditStateFlags.Nothing;
@@ -24,8 +26,8 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
 
         protected override void DrawReadOnlyControl(string name, ref T value)
         {
-            // ToDo: it would be great to print the name of the connected op here.
-            ImGui.TextUnformatted(""); // Print an empty text to force layout to next line
+            ImGui.Button($"{name}", new Vector2(-1,0));
+            //ImGui.Text($"{name}"); // Print an empty text to force layout to next line
         }
     }
 }

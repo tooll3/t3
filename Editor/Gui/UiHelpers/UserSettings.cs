@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -8,6 +8,7 @@ using T3.Core.IO;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Windows;
+using T3.Editor.Gui.Windows.TimeLine;
 
 namespace T3.Editor.Gui.UiHelpers
 {
@@ -20,13 +21,14 @@ namespace T3.Editor.Gui.UiHelpers
         {
         }
 
+        
         public class ConfigData
         {
-            public readonly Dictionary<Guid, ScalableCanvas.Scope> OperatorViewSettings = new Dictionary<Guid, ScalableCanvas.Scope>();
-            public readonly Dictionary<string, Guid> LastOpsForWindows = new Dictionary<string, Guid>();
+            public readonly Dictionary<Guid, ScalableCanvas.Scope> OperatorViewSettings = new();
+            public readonly Dictionary<string, Guid> LastOpsForWindows = new();
 
             [JsonConverter(typeof(StringEnumConverter))]
-            public GraphCanvas.HoverModes HoverMode = GraphCanvas.HoverModes.Live;
+            public GraphCanvas.HoverModes HoverMode = GraphCanvas.HoverModes.LastValue;
 
             public bool AudioMuted;
             
@@ -37,28 +39,45 @@ namespace T3.Editor.Gui.UiHelpers
             public bool ShowToolbar = true;
             public bool ShowTimeline = true;
             public bool ShowMiniMap = false;
+            public bool ShowInteractionOverlay = false;
             
             // UI-State
             public float UiScaleFactor = 1;
             public bool FullScreen = false;
+            public bool FocusMode = false;
             public int WindowLayoutIndex = 0;
             public bool EnableIdleMotion = true;
+            public bool SuspendRenderingWhenHidden = true;
+            public bool MirrorUiOnSecondView = false;
             
             // Interaction
             public bool WarnBeforeLibEdit = true;
             public bool SmartGroupDragging = false;
             public bool ShowExplicitTextureFormatInOutputWindow = false;
             public bool UseArcConnections = true;
+            public bool ResetTimeAfterPlayback;
             public float SnapStrength = 5;
-            public bool UseJogDialControl = true;
-            public float ScrollSmoothing = 0.06f;
-            public float TooltipDelay = 1.2f;
-            public float ClickThreshold = 5; // Increase for high-res display and pen tablets
+            public ValueEditMethods ValueEditMethod;
+            public float ScrollSmoothing = 0.1f;
 
+            public float ClickThreshold = 5; // Increase for high-res display and pen tablets
+            public bool AdjustCameraSpeedWithMouseWheel = false;
+            public float CameraSpeed = 1;
+
+            public bool MiddleMouseButtonZooms = false;
+
+            public TimeLineCanvas.FrameStepAmount FrameStepAmount = TimeLineCanvas.FrameStepAmount.FrameAt30Fps;
+            
+            public bool MouseWheelEditsNeedCtrlKey = true;
+            public bool AutoPinAllAnimations = false;
+
+            
             public float KeyboardScrollAcceleration = 2.5f;
 
             public bool VariationLiveThumbnails = true;
             public bool VariationHoverPreview = true;
+
+            public bool EditorHoverPreview = true;
             
             // Load Save
             public string UserName = UndefinedUserName;
@@ -66,8 +85,10 @@ namespace T3.Editor.Gui.UiHelpers
 
             // Other settings
             public float GizmoSize = 100;
-            public bool SwapMainAnd2ndWindowsWhenFullscreen = false;
-            public bool EnableStartupConsistencyCheck = true;
+            public int FullScreenIndexMain = 0;
+            public int FullScreenIndexViewer = 0;
+            
+
 
             // Timeline
             public float TimeRasterDensity = 1f;
@@ -76,19 +97,35 @@ namespace T3.Editor.Gui.UiHelpers
             public float SpaceMouseRotationSpeedFactor = 1f;
             public float SpaceMouseMoveSpeedFactor = 1f;
             public float SpaceMouseDamping = 0.5f;
+            
 
-            // Symbol Browser
-            public bool AlwaysShowDescriptionPanel = false;
+            // Rendering (controlled from render windows)
+            public string RenderVideoFilePath = "./Render/render-v01.mp4";
+            public string RenderSequenceFilePath = "./ImageSequence/";
 
+            // Profiling
+            public bool EnableFrameProfiling = true;
+            public bool KeepTraceForLogMessages = false;
+            public bool EnableGCProfiling = false;
+
+            
             [JsonConverter(typeof(StringEnumConverter))]
             public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
             
             public List<GraphBookmarkNavigation.Bookmark> Bookmarks = new();
             public List<Gradient> GradientPresets = new();
 
-            
+            public string ColorThemeName;
         }
 
+        public enum ValueEditMethods
+        {
+            InfinitySlider,
+            RadialSlider,
+            JogDial,
+            ValueLadder,
+        }
+        
         public static bool IsUserNameDefined()
         {
             return !string.IsNullOrEmpty(Config.UserName) && Config.UserName != UndefinedUserName;

@@ -1,0 +1,48 @@
+{
+  "Name": "RemapVec2",
+  "Id": "03c157ef-f0bc-4a2e-b862-775c6e886997",
+  "Namespace": "lib.math.vec2",
+  "Inputs": [
+    {
+      "Id": "cfc5b5e0-1a4a-4ccb-afeb-2c13d9889fdd"/*Value*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "517dbbb0-6205-4d87-a84f-1e2c69cdabbe"/*RangeInMin*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "80a87fe2-9ccc-4a3d-ae39-44ba4431cb9b"/*RangeInMax*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0
+      }
+    },
+    {
+      "Id": "0e1c8a24-5183-4dca-9726-39368ac4a6c4"/*RangeOutMin*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "cf991ef5-976d-4536-9a69-e6277a1a914e"/*RangeOutMax*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0
+      }
+    },
+    {
+      "Id": "3f108a20-0551-45fc-97c1-4e85e92a4dde"/*Mode*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

@@ -95,15 +95,15 @@ namespace T3.Editor.Gui.Windows.TimeLine
                             _usedPositions[x] = t + offset;
 
                             var p1 = new Vector2(posX + _canvas.WindowPos.X, bottom - 3);
-                            drawList.AddRectFilled(p1, p1 + new Vector2(1, 3), Color.White);
+                            drawList.AddRectFilled(p1, p1 + new Vector2(1, 3), UiColors.ForegroundFull);
                             //var pen = new Pen(GetTransparentBrush(linedef.LineOpacity * 0.3) , 1);
                             //pen.Freeze();
                             //dc.DrawLine(pen, new Point(posX,0 ), new Point(posX, ActualHeight));
 
 
-                            if (linedef.Label != "")
+                            if (!string.IsNullOrEmpty(linedef.Label))
                             {
-                                String output = "";
+                                string output = "";
                                 foreach (char c in linedef.Label)
                                 {
                                     if (c == 'N')
@@ -130,7 +130,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                                 var s = ImGui.CalcTextSize(output);
                                 var p2 = new Vector2(posX + _canvas.WindowPos.X - s.X * 0.5f, bottom - 16);
                                 //drawList.AddRectFilled(p1, p1 + new Vector2(1, 3), Color.White);
-                                drawList.AddText(p2, Color.Gray, output);
+                                drawList.AddText(p2, UiColors.Gray, output);
                             }
                         }
                         t += linedef.Spacing;
@@ -171,7 +171,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             public float LabelOpacity { get; set; }
         }
 
-        readonly Dictionary<int, double> _usedPositions = new Dictionary<int, double>();
+        readonly Dictionary<int, double> _usedPositions = new();
         //private List<DrawingVisual> m_Children = new List<DrawingVisual>();
         //private DrawingVisual m_DrawingVisual;
         public SnapResult CheckForSnap(double value, float canvasScale) {

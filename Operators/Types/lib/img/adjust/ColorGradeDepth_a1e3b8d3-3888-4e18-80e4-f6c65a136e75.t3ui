@@ -107,66 +107,42 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "d56e82d9-645c-4f7a-bdae-995730a3d0b0"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "d56e82d9-645c-4f7a-bdae-995730a3d0b0"/*Vector4Components*/,
       "Position": {
         "X": 121.91951,
         "Y": 342.35632
       }
     },
     {
-      "ChildId": "c1827037-7cd5-49f0-b98e-465e1afeb71a"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "c1827037-7cd5-49f0-b98e-465e1afeb71a"/*Vector4Components*/,
       "Position": {
         "X": 121.91951,
-        "Y": 387.35623
+        "Y": 398.35623
       }
     },
     {
-      "ChildId": "58ed1635-ad24-437b-88e2-c69045824e90"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "58ed1635-ad24-437b-88e2-c69045824e90"/*Vector4Components*/,
       "Position": {
         "X": 121.91951,
-        "Y": 432.35626
+        "Y": 454.35626
       }
     },
     {
       "ChildId": "6e2e5fbb-33a9-4918-a1a1-9f2c6ed96b15"/*Value*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 121.91951,
         "Y": 286.35632
       }
     },
     {
-      "ChildId": "425d1b01-027a-4d1f-af17-7a25adb74311"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "425d1b01-027a-4d1f-af17-7a25adb74311"/*Vector4Components*/,
       "Position": {
         "X": 141.91951,
         "Y": 527.35626
       }
     },
     {
-      "ChildId": "bb2d367b-cdc1-4b7a-b510-72afab9c5c10"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "bb2d367b-cdc1-4b7a-b510-72afab9c5c10"/*Vector2Components*/,
       "Position": {
         "X": 392.6546,
         "Y": 656.4784
@@ -174,10 +150,6 @@
     },
     {
       "ChildId": "dec693fe-ab77-414b-841a-0bf9941e45c7"/*TransformsConstBuffer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 560.6808,
         "Y": 979.1217
@@ -185,10 +157,6 @@
     },
     {
       "ChildId": "5ebb47bf-477b-4d29-89bd-0ca909c1fc60"/*VertexShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 560.6808,
         "Y": 936.1217
@@ -196,10 +164,6 @@
     },
     {
       "ChildId": "c9d7f265-9d70-40da-b920-10f739eaa26e"/*RasterizerStateOp*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 560.6808,
         "Y": 1022.1217
@@ -207,10 +171,6 @@
     },
     {
       "ChildId": "156b32fb-cbb8-44dc-aa58-acda25112a70"/*PixelShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 560.6808,
         "Y": 1065.1217
@@ -218,10 +178,6 @@
     },
     {
       "ChildId": "f4e127a2-787c-43f6-be07-9c27abdd6c7b"/*TimeConstBuffer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 560.6808,
         "Y": 1151.1217
@@ -229,10 +185,6 @@
     },
     {
       "ChildId": "eba7e280-482b-4f75-be4d-f382f2595866"/*SamplerStateOp*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 561.3552,
         "Y": 1444.5591
@@ -240,10 +192,6 @@
     },
     {
       "ChildId": "e81081bf-e514-4ff1-a1a9-3d2f9a3e066c"/*Rasterizer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 880.52454,
         "Y": 1107.053
@@ -251,10 +199,6 @@
     },
     {
       "ChildId": "6b781b77-a13f-41d1-a761-9cf7fc0505a4"/*PixelShaderStage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 166.0
-      },
       "Position": {
         "X": 880.52454,
         "Y": 1163.0533
@@ -262,10 +206,6 @@
     },
     {
       "ChildId": "7e984a8d-d02f-4466-a66e-22ba9413d79e"/*VertexShaderStage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": 880.52454,
         "Y": 1025.053
@@ -273,10 +213,6 @@
     },
     {
       "ChildId": "be2868e4-3714-4d53-b5fd-a7b528df1acc"/*InputAssemblerStage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 880.52454,
         "Y": 982.053
@@ -284,10 +220,6 @@
     },
     {
       "ChildId": "8ddced6b-bd02-48c4-8b27-df043bbcfc81"/*OutputMergerStage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 880.52454,
         "Y": 1349.0541
@@ -307,10 +239,6 @@
     },
     {
       "ChildId": "0abd393e-819c-4b9a-9b69-7d6a46098197"/*RenderTarget*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 1523.5408,
         "Y": 803.2368
@@ -318,10 +246,6 @@
     },
     {
       "ChildId": "74b93f21-a273-4554-b3e0-61e59b72283a"/*SrvFromTexture2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 560.6808,
         "Y": 1250.1217
@@ -329,10 +253,6 @@
     },
     {
       "ChildId": "4921ebfc-ed84-42c2-bd61-38a7c4c54e19"/*FloatsToBuffer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 361.0
-      },
       "Position": {
         "X": 702.0159,
         "Y": 250.53185
@@ -340,10 +260,6 @@
     },
     {
       "ChildId": "e3d8962c-09d7-4915-9a53-bf04819a665d"/*Draw*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 880.52454,
         "Y": 1405.0542
@@ -351,10 +267,6 @@
     },
     {
       "ChildId": "18aeff95-ba9b-4fc4-bfeb-ab617782b8e7"/*GetTextureSize*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 363.6134,
         "Y": 836.6355
@@ -362,10 +274,6 @@
     },
     {
       "ChildId": "1e8e4cdb-221c-4126-b4c5-74a697a16076"/*ResolutionConstBuffer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 560.6808,
         "Y": 1194.1217
@@ -373,10 +281,6 @@
     },
     {
       "ChildId": "88fe1f79-dd76-4988-994b-b53add47176b"/*SrvFromTexture2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 560.6808,
         "Y": 1306.1217
@@ -384,10 +288,6 @@
     },
     {
       "ChildId": "8ce2f7e3-0c3e-4e2a-b2e6-be496a601935"/*GradientsToTexture*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 149.95557,
         "Y": 1323.5696
@@ -395,10 +295,6 @@
     },
     {
       "ChildId": "9c853107-fb0f-45b8-a319-6810bda65c08"/*SrvFromTexture2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 560.6808,
         "Y": 1362.1217
@@ -406,10 +302,6 @@
     },
     {
       "ChildId": "3a5566a0-a341-4e51-81f8-95ebf5069e5c"/*RenderTargetBlendDesc*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 411.35522,
         "Y": 1487.5591
@@ -417,32 +309,20 @@
     },
     {
       "ChildId": "aa17191d-f436-451a-bd2b-6a6660bfff4a"/*BlendStateOp*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 561.3552,
         "Y": 1487.5591
       }
     },
     {
-      "ChildId": "463377f8-a521-4671-9507-6b85d343a61f"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "463377f8-a521-4671-9507-6b85d343a61f"/*Vector2Components*/,
       "Position": {
         "X": 208.06757,
         "Y": 898.3685
       }
     },
     {
-      "ChildId": "b85898fb-92d1-4fd0-9c89-4ab7fa2e1c70"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "b85898fb-92d1-4fd0-9c89-4ab7fa2e1c70"/*Vector2Components*/,
       "Position": {
         "X": 208.06757,
         "Y": 954.3685
@@ -456,6 +336,15 @@
         "X": 1557.312,
         "Y": 231.01648
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "c908e643-8133-4cbc-a61f-050c44ea4544",
+      "Title": "Tutorial Video",
+      "Description": "",
+      "LinkUrl": "https://youtu.be/D4L9dsfNJlU",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

@@ -2,7 +2,12 @@
   "profiles": {
     "t3": {
       "commandName": "Project",
-      "workingDirectory": ".."
+      "workingDirectory": "..",
+      "nativeDebugging": true
+    },
+    "t3_RIDER": {
+      "commandName": "Project",
+      "workingDirectory": "../../../.."
     }
   }
 }

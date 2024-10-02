@@ -3,11 +3,14 @@ using System.Linq;
 using System.Numerics;
 using T3.Editor.Gui.Graph;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Exploration;
 using T3.Editor.Gui.Windows.Output;
+using T3.Editor.Gui.Windows.RenderExport;
 using T3.Editor.Gui.Windows.Variations;
+using T3.Editor.SystemUi;
 
 namespace T3.Editor.Gui.Windows.Layouts
 {
@@ -43,24 +46,26 @@ namespace T3.Editor.Gui.Windows.Layouts
         public static void TryToInitialize()
         {
             // Wait first frame for ImGUI to initialize
-            if (ImGui.GetTime() > 1 && _hasBeenInitialized)
+            if (ImGui.GetTime() > 0.2f || _hasBeenInitialized)
                 return;
             
             _windows = new List<Window>()
                            {
-                               new GraphWindow(),
-                               new SettingsWindow(),
                                new ParameterWindow(),
-                               new ExplorationWindow(),
-                               new VariationsWindow(),
+                               new GraphWindow(),
                                new OutputWindow(),
-                               new ConsoleLogWindow(),
+                               new VariationsWindow(),
+                               new ExplorationWindow(),
                                new SymbolLibrary(),
                                new RenderSequenceWindow(),
                                new RenderVideoWindow(),
+                               new UtilitiesWindow(),
+                               Program.ConsoleLogWindow,
+                               new IoViewWindow(),
+                               new SettingsWindow(),
                            };            
 
-            LayoutHandling.LoadAndApplyLayout(UserSettings.Config.WindowLayoutIndex);
+            LayoutHandling.LoadAndApplyLayoutOrFocusMode(UserSettings.Config.WindowLayoutIndex);
 
             _appWindowSize = ImGui.GetIO().DisplaySize;
             _hasBeenInitialized = true;
@@ -68,22 +73,64 @@ namespace T3.Editor.Gui.Windows.Layouts
 
         public static void DrawWindowMenuContent()
         {
+            if (_windows == null)
+            {
+                Log.Warning("Can't draw window list before initialization");
+                return;
+            }
+            
             foreach (var window in _windows)
             {
                 window.DrawMenuItemToggle();
             }
 
-            ImGui.MenuItem("FullScreen", "", ref UserSettings.Config.FullScreen);
+            ImGui.Separator();
+            
             if (ImGui.MenuItem("2nd Render Window", "", ShowSecondaryRenderWindow))
                 ShowSecondaryRenderWindow = !ShowSecondaryRenderWindow;
-
+            
+            if(ImGui.BeginMenu("2nd Render Window Fullscreen On"))
+            {
+                for (var index = 0; index < EditorUi.AllScreens.Length; index++)
+                {
+                    var screen = EditorUi.AllScreens.ElementAt(index);
+                    var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
+                                $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
+                    if(ImGui.MenuItem(label, "", index ==  UserSettings.Config.FullScreenIndexViewer)) 
+                    {
+                        UserSettings.Config.FullScreenIndexViewer = index;
+                    }
+                }
+                ImGui.EndMenu();
+            }
+            
+            if (ImGui.BeginMenu("Editor Window Fullscreen On"))
+            {
+                for (var index = 0; index < EditorUi.AllScreens.Length; index++)
+                {
+                    var screen = EditorUi.AllScreens.ElementAt(index);
+                    var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
+                                $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
+                    if(ImGui.MenuItem(label, "", index ==  UserSettings.Config.FullScreenIndexMain)) 
+                    {
+                        UserSettings.Config.FullScreenIndexMain = index;
+                    }
+                }
+                ImGui.EndMenu();
+            }
             ImGui.Separator();
+            
+            if (ImGui.BeginMenu("Debug"))
+            {
+                if (ImGui.MenuItem("ImGUI Demo", "", _demoWindowVisible))
+                    _demoWindowVisible = !_demoWindowVisible;
 
-            if (ImGui.MenuItem("ImGUI Demo", "", _demoWindowVisible))
-                _demoWindowVisible = !_demoWindowVisible;
-
-            if (ImGui.MenuItem("ImGUI Metrics", "", _metricsWindowVisible))
-                _metricsWindowVisible = !_metricsWindowVisible;
+                if (ImGui.MenuItem("ImGUI Metrics", "", _metricsWindowVisible))
+                    _metricsWindowVisible = !_metricsWindowVisible;
+                
+                ImGui.EndMenu();
+            }
+            ImGui.Separator();
 
             LayoutHandling.DrawMainMenuItems();
         }
@@ -119,6 +166,22 @@ namespace T3.Editor.Gui.Windows.Layouts
         public static bool IsAnyInstanceVisible<T>() where T : Window
         {
             return GetAllWindows().OfType<T>().Any(w => w.Config.Visible);
+        }
+        
+        public static void ToggleInstanceVisibility<T>() where T : Window
+        {
+            var foundFirst = false;
+            var newVisibility = false;
+            foreach (var w in GetAllWindows().OfType<T>())
+            {
+                if (!foundFirst)
+                {
+                    newVisibility = !w.Config.Visible;
+                    foundFirst = true;
+                }
+
+                w.Config.Visible = newVisibility;
+            }
         }
         
 
@@ -163,12 +226,10 @@ namespace T3.Editor.Gui.Windows.Layouts
         }
 
         private static Vector2 _appWindowSize;
-        private const float MainMenuBarHeight = 25;
         private static List<Window> _windows;
         private static bool _demoWindowVisible;
         private static bool _metricsWindowVisible;
         public static bool ShowSecondaryRenderWindow { get; private set; }
-        public static bool IsWindowMinimized => _appWindowSize == Vector2.Zero;
         private static bool _hasBeenInitialized;
     }
 }

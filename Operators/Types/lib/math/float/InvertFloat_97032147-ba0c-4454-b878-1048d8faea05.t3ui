@@ -10,6 +10,13 @@
       },
       "Min": -100.0,
       "Max": 100.0
+    },
+    {
+      "InputId": "16ceca8f-dd07-4ee9-9ba2-38087e65e802"/*Invert*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 379.0
+      }
     }
   ],
   "SymbolChildUis": [],

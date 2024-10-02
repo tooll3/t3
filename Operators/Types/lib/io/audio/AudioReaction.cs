@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using T3.Core;
+using Microsoft.VisualBasic.Logging;
 using T3.Core.Animation;
 using T3.Core.Audio;
-using T3.Core.IO;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
+using Log = T3.Core.Logging.Log;
 
 namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
 {
@@ -35,17 +34,31 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
         
         private void Update(EvaluationContext context)
         {
+            if (context.IntVariables.TryGetValue("__MotionBlurPass", out var motionBlurPass))
+            {
+                if (motionBlurPass > 0)
+                {
+                    //Log.Debug($"Skip motion blur pass {motionBlurPass}");
+                    return;
+                }
+            } 
+            
             if (Math.Abs(context.LocalFxTime - _lastEvalTime) < 0.001f)
             {
                 return;
             }
 
-            _lastEvalTime = context.LocalFxTime;
-            
-            if (!string.IsNullOrEmpty(ProjectSettings.Config.AudioInputDeviceName) && !WasapiAudioInput.DevicesInitialized)
+            _lastEvalTime = PlaybackTimeInSecs;
+            var timeSinceLastHit = _lastEvalTime - _lastHitTime;
+            if (timeSinceLastHit < -1)
             {
-                WasapiAudioInput.Initialize();
+                _lastHitTime = timeSinceLastHit;
             }
+            
+            // if (!string.IsNullOrEmpty(context.Playback.Settings?.AudioInputDeviceName) && !WasapiAudioInput.DevicesInitialized)
+            // {
+            //     WasapiAudioInput.Initialize(context.Playback.Settings);
+            // }
 
             if (MathUtils.WasTriggered(Reset.GetValue(context), ref _reset))
             {
@@ -54,44 +67,20 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
             }
 
 
-            List<float> bins = default;
             var mode = (InputModes)InputBand.GetValue(context).Clamp(0, Enum.GetNames(typeof(InputModes)).Length - 1);
-            switch (mode)
-            {
-                case InputModes.RawFft:
-                    bins = AudioAnalysis.FftGainBuffer == null
-                                ? _emptyList
-                                : AudioAnalysis.FftGainBuffer.ToList();
 
-                    break;
+            var bins2 = mode switch
+                            {
+                                InputModes.RawFft                => AudioAnalysis.FftGainBuffer,
+                                InputModes.NormalizedFft         => AudioAnalysis.FftNormalizedBuffer,
+                                InputModes.FrequencyBands        => AudioAnalysis.FrequencyBands,
+                                InputModes.FrequencyBandsPeaks   => AudioAnalysis.FrequencyBandPeaks,
+                                InputModes.FrequencyBandsAttacks => AudioAnalysis.FrequencyBandAttacks,
+                                _                                => null
+                            };
 
-                case InputModes.NormalizedFft:
-                    bins = AudioAnalysis.FftNormalizedBuffer == null
-                                ? _emptyList
-                                : AudioAnalysis.FftNormalizedBuffer.ToList();
-                    break;
-
-                case InputModes.FrequencyBands:
-                    bins = AudioAnalysis.FrequencyBands == null
-                                ? _emptyList
-                                : AudioAnalysis.FrequencyBands.ToList();
-                    break;
-
-                case InputModes.FrequencyBandsPeaks:
-                    bins = AudioAnalysis.FrequencyBandPeaks == null
-                                ? _emptyList
-                                : AudioAnalysis.FrequencyBandPeaks.ToList();
-
-                    break;
-
-                case InputModes.FrequencyBandsAttacks:
-                    bins = AudioAnalysis.FrequencyBandAttacks == null
-                                ? _emptyList
-                                : AudioAnalysis.FrequencyBandAttacks.ToList();
-
-                    break;
-            }
-
+            var bins = bins2 == null ? _emptyList : bins2.ToList();
+            
             var threshold = Threshold.GetValue(context);
             var minTimeBetweenHits = MinTimeBetweenHits.GetValue(context);
             
@@ -100,6 +89,8 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
             var windowEdge = WindowEdge.GetValue(context).Clamp(0.0001f, 1);
             var amplitude = Amplitude.GetValue(context);
             var bias = Bias.GetValue(context);
+
+            var wasHit = false;
             
             Sum = 0f;
             if (bins != null && bins.Count > 0)
@@ -120,20 +111,23 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
 
                 if (couldBeHit != _isHitActive)
                 {
-                    if (!_isHitActive && TimeSinceLastHit > minTimeBetweenHits)
+                    // changed this to >= minTimeBetweenHits to enable more steady beats
+                    if (!_isHitActive && timeSinceLastHit >= minTimeBetweenHits)
                     {
+                        wasHit = true;
                         _isHitActive = couldBeHit;
-                        _lastHitTime = Playback.RunTimeInSecs;
+                        _lastHitTime = _lastEvalTime;
                         _hitCount++;
                     }
                     else
                     {
+                        _isHitActive = false;
                         _isHitActive = couldBeHit;
                     }
                 }
-                
+
                 AccumulatedLevel +=  MathF.Pow((Sum * 2) / threshold, 2) * 0.001 * amplitude;
-                _dampedTimeBetweenHits = MathUtils.Lerp((float)TimeSinceLastHit, _dampedTimeBetweenHits, 0.94f);
+                _dampedTimeBetweenHits = MathUtils.Lerp((float)timeSinceLastHit, _dampedTimeBetweenHits, 0.94f);
             }
 
             float v;
@@ -143,11 +137,11 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
             switch ((OutputModes)Output.GetValue(context).Clamp(0, Enum.GetNames(typeof(OutputModes)).Length - 1))
             {
                 case OutputModes.Pulse:
-                    v = MathF.Pow((1 - (float)TimeSinceLastHit).Clamp(0, 1), bias) * amplitude;
+                    v = MathF.Pow((1 - (float)timeSinceLastHit).Clamp(0, 1), bias) * amplitude;
                     break;
                 
                 case OutputModes.TimeSinceHit:
-                    v = MathF.Pow((float)TimeSinceLastHit, bias) * amplitude;
+                    v = MathF.Pow((float)timeSinceLastHit, bias) * amplitude;
                     break;
                 
                 case OutputModes.Count:
@@ -169,7 +163,7 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
             }
 
             
-            WasHit.Value = _isHitActive;
+            WasHit.Value = wasHit;
             HitCount.Value = _hitCount;
 
             if (float.IsInfinity(v) || float.IsNaN(v))
@@ -248,7 +242,13 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
         public readonly InputSlot<bool> Reset = new();
         
         private static readonly List<float> _emptyList = new();
-        public double TimeSinceLastHit => Playback.RunTimeInSecs - _lastHitTime;
+        public double PlaybackTimeInSecs =>
+            (Playback.Current.IsRenderingToFile) ?   Playback.Current.TimeInSecs : Playback.RunTimeInSecs;
+
+        /// <summary>
+        /// This is used only for visualization
+        /// </summary>
+        public double TimeSinceLastHit => _lastEvalTime - _lastHitTime;
 
         public bool AccumulationActive;
     }

@@ -9,10 +9,8 @@ using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using GraphWindow = T3.Editor.Gui.Graph.GraphWindow;
 
 namespace T3.Editor.Gui.Windows
 {
@@ -31,51 +29,145 @@ namespace T3.Editor.Gui.Windows
         protected override void DrawContent()
         {
             _renameNamespaceDialog.Draw(_subtreeNodeToRename);
-            
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 5);
+
+            ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, 10);
+
+            if (_symbolUsageReference != null)
             {
-                ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
+                ImGui.Text("Usages of " + _symbolUsageReference.Name + ":");
                 if (ImGui.Button("Clear"))
                 {
-                    _filter.SearchString = "";
+                    _symbolUsageReference = null;
                 }
-
-                ImGui.SameLine();
-                if (ImGui.InputText("##Filter", ref _filter.SearchString, 100))
+                else
                 {
-                    _selectedSymbol = null;
-                }
-                
-                ImGui.SameLine();
-                if (ImGui.Button("Update"))
-                {
-                    _treeNode.PopulateCompleteTree();
-                    ExampleSymbolLinking.UpdateExampleLinks();
-                    SymbolAnalysis.Update();
-                }
-                CustomComponents.TooltipForLastItem("Rescans the current symbol tree. This can useful after renaming namespaces.");
+                    ImGui.Separator();
 
-                ImGui.Separator();
-
-                ImGui.BeginChild("scrolling");
-                {
-                    if (string.IsNullOrEmpty(_filter.SearchString))
+                    ImGui.BeginChild("scrolling");
                     {
-                        DrawNode(_treeNode);
+                        if (SymbolAnalysis.DetailsInitialized && SymbolAnalysis.InformationForSymbolIds.TryGetValue(_symbolUsageReference.Id, out var info))
+                        {
+                            foreach (var s in info.DependingSymbolIds)
+                            {
+                                var symbol = SymbolRegistry.Entries[s];
+                                SymbolTreeMenu.DrawSymbolItem(symbol);
+                            }
+                        }
                     }
-                    else
-                    {
-                        DrawList();
-                    }
+                    ImGui.EndChild();
                 }
-                ImGui.EndChild();
             }
-            ImGui.PopStyleVar();
+            else
+            {
+                DrawSymbols();
+            }
+
+            ImGui.PopStyleVar(1);
 
             if (ImGui.IsMouseReleased(0))
             {
                 StopDrag();
             }
+        }
+
+        private void DrawSymbols()
+        {
+            var iconCount = 1;
+            if (_wasScanned)
+                iconCount++;
+
+            CustomComponents.DrawInputFieldWithPlaceholder("Search symbols...", ref _filter.SearchString, -ImGui.GetFrameHeight() * iconCount + 16);
+
+            ImGui.SameLine();
+            if (CustomComponents.IconButton(Icon.Refresh, Vector2.Zero, CustomComponents.ButtonStates.Dimmed))
+            {
+                _treeNode.PopulateCompleteTree();
+                ExampleSymbolLinking.UpdateExampleLinks();
+                SymbolAnalysis.UpdateDetails();
+                _wasScanned = true;
+            }
+
+            CustomComponents.TooltipForLastItem("Scan usage dependencies for all symbols.");
+
+            if (_wasScanned)
+            {
+                ImGui.SameLine();
+                var status = _showFilters ? CustomComponents.ButtonStates.Activated : CustomComponents.ButtonStates.Dimmed;
+                if (CustomComponents.IconButton(Icon.Flame, Vector2.Zero, status))
+                {
+                    _showFilters = !_showFilters;
+                }
+
+                if (_showFilters)
+                {
+                    var totalOpCount = _onlyInLib 
+                                           ? SymbolAnalysis.InformationForSymbolIds.Values.Count(i => i.IsLibOperator) 
+                        :  SymbolAnalysis.InformationForSymbolIds.Count;
+                    CustomComponents.SmallGroupHeader($"Show only... ({totalOpCount} total)");
+                    bool needsUpdate = false;
+                    
+                    var helpMissingCount = SymbolAnalysis.InformationForSymbolIds.Values.Count(i => i.LacksDescription && (i.IsLibOperator || !_onlyInLib));
+                    var missingAllParameterHelpCount = SymbolAnalysis.InformationForSymbolIds.Values.Count(i => i.LacksAllParameterDescription && (i.IsLibOperator || !_onlyInLib));
+                    var lackGroupingCount = SymbolAnalysis.InformationForSymbolIds.Values.Count(i => i.LacksParameterGrouping && (i.IsLibOperator || !_onlyInLib));
+                    var unusedCount = SymbolAnalysis.InformationForSymbolIds.Values.Count(i => i.DependingSymbolIds.Count == 0 && (i.IsLibOperator || !_onlyInLib));
+
+                    needsUpdate |= ImGui.Checkbox($"Help missing ({helpMissingCount})", ref _filterMissingDescriptions);
+                    needsUpdate |= ImGui.Checkbox($"Parameter help missing ({missingAllParameterHelpCount})", ref _filterMissingAllParameterDescriptions);
+                    needsUpdate |= ImGui.Checkbox("Parameter help incomplete", ref _filterMissingSomeParameterDescriptions);
+                    needsUpdate |= ImGui.Checkbox($"No grouping ({lackGroupingCount})", ref _filterMissingParameterGrouping);
+                    needsUpdate |= ImGui.Checkbox($"Unused ({unusedCount})", ref _filterUnused);
+                    FormInputs.AddVerticalSpace();
+                    needsUpdate |= ImGui.Checkbox("Only in Lib", ref _onlyInLib);
+                    
+                    if (needsUpdate)
+                    {
+                        _filteredTree.PopulateCompleteTree((Symbol s) =>
+                                                           {
+                                                               var info = SymbolAnalysis.InformationForSymbolIds[s.Id];
+                                                               if(info == null)
+                                                                   return false;
+
+                                                               if (_onlyInLib && !info.IsLibOperator)
+                                                                   return false;
+                                                               
+                                                               if (!AnyFilterActive)
+                                                                   return true;
+                                                               
+                                                               return ( (_filterMissingDescriptions && info.LacksDescription)
+                                                                        || (_filterMissingAllParameterDescriptions && info.LacksAllParameterDescription)
+                                                                        || (_filterMissingSomeParameterDescriptions && info.LacksSomeParameterDescription)
+                                                                        || (_filterMissingParameterGrouping && info.LacksParameterGrouping)
+                                                                        || (_filterUnused && info.DependingSymbolIds.Count== 0)
+                                                                        );
+                                                           });
+                    }
+
+                    ImGui.Separator();
+                    FormInputs.AddVerticalSpace();
+                    CustomComponents.SmallGroupHeader($"Result...");
+                }
+            }
+
+            ImGui.BeginChild("scrolling");
+            {
+                if (AnyFilterActive)
+                {
+                    DrawNode(_filteredTree);
+                }
+                else if (string.IsNullOrEmpty(_filter.SearchString))
+                {
+                    DrawNode(_treeNode);
+                }
+                else if (_filter.SearchString.Contains('?'))
+                {
+                    DrawRandomPromptList();
+                }
+                else
+                {
+                    DrawList();
+                }
+            }
+            ImGui.EndChild();
         }
 
         private void DrawList()
@@ -85,84 +177,80 @@ namespace T3.Editor.Gui.Windows
             {
                 SymbolTreeMenu.DrawSymbolItem(symbolUi.Symbol);
             }
+        }
 
-            var showUsages = _filter.MatchingSymbolUis.Count == 1 || _selectedSymbol != null;
-            if (showUsages)
+        private int _randomSeed;
+        private List<Symbol> _allLibSymbols;
+        private float _promptComplexity = 0.25f;
+
+        private bool _wasScanned = false;
+        private bool _showFilters;
+        private bool _filterMissingDescriptions;
+        private bool _filterMissingAllParameterDescriptions;
+        private bool _filterMissingSomeParameterDescriptions;
+        private bool _filterMissingParameterGrouping;
+        private bool _filterUnused;
+        private bool _onlyInLib = true;
+
+        private void DrawRandomPromptList()
+        {
+            ImGui.Indent();
+            FormInputs.AddSectionHeader("Random Prompts");
+
+            var listNeedsUpdate = _allLibSymbols == null;
+            FormInputs.SetIndent(80 * T3Ui.UiScaleFactor);
+            FormInputs.AddInt("Seed", ref _randomSeed);
+            listNeedsUpdate |= FormInputs.AddFloat("Complexity", ref _promptComplexity, 0, 1, 0.02f, true);
+            FormInputs.SetIndentToLeft();
+
+            FormInputs.AddVerticalSpace();
+
+            // Rebuild list if necessary
+            if (listNeedsUpdate)
             {
-                var symbol = _selectedSymbol ?? _filter.MatchingSymbolUis[0].Symbol;
-                ImGui.Separator();
-                ImGui.PushFont(Fonts.FontLarge);
-                ImGui.TextUnformatted("Is used these Symbols...");
-                ImGui.PopFont();
-                CustomComponents.HelpText("Note: This only includes currently loaded (instanced) Operators.");
-
-                var graphWindow = GraphWindow.GetVisibleInstances().FirstOrDefault();
-
-                var usagesInSymbolInstances = new Dictionary<Symbol, List<Instance>>();
-                foreach (var symbolInstance in symbol.InstancesOfSymbol)
+                // Count all lib ops
+                if (_allLibSymbols == null)
                 {
-                    var parents = NodeOperations.GetParentInstances(symbolInstance, includeChildInstance: true).ToList();
-                    if (parents.Count < 2)
-                        continue;
-
-                    var compositionSymbol = parents[parents.Count - 2].Symbol;
-                    var instance = parents[parents.Count - 1];
-
-                    if (!usagesInSymbolInstances.TryGetValue(compositionSymbol, out var list))
+                    _allLibSymbols = new List<Symbol>();
+                    foreach (var s in SymbolRegistry.Entries.Values)
                     {
-                        list = new List<Instance>();
-                        usagesInSymbolInstances[compositionSymbol] = list;
-                    }
-
-                    if (list.All(c => c.SymbolChildId != instance.SymbolChildId))
-                    {
-                        list.Add(instance);
+                        if (s.Namespace.StartsWith("lib.") && !s.Name.StartsWith("_"))
+                            _allLibSymbols.Add(s);
                     }
                 }
 
-                foreach (var (compositionSymbol, instances) in usagesInSymbolInstances)
-                {
-                    ImGui.PushFont(Fonts.FontBold);
-                    ImGui.TextColored(Color.Gray, compositionSymbol.Name);
-                    ImGui.PopFont();
-                    ImGui.SameLine();
-                    ImGui.TextColored(Color.Gray, " - " + compositionSymbol.Namespace);
+                // Filter 
+                var limit = (int)(_allLibSymbols.Count * _promptComplexity).Clamp(1, _allLibSymbols.Count - 1);
+                var keep = _filter.SearchString;
+                _filter.SearchString = "lib.";
+                _filter.UpdateIfNecessary(true, limit);
+                _filter.SearchString = keep;
+            }
 
-                    foreach (var instance in instances)
-                    {
-                        ImGui.PushID(instance.SymbolChildId.GetHashCode());
-                        var instanceParent = instance.Parent;
-                        var symbolChild = instanceParent.Symbol.Children.SingleOrDefault(child => child.Id == instance.SymbolChildId);
-                        if (symbolChild == null)
-                        {
-                            Log.Error($"Can't find SymbolChild of Instance {instance.Symbol.Name} ({instance.SymbolChildId}) in parent {instanceParent.Symbol.Name}");
-                            continue;
-                        }
+            var relevantCount = _filter.MatchingSymbolUis.Count;
 
-                        if (ImGui.Selectable(symbolChild.ReadableName))
-                        {
-                            graphWindow?.GraphCanvas.SetComposition(OperatorUtils.BuildIdPathForInstance(instanceParent),
-                                                                    ICanvas.Transition.Undefined);
+            if (_randomSeed == 0)
+            {
+                _randomSeed = (int)(ImGui.GetFrameCount() * 374761393U & 1023U);
+            }
 
-                            var childUi = SymbolUiRegistry.Entries[compositionSymbol.Id].ChildUis.Single(cUi => cUi.Id == instance.SymbolChildId);
-                            NodeSelection.SetSelectionToChildUi(childUi, instance);
-                            FitViewToSelectionHandling.FitViewToSelection();
-                        }
-
-                        ImGui.PopID();
-                    }
-                }
+            var promptCount = _filter.SearchString.Count(c => c == '?');
+            for (uint i = 0; i < promptCount; i++)
+            {
+                var f = MathUtils.Hash01((uint)((i + 42 * _randomSeed * 668265263U) & 0x7fffffff));
+                var randomIndex = (int)(f * relevantCount).Clamp(0, relevantCount - 1);
+                SymbolTreeMenu.DrawSymbolItem(_filter.MatchingSymbolUis[randomIndex].Symbol);
             }
         }
 
-        private void StopDrag()
+        private static void StopDrag()
         {
             T3Ui.DraggingIsInProgress = false;
-            //_dropData = T3Ui.NotDroppingPointer;
         }
 
         private NamespaceTreeNode _subtreeNodeToRename;
-        
+        private bool _openedLibFolderOnce;
+
         private void DrawNode(NamespaceTreeNode subtree)
         {
             if (subtree.Name == NamespaceTreeNode.RootNodeId)
@@ -173,6 +261,11 @@ namespace T3.Editor.Gui.Windows
             {
                 ImGui.PushID(subtree.Name);
                 ImGui.SetNextItemWidth(10);
+                if (subtree.Name == "lib" && !_openedLibFolderOnce)
+                {
+                    ImGui.SetNextItemOpen(true);
+                    _openedLibFolderOnce = true;
+                }
 
                 var isOpen = ImGui.TreeNode(subtree.Name);
                 CustomComponents.ContextMenuForItem(() =>
@@ -183,8 +276,7 @@ namespace T3.Editor.Gui.Windows
                                                             _renameNamespaceDialog.ShowNextFrame();
                                                         }
                                                     });
-                
-                
+
                 if (isOpen)
                 {
                     HandleDropTarget(subtree);
@@ -224,7 +316,7 @@ namespace T3.Editor.Gui.Windows
                 SymbolTreeMenu.DrawSymbolItem(symbol);
             }
         }
-        
+
         private void HandleDropTarget(NamespaceTreeNode subtree)
         {
             if (ImGui.BeginDragDropTarget())
@@ -268,9 +360,11 @@ namespace T3.Editor.Gui.Windows
             return new List<Window>();
         }
 
-        private NamespaceTreeNode _treeNode = new NamespaceTreeNode(NamespaceTreeNode.RootNodeId);
-        private readonly SymbolFilter _filter = new SymbolFilter();
-        private static Symbol _selectedSymbol;
-        private static RenameNamespaceDialog _renameNamespaceDialog = new RenameNamespaceDialog();
+        private readonly NamespaceTreeNode _treeNode = new(NamespaceTreeNode.RootNodeId);
+        private readonly SymbolFilter _filter = new();
+        private static readonly RenameNamespaceDialog _renameNamespaceDialog = new();
+        public static Symbol _symbolUsageReference;
+        private readonly NamespaceTreeNode _filteredTree = new(NamespaceTreeNode.RootNodeId);
+        private bool AnyFilterActive => _filterMissingDescriptions || _filterMissingParameterGrouping || _filterMissingAllParameterDescriptions || _filterUnused;
     }
 }

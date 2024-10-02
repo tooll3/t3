@@ -75,9 +75,12 @@ namespace T3.Editor.Gui.UiHelpers
                 x += dx;
             }
             
-            
-            dl.AddPolyline(ref _graphPoints[0], _sampleCount - 1, Color.DarkGray, ImDrawFlags.None, 1);
-            dl.AddCircleFilled(_graphPoints[_sampleCount - 1], 3, Color.Gray);
+            dl.AddPolyline(ref _graphPoints[0], 
+                           _sampleCount - 1, 
+                           UiColors.Text.Fade(0.3f), 
+                           ImDrawFlags.None, 
+                           1);
+            dl.AddCircleFilled(_graphPoints[_sampleCount - 1], 3, UiColors.Gray);
 
             var valueAsString = $"{_lastValue:G5}";
             dl.AddText(Fonts.FontLarge,
@@ -85,7 +88,7 @@ namespace T3.Editor.Gui.UiHelpers
                        _canvas.WindowPos
                        + new Vector2(_canvas.WindowSize.X - 100f,
                                      _canvas.WindowSize.Y * 0.5f - Fonts.FontLarge.FontSize / 2),
-                       Color.White,
+                       UiColors.Text,
                        valueAsString);
             
             dl.PopClipRect();

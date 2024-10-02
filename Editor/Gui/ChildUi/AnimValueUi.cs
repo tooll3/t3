@@ -6,6 +6,7 @@ using T3.Core.Utils;
 using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using T3.Operators.Types.Id_ea7b8491_2f8e_4add_b0b1_fd068ccfed0d;
 
 namespace T3.Editor.Gui.ChildUi
@@ -36,7 +37,7 @@ namespace T3.Editor.Gui.ChildUi
             
             var highlightEditable = ImGui.GetIO().KeyCtrl;
 
-            if (h > 14)
+            if (h > 14 * T3Ui.UiScaleFactor)
             {
                 ValueLabel.Draw(drawList, graphRect, new Vector2(1, 0), animValue.Amplitude);
                 ValueLabel.Draw(drawList, graphRect, new Vector2(1, 1), animValue.Offset);
@@ -49,9 +50,12 @@ namespace T3.Editor.Gui.ChildUi
             if (ImGui.GetIO().KeyCtrl)
             {
                 ImGui.InvisibleButton("dragMicroGraph", graphRect.GetSize());
-                isActive = ImGui.IsItemActive();
+                if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Left) || ImGui.IsItemActive())
+                {
+                    isActive = true;
+                }
 
-                if (ImGui.IsItemHovered())
+                if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup))
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
                 }
@@ -86,13 +90,23 @@ namespace T3.Editor.Gui.ChildUi
             DrawCurve(drawList, graphRect, animValue, highlightEditable);
             
             ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
+            return SymbolChildUi.CustomUiResult.Rendered 
+                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph 
+                   | SymbolChildUi.CustomUiResult.PreventInputLabels
+                   | SymbolChildUi.CustomUiResult.PreventTooltip;
+
         }
 
         private static void DrawCurve(ImDrawListPtr drawList, ImRect graphRect, AnimValue animValue, bool highlightEditable)
         {
             var graphWidth = graphRect.GetWidth();
             var h = graphRect.GetHeight();
+            
+            var shapeIndex = (animValue.Shape.IsConnected) // Todo check for animated 
+                            ? animValue.Shape.Value 
+                            :animValue.Shape.TypedInputValue.Value;
+
+            var shape = (AnimMath.Shapes)shapeIndex.Clamp(0, Enum.GetNames(typeof(AnimMath.Shapes)).Length);
             
             // Draw Graph
             {
@@ -102,18 +116,18 @@ namespace T3.Editor.Gui.ChildUi
                 // Horizontal line
                 var lh1 = graphRect.Min + Vector2.UnitY * h / 2;
                 var lh2 = new Vector2(graphRect.Max.X, lh1.Y + 1);
-                drawList.AddRectFilled(lh1, lh2, T3Style.Colors.GraphAxis);
+                drawList.AddRectFilled(lh1, lh2, UiColors.WidgetAxis);
 
                 // Vertical start line 
                 var lv1 = graphRect.Min + Vector2.UnitX * (int)(graphWidth * relativeX);
                 var lv2 = new Vector2(lv1.X + 1, graphRect.Max.Y);
-                drawList.AddRectFilled(lv1, lv2, T3Style.Colors.GraphAxis);
+                drawList.AddRectFilled(lv1, lv2, UiColors.WidgetAxis);
 
                 // Fragment line 
                 var cycleWidth = graphWidth * (1- relativeX); 
                 var dx = new Vector2((float)MathUtils.Fmod(animValue._normalizedTime,1f) * cycleWidth - 1, 0);
                 
-                drawList.AddRectFilled(lv1 + dx, lv2 + dx, T3Style.Colors.GraphActiveLine);
+                drawList.AddRectFilled(lv1 + dx, lv2 + dx, UiColors.WidgetActiveLine);
 
                 // Draw graph
                 //        lv
@@ -128,7 +142,7 @@ namespace T3.Editor.Gui.ChildUi
                     var f = (float)i / GraphListSteps;
                     var fragment = f * (1 + previousCycleFragment) - previousCycleFragment + Math.Floor(animValue._normalizedTime);
 
-                    var v = AnimMath.CalcValueForNormalizedTime(animValue._shape,
+                    var v = AnimMath.CalcValueForNormalizedTime(shape,
                                                                 fragment,
                                                                 0,
                                                                 animValue.Bias.TypedInputValue.Value,
@@ -140,7 +154,7 @@ namespace T3.Editor.Gui.ChildUi
                                                      ) + graphRect.Min;
                 }
 
-                var curveLineColor = highlightEditable ? T3Style.Colors.GraphLineHover : T3Style.Colors.GraphLine;
+                var curveLineColor = highlightEditable ? UiColors.WidgetLineHover : UiColors.WidgetLine;
                 drawList.AddPolyline(ref _graphLinePoints[0], GraphListSteps, curveLineColor, ImDrawFlags.None, 1.5f);
             }            
         }

@@ -1,19 +1,26 @@
 {
   "Id": "3352d3a1-ab04-4d0a-bb43-da69095b73fd"/*RadialPoints*/,
+  "Description": "A versatile generator of circular point sets that can create a variety of circles, spirals, helixes, etc.\n\nTry the presets to get an overview.",
   "InputUis": [
     {
       "InputId": "b654ffe2-d46e-4a62-89b3-a9692d5c6481"/*Count*/,
       "Position": {
         "X": -173.14885,
         "Y": 756.73737
-      }
+      },
+      "Description": "Amount of points generated between the first and last point",
+      "Min": 0,
+      "Max": 1000
     },
     {
       "InputId": "acce4779-56d6-47c4-9c52-874fca91a3a1"/*Radius*/,
       "Position": {
         "X": -173.14885,
         "Y": 801.73737
-      }
+      },
+      "Description": "Radius of radial",
+      "Min": 0.0,
+      "Max": 2.0
     },
     {
       "InputId": "13cbb509-f90c-4ae7-a9d3-a8fc907794e3"/*RadiusOffset*/,
@@ -21,6 +28,10 @@
         "X": -173.14885,
         "Y": 846.73737
       },
+      "Description": "This value defines how far the radius of the last point deviates from the radius of the first point.\n\nEspecially helpful if Cycles are increased",
+      "AddPadding": "True",
+      "Min": -10.0,
+      "Max": 10.0,
       "Format": "{0:0.000} ±"
     },
     {
@@ -28,14 +39,16 @@
       "Position": {
         "X": -159.31241,
         "Y": 926.32837
-      }
+      },
+      "Description": "Moves the points:\n\nX (-left / +right), \nY (-down / + up), \nZ (-forward/+backwards)"
     },
     {
       "InputId": "f6986f68-851b-4cd1-ae59-bf189aa1698e"/*Offset*/,
       "Position": {
         "X": -150.41754,
         "Y": 1016.6262
-      }
+      },
+      "Description": "Moves the position of the last point in relation to the first point:\n\nX (-left / +right), \nY (-down / + up),\nZ (-forward/+backward)\n"
     },
     {
       "InputId": "5a3347a2-ba87-4b38-a1a8-94bd0ef70f48"/*StartAngle*/,
@@ -43,8 +56,10 @@
         "X": -150.41754,
         "Y": 1080.569
       },
-      "Scale": 1.0,
-      "Format": "{0:0.000}°"
+      "AddPadding": "True",
+      "Min": -90.0,
+      "Max": 90.0,
+      "Format": "{0:0.0}°"
     },
     {
       "InputId": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
@@ -52,6 +67,8 @@
         "X": -150.41754,
         "Y": 1125.569
       },
+      "Min": 0.0,
+      "Max": 10.0,
       "Scale": 0.01,
       "Format": "{0:0.000} ×"
     },
@@ -60,21 +77,28 @@
       "Position": {
         "X": -150.41754,
         "Y": 1170.569
-      }
+      },
+      "Description": "When drawing the radial points as a close line, two additional points have to be appended: One at the start position and one as separator.\n\nIt will add an overlapping point and a separator, so the number of corners will be Count - 2."
     },
     {
       "InputId": "6df5829e-a534-4620-bcd5-9324f94b4f54"/*Axis*/,
       "Position": {
         "X": -152.72365,
         "Y": 1220.6437
-      }
+      },
+      "AddPadding": "True",
+      "Min": -1.0,
+      "Max": 1.0
     },
     {
       "InputId": "3ee710be-8954-431b-8d3a-38f7f03f0f02"/*W*/,
       "Position": {
         "X": -148.87996,
         "Y": 1288.0674
-      }
+      },
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 1.0
     },
     {
       "InputId": "526cf26b-6cf6-4cba-be2a-4819c2a422bf"/*WOffset*/,
@@ -89,7 +113,9 @@
       "Position": {
         "X": -153.38249,
         "Y": 1471.6694
-      }
+      },
+      "Min": -1.0,
+      "Max": 1.0
     },
     {
       "InputId": "cd917c3d-489e-4e4d-b5dc-eacc846d82ef"/*OrientationAngle*/,
@@ -97,31 +123,36 @@
         "X": -153.38249,
         "Y": 1516.6694
       },
+      "Min": -90.0,
+      "Max": 90.0,
       "Scale": 0.1,
       "Format": "{0:0.000}°"
+    },
+    {
+      "InputId": "ef8d1fe2-8470-4113-8d20-40a92d0dab97"/*BiasAndGain*/,
+      "Position": {
+        "X": -153.38249,
+        "Y": 1561.6694
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true,
+      "UseVec2Control": "BiasAndGain"
     }
   ],
   "SymbolChildUis": [
     {
       "ChildId": "59f31b35-d2d4-41ef-a87c-1ecb787a8afd"/*ComputeShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
-        "X": 107.79022,
-        "Y": 553.5044
+        "X": 202.17285,
+        "Y": 562.38745
       }
     },
     {
       "ChildId": "fabbd287-da9b-469c-99da-67146dab746f"/*ComputeShaderStage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 101.0
-      },
       "Position": {
-        "X": 471.04163,
-        "Y": 587.7994
+        "X": 565.42426,
+        "Y": 596.68243
       }
     },
     {
@@ -132,195 +163,141 @@
         "Y": 855.0513
       },
       "Position": {
-        "X": 266.5485,
-        "Y": 748.49927
+        "X": 360.93112,
+        "Y": 757.3823
       }
     },
     {
       "ChildId": "5e49a35e-1675-477b-b821-14f6164488f1"/*IntToFloat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
-        "X": 59.992126,
-        "Y": 684.4205
+        "X": 201.41183,
+        "Y": 721.83417
       }
     },
     {
       "ChildId": "9347a8f8-f4e5-404b-a181-8c233e7b9ef8"/*ExecuteBufferUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
-        "X": 641.2465,
-        "Y": 646.7957
+        "X": 735.62915,
+        "Y": 655.6788
       }
     },
     {
-      "ChildId": "0df35d44-e770-4490-875c-967a17b72c3e"/*Vector3ToFloat3*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "0df35d44-e770-4490-875c-967a17b72c3e"/*Vector3Components*/,
       "Position": {
-        "X": 40.967846,
-        "Y": 912.42206
+        "X": 135.35048,
+        "Y": 921.3051
       }
     },
     {
-      "ChildId": "92a9a95d-ad1a-49f0-b730-6748dc1b26b7"/*Vector3ToFloat3*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "92a9a95d-ad1a-49f0-b730-6748dc1b26b7"/*Vector3Components*/,
       "Position": {
-        "X": 43.93279,
-        "Y": 1004.00104
+        "X": 138.31541,
+        "Y": 1012.8841
       }
     },
     {
-      "ChildId": "1c9db997-04eb-4a7b-9fb0-6c3d218e2442"/*Vector3ToFloat3*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "1c9db997-04eb-4a7b-9fb0-6c3d218e2442"/*Vector3Components*/,
       "Position": {
-        "X": 60.450222,
-        "Y": 1233.9171
+        "X": 154.83286,
+        "Y": 1242.8
       }
     },
     {
       "ChildId": "76813efe-b681-430a-a064-4c3c4a579236"/*padding*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
-        "X": 63.464634,
-        "Y": 860.497
+        "X": 157.84726,
+        "Y": 869.38007
       }
     },
     {
       "ChildId": "f8c6be68-a92f-4066-88cc-b09658a8bb5e"/*Value*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
-        "X": 43.93279,
-        "Y": 1060.001
+        "X": 138.31541,
+        "Y": 1068.8838
       }
     },
     {
       "ChildId": "b52b75fe-2161-4fc1-b6ed-bea0db3d86cc"/*Value*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
-        "X": 40.967846,
-        "Y": 968.42206
+        "X": 135.35048,
+        "Y": 977.3051
       }
     },
     {
       "ChildId": "6bcaab5e-4151-4e74-aa9d-56e9ea2ad228"/*Value*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
-        "X": 60.450222,
-        "Y": 1177.9171
+        "X": 156.6835,
+        "Y": 1163.667
       }
     },
     {
       "ChildId": "ccedec96-d16b-4965-9308-26836fa94fba"/*CalcDispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
-        "X": 258.43192,
-        "Y": 568.3451
+        "X": 352.81454,
+        "Y": 577.22815
       }
     },
     {
-      "ChildId": "6e217253-c115-4633-b998-bb291ce889c1"/*StructuredBuffer2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "6e217253-c115-4633-b998-bb291ce889c1"/*StructuredBufferWithViews*/,
       "Position": {
-        "X": 110.1939,
-        "Y": 1673.6399
+        "X": 204.57654,
+        "Y": 1682.5227
       }
     },
     {
       "ChildId": "2f1e6571-3d5f-46c0-a49b-f39cebfd5b10"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
-        "X": 262.75928,
-        "Y": 1628.5092
+        "X": 357.1419,
+        "Y": 1637.3921
       }
     },
     {
-      "ChildId": "c013aeef-5267-4521-9ad5-040c4054336b"/*BoolToFloats*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "c013aeef-5267-4521-9ad5-040c4054336b"/*BoolToFloat*/,
       "Position": {
-        "X": 74.04359,
-        "Y": 1388.0305
+        "X": 168.42621,
+        "Y": 1396.9133
       }
     },
     {
-      "ChildId": "68d8c8fa-6348-43c2-82b6-9eb32c1fcf35"/*Vector3ToFloat3*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "68d8c8fa-6348-43c2-82b6-9eb32c1fcf35"/*Vector3Components*/,
       "Position": {
-        "X": 74.04359,
-        "Y": 1487.0305
+        "X": 165.65027,
+        "Y": 1530.1501
       }
     },
     {
       "ChildId": "2053c85a-8978-43f3-b6a0-be46c1abfe7c"/*Value*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
-        "X": 74.04359,
-        "Y": 1444.0305
-      }
-    },
-    {
-      "ChildId": "e264b87f-da89-4608-8822-25e1e98961b1"/*Clamp*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -144.92683,
-        "Y": 548.53296
+        "X": 168.42621,
+        "Y": 1452.9133
       }
     },
     {
       "ChildId": "279bcaff-b61c-49fc-8c44-b8e158ac3b54"/*ClampInt*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
-        "X": -73.734955,
-        "Y": 658.05896
+        "X": 20.647675,
+        "Y": 666.942
+      }
+    },
+    {
+      "ChildId": "144f8658-1739-4a76-ab8d-6984408e84ec"/*Value*/,
+      "Position": {
+        "X": 156.6835,
+        "Y": 1206.667
+      }
+    },
+    {
+      "ChildId": "e9a3f305-40f9-416c-b59d-69b7f3d80f24"/*Value*/,
+      "Position": {
+        "X": 168.42621,
+        "Y": 1495.9133
+      }
+    },
+    {
+      "ChildId": "e30bbf5f-44e6-4a71-8d20-1e97df309b32"/*Vector2Components*/,
+      "Position": {
+        "X": 58.079346,
+        "Y": 1636.3428
       }
     }
   ],
@@ -328,8 +305,8 @@
     {
       "OutputId": "d7605a96-adc6-4a2b-9ba4-33adef3b7f4c"/*OutBuffer*/,
       "Position": {
-        "X": 791.2465,
-        "Y": 646.7957
+        "X": 885.62915,
+        "Y": 655.6788
       }
     }
   ]

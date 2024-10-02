@@ -1,6 +1,5 @@
 using System;
 using System.Numerics;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;

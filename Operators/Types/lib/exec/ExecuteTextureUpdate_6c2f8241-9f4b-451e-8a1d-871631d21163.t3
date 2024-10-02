@@ -14,6 +14,10 @@
     {
       "Id": "dc3bd757-300b-416a-92f9-b9c976ef7206"/*TriggerTexture*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "6b1c2262-f7b1-4abd-b787-d03240245431"/*IsEnabled*/,
+      "DefaultValue": true
     }
   ],
   "Children": [],

@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -8,23 +9,28 @@ cbuffer Params : register(b0)
     float Speed; 
 }
 
-RWStructuredBuffer<Point> Points : u0; 
+RWStructuredBuffer<Particle> Particles : u0; 
 
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
     uint numStructs, stride;
-    Points.GetDimensions(numStructs, stride);
-    if(i.x >= numStructs) {
-        Points[i.x].w = 0 ;
+    Particles.GetDimensions(numStructs, stride);
+    if(i.x >= numStructs) 
         return;
-    }
 
 
-    float3 forward =  normalize(rotate_vector(float3(0,0, 1), Points[i.x].rotation));
-    forward *= Points[i.x].w * 0.01 * Speed;
-    Points[i.x].position += forward;
+    Particle p = Particles[i.x];
+    float4 rot;
+    //float v = q_separate_v(p.Rotation, rot);
 
-    Points[i.x].w *= (1-Drag);
+    //float3 forward =  normalize(qRotateVec3(float3(0, 0, 1), rot));
+
+    p.Position += p.Velocity * 0.01 * Speed;
+
+    p.Velocity *= (1-Drag);
+    // p.Rotation = q_encode_v(rot, v);
+
+    Particles[i.x] = p;
 
 }

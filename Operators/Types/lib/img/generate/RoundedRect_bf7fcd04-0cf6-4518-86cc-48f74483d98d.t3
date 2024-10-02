@@ -8,16 +8,7 @@
       "DefaultValue": null
     },
     {
-      "Id": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Fill*/,
-      "DefaultValue": {
-        "X": 1.0,
-        "Y": 1.0,
-        "Z": 1.0,
-        "W": 1.0
-      }
-    },
-    {
-      "Id": "d4f79203-401a-4f6e-8f83-74a3d61c0177"/*Outline*/,
+      "Id": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Color*/,
       "DefaultValue": {
         "X": 1.0,
         "Y": 1.0,
@@ -35,6 +26,13 @@
       }
     },
     {
+      "Id": "ee2f51f9-38bb-4613-b234-173218cb3aae"/*Position*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
       "Id": "c608e4c4-c545-45ed-8e37-95a53f6871d0"/*Stretch*/,
       "DefaultValue": {
         "X": 1.0,
@@ -42,23 +40,29 @@
       }
     },
     {
-      "Id": "ee2f51f9-38bb-4613-b234-173218cb3aae"/*Center*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
       "Id": "d2401798-593b-4cc3-85d8-3570ddec1f2a"/*Scale*/,
       "DefaultValue": 0.5
+    },
+    {
+      "Id": "202340b4-0629-40a1-9399-0cda047df116"/*Rotate*/,
+      "DefaultValue": 0.0
     },
     {
       "Id": "ef3d0313-50a1-42d3-b3cb-e8ea1b93cd34"/*Round*/,
       "DefaultValue": 0.5
     },
     {
+      "Id": "d4f79203-401a-4f6e-8f83-74a3d61c0177"/*StrokeColor*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
+        "W": 1.0
+      }
+    },
+    {
       "Id": "80bd2460-c28d-490c-981b-77a6e89f3983"/*Stroke*/,
-      "DefaultValue": 0.1
+      "DefaultValue": 0.0
     },
     {
       "Id": "be43e160-f9a0-4991-b764-2b5e533b37cc"/*Feather*/,
@@ -66,41 +70,41 @@
     },
     {
       "Id": "574e7268-27aa-46b6-a13f-8ab63f5990d9"/*FeatherBias*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "202340b4-0629-40a1-9399-0cda047df116"/*Rotate*/,
-      "DefaultValue": 0.0
+      "DefaultValue": -0.001
     },
     {
       "Id": "07e57992-ea38-4e3b-8d69-cb4e99ae587c"/*Resolution*/,
       "DefaultValue": {
-        "Width": 0,
-        "Height": 0
+        "X": 0,
+        "Y": 0
       }
+    },
+    {
+      "Id": "c9c66f57-5c8c-4481-9b9d-a8aa8569ac12"/*GenerateMips*/,
+      "DefaultValue": false
     }
   ],
   "Children": [
     {
-      "Id": "3b04103f-1853-4ca8-b753-ce42d42e16c0"/*Vector4ToFloat4*/,
+      "Id": "3b04103f-1853-4ca8-b753-ce42d42e16c0"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "3eade3a0-95d8-4c6e-835e-945af6dfd902"/*Vector4ToFloat4*/,
+      "Id": "3eade3a0-95d8-4c6e-835e-945af6dfd902"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "624bc5a4-40ec-4ca6-a01e-d7a4f44f989d"/*Vector2ToFloat2*/,
+      "Id": "624bc5a4-40ec-4ca6-a01e-d7a4f44f989d"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "17626164-1e7e-46cd-9904-caf0c6b6113c"/*Vector2ToFloat2*/,
+      "Id": "17626164-1e7e-46cd-9904-caf0c6b6113c"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
@@ -112,7 +116,7 @@
         {
           "Id": "1e4e274b-60b2-4fe8-b275-ebef80d520a7"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\generate\\img-generate-roundedRect.hlsl"
+          "Value": "Resources\\lib\\img\\generate\\RoundedRect.hlsl"
         },
         {
           "Id": "ff7cb999-aa3a-4e11-b9c8-d027bdb55ff6"/*OutputFormat*/,
@@ -128,7 +132,7 @@
       "Outputs": []
     },
     {
-      "Id": "d2b77680-42d7-4801-9eb1-73edaf4b9397"/*Vector4ToFloat4*/,
+      "Id": "d2b77680-42d7-4801-9eb1-73edaf4b9397"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
@@ -164,6 +168,12 @@
       "SourceSlotId": "c608e4c4-c545-45ed-8e37-95a53f6871d0",
       "TargetParentOrChildId": "624bc5a4-40ec-4ca6-a01e-d7a4f44f989d",
       "TargetSlotId": "36f14238-5bb8-4521-9533-f4d1e8fb802b"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "c9c66f57-5c8c-4481-9b9d-a8aa8569ac12",
+      "TargetParentOrChildId": "cae1229c-4a86-48e1-bf7f-ed6b3bea46bf",
+      "TargetSlotId": "480d6c19-a33c-48b3-b9fa-aaf8bd31e6d9"
     },
     {
       "SourceParentOrChildId": "3b04103f-1853-4ca8-b753-ce42d42e16c0",

@@ -1,0 +1,103 @@
+{
+  "Id": "6e32756e-4267-47f1-bad0-56ee8f58b070"/*_DispatchSceneDraws*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "dad22148-b87f-439a-9219-785bee63991c"/*SceneSetup*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "7a9ae929-7001-42ef-b7f2-f2e03bbb7206"/*VertexShader*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "59864da4-3658-4d7d-830e-6ef0d3cbb505"/*PixelShader*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "27405ecf-4994-4e67-8604-d86426345344"/*PrefilteredSpecular*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 540.0
+      }
+    },
+    {
+      "InputId": "3c19533b-c59a-470b-8712-073e71813c0c"/*BrdfLookup*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 585.0
+      }
+    },
+    {
+      "InputId": "60bae25c-64fe-40df-a2e6-a99297a92e0b"/*SamplerStates*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 630.0
+      }
+    },
+    {
+      "InputId": "af6c8349-f48e-4c5a-87fc-33421e255117"/*TransformBuffer*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 675.0
+      }
+    },
+    {
+      "InputId": "883aeabc-19c8-4754-bb3b-9152b491ffa7"/*FloatParameterBuffer*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 720.0
+      }
+    },
+    {
+      "InputId": "8dc3e6e7-0eef-4082-9dc8-4379a901e56b"/*FogParameterBuffer*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 765.0
+      }
+    },
+    {
+      "InputId": "db81ba63-8b7b-425c-9d6a-8f3caf0be70f"/*PointLightBuffer*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 810.0
+      }
+    },
+    {
+      "InputId": "46aee96f-a74e-491c-ae02-843ef62124f7"/*UseSceneMaterials*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 855.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "bda1583a-f5ea-4c3b-ae7d-0bac614d29ec"/*Output*/,
+      "Position": {
+        "X": 125.93762,
+        "Y": -1.0936643
+      }
+    }
+  ]
+}

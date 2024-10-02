@@ -1,12 +1,8 @@
 using System;
-using System.Numerics;
-using SharpDX;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using Point = T3.Core.DataTypes.Point;
 using Quaternion = System.Numerics.Quaternion;
@@ -17,7 +13,7 @@ namespace T3.Operators.Types.Id_bdd982c4_dfc4_48d6_888a_f067081dbe8e
     public class _MixPoints : Instance<_MixPoints>
     {
         [Output(Guid = "5bf5f55e-9099-4413-b17a-f49d042cb4ca")]
-        public readonly Slot<Point[]> Result = new Slot<Point[]>();
+        public readonly Slot<Point[]> Result = new();
 
         public _MixPoints()
         {
@@ -80,7 +76,7 @@ namespace T3.Operators.Types.Id_bdd982c4_dfc4_48d6_888a_f067081dbe8e
                         }
                         catch (Exception)
                         {
-                            Log.Error("incorrect index calculation: \nindex: {index}  bIndex {bIndex}  fraction: {fraction}  lengthA:{listA.Length}  lengthB:{listB.Length}");
+                            Log.Error("incorrect index calculation: \nindex: {index}  bIndex {bIndex}  fraction: {fraction}  lengthA:{listA.Length}  lengthB:{listB.Length}", this);
                         }
                     }
                     break;
@@ -126,19 +122,19 @@ namespace T3.Operators.Types.Id_bdd982c4_dfc4_48d6_888a_f067081dbe8e
         }
         
         [Input(Guid = "57F1D1D3-B437-4761-A5F5-0520CF820F58")]
-        public readonly InputSlot<Point[]> A = new InputSlot<Point[]>();
+        public readonly InputSlot<Point[]> A = new();
         
         [Input(Guid = "3119875E-A6EA-4D19-B536-513459A0DB98")]
-        public readonly InputSlot<Point[]> B = new InputSlot<Point[]>();
+        public readonly InputSlot<Point[]> B = new();
         
         [Input(Guid = "e8e8d26f-ccd1-4c15-b215-9c5bcfc133fb", MappedType = typeof(Modes))]
-        public readonly InputSlot<int> Mode = new InputSlot<int>();
+        public readonly InputSlot<int> Mode = new();
 
         [Input(Guid = "41BF7407-D81F-433C-9C73-41D2C831FE02")]
-        public readonly InputSlot<float> Factor = new InputSlot<float>();
+        public readonly InputSlot<float> Factor = new();
 
         [Input(Guid = "CACFC7CE-19AA-41B8-81FE-79E2D211C8F5", MappedType = typeof(Combinations))]
-        public readonly InputSlot<int> Combination = new InputSlot<int>();
+        public readonly InputSlot<int> Combination = new();
 
         
         // [Input(Guid = "6bcc7eb9-fd84-4eed-9817-ab43710425cf")]

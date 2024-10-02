@@ -4,14 +4,6 @@
   "Namespace": "lib.dx11.tex",
   "Inputs": [
     {
-      "Id": "dca953d6-bdc1-42eb-9a4d-5974c42cf45b"/*Size*/,
-      "DefaultValue": {
-        "X": 256,
-        "Y": 256,
-        "Z": 256
-      }
-    },
-    {
       "Id": "2e0fd6be-0c9e-4624-803c-178d1d80ea43"/*MipLevels*/,
       "DefaultValue": 1
     },
@@ -34,6 +26,14 @@
     {
       "Id": "1884edfa-622b-4b96-a081-95dc361e79f3"/*ResourceOptionFlags*/,
       "DefaultValue": "None"
+    },
+    {
+      "Id": "dca953d6-bdc1-42eb-9a4d-5974c42cf45b"/*Size*/,
+      "DefaultValue": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
     }
   ],
   "Children": [],

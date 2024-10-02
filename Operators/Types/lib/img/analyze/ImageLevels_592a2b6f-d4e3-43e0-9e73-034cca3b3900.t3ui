@@ -1,6 +1,6 @@
 {
   "Id": "592a2b6f-d4e3-43e0-9e73-034cca3b3900"/*ImageLevels*/,
-  "Description": "Visualize the image brightness distribution of an an image.",
+  "Description": "Visualizes the image brightness distribution of an image.",
   "InputUis": [
     {
       "InputId": "f434bac8-b7d8-4787-adf2-1782d6588da8"/*Texture2d*/,
@@ -16,7 +16,10 @@
         "X": -39.94302,
         "Y": 251.02048
       },
-      "Scale": 0.001
+      "Min": -1.0,
+      "Max": 1.0,
+      "Scale": 0.001,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "48e80f45-9685-4ded-aa1c-d05e16658c5a"/*Width*/,
@@ -31,9 +34,9 @@
         "X": -39.94302,
         "Y": 341.02048
       },
-      "Min": -180.0,
-      "Max": 180.0,
-      "Scale": 0.1
+      "Min": -90.0,
+      "Max": 90.0,
+      "Format": "{0:0.000}°"
     },
     {
       "InputId": "a8a4d660-7356-40de-8dc6-549a72b69973"/*ShowOriginal*/,
@@ -60,11 +63,7 @@
       }
     },
     {
-      "ChildId": "c2951663-1f4b-495e-9f97-c68b333f13b0"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "c2951663-1f4b-495e-9f97-c68b333f13b0"/*Vector2Components*/,
       "Position": {
         "X": 159.7204,
         "Y": 245.94528

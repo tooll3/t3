@@ -5,10 +5,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "740a4bd7-96b6-4e94-a40f-3f4ad4a5c473"/*_AnalyzeSound*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 1481.2106,
         "Y": 89.035645
@@ -16,10 +12,6 @@
     },
     {
       "ChildId": "7feb483d-ce7b-4b71-a3bc-c5af4bbdad27"/*Steps*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
       "Position": {
         "X": 750.0,
         "Y": 0.0
@@ -27,10 +19,6 @@
     },
     {
       "ChildId": "423b0b53-c250-425c-a3dd-f6fd16936e3c"/*Layer2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 1200.0,
         "Y": 0.0
@@ -38,10 +26,6 @@
     },
     {
       "ChildId": "467dfbfe-a1de-4657-bc76-9b463175c4ee"/*Execute*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": 1350.0,
         "Y": 0.0
@@ -49,10 +33,6 @@
     },
     {
       "ChildId": "06922394-76f4-4993-982a-483e28830792"/*_LegacyAudioReaction*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 600.0,
         "Y": 488.0
@@ -60,10 +40,6 @@
     },
     {
       "ChildId": "595ddbc1-ee8f-49e1-b32e-2f86135d6d2a"/*SampleGradient*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 600.0,
         "Y": 425.0
@@ -71,10 +47,6 @@
     },
     {
       "ChildId": "dcc00f69-f64f-4580-a159-cec3967348b7"/*Glow*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 900.0,
         "Y": 0.0
@@ -82,21 +54,13 @@
     },
     {
       "ChildId": "27d54710-ba64-4d83-b68d-41e1287a41b8"/*Time*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 600.0,
         "Y": 382.0
       }
     },
     {
-      "ChildId": "36e8475b-c6f5-4776-8207-ed3283188abe"/*Blob*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "36e8475b-c6f5-4776-8207-ed3283188abe"/*_BlobOld*/,
       "Position": {
         "X": 300.0,
         "Y": 0.0
@@ -104,10 +68,6 @@
     },
     {
       "ChildId": "454fdfbc-d173-4a02-a7d4-4b253333dade"/*PickTexture*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
       "Position": {
         "X": 450.0,
         "Y": 0.0
@@ -115,10 +75,6 @@
     },
     {
       "ChildId": "883924e2-3c17-4e91-aa4b-ae732ad67917"/*LinearGradient*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 300.0,
         "Y": 193.0
@@ -126,10 +82,6 @@
     },
     {
       "ChildId": "dc7bc2b2-dd52-42a0-95ac-942e11086e62"/*_LegacyAudioReaction*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 300.0,
         "Y": 256.0
@@ -137,10 +89,6 @@
     },
     {
       "ChildId": "4a99eefa-7e69-4378-b697-e5e7b5b6a9a5"/*_LegacyAudioReaction*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 150.0,
         "Y": 193.0
@@ -148,10 +96,6 @@
     },
     {
       "ChildId": "9cab172c-8259-4769-b251-ee8fdcb40501"/*MirrorRepeat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 600.0,
         "Y": 0.0
@@ -159,10 +103,6 @@
     },
     {
       "ChildId": "bd7e83bd-24c7-46ec-9763-5690f4197355"/*_Jitter2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 150.0,
         "Y": 0.0
@@ -170,10 +110,6 @@
     },
     {
       "ChildId": "b194ca63-5f9d-4ab6-9b1a-7f44122ecf63"/*_LegacyAudioReaction*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 2.0184472,
         "Y": 31.201576
@@ -181,10 +117,6 @@
     },
     {
       "ChildId": "39607d51-9ff8-4e4c-863f-9583e5d3def8"/*_LegacyAudioReaction*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 750.0,
         "Y": 551.0
@@ -192,10 +124,6 @@
     },
     {
       "ChildId": "338a41e9-7c37-41b3-9507-a221df7ddb33"/*_LegacyAudioReaction*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 450.0,
         "Y": 319.0
@@ -203,21 +131,13 @@
     },
     {
       "ChildId": "5520424e-d145-42e8-ab10-ef05843b3348"/*Text*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 1200.0,
         "Y": 654.0
       }
     },
     {
-      "ChildId": "ff4c52ea-9908-428f-bb5f-61e0aeeb99be"/*ScrambleString*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
+      "ChildId": "ff4c52ea-9908-428f-bb5f-61e0aeeb99be"/*BuildRandomString*/,
       "Position": {
         "X": 900.0,
         "Y": 654.0
@@ -225,10 +145,6 @@
     },
     {
       "ChildId": "7fc0333f-a718-47fa-bb54-27a514d636ed"/*MockStrings*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 450.0,
         "Y": 654.0
@@ -236,10 +152,6 @@
     },
     {
       "ChildId": "bccbe27c-e7c9-4174-af7d-88a6c846f09c"/*PickStringPart*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 600.0,
         "Y": 654.0
@@ -247,21 +159,13 @@
     },
     {
       "ChildId": "f13d2168-4dde-4fd3-80e4-ac49f4356dd5"/*CountInt*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 450.0,
         "Y": 697.0
       }
     },
     {
-      "ChildId": "f88c9f77-7f44-4f92-848f-5b776d694655"/*ToUpperCase*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "f88c9f77-7f44-4f92-848f-5b776d694655"/*ChangeCase*/,
       "Position": {
         "X": 1050.0,
         "Y": 654.0
@@ -269,10 +173,6 @@
     },
     {
       "ChildId": "2a2daedc-2a07-4d75-bc31-c429b110c493"/*_LegacyAudioReaction*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 750.0,
         "Y": 906.0
@@ -280,10 +180,6 @@
     },
     {
       "ChildId": "cf3d84ba-a757-4d7a-984b-39876803c4df"/*_LegacyAudioReaction*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 750.0,
         "Y": 949.0
@@ -291,10 +187,6 @@
     },
     {
       "ChildId": "fd0f3f1d-4806-4e82-9847-697917c80fcf"/*AdjustColors*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 1050.0,
         "Y": 0.0
@@ -302,10 +194,6 @@
     },
     {
       "ChildId": "83843fc4-6de3-452a-85c7-cbd43f86f049"/*_LegacyAudioReaction*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 300.0,
         "Y": 803.0
@@ -313,10 +201,6 @@
     },
     {
       "ChildId": "2c37b47b-1b0a-4419-b6ef-1956e19491a6"/*IsGreater*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 450.0,
         "Y": 803.0
@@ -324,10 +208,6 @@
     },
     {
       "ChildId": "966d2ba3-1e4b-4ba5-8a00-3c83b2de394f"/*PickString*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
       "Position": {
         "X": 750.0,
         "Y": 654.0
@@ -335,10 +215,6 @@
     },
     {
       "ChildId": "0665a502-9322-47a0-a714-3ad5cacdb37c"/*BoolToInt*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 600.0,
         "Y": 803.0
@@ -346,10 +222,6 @@
     },
     {
       "ChildId": "ea36f8d0-810c-4022-afd6-1ad37ea13dbd"/*AString*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 600.0,
         "Y": 760.0
@@ -357,10 +229,6 @@
     },
     {
       "ChildId": "b1159277-70ba-4227-b768-2339ebf38679"/*_LegacyAudioReaction*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 450.0,
         "Y": 425.0

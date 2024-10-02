@@ -1,12 +1,9 @@
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using SharpGLTF.Schema2;
 using SpoutDX;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using T3.Core;
-using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -35,7 +32,6 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
 
         private void Update(EvaluationContext context)
         {
-            Command.GetValue(context);
             var texture = Texture.GetValue(context);
             var senderName = SenderName.GetValue(context);
 
@@ -137,8 +133,8 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
                     currentDesc.Format != Format.R16G16B16A16_UNorm &&
                     currentDesc.Format != Format.R16G16B16A16_Float)
                 {
-                    Log.Debug("Spout output supports texture formats B8G8R8A8_UNorm, R8G8B8A8_UNorm, R16G16B16A16_UNorm and R16G16B16A16_Float.");
-                    Log.Debug("Please use a render target operator to change the format accordingly.");
+                    Log.Debug("Spout output supports texture formats B8G8R8A8_UNorm, R8G8B8A8_UNorm, R16G16B16A16_UNorm and R16G16B16A16_Float.", this);
+                    Log.Debug("Please use a render target operator to change the format accordingly.", this);
                     return false;
                 }
                 width = currentDesc.Width;
@@ -148,7 +144,7 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
             }
             catch (Exception e)
             {
-                Log.Debug("Initialization of Spout failed. Are Spout.dll and SpoutDX.dll present in the executable folder?");
+                Log.Debug("Initialization of Spout failed. Are Spout.dll and SpoutDX.dll present in the executable folder?", this);
                 Log.Debug(e.ToString());
                 _spoutDX?.ReleaseSender();
                 _spoutDX?.CloseDirectX11();
@@ -266,10 +262,7 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
         private readonly List<Texture2D> ImagesWithGpuAccess = new();
         // current image index (used for circular access of ImagesWithGpuAccess)
         private int _currentIndex;
-
-        [Input(Guid = "FE61FF9E-7F1B-4F69-9F4B-313F30B57124")]
-        public readonly InputSlot<Command> Command = new();
-
+        
         [Input(Guid = "d4b5c642-9cb9-4f41-8739-edbb9c6c4857")]
         public readonly InputSlot<Texture2D> Texture = new();
 

@@ -9,15 +9,19 @@ using Newtonsoft.Json;
 using SharpDX.Direct3D11;
 using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.InputUi.SimpleInputUis;
+using T3.Editor.Gui.Interaction.Timing;
+using T3.Editor.UiModel;
+
+// ReSharper disable StringLiteralTypo
 
 namespace T3.Editor.Gui.Graph
 {
-    public class PlayerExporter
+    public static class PlayerExporter
     {
         public static void ExportInstance(GraphCanvas graphCanvas, SymbolChildUi childUi)
         {
@@ -36,7 +40,7 @@ namespace T3.Editor.Gui.Graph
                 var exportInfo = new ExportInfo();
                 CollectChildSymbols(instance.Symbol, exportInfo);
 
-                string exportDir = "Export";
+                const string exportDir = "Export";
                 try
                 {
                     Directory.Delete(exportDir, true);
@@ -49,28 +53,38 @@ namespace T3.Editor.Gui.Graph
                 Directory.CreateDirectory(exportDir);
 
                 // Generate Operators assembly
-                var operatorAssemblySources = exportInfo.UniqueSymbols.Select(symbol =>
-                                                                              {
-                                                                                  var source = File.ReadAllText(Model.BuildFilepathForSymbol(symbol, Model.SourceExtension));
-                                                                                  return source;
-                                                                              }).ToList();
+                var operatorAssemblySources
+                    = exportInfo
+                     .UniqueSymbols
+                     .Select(symbol =>
+                             {
+                                 var filePathForSymbol = SymbolData.BuildFilepathForSymbol(symbol,
+                                                                                           SymbolData.SourceExtension);
+
+                                 if (!File.Exists(filePathForSymbol))
+                                 {
+                                     Log.Warning($"Can't find source file {filePathForSymbol}");
+                                     return string.Empty;
+                                 }
+
+                                 var source = File.ReadAllText(filePathForSymbol);
+                                 return source;
+                             }).ToList();
 
                 foreach (var file in Directory.GetFiles(@"Operators\Utils\", "*.cs", SearchOption.AllDirectories))
                 {
-                    operatorAssemblySources.Add(File.ReadAllText(file));    
+                    operatorAssemblySources.Add(File.ReadAllText(file));
                 }
-                
+
                 // Copy player and dependent assemblies to export dir
                 var currentDir = Directory.GetCurrentDirectory();
 
+                var playerPublishPath = currentDir + @"\Player\bin\Release\net6.0-windows\publish\";
                 var playerBuildPath = currentDir + @"\Player\bin\Release\net6.0-windows\";
-                var operatorDependenciesPath = Program.IsStandAlone
-                                                   ? @".\"
-                                                   : @"T3\bin\Release\net6.0-windows\";
 
-                if (!File.Exists(currentDir + @"\Player\bin\Release\net6.0-windows\Player.exe"))
+                if (!File.Exists(currentDir + @"\Player\bin\Release\net6.0-windows\publish\Player.exe"))
                 {
-                    Log.Error($"Can't find valid build in player release folder: (${playerBuildPath})");
+                    Log.Error($"Can't find valid build in player release folder: (${playerPublishPath})");
                     Log.Error("Please use your IDE to rebuild solution in release mode.");
                     return;
                 }
@@ -78,68 +92,31 @@ namespace T3.Editor.Gui.Graph
                 Log.Debug("Copy player resources...");
                 CopyFiles(new[]
                               {
-                                  playerBuildPath + "bass.dll",
-                                  playerBuildPath + "basswasapi.dll",
-                                  playerBuildPath + "Spout.dll",
+                                  playerPublishPath + "Svg.dll",
+                                  playerPublishPath + "Player.exe",
+
                                   playerBuildPath + "SpoutDX.dll",
-                                  playerBuildPath + "CommandLine.dll",
-                                  playerBuildPath + "Player.dll",
-                                  playerBuildPath + "Player.exe",
-                                  playerBuildPath + "Player.deps.json",
-                                  playerBuildPath + "Player.runtimeconfig.json",
-                                  playerBuildPath + "Player.runtimeconfig.dev.json",
-                                  
-                                  // FIXME: These dlls should be references as Operators dependencies but aren't found there
-                                  playerBuildPath + "SharpDX.Desktop.dll", 
+                                  playerBuildPath + "Spout.dll",
+                                  playerBuildPath + "Processing.NDI.Lib.x64.dll",
+                                  playerBuildPath + "basswasapi.dll",
+                                  playerBuildPath + "bass.dll",
+                                  playerBuildPath + "AbletonLinkDLL.dll",
+                                  playerBuildPath + "AbletonLink.dll",
+                                  playerBuildPath + "AbletonLink.deps.json",
+
+                                  playerBuildPath + "NAudio.Core.dll",
+                                  playerBuildPath + "Naudio.Midi.dll",
+
                               },
                           exportDir);
 
-                // NOTE: This is fallback because the Operators.dll compiled for stand alone runner
-                // does not contain all assembly references. So we add these here manually
-                if (Program.IsStandAlone)
-                {
-                    Log.Debug("Copy operator dependencies");
-                    CopyFiles(new[]
-                                  {
-                                      playerBuildPath + "Rug.OSC.dll",
-                                      operatorDependenciesPath + "Core.dll",
-                                      operatorDependenciesPath + "DdsImport.dll",
-                                      operatorDependenciesPath + "ManagedBass.Wasapi.dll",
-                                      operatorDependenciesPath + "ManagedBass.dll",
-                                      operatorDependenciesPath + "Newtonsoft.Json.dll",
-                                      operatorDependenciesPath + "Unsplasharp.dll",
-                                      operatorDependenciesPath + "SharpDX.Mathematics.dll",
-                                      operatorDependenciesPath + "SharpDX.Direct3D11.dll",
-                                      operatorDependenciesPath + "SharpDX.Direct2D1.dll",
-                                      operatorDependenciesPath + "SharpDX.DXGI.dll",
-                                      operatorDependenciesPath + "SharpDX.D3DCompiler.dll",
-                                      operatorDependenciesPath + "SharpDX.dll",
-                                      operatorDependenciesPath + "NAudio.Midi.dll",
-                                      operatorDependenciesPath + "NAudio.Core.dll",
-                                      operatorDependenciesPath + "Svg.dll",
-                                      operatorDependenciesPath + "Fizzler.dll",
-                                      operatorDependenciesPath + "SharpDX.MediaFoundation.dll",
-                                      operatorDependenciesPath + "OpenGL.Net.dll",
-                                      // unsure if all of the below needed but they allow compilation of Spout capable demos
-                                      operatorDependenciesPath + @"runtimes\win-x64\native\Std-symbols.dll",
-                                      operatorDependenciesPath + @"runtimes\win-x64\native\CppSharp.CppParser.dll",
-                                      operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.AST.dll",
-                                      operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.dll",
-                                      operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.Generator.dll",
-                                      operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.Parser.CSharp.dll",
-                                      operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.Parser.dll",
-                                      operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.Runtime.dll"
-                                  },
-                              exportDir);
-                }
-                
                 Log.Debug("Compiling Operators.dll...");
                 var references = CompileSymbolsFromSource(exportDir, operatorAssemblySources.ToArray());
-                
-                if(!Program.IsStandAlone)
+
+                if (!Program.IsStandAlone)
                 {
                     Log.Debug("Copy dependencies referenced in Operators.dll...");
-                    var referencedAssemblies = references.Where(r => r.Display.Contains(currentDir))
+                    var referencedAssemblies = references.Where(assembly => assembly.Display != null && assembly.Display.Contains(currentDir))
                                                          .Select(r => r.Display)
                                                          .Distinct()
                                                          .ToArray();
@@ -148,34 +125,33 @@ namespace T3.Editor.Gui.Graph
                 }
 
                 // Generate exported .t3 files
-                var json = new SymbolJson();
-                
-                var symbolExportDir = Path.Combine(exportDir, Model.OperatorTypesFolder);
+
+                var symbolExportDir = Path.Combine(exportDir, SymbolData.OperatorTypesFolder);
                 if (Directory.Exists(symbolExportDir))
                     Directory.Delete(symbolExportDir, true);
 
                 Directory.CreateDirectory(symbolExportDir);
                 foreach (var symbol in exportInfo.UniqueSymbols)
                 {
-                    using (var sw = new StreamWriter(symbolExportDir + symbol.Name + "_" + symbol.Id + ".t3"))
-                    using (var writer = new JsonTextWriter(sw))
-                    {
-                        json.Writer = writer;
-                        json.Writer.Formatting = Formatting.Indented;
-                        json.WriteSymbol(symbol);
-                    }
+                    using var sw = new StreamWriter(symbolExportDir + symbol.Name + "_" + symbol.Id + ".t3");
+                    using var writer = new JsonTextWriter(sw);
+                    
+                    writer.Formatting = Formatting.Indented;
+                    SymbolJson.WriteSymbol(symbol, writer);
                 }
 
                 // Copy referenced resources
-                Traverse(instance.Outputs.First(), exportInfo);
+                RecursivelyCollectExportData(instance.Outputs.First(), exportInfo);
                 exportInfo.PrintInfo();
                 var resourcePaths = exportInfo.UniqueResourcePaths;
 
                 {
-                    var soundtrack = childUi.SymbolChild.Symbol.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
+                    var symbolPlaybackSettings = childUi.SymbolChild.Symbol.PlaybackSettings;
+
+                    var soundtrack = symbolPlaybackSettings?.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
                     if (soundtrack == null)
                     {
-                        if (SoundtrackUtils.TryFindingSoundtrack(instance, out var otherSoundtrack))
+                        if (PlaybackUtils.TryFindingSoundtrack(out var otherSoundtrack))
                         {
                             Log.Warning($"You should define soundtracks withing the exported operators. Falling back to {otherSoundtrack.FilePath} set in parent...");
                             resourcePaths.Add(otherSoundtrack.FilePath);
@@ -194,19 +170,15 @@ namespace T3.Editor.Gui.Graph
 
                 resourcePaths.Add(@"projectSettings.json");
 
-                resourcePaths.Add(@"Resources\lib\shared\bias.hlsl");
-                resourcePaths.Add(@"Resources\lib\shared\hash-functions.hlsl");
-                resourcePaths.Add(@"Resources\lib\points\spatial-hash-map\hash-map-settings.hlsl");
+                resourcePaths.UnionWith(Directory.GetFiles(@"Resources\lib\shared\"));
 
-                resourcePaths.Add(@"Resources\lib\shared\noise-functions.hlsl");
-                resourcePaths.Add(@"Resources\lib\shared\particle.hlsl");
-                resourcePaths.Add(@"Resources\lib\shared\pbr.hlsl");
-                resourcePaths.Add(@"Resources\lib\shared\point.hlsl");
-                resourcePaths.Add(@"Resources\lib\shared\point-light.hlsl");
+                resourcePaths.Add(@"Resources\lib\points\spatial-hash-map\hash-map-settings.hlsl");
 
                 resourcePaths.Add(@"Resources\lib\dx11\fullscreen-texture.hlsl");
                 resourcePaths.Add(@"Resources\lib\img\internal\resolve-multisampled-depth-buffer-cs.hlsl");
+                resourcePaths.Add(@"Resources\lib\cs\CombineGltfChannels-cs.hlsl");
 
+                resourcePaths.Add(@"Resources\common\images\BRDF-LookUp.png");
                 resourcePaths.Add(@"Resources\common\images\BRDF-LookUp.dds");
                 resourcePaths.Add(@"Resources\common\HDRI\studio_small_08-prefiltered.dds");
 
@@ -224,7 +196,14 @@ namespace T3.Editor.Gui.Graph
 
                         var targetPath = exportDir + Path.DirectorySeparatorChar + resourcePath;
 
-                        var targetDir = new DirectoryInfo(targetPath).Parent.FullName;
+                        var targetDirectoryInfo = new DirectoryInfo(targetPath);
+                        if (targetDirectoryInfo.Parent == null)
+                        {
+                            Log.Warning($"Can't access parent of {targetPath}");
+                            continue;
+                        }
+                        
+                        var targetDir = targetDirectoryInfo.Parent.FullName;
                         if (!Directory.Exists(targetDir))
                             Directory.CreateDirectory(targetDir);
 
@@ -255,9 +234,9 @@ namespace T3.Editor.Gui.Graph
 
         private class ExportInfo
         {
-            private HashSet<Instance> CollectedInstances { get; } = new HashSet<Instance>();
-            public HashSet<Symbol> UniqueSymbols { get; } = new HashSet<Symbol>();
-            public HashSet<string> UniqueResourcePaths { get; } = new HashSet<string>();
+            private HashSet<Instance> CollectedInstances { get; } = new();
+            public HashSet<Symbol> UniqueSymbols { get; } = new();
+            public HashSet<string> UniqueResourcePaths { get; } = new();
 
             public bool AddInstance(Instance instance)
             {
@@ -325,13 +304,13 @@ namespace T3.Editor.Gui.Graph
             }
         }
 
-        private static void Traverse(ISlot slot, ExportInfo exportInfo)
+        private static void RecursivelyCollectExportData(ISlot slot, ExportInfo exportInfo)
         {
             if (slot is IInputSlot)
             {
                 if (slot.IsConnected)
                 {
-                    Traverse(slot.GetConnection(0), exportInfo);
+                    RecursivelyCollectExportData(slot.GetConnection(0), exportInfo);
                 }
 
                 CheckInputForResourcePath(slot, exportInfo);
@@ -339,7 +318,7 @@ namespace T3.Editor.Gui.Graph
             else if (slot.IsConnected)
             {
                 // slot is an output of an composition op
-                Traverse(slot.GetConnection(0), exportInfo);
+                RecursivelyCollectExportData(slot.GetConnection(0), exportInfo);
                 exportInfo.AddInstance(slot.Parent);
             }
             else
@@ -353,20 +332,20 @@ namespace T3.Editor.Gui.Graph
                 {
                     CheckInputForResourcePath(input, exportInfo);
 
-                    if (input.IsConnected)
+                    if (!input.IsConnected)
+                        continue;
+
+                    if (input.IsMultiInput)
                     {
-                        if (input.IsMultiInput)
+                        var multiInput = (IMultiInputSlot)input;
+                        foreach (var entry in multiInput.GetCollectedInputs())
                         {
-                            var multiInput = (IMultiInputSlot)input;
-                            foreach (var entry in multiInput.GetCollectedInputs())
-                            {
-                                Traverse(entry, exportInfo);
-                            }
+                            RecursivelyCollectExportData(entry, exportInfo);
                         }
-                        else
-                        {
-                            Traverse(input.GetConnection(0), exportInfo);
-                        }
+                    }
+                    else
+                    {
+                        RecursivelyCollectExportData(input.GetConnection(0), exportInfo);
                     }
                 }
             }
@@ -376,38 +355,70 @@ namespace T3.Editor.Gui.Graph
         {
             var parent = inputSlot.Parent;
             var inputUi = SymbolUiRegistry.Entries[parent.Symbol.Id].InputUis[inputSlot.Id];
-            if (inputUi is StringInputUi stringInputUi && stringInputUi.Usage == StringInputUi.UsageType.FilePath)
+            if (inputUi is not StringInputUi stringInputUi)
+                return;
+
+            if (stringInputUi.Usage != StringInputUi.UsageType.FilePath && stringInputUi.Usage != StringInputUi.UsageType.DirectoryPath)
+                return;
+
+            var compositionSymbol = parent.Parent.Symbol;
+            var parentSymbolChild = compositionSymbol.Children.Single(child => child.Id == parent.SymbolChildId);
+            var value = parentSymbolChild.Inputs[inputSlot.Id].Value;
+            if (value is not InputValue<string> stringValue)
+                return;
+
+            switch (stringInputUi.Usage)
             {
-                var compositionSymbol = parent.Parent.Symbol;
-                var parentSymbolChild = compositionSymbol.Children.Single(child => child.Id == parent.SymbolChildId);
-                var value = parentSymbolChild.InputValues[inputSlot.Id].Value;
-                if (value is InputValue<string> stringValue)
+                case StringInputUi.UsageType.FilePath:
                 {
                     var resourcePath = stringValue.Value;
                     exportInfo.AddResourcePath(resourcePath);
+
+                    // Copy related font textures
                     if (resourcePath.EndsWith(".fnt"))
                     {
                         exportInfo.AddResourcePath(resourcePath.Replace(".fnt", ".png"));
                     }
+
+                    break;
+                }
+                case StringInputUi.UsageType.DirectoryPath:
+                {
+                    var resourceDirectory = stringValue.Value;
+                    if (!Directory.Exists(resourceDirectory))
+                        break;
+
+                    if (!resourceDirectory.StartsWith("Resources"))
+                    {
+                        Log.Debug($"skipping folder {resourceDirectory} because not in Resources/ folder...");
+                        break;
+                    }
+
+                    Log.Debug($"Export all entries folder {resourceDirectory}...");
+                    foreach (var resourcePath in Directory.GetFiles(resourceDirectory))
+                    {
+                        exportInfo.AddResourcePath(resourcePath);
+                    }
+
+                    break;
                 }
             }
         }
 
-        private static List<MetadataReference> CompileSymbolsFromSource(string exportPath, params string[] sources) 
+        private static List<MetadataReference> CompileSymbolsFromSource(string exportPath, params string[] sources)
         {
             var operatorsAssembly = ResourceManager.Instance().OperatorsAssembly;
             var referencedAssembliesNames = operatorsAssembly.GetReferencedAssemblies(); // todo: ugly
             var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length);
             var coreAssembly = typeof(ResourceManager).Assembly;
             referencedAssemblies.Add(MetadataReference.CreateFromFile(coreAssembly.Location));
-            // referencedAssemblies.Add(MetadataReference.CreateFromFile(operatorsAssembly.Location));
             foreach (var asmName in referencedAssembliesNames)
             {
                 var asm = Assembly.Load(asmName);
                 referencedAssemblies.Add(MetadataReference.CreateFromFile(asm.Location));
                 Log.Debug($"Loaded from {asm} {asm.Location}");
 
-                // in order to get dependencies of the used assemblies that are not part of T3 references itself
+                // In order to get dependencies of the used assemblies that are not part of T3 references itself
                 var subAsmNames = asm.GetReferencedAssemblies();
                 foreach (var subAsmName in subAsmNames)
                 {
@@ -417,7 +428,7 @@ namespace T3.Editor.Gui.Graph
                     referencedAssemblies.Add(MetadataReference.CreateFromFile(subAsm.Location));
                 }
             }
-        
+
             var syntaxTrees = sources.Select(s => CSharpSyntaxTree.ParseText(s));
             var compilation = CSharpCompilation.Create("Operators",
                                                        syntaxTrees,
@@ -426,23 +437,23 @@ namespace T3.Editor.Gui.Graph
                                                           .WithOptimizationLevel(OptimizationLevel.Release)
                                                           .WithAllowUnsafe(true));
 
-            using var dllStream = new FileStream( Path.Combine(exportPath, "Operators.dll"), FileMode.Create);
+            using var dllStream = new FileStream(Path.Combine(exportPath, "Operators.dll"), FileMode.Create);
             using var pdbStream = new MemoryStream();
-            
+
             var emitResult = compilation.Emit(dllStream, pdbStream);
             Log.Info($"compilation results of 'export':");
-                
+
             if (!emitResult.Success)
             {
                 Log.Debug("Failed!");
-                
+
                 Log.Debug("Source codes:");
                 foreach (var source in sources)
                 {
                     Log.Debug(source);
                     Log.Debug("~~~~~~~~~~~~~~~~~~");
                 }
-                
+
                 Log.Debug("Messages");
                 foreach (var entry in emitResult.Diagnostics)
                 {

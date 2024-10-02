@@ -1,0 +1,175 @@
+{
+  "Id": "e92bdb18-4a42-4a92-aacc-45765e5862bf"/*SpringVec3Example*/,
+  "Description": "",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "f76e8753-adde-4521-b007-a8875422b459"/*DrawMesh*/,
+      "Position": {
+        "X": 568.42505,
+        "Y": 331.01367
+      }
+    },
+    {
+      "ChildId": "35d8302e-80d6-4540-a3a4-f395c99c4a7f"/*AnimVec3*/,
+      "Position": {
+        "X": -296.18378,
+        "Y": 454.18762
+      }
+    },
+    {
+      "ChildId": "c46c8f76-2f58-440e-8c80-432da68d7632"/*SpringVec3*/,
+      "Comment": "Position",
+      "Position": {
+        "X": 540.8412,
+        "Y": 451.5415
+      }
+    },
+    {
+      "ChildId": "dc07b56f-6acb-43e5-afe5-dfc9bb34e77b"/*SpringVec2*/,
+      "Comment": "Just for the sake of showing [SpringVec2] ",
+      "Position": {
+        "X": 1651.571,
+        "Y": 221.04785
+      }
+    },
+    {
+      "ChildId": "371812ed-bc02-4788-a21b-a8c7a19caa7e"/*AnimVec2*/,
+      "Position": {
+        "X": 1501.571,
+        "Y": 221.04785
+      }
+    },
+    {
+      "ChildId": "42c894dc-24bd-46f2-a8ba-ce1d58693209"/*Layer2d*/,
+      "Position": {
+        "X": 1801.5717,
+        "Y": 221.04785
+      }
+    },
+    {
+      "ChildId": "27333cca-9e9a-4204-90f6-afb91c4a4824"/*Camera*/,
+      "Position": {
+        "X": 1632.5471,
+        "Y": 369.255
+      }
+    },
+    {
+      "ChildId": "19093da4-0df6-4c13-821b-5392182c3143"/*RenderTarget*/,
+      "Position": {
+        "X": 2259.775,
+        "Y": 400.76355
+      }
+    },
+    {
+      "ChildId": "0d5f7e71-97fa-46c6-a6e4-0ab591063a5a"/*SpringVec3*/,
+      "Comment": "Rotation",
+      "Position": {
+        "X": 540.8412,
+        "Y": 507.5415
+      }
+    },
+    {
+      "ChildId": "e388fcb8-ab65-4f2d-b9e3-fd36471b2985"/*Vector3Components*/,
+      "Comment": "switching X and Z so the rotation follows the movement",
+      "Position": {
+        "X": 32.127167,
+        "Y": 552.3927
+      }
+    },
+    {
+      "ChildId": "14e9444c-9344-4dc7-acf3-013c2f51e08d"/*Vector3*/,
+      "Position": {
+        "X": 204.92145,
+        "Y": 543.8126
+      }
+    },
+    {
+      "ChildId": "8386cdf2-6dcd-4c65-8ded-4329de6fb536"/*ScaleVector3*/,
+      "Position": {
+        "X": -116.98602,
+        "Y": 522.54895
+      }
+    },
+    {
+      "ChildId": "d96482c7-497e-4611-8102-6d2b7f3f8fbf"/*LoadObj*/,
+      "Position": {
+        "X": 418.42505,
+        "Y": 331.01367
+      }
+    },
+    {
+      "ChildId": "a396b68e-3f94-4a07-af15-66f98ca19bf6"/*MidiInput*/,
+      "Position": {
+        "X": -129.46875,
+        "Y": 574.4545
+      }
+    },
+    {
+      "ChildId": "8d3cae5c-33e8-4173-abb7-b4dda31915b2"/*Group*/,
+      "Comment": "Group is like Parent and child hierarchy in other 3D softwares",
+      "Position": {
+        "X": 1445.859,
+        "Y": 357.15527
+      }
+    },
+    {
+      "ChildId": "fc81ee64-82e2-446e-8d0c-4bd5db11c7f4"/*CylinderMesh*/,
+      "Position": {
+        "X": 237.1073,
+        "Y": 192.55798
+      }
+    },
+    {
+      "ChildId": "b7a6c16e-8f8a-4910-bb32-7951b614b5de"/*DrawMesh*/,
+      "Position": {
+        "X": 424.8363,
+        "Y": 175.17126
+      }
+    },
+    {
+      "ChildId": "5cbc8859-10ba-4155-898e-6086545b5b2f"/*Transform*/,
+      "Position": {
+        "X": 786.83936,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "6f16e4e1-e547-466b-8f8c-67c9306b5f9d"/*Group*/,
+      "Position": {
+        "X": 1224.4468,
+        "Y": 264.6836
+      }
+    },
+    {
+      "ChildId": "f25f11d0-30bf-4348-820b-321b0e82c322"/*Group*/,
+      "Position": {
+        "X": 998.90936,
+        "Y": 92.2464
+      }
+    },
+    {
+      "ChildId": "312ed840-c956-4abc-9292-14c65cd9c1e7"/*Execute*/,
+      "Position": {
+        "X": 1982.419,
+        "Y": 411.10687
+      }
+    },
+    {
+      "ChildId": "146dd775-133d-4ae4-9ee5-65ac987a763f"/*Text*/,
+      "Position": {
+        "X": 1240.0581,
+        "Y": 629.0673
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "15daaf5a-f3d9-4746-bc8a-f9cebb490f9c"/*ColorBuffer*/,
+      "Position": {
+        "X": 2457.585,
+        "Y": 402.3916
+      }
+    }
+  ]
+}

@@ -16,11 +16,17 @@ namespace T3.Operators.Types.Id_97032147_ba0c_4454_b878_1048d8faea05
 
         private void Update(EvaluationContext context)
         {
-            Result.Value = -A.GetValue(context);
+            var shouldInvert = Invert.GetValue(context);
+
+            var value = A.GetValue(context);
+            var sign = shouldInvert ? -1 : 1;
+            Result.Value = sign * value;
         }
         
         [Input(Guid = "020acbf3-de2d-48f6-8515-960014bb1aa9")]
         public readonly InputSlot<float> A = new();
 
+        [Input(Guid = "16CECA8F-DD07-4EE9-9BA2-38087E65E802")]
+        public readonly InputSlot<bool> Invert = new();
     }
 }

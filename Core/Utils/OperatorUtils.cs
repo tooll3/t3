@@ -29,6 +29,9 @@ namespace T3.Core.Utils
 
         public static List<Guid> BuildIdPathForInstance(Instance instance)
         {
+            if (instance == null)
+                return null;
+            
             var result = new List<Guid>(6);
             do
             {

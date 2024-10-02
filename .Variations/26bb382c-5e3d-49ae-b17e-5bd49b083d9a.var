@@ -1,0 +1,42 @@
+{
+  "Id": "26bb382c-5e3d-49ae-b17e-5bd49b083d9a",
+  "Variations": [
+    {
+      "Id": "87c6e1d5-f1ca-4054-84bb-da6481956591",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "Wiggle",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "a962fea7-b59f-49f4-83f0-a7e8b625e57c": 1.5,
+          "b19de430-98f0-45c8-87c0-67d563ae5b5a": 206.0,
+          "1951e2f8-29f5-461f-beca-2535b186956a": 3.5,
+          "235158be-dc6f-45ad-81fa-8b1b2ef0e1bd": 1.82
+        }
+      }
+    },
+    {
+      "Id": "af65fa98-8572-4b80-b011-abd272a1228c",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "iMappTest1",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "a962fea7-b59f-49f4-83f0-a7e8b625e57c": 0.42,
+          "ac33e215-86cc-4659-bc87-e0d3c2325aa7": 0.31,
+          "b19de430-98f0-45c8-87c0-67d563ae5b5a": 720.0,
+          "1951e2f8-29f5-461f-beca-2535b186956a": 1020.0,
+          "235158be-dc6f-45ad-81fa-8b1b2ef0e1bd": 1.82
+        }
+      }
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "Id": "e0849edd-ea1b-4657-b22d-5aa646318aa8"/*_AssembleMeshBuffers*/,
-  "Description": "An internal operator that combines structed buffers for Vertice and FaceIndices into a MeshBuffer definition.\n\nIt's the reversal of [_MeshBufferComponents].",
+  "Description": "An internal operator that combines structured buffers for Vertices and Face Indices into a MeshBuffer definition.\n\nIt's the reversal of [_MeshBufferComponents].",
   "InputUis": [
     {
       "InputId": "5e82e351-e8a8-4594-83e3-e86c888d0588"/*PrepareCommand*/,

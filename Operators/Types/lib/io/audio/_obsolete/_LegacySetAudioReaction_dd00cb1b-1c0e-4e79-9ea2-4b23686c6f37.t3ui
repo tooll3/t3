@@ -20,21 +20,13 @@
   "SymbolChildUis": [
     {
       "ChildId": "a7a36d51-2b6d-459d-a211-3015c475d363"/*_AnalyzeSound*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": -171.27321,
         "Y": 224.7528
       }
     },
     {
-      "ChildId": "753abb28-3707-49ab-8781-e1612220d3d3"/*SetContextVariable*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "753abb28-3707-49ab-8781-e1612220d3d3"/*SetFloatVar*/,
       "Position": {
         "X": 24.630577,
         "Y": 137.50885
@@ -42,10 +34,6 @@
     },
     {
       "ChildId": "a3f5be43-ac3b-4e5b-a433-292c9ebcfe1f"/*Execute*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": 212.33075,
         "Y": 64.50675

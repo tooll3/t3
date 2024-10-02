@@ -6,58 +6,33 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Editor.Gui.InputUi.SimpleInputUis;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Interaction
 {
     public class FileReferenceOperations
     {
-        private static void FindMissingPathsInSymbol(Symbol symbol)
+        public static void FixOperatorFilepathsCommand_Executed()
         {
-            foreach (var symbolChild in symbol.Children)
+            AssetFiles.Clear();
+            ScanAssetDirectory(ResourceManager.ResourcesFolder);
+            foreach (var ( key, value) in AssetFiles)
             {
-                //var symbolUi = SymbolUiRegistry.Entries[symbol.Id];
+                Log.Debug($"found {key} in {value}");
+            }
 
-                foreach (var input in symbolChild.Symbol.InputDefinitions)
+                
+            foreach (var symbol in SymbolRegistry.Entries.Values)
+            {
+                var symbolUpdated = FindMissingPathsInSymbol(symbol);
+                if (symbolUpdated)
                 {
-                    var symbolChildUi = SymbolUiRegistry.Entries[symbolChild.Symbol.Id];    
-                    var inputUi = symbolChildUi.InputUis[input.Id];
-                    if (!(inputUi is StringInputUi stringInputUi))
-                        continue;
-
-                    if (stringInputUi.Usage != StringInputUi.UsageType.FilePath)
-                        continue;
-
-                    if (!symbolChild.InputValues.ContainsKey(input.Id))
-                        continue;
                     
-                    var inputValue = symbolChild.InputValues[input.Id].IsDefault
-                                         ? symbolChild.InputValues[input.Id].DefaultValue
-                                         : symbolChild.InputValues[input.Id].Value;
-
-                    var stringInputValue = inputValue as InputValue<string>;
-                    if (stringInputValue == null)
-                        continue;
-
-                    var path = stringInputValue.Value;
-
-                    if (string.IsNullOrEmpty(path))
-                        continue;
-                    
-                    if (File.Exists(path))
-                        continue;
-                    
-                    Log.Warning($"Missing File: {path} in  {symbol.Name}/{symbolChild.ReadableName}.{input.Name}", symbolChild.Id);
-                    var basename = Path.GetFileName(path);
-                        
-                    if (!AssetFiles.ContainsKey(basename))
-                        continue;
-                        
-                    Log.Info($"  -> fixed with: {AssetFiles[basename]}");
-                    stringInputValue.Value =AssetFiles[basename];
                 }
             }
         }
 
+        
         private static void ScanAssetDirectory(string path)
         {
             string[] files = new string[0];
@@ -92,23 +67,57 @@ namespace T3.Editor.Gui.Graph.Interaction
                 ScanAssetDirectory(path + "\\" + dirname);
             }
         }
-
-        public static void FixOperatorFilepathsCommand_Executed()
+        
+        private static bool FindMissingPathsInSymbol(Symbol symbol)
         {
-            AssetFiles.Clear();
-            ScanAssetDirectory(ResourceManager.ResourcesFolder);
-            foreach (var ( key, value) in AssetFiles)
+            var symbolUpdated = false;
+            foreach (var symbolChild in symbol.Children)
             {
-                Log.Debug($"found {key} in {value}");
+                foreach (var input in symbolChild.Symbol.InputDefinitions)
+                {
+                    var symbolChildUi = SymbolUiRegistry.Entries[symbolChild.Symbol.Id];    
+                    var inputUi = symbolChildUi.InputUis[input.Id];
+                    if (inputUi is not StringInputUi stringInputUi)
+                        continue;
+
+                    if (stringInputUi.Usage != StringInputUi.UsageType.FilePath)
+                        continue;
+
+                    if (!symbolChild.Inputs.ContainsKey(input.Id))
+                        continue;
+                    
+                    var inputValue = symbolChild.Inputs[input.Id].IsDefault
+                                         ? symbolChild.Inputs[input.Id].DefaultValue
+                                         : symbolChild.Inputs[input.Id].Value;
+
+                    var stringInputValue = inputValue as InputValue<string>;
+                    if (stringInputValue == null)
+                        continue;
+
+                    var path = stringInputValue.Value;
+
+                    if (string.IsNullOrEmpty(path))
+                        continue;
+                    
+                    if (File.Exists(path))
+                        continue;
+                    
+                    Log.Warning($"Missing File: {path} in  {symbol.Name}/{symbolChild.ReadableName}.{input.Name}", symbolChild.Id);
+                    var basename = Path.GetFileName(path);
+                        
+                    if (!AssetFiles.ContainsKey(basename))
+                        continue;
+                        
+                    Log.Info($"  -> fixed with: {AssetFiles[basename]}");
+                    stringInputValue.Value =AssetFiles[basename];
+                    symbol.InvalidateInputInAllChildInstances(input.Id, symbolChild.Id);
+                    symbolUpdated = true;
+                }
             }
 
-                
-            foreach (var symbol in SymbolRegistry.Entries.Values)
-            {
-                FindMissingPathsInSymbol(symbol);
-            }
+            return symbolUpdated;
         }
-
-        private static readonly Dictionary<string, string> AssetFiles = new Dictionary<string, string>();
+        
+        private static readonly Dictionary<string, string> AssetFiles = new();
     }
 }

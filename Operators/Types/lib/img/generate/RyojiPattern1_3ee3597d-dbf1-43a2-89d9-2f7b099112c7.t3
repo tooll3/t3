@@ -35,6 +35,10 @@
       }
     },
     {
+      "Id": "19a0d33c-4c0e-40ce-8344-5ae17cf081e5"/*Iterations*/,
+      "DefaultValue": 7.0
+    },
+    {
       "Id": "c4891643-ed6a-4af6-9a2f-02917cf26f24"/*Splits*/,
       "DefaultValue": {
         "X": 4.0,
@@ -74,10 +78,6 @@
       "DefaultValue": 0.75
     },
     {
-      "Id": "19a0d33c-4c0e-40ce-8344-5ae17cf081e5"/*Iterations*/,
-      "DefaultValue": 7.0
-    },
-    {
       "Id": "f628c5b7-0278-4d60-80ad-6670cd284cf3"/*Seed*/,
       "DefaultValue": 0.0
     },
@@ -100,8 +100,8 @@
     {
       "Id": "dc471f4a-167c-4283-b4fc-55a2e453316e"/*Resolution*/,
       "DefaultValue": {
-        "Width": 0,
-        "Height": 0
+        "X": 0,
+        "Y": 0
       }
     },
     {
@@ -111,13 +111,13 @@
   ],
   "Children": [
     {
-      "Id": "66d6c4ef-6b9a-468a-98a9-862362945850"/*Vector4ToFloat4*/,
+      "Id": "66d6c4ef-6b9a-468a-98a9-862362945850"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "fa231b23-ad2d-4082-804f-9489e27abe5d"/*Vector4ToFloat4*/,
+      "Id": "fa231b23-ad2d-4082-804f-9489e27abe5d"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
@@ -129,7 +129,7 @@
         {
           "Id": "16dce9bc-02d9-48f8-b07e-94a9af48d27b"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\generate\\img-generate-DotPattern1.hlsl"
+          "Value": "Resources\\lib\\img\\generate\\RyojiPattern1.hlsl"
         },
         {
           "Id": "c80d3700-ceb6-43d0-9ffd-f4854e67a41d"/*Wrap*/,
@@ -145,37 +145,37 @@
       "Outputs": []
     },
     {
-      "Id": "ca157645-9e0b-4166-8151-60c53ab86ccb"/*Vector2ToFloat2*/,
+      "Id": "ca157645-9e0b-4166-8151-60c53ab86ccb"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "5b6562db-76d6-4907-bd27-82175342e596"/*Vector2ToFloat2*/,
+      "Id": "5b6562db-76d6-4907-bd27-82175342e596"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "503052e3-fc4b-40a7-a27b-d2146a487903"/*Vector4ToFloat4*/,
+      "Id": "503052e3-fc4b-40a7-a27b-d2146a487903"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "90518119-afb7-4432-a290-860c0699081f"/*Vector2ToFloat2*/,
+      "Id": "90518119-afb7-4432-a290-860c0699081f"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "a5f0011f-2ae1-437e-89cf-37609de862d2"/*Vector2ToFloat2*/,
+      "Id": "a5f0011f-2ae1-437e-89cf-37609de862d2"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "c6268984-b834-42a9-a31f-77b4de44b27b"/*Vector2ToFloat2*/,
+      "Id": "c6268984-b834-42a9-a31f-77b4de44b27b"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []

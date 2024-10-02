@@ -1,7 +1,5 @@
 using System;
-using System.Net.Mime;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -80,6 +78,6 @@ namespace T3.Operators.Types.Id_0b3436db_e283_436e_ba85_2f3a1de76a9d
         }
 
         [Input(Guid = "{76CC3811-4AE0-48B2-A119-890DB5A4EEB2}")]
-        public readonly InputSlot<string> Path = new InputSlot<string>();        
+        public readonly InputSlot<string> Path = new();        
     }
 }

@@ -17,7 +17,11 @@
     },
     {
       "Id": "4ab2a742-7f3f-4d96-b67e-73e14b4a8f47"/*LogLevel*/,
-      "DefaultValue": 2
+      "DefaultValue": 0
+    },
+    {
+      "Id": "da431996-4c4c-4cdc-9723-9116bbb5440c"/*ClearAfterExecution*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

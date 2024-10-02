@@ -11,12 +11,14 @@
         
         public class ConfigData
         {
+            public bool TimeClipSuspending = true;
             public string MainOperatorName = "";
-            public float AudioResyncThreshold = 1.65f / 60f;
+            public float AudioResyncThreshold = 0.04f;
+            public bool EnablePlaybackControlWithKeyboard = true;
+            public bool WindowedMode = false;
             
-            public string AudioInputDeviceName = string.Empty;
-            public float AudioGainFactor = 1;
-            public float AudioDecayFactor = 0.98f;
+            public string LimitMidiDeviceCapture = null; 
+            public int DefaultOscPort = -1; 
         }
     }
 }

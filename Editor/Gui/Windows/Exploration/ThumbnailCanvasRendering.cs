@@ -2,7 +2,7 @@
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
-using T3.Core;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
@@ -29,7 +29,7 @@ namespace T3.Editor.Gui.Windows.Exploration
 
             EvaluationContext = new EvaluationContext()
                                     {
-                                        RequestedResolution = new Size2((int)thumbnailSize.X, (int)thumbnailSize.Y)
+                                        RequestedResolution = new Int2((int)thumbnailSize.X, (int)thumbnailSize.Y)
                                     };
 
             var description = new Texture2DDescription()
@@ -71,9 +71,9 @@ namespace T3.Editor.Gui.Windows.Exploration
                                                                0.0f, 1.0f));
             deviceContext.OutputMerger.SetTargets(_canvasTextureRtv);
 
-            var vertexShader = resourceManager.GetVertexShader(SharedResources.FullScreenVertexShaderId);
+            var vertexShader = SharedResources.FullScreenVertexShaderResource.Shader;
             deviceContext.VertexShader.Set(vertexShader);
-            var pixelShader = resourceManager.GetPixelShader(SharedResources.FullScreenPixelShaderId);
+            var pixelShader = SharedResources.FullScreenPixelShaderResource.Shader;
             deviceContext.PixelShader.Set(pixelShader);
             deviceContext.PixelShader.SetShaderResource(0, previewTextureSrv);
 

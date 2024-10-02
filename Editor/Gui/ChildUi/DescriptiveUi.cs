@@ -7,6 +7,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.ChildUi
 {
@@ -14,7 +15,7 @@ namespace T3.Editor.Gui.ChildUi
     {
         public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect area)
         {
-            if (instance is not IDescriptiveGraphNode descriptiveGraphNode )
+            if (instance is not IDescriptiveFilename descriptiveGraphNode )
                 return SymbolChildUi.CustomUiResult.None;
             
             drawList.PushClipRect(area.Min, area.Max, true);
@@ -22,7 +23,7 @@ namespace T3.Editor.Gui.ChildUi
             // Label if instance has title
             var symbolChild = instance.Parent.Symbol.Children.Single(c => c.Id == instance.SymbolChildId);
             
-            WidgetElements.DrawTitle(drawList, area, !string.IsNullOrEmpty(symbolChild.Name) ? symbolChild.Name : symbolChild.Symbol.Name);
+            WidgetElements.DrawSmallTitle(drawList, area, !string.IsNullOrEmpty(symbolChild.Name) ? symbolChild.Name : symbolChild.Symbol.Name);
 
             var slot = descriptiveGraphNode.GetSourcePathSlot();
             var filePath = slot?.TypedInputValue?.Value;

@@ -1,0 +1,29 @@
+{
+  "Id": "80032e95-90ec-486d-92a4-ff3d225e556e"/*ScreenCapture*/,
+  "InputUis": [
+    {
+      "InputId": "633199d4-1950-48e3-ace9-0e266c7e5771"/*ScreenIndex*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "9acd5b21-cac7-4a1e-b7a8-1552ad0a907d"/*TimeOut*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "16d64181-abfe-4b34-98c3-87b88d049e50"/*TextureOutput*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

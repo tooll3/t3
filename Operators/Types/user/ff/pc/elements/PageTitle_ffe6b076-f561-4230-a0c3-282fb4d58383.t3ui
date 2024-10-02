@@ -14,10 +14,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "db99be43-6bdb-4ab6-ab59-0fd8206c92ce"/*Text*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 0.0,
         "Y": 0.0

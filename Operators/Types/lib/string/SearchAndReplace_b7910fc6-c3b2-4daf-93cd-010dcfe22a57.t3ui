@@ -1,6 +1,6 @@
 {
   "Id": "b7910fc6-c3b2-4daf-93cd-010dcfe22a57"/*SearchAndReplace*/,
-  "Description": "Looks for an characters or strings in within another string and returns are new string with the matches replaced.",
+  "Description": "Looks for characters or strings within another string and returns a new string with the matches replaced.",
   "InputUis": [
     {
       "InputId": "3ca66cbd-a16a-479c-b858-84732e5023ad"/*OriginalString*/,
@@ -8,6 +8,7 @@
         "X": 0.0,
         "Y": 45.0
       },
+      "Description": "Defines the string whose content is searched",
       "Usage": "Default"
     },
     {
@@ -16,6 +17,8 @@
         "X": 0.0,
         "Y": 90.0
       },
+      "Description": "Defines the string pattern that will be searched for and replaced",
+      "AddPadding": "True",
       "Usage": "Default"
     },
     {
@@ -24,6 +27,7 @@
         "X": 0.0,
         "Y": 135.0
       },
+      "Description": "Defines the string that will be used to replace what is defined as the search pattern",
       "Usage": "Default"
     }
   ],

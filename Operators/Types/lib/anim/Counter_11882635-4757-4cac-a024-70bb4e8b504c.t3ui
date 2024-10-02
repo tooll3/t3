@@ -1,6 +1,6 @@
 {
   "Id": "11882635-4757-4cac-a024-70bb4e8b504c"/*Counter*/,
-  "Description": "A very versatile operator that uses beat time to increment values periodically.\n\nNote that you can adjust many properties directly within the graph while holding CTRL+key.",
+  "Description": "A very versatile operator that uses beat time to increment values periodically / in steps.\n\nNote that you can adjust many properties directly within the graph while holding CTRL+key.\n\nFor a variant that does not count up in steps but linearly see [Time] or [Accumulator].\n\nUseful combinations: [Trigger] [MidiInput] [KeyboardInput]",
   "InputUis": [
     {
       "InputId": "eefdb8ca-68e7-4e39-b302-22eb8930fb8c"/*TriggerIncrement*/,
@@ -28,7 +28,8 @@
       "Position": {
         "X": -200.0,
         "Y": 135.0
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "73b493cb-91d1-4d4f-b9a8-005017ecac8f"/*Modulo*/,

@@ -67,7 +67,7 @@
         {
           "Id": "78fb7501-74d9-4a27-8db2-596f25482c87"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\draw\\draw-ray-lines.hlsl"
+          "Value": "Resources\\lib\\points\\draw\\DrawRayLines.hlsl"
         },
         {
           "Id": "9a8b500e-c3b1-4be1-8270-202ef3f90793"/*EntryPoint*/,
@@ -126,7 +126,7 @@
         {
           "Id": "24646f06-1509-43ce-94c6-eeb608ad97cd"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\draw\\draw-ray-lines.hlsl"
+          "Value": "Resources\\lib\\points\\draw\\DrawRayLines.hlsl"
         },
         {
           "Id": "501338b3-f432-49a5-bdbd-bcf209671305"/*EntryPoint*/,
@@ -194,7 +194,7 @@
       "Outputs": []
     },
     {
-      "Id": "175a4053-13b7-4018-ab1d-73fc917a0f01"/*Vector4ToFloat4*/,
+      "Id": "175a4053-13b7-4018-ab1d-73fc917a0f01"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [
         {
@@ -330,7 +330,7 @@
       "Outputs": []
     },
     {
-      "Id": "756b12bf-461c-48a9-b019-c7ffb7b5cd8f"/*BoolToFloats*/,
+      "Id": "756b12bf-461c-48a9-b019-c7ffb7b5cd8f"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []

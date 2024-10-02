@@ -40,7 +40,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\modify\\wrap-point-positions.hlsl"
+          "Value": "Resources\\lib\\points\\modify\\WrapPointPosition.hlsl"
         }
       ],
       "Outputs": []
@@ -51,7 +51,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 64,
             "Y": 1,
@@ -92,19 +92,19 @@
       "Outputs": []
     },
     {
-      "Id": "6990aeab-3425-4ecd-9540-ec329f3af0bf"/*Vector3ToFloat3*/,
+      "Id": "6990aeab-3425-4ecd-9540-ec329f3af0bf"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "e313fd36-402f-45c7-b829-1077340b328b"/*Vector3ToFloat3*/,
+      "Id": "e313fd36-402f-45c7-b829-1077340b328b"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "9a2914f8-917c-46ed-b9fa-045b83d87da0"/*BoolToFloats*/,
+      "Id": "9a2914f8-917c-46ed-b9fa-045b83d87da0"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
@@ -116,7 +116,7 @@
       "Outputs": []
     },
     {
-      "Id": "05aa7d10-61bc-4367-8725-6516df8562f2"/*BoolToFloats*/,
+      "Id": "05aa7d10-61bc-4367-8725-6516df8562f2"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []

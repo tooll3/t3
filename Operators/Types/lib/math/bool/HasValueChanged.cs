@@ -1,25 +1,22 @@
 using System;
-using System.Diagnostics;
-using T3.Core;
-using T3.Core.Logging;
+using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_146fae64_18da_4183_9794_a322f47c669e
 {
     public class HasValueChanged : Instance<HasValueChanged>
     {
-        [Output(Guid = "35ab8188-77a1-4cd9-b2ad-c503034e49f9", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
-        public readonly Slot<bool> HasChanged = new Slot<bool>();
+        [Output(Guid = "35ab8188-77a1-4cd9-b2ad-c503034e49f9", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<bool> HasChanged = new();
 
-        [Output(Guid = "ab818835-77a1-4cd9-b2ad-c503034e49f9")]
-        public readonly Slot<float> Delta = new Slot<float>();
+        [Output(Guid = "ab818835-77a1-4cd9-b2ad-c503034e49f9", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<float> Delta = new();
 
         [Output(Guid = "5E37DA80-5D1F-4E17-A0A1-1E386B3A2561")]
-        public readonly Slot<float> DeltaOnHit = new Slot<float>();
+        public readonly Slot<float> DeltaOnHit = new();
 
         
         public HasValueChanged()
@@ -28,12 +25,21 @@ namespace T3.Operators.Types.Id_146fae64_18da_4183_9794_a322f47c669e
             Delta.UpdateAction = Update;
         }
 
+        private double _lastEvalTime = 0;
+
         private void Update(EvaluationContext context)
         {
             var newValue = Value.GetValue(context);
             var threshold = Threshold.GetValue(context);
             var minTimeBetweenHits = MinTimeBetweenHits.GetValue(context);
+            var preventContinuedChanges = PreventContinuedChanges.GetValue(context);
 
+            if (Math.Abs(Playback.RunTimeInSecs - _lastEvalTime) < 0.010f)
+                return;
+
+            _lastEvalTime = Playback.RunTimeInSecs;
+
+            
             var hasChanged = false;
             
             float delta = Math.Abs(newValue - _lastValue);
@@ -58,14 +64,15 @@ namespace T3.Operators.Types.Id_146fae64_18da_4183_9794_a322f47c669e
             }
 
             var wasTriggered = MathUtils.WasTriggered(hasChanged, ref _wasHit);
-            
-            if (hasChanged && (PreventContinuedChanges.GetValue(context) || wasTriggered))
+
+            if (hasChanged && (preventContinuedChanges || wasTriggered))
             {
                 var timeSinceLastHit = context.LocalFxTime - _lastHitTime;
                 if (timeSinceLastHit >= minTimeBetweenHits)
                 {
                     _lastHitTime = context.LocalFxTime;
                     _lastHitDelta = delta;
+
                 }
                 else
                 {
@@ -77,6 +84,7 @@ namespace T3.Operators.Types.Id_146fae64_18da_4183_9794_a322f47c669e
 
             Delta.Value = newValue - _lastValue;
             _lastValue = newValue;
+
             DeltaOnHit.Value = (float)_lastHitDelta;
         }
 

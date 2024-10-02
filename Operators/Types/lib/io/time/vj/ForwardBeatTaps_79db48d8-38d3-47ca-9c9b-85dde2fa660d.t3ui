@@ -1,6 +1,6 @@
 {
   "Id": "79db48d8-38d3-47ca-9c9b-85dde2fa660d"/*ForwardBeatTaps*/,
-  "Description": "A helper op that forwards beat tapping to T3 interfaces. \nThis can be useful for tapping bpm rate with midi-controller.\n",
+  "Description": "A helper op that forwards beat tapping to T3 interfaces. \nThis can be useful for tapping BPM rate with a MIDI controller.\n",
   "InputUis": [
     {
       "InputId": "89576f05-3f3d-48d1-ab63-f3c16c85db63"/*SubTree*/,
@@ -21,6 +21,13 @@
       "Position": {
         "X": -200.0,
         "Y": 90.0
+      }
+    },
+    {
+      "InputId": "2e18ae65-044e-443d-9288-7a9bb6864514"/*SlideSyncTimeOffset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
       }
     }
   ],

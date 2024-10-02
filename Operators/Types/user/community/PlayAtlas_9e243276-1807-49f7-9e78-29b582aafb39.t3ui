@@ -1,0 +1,528 @@
+{
+  "Id": "9e243276-1807-49f7-9e78-29b582aafb39"/*PlayAtlas*/,
+  "Description": "For animating image atlases. Great for GIFs, spite sheets, tile sets, etc.\n\nBy default, this reacts to Idle Motion.\nIf you don't want this, set the PlaybackRate to 0 and connect a [AnimValue] to a [FloatToInt], then to StartFrame. Alternatively, you could animate StartFrame in the timeline.",
+  "InputUis": [
+    {
+      "InputId": "6bffaa67-be6d-43cc-9890-75d0a1c51d75"/*Texture2d*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -431.55664,
+        "Y": -193.4024
+      },
+      "Description": "The input texture atlas. Required."
+    },
+    {
+      "InputId": "a47fc959-4ffa-4790-ac1f-5097a72fab3f"/*FrameCountX*/,
+      "Position": {
+        "X": -431.55664,
+        "Y": -148.4024
+      },
+      "GroupTitle": "Visual Settings",
+      "Description": "The number of frames spanning the width of the atlas.",
+      "AddPadding": "True",
+      "Min": 1,
+      "Clamp": true
+    },
+    {
+      "InputId": "25ac515f-2f7f-4ebf-9852-fc96bc83d6af"/*FrameCountY*/,
+      "Position": {
+        "X": -431.55664,
+        "Y": -103.402405
+      },
+      "Description": "The number of frames spanning the height of the atlas.",
+      "Min": 1,
+      "Clamp": true
+    },
+    {
+      "InputId": "65f7f342-fbe8-4fb3-9019-c891fa651d5d"/*FramesToTruncate*/,
+      "Position": {
+        "X": -431.55664,
+        "Y": -58.402405
+      },
+      "Description": "An atlas will sometimes have empty frames at the end of the final row. Specify how many here.",
+      "Min": 0,
+      "Scale": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "7304732c-ebfa-41d5-938c-f01ecc228749"/*DisableSnapping*/,
+      "Position": {
+        "X": -431.55664,
+        "Y": -13.402405
+      },
+      "Description": "By default, the FrameCount values will snap to a multiple of the width and height of the atlas, respectively. This option disables that snapping."
+    },
+    {
+      "InputId": "3f7b1f1f-7790-4142-890c-c69a17689b87"/*StartFrame*/,
+      "Position": {
+        "X": -431.55664,
+        "Y": 31.597595
+      },
+      "GroupTitle": "Animation Settings",
+      "Description": "Which frame to show when the time is at 0."
+    },
+    {
+      "InputId": "69c0ee10-8498-4128-b865-7e622b62cd3d"/*PlaybackRate*/,
+      "Position": {
+        "X": -431.55664,
+        "Y": 76.597595
+      },
+      "Description": "The length of time that it takes to go through all of the frames, measured in cycles per bar."
+    },
+    {
+      "InputId": "21212842-58f4-424b-98c2-603423fead1f"/*FineDelay*/,
+      "Position": {
+        "X": -431.55664,
+        "Y": 121.597595
+      },
+      "Description": "Increases or decreases the StartFrame a non-integer amount. Linked to tempo. Requires non-0 PlaybackRate."
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "13e983a5-3b45-454f-96ba-88903bb653fe"/*Crop*/,
+      "Position": {
+        "X": 2533.4534,
+        "Y": 388.16873
+      }
+    },
+    {
+      "ChildId": "d5706230-af1a-425a-996e-f4e9d710968e"/*IntValue*/,
+      "Position": {
+        "X": 25.125381,
+        "Y": 143.04343
+      }
+    },
+    {
+      "ChildId": "f8ceece9-fc01-49e7-a0d7-8cf7eaa2db67"/*IntValue*/,
+      "Position": {
+        "X": 790.1343,
+        "Y": 1452.4147
+      }
+    },
+    {
+      "ChildId": "04386033-c5d5-42f7-8403-aa131f3eb1c5"/*GetTextureSize*/,
+      "Position": {
+        "X": -24.761597,
+        "Y": -296.10382
+      }
+    },
+    {
+      "ChildId": "f092d8ae-80d4-4b7b-ac28-90a848784147"/*Int2Components*/,
+      "Position": {
+        "X": 206.82373,
+        "Y": -329.7483
+      }
+    },
+    {
+      "ChildId": "824ce6c4-be43-40ae-a65f-e1cf80bf16e1"/*Int2*/,
+      "Position": {
+        "X": 2302.595,
+        "Y": 502.43954
+      }
+    },
+    {
+      "ChildId": "7e3da07b-e9fb-412a-94b6-3903dd4a4880"/*IntDiv*/,
+      "Position": {
+        "X": 819.57446,
+        "Y": 161.45273
+      }
+    },
+    {
+      "ChildId": "700f1d29-bb96-476e-8e7e-666b4faad7ea"/*SubInts*/,
+      "Position": {
+        "X": 1724.4285,
+        "Y": 446.5158
+      }
+    },
+    {
+      "ChildId": "4a14118a-74c5-4f48-ad69-e0215b6b6c6b"/*MultiplyInt*/,
+      "Position": {
+        "X": 1951.2927,
+        "Y": 365.38678
+      }
+    },
+    {
+      "ChildId": "d5ea7059-bcb5-4a8a-8af3-e2a7c1f3c34b"/*MultiplyInt*/,
+      "Position": {
+        "X": 1825.2178,
+        "Y": 241.53079
+      }
+    },
+    {
+      "ChildId": "6b5d582a-7766-4dfb-9bd6-5ef9d8dd1aac"/*AddInts*/,
+      "Position": {
+        "X": 1517.03,
+        "Y": 483.4265
+      }
+    },
+    {
+      "ChildId": "c6adaa8e-714b-409b-9cb6-dd80c46ce278"/*MultiplyInt*/,
+      "Position": {
+        "X": 1985.071,
+        "Y": 604.8128
+      }
+    },
+    {
+      "ChildId": "5f70e665-df3c-4a35-a713-5afc39d3d488"/*ModInt*/,
+      "Position": {
+        "X": 1371.9825,
+        "Y": 643.6753
+      }
+    },
+    {
+      "ChildId": "82b7c2fe-56d3-4194-8813-7532777c257a"/*MaxInt*/,
+      "Position": {
+        "X": -665.5041,
+        "Y": 1319.5815
+      }
+    },
+    {
+      "ChildId": "a1fe5622-1a68-4601-857c-0b3b7c186a1e"/*IntValue*/,
+      "Position": {
+        "X": -745.0218,
+        "Y": 1261.5083
+      }
+    },
+    {
+      "ChildId": "fe5c9a54-b124-4bde-af9a-640c06cbf3d4"/*PickInt*/,
+      "Position": {
+        "X": 538.38354,
+        "Y": 186.32388
+      }
+    },
+    {
+      "ChildId": "27858375-373c-4374-8ac9-f0f93875380c"/*BoolToInt*/,
+      "Position": {
+        "X": -49.021675,
+        "Y": 215.91092
+      }
+    },
+    {
+      "ChildId": "561fa13e-cb2b-470b-b50f-e363b9bf0f6c"/*IntValue*/,
+      "Position": {
+        "X": -39.186462,
+        "Y": 731.2847
+      }
+    },
+    {
+      "ChildId": "4afe5445-6d8f-4165-b97b-7415f29c6ac8"/*IntDiv*/,
+      "Position": {
+        "X": 710.06146,
+        "Y": 748.66656
+      }
+    },
+    {
+      "ChildId": "580e3af2-7af4-40f0-a0a1-15051f9f208c"/*PickInt*/,
+      "Position": {
+        "X": 428.87073,
+        "Y": 773.53766
+      }
+    },
+    {
+      "ChildId": "42a89bc0-e86e-4683-b9c2-92a793f183b1"/*BoolToInt*/,
+      "Position": {
+        "X": -172.83124,
+        "Y": 799.9963
+      }
+    },
+    {
+      "ChildId": "1e5c43bf-da7f-4ff9-939c-7cdc28858fa8"/*SubInts*/,
+      "Position": {
+        "X": 1741.2513,
+        "Y": 1110.6885
+      }
+    },
+    {
+      "ChildId": "c6b532a3-af49-4921-9834-fed35229a44b"/*MultiplyInt*/,
+      "Position": {
+        "X": 1968.1156,
+        "Y": 1029.5586
+      }
+    },
+    {
+      "ChildId": "68056aa6-31d3-4479-8447-e5ccd9b12e24"/*MultiplyInt*/,
+      "Position": {
+        "X": 1842.0406,
+        "Y": 905.7027
+      }
+    },
+    {
+      "ChildId": "c92ce97c-6d3f-4a56-b805-ab05abe12438"/*AddInts*/,
+      "Position": {
+        "X": 1533.8529,
+        "Y": 1147.5991
+      }
+    },
+    {
+      "ChildId": "ef29d038-64df-433c-b318-b8e0e4a70703"/*MultiplyInt*/,
+      "Position": {
+        "X": 2001.8939,
+        "Y": 1268.9854
+      }
+    },
+    {
+      "ChildId": "c26cbb4e-82c8-40f5-8f1c-b8cff4257071"/*ModInt*/,
+      "Position": {
+        "X": 1346.0464,
+        "Y": 1292.4985
+      }
+    },
+    {
+      "ChildId": "2c2ab357-a955-4a11-a60f-d0228ad3601d"/*Int2*/,
+      "Position": {
+        "X": 2355.5542,
+        "Y": 1092.8279
+      }
+    },
+    {
+      "ChildId": "28126558-fff8-4114-bacb-ea556909c6cd"/*IntDiv*/,
+      "Position": {
+        "X": 1078.0026,
+        "Y": 1249.6451
+      }
+    },
+    {
+      "ChildId": "74833d7b-dbaf-48b2-b246-1037f4239a4b"/*MultiplyInt*/,
+      "Position": {
+        "X": -574.17456,
+        "Y": 1108.8267
+      }
+    },
+    {
+      "ChildId": "99f16266-04a0-4fe9-a088-74451f6ce130"/*SubInts*/,
+      "Position": {
+        "X": -400.765,
+        "Y": 1148.7363
+      }
+    },
+    {
+      "ChildId": "69c19c6c-4285-463e-a1cf-e16b1885f666"/*ModInt*/,
+      "Position": {
+        "X": 632.8211,
+        "Y": 1501.0205
+      }
+    },
+    {
+      "ChildId": "b9073aa9-6186-4ff4-8ea1-f5903c910726"/*AnimValue*/,
+      "Position": {
+        "X": -28.205048,
+        "Y": 1100.9982
+      }
+    },
+    {
+      "ChildId": "c34fc007-5c8d-4f95-9d08-66bc0f07fed2"/*IntToFloat*/,
+      "Position": {
+        "X": -208.3504,
+        "Y": 1109.1896
+      }
+    },
+    {
+      "ChildId": "39d005dc-6169-4468-bcd8-87a0e6053aaa"/*Floor*/,
+      "Position": {
+        "X": 122.08798,
+        "Y": 1215.7823
+      }
+    },
+    {
+      "ChildId": "9dc00663-f34f-4996-a2ec-96c974277ed1"/*FloatToInt*/,
+      "Position": {
+        "X": 328.3892,
+        "Y": 1236.292
+      }
+    },
+    {
+      "ChildId": "618853ef-3f49-4dd9-aafa-a9dabace62ef"/*SubInts*/,
+      "Position": {
+        "X": 2157.2827,
+        "Y": 610.03687
+      }
+    },
+    {
+      "ChildId": "1d7dde02-cfdc-42b2-953e-ad4cb3ec8cff"/*SubInts*/,
+      "Position": {
+        "X": 2123.154,
+        "Y": 390.29742
+      }
+    },
+    {
+      "ChildId": "2e138248-d920-4813-9db7-3d44126e0313"/*SubInts*/,
+      "Position": {
+        "X": 2148.7373,
+        "Y": 961.00665
+      }
+    },
+    {
+      "ChildId": "d4071a33-0bc5-4dce-8dee-4db0563e8b09"/*SubInts*/,
+      "Position": {
+        "X": 2177.9746,
+        "Y": 1185.7659
+      }
+    },
+    {
+      "ChildId": "03686acc-a185-4e57-97cd-075736dccc86"/*AddInts*/,
+      "Position": {
+        "X": 438.03357,
+        "Y": 1425.6674
+      }
+    },
+    {
+      "ChildId": "7f3ef40e-4dee-4653-92df-bd4029327144"/*Value*/,
+      "Position": {
+        "X": -464.9873,
+        "Y": 286.81583
+      }
+    },
+    {
+      "ChildId": "a8b4f066-1e93-42e8-a7fb-0951a422a85b"/*SnapToMultiple*/,
+      "Position": {
+        "X": 397.62436,
+        "Y": 54.60092
+      }
+    },
+    {
+      "ChildId": "532e59d9-f633-46b8-9ca9-c9d4710a76ec"/*SnapToMultiple*/,
+      "Position": {
+        "X": 279.0811,
+        "Y": 671.2021
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "372da297-6bb0-49fc-a92f-41bfcc5f9f1a"/*output*/,
+      "Position": {
+        "X": 2763.9717,
+        "Y": 386.58987
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "f71ec894-31e5-45ef-b0a3-5f4582f63d60",
+      "Title": "offset rn",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 753.9782,
+        "Y": 1415.1879
+      },
+      "Size": {
+        "X": 209.08987,
+        "Y": 88.1029
+      }
+    },
+    {
+      "Id": "b4e6b0ad-dd73-4a69-a281-d4dcdf63060f",
+      "Title": "Xstepsize",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 798.74695,
+        "Y": 119.27557
+      },
+      "Size": {
+        "X": 172.02046,
+        "Y": 119.87665
+      }
+    },
+    {
+      "Id": "1daaf43b-8f71-44eb-b747-092524794cb7",
+      "Title": "X crop amt calculation",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 1333.1884,
+        "Y": 159.68726
+      },
+      "Size": {
+        "X": 1112.5743,
+        "Y": 594.80524
+      }
+    },
+    {
+      "Id": "ba2ce098-3695-4995-873d-3f475181b01e",
+      "Title": "Xstepsize calculation\n",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -141.55167,
+        "Y": -132.38626
+      },
+      "Size": {
+        "X": 1161.1133,
+        "Y": 457.42007
+      }
+    },
+    {
+      "Id": "b5a942f2-5593-49df-aee2-e2f0322421e2",
+      "Title": "Ystepsize",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 671.85547,
+        "Y": 717.4778
+      },
+      "Size": {
+        "X": 172.02046,
+        "Y": 119.87665
+      }
+    },
+    {
+      "Id": "0d9f91a5-4c35-41d9-9a81-ea905eec0fa4",
+      "Title": "Ystepsize calculation\n",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -245.62631,
+        "Y": 453.01465
+      },
+      "Size": {
+        "X": 1121.9514,
+        "Y": 466.1676
+      }
+    },
+    {
+      "Id": "cf0f0fae-af98-4a29-9e3e-cd460b130022",
+      "Title": "Y crop amt calculaton",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 1269.2959,
+        "Y": 827.0665
+      },
+      "Size": {
+        "X": 1256.4142,
+        "Y": 568.7994
+      }
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 {
   "Id": "55b13dee-89f8-404f-b2fe-43d5e8c54536"/*Floor*/,
+  "Description": "Rounds to the next lower integer value.\n\nAlso see [Round] & [Ceil]",
   "InputUis": [
     {
       "InputId": "550289db-89cb-465c-a9d8-a16dbf23cc45"/*Value*/,

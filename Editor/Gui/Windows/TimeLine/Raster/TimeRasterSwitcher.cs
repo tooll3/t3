@@ -12,19 +12,24 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
     {
         public void Draw(Playback playback)
         {
+            var unitsPerSeconds = 1f;
             if(UserSettings.Config.TimeDisplayMode != TimeFormat.TimeDisplayModes.Bars)
             {
                 switch (UserSettings.Config.TimeDisplayMode)
                 {
                     case TimeFormat.TimeDisplayModes.F30:
-                        _standardRaster.UnitsPerSecond = 30;
+                        unitsPerSeconds = 30;
+                        _standardRaster.EnableSnapping = true;
                         break;
                     case TimeFormat.TimeDisplayModes.F60:
-                        _standardRaster.UnitsPerSecond = 60;
+                        unitsPerSeconds = 60;
+                        _standardRaster.EnableSnapping = true;
+                        break;
+                    default:
                         break;
                 }
             }
-            ActiveRaster?.Draw(playback);
+            ActiveRaster?.Draw(playback, unitsPerSeconds);
         }
         
         public SnapResult CheckForSnap(double value, float canvasScale)
@@ -48,8 +53,8 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
             }
         }
         
-        private readonly StandardValueRaster _standardRaster = new StandardValueRaster();
-        private readonly BeatTimeRaster _beatRaster = new BeatTimeRaster();
-        private readonly SiTimeRaster _siTimeRaster = new SiTimeRaster();
+        private readonly StandardValueRaster _standardRaster = new();
+        private readonly BeatTimeRaster _beatRaster = new();
+        private readonly SiTimeRaster _siTimeRaster = new();
     }
 }

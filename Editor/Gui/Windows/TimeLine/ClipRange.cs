@@ -2,6 +2,7 @@
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
+using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Styling;
 
@@ -114,11 +115,11 @@ namespace T3.Editor.Gui.Windows.TimeLine
             ImGui.SetCursorScreenPos(p);
         }
 
-        private static readonly Vector2 _timeRangeHandleSize = new Vector2(10, 20);
-        private static readonly Vector2 _timeRangeShadowSize = new Vector2(1, 9999);
-        private static readonly Color _timeRangeShadowColor = Color.Orange.Fade(0.2f);
-        private static readonly Color _timeRangeOutsideColor = Color.Orange.Fade(0.1f);
-        private static readonly Color _timeRangeMarkerColor = Color.Orange.Fade(0.5f);
+        private static readonly Vector2 _timeRangeHandleSize = new(10, 20);
+        private static readonly Vector2 _timeRangeShadowSize = new(1, 9999);
+        private static readonly Color _timeRangeShadowColor = UiColors.StatusAnimated.Fade(0.2f);
+        private static readonly Color _timeRangeOutsideColor = UiColors.StatusAnimated.Fade(0.1f);
+        private static readonly Color _timeRangeMarkerColor = UiColors.StatusAnimated.Fade(0.5f);
 
         //private static Playback _playback;
         private static ITimeClip _timeClip;

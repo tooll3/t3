@@ -1,0 +1,33 @@
+{
+  "Name": "FindKeyframes",
+  "Id": "127e1eb9-aca9-4f8e-b0c9-b709c8a0745a",
+  "Namespace": "lib.anim",
+  "Inputs": [
+    {
+      "Id": "3ad320b9-d1bc-4bdb-b5c8-20caa721621b"/*Mode*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "8cbf43b8-899a-42d4-87c7-cabb43a5d219"/*IndexOrTime*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "1e606db7-7ff8-4cc8-9156-a88d7c27a662"/*WrapIndex*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "f5fa41fb-e11f-47fa-b9f8-18620daa1ae6"/*OpIndex*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "1cb78283-ac4e-44ed-ad40-0a208a4db099"/*CurveIndex*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "b8611c46-420f-45b0-93e3-be10806a6c57"/*AnimatedOp*/,
+      "DefaultValue": 1.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

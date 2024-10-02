@@ -1,0 +1,126 @@
+{
+  "Id": "746d886c-5ab6-44b1-bb15-f3ce2fadf7e6"/*Camera*/,
+  "Description": "Sets the camera for the subgraph.\n",
+  "InputUis": [
+    {
+      "InputId": "047b8fae-468c-48a7-8f3a-5fac8dd5b3c6"/*Command*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "313596cc-3854-436b-89da-5fd40164ce76"/*Position*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Description": "X (-left / +right), Y (-down / + up), Z (-forward/+backwards) coordinates of the current view position. \n\nThe default z-position is 2.41 behind the centered scene origin so that a [Layer2d] with a size of 2 precisely fills the screen height for a Field of view (Fov) of 45°.",
+      "Scale": 0.01
+    },
+    {
+      "InputId": "a7acb25c-d60c-43a6-b1df-2cd5c6e183f3"/*Target*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Description": "The view target of the camera. The line between the Position and the Target defines the view direction.",
+      "Scale": 0.01
+    },
+    {
+      "InputId": "7bde5a5a-ce82-4903-92ff-14e540a605f0"/*FOV*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Description": "Defines the field of view (FOV) or focal length of the camera in degrees",
+      "Min": 0.0,
+      "Max": 180.0,
+      "Clamp": true,
+      "Format": "{0:0.0}°"
+    },
+    {
+      "InputId": "764ca304-fc86-48a9-9c82-a04fac7eadb2"/*Roll*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Description": "Rotates the camera right / left",
+      "Min": -90.0,
+      "Max": 90.0,
+      "Format": "{0:0.0}°"
+    },
+    {
+      "InputId": "fee19916-846f-491a-a2ee-1e7b1ac8e533"/*PositionOffset*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      },
+      "GroupTitle": "Offset"
+    },
+    {
+      "InputId": "123396f0-62c4-43cd-8be0-a661553d4783"/*AlsoOffsetTarget*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "d4d0f046-297b-440a-aef8-c2f0426ef4f5"/*RotationOffset*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "ae275370-a684-42fb-ab7a-50e16d24082d"/*ViewportShift*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "199d4ce0-aab1-403a-ad42-216ef1061a0e"/*NearFarClip*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "GroupTitle": "Options",
+      "Description": "Defines the start and end of the area in which objects are rendered by the camera."
+    },
+    {
+      "InputId": "f66e91a1-b991-48c3-a8c9-33bcad0c2f6f"/*AspectRatio*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Description": "Enforce as fixed aspect ratio for the camera view. \nFor values smaller or equal 0 this settings is ignored and the current view's aspect-ratio is automatically used. When setting this parameter to a positive window the content get's stretched with the aspect of the output window."
+    },
+    {
+      "InputId": "e6dfbfb9-efed-4c17-8860-9c1a1ca2fa38"/*Up*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Description": "Defined a helping vector to control the rotation of the camera. If the the view direction approaches the Up-Vector, camera motion becomes instable because of gimbal lock.\n\nThis needs to be adjusted in cases where the camera needs to point directly up or down."
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "2e1742d8-9ba3-4236-a0cd-a2b02c9f5924"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "761245e2-ac0b-435a-841e-7c9edc804606"/*Reference*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    }
+  ]
+}

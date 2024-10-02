@@ -1,8 +1,9 @@
 {
   "Id": "2f851b5b-b66d-40b0-9445-e733dc4b907d"/*Sum*/,
+  "Description": "Allows to connect any amount of floats whose sum is output\n\nAlso see [Add]",
   "InputUis": [
     {
-      "InputId": "af4a49e6-1ecd-4e94-ae6d-fb5d2bc8430c"/*Input*/,
+      "InputId": "af4a49e6-1ecd-4e94-ae6d-fb5d2bc8430c"/*InputValues*/,
       "Relevancy": "Required",
       "Position": {
         "X": 0.0,

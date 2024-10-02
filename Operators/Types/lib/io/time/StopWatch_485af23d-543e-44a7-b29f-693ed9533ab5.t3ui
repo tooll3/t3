@@ -1,6 +1,6 @@
 {
   "Id": "485af23d-543e-44a7-b29f-693ed9533ab5"/*StopWatch*/,
-  "Description": "A stopwatch that can stop, measure and keep time and thus measure durations.",
+  "Description": "A stopwatch that can stop, measure, and keep time and thus measure durations.",
   "InputUis": [
     {
       "InputId": "38754151-704a-4374-817e-98dfaca62e49"/*ResetTrigger*/,
@@ -14,6 +14,13 @@
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "bf89d8b2-d8fe-4a3c-9255-67944ec831cb"/*PauseWithPlayback*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
       }
     }
   ],

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
-using T3.Core.Resource;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.Camera;
 using T3.Editor.Gui.Interaction.TransformGizmos;
@@ -54,7 +54,7 @@ namespace T3.Editor.Gui.Windows.Output
             PickedACamera,
         }
         
-        public void Update(Instance drawnInstance, Type drawnType)
+        public void Update(Instance drawnInstance, Type drawnType, bool preventInteractions = false)
         {
             _hasAnimationTimeChanged = Math.Abs(_lastUpdateTime - Playback.Current.TimeInBars) > 0.001f;
             _lastUpdateTime = Playback.Current.TimeInBars;
@@ -65,7 +65,7 @@ namespace T3.Editor.Gui.Windows.Output
             {
                 PreventCameraInteraction = true;
                 CameraForRendering = _outputWindowViewCamera;
-                _recentlyUsedCameras = new List<Camera>();
+                _recentlyUsedCameras = new List<ICamera>();
                 return;
             }
 
@@ -75,7 +75,7 @@ namespace T3.Editor.Gui.Windows.Output
             ICamera cameraForManipulation = null;
             CameraForRendering = null;
 
-            PreventCameraInteraction = false;
+            PreventCameraInteraction = preventInteractions;
 
 
             if (_controlMode == ControlModes.PickedACamera)
@@ -83,7 +83,10 @@ namespace T3.Editor.Gui.Windows.Output
                 var isPickStillValid = false;
                 foreach (var recentCam in _recentlyUsedCameras)
                 {
-                    if (recentCam.SymbolChildId == _pickedCameraId)
+                    if (recentCam is not Instance camInstance)
+                        continue;
+                    
+                    if (camInstance.SymbolChildId == _pickedCameraId)
                     {
                         cameraForManipulation = recentCam;
                         CameraForRendering = _outputWindowViewCamera;
@@ -97,12 +100,13 @@ namespace T3.Editor.Gui.Windows.Output
                     _controlMode = _lastControlMode;
                 }
             }
-            
+
+            _drawnTypeIsCommand = drawnType == typeof(Command);
             switch (_controlMode)
             {
                 case ControlModes.SceneViewerFollowing:
                 {
-                    if (drawnType != typeof(Command))
+                    if (!_drawnTypeIsCommand)
                     {
                         PreventCameraInteraction = true;
                     }
@@ -145,7 +149,6 @@ namespace T3.Editor.Gui.Windows.Output
                         }
                         else
                         {
-                            //PreventCameraInteraction = true;
                             PreventImageCanvasInteraction = true;
                             cameraForManipulation = _firstCamInGraph;    
                         }
@@ -163,7 +166,12 @@ namespace T3.Editor.Gui.Windows.Output
 
             if (_controlMode != ControlModes.PickedACamera)
             {
+                
                 CameraForRendering = cameraForManipulation;
+            }
+            else
+            {
+                PreventImageCanvasInteraction = true;
             }
 
             if (CameraForRendering == null)
@@ -191,10 +199,10 @@ namespace T3.Editor.Gui.Windows.Output
                 var children = parentInstance.Children;
                 foreach (var child in children)
                 {
-                    if (child is not Camera cam2)
+                    if (child is not ICamera cam2)
                         continue;
 
-                    if (cam2.Outputs[0].DirtyFlag.FramesSinceLastUpdate > 1)
+                    if (child.Outputs[0].DirtyFlag.FramesSinceLastUpdate > 1)
                         continue;
 
                     if (_firstCamInGraph == null)
@@ -216,95 +224,134 @@ namespace T3.Editor.Gui.Windows.Output
             }
         }
 
-        const string SceneViewerFollowingLabel = "Viewer (Following)";
-        const string SceneViewerModeLabel = "Viewer";
-        const string CameraModeLabel = "Camera";
-
-        public void DrawCameraControlSelection(ViewSelectionPinning pinning)
+        public void DrawCameraControlSelection()
         {
-            ImGui.SetNextItemWidth(115);
+            ImGui.SetNextItemWidth(145);
 
             var label = String.Empty;
             
             switch (_controlMode)
             {
+                case ControlModes.AutoUseFirstCam:
+                    label = "Auto";
+                    break;
+                
                 case ControlModes.SceneViewerFollowing:
-                    label = SceneViewerFollowingLabel;
+                    label = "Follow";
                     break;
                 
                 case ControlModes.UseViewer:
-                    label = SceneViewerModeLabel;
-                    break;
-                
-                case ControlModes.AutoUseFirstCam:
-                    label = CameraModeLabel;
+                    label = "Viewer";
                     break;
                 
                 case ControlModes.PickedACamera:
-                    label = "Locked to Cam";
+                    label = "Locked to Op";
                     break;
             }
 
-            if (ImGui.BeginCombo("##CameraSelection", label))
+            var isAuto = _controlMode == ControlModes.AutoUseFirstCam;
+
+            
+            //var min = ImGui.GetCursorScreenPos();
+            // var isOpen = ImGui.BeginCombo("##CameraSelection", label);
+
+            var width = ImGui.GetFrameHeight() * 5;
+            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, Vector2.Zero);
+            var labelColor = isAuto ? UiColors.TextMuted : UiColors.ForegroundFull;
+            ImGui.PushStyleColor(ImGuiCol.Text, labelColor.Rgba);
+            var isClicked = ImGui.Button($"     {label}##CameraMode", new Vector2(width, ImGui.GetFrameHeight()));
+            ImGui.PopStyleColor();
+            ImGui.PopStyleVar();
+            var min = ImGui.GetItemRectMin();
+            var max = ImGui.GetItemRectMax();
+            if (isClicked)
             {
-                if (ImGui.Selectable(CameraModeLabel, _controlMode == ControlModes.AutoUseFirstCam))
+                ImGui.OpenPopup("cameraPopup");
+                ImGui.SetNextWindowPos(new Vector2(min.X,max.Y));
+                
+            }
+            Icons.DrawIconAtScreenPosition(Icon.Camera,min + new Vector2(4,7), ImGui.GetWindowDrawList(), labelColor);
+            
+            //ImGui.SetNextWindowSize(new Vector2(width,-1));
+            if(ImGui.BeginPopup("cameraPopup", ImGuiWindowFlags.None))
+            {
+                ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6) * T3Ui.UiScaleFactor);
+                if (ImGui.MenuItem("Auto", "", _controlMode == ControlModes.AutoUseFirstCam, true ))
                 {
                     _controlMode = ControlModes.AutoUseFirstCam;
                     _pickedCameraId = Guid.Empty;
                 }
                 CustomComponents.TooltipForLastItem("Shows the first scene camera. For manipulation select the camera operator in graph or in the list below.");
-                if (ImGui.IsItemHovered() && _firstCamInGraph != null)
-                {
-                    T3Ui.AddHoveredId(_firstCamInGraph.SymbolChildId);
-                }
-                
-                if (ImGui.Selectable(SceneViewerModeLabel, _controlMode == ControlModes.UseViewer))
+                if (ImGui.IsItemHovered() && _firstCamInGraph is Instance camInstance)
+                    FrameStats.AddHoveredId(camInstance.SymbolChildId);
+
+                if (ImGui.MenuItem("Viewer",
+                                   "", 
+                                   _controlMode == ControlModes.UseViewer, 
+                                   _drawnTypeIsCommand ))
                 {
                     _controlMode = ControlModes.UseViewer;
                     _pickedCameraId = Guid.Empty;
                 }
                 CustomComponents.TooltipForLastItem("Ignores scene cameras. This can be useful in combination with [ShowCamGizmos].");
                 
-                if (ImGui.Selectable(SceneViewerFollowingLabel, _controlMode == ControlModes.SceneViewerFollowing))
+                if (ImGui.MenuItem("Viewer (Following)",
+                                   "", 
+                                   _controlMode == ControlModes.SceneViewerFollowing,
+                                   _drawnTypeIsCommand
+                                   ))
                 {
                     _controlMode = ControlModes.SceneViewerFollowing;
                     _pickedCameraId = Guid.Empty;
                 }
-                if (ImGui.IsItemHovered() && _firstCamInGraph != null)
-                {
-                    T3Ui.AddHoveredId(_firstCamInGraph.SymbolChildId);
-                }
-                CustomComponents.TooltipForLastItem("During playback the scene viewer is following the scene camera. Otherwise it can be independently manipulated without affecting the scene camera.");
+                if (ImGui.IsItemHovered() && _firstCamInGraph is Instance camInstance2)
+                    FrameStats.AddHoveredId(camInstance2.SymbolChildId);
                 
-                ImGui.Separator();
+                CustomComponents.TooltipForLastItem("During playback the scene viewer is following the scene camera. Otherwise it can be independently manipulated without affecting the scene camera.");
+
+                if (_recentlyUsedCameras.Count > 0)
+                {
+                    ImGui.Separator();
+                    CustomComponents.HintLabel("Active Cameras...");
+                }
                 
                 foreach (var cam in _recentlyUsedCameras)
                 {
-                    ImGui.PushID(cam.SymbolChildId.GetHashCode());
+                    if (cam is not Instance cameraInstance)
+                        continue;
+                    
+                    ImGui.PushID(cameraInstance.SymbolChildId.GetHashCode());
                     {
                         // This is expensive, but happens only if dropdown is open...
                         var symbolChild = SymbolRegistry.Entries[_drawnInstance.Parent.Symbol.Id].Children
-                                                        .SingleOrDefault(child => child.Id == cam.SymbolChildId);
+                                                        .SingleOrDefault(child => child.Id == cameraInstance.SymbolChildId);
 
                         if (symbolChild == null)
                             continue;
                         
-                        if(ImGui.Selectable(symbolChild.ReadableName, cam.SymbolChildId == _pickedCameraId))
+                        if(ImGui.MenuItem(symbolChild.ReadableName, "",cameraInstance.SymbolChildId == _pickedCameraId, true))
                         {
                             _lastControlMode = _controlMode;
                             _controlMode = ControlModes.PickedACamera;
-                            _pickedCameraId = cam.SymbolChildId;
+                            _pickedCameraId = cameraInstance.SymbolChildId;
+                            T3Ui.SelectAndCenterChildIdInView(symbolChild.Id);
                         }
 
                         if (ImGui.IsItemHovered())
                         {
-                            T3Ui.AddHoveredId(cam.SymbolChildId);
+                            FrameStats.AddHoveredId(cameraInstance.SymbolChildId);
                         }
                     }
                     ImGui.PopID();
                 }
 
-                ImGui.EndCombo();
+                ImGui.PopStyleVar();
+                ImGui.EndPopup();
+            }
+            else
+            {
+                CustomComponents.TooltipForLastItem("Camera control mode", "This affects which camera will be manipulated by the view controls. Please also review to the tooltips of the dropdown options.");
+
             }
 
             ImGui.SameLine();
@@ -315,7 +362,7 @@ namespace T3.Editor.Gui.Windows.Output
             _cameraInteraction.ResetView();
         }
 
-
+        private bool _drawnTypeIsCommand;
         private ControlModes _controlMode = ControlModes.AutoUseFirstCam;
         private readonly ViewCamera _outputWindowViewCamera = new();
         private readonly CameraInteraction _cameraInteraction = new();
@@ -326,10 +373,10 @@ namespace T3.Editor.Gui.Windows.Output
         private Guid _pickedCameraId = Guid.Empty;
         
         private Instance _drawnInstance;
-        private List<Camera> _recentlyUsedCameras = new();
+        private List<ICamera> _recentlyUsedCameras = new();
 
         private ControlModes _lastControlMode;
 
-        private Camera _firstCamInGraph;
+        private ICamera _firstCamInGraph;
     }
 }

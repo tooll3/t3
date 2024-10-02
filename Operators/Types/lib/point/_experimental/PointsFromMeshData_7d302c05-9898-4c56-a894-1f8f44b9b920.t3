@@ -24,7 +24,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\generate\\points-from-mesh-data.hlsl"
+          "Value": "Resources\\lib\\points\\generate\\PointsFromMeshData.hlsl"
         }
       ],
       "Outputs": []
@@ -35,7 +35,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 64,
             "Y": 1,
@@ -58,7 +58,7 @@
       "Outputs": []
     },
     {
-      "Id": "8fcd4515-f588-4210-b43c-42e00a066b69"/*StructuredBuffer2*/,
+      "Id": "8fcd4515-f588-4210-b43c-42e00a066b69"/*StructuredBufferWithViews*/,
       "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
         {

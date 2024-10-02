@@ -12,7 +12,7 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
     /// </summary>
     public class SiTimeRaster : AbstractTimeRaster
     {
-        public override void Draw(Playback playback)
+        public override void Draw(Playback playback, float unitsPerSeconds)
         {
             if (ScaleRanges == null || Math.Abs(UserSettings.Config.TimeRasterDensity - _initializedDensity) > 0.0001f)
             {
@@ -47,13 +47,13 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
             {
                 output += c switch
                               {
+                                  'Y' => Format(time, everyYear, 9999),
                                   'D' => Format(time, everyDay, 365),
                                   'H' => Format(time, everyHour, 24),
                                   'M' => Format(time, everyMinute, 60),
                                   'S' => Format(time, everySec, 60),
                                   'F' => Format(time, everySec / 60, 60),
-                                  'T' => Format(time, every100Ms, 10),
-                                  'Y' => Format(time, everyYear, 9999),
+                                  'T' => "." + Format(time, every100Ms, 10),
                                   _   => c
                               };
             }
@@ -86,7 +86,7 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
         
         private static List<ScaleRange> InitializeTimeScaleDefinitions(float density)
         {
-
+            density *= 2f;
 
             var scales = new List<ScaleRange>
                              {

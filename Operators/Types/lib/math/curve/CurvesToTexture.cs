@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using T3.Core.Animation;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -46,11 +44,13 @@ namespace T3.Operators.Types.Id_ab511978_bad5_4b69_90b2_c028447fe9f7
 
                     _curves.Add(curve);
                 }
+                Curves.DirtyFlag.Clear();
             }
             else
             {
-                if (Curves.Value != null)
-                    _curves.Add(Curves.Value);
+                var c = Curves.GetValue(context);
+                if (c != null)
+                    _curves.Add(c);
             }
 
             var curveCount = _curves.Count;

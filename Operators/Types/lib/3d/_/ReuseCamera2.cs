@@ -1,13 +1,10 @@
 using System;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
-using T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6;
 
 namespace T3.Operators.Types.Id_1de05a51_4a22_44cd_a584_6f1ae1c0e8d1
 {
@@ -26,7 +23,7 @@ namespace T3.Operators.Types.Id_1de05a51_4a22_44cd_a584_6f1ae1c0e8d1
             var obj = CameraReference.GetValue(context);
             if (obj == null)
             {
-                Log.Warning("Camera reference is undefined");
+                Log.Warning("Camera reference is undefined", this);
                 return;
             }
 

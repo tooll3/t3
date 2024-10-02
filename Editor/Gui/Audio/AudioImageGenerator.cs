@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.IO;
 using ManagedBass;
 using Newtonsoft.Json;
-using SharpDX;
 using T3.Core.Logging;
+using T3.Core.Utils;
 
 namespace T3.Editor.Gui.Audio
 {
@@ -17,13 +17,21 @@ namespace T3.Editor.Gui.Audio
 
         public string GenerateSoundSpectrumAndVolume()
         {
-            if (String.IsNullOrEmpty(_soundFilePath) || !File.Exists(_soundFilePath))
-                return null;
-
-            if (File.Exists(ImageFilePath))
+            try
             {
-                Log.Debug($"Reusing sound image file: {ImageFilePath}");
-                return ImageFilePath;
+                if (string.IsNullOrEmpty(_soundFilePath) || !File.Exists(_soundFilePath))
+                    return null;
+
+                if (File.Exists(ImageFilePath))
+                {
+                    Log.Debug($"Reusing sound image file: {ImageFilePath}");
+                    return ImageFilePath;
+                }
+            }
+            catch(Exception e)
+            {
+                Log.Warning($"Failed to generated image for soundtrack {_soundFilePath}: " + e.Message);
+                return null;
             }
 
             Log.Debug($"Generating {ImageFilePath}...");
@@ -143,8 +151,8 @@ namespace T3.Editor.Gui.Audio
             {
                 var level = 0f;
 
-                var startIndex = (int)MathUtil.Lerp(0, SpectrumLength, MathUtil.Clamp(this.LowerLimit, 0, 1));
-                var endIndex = (int)MathUtil.Lerp(0, SpectrumLength, MathUtil.Lerp(this.UpperLimit, 0, 1));
+                var startIndex = (int)MathUtils.Lerp(0, SpectrumLength, MathUtils.Clamp(this.LowerLimit, 0, 1));
+                var endIndex = (int)MathUtils.Lerp(0, SpectrumLength, MathUtils.Lerp(this.UpperLimit, 0, 1));
 
                 for (int i = startIndex; i < endIndex; i++)
                 {
@@ -168,10 +176,10 @@ namespace T3.Editor.Gui.Audio
 
         private readonly FftRegion[] _regions =
             {
-                new FftRegion() { Title = "levels", LowerLimit = 0f, UpperLimit = 1f },
-                new FftRegion() { Title = "highlevels", LowerLimit = 0.3f, UpperLimit = 1f },
-                new FftRegion() { Title = "midlevels", LowerLimit = 0.06f, UpperLimit = 0.3f },
-                new FftRegion() { Title = "lowlevels", LowerLimit = 0.0f, UpperLimit = 0.02f },
+                new() { Title = "levels", LowerLimit = 0f, UpperLimit = 1f },
+                new() { Title = "highlevels", LowerLimit = 0.3f, UpperLimit = 1f },
+                new() { Title = "midlevels", LowerLimit = 0.06f, UpperLimit = 0.3f },
+                new() { Title = "lowlevels", LowerLimit = 0.0f, UpperLimit = 0.02f },
             };
 
         private const int SpectrumLength = 1024;

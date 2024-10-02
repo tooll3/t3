@@ -97,14 +97,14 @@
           }
         },
         {
-          "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
-          "Type": "System.Single",
-          "Value": 72.0
-        },
-        {
           "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
           "Type": "System.String",
           "Value": "Resources\\fonts\\RobotoSlab-Black.fnt"
+        },
+        {
+          "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
+          "Type": "System.Single",
+          "Value": 72.0
         }
       ],
       "Outputs": []
@@ -120,6 +120,16 @@
       "SymbolId": "d14233a2-8240-47d3-bb92-0854f6d3b218",
       "InputValues": [
         {
+          "Id": "f084ae44-d69a-48c3-936b-b89e310ca185"/*Refresh*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
+          "Id": "c42d8124-d656-4b52-864f-9c9d888e0c54"/*WrapSize*/,
+          "Type": "System.Single",
+          "Value": 9.0
+        },
+        {
           "Id": "e92432c8-6ceb-494b-9cf4-b21191567b29"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
@@ -130,19 +140,9 @@
           }
         },
         {
-          "Id": "c42d8124-d656-4b52-864f-9c9d888e0c54"/*WrapSize*/,
-          "Type": "System.Single",
-          "Value": 9.0
-        },
-        {
           "Id": "0744e03b-9df3-4a5e-9cfa-f522d9d946ea"/*NoiseAmount*/,
           "Type": "System.Single",
           "Value": 0.1
-        },
-        {
-          "Id": "f084ae44-d69a-48c3-936b-b89e310ca185"/*Reset*/,
-          "Type": "System.Boolean",
-          "Value": false
         }
       ],
       "Outputs": []
@@ -220,16 +220,6 @@
       "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
       "InputValues": [
         {
-          "Id": "ed4f8c30-7b71-4649-97e6-710a718039b0"/*Color*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 0.56,
-            "Y": 0.56,
-            "Z": 0.56,
-            "W": 1.0
-          }
-        },
-        {
           "Id": "a384be77-c5fc-47b3-9ec3-960db9f9bae9"/*Position*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
@@ -243,6 +233,16 @@
           "Value": {
             "X": 1.5,
             "Y": 0.09000001
+          }
+        },
+        {
+          "Id": "ed4f8c30-7b71-4649-97e6-710a718039b0"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.56,
+            "Y": 0.56,
+            "Z": 0.56,
+            "W": 1.0
           }
         }
       ],
@@ -281,17 +281,17 @@
       "SymbolId": "d392d4af-4c78-4f4a-bc3f-4c54c8c73538",
       "InputValues": [
         {
-          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*BlurRadius*/,
+          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*Radius*/,
           "Type": "System.Single",
           "Value": 2.3
         },
         {
-          "Id": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*GlowAmount*/,
+          "Id": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*Intensity*/,
           "Type": "System.Single",
           "Value": 0.61
         },
         {
-          "Id": "4c9b9135-f27b-414e-bed7-f9e5640dc526"/*Offset*/,
+          "Id": "4c9b9135-f27b-414e-bed7-f9e5640dc526"/*Threshold*/,
           "Type": "System.Single",
           "Value": -0.050000012
         },
@@ -389,14 +389,14 @@
           }
         },
         {
-          "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
-          "Type": "System.Single",
-          "Value": 91.0
-        },
-        {
           "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
           "Type": "System.String",
           "Value": "Resources\\fonts\\Roboto-Thin.fnt"
+        },
+        {
+          "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
+          "Type": "System.Single",
+          "Value": 91.0
         }
       ],
       "Outputs": []
@@ -429,7 +429,7 @@
       "Outputs": []
     },
     {
-      "Id": "6434d840-7fe0-4c1d-9ade-2dd8721aeca1"/*Float3ToVector3*/,
+      "Id": "6434d840-7fe0-4c1d-9ade-2dd8721aeca1"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [],
       "Outputs": []
@@ -458,14 +458,14 @@
           }
         },
         {
-          "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
-          "Type": "System.Single",
-          "Value": 32.0
-        },
-        {
           "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
           "Type": "System.String",
           "Value": "Resources\\fonts\\Roboto-Thin.fnt"
+        },
+        {
+          "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
+          "Type": "System.Single",
+          "Value": 32.0
         }
       ],
       "Outputs": []

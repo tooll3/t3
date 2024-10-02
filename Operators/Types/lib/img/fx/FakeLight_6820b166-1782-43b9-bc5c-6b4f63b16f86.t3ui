@@ -1,27 +1,28 @@
 {
   "Id": "6820b166-1782-43b9-bc5c-6b4f63b16f86"/*FakeLight*/,
+  "Description": "Applies fake shading to the image.\n\nFor similar effects see: [Steps] [DetectEdges] [DistortAndShade] [Displace]",
   "InputUis": [
-    {
-      "InputId": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
-      "Position": {
-        "X": -975.6439,
-        "Y": 462.92966
-      }
-    },
     {
       "InputId": "00c53b57-7347-4ebc-97d7-1ab48483f09b"/*HeightMap*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -765.90405,
-        "Y": -21.191006
+        "X": -764.6415,
+        "Y": 5.323948
       }
     },
     {
       "InputId": "56eccacb-65ac-4813-ad7e-fad8e581f570"/*LightMap*/,
-      "Relevancy": "Required",
+      "Relevancy": "Relevant",
       "Position": {
         "X": -761.0598,
         "Y": 140.2838
+      }
+    },
+    {
+      "InputId": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
+      "Position": {
+        "X": -930.1597,
+        "Y": 237.93335
       }
     },
     {
@@ -53,13 +54,16 @@
         "X": -406.7303,
         "Y": 436.7386
       },
-      "Scale": 0.001
+      "Min": -1.0,
+      "Max": 1.0,
+      "Scale": 0.001,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "9d5e3055-c17e-4013-963d-e17c76b707c1"/*HighlightColor*/,
       "Position": {
-        "X": -975.5961,
-        "Y": 536.4494
+        "X": -995.22015,
+        "Y": 566.9757
       }
     },
     {
@@ -76,7 +80,7 @@
         "Y": 862.13007
       },
       "Min": 0.0,
-      "Max": 5.0,
+      "Max": 100.0,
       "Scale": 0.01,
       "Clamp": true
     },
@@ -109,11 +113,7 @@
       }
     },
     {
-      "ChildId": "a6d895fd-16c0-4fa6-83d1-bdbd7dc5c01f"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "a6d895fd-16c0-4fa6-83d1-bdbd7dc5c01f"/*Vector2Components*/,
       "Position": {
         "X": -276.7303,
         "Y": 436.7386
@@ -121,43 +121,27 @@
     },
     {
       "ChildId": "6043d431-f383-43f5-9a2c-a8a0ceb2e2bd"/*UseFallbackTexture*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": -199.66461,
         "Y": 181.23804
       }
     },
     {
-      "ChildId": "d8b232b7-711b-440e-8e4f-20562e2697f9"/*Blob*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "d8b232b7-711b-440e-8e4f-20562e2697f9"/*_BlobOld*/,
       "Position": {
         "X": -278.88748,
         "Y": 773.77454
       }
     },
     {
-      "ChildId": "fca0aad7-e4f4-408a-a4f6-4ccc1e5a55d8"/*Blob*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "fca0aad7-e4f4-408a-a4f6-4ccc1e5a55d8"/*_BlobOld*/,
       "Position": {
         "X": -615.89795,
         "Y": 674.1929
       }
     },
     {
-      "ChildId": "64c08db3-03e8-4951-a95f-39da0ec4637b"/*Blob*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
+      "ChildId": "64c08db3-03e8-4951-a95f-39da0ec4637b"/*_BlobOld*/,
       "Position": {
         "X": -451.58862,
         "Y": 753.622
@@ -165,10 +149,6 @@
     },
     {
       "ChildId": "a87c1bdb-aa97-4b3a-bfe4-759ac4baa77b"/*BlendColors*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -792.0448,
         "Y": 904.53876
@@ -176,10 +156,6 @@
     },
     {
       "ChildId": "67c9ad24-252d-4a95-87ab-6847cd2d8958"/*Blur*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": -444.3788,
         "Y": -70.918106
@@ -187,10 +163,6 @@
     },
     {
       "ChildId": "7f44e678-010a-4efc-92f4-e4f522df15f6"/*Multiply*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": -498.37506,
         "Y": 98.59154

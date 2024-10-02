@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using T3.Core;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using Point = T3.Core.DataTypes.Point;
 using Vector3 = System.Numerics.Vector3;
@@ -17,17 +15,17 @@ namespace T3.Operators.Types.Id_b7345438_f3f4_4ad3_9c57_6076ed0e9399
     public class PrepareSvgLineTransition : Instance<PrepareSvgLineTransition>
     {
         [Output(Guid = "adcfd192-23a3-48c1-ae21-e7d36e055673")]
-        public readonly Slot<StructuredList> ResultList = new Slot<StructuredList>();
+        public readonly Slot<StructuredList> ResultList = new();
 
         [Output(Guid = "4E6983BB-482F-48E7-93B1-73C73F43C60A")]
-        public readonly Slot<int> StrokeCount = new Slot<int>();
+        public readonly Slot<int> StrokeCount = new();
 
         public PrepareSvgLineTransition()
         {
             ResultList.UpdateAction = Update;
         }
 
-        private static List<Segment> segments = new List<Segment>(1000);
+        private static List<Segment> segments = new(1000);
 
         private struct Segment
         {
@@ -101,7 +99,7 @@ namespace T3.Operators.Types.Id_b7345438_f3f4_4ad3_9c57_6076ed0e9399
 
             if (totalLength < 0.0001f || segments.Count < 2)
             {
-                Log.Warning("Stroke animation requires at least two segments with of some length");
+                Log.Warning("Stroke animation requires at least two segments with of some length", this);
                 return;
             }
 
@@ -192,21 +190,21 @@ namespace T3.Operators.Types.Id_b7345438_f3f4_4ad3_9c57_6076ed0e9399
         }
 
         [Input(Guid = "5FD5EEA5-B7AB-406F-8C10-8435D59297B5")]
-        public readonly InputSlot<float> Spread = new InputSlot<float>();
+        public readonly InputSlot<float> Spread = new();
 
         [Input(Guid = "C1FA1A4E-8884-4A6F-AC80-F22D3B5DFE2F", MappedType = typeof(SpreadModes))]
-        public readonly InputSlot<int> SpreadMode = new InputSlot<int>();
+        public readonly InputSlot<int> SpreadMode = new();
 
         [Input(Guid = "8CEF763E-48E4-41F9-B429-0AD32B849ADF")]
-        public readonly InputSlot<float> RandomizeStart = new InputSlot<float>();
+        public readonly InputSlot<float> RandomizeStart = new();
 
         [Input(Guid = "0BCFBD7A-C01B-409F-A661-135DD27E8580")]
-        public readonly InputSlot<float> RandomizeDuration = new InputSlot<float>();
+        public readonly InputSlot<float> RandomizeDuration = new();
 
         [Input(Guid = "82b2e8d3-40c2-4a4c-a9ad-806d5097a8fd")]
-        public readonly InputSlot<StructuredList> SourcePoints = new InputSlot<StructuredList>();
+        public readonly InputSlot<StructuredList> SourcePoints = new();
 
-        private Random _random = new Random();
+        private Random _random = new();
 
         private enum SpreadModes
         {

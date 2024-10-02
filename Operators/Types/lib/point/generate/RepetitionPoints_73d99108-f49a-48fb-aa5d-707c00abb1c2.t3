@@ -16,6 +16,10 @@
       }
     },
     {
+      "Id": "2f1383f3-f5ae-4f2d-bb8e-0ad8e35dd621"/*StartW*/,
+      "DefaultValue": 0.0
+    },
+    {
       "Id": "3a1a829d-d273-4ec0-b327-30be0e0463c4"/*Translate*/,
       "DefaultValue": {
         "X": 0.0,
@@ -36,19 +40,15 @@
       }
     },
     {
-      "Id": "af3c87e3-889d-410f-b4bc-62bd29bee8fa"/*Offset*/,
-      "DefaultValue": 0.0
-    },
-    {
       "Id": "283f9939-7b04-4733-8130-edcf34305fe5"/*Pivot*/,
       "DefaultValue": {
-        "X": 1.0,
+        "X": 0.0,
         "Y": 0.0,
         "Z": 0.0
       }
     },
     {
-      "Id": "2f1383f3-f5ae-4f2d-bb8e-0ad8e35dd621"/*StartW*/,
+      "Id": "af3c87e3-889d-410f-b4bc-62bd29bee8fa"/*Phase*/,
       "DefaultValue": 0.0
     },
     {

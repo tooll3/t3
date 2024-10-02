@@ -1,10 +1,10 @@
 {
-  "Id": "dab61a12-9996-401e-9aa6-328dd6292beb"/*Dashboard*/,
+  "Id": "dab61a12-9996-401e-9aa6-328dd6292beb"/*HomeCanvas*/,
   "Description": "Your personal Workspace.",
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "eb3041f4-dcf1-4ef7-948e-c18ee0a29bc8"/*PartialMain*/,
+      "ChildId": "eb3041f4-dcf1-4ef7-948e-c18ee0a29bc8"/*ThereDemo*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -48,7 +48,7 @@
       }
     },
     {
-      "ChildId": "2fe00e23-ee4a-4234-a0dc-213b9a6ca9fe"/*RandomCamera*/,
+      "ChildId": "2fe00e23-ee4a-4234-a0dc-213b9a6ca9fe"/*OrbitCamera*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -59,7 +59,7 @@
       }
     },
     {
-      "ChildId": "bc999d1e-4b76-43f1-9e3d-8f51b9d22871"/*AnimValue*/,
+      "ChildId": "bc999d1e-4b76-43f1-9e3d-8f51b9d22871"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

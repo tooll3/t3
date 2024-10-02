@@ -6,6 +6,8 @@ using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
+using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Commands.Animation;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.TimeLine;
@@ -18,7 +20,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
     /// <remarks>This provides basic curve editing functionality outside a timeline context, e.g. for CurveParameters</remarks>
     public abstract class CurveEditing
     {
-        protected readonly HashSet<VDefinition> SelectedKeyframes = new HashSet<VDefinition>();
+        protected readonly HashSet<VDefinition> SelectedKeyframes = new();
         protected abstract IEnumerable<Curve> GetAllCurves();
         protected abstract void ViewAllOrSelectedKeys(bool alsoChangeTimeRange = false);
         protected abstract void DeleteSelectedKeyframes();
@@ -147,15 +149,15 @@ namespace T3.Editor.Gui.Interaction.WithCurves
 
         private void ForSelectedOrAllPointsDo(DoSomethingWithKeyframeDelegate doFunc)
         {
-            UpdateCurveAndMakeUpdateKeyframeCommands(doFunc);
-        }
-
-        private void UpdateCurveAndMakeUpdateKeyframeCommands(DoSomethingWithKeyframeDelegate doFunc)
-        {
-            foreach (var keyframe in GetSelectedOrAllPoints())
+            var selectedOrAllPoints = GetSelectedOrAllPoints().ToList();
+            var cmd = new ChangeKeyframesCommand(selectedOrAllPoints, GetAllCurves());
+            
+            foreach (var keyframe in selectedOrAllPoints)
             {
                 doFunc(keyframe);
             }
+            cmd.StoreCurrentValues();
+            UndoRedoStack.Add(cmd);
         }
 
         private void OnSmooth()
@@ -328,7 +330,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
                 }
             }
 
-            bounds.Expand(0.2f);
+            //bounds.Expand(0.2f);
             return bounds;
         }
     }

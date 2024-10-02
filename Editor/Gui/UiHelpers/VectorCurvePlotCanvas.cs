@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
@@ -37,7 +38,7 @@ namespace T3.Editor.Gui.UiHelpers
 
         public void Draw(T value)
         {
-            var dl = ImGui.GetForegroundDrawList();
+            var dl = ImGui.GetWindowDrawList();
             var min = float.PositiveInfinity;
             var max = float.NegativeInfinity;
 
@@ -92,8 +93,6 @@ namespace T3.Editor.Gui.UiHelpers
                 var components = Utilities.GetFloatsFromVector(v);
                 for (var cIndex = 0; cIndex < components.Length; cIndex++)
                 {
-                    var color = _componentCount == 1 ? GrayCurveColor : CurveColors[cIndex];
-                    
                     var c = components[cIndex];
                     _graphPoints[cIndex,index] = new Vector2((int)x,
                                                       (int)_canvas.TransformY(c));
@@ -103,7 +102,7 @@ namespace T3.Editor.Gui.UiHelpers
 
             for(int cIndex= 0; cIndex< _componentCount; cIndex ++)
             {
-                var color = _componentCount == 1 ? GrayCurveColor : CurveColors[cIndex];
+                var color = _componentCount == 1 ? _grayCurveColor : _curveColors[cIndex];
                 dl.AddPolyline(ref _graphPoints[cIndex,0], _sampleCount - 1, color, ImDrawFlags.None, 1);
                 dl.AddCircleFilled(_graphPoints[cIndex, _sampleCount - 1], 3, color);
             }
@@ -113,7 +112,7 @@ namespace T3.Editor.Gui.UiHelpers
 
             for (var cIndex = 0; cIndex < _lastValues.Length; cIndex++)
             {
-                var color = _componentCount == 1 ? GrayCurveColor : TextColors[cIndex];
+                var color = _componentCount == 1 ? _grayCurveColor : _textColors[cIndex];
                 color.Rgba.W= 1;
                 
                 var lastValue = _lastValues[cIndex];
@@ -151,23 +150,24 @@ namespace T3.Editor.Gui.UiHelpers
         private readonly ScalableCanvas _canvas = new() { FillMode = ScalableCanvas.FillModes.FillAvailableContentRegion };
         private const int MaxComponents = 4;
         
-        private static readonly Color GrayCurveColor = new Color(1f, 1f, 1.0f, 0.3f);
-        internal static readonly Color[] CurveColors =
+        private static readonly Color _grayCurveColor = new(1f, 1f, 1.0f, 0.3f);
+
+        private static readonly Color[] _curveColors =
             {
-                new Color(1f, 0.2f, 0.2f, 0.3f),
-                new Color(0.1f, 1f, 0.2f, 0.3f),
-                new Color(0.1f, 0.4f, 1.0f, 0.5f),
-                new Color(0.5f, 0.5f, 0.5f, 0.5f),
-                GrayCurveColor,
+                new(1f, 0.2f, 0.2f, 0.3f),
+                new(0.1f, 1f, 0.2f, 0.3f),
+                new(0.1f, 0.4f, 1.0f, 0.5f),
+                new(0.5f, 0.5f, 0.5f, 0.5f),
+                _grayCurveColor,
             };
-        
-        internal static readonly Color[] TextColors =
+
+        private static readonly Color[] _textColors =
             {
-                new Color(1f, 0.5f, 0.5f, 1f),
-                new Color(0.4f, 1f, 0.5f, 1f),
-                new Color(0.6f, 0.671f, 1.0f, 1f),
-                new Color(0.6f, 0.6f, 0.6f, 1f),
-                GrayCurveColor,
+                new(1f, 0.5f, 0.5f, 1f),
+                new(0.4f, 1f, 0.5f, 1f),
+                new(0.6f, 0.671f, 1.0f, 1f),
+                new(0.6f, 0.6f, 0.6f, 1f),
+                _grayCurveColor,
             };        
     }
 }

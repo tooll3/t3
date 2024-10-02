@@ -53,37 +53,39 @@ namespace T3.Core.DataTypes
             return 0;
         }
 
-        public bool ExistVBefore(double u)
+        public bool HasKeyBefore(double u)
         {
-            u = Math.Round(u, TIME_PRECISION);
-            var foundEl = _state.Table.FirstOrDefault();
-            return foundEl.Value != null && foundEl.Key < u;
+            if (_state.Table.Count == 0)
+                return false;
+            
+            return _state.Table.Keys[0] < Math.Round(u, TIME_PRECISION);
         }
 
-        public bool ExistVAfter(double u)
+
+        public bool HasKeyAfter(double u)
         {
-            u = Math.Round(u, TIME_PRECISION);
-            var foundEl = _state.Table.LastOrDefault();
-            return foundEl.Value != null && foundEl.Key > u;
+            if (_state.Table.Count == 0)
+                return false;
+            
+            return _state.Table.Keys[ _state.Table.Count-1] > Math.Round(u, TIME_PRECISION);
         }
 
-        public double? GetPreviousU(double u)
+        public bool TryGetPreviousKey(double u, out VDefinition key)
         {
             u = Math.Round(u, TIME_PRECISION);
-            var foundEl = _state.Table.LastOrDefault(e => e.Key < u);
-            if (foundEl.Value != null)
-                return foundEl.Key;
-            return null;
+            // todo: Refactor to avoid linq and use binary search
+            (_, key) = _state.Table.LastOrDefault(e => e.Key < u);
+            return key != null;
         }
-
-        public double? GetNextU(double u)
+        
+        public bool TryGetNextKey(double u, out VDefinition key)
         {
             u = Math.Round(u, TIME_PRECISION);
-            var foundEl = _state.Table.FirstOrDefault(e => e.Key > u);
-            if (foundEl.Value != null)
-                return foundEl.Key;
-            return null;
+            // todo: Refactor to avoid linq and use binary search
+            (_, key) = _state.Table.FirstOrDefault(e => e.Key > u);
+            return key != null;
         }
+        
 
         public void AddOrUpdateV(double u, VDefinition key)
         {
@@ -221,7 +223,7 @@ namespace T3.Core.DataTypes
             _state.Read(inputToken);
         }
 
-        private CurveState _state = new CurveState();
+        private CurveState _state = new();
 
         public static void UpdateCurveBoolValue(Curve curves, double time, bool value)
         {

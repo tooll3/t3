@@ -1,6 +1,6 @@
 {
   "Id": "e4e608e7-1248-4d73-910c-e8bfbb34251b"/*SimpleLiquid*/,
-  "Description": "A port of \" simple detailed fluid\" https://www.shadertoy.com/view/sl3Szs by lomateron",
+  "Description": "A port of 'simple detailed fluid' from 'https://www.shadertoy.com/view/sl3Szs' by Lomateron.",
   "InputUis": [
     {
       "InputId": "5c42604f-bbc1-4e65-8f21-8d8e79179e5a"/*ShouldReset*/,
@@ -79,10 +79,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "5b15f239-2a00-48bd-b568-2d45b8af5caf"/*FloatsToBuffer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 244.0
-      },
       "Position": {
         "X": -274.99884,
         "Y": 2049.6218
@@ -90,32 +86,20 @@
     },
     {
       "ChildId": "3337e40d-33bb-46d6-8e80-076565721065"/*MouseInput*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -1047.792,
         "Y": 1974.101
       }
     },
     {
-      "ChildId": "9ae241b2-6064-41d8-a298-1a9f3b326d71"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "9ae241b2-6064-41d8-a298-1a9f3b326d71"/*Vector2Components*/,
       "Position": {
         "X": -897.79205,
         "Y": 1974.101
       }
     },
     {
-      "ChildId": "6da10045-e0e9-47ec-93ac-9d8771316ab3"/*BoolToFloats*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "6da10045-e0e9-47ec-93ac-9d8771316ab3"/*BoolToFloat*/,
       "Position": {
         "X": -897.79205,
         "Y": 2030.101
@@ -123,10 +107,6 @@
     },
     {
       "ChildId": "c54127f2-fb1d-43bb-ac46-8bb7a45154da"/*BufferA*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 56.322113,
         "Y": 2405.8953
@@ -146,10 +126,6 @@
     },
     {
       "ChildId": "809810b5-9c35-45a9-b6ea-fbf88c7f0442"/*SamplerStateOp*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 206.32211,
         "Y": 2362.8953
@@ -157,10 +133,6 @@
     },
     {
       "ChildId": "cf780ed0-f647-4631-b9b6-f85ecec922c8"/*ComputeShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 202.16904,
         "Y": 2197.2542
@@ -168,10 +140,6 @@
     },
     {
       "ChildId": "791f28f5-14c4-4f16-b700-1e47611debf2"/*GetTextureSize*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -641.8277,
         "Y": 2671.984
@@ -179,10 +147,6 @@
     },
     {
       "ChildId": "bac11650-4200-41a1-9fd5-9ac185422dd5"/*BufferB*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -33.762054,
         "Y": 2738.9592
@@ -190,10 +154,6 @@
     },
     {
       "ChildId": "f3c37942-dbe4-420b-b814-e6d3f9c52327"/*UavFromTexture2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 206.32211,
         "Y": 2405.8953
@@ -201,10 +161,6 @@
     },
     {
       "ChildId": "0bb32a81-8b72-47bc-a6f7-a3bb3c93ef7e"/*UavFromTexture2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 116.237946,
         "Y": 2738.9592
@@ -224,10 +180,6 @@
     },
     {
       "ChildId": "2602ea56-c696-4c96-b2a3-af2edc22b017"/*SamplerStateOp*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 599.70166,
         "Y": 2635.5068
@@ -235,10 +187,6 @@
     },
     {
       "ChildId": "6e4f4f4c-501b-4f52-baa4-af23215940bd"/*ComputeShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 587.9215,
         "Y": 2502.9358
@@ -246,10 +194,6 @@
     },
     {
       "ChildId": "63038293-d5e6-47a3-9c65-8434f13c707b"/*Execute*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": 1224.2361,
         "Y": 2377.8474
@@ -257,10 +201,6 @@
     },
     {
       "ChildId": "74705840-f378-4d0e-8954-4d9d18d89133"/*ExecuteTextureUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 1461.3113,
         "Y": 2412.295
@@ -268,10 +208,6 @@
     },
     {
       "ChildId": "18fedd5d-03b4-4197-95a4-6fc40ea16d01"/*PickTexture*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
       "Position": {
         "X": 158.86536,
         "Y": 3160.9458
@@ -279,10 +215,6 @@
     },
     {
       "ChildId": "c89ede4b-e142-4d10-a6aa-706ba73d532f"/*Texture2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -102.56236,
         "Y": 3289.331
@@ -290,10 +222,6 @@
     },
     {
       "ChildId": "f22d04bb-ed8f-4fd1-9d47-d2285f32d0a1"/*CountInt*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -138.4066,
         "Y": 3398.3696
@@ -301,10 +229,6 @@
     },
     {
       "ChildId": "43703128-6d55-468e-a0cb-bf923ba89482"/*PickTexture*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
       "Position": {
         "X": 172.82123,
         "Y": 3387.8645
@@ -312,10 +236,6 @@
     },
     {
       "ChildId": "d493e06b-fe31-47a9-a1b3-59e43697392a"/*UavFromTexture2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 322.82123,
         "Y": 3387.8645
@@ -323,10 +243,6 @@
     },
     {
       "ChildId": "5c4c05fd-c29a-496e-8e37-f67fa939cd8a"/*RenderTarget*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -59.27176,
         "Y": 2253.2542
@@ -334,10 +250,6 @@
     },
     {
       "ChildId": "9dfddf35-0d64-4f8f-8f5b-62975baf9787"/*SrvFromTexture2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 90.72824,
         "Y": 2253.2542
@@ -345,10 +257,6 @@
     },
     {
       "ChildId": "2e16216f-dd50-40fa-923e-6653887f1b71"/*Texture2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 578.2177,
         "Y": 3010.9512
@@ -356,21 +264,13 @@
     },
     {
       "ChildId": "410e04a5-91e8-4dd3-ace5-d8ae47085070"/*UavFromTexture2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 766.60785,
         "Y": 2895.945
       }
     },
     {
-      "ChildId": "2075ef6d-a6a0-4f8e-ab2c-cea593fec2cc"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "2075ef6d-a6a0-4f8e-ab2c-cea593fec2cc"/*Vector2Components*/,
       "Position": {
         "X": -958.4268,
         "Y": 2189.416
@@ -378,43 +278,27 @@
     },
     {
       "ChildId": "393b379b-eab4-49c3-8b0a-439e1e58a1f5"/*SrvFromTexture2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -814.0579,
         "Y": 2749.9165
       }
     },
     {
-      "ChildId": "58c81572-2fd1-4482-8d87-39a6477cfc37"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "58c81572-2fd1-4482-8d87-39a6477cfc37"/*Vector4Components*/,
       "Position": {
         "X": -793.2248,
         "Y": 2546.726
       }
     },
     {
-      "ChildId": "8db96810-749b-46f7-98dd-3156804a22aa"/*CalcSize2DispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
+      "ChildId": "8db96810-749b-46f7-98dd-3156804a22aa"/*CalcInt2DispatchCount*/,
       "Position": {
         "X": 352.16904,
         "Y": 2197.2542
       }
     },
     {
-      "ChildId": "2b556db3-2723-45bd-9ed0-6cdd55d55224"/*CalcSize2DispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
+      "ChildId": "2b556db3-2723-45bd-9ed0-6cdd55d55224"/*CalcInt2DispatchCount*/,
       "Position": {
         "X": 731.0475,
         "Y": 2540.2664
@@ -422,21 +306,13 @@
     },
     {
       "ChildId": "1c4a5aa8-5146-4573-a283-be964047ddfc"/*Once*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -1394.584,
         "Y": 2104.616
       }
     },
     {
-      "ChildId": "0cfb2834-a854-427f-84c1-db2c24c5639e"/*BoolToFloats*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "0cfb2834-a854-427f-84c1-db2c24c5639e"/*BoolToFloat*/,
       "Position": {
         "X": -1094.584,
         "Y": 2104.616
@@ -444,10 +320,6 @@
     },
     {
       "ChildId": "bdf915e3-4ae9-409d-ae7f-6132709a1191"/*Add*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": -955.42456,
         "Y": 2443.1143
@@ -455,10 +327,6 @@
     },
     {
       "ChildId": "53debe42-e749-40bb-a4c4-8dcb6fdccb56"/*HasIntChanged*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -473.1211,
         "Y": 2710.9312
@@ -466,10 +334,6 @@
     },
     {
       "ChildId": "e45c42bf-d6e2-46db-a610-e9beade41c3b"/*Any*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": -1250.4595,
         "Y": 2103.9224

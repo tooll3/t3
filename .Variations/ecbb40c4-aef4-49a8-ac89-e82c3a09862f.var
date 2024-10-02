@@ -1,0 +1,165 @@
+{
+  "Id": "ecbb40c4-aef4-49a8-ac89-e82c3a09862f",
+  "Variations": [
+    {
+      "Id": "60765230-7ea9-4725-b7ae-a6bf4dabf7e8",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "Default",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {}
+    },
+    {
+      "Id": "bca84101-f58d-4fb7-8eb8-f35d9e0e75bd",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Few long ones",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "c643292c-5612-408a-9fd6-ce31e4de3f56": 0.25,
+          "68e16fd7-fabf-446e-9553-a737422c026b": 28.7,
+          "8c1d41ff-02e8-481b-a21a-56d1c519d920": 0.9
+        }
+      }
+    },
+    {
+      "Id": "59228dbe-c991-426a-8c5a-f2e3075b9b7d",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "Suptle glints",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "87148268-6d28-4d71-a2b5-b1ec0fb66685": {
+            "X": 1.0,
+            "Y": 0.9745251,
+            "Z": 0.7087233,
+            "W": 1.0
+          },
+          "c643292c-5612-408a-9fd6-ce31e4de3f56": 0.1,
+          "68e16fd7-fabf-446e-9553-a737422c026b": 10.0,
+          "8c1d41ff-02e8-481b-a21a-56d1c519d920": 0.75,
+          "dd0e21b8-91a6-4853-9907-e0f675a05a5d": 8,
+          "6bc1a296-1a17-44a2-ba41-2c51c192090c": {
+            "X": 0.5610631,
+            "Y": 0.61537164,
+            "Z": 0.67942584,
+            "W": 1.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "792d1b30-0a32-4aaa-8c3a-db7d5bb41bc8",
+      "IsPreset": true,
+      "ActivationIndex": 4,
+      "Title": "Softporn",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "c643292c-5612-408a-9fd6-ce31e4de3f56": 0.05,
+          "68e16fd7-fabf-446e-9553-a737422c026b": 7.12,
+          "8c1d41ff-02e8-481b-a21a-56d1c519d920": 0.26,
+          "dd0e21b8-91a6-4853-9907-e0f675a05a5d": 8,
+          "6bc1a296-1a17-44a2-ba41-2c51c192090c": {
+            "X": 0.39999998,
+            "Y": 0.39999998,
+            "Z": 0.39999998,
+            "W": 1.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "603bf59a-f51c-4aa1-89b0-37f8e23ca1dd",
+      "IsPreset": true,
+      "ActivationIndex": 5,
+      "Title": "What the Frog",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "c643292c-5612-408a-9fd6-ce31e4de3f56": 0.05,
+          "68e16fd7-fabf-446e-9553-a737422c026b": 7.12,
+          "8c1d41ff-02e8-481b-a21a-56d1c519d920": 0.26,
+          "dd0e21b8-91a6-4853-9907-e0f675a05a5d": 4,
+          "6bc1a296-1a17-44a2-ba41-2c51c192090c": {
+            "X": 0.39999998,
+            "Y": 0.39999998,
+            "Z": 0.39999998,
+            "W": 1.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "4581a380-4acf-49b4-b086-7469495bcf08",
+      "IsPreset": true,
+      "ActivationIndex": 6,
+      "Title": "Mom, I broke it.",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 186.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "87148268-6d28-4d71-a2b5-b1ec0fb66685": {
+            "X": 0.6540072,
+            "Y": 1.0,
+            "Z": 0.9967923,
+            "W": 1.0
+          },
+          "c643292c-5612-408a-9fd6-ce31e4de3f56": 0.05,
+          "68e16fd7-fabf-446e-9553-a737422c026b": 7.12,
+          "8c1d41ff-02e8-481b-a21a-56d1c519d920": 0.5,
+          "dd0e21b8-91a6-4853-9907-e0f675a05a5d": 4,
+          "6bc1a296-1a17-44a2-ba41-2c51c192090c": {
+            "X": 0.39999998,
+            "Y": 0.31164882,
+            "Z": 0.31053942,
+            "W": 1.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "04a901e7-d5d4-4476-8e75-97c6b259eb8c",
+      "IsPreset": true,
+      "ActivationIndex": 7,
+      "Title": "JJ Abrams StarTrek",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 186.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "c643292c-5612-408a-9fd6-ce31e4de3f56": 0.25,
+          "68e16fd7-fabf-446e-9553-a737422c026b": 3.51,
+          "6bc1a296-1a17-44a2-ba41-2c51c192090c": {
+            "X": 1.0,
+            "Y": 0.9998608,
+            "Z": 0.9994434,
+            "W": 1.0
+          },
+          "943f048f-4938-4cde-9ac3-c7de5242450e": 0,
+          "069a3776-3084-4a13-aee3-dd9fe6c6c9e1": 3
+        }
+      }
+    }
+  ]
+}

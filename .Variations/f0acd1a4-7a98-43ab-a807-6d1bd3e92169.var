@@ -1,0 +1,52 @@
+{
+  "Id": "f0acd1a4-7a98-43ab-a807-6d1bd3e92169",
+  "Variations": [
+    {
+      "Id": "a0fe4847-82f2-4825-b234-430729adaefb",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "ToSigned",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "f2baf278-adde-42de-afce-336b6c8d0387": -1.0
+        }
+      }
+    },
+    {
+      "Id": "1d0d3f0d-07bb-4be0-97c2-1a01310c3d10",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Degress To Radians",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "f2baf278-adde-42de-afce-336b6c8d0387": 0.0,
+          "252276fb-8de1-42cc-ba41-07d6862015bd": 0.01745321
+        }
+      }
+    },
+    {
+      "Id": "bbf847c5-f797-44e7-b439-42893f28ae84",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "Negate",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "f2baf278-adde-42de-afce-336b6c8d0387": 1.0,
+          "252276fb-8de1-42cc-ba41-07d6862015bd": 0.0
+        }
+      }
+    }
+  ]
+}

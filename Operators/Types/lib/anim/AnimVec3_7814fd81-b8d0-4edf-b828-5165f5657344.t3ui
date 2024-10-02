@@ -1,6 +1,6 @@
 {
   "Id": "7814fd81-b8d0-4edf-b828-5165f5657344"/*AnimVec3*/,
-  "Description": "Generates a repetitive LFO-like signal syned to the current BPM rate. It supports various shapes, modes and forms.\n\nYou can manipulate the rate and shape directly in the graph by dragging with CTRL+ left mouse button.\n\nSome tips:\n- Please checkout the [HowToAnimate] playground to see some applications.\n- You can use [SetSpeedFactors] to override the incoming rate, which is very useful for live VJ setups.\n\n- Also have a look at [AnimValue], [AnimVec2], and [TriggerAnim].\n",
+  "Description": "Generates a repetitive LFO-like signal synced to the current BPM rate. It supports various shapes, modes and forms.\n\nYou can manipulate the rate and shape directly in the graph by dragging with CTRL+ left mouse button.\n\nSome tips:\n- Please checkout the [HowToAnimate] playground to see some applications.\n- You can use [SetSpeedFactors] to override the incoming rate, which is very useful for live VJ setups.\n\n- Also have a look at [AnimValue], [AnimVec2], [TriggerAnim], [OscillateVec2] and [OscillateVec3]",
   "InputUis": [
     {
       "InputId": "fa1b36a1-4ed9-4187-aeb6-f7ba893cf3b2"/*OverrideTime*/,
@@ -53,7 +53,9 @@
         "X": -200.0,
         "Y": 225.0
       },
-      "Format": "{0:G3} ×"
+      "Min": 0.0,
+      "Max": 1.0,
+      "Format": "{0:0.000} ×"
     },
     {
       "InputId": "2384604d-6563-4af7-8799-9666a6d94171"/*Offsets*/,

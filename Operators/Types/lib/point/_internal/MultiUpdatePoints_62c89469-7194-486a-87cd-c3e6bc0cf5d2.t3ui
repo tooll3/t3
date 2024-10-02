@@ -4,6 +4,7 @@
   "InputUis": [
     {
       "InputId": "7caa2f8c-64e1-4941-bd1c-8bdc89584ba7"/*PointBuffers*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 0.0

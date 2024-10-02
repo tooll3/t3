@@ -3,7 +3,10 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Operator.Interfaces;
+using T3.Core.Utils.Geometry;
 using T3.Editor.Gui.Interaction.TransformGizmos;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Interaction.Camera
 {
@@ -13,6 +16,7 @@ namespace T3.Editor.Gui.Interaction.Camera
     /// </summary>
     public class CameraInteraction
     {
+        internal static ICameraManipulator[] ManipulationDevices = Array.Empty<ICameraManipulator>();
         public void Update(ICamera camera, bool allowCameraInteraction)
         {
             if (camera == null)
@@ -38,16 +42,21 @@ namespace T3.Editor.Gui.Interaction.Camera
                 _lastCameraNode = camera;
             }
 
-            if (allowCameraInteraction && ImGui.IsWindowHovered())
+            //if (allowCameraInteraction && ImGui.IsWindowHovered())
+            if (allowCameraInteraction)
             {
                 ManipulateCameraByMouse();
-                if (ImGui.IsWindowFocused())
-                    ManipulateCameraByKeyboard();
+                //if (ImGui.IsWindowFocused())
+                ManipulateCameraByKeyboard();
             }
 
             var frameTime = ImGui.GetTime();
-            SpaceMouseInteraction.ManipulateCamera(_intendedSetup, frameTime);
-            
+
+            foreach (var device in ManipulationDevices)
+            {
+                device.ManipulateCamera(_intendedSetup, frameTime);
+            }
+
             var updateRequired = ComputeSmoothMovement();
             if (!updateRequired)
                 return;
@@ -61,13 +70,13 @@ namespace T3.Editor.Gui.Interaction.Camera
             _moveVelocity = Vector3.Zero;
             _intendedSetup.Reset();
         }
-        
+
         private bool ComputeSmoothMovement()
         {
             var stillDamping = !_smoothedSetup.MatchesSetup(_intendedSetup);
             var stillSliding = _moveVelocity.Length() > CameraInteractionParameters.StopDistanceThreshold;
             var stillOrbiting = _orbitVelocity.Length() > 0.001f;
-            
+
             var cameraIsStillMoving = stillDamping
                                       || stillSliding
                                       || stillOrbiting
@@ -87,7 +96,7 @@ namespace T3.Editor.Gui.Interaction.Camera
                 _orbitVelocity = Vector2.Lerp(_orbitVelocity, Vector2.Zero, _deltaTime * CameraInteractionParameters.OrbitHorizontalDamping * 60);
             }
 
-            var maxVelocityForScale = _viewAxis.ViewDistance.Length() * CameraInteractionParameters.MaxMoveVelocity;
+            var maxVelocityForScale = _viewAxis.ViewDistance.Length() * CameraInteractionParameters.MaxMoveVelocity * UserSettings.Config.CameraSpeed;
             if (_moveVelocity.Length() > maxVelocityForScale)
             {
                 _moveVelocity *= maxVelocityForScale / _moveVelocity.Length();
@@ -110,6 +119,9 @@ namespace T3.Editor.Gui.Interaction.Camera
 
         private void ManipulateCameraByMouse()
         {
+            if (!( ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup | ImGuiHoveredFlags.ChildWindows)))
+                return;
+            
             HandleMouseWheel();
             if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
             {
@@ -128,7 +140,7 @@ namespace T3.Editor.Gui.Interaction.Camera
                     _orbitVelocity += delta * _deltaTime * -0.1f;
                 }
             }
-            else if (ImGui.IsMouseDragging(ImGuiMouseButton.Right))
+            else if (ImGui.IsMouseDragging(ImGuiMouseButton.Right) && !CustomComponents.IsDragScrolling && !ScalableCanvas.IsAnyCanvasDragged)
             {
                 Pan();
             }
@@ -145,33 +157,68 @@ namespace T3.Editor.Gui.Interaction.Camera
                 return;
 
             var viewDistance = _intendedSetup.Position - _intendedSetup.Target;
-
             var zoomFactorForCurrentFramerate = 1 + (CameraInteractionParameters.ZoomSpeed * FrameDurationFactor);
 
-            if (delta < 0)
+            if (UserSettings.Config.AdjustCameraSpeedWithMouseWheel)
             {
-                viewDistance *= zoomFactorForCurrentFramerate;
-            }
+                if (
+                    ImGui.IsMouseDown(ImGuiMouseButton.Left)
+                    || ImGui.IsMouseDown(ImGuiMouseButton.Middle)
+                    || ImGui.IsMouseDown(ImGuiMouseButton.Right))
+                {
+                    if (delta < 0)
+                    {
+                        //viewDistance *= zoomFactorForCurrentFramerate;
+                        UserSettings.Config.CameraSpeed /= zoomFactorForCurrentFramerate;
+                    }
 
-            if (delta > 0)
+                    if (delta > 0)
+                    {
+                        //viewDistance /= zoomFactorForCurrentFramerate;
+                        UserSettings.Config.CameraSpeed *= zoomFactorForCurrentFramerate;
+                    }
+
+                    _intendedSetup.Position = _intendedSetup.Target + viewDistance;
+                    _manipulatedByMouseWheel = true;
+                }
+                else
+                {
+                    //var viewDirLength = _viewAxis.ViewDistance.Length();
+                    var acc = CameraInteractionParameters.CameraAcceleration * UserSettings.Config.CameraSpeed * _deltaTime * 60;
+                    var sign = delta < 0 ? -1 : 1;
+                    _moveVelocity += Vector3.Normalize(_viewAxis.ViewDistance) * acc * sign;
+                    _manipulatedByKeyboard = true;
+                }
+            }
+            else
             {
-                viewDistance /= zoomFactorForCurrentFramerate;
-            }
+                if (delta < 0)
+                {
+                    viewDistance *= zoomFactorForCurrentFramerate;
 
-            _intendedSetup.Position = _intendedSetup.Target + viewDistance;
-            _manipulatedByMouseWheel = true;
+                }
+
+                if (delta > 0)
+                {
+                    viewDistance /= zoomFactorForCurrentFramerate;
+
+                }
+
+                _intendedSetup.Position = _intendedSetup.Target + viewDistance;
+                _manipulatedByMouseWheel = true;
+            }
         }
 
         private void LookAround()
         {
-            if (!ImGui.IsWindowFocused())
+            if (!ImGui.IsWindowHovered())
                 return;
 
             var dragDelta = ImGui.GetIO().MouseDelta;
-            var factorX = -dragDelta.X * CameraInteractionParameters.RotateMouseSensitivity;
-            var factorY = dragDelta.Y * CameraInteractionParameters.RotateMouseSensitivity;
-            var rotAroundX = Matrix4x4.CreateFromAxisAngle(_viewAxis.Left, factorY);
+            var factorX = -dragDelta.X * CameraInteractionParameters.RotateMouseSensitivity * 1.5f;
+            var factorY = dragDelta.Y * CameraInteractionParameters.RotateMouseSensitivity * 1.5f;
             var rotAroundY = Matrix4x4.CreateFromAxisAngle(_viewAxis.Up, factorX);
+            var rotAroundX = Matrix4x4.CreateFromAxisAngle(_viewAxis.Left, factorY);
             var rot = Matrix4x4.Multiply(rotAroundX, rotAroundY);
 
             var viewDir2 = new Vector4(_intendedSetup.Target - _intendedSetup.Position, 1);
@@ -184,29 +231,64 @@ namespace T3.Editor.Gui.Interaction.Camera
 
         private void ApplyOrbitVelocity(Vector2 orbitVelocity)
         {
-            var viewDir = new Vector4(_intendedSetup.Target - _intendedSetup.Position, 1);
-            var viewDirLength = viewDir.Length();
-            viewDir /= viewDirLength;
+            if (UserSettings.Config.AdjustCameraSpeedWithMouseWheel)
+            {
+                var rotAroundX = Matrix4x4.CreateFromAxisAngle(_viewAxis.Left, orbitVelocity.Y);
+                var rotAroundY = Matrix4x4.CreateFromAxisAngle(_viewAxis.Up, orbitVelocity.X);
+                var rot = Matrix4x4.Multiply(rotAroundX, rotAroundY);
 
-            var rotAroundX = Matrix4x4.CreateFromAxisAngle(_viewAxis.Left, orbitVelocity.Y);
-            var rotAroundY = Matrix4x4.CreateFromAxisAngle(_viewAxis.Up, orbitVelocity.X);
-            var rot = Matrix4x4.Multiply(rotAroundX, rotAroundY);
+                // The following was an attempt to offset rotation target with cameraSpeed.
+                // This approach had too many side effects. I'm leaving it here for reference...
+                //
+                // var view = _intendedSetup.Target - _intendedSetup.Position;
+                // var viewLength = view.Length();
+                // var viewDirection = view / viewLength;
+                //
+                // var rotatedViewDir = Vector3.Transform(viewDirection, rot);
+                //
+                // var tempTarget = _intendedSetup.Position + viewDirection * UserSettings.Config.CameraSpeed * 3;
+                // _intendedSetup.Position = tempTarget - rotatedViewDir  * UserSettings.Config.CameraSpeed * 3;
+                // _intendedSetup.Target = _intendedSetup.Position + rotatedViewDir * viewLength;
 
-            var newViewDir = Vector4.Transform(viewDir, rot);
-            newViewDir = Vector4.Normalize(newViewDir);
-            _intendedSetup.Position = _intendedSetup.Target - new Vector3(newViewDir.X, newViewDir.Y, newViewDir.Z) * viewDirLength;
+                var viewDir = _intendedSetup.Target - _intendedSetup.Position;
+                var viewDirLength = viewDir.Length();
+                viewDir /= viewDirLength;
+
+                var newViewDir = Vector3.Transform(viewDir, rot);
+                var newViewVector = newViewDir * viewDirLength;
+                _intendedSetup.Position = _intendedSetup.Target - newViewVector;
+
+                _intendedSetup.Target = _intendedSetup.Position + newViewDir * UserSettings.Config.CameraSpeed * GraphicsMath.DefaultCameraDistance;
+            }
+            else
+            {
+                var viewDir = new Vector4(_intendedSetup.Target - _intendedSetup.Position, 1);
+                var viewDirLength = viewDir.Length();
+                viewDir /= viewDirLength;
+
+                var rotAroundX = Matrix4x4.CreateFromAxisAngle(_viewAxis.Left, orbitVelocity.Y);
+                var rotAroundY = Matrix4x4.CreateFromAxisAngle(_viewAxis.Up, orbitVelocity.X);
+                var rot = Matrix4x4.Multiply(rotAroundX, rotAroundY);
+
+                var newViewDir = Vector4.Transform(viewDir, rot);
+                newViewDir = Vector4.Normalize(newViewDir);
+                _intendedSetup.Position = _intendedSetup.Target - new Vector3(newViewDir.X, newViewDir.Y, newViewDir.Z) * viewDirLength;
+
+            }
         }
+
+
 
         private void Pan()
         {
-            if (!ImGui.IsWindowFocused())
+            if (!ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows))
                 return;
 
             var dragDelta = ImGui.GetIO().MouseDelta;
             var factorX = dragDelta.X / CameraInteractionParameters.RenderWindowHeight;
             var factorY = dragDelta.Y / CameraInteractionParameters.RenderWindowHeight;
 
-            var length = (_intendedSetup.Target - _intendedSetup.Position).Length();
+            var length = (_intendedSetup.Target - _intendedSetup.Position).Length() * UserSettings.Config.CameraSpeed;
             var delta = _viewAxis.Left * factorX * length
                         + _viewAxis.Up * factorY * length;
 
@@ -216,31 +298,30 @@ namespace T3.Editor.Gui.Interaction.Camera
 
         private void ManipulateCameraByKeyboard()
         {
-            if (!ImGui.IsWindowHovered() || ImGui.GetIO().KeyCtrl)
+            if (!ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows) || ImGui.GetIO().KeyCtrl)
                 return;
 
-            var viewDirLength = _viewAxis.ViewDistance.Length();
-            var acc = CameraInteractionParameters.CameraAcceleration * _deltaTime * 60 * viewDirLength;
+            var acc = CameraInteractionParameters.CameraAcceleration * UserSettings.Config.CameraSpeed * _deltaTime * 60;
 
-            if (ImGui.IsKeyDown((ImGuiKey)Key.A) || ImGui.IsKeyDown((ImGuiKey)Key.CursorLeft))
+            if (ImGui.IsKeyDown((ImGuiKey)Key.A))
             {
                 _moveVelocity += _viewAxis.Left * acc;
                 _manipulatedByKeyboard = true;
             }
 
-            if (ImGui.IsKeyDown((ImGuiKey)Key.D) || ImGui.IsKeyDown((ImGuiKey)Key.CursorRight))
+            if (ImGui.IsKeyDown((ImGuiKey)Key.D))
             {
                 _moveVelocity -= _viewAxis.Left * acc;
                 _manipulatedByKeyboard = true;
             }
 
-            if (ImGui.IsKeyDown((ImGuiKey)Key.W) || ImGui.IsKeyDown((ImGuiKey)Key.CursorUp))
+            if (ImGui.IsKeyDown((ImGuiKey)Key.W))
             {
                 _moveVelocity += Vector3.Normalize(_viewAxis.ViewDistance) * acc;
                 _manipulatedByKeyboard = true;
             }
 
-            if (ImGui.IsKeyDown((ImGuiKey)Key.S) || ImGui.IsKeyDown((ImGuiKey)Key.CursorDown))
+            if (ImGui.IsKeyDown((ImGuiKey)Key.S))
             {
                 _moveVelocity -= Vector3.Normalize(_viewAxis.ViewDistance) * acc;
                 _manipulatedByKeyboard = true;
@@ -264,7 +345,7 @@ namespace T3.Editor.Gui.Interaction.Camera
                 _intendedSetup.Reset();
                 _manipulatedByKeyboard = true;
             }
-            
+
             if (ImGui.IsKeyDown((ImGuiKey)Key.C))
             {
                 _moveVelocity = Vector3.Zero;
@@ -294,15 +375,14 @@ namespace T3.Editor.Gui.Interaction.Camera
 
         public void ResetCamera(ICamera cam)
         {
-            cam.CameraPosition = new Vector3(0, 0, CameraInteractionParameters.DefaultCameraPositionZ);
+            cam.CameraPosition = new Vector3(0, 0, GraphicsMath.DefaultCameraDistance);
             cam.CameraTarget = Vector3.Zero;
             cam.CameraRoll = 0;
-
         }
 
-        private static ViewAxis _viewAxis = new ViewAxis();
-        private readonly CameraSetup _smoothedSetup = new CameraSetup();
-        private readonly CameraSetup _intendedSetup = new CameraSetup();
+        private static ViewAxis _viewAxis = new();
+        private readonly CameraSetup _smoothedSetup = new();
+        private readonly CameraSetup _intendedSetup = new();
 
         private static float FrameDurationFactor => (ImGui.GetIO().DeltaTime);
         private bool _manipulatedByMouseWheel;

@@ -1,0 +1,198 @@
+{
+  "Id": "9a7063ee-abde-45b0-b3f0-73a12721488f"/*MotionBlurExample2*/,
+  "Description": "Illustrates some methods of how to generate motion blur.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "60cb6991-b2cb-4890-ad5a-7aa0cb1397a8"/*DrawMeshAtPoints*/,
+      "Position": {
+        "X": 864.6792,
+        "Y": 14.532623
+      }
+    },
+    {
+      "ChildId": "a92e6154-0552-4fdf-9ebf-00c77f904b38"/*CubeMesh*/,
+      "Position": {
+        "X": 715.84973,
+        "Y": 101.3378
+      }
+    },
+    {
+      "ChildId": "f0891a5b-095a-411c-b90e-20aa1b3550ea"/*RenderTarget*/,
+      "Position": {
+        "X": 1650.303,
+        "Y": 236.44629
+      }
+    },
+    {
+      "ChildId": "314f68f9-6a59-496f-975c-8d72c4e7f685"/*RenderWithMotionBlur*/,
+      "Position": {
+        "X": 1654.7104,
+        "Y": 63.87256
+      }
+    },
+    {
+      "ChildId": "98fcaf07-0865-45a4-ba59-5fa89ab58ddd"/*RenderTarget*/,
+      "Position": {
+        "X": 1369.3976,
+        "Y": -108.81961
+      }
+    },
+    {
+      "ChildId": "085dca28-55a9-4402-a0af-3591fbf9c84e"/*HasTimeChanged*/,
+      "Position": {
+        "X": 1500.303,
+        "Y": 318.4463
+      }
+    },
+    {
+      "ChildId": "bfd1de33-44c7-4feb-b33a-978ed4c9b5fc"/*CubeMesh*/,
+      "Position": {
+        "X": 564.6792,
+        "Y": 14.532623
+      }
+    },
+    {
+      "ChildId": "101788f5-ad7d-4c0a-918f-7de48cf43434"/*MeshVerticesToPoints*/,
+      "Position": {
+        "X": 714.6792,
+        "Y": 14.532623
+      }
+    },
+    {
+      "ChildId": "ee4664ed-48db-436f-a332-ab95779a6c37"/*Camera*/,
+      "Position": {
+        "X": 1014.6792,
+        "Y": 14.532623
+      }
+    },
+    {
+      "ChildId": "785bf050-60be-4a28-8513-c93fa3c9a9c5"/*PerlinNoise3*/,
+      "Position": {
+        "X": 864.6792,
+        "Y": 83.53262
+      }
+    },
+    {
+      "ChildId": "49b264e9-f7dd-4442-a4c8-bcc65e3d89ca"/*DrawAsSplitView*/,
+      "Position": {
+        "X": 2095.0364,
+        "Y": -116.82938
+      }
+    },
+    {
+      "ChildId": "610d1603-fba3-4aa1-aeb5-307bf55a9fc5"/*Layer2d*/,
+      "Position": {
+        "X": 1800.303,
+        "Y": 236.44629
+      }
+    },
+    {
+      "ChildId": "c0e57a0d-387f-4eef-b69e-e3b08e13a36a"/*MotionBlur*/,
+      "Position": {
+        "X": 1756.0289,
+        "Y": -135.5473
+      }
+    },
+    {
+      "ChildId": "1730a691-ef06-4ee7-b13b-03bc56839303"/*Layer2d*/,
+      "Position": {
+        "X": 1906.0289,
+        "Y": -135.5473
+      }
+    },
+    {
+      "ChildId": "52c4408e-92ad-4d96-961f-da9e7b4c20b1"/*Layer2d*/,
+      "Position": {
+        "X": 1353.8522,
+        "Y": 329.00394
+      }
+    },
+    {
+      "ChildId": "224d4619-4ede-4503-bc37-6a4f23f0fa0b"/*UseTextureReference*/,
+      "Position": {
+        "X": 1178.4242,
+        "Y": 301.4105
+      }
+    },
+    {
+      "ChildId": "f2413b23-10ae-4fc1-87ae-56922136f4fc"/*Group*/,
+      "Position": {
+        "X": 1500.303,
+        "Y": 236.44629
+      }
+    },
+    {
+      "ChildId": "c9f8cb18-cff0-49b3-bb23-4de98778ae11"/*Layer2d*/,
+      "Position": {
+        "X": 1804.7104,
+        "Y": 63.87256
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "b9dd0fe9-6661-4ea0-8607-8d2020eaf110"/*Output*/,
+      "Position": {
+        "X": 2252.7185,
+        "Y": -144.48904
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "e753db42-0cae-4dc4-834f-b3417149d3f6",
+      "Title": "Old school feedback effect (blurring on one side)",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 1118.4242,
+        "Y": 176.44629
+      },
+      "Size": {
+        "X": 851.8788,
+        "Y": 248.55765
+      }
+    },
+    {
+      "Id": "a601c1e5-1968-4ee6-b20d-df7c2aeece9a",
+      "Title": "Post FX (Only works for camera motion)",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 1309.3976,
+        "Y": -195.5473
+      },
+      "Size": {
+        "X": 740.10895,
+        "Y": 178.26465
+      }
+    },
+    {
+      "Id": "823d226a-5379-4de0-a208-1696ef012f1b",
+      "Title": "Render scene multiple times\n(Slow but nice for exporting videos)",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 1594.7104,
+        "Y": 3.8725586
+      },
+      "Size": {
+        "X": 380.0,
+        "Y": 156.0
+      }
+    }
+  ]
+}

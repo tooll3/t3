@@ -3,7 +3,6 @@
   "InputUis": [
     {
       "InputId": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
-      "Relevancy": "Required",
       "Position": {
         "X": 117.41934,
         "Y": 45.866936
@@ -30,7 +29,7 @@
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "6c118567-8827-4422-86cc-4d4d00762d87"/*ComputerShader*/,
+      "OutputId": "6c118567-8827-4422-86cc-4d4d00762d87"/*Shader*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0

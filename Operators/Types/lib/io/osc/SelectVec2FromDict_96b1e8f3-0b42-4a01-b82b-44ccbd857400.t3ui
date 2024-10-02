@@ -1,0 +1,32 @@
+{
+  "Id": "96b1e8f3-0b42-4a01-b82b-44ccbd857400"/*SelectVec2FromDict*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "2f3472cb-4df8-41e7-b20e-1166992bf732"/*DictionaryInput*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "c3f9db97-0355-4da7-9571-b806e9f2a191"/*SelectX*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Usage": "CustomDropdown"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "7ff4e818-695d-4fff-aa23-544d623eadfe"/*Result*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

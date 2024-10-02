@@ -1,8 +1,5 @@
-using System.Diagnostics;
 using System.Numerics;
 using System.Reflection;
-using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -13,7 +10,7 @@ namespace T3.Operators.Types.Id_d86e9585_d233_455a_9059_fa93debfed01
     public class GetIteratedVec3 : Instance<GetIteratedVec3>
     {
         [Output(Guid = "E9839288-05DB-41E7-8326-3BE4F65F2410", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<Vector3> Result = new Slot<Vector3>();
+        public readonly Slot<Vector3> Result = new();
 
         public GetIteratedVec3()
         {
@@ -30,6 +27,6 @@ namespace T3.Operators.Types.Id_d86e9585_d233_455a_9059_fa93debfed01
 
 
         [Input(Guid = "18dc4a34-f0c1-4763-be36-71b59533916a")]
-        public readonly InputSlot<string> FieldName = new InputSlot<string>();
+        public readonly InputSlot<string> FieldName = new();
     }
 }

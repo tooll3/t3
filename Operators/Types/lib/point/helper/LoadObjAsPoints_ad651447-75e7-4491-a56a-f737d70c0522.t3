@@ -5,11 +5,11 @@
   "Inputs": [
     {
       "Id": "895dab2c-e3be-4e73-9c96-0f6101cea113"/*Path*/,
-      "DefaultValue": "Resources\\proj-partial\\meshes\\cylinder.obj"
+      "DefaultValue": "Resources\\common\\meshes\\cube.obj"
     },
     {
       "Id": "dcacd412-1885-4a10-b073-54192f074ae8"/*Mode*/,
-      "DefaultValue": 0
+      "DefaultValue": 2
     },
     {
       "Id": "0ae6b6c5-80fa-4229-b06b-d9c2ac8c2a3f"/*Sorting*/,

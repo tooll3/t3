@@ -1,5 +1,6 @@
 ﻿using System;
 using ImGuiNET;
+using T3.Core.Operator;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.InputUi.SimpleInputUis
@@ -17,7 +18,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                    };
         }
 
-        protected override InputEditStateFlags DrawEditControl(string name, ref T value)
+        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref T value, bool readOnly)
         {
             return DrawEnumInputEdit(ref value);
         }
@@ -74,7 +75,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             {
                 int index = Array.IndexOf(enumInfo.Values, value);
                 InputEditStateFlags editStateFlags = InputEditStateFlags.Nothing;
-                bool modified = ImGui.Combo("##dropDownParam", ref index, enumInfo.ValueNames, enumInfo.ValueNames.Length);
+                bool modified = ImGui.Combo("##dropDownParam", ref index, enumInfo.ValueNames, enumInfo.ValueNames.Length, 20);
                 if (modified)
                 {
                     value = enumInfo[index];

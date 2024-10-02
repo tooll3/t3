@@ -51,7 +51,7 @@
       "Outputs": []
     },
     {
-      "Id": "a0009473-3fe8-4a02-8373-fb9e63d13ee9"/*DrawBillboards*/,
+      "Id": "a0009473-3fe8-4a02-8373-fb9e63d13ee9"/*_DrawBillboardsOld*/,
       "SymbolId": "071c9aad-ecbf-47bf-b2f6-c43e8212d5b1",
       "InputValues": [
         {
@@ -248,7 +248,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 64,
             "Y": 1,
@@ -283,7 +283,7 @@
       "Outputs": []
     },
     {
-      "Id": "547f5485-476d-4af7-bf31-521c32194a28"/*PickPoints*/,
+      "Id": "547f5485-476d-4af7-bf31-521c32194a28"/*FilterPoints*/,
       "SymbolId": "18251874-5d5a-4384-8dcd-fcf297e54886",
       "InputValues": [],
       "Outputs": []
@@ -308,12 +308,7 @@
           "Value": 0.33
         },
         {
-          "Id": "814fc516-250f-4383-8f20-c2a358bbe4e1"/*EnableZWrite*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
-          "Id": "7acc95ad-d317-42fc-97f8-85f48d7e516f"/*EnableZTest*/,
+          "Id": "d0a58cde-d292-4ceb-ba50-6965eb3ee3dd"/*UseWForSize*/,
           "Type": "System.Boolean",
           "Value": false
         },
@@ -323,7 +318,12 @@
           "Value": 1
         },
         {
-          "Id": "d0a58cde-d292-4ceb-ba50-6965eb3ee3dd"/*UseWForSize*/,
+          "Id": "814fc516-250f-4383-8f20-c2a358bbe4e1"/*EnableZWrite*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
+          "Id": "7acc95ad-d317-42fc-97f8-85f48d7e516f"/*EnableZTest*/,
           "Type": "System.Boolean",
           "Value": false
         }
@@ -389,7 +389,7 @@
       "Outputs": []
     },
     {
-      "Id": "ce77266e-a632-4401-898a-a13809a126a9"/*SnapPointsToGird*/,
+      "Id": "ce77266e-a632-4401-898a-a13809a126a9"/*SnapPointsToGrid*/,
       "SymbolId": "bc88304a-a2c7-4df9-93d8-b7dfecbce3de",
       "InputValues": [],
       "Outputs": []
@@ -484,11 +484,17 @@
     {
       "Id": "83b27e54-3949-4d08-a91f-ae7738e11ca4"/*MouseInput*/,
       "SymbolId": "eff2ffff-dc39-4b90-9b1c-3c0a9a0108c6",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "1327525c-716c-43e4-a5d1-58cf35440462"/*OutputMode*/,
+          "Type": "System.Int32",
+          "Value": 0
+        }
+      ],
       "Outputs": []
     },
     {
-      "Id": "d0d728b3-0992-4628-b1b5-839025461f87"/*Vector2ToFloat2*/,
+      "Id": "d0d728b3-0992-4628-b1b5-839025461f87"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []

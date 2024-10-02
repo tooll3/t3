@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using System.Text.RegularExpressions;
 using ImGuiNET;
-using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
@@ -31,7 +31,10 @@ namespace T3.Editor.Gui.Templates
                 ImGui.BeginChild("templates", new Vector2(200, -1));
                 {
                     var windowMin = ImGui.GetWindowPos();
-                    ImGui.GetWindowDrawList().AddRectFilled(windowMin, windowMin + ImGui.GetContentRegionAvail(), T3Style.Colors.DarkGray);                    
+                    ImGui.GetWindowDrawList().AddRectFilled(windowMin,
+                                                            windowMin + ImGui.GetContentRegionAvail(), 
+                                                            UiColors.BackgroundButton);
+                    FormInputs.SetIndentToParameters();
                     
                     //ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(10,10));
                     //ImGui.PushStyleVar(ImGuiStyleVar.ItemInnerSpacing, new Vector2(4, 4));
@@ -56,7 +59,7 @@ namespace T3.Editor.Gui.Templates
                         var keepCursor = ImGui.GetCursorScreenPos();
 
                         // Background
-                        ImGui.GetWindowDrawList().AddRectFilled(itemRectMin, itemRectMax, isSelected ? T3Style.Colors.ButtonActive : T3Style.Colors.Button);
+                        ImGui.GetWindowDrawList().AddRectFilled(itemRectMin, itemRectMax, isSelected ? UiColors.BackgroundActive : UiColors.BackgroundButton);
                         
                         // Title
                         ImGui.SetCursorScreenPos(itemRectMin + new Vector2(10, 5));
@@ -65,7 +68,7 @@ namespace T3.Editor.Gui.Templates
                         // summary
                         ImGui.SetCursorScreenPos(itemRectMin + new Vector2(10, 25));
                         ImGui.PushFont(Fonts.FontSmall);
-                        ImGui.PushStyleColor(ImGuiCol.Text, Color.White.Fade(0.4f).Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                         ImGui.TextWrapped(template.Summary);
                         ImGui.PopStyleColor();
                         ImGui.PopFont();
@@ -83,7 +86,7 @@ namespace T3.Editor.Gui.Templates
                 ImGui.SameLine();
                 //ImGui.PushStyleVar(ImGuiStyleVar., new Vector2(20,20));
                 
-                ImGui.BeginChild("options", new Vector2(-20, -1), false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
+                ImGui.BeginChild("options", new Vector2(-20, 0), false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
                 {
                     ImGui.Dummy(new Vector2(20,10));
                     
@@ -94,19 +97,19 @@ namespace T3.Editor.Gui.Templates
                     ImGui.TextUnformatted($"Create {_selectedTemplate?.Title}");
                     ImGui.PopFont();
                     
-                    ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                     ImGui.TextWrapped(_selectedTemplate?.Documentation);
                     ImGui.PopStyleColor();
                     ImGui.Dummy(new Vector2(10,10));
 
-                    var isNewSymbolNameValid = NodeOperations.IsNewSymbolNameValid(_newSymbolName);
-                    CustomComponents.DrawStringParameter("Name",
+                    var isNewSymbolNameValid = GraphUtils.IsNewSymbolNameValid(_newSymbolName);
+                    FormInputs.AddStringInput("Name",
                                                          ref _newSymbolName,
                                                          null,
                                                          isNewSymbolNameValid ? null : "Symbols must by unique and not contain spaces or special characters.");
 
-                    var isNamespaceValid = NodeOperations.IsNameSpaceValid(NameSpace);
-                    CustomComponents.DrawStringParameter("NameSpace",
+                    var isNamespaceValid = GraphUtils.IsNameSpaceValid(NameSpace);
+                    FormInputs.AddStringInput("NameSpace",
                                                          ref _newNameSpace,
                                                          NameSpace,
                                                          isNamespaceValid ? null : "Is required and may only include characters, numbers and dots."
@@ -114,13 +117,13 @@ namespace T3.Editor.Gui.Templates
 
                     
                     var isResourceFolderValid = _validResourceFolderPattern.IsMatch(ResourceDirectory);
-                    CustomComponents.DrawStringParameter("Resource Director",
+                    FormInputs.AddStringInput("Resource Directory",
                                                          ref _resourceFolder,
                                                          ResourceDirectory,
                                                          isResourceFolderValid ? null : "Your project files must be in Resources\\ directory for exporting."
                                                         );
                     
-                    CustomComponents.DrawStringParameter("Description", ref _newDescription);
+                    FormInputs.AddStringInput("Description", ref _newDescription);
                     
                     ImGui.Dummy(new Vector2(10,10));
 
@@ -155,7 +158,7 @@ namespace T3.Editor.Gui.Templates
         }
         
         private TemplateDefinition _selectedTemplate = TemplateDefinition.TemplateDefinitions[0];
-        private static readonly Regex _validResourceFolderPattern = new Regex(@"^Resources\\([A-Za-z][A-Za-z\d]*)(\\([A-Za-z][A-Za-z\d]*))*\\?$");
+        private static readonly Regex _validResourceFolderPattern = new(@"^Resources\\([A-Za-z_][A-Za-z_\-\d]*)(\\([A-Za-z_][A-Za-z\-_\d]*))*\\?$");
         
         private string NameSpace => string.IsNullOrEmpty(_newNameSpace) ? $"user.{UserSettings.Config.UserName}.{_newSymbolName}" : _newNameSpace;
         private string ResourceDirectory => string.IsNullOrEmpty(_resourceFolder) ? $"Resources\\user\\{UserSettings.Config.UserName}\\{_newSymbolName}\\" : _resourceFolder;

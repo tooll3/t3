@@ -1,4 +1,5 @@
 ﻿using ImGuiNET;
+using T3.Core.Operator;
 
 namespace T3.Editor.Gui.InputUi.SingleControl
  {
@@ -6,7 +7,7 @@ namespace T3.Editor.Gui.InputUi.SingleControl
      {
          protected abstract bool DrawSingleEditControl(string name, ref T value);
  
-         protected override InputEditStateFlags DrawEditControl(string name, ref T value)
+         protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref T value, bool readOnly)
          {
              bool valueModified = DrawSingleEditControl(name, ref value);
  

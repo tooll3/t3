@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using T3.Core;
 using T3.Core.Audio;
-using T3.Core.IO;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_b72d968b_0045_408d_a2f9_5c739c692a66
@@ -24,13 +21,11 @@ namespace T3.Operators.Types.Id_b72d968b_0045_408d_a2f9_5c739c692a66
 
         private void Update(EvaluationContext context)
         {
-            // if (!WasapiAudioInput.DevicesInitialized)
-            //     WasapiAudioInput.Initialize();
-            //
-            if (!string.IsNullOrEmpty(ProjectSettings.Config.AudioInputDeviceName) && !WasapiAudioInput.DevicesInitialized)
-            {
-                WasapiAudioInput.Initialize();
-            }
+            // if (!string.IsNullOrEmpty(Playback.Current.Settings?.AudioInputDeviceName) 
+            //     && !WasapiAudioInput.DevicesInitialized)
+            // {
+            //     WasapiAudioInput.Initialize(context.Playback.Settings);
+            // }
             
             var mode = (Modes)Mode.GetValue(context).Clamp(0, Enum.GetNames(typeof(Modes)).Length-1);
             switch (mode)

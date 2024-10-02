@@ -51,7 +51,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
             }
             
             ImGui.PushID(inputSlot.Parent.SymbolChildId.GetHashCode() + inputSlot.Id.GetHashCode());
-            var inputEditState = DrawEditControl(name, ref inputSlot.Value);
+            var inputEditState = DrawEditControl(name,inputSlot.Input, ref inputSlot.Value, false);
             ImGui.PopID();
             
             if ((inputEditState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
@@ -65,8 +65,8 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
         
         protected override void DrawReadOnlyControl(string name, ref T int2Value)
         {
-            ImGui.PushStyleColor(ImGuiCol.Text, Color.Blue.Rgba);
-            DrawEditControl(name, ref int2Value);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusAutomated.Rgba);
+            DrawEditControl(name,null, ref int2Value, true);
             ImGui.PopStyleColor();
         }
         
@@ -81,11 +81,11 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
         public override void DrawSettings()
         {
             base.DrawSettings();
-
-            ImGui.DragInt("Min", ref Min);
-            ImGui.DragInt("Max", ref Max);
-            ImGui.DragFloat("Scale", ref _scale);
-            ImGui.Checkbox("Clamp Range", ref Clamp);
+            FormInputs.DrawFieldSetHeader("Value Range");
+            if (FormInputs.DrawIntValueRangeControl(ref Min, ref Max, ref _scale, ref Clamp))
+            {
+                Parent.FlagAsModified();
+            }
         }
 
         public override void Write(JsonTextWriter writer)
@@ -127,7 +127,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
         protected readonly int[] IntComponents;
 
         private const float DefaultScale = 0.1f;
-        private const int DefaultMin = int.MinValue;
-        private const int DefaultMax = int.MaxValue;        
+        public const int DefaultMin = int.MinValue;
+        public const int DefaultMax = int.MaxValue;        
     }
 }

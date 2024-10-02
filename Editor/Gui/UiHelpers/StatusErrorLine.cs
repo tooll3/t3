@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 using ImGuiNET;
-using T3.Core.Logging;
+using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows;
+using T3.SystemUi.Logging;
 
 namespace T3.Editor.Gui.UiHelpers
 {
@@ -14,11 +13,6 @@ namespace T3.Editor.Gui.UiHelpers
     /// </summary>
     public class StatusErrorLine : ILogWriter
     {
-        public StatusErrorLine()
-        {
-            Log.AddWriter(this);
-        }
-
         public void Draw()
         {
             lock (_logEntries)
@@ -36,9 +30,9 @@ namespace T3.Editor.Gui.UiHelpers
                 ImGui.PushFont(Fonts.FontBold);
 
                 var logMessage = lastEntry.Message;
-                if (lastEntry.Level == LogEntry.EntryLevel.Error)
+                if (lastEntry.Level == ILogEntry.EntryLevel.Error)
                 {
-                    logMessage = ExtractMeaningfulMessage(logMessage);
+                    logMessage = ShaderResource.ExtractMeaningfulShaderErrorMessage(logMessage);
                 }
 
                 var width = ImGui.CalcTextSize(logMessage);
@@ -56,21 +50,11 @@ namespace T3.Editor.Gui.UiHelpers
             {
                 ImGui.BeginTooltip();
                 {
-                    var lastEntryTime = double.PositiveInfinity;
                     lock (_logEntries)
                     {
                         foreach (var entry in _logEntries)
                         {
-                            var timeSinceLastEntry = entry.SecondsSinceStart - lastEntryTime;
-                            if (timeSinceLastEntry > 1)
-                                ImGui.Spacing();
-
-                            lastEntryTime = entry.SecondsSinceStart;
-                            var entryLevel = entry.Level;
-                            ImGui.SetCursorPosX(-2);
-                            ImGui.Value("", (float)entry.SecondsSinceStart); // Print with ImGui to avoid allocation
-                            ImGui.SameLine(80);
-                            ImGui.TextColored(ConsoleLogWindow.GetColorForLogLevel(entryLevel), entry.Message);
+                            ConsoleLogWindow.DrawEntry(entry);
                         }
                     }
                 }
@@ -84,9 +68,9 @@ namespace T3.Editor.Gui.UiHelpers
         {
         }
 
-        public LogEntry.EntryLevel Filter { get; set; }
+        public ILogEntry.EntryLevel Filter { get; set; }
 
-        public void ProcessEntry(LogEntry entry)
+        public void ProcessEntry(ILogEntry entry)
         {
             lock (_logEntries)
             {
@@ -99,27 +83,6 @@ namespace T3.Editor.Gui.UiHelpers
             }
         }
 
-        private string ExtractMeaningfulMessage(string message)
-        {
-            var shaderErrorMatch = _shaderErrorPattern.Match(message);
-            if (!shaderErrorMatch.Success)
-                return message;
-
-            var shaderName = shaderErrorMatch.Groups[1].Value;
-            var lineNumber = shaderErrorMatch.Groups[2].Value;
-            var errorMessage = shaderErrorMatch.Groups[3].Value;
-
-            errorMessage = errorMessage.Split('\n').First();
-            return $"{errorMessage} >>>> {shaderName}:{lineNumber}";
-        }
-
-        /// <summary>
-        /// Matches errors like....
-        ///
-        /// Failed to compile shader 'ComputeWobble': C:\Users\pixtur\coding\t3\Resources\compute-ColorGrade.hlsl(32,12-56): warning X3206: implicit truncation of vector type
-        /// </summary>
-        private static readonly Regex _shaderErrorPattern = new Regex(@"Failed to compile shader.*\\(.*)\.hlsl\((.*)\):(.*)");
-
-        private readonly List<LogEntry> _logEntries = new List<LogEntry>();
+        private readonly List<ILogEntry> _logEntries = new();
     }
 }

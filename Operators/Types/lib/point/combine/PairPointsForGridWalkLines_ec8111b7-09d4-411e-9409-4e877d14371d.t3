@@ -56,7 +56,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\combine\\pair-points-for-grid-walk-lines.hlsl"
+          "Value": "Resources\\lib\\points\\combine\\PairPointsForGridWalkLine.hlsl"
         }
       ],
       "Outputs": []
@@ -67,7 +67,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 64,
             "Y": 1,
@@ -108,7 +108,7 @@
       "Outputs": []
     },
     {
-      "Id": "bdedfe31-853c-4cfc-924b-c3ae57e8cacc"/*StructuredBuffer2*/,
+      "Id": "bdedfe31-853c-4cfc-924b-c3ae57e8cacc"/*StructuredBufferWithViews*/,
       "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
         {
@@ -194,19 +194,19 @@
       "Outputs": []
     },
     {
-      "Id": "5349d3cb-23b7-496c-9c46-b5ef77f37fd5"/*Vector3ToFloat3*/,
+      "Id": "5349d3cb-23b7-496c-9c46-b5ef77f37fd5"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "251d9a17-75dc-417c-bb18-f473c42839ec"/*Vector3ToFloat3*/,
+      "Id": "251d9a17-75dc-417c-bb18-f473c42839ec"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "650432ca-c863-481a-a512-9aacc75b532d"/*Vector3ToFloat3*/,
+      "Id": "650432ca-c863-481a-a512-9aacc75b532d"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []

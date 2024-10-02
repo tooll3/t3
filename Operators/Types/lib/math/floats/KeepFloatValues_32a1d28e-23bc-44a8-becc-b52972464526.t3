@@ -8,6 +8,10 @@
       "DefaultValue": 0.0
     },
     {
+      "Id": "c84aa4cf-ce04-43e2-8d88-4ce3b8a7155e"/*AddValueToList*/,
+      "DefaultValue": true
+    },
+    {
       "Id": "519133d3-0440-4c8a-8bc8-75aa17219ad5"/*BufferLength*/,
       "DefaultValue": 100
     },

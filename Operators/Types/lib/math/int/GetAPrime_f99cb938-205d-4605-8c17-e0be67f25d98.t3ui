@@ -1,0 +1,27 @@
+{
+  "Id": "f99cb938-205d-4605-8c17-e0be67f25d98"/*GetAPrime*/,
+  "Description": "Computes a prime number\n\nUseful with [IntToString] [IntToFloat]",
+  "InputUis": [
+    {
+      "InputId": "f94d2c1c-35e4-4862-bbaa-1ed84fd276f6"/*Index*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      },
+      "Min": 0,
+      "Max": 5000,
+      "Scale": 1.0,
+      "Clamp": true
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "219af347-49c8-4ced-a689-6e6ed0e49710"/*Result*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

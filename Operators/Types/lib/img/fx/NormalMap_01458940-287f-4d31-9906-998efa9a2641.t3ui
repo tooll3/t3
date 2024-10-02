@@ -1,6 +1,6 @@
 {
   "Id": "01458940-287f-4d31-9906-998efa9a2641"/*NormalMap*/,
-  "Description": "Converts a brightnes of an image into normal map that can be use with [SetMaterial].",
+  "Description": "Converts the brightness of an image into a normal map that can be used with [SetMaterial].",
   "InputUis": [
     {
       "InputId": "3b04296a-14e5-40e0-91a2-eda0314b0490"/*LightMap*/,
@@ -15,7 +15,8 @@
         "X": -235.75668,
         "Y": 261.74847
       },
-      "Scale": 0.1
+      "Min": -1.0,
+      "Max": 1.0
     },
     {
       "InputId": "3e9bce35-7de1-42de-80e5-8eec29e92422"/*SampleRadius*/,
@@ -36,7 +37,10 @@
       "Position": {
         "X": -235.75668,
         "Y": 396.74847
-      }
+      },
+      "Min": -90.0,
+      "Max": 90.0,
+      "Format": "{0:0.0}°"
     },
     {
       "InputId": "cf7e6f41-cc6e-46dd-8779-1273326a5a53"/*Mode*/,
@@ -44,15 +48,18 @@
         "X": -235.75668,
         "Y": 441.74847
       }
+    },
+    {
+      "InputId": "4d25b1db-daeb-4b5e-b2bc-8681f332b092"/*OutputFormat*/,
+      "Position": {
+        "X": -235.75668,
+        "Y": 486.74847
+      }
     }
   ],
   "SymbolChildUis": [
     {
       "ChildId": "7cf1c6fe-79f7-47bf-9524-4405ab4218fd"/*_ImageFxShaderSetupStatic*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 114.0
-      },
       "Position": {
         "X": 344.9021,
         "Y": 283.4281
@@ -60,10 +67,6 @@
     },
     {
       "ChildId": "28e1c561-216a-4988-b59d-09a7109d3490"/*IntToFloat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -85.75668,
         "Y": 441.74847

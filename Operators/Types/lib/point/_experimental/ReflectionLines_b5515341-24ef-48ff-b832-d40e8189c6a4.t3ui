@@ -1,6 +1,6 @@
 {
   "Id": "b5515341-24ef-48ff-b832-d40e8189c6a4"/*ReflectionLines*/,
-  "Description": "Intersecs rays from a list of oriented points with geometry. This operation is slow!",
+  "Description": "Intersects rays from a list of oriented points with geometry. This operation is slow!",
   "InputUis": [
     {
       "InputId": "57917b87-9aa4-416b-8417-fc2ac9e849b0"/*GPoints*/,
@@ -12,6 +12,7 @@
     },
     {
       "InputId": "517fa007-bf56-497f-be87-2574ff9125c6"/*Mesh*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -717.5935,
         "Y": 665.8894
@@ -56,10 +57,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "b390c164-b273-446b-a3bb-5c2658b1df43"/*ComputeShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -112.58116,
         "Y": 326.55484
@@ -91,10 +88,6 @@
     },
     {
       "ChildId": "b917fd81-2ffe-465e-a8fb-096cff286c95"/*GetSRVProperties*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -398.21472,
         "Y": 561.1239
@@ -102,10 +95,6 @@
     },
     {
       "ChildId": "53428144-5b32-4e1c-8742-10f34828f5c7"/*ExecuteBufferUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 800.7865,
         "Y": 526.1405
@@ -113,10 +102,6 @@
     },
     {
       "ChildId": "f5eca388-cbfe-49ee-a30b-0689c7c21aaa"/*CalcDispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 259.5488,
         "Y": 343.17743
@@ -124,10 +109,6 @@
     },
     {
       "ChildId": "ce42aca7-5241-4767-8d9e-bfe5e325b2bc"/*MultiplyInt*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": -112.58116,
         "Y": 382.55484
@@ -135,21 +116,13 @@
     },
     {
       "ChildId": "238b937b-1af6-4a4a-b46b-7d410c9852f8"/*IntToFloat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 100.539444,
         "Y": 551.9373
       }
     },
     {
-      "ChildId": "eaf89cc6-bb5b-474d-9260-c95f939b1b6d"/*StructuredBuffer2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "eaf89cc6-bb5b-474d-9260-c95f939b1b6d"/*StructuredBufferWithViews*/,
       "Position": {
         "X": 107.55797,
         "Y": 1298.0109
@@ -157,10 +130,6 @@
     },
     {
       "ChildId": "bb2e4a19-7b04-4532-bde8-8bcfae01ec1d"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 253.98778,
         "Y": 1263.8875
@@ -168,10 +137,6 @@
     },
     {
       "ChildId": "f95351e4-7236-498d-822d-8bc1b0f4bcf4"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -567.5935,
         "Y": 620.8894
@@ -179,10 +144,6 @@
     },
     {
       "ChildId": "31529b63-7652-44be-aee7-0bfe7ff94d66"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 127.96961,
         "Y": 1035.131
@@ -190,10 +151,6 @@
     },
     {
       "ChildId": "8a952489-9450-4697-a053-ef408c8c1e1f"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 134.50183,
         "Y": 1117.1654
@@ -201,10 +158,6 @@
     },
     {
       "ChildId": "9a2419fc-0325-4baf-916a-c99dc239bf8f"/*_MeshBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -22.030388,
         "Y": 1035.131
@@ -212,10 +165,6 @@
     },
     {
       "ChildId": "69cd84c4-9af4-435d-8d83-ca3db1d3df42"/*ClampInt*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -405.85156,
         "Y": 432.6473
@@ -223,10 +172,6 @@
     },
     {
       "ChildId": "15a7106d-5b42-4c75-95c1-d6598d783ce5"/*AddInts*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -255.85158,
         "Y": 432.6473

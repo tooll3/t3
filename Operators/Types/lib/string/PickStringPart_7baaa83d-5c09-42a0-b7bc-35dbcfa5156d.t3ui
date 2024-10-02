@@ -1,6 +1,6 @@
 {
   "Id": "7baaa83d-5c09-42a0-b7bc-35dbcfa5156d"/*PickStringPart*/,
-  "Description": "Gets a lines, words or charactsr from the input string. Good for type writer effects, etc.",
+  "Description": "Gets a lines, words, or characters from the input string. Good for typewriter effects, etc.\n\nUseful combinations: [ReadFile] [RequestUrl] [GetAttributeFromJsonString]",
   "InputUis": [
     {
       "InputId": "05d7962b-a02e-4ab5-9927-865375348ccd"/*InputText*/,
@@ -20,6 +20,7 @@
     },
     {
       "InputId": "9cb908ad-0800-4b88-b256-c6cc2b84ab6c"/*FragmentStart*/,
+      "Relevancy": "Relevant",
       "Position": {
         "X": 0.0,
         "Y": 90.0
@@ -48,6 +49,15 @@
         "X": 0.0,
         "Y": 100.0
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "6db2bbfb-4c1f-439b-9796-feb60184d044",
+      "Title": "Example",
+      "Description": "Example video on how to animate strings.",
+      "LinkUrl": "https://www.youtube.com/watch?v=854OSxXzMDM",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

@@ -22,18 +22,18 @@
   ],
   "Children": [
     {
-      "Id": "28a3a1cb-9971-4262-ac3a-60ddc82467df"/*StructuredBuffer2*/,
+      "Id": "28a3a1cb-9971-4262-ac3a-60ddc82467df"/*StructuredBufferWithViews*/,
       "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
-        {
-          "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
-          "Type": "System.Int32",
-          "Value": 32
-        },
         {
           "Id": "16f98211-fe97-4235-b33a-ddbbd2b5997f"/*Count*/,
           "Type": "System.Int32",
           "Value": 1000000
+        },
+        {
+          "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
+          "Type": "System.Int32",
+          "Value": 32
         },
         {
           "Id": "43c2b314-4809-4022-9b07-99965e5c1a7a"/*BufferFlags*/,
@@ -49,7 +49,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 30,
             "Y": 30,
@@ -72,18 +72,18 @@
       "Outputs": []
     },
     {
-      "Id": "f8b04cc2-b91d-4318-8084-eba7ce171a7e"/*StructuredBuffer2*/,
+      "Id": "f8b04cc2-b91d-4318-8084-eba7ce171a7e"/*StructuredBufferWithViews*/,
       "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
-        {
-          "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
-          "Type": "System.Int32",
-          "Value": 4
-        },
         {
           "Id": "16f98211-fe97-4235-b33a-ddbbd2b5997f"/*Count*/,
           "Type": "System.Int32",
           "Value": 1
+        },
+        {
+          "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
+          "Type": "System.Int32",
+          "Value": 4
         },
         {
           "Id": "43c2b314-4809-4022-9b07-99965e5c1a7a"/*BufferFlags*/,
@@ -201,7 +201,7 @@
       "Outputs": []
     },
     {
-      "Id": "72ad5397-1a02-4f41-a7f7-ee4c74954087"/*CalcSize2DispatchCount*/,
+      "Id": "72ad5397-1a02-4f41-a7f7-ee4c74954087"/*CalcInt2DispatchCount*/,
       "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
       "InputValues": [],
       "Outputs": []

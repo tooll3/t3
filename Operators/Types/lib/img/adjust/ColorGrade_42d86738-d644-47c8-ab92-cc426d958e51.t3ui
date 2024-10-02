@@ -1,5 +1,6 @@
 {
   "Id": "42d86738-d644-47c8-ab92-cc426d958e51"/*ColorGrade*/,
+  "Description": "Adjusts the color grading of the incoming image for the Gain (highlights), Gamma (mid-tones), and Lift (shadows).\n\nGray values are neutral. Alpha can be used to amplify the effect. Vignette color, size, and position can be used for additional effects.\n\nTry:\n- blending by hovering over presets while holding the ALT key.\n- dragging the parameter color swatches vertically with the left and right mouse button to quickly adjust brightness and alpha.\n- adding a [WaveForm2] operator to visualize the image properties.\n\nAlso consider using [AdjustColors].",
   "InputUis": [
     {
       "InputId": "777b2c27-a3c8-40d0-a196-80a08af51296"/*Texture2d*/,
@@ -51,6 +52,7 @@
         "X": -8.08049,
         "Y": 527.35626
       },
+      "GroupTitle": "Vignette",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -76,49 +78,49 @@
         "Y": 662.35626
       },
       "Min": -2.0,
-      "Max": 2.0
+      "Max": 2.0,
+      "UseVec2Control": "Position"
+    },
+    {
+      "InputId": "b3e7d147-5f9a-480f-a5da-ea611e5b4805"/*GenerateMipmaps*/,
+      "Position": {
+        "X": -8.08049,
+        "Y": 707.35626
+      },
+      "GroupTitle": "Additional options"
+    },
+    {
+      "InputId": "c73bc2e6-338b-40f9-bfd6-32b6472ff250"/*ClampResult*/,
+      "Position": {
+        "X": -8.08049,
+        "Y": 752.35626
+      }
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "861b22f0-5267-4160-8887-3ec9ffdf9653"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "861b22f0-5267-4160-8887-3ec9ffdf9653"/*Vector4Components*/,
       "Position": {
         "X": 121.91951,
         "Y": 342.35632
       }
     },
     {
-      "ChildId": "e4224966-8692-4fb3-bfa9-cabca46d9966"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "e4224966-8692-4fb3-bfa9-cabca46d9966"/*Vector4Components*/,
       "Position": {
         "X": 121.91951,
-        "Y": 387.35623
+        "Y": 398.35623
       }
     },
     {
-      "ChildId": "78d8f249-6488-4348-b6b9-451f89cf8c4a"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "78d8f249-6488-4348-b6b9-451f89cf8c4a"/*Vector4Components*/,
       "Position": {
         "X": 121.91951,
-        "Y": 432.35626
+        "Y": 454.35626
       }
     },
     {
       "ChildId": "845edc7d-c347-4882-bab7-8ade293e15b4"/*Value*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 121.91951,
         "Y": 286.35632
@@ -137,36 +139,31 @@
       }
     },
     {
-      "ChildId": "51711a0c-c86c-465c-b5a9-067d9e8be9bd"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "51711a0c-c86c-465c-b5a9-067d9e8be9bd"/*Vector4Components*/,
       "Position": {
         "X": 141.91951,
         "Y": 527.35626
       }
     },
     {
-      "ChildId": "0ac1305d-697b-4d4b-80d2-4672117cb228"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "0ac1305d-697b-4d4b-80d2-4672117cb228"/*Vector2Components*/,
       "Position": {
-        "X": 392.6546,
-        "Y": 656.4784
+        "X": 343.63788,
+        "Y": 654.4072
       }
     },
     {
       "ChildId": "10328e98-bef5-4e67-a3f5-566b9752c077"/*_ImageFxShaderSetupStatic*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
-        "X": 831.70105,
-        "Y": 192.5587
+        "X": 928.5582,
+        "Y": 132.04938
+      }
+    },
+    {
+      "ChildId": "fa31315c-4a7e-4b2b-bad2-15dfaddbbd5f"/*BoolToFloat*/,
+      "Position": {
+        "X": 381.1678,
+        "Y": 759.02155
       }
     }
   ],
@@ -174,9 +171,25 @@
     {
       "OutputId": "1680781d-af5e-4b77-beb6-3e4a12d73d59"/*Output*/,
       "Position": {
-        "X": 939.8677,
-        "Y": 642.9786
+        "X": 1149.7422,
+        "Y": 278.45978
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "4b7072b5-d25d-40c4-a835-6724c8b59b50",
+      "Title": "Overview",
+      "Description": "Gives a quick overview on how to use this operator",
+      "LinkUrl": "https://youtu.be/_P4-VKhJXhE",
+      "LinkType": "TutorialVideo"
+    },
+    {
+      "Id": "eec4ba0d-e146-49b0-8e26-4db169cdb588",
+      "Title": "Combing with Presets",
+      "Description": "A quick showcase how using presets can have to refine a color grade.",
+      "LinkUrl": "https://www.youtube.com/watch?v=tk6RY-F7uGU",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

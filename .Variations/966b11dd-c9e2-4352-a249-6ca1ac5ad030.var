@@ -1,0 +1,86 @@
+{
+  "Id": "966b11dd-c9e2-4352-a249-6ca1ac5ad030",
+  "Variations": [
+    {
+      "Id": "ddb677e4-1cfd-4eab-8f8a-4c10775b50f4",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "Cube",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "8350af8e-cb0c-438b-9881-b4d18ee71e77": {
+            "X": -0.07943636,
+            "Y": 0.317136,
+            "Z": 0.35922742
+          }
+        }
+      }
+    },
+    {
+      "Id": "b1d9f592-aab0-404d-9bfa-c4efba5bd074",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Sphere",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "8350af8e-cb0c-438b-9881-b4d18ee71e77": {
+            "X": -0.07943636,
+            "Y": 0.317136,
+            "Z": 0.35922742
+          },
+          "1cbebd99-14cb-4824-9604-a45ed97d8714": 1
+        }
+      }
+    },
+    {
+      "Id": "83507103-4592-4b38-b6da-19d87f3c3244",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "Tiny",
+      "PosOnCanvas": {
+        "X": 489.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "8350af8e-cb0c-438b-9881-b4d18ee71e77": {
+            "X": -0.07943636,
+            "Y": 0.317136,
+            "Z": 0.35922742
+          },
+          "1cbebd99-14cb-4824-9604-a45ed97d8714": 1,
+          "7c6609fc-5c27-4392-92df-492438bd23b0": 0.17
+        }
+      }
+    },
+    {
+      "Id": "c41d1772-67a8-42fe-9c20-a1869b2dbac5",
+      "IsPreset": true,
+      "ActivationIndex": 4,
+      "Title": "Large",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "8350af8e-cb0c-438b-9881-b4d18ee71e77": {
+            "X": -0.07943636,
+            "Y": 0.317136,
+            "Z": 0.35922742
+          },
+          "1cbebd99-14cb-4824-9604-a45ed97d8714": 1,
+          "7c6609fc-5c27-4392-92df-492438bd23b0": 2.14
+        }
+      }
+    }
+  ]
+}

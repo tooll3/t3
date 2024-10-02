@@ -9,16 +9,16 @@ namespace T3.Operators.Types.Id_d3fb5baf_43f8_4983_a1d9_42f4005a3af0
     public class PeakLevel : Instance<PeakLevel>
     {
         [Output(Guid = "6fe37109-0177-4823-9466-eaa49adb19d4", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
-        public readonly Slot<float> AttackLevel = new Slot<float>();
+        public readonly Slot<float> AttackLevel = new();
         
         [Output(Guid = "80DCAD3B-5E93-4991-855D-24176EC54F4D", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<bool> FoundPeak = new Slot<bool>();
+        public readonly Slot<bool> FoundPeak = new();
 
         [Output(Guid = "EC9B98CF-DD88-4B54-977E-960DDF3D5B32", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> TimeSincePeak = new Slot<float>();
+        public readonly Slot<float> TimeSincePeak = new();
 
         [Output(Guid = "F0996EF5-39F0-4874-85A9-C3AC83C9D9E8", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> MovingSum = new Slot<float>();
+        public readonly Slot<float> MovingSum = new();
 
 
         public PeakLevel()
@@ -84,13 +84,13 @@ namespace T3.Operators.Types.Id_d3fb5baf_43f8_4983_a1d9_42f4005a3af0
         
         
         [Input(Guid = "88ed25d3-ab67-47da-ad38-2f0126ce0492")]
-        public readonly InputSlot<float> Value = new InputSlot<float>();
+        public readonly InputSlot<float> Value = new();
 
         [Input(Guid = "279C4F32-2F8A-4679-AFE4-BBF14CF6BA05")]
-        public readonly InputSlot<float> Threshold = new InputSlot<float>();
+        public readonly InputSlot<float> Threshold = new();
         
 
         [Input(Guid = "D38D54B4-D15C-40C3-A5F1-6546F444965C")]
-        public readonly InputSlot<float> MinTimeBetweenPeaks = new InputSlot<float>();
+        public readonly InputSlot<float> MinTimeBetweenPeaks = new();
     }
 }

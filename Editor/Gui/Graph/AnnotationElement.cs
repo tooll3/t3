@@ -5,6 +5,7 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Operator;
+using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Annotations;
 using T3.Editor.Gui.Commands.Graph;
@@ -12,6 +13,7 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph
 {
@@ -20,104 +22,108 @@ namespace T3.Editor.Gui.Graph
     /// </summary>
     static class AnnotationElement
     {
-
         public static void StartRenaming(Annotation annotation)
         {
             _requestedRenameId = annotation.Id;
         }
-        
+
         private static Guid _requestedRenameId = Guid.Empty;
-        
+
         internal static void Draw(Annotation annotation)
         {
+            _screenArea = GraphCanvas.Current.TransformRect(new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size));
+            var titleSize = annotation.Size;
+            titleSize.Y = MathF.Min(titleSize.Y, 14 * T3Ui.UiScaleFactor);
+
+            // Keep height of title area at a minimum height when zooming out
+            var clickableArea = GraphCanvas.Current.TransformRect(new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + titleSize));
+            var height = MathF.Min(16 * T3Ui.UiScaleFactor, _screenArea.GetHeight());
+            clickableArea.Max.Y = clickableArea.Min.Y + height;
+
+            _isVisible = ImGui.IsRectVisible(_screenArea.Min, _screenArea.Max);
+
+            if (!_isVisible)
+                return;
+
             ImGui.PushID(annotation.Id.GetHashCode());
+            var drawList = GraphCanvas.Current.DrawList;
+
+            // Resize indicator
             {
-                _screenArea = GraphCanvas.Current.TransformRect(new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size));
-                var titleSize = annotation.Size;
-                titleSize.Y = MathF.Min(titleSize.Y, 14);
-
-                // Keep height of title area at a minimum height when zooming out
-                var clickableArea = GraphCanvas.Current.TransformRect(new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + titleSize));
-                var height = MathF.Min(16, _screenArea.GetHeight());
-                clickableArea.Max.Y = clickableArea.Min.Y + height;
-
-                _isVisible = ImGui.IsRectVisible(_screenArea.Min, _screenArea.Max);
-
-                if (!_isVisible)
-                    return;
-
-                var drawList = GraphCanvas.Current.DrawList;
-
-                // Resize indicator
+                ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNWSE);
+                ImGui.SetCursorScreenPos(_screenArea.Max - new Vector2(10, 10) * T3Ui.UiScaleFactor);
+                ImGui.Button("##resize", new Vector2(10, 10) * T3Ui.UiScaleFactor);
+                if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                 {
-                    ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNWSE);
-                    ImGui.SetCursorScreenPos(_screenArea.Max - new Vector2(10, 10));
-                    ImGui.Button("##resize", new Vector2(10, 10));
-                    if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
-                    {
-                        var delta = GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
-                        annotation.Size += delta;
-                    }
-
-                    ImGui.SetMouseCursor(ImGuiMouseCursor.Arrow);
+                    var delta = GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
+                    annotation.Size += delta;
                 }
 
-                // Background
-                const float backgroundAlpha = 0.1f;
-                const float headerHoverAlpha = 0.2f;
-                
-                drawList.AddRectFilled(_screenArea.Min, _screenArea.Max, annotation.Color.Fade(backgroundAlpha));
-
-                // Interaction
-                ImGui.SetCursorScreenPos(clickableArea.Min);
-                ImGui.InvisibleButton("##annotationHeader", clickableArea.GetSize());
-
-                THelpers.DebugItemRect();
-                var isHeaderHovered = ImGui.IsItemHovered();
-                if (isHeaderHovered)
-                {
-                    ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
-                }
-                
-                // Header
-                drawList.AddRectFilled(clickableArea.Min, clickableArea.Max,
-                                       annotation.Color.Fade(isHeaderHovered ? headerHoverAlpha : 0));
-
-                HandleDragging(annotation);
-                var shouldRename = (ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left)) || _requestedRenameId == annotation.Id;
-                Renaming.Draw(annotation, shouldRename);
-                if (shouldRename)
-                {
-                    _requestedRenameId = Guid.Empty;
-                }
-
-                var borderColor = annotation.IsSelected
-                                      ? Color.White
-                                      : annotation.Color.Fade(isHeaderHovered ? headerHoverAlpha : backgroundAlpha);
-                
-                const float thickness = 1;
-                drawList.AddRect(_screenArea.Min - Vector2.One * thickness,
-                                 _screenArea.Max + Vector2.One * thickness,
-                                 borderColor, 
-                                 0f, 
-                                 0, 
-                                 thickness);
-
-                // Label
-                {
-                    var isScaledDown = GraphCanvas.Current.Scale.X < 1;
-                    ImGui.PushFont(isScaledDown ? Fonts.FontSmall : Fonts.FontNormal);
-
-                    drawList.PushClipRect(_screenArea.Min, _screenArea.Max, true);
-                    var labelPos = _screenArea.Min + new Vector2(4, 4);
-
-                    drawList.AddText(labelPos,
-                                     ColorVariations.OperatorLabel.Apply(annotation.Color),
-                                     annotation.Title);
-                    ImGui.PopFont();
-                    drawList.PopClipRect();
-                }
+                ImGui.SetMouseCursor(ImGuiMouseCursor.Arrow);
             }
+
+            // Background
+            const float backgroundAlpha = 0.2f;
+            const float headerHoverAlpha = 0.3f;
+
+            drawList.AddRectFilled(_screenArea.Min, _screenArea.Max, UiColors.BackgroundFull.Fade(backgroundAlpha));
+
+            // Interaction
+            ImGui.SetCursorScreenPos(clickableArea.Min);
+            ImGui.InvisibleButton("##annotationHeader", clickableArea.GetSize());
+
+            THelpers.DebugItemRect();
+            var isHeaderHovered = ImGui.IsItemHovered();
+            if (isHeaderHovered)
+            {
+                ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+            }
+
+            // Header
+            drawList.AddRectFilled(clickableArea.Min, clickableArea.Max,
+                                   annotation.Color.Fade(isHeaderHovered ? headerHoverAlpha : 0));
+
+            HandleDragging(annotation);
+            var shouldRename = (ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left)) || _requestedRenameId == annotation.Id;
+            Renaming.Draw(annotation, shouldRename);
+            if (shouldRename)
+            {
+                _requestedRenameId = Guid.Empty;
+            }
+
+            var borderColor = annotation.IsSelected
+                                  ? UiColors.Selection
+                                  : UiColors.BackgroundFull.Fade(isHeaderHovered ? headerHoverAlpha : backgroundAlpha);
+
+            const float thickness = 1;
+            drawList.AddRect(_screenArea.Min - Vector2.One * thickness,
+                             _screenArea.Max + Vector2.One * thickness,
+                             borderColor,
+                             0f,
+                             0,
+                             thickness);
+
+            // Label
+            if(!string.IsNullOrEmpty(annotation.Title)) {
+                var canvasScale = GraphCanvas.Current.Scale.X;
+                var font = annotation.Title.StartsWith("# ") ? Fonts.FontLarge: Fonts.FontNormal;
+                var fade = MathUtils.SmootherStep(0.25f, 0.6f, canvasScale);
+                drawList.PushClipRect(_screenArea.Min, _screenArea.Max, true);
+                var labelPos = _screenArea.Min + new Vector2(8, 6) * T3Ui.DisplayScaleFactor;
+
+                var fontSize = canvasScale > 1 
+                                   ? font.FontSize
+                                   : canvasScale >  Fonts.FontSmall.Scale / Fonts.FontNormal.Scale
+                                       ? font.FontSize
+                                       : font.FontSize * canvasScale;
+                drawList.AddText(font,
+                                 fontSize,
+                                 labelPos,
+                                 ColorVariations.OperatorLabel.Apply(annotation.Color.Fade(fade)),
+                                 annotation.Title);
+                drawList.PopClipRect();
+            }
+
             ImGui.PopID();
         }
 
@@ -214,7 +220,7 @@ namespace T3.Editor.Gui.Graph
             {
                 if (a == annotation)
                     continue;
-                
+
                 var nRect = new ImRect(a.PosOnCanvas, a.PosOnCanvas + a.Size);
                 if (aRect.Contains(nRect))
                     matches.Add(a);

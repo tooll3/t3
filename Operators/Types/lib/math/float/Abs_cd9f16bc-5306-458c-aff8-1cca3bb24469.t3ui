@@ -1,6 +1,6 @@
 {
   "Id": "cd9f16bc-5306-458c-aff8-1cca3bb24469"/*Abs*/,
-  "Description": "the absolute value of a number",
+  "Description": "The absolute value of a number.",
   "InputUis": [
     {
       "InputId": "9ca014a9-5abc-4d83-ac30-bb85c5d913b7"/*Value*/,

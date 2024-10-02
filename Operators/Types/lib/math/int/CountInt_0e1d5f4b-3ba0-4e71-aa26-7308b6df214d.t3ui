@@ -1,12 +1,19 @@
 {
   "Id": "0e1d5f4b-3ba0-4e71-aa26-7308b6df214d"/*CountInt*/,
-  "Description": "A helper operator that counts evaluations as an integer. \nThis",
+  "Description": "A helper operator that counts evaluations as an integer.",
   "InputUis": [
     {
-      "InputId": "bfd95809-61d2-49eb-85d4-ff9e36b2d158"/*Running*/,
+      "InputId": "bfd95809-61d2-49eb-85d4-ff9e36b2d158"/*TriggerIncrement*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
+      }
+    },
+    {
+      "InputId": "6ebe2842-a8fc-4800-8296-c8664c804e3c"/*TriggerDecrement*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
       }
     },
     {
@@ -24,7 +31,7 @@
       }
     },
     {
-      "InputId": "abe64676-ccf7-4163-b4da-26d8b7179af4"/*Increment*/,
+      "InputId": "abe64676-ccf7-4163-b4da-26d8b7179af4"/*Delta*/,
       "Position": {
         "X": -200.0,
         "Y": 180.0

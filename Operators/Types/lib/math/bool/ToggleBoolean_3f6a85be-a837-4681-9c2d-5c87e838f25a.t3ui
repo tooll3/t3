@@ -1,0 +1,30 @@
+{
+  "Id": "3f6a85be-a837-4681-9c2d-5c87e838f25a"/*ToggleBoolean*/,
+  "Description": "When triggered toggles from true to false and back.",
+  "InputUis": [
+    {
+      "InputId": "2216ea9a-a6fb-446e-b4be-0b9a111be745"/*TriggerToggle*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "f8416220-11c9-4d60-ac45-406822690754"/*TriggerReset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "d6fdbe01-b25c-4e8a-a134-dadb192b1864"/*Result*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 138.0
+      }
+    }
+  ]
+}

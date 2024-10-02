@@ -40,7 +40,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\reflection\\reflection-lines.hlsl"
+          "Value": "Resources\\lib\\points\\reflection\\ReflectionLines.hlsl"
         }
       ],
       "Outputs": []
@@ -51,7 +51,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 64,
             "Y": 1,
@@ -98,7 +98,7 @@
       "Outputs": []
     },
     {
-      "Id": "eaf89cc6-bb5b-474d-9260-c95f939b1b6d"/*StructuredBuffer2*/,
+      "Id": "eaf89cc6-bb5b-474d-9260-c95f939b1b6d"/*StructuredBufferWithViews*/,
       "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
         {

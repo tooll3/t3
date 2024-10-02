@@ -1,6 +1,6 @@
 {
   "Id": "e6bbbeef-08d8-4105-b84d-39edadb549c0"/*PickBuffer*/,
-  "Description": "Pick on of the connected GPU buffers. This can be useful for switching between differen sets of Points or Vertices.",
+  "Description": "Picks one of the connected GPU buffers. This can be useful for switching between different sets of Points or Vertices.",
   "InputUis": [
     {
       "InputId": "04776dc8-7b84-41f5-973c-22cadbf44f02"/*Index*/,
@@ -18,130 +18,7 @@
       }
     }
   ],
-  "SymbolChildUis": [
-    {
-      "ChildId": "00975cd0-9082-4875-bfb3-3150ee51c2b2"/*ComputeShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 122.01576,
-        "Y": 552.8011
-      }
-    },
-    {
-      "ChildId": "fa71f79f-0331-4d9c-bb1d-f22da67bd68b"/*ComputeShaderStage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 127.0
-      },
-      "Position": {
-        "X": 471.04163,
-        "Y": 587.7994
-      }
-    },
-    {
-      "ChildId": "905e236a-c5bd-4875-abd7-9a25172a10d7"/*FloatsToBuffer*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 138.28679,
-        "Y": 135.58852
-      },
-      "Position": {
-        "X": 82.63007,
-        "Y": 908.67883
-      }
-    },
-    {
-      "ChildId": "0c602a38-7b9f-46d6-8ca1-e91736e7ac7e"/*ExecuteBufferUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 641.2465,
-        "Y": 646.7957
-      }
-    },
-    {
-      "ChildId": "c32c1f5d-26fc-4e94-803c-0d098c4ad388"/*CalcDispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 273.14893,
-        "Y": 590.2168
-      }
-    },
-    {
-      "ChildId": "c9b482ef-55e5-4f5d-9522-14a31663e1be"/*StructuredBuffer2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 77.5927,
-        "Y": 799.58417
-      }
-    },
-    {
-      "ChildId": "3806d8d3-9616-4f86-8f53-92039ee059b3"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -213.77097,
-        "Y": 700.4401
-      }
-    },
-    {
-      "ChildId": "b4d2e750-bf2f-4121-8707-44f614c941cc"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 273.14893,
-        "Y": 659.2168
-      }
-    },
-    {
-      "ChildId": "804e1634-d07d-4c84-b1bc-7f3970d62b66"/*IntToFloat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -47.369926,
-        "Y": 908.67883
-      }
-    },
-    {
-      "ChildId": "b65a7707-7e79-4725-a260-6e8e3afed96c"/*ClampInt*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -182.01859,
-        "Y": 759.8851
-      }
-    },
-    {
-      "ChildId": "992ff308-f891-49b3-9ff8-08159cf12968"/*IntToFloat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -46.684986,
-        "Y": 1006.406
-      }
-    }
-  ],
+  "SymbolChildUis": [],
   "OutputUis": [
     {
       "OutputId": "32d2645b-b627-437a-afec-7e728e2b54f5"/*Output*/,

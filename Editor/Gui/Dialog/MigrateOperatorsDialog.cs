@@ -4,11 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.SystemUi;
 
 namespace T3.Editor.Gui.Dialog
 {
@@ -22,11 +22,12 @@ namespace T3.Editor.Gui.Dialog
 
         public void Draw()
         {
+            FormInputs.SetIndentToParameters();
             if (BeginDialog("Import Operators from another Tooll installation"))
             {
                 ImGui.BeginChild("options", new Vector2(ImGui.GetContentRegionAvail().X - 400, -1));
                 {
-                    CustomComponents.HelpText("This will help you to import Operators and resources from another Tooll installation.");
+                    FormInputs.AddHint("This will help you to import Operators and resources from another Tooll installation.");
 
                     if (string.IsNullOrEmpty(_userNamespace))
                     {
@@ -34,7 +35,10 @@ namespace T3.Editor.Gui.Dialog
                     }
 
                     var hasChanged = false;
-                    hasChanged |= CustomComponents.DrawStringParameter("User Namespace", ref _userNamespace);
+                    hasChanged |= !_initialized;
+                    _initialized = true;
+                    
+                    hasChanged |= FormInputs.AddStringInput("User Namespace", ref _userNamespace);
 
                     var fullPath = (_otherToollDir != null && Directory.Exists(_otherToollDir)) ? Path.GetFullPath(_otherToollDir) : "";
                     var startUpPath = Path.GetFullPath(".");
@@ -49,8 +53,9 @@ namespace T3.Editor.Gui.Dialog
                         warning = "Can't import from itself";
                     }
 
-                    hasChanged |= CustomComponents.DrawStringParameter("Tooll directory", ref _otherToollDir, null, warning,
-                                                                       FileOperations.FilePickerTypes.Folder);
+                    hasChanged |= FormInputs.AddFilePicker("Tooll directory", ref _otherToollDir, null, warning,
+                                                             FileOperations.FilePickerTypes.Folder);
+                    
 
                     if (hasChanged)
                     {
@@ -58,13 +63,14 @@ namespace T3.Editor.Gui.Dialog
                     }
 
                     var isValid = !string.IsNullOrEmpty(_otherToollDir) && !string.IsNullOrEmpty(_userNamespace);
-                    CustomComponents.HelpText(_scanResultSummary);
+                    FormInputs.AddHint(_scanResultSummary);
 
+                    FormInputs.ApplyIndent();
                     if (CustomComponents.DisablableButton("Import and Restart", isValid))
                     {
                         MigrateSelection();
-                        MessageBox.Show("Tooll now has to restart to complete the import.");
-                        Application.Exit();
+                        EditorUi.Instance.ShowMessageBox("Tooll now has to restart to complete the import.");
+                        EditorUi.Instance.ExitApplication();
                         //Application.Restart();
                         //Environment.Exit(0);
 
@@ -184,8 +190,20 @@ namespace T3.Editor.Gui.Dialog
 
         private void MigrateSelection()
         {
-            var allRemoteT3Files = Directory.GetFiles(_otherOperatorNamespaceDirectory, "*.t3", SearchOption.AllDirectories);
-            var allRemoteT3UiFiles = Directory.GetFiles(_otherOperatorNamespaceDirectory, "*.t3ui", SearchOption.AllDirectories);
+            string[] allRemoteT3Files;
+            string[] allRemoteT3UiFiles;
+
+            try
+            {
+                allRemoteT3Files = Directory.GetFiles(_otherOperatorNamespaceDirectory, "*.t3", SearchOption.AllDirectories);
+                allRemoteT3UiFiles = Directory.GetFiles(_otherOperatorNamespaceDirectory, "*.t3ui", SearchOption.AllDirectories);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Migration failed: " + e.Message);
+                return;
+            }
+            
 
             foreach (var item in _scanResults)
             {
@@ -216,7 +234,7 @@ namespace T3.Editor.Gui.Dialog
                 foreach (var fileList in new[] { allRemoteT3Files, allRemoteT3UiFiles })
                 {
                     var otherFile =
-                        fileList.SingleOrDefault(f =>
+                        fileList.FirstOrDefault(f =>
                                                      Regex.IsMatch(f,
                                                                    item.Title +
                                                                    @"_[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\."));
@@ -331,6 +349,7 @@ namespace T3.Editor.Gui.Dialog
             }
         }
 
+        private bool _initialized;
         private string _scanResultSummary;
         private readonly List<ScanItem> _scanResults = new();
         private readonly List<string> _otherResourceFiles = new();

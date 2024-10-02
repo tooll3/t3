@@ -3,13 +3,6 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "dca953d6-bdc1-42eb-9a4d-5974c42cf45b"/*Size*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 45.0
-      }
-    },
-    {
       "InputId": "2e0fd6be-0c9e-4624-803c-178d1d80ea43"/*MipLevels*/,
       "Position": {
         "X": 0.0,
@@ -49,6 +42,13 @@
       "Position": {
         "X": 0.0,
         "Y": 0.0
+      }
+    },
+    {
+      "InputId": "dca953d6-bdc1-42eb-9a4d-5974c42cf45b"/*Size*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
       }
     }
   ],

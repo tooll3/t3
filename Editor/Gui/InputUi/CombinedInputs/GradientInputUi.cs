@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using ImGuiNET;
 using T3.Core.DataTypes;
+using T3.Core.Operator;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.InputUi.CombinedInputs
@@ -19,30 +20,32 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                    };
         }
         
-        protected override InputEditStateFlags DrawEditControl(string name, ref Gradient gradient)
+        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref Gradient gradient, bool readOnly)
         {
             if (gradient == null)
             {
-                // value was null!
                 ImGui.TextUnformatted(name + " is null?!");
                 return InputEditStateFlags.Nothing;
             }
-            
-            return DrawEditor(gradient);
-        }
 
-        // TODO: Implement proper edit flags and Undo
-        private static InputEditStateFlags DrawEditor(Gradient gradient)
-        {
             var size = new Vector2(ImGui.GetContentRegionAvail().X - GradientEditor.StepHandleSize.X, 
                                    ImGui.GetFrameHeight());
             var area = new ImRect(ImGui.GetCursorScreenPos() + new Vector2(GradientEditor.StepHandleSize.X * 0.5f,0), 
                                   ImGui.GetCursorScreenPos() + size);
-            var modified= GradientEditor.Draw(gradient, ImGui.GetWindowDrawList(), area);
-            return modified ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
+            var drawList = ImGui.GetWindowDrawList();
+
+            var cloneIfModified = input.IsDefault;
+            var modified= GradientEditor.Draw(ref gradient, drawList, area, cloneIfModified);
+
+            if (cloneIfModified && modified.HasFlag(InputEditStateFlags.Modified))
+            {
+                input.IsDefault = false;
+            } 
+            return modified;
         }
-        
-        
+
+        // TODO: Implement proper edit flags and Undo
+
         protected override void DrawReadOnlyControl(string name, ref Gradient value)
         {
             ImGui.NewLine();

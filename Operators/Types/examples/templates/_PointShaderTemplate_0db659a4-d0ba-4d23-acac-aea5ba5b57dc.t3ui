@@ -28,10 +28,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "36c0d869-f211-4ded-84db-53b92c47ad84"/*ComputeShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 5.2371216,
         "Y": 356.4458
@@ -39,10 +35,6 @@
     },
     {
       "ChildId": "4156296b-f982-46f4-89ee-c62c23125735"/*ComputeShaderStage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 127.0
-      },
       "Position": {
         "X": 395.8524,
         "Y": 501.43842
@@ -50,10 +42,6 @@
     },
     {
       "ChildId": "bf02fb9e-e4c4-457b-8b57-57fb750010b4"/*FloatsToBuffer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 88.0
-      },
       "Position": {
         "X": -229.5161,
         "Y": 532.2649
@@ -61,10 +49,6 @@
     },
     {
       "ChildId": "5f5d677d-9dbf-4419-be00-6e8f042f3f03"/*GetSRVProperties*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -299.86755,
         "Y": 763.95416
@@ -72,10 +56,6 @@
     },
     {
       "ChildId": "64c625a3-2a0f-40f9-9bb0-4b9f1a2f810c"/*ExecuteBufferUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 605.88324,
         "Y": 893.9409
@@ -83,32 +63,20 @@
     },
     {
       "ChildId": "43289c51-c4d3-4740-93ba-a14378364f23"/*CalcDispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 214.33832,
         "Y": 503.18958
       }
     },
     {
-      "ChildId": "6caedf16-71b7-4e5c-8751-d59fe0cdd00f"/*Vector3ToFloat3*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "6caedf16-71b7-4e5c-8751-d59fe0cdd00f"/*Vector3Components*/,
       "Position": {
         "X": -397.75333,
         "Y": 540.2987
       }
     },
     {
-      "ChildId": "0805902c-adbd-4567-8aaa-4de17e0a4621"/*StructuredBuffer2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "0805902c-adbd-4567-8aaa-4de17e0a4621"/*StructuredBufferWithViews*/,
       "Position": {
         "X": -79.294556,
         "Y": 922.47754
@@ -116,10 +84,6 @@
     },
     {
       "ChildId": "b8ca7814-ec01-43cd-b9f8-0d7d7794d0c7"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -446.97894,
         "Y": 808.3369
@@ -127,10 +91,6 @@
     },
     {
       "ChildId": "16cedc58-0728-434b-bd0e-8e52f2890c74"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 186.48685,
         "Y": 884.0222
@@ -185,7 +145,7 @@
     },
     {
       "Id": "dc8affb1-d3ea-44eb-bc8d-12a8fd5ade4a",
-      "Title": "Setup a new structured buffer with the \nrequired dimenstion (stride) and length.",
+      "Title": "Setup a new structured buffer with the \nrequired dimension (stride) and length.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

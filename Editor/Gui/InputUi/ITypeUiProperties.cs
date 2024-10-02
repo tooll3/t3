@@ -1,9 +1,9 @@
-﻿using T3.Editor.Gui.Styling;
+﻿using T3.Core.DataTypes.Vector;
 
 namespace T3.Editor.Gui.InputUi
 {
     public interface ITypeUiProperties
     {
-        Color Color { get; set; }
+        Color Color { get;  }
     }
 }

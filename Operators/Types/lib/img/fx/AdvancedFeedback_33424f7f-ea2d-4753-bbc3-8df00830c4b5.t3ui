@@ -1,6 +1,6 @@
 {
   "Id": "33424f7f-ea2d-4753-bbc3-8df00830c4b5"/*AdvancedFeedback*/,
-  "Description": "An advanced version of the [FluidFeedback] effect which much more versatile but harder to control.\nIt also utilizes [DetectEdges] and stabilizes the feedbackback buffer to a meaningful value range and thus avoiding black or overly bright values.",
+  "Description": "An advanced version of the [FluidFeedback] effect is much more versatile but harder to control. It also utilizes [DetectEdges] and stabilizes the feedback buffer to a meaningful value range, thus avoiding black or overly bright values.\n\n\nAll Feedback Ops: [FluidFeedback] [AdvancedFeedback] [AdvancedFeedback2]\n\nAlso see [AfterGlow2]",
   "InputUis": [
     {
       "InputId": "0f29ca23-b5fb-484e-8ae6-8ed70d67d623"/*Command*/,
@@ -75,9 +75,9 @@
         "X": -482.60156,
         "Y": 522.95074
       },
-      "Min": -1.0,
-      "Max": 1.0,
-      "Scale": 0.001
+      "Min": -0.9,
+      "Max": 1.1,
+      "Scale": 0.0001
     },
     {
       "InputId": "849540c3-7ffd-40a7-a78b-3d051256e5f1"/*Rotate*/,
@@ -111,7 +111,10 @@
       "Position": {
         "X": -486.94925,
         "Y": 844.91724
-      }
+      },
+      "Min": -0.01,
+      "Max": 0.01,
+      "Format": "{0:0.0000}"
     },
     {
       "InputId": "cbe45989-b239-491e-a2d8-83a42ab58b85"/*ShiftBrightness*/,
@@ -119,8 +122,9 @@
         "X": -488.08795,
         "Y": 975.38855
       },
-      "Min": -0.1,
-      "Max": 0.1
+      "Min": -0.01,
+      "Max": 0.01,
+      "Format": "{0:0.0000}"
     },
     {
       "InputId": "640de6a7-14ce-4c72-b78e-aa72f642b765"/*AmplifyEdges*/,
@@ -159,15 +163,18 @@
         "X": -489.22665,
         "Y": 1169.2065
       }
+    },
+    {
+      "InputId": "af523ebc-0791-430c-8fff-e50779b8af4f"/*Reset*/,
+      "Position": {
+        "X": -489.22665,
+        "Y": 1214.2065
+      }
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "03d46d71-a6c2-4e47-897a-992eca18a22d"/*UseRenderTarget*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
+      "ChildId": "03d46d71-a6c2-4e47-897a-992eca18a22d"/*UseTextureReference*/,
       "Position": {
         "X": -375.45633,
         "Y": -438.344
@@ -178,7 +185,7 @@
       "Style": "Expanded",
       "Size": {
         "X": 110.0,
-        "Y": 140.0
+        "Y": 153.0
       },
       "Position": {
         "X": 1191.6638,
@@ -187,10 +194,6 @@
     },
     {
       "ChildId": "195de773-cb14-4413-998a-2ea034412acc"/*Layer2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
       "Position": {
         "X": 480.24927,
         "Y": -155.7573
@@ -198,10 +201,6 @@
     },
     {
       "ChildId": "9afcc8d6-28fc-4859-b370-9d81b95d0e7f"/*Execute*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": 630.24927,
         "Y": -155.7573
@@ -209,32 +208,20 @@
     },
     {
       "ChildId": "b3a97d7b-cd02-4fb2-bdb5-f2a632e3396a"/*Displace*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 114.0
-      },
       "Position": {
-        "X": 24.107605,
-        "Y": -260.45108
+        "X": 26.751404,
+        "Y": -285.83167
       }
     },
     {
       "ChildId": "c96a785d-f595-4964-b9a5-aa256be88163"/*Blur*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
-        "X": -186.32443,
-        "Y": -138.03241
+        "X": -176.27795,
+        "Y": -124.28461
       }
     },
     {
       "ChildId": "7704e0c8-863a-4241-9172-688f95c65d36"/*Multiply*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -338.05676,
         "Y": 224.92816
@@ -242,109 +229,48 @@
     },
     {
       "ChildId": "1a0d2306-5cea-4473-bd48-958614cc9ca5"/*Multiply*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -329.68738,
-        "Y": 57.322414
+        "Y": 70.32242
       }
     },
     {
       "ChildId": "f3c5fd11-b86e-4a3a-8348-32e379c0c5e1"/*Multiply*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -329.68738,
         "Y": 12.322414
       }
     },
     {
-      "ChildId": "83b155a2-eb8f-468a-8720-86847cacd409"/*Switch*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
+      "ChildId": "35f6c959-2356-45c4-a42e-c72e993a09f1"/*HasTimeChanged*/,
       "Position": {
-        "X": 819.63617,
-        "Y": -210.50357
-      }
-    },
-    {
-      "ChildId": "ceda43b9-3143-49a0-a079-d99259efc1cf"/*DrawScreenQuad*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 630.24927,
-        "Y": -211.7573
-      }
-    },
-    {
-      "ChildId": "2a42e68e-409f-495e-98c8-b2f55ed15355"/*BoolToInt*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 518.66,
-        "Y": 46.768646
-      }
-    },
-    {
-      "ChildId": "35f6c959-2356-45c4-a42e-c72e993a09f1"/*DidTimeChange*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 218.65997,
-        "Y": 46.768646
+        "X": 208.69415,
+        "Y": 92.86035
       }
     },
     {
       "ChildId": "d8a9130e-c3a0-4881-b6c2-38405893e902"/*And*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
-        "X": 368.65997,
-        "Y": 46.768646
+        "X": 358.69415,
+        "Y": 92.86035
       }
     },
     {
       "ChildId": "4318ad5e-6f0f-45a2-b73e-52649ac045e9"/*_AdjustFeedbackImage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 114.0
-      },
       "Position": {
         "X": -178.63586,
         "Y": -343.5301
       }
     },
     {
-      "ChildId": "ca5bc678-91c5-46a4-97aa-6b7bec53f54e"/*DidTimeChange*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
+      "ChildId": "ca5bc678-91c5-46a4-97aa-6b7bec53f54e"/*HasTimeChanged*/,
       "Position": {
-        "X": 577.9417,
-        "Y": 220.27893
+        "X": 427.9417,
+        "Y": 206.57599
       }
     },
     {
       "ChildId": "2bb17913-43e0-4eda-9409-e2e5f6a0fcd7"/*Execute*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": 727.9417,
         "Y": 220.27893
@@ -352,24 +278,23 @@
     },
     {
       "ChildId": "25b5db1e-7d0b-40a7-b64c-478d936cd322"/*DrawScreenQuad*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 577.9417,
-        "Y": 276.27893
+        "Y": 275.576
       }
     },
     {
       "ChildId": "aaac91f3-fc80-4d47-940a-862ed6eb7322"/*Execute*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": 969.63617,
         "Y": -210.50357
+      }
+    },
+    {
+      "ChildId": "fd9aff2c-227b-452d-956e-0696289999b4"/*Or*/,
+      "Position": {
+        "X": 577.9417,
+        "Y": 206.57599
       }
     }
   ],
@@ -385,7 +310,7 @@
   "Annotations": [
     {
       "Id": "bb61c901-78de-4d49-b181-bf0f9cffb061",
-      "Title": "Reset Buffer when backwards",
+      "Title": "Resets the buffer when going backwards.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -400,6 +325,22 @@
         "X": 380.0,
         "Y": 212.0
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "1b600a25-ed50-4ec8-bdc3-81187fe32b52",
+      "Title": "Overview",
+      "Description": "This 10 min video gives an overview of how this effect works.",
+      "LinkUrl": "https://youtu.be/M7eOmqiUOZM",
+      "LinkType": "TutorialVideo"
+    },
+    {
+      "Id": "2c1a8f78-f23c-4d91-8f23-8ae236f815bc",
+      "Title": "Example for blending",
+      "Description": "A quick illustration how blending presets and fake lighting can be applied to achive various effects.",
+      "LinkUrl": "https://www.youtube.com/watch?v=iIxSKv_WKoM",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

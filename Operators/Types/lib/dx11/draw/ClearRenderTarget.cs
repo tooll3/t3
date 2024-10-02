@@ -1,7 +1,6 @@
 using System.Numerics;
 using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -13,7 +12,7 @@ namespace T3.Operators.Types.Id_e3596381_c118_4e2e_a482_83049a9f74af
     public class ClearRenderTarget : Instance<ClearRenderTarget>
     {
         [Output(Guid = "A6C06F65-1738-4DD0-9D0F-728864FF521B", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
-        public readonly Slot<Command> Output = new Slot<Command>();
+        public readonly Slot<Command> Output = new();
 
         public ClearRenderTarget()
         {

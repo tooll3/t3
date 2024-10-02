@@ -1,5 +1,6 @@
 {
   "Id": "32a6a351-6d22-4915-aa0e-e0483b7f4e76"/*GenerateMips*/,
+  "Description": "Creates mipmaps for the incoming image. Useful if the output image is used as a texture in 3D space and sharp noise is created with perspective distortion.",
   "InputUis": [
     {
       "InputId": "a4e3001c-0663-48ec-8f56-b11ff0b40850"/*Texture*/,

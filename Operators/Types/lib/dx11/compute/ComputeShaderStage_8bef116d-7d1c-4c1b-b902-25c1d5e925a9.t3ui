@@ -46,7 +46,7 @@
       }
     },
     {
-      "InputId": "0105aca4-5fd5-40c8-82a5-e919bb7dd507"/*UavBufferCount*/,
+      "InputId": "0105aca4-5fd5-40c8-82a5-e919bb7dd507"/*UavBufferCounter*/,
       "Position": {
         "X": 106.01553,
         "Y": 352.0835

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 
 namespace T3.Editor.Gui.Commands
 {
@@ -71,8 +72,24 @@ namespace T3.Editor.Gui.Commands
             _redoStack.Clear();
         }
 
-        private static readonly Stack<ICommand> _undoStack = new Stack<ICommand>();
-        private static readonly Stack<ICommand> _redoStack = new Stack<ICommand>();
+        public static string GetUndoStackAsString()
+        {
+            var sb = new StringBuilder();
+            var index = 0;
+            foreach (var a in _undoStack)
+            {
+                sb.Append(a.Name);
+                sb.Append('\n');
+                index++;
+                if (index > 20)
+                    break;
+            }
+
+            return sb.ToString();
+        }
+
+        private static readonly Stack<ICommand> _undoStack = new();
+        private static readonly Stack<ICommand> _redoStack = new();
 
         public static Stack<ICommand> UndoStack => _undoStack;
         public static Stack<ICommand> RedoStack => _redoStack;

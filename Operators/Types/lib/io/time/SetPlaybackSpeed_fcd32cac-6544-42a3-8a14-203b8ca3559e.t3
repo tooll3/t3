@@ -1,0 +1,21 @@
+{
+  "Name": "SetPlaybackSpeed",
+  "Id": "fcd32cac-6544-42a3-8a14-203b8ca3559e",
+  "Namespace": "lib.io.time",
+  "Inputs": [
+    {
+      "Id": "4fdef030-d1d1-403a-b16c-a414f63fc913"/*SubGraph*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "10f14ef0-7399-4a85-96ad-f445903eec1d"/*SpeedFactor*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "f3b73860-e44d-4ae1-9709-51ab142a2d0a"/*TriggerUpdate*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

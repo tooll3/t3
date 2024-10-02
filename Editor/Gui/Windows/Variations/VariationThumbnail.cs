@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
@@ -19,8 +20,6 @@ namespace T3.Editor.Gui.Windows.Variations
     {
         public static bool Draw(VariationBaseCanvas canvas, Variation variation, ImDrawListPtr drawList, ShaderResourceView canvasSrv, ImRect uvRect)
         {
-            
-            
             if (VariationForRenaming == variation)
             {
                 ImGui.PushID(variation.ActivationIndex);
@@ -31,30 +30,28 @@ namespace T3.Editor.Gui.Windows.Variations
                 if (ImGui.IsItemDeactivatedAfterEdit() || ImGui.IsItemDeactivated())
                 {
                     VariationForRenaming = null;
+                    if (VariationHandling.ActivePoolForPresets != null)
+                    {
+                        VariationHandling.ActivePoolForPresets.SaveVariationsToFile();
+                    }
+                    else if (VariationHandling.ActiveInstanceForSnapshots != null)
+                    {
+                        VariationHandling.ActivePoolForSnapshots.SaveVariationsToFile();
+                    }
                 }
 
                 ImGui.PopID();
             }
 
             var focusOpacity = 1f;
-            if (variation.IsSnapshot && VariationHandling.FocusSetsForCompositions.TryGetValue(VariationHandling.ActiveInstanceForSnapshots.Symbol.Id, out var focusSet))
-            {
-                var isWithinFocus = false;
-                foreach (var childId in variation.ParameterSetsForChildIds.Keys)
-                {
-                    if (focusSet.Contains(childId))
-                        isWithinFocus = true;
-                }
-
-                focusOpacity = isWithinFocus ? 1 : 0.2f;
-            }
-                
+            
             _canvas = canvas;
             var pMin = canvas.TransformPosition(variation.PosOnCanvas);
             var sizeOnScreen = canvas.TransformDirectionFloored(ThumbnailSize);
             var pMax = pMin + sizeOnScreen;
 
             var areaOnScreen = new ImRect(pMin, pMax);
+            drawList.AddRectFilled(pMin, pMax, UiColors.Gray.Fade(0.1f * focusOpacity));
             CustomComponents.FillWithStripes(drawList, areaOnScreen);
 
             drawList.AddImage((IntPtr)canvasSrv,
@@ -64,39 +61,45 @@ namespace T3.Editor.Gui.Windows.Variations
                               uvRect.Max, Color.White.Fade(focusOpacity)
                              );
 
-            drawList.AddRect(pMin, pMax, Color.Gray.Fade(0.2f * focusOpacity));
+            drawList.AddRect(pMin, pMax, UiColors.Gray.Fade(0.2f * focusOpacity));
 
             variation.IsSelected = Selection.IsNodeSelected(variation);
             if (variation.IsSelected)
             {
-                drawList.AddRect(pMin - Vector2.One, pMax + Vector2.One, Color.White);
+                drawList.AddRect(pMin - Vector2.One, pMax + Vector2.One, UiColors.Selection);
             }
 
             const int bottomPadding = 15;
             drawList.AddRectFilledMultiColor(pMin + new Vector2(1, sizeOnScreen.Y - bottomPadding - 20),
                                              pMax - Vector2.One,
-                                             Color.TransparentBlack,
-                                             Color.TransparentBlack,
-                                             Color.Black.Fade(0.6f),
-                                             Color.Black.Fade(0.6f)
+                                             UiColors.BackgroundFull.Fade(0),
+                                             UiColors.BackgroundFull.Fade(0),
+                                             UiColors.BackgroundFull.Fade(0.6f),
+                                             UiColors.BackgroundFull.Fade(0.6f)
                                             );
             ImGui.PushClipRect(pMin, pMax, true);
             ImGui.PushFont(Fonts.FontSmall);
 
             var fade = MathUtils.RemapAndClamp(canvas.Scale.X, 0.3f, 0.6f, 0, 1) * focusOpacity;
             drawList.AddText(pMin + new Vector2(4, sizeOnScreen.Y - bottomPadding),
-                             Color.White.Fade(1f * fade),
+                             UiColors.Text.Fade(1f * fade),
                              string.IsNullOrEmpty(variation.Title) ? "Untitled" : variation.Title);
 
             drawList.AddText(pMin + new Vector2(sizeOnScreen.X - bottomPadding, sizeOnScreen.Y - bottomPadding),
-                             Color.White.Fade(0.3f * fade),
+                             UiColors.Text.Fade(0.3f * fade),
                              $"{variation.ActivationIndex:00}");
 
             ImGui.PopFont();
+
+            if (variation.State == Variation.States.Active)
+            {
+                drawList.AddCircleFilled(pMax - Vector2.One * 4, 2, UiColors.WidgetActiveLine);
+            }
+            
             ImGui.SetCursorScreenPos(pMin);
             ImGui.PushID(variation.Id.GetHashCode());
 
-            ImGui.InvisibleButton("##thumbnail", ThumbnailSize);
+            ImGui.InvisibleButton("##thumbnail", pMax-pMin);
 
             if (_canvas.IsBlendingActive)
             {
@@ -108,28 +111,33 @@ namespace T3.Editor.Gui.Windows.Variations
             else
             {
                 // Handle hover
-                if (ImGui.IsItemVisible() && ImGui.IsItemHovered() && UserSettings.Config.VariationHoverPreview)
+                if (ImGui.IsItemVisible() && ImGui.IsItemHovered())
                 {
-                    if (_hoveredVariation == null)
-                    {
-                        _hoveredVariation = variation;
-                        _canvas.StartHover(variation);
-                    }
 
                     if (variation.IsSnapshot)
                     {
                         foreach (var childId in variation.ParameterSetsForChildIds.Keys)
                         {
-                            T3Ui.AddHoveredId(childId);
+                            FrameStats.AddHoveredId(childId);
                         }
                     }
-                    
-                    if (ImGui.GetIO().KeyAlt)
+
+                    if (UserSettings.Config.VariationHoverPreview)
                     {
-                        var mouseX = ImGui.GetMousePos().X;
-                        var blend = (mouseX - pMin.X) / sizeOnScreen.X;
-                        _canvas.StartBlendTo(variation, blend);
-                        DrawBlendIndicator(drawList, areaOnScreen, blend);
+                        if (_hoveredVariation == null)
+                        {
+                            _hoveredVariation = variation;
+                            _canvas.StartHover(variation);
+                        }
+                    
+                    
+                        if (ImGui.GetIO().KeyAlt)
+                        {
+                            var mouseX = ImGui.GetMousePos().X;
+                            var blend = (mouseX - pMin.X) / sizeOnScreen.X;
+                            _canvas.StartBlendTo(variation, blend);
+                            DrawBlendIndicator(drawList, areaOnScreen, blend);
+                        }
                     }
                 }
                 else
@@ -166,7 +174,7 @@ namespace T3.Editor.Gui.Windows.Variations
             ImGui.PushFont(Fonts.FontLarge);
             var label = $"{blend * 100:0}%";
             var labelSize = ImGui.CalcTextSize(label);
-            drawList.AddText(areaOnScreen.GetCenter() - labelSize / 2, Color.White, label);
+            drawList.AddText(areaOnScreen.GetCenter() - labelSize / 2, UiColors.ForegroundFull, label);
             ImGui.PopFont();
         }
 
@@ -297,9 +305,9 @@ namespace T3.Editor.Gui.Windows.Variations
         private static CanvasElementSelection Selection => _canvas.Selection;
         private static Guid _draggedNodeId;
         private static List<ISelectableCanvasObject> _draggedNodes = new();
-        public static readonly Vector2 ThumbnailSize = new Vector2(160, (int)(160 / 16f * 9));
+        public static readonly Vector2 ThumbnailSize = new(160, (int)(160 / 16f * 9));
 
-        public static readonly Vector2 SnapPadding = new Vector2(3, 3);
+        public static readonly Vector2 SnapPadding = new(3, 3);
 
         private static readonly Vector2[] _snapOffsetsInCanvas =
             {

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Newtonsoft.Json;
-using SharpDX;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.IO;
@@ -10,10 +10,11 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Serialization;
 using Point = T3.Core.DataTypes.Point;
-using Utilities = T3.Core.Utils.Utilities;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
+using Vector4 = System.Numerics.Vector4;
 
 // ReSharper disable RedundantNameQualifier
 
@@ -97,12 +98,12 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
                 else if (KeyHandler.PressedKeys[(int)Key.X])
                 {
                     if(!KeyHandler.PressedKeys[(int)Key.CtrlKey])
-                        _paging.Cut();
+                        _paging.Cut(overridePageIndex);
                 }
                 else if (KeyHandler.PressedKeys[(int)Key.V])
                 {
                     if(!KeyHandler.PressedKeys[(int)Key.CtrlKey])
-                        _paging.Paste(context.LocalTime);
+                        _paging.Paste(context.LocalTime, overridePageIndex);
                 }
             }
 
@@ -129,7 +130,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
             if (_needsSave && Playback.RunTimeInSecs - _lastModificationTime > 2)
             {
                 var filepath1 = FilePath.GetValue(context);
-                Utilities.SaveJson(_paging.Pages, filepath1);
+                JsonUtils.SaveJson(_paging.Pages, filepath1);
                 _needsSave = false;
             }
         }
@@ -208,9 +209,13 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
                         _currentStrokeLength = 1;
                     }
 
+                    var color = BrushColor.GetValue(context);
+
                     AppendPoint(new Point()
                                     {
                                         Position = posInWorld,
+                                        Color = color,
+                                        
                                         // Orientation = new Quaternion(
                                         //                              BrushColor.GetValue(context).X,
                                         //                              BrushColor.GetValue(context).Y,
@@ -249,18 +254,16 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
         private static Vector3 CalcPosInWorld(EvaluationContext context, Vector2 mousePos)
         {
             const float offsetFromCamPlane = 0.99f;
-            var posInClipSpace = new SharpDX.Vector4((mousePos.X - 0.5f) * 2, (-mousePos.Y + 0.5f) * 2, offsetFromCamPlane, 1);
-            Matrix clipSpaceToCamera = context.CameraToClipSpace;
-            clipSpaceToCamera.Invert();
-            Matrix cameraToWorld = context.WorldToCamera;
-            cameraToWorld.Invert();
-            Matrix worldToObject = context.ObjectToWorld;
-            worldToObject.Invert();
+            var posInClipSpace = new Vector4((mousePos.X - 0.5f) * 2, (-mousePos.Y + 0.5f) * 2, offsetFromCamPlane, 1);
+            Matrix4x4.Invert(context.CameraToClipSpace, out var clipSpaceToCamera);
+            Matrix4x4.Invert(context.WorldToCamera, out var cameraToWorld);
+            Matrix4x4.Invert(context.ObjectToWorld, out var worldToObject);
 
-            var clipSpaceToWorld = Matrix.Multiply(clipSpaceToCamera, cameraToWorld);
-            var m = Matrix.Multiply(cameraToWorld, clipSpaceToCamera);
-            m.Invert();
-            var p = SharpDX.Vector4.Transform(posInClipSpace, clipSpaceToWorld);
+            var clipSpaceToWorld = Matrix4x4.Multiply(clipSpaceToCamera, cameraToWorld);
+            var m = Matrix4x4.Multiply(cameraToWorld, clipSpaceToCamera);
+            Matrix4x4.Invert(m, out m);
+            
+            var p = Vector4.Transform(posInClipSpace, clipSpaceToWorld);
             return new Vector3(p.X, p.Y, p.Z) / p.W;
         }
 
@@ -268,13 +271,13 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
         {
             if (!_paging.HasActivePage)
             {
-                Log.Warning("Tried writing to undefined sketch page");
+                Log.Warning("Tried writing to undefined sketch page", this);
                 return;
             }
 
             if (_paging.ActivePage.WriteIndex >= CurrentPointList.NumElements - 1)
             {
-                //Log.Debug($"Increasing paint buffer length of {CurrentPointList.NumElements} by {BufferIncreaseStep}...");
+                //Log.Debug($"Increasing paint buffer length of {CurrentPointList.NumElements} by {BufferIncreaseStep}...", this);
                 CurrentPointList.SetLength(CurrentPointList.NumElements + BufferIncreaseStep);
             }
 
@@ -288,7 +291,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
         {
             if (!_paging.HasActivePage || _currentStrokeLength == 0 || _paging.ActivePage.WriteIndex == 0)
             {
-                Log.Warning("Can't get previous stroke point");
+                Log.Warning("Can't get previous stroke point", this);
                 point = new Point();
                 return false;
             }
@@ -373,28 +376,43 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
             public void LoadPages(string filepath)
             {
-                Pages = Utilities.TryLoadingJson<List<Page>>(filepath);
-
-                if (Pages != null)
+                Pages = new List<Page>();
+                try
                 {
-                    foreach (var page in Pages)
+                    try
                     {
-                        if (page.PointsList == null)
+                        Pages = JsonUtils.TryLoadingJson<List<Page>>(filepath);
+                    }
+                    catch ( Exception e)
+                    {
+                        Log.Debug("Failed reading sketch pages from json: " + e.Message, this);
+                    }
+
+                    if (Pages != null)
+                    {
+                        foreach (var page in Pages)
                         {
-                            page.PointsList = new StructuredList<Point>(BufferIncreaseStep);
-                            continue;
+                            if (page.PointsList == null)
+                            {
+                                page.PointsList = new StructuredList<Point>(BufferIncreaseStep);
+                                continue;
+                            }
+
+                            if (page.PointsList.NumElements > page.WriteIndex)
+                                continue;
+
+                            //Log.Warning($"Adjusting writing index {page.WriteIndex} -> {page.PointsList.NumElements}", this);
+                            page.WriteIndex = page.PointsList.NumElements + 1;
                         }
-
-                        if (page.PointsList.NumElements > page.WriteIndex)
-                            continue;
-
-                        //Log.Warning($"Adjusting writing index {page.WriteIndex} -> {page.PointsList.NumElements}");
-                        page.WriteIndex = page.PointsList.NumElements + 1;
+                    }
+                    else
+                    {
+                        Pages = new List<Page>();
                     }
                 }
-                else
+                catch(Exception e)
                 {
-                    Pages = new List<Page>();
+                    Log.Warning($"Failed to load pages in {filepath}: {e.Message}", this);
                 }
             }
 
@@ -404,17 +422,29 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
             public bool HasCutPage => _cutPage != null;
 
-            public void Cut()
+            public void Cut(int overridePageIndex)
             {
                 if (!HasActivePage)
                     return;
 
                 _cutPage = ActivePage;
                 Pages.Remove(ActivePage);
-                UpdatePageIndex(_lastContextTime, NoPageIndex);
+                //if (overridePageIndex < 0)
+                //{
+                //
+                //}
+                // else
+                // {
+                //     var index = Pages.IndexOf(ActivePage);
+                //     if (index != -1)
+                //     {
+                //         Pages[index] = null;
+                //     }
+                // }
+                UpdatePageIndex(_lastContextTime, overridePageIndex);
             }
 
-            public void Paste(double time)
+            public void Paste(double time, int overridePageIndex)
             {
                 if (_cutPage == null)
                     return;
@@ -424,7 +454,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
                 _cutPage.Time = time;
                 Pages.Add(_cutPage);
-                UpdatePageIndex(_lastContextTime, NoPageIndex);
+                UpdatePageIndex(_lastContextTime, overridePageIndex);
             }
 
             public int ActivePageIndex { get; private set; } = NoPageIndex;
@@ -458,6 +488,9 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
         [Input(Guid = "1057313C-006A-4F12-8828-07447337898B")]
         public readonly InputSlot<float> BrushSize = new();
+
+        [Input(Guid = "AE7FB135-C216-4F34-B73F-5115417E916B")]
+        public readonly InputSlot<Vector4> BrushColor = new();
 
         [Input(Guid = "51641425-A2C6-4480-AC8F-2E6D2CBC300A")]
         public readonly InputSlot<string> FilePath = new();

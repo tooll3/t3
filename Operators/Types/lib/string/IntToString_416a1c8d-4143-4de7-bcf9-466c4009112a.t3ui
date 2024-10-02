@@ -1,6 +1,6 @@
 {
   "Id": "416a1c8d-4143-4de7-bcf9-466c4009112a"/*IntToString*/,
-  "Description": "Converts an [IntValue] to a string.\n\nTip: You can override the string formatting to something like... \"{0:0} times\" add prefexis or suffixes.",
+  "Description": "Converts an [IntValue] to a string.\n\nTip: You can override the string formatting to something like... \"{0:0} times\" add prefixes or suffixes.",
   "InputUis": [
     {
       "InputId": "3c1a8975-ab27-40b3-9fee-7de38643294a"/*Value*/,

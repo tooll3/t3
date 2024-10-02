@@ -1,0 +1,45 @@
+{
+  "Id": "587dbb73-fd79-4481-a79e-f77055abda9a"/*FreezeValue*/,
+  "Description": "Keeps the current input value as long as Keep is true.\nThis can be useful for building interactive features like stop watches.",
+  "InputUis": [
+    {
+      "InputId": "7d64e809-3280-47fa-ad0f-218c6081534f"/*Value*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "b53df009-a0eb-46c9-90db-04d8ccdb0ae4"/*Freeze*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "9ad1267b-6d0a-43f4-a4e9-0f77659ddd44"/*Mode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "5bf37afc-d45a-42d0-8f87-905fb5ee013d"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    },
+    {
+      "OutputId": "a125bd4b-3926-4373-9fd2-26620d7cedd3"/*DeltaSinceFreeze*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

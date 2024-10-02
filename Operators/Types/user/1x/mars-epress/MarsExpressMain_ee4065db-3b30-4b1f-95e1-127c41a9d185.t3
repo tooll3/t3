@@ -167,109 +167,24 @@
       "TargetSlotId": "35f501f4-5c79-4628-9441-8b3782544bf6"
     }
   ],
-  "AudioClips": [
-    {
-      "Id": "00000000-0000-0000-0000-000000000000",
-      "StartTime": 0.0,
-      "EndTime": 0.0,
-      "Bpm": 120.0,
-      "DiscardAfterUse": true,
-      "IsSoundtrack": true,
-      "FilePath": "Resources\\user\\1x\\mars-express\\soundtrack\\mars-express.mp3"
-    }
-  ],
-  "Animator": [
-    {
-      "InstanceId": "9a7e8d3c-53ad-4d5e-a6a1-c8a063ade175",
-      "InputId": "f6d96a01-dc90-49c7-9152-a6a42bb05218",
-      "Curve": {
-        "PreCurve": "Constant",
-        "PostCurve": "CycleWithOffset",
-        "Keys": [
-          {
-            "Time": 17.6847,
-            "Value": 0.0,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Linear",
-            "OutEditMode": "Linear",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": 3.141592653589793
-          },
-          {
-            "Time": 22.1733,
-            "Value": 0.0,
-            "InType": "Linear",
-            "OutType": "Linear",
-            "InEditMode": "Linear",
-            "OutEditMode": "Linear",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": -3.141592653589793
-          }
-        ]
+  "PlaybackSettings": {
+    "Enabled": true,
+    "Bpm": 120.0,
+    "AudioSource": 0,
+    "Syncing": 0,
+    "AudioDecayFactor": 0.98,
+    "AudioGainFactor": 1.0,
+    "AudioInputDeviceName": "",
+    "AudioClips": [
+      {
+        "Id": "00000000-0000-0000-0000-000000000000",
+        "StartTime": 0.0,
+        "EndTime": 0.0,
+        "Bpm": 120.0,
+        "DiscardAfterUse": true,
+        "IsSoundtrack": true,
+        "FilePath": "Resources\\user\\1x\\mars-express\\soundtrack\\mars-express.mp3"
       }
-    },
-    {
-      "InstanceId": "9a7e8d3c-53ad-4d5e-a6a1-c8a063ade175",
-      "InputId": "f6d96a01-dc90-49c7-9152-a6a42bb05218",
-      "Index": 1,
-      "Curve": {
-        "PreCurve": "Constant",
-        "PostCurve": "CycleWithOffset",
-        "Keys": [
-          {
-            "Time": 17.6847,
-            "Value": 0.0,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Linear",
-            "OutEditMode": "Linear",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": 3.141592653589793
-          },
-          {
-            "Time": 22.1733,
-            "Value": 0.0,
-            "InType": "Linear",
-            "OutType": "Linear",
-            "InEditMode": "Linear",
-            "OutEditMode": "Linear",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": -3.141592653589793
-          }
-        ]
-      }
-    },
-    {
-      "InstanceId": "9a7e8d3c-53ad-4d5e-a6a1-c8a063ade175",
-      "InputId": "f6d96a01-dc90-49c7-9152-a6a42bb05218",
-      "Index": 2,
-      "Curve": {
-        "PreCurve": "Constant",
-        "PostCurve": "CycleWithOffset",
-        "Keys": [
-          {
-            "Time": 17.6847,
-            "Value": 6.079999923706055,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Linear",
-            "OutEditMode": "Linear",
-            "InTangentAngle": -1.083971869398587,
-            "OutTangentAngle": 2.057620784191206
-          },
-          {
-            "Time": 22.1733,
-            "Value": -2.4000000953674316,
-            "InType": "Linear",
-            "OutType": "Linear",
-            "InEditMode": "Linear",
-            "OutEditMode": "Linear",
-            "InTangentAngle": -1.083971869398587,
-            "OutTangentAngle": -4.22556452298838
-          }
-        ]
-      }
-    }
-  ]
+    ]
+  }
 }

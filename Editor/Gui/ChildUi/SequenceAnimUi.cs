@@ -1,9 +1,11 @@
 ﻿using System.Numerics;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f;
 
 namespace T3.Editor.Gui.ChildUi
@@ -93,7 +95,7 @@ namespace T3.Editor.Gui.ChildUi
 
                 drawList.AddRectFilled(pMin,
                                        new Vector2(x + 1, bottom - 1),
-                                       Color.Black.Fade(barIntensity)
+                                       UiColors.WidgetBackgroundStrong.Fade(barIntensity)
                                       );
 
                 var peak= sequenceAnim.CurrentSequence[barIndex];
@@ -101,7 +103,7 @@ namespace T3.Editor.Gui.ChildUi
                                        new Vector2(x + barWidth, bottom-1),
                                        Color.Mix(_inactiveColor, _highlightColor,highlightFactor));
                 
-                drawList.AddText(pMin + new Vector2(2,0), Color.Black.Fade(barIntensity), "" + (barIndex + 1));
+                drawList.AddText(pMin + new Vector2(2,0), UiColors.WidgetBackgroundStrong.Fade(barIntensity), "" + (barIndex + 1));
                 x += barWidth;
                 xPeaks += barWidth;
             }
@@ -110,18 +112,21 @@ namespace T3.Editor.Gui.ChildUi
             var min = screenRect.Min + new Vector2(sequenceAnim.NormalizedBarTime * w, 0);
             drawList.AddRectFilled(min, 
                                    min + new Vector2(1, h), 
-                                     sequenceAnim.IsRecording ? Color.Red: T3Style.Colors.GraphActiveLine);
+                                     sequenceAnim.IsRecording ? UiColors.StatusAttention: UiColors.WidgetActiveLine);
             
             drawList.PopClipRect();
             ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
+            return SymbolChildUi.CustomUiResult.Rendered 
+                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph 
+                   | SymbolChildUi.CustomUiResult.PreventInputLabels
+                   | SymbolChildUi.CustomUiResult.PreventTooltip;
         }
 
         // private static float _dragStartBias;
         // private static float _dragStartRatio;
         
-        private static readonly Color _highlightColor = Color.Orange;
-        private static readonly Color _inactiveColor = Color.Black.Fade(0.3f);
+        private static readonly Color _highlightColor = UiColors.StatusAnimated;
+        private static readonly Color _inactiveColor = UiColors.WidgetBackgroundStrong.Fade(0.3f);
         
         //private static readonly Vector2[] GraphLinePoints = new Vector2[GraphListSteps];
         private const int GraphListSteps = 80;

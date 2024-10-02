@@ -9,7 +9,7 @@ namespace T3.Operators.Types.Id_efb9ecfc_5aa2_45f1_87b0_1455d7702aa7
     public class RemapValues : Instance<RemapValues>
     {
         [Output(Guid = "18bd8395-7116-425c-b580-1ce944beda65")]
-        public readonly Slot<float> Result = new Slot<float>();
+        public readonly Slot<float> Result = new();
 
         public RemapValues()
         {
@@ -40,7 +40,7 @@ namespace T3.Operators.Types.Id_efb9ecfc_5aa2_45f1_87b0_1455d7702aa7
 
             if (bestMatchingIndex == -1)
             {
-                Log.Warning("RemapValues requires at least one remap pair");
+                Log.Warning("RemapValues requires at least one remap pair", this);
                 Result.Value = 0;
             }
             else

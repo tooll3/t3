@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using T3.Core.Operator;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Commands.Graph
 {
@@ -30,7 +31,7 @@ namespace T3.Editor.Gui.Commands.Graph
         {
             var parentSymbolUi = SymbolUiRegistry.Entries[_parentSymbolId];
             var symbolToAdd = SymbolRegistry.Entries[_addedSymbolId];
-            parentSymbolUi.AddChild(symbolToAdd, _addedChildId, PosOnCanvas, Size);
+            parentSymbolUi.AddChild(symbolToAdd, _addedChildId, PosOnCanvas, Size, ChildName);
         }
 
         // core data
@@ -41,5 +42,6 @@ namespace T3.Editor.Gui.Commands.Graph
         // ui data
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = SymbolChildUi.DefaultOpSize;
+        public string ChildName { get; set; } = string.Empty;
     }
 }

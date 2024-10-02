@@ -1,12 +1,7 @@
-using System;
-using System.Diagnostics;
-using T3.Core;
 using T3.Core.Animation;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_485af23d_543e_44a7_b29f_693ed9533ab5
@@ -15,10 +10,10 @@ namespace T3.Operators.Types.Id_485af23d_543e_44a7_b29f_693ed9533ab5
     {
         [Output(Guid = "617afbbc-8199-43c0-b630-4563e65959ef", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> Delta = new();
-        
+
         [Output(Guid = "195CDCD3-6F02-471A-96E4-3F44A1D03CC2", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> LastDuration = new();
-        
+
         public StopWatch()
         {
             LastDuration.UpdateAction = Update;
@@ -29,49 +24,57 @@ namespace T3.Operators.Types.Id_485af23d_543e_44a7_b29f_693ed9533ab5
         {
             var resetHit = MathUtils.WasTriggered(ResetTrigger.GetValue(context), ref _wasResetTrigger);
 
+            var runTimeInSecs = Playback.RunTimeInSecs;
             if (resetHit)
             {
-                LastDuration.Value = (float)(Playback.RunTimeInSecs - _startTime);
-                _startTime = Playback.RunTimeInSecs;
+                LastDuration.Value = (float)(runTimeInSecs - _startTime);
+                _startTime = runTimeInSecs;
+                _accumulatedDuration = 0;
             }
-            
-            var timeInSecs = (float)(Playback.RunTimeInSecs - _startTime);
-            var timeMode = (TimeModes)DurationIn.GetValue(context).Clamp(0,1);
-            
-            Delta.Value = ConvertTime(timeInSecs, timeMode);
+
+            if (context.Playback.PlaybackSpeed != 0)
+                _accumulatedDuration += runTimeInSecs - _lastUpdateTime;
+
+            _lastUpdateTime = runTimeInSecs;
+
+            var timeInSecs = PauseWithPlayback.GetValue(context) switch
+                                 {
+                                     false => (float)(runTimeInSecs - _startTime),
+                                     true  => _accumulatedDuration
+                                 };
+
+            Delta.Value = ConvertTime(timeInSecs, DurationIn.GetEnumValue<TimeModes>(context), context.Playback);
             LastDuration.DirtyFlag.Clear();
         }
 
-        private float ConvertTime(double timeInSecs, TimeModes mode)
+        private static float ConvertTime(double timeInSecs, TimeModes mode, Playback contextPlayback)
         {
-            switch (mode)
-            {
-                case TimeModes.TimeInSecs:
-                    return (float)timeInSecs;
-                
-                case TimeModes.BeatTime:
-                default:
-                {
-                    var bpm = Playback.Current != null ? Playback.Current.Bpm : 120;
-                    return (float)(timeInSecs * bpm / 240f);
-                }
-            }
+            return mode switch
+                       {
+                           TimeModes.TimeInSecs => (float)timeInSecs,
+                           TimeModes.BeatTime   => (float)contextPlayback.BarsFromSeconds(timeInSecs),
+                           _                    => (float)contextPlayback.BarsFromSeconds(timeInSecs)
+                       };
         }
 
         private double _startTime;
         private bool _wasResetTrigger;
-        //private SendTimeAs _timeMode= SendTimeAs.BeatTime;
-        
-        private enum TimeModes {
+        private double _accumulatedDuration;
+        private double _lastUpdateTime;
+
+        private enum TimeModes
+        {
             TimeInSecs,
             BeatTime,
         }
-        
-        
+
         [Input(Guid = "38754151-704A-4374-817E-98DFACA62E49")]
         public readonly InputSlot<bool> ResetTrigger = new();
-        
-        [Input(Guid = "C19343B2-7534-43A9-A9A6-CE9019437C62", MappedType = (typeof(TimeModes)))]
+
+        [Input(Guid = "C19343B2-7534-43A9-A9A6-CE9019437C62", MappedType = typeof(TimeModes))]
         public readonly InputSlot<int> DurationIn = new();
+
+        [Input(Guid = "BF89D8B2-D8FE-4A3C-9255-67944EC831CB")]
+        public readonly InputSlot<bool> PauseWithPlayback = new();
     }
 }

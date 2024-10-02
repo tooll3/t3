@@ -1,0 +1,64 @@
+{
+  "Id": "22a3cd4e-02b3-44d7-ad2b-aab5810c5e88",
+  "Variations": [
+    {
+      "Id": "a4d87a28-3f13-4d61-b69b-6b825bce89ac",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "5 gone",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "a3dcbd9b-63ea-45dc-b761-7b4f6ddcba14": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 0.0
+          },
+          "4ac28e13-fac9-4f1a-9aa7-e564a0d57e93": 0.07,
+          "4d9bfddb-901e-4524-a99c-ba594d317e8a": 0.14,
+          "276431d2-e689-41f9-9f73-5544f9368a53": {
+            "X": 512,
+            "Y": 512
+          },
+          "e7a99144-1f59-42ae-bdac-906ca1e54e0d": 5.0,
+          "c6c3d50e-9731-42cc-a0fc-ee8d15ac6cca": 0.32,
+          "7428e03f-1f6f-4be4-adb9-accef49b64a6": 0.28,
+          "9a857159-9593-490a-9ef5-1c66c6c6b68d": 0.09
+        }
+      }
+    },
+    {
+      "Id": "1d8c18a7-e7c8-431f-ae6c-92aaaf22d70f",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "6 sided flare",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "a3dcbd9b-63ea-45dc-b761-7b4f6ddcba14": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 0.0
+          },
+          "e7a99144-1f59-42ae-bdac-906ca1e54e0d": 6.0,
+          "c6c3d50e-9731-42cc-a0fc-ee8d15ac6cca": 0.4,
+          "7428e03f-1f6f-4be4-adb9-accef49b64a6": -0.35,
+          "4d9bfddb-901e-4524-a99c-ba594d317e8a": 0.11,
+          "4ac28e13-fac9-4f1a-9aa7-e564a0d57e93": 0.07,
+          "276431d2-e689-41f9-9f73-5544f9368a53": {
+            "X": 512,
+            "Y": 512
+          }
+        }
+      }
+    }
+  ]
+}

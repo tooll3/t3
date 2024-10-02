@@ -1,0 +1,61 @@
+{
+  "Id": "82a5f040-926b-4970-9da2-aa36de94b436"/*RgbaToColor*/,
+  "Description": "Creates a Color from 4 values (RGBA)\n\nSimilar to [AColor] and [PickColor] and the same as [Vector4]\nAlternative with more functions: [SampleGradient]\n\n\nFor the opposite see [Vector4Components]\n\nAlso see: [HSBToColor]\n",
+  "InputUis": [
+    {
+      "InputId": "5f2de1d3-6803-4f56-aaf1-9e29b4d81eb8"/*R*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Description": "Red",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "0742e707-1557-4f66-98d9-3f277416b7a3"/*G*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Description": "Green",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "80bc1511-7210-4710-a45f-ac961f1d672d"/*B*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Description": "Blue",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "f2fd304f-11e7-466f-b594-b1c3af901852"/*A*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      },
+      "Description": "Alpha",
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "ce1c3293-99ed-4309-b040-92931ee706d1"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

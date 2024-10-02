@@ -1,9 +1,10 @@
 {
   "Id": "6184ac2d-c17d-47de-a314-15e1c670f969"/*SelectVertices*/,
-  "Description": "Sets the selection property of mesh vertices from a volume. This can later be used to selectively apply manipulations like displace.",
+  "Description": "Sets the selection property of mesh vertices from a volume. This can later be used to selectively apply manipulations like displace.\n\nalso see: [ScatterMeshFaces]",
   "InputUis": [
     {
       "InputId": "f1350cb5-d7c5-43ad-9e0c-4b0aa7a8c0e4"/*InputMesh*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -450.06876,
         "Y": 1449.7473
@@ -105,10 +106,6 @@
     },
     {
       "ChildId": "f01de02e-6397-4f98-b74d-470188231d01"/*ComputeShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 683.5765,
         "Y": 1454.2537
@@ -116,10 +113,6 @@
     },
     {
       "ChildId": "b31c7691-aa17-490b-9554-27b6f4890a2f"/*ComputeShaderStage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 140.0
-      },
       "Position": {
         "X": 1300.4463,
         "Y": 1439.008
@@ -127,21 +120,13 @@
     },
     {
       "ChildId": "9cf8df85-4aa9-4ee9-ad67-b89b823d00db"/*GetSRVProperties*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 683.5765,
-        "Y": 1510.2537
+        "Y": 1497.2537
       }
     },
     {
       "ChildId": "14a4137b-9c19-451c-bc58-92acfc1b525f"/*ExecuteBufferUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 1600.4463,
         "Y": 1439.008
@@ -149,21 +134,13 @@
     },
     {
       "ChildId": "137fb148-c010-486e-b285-645805ef065e"/*CalcDispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 1000.4463,
         "Y": 1485.2731
       }
     },
     {
-      "ChildId": "e6412733-e00e-43c3-b828-44607fe4d369"/*StructuredBuffer2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
+      "ChildId": "e6412733-e00e-43c3-b828-44607fe4d369"/*StructuredBufferWithViews*/,
       "Position": {
         "X": 887.47766,
         "Y": 2013.2914
@@ -171,10 +148,6 @@
     },
     {
       "ChildId": "6a307b44-4599-4b85-b3d4-79a94d934b22"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 513.98676,
         "Y": 1589.3789
@@ -182,10 +155,6 @@
     },
     {
       "ChildId": "09da3ef6-2967-42a4-91cf-c0e8f3efd4cc"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 1063.4392,
         "Y": 1950.9963
@@ -193,10 +162,6 @@
     },
     {
       "ChildId": "071ad12b-71e8-4748-93a6-ee1fa454f7b0"/*_MeshBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 301.32544,
         "Y": 1646.6719
@@ -204,10 +169,6 @@
     },
     {
       "ChildId": "6856f7f9-0d7c-4cce-ae35-38f8ab1184b4"/*_AssembleMeshBuffers*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 1750.4463,
         "Y": 1439.008
@@ -215,10 +176,6 @@
     },
     {
       "ChildId": "74a4cf76-e677-42f6-9955-cc7a21523ebd"/*IntValue*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 737.47766,
         "Y": 2013.2914
@@ -226,10 +183,6 @@
     },
     {
       "ChildId": "86a94935-1c03-4812-8203-8226e70cd052"/*TransformsConstBuffer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 1000.4463,
         "Y": 1554.2731
@@ -237,65 +190,13 @@
     },
     {
       "ChildId": "a4c528fa-bcce-4d30-ac7c-710daa5c33b8"/*TransformMatrix*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
       "Position": {
         "X": -616.02295,
         "Y": 1620.8845
       }
     },
     {
-      "ChildId": "d978132a-1aea-474e-930d-355cff54bafb"/*PickSDXVector4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -417.70496,
-        "Y": 1621.6067
-      }
-    },
-    {
-      "ChildId": "d50ba8b0-d5f3-45e8-9a43-a25bc21b3f40"/*PickSDXVector4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -417.70496,
-        "Y": 1677.6067
-      }
-    },
-    {
-      "ChildId": "c167a47d-34df-4f84-9e53-8c36cf2be504"/*PickSDXVector4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -417.70496,
-        "Y": 1733.6067
-      }
-    },
-    {
-      "ChildId": "3183400a-0630-4d75-9855-31b103377aa7"/*PickSDXVector4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -417.70496,
-        "Y": 1789.6067
-      }
-    },
-    {
       "ChildId": "b4db21a6-2ee7-4408-91e9-275850611186"/*IntToFloat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -420.4781,
         "Y": 1908.8527
@@ -303,21 +204,13 @@
     },
     {
       "ChildId": "57648447-c1c5-46c8-997a-fcb4afebd5d2"/*IntToFloat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -420.4781,
         "Y": 1964.8527
       }
     },
     {
-      "ChildId": "0565fbcc-bead-4089-800c-28ab6f2ea730"/*BoolToFloats*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "0565fbcc-bead-4089-800c-28ab6f2ea730"/*BoolToFloat*/,
       "Position": {
         "X": -420.4781,
         "Y": 2020.8527
@@ -325,10 +218,6 @@
     },
     {
       "ChildId": "d4f3dfa7-1489-4191-b1db-8223cb4aeb9e"/*Execute*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": 1450.4463,
         "Y": 1439.008
@@ -336,21 +225,13 @@
     },
     {
       "ChildId": "36f1e5cb-c204-44a7-901a-3f5c192df04e"/*VisibleGizmos*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 1190.5486,
         "Y": 2320.8179
       }
     },
     {
-      "ChildId": "481c0c70-55bb-4236-a890-bb4ddb22df0a"/*BoundingBox*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
+      "ChildId": "481c0c70-55bb-4236-a890-bb4ddb22df0a"/*DrawBoxGizmo*/,
       "Position": {
         "X": 760.97595,
         "Y": 2370.868
@@ -358,10 +239,6 @@
     },
     {
       "ChildId": "0bdb03f9-3f1b-4044-a1c8-10cc34158774"/*Transform*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 88.0
-      },
       "Position": {
         "X": 1040.5486,
         "Y": 2320.8179
@@ -369,10 +246,6 @@
     },
     {
       "ChildId": "cde912a7-375c-430a-af4e-f814602c8e9b"/*Multiply*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 760.97595,
         "Y": 2426.868
@@ -383,9 +256,18 @@
     {
       "OutputId": "b8cb2689-25bf-46c4-8454-77cb39a1f8cb"/*Result*/,
       "Position": {
-        "X": 2232.3826,
-        "Y": 1404.6046
+        "X": 1900.4463,
+        "Y": 1439.008
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "2fb495ad-f7de-4d5f-8d4f-0b52d663d4cb",
+      "Title": "Example with Scattering",
+      "Description": "A quick example that highlights how to combine this with Scattering faces.",
+      "LinkUrl": "https://youtu.be/_x8vm2aS9FI",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

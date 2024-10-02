@@ -1,10 +1,12 @@
 ﻿using System;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using String = T3.Operators.Types.Id_5880cbc3_a541_4484_a06a_0e6f77cdbe8e.AString;
 
 namespace T3.Editor.Gui.ChildUi
@@ -29,13 +31,17 @@ namespace T3.Editor.Gui.ChildUi
             if (stringInstance.InputString.IsConnected)
                 return SymbolChildUi.CustomUiResult.None;
 
+            var dragWidth = WidgetElements.DrawDragIndicator(screenRect, drawList);
             var usableArea = screenRect;
+            usableArea.Min.X += dragWidth;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
 
             ImGui.PushFont(GraphCanvas.Current.Scale.X < 2
                                ? Fonts.FontSmall
-                               : Fonts.FontNormal);
+                               : GraphCanvas.Current.Scale.X < 4 
+                                   ? Fonts.FontNormal
+                                   : Fonts.FontLarge);
 
             // Draw edit window
             if (instance.SymbolChildId == _focusedInstanceId)
@@ -60,8 +66,10 @@ namespace T3.Editor.Gui.ChildUi
             // Draw viewer
             else
             {
+                //Log.Debug("hovered " + ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows | ImGuiHoveredFlags.AllowWhenBlockedByPopup | ImGuiHoveredFlags.AllowWhenDisabled ) + " focus" + ImGui.IsWindowFocused(), stringInstance);
                 usableArea.Expand(GraphCanvas.Current.Scale.X < 0.75f ? 0 : -4);
                 if (usableArea.Contains(ImGui.GetMousePos())
+                    && (ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows) || ImGui.IsWindowFocused())
                     && ImGui.IsMouseReleased(ImGuiMouseButton.Left)
                     && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 0).Length() < UserSettings.Config.ClickThreshold)
                 {
@@ -80,7 +88,7 @@ namespace T3.Editor.Gui.ChildUi
 
             ImGui.PopFont();
             ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventOpenSubGraph | SymbolChildUi.CustomUiResult.PreventTooltip;
+            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventOpenSubGraph | SymbolChildUi.CustomUiResult.PreventTooltip | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp;
         }
 
         private static Guid _focusedInstanceId;

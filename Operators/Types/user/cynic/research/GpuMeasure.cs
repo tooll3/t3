@@ -14,7 +14,7 @@ namespace T3.Operators.Types.Id_000e08d0_669f_48df_9083_7aa0a43bbc05
     public class GpuMeasure : Instance<GpuMeasure>
     {
         [Output(Guid = "a506c67c-2e17-49ef-9ac3-990404ce76eb")]
-        public readonly Slot<Command> Output = new Slot<Command>();
+        public readonly Slot<Command> Output = new();
 
         public GpuMeasure()
         {
@@ -70,7 +70,7 @@ namespace T3.Operators.Types.Id_000e08d0_669f_48df_9083_7aa0a43bbc05
                     int usDuration = (int)(durationInS * 1000f * 1000f);
                     if (logToConsole)
                     {
-                        Log.Debug($" localTime: {context.LocalTime:0.00}  GPUMeasure {usDuration}us on GPU.");
+                        Log.Debug($" localTime: {context.LocalTime:0.00}  GPUMeasure {usDuration}us on GPU.", this);
                     }
                     LastMeasureInMicroSeconds = usDuration;
                     _readyToMeasure = true;
@@ -91,12 +91,12 @@ namespace T3.Operators.Types.Id_000e08d0_669f_48df_9083_7aa0a43bbc05
         private bool _readyToMeasure = true;
 
         [Input(Guid = "76c017f1-5474-44a5-b881-d581f7038ca5")]
-        public readonly InputSlot<Command> Command = new InputSlot<Command>();
+        public readonly InputSlot<Command> Command = new();
 
         [Input(Guid = "0c7ec1ae-e8d0-4acb-8050-44768f827b56")]
-        public readonly InputSlot<bool> Enabled = new InputSlot<bool>();
+        public readonly InputSlot<bool> Enabled = new();
 
         [Input(Guid = "e430cc80-9003-4a56-af5d-f5820434c074")]
-        public readonly InputSlot<bool> LogToConsole = new InputSlot<bool>();
+        public readonly InputSlot<bool> LogToConsole = new();
     }
 }

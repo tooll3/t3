@@ -1,84 +1,76 @@
-﻿using System.IO;
-using SharpDX;
-using SharpDX.D3DCompiler;
-using T3.Core;
-using T3.Core.Logging;
+﻿using Operators.Utils;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using ComputeShaderD3D = SharpDX.Direct3D11.ComputeShader;
 
 namespace T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c
 {
-    public class ComputeShader : Instance<ComputeShader>, IDescriptiveGraphNode
+    public class ComputeShader : Instance<ComputeShader>, IDescriptiveFilename, IStatusProvider, IShaderOperator<ComputeShaderD3D>
     {
         [Output(Guid = "{6C118567-8827-4422-86CC-4D4D00762D87}")]
-        public readonly Slot<SharpDX.Direct3D11.ComputeShader> ComputerShader = new Slot<SharpDX.Direct3D11.ComputeShader>();
-        
-        [Output(Guid = "a6fe06e0-b6a9-463c-9e62-930c58b0a0a1")]
-        public readonly Slot<SharpDX.Int3> ThreadCount = new Slot<SharpDX.Int3>();
+        public readonly Slot<ComputeShaderD3D> Shader = new();
 
-        private uint _computeShaderResId;
+        [Output(Guid = "a6fe06e0-b6a9-463c-9e62-930c58b0a0a1")]
+        public readonly Slot<Int3> ThreadCount = new();
+
         public ComputeShader()
         {
-            ComputerShader.UpdateAction = Update;
+            Shader.UpdateAction = Update;
+            ThreadCount.UpdateAction = Update;
         }
-        
+
         public InputSlot<string> GetSourcePathSlot()
         {
             return Source;
         }
 
-        private string _description = "not loaded";
-
         private void Update(EvaluationContext context)
         {
-            var resourceManager = ResourceManager.Instance();
+            var updated = ShaderOperatorImpl.TryUpdateShader(context, ref _sourcePath, out _statusWarning);
 
-            if (Source.DirtyFlag.IsDirty || EntryPoint.DirtyFlag.IsDirty || DebugName.DirtyFlag.IsDirty)
+            if (updated)
             {
-                string sourcePath = Source.GetValue(context);
-                string entryPoint = EntryPoint.GetValue(context);
-                string debugName = DebugName.GetValue(context);
-                if (string.IsNullOrEmpty(debugName) && !string.IsNullOrEmpty(sourcePath))
-                {
-                    debugName = new FileInfo(sourcePath).Name;
-                }
-                _computeShaderResId = resourceManager.CreateComputeShaderFromFile(sourcePath, entryPoint, debugName,
-                                                                                  () => ComputerShader.DirtyFlag.Invalidate());
-                //Log.Debug($"compute shader {sourcePath}:{entryPoint}", this);
-
-                try
-                {
-                    _description =  Path.GetFileName(sourcePath);
-                }
-                catch
-                {
-                    Log.Warning($"Unable to get filename from {sourcePath}", this);
-                }
-            }
-            else
-            {
-                ResourceManager.UpdateComputeShaderFromFile(Source.Value, _computeShaderResId, ref ComputerShader.Value);
+                if (ShaderOperatorImpl.ShaderResource.TryGetThreadGroups(out var threadCount))
+                    ThreadCount.Value = threadCount;
             }
 
-            if (_computeShaderResId != ResourceManager.NullResource)
-            {
-                ComputerShader.Value = resourceManager.GetComputeShader(_computeShaderResId);
-                var shaderReflection = new ShaderReflection(resourceManager.GetComputeShaderBytecode(_computeShaderResId));
-                shaderReflection.GetThreadGroupSize(out int x, out int y, out int z);
-                ThreadCount.Value = new Int3(x, y, z);
-            }
+            Shader.DirtyFlag.Clear();
+            ThreadCount.DirtyFlag.Clear();
         }
 
         [Input(Guid = "{AFB69C81-5063-4CB9-9D42-841B994B5EC0}")]
-        public readonly InputSlot<string> Source = new InputSlot<string>();
+        public readonly InputSlot<string> Source = new();
 
         [Input(Guid = "{8AD9E58D-A767-4A5F-BFBF-D082B80901D6}")]
-        public readonly InputSlot<string> EntryPoint = new InputSlot<string>();
+        public readonly InputSlot<string> EntryPoint = new();
 
         [Input(Guid = "{C0701D0B-D37F-4570-9E9A-EC2E88B919D1}")]
-        public readonly InputSlot<string> DebugName = new InputSlot<string>();
+        public readonly InputSlot<string> DebugName = new();
+
+        public IStatusProvider.StatusLevel GetStatusLevel()
+        {
+            return string.IsNullOrEmpty(_statusWarning) ? IStatusProvider.StatusLevel.Undefined : IStatusProvider.StatusLevel.Warning;
+        }
+
+        public string GetStatusMessage()
+        {
+            return _statusWarning;
+        }
+
+        private string _statusWarning;
+        private string _sourcePath;
+        #region IShaderOperator implementation
+        private IShaderOperator<ComputeShaderD3D> ShaderOperatorImpl => this;
+        InputSlot<string> IShaderOperator<ComputeShaderD3D>.Source => Source;
+        InputSlot<string> IShaderOperator<ComputeShaderD3D>.EntryPoint => EntryPoint;
+        InputSlot<string> IShaderOperator<ComputeShaderD3D>.DebugName => DebugName;
+        Slot<ComputeShaderD3D> IShaderOperator<ComputeShaderD3D>.Shader => Shader;
+        ShaderResource<ComputeShaderD3D> IShaderOperator<ComputeShaderD3D>.ShaderResource { get; set; }
+        bool IShaderOperator<ComputeShaderD3D>.SourceIsSourceCode => false;
+        #endregion
     }
 }

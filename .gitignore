@@ -27,6 +27,9 @@ bld/
 # Uncomment if you have tasks that create the project's static files in wwwroot
 #wwwroot/
 
+# VsCode local configurations
+.vscode/
+
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
@@ -286,7 +289,19 @@ Resources/user/pixtur/VJ/Terror
 Render
 
 # T3 Operators
-Resources/user/pixtur/VJ
 Resources/user/still/proj-fc2/3d/cat-run
 Resources/user/still/prod-80s
 Resources/user/pixtur/SceneCityLogo1
+Resources/user/pixtur/research/ContextualGraph
+Resources/user/still/proj-meteoriks23/soundtrack
+Resources/user/wake/proj-bigeater/images
+Resources/user/still/proj-worksforeverybody/_shared
+Resources/user/pixtur/research/Overlay/230620_16_9_BG_prototyp.png
+Resources/user/pixtur/projects/proj-vj-barn
+Screenshots
+Resources/user/pixtur/research/1000Images/images
+Resources/user/pixtur/VJ/churches
+Resources/user/pixtur/VJ/agingCombined
+Resources/user/pixtur/VJ/CatMadness
+Resources/user/pixtur/VJ/meshes
+ImageSequence

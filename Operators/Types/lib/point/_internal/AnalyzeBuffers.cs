@@ -1,12 +1,8 @@
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_7ad3a38a_9f04_43ba_a16f_6982b87dd2d4
@@ -24,6 +20,9 @@ namespace T3.Operators.Types.Id_7ad3a38a_9f04_43ba_a16f_6982b87dd2d4
 
         [Output(Guid = "0702a722-0b93-4840-9abd-f8ee348c3647")]
         public readonly Slot<int> TotalSize = new();
+        
+        [Output(Guid = "79FE54BE-6841-4F4D-8216-0FA26FF21F21")]
+        public readonly Slot<int> Stride = new();
 
         public AnalyzeBuffers()
         {
@@ -31,17 +30,15 @@ namespace T3.Operators.Types.Id_7ad3a38a_9f04_43ba_a16f_6982b87dd2d4
             StartPositionForSelected.UpdateAction = Update;
             TotalSize.UpdateAction = Update;
             SelectedBuffer.UpdateAction = Update;
+            Stride.UpdateAction = Update;
         }
 
         private void Update(EvaluationContext context)
         {
-            TotalSize.DirtyFlag.Clear();
-            StartPositionForSelected.DirtyFlag.Clear();
-            BufferCount.DirtyFlag.Clear();
-            SelectedBuffer.DirtyFlag.Clear();
-
             var connections = Input.GetCollectedTypedInputs();
-            if (connections == null || connections.Count == 0)
+            var selectedIndex = Index.GetValue(context).Clamp(0, connections.Count-1);
+
+            if (connections.Count == 0)
             {
                 TotalSize.Value = 0;
                 StartPositionForSelected.Value = 0;
@@ -50,10 +47,9 @@ namespace T3.Operators.Types.Id_7ad3a38a_9f04_43ba_a16f_6982b87dd2d4
             }
 
             var totalSize = 0;
-            var selectedIndex = Index.GetValue(context).Clamp(0, connections.Count-1);
-
             var startPosition = 0;
             BufferWithViews selectedBuffer = null;
+            var hadErrors = false;
             for (var connectionIndex = 0; connectionIndex < connections.Count; connectionIndex++)
             {
                 var input = connections[connectionIndex];
@@ -72,15 +68,31 @@ namespace T3.Operators.Types.Id_7ad3a38a_9f04_43ba_a16f_6982b87dd2d4
                 }
                 else
                 {
-                    Log.Warning($"Undefined BufferWithViews at index {connectionIndex}");
+                    hadErrors = true;
+                    if (_complainedOnce)
+                        continue;
+                    
+                    Log.Warning($"Undefined BufferWithViews at index {connectionIndex}", this);
+                    _complainedOnce = true;
                 }
+            }
+
+            if (!hadErrors)
+            {
+                _complainedOnce = false;
             }
 
             SelectedBuffer.Value = selectedBuffer;
             StartPositionForSelected.Value = startPosition;
             BufferCount.Value = connections.Count; 
             TotalSize.Value = totalSize;
+            if (selectedBuffer?.Buffer != null)
+            {
+                Stride.Value = selectedBuffer.Buffer.Description.StructureByteStride;
+            }
         }
+
+        private bool _complainedOnce;
         
         [Input(Guid = "c8a5769e-2536-4caa-8380-22fbeed1ef12")]
         public readonly MultiInputSlot<BufferWithViews> Input = new();

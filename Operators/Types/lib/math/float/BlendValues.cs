@@ -1,9 +1,6 @@
-using System;
-using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_a1341063_f893_4447_93cd_63cfe514495e
@@ -11,7 +8,7 @@ namespace T3.Operators.Types.Id_a1341063_f893_4447_93cd_63cfe514495e
     public class BlendValues : Instance<BlendValues>
     {
         [Output(Guid = "b9e4e703-f797-4750-8a1d-d82c6953ea09")]
-        public readonly Slot<float> Result = new Slot<float>();
+        public readonly Slot<float> Result = new();
 
         public BlendValues()
         {
@@ -42,10 +39,10 @@ namespace T3.Operators.Types.Id_a1341063_f893_4447_93cd_63cfe514495e
          
 
         [Input(Guid = "1c15cce3-3054-47f8-96b5-b8b741df40be")]
-        public readonly MultiInputSlot<float> Values = new MultiInputSlot<float>();
+        public readonly MultiInputSlot<float> Values = new();
         
         [Input(Guid = "03CE9DE0-2FD3-4900-84F7-2510F39DFF2A")]
-        public readonly InputSlot<float> F = new InputSlot<float>();
+        public readonly InputSlot<float> F = new();
 
     }
 }

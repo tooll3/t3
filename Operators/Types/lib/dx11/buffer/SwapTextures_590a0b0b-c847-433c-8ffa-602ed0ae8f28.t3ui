@@ -1,6 +1,6 @@
 {
   "Id": "590a0b0b-c847-433c-8ffa-602ed0ae8f28"/*SwapTextures*/,
-  "Description": "A helper to swappes textures buffers. This can be useful for implementing buffer buffering in compute shader effects.",
+  "Description": "A helper that swaps texture buffers. This can be useful for implementing buffer buffering in compute shader effects.",
   "InputUis": [
     {
       "InputId": "9dd14a67-afdb-4cd4-bdd5-9fcd565bc65d"/*TextureAInput*/,

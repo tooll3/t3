@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator.Slots;
+using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.OutputUi
 {
@@ -28,8 +29,6 @@ namespace T3.Editor.Gui.OutputUi
             if (slot is Slot<List<float>> typedSlot)
             {
                 var v = typedSlot.Value;
-                var outputString =  v == null? "NULL" : string.Join(", ", $"{v:0.000}");
-                ImGui.TextUnformatted($"{outputString}");
 
                 if (v == null)
                     return;
@@ -38,7 +37,7 @@ namespace T3.Editor.Gui.OutputUi
                 {
                     var length = Math.Min(1024, v.Count);
                     var floatList = v.GetRange(0, length).ToArray();
-
+                    
                     ImGui.Checkbox("Auto Fit", ref _autoFit);
                     if (_autoFit)
                     {
@@ -53,8 +52,10 @@ namespace T3.Editor.Gui.OutputUi
                                         _minFit, 
                                         _maxFit, 
                                         new Vector2( ImGui.GetContentRegionAvail().X, 200));
-                        ImGui.DragFloat("Max", ref _maxFit);
-                        ImGui.DragFloat("Min", ref _minFit);
+
+
+                        FormInputs.AddFloat("Max", ref _maxFit);
+                        FormInputs.AddFloat("Min", ref _minFit);
                     }
                 }
 

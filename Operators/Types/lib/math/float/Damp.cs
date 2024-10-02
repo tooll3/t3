@@ -1,11 +1,8 @@
 using System;
-using T3.Core;
 using T3.Core.Animation;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_af9c5db8_7144_4164_b605_b287aaf71bf6
@@ -13,9 +10,9 @@ namespace T3.Operators.Types.Id_af9c5db8_7144_4164_b605_b287aaf71bf6
     public class Damp : Instance<Damp>
     {
         [Output(Guid = "aacea92a-c166-46dc-b775-d28baf9820f5", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> Result = new Slot<float>();
+        public readonly Slot<float> Result = new();
 
-        private const float MinTimeElapsedBeforeEvaluation = 1 / 1000f;
+        private const double MinTimeElapsedBeforeEvaluation = 1 / 1000.0;
 
         public Damp()
         {
@@ -27,9 +24,18 @@ namespace T3.Operators.Types.Id_af9c5db8_7144_4164_b605_b287aaf71bf6
             var inputValue = Value.GetValue(context);
             var damping = Damping.GetValue(context);
 
-            var currentTime = context.LocalFxTime;
+            var currentTime = UseAppRunTime.GetValue(context) ? Playback.RunTimeInSecs : context.LocalFxTime;
             if (Math.Abs(currentTime - _lastEvalTime) < MinTimeElapsedBeforeEvaluation)
                 return;
+            
+            if (context.IntVariables.TryGetValue("__MotionBlurPass", out var motionBlurPass))
+            {
+                if (motionBlurPass > 0)
+                {
+                    //Log.Debug($"Skip motion blur pass {motionBlurPass}");
+                    return;
+                }                
+            } 
 
             _lastEvalTime = currentTime;
 
@@ -55,5 +61,8 @@ namespace T3.Operators.Types.Id_af9c5db8_7144_4164_b605_b287aaf71bf6
         [Input(Guid = "76D52DF1-597E-4429-9916-13E6E0D93248", MappedType = typeof(DampFunctions.Methods))]
         public readonly InputSlot<int> Method = new();
         
+        [Input(Guid = "8909933C-79A8-4127-987B-7B23940A0052")]
+        public readonly InputSlot<bool> UseAppRunTime = new();
+
     }
 }

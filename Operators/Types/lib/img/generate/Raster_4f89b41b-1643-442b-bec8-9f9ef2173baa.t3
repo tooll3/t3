@@ -4,11 +4,36 @@
   "Namespace": "lib.img.generate",
   "Inputs": [
     {
-      "Id": "cce27287-9774-436c-9e90-1becb42d8f95"/*Image*/,
-      "DefaultValue": null
+      "Id": "fd22eaf6-ed3c-4e63-985c-3a3756ecaef2"/*Resolution*/,
+      "DefaultValue": {
+        "X": 0,
+        "Y": 0
+      }
     },
     {
-      "Id": "a4350111-7ca8-4ce7-b494-3e82cc679999"/*Fill*/,
+      "Id": "b32e1383-07c4-4dc4-859d-e7fb19261bce"/*Offset*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "52d36eba-d789-41a0-bdf4-9ca6b3e32530"/*Rotate*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "9cc926c7-ad28-4f49-a662-46584ae8ad9f"/*Stretch*/,
+      "DefaultValue": {
+        "X": 32.0,
+        "Y": 32.0
+      }
+    },
+    {
+      "Id": "2221e831-12dd-4c9f-8533-48b9f96e60ab"/*Scale*/,
+      "DefaultValue": 4.0
+    },
+    {
+      "Id": "a4350111-7ca8-4ce7-b494-3e82cc679999"/*Color*/,
       "DefaultValue": {
         "X": 1.0,
         "Y": 1.0,
@@ -26,28 +51,6 @@
       }
     },
     {
-      "Id": "9cc926c7-ad28-4f49-a662-46584ae8ad9f"/*Size*/,
-      "DefaultValue": {
-        "X": 32.0,
-        "Y": 32.0
-      }
-    },
-    {
-      "Id": "b32e1383-07c4-4dc4-859d-e7fb19261bce"/*Offset*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "Id": "2221e831-12dd-4c9f-8533-48b9f96e60ab"/*Scale*/,
-      "DefaultValue": 4.0
-    },
-    {
-      "Id": "52d36eba-d789-41a0-bdf4-9ca6b3e32530"/*Rotate*/,
-      "DefaultValue": 0.0
-    },
-    {
       "Id": "27ce4875-b4da-4a44-a959-37c81c1600b8"/*DotSize*/,
       "DefaultValue": 0.05333333
     },
@@ -60,54 +63,51 @@
       "DefaultValue": 0.75
     },
     {
-      "Id": "c1378bbd-70df-4b6e-876f-5f1f1c59a617"/*RAffects_DotSize*/,
+      "Id": "54252e04-8f91-4ea5-91a6-f1f66f6da0a6"/*Feather*/,
+      "DefaultValue": 0.02
+    },
+    {
+      "Id": "cce27287-9774-436c-9e90-1becb42d8f95"/*Image*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "c1378bbd-70df-4b6e-876f-5f1f1c59a617"/*RedToDotSize*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "3329cd25-e7b9-47da-88e0-5dd7b6e324fa"/*GAffects_LineWidth*/,
+      "Id": "3329cd25-e7b9-47da-88e0-5dd7b6e324fa"/*GreenToLineWidth*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "92f52517-8ebc-4c89-af0a-b0bc5abc0439"/*BAffects_LineRatio*/,
+      "Id": "92f52517-8ebc-4c89-af0a-b0bc5abc0439"/*BlueToLineRatio*/,
       "DefaultValue": 0.0
     },
     {
       "Id": "6b0bdd9a-248d-410f-9b0e-de20df937775"/*MixOriginal*/,
       "DefaultValue": 1.0
-    },
-    {
-      "Id": "54252e04-8f91-4ea5-91a6-f1f66f6da0a6"/*Feather*/,
-      "DefaultValue": 0.02
-    },
-    {
-      "Id": "fd22eaf6-ed3c-4e63-985c-3a3756ecaef2"/*Resolution*/,
-      "DefaultValue": {
-        "Width": 0,
-        "Height": 0
-      }
     }
   ],
   "Children": [
     {
-      "Id": "7e1f7a5b-6c83-4b42-88ea-acebe2329a35"/*Vector4ToFloat4*/,
+      "Id": "7e1f7a5b-6c83-4b42-88ea-acebe2329a35"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "34207fc4-fea9-4299-9cb9-94ebf4e0139d"/*Vector4ToFloat4*/,
+      "Id": "34207fc4-fea9-4299-9cb9-94ebf4e0139d"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "ef270b5c-dc55-4a3d-a13c-aead074165f9"/*Vector2ToFloat2*/,
+      "Id": "ef270b5c-dc55-4a3d-a13c-aead074165f9"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "9d826906-2c65-46c1-bef9-8b6a9a94cf77"/*Vector2ToFloat2*/,
+      "Id": "9d826906-2c65-46c1-bef9-8b6a9a94cf77"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
@@ -119,7 +119,7 @@
         {
           "Id": "1e4e274b-60b2-4fe8-b275-ebef80d520a7"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\img-fx-Raster.hlsl"
+          "Value": "Resources\\lib\\img\\fx\\Raster.hlsl"
         },
         {
           "Id": "3fe1b650-ce34-4155-9b61-0425e39f7690"/*Wrap*/,

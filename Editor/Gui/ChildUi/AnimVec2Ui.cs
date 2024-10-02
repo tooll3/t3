@@ -6,6 +6,7 @@ using T3.Core.Utils;
 using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using T3.Operators.Types.Id_af79ee8c_d08d_4dca_b478_b4542ed69ad8;
 
 namespace T3.Editor.Gui.ChildUi
@@ -86,7 +87,10 @@ namespace T3.Editor.Gui.ChildUi
             DrawCurve(drawList, graphRect, animVec2, highlightEditable);
             
             ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
+            return SymbolChildUi.CustomUiResult.Rendered 
+                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph 
+                   | SymbolChildUi.CustomUiResult.PreventInputLabels
+                   | SymbolChildUi.CustomUiResult.PreventTooltip;
         }
 
         private static void DrawCurve(ImDrawListPtr drawList, ImRect graphRect, AnimVec2 animValue, bool highlightEditable)
@@ -102,24 +106,24 @@ namespace T3.Editor.Gui.ChildUi
                 // Horizontal line
                 var lh1 = graphRect.Min + Vector2.UnitY * h / 2;
                 var lh2 = new Vector2(graphRect.Max.X, lh1.Y + 1);
-                drawList.AddRectFilled(lh1, lh2, T3Style.Colors.GraphAxis);
+                drawList.AddRectFilled(lh1, lh2, UiColors.WidgetAxis);
 
                 // Vertical start line 
                 var lv1 = graphRect.Min + Vector2.UnitX * (int)(graphWidth * relativeX);
                 var lv2 = new Vector2(lv1.X + 1, graphRect.Max.Y);
-                drawList.AddRectFilled(lv1, lv2, T3Style.Colors.GraphAxis);
+                drawList.AddRectFilled(lv1, lv2, UiColors.WidgetAxis);
 
                 // Fragment lines 
                 {
                     var cycleWidth = graphWidth * (1- relativeX); 
                     var dx = new Vector2((float)MathUtils.Fmod(animValue._normalizedTimeX,1f) * cycleWidth - 1, 0);
-                    drawList.AddRectFilled(lv1 + dx, lv2 + dx, T3Style.Colors.GraphActiveLine);
+                    drawList.AddRectFilled(lv1 + dx, lv2 + dx, UiColors.WidgetActiveLine);
                 }
 
                 {
                     var cycleWidth = graphWidth * (1- relativeX); 
                     var dx = new Vector2((float)MathUtils.Fmod(animValue._normalizedTimeY,1f) * cycleWidth - 1, 0);
-                    drawList.AddRectFilled(lv1 + dx, lv2 + dx, T3Style.Colors.GraphActiveLine);
+                    drawList.AddRectFilled(lv1 + dx, lv2 + dx, UiColors.WidgetActiveLine);
                 }
 
 
@@ -149,7 +153,7 @@ namespace T3.Editor.Gui.ChildUi
                                                      ) + graphRect.Min;
                 }
 
-                var curveLineColor = highlightEditable ? T3Style.Colors.GraphLineHover : T3Style.Colors.GraphLine;
+                var curveLineColor = highlightEditable ? UiColors.WidgetLineHover : UiColors.WidgetLine;
                 drawList.AddPolyline(ref _graphLinePoints[0], GraphListSteps, curveLineColor, ImDrawFlags.None, 1.5f);
             }            
         }

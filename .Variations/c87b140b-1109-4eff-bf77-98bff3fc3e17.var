@@ -25,6 +25,102 @@
           "7c6c2ad1-b7d5-4496-822e-1720356b59d7": false
         }
       }
+    },
+    {
+      "Id": "ed10fb59-9815-4c88-b4cf-96c97eabef26",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Sparkle",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "04ea959f-9f20-4c77-80f4-ff1460b1a209": 1,
+          "3ba2f274-43c5-4c2c-aaa3-474b3f178fbc": 500.0,
+          "a2785b57-abcc-442e-90c7-cd120d3255ab": 1.19,
+          "338a0765-027c-4f49-a5de-38c1ab1035ef": 0.0,
+          "724d28d3-5b04-4e82-9d4f-01e7d42b9577": 0.09,
+          "d0b327fa-f48a-44cd-aa01-161b1c61bdc1": 1.3,
+          "bab504e1-dce7-4264-b1c8-40ec14202305": 1.0,
+          "66aeff41-c6af-4a06-9813-e526308968c2": 130.0,
+          "647fcd91-534c-4433-a338-e1ac77ec5f2b": 144.0,
+          "f9070783-1989-4fcd-9db1-f370f36be71e": 0.0,
+          "7c6c2ad1-b7d5-4496-822e-1720356b59d7": true
+        }
+      }
+    },
+    {
+      "Id": "b3fe0fdb-b5df-416c-b5b4-d22aa35a5183",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "Shimmer",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "04ea959f-9f20-4c77-80f4-ff1460b1a209": 1,
+          "3ba2f274-43c5-4c2c-aaa3-474b3f178fbc": 500.0,
+          "a2785b57-abcc-442e-90c7-cd120d3255ab": 1.19,
+          "338a0765-027c-4f49-a5de-38c1ab1035ef": 0.0,
+          "724d28d3-5b04-4e82-9d4f-01e7d42b9577": 0.09,
+          "d0b327fa-f48a-44cd-aa01-161b1c61bdc1": 1.3,
+          "bab504e1-dce7-4264-b1c8-40ec14202305": 1.0,
+          "66aeff41-c6af-4a06-9813-e526308968c2": 130.0,
+          "647fcd91-534c-4433-a338-e1ac77ec5f2b": 144.0,
+          "f9070783-1989-4fcd-9db1-f370f36be71e": 0.0,
+          "7c6c2ad1-b7d5-4496-822e-1720356b59d7": true
+        }
+      }
+    },
+    {
+      "Id": "3b4a8c7b-4d44-4f62-831b-415646e7271a",
+      "IsPreset": true,
+      "ActivationIndex": 4,
+      "Title": "Continuous Hoop",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "04ea959f-9f20-4c77-80f4-ff1460b1a209": 1,
+          "3ba2f274-43c5-4c2c-aaa3-474b3f178fbc": 1.0,
+          "a2785b57-abcc-442e-90c7-cd120d3255ab": 0.25,
+          "66aeff41-c6af-4a06-9813-e526308968c2": 57.0,
+          "647fcd91-534c-4433-a338-e1ac77ec5f2b": 141.0,
+          "a9e7091e-d0d3-414e-8c17-9f06cd568e24": 0.87,
+          "7c6c2ad1-b7d5-4496-822e-1720356b59d7": false
+        }
+      }
+    },
+    {
+      "Id": "2397f097-4650-4aaf-825f-28492bf04127",
+      "IsPreset": true,
+      "ActivationIndex": 5,
+      "Title": "Streak Sparkle",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "04ea959f-9f20-4c77-80f4-ff1460b1a209": 1,
+          "3ba2f274-43c5-4c2c-aaa3-474b3f178fbc": 500.0,
+          "a2785b57-abcc-442e-90c7-cd120d3255ab": 0.87,
+          "338a0765-027c-4f49-a5de-38c1ab1035ef": 5.2,
+          "724d28d3-5b04-4e82-9d4f-01e7d42b9577": -0.11,
+          "d0b327fa-f48a-44cd-aa01-161b1c61bdc1": 0.63,
+          "f1561cc1-3d5a-4caf-899e-fc0c81eed15b": 0.2,
+          "66aeff41-c6af-4a06-9813-e526308968c2": 57.0,
+          "647fcd91-534c-4433-a338-e1ac77ec5f2b": 141.0,
+          "a9e7091e-d0d3-414e-8c17-9f06cd568e24": 0.45,
+          "7c6c2ad1-b7d5-4496-822e-1720356b59d7": true
+        }
+      }
     }
   ]
 }

@@ -7,8 +7,8 @@
       "ActivationIndex": 1,
       "Title": "Default",
       "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 163.0,
+        "Y": 93.0
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -107,14 +107,36 @@
       "ActivationIndex": 6,
       "Title": "untitled",
       "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 499.0,
+        "Y": 0.5
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
           "7f66aa8d-fbdd-47d6-ba38-07e257e19401": 10.0,
           "d3197979-b418-4182-b1c9-f3126b175f8d": 0.25,
           "9dae724d-7be8-4f82-8907-28550ddbf6e6": 0.0
+        }
+      }
+    },
+    {
+      "Id": "88b35564-3d62-489e-8256-21e755daa489",
+      "IsPreset": true,
+      "ActivationIndex": 7,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "d3197979-b418-4182-b1c9-f3126b175f8d": -1.0000002,
+          "9dae724d-7be8-4f82-8907-28550ddbf6e6": 1.0,
+          "6d10c73c-37b8-443b-94d9-854b04027a3c": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 1.0
+          }
         }
       }
     }

@@ -1,10 +1,10 @@
 using System.Numerics;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
+using Vector3 = System.Numerics.Vector3;
+using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Operators.Types.Id_2ed26fb7_fe66_4ed6_8b8d_230d87ae5c77
 {
@@ -33,14 +33,12 @@ namespace T3.Operators.Types.Id_2ed26fb7_fe66_4ed6_8b8d_230d87ae5c77
 
         private void Update(EvaluationContext context)
         {
+            Matrix4x4.Invert(context.WorldToCamera, out var camToWorld);
             
-            SharpDX.Matrix camToWorld = context.WorldToCamera;
-            camToWorld.Invert();
-            
-            var pos = SharpDX.Vector4.Transform(new SharpDX.Vector4(0f, 0f, 0f, 1f), camToWorld);
+            var pos = Vector4.Transform(new Vector4(0f, 0f, 0f, 1f), camToWorld);
             Position.Value = new Vector3(pos.X, pos.Y, pos.Z);
             
-            var dir = pos -SharpDX.Vector4.Transform(new SharpDX.Vector4(0f, 0f, 1f, 1f), camToWorld);
+            var dir = pos -Vector4.Transform(new Vector4(0f, 0f, 1f, 1f), camToWorld);
             Direction.Value = new Vector3(dir.X, dir.Y, dir.Z);
             
             float aspect = context.CameraToClipSpace.M22 / context.CameraToClipSpace.M11;

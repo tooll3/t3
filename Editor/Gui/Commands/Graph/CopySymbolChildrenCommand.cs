@@ -5,6 +5,7 @@ using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Commands.Graph
 {
@@ -14,7 +15,7 @@ namespace T3.Editor.Gui.Commands.Graph
 
         public bool IsUndoable => true;
 
-        public Dictionary<Guid, Guid> OldToNewIdDict { get; } = new Dictionary<Guid, Guid>();
+        public Dictionary<Guid, Guid> OldToNewIdDict { get; } = new();
 
         public CopySymbolChildrenCommand(SymbolUi sourceCompositionUi,
                                          IEnumerable<SymbolChildUi> symbolChildrenToCopy,
@@ -95,23 +96,26 @@ namespace T3.Editor.Gui.Commands.Graph
             var oldToNewIdDict = _childrenToCopy.ToDictionary(entry => entry.ChildId, entry => entry.AddedId);
             sourceCompositionSymbolUi.Symbol.Animator.CopyAnimationsTo(targetSymbol.Animator, childIdsToCopyAnimations, oldToNewIdDict);
 
-            foreach (var childToCopy in _childrenToCopy)
+            foreach (var childEntryToCopy in _childrenToCopy)
             {
-                SymbolChild symbolChildToCopy = sourceCompositionSymbolUi.Symbol.Children.Find(child => child.Id == childToCopy.ChildId);
+                SymbolChild symbolChildToCopy = sourceCompositionSymbolUi.Symbol.Children.Find(child => child.Id == childEntryToCopy.ChildId);
                 if (symbolChildToCopy == null)
                 {
                     Log.Warning("Skipping attempt to copy undefined operator. This can be related to undo/redo operations. Please try to reproduce and tell pixtur");
                     continue;
                 }
-
+                
                 var symbolToAdd = SymbolRegistry.Entries[symbolChildToCopy.Symbol.Id];
-                targetCompositionSymbolUi.AddChildAsCopyFromSource(symbolToAdd, childToCopy.AddedId, sourceCompositionSymbolUi, childToCopy.ChildId,
-                                                                   _targetPosition + childToCopy.RelativePosition);
+                var newSymbolChild = targetCompositionSymbolUi.AddChildAsCopyFromSource(symbolToAdd, 
+                                                                                        symbolChildToCopy, 
+                                                                                        sourceCompositionSymbolUi,
+                                                                                        _targetPosition + childEntryToCopy.RelativePosition,
+                                                                                        childEntryToCopy.AddedId);
 
-                SymbolChild newSymbolChild = targetSymbol.Children.Find(child => child.Id == childToCopy.AddedId);
+                //SymbolChild newSymbolChild = targetSymbol.Children.Find(child => child.Id == childToCopy.AddedId);
                 NewSymbolChildIds.Add(newSymbolChild.Id);
-                var newSymbolInputs = newSymbolChild.InputValues;
-                foreach (var (id, input) in symbolChildToCopy.InputValues)
+                var newSymbolInputs = newSymbolChild.Inputs;
+                foreach (var (id, input) in symbolChildToCopy.Inputs)
                 {
                     var newInput = newSymbolInputs[id];
                     newInput.Value.Assign(input.Value.Clone());
@@ -130,6 +134,11 @@ namespace T3.Editor.Gui.Commands.Graph
 
                     newOutput.DirtyFlagTrigger = output.DirtyFlagTrigger;
                     newOutput.IsDisabled = output.IsDisabled;
+                    
+                }
+                if(symbolChildToCopy.IsBypassed)
+                {
+                    newSymbolChild.IsBypassed = true;
                 }
             }
 
@@ -169,9 +178,9 @@ namespace T3.Editor.Gui.Commands.Graph
         private readonly Vector2 _targetPosition;
         private readonly Guid _sourceSymbolId;
         private readonly Guid _targetSymbolId;
-        private readonly List<Entry> _childrenToCopy = new List<Entry>();
+        private readonly List<Entry> _childrenToCopy = new();
         private readonly List<Annotation> _annotationsToCopy = new();
-        private readonly List<Symbol.Connection> _connectionsToCopy = new List<Symbol.Connection>();
+        private readonly List<Symbol.Connection> _connectionsToCopy = new();
         public Vector2 PositionOffset;
     }
 }

@@ -1,4 +1,3 @@
-using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -15,16 +14,15 @@ namespace T3.Operators.Types.Id_e14af8a3_8672_4348_af9e_735714c31c92
         [Input(Guid = "693345bd-0cd8-4dca-9416-42a9bdcbc293")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
 
-        [Input(Guid = "dc9285f2-dab8-4960-b74f-783cc675e5b8")]
-        public readonly InputSlot<float> BeatThreshold = new InputSlot<float>();
+        [Input(Guid = "83188b7c-4bb7-4884-b6f0-d73fbf7debe1", MappedType = typeof(Devices))]
+        public readonly InputSlot<int> MidiDevice = new InputSlot<int>();
 
-        [Input(Guid = "4e8d6ee1-b210-48fb-ac32-e093f877de25")]
-        public readonly InputSlot<float> HihatThreshold = new InputSlot<float>();
-
-        [Input(Guid = "51bb8ea2-3afd-41ff-a9e6-7ac5a3c3fc9a")]
-        public readonly InputSlot<float> AudioInGain = new InputSlot<float>();
-
-
+        private enum Devices
+        {
+            ApcMini,
+            Apc40MKII,
+            MidiMix,
+        }
     }
 }
 

@@ -57,6 +57,10 @@
     {
       "Id": "6a5c120f-7c04-439b-ad2d-6f78ceb3b378"/*DisplaceMode*/,
       "DefaultValue": 0
+    },
+    {
+      "Id": "b2f58dc7-e5c6-4c57-a704-94aaa0b1e002"/*GenerateMips*/,
+      "DefaultValue": false
     }
   ],
   "Children": [
@@ -67,7 +71,7 @@
         {
           "Id": "7f14d0e3-1159-434d-b038-74644948937c"/*ShaderPath*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\image-fx-displace.hlsl"
+          "Value": "Resources\\lib\\img\\fx\\Displace.hlsl"
         },
         {
           "Id": "bcc7fb78-1ac3-46f7-be46-885233420e80"/*FloatParams*/,
@@ -82,7 +86,7 @@
         {
           "Id": "440e471b-9f67-435c-9e21-304cd57728aa"/*GenerateMips*/,
           "Type": "System.Boolean",
-          "Value": true
+          "Value": false
         }
       ],
       "Outputs": []
@@ -94,7 +98,7 @@
       "Outputs": []
     },
     {
-      "Id": "0da95969-3de8-4603-9b0e-477c1aa6eb11"/*Vector2ToFloat2*/,
+      "Id": "0da95969-3de8-4603-9b0e-477c1aa6eb11"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
@@ -130,6 +134,12 @@
       "SourceSlotId": "6a5c120f-7c04-439b-ad2d-6f78ceb3b378",
       "TargetParentOrChildId": "3df8359a-b804-4daa-bd0a-af87bd5bd9b6",
       "TargetSlotId": "01809b63-4b4a-47be-9588-98d5998ddb0c"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "b2f58dc7-e5c6-4c57-a704-94aaa0b1e002",
+      "TargetParentOrChildId": "c2468361-b9f0-438f-b434-d1699c6b97f8",
+      "TargetSlotId": "440e471b-9f67-435c-9e21-304cd57728aa"
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",

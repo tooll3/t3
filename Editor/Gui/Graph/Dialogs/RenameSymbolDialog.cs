@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using ImGuiNET;
-using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Helpers;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Dialogs
 {
@@ -26,9 +28,9 @@ namespace T3.Editor.Gui.Graph.Dialogs
                 CustomComponents.HelpText("This is a C# class. It must be unique and\nnot include spaces or special characters");
                 ImGui.Spacing();
 
-                if (CustomComponents.DisablableButton("Rename", NodeOperations.IsNewSymbolNameValid(name)))
+                if (CustomComponents.DisablableButton("Rename", GraphUtils.IsNewSymbolNameValid(name)))
                 {
-                    NodeOperations.RenameSymbol(selectedChildUis[0].SymbolChild.Symbol, name);
+                    SymbolNaming.RenameSymbol(selectedChildUis[0].SymbolChild.Symbol, name);
                     ImGui.CloseCurrentPopup();
                 }
 

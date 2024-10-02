@@ -10,10 +10,10 @@ namespace T3.Operators.Types.Id_ea7b8491_2f8e_4add_b0b1_fd068ccfed0d
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class AnimValue : Instance<AnimValue>
     {
-        [Output(Guid = "ae4addf0-08cf-4b25-9515-4fef9359d183")]
+        [Output(Guid = "ae4addf0-08cf-4b25-9515-4fef9359d183",DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> Result = new();
 
-        [Output(Guid = "5538411F-E6E5-4DFF-9CF4-A6410BE49A8C")]
+        [Output(Guid = "5538411F-E6E5-4DFF-9CF4-A6410BE49A8C",DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<bool> WasHit = new();
         
         public AnimValue()
@@ -39,10 +39,12 @@ namespace T3.Operators.Types.Id_ea7b8491_2f8e_4add_b0b1_fd068ccfed0d
             var time = OverrideTime.IsConnected
                            ? OverrideTime.GetValue(context)
                            : context.LocalFxTime;
+            
+            OverrideTime.DirtyFlag.Clear();
 
             var originalTime = _normalizedTime;
             
-            _normalizedTime = (time + phase) * rateFactorFromContext * rate;
+            _normalizedTime = (time) * rateFactorFromContext * rate  + phase;
             Result.Value = AnimMath.CalcValueForNormalizedTime(_shape, _normalizedTime, 0, bias,ratio) * amplitude + offset;
             
             WasHit.Value = (int)originalTime != (int)_normalizedTime;

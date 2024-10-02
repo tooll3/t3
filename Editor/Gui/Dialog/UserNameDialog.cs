@@ -1,7 +1,7 @@
 ﻿using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
@@ -28,12 +28,12 @@ namespace T3.Editor.Gui.Dialog
                 CustomComponents.HelpText("Tooll will use this to group your projects into a namespace.\n\n(This is a local setting only and not stored online.\n\nIt should be short and not contain spaces or special characters.");
                 ImGui.Spacing();
 
-                if (CustomComponents.DisablableButton("Rename", NodeOperations.IsValidUserName(UserSettings.Config.UserName)))
+                if (CustomComponents.DisablableButton("Rename", GraphUtils.IsValidUserName(UserSettings.Config.UserName)))
                 {
                     UserSettings.Save();
                     
                     // Change home (I.e. dashboard) namespace
-                    if(!SymbolRegistry.Entries.TryGetValue(UiModel.HomeSymbolId, out var homeSymbol))
+                    if(!SymbolRegistry.Entries.TryGetValue(UiModel.UiSymbolData.HomeSymbolId, out var homeSymbol))
                     {
                         Log.Warning("Skipped setting home canvas namespace because symbol wasn't found");
                     }

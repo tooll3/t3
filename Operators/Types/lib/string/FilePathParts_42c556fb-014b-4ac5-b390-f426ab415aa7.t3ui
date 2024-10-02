@@ -1,0 +1,45 @@
+{
+  "Id": "42c556fb-014b-4ac5-b390-f426ab415aa7"/*FilePathParts*/,
+  "Description": "Extracts directory, filename and extension from a filepath and checks if filepath exists.",
+  "InputUis": [
+    {
+      "InputId": "04d5f714-4e38-4a1e-b245-f6f0b582b35a"/*FilePath*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "1a9be39d-16ed-4f5f-916d-03b604101c7e"/*Extension*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "a628fb9e-7647-4fee-838d-f17395e15148"/*Directory*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    },
+    {
+      "OutputId": "1242e534-da34-4da0-8c17-6cfa8fef6e59"/*FilenameWithoutExtension*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 200.0
+      }
+    },
+    {
+      "OutputId": "dd5d3b87-d27d-405e-b8f4-524f3c18379c"/*FileExists*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 300.0
+      }
+    }
+  ]
+}

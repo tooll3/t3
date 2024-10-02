@@ -1,6 +1,6 @@
 {
   "Id": "5952d7b4-29ac-41fb-9324-287392d55048"/*__ObsoletePulse*/,
-  "Description": "Generate a pulse value with a linear decay. \nAlso consider using [LFO].",
+  "Description": "Generates a pulse value with linear decay.\nAlso consider using [LFO].",
   "InputUis": [
     {
       "InputId": "a8d06cd6-ca17-404f-9852-a45ce35da623"/*Trigger*/,

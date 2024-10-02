@@ -2,10 +2,12 @@
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Audio;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c;
 
 namespace T3.Editor.Gui.ChildUi
@@ -70,7 +72,7 @@ namespace T3.Editor.Gui.ChildUi
 
                     drawList.AddRectFilled(new Vector2(xPeaks, bottom - peak * h * valueScale - 2),
                                            new Vector2(xPeaks + barWidth, bottom-1),
-                                           Color.Black.Fade(0.06f));
+                                           UiColors.BackgroundFull.Fade(0.06f));
                     xPeaks += barWidth;
                 }
             }
@@ -78,6 +80,7 @@ namespace T3.Editor.Gui.ChildUi
 
             
             int binIndex = 0;
+            var inactiveColor = UiColors.BackgroundFull.Fade(0.2f);
             for (int barIndex = 0; barIndex < barsCount; barIndex++)
             {
                 var sum = 0f;
@@ -96,7 +99,7 @@ namespace T3.Editor.Gui.ChildUi
                 
                 drawList.AddRectFilled(new Vector2(x, bottom - sum * h * valueScale - 2),
                                        new Vector2(x + barWidth, bottom-1),
-                                       Color.Mix(_highlightColor, _inactiveColor, factor));
+                                       Color.Mix(UiColors.StatusAnimated, inactiveColor, factor));
                 x += barWidth;
                 
             }
@@ -111,12 +114,12 @@ namespace T3.Editor.Gui.ChildUi
             var flashFactor = MathF.Pow((1 - (float)audioReaction2.TimeSinceLastHit * 2).Clamp(0, 1), 4);
             drawList.AddRectFilled(new Vector2(x, bottom - audioReaction2.Sum * h * valueScale),
                                    new Vector2(x + w / 20, bottom),
-                                   Color.Mix(_inactiveColor,_highlightColor, flashFactor));
+                                   Color.Mix(inactiveColor,UiColors.StatusAnimated, flashFactor));
 
             var thresholdY = audioReaction2.Threshold.Value * h * valueScale;
             drawList.AddRectFilled(new Vector2(x, bottom - thresholdY),
                                    new Vector2(x + w / 20, bottom - thresholdY+ 2),
-                                   Color.Orange);
+                                   UiColors.StatusAnimated);
 
 
             var w2 = windowWidth * freqGraphWidth;
@@ -125,7 +128,7 @@ namespace T3.Editor.Gui.ChildUi
             
             drawList.AddRectFilled(new Vector2( x1, bottom - thresholdY),
                                    new Vector2(x2 + w / 20, bottom - thresholdY+ 1),
-                                   Color.White.Fade(0.5f));
+                                   UiColors.ForegroundFull.Fade(0.5f));
 
             // Draw Spinner
             if (audioReaction2.AccumulationActive)
@@ -136,7 +139,7 @@ namespace T3.Editor.Gui.ChildUi
                 drawList.PathClear();
 
                 drawList.PathArcTo(center, h * 0.3f, (float)a, (float)a + 2.6f);
-                drawList.PathStroke(Color.Orange, ImDrawFlags.None, 3);
+                drawList.PathStroke(UiColors.StatusAnimated, ImDrawFlags.None, 3);
             }
 
             var graphRect = screenRect;
@@ -182,14 +185,17 @@ namespace T3.Editor.Gui.ChildUi
 
             drawList.PopClipRect();
             ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
+            return SymbolChildUi.CustomUiResult.Rendered 
+                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph 
+                   | SymbolChildUi.CustomUiResult.PreventInputLabels
+                   | SymbolChildUi.CustomUiResult.PreventTooltip;
         }
 
         
         
         private static float _dragStartThreshold;
         private static float _dragStartWindow;
-        private static readonly Color _highlightColor = Color.Orange;
-        private static readonly Color _inactiveColor = Color.Black.Fade(0.2f);
+        //private static readonly Color _highlightColor = UiColors.Animation;
+        //private static readonly Color _inactiveColor = Color.Black.Fade(0.2f);
     }
 }

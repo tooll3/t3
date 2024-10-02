@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using T3.Core.Logging;
@@ -21,8 +20,8 @@ namespace T3.Editor.Compilation
         /// </summary>
         public static void ResourceUpdateHandler(OperatorResource resource, string path)
         {
-            Log.Info($"Operator source '{path}' changed.");
-            Log.Info($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
+            //Log.Info($"Operator source '{path}' changed.");
+            //Log.Info($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
 
             string source;
             try
@@ -82,7 +81,7 @@ namespace T3.Editor.Compilation
             using var pdbStream = new MemoryStream();
             
             var emitResult = compilation.Emit(dllStream, pdbStream);
-            Log.Info($"compilation results of '{symbolName}':");
+            //Log.Info($"Compilation results of '{symbolName}':");
             if (!emitResult.Success)
             {
                 foreach (var entry in emitResult.Diagnostics)
@@ -95,15 +94,23 @@ namespace T3.Editor.Compilation
             }
             else
             {
-                Log.Info($"Compilation of '{symbolName}' successful.");
-                var newAssembly = Assembly.Load(dllStream.GetBuffer());
-                if (newAssembly.ExportedTypes.Any())
+                try
                 {
-                    return newAssembly;
+                    var newAssembly = Assembly.Load(dllStream.GetBuffer());
+                    if (newAssembly.ExportedTypes.Any())
+                    {
+                        Log.Info($"Compilation of '{symbolName}' successful.");
+                        return newAssembly;
+                    }
+                    else
+                    {
+                        Log.Error("New compiled assembly had no exported type.");
+                        return null;
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    Log.Error("New compiled assembly had no exported type.");
+                    Log.Error("Failed to load compiled type: " + e.Message);
                     return null;
                 }
             }

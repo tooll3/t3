@@ -82,18 +82,18 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
             // horizontal line
             var lh1 = graphRect.Min + Vector2.UnitY * h / 2;
             var lh2 = new Vector2(graphRect.Max.X, lh1.Y + 1);
-            drawList.AddRectFilled(lh1, lh2, T3Style.Colors.GraphAxis);
+            drawList.AddRectFilled(lh1, lh2, UiColors.WidgetAxis);
 
             // Vertical start line
             var lv1 = graphRect.Min + Vector2.UnitX * (int)(graphRect.GetWidth() * 0.1f + 0.5f);
 
             var lv2 = new Vector2(lv1.X + 1, graphRect.Max.Y);
-            drawList.AddRectFilled(lv1, lv2, T3Style.Colors.GraphAxis);
+            drawList.AddRectFilled(lv1, lv2, UiColors.WidgetAxis);
 
             // Fragment line 
             var width = graphRect.GetWidth() - (lv1.X - graphRect.Min.X); //h * (GraphWidthRatio - leftPaddingH);
             var dx = new Vector2(fragment * width - 1, 0);
-            drawList.AddRectFilled(lv1 + dx, lv2 + dx, T3Style.Colors.GraphActiveLine);
+            drawList.AddRectFilled(lv1 + dx, lv2 + dx, UiColors.WidgetActiveLine);
 
             // Draw graph
             //        lv
@@ -115,17 +115,19 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
             GraphLinePoints[3].X = graphRect.Max.X + 1;
             GraphLinePoints[3].Y = y;
 
-            var curveLineColor = isActive && _dragState == DragMode.DraggingHorizontally ? T3Style.Colors.GraphLineHover : T3Style.Colors.GraphLine;
+            var curveLineColor = isActive && _dragState == DragMode.DraggingHorizontally ? UiColors.WidgetLineHover : UiColors.WidgetLine;
             drawList.AddPolyline(ref GraphLinePoints[0], 4, curveLineColor, ImDrawFlags.None, 1);
 
             // Draw offset label
-            if (h > 14)
+            if (!string.IsNullOrEmpty(valueText) && h > 14)
             {
                 ImGui.PushFont(Fonts.FontSmall);
 
                 var labelSize = ImGui.CalcTextSize(valueText);
 
-                var color = isActive && _dragState == DragMode.DraggingVertically ? Color.Red : Color.White;
+                var color = isActive && _dragState == DragMode.DraggingVertically 
+                                ? UiColors.StatusAttention 
+                                : UiColors.WidgetHighlight;
                 drawList.AddText(MathUtils.Floor(new Vector2(graphRect.Max.X - 3 - labelSize.X,
                                                              lh1.Y - labelSize.Y / 2 - 2
                                                             )), color, valueText);

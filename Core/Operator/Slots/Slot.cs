@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using T3.Core.DataTypes;
 using T3.Core.Logging;
+using T3.Core.Operator.Interfaces;
+using T3.Core.Stats;
 
 namespace T3.Core.Operator.Slots
 {
@@ -9,31 +13,86 @@ namespace T3.Core.Operator.Slots
         public Guid Id { get; set; }
         public Type ValueType { get; }
         public Instance Parent { get; set; }
-        public DirtyFlag DirtyFlag { get; set; } = new DirtyFlag();
+        public DirtyFlag DirtyFlag { get; set; } = new();
         
         public T Value; // { get; set; }
         public bool IsMultiInput { get; protected set; } = false;
 
-        protected bool _isDisabled = false;
+        protected bool _isDisabled;
 
-        protected virtual void SetDisabled(bool isDisabled)
+        protected virtual void SetDisabled(bool shouldBeDisabled)
         {
-            if (isDisabled == _isDisabled)
+            if (shouldBeDisabled == _isDisabled)
                 return;
 
-            if (isDisabled)
+            if (shouldBeDisabled)
             {
-                _defaultUpdateAction = _updateAction;
+                if (_keepOriginalUpdateAction != null)
+                {
+                    Log.Warning("Is already bypassed or disabled");
+                    return;
+                }
+                
+                _keepOriginalUpdateAction = _updateAction;
+                _keepDirtyFlagTrigger = DirtyFlag.Trigger;
                 UpdateAction = EmptyAction;
                 DirtyFlag.Invalidate();
             }
             else
             {
-                SetUpdateActionBackToDefault();
-                DirtyFlag.Invalidate();
+                RestoreUpdateAction();
             }
 
-            _isDisabled = isDisabled;
+            _isDisabled = shouldBeDisabled;
+        }
+
+        public virtual bool TrySetBypassToInput(Slot<T> targetSlot)
+        {
+            if (_keepOriginalUpdateAction != null)
+            {
+                //Log.Warning("Already disabled or bypassed");
+                return false;
+            }
+            
+            _keepOriginalUpdateAction = UpdateAction;
+            _keepDirtyFlagTrigger = DirtyFlag.Trigger;
+            UpdateAction = ByPassUpdate;
+            DirtyFlag.Invalidate();
+            _targetInputForBypass = targetSlot;
+            return true;
+        }
+
+        public void OverrideWithAnimationAction(Action<EvaluationContext> newAction)
+        {
+            // Animation actions are updated regardless if operator was already animated
+            if (_keepOriginalUpdateAction == null)
+            {
+                _keepOriginalUpdateAction = UpdateAction;
+                _keepDirtyFlagTrigger = DirtyFlag.Trigger;
+            }
+
+            UpdateAction = newAction;
+            DirtyFlag.Invalidate();
+        }
+        
+        public Action<EvaluationContext> GetUpdateAction()
+        {
+            return _updateAction;
+        }
+        
+        public virtual void RestoreUpdateAction()
+        {
+            // This will happen when operators are recompiled and output slots are disconnected
+            if (_keepOriginalUpdateAction == null)
+            {
+                UpdateAction = null;
+                return;
+            }
+            
+            UpdateAction = _keepOriginalUpdateAction;
+            _keepOriginalUpdateAction = null;
+            DirtyFlag.Trigger = _keepDirtyFlagTrigger;
+            DirtyFlag.Invalidate();
         }
 
         public bool IsDisabled 
@@ -66,10 +125,12 @@ namespace T3.Core.Operator.Slots
             Value = defaultValue;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Update(EvaluationContext context)
         {
-            if (DirtyFlag.IsDirty || IsConnected)
+            if (DirtyFlag.IsDirty || ValueType == typeof(Command))
             {
+                OpUpdateCounter.CountUp();
                 _updateAction?.Invoke(context);
                 DirtyFlag.Clear();
                 DirtyFlag.SetUpdated();
@@ -79,6 +140,11 @@ namespace T3.Core.Operator.Slots
         public void ConnectedUpdate(EvaluationContext context)
         {
             Value = InputConnection[0].GetValue(context);
+        }
+        
+        public void ByPassUpdate(EvaluationContext context)
+        {
+            Value = _targetInputForBypass.GetValue(context);
         }
 
         public T GetValue(EvaluationContext context)
@@ -92,21 +158,34 @@ namespace T3.Core.Operator.Slots
         {
             if (!IsConnected && sourceSlot != null)
             {
-                _actionBeforeAddingConnecting = UpdateAction;
+                if (UpdateAction != null)
+                {
+                    _actionBeforeAddingConnecting = UpdateAction;
+                    if (Parent.Children.Count > 0 && Parent is ICompoundWithUpdate compoundWithUpdate && this is not IInputSlot)
+                    {
+                        //Log.Debug($"Skipping connection for compound op with update method for {Parent.Symbol} {this}", compoundWithUpdate);
+                        //compoundWithUpdate.RegisterOutputUpdateAction(this, ConnectedUpdate);
+                        InputConnection.Insert(index, (Slot<T>)sourceSlot);
+                        DirtyFlag.Target = sourceSlot.DirtyFlag.Target;
+                        DirtyFlag.Reference = DirtyFlag.Target - 1;
+                        return;
+                    }
+                }
                 UpdateAction = ConnectedUpdate;
                 DirtyFlag.Target = sourceSlot.DirtyFlag.Target;
                 DirtyFlag.Reference = DirtyFlag.Target - 1;
             }
-
+            
             if (sourceSlot == null)
                 return;
             
             if (sourceSlot.ValueType != ValueType)
             {
-                Log.Warning("Type match during connection");
+                Log.Warning("Type mismatch during connection");
                 return;
             }
             InputConnection.Insert(index, (Slot<T>)sourceSlot);
+            
         }
 
         private Action<EvaluationContext> _actionBeforeAddingConnecting;
@@ -134,16 +213,13 @@ namespace T3.Core.Operator.Slots
                 else
                 {
                     // if no connection is set anymore restore the default update action
-                    SetUpdateActionBackToDefault();
+                    RestoreUpdateAction();
                 }
                 DirtyFlag.Invalidate();
             }
         }
 
-        public void SetUpdateActionBackToDefault()
-        {
-            UpdateAction = _defaultUpdateAction;
-        }
+
 
         public bool IsConnected => InputConnection.Count > 0;
 
@@ -152,11 +228,11 @@ namespace T3.Core.Operator.Slots
             return InputConnection[index];
         }
 
-        private List<Slot<T>> _inputConnection = new List<Slot<T>>();
+        private List<Slot<T>> _inputConnection = new();
 
         public List<Slot<T>> InputConnection => _inputConnection;
 
-        public int Invalidate()
+        public virtual int Invalidate()
         {
             if (DirtyFlag.IsAlreadyInvalidated || DirtyFlag.HasBeenVisited)
                 return DirtyFlag.Target;
@@ -250,6 +326,11 @@ namespace T3.Core.Operator.Slots
         private Action<EvaluationContext> _updateAction;
         public virtual Action<EvaluationContext> UpdateAction { get => _updateAction; set => _updateAction = value; }
 
-        protected Action<EvaluationContext> _defaultUpdateAction;
+        protected Action<EvaluationContext> _keepOriginalUpdateAction;
+        private DirtyFlagTrigger _keepDirtyFlagTrigger;
+        protected Slot<T> _targetInputForBypass;
     }
+
+    
+    
 }

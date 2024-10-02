@@ -12,8 +12,10 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
 {
     public abstract class AbstractTimeRaster : IValueSnapAttractor
     {
-        public abstract void Draw(Playback playback);
+        public abstract void Draw(Playback playback, float unitsPerSeconds);
         protected abstract string BuildLabel(Raster raster, double timeInSeconds);
+        
+        protected double UnitsPerSecond { get; set; } = 1;
 
         protected virtual IEnumerable<Raster> GetRastersForScale(double invertedScale, out float fadeFactor)
         {
@@ -32,7 +34,7 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
                 return;
 
             var drawList = ImGui.GetWindowDrawList();
-            var topLeft = canvas.WindowPos;
+            var topLeft = canvas.WindowPos + new Vector2(ImGui.GetScrollX(), ImGui.GetScrollY());
             var viewHeight = canvas.WindowSize.Y;
             var width = canvas.WindowSize.X;
 
@@ -56,10 +58,10 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
                 double t = -scroll % raster.Spacing;
 
                 var lineAlpha = raster.FadeLines ? fadeFactor : 1;
-                var lineColor = new Color(0, 0, 0, lineAlpha * 0.9f);
+                var lineColor = UiColors.GridLines.Fade(lineAlpha);
 
                 var textAlpha = raster.FadeLabels ? fadeFactor : 1;
-                var textColor = new Color(textAlpha);
+                var textColor = UiColors.Text.Fade(textAlpha);
 
                 while (t / invertedScale < width)
                 {
@@ -67,8 +69,10 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
 
                     if (xIndex > 0 && xIndex < width && !_usedPositions.ContainsKey(xIndex))
                     {
-                        var time = t + scroll;
-                        _usedPositions[xIndex] = time;
+                        var timeInUnits = t + scroll;
+
+                        _usedPositions[xIndex] = timeInUnits / UnitsPerSecond;
+
 
                         drawList.AddRectFilled(
                                                new Vector2(topLeft.X + xIndex, topLeft.Y),
@@ -76,7 +80,7 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
 
                         if (raster.Label != "")
                         {
-                            var output = BuildLabel(raster, time);
+                            var output = BuildLabel(raster, timeInUnits);
 
                             var p = topLeft + new Vector2(xIndex + 1, viewHeight - 17);
                             drawList.AddText(p, textColor, output);
@@ -98,7 +102,7 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
         }
         #endregion
 
-        private readonly Dictionary<int, double> _usedPositions = new Dictionary<int, double>();
+        private readonly Dictionary<int, double> _usedPositions = new();
         protected List<ScaleRange> ScaleRanges;
         private const double Epsilon = 0.00001f;
 

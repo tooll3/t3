@@ -1,8 +1,11 @@
 using System;
-using System.Numerics;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using T3.Core.Animation;
-using T3.Core.Resource;
+using Quaternion = System.Numerics.Quaternion;
+using Vector2 = System.Numerics.Vector2;
+using Vector3 = System.Numerics.Vector3;
+using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Core.Utils
 {
@@ -14,7 +17,7 @@ namespace T3.Core.Utils
         public static float PerlinNoise(float value, float period, int octaves, int seed)
         {
             var noiseSum = 0.0f;
-
+            octaves = octaves.Clamp(1, 20);
             var frequency = period;
             var amplitude = 0.5f;
             for (var octave = 0; octave < octaves - 1; octave++)
@@ -23,7 +26,7 @@ namespace T3.Core.Utils
                 var a = Noise((int)v, seed);
                 var b = Noise((int)v + 1, seed);
                 var t = Fade(v - (float)Math.Floor(v));
-                noiseSum += SharpDX.MathUtil.Lerp(a, b, t) * amplitude;
+                noiseSum += Lerp(a, b, t) * amplitude;
                 frequency *= 2;
                 amplitude *= 0.5f;
             }
@@ -38,6 +41,18 @@ namespace T3.Core.Utils
             return (float)(1.0 - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);
         }
 
+        public static float  ApplyBiasAndGain(this float x, float s, float t)
+        {
+            const float eps = 0.0001f;
+            const float r = 200;
+            s *= 2;
+            s = s < 1 ? (MathF.Pow(r, 1 - s)) : 1 / MathF.Pow(r, s - 1);
+            return x < t
+                       ? (t * x) / (x + s * (t - x) + eps)
+                       : ((1 - t) * (x - 1)) / (1 - x - s * (t - x) + eps) + 1;
+        }
+        
+        
         public static uint XxHash(uint p)
         {
             const uint PRIME32_2 = 2246822519U, PRIME32_3 = 3266489917U;
@@ -49,6 +64,16 @@ namespace T3.Core.Utils
             h32 = PRIME32_3 * (h32 ^ (h32 >> 13));
 
             return h32 ^ (h32 >> 16);
+        }
+        
+        public static float Hash01( uint x )
+        {
+            x *= 13331U;
+            const uint k = 1103515245U;  // GLIB C
+            x = ((x>>8)^x)*k;
+            x = ((x>>8)^x)*k;
+    
+            return (float)( (x & 0x7fffffff) / 2147483648.0);;
         }
 
         private static float Fade(float t)
@@ -74,6 +99,29 @@ namespace T3.Core.Utils
             return x * x * (3 - 2 * x);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float ToDegrees(this float val)
+        {
+            return val * 180 / MathF.PI;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float ToRadians(this float val)
+        {
+            return val * MathF.PI / 180;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool _IsFinite(this float value)
+        {
+            return !float.IsNaN(value) && !float.IsInfinity(value);
+        }        
+        
+        public static bool _IsFinite(this Vector3 value)
+        {
+            return value.X._IsFinite() && value.Y._IsFinite() && value.Z._IsFinite();
+        }        
+        
         public static Vector2 Clamp(Vector2 v, Vector2 mn, Vector2 mx)
         {
             return new Vector2((v.X < mn.X)
@@ -82,21 +130,53 @@ namespace T3.Core.Utils
                                        ? mx.X
                                        : v.X, (v.Y < mn.Y) ? mn.Y : (v.Y > mx.Y) ? mx.Y : v.Y);
         }
-
+        
+        // method with a callback that returns a double of a given item
+        
+        
+        
+        public static int FindIndexForTime<T>(List<T> items, double time, Func<int, double> timeAtIndex)
+        {
+            if (items.Count == 0)
+                return -1;
+            
+            var lastIndex = items.Count - 1;
+            var firstIndex = 0;
+            
+            if (timeAtIndex(lastIndex) <= time)
+                return lastIndex;
+            
+            if (timeAtIndex(firstIndex) >= time)
+                return firstIndex;
+            
+            while (lastIndex - firstIndex > 1)
+            {
+                var middleIndex = (firstIndex + lastIndex) / 2;
+                
+                var delta = timeAtIndex(middleIndex) - time;
+                
+                if (delta < 0)
+                    firstIndex = middleIndex;
+                else
+                    lastIndex = middleIndex;
+            }
+            return firstIndex;
+        }
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T Min<T>(T lhs, T rhs) where T : System.IComparable<T>
+        public static T Min<T>(T lhs, T rhs) where T : IComparable<T>
         {
             return lhs.CompareTo(rhs) < 0 ? lhs : rhs;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T Max<T>(T lhs, T rhs) where T : System.IComparable<T>
+        public static T Max<T>(T lhs, T rhs) where T : IComparable<T>
         {
             return lhs.CompareTo(rhs) >= 0 ? lhs : rhs;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T Clamp<T>(this T val, T min, T max) where T : System.IComparable<T>
+        public static T Clamp<T>(this T val, T min, T max) where T : IComparable<T>
         {
             if (val.CompareTo(min) < 0) return min;
             else if (val.CompareTo(max) > 0) return max;
@@ -110,10 +190,53 @@ namespace T3.Core.Utils
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Mod(this int val, int repeat)
+        {
+            // Prevent exception
+            if(repeat == 0)
+                return 0;
+            
+            var x = val % repeat;
+            if (x < 0)
+                x = repeat + x;
+            
+            return x;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float[] ToArray(this Vector2 vec2)
+        {
+            return new[] { vec2.X, vec2.Y };
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float[] ToArray(this Vector3 vec3)
+        {
+            return new[] { vec3.X, vec3.Y, vec3.Z };
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float[] ToArray(this Vector4 vec4)
+        {
+            return new[] { vec4.X, vec4.Y, vec4.Z, vec4.W };
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Lerp(float a, float b, float t)
         {
-            return (float)(a + (b - a) * t);
+            return a + (b - a) * t;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float LerpAngle(float from, float to, float t)
+        {
+            var delta = Fmod((from - to), 2* MathF.PI);
+            if (delta > MathF.PI)
+                delta -= 2* MathF.PI;
+            
+            return from - delta * t;
+        }
+
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Fmod(float v, float mod)
@@ -140,7 +263,7 @@ namespace T3.Core.Utils
         }
 
 
-        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float RemapAndClamp(float value, float inMin, float inMax, float outMin, float outMax)
         {
             var factor = (value - inMin) / (inMax - inMin);
@@ -267,49 +390,19 @@ namespace T3.Core.Utils
         {
             return new Vector3(vec.X / vec.W, vec.Y / vec.W, vec.Z / vec.W);
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SharpDX.Vector3 ToVector3(this SharpDX.Vector4 vec)
+        
+        /// <summary>
+        /// Return true if a boolean changed
+        /// </summary>
+        public static bool WasChanged(bool newState, ref bool current)
         {
-            return new SharpDX.Vector3(vec.X / vec.W, vec.Y / vec.W, vec.Z / vec.W);
+            if (newState == current)
+                return false;
+            
+            current = newState;
+            return true;
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SharpDX.Vector3 ToSharpDx(this Vector3 source)
-        {
-            return new SharpDX.Vector3(source.X, source.Y, source.Z);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3 ToNumerics(this SharpDX.Vector3 source)
-        {
-            return new Vector3(source.X, source.Y, source.Z);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SharpDX.Vector4 ToSharpDx(this Vector4 source)
-        {
-            return new SharpDX.Vector4(source.X, source.Y, source.Z, source.W);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector4 ToNumerics(this SharpDX.Vector4 source)
-        {
-            return new Vector4(source.X, source.Y, source.Z, source.W);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SharpDX.Vector4 ToSharpDxVector4(this Vector3 source, float w)
-        {
-            return new SharpDX.Vector4(source.X, source.Y, source.Z, w);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SharpDX.Vector3 ToSharpDxVector3(this Vector3 source)
-        {
-            return new SharpDX.Vector3(source.X, source.Y, source.Z);
-        }
-
+        
         /// <summary>
         /// Return true if a boolean changed from false to true
         /// </summary>
@@ -371,6 +464,11 @@ namespace T3.Core.Utils
             bool isInvalid = double.IsNaN(val) || double.IsInfinity(val);
             val = isInvalid ? defaultValue : val;
             return isInvalid;
+        }
+
+        public static Quaternion RotationFromTwoPositions(Vector3 p1, Vector3 p2)
+        {
+            return Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), (float)(Math.Atan2(p1.X - p2.X, -(p1.Y - p2.Y)) + Math.PI / 2));
         }
     }
 

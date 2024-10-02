@@ -31,24 +31,45 @@ namespace T3.Core.Operator.Slots
             }
         }
         
-        protected override void SetDisabled(bool isDisabled)
+        
+        protected override void SetDisabled(bool shouldBeDisabled)
         {
-            if (isDisabled == _isDisabled)
+            if (shouldBeDisabled == _isDisabled)
                 return;
 
-            if (isDisabled)
+            if (shouldBeDisabled)
             {
-                _defaultUpdateAction = _baseUpdateAction;
+                if (_keepOriginalUpdateAction != null)
+                {
+                    Log.Warning("Is already bypassed or disabled");
+                    return;
+                }
+                
+                _keepOriginalUpdateAction = _baseUpdateAction;
                 base.UpdateAction = EmptyAction;
                 DirtyFlag.Invalidate();
             }
             else
             {
-                SetUpdateActionBackToDefault();
-                DirtyFlag.Invalidate();
+                RestoreUpdateAction();
             }
 
-            _isDisabled = isDisabled;
+            _isDisabled = shouldBeDisabled;
+        }
+
+        public override bool TrySetBypassToInput(Slot<T> targetSlot)
+        {
+            if (_keepOriginalUpdateAction != null)
+            {
+                //Log.Warning("Already disabled or bypassed");
+                return false;
+            }
+            
+            _keepOriginalUpdateAction = _baseUpdateAction;
+            base.UpdateAction = ByPassUpdate;
+            DirtyFlag.Invalidate();
+            _targetInputForBypass = targetSlot;
+            return true;
         }
     }
 }

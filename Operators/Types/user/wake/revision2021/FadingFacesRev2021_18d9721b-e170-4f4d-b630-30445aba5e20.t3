@@ -14,6 +14,11 @@
       "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
       "InputValues": [
         {
+          "Id": "38f34034-b36f-4351-84e1-1a4f96e03fc6"/*Scale*/,
+          "Type": "System.Single",
+          "Value": 1.75
+        },
+        {
           "Id": "ed4f8c30-7b71-4649-97e6-710a718039b0"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
@@ -27,11 +32,6 @@
           "Id": "c8d0e44e-acd1-4045-b565-e1ce0b722e70"/*BlendMode*/,
           "Type": "System.Int32",
           "Value": 0
-        },
-        {
-          "Id": "38f34034-b36f-4351-84e1-1a4f96e03fc6"/*Size*/,
-          "Type": "System.Single",
-          "Value": 1.75
         }
       ],
       "Outputs": []
@@ -215,6 +215,11 @@
           }
         },
         {
+          "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
+          "Type": "System.String",
+          "Value": "Resources\\fonts\\Roboto-Light.fnt"
+        },
+        {
           "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
           "Type": "System.Single",
           "Value": 15.000001
@@ -223,11 +228,6 @@
           "Id": "82cc31ff-3307-4b6d-be70-16e471c2ffc9"/*HorizontalAlign*/,
           "Type": "System.Int32",
           "Value": 2
-        },
-        {
-          "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
-          "Type": "System.String",
-          "Value": "Resources\\fonts\\Roboto-Light.fnt"
         }
       ],
       "Outputs": []
@@ -290,7 +290,7 @@
       "Outputs": []
     },
     {
-      "Id": "73b4ec65-14e3-46e4-a868-fb6f68c3a2be"/*Float2ToVector2*/,
+      "Id": "73b4ec65-14e3-46e4-a868-fb6f68c3a2be"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [],
       "Outputs": []
@@ -333,7 +333,7 @@
       "Outputs": []
     },
     {
-      "Id": "059a4f7d-02ac-45fd-b5d9-b91ec5174477"/*Float4ToVector4*/,
+      "Id": "059a4f7d-02ac-45fd-b5d9-b91ec5174477"/*Vector4*/,
       "SymbolId": "f2e323bd-f881-41a8-81e2-e8f2ac1984dc",
       "InputValues": [
         {
@@ -421,7 +421,7 @@
       "Outputs": []
     },
     {
-      "Id": "be2399c8-3cb7-4ff4-826f-4cae32a87a70"/*Vector2ToFloat2*/,
+      "Id": "be2399c8-3cb7-4ff4-826f-4cae32a87a70"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []

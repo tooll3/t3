@@ -1,14 +1,10 @@
 {
   "Id": "2872d93c-882e-42ee-8bcf-747c24f9b042"/*FadingFaces*/,
-  "Description": "A example how to use the unsplash API and combine it with feed back effects.",
+  "Description": "An example of how to use the Unsplash API and combine it with feedback effects.",
   "InputUis": [],
   "SymbolChildUis": [
     {
       "ChildId": "bec9adf3-9fd5-49ad-b0d3-f434ef0f8491"/*Layer2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": 976.0231,
         "Y": 31.497437
@@ -16,10 +12,6 @@
     },
     {
       "ChildId": "3a28b510-36b7-4038-ae78-42159d7adafc"/*AdjustColors*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 1277.5078,
         "Y": -101.32623
@@ -27,10 +19,6 @@
     },
     {
       "ChildId": "aa45a027-461c-4adb-8a58-f97a27aece7a"/*FluidFeedback*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
       "Position": {
         "X": 1126.0231,
         "Y": 31.497437
@@ -38,10 +26,6 @@
     },
     {
       "ChildId": "e4beacf2-0716-4fe7-9b1a-f7e4b0874534"/*Counter*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 380.34534,
         "Y": 146.83856
@@ -49,10 +33,6 @@
     },
     {
       "ChildId": "ba535981-5add-4940-968d-b96442f2d1de"/*FloatToInt*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 523.3004,
         "Y": 62.44763
@@ -60,10 +40,6 @@
     },
     {
       "ChildId": "2910d367-2bf0-4500-81cd-f03dcc095e62"/*HasValueIncreased*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 693.3004,
         "Y": 131.44763
@@ -71,10 +47,6 @@
     },
     {
       "ChildId": "9bb02b7f-48a4-45dd-a309-447108af7614"/*Counter*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 823.3004,
         "Y": 131.44763
@@ -82,21 +54,13 @@
     },
     {
       "ChildId": "33fc65f9-8d72-49c4-b59e-e0f08b26c525"/*_AnimValueOld*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 976.0231,
         "Y": 163.49744
       }
     },
     {
-      "ChildId": "3e02263f-8ebf-4e87-877e-3e9e61a51d03"/*Float2ToVector2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "3e02263f-8ebf-4e87-877e-3e9e61a51d03"/*Vector2*/,
       "Position": {
         "X": 976.0231,
         "Y": 206.49744
@@ -104,21 +68,13 @@
     },
     {
       "ChildId": "e5e063dc-04d3-49ed-95b2-87666db98861"/*_AnimValueOld*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 846.0231,
         "Y": 206.49744
       }
     },
     {
-      "ChildId": "f3de8f5f-06e1-49d7-b0f2-dc4ab61748a6"/*Float4ToVector4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "f3de8f5f-06e1-49d7-b0f2-dc4ab61748a6"/*Vector4*/,
       "Position": {
         "X": 823.3004,
         "Y": 75.44763
@@ -126,10 +82,6 @@
     },
     {
       "ChildId": "1856de70-1877-44b6-9e24-408ca25518c9"/*_AnimValueOld*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 693.3004,
         "Y": 75.44763
@@ -137,10 +89,6 @@
     },
     {
       "ChildId": "de894d33-c408-44a7-8d25-b82b98587200"/*FilesInFolder*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 523.3004,
         "Y": 19.447632
@@ -148,10 +96,6 @@
     },
     {
       "ChildId": "5aaa4d0b-f8d0-4cfe-bed3-ff780d0d6cb3"/*PickFromStringList*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 673.3004,
         "Y": 19.447632
@@ -159,10 +103,6 @@
     },
     {
       "ChildId": "17baf0f9-d359-413a-a88e-766ba27e64ef"/*LoadImage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 823.3004,
         "Y": 19.447632
@@ -170,10 +110,6 @@
     },
     {
       "ChildId": "9c32d1bc-3e11-4bc9-bd30-bedaae9abd9f"/*Blend*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 1577.5078,
         "Y": -101.32623
@@ -181,10 +117,6 @@
     },
     {
       "ChildId": "44986e0c-dc86-419d-84f7-29c749685fee"/*FakeLight*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 1419.3108,
         "Y": 37.998596
@@ -192,10 +124,6 @@
     },
     {
       "ChildId": "e750fcc2-774b-434d-923d-83661660f126"/*ColorGrade*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 1427.5078,
         "Y": -101.32623

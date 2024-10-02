@@ -1,20 +1,24 @@
 {
   "Id": "6832d272-e63f-4ab2-b48c-85466b4ede1b"/*PickFloatList*/,
-  "Description": "",
+  "Description": "Picks a FloatList from the connected list inputs.",
   "InputUis": [
     {
       "InputId": "5a70a1af-d6c5-43bf-acb8-fce2c9a2de3c"/*Input*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Input for one or more FloatLists"
     },
     {
       "InputId": "b22e2055-ccfd-4379-a3ef-d9b21d347f3d"/*Index*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "Description": "Selects which of the connected lists is used as an output",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [],

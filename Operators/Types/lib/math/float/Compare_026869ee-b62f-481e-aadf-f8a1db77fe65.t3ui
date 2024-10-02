@@ -1,5 +1,6 @@
 {
   "Id": "026869ee-b62f-481e-aadf-f8a1db77fe65"/*Compare*/,
+  "Description": "Compares two float values, outputting a boolean.\n\nAKA: greater, less, equal\n\nTips:\n- If you want to output the min or max value of a set of floats, try [Clamp].",
   "InputUis": [
     {
       "InputId": "8d98d88c-7a0e-4282-823e-4889ef286e5a"/*Value*/,
@@ -7,6 +8,7 @@
         "X": 36.0,
         "Y": 334.0
       },
+      "Description": "Input value.",
       "Min": -100.0,
       "Max": 100.0
     },
@@ -15,21 +17,24 @@
       "Position": {
         "X": 197.0,
         "Y": 373.0
-      }
+      },
+      "Description": "Value to compare input to."
     },
     {
       "InputId": "f1537faa-1bd2-44c9-b0ae-d06c5af5cdef"/*Mode*/,
       "Position": {
         "X": 197.0,
         "Y": 328.0
-      }
+      },
+      "Description": "Which comparison to use.\neg. in IsLarger mode, this op will output True if Value is greater than TestValue."
     },
     {
       "InputId": "b37ce031-92cd-4a18-8ff2-3f79dccdfe9f"/*Precision*/,
       "Position": {
         "X": 197.0,
         "Y": 418.0
-      }
+      },
+      "Description": "How close the inputs need to be for them to be considered equal.\n"
     }
   ],
   "SymbolChildUis": [],

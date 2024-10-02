@@ -83,7 +83,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\sim\\trace-contour-lines.hlsl"
+          "Value": "Resources\\lib\\points\\sim\\TraceContourLines.hlsl"
         }
       ],
       "Outputs": []
@@ -94,7 +94,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 64,
             "Y": 1,
@@ -175,11 +175,11 @@
       "Outputs": []
     },
     {
-      "Id": "f504153b-fc37-4304-892b-3b8d8175a172"/*BoundingBox*/,
+      "Id": "f504153b-fc37-4304-892b-3b8d8175a172"/*DrawBoxGizmo*/,
       "SymbolId": "9123651a-5df8-4f85-9e14-2068f33e2ff1",
       "InputValues": [
         {
-          "Id": "656697b8-b271-463b-9e38-fdb5758d3736"/*Value*/,
+          "Id": "656697b8-b271-463b-9e38-fdb5758d3736"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 1.0,
@@ -189,7 +189,7 @@
           }
         },
         {
-          "Id": "6f95e60a-f259-45fa-b23f-ce284cc9275e"/*Size*/,
+          "Id": "6f95e60a-f259-45fa-b23f-ce284cc9275e"/*Stretch*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 2.0,
@@ -255,7 +255,7 @@
       "Outputs": []
     },
     {
-      "Id": "5a991469-f03a-4362-9d43-3a78a27e06b5"/*Float3ToVector3*/,
+      "Id": "5a991469-f03a-4362-9d43-3a78a27e06b5"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [
         {
@@ -267,7 +267,7 @@
       "Outputs": []
     },
     {
-      "Id": "dd1dc44d-593d-40e1-9c05-eb9fe4f64c5d"/*Vector2ToFloat2*/,
+      "Id": "dd1dc44d-593d-40e1-9c05-eb9fe4f64c5d"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
@@ -313,7 +313,7 @@
       "Outputs": []
     },
     {
-      "Id": "63b3265b-9f7b-4cfd-8311-70e4cd6dc2c3"/*Vector3ToFloat3*/,
+      "Id": "63b3265b-9f7b-4cfd-8311-70e4cd6dc2c3"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []
@@ -355,7 +355,7 @@
       "Outputs": []
     },
     {
-      "Id": "a5289ba7-b6e8-4811-914b-5ebfabd19f23"/*Vector2ToFloat2*/,
+      "Id": "a5289ba7-b6e8-4811-914b-5ebfabd19f23"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []

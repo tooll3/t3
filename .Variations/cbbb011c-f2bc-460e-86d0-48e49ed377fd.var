@@ -223,6 +223,147 @@
           "ec8f4ff1-6b7a-4050-8086-2565c8f5d3fb": 44.0
         }
       }
+    },
+    {
+      "Id": "e1038ebc-9058-4088-9849-71e58eba008f",
+      "IsPreset": true,
+      "ActivationIndex": 9,
+      "Title": "Vertical",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 186.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "615af268-5f30-4600-8c36-e37dbc2108c7": true,
+          "10553b67-45f7-4e9d-b769-05865f4b2357": false,
+          "f3d77ff3-bd0c-4d36-93c3-5bb6cbc5397d": 0.43,
+          "f2eaa551-64f8-475f-b80a-a2b659393157": 0.16
+        }
+      }
+    },
+    {
+      "Id": "f3287a98-1b9b-4265-95ce-17fc78e5e240",
+      "IsPreset": true,
+      "ActivationIndex": 10,
+      "Title": "Light Leak",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 186.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "615af268-5f30-4600-8c36-e37dbc2108c7": true,
+          "10553b67-45f7-4e9d-b769-05865f4b2357": true,
+          "f3d77ff3-bd0c-4d36-93c3-5bb6cbc5397d": 0.4,
+          "f2eaa551-64f8-475f-b80a-a2b659393157": 0.16,
+          "cf4d392f-426a-4451-b752-25009e843a63": 0.85,
+          "411f1a8e-5725-42e7-802b-c777ceaa9cd1": -0.089999974
+        }
+      }
+    },
+    {
+      "Id": "d0399b30-ae67-466a-ac12-f2a8b7fa3152",
+      "IsPreset": true,
+      "ActivationIndex": 11,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "615af268-5f30-4600-8c36-e37dbc2108c7": true,
+          "10553b67-45f7-4e9d-b769-05865f4b2357": true,
+          "f3d77ff3-bd0c-4d36-93c3-5bb6cbc5397d": 0.4,
+          "f2eaa551-64f8-475f-b80a-a2b659393157": 0.13,
+          "3c0a4fe5-25ae-4732-806f-7b7c1eb56da9": {
+            "X": 0.60248804,
+            "Y": 0.04669472,
+            "Z": 0.0,
+            "W": 1.0
+          },
+          "cf4d392f-426a-4451-b752-25009e843a63": 0.52,
+          "397bc44f-0cc1-480a-989a-a6dc83fe1965": 0.0,
+          "411f1a8e-5725-42e7-802b-c777ceaa9cd1": 0.37
+        }
+      }
+    },
+    {
+      "Id": "35bd7cb2-f030-4d65-b855-b08a12ea729a",
+      "IsPreset": true,
+      "ActivationIndex": 12,
+      "Title": "Horizontal",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 186.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "615af268-5f30-4600-8c36-e37dbc2108c7": false,
+          "10553b67-45f7-4e9d-b769-05865f4b2357": true,
+          "f3d77ff3-bd0c-4d36-93c3-5bb6cbc5397d": 0.78,
+          "f2eaa551-64f8-475f-b80a-a2b659393157": 0.15,
+          "ec8f4ff1-6b7a-4050-8086-2565c8f5d3fb": -0.032833412
+        }
+      }
+    },
+    {
+      "Id": "ca64f437-ea57-415d-bfbd-9eab6fca4d85",
+      "IsPreset": true,
+      "ActivationIndex": 13,
+      "Title": "Golden Shower",
+      "PosOnCanvas": {
+        "X": 489.0,
+        "Y": 186.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "615af268-5f30-4600-8c36-e37dbc2108c7": true,
+          "10553b67-45f7-4e9d-b769-05865f4b2357": true,
+          "f3d77ff3-bd0c-4d36-93c3-5bb6cbc5397d": 0.79,
+          "f2eaa551-64f8-475f-b80a-a2b659393157": 0.16,
+          "0d589063-aadf-47e5-8eb0-1c9beba104d0": {
+            "X": 0.534765,
+            "Y": 0.83253586,
+            "Z": 0.7188229,
+            "W": 1.0
+          },
+          "3c0a4fe5-25ae-4732-806f-7b7c1eb56da9": {
+            "X": 1.0,
+            "Y": 0.50694066,
+            "Z": 0.13267559,
+            "W": 1.0
+          },
+          "cf4d392f-426a-4451-b752-25009e843a63": -0.89,
+          "ec8f4ff1-6b7a-4050-8086-2565c8f5d3fb": -0.33999997
+        }
+      }
+    },
+    {
+      "Id": "9deca16d-df67-47c9-be99-738979de4f4f",
+      "IsPreset": true,
+      "ActivationIndex": 14,
+      "Title": "Bloody Monday",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 279.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "615af268-5f30-4600-8c36-e37dbc2108c7": true,
+          "10553b67-45f7-4e9d-b769-05865f4b2357": true,
+          "f3d77ff3-bd0c-4d36-93c3-5bb6cbc5397d": 0.79,
+          "f2eaa551-64f8-475f-b80a-a2b659393157": 0.16,
+          "3c0a4fe5-25ae-4732-806f-7b7c1eb56da9": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.0035767555,
+            "W": 1.0
+          },
+          "cf4d392f-426a-4451-b752-25009e843a63": 0.88
+        }
+      }
     }
   ]
 }

@@ -2,15 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
-using SharpDX.Direct3D11;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Graph.Interaction.Connections;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Selection;
-using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Graph.Interaction
@@ -41,52 +43,49 @@ namespace T3.Editor.Gui.Graph.Interaction
             }
         }
 
-        
         /// <summary>
-        /// NOTE: This has to be called for ALL movable elements and directly after ImGui.Item
+        /// NOTE: This has to be called for ALL movable elements (ops, inputs, outputs) and directly after ImGui.Item
         /// </summary>
         public static void Handle(ISelectableCanvasObject node, Instance instance = null)
         {
-            if (ImGui.IsItemActive())
+            var justClicked = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Left);
+            
+            var isActiveNode = node.Id == _draggedNodeId;
+            if (justClicked)
             {
-                if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
+                var compositionSymbolId = GraphCanvas.Current.CompositionOp.Symbol.Id;
+                _draggedNodeId = node.Id;
+                if (node.IsSelected)
                 {
-                    var compositionSymbolId = GraphCanvas.Current.CompositionOp.Symbol.Id;
-                    _draggedNodeId = node.Id;
-                    if (node.IsSelected)
-                    {
-                        _draggedNodes = NodeSelection.GetSelectedNodes<ISelectableCanvasObject>().ToList();
-                    }
-                    else
-                    {
-                        var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-                        if(UserSettings.Config.SmartGroupDragging)
-                            _draggedNodes = FindSnappedNeighbours(parentUi, node).ToList();
-                        
-                        _draggedNodes.Add(node);
-                    }
-
-                    _moveCommand = new ModifyCanvasElementsCommand(compositionSymbolId, _draggedNodes);
-                    ShakeDetector.Reset();
+                    _draggedNodes = NodeSelection.GetSelectedNodes<ISelectableCanvasObject>().ToList();
                 }
-                else if (_moveCommand != null)
+                else
                 {
-                    if (!T3Ui.IsCurrentlySaving && ShakeDetector.TestDragForShake(ImGui.GetMousePos()))
-                    {
-                        _moveCommand.StoreCurrentValues();
-                        UndoRedoStack.Add(_moveCommand);
-                        _moveCommand = null;
-                        DisconnectDraggedNodes();
-                    }
+                    var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
+                    if(UserSettings.Config.SmartGroupDragging)
+                        _draggedNodes = FindSnappedNeighbours(parentUi, node).ToList();
+                    
+                    _draggedNodes.Add(node);
                 }
 
+                _moveCommand = new ModifyCanvasElementsCommand(compositionSymbolId, _draggedNodes);
+                ShakeDetector.ResetShaking();
+            }
+            else if (isActiveNode && ImGui.IsMouseDown(ImGuiMouseButton.Left) && _moveCommand != null)
+            {
+                if (!T3Ui.IsCurrentlySaving && ShakeDetector.TestDragForShake(ImGui.GetMousePos()))
+                {
+                    _moveCommand.StoreCurrentValues();
+                    UndoRedoStack.Add(_moveCommand);
+                    DisconnectDraggedNodes();
+                }
                 HandleNodeDragging(node);
             }
-            else if (ImGui.IsMouseReleased(0) && _moveCommand != null)
+            else if (isActiveNode && ImGui.IsMouseReleased(0) && _moveCommand != null)
             {
                 if (_draggedNodeId != node.Id)
                     return;
-
+                
                 var singleDraggedNode = (_draggedNodes.Count == 1) ? _draggedNodes[0] : null;
                 _draggedNodeId = Guid.Empty;
                 _draggedNodes.Clear();
@@ -95,49 +94,64 @@ namespace T3.Editor.Gui.Graph.Interaction
                 if (wasDragging)
                 {
                     _moveCommand.StoreCurrentValues();
-                    UndoRedoStack.Add(_moveCommand);
 
-                    if (singleDraggedNode != null && ConnectionMaker.ConnectionSplitHelper.BestMatchLastFrame != null && singleDraggedNode is SymbolChildUi childUi)
+                    if (singleDraggedNode != null && ConnectionSplitHelper.BestMatchLastFrame != null && singleDraggedNode is SymbolChildUi childUi)
                     {
                         var instanceForSymbolChildUi = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(child => child.SymbolChildId == childUi.Id);
                         ConnectionMaker.SplitConnectionWithDraggedNode(childUi, 
-                                                                       ConnectionMaker.ConnectionSplitHelper.BestMatchLastFrame.Connection, 
-                                                                       instanceForSymbolChildUi);
+                                                                       ConnectionSplitHelper.BestMatchLastFrame.Connection, 
+                                                                       instanceForSymbolChildUi,
+                                                                       _moveCommand);
+                        _moveCommand = null;
+                    }
+                    else
+                    {
+                        UndoRedoStack.Add(_moveCommand);
                     }
 
-                    // Reorder inputs nodes if dragged
-                    var selectedInputs = NodeSelection.GetSelectedNodes<IInputUi>().ToList();
-                    if (selectedInputs.Count > 0)
-                    {
-                        var composition = GraphCanvas.Current.CompositionOp;
-                        var compositionUi = SymbolUiRegistry.Entries[composition.Symbol.Id];
-                        composition.Symbol.InputDefinitions.Sort((a, b) =>
-                                                                 {
-                                                                     var childA = compositionUi.InputUis[a.Id];
-                                                                     var childB = compositionUi.InputUis[b.Id];
-                                                                     return (int)(childA.PosOnCanvas.Y * 10000 + childA.PosOnCanvas.X) -
-                                                                            (int)(childB.PosOnCanvas.Y * 10000 + childB.PosOnCanvas.X);
-                                                                 });
-                        composition.Symbol.SortInputSlotsByDefinitionOrder();
-                        NodeOperations.AdjustInputOrderOfSymbol(composition.Symbol);
-                    }
+                    // // Reorder inputs nodes if dragged
+                    // var selectedInputs = NodeSelection.GetSelectedNodes<IInputUi>().ToList();
+                    // if (selectedInputs.Count > 0)
+                    // {
+                    //     var composition = GraphCanvas.Current.CompositionOp;
+                    //     var compositionUi = SymbolUiRegistry.Entries[composition.Symbol.Id];
+                    //     composition.Symbol.InputDefinitions.Sort((a, b) =>
+                    //                                              {
+                    //                                                  var childA = compositionUi.InputUis[a.Id];
+                    //                                                  var childB = compositionUi.InputUis[b.Id];
+                    //                                                  return (int)(childA.PosOnCanvas.Y * 10000 + childA.PosOnCanvas.X) -
+                    //                                                         (int)(childB.PosOnCanvas.Y * 10000 + childB.PosOnCanvas.X);
+                    //                                              });
+                    //     composition.Symbol.SortInputSlotsByDefinitionOrder();
+                    //     InputsAndOutputs.AdjustInputOrderOfSymbol(composition.Symbol);
+                    // }
                 }
                 else
                 {
                     if (!NodeSelection.IsNodeSelected(node))
                     {
-                        if (!ImGui.GetIO().KeyShift)
+                        var replaceSelection = !ImGui.GetIO().KeyShift;
+                        if (replaceSelection)
                         {
-                            NodeSelection.Clear();
-                        }
-
-                        if (node is SymbolChildUi childUi2)
-                        {
-                            NodeSelection.AddSymbolChildToSelection(childUi2, instance);
+                            if (node is SymbolChildUi childUi3)
+                            {
+                                NodeSelection.SetSelectionToChildUi(childUi3, instance);
+                            }
+                            else
+                            {
+                                NodeSelection.SetSelection(node);
+                            }
                         }
                         else
                         {
-                            NodeSelection.AddSelection(node);
+                            if (node is SymbolChildUi childUi2)
+                            {
+                                NodeSelection.AddSymbolChildToSelection(childUi2, instance);
+                            }
+                            else
+                            {
+                                NodeSelection.AddSelection(node);
+                            }
                         }
                     }
                     else
@@ -178,14 +192,11 @@ namespace T3.Editor.Gui.Graph.Interaction
         private static void DisconnectDraggedNodes()
         {
             var removeCommands = new List<ICommand>();
-            var inputConnections = new List<Symbol.Connection>();
-            var outputConnections = new List<Symbol.Connection>();
-            Type inputConnectionType = null;
-            Type outputConnectionType = null;
-            var outConnectionInputIndex = 0;
-            foreach (var nod in _draggedNodes)
+            var inputConnections = new List<(Symbol.Connection connection, Type connectionType, bool isMultiIndex, int multiInputIndex)>();
+            var outputConnections = new List<(Symbol.Connection connection, Type connectionType, bool isMultiIndex, int multiInputIndex)>();
+            foreach (var node in _draggedNodes)
             {
-                if (!(nod is SymbolChildUi childUi))
+                if (node is not SymbolChildUi childUi)
                     continue;
 
                 var instance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(child => child.SymbolChildId == childUi.Id);
@@ -195,60 +206,81 @@ namespace T3.Editor.Gui.Graph.Interaction
                     continue;
                 }
 
-                foreach (var input in instance.Inputs)
+                // Get all input connections and
+                // relative index if they have multi-index inputs
+                var connectionsToInput = instance.Parent.Symbol.Connections.FindAll(c => c.TargetParentOrChildId == instance.SymbolChildId
+                                                                                   && _draggedNodes.All(c2 => c2.Id != c.SourceParentOrChildId));                
+                var inConnectionInputIndex = 0;
+                foreach (var connectionToInput in connectionsToInput)
                 {
-                    if (!input.IsConnected)
-                        continue;
-
-                    var connectionsToInput = instance.Parent.Symbol.Connections.FindAll(c => c.TargetParentOrChildId == instance.SymbolChildId
-                                                                                             && _draggedNodes.All(c2 => c2.Id != c.SourceParentOrChildId));
-                    var lastTargetId = Guid.Empty;
-                    var lastInputId = Guid.Empty;
-                    var multiInputSlotIndex = 0;
-                    
-                    
-                    foreach (var connectionToInput in connectionsToInput)
+                    bool isMultiInput = instance.Parent.Symbol.IsTargetMultiInput(connectionToInput);
+                    if (isMultiInput)
                     {
-                        removeCommands.Add(new DeleteConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, connectionToInput, multiInputSlotIndex));
-                        inputConnections.Add(connectionToInput);
-                        inputConnectionType = input.ValueType;
-                        if (connectionToInput.TargetParentOrChildId == lastTargetId
-                            && connectionToInput.TargetSlotId == lastInputId)
-                        {
-                            multiInputSlotIndex++;
-                        }
-                        else
-                        {
-                            multiInputSlotIndex = 0;
-                        }
+                        inConnectionInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(connectionToInput);
                     }
+                    Type connectionType = instance.Inputs.Find(c => c.Id == connectionToInput.TargetSlotId).ValueType;
+                    inputConnections.Add((connectionToInput, connectionType, isMultiInput, isMultiInput ? inConnectionInputIndex : 0));
                 }
 
-                foreach (var output in instance.Outputs)
+                // Get all output connections and
+                // relative index if they have multi-index inputs
+                var connectionsToOutput = instance.Parent.Symbol.Connections.FindAll(c => c.SourceParentOrChildId == instance.SymbolChildId
+                                                                                    && _draggedNodes.All(c2 => c2.Id != c.TargetParentOrChildId));
+                var outConnectionInputIndex = 0;
+                foreach (var connectionToOutput in connectionsToOutput)
                 {
-                    var connectionsToOutput =
-                        instance.Parent.Symbol.Connections.FindAll(c => c.SourceParentOrChildId == instance.SymbolChildId
-                                                                        && _draggedNodes.All(c2 => c2.Id != c.TargetParentOrChildId));
-                    foreach (var outputConnection in connectionsToOutput)
+                    bool isMultiInput = instance.Parent.Symbol.IsTargetMultiInput(connectionToOutput);
+                    if (isMultiInput)
                     {
-                        outConnectionInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(outputConnection);
-                        removeCommands.Add(new DeleteConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, outputConnection, outConnectionInputIndex));
-                        outputConnections.Add(outputConnection);
-                        outputConnectionType = output.ValueType;
+                        outConnectionInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(connectionToOutput);
                     }
+                    Type connectionType = instance.Outputs.Find(c => c.Id == connectionToOutput.SourceSlotId).ValueType;
+                    outputConnections.Add((connectionToOutput, connectionType, isMultiInput, isMultiInput ? outConnectionInputIndex : 0));
                 }
             }
 
-            if (inputConnections.Count == 1
-                && outputConnections.Count == 1
-                && inputConnectionType == outputConnectionType
-                )
+            // Remove the input connections in index descending order to
+            // prevent to get the wrong index in case of multi-input properties
+            inputConnections.Sort((x, y) => y.multiInputIndex.CompareTo(x.multiInputIndex));
+            foreach (var inputConnection in inputConnections)
             {
-                var newConnection = new Symbol.Connection(sourceParentOrChildId: inputConnections[0].SourceParentOrChildId,
-                                                          sourceSlotId: inputConnections[0].SourceSlotId,
-                                                          targetParentOrChildId: outputConnections[0].TargetParentOrChildId,
-                                                          targetSlotId: outputConnections[0].TargetSlotId);
-                removeCommands.Add(new AddConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, newConnection, outConnectionInputIndex));
+                removeCommands.Add(new DeleteConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, inputConnection.connection, inputConnection.multiInputIndex));
+            }
+
+            // Remove the output connections in index descending order to
+            // prevent to get the wrong index in case of multi-input properties
+            outputConnections.Sort((x, y) => y.multiInputIndex.CompareTo(x.multiInputIndex));
+            foreach(var outputConnection in outputConnections)
+            {
+                removeCommands.Add(new DeleteConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, outputConnection.connection, outputConnection.multiInputIndex));
+            }
+
+            // Reconnect inputs of 1th nodes and outputs of last nodes if are of the same type
+            // and reconnect them in ascending order
+            outputConnections.Sort((x, y) => x.multiInputIndex.CompareTo(y.multiInputIndex));
+            inputConnections.Sort((x, y) => x.multiInputIndex.CompareTo(y.multiInputIndex));
+            var outputConnectionsRemaining = new List<(Symbol.Connection connection, Type connectionType, bool isMultiIndex, int multiInputIndex)>(outputConnections);
+            foreach (var itemInputConnection in inputConnections)
+            {
+                foreach (var itemOutputConnectionRemaining in outputConnectionsRemaining)
+                {
+                    if (itemInputConnection.connectionType == itemOutputConnectionRemaining.connectionType)
+                    {
+                        var newConnection = new Symbol.Connection(sourceParentOrChildId: itemInputConnection.connection.SourceParentOrChildId,
+                                                                  sourceSlotId: itemInputConnection.connection.SourceSlotId,
+                                                                  targetParentOrChildId: itemOutputConnectionRemaining.connection.TargetParentOrChildId,
+                                                                  targetSlotId: itemOutputConnectionRemaining.connection.TargetSlotId);
+
+                        removeCommands.Add(new AddConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, newConnection, itemOutputConnectionRemaining.multiInputIndex));
+                        outputConnectionsRemaining.Remove(itemOutputConnectionRemaining);
+
+                        break;
+                    }
+                }
+                if (outputConnectionsRemaining.Count < 1)
+                {
+                    break;
+                }
             }
 
             if (removeCommands.Count > 0)
@@ -414,97 +446,6 @@ namespace T3.Editor.Gui.Graph.Interaction
             return Alignment.NoSnapped;
         }
 
-        public static void ArrangeOps()
-        {
-            var commands = new List<ICommand>();
-            
-            var freshlySnapped = new List<ISelectableCanvasObject>();
-            foreach (var n in NodeSelection.GetSelectedChildUis())
-            {
-                RecursivelyAlignChildren(n, commands, freshlySnapped);
-            }
-            var command = new MacroCommand("arrange", commands);
-            UndoRedoStack.Add(command);
-        }
-
-        private static float RecursivelyAlignChildren(SymbolChildUi childUi, List<ICommand> commands, List<ISelectableCanvasObject> freshlySnappedOpWidgets)
-        {
-            if (freshlySnappedOpWidgets == null)
-                freshlySnappedOpWidgets = new List<ISelectableCanvasObject>();
-            
-            var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-            var compositionSymbol = GraphCanvas.Current.CompositionOp.Symbol;
-            var connectedChildUis = (from con in compositionSymbol.Connections
-                                     where !con.IsConnectedToSymbolInput && !con.IsConnectedToSymbolOutput
-                                     from sourceChildUi in parentUi.ChildUis
-                                     where con.SourceParentOrChildId == sourceChildUi.Id
-                                           && con.TargetParentOrChildId == childUi.Id
-                                     select sourceChildUi).Distinct().ToArray();
-            
-            // Order connections by input definition order
-            var connections = (from con in compositionSymbol.Connections
-                                     where !con.IsConnectedToSymbolInput && !con.IsConnectedToSymbolOutput
-                                     from sourceChildUi in parentUi.ChildUis
-                                     where con.SourceParentOrChildId == sourceChildUi.Id
-                                           && con.TargetParentOrChildId == childUi.Id
-                                     select con).Distinct().ToArray();
-
-            // Sort the incoming operators into the correct input order and
-            // ignore operators that can't be auto-layouted because their outputs
-            // have connection to multiple operators
-            var sortedInputOps = new List<SymbolChildUi>();
-            foreach (var inputDef in childUi.SymbolChild.Symbol.InputDefinitions)
-            {
-                var matchingConnections = connections.Where(c => c.TargetSlotId == inputDef.Id).ToArray();
-                var connectedOpsForInput=  matchingConnections.SelectMany(c => connectedChildUis.Where(ccc => ccc.Id == c.SourceParentOrChildId));
-                
-                foreach (var op in connectedOpsForInput)
-                {
-                    var connectionsFromOutput = compositionSymbol.Connections.Where(c5 => c5.SourceParentOrChildId == op.Id
-                                                                                          && c5.TargetParentOrChildId != childUi.Id);
-                    var opHasUnpredictableConnections = connectionsFromOutput.Any();
-                    if (!opHasUnpredictableConnections)
-                    {
-                        sortedInputOps.Add(op);
-                    }
-                }
-            }
-
-            float verticalOffset = 0;
-            var snappedCount = 0;
-            foreach (var connectedChildUi in sortedInputOps)
-            {
-                if (freshlySnappedOpWidgets.Contains(connectedChildUi))
-                    continue;
-
-                
-                var thumbnailPadding = HasThumbnail(connectedChildUi) ? connectedChildUi.Size.X : 0;
-                if (snappedCount > 0)
-                    verticalOffset += thumbnailPadding;
-                
-                var moveCommand = new ModifyCanvasElementsCommand(compositionSymbol.Id, new List<ISelectableCanvasObject>() {connectedChildUi}); 
-                connectedChildUi.PosOnCanvas = childUi.PosOnCanvas + new Vector2(- (childUi.Size.X + SnapPadding.X),verticalOffset);
-                moveCommand.StoreCurrentValues();
-                commands.Add(moveCommand);
-
-                freshlySnappedOpWidgets.Add(connectedChildUi);
-                verticalOffset += RecursivelyAlignChildren(connectedChildUi, commands, freshlySnappedOpWidgets);
-
-                freshlySnappedOpWidgets.Add(connectedChildUi);
-                NodeSelection.AddSelection(connectedChildUi);
-                snappedCount++;
-            }
-            
-            var requiredHeight =Math.Max(verticalOffset, childUi.Size.Y);
-            return requiredHeight + SnapPadding.Y;
-        }
-
-        private static bool HasThumbnail(SymbolChildUi childUi)
-        {
-            return childUi.SymbolChild.Symbol.OutputDefinitions.Count > 0 && childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType == typeof(Texture2D);
-        }
-        
-
         private enum Alignment
         {
             NoSnapped,
@@ -514,7 +455,8 @@ namespace T3.Editor.Gui.Graph.Interaction
             SnappedToLeft,
         }
 
-        public static readonly Vector2 SnapPadding = new Vector2(40, 20);
+        public static readonly Vector2 SnapPadding = new(40, 20);
+        public static readonly Vector2 PaddedDefaultOpSize = SymbolChildUi.DefaultOpSize + SnapPadding;
 
         private static readonly Vector2[] _snapOffsetsInCanvas =
             {
@@ -539,28 +481,27 @@ namespace T3.Editor.Gui.Graph.Interaction
                 var delta = mousePosition - _lastPosition;
                 _lastPosition = mousePosition;
 
-                int dx = 0;
+                var dx = 0;
                 if (Math.Abs(delta.X) > 2)
                 {
                     dx = delta.X > 0 ? 1 : -1;
                 }
 
-                _directions.Add(dx);
+                Directions.Add(dx);
 
-                if (_directions.Count < 2)
+                if (Directions.Count < 2)
                     return false;
 
-                // Queue length is optimized for 60 fps
-                // adjust length for different frame rates
-                if (_directions.Count > QueueLength * (1 / 60f) / T3.Core.Animation.Playback.LastFrameDuration)
-                    _directions.RemoveAt(0);
+                // Queue length is optimized for 60 fps adjust length for different frame rates
+                if (Directions.Count > QueueLength * (1 / 60f) / T3.Core.Animation.Playback.LastFrameDuration)
+                    Directions.RemoveAt(0);
 
-                // count direction changes
+                // Count direction changes
                 var changeDirectionCount = 0;
 
                 var lastD = 0;
                 var lastRealD = 0;
-                foreach (var d in _directions)
+                foreach (var d in Directions)
                 {
                     if (lastD != 0 && d != 0)
                     {
@@ -577,20 +518,20 @@ namespace T3.Editor.Gui.Graph.Interaction
                 
                 var wasShaking = changeDirectionCount >= ChangeDirectionThreshold;
                 if (wasShaking)
-                    Reset();
+                    ResetShaking();
 
                 return wasShaking;
             }
 
-            public static void Reset()
+            public static void ResetShaking()
             {
-                _directions.Clear();
+                Directions.Clear();
             }
 
             private static Vector2 _lastPosition = Vector2.Zero;
             private const int QueueLength = 35;
             private const int ChangeDirectionThreshold = 5;
-            private static readonly List<int> _directions = new(QueueLength);
+            private static readonly List<int> Directions = new(QueueLength);
         }
 
     }

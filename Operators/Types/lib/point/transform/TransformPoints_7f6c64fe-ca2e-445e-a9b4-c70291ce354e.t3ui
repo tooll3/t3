@@ -1,13 +1,13 @@
 {
   "Id": "7f6c64fe-ca2e-445e-a9b4-c70291ce354e"/*TransformPoints*/,
-  "Description": "Transforms incoming points.\n\nTips: \n- Try to activate .WIsWeight and combine this operator with [SelectPoints].\n- Changing the Space to Point can be used to offset the points.\n\n\n",
+  "Description": "Transforms incoming points.\n\nTips:\n- Try to activate .WIsWeight and combine this operator with [SelectPoints].\n- Changing the Space to Point can be used to offset the points.",
   "InputUis": [
     {
       "InputId": "565ff364-c3d9-4c60-a9a0-79fdd36d3477"/*Points*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -488.51422,
-        "Y": 626.3017
+        "X": -475.52475,
+        "Y": 755.82294
       }
     },
     {
@@ -15,7 +15,9 @@
       "Position": {
         "X": -461.1681,
         "Y": 874.401
-      }
+      },
+      "GroupTitle": "Transform",
+      "Description": "Moves the incoming points\n\nX (-left / +right), \nY (-down / + up), \nZ (-forward/+backwards)\n"
     },
     {
       "InputId": "454d0150-dac4-41b2-83f8-d1ecc3ef76d4"/*Rotation*/,
@@ -23,65 +25,98 @@
         "X": -461.1681,
         "Y": 919.401
       },
-      "Scale": 0.1
+      "Description": "Rotates the incoming subgraph around the following axes:\n\nX: Horizontal axis\nY: Vertical axis\nZ: Forward axis\n",
+      "Min": -90.0,
+      "Max": 90.0,
+      "Format": "{0:0.0}°"
     },
     {
-      "InputId": "523b7acd-d8e7-4473-9ec7-15eec1d795df"/*Scale*/,
+      "InputId": "523b7acd-d8e7-4473-9ec7-15eec1d795df"/*Stretch*/,
       "Position": {
         "X": -461.1681,
         "Y": 964.4012
-      }
+      },
+      "Description": "Scales the incoming subgraph in the following directions:\n\nX: Width\nY: Height\nZ: Depth\n"
     },
     {
-      "InputId": "a6e5770b-39dc-4d7b-b92e-53302dc89395"/*UniformScale*/,
+      "InputId": "a6e5770b-39dc-4d7b-b92e-53302dc89395"/*Scale*/,
       "Position": {
         "X": -461.1681,
         "Y": 1009.401
-      }
+      },
+      "Description": "Uniformly scales the incoming subgraph",
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Format": "{0:0.000} ×"
     },
     {
       "InputId": "0192b746-ff90-4c26-a7d4-754b6ec8006b"/*UpdateRotation*/,
       "Position": {
         "X": -461.1681,
         "Y": 1054.401
-      }
+      },
+      "Description": "Defines if the rotation of the points is ignored",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "319d71a9-b8dd-406f-a3a2-1c7508ba2ca7"/*Shearing*/,
+      "Position": {
+        "X": -461.1681,
+        "Y": 1099.401
+      },
+      "Description": "Shears the incoming points\n\nX (-left / +right), \nY (-down / + up), \nZ (-forward/+backwards)\n",
+      "AddPadding": "True"
     },
     {
       "InputId": "4af2dbdd-1005-465e-a193-756ed2b29a33"/*ScaleW*/,
       "Position": {
         "X": -461.1681,
-        "Y": 1099.401
-      }
+        "Y": 1153.2802
+      },
+      "GroupTitle": "W",
+      "Description": "Scales the W of the incoming points",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Format": "{0:0.000} ×"
     },
     {
       "InputId": "af0cff8a-126e-47bd-bb60-9198567f85e0"/*OffsetW*/,
       "Position": {
         "X": -461.1681,
-        "Y": 1144.401
-      }
+        "Y": 1198.2802
+      },
+      "Description": "Defines the value that is added / subtracted from W"
     },
     {
       "InputId": "1ab4671f-7977-4e7e-bb06-f828ae32e3af"/*Space*/,
       "Position": {
         "X": -461.1681,
-        "Y": 1189.401
-      }
+        "Y": 1243.2802
+      },
+      "Description": "Defines the space"
     },
     {
       "InputId": "56cd97c5-f4f1-4eb4-a53c-312373ee7706"/*WIsWeight*/,
       "Position": {
         "X": -461.1681,
-        "Y": 1234.401
-      }
+        "Y": 1288.2802
+      },
+      "Description": "Defines if points with different Ws are treated differently"
+    },
+    {
+      "InputId": "0ef7556a-950f-406c-8e1d-511d17b4ea10"/*Pivot*/,
+      "Position": {
+        "X": -461.1681,
+        "Y": 1378.2802
+      },
+      "GroupTitle": "Transform Pivot",
+      "Description": "Moves the Pivot (center point) of the incoming subgraph:\n\nX (-left / +right) \nY (-down / + up) \nZ (-forward/+backwards)\n\nThe Pivot Point determines the location of the incoming subgraph Gizmo. Transforming its location can make it easier to perform transformations around the position you want.\n"
     }
   ],
   "SymbolChildUis": [
     {
       "ChildId": "4a35fd19-11d2-49d3-9d62-d4a46933db93"/*ComputeShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 109.659775,
         "Y": 493.5784
@@ -89,10 +124,6 @@
     },
     {
       "ChildId": "852d7521-22e7-4482-9ae5-0556cd78a26a"/*ComputeShaderStage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 127.0
-      },
       "Position": {
         "X": 475.10886,
         "Y": 524.0607
@@ -112,10 +143,6 @@
     },
     {
       "ChildId": "b23f0e8b-faa3-4e01-9675-e33c0fbe4af6"/*GetSRVProperties*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -185.52144,
         "Y": 695.17487
@@ -123,10 +150,6 @@
     },
     {
       "ChildId": "d7f0248f-a87c-46c8-890b-3a3ec5ae2c26"/*ExecuteBufferUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 648.0739,
         "Y": 523.0598
@@ -134,21 +157,13 @@
     },
     {
       "ChildId": "633e829a-a30a-4a42-9723-022cc2401828"/*CalcDispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 253.58789,
         "Y": 552.60925
       }
     },
     {
-      "ChildId": "597bfff4-5487-481f-a621-90890781ab32"/*StructuredBuffer2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "597bfff4-5487-481f-a621-90890781ab32"/*StructuredBufferWithViews*/,
       "Position": {
         "X": 120.97458,
         "Y": 1204.5917
@@ -156,10 +171,6 @@
     },
     {
       "ChildId": "4877c491-4278-4b27-80c5-3de432c67ce9"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -338.51422,
         "Y": 626.3017
@@ -167,10 +178,6 @@
     },
     {
       "ChildId": "3aa1f8d9-8e1f-43fb-80ba-f15ec5864e40"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 293.35922,
         "Y": 1152.7119
@@ -178,10 +185,6 @@
     },
     {
       "ChildId": "c9390e2c-0150-4ec8-9738-f4a218418bc5"/*TransformMatrix*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
       "Position": {
         "X": -251.75499,
         "Y": 916.53937
@@ -189,10 +192,6 @@
     },
     {
       "ChildId": "b16a669b-1511-426b-b6c8-a385231fa637"/*PickSDXVector4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 48.24501,
         "Y": 873.66125
@@ -200,10 +199,6 @@
     },
     {
       "ChildId": "51b767b4-3725-4e46-b6e0-5c24d9a72348"/*PickSDXVector4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 48.24501,
         "Y": 929.6614
@@ -211,10 +206,6 @@
     },
     {
       "ChildId": "7e1ff815-2e4c-4209-9326-eb996e40471b"/*PickSDXVector4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 48.24501,
         "Y": 985.6613
@@ -222,21 +213,13 @@
     },
     {
       "ChildId": "1551e92b-2e97-4af3-a207-a5cbd1451b56"/*PickSDXVector4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 48.24501,
         "Y": 1041.661
       }
     },
     {
-      "ChildId": "f02656ef-6391-40ba-9660-1f619e8e7edd"/*BoolToFloats*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "f02656ef-6391-40ba-9660-1f619e8e7edd"/*BoolToFloat*/,
       "Position": {
         "X": -263.48126,
         "Y": 1133.9249
@@ -244,21 +227,13 @@
     },
     {
       "ChildId": "514a4521-daf0-4cec-8a3f-f07f72dfcdf5"/*IntToFloat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -263.48126,
         "Y": 1189.9249
       }
     },
     {
-      "ChildId": "861a27b4-9585-4d83-95fb-7cda90632189"/*BoolToFloats*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "861a27b4-9585-4d83-95fb-7cda90632189"/*BoolToFloat*/,
       "Position": {
         "X": -232.58942,
         "Y": 1285.1086

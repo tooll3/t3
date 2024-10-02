@@ -1,6 +1,6 @@
 {
   "Id": "ca3f3c1b-6f22-4bf3-b06b-d2b0d85a8881"/*BubbleZoom*/,
-  "Description": "An image effect that enlarges the inner circular region with a smooth edge. Other words for this would be \"Bulge\", \"Blob distort\", \"Fish Eye zoom\".\n\n",
+  "Description": "An image effect that enlarges the inner circular region with a smooth edge. Other terms for this would be 'Bulge', 'Blob distort', 'Fish Eye zoom'.",
   "InputUis": [
     {
       "InputId": "019b7a1a-0f86-48e2-b5e9-9a04480a3b07"/*Image*/,
@@ -64,11 +64,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "523b7aec-d6f1-4982-8e10-02da1c410d89"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "523b7aec-d6f1-4982-8e10-02da1c410d89"/*Vector2Components*/,
       "Position": {
         "X": -25.117218,
         "Y": 79.04767
@@ -88,10 +84,6 @@
     },
     {
       "ChildId": "a6a5cc16-8a4b-40cb-9f5a-6f4f161d168c"/*GradientsToTexture*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 42.83197,
         "Y": 415.25153
@@ -99,10 +91,6 @@
     },
     {
       "ChildId": "14682724-90f1-4596-8c32-ee64c0208f08"/*BoolToInt*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 574.0718,
         "Y": 555.30414

@@ -1,17 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Numerics;
-using SharpDX;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
-using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Operators.Types.Id_b9999f07_da19_45b9_ae12_f9d0662c694c
@@ -19,7 +13,7 @@ namespace T3.Operators.Types.Id_b9999f07_da19_45b9_ae12_f9d0662c694c
     public class BlendGradients : Instance<BlendGradients>
     {
         [Output(Guid = "D457933E-6642-471E-807A-6C22008BBD0C")]
-        public readonly Slot<Gradient> Result = new Slot<Gradient>();
+        public readonly Slot<Gradient> Result = new();
 
         public BlendGradients()
         {
@@ -113,7 +107,7 @@ namespace T3.Operators.Types.Id_b9999f07_da19_45b9_ae12_f9d0662c694c
             return Vector4.One;
         }
         
-        private Dictionary<float, Vector4> _steps = new Dictionary<float, Vector4>(20);
+        private Dictionary<float, Vector4> _steps = new(20);
 
         private enum BlendModes
         {
@@ -125,16 +119,16 @@ namespace T3.Operators.Types.Id_b9999f07_da19_45b9_ae12_f9d0662c694c
         
         
         [Input(Guid = "AFA38628-B616-4B06-878D-EC554050F2B0")]
-        public readonly InputSlot<Gradient> GradientA = new InputSlot<Gradient>();
+        public readonly InputSlot<Gradient> GradientA = new();
         
         [Input(Guid = "C1856EF1-BCBE-4377-A910-E8EEF7D963DA")]
-        public readonly InputSlot<Gradient> GradientB = new InputSlot<Gradient>();
+        public readonly InputSlot<Gradient> GradientB = new();
         
         [Input(Guid = "EDABC753-2CCA-4F8D-8F14-2B25479C2188", MappedType = typeof(BlendModes))]
-        public readonly InputSlot<int> BlendMode = new MultiInputSlot<int>();
+        public readonly InputSlot<int> BlendMode = new();
         
         [Input(Guid = "C21371D6-1735-43D4-96FF-D04CBCE0FEC9", MappedType = typeof(BlendModes))]
-        public readonly InputSlot<float> MixFactor = new MultiInputSlot<float>();        
+        public readonly InputSlot<float> MixFactor = new();        
     }
     
     

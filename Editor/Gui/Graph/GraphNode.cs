@@ -2,25 +2,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
-using SharpDX;
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
+using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.TransformGizmos;
-using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
-using Color = T3.Editor.Gui.Styling.Color;
+using T3.Editor.UiModel;
+using Color = T3.Core.DataTypes.Vector.Color;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 
@@ -31,7 +35,7 @@ namespace T3.Editor.Gui.Graph
     /// </summary>
     internal static class GraphNode
     {
-        public static void Draw(SymbolChildUi childUi, Instance instance)
+        public static void Draw(SymbolChildUi childUi, Instance instance, bool preventInteraction = false)
         {
             if (instance == null)
                 return;
@@ -46,7 +50,7 @@ namespace T3.Editor.Gui.Graph
                 framesSinceLastUpdate = Math.Min(framesSinceLastUpdate, output.DirtyFlag.FramesSinceLastUpdate);
             }
 
-            SymbolChildUi.CustomUiResult customUiResult;
+            SymbolChildUi.CustomUiResult customUiResult = SymbolChildUi.CustomUiResult.None;
             _drawList = global::T3.Editor.Gui.Graph.Graph.DrawList;
 
             var newNodeSize = ComputeNodeSize(childUi, visibleInputUis);
@@ -54,25 +58,57 @@ namespace T3.Editor.Gui.Graph
             _usableScreenRect = GraphCanvas.Current.TransformRect(new ImRect(childUi.PosOnCanvas,
                                                                              childUi.PosOnCanvas + childUi.Size));
             _selectableScreenRect = _usableScreenRect;
+            if (UserSettings.Config.ShowThumbnails)
+                PreparePreviewAndExpandSelectableArea(instance);
+
             _isVisible = ImGui.IsRectVisible(_selectableScreenRect.Min, _selectableScreenRect.Max);
 
+            var isNodeHovered = false;
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
-                if (UserSettings.Config.ShowThumbnails)
-                    PreparePreviewAndExpandSelectableArea(instance);
-
                 var drawList = GraphCanvas.Current.DrawList;
-
-                customUiResult = SymbolChildUi.CustomUiResult.None;
 
                 if (_isVisible)
                 {
+                    if (instance is IStatusProvider statusProvider)
+                    {
+                        var statusLevel = statusProvider.GetStatusLevel();
+                        if (statusLevel != IStatusProvider.StatusLevel.Success && statusLevel != IStatusProvider.StatusLevel.Undefined)
+                        {
+                            ImGui.SetCursorScreenPos(_usableScreenRect.Min - new Vector2(10, 12) * T3Ui.UiScaleFactor);
+                            ImGui.InvisibleButton("#warning", new Vector2(15, 15));
+                            var color = statusLevel switch
+                                            {
+                                                IStatusProvider.StatusLevel.Notice  => UiColors.StatusAttention,
+                                                IStatusProvider.StatusLevel.Warning => UiColors.StatusWarning,
+                                                IStatusProvider.StatusLevel.Error   => UiColors.StatusError,
+                                                _                                   => UiColors.StatusError
+                                            };
+                            Icons.DrawIconOnLastItem(Icon.Warning, color);
+                            CustomComponents.TooltipForLastItem(UiColors.StatusWarning, statusLevel.ToString(), statusProvider.GetStatusMessage(), false);
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(childUi.Comment))
+                    {
+                        ImGui.SetCursorScreenPos(new Vector2(_usableScreenRect.Max.X, _usableScreenRect.Min.Y) -
+                                                 new Vector2(3, 12) * T3Ui.UiScaleFactor * T3Ui.UiScaleFactor);
+                        if (ImGui.InvisibleButton("#comment", new Vector2(15, 15)))
+                        {
+                            NodeSelection.SetSelectionToChildUi(childUi, instance);
+                            GraphCanvas.EditCommentDialog.ShowNextFrame();
+                        }
+
+                        Icons.DrawIconOnLastItem(Icon.Comment, UiColors.ForegroundFull);
+                        CustomComponents.TooltipForLastItem(UiColors.Text, childUi.Comment, null, false);
+                    }
+
                     // Resize indicator
                     if (childUi.Style == SymbolChildUi.Styles.Resizable)
                     {
                         ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNWSE);
-                        ImGui.SetCursorScreenPos(_usableScreenRect.Max - new Vector2(10, 10));
-                        ImGui.Button("##resize", new Vector2(10, 10));
+                        ImGui.SetCursorScreenPos(_usableScreenRect.Max - new Vector2(10, 10) * T3Ui.UiScaleFactor);
+                        ImGui.Button("##resize", new Vector2(10, 10) * T3Ui.UiScaleFactor);
                         if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                         {
                             var delta = GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
@@ -85,27 +121,30 @@ namespace T3.Editor.Gui.Graph
                     // Rendering
                     //var childInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.SymbolChildId == childUi.SymbolChild.Id);
 
-                    var typeColor = childUi.SymbolChild.Symbol.OutputDefinitions.Count > 0
-                                        ? TypeUiRegistry.GetPropertiesForType(childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType).Color
-                                        : Color.Gray;
+                    var typeColor = (childUi.SymbolChild.Symbol.OutputDefinitions.Count > 0
+                                         ? TypeUiRegistry.GetPropertiesForType(childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType).Color
+                                         : UiColors.Gray).Fade(Graph.GraphOpacity);
 
                     var backgroundColor = typeColor;
+
+                    // Background
+                    var isHighlighted = FrameStats.Last.HoveredIds.Contains(instance.SymbolChildId);
                     if (framesSinceLastUpdate > 2)
                     {
-                        var fadeFactor = MathUtils.RemapAndClamp(framesSinceLastUpdate, 0f, 60f, 0f, 0.5f);
-                        //backgroundColor.Rgba.W *= fadeFactor;
-                        backgroundColor = Color.Mix(backgroundColor, Color.Black, fadeFactor);
+                        var fadeFactor = MathUtils.RemapAndClamp(framesSinceLastUpdate, 0f, 60f, 0f, 1.0f);
+                        var mutedColor = ColorVariations.OperatorBackgroundIdle.Apply(backgroundColor).Fade(Graph.GraphOpacity);
+                        backgroundColor = Color.Mix(backgroundColor, mutedColor, fadeFactor);
                     }
 
-                    // background
-                    var hoveredBackground = T3Ui.HoveredIdsLastFrame.Contains(instance.SymbolChildId);
+                    var backgroundColorWithHover = isHighlighted
+                                                       ? ColorVariations.OperatorBackgroundHover.Apply(backgroundColor)
+                                                       : ColorVariations.OperatorBackground.Apply(backgroundColor);
+
                     drawList.AddRectFilled(_usableScreenRect.Min, _usableScreenRect.Max,
-                                           hoveredBackground
-                                               ? ColorVariations.OperatorHover.Apply(backgroundColor)
-                                               : ColorVariations.Operator.Apply(backgroundColor));
+                                           backgroundColorWithHover.Fade(Graph.GraphOpacity));
 
                     // Custom ui
-                    customUiResult = childUi.DrawCustomUi(instance, _drawList, _selectableScreenRect);
+                    customUiResult = SymbolChildUi.DrawCustomUi(instance, _drawList, _selectableScreenRect);
 
                     // Size toggle
                     if (customUiResult == SymbolChildUi.CustomUiResult.None && GraphCanvas.Current.Scale.X > 0.7f)
@@ -114,9 +153,9 @@ namespace T3.Editor.Gui.Graph
 
                         ImGui.SetCursorScreenPos(pos);
                         ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-                        ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
-                        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Color(1, 1, 1, .3f).Rgba);
-                        ImGui.PushStyleColor(ImGuiCol.Text, new Color(1, 1, 1, .3f).Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba * Graph.GraphOpacity);
+                        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Color(1, 1, 1, .3f * Graph.GraphOpacity).Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.Text, new Color(1, 1, 1, .3f * Graph.GraphOpacity).Rgba);
                         ImGui.PushFont(Icons.IconFont);
 
                         if (childUi.Style == SymbolChildUi.Styles.Default)
@@ -140,104 +179,113 @@ namespace T3.Editor.Gui.Graph
                     }
 
                     // Disabled indicator
-                    if (instance.Outputs.Count > 0 && instance.Outputs[0].IsDisabled)
+                    if (childUi.IsDisabled)
                     {
-                        drawList.AddLine(_usableScreenRect.Min + new Vector2(3, 2), _usableScreenRect.Max - new Vector2(3, 2), T3Style.Colors.Warning, 3);
-                        drawList.AddLine(
-                                         new Vector2(_usableScreenRect.Min.X + 3, _usableScreenRect.Max.Y - 2),
-                                         new Vector2(_usableScreenRect.Max.X - 3, _usableScreenRect.Min.Y + 2),
-                                         T3Style.Colors.Warning, 3);
+                        DrawOverlayLine(drawList, Vector2.Zero, Vector2.One);
+                        DrawOverlayLine(drawList, new Vector2(1, 0), new Vector2(0, 1));
+                    }
+
+                    // Bypass indicator
+                    if (childUi.SymbolChild.IsBypassed)
+                    {
+                        DrawOverlayLine(drawList, new Vector2(0.05f, 0.5f), new Vector2(0.4f, 0.5f));
+                        DrawOverlayLine(drawList, new Vector2(0.6f, 0.5f), new Vector2(0.95f, 0.5f));
+
+                        DrawOverlayLine(drawList, new Vector2(0.35f, 0.1f), new Vector2(0.65f, 0.9f));
+                        DrawOverlayLine(drawList, new Vector2(0.65f, 0.1f), new Vector2(0.35f, 0.9f));
                     }
 
                     // Interaction
-                    ImGui.SetCursorScreenPos(_selectableScreenRect.Min);
+                    if (preventInteraction)
+                    {
+                        ImGui.SetCursorScreenPos(new Vector2(-5000, -5000));
+                    }
+                    else
+                    {
+                        ImGui.SetCursorScreenPos(_selectableScreenRect.Min);
+                    }
 
                     //--------------------------------------------------------------------------
                     ImGui.InvisibleButton("node", _selectableScreenRect.GetSize());
                     //--------------------------------------------------------------------------
 
-                    SelectableNodeMovement.Handle(childUi, instance);
+                    if (!preventInteraction)
+                        SelectableNodeMovement.Handle(childUi, instance);
+
+                    isNodeHovered = !preventInteraction
+                                    && ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup)
+                                    && !GraphCanvas.Current.SymbolBrowser.IsOpen
+                                    && ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup);
 
                     // Tooltip
-                    if (ImGui.IsItemHovered()
+                    if (isNodeHovered
+                        && UserSettings.Config.EditorHoverPreview
                         && (customUiResult & SymbolChildUi.CustomUiResult.PreventTooltip) != SymbolChildUi.CustomUiResult.PreventTooltip
-                        && !GraphCanvas.Current.SymbolBrowser.IsOpen
-                        && ImGui.IsWindowFocused())
+                       )
                     {
                         if (UserSettings.Config.SmartGroupDragging)
                             SelectableNodeMovement.HighlightSnappedNeighbours(childUi);
 
                         //ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
-                        T3Ui.AddHoveredId(childUi.SymbolChild.Id);
+                        FrameStats.AddHoveredId(childUi.SymbolChild.Id);
 
-                        ImGui.SetNextWindowSizeConstraints(new Vector2(200, 120), new Vector2(200, 120));
                         if (UserSettings.Config.HoverMode != GraphCanvas.HoverModes.Disabled
                             && !ImGui.IsMouseDragging(ImGuiMouseButton.Left)
                             && !RenameInstanceOverlay.IsOpen)
                         {
                             ImGui.BeginTooltip();
                             {
-                                TransformGizmoHandling.SetDrawList(drawList);
-                                _imageCanvasForTooltips.Update();
-                                _imageCanvasForTooltips.SetAsCurrent();
-                                if (instance.Outputs.Count > 0)
+                                ImGui.SetNextWindowSizeConstraints(new Vector2(200, 200 * 9 / 16f), new Vector2(200, 200 * 9 / 16f));
+                                ImGui.BeginChild("##innerTooltip");
                                 {
-                                    var firstOutput = instance.Outputs[0];
-                                    IOutputUi outputUi = symbolUi.OutputUis[firstOutput.Id];
-                                    _evaluationContext.Reset();
-                                    _evaluationContext.RequestedResolution = new Size2(1280 / 2, 720 / 2);
-                                    outputUi.DrawValue(firstOutput, _evaluationContext,
-                                                       recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
+                                    TransformGizmoHandling.SetDrawList(drawList);
+                                    _imageCanvasForTooltips.Update();
+                                    _imageCanvasForTooltips.SetAsCurrent();
+                                    if (instance.Outputs.Count > 0)
+                                    {
+                                        var firstOutput = instance.Outputs[0];
+                                        IOutputUi outputUi = symbolUi.OutputUis[firstOutput.Id];
+                                        _evaluationContext.Reset();
+                                        _evaluationContext.RequestedResolution = new Int2(1280 / 2, 720 / 2);
+                                        outputUi.DrawValue(firstOutput, _evaluationContext,
+                                                           recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
+                                    }
+
+                                    _imageCanvasForTooltips.Deactivate();
+                                    TransformGizmoHandling.RestoreDrawList();
                                 }
-
-                                // if (!string.IsNullOrEmpty(symbolUi.Description))
-                                // {
-                                //     ImGui.Spacing();
-                                //     ImGui.PushFont(Fonts.FontSmall);
-                                //     ImGui.PushStyleColor(ImGuiCol.Text, new Color(1, 1, 1, 0.5f).Rgba);
-                                //     ImGui.TextWrapped(symbolUi.Description);
-                                //     ImGui.PopStyleColor();
-                                //     ImGui.PopFont();
-                                // }
-
-                                _imageCanvasForTooltips.Deactivate();
-                                TransformGizmoHandling.RestoreDrawList();
+                                ImGui.EndChild();
                             }
                             ImGui.EndTooltip();
                         }
                     }
 
-                    //if(ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup))
                     // A work around to detect if node is below mouse while dragging end of new connection
                     if (_selectableScreenRect.Contains(ImGui.GetMousePos()))
                     {
                         _hoveredNodeIdForConnectionTarget = childUi.Id;
                     }
 
-                    var hovered = ImGui.IsWindowFocused()
-                                  && (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) ||
-                                      T3Ui.HoveredIdsLastFrame.Contains(instance.SymbolChildId));
+                    var hovered = (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) ||
+                                   FrameStats.Last.HoveredIds.Contains(instance.SymbolChildId));
 
-
-                    
-
-                    
                     // A horrible work around to prevent exception because CompositionOp changed during drawing.
                     // A better solution would defer setting the compositionOp to the beginning of next frame.
                     var justOpenedChild = false;
-                    if (hovered && ImGui.IsMouseDoubleClicked(0) 
+                    if (hovered && (ImGui.IsMouseDoubleClicked(0) || KeyboardBinding.Triggered(UserActions.OpenOperator))
                                 && !RenameInstanceOverlay.IsOpen
                                 && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenSubGraph) == 0)
                     {
-                        if (ImGui.IsWindowFocused())
+                        if (ImGui.IsWindowFocused() || ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup))
                         {
                             var blocked = false;
                             if (UserSettings.Config.WarnBeforeLibEdit && instance.Symbol.Namespace.StartsWith("lib."))
                             {
                                 if (UserSettings.Config.WarnBeforeLibEdit)
                                 {
-                                    var count = NodeOperations.GetDependingSymbols(instance.Symbol).Count();
+                                    var count = Structure.CollectDependingSymbols(instance.Symbol).Count();
                                     LibWarningDialog.DependencyCount = count;
+                                    LibWarningDialog.HandledInstance = instance;
                                     GraphCanvas.LibWarningDialog.ShowNextFrame();
                                     blocked = true;
                                 }
@@ -252,66 +300,49 @@ namespace T3.Editor.Gui.Graph
                         }
                     }
 
-                    // Show Parameter window as context menu
-                    var activatedWithLeftMouse = ImGui.IsItemHovered()
-                                                 && ImGui.IsMouseReleased(ImGuiMouseButton.Left)
-                                                 && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 0).Length() < UserSettings.Config.ClickThreshold
-                                                 && !ParameterWindow.IsAnyInstanceVisible()
-                                                 && !ImGui.GetIO().KeyShift; // allow double click to open
-
-                    var activatedWithMiddleMouse = ImGui.IsItemHovered()
-                                                   && ImGui.IsMouseReleased(ImGuiMouseButton.Middle)
-                                                   && ImGui.GetMouseDragDelta(ImGuiMouseButton.Middle, 0).Length() < UserSettings.Config.ClickThreshold;
-
-                    if ((activatedWithLeftMouse || activatedWithMiddleMouse)
-                        && !justOpenedChild
-                        && string.IsNullOrEmpty(T3Ui.OpenedPopUpName)
-                        && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp) == 0)
+                    if (!justOpenedChild)
                     {
-                        NodeSelection.SetSelectionToChildUi(childUi, instance);
-                        ImGui.OpenPopup("parameterContextPopup");
-                    }
-
-                    ImGui.SetNextWindowSizeConstraints(new Vector2(280, 40), new Vector2(280, 320));
-                    if (!justOpenedChild && ImGui.BeginPopup("parameterContextPopup"))
-                    {
-                        ImGui.PushFont(Fonts.FontSmall);
-                        var compositionSymbolUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-                        var symbolChildUi = compositionSymbolUi.ChildUis.Single(symbolChildUi2 => symbolChildUi2.Id == instance.SymbolChildId);
-                        ParameterWindow.DrawParameters(instance, symbolUi, symbolChildUi, compositionSymbolUi);
-                        ImGui.PopFont();
-                        ImGui.EndPopup();
+                        ParameterPopUp.HandleOpenParameterPopUp(childUi, instance, customUiResult, _selectableScreenRect);
                     }
 
                     DrawPreview();
 
-                    // outline
+                    // Outline shadow
                     drawList.AddRect(_selectableScreenRect.Min,
                                      _selectableScreenRect.Max + Vector2.One,
-                                     new Color(0.08f, 0.08f, 0.08f, 0.8f),
+                                     ColorVariations.OperatorOutline.Apply(typeColor),
                                      rounding: 0,
                                      ImDrawFlags.None);
 
-                    // Animation indicator
+                    if (isHighlighted)
                     {
-                        var compositionOp = GraphCanvas.Current.CompositionOp;
-                        if (compositionOp.Symbol.Animator.IsInstanceAnimated(instance))
-                        {
-                            _drawList.AddRectFilled(new Vector2(_usableScreenRect.Max.X - 5, (_usableScreenRect.Max.Y - 12).Clamp(_usableScreenRect.Min.Y, _usableScreenRect.Max.Y)),
-                                                    new Vector2(_usableScreenRect.Max.X - 2, _usableScreenRect.Max.Y - 3),
-                                                    Color.Orange);
-                        }
+                        drawList.AddRect(_selectableScreenRect.Min - Vector2.One * 2,
+                                         _selectableScreenRect.Max + Vector2.One * 3,
+                                         UiColors.ForegroundFull.Fade(0.6f),
+                                         rounding: 0,
+                                         ImDrawFlags.None);
+                    }
+
+                    // Animation indicator
+                    var indicatorCount = 0;
+                    var compositionOp = GraphCanvas.Current.CompositionOp;
+                    var isInstanceAnimated = compositionOp.Symbol.Animator.IsInstanceAnimated(instance);
+                    if (isInstanceAnimated)
+                    {
+                        DrawIndicator(UiColors.StatusAnimated, ref indicatorCount);
+                    }
+
+                    // Pinned indicator
+                    if (FrameStats.Last.RenderedIds.Contains(instance.SymbolChildId))
+                    {
+                        DrawIndicator(UiColors.Selection, ref indicatorCount);
                     }
 
                     // Snapshot indicator
                     {
-                        if (VariationHandling.FocusSetsForCompositions.TryGetValue(GraphCanvas.Current.CompositionOp.Symbol.Id, out var focusSet))
+                        if (childUi.EnabledForSnapshots)
                         {
-                            if (focusSet.Contains(instance.SymbolChildId))
-                                _drawList.AddRectFilled(new Vector2(_usableScreenRect.Max.X - 5, _usableScreenRect.Min.Y + 3),
-                                                        new Vector2(_usableScreenRect.Max.X - 2,
-                                                                    (_usableScreenRect.Min.Y + 12).Clamp(0, _usableScreenRect.Max.Y)),
-                                                        Color.Blue);
+                            DrawIndicator(UiColors.StatusAutomated, ref indicatorCount);
                         }
                     }
 
@@ -332,22 +363,27 @@ namespace T3.Editor.Gui.Graph
                         && _selectableScreenRect.GetHeight() > 8)
                     {
                         drawList.PushClipRect(_usableScreenRect.Min, _usableScreenRect.Max, true);
-                        ImGui.PushFont(GraphCanvas.Current.Scale.X < 1 ? Fonts.FontSmall : Fonts.FontBold);
-                        var isRenamed = !string.IsNullOrEmpty(childUi.SymbolChild.Name);
+                        var useSmallFont = GraphCanvas.Current.Scale.X < 1 * T3Ui.UiScaleFactor;
+                        var font = Fonts.FontBold;
 
-                        drawList.AddText(_usableScreenRect.Min + LabelPos,
-                                         ColorVariations.OperatorLabel.Apply(typeColor),
-                                         string.Format(isRenamed
-                                                           ? $"\"{childUi.SymbolChild.ReadableName}\""
-                                                           : childUi.SymbolChild.ReadableName));
-                        ImGui.PopFont();
+                        var isRenamed = !string.IsNullOrEmpty(childUi.SymbolChild.Name);
+                        var fade = MathUtils.SmootherStep(0.2f, 0.6f, GraphCanvas.Current.Scale.X);
+
+                        drawList.AddText(font,
+                                         font.FontSize * (useSmallFont ? GraphCanvas.Current.Scale.X : 1),
+                                         _usableScreenRect.Min + LabelPos,
+                                         ColorVariations.OperatorLabel.Apply(typeColor).Fade(fade),
+                                         isRenamed ? $"\"{childUi.SymbolChild.ReadableName}\"" : childUi.SymbolChild.ReadableName);
+
                         drawList.PopClipRect();
                     }
 
                     if (childUi.IsSelected)
                     {
-                        drawList.AddRect(_selectableScreenRect.Min - Vector2.One * 2, _selectableScreenRect.Max + Vector2.One * 2, Color.Black);
-                        drawList.AddRect(_selectableScreenRect.Min - Vector2.One, _selectableScreenRect.Max + Vector2.One, Color.White);
+                        drawList.AddRect(_selectableScreenRect.Min - Vector2.One, _selectableScreenRect.Max + Vector2.One * 2,
+                                         UiColors.BackgroundFull.Fade(Graph.GraphOpacity));
+                        drawList.AddRect(_selectableScreenRect.Min, _selectableScreenRect.Max + Vector2.One * 1,
+                                         UiColors.Selection.Fade(Graph.GraphOpacity));
                     }
                 }
             }
@@ -375,7 +411,7 @@ namespace T3.Editor.Gui.Graph
                                   : ImGui.IsItemHovered();
 
                 var isPotentialConnectionTarget = ConnectionMaker.IsMatchingInputType(inputDefinition.DefaultValue.ValueType);
-                var colorForType = ColorForInputType(inputDefinition);
+                var colorForType = ColorForInputType(inputDefinition).Fade(Graph.GraphOpacity);
 
                 var connectedLines = global::T3.Editor.Gui.Graph.Graph.Connections.GetLinesToNodeInputSlot(childUi, inputDefinition.Id);
 
@@ -384,7 +420,7 @@ namespace T3.Editor.Gui.Graph
                 {
                     var inputLabelOpacity = MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X,
                                                                     0.75f, 1.5f,
-                                                                    0f, 1f);
+                                                                    0f, 1f) * Graph.GraphOpacity;
 
                     var screenCursor = usableSlotArea.GetCenter() + new Vector2(14, -7);
                     if (inputLabelOpacity > 0)
@@ -400,31 +436,33 @@ namespace T3.Editor.Gui.Graph
 
                         var labelSize = ImGui.CalcTextSize(label);
                         _drawList.AddText(screenCursor, labelColor, label);
-
                         screenCursor += new Vector2(labelSize.X + 8, 0);
 
                         // Value
-                        ImGui.PushStyleColor(ImGuiCol.Text, labelColor.Rgba);
-                        //var inputSlot = instance.Inputs.Single(slot => inputDefinition.Id == slot.Id);
-                        var inputSlot = instance.GetInput(inputDefinition.Id);
-                        var valueAsString = inputUi.GetSlotValue(inputSlot);
-
-                        var valueColor = labelColor;
-                        valueColor.Rgba.W *= 0.6f;
-                        
-                        // Avoid clipping because it increases ImGui draw calls and is expensive
-                        var estimatedValueWidth = valueAsString.Length * 8;
-                        var needClipping = estimatedValueWidth > _usableScreenRect.Max.X - screenCursor.X;
-                        if (needClipping)
+                        if (!inputDefinition.IsMultiInput)
                         {
-                            _drawList.PushClipRect(_usableScreenRect.Min, _usableScreenRect.Max, true);
-                        }
-                        
-                        _drawList.AddText(screenCursor, valueColor, valueAsString);
-                        if(needClipping) 
-                            _drawList.PopClipRect();
+                            ImGui.PushStyleColor(ImGuiCol.Text, labelColor.Rgba);
+                            var inputSlot = instance.GetInput(inputDefinition.Id);
+                            var valueAsString = GetValueString(inputSlot);
+                            var valueColor = labelColor;
+                            valueColor.Rgba.W *= 0.6f;
 
-                        ImGui.PopStyleColor();
+                            // Avoid clipping because it increases ImGui draw calls and is expensive
+                            var estimatedValueWidth = valueAsString.Length * 8;
+                            var needClipping = estimatedValueWidth > _usableScreenRect.Max.X - screenCursor.X;
+                            if (needClipping)
+                            {
+                                _drawList.PushClipRect(_usableScreenRect.Min, _usableScreenRect.Max, true);
+                            }
+
+                            if (!string.IsNullOrEmpty(valueAsString))
+                                _drawList.AddText(screenCursor, valueColor, valueAsString);
+
+                            if (needClipping)
+                                _drawList.PopClipRect();
+                            
+                            ImGui.PopStyleColor();
+                        }
 
                         ImGui.PopFont();
                     }
@@ -453,7 +491,7 @@ namespace T3.Editor.Gui.Graph
                         var usableSocketArea = new ImRect(topLeft, topLeft + socketSize);
 
                         var isSocketHovered = usableSocketArea.Contains(ImGui.GetMousePos());
-                        ConnectionMaker.ConnectionSnapEndHelper.RegisterAsPotentialTarget(childUi, inputUi, socketIndex, usableSocketArea);
+                        ConnectionSnapEndHelper.RegisterAsPotentialTarget(childUi, inputUi, socketIndex, usableSocketArea);
 
                         bool isGap = false;
                         if (showGaps)
@@ -469,7 +507,7 @@ namespace T3.Editor.Gui.Graph
                             if (_isVisible && socketHeight > 10)
                             {
                                 ImGui.PushStyleVar(ImGuiStyleVar.Alpha,
-                                                   MathUtils.RemapAndClamp(socketHeight, 10, 20, 0, 0.5f).Clamp(0, 0.5f));
+                                                   MathUtils.RemapAndClamp(socketHeight, 10, 20, 0, 0.5f).Clamp(0, 0.5f) * ImGui.GetStyle().Alpha);
                                 ImGui.PushFont(Fonts.FontSmall);
                                 //ImGui.SetCursorScreenPos(targetPos +  new Vector2(0, -ImGui.GetFontSize()/2));
                                 //ImGui.Value(socketIndex % 4 == 0 ? ">" : "", socketIndex);
@@ -485,9 +523,9 @@ namespace T3.Editor.Gui.Graph
 
                             line.TargetPosition = targetPos;
                             line.TargetNodeArea = connectionBorderArea;
-                            line.IsSelected |= childUi.IsSelected | isSocketHovered;
+                            line.IsSelected |= childUi.IsSelected | isSocketHovered | isNodeHovered;
                             line.FramesSinceLastUsage = framesSinceLastUpdate;
-                            line.IsAboutToBeReplaced = ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(childUi, inputDefinition.Id, socketIndex);
+                            line.IsAboutToBeReplaced = ConnectionSnapEndHelper.IsNextBestTarget(childUi, inputDefinition.Id, socketIndex);
                         }
 
                         DrawMultiInputSocket(childUi, inputDefinition, usableSocketArea, isSocketHovered, socketIndex, isGap, colorForType, reactiveSlotColor);
@@ -505,26 +543,51 @@ namespace T3.Editor.Gui.Graph
                         _drawList.AddRectFilled(new Vector2(usableSlotArea.Max.X - 8, usableSlotArea.Max.Y - 2),
                                                 new Vector2(usableSlotArea.Max.X - 1, usableSlotArea.Max.Y),
                                                 reactiveSlotColor);
+                        if (socketCount == 0)
+                        {
+                            _drawList.AddRectFilled(new Vector2(usableSlotArea.Max.X - 2, usableSlotArea.Min.Y + 1),
+                                                    new Vector2(usableSlotArea.Max.X - 1, usableSlotArea.Max.Y-2),
+                                                    reactiveSlotColor);
+                            
+                            if (inputUi.Relevancy == Relevancy.Required)
+                            {
+                                var pos = usableSlotArea.GetCenter();
+                                
+                                var size = GraphCanvas.Current.Scale.X * 3;
+                                
+                                _drawList.AddCircleFilled(
+                                                          pos + new Vector2(-5, -(size *1f)),
+                                                          MathF.Min(3, size - 1),
+                                                          reactiveSlotColor
+                                                         );
+                                _drawList.AddCircleFilled(
+                                                          pos + new Vector2(-5, +(size * 1f)),
+                                                          MathF.Min(3, size - 1),
+                                                          reactiveSlotColor
+                                                         );                                
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    ConnectionMaker.ConnectionSnapEndHelper.RegisterAsPotentialTarget(childUi, inputUi, 0, usableSlotArea);
+                    ConnectionSnapEndHelper.RegisterAsPotentialTarget(childUi, inputUi, 0, usableSlotArea);
                     //ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id,0)
-                    var isAboutToBeReconnected = ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(childUi, inputDefinition.Id, 0);
+                    var isAboutToBeReconnected = ConnectionSnapEndHelper.IsNextBestTarget(childUi, inputDefinition.Id, 0);
                     foreach (var line in connectedLines)
                     {
                         line.TargetPosition = new Vector2(usableSlotArea.Max.X - 4,
                                                           usableSlotArea.GetCenter().Y);
                         line.TargetNodeArea = connectionBorderArea;
-                        line.IsSelected |= childUi.IsSelected | hovered;
+                        line.IsSelected |= childUi.IsSelected | hovered | isNodeHovered;
                         line.IsAboutToBeReplaced = isAboutToBeReconnected;
                         line.FramesSinceLastUsage = framesSinceLastUpdate;
                     }
 
                     if (_isVisible)
                     {
-                        DrawInputSlot(childUi, inputDefinition, usableSlotArea, colorForType, hovered);
+                        var isMissing = inputUi.Relevancy == Relevancy.Required && connectedLines.Count == 0;
+                        DrawInputSlot(childUi, inputDefinition, usableSlotArea, colorForType, hovered, isMissing);
                     }
                 }
 
@@ -538,18 +601,22 @@ namespace T3.Editor.Gui.Graph
             {
                 var output = instance.Outputs[outputIndex];
                 var usableArea = GetUsableOutputSlotArea(childUi, outputIndex);
-                ImGui.SetCursorScreenPos(usableArea.Min);
-                ImGui.PushID(childUi.SymbolChild.Id.GetHashCode() + outputDef.Id.GetHashCode());
 
+                if (!preventInteraction)
+                {
+                    ImGui.SetCursorScreenPos(usableArea.Min);
+                }
+
+                ImGui.PushID(childUi.SymbolChild.Id.GetHashCode() + outputDef.Id.GetHashCode());
                 ImGui.InvisibleButton("output", usableArea.GetSize());
                 THelpers.DebugItemRect();
                 var valueType = outputDef.ValueType;
-                var colorForType = TypeUiRegistry.Entries[valueType].Color;
+                var colorForType = TypeUiRegistry.Entries[valueType].Color.Fade(Graph.GraphOpacity);
 
                 //Note: isItemHovered does not work when dragging is active
                 var hovered = ConnectionMaker.TempConnections.Count > 0
                                   ? usableArea.Contains(ImGui.GetMousePos())
-                                  : ImGui.IsItemHovered();
+                                  : ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup);
 
                 // Update connection lines
                 var dirtyFlagNumUpdatesWithinFrame = output.DirtyFlag.NumUpdatesWithinFrame;
@@ -564,18 +631,32 @@ namespace T3.Editor.Gui.Graph
 
                     if (childUi.ConnectionStyleOverrides.ContainsKey(outputDef.Id))
                     {
-                        line.ColorForType.Rgba.W = 0.3f;
+                        line.ColorForType.Rgba.W = 0.1f;
                     }
 
-                    line.IsSelected |= childUi.IsSelected;
+                    line.IsSelected |= childUi.IsSelected || hovered | isNodeHovered;
                 }
 
                 {
-                    DrawOutput(childUi, outputDef, usableArea, colorForType, hovered);
-
                     // Visualize update
                     if (_isVisible)
                     {
+                        // Draw update indicator
+                        if (output.DirtyFlag.Trigger != DirtyFlagTrigger.None && usableArea.GetHeight() > 6)
+                        {
+                            var r = usableArea.GetWidth() / 4;
+                            var center = new Vector2(usableArea.Max.X + 2 * r, usableArea.GetCenter().Y - 3 * r);
+                            if (output.DirtyFlag.Trigger == DirtyFlagTrigger.Always)
+                            {
+                                _drawList.AddCircle(center, r, colorForType, 3);
+                            }
+                            else if (output.DirtyFlag.Trigger == DirtyFlagTrigger.Animated)
+                            {
+                                _drawList.AddCircleFilled(center, r, colorForType, 3);
+                            }
+                        }
+
+                        DrawOutput(childUi, outputDef, usableArea, colorForType, hovered);
                         if (dirtyFlagNumUpdatesWithinFrame > 0)
                         {
                             var movement = (float)(ImGui.GetTime() * dirtyFlagNumUpdatesWithinFrame) % 1f * (usableArea.GetWidth() - 1);
@@ -587,7 +668,32 @@ namespace T3.Editor.Gui.Graph
                 }
 
                 outputIndex++;
+                ImGui.PopID();
             }
+        }
+
+        private static void DrawOverlayLine(ImDrawListPtr drawList, Vector2 p1, Vector2 p2)
+        {
+            var padding = new Vector2(3, 2);
+            var size = _usableScreenRect.GetSize() - padding * 2;
+            drawList.AddLine(_usableScreenRect.Min + p1 * size + padding,
+                             _usableScreenRect.Min + p2 * size + padding,
+                             UiColors.StatusWarning.Fade(Graph.GraphOpacity), 3);
+        }
+
+        private static void DrawIndicator(Color color, ref int indicatorCount)
+        {
+            const int s = 4;
+            var dx = (s + 1) * indicatorCount;
+
+            var pMin = new Vector2(_usableScreenRect.Max.X - 2 - s - dx,
+                                   (_usableScreenRect.Max.Y - 2 - s).Clamp(_usableScreenRect.Min.Y + 2, _usableScreenRect.Max.Y));
+            var pMax = new Vector2(_usableScreenRect.Max.X - 2 - dx, _usableScreenRect.Max.Y - 2);
+            _drawList.AddRectFilled(pMin, pMax, color.Fade(Graph.GraphOpacity));
+            _drawList.AddRect(pMin - Vector2.One,
+                              pMax + Vector2.One,
+                              UiColors.WindowBackground.Fade(0.4f * Graph.GraphOpacity));
+            indicatorCount++;
         }
 
         private static void AdjustGroupLayoutAfterResize(ISelectableCanvasObject childUi, Vector2 newNodeSize)
@@ -695,7 +801,7 @@ namespace T3.Editor.Gui.Graph
         {
             var style = direction == SocketDirections.Input
                             ? ColorVariations.ConnectionLines
-                            : ColorVariations.Operator;
+                            : ColorVariations.OperatorBackground;
             if (ConnectionMaker.TempConnections.Count > 0)
             {
                 if (direction == SocketDirections.Input
@@ -708,7 +814,7 @@ namespace T3.Editor.Gui.Graph
                 }
                 else
                 {
-                    style = ColorVariations.Muted;
+                    style = ColorVariations.OperatorBackgroundIdle;
                 }
             }
 
@@ -758,7 +864,11 @@ namespace T3.Editor.Gui.Graph
             if (_previewTextureView == null)
                 return;
 
-            global::T3.Editor.Gui.Graph.Graph.DrawList.AddImage((IntPtr)_previewTextureView, _previewArea.Min, _previewArea.Max);
+            global::T3.Editor.Gui.Graph.Graph.DrawList.AddImage((IntPtr)_previewTextureView, _previewArea.Min,
+                                                                _previewArea.Max,
+                                                                Vector2.Zero,
+                                                                Vector2.One,
+                                                                Color.White.Fade(Graph.GraphOpacity));
         }
 
         private static Vector2 ComputeNodeSize(SymbolChildUi childUi, List<IInputUi> visibleInputUis)
@@ -790,11 +900,6 @@ namespace T3.Editor.Gui.Graph
                 _drawList.AddRectFilled(usableArea.Min, usableArea.Max,
                                         ColorVariations.Highlight.Apply(colorForType));
 
-                if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
-                {
-                    ConnectionMaker.Update();
-                }
-
                 var isMouseReleasedWithoutDrag =
                     ImGui.IsMouseReleased(ImGuiMouseButton.Left) &&
                     ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() < UserSettings.Config.ClickThreshold;
@@ -809,7 +914,7 @@ namespace T3.Editor.Gui.Graph
                 if (ConnectionMaker.IsMatchingOutputType(outputDef.ValueType))
                 {
                     _drawList.AddRectFilled(usableArea.Min, usableArea.Max,
-                                            ColorVariations.OperatorHover.Apply(colorForType));
+                                            ColorVariations.OperatorBackgroundHover.Apply(colorForType));
 
                     if (ImGui.IsMouseReleased(0))
                     {
@@ -821,21 +926,20 @@ namespace T3.Editor.Gui.Graph
                     if (_isVisible)
                     {
                         _drawList.AddRectFilled(usableArea.Min, usableArea.Max,
-                                                ColorVariations.OperatorHover.Apply(colorForType));
+                                                ColorVariations.OperatorBackgroundHover.Apply(colorForType));
 
                         var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
                         var output = instance.Outputs.Single(output2 => output2.Id == outputDef.Id);
 
-                        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
                         ImGui.BeginTooltip();
                         ImGui.TextUnformatted($".{outputDef.Name}");
                         ImGui.PushFont(Fonts.FontSmall);
-                        ImGui.TextColored(Color.Gray, $"<{TypeNameRegistry.Entries[outputDef.ValueType]}>\n{output.DirtyFlag.NumUpdatesWithinFrame} Updates");
+                        ImGui.TextColored(UiColors.Gray,
+                                          $"<{TypeNameRegistry.Entries[outputDef.ValueType]}>\n{output.DirtyFlag.NumUpdatesWithinFrame} Updates\n({output.DirtyFlag.Trigger})");
                         ImGui.PopFont();
                         ImGui.EndTooltip();
-                        ImGui.PopStyleVar();
 
-                        if (ImGui.IsItemActivated())
+                        if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
                         {
                             _draggedOutputOpId = childUi.Id;
                             _draggedOutputDefId = outputDef.Id;
@@ -853,7 +957,7 @@ namespace T3.Editor.Gui.Graph
                                     ConnectionMaker.OpenSymbolBrowserAtOutput(GraphCanvas.Current.SymbolBrowser, childUi, instance, output.Id);
                                 }
                             }
-                            else if (ImGui.IsMouseReleased(ImGuiMouseButton.Right))
+                            else if (ImGui.IsMouseReleased(ImGuiMouseButton.Right) && ImGui.GetIO().KeyCtrl)
                             {
                                 GraphCanvas.Current.EditNodeOutputDialog.OpenForOutput(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputDef);
                             }
@@ -886,9 +990,13 @@ namespace T3.Editor.Gui.Graph
         private static Guid _draggedOutputOpId;
         private static Guid _draggedOutputDefId;
 
+        private static Guid _draggedInputOpId;
+        private static Guid _draggedInputDefId;
+
         private static ImRect GetUsableOutputSlotArea(SymbolChildUi targetUi, int outputIndex)
         {
-            var thickness = (int)MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X, 0.5f, 1.2f, (int)(UsableSlotThickness * 0.5f), UsableSlotThickness);
+            var thickness = (int)MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X, 0.5f, 1.2f, (int)(UsableSlotThickness * 0.5f), UsableSlotThickness) *
+                            T3Ui.UiScaleFactor;
 
             var opRect = _usableScreenRect;
             var outputCount = targetUi.SymbolChild.Symbol.OutputDefinitions.Count;
@@ -912,21 +1020,18 @@ namespace T3.Editor.Gui.Graph
         /// <summary>
         /// Draws slot for non multi-input
         /// </summary>
-        private static void DrawInputSlot(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool hovered)
+        private static void DrawInputSlot(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool hovered,
+                                          bool isMissing)
         {
             if (ConnectionMaker.IsInputSlotCurrentConnectionTarget(targetUi, inputDef))
             {
-                if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
-                {
-                    ConnectionMaker.Update();
-                }
             }
-            else if (ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id, 0) || hovered)
+            else if (ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id, 0) || hovered)
             {
                 if (ConnectionMaker.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                 {
                     _drawList.AddRectFilled(usableArea.Min, usableArea.Max,
-                                            ColorVariations.OperatorHover.Apply(colorForType));
+                                            ColorVariations.OperatorBackgroundHover.Apply(colorForType));
 
                     if (ImGui.IsMouseReleased(0))
                     {
@@ -938,10 +1043,9 @@ namespace T3.Editor.Gui.Graph
                     _drawList.AddRectFilled(
                                             usableArea.Min,
                                             usableArea.Max,
-                                            ColorVariations.OperatorHover.Apply(colorForType)
+                                            ColorVariations.OperatorBackgroundHover.Apply(colorForType)
                                            );
 
-                    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
                     Symbol.Connection connection;
                     SymbolChild sourceOp = null;
                     SymbolChild.Output output = null;
@@ -959,7 +1063,6 @@ namespace T3.Editor.Gui.Graph
                                 if (!sourceOp.Outputs.TryGetValue(connection.SourceSlotId, out output))
                                 {
                                     GraphCanvas.Current.CompositionOp.Symbol.Connections.Remove(connection);
-                                    
                                 }
                                 //output = sourceOp.Outputs[connection.SourceSlotId];
                             }
@@ -967,13 +1070,17 @@ namespace T3.Editor.Gui.Graph
 
                         ImGui.TextUnformatted($".{inputDef.Name}");
                         ImGui.PushFont(Fonts.FontSmall);
-                        ImGui.TextColored(Color.Gray, $"<{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
+                        ImGui.TextColored(UiColors.Gray, $"<{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
                         ImGui.PopFont();
+                        if (isMissing)
+                        {
+                            FormInputs.AddVerticalSpace(5);
+                            ImGui.TextColored(UiColors.StatusAttention, $"Requires input");   
+                        }
                     }
                     ImGui.EndTooltip();
-                    ImGui.PopStyleVar();
 
-                    if (ImGui.IsItemClicked(0))
+                    if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
                     {
                         var createCopy = ImGui.GetIO().KeyCtrl && connection != null;
                         if (createCopy)
@@ -998,9 +1105,38 @@ namespace T3.Editor.Gui.Graph
                         }
                         else
                         {
-                            ConnectionMaker.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef);
+                            _draggedInputOpId = targetUi.Id;
+                            _draggedInputDefId = inputDef.Id;
                         }
                     }
+                    else
+                    {
+                        if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+                        {
+                            _draggedInputOpId = Guid.Empty;
+                            _draggedInputDefId = Guid.Empty;
+                            if (ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickThreshold)
+                            {
+                                ConnectionMaker.StartFromInputSlot(targetUi.SymbolChild.Parent, targetUi, inputDef);
+                                var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(targetUi.SymbolChild.Parent, targetUi, inputDef);
+                                ConnectionMaker.InitSymbolBrowserOnPrimaryGraphWindow(freePosition);
+                            }
+                            else if (ImGui.IsMouseReleased(ImGuiMouseButton.Right) && ImGui.GetIO().KeyCtrl)
+                            {
+                                ConnectionMaker.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef);
+                            }
+                        }
+                    }
+                }
+            }
+            else if (_draggedInputOpId == targetUi.Id && _draggedInputDefId == inputDef.Id)
+            {
+                if (ImGui.IsMouseDragging(ImGuiMouseButton.Left)
+                    && ImGui.GetMouseDragDelta().Length() > UserSettings.Config.ClickThreshold)
+                {
+                    _draggedInputOpId = Guid.Empty;
+                    _draggedInputDefId = Guid.Empty;
+                    ConnectionMaker.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef);
                 }
             }
             else
@@ -1016,6 +1152,15 @@ namespace T3.Editor.Gui.Graph
                                         pos + size,
                                         connectionColor
                                        );
+
+                if (isMissing)
+                {
+                    _drawList.AddCircleFilled(
+                                              pos + new Vector2(-6, size.Y / 2),
+                                              MathF.Min(3, size.Y - 1),
+                                              connectionColor
+                                             );
+                }
             }
         }
 
@@ -1029,7 +1174,7 @@ namespace T3.Editor.Gui.Graph
             ImGui.PushFont(Fonts.FontSmall);
             foreach (var source in sources)
             {
-                ImGui.TextColored(Color.Gray, source);
+                ImGui.TextColored(UiColors.Gray, source);
             }
 
             ImGui.PopFont();
@@ -1106,14 +1251,29 @@ namespace T3.Editor.Gui.Graph
         {
             return inputValue switch
                        {
-                           InputValue<float> f    => $"{f.Value:G3}",
+                           InputValue<float> f    => $"{f.Value:0.000}",
                            InputValue<int> i      => $"{i.Value:G3}",
                            InputValue<Int3> i     => $"{i.Value:G3}",
                            InputValue<bool> b     => $"{b.Value}",
-                           InputValue<Vector3> v3 => $"{v3.Value:G3}",
-                           InputValue<Vector2> v2 => $"{v2.Value:G3}",
+                           InputValue<Vector3> v3 => $"{v3.Value:0.0}",
+                           InputValue<Vector2> v2 => $"{v2.Value:0.0}",
                            InputValue<string> s   => Truncate(s.Value),
                            _                      => ""
+                       };
+        }
+
+        private static string GetValueString(IInputSlot outputSlot)
+        {
+            return outputSlot switch
+                       {
+                           InputSlot<float> f    => $"{f.GetCurrentValue():0.000}",
+                           InputSlot<int> i      => $"{i.GetCurrentValue():G3}",
+                           InputSlot<Int3> i     => $"{i.GetCurrentValue():G3}",
+                           InputSlot<bool> b     => $"{b.GetCurrentValue()}",
+                           InputSlot<Vector3> v3 => $"{v3.GetCurrentValue():0.0}",
+                           InputSlot<Vector2> v2 => $"{v2.GetCurrentValue():0.0}",
+                           InputSlot<string> s   => Truncate(s.GetCurrentValue()),
+                           _                     => ""
                        };
         }
 
@@ -1121,12 +1281,12 @@ namespace T3.Editor.Gui.Graph
         {
             return outputSlot switch
                        {
-                           Slot<float> f    => $"{f.Value:G3}",
+                           Slot<float> f    => $"{f.Value:0.00}",
                            Slot<int> i      => $"{i.Value:G3}",
                            Slot<Int3> i     => $"{i.Value:G3}",
                            Slot<bool> b     => $"{b.Value}",
-                           Slot<Vector3> v3 => $"{v3.Value:G3}",
-                           Slot<Vector2> v2 => $"{v2.Value:G3}",
+                           Slot<Vector3> v3 => $"{v3.Value:0.0}",
+                           Slot<Vector2> v2 => $"{v2.Value:0.0}",
                            Slot<string> s   => Truncate(s.Value),
                            _                => ""
                        };
@@ -1151,21 +1311,17 @@ namespace T3.Editor.Gui.Graph
         {
             if (ConnectionMaker.IsInputSlotCurrentConnectionTarget(targetUi, inputDef, multiInputIndex))
             {
-                if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
-                {
-                    ConnectionMaker.Update();
-                }
             }
-            else if (ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id, multiInputIndex) || isInputHovered)
+            else if (ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id, multiInputIndex) || isInputHovered)
             {
                 if (ConnectionMaker.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                 {
                     _drawList.AddRectFilled(usableArea.Min, usableArea.Max,
-                                            ColorVariations.OperatorHover.Apply(colorForType));
+                                            ColorVariations.OperatorBackgroundHover.Apply(colorForType));
 
                     if (ImGui.IsMouseReleased(0))
                     {
-                        ConnectionMaker.CompleteAtInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef, multiInputIndex);
+                        ConnectionMaker.CompleteAtInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef, multiInputIndex, true);
                     }
                 }
                 else
@@ -1173,10 +1329,9 @@ namespace T3.Editor.Gui.Graph
                     _drawList.AddRectFilled(
                                             usableArea.Min,
                                             usableArea.Max,
-                                            ColorVariations.OperatorHover.Apply(colorForType)
+                                            ColorVariations.OperatorBackgroundHover.Apply(colorForType)
                                            );
 
-                    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
                     ImGui.BeginTooltip();
                     {
                         DrawInputSources(targetUi, inputDef, multiInputIndex);
@@ -1207,12 +1362,11 @@ namespace T3.Editor.Gui.Graph
 
                         ImGui.TextUnformatted($".{inputDef.Name}");
                         ImGui.PushFont(Fonts.FontSmall);
-                        ImGui.TextColored(Color.Gray, $"<{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
+                        ImGui.TextColored(UiColors.Gray, $"<{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
                         ImGui.PopFont();
                         //ImGui.PopStyleVar();
                     }
                     ImGui.EndTooltip();
-                    ImGui.PopStyleVar();
                     //ImGui.SetTooltip($"-> .{inputDef.Name}[{multiInputIndex}] <{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
                     if (ImGui.IsItemClicked(0))
                     {
@@ -1267,7 +1421,7 @@ namespace T3.Editor.Gui.Graph
         }
 
         #region style variables
-        public static Vector2 LabelPos = new Vector2(4, 2);
+        public static Vector2 LabelPos = new(4, 2);
         public static float UsableSlotThickness = 10;
         public static float InputSlotThickness = 3;
         public static float InputSlotMargin = 1;
@@ -1281,7 +1435,7 @@ namespace T3.Editor.Gui.Graph
 
         private static readonly EvaluationContext _evaluationContext = new();
 
-        private static readonly ImageOutputCanvas _imageCanvasForTooltips = new() { DisableDamping = true};
+        private static readonly ImageOutputCanvas _imageCanvasForTooltips = new() { DisableDamping = true };
         private static Guid _hoveredNodeIdForConnectionTarget;
 
         private static ImRect _usableScreenRect;

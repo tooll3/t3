@@ -4,12 +4,12 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net6.0-windows</TargetFramework>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <StartupObject>T3.Program</StartupObject>
 	<ApplicationIcon>..\Resources\t3-editor\images\t3.ico</ApplicationIcon>
+	<RootNamespace>T3.Player</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CommandLineParser" Version="2.9.0-preview1" />
+        <PackageReference Include="CommandLineParser" Version="2.9.1" />
         <PackageReference Include="CppSharp" Version="1.0.1" />
         <PackageReference Include="OpenGL.Net" Version="0.8.4">
             <NoWarn>NU1701</NoWarn>
@@ -20,6 +20,8 @@
         <PackageReference Include="SharpDX.Desktop" Version="4.2.0">
 		        <NoWarn>NU1701</NoWarn>
         </PackageReference>
+        <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0031" />
+        <PackageReference Include="Svg" Version="3.3.0" />
     </ItemGroup>
 
     <ItemGroup>

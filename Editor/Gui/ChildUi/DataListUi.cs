@@ -2,6 +2,7 @@
 using T3.Core.Operator;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using T3.Operators.Types.Id_bfe540ef_f8ad_45a2_b557_cd419d9c8e44;
 
 namespace T3.Editor.Gui.ChildUi
@@ -19,7 +20,7 @@ namespace T3.Editor.Gui.ChildUi
             if (innerRect.GetHeight() < 1)
                 return DefaultResult;
 
-            drawList.AddRectFilled(innerRect.Min, innerRect.Max, Color.DarkGray);
+            drawList.AddRectFilled(innerRect.Min, innerRect.Max, UiColors.Gray);
             
             var list = dataList.InputList.Value;
             if (list == null)
@@ -33,6 +34,7 @@ namespace T3.Editor.Gui.ChildUi
             if (modified)
             {
                 dataList.InputList.DirtyFlag.Invalidate();
+                dataList.Result.DirtyFlag.Invalidate();
             }
 
             return DefaultResult;

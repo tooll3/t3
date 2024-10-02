@@ -1,6 +1,6 @@
 {
   "Id": "51968877-03e7-472d-9b43-95bc8aeda3bc"/*ChannelMixer*/,
-  "Description": "Adjusts the color of an incoming image.\n\nEach row defined a color-channel of the output where as the incoming components are multiplied by a factor summed up .\nFinnally a value is added to each component.\n\nYou can do a lot of things with this operator, like\n- converting to grayscale\n- extracting an alpha channel to grayscale\n- invert an image\n- swap color channels.\n\nCheck the presets for examples.\nFor a more natural color correction try [Adjust Color]",
+  "Description": "Adjusts the color of an incoming image.\n\nEach column defines a color channel of the output, whereas the incoming components are multiplied by a factor and summed up.\nFinally, a value is added to each component.\n\nYou can do a lot of things with this operator, like:\n- converting to grayscale\n- extracting an alpha channel to grayscale\n- inverting an image\n- swapping color channels.\n\nCheck the presets for examples.\nFor more natural color correction, try [Adjust Color].",
   "InputUis": [
     {
       "InputId": "28bb7ff9-190a-4624-9361-c4a530851bfd"/*Texture2d*/,
@@ -51,73 +51,63 @@
         "X": -8.08049,
         "Y": 567.35626
       }
+    },
+    {
+      "InputId": "17d67e72-9603-4dfa-8646-e8e2e9db7fbf"/*ClampResult*/,
+      "Position": {
+        "X": -8.08049,
+        "Y": 612.35626
+      }
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "d417a36e-fe49-4115-8cb7-ea2de2844f10"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "d417a36e-fe49-4115-8cb7-ea2de2844f10"/*Vector4Components*/,
       "Position": {
         "X": 121.91951,
         "Y": 342.35632
       }
     },
     {
-      "ChildId": "80db9bd5-cec6-49af-9cba-f33ef5752a31"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "80db9bd5-cec6-49af-9cba-f33ef5752a31"/*Vector4Components*/,
       "Position": {
         "X": 121.91951,
-        "Y": 387.35623
+        "Y": 398.35623
       }
     },
     {
-      "ChildId": "1e6b6da4-4c9d-4bfe-a0ea-144116dbbe20"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "1e6b6da4-4c9d-4bfe-a0ea-144116dbbe20"/*Vector4Components*/,
       "Position": {
         "X": 121.91951,
-        "Y": 432.35626
+        "Y": 454.35626
       }
     },
     {
-      "ChildId": "0d751e5a-ab98-447a-86ae-998e16b4f99c"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "0d751e5a-ab98-447a-86ae-998e16b4f99c"/*Vector4Components*/,
       "Position": {
         "X": 121.91951,
-        "Y": 477.35626
+        "Y": 510.35626
       }
     },
     {
-      "ChildId": "0c6358fd-a9d2-4d8b-b9d6-5c435bd01708"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "0c6358fd-a9d2-4d8b-b9d6-5c435bd01708"/*Vector4Components*/,
       "Position": {
         "X": 121.91951,
-        "Y": 522.35626
+        "Y": 566.35626
       }
     },
     {
       "ChildId": "99f43d85-65d0-418e-bb90-83f75b71360f"/*_ImageFxShaderSetupStatic*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 322.0
-      },
       "Position": {
         "X": 720.5011,
         "Y": 70.71243
+      }
+    },
+    {
+      "ChildId": "34d84a40-5e42-46f2-aa44-5ad18246b03b"/*BoolToFloat*/,
+      "Position": {
+        "X": 559.64233,
+        "Y": 671.9839
       }
     }
   ],

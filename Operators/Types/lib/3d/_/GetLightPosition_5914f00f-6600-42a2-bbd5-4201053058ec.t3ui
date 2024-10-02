@@ -1,0 +1,51 @@
+{
+  "Id": "5914f00f-6600-42a2-bbd5-4201053058ec"/*GetLightPosition*/,
+  "Description": "Returns the light position with the given index in world space.",
+  "InputUis": [
+    {
+      "InputId": "a5c6ce06-f260-43ae-8ac7-5ea1cfb3f94e"/*LightIndex*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "598ea068-aaa0-43a7-ba58-a8021370ca90"/*Position*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 300.0
+      }
+    },
+    {
+      "OutputId": "23d3f621-0420-4845-b739-3b6d40ae2b5c"/*LightCount*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 400.0
+      }
+    },
+    {
+      "OutputId": "09c82272-f0eb-4fd6-bbec-6d6c0725230d"/*Radius*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 500.0
+      }
+    },
+    {
+      "OutputId": "2f3e1b9c-fda5-4555-993d-75322a5927ce"/*Color*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 600.0
+      }
+    },
+    {
+      "OutputId": "cb03aaef-dab9-4974-8fab-258f6cab521b"/*Intensity*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 700.0
+      }
+    }
+  ]
+}

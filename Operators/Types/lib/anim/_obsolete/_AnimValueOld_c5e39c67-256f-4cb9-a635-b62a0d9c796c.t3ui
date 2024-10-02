@@ -1,6 +1,6 @@
 {
   "Id": "c5e39c67-256f-4cb9-a635-b62a0d9c796c"/*_AnimValueOld*/,
-  "Description": "This is a legacy version of [AnimValue]. \nPlease consider using the update version which has been aligned with [AnimVec2] and [AnimVec3].\n\nGenerates a repetitive LFO-like signal syned to the current BPM rate. It supports various shapes, modes and forms.\n\nYou can manipulate the rate and shape by dragging with CTRL+ left mouse button.\n\nPlease checkout the [AnimatingStuff] playground to see some applications.\n\n",
+  "Description": "This is a legacy version of [AnimValue]. \nPlease consider using the update version which has been aligned with [AnimVec2] and [AnimVec3].\n\nGenerates a repetitive LFO-like signal synced to the current BPM rate. It supports various shapes, modes and forms.\n\nYou can manipulate the rate and shape by dragging with CTRL+ left mouse button.\n\nPlease checkout the [AnimatingStuff] playground to see some applications.\n\n",
   "InputUis": [
     {
       "InputId": "4c38c34c-d992-47f1-bcb5-9bd13fc6474b"/*Shape*/,

@@ -1,0 +1,135 @@
+{
+  "Id": "48e284ff-cfcc-4d6c-83d4-256c9380de61"/*OscOutputExample*/,
+  "Description": "shows what the OscOutput operator can do.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "eacb39bd-1acb-4db5-a540-5a1d7a5b28c3"/*OscOutput*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 140.0
+      },
+      "Position": {
+        "X": 742.9442,
+        "Y": -39.201996
+      }
+    },
+    {
+      "ChildId": "4cba430a-43ad-4f8f-ba6d-6f4a5453fb0f"/*Execute*/,
+      "Position": {
+        "X": 883.78723,
+        "Y": 32.470367
+      }
+    },
+    {
+      "ChildId": "eebbe86b-d85b-4746-a4ad-02e1945aafed"/*Time*/,
+      "Position": {
+        "X": 2.051239,
+        "Y": 319.72168
+      }
+    },
+    {
+      "ChildId": "a35907d0-b702-43ba-bd37-0e30e6b6ac3e"/*OscOutput*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 140.0
+      },
+      "Position": {
+        "X": 742.9442,
+        "Y": 120.798004
+      }
+    },
+    {
+      "ChildId": "6fcdcfdc-53c5-4ea1-a305-0b6fa9ee028a"/*PickFromStringList*/,
+      "Position": {
+        "X": 439.08612,
+        "Y": 127.798615
+      }
+    },
+    {
+      "ChildId": "b184252e-9660-446a-81e3-7d5b79a10005"/*FloatToInt*/,
+      "Position": {
+        "X": 150.17108,
+        "Y": 280.90994
+      }
+    },
+    {
+      "ChildId": "9dfb7763-5d91-4b7f-9e92-28fea322e937"/*MockStrings*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 139.08612,
+        "Y": 127.798615
+      }
+    },
+    {
+      "ChildId": "00f92770-c4b4-4307-8412-8dc088f5d19d"/*ModInt*/,
+      "Position": {
+        "X": 289.08612,
+        "Y": 203.79861
+      }
+    },
+    {
+      "ChildId": "2bc308e9-70ec-447e-a51c-0d3db658895a"/*SplitString*/,
+      "Position": {
+        "X": 289.08612,
+        "Y": 127.798615
+      }
+    },
+    {
+      "ChildId": "b2421772-2464-45a0-b872-2bde4812d0b9"/*Modulo*/,
+      "Position": {
+        "X": 143.1706,
+        "Y": 350.03836
+      }
+    },
+    {
+      "ChildId": "d77b1417-3d8b-403c-897d-e65973d98be2"/*IntValue*/,
+      "Position": {
+        "X": 417.6133,
+        "Y": 42.10525
+      }
+    },
+    {
+      "ChildId": "8b10c6d6-5d05-40db-82c4-4f01729e7b71"/*AString*/,
+      "Position": {
+        "X": 417.6133,
+        "Y": -0.8947487
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "bbf85f4a-f11f-47cf-8689-c059955117ce"/*OSCExecute*/,
+      "Position": {
+        "X": 1033.7872,
+        "Y": 32.470367
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "d28956a0-5be2-4264-b73a-dfe0668896da",
+      "Title": "address:port, only dotted IP4 are supported.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 379.3179,
+        "Y": -16.793674
+      },
+      "Size": {
+        "X": 183.99805,
+        "Y": 101.26501
+      }
+    }
+  ]
+}

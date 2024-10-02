@@ -8,6 +8,23 @@
         "X": -200.0,
         "Y": 0.0
       }
+    },
+    {
+      "InputId": "6ad61e57-1073-483e-a0dd-96a9033aa39b"/*OnlyOnDown*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "fa14ac1d-3247-4d36-bc96-14ff7356720a"/*ColorInGraph*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [],

@@ -1,8 +1,10 @@
 {
   "Id": "a1341063-f893-4447-93cd-63cfe514495e"/*BlendValues*/,
+  "Description": "Blends a number of incoming values with a float value.",
   "InputUis": [
     {
       "InputId": "1c15cce3-3054-47f8-96b5-b8b741df40be"/*Values*/,
+      "Relevancy": "Required",
       "Position": {
         "X": 0.0,
         "Y": 0.0

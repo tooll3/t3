@@ -36,7 +36,7 @@
       "SymbolId": "d392d4af-4c78-4f4a-bc3f-4c54c8c73538",
       "InputValues": [
         {
-          "Id": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*GlowAmount*/,
+          "Id": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*Intensity*/,
           "Type": "System.Single",
           "Value": 0.78666663
         }
@@ -99,13 +99,13 @@
       "Outputs": []
     },
     {
-      "Id": "79e2e037-0250-4cab-899e-2e5e0312c3c6"/*Float2ToVector2*/,
+      "Id": "79e2e037-0250-4cab-899e-2e5e0312c3c6"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "3afef9f3-9e12-4820-ad48-f44368752927"/*Blob*/,
+      "Id": "3afef9f3-9e12-4820-ad48-f44368752927"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
@@ -161,7 +161,7 @@
       "Outputs": []
     },
     {
-      "Id": "8b1f6480-5eac-4285-aacd-c7ea8974fb72"/*FractalNoise*/,
+      "Id": "8b1f6480-5eac-4285-aacd-c7ea8974fb72"/*_FractalNoiseOld*/,
       "SymbolId": "97eb35ec-2825-4f63-8fdf-3fe38fa9e652",
       "InputValues": [
         {
@@ -200,7 +200,7 @@
       "Outputs": []
     },
     {
-      "Id": "ef3cafc3-cefa-4b96-a098-ccb9e67bd5c3"/*Blob*/,
+      "Id": "ef3cafc3-cefa-4b96-a098-ccb9e67bd5c3"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
@@ -523,7 +523,7 @@
       "Outputs": []
     },
     {
-      "Id": "d70cdf82-c136-4ff5-a462-ac63b91fdaa5"/*Blob*/,
+      "Id": "d70cdf82-c136-4ff5-a462-ac63b91fdaa5"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
@@ -589,7 +589,7 @@
       "Outputs": []
     },
     {
-      "Id": "4005be97-f6f2-46dd-a6a3-7a1b28addf9a"/*Blob*/,
+      "Id": "4005be97-f6f2-46dd-a6a3-7a1b28addf9a"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
@@ -672,14 +672,6 @@
           }
         },
         {
-          "Id": "40121009-b4b4-4613-9655-af09dcfea402"/*OffsetCopies*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.019999998,
-            "Y": 0.02
-          }
-        },
-        {
           "Id": "c6fbd3b2-45da-40bc-958a-8ab13b8cdf2b"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.7766667
@@ -693,6 +685,14 @@
           "Id": "33f88b64-3d8f-4b07-afdc-18d3b3eb63c8"/*Copies*/,
           "Type": "System.Single",
           "Value": 10.0
+        },
+        {
+          "Id": "40121009-b4b4-4613-9655-af09dcfea402"/*OffsetCopies*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 0.019999998,
+            "Y": 0.02
+          }
         }
       ],
       "Outputs": []
@@ -720,7 +720,7 @@
       "Outputs": []
     },
     {
-      "Id": "67d5ed3f-d57b-450e-a484-a30f5593db88"/*Float2ToVector2*/,
+      "Id": "67d5ed3f-d57b-450e-a484-a30f5593db88"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [],
       "Outputs": []
@@ -775,7 +775,7 @@
       "Outputs": []
     },
     {
-      "Id": "b7b37c76-55ff-43ee-8ad7-e14da98d3be6"/*Blob*/,
+      "Id": "b7b37c76-55ff-43ee-8ad7-e14da98d3be6"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
@@ -820,7 +820,7 @@
       "Outputs": []
     },
     {
-      "Id": "2c798249-4a62-4cb4-84b2-230857d50348"/*Blob*/,
+      "Id": "2c798249-4a62-4cb4-84b2-230857d50348"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
@@ -929,7 +929,7 @@
       "Outputs": []
     },
     {
-      "Id": "e63f382b-f01f-4685-9a93-3913f4db185e"/*Float2ToVector2*/,
+      "Id": "e63f382b-f01f-4685-9a93-3913f4db185e"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [
         {
@@ -957,32 +957,26 @@
       "SymbolId": "d392d4af-4c78-4f4a-bc3f-4c54c8c73538",
       "InputValues": [
         {
-          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*BlurRadius*/,
+          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*Radius*/,
           "Type": "System.Single",
           "Value": 2.7666664
+        },
+        {
+          "Id": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*Intensity*/,
+          "Type": "System.Single",
+          "Value": 1.5866666
+        },
+        {
+          "Id": "4c9b9135-f27b-414e-bed7-f9e5640dc526"/*Threshold*/,
+          "Type": "System.Single",
+          "Value": 0.043333355
         },
         {
           "Id": "353ac2ee-aed3-4614-adf5-e1328768fd0b"/*Samples*/,
           "Type": "System.Single",
           "Value": 16.0
-        },
-        {
-          "Id": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*GlowAmount*/,
-          "Type": "System.Single",
-          "Value": 1.5866666
-        },
-        {
-          "Id": "4c9b9135-f27b-414e-bed7-f9e5640dc526"/*Offset*/,
-          "Type": "System.Single",
-          "Value": 0.043333355
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "559ca3df-82ca-4d54-87e2-e9669772d38d"/*WaveForm*/,
-      "SymbolId": "40528e34-732e-4653-bbcf-eeea36c3c4cf",
-      "InputValues": [],
       "Outputs": []
     },
     {
@@ -992,7 +986,7 @@
       "Outputs": []
     },
     {
-      "Id": "058d5d73-33c8-4154-a047-3367d53fc2bf"/*Blob*/,
+      "Id": "058d5d73-33c8-4154-a047-3367d53fc2bf"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
@@ -1189,12 +1183,6 @@
       "SourceSlotId": "c4dcede0-34be-48a8-961e-1f8b7d4ada0a",
       "TargetParentOrChildId": "42e7b861-2fad-4b6d-91f9-fa8946a86a78",
       "TargetSlotId": "25bdfb83-a61c-448c-a909-527f1bb73740"
-    },
-    {
-      "SourceParentOrChildId": "289a2611-c597-4001-be03-de1ffeed1152",
-      "SourceSlotId": "7dc02a27-bc05-447f-9053-a44a60123980",
-      "TargetParentOrChildId": "559ca3df-82ca-4d54-87e2-e9669772d38d",
-      "TargetSlotId": "08206117-24fa-4900-b095-acd3a5ddd58d"
     },
     {
       "SourceParentOrChildId": "48da8086-ba75-424d-84e7-9cddc3749fc0",

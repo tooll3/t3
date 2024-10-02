@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
+using T3.Core.Logging;
+using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.Windows
 {
@@ -21,14 +24,21 @@ namespace T3.Editor.Gui.Windows
         {
             if (AllowMultipleInstances)
             {
-                if (ImGui.MenuItem("New " + Config.Title))
+                var menuTitle = string.IsNullOrEmpty(MenuTitle) 
+                                    ? $"Open new {Config.Title} Window"
+                                    : MenuTitle;
+                if (ImGui.MenuItem(menuTitle))
                 {
                     AddAnotherInstance();
                 }
             }
             else
             {
-                if (ImGui.MenuItem(Config.Title, "", Config.Visible))
+                var menuTitle = string.IsNullOrEmpty(MenuTitle) 
+                                    ? Config.Title 
+                                    : MenuTitle;
+
+                if (ImGui.MenuItem(menuTitle, "", Config.Visible))
                 {
                     Config.Visible = !Config.Visible;
                 }
@@ -63,7 +73,7 @@ namespace T3.Editor.Gui.Windows
             
             if (!_wasVisible)
             {
-                ImGui.SetNextWindowSize(new Vector2(400,350));
+                ImGui.SetNextWindowSize(new Vector2(550,450) * T3Ui.UiScaleFactor);
                 _wasVisible = true;
             }
             
@@ -73,21 +83,39 @@ namespace T3.Editor.Gui.Windows
 
             if (ImGui.Begin(Config.Title, ref Config.Visible, WindowFlags))
             {
+                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowPaddingForWindows);
+                
                 // Prevent window header from becoming invisible 
                 var windowPos = ImGui.GetWindowPos();
                 if (windowPos.X <= 0) windowPos.X = 0;
                 if (windowPos.Y <= 0) windowPos.Y = 0;
                 ImGui.SetWindowPos(windowPos);
-
+                
                 var preventMouseScrolling = T3Ui.MouseWheelFieldWasHoveredLastFrame ? ImGuiWindowFlags.NoScrollWithMouse : ImGuiWindowFlags.None;
                 if (PreventWindowDragging)
-                    ImGui.BeginChild("inner", ImGui.GetWindowContentRegionMax()- ImGui.GetWindowContentRegionMin(), false, ImGuiWindowFlags.NoMove| preventMouseScrolling | WindowFlags);
+                    ImGui.BeginChild("inner", 
+                                     ImGui.GetWindowContentRegionMax()- ImGui.GetWindowContentRegionMin(), 
+                                     true, 
+                                     ImGuiWindowFlags.NoMove| preventMouseScrolling | WindowFlags  | ImGuiWindowFlags.AlwaysUseWindowPadding );
+                
 
+                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5,5));
+                
+                var idBefore = ImGui.GetID("");
                 DrawContent();
+                var idAfter = ImGui.GetID("");
+                
+                ImGui.PopStyleVar();
+                
+                if (idBefore != idAfter)
+                {
+                    Log.Warning($"Inconsistent ImGui-ID after rendering {this}  {idBefore} != {idAfter}");
+                }
 
                 if (PreventWindowDragging)
                     ImGui.EndChild();
 
+                ImGui.PopStyleVar(); // innerWindowPadding
                 ImGui.End();
             }
 
@@ -119,9 +147,9 @@ namespace T3.Editor.Gui.Windows
             public bool Visible;
         }
 
-        public WindowConfig Config = new WindowConfig();
+        public WindowConfig Config = new();
 
-
+        protected string MenuTitle;
         private bool _wasVisible;
     }
 }

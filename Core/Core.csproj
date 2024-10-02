@@ -1,26 +1,30 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net6.0-windows</TargetFramework>
         <UseWindowsForms>true</UseWindowsForms>
 	<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
 	<RootNamespace>T3.Core</RootNamespace>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="ManagedBass" Version="3.1.0" />
-      <PackageReference Include="ManagedBass.Wasapi" Version="3.1.0" />
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+      <PackageReference Include="JeremyAnsel.Media.Dds" Version="2.0.4" />
+      <PackageReference Include="ManagedBass" Version="3.1.1" />
+      <PackageReference Include="ManagedBass.Wasapi" Version="3.1.1" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="SharpDX.D3DCompiler" Version="4.2.0" />
       <PackageReference Include="SharpDX.Direct2D1" Version="4.2.0" />
       <PackageReference Include="SharpDX.Direct3D11" Version="4.2.0" />
       <PackageReference Include="SharpDX.Mathematics" Version="4.2.0" />
+      <PackageReference Include="SharpDX.MediaFoundation" Version="4.2.0" />
+      <PackageReference Include="SharpDX.XInput" Version="4.2.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="DdsImport">
-        <HintPath>dependency\DdsImport.dll</HintPath>
-      </Reference>
+      <ProjectReference Include="..\Logging\Logging.csproj" />
+      <ProjectReference Include="..\Serialization\Serialization.csproj" />
+      <ProjectReference Include="..\SystemUi\SystemUi.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,7 +1,9 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
@@ -37,26 +39,45 @@ namespace T3.Editor.Gui.Graph
 
                 // Rendering
                 var typeColor = TypeUiRegistry.Entries[outputDef.ValueType].Color;
-
                 var drawList = GraphCanvas.Current.DrawList;
-                drawList.AddRectFilled(LastScreenRect.Min, LastScreenRect.Max,
-                                 hovered
-                                     ? ColorVariations.OperatorHover.Apply(typeColor)
-                                     : ColorVariations.OutputNodes.Apply(typeColor));
-
-                drawList.AddRectFilled(new Vector2(LastScreenRect.Min.X, LastScreenRect.Max.Y),
-                                 new Vector2(LastScreenRect.Max.X,
-                                             LastScreenRect.Max.Y + GraphNode.InputSlotThickness + GraphNode.InputSlotMargin),
-                                 ColorVariations.OperatorInputZone.Apply(typeColor));
-
-                // Label
+                
+                // Draw output indicator
                 {
+                    var backgroundColor = hovered
+                                    ? ColorVariations.OperatorBackgroundHover.Apply(typeColor)
+                                    : ColorVariations.OutputNodes.Apply(typeColor);
+                    
+                    var halfSize = LastScreenRect.GetSize() * 0.5f;
+                    var paddingX = MathF.Floor( LastScreenRect.GetSize().X * 0.1f);
+                    var indicatorColor = ColorVariations.ConnectionLines.Apply(typeColor).Fade(0.4f);
+                    
+                    drawList.AddRectFilled(LastScreenRect.Min, LastScreenRect.Max, backgroundColor.Fade(0.4f));
+                    
+                    drawList.AddRectFilled(new Vector2(LastScreenRect.Min.X, LastScreenRect.Min.Y),
+                                           new Vector2(LastScreenRect.Max.X - paddingX, LastScreenRect.Max.Y),
+                                           indicatorColor);
+
+                    drawList.AddTriangleFilled(new Vector2(LastScreenRect.Max.X -paddingX, LastScreenRect.Min.Y),
+                                               new Vector2(LastScreenRect.Max.X, LastScreenRect.Min.Y + halfSize.Y),
+                                               new Vector2(LastScreenRect.Max.X-paddingX, LastScreenRect.Max.Y),
+                                               indicatorColor);
+                }
+                
+                // Label
+                if(!string.IsNullOrEmpty(outputDef.Name))
+                {
+                    var size = ImGui.CalcTextSize(outputDef.Name);
+                    var yPos = LastScreenRect.GetCenter().Y - size.Y / 2;
+                    
                     var isScaledDown = GraphCanvas.Current.Scale.X < 1;
                     drawList.PushClipRect(LastScreenRect.Min, LastScreenRect.Max, true);
                     ImGui.PushFont(isScaledDown ? Fonts.FontSmall : Fonts.FontBold);
 
-                    var label = string.Format($"{outputDef.Name}");
-                    drawList.AddText(LastScreenRect.Min, ColorVariations.OperatorLabel.Apply(typeColor), label);
+                    var labelPos = new Vector2(
+                                               LastScreenRect.Min.X +4,
+                                               yPos);
+                    var label = outputDef.Name;
+                    drawList.AddText(labelPos, ColorVariations.OperatorLabel.Apply(typeColor), label);
                     
                     ImGui.PopFont();
                     drawList.PopClipRect();
@@ -64,7 +85,7 @@ namespace T3.Editor.Gui.Graph
 
                 if (outputUi.IsSelected)
                 {
-                    drawList.AddRect(LastScreenRect.Min - Vector2.One, LastScreenRect.Max + Vector2.One, Color.White, 1);
+                    drawList.AddRect(LastScreenRect.Min - Vector2.One, LastScreenRect.Max + Vector2.One, UiColors.Selection, 1);
                 }
 
                 // Draw slot 
@@ -75,7 +96,7 @@ namespace T3.Editor.Gui.Graph
                                                     new Vector2(LastScreenRect.Min.X,
                                                                 LastScreenRect.Max.Y)); 
                     
-                    ConnectionMaker.ConnectionSnapEndHelper.RegisterAsPotentialTarget(outputUi, usableSlotArea);
+                    ConnectionSnapEndHelper.RegisterAsPotentialTarget(outputUi, usableSlotArea);
                     
                     
                     ImGui.SetCursorScreenPos(usableSlotArea.Min);
@@ -91,13 +112,8 @@ namespace T3.Editor.Gui.Graph
                     if (ConnectionMaker.IsOutputNodeCurrentConnectionTarget(outputDef))
                     {
                         drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, color);
-
-                        if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
-                        {
-                            ConnectionMaker.Update();
-                        }
                     }
-                    else if (ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(outputUi) || slotHovered)
+                    else if (ConnectionSnapEndHelper.IsNextBestTarget(outputUi) || slotHovered)
                     {
                         if (ConnectionMaker.IsMatchingInputType(outputDef.ValueType))
                         {
@@ -110,7 +126,7 @@ namespace T3.Editor.Gui.Graph
                         }
                         else
                         {
-                            drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, Color.White);
+                            drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, UiColors.Selection);
                             if (ImGui.IsItemClicked(0))
                             {
                                 ConnectionMaker.StartFromOutputNode(GraphCanvas.Current.CompositionOp.Symbol, outputDef);
@@ -119,7 +135,7 @@ namespace T3.Editor.Gui.Graph
                     }
                     else
                     {
-                        var colorWithMatching = ConnectionMaker.IsMatchingInputType(outputDef.ValueType) ? Color.White : color;
+                        var colorWithMatching = ConnectionMaker.IsMatchingInputType(outputDef.ValueType) ? UiColors.Selection : color;
                         drawList.AddRectFilled(new Vector2(usableSlotArea.Max.X - GraphNode.InputSlotMargin- GraphNode.InputSlotThickness,
                                                            usableSlotArea.Min.Y), 
                                                new Vector2(

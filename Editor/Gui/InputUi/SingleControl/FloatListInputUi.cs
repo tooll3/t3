@@ -18,14 +18,22 @@ namespace T3.Editor.Gui.InputUi.SingleControl
 
         protected override bool DrawSingleEditControl(string name, ref List<float> list)
         {
-            var outputString = string.Join(", ", list);
+            string outputString;
+            lock (list)
+            {
+                outputString = list == null ? "NULL" :  string.Join(", ", list);
+            }
             ImGui.TextUnformatted($"{outputString}");
             return false;
         }
 
         protected override void DrawReadOnlyControl(string name, ref List<float> list)
         {
-            var outputString = (list == null) ? "NULL" :  string.Join(", ", list);
+            string outputString;
+            lock (list)
+            {
+                outputString = (list == null) ? "NULL" :  string.Join(", ", list);
+            }
             ImGui.TextUnformatted($"{outputString}");
         }
     }

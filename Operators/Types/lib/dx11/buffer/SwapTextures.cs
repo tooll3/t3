@@ -22,16 +22,22 @@ namespace T3.Operators.Types.Id_590a0b0b_c847_433c_8ffa_602ed0ae8f28
 
         private void Update(EvaluationContext context)
         {
+            var textureAValue = TextureBInput.GetValue(context);
+            var textureBValue = TextureAInput.GetValue(context);
+            
             if (EnableSwap.GetValue(context))
             {
-                TextureA.Value = TextureBInput.GetValue(context);
-                TextureB.Value = TextureAInput.GetValue(context);
+                TextureA.Value = textureAValue;
+                TextureB.Value = textureBValue;
             }
             else
             {
-                TextureA.Value = TextureAInput.GetValue(context);
-                TextureB.Value = TextureBInput.GetValue(context);
+                TextureA.Value = textureBValue;
+                TextureB.Value = textureAValue;
             }
+            
+            TextureA.DirtyFlag.Clear();
+            TextureB.DirtyFlag.Clear();
         }
 
         [Input(Guid = "9DD14A67-AFDB-4CD4-BDD5-9FCD565BC65D")]

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
@@ -9,169 +8,95 @@ using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
+using T3.Editor.UiModel;
 
-namespace T3.Editor.Gui.Windows.Variations
+namespace T3.Editor.Gui.Windows.Variations;
+
+public class SnapshotCanvas : VariationBaseCanvas
 {
-    public class SnapshotCanvas : VariationBaseCanvas
+    protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForSnapshots;
+    protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForSnapshots;
+
+    public virtual void DrawToolbarFunctions()
     {
-        protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForSnapshots;
-        protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForSnapshots;
+        var s = ImGui.GetFrameHeight();
 
-        public override void DrawToolbarFunctions()
+        if (CustomComponents.IconButton(Icon.Plus, new Vector2(s, s)))
         {
-            var s = ImGui.GetFrameHeight();
-
-            if (CustomComponents.IconButton(Icon.Plus, "##addbutton", new Vector2(s, s)))
-            {
-                CreateVariation();
-            }
-
-            var filteredOpCount = 0;
-
-            var compositionId = VariationHandling.ActiveInstanceForSnapshots.Symbol.Id;
-            if (VariationHandling.FocusSetsForCompositions.TryGetValue(compositionId, out var filterSet))
-            {
-                filteredOpCount = filterSet.Count;
-            }
-
-            ImGui.SameLine();
-            ImGui.Dummy(new Vector2(20, 20));
-
-            ImGui.SameLine();
-            if (filteredOpCount == 0)
-            {
-                if (ImGui.Button("Set focus"))
-                {
-                    var set = new HashSet<Guid>();
-                    foreach (var selectedOp in NodeSelection.GetSelectedInstances())
-                    {
-                        set.Add(selectedOp.SymbolChildId);
-                    }
-
-                    VariationHandling.FocusSetsForCompositions[compositionId] = set;
-
-                    var childrenWhenSettingFocus = new HashSet<Guid>();
-                    foreach (var child in InstanceForBlendOperations.Children)
-                    {
-                        childrenWhenSettingFocus.Add(child.SymbolChildId);
-                    }
-
-                    VariationHandling.ChildIdsWhenFocusedForCompositions[compositionId] = childrenWhenSettingFocus;
-                }
-
-                CustomComponents.TooltipForLastItem("This will limit the parameters stored in new snapshots to the Operators selected when setting the focus.");
-            }
-            else
-            {
-                if (ImGui.Button($"Clear focus ({filteredOpCount})"))
-                {
-                    // Select focused ops
-                    var parentSymbolUi = SymbolUiRegistry.Entries[InstanceForBlendOperations.Symbol.Id];
-
-                    if (filterSet != null)
-                    {
-                        NodeSelection.Clear();
-                        foreach (var symbolChildUi in parentSymbolUi.ChildUis)
-                        {
-                            if (!filterSet.Contains(symbolChildUi.Id))
-                                continue;
-
-                            var instance = InstanceForBlendOperations.Children.FirstOrDefault(c => c.SymbolChildId == symbolChildUi.Id);
-                            if (instance != null)
-                                NodeSelection.AddSymbolChildToSelection(symbolChildUi, instance);
-                        }
-                    }
-                    FitViewToSelectionHandling.FitViewToSelection();
-
-                    VariationHandling.FocusSetsForCompositions.Remove(compositionId);
-                    VariationHandling.ChildIdsWhenFocusedForCompositions.Remove(compositionId);
-                }
-
-                if (ImGui.IsItemHovered())
-                {
-                    if (filterSet != null)
-                    {
-                        foreach (var id in filterSet)
-                        {
-                            T3Ui.AddHoveredId(id);
-                        }
-                    }
-                }
-            }
+            CreateSnapshot();
         }
+    }
 
-        public override string GetTitle()
+    protected override string GetTitle()
+    {
+        return VariationHandling.ActiveInstanceForSnapshots != null 
+                   ? $"...for {VariationHandling.ActiveInstanceForSnapshots.Symbol.Name}" 
+                   : string.Empty;
+    }
+
+    protected override void DrawAdditionalContextMenuContent()
+    {
+        var oneSelected = Selection.SelectedElements.Count == 1;
+        var oneOrMoreSelected = Selection.SelectedElements.Count > 0;
+
+        if (ImGui.MenuItem("Select affected Operators",
+                           "",
+                           false,
+                           oneOrMoreSelected))
         {
-            if (VariationHandling.ActiveInstanceForSnapshots == null)
-                return "";
+            NodeSelection.Clear();
 
-            return $"...for {VariationHandling.ActiveInstanceForSnapshots.Symbol.Name}";
-        }
-
-        protected override void DrawAdditionalContextMenuContent()
-        {
-            var oneSelected = Selection.SelectedElements.Count == 1;
-            var oneOrMoreSelected = Selection.SelectedElements.Count > 0;
-
-            if (ImGui.MenuItem("Select affected Operators",
-                               "",
-                               false,
-                               oneOrMoreSelected))
+            foreach (var element in Selection.SelectedElements)
             {
-                NodeSelection.Clear();
+                if (element is not Variation selectedVariation)
+                    continue;
 
-                foreach (var element in Selection.SelectedElements)
+                var parentSymbolUi = SymbolUiRegistry.Entries[InstanceForBlendOperations.Symbol.Id];
+
+                foreach (var symbolChildUi in parentSymbolUi.ChildUis)
                 {
-                    if (element is not Variation selectedVariation)
+                    if (!selectedVariation.ParameterSetsForChildIds.ContainsKey(symbolChildUi.Id))
                         continue;
 
-                    var parentSymbolUi = SymbolUiRegistry.Entries[InstanceForBlendOperations.Symbol.Id];
-
-                    foreach (var symbolChildUi in parentSymbolUi.ChildUis)
-                    {
-                        if (!selectedVariation.ParameterSetsForChildIds.ContainsKey(symbolChildUi.Id))
-                            continue;
-
-                        var instance = InstanceForBlendOperations.Children.FirstOrDefault(c => c.SymbolChildId == symbolChildUi.Id);
-                        if (instance != null)
-                            NodeSelection.AddSymbolChildToSelection(symbolChildUi, instance);
-                    }
+                    var instance = InstanceForBlendOperations.Children.FirstOrDefault(c => c.SymbolChildId == symbolChildUi.Id);
+                    if (instance != null)
+                        NodeSelection.AddSymbolChildToSelection(symbolChildUi, instance);
                 }
-
-                FitViewToSelectionHandling.FitViewToSelection();
             }
 
-            if (ImGui.MenuItem("Remove selected Ops from Variations",
-                               "",
-                               false,
-                               oneOrMoreSelected))
-            {
-                var selectedInstances = NodeSelection.GetSelectedInstances().ToList();
-                var selectedThumbnails = new List<Variation>();
-                foreach (var thumbnail in Selection.SelectedElements)
-                {
-                    if (thumbnail is Variation v)
-                    {
-                        selectedThumbnails.Add(v);
-                    }
-                }
-
-                VariationHandling.RemoveInstancesFromVariations(selectedInstances, selectedThumbnails);
-            }
+            FitViewToSelectionHandling.FitViewToSelection();
         }
 
-        public override Variation CreateVariation()
+        // Todo: This should be done automatically when disabling snapshots for a symbol child
+        if (ImGui.MenuItem("Remove selected Ops from Variations",
+                           "",
+                           false,
+                           oneOrMoreSelected))
         {
-            var newVariation = VariationHandling.CreateOrUpdateSnapshotVariation();
-            if (newVariation == null)
-                return new Variation();
+            var selectedInstances = NodeSelection.GetSelectedInstances().ToList();
+            var selectedThumbnails = new List<Variation>();
+            foreach (var thumbnail in Selection.SelectedElements)
+            {
+                if (thumbnail is Variation v)
+                {
+                    selectedThumbnails.Add(v);
+                }
+            }
 
-            PoolForBlendOperations.SaveVariationsToFile();
-            Selection.SetSelection(newVariation);
-            ResetView();
-            TriggerThumbnailUpdate();
-            VariationThumbnail.VariationForRenaming = newVariation;
-            return new Variation();
+            VariationHandling.RemoveInstancesFromVariations(selectedInstances.Select(i => i.SymbolChildId), selectedThumbnails);
         }
+    }
+
+    private void CreateSnapshot()
+    {
+        var newSnapshot = VariationHandling.CreateOrUpdateSnapshotVariation();
+        if (newSnapshot == null)
+            return;
+
+        PoolForBlendOperations.SaveVariationsToFile();
+        Selection.SetSelection(newSnapshot);
+        ResetView();
+        TriggerThumbnailUpdate();
+        VariationThumbnail.VariationForRenaming = newSnapshot;
     }
 }

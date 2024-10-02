@@ -29,7 +29,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
 
     // Here is a meaningless example that offsets the each points position 
     // depending on it's position and the input parameters
-    p.position += sin( p.position * 10 + Phase) * Amount;
+    p.Position += sin( p.Position * 10 + Phase) * Amount;
 
     // Write the point with modified position (all the original Orientation and W)
     ResultPoints[i] = p;

@@ -3,9 +3,11 @@ using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
-using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Helpers;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Dialogs
 {
@@ -13,7 +15,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
     {
         public void Draw(Instance compositionOp, List<SymbolChildUi> selectedChildUis, ref string nameSpace, ref string newTypeName, ref string description)
         {
-            DialogSize = new Vector2(500, 280);
+            DialogSize = new Vector2(500, 300);
 
             if (BeginDialog("Duplicate as new symbol"))
             {
@@ -54,12 +56,13 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     ImGui.InputTextMultiline("##description", ref description, 1024, new Vector2(450, 60));
                 }
 
-                if (CustomComponents.DisablableButton("Duplicate", NodeOperations.IsNewSymbolNameValid(newTypeName), enableTriggerWithReturn:false))
+                if (CustomComponents.DisablableButton("Duplicate", GraphUtils.IsNewSymbolNameValid(newTypeName), enableTriggerWithReturn:false))
                 {
                     var compositionSymbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
                     var position = selectedChildUis.First().PosOnCanvas + new Vector2(0, 100);
                     
-                    NodeOperations.DuplicateAsNewType(compositionSymbolUi, selectedChildUis.First().SymbolChild.Symbol.Id, newTypeName, nameSpace, description, position);
+                    Duplicate.DuplicateAsNewType(compositionSymbolUi, selectedChildUis.First().SymbolChild.Symbol.Id, newTypeName, nameSpace, description, position);
+                    T3Ui.SaveModified();
                     ImGui.CloseCurrentPopup();
                 }
 

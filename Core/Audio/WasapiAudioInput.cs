@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using ManagedBass;
 using ManagedBass.Wasapi;
-using T3.Core.IO;
+using T3.Core.Animation;
 using T3.Core.Logging;
+using T3.Core.Operator;
 
 namespace T3.Core.Audio
 {
@@ -14,47 +15,74 @@ namespace T3.Core.Audio
     public static class WasapiAudioInput
     {
         /// <summary>
-        /// Initializes the default device list and input.
+        /// Needs to be called once a frame
+        /// Switches input device required
         /// </summary>
-        public static void Initialize()
+        public static void StartFrame(PlaybackSettings settings)
         {
-            if (_inputDevices != null)
+            _fftUpdatesSinceLastFrame = 0;
+            
+            if (settings == null)
+                return;
+                    
+            if (settings.AudioSource != PlaybackSettings.AudioSources.ExternalDevice)
+            {
+                if (!string.IsNullOrEmpty(ActiveInputDeviceName))
+                {
+                    Stop();
+                }
+                return ;
+            }
+
+            var deviceName = settings.AudioInputDeviceName;
+            if (ActiveInputDeviceName == deviceName)
                 return;
             
-            InitializeInputDeviceList();
+            if (string.IsNullOrEmpty(deviceName))
+            {
+                if (_complainedOnce)
+                    return ;
+                
+                Log.Warning("Can't switch to WASAPI device without a name");
+                _complainedOnce = true;
+                return ;
+            }
 
-            var deviceName = ProjectSettings.Config.AudioInputDeviceName;
-            var device = _inputDevices.FirstOrDefault(d => d.DeviceInfo.Name == deviceName);
+
+            var device = InputDevices.FirstOrDefault(d => d.DeviceInfo.Name == deviceName);
+            if (device == null)
+            {
+                Log.Warning($"Can't find input device {deviceName}");
+                _complainedOnce = true;
+                return ;
+            }
+
             StartInputCapture(device);
+            _complainedOnce = false;
         }
-        
+
+
         public static List<WasapiInputDevice> InputDevices
         {
             get
             {
-                if(_inputDevices == null)
+                if (_inputDevices == null)
                     InitializeInputDeviceList();
 
                 return _inputDevices;
             }
         }
-        
-        /// <summary>
-        /// Needs to be called once a frame
-        /// </summary>
-        public static void CompleteFrame()
-        {
-            _fftUpdatesSinceLastFrame = 0;
-        }
-        
+
+
+
         /// <summary>
         /// If device is null we will attempt default input index
         /// </summary>
-        public static void StartInputCapture(WasapiInputDevice device)
+        private static void StartInputCapture(WasapiInputDevice device)
+            //public static void StartInputCapture(string deviceName)
         {
             int inputDeviceIndex = BassWasapi.DefaultInputDevice;
-            AudioAnalysis.InputMode = AudioAnalysis.InputModes.WasapiDevice;
-            
+
             if (device == null)
             {
                 if (_inputDevices.Count == 0)
@@ -62,6 +90,7 @@ namespace T3.Core.Audio
                     Log.Error("No wasapi input devices found");
                     return;
                 }
+
                 Log.Error($"Attempting default input {BassWasapi.DefaultInputDevice}.");
                 device = _inputDevices[0];
             }
@@ -70,8 +99,8 @@ namespace T3.Core.Audio
                 Log.Debug($"Initializing WASAPI audio input for  {device.DeviceInfo.Name}... ");
                 inputDeviceIndex = device.WasapiDeviceIndex;
             }
-            
-            Bass.Configure(Configuration.UpdateThreads, false);
+
+            //Bass.Configure(Configuration.UpdateThreads, false);
             // Bass.Configure(Configuration.DeviceBufferLength, 1024);
 
             BassWasapi.Stop();
@@ -89,26 +118,30 @@ namespace T3.Core.Audio
                 Log.Error("Can't initialize WASAPI:" + Bass.LastError);
                 return;
             }
-            
-            BassWasapi.Start();
-            AudioAnalysis.InputMode = AudioAnalysis.InputModes.WasapiDevice;
+
+            ActiveInputDeviceName = device.DeviceInfo.Name;
+            var result = BassWasapi.Start();
+            //Log.Debug("Wasapi.StartInputCapture() -> BassWasapi.Start():" + result);
         }
-
-        public static void StopInputCapture()
-        {
-            //_assignedTimingHandler = false;
-        }
-
-
-        public static bool DevicesInitialized => _inputDevices != null;
         
-        public static void InitializeInputDeviceList()
+        private static void Stop()
+        {
+            //Log.Debug("Wasapi.Stop()");
+            BassWasapi.Stop();
+            BassWasapi.Free();
+            ActiveInputDeviceName = null;
+        }
+
+        private static bool _complainedOnce;
+
+        
+        private static void InitializeInputDeviceList()
         {
             _inputDevices = new List<WasapiInputDevice>();
-            
+
             // Keep in local variable to avoid double evaluation
             var deviceCount = BassWasapi.DeviceCount;
-            
+
             for (var deviceIndex = 0; deviceIndex < deviceCount; deviceIndex++)
             {
                 var deviceInfo = BassWasapi.GetDeviceInfo(deviceIndex);
@@ -119,27 +152,32 @@ namespace T3.Core.Audio
 
                 Log.Debug($"Found Wasapi input ID:{_inputDevices.Count} {deviceInfo.Name} LoopBack:{deviceInfo.IsLoopback} IsInput:{deviceInfo.IsInput} (at {deviceIndex})");
                 _inputDevices.Add(new WasapiInputDevice()
-                                    {
-                                        WasapiDeviceIndex = deviceIndex,
-                                        DeviceInfo = deviceInfo,
-                                    });
+                                      {
+                                          WasapiDeviceIndex = deviceIndex,
+                                          DeviceInfo = deviceInfo,
+                                      });
             }
         }
-        
+
         private static int Process(IntPtr buffer, int length, IntPtr user)
         {
+            //Log.Debug("Wasapi.Process() #1");
             var level = BassWasapi.GetLevel();
             if (length < 3000)
-                 return length;
+                return length;
+
+            _lastUpdateTime = Playback.RunTimeInSecs;
 
             int resultCode;
             if (_fftUpdatesSinceLastFrame == 0)
             {
                 resultCode = BassWasapi.GetData(AudioAnalysis.FftGainBuffer, (int)(AudioAnalysis.BassFlagForFftBufferSize | DataFlags.FFTRemoveDC));
+                //Log.Debug("Wasapi.Process() Result code after first update:" +resultCode);
             }
             else
             {
                 resultCode = BassWasapi.GetData(_fftIntermediate, (int)(AudioAnalysis.BassFlagForFftBufferSize | DataFlags.FFTRemoveDC));
+                //Log.Debug("Wasapi.Process() Result code after another update:" +resultCode);
                 if (resultCode >= 0)
                 {
                     for (var i = 0; i < AudioAnalysis.FftHalfSize; i++)
@@ -148,20 +186,20 @@ namespace T3.Core.Audio
                     }
                 }
             }
-            
+
             if (resultCode < 0)
             {
                 Log.Debug($"Can't get Wasapi FFT-Data: {Bass.LastError}");
             }
 
-            var audioLevel = level * 0.00001;
+            _lastAudioLevel = (float)(level * 0.00001);
             _fftUpdatesSinceLastFrame++;
             //Log.Debug($"Process with {length} #{_fftUpdatesSinceLastFrame}  L:{audioLevel:0.0}  DevBufLen:{BassWasapi.Info.BufferLength}");
             return length;
         }
 
         private static int _fftUpdatesSinceLastFrame;
-        
+
         public class WasapiInputDevice
         {
             public int WasapiDeviceIndex;
@@ -171,5 +209,10 @@ namespace T3.Core.Audio
         private static List<WasapiInputDevice> _inputDevices;
         private static readonly float[] _fftIntermediate = new float[AudioAnalysis.FftHalfSize];
         private static readonly WasapiProcedure _wasapiProcedure = Process;
+        private static double _lastUpdateTime;
+
+        public static string ActiveInputDeviceName { get; private set; }
+        private static float _lastAudioLevel;
+        public static float DecayingAudioLevel => (float)(_lastAudioLevel / Math.Max(1, (Playback.RunTimeInSecs - _lastUpdateTime) * 100));
     }
 }

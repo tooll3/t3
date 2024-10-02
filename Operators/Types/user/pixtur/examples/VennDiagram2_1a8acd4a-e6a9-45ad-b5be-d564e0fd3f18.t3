@@ -245,7 +245,7 @@
       "Outputs": []
     },
     {
-      "Id": "d3878303-d63b-4113-a8db-ce551f08e6b7"/*SimNoise*/,
+      "Id": "d3878303-d63b-4113-a8db-ce551f08e6b7"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -271,7 +271,7 @@
           }
         },
         {
-          "Id": "c9cf2182-1297-463c-b5c1-d4ee7ad0895c"/*EnableDepthWrite*/,
+          "Id": "c9cf2182-1297-463c-b5c1-d4ee7ad0895c"/*EnableZWrite*/,
           "Type": "System.Boolean",
           "Value": false
         }
@@ -313,7 +313,7 @@
       "Outputs": []
     },
     {
-      "Id": "df7b8186-27ef-4697-9a1c-96e3ea816183"/*SimDirectedForce*/,
+      "Id": "df7b8186-27ef-4697-9a1c-96e3ea816183"/*SimDirectionalOffset*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {

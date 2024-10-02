@@ -1,14 +1,10 @@
 {
   "Id": "897a5f40-7970-4770-bd51-08a085f8355b"/*FilesInFolderExample*/,
-  "Description": "",
+  "Description": "Shows how [PickFromStringList] can be used to create a dynamic slideshow using all files from within a folder\n\nAlso see [FadingSlideShow]",
   "InputUis": [],
   "SymbolChildUis": [
     {
       "ChildId": "06246b83-0aeb-433a-b116-9dbac1d0a7f4"/*FilesInFolder*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 128.71094,
         "Y": 0.0
@@ -16,10 +12,6 @@
     },
     {
       "ChildId": "51d34f0d-5fee-434a-8bdd-e70a9d3586f0"/*PickFromStringList*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 258.71094,
         "Y": 0.0
@@ -27,10 +19,6 @@
     },
     {
       "ChildId": "b181d253-7343-4a9e-bca6-fe70fefe3951"/*FloatToInt*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 133.27246,
         "Y": 34.592285
@@ -38,10 +26,6 @@
     },
     {
       "ChildId": "7270fe74-0c1c-4d88-86fc-360c166fb644"/*Counter*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 0.0,
         "Y": 51.143555
@@ -49,10 +33,6 @@
     },
     {
       "ChildId": "99855e3f-01dc-44c1-b82c-118151eda1ad"/*LoadImage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 388.71094,
         "Y": 0.0

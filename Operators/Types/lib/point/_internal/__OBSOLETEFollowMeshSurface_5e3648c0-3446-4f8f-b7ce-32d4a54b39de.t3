@@ -48,7 +48,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\sim\\follow-mesh-surface.hlsl"
+          "Value": "Resources\\lib\\points\\sim\\SimFollowMeshSurface.hlsl"
         }
       ],
       "Outputs": []
@@ -59,7 +59,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 64,
             "Y": 1,
@@ -94,7 +94,7 @@
       "Outputs": []
     },
     {
-      "Id": "53f58667-bcfb-4eec-8dea-01c2bb8e8591"/*StructuredBuffer2*/,
+      "Id": "53f58667-bcfb-4eec-8dea-01c2bb8e8591"/*StructuredBufferWithViews*/,
       "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
         {
@@ -158,7 +158,7 @@
       "Outputs": []
     },
     {
-      "Id": "21dea87c-8f10-465b-9c0c-87edd3170a66"/*BoolToFloats*/,
+      "Id": "21dea87c-8f10-465b-9c0c-87edd3170a66"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [
         {
@@ -200,7 +200,7 @@
       "Outputs": []
     },
     {
-      "Id": "ec34f465-7cb4-4a1c-9866-0409ac3fbff1"/*BoolToFloats*/,
+      "Id": "ec34f465-7cb4-4a1c-9866-0409ac3fbff1"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []

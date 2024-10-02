@@ -62,7 +62,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 64,
             "Y": 1,
@@ -196,7 +196,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 64,
             "Y": 1,
@@ -242,7 +242,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 64,
             "Y": 1,
@@ -268,7 +268,12 @@
       "Id": "8b1ad3df-5bd1-4945-b42e-e8dca5ad3580"/*PrefixSum*/,
       "SymbolId": "d35a403b-7e6e-4725-a344-6e8008a4e1e1",
       "InputValues": [],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "faeb2a7e-de0f-4497-964b-7b21dd56f525"/*PrefixSum*/,
+          "DirtyFlagTrigger": "Always"
+        }
+      ]
     },
     {
       "Id": "a7502316-2af6-4b82-8338-306610b856c5"/*MultiplyInt*/,
@@ -528,6 +533,12 @@
     {
       "SourceParentOrChildId": "083ec96e-a7b8-4f97-a203-15dd76b0ccba",
       "SourceSlotId": "c382284f-7e37-4eb0-b284-bc735247f26b",
+      "TargetParentOrChildId": "baf5d18a-e410-4287-a630-433358ce0314",
+      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    },
+    {
+      "SourceParentOrChildId": "8b1ad3df-5bd1-4945-b42e-e8dca5ad3580",
+      "SourceSlotId": "a0801b0a-3447-4179-aa12-8b4b088868d2",
       "TargetParentOrChildId": "baf5d18a-e410-4287-a630-433358ce0314",
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },

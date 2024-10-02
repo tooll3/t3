@@ -35,8 +35,8 @@
         "X": 0.0,
         "Y": 0.0
       },
-      "Min": -100.0,
-      "Max": 100.0
+      "Min": -2.0,
+      "Max": 2.0
     },
     {
       "InputId": "1cce7427-2062-42fd-838e-328def3ecb30"/*MaximumAnisotropy*/,

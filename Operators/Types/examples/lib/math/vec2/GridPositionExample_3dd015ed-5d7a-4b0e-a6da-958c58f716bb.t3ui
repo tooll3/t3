@@ -1,0 +1,191 @@
+{
+  "Id": "3dd015ed-5d7a-4b0e-a6da-958c58f716bb"/*GridPositionExample*/,
+  "Description": "Shows how to combine [Loop] with [GridPosition] to draw raster layout.\n\nAlso consider using [SliceViewPort]",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "b523f12b-4321-4a1b-a5f7-b23afc40a9d6"/*GetFloatVar*/,
+      "Position": {
+        "X": -85.499855,
+        "Y": 405.83142
+      }
+    },
+    {
+      "ChildId": "9ae083d6-5a18-4938-8880-c5188123c2b9"/*Layer2d*/,
+      "Position": {
+        "X": 1115.1758,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "bc3c4b97-6631-4ca5-ae6f-9e04ecd8ed7a"/*GridPosition*/,
+      "Position": {
+        "X": 928.3109,
+        "Y": 383.66052
+      }
+    },
+    {
+      "ChildId": "b16b0d99-636e-4ee7-9120-687872350ba8"/*FloatToInt*/,
+      "Position": {
+        "X": 778.3109,
+        "Y": 383.66052
+      }
+    },
+    {
+      "ChildId": "c0c65a88-86c3-4af4-8e18-af7e95c0ccb5"/*Transform*/,
+      "Position": {
+        "X": 1265.1758,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "dbbc9c57-3748-4f71-b417-946d64a7138d"/*Remap*/,
+      "Position": {
+        "X": 366.19812,
+        "Y": 322.99277
+      }
+    },
+    {
+      "ChildId": "aa479d4c-8ca2-4ae4-9b9c-3bbb7321bb43"/*RepeatAtGPoints*/,
+      "Position": {
+        "X": 366.19812,
+        "Y": 253.99277
+      }
+    },
+    {
+      "ChildId": "55f61178-c716-47b9-b900-5979a1bd644d"/*LinePoints*/,
+      "Position": {
+        "X": 216.19812,
+        "Y": 242.99277
+      }
+    },
+    {
+      "ChildId": "bf13fb6e-688d-4f7a-893b-b38555f01626"/*DrawLines*/,
+      "Position": {
+        "X": 516.1981,
+        "Y": 242.99277
+      }
+    },
+    {
+      "ChildId": "658807b7-4e9f-4560-a285-f08a5172531f"/*RenderTarget*/,
+      "Position": {
+        "X": 965.1758,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "74090477-5b08-47fc-a217-3220861b0430"/*LinePoints*/,
+      "Position": {
+        "X": 216.19812,
+        "Y": 285.99277
+      }
+    },
+    {
+      "ChildId": "3531fd32-fca0-40db-b7b7-6eeaba9042c3"/*Text*/,
+      "Position": {
+        "X": 515.1758,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "1e38c807-89f6-4dc1-9113-917e4a04a596"/*Execute*/,
+      "Position": {
+        "X": 815.1758,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "41d9c669-1127-4380-89d3-03ae842ae3af"/*Remap*/,
+      "Position": {
+        "X": 216.19812,
+        "Y": 156.99277
+      }
+    },
+    {
+      "ChildId": "614079f8-31c2-4cde-af84-edbe3cb9d870"/*Transform*/,
+      "Position": {
+        "X": 665.1758,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "8a7850e7-0c92-4046-b73d-09179347d63d"/*Vector3*/,
+      "Position": {
+        "X": 517.91364,
+        "Y": 159.68948
+      }
+    },
+    {
+      "ChildId": "c3854b6a-f62d-4b4a-986a-02ba57400bf1"/*AString*/,
+      "Position": {
+        "X": 194.98242,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "9e332c57-129a-4beb-9cb8-fb6dd6d9c1c7"/*PickStringPart*/,
+      "Position": {
+        "X": 365.17578,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "ad2154b0-d16c-4da1-86de-48ebd4912f6e"/*FloatToInt*/,
+      "Position": {
+        "X": 65.17578,
+        "Y": 49.35544
+      }
+    },
+    {
+      "ChildId": "a0dcb105-565f-4318-9c69-7ce5f3701180"/*RenderTarget*/,
+      "Position": {
+        "X": 1276.9948,
+        "Y": 382.6447
+      }
+    },
+    {
+      "ChildId": "f50e197c-22fe-4c29-9b5a-1b161dce405b"/*Loop*/,
+      "Position": {
+        "X": 1415.1758,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "ce635cf3-c137-46b0-b90d-414f023a0fb7"/*Time*/,
+      "Position": {
+        "X": 66.19812,
+        "Y": 285.99277
+      }
+    },
+    {
+      "ChildId": "39f7a461-29c3-41a1-9cd2-d7fd4324b5f0"/*Time*/,
+      "Position": {
+        "X": 216.19812,
+        "Y": 199.99277
+      }
+    },
+    {
+      "ChildId": "780c8572-3a62-4bd3-9879-ec07468a10ae"/*Add*/,
+      "Position": {
+        "X": 367.91364,
+        "Y": 159.68948
+      }
+    },
+    {
+      "ChildId": "892fa218-5eed-4de7-a645-090df341baf7"/*MultiplyInt*/,
+      "Position": {
+        "X": 215.17578,
+        "Y": 49.35544
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "a2de29e8-2a27-47c9-b99e-5b1ce4dc10b5"/*ColorBuffer*/,
+      "Position": {
+        "X": 1426.9948,
+        "Y": 382.6447
+      }
+    }
+  ]
+}

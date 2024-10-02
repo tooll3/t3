@@ -1,53 +1,65 @@
 {
   "Id": "17188f49-1243-4511-a46c-1804cae10768"/*PointsOnMesh*/,
-  "Description": "Get evenly distributed points on mesh. Note that the initial evaluation of the Mesh is extremely slow and should not be done on every frame.",
+  "Description": "Get evenly distributed points on a mesh. Note that the initial evaluation of the mesh is extremely slow and should not be done on every frame.\n\nUseful combinations [LoadObj] and [DrawPoints]\n\nSimilar Operators:\nTo create a point at each vertex of the connected mesh [MeshVerticesToPoints] can be used.\nTo create a point at each face of the connected mesh [MeshFacesPoints] can be used.\n",
   "InputUis": [
-    {
-      "InputId": "d737860b-2864-472d-ad46-4061b63a12d4"/*Seed*/,
-      "Position": {
-        "X": -450.28937,
-        "Y": 1937.4443
-      },
-      "Min": -1.0,
-      "Scale": -1.0
-    },
-    {
-      "InputId": "b3d526ee-b1f1-4254-b702-1980d659e557"/*Count*/,
-      "Position": {
-        "X": -470.665,
-        "Y": 1302.371
-      }
-    },
     {
       "InputId": "3289dbe7-14f0-4bf0-b223-bb57419cf179"/*Mesh*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -470.665,
-        "Y": 1257.371
-      }
+        "X": -601.2355,
+        "Y": 1316.4998
+      },
+      "Description": "Mesh Input via [LoadObj] for example"
     },
     {
-      "InputId": "ed758e72-6977-44e0-a997-bf0ad83f6ceb"/*IsEnabled*/,
+      "InputId": "b3d526ee-b1f1-4254-b702-1980d659e557"/*Count*/,
       "Position": {
-        "X": -470.665,
-        "Y": 1302.371
-      }
+        "X": -599.49646,
+        "Y": 1394.1101
+      },
+      "GroupTitle": "Settings",
+      "Description": "Defines the amount of points that are spawning on the surface"
+    },
+    {
+      "InputId": "d737860b-2864-472d-ad46-4061b63a12d4"/*Seed*/,
+      "Position": {
+        "X": -599.49646,
+        "Y": 1439.1101
+      },
+      "Description": "Seed to randomize the position of the points",
+      "Min": -1.0,
+      "Scale": -1.0
     },
     {
       "InputId": "132584c0-c27c-448a-b31d-ae72f0fb4baa"/*Texture*/,
       "Position": {
-        "X": -470.665,
-        "Y": 1347.371
-      }
+        "X": -599.49646,
+        "Y": 1484.1101
+      },
+      "GroupTitle": "Advanced Options",
+      "Description": "Defines the color of the points via an image operator like [LoadImage] for example"
+    },
+    {
+      "InputId": "1843683c-53a2-4862-a9a5-4b3afe729ace"/*UseVertexSelection*/,
+      "Position": {
+        "X": -599.49646,
+        "Y": 1529.1101
+      },
+      "Description": "Defines whether an operator set in between, such as [SelectVertices], is taken into account.",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "ed758e72-6977-44e0-a997-bf0ad83f6ceb"/*IsEnabled*/,
+      "Position": {
+        "X": -599.49646,
+        "Y": 1574.1101
+      },
+      "Description": "Toggle on / off"
     }
   ],
   "SymbolChildUis": [
     {
       "ChildId": "7835ccee-086f-4df9-bf4d-8f345b54cd8c"/*ExecuteBufferUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 1539.6279,
         "Y": 883.62213
@@ -55,10 +67,6 @@
     },
     {
       "ChildId": "4ad2c9fd-fc7a-4ea3-9d47-2bf5843f0f0c"/*ComputeShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 331.94485,
         "Y": 1259.4656
@@ -78,21 +86,13 @@
     },
     {
       "ChildId": "149c7a76-cd3a-4f71-8369-26ff90a8e3b8"/*GetSRVProperties*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 412.8947,
         "Y": 1494.771
       }
     },
     {
-      "ChildId": "628ab010-0b38-46c4-8123-7128d352fa85"/*StructuredBuffer2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "628ab010-0b38-46c4-8123-7128d352fa85"/*StructuredBufferWithViews*/,
       "Position": {
         "X": 562.8947,
         "Y": 1494.771
@@ -100,10 +100,6 @@
     },
     {
       "ChildId": "8faa6788-a136-4773-b94d-80553cf8ea4e"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 712.8947,
         "Y": 1494.771
@@ -111,43 +107,27 @@
     },
     {
       "ChildId": "bce6ba91-73f5-4b1f-817f-a1bc9484ed05"/*_MeshBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
-        "X": -316.87436,
-        "Y": 1251.4272
+        "X": -290.78812,
+        "Y": 1199.2549
       }
     },
     {
       "ChildId": "d1d57ff8-f7d4-4e6a-b57b-ed2d3aa0294a"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 331.94485,
-        "Y": 1371.4656
+        "Y": 1358.4656
       }
     },
     {
       "ChildId": "27496053-42a7-4423-91e3-f0f0e6f3df64"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 331.94485,
-        "Y": 1315.4656
+        "Y": 1302.4656
       }
     },
     {
       "ChildId": "8bad6687-4037-43c8-9a73-ab5f0ebaf2e9"/*Execute*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
       "Position": {
         "X": 1385.0137,
         "Y": 975.7354
@@ -167,10 +147,6 @@
     },
     {
       "ChildId": "9017e90f-053e-4b03-b61e-5b2640c25e26"/*ComputeShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 533.9872,
         "Y": 1827.5835
@@ -178,21 +154,13 @@
     },
     {
       "ChildId": "d69cda40-b96d-40b8-867b-84f807f2f6e2"/*CalcDispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 778.688,
         "Y": 1860.1914
       }
     },
     {
-      "ChildId": "37c16acc-8a78-4811-8580-809623f685be"/*StructuredBuffer2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "37c16acc-8a78-4811-8580-809623f685be"/*StructuredBufferWithViews*/,
       "Position": {
         "X": 521.99414,
         "Y": 2093.9463
@@ -200,10 +168,6 @@
     },
     {
       "ChildId": "47ac598c-e3fc-48d2-bf8e-49d1043866f7"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 778.688,
         "Y": 2041.1914
@@ -211,10 +175,6 @@
     },
     {
       "ChildId": "7b3a74c4-f259-4952-8aa8-924127aa361f"/*ClampInt*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 327.27686,
         "Y": 2022.8219
@@ -222,21 +182,13 @@
     },
     {
       "ChildId": "3e90e88d-9941-460a-b5cd-3bcb38fb991d"/*FloatsToBuffer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 778.688,
         "Y": 1929.1914
       }
     },
     {
-      "ChildId": "4bfceede-eda2-4463-b3e3-d21155b288ee"/*StructuredBuffer2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "4bfceede-eda2-4463-b3e3-d21155b288ee"/*StructuredBufferWithViews*/,
       "Position": {
         "X": 505.97302,
         "Y": 2206.8982
@@ -244,10 +196,6 @@
     },
     {
       "ChildId": "95ef1052-2fab-4a57-a7bd-499a77d1ea91"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 776.7672,
         "Y": 2168.8022
@@ -255,10 +203,6 @@
     },
     {
       "ChildId": "652545c9-b1e9-46b0-b5e5-09244d17935a"/*SrvFromTexture2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -53.60736,
         "Y": 1588.4973
@@ -266,10 +210,6 @@
     },
     {
       "ChildId": "b7f00bf2-b902-42e9-acbf-a0b9150463d5"/*SamplerStateOp*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 778.688,
         "Y": 1998.1914
@@ -277,10 +217,6 @@
     },
     {
       "ChildId": "479d7096-fbee-49b7-9fa3-ebecb5ca5a11"/*UseFallbackTexture*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": -203.60736,
         "Y": 1588.4973
@@ -288,13 +224,23 @@
     },
     {
       "ChildId": "3840d8bb-74e4-467c-b2d7-eb98b5fce2e1"/*LoadImage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -357.14862,
         "Y": 1631.0552
+      }
+    },
+    {
+      "ChildId": "3dcba1ac-cd74-466e-aff2-02aaf5d28abd"/*BoolToFloat*/,
+      "Position": {
+        "X": -156.21463,
+        "Y": 1396.0405
+      }
+    },
+    {
+      "ChildId": "61b54ff2-617f-462a-af57-9dc181f86235"/*FloatsToBuffer*/,
+      "Position": {
+        "X": 648.49475,
+        "Y": 1088.8062
       }
     }
   ],

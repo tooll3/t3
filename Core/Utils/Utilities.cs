@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq.Expressions;
 using System.Numerics;
-using Newtonsoft.Json;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 
@@ -58,10 +55,15 @@ namespace T3.Core.Utils
             return Array.Empty<float>();
         }
         
-        
+        /// <summary>
+        /// Clamps an integer to the number of enums.
+        /// This prevents cast exceptions if index is out of range.   
+        /// </summary>
+        /// <remarks>Note that this doesn't work for Enums with non-zero start index.</remarks>
         public static T GetEnumValue<T>(this InputSlot<int> intInputSlot, EvaluationContext context) where T : Enum
         {
-            return CastTo<T>.From(intInputSlot.GetValue(context));
+            var i = intInputSlot.GetValue(context).Clamp(0, Enum.GetValues(typeof(T)).Length - 1);
+            return CastTo<T>.From(i);
         }
         
         public static int Hash<T>(T a, T b)
@@ -75,50 +77,53 @@ namespace T3.Core.Utils
             }
         }
 
-        public static T TryLoadingJson<T>(string filepath) where T : class, new()
+        public static void CopyImageMemory(IntPtr srcData,  IntPtr dstData, int height, int srcStride, int dstStride)
         {
-            if (!File.Exists(filepath))
+            // Fast path, both strides are the same
+            if (srcStride == dstStride)
             {
-                Log.Warning($"{filepath} doesn't exist yet");
-                return null;
+                SharpDX.Utilities.CopyMemory(dstData, srcData, height * srcStride);
             }
-
-            var jsonBlob = File.ReadAllText(filepath);
-            var serializer = JsonSerializer.Create();
-            var fileTextReader = new StringReader(jsonBlob);
-            try
+            else
             {
-                if (serializer.Deserialize(fileTextReader, typeof(T)) is T configurations)
-                    return configurations;
+                //We could pass row width as argument, bu the smallest of each stride is enough here
+                int rowWidth = Math.Min(srcStride, dstStride);
+                for (int i = 0; i < height; i++)
+                {
+                    SharpDX.Utilities.CopyMemory(dstData, srcData, rowWidth);
+                    srcData += srcStride;
+                    dstData += dstStride;   
+                }
             }
-            catch (Exception e)
-            {
-                Log.Error($"Can't load {filepath}:" + e.Message);
-                return null;
-            }
-
-            Log.Error($"Can't load {filepath}");
-            return null;
         }
 
-        public static void SaveJson<T>(T dataObject, string filepath) where T : class, new()
+        /// <summary>
+        /// Infinite modulo indexer, also allows to reference array indexes using negative values
+        /// Note: assumes count is positive, does not perform check for it
+        /// </summary>
+        /// <param name="index">Index value</param>
+        /// <param name="count">Element count</param>
+        /// <returns>A valid index to lookup in the array</returns>
+        public static int InfiniteModIndexer(int index, int count)
         {
-            if (string.IsNullOrEmpty(filepath))
+            if (count == 0)
+                return 0;
+
+            if (index < count)
             {
-                Log.Warning($"Can't save {typeof(T)} to empty filename...");
-                return;
+                if (index >= 0)
+                {
+                    return index;
+                }
+                else
+                {
+                    int remainder = index % count;
+                    return remainder == 0 ? 0 : remainder + count;
+                }
             }
-            Log.Debug($"Saving {filepath}...");
-            var serializer = JsonSerializer.Create();
-            serializer.Formatting = Formatting.Indented;
-            try
+            else
             {
-                using var streamWriter = File.CreateText(filepath);
-                serializer.Serialize(streamWriter, dataObject);
-            }
-            catch(Exception e)
-            {
-                Log.Warning($"Can't create file {filepath} to save {typeof(T)} " + e.Message);
+                return index % count;
             }
         }
     }

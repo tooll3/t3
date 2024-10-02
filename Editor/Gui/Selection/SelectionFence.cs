@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 using ImGuiNET;
-using T3.Editor.Gui.Styling;
+using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Selection
@@ -17,7 +17,10 @@ namespace T3.Editor.Gui.Selection
 
             if (state == States.Inactive)
             {
-                if (ImGui.IsAnyItemHovered() || !ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || !ImGui.IsMouseClicked(ImGuiMouseButton.Left) || ImGui.GetIO().KeyAlt)
+                if (ImGui.IsAnyItemHovered() 
+                    || !ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup | ImGuiHoveredFlags.ChildWindows) 
+                    || !ImGui.IsMouseClicked(ImGuiMouseButton.Left) || ImGui.GetIO().KeyAlt
+                    || FrameStats.Last.IsItemContextMenuOpen)
                     return state;
                 
                 _startPositionInScreen = ImGui.GetMousePos();

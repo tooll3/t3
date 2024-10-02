@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.Text;
-using System.Windows.Forms;
 using T3.Core.Logging;
+using T3.Editor.Gui.UiHelpers;
+using T3.Editor.SystemUi;
+using T3.SystemUi;
 
 namespace T3.Editor.Gui.Interaction.StartupCheck
 {
@@ -15,7 +16,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
         {
             if (File.Exists(StartUpLockFilePath))
             {
-                ShowMessageBox();
+                ShowLastStartupFailedMessageBox();
             }
 
             File.WriteAllText(StartUpLockFilePath, "Startup " + DateTime.Now);
@@ -33,16 +34,15 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
             }
         }
 
-        private static void ShowMessageBox()
+        private static void ShowLastStartupFailedMessageBox()
         {
             var isThereABackup = !string.IsNullOrEmpty(AutoBackup.AutoBackup.GetLatestArchiveFilePath());
             if (!isThereABackup)
             {
-                var result2 = MessageBox.Show("It looks like the last startup failed.\nSadly there is no backup yet.", "Startup Failed",
-                                              MessageBoxButtons.RetryCancel);
-                if (result2 != DialogResult.Retry)
+                var result2 = EditorUi.Instance.ShowMessageBox("It looks like the last startup failed.\nSadly there is no backup yet.", "Startup Failed", PopUpButtons.RetryCancel);
+                if (result2 != PopUpResult.Retry)
                 {
-                    Application.Exit();
+                    EditorUi.Instance.ExitApplication();
                 }
 
                 return;
@@ -51,7 +51,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
             Log.Debug("StartUpProgress lock file exists?");
 
             var timeOfLastBackup = AutoBackup.AutoBackup.GetTimeOfLastBackup();
-            var timeSpan = GetReadableRelativeTime(timeOfLastBackup);
+            var timeSpan = THelpers.GetReadableRelativeTime(timeOfLastBackup);
 
             const string caption = "Oh no! Start up problems...";
             string message = "It looks like last start up was incomplete.\n\n" +
@@ -60,61 +60,39 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                              "  NO to open a link to documentation\n" +
                              "  CANCEL to attempt starting anyways.\n";
 
-            var result = MessageBox.Show(message, caption, MessageBoxButtons.YesNoCancel);
+            var result = EditorUi.Instance.ShowMessageBox(message, caption, PopUpButtons.YesNoCancel);
             switch (result)
             {
-                case DialogResult.Yes:
+                case PopUpResult.Yes:
                 {
                     var wasSuccessful = AutoBackup.AutoBackup.RestoreLast();
                     if (wasSuccessful)
                     {
                         FlagStartupSequenceComplete();
-                        MessageBox.Show("Backup restored. Click OK to restart.\nFingers crossed.", "Complete", MessageBoxButtons.OK);
+                        EditorUi.Instance.ShowMessageBox("Backup restored. Click OK to restart.\nFingers crossed.", "Complete", PopUpButtons.Ok);
                         //Application.Exit();
                         Environment.Exit(0);
                     }
                     else
                     {
-                        MessageBox.Show("Restoring backup failed.\nYou might want to try an earlier archive in .t3\\backup\\...", "Failed",
-                                        MessageBoxButtons.OK);
+                        EditorUi.Instance.ShowMessageBox("Restoring backup failed.\nYou might want to try an earlier archive in .t3\\backup\\...", "Failed",
+                                        PopUpButtons.Ok);
                         Environment.Exit(0);
                     }
 
                     break;
                 }
-                case DialogResult.No:
+                case PopUpResult.No:
                     StartupValidation.OpenUrl(HelpUrl);
                     Environment.Exit(0);
                     break;
                 
-                case DialogResult.Cancel:
+                case PopUpResult.Cancel:
                     break;
             }
         }
 
-        private static string GetReadableRelativeTime(DateTime? timeOfLastBackup)
-        {
-            if (timeOfLastBackup == null)
-                return "Unknown time";
-
-            var timeSinceLastBack = DateTime.Now - timeOfLastBackup;
-            var minutes = timeSinceLastBack.Value.TotalMinutes;
-            if (minutes < 120)
-            {
-                return $"{minutes:0} minutes ago";
-            }
-
-            var hours = timeSinceLastBack.Value.TotalHours;
-            if (hours < 30)
-            {
-                return $"{hours:0.0} hours ago";
-            }
-
-            var days = timeSinceLastBack.Value.TotalDays;
-            return $"{days:0.0} days ago";
-        }
-
-        private const string HelpUrl = "https://github.com/still-scene/t3/wiki/installation#setup-and-installation";
+        private const string HelpUrl = "https://github.com/tooll3/t3/wiki/installation#setup-and-installation";
         private const string StartUpLockFilePath = @".t3\startingUp";
     }
 }

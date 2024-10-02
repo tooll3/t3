@@ -65,6 +65,7 @@ namespace T3.Editor.Gui.Windows
             ImGui.SetCursorScreenPos(topLeftOnScreen);
 
             var sizeOnScreen = ImageOutputCanvas.Current.TransformDirection(size);
+
             var srv = SrvManager.GetSrvForTexture(texture);
             ImGui.Image((IntPtr)srv, sizeOnScreen);
 
@@ -74,51 +75,53 @@ namespace T3.Editor.Gui.Windows
                 T3.Core.IO.MouseInput.Set(relativePosition, ImGui.IsMouseDown(ImGuiMouseButton.Left));
             }
             
-            string format = "";
-            if (srv == null)
+            if (UserSettings.Config.ShowToolbar)
             {
-                format = "null?";
-            } 
-            else if (UserSettings.Config.ShowExplicitTextureFormatInOutputWindow)
-            {
-                format = srv.Description.Format.ToString();
-            }
-            else
-            {
-                switch (srv.Description.Format)
+                var format = "";
+                if (srv == null)
                 {
-                    case Format.R16G16B16A16_Float:
-                        format = "RGBA:16";
-                        break;
-                    case Format.R8G8B8A8_SNorm:
-                        format = "RGBA:8";
-                        break;
-                    default:
-                        format = srv.Description.Format.ToString();
-                        break;
+                    format = "null?";
+                } 
+                else if (UserSettings.Config.ShowExplicitTextureFormatInOutputWindow)
+                {
+                    format = srv.Description.Format.ToString();
                 }
+                else
+                {
+                    switch (srv.Description.Format)
+                    {
+                        case Format.R16G16B16A16_Float:
+                            format = "RGBA:16";
+                            break;
+                        case Format.R8G8B8A8_SNorm:
+                            format = "RGBA:8";
+                            break;
+                        default:
+                            format = srv.Description.Format.ToString();
+                            break;
+                    }
+                }
+                
+                ImGui.PushFont(Fonts.FontSmall);
+                var zoom = Math.Abs(Scale.X) < 0.001f ? "" : $" ×{Scale.X:G2}";
+                var description = $"{size.X}x{size.Y}  {format} {zoom}";
+                var descriptionWidth = ImGui.CalcTextSize(description).X;
+
+                var textPos = new Vector2(WindowPos.X + (WindowSize.X - descriptionWidth) / 2,
+                                          WindowPos.Y + WindowSize.Y - 16);
+
+                var drawList = ImGui.GetWindowDrawList();
+                var shadowColor = UiColors.BackgroundFull.Fade(0.5f);
+                drawList.AddText(textPos + new Vector2(1,0), shadowColor, description );
+                drawList.AddText(textPos + new Vector2(-1,0), shadowColor, description );
+                drawList.AddText(textPos + new Vector2(0,1), shadowColor, description );
+                drawList.AddText(textPos + new Vector2(0,-1), shadowColor, description );
+                drawList.AddText(textPos, UiColors.ForegroundFull, description );
+                ImGui.PopFont();
             }
-                
-                
-                
-            ImGui.PushFont(Fonts.FontSmall);
-            var zoom = Math.Abs(Scale.X) < 0.001f ? "" : $" ×{Scale.X:G2}";
-            var description = $"{size.X}x{size.Y}  {format} {zoom}";
-            var descriptionWidth = ImGui.CalcTextSize(description).X;
-
-            var textPos = new Vector2(WindowPos.X + (WindowSize.X - descriptionWidth) / 2,
-                                      WindowPos.Y + WindowSize.Y - 16);
-
-            var drawList = ImGui.GetWindowDrawList();
-            drawList.AddText(textPos + new Vector2(1,0), ShadowColor, description );
-            drawList.AddText(textPos + new Vector2(-1,0), ShadowColor, description );
-            drawList.AddText(textPos + new Vector2(0,1), ShadowColor, description );
-            drawList.AddText(textPos + new Vector2(0,-1), ShadowColor, description );
-            drawList.AddText(textPos, Color.White, description );
-            ImGui.PopFont();
         }
         
-        private static readonly Color ShadowColor = new Color(0.0f, 0.0f, 0.0f, 0.6f);
+        //private static readonly Color ShadowColor = new Color(0.0f, 0.0f, 0.0f, 0.6f);
 
 
         public void SetViewMode(Modes newMode)

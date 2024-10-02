@@ -74,7 +74,7 @@ namespace T3.Operators.Types.Id_271e397e_051c_473f_968f_a2251fed65d1
             }
 
             var isValidIndex = pageIndex >= 0 && pageIndex < orderedPages.Count;
-            if (!isValidIndex)
+            if (!isValidIndex || orderedPages[pageIndex] == null)
             {
                 PointList.Value = _emptyList;
                 DistanceToCurrentTime.Value = 10000;

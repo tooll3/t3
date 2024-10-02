@@ -1,6 +1,5 @@
 ﻿using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -12,8 +11,8 @@ namespace T3.Operators.Types.Id_9d1266c5_23db_439f_a475_8000fdd1c318
 {
     public class InputAssemblerStage : Instance<InputAssemblerStage>
     {
-        [Output(Guid = "18CAE035-C050-4F98-9E5E-B3A6DB70DDA7", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
-        public readonly Slot<Command> Output = new Slot<Command>(new Command());
+        [Output(Guid = "18CAE035-C050-4F98-9E5E-B3A6DB70DDA7")]
+        public readonly Slot<Command> Output = new(new Command());
 
         public InputAssemblerStage()
         {
@@ -51,12 +50,12 @@ namespace T3.Operators.Types.Id_9d1266c5_23db_439f_a475_8000fdd1c318
 
 
         [Input(Guid = "1EA95430-B853-4A60-A981-F316905995E8")]
-        public readonly InputSlot<PrimitiveTopology> PrimitiveTopology = new InputSlot<PrimitiveTopology>();
+        public readonly InputSlot<PrimitiveTopology> PrimitiveTopology = new();
         [Input(Guid = "B8E07473-60F9-4F5E-995D-7165EF8F7993")]
-        public readonly InputSlot<InputLayout> InputLayout = new InputSlot<InputLayout>();
+        public readonly InputSlot<InputLayout> InputLayout = new();
         [Input(Guid = "4A1703D4-5958-4EDE-A755-79A12FE85F3B")]
-        public readonly MultiInputSlot<Buffer> VertexBuffers = new MultiInputSlot<Buffer>();
+        public readonly MultiInputSlot<Buffer> VertexBuffers = new();
         [Input(Guid = "C8FD1C4B-E6D6-4CA1-A718-4518E3BFFC59")]
-        public readonly InputSlot<Buffer> IndexBuffer = new InputSlot<Buffer>();
+        public readonly InputSlot<Buffer> IndexBuffer = new();
     }
 }

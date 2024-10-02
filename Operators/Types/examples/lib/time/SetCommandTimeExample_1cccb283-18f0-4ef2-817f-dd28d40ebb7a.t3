@@ -119,7 +119,7 @@
       "Outputs": []
     },
     {
-      "Id": "dd565ebb-0619-467b-9b1f-23aea691bbd1"/*Float3ToVector3*/,
+      "Id": "dd565ebb-0619-467b-9b1f-23aea691bbd1"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [],
       "Outputs": []
@@ -197,21 +197,6 @@
       "SymbolId": "2c3d2c26-ac45-42e9-8f13-6ea338333568",
       "InputValues": [
         {
-          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
-          "Type": "System.Single",
-          "Value": 0.07
-        },
-        {
-          "Id": "8169be8f-cb35-4900-b462-f2139b412d59"/*Rotation*/,
-          "Type": "System.Single",
-          "Value": 262.0
-        },
-        {
-          "Id": "5774969c-ef4d-482e-ab37-b3a84b09debb"/*PingPong*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
           "Id": "e47e9e63-9c94-4c29-9555-2452fa498d57"/*Gradient*/,
           "Type": "T3.Core.DataTypes.Gradient",
           "Value": {
@@ -241,6 +226,21 @@
               ]
             }
           }
+        },
+        {
+          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
+          "Type": "System.Single",
+          "Value": 0.07
+        },
+        {
+          "Id": "5774969c-ef4d-482e-ab37-b3a84b09debb"/*PingPong*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
+          "Id": "8169be8f-cb35-4900-b462-f2139b412d59"/*Rotation*/,
+          "Type": "System.Single",
+          "Value": 262.0
         }
       ],
       "Outputs": []
@@ -274,7 +274,7 @@
       "Outputs": []
     },
     {
-      "Id": "90fbe32e-868e-4b73-bdf7-8110b7b4aab3"/*Float2ToVector2*/,
+      "Id": "90fbe32e-868e-4b73-bdf7-8110b7b4aab3"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [],
       "Outputs": []
@@ -313,7 +313,7 @@
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
-          "Id": "dd92fb0a-4b3e-4492-bf59-437d914a1ad3"/*Radius*/,
+          "Id": "dd92fb0a-4b3e-4492-bf59-437d914a1ad3"/*DistanceToTarget*/,
           "Type": "System.Single",
           "Value": 7.3
         }

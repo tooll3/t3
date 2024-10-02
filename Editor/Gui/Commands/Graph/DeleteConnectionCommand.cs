@@ -5,7 +5,7 @@ namespace T3.Editor.Gui.Commands.Graph
 {
     public class DeleteConnectionCommand : ICommand
     {
-        public string Name => "Remove Connection";
+        public string Name => "Delete Connection";
         public bool IsUndoable => true;
 
         public DeleteConnectionCommand(Symbol compositionSymbol, Symbol.Connection connectionToRemove, int multiInputIndex)

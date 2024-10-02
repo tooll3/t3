@@ -5,35 +5,66 @@
   "SymbolChildUis": [
     {
       "ChildId": "3ca68ae8-02bd-432b-94a4-be80b6eb5d1a"/*LoadImage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
-        "X": 5.4802475,
-        "Y": 4.8835144
+        "X": 20.162567,
+        "Y": 269.22614
       }
     },
     {
       "ChildId": "73ef00c1-942d-4464-9390-b9632fef8468"/*DetectEdges*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "Comment": "You discovered a comment! \nIn many examples we will use these to explain the purpose of certain operators in a graph or point out noteworthy parameter settings.",
       "Position": {
-        "X": 160.0813,
-        "Y": -0.073516846
+        "X": 272.81885,
+        "Y": 265.47058
       }
     },
     {
-      "ChildId": "e841cd12-d601-4bde-94f3-85e9dd02a60a"/*Blob*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
+      "ChildId": "710e4b8a-f5c7-4d6c-82a7-df509ed708ce"/*AsciiRender*/,
       "Position": {
-        "X": 386.1458,
-        "Y": 152.14096
+        "X": 463.84412,
+        "Y": 833.6876
+      }
+    },
+    {
+      "ChildId": "cfcb9a91-54a9-4b04-a972-30fbb65f9ee2"/*Blur*/,
+      "Position": {
+        "X": 313.84412,
+        "Y": 833.6876
+      }
+    },
+    {
+      "ChildId": "d7df48f3-9989-4b99-ad68-a266ed2b9760"/*Blob*/,
+      "Position": {
+        "X": 544.6786,
+        "Y": 505.31738
+      }
+    },
+    {
+      "ChildId": "8e521fb6-e59d-403c-80cc-9e9b38df0b23"/*Text*/,
+      "Position": {
+        "X": 13.844116,
+        "Y": 833.6876
+      }
+    },
+    {
+      "ChildId": "b35105be-26e1-4847-bfb5-4686fb304d1b"/*RenderTarget*/,
+      "Position": {
+        "X": 163.84412,
+        "Y": 833.6876
+      }
+    },
+    {
+      "ChildId": "ebfeac4e-0baf-4d89-9572-311831b8e631"/*AnimValue*/,
+      "Position": {
+        "X": 313.84412,
+        "Y": 959.6876
+      }
+    },
+    {
+      "ChildId": "f8b7be5b-bd28-40f3-9c30-880575a764f8"/*AnimVec2*/,
+      "Position": {
+        "X": 313.84412,
+        "Y": 916.6876
       }
     }
   ],
@@ -41,8 +72,8 @@
     {
       "OutputId": "c301380c-8fe6-4e3d-af10-9cebd230b0e9"/*TextureOutput*/,
       "Position": {
-        "X": 564.6011,
-        "Y": 18.0
+        "X": 613.8442,
+        "Y": 833.6876
       }
     }
   ],
@@ -57,17 +88,17 @@
         "W": 1.0
       },
       "Position": {
-        "X": 0.97267914,
-        "Y": -115.01053
+        "X": -0.5046997,
+        "Y": 75.63788
       },
       "Size": {
-        "X": 134.18053,
-        "Y": 159.90724
+        "X": 223.6509,
+        "Y": 235.14153
       }
     },
     {
       "Id": "d26f5d4f-5727-4d0f-989b-9fcb19c037e6",
-      "Title": "You can create a connection by\ndragging the output of [LoadImage] \nto the Image input of [DetectEdges].\nThen select [DetectEdges] to see the result.",
+      "Title": "You can create a connection by\ndragging the output of [LoadImage] \nto the Image input of [DetectEdges].\nThen select [DetectEdges] to see \nthe result.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -75,30 +106,30 @@
         "W": 1.0
       },
       "Position": {
-        "X": 148.36206,
-        "Y": -115.46121
+        "X": 226.6435,
+        "Y": 75.63788
       },
       "Size": {
-        "X": 137.4108,
-        "Y": 160.7336
+        "X": 232.78459,
+        "Y": 234.8706
       }
     },
     {
       "Id": "df329cf7-1e0e-496a-b91e-592a30ccbbd5",
-      "Title": "Tutorial 1 ",
+      "Title": "Tutorial 1 - Basic user interface\n\nYou might also want to have a look at the Tutorial Video shown in the description in the Parameter Window. \nIt will give you a nice overview of the user interface.",
       "Color": {
-        "X": 0.6,
-        "Y": 0.6,
-        "Z": 0.6,
+        "X": 0.46909162,
+        "Y": 0.7340425,
+        "Z": 0.46333182,
         "W": 1.0
       },
       "Position": {
-        "X": -10.087128,
-        "Y": -284.35217
+        "X": -11.772705,
+        "Y": -214.91737
       },
       "Size": {
-        "X": 546.0181,
-        "Y": 134.01688
+        "X": 729.9956,
+        "Y": 248.01181
       }
     },
     {
@@ -111,12 +142,12 @@
         "W": 1.0
       },
       "Position": {
-        "X": 2.0605392,
-        "Y": -258.60645
+        "X": -4.627075,
+        "Y": -124.16031
       },
       "Size": {
-        "X": 300.70782,
-        "Y": 55.147877
+        "X": 686.71625,
+        "Y": 84.591774
       }
     },
     {
@@ -129,17 +160,17 @@
         "W": 1.0
       },
       "Position": {
-        "X": 0.97267914,
-        "Y": -200.95049
+        "X": -4.627075,
+        "Y": -33.081573
       },
       "Size": {
-        "X": 302.33978,
-        "Y": 35.02268
+        "X": 686.1906,
+        "Y": 48.96016
       }
     },
     {
       "Id": "1058504f-053c-4b01-833c-4c5d8d5ea64a",
-      "Title": "Creating new operators is easy:\n1. select [DetectEdges] and...\n2. press TAB on your keyboard.\n\n3. Type \"Color...\" and select [ColorGrade] by\n   pressing return.",
+      "Title": "Creating new operators is easy:\n1. select [DetectEdges] and...\n2. press TAB on your keyboard.\n3. Type \"Color...\" and select \n [ColorGrade] by pressing return.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -147,12 +178,12 @@
         "W": 1.0
       },
       "Position": {
-        "X": 303.43536,
-        "Y": -115.62796
+        "X": 464.765,
+        "Y": 75.63788
       },
       "Size": {
-        "X": 185.94003,
-        "Y": 161.75705
+        "X": 238.52156,
+        "Y": 234.24812
       }
     },
     {
@@ -165,12 +196,12 @@
         "W": 1.0
       },
       "Position": {
-        "X": -10.44973,
-        "Y": -143.8385
+        "X": -10.832947,
+        "Y": 39.85852
       },
       "Size": {
-        "X": 542.5878,
-        "Y": 211.04684
+        "X": 729.69507,
+        "Y": 285.7998
       }
     },
     {
@@ -183,17 +214,17 @@
         "W": 1.0
       },
       "Position": {
-        "X": -9.452538,
-        "Y": 79.26111
+        "X": -9.894287,
+        "Y": 337.159
       },
       "Size": {
-        "X": 539.9444,
-        "Y": 218.23438
+        "X": 730.626,
+        "Y": 366.3865
       }
     },
     {
       "Id": "86ddce6c-2d27-451c-acde-7edffdb45820",
-      "Title": "1. Select the [Blob]...\n2. Notice how the parameter window shows the things you can do with it..\n",
+      "Title": "1. Select the [Blob]...\n2. Notice how the Parameter Window now shows the parameters you adjust for the blob...\n",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -201,17 +232,17 @@
         "W": 1.0
       },
       "Position": {
-        "X": -0.84041214,
-        "Y": 99.11432
+        "X": -6.421631,
+        "Y": 370.2615
       },
       "Size": {
-        "X": 339.32666,
-        "Y": 28.132973
+        "X": 493.12595,
+        "Y": 51.022743
       }
     },
     {
       "Id": "f5ee65c5-76e7-4242-bdb2-6e6c8ab1cc2a",
-      "Title": "You can...\n\n1. Drag values horizontally to change them.\n2. Click a value to type, e.g. values like \"2.1\" or fomulas like \"1.4/3\"\n3. Hover over a value to use mouse wheel. Try holding Shift (for finer) \n   or ALT (for faster) changes.\n\n",
+      "Title": "You can...\n\n1. Drag values horizontally to change them.\n2. Click a value to type, e.g. values like \"2.1\" or formulas like \"1.4/3\"\n3. Hover over a value to use mouse wheel. Try holding Shift (for finer) \n  or ALT (for faster) changes.\n\n",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -219,12 +250,12 @@
         "W": 1.0
       },
       "Position": {
-        "X": -0.38714218,
-        "Y": 130.38995
+        "X": -6.421631,
+        "Y": 424.1971
       },
       "Size": {
-        "X": 339.6917,
-        "Y": 77.729126
+        "X": 493.88586,
+        "Y": 128.77069
       }
     },
     {
@@ -237,12 +268,12 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1.9282684,
-        "Y": 243.61679
+        "X": -7.4015045,
+        "Y": 617.11487
       },
       "Size": {
-        "X": 340.95834,
-        "Y": 38.830128
+        "X": 495.7834,
+        "Y": 71.09724
       }
     },
     {
@@ -255,13 +286,40 @@
         "W": 1.0
       },
       "Position": {
-        "X": -0.84041595,
-        "Y": 210.98138
+        "X": -6.421631,
+        "Y": 555.74744
       },
       "Size": {
-        "X": 340.41452,
-        "Y": 24.688107
+        "X": 495.52887,
+        "Y": 58.375904
       }
+    },
+    {
+      "Id": "14288e8d-d885-4a09-a83d-2849fea72054",
+      "Title": "This is just another simple example that is connected to the operator output.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -6.821739,
+        "Y": 712.0084
+      },
+      "Size": {
+        "X": 728.15894,
+        "Y": 294.46783
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "6e2b005a-8909-4e19-82aa-6727bc6d8556",
+      "Title": "T3-Introduction",
+      "Description": "A short video tutorial that will guide you through the user interface.",
+      "LinkUrl": "https://tooll.io",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

@@ -7,8 +7,8 @@
       "ActivationIndex": 1,
       "Title": "Displace1",
       "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": -1.512001,
+        "Y": 246.01799
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -23,7 +23,7 @@
       "ActivationIndex": 2,
       "Title": "Crazy",
       "PosOnCanvas": {
-        "X": 162.99998,
+        "X": 163.0,
         "Y": 0.0
       },
       "ParameterSetsForChildIds": {
@@ -108,8 +108,8 @@
       "ActivationIndex": 6,
       "Title": "untitled",
       "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 189.796,
+        "Y": 231.30202
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -124,8 +124,8 @@
       "ActivationIndex": 7,
       "Title": "untitled",
       "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 383.368,
+        "Y": 221.114
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {

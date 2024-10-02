@@ -1,5 +1,6 @@
 {
   "Id": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe"/*Value*/,
+  "Description": "Helpful to animate or control the setting of one or multiple nodes.\n\nCan be combined with [Add], [Multiply], [Divide], [Modulo], [Damp], [Div], [Remap] and many other Math Operators to create complex and helpful rigs and combinations.",
   "InputUis": [
     {
       "InputId": "7773837e-104a-4b3d-a41f-cadbd9249af2"/*Float*/,
@@ -7,29 +8,10 @@
         "X": 36.0,
         "Y": 334.0
       },
-      "Min": -1E+14,
-      "Max": 1E+15
-    },
-    {
-      "InputId": "90045a45-f549-4cb5-b57c-c39a0664e84f"/*SliderMin*/,
-      "Position": {
-        "X": 36.0,
-        "Y": 379.0
-      }
-    },
-    {
-      "InputId": "1785eabd-54fa-4b8c-ae5a-54112c2e50b8"/*SliderMax*/,
-      "Position": {
-        "X": 36.0,
-        "Y": 424.0
-      }
-    },
-    {
-      "InputId": "97eaecbb-9290-4d23-932d-dc183ebfcda6"/*ClampSlider*/,
-      "Position": {
-        "X": 36.0,
-        "Y": 469.0
-      }
+      "GroupTitle": "Setting",
+      "Description": "Value that can be defined or animated, among other things, and is then sent out.",
+      "Min": -1.0,
+      "Max": 1.0
     }
   ],
   "SymbolChildUis": [],

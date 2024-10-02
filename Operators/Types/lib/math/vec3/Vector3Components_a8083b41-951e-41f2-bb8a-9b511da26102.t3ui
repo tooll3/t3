@@ -1,0 +1,37 @@
+{
+  "Id": "a8083b41-951e-41f2-bb8a-9b511da26102"/*Vector3Components*/,
+  "Description": "Converts a vec3 to 3 single values\n\nFor the opposite see [Vector3]",
+  "InputUis": [
+    {
+      "InputId": "bc217d95-25d4-44e8-b5ba-05b7facd9a20"/*Value*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "2f05b628-8fc0-46dc-b312-9b107b8ca4a2"/*X*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    },
+    {
+      "OutputId": "f07622c1-aca1-4b8b-8e4a-42d94be87539"/*Y*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 300.0
+      }
+    },
+    {
+      "OutputId": "5173cf99-c9ae-4da4-8b7a-a6b6f27daa84"/*Z*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 400.0
+      }
+    }
+  ]
+}

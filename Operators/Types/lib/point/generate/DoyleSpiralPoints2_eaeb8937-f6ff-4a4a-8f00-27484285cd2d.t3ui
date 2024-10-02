@@ -1,0 +1,285 @@
+{
+  "Id": "eaeb8937-f6ff-4a4a-8f00-27484285cd2d"/*DoyleSpiralPoints2*/,
+  "Description": "Generate a set of points that with decreasing to sizes that can be used to draw a Doyle spiral:\n\nIn the mathematics of circle packing, a Doyle spiral is a pattern of non-crossing circles in the plane in which each circle is surrounded by a ring of six tangent circles. \nThese patterns contain spiral arms formed by circles linked through opposite points of tangency, with their centers on logarithmic spirals of three different shapes. ",
+  "InputUis": [
+    {
+      "InputId": "72ffae32-423d-4c4e-9b6a-39094b1d4bfd"/*Steps*/,
+      "Position": {
+        "X": -1339.0763,
+        "Y": 770.3935
+      },
+      "Description": "Amount of points along the spiral"
+    },
+    {
+      "InputId": "ffbfa2dd-75ed-439e-8bab-eb0104ab9c0d"/*Offset*/,
+      "Position": {
+        "X": -1339.0763,
+        "Y": 815.3935
+      },
+      "Description": "Offsets the position of the drawn points on the spiral",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "bfc2279a-7bf8-436a-a04d-813ecee1776a"/*PointsPerStep*/,
+      "Position": {
+        "X": -1339.0762,
+        "Y": 896.875
+      },
+      "Description": "Defines of how many points one step consists of",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "77f01a41-38ff-4186-8336-84a030be124f"/*SpiralSteepness*/,
+      "Position": {
+        "X": -1339.0762,
+        "Y": 941.875
+      },
+      "Description": "Defines how intense the size of the points increases with each row"
+    },
+    {
+      "InputId": "c576de4b-d0da-4fb7-8290-e9fc383f7c13"/*Scale*/,
+      "Position": {
+        "X": -1290.6246,
+        "Y": 1091.3464
+      },
+      "GroupTitle": "Spiral Size",
+      "Description": "Uniformly scales the size",
+      "Scale": 0.001
+    },
+    {
+      "InputId": "5af0a50e-0da1-4800-9fef-c1217eb2368a"/*ScaleBias*/,
+      "Position": {
+        "X": -1290.6246,
+        "Y": 1136.3462
+      },
+      "Description": "Non-uniformly scales the position of the points on the spiral\nThe points in the center get compressed while the outer points get pushed outwards"
+    },
+    {
+      "InputId": "51748370-6134-4297-90bd-cbd77531d854"/*CenterPositionScale*/,
+      "Position": {
+        "X": -1290.6246,
+        "Y": 1181.3462
+      },
+      "Description": "Scales the center of the spiral cutting off all affected points"
+    },
+    {
+      "InputId": "dcc7b167-c743-46d7-9a01-08c291a2016f"/*W*/,
+      "Position": {
+        "X": -1305.205,
+        "Y": 1357.432
+      },
+      "GroupTitle": "PointSize / W",
+      "Description": "Scales the W-Value of the points (default = size of the points)"
+    },
+    {
+      "InputId": "c0e1a16c-7b1f-43bb-aa13-42cd37f499b8"/*WBias*/,
+      "Position": {
+        "X": -1305.205,
+        "Y": 1402.432
+      },
+      "Description": "Defines how intense the outer points grow in size"
+    },
+    {
+      "InputId": "58e4f212-dc64-4697-a561-296bb66e39ca"/*CenterSizeScale*/,
+      "Position": {
+        "X": -1305.205,
+        "Y": 1447.432
+      },
+      "Description": "Scales the inner points of the spiral cutting pff points by reducing their size"
+    },
+    {
+      "InputId": "1e099abf-0378-43a4-899c-ade1828e42a6"/*Center*/,
+      "Position": {
+        "X": -1312.8433,
+        "Y": 1907.6337
+      },
+      "GroupTitle": "Transform",
+      "Description": "Transforms the center / pivot of the spiral"
+    },
+    {
+      "InputId": "4f0a45cb-7d9b-4021-9977-471215c377a6"/*OrientationAxis*/,
+      "Position": {
+        "X": -1312.8433,
+        "Y": 1952.6337
+      },
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "b8a087a7-2a72-45e8-9adf-938cca729651"/*OrientationAngle*/,
+      "Position": {
+        "X": -1312.8433,
+        "Y": 1997.6337
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "4372c920-5987-4ae7-9010-683cd5413227"/*ComputeShader*/,
+      "Position": {
+        "X": 144.38477,
+        "Y": 286.20483
+      }
+    },
+    {
+      "ChildId": "c1f5742d-d974-4d59-839b-d61e1710dc12"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 507.63617,
+        "Y": 320.49982
+      }
+    },
+    {
+      "ChildId": "fe783651-4b14-4f0e-86e1-4f9b790abd9c"/*FloatsToBuffer*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 110.78082,
+        "Y": 906.7811
+      },
+      "Position": {
+        "X": 231.37524,
+        "Y": 840.3195
+      }
+    },
+    {
+      "ChildId": "1b08befd-a52e-4465-964a-00be906364b9"/*ExecuteBufferUpdate*/,
+      "Position": {
+        "X": 702.06287,
+        "Y": 406.1112
+      }
+    },
+    {
+      "ChildId": "25510ec0-3bf3-41c2-b5d3-8d0b16d02ea3"/*Vector3Components*/,
+      "Position": {
+        "X": -746.97156,
+        "Y": 1148.3666
+      }
+    },
+    {
+      "ChildId": "ea95333e-d2a7-48bf-8617-d16094de0723"/*padding*/,
+      "Position": {
+        "X": -746.97156,
+        "Y": 993.3666
+      }
+    },
+    {
+      "ChildId": "d7472371-3a16-4d93-a136-d93f1ef7b3c5"/*CalcDispatchCount*/,
+      "Position": {
+        "X": 295.02646,
+        "Y": 301.04553
+      }
+    },
+    {
+      "ChildId": "5e8e0786-3884-4ca3-9484-c1bd8270b095"/*ClampInt*/,
+      "Position": {
+        "X": -1015.58356,
+        "Y": 795.1038
+      }
+    },
+    {
+      "ChildId": "432b965d-ba4a-4492-a57a-a9d5b6a27d50"/*MultiplyInt*/,
+      "Position": {
+        "X": -487.00586,
+        "Y": 460.35757
+      }
+    },
+    {
+      "ChildId": "97aae4ab-46d9-486b-be5d-96c54e5e820f"/*padding*/,
+      "Position": {
+        "X": -746.97156,
+        "Y": 1036.3666
+      }
+    },
+    {
+      "ChildId": "bfd41dd0-90b5-4e44-a3ec-05460f458d78"/*ClampInt*/,
+      "Position": {
+        "X": -337.00586,
+        "Y": 460.35757
+      }
+    },
+    {
+      "ChildId": "d2fa194a-a8e7-411d-8b07-b2536ae65bfb"/*StructuredBufferWithViews*/,
+      "Position": {
+        "X": -86.50103,
+        "Y": 691.1957
+      }
+    },
+    {
+      "ChildId": "86346875-f61a-4a02-88c4-35d12a6a2968"/*GetBufferComponents*/,
+      "Position": {
+        "X": 114.896095,
+        "Y": 715.3661
+      }
+    },
+    {
+      "ChildId": "2009c0c5-bb7a-4991-b40a-d6715f4d38f1"/*Vector3Components*/,
+      "Position": {
+        "X": -265.96265,
+        "Y": 1236.3569
+      }
+    },
+    {
+      "ChildId": "40a3784c-becb-4e04-9f10-f98c2816eafc"/*Modulo*/,
+      "Position": {
+        "X": 790.2649,
+        "Y": 1116.6594
+      }
+    },
+    {
+      "ChildId": "4e941219-7447-4233-8444-a1d629c567df"/*_DoyleSpiralRoot*/,
+      "Position": {
+        "X": 790.2649,
+        "Y": 1216.6594
+      }
+    },
+    {
+      "ChildId": "bb314cbb-a412-40db-a665-345b88ee09d8"/*_DoyleSpiralRoot*/,
+      "Position": {
+        "X": -563.2251,
+        "Y": 1599.2355
+      }
+    },
+    {
+      "ChildId": "37ef7c7b-253a-4a15-b6db-095b6f4cce84"/*Vector2Components*/,
+      "Position": {
+        "X": -349.26678,
+        "Y": 1503.0316
+      }
+    },
+    {
+      "ChildId": "dfcd4470-51c3-449e-be9e-200b949b82ae"/*Vector2Components*/,
+      "Position": {
+        "X": -349.26678,
+        "Y": 1559.0316
+      }
+    },
+    {
+      "ChildId": "80c3f746-e935-4161-8e04-bb30f091d73c"/*IntToFloat*/,
+      "Position": {
+        "X": -871.03265,
+        "Y": 1517.8766
+      }
+    },
+    {
+      "ChildId": "b33b0a98-0005-42bd-a5ca-cc0e8befb9ad"/*IntToFloat*/,
+      "Position": {
+        "X": -871.03265,
+        "Y": 1573.8766
+      }
+    },
+    {
+      "ChildId": "08bd2606-6f37-4842-b5c1-26c530deb3b2"/*ClampInt*/,
+      "Position": {
+        "X": -1071.4358,
+        "Y": 1415.4395
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "197b9371-876f-4809-b030-bb1a7b622312"/*OutBuffer*/,
+      "Position": {
+        "X": 852.06287,
+        "Y": 406.1112
+      }
+    }
+  ]
+}

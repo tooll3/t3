@@ -33,10 +33,6 @@
     },
     {
       "ChildId": "147352aa-0e96-4be4-8770-69015bc35277"/*ComputeShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 1028.9509,
         "Y": 1574.8134
@@ -44,10 +40,6 @@
     },
     {
       "ChildId": "758800db-9e84-427e-a025-548aeb5a6835"/*ComputeShaderStage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 153.0
-      },
       "Position": {
         "X": 1394.4,
         "Y": 1605.2957
@@ -55,10 +47,6 @@
     },
     {
       "ChildId": "11dda7f9-60f0-4871-a986-658ddbbc9f10"/*ExecuteBufferUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 1597.427,
         "Y": 1639.7407
@@ -66,10 +54,6 @@
     },
     {
       "ChildId": "06e81309-9a05-4867-88ef-40df5deed084"/*CalcDispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 1172.879,
         "Y": 1633.8442
@@ -77,10 +61,6 @@
     },
     {
       "ChildId": "ef89b18c-d0ad-4b38-8877-c92bf1cbd7fc"/*NewVertices*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 1049.558,
         "Y": 2184.2598
@@ -88,10 +68,6 @@
     },
     {
       "ChildId": "4fde3186-f5e3-4de0-a939-50f7fd3fdeb2"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 1197.0577,
         "Y": 2136.4014
@@ -99,10 +75,6 @@
     },
     {
       "ChildId": "55f304f5-c6f9-43a9-a729-0192b0193a01"/*_MeshBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 215.91827,
         "Y": 2004.9773
@@ -110,10 +82,6 @@
     },
     {
       "ChildId": "4ea1df5d-4467-4df5-8795-3cd6b8fe3e46"/*_AssembleMeshBuffers*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 1747.427,
         "Y": 1639.7407
@@ -121,10 +89,6 @@
     },
     {
       "ChildId": "58f3b5a0-3989-4a3e-8063-3a81bdaac1cd"/*IntValue*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 899.55817,
         "Y": 2240.2598
@@ -132,10 +96,6 @@
     },
     {
       "ChildId": "7881acd2-62f5-41d4-9b62-eda7445c6987"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 403.62543,
         "Y": 2094.7202
@@ -143,10 +103,6 @@
     },
     {
       "ChildId": "84166292-5633-498e-9af7-5ef3811d05c3"/*GetSRVProperties*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 749.55817,
         "Y": 2184.2598
@@ -154,10 +110,6 @@
     },
     {
       "ChildId": "4d0eebee-4f9b-461e-8057-e4c7adc5cf8c"/*MultiplyInt*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 899.55817,
         "Y": 2184.2598
@@ -165,10 +117,6 @@
     },
     {
       "ChildId": "f5b7f0b6-db05-47e3-8eec-588b33bfe247"/*IntValue*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 900.8878,
         "Y": 2079.3418
@@ -176,10 +124,6 @@
     },
     {
       "ChildId": "f769f9e5-b257-4cc7-b089-282305c79e1f"/*NewFaceIndices*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 1050.8878,
         "Y": 2023.3413
@@ -187,10 +131,6 @@
     },
     {
       "ChildId": "885504a3-7dcb-4c72-97e7-07eb222c2551"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 1198.3876,
         "Y": 1975.4832
@@ -198,10 +138,6 @@
     },
     {
       "ChildId": "c7c6d4e1-4d7a-4871-a692-f59481f385de"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 384.81512,
         "Y": 1947.7917
@@ -209,10 +145,6 @@
     },
     {
       "ChildId": "68b7514d-775d-4977-879e-29329163882e"/*GetSRVProperties*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 736.53735,
         "Y": 2015.0759
@@ -231,7 +163,7 @@
   "Annotations": [
     {
       "Id": "69053100-817b-499a-afff-6d21b6476021",
-      "Title": "Build new vertex buffer.",
+      "Title": "Build a new vertex buffer.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

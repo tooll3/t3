@@ -1,10 +1,10 @@
-﻿using System;
+using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SharpDX;
 using T3.Core.Logging;
-using T3.Core.Resource;
+using T3.Core.Model;
 
 namespace T3.Core.DataTypes
 {
@@ -28,9 +28,10 @@ namespace T3.Core.DataTypes
         public abstract int NumElements { get; }
         public abstract int ElementSizeInBytes { get; }
         public abstract int TotalSizeInBytes { get; }
-        public abstract void WriteToStream(DataStream stream);
-        public abstract StructuredList Clone();
-
+        public abstract void WriteToStream(Stream stream);
+        public abstract StructuredList TypedClone();
+        public abstract object Clone();
+        
         public abstract StructuredList Join(params StructuredList[] other);
 
         // public abstract StructuredList Filter(Func<object, bool> filter);
@@ -40,10 +41,16 @@ namespace T3.Core.DataTypes
         public abstract void Write(JsonTextWriter writerNotUsed);
 
         public abstract StructuredList Read(JsonTextReader reader);
+        public abstract StructuredList Read(JToken inputToken);
     }
 
-    public class StructuredList<T> : StructuredList where T : struct
+    public class StructuredList<T> : StructuredList where T : unmanaged
     {
+        public StructuredList(T[] array) : base(typeof(T))
+        {
+            TypedElements = array;
+        }
+        
         public StructuredList(int count) : base(typeof(T))
         {
             TypedElements = new T[count];
@@ -78,18 +85,30 @@ namespace T3.Core.DataTypes
         public override int ElementSizeInBytes => Marshal.SizeOf<T>();
         public override int TotalSizeInBytes => NumElements * ElementSizeInBytes;
 
-        public override void WriteToStream(DataStream stream)
+        public override unsafe void WriteToStream(Stream stream)
         {
-            if (NumElements > 0)
-                stream.WriteRange(TypedElements);
+            for (int i = 0; i < TypedElements.Length; i++)
+            {
+                // pin element and write to stream
+                fixed(T* elementPtr = &TypedElements[i])
+                {
+                    var bytes = new Span<byte>(elementPtr, ElementSizeInBytes);
+                    stream.Write(bytes);
+                }
+            }
         }
 
-        public override StructuredList Clone()
+        public override StructuredList TypedClone()
         {
             var clone = new StructuredList<T>(NumElements);
             Array.Copy(TypedElements, clone.TypedElements, NumElements);
 
             return clone;
+        }
+
+        public override object Clone()
+        {
+            return this.TypedClone();
         }
 
         public override StructuredList Join(params StructuredList[] lists)
@@ -189,6 +208,13 @@ namespace T3.Core.DataTypes
                 foreach (var fieldInfo in fieldInfos)
                 {
                     var name = fieldInfo.Name;
+                    
+                    // Prevent writing read only attributes because they will cause an exception when
+                    // trying to read the const property like Point.Stride
+                    
+                    if (fieldInfo.IsPrivate || fieldInfo.IsStatic || fieldInfo.IsLiteral)
+                        continue;
+
                     writer.WritePropertyName(name);
                     var value = fieldInfo.GetValue(entry);
                     TypeValueToJsonConverters.Entries[fieldInfo.FieldType](writer, value);
@@ -235,6 +261,43 @@ namespace T3.Core.DataTypes
             
             return this;
         }
+        
+        public  override StructuredList Read(JToken inputToken)
+        {
+            //var inputToken = JToken.ReadFrom(reader);
+            if (inputToken == null || inputToken is JValue)
+                return null;
+
+            var jArray = (JArray)inputToken["StructuredList"];
+            if (jArray == null)
+            {
+                TypedElements = Array.Empty<T>();
+                return this;
+            }
+            var elementCount = jArray.Count;
+            
+            TypedElements = new T[elementCount];
+
+            var fieldInfos = Type.GetFields();
+            for (var index = 0; index < jArray.Count; index++)
+            {
+                TypedElements[index]= new T();
+                object boxedEntry = TypedElements[index];
+                
+                var childJson = jArray[index];
+                foreach (var fieldInfo in fieldInfos)
+                {
+                    var valueConverter = JsonToTypeValueConverters.Entries[fieldInfo.FieldType];
+                    var valueJson = childJson[fieldInfo.Name];
+                    var objValue =valueConverter(valueJson);
+                    fieldInfo.SetValue(boxedEntry, objValue);
+                }
+
+                TypedElements[index] = (T)boxedEntry;
+            }
+            
+            return this;
+        }        
     }
 
     public class StructuredListConverter : JsonConverter

@@ -12,12 +12,12 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
     /// </summary>
     public class StandardValueRaster : AbstractTimeRaster
     {
-        public override void Draw(Playback playback)
+        public override void Draw(Playback playback, float unitsPerSeconds)
         {
-            var unitInSecs = UnitsPerSecond / playback.Bpm * 60f * 4f;
+            UnitsPerSecond = unitsPerSeconds / playback.Bpm * 60f * 4f;
 
-            var scale = TimeLineCanvas.Current.Scale.X / unitInSecs;
-            var scroll = TimeLineCanvas.Current.Scroll.X * unitInSecs;
+            var scale = TimeLineCanvas.Current.Scale.X / UnitsPerSecond;
+            var scroll = TimeLineCanvas.Current.Scroll.X * UnitsPerSecond;
             DrawTimeTicks(scale, scroll, TimeLineCanvas.Current);
         }
 
@@ -30,23 +30,23 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
 
         public void Draw(ICanvas canvas)
         {
-            var unitInSecs = UnitsPerSecond;
+            var unitInSecs = 1;
 
             var scale = canvas.Scale.X / unitInSecs;
             var scroll = canvas.Scroll.X * canvas.Scale.X;
             DrawTimeTicks(scale, scroll / scale, canvas);
         }
 
-        public float UnitsPerSecond { get; set; } = 1;
+        
 
-        protected override string BuildLabel(Raster raster, double timeInSeconds)
+        protected override string BuildLabel(Raster raster, double timeInUnits)
         {
             var output = "";
             foreach (var c in raster.Label)
             {
                 if (c == 'N')
                 {
-                    output += timeInSeconds.ToString("G5", CultureInfo.InvariantCulture);
+                    output += timeInUnits.ToString("G5", CultureInfo.InvariantCulture);
                 }
                 else
                 {
@@ -106,6 +106,8 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
             return !EnableSnapping 
                        ? null 
                        : base.CheckForSnap(time, canvasScale);
+            
+            //return  base.CheckForSnap(time, canvasScale);
         }
 
         private readonly Raster[] _blendRasters = new Raster[2];

@@ -34,8 +34,8 @@
     {
       "Id": "61bb0df6-6c8a-4f3a-b7f4-9d979377cab8"/*Resolution*/,
       "DefaultValue": {
-        "Width": 0,
-        "Height": 0
+        "X": 0,
+        "Y": 0
       }
     },
     {
@@ -51,15 +51,15 @@
         {
           "Id": "16dce9bc-02d9-48f8-b07e-94a9af48d27b"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\generate\\img-generate-Grain.hlsl"
+          "Value": "Resources\\lib\\img\\generate\\Grain.hlsl"
         },
         {
           "Id": "499e7ff0-3b6a-414b-be19-03c615931ab8"/*BufferColor*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.5,
-            "Y": 0.5,
-            "Z": 0.5,
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
             "W": 0.0
           }
         }

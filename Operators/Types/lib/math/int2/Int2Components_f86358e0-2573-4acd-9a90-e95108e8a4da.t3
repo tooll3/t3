@@ -1,0 +1,16 @@
+{
+  "Name": "Int2Components",
+  "Id": "f86358e0-2573-4acd-9a90-e95108e8a4da",
+  "Namespace": "lib.math.int2",
+  "Inputs": [
+    {
+      "Id": "425ba347-d82a-49ec-b8b4-d0f8f7e3a504"/*Resolution*/,
+      "DefaultValue": {
+        "X": 0,
+        "Y": 0
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

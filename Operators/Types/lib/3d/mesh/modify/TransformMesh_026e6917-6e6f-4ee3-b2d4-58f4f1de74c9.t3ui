@@ -6,65 +6,76 @@
       "InputId": "c2c9afc7-3474-40c3-be82-b9f48c92a2c5"/*Mesh*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -868.13226,
-        "Y": 729.2969
+        "X": -557.8594,
+        "Y": 773.0897
       }
     },
     {
       "InputId": "da607ebd-6fec-4ae8-bf91-b70dcb794557"/*Translation*/,
       "Position": {
-        "X": -867.9335,
-        "Y": 916.22766
-      }
+        "X": -557.6606,
+        "Y": 867.47046
+      },
+      "GroupTitle": "Transform Mesh",
+      "Description": "Moves the incoming mesh\n\nX (-left / +right), \nY (-down / + up), \nZ (-forward/+backwards)\n"
     },
     {
       "InputId": "1168094f-1eee-4ed7-95e2-9459e6171e08"/*Rotation*/,
       "Position": {
-        "X": -867.9335,
-        "Y": 961.22766
+        "X": -557.6606,
+        "Y": 912.47046
       },
-      "Scale": 0.1
+      "Description": "Rotates the incoming mesh around the following axes:\n\nX: Horizontal axis\nY: Vertical axis\nZ: Forward axis\n",
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
     },
     {
       "InputId": "f37c11a5-b210-4e83-8ebd-64ea49ee9b96"/*Scale*/,
       "Position": {
-        "X": -867.9335,
-        "Y": 1006.22784
-      }
+        "X": -557.6606,
+        "Y": 957.47064
+      },
+      "Description": "Scales the incoming subgraph in the following directions:\n\nX: Width\nY: Height\nZ: Depth\n"
     },
     {
       "InputId": "86791d0a-97c3-413a-89d9-aa2ddd40ce4a"/*UniformScale*/,
       "Position": {
-        "X": -867.9335,
-        "Y": 1051.2278
-      }
+        "X": -557.6606,
+        "Y": 1002.4706
+      },
+      "Description": "Uniformly scales the incoming mesh",
+      "AddPadding": "True"
     },
     {
       "InputId": "71531810-78ab-449e-bb13-bfe5fe3d2a69"/*UseVertexSelection*/,
       "Position": {
-        "X": -867.9335,
-        "Y": 1096.2278
-      }
+        "X": -557.6606,
+        "Y": 1047.4706
+      },
+      "Description": "Defines whether only selected vertices should be affected by the manipulation",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "ccd89dd2-1baa-4a0c-8ec3-5a0e77551379"/*Pivot*/,
+      "Position": {
+        "X": -557.6606,
+        "Y": 1092.4706
+      },
+      "GroupTitle": "Transform Pivot",
+      "Description": "Moves the Pivot (center point) of the incoming subgraph:\n\nX (-left / +right) \nY (-down / + up) \nZ (-forward/+backwards)\n\nThe Pivot Point determines the location of the incoming subgraph Gizmo. Transforming its location can make it easier to perform transformations around the position you want.\n"
     }
   ],
   "SymbolChildUis": [
     {
       "ChildId": "1c233d4c-fb3c-47ac-9461-55b7ee4dc323"/*ComputeShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
-        "X": 109.659775,
-        "Y": 493.5784
+        "X": 106.335434,
+        "Y": 516.8489
       }
     },
     {
       "ChildId": "0dfb8c38-16c2-4604-8e32-ecb9cb7642aa"/*ComputeShaderStage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 127.0
-      },
       "Position": {
         "X": 475.10886,
         "Y": 524.0607
@@ -75,19 +86,15 @@
       "Style": "Resizable",
       "Size": {
         "X": 108.263535,
-        "Y": 209.40137
+        "Y": 130.72499
       },
       "Position": {
-        "X": 178.24501,
-        "Y": 873.66125
+        "X": 279.3053,
+        "Y": 871.00183
       }
     },
     {
       "ChildId": "55f0a2a3-093b-426a-8955-f225413a96c7"/*GetSRVProperties*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -73.12926,
         "Y": 695.17487
@@ -95,156 +102,72 @@
     },
     {
       "ChildId": "52ea84e0-0daa-4c24-b50f-848a492d4df4"/*ExecuteBufferUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
-        "X": 678.1359,
-        "Y": 558.50574
+        "X": 625.1089,
+        "Y": 524.0607
       }
     },
     {
       "ChildId": "020d3da9-7ca7-4709-8869-a3e0d075a2d5"/*CalcDispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
-        "X": 253.58789,
-        "Y": 552.60925
+        "X": 250.26355,
+        "Y": 575.8797
       }
     },
     {
-      "ChildId": "fb5aa285-2f39-4fdb-b00b-5114d61223ff"/*StructuredBuffer2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
+      "ChildId": "fb5aa285-2f39-4fdb-b00b-5114d61223ff"/*StructuredBufferWithViews*/,
       "Position": {
-        "X": 120.97458,
-        "Y": 1204.5917
+        "X": 106.920654,
+        "Y": 1073.6066
       }
     },
     {
       "ChildId": "58f46406-99ac-4552-ab39-5100ea0242e2"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
-        "X": -226.12204,
-        "Y": 626.3017
+        "X": -250.68524,
+        "Y": 727.7284
       }
     },
     {
       "ChildId": "3f67b99a-f4c7-4b45-ba29-0e4f7c00444f"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
-        "X": 293.35922,
-        "Y": 1152.7119
+        "X": 279.3053,
+        "Y": 1021.7268
       }
     },
     {
       "ChildId": "b3de1c6c-3781-4512-b80e-c7e9f21a95bd"/*TransformMatrix*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
       "Position": {
-        "X": -139.36281,
-        "Y": 916.53937
-      }
-    },
-    {
-      "ChildId": "c32371bc-15ae-4f19-84c9-e03b51edb673"/*PickSDXVector4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 48.24501,
-        "Y": 873.66125
-      }
-    },
-    {
-      "ChildId": "07bbe0ba-e2e8-486a-854c-cb3e190987d6"/*PickSDXVector4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 48.24501,
-        "Y": 929.6614
-      }
-    },
-    {
-      "ChildId": "dde1840d-9c32-40a6-958f-a5405efedc39"/*PickSDXVector4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 48.24501,
-        "Y": 985.6613
-      }
-    },
-    {
-      "ChildId": "c6d0d539-b199-4fdb-a217-1ceaebe24bbc"/*PickSDXVector4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 48.24501,
-        "Y": 1041.661
+        "X": 129.3053,
+        "Y": 871.00183
       }
     },
     {
       "ChildId": "7d9f0525-6ecc-4a74-9ae1-8f697b5b8aa0"/*_MeshBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
-        "X": -498.1996,
-        "Y": 776.4856
+        "X": -407.85938,
+        "Y": 773.0897
       }
     },
     {
       "ChildId": "d44f886a-f752-48f5-b2a1-1eb20858e81d"/*_AssembleMeshBuffers*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
-        "X": 939.47815,
-        "Y": 612.7187
+        "X": 775.1089,
+        "Y": 524.0607
       }
     },
     {
       "ChildId": "a616e533-23fa-424a-8eb4-d0d1b43b9482"/*PBRVertex.Stride*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
-        "X": -147.94518,
-        "Y": 1271.9976
+        "X": -43.079346,
+        "Y": 1073.6066
       }
     },
     {
-      "ChildId": "331e7588-3b1d-4f76-8021-b22147cd7972"/*BoolToFloats*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "331e7588-3b1d-4f76-8021-b22147cd7972"/*BoolToFloat*/,
       "Position": {
-        "X": -154.11465,
-        "Y": 1153.4233
+        "X": 129.3053,
+        "Y": 979.00183
       }
     }
   ],
@@ -252,8 +175,8 @@
     {
       "OutputId": "9ff1bfed-4554-4c55-9557-8b318ac47afe"/*Result*/,
       "Position": {
-        "X": 1215.2996,
-        "Y": 578.8686
+        "X": 925.1089,
+        "Y": 524.0607
       }
     }
   ]

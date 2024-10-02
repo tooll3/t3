@@ -1,5 +1,6 @@
 {
   "Id": "55411442-d538-48bf-ab78-b8c24c85aa46"/*AdjustColors*/,
+  "Description": "Adjusts various color properties of the incoming image and adds a slight vignette.\n\nAlso consider using [ColorGrade].",
   "InputUis": [
     {
       "InputId": "c325d01a-5232-4696-9b58-e24f72779597"/*Texture2d*/,
@@ -103,48 +104,31 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "76ba6253-5852-43af-b858-da176bcb612b"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "76ba6253-5852-43af-b858-da176bcb612b"/*Vector4Components*/,
       "Position": {
         "X": 261.9446,
         "Y": 577.09564
       }
     },
     {
-      "ChildId": "66749bd3-1a56-4ed3-be17-c08249ba0565"/*_ImageFxShaderSetup2*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 137.52068,
-        "Y": 520.0926
-      },
-      "Position": {
-        "X": 611.1216,
-        "Y": 392.92044
-      }
-    },
-    {
-      "ChildId": "25c48790-15e9-4f3c-a509-8dc9efa54ede"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "25c48790-15e9-4f3c-a509-8dc9efa54ede"/*Vector2Components*/,
       "Position": {
         "X": 242.25406,
         "Y": 838.0634
       }
     },
     {
-      "ChildId": "ab65d77c-65c4-4231-b17e-f33bbf108b60"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "ab65d77c-65c4-4231-b17e-f33bbf108b60"/*Vector4Components*/,
       "Position": {
         "X": 261.9446,
         "Y": 633.09564
+      }
+    },
+    {
+      "ChildId": "86f9a136-1f29-4ba9-907f-604c60f3a293"/*_ImageFxShaderSetupStatic*/,
+      "Position": {
+        "X": 897.6512,
+        "Y": 431.74585
       }
     }
   ],
@@ -152,8 +136,8 @@
     {
       "OutputId": "c4dcede0-34be-48a8-961e-1f8b7d4ada0a"/*Output*/,
       "Position": {
-        "X": 939.8677,
-        "Y": 642.9786
+        "X": 1273.5383,
+        "Y": 660.0025
       }
     }
   ]

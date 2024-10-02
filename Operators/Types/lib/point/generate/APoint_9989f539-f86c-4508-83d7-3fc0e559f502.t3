@@ -28,6 +28,27 @@
       "DefaultValue": 1.0
     },
     {
+      "Id": "34ad759e-9a81-4d7e-9024-5abacc279895"/*Color*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
+        "W": 1.0
+      }
+    },
+    {
+      "Id": "130b5c11-66dd-4c0e-ac67-924554bad2d8"/*Extend*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0
+      }
+    },
+    {
+      "Id": "ca12df13-7529-4ede-b6fc-ce8aeba4f33e"/*Selected*/,
+      "DefaultValue": 1.0
+    },
+    {
       "Id": "53cde701-435f-42e4-b598-db0e607a238c"/*AddSeparator*/,
       "DefaultValue": false
     }

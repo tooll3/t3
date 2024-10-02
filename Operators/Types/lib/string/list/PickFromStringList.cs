@@ -8,10 +8,10 @@ namespace T3.Operators.Types.Id_ef357e66_24e9_4f54_8d86_869db74602f4
     public class PickFromStringList : Instance<PickFromStringList>
     {
         [Output(Guid = "467bb46e-3391-48a7-b0eb-f7fd9d77b60f")]
-        public readonly Slot<string> Selected = new Slot<string>();
+        public readonly Slot<string> Selected = new();
 
         [Output(Guid = "83009BD4-5257-44A2-8091-92B7D2FA5E35")]
-        public readonly Slot<int> Count = new Slot<int>();
+        public readonly Slot<int> Count = new();
 
         
         public PickFromStringList()
@@ -48,9 +48,9 @@ namespace T3.Operators.Types.Id_ef357e66_24e9_4f54_8d86_869db74602f4
         }
 
         [Input(Guid = "8d5e77a6-1ec4-4979-ad26-f7862049bce1")]
-        public readonly InputSlot<List<string>> Input = new InputSlot<List<string>>(new List<string>(20));
+        public readonly InputSlot<List<string>> Input = new(new List<string>(20));
 
         [Input(Guid = "12ce5fe3-750f-47ed-9507-416cb327a615")]
-        public readonly InputSlot<int> Index = new InputSlot<int>(0);
+        public readonly InputSlot<int> Index = new(0);
     }
 }

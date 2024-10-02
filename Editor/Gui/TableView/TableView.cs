@@ -15,7 +15,7 @@ namespace T3.Editor.Gui.TableView
             return Draw(list, Vector2.Zero);
         }
 
-        public static Dictionary<Type, string[]> TypeComponents = new Dictionary<Type, string[]>()
+        public static Dictionary<Type, string[]> TypeComponents = new()
                                                                       {
                                                                           { typeof(Vector2), new[] { ".x", ".y" } },
                                                                           { typeof(Vector3), new[] { ".x", ".y", ".z" } },
@@ -25,7 +25,6 @@ namespace T3.Editor.Gui.TableView
 
         public static bool Draw(StructuredList list, Vector2 size)
         {
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(3, 3));
             ImGui.BeginChild("child", size);
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(2, 2));
             const float valueColumnWidth = 50;
@@ -103,7 +102,7 @@ namespace T3.Editor.Gui.TableView
                         var o = fi.GetValue(obj);
                         if (o is float f)
                         {
-                            if (DrawFloatManipulation(ref f, fieldIndex))
+                            if (DrawFloatManipulation(ref f, objectIndex* 1000+ fieldIndex))
                             {
                                 fi.SetValue(obj, f);
                                 objModified = true;
@@ -199,7 +198,6 @@ namespace T3.Editor.Gui.TableView
             ImGui.PopFont();
             ImGui.PopStyleVar(); // FramePadding
             ImGui.EndChild();
-            ImGui.PopStyleVar(); // WindowPadding
             
             return listModified;
 
@@ -210,10 +208,10 @@ namespace T3.Editor.Gui.TableView
                 var grayedOut = (Math.Abs(f) < 0.0001f);
                 if (grayedOut)
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Text, Color.DarkGray.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.BackgroundFull.Rgba);
                 }
-                
-                var fieldModified = ImGui.DragFloat("##sdf", ref f);
+
+                var fieldModified = ImGui.DragFloat("##sdf", ref f, 0.01f);
 
                 if (grayedOut)
                 {

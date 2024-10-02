@@ -1,9 +1,8 @@
 using System;
-using SharpDX;
-using SharpDX.Direct2D1;
+using System.Numerics;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -11,6 +10,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using T3.Core.Utils.Geometry;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
@@ -20,7 +20,7 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
     public class CubeMesh : Instance<CubeMesh>
     {
         [Output(Guid = "35660e2b-5005-44a2-bf57-db9a3f1b791d")]
-        public readonly Slot<MeshBuffers> Data = new Slot<MeshBuffers>();
+        public readonly Slot<MeshBuffers> Data = new();
 
         public CubeMesh()
         {
@@ -35,22 +35,20 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
 
                 var scale = Scale.GetValue(context);
                 var stretch = Stretch.GetValue(context);
-                var stretchDX = new SharpDX.Vector3(stretch.X, stretch.Y, stretch.Z);
                 var pivot = Pivot.GetValue(context);
-                var pivotDX = new SharpDX.Vector3(pivot.X, pivot.Y, pivot.Z);
                 var rotation = Rotation.GetValue(context);
-                var cubeRotationMatrix = Matrix.RotationYawPitchRoll(MathUtil.DegreesToRadians(rotation.Y),
-                                                                     MathUtil.DegreesToRadians(rotation.X),
-                                                                     MathUtil.DegreesToRadians(rotation.Z));
+                var cubeRotationMatrix = Matrix4x4.CreateFromYawPitchRoll(MathUtils.ToRad * (rotation.Y),
+                                                                     MathUtils.ToRad * (rotation.X),
+                                                                     MathUtils.ToRad * (rotation.Z));
 
                 var center = Center.GetValue(context);
                 // var offset = new SharpDX.Vector3(stretch.X * scale * (pivot.X - 0.5f),
                 //                                  stretch.Y * scale * (pivot.Y - 0.5f),
                 //                                  stretch.Z * scale * (pivot.Z - 0.5f));
 
-                var offset = -SharpDX.Vector3.One * 0.5f;
+                var offset = -Vector3.One * 0.5f;
 
-                var center2 = new SharpDX.Vector3(center.X, center.Y, center.Z);
+                var center2 = new Vector3(center.X, center.Y, center.Z);
 
                 var segments = Segments.GetValue(context);
                 _xSegments = segments.X.Clamp(1, 10000) + 1;
@@ -68,7 +66,7 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                     _vertexBufferData = new PbrVertex[verticesCount];
 
                 if (_indexBufferData.Length != faceCount)
-                    _indexBufferData = new SharpDX.Int3[faceCount];
+                    _indexBufferData = new Int3[faceCount];
 
                 int sideFaceIndex = 0;
                 int sideVertexIndex = 0;
@@ -77,11 +75,11 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                 {
                     var side = _sides[sideIndex];
 
-                    var sideRotationMatrix = Matrix.RotationYawPitchRoll(side.SideRotation.Y,
+                    var sideRotationMatrix = Matrix4x4.CreateFromYawPitchRoll(side.SideRotation.Y,
                                                                          side.SideRotation.X,
                                                                          side.SideRotation.Z);
 
-                    var rotationMatrix = Matrix.Multiply(sideRotationMatrix, cubeRotationMatrix);
+                    var rotationMatrix = Matrix4x4.Multiply(sideRotationMatrix, cubeRotationMatrix);
 
                     var columnCount = GetSegmentCountForAxis(side.ColumnAxis);
                     var rowCount = GetSegmentCountForAxis(side.RowAxis);
@@ -93,9 +91,9 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                     double rowStep = 1.0 / (rowCount - 1);
                     float depthScale = 1f;
 
-                    var normal = SharpDX.Vector3.TransformNormal(SharpDX.Vector3.ForwardLH, rotationMatrix);
-                    var tangent = SharpDX.Vector3.TransformNormal(SharpDX.Vector3.Right, rotationMatrix);
-                    var binormal = SharpDX.Vector3.TransformNormal(SharpDX.Vector3.Up, rotationMatrix);
+                    var normal = Vector3.TransformNormal(VectorT3.ForwardLH, rotationMatrix);
+                    var tangent = Vector3.TransformNormal(VectorT3.Right, rotationMatrix);
+                    var binormal = Vector3.TransformNormal(VectorT3.Up, rotationMatrix);
 
                     // Initialize
                     for (int columnIndex = 0; columnIndex < columnCount; ++columnIndex)
@@ -110,14 +108,14 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                             var vertexIndex = rowIndex + columnIndex * rowCount + sideVertexIndex;
                             var faceIndex = 2 * (rowIndex + columnIndex * (rowCount - 1)) + sideFaceIndex;
 
-                            var p = new SharpDX.Vector3(columnFragment,
+                            var p = new Vector3(columnFragment,
                                                         rowFragment,
                                                         depthScale);
 
                             var v0 = (rowIndex) / ((float)rowCount - 1);
-                            var uv0 = new SharpDX.Vector2(u0, v0);
-                            var position = (SharpDX.Vector3.TransformNormal(p + offset, sideRotationMatrix) + pivotDX) * stretchDX * scale;
-                            position = SharpDX.Vector3.TransformNormal(position, cubeRotationMatrix);
+                            var uv0 = new Vector2(u0, v0);
+                            var position = (Vector3.TransformNormal(p + offset, sideRotationMatrix) + pivot) * stretch * scale;
+                            position = Vector3.TransformNormal(position, cubeRotationMatrix);
 
                             _vertexBufferData[vertexIndex + 0] = new PbrVertex
                                                                      {
@@ -132,8 +130,8 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                             if (columnIndex >= columnCount - 1 || rowIndex >= rowCount - 1)
                                 continue;
 
-                            _indexBufferData[faceIndex + 0] = new SharpDX.Int3(vertexIndex, vertexIndex + rowCount, vertexIndex + 1);
-                            _indexBufferData[faceIndex + 1] = new SharpDX.Int3(vertexIndex + rowCount, vertexIndex + rowCount + 1, vertexIndex + 1);
+                            _indexBufferData[faceIndex + 0] = new Int3(vertexIndex, vertexIndex + rowCount, vertexIndex + 1);
+                            _indexBufferData[faceIndex + 1] = new Int3(vertexIndex + rowCount, vertexIndex + rowCount + 1, vertexIndex + 1);
                         }
                     }
 
@@ -142,16 +140,16 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                 }
 
                 // Write Data
-                _vertexBufferWithViews.Buffer = _vertexBuffer;
                 ResourceManager.SetupStructuredBuffer(_vertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride, ref _vertexBuffer);
                 ResourceManager.CreateStructuredBufferSrv(_vertexBuffer, ref _vertexBufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_vertexBuffer, UnorderedAccessViewBufferFlags.None, ref _vertexBufferWithViews.Uav);
+                _vertexBufferWithViews.Buffer = _vertexBuffer;
 
-                _indexBufferWithViews.Buffer = _indexBuffer;
                 const int stride = 3 * 4;
                 ResourceManager.SetupStructuredBuffer(_indexBufferData, stride * faceCount, stride, ref _indexBuffer);
                 ResourceManager.CreateStructuredBufferSrv(_indexBuffer, ref _indexBufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_indexBuffer, UnorderedAccessViewBufferFlags.None, ref _indexBufferWithViews.Uav);
+                _indexBufferWithViews.Buffer = _indexBuffer;
 
                 _data.VertexBuffer = _vertexBufferWithViews;
                 _data.IndicesBuffer = _indexBufferWithViews;
@@ -197,34 +195,34 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
 
         private struct Side
         {
-            public SharpDX.Vector3 Normal;
-            public SharpDX.Vector3 Tangent;
-            public SharpDX.Vector3 Binormal;
+            public Vector3 Normal;
+            public Vector3 Tangent;
+            public Vector3 Binormal;
             public Vector2 UvScale;
             public Vector2 UvOffset;
             public SegmentAxis ColumnAxis;
             public SegmentAxis RowAxis;
             public SegmentAxis DepthAxis;
-            public SharpDX.Vector3 SideRotation;
+            public Vector3 SideRotation;
         }
 
         static private Side[] _sides =
             {
                 // Front
-                new Side
+                new()
                     {
-                        Normal = SharpDX.Vector3.ForwardLH,
-                        Tangent = SharpDX.Vector3.Right,
-                        Binormal = SharpDX.Vector3.Up,
+                        Normal = VectorT3.ForwardLH,
+                        Tangent = VectorT3.Right,
+                        Binormal = VectorT3.Up,
                         UvScale = Vector2.One,
                         UvOffset = Vector2.Zero,
                         ColumnAxis = SegmentAxis.X,
                         RowAxis = SegmentAxis.Y,
                         DepthAxis = SegmentAxis.Z,
-                        SideRotation = new SharpDX.Vector3(0, 0, 0),
+                        SideRotation = Vector3.Zero
                     },
                 // Right
-                new Side
+                new()
                     {
                         Normal = default,
                         Tangent = default,
@@ -234,23 +232,23 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                         ColumnAxis = SegmentAxis.Z,
                         RowAxis = SegmentAxis.Y,
                         DepthAxis = SegmentAxis.X,
-                        SideRotation = new SharpDX.Vector3(0, (float)(Math.PI * 0.5), 0),
+                        SideRotation = new Vector3(0, (float)(Math.PI * 0.5), 0),
                     },
                 // Back
-                new Side
+                new()
                     {
-                        Normal = -SharpDX.Vector3.ForwardLH,
-                        Tangent = -SharpDX.Vector3.Right,
-                        Binormal = -SharpDX.Vector3.Up,
+                        Normal = -VectorT3.ForwardLH,
+                        Tangent = -VectorT3.Right,
+                        Binormal = -VectorT3.Up,
                         UvScale = default,
                         UvOffset = default,
                         ColumnAxis = SegmentAxis.X,
                         RowAxis = SegmentAxis.Y,
                         DepthAxis = SegmentAxis.Z,
-                        SideRotation = new SharpDX.Vector3(0, (float)Math.PI, 0),
+                        SideRotation = new Vector3(0, (float)Math.PI, 0),
                     },
                 // Left
-                new Side
+                new()
                     {
                         Normal = default,
                         Tangent = default,
@@ -260,10 +258,10 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                         ColumnAxis = SegmentAxis.Z,
                         RowAxis = SegmentAxis.Y,
                         DepthAxis = SegmentAxis.X,
-                        SideRotation = new SharpDX.Vector3(0, (float)(Math.PI * 1.5), 0),
+                        SideRotation = new Vector3(0, (float)(Math.PI * 1.5), 0),
                     },
                 // Top
-                new Side
+                new()
                     {
                         Normal = default,
                         Tangent = default,
@@ -273,10 +271,10 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                         ColumnAxis = SegmentAxis.X,
                         RowAxis = SegmentAxis.Z,
                         DepthAxis = SegmentAxis.Y,
-                        SideRotation = new SharpDX.Vector3((float)(Math.PI * 0.5), 0, 0),
+                        SideRotation = new Vector3((float)(Math.PI * 0.5), 0, 0),
                     },
                 // Bottom
-                new Side
+                new()
                     {
                         Normal = default,
                         Tangent = default,
@@ -286,36 +284,36 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                         ColumnAxis = SegmentAxis.X,
                         RowAxis = SegmentAxis.Z,
                         DepthAxis = SegmentAxis.Y,
-                        SideRotation = new SharpDX.Vector3((float)(Math.PI * 1.5), 0, 0),
+                        SideRotation = new Vector3((float)(Math.PI * 1.5), 0, 0),
                     },
             };
 
         private Buffer _vertexBuffer;
         private PbrVertex[] _vertexBufferData = new PbrVertex[0];
-        private readonly BufferWithViews _vertexBufferWithViews = new BufferWithViews();
+        private readonly BufferWithViews _vertexBufferWithViews = new();
 
         private Buffer _indexBuffer;
-        private SharpDX.Int3[] _indexBufferData = new SharpDX.Int3[0];
-        private readonly BufferWithViews _indexBufferWithViews = new BufferWithViews();
+        private Int3[] _indexBufferData = new Int3[0];
+        private readonly BufferWithViews _indexBufferWithViews = new();
 
-        private readonly MeshBuffers _data = new MeshBuffers();
+        private readonly MeshBuffers _data = new();
 
         [Input(Guid = "E445A6DA-0B66-46AE-AD2B-650E9CC50798")]
-        public readonly InputSlot<Int3> Segments = new InputSlot<Int3>();
+        public readonly InputSlot<Int3> Segments = new();
 
         [Input(Guid = "97C9849E-751C-49A9-823D-0AF839FA503E")]
-        public readonly InputSlot<Vector3> Stretch = new InputSlot<Vector3>();
+        public readonly InputSlot<Vector3> Stretch = new();
 
         [Input(Guid = "9a7d34a1-ca39-48bc-b977-9a786d23f3b1")]
-        public readonly InputSlot<float> Scale = new InputSlot<float>();
+        public readonly InputSlot<float> Scale = new();
 
         [Input(Guid = "FEBFAE90-13E8-4F0A-8CCF-B8825EA525F8")]
-        public readonly InputSlot<Vector3> Pivot = new InputSlot<Vector3>();
+        public readonly InputSlot<Vector3> Pivot = new();
 
         [Input(Guid = "f4a78f77-8d8c-4b7b-8545-ea80947b428d")]
-        public readonly InputSlot<Vector3> Center = new InputSlot<Vector3>();
+        public readonly InputSlot<Vector3> Center = new();
 
         [Input(Guid = "e641c244-9dc8-444d-8dee-c3e9b710f9db")]
-        public readonly InputSlot<Vector3> Rotation = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> Rotation = new();
     }
 }

@@ -29,10 +29,6 @@
       }
     },
     {
-      "Id": "81962c9b-2fcd-432a-b2e7-c31b743ecd02"/*Range*/,
-      "DefaultValue": 100.0
-    },
-    {
       "Id": "f3ca8d13-4e24-4718-a59c-6a1b9a2a3c04"/*IsEnabled*/,
       "DefaultValue": true
     },
@@ -47,6 +43,10 @@
     {
       "Id": "d6f6838c-4b36-41a8-86c5-1b1fe5dcece1"/*Decay*/,
       "DefaultValue": 2.0
+    },
+    {
+      "Id": "7d6e2f4b-cd5b-446d-b63e-1fd8780bf0fd"/*Range*/,
+      "DefaultValue": 1.0
     }
   ],
   "Children": [
@@ -106,7 +106,7 @@
       "Outputs": []
     },
     {
-      "Id": "2ab03a47-57e2-44be-88f5-70ee7b3f3df0"/*SphereGizmo*/,
+      "Id": "2ab03a47-57e2-44be-88f5-70ee7b3f3df0"/*DrawSphereGizmo*/,
       "SymbolId": "1998f949-5c0a-4f39-82cf-b0bda31f7f21",
       "InputValues": [
         {
@@ -126,6 +126,12 @@
     {
       "Id": "def1a967-ba08-44b0-8e3d-66acb93600bf"/*Multiply*/,
       "SymbolId": "17b60044-9125-4961-8a79-ca94697b3726",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "984617aa-f33b-430e-b2ae-06a34ade8e7c"/*Value*/,
+      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
       "InputValues": [],
       "Outputs": []
     }
@@ -247,7 +253,7 @@
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
-      "SourceSlotId": "81962c9b-2fcd-432a-b2e7-c31b743ecd02",
+      "SourceSlotId": "7d6e2f4b-cd5b-446d-b63e-1fd8780bf0fd",
       "TargetParentOrChildId": "f8e99532-7a20-474f-9b7f-19dbced8e191",
       "TargetSlotId": "e825e0b5-4c04-4ce6-9aef-7d099e9d2430"
     },

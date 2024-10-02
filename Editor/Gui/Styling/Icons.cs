@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
 using T3.Editor.Gui.UiHelpers;
 
@@ -8,11 +9,11 @@ namespace T3.Editor.Gui.Styling
     /// <summary>
     /// Handles the mapping of custom icons
     /// </summary>
-    static class Icons
+    internal static class Icons
     {
         public static ImFontPtr IconFont { get; set; }
 
-        public static void Draw(Icon icon)
+        private static void Draw(Icon icon)
         {
             ImGui.PushFont(IconFont);
             ImGui.TextUnformatted(((char)(int)icon).ToString());
@@ -80,19 +81,25 @@ namespace T3.Editor.Gui.Styling
                               color);
         }
 
-        public static void DrawIconOnLastItem(Icon icon)
+        public static void DrawIconOnLastItem(Icon icon, Color color, float alignment= 0.5f)
         {
             var pos = ImGui.GetItemRectMin();
             var size = ImGui.GetItemRectMax() - pos;
             GetGlyphDefinition(icon, out var uvRange, out var iconSize);
-            var centerOffset = MathUtils.Floor((size - iconSize)/2);
+            var centerOffset = MathUtils.Floor( (size - iconSize) * new Vector2( alignment, 0.5f));
             var alignedPos = pos + centerOffset;
             ImGui.GetWindowDrawList().AddImage(ImGui.GetIO().Fonts.TexID,
                                                alignedPos,
                                                alignedPos + iconSize,
                                                uvRange.Min,
                                                uvRange.Max,
-                                               Color.White);
+                                               color);
+            ImGui.GetWindowDrawList().AddImage(ImGui.GetIO().Fonts.TexID,
+                                               alignedPos,
+                                               alignedPos + iconSize,
+                                               uvRange.Min,
+                                               uvRange.Max,
+                                               color);
         }
         
         private static void GetGlyphDefinition(Icon icon, out ImRect uvRange, out Vector2 size)
@@ -136,7 +143,7 @@ namespace T3.Editor.Gui.Styling
         {
             public IconSource(Icon icon, int slotIndex)
             {
-                SourceArea = ImRect.RectWithSize(new Vector2(SlotSize * slotIndex, 0), new Vector2(16,16));
+                SourceArea = ImRect.RectWithSize(new Vector2(SlotSize * slotIndex, 0), new Vector2(15,15));
                 Char = (char)icon;
             }            
             
@@ -157,10 +164,9 @@ namespace T3.Editor.Gui.Styling
             public readonly char Char;
         }
         
-        
-
         public static readonly IconSource[] CustomIcons =
             {
+                new (Icon.None, 0),                
                 new (Icon.DopeSheetKeyframeLinearSelected, 0, new Vector2(15, 25)),
                 new (Icon.DopeSheetKeyframeLinear, 1, new Vector2(15, 25)),
                 new (Icon.LastKeyframe, 2, new Vector2(15, 25)),
@@ -171,12 +177,12 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.PlayForwards, 7),
                 new (Icon.JumpToNextKeyframe, 8),
                 new (Icon.JumpToRangeEnd, 9),
-                new (Icon.Loop, 10, new Vector2(32, 15)),
+                new (Icon.Loop, 10, new Vector2(24, 15)),
                 new (Icon.BeatGrid, 12),
                 new (Icon.ConnectedParameter, 13),
                 new (Icon.Stripe4PxPattern, 14),
                 new (Icon.CurveKeyframe, 15),
-                new (Icon.CurveKeyframeSelected, 15),
+                new (Icon.CurveKeyframeSelected, 16),
                 new (Icon.CurrentTimeMarkerHandle, 17),
                 new (Icon.FollowTime, 18),
                 new (Icon.ToggleAudioOn, 19),
@@ -222,7 +228,45 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.Plus,  54),
                 new (Icon.HoverScrub,  55),
                 new (Icon.AutoRefresh,  56),
-                new (Icon.Camera,  57),
+                new (Icon.Snapshot,  57),
+                new (Icon.Move, 58),
+                new (Icon.Scale, 59),
+                new (Icon.Rotate, 60),
+                new (Icon.Help, 61),
+                new (Icon.Hint, 62),                
+                new (Icon.PinParams, 63),
+                new (Icon.Unpin, 64),
+                new (Icon.Pipette, 65),
+                new (Icon.Link, 66),
+                new (Icon.Search, 67),
+                new (Icon.ParamsList, 68),
+                new (Icon.Presets, 69),
+                new (Icon.HelpOutline, 70),
+                new (Icon.PlayOutput, 71),
+                new (Icon.AddKeyframe, 72),
+                new (Icon.AddOpToInput, 73),
+                new (Icon.ExtractInput, 74),
+                new (Icon.IO, 75),
+                new (Icon.Flame, 76),
+                new (Icon.Comment, 77),
+                new (Icon.Camera, 78),
+                new (Icon.PopUp, slotIndex:79),
+                new (Icon.Visible, slotIndex:80),
+                new (Icon.Hidden, slotIndex:81),
+                new (Icon.Thumbnails, slotIndex:82),
+                new (Icon.List, slotIndex:83),
+                new (Icon.Sorting, slotIndex:84),
+                new (Icon.Settings2, slotIndex:85),
+                new (Icon.SidePanelRight, slotIndex:86),
+                new (Icon.SidePanelLeft, slotIndex:87),
+                new (Icon.OperatorBypassOff, slotIndex:88),
+                new (Icon.OperatorBypassOn, slotIndex:89),
+                new (Icon.OperatorDisabled, slotIndex:90),
+                new (Icon.Knob, slotIndex:91),
+                new (Icon.ClampMinOn, slotIndex:92),
+                new (Icon.ClampMaxOn, slotIndex:93),
+                new (Icon.ClampMinOff, slotIndex:94),
+                new (Icon.ClampMaxOff, slotIndex:95),
             };
 
         public const string IconAtlasPath = @"Resources\t3-editor\images\t3-icons.png";
@@ -230,6 +274,7 @@ namespace T3.Editor.Gui.Styling
 
     public enum Icon
     {
+        None=0,
         DopeSheetKeyframeLinearSelected = 64,
         DopeSheetKeyframeLinear,
         LastKeyframe,
@@ -286,6 +331,44 @@ namespace T3.Editor.Gui.Styling
         Plus,
         HoverScrub,
         AutoRefresh,
-        Camera
+        Snapshot,
+        Move,
+        Scale,
+        Rotate,
+        Help,
+        Hint,
+        PinParams,
+        Unpin,
+        Pipette,
+        Link,
+        Search,
+        ParamsList,
+        Presets,
+        HelpOutline,
+        PlayOutput,
+        AddKeyframe,
+        AddOpToInput,
+        ExtractInput,
+        Flame,
+        IO,
+        Comment,
+        Camera,
+        PopUp,
+        Visible,
+        Hidden,
+        Thumbnails,
+        List,
+        Sorting,
+        Settings2,
+        SidePanelRight,
+        SidePanelLeft,
+        OperatorBypassOff,
+        OperatorBypassOn,
+        OperatorDisabled,
+        Knob,
+        ClampMinOn,
+        ClampMaxOn,
+        ClampMinOff,
+        ClampMaxOff,
     }
 }

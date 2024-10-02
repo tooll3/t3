@@ -1,6 +1,6 @@
 {
   "Id": "a18ae2d3-1735-40b8-bebb-65a6788bc872"/*And*/,
-  "Description": "",
+  "Description": "Returns True if both inputs are true. Consider using [All] if you want to test more than two booleans for true.",
   "InputUis": [
     {
       "InputId": "1931b0fe-0df0-4ba1-9da5-b3eceaa87888"/*A*/,

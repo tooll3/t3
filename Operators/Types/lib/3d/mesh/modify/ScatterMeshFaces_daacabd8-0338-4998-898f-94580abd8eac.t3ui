@@ -1,6 +1,6 @@
 {
   "Id": "daacabd8-0338-4998-898f-94580abd8eac"/*ScatterMeshFaces*/,
-  "Description": "This op is similar to [DisplaceMesh]. However it uses faces centers instead of the vertices, to can \"scatters\" a mesh while keeping the size of the individual faces.\n\nPlease note that this effects works best with flat shader meshes created by [SplitMeshVertices], because this operator will generate artefacts for Meshes that use shared vertices.\n",
+  "Description": "This op is similar to [DisplaceMesh]. However, it uses faces centers instead of the vertices to \"scatter\" a mesh while keeping the size of the individual faces.\n\nPlease note that this effects works best with flat shader meshes created by [SplitMeshVertices], because this operator will generate artifacts for Meshes that use shared vertices.\n",
   "InputUis": [
     {
       "InputId": "d2ca131d-1bab-47ce-b0e7-382c61d6a176"/*InputMesh*/,
@@ -116,11 +116,7 @@
       }
     },
     {
-      "ChildId": "6ef8e9a2-8687-4d65-9a08-926361fdab7f"/*Vector3ToFloat3*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "6ef8e9a2-8687-4d65-9a08-926361fdab7f"/*Vector3Components*/,
       "Position": {
         "X": -341.72012,
         "Y": 2264.022
@@ -128,10 +124,6 @@
     },
     {
       "ChildId": "35da294c-48c0-465f-b978-963e3c3dbada"/*ComputeShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 1014.63226,
         "Y": 1408.5128
@@ -139,10 +131,6 @@
     },
     {
       "ChildId": "ff1cf54e-05b8-4a32-b26f-3fab98cc7d16"/*ComputeShaderStage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 153.0
-      },
       "Position": {
         "X": 1397.4193,
         "Y": 1439.008
@@ -150,10 +138,6 @@
     },
     {
       "ChildId": "d138bbe1-dfb0-4c47-9738-3f9bcc7a8c12"/*GetSRVProperties*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 846.0171,
         "Y": 1839.7354
@@ -161,10 +145,6 @@
     },
     {
       "ChildId": "5f160841-52a1-41d8-8a3d-af532aef2c67"/*ExecuteBufferUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 1600.4463,
         "Y": 1473.4531
@@ -172,21 +152,13 @@
     },
     {
       "ChildId": "0d8e1539-b7ef-400b-9d1c-03600759f86c"/*CalcDispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 1175.8983,
         "Y": 1467.5566
       }
     },
     {
-      "ChildId": "d5721d7b-81bf-47f7-ad82-bf6b5c010cf9"/*StructuredBuffer2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
+      "ChildId": "d5721d7b-81bf-47f7-ad82-bf6b5c010cf9"/*StructuredBufferWithViews*/,
       "Position": {
         "X": 1043.285,
         "Y": 2119.539
@@ -194,10 +166,6 @@
     },
     {
       "ChildId": "dbf06396-8dd2-4f8b-9ac5-93aa5e6ae191"/*GetVertices*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 693.0243,
         "Y": 1770.8622
@@ -205,10 +173,6 @@
     },
     {
       "ChildId": "e5a329fc-27ab-4682-9967-7a320eb8f23b"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 1215.6697,
         "Y": 2067.6594
@@ -216,10 +180,6 @@
     },
     {
       "ChildId": "3889ea59-6d04-43e2-a35d-7a5f7433a0d8"/*_MeshBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 482.7123,
         "Y": 1670.6775
@@ -227,10 +187,6 @@
     },
     {
       "ChildId": "c8c33bc5-d270-4546-8439-dd9451980821"/*_AssembleMeshBuffers*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 1861.7886,
         "Y": 1527.666
@@ -238,10 +194,6 @@
     },
     {
       "ChildId": "a7b5db9f-f5b1-4ab0-bf94-5532d834342b"/*IntValue*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 580.7886,
         "Y": 2198.0364
@@ -249,10 +201,6 @@
     },
     {
       "ChildId": "d78e3c51-22d2-47fa-8a10-3454de465f1e"/*TransformsConstBuffer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 777.8466,
         "Y": 1351.2744
@@ -260,21 +208,13 @@
     },
     {
       "ChildId": "7c12d4cf-660f-478b-9438-decf29629ed9"/*IntToFloat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -340.75208,
         "Y": 1602.3148
       }
     },
     {
-      "ChildId": "19024b14-2573-4acf-8b0b-821964f0b0af"/*BoolToFloats*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
+      "ChildId": "19024b14-2573-4acf-8b0b-821964f0b0af"/*BoolToFloat*/,
       "Position": {
         "X": -337.71606,
         "Y": 2166.2249
@@ -282,10 +222,6 @@
     },
     {
       "ChildId": "c40d4d31-596f-45eb-ab0e-464347747000"/*GetIndices*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 685.3213,
         "Y": 1620.3024
@@ -293,21 +229,13 @@
     },
     {
       "ChildId": "af9a874c-6eff-4481-a482-f9d9e69a7469"/*GetSRVProperties*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 865.018,
         "Y": 1716.9259
       }
     },
     {
-      "ChildId": "72402b77-0342-4ce9-bdd3-561060d84129"/*Vector3ToFloat3*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
+      "ChildId": "72402b77-0342-4ce9-bdd3-561060d84129"/*Vector3Components*/,
       "Position": {
         "X": -341.72012,
         "Y": 2376.022
@@ -315,10 +243,6 @@
     },
     {
       "ChildId": "82000524-0b8a-4bdb-8844-acfb4ee88285"/*_padding*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -202.0156,
         "Y": 2417.9172
@@ -332,6 +256,15 @@
         "X": 2232.3826,
         "Y": 1404.6046
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "8593c2f8-0793-40af-b58f-713fb007a618",
+      "Title": "Quick tutorial",
+      "Description": "",
+      "LinkUrl": "https://youtu.be/_x8vm2aS9FI",
+      "LinkType": "TutorialVideo"
     }
   ]
 }
