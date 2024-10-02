@@ -8,7 +8,7 @@ namespace Main;
 
 internal static partial class ProcessUtils
 {
-    [GeneratedRegex(@"\x1B\[[0-?]*[ -/]*[@-~]")]
+    [GeneratedRegex(@"\x1B\[[0-?]*[ -/]*[@-~]")] // todo: this seems to remove newlines as well :(
     private static partial Regex RemoveAnsiEscapeSequences();
 
     private static readonly Regex RemoveAnsiEscapeSequencesRegex = RemoveAnsiEscapeSequences();
