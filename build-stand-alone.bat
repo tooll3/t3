@@ -21,6 +21,7 @@ mkdir "..\T3-Standalone\.t3"
 Xcopy "Install\default-layouts" "..\T3-Standalone\.t3\layouts" /E /H /C /I
 Xcopy "Install\default-themes" "..\T3-Standalone\.t3\Themes" /E /H /C /I
 copy "Install\gradients.json" "..\T3-Standalone\.t3\gradients.json"
+copy "Install\resolutions.json" "..\T3-Standalone\.t3\resolutions.json"
 
 @RD /S /Q "..\T3-Standalone\cs"
 @RD /S /Q "..\T3-Standalone\de"
