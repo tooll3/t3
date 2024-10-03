@@ -77,7 +77,8 @@ internal class ParameterWindow : Window
 
         var id = instance?.SymbolChildId ?? Guid.Empty;
 
-        if (id != _lastSelectedInstanceId)
+        var selectionChanged = id != _lastSelectedInstanceId;
+        if (selectionChanged)
         {
             _lastSelectedInstanceId = id;
             _viewMode = ViewModes.Parameters;
@@ -121,7 +122,7 @@ internal class ParameterWindow : Window
         switch (_viewMode)
         {
             case ViewModes.Parameters:
-                DrawParametersArea(instance, symbolChildUi, symbolUi);
+                DrawParametersArea(instance, symbolChildUi, symbolUi, selectionChanged);
                 break;
             case ViewModes.Settings:
                 modified |= _parameterSettings.DrawContent(symbolUi);
@@ -207,11 +208,14 @@ internal class ParameterWindow : Window
         return modified;
     }
 
-    private void DrawParametersArea(Instance instance, SymbolChildUi symbolChildUi, SymbolUi symbolUi)
+    private void DrawParametersArea(Instance instance, SymbolChildUi symbolChildUi, SymbolUi symbolUi, bool resetScroll= false)
     {
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
         ImGui.BeginChild("parameters", Vector2.Zero, false, ImGuiWindowFlags.AlwaysUseWindowPadding);
 
+        if(resetScroll)
+            ImGui.SetScrollY(0);
+        
         CustomComponents.HandleDragScrolling(this);
         DrawChildNameAndFlags(instance, symbolChildUi, symbolUi);
 

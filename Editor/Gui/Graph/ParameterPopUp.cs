@@ -50,11 +50,12 @@ internal static class ParameterPopUp
         NodeIdRequestedForParameterWindowActivation = Guid.Empty;
 
         _isOpen = true;
+        _needResetScroll = true;
         _lastRequiredHeight = 0;
         _focusDelayCount = 3;
     }
 
-    private static Vector2 DefaultWindowSize => new Vector2(310, 250) * T3Ui.UiScaleFactor;
+    private static Vector2 DefaultWindowSize => new Vector2(310, 300) * T3Ui.UiScaleFactor;
     public static void DrawParameterPopUp(GraphWindow graphWindow)
     {
         if (!_isOpen || _selectedInstance == null || _graphCanvas == null)
@@ -94,9 +95,9 @@ internal static class ParameterPopUp
                 Close();
             }
 
-            ImGui.GetWindowDrawList().AddRectFilled(ImGui.GetWindowPos(),
-                                                    ImGui.GetWindowPos() + ImGui.GetWindowSize(),
-                                                    UiColors.BackgroundFull);
+            // ImGui.GetWindowDrawList().AddRectFilled(ImGui.GetWindowPos(),
+            //                                         ImGui.GetWindowPos() + ImGui.GetWindowSize(),
+            //                                         UiColors.BackgroundFull.Fade(0.5f));
 
             FormInputs.SetIndent(20);
 
@@ -170,6 +171,12 @@ internal static class ParameterPopUp
                 case ViewModes.Parameters:
                     FrameStats.Current.OpenedPopUpName = ParameterPopUpName;
                     ImGui.BeginChild("Scrolling", new Vector2(DefaultWindowSize.X, height - 5 ), false);
+                    if (_needResetScroll)
+                    {
+                        ImGui.SetScrollY(0);
+                        _needResetScroll = false;
+                    }
+                    
                     CustomComponents.HandleDragScrolling(_parameterPopUpReference);
                     ImGui.PushFont(Fonts.FontSmall);
                     ParameterWindow.DrawParameters(_selectedInstance, symbolUi, symbolChildUi, compositionSymbolUi, hideNonEssentials: true);
@@ -252,6 +259,7 @@ internal static class ParameterPopUp
     private const float MinHeight = 50;
 
     private static bool _isOpen;
+    private static bool _needResetScroll;
     private static int _focusDelayCount;
     private static object _parameterPopUpReference = new();
 
