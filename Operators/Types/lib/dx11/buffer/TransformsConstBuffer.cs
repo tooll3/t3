@@ -20,6 +20,7 @@ namespace T3.Operators.Types.Id_a60adc26_d7c6_4615_af78_8d2d6da46b79
         {
             //Log.Debug($" ObjectToWorld: {context.ObjectToWorld}", this);
             var bufferContent = new TransformBufferLayout(context.CameraToClipSpace, context.WorldToCamera, context.ObjectToWorld);
+            //var bufferContent = new TransformBufferLayout(context);
             ResourceManager.SetupConstBuffer(bufferContent, ref Buffer.Value);
             Buffer.Value.DebugName = nameof(TransformsConstBuffer);
         }

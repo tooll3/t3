@@ -1,0 +1,66 @@
+{
+  "Id": "5390ae74-a51e-4d10-adf7-78a8ddf3cd61"/*SetDirectionalLight*/,
+  "Description": "Sets a light source for shadows.",
+  "InputUis": [
+    {
+      "InputId": "d4634e0a-1b7d-417e-82c8-9ac1880dac74"/*Command*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -199.39244,
+        "Y": 13.366531
+      }
+    },
+    {
+      "InputId": "02ea5568-2d6c-4c4e-9923-b7d7c159606a"/*Position*/,
+      "Position": {
+        "X": -199.39244,
+        "Y": 58.36653
+      }
+    },
+    {
+      "InputId": "1618cecb-6312-4e41-9770-189f9047f277"/*Rotation*/,
+      "Position": {
+        "X": -199.39244,
+        "Y": 103.36653
+      }
+    },
+    {
+      "InputId": "5f638620-e513-4773-81df-3dac3fdf81de"/*Intensity*/,
+      "Position": {
+        "X": -199.39244,
+        "Y": 103.36653
+      }
+    },
+    {
+      "InputId": "58883f45-e5f5-4ca9-aa5d-28dc3ab2c855"/*Color*/,
+      "Position": {
+        "X": -199.39244,
+        "Y": 148.36653
+      }
+    },
+    {
+      "InputId": "6cf5d82f-0861-40a1-9b31-5552e6c8d505"/*Range*/,
+      "Position": {
+        "X": -199.39244,
+        "Y": 193.36653
+      }
+    },
+    {
+      "InputId": "45c969bb-3472-4eab-acc5-bc75466daf5d"/*Decay*/,
+      "Position": {
+        "X": -199.39244,
+        "Y": 238.36653
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "7e87d7de-74c0-4dad-9ea9-d8790f3fff0f"/*Output*/,
+      "Position": {
+        "X": 33.41637,
+        "Y": 92.95817
+      }
+    }
+  ]
+}

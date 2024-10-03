@@ -1,0 +1,40 @@
+{
+  "Id": "c1201ee1-c6aa-4d1d-82af-6239cad9def4"/*SetRenderPass*/,
+  "Description": "Sets the current Renderpassing flag.",
+  "InputUis": [
+    {
+      "InputId": "5c82a1e8-d91f-4777-9c9c-0b4509dd8150"/*SubTree*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "56bfc2ec-1455-41aa-a3b8-ffe3ead75941"/*Id*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "2623ed48-b145-4942-9730-a5936a104def"/*Texture*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "ef38e0f6-4bcb-44f4-bf61-98b3039e21e9"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

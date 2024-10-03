@@ -128,12 +128,6 @@
       "SymbolId": "17b60044-9125-4961-8a79-ca94697b3726",
       "InputValues": [],
       "Outputs": []
-    },
-    {
-      "Id": "984617aa-f33b-430e-b2ae-06a34ade8e7c"/*Value*/,
-      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
-      "InputValues": [],
-      "Outputs": []
     }
   ],
   "Connections": [

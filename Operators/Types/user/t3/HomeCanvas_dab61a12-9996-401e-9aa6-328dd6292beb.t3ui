@@ -138,6 +138,13 @@
         "X": -1629.6843,
         "Y": -4481.996
       }
+    },
+    {
+      "ChildId": "384fbe84-68f3-47bb-ba5e-c46efa60958b"/*DrawShadowResearch*/,
+      "Position": {
+        "X": -1619.7617,
+        "Y": -4193.0967
+      }
     }
   ],
   "OutputUis": [],

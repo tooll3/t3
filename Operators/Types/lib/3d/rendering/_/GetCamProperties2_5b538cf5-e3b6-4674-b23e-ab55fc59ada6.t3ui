@@ -1,6 +1,6 @@
 {
   "Id": "5b538cf5-e3b6-4674-b23e-ab55fc59ada6"/*GetCamProperties2*/,
-  "Description": "",
+  "Description": "An internal operator that provides access to all cameras in the current composition.\n\nThis is useful for drawing camera gizmos and other internal operations. Note that the execution order and update state of the cameras is undefined.\nTherefore this operator should not be used in production.",
   "InputUis": [
     {
       "InputId": "f7d2b9bc-4d01-4e3b-91ed-4e41ff387196"/*CameraIndex*/,
@@ -34,7 +34,7 @@
       }
     },
     {
-      "OutputId": "40bd0840-10ad-46cd-b8e7-0bad72222c32"/*WorldToClipSpaceRows*/,
+      "OutputId": "40bd0840-10ad-46cd-b8e7-0bad72222c32"/*CamToClipSpaceRows*/,
       "Position": {
         "X": 300.0,
         "Y": 700.0

@@ -23,27 +23,47 @@ namespace T3.Operators.Types.Id_5efaf208_ba62_42ce_b3df_059b37fc1382 {
             var deviceContext = device.ImmediateContext;
             var outputMerger = deviceContext.OutputMerger;
 
-            DepthStencilView.GetValue(context);
-            DepthStencilReference.GetValue(context);
-            BlendFactor.GetValue(context);
-            BlendSampleMask.GetValue(context);
+            DepthStencilReference_IGNORED.GetValue(context);
+            BlendFactor_NOTSUPPORTED.GetValue(context);
+            BlendSampleMask_NOTSUPPORTED.GetValue(context);
             
-            
+            // GET DSV, RTV and UAVs from context
+            _depthStencilView= DepthStencilView.GetValue(context);
             RenderTargetViews.GetValues(ref _renderTargetViews, context);
             UnorderedAccessViews.GetValues(ref _unorderedAccessViews, context);
-
+            
+            // if (_unorderedAccessViews.Length > 0)
+                // _prevUnorderedAccessViews = outputMerger.GetUnorderedAccessViews(1, _unorderedAccessViews.Length);
+                
+            // KEEP RTVs
             _prevRenderTargetViews = outputMerger.GetRenderTargets(_renderTargetViews.Length);
             outputMerger.GetRenderTargets(out _prevDepthStencilView);
-            outputMerger.SetDepthStencilState(DepthStencilState.GetValue(context));
-            _prevBlendState = outputMerger.GetBlendState(out _prevBlendFactor, out _prevSampleMask);
-            if (_renderTargetViews.Length > 0)
-                outputMerger.SetRenderTargets(null, _renderTargetViews);
             
+            // KEEP blend state
+            _prevBlendState = outputMerger.GetBlendState(out _prevBlendFactor, out _prevSampleMask);
+            
+            // SET depth state
+            outputMerger.SetDepthStencilState(DepthStencilState.GetValue(context));
+            
+            // SET renderTargets
+            if (_depthStencilView != null)
+            {
+                outputMerger.SetTargets(_depthStencilView, _renderTargetViews);                
+            }
+            else
+            {
+                if (_renderTargetViews.Length > 0)
+                    outputMerger.SetRenderTargets(null, _renderTargetViews);
+            }
+            
+            
+            // SET UAVs
             if (_unorderedAccessViews.Length > 0)
             {
                 outputMerger.SetUnorderedAccessViews(1, _unorderedAccessViews);
             }
 
+            // SET blend state 
             outputMerger.BlendState = BlendState.GetValue(context);
         }
 
@@ -67,6 +87,8 @@ namespace T3.Operators.Types.Id_5efaf208_ba62_42ce_b3df_059b37fc1382 {
         }
 
         private RenderTargetView[] _renderTargetViews = new RenderTargetView[0];
+        private DepthStencilView _depthStencilView;
+        
         private RenderTargetView[] _prevRenderTargetViews;
         private UnorderedAccessView[] _unorderedAccessViews = new UnorderedAccessView[0];
         //private UnorderedAccessView[] _prevUnorderedAccessViews;
@@ -75,28 +97,28 @@ namespace T3.Operators.Types.Id_5efaf208_ba62_42ce_b3df_059b37fc1382 {
         private RawColor4 _prevBlendFactor;
         private int _prevSampleMask;
 
-        [Input(Guid = "394D374F-2125-4ECB-8A69-CC7B2C3C6CB7")]
-        public readonly InputSlot<DepthStencilView> DepthStencilView = new();
-
         [Input(Guid = "9C131DA6-AD56-4E15-9730-754096B3B765")]
         public readonly MultiInputSlot<RenderTargetView> RenderTargetViews = new();
 
         [Input(Guid = "0ED97939-643B-445E-879C-E18C4430AA03")]
         public readonly MultiInputSlot<UnorderedAccessView> UnorderedAccessViews = new();
 
+        [Input(Guid = "394D374F-2125-4ECB-8A69-CC7B2C3C6CB7")]
+        public readonly InputSlot<DepthStencilView> DepthStencilView = new();
+
         [Input(Guid = "1D5FAAD5-3BE5-426C-B464-AD490EA3D1AA")]
         public readonly InputSlot<DepthStencilState> DepthStencilState = new();
 
         [Input(Guid = "6C7907D7-70F7-4DB7-83EA-22EE48610994")]
-        public readonly InputSlot<int> DepthStencilReference = new();
+        public readonly InputSlot<int> DepthStencilReference_IGNORED = new InputSlot<int>();
 
         [Input(Guid = "E0BC9CF8-42C8-4632-B958-7A96F6D03BA2")]
         public readonly InputSlot<BlendState> BlendState = new();
 
         [Input(Guid = "CCEE2EC3-586F-4396-8B20-CC99484E1B64")]
-        public readonly InputSlot<System.Numerics.Vector4> BlendFactor = new();
+        public readonly InputSlot<System.Numerics.Vector4> BlendFactor_NOTSUPPORTED = new InputSlot<System.Numerics.Vector4>();
 
         [Input(Guid = "03166157-1E18-4513-8AF5-398C6F4FCB1E")]
-        public readonly InputSlot<int> BlendSampleMask = new();
+        public readonly InputSlot<int> BlendSampleMask_NOTSUPPORTED = new InputSlot<int>();
     }
 }

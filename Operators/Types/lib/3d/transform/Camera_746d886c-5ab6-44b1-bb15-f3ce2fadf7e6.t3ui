@@ -104,6 +104,13 @@
         "Y": 0.0
       },
       "Description": "Defined a helping vector to control the rotation of the camera. If the the view direction approaches the Up-Vector, camera motion becomes instable because of gimbal lock.\n\nThis needs to be adjusted in cases where the camera needs to point directly up or down."
+    },
+    {
+      "InputId": "f4384357-dd4e-4008-9ed5-2805ec32935c"/*BypassInViewerMode*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      }
     }
   ],
   "SymbolChildUis": [],

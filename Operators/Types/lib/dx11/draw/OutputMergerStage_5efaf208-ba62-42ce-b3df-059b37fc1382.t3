@@ -4,10 +4,6 @@
   "Namespace": "lib.dx11.draw",
   "Inputs": [
     {
-      "Id": "394d374f-2125-4ecb-8a69-cc7b2c3c6cb7"/*DepthStencilView*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "9c131da6-ad56-4e15-9730-754096b3b765"/*RenderTargetViews*/,
       "DefaultValue": null
     },
@@ -16,11 +12,15 @@
       "DefaultValue": null
     },
     {
+      "Id": "394d374f-2125-4ecb-8a69-cc7b2c3c6cb7"/*DepthStencilView*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "1d5faad5-3be5-426c-b464-ad490ea3d1aa"/*DepthStencilState*/,
       "DefaultValue": null
     },
     {
-      "Id": "6c7907d7-70f7-4db7-83ea-22ee48610994"/*DepthStencilReference*/,
+      "Id": "6c7907d7-70f7-4db7-83ea-22ee48610994"/*DepthStencilReference_IGNORED*/,
       "DefaultValue": 0
     },
     {
@@ -28,7 +28,7 @@
       "DefaultValue": null
     },
     {
-      "Id": "ccee2ec3-586f-4396-8b20-cc99484e1b64"/*BlendFactor*/,
+      "Id": "ccee2ec3-586f-4396-8b20-cc99484e1b64"/*BlendFactor_NOTSUPPORTED*/,
       "DefaultValue": {
         "X": 1.0,
         "Y": 1.0,
@@ -37,7 +37,7 @@
       }
     },
     {
-      "Id": "03166157-1e18-4513-8af5-398c6f4fcb1e"/*BlendSampleMask*/,
+      "Id": "03166157-1e18-4513-8af5-398c6f4fcb1e"/*BlendSampleMask_NOTSUPPORTED*/,
       "DefaultValue": 0
     }
   ],

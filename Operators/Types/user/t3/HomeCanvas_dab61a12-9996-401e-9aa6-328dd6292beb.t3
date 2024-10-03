@@ -207,6 +207,12 @@
       "SymbolId": "7bd3aab4-009f-4c5e-95c9-88f3d08b6893",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "384fbe84-68f3-47bb-ba5e-c46efa60958b"/*DrawShadowResearch*/,
+      "SymbolId": "0fc6dc9f-713f-4f59-922b-3224454704c5",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [

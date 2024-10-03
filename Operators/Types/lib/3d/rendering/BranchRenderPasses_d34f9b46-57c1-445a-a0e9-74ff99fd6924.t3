@@ -1,0 +1,25 @@
+{
+  "Name": "BranchRenderPasses",
+  "Id": "d34f9b46-57c1-445a-a0e9-74ff99fd6924",
+  "Namespace": "lib.3d.rendering",
+  "Inputs": [
+    {
+      "Id": "b4efb2d5-7de1-4edd-9df1-e79474506092"/*Commands*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "d002a04f-72eb-43f6-bdad-930dad774e02"/*Index*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "c38203c8-58e1-4735-b047-67aa1ddbe83a"/*OptimizeInvalidation*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "abb57fdb-687a-4425-b1ba-d1f14057526f"/*ShadowMode*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

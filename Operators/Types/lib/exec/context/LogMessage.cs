@@ -1,16 +1,19 @@
+using System;
+using T3.Core;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_53127485_e2c7_4be8_aff2_da5790799593
 {
     public class LogMessage : Instance<LogMessage>
     {
-        [Output(Guid = "8d6a6d3d-c814-41bc-b770-5a54dfdeb6a2", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
+        [Output(Guid = "8d6a6d3d-c814-41bc-b770-5a54dfdeb6a2")]
         public readonly Slot<Command> Output = new();
 
         public LogMessage()
@@ -18,26 +21,19 @@ namespace T3.Operators.Types.Id_53127485_e2c7_4be8_aff2_da5790799593
             Output.UpdateAction = Update;
         }
         
+        private int ClampForEnum<T>(int i) where T : Enum
+        {
+            return i.Clamp(0, Enum.GetValues(typeof(T)).Length - 1);
+        }
+
         private void Update(EvaluationContext context)
         {
-            var triggerNeedsUpdate = OnlyOnChanges.DirtyFlag.IsDirty;
-            var onlyOnChanges = OnlyOnChanges.GetValue(context);
-            if (triggerNeedsUpdate)
-            {
-                Output.DirtyFlag.Trigger = onlyOnChanges ? DirtyFlagTrigger.None : DirtyFlagTrigger.Animated;
-            }
-            
             var message = Message.GetValue(context);
-            
-            if(onlyOnChanges && message == _lastMessage)
-                return;
-            
-            _lastMessage = message;
-            
-            var logLevel = LogLevel.GetEnumValue<LogLevels>(context);
-            if (logLevel > (int)LogLevels.None)
+            var logLevel = LogLevel.GetValue(context).ClampForEnum<LogLevels>();
+
+            if (logLevel >= (int)LogLevels.None)
             {
-                Log.Debug($"{new string(' ', _nestingLevel * 4)} { (string.IsNullOrEmpty( message) ? fallbackMessage : message)  }  @{context.LocalFxTime:0.00}b  {_dampedPreviousUpdateDuration*1000.0:0.00}ms", this);
+                Log.Debug($"{new string('-', _nestingLevel)} { (string.IsNullOrEmpty( message) ? fallbackMessage : message)  }  @{context.LocalFxTime:0.00}b  {_dampedPreviousUpdateDuration*1000.0:0.00}ms", this);
             }
 
             _nestingLevel++;
@@ -49,31 +45,27 @@ namespace T3.Operators.Types.Id_53127485_e2c7_4be8_aff2_da5790799593
             
             _nestingLevel--;
 
-            if ((int)logLevel >= (int)LogLevels.UpdateTime)
+            if (logLevel >= (int)LogLevels.UpdateTime)
             {
                 Log.Debug($"{new string(' ', _nestingLevel)} Update took {updateDuration*1000.0:0.00}ms", this);
             }
-        } 
+        }
 
         private static readonly string fallbackMessage = "Log";
-        private string _lastMessage = null;
 
         private double _dampedPreviousUpdateDuration = 0;
         
 
         [Input(Guid = "183cd865-7939-4110-8192-f112fff3cc60")]
         public readonly InputSlot<Command> SubGraph = new();
-        
-        [Input(Guid = "8483C153-627C-4154-8FBE-3611CA788701")]
-        public readonly InputSlot<bool> OnlyOnChanges = new();
-        
+
         [Input(Guid = "acd53819-c248-4c95-a1a5-92a583e9b49b")]
         public readonly InputSlot<string> Message = new();
         
         [Input(Guid = "42a673ee-c323-401c-b5d9-8d8f9dbebc2b", MappedType = typeof(LogLevels))]
         public readonly InputSlot<int> LogLevel = new();
 
-        private static int _nestingLevel = 0;
+        private static int _nestingLevel = 1;
         
         private enum LogLevels
         {

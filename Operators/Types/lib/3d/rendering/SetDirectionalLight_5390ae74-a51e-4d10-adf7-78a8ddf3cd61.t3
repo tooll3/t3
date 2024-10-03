@@ -1,0 +1,50 @@
+{
+  "Name": "SetDirectionalLight",
+  "Id": "5390ae74-a51e-4d10-adf7-78a8ddf3cd61",
+  "Namespace": "lib.3d.rendering",
+  "Inputs": [
+    {
+      "Id": "d4634e0a-1b7d-417e-82c8-9ac1880dac74"/*Command*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "02ea5568-2d6c-4c4e-9923-b7d7c159606a"/*Position*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "1618cecb-6312-4e41-9770-189f9047f277"/*Rotation*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "5f638620-e513-4773-81df-3dac3fdf81de"/*Intensity*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "58883f45-e5f5-4ca9-aa5d-28dc3ab2c855"/*Color*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
+        "W": 1.0
+      }
+    },
+    {
+      "Id": "6cf5d82f-0861-40a1-9b31-5552e6c8d505"/*Range*/,
+      "DefaultValue": 100.0
+    },
+    {
+      "Id": "45c969bb-3472-4eab-acc5-bc75466daf5d"/*Decay*/,
+      "DefaultValue": 2.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

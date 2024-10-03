@@ -53,6 +53,8 @@ namespace T3.Operators.Types.Id_843c9378_6836_4f39_b676_06fd2828af3e
             }
             
             _bufferContent = new TransformBufferLayout(camera.CameraToClipSpace, camera.WorldToCamera, camera.LastObjectToWorld);
+            //camera.CameraToClipSpace, camera.WorldToCamera, camera.LastObjectToWorld
+            //_bufferContent = new TransformBufferLayout(context);
             ResourceManager.SetupConstBuffer(_bufferContent, ref Buffer.Value);
             Buffer.Value.DebugName=nameof(TransformsConstBuffer);
             _previousBufferInitialized = true;

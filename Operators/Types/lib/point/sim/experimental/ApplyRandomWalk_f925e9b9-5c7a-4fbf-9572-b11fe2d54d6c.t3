@@ -9,27 +9,27 @@
     },
     {
       "Id": "7ce4b12c-224c-41ad-a42d-770df1ee4a67"/*TriggerStep*/,
-      "DefaultValue": false
+      "DefaultValue": true
     },
     {
       "Id": "351e1da3-a8ab-4625-b7c6-0c14703a94d9"/*StepWidth*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.001
     },
     {
       "Id": "a5f770ae-7f1d-4b45-93e9-d31ba7f62932"/*TurnAngle*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 90.0
     },
     {
       "Id": "23a45ab7-7f40-4f6d-91ff-5ecaf9ffe221"/*StepRatio*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 1.0
     },
     {
       "Id": "e0326849-5e5b-41fb-b53e-0a2c0eafca12"/*TurnRatio*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.25
     },
     {
       "Id": "065cafa7-8da9-428b-aef7-5ce7f969f293"/*RandomStepWidth*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.01
     },
     {
       "Id": "b70f51c3-b64f-417e-a22f-e9f790e0259a"/*RandomRotateAngle*/,

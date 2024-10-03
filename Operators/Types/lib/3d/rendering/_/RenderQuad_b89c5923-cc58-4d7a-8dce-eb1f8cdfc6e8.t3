@@ -234,7 +234,7 @@
       "SymbolId": "5efaf208-ba62-42ce-b3df-059b37fc1382",
       "InputValues": [
         {
-          "Id": "ccee2ec3-586f-4396-8b20-cc99484e1b64"/*BlendFactor*/,
+          "Id": "ccee2ec3-586f-4396-8b20-cc99484e1b64"/*BlendFactor_NOTSUPPORTED*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 1.0,
