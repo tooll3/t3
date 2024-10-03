@@ -22,6 +22,9 @@ namespace T3.Operators.Types.Id_fbe1a703_f372_4236_9f20_5d0b69183843
         IInputSlot ITransformable.ScaleInput => VolumeScale;
         public Action<Instance, EvaluationContext> TransformCallback { get; set; }
 
+        [Input(Guid = "4789cd40-2144-437c-b806-f1b2eca81143")]
+        public readonly InputSlot<float> Amount = new InputSlot<float>();
+
         [Input(Guid = "86c81e40-79e8-4699-a7fe-581f0b09d266", MappedType = typeof(VolumeShapes))]
         public readonly InputSlot<int> VolumeShape = new InputSlot<int>();
 

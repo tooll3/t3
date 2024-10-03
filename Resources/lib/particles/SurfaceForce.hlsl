@@ -18,6 +18,8 @@ cbuffer Params : register(b0)
 
     float InvertVolumeFactor;
     float AttractionDecay;
+
+    float Amount;
 }
 
 cbuffer Params : register(b1)
@@ -149,7 +151,7 @@ static const int VolumeNoise = 4;
         {
             force = -surfaceInWorld * Attraction / (1 + distance * AttractionDecay);
         }
-        velocity += force;
+        velocity += force * Amount;
     }
 
     if (!isnan(velocity.x) && !isnan(velocity.y) && !isnan(velocity.z))

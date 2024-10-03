@@ -3,6 +3,13 @@
   "Description": "Repels particles from primitive volumes.\n\nThis force uses the particle's radius in world units as defined on emit by [ParticleSystem]. Please check the documentation on that operator.\n",
   "InputUis": [
     {
+      "InputId": "4789cd40-2144-437c-b806-f1b2eca81143"/*Amount*/,
+      "Position": {
+        "X": -634.0038,
+        "Y": 1986.3079
+      }
+    },
+    {
       "InputId": "86c81e40-79e8-4699-a7fe-581f0b09d266"/*VolumeShape*/,
       "Position": {
         "X": -301.69586,
@@ -77,7 +84,7 @@
       "InputId": "b7a82887-9b8a-4999-8970-515fe199724a"/*AttractionDecay*/,
       "Position": {
         "X": -289.84814,
-        "Y": 2292.0205
+        "Y": 2337.0205
       },
       "Min": 0.0,
       "Max": 10.0,

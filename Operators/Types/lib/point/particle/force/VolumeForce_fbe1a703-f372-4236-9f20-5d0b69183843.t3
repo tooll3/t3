@@ -4,6 +4,10 @@
   "Namespace": "lib.point.particle.force",
   "Inputs": [
     {
+      "Id": "4789cd40-2144-437c-b806-f1b2eca81143"/*Amount*/,
+      "DefaultValue": 1.0
+    },
+    {
       "Id": "86c81e40-79e8-4699-a7fe-581f0b09d266"/*VolumeShape*/,
       "DefaultValue": 0
     },
@@ -574,6 +578,12 @@
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "SourceSlotId": "b7a82887-9b8a-4999-8970-515fe199724a",
+      "TargetParentOrChildId": "996aeb35-deff-4ff9-ae66-840a52a1216c",
+      "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "4789cd40-2144-437c-b806-f1b2eca81143",
       "TargetParentOrChildId": "996aeb35-deff-4ff9-ae66-840a52a1216c",
       "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
     },
