@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using T3.Core.DataTypes;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
@@ -32,7 +33,7 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
             
             Reference.DirtyFlag.Clear();
             
-            if (context.BypassCameras)
+            if (context.BypassCameras && BypassInViewerMode.GetValue(context))
             {
                 Command.GetValue(context);
                 return;
@@ -76,9 +77,24 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
                                         OffsetAffectsTarget = AlsoOffsetTarget.GetValue(context)
                                     };
 
+            // Log.Debug($"CameraDefinition: {_cameraDefinition.NearFarClip}\n" 
+            //           + $"Position: {_cameraDefinition.Position}\n"
+            //             + $"Target: {_cameraDefinition.Target}\n"
+            //           + $"Up: {_cameraDefinition.Up}\n"
+            //           + $"AspectRatio: {_cameraDefinition.AspectRatio}\n"
+            //           + $"Fov: {_cameraDefinition.Fov}\n"
+            //           + $"Roll: {_cameraDefinition.Roll}\n"
+            //           + $"RotationOffset: {_cameraDefinition.RotationOffset}\n"
+            //           + $"OffsetAffectsTarget: {_cameraDefinition.OffsetAffectsTarget}\n"
+            //           + $"PositionOffset: {_cameraDefinition.PositionOffset}\n"
+            //           + $"ViewPortShift: {_cameraDefinition.ViewPortShift}\n"
+            //           
+            //           
+            //         , this);
             
             _cameraDefinition.BuildProjectionMatrices(out var camToClipSpace, out var worldToCamera);
 
+            // Log.Debug("" +worldToCamera, this);
             CameraToClipSpace = camToClipSpace;
             WorldToCamera = worldToCamera;
             
@@ -177,7 +193,7 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
         [Input(Guid = "E6DFBFB9-EFED-4C17-8860-9C1A1CA2FA38")]
         public readonly InputSlot<System.Numerics.Vector3> Up = new();
         
-        
-
+        [Input(Guid = "F4384357-DD4E-4008-9ED5-2805EC32935C")]
+        public readonly InputSlot<bool> BypassInViewerMode = new();
     }
 }

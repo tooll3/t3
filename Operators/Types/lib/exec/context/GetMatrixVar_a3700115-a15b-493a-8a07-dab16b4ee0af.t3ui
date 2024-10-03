@@ -1,0 +1,24 @@
+{
+  "Id": "a3700115-a15b-493a-8a07-dab16b4ee0af"/*GetMatrixVar*/,
+  "Description": "Retrieves a matrix as an array for Vector4 from the evaluation context.\nThis is used internally for passing transform matrices between renderpasses for things like rendering shadow maps.",
+  "InputUis": [
+    {
+      "InputId": "6ff40ed6-68d9-46b8-aaf3-d4276bedfd81"/*VariableName*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "CustomDropdown"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "1eeab949-c741-4abe-a5aa-be0819097cda"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

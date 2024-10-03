@@ -4,15 +4,15 @@
   "Namespace": "lib.dx11.draw",
   "Inputs": [
     {
-      "Id": "394d374f-2125-4ecb-8a69-cc7b2c3c6cb7"/*DepthStencilView*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "9c131da6-ad56-4e15-9730-754096b3b765"/*RenderTargetViews*/,
       "DefaultValue": null
     },
     {
       "Id": "0ed97939-643b-445e-879c-e18c4430aa03"/*UnorderedAccessViews*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "394d374f-2125-4ecb-8a69-cc7b2c3c6cb7"/*DepthStencilView*/,
       "DefaultValue": null
     },
     {

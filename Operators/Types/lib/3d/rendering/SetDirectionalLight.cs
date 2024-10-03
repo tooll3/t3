@@ -55,8 +55,8 @@ namespace T3.Operators.Types.Id_5390ae74_a51e_4d10_adf7_78a8ddf3cd61
         [Input(Guid = "45c969bb-3472-4eab-acc5-bc75466daf5d")]
         public readonly InputSlot<float> Decay = new();
 
-        [Input(Guid = "B05C8254-73C2-473E-8F07-4A46D1B6AE55")]
-        public readonly InputSlot<Vector2> ShadowRange = new();
+        // [Input(Guid = "B05C8254-73C2-473E-8F07-4A46D1B6AE55")]
+        // public readonly InputSlot<Vector2> ShadowRange = new();
 
 
     }

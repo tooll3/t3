@@ -1,0 +1,47 @@
+{
+  "Id": "b822a197-9cf6-4bda-abda-02cf98ed5b90"/*SetMatrixVar*/,
+  "Description": "Stores a matrix as an array of vector4 on the evaluation context.\nThis is used internally by passing transform matrices between render passes for things like rendering shadow maps.",
+  "InputUis": [
+    {
+      "InputId": "6ac6caf5-f65b-4740-9a35-3ac0e5bfbdde"/*SubGraph*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "3e968af2-a08e-4c4b-a822-724c66164b5f"/*VariableName*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "4bd58603-46b7-4c66-bcd6-43468400d489"/*Value*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "34f9fde3-7030-4d1a-a48d-e71984634709"/*ClearAfterExecution*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "82686968-5e65-428f-91da-d15d55b37300"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

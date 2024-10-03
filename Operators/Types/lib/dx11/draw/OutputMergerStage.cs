@@ -27,7 +27,7 @@ namespace T3.Operators.Types.Id_5efaf208_ba62_42ce_b3df_059b37fc1382 {
             BlendFactor_NOTSUPPORTED.GetValue(context);
             BlendSampleMask_NOTSUPPORTED.GetValue(context);
             
-            // GET DSV, RTV and UAVs from contenxt
+            // GET DSV, RTV and UAVs from context
             _depthStencilView= DepthStencilView.GetValue(context);
             RenderTargetViews.GetValues(ref _renderTargetViews, context);
             UnorderedAccessViews.GetValues(ref _unorderedAccessViews, context);
@@ -97,14 +97,14 @@ namespace T3.Operators.Types.Id_5efaf208_ba62_42ce_b3df_059b37fc1382 {
         private RawColor4 _prevBlendFactor;
         private int _prevSampleMask;
 
-        [Input(Guid = "394D374F-2125-4ECB-8A69-CC7B2C3C6CB7")]
-        public readonly InputSlot<DepthStencilView> DepthStencilView = new();
-
         [Input(Guid = "9C131DA6-AD56-4E15-9730-754096B3B765")]
         public readonly MultiInputSlot<RenderTargetView> RenderTargetViews = new();
 
         [Input(Guid = "0ED97939-643B-445E-879C-E18C4430AA03")]
         public readonly MultiInputSlot<UnorderedAccessView> UnorderedAccessViews = new();
+
+        [Input(Guid = "394D374F-2125-4ECB-8A69-CC7B2C3C6CB7")]
+        public readonly InputSlot<DepthStencilView> DepthStencilView = new();
 
         [Input(Guid = "1D5FAAD5-3BE5-426C-B464-AD490EA3D1AA")]
         public readonly InputSlot<DepthStencilState> DepthStencilState = new();

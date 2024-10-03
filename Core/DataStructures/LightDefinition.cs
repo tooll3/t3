@@ -33,14 +33,14 @@ namespace T3.Core.Rendering
         public System.Numerics.Vector4 Color;
 
         [FieldOffset(8 * 4)]
-        public float Range;
-
-        [FieldOffset(9 * 4)]
-        public float Decay;
-
-        [FieldOffset(10 * 4)]
         public System.Numerics.Vector3 SpotLightDirection;
-
+        
+        [FieldOffset(11 * 4)]
+        public float Range;
+        
+        [FieldOffset(12 * 4)]
+        public float Decay;
+        
         [FieldOffset(13 * 4)]
         public float SpotLightFOV;  
 
@@ -50,7 +50,7 @@ namespace T3.Core.Rendering
         [FieldOffset(15 * 4)]
         public int ShadowMode; // 0 off / 1 cast shadow 
 
-        private const int StructSize = 16 * 4;
+        public const int StructSize = 16 * 4;
     }
     
 }

@@ -17,10 +17,16 @@ namespace T3.Operators.Types.Id_facb7925_176a_4eae_bedc_cdbf532ff6ff
         public readonly InputSlot<System.Numerics.Vector3> LightPosition = new InputSlot<System.Numerics.Vector3>();
 
         [Input(Guid = "76a6a0e4-168d-4172-9946-e843df9d0ca0")]
-        public readonly InputSlot<System.Numerics.Vector3> LightDirection = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<System.Numerics.Vector3> LightTarget = new InputSlot<System.Numerics.Vector3>();
 
         [Input(Guid = "5fb309a1-f164-4fe0-95e2-3bfc37823f78")]
         public readonly InputSlot<System.Numerics.Vector2> DepthRange = new InputSlot<System.Numerics.Vector2>();
+
+        [Input(Guid = "3ee1e726-b5b8-4479-92cc-1a46886ddfd2")]
+        public readonly InputSlot<int> Resolution = new InputSlot<int>();
+
+        [Input(Guid = "bbec0f5e-b6ec-44b2-97ec-403419161b3a")]
+        public readonly InputSlot<bool> ShowDebug = new InputSlot<bool>();
 
     }
 }

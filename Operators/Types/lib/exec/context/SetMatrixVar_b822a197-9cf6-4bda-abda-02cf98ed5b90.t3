@@ -1,0 +1,25 @@
+{
+  "Name": "SetMatrixVar",
+  "Id": "b822a197-9cf6-4bda-abda-02cf98ed5b90",
+  "Namespace": "lib.exec.context",
+  "Inputs": [
+    {
+      "Id": "6ac6caf5-f65b-4740-9a35-3ac0e5bfbdde"/*SubGraph*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "3e968af2-a08e-4c4b-a822-724c66164b5f"/*VariableName*/,
+      "DefaultValue": "m"
+    },
+    {
+      "Id": "4bd58603-46b7-4c66-bcd6-43468400d489"/*Value*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "34f9fde3-7030-4d1a-a48d-e71984634709"/*ClearAfterExecution*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

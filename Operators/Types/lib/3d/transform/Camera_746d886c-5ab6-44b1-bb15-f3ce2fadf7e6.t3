@@ -76,6 +76,10 @@
         "Y": 1.0,
         "Z": 0.0
       }
+    },
+    {
+      "Id": "f4384357-dd4e-4008-9ed5-2805ec32935c"/*BypassInViewerMode*/,
+      "DefaultValue": true
     }
   ],
   "Children": [],

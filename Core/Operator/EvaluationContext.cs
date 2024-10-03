@@ -39,6 +39,7 @@ namespace T3.Core.Operator
             PointLights.Clear();
             FloatVariables.Clear();
             IntVariables.Clear();
+            ObjectVariables.Clear();
             
             PbrContextSettings.SetDefaultToContext(this);
         }
@@ -107,7 +108,6 @@ namespace T3.Core.Operator
         /// A structure that is used by SetTexture  
         /// </summary>
         public Dictionary<string, Texture2D> ContextTextures { get; set; } = new(10);
-        // public Texture2D PrbPrefilteredSpecular { get; set; }
         public PointLightStack PointLights { get; } = new();
         
         /// <summary>
@@ -122,13 +122,20 @@ namespace T3.Core.Operator
         
         public GizmoVisibility ShowGizmos { get; set; }
 
+        #region context variables
         public Dictionary<string, float> FloatVariables { get; } = new();
         public Dictionary<string, int> IntVariables { get; } = new();
+        
+        /// <summary>
+        /// Used to store objects different from float and int
+        /// </summary>
+        public Dictionary<string, object> ObjectVariables { get; } = new();
+        #endregion
+        
         public StructuredList IteratedList { get; set; }
         public int IteratedListIndex { get; set; }
         public bool BypassCameras { get; set; }
 
-        public LegacyParticleSystem LegacyParticleSystem;
         public ParticleSystem ParticleSystem;
     }
 }

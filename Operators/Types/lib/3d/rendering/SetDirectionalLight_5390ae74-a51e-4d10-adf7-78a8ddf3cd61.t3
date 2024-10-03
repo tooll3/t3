@@ -43,13 +43,6 @@
     {
       "Id": "45c969bb-3472-4eab-acc5-bc75466daf5d"/*Decay*/,
       "DefaultValue": 2.0
-    },
-    {
-      "Id": "b05c8254-73c2-473e-8f07-4a46d1b6ae55"/*ShadowRange*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0
-      }
     }
   ],
   "Children": [],

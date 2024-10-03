@@ -100,11 +100,12 @@ psInput vsMain(uint id : SV_VertexID)
     float3 worldNormal = normalize(mul(float4(vertex.Normal, 0), (float4x4)ObjectToWorld).xyz);
 
     // Offset position along normal for shadow mapping
-    float4 posInWorldOffset = posInWorld;
+    float4 posInWorldOffset = posInWorld; //  float4(posInWorld.xyz, 1);
     posInWorldOffset.xyz += worldNormal * ShadowOffset;
 
     // Compute position in light clip space
     float4 posInLightClipSpace = mul(posInWorldOffset, WorldToLightClipSpace);
+    // posInLightClipSpace.xyz /= posInLightClipSpace.w;
     output.positionInLightClipSpace = posInLightClipSpace;
 
     // Pass tangent space basis vectors (for normal mapping).
@@ -143,7 +144,7 @@ inline float ComputeShadowFactor(float3 shadowCoord, float2 texelSize, float bia
             // Sample only if sampleUV is within [0,1]
             if (sampleUV.x >= 0 && sampleUV.x <= 1 && sampleUV.y >= 0 && sampleUV.y <= 1)
             {
-                float sampleDepth = ShadowMap.Sample(texSampler, sampleUV);
+                float sampleDepth = ShadowMap.Sample(clampedSampler, sampleUV);
 
                 // Compare depths with bias
                 if (shadowCoord.z > sampleDepth + bias)
@@ -160,7 +161,8 @@ inline float ComputeShadowFactor(float3 shadowCoord, float2 texelSize, float bia
 // based on https://github.com/Nadrin/PBR/blob/master/data/shaders/hlsl/pbr.hlsl
 float4 psMain(psInput pin) : SV_TARGET
 {
-    // Sample input textures to get shading model params.
+    // return float4(pin.positionInLightClipSpace.xyz, 1);
+    //  Sample input textures to get shading model params.
     float4 albedo = BaseColorMap.Sample(texSampler, pin.texCoord);
     if (AlphaCutOff > 0 && albedo.a < AlphaCutOff)
     {
@@ -267,8 +269,13 @@ float4 psMain(psInput pin) : SV_TARGET
     }
 
     // Compute shadow coordinates
+    // return float4(pin.positionInLightClipSpace.xyz, 1);
     float3 shadowCoord = pin.positionInLightClipSpace.xyz / pin.positionInLightClipSpace.w;
+    // float3 shadowCoord = pin.positionInLightClipSpace.xyz;
+    // return float4(shadowCoord.xyz, 1);
     shadowCoord.xy = shadowCoord.xy * 0.5 + 0.5;
+    shadowCoord.y = 1 - shadowCoord.y;
+    // return float4(shadowCoord.xy * 10 % 1, 0, 1);
 
     // Compute shadow map texel size
     uint shadowMapWidth, shadowMapHeight;
@@ -287,7 +294,8 @@ float4 psMain(psInput pin) : SV_TARGET
     float4 litColor = float4(directLighting + ambientLighting, 1.0) * BaseColor * Color;
 
     // Blend litColor with shadow color based on shadowFactor and ShadowColor.a
-    litColor.rgb = litColor.rgb * shadowFactor + ShadowColor.rgb * (1.0 - shadowFactor) * ShadowColor.a;
+    // litColor.rgb = litColor.rgb * shadowFactor + ShadowColor.rgb * (1.0 - shadowFactor) * ShadowColor.a;
+    litColor.rgba = lerp(litColor, ShadowColor, (1 - shadowFactor) * ShadowColor.a);
 
     litColor += float4(EmissiveColorMap.Sample(texSampler, pin.texCoord).rgb * EmissiveColor.rgb, 0);
 
