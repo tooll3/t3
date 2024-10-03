@@ -1023,11 +1023,6 @@
           "Id": "72dd0c80-8e95-474b-9aa5-d8292d0ff0dd"/*Value*/,
           "Type": "System.Int32",
           "Value": 0
-        },
-        {
-          "Id": "4ab2a742-7f3f-4d96-b67e-73e14b4a8f47"/*LogLevel*/,
-          "Type": "System.Int32",
-          "Value": 3
         }
       ],
       "Outputs": []

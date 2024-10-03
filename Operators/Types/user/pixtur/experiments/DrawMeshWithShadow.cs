@@ -38,6 +38,15 @@ namespace T3.Operators.Types.Id_c08a6847_e7c4_46e6_a8fb_24bb62a64b96
         [Input(Guid = "2c7cb3a7-ba47-42e9-bc39-597e5fd45457")]
         public readonly InputSlot<int> FillMode = new InputSlot<int>();
 
+        [Input(Guid = "0a01af5b-3f25-43e2-9157-1aa961b2ffcf")]
+        public readonly InputSlot<System.Numerics.Vector4> ShadowColor = new InputSlot<System.Numerics.Vector4>();
+
+        [Input(Guid = "848e10b4-5511-4495-bf63-eb76a1b63fb4")]
+        public readonly InputSlot<float> ShadowBias = new InputSlot<float>();
+
+        [Input(Guid = "bec607ca-e53f-43c8-a052-224506596016")]
+        public readonly InputSlot<float> ShadowOffset = new InputSlot<float>();
+
     }
 }
 

@@ -12,7 +12,7 @@
           "Id": "6196074f-4770-4e81-812a-012fcaab207b"/*LightPosition*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": -31.26,
+            "X": -0.0,
             "Y": -39.38,
             "Z": -153.0
           }
@@ -40,7 +40,28 @@
     {
       "Id": "37befaf6-cf9c-454d-aaa2-ee87e5913fca"/*DrawMeshWithShadow*/,
       "SymbolId": "c08a6847-e7c4-46e6-a8fb-24bb62a64b96",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "0a01af5b-3f25-43e2-9157-1aa961b2ffcf"/*ShadowColor*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          }
+        },
+        {
+          "Id": "848e10b4-5511-4495-bf63-eb76a1b63fb4"/*ShadowBias*/,
+          "Type": "System.Single",
+          "Value": -0.02
+        },
+        {
+          "Id": "bec607ca-e53f-43c8-a052-224506596016"/*ShadowOffset*/,
+          "Type": "System.Single",
+          "Value": 0.03
+        }
+      ],
       "Outputs": []
     },
     {
@@ -52,7 +73,18 @@
     {
       "Id": "7e8a5e52-50de-43dc-8597-38f588c19216"/*DrawMeshWithShadow*/,
       "SymbolId": "c08a6847-e7c4-46e6-a8fb-24bb62a64b96",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "0a01af5b-3f25-43e2-9157-1aa961b2ffcf"/*ShadowColor*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 0.43
+          }
+        }
+      ],
       "Outputs": []
     },
     {
@@ -264,6 +296,7 @@
     },
     {
       "Id": "3263f1d0-4e1f-423f-8dd3-a9ef9d3eee8a"/*LogMessage*/,
+      "IsBypassed": true,
       "SymbolId": "53127485-e2c7-4be8-aff2-da5790799593",
       "InputValues": [
         {
