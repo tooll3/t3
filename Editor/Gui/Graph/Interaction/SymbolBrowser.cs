@@ -87,6 +87,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                 if (!hasFocus || anythingActive || !ImGui.IsKeyReleased((ImGuiKey)Key.Tab))
                     return;
 
+                // Open at mouse position
                 if (NodeSelection.GetSelectedChildUis().Count() != 1)
                 {
                     ConnectionMaker.StartOperation("Add operator");
@@ -99,6 +100,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                     return;
                 }
 
+                // Open at selected node
                 var childUi = NodeSelection.GetSelectedChildUis().ToList()[0];
                 {
                     var instance = NodeSelection.GetInstanceForSymbolChildUi(childUi);
@@ -166,7 +168,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                         UiListHelpers.AdvanceSelectedItem(_matchingPresets, ref _selectedPreset, 0);
                         DrawPresetPanel(browserPositionInWindow, new Vector2(140, browserSize.Y));
                     }
-                    else
+                    else if(UserSettings.Config.ShowSymbolBrowserHelp)
                     {
                         _selectedPreset = null;
                         DrawDescriptionPanel(browserPositionInWindow, browserSize);
@@ -687,7 +689,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         private ImDrawListPtr _drawList;
         private bool _selectedItemChanged;
 
-        private static Vector2 ResultListSize => new Vector2(250, 300) * T3Ui.UiScaleFactor;
+        private static Vector2 ResultListSize => new Vector2(250, 260) * T3Ui.UiScaleFactor;
         private readonly Vector4 _namespaceColor = new Color(1, 1, 1, 0.4f);
 
         private SymbolUi _selectedSymbolUi;

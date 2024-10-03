@@ -66,6 +66,11 @@ namespace T3.Editor.Gui.Windows
                                                           "If enabled, scrolling the mouse wheel while holding left of right mouse button will control navigation speed with WASD keys. This is similar to Unity and Unreal",
                                                           UserSettings.Defaults.AdjustCameraSpeedWithMouseWheel);
 
+                        changed |= FormInputs.AddCheckBox("Show Symbol Browser Help",
+                                                          ref UserSettings.Config.ShowSymbolBrowserHelp,
+                                                          "Display help next to the symbol browser that opens when pressing the TAB key.\nHiding might be useful for live performances.",
+                                                          UserSettings.Defaults.ShowSymbolBrowserHelp);
+                        
                         changed |= FormInputs.AddCheckBox("Use arc connections",
                                                           ref UserSettings.Config.UseArcConnections,
                                                           "Affects the shape of the connections between your operators",

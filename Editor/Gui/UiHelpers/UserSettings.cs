@@ -49,6 +49,7 @@ namespace T3.Editor.Gui.UiHelpers
             public bool EnableIdleMotion = true;
             public bool SuspendRenderingWhenHidden = true;
             public bool MirrorUiOnSecondView = false;
+            public bool ShowSymbolBrowserHelp = true;
             
             // Interaction
             public bool WarnBeforeLibEdit = true;
