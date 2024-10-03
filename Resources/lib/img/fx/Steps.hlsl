@@ -77,7 +77,10 @@ float4 ComputeColor(float2 uv)
     bool isHighlight = index == modi((int)HighlightIndex, (int)StepCount);
     float4 rampColor = RampImageA.Sample(texSampler, float2(main, 0.5 / 2));
 
-    float4 mainRampColor = isHighlight ? Highlight : rampColor;
+    // float4 mainRampColor = isHighlight ? Highlight : rampColor;
+    float4 mainRampColor = isHighlight
+                               ? lerp(rampColor, Highlight, Highlight.a)
+                               : rampColor;
 
     // A legacy implementation that was using ramp color for alpha of highlight areas
     // This turned out to be limiting for highlights on transparent ramps.
