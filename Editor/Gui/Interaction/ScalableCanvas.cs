@@ -69,7 +69,7 @@ namespace T3.Editor.Gui.Interaction
         public Vector2 TransformPosition(Vector2 posOnCanvas)
         {
             var v = TransformPositionFloat(posOnCanvas);
-            return new Vector2((int)v.X, (int)v.Y);
+            return new Vector2((int)(v.X+0.5f), (int)(v.Y+ 0.5f));
         }
         
         /// <summary>

@@ -35,7 +35,7 @@ namespace T3.Operators.Types.Id_2c53eee7_eb38_449b_ad2a_d7a674952e5b
             var gradients = new List<Gradient>(4);
             var useHorizontal = Direction.GetValue(context) == 0;
             int gradientsCount = 0;
-            if (Gradients.IsConnected)
+            if (Gradients.HasInputConnections)
             {
                 gradientsCount = Gradients.CollectedInputs.Count;
                 if (gradientsCount == 0)

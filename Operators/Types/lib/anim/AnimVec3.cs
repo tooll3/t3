@@ -29,7 +29,7 @@ namespace T3.Operators.Types.Id_7814fd81_b8d0_4edf_b828_5165f5657344
             var amplitudes = Amplitudes.GetValue(context) * amplitudeFactor;
             var offsets = Offsets.GetValue(context);
             var bias = Bias.GetValue(context);
-            var time = OverrideTime.IsConnected
+            var time = OverrideTime.HasInputConnections
                            ? OverrideTime.GetValue(context)
                            : context.LocalFxTime;
 

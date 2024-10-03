@@ -23,7 +23,7 @@ namespace T3.Operators.Types.Id_32325c5b_53f7_4414_b4dd_a436e45528b0
             var newTime = NewTime.GetValue(context);
             var mode = OffsetMode.GetEnumValue<Modes>(context);
 
-            if (SubTree.IsConnected)
+            if (SubTree.HasInputConnections)
             {
                 var previousKeyframeTime = context.LocalTime;
                 var previousEffectTime = context.LocalFxTime;

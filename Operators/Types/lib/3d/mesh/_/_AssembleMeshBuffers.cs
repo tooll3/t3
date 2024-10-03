@@ -18,7 +18,7 @@ namespace T3.Operators.Types.Id_e0849edd_ea1b_4657_b22d_5aa646318aa8
 
         private void Update(EvaluationContext context)
         {
-            if (PrepareCommand.IsConnected)
+            if (PrepareCommand.HasInputConnections)
             {
                 PrepareCommand.GetValue(context);
             }

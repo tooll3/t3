@@ -210,12 +210,12 @@ internal static class Structure
 
         if (slot is IInputSlot)
         {
-            if (!slot.IsConnected)
+            if (!slot.HasInputConnections)
                 return;
 
             CollectSlotDependencies(slot.GetConnection(0), all);
         }
-        else if (slot.IsConnected)
+        else if (slot.HasInputConnections)
         {
             CollectSlotDependencies(slot.GetConnection(0), all);
         }
@@ -224,7 +224,7 @@ internal static class Structure
             var parentInstance = slot.Parent;
             foreach (var input in parentInstance.Inputs)
             {
-                if (input.IsConnected)
+                if (input.HasInputConnections)
                 {
                     if (input.IsMultiInput)
                     {

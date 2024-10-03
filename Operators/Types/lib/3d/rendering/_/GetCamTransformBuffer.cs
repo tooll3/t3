@@ -26,7 +26,7 @@ namespace T3.Operators.Types.Id_843c9378_6836_4f39_b676_06fd2828af3e
         
         private void Update(EvaluationContext context)
         {
-            if (!CameraReference.IsConnected)
+            if (!CameraReference.HasInputConnections)
             {
                 CameraReference.DirtyFlag.Clear();
                 return;

@@ -45,7 +45,7 @@ namespace T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c
                     throw new ArgumentOutOfRangeException();
             }
 
-            var time = OverrideTime.IsConnected
+            var time = OverrideTime.HasInputConnections
                            ? OverrideTime.GetValue(context)
                            : context.LocalFxTime;
 

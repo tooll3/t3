@@ -28,7 +28,7 @@ namespace T3.Operators.Types.Id_c2b2758a_5b3e_465a_87b7_c6a13d3fba48
             var isTimeDirty = TimeInSecs.DirtyFlag.IsDirty;
             var timeParameter = TimeInSecs.GetValue(context);
             
-            if (!TimeInSecs.IsConnected && isTimeDirty)
+            if (!TimeInSecs.HasInputConnections && isTimeDirty)
             {
                 _startRunTimeInSecs = Playback.RunTimeInSecs - timeParameter;
             }
@@ -57,7 +57,7 @@ namespace T3.Operators.Types.Id_c2b2758a_5b3e_465a_87b7_c6a13d3fba48
 
             if (_audioClip != null && IsPlaying.GetValue(context))
             {
-                var targetTime = TimeInSecs.IsConnected
+                var targetTime = TimeInSecs.HasInputConnections
                                      ? timeParameter
                                      : Playback.RunTimeInSecs - _startRunTimeInSecs;
                 

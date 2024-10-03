@@ -18,7 +18,7 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
             
             var modified = false;
             //var value = (double)inputSlot.TypedInputValue.Value;
-            var value = (inputSlot.IsConnected) 
+            var value = (inputSlot.HasInputConnections) 
                             ? (double)inputSlot.Value 
                             :(double)inputSlot.TypedInputValue.Value;
             

@@ -34,7 +34,7 @@ namespace T3.Operators.Types.Id_ab511978_bad5_4b69_90b2_c028447fe9f7
             var useHorizontal = Direction.GetValue(context) == 0;
             var sampleCount = SampleSize.GetValue(context).Clamp(1, 16384);
 
-            if (Curves.IsConnected)
+            if (Curves.HasInputConnections)
             {
                 foreach (var curveInput in Curves.CollectedInputs)
                 {

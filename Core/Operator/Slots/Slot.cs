@@ -156,7 +156,7 @@ namespace T3.Core.Operator.Slots
 
         public void AddConnection(ISlot sourceSlot, int index = 0)
         {
-            if (!IsConnected && sourceSlot != null)
+            if (!HasInputConnections && sourceSlot != null)
             {
                 if (UpdateAction != null)
                 {
@@ -192,7 +192,7 @@ namespace T3.Core.Operator.Slots
 
         public void RemoveConnection(int index = 0)
         {
-            if (IsConnected)
+            if (HasInputConnections)
             {
                 if (index < InputConnection.Count)
                 {
@@ -204,7 +204,7 @@ namespace T3.Core.Operator.Slots
                 }
             }
 
-            if (!IsConnected)
+            if (!HasInputConnections)
             {
                 if (_actionBeforeAddingConnecting != null)
                 {
@@ -221,7 +221,7 @@ namespace T3.Core.Operator.Slots
 
 
 
-        public bool IsConnected => InputConnection.Count > 0;
+        public bool HasInputConnections => InputConnection.Count > 0;
 
         public ISlot GetConnection(int index)
         {
@@ -239,7 +239,7 @@ namespace T3.Core.Operator.Slots
             
             if (this is IInputSlot)
             {
-                if (IsConnected)
+                if (HasInputConnections)
                 {
                     DirtyFlag.Target = GetConnection(0).Invalidate();
                 }
@@ -248,7 +248,7 @@ namespace T3.Core.Operator.Slots
                     DirtyFlag.Invalidate();
                 }
             }
-            else if (IsConnected)
+            else if (HasInputConnections)
             {
                 // slot is an output of an composition op
                 DirtyFlag.Target = GetConnection(0).Invalidate();
@@ -262,7 +262,7 @@ namespace T3.Core.Operator.Slots
                 bool outputDirty = DirtyFlag.IsDirty;
                 foreach (var input in parent.Inputs)
                 {
-                    if (input.IsConnected)
+                    if (input.HasInputConnections)
                     {
                         if (input.IsMultiInput)
                         {

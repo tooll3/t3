@@ -28,7 +28,7 @@ namespace T3.Editor.Gui.ChildUi
             if (!(instance is String stringInstance))
                 return SymbolChildUi.CustomUiResult.None;
 
-            if (stringInstance.InputString.IsConnected)
+            if (stringInstance.InputString.HasInputConnections)
                 return SymbolChildUi.CustomUiResult.None;
 
             var dragWidth = WidgetElements.DrawDragIndicator(screenRect, drawList);

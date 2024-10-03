@@ -28,7 +28,7 @@ namespace T3.Operators.Types.Id_2a0c932a_eb81_4a7d_aeac_836a23b0b789
                 return;
             }
 
-            if (SubGraph.IsConnected)
+            if (SubGraph.HasInputConnections)
             {
                 var hadPreviousValue = context.FloatVariables.TryGetValue(name, out var previous);
                 context.FloatVariables[name] = newValue;

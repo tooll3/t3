@@ -28,7 +28,7 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
 
         private void UpdateOutputWithSubtree(EvaluationContext context)
         {
-            if(!Reference.IsConnected || Reference.DirtyFlag.IsDirty) 
+            if(!Reference.HasInputConnections || Reference.DirtyFlag.IsDirty) 
                 UpdateCameraDefinition(context);
             
             Reference.DirtyFlag.Clear();

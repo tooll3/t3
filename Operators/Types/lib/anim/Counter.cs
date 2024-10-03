@@ -136,7 +136,7 @@ namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
                 ? (float)((_beatTime - _lastJumpTime) * _rate).Clamp(0, 1)
                 : (float)(_beatTime - _lastJumpTime).Clamp(0, 1);
 
-        private bool UseRate => _rate > -1 && !TriggerIncrement.IsConnected;
+        private bool UseRate => _rate > -1 && !TriggerIncrement.HasInputConnections;
 
         private float _speedFactor=1;
         private float _rate;

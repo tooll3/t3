@@ -19,13 +19,13 @@ namespace T3.Operators.Types.Id_6c2f8241_9f4b_451e_8a1d_871631d21163
         private void Update(EvaluationContext context)
         {
             var isEnabled = IsEnabled.GetValue(context);
-            if (!isEnabled || TriggerTexture.IsConnected && !TriggerTexture.DirtyFlag.IsDirty)
+            if (!isEnabled || TriggerTexture.HasInputConnections && !TriggerTexture.DirtyFlag.IsDirty)
             {
                 Output.DirtyFlag.Clear();
                 return;
             }
             
-            if (UpdateCommands.IsConnected && UpdateCommands.DirtyFlag.IsDirty)
+            if (UpdateCommands.HasInputConnections && UpdateCommands.DirtyFlag.IsDirty)
             {
                 // This will execute the input
                 UpdateCommands.GetValue(context);

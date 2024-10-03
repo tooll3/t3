@@ -100,9 +100,9 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
             }
 
             var time = context.LocalFxTime * _rate;
-            if (OverrideTime.IsConnected)
+            var overrideTime = OverrideTime.GetValue(context) / CurrentSequence.Count;
+            if (OverrideTime.HasInputConnections)
             {
-                var overrideTime = OverrideTime.GetValue(context);
                 time = overrideTime * _rate;
             }
             

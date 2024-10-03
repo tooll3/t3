@@ -791,7 +791,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             if (primaryOutput == null
                 || firstMatchingInput == null
                 //|| primaryOutput.IsConnected 
-                || firstMatchingInput.IsConnected)
+                || firstMatchingInput.HasInputConnections)
             {
                 Log.Warning("Op doesn't have valid connections");
                 return;

@@ -308,14 +308,14 @@ namespace T3.Editor.Gui.Graph
         {
             if (slot is IInputSlot)
             {
-                if (slot.IsConnected)
+                if (slot.HasInputConnections)
                 {
                     RecursivelyCollectExportData(slot.GetConnection(0), exportInfo);
                 }
 
                 CheckInputForResourcePath(slot, exportInfo);
             }
-            else if (slot.IsConnected)
+            else if (slot.HasInputConnections)
             {
                 // slot is an output of an composition op
                 RecursivelyCollectExportData(slot.GetConnection(0), exportInfo);
@@ -332,7 +332,7 @@ namespace T3.Editor.Gui.Graph
                 {
                     CheckInputForResourcePath(input, exportInfo);
 
-                    if (!input.IsConnected)
+                    if (!input.HasInputConnections)
                         continue;
 
                     if (input.IsMultiInput)

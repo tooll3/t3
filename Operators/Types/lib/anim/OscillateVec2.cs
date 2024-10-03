@@ -21,7 +21,7 @@ namespace T3.Operators.Types.Id_49796f63_27a8_4714_ba69_2073488ca833
         {
             //var t = (float)context.Playback.BeatTime * SpeedFactor.GetValue(context);
 
-            var t = OverrideTime.IsConnected
+            var t = OverrideTime.HasInputConnections
                         ? OverrideTime.GetValue(context)
                         : (float)context.LocalFxTime * SpeedFactor.GetValue(context);
             

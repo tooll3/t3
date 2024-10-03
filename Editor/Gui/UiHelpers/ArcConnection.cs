@@ -28,9 +28,9 @@ namespace T3.Editor.Gui.UiHelpers
 
         private const float TAU = Pi / 180;
 
-        public static bool Draw(ImRect rectA, Vector2 pointA, ImRect rectB, Vector2 pointB, Color color, float thickness, ref Vector2 hoverPosition)
+        public static bool Draw(ImRect rectA, Vector2 pointA, ImRect rectB, Vector2 pointB, Color color, float thickness, float currentCanvasScale, ref Vector2 hoverPosition)
         {
-            var currentCanvasScale = GraphCanvas.Current.Scale.X.Clamp(0.2f,2f);
+            //var currentCanvasScale = GraphCanvas.Current.Scale.X.Clamp(0.2f,2f);
             pointA.X -= (3-1 * currentCanvasScale).Clamp(1,1);
             pointB.X += (4-4 * currentCanvasScale).Clamp(0,4);
             

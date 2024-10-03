@@ -415,6 +415,7 @@ namespace T3.Editor.Gui.Graph
                                                         TargetPosition,
                                                         color,
                                                         thickness,
+                                                        GraphCanvas.Current.Scale.X,
                                                         ref hoverPositionOnLine);
 
                     const float minDistanceToTargetSocket = 10;

@@ -24,7 +24,7 @@ namespace T3.Operators.Types.Id_de0e54c3_631b_4a01_a8a7_8cdff2e07e55
 
         private void Update(EvaluationContext context)
         {
-            if (UpdateCommand.IsConnected && UpdateCommand.DirtyFlag.IsDirty)
+            if (UpdateCommand.HasInputConnections && UpdateCommand.DirtyFlag.IsDirty)
             {
                 // This will execute the input
                 UpdateCommand.GetValue(context);

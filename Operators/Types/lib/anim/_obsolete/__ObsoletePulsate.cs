@@ -25,7 +25,7 @@ namespace T3.Operators.Types.Id_ffed6f9e_2495_4cf3_9cda_740ecec75d10
 
         private void Update (EvaluationContext context)
         {
-            var beatTime = BeatTime.IsConnected 
+            var beatTime = BeatTime.HasInputConnections 
                                ? BeatTime.GetValue(context) 
                                : (float)context.Playback.FxTimeInBars;
             var frequency = Frequency.GetValue (context);

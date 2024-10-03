@@ -28,7 +28,7 @@ namespace T3.Editor.Gui.ChildUi
             var innerRect = selectableScreenRect;
             innerRect.Min.X += dragWidth;
             
-            var gradient = (gradientInstance.Gradient.IsConnected) 
+            var gradient = (gradientInstance.Gradient.HasInputConnections) 
                                ? gradientInstance.Gradient.Value 
                                :gradientInstance.Gradient.TypedInputValue.Value;
             

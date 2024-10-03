@@ -70,7 +70,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         /// <summary>
         /// Replaces current selection with symbol child
         /// </summary>
-        public static void SetSelectionToChildUi(SymbolChildUi node, Instance instance)
+        public static void SetSelectionToChildUi(ISelectableCanvasObject node, Instance instance)
         {
             Clear();
             AddSymbolChildToSelection(node, instance);
@@ -90,7 +90,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             AddSymbolChildToSelection(childUi, instance);
         }
 
-        public static void AddSymbolChildToSelection(SymbolChildUi childUi, Instance instance)
+        public static void AddSymbolChildToSelection(ISelectableCanvasObject childUi, Instance instance)
         {
             _selectedComposition = null;
             if (Selection.Contains(childUi))
@@ -102,7 +102,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                 _childUiInstanceIdPaths[childUi] = OperatorUtils.BuildIdPathForInstance(instance);
                 if (instance is ITransformable transformable)
                 {
-                    TransformGizmoHandling.RegisterSelectedTransformable(childUi, transformable);
+                    TransformGizmoHandling.RegisterSelectedTransformable(transformable);
                 }
             }
         }
@@ -240,6 +240,6 @@ namespace T3.Editor.Gui.Graph.Interaction
 
         public static readonly List<ISelectableCanvasObject> Selection = new();
         private static Instance _selectedComposition;
-        private static readonly Dictionary<SymbolChildUi, List<Guid>> _childUiInstanceIdPaths = new();
+        private static readonly Dictionary<ISelectableCanvasObject, List<Guid>> _childUiInstanceIdPaths = new();
     }
 }

@@ -27,7 +27,7 @@ namespace T3.Operators.Types.Id_55cc0f79_96c9_482e_9794_934dc0f87708
 
         private void Update(EvaluationContext context)
         {
-            if (!Values.IsConnected)
+            if (!Values.HasInputConnections)
                 return;
 
             var useHorizontal = Direction.GetValue(context) == 0;

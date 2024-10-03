@@ -21,7 +21,7 @@ namespace T3.Operators.Types.Id_e6072ecf_30d2_4c52_afa1_3b195d61617b
 
         private void Update(EvaluationContext context)
         {
-            if (VariableName.DirtyFlag.IsDirty && !VariableName.IsConnected)
+            if (VariableName.DirtyFlag.IsDirty && !VariableName.HasInputConnections)
                 _contextVariableNames= context.FloatVariables.Keys.ToList();
             
             var variableName = VariableName.GetValue(context);

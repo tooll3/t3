@@ -53,7 +53,7 @@ namespace T3.Editor.Gui.ChildUi
             drawList.AddText(font, font.FontSize, labelPos, labelColor, label);
             ImGui.PopFont();
             
-            if (!trigger.BoolValue.IsConnected)
+            if (!trigger.BoolValue.HasInputConnections)
             {
                 var isHoveredOrActive = trigger.SymbolChildId == activeInputId ||
                                         ImGui.IsWindowHovered() && activeRect.Contains(ImGui.GetMousePos());

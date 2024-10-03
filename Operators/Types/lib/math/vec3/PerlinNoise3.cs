@@ -18,7 +18,7 @@ namespace T3.Operators.Types.Id_50aab941_0a29_474a_affd_13a74ea0c780
 
         private void Update(EvaluationContext context)
         {
-            var value = OverrideTime.IsConnected
+            var value = OverrideTime.HasInputConnections
                             ? OverrideTime.GetValue(context)
                             : (float)context.LocalFxTime;
             

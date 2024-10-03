@@ -43,7 +43,7 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
                 return;
             }
             
-            if (!OverrideBuilder.IsConnected || stringBuilder == null)
+            if (!OverrideBuilder.HasInputConnections || stringBuilder == null)
             {
                 stringBuilder = _fallbackBuffer;
             }

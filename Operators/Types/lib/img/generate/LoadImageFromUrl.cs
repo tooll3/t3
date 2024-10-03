@@ -36,7 +36,7 @@ namespace T3.Operators.Types.Id_61ec6355_bd7d_4abb_aa44_b01b7d658e23
             var url = Url.GetValue(context);
             if (wasUpdated || url != _url && !string.IsNullOrEmpty(url))
             {
-                if (wasUpdated && !TriggerUpdate.IsConnected)
+                if (wasUpdated && !TriggerUpdate.HasInputConnections)
                 {
                     TriggerUpdate.SetTypedInputValue(false);
                 }

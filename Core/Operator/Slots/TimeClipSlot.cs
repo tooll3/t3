@@ -103,7 +103,7 @@ namespace T3.Core.Operator.Slots
                 return DirtyFlag.Target;
 
             // Slot is an output of an composition op
-            if (IsConnected)
+            if (HasInputConnections)
             {
                 DirtyFlag.Target = GetConnection(0).Invalidate();
             }
@@ -115,7 +115,7 @@ namespace T3.Core.Operator.Slots
                     var isOutputDirty = DirtyFlag.IsDirty;
                     foreach (var inputSlot in parentInstance.Inputs)
                     {
-                        if (inputSlot.IsConnected)
+                        if (inputSlot.HasInputConnections)
                         {
                             // inputSlot.DirtyFlag.Target = inputSlot.GetConnection(0).Invalidate();
                             if (inputSlot.IsMultiInput)
