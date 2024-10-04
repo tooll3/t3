@@ -18,13 +18,6 @@
       }
     },
     {
-      "ChildId": "dd49f5e5-f81c-4826-a763-0589a845a8fa"/*ListToBuffer*/,
-      "Position": {
-        "X": -54.763794,
-        "Y": 86.41925
-      }
-    },
-    {
       "ChildId": "6129e3a5-1168-4f42-92ad-81767d7831ee"/*DrawMeshChunksAtPoints*/,
       "Position": {
         "X": 900.0,
@@ -232,13 +225,6 @@
       "Position": {
         "X": -469.24054,
         "Y": 1260.5093
-      }
-    },
-    {
-      "ChildId": "5bff80cf-bd8d-4bb0-992d-7a88565a841b"/*ListToBuffer*/,
-      "Position": {
-        "X": -79.67395,
-        "Y": 1096.2837
       }
     },
     {
@@ -1310,13 +1296,6 @@
       "Position": {
         "X": -330.937,
         "Y": 853.73926
-      }
-    },
-    {
-      "ChildId": "a88e2491-d747-4780-8317-f845023f973e"/*ListToBuffer*/,
-      "Position": {
-        "X": -825.3479,
-        "Y": 781.3668
       }
     },
     {

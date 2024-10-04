@@ -25,15 +25,8 @@
     {
       "ChildId": "9f2ebaa9-f707-49f2-b679-e8ac715f06ab"/*_GetSceneDefinitionPoints*/,
       "Position": {
-        "X": -971.0819,
-        "Y": 459.9067
-      }
-    },
-    {
-      "ChildId": "0565144c-5622-4335-9e5b-518bb1480abc"/*ListToBuffer*/,
-      "Position": {
-        "X": -671.0819,
-        "Y": 419.9067
+        "X": -960.7349,
+        "Y": 412.1135
       }
     },
     {

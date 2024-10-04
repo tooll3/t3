@@ -18,13 +18,6 @@
       }
     },
     {
-      "ChildId": "2899c518-79a8-4eed-abc0-d7586da14f4a"/*ListToBuffer*/,
-      "Position": {
-        "X": -79.67395,
-        "Y": 1096.2837
-      }
-    },
-    {
       "ChildId": "f26c51cd-3cea-480c-bab2-d76d0631ea1e"/*BreakingChunks*/,
       "Position": {
         "X": 872.0902,

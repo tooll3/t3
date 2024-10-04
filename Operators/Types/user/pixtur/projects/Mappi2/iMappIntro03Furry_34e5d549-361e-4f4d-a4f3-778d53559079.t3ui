@@ -296,13 +296,6 @@
       }
     },
     {
-      "ChildId": "d2a192c6-1704-44b9-9665-049380da08ec"/*ListToBuffer*/,
-      "Position": {
-        "X": 9139.394,
-        "Y": 8231.598
-      }
-    },
-    {
       "ChildId": "e88a9daa-4d0f-4f41-a662-437cd04d2892"/*SetMaterial*/,
       "Position": {
         "X": 9654.189,

@@ -32,7 +32,7 @@ namespace T3.Operators.Types.Id_b822a197_9cf6_4bda_abda_02cf98ed5b90
                 return;
             }
 
-            if (SubGraph.IsConnected)
+            if (SubGraph.HasInputConnections)
             {
                 var hadPreviousValue = context.ObjectVariables.TryGetValue(name, out var previous);
                 

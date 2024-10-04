@@ -22,7 +22,7 @@ namespace T3.Operators.Types.Id_270c37b6_7633_4952_bade_a3ea2300583c
             Result.Value = colorTexture;
             
             var reference = TextureReference.GetValue(context);
-            if (TextureReference.IsConnected && TextureReference != null)
+            if (TextureReference.HasInputConnections && TextureReference != null)
             {
                 reference.ColorTexture = colorTexture;
                 reference.DepthTexture = DepthTexture.GetValue(context);

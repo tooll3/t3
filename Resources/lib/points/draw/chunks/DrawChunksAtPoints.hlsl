@@ -19,28 +19,34 @@ cbuffer Transforms : register(b0)
 
 cbuffer Params : register(b1)
 {
+    float4x4 WorldToLightClipSpace;
     float4 Color;
     float Size;
-    float SegmentCount;
-    float UseWForSize;
     float AlphaCutOff;
-    float UseStretch;
 };
 
-cbuffer FogParams : register(b2)
+cbuffer Params : register(b2)
+{
+    int SegmentCount;
+    int UseWForSize;
+    int UseStretch;
+    int UseShadowMaps;
+};
+
+cbuffer FogParams : register(b3)
 {
     float4 FogColor;
     float FogDistance;
     float FogBias;
 }
 
-cbuffer PointLights : register(b3)
+cbuffer PointLights : register(b4)
 {
     PointLight Lights[8];
     int ActiveLightCount;
 }
 
-cbuffer PbrParams : register(b4)
+cbuffer PbrParams : register(b5)
 {
     float4 BaseColor;
     float4 EmissiveColor;
@@ -182,7 +188,7 @@ float4 psMain(psInput pin) : SV_TARGET
     {
         float3 Li = Lights[i].position - pin.worldPosition; //- Lights[i].direction;
         float distance = length(Li);
-        float intensity = Lights[i].intensity / (pow(distance/Lights[i].range, Lights[i].decay) + 1);
+        float intensity = Lights[i].intensity / (pow(distance / Lights[i].range, Lights[i].decay) + 1);
         float3 Lradiance = Lights[i].color * intensity; // Lights[i].radiance;
 
         // Half-vector between Li and Lo.

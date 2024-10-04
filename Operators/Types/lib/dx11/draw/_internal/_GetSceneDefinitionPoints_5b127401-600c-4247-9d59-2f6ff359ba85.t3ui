@@ -14,17 +14,17 @@
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "d9c04756-8922-496d-8380-120f280ef65b"/*ResultList*/,
-      "Position": {
-        "X": 125.93762,
-        "Y": 98.906334
-      }
-    },
-    {
       "OutputId": "cb0e5b54-1c68-43a6-9101-2c9bc9b67c51"/*IndicesBuffer*/,
       "Position": {
         "X": 125.93762,
         "Y": 198.90634
+      }
+    },
+    {
+      "OutputId": "11da2373-6f05-4818-8616-4f2c33f63301"/*Points*/,
+      "Position": {
+        "X": 125.93762,
+        "Y": 298.90634
       }
     }
   ]
