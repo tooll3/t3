@@ -52,6 +52,15 @@ namespace T3.Operators.Types.Id_0e313329_74fb_4f2a_b1c2_136e1ecf9b3e
 
         [Input(Guid = "7d609639-d9f3-4c7c-9fde-91c71a29aedc")]
         public readonly InputSlot<bool> UseStretch = new InputSlot<bool>();
+
+        [Input(Guid = "2ba5d5a0-2292-409a-b603-867bc2c347c7")]
+        public readonly InputSlot<float> ShadowOffset = new InputSlot<float>();
+
+        [Input(Guid = "271ffc87-bf9a-4958-ab9f-387f27744aee")]
+        public readonly InputSlot<float> ShadowBias = new InputSlot<float>();
+
+        [Input(Guid = "c54759f0-759d-470e-8000-03cdfe609f1c")]
+        public readonly InputSlot<System.Numerics.Vector4> ShadowColor = new InputSlot<System.Numerics.Vector4>();
     }
 }
 

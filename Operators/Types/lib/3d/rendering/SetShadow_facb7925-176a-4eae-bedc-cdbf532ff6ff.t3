@@ -1,7 +1,7 @@
 {
   "Name": "SetShadow",
   "Id": "facb7925-176a-4eae-bedc-cdbf532ff6ff",
-  "Namespace": "user.pixtur.experiments",
+  "Namespace": "lib.3d.rendering",
   "Inputs": [
     {
       "Id": "be6dc055-d4c8-4c75-a084-12c22a268034"/*Command*/,

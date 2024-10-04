@@ -21,8 +21,13 @@ cbuffer Params : register(b1)
 {
     float4x4 WorldToLightClipSpace;
     float4 Color;
+
     float Size;
     float AlphaCutOff;
+    float ShadowOffset;
+    float ShadowBias;
+
+    float4 ShadowColor;
 };
 
 cbuffer Params : register(b2)
@@ -30,7 +35,7 @@ cbuffer Params : register(b2)
     int SegmentCount;
     int UseWForSize;
     int UseStretch;
-    int UseShadowMaps;
+    int IsShadowPass;
 };
 
 cbuffer FogParams : register(b3)
@@ -63,6 +68,7 @@ struct psInput
     float3 worldPosition : POSITION;
     float3x3 tbnToWorld : TBASIS;
     float fog : VPOS;
+    float4 positionInLightClipSpace : LIGHTCLIPPOS;
 };
 
 struct IndicesForDraw
@@ -75,7 +81,6 @@ sampler texSampler : register(s0);
 sampler clampedSampler : register(s1);
 
 StructuredBuffer<PbrVertex> PbrVertices : register(t0);
-// StructuredBuffer<int3> FaceIndices : register(t1);
 StructuredBuffer<Point> Points : register(t1);
 StructuredBuffer<IndicesForDraw> DrawData : register(t2);
 
@@ -85,25 +90,12 @@ Texture2D<float4> RSMOMap : register(t5);
 Texture2D<float4> NormalMap : register(t6);
 TextureCube<float4> PrefilteredSpecular : register(t7);
 Texture2D<float4> BRDFLookup : register(t8);
+Texture2D<float> ShadowMap : register(t9);
 
 psInput vsMain(uint id : SV_VertexID)
 {
     psInput output;
 
-    // uint faceCount, meshStride;
-    // FaceIndices.GetDimensions(faceCount, meshStride);
-
-    // int verticesPerInstance = faceCount * 3;
-
-    // int faceIndex = (id % verticesPerInstance) / 3;
-    // int faceVertexIndex = id % 3;
-
-    // // uint instanceCount, instanceStride;
-    // // Points.GetDimensions(instanceCount, instanceStride);
-
-    // int pointIndex = id / verticesPerInstance;
-
-    // uint vertexIndex = FaceIndices[faceIndex][faceVertexIndex];
     uint drawFaceIndex = id / 3;
     uint faceVertexIndex = id % 3;
     uint vertexIndex = DrawData[drawFaceIndex].VertexIndices[faceVertexIndex];
@@ -127,6 +119,15 @@ psInput vsMain(uint id : SV_VertexID)
     float2 uv = vertex.TexCoord;
     output.texCoord = float2(uv.x, 1 - uv.y);
 
+    // Offset position along normal for shadow mapping
+    float4 posInWorld = mul(posInObject, ObjectToWorld);
+    output.worldPosition = posInWorld.xyz;
+
+    float3 worldNormal = normalize(mul(float4(vertex.Normal, 0), (float4x4)ObjectToWorld).xyz);
+    float4 posInWorldOffset = posInWorld;
+    posInWorldOffset.xyz += worldNormal * ShadowOffset;
+    output.positionInLightClipSpace = mul(posInWorldOffset, WorldToLightClipSpace);
+
     // Pass tangent space basis vectors (for normal mapping).
     float3x3 TBN = float3x3(vertex.Tangent, vertex.Bitangent, vertex.Normal);
     TBN = mul(TBN, (float3x3)orientationMatrix);
@@ -137,8 +138,6 @@ psInput vsMain(uint id : SV_VertexID)
         normalize(TBN._m10_m11_m12),
         normalize(TBN._m20_m21_m22));
 
-    output.worldPosition = mul(posInObject, ObjectToWorld);
-
     // Fog
     if (FogDistance > 0)
     {
@@ -148,6 +147,34 @@ psInput vsMain(uint id : SV_VertexID)
     }
 
     return output;
+}
+
+inline float ComputeShadowFactor(float3 shadowCoord, float2 texelSize, float bias)
+{
+    float shadow = 0.0;
+    int samples = 0;
+    for (int y = -1; y <= 1; y++)
+    {
+        for (int x = -1; x <= 1; x++)
+        {
+            float2 offset = float2(x, y) * texelSize;
+            float2 sampleUV = shadowCoord.xy + offset;
+
+            // Sample only if sampleUV is within [0,1]
+            if (sampleUV.x >= 0 && sampleUV.x <= 1 && sampleUV.y >= 0 && sampleUV.y <= 1)
+            {
+                float sampleDepth = ShadowMap.Sample(clampedSampler, sampleUV);
+
+                // Compare depths with bias
+                if (shadowCoord.z > sampleDepth + bias)
+                {
+                    shadow += 1.0;
+                }
+            }
+            samples++;
+        }
+    }
+    return 1.0 - (shadow / samples);
 }
 
 float4 psMain(psInput pin) : SV_TARGET
@@ -163,7 +190,7 @@ float4 psMain(psInput pin) : SV_TARGET
     float occlusion = roughnessMetallicOcclusion.z;
 
     // Outgoing light direction (vector from world-space fragment position to the "eye").
-    float3 eyePosition = mul(float4(0, 0, 0, 1), CameraToWorld);
+    float3 eyePosition = mul(float4(0, 0, 0, 1), CameraToWorld).xyz;
     float3 Lo = normalize(eyePosition - pin.worldPosition);
 
     // Get current fragment's normal and transform to world space.
@@ -179,17 +206,17 @@ float4 psMain(psInput pin) : SV_TARGET
     float3 Lr = 2.0 * cosLo * N - Lo;
 
     // Fresnel reflectance at normal incidence (for metals use albedo color).
-    float3 F0 = lerp(Fdielectric, albedo, metalness);
+    float3 F0 = lerp(Fdielectric, albedo.rgb, metalness);
 
     // Direct lighting calculation for analytical lights.
     // Direct lighting calculation for analytical lights.
     float3 directLighting = 0.0;
-    for (uint i = 0; i < ActiveLightCount; ++i)
+    for (int i = 0; i < ActiveLightCount; ++i)
     {
         float3 Li = Lights[i].position - pin.worldPosition; //- Lights[i].direction;
         float distance = length(Li);
         float intensity = Lights[i].intensity / (pow(distance / Lights[i].range, Lights[i].decay) + 1);
-        float3 Lradiance = Lights[i].color * intensity; // Lights[i].radiance;
+        float3 Lradiance = Lights[i].color.rgb * intensity; // Lights[i].radiance;
 
         // Half-vector between Li and Lo.
         float3 Lh = normalize(Li + Lo);
@@ -257,11 +284,37 @@ float4 psMain(psInput pin) : SV_TARGET
         ambientLighting = diffuseIBL + specularIBL;
     }
 
-    // Final fragment color.
+    float shadowFactor = 1.0;
 
+    if (!IsShadowPass)
+    {
+        // Compute shadow coordinates
+        float3 shadowCoord = pin.positionInLightClipSpace.xyz / pin.positionInLightClipSpace.w;
+        shadowCoord.xy = shadowCoord.xy * 0.5 + 0.5;
+        shadowCoord.y = 1 - shadowCoord.y;
+
+        // Compute shadow map texel size
+        uint shadowMapWidth, shadowMapHeight;
+        ShadowMap.GetDimensions(shadowMapWidth, shadowMapHeight);
+        float2 shadowMapTexelSize = float2(1.0 / shadowMapWidth, 1.0 / shadowMapHeight);
+
+        // float shadowFactor = 1.0;
+
+        // Check if shadowCoord is within [0,1]
+        if (shadowCoord.x >= 0 && shadowCoord.x <= 1 && shadowCoord.y >= 0 && shadowCoord.y <= 1)
+        {
+            shadowFactor = ComputeShadowFactor(shadowCoord, shadowMapTexelSize, ShadowBias);
+        }
+    }
+
+    // Final fragment color.
     float4 litColor = float4(directLighting + ambientLighting, 1.0) * BaseColor * Color;
-    litColor.rgb = lerp(litColor.rgb, FogColor.rgb, pin.fog);
+    litColor.rgb = lerp(litColor.rgb, ShadowColor.rgb, (1 - shadowFactor) * ShadowColor.a);
+
     litColor += float4(EmissiveColorMap.Sample(texSampler, pin.texCoord).rgb * EmissiveColor.rgb, 0);
+    litColor.rgb = lerp(litColor.rgb, FogColor.rgb, pin.fog);
     litColor.a *= albedo.a;
+    // if (!IsShadowPass)
+    //     litColor.r = 0.5;
     return litColor;
 }

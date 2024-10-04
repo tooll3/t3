@@ -1,0 +1,107 @@
+{
+  "Id": "1f73d45d-fdbf-4429-8e17-741285a050f5"/*SetShadowExample*/,
+  "Description": "A simple illustration how SetShadow can be applied.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "a7b7f650-ce80-4f2a-804b-b55913532fab"/*LoadGltfScene*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 155.77539
+      }
+    },
+    {
+      "ChildId": "67f7de5b-12d9-47b6-994d-d9275a475f78"/*_GetSceneDefinitionPoints*/,
+      "Position": {
+        "X": 150.0,
+        "Y": 115.77539
+      }
+    },
+    {
+      "ChildId": "a6805582-297d-4952-bf94-134582468da3"/*DrawMeshChunksAtPoints*/,
+      "Position": {
+        "X": 593.18884,
+        "Y": 44.273193
+      }
+    },
+    {
+      "ChildId": "c72718da-f421-4671-adbc-a9acba8e4731"/*SoftTransformPoints*/,
+      "Position": {
+        "X": 293.18884,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "966e9988-f44a-4b73-ae1c-cd1de9ac66b7"/*Camera*/,
+      "Position": {
+        "X": 1205.2754,
+        "Y": 46.904297
+      }
+    },
+    {
+      "ChildId": "4ab38313-31d1-4c46-9200-5c53980451e3"/*RenderTarget*/,
+      "Position": {
+        "X": 1355.2754,
+        "Y": 46.904297
+      }
+    },
+    {
+      "ChildId": "7936986c-ed18-4605-b92f-1847ed99283f"/*PointLight*/,
+      "Position": {
+        "X": 1055.2754,
+        "Y": 46.904297
+      }
+    },
+    {
+      "ChildId": "8a91cba0-75b1-4f6f-ab03-1e403321a115"/*SetShadow*/,
+      "Position": {
+        "X": 905.2754,
+        "Y": 46.904297
+      }
+    },
+    {
+      "ChildId": "8d056cbc-257d-45cf-a633-e0579798b060"/*APoint*/,
+      "Position": {
+        "X": 706.0877,
+        "Y": 352.22046
+      }
+    },
+    {
+      "ChildId": "267c4781-9800-4644-8d42-cdf947c60249"/*SetMaterial*/,
+      "Position": {
+        "X": 743.18884,
+        "Y": 44.273193
+      }
+    },
+    {
+      "ChildId": "0af262d4-d4b4-4a53-bc50-8aeef87fc2c5"/*LinearGradient*/,
+      "Position": {
+        "X": 579.8457,
+        "Y": 248.74097
+      }
+    },
+    {
+      "ChildId": "e67318b7-8e39-4d16-b650-bbb7a1463346"/*AnimVec3*/,
+      "Position": {
+        "X": 150.0,
+        "Y": 59.77539
+      }
+    },
+    {
+      "ChildId": "6878d8b6-c87f-4c74-a5f4-93bbe876bdc0"/*RandomizePoints*/,
+      "Position": {
+        "X": 443.18884,
+        "Y": 0.0
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "302055d3-17af-4393-b85f-d792866a1f79"/*ColorBuffer*/,
+      "Position": {
+        "X": 1765.2754,
+        "Y": 187.61023
+      }
+    }
+  ]
+}
