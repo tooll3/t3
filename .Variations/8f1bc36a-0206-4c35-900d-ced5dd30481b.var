@@ -262,6 +262,21 @@
           "00fd2794-567a-4f9b-a900-c2ebf9760764": 10
         }
       }
+    },
+    {
+      "Id": "89248d8a-6b75-4feb-a45f-9cfd3b7a7848",
+      "IsPreset": false,
+      "ActivationIndex": 63,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 651.0
+      },
+      "ParameterSetsForChildIds": {
+        "64129846-7e9a-4afd-a46c-be50ba148aa2": {
+          "00fd2794-567a-4f9b-a900-c2ebf9760764": 9
+        }
+      }
     }
   ]
 }

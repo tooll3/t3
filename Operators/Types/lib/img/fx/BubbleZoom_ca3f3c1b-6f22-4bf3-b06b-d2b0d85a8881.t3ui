@@ -14,7 +14,8 @@
       "Position": {
         "X": -272.0758,
         "Y": 88.51079
-      }
+      },
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "5bb5934d-28a8-4bd3-a146-f0ecb804170a"/*ScaleFactor*/,

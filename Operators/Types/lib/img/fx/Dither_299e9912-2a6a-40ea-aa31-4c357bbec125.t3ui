@@ -75,8 +75,7 @@
       "GroupTitle": "Size",
       "Description": "Uniformly scales the size of the effect.",
       "Min": 1.0,
-      "Max": 15.0,
-      "Clamp": true
+      "Max": 15.0
     },
     {
       "InputId": "50335511-3b96-4c23-a604-3bc3dacae062"/*Offset*/,

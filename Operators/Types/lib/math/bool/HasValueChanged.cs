@@ -1,5 +1,6 @@
 using System;
 using T3.Core.Animation;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -39,40 +40,39 @@ namespace T3.Operators.Types.Id_146fae64_18da_4183_9794_a322f47c669e
 
             _lastEvalTime = Playback.RunTimeInSecs;
 
-            
-            var hasChanged = false;
-            
-            float delta = Math.Abs(newValue - _lastValue);
 
+            
+            bool hasChanged;
+            
+            var delta = newValue - _lastValue;
+            _lastValue = newValue;
+            
             switch ((Modes)Mode.GetValue(context).Clamp(0, Enum.GetNames(typeof(Modes)).Length -1))
             {
                 case Modes.Changed:
-                    var increase = delta > threshold;
-                    hasChanged = increase;
+                    hasChanged = MathF.Abs(delta) > threshold;
                     break;
                 
                 case Modes.Increased:
-                    hasChanged = newValue > _lastValue + threshold;
+                    hasChanged = delta > threshold;
                     break;
                 
                 case Modes.Decreased:
-                    hasChanged = newValue < _lastValue - threshold;
+                    hasChanged = newValue < threshold;
                     break;
                 
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
             var wasTriggered = MathUtils.WasTriggered(hasChanged, ref _wasHit);
 
             if (hasChanged && (preventContinuedChanges || wasTriggered))
             {
-                var timeSinceLastHit = context.LocalFxTime - _lastHitTime;
-                if (timeSinceLastHit >= minTimeBetweenHits)
+                var timeSinceLastHit = context.LocalTime - _lastHitTime;
+                if (timeSinceLastHit < 0 || timeSinceLastHit >= minTimeBetweenHits)
                 {
-                    _lastHitTime = context.LocalFxTime;
+                    _lastHitTime = context.LocalTime;
                     _lastHitDelta = delta;
-
                 }
                 else
                 {
@@ -81,11 +81,8 @@ namespace T3.Operators.Types.Id_146fae64_18da_4183_9794_a322f47c669e
             }
             
             HasChanged.Value = hasChanged;
-
-            Delta.Value = newValue - _lastValue;
-            _lastValue = newValue;
-
-            DeltaOnHit.Value = (float)_lastHitDelta;
+            Delta.Value = delta;
+            DeltaOnHit.Value = _lastHitDelta;
         }
 
         private float _lastValue;
