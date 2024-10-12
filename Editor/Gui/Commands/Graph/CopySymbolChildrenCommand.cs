@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using T3.Core.Logging;
+﻿#nullable enable
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph;
 using T3.Editor.UiModel;
+// ReSharper disable PossibleMultipleEnumeration
 
 namespace T3.Editor.Gui.Commands.Graph;
 
@@ -17,17 +14,15 @@ public class CopySymbolChildrenCommand : ICommand
 
     public Dictionary<Guid, Guid> OldToNewIdDict { get; } = new();
 
-    private CopyMode _copyMode;
         
     public enum CopyMode {Normal, ClipboardSource, ClipboardTarget}
         
-    private readonly Action? _destructorAction;
 
     public CopySymbolChildrenCommand(SymbolUi sourceCompositionUi,
-                                     IEnumerable<SymbolUi.Child> symbolChildrenToCopy,
-                                     List<Annotation> selectedAnnotations,
+                                     IEnumerable<SymbolUi.Child>? symbolChildrenToCopy,
+                                     List<Annotation>? selectedAnnotations,
                                      SymbolUi targetCompositionUi,
-                                     Vector2 targetPosition, CopyMode copyMode = CopyMode.Normal, Symbol sourceSymbol = null)
+                                     Vector2 targetPosition, CopyMode copyMode = CopyMode.Normal, Symbol? sourceSymbol = null)
     {
         _copyMode = copyMode;
             
@@ -55,7 +50,7 @@ public class CopySymbolChildrenCommand : ICommand
 
         symbolChildrenToCopy ??= sourceCompositionUi.ChildUis.Values.ToArray();
 
-        Vector2 upperLeftCorner = new Vector2(Single.MaxValue, Single.MaxValue);
+        var upperLeftCorner = new Vector2(float.MaxValue, float.MaxValue);
         foreach (var childToCopy in symbolChildrenToCopy)
         {
             upperLeftCorner = Vector2.Min(upperLeftCorner, childToCopy.PosOnCanvas);
@@ -65,7 +60,7 @@ public class CopySymbolChildrenCommand : ICommand
 
         foreach (var childToCopy in symbolChildrenToCopy)
         {
-            Entry entry = new Entry(childToCopy.Id, Guid.NewGuid(), childToCopy.PosOnCanvas - upperLeftCorner, childToCopy.Size);
+            var entry = new Entry(childToCopy.Id, Guid.NewGuid(), childToCopy.PosOnCanvas - upperLeftCorner, childToCopy.Size);
             _childrenToCopy.Add(entry);
             OldToNewIdDict.Add(entry.ChildId, entry.AddedId);
         }
@@ -91,10 +86,10 @@ public class CopySymbolChildrenCommand : ICommand
         }
     }
         
-    ~CopySymbolChildrenCommand()
-    {
-        _destructorAction?.Invoke();
-    }
+    // ~CopySymbolChildrenCommand()
+    // {
+    //     _destructorAction?.Invoke();
+    // }
 
     public void Undo()
     {
@@ -120,8 +115,8 @@ public class CopySymbolChildrenCommand : ICommand
 
     public void Do()
     {
-        SymbolUi targetCompositionSymbolUi;
-        SymbolUi sourceCompositionSymbolUi;
+        SymbolUi? targetCompositionSymbolUi;
+        SymbolUi? sourceCompositionSymbolUi;
         Symbol sourceCompositionSymbol;
             
         if (_copyMode == CopyMode.ClipboardTarget)
@@ -134,7 +129,18 @@ public class CopySymbolChildrenCommand : ICommand
             return;
         }
 
-
+        if (_clipboardSymbolUi == null)
+        {
+            this.LogError(false, $"Undefined symbolUi?");
+            return;
+        }
+        
+        if(targetCompositionSymbolUi == null)
+        {
+            this.LogError(false, $"Undefined targetCompositionSymbolUi?");
+            return;
+        }
+        
         if (_copyMode == CopyMode.ClipboardSource)
         {
             sourceCompositionSymbolUi = _clipboardSymbolUi;
@@ -151,7 +157,7 @@ public class CopySymbolChildrenCommand : ICommand
             sourceCompositionSymbol = sourceCompositionSymbolUi.Symbol;
         }
             
-        var targetSymbol = targetCompositionSymbolUi!.Symbol;
+        var targetSymbol = targetCompositionSymbolUi.Symbol;
 
         // copy animations first, so when creating the new child instances can automatically create animations actions for the existing curves
         var childIdsToCopyAnimations = _childrenToCopy.Select(entry => entry.ChildId).ToList();
@@ -219,8 +225,8 @@ public class CopySymbolChildrenCommand : ICommand
         targetCompositionSymbolUi.FlagAsModified();
     }
 
-    public readonly List<Guid> NewSymbolChildIds = new(); //This primarily used for selecting the new children
-    public List<Guid> NewSymbolAnnotationIds = new(); //This primarily used for selecting the new children
+    public readonly List<Guid> NewSymbolChildIds = []; //This primarily used for selecting the new children
+    public List<Guid> NewSymbolAnnotationIds = []; //This primarily used for selecting the new children
 
     struct Entry
     {
@@ -237,19 +243,17 @@ public class CopySymbolChildrenCommand : ICommand
         public readonly Vector2 RelativePosition;
         public readonly Vector2 Size;
     }
-
-    private static void LogError(bool isUndo,string log)
-    {
-        Log.Warning($"{nameof(CopySymbolChildrenCommand)} {(isUndo ? "Undo" : "Redo")}: {log}");
-    }
+    
+    private readonly CopyMode _copyMode;
+    //private readonly Action? _destructorAction;
 
     private readonly Vector2 _targetPosition;
     private readonly Guid _sourceSymbolId;
     private readonly Symbol? _sourcePastedSymbol;
-    private readonly SymbolUi _clipboardSymbolUi;
+    private readonly SymbolUi? _clipboardSymbolUi;
     private readonly Guid _targetSymbolId;
-    private readonly List<Entry> _childrenToCopy = new();
-    private readonly List<Annotation> _annotationsToCopy = new();
-    private readonly List<Symbol.Connection> _connectionsToCopy = new();
+    private readonly List<Entry> _childrenToCopy = [];
+    private readonly List<Annotation> _annotationsToCopy = [];
+    private readonly List<Symbol.Connection> _connectionsToCopy = [];
     public Vector2 PositionOffset;
 }
