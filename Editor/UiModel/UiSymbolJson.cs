@@ -5,7 +5,6 @@ using Newtonsoft.Json.Linq;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Model;
 using T3.Core.Operator;
-using T3.Core.SystemUi;
 using T3.Editor.External.Truncon.Collections;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.InputUi;
@@ -18,8 +17,6 @@ namespace T3.Editor.UiModel;
 
 public static class SymbolUiJson
 {
-
-        
     public static void WriteSymbolUi(SymbolUi symbolUi, JsonTextWriter writer)
     {
         try
@@ -96,11 +93,11 @@ public static class SymbolUiJson
                 {
                     writer.WriteObject(JsonKeys.Comment, childUi.Comment);
                 }
-                    
+
                 writer.WritePropertyName(JsonKeys.Position);
                 _vector2ToJson(writer, childUi.PosOnCanvas);
 
-                if(childUi.SnapshotGroupIndex != 0)
+                if (childUi.SnapshotGroupIndex != 0)
                     writer.WriteObject(nameof(SymbolUi.Child.SnapshotGroupIndex), childUi.SnapshotGroupIndex);
 
                 if (childUi.ConnectionStyleOverrides.Count > 0)
@@ -171,16 +168,16 @@ public static class SymbolUiJson
 
         writer.WriteEndArray();
     }
-        
+
     private static void WriteLinks(SymbolUi symbolUi, JsonTextWriter writer)
     {
         if (symbolUi.Links.Count == 0)
             return;
-            
+
         writer.WritePropertyName(JsonKeys.Links);
         writer.WriteStartArray();
 
-        foreach (var link in symbolUi.Links.Values.OrderBy(x=> x.Id))
+        foreach (var link in symbolUi.Links.Values.OrderBy(x => x.Id))
         {
             writer.WriteStartObject();
             writer.WriteObject(JsonKeys.Id, link.Id.ToString());
@@ -193,43 +190,43 @@ public static class SymbolUiJson
 
         writer.WriteEndArray();
     }
-        
-        
-    internal static bool TryReadSymbolUiExternal(JToken mainObject, Symbol symbol, out SymbolUi symbolUi)
+
+    internal static bool TryReadSymbolUiExternal(JToken mainObject, Symbol symbol, [NotNullWhen(true)] out SymbolUi? symbolUi)
     {
         symbolUi = null;
-        var guidString = mainObject[JsonKeys.Id].Value<string>();
-        var hasGuid = Guid.TryParse(guidString, out var symbolId);
+        var guidToken = mainObject[JsonKeys.Id];
+        if (guidToken == null)
+            return false;
 
-        if (!hasGuid)
+        var guidString = guidToken.Value<string>();
+        if (!Guid.TryParse(guidString, out _))
         {
             Log.Warning($"Error parsing guid {guidString}");
             return false;
         }
 
         var success = TryReadSymbolUi(mainObject, symbol, out symbolUi);
-        if(success)
-            symbolUi.UpdateConsistencyWithSymbol(symbol);
-
-        return success;
+        if (!success || symbolUi == null)
+            return success;
+        
+        symbolUi.UpdateConsistencyWithSymbol(symbol);
+        return true;
     }
 
 
-    internal static bool TryReadSymbolUi(JToken mainObject, Symbol symbol, out SymbolUi? symbolUi)
+
+    internal static bool TryReadSymbolUi(JToken mainObject, Symbol symbol, [NotNullWhen(true)] out SymbolUi? symbolUi)
     {
         var inputDict = new OrderedDictionary<Guid, IInputUi>();
         if (TryGetJArray(JsonKeys.InputUis, mainObject, symbol, out var inputUiArray))
         {
-            foreach (JToken uiInputEntry in inputUiArray)
+            foreach (JToken uiInputToken in inputUiArray)
             {
-                Guid inputId;
-                try
+                //inputId = Guid.Parse(uiInputEntry[JsonKeys.InputId].Value<string>() ?? string.Empty);
+                
+                if (!JsonUtils.TryGetGuid(uiInputToken[JsonKeys.InputId], out var inputId))
                 {
-                    inputId = Guid.Parse(uiInputEntry[JsonKeys.InputId].Value<string>() ?? string.Empty);
-                }
-                catch
-                {
-                    Log.Error("Skipping input with invalid symbolChildUi id");
+                    Log.Error("Skipping input with missing or invalid id");
                     continue;
                 }
 
@@ -246,22 +243,19 @@ public static class SymbolUiJson
                 // get the symbol input definition
                 var inputUi = InputUiFactory.Instance.CreateFor(type);
                 inputUi.InputDefinition = inputDefinition;
-                inputUi.Read(uiInputEntry);
+                inputUi.Read(uiInputToken);
                 inputDict.Add(inputId, inputUi);
             }
         }
-            
+
         var outputDict = new OrderedDictionary<Guid, IOutputUi>();
         if (TryGetJArray(JsonKeys.OutputUis, mainObject, symbol, out var outputUiArray))
         {
-            foreach (var uiOutputEntry in outputUiArray)
+            foreach (var uiOutputToken in outputUiArray)
             {
-                var outputIdString = uiOutputEntry[JsonKeys.OutputId].Value<string>();
-                var hasOutputId = Guid.TryParse(outputIdString, out var outputId);
-
-                if (!hasOutputId)
+                if (!JsonUtils.TryGetGuid(uiOutputToken[JsonKeys.OutputId], out var outputId))
                 {
-                    Log.Warning($"Skipping UI output in {symbol.Name} {symbol.Id} for invalid output id `{outputIdString}`");
+                    Log.Error("Skipping input with missing or invalid id");
                     continue;
                 }
 
@@ -275,18 +269,13 @@ public static class SymbolUiJson
 
                 var outputUi = OutputUiFactory.Instance.CreateFor(outputDefinition.ValueType);
                 outputUi.OutputDefinition = symbol.OutputDefinitions.First(def => def.Id == outputId);
-
-                var positionToken = uiOutputEntry[JsonKeys.Position];
-                outputUi.PosOnCanvas = (Vector2)_jsonToVector2(positionToken);
-
+                outputUi.PosOnCanvas = GetVec2OrDefault(uiOutputToken[JsonKeys.Position]);
                 outputDict.Add(outputId, outputUi);
             }
         }
 
-
         var annotationDict = ReadAnnotations(mainObject);
         var linksDict = ReadLinks(mainObject);
-
 
         IEnumerable<JToken> symbolChildUiJsonEnumerable;
         if (TryGetJArray(JsonKeys.SymbolChildUis, mainObject, symbol, out var symbolChildUiJson))
@@ -297,30 +286,32 @@ public static class SymbolUiJson
         {
             symbolChildUiJsonEnumerable = Array.Empty<JToken>();
         }
-            
-        symbolUi = new SymbolUi(symbol: symbol, 
-                                childUis: parent => CreateSymbolUiChildren(parent, symbolChildUiJsonEnumerable), 
-                                inputs: inputDict, 
-                                outputs: outputDict, 
-                                annotations: annotationDict, 
-                                links: linksDict, 
+
+        symbolUi = new SymbolUi(symbol: symbol,
+                                childUis: parent => CreateSymbolUiChildren(parent, symbolChildUiJsonEnumerable),
+                                inputs: inputDict,
+                                outputs: outputDict,
+                                annotations: annotationDict,
+                                links: linksDict,
                                 updateConsistency: false);
-            
+
         var descriptionEntry = mainObject[JsonKeys.Description];
-        if(descriptionEntry?.Value<string>() != null)
+        if (descriptionEntry?.Value<string>() != null)
             symbolUi.Description = descriptionEntry.Value<string>();
 
         return true;
     }
-        
-    static bool TryGetJArray(string key, JToken token, Symbol symbol, [NotNullWhen(true)] out JArray? array)
+
+    private static bool TryGetJArray(string key, JToken token, Symbol symbol, [NotNullWhen(true)] out JArray? array)
     {
         var exceptionRaised = false;
         array = null;
 
         try
         {
-            array = (JArray)token[key];
+            array = (JArray?)token[key];
+            if (array == null)
+                return false;
         }
         catch
         {
@@ -345,54 +336,43 @@ public static class SymbolUiJson
         var symbolId = parentSymbol.Id;
         foreach (var childEntry in childJsons)
         {
-            if(childEntry == null)
-                continue;
-                
-            var childIdString = childEntry[JsonKeys.ChildId].Value<string>();
-            var hasChildId = Guid.TryParse(childIdString, out var childId);
-
-            if (!hasChildId)
+            if (!JsonUtils.TryGetGuid(childEntry[JsonKeys.ChildId], out var childId))
             {
-                Log.Warning($"Skipping UI child definition in {parentSymbol.Name} {symbolId} for invalid child id `{childIdString}`");
+                Log.Warning($"Skipping UI child definition in {parentSymbol.Name} {symbolId} for invalid child id");
                 continue;
             }
-                
+
             if (!parentSymbol.Children.TryGetValue(childId, out var symbolChild))
             {
                 Log.Warning($"Skipping UI child definition in {parentSymbol.Name} {symbolId} for undefined child {childId}");
                 continue;
             }
-                
+
             var childUi = new SymbolUi.Child(symbolChild.Id, parentSymbol.Id, (EditorSymbolPackage)parentSymbol.SymbolPackage);
-                
+
             if (childEntry[JsonKeys.Comment] != null)
             {
-                childUi.Comment = childEntry[JsonKeys.Comment].Value<string>();
+                childUi.Comment = childEntry[JsonKeys.Comment]?.Value<string>() ?? string.Empty;
             }
 
             var positionToken = childEntry[JsonKeys.Position];
-            childUi.PosOnCanvas = (Vector2)_jsonToVector2(positionToken);
+            childUi.PosOnCanvas = GetVec2OrDefault(positionToken);
 
             if (childEntry[JsonKeys.Size] != null)
             {
                 var sizeToken = childEntry[JsonKeys.Size];
-                childUi.Size = (Vector2)_jsonToVector2(sizeToken);
-            }
-                
-            if (childEntry[nameof(SymbolUi.Child.SnapshotGroupIndex)] != null)
-            {
-                childUi.SnapshotGroupIndex = childEntry[nameof(SymbolUi.Child.SnapshotGroupIndex)].Value<int>();
+                childUi.Size = GetVec2OrDefault(sizeToken);
             }
 
-            var childStyleEntry = childEntry[JsonKeys.Style];
-            if (childStyleEntry != null)
+            if (childEntry[nameof(SymbolUi.Child.SnapshotGroupIndex)] != null)
             {
-                childUi.Style = (SymbolUi.Child.Styles)Enum.Parse(typeof(SymbolUi.Child.Styles), childStyleEntry.Value<string>());
+                childUi.SnapshotGroupIndex = (childEntry[nameof(SymbolUi.Child.SnapshotGroupIndex)] ?? -1).Value<int>();
             }
-            else
-            {
-                childUi.Style = SymbolUi.Child.Styles.Default;
-            }
+
+            childUi.Style = JsonUtils.TryGetEnum(childEntry[JsonKeys.Style], out SymbolUi.Child.Styles childStyle) 
+                                ? childStyle
+                                : SymbolUi.Child.Styles.Default;
+            
 
             var conStyleEntry = childEntry[JsonKeys.ConnectionStyleOverrides];
             if (conStyleEntry != null)
@@ -400,8 +380,12 @@ public static class SymbolUiJson
                 var dict = childUi.ConnectionStyleOverrides;
                 foreach (var styleEntry in (JArray)conStyleEntry)
                 {
-                    var id = Guid.Parse(styleEntry[JsonKeys.Id].Value<string>());
-                    var style = (SymbolUi.Child.ConnectionStyles)Enum.Parse(typeof(SymbolUi.Child.ConnectionStyles), styleEntry[JsonKeys.Style].Value<string>());
+                    if (!JsonUtils.TryGetGuid(styleEntry[JsonKeys.Id], out var id)
+                        || !JsonUtils.TryGetEnum(styleEntry[JsonKeys.Style], out SymbolUi.Child.ConnectionStyles style))
+                    {
+                        Log.Warning($"Skipping connection style override for invalid id or style");
+                        continue;
+                    }
                     dict.Add(id, style);
                 }
             }
@@ -415,58 +399,79 @@ public static class SymbolUiJson
     private static OrderedDictionary<Guid, Annotation> ReadAnnotations(JToken token)
     {
         var annotationDict = new OrderedDictionary<Guid, Annotation>();
-        var annotationsArray = (JArray)token[JsonKeys.Annotations];
-        if (annotationsArray == null)
+        
+        var annotationsToken = token[JsonKeys.Annotations];
+        if (annotationsToken is not JArray annotationsArray)
             return annotationDict;
-            
+
         foreach (var annotationEntry in annotationsArray)
         {
+            if (!JsonUtils.TryGetGuid(annotationEntry[JsonKeys.Id], out var id))
+            {
+                Log.Warning("Skipping annotation with missing or invalid id");
+                continue;
+            }
+
             var annotation = new Annotation
                                  {
-                                     Id = Guid.Parse(annotationEntry[JsonKeys.Id].Value<string>()),
-                                     Title = annotationEntry[JsonKeys.Title].Value<string>(),
-                                     PosOnCanvas = (Vector2)_jsonToVector2(annotationEntry[JsonKeys.Position])
+                                     Id = id,
+                                     Title = annotationEntry[JsonKeys.Title]?.Value<string>() ?? string.Empty,
+                                     PosOnCanvas = GetVec2OrDefault(annotationEntry[JsonKeys.Position]),
                                  };
 
+            
             var colorEntry = annotationEntry[JsonKeys.Color];
             if (colorEntry != null)
             {
                 annotation.Color = new Color((Vector4)_jsonToVector4(colorEntry));
             }
 
-            annotation.Size = (Vector2)_jsonToVector2(annotationEntry[JsonKeys.Size]);
+            annotation.Size = GetVec2OrDefault(annotationEntry[JsonKeys.Size]);
             annotationDict[annotation.Id] = annotation;
         }
 
         return annotationDict;
     }
-        
+
     private static OrderedDictionary<Guid, ExternalLink> ReadLinks(JToken token)
     {
         var linkDict = new OrderedDictionary<Guid, ExternalLink>();
-        var linksArray = (JArray)token[JsonKeys.Links];
-        if (linksArray == null)
-            return linkDict;
-            
+        
+        var linksToken = token[JsonKeys.Links];
+        if (linksToken is not JArray linksArray)
+            return linkDict;        
+
         foreach (var linkEntry in linksArray)
         {
             if (!Enum.TryParse<ExternalLink.LinkTypes>(linkEntry[JsonKeys.LinkType]?.Value<string>(), out var type))
                 type = ExternalLink.LinkTypes.Other;
-                
+
+            if (!JsonUtils.TryGetGuid(linkEntry[JsonKeys.Id], out var id))
+            {
+                Log.Warning("Skipping annotation with missing or invalid id");
+                continue;
+            }
+            
             var link = new ExternalLink
                            {
-                               Id = Guid.Parse(linkEntry[JsonKeys.Id].Value<string>()),
-                               Title = linkEntry[JsonKeys.Title]?.Value<string>(),
-                               Description = linkEntry[JsonKeys.Description]?.Value<string>(),
-                               Url = linkEntry[JsonKeys.LinkUrl]?.Value<string>(),
-                               Type =  type,
+                               Id = id,
+                               Title = linkEntry[JsonKeys.Title]?.Value<string>() ?? string.Empty,
+                               Description = linkEntry[JsonKeys.Description]?.Value<string>() ?? string.Empty,
+                               Url = linkEntry[JsonKeys.LinkUrl]?.Value<string>() ?? string.Empty,
+                               Type = type,
                            };
 
             linkDict[link.Id] = link;
         }
+
         return linkDict;
     }
-        
+
+    
+    internal static Vector2 GetVec2OrDefault(JToken? token)
+    {
+        return  token == null ? default : (Vector2)_jsonToVector2(token);
+    }
 
     private readonly struct JsonKeys
     {
@@ -479,7 +484,6 @@ public static class SymbolUiJson
         public const string Position = nameof(Position);
         public const string Annotations = nameof(Annotations);
         public const string Links = nameof(Links);
-        public const string ParamCollections = nameof(ParamCollections);
         public const string Comment = nameof(Comment);
         public const string Id = nameof(Id);
         public const string Title = nameof(Title);
@@ -491,7 +495,7 @@ public static class SymbolUiJson
         public const string LinkType = nameof(LinkType);
         public const string LinkUrl = nameof(LinkUrl);
     }
-        
+
     private static readonly Func<JToken, object> _jsonToVector2 = JsonToTypeValueConverters.Entries[typeof(Vector2)];
     private static readonly Func<JToken, object> _jsonToVector4 = JsonToTypeValueConverters.Entries[typeof(Vector4)];
     private static readonly Action<JsonTextWriter, object> _vector2ToJson = TypeValueToJsonConverters.Entries[typeof(Vector2)];

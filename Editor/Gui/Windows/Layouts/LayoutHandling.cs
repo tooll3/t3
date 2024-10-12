@@ -153,18 +153,11 @@ internal static class LayoutHandling
             }
         }
 
-        // apply ImGui settings
+        // Apply ImGui settings
         if (!string.IsNullOrEmpty(layout.ImGuiSettings))
         {
-            Program.RequestImGuiLayoutUpdate = layout.ImGuiSettings;
+            Program.NewImGuiLayoutDefinition = layout.ImGuiSettings;
         }
-        //ImGui.LoadIniSettingsFromMemory(layout.ImGuiSettings);
-
-        // Than apply size and positions
-        // foreach (var window1 in WindowManager.GetAllWindows())
-        // {
-        //     window1.ApplySizeAndPosition();
-        // }
     }
 
     private static void SaveLayout(int index)

@@ -144,7 +144,7 @@ public class StringInputUi : InputValueUi<string>
 
     private readonly record struct InputRequest(string Value, string[] Filter, bool IsFolder, bool ShowWarning, IResourceConsumer ResourcePackageContainer);
 
-    private static unsafe InputEditStateFlags DrawFileInput(FileOperations.FilePickerTypes type, ref string value, string filter, Func<InputRequest, InputResult> draw)
+    private static InputEditStateFlags DrawFileInput(FileOperations.FilePickerTypes type, ref string value, string filter, Func<InputRequest, InputResult> draw)
     {
         ImGui.SetNextItemWidth(-70);
 

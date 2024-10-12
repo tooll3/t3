@@ -1,3 +1,4 @@
+#nullable enable
 using SharpDX.Direct3D11;
 using System.Diagnostics;
 using System.Globalization;
@@ -25,8 +26,8 @@ namespace T3.Editor;
 
 internal static class Program
 {
-    public static IUiContentDrawer UiContentContentDrawer;
-    public static Device Device { get; private set; }
+    public static IUiContentDrawer? UiContentContentDrawer;
+    public static Device? Device { get; private set; }
 
     public static Version Version => RuntimeAssemblies.Version;
     private static string? _versionText;
@@ -105,7 +106,10 @@ internal static class Program
         CultureInfo.CurrentCulture = new CultureInfo("en-US");
         ShaderCompiler.ShaderCacheSubdirectory = $"Editor_{VersionText}";
             
+        // ReSharper disable once UnusedVariable
         var userSettings = new UserSettings(saveOnQuit: true);
+        
+        // ReSharper disable once UnusedVariable
         var projectSettings = new ProjectSettings(saveOnQuit: true);
 
         Log.Debug($"About to initialize ProgramWindows");
@@ -125,7 +129,7 @@ internal static class Program
 
         Log.Debug($"About to initialize Camera Interaction");
         var spaceMouse = new SpaceMouse(ProgramWindows.Main.HwndHandle);
-        CameraInteraction.ManipulationDevices = new ICameraManipulator[] { spaceMouse };
+        CameraInteraction.ManipulationDevices = [spaceMouse];
         ProgramWindows.SetInteractionDevices(spaceMouse);
 
         Log.Debug($"About to initialize Resource Manager");
@@ -221,6 +225,6 @@ internal static class Program
     // Main loop
     public static readonly StatusErrorLine StatusErrorLine = new();
     public static readonly ConsoleLogWindow ConsoleLogWindow = new();
-    public static string RequestImGuiLayoutUpdate;
+    public static string NewImGuiLayoutDefinition = string.Empty;
     public static bool IsShuttingDown;
 }

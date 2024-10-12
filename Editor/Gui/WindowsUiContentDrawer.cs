@@ -108,10 +108,10 @@ public sealed class WindowsUiContentDrawer : IUiContentDrawer<Device>
             DirtyFlag.IncrementGlobalTicks();
             T3Metrics.UiRenderingStarted();
             
-            if (!string.IsNullOrEmpty(Program.RequestImGuiLayoutUpdate))
+            if (!string.IsNullOrEmpty(Program.NewImGuiLayoutDefinition))
             {
-                ImGui.LoadIniSettingsFromMemory(Program.RequestImGuiLayoutUpdate);
-                Program.RequestImGuiLayoutUpdate = null;
+                ImGui.LoadIniSettingsFromMemory(Program.NewImGuiLayoutDefinition);
+                Program.NewImGuiLayoutDefinition = string.Empty;
             }
             
             ImGui.NewFrame();

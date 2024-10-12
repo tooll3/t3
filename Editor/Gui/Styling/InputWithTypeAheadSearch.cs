@@ -1,7 +1,5 @@
 ﻿using ImGuiNET;
 using T3.Core.DataTypes.Vector;
-using T3.Core.IO;
-using T3.Core.Utils;
 using T3.Editor.Gui.UiHelpers;
 using T3.SystemUi;
 

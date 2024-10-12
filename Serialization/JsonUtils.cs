@@ -98,4 +98,36 @@ public static class JsonUtils
         writer.WritePropertyName(name);
         writer.WriteValue(value.ToString());
     }
+
+    public static bool TryGetGuid(JToken? token, out Guid guid)
+    {
+        if (token == null)
+        {
+            guid = Guid.Empty;
+            return false;
+        }
+
+        var guidString = token.Value<string>();
+        return Guid.TryParse(guidString, out guid);
+    }
+
+    public static bool TryGetEnum<T>(JToken? token, out T enumValue) where T : struct, Enum
+    {
+        if (token == null)
+        {
+            enumValue = default;
+            return false;
+        }
+
+        var stringValue = token.Value<string>() ?? string.Empty;
+
+        if (Enum.TryParse<T>(stringValue, out var result))
+        {
+            enumValue = result;
+            return true;
+        }
+
+        enumValue = default;
+        return false;
+    }
 }
