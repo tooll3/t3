@@ -6,7 +6,6 @@ using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using T3.Editor.App;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.UiHelpers;
 using Texture2D = T3.Core.DataTypes.Texture2D;

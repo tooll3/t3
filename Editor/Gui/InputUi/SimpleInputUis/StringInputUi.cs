@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -14,7 +12,6 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.Windows.Utilities;
 using T3.Serialization;
 
 namespace T3.Editor.Gui.InputUi.SimpleInputUis;

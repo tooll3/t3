@@ -1,10 +1,8 @@
 ﻿using System.IO;
 using ImGuiNET;
 using Newtonsoft.Json;
-using T3.Core.Model;
 using T3.Core.UserData;
 using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;

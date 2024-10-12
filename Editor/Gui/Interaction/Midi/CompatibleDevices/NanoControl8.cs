@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using T3.Editor.Gui.Interaction.Midi.CommandProcessing;
+﻿using T3.Editor.Gui.Interaction.Midi.CommandProcessing;
 using T3.Editor.Gui.Interaction.Variations;
 
 namespace T3.Editor.Gui.Interaction.Midi.CompatibleDevices;

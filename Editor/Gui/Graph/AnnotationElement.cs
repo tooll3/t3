@@ -1,11 +1,8 @@
 using ImGuiNET;
-using T3.Core.IO;
-using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Annotations;
 using T3.Editor.Gui.Commands.Graph;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;

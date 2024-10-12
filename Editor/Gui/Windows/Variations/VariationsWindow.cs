@@ -1,8 +1,6 @@
-﻿using System.Diagnostics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.SystemUi;
 using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Styling;

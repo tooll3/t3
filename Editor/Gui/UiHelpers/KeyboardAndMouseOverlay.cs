@@ -1,6 +1,5 @@
 ﻿using ImGuiNET;
 using T3.Core.Animation;
-using T3.Core.IO;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.SystemUi;

@@ -26,7 +26,6 @@ using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
-using T3.Editor.Gui.Windows.Utilities;
 using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 using T3.SystemUi;

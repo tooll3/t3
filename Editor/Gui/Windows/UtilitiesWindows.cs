@@ -1,7 +1,6 @@
 ﻿using ImGuiNET;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.Utilities;
 

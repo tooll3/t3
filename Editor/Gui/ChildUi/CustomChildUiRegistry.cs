@@ -1,8 +1,6 @@
 ﻿#nullable enable
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using System.Runtime.Loader;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.UiHelpers;

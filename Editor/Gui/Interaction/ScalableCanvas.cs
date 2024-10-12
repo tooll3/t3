@@ -2,14 +2,12 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.TimeLine;
 
 namespace T3.Editor.Gui.Interaction;

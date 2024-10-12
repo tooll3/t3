@@ -2,7 +2,6 @@
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
-using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;

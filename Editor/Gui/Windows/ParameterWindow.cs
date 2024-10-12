@@ -1,6 +1,5 @@
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
-using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.SystemUi;
@@ -10,7 +9,6 @@ using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
-using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Layouts;

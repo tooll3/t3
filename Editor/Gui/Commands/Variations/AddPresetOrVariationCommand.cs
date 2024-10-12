@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using T3.Core.Logging;
-using T3.Core.Operator;
+﻿using T3.Core.Operator;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.UiModel;

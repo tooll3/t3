@@ -3,8 +3,6 @@ using System.IO;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
-using T3.Editor.Gui.Windows.Utilities;
-using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph;
 

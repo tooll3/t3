@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using T3.Core.Operator;
-using T3.Editor.Gui.Windows;
 
 namespace T3.Editor.Gui.Templates;
 

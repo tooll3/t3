@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.SystemUi;
-using T3.Editor.SystemUi;
 
 namespace T3.Editor.UiModel;
 

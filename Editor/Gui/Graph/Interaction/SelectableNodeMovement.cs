@@ -4,11 +4,8 @@ using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Interaction.Connections;
-using T3.Editor.Gui.Graph.Modification;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 

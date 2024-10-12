@@ -7,8 +7,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Helpers;
-using T3.Editor.Gui.Windows.Layouts;
-using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Modification;

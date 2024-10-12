@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using Operators.Utils;
-using T3.Core.Logging;
 using T3.Editor.Gui.Interaction.Midi.CompatibleDevices;
 using Type = System.Type;
 

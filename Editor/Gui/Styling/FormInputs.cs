@@ -1,11 +1,7 @@
 ﻿using ImGuiNET;
-using T3.Core.IO;
-using T3.Editor.Compilation;
 using T3.Editor.Gui.InputUi;
-using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Styling;
 

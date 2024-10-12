@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using T3.Core.Animation;
+﻿using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Editor.Gui.Windows.TimeLine;
-using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Commands.Animation;
 

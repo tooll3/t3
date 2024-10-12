@@ -2,7 +2,6 @@
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
-using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.Camera;

@@ -1,7 +1,6 @@
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.UiHelpers;

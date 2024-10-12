@@ -1,5 +1,4 @@
 using ImGuiNET;
-using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;

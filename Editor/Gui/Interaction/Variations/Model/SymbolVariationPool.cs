@@ -1,8 +1,6 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using T3.Core.DataTypes;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -11,8 +9,6 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Commands.Variations;
-using T3.Editor.Gui.Windows;
-using T3.Editor.UiModel;
 using T3.Serialization;
 
 namespace T3.Editor.Gui.Interaction.Variations.Model;

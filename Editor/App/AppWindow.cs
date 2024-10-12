@@ -7,7 +7,6 @@ using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Windows;
-using T3.Core.Compilation;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Resource;
 using T3.Core.SystemUi;

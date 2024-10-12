@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using T3.Editor.Gui.Graph;
+﻿using T3.Editor.Gui.Graph;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Commands.Annotations;

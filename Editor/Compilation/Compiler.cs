@@ -2,8 +2,6 @@
 using System.Collections.Frozen;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using Main;
 
 namespace T3.Editor.Compilation;

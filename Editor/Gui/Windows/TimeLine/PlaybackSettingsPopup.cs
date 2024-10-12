@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Text;
+﻿using System.Text;
 using System.Text.RegularExpressions;
 using ImGuiNET;
 using ManagedBass;
@@ -8,8 +7,6 @@ using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.IO;
 using T3.Core.Operator;
-using T3.Core.Resource;
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;

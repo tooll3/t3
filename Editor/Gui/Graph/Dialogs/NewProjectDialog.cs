@@ -5,7 +5,6 @@ using T3.Editor.Compilation;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Dialogs;

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Numerics;
+﻿using System.Diagnostics.CodeAnalysis;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 

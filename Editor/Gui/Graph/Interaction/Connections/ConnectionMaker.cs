@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using T3.Core.Operator;
+﻿using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;

@@ -1,9 +1,7 @@
-using System.IO;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Audio;
 using T3.Core.DataTypes;
-using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Editor.Gui.Audio;
 using Texture2D = T3.Core.DataTypes.Texture2D;

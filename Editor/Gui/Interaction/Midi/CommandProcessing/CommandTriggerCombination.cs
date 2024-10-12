@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using T3.Core.Logging;
-
-namespace T3.Editor.Gui.Interaction.Midi.CommandProcessing;
+﻿namespace T3.Editor.Gui.Interaction.Midi.CommandProcessing;
 
 /// <summary>
 /// Defines and invokes matching commands if input signals are matching. 

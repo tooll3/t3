@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.Operator;
 
 namespace T3.Editor.Gui.InputUi.SimpleInputUis;

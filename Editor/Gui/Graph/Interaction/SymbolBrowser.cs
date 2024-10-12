@@ -1,6 +1,5 @@
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
-using T3.Core.IO;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;

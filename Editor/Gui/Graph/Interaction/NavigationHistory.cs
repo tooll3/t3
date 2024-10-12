@@ -1,7 +1,5 @@
 ﻿using T3.Core.Operator;
-using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Helpers;
-using T3.Editor.Gui.Windows;
 
 namespace T3.Editor.Gui.Graph.Interaction;
 

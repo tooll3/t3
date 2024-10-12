@@ -4,7 +4,6 @@ using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.ChildUi;

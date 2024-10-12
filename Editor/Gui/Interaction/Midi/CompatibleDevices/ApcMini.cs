@@ -1,5 +1,4 @@
 ﻿#nullable enable
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using T3.Editor.Gui.Interaction.Midi.CommandProcessing;
 using T3.Editor.Gui.Interaction.Variations;

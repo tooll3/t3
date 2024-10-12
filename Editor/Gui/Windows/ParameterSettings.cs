@@ -1,10 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace T3.Editor.Gui.Interaction.Midi.CommandProcessing;
+﻿namespace T3.Editor.Gui.Interaction.Midi.CommandProcessing;
 
 /// <summary>
 /// Describes either a single or range of buttons on a midi device  

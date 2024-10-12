@@ -1,6 +1,4 @@
-﻿using System;
-using T3.Core.Logging;
-using T3.Core.Utils;
+﻿using T3.Core.Utils;
 using T3.Editor.Gui.Interaction.Variations.Model;
 
 namespace T3.Editor.Gui.Interaction.Variations;

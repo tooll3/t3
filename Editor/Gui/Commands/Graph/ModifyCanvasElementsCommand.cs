@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using T3.Core.Logging;
-using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Selection;
+﻿using T3.Editor.Gui.Selection;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Commands.Graph;

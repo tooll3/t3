@@ -3,7 +3,6 @@ using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;

@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using T3.Core.Operator;
+﻿using T3.Core.Operator;
 using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Interaction.Midi;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Windows.Variations;
 using T3.Editor.UiModel;

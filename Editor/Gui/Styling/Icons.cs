@@ -1,10 +1,8 @@
 ﻿using System.IO;
 using ImGuiNET;
-using T3.Core.Compilation;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Resource;
 using T3.Core.Utils;
-using T3.Editor.App;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Styling;

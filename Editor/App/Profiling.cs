@@ -1,5 +1,4 @@
-﻿using System;
-using T3.Core.Animation;
+﻿using T3.Core.Animation;
 using T3.Core.DataTypes.DataSet;
 using T3.Editor.Gui.UiHelpers;
 using T3.SystemUi.Logging;

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;

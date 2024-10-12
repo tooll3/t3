@@ -1,5 +1,4 @@
 ﻿using T3.Core.DataTypes.Vector;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 
