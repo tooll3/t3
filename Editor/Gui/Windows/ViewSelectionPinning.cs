@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿#nullable enable
+using System.Diagnostics.CodeAnalysis;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph;
@@ -21,24 +22,22 @@ internal class ViewSelectionPinning
     {
         if (!TryGetPinnedOrSelectedInstance(out var pinnedOrSelectedInstance, out var canvas))
             return;
-            
+
         var selection = canvas.NodeSelection;
 
-        bool shouldPin = false;
+        var shouldPin = false;
         canvas.NodeSelection.PinnedIds.Add(pinnedOrSelectedInstance.SymbolChildId);
-            
-        if (CustomComponents.IconButton(Icon.Pin, 
-                                                   
+
+        if (CustomComponents.IconButton(Icon.Pin,
                                         new Vector2(T3Style.ToolBarHeight, T3Style.ToolBarHeight) * T3Ui.UiScaleFactor,
                                         _isPinned ? CustomComponents.ButtonStates.Activated : CustomComponents.ButtonStates.Dimmed
                                        ))
         {
-                
             if (_isPinned)
             {
                 // Keep pinned if pinned operator changed
                 var oneSelected = selection.Selection.Count == 1;
-                var selectedOp= selection.GetFirstSelectedInstance();
+                var selectedOp = selection.GetFirstSelectedInstance();
                 var opChanged = pinnedOrSelectedInstance != selectedOp;
                 if (!opChanged || !oneSelected)
                 {
@@ -53,13 +52,13 @@ internal class ViewSelectionPinning
             {
                 shouldPin = true;
             }
-                
+
             if (shouldPin)
                 PinSelectionToView(canvas);
         }
+
         CustomComponents.TooltipForLastItem("Pin output to active operator.");
-            
-            
+
         ImGui.SameLine();
         ImGui.SetNextItemWidth(200);
         var suffix = _isPinned ? " (pinned)" : " (selected)";
@@ -70,7 +69,7 @@ internal class ViewSelectionPinning
         }
 
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
-            
+
         if (ImGui.BeginCombo("##pinning", pinnedOrSelectedInstance.Symbol.Name + suffix))
         {
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
@@ -102,7 +101,7 @@ internal class ViewSelectionPinning
             {
                 if (ImGui.MenuItem("Unpin start operator"))
                 {
-                    _pinnedEvaluationInstancePath = null;
+                    _pinnedEvaluationInstancePath = [];
                 }
             }
             else
@@ -118,9 +117,12 @@ internal class ViewSelectionPinning
                 if (ImGui.MenuItem("Show in Graph"))
                 {
                     var parentInstance = pinnedOrSelectedInstance.Parent;
-                    var parentSymbolUi = parentInstance.GetSymbolUi();
+                    var parentSymbolUi = parentInstance?.GetSymbolUi();
+                    if (parentSymbolUi == null)
+                        return;
+                    
                     var instanceChildUi = parentSymbolUi.ChildUis[pinnedOrSelectedInstance.SymbolChildId];
-                    selection.SetSelection(instanceChildUi, pinnedOrSelectedInstance);
+                    selection?.SetSelection(instanceChildUi, pinnedOrSelectedInstance);
                     FitViewToSelectionHandling.FitViewToSelection();
                 }
             }
@@ -155,9 +157,11 @@ internal class ViewSelectionPinning
         //_pinnedEvaluationInstancePath = null;
     }
 
-    private void PinSelectionAsEvaluationStart(Instance instance)
+    private void PinSelectionAsEvaluationStart(Instance? instance)
     {
-        _pinnedEvaluationInstancePath = instance.InstancePath;
+        _pinnedEvaluationInstancePath = instance != null
+                                            ? instance.InstancePath
+                                            : [];
     }
 
     public bool TryGetPinnedOrSelectedInstance([NotNullWhen(true)] out Instance? instance, [NotNullWhen(true)] out GraphCanvas? canvas)
@@ -198,22 +202,21 @@ internal class ViewSelectionPinning
         return false;
     }
 
-
-    public void PinInstance(Instance instance, GraphCanvas canvas)
+    public void PinInstance(Instance? instance, GraphCanvas canvas)
     {
-        _pinnedInstancePath = instance.InstancePath;
+        _pinnedInstancePath = instance != null ? instance.InstancePath : [];
         _pinnedInstanceCanvas = canvas;
         _isPinned = true;
     }
-        
+
     private void Unpin()
     {
         _isPinned = false;
         _pinnedInstanceCanvas = null;
-        _pinnedInstancePath = null;
+        _pinnedInstancePath = [];
     }
 
-    public bool TryGetPinnedEvaluationInstance(Structure structure, out Instance? instance)
+    public bool TryGetPinnedEvaluationInstance(Structure structure, [NotNullWhen(true)] out Instance? instance)
     {
         instance = structure.GetInstanceFromIdPath(_pinnedEvaluationInstancePath);
         return instance != null;

@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Styling;
@@ -96,6 +97,6 @@ internal class DuplicateSymbolDialog : ModalDialog
         EndDialog();
     }
 
-    private EditableSymbolProject _projectToCopyTo;
-    private bool _completedReloadPrompt = false;
+    private EditableSymbolProject? _projectToCopyTo;
+    private bool _completedReloadPrompt;
 }

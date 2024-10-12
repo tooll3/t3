@@ -61,7 +61,7 @@ internal sealed partial class GraphWindow
     public override IReadOnlyList<Window> GetInstances() => GraphWindowInstances;
     public event EventHandler<EditorSymbolPackage> WindowDestroyed;
 
-    public static bool TryOpenPackage(EditorSymbolPackage package, bool replaceFocused, Instance startingComposition = null, WindowConfig config = null,
+    public static bool TryOpenPackage(EditorSymbolPackage package, bool replaceFocused, Instance? startingComposition = null, WindowConfig? config = null,
                                       int instanceNumber = NoInstanceNumber)
     {
         if (!package.TryGetRootInstance(out var root))
@@ -92,7 +92,7 @@ internal sealed partial class GraphWindow
             newWindow.Config = config;
         }
 
-        IReadOnlyList<Guid> rootPath = [root!.SymbolChildId];
+        IReadOnlyList<Guid> rootPath = [root.SymbolChildId];
         var startPath = rootPath;
         if (root == startingComposition)
         {

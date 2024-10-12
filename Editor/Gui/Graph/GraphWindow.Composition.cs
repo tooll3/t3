@@ -28,14 +28,14 @@ internal sealed partial class GraphWindow
                 if (instance == _instance)
                     return instance;
                 
-                lock (Compositions)
+                lock (_compositions)
                 {
-                    Compositions.Remove(_instance, out var thisComposition);
+                    _compositions.Remove(_instance, out var thisComposition);
                     System.Diagnostics.Debug.Assert(thisComposition == this);
                     _instance.Disposing -= InstanceOnDisposing;
                     _instance = instance;
                     instance.Disposing += InstanceOnDisposing;
-                    Compositions[instance] = this;
+                    _compositions[instance] = this;
                 }
 
                 return instance;
@@ -95,21 +95,20 @@ internal sealed partial class GraphWindow
         private void InstanceOnDisposing()
         {
             _instance.Disposing -= InstanceOnDisposing;
-            if(_disposed)
-                return;
-            
-          //  Dispose();
+            // if(_disposed)
+            //     return;
+            //  Dispose();
         }
 
         internal static Composition GetFor(Instance instance)
         {
             Composition? composition;
-            lock (Compositions)
+            lock (_compositions)
             {
-                if (!Compositions.TryGetValue(instance, out composition))
+                if (!_compositions.TryGetValue(instance, out composition))
                 {
                     composition = new Composition(instance);
-                    Compositions[instance] = composition;
+                    _compositions[instance] = composition;
                 }
                 
                 composition._checkoutCount++;
@@ -141,16 +140,16 @@ internal sealed partial class GraphWindow
                                                     
             _disposed = true;
 
-            lock (Compositions)
+            lock (_compositions)
             {
                 ReloadIfNecessary();
-                Compositions.Remove(_instance);
+                _compositions.Remove(_instance);
             }
         }
 
         private bool _disposed;
-        private bool _isReadOnly;
+        private readonly bool _isReadOnly;
 
-        private static readonly Dictionary<Instance, Composition> Compositions = new();
+        private static readonly Dictionary<Instance, Composition> _compositions = new();
     }
 }
