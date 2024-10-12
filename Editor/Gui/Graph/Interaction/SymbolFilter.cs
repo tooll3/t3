@@ -3,7 +3,6 @@ using System.Text.RegularExpressions;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction.Connections;
-using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Interaction;
@@ -13,8 +12,8 @@ namespace T3.Editor.Gui.Graph.Interaction;
 /// </summary>
 internal sealed class SymbolFilter
 {
-    public string SearchString;  // not a property to allow ref passing
-    public Type FilterInputType {
+    public string SearchString = string.Empty;  // not a property to allow ref passing
+    public Type? FilterInputType {
         get => _inputType;
         set
         {
@@ -22,7 +21,7 @@ internal sealed class SymbolFilter
             _inputType = value;
         }
     }
-    public Type FilterOutputType {
+    public Type? FilterOutputType {
         get => _outputType;
         set
         {
@@ -32,9 +31,7 @@ internal sealed class SymbolFilter
     }
 
     public bool OnlyMultiInputs { get; set; }
-    public List<SymbolUi> MatchingSymbolUis { get; private set; } = new();
-    //public List<Variation> MatchingPresets { get; } = new();
-    public SymbolVariationPool PresetPool { get; private set; }
+    public List<SymbolUi> MatchingSymbolUis { get; private set; } = [];
 
     public void UpdateIfNecessary(NodeSelection? selection, bool forceUpdate = false, int limit=30)
     {
@@ -47,9 +44,8 @@ internal sealed class SymbolFilter
             
         if (_needsUpdate)
         {
-            //UpdateConnectSlotHashes();
+            //UpdateConnectSlotHashes();  //TODO: Clarify why this is commented out
             UpdateMatchingSymbols(selection, limit);
-
         }
 
         WasUpdated = _needsUpdate;
@@ -74,7 +70,7 @@ internal sealed class SymbolFilter
         else
         {
             symbolFilter = search;
-            presetFilter = null;
+            presetFilter = string.Empty;
         }
             
         var pattern = string.Join(".*", symbolFilter.ToCharArray());
@@ -99,9 +95,9 @@ internal sealed class SymbolFilter
     {
         _sourceInputHash = 0;
         _targetInputHash = 0;
-
+    
         var tempConnections = ConnectionMaker.GetTempConnectionsFor(window);
-
+    
         foreach (var c in tempConnections)
         {
             switch (c.GetStatus())
@@ -109,7 +105,7 @@ internal sealed class SymbolFilter
                 case ConnectionMaker.TempConnection.Status.SourceIsDraftNode:
                     _targetInputHash = c.TargetSlotId.GetHashCode();
                     break;
-
+    
                 case ConnectionMaker.TempConnection.Status.TargetIsDraftNode:
                     _sourceInputHash = c.SourceSlotId.GetHashCode();
                     break;
@@ -352,16 +348,16 @@ internal sealed class SymbolFilter
 
         
     private bool _needsUpdate;
-    private string _symbolFilterString;
-    public string PresetFilterString;
+    private string _symbolFilterString = string.Empty;
+    public string PresetFilterString = string.Empty;
 
-    private Type _inputType;
-    private Type _outputType;
+    private Type? _inputType;
+    private Type? _outputType;
     public bool WasUpdated;
 
     private static int _sourceInputHash;
     private int _targetInputHash;
 
-    private Regex _currentRegex;
-    private string _lastSearchString;
+    private Regex _currentRegex = new(".*", RegexOptions.IgnoreCase);
+    private string _lastSearchString =string.Empty;
 }

@@ -45,7 +45,7 @@ internal sealed class SymbolPathHandler
 
     public Symbol Symbol;
     private bool _initialized;
-    private string _projectFolder;
+    private string _projectFolder = string.Empty;
     
     public event Action<SymbolPathHandler>? AllFilesReady;
 
@@ -92,7 +92,7 @@ internal sealed class SymbolPathHandler
         return changed;
     }
 
-    public static string GetCorrectPath(string name, string @namespace, string projectFolder, string rootNamespace, string fileExtension)
+    public static string GetCorrectPath(string name, string? @namespace, string projectFolder, string? rootNamespace, string fileExtension)
     {
         var folder = GetCorrectDirectory(@namespace, rootNamespace, projectFolder);
         var fmt = GetPathFormat(folder, name);
@@ -112,11 +112,14 @@ internal sealed class SymbolPathHandler
 
     public static string GetCorrectSourceCodePath(string name, string @namespace, EditableSymbolProject project)
     {
-        return GetCorrectPath(name, @namespace, project.Folder, project.CsProjectFile.RootNamespace, EditableSymbolProject.SourceCodeExtension);
+        return GetCorrectPath(name, @namespace, project.Folder, project.CsProjectFile.RootNamespace, EditorSymbolPackage.SourceCodeExtension);
     }
 
-    static string GetCorrectDirectory(string @namespace, string rootNamespace, string projectFolder)
+    private static string GetCorrectDirectory(string? @namespace, string? rootNamespace, string projectFolder)
     {
+        @namespace ??= string.Empty;
+        rootNamespace ??= string.Empty;
+        
         var symbolNamespace = @namespace.StartsWith(rootNamespace)
                                   ? @namespace.Replace(rootNamespace, "")
                                   : @namespace;
