@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿#nullable enable
+using System.IO;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -30,7 +31,7 @@ public class StringInputUi : InputValueUi<string>
     }
 
     public UsageType Usage { get; private set; } = UsageType.Default;
-    public string FileFilter { get; private set; }
+    public string? FileFilter { get; private set; }
 
     public override IInputUi Clone()
     {
@@ -46,7 +47,7 @@ public class StringInputUi : InputValueUi<string>
                    };
     }
 
-    protected override InputEditStateFlags DrawEditControl(string name, Symbol.Child.Input input, ref string value, bool readOnly)
+    protected override InputEditStateFlags DrawEditControl(string name, Symbol.Child.Input input, ref string? value, bool readOnly)
     {
         if (value == null)
         {
@@ -141,7 +142,7 @@ public class StringInputUi : InputValueUi<string>
 
     private readonly record struct InputRequest(string Value, string[] Filter, bool IsFolder, bool ShowWarning, IResourceConsumer ResourcePackageContainer);
 
-    private static InputEditStateFlags DrawFileInput(FileOperations.FilePickerTypes type, ref string value, string filter, Func<InputRequest, InputResult> draw)
+    private static InputEditStateFlags DrawFileInput(FileOperations.FilePickerTypes type, ref string value, string? filter, Func<InputRequest, InputResult> draw)
     {
         ImGui.SetNextItemWidth(-70);
 
@@ -458,6 +459,6 @@ public class StringInputUi : InputValueUi<string>
     private static bool _fileManagerOpen;
     private static readonly object _fileManagerResultLock = new();
     private static bool _hasClosedFileManager;
-    private static Instance[] _selectedInstances = [];
+    private static readonly Instance[] _selectedInstances = [];
     private static TempResourceConsumer? _searchResourceConsumer;
 }

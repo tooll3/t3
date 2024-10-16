@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿#nullable enable
+using System.Diagnostics;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
@@ -44,22 +45,20 @@ internal class CommandOutputUi : OutputUi<Command>
         var originalCamMatrix = context.WorldToCamera;
         var originalViewMatrix = context.CameraToClipSpace;
             
-        // invalidate
+        // Invalidate
         StartInvalidation(slot);
 
-        // setup render target - TODO: this should not be done for all 'Command' outputs as most of them don't produce image content
+        // Setup render target - TODO: this should not be done for all 'Command' outputs as most of them don't produce image content
         var device = ResourceManager.Device;
 
-        Int2 size = context.RequestedResolution;
-        var wasRebuild = UpdateTextures(device, size, Format.R16G16B16A16_Float);
+        var size = context.RequestedResolution;
+        UpdateTextures(device, size, Format.R16G16B16A16_Float);
         var deviceContext = device.ImmediateContext;
         var prevViewports = deviceContext.Rasterizer.GetViewports<RawViewportF>();
         var prevTargets = deviceContext.OutputMerger.GetRenderTargets(1);
         deviceContext.Rasterizer.SetViewport(new SharpDX.Viewport(0, 0, size.Width, size.Height, 0.0f, 1.0f));
-        //deviceContext.OutputMerger.SetTargets(_colorBufferRtv);
         deviceContext.OutputMerger.SetTargets(_depthBufferDsv, _colorBufferRtv);
 
-        //var colorRgba = new RawColor4(0.1f, 0.1f, 0.1f, 1.0f);
         var colorRgba = new RawColor4(context.BackgroundColor.X,
                                       context.BackgroundColor.Y,
                                       context.BackgroundColor.Z,
@@ -68,7 +67,7 @@ internal class CommandOutputUi : OutputUi<Command>
         if(_depthBufferDsv != null)
             deviceContext.ClearDepthStencilView(_depthBufferDsv, DepthStencilClearFlags.Depth, 1.0f, 0);
             
-        // evaluate the op
+        // Evaluate the operator
         slot.Update(context);
 
         if (context.ShowGizmos != T3.Core.Operator.GizmoVisibility.Off)
@@ -76,17 +75,20 @@ internal class CommandOutputUi : OutputUi<Command>
             context.WorldToCamera = originalCamMatrix;
             context.CameraToClipSpace = originalViewMatrix;
 
-            var outputSlot = _gridOutputs[0];
-            outputSlot.Invalidate();
-            outputSlot.Update(context);
+            if(_gridOutputs != null && _gridOutputs.Count > 0)
+            {
+                var outputSlot = _gridOutputs[0];
+                outputSlot.Invalidate();
+                outputSlot.Update(context);
+            }
         }
 
-        // restore prev setup
+        // Restore previous setup
         deviceContext.Rasterizer.SetViewports(prevViewports);
         deviceContext.OutputMerger.SetTargets(prevTargets);
 
-        // clean up ref counts for RTVs
-        for (int i = 0; i < prevTargets.Length; i++)
+        // Clean up ref counts for RTVs
+        for (var i = 0; i < prevTargets.Length; i++)
         {
             prevTargets[i].Dispose();
         }
@@ -94,12 +96,12 @@ internal class CommandOutputUi : OutputUi<Command>
 
     private bool EnsureGridOutputsExist()
     {
-        if (_gridOutputs != null) return true;
+        if (_gridOutputs != null) 
+            return true;
             
-        if (!_outputWindowGridSymbol.TryGetParentlessInstance(out var gridInstance))
+        if (_outputWindowGridSymbol == null || !_outputWindowGridSymbol.TryGetParentlessInstance(out var gridInstance))
         {
-            var message = $"{nameof(CommandOutputUi)} Could not create grid instance";
-            Log.Error(message);
+            Log.Error($"{nameof(CommandOutputUi)} Could not create grid instance");
             return false;
         }
 
@@ -159,7 +161,7 @@ internal class CommandOutputUi : OutputUi<Command>
                 _colorBufferSrv?.Dispose();
                 _colorBufferRtv?.Dispose();
 
-                var colorDesc = DefaultColorDescription with 
+                var colorDesc = _defaultColorDescription with 
                                     {
                                         Format = format,
                                         Width = size.Width,
@@ -176,7 +178,7 @@ internal class CommandOutputUi : OutputUi<Command>
                 Utilities.Dispose(ref _depthBufferDsv);
                 Utilities.Dispose(ref _depthBuffer);
 
-                var depthDesc = DefaultDepthDescription with
+                var depthDesc = _defaultDepthDescription with
                                     {
                                         Width = size.Width,
                                         Height = size.Height,
@@ -203,7 +205,7 @@ internal class CommandOutputUi : OutputUi<Command>
         return true;
     }
 
-    private static readonly Texture2DDescription DefaultColorDescription = new()
+    private static readonly Texture2DDescription _defaultColorDescription = new()
                                                                                {
                                                                                    ArraySize = 1,
                                                                                    BindFlags = BindFlags.RenderTarget | BindFlags.ShaderResource,
@@ -214,7 +216,7 @@ internal class CommandOutputUi : OutputUi<Command>
                                                                                    Usage = ResourceUsage.Default
                                                                                };
 
-    private static readonly Texture2DDescription DefaultDepthDescription = new()
+    private static readonly Texture2DDescription _defaultDepthDescription = new()
                                                                                {
                                                                                    ArraySize = 1,
                                                                                    BindFlags = BindFlags.DepthStencil | BindFlags.ShaderResource,
@@ -227,17 +229,17 @@ internal class CommandOutputUi : OutputUi<Command>
                                                                                    SampleDescription = new SampleDescription(1, 0),
                                                                                    Usage = ResourceUsage.Default
                                                                                };
-    private Texture2D _colorBuffer;
-    private ShaderResourceView _colorBufferSrv;
+    private Texture2D? _colorBuffer;
+    private ShaderResourceView? _colorBufferSrv;
         
-    private RenderTargetView _colorBufferRtv;
-    private Texture2D _depthBuffer;
+    private RenderTargetView? _colorBufferRtv;
+    private Texture2D? _depthBuffer;
         
-    private DepthStencilView _depthBufferDsv;
+    private DepthStencilView? _depthBufferDsv;
         
     // instance management
-    private readonly Symbol _outputWindowGridSymbol;
+    private readonly Symbol? _outputWindowGridSymbol;
     private Instance? _gridInstance;
     private readonly Action _onGridInstanceDisposed;
-    private IReadOnlyList<ISlot> _gridOutputs;
+    private IReadOnlyList<ISlot>? _gridOutputs;
 }
