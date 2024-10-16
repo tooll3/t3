@@ -19,6 +19,14 @@
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
+    },
+    {
+      "InputId": "35a63cbe-7fd5-45da-9d69-322dd79db493"/*SwitchUV*/,
+      "Position": {
+        "X": -485.13284,
+        "Y": 1037.2579
+      },
+      "Description": "False = TexCoord, True = TexCoord2"
     }
   ],
   "SymbolChildUis": [
@@ -101,7 +109,7 @@
       "ChildId": "ece03783-31ef-4057-a82d-cb980a3fcdc2"/*GetSRVProperties*/,
       "Position": {
         "X": -1.2656555,
-        "Y": 1100.6326
+        "Y": 1113.6326
       }
     },
     {
@@ -109,6 +117,13 @@
       "Position": {
         "X": -1.2656555,
         "Y": 1057.6326
+      }
+    },
+    {
+      "ChildId": "5fe51748-f154-4e82-b74e-be21f38bcc49"/*BoolToFloat*/,
+      "Position": {
+        "X": -220.72968,
+        "Y": 1036.6613
       }
     }
   ],
