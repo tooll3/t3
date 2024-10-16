@@ -506,7 +506,7 @@
       "Name": "EmitPoint",
       "InputValues": [
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Scale*/,
           "Type": "System.Single",
           "Value": 0.121
         },

@@ -32,11 +32,10 @@ cbuffer Params : register(b0)
     float1 OrientationAngle;
 
     float2 GainAndBias;            // 28
-    float2 FX1;
-    
-    float2 FX2;
     float2 __padding6;
 
+    float2 FX1;
+    float2 FX2;
 
     float3 PointScale;             // 36
 

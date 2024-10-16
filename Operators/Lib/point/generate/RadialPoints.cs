@@ -46,9 +46,6 @@ internal sealed class RadialPoints : Instance<RadialPoints>
         [Input(Guid = "6df5829e-a534-4620-bcd5-9324f94b4f54")]
         public readonly InputSlot<System.Numerics.Vector3> Axis = new InputSlot<System.Numerics.Vector3>();
 
-        [Input(Guid = "526cf26b-6cf6-4cba-be2a-4819c2a422bf")]
-        public readonly InputSlot<float> WOffset = new InputSlot<float>();
-
         [Input(Guid = "01a62754-7629-487d-a43a-f0cd2fbfafce")]
         public readonly InputSlot<System.Numerics.Vector3> OrientationAxis = new InputSlot<System.Numerics.Vector3>();
 
@@ -58,9 +55,6 @@ internal sealed class RadialPoints : Instance<RadialPoints>
         [Input(Guid = "ef8d1fe2-8470-4113-8d20-40a92d0dab97")]
         public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
 
-        [Input(Guid = "3ee710be-8954-431b-8d3a-38f7f03f0f02")]
-        public readonly InputSlot<float> W = new InputSlot<float>();
-
         [Input(Guid = "56b8aabc-2abf-49c7-ba1a-945a7bcf0c53")]
         public readonly InputSlot<System.Numerics.Vector2> FX1 = new InputSlot<System.Numerics.Vector2>();
 
@@ -69,4 +63,10 @@ internal sealed class RadialPoints : Instance<RadialPoints>
 
         [Input(Guid = "8fd178b9-877a-43ac-9e03-3fc1c98faf21")]
         public readonly InputSlot<System.Numerics.Vector3> PointScale = new InputSlot<System.Numerics.Vector3>();
+
+        [Input(Guid = "3ee710be-8954-431b-8d3a-38f7f03f0f02")]
+        public readonly InputSlot<float> W = new InputSlot<float>();
+
+        [Input(Guid = "526cf26b-6cf6-4cba-be2a-4819c2a422bf")]
+        public readonly InputSlot<float> WOffset = new InputSlot<float>();
 }

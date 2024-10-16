@@ -541,7 +541,7 @@
       "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
       "InputValues": [
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Scale*/,
           "Type": "System.Single",
           "Value": 0.38
         }
@@ -1563,7 +1563,7 @@
           "Value": 1.0
         },
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Scale*/,
           "Type": "System.Single",
           "Value": 0.14
         },
@@ -2807,7 +2807,7 @@
           "Value": 1.0
         },
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Scale*/,
           "Type": "System.Single",
           "Value": 0.03
         },
@@ -2933,7 +2933,7 @@
       "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
       "InputValues": [
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Scale*/,
           "Type": "System.Single",
           "Value": 0.08
         }
@@ -2969,7 +2969,7 @@
       "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
       "InputValues": [
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Scale*/,
           "Type": "System.Single",
           "Value": 0.23
         }

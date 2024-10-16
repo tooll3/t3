@@ -8,42 +8,42 @@ internal sealed class DrawLines : Instance<DrawLines>
     [Output(Guid = "73ebf863-ba71-421c-bee7-312f13c5eff0")]
     public readonly Slot<Command> Output = new();
 
-    [Input(Guid = "e15b6dc7-aaf9-4244-a4b8-4ac13ee7d23f")]
-    public readonly InputSlot<BufferWithViews> GPoints = new();
+        [Input(Guid = "e15b6dc7-aaf9-4244-a4b8-4ac13ee7d23f")]
+        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
-    [Input(Guid = "75419a73-8a3e-4538-9a1d-e3b0ce7f8561")]
-    public readonly InputSlot<Vector4> Color = new();
+        [Input(Guid = "75419a73-8a3e-4538-9a1d-e3b0ce7f8561")]
+        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
 
-    [Input(Guid = "df158fcf-3042-48cf-8383-7bf4c1bcb8a6")]
-    public readonly InputSlot<float> Size = new();
+        [Input(Guid = "df158fcf-3042-48cf-8383-7bf4c1bcb8a6")]
+        public readonly InputSlot<float> Size = new InputSlot<float>();
 
-    [Input(Guid = "d0919481-203a-4379-8094-187d6209e00d")]
-    public readonly InputSlot<float> ShrinkWithDistance = new();
+        [Input(Guid = "d0919481-203a-4379-8094-187d6209e00d")]
+        public readonly InputSlot<float> ShrinkWithDistance = new InputSlot<float>();
 
-    [Input(Guid = "28f85ae9-ebae-4300-8aa0-738c6327cc44")]
-    public readonly InputSlot<float> TransitionProgress = new();
+        [Input(Guid = "28f85ae9-ebae-4300-8aa0-738c6327cc44")]
+        public readonly InputSlot<float> TransitionProgress = new InputSlot<float>();
 
-    [Input(Guid = "039e11ea-2155-4f90-aa8a-74ead604679c")]
-    public readonly InputSlot<float> UseWForWidth = new();
+        [Input(Guid = "567794ab-b3d3-43f6-ae95-4d654f797577")]
+        public readonly InputSlot<bool> UseWAsTexCoordV = new InputSlot<bool>();
 
-    [Input(Guid = "567794ab-b3d3-43f6-ae95-4d654f797577")]
-    public readonly InputSlot<bool> UseWAsTexCoordV = new();
+        [Input(Guid = "c10f9c6c-9923-42c6-848d-6b98097acc67")]
+        public readonly InputSlot<T3.Core.DataTypes.Texture2D> Texture_ = new InputSlot<T3.Core.DataTypes.Texture2D>();
 
-    [Input(Guid = "c10f9c6c-9923-42c6-848d-6b98097acc67")]
-    public readonly InputSlot<Texture2D> Texture_ = new();
+        [Input(Guid = "9ba2aa59-e55b-4ebe-aa98-0f79ed77c7aa")]
+        public readonly InputSlot<bool> EnableZTest = new InputSlot<bool>();
 
-    [Input(Guid = "9ba2aa59-e55b-4ebe-aa98-0f79ed77c7aa")]
-    public readonly InputSlot<bool> EnableZTest = new();
+        [Input(Guid = "c9cf2182-1297-463c-b5c1-d4ee7ad0895c")]
+        public readonly InputSlot<bool> EnableZWrite = new InputSlot<bool>();
 
-    [Input(Guid = "c9cf2182-1297-463c-b5c1-d4ee7ad0895c")]
-    public readonly InputSlot<bool> EnableZWrite = new();
+        [Input(Guid = "d90ff4e6-7d70-441f-a064-b40401025c36", MappedType = typeof(SharedEnums.BlendModes))]
+        public readonly InputSlot<int> BlendMod = new InputSlot<int>();
 
-    [Input(Guid = "d90ff4e6-7d70-441f-a064-b40401025c36", MappedType = typeof(SharedEnums.BlendModes))]
-    public readonly InputSlot<int> BlendMod = new();
+        [Input(Guid = "e797d93b-3847-4324-898e-09018267ea82")]
+        public readonly InputSlot<float> UvScale = new InputSlot<float>();
 
-    [Input(Guid = "e797d93b-3847-4324-898e-09018267ea82")]
-    public readonly InputSlot<float> UvScale = new();
+        [Input(Guid = "ba83a66f-5a4c-4355-abb2-d4b7cd55d542")]
+        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> WrapMode = new InputSlot<SharpDX.Direct3D11.TextureAddressMode>();
 
-    [Input(Guid = "ba83a66f-5a4c-4355-abb2-d4b7cd55d542")]
-    public readonly InputSlot<TextureAddressMode> WrapMode = new();
+        [Input(Guid = "039e11ea-2155-4f90-aa8a-74ead604679c")]
+        public readonly InputSlot<float> UseWForWidth = new InputSlot<float>();
 }

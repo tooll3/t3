@@ -11,7 +11,7 @@
       "Description": "Points closer to the camera Fade out."
     },
     {
-      "InputId": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+      "InputId": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Scale*/,
       "Position": {
         "X": 606.7909,
         "Y": 4209.768
@@ -80,6 +80,7 @@
         "X": 606.7909,
         "Y": 4254.768
       },
+      "GroupTitle": "OBSOLETE",
       "Description": "Defines whether the \"W\" value of the Gpoints used has an influence on the size of the rendered Points"
     },
     {

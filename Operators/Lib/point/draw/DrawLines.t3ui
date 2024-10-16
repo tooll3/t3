@@ -8,6 +8,7 @@
         "X": -300.97974,
         "Y": 495.4646
       },
+      "GroupTitle": "OBSOLETE LEGACY PARAMS",
       "Description": "Defines whether the \"W\"-Value of the Gpoints used has an influence on the size of the rendered Points"
     },
     {
