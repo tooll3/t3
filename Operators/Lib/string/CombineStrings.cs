@@ -29,6 +29,7 @@ internal sealed class CombineStrings : Instance<CombineStrings>
             isFirst = false;
         }
         Result.Value = _stringBuilder.ToString();
+        Input.DirtyFlag.Clear();
     }
 
     private readonly StringBuilder _stringBuilder = new();
