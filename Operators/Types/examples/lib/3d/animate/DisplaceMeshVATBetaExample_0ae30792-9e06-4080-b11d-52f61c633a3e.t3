@@ -483,6 +483,12 @@
       "SymbolId": "cd43942a-887e-4e34-bc54-0c2e5e8bc2af",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "18a25f50-4b1b-41fb-aa6a-54c13fa553c5"/*UVsViewer*/,
+      "SymbolId": "68cf773d-30ac-4ae0-bc1e-b7a17ea322bb",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -503,6 +509,12 @@
       "SourceSlotId": "977ca2f4-cddb-4b9a-82b2-ff66453bbf9b",
       "TargetParentOrChildId": "11c7d9c3-d3dd-4447-8ecf-9a6b7ae06d7a",
       "TargetSlotId": "55dc52d8-51a6-497a-9624-b118e0e27c65"
+    },
+    {
+      "SourceParentOrChildId": "1cd7dc6b-e5e2-4554-a5a2-28680ce4b26a",
+      "SourceSlotId": "df640cce-fb6f-46fe-962d-ffafd80a954d",
+      "TargetParentOrChildId": "18a25f50-4b1b-41fb-aa6a-54c13fa553c5",
+      "TargetSlotId": "4ccfb3fe-5c64-45d6-8b3f-63249c69e146"
     },
     {
       "SourceParentOrChildId": "38a741e7-7c4a-4eb7-be78-daf4abb1e769",
