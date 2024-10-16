@@ -11,6 +11,7 @@ using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 
 namespace T3.Editor;
