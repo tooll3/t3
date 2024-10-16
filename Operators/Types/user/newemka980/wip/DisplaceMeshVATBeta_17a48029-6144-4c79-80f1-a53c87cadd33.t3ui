@@ -1,5 +1,6 @@
 {
   "Id": "17a48029-6144-4c79-80f1-a53c87cadd33"/*DisplaceMeshVATBeta*/,
+  "Description": "Vertex Animation Texture is a technique that allows to store a complex mesh animation in textures and use a vertex shader to play the animation.\nIn the links section you'll find the needed Blender addons and an article about VAT.",
   "InputUis": [
     {
       "InputId": "e5c52d40-1d93-40a8-b430-868ff4c77107"/*InputMesh*/,
@@ -9,52 +10,38 @@
       }
     },
     {
-      "InputId": "480ec4b2-558a-4a64-8a53-55ce1bdcfc18"/*Offset*/,
+      "InputId": "480ec4b2-558a-4a64-8a53-55ce1bdcfc18"/*UVOffset*/,
       "Position": {
         "X": -1266.0374,
         "Y": 37.86139
       }
     },
     {
-      "InputId": "2b7af5bb-2ed5-4b9a-89fe-0a45c3cc9111"/*Amount*/,
+      "InputId": "f4593d23-e4ca-44b0-85e5-4a0038c450a0"/*Texture*/,
       "Position": {
         "X": -1266.0374,
         "Y": 82.86139
       }
     },
     {
-      "InputId": "4e5c35f7-c815-4959-a3cd-b8f3cddaa9ba"/*AmountDistribution*/,
+      "InputId": "e11db6b9-6217-4c76-9ef2-6bd609f0a79a"/*Normal*/,
       "Position": {
         "X": -1266.0374,
         "Y": 127.86139
       }
     },
     {
-      "InputId": "f4593d23-e4ca-44b0-85e5-4a0038c450a0"/*Texture*/,
+      "InputId": "bae99b0d-70e5-4f34-a052-5ae133bf9fcb"/*RecomputeNormal*/,
       "Position": {
-        "X": -1266.0374,
-        "Y": 217.86139
+        "X": -1257.9199,
+        "Y": 359.98016
       }
     },
     {
-      "InputId": "e6bce02b-89be-4a8e-98f8-716576464705"/*ScaleUV*/,
+      "InputId": "0a07ec19-0623-4240-9354-1b49383fda86"/*SplitMesh*/,
       "Position": {
-        "X": -1266.0374,
-        "Y": 262.8614
-      }
-    },
-    {
-      "InputId": "6e005857-0e6d-4c50-9e81-e9339e1acb92"/*UseVertexSelection*/,
-      "Position": {
-        "X": -1266.0374,
-        "Y": 307.8614
-      }
-    },
-    {
-      "InputId": "e11db6b9-6217-4c76-9ef2-6bd609f0a79a"/*Normal*/,
-      "Position": {
-        "X": -1266.0374,
-        "Y": 352.8614
+        "X": -1257.9199,
+        "Y": 404.98016
       }
     }
   ],
@@ -64,13 +51,6 @@
       "Position": {
         "X": -457.36646,
         "Y": 236.02557
-      }
-    },
-    {
-      "ChildId": "10ab334f-bea0-4023-8d97-235ac909696c"/*Vector3Components*/,
-      "Position": {
-        "X": -650.0,
-        "Y": 351.0
       }
     },
     {
@@ -104,8 +84,8 @@
     {
       "ChildId": "187d64bf-4fb6-45a9-ba68-2a6e35d50fce"/*StructuredBufferWithViews*/,
       "Position": {
-        "X": -779.34424,
-        "Y": 670.5639
+        "X": -653.71594,
+        "Y": 666.2689
       }
     },
     {
@@ -118,8 +98,8 @@
     {
       "ChildId": "c73ba57e-4991-4507-9228-4f64d58a0ed5"/*GetBufferComponents*/,
       "Position": {
-        "X": -500.0,
-        "Y": 638.0
+        "X": -463.4926,
+        "Y": 630.4838
       }
     },
     {
@@ -132,22 +112,15 @@
     {
       "ChildId": "3966256f-6209-4f1a-bbc4-21e09313dfef"/*_AssembleMeshBuffers*/,
       "Position": {
-        "X": 198.55797,
-        "Y": 107.57378
+        "X": 225.96043,
+        "Y": 123.232315
       }
     },
     {
       "ChildId": "751dbdfa-0165-4cad-838d-ac5401cc3cc0"/*IntValue*/,
       "Position": {
-        "X": -950.0,
-        "Y": 678.0
-      }
-    },
-    {
-      "ChildId": "55677186-bd41-4806-a55e-3c30c6695061"/*BoolToFloat*/,
-      "Position": {
-        "X": -650.0,
-        "Y": 407.0
+        "X": -803.71594,
+        "Y": 666.2689
       }
     },
     {
@@ -160,22 +133,8 @@
     {
       "ChildId": "9c9637f7-7b6d-443e-b136-e99f497b2352"/*SamplerStateOp*/,
       "Position": {
-        "X": -421.38885,
-        "Y": 469.97736
-      }
-    },
-    {
-      "ChildId": "b56449cf-8dec-45b6-8348-515f11906a21"/*Vector2Components*/,
-      "Position": {
-        "X": -650.0,
-        "Y": 295.0
-      }
-    },
-    {
-      "ChildId": "82664a6d-a536-4892-b026-66daf536167c"/*Vector3Components*/,
-      "Position": {
-        "X": -650.0,
-        "Y": 463.0
+        "X": -457.36646,
+        "Y": 318.02557
       }
     },
     {
@@ -195,8 +154,8 @@
     {
       "ChildId": "c3373d06-44da-4d50-8406-716668502f9d"/*RecomputeNormals*/,
       "Position": {
-        "X": 370.08606,
-        "Y": 64.646774
+        "X": 692.9702,
+        "Y": 174.58069
       }
     },
     {
@@ -207,10 +166,38 @@
       }
     },
     {
-      "ChildId": "fc2430e7-4601-4712-84d8-5f3aad1bc998"/*_padding*/,
+      "ChildId": "484ebb79-b8e7-4783-bd71-4e9f91d818b6"/*PickMeshBuffer*/,
       "Position": {
-        "X": -415.4914,
-        "Y": 406.89096
+        "X": 888.92883,
+        "Y": 86.89145
+      }
+    },
+    {
+      "ChildId": "a66111dc-206b-4a96-b0cb-45455b21c156"/*BoolToInt*/,
+      "Position": {
+        "X": -923.9407,
+        "Y": 367.909
+      }
+    },
+    {
+      "ChildId": "f08f65c9-3a62-4270-909f-17a02c63ee18"/*SplitMeshVertices*/,
+      "Position": {
+        "X": 398.26093,
+        "Y": 206.35716
+      }
+    },
+    {
+      "ChildId": "8d0cba65-2bbe-4a91-8dfb-da2bc9537073"/*PickMeshBuffer*/,
+      "Position": {
+        "X": 542.9702,
+        "Y": 174.58069
+      }
+    },
+    {
+      "ChildId": "b7f81a97-8cf5-4a96-9631-d54b530d876d"/*BoolToInt*/,
+      "Position": {
+        "X": -923.9407,
+        "Y": 423.909
       }
     }
   ],
@@ -218,9 +205,32 @@
     {
       "OutputId": "df640cce-fb6f-46fe-962d-ffafd80a954d"/*Result*/,
       "Position": {
-        "X": 515.25696,
-        "Y": 111.72153
+        "X": 1038.9288,
+        "Y": 86.89145
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "1c37df42-b46f-49b8-8ba4-1ddc9c3bba16",
+      "Title": "Unreal Tools",
+      "Description": "A Blender addon to generates the uvmap and textures for vertex displacement.",
+      "LinkUrl": "https://github.com/JoshRBogart/unreal_tools",
+      "LinkType": "Reference"
+    },
+    {
+      "Id": "8be9bab9-f32e-4561-875e-c425527c6197",
+      "Title": "Blender-DDS-Addon",
+      "Description": "You need this addon to export VAT from Blender to DDS ",
+      "LinkUrl": "https://github.com/matyalatte/Blender-DDS-Addon",
+      "LinkType": "Reference"
+    },
+    {
+      "Id": "108d88a2-594c-44bc-8f23-42dfcc24f16e",
+      "Title": "Texture Animation: Applying Morphing and Vertex Animation Techniques",
+      "Description": "",
+      "LinkUrl": "https://medium.com/tech-at-wildlife-studios/texture-animation-techniques-1daecb316657",
+      "LinkType": "Documentation"
     }
   ]
 }
