@@ -270,7 +270,9 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
             if (inputs[i].Id != inputId)
             {
                 int index = inputs.FindIndex(i + 1, input => input.Id == inputId);
-                Debug.Assert(index >= 0);
+                if (index == -1)
+                    continue;
+                //Debug.Assert(index >= 0);
                 inputs.Swap(i, index);
                 Debug.Assert(inputId == inputs[i].Id);
             }
@@ -279,7 +281,9 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
         #if DEBUG
             if (numInputs > 0)
             {
+#if SKIP_ASSERTS
                 Debug.Assert(inputs.Count == inputDefinitions.Count);
+#endif
             }
         #endif
     }

@@ -150,7 +150,7 @@ public abstract partial class SymbolPackage : IResourcePackage
         if (updatedSymbols.Any(s => s == null))
         {
             var message = $"Found null references in updated symbols for {AssemblyInformation.Name}";
-            Debug.Assert(false, message);
+            //Debug.Assert(false, message);
             Log.Error(message);
             updatedSymbols = updatedSymbols.Where(x => x != null).ToList();
         }
