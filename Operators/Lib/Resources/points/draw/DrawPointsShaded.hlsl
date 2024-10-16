@@ -76,7 +76,7 @@ sampler texSampler : register(s0);
 sampler clampedSampler : register(s1);
 
 
-StructuredBuffer<Point> Points : t0;
+StructuredBuffer<LegacyPoint> Points : t0;
 StructuredBuffer<float4> Colors : t1;
 
 Texture2D<float4> BaseColorMap : register(t1);
@@ -93,7 +93,7 @@ psInput vsMain(uint id: SV_VertexID)
 
     int quadIndex = id % 6;
     int particleId = id / 6;
-    Point pointDef = Points[particleId];
+    LegacyPoint pointDef = Points[particleId];
 
     float3 quadPos = Corners[quadIndex];
     output.texCoord = (quadPos.xy * 0.5 + 0.5);

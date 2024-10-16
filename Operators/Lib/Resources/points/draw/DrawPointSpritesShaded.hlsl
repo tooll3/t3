@@ -81,7 +81,7 @@ struct psInput
 
 sampler texSampler : register(s0);
 
-StructuredBuffer<Point> Points : t0;
+StructuredBuffer<LegacyPoint> Points : t0;
 StructuredBuffer<SpriteDef> Sprites : t1;
 Texture2D<float4> FontTexture : register(t2);
 
@@ -106,7 +106,7 @@ psInput vsMain(uint id: SV_VertexID)
 
     SpriteDef sprite = Sprites[spriteIndex];
 
-    Point p = Points[entryIndex];
+    LegacyPoint p = Points[entryIndex];
 
     float3 quadCorners = Corners[vertexIndex];
     float3 posInObject =  (-float3(sprite.Pivot, 0) + quadCorners * float3(sprite.Size,0)) * Size * p.Stretch.xyz * p.W;

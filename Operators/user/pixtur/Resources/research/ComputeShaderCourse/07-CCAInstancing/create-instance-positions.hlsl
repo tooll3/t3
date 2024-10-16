@@ -34,7 +34,7 @@ struct Pixel {
 Texture2D<float4> FxTexture : register(t0);
 sampler texSampler : register(s0);
 
-RWStructuredBuffer<Point> PointBuffer : register(u0); 
+RWStructuredBuffer<LegacyPoint> PointBuffer : register(u0); 
 RWStructuredBuffer<uint> Counters : register(u1); 
 
 // static const int2 DirectionsMoore[] = 

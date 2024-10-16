@@ -38,8 +38,8 @@ cbuffer Params : register(b2)
     int SetW;
 }
 
-StructuredBuffer<Point> SourcePoints : t0;
-RWStructuredBuffer<Point> ResultPoints : u0;
+StructuredBuffer<LegacyPoint> SourcePoints : t0;
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
 
 static const float NoisePhase = 0;
 
@@ -75,7 +75,7 @@ inline float LinearStep(float min, float max, float t)
     if (i.x >= numStructs)
         return;
 
-    Point p = SourcePoints[i.x];
+    LegacyPoint p = SourcePoints[i.x];
 
     if (isnan(p.W))
     {

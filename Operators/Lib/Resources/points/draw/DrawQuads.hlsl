@@ -53,7 +53,7 @@ struct psInput
 
 sampler texSampler : register(s0);
 
-StructuredBuffer<Point> Points : t0;
+StructuredBuffer<LegacyPoint> Points : t0;
 Texture2D<float4> texture2 : register(t1);
 
 psInput vsMain(uint id
@@ -65,7 +65,7 @@ psInput vsMain(uint id
     int particleId = id / 6;
     float3 cornerFactors = Corners[quadIndex];
 
-    Point p = Points[particleId];
+    LegacyPoint p = Points[particleId];
 
     float2 atlasResolution = 1. / float2(TextureCellsX, TextureCellsY);
     float atlasRatio = (float)TextureCellsX / TextureCellsY;

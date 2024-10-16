@@ -29,9 +29,9 @@ cbuffer Params : register(b0)
     float Amount;
 }
 
-StructuredBuffer<Point> SourcePoints : t0;        
+StructuredBuffer<LegacyPoint> SourcePoints : t0;        
 
-RWStructuredBuffer<Point> ResultPoints : u0;
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
 
 
 [numthreads(64,1,1)]
@@ -44,7 +44,7 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
     }
 
-    Point p = SourcePoints[index];
+    LegacyPoint p = SourcePoints[index];
 
     if(SetColor > 0.5)
         p.Color = lerp(p.Color, Color, Amount);

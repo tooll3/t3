@@ -27,7 +27,7 @@ cbuffer Params : register(b0)
     float2 BiasGain;
 }
 
-RWStructuredBuffer<Point> ResultPoints : u0;    // output
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;    // output
 
 float3 RotatePointAroundAxis(float3 In, float3 Axis, float Rotation)
 {

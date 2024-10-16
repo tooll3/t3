@@ -1,4 +1,4 @@
-struct Point
+struct LegacyPoint
 {
     float3 position;
     float w;
@@ -10,7 +10,7 @@ struct Point
 
 // struct Particle
 // {
-//     Point p;
+//     LegacyPoint p;
 
 //     float3 velocity;
 //     float birthTime;

@@ -12,8 +12,8 @@ cbuffer Params : register(b0)
 }
 
 StructuredBuffer<PbrVertex> SourceVertices : t0;
-StructuredBuffer<Point> SourcePoints : t1;
-StructuredBuffer<Point> TargetPoints : t2;
+StructuredBuffer<LegacyPoint> SourcePoints : t1;
+StructuredBuffer<LegacyPoint> TargetPoints : t2;
 
 RWStructuredBuffer<PbrVertex> ResultVertices : u0;
 

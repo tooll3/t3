@@ -81,7 +81,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     
     ResultPoints[index].Position = v;
-    ResultPoints[index].W = (closeCircle && index == pointCount -1)
+    ResultPoints[index].Scale = (closeCircle && index == pointCount -1)
                           ? NAN
                           : W + WOffset * f;
 
@@ -98,8 +98,8 @@ void main(uint3 i : SV_DispatchThreadID)
 
     ResultPoints[index].Rotation = qMul(normalize(qMul(spin2, lookat)), spin);
     ResultPoints[index].Color = 1;
-    ResultPoints[index].Stretch = 1;
-    ResultPoints[index].Selected = 1;
+    ResultPoints[index].Scale = 1;
+    //ResultPoints[index].FX1 = 0;
 
 }
 

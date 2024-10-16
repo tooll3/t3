@@ -20,8 +20,8 @@ cbuffer Params : register(b0)
     float2 BiasAndGain;
 }
 
-StructuredBuffer<Point> SourcePoints : t0;
-RWStructuredBuffer<Point> ResultPoints : u0;
+StructuredBuffer<LegacyPoint> SourcePoints : t0;
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
 
 float3 GetNoise(float3 pos, float3 variation)
 {
@@ -69,7 +69,7 @@ void GetTranslationAndRotation(float weight, float3 pointPos, float4 rotation,
 
     float3 variationOffset = hash41u(i.x).xyz * Variation;
 
-    Point p = SourcePoints[i.x];
+    LegacyPoint p = SourcePoints[i.x];
 
     float weight = UseSelection < 0 ? lerp(1, p.Selected, -UseSelection)
                                     : lerp(1, p.W, UseSelection);

@@ -12,7 +12,7 @@ cbuffer Params : register(b0)
 }
 
 StructuredBuffer<PbrVertex> SourceVertices : t0;        
-StructuredBuffer<Point> Points : t1;        
+StructuredBuffer<LegacyPoint> Points : t1;        
 RWStructuredBuffer<PbrVertex> ResultVertices : u0;   
 
 static float f;
@@ -69,8 +69,8 @@ void main(uint3 i : SV_DispatchThreadID)
     uint bIndex = aIndex + 1;
     f = floatIndex - aIndex; 
 
-    Point pointA = Points[aIndex];
-    Point pointB = Points[bIndex];
+    LegacyPoint pointA = Points[aIndex];
+    LegacyPoint pointB = Points[bIndex];
 
     orientationA = transpose(qToMatrix(pointA.Rotation));
     orientationB = transpose(qToMatrix(pointB.Rotation));

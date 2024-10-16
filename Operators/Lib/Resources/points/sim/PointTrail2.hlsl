@@ -12,8 +12,8 @@ cbuffer Params : register(b1)
     int TrailLength;
 }
 
-StructuredBuffer<Point> CyclePoints : t0;   // input
-RWStructuredBuffer<Point> TrailPoints : u0; // output
+StructuredBuffer<LegacyPoint> CyclePoints : t0;   // input
+RWStructuredBuffer<LegacyPoint> TrailPoints : u0; // output
 
 [numthreads(64, 1, 1)] void main(uint3 i : SV_DispatchThreadID)
 {

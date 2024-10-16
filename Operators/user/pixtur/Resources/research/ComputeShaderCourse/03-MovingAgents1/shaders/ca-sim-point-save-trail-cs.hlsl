@@ -36,7 +36,7 @@ cbuffer ResolutionBuffer : register(b1)
 // sampler texSampler : register(s0);
 // Texture2D<float4> InputTexture : register(t0);
 
-RWStructuredBuffer<Point> Points : register(u0); 
+RWStructuredBuffer<LegacyPoint> Points : register(u0); 
 RWTexture2D<float4> WriteOutput  : register(u1); 
 
 int2 CellAddressFromPosition(float3 pos) 

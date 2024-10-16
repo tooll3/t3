@@ -18,13 +18,13 @@ cbuffer Params : register(b0)
     float NoiseDensity;
 }
 
-StructuredBuffer<Point> PointsA : t0;
-StructuredBuffer<Point> PointsB : t1;
+StructuredBuffer<LegacyPoint> PointsA : t0;
+StructuredBuffer<LegacyPoint> PointsB : t1;
 
 Texture2D<float4> GrowthMap : register(t2);
 sampler texSampler : register(s0);
 
-RWStructuredBuffer<Point> ResultPoints : u0;
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
 
 
 float3 GetNoise(float3 pos) 
@@ -80,8 +80,8 @@ void main(uint3 i : SV_DispatchThreadID)
     else 
     {
         uint targetIndex = (i.x / sourceCount )  % targetPosCount;
-        Point A = PointsA[sourceIndex];
-        Point B = PointsB[targetIndex];
+        LegacyPoint A = PointsA[sourceIndex];
+        LegacyPoint B = PointsB[targetIndex];
 
         //ResultPoints[i.x] = A;
         //return;

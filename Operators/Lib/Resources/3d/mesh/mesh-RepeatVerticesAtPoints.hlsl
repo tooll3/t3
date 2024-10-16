@@ -12,7 +12,7 @@ cbuffer Params : register(b0)
 }
 
 StructuredBuffer<PbrVertex> SourceVertices : t0;       
-StructuredBuffer<Point> Points : t1;       
+StructuredBuffer<LegacyPoint> Points : t1;       
 
 RWStructuredBuffer<PbrVertex> ResultVertices : u0;   
 
@@ -35,7 +35,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     PbrVertex v = SourceVertices[vertexIndex];
     
-    Point p = Points[pointIndex];
+    LegacyPoint p = Points[pointIndex];
 
     // Apply point transform
     float4 posInObject = float4( v.Position,1);

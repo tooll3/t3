@@ -14,12 +14,12 @@ cbuffer Params : register(b0)
     float UseCurlNoise;
 }
 
-// struct Point {
+// struct LegacyPoint {
 //     float3 Position;
 //     float W;
 // };
 
-RWStructuredBuffer<Point> ResultPoints : u0; 
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0; 
 
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)

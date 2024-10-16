@@ -42,7 +42,7 @@ struct psInput
 sampler texSampler : register(s0);
 sampler pointSampler : register(s1);
 
-StructuredBuffer<Point> Points : register(t0);
+StructuredBuffer<LegacyPoint> Points : register(t0);
 Texture2DArray<float4> SpriteTexture : register(t1);
 Texture2D<float4> FxTexture : register(t2);
 Texture3D<float> IndexFromColorLookUp : register(t3);
@@ -73,7 +73,7 @@ psInput vsMain(uint id: SV_VertexID)
     uint pointId = id / 6;
     float3 cornerFactors = Corners[quadIndex];
 
-    Point p = Points[pointId]; 
+    LegacyPoint p = Points[pointId]; 
 
     float f = pointId / (float)particleCount;
     output.texCoord = (cornerFactors.xy * float2(1, -1) * 0.5 + 0.5);

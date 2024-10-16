@@ -33,7 +33,7 @@ Texture2D<float4> ColorMap : t3;
 
 sampler texSampler : register(s0);
 
-RWStructuredBuffer<Point> ResultPoints : u0;
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
 RWStructuredBuffer<float4> ResultColors : u1;
 
 [numthreads(160,1,1)]
@@ -88,7 +88,7 @@ void main(uint3 i : SV_DispatchThreadID)
     uint3 fIndices = FaceIndices[faceIndex];
 
     // Compute barycentric coordinates
-    Point p;
+    LegacyPoint p;
 
     p.Selected = 1;
     p.Stretch = 1;

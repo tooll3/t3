@@ -36,8 +36,8 @@ cbuffer Params : register(b0)
     float RotationSpace;
 }
 
-StructuredBuffer<Point> Points : t0;
-RWStructuredBuffer<Point> ResultPoints : u0; // output
+StructuredBuffer<LegacyPoint> Points : t0;
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0; // output
 
 Texture2D<float4> inputTexture : register(t1);
 sampler texSampler : register(s0);
@@ -52,7 +52,7 @@ sampler texSampler : register(s0);
     if (i.x >= pointCount)
         return;
 
-    Point p = Points[index];
+    LegacyPoint p = Points[index];
 
     float divider = pointCount < 2 ? 1 : (pointCount - 1);
     float f = (float)i.x / divider;

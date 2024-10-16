@@ -12,9 +12,9 @@ cbuffer Params : register(b0)
     float AddSeperators;
 }
 
-StructuredBuffer<Point> SourcePoints : t0;   // input
-StructuredBuffer<Point> TargetPoints : t1;   // input
-RWStructuredBuffer<Point> ResultPoints : u0; // output
+StructuredBuffer<LegacyPoint> SourcePoints : t0;   // input
+StructuredBuffer<LegacyPoint> TargetPoints : t1;   // input
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0; // output
 
 // static const float NAN = sqrt(-1);
 
@@ -46,8 +46,8 @@ RWStructuredBuffer<Point> ResultPoints : u0; // output
         }
         else
         {
-            Point A = SourcePoints[sourceIndex];
-            Point B = TargetPoints[targetIndex];
+            LegacyPoint A = SourcePoints[sourceIndex];
+            LegacyPoint B = TargetPoints[targetIndex];
             float4 rotA = normalize(A.Rotation);
             float4 rotB = normalize(B.Rotation);
 
@@ -78,8 +78,8 @@ RWStructuredBuffer<Point> ResultPoints : u0; // output
         }
         else
         {
-            Point sourceP = SourcePoints[sourceIndex];
-            Point targetP = TargetPoints[targetIndex];
+            LegacyPoint sourceP = SourcePoints[sourceIndex];
+            LegacyPoint targetP = TargetPoints[targetIndex];
 
             float4 sourceRot = normalize(sourceP.Rotation);
             float4 targetRot = normalize(targetP.Rotation);

@@ -78,7 +78,7 @@ struct psInput
 
 sampler texSampler : register(s0);
 
-StructuredBuffer<Point> Points : t0;
+StructuredBuffer<LegacyPoint> Points : t0;
 //Texture2D<float4> texture2 : register(t1);
 
 Texture2D<float4> BaseColorMap : register(t1);
@@ -111,7 +111,7 @@ psInput vsMain(uint id: SV_VertexID)
     float f = (float)(particleId + cornerFactors.x)  / clamp(pointCount - 1, 1,100000);
 
     int offset = cornerFactors.x < 0.5 ? 0 : 1; 
-    Point p = Points[particleId+offset];
+    LegacyPoint p = Points[particleId+offset];
 
     float4 pointRotation = p.Rotation;
 

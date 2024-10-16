@@ -32,8 +32,8 @@ cbuffer IntParams : register(b1)
     int Repeat;
 }
 
-StructuredBuffer<Point> SourcePoints : t0;        
-RWStructuredBuffer<Point> ResultPoints : u0;  
+StructuredBuffer<LegacyPoint> SourcePoints : t0;        
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;  
 
 float3 hsb2rgb(float3 c)
 {
@@ -65,7 +65,7 @@ void main(uint3 i : SV_DispatchThreadID)
 {
     uint pointCount, stride;
     SourcePoints.GetDimensions(pointCount, stride);
-    Point p = SourcePoints[i.x];
+    LegacyPoint p = SourcePoints[i.x];
 
     uint pointId = i.x;
     uint pointU = pointId * _PRIME0 % (Repeat == 0 ? 999999999 : Repeat) ;

@@ -13,8 +13,8 @@ cbuffer Params : register(b0)
     float WIsWeight;
 }
 
-StructuredBuffer<Point> SourcePoints : t0;
-RWStructuredBuffer<Point> ResultPoints : u0;
+StructuredBuffer<LegacyPoint> SourcePoints : t0;
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
 
 static const float PointSpace = 0;
 static const float ObjectSpace = 1;
@@ -37,7 +37,7 @@ void main(uint3 i : SV_DispatchThreadID)
     if (i.x >= numStructs)
         return;
 
-    Point p = SourcePoints[i.x];
+    LegacyPoint p = SourcePoints[i.x];
 
     float w = p.W;
     float3 pos = p.Position;

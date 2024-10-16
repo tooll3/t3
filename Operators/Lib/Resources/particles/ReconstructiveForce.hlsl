@@ -15,7 +15,7 @@ cbuffer Params : register(b0)
     float SpeedFactor;
 }
 
-StructuredBuffer<Point> TargetPoints : t0;   
+StructuredBuffer<LegacyPoint> TargetPoints : t0;   
 RWStructuredBuffer<Particle> Particles : u0; 
 
 [numthreads(64,1,1)]

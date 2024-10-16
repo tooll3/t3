@@ -44,9 +44,9 @@ static const int3 AxisOrders[] =
     int3(2, 0, 1), // 0
 };
  
-StructuredBuffer<Point> StartPoints : t0;
-StructuredBuffer<Point> TargetPoints : t1;
-RWStructuredBuffer<Point> ResultPoints : u0;
+StructuredBuffer<LegacyPoint> StartPoints : t0;
+StructuredBuffer<LegacyPoint> TargetPoints : t1;
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
 
 [numthreads(11,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
@@ -66,8 +66,8 @@ void main(uint3 i : SV_DispatchThreadID)
     uint lineIndex = i.x / stepsPerPairCount;
     uint lineStepIndex = i.x % stepsPerPairCount;
 
-    Point A = StartPoints[lineIndex % (uint)countA];
-    Point B = TargetPoints[lineIndex % (uint)countB];
+    LegacyPoint A = StartPoints[lineIndex % (uint)countA];
+    LegacyPoint B = TargetPoints[lineIndex % (uint)countB];
 
     float2 hash = hash21(lineIndex);
     int3 axisOrder =  AxisOrders[(int)(hash.x*4)]; // int3(2,1,0);

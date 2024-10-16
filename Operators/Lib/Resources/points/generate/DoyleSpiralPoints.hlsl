@@ -26,7 +26,7 @@ cbuffer Params : register(b0)
     float CutOff2;
 }
 
-RWStructuredBuffer<Point> ResultPoints : u0; // output
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0; // output
 
 static const float ToRad = 3.141578 / 180;
 

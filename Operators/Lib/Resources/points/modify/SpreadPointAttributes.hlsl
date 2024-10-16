@@ -17,11 +17,11 @@ cbuffer Params : register(b1)
     int ApplyMode;
 }
 
-StructuredBuffer<Point> SourcePoints : t0;
+StructuredBuffer<LegacyPoint> SourcePoints : t0;
 Texture2D<float4> CurveImage : register(t1);
 Texture2D<float4> GradientImage : register(t2);
 
-RWStructuredBuffer<Point> ResultPoints : u0;
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
 sampler ClampedSampler : register(s0);
 
 float3 fmod(float3 x, float3 y)
@@ -53,7 +53,7 @@ float3 fmod(float3 x, float3 y)
         return;
     }
 
-    Point p = SourcePoints[index];
+    LegacyPoint p = SourcePoints[index];
 
     if (Mode != SPREADMODE_BUFFER && (isnan(p.W)))
     {
