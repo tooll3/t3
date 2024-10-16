@@ -6,14 +6,8 @@
 
 cbuffer Params : register(b0)
 {   
-    float Amount;
+   
     float2 MainOffset;
-    
-    //float2 ScaleUV;
-    float _Padding;
-    float3 Distribution;
-    //float UseVertexSelection;
-
     
 }
 
@@ -60,9 +54,9 @@ void main(uint3 i : SV_DispatchThreadID)
 
     float3 posInWorld = v.Position;
  
-    float2 uv = SourceVertices[gi].TexCoord2;// * ScaleUV;
+    float2 uv = SourceVertices[gi].TexCoord2;
     float frame = 1/height; 
-    uv += MainOffset.xy + float2(0,frame);
+    uv += MainOffset + float2(0,frame);
     float4 texColor = DisplaceMap.SampleLevel(texSampler, uv, 0); 
     float4 normals = NormalMap.SampleLevel(texSampler, uv, 0);
     float3x3 TBN = float3x3(v.Tangent, v.Bitangent, v.Normal);
@@ -70,10 +64,8 @@ void main(uint3 i : SV_DispatchThreadID)
     
     float3 offset = 0;
     
-    offset= texColor.rbg * Distribution;
-    //v.Normal = normals.rgb;
-    //ResultVertices[gi].Tangent = 0;
-    //ResultVertices[gi].Normal = v.Normal  ;
+    offset= texColor.rbg ;
+
     ResultVertices[gi].Position = v.Position + offset;
     ResultVertices[gi].TexCoord = SourceVertices[gi].TexCoord;
 
