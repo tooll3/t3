@@ -36,10 +36,17 @@
     {
       "InputId": "526cf26b-6cf6-4cba-be2a-4819c2a422bf"/*WOffset*/,
       "Position": {
-        "X": -148.87996,
-        "Y": 1333.0674
+        "X": -152.60738,
+        "Y": 1363.5079
       },
       "Format": "{0:0.000} ±"
+    },
+    {
+      "InputId": "56b8aabc-2abf-49c7-ba1a-945a7bcf0c53"/*FX1*/,
+      "Position": {
+        "X": -271.26318,
+        "Y": 1761.7194
+      }
     },
     {
       "InputId": "5a3347a2-ba87-4b38-a1a8-94bd0ef70f48"/*StartAngle*/,
@@ -51,6 +58,13 @@
       "Min": -90.0,
       "Max": 90.0,
       "Format": "{0:0.0}°"
+    },
+    {
+      "InputId": "5e0ff702-687e-4892-9a86-29f356d7f6bd"/*FX2*/,
+      "Position": {
+        "X": -271.26318,
+        "Y": 1817.7194
+      }
     },
     {
       "InputId": "6df5829e-a534-4620-bcd5-9324f94b4f54"/*Axis*/,
@@ -69,6 +83,13 @@
         "Y": 1170.569
       },
       "Description": "When drawing the radial points as a close line, two additional points have to be appended: One at the start position and one as separator.\n\nIt will add an overlapping point and a separator, so the number of corners will be Count - 2."
+    },
+    {
+      "InputId": "8fd178b9-877a-43ac-9e03-3fc1c98faf21"/*PointScale*/,
+      "Position": {
+        "X": -271.26318,
+        "Y": 1873.7194
+      }
     },
     {
       "InputId": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
@@ -94,8 +115,8 @@
     {
       "InputId": "b654ffe2-d46e-4a62-89b3-a9692d5c6481"/*Count*/,
       "Position": {
-        "X": -173.14885,
-        "Y": 756.73737
+        "X": -129.35233,
+        "Y": 666.942
       },
       "Description": "Amount of points generated between the first and last point",
       "Min": 0,
@@ -145,8 +166,8 @@
       "ChildId": "092378ee-688d-4a5b-9c58-65cb98acea4f"/*FloatsToBuffer*/,
       "Style": "Resizable",
       "Size": {
-        "X": 130.9806,
-        "Y": 855.0513
+        "X": 126.68663,
+        "Y": 1183.5404
       },
       "Position": {
         "X": 360.93112,
@@ -168,6 +189,13 @@
       }
     },
     {
+      "ChildId": "16e7a945-7f8f-4523-a818-542303023577"/*Padding*/,
+      "Position": {
+        "X": 63.67047,
+        "Y": 1655.0687
+      }
+    },
+    {
       "ChildId": "1c9db997-04eb-4a7b-9fb0-6c3d218e2442"/*Vector3Components*/,
       "Position": {
         "X": 154.83286,
@@ -177,8 +205,8 @@
     {
       "ChildId": "2053c85a-8978-43f3-b6a0-be46c1abfe7c"/*Value*/,
       "Position": {
-        "X": 168.42621,
-        "Y": 1452.9133
+        "X": 30.719116,
+        "Y": 1398.0376
       }
     },
     {
@@ -189,10 +217,17 @@
       }
     },
     {
+      "ChildId": "2c005354-b7e8-4902-aca6-fbb88b2c1737"/*Vector2Components*/,
+      "Position": {
+        "X": -121.26318,
+        "Y": 1761.7194
+      }
+    },
+    {
       "ChildId": "2f1e6571-3d5f-46c0-a49b-f39cebfd5b10"/*GetBufferComponents*/,
       "Position": {
-        "X": 357.1419,
-        "Y": 1637.3921
+        "X": 358.68768,
+        "Y": 349.7149
       }
     },
     {
@@ -200,6 +235,13 @@
       "Position": {
         "X": 202.17285,
         "Y": 562.38745
+      }
+    },
+    {
+      "ChildId": "5e3aef4b-d7ed-4253-bd7b-e05fc2e6b685"/*Vector2Components*/,
+      "Position": {
+        "X": -121.26318,
+        "Y": 1817.7194
       }
     },
     {
@@ -212,8 +254,8 @@
     {
       "ChildId": "68d8c8fa-6348-43c2-82b6-9eb32c1fcf35"/*Vector3Components*/,
       "Position": {
-        "X": 165.65027,
-        "Y": 1530.1501
+        "X": 27.943176,
+        "Y": 1475.2744
       }
     },
     {
@@ -226,8 +268,8 @@
     {
       "ChildId": "6e217253-c115-4633-b998-bb291ce889c1"/*StructuredBufferWithViews*/,
       "Position": {
-        "X": 204.57654,
-        "Y": 1682.5227
+        "X": 206.12231,
+        "Y": 394.84552
       }
     },
     {
@@ -252,6 +294,13 @@
       }
     },
     {
+      "ChildId": "96ba1267-4789-4e87-ba10-fa19a9a2f370"/*Vector3Components*/,
+      "Position": {
+        "X": -101.304504,
+        "Y": 1892.6508
+      }
+    },
+    {
       "ChildId": "b52b75fe-2161-4fc1-b6ed-bea0db3d86cc"/*Value*/,
       "Position": {
         "X": 135.35048,
@@ -261,8 +310,8 @@
     {
       "ChildId": "c013aeef-5267-4521-9ad5-040c4054336b"/*BoolToFloat*/,
       "Position": {
-        "X": 168.42621,
-        "Y": 1396.9133
+        "X": 30.719116,
+        "Y": 1342.0376
       }
     },
     {
@@ -275,15 +324,15 @@
     {
       "ChildId": "e30bbf5f-44e6-4a71-8d20-1e97df309b32"/*Vector2Components*/,
       "Position": {
-        "X": 58.079346,
-        "Y": 1636.3428
+        "X": 63.67047,
+        "Y": 1599.0687
       }
     },
     {
       "ChildId": "e9a3f305-40f9-416c-b59d-69b7f3d80f24"/*Value*/,
       "Position": {
-        "X": 168.42621,
-        "Y": 1495.9133
+        "X": 30.719116,
+        "Y": 1441.0376
       }
     },
     {

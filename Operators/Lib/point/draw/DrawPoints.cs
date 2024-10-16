@@ -34,4 +34,14 @@ internal sealed class DrawPoints : Instance<DrawPoints>
 
     [Input(Guid = "850e3a32-11ba-4ad2-a2b1-6164f077ddd6")]
     public readonly InputSlot<Texture2D> Texture_ = new InputSlot<Texture2D>();
+
+        [Input(Guid = "e40aeedd-49fe-467c-b886-064a1024cef3", MappedType = typeof(ScaleFXModes))]
+        public readonly InputSlot<int> ScaleFX = new InputSlot<int>();
+        
+        private enum ScaleFXModes
+        {
+            None = 0,
+            FX1 = 1,
+            FX2 = 2,
+        }
 }

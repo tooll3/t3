@@ -26,16 +26,22 @@ cbuffer Transforms : register(b0)
     float4x4 ObjectToClipSpace;
 };
 
-cbuffer Params : register(b2)
+cbuffer Params : register(b1)
 {
     float4 Color;
 
     float Size;
-    float SegmentCount;
     float CutOffTransparent;
     float FadeNearest;
-    float UseWForSize;
 };
+
+cbuffer IntParams : register(b2)
+{
+    int SegmentCount;
+    int ScaleFX;
+    int UseWForSize;
+};
+
 
 cbuffer FogParams : register(b3)
 {
@@ -54,7 +60,7 @@ struct psInput
 
 sampler texSampler : register(s0);
 
-StructuredBuffer<LegacyPoint> Points : t0;
+StructuredBuffer<Point> Points : t0;
 Texture2D<float4> texture2 : register(t1);
 
 psInput vsMain(uint id
@@ -64,7 +70,7 @@ psInput vsMain(uint id
 
     int quadIndex = id % 6;
     int particleId = id / 6;
-    LegacyPoint pointDef = Points[particleId];
+    Point pointDef = Points[particleId];
 
     // float4 aspect = float4(CameraToClipSpace[1][1] / CameraToClipSpace[0][0],1,1,1);
     float3 quadPos = Corners[quadIndex];
@@ -79,9 +85,13 @@ psInput vsMain(uint id
     float tooCloseFactor = saturate(-posInCamera.z / FadeNearest - 1);
     output.color.a *= tooCloseFactor;
 
-    float sizeFactor = UseWForSize > 0.5 ? pointDef.W : (isnan(pointDef.W) ? 0 : 1);
+    //float sizeFactor = UseWForSize > 0.5 ? pointDef.W : (isnan(pointDef.W) ? 0 : 1);
 
-    quadPosInCamera.xy += quadPos.xy * 0.10 * sizeFactor * Size;
+    float sizeFxFactor = ScaleFX == 0 ? 1:
+        (ScaleFX == 1) ? pointDef.FX1 : pointDef.FX2;
+ 
+
+    quadPosInCamera.xy += quadPos.xy * 0.10 * pointDef.Scale.xy * Size * sizeFxFactor;
     output.position = mul(quadPosInCamera, CameraToClipSpace);
     float4 posInWorld = mul(posInObject, ObjectToWorld);
 
