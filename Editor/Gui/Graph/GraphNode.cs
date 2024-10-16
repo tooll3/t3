@@ -1405,7 +1405,7 @@ internal class GraphNode
                 //ImGui.SetTooltip($"-> .{inputDef.Name}[{multiInputIndex}] <{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
                 if (ImGui.IsItemClicked(0))
                 {
-                    ConnectionMaker.StartFromInputSlot(_window, instance.Symbol, targetUi, inputDef, multiInputIndex);
+                    ConnectionMaker.StartFromInputSlot(_window, instance.Parent.Symbol, targetUi, inputDef, multiInputIndex);
                     Log.Debug("started connection at MultiInputIndex:" + multiInputIndex);
                 }
             }
