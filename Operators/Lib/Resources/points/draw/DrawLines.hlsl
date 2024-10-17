@@ -81,7 +81,8 @@ psInput vsMain(uint id : SV_VertexID)
     Point pointB = Points[particleId + 1];
     Point pointBB = Points[particleId > SegmentCount - 2 ? SegmentCount - 2 : particleId + 2];
 
-    float3 posInObject = cornerFactors.x < 0.5
+    float f = cornerFactors.x;
+    float3 posInObject = f < 0.5
                              ? pointA.Position
                              : pointB.Position;
 
@@ -121,40 +122,46 @@ psInput vsMain(uint id : SV_VertexID)
         normalB = normal;
     }
 
-    float3 neighboarNormal = lerp(normalA, normalB, cornerFactors.x);
+    float3 neighboarNormal = lerp(normalA, normalB, f);
     float3 meterNormal = (normal + neighboarNormal) / 2;
-    float4 pos = lerp(aInScreen, bInScreen, cornerFactors.x);
+    float4 pos = lerp(aInScreen, bInScreen, f);
 
     float4 posInCamSpace = mul(float4(posInObject, 1), ObjectToCamera);
     posInCamSpace.xyz /= posInCamSpace.w;
     posInCamSpace.w = 1;
 
-    float wAtPoint = lerp(pointA.Scale.x, pointB.Scale.x, cornerFactors.x);
+    float widthAtPoint = lerp(pointA.Scale.x, pointB.Scale.x, f);
 
-    if (UseWForU > 0.5 && !isnan(wAtPoint))
+    float pFx1 = lerp(pointA.FX1, pointB.FX1, f);
+    float pFx2 = lerp(pointA.FX2, pointB.FX2, f);
+
+    float texFxFactor = WidthFX == 0 ? 1 : ((WidthFX == 1) ? pFx1 : pFx2);
+
+    float u = f;
+    switch (UvMode)
     {
-        output.texCoord = float2(wAtPoint, cornerFactors.y / 2 + 0.5);
+    case 0:
+        u = (particleId + f) / SegmentCount;
+        break;
+    case 1:
+        u = pFx1;
+        break;
+    case 2:
+        u = pFx2;
+        break;
     }
-    else
-    {
-        float strokeFactor = (particleId + cornerFactors.x) / SegmentCount;
-        output.texCoord = float2(strokeFactor, cornerFactors.y / 2 + 0.5);
-    }
 
-    output.texCoord.x *= UvScale;
-    output.texCoord.x += OffsetU;
+    output.texCoord = float2(u * UvScale + OffsetU, cornerFactors.y / 2 + 0.5);
 
-    float thickness = Size * discardFactor * lerp(1, 1 / (posInCamSpace.z), ShrinkWithDistance);
-
-    thickness *= UseWForWidth < 0 ? lerp(1, 1 - wAtPoint, -UseWForWidth)
-                                  : lerp(1, wAtPoint, UseWForWidth);
+    float widthFxFactor = WidthFX == 0 ? 1 : ((WidthFX == 1) ? pFx1 : pFx2);
+    float thickness = Size * discardFactor * lerp(1, 1 / (posInCamSpace.z), ShrinkWithDistance) * widthFxFactor;
 
     float miter = dot(-meterNormal, normal);
     pos += cornerFactors.y * 0.1f * thickness * float4(meterNormal, 0) / clamp(miter, -1, -0.16);
 
     output.position = pos / aspect;
 
-    float3 n = cornerFactors.x < 0.5
+    float3 n = f < 0.5
                    ? cross(pointA.Position - pointAA.Position, pointA.Position - pointB.Position)
                    : cross(pointB.Position - pointA.Position, pointB.Position - pointBB.Position);
     n = normalize(n);
@@ -167,7 +174,6 @@ psInput vsMain(uint id : SV_VertexID)
 float4 psMain(psInput input) : SV_TARGET
 {
     float4 imgColor = texture2.Sample(texSampler, input.texCoord);
-
     float dFromLineCenter = abs(input.texCoord.y - 0.5) * 2;
 
     float4 col = input.color * imgColor;
