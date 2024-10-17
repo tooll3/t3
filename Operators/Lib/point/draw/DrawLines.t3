@@ -14,7 +14,7 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "520c428e-77b0-44d7-95af-d1cbf9b7e4a7"/*UvMode*/,
+      "Id": "520c428e-77b0-44d7-95af-d1cbf9b7e4a7"/*UvScaleFX*/,
       "DefaultValue": 0
     },
     {
@@ -147,7 +147,7 @@
         {
           "Id": "d5efbe02-8f33-42e9-a205-859c218acbec"/*Input2*/,
           "Type": "System.Int32",
-          "Value": -1
+          "Value": -2
         }
       ],
       "Outputs": []
