@@ -17,33 +17,54 @@ internal sealed class DrawLines : Instance<DrawLines>
         [Input(Guid = "df158fcf-3042-48cf-8383-7bf4c1bcb8a6")]
         public readonly InputSlot<float> Size = new InputSlot<float>();
 
+        [Input(Guid = "00cb7dc1-edc7-4102-a6a0-6cc44a4f0e56", MappedType = typeof(WidthFXs))]
+        public readonly InputSlot<int> WidthFX = new InputSlot<int>();
+
         [Input(Guid = "d0919481-203a-4379-8094-187d6209e00d")]
         public readonly InputSlot<float> ShrinkWithDistance = new InputSlot<float>();
-
-        [Input(Guid = "28f85ae9-ebae-4300-8aa0-738c6327cc44")]
-        public readonly InputSlot<float> TransitionProgress = new InputSlot<float>();
-
-        [Input(Guid = "567794ab-b3d3-43f6-ae95-4d654f797577")]
-        public readonly InputSlot<bool> UseWAsTexCoordV = new InputSlot<bool>();
-
-        [Input(Guid = "c10f9c6c-9923-42c6-848d-6b98097acc67")]
-        public readonly InputSlot<T3.Core.DataTypes.Texture2D> Texture_ = new InputSlot<T3.Core.DataTypes.Texture2D>();
 
         [Input(Guid = "9ba2aa59-e55b-4ebe-aa98-0f79ed77c7aa")]
         public readonly InputSlot<bool> EnableZTest = new InputSlot<bool>();
 
-        [Input(Guid = "c9cf2182-1297-463c-b5c1-d4ee7ad0895c")]
-        public readonly InputSlot<bool> EnableZWrite = new InputSlot<bool>();
+        [Input(Guid = "c10f9c6c-9923-42c6-848d-6b98097acc67")]
+        public readonly InputSlot<T3.Core.DataTypes.Texture2D> Texture_ = new InputSlot<T3.Core.DataTypes.Texture2D>();
 
         [Input(Guid = "d90ff4e6-7d70-441f-a064-b40401025c36", MappedType = typeof(SharedEnums.BlendModes))]
         public readonly InputSlot<int> BlendMod = new InputSlot<int>();
 
-        [Input(Guid = "e797d93b-3847-4324-898e-09018267ea82")]
-        public readonly InputSlot<float> UvScale = new InputSlot<float>();
+        [Input(Guid = "c9cf2182-1297-463c-b5c1-d4ee7ad0895c")]
+        public readonly InputSlot<bool> EnableZWrite = new InputSlot<bool>();
+
+        [Input(Guid = "28f85ae9-ebae-4300-8aa0-738c6327cc44")]
+        public readonly InputSlot<float> TransitionProgress = new InputSlot<float>();
 
         [Input(Guid = "ba83a66f-5a4c-4355-abb2-d4b7cd55d542")]
         public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> WrapMode = new InputSlot<SharpDX.Direct3D11.TextureAddressMode>();
 
+        [Input(Guid = "e797d93b-3847-4324-898e-09018267ea82")]
+        public readonly InputSlot<float> UvScale = new InputSlot<float>();
+
+        [Input(Guid = "520c428e-77b0-44d7-95af-d1cbf9b7e4a7", MappedType = typeof(UvModes))]
+        public readonly InputSlot<int> UvMode = new InputSlot<int>();
+
         [Input(Guid = "039e11ea-2155-4f90-aa8a-74ead604679c")]
         public readonly InputSlot<float> UseWForWidth = new InputSlot<float>();
+
+        [Input(Guid = "567794ab-b3d3-43f6-ae95-4d654f797577")]
+        public readonly InputSlot<bool> UseWAsTexCoordV = new InputSlot<bool>();
+        
+        private enum WidthFXs
+        {
+            None,
+            FX1,
+            FX2,
+        }
+
+        private enum UvModes
+        {
+            Stretch,
+            UFromFX1,
+            UFromFX2,
+        }
+        
 }
