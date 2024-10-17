@@ -53,7 +53,8 @@ public static class SymbolJson
     {
         writer.WritePropertyName(JsonKeys.Connections);
         writer.WriteStartArray();
-        foreach (var connection in connections.OrderBy(c => c.TargetParentOrChildId.ToString() + c.TargetSlotId))
+
+        foreach (var connection in connections)
         {
             writer.WriteStartObject();
             writer.WriteValue(JsonKeys.SourceParentOrChildId, connection.SourceParentOrChildId);
