@@ -43,7 +43,7 @@ internal class NodeSelection : ISelection
         _history.UpdateSelectedInstance(instance);
         Clear();
         _childUiInstanceIdPaths.Clear();
-        _selectedComposition = instance.InstancePath;
+        _selectedCompositionPath = instance.InstancePath;
     }
 
     /// <summary>
@@ -111,13 +111,13 @@ internal class NodeSelection : ISelection
             return null;
 
         var selection = GetFirstSelectedInstance();
-        return selection == _structure.GetInstanceFromIdPath(_selectedComposition) ? null : selection;
+        return selection == _structure.GetInstanceFromIdPath(_selectedCompositionPath) ? null : selection;
     }
         
     public Instance? GetFirstSelectedInstance()
     {
         if (Selection.Count == 0)
-            return _structure.GetInstanceFromIdPath(_selectedComposition);
+            return _structure.GetInstanceFromIdPath(_selectedCompositionPath);
 
         if (Selection[0] is SymbolUi.Child firstNode)
         {
@@ -150,12 +150,12 @@ internal class NodeSelection : ISelection
     /// <summary>
     /// Returns null if there are other selections
     /// </summary>
-    public Instance? GetSelectedComposition() => Selection.Count > 0 ? null : _structure.GetInstanceFromIdPath(_selectedComposition);
+    public Instance? GetSelectedComposition() => Selection.Count > 0 ? null : _structure.GetInstanceFromIdPath(_selectedCompositionPath);
 
     public Guid? GetSelectionSymbolChildId()
     {
         if (Selection.Count == 0)
-            return _selectedComposition[^1];
+            return _selectedCompositionPath[^1];
 
         if (Selection[0] is not SymbolUi.Child firstNode)
             return null;
@@ -190,6 +190,6 @@ internal class NodeSelection : ISelection
     private readonly Structure _structure;
 
     public readonly List<ISelectableCanvasObject> Selection = new();
-    private IReadOnlyList<Guid> _selectedComposition;
+    private IReadOnlyList<Guid> _selectedCompositionPath;
     private readonly Dictionary<SymbolUi.Child, IReadOnlyList<Guid>> _childUiInstanceIdPaths = new();
 }

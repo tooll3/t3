@@ -67,7 +67,8 @@ internal class ParameterWindow : Window
         if (DrawSettingsForSelectedAnnotations(nodeSelection))
             return;
         
-        var instance = nodeSelection.GetSelectedInstanceWithoutComposition();
+        var instance = nodeSelection.GetSelectedInstanceWithoutComposition() 
+                       ?? nodeSelection.GetSelectedComposition();
 
         var id = instance?.SymbolChildId ?? Guid.Empty;
 
@@ -83,9 +84,6 @@ internal class ParameterWindow : Window
             if (selectedInputs.Count > 0)
             {
                 instance = graphWindow.CompositionOp;
-                if(instance == null)
-                    return;
-                
                 var inputUi = selectedInputs.First();
                 _viewMode = ViewModes.Settings;
                 _parameterSettings.SelectInput(inputUi.Id);
@@ -104,7 +102,7 @@ internal class ParameterWindow : Window
             return;
         
         var modified = false;
-        modified |= DrawSymbolHeader(instance, symbolChildUi, symbolUi);
+        modified |= DrawSymbolHeader(instance, symbolUi);
         
         if (instance.Parent == null)
         {
@@ -121,7 +119,7 @@ internal class ParameterWindow : Window
                 modified |= _parameterSettings.DrawContent(symbolUi, nodeSelection);
                 break;
             case ViewModes.Help:
-                using (new ChildWindowScope("help",Vector2.Zero, ImGuiWindowFlags.None, Color.Transparent, 0, 0))
+                using (new ChildWindowScope("help",Vector2.Zero, ImGuiWindowFlags.None, Color.Transparent))
                 {
                     OperatorHelp.DrawHelp(symbolUi);
                 }
@@ -132,7 +130,7 @@ internal class ParameterWindow : Window
             symbolUi.FlagAsModified();
     }
     
-    private bool DrawSymbolHeader(Instance op, SymbolUi.Child symbolChildUi, SymbolUi symbolUi)
+    private bool DrawSymbolHeader(Instance op, SymbolUi symbolUi)
     {
         var modified = false;
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
@@ -183,6 +181,10 @@ internal class ParameterWindow : Window
                     {
                         BlockingWindow.Instance.ShowMessageBox(reason, "Could not rename namespace");
                     }
+                    else
+                    {
+                        modified = true;
+                    }
                 }
             }
             else
@@ -222,10 +224,10 @@ internal class ParameterWindow : Window
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
         ImGui.BeginChild("parameters", Vector2.Zero, false, ImGuiWindowFlags.AlwaysUseWindowPadding);
 
-        DrawChildNameAndFlags(instance, symbolChildUi, symbolUi);
+        DrawChildNameAndFlags(instance);
 
         var selectedChildSymbolUi = instance.GetSymbolUi();
-        var compositionSymbolUi = instance.Parent.GetSymbolUi();
+        var compositionSymbolUi = instance.Parent?.GetSymbolUi();
 
         // Draw parameters
         DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi, false, this );
@@ -239,7 +241,7 @@ internal class ParameterWindow : Window
         ImGui.PopStyleVar();
     }
 
-    private void DrawChildNameAndFlags(Instance op, SymbolUi.Child symbolChildUi_, SymbolUi symbolUi)
+    private void DrawChildNameAndFlags(Instance op)
     {
         var hideParameters = _viewMode == ViewModes.Help || _parameterSettings.IsActive;
         if (hideParameters)
@@ -263,7 +265,7 @@ internal class ParameterWindow : Window
 
             ImGui.PopStyleVar();
 
-            if (ImGui.IsItemActivated())
+            if (ImGui.IsItemActivated() && op.Parent != null)
             {
                 _symbolChildNameCommand = new ChangeSymbolChildNameCommand(symbolChildUi, op.Parent.Symbol);
             }
@@ -355,6 +357,12 @@ internal class ParameterWindow : Window
     {
         var groupState = GroupState.None;
 
+        if (instance.Parent == null)
+        {
+            Log.Warning("can't draw parameters for root instance");
+            return;
+        }
+
         ImGui.PushStyleColor(ImGuiCol.FrameBg, UiColors.BackgroundButton.Rgba);
         ImGui.PushStyleColor(ImGuiCol.FrameBgHovered, UiColors.BackgroundHover.Rgba);
         foreach (var inputSlot in instance.Inputs)
@@ -376,6 +384,7 @@ internal class ParameterWindow : Window
             ImGui.PushID(inputSlot.Id.GetHashCode());
             var editState = inputUi.DrawParameterEdit(inputSlot, compositionSymbolUi, symbolChildUi, hideNonEssentials: hideNonEssentials, skipIfDefault);
             ImGui.PopID();
+            
             // ... and handle the edit state
             if (editState.HasFlag(InputEditStateFlags.Started))
             {
@@ -504,13 +513,6 @@ internal class ParameterWindow : Window
         Settings,
         Help,
     }
-
-    private static readonly List<Icon> _modeIcons = new()
-                                                        {
-                                                            Icon.List,
-                                                            Icon.Settings2,
-                                                            Icon.HelpOutline
-                                                        };
 
     private ViewModes _viewMode = ViewModes.Parameters;
 
