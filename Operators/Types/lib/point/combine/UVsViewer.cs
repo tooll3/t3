@@ -16,6 +16,9 @@ namespace T3.Operators.Types.Id_68cf773d_30ac_4ae0_bc1e_b7a17ea322bb
         [Input(Guid = "017cf5d0-5e39-480e-9a23-ce3d6e1c0d40")]
         public readonly InputSlot<float> BlendValue = new InputSlot<float>();
 
+        [Input(Guid = "35a63cbe-7fd5-45da-9d69-322dd79db493")]
+        public readonly InputSlot<bool> SwitchUV = new InputSlot<bool>();
+
               
         
     }
