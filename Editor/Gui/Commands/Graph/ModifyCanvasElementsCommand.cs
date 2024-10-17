@@ -59,6 +59,9 @@ internal class ModifyCanvasElementsCommand : ICommand
             entry.Size = selectable.Size;
             _nodeSelection.IsNodeSelected(selectable);
         }
+        
+        if(_selectionContainer is SymbolUi symbolUi)
+            symbolUi.FlagAsModified();
     }
 
     public void Undo()
