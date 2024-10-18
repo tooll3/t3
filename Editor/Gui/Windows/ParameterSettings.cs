@@ -198,19 +198,17 @@ public class ParameterSettings
                 _isDraggingParameterOrder = false;
                 
                 // Sort inputDef by order of inputUis...
-                var inputDefinitions = symbol.InputDefinitions;
-                for (int i = 0; i < symbol.InputDefinitions.Count; i++)
+                var originalList = symbol.InputDefinitions.ToList();
+                symbol.InputDefinitions.Clear();
+                foreach (var inputUi in _symbolUisWhileDragging)
                 {
-                    var inputId = inputDefinitions[i].Id;
-                    var index = _symbolUisWhileDragging.FindIndex(input => input.InputDefinition.Id == inputId);
-                    if (index == -1)
+                    var inputDefinition = originalList.Find(def => def.Id == inputUi.InputDefinition.Id);
+                    if (inputDefinition != null)
                     {
-                        continue;
+                        symbol.InputDefinitions.Add(inputDefinition);
                     }
-                    
-                    symbol.InputDefinitions.Swap(i, index);
                 }
-
+                
                 _symbolUisWhileDragging.Clear();
                 _wasDraggingParameterOrder = false;
                 symbol.SortInputSlotsByDefinitionOrder();
