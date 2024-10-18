@@ -10,9 +10,7 @@
         "X": 0.0,
         "Y": 0.0
       },
-      "ParameterSetsForChildIds": {
-        "00000000-0000-0000-0000-000000000000": {}
-      }
+      "ParameterSetsForChildIds": {}
     },
     {
       "Id": "3b320b43-a3b5-46d5-a91f-95c8ea6f12ef",
