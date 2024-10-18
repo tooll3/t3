@@ -77,8 +77,14 @@ internal static class UiRegistration
                                );
         
         RegisterTypesToProperty(UiProperties.GpuData,
-                                typeof(DataSet), typeof(SceneSetup), typeof(PbrMaterial), typeof(Texture3dWithViews), typeof(MeshBuffers), 
-                                typeof(ParticleSystem), typeof(GizmoVisibility),
+                                typeof(DataSet), 
+                                typeof(SceneSetup), 
+                                typeof(PbrMaterial), 
+                                typeof(Texture3dWithViews), 
+                                typeof(MeshBuffers), 
+                                typeof(ParticleSystem), 
+                                typeof(BufferWithViews),
+                                typeof(GizmoVisibility),
                                 
                                 // sharpDX types
                                 typeof(SharpDX.Direct3D.PrimitiveTopology));
