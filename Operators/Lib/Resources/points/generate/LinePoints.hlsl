@@ -12,22 +12,30 @@ cbuffer Params : register(b0)
     float3 Direction;
     float Pivot;
 
-    float W;
-    float WOffset;
+    // float W;
+    // float WOffset;
     float OrientationAngle;
-    float Twist;
-
     float3 ManualOrientationAxis;
-    float OrientationMode;
-    
+
     float4 ColorA;
     float4 ColorB;
 
-    float AddSeparator;
     float2 BiasGain;
+    float2 FX1;
+    float2 FX2;
+
+    float Twist;
 }
 
-RWStructuredBuffer<LegacyPoint> ResultPoints : u0;    // output
+cbuffer Params : register(b1)
+{
+    int AddSeparator;
+    int OrientationMode;    
+}
+
+
+
+RWStructuredBuffer<Point> ResultPoints : u0;    // output
 
 float3 RotatePointAroundAxis(float3 In, float3 Axis, float Rotation)
 {
@@ -52,13 +60,9 @@ void main(uint3 i : SV_DispatchThreadID)
 
     uint pointCount, stride; 
     ResultPoints.GetDimensions(pointCount, stride); 
-    if(index > pointCount)  
+    if(index >= pointCount)  
         return;
 
-    if(AddSeparator > 0.5 && index == pointCount -1) {
-        ResultPoints[index].W = sqrt(-1); 
-        return;
-    }
 
     int seperatorOffset = AddSeparator > 0.5 ? 1 :0;
     int steps = (pointCount - 1 - seperatorOffset);
@@ -66,7 +70,9 @@ void main(uint3 i : SV_DispatchThreadID)
     float f =  f1 - Pivot;
     
     ResultPoints[index].Position = lerp(Center, Center + Direction * LengthFactor, f);
-    ResultPoints[index].W = W + WOffset * (float)(index)/steps;
+
+    //float f = (float)(index)/steps;
+    //ResultPoints[index].W = W + WOffset * (float)(index)/steps;
 
     float4 rot2 = 0;
     if(OrientationMode < 0.5) 
@@ -92,9 +98,10 @@ void main(uint3 i : SV_DispatchThreadID)
         rot2 = normalize(qFromAngleAxis((OrientationAngle + Twist * f) / 180 * 3.141578, ManualOrientationAxis));
     }
 
-    ResultPoints[index].Stretch = 1;
+    ResultPoints[index].Scale = (AddSeparator  && index == pointCount -1) ? NAN : 1;;
     ResultPoints[index].Rotation = rot2;
     ResultPoints[index].Color = lerp(ColorA, ColorB, f1);
-    ResultPoints[index].Selected = 1;
+    ResultPoints[index].FX1 = FX1.x + FX1.y * f1;
+    ResultPoints[index].FX2 = FX2.x + FX2.y * f1;
 }
 
