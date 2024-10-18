@@ -59,6 +59,12 @@ internal sealed class GridPoints : Instance<GridPoints>
     [Input(Guid = "aa19b556-660b-4267-be44-30c30d85314e")]
     public readonly InputSlot<Vector4> Color = new InputSlot<Vector4>();
 
+        [Input(Guid = "2ebf7750-fb52-4855-a97b-8bfc09c855ce")]
+        public readonly InputSlot<float> FX1 = new InputSlot<float>();
+
+        [Input(Guid = "062e3bd6-fe6d-4c9a-a34d-e26fe0d80283")]
+        public readonly InputSlot<float> FX2 = new InputSlot<float>();
+
     private enum SizeModes
     {
         Cell,
