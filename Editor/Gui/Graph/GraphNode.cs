@@ -532,7 +532,7 @@ internal class GraphNode
                             //ImGui.Value(socketIndex % 4 == 0 ? ">" : "", socketIndex);
                 
                             var sockedInputIndex = showGaps ? socketIndex / 2 : socketIndex;
-                            var isFourGroupStart = sockedInputIndex % 4 == 0;
+                            var isFourGroupStart = sockedInputIndex > 0 && sockedInputIndex % 4 == 0;
                             var markerForFourAligned = isFourGroupStart ? " <" : "";
                             
                             if(isFourGroupStart)

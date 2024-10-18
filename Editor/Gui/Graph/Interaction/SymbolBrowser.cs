@@ -146,7 +146,7 @@ internal sealed class SymbolBrowser
 
             if (_selectedSymbolUi != null)
             {
-                if (_filter.PresetFilterString != null && (_filter.WasUpdated || _selectedItemChanged))
+                if (_filter.PresetFilterString != string.Empty && (_filter.WasUpdated || _selectedItemChanged))
                 {
                     _matchingPresets.Clear();
                     var presetPool = VariationHandling.GetOrLoadVariations(_selectedSymbolUi.Symbol.Id);
@@ -157,7 +157,7 @@ internal sealed class SymbolBrowser
                     }
                 }
 
-                if (_filter.PresetFilterString != null)
+                if ( _filter.PresetFilterString != string.Empty)
                 {
                     UiListHelpers.AdvanceSelectedItem(_matchingPresets, ref _selectedPreset, 0);
                     DrawPresetPanel(_window, browserPositionInWindow, new Vector2(140, browserSize.Y));
@@ -195,7 +195,7 @@ internal sealed class SymbolBrowser
         ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, padding);
         ImGui.SetNextItemWidth(size.X);
 
-        ImGui.InputText("##symbolbrowserfilter", ref _filter.SearchString, 20);
+        ImGui.InputText("##symbolBrowserFilter", ref _filter.SearchString, 20);
 
         // Search input outline
         _drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), UiColors.Gray);
@@ -267,8 +267,8 @@ internal sealed class SymbolBrowser
 
         if (ImGui.BeginChildFrame(999, size))
         {
-            if (_filter.PresetFilterString == null)
-            {
+            // if (_filter.PresetFilterString == null)
+            // {
                 if (ImGui.IsKeyReleased((ImGuiKey)Key.CursorDown))
                 {
                     UiListHelpers.AdvanceSelectedItem(_filter.MatchingSymbolUis, ref _selectedSymbolUi, 1);
@@ -279,7 +279,7 @@ internal sealed class SymbolBrowser
                     UiListHelpers.AdvanceSelectedItem(_filter.MatchingSymbolUis, ref _selectedSymbolUi, -1);
                     _selectedItemChanged = true;
                 }
-            }
+            // }
 
             var gotAMatch = _filter.MatchingSymbolUis.Count > 0 && !_filter.MatchingSymbolUis.Contains(_selectedSymbolUi);
             if (gotAMatch)
