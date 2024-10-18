@@ -102,7 +102,7 @@ public sealed class WindowsUiContentDrawer : IUiContentDrawer<Device>
             ImGui.GetIO().DisplaySize = ProgramWindows.Main.Size;
             
             ProgramWindows.HandleFullscreenToggle();
-            EditableSymbolProject.RecompileChangedProjects(async: true);
+            EditableSymbolProject.RecompileChangedProjects(async: false);
             
             DirtyFlag.IncrementGlobalTicks();
             T3Metrics.UiRenderingStarted();
