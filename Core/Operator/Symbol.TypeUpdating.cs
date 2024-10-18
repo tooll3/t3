@@ -11,6 +11,7 @@ public sealed partial class Symbol
 {
     internal void UpdateInstanceType()
     {
+        NeedsTypeUpdate = false;
         UpdateSlotsAndConnectionsForType(out var oldInputDefinitions, out var oldOutputDefinitions);
 
         var existingInstancesRefreshInfo = new List<InstanceTypeRefreshInfo>();
@@ -31,8 +32,27 @@ public sealed partial class Symbol
             if (parent == null)
             {
                 Log.Warning($"Instance {instance} has no parent. Skipping connections and recreation.");
+                DestroyInstance(instance);
+                continue;
             }
-            else if (TryGenerateConnectionInfo(instance, slotChanges, out var refreshInfo, parent))
+            
+            var parentSymbol = parent.Symbol;
+            var symbolChild = instance.SymbolChild;
+
+            if (symbolChild != null)
+            {
+                UpdateSymbolChildIO(symbolChild, slotChanges);
+            }
+            
+            if (parentSymbol.NeedsTypeUpdate)
+            {
+                //Log.Debug($"Instance {instance} has parent {parent} that needs type update. Skipping connections and recreation.");
+                DestroyInstance(instance);
+                continue;
+            }
+            
+            // reconnection logic
+            if (TryGenerateConnectionInfo(instance, slotChanges, out var refreshInfo, parent, parentSymbol))
             {
                 existingInstancesRefreshInfo.Add(refreshInfo);
             }
@@ -187,9 +207,8 @@ public sealed partial class Symbol
             }
         }
 
-        static bool TryGenerateConnectionInfo(Instance instance, SlotChangeInfo slotChangeInfo, out InstanceTypeRefreshInfo refreshInfo, Instance parent)
+        static bool TryGenerateConnectionInfo(Instance instance, SlotChangeInfo slotChangeInfo, out InstanceTypeRefreshInfo refreshInfo, Instance parent, Symbol parentSymbol)
         {
-            var parentSymbol = parent.Symbol;
             if (!parent.Children.ContainsKey(instance.SymbolChildId))
             {
                 // This happens when recompiling ops...
@@ -250,38 +269,41 @@ public sealed partial class Symbol
 
             var symbolChild = instance.SymbolChild!;
 
-            // update inputs of symbol child
-            var childInputDict = symbolChild.Inputs;
-            var oldChildInputs = new Dictionary<Guid, Child.Input>(childInputDict);
-            childInputDict.Clear();
-            foreach (var inputDefinition in slotChangeInfo.NewInputDefinitions)
-            {
-                var inputId = inputDefinition.Id;
-                var inputToAdd = oldChildInputs.TryGetValue(inputId, out var oldInput)
-                                     ? oldInput
-                                     : new Child.Input(inputDefinition);
-
-                childInputDict.Add(inputId, inputToAdd);
-            }
-
-            // update output of symbol child
-            var childOutputDict = symbolChild.Outputs;
-            var oldChildOutputs = new Dictionary<Guid, Child.Output>(childOutputDict);
-            childOutputDict.Clear();
-            foreach (var outputDefinition in slotChangeInfo.NewOutputDefinitions)
-            {
-                var id = outputDefinition.Id;
-                if (!oldChildOutputs.TryGetValue(id, out var output))
-                {
-                    OutputDefinition.TryGetNewValueType(outputDefinition, out var outputData);
-                    output = new Child.Output(outputDefinition, outputData);
-                }
-
-                childOutputDict.Add(id, output);
-            }
-
             refreshInfo = new InstanceTypeRefreshInfo(symbolChild, parent, parentSymbol, connectionEntriesToReplace);
             return true;
+        }
+    }
+    
+    // todo - reduce or eliminate these dictionary allocations?
+    private static void UpdateSymbolChildIO(Child symbolChild, SlotChangeInfo slotChangeInfo)
+    {
+        var childInputDict = symbolChild.Inputs;
+        var oldChildInputs = new Dictionary<Guid, Child.Input>(childInputDict);
+        childInputDict.Clear();
+        foreach (var inputDefinition in slotChangeInfo.NewInputDefinitions)
+        {
+            var inputId = inputDefinition.Id;
+            var inputToAdd = oldChildInputs.TryGetValue(inputId, out var oldInput)
+                                 ? oldInput
+                                 : new Child.Input(inputDefinition);
+
+            childInputDict.Add(inputId, inputToAdd);
+        }
+
+        // update output of symbol child
+        var childOutputDict = symbolChild.Outputs;
+        var oldChildOutputs = new Dictionary<Guid, Child.Output>(childOutputDict);
+        childOutputDict.Clear();
+        foreach (var outputDefinition in slotChangeInfo.NewOutputDefinitions)
+        {
+            var id = outputDefinition.Id;
+            if (!oldChildOutputs.TryGetValue(id, out var output))
+            {
+                OutputDefinition.TryGetNewValueType(outputDefinition, out var outputData);
+                output = new Child.Output(outputDefinition, outputData);
+            }
+
+            childOutputDict.Add(id, output);
         }
     }
 

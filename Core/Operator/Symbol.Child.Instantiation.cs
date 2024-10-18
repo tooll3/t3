@@ -110,6 +110,13 @@ internal static class SymbolInstantiation
             }
 
             var symbolOfNewInstance = symbolChild.Symbol;
+
+            // make sure we're not instantiating a child that needs to be updated again later
+            if (symbolOfNewInstance.NeedsTypeUpdate)
+            {
+                symbolOfNewInstance.UpdateInstanceType();
+            }
+            
             if (!TryInstantiate(out newInstance, symbolOfNewInstance, symbolChildId, out reason))
             {
                 Log.Error(reason);

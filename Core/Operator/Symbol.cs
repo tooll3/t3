@@ -83,6 +83,7 @@ public sealed partial class Symbol : IDisposable, IResource
     {
         SymbolPackage = symbolPackage; // we re-assign this here because symbols can be moved from one package to another
         InstanceType = instanceType;
+        NeedsTypeUpdate = true;
     }
 
     public void Dispose()
@@ -370,6 +371,7 @@ public sealed partial class Symbol : IDisposable, IResource
         _instancesOfSelf.Add(instance);
     }
 
+    internal bool NeedsTypeUpdate { get; private set; }
     private readonly List<Instance> _instancesOfSelf = new();
     private ConcurrentDictionary<Guid, Child> _children = new();
 }
