@@ -237,6 +237,7 @@ internal static class ConnectionMaker
         {
             //Log.Debug("Setup temp op");
             StartOperation(inProgress, "Temp op");
+            inProgressCommand = inProgress.Command;
         }
             
         if (doneCommands != null)
