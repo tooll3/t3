@@ -532,7 +532,13 @@ internal class GraphNode
                             //ImGui.Value(socketIndex % 4 == 0 ? ">" : "", socketIndex);
                 
                             var sockedInputIndex = showGaps ? socketIndex / 2 : socketIndex;
-                            var markerForFourAligned = sockedInputIndex % 4 == 0 ? " <" : "";
+                            var isFourGroupStart = sockedInputIndex % 4 == 0;
+                            var markerForFourAligned = isFourGroupStart ? " <" : "";
+                            
+                            if(isFourGroupStart)
+                                drawList.AddRectFilled(topLeft + new Vector2(socketSize.X * 0.5f,-2), 
+                                                       topLeft + new Vector2(_usableScreenRect.GetWidth()*0.25f,0), UiColors.ForegroundFull.Fade(0.1f));
+                            
                             drawList.AddText(targetPos + new Vector2(7, -ImGui.GetFontSize() / 2),
                                              new Color(MathUtils.RemapAndClamp(socketHeight, 10, 20, 0, 0.5f).Clamp(0, 0.5f)),
                                              $"{sockedInputIndex}" + markerForFourAligned);
