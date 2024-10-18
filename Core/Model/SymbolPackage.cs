@@ -130,7 +130,7 @@ public abstract partial class SymbolPackage : IResourcePackage
         ConcurrentDictionary<Guid, Type> newTypes = new();
 
         var removedSymbolIds = new HashSet<Guid>(SymbolDict.Keys);
-        List<Symbol> updatedSymbols = new();
+        ConcurrentBag<Symbol> updatedSymbols = new();
 
         if (parallel)
         {
@@ -144,15 +144,6 @@ public abstract partial class SymbolPackage : IResourcePackage
             {
                 LoadTypes(guid, type.Type, newTypes);
             }
-        }
-
-        // Todo: This is an attempt to narrow down the cause of the null references in updatedSymbols
-        if (updatedSymbols.Any(s => s == null))
-        {
-            var message = $"Found null references in updated symbols for {AssemblyInformation.Name}";
-            //Debug.Assert(false, message);
-            Log.Error(message);
-            updatedSymbols = updatedSymbols.Where(x => x != null).ToList();
         }
         
         // sort for instance refresh optimization
@@ -248,14 +239,13 @@ public abstract partial class SymbolPackage : IResourcePackage
             if (SymbolDict.TryGetValue(guid, out var symbol))
             {
                 removedSymbolIds.Remove(guid);
-
-                symbol.UpdateTypeWithoutUpdatingDefinitionsOrInstances(type, this);
                 if (symbol == null)
                 {
                     Log.Error($"Skipping update of invalid symbol {guid}.");
                     return;
                 }
-                
+
+                symbol.UpdateTypeWithoutUpdatingDefinitionsOrInstances(type, this);
                 updatedSymbols.Add(symbol);
             }
             else
