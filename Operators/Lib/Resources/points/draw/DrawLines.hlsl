@@ -113,11 +113,11 @@ psInput vsMain(uint id : SV_VertexID)
     float3 normalA = normalize(cross(directionA, float3(0, 0, 1)));
     float3 normalB = normalize(cross(directionB, float3(0, 0, 1)));
 
-    if (isnan(pointAA.Scale.x))
+    if (isnan(pointAA.Scale.x) || isinf(pointAA.Scale.x))
     {
         normalA = normal;
     }
-    if (isnan(pointBB.Scale.x))
+    if (isnan(pointBB.Scale.x) || isinf(pointBB.Scale.x))
     {
         normalB = normal;
     }
@@ -155,6 +155,8 @@ psInput vsMain(uint id : SV_VertexID)
 
     float widthFxFactor = WidthFX == 0 ? 1 : ((WidthFX == 1) ? pFx1 : pFx2);
     float thickness = Size * discardFactor * lerp(1, 1 / (posInCamSpace.z), ShrinkWithDistance) * widthFxFactor;
+    thickness *= widthAtPoint; // UseWForWidth < 0 ? lerp(1, 1-widthAtPoint, -UseWForWidth)
+                               //: lerp(1, widthAtPoint, UseWForWidth) ;
 
     float miter = dot(-meterNormal, normal);
     pos += cornerFactors.y * 0.1f * thickness * float4(meterNormal, 0) / clamp(miter, -1, -0.16);
