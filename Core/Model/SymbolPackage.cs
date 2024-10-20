@@ -145,21 +145,8 @@ public abstract partial class SymbolPackage : IResourcePackage
                 LoadTypes(guid, type.Type, newTypes);
             }
         }
-        
-        // sort for instance refresh optimization
-        var updatedSymbolsSorted = updatedSymbols
-                              .OrderBy(symbol =>
-                                       {
-                                           var existingInstances = symbol.InstancesOfSelf;
-                                           return existingInstances.Count == 0 ||
-                                                  
-                                                  // this is faster since we can assume an instance without a parent
-                                                  // is a root instance that will birth other instances
-                                                  existingInstances.Any(instance => instance.Parent == null);
-                                       })
-                              .ThenBy(symbol => symbol.InstancesOfSelf.Count);
 
-        foreach (var symbol in updatedSymbolsSorted)
+        foreach (var symbol in updatedSymbols)
         {
             UpdateSymbolInstances(symbol);
             SymbolUpdated?.Invoke(symbol);

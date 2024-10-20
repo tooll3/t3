@@ -1,3 +1,5 @@
+using System;
+
 namespace T3.Core.Utils;
 
 public class ArrayUtils
@@ -9,14 +11,17 @@ public class ArrayUtils
     /// </summary>
     public static void Insert<T>(ref T[] array, T value, int index)
     {
-        var newArray = new T[array.Length + 1];
+        var originalLength = array.Length;
+        var newLength = originalLength + 1;
+        var newArray = new T[newLength];
+        index = Math.Min(originalLength, index);
         for (var i = 0; i < index; i++)
         {
             newArray[i] = array[i];
         }
 
         newArray[index] = value;
-        for (var i = index + 1; i < array.Length + 1; i++)
+        for (var i = index + 1; i < newLength; i++)
         {
             newArray[i] = array[i - 1];
         }

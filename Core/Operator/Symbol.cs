@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ public sealed partial class Symbol : IDisposable, IResource
     #region Saved Properties
     public readonly Guid Id;
     public IReadOnlyDictionary<Guid, Child> Children => _children;
-    public IReadOnlyList<Instance> InstancesOfSelf => _instancesOfSelf;
+    public IEnumerable<Instance> InstancesOfSelf => _instancesOfSelf;
     public readonly List<Connection> Connections = [];
 
     /// <summary>
@@ -88,37 +89,12 @@ public sealed partial class Symbol : IDisposable, IResource
 
     public void Dispose()
     {
-        var allInstances = _instancesOfSelf.ToArray(); // copy as it will be modified
-        foreach (var instance in allInstances)
+        for (var index = 0; index < _childrenCreatedFromMe.Count; index++)
         {
-            DestroyInstance(instance);
+            var child = _childrenCreatedFromMe[index];
+            child.Dispose();
+            _childrenCreatedFromMe.RemoveAt(index);
         }
-            
-        for (var index = _instancesOfSelf.Count - 1; index >= 0; index--)
-        {
-            var instance = _instancesOfSelf[index];
-            DestroyInstance(instance, index);
-        }
-    }
-
-    private void DestroyInstance(Instance instance, int index = -1)
-    {
-        var allChildren = instance.ChildInstances.Values.ToArray();
-        foreach (var child in allChildren)
-        {
-            child.Symbol.DestroyInstance(child);
-        }
-            
-        instance.Parent?.ChildInstances.Remove(instance.SymbolChildId);
-        instance.Dispose();
-            
-        index = index == -1 ? _instancesOfSelf.IndexOf(instance) : index;
-        if (index < 0)
-        {
-            Log.Warning($"Skipping removal of instance from symbol {instance.Symbol} because it was not found.");
-            return;
-        }
-        _instancesOfSelf.RemoveAt(index);
     }
 
     public int GetMultiInputIndexFor(Connection con)
@@ -159,11 +135,13 @@ public sealed partial class Symbol : IDisposable, IResource
 
         // Check if another connection is already existing to the target input, ignoring multi inputs for now
         var connectionsAtInput = Connections.FindAll(c =>
-                                                         c.TargetParentOrChildId == connection.TargetParentOrChildId &&
+                                                         (c.TargetParentOrChildId == connection.TargetParentOrChildId
+                                                          || c.TargetParentOrChildId == Guid.Empty) &&
                                                          c.TargetSlotId == connection.TargetSlotId);
 
         if (multiInputIndex > connectionsAtInput.Count)
         {
+            // todo - solve is to ensure that the multi-input slots aren't cleared of quantity when recompiling, or rather are populated in order
             Log.Error($"Trying to add a connection at the index {multiInputIndex}. Out of bound of the {connectionsAtInput.Count} existing connections.");
             return;
         }
@@ -252,16 +230,18 @@ public sealed partial class Symbol : IDisposable, IResource
             }
         }
 
-        if (removed)
-        {
-            foreach (var instance in _instancesOfSelf)
-            {
-                instance.RemoveConnection(connection, multiInputIndex);
-            }
-        }
-        else
+        if (!removed)
         {
             Log.Warning($"Failed to remove connection.");
+            return;
+        }
+
+        foreach (var instance in _instancesOfSelf)
+        {
+            if (instance.TryGetTargetSlot(connection, out var targetSlot))
+            {
+                targetSlot.RemoveConnection(multiInputIndex);
+            }
         }
     }
 
@@ -295,12 +275,10 @@ public sealed partial class Symbol : IDisposable, IResource
         Connections.RemoveAll(c => c.SourceParentOrChildId == childId || c.TargetParentOrChildId == childId);
             
         var removedFromSymbol = _children.Remove(childId, out var symbolChild);
-        var idOfRemovedChild = symbolChild!.Id;
 
-        foreach (var instance in _instancesOfSelf)
+        foreach (var me in _childrenCreatedFromMe)
         {
-            var childInstance = instance.Children[idOfRemovedChild];
-            childInstance.Symbol.DestroyInstance(childInstance);
+            me.DestroyChild(symbolChild);
         }
 
         if (removedFromSymbol)
@@ -366,12 +344,8 @@ public sealed partial class Symbol : IDisposable, IResource
         }
     }
 
-    internal void AddInstanceOfSelf(Instance instance)
-    {
-        _instancesOfSelf.Add(instance);
-    }
-
-    internal bool NeedsTypeUpdate { get; private set; }
-    private readonly List<Instance> _instancesOfSelf = new();
+    internal bool NeedsTypeUpdate { get; private set; } = true;
+    private IEnumerable<Instance> _instancesOfSelf => _childrenCreatedFromMe.SelectMany(x => x.Instances);
     private ConcurrentDictionary<Guid, Child> _children = new();
+    private readonly SynchronizedCollection<Child> _childrenCreatedFromMe = new();
 }

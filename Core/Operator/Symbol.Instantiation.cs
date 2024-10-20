@@ -1,12 +1,9 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using T3.Core.Compilation;
 using T3.Core.Logging;
-using T3.Core.Operator.Slots;
 
 namespace T3.Core.Operator;
 
@@ -24,12 +21,16 @@ public sealed partial class Symbol
         
         SymbolPackage.AddDependencyOn(symbol);
 
-        var newChildInstances = new List<Instance>(_instancesOfSelf.Count);
-
-        foreach (var instance in _instancesOfSelf)
+        List<Instance> newChildInstances;
+        lock (_childrenCreatedFromMe.SyncRoot)
         {
-            if (newChild.TryCreateNewInstance(instance, out var newChildInstance))
-                newChildInstances.Add(newChildInstance);
+            var count = _childrenCreatedFromMe.Count;
+            newChildInstances = new List<Instance>(count);
+            for (var index = 0; index < count; index++)
+            {
+                var child = _childrenCreatedFromMe[index];
+                child.AddChildInstances(newChild, newChildInstances);
+            }
         }
 
         Animator.CreateUpdateActionsForExistingCurves(newChildInstances);

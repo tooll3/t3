@@ -30,6 +30,7 @@
         <PackageReference Include="SharpDX.Mathematics" Version="4.2.0" />
         <PackageReference Include="SharpDX.MediaFoundation" Version="4.2.0" />
         <PackageReference Include="SharpDX.XInput" Version="4.2.0" />
+        <PackageReference Include="System.ServiceModel.Primitives" Version="4.9.0" />
     </ItemGroup>
 
     <ItemGroup>
