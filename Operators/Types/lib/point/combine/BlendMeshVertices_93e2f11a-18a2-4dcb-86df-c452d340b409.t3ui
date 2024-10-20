@@ -167,7 +167,7 @@
       "ChildId": "5b303fe8-ea99-4f62-8fea-cbcc4a14407f"/*GetSRVProperties*/,
       "Position": {
         "X": -1.2656555,
-        "Y": 1100.6326
+        "Y": 1113.6326
       }
     },
     {
@@ -182,13 +182,6 @@
       "Position": {
         "X": -160.26855,
         "Y": 1204.6438
-      }
-    },
-    {
-      "ChildId": "11a518fd-a33d-4aa2-9f5f-3727ca75a386"/*DisplaceMeshNoise*/,
-      "Position": {
-        "X": 477.4934,
-        "Y": 1354.3801
       }
     }
   ],
