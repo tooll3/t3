@@ -8,7 +8,7 @@ namespace Main;
 
 internal static partial class ProcessUtils
 {
-    [GeneratedRegex(@"\x1B\[[0-?]*[ -/]*[@-~]")] // todo: this seems to remove newlines as well :(
+    [GeneratedRegex(@"\x1B\[[0-?]*[ -/]*[@-~](?!\n)")]
     private static partial Regex RemoveAnsiEscapeSequences();
 
     private static readonly Regex RemoveAnsiEscapeSequencesRegex = RemoveAnsiEscapeSequences();
@@ -64,16 +64,16 @@ public class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
             if (!process.Start())
             {
                 Close(process, 0f);
-                Log.Warning(crossPlatformFailureMessage);
+                T3.Core.Logging.Log.Warning(crossPlatformFailureMessage);
             }
             else
             {
-                Log.Info("Started cross-platform powershell");
+                T3.Core.Logging.Log.Info("Started cross-platform powershell");
             }
         }
         catch (Exception e)
         {
-            Log.Error($"{crossPlatformFailureMessage}: {e.Message}");
+            T3.Core.Logging.Log.Error($"{crossPlatformFailureMessage}: {e.Message}");
         }
         
         // fallback to legacy powershell
@@ -84,15 +84,15 @@ public class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
             {
                 Close(process, 0f);
                 process = null;
-                Log.Error(legacyFailureMessage);
+                T3.Core.Logging.Log.Error(legacyFailureMessage);
                 return false;
             }
             
-            Log.Info("Started legacy powershell");
+            T3.Core.Logging.Log.Info("Started legacy powershell");
         }
         catch (Exception e)
         {
-            Log.Error($"{legacyFailureMessage}: {e.Message}");
+            T3.Core.Logging.Log.Error($"{legacyFailureMessage}: {e.Message}");
             process = null;
             return false;
         }
@@ -131,40 +131,44 @@ public class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
 
         if (process != _process)
         {
-            Log.Error("Unexpected process exited");
+            T3.Core.Logging.Log.Error("Unexpected process exited");
             return;
         }
 
         _process = null;
     }
 
-    public bool TryCommand(Command<T> cmd, T currentData, string? inDirectory = null, bool suppressOutput = false)
+    public bool TryCommand(Command<T> cmd, T currentData, out string response, string? inDirectory = null, bool suppressOutput = false)
     {
         if(_process == null || _process.HasExited)
         {
-            Log.Error("Process is not running");
+            response = "Process is not running";
+            if(!suppressOutput)
+                Log(response, true);
             return false;
         }
         
-        return TryCommand(cmd, currentData, _process!, inDirectory, suppressOutput);
+        return TryCommand(cmd, currentData, _process!, out response, inDirectory, suppressOutput);
     }
 
-    private bool TryCommand(Command<T> cmd, T currentData, Process process, string? inDirectory = null, bool suppressOutput = false)
+    private bool TryCommand(Command<T> cmd, T currentData, Process process, out string response, string? inDirectory = null, bool suppressOutput = false)
     {
         var cmdString = cmd.GetCommand(currentData);
         if (cmdString == null)
         {
-            WriteToConsole($" --- Failed to generate command for {currentData}");
+            response = $"Failed to generate command for {currentData}";
+            Log(response, true);
             return false;
         }
 
-        string output;
-        
         lock (_commandLock)
         {
             if (process.HasExited)
             {
-                Log.Error("Process has exited unexpectedly");
+                response = "Process has exited unexpectedly";
+                if(!suppressOutput)
+                    Log(response, true);
+                
                 return false;
             }
 
@@ -175,22 +179,23 @@ public class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
                 ChangeDirectory(inDirectory);
             }
 
-            output = WriteToProcessAndWaitForResponse(process, cmdString);
+            response = WriteToProcessAndWaitForResponse(process, cmdString);
             _suppressConsoleOutput = pOutputSuppress;
         }
         
-        var success = cmd.Evaluator(ref output, currentData!);
+        var success = cmd.Evaluator(ref response, currentData!);
 
         if (success)
             return true;
 
         // log failure to console
-        var response = output.Length < 256 ? output : output[^255..];
 
-        var failureLog = $"Command failed for {currentData!}: COMMAND: '{cmdString}' --> RESPONSE: '{response}'";
-        
-        if(!suppressOutput)
-            WriteToConsole(failureLog, true);
+        if (!suppressOutput)
+        {
+            var failureLog = $"Command failed for {currentData!}: COMMAND: '{cmdString}' --> RESPONSE: '{response}'";
+            Log(failureLog, true);
+        }
+
         return false;
     }
 
@@ -200,7 +205,7 @@ public class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
         {
             if (_process is not { HasExited: false })
             {
-                Log.Error("Process is not running");
+                T3.Core.Logging.Log.Error("Process is not running");
                 return;
             }
 
@@ -210,7 +215,7 @@ public class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
             var response = WriteToProcessAndWaitForResponse(_process, $"cd '{inDirectory}'");
             if (response != null && response.Contains("annot find path"))
             {
-                Log.Error($"Failed to change directory to '{inDirectory}'");
+                T3.Core.Logging.Log.Error($"Failed to change directory to '{inDirectory}'");
             }
             else
             {
@@ -242,13 +247,13 @@ public class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
     private void ReadAndPrintOutput(string outputString, bool error)
     {
         if(!_suppressConsoleOutput)
-            WriteToConsole(outputString, error);
+            Log(outputString, error);
         
         outputString = ProcessUtils.RemoveAnsiEscapeSequences(outputString);
 
         lock (_outputLock)
         {
-            _previousConsoleOutputSb.Append(outputString);
+            _previousConsoleOutputSb.AppendLine(outputString);
 
             if (!IsCommandComplete(outputString))
             {
@@ -288,16 +293,16 @@ public class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
         ReadAndPrintOutput(data, error);
     }
 
-    private void WriteToConsole(string message, bool isError = false)
+    private void Log(string message, bool isError = false)
     {
         _singleLogSb.Clear();
         _singleLogSb.Append(logPrefix).Append(message);
         message = _singleLogSb.ToString();
 
         if (isError)
-            Log.Error(message);
+            T3.Core.Logging.Log.Error(message);
         else
-            Log.Info(message);
+            T3.Core.Logging.Log.Info(message);
     }
 
     private static void WriteToProcess(Process process, string message)
@@ -310,7 +315,7 @@ public class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
         catch (Exception e)
         {
             // ignored
-            Log.Error($"Failed to write to process: {e.Message}");
+            T3.Core.Logging.Log.Error($"Failed to write to process: {e.Message}");
         }
     }
 
@@ -333,7 +338,7 @@ public class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
         {
             // ignored
             var msg = $"Failed to write to process: {e.Message}";
-            Log.Error(msg);
+            T3.Core.Logging.Log.Error(msg);
             _consumeOutputResetEvent.Set();
             return msg;
         }
