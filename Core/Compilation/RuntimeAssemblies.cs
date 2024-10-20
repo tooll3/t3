@@ -28,9 +28,13 @@ public static class RuntimeAssemblies
        // var alreadyLoadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
         var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
-        assemblies.SelectMany(x => x.GetReferencedAssemblies())
-                  .DistinctBy(x => x.FullName).AsParallel()
-                  .ForAll(assemblyName => Assembly.Load(assemblyName));
+        foreach (var assembly in assemblies)
+        {
+            foreach (var referencedAssembly in assembly.GetReferencedAssemblies())
+            {
+                Assembly.Load(referencedAssembly);
+            }
+        }
 
         CoreAssemblies = AppDomain.CurrentDomain.GetAssemblies();
     }
