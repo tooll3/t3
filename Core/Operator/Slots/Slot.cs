@@ -190,7 +190,7 @@ public class Slot<T> : ISlot
                 {
                     //Log.Debug($"Skipping connection for compound op with update method for {Parent.Symbol} {this}", compoundWithUpdate);
                     //compoundWithUpdate.RegisterOutputUpdateAction(this, ConnectedUpdate);
-                    ArrayUtils.Insert(ref InputConnections, (Slot<T>)sourceSlot, index);
+                    ArrayUtils.InsertAtIndexOrEnd(ref InputConnections, (Slot<T>)sourceSlot, index);
 
                     _dirtyFlag.Target = sourceSlot.DirtyFlag.Target;
                     _dirtyFlag.Reference = _dirtyFlag.Target - 1;
@@ -208,7 +208,7 @@ public class Slot<T> : ISlot
             return;
         }
 
-        ArrayUtils.Insert(ref InputConnections, (Slot<T>)sourceSlot, index);
+        ArrayUtils.InsertAtIndexOrEnd(ref InputConnections, (Slot<T>)sourceSlot, index);
     }
 
     private Action<EvaluationContext> _actionBeforeAddingConnecting;
@@ -223,7 +223,7 @@ public class Slot<T> : ISlot
             }
             else
             {
-                Log.Error($"Trying to delete connection at index {index}, but input slot only has {InputConnections.Length} connections");
+                Log.Error($"{Parent} trying to delete connection at index {index}, but {GetType()} only has {InputConnections.Length} connections");
             }
         }
 

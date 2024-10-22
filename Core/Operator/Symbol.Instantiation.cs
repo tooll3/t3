@@ -39,7 +39,7 @@ public sealed partial class Symbol
 
     public bool TryGetParentlessInstance([NotNullWhen(true)] out Instance? newInstance)
     {
-        newInstance = _instancesOfSelf.FirstOrDefault(x => x.Parent == null);
+        newInstance = InstancesOfSelf.FirstOrDefault(x => x.Parent == null);
         if (newInstance != null)
         {
             return true;

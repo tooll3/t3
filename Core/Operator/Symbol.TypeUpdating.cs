@@ -88,44 +88,40 @@ public sealed partial class Symbol
                 }
             }
 
-            var connectionsToRemoveWithinSymbol = new List<Connection>();
-            foreach (var con in Connections)
+            var connectionsToRemoveWithinSymbol = new HashSet<ConnectionEntry>(); // prevents duplicates - is this necessary?
+            int existingConnectionCount = Connections.Count;
+            for (var i = 0; i < existingConnectionCount; i++)
             {
+                var con = Connections[i];
                 var sourceSlotId = con.SourceSlotId;
                 var targetSlotId = con.TargetSlotId;
 
                 foreach (var input in removedInputDefinitions)
                 {
-                    if (sourceSlotId == input.Id)
-                        connectionsToRemoveWithinSymbol.Add(con);
+                    if (sourceSlotId != input.Id)
+                        continue;
+
+                    // find the multi input index
+                    if (TryGetMultiInputIndexOf(con, out var connectionIndex, out var multiInputIndex))
+                    {
+                        connectionsToRemoveWithinSymbol.Add(new ConnectionEntry(con, multiInputIndex, connectionIndex));
+                    }
                 }
 
                 foreach (var output in removedOutputDefinitions)
                 {
-                    if (targetSlotId == output.Id)
-                        connectionsToRemoveWithinSymbol.Add(con);
+                    if (targetSlotId != output.Id)
+                        continue;
+
+                    // find the multi input index
+                    if (TryGetMultiInputIndexOf(con, out var connectionIndex, out var multiInputIndex))
+                    {
+                        connectionsToRemoveWithinSymbol.Add(new ConnectionEntry(con, multiInputIndex, connectionIndex));
+                    }
                 }
             }
 
-            connectionsToRemoveWithinSymbol = connectionsToRemoveWithinSymbol.Distinct().ToList(); // remove possible duplicates
-            connectionsToRemoveWithinSymbol.Reverse(); // reverse order to have always valid multi input indices
-            var connectionEntriesToRemove = new List<ConnectionEntry>(connectionsToRemoveWithinSymbol.Count);
-            foreach (var con in connectionsToRemoveWithinSymbol)
-            {
-                var entry = new ConnectionEntry
-                                {
-                                    Connection = con,
-                                    MultiInputIndex = Connections.FindAll(c => c.TargetParentOrChildId == con.TargetParentOrChildId
-                                                                               && c.TargetSlotId == con.TargetSlotId)
-                                                                 .FindIndex(cc => cc == con) // todo: fix this mess! connection rework!
-                                };
-                connectionEntriesToRemove.Add(entry);
-            }
-
-            foreach (var entry in connectionEntriesToRemove)
-            {
-                RemoveConnection(entry.Connection, entry.MultiInputIndex);
-            }
+            RemoveConnections(connectionsToRemoveWithinSymbol);
 
             return;
 
@@ -153,10 +149,51 @@ public sealed partial class Symbol
                     return false;
                 }
             }
+
+           
         }
 
     }
-    
+
+    private void RemoveConnections(IEnumerable<ConnectionEntry> connectionsToRemoveWithinSymbol)
+    {
+        foreach (var entry in connectionsToRemoveWithinSymbol.OrderByDescending(x => x.ConnectionIndex))
+        {
+            Connections.RemoveAt(entry.ConnectionIndex);
+            foreach (var child in _childrenCreatedFromMe)
+            {
+                child.RemoveConnectionFromInstances(entry);
+            }
+           
+        }
+    }
+
+    private bool TryGetMultiInputIndexOf(Connection con, out int foundAtConnectionIndex, out int multiInputIndex)
+    {
+        multiInputIndex = 0;
+        foundAtConnectionIndex = -1;
+        var connectionCount = Connections.Count;
+        for (int i = 0; i < connectionCount; i++)
+        {
+            var other = Connections[i];
+            if (con.TargetParentOrChildId != other.TargetParentOrChildId || con.TargetSlotId != other.TargetSlotId)
+                continue;
+
+            if (other == con)
+            {
+                foundAtConnectionIndex = i;
+                break;
+            }
+
+            multiInputIndex++;
+        }
+
+        if (foundAtConnectionIndex != -1) return true;
+
+        Log.Error("Could not find connection in symbol");
+        return false;
+    }
+
     private static void UpdateSymbolChildIO(Child symbolChild, SlotChangeInfo slotChangeInfo)
     {
         // update inputs
@@ -207,11 +244,7 @@ public sealed partial class Symbol
         }
     }
 
-    private class ConnectionEntry
-    {
-        public Connection Connection { get; set; }
-        public int MultiInputIndex { get; set; }
-    }
+    internal readonly record struct ConnectionEntry(Connection Connection, int MultiInputIndex, int ConnectionIndex);
 
 
     internal readonly record struct SlotChangeInfo(

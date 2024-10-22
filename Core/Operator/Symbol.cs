@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.CodeAnalysis.Operations;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator.Slots;
@@ -24,7 +23,7 @@ public sealed partial class Symbol : IDisposable, IResource
     #region Saved Properties
     public readonly Guid Id;
     public IReadOnlyDictionary<Guid, Child> Children => _children;
-    public IEnumerable<Instance> InstancesOfSelf => _instancesOfSelf;
+    public IEnumerable<Instance> InstancesOfSelf => _childrenCreatedFromMe.SelectMany(x => x.Instances);
     public readonly List<Connection> Connections = [];
 
     /// <summary>
@@ -107,9 +106,9 @@ public sealed partial class Symbol : IDisposable, IResource
 
     public void SortInputSlotsByDefinitionOrder()
     {
-        foreach (var instance in _instancesOfSelf)
+        for (var index = 0; index < _childrenCreatedFromMe.Count; index++)
         {
-            Instance.SortInputSlotsByDefinitionOrder(instance);
+            _childrenCreatedFromMe[index].SortInputSlotsByDefinitionOrder();
         }
     }
         
@@ -186,8 +185,10 @@ public sealed partial class Symbol : IDisposable, IResource
             }
         }
 
-        foreach (var instance in _instancesOfSelf)
-            instance.TryAddConnection(connection, multiInputIndex);
+        for (var index = 0; index < _childrenCreatedFromMe.Count; index++)
+        {
+            _childrenCreatedFromMe[index].AddConnectionToInstances(connection, multiInputIndex);
+        }
     }
 
     public void RemoveConnection(Connection connection, int multiInputIndex = 0)
@@ -236,18 +237,15 @@ public sealed partial class Symbol : IDisposable, IResource
             return;
         }
 
-        foreach (var instance in _instancesOfSelf)
+        foreach (var child in _childrenCreatedFromMe)
         {
-            if (instance.TryGetTargetSlot(connection, out var targetSlot))
-            {
-                targetSlot.RemoveConnection(multiInputIndex);
-            }
+            child.RemoveConnectionFromInstances(connection, multiInputIndex);
         }
     }
 
     public void CreateOrUpdateActionsForAnimatedChildren()
     {
-        foreach (var instance in _instancesOfSelf)
+        foreach (var instance in InstancesOfSelf)
         {
             Animator.CreateUpdateActionsForExistingCurves(instance.Children.Values);
         }
@@ -255,17 +253,18 @@ public sealed partial class Symbol : IDisposable, IResource
 
     internal void CreateAnimationUpdateActionsForSymbolInstances()
     {
-        var parents = new HashSet<Symbol>();
-        foreach (var instance in _instancesOfSelf)
+        var foundParentsOfMyInstances = new HashSet<Symbol>();
+        foreach (var instance in InstancesOfSelf)
         {
             var parent = instance.Parent;
-            if(parent != null)
-                parents.Add(parent.Symbol);
-        }
-
-        foreach (var parentSymbol in parents)
-        {
-            parentSymbol.CreateOrUpdateActionsForAnimatedChildren();
+            if (parent != null)
+            {
+                var parentSymbol = parent.Symbol;
+                if (foundParentsOfMyInstances.Add(parentSymbol))
+                {
+                    parentSymbol.CreateOrUpdateActionsForAnimatedChildren();
+                }
+            }
         }
     }
 
@@ -320,11 +319,9 @@ public sealed partial class Symbol : IDisposable, IResource
 
     public void InvalidateInputInAllChildInstances(Guid inputId, Guid childId)
     {
-        foreach (var parent in _instancesOfSelf)
+        foreach (var parent in _childrenCreatedFromMe)
         {
-            var instance = parent.Children[childId];
-            var slot = instance.Inputs.Single(i => i.Id == inputId);
-            slot.DirtyFlag.Invalidate();
+            parent.InvalidateInputInChildren(inputId, childId);
         }
     }
 
@@ -334,18 +331,15 @@ public sealed partial class Symbol : IDisposable, IResource
     public void InvalidateInputDefaultInInstances(IInputSlot inputSlot)
     {
         var inputId = inputSlot.Id;
-        foreach (var instance in _instancesOfSelf)
+        for (var index = 0; index < _childrenCreatedFromMe.Count; index++)
         {
-            var slot = instance.Inputs.Single(i => i.Id == inputId);
-            if (!slot.Input.IsDefault)
-                continue;
-
-            slot.DirtyFlag.Invalidate();
+            var child = _childrenCreatedFromMe[index];
+            child.InvalidateInputDefaultInInstances(inputId);
         }
     }
 
     internal bool NeedsTypeUpdate { get; private set; } = true;
-    private IEnumerable<Instance> _instancesOfSelf => _childrenCreatedFromMe.SelectMany(x => x.Instances);
+    //private IEnumerable<Instance> _instancesOfSelf => _childrenCreatedFromMe.SelectMany(x => x.Instances);
     private ConcurrentDictionary<Guid, Child> _children = new();
     private readonly SynchronizedCollection<Child> _childrenCreatedFromMe = new();
 }

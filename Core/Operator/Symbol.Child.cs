@@ -71,7 +71,6 @@ public partial class Symbol
         }
 
         #region sub classes =============================================================
-
         public sealed class Output
         {
             public Symbol.OutputDefinition OutputDefinition { get; }
@@ -148,9 +147,7 @@ public partial class Symbol
                 IsDefault = true;
             }
         }
-
         #endregion
-
 
         private bool _isBypassed;
 
@@ -210,7 +207,6 @@ public partial class Symbol
                 return;
             }
 
-
             if (_instancesOfSelf.Count == 0)
             {
                 _isBypassed = shouldBypass; // while duplicating / cloning as new symbol there are no instances yet.
@@ -218,7 +214,7 @@ public partial class Symbol
             }
 
             var id = Id;
-            foreach (var parentInstance in Parent._instancesOfSelf)
+            foreach (var parentInstance in Parent.InstancesOfSelf)
             {
                 var instance = parentInstance.Children[id];
                 var mainInputSlot = instance.Inputs[0];
@@ -403,6 +399,7 @@ public partial class Symbol
                 _instancesOfSelf.RemoveAt(i);
             }
         }
+
         private void DestroyInstance(Instance instance)
         {
             instance.Parent?.ChildInstances.Remove(instance.SymbolChildId);
@@ -430,7 +427,7 @@ public partial class Symbol
         internal void UpdateIOAndConnections(SlotChangeInfo slotChanges)
         {
             var hasParent = Parent != null;
-            
+
             UpdateSymbolChildIO(this, slotChanges);
 
             if (!hasParent)
@@ -448,44 +445,7 @@ public partial class Symbol
                 return;
             }
 
-            RemoveConnections(slotChanges, out var connectionEntriesToReplace);
-            
-            // Recreate all instances fresh
-            for (var index = _instancesOfSelf.Count - 1; index >= 0; index--)
-            {
-                var instance = _instancesOfSelf[index];
-                DestroyInstance(instance);
-
-                if (!TryCreateNewInstance(instance.Parent, newInstance: out var newInstance))
-                {
-                    Log.Error($"Could not recreate instance of symbol: {Symbol.Name} with parent: {Parent.Name}");
-                    _instancesOfSelf.RemoveAt(index);
-                }
-                else
-                {
-                    _instancesOfSelf[index] = newInstance;
-                }
-            }
-
-            // ... and add the connections again
-            connectionEntriesToReplace.Reverse(); // process reverse that multi input index are correct
-            foreach (var entry in connectionEntriesToReplace.OrderBy(x => x.MultiInputIndex))
-            {
-                Parent.AddConnection(entry.Connection, entry.MultiInputIndex);
-            }
-        }
-        
-        
-         void RemoveConnections(SlotChangeInfo slotChangeInfo, out List<ConnectionEntry> connectionEntriesToReplace)
-        {
-            //if (!parent.Children.ContainsKey(instance.SymbolChildId))
-            {
-                // This happens when recompiling ops...
-              //  Log.Error($"Warning: Skipping no longer valid instance of {instance.Symbol} in {parent.Symbol}");
-           //     refreshInfo = default;
-           //     return false;
-            }
-
+            // deal with removed connections
             var parentConnections = Parent!.Connections;
             // get all connections that belong to this instance
             var connectionsToReplace = parentConnections.FindAll(c => c.SourceParentOrChildId == Id ||
@@ -493,20 +453,20 @@ public partial class Symbol
             // first remove those connections where the inputs/outputs doesn't exist anymore
             var connectionsToRemove =
                 connectionsToReplace.FindAll(c =>
-                                             {
-                                                 return slotChangeInfo.RemovedOutputDefinitions.FirstOrDefault(output =>
-                                                        {
-                                                            var outputId = output.Id;
-                                                            return outputId == c.SourceSlotId ||
-                                                                   outputId == c.TargetSlotId;
-                                                        }) != null
-                                                        || slotChangeInfo.RemovedInputDefinitions.FirstOrDefault(input =>
-                                                        {
-                                                            var inputId = input.Id;
-                                                            return inputId == c.SourceSlotId ||
-                                                                   inputId == c.TargetSlotId;
-                                                        }) != null;
-                                             });
+                                      {
+                                          return slotChanges.RemovedOutputDefinitions.Any(output =>
+                                                                                          {
+                                                                                              var outputId = output.Id;
+                                                                                              return outputId == c.SourceSlotId ||
+                                                                                                     outputId == c.TargetSlotId;
+                                                                                          })
+                                                 || slotChanges.RemovedInputDefinitions.Any(input =>
+                                                                                            {
+                                                                                                var inputId = input.Id;
+                                                                                                return inputId == c.SourceSlotId ||
+                                                                                                       inputId == c.TargetSlotId;
+                                                                                            });
+                                      });
 
             foreach (var connection in connectionsToRemove)
             {
@@ -516,26 +476,55 @@ public partial class Symbol
 
             // now create the entries for those that will be reconnected after the instance has been replaced. Take care of the multi input order
             connectionsToReplace.Reverse();
-            connectionEntriesToReplace = new List<ConnectionEntry>(connectionsToReplace.Count);
+            var connectionEntriesToReplace = new HashSet<ConnectionEntry>(connectionsToReplace.Count); // prevent duplicates - is this necessary?
             foreach (var con in connectionsToReplace)
             {
-                var entry = new ConnectionEntry
-                                {
-                                    Connection = con,
-                                    MultiInputIndex = parentConnections.FindAll(c => c.TargetParentOrChildId == con.TargetParentOrChildId
-                                                                                     && c.TargetSlotId == con.TargetSlotId)
-                                                                       .FindIndex(cc => cc == con) // todo: fix this mess! connection rework!
-                                };
-                connectionEntriesToReplace.Add(entry);
+                if (Parent.TryGetMultiInputIndexOf(con, out var foundAtConnectionIndex, out var multiInputIndex))
+                {
+                    connectionEntriesToReplace.Add(new ConnectionEntry
+                                                       {
+                                                           Connection = con,
+                                                           MultiInputIndex = multiInputIndex,
+                                                           ConnectionIndex = foundAtConnectionIndex
+                                                       });
+                }
             }
 
-            foreach (var entry in connectionEntriesToReplace.OrderByDescending(x => x.MultiInputIndex))
+            Parent.RemoveConnections(connectionEntriesToReplace);
+
+            // Recreate all instances fresh
+            for (var index = _instancesOfSelf.Count - 1; index >= 0; index--)
             {
-                Parent.RemoveConnection(entry.Connection, entry.MultiInputIndex);
-            }
+                var instance = _instancesOfSelf[index];
+                DestroyInstance(instance);
+                _instancesOfSelf.RemoveAt(index);
 
-            connectionEntriesToReplace.Reverse(); // restore original order
+                if (!TryCreateNewInstance(instance.Parent, newInstance: out _))
+                {
+                    Log.Error($"Could not recreate instance of symbol: {Symbol.Name} with parent: {Parent.Name}");
+                }
+            }
+            
+            // ... and add the connections again
+            Dictionary<GuidPair, int> multiInputIndexMap = new();
+            foreach (var entry in connectionEntriesToReplace.OrderBy(x => x.MultiInputIndex))
+            {
+                var connection = entry.Connection;
+                var guidPair = new GuidPair(connection.SourceSlotId, connection.TargetSlotId, connection.SourceParentOrChildId, connection.TargetParentOrChildId);
+                
+                // normalize the multiInputIndices so indexes are not skipped after being removed while we do so
+                if (!multiInputIndexMap.TryGetValue(guidPair, out var multiInputIndex))
+                {
+                    multiInputIndex = 0;
+                    multiInputIndexMap.Add(guidPair, 0);
+                }
+                
+                Parent.AddConnection(connection, multiInputIndex);
+                multiInputIndexMap[guidPair] = multiInputIndex + 1;
+            }
         }
+        
+        private readonly record struct GuidPair(in Guid Source, in Guid Target, in Guid SourceParentOrChildId, in Guid TargetParentOrChildId);
 
         internal bool TryCreateNewInstance(Instance parentInstance, [NotNullWhen(true)] out Instance newInstance)
         {
@@ -628,7 +617,6 @@ public partial class Symbol
                     newInstance = null;
                     return false;
                 }
-
 
                 // make sure we're not instantiating a child that needs to be updated again later
                 if (Symbol.NeedsTypeUpdate)
@@ -736,6 +724,77 @@ public partial class Symbol
                 }
             }
         }
-    }
 
+
+        internal void AddConnectionToInstances(Connection connection, int multiInputIndex)
+        {
+            foreach (var instance in _instancesOfSelf)
+            {
+                instance.TryAddConnection(connection, multiInputIndex);
+            }
+        }
+        
+        internal void RemoveConnectionFromInstances(in ConnectionEntry entry)
+        {
+            RemoveConnectionFromInstances(entry.Connection, entry.MultiInputIndex);
+        }
+
+        internal void RemoveConnectionFromInstances(Connection connection, int multiInputIndex)
+        {
+            foreach (var instance in _instancesOfSelf)
+            {
+                if (instance.TryGetTargetSlot(connection, out var targetSlot))
+                {
+                    targetSlot.RemoveConnection(multiInputIndex);
+                }
+            }
+        }
+
+        internal void InvalidateInputDefaultInInstances(in Guid inputId)
+        {
+            foreach (var instance in _instancesOfSelf)
+            {
+                var inputSlots = instance.Inputs;
+                for (int i = 0; i < inputSlots.Count; i++)
+                {
+                    var slot = inputSlots[i];
+                    if (slot.Id != inputId)
+                        continue;
+
+                    if (!slot.Input.IsDefault)
+                        continue;
+
+                    slot.DirtyFlag.Invalidate();
+                    break;
+                }
+            }        
+        }
+
+        internal void InvalidateInputInChildren(in Guid inputId, in Guid childId)
+        {
+            for(int i = 0; i < _instancesOfSelf.Count; i++)
+            {
+                var instance = _instancesOfSelf[i];
+                var child = instance.Children[childId];
+                var inputSlots = child.Inputs;
+                for (int j = 0; j < inputSlots.Count; j++)
+                {
+                    var slot = inputSlots[j];
+                    if (slot.Id != inputId)
+                        continue;
+
+                    slot.DirtyFlag.Invalidate();
+                    break;
+                }
+            }
+        }
+
+        internal void SortInputSlotsByDefinitionOrder()
+        {
+            foreach (var instance in _instancesOfSelf)
+            {
+                Instance.SortInputSlotsByDefinitionOrder(instance);
+            }
+        }
+    }
 }

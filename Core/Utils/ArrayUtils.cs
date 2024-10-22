@@ -2,14 +2,15 @@ using System;
 
 namespace T3.Core.Utils;
 
-public class ArrayUtils
+internal class ArrayUtils
 {
     /// <summary>
     /// Inserts a value in an array by replacing the array with a new array (length + 1) and copying the values
     /// Will create a lot of garbage if used frequently
     /// Created for Slots so they can have array-based inputs for performance reasons
+    /// If index exceeds the length of the array, the value will be appended at the end
     /// </summary>
-    public static void Insert<T>(ref T[] array, T value, int index)
+    internal static void InsertAtIndexOrEnd<T>(ref T[] array, T value, int index)
     {
         var originalLength = array.Length;
         var newLength = originalLength + 1;
@@ -34,7 +35,7 @@ public class ArrayUtils
     /// Will create a lot of garbage if used frequently
     /// Created for Slots so they can have array-based inputs for performance reasons
     /// </summary>
-    public static void RemoveAt<T>(ref T[] array, int index)
+    internal static void RemoveAt<T>(ref T[] array, int index)
     {
         var newArray = new T[array.Length - 1];
         for (var i = 0; i < index; i++)
