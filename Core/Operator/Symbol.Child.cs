@@ -475,7 +475,6 @@ public partial class Symbol
             }
 
             // now create the entries for those that will be reconnected after the instance has been replaced. Take care of the multi input order
-            connectionsToReplace.Reverse();
             var connectionEntriesToReplace = new HashSet<ConnectionEntry>(connectionsToReplace.Count); // prevent duplicates - is this necessary?
             foreach (var con in connectionsToReplace)
             {
