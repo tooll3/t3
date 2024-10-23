@@ -25,26 +25,29 @@ internal sealed class LinePoints : Instance<LinePoints>
         [Input(Guid = "28081e5f-da01-46dc-81ad-699df29a49a4")]
         public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
 
+        [Input(Guid = "6f46bd61-422f-4715-9219-3d2e1dff1d90")]
+        public readonly InputSlot<System.Numerics.Vector4> ColorA = new InputSlot<System.Numerics.Vector4>();
+
+        [Input(Guid = "4d45a633-ac00-4cbe-83a3-43c419c3da97")]
+        public readonly InputSlot<System.Numerics.Vector4> ColorB = new InputSlot<System.Numerics.Vector4>();
+
+        [Input(Guid = "4ab30d37-dec7-4c7a-a44c-25baf18f25ae")]
+        public readonly InputSlot<System.Numerics.Vector2> Scale = new InputSlot<System.Numerics.Vector2>();
+
         [Input(Guid = "442cca8c-9e38-4eeb-a67c-945510218a85")]
         public readonly InputSlot<System.Numerics.Vector2> F1 = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "8f3eab23-6e6a-43dc-969e-c5ef3b8e3fe0")]
         public readonly InputSlot<System.Numerics.Vector2> F2 = new InputSlot<System.Numerics.Vector2>();
 
-        [Input(Guid = "4d45a633-ac00-4cbe-83a3-43c419c3da97")]
-        public readonly InputSlot<System.Numerics.Vector4> ColorB = new InputSlot<System.Numerics.Vector4>();
-
-        [Input(Guid = "6f46bd61-422f-4715-9219-3d2e1dff1d90")]
-        public readonly InputSlot<System.Numerics.Vector4> ColorA = new InputSlot<System.Numerics.Vector4>();
-
-        [Input(Guid = "a8dfe0e7-ad33-47cf-ab78-726385e38434")]
-        public readonly InputSlot<System.Numerics.Vector3> OrientationAxis = new InputSlot<System.Numerics.Vector3>();
-
         [Input(Guid = "83986e05-af3e-469f-a656-9956d37d12ba", MappedType = typeof(OrientationModes))]
         public readonly InputSlot<int> Orientation = new InputSlot<int>();
 
         [Input(Guid = "8f7206d1-5f78-4a9c-bba9-1ef8277b6d5f")]
         public readonly InputSlot<float> Twist = new InputSlot<float>();
+
+        [Input(Guid = "a8dfe0e7-ad33-47cf-ab78-726385e38434")]
+        public readonly InputSlot<System.Numerics.Vector3> OrientationAxis = new InputSlot<System.Numerics.Vector3>();
 
         [Input(Guid = "208b724d-c5d7-4eaa-94a1-e1f045f14969")]
         public readonly InputSlot<float> OrientationAngle = new InputSlot<float>();

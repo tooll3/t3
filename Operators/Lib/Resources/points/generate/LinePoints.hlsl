@@ -23,6 +23,7 @@ cbuffer Params : register(b0)
     float2 FX1;
     float2 FX2;
 
+    float PointSize;
     float Twist;
 }
 
@@ -92,7 +93,7 @@ float3 RotatePointAroundAxis(float3 In, float3 Axis, float Rotation)
         rot2 = normalize(qFromAngleAxis((OrientationAngle + Twist * f) / 180 * 3.141578, ManualOrientationAxis));
     }
 
-    ResultPoints[index].Scale = (AddSeparator && index == pointCount - 1) ? sqrt(-1) : 1;
+    ResultPoints[index].Scale = (AddSeparator && index == pointCount - 1) ? sqrt(-1) : PointSize;
     ResultPoints[index].Rotation = rot2;
     ResultPoints[index].Color = lerp(ColorA, ColorB, f1);
     ResultPoints[index].FX1 = FX1.x + FX1.y * f1;

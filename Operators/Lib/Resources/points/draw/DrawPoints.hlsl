@@ -30,7 +30,7 @@ cbuffer Params : register(b1)
 {
     float4 Color;
 
-    float Size;
+    float PointSize;
     float CutOffTransparent;
     float FadeNearest;
 };
@@ -39,7 +39,7 @@ cbuffer IntParams : register(b2)
 {
     int SegmentCount;
     int ScaleFX;
-    int UseWForSize;
+    int UsePointScale;
 };
 
 
@@ -87,11 +87,13 @@ psInput vsMain(uint id
 
     //float sizeFactor = UseWForSize > 0.5 ? pointDef.W : (isnan(pointDef.W) ? 0 : 1);
 
-    float sizeFxFactor = ScaleFX == 0 ? 1:
-        (ScaleFX == 1) ? pointDef.FX1 : pointDef.FX2;
+    float sizeFxFactor = ScaleFX == 0 
+        ? 1
+        : (ScaleFX == 1) ? pointDef.FX1 : pointDef.FX2;
  
 
-    quadPosInCamera.xy += quadPos.xy * 0.10 * pointDef.Scale.xy * Size * sizeFxFactor;
+    float2 s = PointSize * sizeFxFactor * (UsePointScale  ? pointDef.Scale.xy : 1);
+    quadPosInCamera.xy += quadPos.xy * 0.10 * s;
     output.position = mul(quadPosInCamera, CameraToClipSpace);
     float4 posInWorld = mul(posInObject, ObjectToWorld);
 

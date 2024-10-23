@@ -8,10 +8,11 @@
         "X": 1716.8268,
         "Y": 3909.4236
       },
-      "Description": "Points closer to the camera Fade out."
+      "Description": "Points closer to the camera Fade out.",
+      "AddPadding": "True"
     },
     {
-      "InputId": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Scale*/,
+      "InputId": "414c8045-5086-4449-9d9a-03f28c3966b3"/*PointSize*/,
       "Position": {
         "X": 1716.8268,
         "Y": 3864.4236
@@ -29,6 +30,14 @@
         "Y": 4130.425
       },
       "Description": "Input for Points"
+    },
+    {
+      "InputId": "64e75fea-c07f-4cb1-8ac0-0f8d05362664"/*UsePointsScale*/,
+      "Position": {
+        "X": 1568.0432,
+        "Y": 4061.7695
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "7acc95ad-d317-42fc-97f8-85f48d7e516f"/*EnableZTest*/,
@@ -77,8 +86,8 @@
     {
       "InputId": "d0a58cde-d292-4ceb-ba50-6965eb3ee3dd"/*UseWForSize*/,
       "Position": {
-        "X": 1568.0432,
-        "Y": 4016.7695
+        "X": 1907.9156,
+        "Y": 4824.5693
       },
       "GroupTitle": "OBSOLETE",
       "Description": "Defines whether the \"W\" value of the Gpoints used has an influence on the size of the rendered Points"
@@ -156,13 +165,6 @@
       "Position": {
         "X": 1918.6809,
         "Y": 3718.1619
-      }
-    },
-    {
-      "ChildId": "62805d99-966e-4847-a431-5d33b0bab45e"/*BoolToInt*/,
-      "Position": {
-        "X": 1718.0432,
-        "Y": 4016.7695
       }
     },
     {
@@ -260,6 +262,13 @@
       }
     },
     {
+      "ChildId": "dfb5bcac-3a5f-425c-902b-35100f6c2281"/*BoolToInt*/,
+      "Position": {
+        "X": 1718.0432,
+        "Y": 4072.7695
+      }
+    },
+    {
       "ChildId": "f71b2d3c-cd93-4fd6-80c4-a0edec63e9d9"/*SrvFromTexture2d*/,
       "Position": {
         "X": 1474.0911,
@@ -299,6 +308,26 @@
       "Position": {
         "X": 2628.9512,
         "Y": 4168.742
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "8c79f31e-43f2-404a-9bf3-592d589316ed",
+      "Title": "Obsolete params",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 1847.9156,
+        "Y": 4764.5693
+      },
+      "Size": {
+        "X": 229.99988,
+        "Y": 145.0
       }
     }
   ]

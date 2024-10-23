@@ -214,7 +214,7 @@
       "SymbolId": "780edb20-f83f-494c-ab17-7015e2311250",
       "InputValues": [
         {
-          "Id": "f15a003c-7969-4505-b598-6c6c4b5a3bbe"/*ApplyTargetOrientation*/,
+          "Id": "f15a003c-7969-4505-b598-6c6c4b5a3bbe"/*ApplyOrientation*/,
           "Type": "System.Boolean",
           "Value": true
         },

@@ -32,12 +32,11 @@ cbuffer Params : register(b0)
     float1 OrientationAngle;
 
     float2 GainAndBias;            // 28
-    float2 __padding6;
+    float2 PointScale;             // 36
 
     float2 FX1;
     float2 FX2;
 
-    float3 PointScale;             // 36
 
 
 }
@@ -90,8 +89,7 @@ void main(uint3 i : SV_DispatchThreadID)
     ResultPoints[index].Position = v;
     ResultPoints[index].Scale = (closeCircle && index == pointCount -1)
                           ? NAN
-                          : PointScale;
-                          //: W + WOffset * f;
+                          : PointScale.x + PointScale.y * f;
 
     float4 orientation = qFromAngleAxis(3.141578/2 * 1, normalize(OrientationAxis));
 

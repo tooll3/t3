@@ -15,10 +15,16 @@ internal sealed class DrawPoints : Instance<DrawPoints>
         public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
 
         [Input(Guid = "414c8045-5086-4449-9d9a-03f28c3966b3")]
-        public readonly InputSlot<float> Scale = new InputSlot<float>();
+        public readonly InputSlot<float> PointSize = new InputSlot<float>();
 
         [Input(Guid = "e40aeedd-49fe-467c-b886-064a1024cef3", MappedType = typeof(ScaleFXModes))]
         public readonly InputSlot<int> ScaleFX = new InputSlot<int>();
+
+        [Input(Guid = "64e75fea-c07f-4cb1-8ac0-0f8d05362664")]
+        public readonly InputSlot<bool> UsePointsScale = new InputSlot<bool>();
+
+        [Input(Guid = "8fab9161-48d4-43b0-a18f-5942b7071a49", MappedType = typeof(SharedEnums.BlendModes))]
+        public readonly InputSlot<int> BlendMode = new InputSlot<int>();
 
         [Input(Guid = "3fbad175-6060-40f2-a675-bdae20107698")]
         public readonly InputSlot<float> FadeNearest = new InputSlot<float>();
@@ -28,9 +34,6 @@ internal sealed class DrawPoints : Instance<DrawPoints>
 
         [Input(Guid = "7acc95ad-d317-42fc-97f8-85f48d7e516f")]
         public readonly InputSlot<bool> EnableZTest = new InputSlot<bool>();
-
-        [Input(Guid = "8fab9161-48d4-43b0-a18f-5942b7071a49", MappedType = typeof(SharedEnums.BlendModes))]
-        public readonly InputSlot<int> BlendMode = new InputSlot<int>();
 
         [Input(Guid = "850e3a32-11ba-4ad2-a2b1-6164f077ddd6")]
         public readonly InputSlot<T3.Core.DataTypes.Texture2D> Texture_ = new InputSlot<T3.Core.DataTypes.Texture2D>();

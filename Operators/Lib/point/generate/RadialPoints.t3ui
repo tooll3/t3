@@ -8,6 +8,7 @@
         "X": -153.38249,
         "Y": 1471.6694
       },
+      "AddPadding": "True",
       "Min": -1.0,
       "Max": 1.0
     },
@@ -18,7 +19,6 @@
         "Y": 846.73737
       },
       "Description": "This value defines how far the radius of the last point deviates from the radius of the first point.\n\nEspecially helpful if Cycles are increased",
-      "AddPadding": "True",
       "Min": -10.0,
       "Max": 10.0,
       "Format": "{0:0.000} ±"
@@ -42,10 +42,10 @@
       "Format": "{0:0.000} ±"
     },
     {
-      "InputId": "56b8aabc-2abf-49c7-ba1a-945a7bcf0c53"/*FX1*/,
+      "InputId": "56b8aabc-2abf-49c7-ba1a-945a7bcf0c53"/*F1*/,
       "Position": {
-        "X": -90.19629,
-        "Y": 1761.6779
+        "X": -86.32953,
+        "Y": 1797.0687
       }
     },
     {
@@ -60,10 +60,10 @@
       "Format": "{0:0.0}°"
     },
     {
-      "InputId": "5e0ff702-687e-4892-9a86-29f356d7f6bd"/*FX2*/,
+      "InputId": "5e0ff702-687e-4892-9a86-29f356d7f6bd"/*F2*/,
       "Position": {
-        "X": -90.19629,
-        "Y": 1817.6779
+        "X": -86.32953,
+        "Y": 1853.0687
       }
     },
     {
@@ -87,8 +87,8 @@
     {
       "InputId": "8fd178b9-877a-43ac-9e03-3fc1c98faf21"/*PointScale*/,
       "Position": {
-        "X": -307.56125,
-        "Y": 1861.3961
+        "X": -279.31088,
+        "Y": 2055.7246
       }
     },
     {
@@ -123,12 +123,21 @@
       "Max": 1000
     },
     {
+      "InputId": "bf66627b-9228-4763-99be-5196ad9c8eb3"/*Scale*/,
+      "Position": {
+        "X": -86.32953,
+        "Y": 1741.0687
+      },
+      "GroupTitle": "Point Attributes"
+    },
+    {
       "InputId": "ca84209e-d821-40c6-b23c-38fc4bbd47b0"/*Center*/,
       "Position": {
         "X": -159.31241,
         "Y": 926.32837
       },
-      "Description": "Moves the points:\n\nX (-left / +right), \nY (-down / + up), \nZ (-forward/+backwards)"
+      "Description": "Moves the points:\n\nX (-left / +right), \nY (-down / + up), \nZ (-forward/+backwards)",
+      "AddPadding": "True"
     },
     {
       "InputId": "cd917c3d-489e-4e4d-b5dc-eacc846d82ef"/*OrientationAngle*/,
@@ -189,13 +198,6 @@
       }
     },
     {
-      "ChildId": "16e7a945-7f8f-4523-a818-542303023577"/*Padding*/,
-      "Position": {
-        "X": 63.67047,
-        "Y": 1655.0687
-      }
-    },
-    {
       "ChildId": "1c9db997-04eb-4a7b-9fb0-6c3d218e2442"/*Vector3Components*/,
       "Position": {
         "X": 128.3016,
@@ -219,8 +221,8 @@
     {
       "ChildId": "2c005354-b7e8-4902-aca6-fbb88b2c1737"/*Vector2Components*/,
       "Position": {
-        "X": 59.80371,
-        "Y": 1761.6779
+        "X": 63.67047,
+        "Y": 1797.0687
       }
     },
     {
@@ -240,8 +242,8 @@
     {
       "ChildId": "5e3aef4b-d7ed-4253-bd7b-e05fc2e6b685"/*Vector2Components*/,
       "Position": {
-        "X": 59.80371,
-        "Y": 1817.6779
+        "X": 63.67047,
+        "Y": 1853.0687
       }
     },
     {
@@ -249,6 +251,13 @@
       "Position": {
         "X": 201.41183,
         "Y": 721.83417
+      }
+    },
+    {
+      "ChildId": "667d86ed-20f6-4efc-ac6f-381ce75eb20e"/*Vector2Components*/,
+      "Position": {
+        "X": 63.67047,
+        "Y": 1741.0687
       }
     },
     {
@@ -296,8 +305,8 @@
     {
       "ChildId": "96ba1267-4789-4e87-ba10-fa19a9a2f370"/*Vector3Components*/,
       "Position": {
-        "X": -61.460144,
-        "Y": 1893.8634
+        "X": -58.03589,
+        "Y": 2012.0013
       }
     },
     {
@@ -312,13 +321,6 @@
       "Position": {
         "X": 30.719116,
         "Y": 1342.0376
-      }
-    },
-    {
-      "ChildId": "c9a7a275-1d64-4403-aede-c984c1ebdafe"/*Padding*/,
-      "Position": {
-        "X": 84.494934,
-        "Y": 1715.4711
       }
     },
     {

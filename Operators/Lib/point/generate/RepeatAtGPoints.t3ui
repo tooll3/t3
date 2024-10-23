@@ -3,6 +3,14 @@
   "Description": "Repeats a list of GPU points at positions provided by another list of points. The orientation of the target points can be applied, so this operator can be used to create point instanciation.\n\nIf the ApplyTargetScaleW parameter is activated, the W attribute of the target points is used as a scale factor.",
   "InputUis": [
     {
+      "InputId": "0acbe3d0-53fa-47eb-b12e-453f1b61af33"/*ApplyTargetScale*/,
+      "Position": {
+        "X": -160.83728,
+        "Y": 889.66925
+      },
+      "GroupTitle": "Options"
+    },
+    {
       "InputId": "47c3c549-78bb-41fd-a88c-58f643870b40"/*GPoints*/,
       "Relevancy": "Required",
       "Position": {
@@ -13,9 +21,10 @@
     {
       "InputId": "5247aeb2-7e69-4ff3-b432-77319f9b2467"/*SetF1To*/,
       "Position": {
-        "X": -23.334442,
-        "Y": 935.82654
-      }
+        "X": -30.203705,
+        "Y": 984.3918
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "6026d26d-b958-4508-b543-92fbdf8950d6"/*AddSeparators*/,
@@ -27,31 +36,31 @@
     {
       "InputId": "62130a78-6fe7-4146-89da-e536eb81501a"/*SetF2To*/,
       "Position": {
-        "X": -23.334442,
-        "Y": 980.82654
+        "X": -30.203705,
+        "Y": 1029.3918
       }
     },
     {
       "InputId": "6bd240ad-0ff8-4282-a045-8e00d82cc017"/*ScaleFactor*/,
       "Position": {
-        "X": -23.334442,
-        "Y": 890.82654
+        "X": -30.203705,
+        "Y": 939.3918
       }
     },
     {
-      "InputId": "796d3d55-32b3-436e-a4c3-f15e1585a914"/*ConnectLines*/,
+      "InputId": "796d3d55-32b3-436e-a4c3-f15e1585a914"/*CombineMode*/,
       "Position": {
         "X": -899.20105,
         "Y": 1002.2417
-      },
-      "GroupTitle": "OBSOLETE PARAMETERS"
+      }
     },
     {
       "InputId": "9df1f57c-a079-49c1-b537-d8eb08f2d0d3"/*Scale*/,
       "Position": {
         "X": -25.819427,
         "Y": 733.15216
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "a952d91a-a86b-4370-acd9-e17b19025966"/*GTargets*/,
@@ -62,7 +71,7 @@
       }
     },
     {
-      "InputId": "f15a003c-7969-4505-b598-6c6c4b5a3bbe"/*ApplyTargetOrientation*/,
+      "InputId": "f15a003c-7969-4505-b598-6c6c4b5a3bbe"/*ApplyOrientation*/,
       "Position": {
         "X": -173.33444,
         "Y": 834.82654
@@ -80,7 +89,8 @@
       "Position": {
         "X": -532.56726,
         "Y": 1524.1018
-      }
+      },
+      "GroupTitle": "Obsolete Parameters"
     }
   ],
   "SymbolChildUis": [
@@ -156,7 +166,14 @@
       "ChildId": "9506cd5e-4355-4ce3-9060-313aad7fbf05"/*CompareInt*/,
       "Position": {
         "X": -516.58295,
-        "Y": 1197.479
+        "Y": 1221.479
+      }
+    },
+    {
+      "ChildId": "95230b28-9d71-4d24-bd58-1c39e6c5e4d9"/*BoolToInt*/,
+      "Position": {
+        "X": -23.334442,
+        "Y": 890.82654
       }
     },
     {
