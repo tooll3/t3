@@ -25,7 +25,7 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "442cca8c-9e38-4eeb-a67c-945510218a85"/*FX1*/,
+      "Id": "442cca8c-9e38-4eeb-a67c-945510218a85"/*F1*/,
       "DefaultValue": {
         "X": 1.0,
         "Y": 0.0
@@ -58,7 +58,7 @@
       "DefaultValue": 1
     },
     {
-      "Id": "8f3eab23-6e6a-43dc-969e-c5ef3b8e3fe0"/*FX2*/,
+      "Id": "8f3eab23-6e6a-43dc-969e-c5ef3b8e3fe0"/*F2*/,
       "DefaultValue": {
         "X": 1.0,
         "Y": 0.0

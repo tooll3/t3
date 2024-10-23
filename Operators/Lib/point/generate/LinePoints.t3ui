@@ -42,7 +42,7 @@
       "Format": "{0:0.000} ±"
     },
     {
-      "InputId": "442cca8c-9e38-4eeb-a67c-945510218a85"/*FX1*/,
+      "InputId": "442cca8c-9e38-4eeb-a67c-945510218a85"/*F1*/,
       "Position": {
         "X": -78.61072,
         "Y": 1255.0425
@@ -88,7 +88,7 @@
       "Description": "Sadly there is no simple method to define the orientation of the points.\n\nSimple: Ignores Line direction and use the Orientation and Angle\nUp Vector: Orient X towards the direction. This can have unpredictable results when line is pointing up or when using Orientation Angles."
     },
     {
-      "InputId": "8f3eab23-6e6a-43dc-969e-c5ef3b8e3fe0"/*FX2*/,
+      "InputId": "8f3eab23-6e6a-43dc-969e-c5ef3b8e3fe0"/*F2*/,
       "Position": {
         "X": -78.61072,
         "Y": 1311.0425

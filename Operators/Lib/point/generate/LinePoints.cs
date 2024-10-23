@@ -26,10 +26,10 @@ internal sealed class LinePoints : Instance<LinePoints>
         public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "442cca8c-9e38-4eeb-a67c-945510218a85")]
-        public readonly InputSlot<System.Numerics.Vector2> FX1 = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<System.Numerics.Vector2> F1 = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "8f3eab23-6e6a-43dc-969e-c5ef3b8e3fe0")]
-        public readonly InputSlot<System.Numerics.Vector2> FX2 = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<System.Numerics.Vector2> F2 = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "4d45a633-ac00-4cbe-83a3-43c419c3da97")]
         public readonly InputSlot<System.Numerics.Vector4> ColorB = new InputSlot<System.Numerics.Vector4>();

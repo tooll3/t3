@@ -15,10 +15,10 @@ internal sealed class DrawLines : Instance<DrawLines>
         public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
 
         [Input(Guid = "df158fcf-3042-48cf-8383-7bf4c1bcb8a6")]
-        public readonly InputSlot<float> Size = new InputSlot<float>();
+        public readonly InputSlot<float> LineWidth = new InputSlot<float>();
 
         [Input(Guid = "00cb7dc1-edc7-4102-a6a0-6cc44a4f0e56", MappedType = typeof(WidthFXs))]
-        public readonly InputSlot<int> WidthFX = new InputSlot<int>();
+        public readonly InputSlot<int> WidthFactor = new InputSlot<int>();
 
         [Input(Guid = "d0919481-203a-4379-8094-187d6209e00d")]
         public readonly InputSlot<float> ShrinkWithDistance = new InputSlot<float>();
