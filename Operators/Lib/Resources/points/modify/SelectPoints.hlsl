@@ -35,11 +35,13 @@ cbuffer Params : register(b2)
     int SelectMode;
     int ClampResult;
     int DiscardNonSelected;
-    int SetW;
+
+    int StrengthFactor;
+    int WriteTo;
 }
 
-StructuredBuffer<LegacyPoint> SourcePoints : t0;
-RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
+StructuredBuffer<Point> SourcePoints : t0;
+RWStructuredBuffer<Point> ResultPoints : u0;
 
 static const float NoisePhase = 0;
 
@@ -75,13 +77,14 @@ inline float LinearStep(float min, float max, float t)
     if (i.x >= numStructs)
         return;
 
-    LegacyPoint p = SourcePoints[i.x];
+    Point p = SourcePoints[i.x];
 
-    if (isnan(p.W))
+    if (isnan(p.Scale.x))
     {
         ResultPoints[i.x] = p;
         return;
     }
+
 
     float3 posInObject = p.Position;
     float3 posInVolume = mul(float4(posInObject, 1), TransformVolume).xyz;
@@ -120,39 +123,57 @@ inline float LinearStep(float min, float max, float t)
 
     s = ApplyBiasAndGain(s, GainAndBias.x, GainAndBias.y);
 
-    float w = p.W;
+    float w = WriteTo == 0 
+        ? 1
+        : (WriteTo == 1) ? p.FX1 : p.FX2;
+
+
+    float strength = Strength * (StrengthFactor == 0 
+        ? 1
+        : (StrengthFactor == 1) ? p.FX1 : p.FX2);
+
     if (SelectMode == ModeOverride)
     {
-        s *= Strength;
+        s *= strength;
     }
     else if (SelectMode == ModeAdd)
     {
-        s += w * Strength;
+        s += w * strength;
     }
     else if (SelectMode == ModeSub)
     {
-        s = w - s * Strength;
+        s = w - s * strength;
     }
     else if (SelectMode == ModeMultiply)
     {
-        s = lerp(w, w * s, Strength);
+        s = lerp(w, w * s, strength);
     }
     else if (SelectMode == ModeInvert)
     {
         s = s * (1 - w);
     }
 
+
     float result = (DiscardNonSelected && s <= 0)
-                       ? sqrt(-1)
+                       ? NAN
                    : (ClampResult)
                        ? saturate(s)
                        : s;
 
-    p.Selected = result;
-    if (SetW)
+    switch(WriteTo)
     {
-        p.W = result;
+        case 1:
+            p.FX1 = result;
+            break;
+        case 2:
+            p.FX2 = result;
+            break;
     }
+    //p.Selected = result;
+    // if (SetW)
+    // {
+    //     p.W = result;
+    // }
 
     ResultPoints[i.x] = p;
 }

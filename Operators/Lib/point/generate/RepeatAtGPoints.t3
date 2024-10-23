@@ -2,7 +2,7 @@
   "Id": "780edb20-f83f-494c-ab17-7015e2311250"/*RepeatAtGPoints*/,
   "Inputs": [
     {
-      "Id": "0acbe3d0-53fa-47eb-b12e-453f1b61af33"/*ApplyTargetScale*/,
+      "Id": "0acbe3d0-53fa-47eb-b12e-453f1b61af33"/*ApplyPointScale*/,
       "DefaultValue": true
     },
     {

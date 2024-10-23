@@ -3,7 +3,7 @@
   "Description": "Repeats a list of GPU points at positions provided by another list of points. The orientation of the target points can be applied, so this operator can be used to create point instanciation.\n\nIf the ApplyTargetScaleW parameter is activated, the W attribute of the target points is used as a scale factor.",
   "InputUis": [
     {
-      "InputId": "0acbe3d0-53fa-47eb-b12e-453f1b61af33"/*ApplyTargetScale*/,
+      "InputId": "0acbe3d0-53fa-47eb-b12e-453f1b61af33"/*ApplyPointScale*/,
       "Position": {
         "X": -160.83728,
         "Y": 889.66925
