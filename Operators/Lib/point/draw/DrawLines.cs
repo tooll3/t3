@@ -56,8 +56,8 @@ internal sealed class DrawLines : Instance<DrawLines>
         private enum WidthFXs
         {
             None,
-            FX1,
-            FX2,
+            F1,
+            F2,
         }
 
         private enum UvModes

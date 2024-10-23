@@ -235,9 +235,10 @@ internal static partial class ProjectSetup
             case 1:
             {
                 var package = (EditorSymbolPackage)packages[0].Package;
-                package.LoadSymbols(true, out var newlyRead, out var allNewSymbols);
+                var parallel = false;
+                package.LoadSymbols(parallel, out var newlyRead, out var allNewSymbols);
                 package.ApplySymbolChildren(newlyRead);
-                package.LoadUiFiles(true, allNewSymbols, out var newlyLoadedUis, out var preExistingUis);
+                package.LoadUiFiles(parallel, allNewSymbols, out var newlyLoadedUis, out var preExistingUis);
                 package.LocateSourceCodeFiles();
                 package.RegisterUiSymbols(newlyLoadedUis, preExistingUis);
 

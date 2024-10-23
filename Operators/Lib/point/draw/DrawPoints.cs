@@ -18,7 +18,7 @@ internal sealed class DrawPoints : Instance<DrawPoints>
         public readonly InputSlot<float> PointSize = new InputSlot<float>();
 
         [Input(Guid = "e40aeedd-49fe-467c-b886-064a1024cef3", MappedType = typeof(ScaleFXModes))]
-        public readonly InputSlot<int> ScaleFX = new InputSlot<int>();
+        public readonly InputSlot<int> ScaleFactor = new InputSlot<int>();
 
         [Input(Guid = "64e75fea-c07f-4cb1-8ac0-0f8d05362664")]
         public readonly InputSlot<bool> UsePointsScale = new InputSlot<bool>();
@@ -44,7 +44,7 @@ internal sealed class DrawPoints : Instance<DrawPoints>
         private enum ScaleFXModes
         {
             None = 0,
-            FX1 = 1,
-            FX2 = 2,
+            F1 = 1,
+            F2 = 2,
         }
 }

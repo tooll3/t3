@@ -47,7 +47,7 @@
       "DefaultValue": true
     },
     {
-      "Id": "e40aeedd-49fe-467c-b886-064a1024cef3"/*ScaleFX*/,
+      "Id": "e40aeedd-49fe-467c-b886-064a1024cef3"/*ScaleFactor*/,
       "DefaultValue": 0
     }
   ],

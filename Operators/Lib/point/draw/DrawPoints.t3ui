@@ -93,7 +93,7 @@
       "Description": "Defines whether the \"W\" value of the Gpoints used has an influence on the size of the rendered Points"
     },
     {
-      "InputId": "e40aeedd-49fe-467c-b886-064a1024cef3"/*ScaleFX*/,
+      "InputId": "e40aeedd-49fe-467c-b886-064a1024cef3"/*ScaleFactor*/,
       "Position": {
         "X": 1718.0432,
         "Y": 3971.7693
