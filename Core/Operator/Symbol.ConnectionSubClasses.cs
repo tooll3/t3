@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Linq.Expressions;
 using T3.Core.Logging;
 using T3.Core.Operator.Slots;
@@ -8,18 +9,26 @@ namespace T3.Core.Operator;
 
 public sealed partial class Symbol
 {
+    internal interface ISlotDefinition
+    {
+        public Guid Id { get; }
+        public Type ValueType { get; }
+        public string Name { get; }
+    }
     /// <summary>
     /// Options on the visual presentation of <see cref="Symbol"/> input.
     /// </summary>
-    public sealed class InputDefinition
+    public sealed class InputDefinition : ISlotDefinition
     {
         public Guid Id { get; internal init; }
         public string Name { get; internal set; }
         public InputValue DefaultValue { get; set; }
         public bool IsMultiInput { get; internal set; }
+
+        public Type ValueType => DefaultValue.ValueType;
     }
 
-    public sealed class OutputDefinition
+    public sealed class OutputDefinition : ISlotDefinition
     {
         public Guid Id { get; init; }
         public string Name { get; init; }
@@ -82,6 +91,9 @@ public sealed partial class Symbol
             SourceSlotId = sourceSlotId;
             TargetParentOrChildId = targetParentOrChildId;
             TargetSlotId = targetSlotId;
+            
+            Debug.Assert(Guid.Empty != sourceSlotId);
+            Debug.Assert(Guid.Empty != targetSlotId);
 
             // pre-compute hash code as this is read-only
             _hashCode = CalculateHashCode(sourceParentOrChildId, sourceSlotId, targetParentOrChildId, targetSlotId);

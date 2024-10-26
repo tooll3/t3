@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -81,13 +82,13 @@ internal partial class EditableSymbolProject
         return false;
     }
 
-    private bool TryRecompileWithNewSource(Symbol symbol, string newSource)
+    private bool TryRecompileWithNewSource(Symbol symbol, string newSource, [NotNullWhen(false)] out string reason)
     {
         var id = symbol.Id;
         var gotCurrentSource = FilePathHandlers.TryGetValue(id, out var currentSourcePath);
         if (!gotCurrentSource || currentSourcePath!.SourceCodePath == null)
         {
-            Log.Error($"Could not find original source code for symbol \"{symbol.Name}\"");
+            reason = $"Could not find original source code for symbol \"{symbol.Name}\"";
             return false;
         }
 
@@ -99,7 +100,7 @@ internal partial class EditableSymbolProject
         }
         catch
         {
-            Log.Error($"Could not read original source code at \"{currentSourcePath}\"");
+            reason = $"Could not read original source code at \"{currentSourcePath}\"";
             return false;
         }
 
@@ -113,6 +114,7 @@ internal partial class EditableSymbolProject
         if (TryRecompile())
         {
             ProjectSetup.UpdateSymbolPackage(this);
+            reason = null;
             return true;
         }
             
@@ -122,13 +124,14 @@ internal partial class EditableSymbolProject
         symbolUi.FlagAsModified();
         SaveModifiedSymbols();
 
+        reason = "Failed to compile";
         return false;
     }
 
     /// <summary>
     /// this currently is primarily used when re-ordering symbol inputs and outputs
     /// </summary>
-    public static bool UpdateSymbolWithNewSource(Symbol symbol, string newSource, out string reason)
+    public static bool UpdateSymbolWithNewSource(Symbol symbol, string newSource, [NotNullWhen(false)] out string? reason)
     {
         if (CheckCompilation(out reason))
             return false;
@@ -136,12 +139,11 @@ internal partial class EditableSymbolProject
         if (symbol.SymbolPackage.IsReadOnly)
         {
             reason = $"Could not update symbol '{symbol.Name}' because it is not modifiable.";
-            Log.Error(reason);
             return false;
         }
 
         var editableSymbolPackage = (EditableSymbolProject)symbol.SymbolPackage;
-        return editableSymbolPackage.TryRecompileWithNewSource(symbol, newSource);
+        return editableSymbolPackage.TryRecompileWithNewSource(symbol, newSource, out reason);
     }
 
     public static bool RenameNameSpaces(NamespaceTreeNode node, EditableSymbolProject sourcePackage, EditableSymbolProject targetPackage, string newNamespace, out string reason)
@@ -407,6 +409,7 @@ internal partial class EditableSymbolProject
     {
         if (!UpdateSymbolWithNewSource(symbol, newSource, out reason))
         {
+            Log.Error(reason);
             var title = $"Could not update symbol '{symbol.Name}'";
             BlockingWindow.Instance.ShowMessageBox(reason, title);
             reason = title + ": " + reason;

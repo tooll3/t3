@@ -182,8 +182,14 @@ public static partial class ResourceManager
 
 public static class ResourceExtensions
 {
-    public static IEnumerable<IResourcePackage> PackagesInCommon(this IEnumerable<Instance> instances)
+    public static IEnumerable<IResourcePackage> PackagesInCommon(this IReadOnlyCollection<Instance> instances)
     {
+        if(instances.Count == 0)
+            return [];
+        
+        if(instances.Count == 1)
+            return instances.First().AvailableResourcePackages;
+
         return instances.Select(x => x.AvailableResourcePackages)
                         .Aggregate<IEnumerable<IResourcePackage>>((a, b) => a.Intersect(b));
     }

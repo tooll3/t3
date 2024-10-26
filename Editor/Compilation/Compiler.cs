@@ -2,6 +2,7 @@
 using System.Collections.Frozen;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using Main;
 
 namespace T3.Editor.Compilation;
@@ -43,29 +44,46 @@ internal static class Compiler
 
     private static bool Evaluate(ref string output, in CompilationOptions options)
     {
-        var success = output.Contains("Build succeeded");
-        if (!success)
+        if (output.Contains("Build succeeded")) return true;
+        
+        // print only errors
+        const string searchTerm = "error";
+        var searchTermSpan = searchTerm.AsSpan();
+        for (int i = 0; i < output.Length; i++)
         {
-            Log.Error(output);
+            var newlineIndex = output.IndexOf('\n', i);
+            var endOfLineIndex = newlineIndex == -1
+                                     ? output.Length
+                                     : newlineIndex;
+
+            var span = output.AsSpan(i, endOfLineIndex - i);
+            // if span contains "error"
+            if (span.IndexOf(searchTermSpan) != -1)
+            {
+                _failureLogSb.Append(span).AppendLine();
+            }
+
+            i = endOfLineIndex;
         }
 
-        return success;
+        output = _failureLogSb.ToString();
+        _failureLogSb.Clear();
+        return false;
     }
     
     private readonly record struct CompilationOptions(CsProjectFile ProjectFile, BuildMode BuildMode, string? TargetDirectory, Verbosity Verbosity, bool RestoreNuGet);
     
     private static ProcessCommander<CompilationOptions>? _processCommander;
     private static readonly object _processLock = new();
+    private static readonly Stopwatch stopwatch = new();
     
     public static bool TryCompile(CsProjectFile projectFile, BuildMode buildMode, bool nugetRestore, string? targetDirectory = null, Verbosity verbosity = Verbosity.Quiet)
     {
-        Stopwatch stopwatch = new();
-        stopwatch.Start();
-
         bool success;
-
+        string logMessage;
         lock (_processLock)
         {
+            stopwatch.Restart();
             if (_processCommander == null)
             {
                 _processCommander = new ProcessCommander<CompilationOptions>(_workingDirectory, "Compilation: ");
@@ -83,19 +101,28 @@ internal static class Compiler
             var compilationOptions = new CompilationOptions(projectFile, buildMode, targetDirectory, verbosity, nugetRestore);
             var command = new Command<CompilationOptions>(GetCommandFor, Evaluate);
 
-            success = _processCommander.TryCommand(command, compilationOptions, projectFile.Directory, true);
+            if (!_processCommander.TryCommand(command, compilationOptions, out var response, projectFile.Directory, suppressOutput: true))
+            {
+                success = false;
+                logMessage = $"{projectFile.Name}: Build failed in {stopwatch.ElapsedMilliseconds}ms:\n{response}";
+            }
+            else
+            {
+                success = true;
+                logMessage = $"{projectFile.Name}: Build succeeded in {stopwatch.ElapsedMilliseconds}ms";
+            }
         }
 
         if (!success)
         {
-            Log.Error($"{projectFile.Name}: Build failed in {stopwatch.ElapsedMilliseconds}ms");
-            return false;
+            Log.Error(logMessage);
+        }
+        else
+        {
+            Log.Info(logMessage);
         }
         
-        stopwatch.Stop();
-        Log.Info($"{projectFile.Name}: Build succeeded in {stopwatch.ElapsedMilliseconds}ms");
-
-        return true;
+        return success;
     }
 
     public enum BuildMode
@@ -114,4 +141,6 @@ internal static class Compiler
                                                                                         { Verbosity.Detailed, "d" },
                                                                                         { Verbosity.Diagnostic, "diag" }
                                                                                     }.ToFrozenDictionary();
+    
+    private static readonly StringBuilder _failureLogSb = new();
 }

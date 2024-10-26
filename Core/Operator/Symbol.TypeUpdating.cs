@@ -11,79 +11,27 @@ public sealed partial class Symbol
 {
     internal void UpdateInstanceType()
     {
+        if (!NeedsTypeUpdate)
+            return;
+        
         NeedsTypeUpdate = false;
+        
         UpdateSlotsAndConnectionsForType(out var oldInputDefinitions, out var oldOutputDefinitions);
-
-        var existingInstancesRefreshInfo = new List<InstanceTypeRefreshInfo>();
 
         var slotChanges = new SlotChangeInfo(oldInputDefinitions, oldOutputDefinitions, InputDefinitions, OutputDefinitions);
 
-        int parentlessCount = 0;
-        
-        var count = _instancesOfSelf.Count;
+        var count = _childrenCreatedFromMe.Count;
         if (count == 0)
             return;
-        
-        // first remove relevant connections from instances and update symbol child input values if needed
-        for (var index = count - 1; index >= 0; index--)
+
+        foreach (var child in _childrenCreatedFromMe)
         {
-            var instance = _instancesOfSelf[index];
-            var parent = instance.Parent;
-            if (parent == null)
-            {
-                Log.Warning($"Instance {instance} has no parent. Skipping connections and recreation.");
-                DestroyInstance(instance);
-                continue;
-            }
-            
-            var parentSymbol = parent.Symbol;
-            var symbolChild = instance.SymbolChild;
-
-            if (symbolChild != null)
-            {
-                UpdateSymbolChildIO(symbolChild, slotChanges);
-            }
-            
-            if (parentSymbol.NeedsTypeUpdate)
-            {
-                //Log.Debug($"Instance {instance} has parent {parent} that needs type update. Skipping connections and recreation.");
-                DestroyInstance(instance);
-                continue;
-            }
-            
-            // reconnection logic
-            if (TryGenerateConnectionInfo(instance, slotChanges, out var refreshInfo, parent, parentSymbol))
-            {
-                existingInstancesRefreshInfo.Add(refreshInfo);
-            }
-
-            DestroyInstance(instance);
-        }
-
-        foreach (var item in existingInstancesRefreshInfo)
-        {
-            var symbolChild = item.SymbolChild;
-            var parent = item.Parent;
-            if (!symbolChild.TryCreateNewInstance(parent, newInstance: out _))
-            {
-                Log.Error($"Could not recreate instance of symbol: {symbolChild.Symbol.Name} with parent: {item.ParentSymbol.Name}");
-            }
-        }
-
-        // ... and add the connections again
-        existingInstancesRefreshInfo.Reverse(); // process reverse that multi input index are correct
-        foreach (var item in existingInstancesRefreshInfo)
-        {
-            var parentSymbol = item.ParentSymbol;
-            foreach (var entry in item.ConnectionsToReplace)
-            {
-                parentSymbol.AddConnection(entry.Connection, entry.MultiInputIndex);
-            }
+            child.UpdateIOAndConnections(slotChanges);
         }
 
         return;
 
-        void UpdateSlotsAndConnectionsForType(out List<InputDefinition> previousInputDefinitions, out List<OutputDefinition> previousOutputDefinitions)
+        void UpdateSlotsAndConnectionsForType(out List<InputDefinition> removedInputDefinitions, out List<OutputDefinition> removedOutputDefinitions)
         {
             var operatorInfo = SymbolPackage.AssemblyInformation.OperatorTypeInfo[Id];
 
@@ -91,18 +39,18 @@ public sealed partial class Symbol
             var inputs = operatorInfo.Inputs;
 
             // todo: it's probably better to first check if there's a change and only then allocate
-            previousInputDefinitions = new List<InputDefinition>(InputDefinitions);
+            removedInputDefinitions = new List<InputDefinition>(InputDefinitions);
             InputDefinitions.Clear();
             foreach (var info in inputs)
             {
                 var id = info.Attribute.Id;
-                var alreadyExistingInput = previousInputDefinitions.FirstOrDefault(i => i.Id == id);
+                var alreadyExistingInput = removedInputDefinitions.FirstOrDefault(i => i.Id == id);
                 if (alreadyExistingInput != null)
                 {
                     alreadyExistingInput.Name = info.Name;
                     alreadyExistingInput.IsMultiInput = info.IsMultiInput;
                     InputDefinitions.Add(alreadyExistingInput);
-                    previousInputDefinitions.Remove(alreadyExistingInput);
+                    removedInputDefinitions.Remove(alreadyExistingInput);
                 }
                 else
                 {
@@ -116,16 +64,16 @@ public sealed partial class Symbol
 
             // check if outputs have changed
             var outputs = operatorInfo.Outputs;
-            previousOutputDefinitions = new List<OutputDefinition>(OutputDefinitions);
+            removedOutputDefinitions = new List<OutputDefinition>(OutputDefinitions);
             OutputDefinitions.Clear();
             foreach (var info in outputs)
             {
                 var attribute = info.Attribute;
-                var alreadyExistingOutput = previousOutputDefinitions.FirstOrDefault(o => o.Id == attribute.Id);
+                var alreadyExistingOutput = removedOutputDefinitions.FirstOrDefault(o => o.Id == attribute.Id);
                 if (alreadyExistingOutput != null)
                 {
                     OutputDefinitions.Add(alreadyExistingOutput);
-                    previousOutputDefinitions.Remove(alreadyExistingOutput);
+                    removedOutputDefinitions.Remove(alreadyExistingOutput);
                 }
                 else
                 {
@@ -140,44 +88,40 @@ public sealed partial class Symbol
                 }
             }
 
-            var connectionsToRemoveWithinSymbol = new List<Connection>();
-            foreach (var con in Connections)
+            var connectionsToRemoveWithinSymbol = new HashSet<ConnectionEntry>(); // prevents duplicates - is this necessary?
+            int existingConnectionCount = Connections.Count;
+            for (var i = 0; i < existingConnectionCount; i++)
             {
+                var con = Connections[i];
                 var sourceSlotId = con.SourceSlotId;
                 var targetSlotId = con.TargetSlotId;
 
-                foreach (var input in previousInputDefinitions)
+                foreach (var input in removedInputDefinitions)
                 {
-                    if (sourceSlotId == input.Id)
-                        connectionsToRemoveWithinSymbol.Add(con);
+                    if (sourceSlotId != input.Id)
+                        continue;
+
+                    // find the multi input index
+                    if (TryGetMultiInputIndexOf(con, out var connectionIndex, out var multiInputIndex))
+                    {
+                        connectionsToRemoveWithinSymbol.Add(new ConnectionEntry(con, multiInputIndex, connectionIndex));
+                    }
                 }
 
-                foreach (var output in previousOutputDefinitions)
+                foreach (var output in removedOutputDefinitions)
                 {
-                    if (targetSlotId == output.Id)
-                        connectionsToRemoveWithinSymbol.Add(con);
+                    if (targetSlotId != output.Id)
+                        continue;
+
+                    // find the multi input index
+                    if (TryGetMultiInputIndexOf(con, out var connectionIndex, out var multiInputIndex))
+                    {
+                        connectionsToRemoveWithinSymbol.Add(new ConnectionEntry(con, multiInputIndex, connectionIndex));
+                    }
                 }
             }
 
-            connectionsToRemoveWithinSymbol = connectionsToRemoveWithinSymbol.Distinct().ToList(); // remove possible duplicates
-            connectionsToRemoveWithinSymbol.Reverse(); // reverse order to have always valid multi input indices
-            var connectionEntriesToRemove = new List<ConnectionEntry>(connectionsToRemoveWithinSymbol.Count);
-            foreach (var con in connectionsToRemoveWithinSymbol)
-            {
-                var entry = new ConnectionEntry
-                                {
-                                    Connection = con,
-                                    MultiInputIndex = Connections.FindAll(c => c.TargetParentOrChildId == con.TargetParentOrChildId
-                                                                               && c.TargetSlotId == con.TargetSlotId)
-                                                                 .FindIndex(cc => cc == con) // todo: fix this mess! connection rework!
-                                };
-                connectionEntriesToRemove.Add(entry);
-            }
-
-            foreach (var entry in connectionEntriesToRemove)
-            {
-                RemoveConnection(entry.Connection, entry.MultiInputIndex);
-            }
+            RemoveConnections(connectionsToRemoveWithinSymbol);
 
             return;
 
@@ -205,121 +149,109 @@ public sealed partial class Symbol
                     return false;
                 }
             }
+
+           
         }
 
-        static bool TryGenerateConnectionInfo(Instance instance, SlotChangeInfo slotChangeInfo, out InstanceTypeRefreshInfo refreshInfo, Instance parent, Symbol parentSymbol)
+    }
+
+    private void RemoveConnections(IEnumerable<ConnectionEntry> connectionsToRemoveWithinSymbol)
+    {
+        foreach (var entry in connectionsToRemoveWithinSymbol.OrderByDescending(x => x.ConnectionIndex))
         {
-            if (!parent.Children.ContainsKey(instance.SymbolChildId))
+            Connections.RemoveAt(entry.ConnectionIndex);
+            foreach (var child in _childrenCreatedFromMe)
             {
-                // This happens when recompiling ops...
-                Log.Error($"Warning: Skipping no longer valid instance of {instance.Symbol} in {parent.Symbol}");
-                refreshInfo = default;
-                return false;
+                child.RemoveConnectionFromInstances(entry);
             }
-
-            var parentConnections = parentSymbol.Connections;
-            // get all connections that belong to this instance
-            var connectionsToReplace = parentConnections.FindAll(c => c.SourceParentOrChildId == instance.SymbolChildId ||
-                                                                      c.TargetParentOrChildId == instance.SymbolChildId);
-            // first remove those connections where the inputs/outputs doesn't exist anymore
-            var connectionsToRemove =
-                connectionsToReplace.FindAll(c =>
-                                             {
-                                                 return slotChangeInfo.OldOutputDefinitions.FirstOrDefault(output =>
-                                                        {
-                                                            var outputId = output.Id;
-                                                            return outputId == c.SourceSlotId ||
-                                                                   outputId == c.TargetSlotId;
-                                                        }) != null
-                                                        || slotChangeInfo.OldInputDefinitions.FirstOrDefault(input =>
-                                                        {
-                                                            var inputId = input.Id;
-                                                            return inputId == c.SourceSlotId ||
-                                                                   inputId == c.TargetSlotId;
-                                                        }) != null;
-                                             });
-
-            foreach (var connection in connectionsToRemove)
-            {
-                parentSymbol.RemoveConnection(connection);
-                connectionsToReplace.Remove(connection);
-            }
-
-            // now create the entries for those that will be reconnected after the instance has been replaced. Take care of the multi input order
-            connectionsToReplace.Reverse();
-            var connectionEntriesToReplace = new List<ConnectionEntry>(connectionsToReplace.Count);
-            foreach (var con in connectionsToReplace)
-            {
-                var entry = new ConnectionEntry
-                                {
-                                    Connection = con,
-                                    MultiInputIndex = parentConnections.FindAll(c => c.TargetParentOrChildId == con.TargetParentOrChildId
-                                                                                     && c.TargetSlotId == con.TargetSlotId)
-                                                                       .FindIndex(cc => cc == con) // todo: fix this mess! connection rework!
-                                };
-                connectionEntriesToReplace.Add(entry);
-            }
-
-            foreach (var entry in connectionEntriesToReplace)
-            {
-                parentSymbol.RemoveConnection(entry.Connection, entry.MultiInputIndex);
-            }
-
-            connectionEntriesToReplace.Reverse(); // restore original order
-
-            var symbolChild = instance.SymbolChild!;
-
-            refreshInfo = new InstanceTypeRefreshInfo(symbolChild, parent, parentSymbol, connectionEntriesToReplace);
-            return true;
+           
         }
     }
-    
-    // todo - reduce or eliminate these dictionary allocations?
+
+    private bool TryGetMultiInputIndexOf(Connection con, out int foundAtConnectionIndex, out int multiInputIndex)
+    {
+        multiInputIndex = 0;
+        foundAtConnectionIndex = -1;
+        var connectionCount = Connections.Count;
+        for (int i = 0; i < connectionCount; i++)
+        {
+            var other = Connections[i];
+            if (con.TargetParentOrChildId != other.TargetParentOrChildId || con.TargetSlotId != other.TargetSlotId)
+                continue;
+
+            if (other == con)
+            {
+                foundAtConnectionIndex = i;
+                break;
+            }
+
+            multiInputIndex++;
+        }
+
+        if (foundAtConnectionIndex != -1) return true;
+
+        Log.Error("Could not find connection in symbol");
+        return false;
+    }
+
     private static void UpdateSymbolChildIO(Child symbolChild, SlotChangeInfo slotChangeInfo)
     {
+        // update inputs
         var childInputDict = symbolChild.Inputs;
-        var oldChildInputs = new Dictionary<Guid, Child.Input>(childInputDict);
-        childInputDict.Clear();
-        foreach (var inputDefinition in slotChangeInfo.NewInputDefinitions)
+        foreach (var inputDefinition in slotChangeInfo.RemovedInputDefinitions)
+        {
+            if (!childInputDict.Remove(inputDefinition.Id))
+            {
+                Log.Error($"Could not remove input {inputDefinition.Name} from {symbolChild.Symbol.Name}");
+            }
+        }
+        
+        foreach (var inputDefinition in slotChangeInfo.LatestInputDefinitions)
         {
             var inputId = inputDefinition.Id;
-            var inputToAdd = oldChildInputs.TryGetValue(inputId, out var oldInput)
-                                 ? oldInput
-                                 : new Child.Input(inputDefinition);
+            // create new input if needed
+            if (!childInputDict.TryGetValue(inputId, out var input) || input.InputDefinition.DefaultValue.ValueType != inputDefinition.DefaultValue.ValueType)
+            {
+                input = new Child.Input(inputDefinition);
+            }
 
-            childInputDict.Add(inputId, inputToAdd);
+            childInputDict[inputId] = input;
         }
 
         // update output of symbol child
         var childOutputDict = symbolChild.Outputs;
-        var oldChildOutputs = new Dictionary<Guid, Child.Output>(childOutputDict);
-        childOutputDict.Clear();
-        foreach (var outputDefinition in slotChangeInfo.NewOutputDefinitions)
+        
+        foreach(var outputDefinition in slotChangeInfo.RemovedOutputDefinitions)
+        {
+            if (!childOutputDict.Remove(outputDefinition.Id))
+            {
+                Log.Error($"Could not remove output {outputDefinition.Name} from {symbolChild.Symbol.Name}");
+            }
+        }
+        
+        foreach (var outputDefinition in slotChangeInfo.LatestOutputDefinitions)
         {
             var id = outputDefinition.Id;
-            if (!oldChildOutputs.TryGetValue(id, out var output))
+
+            // create new output if needed
+            if (!childOutputDict.TryGetValue(id, out var output) || output.OutputDefinition.ValueType != outputDefinition.ValueType)
             {
                 OutputDefinition.TryGetNewValueType(outputDefinition, out var outputData);
                 output = new Child.Output(outputDefinition, outputData);
             }
 
-            childOutputDict.Add(id, output);
+            childOutputDict[id] = output;
         }
     }
 
-    private class ConnectionEntry
-    {
-        public Connection Connection { get; set; }
-        public int MultiInputIndex { get; set; }
-    }
+    internal readonly record struct ConnectionEntry(Connection Connection, int MultiInputIndex, int ConnectionIndex);
 
-    private readonly record struct InstanceTypeRefreshInfo(Child SymbolChild, Instance Parent, Symbol ParentSymbol, List<ConnectionEntry> ConnectionsToReplace);
 
-    private readonly record struct SlotChangeInfo(
-        IReadOnlyList<InputDefinition> OldInputDefinitions,
-        IReadOnlyList<OutputDefinition> OldOutputDefinitions,
-        IReadOnlyList<InputDefinition> NewInputDefinitions,
-        IReadOnlyList<OutputDefinition> NewOutputDefinitions);
+    internal readonly record struct SlotChangeInfo(
+        IReadOnlyList<InputDefinition> RemovedInputDefinitions,
+        IReadOnlyList<OutputDefinition> RemovedOutputDefinitions,
+        IReadOnlyList<InputDefinition> LatestInputDefinitions,
+        IReadOnlyList<OutputDefinition> LatestOutputDefinitions);
 
     public void ReplaceWithContentsOf(Symbol newSymbol)
     {
