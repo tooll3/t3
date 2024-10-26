@@ -11844,7 +11844,8 @@
         "EndTime": 0.0,
         "Bpm": 120.0,
         "DiscardAfterUse": true,
-        "IsSoundtrack": true
+        "IsSoundtrack": true,
+        "FilePath": "C:/Users/pixtur/dev/tooll/t3-main/Operators/examples/Resources/user/still/proj-worksforeverybody/soundtrack/works-for-everybody.mp3"
       }
     ]
   }
