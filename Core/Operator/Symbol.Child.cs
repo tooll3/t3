@@ -470,12 +470,14 @@ public partial class Symbol
 
             foreach (var connection in connectionsToRemove)
             {
-                Parent.RemoveConnection(connection);
+                Parent.RemoveConnection(connection);  // TODO: clarify if we need to iterate over all multi input indices
                 connectionsToReplace.Remove(connection);
             }
 
             // now create the entries for those that will be reconnected after the instance has been replaced. Take care of the multi input order
-            var connectionEntriesToReplace = new HashSet<ConnectionEntry>(connectionsToReplace.Count); // prevent duplicates - is this necessary?
+            connectionsToReplace.Reverse();
+            
+            var connectionEntriesToReplace = new List<ConnectionEntry>(connectionsToReplace.Count); 
             foreach (var con in connectionsToReplace)
             {
                 if (Parent.TryGetMultiInputIndexOf(con, out var foundAtConnectionIndex, out var multiInputIndex))
@@ -506,20 +508,10 @@ public partial class Symbol
             
             // ... and add the connections again
             Dictionary<GuidPair, int> multiInputIndexMap = new();
-            foreach (var entry in connectionEntriesToReplace.OrderBy(x => x.MultiInputIndex))
+            foreach (var entry in connectionEntriesToReplace.OrderBy(x => x.ConnectionIndex).ThenBy(x => x.MultiInputIndex))
             {
                 var connection = entry.Connection;
-                var guidPair = new GuidPair(connection.SourceSlotId, connection.TargetSlotId, connection.SourceParentOrChildId, connection.TargetParentOrChildId);
-                
-                // normalize the multiInputIndices so indexes are not skipped after being removed while we do so
-                if (!multiInputIndexMap.TryGetValue(guidPair, out var multiInputIndex))
-                {
-                    multiInputIndex = 0;
-                    multiInputIndexMap.Add(guidPair, 0);
-                }
-                
-                Parent.AddConnection(connection, multiInputIndex);
-                multiInputIndexMap[guidPair] = multiInputIndex + 1;
+                Parent.AddConnection(connection, entry.MultiInputIndex);
             }
         }
         
