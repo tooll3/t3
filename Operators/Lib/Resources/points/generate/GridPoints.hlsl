@@ -17,6 +17,7 @@ cbuffer Params : register(b0)
 
     float4 Color;
 
+    float PointScale;
     float FX1;
     float FX2;
 }
@@ -73,7 +74,7 @@ static const float ToRad = 3.141578 / 180;
     ResultPoints[index].Color = Color;
     ResultPoints[index].FX1 = FX1;
     ResultPoints[index].FX2 = FX2;
-    ResultPoints[index].Scale = 1;
+    ResultPoints[index].Scale = PointScale;
 
     if (Tiling < 0.5)
     {

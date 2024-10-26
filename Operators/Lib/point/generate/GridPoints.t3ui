@@ -3,10 +3,10 @@
   "Description": "Creates a buffer of GPU points distributed on a rectangular or hexagonal grid.\n\nTips:\n- Set any of the counts to 1 to create a plane of points.\n- Switch the SizeMode to set if the scaling refers to the padding between the points or the size of the volume.",
   "InputUis": [
     {
-      "InputId": "062e3bd6-fe6d-4c9a-a34d-e26fe0d80283"/*FX2*/,
+      "InputId": "062e3bd6-fe6d-4c9a-a34d-e26fe0d80283"/*F2*/,
       "Position": {
-        "X": -53.746277,
-        "Y": 969.1513
+        "X": -78.29297,
+        "Y": 1028.4021
       }
     },
     {
@@ -15,6 +15,7 @@
         "X": -49.790085,
         "Y": 574.9527
       },
+      "AddPadding": "True",
       "Min": -0.5,
       "Max": 0.5
     },
@@ -29,10 +30,10 @@
       "Format": "{0:0.0}°"
     },
     {
-      "InputId": "2ebf7750-fb52-4855-a97b-8bfc09c855ce"/*FX1*/,
+      "InputId": "2ebf7750-fb52-4855-a97b-8bfc09c855ce"/*F1*/,
       "Position": {
-        "X": -53.746277,
-        "Y": 924.1513
+        "X": -78.29297,
+        "Y": 983.40204
       }
     },
     {
@@ -63,7 +64,8 @@
       "Position": {
         "X": 307.94406,
         "Y": 1828.0916
-      }
+      },
+      "GroupTitle": "Obsolete Parameters"
     },
     {
       "InputId": "72eda38f-fc49-4b1f-b7c0-97e07bee4f7c"/*CountX*/,
@@ -95,7 +97,8 @@
       "Position": {
         "X": -386.9745,
         "Y": 1214.3276
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "aa19b556-660b-4267-be44-30c30d85314e"/*Color*/,
@@ -103,9 +106,18 @@
         "X": -53.746277,
         "Y": 879.1513
       },
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
+    },
+    {
+      "InputId": "d79bde19-0d67-434d-88fd-3c9c762fb3c2"/*PointScale*/,
+      "Position": {
+        "X": -78.29297,
+        "Y": 938.40204
+      },
+      "GroupTitle": "Point Attributes"
     },
     {
       "InputId": "d910b40e-6bee-4e1a-82a9-625b89fc27eb"/*Pivot*/,

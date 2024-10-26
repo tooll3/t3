@@ -17,19 +17,13 @@ internal sealed class LinePoints : Instance<LinePoints>
         public readonly InputSlot<System.Numerics.Vector3> Direction = new InputSlot<System.Numerics.Vector3>();
 
         [Input(Guid = "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0")]
-        public readonly InputSlot<float> LengthFactor = new InputSlot<float>();
+        public readonly InputSlot<float> Length = new InputSlot<float>();
 
         [Input(Guid = "af75835a-04c9-4721-8c7a-a31ef8012f06")]
         public readonly InputSlot<float> Pivot = new InputSlot<float>();
 
         [Input(Guid = "28081e5f-da01-46dc-81ad-699df29a49a4")]
         public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
-
-        [Input(Guid = "6f46bd61-422f-4715-9219-3d2e1dff1d90")]
-        public readonly InputSlot<System.Numerics.Vector4> ColorA = new InputSlot<System.Numerics.Vector4>();
-
-        [Input(Guid = "4d45a633-ac00-4cbe-83a3-43c419c3da97")]
-        public readonly InputSlot<System.Numerics.Vector4> ColorB = new InputSlot<System.Numerics.Vector4>();
 
         [Input(Guid = "4ab30d37-dec7-4c7a-a44c-25baf18f25ae")]
         public readonly InputSlot<System.Numerics.Vector2> Scale = new InputSlot<System.Numerics.Vector2>();
@@ -39,6 +33,12 @@ internal sealed class LinePoints : Instance<LinePoints>
 
         [Input(Guid = "8f3eab23-6e6a-43dc-969e-c5ef3b8e3fe0")]
         public readonly InputSlot<System.Numerics.Vector2> F2 = new InputSlot<System.Numerics.Vector2>();
+
+        [Input(Guid = "6f46bd61-422f-4715-9219-3d2e1dff1d90")]
+        public readonly InputSlot<System.Numerics.Vector4> ColorA = new InputSlot<System.Numerics.Vector4>();
+
+        [Input(Guid = "4d45a633-ac00-4cbe-83a3-43c419c3da97")]
+        public readonly InputSlot<System.Numerics.Vector4> ColorB = new InputSlot<System.Numerics.Vector4>();
 
         [Input(Guid = "83986e05-af3e-469f-a656-9956d37d12ba", MappedType = typeof(OrientationModes))]
         public readonly InputSlot<int> Orientation = new InputSlot<int>();

@@ -26,22 +26,22 @@ internal sealed class RadialPoints : Instance<RadialPoints>
         public readonly InputSlot<float> Radius = new InputSlot<float>();
 
         [Input(Guid = "13cbb509-f90c-4ae7-a9d3-a8fc907794e3")]
-        public readonly InputSlot<float> RadiusOffset = new InputSlot<float>();
+        public readonly InputSlot<float> OffsetRadius = new InputSlot<float>();
 
         [Input(Guid = "ca84209e-d821-40c6-b23c-38fc4bbd47b0")]
         public readonly InputSlot<System.Numerics.Vector3> Center = new InputSlot<System.Numerics.Vector3>();
 
-        [Input(Guid = "f6986f68-851b-4cd1-ae59-bf189aa1698e")]
-        public readonly InputSlot<System.Numerics.Vector3> Offset = new InputSlot<System.Numerics.Vector3>();
-
         [Input(Guid = "6df5829e-a534-4620-bcd5-9324f94b4f54")]
         public readonly InputSlot<System.Numerics.Vector3> Axis = new InputSlot<System.Numerics.Vector3>();
+
+        [Input(Guid = "f6986f68-851b-4cd1-ae59-bf189aa1698e")]
+        public readonly InputSlot<System.Numerics.Vector3> OffsetCenter = new InputSlot<System.Numerics.Vector3>();
 
         [Input(Guid = "5a3347a2-ba87-4b38-a1a8-94bd0ef70f48")]
         public readonly InputSlot<float> StartAngle = new InputSlot<float>();
 
         [Input(Guid = "94b2a118-f760-4043-933c-31283e6e7006")]
-        public readonly InputSlot<float> Cycles = new InputSlot<float>();
+        public readonly InputSlot<float> Rotations = new InputSlot<float>();
 
         [Input(Guid = "ef8d1fe2-8470-4113-8d20-40a92d0dab97")]
         public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();

@@ -10,7 +10,7 @@
       }
     },
     {
-      "Id": "13cbb509-f90c-4ae7-a9d3-a8fc907794e3"/*RadiusOffset*/,
+      "Id": "13cbb509-f90c-4ae7-a9d3-a8fc907794e3"/*OffsetRadius*/,
       "DefaultValue": 0.0
     },
     {
@@ -60,7 +60,7 @@
       }
     },
     {
-      "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
+      "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Rotations*/,
       "DefaultValue": 1.0
     },
     {
@@ -98,7 +98,7 @@
       }
     },
     {
-      "Id": "f6986f68-851b-4cd1-ae59-bf189aa1698e"/*Offset*/,
+      "Id": "f6986f68-851b-4cd1-ae59-bf189aa1698e"/*OffsetPosition*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,

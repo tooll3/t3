@@ -54,7 +54,7 @@
         "X": -78.61072,
         "Y": 1367.0425
       },
-      "AddPadding": "True"
+      "GroupTitle": "Point Attributes"
     },
     {
       "InputId": "4d45a633-ac00-4cbe-83a3-43c419c3da97"/*ColorB*/,
@@ -72,19 +72,20 @@
         "X": -78.61072,
         "Y": 1098.0425
       },
-      "GroupTitle": "Point Attributes",
       "Description": "Color at the start of the line (I.e. at the Center)",
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
     },
     {
-      "InputId": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*LengthFactor*/,
+      "InputId": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*Length*/,
       "Position": {
         "X": 71.38928,
         "Y": 840.04254
       },
-      "Description": "A factor multiplied to the direction of the line. \nDirection of 2, 0, 0  × 1  and 1, 0, 0 × 2 are equavilent."
+      "Description": "A factor multiplied to the direction of the line. \nDirection of 2, 0, 0  × 1  and 1, 0, 0 × 2 are equavilent.",
+      "AddPadding": "True"
     },
     {
       "InputId": "83986e05-af3e-469f-a656-9956d37d12ba"/*Orientation*/,
@@ -144,7 +145,6 @@
         "Y": 941.04254
       },
       "Description": "Defines how the Line is centered.\n\n0 - the line starts at center\n0.5 - the line is centered\n1.0 -  the last point of the line is at the Center.",
-      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0
     },
@@ -154,7 +154,7 @@
         "X": 297.56772,
         "Y": 1831.1353
       },
-      "GroupTitle": "OBSOLETE Params",
+      "GroupTitle": "Obsolete Parameters",
       "Description": "Width at the beginning of the line."
     },
     {
