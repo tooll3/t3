@@ -89,16 +89,16 @@ internal class OutputWindow : Window
             // Move down to avoid overlapping with toolbar
             ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
 
-            Pinning.TryGetPinnedOrSelectedInstance(out var drawnInstance,  out var canvas);
+            Pinning.TryGetPinnedOrSelectedInstance(out var drawnInstance,  out var graphCanvas);
 
-            if (canvas != null)
+            if (graphCanvas != null)
             {
-                Pinning.TryGetPinnedEvaluationInstance(canvas?.Structure, out var evaluationInstance);
+                Pinning.TryGetPinnedEvaluationInstance(graphCanvas?.Structure, out var evaluationInstance);
 
                 var drawnType = UpdateAndDrawOutput(drawnInstance, evaluationInstance);
                 _imageCanvas.Deactivate();
                 _camSelectionHandling.Update(drawnInstance, drawnType);
-                var editingFlags = _camSelectionHandling.PreventCameraInteraction | _camSelectionHandling.PreventImageCanvasInteraction
+                var editingFlags = _camSelectionHandling.PreventCameraInteraction | _camSelectionHandling.PreventImageCanvasInteraction |  drawnType != typeof(Texture2D)
                                        ? T3Ui.EditingFlags.PreventMouseInteractions
                                        : T3Ui.EditingFlags.None;
 
