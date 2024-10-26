@@ -157,7 +157,7 @@ public sealed partial class Symbol
 
     private void RemoveConnections(IEnumerable<ConnectionEntry> connectionsToRemoveWithinSymbol)
     {
-        foreach (var entry in connectionsToRemoveWithinSymbol.OrderByDescending(x => x.ConnectionIndex).ThenByDescending(x => x.MultiInputIndex))
+        foreach (var entry in connectionsToRemoveWithinSymbol.OrderByDescending(x => x.ConnectionIndex))
         {
             Connections.RemoveAt(entry.ConnectionIndex);
             foreach (var child in _childrenCreatedFromMe)

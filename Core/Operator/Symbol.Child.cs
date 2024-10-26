@@ -507,7 +507,7 @@ public partial class Symbol
             }
             
             // ... and add the connections again
-            foreach (var entry in connectionEntriesToReplace.OrderBy(x => x.ConnectionIndex).ThenBy(x => x.MultiInputIndex))
+            foreach (var entry in connectionEntriesToReplace.OrderBy(x => x.ConnectionIndex))
             {
                 var connection = entry.Connection;
                 Parent.AddConnection(connection, entry.MultiInputIndex);
