@@ -53,13 +53,6 @@
       }
     },
     {
-      "ChildId": "0abf2269-4678-4168-a105-f182799920a5"/*RadialPoints*/,
-      "Position": {
-        "X": -502.9629,
-        "Y": 922.7821
-      }
-    },
-    {
       "ChildId": "0d26827b-af65-4b61-8729-7fc3f3e5e087"/*RepeatAtGPoints*/,
       "Comment": "We change connection type.",
       "Position": {

@@ -5,7 +5,7 @@
 #define PI 3.14159265359f
 #endif
 
-#pragma warning(disable : 4008)
+#pragma warning(disable : 4118)
 const static float NAN = sqrt(-1);
 
 #ifndef mod

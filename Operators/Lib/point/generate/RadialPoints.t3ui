@@ -161,7 +161,7 @@
       "UseVec2Control": "BiasAndGain"
     },
     {
-      "InputId": "f6986f68-851b-4cd1-ae59-bf189aa1698e"/*OffsetPosition*/,
+      "InputId": "f6986f68-851b-4cd1-ae59-bf189aa1698e"/*OffsetCenter*/,
       "Position": {
         "X": -150.41754,
         "Y": 1016.6262

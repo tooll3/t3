@@ -98,7 +98,7 @@
       }
     },
     {
-      "Id": "f6986f68-851b-4cd1-ae59-bf189aa1698e"/*OffsetPosition*/,
+      "Id": "f6986f68-851b-4cd1-ae59-bf189aa1698e"/*OffsetCenter*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,

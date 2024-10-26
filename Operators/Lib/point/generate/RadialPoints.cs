@@ -67,9 +67,9 @@ internal sealed class RadialPoints : Instance<RadialPoints>
         [Input(Guid = "3ee710be-8954-431b-8d3a-38f7f03f0f02")]
         public readonly InputSlot<float> W = new InputSlot<float>();
 
-        [Input(Guid = "526cf26b-6cf6-4cba-be2a-4819c2a422bf")]
-        public readonly InputSlot<float> WOffset = new InputSlot<float>();
-
         [Input(Guid = "8fd178b9-877a-43ac-9e03-3fc1c98faf21")]
         public readonly InputSlot<System.Numerics.Vector3> PointScale = new InputSlot<System.Numerics.Vector3>();
+
+        [Input(Guid = "526cf26b-6cf6-4cba-be2a-4819c2a422bf")]
+        public readonly InputSlot<float> WOffset = new InputSlot<float>();
 }
