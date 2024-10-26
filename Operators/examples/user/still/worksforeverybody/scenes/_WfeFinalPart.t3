@@ -1589,11 +1589,11 @@
       "Outputs": []
     },
     {
-      "Id": "535e34fd-2e4a-4cfa-9eae-2c603843de03"/*SpreadPointAttributes*/,
+      "Id": "535e34fd-2e4a-4cfa-9eae-2c603843de03"/*MapPointAttributes*/,
       "SymbolId": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8",
       "InputValues": [
         {
-          "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*WCurve*/,
+          "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*MappingCurve*/,
           "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {

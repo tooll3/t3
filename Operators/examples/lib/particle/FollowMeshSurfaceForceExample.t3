@@ -91,11 +91,11 @@
       "Outputs": []
     },
     {
-      "Id": "3100a557-1e74-421f-aa48-618965161fe9"/*SpreadPointAttributes*/,
+      "Id": "3100a557-1e74-421f-aa48-618965161fe9"/*MapPointAttributes*/,
       "SymbolId": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8",
       "InputValues": [
         {
-          "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*WCurve*/,
+          "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*MappingCurve*/,
           "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
@@ -167,7 +167,7 @@
           }
         },
         {
-          "Id": "7634c477-6891-4fac-8f8a-3e580cb02277"/*Mode*/,
+          "Id": "7634c477-6891-4fac-8f8a-3e580cb02277"/*InputMode*/,
           "Type": "System.Int32",
           "Value": 1
         }
@@ -403,11 +403,11 @@
       "Outputs": []
     },
     {
-      "Id": "b7128776-9996-4f02-a3c8-6e09a19e9a9f"/*SpreadPointAttributes*/,
+      "Id": "b7128776-9996-4f02-a3c8-6e09a19e9a9f"/*MapPointAttributes*/,
       "SymbolId": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8",
       "InputValues": [
         {
-          "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*WCurve*/,
+          "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*MappingCurve*/,
           "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
@@ -439,7 +439,7 @@
           }
         },
         {
-          "Id": "7634c477-6891-4fac-8f8a-3e580cb02277"/*Mode*/,
+          "Id": "7634c477-6891-4fac-8f8a-3e580cb02277"/*InputMode*/,
           "Type": "System.Int32",
           "Value": 0
         },

@@ -721,7 +721,7 @@
       "Outputs": []
     },
     {
-      "Id": "7019dd4a-0ad4-494e-a40f-b645c92dffca"/*SpreadPointAttributes*/,
+      "Id": "7019dd4a-0ad4-494e-a40f-b645c92dffca"/*MapPointAttributes*/,
       "SymbolId": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8",
       "InputValues": [
         {

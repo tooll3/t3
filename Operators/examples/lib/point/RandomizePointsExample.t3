@@ -1213,11 +1213,11 @@
       "Outputs": []
     },
     {
-      "Id": "ffa59d51-280e-4d62-8cb7-4f138456b420"/*SpreadPointAttributes*/,
+      "Id": "ffa59d51-280e-4d62-8cb7-4f138456b420"/*MapPointAttributes*/,
       "SymbolId": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8",
       "InputValues": [
         {
-          "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*WCurve*/,
+          "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*MappingCurve*/,
           "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
@@ -1280,7 +1280,7 @@
           }
         },
         {
-          "Id": "d5a5862b-d3a2-4e6e-ad54-32cff7ced0fd"/*Amount*/,
+          "Id": "d5a5862b-d3a2-4e6e-ad54-32cff7ced0fd"/*Strength*/,
           "Type": "System.Single",
           "Value": 1.25
         }

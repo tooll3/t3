@@ -48,7 +48,7 @@
       }
     },
     {
-      "ChildId": "150f01c3-fba9-4b79-bf10-c34b8d55db36"/*SpreadPointAttributes*/,
+      "ChildId": "150f01c3-fba9-4b79-bf10-c34b8d55db36"/*MapPointAttributes*/,
       "Comment": "We assign some colors to these points.",
       "Position": {
         "X": 507.34485,
@@ -164,7 +164,7 @@
       }
     },
     {
-      "ChildId": "444580e6-65be-42f5-8bf2-127463083620"/*SpreadPointAttributes*/,
+      "ChildId": "444580e6-65be-42f5-8bf2-127463083620"/*MapPointAttributes*/,
       "Position": {
         "X": 628.53546,
         "Y": 2479.985

@@ -1,0 +1,223 @@
+{
+  "Id": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8"/*MapPointAttributes*/,
+  "Description": "Sets the points attribute and color from input attributes. This can be very powerful to remap point attributes.\n\nDifferent modes allow you to...\n- distribute the curve range along all points\n- or use different mapping ranges.\n\nYou can also connect a texture to provide an override for the curve.",
+  "InputUis": [
+    {
+      "InputId": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*MappingCurve*/,
+      "Position": {
+        "X": -233.01074,
+        "Y": 1357.3896
+      },
+      "Description": "Defines the actual remapping curve. \nNote that only the x-range between 0 and 1 is used."
+    },
+    {
+      "InputId": "38046ede-e786-4cb1-ac17-de6cb7b91c32"/*Range*/,
+      "Position": {
+        "X": -153.77283,
+        "Y": 824.7957
+      },
+      "Description": "Can rescale the range input range. Smaller value will effectively narrow the range or increase the number of repetitions respectively."
+    },
+    {
+      "InputId": "6d16847c-a560-4835-b120-3fb8c278530a"/*WriteTo*/,
+      "Position": {
+        "X": -153.77283,
+        "Y": 1049.7959
+      },
+      "GroupTitle": "Write Attributes",
+      "Description": "Defines to which attribute the result should be written to."
+    },
+    {
+      "InputId": "7634c477-6891-4fac-8f8a-3e580cb02277"/*InputMode*/,
+      "Position": {
+        "X": -153.77283,
+        "Y": 914.7957
+      },
+      "Description": "Defines how to normalized input value is computed for each point.\n\n- The default will use 0 for the first point and 1 for the last. Interpolating between.\n- F1 and F2 will use the point attributes. This can be very powerful, e.g. remap the age of particles to a color or size.\n- Random will assign a random value between 0 and 1 for each point.\n"
+    },
+    {
+      "InputId": "7be4e933-6183-4e9c-9c10-0468b46f2a45"/*WriteColor*/,
+      "Position": {
+        "X": -153.77283,
+        "Y": 1094.7959
+      },
+      "GroupTitle": "Write Colors",
+      "Description": "Defines how the gradient colors are applied."
+    },
+    {
+      "InputId": "7c944690-d5b2-4894-a178-97593ecd797a"/*Gradient*/,
+      "Position": {
+        "X": -233.01074,
+        "Y": 1426.3896
+      },
+      "Description": "Defines the colors to be applied for remapped input range.\n\nTip: Try to use a HOLD interpolated gradient with Random input mode."
+    },
+    {
+      "InputId": "82a1a932-f5c3-41d5-9539-9b21663aee1b"/*Phase*/,
+      "Position": {
+        "X": -153.77283,
+        "Y": 869.7957
+      },
+      "Description": "Allows the range to swifted. This be useful to build transitions or cycle through repetitive configurations."
+    },
+    {
+      "InputId": "840aa616-6983-4840-a58b-d5396a91c2f9"/*Mapping*/,
+      "Position": {
+        "X": -153.77283,
+        "Y": 959.7957
+      },
+      "GroupTitle": "Mapping Range",
+      "Description": "Allows the initial input value to be remapped. \nCombining this with Range and Phase can be powerful to build transitions for animated effects."
+    },
+    {
+      "InputId": "ba00fa7a-fcda-48da-a4c7-f2fe97997e50"/*WriteMode*/,
+      "Position": {
+        "X": -153.77283,
+        "Y": 1004.79565
+      },
+      "Description": "Allow different configuration of how the new values should be applied."
+    },
+    {
+      "InputId": "cd91ff45-7f21-40fd-86c8-8dd95204c3b3"/*ValueTexture*/,
+      "Position": {
+        "X": -86.86752,
+        "Y": 1300.8027
+      },
+      "Description": "Allows to override the curve with an texture."
+    },
+    {
+      "InputId": "d504c3f9-290f-4a73-bf9d-f9266ea955f6"/*Points*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -571.369,
+        "Y": 1144.3662
+      }
+    },
+    {
+      "InputId": "d5a5862b-d3a2-4e6e-ad54-32cff7ced0fd"/*Strength*/,
+      "Position": {
+        "X": -153.77283,
+        "Y": 779.7957
+      },
+      "Description": "Defines how the effect is apply,  with 0 effectively bypassing the effect.\n\nNote the values below 0 or above 1 are allowed but might yield unpredicicatable effects.",
+      "Min": 0.0,
+      "Max": 1.0
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "08a9d12e-d97b-4e40-957e-4afb9162ebca"/*FloatsToBuffer*/,
+      "Position": {
+        "X": -3.7728271,
+        "Y": 779.7957
+      }
+    },
+    {
+      "ChildId": "11a61704-32d6-49b7-8580-e13b82ebbb83"/*StructuredBufferWithViews*/,
+      "Position": {
+        "X": -257.46603,
+        "Y": 1617.881
+      }
+    },
+    {
+      "ChildId": "1256179c-554a-4585-9541-71707ea183b7"/*IntsToBuffer*/,
+      "Position": {
+        "X": -3.7728271,
+        "Y": 914.7957
+      }
+    },
+    {
+      "ChildId": "3841f0be-b63c-4fda-8c7f-c3cd80fc9d0b"/*ExecuteBufferUpdate*/,
+      "Position": {
+        "X": 569.93933,
+        "Y": 1596.843
+      }
+    },
+    {
+      "ChildId": "4b10b4a9-f257-420b-bddb-ff1c87b401c6"/*SamplerState*/,
+      "Position": {
+        "X": 198.62561,
+        "Y": 1509.2986
+      }
+    },
+    {
+      "ChildId": "658f3d9b-ff59-4acb-b285-f782adabae76"/*CalcDispatchCount*/,
+      "Position": {
+        "X": 152.93085,
+        "Y": 756.4321
+      }
+    },
+    {
+      "ChildId": "905228f2-25c0-4494-a98a-9293e4f9e976"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 405.26486,
+        "Y": 1200.8788
+      }
+    },
+    {
+      "ChildId": "9710e80e-e4d1-4fc6-8b69-515c3e9a8eb8"/*GetBufferComponents*/,
+      "Position": {
+        "X": 198.62561,
+        "Y": 1552.2986
+      }
+    },
+    {
+      "ChildId": "a727cbe7-3609-41c1-a2ab-af348b583d3e"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 66.98926,
+        "Y": 1426.3896
+      }
+    },
+    {
+      "ChildId": "a75abfbb-426a-47d3-9018-1239afc4235f"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 213.13248,
+        "Y": 1300.8027
+      }
+    },
+    {
+      "ChildId": "b3370e7d-da15-48dc-996e-30512f45dd3e"/*ComputeShader*/,
+      "Position": {
+        "X": -6.989746,
+        "Y": 727.3711
+      }
+    },
+    {
+      "ChildId": "c07a4962-64ae-48aa-b517-58f7fb7eba08"/*CurvesToTexture*/,
+      "Position": {
+        "X": -83.01074,
+        "Y": 1357.3896
+      }
+    },
+    {
+      "ChildId": "e6858bcc-16ce-45dc-a878-0ebe319e7872"/*GradientsToTexture*/,
+      "Position": {
+        "X": -83.01074,
+        "Y": 1426.3896
+      }
+    },
+    {
+      "ChildId": "ef24f862-a9d4-4fa7-82d5-9373a92513cf"/*FirstValidTexture*/,
+      "Position": {
+        "X": 63.132477,
+        "Y": 1300.8027
+      }
+    },
+    {
+      "ChildId": "fbdc7366-82a7-4cb1-bddc-7acab908bcd3"/*GetBufferComponents*/,
+      "Position": {
+        "X": -421.36926,
+        "Y": 1144.3662
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "39c62e1e-7c63-4a88-9923-3f7f5fffbfbf"/*Output*/,
+      "Position": {
+        "X": 699.9392,
+        "Y": 1596.843
+      }
+    }
+  ]
+}

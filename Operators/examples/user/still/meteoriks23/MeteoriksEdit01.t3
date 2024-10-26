@@ -1086,11 +1086,11 @@
       "Outputs": []
     },
     {
-      "Id": "88a442e6-d8fc-42c7-9af3-f1d3f5b0c94b"/*SpreadPointAttributes*/,
+      "Id": "88a442e6-d8fc-42c7-9af3-f1d3f5b0c94b"/*MapPointAttributes*/,
       "SymbolId": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8",
       "InputValues": [
         {
-          "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*WCurve*/,
+          "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*MappingCurve*/,
           "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {

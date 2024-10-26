@@ -209,7 +209,7 @@
       "Outputs": []
     },
     {
-      "Id": "150f01c3-fba9-4b79-bf10-c34b8d55db36"/*SpreadPointAttributes*/,
+      "Id": "150f01c3-fba9-4b79-bf10-c34b8d55db36"/*MapPointAttributes*/,
       "SymbolId": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8",
       "InputValues": [
         {
@@ -603,7 +603,7 @@
       "Outputs": []
     },
     {
-      "Id": "444580e6-65be-42f5-8bf2-127463083620"/*SpreadPointAttributes*/,
+      "Id": "444580e6-65be-42f5-8bf2-127463083620"/*MapPointAttributes*/,
       "SymbolId": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8",
       "InputValues": [
         {

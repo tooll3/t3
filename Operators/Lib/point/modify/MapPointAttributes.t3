@@ -1,8 +1,8 @@
 {
-  "Id": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8"/*SpreadPointAttributes*/,
+  "Id": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8"/*MapPointAttributes*/,
   "Inputs": [
     {
-      "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*WCurve*/,
+      "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*MappingCurve*/,
       "DefaultValue": {
         "Curve": {
           "PreCurve": "Constant",
@@ -10,13 +10,13 @@
           "Keys": [
             {
               "Time": 0.0,
-              "Value": 1.0,
+              "Value": 0.0,
               "InType": "Linear",
               "OutType": "Linear",
               "InEditMode": "Linear",
               "OutEditMode": "Linear",
-              "InTangentAngle": 0.0,
-              "OutTangentAngle": 3.141592653589793
+              "InTangentAngle": 0.7853981633974483,
+              "OutTangentAngle": 3.9269908169872414
             },
             {
               "Time": 1.0,
@@ -25,8 +25,8 @@
               "OutType": "Linear",
               "InEditMode": "Linear",
               "OutEditMode": "Linear",
-              "InTangentAngle": 0.0,
-              "OutTangentAngle": -3.141592653589793
+              "InTangentAngle": 0.7853981633974483,
+              "OutTangentAngle": -2.356194490192345
             }
           ]
         }
@@ -37,8 +37,16 @@
       "DefaultValue": 1.0
     },
     {
-      "Id": "7634c477-6891-4fac-8f8a-3e580cb02277"/*Mode*/,
+      "Id": "6d16847c-a560-4835-b120-3fb8c278530a"/*WriteTo*/,
+      "DefaultValue": 1
+    },
+    {
+      "Id": "7634c477-6891-4fac-8f8a-3e580cb02277"/*InputMode*/,
       "DefaultValue": 0
+    },
+    {
+      "Id": "7be4e933-6183-4e9c-9c10-0468b46f2a45"/*WriteColor*/,
+      "DefaultValue": 2
     },
     {
       "Id": "7c944690-d5b2-4894-a178-97593ecd797a"/*Gradient*/,
@@ -79,7 +87,7 @@
       "DefaultValue": 0
     },
     {
-      "Id": "ba00fa7a-fcda-48da-a4c7-f2fe97997e50"/*ApplyMode*/,
+      "Id": "ba00fa7a-fcda-48da-a4c7-f2fe97997e50"/*WriteMode*/,
       "DefaultValue": 0
     },
     {
@@ -91,7 +99,7 @@
       "DefaultValue": null
     },
     {
-      "Id": "d5a5862b-d3a2-4e6e-ad54-32cff7ced0fd"/*Amount*/,
+      "Id": "d5a5862b-d3a2-4e6e-ad54-32cff7ced0fd"/*Strength*/,
       "DefaultValue": 1.0
     }
   ],
@@ -156,12 +164,6 @@
       "Outputs": []
     },
     {
-      "Id": "82dc9cf9-9fd9-4e6d-a7f2-bc0197b08cdd"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "905228f2-25c0-4494-a98a-9293e4f9e976"/*ComputeShaderStage*/,
       "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
       "InputValues": [
@@ -202,7 +204,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\modify\\SpreadPointAttributes.hlsl"
+          "Value": "/Lib/points/modify/MapPointAttributes.hlsl"
         }
       ],
       "Outputs": []
@@ -321,6 +323,18 @@
       "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
     },
     {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "6d16847c-a560-4835-b120-3fb8c278530a",
+      "TargetParentOrChildId": "1256179c-554a-4585-9541-71707ea183b7",
+      "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "7be4e933-6183-4e9c-9c10-0468b46f2a45",
+      "TargetParentOrChildId": "1256179c-554a-4585-9541-71707ea183b7",
+      "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
+    },
+    {
       "SourceParentOrChildId": "905228f2-25c0-4494-a98a-9293e4f9e976",
       "SourceSlotId": "c382284f-7e37-4eb0-b284-bc735247f26b",
       "TargetParentOrChildId": "3841f0be-b63c-4fda-8c7f-c3cd80fc9d0b",
@@ -343,12 +357,6 @@
       "SourceSlotId": "d7918fd8-906e-424d-8c5c-9631941cfc9d",
       "TargetParentOrChildId": "658f3d9b-ff59-4acb-b285-f782adabae76",
       "TargetSlotId": "f79ccc37-05fd-4f81-97d6-6c1cafca180c"
-    },
-    {
-      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
-      "SourceSlotId": "7634c477-6891-4fac-8f8a-3e580cb02277",
-      "TargetParentOrChildId": "82dc9cf9-9fd9-4e6d-a7f2-bc0197b08cdd",
-      "TargetSlotId": "01809b63-4b4a-47be-9588-98d5998ddb0c"
     },
     {
       "SourceParentOrChildId": "658f3d9b-ff59-4acb-b285-f782adabae76",

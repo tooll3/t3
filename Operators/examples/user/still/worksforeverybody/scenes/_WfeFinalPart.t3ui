@@ -664,7 +664,7 @@
       }
     },
     {
-      "ChildId": "535e34fd-2e4a-4cfa-9eae-2c603843de03"/*SpreadPointAttributes*/,
+      "ChildId": "535e34fd-2e4a-4cfa-9eae-2c603843de03"/*MapPointAttributes*/,
       "Position": {
         "X": -417.10657,
         "Y": -1742.2369
