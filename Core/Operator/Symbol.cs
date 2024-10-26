@@ -277,7 +277,7 @@ public sealed partial class Symbol : IDisposable, IResource
 
         foreach (var me in _childrenCreatedFromMe)
         {
-            me.DestroyChild(symbolChild);
+            me.DestroyChildInstances(symbolChild);
         }
 
         if (removedFromSymbol)
@@ -338,7 +338,7 @@ public sealed partial class Symbol : IDisposable, IResource
         }
     }
 
-    internal bool NeedsTypeUpdate { get; private set; } = true;
+    private bool NeedsTypeUpdate { get; set; } = true;
     //private IEnumerable<Instance> _instancesOfSelf => _childrenCreatedFromMe.SelectMany(x => x.Instances);
     private ConcurrentDictionary<Guid, Child> _children = new();
     private readonly SynchronizedCollection<Child> _childrenCreatedFromMe = new();

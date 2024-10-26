@@ -290,15 +290,9 @@ internal class EditorSymbolPackage : SymbolPackage
             return false;
         }
         
-        ReplaceRootInstanceWith(rootInstance);
-        return true;
-    }
-
-    private void ReplaceRootInstanceWith(Instance rootInstance)
-    {
-        OnRootInstanceDisposed();
         RootInstance = rootInstance;
         rootInstance.Disposing += OnRootInstanceDisposed;
+        return true;
     }
 
     private void OnRootInstanceDisposed()

@@ -92,7 +92,7 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
         Disposing?.Invoke();
         foreach (var child in ChildInstances.Values)
         {
-            child.Dispose();
+            child.SymbolChild!.DisposeOfInstance(child);
         }
         Dispose(true);
     }

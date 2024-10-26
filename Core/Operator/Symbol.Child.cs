@@ -379,7 +379,7 @@ public partial class Symbol
             return new Guid(newGuidBytes);
         }
 
-        internal void DestroyChild(Child child)
+        internal void DestroyChildInstances(Child child)
         {
             var idToDestroy = child.Id;
             foreach (var instance in _instancesOfSelf)
@@ -395,15 +395,17 @@ public partial class Symbol
         {
             for (int i = _instancesOfSelf.Count - 1; i >= 0; i--)
             {
-                DestroyInstance(_instancesOfSelf[i]);
-                _instancesOfSelf.RemoveAt(i);
+                DestroyAndRemoveInstanceAtIndex(i, out _);
             }
         }
 
-        private void DestroyInstance(Instance instance)
+        private void DestroyAndRemoveInstanceAtIndex(int index, out Instance? parent)
         {
-            instance.Parent?.ChildInstances.Remove(instance.SymbolChildId);
+            var instance = _instancesOfSelf[index];
+            parent = instance.Parent;
+            parent?.ChildInstances.Remove(instance.SymbolChildId);
             instance.Dispose();
+            _instancesOfSelf.RemoveAt(index);
         }
 
         internal void Dispose()
@@ -496,18 +498,15 @@ public partial class Symbol
             // Recreate all instances fresh
             for (var index = _instancesOfSelf.Count - 1; index >= 0; index--)
             {
-                var instance = _instancesOfSelf[index];
-                DestroyInstance(instance);
-                _instancesOfSelf.RemoveAt(index);
+                DestroyAndRemoveInstanceAtIndex(index, out var parent);
 
-                if (!TryCreateNewInstance(instance.Parent, newInstance: out _))
+                if (!TryCreateNewInstance(parent, newInstance: out _))
                 {
                     Log.Error($"Could not recreate instance of symbol: {Symbol.Name} with parent: {Parent.Name}");
                 }
             }
             
             // ... and add the connections again
-            Dictionary<GuidPair, int> multiInputIndexMap = new();
             foreach (var entry in connectionEntriesToReplace.OrderBy(x => x.ConnectionIndex).ThenBy(x => x.MultiInputIndex))
             {
                 var connection = entry.Connection;
@@ -515,8 +514,6 @@ public partial class Symbol
             }
         }
         
-        private readonly record struct GuidPair(in Guid Source, in Guid Target, in Guid SourceParentOrChildId, in Guid TargetParentOrChildId);
-
         internal bool TryCreateNewInstance(Instance parentInstance, [NotNullWhen(true)] out Instance newInstance)
         {
             if (!TryCreateInstance(parentInstance, out newInstance, out var reason))
@@ -786,6 +783,16 @@ public partial class Symbol
             {
                 Instance.SortInputSlotsByDefinitionOrder(instance);
             }
+        }
+
+        internal void DisposeOfInstance(Instance child)
+        {
+            if (!_instancesOfSelf.Remove(child))
+            {
+                Log.Error($"Could not remove instance {child} from {this}");
+            }
+            
+            child.Dispose();
         }
     }
 }
