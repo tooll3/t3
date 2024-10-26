@@ -215,7 +215,7 @@ internal sealed class _SketchImpl : Instance<_SketchImpl>
                                     //                              BrushColor.GetValue(context).Z,
                                     //                              BrushColor.GetValue(context).W
                                     //                             ),
-                                    W = visibleBrushSize / 2 + 0.002f, // prevent getting too small
+                                    F1 = visibleBrushSize / 2 + 0.002f, // prevent getting too small
                                 });
                 AppendPoint(Point.Separator(), advanceIndex: false);
                 _currentStrokeLength++;
@@ -233,7 +233,7 @@ internal sealed class _SketchImpl : Instance<_SketchImpl>
                     if (!(distanceToPoint < visibleBrushSize * 0.02f))
                         continue;
 
-                    CurrentPointList.TypedElements[index].W = float.NaN;
+                    CurrentPointList.TypedElements[index].F1 = float.NaN;
                     wasModified = true;
                 }
 

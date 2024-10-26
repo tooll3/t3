@@ -51,7 +51,7 @@ internal sealed class RadialPointsCpu : Instance<RadialPointsCpu>
             var p = new Point
                         {
                             Position = vInAxis,
-                            W = MathUtils.Lerp(thickness, thickness + thicknessOffset, f),
+                            F1 = MathUtils.Lerp(thickness, thickness + thicknessOffset, f),
                             Orientation = rot
                         };
             _pointList[index] = p;

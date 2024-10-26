@@ -73,7 +73,7 @@ internal sealed class LoadObjEdges : Instance<LoadObjEdges>, IDescriptiveFilenam
                                                       {
                                                           Position = new Vector3(pFrom.X, pFrom.Y, pFrom.Z),
                                                           Orientation = Quaternion.Identity,
-                                                          W = 1
+                                                          F1 = 1
                                                       };
                 index++;
 
@@ -82,7 +82,7 @@ internal sealed class LoadObjEdges : Instance<LoadObjEdges>, IDescriptiveFilenam
                                                       {
                                                           Position = new Vector3(pTo.X, pTo.Y, pTo.Z),
                                                           Orientation = Quaternion.Identity,
-                                                          W = 1
+                                                          F1 = 1
                                                       };                    
                 index++;
 

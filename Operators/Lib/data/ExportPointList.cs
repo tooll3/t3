@@ -44,7 +44,7 @@ internal sealed class ExportPointList : Instance<ExportPointList>
                     var doubleNanCount = 0;
                     foreach (var p in pointList.TypedElements)
                     {
-                        if (!float.IsNaN(p.W))
+                        if (!float.IsNaN(p.F1))
                         {
                             lastItemWasNan = false;
                             continue;
@@ -63,7 +63,7 @@ internal sealed class ExportPointList : Instance<ExportPointList>
                     var filteredIndex = 0;
                     foreach (var p in pointList.TypedElements)
                     {
-                        if (!float.IsNaN(p.W))
+                        if (!float.IsNaN(p.F1))
                         {
                             filterPointList[filteredIndex] = p;
                             filteredIndex ++;

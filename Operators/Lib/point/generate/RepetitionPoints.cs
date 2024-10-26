@@ -60,11 +60,11 @@ internal sealed class RepetitionPoints : Instance<RepetitionPoints>
             var pos = Vector4.Transform(v, transform);
             
             _pointList.TypedElements[i].Position = new Vector3(pos.X, pos.Y, pos.Z);
-            _pointList.TypedElements[i].W = scale.Length() / Vector3.One.Length() + startW;
+            _pointList.TypedElements[i].F1 = scale.Length() / Vector3.One.Length() + startW;
             _pointList.TypedElements[i].Orientation =  new Quaternion(rotation.X, rotation.Y, rotation.Z, rotation.W);
             _pointList.TypedElements[i].Color = new Vector4(1, 1, 1, 1);
-            _pointList.TypedElements[i].Selected = 1;
-            _pointList.TypedElements[i].Stretch = Vector3.One;
+            _pointList.TypedElements[i].F2 = 1;
+            _pointList.TypedElements[i].Scale = Vector3.One;
         }
             
         if (addSeparator)

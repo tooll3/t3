@@ -478,11 +478,11 @@ internal sealed class LineFont
                 _tempPoints.Add(new Point
                                     {
                                         Position = position,
-                                        W = 1,
+                                        F1 = 1,
                                         Orientation = Quaternion.Identity,
                                         Color = Vector4.One,
-                                        Stretch = Vector3.One,
-                                        Selected = 1,
+                                        Scale = Vector3.One,
+                                        F2 = 1,
                                     });
             }
 
@@ -507,7 +507,7 @@ internal sealed class LineFont
             var p2Valid = false;
             for (var pointIndex = 0; pointIndex <= points.Length + 2; pointIndex++)
             {
-                p0Valid = pointIndex >= 0 && pointIndex < points.Length  && !float.IsNaN(points[pointIndex].W);
+                p0Valid = pointIndex >= 0 && pointIndex < points.Length  && !float.IsNaN(points[pointIndex].F1);
                 if (p0Valid)
                     p0 = points[pointIndex].Position;
                     

@@ -57,7 +57,7 @@ internal sealed class PrepareSvgLineTransition : Instance<PrepareSvgLineTransiti
         segments.Clear();
         for (var pointIndex = 0; pointIndex < sourcePoints.NumElements; pointIndex++)
         {
-            if (float.IsNaN(sourcePoints.TypedElements[pointIndex].W))
+            if (float.IsNaN(sourcePoints.TypedElements[pointIndex].F1))
             {
                 var hasAtLeastTwoPoints = indexWithinSegment > 1;
                 if (hasAtLeastTwoPoints)
@@ -153,7 +153,7 @@ internal sealed class PrepareSvgLineTransition : Instance<PrepareSvgLineTransiti
                         break;
                 }
 
-                sourcePoints.TypedElements[pi].W = w;
+                sourcePoints.TypedElements[pi].F1 = w;
             }
         }
 

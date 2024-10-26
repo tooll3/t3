@@ -24,10 +24,10 @@ internal sealed class LinePointsCpu : Instance<LinePointsCpu>
         var array = addSeparator ? _pointListWithSeparator : _pointList;
             
         array.TypedElements[0].Position = from;
-        array.TypedElements[0].W = w;
+        array.TypedElements[0].F1 = w;
         array.TypedElements[0].Orientation = rot;
         array.TypedElements[1].Position = to;
-        array.TypedElements[1].W = w + wOffset;
+        array.TypedElements[1].F1 = w + wOffset;
         array.TypedElements[1].Orientation = rot;
             
         ResultList.Value = array;

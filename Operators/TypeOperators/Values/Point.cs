@@ -50,10 +50,10 @@ public sealed class Point : Instance<Point>, ITransformable
         var array = _addSeparator ? _pointListWithSeparator : _pointList;
         OutPosition.Value = pos;
         array.TypedElements[0].Position = pos;
-        array.TypedElements[0].W = W.GetValue(context);
+        array.TypedElements[0].F1 = F1.GetValue(context);
         array.TypedElements[0].Color = Color.GetValue(context);
-        array.TypedElements[0].Stretch = Extend.GetValue(context);
-        array.TypedElements[0].Selected = Selected.GetValue(context);
+        array.TypedElements[0].Scale = Size.GetValue(context) * Scale.GetValue(context);
+        array.TypedElements[0].F2 = F2.GetValue(context);
         array.TypedElements[0].Orientation = rot;
         ResultList.Value = array;
             
@@ -101,24 +101,27 @@ public sealed class Point : Instance<Point>, ITransformable
     [Input(Guid = "a0a453db-d8f1-415a-9a98-3c88a25b15e7")]
     public readonly InputSlot<System.Numerics.Vector3> Position = new();
 
+    [Input(Guid = "130B5C11-66DD-4C0E-AC67-924554BAD2D8")]
+    public readonly InputSlot<System.Numerics.Vector3> Size = new();
+
+    [Input(Guid = "3CDC9CAB-36D4-431F-B9BD-C8D8F49EE465")]
+    public readonly InputSlot<float> Scale = new();
+    
+    [Input(Guid = "2d7d85ce-7b5e-4e86-bae2-88a7c4f7a2e5")]
+    public readonly InputSlot<float> F1 = new();
+        
+    [Input(Guid = "CA12DF13-7529-4EDE-B6FC-CE8AEBA4F33E")]
+    public readonly InputSlot<float> F2 = new();
+    
+    [Input(Guid = "34AD759E-9A81-4D7E-9024-5ABACC279895")]
+    public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        
     [Input(Guid = "55a3370f-1768-414f-b38d-4accc5e93914")]
     public readonly InputSlot<System.Numerics.Vector3> RotationAxis = new();
 
     [Input(Guid = "E9859381-EB88-4856-91C5-60D30AC6035A")]
     public readonly InputSlot<float> RotationAngle = new();
-
-    [Input(Guid = "2d7d85ce-7b5e-4e86-bae2-88a7c4f7a2e5")]
-    public readonly InputSlot<float> W = new();
-        
-    [Input(Guid = "34AD759E-9A81-4D7E-9024-5ABACC279895")]
-    public readonly InputSlot<System.Numerics.Vector4> Color = new();
-
-    [Input(Guid = "130B5C11-66DD-4C0E-AC67-924554BAD2D8")]
-    public readonly InputSlot<System.Numerics.Vector3> Extend = new();
-        
-    [Input(Guid = "CA12DF13-7529-4EDE-B6FC-CE8AEBA4F33E")]
-    public readonly InputSlot<float> Selected = new();
-        
+    
     [Input(Guid = "53CDE701-435F-42E4-B598-DB0E607A238C")]
     public readonly InputSlot<bool> AddSeparator = new();
         
