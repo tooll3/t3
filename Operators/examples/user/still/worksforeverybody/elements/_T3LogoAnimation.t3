@@ -182,7 +182,7 @@
       "SymbolId": "2dc5c9d1-ea93-4597-a4d9-7b610aad603a",
       "InputValues": [
         {
-          "Id": "ba7ffda2-f9f6-440d-a174-7339844835fa"/*BlendValue*/,
+          "Id": "ba7ffda2-f9f6-440d-a174-7339844835fa"/*BlendFactor*/,
           "Type": "System.Single",
           "Value": 0.01
         },
@@ -466,7 +466,7 @@
       "SymbolId": "4ae9e2f5-7cb3-40b0-a662-0662e8cb7c68",
       "InputValues": [
         {
-          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*LengthFactor*/,
+          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*Length*/,
           "Type": "System.Single",
           "Value": 0.216
         },
@@ -688,7 +688,7 @@
           "Value": 0.0
         },
         {
-          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*LengthFactor*/,
+          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*Length*/,
           "Type": "System.Single",
           "Value": 1.069
         },

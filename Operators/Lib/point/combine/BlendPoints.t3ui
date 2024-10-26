@@ -30,7 +30,7 @@
       "AddPadding": "True"
     },
     {
-      "InputId": "ba7ffda2-f9f6-440d-a174-7339844835fa"/*BlendValue*/,
+      "InputId": "ba7ffda2-f9f6-440d-a174-7339844835fa"/*BlendFactor*/,
       "Position": {
         "X": -551.6894,
         "Y": 616.0946

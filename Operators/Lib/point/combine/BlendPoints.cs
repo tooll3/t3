@@ -14,7 +14,7 @@ internal sealed class BlendPoints : Instance<BlendPoints>
     public readonly InputSlot<BufferWithViews> PointsB_ = new InputSlot<BufferWithViews>();
 
     [Input(Guid = "ba7ffda2-f9f6-440d-a174-7339844835fa")]
-    public readonly InputSlot<float> BlendValue = new InputSlot<float>();
+    public readonly InputSlot<float> BlendFactor = new InputSlot<float>();
 
     [Input(Guid = "EE8E9E15-CE18-4034-ABC6-DD56108C8A02")]
     public readonly InputSlot<float> Scatter = new InputSlot<float>();
@@ -31,11 +31,11 @@ internal sealed class BlendPoints : Instance<BlendPoints>
         
     private enum BlendModes
     {
-        Blend,
-        UseW1AsWeight,
-        UseW2AsWeight,
-        RangeBlend,
-        RangeBlendSmooth,
+        Mix,
+        UseA_F1,
+        UseB_F1,
+        MixWithSlidingRange,
+        MixWithSlidingRangeSmooth,
     }
         
     private enum PairingModes

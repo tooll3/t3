@@ -25,7 +25,7 @@
       "DefaultValue": 0
     },
     {
-      "Id": "58980e30-204b-40e2-9610-8482ff01a57c"/*SampleMode*/,
+      "Id": "58980e30-204b-40e2-9610-8482ff01a57c"/*RangeMode*/,
       "DefaultValue": 0
     },
     {
@@ -49,7 +49,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\modify\\ResampleLinePoints.hlsl"
+          "Value": "Resources/lib/points/modify/ResampleLinePoints.hlsl"
         }
       ],
       "Outputs": []

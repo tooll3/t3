@@ -599,7 +599,7 @@
           "Value": 0.0
         },
         {
-          "Id": "58980e30-204b-40e2-9610-8482ff01a57c"/*SampleMode*/,
+          "Id": "58980e30-204b-40e2-9610-8482ff01a57c"/*RangeMode*/,
           "Type": "System.Int32",
           "Value": 1
         },
@@ -698,7 +698,7 @@
           "Value": 0.0
         },
         {
-          "Id": "58980e30-204b-40e2-9610-8482ff01a57c"/*SampleMode*/,
+          "Id": "58980e30-204b-40e2-9610-8482ff01a57c"/*RangeMode*/,
           "Type": "System.Int32",
           "Value": 1
         },
