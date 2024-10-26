@@ -42,7 +42,6 @@ cbuffer IntParams : register(b2)
     int UsePointScale;
 };
 
-
 cbuffer FogParams : register(b3)
 {
     float4 FogColor;
@@ -85,14 +84,12 @@ psInput vsMain(uint id
     float tooCloseFactor = saturate(-posInCamera.z / FadeNearest - 1);
     output.color.a *= tooCloseFactor;
 
-    //float sizeFactor = UseWForSize > 0.5 ? pointDef.W : (isnan(pointDef.W) ? 0 : 1);
+    float sizeFxFactor = ScaleFX == 0
+                             ? 1
+                         : (ScaleFX == 1) ? pointDef.FX1
+                                          : pointDef.FX2;
 
-    float sizeFxFactor = ScaleFX == 0 
-        ? 1
-        : (ScaleFX == 1) ? pointDef.FX1 : pointDef.FX2;
- 
-
-    float2 s = PointSize * sizeFxFactor * (UsePointScale  ? pointDef.Scale.xy : 1);
+    float2 s = PointSize * sizeFxFactor * (UsePointScale ? pointDef.Scale.xy : 1);
     quadPosInCamera.xy += quadPos.xy * 0.10 * s;
     output.position = mul(quadPosInCamera, CameraToClipSpace);
     float4 posInWorld = mul(posInObject, ObjectToWorld);

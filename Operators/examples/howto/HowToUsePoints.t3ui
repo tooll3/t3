@@ -92,8 +92,8 @@
       "ChildId": "11de5802-3cd1-4b92-8ddc-bd99a6476198"/*AddNoise*/,
       "Comment": "We add some perlin noice driven by the Time.\n\nIf you don't see the animation, please enable IdleMotion.",
       "Position": {
-        "X": -2355.0696,
-        "Y": 1218.2592
+        "X": -2565.9827,
+        "Y": 1221.9922
       }
     },
     {
@@ -171,6 +171,13 @@
       "Position": {
         "X": -1090.4968,
         "Y": 636.749
+      }
+    },
+    {
+      "ChildId": "313c148a-8ebb-4531-a581-6dcdc748c539"/*SelectPoints*/,
+      "Position": {
+        "X": -2803.4907,
+        "Y": 1214.2795
       }
     },
     {
@@ -266,8 +273,8 @@
       "ChildId": "51f3ae0c-f82f-44af-8bd6-11d7bd79f9ad"/*RadialPoints*/,
       "Comment": "We generate 400 points...\n\n- in a radial layout\n- with 3 cycles\n- and a radius offset to form a sprial.\n\nWe also apply a gradient (1 ... 1.5) to the point's W attribute.\n\nNote how we disabled CloseCircle line.",
       "Position": {
-        "X": -2655.0696,
-        "Y": 1218.2592
+        "X": -3124.491,
+        "Y": 1207.9937
       }
     },
     {
@@ -439,6 +446,13 @@
       }
     },
     {
+      "ChildId": "9f87b2da-395c-4da6-8223-b59e61a936ef"/*Time*/,
+      "Position": {
+        "X": -2976.708,
+        "Y": 1300.0852
+      }
+    },
+    {
       "ChildId": "a07606fd-6a79-4dea-bf5d-f4f4981ce882"/*RadialPoints*/,
       "Comment": "A half circle that is being revolved around the axis - points.",
       "Position": {
@@ -456,8 +470,8 @@
     {
       "ChildId": "a41f2ec4-419c-47d1-8c78-16e1b27fc57f"/*Time*/,
       "Position": {
-        "X": -2505.0693,
-        "Y": 1274.2592
+        "X": -2715.9824,
+        "Y": 1277.9922
       }
     },
     {
@@ -567,8 +581,8 @@
       "ChildId": "ccb65dc9-10ca-4a9f-9a22-809e3a4e9ba4"/*TransformPoints*/,
       "Comment": "We slightly stretch to spiral to adjust it to our view's aspect ratio.",
       "Position": {
-        "X": -2505.0693,
-        "Y": 1218.2592
+        "X": -2974.4907,
+        "Y": 1207.9937
       }
     },
     {

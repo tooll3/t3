@@ -15,7 +15,7 @@ internal sealed class DrawPointsShaded : Instance<DrawPointsShaded>
     public readonly InputSlot<Vector4> Color = new();
 
     [Input(Guid = "68ebd395-5e00-4aeb-acfb-312899c4907c")]
-    public readonly InputSlot<float> Size = new();
+    public readonly InputSlot<float> PointSize = new();
 
     [Input(Guid = "9435c9b2-5237-4199-ac9c-93e9ddc5f8b3")]
     public readonly InputSlot<bool> EnableZWrite = new();
@@ -34,4 +34,17 @@ internal sealed class DrawPointsShaded : Instance<DrawPointsShaded>
 
     [Input(Guid = "ef476073-0796-4e6d-bf8b-d0ab92e92296")]
     public readonly InputSlot<BufferWithViews> Colors = new();
+
+    [Input(Guid = "d72344f7-9862-47a1-ad25-135725430ca9", MappedType = typeof(ScaleFXModes))]
+    public readonly InputSlot<int> ScaleFactor = new InputSlot<int>();
+
+        [Input(Guid = "4ca3418c-9542-4158-8a72-ba14c9c199ee")]
+        public readonly InputSlot<bool> UsePointScale = new InputSlot<bool>();
+    
+    private enum ScaleFXModes
+    {
+        None = 0,
+        F1 = 1,
+        F2 = 2,
+    }
 }

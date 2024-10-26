@@ -707,7 +707,7 @@
           "Value": true
         },
         {
-          "Id": "68ebd395-5e00-4aeb-acfb-312899c4907c"/*Size*/,
+          "Id": "68ebd395-5e00-4aeb-acfb-312899c4907c"/*PointSize*/,
           "Type": "System.Single",
           "Value": 0.12
         },

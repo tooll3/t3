@@ -9,7 +9,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\assets\\CerberusGun\\ceberus-weapon.obj"
+          "Value": "Resources/assets/CerberusGun/ceberus-weapon.obj"
         }
       ],
       "Outputs": []
@@ -256,7 +256,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "assets\\CerberusGun\\cerberus_A.jpg"
+          "Value": "assets/CerberusGun/cerberus_A.jpg"
         }
       ],
       "Outputs": []
@@ -408,7 +408,12 @@
         {
           "Id": "292e80cf-ba31-4a50-9bf4-83712430f811"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\assets\\DamagedHelmet.glb"
+          "Value": "Resources/assets/DamagedHelmet.glb"
+        },
+        {
+          "Id": "57f129ae-0b2e-465d-8c0e-f6259fdd37ce"/*CombineBuffer*/,
+          "Type": "System.Boolean",
+          "Value": false
         },
         {
           "Id": "d02f41a6-1a6b-4a6e-8d6c-a28873c79f2c"/*Setup*/,
@@ -434,7 +439,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "assets\\CerberusGun\\cerberus_N.jpg"
+          "Value": "assets/CerberusGun/cerberus_N.jpg"
         }
       ],
       "Outputs": []
@@ -665,18 +670,23 @@
           "Value": 0.37
         },
         {
+          "Id": "2693cb7d-33b3-4a0c-929f-e6911d2d4a0c"/*Octaves*/,
+          "Type": "System.Int32",
+          "Value": 3
+        },
+        {
           "Id": "c427d83b-1046-4b8d-b44a-e616a64a702a"/*AmplitudeXYZ*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": 3.4,
-            "Y": 0.19999999,
+            "X": 1.63,
+            "Y": 3.0,
             "Z": 0.08
           }
         },
         {
           "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Amplitude*/,
           "Type": "System.Single",
-          "Value": 10.8
+          "Value": 6.84
         }
       ],
       "Outputs": []
