@@ -2938,7 +2938,7 @@
           "Value": 14
         },
         {
-          "Id": "f6986f68-851b-4cd1-ae59-bf189aa1698e"/*Offset*/,
+          "Id": "f6986f68-851b-4cd1-ae59-bf189aa1698e"/*OffsetCenter*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.0,
@@ -4850,11 +4850,11 @@
       "Outputs": []
     },
     {
-      "Id": "824ea03e-6531-47e2-aaaf-71ec4a6efe9d"/*SpreadPointAttributes*/,
+      "Id": "824ea03e-6531-47e2-aaaf-71ec4a6efe9d"/*MapPointAttributes*/,
       "SymbolId": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8",
       "InputValues": [
         {
-          "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*WCurve*/,
+          "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*MappingCurve*/,
           "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
@@ -4926,7 +4926,7 @@
           }
         },
         {
-          "Id": "ba00fa7a-fcda-48da-a4c7-f2fe97997e50"/*ApplyMode*/,
+          "Id": "ba00fa7a-fcda-48da-a4c7-f2fe97997e50"/*WriteMode*/,
           "Type": "System.Int32",
           "Value": 0
         }
@@ -6717,7 +6717,7 @@
           "Value": 1
         },
         {
-          "Id": "ba7ffda2-f9f6-440d-a174-7339844835fa"/*BlendValue*/,
+          "Id": "ba7ffda2-f9f6-440d-a174-7339844835fa"/*BlendFactor*/,
           "Type": "System.Single",
           "Value": 1.0
         },
@@ -8903,7 +8903,7 @@
           }
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.019
         }
@@ -9116,7 +9116,7 @@
           "Value": 4
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 1.129
         }

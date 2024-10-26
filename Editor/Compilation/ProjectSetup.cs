@@ -235,13 +235,15 @@ internal static partial class ProjectSetup
             case 1:
             {
                 var package = (EditorSymbolPackage)packages[0].Package;
-                package.LoadSymbols(true, out var newlyRead, out var allNewSymbols);
+                const bool parallel = false;
+                package.LoadSymbols(parallel, out var newlyRead, out var allNewSymbols);
                 package.ApplySymbolChildren(newlyRead);
-                package.LoadUiFiles(true, allNewSymbols, out var newlyLoadedUis, out var preExistingUis);
+                package.LoadUiFiles(parallel, allNewSymbols, out var newlyLoadedUis, out var preExistingUis);
                 package.LocateSourceCodeFiles();
                 package.RegisterUiSymbols(newlyLoadedUis, preExistingUis);
 
-                Log.Info($"Updated symbol package {package.DisplayName} in {stopWatch.ElapsedMilliseconds}ms");
+                var count = package.Symbols.Sum(x => x.Value.InstancesOfSelf.Count());
+                Log.Info($"Updated symbol package {package.DisplayName} in {stopWatch.ElapsedMilliseconds}ms with {count} instances of its symbols");
                 return;
             }
         }

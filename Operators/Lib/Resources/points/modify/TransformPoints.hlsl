@@ -6,11 +6,17 @@
 cbuffer Params : register(b0)
 {
     float4x4 TransformMatrix;
-    float UpdateRotation;
-    float ScaleW;
-    float OffsetW;
-    float CoordinateSpace;
-    float WIsWeight;
+    float Strength;
+    // float UpdateRotation;
+    // float ScaleW;
+    // float OffsetW;
+    // float WIsWeight;
+}
+
+cbuffer Params : register(b1) 
+{
+    int CoordinateSpace;
+    int StrengthFactor;
 }
 
 StructuredBuffer<Point> SourcePoints : t0;
@@ -39,7 +45,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     Point p = SourcePoints[i.x];
 
-    float w = p.W;
+    //float w = p.W;
     float3 pos = p.Position;
 
     float4 orgRot = p.Rotation;
@@ -58,51 +64,52 @@ void main(uint3 i : SV_DispatchThreadID)
 
     float3 scale = ExtractScale(TransformMatrix);
 
-    if (UpdateRotation > 0.5)
-    {
-        // Remove scale from the matrix to get pure rotation
-        float3x3 rotationMatrix = float3x3(
-            TransformMatrix._m00_m01_m02 / scale.x,
-            TransformMatrix._m10_m11_m12 / scale.y,
-            TransformMatrix._m20_m21_m22 / scale.z
-        );
+    // Remove scale from the matrix to get pure rotation
+    float3x3 rotationMatrix = float3x3(
+        TransformMatrix._m00_m01_m02 / scale.x,
+        TransformMatrix._m10_m11_m12 / scale.y,
+        TransformMatrix._m20_m21_m22 / scale.z
+    );
 
-        newRotation = normalize(qFromMatrix3Precise(transpose(rotationMatrix)));
+    newRotation = normalize(qFromMatrix3Precise(transpose(rotationMatrix)));
 
-        // Adjust rotation in point space
-        if (CoordinateSpace < 0.5)
-        {
-            newRotation = qMul(orgRot, newRotation);
-        }
-        else
-        {
-            newRotation = qMul(newRotation, orgRot);
-        }
-    }
-
-    float weight = 1;
-
-    if (WIsWeight >= 0.5)
-    {
-        float3 weightedOffset = (pos - pLocal) * w;
-        pos = pLocal + weightedOffset;
-        weight = w;
-        newRotation = qSlerp(orgRot, newRotation, w);
-    }
-
+    // Adjust rotation in point space
     if (CoordinateSpace < 0.5)
+    {
+        newRotation = qMul(orgRot, newRotation);
+    }
+    else
+    {
+        newRotation = qMul(newRotation, orgRot);
+    }
+
+    //float weight = 1;
+
+    float strength = Strength * (StrengthFactor == 0 
+        ? 1
+        : (StrengthFactor == 1) ? p.FX1 : p.FX2);
+
+    // if (WIsWeight >= 0.5)
+    // {
+    //     float3 weightedOffset = (pos - pLocal) * w;
+    //     pos = pLocal + weightedOffset;
+    //     weight = w;
+    //     newRotation = qSlerp(orgRot, newRotation, w);
+    // }
+
+    if (CoordinateSpace == 0)
     {
         pos.xyz = qRotateVec3(pos.xyz, orgRot).xyz;
         pos += p.Position;
         
         // Apply scale to Stretch
-        p.Stretch *= scale;
+        p.Scale *= lerp(1, scale, strength);
     }
 
-    p.Position = pos.xyz;
-    p.Rotation = newRotation;
+    p.Position = lerp(p.Position, pos.xyz, strength);
+    p.Rotation = qSlerp(p.Rotation,  newRotation, strength);
 
-    p.W = lerp(p.W, p.W * ScaleW + OffsetW, weight);
+    //p.W = lerp(p.W, p.W * ScaleW + OffsetW, weight);
 
     ResultPoints[i.x] = p;
 }

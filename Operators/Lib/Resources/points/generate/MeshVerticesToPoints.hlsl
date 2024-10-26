@@ -10,7 +10,7 @@ cbuffer Params : register(b0)
 }
 
 StructuredBuffer<PbrVertex> Vertices : t0;   // input
-RWStructuredBuffer<Point> ResultPoints : u0; // output
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0; // output
 
 [numthreads(256, 4, 1)] void main(uint3 i : SV_DispatchThreadID)
 {

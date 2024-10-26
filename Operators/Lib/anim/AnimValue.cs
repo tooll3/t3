@@ -28,6 +28,7 @@ public sealed class AnimValue : Instance<AnimValue>
         var ratio = Ratio.GetValue(context);
         var rateFactorFromContext = AnimMath.GetSpeedOverrideFromContext(context, AllowSpeedFactor);
         _shape = (AnimMath.Shapes)Shape.GetValue(context).Clamp(0, Enum.GetNames(typeof(AnimMath.Shapes)).Length);
+        _shape = Shape.GetEnumValue<AnimMath.Shapes>(context);
         var amplitude = Amplitude.GetValue(context);
         var offset = Offset.GetValue(context);
         var bias = Bias.GetValue(context);

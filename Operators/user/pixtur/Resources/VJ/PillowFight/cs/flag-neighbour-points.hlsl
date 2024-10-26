@@ -1,6 +1,6 @@
 #include "shared/point.hlsl"
 
-RWStructuredBuffer<Point> points :register(u0); 
+RWStructuredBuffer<LegacyPoint> points :register(u0); 
 
 cbuffer Params : register(b0)
 {

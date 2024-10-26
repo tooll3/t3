@@ -40,7 +40,7 @@
       }
     },
     {
-      "InputId": "5894156a-cc31-4236-908c-de0e5385fd84"/*Amount*/,
+      "InputId": "5894156a-cc31-4236-908c-de0e5385fd84"/*Strength*/,
       "Position": {
         "X": -354.29822,
         "Y": 941.61896
@@ -51,9 +51,10 @@
     {
       "InputId": "6c2ab161-da81-47c2-8008-222cf994179c"/*UseWAsWeight*/,
       "Position": {
-        "X": -351.6601,
-        "Y": 1259.9845
+        "X": -370.19815,
+        "Y": 1625.1031
       },
+      "GroupTitle": "Obsolete Parameters",
       "Description": "Defines whether particles are more or less affected by noise depending on the W value."
     },
     {
@@ -64,6 +65,13 @@
       },
       "GroupTitle": "Settings",
       "Description": "Defines the frequency, i.e. how fast the points move."
+    },
+    {
+      "InputId": "96b296e9-f15a-4543-a850-8078c583ee94"/*StrengthFactor*/,
+      "Position": {
+        "X": -351.6601,
+        "Y": 1394.9845
+      }
     },
     {
       "InputId": "97c25ec6-ef71-42f8-9352-52baf2ce41a4"/*RotationLookupDistance*/,
@@ -120,10 +128,24 @@
       }
     },
     {
+      "ChildId": "4387cbcf-50d8-462d-892e-7e03f8971bd8"/*IntsToBuffer*/,
+      "Position": {
+        "X": 311.03137,
+        "Y": 1392.1216
+      }
+    },
+    {
       "ChildId": "4c0f05a4-805c-42ba-9bf2-02c4d87d193f"/*ComputeShaderStage*/,
       "Position": {
         "X": 473.44153,
         "Y": 578.99976
+      }
+    },
+    {
+      "ChildId": "526c2301-a159-49b8-9a5f-188e7cde0b71"/*__padding*/,
+      "Position": {
+        "X": 46.52594,
+        "Y": 1294.5292
       }
     },
     {

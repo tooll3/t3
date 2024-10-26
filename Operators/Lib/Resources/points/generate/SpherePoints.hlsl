@@ -11,7 +11,7 @@ cbuffer Params : register(b0)
     float Scatter;
 }
 
-RWStructuredBuffer<Point> ResultPoints : u0;    // output
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;    // output
 
 
 static float precision = 0.0001;

@@ -180,10 +180,11 @@ internal sealed partial class GraphWindow : Window
             }
             drawList.ChannelsMerge();
 
-            EditDescriptionDialog.Draw(CompositionOp.Symbol);
+            EditDescriptionDialog.Draw(_composition.Symbol);
         }
         ImGui.EndChild();
 
+        RefreshRootInstance();
         if (UserSettings.Config.ShowTimeline)
         {
             const int splitterWidth = 3;
@@ -212,7 +213,6 @@ internal sealed partial class GraphWindow : Window
         if (UserSettings.Config.ShowMiniMap)
             DrawMiniMap(_composition, GraphCanvas);
 
-        RefreshRootInstance();
         if (_compositionsForDisposal.TryPeek(out var latestComposition))
         {
             if (!_compositionPath.Contains(latestComposition.SymbolChildId))

@@ -46,7 +46,7 @@ sampler texSampler : register(s0);
 Texture2D<float4> InputTexture : register(t0);
 
 RWStructuredBuffer<Breed> Breeds : register(u0); 
-RWStructuredBuffer<Point> Points : register(u1); 
+RWStructuredBuffer<LegacyPoint> Points : register(u1); 
 RWTexture2D<float4> WriteOutput  : register(u2); 
 
 

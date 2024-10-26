@@ -123,7 +123,7 @@
           "Value": 1.0
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.015999999
         }
@@ -582,6 +582,11 @@
             "Z": 1.0,
             "W": 0.0
           }
+        },
+        {
+          "Id": "fca535e3-ea35-455f-b4ef-0a9d7feacef8"/*GenerateMips*/,
+          "Type": "System.Boolean",
+          "Value": true
         }
       ],
       "Outputs": []
@@ -596,7 +601,7 @@
           "Value": 0.15
         },
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*PointSize*/,
           "Type": "System.Single",
           "Value": 0.38
         },

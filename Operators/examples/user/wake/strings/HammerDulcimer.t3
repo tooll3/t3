@@ -29,7 +29,7 @@
           }
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.0039999997
         }
@@ -208,7 +208,7 @@
       "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
       "InputValues": [
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*PointSize*/,
           "Type": "System.Single",
           "Value": 0.05
         },
@@ -257,7 +257,7 @@
       "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
       "InputValues": [
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*PointSize*/,
           "Type": "System.Single",
           "Value": 0.06
         },
@@ -441,7 +441,7 @@
       "SymbolId": "780edb20-f83f-494c-ab17-7015e2311250",
       "InputValues": [
         {
-          "Id": "f15a003c-7969-4505-b598-6c6c4b5a3bbe"/*ApplyTargetOrientation*/,
+          "Id": "f15a003c-7969-4505-b598-6c6c4b5a3bbe"/*ApplyOrientation*/,
           "Type": "System.Boolean",
           "Value": true
         },
@@ -541,7 +541,7 @@
           "Value": false
         },
         {
-          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
+          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Rotations*/,
           "Type": "System.Single",
           "Value": 3.0
         },
@@ -595,7 +595,7 @@
           "Value": true
         },
         {
-          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
+          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Rotations*/,
           "Type": "System.Single",
           "Value": 3.0
         },
@@ -707,7 +707,7 @@
           "Value": false
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.057
         }
@@ -915,7 +915,7 @@
           "Value": true
         },
         {
-          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
+          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Rotations*/,
           "Type": "System.Single",
           "Value": 1.0
         },
@@ -1014,7 +1014,7 @@
           "Value": 0
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.006
         }
@@ -1059,7 +1059,7 @@
       "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
       "InputValues": [
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*PointSize*/,
           "Type": "System.Single",
           "Value": 0.03
         },
@@ -1119,7 +1119,7 @@
           }
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.007999999
         }
@@ -1131,7 +1131,7 @@
       "SymbolId": "dd586355-64b3-4e96-af6d-b4927595dee7",
       "InputValues": [
         {
-          "Id": "5894156a-cc31-4236-908c-de0e5385fd84"/*Amount*/,
+          "Id": "5894156a-cc31-4236-908c-de0e5385fd84"/*Strength*/,
           "Type": "System.Single",
           "Value": 12.1
         },
@@ -1504,7 +1504,7 @@
           }
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.006
         }
@@ -1956,7 +1956,7 @@
           "Value": false
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.012
         }
@@ -1968,7 +1968,7 @@
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {
-          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
+          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Rotations*/,
           "Type": "System.Single",
           "Value": 1.0
         },
@@ -1997,7 +1997,7 @@
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {
-          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
+          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Rotations*/,
           "Type": "System.Single",
           "Value": 1.0
         },
@@ -2212,7 +2212,7 @@
       "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
       "InputValues": [
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*PointSize*/,
           "Type": "System.Single",
           "Value": 0.07
         },
@@ -2459,7 +2459,7 @@
           "Value": false
         },
         {
-          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
+          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Rotations*/,
           "Type": "System.Single",
           "Value": 1.0
         },
@@ -2491,7 +2491,7 @@
           "Value": true
         },
         {
-          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
+          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Rotations*/,
           "Type": "System.Single",
           "Value": 1.0
         },
@@ -2663,7 +2663,7 @@
           "Value": 0
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.006
         }
@@ -3001,7 +3001,7 @@
       "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
       "InputValues": [
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*PointSize*/,
           "Type": "System.Single",
           "Value": 0.03
         },
@@ -3046,7 +3046,7 @@
       "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
       "InputValues": [
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*PointSize*/,
           "Type": "System.Single",
           "Value": 0.066
         },
@@ -3068,7 +3068,7 @@
       "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
       "InputValues": [
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*PointSize*/,
           "Type": "System.Single",
           "Value": 0.05
         },
@@ -3210,7 +3210,7 @@
           "Value": true
         },
         {
-          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
+          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Rotations*/,
           "Type": "System.Single",
           "Value": 1.0
         },
@@ -3500,7 +3500,7 @@
           "Value": false
         },
         {
-          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
+          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Rotations*/,
           "Type": "System.Single",
           "Value": 1.0
         },
@@ -3786,7 +3786,7 @@
       "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
       "InputValues": [
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*PointSize*/,
           "Type": "System.Single",
           "Value": 0.066
         },
@@ -3830,7 +3830,7 @@
           "Value": true
         },
         {
-          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
+          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Rotations*/,
           "Type": "System.Single",
           "Value": 1.0
         },
@@ -3930,7 +3930,7 @@
       "SymbolId": "780edb20-f83f-494c-ab17-7015e2311250",
       "InputValues": [
         {
-          "Id": "f15a003c-7969-4505-b598-6c6c4b5a3bbe"/*ApplyTargetOrientation*/,
+          "Id": "f15a003c-7969-4505-b598-6c6c4b5a3bbe"/*ApplyOrientation*/,
           "Type": "System.Boolean",
           "Value": true
         },
@@ -3968,7 +3968,7 @@
           "Value": true
         },
         {
-          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
+          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Rotations*/,
           "Type": "System.Single",
           "Value": 5.0
         },

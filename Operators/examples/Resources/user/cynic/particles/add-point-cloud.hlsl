@@ -35,14 +35,14 @@ cbuffer Params : register(b3)
     // eventual parameters go here
 }
 
-struct Point
+struct LegacyPoint
 {
     float3 position;
     int id;
     float4 color;
 };
 
-StructuredBuffer<Point> PointCloud : s0;
+StructuredBuffer<LegacyPoint> PointCloud : s0;
 
 RWStructuredBuffer<Particle> Particles : u0;
 ConsumeStructuredBuffer<ParticleIndex> DeadParticles : u1;
@@ -57,7 +57,7 @@ void main(uint3 i : SV_DispatchThreadID)
     ParticleIndex pi = DeadParticles.Consume();
         
     Particle particle = Particles[pi.index];
-    Point aPoint = PointCloud[i.x];
+    LegacyPoint aPoint = PointCloud[i.x];
 
     particle.size = 1;
     particle.position = aPoint.position;

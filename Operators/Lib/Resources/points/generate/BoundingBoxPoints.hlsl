@@ -18,8 +18,8 @@ struct MinMax
     uint3 Max;
 };
 
-StructuredBuffer<Point> SourcePoints : register(t0);
-RWStructuredBuffer<Point> ResultPoints : register(u0);
+StructuredBuffer<LegacyPoint> SourcePoints : register(t0);
+RWStructuredBuffer<LegacyPoint> ResultPoints : register(u0);
 RWStructuredBuffer<MinMax> Bounds : register(u1);
 
 groupshared uint3 g_MinValue = 0xffffffffu;
@@ -53,7 +53,7 @@ inline float OIntToFloat(uint value)
     uint stride, sourcePointCount;
     SourcePoints.GetDimensions(sourcePointCount, stride);
 
-    Point sourcePoint = SourcePoints[DTid.x];
+    LegacyPoint sourcePoint = SourcePoints[DTid.x];
     float3 position = sourcePoint.Position;
 
     // float isValid = !(DTid.x >= sourcePointCount || isnan(position.x) || isnan(position.y) || isnan(position.z));

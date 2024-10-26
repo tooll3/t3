@@ -38,12 +38,12 @@ internal sealed class _GetSceneDefinitionPoints : Instance<_GetSceneDefinitionPo
             var sceneDispatch = sceneDefinition.Dispatches[index];
             var matrix = sceneDispatch.CombinedTransform;
                 
-            instancePoints.TypedElements[index].W = 1;
+            instancePoints.TypedElements[index].F1 = 1;
             instancePoints.TypedElements[index].Color = Vector4.One;
             Matrix4x4.Decompose(matrix, out var scale, out var rotation, out var translation);
             instancePoints.TypedElements[index].Position = translation;
-            instancePoints.TypedElements[index].Stretch = new Vector3( MathF.Abs(scale.X), MathF.Abs(scale.Y), MathF.Abs(scale.Z));
-            instancePoints.TypedElements[index].Selected = 1;
+            instancePoints.TypedElements[index].Scale = new Vector3( MathF.Abs(scale.X), MathF.Abs(scale.Y), MathF.Abs(scale.Z));
+            instancePoints.TypedElements[index].F2 = 1;
             instancePoints.TypedElements[index].Orientation = rotation;
             chunkIndices[index] = sceneDispatch.ChunkIndex;
         }

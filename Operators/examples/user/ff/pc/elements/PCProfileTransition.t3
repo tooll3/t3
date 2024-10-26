@@ -497,7 +497,7 @@
           "Value": false
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.027
         }
@@ -640,7 +640,7 @@
           "Value": -23.0
         },
         {
-          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
+          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Rotations*/,
           "Type": "System.Single",
           "Value": 1.0
         },

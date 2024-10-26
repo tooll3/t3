@@ -128,12 +128,6 @@ public class CopySymbolChildrenCommand : ICommand
             this.LogError(false, $"Failed to find target symbol with id: {_targetSymbolId} - was it removed?");
             return;
         }
-
-        if (_clipboardSymbolUi == null)
-        {
-            this.LogError(false, $"Undefined symbolUi?");
-            return;
-        }
         
         if(targetCompositionSymbolUi == null)
         {
@@ -143,6 +137,11 @@ public class CopySymbolChildrenCommand : ICommand
         
         if (_copyMode == CopyMode.ClipboardSource)
         {
+            if (_clipboardSymbolUi == null)
+            {
+                this.LogError(false, $"Undefined symbolUi?");
+                return;
+            }
             sourceCompositionSymbolUi = _clipboardSymbolUi;
             sourceCompositionSymbol = _sourcePastedSymbol!;
         }

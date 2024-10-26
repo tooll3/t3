@@ -68,7 +68,7 @@
           "Value": false
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.005
         }
@@ -149,7 +149,7 @@
           "Value": true
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.71
         }
@@ -2245,7 +2245,7 @@
       "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
       "InputValues": [
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*PointSize*/,
           "Type": "System.Single",
           "Value": 0.114
         }
@@ -2552,7 +2552,7 @@
           "Value": true
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.009
         }
@@ -5309,7 +5309,7 @@
           }
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.024
         }
@@ -5409,7 +5409,7 @@
           "Value": 90.0
         },
         {
-          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
+          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Rotations*/,
           "Type": "System.Single",
           "Value": -1.0
         },

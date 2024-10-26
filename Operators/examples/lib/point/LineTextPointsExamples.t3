@@ -391,7 +391,7 @@
           }
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 1.39
         }
@@ -468,11 +468,11 @@
       "Outputs": []
     },
     {
-      "Id": "b1526e88-8794-4d05-ab69-c08abf59ad87"/*SpreadPointAttributes*/,
+      "Id": "b1526e88-8794-4d05-ab69-c08abf59ad87"/*MapPointAttributes*/,
       "SymbolId": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8",
       "InputValues": [
         {
-          "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*WCurve*/,
+          "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*MappingCurve*/,
           "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
@@ -570,7 +570,7 @@
           }
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.025999999
         }
@@ -599,7 +599,7 @@
           "Value": 0.0
         },
         {
-          "Id": "58980e30-204b-40e2-9610-8482ff01a57c"/*SampleMode*/,
+          "Id": "58980e30-204b-40e2-9610-8482ff01a57c"/*RangeMode*/,
           "Type": "System.Int32",
           "Value": 1
         },
@@ -698,7 +698,7 @@
           "Value": 0.0
         },
         {
-          "Id": "58980e30-204b-40e2-9610-8482ff01a57c"/*SampleMode*/,
+          "Id": "58980e30-204b-40e2-9610-8482ff01a57c"/*RangeMode*/,
           "Type": "System.Int32",
           "Value": 1
         },

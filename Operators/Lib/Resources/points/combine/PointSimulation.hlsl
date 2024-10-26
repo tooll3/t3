@@ -2,8 +2,8 @@
 #include "shared/point.hlsl"
 #include "shared/quat-functions.hlsl"
 
-StructuredBuffer<Point> SourcePoints : t0;         // input
-RWStructuredBuffer<Point> ResultPoints : u0; 
+StructuredBuffer<LegacyPoint> SourcePoints : t0;         // input
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0; 
 
 
 

@@ -39,7 +39,7 @@ cbuffer Params : register(b1)
     float ZoneCenter;
 }
 
-RWStructuredBuffer<Point> Points : u0;   
+RWStructuredBuffer<LegacyPoint> Points : u0;   
 Texture2D<float4> inputTexture : register(t1);
 sampler texSampler : register(s0);
 static float2 texSize;
@@ -82,7 +82,7 @@ void main(uint3 i : SV_DispatchThreadID)
     texSize = float2(sx,sy);
 
     
-    Point P = Points[lineStartIndex];
+    LegacyPoint P = Points[lineStartIndex];
 
     float3 pos = P.Position;
     float4 rot = P.Rotation;

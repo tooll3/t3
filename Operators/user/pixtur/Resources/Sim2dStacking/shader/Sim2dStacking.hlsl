@@ -8,8 +8,8 @@ cbuffer Params : register(b0)
     float Amount;
 }
 
-//StructuredBuffer<Point> SourcePoints : t0;        
-RWStructuredBuffer<Point> Points : u0;   
+//StructuredBuffer<LegacyPoint> SourcePoints : t0;        
+RWStructuredBuffer<LegacyPoint> Points : u0;   
 
 [numthreads(64,1,1)]
 void main(uint3 DTid : SV_DispatchThreadID)
@@ -22,7 +22,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
         return;
     }
 
-    Point p = Points[i];  
+    LegacyPoint p = Points[i];  
 
     p.position.y += 0.1 * Amount;
 

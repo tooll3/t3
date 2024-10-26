@@ -24,9 +24,9 @@ cbuffer IntParams : register(b1)
     int IsAutoCount;
 }
 
-StructuredBuffer<Point> EmitPoints : t0;
+StructuredBuffer<LegacyPoint> EmitPoints : t0;
 RWStructuredBuffer<Particle> Particles : u0;
-RWStructuredBuffer<Point> ResultPoints : u1;
+RWStructuredBuffer<LegacyPoint> ResultPoints : u1;
 
 #define W_KEEP_ORIGINAL 0
 #define W_PARTICLE_AGE 1

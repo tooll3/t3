@@ -3,24 +3,30 @@
 
 cbuffer Params : register(b0)
 {
-    float3 Count;
+    float3 Size;
     float __padding1;
 
-    float3 Size;
-    float __padding3;
-
     float3 Center;
-    float W;
+    float __padding2;
 
     float3 OrientationAxis;
     float OrientationAngle;
 
     float3 Pivot;
-    float SizeMode;
+    float __padding3;
 
     float4 Color;
 
-    float Tiling;
+    float PointScale;
+    float FX1;
+    float FX2;
+}
+
+cbuffer Params : register(b1)
+{
+    int3 Count;
+    int SizeMode;
+    int Tiling;
 }
 
 RWStructuredBuffer<Point> ResultPoints : u0; // output
@@ -66,14 +72,14 @@ static const float ToRad = 3.141578 / 180;
     pos *= zeroAdjustedSize;
 
     ResultPoints[index].Color = Color;
-    ResultPoints[index].Selected = 1;
-    ResultPoints[index].Stretch = 1;
+    ResultPoints[index].FX1 = FX1;
+    ResultPoints[index].FX2 = FX2;
+    ResultPoints[index].Scale = PointScale;
 
     if (Tiling < 0.5)
     {
         pos += Center;
         ResultPoints[index].Position = pos;
-        ResultPoints[index].W = W;
         ResultPoints[index].Rotation = qFromAngleAxis(OrientationAngle * PI / 180, normalize(OrientationAxis));
         return;
     }
@@ -94,7 +100,7 @@ static const float ToRad = 3.141578 / 180;
 
         pos += Center;
         ResultPoints[index].Position = pos;
-        ResultPoints[index].W = W * (2 / 3.0);
+        ResultPoints[index].FX1 = FX1 * (2 / 3.0);
         ResultPoints[index].Rotation = qFromAngleAxis(OrientationAngle * PI / 180 + rotDelta, normalize(OrientationAxis));
         return;
     }
@@ -116,8 +122,6 @@ static const float ToRad = 3.141578 / 180;
         pos.z *= sqrt(3.0) / 2;
         pos += Center;
         ResultPoints[index].Position = pos;
-        ResultPoints[index].W = W;
-
         ResultPoints[index].Rotation = qFromAngleAxis((OrientationAngle)*PI / 180, normalize(OrientationAxis));
     }
 
@@ -138,7 +142,6 @@ static const float ToRad = 3.141578 / 180;
         }
 
         ResultPoints[index].Position = pos;
-        ResultPoints[index].W = W;
         ResultPoints[index].Rotation = qFromAngleAxis(OrientationAngle * PI / 180, normalize(OrientationAxis));
         return;
     }

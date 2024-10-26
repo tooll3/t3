@@ -7,7 +7,7 @@
       "SymbolId": "4ae9e2f5-7cb3-40b0-a662-0662e8cb7c68",
       "InputValues": [
         {
-          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*LengthFactor*/,
+          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*Length*/,
           "Type": "System.Single",
           "Value": 0.0
         },
@@ -244,7 +244,7 @@
           }
         },
         {
-          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*LengthFactor*/,
+          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*Length*/,
           "Type": "System.Single",
           "Value": 2.0
         },
@@ -271,7 +271,7 @@
       "SymbolId": "780edb20-f83f-494c-ab17-7015e2311250",
       "InputValues": [
         {
-          "Id": "796d3d55-32b3-436e-a4c3-f15e1585a914"/*ConnectLines*/,
+          "Id": "796d3d55-32b3-436e-a4c3-f15e1585a914"/*CombineMode*/,
           "Type": "System.Int32",
           "Value": 1
         }
@@ -283,7 +283,7 @@
       "SymbolId": "dd586355-64b3-4e96-af6d-b4927595dee7",
       "InputValues": [
         {
-          "Id": "5894156a-cc31-4236-908c-de0e5385fd84"/*Amount*/,
+          "Id": "5894156a-cc31-4236-908c-de0e5385fd84"/*Strength*/,
           "Type": "System.Single",
           "Value": 4.8
         },
@@ -305,7 +305,7 @@
           "Value": 90.0
         },
         {
-          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
+          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Rotations*/,
           "Type": "System.Single",
           "Value": 0.5
         },
@@ -325,7 +325,7 @@
       "SymbolId": "4ae9e2f5-7cb3-40b0-a662-0662e8cb7c68",
       "InputValues": [
         {
-          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*LengthFactor*/,
+          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*Length*/,
           "Type": "System.Single",
           "Value": -0.0
         },
@@ -391,7 +391,7 @@
           "Value": 90.0
         },
         {
-          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
+          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Rotations*/,
           "Type": "System.Single",
           "Value": 0.5
         }

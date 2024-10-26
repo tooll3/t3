@@ -6,7 +6,7 @@ cbuffer Params : register(b0)
     float EnlargeCenter;
 }
 
-RWStructuredBuffer<Point> ResultPoints : u0;
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
 Texture2D<float4> inputTexture : register(t0);
 sampler texSampler : register(s0);
 

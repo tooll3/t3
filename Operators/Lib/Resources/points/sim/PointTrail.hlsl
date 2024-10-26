@@ -36,9 +36,9 @@ RWStructuredBuffer<Point> TrailPoints : u0; // output
         float3 lastPos = TrailPoints[(targetIndex - 1) % bufferLength].Position;
         float3 pos = SourcePoints[sourceIndex].Position;
         if (length(lastPos - pos) > AddSeparatorThreshold)
-            TrailPoints[targetIndex].W = sqrt(-1);
+            TrailPoints[targetIndex].Scale = NAN;
     }
 
     // Flag follow position W as NaN line seperator
-    TrailPoints[(targetIndex + 1) % bufferLength].W = sqrt(-1);
+    TrailPoints[(targetIndex + 1) % bufferLength].Scale = NAN;
 }

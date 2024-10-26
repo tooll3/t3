@@ -11,9 +11,9 @@ cbuffer Params : register(b0)
     float Scatter;
 }
 
-StructuredBuffer<Point> PointsA : t0;        // input
-StructuredBuffer<Point> PointsB : t1;        // input
-RWStructuredBuffer<Point> ResultPoints : u0; // output
+StructuredBuffer<LegacyPoint> PointsA : t0;        // input
+StructuredBuffer<LegacyPoint> PointsB : t1;        // input
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0; // output
 
 [numthreads(64, 1, 1)] void main(uint3 i
                                  : SV_DispatchThreadID)
@@ -37,8 +37,8 @@ RWStructuredBuffer<Point> ResultPoints : u0; // output
         bIndex = (int)(countB * t);
     }
 
-    Point A = PointsA[aIndex];
-    Point B = PointsB[bIndex];
+    LegacyPoint A = PointsA[aIndex];
+    LegacyPoint B = PointsB[bIndex];
 
     float f = 0;
 

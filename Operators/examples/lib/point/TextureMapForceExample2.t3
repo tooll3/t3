@@ -67,7 +67,7 @@
       "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
       "InputValues": [
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*PointSize*/,
           "Type": "System.Single",
           "Value": 0.027
         }
@@ -232,7 +232,7 @@
           "Value": 0.13
         },
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*PointSize*/,
           "Type": "System.Single",
           "Value": 0.05
         },
@@ -816,11 +816,11 @@
       "Outputs": []
     },
     {
-      "Id": "e83f2d83-a15b-4513-be61-9f1496ce453d"/*SpreadPointAttributes*/,
+      "Id": "e83f2d83-a15b-4513-be61-9f1496ce453d"/*MapPointAttributes*/,
       "SymbolId": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8",
       "InputValues": [
         {
-          "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*WCurve*/,
+          "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*MappingCurve*/,
           "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {

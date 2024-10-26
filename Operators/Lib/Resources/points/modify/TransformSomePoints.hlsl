@@ -24,8 +24,8 @@ cbuffer Params : register(b0)
 }
 
 
-StructuredBuffer<Point> SourcePoints : t0;        
-RWStructuredBuffer<Point> ResultPoints : u0;   
+StructuredBuffer<LegacyPoint> SourcePoints : t0;        
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;   
 
 static const float PointSpace = 0;
 static const float ObjectSpace = 1;
@@ -83,7 +83,7 @@ void main(uint3 i : SV_DispatchThreadID)
         ResultPoints[resultIndex].W = indexInGroup;
     }
                     
-    Point p = SourcePoints[sourceIndex];
+    LegacyPoint p = SourcePoints[sourceIndex];
 
     float w = p.W;
     float3 pOrg = p.Position;

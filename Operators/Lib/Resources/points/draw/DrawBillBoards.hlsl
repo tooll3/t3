@@ -90,7 +90,7 @@ struct psInput
 
 sampler texSampler : register(s0);
 
-StructuredBuffer<Point> Points : t0;
+StructuredBuffer<LegacyPoint> Points : t0;
 Texture2D<float4> SpriteTexture : register(t1);
 Texture2D<float4> FxTexture : register(t2);
 Texture2D<float4> ColorOverW : register(t3);
@@ -144,7 +144,7 @@ psInput vsMain(uint id
     uint pointId = id / 6;
     float3 cornerFactors = Corners[quadIndex];
 
-    Point p = Points[pointId]; 
+    LegacyPoint p = Points[pointId]; 
 
     float4 pRotation = normalize(p.Rotation); 
     float f = pointId / (float)particleCount;

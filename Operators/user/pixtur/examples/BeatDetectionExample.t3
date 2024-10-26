@@ -7,7 +7,7 @@
       "SymbolId": "836f211f-b387-417c-8316-658e0dc6e117",
       "InputValues": [
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.05
         }
@@ -184,7 +184,7 @@
       "SymbolId": "dd586355-64b3-4e96-af6d-b4927595dee7",
       "InputValues": [
         {
-          "Id": "5894156a-cc31-4236-908c-de0e5385fd84"/*Amount*/,
+          "Id": "5894156a-cc31-4236-908c-de0e5385fd84"/*Strength*/,
           "Type": "System.Single",
           "Value": 0.099999994
         },

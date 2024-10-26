@@ -35,7 +35,7 @@ internal sealed class NoisePoints : Instance<NoisePoints>
                                        MathUtils.PerlinNoise(phase + 110.637f + fX, frequency, 2, seed) * amplitude * scale.Y,
                                        MathUtils.PerlinNoise(phase + 241.221f + fX, frequency, 2, seed) * amplitude * scale.Z);
             _points[index].Position = position;
-            _points[index].W = thickness;
+            _points[index].F1 = thickness;
             index++;
         }
 

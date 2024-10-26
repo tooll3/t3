@@ -55,7 +55,7 @@
       }
     },
     {
-      "ChildId": "3100a557-1e74-421f-aa48-618965161fe9"/*SpreadPointAttributes*/,
+      "ChildId": "3100a557-1e74-421f-aa48-618965161fe9"/*MapPointAttributes*/,
       "Comment": "We add a small growth animation to the size.",
       "Position": {
         "X": 1255.945,
@@ -164,7 +164,7 @@
       }
     },
     {
-      "ChildId": "b7128776-9996-4f02-a3c8-6e09a19e9a9f"/*SpreadPointAttributes*/,
+      "ChildId": "b7128776-9996-4f02-a3c8-6e09a19e9a9f"/*MapPointAttributes*/,
       "Comment": "The moving particles are the tip of stems.\n\nWe add some random variation to color.",
       "Position": {
         "X": 1260.2389,

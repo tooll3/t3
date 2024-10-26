@@ -412,7 +412,7 @@
           }
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.148
         }
@@ -722,7 +722,7 @@
         {
           "Id": "ef2a461d-c66d-44d8-8b0e-e48a57ec991f"/*FilePath*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-worksforeverybody\\svg\\still-logo.svg"
+          "Value": "Resources/user/still/proj-worksforeverybody/svg/still-logo.svg"
         }
       ],
       "Outputs": []
@@ -783,7 +783,7 @@
           }
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.148
         }
@@ -1517,7 +1517,7 @@
         "Bpm": 120.0,
         "DiscardAfterUse": true,
         "IsSoundtrack": true,
-        "FilePath": "user\\still\\proj-worksforeverybody\\soundtrack\\works-for-everybody.mp3"
+        "FilePath": "user/still/proj-worksforeverybody/soundtrack/works-for-everybody.mp3"
       }
     ]
   },

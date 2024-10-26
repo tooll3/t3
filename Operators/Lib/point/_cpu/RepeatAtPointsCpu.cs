@@ -43,7 +43,7 @@ internal sealed class RepeatAtPointsCpu : Instance<RepeatAtPointsCpu>
                     = new Point()
                           {
                               Position = destination.Position + Vector3.Transform(source.Position, destination.Orientation),
-                              W = source.W,
+                              F1 = source.F1,
                               Orientation = Quaternion.Multiply(destination.Orientation, source.Orientation),
                           };
             }

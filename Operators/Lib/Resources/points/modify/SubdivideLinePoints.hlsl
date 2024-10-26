@@ -8,8 +8,8 @@ cbuffer Params : register(b0)
     float InsertCount;
 }
 
-StructuredBuffer<Point> SourcePoints : t0;         // input
-RWStructuredBuffer<Point> ResultPoints : u0;    // output
+StructuredBuffer<LegacyPoint> SourcePoints : t0;         // input
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;    // output
 
 
 static uint sourceCount;

@@ -11,8 +11,8 @@ cbuffer Params : register(b0)
     float Width;
 }
 
-StructuredBuffer<Point> RailPoints : t0;
-StructuredBuffer<Point> ShapePoints : t1;
+StructuredBuffer<LegacyPoint> RailPoints : t0;
+StructuredBuffer<LegacyPoint> ShapePoints : t1;
 
 RWStructuredBuffer<PbrVertex> Vertices : u0;
 RWStructuredBuffer<int3> TriangleIndices : u1;
@@ -45,8 +45,8 @@ void main(uint3 i : SV_DispatchThreadID)
     uint columnIndex = vertexIndex / rows;
 
     PbrVertex v;
-    Point railPoint = RailPoints[columnIndex];
-    Point shapePoint = ShapePoints[rowIndex];
+    LegacyPoint railPoint = RailPoints[columnIndex];
+    LegacyPoint shapePoint = ShapePoints[rowIndex];
 
     float3 scaleFactor = (UseStretch ? railPoint.Stretch : 1)
      *  (UseWAsWidth ? railPoint.W : 1) * Width;;

@@ -497,7 +497,7 @@
       }
     },
     {
-      "ChildId": "ffa59d51-280e-4d62-8cb7-4f138456b420"/*SpreadPointAttributes*/,
+      "ChildId": "ffa59d51-280e-4d62-8cb7-4f138456b420"/*MapPointAttributes*/,
       "Comment": "We colorize the spiral with a gradient.",
       "Position": {
         "X": -828.9907,

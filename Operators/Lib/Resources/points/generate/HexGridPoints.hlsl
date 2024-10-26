@@ -35,7 +35,7 @@ static const float2 HexOffsetsAndAngles[] =
 
 
 
-RWStructuredBuffer<Point> ResultPoints : u0;    // output
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;    // output
 static const float ToRad = 3.141578 / 180;
 
 [numthreads(64,4,1)]

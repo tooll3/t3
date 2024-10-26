@@ -61,7 +61,7 @@ internal sealed class _MixPoints : Instance<_MixPoints>
                         var pB = new Point()
                                      {
                                          Position = Vector3.Lerp(pB1.Position, pB2.Position, fraction),
-                                         W = MathUtils.Lerp(pB1.W, pB2.W, fraction),
+                                         F1 = MathUtils.Lerp(pB1.F1, pB2.F1, fraction),
                                          Orientation =  Quaternion.Identity,
                                      };
                         //pB.Position.W = 1;

@@ -25,7 +25,7 @@
           }
         },
         {
-          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
+          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Rotations*/,
           "Type": "System.Single",
           "Value": 10.7
         },
@@ -54,7 +54,7 @@
           "Value": -90.0
         },
         {
-          "Id": "f6986f68-851b-4cd1-ae59-bf189aa1698e"/*Offset*/,
+          "Id": "f6986f68-851b-4cd1-ae59-bf189aa1698e"/*OffsetCenter*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.0,
@@ -481,7 +481,7 @@
           "Value": true
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.0108
         }

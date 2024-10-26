@@ -9,7 +9,7 @@ public struct Point
     public Vector3 Position;
 
     [FieldOffset(3 * 4)]
-    public float W;
+    public float F1;
 
     [FieldOffset(4 * 4)]
     public Quaternion Orientation;
@@ -18,20 +18,20 @@ public struct Point
     public Vector4 Color;
         
     [FieldOffset(12 * 4)]
-    public Vector3 Stretch;
+    public Vector3 Scale;
         
     [FieldOffset(15 * 4)]
-    public float Selected;
+    public float F2;
 
 
     public Point()
     {
         Position = Vector3.Zero;
-        W = 1;
+        F1 = 1;
         Orientation = Quaternion.Identity;
         Color = Vector4.One;
-        Stretch = Vector3.One;
-        Selected = 1;
+        Scale = Vector3.One;
+        F2 = 1;
     }
 
     public static Point Separator()
@@ -39,11 +39,11 @@ public struct Point
         return new Point
                    {
                        Position = Vector3.Zero,
-                       W = float.NaN,
+                       F1 = 1,
                        Orientation = Quaternion.Identity,
                        Color = Vector4.One,
-                       Stretch = Vector3.One,
-                       Selected = 1,
+                       Scale = new Vector3(float.NaN, float.NaN, float.NaN),
+                       F2 = 1,
                    };
     }
 

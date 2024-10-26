@@ -14,9 +14,9 @@ cbuffer Params : register(b0)
 }
 
 
-StructuredBuffer<Point> SourcePoints : t0;        
+StructuredBuffer<LegacyPoint> SourcePoints : t0;        
 Texture2D<float4> FxTexture : register(t1);
-RWStructuredBuffer<Point> ResultPoints : u0;   
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;   
 sampler texSampler : register(s0);
 
 [numthreads(64,1,1)]

@@ -73,7 +73,7 @@ StructuredBuffer<Face> FaceBuffer : t0;
 
 Texture2D<float4> inputTexture : register(t1);
 
-RWStructuredBuffer<Point> points : u0;
+RWStructuredBuffer<LegacyPoint> points : u0;
 // ConsumeStructuredBuffer<ParticleIndex> DeadParticles : u1;
 //RWStructuredBuffer<Face> FaceBuffer : u2;
 
@@ -120,7 +120,7 @@ void main(uint3 i : SV_DispatchThreadID)
     float3 pos = f.positions[0] * u + f.positions[1] * v + f.positions[2] * w;
 
     // ParticleIndex pi = DeadParticles.Consume();
-    Point newPoint = points[i.x];
+    LegacyPoint newPoint = points[i.x];
     newPoint.Position = mul(float4(pos.xyz,1), ObjectToWorld);
     newPoint.W =1;
     newPoint.Rotation = float4(0,0,0,1);

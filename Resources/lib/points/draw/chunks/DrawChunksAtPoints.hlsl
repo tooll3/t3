@@ -70,7 +70,7 @@ sampler clampedSampler : register(s1);
 
 StructuredBuffer<PbrVertex> PbrVertices : register(t0);
 // StructuredBuffer<int3> FaceIndices : register(t1);
-StructuredBuffer<Point> Points : register(t1);
+StructuredBuffer<LegacyPoint> Points : register(t1);
 StructuredBuffer<IndicesForDraw> DrawData : register(t2);
 
 Texture2D<float4> BaseColorMap : register(t3);

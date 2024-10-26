@@ -669,7 +669,7 @@
         {
           "Id": "895dab2c-e3be-4e73-9c96-0f6101cea113"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-there\\linedrawings\\intro-logo-with-title.obj"
+          "Value": "Resources/user/still/proj-there/linedrawings/intro-logo-with-title.obj"
         },
         {
           "Id": "dcacd412-1885-4a10-b073-54192f074ae8"/*Mode*/,
@@ -1249,7 +1249,7 @@
         {
           "Id": "ef2a461d-c66d-44d8-8b0e-e48a57ec991f"/*FilePath*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-there\\svgs\\intro-mournings\\col-03.svg"
+          "Value": "Resources/user/still/proj-there/svgs/intro-mournings/col-03.svg"
         }
       ],
       "Outputs": []
@@ -1361,7 +1361,7 @@
         {
           "Id": "895dab2c-e3be-4e73-9c96-0f6101cea113"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-there\\linedrawings\\intro-logo-marion.obj"
+          "Value": "Resources/user/still/proj-there/linedrawings/intro-logo-marion.obj"
         },
         {
           "Id": "dcacd412-1885-4a10-b073-54192f074ae8"/*Mode*/,
@@ -1483,7 +1483,7 @@
         {
           "Id": "ef2a461d-c66d-44d8-8b0e-e48a57ec991f"/*FilePath*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-there\\svgs\\intro-mournings\\col-03.svg"
+          "Value": "Resources/user/still/proj-there/svgs/intro-mournings/col-03.svg"
         }
       ],
       "Outputs": []
@@ -1716,7 +1716,7 @@
         {
           "Id": "ef2a461d-c66d-44d8-8b0e-e48a57ec991f"/*FilePath*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-there\\svgs\\intro-mournings\\col-02b.svg"
+          "Value": "Resources/user/still/proj-there/svgs/intro-mournings/col-02b.svg"
         }
       ],
       "Outputs": []
@@ -1980,7 +1980,7 @@
         {
           "Id": "ef2a461d-c66d-44d8-8b0e-e48a57ec991f"/*FilePath*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-there\\svgs\\intro-mournings\\col-04.svg"
+          "Value": "Resources/user/still/proj-there/svgs/intro-mournings/col-04.svg"
         }
       ],
       "Outputs": []
@@ -2610,7 +2610,7 @@
         "Bpm": 120.0,
         "DiscardAfterUse": true,
         "IsSoundtrack": true,
-        "FilePath": "Resources\\user\\still\\proj-there\\soundtrack\\partial.mp3"
+        "FilePath": "Resources/user/still/proj-there/soundtrack/partial.mp3"
       }
     ]
   },

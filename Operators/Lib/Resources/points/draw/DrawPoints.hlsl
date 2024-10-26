@@ -26,16 +26,22 @@ cbuffer Transforms : register(b0)
     float4x4 ObjectToClipSpace;
 };
 
-cbuffer Params : register(b2)
+cbuffer Params : register(b1)
 {
     float4 Color;
 
-    float Size;
-    float SegmentCount;
+    float PointSize;
     float CutOffTransparent;
     float FadeNearest;
-    float UseWForSize;
 };
+
+cbuffer IntParams : register(b2)
+{
+    int SegmentCount;
+    int ScaleFX;
+    int UsePointScale;
+};
+
 
 cbuffer FogParams : register(b3)
 {
@@ -79,9 +85,15 @@ psInput vsMain(uint id
     float tooCloseFactor = saturate(-posInCamera.z / FadeNearest - 1);
     output.color.a *= tooCloseFactor;
 
-    float sizeFactor = UseWForSize > 0.5 ? pointDef.W : (isnan(pointDef.W) ? 0 : 1);
+    //float sizeFactor = UseWForSize > 0.5 ? pointDef.W : (isnan(pointDef.W) ? 0 : 1);
 
-    quadPosInCamera.xy += quadPos.xy * 0.10 * sizeFactor * Size;
+    float sizeFxFactor = ScaleFX == 0 
+        ? 1
+        : (ScaleFX == 1) ? pointDef.FX1 : pointDef.FX2;
+ 
+
+    float2 s = PointSize * sizeFxFactor * (UsePointScale  ? pointDef.Scale.xy : 1);
+    quadPosInCamera.xy += quadPos.xy * 0.10 * s;
     output.position = mul(quadPosInCamera, CameraToClipSpace);
     float4 posInWorld = mul(posInObject, ObjectToWorld);
 

@@ -52,8 +52,8 @@ cbuffer Params : register(b1)
     float3 Center;
 }
 
-// StructuredBuffer<Point> Points : t0;
-RWStructuredBuffer<Point> ResultPoints : u0; // output
+// StructuredBuffer<LegacyPoint> Points : t0;
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0; // output
 
 Texture2D<float4> inputTexture : register(t0);
 sampler texSampler : register(s0);
@@ -63,7 +63,7 @@ sampler texSampler : register(s0);
 {
     uint index = i.x;
 
-    Point P = ResultPoints[index];
+    LegacyPoint P = ResultPoints[index];
     float3 pos = P.Position;
     pos -= Center;
 

@@ -8,7 +8,7 @@
     <AssemblyName>$(RootNamespace)</AssemblyName>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <VersionPrefix>1.2.11</VersionPrefix>
+    <VersionPrefix>1.119.146</VersionPrefix>
     <HomeGuid>00000000-0000-0000-0000-000000000000</HomeGuid>
     <EditorVersion>3.10.1</EditorVersion>
     <IsEditorOnly>false</IsEditorOnly>
@@ -49,11 +49,9 @@
     <Using Alias="Format" Include="SharpDX.DXGI.Format" />
     <Using Alias="Texture2DDescription" Include="SharpDX.Direct3D11.Texture2DDescription" />
     <Using Alias="Texture3DDescription" Include="SharpDX.Direct3D11.Texture3DDescription" />
-    <Using Alias="RenderTargetBlendDescription"
-      Include="SharpDX.Direct3D11.RenderTargetBlendDescription" />
+    <Using Alias="RenderTargetBlendDescription" Include="SharpDX.Direct3D11.RenderTargetBlendDescription" />
     <Using Alias="SamplerState" Include="SharpDX.Direct3D11.SamplerState" />
-    <Using Alias="UnorderedAccessViewBufferFlags"
-      Include="SharpDX.Direct3D11.UnorderedAccessViewBufferFlags" />
+    <Using Alias="UnorderedAccessViewBufferFlags" Include="SharpDX.Direct3D11.UnorderedAccessViewBufferFlags" />
     <Using Alias="RawRectangle" Include="SharpDX.Mathematics.Interop.RawRectangle" />
     <Using Alias="RawViewportF" Include="SharpDX.Mathematics.Interop.RawViewportF" />
     <Using Alias="ResourceUsage" Include="SharpDX.Direct3D11.ResourceUsage" />
@@ -91,8 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Core.csproj" Private="false" PrivateAssets="all" />
-    <ProjectReference Include="..\..\Serialization\Serialization.csproj" Private="false"
-      PrivateAssets="all" />
+    <ProjectReference Include="..\..\Serialization\Serialization.csproj" Private="false" PrivateAssets="all" />
     <ProjectReference Include="..\..\SystemUi\SystemUi.csproj" Private="false" PrivateAssets="all" />
     <ProjectReference Include="..\..\Logging\Logging.csproj" Private="false" PrivateAssets="all" />
   </ItemGroup>
@@ -155,7 +152,6 @@
         }
       </OperatorPackageInfoJson>
     </PropertyGroup>
-    <WriteLinesToFile File="$(OutputPath)/OperatorPackage.json" Lines="$(OperatorPackageInfoJson)"
-      Overwrite="True" Encoding="UTF-8" />
+    <WriteLinesToFile File="$(OutputPath)/OperatorPackage.json" Lines="$(OperatorPackageInfoJson)" Overwrite="True" Encoding="UTF-8" />
   </Target>
 </Project>

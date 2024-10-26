@@ -38,8 +38,8 @@ cbuffer Params : register(b1)
 
 
 
-//StructuredBuffer<Point> Points : t0;
-RWStructuredBuffer<Point> Points : u0;    // output
+//StructuredBuffer<LegacyPoint> Points : t0;
+RWStructuredBuffer<LegacyPoint> Points : u0;    // output
 
 Texture2D<float4> DisplaceMap : register(t1);
 sampler texSampler : register(s0);
@@ -49,7 +49,7 @@ void main(uint3 i : SV_DispatchThreadID)
 {
     uint index = i.x; 
 
-    Point P = Points[index];
+    LegacyPoint P = Points[index];
     
     float3 pos = P.Position;
     pos -= Center;

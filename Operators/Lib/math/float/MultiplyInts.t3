@@ -1,0 +1,11 @@
+{
+  "Id": "318072b7-9d7b-4ad3-b163-484c3a987895"/*MultiplyInts*/,
+  "Inputs": [
+    {
+      "Id": "20bac17b-0c5e-4a35-8fc1-7c20d5e101d2"/*InputValues*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

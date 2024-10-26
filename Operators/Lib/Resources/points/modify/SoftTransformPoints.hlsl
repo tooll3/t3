@@ -30,8 +30,8 @@ cbuffer Params : register(b0)
     float Amount;
 }
 
-StructuredBuffer<Point> SourcePoints : t0;
-RWStructuredBuffer<Point> ResultPoints : u0;
+StructuredBuffer<LegacyPoint> SourcePoints : t0;
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
 
 float sdEllipsoid(float3 p, float3 r)
 {
@@ -61,7 +61,7 @@ static const float VolumeZebra = 3.5;
     if (i.x >= numStructs)
         return;
 
-    Point p = SourcePoints[i.x];
+    LegacyPoint p = SourcePoints[i.x];
 
     float3 posInObject = p.Position;
     float3 posInVolume = mul(float4(posInObject, 1), TransformVolume).xyz;

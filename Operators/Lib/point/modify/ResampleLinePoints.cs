@@ -14,7 +14,7 @@ internal sealed class ResampleLinePoints : Instance<ResampleLinePoints>
     public readonly InputSlot<int> Count = new InputSlot<int>();
 
     [Input(Guid = "58980e30-204b-40e2-9610-8482ff01a57c", MappedType = typeof(SampleModes))]
-    public readonly InputSlot<int> SampleMode = new InputSlot<int>();
+    public readonly InputSlot<int> RangeMode = new InputSlot<int>();
 
     [Input(Guid = "354e468d-d38a-49ba-b2f3-8e522723d43f")]
     public readonly InputSlot<Vector2> SampleRange = new InputSlot<Vector2>();

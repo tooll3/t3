@@ -253,7 +253,7 @@
       "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
       "InputValues": [
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*PointSize*/,
           "Type": "System.Single",
           "Value": 0.009
         },
@@ -425,7 +425,7 @@
       "SymbolId": "836f211f-b387-417c-8316-658e0dc6e117",
       "InputValues": [
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.18
         }
@@ -976,7 +976,7 @@
       "SymbolId": "dd586355-64b3-4e96-af6d-b4927595dee7",
       "InputValues": [
         {
-          "Id": "5894156a-cc31-4236-908c-de0e5385fd84"/*Amount*/,
+          "Id": "5894156a-cc31-4236-908c-de0e5385fd84"/*Strength*/,
           "Type": "System.Single",
           "Value": 9.94
         },
@@ -1031,7 +1031,7 @@
       "SymbolId": "4ae9e2f5-7cb3-40b0-a662-0662e8cb7c68",
       "InputValues": [
         {
-          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*LengthFactor*/,
+          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*Length*/,
           "Type": "System.Single",
           "Value": 2.1
         },
@@ -1108,7 +1108,7 @@
           "Value": 1
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.06
         }
@@ -1206,7 +1206,7 @@
       "SymbolId": "836f211f-b387-417c-8316-658e0dc6e117",
       "InputValues": [
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.13
         }
@@ -1561,7 +1561,7 @@
       "SymbolId": "780edb20-f83f-494c-ab17-7015e2311250",
       "InputValues": [
         {
-          "Id": "796d3d55-32b3-436e-a4c3-f15e1585a914"/*ConnectLines*/,
+          "Id": "796d3d55-32b3-436e-a4c3-f15e1585a914"/*CombineMode*/,
           "Type": "System.Int32",
           "Value": 0
         }

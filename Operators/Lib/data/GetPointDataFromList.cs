@@ -39,7 +39,7 @@ internal sealed class GetPointDataFromList : Instance<GetPointDataFromList>
 
         var point = pointList.TypedElements[index.Mod(pointList.NumElements)];
         Position.Value = point.Position;
-        W.Value = point.W;
+        W.Value = point.F1;
         Orientation.Value = new Vector4(point.Orientation.X, point.Orientation.Y, point.Orientation.Z, point.Orientation.W);
     }
         

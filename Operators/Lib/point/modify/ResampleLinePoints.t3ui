@@ -38,7 +38,7 @@
       "Description": "Defines how rotation of the interpolated points is computed. \nThis rotation can be relevant when resulting points are used for instantiating or repeating other points.\n\nIn some situations, the rotation is already inconsistent, e.g. when the position of the points has be randomized without adjusting the rotation. In this case, recomputing the rotation from the line's tangent can be helpful."
     },
     {
-      "InputId": "58980e30-204b-40e2-9610-8482ff01a57c"/*SampleMode*/,
+      "InputId": "58980e30-204b-40e2-9610-8482ff01a57c"/*RangeMode*/,
       "Position": {
         "X": -551.46265,
         "Y": 715.3659

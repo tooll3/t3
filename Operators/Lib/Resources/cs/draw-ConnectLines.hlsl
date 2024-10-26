@@ -20,7 +20,7 @@ cbuffer Params : register(b1)
 }
 
 #include "points/spatial-hash-map/spatial-hash-map-lookup.hlsl"
-StructuredBuffer<Point> points :register(t5);
+StructuredBuffer<LegacyPoint> points :register(t5);
 
 RWStructuredBuffer<uint2> pointIndexPairs :register(u0);
 

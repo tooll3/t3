@@ -120,7 +120,7 @@ internal sealed class LoadObjAsPoints : Instance<LoadObjAsPoints>
                                                                                                 mesh.Positions[sortedVertexIndex].X,
                                                                                                 mesh.Positions[sortedVertexIndex].Y,
                                                                                                 mesh.Positions[sortedVertexIndex].Z),
-                                                                         W = (c.X + c.Y + c.Z) / 3,
+                                                                         F1 = (c.X + c.Y + c.Z) / 3,
                                                                          Color = c,
                                                                      };
                         }
@@ -133,7 +133,7 @@ internal sealed class LoadObjAsPoints : Instance<LoadObjAsPoints>
                                                                                                 mesh.Positions[sortedVertexIndex].X,
                                                                                                 mesh.Positions[sortedVertexIndex].Y,
                                                                                                 mesh.Positions[sortedVertexIndex].Z),
-                                                                         W = 1,
+                                                                         F1 = 1,
                                                                          Color = new Vector4(gray),
                                                                      };
                         }
@@ -146,7 +146,7 @@ internal sealed class LoadObjAsPoints : Instance<LoadObjAsPoints>
                                                                                                 mesh.Positions[sortedVertexIndex].Y,
                                                                                                 mesh.Positions[sortedVertexIndex].Z),
                                                                          Orientation = new Quaternion(c.X, c.Y, c.Z, c.W),
-                                                                         W = 1,
+                                                                         F1 = 1,
                                                                          Color = c,
                                                                      };
                         }
@@ -200,7 +200,7 @@ internal sealed class LoadObjAsPoints : Instance<LoadObjAsPoints>
                                                                                                  mesh.Positions[sortedVertexIndices[lastVertexIndex]].X,
                                                                                                  mesh.Positions[sortedVertexIndices[lastVertexIndex]].Y,
                                                                                                  mesh.Positions[sortedVertexIndices[lastVertexIndex]].Z),
-                                                                          W = 1
+                                                                          F1 = 1
                                                                       };
                             _points.TypedElements[pointIndex++] = Point.Separator();
                         }
@@ -211,7 +211,7 @@ internal sealed class LoadObjAsPoints : Instance<LoadObjAsPoints>
                                                                                              mesh.Positions[sortedVertexIndices[line.V0]].X,
                                                                                              mesh.Positions[sortedVertexIndices[line.V0]].Y,
                                                                                              mesh.Positions[sortedVertexIndices[line.V0]].Z),
-                                                                      W = 1
+                                                                      F1 = 1
                                                                   };
 
                         lastVertexIndex = line.V2;
@@ -223,7 +223,7 @@ internal sealed class LoadObjAsPoints : Instance<LoadObjAsPoints>
                                                                                          mesh.Positions[sortedVertexIndices[lastVertexIndex]].X,
                                                                                          mesh.Positions[sortedVertexIndices[lastVertexIndex]].Y,
                                                                                          mesh.Positions[sortedVertexIndices[lastVertexIndex]].Z),
-                                                                  W = 1
+                                                                  F1 = 1
                                                               };
 
                     _points.TypedElements[pointIndex] = Point.Separator();
@@ -310,7 +310,7 @@ internal sealed class LoadObjAsPoints : Instance<LoadObjAsPoints>
                                                   mesh.Positions[vertexIndexA].X,
                                                   mesh.Positions[vertexIndexA].Y,
                                                   mesh.Positions[vertexIndexA].Z),
-                           W = 1
+                           F1 = 1
                        });
 
         points.Add(new Point()
@@ -319,12 +319,12 @@ internal sealed class LoadObjAsPoints : Instance<LoadObjAsPoints>
                                                   mesh.Positions[vertexIndexB].X,
                                                   mesh.Positions[vertexIndexB].Y,
                                                   mesh.Positions[vertexIndexB].Z),
-                           W = 1
+                           F1 = 1
                        });
 
         points.Add(new Point()
                        {
-                           W = float.NaN
+                           F1 = float.NaN
                        });
 
             

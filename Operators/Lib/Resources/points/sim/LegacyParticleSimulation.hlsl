@@ -25,8 +25,8 @@ cbuffer IntParams : register(b1)
     int CollectCycleIndex;
 }
 
-StructuredBuffer<Point> NewPoints : t0;
-RWStructuredBuffer<Point> CollectedPoints : u0;
+StructuredBuffer<LegacyPoint> NewPoints : t0;
+RWStructuredBuffer<LegacyPoint> CollectedPoints : u0;
 
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
@@ -92,7 +92,7 @@ void main(uint3 i : SV_DispatchThreadID)
         if(ApplyMovement > 0.5) 
         {
             
-            Point p = CollectedPoints[gi];
+            LegacyPoint p = CollectedPoints[gi];
             float4 rot;
             float v = q_separate_v(p.Rotation, rot);
 

@@ -17,7 +17,7 @@ cbuffer Params : register(b0)
 StructuredBuffer<int3> Faces : t0;
 StructuredBuffer<PbrVertex> SourceVertices : t1;
 
-RWStructuredBuffer<Point> ResultPoints : u0;
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
 
 
 float CalculateTriangleArea(float3 vertexA, float3 vertexB, float3 vertexC)

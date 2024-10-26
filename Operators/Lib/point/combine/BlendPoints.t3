@@ -14,8 +14,8 @@
       "DefaultValue": 0
     },
     {
-      "Id": "ba7ffda2-f9f6-440d-a174-7339844835fa"/*BlendValue*/,
-      "DefaultValue": 0.0
+      "Id": "ba7ffda2-f9f6-440d-a174-7339844835fa"/*BlendFactor*/,
+      "DefaultValue": 0.5
     },
     {
       "Id": "bdb712a8-3dbc-458a-887a-5add51813196"/*RangeWidth*/,
@@ -102,7 +102,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\combine\\BlendPoints.hlsl"
+          "Value": "Resources/lib/points/combine/BlendPoints.hlsl"
         }
       ],
       "Outputs": []

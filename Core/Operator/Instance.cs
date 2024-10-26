@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using T3.Core.Logging;
@@ -89,6 +90,10 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
     internal void Dispose()
     {
         Disposing?.Invoke();
+        foreach (var child in ChildInstances.Values)
+        {
+            child.SymbolChild!.DisposeOfInstance(child);
+        }
         Dispose(true);
     }
 
@@ -129,52 +134,46 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
         if (!gotSource || !gotTarget)
             return false;
 
-        targetSlot.AddConnection(sourceSlot, multiInputIndex);
-        sourceSlot.DirtyFlag.Invalidate();
+        targetSlot!.AddConnection(sourceSlot, multiInputIndex);
+        sourceSlot!.DirtyFlag.Invalidate();
         return true;
     }
 
-    public void RemoveConnection(Symbol.Connection connection, int index)
-    {
-        if (!TryGetTargetSlot(connection, out var targetSlot))
-        {
-            return;
-        }
-
-        targetSlot.RemoveConnection(index);
-    }
-
-    private bool TryGetSourceSlot(Symbol.Connection connection, out ISlot sourceSlot)
+    private bool TryGetSourceSlot(Symbol.Connection connection, [NotNullWhen(true)] out ISlot? sourceSlot)
     {
         var compositionInstance = this;
 
         // Get source Instance
-        Instance sourceInstance = null;
-        var gotSourceInstance = false;
+        IEnumerable<ISlot> sourceSlotList;
             
         var sourceParentOrChildId = connection.SourceParentOrChildId;
-            
-        foreach(var child in compositionInstance.Children.Values)
+        if (sourceParentOrChildId == Guid.Empty)
         {
-            if (child.SymbolChildId != sourceParentOrChildId)
-                continue;
-                
-            sourceInstance = child;
-            gotSourceInstance = true;
-            break;
+            sourceSlotList = compositionInstance.Inputs;
         }
-
-        // Evaluate correctness of slot source Instance
-        var connectionBelongsToThis = sourceParentOrChildId == Guid.Empty;
-        if (!gotSourceInstance && !connectionBelongsToThis)
+        else
         {
-            Log.Error($"Connection in {this} has incorrect source slot: {sourceParentOrChildId}");
-            sourceSlot = null;
-            return false;
+            Instance? sourceInstance = null;
+            foreach (var child in compositionInstance.Children.Values)
+            {
+                if (child.SymbolChildId != sourceParentOrChildId)
+                    continue;
+
+                sourceInstance = child;
+                break;
+            }
+
+            if (sourceInstance == null)
+            {
+                Log.Error($"Connection in {this} has incorrect source child : {sourceParentOrChildId}");
+                sourceSlot = null;
+                return false;
+            }
+
+            sourceSlotList = sourceInstance.Outputs;
         }
 
         // Get source Slot
-        var sourceSlotList = gotSourceInstance ? sourceInstance.Outputs : compositionInstance.Inputs.Cast<ISlot>();
         sourceSlot = null;
         var gotSourceSlot = false;
             
@@ -191,20 +190,31 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
         return gotSourceSlot;
     }
 
-    private bool TryGetTargetSlot(Symbol.Connection connection, out ISlot targetSlot)
+    internal bool TryGetTargetSlot(Symbol.Connection connection, [NotNullWhen(true)] out ISlot? targetSlot)
     {
         var compositionInstance = this;
 
         // Get target Instance
-            
         var targetParentOrChildId = connection.TargetParentOrChildId;
+        IEnumerable<ISlot> targetSlotList;
 
-        // Get target Slot
-        var targetSlotList = compositionInstance.Children.TryGetValue(targetParentOrChildId, out var targetInstance) 
-                                 ? targetInstance.Inputs.Cast<ISlot>() 
-                                 : compositionInstance.Outputs;
+        if (targetParentOrChildId == Guid.Empty)
+        {
+            targetSlotList = compositionInstance.Outputs;
+        }
+        else
+        {
+            compositionInstance.Children.TryGetValue(targetParentOrChildId, out var targetInstance);
+            if (targetInstance == null)
+            {
+                Log.Error($"Connection in {this} has incorrect target child: {targetParentOrChildId}");
+                targetSlot = null;
+                return false;
+            }
+            
+            targetSlotList = targetInstance.Inputs;
+        }
 
-        targetSlot = null;
         var gotTargetSlot = false;
         foreach(var slot in targetSlotList)
         {
@@ -212,17 +222,10 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
                 continue;
                 
             targetSlot = slot;
-            gotTargetSlot = true;
-            break;
+            return true;
         }
 
-        #if DEBUG
-            if (targetInstance == null)
-            {
-                System.Diagnostics.Debug.Assert(connection.TargetParentOrChildId == Guid.Empty);
-            }
-        #endif
-
+        targetSlot = null;
         return gotTargetSlot;
     }
 
@@ -270,7 +273,9 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
             if (inputs[i].Id != inputId)
             {
                 int index = inputs.FindIndex(i + 1, input => input.Id == inputId);
-                Debug.Assert(index >= 0);
+                if (index == -1)
+                    continue;
+                //Debug.Assert(index >= 0);
                 inputs.Swap(i, index);
                 Debug.Assert(inputId == inputs[i].Id);
             }
@@ -279,7 +284,9 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
         #if DEBUG
             if (numInputs > 0)
             {
+#if SKIP_ASSERTS
                 Debug.Assert(inputs.Count == inputDefinitions.Count);
+#endif
             }
         #endif
     }

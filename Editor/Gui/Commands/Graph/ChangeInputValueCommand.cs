@@ -79,6 +79,7 @@ public class ChangeInputValueCommand : ICommand
                 AssignValue(OriginalValue);
             }
         }
+        inputParentSymbolUi.FlagAsModified();
     }
 
     public void Do()
@@ -112,7 +113,6 @@ public class ChangeInputValueCommand : ICommand
             return;
         }
 
-        bool changed = false;
         if (_isAnimated)
         {
             var inputUi = symbolUi.InputUis[_inputId];
@@ -130,12 +130,11 @@ public class ChangeInputValueCommand : ICommand
         else
         {
             input.IsDefault = false;
-            changed = input.Value.Assign(valueToSet);
+            input.Value.Assign(valueToSet);
             InvalidateInstances(inputParentSymbol, symbolChild);
         }
             
-        if(changed)
-            symbolUi.FlagAsModified();
+        symbolUi.FlagAsModified();
     }
 
     private void InvalidateInstances(Symbol inputParentSymbol, Symbol.Child symbolChild)

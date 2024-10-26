@@ -64,7 +64,7 @@ sampler clampedSampler : register(s1);
 
 StructuredBuffer<PbrVertex> PbrVertices : t0;
 StructuredBuffer<int3> FaceIndices : t1;
-StructuredBuffer<Point> Points : t2;
+StructuredBuffer<LegacyPoint> Points : t2;
 
 Texture2D<float4> BaseColorMap : register(t3);
 Texture2D<float4> EmissiveColorMap : register(t4);

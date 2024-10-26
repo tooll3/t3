@@ -94,8 +94,8 @@ struct psInput
 
 sampler texSampler : register(s0);
 
-StructuredBuffer<Point> DataPoints : t0;
-StructuredBuffer<Point> OverridePositionPoints : t1;
+StructuredBuffer<LegacyPoint> DataPoints : t0;
+StructuredBuffer<LegacyPoint> OverridePositionPoints : t1;
 
 static const float NanPlaceholder = 999666.666;
 

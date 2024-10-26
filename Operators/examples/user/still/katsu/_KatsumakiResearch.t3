@@ -442,7 +442,7 @@
           }
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.01
         }
@@ -582,7 +582,7 @@
       "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
       "InputValues": [
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*PointSize*/,
           "Type": "System.Single",
           "Value": 0.99
         },
@@ -2092,7 +2092,7 @@
       "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
       "InputValues": [
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*PointSize*/,
           "Type": "System.Single",
           "Value": 0.06
         },
@@ -2854,7 +2854,7 @@
       "SymbolId": "dd586355-64b3-4e96-af6d-b4927595dee7",
       "InputValues": [
         {
-          "Id": "5894156a-cc31-4236-908c-de0e5385fd84"/*Amount*/,
+          "Id": "5894156a-cc31-4236-908c-de0e5385fd84"/*Strength*/,
           "Type": "System.Single",
           "Value": 17.8
         }
@@ -3357,7 +3357,7 @@
       "SymbolId": "dd586355-64b3-4e96-af6d-b4927595dee7",
       "InputValues": [
         {
-          "Id": "5894156a-cc31-4236-908c-de0e5385fd84"/*Amount*/,
+          "Id": "5894156a-cc31-4236-908c-de0e5385fd84"/*Strength*/,
           "Type": "System.Single",
           "Value": 17.8
         }
@@ -4011,7 +4011,7 @@
           "Value": false
         },
         {
-          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
+          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Rotations*/,
           "Type": "System.Single",
           "Value": 60.0
         },
@@ -4031,7 +4031,7 @@
           "Value": -268.0
         },
         {
-          "Id": "f6986f68-851b-4cd1-ae59-bf189aa1698e"/*Offset*/,
+          "Id": "f6986f68-851b-4cd1-ae59-bf189aa1698e"/*OffsetCenter*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.0,
@@ -4412,7 +4412,7 @@
           }
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.01
         }
@@ -4686,11 +4686,11 @@
       "Outputs": []
     },
     {
-      "Id": "bfbb4441-34d9-4606-9202-0d544bd42c84"/*SpreadPointAttributes*/,
+      "Id": "bfbb4441-34d9-4606-9202-0d544bd42c84"/*MapPointAttributes*/,
       "SymbolId": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8",
       "InputValues": [
         {
-          "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*WCurve*/,
+          "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*MappingCurve*/,
           "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
@@ -5644,7 +5644,7 @@
           "Value": false
         },
         {
-          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
+          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Rotations*/,
           "Type": "System.Single",
           "Value": 60.0
         },
@@ -5664,7 +5664,7 @@
           "Value": -268.0
         },
         {
-          "Id": "f6986f68-851b-4cd1-ae59-bf189aa1698e"/*Offset*/,
+          "Id": "f6986f68-851b-4cd1-ae59-bf189aa1698e"/*OffsetCenter*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.0,
@@ -5764,7 +5764,7 @@
       "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
       "InputValues": [
         {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*PointSize*/,
           "Type": "System.Single",
           "Value": 0.06
         },

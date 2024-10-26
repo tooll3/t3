@@ -45,7 +45,7 @@ internal sealed class LinearPointsCpu : Instance<LinearPointsCpu>
             var fX = x / (float)countX;
             _points[index].Position = Vector3.Lerp(startPoint, startPoint + offset, fX);
             _points[index].Orientation = Quaternion.Identity;
-            _points[index].W = MathUtils.Lerp(startW, startW + scaleW, fX);
+            _points[index].F1 = MathUtils.Lerp(startW, startW + scaleW, fX);
             _pointList[index] = _points[index]; 
             index++;
         }

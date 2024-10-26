@@ -185,7 +185,7 @@
           }
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.0117
         }
@@ -247,7 +247,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\sim\\SimDirectionalOffset.hlsl"
+          "Value": "Resources/lib/points/sim/SimDirectionalOffset.hlsl"
         }
       ],
       "Outputs": []

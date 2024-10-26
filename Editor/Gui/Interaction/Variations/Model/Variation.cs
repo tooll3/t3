@@ -20,21 +20,21 @@ public class Variation : ISelectableCanvasObject
     public string Title;
     public int ActivationIndex;
     public bool IsPreset;
-
+    
     public Vector2 PosOnCanvas { get; set; }
     public Vector2 Size { get; set; } = VariationThumbnail.ThumbnailSize;
     public DateTime PublishedDate;
-
+    
     // Other properties...
     public bool IsSelected { get; set; }
     public States State { get; set; } = States.InActive;
     public bool IsSnapshot => !IsPreset;
-
+    
     /// <summary>
     /// Changes by SymbolChildId
     /// </summary>
     public Dictionary<Guid, Dictionary<Guid, InputValue>> ParameterSetsForChildIds;
-
+    
     public Variation Clone()
     {
         return new Variation()
@@ -56,20 +56,20 @@ public class Variation : ISelectableCanvasObject
                                                                       kv2 => kv2.Value.Clone())),
                    };
     }
-
+    
     public static Variation FromJson(Guid symbolId, JToken jToken)
     {
         if (!SymbolUiRegistry.TryGetSymbolUi(symbolId, out var compositionSymbolUi))
             return null;
-            
+        
         var compositionSymbol = compositionSymbolUi.Symbol;
-
+        
         var idToken = jToken[nameof(Id)];
-
+        
         var idString = idToken?.Value<string>();
         if (idString == null)
             return null;
-
+        
         var newVariation = new Variation
                                {
                                    Id = Guid.Parse(idString),
@@ -78,33 +78,33 @@ public class Variation : ISelectableCanvasObject
                                    IsPreset = jToken[nameof(IsPreset)]?.Value<bool>() ?? false,
                                    ParameterSetsForChildIds = new Dictionary<Guid, Dictionary<Guid, InputValue>>(),
                                };
-
+        
         var positionToken = jToken[nameof(PosOnCanvas)];
         if (positionToken != null)
         {
             newVariation.PosOnCanvas = new Vector2(positionToken["X"]?.Value<float>() ?? 0,
                                                    positionToken["Y"]?.Value<float>() ?? 0);
         }
-
+        
         var changesToken = (JObject)jToken[nameof(ParameterSetsForChildIds)];
         if (changesToken == null)
             return newVariation;
-
+        
         foreach (var (symbolChildIdString, changes2) in changesToken)
         {
             var changeList = new Dictionary<Guid, InputValue>();
             if (changes2 is not JObject o)
                 continue;
-
+            
             var symbolChildId = Guid.Parse(symbolChildIdString);
-
+            
             Symbol symbolForChanges;
-
+            
             if (symbolChildId == Guid.Empty)
             {
                 symbolForChanges = compositionSymbol;
             }
-            else if(compositionSymbol.Children.TryGetValue(symbolChildId, out var symbolChild))
+            else if (compositionSymbol.Children.TryGetValue(symbolChildId, out var symbolChild))
             {
                 symbolForChanges = symbolChild.Symbol;
             }
@@ -113,7 +113,7 @@ public class Variation : ISelectableCanvasObject
                 //Log.Warning($"Can't find symbol {symbolChildIdString} for preset changes");
                 continue;
             }
-
+            
             foreach (var (inputIdString, valueToken) in o)
             {
                 var inputId = Guid.Parse(inputIdString);
@@ -123,25 +123,25 @@ public class Variation : ISelectableCanvasObject
                     Log.Warning($"Can't find symbol input {symbolChildIdString}/{inputId} for preset changes");
                     continue;
                 }
-
+                
                 var inputValue = InputValueCreators.Entries[input.DefaultValue.ValueType]();
                 inputValue.SetValueFromJson(valueToken);
                 changeList[inputId] = inputValue;
             }
-
+            
             if (changeList.Count > 0)
             {
                 newVariation.ParameterSetsForChildIds[symbolChildId] = changeList;
             }
         }
-
+        
         return newVariation;
     }
-
+    
     public void ToJson(JsonTextWriter writer)
     {
         var vec2Writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
-
+        
         //writer.WritePropertyName(Id.ToString());
         writer.WriteStartObject();
         {
@@ -149,15 +149,18 @@ public class Variation : ISelectableCanvasObject
             writer.WriteValue(nameof(IsPreset), IsPreset);
             writer.WriteValue(nameof(ActivationIndex), ActivationIndex);
             writer.WriteObject(nameof(Title), Title);
-
+            
             writer.WritePropertyName(nameof(PosOnCanvas));
             vec2Writer(writer, PosOnCanvas);
-
+            
             writer.WritePropertyName(nameof(ParameterSetsForChildIds));
             writer.WriteStartObject();
             {
                 foreach (var (id, values) in ParameterSetsForChildIds)
                 {
+                    if (values.Count <= 0) 
+                        continue;
+                    
                     writer.WritePropertyName(id.ToString());
                     writer.WriteStartObject();
                     foreach (var (inputId, value) in values)
@@ -165,7 +168,7 @@ public class Variation : ISelectableCanvasObject
                         writer.WritePropertyName(inputId.ToString());
                         value.ToJson(writer);
                     }
-
+                    
                     writer.WriteEndObject();
                 }
             }
@@ -173,12 +176,12 @@ public class Variation : ISelectableCanvasObject
         }
         writer.WriteEndObject();
     }
-
+    
     public override string ToString()
     {
         return $"{Title} #{ActivationIndex}";
     }
-
+    
     public enum States
     {
         Undefined,

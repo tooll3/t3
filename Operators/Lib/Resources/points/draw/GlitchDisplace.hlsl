@@ -63,7 +63,7 @@ struct psInput
 
 sampler texSampler : register(s0);
 
-StructuredBuffer<Point> Points : t0;
+StructuredBuffer<LegacyPoint> Points : t0;
 Texture2D<float4> texture2 : register(t1);
 
 psInput vsMain(uint id: SV_VertexID)
@@ -72,7 +72,7 @@ psInput vsMain(uint id: SV_VertexID)
 
     int quadIndex = id % 6;
     int particleId = id / 6;
-    Point pointDef = Points[particleId];
+    LegacyPoint pointDef = Points[particleId];
 
     float4 aspect = float4(CameraToClipSpace[1][1] / CameraToClipSpace[0][0],1,1,1);
     float3 cornerDef = Corners[quadIndex];

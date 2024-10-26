@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
@@ -55,6 +56,11 @@ public class ParameterSettings
 
         return modified;
     }
+    
+    private bool _isDraggingParameterOrder;
+    private static bool _wasDraggingParameterOrder;
+
+    private List<IInputUi> _symbolUisWhileDragging = [];
 
     private IInputUi DrawSelectionArea(SymbolUi symbolUi, NodeSelection nodeSelection)
     {
@@ -70,10 +76,13 @@ public class ParameterSettings
             var symbol = symbolUi.Symbol;
 
             ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0, 0.5f));
-                
-            for (var index = 0; index < symbolUi.InputUis.Values.ToList().Count; index++)
+
+            var inputUis =  _isDraggingParameterOrder ? _symbolUisWhileDragging : symbolUi.InputUis.Values.ToList();
+            var dragCompleted = false;
+            
+            for (var index = 0; index < inputUis.Count; index++)
             {
-                var inputUi = symbolUi.InputUis.Values.ToList()[index];
+                var inputUi = inputUis[index];
                 var isSelected = inputUi.InputDefinition.Id == SelectedInputId;
                 if (isSelected)
                     selectedInputUi = inputUi;
@@ -96,27 +105,37 @@ public class ParameterSettings
                 // Handle dragging
                 var itemMin = ImGui.GetItemRectMin();
                 var itemMax = ImGui.GetItemRectMax();
-                if (ImGui.IsItemActive() && !ImGui.IsItemHovered())
+
+                if(!_isDraggingParameterOrder && ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                 {
-                    var mouseY = ImGui.GetMousePos().Y;
-                    var halfHeight = ImGui.GetItemRectSize().Y / 2;
-                    var indexDelta = 0;
-                    if (mouseY < itemMin.Y - halfHeight && index > 0)
+                    _isDraggingParameterOrder = true;
+                    _symbolUisWhileDragging = symbolUi.InputUis.Values.ToList();
+                }
+                else if (_isDraggingParameterOrder)
+                {
+
+                    //if (ImGui.IsItemActive() && !ImGui.IsItemHovered())
+                    if (ImGui.IsItemActive())
                     {
-                        indexDelta = -1;
-                    }
-                    else if (mouseY > itemMax.Y + halfHeight  && index < symbolUi.InputUis.Count - 1)
-                    {
-                        indexDelta = 1;
-                    }
+                        var mouseY = ImGui.GetMousePos().Y;
+                        var halfHeight = ImGui.GetItemRectSize().Y / 2;
+                        var indexDelta = 0;
+                        if (mouseY < itemMin.Y - halfHeight && index > 0)
+                        {
+                            indexDelta = -1;
+                        }
+                        else if (mouseY > itemMax.Y + halfHeight && index < symbolUi.InputUis.Count - 1)
+                        {
+                            indexDelta = 1;
+                        }
                         
-                    
-                    if (indexDelta != 0)
-                    {
-                        (symbol.InputDefinitions[index + indexDelta], symbol.InputDefinitions[index]) 
-                            = (symbol.InputDefinitions[index], symbol.InputDefinitions[index + indexDelta]);
-                        
-                        _wasDraggingParameterOrder = true;
+                        if (indexDelta != 0)
+                        {
+                            (_symbolUisWhileDragging[index + indexDelta], _symbolUisWhileDragging[index])
+                                = (_symbolUisWhileDragging[index], _symbolUisWhileDragging[index + indexDelta]);
+                            
+                            _wasDraggingParameterOrder = true;
+                        }
                     }
                 }
 
@@ -150,6 +169,7 @@ public class ParameterSettings
                     }
                 }
                 
+                // Handle click
                 if (clicked && !_wasDraggingParameterOrder)
                 { 
                     SelectedInputId = inputUi.InputDefinition.Id;
@@ -157,6 +177,11 @@ public class ParameterSettings
                     var selectedInstance = nodeSelection.GetFirstSelectedInstance();
                     if(selectedInstance == null) 
                         nodeSelection.SetSelection(inputUi);
+                }
+
+                if (ImGui.IsItemDeactivated())
+                {
+                    dragCompleted = true;
                 }
                 
             }
@@ -168,9 +193,23 @@ public class ParameterSettings
                 SelectedInputId = symbolUi.InputUis.Values.First().InputDefinition.Id;
             }
             
-            if (ImGui.IsMouseReleased(ImGuiMouseButton.Left) && _wasDraggingParameterOrder)
+            if (dragCompleted && _wasDraggingParameterOrder)
             {
-
+                _isDraggingParameterOrder = false;
+                
+                // Sort inputDef by order of inputUis...
+                var originalList = symbol.InputDefinitions.ToList();
+                symbol.InputDefinitions.Clear();
+                foreach (var inputUi in _symbolUisWhileDragging)
+                {
+                    var inputDefinition = originalList.Find(def => def.Id == inputUi.InputDefinition.Id);
+                    if (inputDefinition != null)
+                    {
+                        symbol.InputDefinitions.Add(inputDefinition);
+                    }
+                }
+                
+                _symbolUisWhileDragging.Clear();
                 _wasDraggingParameterOrder = false;
                 symbol.SortInputSlotsByDefinitionOrder();
                 InputsAndOutputs.AdjustInputOrderOfSymbol(symbol);
@@ -283,7 +322,6 @@ public class ParameterSettings
         WithGroup,
     }
 
-    private static bool _wasDraggingParameterOrder;
     internal Guid SelectedInputId { get; set; }
     
     public bool IsActive { get; private set; } = false;

@@ -441,7 +441,7 @@
       "SymbolId": "836f211f-b387-417c-8316-658e0dc6e117",
       "InputValues": [
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.006
         }
@@ -531,7 +531,7 @@
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {
-          "Id": "13cbb509-f90c-4ae7-a9d3-a8fc907794e3"/*RadiusOffset*/,
+          "Id": "13cbb509-f90c-4ae7-a9d3-a8fc907794e3"/*OffsetRadius*/,
           "Type": "System.Single",
           "Value": -1.0
         },
@@ -546,7 +546,7 @@
           "Value": false
         },
         {
-          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Cycles*/,
+          "Id": "94b2a118-f760-4043-933c-31283e6e7006"/*Rotations*/,
           "Type": "System.Single",
           "Value": 10.0
         },
@@ -589,7 +589,7 @@
       "SymbolId": "836f211f-b387-417c-8316-658e0dc6e117",
       "InputValues": [
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.01
         }
@@ -1047,7 +1047,7 @@
       "SymbolId": "4ae9e2f5-7cb3-40b0-a662-0662e8cb7c68",
       "InputValues": [
         {
-          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*LengthFactor*/,
+          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*Length*/,
           "Type": "System.Single",
           "Value": 0.5
         },
@@ -1638,7 +1638,7 @@
           }
         },
         {
-          "Id": "f6986f68-851b-4cd1-ae59-bf189aa1698e"/*Offset*/,
+          "Id": "f6986f68-851b-4cd1-ae59-bf189aa1698e"/*OffsetCenter*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": -0.77666664,
@@ -2023,7 +2023,7 @@
           "Value": 0.1
         },
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.083
         }
@@ -2089,7 +2089,7 @@
       "SymbolId": "836f211f-b387-417c-8316-658e0dc6e117",
       "InputValues": [
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.012999999
         }

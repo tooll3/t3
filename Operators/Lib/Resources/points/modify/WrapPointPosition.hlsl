@@ -25,12 +25,12 @@ cbuffer Transforms : register(b1)
     float4x4 ObjectToClipSpace;
 };
 
-// struct Point {
+// struct LegacyPoint {
 //     float3 Position;
 //     float W;
 // };
 
-RWStructuredBuffer<Point> ResultPoints : u0; 
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0; 
 
 
 

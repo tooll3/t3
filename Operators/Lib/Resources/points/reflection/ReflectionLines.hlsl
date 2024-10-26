@@ -11,11 +11,11 @@ cbuffer Params : register(b0)
     float SpreadColorShift;
 }
 
-StructuredBuffer<Point> SourcePoints : t0;
+StructuredBuffer<LegacyPoint> SourcePoints : t0;
 StructuredBuffer<PbrVertex> Vertices: t1;
 StructuredBuffer<int3> Indices: t2;
 
-RWStructuredBuffer<Point> ResultPoints : u0;
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
 
 
 // Casual Moller-Trumbore GPU Ray-Triangle Intersection Routine
@@ -122,7 +122,7 @@ void main(uint3 i : SV_DispatchThreadID, uint3 GTid : SV_GroupThreadID)
     uint stepCount = (uint)StepCount; // including separator
     uint rayGroupStartIndex= i.x * stepCount;
 
-    Point p = SourcePoints[i.x];
+    LegacyPoint p = SourcePoints[i.x];
 
     // Write ray start and seperator
     ResultPoints[rayGroupStartIndex + 0] = p;

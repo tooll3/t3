@@ -162,11 +162,11 @@ internal sealed class BezierSpline
             var d = pos - lastPos;
             lastPos = pos;
 
-            result[index].W = 1;
+            result[index].F1 = 1;
             result[index].Orientation = LookAt(Vector3.Normalize(d), -upVector);
             result[index].Color = SampleLinearColors(t, ref sourcePoints);
-            result[index].Stretch = new Vector3(1.0f, 1.0f, 1.0f);
-            result[index].Selected = 1;
+            result[index].Scale = new Vector3(1.0f, 1.0f, 1.0f);
+            result[index].F2 = 1;
         }
 
         return result;
@@ -252,8 +252,8 @@ internal sealed class BezierSpline
         }
 
         return Bezier.GetPoint(pA,
-                               pA - (pLast - pB) / curvature * points[i].W,
-                               pB + (pA - pNext) / curvature * points[i + 1].W,
+                               pA - (pLast - pB) / curvature * points[i].F1,
+                               pB + (pA - pNext) / curvature * points[i + 1].F1,
                                pB,
                                t);
     }
@@ -269,7 +269,7 @@ internal sealed class BezierSpline
             var t = (float)index / count;
 
             result[index].Position = SampleCubicBezier(t, 4, ref sourcePoints);
-            result[index].W = 1;
+            result[index].F1 = 1;
         }
 
         return result;

@@ -141,7 +141,7 @@ internal sealed class SaveParameterSet : Instance<SaveParameterSet>
                 pointList.TypedElements[paramIndex] = new Point()
                                                           {
                                                               Position = new System.Numerics.Vector3(parameter.X, -parameter.Y, 0),
-                                                              W = 1,
+                                                              F1 = 1,
                                                           };
             }
 

@@ -50,13 +50,13 @@ cbuffer Params : register(b1)
 #define WMODE_ADD 1
 #define WMODE_BLEND 2
 
-StructuredBuffer<Point> SourcePoints : t0;
-StructuredBuffer<Point> FieldPoints : t1;
+StructuredBuffer<LegacyPoint> SourcePoints : t0;
+StructuredBuffer<LegacyPoint> FieldPoints : t1;
 
 Texture2D<float4> CurveImage : register(t2);
 Texture2D<float4> GradientImage : register(t3);
 
-RWStructuredBuffer<Point> ResultPoints : u0;
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
 
 sampler texSampler : register(s0);
 
@@ -75,7 +75,7 @@ float3 fmod(float3 x, float3 y)
         return;
     }
 
-    Point p = SourcePoints[index];
+    LegacyPoint p = SourcePoints[index];
 
     float3 totalForce;
     float totalWeight = 0;

@@ -310,7 +310,7 @@
       }
     },
     {
-      "ChildId": "7019dd4a-0ad4-494e-a40f-b645c92dffca"/*SpreadPointAttributes*/,
+      "ChildId": "7019dd4a-0ad4-494e-a40f-b645c92dffca"/*MapPointAttributes*/,
       "Position": {
         "X": 3097.2688,
         "Y": -803.3949

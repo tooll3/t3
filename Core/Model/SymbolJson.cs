@@ -237,14 +237,24 @@ public static class SymbolJson
         return (id, jsonValue);
     }
 
-    private static Symbol.Connection ReadConnection(JToken jsonConnection)
+    private static bool TryReadConnection(JToken jsonConnection, out Symbol.Connection? connection)
     {
-        var sourceInstanceId = Guid.Parse(jsonConnection[JsonKeys.SourceParentOrChildId].Value<string>());
-        var sourceSlotId = Guid.Parse(jsonConnection[JsonKeys.SourceSlotId].Value<string>());
-        var targetInstanceId = Guid.Parse(jsonConnection[JsonKeys.TargetParentOrChildId].Value<string>());
-        var targetSlotId = Guid.Parse(jsonConnection[JsonKeys.TargetSlotId].Value<string>());
+        var sourceChildString = jsonConnection[JsonKeys.SourceParentOrChildId].Value<string>();
+        var targetChildString = jsonConnection[JsonKeys.TargetParentOrChildId].Value<string>();
+        var sourceSlotString = jsonConnection[JsonKeys.SourceSlotId].Value<string>();
+        var targetSlotString = jsonConnection[JsonKeys.TargetSlotId].Value<string>();
+        
+        if(!Guid.TryParse(sourceChildString, out var sourceInstanceId) ||
+           !Guid.TryParse(targetChildString, out var targetInstanceId) ||
+           !Guid.TryParse(sourceSlotString, out var sourceSlotId) ||
+           !Guid.TryParse(targetSlotString, out var targetSlotId))
+        {
+            connection = null;
+            return false;
+        }
 
-        return new Symbol.Connection(sourceInstanceId, sourceSlotId, targetInstanceId, targetSlotId);
+        connection = new Symbol.Connection(sourceInstanceId, sourceSlotId, targetInstanceId, targetSlotId);
+        return true;
     }
 
     private static void ReadChildInputValue(Symbol.Child symbolChild, JToken inputJson)
@@ -299,7 +309,7 @@ public static class SymbolJson
         var hasConnections = connectionsJson.Count > 0;
         if (hasConnections)
         {
-            ObtainConnections(connectionsJson, connections);
+            ObtainConnections(connectionsJson, connections, instanceType);
         }
 
         var inputJsonArray = (JArray)jToken[JsonKeys.Inputs];
@@ -332,11 +342,16 @@ public static class SymbolJson
         return new SymbolReadResult(symbol, childrenJsons, animatorData);
     }
 
-    private static void ObtainConnections(JArray connectionsJson, List<Symbol.Connection> connections)
+    private static void ObtainConnections(JArray connectionsJson, List<Symbol.Connection> connections, Type type)
     {
         foreach (var c in connectionsJson)
         {
-            var connection = ReadConnection(c);
+            if (!TryReadConnection(c, out var connection))
+            {
+                Log.Warning($"[{type}] Failed to read connection: " + c);
+                continue;
+            }
+            
             connections.Add(connection);
         }
     }

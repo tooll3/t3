@@ -225,10 +225,10 @@ internal sealed class TextSprites : Instance<TextSprites>
             _points.Add(new Point
                             {
                                 Position = center,
-                                W = 1,
+                                F1 = 1,
                                 Orientation = Quaternion.Identity,
-                                Selected = 1,
-                                Stretch = Vector3.One,
+                                F2 = 1,
+                                Scale = Vector3.One,
                                 Color = Vector4.One,
                             });
             outputIndex++;
@@ -280,11 +280,11 @@ internal sealed class TextSprites : Instance<TextSprites>
     private readonly Point[] _nonPoints = { new()
                                                 {
                                                     Position = Vector3.Zero,
-                                                    W= float.NaN,
+                                                    F1= float.NaN,
                                                     Orientation =  Quaternion.Identity,
                                                     Color = Vector4.One,
-                                                    Selected = 1,
-                                                    Stretch = Vector3.One,
+                                                    F2 = 1,
+                                                    Scale = Vector3.One,
                                                 } };
 
     private void OffsetLineCharacters(float offset, int currentLineCharacterCount, int outputIndex)

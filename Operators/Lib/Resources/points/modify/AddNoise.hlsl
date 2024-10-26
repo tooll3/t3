@@ -3,7 +3,7 @@
 #include "shared/point.hlsl"
 #include "shared/quat-functions.hlsl"
 #include "shared/bias-functions.hlsl"
-  
+
 cbuffer Params : register(b0)
 {
     float Amount;
@@ -15,9 +15,15 @@ cbuffer Params : register(b0)
     float RotationLookupDistance;
 
     float3 NoiseOffset;
-    float UseSelection;
+    float __padding;
+    // float UseSelection;
 
     float2 BiasAndGain;
+}
+
+cbuffer Params : register(b1)
+{
+    int StrengthMode;
 }
 
 StructuredBuffer<Point> SourcePoints : t0;
@@ -26,7 +32,7 @@ RWStructuredBuffer<Point> ResultPoints : u0;
 float3 GetNoise(float3 pos, float3 variation)
 {
     float3 noiseLookup = (pos * 0.91 + variation + Phase) * Frequency;
-    return snoiseVec3(noiseLookup) * Amount / 100 * AmountDistribution;
+    return snoiseVec3(noiseLookup) * Amount / 10 * AmountDistribution;
 }
 
 static float3 variationOffset;
@@ -70,9 +76,8 @@ void GetTranslationAndRotation(float weight, float3 pointPos, float4 rotation,
     float3 variationOffset = hash41u(i.x).xyz * Variation;
 
     Point p = SourcePoints[i.x];
+    float weight = StrengthMode == 0 ? 1 : ((StrengthMode == 1) ? p.FX1 : p.FX2);
 
-    float weight = UseSelection < 0 ? lerp(1, p.Selected, -UseSelection)
-                                    : lerp(1, p.W, UseSelection);
     float3 offset;
     float4 newRotation = p.Rotation;
 

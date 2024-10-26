@@ -3,33 +3,32 @@
 
 #ifndef PI
 #define PI 3.14159265359f
-#endif 
+#endif
 
-#pragma warning( disable : 4008 )
-const static float NAN = 0.0f / 0.0f;
+#pragma warning(disable : 4118)
+const static float NAN = sqrt(-1);
 
 #ifndef mod
 #define mod(x, y) ((x) - (y) * floor((x) / (y)))
-#endif 
+#endif
 
-inline float q_separate_v(float4 q, out float4 normalized ) 
+inline float q_separate_v(float4 q, out float4 normalized)
 {
     float l = length(q);
-    normalized = q / l; 
+    normalized = q / l;
     return l - 1;
 }
 
-inline float4 q_encode_v(float4 q, float v ) 
+inline float4 q_encode_v(float4 q, float v)
 {
     return q * (v + 1);
 }
 
 float4 qMul(float4 q1, float4 q2)
-{ 
+{
     return float4(
         q2.xyz * q1.w + q1.xyz * q2.w + cross(q1.xyz, q2.xyz),
-        q1.w * q2.w - dot(q1.xyz, q2.xyz)
-    );
+        q1.w * q2.w - dot(q1.xyz, q2.xyz));
 }
 
 // Vector rotation with a quaternion
@@ -47,7 +46,6 @@ inline float3 qRotateVec3(float3 v, float4 q)
     return v + q.w * t + cross(q.xyz, t);
 }
 
-
 float4 qConjugate(float4 q)
 {
     return float4(-q.x, -q.y, -q.z, q.w);
@@ -59,7 +57,6 @@ float4 qInverse(float4 q)
     float4 conj = qConjugate(q);
     return conj / (q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
 }
-
 
 // A given angle of rotation about a given axis
 float4 qFromAngleAxis(float angle, float3 axis)
@@ -85,9 +82,13 @@ float4 qFromVectors(float3 v1, float3 v2)
         }
         tmp = normalize(tmp);
         q = qFromAngleAxis(PI, tmp);
-    } else if (d > 0.999999) {
+    }
+    else if (d > 0.999999)
+    {
         q = QUATERNION_IDENTITY;
-    } else {
+    }
+    else
+    {
         q.xyz = cross(v1, v2);
         q.w = 1 + d;
         q = normalize(q);
@@ -209,19 +210,18 @@ float4 qSlerp(in float4 a, in float4 b, float t)
     return QUATERNION_IDENTITY;
 }
 
-
 float4 qFromEuler(float yaw, float pitch, float roll)
 {
-return float4(
-        sin(roll/2) * cos(pitch/2) * cos(yaw/2) - cos(roll/2) * sin(pitch/2) * sin(yaw/2),
-        cos(roll/2) * sin(pitch/2) * cos(yaw/2) + sin(roll/2) * cos(pitch/2) * sin(yaw/2),
-        cos(roll/2) * cos(pitch/2) * sin(yaw/2) - sin(roll/2) * sin(pitch/2) * cos(yaw/2),
-        cos(roll/2) * cos(pitch/2) * cos(yaw/2) + sin(roll/2) * sin(pitch/2) * sin(yaw/2));
+    return float4(
+        sin(roll / 2) * cos(pitch / 2) * cos(yaw / 2) - cos(roll / 2) * sin(pitch / 2) * sin(yaw / 2),
+        cos(roll / 2) * sin(pitch / 2) * cos(yaw / 2) + sin(roll / 2) * cos(pitch / 2) * sin(yaw / 2),
+        cos(roll / 2) * cos(pitch / 2) * sin(yaw / 2) - sin(roll / 2) * sin(pitch / 2) * cos(yaw / 2),
+        cos(roll / 2) * cos(pitch / 2) * cos(yaw / 2) + sin(roll / 2) * sin(pitch / 2) * sin(yaw / 2));
 }
 
 float4x4 qToMatrix(float4 quat)
 {
-    float4x4 m = 0; //float4x4(float4(0, 0, 0, 0), float4(0, 0, 0, 0), float4(0, 0, 0, 0), float4(0, 0, 0, 0));
+    float4x4 m = 0; // float4x4(float4(0, 0, 0, 0), float4(0, 0, 0, 0), float4(0, 0, 0, 0), float4(0, 0, 0, 0));
 
     float x = quat.x, y = quat.y, z = quat.z, w = quat.w;
     float x2 = x + x, y2 = y + y, z2 = z + z;
@@ -246,54 +246,54 @@ float4x4 qToMatrix(float4 quat)
     return m;
 }
 
-
-float4 qFromMatrix3 (float3x3 m) 
-{   
-    float w = sqrt( 1.0 + m._m00 + m._m11 + m._m22) / 2.0;
+float4 qFromMatrix3(float3x3 m)
+{
+    float w = sqrt(1.0 + m._m00 + m._m11 + m._m22) / 2.0;
     float w4 = (4.0 * w);
-    float x = (m._m21 - m._m12) / w4 ;
-    float y = (m._m02 - m._m20) / w4 ;
-    float z = (m._m10 - m._m01) / w4 ;
-    return float4(x,y,z,w);
+    float x = (m._m21 - m._m12) / w4;
+    float y = (m._m02 - m._m20) / w4;
+    float z = (m._m10 - m._m01) / w4;
+    return float4(x, y, z, w);
 }
 
-float4 qFromMatrix3Precise (float3x3 m) 
-{   
+float4 qFromMatrix3Precise(float3x3 m)
+{
     float tr = m._m00 + m._m11 + m._m22;
 
-    if (tr > 0) { 
-        float S = sqrt(tr+1.0) * 2; // S=4*qw 
+    if (tr > 0)
+    {
+        float S = sqrt(tr + 1.0) * 2; // S=4*qw
         return float4(
             (m._m21 - m._m12) / S,
             (m._m02 - m._m20) / S,
-            (m._m10 - m._m01) / S, 
-            0.25 * S
-        );
-    } else if ((m._m00 > m._m11)&(m._m00 > m._m22)) { 
-        float S = sqrt(1.0 + m._m00 - m._m11 - m._m22) * 2; // S=4*qx 
+            (m._m10 - m._m01) / S,
+            0.25 * S);
+    }
+    else if ((m._m00 > m._m11) & (m._m00 > m._m22))
+    {
+        float S = sqrt(1.0 + m._m00 - m._m11 - m._m22) * 2; // S=4*qx
         return float4(
             0.25 * S,
-            (m._m01 + m._m10) / S ,
-            (m._m02 + m._m20) / S ,
-            (m._m21 - m._m12) / S
-        );
-    } else if (m._m11 > m._m22) { 
+            (m._m01 + m._m10) / S,
+            (m._m02 + m._m20) / S,
+            (m._m21 - m._m12) / S);
+    }
+    else if (m._m11 > m._m22)
+    {
         float S = sqrt(1.0 + m._m11 - m._m00 - m._m22) * 2; // S=4*qy
         return float4(
             (m._m01 + m._m10) / S,
             0.25 * S,
             (m._m12 + m._m21) / S,
-            (m._m02 - m._m20) / S
-        );
-    } else { 
+            (m._m02 - m._m20) / S);
+    }
+    else
+    {
         float S = sqrt(1.0 + m._m22 - m._m00 - m._m11) * 2; // S=4*qz
         return float4(
             (m._m02 + m._m20) / S,
             (m._m12 + m._m21) / S,
             0.25 * S,
-            (m._m10 - m._m01) / S
-        );
+            (m._m10 - m._m01) / S);
     }
 }
-
-

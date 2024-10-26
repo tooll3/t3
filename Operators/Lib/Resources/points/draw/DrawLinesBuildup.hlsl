@@ -54,7 +54,7 @@ struct psInput
 
 sampler texSampler : register(s0);
 
-StructuredBuffer<Point> Points : t0;
+StructuredBuffer<LegacyPoint> Points : t0;
 Texture2D<float4> texture2 : register(t1);
 
 psInput vsMain(uint id: SV_VertexID)
@@ -70,10 +70,10 @@ psInput vsMain(uint id: SV_VertexID)
     uint particleId = id / 6;
     float3 cornerFactors = Corners[quadIndex];
     
-    Point pointAA = Points[ particleId<1 ? 0: particleId-1];
-    Point pointA = Points[particleId];
-    Point pointB = Points[particleId+1];
-    Point pointBB = Points[particleId > SegmentCount-2 ? SegmentCount-2: particleId+2];
+    LegacyPoint pointAA = Points[ particleId<1 ? 0: particleId-1];
+    LegacyPoint pointA = Points[particleId];
+    LegacyPoint pointB = Points[particleId+1];
+    LegacyPoint pointBB = Points[particleId > SegmentCount-2 ? SegmentCount-2: particleId+2];
 
     float3 posInObject = cornerFactors.x < 0.5
         ? pointA.Position

@@ -1,8 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.CodeAnalysis.Operations;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator.Slots;
@@ -23,7 +23,7 @@ public sealed partial class Symbol : IDisposable, IResource
     #region Saved Properties
     public readonly Guid Id;
     public IReadOnlyDictionary<Guid, Child> Children => _children;
-    public IReadOnlyList<Instance> InstancesOfSelf => _instancesOfSelf;
+    public IEnumerable<Instance> InstancesOfSelf => _childrenCreatedFromMe.SelectMany(x => x.Instances);
     public readonly List<Connection> Connections = [];
 
     /// <summary>
@@ -83,41 +83,17 @@ public sealed partial class Symbol : IDisposable, IResource
     {
         SymbolPackage = symbolPackage; // we re-assign this here because symbols can be moved from one package to another
         InstanceType = instanceType;
+        NeedsTypeUpdate = true;
     }
 
     public void Dispose()
     {
-        var allInstances = _instancesOfSelf.ToArray(); // copy as it will be modified
-        foreach (var instance in allInstances)
+        for (var index = 0; index < _childrenCreatedFromMe.Count; index++)
         {
-            DestroyInstance(instance);
+            var child = _childrenCreatedFromMe[index];
+            child.Dispose();
+            _childrenCreatedFromMe.RemoveAt(index);
         }
-            
-        for (var index = _instancesOfSelf.Count - 1; index >= 0; index--)
-        {
-            var instance = _instancesOfSelf[index];
-            DestroyInstance(instance, index);
-        }
-    }
-
-    private void DestroyInstance(Instance instance, int index = -1)
-    {
-        var allChildren = instance.ChildInstances.Values.ToArray();
-        foreach (var child in allChildren)
-        {
-            child.Symbol.DestroyInstance(child);
-        }
-            
-        instance.Parent?.ChildInstances.Remove(instance.SymbolChildId);
-        instance.Dispose();
-            
-        index = index == -1 ? _instancesOfSelf.IndexOf(instance) : index;
-        if (index < 0)
-        {
-            Log.Warning($"Skipping removal of instance from symbol {instance.Symbol} because it was not found.");
-            return;
-        }
-        _instancesOfSelf.RemoveAt(index);
     }
 
     public int GetMultiInputIndexFor(Connection con)
@@ -130,9 +106,9 @@ public sealed partial class Symbol : IDisposable, IResource
 
     public void SortInputSlotsByDefinitionOrder()
     {
-        foreach (var instance in _instancesOfSelf)
+        for (var index = 0; index < _childrenCreatedFromMe.Count; index++)
         {
-            Instance.SortInputSlotsByDefinitionOrder(instance);
+            _childrenCreatedFromMe[index].SortInputSlotsByDefinitionOrder();
         }
     }
         
@@ -158,11 +134,13 @@ public sealed partial class Symbol : IDisposable, IResource
 
         // Check if another connection is already existing to the target input, ignoring multi inputs for now
         var connectionsAtInput = Connections.FindAll(c =>
-                                                         c.TargetParentOrChildId == connection.TargetParentOrChildId &&
+                                                         (c.TargetParentOrChildId == connection.TargetParentOrChildId
+                                                          || c.TargetParentOrChildId == Guid.Empty) &&
                                                          c.TargetSlotId == connection.TargetSlotId);
 
         if (multiInputIndex > connectionsAtInput.Count)
         {
+            // todo - solve is to ensure that the multi-input slots aren't cleared of quantity when recompiling, or rather are populated in order
             Log.Error($"Trying to add a connection at the index {multiInputIndex}. Out of bound of the {connectionsAtInput.Count} existing connections.");
             return;
         }
@@ -207,8 +185,10 @@ public sealed partial class Symbol : IDisposable, IResource
             }
         }
 
-        foreach (var instance in _instancesOfSelf)
-            instance.TryAddConnection(connection, multiInputIndex);
+        for (var index = 0; index < _childrenCreatedFromMe.Count; index++)
+        {
+            _childrenCreatedFromMe[index].AddConnectionToInstances(connection, multiInputIndex);
+        }
     }
 
     public void RemoveConnection(Connection connection, int multiInputIndex = 0)
@@ -251,22 +231,21 @@ public sealed partial class Symbol : IDisposable, IResource
             }
         }
 
-        if (removed)
-        {
-            foreach (var instance in _instancesOfSelf)
-            {
-                instance.RemoveConnection(connection, multiInputIndex);
-            }
-        }
-        else
+        if (!removed)
         {
             Log.Warning($"Failed to remove connection.");
+            return;
+        }
+
+        foreach (var child in _childrenCreatedFromMe)
+        {
+            child.RemoveConnectionFromInstances(connection, multiInputIndex);
         }
     }
 
     public void CreateOrUpdateActionsForAnimatedChildren()
     {
-        foreach (var instance in _instancesOfSelf)
+        foreach (var instance in InstancesOfSelf)
         {
             Animator.CreateUpdateActionsForExistingCurves(instance.Children.Values);
         }
@@ -274,17 +253,18 @@ public sealed partial class Symbol : IDisposable, IResource
 
     internal void CreateAnimationUpdateActionsForSymbolInstances()
     {
-        var parents = new HashSet<Symbol>();
-        foreach (var instance in _instancesOfSelf)
+        var foundParentsOfMyInstances = new HashSet<Symbol>();
+        foreach (var instance in InstancesOfSelf)
         {
             var parent = instance.Parent;
-            if(parent != null)
-                parents.Add(parent.Symbol);
-        }
-
-        foreach (var parentSymbol in parents)
-        {
-            parentSymbol.CreateOrUpdateActionsForAnimatedChildren();
+            if (parent != null)
+            {
+                var parentSymbol = parent.Symbol;
+                if (foundParentsOfMyInstances.Add(parentSymbol))
+                {
+                    parentSymbol.CreateOrUpdateActionsForAnimatedChildren();
+                }
+            }
         }
     }
 
@@ -294,12 +274,10 @@ public sealed partial class Symbol : IDisposable, IResource
         Connections.RemoveAll(c => c.SourceParentOrChildId == childId || c.TargetParentOrChildId == childId);
             
         var removedFromSymbol = _children.Remove(childId, out var symbolChild);
-        var idOfRemovedChild = symbolChild!.Id;
 
-        foreach (var instance in _instancesOfSelf)
+        foreach (var me in _childrenCreatedFromMe)
         {
-            var childInstance = instance.Children[idOfRemovedChild];
-            childInstance.Symbol.DestroyInstance(childInstance);
+            me.DestroyChildInstances(symbolChild);
         }
 
         if (removedFromSymbol)
@@ -341,11 +319,9 @@ public sealed partial class Symbol : IDisposable, IResource
 
     public void InvalidateInputInAllChildInstances(Guid inputId, Guid childId)
     {
-        foreach (var parent in _instancesOfSelf)
+        foreach (var parent in _childrenCreatedFromMe)
         {
-            var instance = parent.Children[childId];
-            var slot = instance.Inputs.Single(i => i.Id == inputId);
-            slot.DirtyFlag.Invalidate();
+            parent.InvalidateInputInChildren(inputId, childId);
         }
     }
 
@@ -355,21 +331,15 @@ public sealed partial class Symbol : IDisposable, IResource
     public void InvalidateInputDefaultInInstances(IInputSlot inputSlot)
     {
         var inputId = inputSlot.Id;
-        foreach (var instance in _instancesOfSelf)
+        for (var index = 0; index < _childrenCreatedFromMe.Count; index++)
         {
-            var slot = instance.Inputs.Single(i => i.Id == inputId);
-            if (!slot.Input.IsDefault)
-                continue;
-
-            slot.DirtyFlag.Invalidate();
+            var child = _childrenCreatedFromMe[index];
+            child.InvalidateInputDefaultInInstances(inputId);
         }
     }
 
-    internal void AddInstanceOfSelf(Instance instance)
-    {
-        _instancesOfSelf.Add(instance);
-    }
-
-    private readonly List<Instance> _instancesOfSelf = new();
+    private bool NeedsTypeUpdate { get; set; } = true;
+    //private IEnumerable<Instance> _instancesOfSelf => _childrenCreatedFromMe.SelectMany(x => x.Instances);
     private ConcurrentDictionary<Guid, Child> _children = new();
+    private readonly SynchronizedCollection<Child> _childrenCreatedFromMe = new();
 }

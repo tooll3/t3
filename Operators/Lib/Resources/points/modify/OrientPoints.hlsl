@@ -12,8 +12,8 @@ cbuffer Params : register(b0)
     float Flip;
 }
 
-StructuredBuffer<Point> SourcePoints : t0;
-RWStructuredBuffer<Point> ResultPoints : u0;
+StructuredBuffer<LegacyPoint> SourcePoints : t0;
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
 
 static const float PointSpace = 0;
 static const float ObjectSpace = 1;
@@ -28,7 +28,7 @@ static const float WorldSpace = 2;
         return;
     }
 
-    Point p = SourcePoints[i.x];
+    LegacyPoint p = SourcePoints[i.x];
 
     p.Position = p.Position;
 

@@ -3,18 +3,20 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "130b5c11-66dd-4c0e-ac67-924554bad2d8"/*Extend*/,
+      "InputId": "130b5c11-66dd-4c0e-ac67-924554bad2d8"/*Size*/,
       "Position": {
         "X": -200.0,
         "Y": 225.0
-      }
+      },
+      "GroupTitle": "Point Attributes"
     },
     {
-      "InputId": "2d7d85ce-7b5e-4e86-bae2-88a7c4f7a2e5"/*W*/,
+      "InputId": "2d7d85ce-7b5e-4e86-bae2-88a7c4f7a2e5"/*F1*/,
       "Position": {
         "X": -200.0,
         "Y": 135.0
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "34ad759e-9a81-4d7e-9024-5abacc279895"/*Color*/,
@@ -22,23 +24,34 @@
         "X": -200.0,
         "Y": 180.0
       },
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
+    },
+    {
+      "InputId": "3cdc9cab-36d4-431f-b9bd-c8d8f49ee465"/*Scale*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      }
     },
     {
       "InputId": "53cde701-435f-42e4-b598-db0e607a238c"/*AddSeparator*/,
       "Position": {
         "X": -200.0,
         "Y": 315.0
-      }
+      },
+      "GroupTitle": "Additional Option",
+      "Description": "Enabling this option will append a seperator point and thus return a buffer with the length of two.\nThis can be useful for rendering lines and working with [RepeatAtPoints]."
     },
     {
       "InputId": "55a3370f-1768-414f-b38d-4accc5e93914"/*RotationAxis*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "GroupTitle": "Point Orientation"
     },
     {
       "InputId": "a0a453db-d8f1-415a-9a98-3c88a25b15e7"/*Position*/,
@@ -48,7 +61,7 @@
       }
     },
     {
-      "InputId": "ca12df13-7529-4ede-b6fc-ce8aeba4f33e"/*Selected*/,
+      "InputId": "ca12df13-7529-4ede-b6fc-ce8aeba4f33e"/*F2*/,
       "Position": {
         "X": -200.0,
         "Y": 270.0

@@ -82,11 +82,11 @@ internal sealed class LoadSvg : Instance<LoadSvg>
 
                 _pointListWithSeparator.TypedElements[startIndex + pathPointIndex].Position
                     = (new Vector3(point.X, 1 - point.Y, 0) + centerOffset) * scale;
-                _pointListWithSeparator.TypedElements[startIndex + pathPointIndex].W = 1;
+                _pointListWithSeparator.TypedElements[startIndex + pathPointIndex].F1 = 1;
                 _pointListWithSeparator.TypedElements[startIndex + pathPointIndex].Orientation = Quaternion.Identity;
                 _pointListWithSeparator.TypedElements[startIndex + pathPointIndex].Color = new Vector4(1.0f); // We need a better fix, maybe with the colors from the SVG file
-                _pointListWithSeparator.TypedElements[startIndex + pathPointIndex].Selected = 1;
-                _pointListWithSeparator.TypedElements[startIndex + pathPointIndex].Stretch = Vector3.One;
+                _pointListWithSeparator.TypedElements[startIndex + pathPointIndex].F2 = 1;
+                _pointListWithSeparator.TypedElements[startIndex + pathPointIndex].Scale = Vector3.One;
             }
 
             // Calculate normals

@@ -19,13 +19,13 @@ cbuffer Params : register(b1)
     float Distance;
 }
 
-// struct Point {
+// struct LegacyPoint {
 //     float3 Position;
 //     float W;
 // };
 
-StructuredBuffer<Point> Points1 : t0;         // input
-RWStructuredBuffer<Point> ResultPoints : u0;    // output
+StructuredBuffer<LegacyPoint> Points1 : t0;         // input
+RWStructuredBuffer<LegacyPoint> ResultPoints : u0;    // output
 
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
