@@ -445,7 +445,11 @@ internal class ScalableCanvas : ICanvas
                 || (ImGui.IsMouseDragging(ImGuiMouseButton.Right) && !ImGui.GetIO().KeyAlt))
            )
         {
-            ScrollTarget -= mouseState.Delta / (ParentScale * ScaleTarget);
+            var parentScale =UsingParentCanvas && !flags.HasFlag(T3Ui.EditingFlags.IgnoreParentZoom) 
+                                 ? GraphWindow.Focused!.GraphCanvas.ScaleTarget : 
+                                 Vector2.One;
+            
+            ScrollTarget -= mouseState.Delta / (parentScale * ScaleTarget);
             _draggedCanvas = this;
         }
             
@@ -621,7 +625,7 @@ internal class ScalableCanvas : ICanvas
         }
     }
 
-    public Vector2 ParentScale => UsingParentCanvas ? GraphWindow.Focused!.GraphCanvas.ScaleTarget : Vector2.One;
+    
 
     public enum FillModes
     {

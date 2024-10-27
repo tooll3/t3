@@ -653,6 +653,7 @@ public static class T3Ui
         PreventZoomWithMouseWheel = 1 << 3,
         PreventPanningWithMouse = 1 << 4,
         AllowHoveredChildWindows = 1 << 5,
+        IgnoreParentZoom = 1 << 6,
     }
 
     internal static bool UseVSync = true;
