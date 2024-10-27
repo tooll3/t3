@@ -38,7 +38,7 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
 
     private void Update(EvaluationContext context)
     {
-        var requestedTime = OverrideTimeInSecs.IsConnected
+        var requestedTime = OverrideTimeInSecs.HasInputConnections
                                 ? OverrideTimeInSecs.GetValue(context)
                                 : context.Playback.SecondsFromBars(context.LocalTime);
 

@@ -133,7 +133,7 @@ public sealed class Counter : Instance<Counter>
             ? (float)((_beatTime - _lastJumpTime) * _rate).Clamp(0, 1)
             : (float)(_beatTime - _lastJumpTime).Clamp(0, 1);
 
-    private bool UseRate => _rate > -1 && !TriggerIncrement.IsConnected;
+    private bool UseRate => _rate > -1 && !TriggerIncrement.HasInputConnections;
 
     private float _speedFactor=1;
     private float _rate;

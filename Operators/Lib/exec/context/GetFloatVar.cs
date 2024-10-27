@@ -13,7 +13,7 @@ public sealed class GetFloatVar : Instance<GetFloatVar>, ICustomDropdownHolder
 
     private void Update(EvaluationContext context)
     {
-        if (VariableName.DirtyFlag.IsDirty && !VariableName.IsConnected)
+        if (VariableName.DirtyFlag.IsDirty && !VariableName.HasInputConnections)
             _contextVariableNames= context.FloatVariables.Keys.ToList();
             
         var variableName = VariableName.GetValue(context);

@@ -42,7 +42,7 @@ internal sealed class _AnimValueOld : Instance<_AnimValueOld>
                 throw new ArgumentOutOfRangeException();
         }
 
-        var time = OverrideTime.IsConnected
+        var time = OverrideTime.HasInputConnections
                        ? OverrideTime.GetValue(context)
                        : context.LocalFxTime;
 

@@ -82,7 +82,7 @@ public sealed class Resource<T> : IDisposable, IResource
 
         if (!string.IsNullOrWhiteSpace(newPath))
         {
-            if (!_slot.IsConnected)
+            if (!_slot.HasInputConnections)
             {
                 newPath.ToForwardSlashesUnsafe();
             }
@@ -195,7 +195,7 @@ public sealed class Resource<T> : IDisposable, IResource
                 
             _userPath = newPath;
 
-            if (_slot is { IsConnected: false })
+            if (_slot is { HasInputConnections: false })
                 _slot.SetTypedInputValue(newPath.ToForwardSlashes());
         }
 

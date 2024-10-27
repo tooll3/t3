@@ -13,6 +13,6 @@ public interface ISlot
     bool IsDisabled { set; }
     void AddConnection(ISlot source, int index = 0);
     void RemoveConnection(int index = 0);
-    bool IsConnected { get; }
+    bool HasInputConnections { get; }
     public bool TryGetFirstConnection(out ISlot connectedSlot);
 }

@@ -38,7 +38,7 @@ internal sealed class BuildRandomString : Instance<BuildRandomString>
             return;
         }
             
-        if (!OverrideBuilder.IsConnected || stringBuilder == null)
+        if (!OverrideBuilder.HasInputConnections || stringBuilder == null)
         {
             stringBuilder = _fallbackBuffer;
         }

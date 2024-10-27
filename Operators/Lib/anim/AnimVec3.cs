@@ -25,7 +25,7 @@ public sealed class AnimVec3 : Instance<AnimVec3>
         var amplitudes = Amplitudes.GetValue(context) * amplitudeFactor;
         var offsets = Offsets.GetValue(context);
         var bias = Bias.GetValue(context);
-        var time = OverrideTime.IsConnected
+        var time = OverrideTime.HasInputConnections
                        ? OverrideTime.GetValue(context)
                        : context.LocalFxTime;
 

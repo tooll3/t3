@@ -70,7 +70,7 @@ public static class BooleanUi
                              ImDrawFlags.None,
                              MathF.Max(1.4f, 0.5f * canvasScaleY));
 
-        if (!boolean.BoolValue.IsConnected)
+        if (!boolean.BoolValue.HasInputConnections)
         {
             var isHoveredOrActive = boolean.SymbolChildId == activeInputId ||
                                     ImGui.IsWindowHovered() && activeRect.Contains(ImGui.GetMousePos());

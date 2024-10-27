@@ -14,13 +14,13 @@ internal sealed class ExecuteTextureUpdate : Instance<ExecuteTextureUpdate>
     private void Update(EvaluationContext context)
     {
         var isEnabled = IsEnabled.GetValue(context);
-        if (!isEnabled || TriggerTexture.IsConnected && !TriggerTexture.DirtyFlag.IsDirty)
+        if (!isEnabled || TriggerTexture.HasInputConnections && !TriggerTexture.DirtyFlag.IsDirty)
         {
             Output.DirtyFlag.Clear();
             return;
         }
             
-        if (UpdateCommands.IsConnected && UpdateCommands.DirtyFlag.IsDirty)
+        if (UpdateCommands.HasInputConnections && UpdateCommands.DirtyFlag.IsDirty)
         {
             // This will execute the input
             UpdateCommands.GetValue(context);

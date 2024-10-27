@@ -770,7 +770,7 @@ internal static class ColorUsage
 
             foreach (var input in child.Inputs)
             {
-                if (input.Input.IsDefault || input.IsConnected)
+                if (input.Input.IsDefault || input.HasInputConnections)
                     continue;
 
                 if (animator.IsAnimated(child.SymbolChildId, input.Id))

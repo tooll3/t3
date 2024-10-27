@@ -25,7 +25,7 @@ internal sealed class GradientsToTexture : Instance<GradientsToTexture>
         var gradients = new List<Gradient>(4);
         var useHorizontal = Direction.GetValue(context) == 0;
         int gradientsCount = 0;
-        if (Gradients.IsConnected)
+        if (Gradients.HasInputConnections)
         {
             gradientsCount = Gradients.CollectedInputs.Count;
             if (gradientsCount == 0)

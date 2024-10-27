@@ -21,7 +21,7 @@ internal sealed class Camera : Instance<Camera>, ICamera, ICameraPropertiesProvi
 
     private void UpdateOutputWithSubtree(EvaluationContext context)
     {
-        if(!Reference.IsConnected || Reference.DirtyFlag.IsDirty) 
+        if(!Reference.HasInputConnections || Reference.DirtyFlag.IsDirty) 
             UpdateCameraDefinition(context);
             
         Reference.DirtyFlag.Clear();

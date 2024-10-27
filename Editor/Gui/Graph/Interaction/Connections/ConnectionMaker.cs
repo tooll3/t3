@@ -846,7 +846,7 @@ internal static class ConnectionMaker
         if (primaryOutput == null
             || firstMatchingInput == null
             //|| primaryOutput.IsConnected 
-            || firstMatchingInput.IsConnected)
+            || firstMatchingInput.HasInputConnections)
         {
             Log.Warning("Op doesn't have valid connections");
             return;

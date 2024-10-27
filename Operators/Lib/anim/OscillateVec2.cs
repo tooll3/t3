@@ -15,7 +15,7 @@ internal sealed class OscillateVec2 : Instance<OscillateVec2>
     {
         //var t = (float)context.Playback.BeatTime * SpeedFactor.GetValue(context);
 
-        var t = OverrideTime.IsConnected
+        var t = OverrideTime.HasInputConnections
                     ? OverrideTime.GetValue(context)
                     : (float)context.LocalFxTime * SpeedFactor.GetValue(context);
             

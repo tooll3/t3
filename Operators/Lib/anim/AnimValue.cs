@@ -33,7 +33,7 @@ public sealed class AnimValue : Instance<AnimValue>
         var offset = Offset.GetValue(context);
         var bias = Bias.GetValue(context);
 
-        var time = OverrideTime.IsConnected
+        var time = OverrideTime.HasInputConnections
                        ? OverrideTime.GetValue(context)
                        : context.LocalFxTime;
             

@@ -181,7 +181,7 @@ public class Slot<T> : ISlot
 
     public void AddConnection(ISlot sourceSlot, int index = 0)
     {
-        if (!IsConnected)
+        if (!HasInputConnections)
         {
             if (UpdateAction != null)
             {
@@ -215,7 +215,7 @@ public class Slot<T> : ISlot
 
     public void RemoveConnection(int index = 0)
     {
-        if (IsConnected)
+        if (HasInputConnections)
         {
             if (index < InputConnections.Length)
             {
@@ -227,7 +227,7 @@ public class Slot<T> : ISlot
             }
         }
 
-        if (!IsConnected)
+        if (!HasInputConnections)
         {
             if (_actionBeforeAddingConnecting != null)
             {
@@ -242,7 +242,7 @@ public class Slot<T> : ISlot
         }
     }
 
-    public bool IsConnected => InputConnections.Length > 0;
+    public bool HasInputConnections => InputConnections.Length > 0;
 
     public ISlot FirstConnection => InputConnections[0];
 

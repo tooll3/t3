@@ -111,7 +111,7 @@ public abstract class InputValueUi<T> : IInputUi
                                                  bool skipIfDefault)
     {
         var editState = InputEditStateFlags.Nothing;
-        if ((inputSlot.IsConnected || inputSlot.IsMultiInput) && hideNonEssentials)
+        if ((inputSlot.HasInputConnections || inputSlot.IsMultiInput) && hideNonEssentials)
             return editState;
 
         if (inputSlot.Input == null)
@@ -146,7 +146,7 @@ public abstract class InputValueUi<T> : IInputUi
         var structure = graphCanvas.Structure;
         IReadOnlyList<ConnectionMaker.TempConnection> tempConnections = ConnectionMaker.GetTempConnectionsFor(window);
 
-        if (inputSlot.IsConnected)
+        if (inputSlot.HasInputConnections)
         {
             editState = DrawConnectedParameter();
         }

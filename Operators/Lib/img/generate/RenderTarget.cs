@@ -119,7 +119,7 @@ internal sealed class RenderTarget : Instance<RenderTarget>, IRenderStatsProvide
             context.RequestedResolution = size;
             context.SetDefaultCamera();
 
-            if (TextureReference.IsConnected && TextureReference != null)
+            if (TextureReference.HasInputConnections && TextureReference != null)
             {
                 reference.ColorTexture = ColorTexture;
                 reference.DepthTexture = DepthTexture;

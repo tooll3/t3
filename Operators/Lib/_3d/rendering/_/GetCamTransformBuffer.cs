@@ -20,7 +20,7 @@ internal sealed class GetCamTransformBuffer : Instance<GetCamTransformBuffer>
         
     private void Update(EvaluationContext context)
     {
-        if (!CameraReference.IsConnected)
+        if (!CameraReference.HasInputConnections)
         {
             CameraReference.DirtyFlag.Clear();
             return;

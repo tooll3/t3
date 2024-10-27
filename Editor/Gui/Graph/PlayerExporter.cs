@@ -348,7 +348,7 @@ internal static partial class PlayerExporter
         {
             CheckInputForResourcePath(input, exportInfo);
 
-            if (!input.IsConnected)
+            if (!input.HasInputConnections)
                 continue;
 
             if (input.TryGetAsMultiInput(out var multiInput))

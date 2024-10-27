@@ -15,7 +15,7 @@ internal sealed class OscillateVec3 : Instance<OscillateVec3>
 
     private void Update(EvaluationContext context)
     {
-        var t = OverrideTime.IsConnected
+        var t = OverrideTime.HasInputConnections
                     ? OverrideTime.GetValue(context)
                     : (float)context.LocalFxTime * SpeedFactor.GetValue(context);
 

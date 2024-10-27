@@ -17,7 +17,7 @@ internal sealed class _ComputeLightOcclusions : Instance<_ComputeLightOcclusions
 
     private void Update(EvaluationContext context)
     {
-        if (UpdateCommand.IsConnected && UpdateCommand.DirtyFlag.IsDirty)
+        if (UpdateCommand.HasInputConnections && UpdateCommand.DirtyFlag.IsDirty)
         {
             // This will execute the input
             UpdateCommand.GetValue(context);

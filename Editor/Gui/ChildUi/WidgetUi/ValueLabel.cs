@@ -17,7 +17,7 @@ public static class ValueLabel
             
         var modified = false;
         //var value = (double)inputSlot.TypedInputValue.Value;
-        var value = (inputSlot.IsConnected) 
+        var value = (inputSlot.HasInputConnections) 
                         ? (double)inputSlot.Value 
                         :(double)inputSlot.TypedInputValue.Value;
             

@@ -94,7 +94,7 @@ public sealed class SequenceAnim : Instance<SequenceAnim>
         }
 
         var time = context.LocalFxTime * _rate;
-        if (OverrideTime.IsConnected)
+        if (OverrideTime.HasInputConnections)
         {
             var overrideTime = OverrideTime.GetValue(context);
             time = overrideTime * _rate;

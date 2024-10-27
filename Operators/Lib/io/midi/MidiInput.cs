@@ -84,22 +84,22 @@ public sealed class MidiInput : Instance<MidiInput>, MidiConnectionManager.IMidi
                 if (_teachingActive)
                 {
                     // The teaching mode shouldn't override the connected nodes
-                    if (!Device.IsConnected) {
+                    if (!Device.HasInputConnections) {
                         Device.SetTypedInputValue(_lastMessageDevice.ProductName);
                         _trainedDeviceName = _lastMessageDevice.ProductName;
                     }
 
-                    if (!Channel.IsConnected) {
+                    if (!Channel.HasInputConnections) {
                         Channel.SetTypedInputValue(signal.Channel);
                         _trainedChannel = signal.Channel;
                     }
 
-                    if (!Control.IsConnected) {
+                    if (!Control.HasInputConnections) {
                         Control.SetTypedInputValue(signal.ControllerId);
                         _trainedControllerId = signal.ControllerId;
                     }
 
-                    if (!EventType.IsConnected) {
+                    if (!EventType.HasInputConnections) {
                         EventType.SetTypedInputValue((int)signal.EventType);
                         _trainedEventType = signal.EventType;
                     }

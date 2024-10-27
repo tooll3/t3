@@ -25,7 +25,7 @@ internal sealed class CurvesToTexture : Instance<CurvesToTexture>
         var useHorizontal = Direction.GetValue(context) == 0;
         var sampleCount = SampleSize.GetValue(context).Clamp(1, 16384);
 
-        if (Curves.IsConnected)
+        if (Curves.HasInputConnections)
         {
             foreach (var curveInput in Curves.CollectedInputs)
             {

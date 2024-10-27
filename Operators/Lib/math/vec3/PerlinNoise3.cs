@@ -15,7 +15,7 @@ internal sealed class PerlinNoise3 : Instance<PerlinNoise3>
 
     private void Update(EvaluationContext context)
     {
-        var value = OverrideTime.IsConnected
+        var value = OverrideTime.HasInputConnections
                         ? OverrideTime.GetValue(context)
                         : (float)context.LocalFxTime;
             

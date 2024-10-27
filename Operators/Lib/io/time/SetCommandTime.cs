@@ -20,7 +20,7 @@ internal sealed class SetCommandTime : Instance<SetCommandTime>
         var newTime = NewTime.GetValue(context);
         var mode = OffsetMode.GetEnumValue<Modes>(context);
 
-        if (SubTree.IsConnected)
+        if (SubTree.HasInputConnections)
         {
             var previousKeyframeTime = context.LocalTime;
             var previousEffectTime = context.LocalFxTime;

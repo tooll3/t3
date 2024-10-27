@@ -22,7 +22,7 @@ internal sealed class __ObsoletePulsate : Instance<__ObsoletePulsate>
 
     private void Update (EvaluationContext context)
     {
-        var beatTime = BeatTime.IsConnected 
+        var beatTime = BeatTime.HasInputConnections 
                            ? BeatTime.GetValue(context) 
                            : (float)context.Playback.FxTimeInBars;
         var frequency = Frequency.GetValue (context);

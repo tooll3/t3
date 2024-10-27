@@ -49,11 +49,11 @@ public static class MidiInputUi
             var _displayControlValue = midiInput.Control.TypedInputValue.Value.ToString();
             var _displayChannelValue = midiInput.Channel.TypedInputValue.Value.ToString();
             var _displayDeviceValue = midiInput.Device.TypedInputValue.Value;
-            if (midiInput.Control.IsConnected)
+            if (midiInput.Control.HasInputConnections)
                 _displayControlValue = midiInput.Control.DirtyFlag.IsDirty ? "??" : midiInput.Control.Value.ToString();
-            if (midiInput.Channel.IsConnected)
+            if (midiInput.Channel.HasInputConnections)
                 _displayChannelValue = midiInput.Channel.DirtyFlag.IsDirty ? "??" : midiInput.Channel.Value.ToString();
-            if (midiInput.Device.IsConnected)
+            if (midiInput.Device.HasInputConnections)
                 _displayDeviceValue = midiInput.Device.DirtyFlag.IsDirty ? "??" : midiInput.Device.Value;
             deviceAndChannel = $"{_displayDeviceValue} CH{_displayChannelValue}:{_displayControlValue}";
         }

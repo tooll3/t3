@@ -14,7 +14,7 @@ internal sealed class _AssembleMeshBuffers : Instance<_AssembleMeshBuffers>
 
     private void Update(EvaluationContext context)
     {
-        if (PrepareCommand.IsConnected)
+        if (PrepareCommand.HasInputConnections)
         {
             PrepareCommand.GetValue(context);
         }

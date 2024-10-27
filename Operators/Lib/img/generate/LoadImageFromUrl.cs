@@ -27,7 +27,7 @@ internal sealed class LoadImageFromUrl : Instance<LoadImageFromUrl>
         var url = Url.GetValue(context);
         if (wasUpdated || url != _url && !string.IsNullOrEmpty(url))
         {
-            if (wasUpdated && !TriggerUpdate.IsConnected)
+            if (wasUpdated && !TriggerUpdate.HasInputConnections)
             {
                 TriggerUpdate.SetTypedInputValue(false);
             }

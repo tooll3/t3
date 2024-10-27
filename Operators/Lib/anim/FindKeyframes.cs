@@ -24,7 +24,7 @@ internal sealed class FindKeyframes : Instance<FindKeyframes>, IStatusProvider
 
     private void Update(EvaluationContext context)
     {
-        if (!AnimatedOp.IsConnected)
+        if (!AnimatedOp.HasInputConnections)
         {
             _lastErrorMessage = "No animated operator connected to reference";
             _lastAnimatedOp = null;

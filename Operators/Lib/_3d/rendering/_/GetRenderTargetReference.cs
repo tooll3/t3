@@ -17,7 +17,7 @@ internal sealed class GetRenderTargetReference : Instance<GetRenderTargetReferen
         Result.Value = colorTexture;
             
         var reference = TextureReference.GetValue(context);
-        if (TextureReference.IsConnected && TextureReference != null)
+        if (TextureReference.HasInputConnections && TextureReference != null)
         {
             reference.ColorTexture = colorTexture;
             reference.DepthTexture = DepthTexture.GetValue(context);

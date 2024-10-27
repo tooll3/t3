@@ -25,7 +25,7 @@ public sealed class AnimVec2 : Instance<AnimVec2>
         var offsets = Offsets.GetValue(context);
         var bias = Bias.GetValue(context);
         var ratio = Ratio.GetValue(context);
-        var time = OverrideTime.IsConnected
+        var time = OverrideTime.HasInputConnections
                        ? OverrideTime.GetValue(context)
                        : context.LocalFxTime;
 

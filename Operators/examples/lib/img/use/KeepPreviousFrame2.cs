@@ -20,7 +20,7 @@ namespace Examples.lib.img.use;
     private void UpdateTexture(EvaluationContext context)
     {
         var keep = Keep.GetValue(context);
-        if (!ImageA.IsConnected || !keep)
+        if (!ImageA.HasInputConnections || !keep)
         {
             return;
         }

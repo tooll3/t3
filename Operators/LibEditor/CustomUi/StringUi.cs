@@ -29,7 +29,7 @@ public static class StringUi
         if (!(instance is String stringInstance))
             return SymbolUi.Child.CustomUiResult.None;
 
-        if (stringInstance.InputString.IsConnected)
+        if (stringInstance.InputString.HasInputConnections)
             return SymbolUi.Child.CustomUiResult.None;
 
         var dragWidth = WidgetElements.DrawDragIndicator(screenRect, drawList, canvasScale);

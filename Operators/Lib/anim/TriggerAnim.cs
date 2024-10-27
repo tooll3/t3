@@ -45,7 +45,7 @@ public sealed class TriggerAnim : Instance<TriggerAnim>
         var animMode = AnimMode.GetEnumValue<AnimModes>(context);
         var triggerVariableName = UseTriggerVar.GetValue(context);
             
-        var isTriggeredByVar = !Trigger.IsConnected 
+        var isTriggeredByVar = !Trigger.HasInputConnections 
                                && context.IntVariables.GetValueOrDefault(triggerVariableName, 0 ) == 1;
 
         var triggered = Trigger.GetValue(context) || isTriggeredByVar;

@@ -23,7 +23,7 @@ public sealed class SetFloatVar : Instance<SetFloatVar>
             return;
         }
 
-        if (SubGraph.IsConnected)
+        if (SubGraph.HasInputConnections)
         {
             var hadPreviousValue = context.FloatVariables.TryGetValue(name, out var previous);
             context.FloatVariables[name] = newValue;

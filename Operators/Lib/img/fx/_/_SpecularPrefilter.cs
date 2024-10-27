@@ -39,7 +39,7 @@ internal sealed class _SpecularPrefilter : Instance<_SpecularPrefilter>
         var vs = VertexShader.GetValue(context);
         var gs = GeometryShader.GetValue(context);
 
-        if (CubeMap.IsConnected && CubeMap.DirtyFlag.IsDirty)
+        if (CubeMap.HasInputConnections && CubeMap.DirtyFlag.IsDirty)
         {
             //Log.Debug("Dirty", this);
         }

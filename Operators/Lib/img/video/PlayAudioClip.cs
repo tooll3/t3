@@ -52,14 +52,14 @@ internal sealed class PlayAudioClip : Instance<PlayAudioClip>, IStatusProvider
         var isTimeDirty = TimeInSecs.DirtyFlag.IsDirty;
         var timeParameter = TimeInSecs.GetValue(context);
             
-        if (!TimeInSecs.IsConnected && isTimeDirty)
+        if (!TimeInSecs.HasInputConnections && isTimeDirty)
         {
             _startRunTimeInSecs = Playback.RunTimeInSecs - timeParameter;
         }
 
         if (audioClip != null && IsPlaying.GetValue(context))
         {
-            var targetTime = TimeInSecs.IsConnected
+            var targetTime = TimeInSecs.HasInputConnections
                                  ? timeParameter
                                  : Playback.RunTimeInSecs - _startRunTimeInSecs;
                 

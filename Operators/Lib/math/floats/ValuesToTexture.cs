@@ -19,7 +19,7 @@ internal sealed class ValuesToTexture : Instance<ValuesToTexture>
 
     private void Update(EvaluationContext context)
     {
-        if (!Values.IsConnected)
+        if (!Values.HasInputConnections)
             return;
 
         var useHorizontal = Direction.GetValue(context) == 0;

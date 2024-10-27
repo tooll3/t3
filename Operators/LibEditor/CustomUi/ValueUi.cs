@@ -34,7 +34,7 @@ public static class ValueUi
             
         var isAnimated = instance.Parent?.Symbol.Animator.IsInputSlotAnimated(valueInstance.Float)??false;
             
-        var value = (isAnimated || valueInstance.Float.IsConnected) 
+        var value = (isAnimated || valueInstance.Float.HasInputConnections) 
                         ? (double)valueInstance.Float.Value 
                         :(double)valueInstance.Float.TypedInputValue.Value;
             

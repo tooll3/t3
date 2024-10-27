@@ -31,7 +31,7 @@ public static class SampleCurveUi
                    | SymbolUi.Child.CustomUiResult.PreventInputLabels
                    | SymbolUi.Child.CustomUiResult.PreventOpenParameterPopUp;
             
-        var curve = (sampleCurve.Curve.IsConnected) 
+        var curve = (sampleCurve.Curve.HasInputConnections) 
                         ? sampleCurve.Curve.Value 
                         :sampleCurve.Curve.TypedInputValue.Value;
 
