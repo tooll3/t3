@@ -1,7 +1,7 @@
 namespace Lib.img.generate;
 
 [Guid("0b3436db-e283-436e-ba85-2f3a1de76a9d")]
-internal sealed class LoadImage : Instance<LoadImage>, IDescriptiveFilename
+internal sealed class LoadImage : Instance<LoadImage>, IDescriptiveFilename, IStatusProvider
 {
     [Output(Guid = "{E0C4FEDD-5C2F-46C8-B67D-5667435FB037}")]
     public readonly Slot<Texture2D> Texture = new();
@@ -13,6 +13,8 @@ internal sealed class LoadImage : Instance<LoadImage>, IDescriptiveFilename
     {
         _textureResource = ResourceManager.CreateTextureResource(Path);
         _textureResource.AddDependentSlots(Texture);
+
+        
         Texture.UpdateAction = UpdateTexture;
         ShaderResourceView.UpdateAction = UpdateTexture;
     }
@@ -25,11 +27,15 @@ internal sealed class LoadImage : Instance<LoadImage>, IDescriptiveFilename
         var currentSrv = ShaderResourceView.Value;
         if (Texture.Value == null)
         {
+            _lastErrorMessage = "Failed to load texture: " + Path.Value;
+            Log.Warning(_lastErrorMessage, this);
             currentSrv?.Dispose();
             ShaderResourceView.Value = null;
             ShaderResourceView.DirtyFlag.Clear();
             return;
         }
+
+        _lastErrorMessage = string.Empty;
             
         Texture.Value.CreateShaderResourceView(ref currentSrv, "");
 
@@ -54,4 +60,11 @@ internal sealed class LoadImage : Instance<LoadImage>, IDescriptiveFilename
     public InputSlot<string> SourcePathSlot => Path;
 
     private readonly Resource<Texture2D> _textureResource;
+
+    IStatusProvider.StatusLevel IStatusProvider.GetStatusLevel() =>
+        string.IsNullOrEmpty(_lastErrorMessage) ? IStatusProvider.StatusLevel.Success : IStatusProvider.StatusLevel.Warning;
+
+    string IStatusProvider.GetStatusMessage() => _lastErrorMessage;
+
+    private string _lastErrorMessage = string.Empty;
 }
