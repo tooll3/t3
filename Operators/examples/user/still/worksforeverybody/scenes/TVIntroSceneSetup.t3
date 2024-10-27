@@ -85,7 +85,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\TV-Stand-01.obj"
+          "Value": "Resources/user/still/proj-worksforeverybody/geometry/classroom/TV-Stand-01.obj"
         }
       ],
       "Outputs": []
@@ -349,7 +349,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\the_sky_is_on_fire.jpg"
+          "Value": "Resources/user/still/proj-worksforeverybody/geometry/classroom/the_sky_is_on_fire.jpg"
         }
       ],
       "Outputs": []
@@ -773,7 +773,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\classroom-bake.jpg"
+          "Value": "Resources/user/still/proj-worksforeverybody/geometry/classroom/classroom-bake.jpg"
         }
       ],
       "Outputs": []
@@ -852,7 +852,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\tv-stand.png"
+          "Value": "Resources/user/still/proj-worksforeverybody/geometry/classroom/tv-stand.png"
         }
       ],
       "Outputs": []
@@ -919,7 +919,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-fc2\\3d\\revision-logo 1.png"
+          "Value": "Resources/user/still/proj-fc2/3d/revision-logo 1.png"
         }
       ],
       "Outputs": []
@@ -1152,7 +1152,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\TV_1970_Mat_baseColor.jpeg"
+          "Value": "Resources/user/still/proj-worksforeverybody/geometry/classroom/TV_1970_Mat_baseColor.jpeg"
         }
       ],
       "Outputs": []
@@ -1601,7 +1601,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\TV-1970-screen-01.obj"
+          "Value": "Resources/user/still/proj-worksforeverybody/geometry/classroom/TV-1970-screen-01.obj"
         }
       ],
       "Outputs": []
@@ -1798,7 +1798,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-fc2\\3d\\coffee-mug.obj"
+          "Value": "Resources/user/still/proj-fc2/3d/coffee-mug.obj"
         },
         {
           "Id": "c39a61b3-fb6b-4611-8f13-273f13c9c491"/*ScaleFactor*/,
@@ -1918,7 +1918,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\bake-04.obj"
+          "Value": "Resources/user/still/proj-worksforeverybody/geometry/classroom/bake-04.obj"
         }
       ],
       "Outputs": []
@@ -2152,7 +2152,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\TV_1970_Mat_normal.png"
+          "Value": "Resources/user/still/proj-worksforeverybody/geometry/classroom/TV_1970_Mat_normal.png"
         }
       ],
       "Outputs": []
@@ -2164,7 +2164,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\TV-1970-body-01.obj"
+          "Value": "Resources/user/still/proj-worksforeverybody/geometry/classroom/TV-1970-body-01.obj"
         }
       ],
       "Outputs": []
@@ -2351,12 +2351,6 @@
       "TargetSlotId": "6d859756-0243-42c5-973d-6de2dcdc5609"
     },
     {
-      "SourceParentOrChildId": "5c11c468-aa64-4578-a462-20a3a24a6398",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "11770b8e-abbe-4789-a118-80edbdc71dd5",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
-    },
-    {
       "SourceParentOrChildId": "d260a856-4da4-4362-8108-727e94572508",
       "SourceSlotId": "1f4e7cac-1f62-4633-b0f3-a3017a026753",
       "TargetParentOrChildId": "1ce5daff-507b-4be6-8f04-a8a35214e548",
@@ -2399,14 +2393,14 @@
       "TargetSlotId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"
     },
     {
-      "SourceParentOrChildId": "be6be7f3-54ef-429f-a393-43f6bf8efb00",
-      "SourceSlotId": "357c4c25-2b08-4470-84b1-9707a3d8e56e",
+      "SourceParentOrChildId": "ec3f7ba2-fa47-4b58-a68b-e4f9925cd9c4",
+      "SourceSlotId": "846bc771-7367-48e2-8389-206e2ee5c063",
       "TargetParentOrChildId": "23553491-cb7a-4b03-9401-222613c325a7",
       "TargetSlotId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"
     },
     {
-      "SourceParentOrChildId": "ec3f7ba2-fa47-4b58-a68b-e4f9925cd9c4",
-      "SourceSlotId": "846bc771-7367-48e2-8389-206e2ee5c063",
+      "SourceParentOrChildId": "be6be7f3-54ef-429f-a393-43f6bf8efb00",
+      "SourceSlotId": "357c4c25-2b08-4470-84b1-9707a3d8e56e",
       "TargetParentOrChildId": "23553491-cb7a-4b03-9401-222613c325a7",
       "TargetSlotId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"
     },
@@ -2483,12 +2477,6 @@
       "TargetSlotId": "2a585a23-b60c-4c8b-8cfa-9ab2a8b04c7a"
     },
     {
-      "SourceParentOrChildId": "709e5dac-1db3-41ba-b6a4-eb8b5951843a",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "3964f49e-9c93-4aec-83d1-656bb779ee4f",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
-    },
-    {
       "SourceParentOrChildId": "0be1e021-cbc0-4920-b58b-81a912dec46e",
       "SourceSlotId": "1f4e7cac-1f62-4633-b0f3-a3017a026753",
       "TargetParentOrChildId": "3b042115-9796-42ac-b60a-9dc56680f830",
@@ -2499,12 +2487,6 @@
       "SourceSlotId": "7b9c9b05-4654-48c5-9ee4-8eff949f106f",
       "TargetParentOrChildId": "4354d48c-99c4-4da5-86ff-09ee78a3bb6b",
       "TargetSlotId": "40606d4e-acaf-4f23-a845-16f0eb9b73cf"
-    },
-    {
-      "SourceParentOrChildId": "7452a63f-feb3-41e8-bbad-a44dd307026a",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "46ade22d-bab7-4203-bb57-d6e36387eb53",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
     },
     {
       "SourceParentOrChildId": "b1cdeddb-5b6a-445a-98e3-62a81ea1236a",
@@ -2535,12 +2517,6 @@
       "SourceSlotId": "e011dd8c-1b9c-458f-8960-e6c38e83ca74",
       "TargetParentOrChildId": "4c489763-5a5a-4ad1-bd72-85f3831605c7",
       "TargetSlotId": "402ec136-4727-41b7-8bfb-344d1ed83a48"
-    },
-    {
-      "SourceParentOrChildId": "30f610b4-cb98-4729-9c92-4dcd99022b2f",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "4dba1ae5-3043-4394-845b-2791a6debac5",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
     },
     {
       "SourceParentOrChildId": "f151b72f-56f0-4a54-b21d-f06c74e90082",
@@ -2589,12 +2565,6 @@
       "SourceSlotId": "66ce8660-253c-4a0b-8aec-f7a56751a1e4",
       "TargetParentOrChildId": "5ef8acc7-f0f2-407b-829b-3c3db218f570",
       "TargetSlotId": "eb601c57-2025-4135-8292-223eaedaf187"
-    },
-    {
-      "SourceParentOrChildId": "6c58fc8f-79f1-4a78-8bdb-b832ee1524d1",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "64cbb75d-aa6b-49eb-8f23-40f4f7f32c04",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
     },
     {
       "SourceParentOrChildId": "90f76445-62a2-4a9b-9a37-815973920393",
@@ -2675,12 +2645,6 @@
       "TargetSlotId": "7773837e-104a-4b3d-a41f-cadbd9249af2"
     },
     {
-      "SourceParentOrChildId": "d4a91575-d6f8-496b-bffc-1559fa26b0a6",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "7dd79787-fe1a-4f2d-8e73-0bb5a17400f5",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
-    },
-    {
       "SourceParentOrChildId": "949485f2-8972-4ef0-a99d-29a4c08f9eeb",
       "SourceSlotId": "e0c4fedd-5c2f-46c8-b67d-5667435fb037",
       "TargetParentOrChildId": "7ea2f979-b2cd-40d6-941b-7e54138b8975",
@@ -2751,12 +2715,6 @@
       "SourceSlotId": "e011dd8c-1b9c-458f-8960-e6c38e83ca74",
       "TargetParentOrChildId": "9526547d-1d85-4ab7-ac4c-1ace81974d4d",
       "TargetSlotId": "a4527e01-f19a-4200-85e5-00144f3ce061"
-    },
-    {
-      "SourceParentOrChildId": "064135e9-140e-4337-ad5b-e2a887f299af",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "9a71e218-b8da-4a27-9b68-42d56ef24fb5",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
     },
     {
       "SourceParentOrChildId": "1f9a008b-6898-480c-9152-ee42d5760ee2",
@@ -2837,21 +2795,9 @@
       "TargetSlotId": "d68b5569-b43d-4a0d-9524-35289ce08098"
     },
     {
-      "SourceParentOrChildId": "d8dd6724-6afa-4c51-8c0b-f282547c504e",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "b8b094d1-2905-4bb2-b7fb-60a14199f91d",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
-    },
-    {
       "SourceParentOrChildId": "6f49ef7c-f5a4-4f19-9f80-f83e977d5ed9",
       "SourceSlotId": "977ca2f4-cddb-4b9a-82b2-ff66453bbf9b",
       "TargetParentOrChildId": "b9fd6678-999a-495c-a514-ab8a80d23f28",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
-    },
-    {
-      "SourceParentOrChildId": "20da61db-09ef-442e-961e-55e5f950879c",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "bb72d2d1-c938-409e-aa00-549455caca32",
       "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
     },
     {
@@ -3041,12 +2987,6 @@
       "TargetSlotId": "4525c76c-cdcf-47f3-aa96-335cfc5b5c1b"
     },
     {
-      "SourceParentOrChildId": "ff615fbb-1f72-4c71-90ab-c41512c578d0",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "d9000542-bf68-4045-83cc-0b06d74e224d",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
-    },
-    {
       "SourceParentOrChildId": "7ea2f979-b2cd-40d6-941b-7e54138b8975",
       "SourceSlotId": "c4dcede0-34be-48a8-961e-1f8b7d4ada0a",
       "TargetParentOrChildId": "da75a1a8-0636-4881-a56c-1688aee38622",
@@ -3129,12 +3069,6 @@
       "SourceSlotId": "7b9c9b05-4654-48c5-9ee4-8eff949f106f",
       "TargetParentOrChildId": "f00b65c1-6032-4f04-9e27-290c35317f7d",
       "TargetSlotId": "40606d4e-acaf-4f23-a845-16f0eb9b73cf"
-    },
-    {
-      "SourceParentOrChildId": "fec84f72-07ec-4764-b36d-bb2b5ab78387",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "fa0e8091-5c7c-4ba6-94d9-92fd14755cf9",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
     },
     {
       "SourceParentOrChildId": "8d5a754e-21d4-4820-83bf-ff09f9f59c99",

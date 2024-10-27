@@ -21,8 +21,7 @@ internal sealed class CamPosition : Instance<CamPosition>
     public CamPosition()
     {
         Command.UpdateAction += Update;
-        Position.UpdateAction += Update;
-        Direction.UpdateAction += Update;
+        // Note: We only want to call update for the execution path. 
     }
 
     private void Update(EvaluationContext context)

@@ -77,7 +77,7 @@
       "SymbolId": "9989f539-f86c-4508-83d7-3fc0e559f502",
       "InputValues": [
         {
-          "Id": "2d7d85ce-7b5e-4e86-bae2-88a7c4f7a2e5"/*W*/,
+          "Id": "2d7d85ce-7b5e-4e86-bae2-88a7c4f7a2e5"/*F1*/,
           "Type": "System.Single",
           "Value": 0.17
         },
@@ -161,7 +161,7 @@
       "SymbolId": "9989f539-f86c-4508-83d7-3fc0e559f502",
       "InputValues": [
         {
-          "Id": "2d7d85ce-7b5e-4e86-bae2-88a7c4f7a2e5"/*W*/,
+          "Id": "2d7d85ce-7b5e-4e86-bae2-88a7c4f7a2e5"/*F1*/,
           "Type": "System.Single",
           "Value": -0.37
         },
@@ -273,7 +273,7 @@
       "SymbolId": "9989f539-f86c-4508-83d7-3fc0e559f502",
       "InputValues": [
         {
-          "Id": "2d7d85ce-7b5e-4e86-bae2-88a7c4f7a2e5"/*W*/,
+          "Id": "2d7d85ce-7b5e-4e86-bae2-88a7c4f7a2e5"/*F1*/,
           "Type": "System.Single",
           "Value": 0.29999998
         },
@@ -822,7 +822,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\testcontent\\T3-Logo\\t3-logo.png"
+          "Value": "Resources/user/pixtur/testcontent/T3-Logo/t3-logo.png"
         }
       ],
       "Outputs": []
