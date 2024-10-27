@@ -133,8 +133,8 @@ public class ChangeInputValueCommand : ICommand
             input.Value.Assign(valueToSet);
             InvalidateInstances(inputParentSymbol, symbolChild);
         }
-            
-        symbolUi.FlagAsModified();
+        
+        inputParentSymbolUi.FlagAsModified();
     }
 
     private void InvalidateInstances(Symbol inputParentSymbol, Symbol.Child symbolChild)
