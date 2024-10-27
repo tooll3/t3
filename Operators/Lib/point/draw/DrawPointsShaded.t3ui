@@ -21,14 +21,16 @@
       "Position": {
         "X": 2055.1743,
         "Y": 3892.7412
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "68ebd395-5e00-4aeb-acfb-312899c4907c"/*PointSize*/,
       "Position": {
         "X": 1916.5818,
         "Y": 3731.3904
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "92e069cf-d136-4a13-8bcd-243731f77a54"/*GPoints*/,
@@ -43,14 +45,16 @@
       "Position": {
         "X": 2448.4275,
         "Y": 4431.9185
-      }
+      },
+      "GroupTitle": "Draw Options"
     },
     {
       "InputId": "b575d027-fd84-4a51-bf8a-6f3437e347f4"/*UseWForSize*/,
       "Position": {
         "X": 1901.5397,
         "Y": 4802.3247
-      }
+      },
+      "GroupTitle": "Obsolete Parameters"
     },
     {
       "InputId": "bb8e9be9-1371-45fd-be67-93d183b1355e"/*BlendMode*/,
@@ -78,7 +82,8 @@
       "Position": {
         "X": 1916.5818,
         "Y": 3643.3904
-      }
+      },
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [

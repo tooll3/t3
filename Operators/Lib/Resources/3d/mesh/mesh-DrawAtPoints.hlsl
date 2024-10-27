@@ -20,27 +20,31 @@ cbuffer Transforms : register(b0)
 cbuffer Params : register(b1)
 {
     float4 Color;
-    float Size;
-    float SegmentCount;
+    float Scale;
     float UseWForSize;
     float AlphaCutOff;
-    float UseStretch;
 };
 
-cbuffer FogParams : register(b2)
+cbuffer Params : register(b2)
+{
+    int UsePointScale;
+    int ScaleFactorMode;
+};
+
+cbuffer FogParams : register(b3)
 {
     float4 FogColor;
     float FogDistance;
     float FogBias;
 }
 
-cbuffer PointLights : register(b3)
+cbuffer PointLights : register(b4)
 {
     PointLight Lights[8];
     int ActiveLightCount;
 }
 
-cbuffer PbrParams : register(b4)
+cbuffer PbrParams : register(b5)
 {
     float4 BaseColor;
     float4 EmissiveColor;
@@ -64,7 +68,7 @@ sampler clampedSampler : register(s1);
 
 StructuredBuffer<PbrVertex> PbrVertices : t0;
 StructuredBuffer<int3> FaceIndices : t1;
-StructuredBuffer<LegacyPoint> Points : t2;
+StructuredBuffer<Point> Points : t2;
 
 Texture2D<float4> BaseColorMap : register(t3);
 Texture2D<float4> EmissiveColorMap : register(t4);
@@ -94,9 +98,17 @@ psInput vsMain(uint id
     PbrVertex vertex = PbrVertices[FaceIndices[faceIndex][faceVertexIndex]];
     float4 posInObject = float4(vertex.Position, 1);
 
-    float resizeFromW = UseWForSize ? Points[instanceIndex].W : 1;
-    float3 resizeFromStretch = UseStretch ? Points[instanceIndex].Stretch : 1;
-    posInObject.xyz *= max(0, resizeFromW) * Size * resizeFromStretch;
+    // float resizeFromW = UseWForSize ? Points[instanceIndex].W : 1;
+    // float3 resizeFromStretch = UseStretch ? Points[instanceIndex].Stretch : 1;
+
+    float sizeFactor = ScaleFactorMode == 0
+                           ? 1
+                       : (ScaleFactorMode == 1) ? Points[instanceIndex].FX1
+                                                : Points[instanceIndex].FX2;
+
+    float3 s = Scale * sizeFactor * (UsePointScale ? Points[instanceIndex].Scale : 1);
+
+    posInObject.xyz *= s; //(0, resizeFromW) * Scale * resizeFromStretch;
     float4x4 orientationMatrix = transpose(qToMatrix(normalize(Points[instanceIndex].Rotation)));
     posInObject = mul(float4(posInObject.xyz, 1), orientationMatrix);
 
@@ -170,7 +182,7 @@ float4 psMain(psInput pin) : SV_TARGET
     {
         float3 Li = Lights[i].position - pin.worldPosition; //- Lights[i].direction;
         float distance = length(Li);
-        float intensity = Lights[i].intensity / (pow(distance/Lights[i].range, Lights[i].decay) + 1);
+        float intensity = Lights[i].intensity / (pow(distance / Lights[i].range, Lights[i].decay) + 1);
         float3 Lradiance = Lights[i].color * intensity; // Lights[i].radiance;
 
         // Half-vector between Li and Lo.
@@ -230,7 +242,7 @@ float4 psMain(psInput pin) : SV_TARGET
         float3 specularIrradiance = PrefilteredSpecular.SampleLevel(texSampler, Lr.xyz, roughness * levels).rgb;
 
         // Split-sum approximation factors for Cook-Torrance specular BRDF.
-        float2 specularBRDF = BRDFLookup.SampleLevel(clampedSampler, float2(cosLo, roughness),0).rg;
+        float2 specularBRDF = BRDFLookup.SampleLevel(clampedSampler, float2(cosLo, roughness), 0).rg;
 
         // Total specular IBL contribution.
         float3 specularIBL = (F0 * specularBRDF.x + specularBRDF.y) * specularIrradiance;

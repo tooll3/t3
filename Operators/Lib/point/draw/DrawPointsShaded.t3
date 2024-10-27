@@ -15,7 +15,7 @@
     },
     {
       "Id": "68ebd395-5e00-4aeb-acfb-312899c4907c"/*PointSize*/,
-      "DefaultValue": 0.2
+      "DefaultValue": 0.1
     },
     {
       "Id": "92e069cf-d136-4a13-8bcd-243731f77a54"/*GPoints*/,
