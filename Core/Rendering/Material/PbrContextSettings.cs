@@ -16,8 +16,8 @@ public static class PbrContextSettings
         WhitePixelTexture = TextureUtils.CreateColorTexture(new Vector4(1, 1, 1, 1));
         BlackPixelTexture = TextureUtils.CreateColorTexture(new Vector4(0, 0, 0, 0));
 
-        _bdrfLookupTextureResource = ResourceManager.CreateTextureResource("images/BRDF-LookUp.dds", null);
-        if (!TryLoadTextureAsSrv("images/BRDF-LookUp.dds", out _bdrfLookupTextureResource, ref PbrLookUpTextureSrv))
+        _bdrfLookupTextureResource = ResourceManager.CreateTextureResource("pbr/BRDF-LookUp.dds", null);
+        if (!TryLoadTextureAsSrv("images/pbr/BRDF-LookUp.dds", out _bdrfLookupTextureResource, ref PbrLookUpTextureSrv))
         {
             Log.Error("Could not load prefiltered BRDF texture");
             _bdrfLookupTextureResource.Changed += () =>
@@ -26,7 +26,7 @@ public static class PbrContextSettings
             };
         }
         
-        _prefilteredBrdfTextureResource = ResourceManager.CreateTextureResource("HDRI/studio_small_08-prefiltered.dds", null);
+        _prefilteredBrdfTextureResource = ResourceManager.CreateTextureResource("images/hdri/studio_small_08-prefiltered.dds", null);
         if (_prefilteredBrdfTextureResource.Value == null)
         {
             Log.Error("Could not load prefiltered BRDF texture");

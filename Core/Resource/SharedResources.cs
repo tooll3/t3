@@ -59,8 +59,8 @@ public static class SharedResources
                                                                                         IsAntialiasedLineEnabled = false
                                                                                     }); 
             
-        _viewWindowDefaultTexture = ResourceManager.CreateTextureResource(@"t3-editor/images/t3-background.png", null);
-        _colorPickerTexture = ResourceManager.CreateTextureResource(@"t3-editor/images/t3-colorpicker.png", null);
+        _viewWindowDefaultTexture = ResourceManager.CreateTextureResource(@"images/editor/t3-background.png", null);
+        _colorPickerTexture = ResourceManager.CreateTextureResource(@"images/editor/t3-colorpicker.png", null);
 
         if (_viewWindowDefaultTexture.Value == null)
         {

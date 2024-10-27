@@ -270,7 +270,7 @@ internal static class Icons
             new (Icon.ClampMaxOff, slotIndex:95),
         };
 
-    public static readonly string IconAtlasPath = Path.Combine(SharedResources.Directory, @"t3-editor\images\t3-icons.png");
+    public static readonly string IconAtlasPath = Path.Combine(SharedResources.Directory, @"images\editor\t3-icons.png");
 }
 
 public enum Icon

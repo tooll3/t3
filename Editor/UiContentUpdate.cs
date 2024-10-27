@@ -41,7 +41,7 @@ internal static class UiContentUpdate
         var fontAtlasPtr = ImGui.GetIO().Fonts;
         fontAtlasPtr.Clear();
         const string fontName = "Roboto";
-        var root = Path.Combine(SharedResources.Directory, "t3-editor", "fonts", fontName + '-');
+        var root = Path.Combine(SharedResources.Directory, "fonts", "editor", fontName + '-');
         
         const string fileExtension = ".ttf";
         var format = $"{root}{{0}}{fileExtension}";

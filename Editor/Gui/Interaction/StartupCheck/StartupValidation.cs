@@ -22,10 +22,10 @@ public static class StartupValidation
                                      RequiredFilePaths = new List<string>()
                                                              {
                                                                  @"Resources\",
-                                                                 @"Resources\t3-editor\images\t3-icons.png",
-                                                                 @"Resources\t3-editor\images\t3.ico",
-                                                                 @"Resources\t3-editor\images\t3-SplashScreen.png",
-                                                                 @"Resources\t3-editor\fonts\Roboto-Regular.ttf",
+                                                                 @"Resources\images\editor\t3-icons.png",
+                                                                 @"Resources\images\editor\t3.ico",
+                                                                 @"Resources\images\editor\t3-SplashScreen.png",
+                                                                 @"Resources\fonts\editor\Roboto-Regular.ttf",
                                                              },
                                      Message = @"Please make sure to set the correct start up directory.\n ",
                                      URL = "https://github.com/tooll3/t3/wiki/installation#setting-the-startup-directory-in-visual-studio",

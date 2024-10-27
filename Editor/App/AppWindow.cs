@@ -150,7 +150,7 @@ internal class AppWindow
 
     private void CreateRenderForm(string windowTitle, bool disableClose)
     {
-        var fileName = Path.Combine(SharedResources.Directory, @"t3-editor\images\t3.ico");
+        var fileName = Path.Combine(SharedResources.Directory, @"images/editor/t3.ico");
         Form = disableClose
                    ? new NoCloseRenderForm(windowTitle)
                          {
