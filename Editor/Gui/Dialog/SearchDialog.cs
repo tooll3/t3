@@ -42,7 +42,7 @@ public class SearchDialog : ModalDialog
             FormInputs.SetIndentToLeft();
                 
             FormInputs.SetWidth(0.7f);
-            needsUpdate |= FormInputs.AddStringInput("", ref _searchString, "Search", null, null, string.Empty);
+            needsUpdate |= FormInputs.AddStringInput("##searchInput", ref _searchString, "Search", null, null, string.Empty);
             ImGui.SameLine();
             FormInputs.SetWidth(1f);
             needsUpdate |= FormInputs.AddEnumDropdown(ref _searchMode, "");
