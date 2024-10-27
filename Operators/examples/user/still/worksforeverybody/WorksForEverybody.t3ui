@@ -2424,6 +2424,13 @@
       }
     },
     {
+      "ChildId": "d1922aa3-7925-485b-8ade-92121c70c1ca"/*TVIntroScene*/,
+      "Position": {
+        "X": 6109.3315,
+        "Y": 3007.9084
+      }
+    },
+    {
       "ChildId": "d1a290d0-2b1a-426e-a47e-81bb3e547b9c"/*_DrawVaryingQuads*/,
       "Position": {
         "X": 569.9187,

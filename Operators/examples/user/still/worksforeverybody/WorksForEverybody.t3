@@ -7576,6 +7576,12 @@
       "Outputs": []
     },
     {
+      "Id": "d1922aa3-7925-485b-8ade-92121c70c1ca"/*TVIntroScene*/,
+      "SymbolId": "d71f9aa0-687f-4537-9154-eed685a8ecc2",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "d1a290d0-2b1a-426e-a47e-81bb3e547b9c"/*_DrawVaryingQuads*/,
       "SymbolId": "ffc0a7ed-fe61-4188-8db9-0b0f07c6b981",
       "InputValues": [

@@ -359,7 +359,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\bake-04.obj"
+          "Value": "Resources/user/still/proj-worksforeverybody/geometry/classroom/bake-04.obj"
         }
       ],
       "Outputs": []
@@ -562,7 +562,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\tv-stand.png"
+          "Value": "Resources/user/still/proj-worksforeverybody/geometry/classroom/tv-stand.png"
         }
       ],
       "Outputs": []
@@ -632,7 +632,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\TV_1970_Mat_normal.png"
+          "Value": "Resources/user/still/proj-worksforeverybody/geometry/classroom/TV_1970_Mat_normal.png"
         }
       ],
       "Outputs": []
@@ -681,7 +681,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\TV-Stand-01.obj"
+          "Value": "Resources/user/still/proj-worksforeverybody/geometry/classroom/TV-Stand-01.obj"
         }
       ],
       "Outputs": []
@@ -792,7 +792,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\classroom-bake.jpg"
+          "Value": "Resources/user/still/proj-worksforeverybody/geometry/classroom/classroom-bake.jpg"
         }
       ],
       "Outputs": []
@@ -804,7 +804,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\TV-1970-body-01.obj"
+          "Value": "Resources/user/still/proj-worksforeverybody/geometry/classroom/TV-1970-body-01.obj"
         }
       ],
       "Outputs": []
@@ -1308,7 +1308,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\TV-1970-screen-01.obj"
+          "Value": "Resources/user/still/proj-worksforeverybody/geometry/classroom/TV-1970-screen-01.obj"
         }
       ],
       "Outputs": []
@@ -1336,7 +1336,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\the_sky_is_on_fire.jpg"
+          "Value": "Resources/user/still/proj-worksforeverybody/geometry/classroom/the_sky_is_on_fire.jpg"
         }
       ],
       "Outputs": []
@@ -1741,7 +1741,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-worksforeverybody\\geometry\\classroom\\TV_1970_Mat_baseColor.jpeg"
+          "Value": "Resources/user/still/proj-worksforeverybody/geometry/classroom/TV_1970_Mat_baseColor.jpeg"
         }
       ],
       "Outputs": []
@@ -1845,28 +1845,10 @@
       "TargetSlotId": "4525c76c-cdcf-47f3-aa96-335cfc5b5c1b"
     },
     {
-      "SourceParentOrChildId": "19c645a9-784e-4823-9dd6-e3dd808b8a8c",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "03cbe9b9-b16d-4594-80e8-dae8eab29ffa",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
-    },
-    {
       "SourceParentOrChildId": "310270d6-6b50-4f85-b8b7-607dd4215a2d",
       "SourceSlotId": "f83f1835-477e-4bb6-93f0-14bf273b8e94",
       "TargetParentOrChildId": "05c681a3-bec8-4dd9-bcaf-968271d631c4",
       "TargetSlotId": "7f5fb125-8aca-4344-8b30-e7d4e7873c1c"
-    },
-    {
-      "SourceParentOrChildId": "eae987bc-c732-4437-a2ae-807803eb5941",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "05da9a8c-d73e-4cfb-9161-3eedc3f2c0d4",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
-    },
-    {
-      "SourceParentOrChildId": "e80fcbc4-6c96-4848-854e-6cab3cab4c11",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "0a9f1f6f-6fe7-4a6d-9353-cad5f6283e36",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
     },
     {
       "SourceParentOrChildId": "8b598843-2c4f-4835-9b66-c25cae0bcbfa",
@@ -1977,12 +1959,6 @@
       "TargetSlotId": "c325d01a-5232-4696-9b58-e24f72779597"
     },
     {
-      "SourceParentOrChildId": "785ba61e-5b95-4017-bf2b-6aa02eabb26e",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "38f255b7-7426-473a-8f31-b56cd5d691d8",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
-    },
-    {
       "SourceParentOrChildId": "5f3d9dfa-b4d8-46de-8307-57a3421637bb",
       "SourceSlotId": "f83f1835-477e-4bb6-93f0-14bf273b8e94",
       "TargetParentOrChildId": "3ecee3ed-2f8a-49c1-8010-1a71dffac998",
@@ -2017,12 +1993,6 @@
       "SourceSlotId": "9ff1bfed-4554-4c55-9557-8b318ac47afe",
       "TargetParentOrChildId": "49a658ef-b70e-4b7c-87d0-71de2a545fce",
       "TargetSlotId": "97429e1f-3f30-4789-89a6-8e930e356ee6"
-    },
-    {
-      "SourceParentOrChildId": "6ee72708-7a62-44eb-8cb6-4da1940b949f",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "4d3e976b-9980-4e37-bc56-f07aad8e13cf",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
     },
     {
       "SourceParentOrChildId": "dea71a9d-b3a3-4cc8-b288-2907d900b582",
@@ -2199,12 +2169,6 @@
       "TargetSlotId": "c2c9afc7-3474-40c3-be82-b9f48c92a2c5"
     },
     {
-      "SourceParentOrChildId": "3d0dcccb-da7c-43d3-a864-6efed45b5176",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "a462d6db-df55-460d-9c80-e64f5b4bb5a1",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
-    },
-    {
       "SourceParentOrChildId": "e1de679d-e80c-4da0-9a42-defe3e7dd067",
       "SourceSlotId": "ae4addf0-08cf-4b25-9515-4fef9359d183",
       "TargetParentOrChildId": "a5f1260d-d64d-4b2f-94d5-d7cf2c3b07fd",
@@ -2305,18 +2269,6 @@
       "SourceSlotId": "e0c4fedd-5c2f-46c8-b67d-5667435fb037",
       "TargetParentOrChildId": "cbb82566-3920-4f71-bfee-4c8431bda56e",
       "TargetSlotId": "c325d01a-5232-4696-9b58-e24f72779597"
-    },
-    {
-      "SourceParentOrChildId": "ad738f96-2081-4e2c-9dbb-064828f636e6",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "cff9d0fb-d0e2-43bf-ab99-47501e6d2c37",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
-    },
-    {
-      "SourceParentOrChildId": "98e14c65-0bac-43a0-bd24-88404f26d6cb",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "d04ab8bf-da5a-44ea-9749-8a73aa4c1d20",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
     },
     {
       "SourceParentOrChildId": "72997587-20ac-40f7-8e7e-7372af4c01b4",
@@ -2433,28 +2385,10 @@
       "TargetSlotId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"
     },
     {
-      "SourceParentOrChildId": "d4dfe39a-2a16-4428-8cb0-8421a794991b",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "eb69396e-ba61-4df2-929a-b3d700dbc51b",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
-    },
-    {
-      "SourceParentOrChildId": "5698843a-1c57-472b-a1d9-96387d7a9aeb",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "efb83a02-c583-4c6a-8bf7-456cd57a1b1c",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
-    },
-    {
       "SourceParentOrChildId": "34d7e414-8868-46e9-b685-9e547a9be9c5",
       "SourceSlotId": "322717ef-3a76-4e23-845f-a12a03d73969",
       "TargetParentOrChildId": "f04014ed-43f9-4f30-8245-16787a056ddb",
       "TargetSlotId": "c2c9afc7-3474-40c3-be82-b9f48c92a2c5"
-    },
-    {
-      "SourceParentOrChildId": "246d20db-d5d6-4fae-bff5-b8c0cbd3d7f4",
-      "SourceSlotId": "6c4c601b-7018-4a61-b72b-6bce5f336b32",
-      "TargetParentOrChildId": "f87380f7-5835-4d47-b106-0aff031cf383",
-      "TargetSlotId": "dcd066ce-ac44-4e76-85b3-78821245d9dc"
     },
     {
       "SourceParentOrChildId": "443a7d56-582c-4c9c-b806-9e9a16fbfa7c",
