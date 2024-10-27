@@ -49,4 +49,13 @@ internal sealed class DrawMeshChunksAtPoints : Instance<DrawMeshChunksAtPoints>
 
     [Input(Guid = "fc846c4a-ac50-4260-8267-4484ced2d22f")]
     public readonly InputSlot<bool> UpdateDrawData = new InputSlot<bool>();
+
+            [Input(Guid = "2ba5d5a0-2292-409a-b603-867bc2c347c7")]
+        public readonly InputSlot<float> ShadowOffset = new InputSlot<float>();
+
+        [Input(Guid = "271ffc87-bf9a-4958-ab9f-387f27744aee")]
+        public readonly InputSlot<float> ShadowBias = new InputSlot<float>();
+
+        [Input(Guid = "c54759f0-759d-470e-8000-03cdfe609f1c")]
+        public readonly InputSlot<System.Numerics.Vector4> ShadowColor = new InputSlot<System.Numerics.Vector4>();
 }

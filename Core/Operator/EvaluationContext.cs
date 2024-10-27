@@ -123,9 +123,18 @@ public class EvaluationContext
     public System.Numerics.Vector4 ForegroundColor { get; set; } = Vector4.One;
         
     public GizmoVisibility ShowGizmos { get; set; }
-
+    
+    #region context variables
     public Dictionary<string, float> FloatVariables { get; } = new();
     public Dictionary<string, int> IntVariables { get; } = new();
+    
+    /// <summary>
+    /// Used to store objects different from float and int
+    /// </summary>
+    public Dictionary<string, object> ObjectVariables { get; } = new();
+    #endregion
+    
+    
     public StructuredList IteratedList { get; set; }
     public int IteratedListIndex { get; set; }
     public bool BypassCameras { get; set; }

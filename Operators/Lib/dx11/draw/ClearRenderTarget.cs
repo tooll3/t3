@@ -1,3 +1,4 @@
+using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
 
 namespace Lib.dx11.draw;
@@ -19,15 +20,25 @@ internal sealed class ClearRenderTarget : Instance<ClearRenderTarget>
         var deviceContext = device.ImmediateContext;
         // deviceContext.Draw2(VertexCount.GetValue(context), VertexStartLocation.GetValue(context));
         var rtv = RenderTarget.GetValue(context);
-        if (rtv == null)
-            return;
-
-        var c = ClearColor.GetValue(context);
-        deviceContext.ClearRenderTargetView(rtv, new RawColor4(c.X, c.Y, c.Z, c.W));
+        if (rtv != null)
+        {
+            var c = ClearColor.GetValue(context);
+            deviceContext.ClearRenderTargetView(rtv, new RawColor4(c.X, c.Y, c.Z, c.W));
+        }
+        
+        var dsv = DepthStencilView.GetValue(context);
+        if (dsv != null)
+        {
+            deviceContext.ClearDepthStencilView(dsv, DepthStencilClearFlags.Depth, 1.0f, 0);
+        }
     }
 
     [Input(Guid = "D73D2FE7-1AF4-48D6-9AD3-F8C87C3369D6")]
     public readonly InputSlot<Vector4> ClearColor = new();
+    
     [Input(Guid = "25C0C15C-5B95-4FE3-8D59-4E127FCE1CF2")]
     public readonly InputSlot<RenderTargetView> RenderTarget = new();
+    
+    [Input(Guid = "65077B57-F9EB-48AA-8195-588F906B0E72")]
+    public readonly InputSlot<SharpDX.Direct3D11.DepthStencilView> DepthStencilView = new();
 }

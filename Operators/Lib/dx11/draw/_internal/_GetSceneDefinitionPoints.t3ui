@@ -21,10 +21,17 @@
       }
     },
     {
-      "OutputId": "cb0e5b54-1c68-43a6-9101-2c9bc9b67c51"/*IndicesBuffer*/,
+      "OutputId": "cb0e5b54-1c68-43a6-9101-2c9bc9b67c51"/*ChunkDefsBuffer*/,
       "Position": {
         "X": 125.93762,
         "Y": 198.90634
+      }
+    },
+    {
+      "OutputId": "11da2373-6f05-4818-8616-4f2c33f63301"/*Points*/,
+      "Position": {
+        "X": 125.93762,
+        "Y": 298.90634
       }
     }
   ]

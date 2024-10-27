@@ -19,28 +19,65 @@ internal sealed class OutputMergerStage : Instance<OutputMergerStage> {
         var deviceContext = device.ImmediateContext;
         var outputMerger = deviceContext.OutputMerger;
 
-        DepthStencilView.GetValue(context);
+        //DepthStencilView.GetValue(context);
         DepthStencilReference.GetValue(context);
         BlendFactor.GetValue(context);
         BlendSampleMask.GetValue(context);
-            
-            
+        
+        // GET DSV, RTV and UAVs from context
+        _depthStencilView= DepthStencilView.GetValue(context);
         RenderTargetViews.GetValues(ref _renderTargetViews, context);
         UnorderedAccessViews.GetValues(ref _unorderedAccessViews, context);
 
+        // KEEP RTVs
         _prevRenderTargetViews = outputMerger.GetRenderTargets(_renderTargetViews.Length);
         outputMerger.GetRenderTargets(out _prevDepthStencilView);
-        outputMerger.SetDepthStencilState(DepthStencilState.GetValue(context));
-        _prevBlendState = outputMerger.GetBlendState(out _prevBlendFactor, out _prevSampleMask);
-        if (_renderTargetViews.Length > 0)
-            outputMerger.SetRenderTargets(null, _renderTargetViews);
             
+        // KEEP blend state
+        _prevBlendState = outputMerger.GetBlendState(out _prevBlendFactor, out _prevSampleMask);
+            
+        // SET depth state
+        //_prevDepthStencilState = outputMerger.DepthStencilState;
+        outputMerger.SetDepthStencilState(DepthStencilState.GetValue(context));
+            
+        // SET renderTargets
+        if (_depthStencilView != null)
+        {
+            outputMerger.SetTargets(_depthStencilView, _renderTargetViews);                
+        }
+        else
+        {
+            if (_renderTargetViews.Length > 0)
+                outputMerger.SetRenderTargets(null, _renderTargetViews);
+        }
+            
+            
+        // SET UAVs
         if (_unorderedAccessViews.Length > 0)
         {
             outputMerger.SetUnorderedAccessViews(1, _unorderedAccessViews);
         }
 
+        // SET blend state 
         outputMerger.BlendState = BlendState.GetValue(context);
+        
+        // _depthStencilView= DepthStencilView.GetValue(context);
+        // RenderTargetViews.GetValues(ref _renderTargetViews, context);
+        // UnorderedAccessViews.GetValues(ref _unorderedAccessViews, context);
+        //
+        // _prevRenderTargetViews = outputMerger.GetRenderTargets(_renderTargetViews.Length);
+        // outputMerger.GetRenderTargets(out _prevDepthStencilView);
+        // outputMerger.SetDepthStencilState(DepthStencilState.GetValue(context));
+        // _prevBlendState = outputMerger.GetBlendState(out _prevBlendFactor, out _prevSampleMask);
+        // if (_renderTargetViews.Length > 0)
+        //     outputMerger.SetRenderTargets(null, _renderTargetViews);
+        //     
+        // if (_unorderedAccessViews.Length > 0)
+        // {
+        //     outputMerger.SetUnorderedAccessViews(1, _unorderedAccessViews);
+        // }
+        //
+        // outputMerger.BlendState = BlendState.GetValue(context);
     }
 
     private void Restore(EvaluationContext context) {
@@ -50,6 +87,7 @@ internal sealed class OutputMergerStage : Instance<OutputMergerStage> {
         outputMerger.BlendState = _prevBlendState;
         if (_renderTargetViews.Length > 0)
             outputMerger.SetRenderTargets(_prevDepthStencilView, _prevRenderTargetViews);
+        
         foreach (var rtv in _prevRenderTargetViews)
             rtv?.Dispose();
 
@@ -63,6 +101,8 @@ internal sealed class OutputMergerStage : Instance<OutputMergerStage> {
     }
 
     private RenderTargetView[] _renderTargetViews = new RenderTargetView[0];
+    private DepthStencilView _depthStencilView;
+    
     private RenderTargetView[] _prevRenderTargetViews;
     private UnorderedAccessView[] _unorderedAccessViews = new UnorderedAccessView[0];
     //private UnorderedAccessView[] _prevUnorderedAccessViews;
@@ -94,4 +134,5 @@ internal sealed class OutputMergerStage : Instance<OutputMergerStage> {
 
     [Input(Guid = "03166157-1E18-4513-8AF5-398C6F4FCB1E")]
     public readonly InputSlot<int> BlendSampleMask = new();
+
 }

@@ -1,0 +1,11 @@
+{
+  "Id": "a3700115-a15b-493a-8a07-dab16b4ee0af"/*GetMatrixVar*/,
+  "Inputs": [
+    {
+      "Id": "6ff40ed6-68d9-46b8-aaf3-d4276bedfd81"/*VariableName*/,
+      "DefaultValue": "m"
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
