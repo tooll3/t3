@@ -17,7 +17,7 @@ public static class PbrContextSettings
         BlackPixelTexture = TextureUtils.CreateColorTexture(new Vector4(0, 0, 0, 0));
 
         _bdrfLookupTextureResource = ResourceManager.CreateTextureResource("pbr/BRDF-LookUp.dds", null);
-        if (!TryLoadTextureAsSrv("images/pbr/BRDF-LookUp.dds", out _bdrfLookupTextureResource, ref PbrLookUpTextureSrv))
+        if (!TryLoadTextureAsSrv("pbr/BRDF-LookUp.dds", out _bdrfLookupTextureResource, ref PbrLookUpTextureSrv))
         {
             Log.Error("Could not load prefiltered BRDF texture");
             _bdrfLookupTextureResource.Changed += () =>

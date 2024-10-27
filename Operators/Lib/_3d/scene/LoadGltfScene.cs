@@ -28,10 +28,28 @@ public class LoadGltfScene : Instance<LoadGltfScene>
 
     public LoadGltfScene()
     {
+        _resource = new Resource<SceneSetup>(Path, OnFileChanged);
+        _resource.AddDependentSlots(ResultSetup, Mesh, Material);        
+        
         ResultSetup.UpdateAction += Update;
         Mesh.UpdateAction += Update;
     }
 
+    private bool OnFileChanged(FileResource file, SceneSetup currentValue, out SceneSetup newValue, out string failureReason)
+    {
+        LoadFile(file.AbsolutePath, 0, true);
+        // if (BmFontDescription.TryInitializeFromFile(file.AbsolutePath, out newValue))
+        // {
+        failureReason = null;
+        newValue = ResultSetup.Value;
+        //     return true;
+        // }
+        return true;
+            
+        // failureReason = "Failed to load font from file";
+        // return false;
+    }
+    
     private void Update(EvaluationContext context)
     {
         _lastErrorMessage = string.Empty;
@@ -57,12 +75,17 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         
         TriggerUpdate.SetTypedInputValue(false);
         
-        if (filePath == null || !File.Exists(filePath))
-        {
-            _lastErrorMessage = $"Gltf File not found: {filePath}";
-            return;
-        }
+        // if (filePath == null || !File.Exists(filePath))
+        // {
+        //     _lastErrorMessage = $"Gltf File not found: {filePath}";
+        //     return;
+        // }
 
+        LoadFile(filePath, meshChildIndex, materialNeedsUpdate);
+    }
+
+    private void LoadFile(string filePath, int meshChildIndex, bool materialNeedsUpdate)
+    {
         if (LoadFileIfRequired(filePath, out var newSetup))
         {
             ResultSetup.Value?.Dispose();
@@ -487,6 +510,8 @@ public class LoadGltfScene : Instance<LoadGltfScene>
     
     public IEnumerable<string> FileFilter => _fileFilters;
     private static readonly string[] _fileFilters = ["*.gltf"];
+    private readonly Resource<SceneSetup> _resource;
+
 
     #region Asset extraction
     /// <summary>
@@ -1044,6 +1069,9 @@ public class LoadGltfScene : Instance<LoadGltfScene>
     private string _lastErrorMessage = string.Empty;
     #endregion
 
+
+    
+    
     [Input(Guid = "292e80cf-ba31-4a50-9bf4-83712430f811")]
     public readonly InputSlot<string> Path = new();
 
