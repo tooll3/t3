@@ -1,4 +1,4 @@
-﻿#nullable enable
+﻿using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.UiHelpers;
@@ -18,19 +18,14 @@ namespace T3.Editor.Gui.Styling;
 ///
 /// It should work for now, but it's likely to break with future versions of ImGui.
 /// </remarks>
-public static class StringInputWithTypeAheadSearch
+public static class ResourceInputWithTypeAheadSearch
 {
     //public readonly record struct Texts(string DisplayText, string SearchText, string? Tooltip);
-    //public readonly record struct Args<T>(string Label, IEnumerable<T> Items, Func<T, Texts> GetTextInfo, bool Warning);
-    
-    public static bool Draw(string inputLabel,
-                            string? warning,
-                            List<string> items,
-                            ref string filter, 
-                            out string selected, 
-                            bool outlineOnly=false)
+    public readonly record struct Args(string Label, IEnumerable<string> Items, bool Warning);
+        
+    public static bool Draw(Args args, ref string filter, out string selected, bool outlineOnly=false)
     {
-        var inputId = ImGui.GetID(inputLabel); 
+        var inputId = ImGui.GetID(args.Label); 
         var isSearchResultWindowOpen = inputId == _activeInputId;
 
         if (isSearchResultWindowOpen)
@@ -60,11 +55,11 @@ public static class StringInputWithTypeAheadSearch
             ImGui.PushStyleColor(ImGuiCol.FrameBgActive, Color.Red.Rgba);
         }
             
-        var color = string.IsNullOrEmpty( warning) ? UiColors.StatusWarning.Rgba : UiColors.Text.Rgba;
+        var color = args.Warning ? UiColors.StatusWarning.Rgba : UiColors.Text.Rgba;
         ImGui.PushStyleColor(ImGuiCol.Text, color);
             
         filter ??= string.Empty;
-        var wasChanged = ImGui.InputText(inputLabel, ref filter, 256);
+        var wasChanged = ImGui.InputText(args.Label, ref filter, 256);
             
         ImGui.PopStyleColor();
             
@@ -92,6 +87,7 @@ public static class StringInputWithTypeAheadSearch
         if ( ImGui.IsItemActive() || isSearchResultWindowOpen)
         {
             _activeInputId = inputId;
+            var drawList = ImGui.GetWindowDrawList();
 
             var lastPosition = new Vector2(ImGui.GetItemRectMin().X, ImGui.GetItemRectMax().Y);
             var size = new Vector2(ImGui.GetItemRectSize().X, 320);
@@ -108,45 +104,80 @@ public static class StringInputWithTypeAheadSearch
                                            | ImGuiWindowFlags.Tooltip // ugly as f**k. Sadly .PopUp will lead to random crashes.
                                            | ImGuiWindowFlags.NoFocusOnAppearing;
                 
+            ImGui.SetNextWindowSize(new Vector2(450,300));
+            ImGui.PushStyleColor(ImGuiCol.PopupBg, UiColors.BackgroundFull.Rgba);
             if (ImGui.Begin("##typeAheadSearchPopup", ref isSearchResultWindowOpen,flags))
             {
+                
                 _lastTypeAheadResults.Clear();
                 var index = 0;
                 ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.Gray.Rgba);
                     
                 var matches = new List<string>();
                 var others = new List<string>();
-                foreach (var item in items)
+                foreach (var path in args.Items)
                 {
-                    var word = args.GetTextInfo(item);
-                    if(string.IsNullOrEmpty(filter) || word.SearchText.StartsWith(filter, StringComparison.InvariantCultureIgnoreCase))
+                    if(string.IsNullOrEmpty(filter) || path.StartsWith(filter, StringComparison.InvariantCultureIgnoreCase))
                     {
-                        matches.Add(item);
+                        matches.Add(path);
                     }
                     else
                     {
-                        others.Add(item);
+                        others.Add(path);
                     }
                 }
                     
                 var listItems = (!string.IsNullOrWhiteSpace(filter) && matches.Count  <=1) ? others : matches;
-                    
-                foreach (var item in listItems)
+                
+                var lastProjectGroup = string.Empty;
+                
+                foreach (var path in listItems)
                 {
                     var isSelected = index == _selectedResultIndex;
 
                     // We can't use IsItemHovered because we need to use Tooltip hack 
                     ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
 
-                    var textInfo = args.GetTextInfo(item);
-                    ImGui.Selectable(textInfo.DisplayText, isSelected);
-
+                    // TODO: Optimize regex to be static and better readable
+                    var testRegex = new Regex(@"^\/(.+?)\/(.*?)\/([^\/]*)$");
+                    
+                    var match = testRegex.Match(path);
+                    var project = match.Success ? match.Groups[1].Value : string.Empty;
+                    var pathInProject = match.Success ? match.Groups[2].Value : path;
+                    var filename = match.Success ? match.Groups[3].Value : path;
+                    
+                    if (project != lastProjectGroup)
+                    {
+                        if (lastProjectGroup != string.Empty)
+                            FormInputs.AddVerticalSpace(8);
+                        
+                        ImGui.PushFont(Fonts.FontSmall);
+                        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                        ImGui.TextUnformatted( $"/{project}/");
+                        ImGui.PopStyleColor();
+                        ImGui.PopFont();
+                        lastProjectGroup = project;
+                    }
+                    
+                    var lastPos = ImGui.GetCursorPos();
+                    ImGui.Selectable( $"##{path}" , isSelected, ImGuiSelectableFlags.None);
                     var isItemHovered = new ImRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax()).Contains( ImGui.GetMousePos());
+                    var keepNextPos = ImGui.GetCursorPos();
+                    
+                    ImGui.SetCursorPos(lastPos);
+                    
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                    ImGui.TextUnformatted(pathInProject + "/");
+                    ImGui.PopStyleColor();
+                    ImGui.SameLine();
+                    ImGui.TextUnformatted(filename);
+                    
+                    ImGui.SetCursorPos(keepNextPos);
 
-                    if (isItemHovered && !string.IsNullOrEmpty(textInfo.Tooltip))
+                    if (isItemHovered && !string.IsNullOrEmpty(path))
                     {
                         ImGui.BeginTooltip();
-                        ImGui.TextUnformatted(textInfo.Tooltip);
+                        ImGui.TextUnformatted(path);
                         ImGui.EndTooltip();
                     }
                         
@@ -155,13 +186,13 @@ public static class StringInputWithTypeAheadSearch
                     if ((ImGui.IsMouseClicked(ImGuiMouseButton.Left) && isItemHovered) 
                         || (isSelected && ImGui.IsKeyPressed((ImGuiKey)Key.Return)))
                     {
-                        filter = textInfo.SearchText;
+                        filter = path;
                         wasChanged = true;
                         _activeInputId = 0;
-                        selected = item;
+                        selected = path;
                     }
 
-                    _lastTypeAheadResults.Add(textInfo.SearchText);
+                    _lastTypeAheadResults.Add(path);
                     if (++index > 100)
                         break;
                 }
@@ -177,6 +208,7 @@ public static class StringInputWithTypeAheadSearch
             }
 
             ImGui.End();
+            ImGui.PopStyleColor();
         }
 
         if (lostFocus)

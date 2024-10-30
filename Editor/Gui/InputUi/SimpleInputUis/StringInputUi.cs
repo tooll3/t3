@@ -127,14 +127,9 @@ public class StringInputUi : InputValueUi<string>
                 
             var drawnItems = ResourceManager.EnumerateResources(filter, request.IsFolder, request.ResourcePackageContainer.AvailableResourcePackages, ResourceManager.PathMode.Aliased);
                 
-            var args = new InputWithTypeAheadSearch.Args<string>("##filePathSearch", drawnItems, GetTextInfo, request.ShowWarning);
-            var changed = InputWithTypeAheadSearch.Draw(args, ref value, out _);
+            var args = new ResourceInputWithTypeAheadSearch.Args("##filePathSearch", drawnItems, request.ShowWarning);
+            var changed = ResourceInputWithTypeAheadSearch.Draw(args, ref value, out _);
             return new InputResult(changed, value);
-        }
-            
-        static InputWithTypeAheadSearch.Texts GetTextInfo(string resourcePath)
-        {
-            return new InputWithTypeAheadSearch.Texts(DisplayText: System.IO.Path.GetFileName(resourcePath), resourcePath, resourcePath);
         }
     }
         
