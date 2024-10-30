@@ -134,6 +134,9 @@ public interface IShaderOperator<T> : IDescriptiveFilename where T : AbstractSha
                                       
                                       CachedEntryPoint = EntryPoint.GetValue(context);
                                       
+                                      // This is a hack to invalidate the input so that the op doesn't stay dirtly
+                                      _ = DebugName.GetValue(context);
+                                      
                                       var shader = resource.GetValue(context);
                                       ShaderSlot.Value = shader;
                                       OnShaderUpdate(context, shader);
