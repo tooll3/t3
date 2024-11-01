@@ -99,7 +99,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\particles\\ParticleSystem.hlsl"
+          "Value": "Resources/lib/particles/ParticleSystem.hlsl"
         }
       ],
       "Outputs": []
@@ -202,8 +202,9 @@
       "Outputs": []
     },
     {
-      "Id": "87abbc5a-e272-4616-b918-fa4ec362bdf4"/*BoolToInt*/,
+      "Id": "87abbc5a-e272-4616-b918-fa4ec362bdf4"/*UsingEmitCount*/,
       "SymbolId": "cd43942a-887e-4e34-bc54-0c2e5e8bc2af",
+      "Name": "UsingEmitCount",
       "InputValues": [],
       "Outputs": []
     },
@@ -332,6 +333,12 @@
       "SourceSlotId": "c41d9633-1397-4602-a5f8-7808c3d63108",
       "TargetParentOrChildId": "11d59891-c071-4700-aa43-e8c8d42b199e",
       "TargetSlotId": "73128257-d731-4065-b19a-c8fa21803cd4"
+    },
+    {
+      "SourceParentOrChildId": "0dc49394-c5eb-4217-93cd-37d1eade95e8",
+      "SourceSlotId": "9b2b6339-ea13-4a8b-8223-1c95266e59f1",
+      "TargetParentOrChildId": "11d59891-c071-4700-aa43-e8c8d42b199e",
+      "TargetSlotId": "d3b6ea62-7d52-4791-b44f-3ba8efac93de"
     },
     {
       "SourceParentOrChildId": "0dc49394-c5eb-4217-93cd-37d1eade95e8",

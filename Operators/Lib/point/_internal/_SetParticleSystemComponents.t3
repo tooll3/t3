@@ -14,6 +14,10 @@
       "DefaultValue": null
     },
     {
+      "Id": "d3b6ea62-7d52-4791-b44f-3ba8efac93de"/*IsReset*/,
+      "DefaultValue": false
+    },
+    {
       "Id": "f3ab1099-3a0d-409e-aa18-89219e85e01f"/*InitializeVelocityFactor*/,
       "DefaultValue": 0.0
     }

@@ -27,6 +27,14 @@
       }
     },
     {
+      "InputId": "d3b6ea62-7d52-4791-b44f-3ba8efac93de"/*IsReset*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
       "InputId": "f3ab1099-3a0d-409e-aa18-89219e85e01f"/*InitializeVelocityFactor*/,
       "Position": {
         "X": -200.0,

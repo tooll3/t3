@@ -11,16 +11,19 @@ internal sealed class GetParticleComponents : Instance<GetParticleComponents>, I
 
     [Output(Guid = "641ECE29-7845-43E5-85CA-F33912A1989F", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<float> SpeedFactor = new();
-        
+    
+    [Output(Guid = "777494EA-E8AE-4C70-A195-FEB68F286EA9", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+    public readonly Slot<bool> IsReset = new();
+    
     public GetParticleComponents()
     {
         ParticlesUav.UpdateAction += Update;
-        Length.UpdateAction += Update;
+        //Length.UpdateAction += Update;
     }
 
     private void Update(EvaluationContext context)
     {
-        if (context == null || context.ParticleSystem == null)
+        if (context?.ParticleSystem == null)
         {
             _lastErrorMessage = "Particle system not set. Is ParticleSimulation not attached?";
             return;
@@ -36,12 +39,14 @@ internal sealed class GetParticleComponents : Instance<GetParticleComponents>, I
             
         ParticlesUav.Value = context.ParticleSystem.ParticleBuffer.Uav;
         SpeedFactor.Value = context.ParticleSystem.SpeedFactor;
+        IsReset.Value = context.ParticleSystem.IsReset;
             
         Length.Value = context.ParticleSystem.ParticleBuffer.Srv.Description.Buffer.ElementCount;
             
         ParticlesUav.DirtyFlag.Clear();
         Length.DirtyFlag.Clear();
         SpeedFactor.DirtyFlag.Clear();
+        IsReset.DirtyFlag.Clear();
     }
         
     public IStatusProvider.StatusLevel GetStatusLevel()

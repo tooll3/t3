@@ -17,6 +17,7 @@ internal sealed class _SetParticleSystemComponents : Instance<_SetParticleSystem
         _particleSystem.ParticleBuffer = PointsSimBuffer.GetValue(context);
         _particleSystem.SpeedFactor = SpeedFactor.GetValue(context);
         _particleSystem.InitializeVelocityFactor = InitializeVelocityFactor.GetValue(context);
+        _particleSystem.IsReset = IsReset.GetValue(context);
             
         var effects = Effects.CollectedInputs;
         var keep = context.ParticleSystem;
@@ -37,10 +38,7 @@ internal sealed class _SetParticleSystemComponents : Instance<_SetParticleSystem
     }
 
     private readonly ParticleSystem _particleSystem = new();
-        
-    // [Input(Guid = "8B47EC1F-8537-47BE-B31B-641BCEA3BDFE")]
-    // public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> PointsBuffer = new();
-
+    
     [Input(Guid = "13583F72-3F77-4BE0-B596-B8DBD27CA19C")]
     public readonly InputSlot<BufferWithViews> PointsSimBuffer = new();
         
@@ -52,4 +50,9 @@ internal sealed class _SetParticleSystemComponents : Instance<_SetParticleSystem
         
     [Input(Guid = "73128257-D731-4065-B19A-C8FA21803CD4")]
     public readonly MultiInputSlot<ParticleSystem> Effects = new();
+    
+    [Input(Guid = "D3B6EA62-7D52-4791-B44F-3BA8EFAC93DE")]
+    public readonly InputSlot<bool> IsReset = new();
+
+    
 }

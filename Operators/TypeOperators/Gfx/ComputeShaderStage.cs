@@ -27,7 +27,7 @@ public sealed class ComputeShaderStage : Instance<ComputeShaderStage>, IRenderSt
         _cs = ComputeShader.GetValue(context);
             
         Int3 dispatchCount = Dispatch.GetValue(context);
-        int count = DispatchCallCount.GetValue(context).Clamp(1, 10);
+        int count = DispatchCallCount.GetValue(context).Clamp(1, 100);
 
         ConstantBuffers.GetValues(ref _constantBuffers, context);
         ShaderResources.GetValues(ref _shaderResourceViews, context);
@@ -67,20 +67,34 @@ public sealed class ComputeShaderStage : Instance<ComputeShaderStage>, IRenderSt
             csStage.SetUnorderedAccessViews(0, _uavs);
         }
 
+        // Dispatch the shader
         for (int i = 0; i < count; i++)
         {
             deviceContext.Dispatch(dispatchCount.X, dispatchCount.Y, dispatchCount.Z);
         }
 
+        
         // unbind resources
         for (int i = 0; i < _uavs.Length; i++)
+        {
             csStage.SetUnorderedAccessView(i, null);
+        }
+        
         for (int i = 0; i < _samplerStates.Length; i++)
+        {
             csStage.SetSampler(i, null);
+        }
+        
         for (int i = 0; i < _shaderResourceViews.Length; i++)
+        {
             csStage.SetShaderResource(i, null);
+        }
+        
         for (int i = 0; i < _constantBuffers.Length; i++)
+        {
             csStage.SetConstantBuffer(i, null);
+        }
+            
             
         _statsUpdateCount++;
         _statsDispatchCount += dispatchCount.X * dispatchCount.Y * dispatchCount.Z;

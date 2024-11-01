@@ -10,6 +10,7 @@ public class ParticleSystem
 {
     public BufferWithViews ParticleBuffer;
     public float SpeedFactor;
+    public bool IsReset;
     public float InitializeVelocityFactor;
 }
 
