@@ -122,9 +122,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
                     _vDef.InTangentAngle = _vDef.OutTangentAngle + Math.PI;
                 }
             }
-
         }
-
 
         /// <summary>
         /// Update tangent orientation after changing the scale of the CurveEditor
