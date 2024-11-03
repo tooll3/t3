@@ -41,17 +41,17 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
 
             var timeMode = TimeMode.GetEnumValue<Times>(context);
             var currentTime = timeMode switch
-                                  {
-                                      Times.PlayTime   => context.Playback.TimeInBars,
-                                      Times.AppRunTime => Playback.RunTimeInSecs,
-                                      _                => context.LocalFxTime
-                                  };
+            {
+                Times.PlayTime => context.Playback.TimeInBars,
+                Times.AppRunTime => Playback.RunTimeInSecs,
+                _ => context.LocalFxTime
+            };
 
             var animMode = AnimMode.GetEnumValue<AnimModes>(context);
             var triggerVariableName = UseTriggerVar.GetValue(context);
-            
-            var isTriggeredByVar = !Trigger.HasInputConnections 
-                                   && context.IntVariables.GetValueOrDefault(triggerVariableName, 0 ) == 1;
+
+            var isTriggeredByVar = !Trigger.HasInputConnections
+                                   && context.IntVariables.GetValueOrDefault(triggerVariableName, 0) == 1;
 
             var triggered = Trigger.GetValue(context) || isTriggeredByVar;
             if (triggered != _trigger)
@@ -73,7 +73,7 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
                         {
                             _triggerTime = currentTime;
                             _currentDirection = Directions.Forward;
-                            LastFraction = -_delay;
+                            LastFraction = 0; // Initialize at 0 instead of -delay
                         }
                     }
                     else
@@ -88,35 +88,34 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
                 }
             }
 
-
             if (animMode == AnimModes.ForwardAndBackwards)
             {
                 var dp = (float)((currentTime - _triggerTime) / _duration);
                 switch (_currentDirection)
                 {
                     case Directions.Forward:
-                    {
-                        LastFraction = _startProgress + dp;
-                        if (LastFraction >= 1)
                         {
-                            HasCompleted.Value = true;
-                            LastFraction = 1;
-                            _currentDirection = Directions.None;
+                            // Apply delay to the progress calculation
+                            var delayedDp = (currentTime - _triggerTime < _delay) ? 0 : (float)((currentTime - _triggerTime - _delay) / _duration);
+                            LastFraction = _startProgress + delayedDp;
+                            if (LastFraction >= 1)
+                            {
+                                HasCompleted.Value = true;
+                                LastFraction = 1;
+                                _currentDirection = Directions.None;
+                            }
+                            break;
                         }
-
-                        break;
-                    }
                     case Directions.Backwards:
-                    {
-                        LastFraction = _startProgress - dp;
-                        if (LastFraction <= 0)
                         {
-                            LastFraction = 0;
-                            _currentDirection = Directions.None;
+                            LastFraction = _startProgress - dp;
+                            if (LastFraction <= 0)
+                            {
+                                LastFraction = 0;
+                                _currentDirection = Directions.None;
+                            }
+                            break;
                         }
-
-                        break;
-                    }
                 }
             }
             else
@@ -124,41 +123,47 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
                 switch (_currentDirection)
                 {
                     case Directions.Forward:
-                    {
-                        LastFraction = (currentTime - _triggerTime + 0.00001f)/_duration;
-                        if(LastFraction >= 1)
                         {
-                            LastFraction = 1;
-                            HasCompleted.Value = true;
-                            _currentDirection = Directions.None;
+                            // Apply delay to the progress calculation
+                            var timeSinceTrigger = currentTime - _triggerTime;
+                            if (timeSinceTrigger < _delay)
+                            {
+                                LastFraction = 0;
+                            }
+                            else
+                            {
+                                LastFraction = (timeSinceTrigger - _delay) / _duration;
+                                if (LastFraction >= 1)
+                                {
+                                    LastFraction = 1;
+                                    HasCompleted.Value = true;
+                                    _currentDirection = Directions.None;
+                                }
+                            }
+                            break;
                         }
-
-                        break;
-                    }
                     case Directions.Backwards:
-                    {
-                        LastFraction =   1+( _triggerTime- currentTime )/_duration;
-                        if (LastFraction < 0)
                         {
-                            LastFraction = 0;
-                            _currentDirection = Directions.None;
+                            LastFraction = 1 + (_triggerTime - currentTime) / _duration;
+                            if (LastFraction < 0)
+                            {
+                                LastFraction = 0;
+                                _currentDirection = Directions.None;
+                            }
+                            break;
                         }
-
-                        break;
-                    }
                 }
             }
-            
+
             var normalizedValue = CalcNormalizedValueForFraction(LastFraction, (int)_shape);
             if (double.IsNaN(LastFraction) || double.IsInfinity(LastFraction))
             {
                 LastFraction = 0;
             }
-            
-            //Result.Value = MathUtils.Lerp(_baseValue, _amplitudeValue,  normalizedValue);
-            Result.Value = _baseValue + _amplitudeValue *  normalizedValue;
+
+            Result.Value = _baseValue + _amplitudeValue * normalizedValue;
         }
-        
+
         public float CalcNormalizedValueForFraction(double t, int shapeIndex)
         {
             //var fraction = CalcFraction(t);
@@ -175,15 +180,122 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
 
         private delegate float MappingFunction(float fraction);
         private static readonly MappingFunction[] MapShapes =
+        {
+                f => f.Clamp(0,1),                             // 0: Linear
+                f => MathUtils.SmootherStep(0,1,f.Clamp(0,1)), // 1: Smooth Step
+                f => MathUtils.SmootherStep(0,1,f.Clamp(0,1)/2) *2, // 2: Ease In
+                f => MathUtils.SmootherStep(0,1,f.Clamp(0,1)/2 + 0.5f) *2 -1, // 3: Ease Out
+                f => MathF.Sin(f.Clamp(0,1) * 40) * MathF.Pow(1-f.Clamp(0.0001f, 1),4), // 4: Shake
+                f => f<=0 ? 0 : (1-f.Clamp(0,1)),             // 5: Kick
+
+                // New easing functions appended after original functions
+                EaseInQuad,    // 6: EaseInQuad
+                EaseOutQuad,   // 7: EaseOutQuad
+                EaseInOutQuad, // 8: EaseInOutQuad
+                EaseInCubic,   // 9: EaseInCubic
+                EaseOutCubic,  // 10: EaseOutCubic
+                EaseInOutCubic, // 11: EaseInOutCubic
+                EaseInBack,
+                EaseOutBack,
+                EaseInOutBack,
+                EaseOutBounce,
+                EaseInExpo,
+                EaseOutExpo,
+                EaseInOutExpo,
+                EaseInElastic,
+                EaseOutElastic,
+        };
+        private static float EaseInQuad(float t) => t * t;
+        private static float EaseOutQuad(float t) => t * (2 - t);
+        private static float EaseInOutQuad(float t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        private static float EaseInCubic(float t) => t * t * t;
+        private static float EaseOutCubic(float t) => (--t) * t * t + 1;
+        private static float EaseInOutCubic(float t) => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+        private static float EaseInBack(float t)
+        {
+            const float c1 = 1.70158f;
+            const float c3 = c1 + 1;
+
+            return c3 * t * t * t - c1 * t * t;
+        }
+        private static float EaseOutBack(float t)
+        {
+            const float c1 = 1.70158f;
+            const float c3 = c1 + 1;
+
+            return 1 + c3 * MathF.Pow(t - 1, 3) + c1 * MathF.Pow(t - 1, 2);
+        }
+        private static float EaseInOutBack(float t)
+        {
+            const float c1 = 1.70158f;
+            var c2 = c1 * 1.525;
+
+            return (float)(t < 0.5
+            ? (Math.Pow(2 * t, 2) * ((c2 + 1) * 2 * t - c2)) / 2
+            : (Math.Pow(2 * t - 2, 2) * ((c2 + 1) * (t * 2 - 2) + c2) + 2) / 2);
+
+        }
+        private static float EaseOutBounce(float t)
+        {
+            const float n1 = 7.5625f;
+            const float d1 = 2.75f;
+
+            if (t < 1 / d1)
             {
-                f => f.Clamp(0,1), // 0: Linear
-                f => MathUtils.SmootherStep(0,1,f.Clamp(0,1)), //1: Smooth Step
-                f => MathUtils.SmootherStep(0,1,f.Clamp(0,1)/2) *2   , //2: Easy In
-                f => MathUtils.SmootherStep(0,1,f.Clamp(0,1)/2 + 0.5f) *2 -1, //3: Easy Out
-                f => MathF.Sin(f.Clamp(0,1) * 40) * MathF.Pow(1-f.Clamp(0.0001f, 1),4) ,  //4: Shake
-                f => f<=0 ? 0 : (1-f.Clamp(0,1)), // 5: Kick
-            };
-        
+                return n1 * t * t;
+            }
+            else if (t < 2 / d1)
+            {
+                return n1 * (t -= 1.5f / d1) * t + 0.75f;
+            }
+            else if (t < 2.5f / d1)
+            {
+                return n1 * (t -= 2.25f / d1) * t + 0.9375f;
+            }
+            else
+            {
+                return n1 * (t -= 2.625f / d1) * t + 0.984375f;
+            }
+        }
+
+        private static float EaseInExpo(float t)
+        {
+            return (float)(t == 0 ? 0 : Math.Pow(2, 10 * t - 10));
+        }
+        private static float EaseOutExpo(float t)
+        {
+            return (float)(t == 1 ? 1 : 1 - Math.Pow(2, -10 * t));
+        }
+        private static float EaseInOutExpo(float t)
+        {
+            return (float)(t == 0
+              ? 0
+              : t == 1
+              ? 1
+              : t < 0.5 ? Math.Pow(2, 20 * t - 10) / 2
+              : (2 - Math.Pow(2, -20 * t + 10)) / 2);
+        }
+        private static float EaseInElastic(float t)
+        {
+            const float c4 = (float)((2f * Math.PI) / 3f);
+
+            return (float)(t == 0
+              ? 0
+              : t == 1
+              ? 1
+              : -Math.Pow(2, 10 * t - 10) * Math.Sin((t * 10 - 10.75) * c4));
+        }
+        private static float EaseOutElastic(float t)
+        {
+            const float c4 = (float)((2f * Math.PI) / 3f);
+
+            return (float)(t == 0
+              ? 0
+              : t == 1
+              ? 1
+              : Math.Pow(2, -10 * t) * Math.Sin((t * 10 - 0.75) * c4) + 1);
+        }
+
         private bool _trigger;
         private Shapes _shape;
         private float _bias;
@@ -203,6 +315,22 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
             EaseOut = 3,
             Shake = 4,
             Kick = 5,
+            // New easings begin here
+            EaseInQuad = 6,
+            EaseOutQuad = 7,
+            EaseInOutQuad = 8,
+            EaseInCubic = 9,
+            EaseOutCubic = 10,
+            EaseInOutCubic = 11,
+            EaseInBack = 12,
+            EaseOutBack = 13,
+            EaseInOutBack = 14,// Continue adding other new easing functions here
+            EaseOutBounce = 15,
+            EaseInExpo = 16,
+            EaseOutExpo = 17,
+            EaseInOutExpo = 18,
+            EaseInElastic = 19,
+            EaseOutElastic = 20,
         }
 
 
