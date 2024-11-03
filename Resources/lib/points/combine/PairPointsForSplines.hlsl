@@ -55,8 +55,8 @@ inline float3 Interpolate(float t, float3 pA, float3 tA, float3 tB, float3 pB)
         return;
     }
 
-    uint indexA = pairIndex / countA;
-    uint indexB = pairIndex / countB;
+    uint indexA = pairIndex % countA;
+    uint indexB = pairIndex % countB;
 
     float3 posA1 = PointsA[indexA].Position;
     float3 posB1 = PointsB[indexB].Position;
