@@ -562,7 +562,7 @@
       "SymbolId": "ec0675d7-6b72-4b15-b141-80bdd2367cd8",
       "InputValues": [
         {
-          "Id": "82384eba-1d7a-41c8-a703-9184c961d766"/*Amount*/,
+          "Id": "82384eba-1d7a-41c8-a703-9184c961d766"/*Strength*/,
           "Type": "System.Single",
           "Value": 1.3
         },

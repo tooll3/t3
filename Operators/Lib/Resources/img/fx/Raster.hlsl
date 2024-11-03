@@ -100,7 +100,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         float4 imgColorForCel = inputTexture.SampleLevel(texSampler, pCel, 0.0);
         // orgColor = imgColorForCel;
         dotSize = lerp(dotSize, imgColorForCel.r, RAffects_DotSize);
-        lineWidth = lerp(lineWidth, imgColorForCel.r, GAffects_LineWidth);
+        lineWidth = lerp(lineWidth, imgColorForCel.g, GAffects_LineWidth);
         lineRatio = lerp(lineRatio, imgColorForCel.b, BAffects_LineRatio);
         // return imgColorForCel;
     }

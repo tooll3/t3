@@ -79,7 +79,9 @@ psInput vsMain(uint id : SV_VertexID)
     Point pointAA = Points[particleId < 1 ? 0 : particleId - 1];
     Point pointA = Points[particleId];
     Point pointB = Points[particleId + 1];
-    Point pointBB = Points[particleId > SegmentCount - 2 ? SegmentCount - 2 : particleId + 2];
+    Point pointBB = Points[particleId > SegmentCount - 2
+                               ? SegmentCount - 2
+                               : particleId + 2];
 
     float f = cornerFactors.x;
     float3 posInObject = f < 0.5

@@ -6,34 +6,34 @@
 
 cbuffer Params : register(b0)
 {
-    float Amount;
+    float Strength;
     float3 RandomizePosition;
 
     float3 RandomizeRotation;
-    float RandomizeW;
+    float RandomizeF1;
 
     float4 RandomizeColor;
 
-    float3 Stretch;
+    float3 Scale;
     float RandomSeed;
 
-
     float2 GainAndBias;
-    float UseSelection;
-
+    float RandomizeF2;
 }
- 
-cbuffer IntParams : register(b1) 
+
+cbuffer IntParams : register(b1)
 {
     uint OffsetMode;
     uint UsePointSpace;
     uint Interpolation;
     int ClampColorsEtc;
+
     int Repeat;
+    int StrengthFactor;
 }
 
-StructuredBuffer<LegacyPoint> SourcePoints : t0;        
-RWStructuredBuffer<LegacyPoint> ResultPoints : u0;  
+StructuredBuffer<Point> SourcePoints : t0;
+RWStructuredBuffer<Point> ResultPoints : u0;
 
 float3 hsb2rgb(float3 c)
 {
@@ -59,61 +59,66 @@ float3 rgb2hsb(float3 c)
         q.x * 0.5);
 }
 
- 
-[numthreads(64,1,1)]
-void main(uint3 i : SV_DispatchThreadID)
+[numthreads(64, 1, 1)] void main(uint3 i : SV_DispatchThreadID)
 {
     uint pointCount, stride;
     SourcePoints.GetDimensions(pointCount, stride);
-    LegacyPoint p = SourcePoints[i.x];
+    Point p = SourcePoints[i.x];
 
     uint pointId = i.x;
-    uint pointU = pointId * _PRIME0 % (Repeat == 0 ? 999999999 : Repeat) ;
+    uint pointU = pointId * _PRIME0 % (Repeat == 0 ? 999999999 : Repeat);
     float particlePhaseOffset = hash11u(pointU);
 
     float phase = abs(particlePhaseOffset + RandomSeed);
 
-    int phaseIndex = (uint)phase + pointU; 
+    int phaseIndex = (uint)phase + pointU;
 
-    float t = fmod (phase,1);
-    t = Interpolation == 0 ? 0 : (Interpolation == 1 ? t : smoothstep(0,1,t));
-    float4 biasedA = ApplyBiasAndGain(lerp(hash41u(phaseIndex ), hash41u(phaseIndex + 1), t), GainAndBias.x, GainAndBias.y);
-    float4 biasedB = ApplyBiasAndGain(lerp(hash41u(phaseIndex + _PRIME0 ), hash41u(phaseIndex + _PRIME0 + 1), t), GainAndBias.x, GainAndBias.y);
+    float t = fmod(phase, 1);
+    t = Interpolation == 0 ? 0 : (Interpolation == 1 ? t : smoothstep(0, 1, t));
+    float4 biasedA = ApplyBiasAndGain(lerp(hash41u(phaseIndex), hash41u(phaseIndex + 1), t), GainAndBias.x, GainAndBias.y);
+    float4 biasedB = ApplyBiasAndGain(lerp(hash41u(phaseIndex + _PRIME0), hash41u(phaseIndex + _PRIME0 + 1), t), GainAndBias.x, GainAndBias.y);
 
-    float amount = Amount * lerp( UseSelection, p.Selected,1);
+    float strength = Strength * (StrengthFactor == 0
+                                     ? 1
+                                 : (StrengthFactor == 1) ? p.FX1
+                                                         : p.FX2);
+
     float4 rot = p.Rotation;
-    
-    biasedA -= OffsetMode * 0.5;
-    biasedB -= OffsetMode * 0.5;
 
-    p.Position += amount * (
-        UsePointSpace == 0 
-            ? qRotateVec3(biasedA.xyz * RandomizePosition, p.Rotation)
-            : biasedA.xyz * RandomizePosition
-        );
+    if (OffsetMode == 1)
+    {
+        biasedA = (biasedA * 2) - 1;
+        biasedB = (biasedB * 2) - 1;
+        // biasedB -= OffsetMode * 0.5;
+    }
 
-    
-    float4 HSBa = float4( rgb2hsb(p.Color.rgb), p.Color.a);
-    HSBa += biasedB * RandomizeColor * amount;
-    
-    float4 rgba = float4( hsb2rgb(HSBa.xyz), HSBa.a);
+    p.Position += strength * (UsePointSpace == 0
+                                  ? qRotateVec3(biasedA.xyz * RandomizePosition, p.Rotation)
+                                  : biasedA.xyz * RandomizePosition);
+
+    float4 HSBa = float4(rgb2hsb(p.Color.rgb), p.Color.a);
+    HSBa += biasedB * RandomizeColor * strength;
+    HSBa.x = fmod(HSBa.x, 1);
+
+    float4 rgba = float4(hsb2rgb(HSBa.xyz), HSBa.a);
     p.Color = ClampColorsEtc ? saturate(rgba) : rgba;
 
-    p.W += biasedA.w * RandomizeW * amount;
+    p.FX1 += biasedA.w * RandomizeF1 * strength;
+    p.FX2 += biasedA.r * RandomizeF2 * strength;
 
-    if(ClampColorsEtc && !isnan(p.W)) {
-        p.W = max(0, p.W);
-
+    if (ClampColorsEtc && !isnan(p.Scale.x))
+    {
+        p.FX1 = max(0, p.FX1);
+        p.FX2 = max(0, p.FX2);
     }
-    p.Stretch += float3(biasedB.w, biasedA.w, biasedA.z) * Stretch * amount; // Not ideal... distribution overlap
+    p.Scale += float3(biasedB.w, biasedA.w, biasedA.z) * Scale * strength; // Not ideal... distribution overlap
 
     // Rotation
-    float3 randomRotate = (RandomizeRotation / 180 * PI) * amount * biasedA.xyz; 
-    rot = normalize(qMul(rot, qFromAngleAxis(randomRotate.x , float3(1,0,0))));
-    rot = normalize(qMul(rot, qFromAngleAxis(randomRotate.y , float3(0,1,0))));
-    rot = normalize(qMul(rot, qFromAngleAxis(randomRotate.z , float3(0,0,1))));
+    float3 randomRotate = (RandomizeRotation / 180 * PI) * strength * biasedA.xyz;
+    rot = normalize(qMul(rot, qFromAngleAxis(randomRotate.x, float3(1, 0, 0))));
+    rot = normalize(qMul(rot, qFromAngleAxis(randomRotate.y, float3(0, 1, 0))));
+    rot = normalize(qMul(rot, qFromAngleAxis(randomRotate.z, float3(0, 0, 1))));
     p.Rotation = rot;
 
     ResultPoints[i.x] = p;
 }
-

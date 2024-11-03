@@ -21,6 +21,7 @@
     },
     {
       "InputId": "54fc4cd7-dfc3-4690-9fd1-2b555f7656d4"/*Points*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -1077.7855,
         "Y": 37.991627
