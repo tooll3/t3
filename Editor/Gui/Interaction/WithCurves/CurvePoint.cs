@@ -6,9 +6,6 @@ using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Interaction.WithCurves;
 
-/// <summary>
-/// Interaction logic for CurvePointControl.xaml
-/// </summary>
 internal static class CurvePoint
 {
     public static void Draw(in Guid compositionSymbolId, VDefinition vDef, ICanvas curveEditCanvas, bool isSelected, CurveEditing curveEditing)
@@ -36,7 +33,7 @@ internal static class CurvePoint
 
         if (ImGui.IsItemHovered())
         {
-            ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+            //ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
         }
             
         ImGui.PushFont(Icons.IconFont);
@@ -106,7 +103,7 @@ internal static class CurvePoint
             _vDef.OutEditMode = VDefinition.EditMode.Tangent;
 
             var vectorInCanvas = _curveEditCanvas.InverseTransformDirection(ImGui.GetMousePos() - pCenter);
-            _vDef.InTangentAngle = (float)(Math.PI / 2 - Math.Atan2(vectorInCanvas.X, vectorInCanvas.Y));
+            _vDef.OutTangentAngle = (float)(-Math.PI / 2 - Math.Atan2(vectorInCanvas.X, vectorInCanvas.Y));
 
             if (ImGui.GetIO().KeyCtrl)
                 _vDef.BrokenTangents = true;
@@ -117,7 +114,7 @@ internal static class CurvePoint
                 _vDef.InEditMode = VDefinition.EditMode.Tangent;
 
                 _leftTangentInScreen = new Vector2(-_rightTangentInScreen.X, -_rightTangentInScreen.Y);
-                _vDef.OutTangentAngle = _vDef.InTangentAngle + Math.PI;
+                _vDef.InTangentAngle = _vDef.OutTangentAngle + Math.PI;
             }
         }
     }

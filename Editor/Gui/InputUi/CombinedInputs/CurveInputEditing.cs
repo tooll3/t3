@@ -299,8 +299,7 @@ public static class CurveInputEditing
                         CurvePoint.Draw(compositionSymbolId, keyframe, this, interaction.SelectedKeyframes.Contains(keyframe), interaction);
                     }
 
-                    //v
-                    //ar min = ImGui.GetWindowPos() ;
+                    //var min = ImGui.GetWindowPos() ;
                     //ImGui.GetWindowDrawList().AddText(min, Color.Green, " Curve #" + _objectIdGenerator.GetId(curve, out _));
 
                     interaction.HandleFenceSelection(selectionFence);
