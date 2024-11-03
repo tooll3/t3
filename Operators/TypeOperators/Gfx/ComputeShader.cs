@@ -24,6 +24,9 @@ public sealed class ComputeShader : Instance<ComputeShader>, IDescriptiveFilenam
 
     public void OnShaderUpdate(EvaluationContext context, ComputeShaderT3? shader)
     {
+        ThreadCount.DirtyFlag.Clear();
+        Shader.DirtyFlag.Clear();
+        
         if (shader == null)
         {
             return;
@@ -32,7 +35,7 @@ public sealed class ComputeShader : Instance<ComputeShader>, IDescriptiveFilenam
         if (shader.TryGetThreadGroups(out var threadCount))
             ThreadCount.Value = threadCount;
 
-        ThreadCount.DirtyFlag.Clear();
+
     }
 
     public InputSlot<string> SourcePathSlot => Source;

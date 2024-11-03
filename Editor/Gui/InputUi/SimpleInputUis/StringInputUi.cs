@@ -122,10 +122,10 @@ public class StringInputUi : InputValueUi<string>
             
         static InputResult Draw(InputRequest request)
         {
-            var filter = request.Filter;
+            var fileExtensionFilters = request.FileExtensionFilters;
             var value = request.Value;
                 
-            var drawnItems = ResourceManager.EnumerateResources(filter, request.IsFolder, request.ResourcePackageContainer.AvailableResourcePackages, ResourceManager.PathMode.Aliased);
+            var drawnItems = ResourceManager.EnumerateResources(fileExtensionFilters, request.IsFolder, request.ResourcePackageContainer.AvailableResourcePackages, ResourceManager.PathMode.Aliased);
                 
             var args = new ResourceInputWithTypeAheadSearch.Args("##filePathSearch", drawnItems, request.ShowWarning);
             var changed = ResourceInputWithTypeAheadSearch.Draw(args, ref value, out _);
@@ -135,7 +135,7 @@ public class StringInputUi : InputValueUi<string>
         
     private readonly record struct InputResult(bool Modified, string Value);
 
-    private readonly record struct InputRequest(string Value, string[] Filter, bool IsFolder, bool ShowWarning, IResourceConsumer ResourcePackageContainer);
+    private readonly record struct InputRequest(string Value, string[] FileExtensionFilters, bool IsFolder, bool ShowWarning, IResourceConsumer ResourcePackageContainer);
 
     private static InputEditStateFlags DrawFileInput(FileOperations.FilePickerTypes type, ref string value, string? filter, Func<InputRequest, InputResult> draw)
     {
