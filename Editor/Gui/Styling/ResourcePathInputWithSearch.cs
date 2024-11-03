@@ -205,8 +205,6 @@ public static class ResourceInputWithTypeAheadSearch
                     var isItemHovered = new ImRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax()).Contains( ImGui.GetMousePos());
                     var keepNextPos = ImGui.GetCursorPos();
                     
-                    // Write Labels
-
                     isSelected = path == searchString;
                     ImGui.PushFont(isSelected ? Fonts.FontBold : Fonts.FontNormal);
 
@@ -220,12 +218,13 @@ public static class ResourceInputWithTypeAheadSearch
                     
                     ImGui.SetCursorPos(keepNextPos);
 
-                    if (isItemHovered && !string.IsNullOrEmpty(path))
-                    {
-                        ImGui.BeginTooltip();
-                        ImGui.TextUnformatted(path);
-                        ImGui.EndTooltip();
-                    }
+                    // Tooltips inside other tooltips are not working 
+                    // if (isItemHovered && !string.IsNullOrEmpty(path))
+                    // {
+                    //     ImGui.BeginTooltip();
+                    //     ImGui.TextUnformatted(path);
+                    //     ImGui.EndTooltip();
+                    // }
                         
                     ImGui.PopStyleColor();
                             
@@ -243,8 +242,9 @@ public static class ResourceInputWithTypeAheadSearch
                     if (++index > 100)
                         break;
                 }
-                    
-                var isPopupHovered = new ImRect(ImGui.GetWindowContentRegionMin(), ImGui.GetWindowContentRegionMax()).Contains(ImGui.GetMousePos());
+                
+                var isPopupHovered = ImRect.RectWithSize(ImGui.GetWindowPos( ), ImGui.GetWindowSize())
+                                           .Contains(ImGui.GetMousePos());
 
                 if (!isPopupHovered && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
                 {
