@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
@@ -108,7 +108,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
                 _vDef.OutEditMode = VDefinition.EditMode.Tangent;
 
                 var vectorInCanvas = _curveEditCanvas.InverseTransformDirection(ImGui.GetMousePos() - pCenter);
-                _vDef.InTangentAngle = (float)(Math.PI / 2 - Math.Atan2(vectorInCanvas.X, vectorInCanvas.Y));
+                _vDef.OutTangentAngle = (float)(-Math.PI / 2 - Math.Atan2(vectorInCanvas.X, vectorInCanvas.Y));
 
                 if (ImGui.GetIO().KeyCtrl)
                     _vDef.BrokenTangents = true;
@@ -119,10 +119,12 @@ namespace T3.Editor.Gui.Interaction.WithCurves
                     _vDef.InEditMode = VDefinition.EditMode.Tangent;
 
                     _leftTangentInScreen = new Vector2(-_rightTangentInScreen.X, -_rightTangentInScreen.Y);
-                    _vDef.OutTangentAngle = _vDef.InTangentAngle + Math.PI;
+                    _vDef.InTangentAngle = _vDef.OutTangentAngle + Math.PI;
                 }
             }
+
         }
+
 
         /// <summary>
         /// Update tangent orientation after changing the scale of the CurveEditor
