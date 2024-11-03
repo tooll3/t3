@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
@@ -107,7 +107,7 @@ namespace T3.Editor.Gui.ChildUi
 
                 // Fragment line 
                 var cycleWidth = graphWidth * (1 - relativeX); 
-                var dx = new Vector2(((float)anim.LastFraction * duration + delay) * cycleWidth - 1, 0);
+                var dx = new Vector2((float)anim.LastFraction * duration * cycleWidth, 0);
                 drawList.AddRectFilled(lv1 + dx, lv2 + dx, UiColors.WidgetActiveLine);
 
                 // Draw graph
@@ -128,7 +128,7 @@ namespace T3.Editor.Gui.ChildUi
                 {
                     var f = (float)i / GraphListSteps;
                     var fragment = f * (1 + previousCycleFragment) - previousCycleFragment;
-                    GraphLinePoints[i] = new Vector2((f * duration +  delay) * graphWidth,
+                    GraphLinePoints[i] = new Vector2((f * duration) * graphWidth,
                                                      (0.5f - anim.CalcNormalizedValueForFraction(fragment, shapeIndex) / 2) * h
                                                     ) + graphRect.Min;
                 }
