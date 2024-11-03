@@ -143,8 +143,9 @@ internal abstract class FloatVectorInputValueUi<T> : InputValueUi<T>
                 },                
         };
 
-    public override void DrawSettings()
+    public override bool DrawSettings()
     {
+        var modified = false;
         var keepPosition = ImGui.GetCursorPos();
         ImGui.SetCursorPos(new Vector2(ImGui.GetWindowContentRegionMax().X - ImGui.GetFrameHeight() - ImGui.GetStyle().FramePadding.X, 
                                        ImGui.GetWindowContentRegionMin().Y));
@@ -169,18 +170,19 @@ internal abstract class FloatVectorInputValueUi<T> : InputValueUi<T>
                     Format = p.CustomFormat;
                     Parent.FlagAsModified();
                     ImGui.CloseCurrentPopup();
+                    modified = true;
                 }
             }
 
             ImGui.EndPopup();
         }
             
-        base.DrawSettings();
+        modified |= base.DrawSettings();
             
         FormInputs.DrawFieldSetHeader("Value Range");
         if (FormInputs.DrawValueRangeControl(ref Min, ref Max, ref _scale,  ref Clamp, DefaultMin, DefaultMax, DefaultScale))
         {
-            Parent.FlagAsModified();
+            modified = true;
         }
             
         FormInputs.DrawFieldSetHeader("Custom Value format");
@@ -197,11 +199,14 @@ internal abstract class FloatVectorInputValueUi<T> : InputValueUi<T>
                                       null)
             )
         {
+            modified = true;
             if (string.IsNullOrWhiteSpace(Format))
             {
                 Format = null;
             }
         }
+
+        return modified;
     }
 
     public override void Write(JsonTextWriter writer)

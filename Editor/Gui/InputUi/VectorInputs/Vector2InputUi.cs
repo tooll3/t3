@@ -155,14 +155,19 @@ internal class Vector2InputUi : FloatVectorInputValueUi<Vector2>
         Curve.UpdateCurveValues(curves, time, FloatComponents);
     }
 
-    public override void DrawSettings()
+    public override bool DrawSettings()
     {
-        base.DrawSettings();
+        var modified = base.DrawSettings();
 
         FormInputs.DrawFieldSetHeader("Show 2D Control");
         var tmpForRef = UseVec2Control;
         if (FormInputs.AddEnumDropdown(ref tmpForRef, null))
+        {
+            modified = true;
             UseVec2Control = tmpForRef;
+        }
+
+        return modified;
     }
 
     public override void Write(JsonTextWriter writer)

@@ -324,9 +324,9 @@ public class StringInputUi : InputValueUi<string>
         }
     }
 
-    public override void DrawSettings()
+    public override bool DrawSettings()
     {
-        base.DrawSettings();
+        var modified= base.DrawSettings();
         FormInputs.AddVerticalSpace();
 
         FormInputs.DrawFieldSetHeader("Usage");
@@ -336,7 +336,10 @@ public class StringInputUi : InputValueUi<string>
         {
             var tmpForRef = Usage;
             if (FormInputs.AddEnumDropdown(ref tmpForRef, null))
+            {
+                modified = true;
                 Usage = tmpForRef;
+            }
         }
 
         
@@ -352,9 +355,12 @@ public class StringInputUi : InputValueUi<string>
             if (FormInputs.AddStringInput("##File Filter", ref tmp, null, warning,
                                           "This will only work for file FilePath-Mode.\nThe filter has to be in following format:\n\n Your Description (*.ext)|*.ext"))
             {
+                modified = true;
                 FileFilter = tmp;
             }
         }
+
+        return modified;
     }
 
     public override void Write(JsonTextWriter writer)

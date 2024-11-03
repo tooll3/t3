@@ -44,7 +44,7 @@ public interface IInputUi : ISelectableCanvasObject
         
     InputEditStateFlags DrawParameterEdit(IInputSlot input, SymbolUi compositionUi, SymbolUi.Child symbolChildUi, bool hideNonEssentials, bool skipIfDefault);
     string GetSlotValue(IInputSlot inputSlot);
-    void DrawSettings();
+    bool DrawSettings();
 
     IInputUi Clone();
     void Write(JsonTextWriter writer);

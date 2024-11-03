@@ -586,9 +586,9 @@ public abstract class InputValueUi<T> : IInputUi
 
 
         
-    public virtual void DrawSettings()
+    public virtual bool DrawSettings()
     {
-
+        return false;
     }
 
 

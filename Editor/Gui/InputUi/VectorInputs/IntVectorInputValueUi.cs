@@ -77,14 +77,12 @@ internal abstract class IntVectorInputValueUi<T> : InputValueUi<T>
 
     public abstract override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator, double time);
         
-    public override void DrawSettings()
+    public override bool DrawSettings()
     {
-        base.DrawSettings();
+        var modified = base.DrawSettings();
         FormInputs.DrawFieldSetHeader("Value Range");
-        if (FormInputs.DrawIntValueRangeControl(ref Min, ref Max, ref _scale, ref Clamp))
-        {
-            Parent.FlagAsModified();
-        }
+        modified |= FormInputs.DrawIntValueRangeControl(ref Min, ref Max, ref _scale, ref Clamp);
+        return modified;
     }
 
     public override void Write(JsonTextWriter writer)

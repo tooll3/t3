@@ -288,7 +288,7 @@ public class ParameterSettings
                 }
                     
                 // Draw additional settings for input types like Vector2, Vector3, etc.
-                selectedInputUi.DrawSettings();
+                modified |=selectedInputUi.DrawSettings();
                     
                 FormInputs.AddVerticalSpace();
 
