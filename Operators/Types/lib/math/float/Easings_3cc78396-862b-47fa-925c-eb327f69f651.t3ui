@@ -1,0 +1,56 @@
+{
+  "Id": "3cc78396-862b-47fa-925c-eb327f69f651"/*Easings*/,
+  "Description": "This operator creates smooth, ease-in-out transitions between changing input values, perfect for animating any step change. Customize the transition style with options like cubic, exponential, or back easing, or choose a linear fallback for a simple interpolation. Note: The input value should evolve in steps (e.g., sudden changes) to fully utilize the easing effect.\n[Damp] [Spring]",
+  "InputUis": [
+    {
+      "InputId": "c2107af4-7b4f-43ef-97fe-934833790032"/*Value*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      }
+    },
+    {
+      "InputId": "da40ddcd-cef8-494a-a7f8-cd8ddfbd7603"/*Duration*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 379.0
+      },
+      "Min": 0.01,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "5580eee8-db7b-4e9b-898d-5c7680b0c302"/*UseAppRunTime*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 469.0
+      }
+    },
+    {
+      "InputId": "bc388ea3-e1e6-4773-95e5-b8a649c3344f"/*Ease*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 514.0
+      }
+    },
+    {
+      "InputId": "33c43dad-ca81-457d-90bb-b29ee9ac2f9a"/*Strength*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 559.0
+      },
+      "Description": "works only for Back functions"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "4d1e77d8-bfee-4451-9dcf-f187cd82ec26"/*Result*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 38.0
+      }
+    }
+  ]
+}

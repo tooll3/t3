@@ -1,0 +1,29 @@
+{
+  "Name": "Easings",
+  "Id": "3cc78396-862b-47fa-925c-eb327f69f651",
+  "Namespace": "lib.math.float",
+  "Inputs": [
+    {
+      "Id": "c2107af4-7b4f-43ef-97fe-934833790032"/*Value*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "da40ddcd-cef8-494a-a7f8-cd8ddfbd7603"/*Duration*/,
+      "DefaultValue": 0.25
+    },
+    {
+      "Id": "5580eee8-db7b-4e9b-898d-5c7680b0c302"/*UseAppRunTime*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "bc388ea3-e1e6-4773-95e5-b8a649c3344f"/*Ease*/,
+      "DefaultValue": 2
+    },
+    {
+      "Id": "33c43dad-ca81-457d-90bb-b29ee9ac2f9a"/*Strength*/,
+      "DefaultValue": 0.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
