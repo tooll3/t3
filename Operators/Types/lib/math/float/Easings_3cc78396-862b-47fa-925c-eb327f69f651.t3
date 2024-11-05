@@ -18,10 +18,6 @@
     {
       "Id": "bc388ea3-e1e6-4773-95e5-b8a649c3344f"/*Ease*/,
       "DefaultValue": 2
-    },
-    {
-      "Id": "33c43dad-ca81-457d-90bb-b29ee9ac2f9a"/*Strength*/,
-      "DefaultValue": 0.0
     }
   ],
   "Children": [],
