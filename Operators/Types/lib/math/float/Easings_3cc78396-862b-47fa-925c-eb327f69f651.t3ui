@@ -33,14 +33,6 @@
         "X": 36.0,
         "Y": 514.0
       }
-    },
-    {
-      "InputId": "33c43dad-ca81-457d-90bb-b29ee9ac2f9a"/*Strength*/,
-      "Position": {
-        "X": 36.0,
-        "Y": 559.0
-      },
-      "Description": "works only for Back functions"
     }
   ],
   "SymbolChildUis": [],

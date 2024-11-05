@@ -25,7 +25,7 @@ namespace T3.Operators.Types.Id_3cc78396_862b_47fa_925c_eb327f69f651
             var inputValue = Value.GetValue(context);  // Target value (0 or 1)
             var duration = Duration.GetValue(context); // Duration of the animation in seconds
             var easeMode = Ease.GetValue(context);     // Easing function selector
-            var strength = Strength.GetValue(context);
+            
 
             var currentTime = UseAppRunTime.GetValue(context) ? Playback.RunTimeInSecs : context.LocalFxTime;
             if (Math.Abs(currentTime - _lastEvalTime) < MinTimeElapsedBeforeEvaluation)
@@ -47,8 +47,8 @@ namespace T3.Operators.Types.Id_3cc78396_862b_47fa_925c_eb327f69f651
             }
 
             // Calculate progress based on elapsed time and duration
-            float elapsedTime = (float)(currentTime - _startTime);
-            float progress = Math.Clamp(elapsedTime / duration, 0f, 1f);
+            var elapsedTime = (float)(currentTime - _startTime);
+            var progress = Math.Clamp(elapsedTime / duration, 0f, 1f);
 
             // Apply selected easing function based on easeMode
             var easedProgress = easeMode switch
@@ -89,9 +89,6 @@ namespace T3.Operators.Types.Id_3cc78396_862b_47fa_925c_eb327f69f651
             Result.Value = MathUtils.Lerp(_initialValue, _targetValue, easedProgress);
             _previousInputValue = inputValue;
         }
-        
-
-        
 
         private double _lastEvalTime;
         private double _startTime;
@@ -110,11 +107,6 @@ namespace T3.Operators.Types.Id_3cc78396_862b_47fa_925c_eb327f69f651
 
         [Input(Guid = "bc388ea3-e1e6-4773-95e5-b8a649c3344f", MappedType = typeof(EasingType))]
         public readonly InputSlot<int> Ease = new();
-
-        [Input(Guid = "33c43dad-ca81-457d-90bb-b29ee9ac2f9a")]
-        public readonly InputSlot<float> Strength = new();
-
-
         
     }
 }
