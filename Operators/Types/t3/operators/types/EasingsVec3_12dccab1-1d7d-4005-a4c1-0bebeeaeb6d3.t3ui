@@ -28,13 +28,6 @@
         "X": -200.0,
         "Y": 135.0
       }
-    },
-    {
-      "InputId": "fb3876a7-0a01-4cdb-891b-a3557f46c75a"/*Strength*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 180.0
-      }
     }
   ],
   "SymbolChildUis": [],
