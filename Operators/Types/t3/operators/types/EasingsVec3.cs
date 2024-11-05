@@ -25,7 +25,7 @@ namespace T3.Operators.Types.Id_12dccab1_1d7d_4005_a4c1_0bebeeaeb6d3
             var inputValue = Value.GetValue(context);  // Target value (0 or 1)
             var duration = Duration.GetValue(context); // Duration of the animation in seconds
             var easeMode = Ease.GetValue(context);     // Easing function selector
-            var strength = Strength.GetValue(context);
+            
 
             var currentTime = UseAppRunTime.GetValue(context) ? Playback.RunTimeInSecs : context.LocalFxTime;
             if (Math.Abs(currentTime - _lastEvalTime) < MinTimeElapsedBeforeEvaluation)
@@ -37,16 +37,7 @@ namespace T3.Operators.Types.Id_12dccab1_1d7d_4005_a4c1_0bebeeaeb6d3
             }
 
             _lastEvalTime = currentTime;
-           /* var threshold = new Vector3(0.001f, 0.001f, 0.001f);
-            var testing = _previousInputValue.X;
-            var inval = inputValue.X;
-            // Check if input has changed to trigger new animation
-            if (Math.Abs(inval - testing) > 0.001f)
-            {
-                _startTime = currentTime;
-                _initialValue = Result.Value;
-                _targetValue = inputValue;
-            }*/
+           
             if (Vector3.Distance(inputValue, _previousInputValue) > 0.001f)
             {
                 _startTime = currentTime;
@@ -56,194 +47,58 @@ namespace T3.Operators.Types.Id_12dccab1_1d7d_4005_a4c1_0bebeeaeb6d3
 
 
             // Calculate progress based on elapsed time and duration
-            float elapsedTime = (float)(currentTime - _startTime);
-            float progress = Math.Clamp(elapsedTime / duration, 0f, 1f);
+            var elapsedTime = (float)(currentTime - _startTime);
+            var progress = Math.Clamp(elapsedTime / duration, 0f, 1f);
 
             // Apply selected easing function based on easeMode
-            float easedProgress = progress;
-            switch (easeMode)
+            //var easedProgress = progress;
+            var easedProgress = easeMode switch
             {
-                case 1:
-                    easedProgress = InOutCubic(progress);
-                    break;
-                case 2:
-                    easedProgress = InOutExpo(progress);
-                    break;
-                case 3:
-                    easedProgress = InOutBack(progress, strength);
-                    break;
-                case 4:
-                    easedProgress = OutBounce(progress);
-                    break;
-                case 5:
-                    easedProgress = OutElastic(progress);
-                    break;
-                case 6:
-                    easedProgress = OutCirc(progress);
-                    break;
-                case 7:
-                     easedProgress = OutBack(progress, strength);
-                    break;
-                case 8:
-                    easedProgress = OutQuad(progress);
-                    break;
-                case 9: 
-                    easedProgress = OutExpo(progress);
-                    break;
-                case 10:
-                    easedProgress = OutCubic(progress);
-                    break;
-                case 11:
-                    easedProgress = InQuad(progress);
-                    break;
-                case 12:
-                    easedProgress = InCubic(progress);
-                    break;
+                1 => EasingFunctions.InOutSine(progress),
+                2 => EasingFunctions.InOutQuad(progress),
+                3 => EasingFunctions.InOutCubic(progress),
+                4 => EasingFunctions.InOutQuart(progress),
+                5 => EasingFunctions.InOutQuint(progress),
+                6 => EasingFunctions.InOutExpo(progress),
+                7 => EasingFunctions.InOutCirc(progress),
+                8 => EasingFunctions.InOutBack(progress),
+                9 => EasingFunctions.InOutElastic(progress),
+                10 => EasingFunctions.InOutBounce(progress),
+                11 => EasingFunctions.OutSine(progress),
+                12 => EasingFunctions.OutQuad(progress),
+                13 => EasingFunctions.OutCubic(progress),
+                14 => EasingFunctions.OutQuart(progress),
+                15 => EasingFunctions.OutQuint(progress),
+                16 => EasingFunctions.OutExpo(progress),
+                17 => EasingFunctions.OutCirc(progress),
+                18 => EasingFunctions.OutBack(progress),
+                19 => EasingFunctions.OutElastic(progress),
+                20 => EasingFunctions.OutBounce(progress),
+                21 => EasingFunctions.InSine(progress),
+                22 => EasingFunctions.InQuad(progress),
+                23 => EasingFunctions.InCubic(progress),
+                24 => EasingFunctions.InQuart(progress),
+                25 => EasingFunctions.InQuint(progress),
+                26 => EasingFunctions.InExpo(progress),
+                27 => EasingFunctions.InCirc(progress),
+                28 => EasingFunctions.InBack(progress),
+                29 => EasingFunctions.InElastic(progress),
+                30 => EasingFunctions.InBounce(progress),
 
-                default:
-                    // Default to linear if easeMode is unrecognized or set to 0
-                    easedProgress = progress;
-                    break;
-            }
+                _ => progress,// Default to linear if easeMode is unrecognized or set to 0
+            };
             Result.Value = new Vector3(
                             MathUtils.Lerp(_initialValue.X, _targetValue.X, easedProgress),
                             MathUtils.Lerp(_initialValue.Y, _targetValue.Y, easedProgress),
                             MathUtils.Lerp(_initialValue.Z, _targetValue.Z, easedProgress)
                 );
+            
 
             _previousInputValue = inputValue;
         }
-        private enum Easings
-        {
-            Linear = 0,
-            InOutCubic = 1,
-            InOutExpo = 2,
-            InOutBack = 3,
-            OutBounce = 4,
-            OutElastic = 5,
-            OutCirc = 6,
-            OutBack = 7,
-            OutQuad = 8,
-            OutExpo = 9,
-            OutCubic = 10,
-            InQuad = 11,
-            InCubic = 12,
+     
 
-        }
-
-        // Easing functions
-
-            //Quad
-        private static float InQuad(float t) => t * t;
-        private static float OutQuad(float t) => t * (2 - t);
-        private static float InOutQuad(float t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-            //Cubic
-        private static float InCubic(float t) => t * t * t;
-        private static float OutCubic(float t) => (--t) * t * t + 1;
-        private static float InOutCubic(float t) => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
-            //Expo
-        private static float InExpo(float t)
-        {
-            return (float)(t == 0 ? 0 : Math.Pow(2, 10 * t - 10));
-        }
-        private static float OutExpo(float t)
-        {
-            return (float)(t == 1 ? 1 : 1 - Math.Pow(2, -10 * t));
-        }
-        private static float InOutExpo(float t)
-        {
-            return (float)(t == 0
-              ? 0
-              : t == 1
-              ? 1
-              : t < 0.5 ? Math.Pow(2, 20 * t - 10) / 2
-              : (2 - Math.Pow(2, -20 * t + 10)) / 2);
-        }
-            //Back
-        private static float InBack(float t, float ctrl )
-        {
-            var c1 = 1.70158f + ctrl;
-            var c3 = c1 + 1f;
-
-            return (float)c3 * t * t * t - c1 * t * t;
-
-        }
-        private static float OutBack(float t, float ctrl)
-        {
-            var c1 = 1.70158f + ctrl;
-            var c3 = c1 + 1;
-
-            return 1 + c3 * MathF.Pow(t - 1, 3) + c1 * MathF.Pow(t - 1, 2);
-        }
-        private static float InOutBack(float t, float ctrl)
-        {
-            var c1 = 1.70158f + ctrl;
-            var c2 = c1 * 1.525;
-
-            return (float)(t < 0.5
-            ? (Math.Pow(2 * t, 2) * ((c2 + 1) * 2 * t - c2)) / 2
-            : (Math.Pow(2 * t - 2, 2) * ((c2 + 1) * (t * 2 - 2) + c2) + 2) / 2);
-
-        }
-            //Bounce
-        private static float OutBounce(float t)
-        {
-            const float n1 = 7.5625f;
-            const float d1 = 2.75f;
-
-            if (t < 1 / d1)
-            {
-                return n1 * t * t;
-            }
-            else if (t < 2 / d1)
-            {
-                return n1 * (t -= 1.5f / d1) * t + 0.75f;
-            }
-            else if (t < 2.5f / d1)
-            {
-                return n1 * (t -= 2.25f / d1) * t + 0.9375f;
-            }
-            else
-            {
-                return n1 * (t -= 2.625f / d1) * t + 0.984375f;
-            }
-        }
-            //Elastic
-        private static float InElastic(float t)
-        {
-            const float c4 = (float)((2f * Math.PI) / 3f);
-
-            return (float)(t == 0
-              ? 0
-              : t == 1
-              ? 1
-              : -Math.Pow(2, 10 * t - 10) * Math.Sin((t * 10 - 10.75) * c4));
-        }
-        private static float OutElastic(float t)
-        {
-            const float c4 = (float)((2f * Math.PI) / 3f);
-
-            return (float)(t == 0
-              ? 0
-              : t == 1
-              ? 1
-              : Math.Pow(2, -10 * t) * Math.Sin((t * 10 - 0.75) * c4) + 1);
-        }
-            //Circ
-        private static float InCirc(float t)
-        {
-            return (float)(1 - Math.Sqrt(1 - Math.Pow(t, 2)));
-        }
-        private static float OutCirc(float t)
-        {
-            return (float)Math.Sqrt(1 - Math.Pow(t - 1, 2));
-        }
-        private static float InOutCirc(float t)
-        {
-            return (float)(t < 0.5
-                ? (1 - Math.Sqrt(1 - Math.Pow(2 * t, 2))) / 2
-                : (Math.Sqrt(1 - Math.Pow(-2 * t + 2, 2)) + 1) / 2);
-        }
+        
 
         private double _lastEvalTime;
         private double _startTime;
@@ -260,11 +115,10 @@ namespace T3.Operators.Types.Id_12dccab1_1d7d_4005_a4c1_0bebeeaeb6d3
         [Input(Guid = "2a450207-489e-4a8d-83ab-37ed8167eebe")]
         public readonly InputSlot<bool> UseAppRunTime = new();
 
-        [Input(Guid = "9ef45ff9-9d59-44b7-b03d-37a1be40a776", MappedType = typeof(Easings))]
+        [Input(Guid = "9ef45ff9-9d59-44b7-b03d-37a1be40a776", MappedType = typeof(EasingFunctions.EasingType))]
         public readonly InputSlot<int> Ease = new();
 
-        [Input(Guid = "fb3876a7-0a01-4cdb-891b-a3557f46c75a")]
-        public readonly InputSlot<float> Strength = new();
+        
 
 
         
