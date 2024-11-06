@@ -132,8 +132,6 @@ psInput vsMain(uint id : SV_VertexID)
     posInCamSpace.xyz /= posInCamSpace.w;
     posInCamSpace.w = 1;
 
-    float widthAtPoint = lerp(pointA.Scale.x, pointB.Scale.x, f);
-
     float pFx1 = lerp(pointA.FX1, pointB.FX1, f);
     float pFx2 = lerp(pointA.FX2, pointB.FX2, f);
 
@@ -155,6 +153,7 @@ psInput vsMain(uint id : SV_VertexID)
 
     output.texCoord = float2(u * UvScale + OffsetU, cornerFactors.y / 2 + 0.5);
 
+    float widthAtPoint = lerp(pointA.Scale.x, pointB.Scale.x, f);
     float widthFxFactor = WidthFX == 0 ? 1 : ((WidthFX == 1) ? pFx1 : pFx2);
     float thickness = Size * discardFactor * lerp(1, 1 / (posInCamSpace.z), ShrinkWithDistance) * widthFxFactor;
     thickness *= widthAtPoint; // UseWForWidth < 0 ? lerp(1, 1-widthAtPoint, -UseWForWidth)

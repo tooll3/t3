@@ -5,6 +5,10 @@
 #define PI 3.14159265359f
 #endif
 
+#ifndef TAU
+#define TAU (3.14159265359f / 180)
+#endif
+
 #pragma warning(disable : 4118)
 const static float NAN = sqrt(-1);
 

@@ -37,7 +37,7 @@ public static class MathUtils
         return (float)(1.0 - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);
     }
 
-    public static float  ApplyBiasAndGain(this float x, float s, float t)
+    public static float ApplyBiasAndGainOld(this float x, float s, float t)
     {
         const float eps = 0.0001f;
         const float r = 200;
@@ -46,6 +46,24 @@ public static class MathUtils
         return x < t
                    ? (t * x) / (x + s * (t - x) + eps)
                    : ((1 - t) * (x - 1)) / (1 - x - s * (t - x) + eps) + 1;
+    }
+    
+    public static float ApplyBiasAndGain(this float value, float gain,float bias )
+    {
+        bias = Clamp(bias, 0.001f, 0.999f);
+        gain = Clamp(gain, 0.001f, 0.999f);
+    
+        // Apply bias
+        value /= ((1.0f / bias - 2.0f) * (1.0f - value) + 1.0f);
+        
+        var gainFactorLow = 1.0f / gain - 2.0f;
+        var gainFactorHigh = 1.0f / (1.0f - gain) - 2.0f;
+    
+        // Use conditional expression to determine scaled value
+        var scaledValue = value < 0.5f
+                              ? (value * 2.0f) / (gainFactorLow * (1.0f - value * 2.0f) + 1.0f) * 0.5f
+                              : ((value * 2.0f - 1.0f) / (gainFactorHigh * (1.0f - (value * 2.0f - 1.0f)) + 1.0f)) * 0.5f + 0.5f;
+        return scaledValue;
     }
         
         
