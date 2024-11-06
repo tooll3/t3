@@ -3,32 +3,30 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "28e1dc97-e133-493b-a04f-f268fd86c378"/*Value*/,
+      "InputId": "bcf6de27-1ffd-422c-9f5b-910d89cad1a4"/*TemplateCode*/,
+      "Relevancy": "Required",
       "Position": {
-        "X": 36.0,
-        "Y": 334.0
+        "X": -200.0,
+        "Y": 45.0
       },
-      "Min": -100.0,
-      "Max": 100.0
+      "Usage": "Default"
     },
     {
-      "InputId": "561c9435-49b6-465e-b0d7-db7a14c70116"/*ModuloValue*/,
+      "InputId": "ffc1c70e-b717-4337-916d-c3a13343e9cc"/*Field*/,
+      "Relevancy": "Required",
       "Position": {
-        "X": 197.0,
-        "Y": 328.0
-      },
-      "Min": -100.0,
-      "Max": 100.0,
-      "Scale": 0.01
+        "X": -200.0,
+        "Y": 0.0
+      }
     }
   ],
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "5ddbac03-6d65-48c1-9545-dfc6679f7706"/*Result*/,
+      "OutputId": "a1ab0c16-ed15-4334-a529-10e3c217df1a"/*ShaderCode*/,
       "Position": {
-        "X": 133.0,
-        "Y": 38.0
+        "X": 300.0,
+        "Y": 200.0
       }
     }
   ]

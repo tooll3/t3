@@ -31,8 +31,10 @@ internal sealed class CombineFields : Instance<CombineFields>
         
         var combineMethod = CombineMethod.GetEnumValue<CombineMethods>(context);
         var callDef = new StringBuilder();
+        callDef.AppendLine("");
         callDef.AppendLine($"#define {fn}CombineFunc(a,b) ({_combineMethodDefinitions[(int)combineMethod]})\n");
-        callDef.AppendLine($"float {fn}(float3 p) {{\r  d=1;");
+        callDef.AppendLine($"float {fn}(float3 p) {{");
+        callDef.AppendLine($"    d=1;");
         
         foreach(var i in connectedFields) 
         {
@@ -44,11 +46,13 @@ internal sealed class CombineFields : Instance<CombineFields>
             
             // This is actually not necessary, because 
             var inputFn = inputDef.CollectedFeatureIds[^1];
-            callDef.AppendLine($"d = {fn}CombineFunc(d,  {inputFn}(p));\n");
+            callDef.AppendLine($"    d = {fn}CombineFunc(d,  {inputFn}(p));");
         }
         
-        callDef.AppendLine("return d;\n}\n");
-        sd.AppendToShaderDef(callDef.ToString());
+        callDef.AppendLine("    return d;");
+        callDef.AppendLine("}");
+        
+        sd.AppendLineToShaderDef(callDef.ToString());
         
         sd.CollectedFeatureIds.Add(fn);
     }

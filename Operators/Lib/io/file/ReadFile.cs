@@ -11,7 +11,7 @@ internal sealed class ReadFile : Instance<ReadFile>
         _fileContents = new Resource<string>(FilePath, TryLoad);
         _fileContents.AddDependentSlots(Result);
         Result.UpdateAction += Update;
-        TriggerUpdate.UpdateAction += OnTriggerUpdate;
+        //TriggerUpdate.UpdateAction += OnTriggerUpdate;
     }
 
     private void OnTriggerUpdate(EvaluationContext context)
@@ -47,8 +47,8 @@ internal sealed class ReadFile : Instance<ReadFile>
 
     private void Update(EvaluationContext context)
     {
-        if(TriggerUpdate.GetValue(context))
-            _fileContents.MarkFileAsChanged();
+        // if(TriggerUpdate.GetValue(context))
+        //     _fileContents.MarkFileAsChanged();
             
         Result.Value = _fileContents.Value;
         Result.DirtyFlag.Clear();

@@ -19,12 +19,12 @@ internal sealed class SphereField : Instance<SphereField>
         var sd = FieldShaderDefinition.GetOrCreateDefinition(context, fn);
         Result.Value = sd;
         
-        sd.KeepVec3Parameter("Center", Center.GetValue(context));
-        sd.KeepScalarParameter("Radius", Radius.GetValue(context));
+        sd.KeepVec3Parameter("Center", Center.GetValue(context), fn);
+        sd.KeepScalarParameter("Radius", Radius.GetValue(context), fn);
         
-        sd.AppendToShaderDef($"float {fn}(float3 p) {{\n");
-        sd.AppendToShaderDef($"return length(p - {fn}Center) / {fn}Radius;\n");
-        sd.AppendToShaderDef("}\n");
+        sd.AppendLineToShaderDef($"float {fn}(float3 p) {{");
+        sd.AppendLineToShaderDef($"    return length(p - {fn}Center) / {fn}Radius;");
+        sd.AppendLineToShaderDef("}");
         
         sd.CollectedFeatureIds.Add(fn);
     }

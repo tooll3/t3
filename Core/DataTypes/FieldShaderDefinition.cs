@@ -7,39 +7,43 @@ namespace T3.Core.DataTypes;
 
 public class FieldShaderDefinition
 {
-    public void AppendToShaderDef(string s)
+    public string GetShaderCode()
     {
-        _shaderDefBuilder.Append(s);
+        return _shaderDefBuilder.ToString();
     }
 
-
-    private List<float> FloatBufferValues = [];
-    private List<string> FloatParametersNames= [];
-
-    public void KeepScalarParameter(string name, float value)
+    public void AppendLineToShaderDef(string s)
     {
-        FloatParametersNames.Add(name);
+        _shaderDefBuilder.AppendLine(s);
+    }
+
+    private record ShaderParameter(string TypeName, string Name);
+
+    public List<float> FloatBufferValues = [];
+    private List<ShaderParameter> FloatParameters = [];
+
+    public void KeepScalarParameter(string name, float value, string fn)
+    {
+        FloatParameters.Add(new ShaderParameter("float", fn + name));
         FloatBufferValues.Add(value);
     }
 
-    public void KeepVec2Parameter(string name, Vector2 value)
+    public void KeepVec2Parameter(string name, Vector2 value, string fn)
     {
         PadFloatParametersToVectorComponentCount(2);
-        FloatParametersNames.Add(name);
+        FloatParameters.Add(new ShaderParameter("float2", fn + name));
         FloatBufferValues.Add(value.X);
         FloatBufferValues.Add(value.Y);
     }
 
-    public void KeepVec3Parameter(string name, Vector3 value)
+    public void KeepVec3Parameter(string name, Vector3 value, string fn)
     {
-        PadFloatParametersToVectorComponentCount(3);
-        FloatParametersNames.Add(name);
+        FloatParameters.Add(new ShaderParameter("float3", fn + name));
         FloatBufferValues.Add(value.X);
         FloatBufferValues.Add(value.Y);
         FloatBufferValues.Add(value.Z);
     }
 
-    
     //
     //  |0123|0123|
     //  |VVV |    | 0 ok
@@ -51,17 +55,16 @@ public class FieldShaderDefinition
         var rest = FloatBufferValues.Count % 4;
         if (rest <= 4 - size)
             return;
-        
+
         var requiredPadding = size - rest + 1;
-            
+
         for (var i = 0; i < requiredPadding; i++)
         {
             FloatBufferValues.Add(0);
-            FloatParametersNames.Add("__padding" + FloatBufferValues.Count);
+            FloatParameters.Add(new ShaderParameter("float", "__padding" + FloatBufferValues.Count));
         }
     }
-    
-    
+
     public static string ContextVariableName = "__ScalarFieldDefinition";
     public bool HasErrors;
 
@@ -81,16 +84,15 @@ public class FieldShaderDefinition
             if (!restartedFromRoot)
                 return sd;
         }
-        
-        sd= new FieldShaderDefinition();
+
+        sd = new FieldShaderDefinition();
         context.ObjectVariables[ContextVariableName] = sd;
         return sd;
     }
 
-    
-    private static string ShortenGuid(Guid guid, int length =7)
+    private static string ShortenGuid(Guid guid, int length = 7)
     {
-        if (length < 1 || length > 22) 
+        if (length < 1 || length > 22)
             throw new ArgumentOutOfRangeException(nameof(length), "Length must be between 1 and 22.");
 
         var guidBytes = guid.ToByteArray();
@@ -98,6 +100,46 @@ public class FieldShaderDefinition
         var alphanumeric = base64.Replace("+", "").Replace("/", "").Replace("=", "");
         return alphanumeric.Substring(0, length);
     }
-    
+
     private readonly StringBuilder _shaderDefBuilder = new();
+
+    public string GenerateShaderCode(string templateCode)
+    {
+        InjectParameters(ref templateCode);
+        InjectFunctions(ref templateCode);
+        return templateCode;
+    }
+
+    private bool InjectParameters(ref string templateCode)
+    {
+        var commentHook = ToCommentHook("FLOAT_PARAMS");
+
+        if (templateCode.IndexOf(commentHook, StringComparison.Ordinal) == -1)
+            return false;
+
+        var sb = new StringBuilder();
+        foreach (var name in FloatParameters)
+        {
+            sb.AppendLine($"\t{name.TypeName} {name.Name};");
+        }
+
+        templateCode = templateCode.Replace(commentHook, sb.ToString());
+        return true;
+    }
+
+    private bool InjectFunctions(ref string templateCode)
+    {
+        var commentHook = ToCommentHook("FIELD_FUNCTIONS");
+
+        if (templateCode.IndexOf(commentHook, StringComparison.Ordinal) == -1)
+            return false;
+
+        templateCode = templateCode.Replace(commentHook, _shaderDefBuilder.ToString());
+        return true;
+    }
+
+    private string ToCommentHook(string hook)
+    {
+        return $"/*{{{hook}}}*/";
+    }
 }
