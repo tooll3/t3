@@ -1,0 +1,35 @@
+{
+  "Id": "73c028d1-3de2-4269-b503-97f62bbce320"/*_GetFieldShaderAttributes*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "28e1dc97-e133-493b-a04f-f268fd86c378"/*Value*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    },
+    {
+      "InputId": "561c9435-49b6-465e-b0d7-db7a14c70116"/*ModuloValue*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 328.0
+      },
+      "Min": -100.0,
+      "Max": 100.0,
+      "Scale": 0.01
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "5ddbac03-6d65-48c1-9545-dfc6679f7706"/*Result*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 38.0
+      }
+    }
+  ]
+}

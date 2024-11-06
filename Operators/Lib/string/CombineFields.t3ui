@@ -1,0 +1,31 @@
+{
+  "Id": "82270977-07b5-4d86-8544-5aebc638d46c"/*CombineFields*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "4648e514-b48c-4a98-a728-3ebf9bcfa0b7"/*CombineMethod*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "7248c680-7279-4c1d-b968-3864cb849c77"/*InputFields*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "db0bbde0-18b6-4c53-8cf7-a294177d2089"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

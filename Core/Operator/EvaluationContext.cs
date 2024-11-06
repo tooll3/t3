@@ -41,6 +41,7 @@ public class EvaluationContext
         PointLights.Clear();
         FloatVariables.Clear();
         IntVariables.Clear();
+        ObjectVariables.Clear();
             
         PbrContextSettings.SetDefaultToContext(this);
     }

@@ -1,0 +1,19 @@
+{
+  "Id": "fc2a33fc-d957-4113-8096-92d4dcbe14b5"/*SphereField*/,
+  "Inputs": [
+    {
+      "Id": "3dd7c779-7982-4e7c-b4ce-f1915f477ad0"/*Radius*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "ca582e39-37d7-4df6-b942-e2330f2bf2c6"/*Center*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
