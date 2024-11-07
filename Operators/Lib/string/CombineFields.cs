@@ -34,7 +34,7 @@ internal sealed class CombineFields : Instance<CombineFields>
         callDef.AppendLine("");
         callDef.AppendLine($"#define {fn}CombineFunc(a,b) ({_combineMethodDefinitions[(int)combineMethod]})\n");
         callDef.AppendLine($"float {fn}(float3 p) {{");
-        callDef.AppendLine($"    d=1;");
+        callDef.AppendLine($"    float d=1;" );
         
         foreach(var i in connectedFields) 
         {

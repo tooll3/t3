@@ -25,9 +25,6 @@ internal sealed class SelectPointsWithField : Instance<SelectPointsWithField>
         [Input(Guid = "03558959-4190-4b5b-a544-b17d56fb77da")]
         public readonly InputSlot<bool> ClampResult = new InputSlot<bool>();
 
-        [Input(Guid = "80dc1a9c-2452-4d82-bb19-a68de1c5a104", MappedType = typeof(Shapes))]
-        public readonly InputSlot<int> VolumeShape = new InputSlot<int>();
-
         [Input(Guid = "d41776c7-74ef-45fd-b507-ff5a3b6c0125")]
         public readonly InputSlot<float> FallOff = new InputSlot<float>();
 

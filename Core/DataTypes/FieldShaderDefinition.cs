@@ -107,7 +107,24 @@ public class FieldShaderDefinition
     {
         InjectParameters(ref templateCode);
         InjectFunctions(ref templateCode);
+        InjectCall(ref templateCode);
         return templateCode;
+    }
+
+    private bool InjectCall(ref string templateCode)
+    {
+        var commentHook = ToCommentHook("FIELD_CALL");
+        if(CollectedFeatureIds.Count == 0)
+            return false;
+
+        if (templateCode.IndexOf(commentHook, StringComparison.Ordinal) == -1)
+            return false;
+
+        var fn = CollectedFeatureIds[^1];
+        var code = $"{fn}(pos);//";
+
+        templateCode = templateCode.Replace(commentHook, code);
+        return true;
     }
 
     private bool InjectParameters(ref string templateCode)

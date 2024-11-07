@@ -53,13 +53,6 @@
       }
     },
     {
-      "InputId": "80dc1a9c-2452-4d82-bb19-a68de1c5a104"/*VolumeShape*/,
-      "Position": {
-        "X": 185.24207,
-        "Y": 1861.4323
-      }
-    },
-    {
       "InputId": "af41409a-81ce-43c0-8cf7-1787e3b47b70"/*Points*/,
       "Relevancy": "Required",
       "Position": {
@@ -115,13 +108,6 @@
       }
     },
     {
-      "ChildId": "11f4add4-e670-4801-839f-ede05f81d9d8"/*FloatsToList*/,
-      "Position": {
-        "X": 439.40308,
-        "Y": 1223.8248
-      }
-    },
-    {
       "ChildId": "1eab1da0-07ef-4fb7-b5c4-9f8a249cb249"/*_GetFieldShaderAttributes*/,
       "Position": {
         "X": 677.42883,
@@ -152,15 +138,8 @@
     {
       "ChildId": "4417c142-2884-4500-964e-a124d5cc302f"/*IntsToBuffer*/,
       "Position": {
-        "X": 405.85678,
-        "Y": 1893.2555
-      }
-    },
-    {
-      "ChildId": "4c6d468e-c56b-4ecf-ad34-077bc0eca9bc"/*BoolToInt*/,
-      "Position": {
-        "X": -145.15039,
-        "Y": 2113.6409
+        "X": 335.24207,
+        "Y": 1906.4323
       }
     },
     {
@@ -206,31 +185,10 @@
       }
     },
     {
-      "ChildId": "9d3a2a84-a4c2-4014-84fb-6ae8e787f5da"/*TransformsConstBuffer*/,
-      "Position": {
-        "X": 391.8111,
-        "Y": 1431.7645
-      }
-    },
-    {
       "ChildId": "9db170d5-667d-4190-b7ef-0bce37f0e478"/*Vector2Components*/,
       "Position": {
         "X": 192.16019,
         "Y": 1654.1232
-      }
-    },
-    {
-      "ChildId": "ab85dd37-8944-4ad3-9840-c3b3ded95461"/*ComputeShader*/,
-      "Position": {
-        "X": 589.4031,
-        "Y": 1223.8248
-      }
-    },
-    {
-      "ChildId": "b05e2468-80ed-4818-916e-1715a2e5fac1"/*FloatsToBuffer*/,
-      "Position": {
-        "X": 739.4031,
-        "Y": 1223.8248
       }
     },
     {
@@ -242,9 +200,14 @@
     },
     {
       "ChildId": "dd052349-3e16-4357-b79d-efa63f2f3e0a"/*String*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 128.91852,
+        "Y": 345.7641
+      },
       "Position": {
-        "X": 527.42883,
-        "Y": 1017.1018
+        "X": 41.382233,
+        "Y": 1027.0754
       }
     },
     {
@@ -257,8 +220,8 @@
     {
       "ChildId": "e64665e0-4b97-4ba6-be67-a37852e088c1"/*FloatListToBuffer*/,
       "Position": {
-        "X": 827.42883,
-        "Y": 1028.1018
+        "X": 829.0911,
+        "Y": 1067.442
       }
     },
     {
