@@ -1,0 +1,28 @@
+{
+  "Name": "EasingsVec2",
+  "Id": "93d9b8f4-d92f-4727-8d06-c1add3a74fe7",
+  "Namespace": "lib.math.float",
+  "Inputs": [
+    {
+      "Id": "3156deda-67ba-42eb-9418-7f28ea4b4ca5"/*Value*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "51989ff4-a9c6-4fbc-bbc1-79b7af859e23"/*Duration*/,
+      "DefaultValue": 0.25
+    },
+    {
+      "Id": "38f566a4-d41f-43d7-9ee5-1be3cb20e21c"/*UseAppRunTime*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "19da524f-6cea-4da0-8ee2-9b47ef8a93a7"/*Ease*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
