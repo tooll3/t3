@@ -4,16 +4,22 @@ namespace Lib.@string;
 internal sealed class JoinStringList : Instance<JoinStringList>, IStatusProvider
 {
     [Output(Guid = "ef105688-3e28-47c3-8b8e-5fda3bde3090")]
-    public readonly Slot<string> Result = new();
-
-    public JoinStringList()
+    public readonly Slot<string> Result = new();    public JoinStringList()
     {
         Result.UpdateAction += Update;
     }
 
     private void Update(EvaluationContext context)
     {
-        var separator = Separator.GetValue(context).Replace("\\n", "\n");
+        var separatorValue = Separator.GetValue(context);
+        if (separatorValue == null)
+        {
+            _lastErrorMessage = "Separator can't be null.";
+            Result.Value = string.Empty;
+            return;
+        }
+        
+        var separator = separatorValue.Replace("\\n", "\n");
         var input = Input.GetValue(context);
         if (input == null || input.Count == 0)
         {

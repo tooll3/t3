@@ -1,7 +1,7 @@
 namespace Lib.io.file;
 
 [Guid("5f71d2f8-98c8-4502-8f40-2ea4a1e18cca")]
-internal sealed class ReadFile : Instance<ReadFile>
+internal sealed class ReadFile : Instance<ReadFile>, IDescriptiveFilename
 {
     [Output(Guid = "d792d3b4-b800-41f1-9d69-6ee55751ad37")]
     public readonly Slot<string> Result = new();
@@ -11,15 +11,12 @@ internal sealed class ReadFile : Instance<ReadFile>
         _fileContents = new Resource<string>(FilePath, TryLoad);
         _fileContents.AddDependentSlots(Result);
         Result.UpdateAction += Update;
-        //TriggerUpdate.UpdateAction += OnTriggerUpdate;
+        TriggerUpdate.UpdateAction += OnTriggerUpdate;
     }
 
     private void OnTriggerUpdate(EvaluationContext context)
     {
-        if (TriggerUpdate.GetValue(context))
-        {
-            _fileContents.MarkFileAsChanged();
-        }
+        _fileContents.MarkFileAsChanged();
     }
 
     private bool TryLoad(FileResource file, string currentValue, out string newValue, out string failureReason)
@@ -47,14 +44,9 @@ internal sealed class ReadFile : Instance<ReadFile>
 
     private void Update(EvaluationContext context)
     {
-        // if(TriggerUpdate.GetValue(context))
-        //     _fileContents.MarkFileAsChanged();
-            
-        Result.Value = _fileContents.Value;
+        Result.Value = _fileContents.GetValue(context);
         Result.DirtyFlag.Clear();
     }
-        
-        
         
     [Input(Guid = "24b7e7e1-fe0b-46be-807e-0afacd4800f9")]
     public readonly InputSlot<string> FilePath = new();
@@ -63,4 +55,8 @@ internal sealed class ReadFile : Instance<ReadFile>
     public readonly InputSlot<bool> TriggerUpdate = new();
 
     private Resource<string> _fileContents;
+    public IEnumerable<string> FileFilter => FileFilterDefault;
+    public InputSlot<string> SourcePathSlot => FilePath;
+    
+    private static readonly string[] FileFilterDefault = ["*"];
 }
