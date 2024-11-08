@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using T3.Core.Operator;
 
@@ -38,12 +39,24 @@ public class FieldShaderDefinition
 
     public void KeepVec3Parameter(string name, Vector3 value, string fn)
     {
+        PadFloatParametersToVectorComponentCount(3);
         FloatParameters.Add(new ShaderParameter("float3", fn + name));
         FloatBufferValues.Add(value.X);
         FloatBufferValues.Add(value.Y);
         FloatBufferValues.Add(value.Z);
     }
 
+    public void KeepMatrixParameter(string name, Matrix4x4 matrix, string fn)
+    {
+        PadFloatParametersToVectorComponentCount(16);
+        FloatParameters.Add(new ShaderParameter("float4x4", fn + name));
+        Span<float> elements = MemoryMarshal.CreateSpan(ref matrix.M11, 16);
+        foreach (float value in elements)
+        {
+            FloatBufferValues.Add(value);
+        }
+    }
+    
     //
     //  |0123|0123|
     //  |VVV |    | 0 ok
@@ -56,7 +69,7 @@ public class FieldShaderDefinition
         if (rest <= 4 - size)
             return;
 
-        var requiredPadding = size - rest + 1;
+        var requiredPadding = size - rest ;
 
         for (var i = 0; i < requiredPadding; i++)
         {
@@ -121,7 +134,7 @@ public class FieldShaderDefinition
             return false;
 
         var fn = CollectedFeatureIds[^1];
-        var code = $"{fn}(pos);//";
+        var code = $"{fn}(pos);//"; // add comment to avoid syntax errors in generated code
 
         templateCode = templateCode.Replace(commentHook, code);
         return true;
@@ -159,4 +172,6 @@ public class FieldShaderDefinition
     {
         return $"/*{{{hook}}}*/";
     }
+
+    
 }

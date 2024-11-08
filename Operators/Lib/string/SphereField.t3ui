@@ -15,6 +15,13 @@
         "X": -200.0,
         "Y": 0.0
       }
+    },
+    {
+      "InputId": "f6a672f3-0d9d-4f89-98d9-2ccfb0218ea7"/*FallOff*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
     }
   ],
   "SymbolChildUis": [],

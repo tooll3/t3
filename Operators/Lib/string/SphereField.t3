@@ -12,6 +12,10 @@
         "Y": 0.0,
         "Z": 0.0
       }
+    },
+    {
+      "Id": "f6a672f3-0d9d-4f89-98d9-2ccfb0218ea7"/*FallOff*/,
+      "DefaultValue": 0.0
     }
   ],
   "Children": [],

@@ -23,7 +23,15 @@ internal sealed class FloatListToBuffer : Instance<FloatListToBuffer>
             if (floatParams == null || floatParams.Count == 0)
                 return;
             
-            var array = floatParams.ToArray();
+            //var array = floatParams.ToArray();
+            var arraySize = (floatParams.Count / 4 + (floatParams.Count % 4 == 0 ? 0 : 1)) * 4; // always 16byte slices for alignment
+            var array = new float[arraySize];
+            
+            for (var i = 0; i < floatParams.Count; i++)
+            {
+                array[i] = floatParams[i];
+            }
+            
             var device = ResourceManager.Device;
 
             var size = sizeof(float) * array.Length;

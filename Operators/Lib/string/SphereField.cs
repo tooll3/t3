@@ -21,11 +21,11 @@ internal sealed class SphereField : Instance<SphereField>
         
         sd.KeepVec3Parameter("Center", Center.GetValue(context), fn);
         sd.KeepScalarParameter("Radius", Radius.GetValue(context), fn);
+        sd.KeepScalarParameter("FallOff", FallOff.GetValue(context), fn);
         
         sd.AppendLineToShaderDef($"float {fn}(float3 p) {{");
-        sd.AppendLineToShaderDef($"    return length(p - {fn}Center) / {fn}Radius;");
+        sd.AppendLineToShaderDef($"    return saturate( ({fn}Radius / {fn}FallOff) - (length(p - {fn}Center) / {fn}FallOff) + 0.5  ); ");
         sd.AppendLineToShaderDef("}");
-        
         sd.CollectedFeatureIds.Add(fn);
     }
     
@@ -35,5 +35,9 @@ internal sealed class SphereField : Instance<SphereField>
     
     [Input(Guid = "3DD7C779-7982-4E7C-B4CE-F1915F477AD0")]
     public readonly InputSlot<float> Radius = new(); 
+    
+    [Input(Guid = "F6A672F3-0D9D-4F89-98D9-2CCFB0218EA7")]
+    public readonly InputSlot<float> FallOff = new(); 
+
 }
 

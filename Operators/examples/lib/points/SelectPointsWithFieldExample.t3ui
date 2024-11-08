@@ -1,0 +1,121 @@
+{
+  "Id": "99cf2542-d408-4a81-ba49-4204eb2f6df8"/*SelectPointsWithFieldExample*/,
+  "Description": "",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "05a2c882-fafa-4e3f-9794-b8980e7134cd"/*TransformField*/,
+      "Position": {
+        "X": 475.55664,
+        "Y": 43.0
+      }
+    },
+    {
+      "ChildId": "0e051e40-aba9-4ef7-af49-c8d5fe6baeea"/*CombineFields*/,
+      "Position": {
+        "X": 325.55664,
+        "Y": 86.0
+      }
+    },
+    {
+      "ChildId": "126d0f0e-522e-4c9e-9f11-fb1f924ad111"/*SphereField*/,
+      "Position": {
+        "X": 157.43555,
+        "Y": 33.88965
+      }
+    },
+    {
+      "ChildId": "1e1d79e0-5bf4-4621-bf76-3ed75dfdd822"/*SetMaterial*/,
+      "Position": {
+        "X": 1075.5566,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "2482d42b-ef21-494c-9af8-cffac0fa1832"/*AnimValue*/,
+      "Position": {
+        "X": 7.435547,
+        "Y": 87.88965
+      }
+    },
+    {
+      "ChildId": "26b0ffc7-a292-4c9f-b137-77e5733f819f"/*SelectPointsWithField*/,
+      "Position": {
+        "X": 775.55664,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "5185601d-6c29-4b8a-9258-ac4248208b46"/*CombineFields*/,
+      "Position": {
+        "X": 625.55664,
+        "Y": 43.0
+      }
+    },
+    {
+      "ChildId": "582fba26-7293-4222-9d37-72f595ffd342"/*SphereField*/,
+      "Position": {
+        "X": 157.43555,
+        "Y": 89.88965
+      }
+    },
+    {
+      "ChildId": "b84d1bcf-6603-45dd-a3dc-167492d4f71d"/*PerlinNoise3*/,
+      "Position": {
+        "X": 325.55664,
+        "Y": 43.0
+      }
+    },
+    {
+      "ChildId": "c55d8dca-4da0-4ed6-bf96-443e2f2e12f8"/*GridPoints*/,
+      "Position": {
+        "X": 625.55664,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "cea34cbf-7e8d-4d09-b9d7-d7a4276556ee"/*AnimValue*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 52.851562
+      }
+    },
+    {
+      "ChildId": "d06e0335-ba09-49c1-8956-29cbba683234"/*DrawPointsShaded*/,
+      "Position": {
+        "X": 925.55664,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "d94966ea-0c39-48ad-b761-bc1e3289bf10"/*AnimValue*/,
+      "Position": {
+        "X": 155.23804,
+        "Y": 177.49731
+      }
+    },
+    {
+      "ChildId": "e973dbad-0e53-4ca3-9967-7515d654539c"/*SphereField*/,
+      "Position": {
+        "X": 325.55664,
+        "Y": 168.0
+      }
+    },
+    {
+      "ChildId": "f5203a86-fb3c-427a-90d0-d099feadc0c3"/*RenderTarget*/,
+      "Position": {
+        "X": 1267.2634,
+        "Y": 4.5756836
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "ac4e8f81-027e-4916-aeaa-9a3d13a62c18"/*ColorBuffer*/,
+      "Position": {
+        "X": 1677.2634,
+        "Y": 102.0
+      }
+    }
+  ]
+}

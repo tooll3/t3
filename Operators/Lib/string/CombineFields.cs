@@ -31,10 +31,12 @@ internal sealed class CombineFields : Instance<CombineFields>
         
         var combineMethod = CombineMethod.GetEnumValue<CombineMethods>(context);
         var callDef = new StringBuilder();
+        var mode = _combineMethodDefinitions2[(int)combineMethod];
+        
         callDef.AppendLine("");
-        callDef.AppendLine($"#define {fn}CombineFunc(a,b) ({_combineMethodDefinitions[(int)combineMethod]})\n");
+        callDef.AppendLine($"#define {fn}CombineFunc(a,b) ({mode.Code})\n");
         callDef.AppendLine($"float {fn}(float3 p) {{");
-        callDef.AppendLine($"    float d=1;" );
+        callDef.AppendLine($"    float d={mode.StartValue};" );
         
         foreach(var i in connectedFields) 
         {
@@ -44,7 +46,6 @@ internal sealed class CombineFields : Instance<CombineFields>
                 Log.Warning("Inconsistent field shader definition", this);
             }
             
-            // This is actually not necessary, because 
             var inputFn = inputDef.CollectedFeatureIds[^1];
             callDef.AppendLine($"    d = {fn}CombineFunc(d,  {inputFn}(p));");
         }
@@ -60,17 +61,24 @@ internal sealed class CombineFields : Instance<CombineFields>
     //private readonly StringBuilder _stringBuilder = new();
     //private  string _fn;
 
-    private string[] _combineMethodDefinitions=
+    private sealed record CombineMethod2(string Code, float StartValue);
+    
+    private CombineMethod2[] _combineMethodDefinitions2=
         [
-            "(a) + (b)", // add
-            "(a) * (b)", // multiply
+            new CombineMethod2("(a) + (b)",0), 
+            new CombineMethod2("(a) - (b)", 0),
+            new CombineMethod2("(a) * (b)", 1),
+            new CombineMethod2("min(a, b)", 999999),            
+            new CombineMethod2("max(a, b)", -999999),            
         ];
-
     
     private enum CombineMethods
     {
         Add,
+        Sub,
         Multiply,
+        Min,
+        Max,
     }
 
     [Input(Guid = "7248C680-7279-4C1D-B968-3864CB849C77")]
