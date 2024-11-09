@@ -25,20 +25,11 @@ internal sealed class SelectPointsWithField : Instance<SelectPointsWithField>
         [Input(Guid = "03558959-4190-4b5b-a544-b17d56fb77da")]
         public readonly InputSlot<bool> ClampResult = new InputSlot<bool>();
 
-        [Input(Guid = "d41776c7-74ef-45fd-b507-ff5a3b6c0125")]
-        public readonly InputSlot<float> FallOff = new InputSlot<float>();
-
         [Input(Guid = "c9fbe013-7050-4714-a43d-68960d6afbea")]
         public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "61acc5cc-f084-4c88-8d54-207645dc841f")]
         public readonly InputSlot<float> Scatter = new InputSlot<float>();
-
-        [Input(Guid = "3973e7d6-8d1a-4725-802c-42ce2f5eeaad")]
-        public readonly InputSlot<float> Phase = new InputSlot<float>();
-
-        [Input(Guid = "004caed6-9acf-414e-b1f5-c23201d3ef89")]
-        public readonly InputSlot<float> Threshold = new InputSlot<float>();
 
         [Input(Guid = "bc002ec2-cd53-4cf3-800c-868f2cacbb0c")]
         public readonly InputSlot<bool> DiscardNonSelected = new InputSlot<bool>();

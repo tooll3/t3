@@ -2,20 +2,12 @@
   "Id": "695d20dc-d1fe-4648-80fb-e1159b8aead4"/*SelectPointsWithField*/,
   "Inputs": [
     {
-      "Id": "004caed6-9acf-414e-b1f5-c23201d3ef89"/*Threshold*/,
-      "DefaultValue": 0.0
-    },
-    {
       "Id": "03558959-4190-4b5b-a544-b17d56fb77da"/*ClampResult*/,
       "DefaultValue": false
     },
     {
       "Id": "07177f13-ef76-4e81-91b5-49cf8eb73cbd"/*Mode*/,
       "DefaultValue": 0
-    },
-    {
-      "Id": "3973e7d6-8d1a-4725-802c-42ce2f5eeaad"/*Phase*/,
-      "DefaultValue": 0.0
     },
     {
       "Id": "3da5b21f-f31b-4f11-9f1c-0deee0efac40"/*Field*/,
@@ -49,27 +41,11 @@
       }
     },
     {
-      "Id": "d41776c7-74ef-45fd-b507-ff5a3b6c0125"/*FallOff*/,
-      "DefaultValue": 0.5
-    },
-    {
       "Id": "f38834a9-1bfe-4edc-9b70-2d0c57967556"/*Strength*/,
       "DefaultValue": 1.0
     }
   ],
   "Children": [
-    {
-      "Id": "086a3530-2de6-4633-9bd5-be9f8837e6f6"/*ReadFile*/,
-      "SymbolId": "5f71d2f8-98c8-4502-8f40-2ea4a1e18cca",
-      "InputValues": [
-        {
-          "Id": "24b7e7e1-fe0b-46be-807e-0afacd4800f9"/*FilePath*/,
-          "Type": "System.String",
-          "Value": "/Lib/points/_research/SelectPointsWithField.hlsl"
-        }
-      ],
-      "Outputs": []
-    },
     {
       "Id": "1eab1da0-07ef-4fb7-b5c4-9f8a249cb249"/*_GetFieldShaderAttributes*/,
       "SymbolId": "73c028d1-3de2-4269-b503-97f62bbce320",
@@ -83,12 +59,6 @@
       "Outputs": []
     },
     {
-      "Id": "253ac5a9-7c1c-414b-9e0b-1dbb91ddd550"/*GetSRVProperties*/,
-      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "25b99973-f2c9-42d8-9303-25da2e765259"/*StructuredBufferWithViews*/,
       "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
@@ -96,6 +66,18 @@
           "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
           "Type": "System.Int32",
           "Value": 64
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "3659cd5c-6ea9-4530-ad99-8d2e611fe4ca"/*ReadFile*/,
+      "SymbolId": "5f71d2f8-98c8-4502-8f40-2ea4a1e18cca",
+      "InputValues": [
+        {
+          "Id": "24b7e7e1-fe0b-46be-807e-0afacd4800f9"/*FilePath*/,
+          "Type": "System.String",
+          "Value": "/Lib/points/_research/SelectPointsWithField.hlsl"
         }
       ],
       "Outputs": []
@@ -220,8 +202,8 @@
       "TargetSlotId": "7a77a26e-88b5-43ed-84b1-b35682ceda7d"
     },
     {
-      "SourceParentOrChildId": "dd052349-3e16-4357-b79d-efa63f2f3e0a",
-      "SourceSlotId": "dd9d8718-addc-49b1-bd33-aac22b366f94",
+      "SourceParentOrChildId": "3659cd5c-6ea9-4530-ad99-8d2e611fe4ca",
+      "SourceSlotId": "d792d3b4-b800-41f1-9d69-6ee55751ad37",
       "TargetParentOrChildId": "1eab1da0-07ef-4fb7-b5c4-9f8a249cb249",
       "TargetSlotId": "bcf6de27-1ffd-422c-9f5b-910d89cad1a4"
     },

@@ -1,0 +1,37 @@
+{
+  "Id": "860da1cd-b341-4bc5-965a-4a9c295831f4"/*RoundedBoxField*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*Radius*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "951b2983-1359-41e4-8fb0-8d97c50ed8d6"/*Center*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "c8268819-686a-4ad7-91a5-9841b26a7cd6"/*FallOff*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "9153c53c-0b19-4ce4-b086-e448d78ef032"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}
