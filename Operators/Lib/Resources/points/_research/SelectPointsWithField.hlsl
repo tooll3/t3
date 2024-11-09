@@ -6,16 +6,15 @@
 
 /*{ADDITIONAL_INCLUDES}*/
 
-cbuffer Params : register(b1)
+cbuffer Params : register(b0)
 {
-    float4x4 TransformVolume;
-    float FallOff;
     float Strength;
     float2 GainAndBias;
-    float Phase;
-    float Threshold;
     float Scatter;
+}
 
+cbuffer Params : register(b1)
+{
     /*{FLOAT_PARAMS}*/
 }
 
@@ -24,8 +23,8 @@ cbuffer Params : register(b2)
     int SelectMode;
     int ClampResult;
     int DiscardNonSelected;
-
     int StrengthFactor;
+
     int WriteTo;
 }
 
@@ -59,9 +58,10 @@ static const float NoisePhase = 0;
         return;
     }
 
-    float3 posInObject = p.Position;
-    float3 posInVolume = mul(float4(posInObject, 1), TransformVolume).xyz;
-
+    // float3 posInObject = p.Position;
+    // float3 posInVolume = mul(float4(posInObject, 1), TransformVolume).xyz;
+    float3 pos = p.Position;
+    ;
     float s = /*{FIELD_CALL}*/ 0;
 
     float scatter = Scatter * (hash11u(i.x) - 0.5);
@@ -119,6 +119,5 @@ static const float NoisePhase = 0;
     //  {
     //      p.W = result;
     //  }
-
     ResultPoints[i.x] = p;
 }
