@@ -48,7 +48,7 @@ public class FieldShaderDefinition
 
     public void KeepMatrixParameter(string name, Matrix4x4 matrix, string fn)
     {
-        PadFloatParametersToVectorComponentCount(16);
+        PadFloatParametersToVectorComponentCount(4);
         FloatParameters.Add(new ShaderParameter("float4x4", fn + name));
         Span<float> elements = MemoryMarshal.CreateSpan(ref matrix.M11, 16);
         foreach (float value in elements)
@@ -65,11 +65,11 @@ public class FieldShaderDefinition
     //  |   V|VV  | 3 -> padBy 1
     public void PadFloatParametersToVectorComponentCount(int size)
     {
-        var rest = FloatBufferValues.Count % 4;
-        if (rest <= 4 - size)
+        var currentStart = FloatBufferValues.Count % 4;
+        if (currentStart <= 4 - size)
             return;
 
-        var requiredPadding = size - rest ;
+        var requiredPadding = size - currentStart + 1;
 
         for (var i = 0; i < requiredPadding; i++)
         {
