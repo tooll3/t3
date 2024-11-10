@@ -1,5 +1,5 @@
 {
-  "Name": "EasingsVec3",
+  "Name": "EaseVec3",
   "Id": "12dccab1-1d7d-4005-a4c1-0bebeeaeb6d3",
   "Namespace": "lib.math.float",
   "Inputs": [
@@ -20,7 +20,11 @@
       "DefaultValue": false
     },
     {
-      "Id": "9ef45ff9-9d59-44b7-b03d-37a1be40a776"/*Ease*/,
+      "Id": "1867ff18-f510-4c84-a3be-a4123e878133"/*Mode*/,
+      "DefaultValue": 2
+    },
+    {
+      "Id": "9ef45ff9-9d59-44b7-b03d-37a1be40a776"/*Interpolation*/,
       "DefaultValue": 0
     }
   ],

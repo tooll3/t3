@@ -16,12 +16,12 @@
       "DefaultValue": false
     },
     {
-      "Id": "fe0231d9-03b6-466f-82e9-852b892adf2e"/*Direction*/,
-      "DefaultValue": 0
+      "Id": "fe0231d9-03b6-466f-82e9-852b892adf2e"/*Mode*/,
+      "DefaultValue": 2
     },
     {
-      "Id": "bc388ea3-e1e6-4773-95e5-b8a649c3344f"/*Mode*/,
-      "DefaultValue": 2
+      "Id": "bc388ea3-e1e6-4773-95e5-b8a649c3344f"/*Interpolation*/,
+      "DefaultValue": 6
     }
   ],
   "Children": [],

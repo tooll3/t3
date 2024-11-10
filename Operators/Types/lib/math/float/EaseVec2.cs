@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -6,16 +7,16 @@ using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 using static T3.Core.Utils.EasingFunctions;
 
-namespace T3.Operators.Types.Id_3cc78396_862b_47fa_925c_eb327f69f651
+namespace T3.Operators.Types.Id_93d9b8f4_d92f_4727_8d06_c1add3a74fe7
 {
-    public class Ease : Instance<Ease>
+    public class EaseVec2 : Instance<EaseVec2>
     {
-        [Output(Guid = "4d1e77d8-bfee-4451-9dcf-f187cd82ec26", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> Result = new();
+        [Output(Guid = "8e972216-4a0b-47a3-856a-37a3861e2017", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<Vector2> Result = new();
 
         private const float MinTimeElapsedBeforeEvaluation = 1 / 1000f;
 
-        public Ease()
+        public EaseVec2()
         {
             Result.UpdateAction = Update;
         }
@@ -27,7 +28,6 @@ namespace T3.Operators.Types.Id_3cc78396_862b_47fa_925c_eb327f69f651
             var easeMode = Interpolation.GetValue(context);     // Easing function selector
             var easeDirection = (EaseDirection)Mode.GetValue(context);
 
-
             var currentTime = UseAppRunTime.GetValue(context) ? Playback.RunTimeInSecs : context.LocalFxTime;
             if (Math.Abs(currentTime - _lastEvalTime) < MinTimeElapsedBeforeEvaluation)
                 return;
@@ -38,19 +38,21 @@ namespace T3.Operators.Types.Id_3cc78396_862b_47fa_925c_eb327f69f651
             }
 
             _lastEvalTime = currentTime;
-
-            // Check if input has changed to trigger new animation
-            if (Math.Abs(inputValue - _previousInputValue) > 0.001f)
+           
+            if (Vector2.Distance(inputValue, _previousInputValue) > 0.001f)
             {
                 _startTime = currentTime;
                 _initialValue = Result.Value;
                 _targetValue = inputValue;
             }
 
+
             // Calculate progress based on elapsed time and duration
             var elapsedTime = (float)(currentTime - _startTime);
             var progress = Math.Clamp(elapsedTime / duration, 0f, 1f);
 
+            // Apply selected easing function based on easeMode
+            
             var easedProgress = progress;
             switch (easeDirection)
             {
@@ -104,31 +106,43 @@ namespace T3.Operators.Types.Id_3cc78396_862b_47fa_925c_eb327f69f651
                         _ => progress
                     };
                     break;
-            }
-            Result.Value = MathUtils.Lerp(_initialValue, _targetValue, easedProgress);
+            };
+            Result.Value = new Vector2(
+                            MathUtils.Lerp(_initialValue.X, _targetValue.X, easedProgress),
+                            MathUtils.Lerp(_initialValue.Y, _targetValue.Y, easedProgress)
+                );
+            
+
             _previousInputValue = inputValue;
         }
+     
+
+        
 
         private double _lastEvalTime;
         private double _startTime;
-        private float _initialValue;
-        private float _targetValue;
-        private float _previousInputValue;
+        private Vector2 _initialValue;
+        private Vector2 _targetValue;
+        private Vector2 _previousInputValue;
 
-        [Input(Guid = "c2107af4-7b4f-43ef-97fe-934833790032")]
-        public readonly InputSlot<float> Value = new InputSlot<float>();
+        [Input(Guid = "3156deda-67ba-42eb-9418-7f28ea4b4ca5")]
+        public readonly InputSlot<System.Numerics.Vector2> Value = new InputSlot<System.Numerics.Vector2>();
 
-        [Input(Guid = "da40ddcd-cef8-494a-a7f8-cd8ddfbd7603")]
+        [Input(Guid = "51989ff4-a9c6-4fbc-bbc1-79b7af859e23")]
         public readonly InputSlot<float> Duration = new InputSlot<float>();
 
-        [Input(Guid = "5580eee8-db7b-4e9b-898d-5c7680b0c302")]
+        [Input(Guid = "38f566a4-d41f-43d7-9ee5-1be3cb20e21c")]
         public readonly InputSlot<bool> UseAppRunTime = new InputSlot<bool>();
 
-        [Input(Guid = "fe0231d9-03b6-466f-82e9-852b892adf2e", MappedType = typeof(EaseDirection))]
+        [Input(Guid = "5f2c66dd-dfaf-4aa0-b184-01e89819b317", MappedType = typeof(EaseDirection))]
         public readonly InputSlot<int> Mode = new InputSlot<int>();
 
-        [Input(Guid = "bc388ea3-e1e6-4773-95e5-b8a649c3344f", MappedType = typeof(EasingType))]
+        [Input(Guid = "19da524f-6cea-4da0-8ee2-9b47ef8a93a7", MappedType = typeof(EasingFunctions.EasingType))]
         public readonly InputSlot<int> Interpolation = new InputSlot<int>();
+
+        
+
+
         
     }
 }
