@@ -370,8 +370,8 @@ public partial class SymbolPackage
         RegisterType(typeof(PbrMaterial), "Material",
                      () => new InputValue<PbrMaterial>());
 
-        RegisterType(typeof(FieldShaderGraph), "FieldShaderDefinition",
-                     () => new InputValue<FieldShaderGraph>());
+        RegisterType(typeof(ShaderGraphNode), "FieldShaderDefinition",
+                     () => new InputValue<ShaderGraphNode>());
         
         RegisterType(typeof(SceneSetup), nameof(SceneSetup),
                      InputDefaultValueCreator<SceneSetup>,

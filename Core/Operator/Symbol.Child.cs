@@ -188,6 +188,9 @@ public partial class Symbol
 
             if (mainInput.DefaultValue.ValueType == typeof(string))
                 return true;
+            
+            if (mainInput.DefaultValue.ValueType == typeof(ShaderGraphNode))
+                return true;
 
             return false;
         }

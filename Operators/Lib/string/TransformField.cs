@@ -4,31 +4,26 @@ using T3.Core.Utils.Geometry;
 namespace Lib.@string;
 
 [Guid("c44d23c7-bfac-403d-b49e-49d00001a316")]
-internal sealed class TransformField : Instance<TransformField>
+internal sealed class TransformField : Instance<TransformField>, IGraphNodeOp
 {
     [Output(Guid = "9b12e766-9dcd-4c8f-83ee-2a0b78beae43")]
-    public readonly Slot<FieldShaderGraph> Result = new();
+    public readonly Slot<ShaderGraphNode> Result = new();
 
     public TransformField()
     {
+        ShaderNode = new ShaderGraphNode(this, null, InputField);
+        Result.Value = ShaderNode;
+        ShaderNode.AdditionalParameters = [new ShaderGraphNode.Parameter("float4x4", "Transform", Matrix4x4.Identity)];
         Result.UpdateAction += Update;
     }
 
     private void Update(EvaluationContext context)
     {
-        // Setup feature
-        var fn = FieldShaderGraph.BuildNodeId(this);
-        var sd = FieldShaderGraph.GetOrCreateDefinition(context, fn);
-        Result.Value = sd;
+        ShaderNode.Update(context);
         
-        // Get connected field
-        var connectedField = InputField.GetValue(context);
-        if (connectedField == null)
-        {
-            sd.HasErrors = true;
-            sd.CollectedFeatureIds.Add(fn);
-            return;
-        }
+        _inputFn= ShaderNode.InputNodes.Count == 1 
+                      ? ShaderNode.InputNodes[0].ToString() 
+                      : string.Empty;
         
         // Get parameters 
         var s = Scale.GetValue(context) * UniformScale.GetValue(context);
@@ -55,18 +50,27 @@ internal sealed class TransformField : Instance<TransformField>
             
         // transpose all as mem layout in hlsl constant buffer is row based
         objectToParentObject.Transpose();
-        
-        // Set parameters to shader definition
-        sd.KeepMatrixParameter("Transform", objectToParentObject, fn);
-        
-        // Create shader function
-        var inputFn = connectedField.CollectedFeatureIds[^1];
-        sd.AppendLineToShaderCode($"float {fn}(float3 pos) {{");
-        sd.AppendLineToShaderCode($"    return {inputFn}(mul(float4(pos.xyz,1), {fn}Transform).xyz);");
-        sd.AppendLineToShaderCode("}");
-        
-        sd.CollectedFeatureIds.Add(fn);
+        Matrix4x4.Invert(objectToParentObject, out var invertedMatrix);
+
+        ShaderNode.AdditionalParameters[0].Value = invertedMatrix;  // This looks ugly. Should be refactored eventually
     }
+    
+
+
+    public ShaderGraphNode ShaderNode { get; }
+    public string GetShaderCode()
+    {
+        return $@" 
+        float {ShaderNode}(float3 pos) {{
+            return {_inputFn}(mul(float4(pos.xyz,1), {ShaderNode}Transform).xyz);
+        }}
+        ";
+    }
+    
+    private string _inputFn;
+    
+    [Input(Guid = "7248C680-7279-4C1D-B968-3864CB849C77")]
+    public readonly InputSlot<ShaderGraphNode> InputField = new();
     
     [Input(Guid = "3B817E6C-F532-4A8C-A2FF-A00DC926EEB2")]
     public readonly InputSlot<Vector3> Translation = new();
@@ -85,19 +89,5 @@ internal sealed class TransformField : Instance<TransformField>
 
     [Input(Guid = "279730B7-C427-4924-9FDE-77EB65A3076C")]
     public readonly InputSlot<Vector3> Pivot = new();
-
-    
-    
-    [Input(Guid = "10afeac5-971c-4762-b73f-fea73a21dcd3")]
-    public readonly InputSlot<Vector3> Center = new();
-    
-    [Input(Guid = "267aeadd-ec11-445d-9166-a741c84813bf")]
-    public readonly InputSlot<float> Radius = new(); 
-    
-    [Input(Guid = "a1e1d1a9-0b8c-4756-b805-0839a2ee54c3")]
-    public readonly InputSlot<float> FallOff = new(); 
-    
-    [Input(Guid = "7248C680-7279-4C1D-B968-3864CB849C77")]
-    public readonly InputSlot<FieldShaderGraph> InputField = new();
 }
 

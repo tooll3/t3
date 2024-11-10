@@ -1,75 +1,71 @@
+using System.Reflection;
 using T3.Core.Utils;
 
 namespace Lib.@string;
 
 [Guid("82270977-07b5-4d86-8544-5aebc638d46c")]
-internal sealed class CombineFields : Instance<CombineFields>
+internal sealed class CombineFields : Instance<CombineFields>, IGraphNodeOp
 {
     [Output(Guid = "db0bbde0-18b6-4c53-8cf7-a294177d2089")]
-    public readonly Slot<FieldShaderGraph> Result = new();
+    public readonly Slot<ShaderGraphNode> Result = new();
 
     public CombineFields()
     {
+        ShaderNode = new ShaderGraphNode(this, InputFields);
         Result.UpdateAction += Update;
+        Result.Value = ShaderNode;
     }
-
+    
     private void Update(EvaluationContext context)
     {
-        var fn = FieldShaderGraph.BuildNodeId(this);
-        var sd = FieldShaderGraph.GetOrCreateDefinition(context, fn);
-        Result.Value = sd;
+        ShaderNode.Update(context);
         
-        var connectedFields = InputFields.GetCollectedTypedInputs();
-        
-        var hasConnectedInputFields = connectedFields.Count > 0;
-        if(!hasConnectedInputFields)
-        {
-            sd.HasErrors = true;
-            sd.CollectedFeatureIds.Add(fn);
-            return;
-        }
-        
+        // Get all parameters to clear operator dirty flag
         var combineMethod = CombineMethod.GetEnumValue<CombineMethods>(context);
-        var callDef = new StringBuilder();
-        var mode = _combineMethodDefinitions2[(int)combineMethod];
-        
-        callDef.AppendLine("");
-        callDef.AppendLine($"#define {fn}CombineFunc(a,b) ({mode.Code})\n");
-        callDef.AppendLine($"float {fn}(float3 p) {{");
-        callDef.AppendLine($"    float d={mode.StartValue};" );
-        
-        foreach(var i in connectedFields) 
+        if(combineMethod != _combineMethod)
         {
-            var inputDef = i.GetValue(context);
-            if (inputDef != sd)
-            {
-                Log.Warning("Inconsistent field shader definition", this);
-            }
-            
-            var inputFn = inputDef.CollectedFeatureIds[^1];
-            callDef.AppendLine($"    d = {fn}CombineFunc(d,  {inputFn}(p));");
+            _combineMethod = combineMethod;
+            ShaderNode.HasChangedCode = true;
         }
         
-        callDef.AppendLine("    return d;");
-        callDef.AppendLine("}");
-        
-        sd.AppendLineToShaderCode(callDef.ToString());
-        
-        sd.CollectedFeatureIds.Add(fn);
+        InputFields.DirtyFlag.Clear();
     }
 
-    //private readonly StringBuilder _stringBuilder = new();
-    //private  string _fn;
+    public string GetShaderCode()
+    {
+        _callDef.Clear();
+        var mode = _combineModes[(int)_combineMethod];
+        
+        _callDef.AppendLine("");
+        _callDef.AppendLine($"#define {ShaderNode}CombineFunc(a,b) ({mode.Code})\n");
+        _callDef.AppendLine($"float {ShaderNode}(float3 p) {{");
+        _callDef.AppendLine($"    float d={mode.StartValue};" );
+        
+        foreach(var inputNode in ShaderNode.InputNodes) 
+        {
+            _callDef.AppendLine($"    d = {ShaderNode}CombineFunc(d,  {inputNode}(p));");
+        }
+        
+        _callDef.AppendLine("    return d;");
+        _callDef.AppendLine("}");
+        return _callDef.ToString();
+    }
 
-    private sealed record CombineMethod2(string Code, float StartValue);
+
+    public ShaderGraphNode ShaderNode  { get; }
+
+    private CombineMethods _combineMethod;
+    private readonly StringBuilder _callDef = new();
+
+    private sealed record CombineMethodDefs(string Code, float StartValue);
     
-    private CombineMethod2[] _combineMethodDefinitions2=
+    private readonly CombineMethodDefs[] _combineModes=
         [
-            new CombineMethod2("(a) + (b)",0), 
-            new CombineMethod2("(a) - (b)", 0),
-            new CombineMethod2("(a) * (b)", 1),
-            new CombineMethod2("min(a, b)", 999999),            
-            new CombineMethod2("max(a, b)", -999999),            
+            new CombineMethodDefs("(a) + (b)",0), 
+            new CombineMethodDefs("(a) - (b)", 0),
+            new CombineMethodDefs("(a) * (b)", 1),
+            new CombineMethodDefs("min(a, b)", 999999),            
+            new CombineMethodDefs("max(a, b)", -999999),            
         ];
     
     private enum CombineMethods
@@ -82,9 +78,11 @@ internal sealed class CombineFields : Instance<CombineFields>
     }
 
     [Input(Guid = "7248C680-7279-4C1D-B968-3864CB849C77")]
-    public readonly MultiInputSlot<FieldShaderGraph> InputFields = new();
+    public readonly MultiInputSlot<ShaderGraphNode> InputFields = new();
         
+    
     [Input(Guid = "4648E514-B48C-4A98-A728-3EBF9BCFA0B7", MappedType = typeof(CombineMethods))]
     public readonly InputSlot<int> CombineMethod = new();
 }
+
 

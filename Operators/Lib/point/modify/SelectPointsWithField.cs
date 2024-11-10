@@ -35,7 +35,7 @@ internal sealed class SelectPointsWithField : Instance<SelectPointsWithField>
         public readonly InputSlot<bool> DiscardNonSelected = new InputSlot<bool>();
 
         [Input(Guid = "3da5b21f-f31b-4f11-9f1c-0deee0efac40")]
-        public readonly InputSlot<T3.Core.DataTypes.FieldShaderGraph> Field = new InputSlot<T3.Core.DataTypes.FieldShaderGraph>();
+        public readonly InputSlot<T3.Core.DataTypes.ShaderGraphNode> Field = new InputSlot<T3.Core.DataTypes.ShaderGraphNode>();
 
 
         

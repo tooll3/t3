@@ -13,15 +13,22 @@
     {
       "ChildId": "05a2c882-fafa-4e3f-9794-b8980e7134cd"/*TransformField*/,
       "Position": {
-        "X": 625.55664,
-        "Y": 43.0
+        "X": 647.884,
+        "Y": 107.711334
       }
     },
     {
       "ChildId": "06366417-905b-4e85-a909-af41ef455910"/*SphereField*/,
       "Position": {
         "X": 325.55664,
-        "Y": 142.0
+        "Y": 129.0
+      }
+    },
+    {
+      "ChildId": "0add73b0-0166-4b6d-9273-e4cb32b8d320"/*SelectPoints*/,
+      "Position": {
+        "X": 879.8453,
+        "Y": -275.02652
       }
     },
     {
@@ -76,8 +83,8 @@
     {
       "ChildId": "25e062cd-bd25-4b09-bf14-6db86bdd628a"/*RoundedBoxField*/,
       "Position": {
-        "X": 910.296,
-        "Y": 565.64294
+        "X": 540.6862,
+        "Y": 600.5189
       }
     },
     {
@@ -90,8 +97,8 @@
     {
       "ChildId": "2d883f0e-f8f7-488d-90d6-c3a0788579fd"/*TransformField*/,
       "Position": {
-        "X": 910.296,
-        "Y": 628.64294
+        "X": 755.818,
+        "Y": 699.69763
       }
     },
     {
@@ -102,6 +109,13 @@
       }
     },
     {
+      "ChildId": "31b21a4e-5a9d-479f-91c6-84cd82cf00e4"/*SphereField*/,
+      "Position": {
+        "X": 308.82333,
+        "Y": -79.85608
+      }
+    },
+    {
       "ChildId": "345a7893-cd9c-45e6-b684-e9eec749288c"/*SelectPoints*/,
       "Position": {
         "X": 749.52203,
@@ -109,10 +123,24 @@
       }
     },
     {
+      "ChildId": "36171c57-1b28-40fc-b223-9518b202011c"/*PerlinNoise3*/,
+      "Position": {
+        "X": 158.82333,
+        "Y": -79.85608
+      }
+    },
+    {
+      "ChildId": "3babf3c7-eaf7-4733-9d91-04ea39d62b7c"/*SphereField*/,
+      "Position": {
+        "X": 308.82333,
+        "Y": -122.85608
+      }
+    },
+    {
       "ChildId": "3cff42ee-3cad-4600-8320-69f9a3703162"/*CombineFields*/,
       "Position": {
-        "X": 475.55664,
-        "Y": 86.0
+        "X": 504.3294,
+        "Y": 190.62802
       }
     },
     {
@@ -132,8 +160,29 @@
     {
       "ChildId": "47a9a4c5-9b1b-4042-9402-fa41ba2dd759"/*RaymarchField*/,
       "Position": {
-        "X": 1360.296,
-        "Y": 522.64294
+        "X": 1210.296,
+        "Y": 565.64294
+      }
+    },
+    {
+      "ChildId": "4c0e8bed-ce06-4862-83fa-65fa076d8fa3"/*SelectPointsWithField*/,
+      "Position": {
+        "X": 608.82336,
+        "Y": -165.85608
+      }
+    },
+    {
+      "ChildId": "4c934257-3ac4-467f-9ead-a8f2ffd51072"/*TransformField*/,
+      "Position": {
+        "X": 1034.8262,
+        "Y": 590.1651
+      }
+    },
+    {
+      "ChildId": "4d685268-7b65-4b01-b281-5a61ca6ad3e4"/*PerlinNoise3*/,
+      "Position": {
+        "X": 418.43842,
+        "Y": 732.52545
       }
     },
     {
@@ -151,6 +200,13 @@
       }
     },
     {
+      "ChildId": "5a3cb6fb-1115-4127-9aca-03d434b03768"/*TransformField*/,
+      "Position": {
+        "X": 734.8261,
+        "Y": 590.1651
+      }
+    },
+    {
       "ChildId": "5baaf323-0d37-4367-9c2f-cd1a107d212e"/*LoadImage*/,
       "Position": {
         "X": 1185.2635,
@@ -160,15 +216,22 @@
     {
       "ChildId": "5c8d7871-301d-4b7d-b517-f895d815e5dc"/*AnimValue*/,
       "Position": {
-        "X": 610.296,
-        "Y": 628.64294
+        "X": 548.7181,
+        "Y": 806.8375
+      }
+    },
+    {
+      "ChildId": "61fb09ad-5f15-4fdb-9bcb-1606dda970af"/*SphereField*/,
+      "Position": {
+        "X": -15.968567,
+        "Y": -168.35309
       }
     },
     {
       "ChildId": "6641acaa-c0ed-4d57-89ee-8dd405eb40b6"/*PerlinNoise3*/,
       "Position": {
-        "X": 737.5795,
-        "Y": 495.2262
+        "X": 565.9241,
+        "Y": 877.2275
       }
     },
     {
@@ -181,8 +244,15 @@
     {
       "ChildId": "9521c802-0a11-4eef-b9f3-c1007ac36bd9"/*CombineFields*/,
       "Position": {
-        "X": 1060.296,
-        "Y": 565.64294
+        "X": 884.8261,
+        "Y": 590.1651
+      }
+    },
+    {
+      "ChildId": "9749e207-dac1-499a-a613-d73dc425287f"/*CombineFields*/,
+      "Position": {
+        "X": 458.82333,
+        "Y": -122.85608
       }
     },
     {
@@ -251,8 +321,8 @@
     {
       "ChildId": "c514b638-f0d3-40ec-8f30-eed01f5aa96f"/*RoundedBoxField*/,
       "Position": {
-        "X": 760.296,
-        "Y": 628.64294
+        "X": 559.214,
+        "Y": 727.9843
       }
     },
     {
@@ -266,7 +336,7 @@
       "ChildId": "cdc9bbe5-809a-4b27-aeb2-e51ec15c0f61"/*PerlinNoise3*/,
       "Position": {
         "X": 475.55664,
-        "Y": 43.0
+        "Y": 86.0
       }
     },
     {
@@ -279,8 +349,8 @@
     {
       "ChildId": "d06e0335-ba09-49c1-8956-29cbba683234"/*DrawPointsShaded*/,
       "Position": {
-        "X": 925.55664,
-        "Y": 0.0
+        "X": 933.8821,
+        "Y": 52.60161
       }
     },
     {
@@ -300,8 +370,8 @@
     {
       "ChildId": "dc6395b1-f409-4df0-9399-8c5434b80ac5"/*SphereField*/,
       "Position": {
-        "X": 325.55664,
-        "Y": 86.0
+        "X": 475.55664,
+        "Y": 43.0
       }
     },
     {
@@ -328,15 +398,36 @@
     {
       "ChildId": "ea218ee9-a02a-40b7-bd6e-1603150e4abd"/*TransformField*/,
       "Position": {
-        "X": 1210.296,
-        "Y": 522.64294
+        "X": 1218.4701,
+        "Y": 439.26746
+      }
+    },
+    {
+      "ChildId": "eb3363a2-8c03-44d7-b382-8f88b5605673"/*SphereField*/,
+      "Position": {
+        "X": 837.40717,
+        "Y": 252.43533
+      }
+    },
+    {
+      "ChildId": "efdfc0f7-2ea8-4ccf-8268-b14fe6164591"/*TransformField*/,
+      "Position": {
+        "X": 284.03143,
+        "Y": -179.01889
       }
     },
     {
       "ChildId": "f0e36e18-5555-426b-afea-4726f13a1fb3"/*AnimValue*/,
       "Position": {
-        "X": 760.296,
-        "Y": 565.64294
+        "X": 468.28333,
+        "Y": 485.08795
+      }
+    },
+    {
+      "ChildId": "f37e66b0-cabb-4862-897b-5e254097855f"/*DrawPoints*/,
+      "Position": {
+        "X": 758.82336,
+        "Y": -165.85608
       }
     },
     {
@@ -351,6 +442,20 @@
       "Position": {
         "X": 1764.9407,
         "Y": 517.7577
+      }
+    },
+    {
+      "ChildId": "fb2a7617-4658-455a-bfe0-035f9cd760de"/*GridPoints*/,
+      "Position": {
+        "X": 458.82333,
+        "Y": -165.85608
+      }
+    },
+    {
+      "ChildId": "ffffc2c2-bd4a-45ff-8588-a517620b62bf"/*TransformField*/,
+      "Position": {
+        "X": 134.03143,
+        "Y": -168.35309
       }
     }
   ],
