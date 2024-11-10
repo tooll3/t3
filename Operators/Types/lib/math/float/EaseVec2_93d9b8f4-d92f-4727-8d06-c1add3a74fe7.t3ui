@@ -1,6 +1,6 @@
 {
-  "Id": "93d9b8f4-d92f-4727-8d06-c1add3a74fe7"/*EasingsVec2*/,
-  "Description": "",
+  "Id": "93d9b8f4-d92f-4727-8d06-c1add3a74fe7"/*EaseVec2*/,
+  "Description": "[SpringVec2] [DampVec2] [Ease]",
   "InputUis": [
     {
       "InputId": "3156deda-67ba-42eb-9418-7f28ea4b4ca5"/*Value*/,
@@ -24,7 +24,14 @@
       }
     },
     {
-      "InputId": "19da524f-6cea-4da0-8ee2-9b47ef8a93a7"/*Ease*/,
+      "InputId": "5f2c66dd-dfaf-4aa0-b184-01e89819b317"/*Mode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "19da524f-6cea-4da0-8ee2-9b47ef8a93a7"/*Interpolation*/,
       "Position": {
         "X": -200.0,
         "Y": 135.0

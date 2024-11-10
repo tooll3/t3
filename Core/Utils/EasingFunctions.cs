@@ -147,41 +147,6 @@ namespace T3.Core.Utils
         }
         public static float InOutBounce(float t) => t < 0.5 ? (1 - OutBounce(1 - 2 * t)) / 2 : (1 + OutBounce(2 * t - 1)) / 2;
 
-        /*public enum EasingType
-        {
-            Linear = 0,
-            InOutSine = 1,
-            InOutQuad  = 2,
-            InOutCubic = 3,
-            InOutQuart = 4,
-            InOutQuint = 5,
-            InOutExpo = 6,
-            InOutCirc = 7,
-            InOutBack = 8,
-            InOutElastic = 9,
-            InOutBounce = 10,
-            OutSine = 11,
-            OutQuad = 12,
-            OutCubic = 13,
-            OutQuart = 14,
-            OutQuint = 15,
-            OutExpo = 16,
-            OutCirc = 17,
-            OutBack = 18,
-            OutElastic = 19,
-            OutBounce = 20,
-            InSine = 21,
-            InQuad = 22,
-            InCubic = 23,
-            InQuart = 24,
-            InQuint = 25,
-            InExpo = 26,
-            InCirc = 27,
-            InBack = 28,
-            InElastic = 29,
-            InBounce = 30,
-        }*/
-
         public enum EasingType
         {
             Linear = 0,
@@ -200,9 +165,9 @@ namespace T3.Core.Utils
 
         public enum EaseDirection
         {
-            In = 1,
-            Out = 2,
-            InOut = 3
+            In = 0,
+            Out = 1,
+            InOut = 2,
         }
 
     }
