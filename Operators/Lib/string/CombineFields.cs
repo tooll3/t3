@@ -6,7 +6,7 @@ namespace Lib.@string;
 internal sealed class CombineFields : Instance<CombineFields>
 {
     [Output(Guid = "db0bbde0-18b6-4c53-8cf7-a294177d2089")]
-    public readonly Slot<FieldShaderDefinition> Result = new();
+    public readonly Slot<FieldShaderGraph> Result = new();
 
     public CombineFields()
     {
@@ -15,8 +15,8 @@ internal sealed class CombineFields : Instance<CombineFields>
 
     private void Update(EvaluationContext context)
     {
-        var fn = FieldShaderDefinition.BuildInstanceId(this);
-        var sd = FieldShaderDefinition.GetOrCreateDefinition(context, fn);
+        var fn = FieldShaderGraph.BuildNodeId(this);
+        var sd = FieldShaderGraph.GetOrCreateDefinition(context, fn);
         Result.Value = sd;
         
         var connectedFields = InputFields.GetCollectedTypedInputs();
@@ -53,7 +53,7 @@ internal sealed class CombineFields : Instance<CombineFields>
         callDef.AppendLine("    return d;");
         callDef.AppendLine("}");
         
-        sd.AppendLineToShaderDef(callDef.ToString());
+        sd.AppendLineToShaderCode(callDef.ToString());
         
         sd.CollectedFeatureIds.Add(fn);
     }
@@ -82,7 +82,7 @@ internal sealed class CombineFields : Instance<CombineFields>
     }
 
     [Input(Guid = "7248C680-7279-4C1D-B968-3864CB849C77")]
-    public readonly MultiInputSlot<FieldShaderDefinition> InputFields = new();
+    public readonly MultiInputSlot<FieldShaderGraph> InputFields = new();
         
     [Input(Guid = "4648E514-B48C-4A98-A728-3EBF9BCFA0B7", MappedType = typeof(CombineMethods))]
     public readonly InputSlot<int> CombineMethod = new();

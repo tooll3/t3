@@ -85,7 +85,7 @@ internal static class UiRegistration
                                 typeof(ParticleSystem), 
                                 typeof(BufferWithViews),
                                 typeof(GizmoVisibility),
-                                typeof(FieldShaderDefinition),
+                                typeof(FieldShaderGraph),
                                 // sharpDX types
                                 typeof(SharpDX.Direct3D.PrimitiveTopology));
         

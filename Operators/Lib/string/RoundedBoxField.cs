@@ -6,7 +6,7 @@ namespace Lib.@string;
 internal sealed class RoundedBoxField : Instance<RoundedBoxField>
 {
     [Output(Guid = "9153c53c-0b19-4ce4-b086-e448d78ef032")]
-    public readonly Slot<FieldShaderDefinition> Result = new();
+    public readonly Slot<FieldShaderGraph> Result = new();
 
     public RoundedBoxField()
     {
@@ -15,18 +15,18 @@ internal sealed class RoundedBoxField : Instance<RoundedBoxField>
 
     private void Update(EvaluationContext context)
     {
-        var fn = FieldShaderDefinition.BuildInstanceId(this);
-        var sd = FieldShaderDefinition.GetOrCreateDefinition(context, fn);
+        var fn = FieldShaderGraph.BuildNodeId(this);
+        var sd = FieldShaderGraph.GetOrCreateDefinition(context, fn);
         Result.Value = sd;
         
         sd.KeepVec3Parameter("Center", Center.GetValue(context), fn);
         sd.KeepVec3Parameter("Size", Size.GetValue(context), fn);
         sd.KeepScalarParameter("Radius", Radius.GetValue(context), fn);
         
-        sd.AppendLineToShaderDef($"float {fn}(float3 p) {{");
-        sd.AppendLineToShaderDef($"   float3 q = abs(p- {fn}Center) - {fn}Size + {fn}Radius;");
-        sd.AppendLineToShaderDef($"   return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0) - {fn}Radius;");
-        sd.AppendLineToShaderDef("}");
+        sd.AppendLineToShaderCode($"float {fn}(float3 p) {{");
+        sd.AppendLineToShaderCode($"   float3 q = abs(p- {fn}Center) - {fn}Size + {fn}Radius;");
+        sd.AppendLineToShaderCode($"   return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0) - {fn}Radius;");
+        sd.AppendLineToShaderCode("}");
         
         
         // return saturate( ({Radius} / {FallOff}) - (length(p - {Center}) / {FallOff}) + 0.5 ); 

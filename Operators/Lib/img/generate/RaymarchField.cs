@@ -49,5 +49,5 @@ public class RaymarchField : Instance<RaymarchField>
     public readonly InputSlot<float> DistToColor = new();
 
         [Input(Guid = "16a89f4b-c426-45d5-98f6-f0e84326e46d")]
-        public readonly InputSlot<T3.Core.DataTypes.FieldShaderDefinition> SdfField = new InputSlot<T3.Core.DataTypes.FieldShaderDefinition>();
+        public readonly InputSlot<T3.Core.DataTypes.FieldShaderGraph> SdfField = new InputSlot<T3.Core.DataTypes.FieldShaderGraph>();
 }

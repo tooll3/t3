@@ -47,7 +47,7 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
     
     
     [Input(Guid = "FFC1C70E-B717-4337-916D-C3A13343E9CC")]
-    public readonly InputSlot<FieldShaderDefinition> Field = new();
+    public readonly InputSlot<FieldShaderGraph> Field = new();
     
     [Input(Guid = "BCF6DE27-1FFD-422C-9F5B-910D89CAD1A4")]
     public readonly InputSlot<string> TemplateCode = new();

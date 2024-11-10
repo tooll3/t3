@@ -6,7 +6,7 @@ namespace Lib.@string;
 internal sealed class SphereField : Instance<SphereField>
 {
     [Output(Guid = "02f7d494-72ed-4247-88d7-0cbb730edf65")]
-    public readonly Slot<FieldShaderDefinition> Result = new();
+    public readonly Slot<FieldShaderGraph> Result = new();
 
     public SphereField()
     {
@@ -15,17 +15,17 @@ internal sealed class SphereField : Instance<SphereField>
 
     private void Update(EvaluationContext context)
     {
-        var fn = FieldShaderDefinition.BuildInstanceId(this);
-        var sd = FieldShaderDefinition.GetOrCreateDefinition(context, fn);
+        var fn = FieldShaderGraph.BuildNodeId(this);
+        var sd = FieldShaderGraph.GetOrCreateDefinition(context, fn);
         Result.Value = sd;
         
         sd.KeepVec3Parameter("Center", Center.GetValue(context), fn);
         sd.KeepScalarParameter("Radius", Radius.GetValue(context), fn);
         sd.KeepScalarParameter("FallOff", FallOff.GetValue(context), fn);
         
-        sd.AppendLineToShaderDef($"float {fn}(float3 p) {{");
-        sd.AppendLineToShaderDef($"    return saturate( ({fn}Radius / {fn}FallOff) - (length(p - {fn}Center) / {fn}FallOff) + 0.5  ); ");
-        sd.AppendLineToShaderDef("}");
+        sd.AppendLineToShaderCode($"float {fn}(float3 p) {{");
+        sd.AppendLineToShaderCode($"    return saturate( ({fn}Radius / {fn}FallOff) - (length(p - {fn}Center) / {fn}FallOff) + 0.5  ); ");
+        sd.AppendLineToShaderCode("}");
         sd.CollectedFeatureIds.Add(fn);
     }
     

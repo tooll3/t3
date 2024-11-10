@@ -7,7 +7,7 @@ namespace Lib.@string;
 internal sealed class TransformField : Instance<TransformField>
 {
     [Output(Guid = "9b12e766-9dcd-4c8f-83ee-2a0b78beae43")]
-    public readonly Slot<FieldShaderDefinition> Result = new();
+    public readonly Slot<FieldShaderGraph> Result = new();
 
     public TransformField()
     {
@@ -17,8 +17,8 @@ internal sealed class TransformField : Instance<TransformField>
     private void Update(EvaluationContext context)
     {
         // Setup feature
-        var fn = FieldShaderDefinition.BuildInstanceId(this);
-        var sd = FieldShaderDefinition.GetOrCreateDefinition(context, fn);
+        var fn = FieldShaderGraph.BuildNodeId(this);
+        var sd = FieldShaderGraph.GetOrCreateDefinition(context, fn);
         Result.Value = sd;
         
         // Get connected field
@@ -61,9 +61,9 @@ internal sealed class TransformField : Instance<TransformField>
         
         // Create shader function
         var inputFn = connectedField.CollectedFeatureIds[^1];
-        sd.AppendLineToShaderDef($"float {fn}(float3 pos) {{");
-        sd.AppendLineToShaderDef($"    return {inputFn}(mul(float4(pos.xyz,1), {fn}Transform).xyz);");
-        sd.AppendLineToShaderDef("}");
+        sd.AppendLineToShaderCode($"float {fn}(float3 pos) {{");
+        sd.AppendLineToShaderCode($"    return {inputFn}(mul(float4(pos.xyz,1), {fn}Transform).xyz);");
+        sd.AppendLineToShaderCode("}");
         
         sd.CollectedFeatureIds.Add(fn);
     }
@@ -98,6 +98,6 @@ internal sealed class TransformField : Instance<TransformField>
     public readonly InputSlot<float> FallOff = new(); 
     
     [Input(Guid = "7248C680-7279-4C1D-B968-3864CB849C77")]
-    public readonly InputSlot<FieldShaderDefinition> InputField = new();
+    public readonly InputSlot<FieldShaderGraph> InputField = new();
 }
 
