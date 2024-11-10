@@ -1,5 +1,5 @@
 {
-  "Name": "Easings",
+  "Name": "Ease",
   "Id": "3cc78396-862b-47fa-925c-eb327f69f651",
   "Namespace": "lib.math.float",
   "Inputs": [
@@ -16,7 +16,11 @@
       "DefaultValue": false
     },
     {
-      "Id": "bc388ea3-e1e6-4773-95e5-b8a649c3344f"/*Ease*/,
+      "Id": "fe0231d9-03b6-466f-82e9-852b892adf2e"/*Direction*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "bc388ea3-e1e6-4773-95e5-b8a649c3344f"/*Mode*/,
       "DefaultValue": 2
     }
   ],

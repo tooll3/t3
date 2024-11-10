@@ -1,5 +1,5 @@
 {
-  "Id": "3cc78396-862b-47fa-925c-eb327f69f651"/*Easings*/,
+  "Id": "3cc78396-862b-47fa-925c-eb327f69f651"/*Ease*/,
   "Description": "This operator creates smooth, ease-in-out transitions between changing input values, perfect for animating any step change. Customize the transition style with options like cubic, exponential, or back easing, or choose a linear fallback for a simple interpolation. Note: The input value should evolve in steps (e.g., sudden changes) to fully utilize the easing effect.\n[Damp] [Spring]",
   "InputUis": [
     {
@@ -28,7 +28,14 @@
       }
     },
     {
-      "InputId": "bc388ea3-e1e6-4773-95e5-b8a649c3344f"/*Ease*/,
+      "InputId": "fe0231d9-03b6-466f-82e9-852b892adf2e"/*Direction*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 604.0
+      }
+    },
+    {
+      "InputId": "bc388ea3-e1e6-4773-95e5-b8a649c3344f"/*Mode*/,
       "Position": {
         "X": 36.0,
         "Y": 514.0
