@@ -8,6 +8,10 @@
     {
       "Id": "7248c680-7279-4c1d-b968-3864cb849c77"/*InputFields*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "9e4f5916-722d-4c4b-b1ca-814958a5b836"/*K*/,
+      "DefaultValue": 0.05
     }
   ],
   "Children": [],

@@ -35,9 +35,22 @@ internal sealed class CombineFields : Instance<CombineFields>, IGraphNodeOp
     {
         _callDef.Clear();
         var mode = _combineModes[(int)_combineMethod];
+        if(_combineMethod == CombineMethods.SmoothUnion)
+        {
+            _callDef.AppendLine($@"
+inline float {ShaderNode}CombineFunc(float d1, float d2) {{
+    float k = {ShaderNode}K;
+    float h = max(k - abs(d1 - d2), 0.0);
+    return min(d1, d2) - (h * h) / (4.0 * k);
+}}
+");
+        }
+        else
+        {
+            _callDef.AppendLine($"#define {ShaderNode}CombineFunc(a,b) ({mode.Code})\n");
+        }
         
         _callDef.AppendLine("");
-        _callDef.AppendLine($"#define {ShaderNode}CombineFunc(a,b) ({mode.Code})\n");
         _callDef.AppendLine($"float {ShaderNode}(float3 p) {{");
         _callDef.AppendLine($"    float d={mode.StartValue};" );
         
@@ -66,7 +79,9 @@ internal sealed class CombineFields : Instance<CombineFields>, IGraphNodeOp
             new CombineMethodDefs("(a) * (b)", 1),
             new CombineMethodDefs("min(a, b)", 999999),            
             new CombineMethodDefs("max(a, b)", -999999),            
+            new CombineMethodDefs("SmoothUnion(a, b)", 0),            
         ];
+
     
     private enum CombineMethods
     {
@@ -75,11 +90,15 @@ internal sealed class CombineFields : Instance<CombineFields>, IGraphNodeOp
         Multiply,
         Min,
         Max,
+        SmoothUnion,
     }
 
     [Input(Guid = "7248C680-7279-4C1D-B968-3864CB849C77")]
     public readonly MultiInputSlot<ShaderGraphNode> InputFields = new();
         
+    [GraphParam]
+    [Input(Guid = "9E4F5916-722D-4C4B-B1CA-814958A5B836")]
+    public readonly InputSlot<float> K = new();
     
     [Input(Guid = "4648E514-B48C-4A98-A728-3EBF9BCFA0B7", MappedType = typeof(CombineMethods))]
     public readonly InputSlot<int> CombineMethod = new();
