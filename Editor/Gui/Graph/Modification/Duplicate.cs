@@ -14,7 +14,7 @@ namespace T3.Editor.Gui.Graph.Modification;
 
 internal static class Duplicate
 {
-    public static Symbol DuplicateAsNewType(SymbolUi compositionUi,EditableSymbolProject project, Guid symbolId, string newTypeName, string nameSpace,
+    public static Symbol DuplicateAsNewType(SymbolUi compositionUi, EditableSymbolProject project, Guid symbolId, string newTypeName, string nameSpace,
                                             string description, Vector2 posOnCanvas)
     {
         var sourceSymbol = EditorSymbolPackage.AllSymbols.FirstOrDefault(x => x.Id == symbolId);
@@ -23,7 +23,7 @@ internal static class Duplicate
             Log.Warning("Can't find symbol to duplicate");
             return null;
         }
-        
+
         //var sourceSymbol = symbolChildToDuplicate.Symbol;
 
         var syntaxTree = GraphUtils.GetSyntaxTree(sourceSymbol);
@@ -37,7 +37,7 @@ internal static class Duplicate
         var root = syntaxTree.GetRoot();
         var classRenamer = new ClassRenameRewriter(newTypeName);
         root = classRenamer.Visit(root);
-        
+
         var memberRewriter = new Duplicate.MemberDuplicateRewriter(newTypeName);
         root = memberRewriter.Visit(root);
         var oldToNewIdMap = memberRewriter.OldToNewGuidDict;
@@ -58,7 +58,7 @@ internal static class Duplicate
         var newSymbolUi = sourceSymbolUi.CloneForNewSymbol(newSymbol, oldToNewIdMap);
         newSymbolUi.Description = description;
         newSymbolUi.ReadOnly = false;
-        
+
         project.ReplaceSymbolUi(newSymbolUi);
 
         // Apply content to new symbol
@@ -118,13 +118,13 @@ internal static class Duplicate
         var sourceSelectables = sourceSymbolUi.GetSelectables().ToArray();
         var newSelectables = newSymbolUi.GetSelectables().ToArray();
         Debug.Assert(sourceSelectables.Length == newSelectables.Length);
-        for (int i = 0; i < sourceSelectables.Length && i<newSelectables.Length; i++)
+        for (int i = 0; i < sourceSelectables.Length && i < newSelectables.Length; i++)
         {
             newSelectables[i].PosOnCanvas = sourceSelectables[i].PosOnCanvas; // todo: check if this is enough or if id check needed
         }
-        
+
         Log.Debug($"Created new symbol '{newTypeName}'");
-        
+
         newSymbolUi.FlagAsModified();
         project.SaveModifiedSymbols();
 
@@ -142,7 +142,7 @@ internal static class Duplicate
         int end = newSource.IndexOf("\")", start, StringComparison.Ordinal);
         if (end < 0)
             return newSource;
-        
+
         var oldGuid = newSource[start..end];
         var newGuid = newSymbolId.ToString();
         return newSource.Replace(oldGuid, newGuid);
@@ -180,33 +180,54 @@ internal static class Duplicate
                 return node;
 
             var idValue = nameSyntax.Identifier.ValueText;
-            
-            // Todo: Would be great to use nameof() here.
-            if (idValue is not ("InputSlot" or "MultiInputSlot" or "Slot" or "TimeClipSlot" or "TransformCallbackSlot"))
-                return node; // no input / multi-input / slot / timeClip-slot (output)
 
-            var attrList = node.AttributeLists[0];
-            var firstAttribute = attrList.Attributes[0];
-            
-            var match = _guidRegex.Match(firstAttribute.ToString());
-            var oldGuiString = match.Value;
-            var oldGuid = Guid.Parse(oldGuiString);
-            var newGuid = Guid.NewGuid();
-            OldToNewGuidDict[oldGuid] = newGuid;
-            if (firstAttribute.ArgumentList == null)
-            {
-                Log.Debug("Skipping input with inconsistent format: " + node);
+            // Only process specific slot types
+            if (idValue is not ("InputSlot" or "MultiInputSlot" or "Slot" or "TimeClipSlot" or "TransformCallbackSlot"))
                 return node;
-            }
-            
-            var attributesWithNewGui = firstAttribute.ArgumentList.ToString().Replace(oldGuiString, newGuid.ToString());
-            var argList = SyntaxFactory.ParseAttributeArgumentList(attributesWithNewGui);
-            if (argList == null)
+
+            // Iterate through all attribute lists associated with the field
+            foreach (var attrList in node.AttributeLists)
             {
-                Log.Debug("Skipping input with inconsistent format: " + node);
-                return node;
+                foreach (var attribute in attrList.Attributes)
+                {
+                    // Check if the attribute has a GUID in it
+                    var match = _guidRegex.Match(attribute.ToString());
+                    if (!match.Success)
+                        continue; // Skip attributes without a GUID
+
+                    var oldGuidString = match.Value;
+                    if (!Guid.TryParse(oldGuidString, out var oldGuid))
+                    {
+                        Log.Debug("Skipping input with inconsistent GUID format: " + node);
+                        continue;
+                    }
+
+                    // Generate a new GUID and update the dictionary
+                    var newGuid = Guid.NewGuid();
+                    OldToNewGuidDict[oldGuid] = newGuid;
+
+                    // Replace the old GUID with the new one in the attribute's argument list
+                    if (attribute.ArgumentList != null)
+                    {
+                        var updatedArgs = attribute.ArgumentList.ToString().Replace(oldGuidString, newGuid.ToString());
+                        var newArgList = SyntaxFactory.ParseAttributeArgumentList(updatedArgs);
+
+                        if (newArgList != null)
+                        {
+                            // Replace the old argument list with the new one
+                            node = node.ReplaceNode(attribute.ArgumentList, newArgList);
+                        }
+                        else
+                        {
+                            Log.Debug("Skipping input with inconsistent argument list: " + node);
+                        }
+                    }
+                    else
+                    {
+                        Log.Debug("Skipping input without argument list: " + node);
+                    }
+                }
             }
-            node = node.ReplaceNode(firstAttribute.ArgumentList, argList);
 
             return node;
         }
