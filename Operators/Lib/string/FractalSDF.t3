@@ -1,0 +1,42 @@
+{
+  "Id": "933aec2c-e7dd-44b4-a094-14d0195f9f7a"/*FractalSDF*/,
+  "Inputs": [
+    {
+      "Id": "094637cf-9526-49d5-bb9f-19991cdcc516"/*Iterations*/,
+      "DefaultValue": 8
+    },
+    {
+      "Id": "482ff1b2-2383-45db-8a5a-30ef2a07c8fb"/*Clamping*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "5678312c-5c31-4b7e-9e82-4595aa8a6740"/*Scale*/,
+      "DefaultValue": 2.0
+    },
+    {
+      "Id": "5dc2517b-228c-45a7-abe5-b87275eb5224"/*Fold*/,
+      "DefaultValue": {
+        "X": 0.5,
+        "Y": 1.0
+      }
+    },
+    {
+      "Id": "ab32b4f6-dea8-4e25-b5cd-2e232273a51e"/*Minrad*/,
+      "DefaultValue": 0.303
+    },
+    {
+      "Id": "cef65141-085c-4e09-8f16-8338b0964bc4"/*Increment*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

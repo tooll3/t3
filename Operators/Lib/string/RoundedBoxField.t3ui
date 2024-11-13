@@ -17,10 +17,10 @@
       }
     },
     {
-      "InputId": "c8268819-686a-4ad7-91a5-9841b26a7cd6"/*FallOff*/,
+      "InputId": "c4ef07b4-853b-48d4-9ade-c93ee849071a"/*Size*/,
       "Position": {
         "X": -200.0,
-        "Y": 90.0
+        "Y": 45.0
       }
     }
   ],

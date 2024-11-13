@@ -9,18 +9,7 @@ cbuffer ParamConstants : register(b0)
     float DistToColor;
     float AODistance;
     float __padding1;
-    // float Minrad;
-    // float Scale;
-    // float2 Fold;
 
-    // float3 Clamping;
-    // float1 __align1__;
-    // float3 Increment;
-    // float1 __align2__;
-
-    // float4 Surface1;
-    // float4 Surface2;
-    // float4 Surface3;
     float4 Specular;
     float4 Glow;
     float4 AmbientOcclusion;
@@ -51,14 +40,6 @@ cbuffer Params : register(b2)
     /*{FLOAT_PARAMS}*/
 }
 
-// //>>> _common parameters
-// float4x4 objectToWorldMatrix;
-// float4x4 worldToCameraMatrix;
-// float4x4 projMatrix;
-// Texture2D txDiffuse;
-// float2 RenderTargetSize;
-// //<<< _common parameters
-
 struct vsOutput
 {
     float4 position : SV_POSITION;
@@ -76,9 +57,6 @@ static const float3 Quad[] =
         float3(-1, 1, 0),
         float3(-1, -1, 0),
 };
-
-// Texture2D<float4> ImageA : register(t0);
-// sampler texSampler : register(s0);
 
 vsOutput vsMain4(uint vertexId : SV_VertexID)
 {
@@ -105,20 +83,7 @@ vsOutput vsMain4(uint vertexId : SV_VertexID)
     return output;
 }
 
-//----------------------------------
-
 /*{FIELD_FUNCTIONS}*/
-
-// #define mod ((x), (y))((x) - (y) * floor((x) / (y)))
-
-// float sdBox(in float2 p, in float2 b)
-// {
-//     float2 d = abs(p) - b;
-//     return length(
-//                max(d, float2(0, 0))) +
-//            min(max(d.x, d.y),
-//                0.0);
-// }
 
 struct VS_IN
 {
@@ -133,46 +98,6 @@ struct PS_IN
     float3 worldTViewPos : TEXCOORD1;
     float3 worldTViewDir : TEXCOORD2;
 };
-
-// static float BOX_RADIUS = 0.005;
-// float dBox(float3 p, float3 b)
-// {
-//     return length(max(abs(p) - b + float3(BOX_RADIUS, BOX_RADIUS, BOX_RADIUS), 0.0)) - BOX_RADIUS;
-// }
-
-// static int mandelBoxIterations = 7;
-
-// float dMandelbox(float3 pos)
-// {
-//     float4 pN = float4(pos, 1);
-//     // return dStillLogo(pN);
-
-//     // precomputed constants
-//     float minRad2 = clamp(Minrad, 1.0e-9, 1.0);
-//     float4 scale = float4(Scale, Scale, Scale, abs(Scale)) / minRad2;
-//     float absScalem1 = abs(Scale - 1.0);
-//     float AbsScaleRaisedTo1mIters = pow(abs(Scale), float(1 - mandelBoxIterations));
-//     float DIST_MULTIPLIER = StepSize;
-
-//     float4 p = float4(pos, 1);
-//     float4 p0 = p; // p.w is the distance estimate
-
-//     for (int i = 0; i < mandelBoxIterations; i++)
-//     {
-//         // box folding:
-//         p.xyz = abs(1 + p.xyz) - p.xyz - abs(1.0 - p.xyz);                 // add;add;abs.add;abs.add (130.4%)
-//         p.xyz = clamp(p.xyz, Clamping.x, Clamping.y) * Clamping.z - p.xyz; // min;max;mad
-
-//         // sphere folding: if (r2 < minRad2) p /= minRad2; else if (r2 < 1.0) p /= r2;
-//         float r2 = dot(p.xyz, p.xyz);
-//         p *= clamp(max(minRad2 / r2, minRad2), Fold.x, Fold.y); // dp3,div,max.sat,mul
-//         p.xyz += float3(Increment.x, Increment.y, Increment.z);
-//         // scale, translate
-//         p = p * scale + p0;
-//     }
-//     float d = ((length(p.xyz) - absScalem1) / p.w - AbsScaleRaisedTo1mIters) * DIST_MULTIPLIER;
-//     return d;
-// }
 
 //---------------------------------------
 float GetDistance(float3 pos)
@@ -215,27 +140,6 @@ float ComputeAO(float3 aoposition, float3 aonormal, float aodistance, float aoit
 }
 
 static float MAX_DIST = 300;
-
-// // Compute the color at |pos|.
-// float3 ComputeDiffuseColor(float3 pos)
-// {
-//     float3 p = pos, p0 = p;
-//     float trap = 1.0;
-
-//     for (int i = 0; i < 3; i++)
-//     {
-//         p.xyz = clamp(p.xyz, -1.0, 1.0) * 2.0 - p.xyz;
-//         float r2 = dot(p.xyz, p.xyz);
-//         p *= clamp(max(Minrad / r2, Minrad), 0.0, 1.0);
-//         p = p * Scale + p0.xyz;
-//         trap = min(trap, r2);
-//     }
-//     // |c.x|: log final distance (fractional iteration count)
-//     // |c.y|: spherical orbit trap at (0,0,0)
-//     float2 c = clamp(float2(0.33 * log(dot(p, p)) - 1.0, sqrt(trap)), 0.0, 1.0);
-
-//     return lerp(lerp(Surface1.xyz, Surface2.xyz, c.y), Surface3.xyz, c.x);
-// }
 
 float4 psMain(vsOutput input) : SV_TARGET
 {
@@ -293,5 +197,11 @@ float4 psMain(vsOutput input) : SV_TARGET
     float f = clamp(log(length(p - input.worldTViewPos) / Fog), 0, 1);
     col = lerp(col, Background.rgb, f);
     a *= (1 - f * Background.a);
+
+    // if (a < 0.9)
+    // {
+    //     discard;
+    // }
+    // return float4(a.xxx, 1);
     return float4(col, a);
 }

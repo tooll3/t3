@@ -11,6 +11,7 @@
     },
     {
       "InputId": "16a89f4b-c426-45d5-98f6-f0e84326e46d"/*SdfField*/,
+      "Relevancy": "Required",
       "Position": {
         "X": 465.9897,
         "Y": 284.52948
@@ -136,8 +137,8 @@
     {
       "ChildId": "268c474a-8846-4c2f-8e0f-c38785191978"/*RenderTargetBlendDescription*/,
       "Position": {
-        "X": 949.72217,
-        "Y": 1020.9092
+        "X": 890.24963,
+        "Y": 760.54297
       }
     },
     {
@@ -253,8 +254,8 @@
     {
       "ChildId": "9b11342e-a7eb-4831-b8dd-3c2eecbfc150"/*OutputMergerStage*/,
       "Position": {
-        "X": 1249.7222,
-        "Y": 1020.9092
+        "X": 1190.2496,
+        "Y": 760.54297
       }
     },
     {
@@ -342,15 +343,15 @@
     {
       "ChildId": "fc53c377-a33f-473b-ac7e-fc7aa96177fb"/*BlendState*/,
       "Position": {
-        "X": 1099.7222,
-        "Y": 1020.9092
+        "X": 1040.2496,
+        "Y": 760.54297
       }
     },
     {
       "ChildId": "fe6a773b-3013-4fdf-ad27-267609cbbd44"/*Draw*/,
       "Position": {
-        "X": 1249.7222,
-        "Y": 1076.9089
+        "X": 1190.2496,
+        "Y": 816.5427
       }
     }
   ],

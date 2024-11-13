@@ -3,7 +3,7 @@
   "Inputs": [
     {
       "Id": "4648e514-b48c-4a98-a728-3ebf9bcfa0b7"/*CombineMethod*/,
-      "DefaultValue": 0
+      "DefaultValue": 3
     },
     {
       "Id": "7248c680-7279-4c1d-b968-3864cb849c77"/*InputFields*/,
