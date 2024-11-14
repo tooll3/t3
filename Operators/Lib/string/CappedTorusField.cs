@@ -34,6 +34,7 @@ internal sealed class CappedTorusField : Instance<CappedTorusField>
         
         float an = 2.5*(0.5+0.5*({ShaderNode}Size*1.1+3.0));
         float2 sc = float2(sin(an),cos(an));
+
         p.x = abs(p.x);
         float k = (sc.y*p.x>sc.x*p.y) ? dot(p.xy,sc) : length(p.xy);
         return sqrt(dot(p,p) + ra*ra - 2.0*ra*k ) - rb;
