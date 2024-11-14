@@ -1,0 +1,27 @@
+{
+  "Id": "27c6aa52-7b3e-4a9a-b6e5-0359f7155cee"/*LinkField*/,
+  "Inputs": [
+    {
+      "Id": "02d27492-30c1-46b0-abc6-e0cd5af163d8"/*Center*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "4f0942b7-24ac-49e6-a9aa-21f0812c036b"/*Size*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "6ca362c6-25d6-4bee-8e6b-37c5638414df"/*RadiusB*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "f438eea9-ff20-482b-b5ba-c59fa189837b"/*RadiusA*/,
+      "DefaultValue": 1.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
