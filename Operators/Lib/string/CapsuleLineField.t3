@@ -1,0 +1,35 @@
+{
+  "Id": "752e4358-05e0-4651-a147-f141138f5244"/*CapsuleLineField*/,
+  "Inputs": [
+    {
+      "Id": "0b4fde07-5439-4dbd-af37-32e5c6dc9315"/*B*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": -0.5,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "50a47ea6-a941-4ff4-9b87-14ddd2791fe4"/*Center*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "808c44ff-44e2-4a22-91f1-f459f298e6eb"/*Radius*/,
+      "DefaultValue": 0.125
+    },
+    {
+      "Id": "ace2fa64-382c-4386-b623-5b1051f4bcf4"/*A*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.5,
+        "Z": 0.0
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
