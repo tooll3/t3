@@ -1,0 +1,26 @@
+{
+  "Id": "1e1e65cd-3564-45e1-88f8-6cb4b4b18c5a"/*HexagonalPrismField*/,
+  "Inputs": [
+    {
+      "Id": "356e85dd-bf81-4a1c-96a4-1d2983916a4b"/*Round*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "a87ec8e0-ad88-45f4-8ce4-33baad9ab1a9"/*RadiusLength*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 0.25
+      }
+    },
+    {
+      "Id": "cfc6f8f3-94b4-46f6-9501-11d7b7916bb7"/*Center*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

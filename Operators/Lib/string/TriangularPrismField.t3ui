@@ -1,0 +1,37 @@
+{
+  "Id": "280989a6-a35d-4a91-b8c6-b1c7ca9ca9d6"/*TriangularPrismField*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "78b9be91-d1f2-4d96-ae7b-e6d2c126cc9b"/*RadiusLength*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "b9d9d45a-e363-4bf4-b9cd-9e79f93f5dee"/*Round*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "f088b205-2587-4f7c-903d-ee162b8d919b"/*Center*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "15393ac5-2e6c-4f34-8409-b98a95103d6f"/*Result*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}
