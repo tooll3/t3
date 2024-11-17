@@ -9,7 +9,7 @@ using T3.Editor.UiModel;
 // ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable SuggestBaseTypeForParameter
 
-namespace T3.Editor.Gui.Windows.ResearchCanvas.SnapGraph;
+namespace T3.Editor.Gui.MagGraph.Ui;
 
 /// <summary>
 /// Generate considerations:
@@ -18,7 +18,7 @@ namespace T3.Editor.Gui.Windows.ResearchCanvas.SnapGraph;
 /// - This might be especially complicated if the state cannot be stored in the layout model, because it
 ///   relies on a temp. property like expanding a parameter type group.
 /// </summary>
-internal sealed class SnapGraphLayout
+internal sealed class MagGraphLayout
 {
     public void ComputeLayout(Instance composition)
     {
@@ -63,9 +63,9 @@ internal sealed class SnapGraphLayout
             
             //var symbolChild = childInstance.Symbol;
 
-            Items.Add(childId, new SnapGraphItem
+            Items.Add(childId, new MagGraphItem
                                    {
-                                       Category = SnapGraphItem.Categories.Operator,
+                                       Category = MagGraphItem.Categories.Operator,
                                        Id = childId,
                                        Instance = childInstance,
                                        Selectable = childUi,
@@ -73,16 +73,16 @@ internal sealed class SnapGraphLayout
                                        SymbolChild =  childUi.SymbolChild, //compositionOp.Symbol.Children.SingleOrDefault(cc => cc.Id == childId),
                                        SymbolChildUi = childUi,
                                        PosOnCanvas = childUi.PosOnCanvas,
-                                       Size = SnapGraphItem.GridSize,
+                                       Size = MagGraphItem.GridSize,
                                    });
         }
 
         foreach (var input in compositionOp.Inputs)
         {
             var inputUi = compositionSymbolUi.InputUis[input.Id];
-            Items.Add(input.Id, new SnapGraphItem
+            Items.Add(input.Id, new MagGraphItem
                                     {
-                                        Category = SnapGraphItem.Categories.Input,
+                                        Category = MagGraphItem.Categories.Input,
                                         Id = input.Id,
                                         Instance = compositionOp,
                                         Selectable = inputUi,
@@ -90,16 +90,16 @@ internal sealed class SnapGraphLayout
                                         SymbolChild = null,
                                         SymbolChildUi = null,
                                         PosOnCanvas = inputUi.PosOnCanvas,
-                                        Size = SnapGraphItem.GridSize,
+                                        Size = MagGraphItem.GridSize,
                                     });
         }
         
         foreach (var output in compositionOp.Outputs)
         {
             var outputUi = compositionSymbolUi.OutputUis[output.Id];
-            Items.Add(output.Id, new SnapGraphItem
+            Items.Add(output.Id, new MagGraphItem
                                      {
-                                        Category = SnapGraphItem.Categories.Output,
+                                        Category = MagGraphItem.Categories.Output,
                                         Id = output.Id,
                                         Instance = compositionOp,
                                         Selectable = outputUi,
@@ -107,7 +107,7 @@ internal sealed class SnapGraphLayout
                                         SymbolChild = null,
                                         SymbolChildUi = null,
                                         PosOnCanvas = outputUi.PosOnCanvas,
-                                        Size = SnapGraphItem.GridSize,
+                                        Size = MagGraphItem.GridSize,
                                     });
         }
     }
@@ -138,8 +138,8 @@ internal sealed class SnapGraphLayout
     
     private void UpdateVisibleItemLines(Instance composition)
     {
-        var inputLines = new List<SnapGraphItem.InputLine>(8); 
-        var outputLines = new List<SnapGraphItem.OutputLine>(4); 
+        var inputLines = new List<MagGraphItem.InputLine>(8); 
+        var outputLines = new List<MagGraphItem.OutputLine>(4); 
         
         // Todo: Implement connected multi-inputs
         foreach (var item in Items.Values)
@@ -150,7 +150,7 @@ internal sealed class SnapGraphLayout
             var visibleIndex = 0;
             
             // Collect inputs
-            if (item.Category == SnapGraphItem.Categories.Operator)
+            if (item.Category == MagGraphItem.Categories.Operator)
             {
                 for (var inputLineIndex = 0; inputLineIndex < item.Instance.Inputs.Count; inputLineIndex++)
                 {
@@ -169,7 +169,7 @@ internal sealed class SnapGraphLayout
                         var multiInputIndex = 0;
                         foreach (var i in multiInputSlot.GetCollectedInputs())
                         {
-                            inputLines.Add(new SnapGraphItem.InputLine
+                            inputLines.Add(new MagGraphItem.InputLine
                                                {
                                                    Id = input.Id,
                                                    Type = input.ValueType,
@@ -184,7 +184,7 @@ internal sealed class SnapGraphLayout
                     }
                     else
                     {
-                        inputLines.Add(new SnapGraphItem.InputLine
+                        inputLines.Add(new MagGraphItem.InputLine
                                            {
                                                Id = input.Id,
                                                Type = input.ValueType,
@@ -214,14 +214,14 @@ internal sealed class SnapGraphLayout
                     if (outputIndex > 0 && !isConnected)
                         continue;
 
-                    outputLines.Add(new SnapGraphItem.OutputLine
+                    outputLines.Add(new MagGraphItem.OutputLine
                                         {
                                             Output = output,
                                             OutputUi = outputUi,
                                             // IsPrimary = outputIndex == 0,
                                             OutputIndex = outputIndex,
                                             VisibleIndex = outputIndex == 0 ? 0 : visibleIndex,
-                                            ConnectionsOut = new List<SnapGraphConnection>(),
+                                            ConnectionsOut = new List<MagGraphConnection>(),
                                         });
                     if (outputIndex == 0)
                     {
@@ -233,29 +233,29 @@ internal sealed class SnapGraphLayout
                     }
                 }
             }
-            else if (item.Category == SnapGraphItem.Categories.Input)
+            else if (item.Category == MagGraphItem.Categories.Input)
             {
                 if (item.Selectable is IInputUi inputUi)
                 {
                     var input = item.Instance.Inputs.FirstOrDefault(i => i.Id == item.Id);
-                    outputLines.Add(new SnapGraphItem.OutputLine
+                    outputLines.Add(new MagGraphItem.OutputLine
                                         {
                                             Output = input, // This looks confusing but is correct
                                             OutputUi = null,
                                             // IsPrimary =true,
                                             OutputIndex = 0,
                                             VisibleIndex = 0,
-                                            ConnectionsOut = new List<SnapGraphConnection>(),
+                                            ConnectionsOut = new List<MagGraphConnection>(),
                                         });
                     
                 }
             }
-            else if (item.Category == SnapGraphItem.Categories.Output)
+            else if (item.Category == MagGraphItem.Categories.Output)
             {
                 var output = item.Instance.Outputs.FirstOrDefault(o => o.Id == item.Id);
                 if (item.Selectable is IOutputUi outputUi)
                 {
-                    inputLines.Add(new SnapGraphItem.InputLine()
+                    inputLines.Add(new MagGraphItem.InputLine()
                                         {
                                             Type = output.ValueType,
                                             Id = output.Id,
@@ -272,7 +272,7 @@ internal sealed class SnapGraphLayout
             item.OutputLines = outputLines.ToArray();
 
             //var count = Math.Max(1, item.InputLines.Count + item.OutputLines.Count -2);
-            item.Size = new Vector2(SnapGraphItem.Width, SnapGraphItem.LineHeight * (Math.Max(1, visibleIndex)));
+            item.Size = new Vector2(MagGraphItem.Width, MagGraphItem.LineHeight * (Math.Max(1, visibleIndex)));
         }
     }
     
@@ -293,9 +293,9 @@ internal sealed class SnapGraphLayout
                 var targetInput = targetItem2.Instance.Inputs.FirstOrDefault(i => i.Input.InputDefinition.Id == c.TargetSlotId);
                 GetVisibleInputIndex(targetItem2, targetInput, out var targetInputIndex, out var targetMultiInputIndex);
                 
-                var connectionFromSymbolInput = new SnapGraphConnection
+                var connectionFromSymbolInput = new MagGraphConnection
                                               {
-                                                  Style = SnapGraphConnection.ConnectionStyles.Unknown,
+                                                  Style = MagGraphConnection.ConnectionStyles.Unknown,
                                                   SourceItem = symbolInputItem,
                                                   SourceOutput = symbolInput,
                                                   TargetItem = targetItem2,
@@ -339,9 +339,9 @@ internal sealed class SnapGraphLayout
                     outputIndex2 = sourceItem2.OutputLines.Length - 1;
                 }
                 
-                var connectionFromSymbolInput = new SnapGraphConnection
+                var connectionFromSymbolInput = new MagGraphConnection
                                                     {
-                                                        Style = SnapGraphConnection.ConnectionStyles.Unknown,
+                                                        Style = MagGraphConnection.ConnectionStyles.Unknown,
                                                         SourceItem = sourceItem2,
                                                         SourceOutput = symbolOutput,
                                                         TargetItem = symbolOutputItem,
@@ -392,9 +392,9 @@ internal sealed class SnapGraphLayout
                 outputIndex = sourceItem.OutputLines.Length - 1;
             }
 
-            var snapGraphConnection = new SnapGraphConnection
+            var snapGraphConnection = new MagGraphConnection
                                           {
-                                              Style = SnapGraphConnection.ConnectionStyles.Unknown,
+                                              Style = MagGraphConnection.ConnectionStyles.Unknown,
                                               SourceItem = sourceItem,
                                               SourceOutput = output,
                                               TargetItem = targetItem,
@@ -412,7 +412,7 @@ internal sealed class SnapGraphLayout
         }
     }
 
-    private static void GetVisibleInputIndex(SnapGraphItem targetItem, IInputSlot input, out int inputIndex, out int multiInputIndex)
+    private static void GetVisibleInputIndex(MagGraphItem targetItem, IInputSlot input, out int inputIndex, out int multiInputIndex)
     {
         // Find connected index
         inputIndex = 0;
@@ -451,11 +451,11 @@ internal sealed class SnapGraphLayout
                 //sc.InputLineIndex == 0
                 //&& sc.OutputLineIndex == 0
                 MathF.Abs(sourceMax.X - targetMin.X) < 1
-                && MathF.Abs((sourceMin.Y + sc.VisibleOutputIndex* SnapGraphItem.GridSize.Y) 
-                             - (targetMin.Y + sc.InputLineIndex* SnapGraphItem.GridSize.Y)) < 1)
+                && MathF.Abs((sourceMin.Y + sc.VisibleOutputIndex* MagGraphItem.GridSize.Y) 
+                             - (targetMin.Y + sc.InputLineIndex* MagGraphItem.GridSize.Y)) < 1)
             {
-                sc.Style = SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal;
-                var p = new Vector2(sourceMax.X, sourceMin.Y + ( + sc.VisibleOutputIndex + 0.5f) * SnapGraphItem.GridSize.Y);
+                sc.Style = MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal;
+                var p = new Vector2(sourceMax.X, sourceMin.Y + ( + sc.VisibleOutputIndex + 0.5f) * MagGraphItem.GridSize.Y);
                 sc.SourcePos = p;
                 sc.TargetPos = p;
                 continue;
@@ -467,8 +467,8 @@ internal sealed class SnapGraphLayout
                 && MathF.Abs(sourceMin.X - targetMin.X) < 1
                 && MathF.Abs(sourceMax.Y - targetMin.Y) < 1)
             {
-                sc.Style = SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical;
-                var p = new Vector2(sourceMin.X + SnapGraphItem.GridSize.X / 2, targetMin.Y);
+                sc.Style = MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical;
+                var p = new Vector2(sourceMin.X + MagGraphItem.GridSize.X / 2, targetMin.Y);
                 sc.SourcePos = p;
                 sc.TargetPos = p;
                 continue;
@@ -478,11 +478,11 @@ internal sealed class SnapGraphLayout
             if (sc.OutputLineIndex == 0
                 && sc.InputLineIndex > 0
                 && MathF.Abs(sourceMax.X - targetMin.X) < 1
-                && MathF.Abs(sourceMin.Y - (targetMin.Y + sc.VisibleOutputIndex * SnapGraphItem.GridSize.Y)) < 1
+                && MathF.Abs(sourceMin.Y - (targetMin.Y + sc.VisibleOutputIndex * MagGraphItem.GridSize.Y)) < 1
                 )
             {
-                sc.Style = SnapGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal;
-                var p = new Vector2(sourceMax.X, targetMin.Y + (0.5f + sc.InputLineIndex) * SnapGraphItem.GridSize.Y);
+                sc.Style = MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal;
+                var p = new Vector2(sourceMax.X, targetMin.Y + (0.5f + sc.InputLineIndex) * MagGraphItem.GridSize.Y);
                 sc.SourcePos = p;
                 sc.TargetPos = p;
                 continue;
@@ -491,10 +491,10 @@ internal sealed class SnapGraphLayout
             if (sc.OutputLineIndex > 0
                 && sc.InputLineIndex == 0
                 && MathF.Abs(sourceMax.X - targetMin.Y) < 1
-                && MathF.Abs(sourceMax.Y + (1 + sc.SourceItem.OutputLines.Length + sc.VisibleOutputIndex) * SnapGraphItem.GridSize.Y) < 1)
+                && MathF.Abs(sourceMax.Y + (1 + sc.SourceItem.OutputLines.Length + sc.VisibleOutputIndex) * MagGraphItem.GridSize.Y) < 1)
             {
-                sc.Style = SnapGraphConnection.ConnectionStyles.AdditionalOutToMainInputSnappedVertical;
-                var p = new Vector2(sourceMax.X, targetMin.Y + 0.5f * SnapGraphItem.GridSize.Y);
+                sc.Style = MagGraphConnection.ConnectionStyles.AdditionalOutToMainInputSnappedVertical;
+                var p = new Vector2(sourceMax.X, targetMin.Y + 0.5f * MagGraphItem.GridSize.Y);
                 sc.SourcePos = p;
                 sc.TargetPos = p;
                 continue;
@@ -503,11 +503,11 @@ internal sealed class SnapGraphLayout
             if (sc.OutputLineIndex == 0
                 && sc.InputLineIndex == 0
                 && sourceMax.Y < targetMin.Y
-                && MathF.Abs(sourceMin.X - targetMin.X) < SnapGraphItem.GridSize.X / 2)
+                && MathF.Abs(sourceMin.X - targetMin.X) < MagGraphItem.GridSize.X / 2)
             {
-                sc.SourcePos = new Vector2(sourceMin.X + SnapGraphItem.GridSize.X / 2, sourceMax.Y);
-                sc.TargetPos = new Vector2(targetMin.X + SnapGraphItem.GridSize.X / 2, targetMin.Y);
-                sc.Style = SnapGraphConnection.ConnectionStyles.BottomToTop;
+                sc.SourcePos = new Vector2(sourceMin.X + MagGraphItem.GridSize.X / 2, sourceMax.Y);
+                sc.TargetPos = new Vector2(targetMin.X + MagGraphItem.GridSize.X / 2, targetMin.Y);
+                sc.Style = MagGraphConnection.ConnectionStyles.BottomToTop;
                 continue;
             }
             
@@ -527,10 +527,10 @@ internal sealed class SnapGraphLayout
             // }
 
 
-            sc.SourcePos = new Vector2(sourceMax.X, sourceMin.Y + (sc.VisibleOutputIndex + 0.5f) * SnapGraphItem.GridSize.Y);
-            sc.TargetPos = new Vector2(targetMin.X, targetMin.Y + (sc.InputLineIndex + 0.5f) * SnapGraphItem.GridSize.Y);
+            sc.SourcePos = new Vector2(sourceMax.X, sourceMin.Y + (sc.VisibleOutputIndex + 0.5f) * MagGraphItem.GridSize.Y);
+            sc.TargetPos = new Vector2(targetMin.X, targetMin.Y + (sc.InputLineIndex + 0.5f) * MagGraphItem.GridSize.Y);
 
-            sc.Style = SnapGraphConnection.ConnectionStyles.RightToLeft;
+            sc.Style = MagGraphConnection.ConnectionStyles.RightToLeft;
 
             //TODO: Snapped from output
             //TODO: Snapped to input
@@ -557,7 +557,7 @@ internal sealed class SnapGraphLayout
 
     
     //public readonly List<SnapGroup> SnapGroups = new();
-    public readonly Dictionary<Guid, SnapGraphItem> Items = new(127);
-    public readonly List<SnapGraphConnection> SnapConnections = new(127);
+    public readonly Dictionary<Guid, MagGraphItem> Items = new(127);
+    public readonly List<MagGraphConnection> SnapConnections = new(127);
     private int _compositionModelHash;
 }

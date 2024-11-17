@@ -2,7 +2,6 @@
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
@@ -11,15 +10,15 @@ using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
-namespace T3.Editor.Gui.Windows.ResearchCanvas.SnapGraph;
+namespace T3.Editor.Gui.MagGraph.Ui;
 
-internal class SnapGraphCanvas : ScalableCanvas
+internal sealed class MagGraphCanvas : ScalableCanvas
 {
-    public SnapGraphCanvas(ResearchWindow Window, NodeSelection nodeSelection)
+    public MagGraphCanvas(MagGraphWindow Window, NodeSelection nodeSelection)
     {
         _window = Window;
         NodeSelection = nodeSelection;
-        _itemMovement = new SnapItemMovement(this, _snapGraphLayout, nodeSelection);
+        _itemMovement = new MagItemMovement(this, _magGraphLayout, nodeSelection);
         //SelectableNodeMovement = new SelectableNodeMovement(window, this, NodeSelection);
     }
 
@@ -29,7 +28,7 @@ internal class SnapGraphCanvas : ScalableCanvas
         if (_compositionOp == null)
             return;
 
-        _snapGraphLayout.ComputeLayout(_compositionOp);
+        _magGraphLayout.ComputeLayout(_compositionOp);
 
         if (ImGui.Button("Center"))
         {
@@ -43,12 +42,12 @@ internal class SnapGraphCanvas : ScalableCanvas
             HandleFenceSelection(_window.CompositionOp, _selectionFence);
 
         var drawList = ImGui.GetWindowDrawList();
-        foreach (var item in _snapGraphLayout.Items.Values)
+        foreach (var item in _magGraphLayout.Items.Values)
         {
             DrawNode(item, drawList);
         }
 
-        foreach (var connection in _snapGraphLayout.SnapConnections)
+        foreach (var connection in _magGraphLayout.SnapConnections)
         {
             DrawConnection(connection, drawList);
         }
@@ -66,7 +65,7 @@ internal class SnapGraphCanvas : ScalableCanvas
         }
     }
 
-    private void DrawNode(SnapGraphItem item, ImDrawListPtr drawList)
+    private void DrawNode(MagGraphItem item, ImDrawListPtr drawList)
     {
         if (!TypeUiRegistry.TryGetPropertiesForType(item.PrimaryType, out var typeUiProperties))
             return;
@@ -90,10 +89,10 @@ internal class SnapGraphCanvas : ScalableCanvas
                     {
                         switch (c.Style)
                         {
-                            case SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical:
+                            case MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical:
                                 isSnappedVertically = true;
                                 break;
-                            case SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal:
+                            case MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal:
                                 isSnappedHorizontally = true;
                                 break;
                         }
@@ -125,7 +124,7 @@ internal class SnapGraphCanvas : ScalableCanvas
         ImGui.PushFont(Fonts.FontBold);
         var labelSize = ImGui.CalcTextSize(item.ReadableName);
         ImGui.PopFont();
-        var downScale = MathF.Min(1, SnapGraphItem.Width * 0.9f / labelSize.X );
+        var downScale = MathF.Min(1, MagGraphItem.Width * 0.9f / labelSize.X );
 
         drawList.AddText(Fonts.FontBold,
                          Fonts.FontBold.FontSize * downScale * CanvasScale ,
@@ -159,7 +158,7 @@ internal class SnapGraphCanvas : ScalableCanvas
                              pMin
                              + new Vector2(-8, 9) * CanvasScale
                              + new Vector2(0, GridSizeOnScreen.Y * (outputIndex + inputIndex - 1))
-                             + new Vector2(SnapGraphItem.Width * CanvasScale - outputLabelSize.X  * CanvasScale, 0),
+                             + new Vector2(MagGraphItem.Width * CanvasScale - outputLabelSize.X  * CanvasScale, 0),
                              labelColor.Fade(0.7f),
                              outputDefinitionName);
         }
@@ -171,7 +170,7 @@ internal class SnapGraphCanvas : ScalableCanvas
                 continue;
             
             var p = TransformPosition(i.PositionOnCanvas);
-            if (i.Direction == SnapGraphItem.Directions.Vertical)
+            if (i.Direction == MagGraphItem.Directions.Vertical)
             {
                 drawList.AddTriangleFilled(p + new Vector2(-1.5f, 0) * CanvasScale * 1.5f,
                                            p + new Vector2(1.5f, 0) * CanvasScale * 1.5f,
@@ -202,7 +201,7 @@ internal class SnapGraphCanvas : ScalableCanvas
             
             var p = TransformPosition(oa.PositionOnCanvas);
             var color = ColorVariations.OperatorBackground.Apply(type2UiProperties.Color).Fade(0.7f);
-            if (oa.Direction == SnapGraphItem.Directions.Vertical)
+            if (oa.Direction == MagGraphItem.Directions.Vertical)
             {
                 drawList.AddTriangleFilled(p + new Vector2(0, -1) + new Vector2(-1.5f, 0) * CanvasScale * 1.5f,
                                            p + new Vector2(0, -1) + new Vector2(1.5f, 0) * CanvasScale * 1.5f,
@@ -228,9 +227,9 @@ internal class SnapGraphCanvas : ScalableCanvas
         }
     }
 
-    private void DrawConnection(SnapGraphConnection connection, ImDrawListPtr drawList)
+    private void DrawConnection(MagGraphConnection connection, ImDrawListPtr drawList)
     {
-        if (connection.Style == SnapGraphConnection.ConnectionStyles.Unknown)
+        if (connection.Style == MagGraphConnection.ConnectionStyles.Unknown)
             return;
 
         var type = connection.TargetItem.InputLines[connection.InputLineIndex].Type;
@@ -247,20 +246,20 @@ internal class SnapGraphCanvas : ScalableCanvas
         {
             switch (connection.Style)
             {
-                case SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal:
+                case MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal:
                     drawList.AddCircleFilled(sourcePosOnScreen, anchorSize * 1.6f, typeColor, 3);
                     break;
-                case SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical:
+                case MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical:
                     drawList.AddTriangleFilled(
                                                sourcePosOnScreen + new Vector2(-1, -1) * CanvasScale * 4,
                                                sourcePosOnScreen + new Vector2(1, -1) * CanvasScale * 4,
                                                sourcePosOnScreen + new Vector2(0, 1) * CanvasScale * 4,
                                                typeColor);
                     break;
-                case SnapGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal:
+                case MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal:
                     drawList.AddCircleFilled(sourcePosOnScreen, anchorSize * 1.6f, typeColor, 3);
                     break;
-                case SnapGraphConnection.ConnectionStyles.AdditionalOutToMainInputSnappedVertical:
+                case MagGraphConnection.ConnectionStyles.AdditionalOutToMainInputSnappedVertical:
                     drawList.AddCircleFilled(sourcePosOnScreen, anchorSize * 1.6f, Color.Red, 3);
                     break;
             }
@@ -271,7 +270,7 @@ internal class SnapGraphCanvas : ScalableCanvas
 
             switch (connection.Style)
             {
-                case SnapGraphConnection.ConnectionStyles.BottomToTop:
+                case MagGraphConnection.ConnectionStyles.BottomToTop:
                     drawList.AddBezierCubic(sourcePosOnScreen,
                                             sourcePosOnScreen + new Vector2(0, d),
                                             targetPosOnScreen - new Vector2(0, d),
@@ -279,7 +278,7 @@ internal class SnapGraphCanvas : ScalableCanvas
                                             typeColor.Fade(0.6f),
                                             2);
                     break;
-                case SnapGraphConnection.ConnectionStyles.BottomToLeft:
+                case MagGraphConnection.ConnectionStyles.BottomToLeft:
                     drawList.AddBezierCubic(sourcePosOnScreen,
                                             sourcePosOnScreen + new Vector2(0, d),
                                             targetPosOnScreen - new Vector2(d, 0),
@@ -287,7 +286,7 @@ internal class SnapGraphCanvas : ScalableCanvas
                                             typeColor.Fade(0.6f),
                                             2);
                     break;
-                case SnapGraphConnection.ConnectionStyles.RightToTop:
+                case MagGraphConnection.ConnectionStyles.RightToTop:
                     drawList.AddBezierCubic(sourcePosOnScreen,
                                             sourcePosOnScreen + new Vector2(d, 0),
                                             targetPosOnScreen - new Vector2(0, d),
@@ -295,7 +294,7 @@ internal class SnapGraphCanvas : ScalableCanvas
                                             typeColor.Fade(0.6f),
                                             2);
                     break;
-                case SnapGraphConnection.ConnectionStyles.RightToLeft:
+                case MagGraphConnection.ConnectionStyles.RightToLeft:
                     var hoverPositionOnLine = Vector2.Zero;
                     var isHovering = ArcConnection.Draw( Scale,
                                                          new ImRect(sourcePosOnScreen, sourcePosOnScreen + new Vector2(10, 10)),
@@ -322,7 +321,7 @@ internal class SnapGraphCanvas : ScalableCanvas
                     //                         typeColor.Fade(0.6f),
                     //                         2);
                     break;
-                case SnapGraphConnection.ConnectionStyles.Unknown:
+                case MagGraphConnection.ConnectionStyles.Unknown:
                     break;
             }
         }
@@ -369,7 +368,7 @@ internal class SnapGraphCanvas : ScalableCanvas
     private void HandleSelectionFenceUpdate(ImRect bounds, Instance compositionOp, SelectionFence.SelectModes selectMode)
     {
         var boundsInCanvas = InverseTransformRect(bounds);
-        var itemsInFence = (from child in _snapGraphLayout.Items.Values
+        var itemsInFence = (from child in _magGraphLayout.Items.Values
                             let rect = new ImRect(child.PosOnCanvas, child.PosOnCanvas + child.Size)
                             where rect.Overlaps(boundsInCanvas)
                             select child).ToList();
@@ -387,7 +386,7 @@ internal class SnapGraphCanvas : ScalableCanvas
             }
             else
             {
-                if (item.Category == SnapGraphItem.Categories.Operator)
+                if (item.Category == MagGraphItem.Categories.Operator)
                 {
                     NodeSelection.AddSelection(item, item.Instance);
                 }
@@ -402,7 +401,7 @@ internal class SnapGraphCanvas : ScalableCanvas
     private void CenterView()
     {
         var visibleArea = new ImRect();
-        foreach (var item in _snapGraphLayout.Items.Values)
+        foreach (var item in _magGraphLayout.Items.Values)
         {
             visibleArea.Add(item.PosOnCanvas);
         }
@@ -410,15 +409,15 @@ internal class SnapGraphCanvas : ScalableCanvas
         FitAreaOnCanvas(visibleArea);
     }
 
-    private readonly SnapItemMovement _itemMovement;
+    private readonly MagItemMovement _itemMovement;
 
-    private readonly SnapGraphLayout _snapGraphLayout = new();
+    private readonly MagGraphLayout _magGraphLayout = new();
 
-    private readonly ResearchWindow _window;
+    private readonly MagGraphWindow _window;
     internal readonly NodeSelection NodeSelection;
     private Instance _compositionOp;
     private readonly SelectionFence _selectionFence = new();
-    private Vector2 GridSizeOnScreen => TransformDirection(SnapGraphItem.GridSize);
+    private Vector2 GridSizeOnScreen => TransformDirection(MagGraphItem.GridSize);
     private float CanvasScale => Scale.X;
     private static bool ShowDebug => ImGui.GetIO().KeyCtrl;
 }

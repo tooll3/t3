@@ -9,9 +9,9 @@ using T3.Editor.UiModel;
 
 // ReSharper disable UseWithExpressionToCopyStruct
 
-namespace T3.Editor.Gui.Windows.ResearchCanvas.SnapGraph;
+namespace T3.Editor.Gui.MagGraph.Ui;
 
-internal sealed class SnapGraphItem : ISelectableCanvasObject
+internal sealed class MagGraphItem : ISelectableCanvasObject
 {
     public enum Categories
     {
@@ -27,7 +27,7 @@ internal sealed class SnapGraphItem : ISelectableCanvasObject
     public Vector2 PosOnCanvas { get => Selectable.PosOnCanvas; set => Selectable.PosOnCanvas = value; }
     public Vector2 Size { get; set; }
     //public bool IsSelected => NodeSelection.IsNodeSelected(this);
-    public SnapGroup SnapGroup;
+    public MagGroup MagGroup;
     public float UnitHeight => InputLines.Length + OutputLines.Length + 1;
 
     public override string ToString()
@@ -66,7 +66,7 @@ internal sealed class SnapGraphItem : ISelectableCanvasObject
         public IInputUi InputUi;
         //public bool IsPrimary;
         public int VisibleIndex;
-        public SnapGraphConnection ConnectionIn;
+        public MagGraphConnection ConnectionIn;
         public int MultiInputIndex;
     }
 
@@ -78,7 +78,7 @@ internal sealed class SnapGraphItem : ISelectableCanvasObject
         //public bool IsPrimary;
         public int VisibleIndex;
         public int OutputIndex;
-        public List<SnapGraphConnection> ConnectionsOut;
+        public List<MagGraphConnection> ConnectionsOut;
     }
 
     public struct AnchorPoint
@@ -104,7 +104,7 @@ internal sealed class SnapGraphItem : ISelectableCanvasObject
 
     public ImRect Area => ImRect.RectWithSize(PosOnCanvas, Size);
 
-    public static ImRect GetGroupBoundingBox(IEnumerable<SnapGraphItem> items)
+    public static ImRect GetGroupBoundingBox(IEnumerable<MagGraphItem> items)
     {
         ImRect extend = default;
         var index2 = 0;
@@ -202,7 +202,7 @@ internal sealed class SnapGraphItem : ISelectableCanvasObject
     }
 
     /** Assume as free (I.e. not connected) unless on connection is snapped, then return this connection has hash. */
-    private static int GetSnappedConnectionHash(List<SnapGraphConnection> snapGraphConnections)
+    private static int GetSnappedConnectionHash(List<MagGraphConnection> snapGraphConnections)
     {
         foreach (var sc in snapGraphConnections)
         {
@@ -251,7 +251,7 @@ internal sealed class SnapGraphItem : ISelectableCanvasObject
 
     public void Select(NodeSelection nodeSelection)
     {
-        if (Category == SnapGraphItem.Categories.Operator)
+        if (Category == MagGraphItem.Categories.Operator)
         {
             //nodeSelection.SetSelectionToChildUi(this, Instance);
             nodeSelection.SetSelection(this, Instance);

@@ -1,16 +1,15 @@
-﻿using System.Numerics;
-using T3.Core.Operator.Slots;
+﻿using T3.Core.Operator.Slots;
 
-namespace T3.Editor.Gui.Windows.ResearchCanvas.SnapGraph;
+namespace T3.Editor.Gui.MagGraph.Ui;
 
-internal class SnapGraphConnection
+internal sealed class MagGraphConnection
 {
     public ConnectionStyles Style;
     public Vector2 SourcePos;
     public Vector2 TargetPos;
     
-    public SnapGraphItem SourceItem;
-    public SnapGraphItem TargetItem;
+    public MagGraphItem SourceItem;
+    public MagGraphItem TargetItem;
     public ISlot SourceOutput;
     
     //public IInputSlot TargetInput;

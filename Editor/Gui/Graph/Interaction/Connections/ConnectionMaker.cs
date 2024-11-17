@@ -19,7 +19,7 @@ internal static class ConnectionMaker
 {
     private static readonly Dictionary<Window, ConnectionInProgress> InProgress = new();
 
-    private class ConnectionInProgress
+    private sealed class ConnectionInProgress
     {
         public readonly List<TempConnection> TempConnections = new();
         public MacroCommand? Command = null;
@@ -43,7 +43,7 @@ internal static class ConnectionMaker
     {
         InProgress.Add(window, new ConnectionInProgress());
     }
-        
+
     public static void RemoveWindow(GraphWindow window)
     {
         InProgress.Remove(window);
@@ -109,7 +109,7 @@ internal static class ConnectionMaker
             //if (selectedSymbolChildUis.Count > 1)
         {
             selectedSymbolChildUis.Reverse();
-                
+
             // add temp connections for all selected nodes that have the same primary output type
             foreach (var selectedChild in selectedSymbolChildUis)
             {
@@ -117,9 +117,10 @@ internal static class ConnectionMaker
                 if (outputDefinitions.Count == 0)
                     continue;
 
-                var firstOutput = selectedChild == sourceUi ? outputDef 
-                                      :    outputDefinitions[0];
-                if(firstOutput.ValueType != outputDef.ValueType)
+                var firstOutput = selectedChild == sourceUi
+                                      ? outputDef
+                                      : outputDefinitions[0];
+                if (firstOutput.ValueType != outputDef.ValueType)
                     continue;
 
                 inProgress.TempConnections.Add(new TempConnection(
@@ -142,8 +143,8 @@ internal static class ConnectionMaker
         }
     }
 
-
-    public static void StartFromInputSlot(GraphWindow window, Symbol parentSymbol, SymbolUi.Child targetUi, Symbol.InputDefinition inputDef, int multiInputIndex = 0)
+    public static void StartFromInputSlot(GraphWindow window, Symbol parentSymbol, SymbolUi.Child targetUi, Symbol.InputDefinition inputDef,
+                                          int multiInputIndex = 0)
     {
         var existingConnection = FindConnectionToInputSlot(parentSymbol, targetUi, inputDef, multiInputIndex);
         var inProgress = InProgress[window];
@@ -192,7 +193,7 @@ internal static class ConnectionMaker
                                                                     && c.TargetSlotId == outputDef.Id);
 
         var inProgressCommand = inProgress.Command;
-            
+
         if (existingConnection != null)
         {
             inProgressCommand.AddAndExecCommand(new DeleteConnectionCommand(parentSymbol, existingConnection, 0));
@@ -215,7 +216,7 @@ internal static class ConnectionMaker
             inProgress.IsDisconnectingFromInput = false;
         }
     }
-        
+
     public static void StartOperation(GraphWindow window, string commandName) => StartOperation(InProgress[window], commandName);
 
     private static void StartOperation(ConnectionInProgress inProgress, string commandName)
@@ -227,10 +228,10 @@ internal static class ConnectionMaker
 
         inProgress.Command = new MacroCommand(commandName);
     }
-        
-    public static void CompleteOperation(GraphWindow window, List<ICommand> doneCommands = null, string newCommandTitle = null) 
+
+    public static void CompleteOperation(GraphWindow window, List<ICommand> doneCommands = null, string newCommandTitle = null)
         => CompleteOperation(InProgress[window], doneCommands, newCommandTitle);
-        
+
     private static void CompleteOperation(ConnectionInProgress inProgress, List<ICommand> doneCommands = null, string newCommandTitle = null)
     {
         var inProgressCommand = inProgress.Command;
@@ -240,7 +241,7 @@ internal static class ConnectionMaker
             StartOperation(inProgress, "Temp op");
             inProgressCommand = inProgress.Command;
         }
-            
+
         if (doneCommands != null)
         {
             foreach (var c in doneCommands)
@@ -253,7 +254,7 @@ internal static class ConnectionMaker
         {
             inProgressCommand!.Name = newCommandTitle;
         }
-            
+
         UndoRedoStack.Add(inProgressCommand);
         Reset(inProgress);
     }
@@ -265,7 +266,7 @@ internal static class ConnectionMaker
         inProgress.Command?.Undo();
         Reset(inProgress);
     }
-        
+
     private static void Reset(ConnectionInProgress inProgress)
     {
         inProgress.Reset();
@@ -319,8 +320,8 @@ internal static class ConnectionMaker
 
             pos.X -= offset;
             childUi.PosOnCanvas = pos;
-
         }
+
         command.StoreCurrentValues();
 
         inProgressCommand.AddExecutedCommandForUndo(command);
@@ -354,13 +355,14 @@ internal static class ConnectionMaker
         }
     }
 
-    public static void CompleteAtInputSlot(GraphWindow window, Instance childInstance, SymbolUi.Child targetUi, Symbol.InputDefinition input, int multiInputIndex = 0,
+    public static void CompleteAtInputSlot(GraphWindow window, Instance childInstance, SymbolUi.Child targetUi, Symbol.InputDefinition input,
+                                           int multiInputIndex = 0,
                                            bool insertMultiInput = false)
     {
         var inProgress = InProgress[window];
         var connectionList = inProgress.TempConnections;
         var symbolInstance = childInstance.Parent;
-            
+
         var sourceId = connectionList[0].SourceParentOrChildId;
         if (sourceId != Guid.Empty) // empty if coming from the parent input slots
         {
@@ -423,12 +425,13 @@ internal static class ConnectionMaker
         {
             var connectionToRemove = allConnectionsToSlot[multiInputIndex];
             var deleteCommand = new DeleteConnectionCommand(symbol, connectionToRemove, multiInputIndex);
-                
+
             inProgressCommand.AddAndExecCommand(deleteCommand);
             foreach (var addCommand in addCommands)
             {
                 inProgressCommand.AddAndExecCommand(addCommand);
             }
+
             inProgressCommand.Name = $"Reconnect to {targetUi.SymbolChild.ReadableName}.{input.Name}";
         }
         else
@@ -438,7 +441,7 @@ internal static class ConnectionMaker
                 inProgressCommand.AddAndExecCommand(addCommand);
             }
         }
-            
+
         CompleteOperation(inProgress);
     }
 
@@ -450,7 +453,7 @@ internal static class ConnectionMaker
         {
             Structure.CollectSlotDependencies(inputSlot, deps);
         }
-            
+
         var inProgress = InProgress[window];
         var connectionList = inProgress.TempConnections;
 
@@ -469,13 +472,12 @@ internal static class ConnectionMaker
                                                   sourceSlotId: output.Id,
                                                   targetParentOrChildId: connectionList[0].TargetParentOrChildId,
                                                   targetSlotId: connectionList[0].TargetSlotId);
-            
+
         inProgress.Command.AddAndExecCommand(new AddConnectionCommand(sourceInstance.Parent.Symbol, newConnection, 0));
         CompleteOperation(inProgress);
     }
 
     #region related to SymbolBrowser
-        
     /// <remarks>
     /// Assumes that a temp connection has be created earlier and is now dropped on the background
     /// </remarks>
@@ -491,7 +493,7 @@ internal static class ConnectionMaker
             CompleteOperation(inProgress);
             return;
         }
-            
+
         var symbolBrowser = window.SymbolBrowser;
 
         var firstConnectionType = connectionList[0].ConnectionType;
@@ -546,7 +548,6 @@ internal static class ConnectionMaker
             AbortOperation(inProgress);
         }
     }
-        
 
     public static void OpenSymbolBrowserAtOutput(GraphWindow window, SymbolUi.Child childUi, Instance instance,
                                                  Guid outputId)
@@ -554,7 +555,7 @@ internal static class ConnectionMaker
         var primaryOutput = instance.Outputs.SingleOrDefault(o => o.Id == outputId);
         if (primaryOutput == null)
             return;
-            
+
         var connectionList = InProgress[window];
         StartOperation(connectionList, "Insert Operator");
         InsertSymbolBrowser(window, childUi, instance, primaryOutput);
@@ -569,20 +570,18 @@ internal static class ConnectionMaker
             return;
         }
 
-
         var parentUi = instance.Parent.GetSymbolUi();
 
         if (!parentUi.ChildUis.TryGetValue(instance.SymbolChildId, out var symbolChildUi))
         {
             return;
         }
-            
-            
+
         if (instance.Outputs.Count < 1)
             return;
-            
+
         var posOnCanvas = symbolChildUi.PosOnCanvas;
-            
+
         var primaryOutput = instance.Outputs[0];
         var inProgress = InProgress[window];
         StartOperation(inProgress, "Insert Operator");
@@ -615,9 +614,9 @@ internal static class ConnectionMaker
         }
         else
         {
-            posOnCanvas.X += SymbolUi.Child.DefaultOpSize.X +  SelectableNodeMovement.SnapPadding.X;
+            posOnCanvas.X += SymbolUi.Child.DefaultOpSize.X + SelectableNodeMovement.SnapPadding.X;
         }
-            
+
         var commandsForUndo = new List<ICommand>();
         var parent = instance.Parent;
         var parentSymbol = parent.Symbol;
@@ -634,11 +633,11 @@ internal static class ConnectionMaker
             Log.Warning("Unable to create new operator");
             return;
         }
-            
+
         var newInstance = instance.Parent.Children[newChildUi.Id];
 
         selection.SetSelection(newChildUi, newInstance);
-            
+
         foreach (var c in connectionList)
         {
             switch (c.GetStatus())
@@ -650,7 +649,6 @@ internal static class ConnectionMaker
                         Log.Error("Failed to find matching output connection type " + c.ConnectionType);
                         continue;
                     }
-                        
 
                     var newConnectionToSource = new Symbol.Connection(sourceParentOrChildId: newSymbolChild.Id,
                                                                       sourceSlotId: outputDef.Id,
@@ -683,15 +681,15 @@ internal static class ConnectionMaker
         CompleteOperation(inProgress, commandsForUndo, "Insert Op " + newChildUi.SymbolChild.ReadableName);
         ParameterPopUp.NodeIdRequestedForParameterWindowActivation = newSymbolChild.Id;
     }
-        
+
     public static void OpenBrowserWithSingleSelection(GraphWindow window, SymbolUi.Child childUi, Instance instance)
     {
         if (instance.Outputs.Count < 1)
             return;
-            
+
         //StartOperation("Insert Operator");
         var primaryOutput = instance.Outputs[0];
-            
+
         InsertSymbolBrowser(window, childUi, instance, primaryOutput);
     }
 
@@ -699,7 +697,7 @@ internal static class ConnectionMaker
     {
         var inProgress = InProgress[window];
         StartOperation(inProgress, "Insert Operator");
-            
+
         var connections = instance.Parent.Symbol.Connections.FindAll(connection => connection.SourceParentOrChildId == instance.SymbolChildId
                                                                                    && connection.SourceSlotId == primaryOutput.Id);
 
@@ -711,7 +709,6 @@ internal static class ConnectionMaker
                                               targetSlotId: NotConnectedId,
                                               primaryOutput.ValueType));
 
-            
         Type filterOutputType = null;
         if (connections.Count > 0)
         {
@@ -719,14 +716,15 @@ internal static class ConnectionMaker
             if (mainConnection.IsConnectedToSymbolOutput)
             {
                 var compUi = instance.Parent.GetSymbolUi();
-                    
-                if(compUi.OutputUis.TryGetValue(mainConnection.TargetSlotId, out var outputUi))
+
+                if (compUi.OutputUis.TryGetValue(mainConnection.TargetSlotId, out var outputUi))
                 {
-                    var moveCommand = new ModifyCanvasElementsCommand(compUi, new List<ISelectableCanvasObject>() {outputUi}, window.GraphCanvas.NodeSelection);
+                    var moveCommand =
+                        new ModifyCanvasElementsCommand(compUi, new List<ISelectableCanvasObject>() { outputUi }, window.GraphCanvas.NodeSelection);
                     outputUi.PosOnCanvas += new Vector2(SymbolUi.Child.DefaultOpSize.X, 0);
                     moveCommand.StoreCurrentValues();
                     inProgress.Command.AddAndExecCommand(moveCommand);
-                }                    
+                }
             }
             else
             {
@@ -765,9 +763,9 @@ internal static class ConnectionMaker
             Log.Debug("Splitting connections from inputs is not implemented yet");
             return;
         }
-            
+
         var inProgress = InProgress[window];
-            
+
         StartOperation(inProgress, "Split connection with new Operator");
 
         // Todo: Fix me for output nodes
@@ -780,7 +778,7 @@ internal static class ConnectionMaker
 
         AdjustGraphLayoutForNewNode(inProgress.Command, parentSymbol, connection, window.GraphCanvas.NodeSelection);
         inProgress.Command.AddAndExecCommand(new DeleteConnectionCommand(parentSymbol, connection, multiInputIndex));
-            
+
         var connectionList = inProgress.TempConnections;
         connectionList.Clear();
         var connectionType = inputDef.DefaultValue.ValueType;
@@ -806,7 +804,7 @@ internal static class ConnectionMaker
     internal static bool IsTargetInvalid(GraphWindow window, Type type)
     {
         var connectionList = InProgress[window].TempConnections;
-        return T3Ui.IsAnyPopupOpen 
+        return T3Ui.IsAnyPopupOpen
                || connectionList == null
                || connectionList.Count == 0
                || connectionList.All(c => c.ConnectionType != type);
@@ -814,16 +812,16 @@ internal static class ConnectionMaker
 
     public static void SplitConnectionWithDraggedNode(GraphWindow window, SymbolUi.Child childUi, Symbol.Connection oldConnection, Instance instance,
                                                       ModifyCanvasElementsCommand moveCommand, NodeSelection selection)
-    { 
+    {
         var inProgress = InProgress[window];
         StartOperation(inProgress, $"Split connection with {childUi.SymbolChild.ReadableName}");
-            
+
         var inProgressCommand = inProgress.Command;
         inProgressCommand.AddExecutedCommandForUndo(moveCommand); // FIXME: this will break consistency check 
-            
+
         var parent = instance.Parent;
         var siblingDict = parent.Children;
-        if (!siblingDict.TryGetValue(oldConnection.SourceParentOrChildId, out var sourceInstance) 
+        if (!siblingDict.TryGetValue(oldConnection.SourceParentOrChildId, out var sourceInstance)
             || !siblingDict.TryGetValue(oldConnection.TargetParentOrChildId, out var targetInstance))
         {
             Log.Warning("Can't split this connection");
@@ -899,7 +897,7 @@ internal static class ConnectionMaker
         //StartOperation("Insert Node");
         //var macroCommand = new MacroCommand("Insert node");
         var inProgress = InProgress[window];
-            
+
         foreach (var c in inProgress.TempConnections)
         {
             var newConnection = new Symbol.Connection(sourceParentOrChildId: UseSymbolContainerId,
@@ -912,7 +910,6 @@ internal static class ConnectionMaker
         //UndoRedoStack.AddAndExecute(macroCommand);
         //Reset();
         CompleteOperation(inProgress);
-            
     }
 
     public static void CompleteAtSymbolOutputNode(GraphWindow window, Symbol parentSymbol, Symbol.OutputDefinition outputDef)
@@ -929,9 +926,9 @@ internal static class ConnectionMaker
             added = true;
         }
 
-        if(added)
+        if (added)
             parentSymbol.GetSymbolUi().FlagAsModified();
-            
+
         connectionList.Clear();
         ConnectionSnapEndHelper.ResetSnapping();
     }
@@ -1030,6 +1027,10 @@ internal static class ConnectionMaker
 
     public static IReadOnlyList<TempConnection> GetTempConnectionsFor(Window window)
     {
-        return InProgress[window].TempConnections;
+        return InProgress.TryGetValue(window, out var inProgress)
+                   ? inProgress.TempConnections
+                   : _emptyList;
     }
+
+    private static readonly List<TempConnection> _emptyList = [];
 }
