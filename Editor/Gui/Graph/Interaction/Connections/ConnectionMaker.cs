@@ -4,6 +4,7 @@ using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Selection;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 
@@ -16,7 +17,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections;
 /// </summary>
 internal static class ConnectionMaker
 {
-    private static readonly Dictionary<GraphWindow, ConnectionInProgress> InProgress = new();
+    private static readonly Dictionary<Window, ConnectionInProgress> InProgress = new();
 
     private class ConnectionInProgress
     {
@@ -1027,7 +1028,7 @@ internal static class ConnectionMaker
         return InProgress[window].TempConnections.Count > 0;
     }
 
-    public static IReadOnlyList<TempConnection> GetTempConnectionsFor(GraphWindow window)
+    public static IReadOnlyList<TempConnection> GetTempConnectionsFor(Window window)
     {
         return InProgress[window].TempConnections;
     }
