@@ -45,6 +45,10 @@ internal sealed class MagGraphCanvas : ScalableCanvas
             _graphLayout.ComputeLayout(_compositionOp, forceUpdate: true);
         }
 
+        ImGui.SameLine(0, 5);
+        ImGui.Checkbox("Debug", ref _enableDebug);
+
+        
         //Log.Debug("Updating canvas...");
         UpdateCanvas(out _);
         var drawList = ImGui.GetWindowDrawList();
@@ -269,13 +273,14 @@ internal sealed class MagGraphCanvas : ScalableCanvas
                                            ColorVariations.OperatorOutline.Apply(type2UiProperties.Color));
             }
 
-            if (ShowDebug)
-            {
-                ImGui.SetCursorScreenPos(TransformPosition(i.PositionOnCanvas));
-                ImGui.Button("##" + i.GetHashCode());
-                if (ImGui.IsItemHovered())
-                    ImGui.SetTooltip("hash:" + i.ConnectionHash);
-            }
+            ShowAnchorPointDebugs(i);
+            // if (ShowDebug)
+            // {
+            //     ImGui.SetCursorScreenPos(TransformPosition(i.PositionOnCanvas));
+            //     ImGui.Button("##" + i.GetHashCode());
+            //     if (ImGui.IsItemHovered())
+            //         ImGui.SetTooltip("hash:" + i.ConnectionHash);
+            // }
         }
 
         // Draw output sockets
@@ -301,14 +306,21 @@ internal sealed class MagGraphCanvas : ScalableCanvas
                                            color);
             }
 
-            if (ShowDebug)
-            {
-                ImGui.SetCursorScreenPos(TransformPosition(oa.PositionOnCanvas));
-                ImGui.Button("##" + oa.GetHashCode());
-                if (ImGui.IsItemHovered())
-                    ImGui.SetTooltip("hash:" + oa.ConnectionHash);
-            }
-            //drawList.AddCircle(TransformPosition(i.PositionOnCanvas), 3, type2UiProperties.Color, 4);
+            ShowAnchorPointDebugs(oa);
+        }
+    }
+
+    private void ShowAnchorPointDebugs(MagGraphItem.AnchorPoint oa)
+    {
+        if (ShowDebug && !ImGui.IsMouseDown(ImGuiMouseButton.Left))
+        {
+            ImGui.PushFont(Fonts.FontSmall);
+            ImGui.SetCursorScreenPos(TransformPosition(oa.PositionOnCanvas) - Vector2.One * ImGui.GetFrameHeight()/2);
+            ImGui.Button("?##" + oa.GetHashCode());
+            if (ImGui.IsItemHovered())
+                ImGui.SetTooltip("hash:" + oa.ConnectionHash);
+            
+            ImGui.PopFont();
         }
     }
 
@@ -509,5 +521,6 @@ internal sealed class MagGraphCanvas : ScalableCanvas
     private readonly SelectionFence _selectionFence = new();
     private Vector2 GridSizeOnScreen => TransformDirection(MagGraphItem.GridSize);
     private float CanvasScale => Scale.X;
-    private static bool ShowDebug => ImGui.GetIO().KeyCtrl;
+    public bool ShowDebug => ImGui.GetIO().KeyCtrl || _enableDebug;
+    private bool _enableDebug;
 }

@@ -10,7 +10,9 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Selection;
+using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
@@ -92,7 +94,7 @@ internal sealed class MagItemMovement
         else if (isActiveNode && ImGui.IsMouseDown(ImGuiMouseButton.Left) && _modifyCommand != null)
         {
             // TODO: Implement shake disconnect later
-            HandleNodeDragging(canvas, composition);
+            HandleSnappedDragging(canvas, composition);
         }
         else if (isActiveNode && ImGui.IsMouseReleased(0) && _modifyCommand != null)
         {
@@ -192,7 +194,7 @@ internal sealed class MagItemMovement
         UpdateDragConnectionOnStart(draggedNodes);
     }
 
-    private void HandleNodeDragging(ICanvas canvas, Instance composition)
+    private void HandleSnappedDragging(ICanvas canvas, Instance composition)
     {
         var dl = ImGui.GetWindowDrawList();
         if (!ImGui.IsMouseDragging(ImGuiMouseButton.Left))
@@ -226,14 +228,13 @@ internal sealed class MagItemMovement
             _isDragging = true;
         }
 
-        var showDebug = ImGui.GetIO().KeyCtrl;
         var mousePosOnCanvas = canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
         var requestedDeltaOnCanvas = mousePosOnCanvas - _dragStartPosInOpOnCanvas;
 
         var dragExtend = MagGraphItem.GetItemSetBounds(_draggedNodes);
         dragExtend.Expand(SnapThreshold * canvas.Scale.X);
 
-        if (showDebug)
+        if (_canvas.ShowDebug)
         {
             dl.AddCircle(_canvas.TransformPosition(_dragStartPosInOpOnCanvas), 10, Color.Blue);
 
@@ -269,8 +270,21 @@ internal sealed class MagItemMovement
         {
             foreach (var draggedItem in _draggedNodes)
             {
-                snapping.TestForSnap(otherItem, draggedItem, false);
-                snapping.TestForSnap(draggedItem, otherItem, true);
+                snapping.TestItemsForSnap(otherItem, draggedItem, false, _canvas);
+                snapping.TestItemsForSnap(draggedItem, otherItem, true, _canvas);
+            }
+        }
+        
+        // Highlight best distance
+        if (_canvas.ShowDebug)
+        {
+            if (snapping.BestDistance < 500)
+            {
+                var p1 = _canvas.TransformPosition(snapping.OutAnchorPos);
+                var p2 = _canvas.TransformPosition(snapping.InputAnchorPos);
+                dl.AddCircle(p1, 5, Color.Red);
+                dl.AddCircle(p2, 5, Color.Red);
+                dl.AddLine(p1,p2, UiColors.StatusAttention);
             }
         }
 
@@ -333,8 +347,11 @@ internal sealed class MagItemMovement
         public Vector2 InputAnchorPos;
         public bool Reverse;
 
-        public void TestForSnap(MagGraphItem a, MagGraphItem b, bool revert)
+        public void TestItemsForSnap(MagGraphItem a, MagGraphItem b, bool revert, MagGraphCanvas canvas)
         {
+            // if (a.PrimaryType != b.PrimaryType)
+            //     return;
+            
             MultiInputIndex = 0;
             for (var bInputLineIndex = 0; bInputLineIndex < b.InputLines.Length; bInputLineIndex++)
             {
@@ -353,6 +370,7 @@ internal sealed class MagItemMovement
                         var outPos = new Vector2(a.Area.Min.X + MagGraphItem.WidthHalf, a.Area.Max.Y);
                         var inPos = new Vector2(b.Area.Min.X + MagGraphItem.WidthHalf, b.Area.Min.Y);
 
+
                         if (inConnection != null)
                         {
                             foreach (var c in ol.ConnectionsOut)
@@ -360,6 +378,14 @@ internal sealed class MagItemMovement
                                 if (c != inConnection)
                                     continue;
 
+                                if (canvas.ShowDebug)
+                                {
+                                    var drawList = ImGui.GetForegroundDrawList();
+                                    drawList.AddLine(canvas.TransformPosition( outPos), 
+                                                     canvas.TransformPosition(inPos), 
+                                                     UiColors.ForegroundFull.Fade(0.4f));  
+                                }
+                                
                                 if (TestAndKeepPositionsForSnapping(outPos, inPos))
                                 {
                                     Direction = MagGraphItem.Directions.Vertical;
@@ -388,10 +414,18 @@ internal sealed class MagItemMovement
                     }
 
                     // // A -> B horizontally
-                    {
+                    else {
                         var outPos = new Vector2(a.Area.Max.X, a.Area.Min.Y + (0.5f + ol.VisibleIndex) * MagGraphItem.LineHeight);
                         var inPos = new Vector2(b.Area.Min.X, b.Area.Min.Y + (0.5f + bInputLine.VisibleIndex) * MagGraphItem.LineHeight);
 
+                        if (canvas.ShowDebug)
+                        {
+                            var drawList = ImGui.GetForegroundDrawList();
+                            drawList.AddLine(canvas.TransformPosition( outPos), 
+                                             canvas.TransformPosition(inPos), 
+                                             UiColors.StatusAttention.Fade(0.2f));  
+                        }
+                        
                         if (TestAndKeepPositionsForSnapping(outPos, inPos))
                         {
                             Direction = MagGraphItem.Directions.Horizontal;
@@ -464,7 +498,7 @@ internal sealed class MagItemMovement
 
     private Vector2 _lastAppliedOffset;
 
-    private const float SnapThreshold = 10;
+    private const float SnapThreshold = 30;
     private readonly List<MagGraphConnection> _bridgeConnectionsOnStart = [];
 
     private MagGraphItem? _longTapItem;
