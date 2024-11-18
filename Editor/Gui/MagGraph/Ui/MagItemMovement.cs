@@ -282,9 +282,9 @@ internal sealed class MagItemMovement
             {
                 var p1 = _canvas.TransformPosition(snapping.OutAnchorPos);
                 var p2 = _canvas.TransformPosition(snapping.InputAnchorPos);
-                dl.AddCircle(p1, 5, Color.Red);
-                dl.AddCircle(p2, 5, Color.Red);
-                dl.AddLine(p1,p2, UiColors.StatusAttention);
+                // dl.AddCircle(p1, 5, Color.Red);
+                // dl.AddCircle(p2, 5, Color.Red);
+                dl.AddLine(p1,p2, UiColors.ForegroundFull.Fade(0.1f),6);
             }
         }
 
@@ -350,7 +350,7 @@ internal sealed class MagItemMovement
         public void TestItemsForSnap(MagGraphItem a, MagGraphItem b, bool revert, MagGraphCanvas canvas)
         {
             // if (a.PrimaryType != b.PrimaryType)
-            //     return;
+            //      return;
             
             MultiInputIndex = 0;
             for (var bInputLineIndex = 0; bInputLineIndex < b.InputLines.Length; bInputLineIndex++)
@@ -361,30 +361,25 @@ internal sealed class MagItemMovement
                 for (var aOutLineIndex = 0; aOutLineIndex < a.OutputLines.Length; aOutLineIndex++)
                 {
                     ref var ol = ref a.OutputLines[aOutLineIndex];
+                    if(bInputLine.Type != ol.Output.ValueType)
+                        continue;
 
                     // A -> B vertical
                     if (aOutLineIndex == 0 && bInputLineIndex == 0)
                     {
-                        // If input is connected the only valid output is the one with the connection line
-
                         var outPos = new Vector2(a.Area.Min.X + MagGraphItem.WidthHalf, a.Area.Max.Y);
                         var inPos = new Vector2(b.Area.Min.X + MagGraphItem.WidthHalf, b.Area.Min.Y);
-
-
+                    
+                    
+                        // If input is connected the only valid output is the one with the connection line
                         if (inConnection != null)
                         {
                             foreach (var c in ol.ConnectionsOut)
                             {
                                 if (c != inConnection)
                                     continue;
-
-                                if (canvas.ShowDebug)
-                                {
-                                    var drawList = ImGui.GetForegroundDrawList();
-                                    drawList.AddLine(canvas.TransformPosition( outPos), 
-                                                     canvas.TransformPosition(inPos), 
-                                                     UiColors.ForegroundFull.Fade(0.4f));  
-                                }
+                                
+                                ShowDebugLine(outPos, inPos, a.PrimaryType);
                                 
                                 if (TestAndKeepPositionsForSnapping(outPos, inPos))
                                 {
@@ -400,6 +395,8 @@ internal sealed class MagItemMovement
                         }
                         else
                         {
+                            ShowDebugLine(outPos, inPos, a.PrimaryType);
+                            
                             if (TestAndKeepPositionsForSnapping(outPos, inPos))
                             {
                                 Direction = MagGraphItem.Directions.Vertical;
@@ -414,18 +411,37 @@ internal sealed class MagItemMovement
                     }
 
                     // // A -> B horizontally
-                    else {
+                    if(ol.Output.ValueType == bInputLine.Input.ValueType) 
+                    {
                         var outPos = new Vector2(a.Area.Max.X, a.Area.Min.Y + (0.5f + ol.VisibleIndex) * MagGraphItem.LineHeight);
                         var inPos = new Vector2(b.Area.Min.X, b.Area.Min.Y + (0.5f + bInputLine.VisibleIndex) * MagGraphItem.LineHeight);
 
-                        if (canvas.ShowDebug)
+
+                        if (inConnection != null)
                         {
-                            var drawList = ImGui.GetForegroundDrawList();
-                            drawList.AddLine(canvas.TransformPosition( outPos), 
-                                             canvas.TransformPosition(inPos), 
-                                             UiColors.StatusAttention.Fade(0.2f));  
+                            foreach (var c in ol.ConnectionsOut)
+                            {
+                                if (c != inConnection)
+                                    continue;
+                                
+                                ShowDebugLine(outPos, inPos, a.PrimaryType);
+                                
+                                if (TestAndKeepPositionsForSnapping(outPos, inPos))
+                                {
+                                    Direction = MagGraphItem.Directions.Horizontal;
+                                    OutLineIndex = aOutLineIndex;
+                                    InputLineIndex = bInputLineIndex;
+                                    MultiInputIndex = bInputLine.MultiInputIndex;
+                                    BestA = a;
+                                    BestB = b;
+                                    Reverse = revert;
+                                }
+                            }
                         }
-                        
+                        else
+                        {
+                            ShowDebugLine(outPos, inPos, a.PrimaryType);
+
                         if (TestAndKeepPositionsForSnapping(outPos, inPos))
                         {
                             Direction = MagGraphItem.Directions.Horizontal;
@@ -436,11 +452,27 @@ internal sealed class MagItemMovement
                             BestB = b;
                             Reverse = revert;
                         }
+                        }
                     }
                 }
             }
 
             Direction = MagGraphItem.Directions.Horizontal;
+            return;
+
+            void ShowDebugLine(Vector2 outPos, Vector2 inPos, Type connectionType)
+            {
+                if (!canvas.ShowDebug)
+                    return;
+                
+                var drawList = ImGui.GetForegroundDrawList();
+                var uiPrimaryColor = TypeUiRegistry.GetPropertiesForType(connectionType).Color;
+                drawList.AddLine(canvas.TransformPosition( outPos), 
+                                 canvas.TransformPosition(inPos), 
+                                 uiPrimaryColor.Fade(0.4f));
+                
+                drawList.AddCircleFilled(canvas.TransformPosition(inPos), 6, uiPrimaryColor.Fade(0.4f));
+            }
         }
 
         private bool TestAndKeepPositionsForSnapping(Vector2 outPos, Vector2 inputPos)

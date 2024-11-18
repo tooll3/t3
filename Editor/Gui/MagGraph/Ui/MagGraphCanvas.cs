@@ -273,14 +273,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
                                            ColorVariations.OperatorOutline.Apply(type2UiProperties.Color));
             }
 
-            ShowAnchorPointDebugs(i);
-            // if (ShowDebug)
-            // {
-            //     ImGui.SetCursorScreenPos(TransformPosition(i.PositionOnCanvas));
-            //     ImGui.Button("##" + i.GetHashCode());
-            //     if (ImGui.IsItemHovered())
-            //         ImGui.SetTooltip("hash:" + i.ConnectionHash);
-            // }
+            ShowAnchorPointDebugs(i, true);
         }
 
         // Draw output sockets
@@ -310,18 +303,31 @@ internal sealed class MagGraphCanvas : ScalableCanvas
         }
     }
 
-    private void ShowAnchorPointDebugs(MagGraphItem.AnchorPoint oa)
+    private void ShowAnchorPointDebugs(MagGraphItem.AnchorPoint a, bool isInput = false)
     {
-        if (ShowDebug && !ImGui.IsMouseDown(ImGuiMouseButton.Left))
+        if (!ShowDebug || ImGui.IsMouseDown(ImGuiMouseButton.Left))
+            return;
+        
+        ImGui.PushFont(Fonts.FontSmall);
+        var typeUiProperties =TypeUiRegistry.GetPropertiesForType(a.ConnectionType);
+        
+        ImGui.SetCursorScreenPos(TransformPosition(a.PositionOnCanvas) - Vector2.One * ImGui.GetFrameHeight()/2);
+        ImGui.PushStyleColor(ImGuiCol.Text, typeUiProperties.Color.Rgba);
+        ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
+        var label = isInput ? "I" : "O";
+        ImGui.Button($"{label}##{a.GetHashCode()}");
+        ImGui.PopStyleColor(2);
+        if (ImGui.IsItemHovered())
         {
-            ImGui.PushFont(Fonts.FontSmall);
-            ImGui.SetCursorScreenPos(TransformPosition(oa.PositionOnCanvas) - Vector2.One * ImGui.GetFrameHeight()/2);
-            ImGui.Button("?##" + oa.GetHashCode());
-            if (ImGui.IsItemHovered())
-                ImGui.SetTooltip("hash:" + oa.ConnectionHash);
-            
-            ImGui.PopFont();
+            ImGui.BeginTooltip();
+            //ImGui.SetTooltip("hash:" + oa.ConnectionHash);
+            ImGui.Text(isInput ? "Input" : "Output");
+            ImGui.Text("" + a.ConnectionType.Name);
+            ImGui.Text("" + a.ConnectionHash);
+            ImGui.EndTooltip();
         }
+            
+        ImGui.PopFont();
     }
 
     private void DrawConnection(MagGraphConnection connection, ImDrawListPtr drawList)
