@@ -20,6 +20,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
 {
     public MagGraphCanvas(MagGraphWindow window, NodeSelection nodeSelection)
     {
+        EnableParentZoom = false;
         _window = window;
         _nodeSelection = nodeSelection;
         _itemMovement = new MagItemMovement(this, _graphLayout, nodeSelection);
@@ -38,13 +39,22 @@ internal sealed class MagGraphCanvas : ScalableCanvas
             CenterView();
         }
 
+        ImGui.SameLine(0, 5);
+        if (ImGui.Button("Rescan"))
+        {
+            _graphLayout.ComputeLayout(_compositionOp, forceUpdate: true);
+        }
+
+        //Log.Debug("Updating canvas...");
         UpdateCanvas(out _);
-        
+        var drawList = ImGui.GetWindowDrawList();
+
+        DrawBackgroundGrids(drawList);
+
         if (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup)
             && ConnectionMaker.GetTempConnectionsFor(_window).Count == 0)
             HandleFenceSelection(_window.CompositionOp, _selectionFence);
 
-        var drawList = ImGui.GetWindowDrawList();
         foreach (var item in _graphLayout.Items.Values)
         {
             DrawNode(item, drawList);
@@ -66,17 +76,80 @@ internal sealed class MagGraphCanvas : ScalableCanvas
                                    UiColors.ForegroundFull.Fade(progress * 0.2f));
             }
         }
-        
+
         MagItemMovement.CompleteFrame();
+    }
+
+    private void DrawBackgroundGrids(ImDrawListPtr drawList)
+    {
+        var minSize = MathF.Min(MagGraphItem.GridSize.X, MagGraphItem.GridSize.Y);
+        var gridSize = Vector2.One * minSize;
+        var maxOpacity = 0.25f;
+
+        var fineGrid = MathUtils.RemapAndClamp(Scale.X, 0.5f, 2f, 0.0f, maxOpacity);
+        if (fineGrid > 0.01f)
+        {
+            var color = UiColors.BackgroundFull.Fade(fineGrid);
+            DrawBackgroundGrid(drawList, gridSize, color);
+        }
+
+        var roughGrid = MathUtils.RemapAndClamp(Scale.X, 0.1f, 2f, 0.0f, maxOpacity);
+        if (roughGrid > 0.01f)
+        {
+            var color = UiColors.BackgroundFull.Fade(roughGrid);
+            DrawBackgroundGrid(drawList, gridSize * 5, color);
+        }
+    }
+
+    private void DrawBackgroundGrid(ImDrawListPtr drawList, Vector2 gridSize, Color color)
+    {
+        var window = new ImRect(ImGui.GetWindowPos(), ImGui.GetWindowPos() + ImGui.GetWindowSize());
+
+        var topLeftOnCanvas = InverseTransformPositionFloat(ImGui.GetWindowPos());
+        var alignedTopLeftCanvas = new Vector2((int)(topLeftOnCanvas.X / gridSize.X) * gridSize.X,
+                                               (int)(topLeftOnCanvas.Y / gridSize.Y) * gridSize.Y);
+
+        var topLeftOnScreen = TransformPosition(alignedTopLeftCanvas);
+        var screenGridSize = TransformDirection(gridSize);
+
+        var count = new Vector2(window.GetWidth() / screenGridSize.X, window.GetHeight() / screenGridSize.Y);
+
+        for (int ix = 0; ix < 200 && ix <= count.X + 1; ix++)
+        {
+            var x = (int)(topLeftOnScreen.X + ix * screenGridSize.X);
+            drawList.AddRectFilled(new Vector2( x,window.Min.Y),
+                                   new Vector2( x + 1, window.Max.Y),
+                                   color);
+
+        }
+
+        for (int iy = 0; iy < 200 && iy <= count.Y + 1; iy++)
+        {
+            var y = (int)(topLeftOnScreen.Y + iy * screenGridSize.Y);
+            drawList.AddRectFilled(new Vector2(window.Min.X, y),
+                                   new Vector2(window.Max.X, y + 1),
+                                   color);
+        }
+
+        // Commented out. Sadly drawing a point raster creates too many polys and eventually
+        // will case rendering artifacts...
+        //
+        // for (int ix = 0; ix < 200 && ix <= count.X+1; ix++)
+        // {
+        //     for (int iy = 0; iy < 200 && iy <= count.Y+1; iy++)
+        //     {
+        //         var pOnScreen = topLeftOnScreen + new Vector2(ix, iy) * screenGridSize;
+        //         drawList.AddRectFilled(pOnScreen, pOnScreen + Vector2.One, color);   
+        //     }
+        // }
     }
 
     private void DrawNode(MagGraphItem item, ImDrawListPtr drawList)
     {
         if (_compositionOp == null)
             return;
-        
-        if (!TypeUiRegistry.TryGetPropertiesForType(item.PrimaryType, out var typeUiProperties))
-            return;
+
+        var typeUiProperties = TypeUiRegistry.GetPropertiesForType(item.PrimaryType);
 
         var typeColor = typeUiProperties.Color;
         var labelColor = ColorVariations.OperatorLabel.Apply(typeColor);
@@ -135,10 +208,10 @@ internal sealed class MagGraphCanvas : ScalableCanvas
         ImGui.PushFont(Fonts.FontBold);
         var labelSize = ImGui.CalcTextSize(item.ReadableName);
         ImGui.PopFont();
-        var downScale = MathF.Min(1, MagGraphItem.Width * 0.9f / labelSize.X );
+        var downScale = MathF.Min(1, MagGraphItem.Width * 0.9f / labelSize.X);
 
         drawList.AddText(Fonts.FontBold,
-                         Fonts.FontBold.FontSize * downScale * CanvasScale ,
+                         Fonts.FontBold.FontSize * downScale * CanvasScale,
                          pMin + new Vector2(8, 9) * CanvasScale,
                          labelColor,
                          item.ReadableName);
@@ -152,7 +225,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
                              pMin + new Vector2(8, 9) * CanvasScale + new Vector2(0, GridSizeOnScreen.Y * (inputIndex)),
                              labelColor.Fade(0.7f),
                              inputLine.InputUi.InputDefinition.Name ?? "?"
-                             );
+                            );
         }
 
         // Draw output labels...
@@ -169,7 +242,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
                              pMin
                              + new Vector2(-8, 9) * CanvasScale
                              + new Vector2(0, GridSizeOnScreen.Y * (outputIndex + inputIndex - 1))
-                             + new Vector2(MagGraphItem.Width * CanvasScale - outputLabelSize.X  * CanvasScale, 0),
+                             + new Vector2(MagGraphItem.Width * CanvasScale - outputLabelSize.X * CanvasScale, 0),
                              labelColor.Fade(0.7f),
                              outputDefinitionName);
         }
@@ -179,7 +252,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
         {
             if (!TypeUiRegistry.TryGetPropertiesForType(i.ConnectionType, out var type2UiProperties))
                 continue;
-            
+
             var p = TransformPosition(i.PositionOnCanvas);
             if (i.Direction == MagGraphItem.Directions.Vertical)
             {
@@ -210,7 +283,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
         {
             if (!TypeUiRegistry.TryGetPropertiesForType(oa.ConnectionType, out var type2UiProperties))
                 continue;
-            
+
             var p = TransformPosition(oa.PositionOnCanvas);
             var color = ColorVariations.OperatorBackground.Apply(type2UiProperties.Color).Fade(0.7f);
             if (oa.Direction == MagGraphItem.Directions.Vertical)
@@ -248,7 +321,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
 
         if (!TypeUiRegistry.TryGetPropertiesForType(type, out var typeUiProperties))
             return;
-        
+
         var anchorSize = 3 * CanvasScale;
         var typeColor = typeUiProperties.Color;
         var sourcePosOnScreen = TransformPosition(connection.SourcePos);
@@ -308,7 +381,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
                     break;
                 case MagGraphConnection.ConnectionStyles.RightToLeft:
                     // break;
-                //case MagGraphConnection.ConnectionStyles.RightToLeft:
+                    //case MagGraphConnection.ConnectionStyles.RightToLeft:
                     //var hoverPositionOnLine = Vector2.Zero;
                     // var isHovering = ArcConnection.Draw( Scale,
                     //                                      new ImRect(sourcePosOnScreen, sourcePosOnScreen + new Vector2(10, 10)),
@@ -328,12 +401,12 @@ internal sealed class MagGraphCanvas : ScalableCanvas
                     //     ConnectionSplitHelper.RegisterAsPotentialSplit(Connection, ColorForType, hoverPositionOnLine);
                     // }                        
                     //
-                     drawList.AddBezierCubic(sourcePosOnScreen,
-                                             sourcePosOnScreen + new Vector2(d, 0),
-                                             targetPosOnScreen - new Vector2(d, 0),
-                                             targetPosOnScreen,
-                                             typeColor.Fade(0.6f),
-                                             2);
+                    drawList.AddBezierCubic(sourcePosOnScreen,
+                                            sourcePosOnScreen + new Vector2(d, 0),
+                                            targetPosOnScreen - new Vector2(d, 0),
+                                            targetPosOnScreen,
+                                            typeColor.Fade(0.6f),
+                                            2);
                     break;
                 case MagGraphConnection.ConnectionStyles.Unknown:
                     break;
@@ -351,8 +424,6 @@ internal sealed class MagGraphCanvas : ScalableCanvas
             }
         }
     }
-
-
 
     private void HandleFenceSelection(Instance compositionOp, SelectionFence selectionFence)
     {
@@ -383,7 +454,6 @@ internal sealed class MagGraphCanvas : ScalableCanvas
                 throw new ArgumentOutOfRangeException();
         }
     }
-
 
     // TODO: Support non graph items like annotations.
     private void HandleSelectionFenceUpdate(ImRect bounds, SelectionFence.SelectModes selectMode)

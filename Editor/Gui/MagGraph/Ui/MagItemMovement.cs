@@ -36,9 +36,7 @@ internal sealed class MagItemMovement
         _layout = layout;
         _nodeSelection = nodeSelection;
     }
-
-
-
+    
     /// <summary>
     /// For certain edge cases like the release handling of nodes cannot be detected.
     /// This is a work around to clear the state on mouse release

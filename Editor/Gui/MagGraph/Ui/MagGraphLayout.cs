@@ -25,22 +25,23 @@ namespace T3.Editor.Gui.MagGraph.Ui;
 /// </summary>
 internal sealed class MagGraphLayout
 {
-    public void ComputeLayout(Instance composition)
+    public void ComputeLayout(Instance compositionOp, bool forceUpdate = false)
     {
-        if (!SymbolUiRegistry.TryGetSymbolUi(composition.Symbol.Id, out var parentSymbolUi))
+        if (!SymbolUiRegistry.TryGetSymbolUi(compositionOp.Symbol.Id, out var parentSymbolUi))
             return;
-        
-        var parentSymbol = composition.Symbol;
 
-        if (HasCompositionDataChanged(parentSymbol, ref _compositionModelHash))
-        {
-             CollectItemReferences(composition, parentSymbolUi);
-             UpdateConnectionSources(composition);
-             UpdateVisibleItemLines(composition);
-             CollectConnectionReferences(composition);
-        }
+        if (HasCompositionDataChanged(compositionOp.Symbol, ref _compositionModelHash) || forceUpdate)
+            RefreshDataStructure(compositionOp, parentSymbolUi);
 
         UpdateLayout();
+    }
+
+    private void RefreshDataStructure(Instance composition, SymbolUi parentSymbolUi)
+    {
+        CollectItemReferences(composition, parentSymbolUi);
+        UpdateConnectionSources(composition);
+        UpdateVisibleItemLines(composition);
+        CollectConnectionReferences(composition);
     }
 
     /// <remarks>
@@ -526,18 +527,18 @@ internal sealed class MagGraphLayout
 
 
 
-    private static bool HasCompositionDataChanged(Symbol composition, ref int hash)
+    private static bool HasCompositionDataChanged(Symbol composition, ref int originalHash)
     {
         var newHash = 0;
-        foreach (var i in composition.Children)
+        foreach (var i in composition.Children.Keys)
         {
             newHash += i.GetHashCode();
         }
 
-        if (newHash == hash)
+        if (newHash == originalHash)
             return false;
 
-        hash = newHash;
+        originalHash = newHash;
         return true;
     }
 
