@@ -17,6 +17,7 @@ public static class T3Metrics
     {
         _watchImgRenderTime.Stop();
         _uiRenderDurationMs = (float)((double)_watchImgRenderTime.ElapsedTicks / Stopwatch.Frequency * 1000.0);
+        _frameDurations.Enqueue(_uiRenderDurationMs);
     }
         
         
@@ -38,7 +39,22 @@ public static class T3Metrics
         {
             ImGui.BeginTooltip();
             {
-                ImGui.Text($"UI: {_peakUiRenderDurationMs:0.0}ms\nRender: {_peakDeltaTimeMs:0.0}ms\n VSync: {(T3Ui.UseVSync?"On":"Off")} (Click to toggle)");
+                var values = _frameDurations.ToArray();
+                ImGui.PlotLines("##test", ref values[0], values.Length, 0,
+                                null,
+                                0.00f,15f
+                                );
+                
+                var average = values.Average();
+                var min = values.Min();
+                var jitter = values.Max()-min;
+                
+                
+                ImGui.Text($"""
+                            UI: {_peakUiRenderDurationMs:0.0}ms (~{average:0.0}  {min:0.0}  +{jitter:0.0})
+                            Render: {_peakDeltaTimeMs:0.0}ms
+                            VSync: {(T3Ui.UseVSync?"On":"Off")} (Click to toggle)
+                            """);
                     
                 ImGui.Spacing();
                     
@@ -62,6 +78,8 @@ public static class T3Metrics
         const float normalFramerateLevelAt = 0.5f;
         const float frameTimingScaleFactor = barWidth / normalFramerateLevelAt / ExpectedFramerate;
 
+        _uiSmoothedRenderDurationMs = MathUtils.Lerp(_uiSmoothedRenderDurationMs, _uiRenderDurationMs, 0.05f);
+        
         _peakUiRenderDurationMs = _peakUiRenderDurationMs > _uiRenderDurationMs
                                       ? MathUtils.Lerp(_peakUiRenderDurationMs, _uiRenderDurationMs, 0.05f)
                                       : _uiRenderDurationMs;
@@ -118,5 +136,8 @@ public static class T3Metrics
 
 
     private static float _uiRenderDurationMs;
+    private static float _uiSmoothedRenderDurationMs;
     private static readonly Stopwatch _watchImgRenderTime = new();
+    
+    private static readonly CircularBuffer<float> _frameDurations = new(100);
 }
