@@ -1,4 +1,5 @@
-﻿using T3.Core.Operator;
+﻿#nullable enable
+using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
@@ -13,7 +14,7 @@ namespace T3.Editor.Gui.MagGraph.Ui;
 
 internal sealed class MagGraphItem : ISelectableCanvasObject
 {
-    public enum Categories
+    public enum Variants
     {
         Operator,
         Input,
@@ -21,61 +22,52 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
     }
 
     public Guid Id { get; init; }
-    public Categories Category;
+    public Variants Variant;
     public Type PrimaryType = typeof(float);
-    public ISelectableCanvasObject Selectable;
+    public required ISelectableCanvasObject Selectable;
     public Vector2 PosOnCanvas { get => Selectable.PosOnCanvas; set => Selectable.PosOnCanvas = value; }
     public Vector2 Size { get; set; }
     //public bool IsSelected => NodeSelection.IsNodeSelected(this);
-    public MagGroup MagGroup;
-    public float UnitHeight => InputLines.Length + OutputLines.Length + 1;
+    public MagGroup? MagGroup;
 
-    public override string ToString()
-    {
-        return ReadableName;
-    }
+    public override string ToString() => ReadableName;
 
-    public SymbolUi SymbolUi;
-    public Symbol.Child SymbolChild;
-    public SymbolUi.Child SymbolChildUi;
-    public Instance Instance;
+    public SymbolUi? SymbolUi;
+    public Symbol.Child? SymbolChild;
+    public Instance? Instance;
 
     public string ReadableName
     {
         get
         {
-            return Category switch
+            return Variant switch
                        {
-                           Categories.Operator => SymbolChild != null ? SymbolChild.ReadableName : "???",
-                           Categories.Input    => Selectable is IInputUi inputUi ? inputUi.InputDefinition.Name : "???",
-                           Categories.Output   => Selectable is IOutputUi outputUi ? outputUi.OutputDefinition.Name : "???",
+                           Variants.Operator => SymbolChild != null ? SymbolChild.ReadableName : "???",
+                           Variants.Input    => Selectable is IInputUi inputUi ? inputUi.InputDefinition.Name : "???",
+                           Variants.Output   => Selectable is IOutputUi outputUi ? outputUi.OutputDefinition.Name : "???",
                            _                   => "???"
                        };
         }
     }
 
-    public InputLine[] InputLines;
-    public OutputLine[] OutputLines;
+    public InputLine[] InputLines = Array.Empty<InputLine>();
+    public OutputLine[] OutputLines = Array.Empty<OutputLine>();
 
     public struct InputLine
     {
         public Type Type;
         public Guid Id;
-        //public SnapGraphItem TargetItem;
         public ISlot Input;
         public IInputUi InputUi;
-        //public bool IsPrimary;
         public int VisibleIndex;
-        public MagGraphConnection ConnectionIn;
+        public MagGraphConnection? ConnectionIn;
         public int MultiInputIndex;
     }
 
     public struct OutputLine
     {
-        //public SnapGraphItem SourceItem;
         public ISlot Output;
         public IOutputUi OutputUi;
-        //public bool IsPrimary;
         public int VisibleIndex;
         public int OutputIndex;
         public List<MagGraphConnection> ConnectionsOut;
@@ -99,18 +91,19 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
     public const float Width = 140;
     public const float WidthHalf = Width / 2;
     public const float LineHeight = 35;
-    public const float LineHeightHalf = LineHeight / 2;
-    public static readonly Vector2 GridSize = new Vector2(Width, LineHeight);
+    public static readonly Vector2 GridSize = new(Width, LineHeight);
 
     public ImRect Area => ImRect.RectWithSize(PosOnCanvas, Size);
 
-    public static ImRect GetGroupBoundingBox(IEnumerable<MagGraphItem> items)
+    public static ImRect GetItemSetBounds(IEnumerable<MagGraphItem> items)
     {
         ImRect extend = default;
-        var index2 = 0;
+        var index = 0;
+        
+        // Can't use list because enumerable...
         foreach (var item in items)
         {
-            if (index2 == 0)
+            if (index == 0)
             {
                 extend = item.Area;
             }
@@ -119,7 +112,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
                 extend.Add(item.Area);
             }
 
-            index2++;
+            index++;
         }
 
         return extend;
@@ -201,7 +194,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
         }
     }
 
-    /** Assume as free (I.e. not connected) unless on connection is snapped, then return this connection has hash. */
+    /** Assume as free (I.e. not connected) unless an connection is snapped, then return this connection as hash. */
     private static int GetSnappedConnectionHash(List<MagGraphConnection> snapGraphConnections)
     {
         foreach (var sc in snapGraphConnections)
@@ -251,9 +244,8 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
 
     public void Select(NodeSelection nodeSelection)
     {
-        if (Category == MagGraphItem.Categories.Operator)
+        if (Variant == MagGraphItem.Variants.Operator)
         {
-            //nodeSelection.SetSelectionToChildUi(this, Instance);
             nodeSelection.SetSelection(this, Instance);
         }
         else
@@ -262,7 +254,15 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
         }
     }
 
-    public void AddToSelection()
+    public void AddToSelection(NodeSelection nodeSelection)
     {
+        if (Variant == MagGraphItem.Variants.Operator)
+        {
+            nodeSelection.AddSelection(this, Instance);
+        }
+        else
+        {
+            nodeSelection.AddSelection(this);
+        }
     }
 }

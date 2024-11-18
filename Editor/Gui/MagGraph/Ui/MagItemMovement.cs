@@ -1,4 +1,7 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+
+using System.Diagnostics.CodeAnalysis;
+using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
@@ -7,7 +10,6 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
-using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
@@ -17,6 +19,10 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.MagGraph.Ui;
 
+
+/// <summary>
+/// 
+/// </summary>
 /// <remarks>
 /// Things would be slightly more efficient if this would would use SnapGraphItems. However this would
 /// prevent us from reusing fence selection. Enforcing this to be used for dragging inputs and outputs
@@ -31,17 +37,10 @@ internal sealed class MagItemMovement
         _nodeSelection = nodeSelection;
     }
 
-    /// <summary>
-    /// Reset to avoid accidental dragging of previous elements 
-    /// </summary>
-    public static void Reset()
-    {
-        _modifyCommand = null;
-        _draggedNodes.Clear();
-    }
+
 
     /// <summary>
-    /// For certain edge cases the release handling of nodes cannot be detected.
+    /// For certain edge cases like the release handling of nodes cannot be detected.
     /// This is a work around to clear the state on mouse release
     /// </summary>
     // Todo: Call this from the main loop?
@@ -53,55 +52,19 @@ internal sealed class MagItemMovement
         }
     }
 
-    void AddSnappedItemsToHashSet( MagGraphItem item)
-    {
-        if (_draggedNodes.Contains(item))
-            return;
-        
-        _draggedNodes.Add(item);
-        for (var index = 0; index < item.InputLines.Length; index++)
-        {
-            var c= item.InputLines[index].ConnectionIn;
-            if (c == null)
-                continue;
-
-            if (c.IsSnapped)
-                AddSnappedItemsToHashSet(c.SourceItem);
-        }
-
-        for (var index = 0; index < item.OutputLines.Length; index++)
-        {
-            var connections= item.OutputLines[index].ConnectionsOut;
-            foreach (var c in connections)
-            {
-                if(c.IsSnapped)
-                    AddSnappedItemsToHashSet(c.TargetItem);
-            }
-        }
-    }
-
-    private MagGraphItem _tappedItem;
-
-    private bool IsItemSelected(ISelectableCanvasObject item)
-    {
-        return _nodeSelection.IsNodeSelected(item);
-    }
-    
-    
     /// <summary>
     /// NOTE: This has to be called for ALL movable elements (ops, inputs, outputs) and directly after ImGui.Item
     /// </summary>
-    public void Handle(MagGraphItem item, MagGraphCanvas canvas)
+    public void HandleForItem(MagGraphItem item, MagGraphCanvas canvas, Instance composition)
     {
         var justClicked = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Left);
-        var composition = item.Instance.Parent;
-            
-        
+        //var composition = item.Instance?.Parent;
+        //Debug.Assert(composition != null, "Composition not found");
+
         var isActiveNode = item.Id == _draggedNodeId;
         if (justClicked)
         {
-            _tappedItem = item;
-            var compositionSymbolId = composition.Symbol.Id;
+            _longTapItem = item;
             _draggedNodeId = item.Id;
             if (IsItemSelected(item))
             {
@@ -113,14 +76,11 @@ internal sealed class MagItemMovement
                         _draggedNodes.Add(i);
                     }
                 }
-                //_draggedNodes = NodeSelection.GetSelectedNodes<SnapGraphItem>().ToHashSet();
             }
             else
             {
-                //Log.Debug("Collecting snapped");
                 _draggedNodes.Clear();
-                AddSnappedItemsToHashSet(item);
-                //_draggedNodes = new HashSet<SnapGraphItem> { item };
+                CollectSnappedItems(item);
             }
 
             _mousePressedTime = ImGui.GetTime();
@@ -134,7 +94,7 @@ internal sealed class MagItemMovement
         else if (isActiveNode && ImGui.IsMouseDown(ImGuiMouseButton.Left) && _modifyCommand != null)
         {
             // TODO: Implement shake disconnect later
-            HandleNodeDragging(item, canvas);
+            HandleNodeDragging(canvas, composition);
         }
         else if (isActiveNode && ImGui.IsMouseReleased(0) && _modifyCommand != null)
         {
@@ -167,14 +127,14 @@ internal sealed class MagItemMovement
                     UndoRedoStack.Add(_modifyCommand);
                 }
 
-                // Reorder inputs nodes if dragged
+                // Reorder input nodes if dragged
                 var selectedInputs = _nodeSelection.GetSelectedNodes<IInputUi>().ToList();
                 if (selectedInputs.Count > 0)
                 {
                     //var compositionUi = SymbolUiRegistry.Entries[composition.Symbol.Id];
-                    if(!SymbolUiRegistry.TryGetSymbolUi(composition.Symbol.Id, out var compositionUi))
+                    if (!SymbolUiRegistry.TryGetSymbolUi(composition.Symbol.Id, out var compositionUi))
                         return;
-                    
+
                     composition.Symbol.InputDefinitions.Sort((a, b) =>
                                                              {
                                                                  var childA = compositionUi.InputUis[a.Id];
@@ -194,26 +154,10 @@ internal sealed class MagItemMovement
                     if (replaceSelection)
                     {
                         item.Select(_nodeSelection);
-                        // if (item.Category == SnapGraphItem.Categories.Operator)
-                        // {
-                        //     NodeSelection.SetSelectionToChildUi(item.SymbolChildUi, item.Instance);
-                        // }
-                        // else
-                        // {
-                        //     NodeSelection.SetSelection(item.Selectable);
-                        // }
                     }
                     else
                     {
-                        item.AddToSelection();
-                        // if (item.Category == SnapGraphItem.Categories.Operator)
-                        // {
-                        //     NodeSelection.AddSymbolChildToSelection(item.SymbolChildUi, item.Instance);
-                        // }
-                        // else
-                        // {
-                        //     NodeSelection.AddSelection(item.Selectable);
-                        // }
+                        item.AddToSelection(_nodeSelection);
                     }
                 }
                 else
@@ -245,38 +189,34 @@ internal sealed class MagItemMovement
 
     private void StartDragging(HashSet<MagGraphItem> draggedNodes)
     {
-        _currentAppliedSnapOffset = Vector2.Zero;
+        //_currentAppliedSnapOffset = Vector2.Zero;
         _lastAppliedOffset = Vector2.Zero;
         UpdateDragConnectionOnStart(draggedNodes);
     }
 
-    private double _mousePressedTime;
-    
-    private void HandleNodeDragging(ISelectableCanvasObject draggedNode, ScalableCanvas canvas)
+    private void HandleNodeDragging(ICanvas canvas, Instance composition)
     {
         var dl = ImGui.GetWindowDrawList();
         if (!ImGui.IsMouseDragging(ImGuiMouseButton.Left))
         {
             {
                 var timeSincePress = ImGui.GetTime() - _mousePressedTime;
-                //Log.Debug(""+timeSincePress);
-                var longTapDuration = 0.3f;
+                const float longTapDuration = 0.3f;
                 var longTapProgress = (float)(timeSincePress / longTapDuration);
                 if (longTapProgress < 1)
                 {
-                    dl.AddCircle(ImGui.GetMousePos(), 100 * (1-longTapProgress), Color.White.Fade( MathF.Pow(longTapProgress,3)));
+                    dl.AddCircle(ImGui.GetMousePos(), 100 * (1 - longTapProgress), Color.White.Fade(MathF.Pow(longTapProgress, 3)));
                 }
-                else if (longTapProgress > 1)
+                else if (_longTapItem != null)
                 {
-                    _tappedItem.Select(_nodeSelection);
+                    _longTapItem.Select(_nodeSelection);
                     _draggedNodes.Clear();
-                    _draggedNodes.Add(_tappedItem);
+                    _draggedNodes.Add(_longTapItem);
                     var snapGraphItems = _draggedNodes.Select(i => i as ISelectableCanvasObject).ToList();
-                    _modifyCommand = new ModifyCanvasElementsCommand(_tappedItem.Instance.Parent.Symbol.Id, snapGraphItems, _nodeSelection); 
-                    
+                    _modifyCommand = new ModifyCanvasElementsCommand(composition.Symbol.Id, snapGraphItems, _nodeSelection);
                 }
             }
-            
+
             _isDragging = false;
             return;
         }
@@ -292,7 +232,7 @@ internal sealed class MagItemMovement
         var mousePosOnCanvas = canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
         var requestedDeltaOnCanvas = mousePosOnCanvas - _dragStartPosInOpOnCanvas;
 
-        var dragExtend = MagGraphItem.GetGroupBoundingBox(_draggedNodes);
+        var dragExtend = MagGraphItem.GetItemSetBounds(_draggedNodes);
         dragExtend.Expand(SnapThreshold * canvas.Scale.X);
 
         if (showDebug)
@@ -315,10 +255,7 @@ internal sealed class MagItemMovement
 
             overlappingItems.Add(otherItem);
         }
-
-        // New possible ConnectionsOptions
-        List<Symbol.Connection> newPossibleConnections = [];
-
+        
         // Move back to non-snapped position
         foreach (var n in _draggedNodes)
         {
@@ -328,32 +265,32 @@ internal sealed class MagItemMovement
 
         _lastAppliedOffset = requestedDeltaOnCanvas;
 
-        var snapResult = new SnapResult() { BestDistance = float.PositiveInfinity };
+        var snapping = new Snapping { BestDistance = float.PositiveInfinity };
 
         foreach (var otherItem in overlappingItems)
         {
             foreach (var draggedItem in _draggedNodes)
             {
-                snapResult.TestForSnap(otherItem, draggedItem, false);
-                snapResult.TestForSnap(draggedItem, otherItem, true);
+                snapping.TestForSnap(otherItem, draggedItem, false);
+                snapping.TestForSnap(draggedItem, otherItem, true);
             }
         }
 
         // Snapped
-        if (snapResult.BestDistance < MagGraphItem.LineHeight * 0.5f)
+        if (snapping.BestDistance < MagGraphItem.LineHeight * 0.5f)
         {
-            var bestSnapDelta = !snapResult.Reverse
-                                    ? snapResult.OutAnchorPos - snapResult.InputAnchorPos
-                                    : snapResult.InputAnchorPos - snapResult.OutAnchorPos;
+            var bestSnapDelta = !snapping.Reverse
+                                    ? snapping.OutAnchorPos - snapping.InputAnchorPos
+                                    : snapping.InputAnchorPos - snapping.OutAnchorPos;
 
             dl.AddLine(_canvas.TransformPosition(mousePosOnCanvas),
                        canvas.TransformPosition(mousePosOnCanvas) + _canvas.TransformDirection(bestSnapDelta),
                        Color.White);
 
-            if (Vector2.Distance(snapResult.InputAnchorPos, LastSnapPositionOnCanvas) > 2)
+            if (Vector2.Distance(snapping.InputAnchorPos, LastSnapPositionOnCanvas) > 2)
             {
                 LastSnapTime = ImGui.GetTime();
-                LastSnapPositionOnCanvas = snapResult.InputAnchorPos;
+                LastSnapPositionOnCanvas = snapping.InputAnchorPos;
             }
 
             foreach (var n in _draggedNodes)
@@ -383,8 +320,9 @@ internal sealed class MagItemMovement
             }
         }
     }
-    
-        private struct SnapResult
+
+    [SuppressMessage("ReSharper", "NotAccessedField.Local")]
+    private struct Snapping
     {
         public float BestDistance;
         public MagGraphItem BestA;
@@ -486,22 +424,60 @@ internal sealed class MagItemMovement
         }
     }
 
+    private static void CollectSnappedItems(MagGraphItem item)
+    {
+        if (!_draggedNodes.Add(item))
+            return;
+
+        for (var index = 0; index < item.InputLines.Length; index++)
+        {
+            var c = item.InputLines[index].ConnectionIn;
+            if (c == null)
+                continue;
+
+            if (c.IsSnapped)
+                CollectSnappedItems(c.SourceItem);
+        }
+
+        for (var index = 0; index < item.OutputLines.Length; index++)
+        {
+            var connections = item.OutputLines[index].ConnectionsOut;
+            foreach (var c in connections)
+            {
+                if (c.IsSnapped)
+                    CollectSnappedItems(c.TargetItem);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Reset to avoid accidental dragging of previous elements 
+    /// </summary>
+    private static void Reset()
+    {
+        _modifyCommand = null;
+        _draggedNodes.Clear();
+    }
+    
+    private bool IsItemSelected(ISelectableCanvasObject item) => _nodeSelection.IsNodeSelected(item);
+
     public double LastSnapTime = double.NegativeInfinity;
     public Vector2 LastSnapPositionOnCanvas;
 
-    private Vector2 _currentAppliedSnapOffset;
     private Vector2 _lastAppliedOffset;
 
     private const float SnapThreshold = 10;
     private readonly List<MagGraphConnection> _bridgeConnectionsOnStart = [];
 
+    private MagGraphItem? _longTapItem;
+    private double _mousePressedTime;
+
     private static bool _isDragging;
     private static Vector2 _dragStartPosInOpOnCanvas;
-
-    private static ModifyCanvasElementsCommand _modifyCommand;
-
+    private static ModifyCanvasElementsCommand? _modifyCommand;
     private static Guid _draggedNodeId = Guid.Empty;
     private static readonly HashSet<MagGraphItem> _draggedNodes = [];
+
     private readonly MagGraphCanvas _canvas;
     private readonly MagGraphLayout _layout;
     private readonly NodeSelection _nodeSelection;

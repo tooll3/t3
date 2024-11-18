@@ -101,7 +101,7 @@ public sealed partial class Symbol
 
         public sealed override int GetHashCode() => _hashCode;
 
-        private int CalculateHashCode(in Guid sourceParentOrChildId, in Guid sourceSlotId, in Guid targetParentOrChildId, in Guid targetSlotId)
+        private static int CalculateHashCode(in Guid sourceParentOrChildId, in Guid sourceSlotId, in Guid targetParentOrChildId, in Guid targetSlotId)
         {
             int hash = sourceParentOrChildId.GetHashCode();
             hash = hash * 31 + sourceSlotId.GetHashCode();

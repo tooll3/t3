@@ -13,10 +13,15 @@ namespace T3.Editor.Gui.MagGraph.Ui;
 
 /// <summary>
 /// Generate considerations:
-/// - The layout model is a temporary data that is completely be generated from the t3ui data.
+/// - The layout model is a temporary data that is completely generated from the t3ui data.
 /// - Its computation is expensive and should only be done if required.
 /// - This might be especially complicated if the state cannot be stored in the layout model, because it
 ///   relies on a temp. property like expanding a parameter type group.
+///
+/// It basically separates the following steps:
+/// - generating the ui-model data (esp. elements, their inputs and connection slot indices)
+/// - Updating the layouts
+/// 
 /// </summary>
 internal sealed class MagGraphLayout
 {
@@ -47,31 +52,20 @@ internal sealed class MagGraphLayout
 
         foreach (var (childId, childInstance) in compositionOp.Children)
         {
-            //var childId = childInstance.SymbolChildId;
-            
             if(!compositionSymbolUi.ChildUis.TryGetValue(childId, out var childUi))
                 continue;
             
             if(!SymbolUiRegistry.TryGetSymbolUi(childInstance.Symbol.Id, out var symbolUi))
                 continue;
             
-            // var symbolChildUi = parentSymbolUi.ChildUis.SingleOrDefault(cc => cc.Id == childId);
-            // if (symbolChildUi == null)
-            //     continue;
-            
-            //var symbolChild = composition.Symbol.Children.SingleOrDefault(cc => cc.Id == childId);
-            
-            //var symbolChild = childInstance.Symbol;
-
             Items.Add(childId, new MagGraphItem
                                    {
-                                       Category = MagGraphItem.Categories.Operator,
+                                       Variant = MagGraphItem.Variants.Operator,
                                        Id = childId,
                                        Instance = childInstance,
                                        Selectable = childUi,
                                        SymbolUi = symbolUi,
-                                       SymbolChild =  childUi.SymbolChild, //compositionOp.Symbol.Children.SingleOrDefault(cc => cc.Id == childId),
-                                       SymbolChildUi = childUi,
+                                       SymbolChild =  childUi.SymbolChild,
                                        PosOnCanvas = childUi.PosOnCanvas,
                                        Size = MagGraphItem.GridSize,
                                    });
@@ -82,13 +76,12 @@ internal sealed class MagGraphLayout
             var inputUi = compositionSymbolUi.InputUis[input.Id];
             Items.Add(input.Id, new MagGraphItem
                                     {
-                                        Category = MagGraphItem.Categories.Input,
+                                        Variant = MagGraphItem.Variants.Input,
                                         Id = input.Id,
                                         Instance = compositionOp,
                                         Selectable = inputUi,
                                         SymbolUi = null,
                                         SymbolChild = null,
-                                        SymbolChildUi = null,
                                         PosOnCanvas = inputUi.PosOnCanvas,
                                         Size = MagGraphItem.GridSize,
                                     });
@@ -99,13 +92,12 @@ internal sealed class MagGraphLayout
             var outputUi = compositionSymbolUi.OutputUis[output.Id];
             Items.Add(output.Id, new MagGraphItem
                                      {
-                                        Category = MagGraphItem.Categories.Output,
+                                        Variant = MagGraphItem.Variants.Output,
                                         Id = output.Id,
                                         Instance = compositionOp,
                                         Selectable = outputUi,
                                         SymbolUi = null,
                                         SymbolChild = null,
-                                        SymbolChildUi = null,
                                         PosOnCanvas = outputUi.PosOnCanvas,
                                         Size = MagGraphItem.GridSize,
                                     });
@@ -150,7 +142,7 @@ internal sealed class MagGraphLayout
             var visibleIndex = 0;
             
             // Collect inputs
-            if (item.Category == MagGraphItem.Categories.Operator)
+            if (item.Variant == MagGraphItem.Variants.Operator)
             {
                 for (var inputLineIndex = 0; inputLineIndex < item.Instance.Inputs.Count; inputLineIndex++)
                 {
@@ -207,10 +199,8 @@ internal sealed class MagGraphLayout
                         continue;
                     }
 
-                    //return  c.SourceParentOrChildId.GetHashCode() << 32 + c.SourceSlotId.GetHashCode();
                     long outputHash = item.Id.GetHashCode() << 32 + output.Id.GetHashCode();
                     var isConnected = ConnectedOuputs.Contains(outputHash);
-                    //Log.Debug($"is connected  {isConnected}: {outputHash}");
                     if (outputIndex > 0 && !isConnected)
                         continue;
 
@@ -218,10 +208,9 @@ internal sealed class MagGraphLayout
                                         {
                                             Output = output,
                                             OutputUi = outputUi,
-                                            // IsPrimary = outputIndex == 0,
                                             OutputIndex = outputIndex,
                                             VisibleIndex = outputIndex == 0 ? 0 : visibleIndex,
-                                            ConnectionsOut = new List<MagGraphConnection>(),
+                                            ConnectionsOut = [],
                                         });
                     if (outputIndex == 0)
                     {
@@ -233,7 +222,7 @@ internal sealed class MagGraphLayout
                     }
                 }
             }
-            else if (item.Category == MagGraphItem.Categories.Input)
+            else if (item.Variant == MagGraphItem.Variants.Input)
             {
                 if (item.Selectable is IInputUi inputUi)
                 {
@@ -250,7 +239,7 @@ internal sealed class MagGraphLayout
                     
                 }
             }
-            else if (item.Category == MagGraphItem.Categories.Output)
+            else if (item.Variant == MagGraphItem.Variants.Output)
             {
                 var output = item.Instance.Outputs.FirstOrDefault(o => o.Id == item.Id);
                 if (item.Selectable is IOutputUi outputUi)
@@ -435,6 +424,9 @@ internal sealed class MagGraphLayout
         }
     }
 
+    /// <summary>
+    /// Update the layout of the connections (e.g. if they are snapped, of flowing vertically or horizontally)
+    /// </summary>
     private void UpdateLayout()
     {
         foreach (var sc in SnapConnections)
@@ -443,13 +435,9 @@ internal sealed class MagGraphLayout
             var sourceMax = sourceMin + sc.SourceItem.Size;
 
             var targetMin = sc.TargetItem.PosOnCanvas;
-            //var targetMax = targetMin + sc.TargetItem.Size;
-
             
             // Snapped horizontally
             if (
-                //sc.InputLineIndex == 0
-                //&& sc.OutputLineIndex == 0
                 MathF.Abs(sourceMax.X - targetMin.X) < 1
                 && MathF.Abs((sourceMin.Y + sc.VisibleOutputIndex* MagGraphItem.GridSize.Y) 
                              - (targetMin.Y + sc.InputLineIndex* MagGraphItem.GridSize.Y)) < 1)
@@ -459,7 +447,6 @@ internal sealed class MagGraphLayout
                 sc.SourcePos = p;
                 sc.TargetPos = p;
                 continue;
-                // Log.Debug($"Snap horizontally {r.SourceItem} -> {r.TargetItem}");
             }
 
             if (sc.InputLineIndex == 0
@@ -472,7 +459,6 @@ internal sealed class MagGraphLayout
                 sc.SourcePos = p;
                 sc.TargetPos = p;
                 continue;
-                // Log.Debug($"Snap vertically {r.SourceItem} -> {r.TargetItem}");
             }
 
             if (sc.OutputLineIndex == 0

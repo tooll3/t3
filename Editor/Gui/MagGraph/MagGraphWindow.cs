@@ -5,32 +5,18 @@ using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.Gui.Windows;
-using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.MagGraph;
 
 internal sealed class MagGraphWindow : Window
 {
-    //public MagGraphWindow(EditorSymbolPackage package, int instanceNumber, Instance rootInstance)
     public MagGraphWindow()
     {
         Config.Title = "MagGraph";
-        MenuTitle = "MagGraph";
+        MenuTitle = "Magnetic Graph View";
         WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
-        //GraphWindow.Composition.GetFor();
-        
-        if (GraphWindow.Focused == null)
-        {
-            Log.Warning("Can't show magnetic graph window without focused graph window");
-            return;
-        }
-
-        //var rootInstance = GraphWindow.Focused.CompositionOp;
-        
-
     }
 
-    //private Instance _compositionOp;
     
     protected override void DrawContent()
     {
@@ -41,10 +27,10 @@ internal sealed class MagGraphWindow : Window
         if (CompositionOp != focusedCompositionOp)
         {
             CompositionOp = focusedCompositionOp;
-            RootInstance = GraphWindow.Composition.GetFor(focusedCompositionOp!);
-            Structure = new Structure(() => RootInstance.Instance);
-            var navigationHistory = new NavigationHistory(Structure);
-            var nodeSelection = new NodeSelection(navigationHistory, Structure);
+            _rootInstance = GraphWindow.Composition.GetFor(focusedCompositionOp!);
+            _structure = new Structure(() => _rootInstance.Instance);
+            var navigationHistory = new NavigationHistory(_structure);
+            var nodeSelection = new NodeSelection(navigationHistory, _structure);
             _magGraphCanvas = new MagGraphCanvas(this, nodeSelection);
         }
         
@@ -53,14 +39,12 @@ internal sealed class MagGraphWindow : Window
     
     public override List<Window> GetInstances()
     {
-        return new List<Window>();
+        return [];
     }
 
-    //private GraphWindow.Composition _composition;
-    //internal Instance CompositionOp => _composition?.Instance;
     internal Instance CompositionOp;
-    
+
     private MagGraphCanvas _magGraphCanvas;
-    internal GraphWindow.Composition RootInstance { get; private set; }
-    public Structure Structure;
+    private GraphWindow.Composition _rootInstance;
+    private Structure _structure;
 }
