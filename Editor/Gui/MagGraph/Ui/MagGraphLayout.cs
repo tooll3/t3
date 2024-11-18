@@ -268,8 +268,8 @@ internal sealed class MagGraphLayout
     
     private void CollectConnectionReferences(Instance composition)
     {
-        SnapConnections.Clear();
-        SnapConnections.Capacity = composition.Symbol.Connections.Count;
+        MagConnections.Clear();
+        MagConnections.Capacity = composition.Symbol.Connections.Count;
         
         foreach (var c in composition.Symbol.Connections)
         {
@@ -299,7 +299,7 @@ internal sealed class MagGraphLayout
             
                 symbolInputItem.OutputLines[0].ConnectionsOut.Add(connectionFromSymbolInput);
                 targetItem2.InputLines[targetInputIndex].ConnectionIn = connectionFromSymbolInput;
-                SnapConnections.Add(connectionFromSymbolInput);
+                MagConnections.Add(connectionFromSymbolInput);
                 continue;
             }
             
@@ -345,7 +345,7 @@ internal sealed class MagGraphLayout
             
                 sourceItem2.OutputLines[outputIndex2].ConnectionsOut.Add(connectionFromSymbolInput);
                 symbolOutputItem.InputLines[0].ConnectionIn = connectionFromSymbolInput;
-                SnapConnections.Add(connectionFromSymbolInput);
+                MagConnections.Add(connectionFromSymbolInput);
                 continue;
             }
             
@@ -398,7 +398,7 @@ internal sealed class MagGraphLayout
             
             targetItem.InputLines[inputIndex].ConnectionIn = snapGraphConnection;
             sourceItem.OutputLines[outputIndex].ConnectionsOut.Add(snapGraphConnection);
-            SnapConnections.Add(snapGraphConnection);
+            MagConnections.Add(snapGraphConnection);
         }
     }
 
@@ -430,7 +430,7 @@ internal sealed class MagGraphLayout
     /// </summary>
     private void UpdateLayout()
     {
-        foreach (var sc in SnapConnections)
+        foreach (var sc in MagConnections)
         {
             var sourceMin = sc.SourceItem.PosOnCanvas;
             var sourceMax = sourceMin + sc.SourceItem.Size;
@@ -545,6 +545,6 @@ internal sealed class MagGraphLayout
     
     //public readonly List<SnapGroup> SnapGroups = new();
     public readonly Dictionary<Guid, MagGraphItem> Items = new(127);
-    public readonly List<MagGraphConnection> SnapConnections = new(127);
+    public readonly List<MagGraphConnection> MagConnections = new(127);
     private int _compositionModelHash;
 }

@@ -64,7 +64,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
             DrawNode(item, drawList);
         }
 
-        foreach (var connection in _graphLayout.SnapConnections)
+        foreach (var connection in _graphLayout.MagConnections)
         {
             DrawConnection(connection, drawList);
         }
@@ -252,26 +252,49 @@ internal sealed class MagGraphCanvas : ScalableCanvas
         }
 
         // Draw input sockets
+        //var blinkFactor = MathF.Sin((float)ImGui.GetTime()/3.15f*20) /2 + 0.5f;
+        
         foreach (var i in item.GetInputAnchors())
         {
-            if (!TypeUiRegistry.TryGetPropertiesForType(i.ConnectionType, out var type2UiProperties))
+            var isAlreadyUsed = i.ConnectionHash != 0;
+            if (isAlreadyUsed)
                 continue;
-
+            
+            var type2UiProperties = TypeUiRegistry.GetPropertiesForType(i.ConnectionType);
             var p = TransformPosition(i.PositionOnCanvas);
+            var blinkFactor = (float)((ImGui.GetTime() +  (p - ImGui.GetMousePos()).Length() * 0.001f ) % 1);
+            var color = ColorVariations.OperatorBackgroundHover.Apply(type2UiProperties.Color);
+            var isPotentialDragTarget = i.ConnectionType == _itemMovement.DraggedPrimaryOutputType
+                                        && !_itemMovement.IsItemDragged(item);
+            
+            
+            
+            // if (isPotentialDragTarget)
+            // {
+            //     //color = Color.Mix(color, ColorVariations.OperatorBackgroundHover.Apply(type2UiProperties.Color), blinkFactor);
+            // }
+            
+            if (isPotentialDragTarget)
+            {
+                drawList.AddCircleFilled(p, 2 + 15 * blinkFactor, color.Fade( (1- blinkFactor) * 0.7f));
+            }
+            
             if (i.Direction == MagGraphItem.Directions.Vertical)
             {
                 drawList.AddTriangleFilled(p + new Vector2(-1.5f, 0) * CanvasScale * 1.5f,
                                            p + new Vector2(1.5f, 0) * CanvasScale * 1.5f,
                                            p + new Vector2(0, 2) * CanvasScale * 1.5f,
-                                           ColorVariations.OperatorOutline.Apply(type2UiProperties.Color));
+                                           color);
             }
             else
             {
                 drawList.AddTriangleFilled(p + new Vector2(1, 0) + new Vector2(-0, -1.5f) * CanvasScale * 1.5f,
                                            p + new Vector2(1, 0) + new Vector2(0, 1.5f) * CanvasScale * 1.5f,
                                            p + new Vector2(1, 0) + new Vector2(2, 0) * CanvasScale * 1.5f,
-                                           ColorVariations.OperatorOutline.Apply(type2UiProperties.Color));
+                                           color);
             }
+
+
 
             ShowAnchorPointDebugs(i, true);
         }
@@ -337,8 +360,10 @@ internal sealed class MagGraphCanvas : ScalableCanvas
 
         var type = connection.TargetItem.InputLines[connection.InputLineIndex].Type;
 
-        if (!TypeUiRegistry.TryGetPropertiesForType(type, out var typeUiProperties))
-            return;
+        // if (!TypeUiRegistry.TryGetPropertiesForType(type, out var typeUiProperties))
+        //     return;
+        
+        var typeUiProperties = TypeUiRegistry.GetPropertiesForType(type);
 
         var anchorSize = 3 * CanvasScale;
         var typeColor = typeUiProperties.Color;
