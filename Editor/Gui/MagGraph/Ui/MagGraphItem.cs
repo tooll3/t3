@@ -97,7 +97,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
 
     public ImRect Area => ImRect.RectWithSize(PosOnCanvas, Size);
 
-    public static ImRect GetItemSetBounds(IEnumerable<MagGraphItem> items)
+    public static ImRect GetItemsBounds(IEnumerable<MagGraphItem> items)
     {
         ImRect extend = default;
         var index = 0;

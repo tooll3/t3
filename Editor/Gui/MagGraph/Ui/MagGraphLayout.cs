@@ -30,18 +30,24 @@ internal sealed class MagGraphLayout
         if (!SymbolUiRegistry.TryGetSymbolUi(compositionOp.Symbol.Id, out var parentSymbolUi))
             return;
 
-        if (HasCompositionDataChanged(compositionOp.Symbol, ref _compositionModelHash) || forceUpdate)
+        if (forceUpdate || _structureFlaggedAsChanged || HasCompositionDataChanged(compositionOp.Symbol, ref _compositionModelHash))
             RefreshDataStructure(compositionOp, parentSymbolUi);
 
         UpdateLayout();
     }
-
+    
+    public void FlagAsChanged()
+    {
+        _structureFlaggedAsChanged = true;
+    }
+    
     private void RefreshDataStructure(Instance composition, SymbolUi parentSymbolUi)
     {
         CollectItemReferences(composition, parentSymbolUi);
         UpdateConnectionSources(composition);
         UpdateVisibleItemLines(composition);
         CollectConnectionReferences(composition);
+        _structureFlaggedAsChanged = false;
     }
 
     /// <remarks>
@@ -524,9 +530,7 @@ internal sealed class MagGraphLayout
             //TODO: Snapped vertically
         }
     }
-
-
-
+    
     private static bool HasCompositionDataChanged(Symbol composition, ref int originalHash)
     {
         var newHash = 0;
@@ -547,4 +551,6 @@ internal sealed class MagGraphLayout
     public readonly Dictionary<Guid, MagGraphItem> Items = new(127);
     public readonly List<MagGraphConnection> MagConnections = new(127);
     private int _compositionModelHash;
+    private bool _structureFlaggedAsChanged;
+
 }

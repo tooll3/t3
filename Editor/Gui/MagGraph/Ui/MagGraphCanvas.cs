@@ -33,6 +33,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
             return;
 
         _graphLayout.ComputeLayout(_compositionOp);
+        _itemMovement.PrepareFrame();
 
         if (ImGui.Button("Center"))
         {
