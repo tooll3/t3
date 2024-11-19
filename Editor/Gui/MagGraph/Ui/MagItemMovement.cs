@@ -8,12 +8,11 @@ using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
-using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
@@ -44,27 +43,51 @@ internal sealed class MagItemMovement
     /// This is a work around to clear the state on mouse release
     /// </summary>
     // Todo: Call this from the main loop?
-    public static void CompleteFrame()
+    public void CompleteFrame()
     {
         if (ImGui.IsMouseReleased(0) && _modifyCommand != null)
         {
             Reset();
         }
     }
+    
+    private Vector2 _lastPosForDebug = Vector2.Zero;
+    private CircularBuffer<Vector2> _lastPositions = new(100);
 
     /// <summary>
     /// NOTE: This has to be called for ALL movable elements (ops, inputs, outputs) and directly after ImGui.Item
     /// </summary>
     public void HandleForItem(MagGraphItem item, MagGraphCanvas canvas, Instance composition)
     {
-        var clickedDown = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Left);
-
+        // Some debugging for drag behaviour...
+        // if (item.SymbolUi != null && item.Instance != null && item.SymbolUi.Symbol.Name == "Time")
+        // {
+        //     //var parentUi = item.SymbolUi.Parent;
+        //     if(SymbolUiRegistry.TryGetSymbolUi(item.Instance.Parent.Symbol.Id, out var parentSymbolUi))
+        //     {
+        //         var symbolChildUi = parentSymbolUi.ChildUis[item.Instance.SymbolChildId];
+        //         if (item.PosOnCanvas != _lastPosForDebug)
+        //         {
+        //             _lastPositions.Enqueue(item.PosOnCanvas);
+        //             //Log.Debug($"{_lastAppliedOffset}  {item.PosOnCanvas}  {symbolChildUi.PosOnCanvas}");
+        //             _lastPosForDebug = item.PosOnCanvas;
+        //         }
+        //
+        //         var drawList = ImGui.GetForegroundDrawList();
+        //         foreach (var p in _lastPositions.ToArray())
+        //         {
+        //             drawList.AddCircle(canvas.TransformPosition(p), 5, Color.Red);
+        //         }
+        //     }  
+        // }
+        
         var isActiveNode = item.Id == _draggedNodeId;
+        var clickedDown = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Left);
         if (clickedDown)
         {
             _longTapItem = item;
             _draggedNodeId = item.Id;
-            if (IsItemSelected(item))
+            if (item.IsSelected(_nodeSelection))
             {
                 _draggedItems.Clear();
                 foreach (var s in _nodeSelection.Selection)
@@ -102,6 +125,7 @@ internal sealed class MagItemMovement
             var singleDraggedNode = (_draggedItems.Count == 1) ? _draggedItems.First() : null;
             _draggedNodeId = Guid.Empty;
             _draggedItems.Clear();
+            _lastAppliedOffset = Vector2.Zero;
 
             var wasDragging = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() > UserSettings.Config.ClickThreshold;
             if (wasDragging)
@@ -172,7 +196,8 @@ internal sealed class MagItemMovement
         DraggedPrimaryOutputType = null;
         
         _lastAppliedOffset = Vector2.Zero;
-        UpdateDragConnectionOnStart(draggedNodes);
+        _isDragging = false;
+        UpdateBorderConnections(draggedNodes);
 
         // Set primary types to indicate targets for dragging
         if (_draggedItems.Count != 1)
@@ -210,14 +235,13 @@ internal sealed class MagItemMovement
                     _modifyCommand = new ModifyCanvasElementsCommand(composition.Symbol.Id, snapGraphItems, _nodeSelection);
                 }
             }
-
+        
             _isDragging = false;
             return;
         }
 
         if (!_isDragging)
         {
-            //Log.Debug("Dragging has begun");
             _dragStartPosInOpOnCanvas = canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
             _isDragging = true;
         }
@@ -311,19 +335,19 @@ internal sealed class MagItemMovement
         }
     }
 
-    private void UpdateDragConnectionOnStart(HashSet<MagGraphItem> draggedItems)
+    private void UpdateBorderConnections(HashSet<MagGraphItem> draggedItems)
     {
-        _bridgeConnectionsOnStart.Clear();
+        _borderConnections.Clear();
         foreach (var c in _layout.MagConnections)
         {
             var targetDragged = draggedItems.Contains(c.TargetItem);
             var sourceDragged = draggedItems.Contains(c.SourceItem);
             if (targetDragged != sourceDragged)
             {
-                _bridgeConnectionsOnStart.Add(c);
+                _borderConnections.Add(c);
             }
         }
-        Log.Debug($" Found {_bridgeConnectionsOnStart.Count} bridge connections in {draggedItems.Count}" );
+        //Log.Debug($" Found {_borderConnections.Count} bridge connections in {draggedItems.Count}" );
     }
 
     [SuppressMessage("ReSharper", "NotAccessedField.Local")]
@@ -515,13 +539,12 @@ internal sealed class MagItemMovement
     /// <summary>
     /// Reset to avoid accidental dragging of previous elements 
     /// </summary>
-    private static void Reset()
+    private void Reset()
     {
         _modifyCommand = null;
+        _lastAppliedOffset = Vector2.Zero;
         _draggedItems.Clear();
     }
-
-    private bool IsItemSelected(ISelectableCanvasObject item) => _nodeSelection.IsNodeSelected(item);
 
     public double LastSnapTime = double.NegativeInfinity;
     public Vector2 LastSnapPositionOnCanvas;
@@ -529,13 +552,13 @@ internal sealed class MagItemMovement
     private Vector2 _lastAppliedOffset;
 
     private const float SnapThreshold = 30;
-    private readonly List<MagGraphConnection> _bridgeConnectionsOnStart = [];
+    private readonly List<MagGraphConnection> _borderConnections = [];
 
     private MagGraphItem? _longTapItem;
     private double _mousePressedTime;
 
     private static bool _isDragging;
-    private static Vector2 _dragStartPosInOpOnCanvas;
+    private Vector2 _dragStartPosInOpOnCanvas;
     private static ModifyCanvasElementsCommand? _modifyCommand;
     private static Guid _draggedNodeId = Guid.Empty;
     private static readonly HashSet<MagGraphItem> _draggedItems = [];

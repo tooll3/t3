@@ -26,7 +26,9 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
     public Type PrimaryType = typeof(float);
     public required ISelectableCanvasObject Selectable;
     public Vector2 PosOnCanvas { get => Selectable.PosOnCanvas; set => Selectable.PosOnCanvas = value; }
+
     public Vector2 Size { get; set; }
+
     //public bool IsSelected => NodeSelection.IsNodeSelected(this);
     public MagGroup? MagGroup;
 
@@ -45,7 +47,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
                            Variants.Operator => SymbolChild != null ? SymbolChild.ReadableName : "???",
                            Variants.Input    => Selectable is IInputUi inputUi ? inputUi.InputDefinition.Name : "???",
                            Variants.Output   => Selectable is IOutputUi outputUi ? outputUi.OutputDefinition.Name : "???",
-                           _                   => "???"
+                           _                 => "???"
                        };
         }
     }
@@ -99,7 +101,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
     {
         ImRect extend = default;
         var index = 0;
-        
+
         // Can't use list because enumerable...
         foreach (var item in items)
         {
@@ -136,7 +138,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
                              {
                                  PositionOnCanvas = new Vector2(WidthHalf, Size.Y) + PosOnCanvas,
                                  Direction = Directions.Vertical,
-                                 ConnectionType =  OutputLines[0].Output.ValueType,
+                                 ConnectionType = OutputLines[0].Output.ValueType,
                                  ConnectionHash = GetSnappedConnectionHash(OutputLines[0].ConnectionsOut),
                                  SlotId = OutputLines[0].Output.Id,
                              };
@@ -244,9 +246,13 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
 
     public void Select(NodeSelection nodeSelection)
     {
-        if (Variant == MagGraphItem.Variants.Operator)
+        // TODO: Avoid this by not using magGraphItem as selectable
+        if (Variant == MagGraphItem.Variants.Operator
+            && Instance?.Parent != null
+            && SymbolUiRegistry.TryGetSymbolUi(Instance.Parent.Symbol.Id, out var parentSymbolUi)
+            && parentSymbolUi.ChildUis.TryGetValue(Instance.SymbolChildId, out var childUi))
         {
-            nodeSelection.SetSelection(this, Instance);
+            nodeSelection.SetSelection(childUi, Instance);
         }
         else
         {
@@ -256,7 +262,11 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
 
     public void AddToSelection(NodeSelection nodeSelection)
     {
-        if (Variant == MagGraphItem.Variants.Operator)
+        // TODO: Avoid this by not using magGraphItem as selectable
+        if (Variant == MagGraphItem.Variants.Operator
+            && Instance?.Parent != null
+            && SymbolUiRegistry.TryGetSymbolUi(Instance.Parent.Symbol.Id, out var parentSymbolUi)
+            && parentSymbolUi.ChildUis.TryGetValue(Instance.SymbolChildId, out var childUi))
         {
             nodeSelection.AddSelection(this, Instance);
         }
@@ -264,5 +274,10 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
         {
             nodeSelection.AddSelection(this);
         }
+    }
+
+    public bool IsSelected(NodeSelection nodeSelection)
+    {
+        return nodeSelection.Selection.Any(c => c.Id == Id);
     }
 }

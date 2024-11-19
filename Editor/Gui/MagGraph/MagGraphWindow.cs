@@ -27,11 +27,7 @@ internal sealed class MagGraphWindow : Window
         if (CompositionOp != focusedCompositionOp)
         {
             CompositionOp = focusedCompositionOp;
-            _rootInstance = GraphWindow.Composition.GetFor(focusedCompositionOp!);
-            _structure = new Structure(() => _rootInstance.Instance);
-            var navigationHistory = new NavigationHistory(_structure);
-            var nodeSelection = new NodeSelection(navigationHistory, _structure);
-            _magGraphCanvas = new MagGraphCanvas(this, nodeSelection);
+            _magGraphCanvas = new MagGraphCanvas(this, GraphWindow.Focused.GraphCanvas.NodeSelection);
         }
         
         _magGraphCanvas?.Draw();
@@ -43,8 +39,5 @@ internal sealed class MagGraphWindow : Window
     }
 
     internal Instance CompositionOp;
-
     private MagGraphCanvas _magGraphCanvas;
-    private GraphWindow.Composition _rootInstance;
-    private Structure _structure;
 }

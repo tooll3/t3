@@ -81,7 +81,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
             }
         }
 
-        MagItemMovement.CompleteFrame();
+        _itemMovement.CompleteFrame();
     }
 
     private void DrawBackgroundGrids(ImDrawListPtr drawList)
@@ -202,7 +202,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
         // Background
         drawList.AddRectFilled(pMin, pMax, ColorVariations.OperatorBackground.Apply(typeColor).Fade(0.7f), 0);
 
-        var isSelected = _nodeSelection.IsNodeSelected(item);
+        var isSelected =  item.IsSelected(_nodeSelection);
         var outlineColor = isSelected
                                ? UiColors.ForegroundFull
                                : UiColors.BackgroundFull.Fade(0.3f);
@@ -214,9 +214,11 @@ internal sealed class MagGraphCanvas : ScalableCanvas
         ImGui.PopFont();
         var downScale = MathF.Min(1, MagGraphItem.Width * 0.9f / labelSize.X);
 
+        var labelPos = pMin + new Vector2(8, 7) * CanvasScale + new Vector2(0, -1);
+        labelPos = new Vector2(MathF.Round(labelPos.X), MathF.Round(labelPos.Y));
         drawList.AddText(Fonts.FontBold,
                          Fonts.FontBold.FontSize * downScale * CanvasScale,
-                         pMin + new Vector2(8, 9) * CanvasScale,
+                         labelPos,
                          labelColor,
                          item.ReadableName);
 
