@@ -48,6 +48,7 @@ internal sealed class MagItemMovement
     /// a hasChanged flag in layout.</remarks>
     public void PrepareFrame()
     {
+        // derive _draggedItems from ids
         _draggedItems.Clear();
         foreach (var id in _draggedItemIds)
         {
@@ -58,6 +59,8 @@ internal sealed class MagItemMovement
             }
             _draggedItems.Add(item);
         }
+        
+        UpdateBorderConnections(_draggedItems);
     }
     
     
@@ -118,10 +121,33 @@ internal sealed class MagItemMovement
             var hasChanged = HandleSnappedDragging(canvas, composition);
             if (hasChanged)
             {
-                if(TryCreateNewConnectionFromSnap(composition))
-                    _layout.FlagAsChanged();
+                if (_snapping.IsSnapped)
+                {
+                    if(TryCreateNewConnectionFromSnap(composition))
+                        _layout.FlagAsChanged();
+                }
+                else
+                {
+                    var structureChanged = false;
+                    foreach (var c in _layout.MagConnections)
+                    {
+                        if (_snappedBorderConnections.Contains(c.ConnectionHash))
+                        {
+                            Log.Debug("Snapped border connection has been broken " + c);
+                            var connection = new Symbol.Connection(c.SourceItem.Id,
+                                                                   c.SourceOutput.Id,
+                                                                   c.TargetItem.Id,
+                                                                   c.TargetItem.InputLines[c.InputLineIndex].Input.Id);
+                            
+                            _macroCommand.AddAndExecCommand(new DeleteConnectionCommand(composition.Symbol, connection, 0));
+                            structureChanged = true;
+                        }
+                    }
+                    if(structureChanged)
+                        _layout.FlagAsChanged();
+                }
 
-                Log.Debug("Snapping changed " + _snapping.IsSnapped);
+                //Log.Debug("Snapping changed " + _snapping.IsSnapped);
             }
         }
         // Release and complete dragging
@@ -213,6 +239,7 @@ internal sealed class MagItemMovement
                     continue;
 
                 GetPotentialConnectionsAfterSnap(ref newConnections, draggedItem, otherItem);
+                GetPotentialConnectionsAfterSnap(ref newConnections,  otherItem,draggedItem);
             }
         }
 
@@ -407,6 +434,7 @@ internal sealed class MagItemMovement
     private void UpdateBorderConnections(HashSet<MagGraphItem> draggedItems)
     {
         _borderConnections.Clear();
+        // This could be optimized by only looking for dragged item connections
         foreach (var c in _layout.MagConnections)
         {
             var targetDragged = draggedItems.Contains(c.TargetItem);
@@ -416,8 +444,18 @@ internal sealed class MagItemMovement
                 _borderConnections.Add(c);
             }
         }
+        _snappedBorderConnections.Clear();
+
+        foreach (var c in _borderConnections)
+        {
+            if (c.IsSnapped)
+                _snappedBorderConnections.Add(c.ConnectionHash);
+        }
+        //Log.Debug($"Found {_snappedBorderConnections.Count} snapped border connections");
         //Log.Debug($" Found {_borderConnections.Count} bridge connections in {draggedItems.Count}" );
     }
+
+    private readonly HashSet<int> _snappedBorderConnections = new();
 
     
     private static void GetPotentialConnectionsAfterSnap(ref List<Symbol.Connection> result, MagGraphItem a, MagGraphItem b)
@@ -477,7 +515,11 @@ internal sealed class MagItemMovement
             
             // Clarify if outConnection should also be empty...
             if (outputLine.ConnectionsOut.Count > 0)
+            {
+                if(outputLine.ConnectionsOut[0].IsSnapped 
+                   && (outputLine.ConnectionsOut[0].SourcePos - inPos).Length() < 0.01f)
                 return;
+            }
             
             newConnections.Add(new Symbol.Connection(
                                                      a.Id,
@@ -633,6 +675,8 @@ internal sealed class MagItemMovement
             }
         }
     }
+    
+    
 
     public bool IsItemDragged(MagGraphItem item) => _draggedItemIds.Contains(item.Id);
     
