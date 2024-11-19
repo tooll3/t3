@@ -15,6 +15,7 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
+
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 
 // ReSharper disable UseWithExpressionToCopyStruct
@@ -50,7 +51,7 @@ internal sealed class MagItemMovement
             Reset();
         }
     }
-    
+
     private Vector2 _lastPosForDebug = Vector2.Zero;
     private CircularBuffer<Vector2> _lastPositions = new(100);
 
@@ -80,9 +81,10 @@ internal sealed class MagItemMovement
         //         }
         //     }  
         // }
-        
+
         var isActiveNode = item.Id == _draggedNodeId;
         var clickedDown = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Left);
+        // Start dragging
         if (clickedDown)
         {
             _longTapItem = item;
@@ -112,11 +114,17 @@ internal sealed class MagItemMovement
             _modifyCommand = new ModifyCanvasElementsCommand(composition.Symbol.Id, snapGraphItems, _nodeSelection);
             //ShakeDetector.ResetShaking();
         }
+        // Update dragging...
         else if (isActiveNode && ImGui.IsMouseDown(ImGuiMouseButton.Left) && _modifyCommand != null)
         {
             // TODO: Implement shake disconnect later
-            HandleSnappedDragging(canvas, composition);
+            var hasChanged = HandleSnappedDragging(canvas, composition);
+            if (hasChanged)
+            {
+                Log.Debug("Snapping changed " + _snapping.IsSnapped);
+            }
         }
+        // Release and complete dragging
         else if (isActiveNode && ImGui.IsMouseReleased(0) && _modifyCommand != null)
         {
             if (_draggedNodeId != item.Id)
@@ -194,7 +202,7 @@ internal sealed class MagItemMovement
     {
         DraggedPrimaryInputType = null;
         DraggedPrimaryOutputType = null;
-        
+
         _lastAppliedOffset = Vector2.Zero;
         _isDragging = false;
         UpdateBorderConnections(draggedNodes);
@@ -202,17 +210,17 @@ internal sealed class MagItemMovement
         // Set primary types to indicate targets for dragging
         if (_draggedItems.Count != 1)
             return;
-        
+
         var item = _draggedItems.First();
         DraggedPrimaryOutputType = item.PrimaryType;
-            
-        if(item.InputLines.Length == 0)
+
+        if (item.InputLines.Length == 0)
             return;
-            
+
         DraggedPrimaryInputType = item.InputLines[0].Type;
     }
 
-    private void HandleSnappedDragging(ICanvas canvas, Instance composition)
+    private bool HandleSnappedDragging(ICanvas canvas, Instance composition)
     {
         var dl = ImGui.GetWindowDrawList();
         if (!ImGui.IsMouseDragging(ImGuiMouseButton.Left))
@@ -235,9 +243,9 @@ internal sealed class MagItemMovement
                     _modifyCommand = new ModifyCanvasElementsCommand(composition.Symbol.Id, snapGraphItems, _nodeSelection);
                 }
             }
-        
+
             _isDragging = false;
-            return;
+            return false;
         }
 
         if (!_isDragging)
@@ -282,43 +290,44 @@ internal sealed class MagItemMovement
 
         _lastAppliedOffset = requestedDeltaOnCanvas;
 
-        var snapping = new Snapping { BestDistance = float.PositiveInfinity };
+        //_snapping = new Snapping() { BestDistance = float.PositiveInfinity};
+        _snapping.Reset();
 
         foreach (var otherItem in overlappingItems)
         {
             foreach (var draggedItem in _draggedItems)
             {
-                snapping.TestItemsForSnap(otherItem, draggedItem, false, _canvas);
-                snapping.TestItemsForSnap(draggedItem, otherItem, true, _canvas);
+                _snapping.TestItemsForSnap(otherItem, draggedItem, false, _canvas);
+                _snapping.TestItemsForSnap(draggedItem, otherItem, true, _canvas);
             }
         }
 
         // Highlight best distance
         if (_canvas.ShowDebug)
         {
-            if (snapping.BestDistance < 500)
+            if (_snapping.BestDistance < 500)
             {
-                var p1 = _canvas.TransformPosition(snapping.OutAnchorPos);
-                var p2 = _canvas.TransformPosition(snapping.InputAnchorPos);
+                var p1 = _canvas.TransformPosition(_snapping.OutAnchorPos);
+                var p2 = _canvas.TransformPosition(_snapping.InputAnchorPos);
                 dl.AddLine(p1, p2, UiColors.ForegroundFull.Fade(0.1f), 6);
             }
         }
 
         // Snapped
-        if (snapping.BestDistance < MagGraphItem.LineHeight * 0.5f)
+        if (_snapping.IsSnapped)
         {
-            var bestSnapDelta = !snapping.Reverse
-                                    ? snapping.OutAnchorPos - snapping.InputAnchorPos
-                                    : snapping.InputAnchorPos - snapping.OutAnchorPos;
+            var bestSnapDelta = !_snapping.Reverse
+                                    ? _snapping.OutAnchorPos - _snapping.InputAnchorPos
+                                    : _snapping.InputAnchorPos - _snapping.OutAnchorPos;
 
             dl.AddLine(_canvas.TransformPosition(mousePosOnCanvas),
                        canvas.TransformPosition(mousePosOnCanvas) + _canvas.TransformDirection(bestSnapDelta),
                        Color.White);
 
-            if (Vector2.Distance(snapping.InputAnchorPos, LastSnapPositionOnCanvas) > 2)
+            if (Vector2.Distance(_snapping.InputAnchorPos, LastSnapPositionOnCanvas) > 2)
             {
                 LastSnapTime = ImGui.GetTime();
-                LastSnapPositionOnCanvas = snapping.InputAnchorPos;
+                LastSnapPositionOnCanvas = _snapping.InputAnchorPos;
             }
 
             foreach (var n in _draggedItems)
@@ -333,6 +342,10 @@ internal sealed class MagItemMovement
             LastSnapPositionOnCanvas = Vector2.Zero;
             LastSnapTime = double.NegativeInfinity;
         }
+
+        var snappingChanged = _snapping.IsSnapped != _wasSnapped;
+        _wasSnapped = _snapping.IsSnapped;
+        return snappingChanged;
     }
 
     private void UpdateBorderConnections(HashSet<MagGraphItem> draggedItems)
@@ -351,11 +364,11 @@ internal sealed class MagItemMovement
     }
 
     [SuppressMessage("ReSharper", "NotAccessedField.Local")]
-    private struct Snapping
+    private class Snapping
     {
         public float BestDistance;
-        public MagGraphItem BestA;
-        public MagGraphItem BestB;
+        public MagGraphItem? BestA;
+        public MagGraphItem? BestB;
         public MagGraphItem.Directions Direction;
         public int InputLineIndex;
         public int MultiInputIndex;
@@ -363,114 +376,76 @@ internal sealed class MagItemMovement
         public Vector2 OutAnchorPos;
         public Vector2 InputAnchorPos;
         public bool Reverse;
+        public bool IsSnapped => BestDistance < MagGraphItem.LineHeight * 0.5f;
 
         public void TestItemsForSnap(MagGraphItem a, MagGraphItem b, bool revert, MagGraphCanvas canvas)
         {
-            MultiInputIndex = 0;
-            for (var bInputLineIndex = 0; bInputLineIndex < b.InputLines.Length; bInputLineIndex++)
+            MagGraphConnection? inConnection;
+
+            int aOutLineIndex, bInputLineIndex;
+            for (bInputLineIndex = 0; bInputLineIndex < b.InputLines.Length; bInputLineIndex++)
             {
                 ref var bInputLine = ref b.InputLines[bInputLineIndex];
-                var inConnection = bInputLine.ConnectionIn;
+                inConnection = bInputLine.ConnectionIn;
 
-                for (var aOutLineIndex = 0; aOutLineIndex < a.OutputLines.Length; aOutLineIndex++)
+                for (aOutLineIndex = 0; aOutLineIndex < a.OutputLines.Length; aOutLineIndex++)
                 {
-                    ref var ol = ref a.OutputLines[aOutLineIndex];
-                    if (bInputLine.Type != ol.Output.ValueType)
+                    ref var outputLine = ref a.OutputLines[aOutLineIndex];  // Avoid copying data from array
+                    if (bInputLine.Type != outputLine.Output.ValueType)
                         continue;
 
-                    // A -> B vertical
+                    // vertical
                     if (aOutLineIndex == 0 && bInputLineIndex == 0)
                     {
-                        var outPos = new Vector2(a.Area.Min.X + MagGraphItem.WidthHalf, a.Area.Max.Y);
-                        var inPos = new Vector2(b.Area.Min.X + MagGraphItem.WidthHalf, b.Area.Min.Y);
-
-                        // If input is connected the only valid output is the one with the connection line
-                        if (inConnection != null)
-                        {
-                            foreach (var c in ol.ConnectionsOut)
-                            {
-                                if (c != inConnection)
-                                    continue;
-
-                                ShowDebugLine(outPos, inPos, a.PrimaryType);
-
-                                if (TestAndKeepPositionsForSnapping(outPos, inPos))
-                                {
-                                    Direction = MagGraphItem.Directions.Vertical;
-                                    OutLineIndex = aOutLineIndex;
-                                    InputLineIndex = bInputLineIndex;
-                                    MultiInputIndex = 0;
-                                    BestA = a;
-                                    BestB = b;
-                                    Reverse = revert;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            ShowDebugLine(outPos, inPos, a.PrimaryType);
-
-                            if (TestAndKeepPositionsForSnapping(outPos, inPos))
-                            {
-                                Direction = MagGraphItem.Directions.Vertical;
-                                OutLineIndex = aOutLineIndex;
-                                InputLineIndex = bInputLineIndex;
-                                MultiInputIndex = 0;
-                                BestA = a;
-                                BestB = b;
-                                Reverse = revert;
-                            }
-                        }
+                        TestAndKeepPositionsForSnapping(ref outputLine,
+                                                        0,
+                                                        MagGraphItem.Directions.Vertical,
+                                                        new Vector2(a.Area.Min.X + MagGraphItem.WidthHalf, a.Area.Max.Y),
+                                                        new Vector2(b.Area.Min.X + MagGraphItem.WidthHalf, b.Area.Min.Y));
                     }
 
-                    // // A -> B horizontally
-                    if (ol.Output.ValueType == bInputLine.Input.ValueType)
+                    // horizontal
+                    if (outputLine.Output.ValueType == bInputLine.Input.ValueType)
                     {
-                        var outPos = new Vector2(a.Area.Max.X, a.Area.Min.Y + (0.5f + ol.VisibleIndex) * MagGraphItem.LineHeight);
-                        var inPos = new Vector2(b.Area.Min.X, b.Area.Min.Y + (0.5f + bInputLine.VisibleIndex) * MagGraphItem.LineHeight);
-
-                        if (inConnection != null)
-                        {
-                            foreach (var c in ol.ConnectionsOut)
-                            {
-                                if (c != inConnection)
-                                    continue;
-
-                                ShowDebugLine(outPos, inPos, a.PrimaryType);
-
-                                if (TestAndKeepPositionsForSnapping(outPos, inPos))
-                                {
-                                    Direction = MagGraphItem.Directions.Horizontal;
-                                    OutLineIndex = aOutLineIndex;
-                                    InputLineIndex = bInputLineIndex;
-                                    MultiInputIndex = bInputLine.MultiInputIndex;
-                                    BestA = a;
-                                    BestB = b;
-                                    Reverse = revert;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            ShowDebugLine(outPos, inPos, a.PrimaryType);
-
-                            if (TestAndKeepPositionsForSnapping(outPos, inPos))
-                            {
-                                Direction = MagGraphItem.Directions.Horizontal;
-                                OutLineIndex = aOutLineIndex;
-                                InputLineIndex = bInputLineIndex;
-                                MultiInputIndex = bInputLine.MultiInputIndex;
-                                BestA = a;
-                                BestB = b;
-                                Reverse = revert;
-                            }
-                        }
+                        TestAndKeepPositionsForSnapping(ref outputLine,
+                                                        bInputLine.MultiInputIndex,
+                                                        MagGraphItem.Directions.Horizontal,
+                                                        new Vector2(a.Area.Max.X, a.Area.Min.Y + (0.5f + outputLine.VisibleIndex) * MagGraphItem.LineHeight),
+                                                        new Vector2(b.Area.Min.X, b.Area.Min.Y + (0.5f + bInputLine.VisibleIndex) * MagGraphItem.LineHeight));
                     }
                 }
             }
 
             Direction = MagGraphItem.Directions.Horizontal;
             return;
+
+            void TestAndKeepPositionsForSnapping(ref MagGraphItem.OutputLine outputLine,
+                                                 int multiInputIndexIfValid,
+                                                 MagGraphItem.Directions directionIfValid,
+                                                 Vector2 outPos,
+                                                 Vector2 inPos)
+            {
+                // If input is connected the only valid output is the one with the connection line
+                if (inConnection != null && outputLine.ConnectionsOut.All(c => c != inConnection))
+                    return;
+
+                ShowDebugLine(outPos, inPos, a.PrimaryType);
+
+                var d = Vector2.Distance(outPos, inPos);
+                if (d >= BestDistance)
+                    return;
+
+                BestDistance = d;
+                OutAnchorPos = outPos;
+                InputAnchorPos = inPos;
+                OutLineIndex = aOutLineIndex;
+                InputLineIndex = bInputLineIndex;
+                BestA = a;
+                BestB = b;
+                Reverse = revert;
+                Direction = directionIfValid;
+                MultiInputIndex = multiInputIndexIfValid;
+            }
 
             void ShowDebugLine(Vector2 outPos, Vector2 inPos, Type connectionType)
             {
@@ -487,19 +462,12 @@ internal sealed class MagItemMovement
             }
         }
 
-        private bool TestAndKeepPositionsForSnapping(Vector2 outPos, Vector2 inputPos)
+        public void Reset()
         {
-            var d = Vector2.Distance(outPos, inputPos);
-            if (d >= BestDistance)
-                return false;
-
-            BestDistance = d;
-            OutAnchorPos = outPos;
-            InputAnchorPos = inputPos;
-            return true;
+            BestDistance = float.PositiveInfinity;
         }
     }
-    
+
     private static void CollectSnappedDragItems(MagGraphItem rootItem)
     {
         var collection = _draggedItems;
@@ -510,7 +478,7 @@ internal sealed class MagItemMovement
         {
             if (!collection.Add(item))
                 return;
-            
+
             for (var index = 0; index < item.InputLines.Length; index++)
             {
                 var c = item.InputLines[index].ConnectionIn;
@@ -532,9 +500,8 @@ internal sealed class MagItemMovement
             }
         }
     }
-    
+
     public bool IsItemDragged(MagGraphItem item) => _draggedItems.Contains(item);
-    
 
     /// <summary>
     /// Reset to avoid accidental dragging of previous elements 
@@ -553,6 +520,8 @@ internal sealed class MagItemMovement
 
     private const float SnapThreshold = 30;
     private readonly List<MagGraphConnection> _borderConnections = [];
+    private bool _wasSnapped;
+    private static readonly Snapping _snapping = new();
 
     private MagGraphItem? _longTapItem;
     private double _mousePressedTime;
