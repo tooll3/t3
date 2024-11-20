@@ -82,6 +82,15 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
         public Type ConnectionType;
         public int ConnectionHash;
         public Guid SlotId;
+        
+        /** Test if a could be split be inserting b */
+        public bool CountBeSplitBy(AnchorPoint b)
+        {
+            return ConnectionType == b.ConnectionType
+                   && Direction == b.Direction
+                   && ConnectionHash != FreeAnchor
+                   && b.ConnectionHash == FreeAnchor;
+        }
     }
 
     public enum Directions
@@ -210,7 +219,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
         return FreeAnchor;
     }
 
-    private const int FreeAnchor = 0;
+    public const int FreeAnchor = 0;
 
     //
     // public void ForOutputAnchors(Action<AnchorPoint> call)

@@ -12,8 +12,6 @@ using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.Windows;
-using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
@@ -144,18 +142,15 @@ internal sealed class MagItemMovement
                 return;
 
             var singleDraggedNode = (_draggedItems.Count == 1) ? _draggedItems.First() : null;
-            _draggedNodeId = Guid.Empty;
-            _draggedItemIds.Clear();
-            _lastAppliedOffset = Vector2.Zero;
+
 
             var wasDragging = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() > UserSettings.Config.ClickThreshold;
             if (wasDragging)
             {
-                _moveElementsCommand.StoreCurrentValues();
+                _moveElementsCommand?.StoreCurrentValues();
 
                 if (singleDraggedNode != null
-                    && ConnectionSplitHelper.BestMatchLastFrame != null
-                    && singleDraggedNode is MagGraphItem graphItem)
+                    && ConnectionSplitHelper.BestMatchLastFrame != null)
                 {
                     //var instanceForSymbolChildUi = composition.Children.SingleOrDefault(child => child.SymbolChildId == graphItem.SymbolChildUi.Id);
                     // TODO: Implement later
@@ -192,8 +187,7 @@ internal sealed class MagItemMovement
                     }
                 }
             }
-
-            _macroCommand = null;
+            StopDragOperation();
         }
         else if (ImGui.IsMouseReleased(0) && _macroCommand == null)
         {
@@ -255,7 +249,7 @@ internal sealed class MagItemMovement
                     if (ca != cb
                         && cb.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical
                         && cb.SourcePos.Y > ca.SourcePos.Y
-                        && Math.Abs(cb.SourcePos.X - ca.SourcePos.X) < SnapTollerance
+                        && Math.Abs(cb.SourcePos.X - ca.SourcePos.X) < SnapTolerance
                         && cb.Type == ca.Type)
                     {
                         potentialLinks.Add(cb);
@@ -348,7 +342,7 @@ internal sealed class MagItemMovement
         return affectedItems;
     }
 
-    private record SnapCollapseConnectionPair(MagGraphConnection Ca, MagGraphConnection Cb);
+    private sealed record SnapCollapseConnectionPair(MagGraphConnection Ca, MagGraphConnection Cb);
 
     private bool TryCreateNewConnectionFromSnap(Instance composition)
     {
@@ -389,6 +383,8 @@ internal sealed class MagItemMovement
 
         _lastAppliedOffset = Vector2.Zero;
         _isDragging = false;
+        
+        UpdateSplitInsertionPoints(_draggedItems);
 
         // Set primary types to indicate targets for dragging
         if (_draggedItemIds.Count != 1)
@@ -416,8 +412,13 @@ internal sealed class MagItemMovement
     {
         _moveElementsCommand = null;
         _macroCommand = null;
+        
         _lastAppliedOffset = Vector2.Zero;
+        
+        _draggedNodeId = Guid.Empty;
         _draggedItemIds.Clear();
+        DraggedPrimaryOutputType = null;
+        SplitInsertionPoints.Clear();
     }
 
     private bool HandleSnappedDragging(ICanvas canvas, Instance composition)
@@ -577,7 +578,54 @@ internal sealed class MagItemMovement
         }
     }
 
-    private readonly HashSet<int> _snappedBorderConnections = new();
+    /**
+     * When starting a new drag operation, we try to identify border input anchors of the dragged items,
+     * that can be used to insert them between other snapped items.
+     */
+    private void UpdateSplitInsertionPoints(HashSet<MagGraphItem> draggedItems)
+    {
+        SplitInsertionPoints.Clear();
+
+        foreach (var itemA in draggedItems)
+        {
+            foreach (var inputAnchor in itemA.GetInputAnchors())
+            {
+                if (inputAnchor.ConnectionHash != MagGraphItem.FreeAnchor)
+                    continue;
+
+                var inlineItems = new List<SplitInsertionPoint>();
+                foreach (var itemB in draggedItems)
+                {
+                    var xy = inputAnchor.Direction == MagGraphItem.Directions.Horizontal ? 0 : 1;
+                    // if (itemA == itemB)
+                    //     continue;
+                    
+                    if (Math.Abs(itemA.PosOnCanvas[1-xy] - itemB.PosOnCanvas[1-xy]) > SnapTolerance)
+                        continue;
+
+                    foreach (var outputAnchor in itemB.GetOutputAnchors())
+                    {
+                        if (outputAnchor.ConnectionHash != MagGraphItem.FreeAnchor
+                            || outputAnchor.Direction != inputAnchor.Direction
+                            || inputAnchor.ConnectionType != outputAnchor.ConnectionType)
+                        {
+                            continue;
+                        }
+                        inlineItems.Add(new SplitInsertionPoint(itemA.Id, 
+                                                                inputAnchor, 
+                                                                outputAnchor.PositionOnCanvas[xy]- inputAnchor.PositionOnCanvas[xy] ));
+                    }
+                }
+
+                // Skip insertion lines with gaps
+                if (inlineItems.Count == 1)
+                {
+                    SplitInsertionPoints.Add(inlineItems[0]);
+                }
+            }
+        }
+    }
+
 
     private static void GetPotentialConnectionsAfterSnap(ref List<Symbol.Connection> result, MagGraphItem a, MagGraphItem b)
     {
@@ -601,7 +649,6 @@ internal sealed class MagItemMovement
                     AddPossibleNewConnections(ref result,
                                               ref outputLine,
                                               ref bInputLine,
-                                              MagGraphItem.Directions.Vertical,
                                               new Vector2(a.Area.Min.X + MagGraphItem.WidthHalf, a.Area.Max.Y),
                                               new Vector2(b.Area.Min.X + MagGraphItem.WidthHalf, b.Area.Min.Y));
                 }
@@ -612,7 +659,6 @@ internal sealed class MagItemMovement
                     AddPossibleNewConnections(ref result,
                                               ref outputLine,
                                               ref bInputLine,
-                                              MagGraphItem.Directions.Horizontal,
                                               new Vector2(a.Area.Max.X, a.Area.Min.Y + (0.5f + outputLine.VisibleIndex) * MagGraphItem.LineHeight),
                                               new Vector2(b.Area.Min.X, b.Area.Min.Y + (0.5f + bInputLine.VisibleIndex) * MagGraphItem.LineHeight));
                 }
@@ -624,11 +670,10 @@ internal sealed class MagItemMovement
         void AddPossibleNewConnections(ref List<Symbol.Connection> newConnections,
                                        ref MagGraphItem.OutputLine outputLine,
                                        ref MagGraphItem.InputLine inputLine,
-                                       MagGraphItem.Directions directionIfValid,
                                        Vector2 outPos,
                                        Vector2 inPos)
         {
-            if (Vector2.Distance(outPos, inPos) > SnapTollerance)
+            if (Vector2.Distance(outPos, inPos) > SnapTolerance)
                 return;
 
             if (inConnection != null)
@@ -638,7 +683,7 @@ internal sealed class MagItemMovement
             if (outputLine.ConnectionsOut.Count > 0)
             {
                 if (outputLine.ConnectionsOut[0].IsSnapped
-                    && (outputLine.ConnectionsOut[0].SourcePos - inPos).Length() < SnapTollerance)
+                    && (outputLine.ConnectionsOut[0].SourcePos - inPos).Length() < SnapTolerance)
                     return;
             }
 
@@ -652,7 +697,7 @@ internal sealed class MagItemMovement
     }
 
     [SuppressMessage("ReSharper", "NotAccessedField.Local")]
-    private class Snapping
+    private sealed class Snapping
     {
         public float BestDistance;
         public MagGraphItem? BestA;
@@ -807,13 +852,16 @@ internal sealed class MagItemMovement
         }
     }
 
-    public bool IsItemDragged(MagGraphItem item) => _draggedItemIds.Contains(item.Id);
+    public static bool IsItemDragged(MagGraphItem item) => _draggedItemIds.Contains(item.Id);
 
     public double LastSnapTime = double.NegativeInfinity;
     public Vector2 LastSnapPositionOnCanvas;
 
+    internal Type? DraggedPrimaryOutputType;
+    internal Type? DraggedPrimaryInputType;
+    internal readonly List<SplitInsertionPoint> SplitInsertionPoints = [];
+    
     private Vector2 _lastAppliedOffset;
-
     private const float SnapThreshold = 30;
     private readonly List<MagGraphConnection> _borderConnections = [];
     private bool _wasSnapped;
@@ -828,13 +876,15 @@ internal sealed class MagItemMovement
     private static MacroCommand? _macroCommand;
     private static ModifyCanvasElementsCommand? _moveElementsCommand;
     private static Guid _draggedNodeId = Guid.Empty;
-    private static HashSet<MagGraphItem> _draggedItems = [];
+    private static readonly HashSet<MagGraphItem> _draggedItems = [];
     private static readonly HashSet<Guid> _draggedItemIds = [];
 
-    public Type? DraggedPrimaryOutputType;
-    public Type? DraggedPrimaryInputType;
+    internal sealed record SplitInsertionPoint(Guid ItemId, MagGraphItem.AnchorPoint AnchorPoint, float Distance);
+    
+    private readonly HashSet<int> _snappedBorderConnections = [];
+    
     private readonly MagGraphCanvas _canvas;
     private readonly MagGraphLayout _layout;
     private readonly NodeSelection _nodeSelection;
-    private static float SnapTollerance = 0.01f;
+    private  const float SnapTolerance = 0.01f;
 }

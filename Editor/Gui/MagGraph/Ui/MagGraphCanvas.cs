@@ -49,7 +49,6 @@ internal sealed class MagGraphCanvas : ScalableCanvas
         ImGui.SameLine(0, 5);
         ImGui.Checkbox("Debug", ref _enableDebug);
 
-        
         //Log.Debug("Updating canvas...");
         UpdateCanvas(out _);
         var drawList = ImGui.GetWindowDrawList();
@@ -122,10 +121,9 @@ internal sealed class MagGraphCanvas : ScalableCanvas
         for (int ix = 0; ix < 200 && ix <= count.X + 1; ix++)
         {
             var x = (int)(topLeftOnScreen.X + ix * screenGridSize.X);
-            drawList.AddRectFilled(new Vector2( x,window.Min.Y),
-                                   new Vector2( x + 1, window.Max.Y),
+            drawList.AddRectFilled(new Vector2(x, window.Min.Y),
+                                   new Vector2(x + 1, window.Max.Y),
                                    color);
-
         }
 
         for (int iy = 0; iy < 200 && iy <= count.Y + 1; iy++)
@@ -149,6 +147,38 @@ internal sealed class MagGraphCanvas : ScalableCanvas
         // }
     }
 
+    [Flags]
+    private enum Borders
+    {
+        None = 0,
+        Up = 1,
+        Right = 2,
+        Down = 4,
+        Left = 8,
+    }
+
+    private static readonly ImDrawFlags[] _borderRoundings =
+        {
+            ImDrawFlags.RoundCornersAll, //        0000      
+            ImDrawFlags.RoundCornersBottom, //     0001                 up
+            ImDrawFlags.RoundCornersLeft, //       0010           right
+            ImDrawFlags.RoundCornersBottomLeft, // 0011           right up
+            ImDrawFlags.RoundCornersTop, //        0100      down
+            ImDrawFlags.RoundCornersNone, //       0101      down       up
+            ImDrawFlags.RoundCornersTopLeft, // 0110      down right  
+            ImDrawFlags.RoundCornersNone, //       0111      down right up  
+            
+            ImDrawFlags.RoundCornersRight, //      1000 left
+            ImDrawFlags.RoundCornersBottomRight, //1001 left            up
+            ImDrawFlags.RoundCornersNone, //       1010 left      right
+            ImDrawFlags.RoundCornersNone, //       1011 left      right up
+            ImDrawFlags.RoundCornersTopRight, //       1100 left down
+            ImDrawFlags.RoundCornersNone, //       1101 left down       up
+            ImDrawFlags.RoundCornersNone, //       1110 left down right  
+            ImDrawFlags.RoundCornersNone, //       1111 left down right up  
+
+        };
+
     private void DrawNode(MagGraphItem item, ImDrawListPtr drawList)
     {
         if (_compositionOp == null)
@@ -161,11 +191,38 @@ internal sealed class MagGraphCanvas : ScalableCanvas
 
         var pMin = TransformPosition(item.PosOnCanvas);
         var pMax = TransformPosition(item.PosOnCanvas + item.Size);
+        var pMinVisible = pMin;
+        var pMaxVisible = pMax;
 
         // Adjust size when snapped
+        // var isSnappedLeft = false;
+        // var isSnappedUp = false;
+        // var isSnappedDown = false;
+        // var isSnappedRight = false;
+        var snappedBorders = Borders.None;
+
         {
-            var isSnappedVertically = false;
-            var isSnappedHorizontally = false;
+            for (var index = 0; index < 1 && index < item.InputLines.Length; index++)
+            {
+                ref var il = ref item.InputLines[index];
+                var c = il.ConnectionIn;
+                if (c != null)
+                {
+                    if (c.IsSnapped)
+                    {
+                        switch (c.Style)
+                        {
+                            case MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical:
+                                snappedBorders |= Borders.Up;
+                                break;
+                            case MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal:
+                                snappedBorders |= Borders.Left;
+                                break;
+                        }
+                    }
+                }
+            }
+
             for (var index = 0; index < 1 && index < item.OutputLines.Length; index++)
             {
                 ref var ol = ref item.OutputLines[index];
@@ -176,21 +233,24 @@ internal sealed class MagGraphCanvas : ScalableCanvas
                         switch (c.Style)
                         {
                             case MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical:
-                                isSnappedVertically = true;
+                                snappedBorders |= Borders.Down;
                                 break;
                             case MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal:
-                                isSnappedHorizontally = true;
+                                snappedBorders |= Borders.Right;
                                 break;
                         }
                     }
                 }
             }
 
-            if (!isSnappedVertically)
-                pMax.Y -= 3;
-
-            if (!isSnappedHorizontally)
-                pMax.X -= 3;
+            
+            
+            // There is probably a better method than this...
+            const int snapPadding = 1;
+            if (!snappedBorders.HasFlag(Borders.Down)) pMaxVisible.Y -= snapPadding * CanvasScale;
+            if (!snappedBorders.HasFlag(Borders.Right)) pMaxVisible.X -= snapPadding * CanvasScale;
+            if (!snappedBorders.HasFlag(Borders.Up)) pMinVisible.Y += snapPadding * CanvasScale;
+            if (!snappedBorders.HasFlag(Borders.Left)) pMinVisible.X += snapPadding * CanvasScale;
         }
 
         // ImGUI element for selection
@@ -200,14 +260,17 @@ internal sealed class MagGraphCanvas : ScalableCanvas
         _itemMovement.HandleForItem(item, this, _compositionOp);
         ImGui.PopID();
 
-        // Background
-        drawList.AddRectFilled(pMin, pMax, ColorVariations.OperatorBackground.Apply(typeColor).Fade(0.7f), 0);
+        // Background and Outline
 
-        var isSelected =  item.IsSelected(_nodeSelection);
+        var imDrawFlags = _borderRoundings[(int)snappedBorders % 16];
+
+        drawList.AddRectFilled(pMinVisible, pMaxVisible - Vector2.One, ColorVariations.OperatorBackground.Apply(typeColor).Fade(0.7f), 6 * CanvasScale, imDrawFlags);
+
+        var isSelected = item.IsSelected(_nodeSelection);
         var outlineColor = isSelected
                                ? UiColors.ForegroundFull
-                               : UiColors.BackgroundFull.Fade(0.3f);
-        drawList.AddRect(pMin, pMax, outlineColor, 0);
+                               : UiColors.BackgroundFull.Fade(0f);
+        drawList.AddRect(pMinVisible, pMaxVisible, outlineColor, 6 * CanvasScale, imDrawFlags);
 
         // Label...
         ImGui.PushFont(Fonts.FontBold);
@@ -256,50 +319,45 @@ internal sealed class MagGraphCanvas : ScalableCanvas
 
         // Draw input sockets
         //var blinkFactor = MathF.Sin((float)ImGui.GetTime()/3.15f*20) /2 + 0.5f;
-        
-        foreach (var i in item.GetInputAnchors())
+
+        foreach (var inputAnchor in item.GetInputAnchors())
         {
-            var isAlreadyUsed = i.ConnectionHash != 0;
+            var isAlreadyUsed = inputAnchor.ConnectionHash != 0;
             if (isAlreadyUsed)
+            {
                 continue;
-            
-            var type2UiProperties = TypeUiRegistry.GetPropertiesForType(i.ConnectionType);
-            var p = TransformPosition(i.PositionOnCanvas);
-            var blinkFactor = (float)((ImGui.GetTime() +  (p - ImGui.GetMousePos()).Length() * 0.001f ) % 1);
-            var color = ColorVariations.OperatorBackgroundHover.Apply(type2UiProperties.Color);
-            var isPotentialDragTarget = i.ConnectionType == _itemMovement.DraggedPrimaryOutputType
-                                        && !_itemMovement.IsItemDragged(item);
-            
-            
-            
-            // if (isPotentialDragTarget)
-            // {
-            //     //color = Color.Mix(color, ColorVariations.OperatorBackgroundHover.Apply(type2UiProperties.Color), blinkFactor);
-            // }
-            
+            }
+
+            var type2UiProperties = TypeUiRegistry.GetPropertiesForType(inputAnchor.ConnectionType);
+            var p = TransformPosition(inputAnchor.PositionOnCanvas);
+            var blinkFactor = (float)((ImGui.GetTime() + (p - ImGui.GetMousePos()).Length() * 0.001f) % 1);
+            var color = ColorVariations.OperatorOutline.Apply(type2UiProperties.Color);
+            var isPotentialDragTarget = inputAnchor.ConnectionType == _itemMovement.DraggedPrimaryOutputType
+                                        && !MagItemMovement.IsItemDragged(item);
+
             if (isPotentialDragTarget)
             {
-                drawList.AddCircleFilled(p, 2 + 15 * blinkFactor, color.Fade( (1- blinkFactor) * 0.7f));
+                drawList.AddCircleFilled(p, 2 + 15 * blinkFactor, color.Fade((1 - blinkFactor) * 0.7f));
             }
-            
-            if (i.Direction == MagGraphItem.Directions.Vertical)
+
+            if (inputAnchor.Direction == MagGraphItem.Directions.Vertical)
             {
-                drawList.AddTriangleFilled(p + new Vector2(-1.5f, 0) * CanvasScale * 1.5f,
-                                           p + new Vector2(1.5f, 0) * CanvasScale * 1.5f,
-                                           p + new Vector2(0, 2) * CanvasScale * 1.5f,
+                var pp = new Vector2(p.X + 2, pMinVisible.Y);
+                drawList.AddTriangleFilled(pp + new Vector2(-1.5f, 0) * CanvasScale * 2.5f,
+                                           pp + new Vector2(1.5f, 0) * CanvasScale * 2.5f,
+                                           pp + new Vector2(0, 2) * CanvasScale * 2.5f,
                                            color);
             }
             else
             {
-                drawList.AddTriangleFilled(p + new Vector2(1, 0) + new Vector2(-0, -1.5f) * CanvasScale * 1.5f,
-                                           p + new Vector2(1, 0) + new Vector2(0, 1.5f) * CanvasScale * 1.5f,
-                                           p + new Vector2(1, 0) + new Vector2(2, 0) * CanvasScale * 1.5f,
+                var pp = new Vector2(pMinVisible.X-1, p.Y );
+                drawList.AddTriangleFilled(pp + new Vector2(1, 0) + new Vector2(-0, -1.5f) * CanvasScale * 1.5f,
+                                           pp + new Vector2(1, 0) + new Vector2(2, 0) * CanvasScale * 1.5f,
+                                           pp + new Vector2(1, 0) + new Vector2(0, 1.5f) * CanvasScale * 1.5f,
                                            color);
             }
 
-
-
-            ShowAnchorPointDebugs(i, true);
+            ShowAnchorPointDebugs(inputAnchor, true);
         }
 
         // Draw output sockets
@@ -309,18 +367,22 @@ internal sealed class MagGraphCanvas : ScalableCanvas
 
             var p = TransformPosition(oa.PositionOnCanvas);
             var color = ColorVariations.OperatorBackground.Apply(type2UiProperties.Color).Fade(0.7f);
+
             if (oa.Direction == MagGraphItem.Directions.Vertical)
             {
-                drawList.AddTriangleFilled(p + new Vector2(0, -1) + new Vector2(-1.5f, 0) * CanvasScale * 1.5f,
-                                           p + new Vector2(0, -1) + new Vector2(1.5f, 0) * CanvasScale * 1.5f,
-                                           p + new Vector2(0, -1) + new Vector2(0, 2) * CanvasScale * 1.5f,
+                var pp = new Vector2(p.X, pMaxVisible.Y);
+                drawList.AddTriangleFilled(pp + new Vector2(0, -1) + new Vector2(-1.5f, 0) * CanvasScale * 1.5f,
+                                           pp + new Vector2(0, -1) + new Vector2(1.5f, 0) * CanvasScale * 1.5f,
+                                           pp + new Vector2(0, -1) + new Vector2(0, 2) * CanvasScale * 1.5f,
                                            color);
             }
             else
             {
-                drawList.AddTriangleFilled(p + new Vector2(0, 0) + new Vector2(-0, -1.5f) * CanvasScale * 1.5f,
-                                           p + new Vector2(0, 0) + new Vector2(0, 1.5f) * CanvasScale * 1.5f,
-                                           p + new Vector2(0, 0) + new Vector2(2, 0) * CanvasScale * 1.5f,
+                var pp = new Vector2(pMaxVisible.X - 1, p.Y);
+
+                drawList.AddTriangleFilled(pp + new Vector2(0, 0) + new Vector2(-0, -1.5f) * CanvasScale * 1.5f,
+                                           pp + new Vector2(0, 0) + new Vector2(2, 0) * CanvasScale * 1.5f,
+                                           pp + new Vector2(0, 0) + new Vector2(0, 1.5f) * CanvasScale * 1.5f,
                                            color);
             }
 
@@ -332,11 +394,11 @@ internal sealed class MagGraphCanvas : ScalableCanvas
     {
         if (!ShowDebug || ImGui.IsMouseDown(ImGuiMouseButton.Left))
             return;
-        
+
         ImGui.PushFont(Fonts.FontSmall);
-        var typeUiProperties =TypeUiRegistry.GetPropertiesForType(a.ConnectionType);
-        
-        ImGui.SetCursorScreenPos(TransformPosition(a.PositionOnCanvas) - Vector2.One * ImGui.GetFrameHeight()/2);
+        var typeUiProperties = TypeUiRegistry.GetPropertiesForType(a.ConnectionType);
+
+        ImGui.SetCursorScreenPos(TransformPosition(a.PositionOnCanvas) - Vector2.One * ImGui.GetFrameHeight() / 2);
         ImGui.PushStyleColor(ImGuiCol.Text, typeUiProperties.Color.Rgba);
         ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
         var label = isInput ? "I" : "O";
@@ -351,20 +413,22 @@ internal sealed class MagGraphCanvas : ScalableCanvas
             ImGui.Text("" + a.ConnectionHash);
             ImGui.EndTooltip();
         }
-            
+
         ImGui.PopFont();
     }
+
+    private static float Blink => MathF.Sin((float)ImGui.GetTime() * 10) * 0.5f + 0.5f;
 
     private void DrawConnection(MagGraphConnection connection, ImDrawListPtr drawList)
     {
         if (connection.Style == MagGraphConnection.ConnectionStyles.Unknown)
             return;
 
-        var type = connection.TargetItem.InputLines[connection.InputLineIndex].Type;
+        var type = connection.Type;
 
         // if (!TypeUiRegistry.TryGetPropertiesForType(type, out var typeUiProperties))
         //     return;
-        
+
         var typeUiProperties = TypeUiRegistry.GetPropertiesForType(type);
 
         var anchorSize = 3 * CanvasScale;
@@ -377,15 +441,51 @@ internal sealed class MagGraphCanvas : ScalableCanvas
             switch (connection.Style)
             {
                 case MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal:
+                {
+                    var isPotentialSplitTarget = _itemMovement.SplitInsertionPoints.Count > 0
+                                                 && _itemMovement.SplitInsertionPoints
+                                                                 .Any(x
+                                                                          => x.AnchorPoint.Direction == MagGraphItem.Directions.Horizontal
+                                                                             && x.AnchorPoint.ConnectionType == type);
+                    if (isPotentialSplitTarget)
+                    {
+                        var extend = new Vector2(0, MagGraphItem.GridSize.Y * CanvasScale * 0.4f);
+
+                        drawList.AddRectFilled(
+                                               sourcePosOnScreen - extend + new Vector2(-1, 0),
+                                               sourcePosOnScreen + extend + new Vector2(0, 0),
+                                               typeColor.Fade(Blink)
+                                              );
+                    }
+
                     drawList.AddCircleFilled(sourcePosOnScreen, anchorSize * 1.6f, typeColor, 3);
                     break;
+                }
                 case MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical:
+                {
+                    var isPotentialSplitTarget = _itemMovement.SplitInsertionPoints.Count > 0
+                                                 && _itemMovement.SplitInsertionPoints
+                                                                 .Any(x
+                                                                          => x.AnchorPoint.Direction == MagGraphItem.Directions.Vertical
+                                                                             && x.AnchorPoint.ConnectionType == type);
+                    if (isPotentialSplitTarget)
+                    {
+                        var extend = new Vector2(MagGraphItem.GridSize.X * CanvasScale * 0.4f, 0);
+
+                        drawList.AddRectFilled(
+                                               sourcePosOnScreen - extend + new Vector2(0, -1),
+                                               sourcePosOnScreen + extend + new Vector2(0, 0),
+                                               typeColor.Fade(Blink)
+                                              );
+                    }
+
                     drawList.AddTriangleFilled(
                                                sourcePosOnScreen + new Vector2(-1, -1) * CanvasScale * 4,
                                                sourcePosOnScreen + new Vector2(1, -1) * CanvasScale * 4,
                                                sourcePosOnScreen + new Vector2(0, 1) * CanvasScale * 4,
                                                typeColor);
                     break;
+                }
                 case MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal:
                     drawList.AddCircleFilled(sourcePosOnScreen, anchorSize * 1.6f, typeColor, 3);
                     break;
