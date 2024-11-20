@@ -463,9 +463,6 @@ internal sealed class MagGraphCanvas : ScalableCanvas
                     break;
                 case MagGraphConnection.ConnectionStyles.AdditionalOutToMainInputSnappedVertical:
                     break;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
         }
     }

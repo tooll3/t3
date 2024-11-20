@@ -11,7 +11,9 @@ internal sealed class MagGraphConnection
     public MagGraphItem SourceItem;
     public MagGraphItem TargetItem;
     public ISlot SourceOutput;
-    
+    public ISlot TargetInput => TargetItem.InputLines[InputLineIndex].Input;
+
+    public Type Type => SourceOutput?.ValueType;
     //public IInputSlot TargetInput;
     public int InputLineIndex;
     public int OutputLineIndex;
@@ -32,6 +34,9 @@ internal sealed class MagGraphConnection
         BottomToLeft,
         RightToTop,
         RightToLeft,
+        
         Unknown,
     }
+
+    public bool IsUnlinked;
 }
