@@ -305,8 +305,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
         // Draw output sockets
         foreach (var oa in item.GetOutputAnchors())
         {
-            if (!TypeUiRegistry.TryGetPropertiesForType(oa.ConnectionType, out var type2UiProperties))
-                continue;
+            var type2UiProperties = TypeUiRegistry.GetPropertiesForType(oa.ConnectionType);
 
             var p = TransformPosition(oa.PositionOnCanvas);
             var color = ColorVariations.OperatorBackground.Apply(type2UiProperties.Color).Fade(0.7f);

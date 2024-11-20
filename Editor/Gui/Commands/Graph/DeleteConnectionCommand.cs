@@ -10,7 +10,7 @@ public class DeleteConnectionCommand : ICommand
 
     public DeleteConnectionCommand(Symbol compositionSymbol, Symbol.Connection connectionToRemove, int multiInputIndex)
     {
-        _removedConnection = connectionToRemove;
+        _removedConnection = connectionToRemove.Clone();
         _compositionSymbolId = compositionSymbol.Id;
         _multiInputIndex = multiInputIndex;
     }

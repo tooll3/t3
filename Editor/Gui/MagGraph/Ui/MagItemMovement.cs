@@ -118,8 +118,9 @@ internal sealed class MagItemMovement
         else if (isActiveNode && ImGui.IsMouseDown(ImGuiMouseButton.Left) && _macroCommand != null)
         {
             // TODO: Implement shake disconnect later
-            var hasChanged = HandleSnappedDragging(canvas, composition);
-            if (hasChanged)
+            
+            var snappingChanged = HandleSnappedDragging(canvas, composition);
+            if (snappingChanged)
             {
                 if (_snapping.IsSnapped)
                 {
@@ -129,20 +130,38 @@ internal sealed class MagItemMovement
                 else
                 {
                     var structureChanged = false;
+                    var unsnappedConnections = new List<MagGraphConnection>();
+                    
                     foreach (var c in _layout.MagConnections)
                     {
-                        if (_snappedBorderConnections.Contains(c.ConnectionHash))
-                        {
-                            Log.Debug("Snapped border connection has been broken " + c);
-                            var connection = new Symbol.Connection(c.SourceItem.Id,
-                                                                   c.SourceOutput.Id,
-                                                                   c.TargetItem.Id,
-                                                                   c.TargetItem.InputLines[c.InputLineIndex].Input.Id);
+                        if (!_snappedBorderConnections.Contains(c.ConnectionHash))
+                            continue;
+                        
+                        unsnappedConnections.Add(c);
+                        
+                        //Log.Debug("Snapped border connection has been broken " + c);
+                        var connection = new Symbol.Connection(c.SourceItem.Id,
+                                                               c.SourceOutput.Id,
+                                                               c.TargetItem.Id,
+                                                               c.TargetItem.InputLines[c.InputLineIndex].Input.Id);
                             
-                            _macroCommand.AddAndExecCommand(new DeleteConnectionCommand(composition.Symbol, connection, 0));
-                            structureChanged = true;
+                        _macroCommand.AddAndExecCommand(new DeleteConnectionCommand(composition.Symbol, connection, 0));
+                        structureChanged = true;
+                    }
+
+                    foreach (var a in unsnappedConnections)
+                    {
+                        foreach (var b in unsnappedConnections)
+                        {
+                            if (a == b)
+                                continue;
+                            
+                            if(a.SourceOutput.ValueType != b.sou)
                         }
                     }
+                    
+                    
+                    
                     if(structureChanged)
                         _layout.FlagAsChanged();
                 }
@@ -265,7 +284,6 @@ internal sealed class MagItemMovement
 
         _lastAppliedOffset = Vector2.Zero;
         _isDragging = false;
-        //UpdateBorderConnections(draggedNodes);
 
         // Set primary types to indicate targets for dragging
         if (_draggedItemIds.Count != 1)
@@ -451,8 +469,6 @@ internal sealed class MagItemMovement
             if (c.IsSnapped)
                 _snappedBorderConnections.Add(c.ConnectionHash);
         }
-        //Log.Debug($"Found {_snappedBorderConnections.Count} snapped border connections");
-        //Log.Debug($" Found {_borderConnections.Count} bridge connections in {draggedItems.Count}" );
     }
 
     private readonly HashSet<int> _snappedBorderConnections = new();
