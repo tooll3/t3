@@ -29,12 +29,15 @@ internal sealed class MagGraphLayout
     {
         if (!SymbolUiRegistry.TryGetSymbolUi(compositionOp.Symbol.Id, out var parentSymbolUi))
             return;
-
-        if (forceUpdate || _structureFlaggedAsChanged || HasCompositionDataChanged(compositionOp.Symbol, ref _compositionModelHash))
+        
+        if (forceUpdate || FrameStats.Last.UndoRedoTriggered || _structureFlaggedAsChanged || HasCompositionDataChanged(compositionOp.Symbol, ref _compositionModelHash))
             RefreshDataStructure(compositionOp, parentSymbolUi);
 
         UpdateLayout();
     }
+    
+    
+    
     
     public void FlagAsChanged()
     {

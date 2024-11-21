@@ -1,4 +1,5 @@
-﻿using T3.Core.Operator.Slots;
+﻿using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 
 namespace T3.Editor.Gui.MagGraph.Ui;
 
@@ -36,6 +37,16 @@ internal sealed class MagGraphConnection
         RightToLeft,
         
         Unknown,
+    }
+
+    public Symbol.Connection AsSymbolConnection()
+    {
+        return new Symbol.Connection(
+                              SourceItem.Id,
+                              SourceOutput.Id,
+                              TargetItem.Id,
+                              TargetInput.Id
+                             );
     }
 
     public bool IsUnlinked;

@@ -445,8 +445,8 @@ internal sealed class MagGraphCanvas : ScalableCanvas
                     var isPotentialSplitTarget = _itemMovement.SplitInsertionPoints.Count > 0
                                                  && _itemMovement.SplitInsertionPoints
                                                                  .Any(x
-                                                                          => x.AnchorPoint.Direction == MagGraphItem.Directions.Horizontal
-                                                                             && x.AnchorPoint.ConnectionType == type);
+                                                                          => x.Direction == MagGraphItem.Directions.Horizontal
+                                                                             && x.Type == type);
                     if (isPotentialSplitTarget)
                     {
                         var extend = new Vector2(0, MagGraphItem.GridSize.Y * CanvasScale * 0.4f);
@@ -466,8 +466,8 @@ internal sealed class MagGraphCanvas : ScalableCanvas
                     var isPotentialSplitTarget = _itemMovement.SplitInsertionPoints.Count > 0
                                                  && _itemMovement.SplitInsertionPoints
                                                                  .Any(x
-                                                                          => x.AnchorPoint.Direction == MagGraphItem.Directions.Vertical
-                                                                             && x.AnchorPoint.ConnectionType == type);
+                                                                          => x.Direction == MagGraphItem.Directions.Vertical
+                                                                             && x.Type == type);
                     if (isPotentialSplitTarget)
                     {
                         var extend = new Vector2(MagGraphItem.GridSize.X * CanvasScale * 0.4f, 0);
