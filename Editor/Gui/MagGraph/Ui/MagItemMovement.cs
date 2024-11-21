@@ -6,6 +6,7 @@ using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
@@ -281,6 +282,13 @@ internal sealed class MagItemMovement
         else if (list.Count == 1)
         {
             var pair = list[0];
+            
+            if (Structure.CheckForCycle(pair.Ca.SourceItem.Instance, pair.Cb.TargetItem.Id))
+            {
+                Log.Debug("Sorry, this connection would create a cycle.");
+                return;
+            }
+            
             var potentialMovers = CollectSnappedItems(pair.Cb.TargetItem);
 
             // Clarify if the subset of items snapped to lower target op is sufficient to fill most gaps
@@ -296,6 +304,8 @@ internal sealed class MagItemMovement
 
             MoveToFillGaps(pair, movableItems, false);
             newMoveComment.StoreCurrentValues();
+
+
 
             _macroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol,
                                                                      new Symbol.Connection(pair.Ca.SourceItem.Id,
@@ -358,9 +368,49 @@ internal sealed class MagItemMovement
         if (!_snapping.IsSnapped || _macroCommand == null || _snapping.BestA == null)
             return false;
 
+        var insertionPoint = _snapping.InsertionPoint;
+
+        // Split connection
+        var connection = _snapping.BestA.InputLines[0].ConnectionIn;
+        if (connection == null)
+        {
+            Log.Warning("Missing connection?");
+            return true;
+        }
+        
+        
+        if (Structure.CheckForCycle(connection.SourceItem.Instance, insertionPoint.InputItemId))
+        {
+            Log.Debug("Sorry, this connection would create a cycle.");
+            return false;
+        }
+        
+        if (Structure.CheckForCycle(connection.TargetItem.Instance, insertionPoint.OutputItemId))
+        {
+            Log.Debug("Sorry, this connection would create a cycle.");
+            return false;
+        }
+
+        
+        _macroCommand.AddAndExecCommand(new DeleteConnectionCommand(composition.Symbol, 
+                                                                    connection.AsSymbolConnection(),
+                                                                    0));
+        _macroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol,
+                                                                 new Symbol.Connection(connection.SourceItem.Id,
+                                                                                       connection.SourceOutput.Id,
+                                                                                       insertionPoint.InputItemId,
+                                                                                       insertionPoint.InputId
+                                                                                      ),0));
+        
+        _macroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol,
+                                                                 new Symbol.Connection(insertionPoint.OutputItemId,
+                                                                                       insertionPoint.OutputId,
+                                                                                       connection.TargetItem.Id,
+                                                                                       connection.TargetInput.Id
+                                                                                      ),0));
+        
         // Find movable items...
         var snappedItems = CollectSnappedItems(_snapping.BestA);
-        var insertionPoint = _snapping.InsertionPoint;
         var movableItems = new List<MagGraphItem>();
         foreach (var otherItem in snappedItems)
         {
@@ -384,30 +434,7 @@ internal sealed class MagItemMovement
         }
         newMoveComment.StoreCurrentValues();
         
-        // Split connection
-        var connection = _snapping.BestA.InputLines[0].ConnectionIn;
-        if (connection == null)
-        {
-            Log.Warning("Missing connection?");
-            return true;
-        }
-        
-        _macroCommand.AddAndExecCommand(new DeleteConnectionCommand(composition.Symbol, 
-                                                                    connection.AsSymbolConnection(),
-                                                                    0));
-        _macroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol,
-                                                                 new Symbol.Connection(connection.SourceItem.Id,
-                                                                                       connection.SourceOutput.Id,
-                                                                                       insertionPoint.InputItemId,
-                                                                                       insertionPoint.InputId
-                                                                                       ),0));
-        
-        _macroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol,
-                                                                 new Symbol.Connection(insertionPoint.OutputItemId,
-                                                                                       insertionPoint.OutputId,
-                                                                                       connection.TargetItem.Id,
-                                                                                       connection.TargetInput.Id
-                                                                                      ),0));
+
         return true;
     }
     
@@ -432,6 +459,12 @@ internal sealed class MagItemMovement
 
         foreach (var newConnection in newConnections)
         {
+            if (Structure.CheckForCycle(composition.Symbol, newConnection))
+            {
+                Log.Debug("Sorry, this connection would create a cycle.");
+                continue;
+            }
+            
             _macroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol, newConnection, 0));
         }
 
@@ -616,10 +649,6 @@ internal sealed class MagItemMovement
             }
 
             _lastAppliedOffset += bestSnapDelta;
-            if (_snapping.IsInsertion)
-            {
-                Log.Debug("Insertion!");
-            }
         }
         else
         {
@@ -897,21 +926,10 @@ internal sealed class MagItemMovement
             var inputPos = item.PosOnCanvas + new Vector2(MagGraphItem.GridSize.X / 2 ,0);
             var insertionAnchorPos = insertionAnchorItem.PosOnCanvas + new Vector2(MagGraphItem.GridSize.X / 2 ,0);
             var d = Vector2.Distance(insertionAnchorPos, inputPos);
-
-            // if (true || canvas.ShowDebug)
-            // {
-            //     var drawList = ImGui.GetForegroundDrawList();
-            //     var uiPrimaryColor = TypeUiRegistry.GetPropertiesForType(insertionPoint.Type).Color;
-            //     drawList.AddLine(canvas.TransformPosition(inputPos),
-            //                      canvas.TransformPosition(insertionAnchorPos),
-            //                      uiPrimaryColor.Fade(1f));
-            // }
-                
-            // Log.Debug($"Insertion: {d}   Best: {BestDistance}");
+            //var d = ((insertionAnchorPos - inputPos) * new Vector2(0.3f, 1)).Length();
             
             if (d >= BestDistance)
                 return;
-            
             
             BestDistance = d;
             OutAnchorPos = inputPos;
