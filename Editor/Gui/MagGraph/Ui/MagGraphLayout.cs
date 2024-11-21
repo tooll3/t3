@@ -39,11 +39,15 @@ internal sealed class MagGraphLayout
         UpdateConnectionLayout();
     }
     
-    
     public void FlagAsChanged()
     {
         _structureFlaggedAsChanged = true;
     }
+
+    
+
+    /** During connection operations when can request to expand normally hidden inputs of an operator */
+    public Guid LastSneakPeekItemId;
     
     private void RefreshDataStructure(Instance composition, SymbolUi parentSymbolUi)
     {
@@ -164,10 +168,11 @@ internal sealed class MagGraphLayout
                         if (!item.SymbolUi.InputUis.TryGetValue(input.Id, out var inputUi)) //TODO: Log error?
                             continue;
 
-                        if (inputLineIndex > 0
-                            && (!input.HasInputConnections
-                                && inputUi.Relevancy is not (Relevancy.Relevant or Relevancy.Required))
-                           )
+                        var isRelevant = inputUi.Relevancy is (Relevancy.Relevant or Relevancy.Required);
+                        var isMatchingType = false; //input.ValueType == typeof(float);//ConnectionTargetType;
+
+                        var shouldBeVisible = isRelevant || isMatchingType || inputLineIndex == 0 || input.HasInputConnections;
+                        if (!shouldBeVisible)
                             continue;
 
                         if (input.IsMultiInput && input is IMultiInputSlot multiInputSlot)
@@ -568,6 +573,8 @@ internal sealed class MagGraphLayout
         {
             newHash += i.GetHashCode();
         }
+
+        newHash += composition.Connections.Count.GetHashCode();
 
         if (newHash == originalHash)
             return false;

@@ -297,32 +297,54 @@ public class Structure
     internal static bool CheckForCycle(Symbol compositionSymbol, Symbol.Connection connection)
     {
         var hashSet = new HashSet<Guid>();
-        var stack = new Stack<Guid>();
+        
+        CollectDependentChildren(connection.TargetParentOrChildId, connection.TargetSlotId);
 
-        stack.Push(connection.TargetParentOrChildId);
+        return hashSet.Contains(connection.SourceParentOrChildId);
 
-        while (stack.Count > 0)
+        void CollectDependentChildren(Guid childId, Guid childInputSlotId)
         {
-            var currentId = stack.Pop();
-
-            if (!hashSet.Add(currentId))
-                continue;
-
-            for (var index = 0; index < compositionSymbol.Connections.Count; index++)
+            if (!hashSet.Add(childId))
+                return;
+            
+            // find all connections into child...
+            foreach (var c in compositionSymbol.Connections)
             {
-                var c = compositionSymbol.Connections[index];
-                if (c.TargetParentOrChildId != currentId)
-                    continue;
-                
-                // Early exit if a cycle is detected
-                if (c.SourceParentOrChildId == connection.SourceParentOrChildId)
-                    return true;
-
-                stack.Push(c.SourceParentOrChildId);
+                if (c.TargetParentOrChildId == childId && (childInputSlotId == Guid.Empty || c.TargetSlotId == childInputSlotId))
+                {
+                    CollectDependentChildren(c.SourceParentOrChildId,  Guid.Empty);    
+                }
             }
         }
-
-        return false;
+        
+        // var hashSet = new HashSet<Guid>();
+        // var stack = new Stack<Guid>();
+        //
+        // stack.Push(connection.TargetParentOrChildId);
+        //
+        // while (stack.Count > 0)
+        // {
+        //     var currentId = stack.Pop();
+        //
+        //     if (!hashSet.Add(currentId))
+        //         continue;
+        //
+        //     for (var index = 0; index < compositionSymbol.Connections.Count; index++)
+        //     {
+        //         var c = compositionSymbol.Connections[index];
+        //         if (c.TargetParentOrChildId == currentId)
+        //         {
+        //             if (c.SourceParentOrChildId == connection.SourceParentOrChildId)
+        //                 return true;
+        //
+        //             stack.Push(c.SourceParentOrChildId);
+        //         }
+        //
+        //         // Early exit if a cycle is detected
+        //     }
+        // }
+        //
+        // return false;
     }
 
     

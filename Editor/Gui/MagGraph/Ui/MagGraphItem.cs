@@ -36,7 +36,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
 
     public SymbolUi? SymbolUi;
     public Symbol.Child? SymbolChild;
-    public Instance? Instance;
+    public Instance Instance;
 
     public string ReadableName
     {
