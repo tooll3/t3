@@ -819,7 +819,7 @@ internal sealed class MagItemMovement
         public Vector2 OutAnchorPos;
         public Vector2 InputAnchorPos;
         public bool Reverse;
-        public bool IsSnapped => BestDistance < MagGraphItem.LineHeight * 0.5f;
+        public bool IsSnapped => BestDistance < MagGraphItem.LineHeight * (IsInsertion ? 0.35: 0.5f);
         public bool IsInsertion;
         public SplitInsertionPoint InsertionPoint;
 
@@ -925,7 +925,7 @@ internal sealed class MagItemMovement
 
             var inputPos = item.PosOnCanvas + new Vector2(MagGraphItem.GridSize.X / 2 ,0);
             var insertionAnchorPos = insertionAnchorItem.PosOnCanvas + new Vector2(MagGraphItem.GridSize.X / 2 ,0);
-            var d = Vector2.Distance(insertionAnchorPos, inputPos);
+            var d = Vector2.Distance(insertionAnchorPos , inputPos);
             //var d = ((insertionAnchorPos - inputPos) * new Vector2(0.3f, 1)).Length();
             
             if (d >= BestDistance)
