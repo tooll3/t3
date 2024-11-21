@@ -325,8 +325,6 @@ internal static class ConnectionMaker
         command.StoreCurrentValues();
 
         inProgressCommand.AddExecutedCommandForUndo(command);
-        //commands.Add(new ModifyCanvasElementsCommand(parentSymbolUi.Symbol.Id, changedSymbols));
-        //return new MacroCommand("adjust layout", commands);
     }
 
     private static void RecursivelyAddChildren(ref HashSet<Symbol.Child> set, Symbol parent, Symbol.Child targetNode)
@@ -368,22 +366,10 @@ internal static class ConnectionMaker
         {
             var sourceInstance = symbolInstance.Children[sourceId];
 
-            // Check for cycles
-            var outputSlot = sourceInstance.Outputs[0];
-            var deps = new HashSet<ISlot>();
-            Structure.CollectSlotDependencies(outputSlot, deps);
-
-            foreach (var d in deps)
+            if (Structure.CheckForCycle(sourceInstance.Outputs[0], targetUi.Id))
             {
-                if (d.Parent.SymbolChildId != targetUi.Id)
-                    continue;
-
                 Log.Debug("Sorry, you can't do this. This connection would result in a cycle.");
-                Log.Debug($"Dependency: [{d.Parent.Symbol.Name}], target: [{targetUi.SymbolChild.Symbol.Name}]");
-                //TempConnections.Clear();
-                //ConnectionSnapEndHelper.ResetSnapping();
                 AbortOperation(inProgress);
-                return;
             }
         }
 
@@ -447,34 +433,36 @@ internal static class ConnectionMaker
 
     public static void CompleteAtOutputSlot(GraphWindow window, Instance sourceInstance, SymbolUi.Child sourceUi, Symbol.OutputDefinition output)
     {
-        // Check for cycles
-        var deps = new HashSet<ISlot>();
-        foreach (var inputSlot in sourceInstance.Inputs)
+        var connectionProgress = InProgress[window];
+        var tempConnections = connectionProgress?.TempConnections;
+
+        if (tempConnections == null || tempConnections.Count != 1)
         {
-            Structure.CollectSlotDependencies(inputSlot, deps);
+            Log.Debug("Can only connect one line");
+            tempConnections?.Clear();
+            return;
         }
 
-        var inProgress = InProgress[window];
-        var connectionList = inProgress.TempConnections;
+        var tempConnection = tempConnections[0];
 
-        foreach (var d in deps)
+        // Check for cycles
+        var targetId = tempConnection.TargetParentOrChildId;
+        if (Structure.CheckForCycle(sourceInstance, targetId))
         {
-            if (d.Parent.SymbolChildId != connectionList[0].TargetParentOrChildId)
-                continue;
-
             Log.Debug("Sorry, you can't do this. This connection would result in a cycle.");
-            connectionList.Clear();
+            tempConnections.Clear();
             ConnectionSnapEndHelper.ResetSnapping();
             return;
         }
 
         var newConnection = new Symbol.Connection(sourceParentOrChildId: sourceUi.SymbolChild.Id,
                                                   sourceSlotId: output.Id,
-                                                  targetParentOrChildId: connectionList[0].TargetParentOrChildId,
-                                                  targetSlotId: connectionList[0].TargetSlotId);
+                                                  targetParentOrChildId: tempConnection.TargetParentOrChildId,
+                                                  targetSlotId: tempConnection.TargetSlotId);
 
-        inProgress.Command.AddAndExecCommand(new AddConnectionCommand(sourceInstance.Parent.Symbol, newConnection, 0));
-        CompleteOperation(inProgress);
+        connectionProgress.Command.AddAndExecCommand(new AddConnectionCommand(sourceInstance.Parent.Symbol,
+                                                                              newConnection, 0));
+        CompleteOperation(connectionProgress);
     }
 
     #region related to SymbolBrowser
