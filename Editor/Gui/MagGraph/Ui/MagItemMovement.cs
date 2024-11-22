@@ -4,6 +4,7 @@ using System.Diagnostics;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Helpers;
@@ -131,7 +132,7 @@ internal sealed partial class MagItemMovement
                 {
                     if (_snapping.IsInsertion)
                     {
-                        if (TryToSplitInsert(composition))
+                        if (TrySplitInsert(composition))
                             _layout.FlagAsChanged();
                     }
                     else if (TryCreateNewConnectionFromSnap(composition))
@@ -184,7 +185,7 @@ internal sealed partial class MagItemMovement
         else if (ImGui.IsMouseReleased(0) && !_isInProgress)
         {
             // This happens after shake
-            _draggedItemIds.Clear();
+            //_draggedItemIds.Clear();
         }
 
         var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickThreshold;
@@ -373,8 +374,6 @@ internal sealed partial class MagItemMovement
 
         _lastAppliedOffset = Vector2.Zero;
 
-        _draggedNodeId = Guid.Empty;
-        _draggedItemIds.Clear();
         //DraggedPrimaryOutputType = null;
         SplitInsertionPoints.Clear();
     }
@@ -388,6 +387,9 @@ internal sealed partial class MagItemMovement
         PrimaryOutputItem = null;
         PrimaryOutputItemId = Guid.Empty;
         DraggedPrimaryOutputType = null;
+        
+        _draggedNodeId = Guid.Empty;
+        _draggedItemIds.Clear();
     }
 
     /// <summary>
@@ -729,7 +731,7 @@ internal sealed partial class MagItemMovement
     ///<summary>
     /// Search for potential new connections through snapping
     /// </summary>
-    private bool TryToSplitInsert(Instance composition)
+    private bool TrySplitInsert(Instance composition)
     {
         if (!_snapping.IsSnapped || _macroCommand == null || _snapping.BestA == null)
             return false;
@@ -778,19 +780,32 @@ internal sealed partial class MagItemMovement
                                                                                        connection.TargetItem.Id,
                                                                                        connection.TargetInput.Id
                                                                                       ), 0));
+        
+        MoveSnappedItemsVertically(composition, 
+                      _snapping.BestA,
+                      _snapping.OutAnchorPos.Y - MagGraphItem.GridSize.Y / 2, 
+                      insertionPoint.Distance);
+        return true;
+    }
 
-        // Find movable items...
-        var snappedItems = CollectSnappedItems(_snapping.BestA);
+    /// <summary>
+    /// Creates and applies a command to move items vertically
+    /// </summary>
+    /// <returns>
+    /// True if some items where moved
+    /// </returns>
+    private bool MoveSnappedItemsVertically(Instance composition, MagGraphItem rootItem, float yThreshold, float yDistance)
+    {
         var movableItems = new List<MagGraphItem>();
-        foreach (var otherItem in snappedItems)
+        foreach (var otherItem in CollectSnappedItems(rootItem))
         {
-            if (otherItem.PosOnCanvas.Y > _snapping.OutAnchorPos.Y - MagGraphItem.GridSize.Y / 2)
+            if (otherItem.PosOnCanvas.Y > yThreshold)
             {
                 movableItems.Add(otherItem);
             }
         }
-
-        if (movableItems.Count == 0)
+        
+        if (movableItems.Count == 0 || _macroCommand == null)
             return false;
 
         // Move items down...
@@ -800,20 +815,19 @@ internal sealed partial class MagItemMovement
 
         foreach (var item in affectedItemsAsNodes)
         {
-            item.PosOnCanvas += new Vector2(0, insertionPoint.Distance);
+            item.PosOnCanvas += new Vector2(0, yDistance);
         }
 
         newMoveComment.StoreCurrentValues();
-
         return true;
     }
-    
+
     private void InitPrimaryDraggedOutput()
     {
         DraggedPrimaryOutputType = null;
         PrimaryOutputItemId = Guid.Empty;
         PrimaryOutputItem = null;
-        HoveredItemForInputSelection = null;
+        ItemForInputSelection = null;
         var primaryOutputItem = FindPrimaryOutputItem();
         if (primaryOutputItem == null)
             return;
@@ -877,7 +891,7 @@ internal sealed partial class MagItemMovement
             if (!otherItem.Area.Contains(PeekAnchorInCanvas))
                 continue;
 
-            HoveredItemForInputSelection = otherItem;
+            ItemForInputSelection = otherItem;
             return true;
         }
 
@@ -891,29 +905,66 @@ internal sealed partial class MagItemMovement
     /// - move the dragged items to the snapped position
     /// - move all other relevant snapped items down
     /// - create the connection
-    ///  
     /// </summary>
-    internal void TryConnectHiddenInput(IInputUi inputUi, Instance compositionOp)
+    internal void TryConnectHiddenInput(IInputUi targetInputUi, Instance composition)
     {
-        Log.Debug("Trying to connect input " + inputUi);
-        Debug.Assert(PrimaryOutputItem != null && HoveredItemForInputSelection != null);
+        Debug.Assert(PrimaryOutputItem != null && ItemForInputSelection != null);
         Debug.Assert(_macroCommand != null);
+        Debug.Assert(ItemForInputSelection.Variant == MagGraphItem.Variants.Operator); // This will bite us later...
 
-
+        // create connection
         var connectionToAdd = new Symbol.Connection(PrimaryOutputItemId,
                                                     PrimaryOutputItem.OutputLines[0].Id,
-                                                    HoveredItemForInputSelection.Id,
-                                                    inputUi.Id);
+                                                    ItemForInputSelection.Id,
+                                                    targetInputUi.Id);
 
-        if (Structure.CheckForCycle(compositionOp.Symbol, connectionToAdd))
+        if (Structure.CheckForCycle(composition.Symbol, connectionToAdd))
         {
             Log.Debug("Sorry, this connection would create a cycle.");
             return;
         }
 
-        _macroCommand.AddAndExecCommand(new AddConnectionCommand(compositionOp.Symbol,
+        _macroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol,
                                                                  connectionToAdd,
                                                                  0));
+        
+        // Find insertion index
+        var inputLineIndex = 0;
+        foreach (var input in ItemForInputSelection.Instance.Inputs)
+        {
+            if (inputLineIndex <  ItemForInputSelection.InputLines.Length 
+                && input.Id == ItemForInputSelection.InputLines[inputLineIndex].Input.Id)
+                inputLineIndex++;
+            
+            if (input.Id == targetInputUi.InputDefinition.Id)
+                break;
+        }
+        
+        MoveSnappedItemsVertically(composition, 
+                      ItemForInputSelection,
+                      ItemForInputSelection.PosOnCanvas.Y + MagGraphItem.GridSize.Y * (inputLineIndex - 0.5f), 
+                      MagGraphItem.GridSize.Y);
+        
+        // Snap items (if there is space...)
+        // We assume that all dragged items are snapped...
+        var targetPos = ItemForInputSelection.PosOnCanvas 
+                            + new Vector2(-PrimaryOutputItem.Size.X,
+                                          (inputLineIndex) * MagGraphItem.GridSize.Y );
+        
+        var moveDelta = targetPos - PrimaryOutputItem.PosOnCanvas;
+        
+        var affectedItemsAsNodes = _draggedItems.Select(i => i as ISelectableCanvasObject).ToList();
+        var newMoveComment = new ModifyCanvasElementsCommand(composition.Symbol.Id, affectedItemsAsNodes, _nodeSelection);
+        _macroCommand.AddExecutedCommandForUndo(newMoveComment);
+
+        foreach (var item in affectedItemsAsNodes)
+        {
+            item.PosOnCanvas += moveDelta;
+        }
+
+        newMoveComment.StoreCurrentValues();
+        
+        // Complete drag interation
         Reset();
     }
     
@@ -973,7 +1024,7 @@ internal sealed partial class MagItemMovement
 
     internal Type? DraggedPrimaryOutputType;
     internal MagGraphItem? PrimaryOutputItem;
-    internal MagGraphItem? HoveredItemForInputSelection;
+    internal MagGraphItem? ItemForInputSelection;
     internal Guid PrimaryOutputItemId;
 
     internal Vector2 PeekAnchorInCanvas => PrimaryOutputItem == null

@@ -422,7 +422,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
 
     private void DrawHiddenInputSelector()
     {
-        if (_itemMovement.HoveredItemForInputSelection == null || _compositionOp == null) 
+        if (_itemMovement.ItemForInputSelection == null || _compositionOp == null) 
             return;
 
         var screenPos = TransformPosition(_itemMovement.PeekAnchorInCanvas);
@@ -447,16 +447,22 @@ internal sealed class MagGraphCanvas : ScalableCanvas
                              true,
                              flags))
         {
-            var childUi = _itemMovement.HoveredItemForInputSelection.SymbolUi;
+            var childUi = _itemMovement.ItemForInputSelection.SymbolUi;
             if (childUi != null)
             {
+                var inputIndex = 0;
                 foreach (var inputUi in childUi.InputUis.Values)
                 {
-                    if (inputUi.Type != _itemMovement.DraggedPrimaryOutputType)
-                        continue;
+                    var input = _itemMovement.ItemForInputSelection.Instance.Inputs[inputIndex];
+                    if (inputUi.Type == _itemMovement.DraggedPrimaryOutputType)
+                    {
+                        var isConnected = input.HasInputConnections;
+                        var prefix = isConnected ? "> " : "   "; 
+                        if (ImGui.Selectable(prefix + inputUi.InputDefinition.Name))
+                            _itemMovement.TryConnectHiddenInput(inputUi, _compositionOp);
+                    }
 
-                    if (ImGui.Selectable(inputUi.InputDefinition.Name))
-                        _itemMovement.TryConnectHiddenInput( inputUi, _compositionOp);
+                    inputIndex++;
                 } 
             }
 
