@@ -225,6 +225,7 @@ internal sealed class MagGraphLayout
 
                         outputLines.Add(new MagGraphItem.OutputLine
                                             {
+                                                Id = outputUi.Id,
                                                 Output = output,
                                                 OutputUi = outputUi,
                                                 OutputIndex = outputIndex,
@@ -254,6 +255,7 @@ internal sealed class MagGraphLayout
                     outputLines.Add(new MagGraphItem.OutputLine
                                         {
                                             Output = parentInput!, // This looks confusing but is correct
+                                            Id= parentInput!.Id,
                                             OutputUi = null,
                                             // IsPrimary =true,
                                             OutputIndex = 0,
@@ -396,8 +398,11 @@ internal sealed class MagGraphLayout
             }
 
             // Connections between nodes
-            var output = sourceItem.Instance?.Outputs.FirstOrDefault(o => o.Id == c.SourceSlotId);
-            var input = targetItem.Instance?.Inputs.FirstOrDefault(i => i.Input.InputDefinition.Id == c.TargetSlotId);
+            var output = sourceItem.Variant == MagGraphItem.Variants.Input
+                         ? sourceItem.Instance.Inputs.FirstOrDefault(o => o.Id == c.SourceSlotId)
+                         : sourceItem.Instance.Outputs.FirstOrDefault(o => o.Id == c.SourceSlotId);
+            
+            var input = targetItem.Instance.Inputs.FirstOrDefault(i => i.Input.InputDefinition.Id == c.TargetSlotId);
 
             if (output == null || input == null)
             {
@@ -538,22 +543,6 @@ internal sealed class MagGraphLayout
                 sc.Style = MagGraphConnection.ConnectionStyles.BottomToTop;
                 continue;
             }
-            
-            // Snapped horizontally 2
-            // if (sc.OutputLineIndex > 0
-            //     && sc.InputLineIndex > 0
-            //     && MathF.Abs(sourceMax.X - targetMin.X) < 1
-            //     // && MathF.Abs((sourceMin.Y + sc.VisibleOutputIndex * SnapGraphItem.GridSize.Y) 
-            //     //              - (targetMin.Y + sc.InputLineIndex * SnapGraphItem.GridSize.Y)) < 1
-            //     )
-            // {
-            //     sc.Style = SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal;
-            //     var p = new Vector2(sourceMax.X, sourceMin.Y + 0.5f * SnapGraphItem.GridSize.Y);
-            //     sc.SourcePos = p;
-            //     sc.TargetPos = p;
-            //     continue;
-            // }
-
 
             sc.SourcePos = new Vector2(sourceMax.X, sourceMin.Y + (sc.VisibleOutputIndex + 0.5f) * MagGraphItem.GridSize.Y);
             sc.TargetPos = new Vector2(targetMin.X, targetMin.Y + (sc.InputLineIndex + 0.5f) * MagGraphItem.GridSize.Y);

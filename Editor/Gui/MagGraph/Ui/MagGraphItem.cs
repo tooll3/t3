@@ -68,6 +68,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
 
     public struct OutputLine
     {
+        public Guid Id;
         public ISlot Output;
         public IOutputUi? OutputUi;
         public int VisibleIndex;

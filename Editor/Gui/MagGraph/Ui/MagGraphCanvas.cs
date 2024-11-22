@@ -81,6 +81,9 @@ internal sealed class MagGraphCanvas : ScalableCanvas
             }
         }
 
+        DrawHiddenInputSelector();
+        
+
         _itemMovement.CompleteFrame();
     }
 
@@ -298,10 +301,19 @@ internal sealed class MagGraphCanvas : ScalableCanvas
 
             if (hasMatchingTypes)
             {
-                var indicatorPos = new Vector2(pMin.X, pMin.Y + MagGraphItem.GridSize.Y/2 * CanvasScale);
-                // drawList.AddCircle(indicatorPos + new Vector2(0,-5), 3, UiColors.ForegroundFull.Fade(Blink));
-                // drawList.AddCircle(indicatorPos + new Vector2(0,2), 3, UiColors.ForegroundFull.Fade(Blink));
-                drawList.AddCircleFilled(indicatorPos + new Vector2(0,0), 3, UiColors.ForegroundFull.Fade(Blink));
+                if (_itemMovement.PrimaryOutputItem != null)
+                {
+                    var indicatorPos = new Vector2(pMin.X, pMin.Y + MagGraphItem.GridSize.Y/2 * CanvasScale);
+                    var isPeeked = item.Area.Contains(_itemMovement.PeekAnchorInCanvas);
+                    if (isPeeked)
+                    {
+                        drawList.AddCircleFilled(indicatorPos, 4, UiColors.ForegroundFull);
+                    }
+                    else
+                    {
+                        drawList.AddCircle(indicatorPos, 3, UiColors.ForegroundFull.Fade(Blink));
+                    }
+                }
             }
         }
         
@@ -335,10 +347,17 @@ internal sealed class MagGraphCanvas : ScalableCanvas
                              labelColor.Fade(0.7f),
                              outputDefinitionName);
         }
+        
+        // Indicator primary output op peek position...
+        if (item.Id == _itemMovement.PrimaryOutputItemId)
+        {
+            drawList.AddCircleFilled( TransformPosition(new Vector2(item.Area.Max.X - MagGraphItem.GridSize.Y*0.25f, 
+                                                                    item.Area.Min.Y + MagGraphItem.GridSize.Y*0.5f)),
+                                                        3 * CanvasScale,
+                                                        UiColors.ForegroundFull);
+        }
 
         // Draw input sockets
-        //var blinkFactor = MathF.Sin((float)ImGui.GetTime()/3.15f*20) /2 + 0.5f;
-
         foreach (var inputAnchor in item.GetInputAnchors())
         {
             var isAlreadyUsed = inputAnchor.ConnectionHash != 0;
@@ -349,15 +368,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
 
             var type2UiProperties = TypeUiRegistry.GetPropertiesForType(inputAnchor.ConnectionType);
             var p = TransformPosition(inputAnchor.PositionOnCanvas);
-            var blinkFactor = (float)((ImGui.GetTime() + (p - ImGui.GetMousePos()).Length() * 0.001f) % 1);
             var color = ColorVariations.OperatorOutline.Apply(type2UiProperties.Color);
-            var isPotentialDragTarget = inputAnchor.ConnectionType == _itemMovement.DraggedPrimaryOutputType
-                                        && !MagItemMovement.IsItemDragged(item);
-
-            if (isPotentialDragTarget)
-            {
-                drawList.AddCircleFilled(p, 2 + 15 * blinkFactor, color.Fade((1 - blinkFactor) * 0.7f));
-            }
 
             if (inputAnchor.Direction == MagGraphItem.Directions.Vertical)
             {
@@ -407,6 +418,68 @@ internal sealed class MagGraphCanvas : ScalableCanvas
 
             ShowAnchorPointDebugs(oa);
         }
+    }
+
+    private void DrawHiddenInputSelector()
+    {
+        if (_itemMovement.FieldHoveredItem == null)
+            return;
+
+        var screenPos = TransformPosition(_itemMovement.PeekAnchorInCanvas);
+        
+        ImGui.SetNextWindowPos(screenPos);
+
+        const ImGuiWindowFlags flags = ImGuiWindowFlags.NoTitleBar
+                                       | ImGuiWindowFlags.NoMove
+                                       | ImGuiWindowFlags.Tooltip // ugly as f**k. Sadly .PopUp will lead to random crashes.
+                                       | ImGuiWindowFlags.NoFocusOnAppearing
+                                       | ImGuiWindowFlags.NoScrollbar
+                                       //| ImGuiWindowFlags.NoBackground
+        | ImGuiWindowFlags.AlwaysUseWindowPadding;
+        
+        ImGui.PushStyleVar(ImGuiStyleVar.ChildRounding, 5);
+        ImGui.PushStyleVar(ImGuiStyleVar.PopupBorderSize,  0);
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding,  Vector2.One * 4);
+        
+        ImGui.PushStyleColor(ImGuiCol.PopupBg, UiColors.BackgroundFull.Fade(0.6f).Rgba);
+        if (ImGui.BeginChild("Popup",
+                             new Vector2(100, 120),
+                             true,
+                             flags))
+        {
+            var childUi = _itemMovement.FieldHoveredItem.SymbolUi;
+            if (childUi != null)
+            {
+                foreach (var inputUi in childUi.InputUis.Values)
+                {
+                    if (inputUi.Type != _itemMovement.DraggedPrimaryOutputType)
+                        continue;
+
+                    if (ImGui.Selectable(inputUi.InputDefinition.Name))
+                    {
+                        // TODO: Do something...
+                        // And close
+                        _itemMovement.FieldHoveredItem = null;
+                        _itemMovement.PrimaryOutputItem = null;
+                    }
+                } 
+                
+            }
+
+            // Close
+            var isPopupHovered = ImRect.RectWithSize(ImGui.GetWindowPos( ), ImGui.GetWindowSize())
+                                       .Contains(ImGui.GetMousePos());
+            
+            if (!isPopupHovered && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+            {
+                _itemMovement.FieldHoveredItem = null;
+            }
+            ImGui.PopStyleVar(1);
+        }
+        
+        ImGui.EndChild();
+        ImGui.PopStyleVar(3);
+        ImGui.PopStyleColor();
     }
 
     private void ShowAnchorPointDebugs(MagGraphItem.AnchorPoint a, bool isInput = false)
@@ -672,4 +745,6 @@ internal sealed class MagGraphCanvas : ScalableCanvas
     private float CanvasScale => Scale.X;
     public bool ShowDebug => ImGui.GetIO().KeyCtrl || _enableDebug;
     private bool _enableDebug;
+
+    
 }
