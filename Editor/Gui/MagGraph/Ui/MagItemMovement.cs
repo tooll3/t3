@@ -1,5 +1,6 @@
 ﻿#nullable enable
 
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
@@ -8,7 +9,6 @@ using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
@@ -16,7 +16,6 @@ using T3.Editor.Gui.UiHelpers;
 using Vector2 = System.Numerics.Vector2;
 
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
-
 // ReSharper disable UseWithExpressionToCopyStruct
 
 namespace T3.Editor.Gui.MagGraph.Ui;
@@ -38,9 +37,6 @@ internal sealed class MagItemMovement
         _nodeSelection = nodeSelection;
     }
 
-    /** During connection operations we want to indicate operator if matching but hidden inputs */
-    public Type? ConnectionTargetType; // = typeof(float);
-
     /// <summary>
     /// We can't assume the the layout model structure to be stable across frames.
     /// We use Guids to carry over the information for dragged items.
@@ -53,8 +49,6 @@ internal sealed class MagItemMovement
     {
         // Derive _draggedItems from ids
         _draggedItems.Clear();
-        //PrimaryOutputItem = null;
-
         foreach (var id in _draggedItemIds)
         {
             if (!_layout.Items.TryGetValue(id, out var item))
@@ -80,7 +74,7 @@ internal sealed class MagItemMovement
     // Todo: Call this from the main loop?
     public void CompleteFrame()
     {
-        if (ImGui.IsMouseReleased(0) && _macroCommand != null)
+        if (ImGui.IsMouseReleased(0) && _isInProgress)
         {
             StopDragOperation();
         }
@@ -124,7 +118,7 @@ internal sealed class MagItemMovement
             //ShakeDetector.ResetShaking();
         }
         // Update dragging...
-        else if (isActiveNode && ImGui.IsMouseDown(ImGuiMouseButton.Left) && _macroCommand != null)
+        else if (isActiveNode && ImGui.IsMouseDown(ImGuiMouseButton.Left) && _isInProgress)
         {
             // TODO: Implement shake disconnect later
 
@@ -149,53 +143,13 @@ internal sealed class MagItemMovement
             }
         }
         // Release and complete dragging
-        else if (isActiveNode && ImGui.IsMouseReleased(0) && _macroCommand != null)
+        else if (isActiveNode && ImGui.IsMouseReleased(0) && _isInProgress)
         {
             if (_draggedNodeId != item.Id)
                 return;
 
-            var singleDraggedNode = (_draggedItems.Count == 1) ? _draggedItems.First() : null;
-
-            var wasDragging = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() > UserSettings.Config.ClickThreshold;
-            if (wasDragging)
-            {
-                _moveElementsCommand?.StoreCurrentValues();
-
-                if (singleDraggedNode != null
-                    && ConnectionSplitHelper.BestMatchLastFrame != null)
-                {
-                    //var instanceForSymbolChildUi = composition.Children.SingleOrDefault(child => child.SymbolChildId == graphItem.SymbolChildUi.Id);
-                    // TODO: Implement later
-                    // ConnectionMaker.SplitConnectionWithDraggedNode(graphItem.SymbolChildUi,
-                    //                                                ConnectionSplitHelper.BestMatchLastFrame.Connection,
-                    //                                                graphItem.Instance,
-                    //                                                _modifyCommand);
-                    _macroCommand = null;
-                }
-                else
-                {
-                    UndoRedoStack.Add(_macroCommand);
-                }
-
-                //FieldHoveredItem = PrimaryOutputItem;
-                if (PrimaryOutputItem != null)
-                {
-                    MagGraphItem? hoveredItem = null;
-                    foreach (var otherItem in _layout.Items.Values)
-                    {
-                        if (!otherItem.Area.Contains(PeekAnchorInCanvas))
-                            continue;
-                        hoveredItem = otherItem;
-                        break;
-                    }
-
-                    if (hoveredItem != null)
-                    {
-                        FieldHoveredItem = hoveredItem;
-                    }
-                }
-            }
-            else
+            // Only clicked
+            if (!_hasDragged)
             {
                 if (!_nodeSelection.IsNodeSelected(item))
                 {
@@ -217,10 +171,18 @@ internal sealed class MagItemMovement
                     }
                 }
             }
+            // Complete drag interactions...
+            else
+            {
+                _moveElementsCommand?.StoreCurrentValues();
+                UndoRedoStack.Add(_macroCommand);
+                if (!TryInitializeInputSelectionPicker())
+                    Reset();
+            }
 
             StopDragOperation();
         }
-        else if (ImGui.IsMouseReleased(0) && _macroCommand == null)
+        else if (ImGui.IsMouseReleased(0) && !_isInProgress)
         {
             // This happens after shake
             _draggedItemIds.Clear();
@@ -234,6 +196,77 @@ internal sealed class MagItemMovement
         {
             item.Select(_nodeSelection);
         }
+    }
+
+    private bool TryInitializeInputSelectionPicker()
+    {
+        if (PrimaryOutputItem == null)
+            return false;
+
+        foreach (var otherItem in _layout.Items.Values)
+        {
+            if (otherItem == PrimaryOutputItem)
+                continue;
+            
+            if (!otherItem.Area.Contains(PeekAnchorInCanvas))
+                continue;
+
+            HoveredItemForInputSelection = otherItem;
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// After snapping picking an hidden input field for connection, this
+    /// method can be called to...
+    /// - move the dragged items to the snapped position
+    /// - move all other relevant snapped items down
+    /// - create the connection
+    ///  
+    /// </summary>
+    /// <param name="inputUi"></param>
+    /// <param name="compositionOp"></param>
+    internal void TryConnectHiddenInput(IInputUi inputUi, Instance compositionOp)
+    {
+        Log.Debug("Trying to connect input " + inputUi);
+        Debug.Assert(PrimaryOutputItem != null && HoveredItemForInputSelection != null);
+        Debug.Assert(_macroCommand != null);
+
+        // var requiredNewCommand = _macroCommand == null; 
+        // if (requiredNewCommand)
+        // {
+        //     _macroCommand = new MacroCommand("Connected operators"); 
+        // }
+
+        var connectionToAdd = new Symbol.Connection(PrimaryOutputItemId,
+                                                    PrimaryOutputItem.OutputLines[0].Id,
+                                                    HoveredItemForInputSelection.Id,
+                                                    inputUi.Id);
+
+        if (Structure.CheckForCycle(compositionOp.Symbol, connectionToAdd))
+        {
+            Log.Debug("Sorry, this connection would create a cycle.");
+            return;
+        }
+
+        _macroCommand.AddAndExecCommand(new AddConnectionCommand(compositionOp.Symbol,
+                                                                 connectionToAdd,
+                                                                 0));
+        Reset();
+        // if(requiredNewCommand)
+        //     UndoRedoStack.Add(_macroCommand);
+    }
+
+    /// <summary>
+    /// This will reset the state including all highlights and indicators 
+    /// </summary>
+    internal void Reset()
+    {
+        PrimaryOutputItem = null;
+        PrimaryOutputItemId = Guid.Empty;
+        DraggedPrimaryOutputType = null;
     }
 
     /// <summary>
@@ -334,7 +367,9 @@ internal sealed class MagItemMovement
         }
     }
 
-    /** Iterate through gap lines and move items below upwards */
+    ///<summary>
+    /// Iterate through gap lines and move items below upwards
+    /// </summary>
     private static HashSet<MagGraphItem> MoveToFillGaps(SnapCollapseConnectionPair pair, HashSet<MagGraphItem> movableItems, bool dryRun)
     {
         var minY = pair.Ca.SourcePos.Y;
@@ -379,7 +414,9 @@ internal sealed class MagItemMovement
 
     private sealed record SnapCollapseConnectionPair(MagGraphConnection Ca, MagGraphConnection Cb);
 
-    /** Search for potential new connections through snapping */
+    ///<summary>
+    /// Search for potential new connections through snapping
+    /// </summary>
     private bool TryToSplitInsert(Instance composition)
     {
         if (!_snapping.IsSnapped || _macroCommand == null || _snapping.BestA == null)
@@ -459,7 +496,9 @@ internal sealed class MagItemMovement
         return true;
     }
 
-    /** Search for potential new connections through snapping */
+    ///<summary>
+    /// Search for potential new connections through snapping
+    /// </summary>
     private bool TryCreateNewConnectionFromSnap(Instance composition)
     {
         if (!_snapping.IsSnapped || _macroCommand == null)
@@ -495,53 +534,48 @@ internal sealed class MagItemMovement
     private void StartDragOperation(Instance composition)
     {
         var snapGraphItems = _draggedItems.Select(i => i as ISelectableCanvasObject).ToList();
+
         _macroCommand = new MacroCommand("Move nodes");
         _moveElementsCommand = new ModifyCanvasElementsCommand(composition.Symbol.Id, snapGraphItems, _nodeSelection);
         _macroCommand.AddExecutedCommandForUndo(_moveElementsCommand);
 
-        DraggedPrimaryOutputType = null;
-
         _lastAppliedOffset = Vector2.Zero;
-        _isDragging = false;
+        _isInProgress = true;
+        _hasDragged = false;
 
-        //UpdateBorderConnections(_draggedItems);
         UpdateSplitInsertionPoints(_draggedItems);
 
-        PrimaryOutputItemId = Guid.Empty;
-        PrimaryOutputItem = null;
-        FieldHoveredItem = null;
-        var primaryOutputItem = FindPrimaryOutputItem();
-        if (primaryOutputItem == null)
-        {
-            return;
-        }
-
-        //var item = _draggedItems.First();
-
-        DraggedPrimaryOutputType = primaryOutputItem.PrimaryType;
-
-        if (primaryOutputItem.InputLines.Length == 0)
-            return;
-
-        PrimaryOutputItemId = primaryOutputItem.Id;
+        InitializePrimaryDraggedOutput();
     }
 
-    /** Snapping an item onto a hidden parameter is a complicated ui problem.
-     * To allow this interaction we add "peek" anchor indicator to the dragged item set.
-     * If this is dropped without snapping onto an operator with hidden parameters of the matching type,
-     * we present cables.gl inspired picker interface.
-     */
-    /**
-     * Set primary types to indicate targets for dragging
-     *
-     * This part is a little fishy. To have "some" solution we try to identify dragged
-     *    constellations that has a single free horizontal output anchor on the left column.
-     *
-     *     -
-     *     -X
-     *
-     */
-    private MagGraphItem? FindPrimaryOutputItem()
+    /// <summary>
+    /// Reset to avoid accidental dragging of previous elements 
+    /// </summary>
+    private void StopDragOperation()
+    {
+        _isInProgress = false;
+        //_moveElementsCommand = null;
+        //_macroCommand = null;
+
+        _lastAppliedOffset = Vector2.Zero;
+
+        _draggedNodeId = Guid.Empty;
+        _draggedItemIds.Clear();
+        //DraggedPrimaryOutputType = null;
+        SplitInsertionPoints.Clear();
+    }
+
+    /// <summary>
+    /// Snapping an item onto a hidden parameter is a tricky ui problem.
+    /// To allow this interaction we add "peek" anchor indicator to the dragged item set.
+    /// If this is dropped without snapping onto an operator with hidden parameters of the matching type,
+    /// we present cables.gl inspired picker interface.
+    ///
+    /// Set primary types to indicate targets for dragging
+    /// This part is a little fishy. To have "some" solution we try to identify dragged
+    /// constellations that has a single free horizontal output anchor on the left column.
+    /// </summary>
+    private static MagGraphItem? FindPrimaryOutputItem()
     {
         if (_draggedItems.Count == 0)
             return null;
@@ -569,27 +603,9 @@ internal sealed class MagItemMovement
         return rightItem;
     }
 
-    //private sealed record PeekAnchor(Guid ItemId, Type Type);
-    //private Pick
-
     /// <summary>
-    /// Reset to avoid accidental dragging of previous elements 
+    /// Update dragged items and use anchor definitions to identify and use potential snap targets
     /// </summary>
-    private void StopDragOperation()
-    {
-        _moveElementsCommand = null;
-        _macroCommand = null;
-
-        _lastAppliedOffset = Vector2.Zero;
-
-        _draggedNodeId = Guid.Empty;
-        _draggedItemIds.Clear();
-        //DraggedPrimaryOutputType = null;
-        ConnectionTargetType = null;
-        SplitInsertionPoints.Clear();
-    }
-
-    /** Update dragged items and use anchor definitions to identify and use potential snap targets */
     private bool HandleSnappedDragging(ICanvas canvas, Instance composition)
     {
         var dl = ImGui.GetWindowDrawList();
@@ -618,14 +634,14 @@ internal sealed class MagItemMovement
                 }
             }
 
-            _isDragging = false;
+            _hasDragged = false;
             return false;
         }
 
-        if (!_isDragging)
+        if (!_hasDragged)
         {
             _dragStartPosInOpOnCanvas = canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
-            _isDragging = true;
+            _hasDragged = true;
         }
 
         var mousePosOnCanvas = canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
@@ -759,10 +775,10 @@ internal sealed class MagItemMovement
         }
     }
 
-    /**
-     * When starting a new drag operation, we try to identify border input anchors of the dragged items,
-     * that can be used to insert them between other snapped items.
-     */
+    /// <summary>
+    /// When starting a new drag operation, we try to identify border input anchors of the dragged items,
+    /// that can be used to insert them between other snapped items.
+    /// </summary>
     private void UpdateSplitInsertionPoints(HashSet<MagGraphItem> draggedItems)
     {
         SplitInsertionPoints.Clear();
@@ -818,6 +834,24 @@ internal sealed class MagItemMovement
                 }
             }
         }
+    }
+
+    private void InitializePrimaryDraggedOutput()
+    {
+        DraggedPrimaryOutputType = null;
+        PrimaryOutputItemId = Guid.Empty;
+        PrimaryOutputItem = null;
+        HoveredItemForInputSelection = null;
+        var primaryOutputItem = FindPrimaryOutputItem();
+        if (primaryOutputItem == null)
+            return;
+
+        DraggedPrimaryOutputType = primaryOutputItem.PrimaryType;
+
+        if (primaryOutputItem.InputLines.Length == 0)
+            return;
+
+        PrimaryOutputItemId = primaryOutputItem.Id;
     }
 
     private static void GetPotentialConnectionsAfterSnap(ref List<Symbol.Connection> result, MagGraphItem a, MagGraphItem b)
@@ -1090,7 +1124,7 @@ internal sealed class MagItemMovement
     // Related to hidden inputs connectivity
     internal Type? DraggedPrimaryOutputType;
     internal MagGraphItem? PrimaryOutputItem;
-    internal MagGraphItem? FieldHoveredItem;
+    internal MagGraphItem? HoveredItemForInputSelection;
     internal Guid PrimaryOutputItemId;
 
     internal Vector2 PeekAnchorInCanvas => PrimaryOutputItem == null
@@ -1106,14 +1140,16 @@ internal sealed class MagItemMovement
     private bool _wasSnapped;
     private static readonly Snapping _snapping = new();
 
-    //private MagGraphItem? _longTapItem;
     private Guid _longTapItemId = Guid.Empty;
     private double _mousePressedTime;
 
-    private static bool _isDragging;
+    private static bool _isInProgress;
+    private static bool _hasDragged;
     private Vector2 _dragStartPosInOpOnCanvas;
+
     private static MacroCommand? _macroCommand;
     private static ModifyCanvasElementsCommand? _moveElementsCommand;
+
     private static Guid _draggedNodeId = Guid.Empty;
     private static readonly HashSet<MagGraphItem> _draggedItems = [];
     private static readonly HashSet<Guid> _draggedItemIds = [];

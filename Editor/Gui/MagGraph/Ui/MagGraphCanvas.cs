@@ -422,7 +422,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
 
     private void DrawHiddenInputSelector()
     {
-        if (_itemMovement.FieldHoveredItem == null)
+        if (_itemMovement.HoveredItemForInputSelection == null || _compositionOp == null) 
             return;
 
         var screenPos = TransformPosition(_itemMovement.PeekAnchorInCanvas);
@@ -447,7 +447,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
                              true,
                              flags))
         {
-            var childUi = _itemMovement.FieldHoveredItem.SymbolUi;
+            var childUi = _itemMovement.HoveredItemForInputSelection.SymbolUi;
             if (childUi != null)
             {
                 foreach (var inputUi in childUi.InputUis.Values)
@@ -456,14 +456,8 @@ internal sealed class MagGraphCanvas : ScalableCanvas
                         continue;
 
                     if (ImGui.Selectable(inputUi.InputDefinition.Name))
-                    {
-                        // TODO: Do something...
-                        // And close
-                        _itemMovement.FieldHoveredItem = null;
-                        _itemMovement.PrimaryOutputItem = null;
-                    }
+                        _itemMovement.TryConnectHiddenInput( inputUi, _compositionOp);
                 } 
-                
             }
 
             // Close
@@ -472,7 +466,8 @@ internal sealed class MagGraphCanvas : ScalableCanvas
             
             if (!isPopupHovered && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
             {
-                _itemMovement.FieldHoveredItem = null;
+                _itemMovement.Reset();
+                //_itemMovement.FieldHoveredItem = null;
             }
             ImGui.PopStyleVar(1);
         }
