@@ -4,7 +4,6 @@ using System.Diagnostics;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
-using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Helpers;
@@ -519,9 +518,11 @@ internal sealed partial class MagItemMovement
         var collapseLines = new HashSet<float>();
         foreach (var mc in unsnappedConnections)
         {
-            if (mc.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal)
+            if (mc.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal
+                && mc.InputLineIndex > 0
+                )
             {
-                collapseLines.Add(mc.SourcePos.Y );
+                collapseLines.Add(mc.SourcePos.Y);
             }
         }
 
