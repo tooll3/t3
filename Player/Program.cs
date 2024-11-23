@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text;
 using CommandLine;
 using CommandLine.Text;
 using ManagedBass;
@@ -35,6 +36,7 @@ using FillMode = SharpDX.Direct3D11.FillMode;
 using ResourceManager = T3.Core.Resource.ResourceManager;
 using VertexShader = T3.Core.DataTypes.VertexShader;
 using PixelShader = T3.Core.DataTypes.PixelShader;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace T3.Player;
 
@@ -164,7 +166,7 @@ internal static partial class Program
             InitializeInput(_renderForm);
 
             // New RenderTargetView from the backbuffer
-            _backBuffer = Resource.FromSwapChain<Texture2D>(_swapChain, 0);
+            _backBuffer = Resource.FromSwapChain<SharpDX.Direct3D11.Texture2D>(_swapChain, 0);
             _renderView = new RenderTargetView(_device, _backBuffer);
 
             var shaderCompiler = new DX11ShaderCompiler
@@ -250,6 +252,24 @@ internal static partial class Program
                         break;
                     }
                 }
+            }
+
+            if (_textureOutput == null)
+            {
+                var sb = new StringBuilder();
+                var slots = _project.Outputs.Where(x => x is not null).ToArray();
+                sb.AppendLine("Found the following outputs:");
+                foreach (var slot in slots)
+                {
+                    sb.AppendLine($"{slot.GetType()} | {slot.ValueType} ({slot.ValueType.Assembly.ToString()}\n");
+                }
+
+                sb.AppendLine();
+                sb.AppendLine("Expected:");
+                sb.Append($"{typeof(Slot<Texture2D>).FullName} | {typeof(Texture2D).FullName} ({typeof(Texture2D).Assembly.ToString()}\n");
+                var message = $"Failed to find texture output. \n{sb}";
+                CloseApplication(true, message);
+                return;
             }
 
             // TODO - implement proper shader pre-compilation as an option to instance instantiation
@@ -343,12 +363,12 @@ internal static partial class Program
         }
     }
 
-    private static void RebuildBackBuffer(RenderForm form, Device device, ref RenderTargetView rtv, ref Texture2D buffer, SwapChain swapChain)
+    private static void RebuildBackBuffer(RenderForm form, Device device, ref RenderTargetView rtv, ref SharpDX.Direct3D11.Texture2D buffer, SwapChain swapChain)
     {
         rtv.Dispose();
         buffer.Dispose();
         swapChain.ResizeBuffers(3, form.ClientSize.Width, form.ClientSize.Height, Format.Unknown, SwapChainFlags.AllowModeSwitch);
-        buffer = Resource.FromSwapChain<Texture2D>(swapChain, 0);
+        buffer = Resource.FromSwapChain<SharpDX.Direct3D11.Texture2D>(swapChain, 0);
         rtv = new RenderTargetView(device, buffer);
     }
 
@@ -403,7 +423,7 @@ internal static partial class Program
     private static int _vsyncInterval;
     private static SwapChain _swapChain;
     private static RenderTargetView _renderView;
-    private static Texture2D _backBuffer;
+    private static SharpDX.Direct3D11.Texture2D _backBuffer;
     private static Instance _project;
     private static EvaluationContext _evalContext;
     private static Playback _playback;
