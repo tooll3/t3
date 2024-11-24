@@ -17,7 +17,7 @@ using Vector2 = System.Numerics.Vector2;
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable UseWithExpressionToCopyStruct
 
-namespace T3.Editor.Gui.MagGraph.Ui;
+namespace T3.Editor.Gui.MagGraph.Ui.Interaction;
 
 /// <summary>
 /// 
@@ -29,39 +29,27 @@ namespace T3.Editor.Gui.MagGraph.Ui;
 /// </remarks>
 internal sealed partial class MagItemMovement
 {
-    public MagItemMovement(MagGraphCanvas magGraphCanvas, MagGraphLayout layout, NodeSelection nodeSelection)
+    public MagItemMovement(GraphUiContext graphUiContext, MagGraphCanvas magGraphCanvas, MagGraphLayout layout, NodeSelection nodeSelection)
     {
         _canvas = magGraphCanvas;
         _layout = layout;
         _nodeSelection = nodeSelection;
+        _context = graphUiContext;
     }
 
-    /// <summary>
-    /// We can't assume the the layout model structure to be stable across frames.
-    /// We use Guids to carry over the information for dragged items.
-    /// </summary>
-    ///
-    /// <remarks>
-    /// This can eventually be optimized by having a structure counter or a hasChanged flag in layout.
-    /// </remarks>
+    private GraphUiContext _context;
+
+
     public void PrepareFrame()
     {
-        // Derive _draggedItems from ids
-        _draggedItems.Clear();
-        foreach (var id in _draggedItemIds)
-        {
-            if (!_layout.Items.TryGetValue(id, out var item))
-            {
-                Log.Warning("Dragged item no longer valid?");
-                continue;
-            }
+        PrepareItemReferences();
+        PrepareDragInteraction();
+    }
 
-            if (id == PrimaryOutputItemId)
-                PrimaryOutputItem = item;
 
-            _draggedItems.Add(item);
-        }
 
+    private void PrepareDragInteraction()
+    {
         UpdateBorderConnections(_draggedItems); // Sadly structure might change during drag...
         UpdateSnappedBorderConnections();
     }
@@ -78,15 +66,50 @@ internal sealed partial class MagItemMovement
             StopDragOperation();
         }
     }
+    
+    /// <summary>
+    /// We can't assume the the layout model structure to be stable across frames.
+    /// We use Guids to carry over the information for dragged items.
+    /// </summary>
+    ///
+    /// <remarks>
+    /// This can eventually be optimized by having a structure counter or a hasChanged flag in layout.
+    /// </remarks>
+    private void PrepareItemReferences()
+    {
+        _draggedItems.Clear();
+        foreach (var id in _draggedItemIds)
+        {
+            if (!_layout.Items.TryGetValue(id, out var item))
+            {
+                Log.Warning("Dragged item no longer valid?");
+                continue;
+            }
+
+            if (id == PrimaryOutputItemId)
+                PrimaryOutputItem = item;
+
+            _draggedItems.Add(item);
+        }
+    }
 
     /// <summary>
-    /// NOTE: This has to be called for ALL movable elements (ops, inputs, outputs) and directly after ImGui.Item
+    /// This is called for ALL movable elements (ops, inputs, outputs) and directly after ImGui.Item
     /// </summary>
-    public void HandleForItem(MagGraphItem item, MagGraphCanvas canvas, Instance composition)
+    public void HandleForItem(MagGraphItem item, MagGraphCanvas canvas)
     {
+        var composition = _context.CompositionOp;
+        if (composition == null)
+            return;
+        
         var isActiveNode = item.Id == _draggedNodeId;
-        var clickedDown = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Left);
+        var isItemHovered = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup 
+                                                | ImGuiHoveredFlags.AllowWhenBlockedByActiveItem);
+        var clickedDown = isItemHovered && ImGui.IsMouseClicked(ImGuiMouseButton.Left);
 
+        if(isItemHovered)
+            _context.LastHoveredItem = item;
+        
         // Start dragging
         if (clickedDown)
         {
@@ -102,44 +125,29 @@ internal sealed partial class MagItemMovement
                         _draggedItemIds.Add(i.Id);
                     }
                 }
-
-                PrepareFrame();
+                PrepareDragInteraction();
             }
             else
             {
-                CollectSnappedDragItems(item);
+                _draggedItems.Clear();
+                CollectSnappedItems(item, _draggedItems);
+
+                _draggedItemIds.Clear();
+                foreach (var item1 in _draggedItems)
+                {
+                    _draggedItemIds.Add(item1.Id);
+                }
             }
 
             _mousePressedTime = ImGui.GetTime();
 
             StartDragOperation(composition);
-
-            //ShakeDetector.ResetShaking();
         }
         // Update dragging...
         else if (isActiveNode && ImGui.IsMouseDown(ImGuiMouseButton.Left) && _isInProgress)
         {
-            // TODO: Implement shake disconnect later
-
-            var snappingChanged = HandleSnappedDragging(canvas, composition);
-            if (snappingChanged)
-            {
-                HandleUnsnapAndCollapse(composition);
-                _layout.FlagAsChanged();
-
-                if (_snapping.IsSnapped)
-                {
-                    if (_snapping.IsInsertion)
-                    {
-                        if (TrySplitInsert(composition))
-                            _layout.FlagAsChanged();
-                    }
-                    else if (TryCreateNewConnectionFromSnap(composition))
-                    {
-                        _layout.FlagAsChanged();
-                    }
-                }
-            }
+            // Now updated in state machine...
+            //UpdateDragging(canvas, composition);
         }
         // Release and complete dragging
         else if (isActiveNode && ImGui.IsMouseReleased(0) && _isInProgress)
@@ -173,8 +181,8 @@ internal sealed partial class MagItemMovement
             // Complete drag interactions...
             else
             {
-                _moveElementsCommand?.StoreCurrentValues();
-                UndoRedoStack.Add(_macroCommand);
+                GraphUiContext._moveElementsCommand?.StoreCurrentValues();
+                UndoRedoStack.Add(GraphUiContext.MacroCommand);
                 if (!TryInitializeInputSelectionPicker())
                     Reset();
             }
@@ -194,6 +202,33 @@ internal sealed partial class MagItemMovement
             && !_nodeSelection.IsNodeSelected(item))
         {
             item.Select(_nodeSelection);
+        }
+    }
+
+    internal void UpdateDragging(GraphUiContext context)
+    {
+        var composition = context.CompositionOp;
+        if (composition == null)
+            return;
+        
+        var snappingChanged = HandleSnappedDragging(context.Canvas, composition);
+        if (!snappingChanged)
+            return;
+        
+        HandleUnsnapAndCollapse(composition);
+        _layout.FlagAsChanged();
+
+        if (!_snapping.IsSnapped)
+            return;
+        
+        if (_snapping.IsInsertion)
+        {
+            if (TrySplitInsert(composition))
+                _layout.FlagAsChanged();
+        }
+        else if (TryCreateNewConnectionFromSnap(composition))
+        {
+            _layout.FlagAsChanged();
         }
     }
 
@@ -348,9 +383,9 @@ internal sealed partial class MagItemMovement
     {
         var snapGraphItems = _draggedItems.Select(i => i as ISelectableCanvasObject).ToList();
 
-        _macroCommand = new MacroCommand("Move nodes");
-        _moveElementsCommand = new ModifyCanvasElementsCommand(composition.Symbol.Id, snapGraphItems, _nodeSelection);
-        _macroCommand.AddExecutedCommandForUndo(_moveElementsCommand);
+        GraphUiContext.MacroCommand = new MacroCommand("Move nodes");
+        GraphUiContext._moveElementsCommand = new ModifyCanvasElementsCommand(composition.Symbol.Id, snapGraphItems, _nodeSelection);
+        GraphUiContext.MacroCommand.AddExecutedCommandForUndo(GraphUiContext._moveElementsCommand);
 
         _lastAppliedOffset = Vector2.Zero;
         _isInProgress = true;
@@ -394,7 +429,7 @@ internal sealed partial class MagItemMovement
     /// </summary>
     private void HandleUnsnapAndCollapse(Instance composition)
     {
-        if (_macroCommand == null)
+        if (GraphUiContext.MacroCommand == null)
             return;
 
         var unsnappedConnections = new List<MagGraphConnection>();
@@ -412,7 +447,7 @@ internal sealed partial class MagItemMovement
                                                    mc.TargetItem.Id,
                                                    mc.TargetItem.InputLines[mc.InputLineIndex].Input.Id);
 
-            _macroCommand.AddAndExecCommand(new DeleteConnectionCommand(composition.Symbol, connection, 0));
+            GraphUiContext.MacroCommand.AddAndExecCommand(new DeleteConnectionCommand(composition.Symbol, connection, 0));
             mc.IsUnlinked = true;
         }
         
@@ -488,17 +523,17 @@ internal sealed partial class MagItemMovement
 
         var affectedItemsAsNodes = movableItems.Select(i => i as ISelectableCanvasObject).ToList();
         var newMoveComment = new ModifyCanvasElementsCommand(composition.Symbol.Id, affectedItemsAsNodes, _nodeSelection);
-        _macroCommand.AddExecutedCommandForUndo(newMoveComment);
+        GraphUiContext.MacroCommand.AddExecutedCommandForUndo(newMoveComment);
 
         MoveToFillGaps(pair, movableItems, false);
         newMoveComment.StoreCurrentValues();
 
-        _macroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol,
-                                                                 new Symbol.Connection(pair.Ca.SourceItem.Id,
-                                                                                       pair.Ca.SourceOutput.Id,
-                                                                                       pair.Cb.TargetItem.Id,
-                                                                                       pair.Cb.TargetInput.Id),
-                                                                 0));
+        GraphUiContext.MacroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol,
+                                                                    new Symbol.Connection(pair.Ca.SourceItem.Id,
+                                                                                          pair.Ca.SourceOutput.Id,
+                                                                                          pair.Cb.TargetItem.Id,
+                                                                                          pair.Cb.TargetInput.Id),
+                                                                    0));
         return true;
     }
     
@@ -595,7 +630,7 @@ internal sealed partial class MagItemMovement
     /// </summary>
     private bool TryCreateNewConnectionFromSnap(Instance composition)
     {
-        if (!_snapping.IsSnapped || _macroCommand == null)
+        if (!_snapping.IsSnapped || GraphUiContext.MacroCommand == null)
             return false;
 
         var newConnections = new List<Symbol.Connection>();
@@ -619,7 +654,7 @@ internal sealed partial class MagItemMovement
                 continue;
             }
 
-            _macroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol, newConnection, 0));
+            GraphUiContext.MacroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol, newConnection, 0));
         }
 
         return newConnections.Count > 0;
@@ -786,7 +821,7 @@ internal sealed partial class MagItemMovement
     /// </summary>
     private bool TrySplitInsert(Instance composition)
     {
-        if (!_snapping.IsSnapped || _macroCommand == null || _snapping.BestA == null)
+        if (!_snapping.IsSnapped || GraphUiContext.MacroCommand == null || _snapping.BestA == null)
             return false;
 
         var insertionPoint = _snapping.InsertionPoint;
@@ -817,22 +852,22 @@ internal sealed partial class MagItemMovement
             return false;
         }
 
-        _macroCommand.AddAndExecCommand(new DeleteConnectionCommand(composition.Symbol,
-                                                                    connection.AsSymbolConnection(),
-                                                                    0));
-        _macroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol,
-                                                                 new Symbol.Connection(connection.SourceItem.Id,
-                                                                                       connection.SourceOutput.Id,
-                                                                                       insertionPoint.InputItemId,
-                                                                                       insertionPoint.InputId
-                                                                                      ), 0));
+        GraphUiContext.MacroCommand.AddAndExecCommand(new DeleteConnectionCommand(composition.Symbol,
+                                                                       connection.AsSymbolConnection(),
+                                                                       0));
+        GraphUiContext.MacroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol,
+                                                                    new Symbol.Connection(connection.SourceItem.Id,
+                                                                                          connection.SourceOutput.Id,
+                                                                                          insertionPoint.InputItemId,
+                                                                                          insertionPoint.InputId
+                                                                                         ), 0));
 
-        _macroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol,
-                                                                 new Symbol.Connection(insertionPoint.OutputItemId,
-                                                                                       insertionPoint.OutputId,
-                                                                                       connection.TargetItem.Id,
-                                                                                       connection.TargetInput.Id
-                                                                                      ), 0));
+        GraphUiContext.MacroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol,
+                                                                    new Symbol.Connection(insertionPoint.OutputItemId,
+                                                                                          insertionPoint.OutputId,
+                                                                                          connection.TargetItem.Id,
+                                                                                          connection.TargetInput.Id
+                                                                                         ), 0));
 
         MoveSnappedItemsVertically(composition,
                                    CollectSnappedItems( _snapping.BestA),
@@ -858,13 +893,13 @@ internal sealed partial class MagItemMovement
             }
         }
 
-        if (movableItems.Count == 0 || _macroCommand == null)
+        if (movableItems.Count == 0 || GraphUiContext.MacroCommand == null)
             return false;
 
         // Move items down...
         var affectedItemsAsNodes = movableItems.Select(i => i as ISelectableCanvasObject).ToList();
         var newMoveComment = new ModifyCanvasElementsCommand(composition.Symbol.Id, affectedItemsAsNodes, _nodeSelection);
-        _macroCommand.AddExecutedCommandForUndo(newMoveComment);
+        GraphUiContext.MacroCommand.AddExecutedCommandForUndo(newMoveComment);
 
         foreach (var item in affectedItemsAsNodes)
         {
@@ -958,12 +993,22 @@ internal sealed partial class MagItemMovement
     /// - move all other relevant snapped items down
     /// - create the connection
     /// </summary>
-    internal void TryConnectHiddenInput(IInputUi targetInputUi, Instance composition)
+    internal void TryConnectHiddenInput(IInputUi targetInputUi)
     {
+        var composition = _context.CompositionOp;
+        if (composition == null)
+            return;
+        
         Debug.Assert(PrimaryOutputItem != null && ItemForInputSelection != null);
-        Debug.Assert(_macroCommand != null);
+        Debug.Assert(GraphUiContext.MacroCommand != null);
         Debug.Assert(ItemForInputSelection.Variant == MagGraphItem.Variants.Operator); // This will bite us later...
 
+        if (PrimaryOutputItem.OutputLines.Length == 0)
+        {
+            Log.Warning("no visible output to connect?");
+            return;
+        }
+        
         // Create connection
         var connectionToAdd = new Symbol.Connection(PrimaryOutputItemId,
                                                     PrimaryOutputItem.OutputLines[0].Id,
@@ -976,9 +1021,9 @@ internal sealed partial class MagItemMovement
             return;
         }
 
-        _macroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol,
-                                                                 connectionToAdd,
-                                                                 0));
+        GraphUiContext.MacroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol,
+                                                                    connectionToAdd,
+                                                                    0));
 
         // Find insertion index
         var inputLineIndex = 0;
@@ -1006,7 +1051,7 @@ internal sealed partial class MagItemMovement
 
         var affectedItemsAsNodes = _draggedItems.Select(i => i as ISelectableCanvasObject).ToList();
         var newMoveComment = new ModifyCanvasElementsCommand(composition.Symbol.Id, affectedItemsAsNodes, _nodeSelection);
-        _macroCommand.AddExecutedCommandForUndo(newMoveComment);
+        GraphUiContext.MacroCommand.AddExecutedCommandForUndo(newMoveComment);
 
         foreach (var item in affectedItemsAsNodes)
         {
@@ -1017,18 +1062,6 @@ internal sealed partial class MagItemMovement
 
         // Complete drag interaction
         Reset();
-    }
-
-    private static void CollectSnappedDragItems(MagGraphItem rootItem)
-    {
-        _draggedItems.Clear();
-        CollectSnappedItems(rootItem, _draggedItems);
-
-        _draggedItemIds.Clear();
-        foreach (var item in _draggedItems)
-        {
-            _draggedItemIds.Add(item.Id);
-        }
     }
 
     /// <summary>
@@ -1089,7 +1122,7 @@ internal sealed partial class MagItemMovement
     private const float SnapThreshold = 30;
     private readonly List<MagGraphConnection> _borderConnections = [];
     private bool _wasSnapped;
-    private static readonly Snapping _snapping = new();
+    private static readonly MagItemMovement.Snapping _snapping = new();
 
     private Guid _longTapItemId = Guid.Empty;
     private double _mousePressedTime;
@@ -1097,9 +1130,6 @@ internal sealed partial class MagItemMovement
     private static bool _isInProgress;
     private static bool _hasDragged;
     private Vector2 _dragStartPosInOpOnCanvas;
-
-    private static MacroCommand? _macroCommand;
-    private static ModifyCanvasElementsCommand? _moveElementsCommand;
 
     private static Guid _draggedNodeId = Guid.Empty;
     private static readonly HashSet<MagGraphItem> _draggedItems = [];

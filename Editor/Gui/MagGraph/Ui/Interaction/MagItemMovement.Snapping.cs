@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using ImGuiNET;
 using T3.Editor.Gui.InputUi;
 
-namespace T3.Editor.Gui.MagGraph.Ui;
+namespace T3.Editor.Gui.MagGraph.Ui.Interaction;
 
 internal sealed partial class MagItemMovement
 {
