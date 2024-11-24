@@ -1,4 +1,28 @@
-﻿namespace T3.Editor.Gui.MagGraph.Ui.Interaction.States;
+﻿using ImGuiNET;
+
+namespace T3.Editor.Gui.MagGraph.Ui.Interaction.States;
+
+internal abstract class State(StateMachine s)
+{
+    protected StateMachine Sm => s;
+    
+    public virtual void Enter(GraphUiContext context)
+    {
+    }
+
+    public virtual void Exit(GraphUiContext context)
+    {
+    }
+
+    public double EnterTime;
+    protected double Time => Sm.Time - EnterTime;
+    public abstract void Update(GraphUiContext context);
+
+    public override string ToString()
+    {
+        return this.GetType().Name.Replace("State", "" );
+    }
+}
 
 /// <summary>
 /// A state machine that controls the interaction of manipulating the magnetic graph.
@@ -9,13 +33,15 @@ internal sealed class StateMachine
     internal readonly DefaultState DefaultState;
     internal readonly HoldingState HoldingState;
     internal readonly DraggingState DraggingState;
-    
+    internal readonly HoldingAfterLongTapState HoldingAfterLongTapState;
+
     public StateMachine(GraphUiContext context)
     {
         // Instantiate states
         DefaultState = new DefaultState(this);
         DraggingState = new DraggingState(this);
         HoldingState = new HoldingState(this);
+        HoldingAfterLongTapState = new HoldingAfterLongTapState(this);
 
         _currentState = DefaultState;
         _currentState.Enter(context);
@@ -29,12 +55,15 @@ internal sealed class StateMachine
 
     internal void SetState(State newState, GraphUiContext context)
     {
-        Log.Debug($"Exit {_currentState}...");
+        //Log.Debug($"Exit {_currentState}...");
         _currentState.Exit(context);
         _currentState = newState;
-        Log.Debug($"Enter {_currentState}...");
+        newState.EnterTime = Time;
+        Log.Debug($"--> {_currentState}  {context.ActiveItem}");
         _currentState.Enter(context);
     }
 
     private State _currentState;
+    public double Time => ImGui.GetTime();
+    public State CurrentState => _currentState;
 }

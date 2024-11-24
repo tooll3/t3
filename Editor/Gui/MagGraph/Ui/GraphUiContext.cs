@@ -10,12 +10,12 @@ namespace T3.Editor.Gui.MagGraph.Ui;
 
 internal sealed class GraphUiContext
 {
-    public GraphUiContext(NodeSelection selection, MagGraphCanvas canvas, Instance compositionOp)
+    public GraphUiContext(NodeSelection selector, MagGraphCanvas canvas, Instance compositionOp)
     {
-        Selection = selection;
+        Selector = selector;
         Canvas = canvas;
         CompositionOp = compositionOp;
-        ItemMovement = new MagItemMovement(this, canvas, Layout, selection);
+        ItemMovement = new MagItemMovement(this, canvas, Layout, selector);
         StateMachine = new StateMachine(this);
     }
 
@@ -23,10 +23,10 @@ internal sealed class GraphUiContext
     public readonly MagItemMovement ItemMovement;
     public readonly MagGraphLayout Layout = new();
 
-    public readonly NodeSelection Selection;
+    public readonly NodeSelection Selector;
     public readonly Instance CompositionOp;
     public readonly StateMachine StateMachine;
-    public static MacroCommand? MacroCommand;
-    public static ModifyCanvasElementsCommand? _moveElementsCommand;
-    public MagGraphItem? LastHoveredItem { get; set; }
+    public  MacroCommand? MacroCommand;
+    public  ModifyCanvasElementsCommand? MoveElementsCommand;
+    public MagGraphItem? ActiveItem { get; set; }
 }

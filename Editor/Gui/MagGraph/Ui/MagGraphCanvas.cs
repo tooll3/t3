@@ -7,6 +7,7 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.MagGraph.Ui.Interaction.States;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -52,7 +53,9 @@ internal sealed class MagGraphCanvas : ScalableCanvas
         //Log.Debug("Updating canvas...");
         UpdateCanvas(out _);
         var drawList = ImGui.GetWindowDrawList();
-        _context.LastHoveredItem = null;
+        
+        if(_context.StateMachine.CurrentState is DefaultState)
+            _context.ActiveItem = null;
 
         DrawBackgroundGrids(drawList);
 
@@ -249,7 +252,37 @@ internal sealed class MagGraphCanvas : ScalableCanvas
         ImGui.SetCursorScreenPos(pMin);
         ImGui.PushID(item.Id.GetHashCode());
         ImGui.InvisibleButton(string.Empty, pMax - pMin);
-        _context.ItemMovement.HandleForItem(item, this);
+        // var isActiveNode = item.Id == _activeNodeId;
+        var isItemHovered = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup 
+                                                | ImGuiHoveredFlags.AllowWhenBlockedByActiveItem);
+        //var clickedDown = isItemHovered && ImGui.IsMouseClicked(ImGuiMouseButton.Left);
+
+        if(_context.StateMachine.CurrentState is DefaultState && isItemHovered)
+            _context.ActiveItem = item;
+        
+        // else if (isActiveNode && ImGui.IsMouseDown(ImGuiMouseButton.Left) && _isInProgress)
+        // {
+        //     // Now updated in HoldState and DraggingState
+        // }
+        // // Release and complete dragging
+        // else if (isActiveNode && ImGui.IsMouseReleased(0) && _isInProgress)
+        // {
+        //     // Now updated in HoldState and DraggingState
+        // }
+        // else if (ImGui.IsMouseReleased(0) && !_isInProgress)
+        // {
+        //     // Now updated in HoldState and DraggingState
+        // }
+
+        // Todo: We eventually need to handle right clicking to select and open context menu when dragging with right mouse button. 
+        // var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickThreshold;
+        // if (ImGui.IsMouseReleased(ImGuiMouseButton.Right)
+        //     && !wasDraggingRight
+        //     && ImGui.IsItemHovered()
+        //     && !_nodeSelection.IsNodeSelected(item))
+        // {
+        //     item.Select(_nodeSelection);
+        // }
         ImGui.PopID();
 
         // Background and Outline
@@ -258,7 +291,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
         drawList.AddRectFilled(pMinVisible + Vector2.One * CanvasScale, pMaxVisible - Vector2.One, ColorVariations.OperatorBackground.Apply(typeColor).Fade(0.7f), 6 * CanvasScale,
                                imDrawFlags);
 
-        var isSelected = item.IsSelected(_context.Selection);
+        var isSelected = _context.Selector.IsSelected(item);
         var outlineColor = isSelected
                                ? UiColors.ForegroundFull
                                : UiColors.BackgroundFull.Fade(0f);
@@ -455,7 +488,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
                         var isConnected = input.HasInputConnections;
                         var prefix = isConnected ? "> " : "   ";
                         if (ImGui.Selectable(prefix + inputUi.InputDefinition.Name))
-                            _context.ItemMovement.TryConnectHiddenInput(inputUi);
+                            _context.ItemMovement.TryConnectHiddenInput(_context, inputUi);
                     }
 
                     inputIndex++;
@@ -663,7 +696,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
         {
             case SelectionFence.States.PressedButNotMoved:
                 if (selectMode == SelectionFence.SelectModes.Replace)
-                    _context.Selection.Clear();
+                    _context.Selector.Clear();
                 break;
 
             case SelectionFence.States.Updated:
@@ -675,8 +708,8 @@ internal sealed class MagGraphCanvas : ScalableCanvas
                 if (ImGui.IsPopupOpen("", ImGuiPopupFlags.AnyPopup))
                     break;
 
-                _context.Selection.Clear();
-                _context.Selection.SetSelectionToComposition(compositionOp);
+                _context.Selector.Clear();
+                _context.Selector.SetSelectionToComposition(compositionOp);
                 break;
             case SelectionFence.States.Inactive:
                 break;
@@ -698,24 +731,24 @@ internal sealed class MagGraphCanvas : ScalableCanvas
 
         if (selectMode == SelectionFence.SelectModes.Replace)
         {
-            _context.Selection.Clear();
+            _context.Selector.Clear();
         }
 
         foreach (var item in itemsInFence)
         {
             if (selectMode == SelectionFence.SelectModes.Remove)
             {
-                _context.Selection.DeselectNode(item, item.Instance);
+                _context.Selector.DeselectNode(item, item.Instance);
             }
             else
             {
                 if (item.Variant == MagGraphItem.Variants.Operator)
                 {
-                    _context.Selection.AddSelection(item, item.Instance);
+                    _context.Selector.AddSelection(item, item.Instance);
                 }
                 else
                 {
-                    _context.Selection.AddSelection(item);
+                    _context.Selector.AddSelection(item);
                 }
             }
         }

@@ -278,7 +278,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
             && SymbolUiRegistry.TryGetSymbolUi(Instance.Parent.Symbol.Id, out var parentSymbolUi)
             && parentSymbolUi.ChildUis.TryGetValue(Instance.SymbolChildId, out var childUi))
         {
-            nodeSelection.AddSelection(this, Instance);
+            nodeSelection.AddSelection(childUi, Instance);
         }
         else
         {
@@ -286,8 +286,8 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
         }
     }
 
-    public bool IsSelected(NodeSelection nodeSelection)
-    {
-        return nodeSelection.Selection.Any(c => c.Id == Id);
-    }
+    // public bool IsSelected(NodeSelection nodeSelection)
+    // {
+    //     return nodeSelection.Selection.Any(c => c.Id == Id);
+    // }
 }

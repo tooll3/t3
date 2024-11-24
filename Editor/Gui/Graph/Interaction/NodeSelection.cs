@@ -4,6 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Interaction.TransformGizmos;
+using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.Gui.Selection;
 using T3.Editor.UiModel;
 
@@ -192,4 +193,15 @@ internal class NodeSelection : ISelection
     public readonly List<ISelectableCanvasObject> Selection = new();
     private IReadOnlyList<Guid> _selectedCompositionPath;
     private readonly Dictionary<SymbolUi.Child, IReadOnlyList<Guid>> _childUiInstanceIdPaths = new();
+
+    public bool IsSelected(MagGraphItem item)
+    {
+        // Avoid linq
+        foreach (var i in Selection)
+        {
+            if (i.Id == item.Id)
+                return true;
+        }
+        return false;
+    }
 }
