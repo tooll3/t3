@@ -29,6 +29,7 @@ internal sealed class HoldingBackgroundState(StateMachine sm) : State(sm)
         //Debug.Assert(context.ActiveItem != null);
         
         if (!ImGui.IsMouseDown(ImGuiMouseButton.Left)
+            || !context.Canvas.IsFocused
             || ImGui.IsMouseDragging(ImGuiMouseButton.Left))
         {
             Sm.SetState(Sm.DefaultState,context);
@@ -53,17 +54,11 @@ internal sealed class PlaceholderState(StateMachine sm) : State(sm)
 {
     public override void Update(GraphUiContext context)
     {
-        if (context.Placeholder.PlaceholderItem == null)
-        {
-            context.Placeholder.Cancel(context);
-            Sm.SetState(Sm.DefaultState,context);
+        if (context.Placeholder.PlaceholderItem != null)
             return;
-        }
         
-        // if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
-        // {
-        //     Sm.SetState(Sm.DraggingState,context);
-        // }
+        context.Placeholder.Cancel(context);
+        Sm.SetState(Sm.DefaultState,context);
     }
 }
 

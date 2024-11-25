@@ -29,14 +29,19 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         _nodeSelection = nodeSelection;
     }
 
+    public bool IsFocused { get; private set; } 
+
     public void Draw()
     {
         if (_window.CompositionOp == null)
             return;
         
+            
         if (_window.CompositionOp != _context.CompositionOp)
             _context = new GraphUiContext(_nodeSelection, this, _window.CompositionOp);
-        
+
+        IsFocused = ImGui.IsWindowFocused();
+            
         // Prepare frame
         _context.Layout.ComputeLayout(_context.CompositionOp);
         _context.ItemMovement.PrepareFrame();
@@ -60,10 +65,17 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
 
         DrawBackgroundGrids(drawList);
 
-        if (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup)
-            && ConnectionMaker.GetTempConnectionsFor(_window).Count == 0)
-            HandleFenceSelection(_window.CompositionOp, _selectionFence);
-
+        // Selection fence...
+        
+        {
+            //Log.Debug("" + _context.StateMachine.CurrentState + ""  + _context.StateMachine.CurrentState.Time);
+            HandleFenceSelection(_context, _selectionFence);
+        }
+        // else
+        // {
+        //     //_selectionFence.
+        // }
+        
         // Content
         foreach (var item in _context.Layout.Items.Values)
         {
@@ -285,8 +297,17 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
 
     private static float Blink => MathF.Sin((float)ImGui.GetTime() * 10) * 0.5f + 0.5f;
 
-    private void HandleFenceSelection(Instance compositionOp, SelectionFence selectionFence)
+    private void HandleFenceSelection(GraphUiContext context, SelectionFence selectionFence)
     {
+        var shouldBeActive =
+            ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup)
+            && _context.StateMachine.CurrentState is DefaultState
+            && _context.StateMachine.CurrentState.Time > 0.1f // Prevent glitches when coming from other states.
+            ;
+        
+        if(!shouldBeActive)
+            return;
+        
         switch (selectionFence.UpdateAndDraw(out var selectMode))
         {
             case SelectionFence.States.PressedButNotMoved:
@@ -304,7 +325,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
                     break;
 
                 _context.Selector.Clear();
-                _context.Selector.SetSelectionToComposition(compositionOp);
+                _context.Selector.SetSelectionToComposition(context.CompositionOp);
                 break;
             case SelectionFence.States.Inactive:
                 break;

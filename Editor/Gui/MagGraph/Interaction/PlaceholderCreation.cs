@@ -2,6 +2,7 @@
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
+using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph;
@@ -14,6 +15,7 @@ using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 using T3.SystemUi;
 
@@ -34,13 +36,13 @@ internal sealed class PlaceholderCreation
     }
 
     private static readonly PlaceholderSelectable _placeHoldSelectable = new();
-        
+
     public static Guid PlaceHolderId = Guid.Parse("ffffffff-eeee-47C7-A17F-E297672EE1F3");
-    
+
     public void OpenOnCanvas(GraphUiContext context, Vector2 posOnCanvas)
     {
         context.MacroCommand = new MacroCommand("Insert Operator");
-        
+
         PlaceholderItem = new MagGraphItem
                               {
                                   Selectable = _placeHoldSelectable,
@@ -52,9 +54,14 @@ internal sealed class PlaceholderCreation
 
         context.Layout.Items[PlaceHolderId] = PlaceholderItem;
         _focusInputNextTime = true;
+
         //_filter.PresetFilterString = string.Empty;
-        _filter.WasUpdated= true;
+        _filter.WasUpdated = true;
         _filter.SearchString = string.Empty;
+        _selectedSymbolUi = null;
+        _filter.UpdateIfNecessary(context.Selector, forceUpdate: true);
+        
+        _selectedItemChanged = true;
     }
 
     public void Cancel(GraphUiContext context)
@@ -62,80 +69,79 @@ internal sealed class PlaceholderCreation
         context.MacroCommand?.Undo();
         Reset(context);
     }
-    
+
     private void Close(GraphUiContext context)
     {
-        if(context.MacroCommand != null) 
-            UndoRedoStack.Add(context. MacroCommand);
-        
+        if (context.MacroCommand != null)
+            UndoRedoStack.Add(context.MacroCommand);
+
         Reset(context);
     }
-    
-    
+
     private void Reset(GraphUiContext context)
     {
         context.MacroCommand = null;
-        
+
         if (PlaceholderItem == null)
             return;
 
         context.Layout.Items.Remove(PlaceHolderId);
         PlaceholderItem = null;
-        
+
         THelpers.RestoreImGuiKeyboardNavigation();
     }
-    
+
     internal void DrawPlaceholder(GraphUiContext context, ImDrawListPtr drawList)
     {
         if (PlaceholderItem == null)
             return;
-        
+
         FrameStats.Current.OpenedPopUpName = "SymbolBrowser";
 
         _filter.UpdateIfNecessary(context.Selector);
 
         ImGui.PushID(_uiId);
         {
-            var pMin = context.Canvas.TransformPosition(PlaceholderItem.PosOnCanvas);
-            var pMax = context.Canvas.TransformPosition(PlaceholderItem.Area.Max);
-            var posInWindow = pMin - ImGui.GetWindowPos();
-            
-            ImGui.SetCursorPos(posInWindow);
-            DrawSearchInput(context, drawList);            
-            
-            var resultPosOnScreen = new Vector2(pMin.X, pMax.Y);
-            var resultPosOnWindow = resultPosOnScreen - ImGui.GetWindowPos();
-            
-            ImGui.SetCursorPos(resultPosOnWindow);
-            DrawResultsList(context);
+            // var posInWindow = pMin - ImGui.GetWindowPos();
 
-            if (_selectedSymbolUi != null)
+            //ImGui.SetCursorPos(posInWindow);
+            DrawSearchInput(context, drawList);
+
+            // Might have been closed from input
+            if (PlaceholderItem != null)
             {
-                if (_filter.PresetFilterString != string.Empty && (_filter.WasUpdated || _selectedItemChanged))
+                var pMin = context.Canvas.TransformPosition(PlaceholderItem.PosOnCanvas);
+                var pMax = context.Canvas.TransformPosition(PlaceholderItem.Area.Max);
+                DrawResultsList(new ImRect(pMin,pMax),  context);
+
+                if (_selectedSymbolUi != null)
                 {
-                    // TODO: Implement preset search
+                    if (_filter.PresetFilterString != string.Empty && (_filter.WasUpdated || _selectedItemChanged))
+                    {
+                        // TODO: Implement preset search
+                    }
                 }
-            }
-            
-            if (_focusInputNextTime)
-            {
-                ImGui.SetKeyboardFocusHere();
-                _focusInputNextTime = false;
-                _selectedItemChanged = true;
-            }
 
+                if (_focusInputNextTime)
+                {
+                    ImGui.SetKeyboardFocusHere();
+                    _focusInputNextTime = false;
+                    _selectedItemChanged = true;
+                }
+                
+            }
 
         }
 
-        ImGui.PopID();        
+        ImGui.PopID();
     }
 
     private void DrawSearchInput(GraphUiContext context, ImDrawListPtr drawList)
     {
         Debug.Assert(PlaceholderItem != null);
-        
+
         var canvasScale = context.Canvas.Scale.X;
-        var item = this.PlaceholderItem; 
+        var item = this.PlaceholderItem;
         var pMin = context.Canvas.TransformPosition(item.PosOnCanvas);
         var pMax = context.Canvas.TransformPosition(item.PosOnCanvas + item.Size);
         var pMinVisible = pMin;
@@ -161,9 +167,7 @@ internal sealed class PlaceholderCreation
         ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, padding);
         ImGui.PushStyleColor(ImGuiCol.FrameBg, Color.Transparent.Rgba);
         ImGui.SetNextItemWidth(item.Size.X);
-        
 
-        
         ImGui.InputText("##symbolBrowserFilter",
                         ref _filter.SearchString,
                         20, ImGuiInputTextFlags.AutoSelectAll);
@@ -173,7 +177,6 @@ internal sealed class PlaceholderCreation
         {
             if (_selectedSymbolUi != null)
             {
-                Log.Debug("would create " + _selectedSymbolUi.Symbol);
                 CreateInstance(context, _selectedSymbolUi.Symbol);
             }
         }
@@ -186,9 +189,9 @@ internal sealed class PlaceholderCreation
             _selectedItemChanged = true;
         }
 
-        var clickedOutside = ImGui.IsMouseClicked(ImGuiMouseButton.Left) && ImGui.IsWindowHovered();
+        var clickedOutside = false; //ImGui.IsMouseClicked(ImGuiMouseButton.Left) && ImGui.IsWindowHovered();
         var shouldCancelConnectionMaker = clickedOutside
-                                          || ImGui.IsMouseClicked(ImGuiMouseButton.Right)
+                                          //|| ImGui.IsMouseClicked(ImGuiMouseButton.Right)
                                           || ImGui.IsKeyDown((ImGuiKey)Key.Esc);
 
         if (shouldCancelConnectionMaker)
@@ -206,7 +209,7 @@ internal sealed class PlaceholderCreation
         {
             PlaceholderItem.PosOnCanvas += context.Canvas.InverseTransformDirection(ImGui.GetIO().MouseDelta);
         }
-        
+
         // Label...
         // ImGui.PushFont(Fonts.FontBold);
         // var labelSize = ImGui.CalcTextSize(item.ReadableName);
@@ -220,19 +223,38 @@ internal sealed class PlaceholderCreation
         //                  UiColors.ForegroundFull,
         //                  "Search...");
     }
-        
 
-    private void DrawResultsList(GraphUiContext context)
+    private void DrawResultsList(ImRect screenItemArea, GraphUiContext context)
     {
-        //var canvas = window.GraphCanvas;
-        ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(5, 5));
-        ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 10));
+        var size = new Vector2(150, 235) * T3Ui.UiScaleFactor;
+        var windowSize = ImGui.GetWindowSize();
+        var windowPos = ImGui.GetWindowPos();
+        Vector2 resultPosOnScreen= new Vector2(screenItemArea.Min.X, screenItemArea.Max.Y + 3);
+        if (Orientation == MagGraphItem.Directions.Horizontal)
+        {
             
-        ImGui.PushStyleColor(ImGuiCol.FrameBg, UiColors.BackgroundPopup.Rgba);
+            var y =  screenItemArea.GetCenter().Y + (-0.3f) * size.Y;
+            resultPosOnScreen.Y = y.Clamp(windowPos.Y + 10, windowSize.Y + windowPos.Y - size.Y - 10);;
+            resultPosOnScreen.X = screenItemArea.Max.X.Clamp(windowPos.X + 10,
+                                                             windowPos.X + windowSize.X - size.X - 10);
+        }
+        
+        var resultPosOnWindow = resultPosOnScreen - ImGui.GetWindowPos();
+
+        ImGui.SetCursorPos(resultPosOnWindow);
 
         
-        var size = new Vector2(150, 250) * T3Ui.UiScaleFactor;
-        if (ImGui.BeginChildFrame(999, size))
+        ImGui.PushStyleVar(ImGuiStyleVar.ChildRounding, 6);
+        ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 14);
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(4, 6));
+        ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(3, 6));
+
+        ImGui.PushStyleColor(ImGuiCol.ChildBg, UiColors.BackgroundFull.Fade(0.5f).Rgba);
+        ImGui.PushStyleColor(ImGuiCol.ScrollbarBg, Color.Transparent.Rgba);
+
+        if(ImGui.BeginChild(999, size, true,
+                                   ImGuiWindowFlags.None | ImGuiWindowFlags.AlwaysUseWindowPadding 
+                                   )) 
         {
             if (ImGui.IsKeyReleased((ImGuiKey)Key.CursorDown))
             {
@@ -286,20 +308,17 @@ internal sealed class PlaceholderCreation
 
                     var isSelected = symbolUi == _selectedSymbolUi;
 
+                    ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 14);
                     _selectedItemChanged |= ImGui.Selectable($"##Selectable{symbolHash.ToString()}", isSelected);
+                    ImGui.PopStyleVar();
 
                     var isHovered = ImGui.IsItemHovered();
-                    var hasMouseMoved = ImGui.GetIO().MouseDelta.LengthSquared() > 0;
-                    if (hasMouseMoved && isHovered)
+                    if (isHovered)
                     {
-                        _selectedSymbolUi = symbolUi;
-                        //_timeDescriptionSymbolUiLastHovered = DateTime.Now;
-                        _selectedItemChanged = true;
-                    }
-                    else if (_selectedItemChanged && _selectedSymbolUi == symbolUi)
-                    {
-                        UiListHelpers.ScrollToMakeItemVisible();
-                        _selectedItemChanged = false;
+                        ImGui.SetNextWindowSize(new Vector2(300, 0));
+                        ImGui.BeginTooltip();
+                        OperatorHelp.DrawHelpSummary(symbolUi);
+                        ImGui.EndTooltip();
                     }
 
                     if (ImGui.IsItemActivated())
@@ -310,30 +329,15 @@ internal sealed class PlaceholderCreation
                     ImGui.SameLine();
 
                     ImGui.TextUnformatted(symbolUi.Symbol.Name);
-                    
-                    // Namespace hidden for now...
-                    // ImGui.SameLine();
-                    //
-                    // if (!string.IsNullOrEmpty(symbolNamespace))
-                    // {
-                    //     ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Fade(0.5f).Rgba);
-                    //     ImGui.Text(symbolNamespace);
-                    //     ImGui.PopStyleColor();
-                    //     ImGui.SameLine();
-                    // }
-
-                    // ImGui.NewLine();
-
                     ImGui.PopStyleColor(3);
                 }
                 ImGui.PopID();
             }
         }
+        ImGui.EndChild();
 
-        ImGui.EndChildFrame();
-
-        ImGui.PopStyleColor();
-        ImGui.PopStyleVar(2);
+        ImGui.PopStyleColor(2);
+        ImGui.PopStyleVar(4);
     }
 
     private void CreateInstance(GraphUiContext context, Symbol symbol)
@@ -343,13 +347,13 @@ internal sealed class PlaceholderCreation
             Log.Warning("Macro command missing for insertion");
             return;
         }
-        
+
         var parentSymbol = context.CompositionOp.Symbol;
         var parentSymbolUi = parentSymbol.GetSymbolUi();
-    
+
         var addSymbolChildCommand = new AddSymbolChildCommand(parentSymbol, symbol.Id) { PosOnCanvas = PlaceholderItem.PosOnCanvas };
         context.MacroCommand.AddAndExecCommand(addSymbolChildCommand);
-    
+
         // Select new node
         if (!parentSymbolUi.ChildUis.TryGetValue(addSymbolChildCommand.AddedChildId, out var newChildUi))
         {
@@ -357,25 +361,24 @@ internal sealed class PlaceholderCreation
                         $"from parent symbol ui {parentSymbolUi.Symbol}");
             return;
         }
-            
+
         var newSymbolChild = newChildUi.SymbolChild;
         var newInstance = context.CompositionOp.Children[newChildUi.Id];
         context.Selector.SetSelection(newChildUi, newInstance);
-        
+
         // TODO: add preset selection...
-        
+
         ParameterPopUp.NodeIdRequestedForParameterWindowActivation = newSymbolChild.Id;
         context.Layout.FlagAsChanged();
-        
+
         Close(context);
     }
-    
-    
-        
+
     private readonly SymbolFilter _filter = new();
     private bool _focusInputNextTime = true;
     private bool _selectedItemChanged;
-    
+    private MagGraphItem.Directions Orientation = MagGraphItem.Directions.Horizontal;
+
     private SymbolUi _selectedSymbolUi;
     private static readonly int _uiId = "DraftNode".GetHashCode();
 }

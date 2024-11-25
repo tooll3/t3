@@ -114,7 +114,7 @@ internal sealed partial class MagGraphCanvas
         ImGui.PopFont();
         var downScale = MathF.Min(1, MagGraphItem.Width * 0.9f / labelSize.X);
 
-        var labelPos = pMin + new Vector2(8, 7) * CanvasScale + new Vector2(0, -1);
+        var labelPos = pMin + new Vector2(8, 8) * CanvasScale + new Vector2(0, -1);
         labelPos = new Vector2(MathF.Round(labelPos.X), MathF.Round(labelPos.Y));
         drawList.AddText(Fonts.FontBold,
                          Fonts.FontBold.FontSize * downScale * CanvasScale,

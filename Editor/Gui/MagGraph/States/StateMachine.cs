@@ -16,7 +16,7 @@ internal abstract class State(StateMachine s)
     }
 
     public double EnterTime;
-    protected double Time => Sm.Time - EnterTime;
+    public double Time => Sm.Time - EnterTime;
     public abstract void Update(GraphUiContext context);
 
     public override string ToString()
