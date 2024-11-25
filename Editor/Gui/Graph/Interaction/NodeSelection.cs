@@ -4,6 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Interaction.TransformGizmos;
+using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.Gui.Selection;
 using T3.Editor.UiModel;

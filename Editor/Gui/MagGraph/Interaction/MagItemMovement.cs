@@ -9,6 +9,8 @@ using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.MagGraph.Model;
+using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using Vector2 = System.Numerics.Vector2;
@@ -16,7 +18,7 @@ using Vector2 = System.Numerics.Vector2;
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable UseWithExpressionToCopyStruct
 
-namespace T3.Editor.Gui.MagGraph.Ui.Interaction;
+namespace T3.Editor.Gui.MagGraph.Interaction;
 
 /// <summary>
 /// Provides functions for moving, snapping, connecting, insertion etc. of operators. It controlled by the <see cref="StateMachine"/>

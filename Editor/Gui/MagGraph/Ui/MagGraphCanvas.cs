@@ -7,7 +7,9 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
-using T3.Editor.Gui.MagGraph.Ui.Interaction.States;
+using T3.Editor.Gui.MagGraph.Interaction;
+using T3.Editor.Gui.MagGraph.Model;
+using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -314,7 +316,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
         // Indicate hidden matching inputs...
         if (_context.ItemMovement.DraggedPrimaryOutputType != null
             && item.Variant == MagGraphItem.Variants.Operator
-            && !Interaction.MagItemMovement.IsItemDragged(item))
+            && !MagItemMovement.IsItemDragged(item))
         {
             var hasMatchingTypes = false;
             foreach (var i in item.Instance.Inputs)

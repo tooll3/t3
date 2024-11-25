@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
+using T3.Editor.Gui.MagGraph.Ui;
 
-namespace T3.Editor.Gui.MagGraph.Ui.Interaction.States;
+namespace T3.Editor.Gui.MagGraph.States;
 
 internal abstract class State(StateMachine s)
 {
@@ -31,17 +32,19 @@ internal sealed class StateMachine
 {
     // States defined as fields
     internal readonly DefaultState DefaultState;
-    internal readonly HoldingState HoldingState;
+    internal readonly HoldingBackgroundState HoldingBackgroundState;
+    internal readonly HoldingItemState HoldingItemState;
     internal readonly DraggingState DraggingState;
-    internal readonly HoldingAfterLongTapState HoldingAfterLongTapState;
+    internal readonly HoldingItemAfterLongTapState HoldingItemAfterLongTapState;
 
     public StateMachine(GraphUiContext context)
     {
         // Instantiate states
         DefaultState = new DefaultState(this);
         DraggingState = new DraggingState(this);
-        HoldingState = new HoldingState(this);
-        HoldingAfterLongTapState = new HoldingAfterLongTapState(this);
+        HoldingBackgroundState = new HoldingBackgroundState(this);
+        HoldingItemState = new HoldingItemState(this);
+        HoldingItemAfterLongTapState = new HoldingItemAfterLongTapState(this);
 
         _currentState = DefaultState;
         _currentState.Enter(context);

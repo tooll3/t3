@@ -3,6 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.UiHelpers;
@@ -10,7 +11,7 @@ using T3.Editor.UiModel;
 
 // ReSharper disable UseWithExpressionToCopyStruct
 
-namespace T3.Editor.Gui.MagGraph.Ui;
+namespace T3.Editor.Gui.MagGraph.Model;
 
 internal sealed class MagGraphItem : ISelectableCanvasObject
 {
@@ -19,6 +20,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
         Operator,
         Input,
         Output,
+        Placeholder,
         Obsolete,
     }
 
@@ -31,11 +33,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
     public Vector2 Size { get; set; }
     
     public ImRect Area => ImRect.RectWithSize(PosOnCanvas, Size);
-
-
-    //public bool IsSelected => NodeSelection.IsNodeSelected(this);
-    public MagGroup? MagGroup;
-
+    
     public override string ToString() => ReadableName;
 
     public SymbolUi? SymbolUi;

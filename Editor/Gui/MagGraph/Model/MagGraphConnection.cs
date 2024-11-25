@@ -1,7 +1,7 @@
 ﻿using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 
-namespace T3.Editor.Gui.MagGraph.Ui;
+namespace T3.Editor.Gui.MagGraph.Model;
 
 internal sealed class MagGraphConnection
 {

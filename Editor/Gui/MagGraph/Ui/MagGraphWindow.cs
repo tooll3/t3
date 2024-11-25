@@ -1,12 +1,9 @@
 ﻿using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Helpers;
-using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.Gui.Windows;
 
-namespace T3.Editor.Gui.MagGraph;
+namespace T3.Editor.Gui.MagGraph.Ui;
 
 internal sealed class MagGraphWindow : Window
 {

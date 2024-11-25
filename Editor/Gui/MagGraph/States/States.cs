@@ -1,24 +1,57 @@
 ﻿using System.Diagnostics;
 using ImGuiNET;
+using T3.Editor.Gui.MagGraph.Ui;
+using MagItemMovement = T3.Editor.Gui.MagGraph.Interaction.MagItemMovement;
 
-namespace T3.Editor.Gui.MagGraph.Ui.Interaction.States;
+namespace T3.Editor.Gui.MagGraph.States;
 
 internal sealed class DefaultState(StateMachine s) : State(s)
 {
     public override void Update(GraphUiContext c)
     {
-        if (c.ActiveItem == null)
+        var clickedDown = ImGui.IsMouseClicked(ImGuiMouseButton.Left);
+        if (!clickedDown)
             return;
         
-        var clickedDown = ImGui.IsMouseClicked(ImGuiMouseButton.Left);
-        if (clickedDown)
-        {
-            Sm.SetState(Sm.HoldingState, c);
-        }
+        Sm.SetState(c.ActiveItem != null 
+                        ? Sm.HoldingItemState 
+                        : Sm.HoldingBackgroundState, c);
     }
 }
 
-internal sealed class HoldingState(StateMachine sm) : State(sm)
+/// <summary>
+/// Active while long tapping on background for insertion
+/// </summary>
+internal sealed class HoldingBackgroundState(StateMachine sm) : State(sm)
+{
+    public override void Update(GraphUiContext context)
+    {
+        //Debug.Assert(context.ActiveItem != null);
+        
+        if (!ImGui.IsMouseDown(ImGuiMouseButton.Left)
+            || ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+        {
+            Sm.SetState(Sm.DefaultState,context);
+            return;
+        }
+        
+        const float longTapDuration = 0.3f;
+        var longTapProgress = (float)(Time / longTapDuration);
+        MagItemMovement.UpdateLongPressIndicator(longTapProgress);
+
+        if (!(longTapProgress > 1))
+            return;
+        
+        Log.Debug("Would do something...");
+        Sm.SetState(Sm.DefaultState,context);
+        
+        // MagItemMovement.SelectActiveItem(context);
+        // context.ItemMovement.SetDraggedItemIds([context.ActiveItem.Id]);
+        // Sm.SetState(Sm.HoldingAfterLongTapState, context);
+    }
+}
+
+internal sealed class HoldingItemState(StateMachine sm) : State(sm)
 {
     public override void Enter(GraphUiContext context)
     {
@@ -66,12 +99,13 @@ internal sealed class HoldingState(StateMachine sm) : State(sm)
         
         MagItemMovement.SelectActiveItem(context);
         context.ItemMovement.SetDraggedItemIds([context.ActiveItem.Id]);
-        Sm.SetState(Sm.HoldingAfterLongTapState, context);
+        Sm.SetState(Sm.HoldingItemAfterLongTapState, context);
 
     }
 }
 
-internal sealed class HoldingAfterLongTapState(StateMachine sm) : State(sm)
+
+internal sealed class HoldingItemAfterLongTapState(StateMachine sm) : State(sm)
 {
     public override void Update(GraphUiContext context)
     {

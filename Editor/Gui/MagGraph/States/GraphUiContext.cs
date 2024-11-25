@@ -3,8 +3,9 @@ using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.MagGraph.Ui.Interaction;
-using T3.Editor.Gui.MagGraph.Ui.Interaction.States;
+using T3.Editor.Gui.MagGraph.Model;
+using T3.Editor.Gui.MagGraph.States;
+using MagItemMovement = T3.Editor.Gui.MagGraph.Interaction.MagItemMovement;
 
 namespace T3.Editor.Gui.MagGraph.Ui;
 

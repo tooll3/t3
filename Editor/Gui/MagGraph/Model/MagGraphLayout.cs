@@ -12,7 +12,7 @@ using T3.Editor.UiModel;
 // ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable SuggestBaseTypeForParameter
 
-namespace T3.Editor.Gui.MagGraph.Ui;
+namespace T3.Editor.Gui.MagGraph.Model;
 
 /// <summary>
 /// Generate considerations:
@@ -44,15 +44,11 @@ internal sealed class MagGraphLayout
         _structureFlaggedAsChanged = true;
     }
 
-    private int _updateCycle;
-    
-
-    /** During connection operations when can request to expand normally hidden inputs of an operator */
-    public Guid LastSneakPeekItemId;
+    private int _structureUpdateCycle;
     
     private void RefreshDataStructure(Instance composition, SymbolUi parentSymbolUi)
     {
-        _updateCycle++;
+        _structureUpdateCycle++;
         CollectItemReferences(composition, parentSymbolUi);
         UpdateConnectionSources(composition);
         UpdateVisibleItemLines();
@@ -69,7 +65,6 @@ internal sealed class MagGraphLayout
 
         var addedItemCount =0;
         var updatedItemCount = 0;
-        var previousItemCount = Items.Count;
         
         foreach (var (childId, childInstance) in compositionOp.Children)
         {
@@ -82,7 +77,7 @@ internal sealed class MagGraphLayout
 
             if (Items.TryGetValue(childId, out var opItem))
             {
-                opItem.Reset(_updateCycle);
+                opItem.Reset(_structureUpdateCycle);
                 updatedItemCount++;
             }
             else
@@ -96,7 +91,7 @@ internal sealed class MagGraphLayout
                                          SymbolUi = symbolUi,
                                          SymbolChild = childUi.SymbolChild,
                                          Size = MagGraphItem.GridSize,
-                                         LastUpdateCycle = _updateCycle,
+                                         LastUpdateCycle = _structureUpdateCycle,
                                      };
                 addedItemCount++;
             }
@@ -106,7 +101,7 @@ internal sealed class MagGraphLayout
         {
             if (Items.TryGetValue(input.Id, out var inputOp))
             {
-                inputOp.Reset(_updateCycle);
+                inputOp.Reset(_structureUpdateCycle);
                 updatedItemCount++;
             }
             else
@@ -129,7 +124,7 @@ internal sealed class MagGraphLayout
                 var outputUi = compositionSymbolUi.OutputUis[output.Id];
                 if(Items.TryGetValue( output.Id, out var outputOp))
                 {
-                    outputOp.Reset(_updateCycle);
+                    outputOp.Reset(_structureUpdateCycle);
                     updatedItemCount++;
                 }
                 else
@@ -143,7 +138,7 @@ internal sealed class MagGraphLayout
                                                Size = MagGraphItem.GridSize,
                                            };
                     addedItemCount++;
-                };
+                }
         }
 
         var hasObsoleteItems = Items.Count > updatedItemCount + addedItemCount;
@@ -151,7 +146,7 @@ internal sealed class MagGraphLayout
         {
             foreach (var item in Items.Values)
             {
-                if (item.LastUpdateCycle >= _updateCycle)
+                if (item.LastUpdateCycle >= _structureUpdateCycle)
                     continue;
                 
                 Items.Remove(item.Id);
@@ -161,7 +156,7 @@ internal sealed class MagGraphLayout
         }
     }
 
-    private readonly HashSet<long> _connectedOuputs = new(100);
+    private readonly HashSet<long> _connectedOutputs = new(100);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static long GetConnectionSourceHash(Symbol.Connection c)
@@ -174,14 +169,14 @@ internal sealed class MagGraphLayout
     /// </summary>
     private void UpdateConnectionSources(Instance composition)
     {
-        _connectedOuputs.Clear();
+        _connectedOutputs.Clear();
 
         foreach (var c in composition.Symbol.Connections)
         {
             if (c.IsConnectedToSymbolInput)
                 continue;
 
-            _connectedOuputs.Add(GetConnectionSourceHash(c));
+            _connectedOutputs.Add(GetConnectionSourceHash(c));
         }
     }
     
@@ -261,7 +256,7 @@ internal sealed class MagGraphLayout
                         }
 
                         long outputHash = item.Id.GetHashCode() << 32 + output.Id.GetHashCode();
-                        var isConnected = _connectedOuputs.Contains(outputHash);
+                        var isConnected = _connectedOutputs.Contains(outputHash);
                         if (outputIndex > 0 && !isConnected)
                             continue;
 
@@ -357,7 +352,7 @@ internal sealed class MagGraphLayout
                     continue;
 
                 var symbolInput = composition.Inputs.FirstOrDefault(i => i.Id == c.SourceSlotId);
-                var targetInput = targetItem2.Instance?.Inputs.FirstOrDefault(i => i.Input.InputDefinition.Id == c.TargetSlotId);
+                var targetInput = targetItem2.Instance.Inputs.FirstOrDefault(i => i.Input.InputDefinition.Id == c.TargetSlotId);
                 Debug.Assert(targetInput != null);
                 
                 GetVisibleInputIndex(targetItem2, targetInput, out var targetInputIndex, out var targetMultiInputIndex);
@@ -389,7 +384,7 @@ internal sealed class MagGraphLayout
                     continue;
 
                 var symbolOutput = composition.Outputs.FirstOrDefault((o => o.Id == c.TargetSlotId));
-                var sourceOutput = sourceItem2.Instance?.Outputs.FirstOrDefault(o => o.Id == c.SourceSlotId);
+                var sourceOutput = sourceItem2.Instance.Outputs.FirstOrDefault(o => o.Id == c.SourceSlotId);
                 
                 Debug.Assert(sourceOutput != null);
 
@@ -405,7 +400,7 @@ internal sealed class MagGraphLayout
 
                 if (outputIndex2 >= sourceItem2.OutputLines.Length)
                 {
-                    //Log.Warning($"OutputIndex {outputIndex} exceeds number of outputlines {sourceItem.OutputLines.Length} in {sourceItem}");
+                    //Log.Warning($"OutputIndex {outputIndex} exceeds number of output lines {sourceItem.OutputLines.Length} in {sourceItem}");
                     outputIndex2 = sourceItem2.OutputLines.Length - 1;
                 }
 
@@ -466,7 +461,7 @@ internal sealed class MagGraphLayout
 
             if (outputIndex >= sourceItem.OutputLines.Length)
             {
-                Log.Warning($"OutputIndex {outputIndex} exceeds number of outputlines {sourceItem.OutputLines.Length} in {sourceItem}");
+                Log.Warning($"OutputIndex {outputIndex} exceeds number of output lines {sourceItem.OutputLines.Length} in {sourceItem}");
                 outputIndex = sourceItem.OutputLines.Length - 1;
             }
 
