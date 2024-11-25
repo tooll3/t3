@@ -58,7 +58,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
     // {
     //     return nodeSelection.Selection.Any(c => c.Id == Id);
     // }
-    public void Reset(int updateCycle)
+    public void ResetConnections(int updateCycle)
     {
         InputLines = Array.Empty<InputLine>();
         OutputLines = Array.Empty<OutputLine>();

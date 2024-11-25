@@ -36,6 +36,7 @@ internal sealed class StateMachine
     internal readonly HoldingItemState HoldingItemState;
     internal readonly DraggingState DraggingState;
     internal readonly HoldingItemAfterLongTapState HoldingItemAfterLongTapState;
+    internal readonly PlaceholderState PlaceholderState;
 
     public StateMachine(GraphUiContext context)
     {
@@ -45,6 +46,7 @@ internal sealed class StateMachine
         HoldingBackgroundState = new HoldingBackgroundState(this);
         HoldingItemState = new HoldingItemState(this);
         HoldingItemAfterLongTapState = new HoldingItemAfterLongTapState(this);
+        PlaceholderState = new PlaceholderState(this);
 
         _currentState = DefaultState;
         _currentState.Enter(context);

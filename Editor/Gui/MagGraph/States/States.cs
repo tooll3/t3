@@ -43,13 +43,30 @@ internal sealed class HoldingBackgroundState(StateMachine sm) : State(sm)
             return;
         
         Log.Debug("Would do something...");
-        Sm.SetState(Sm.DefaultState,context);
-        
-        // MagItemMovement.SelectActiveItem(context);
-        // context.ItemMovement.SetDraggedItemIds([context.ActiveItem.Id]);
-        // Sm.SetState(Sm.HoldingAfterLongTapState, context);
+        Sm.SetState(Sm.PlaceholderState,context);
+        var posOnCanvas = context.Canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
+        context.Placeholder.OpenOnCanvas(context, posOnCanvas);
     }
 }
+
+internal sealed class PlaceholderState(StateMachine sm) : State(sm)
+{
+    public override void Update(GraphUiContext context)
+    {
+        if (context.Placeholder.PlaceholderItem == null)
+        {
+            context.Placeholder.Cancel(context);
+            Sm.SetState(Sm.DefaultState,context);
+            return;
+        }
+        
+        // if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+        // {
+        //     Sm.SetState(Sm.DraggingState,context);
+        // }
+    }
+}
+
 
 internal sealed class HoldingItemState(StateMachine sm) : State(sm)
 {
@@ -124,6 +141,8 @@ internal sealed class HoldingItemAfterLongTapState(StateMachine sm) : State(sm)
         }
     }
 }
+
+
 
 
 

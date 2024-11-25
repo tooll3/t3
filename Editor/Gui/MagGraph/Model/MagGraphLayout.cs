@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.UiModel;
 
@@ -77,7 +78,7 @@ internal sealed class MagGraphLayout
 
             if (Items.TryGetValue(childId, out var opItem))
             {
-                opItem.Reset(_structureUpdateCycle);
+                opItem.ResetConnections(_structureUpdateCycle);
                 updatedItemCount++;
             }
             else
@@ -101,7 +102,7 @@ internal sealed class MagGraphLayout
         {
             if (Items.TryGetValue(input.Id, out var inputOp))
             {
-                inputOp.Reset(_structureUpdateCycle);
+                inputOp.ResetConnections(_structureUpdateCycle);
                 updatedItemCount++;
             }
             else
@@ -124,7 +125,7 @@ internal sealed class MagGraphLayout
                 var outputUi = compositionSymbolUi.OutputUis[output.Id];
                 if(Items.TryGetValue( output.Id, out var outputOp))
                 {
-                    outputOp.Reset(_structureUpdateCycle);
+                    outputOp.ResetConnections(_structureUpdateCycle);
                     updatedItemCount++;
                 }
                 else
@@ -139,6 +140,12 @@ internal sealed class MagGraphLayout
                                            };
                     addedItemCount++;
                 }
+        }
+        
+        if(Items.TryGetValue( PlaceholderCreation.PlaceHolderId, out var placeholderOp))
+        {
+            placeholderOp.ResetConnections(_structureUpdateCycle);
+            updatedItemCount++;
         }
 
         var hasObsoleteItems = Items.Count > updatedItemCount + addedItemCount;
@@ -323,6 +330,9 @@ internal sealed class MagGraphLayout
                                        });
                     break;
                 }
+                case MagGraphItem.Variants.Placeholder:
+                    break;
+                
                 default:
                     throw new ArgumentOutOfRangeException();
             }
