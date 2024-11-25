@@ -19,6 +19,7 @@
     <PackageReference Include="CppSharp" Version="1.0.1" />
     <PackageReference Include="ManagedBass" Version="3.1.1" />
     <PackageReference Include="ManagedBass.Wasapi" Version="3.1.1" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="6.0.6" />
     <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="NDILibDotNet6" Version="1.0.11" />
     <PackageReference Include="OpenGL.Net" Version="0.8.4">
@@ -34,6 +35,11 @@
     <PackageReference Include="SharpDX.XInput" Version="4.2.0" />
     <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0031" />
     <PackageReference Include="Svg" Version="3.3.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+    <PackageReference Include="System.Formats.Asn1" Version="6.0.1" />
+    <PackageReference Include="System.IO.Packaging" Version="6.0.1" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
     <PackageReference Include="unsplasharp.api" Version="0.7.0" />
   </ItemGroup>
 
