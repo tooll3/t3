@@ -19,15 +19,19 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
         Operator,
         Input,
         Output,
+        Obsolete,
     }
 
+    internal int LastUpdateCycle;
     public Guid Id { get; init; }
     public Variants Variant;
     public Type PrimaryType = typeof(float);
     public required ISelectableCanvasObject Selectable;
     public Vector2 PosOnCanvas { get => Selectable.PosOnCanvas; set => Selectable.PosOnCanvas = value; }
-
     public Vector2 Size { get; set; }
+    
+    public ImRect Area => ImRect.RectWithSize(PosOnCanvas, Size);
+
 
     //public bool IsSelected => NodeSelection.IsNodeSelected(this);
     public MagGroup? MagGroup;
@@ -50,6 +54,17 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
                            _                 => "???"
                        };
         }
+    }
+    
+    // public bool IsSelected(NodeSelection nodeSelection)
+    // {
+    //     return nodeSelection.Selection.Any(c => c.Id == Id);
+    // }
+    public void Reset(int updateCycle)
+    {
+        InputLines = Array.Empty<InputLine>();
+        OutputLines = Array.Empty<OutputLine>();
+        LastUpdateCycle = updateCycle;
     }
 
     public InputLine[] InputLines = Array.Empty<InputLine>();
@@ -105,7 +120,6 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
     public const float LineHeight = 35;
     public static readonly Vector2 GridSize = new(Width, LineHeight);
 
-    public ImRect Area => ImRect.RectWithSize(PosOnCanvas, Size);
 
     public static ImRect GetItemsBounds(IEnumerable<MagGraphItem> items)
     {
@@ -285,9 +299,4 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
             nodeSelection.AddSelection(this);
         }
     }
-
-    // public bool IsSelected(NodeSelection nodeSelection)
-    // {
-    //     return nodeSelection.Selection.Any(c => c.Id == Id);
-    // }
 }

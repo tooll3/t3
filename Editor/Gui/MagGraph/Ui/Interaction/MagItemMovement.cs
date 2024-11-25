@@ -19,7 +19,7 @@ using Vector2 = System.Numerics.Vector2;
 namespace T3.Editor.Gui.MagGraph.Ui.Interaction;
 
 /// <summary>
-/// 
+/// Provides functions for moving, snapping, connecting, insertion etc. of operators. It controlled by the <see cref="StateMachine"/>
 /// </summary>
 /// <remarks>
 /// Things would be slightly more efficient if this would would use SnapGraphItems. However this would
@@ -40,7 +40,6 @@ internal sealed partial class MagItemMovement
 
     internal void PrepareFrame()
     {
-        UpdateItemReferences();
         PrepareDragInteraction();
     }
 
@@ -50,45 +49,6 @@ internal sealed partial class MagItemMovement
         UpdateSnappedBorderConnections();
     }
 
-    /// <summary>
-    /// For certain edge cases like the release handling of nodes cannot be detected.
-    /// This is a work around to clear the state on mouse release
-    /// </summary>
-    // Todo: Call this from the main loop?
-    internal void CompleteFrame()
-    {
-        //Log.Debug("CompleteFrame()???");
-        // if (ImGui.IsMouseReleased(0) && _isInProgress)
-        // {
-        //     StopDragOperation();
-        // }
-    }
-
-    /// <summary>
-    /// We can't assume the the layout model structure to be stable across frames.
-    /// We use Guids to carry over the information for dragged items.
-    /// </summary>
-    ///
-    /// <remarks>
-    /// This can eventually be optimized by having a structure counter or a hasChanged flag in layout.
-    /// </remarks>
-    private void UpdateItemReferences()
-    {
-        _draggedItems.Clear();
-        foreach (var id in _draggedItemIds)
-        {
-            if (!_layout.Items.TryGetValue(id, out var item))
-            {
-                Log.Warning("Dragged item no longer valid?");
-                continue;
-            }
-
-            if (id == PrimaryOutputItemId)
-                PrimaryOutputItem = item;
-
-            _draggedItems.Add(item);
-        }
-    }
 
     internal void CompleteDragOperation(GraphUiContext context)
     {
@@ -96,7 +56,6 @@ internal sealed partial class MagItemMovement
         {
             context.MoveElementsCommand?.StoreCurrentValues();
             UndoRedoStack.Add(context.MacroCommand);
-            //context.MacroCommand = null;
         }
 
         if (!TryInitializeInputSelectionPicker())
@@ -118,10 +77,9 @@ internal sealed partial class MagItemMovement
     internal void Reset()
     {
         PrimaryOutputItem = null;
-        PrimaryOutputItemId = Guid.Empty;
         DraggedPrimaryOutputType = null;
 
-        _draggedItemIds.Clear();
+        _draggedItems.Clear();
     }
 
     internal static void SelectActiveItem(GraphUiContext context)
@@ -180,7 +138,7 @@ internal sealed partial class MagItemMovement
         var dl = ImGui.GetWindowDrawList();
         dl.AddCircle(ImGui.GetMousePos(), 100 * (1 - longTapProgress), Color.White.Fade(MathF.Pow(longTapProgress, 3)));
     }
-    
+
     /// <summary>
     /// Update dragged items and use anchor definitions to identify and use potential snap targets
     /// </summary>
@@ -215,7 +173,7 @@ internal sealed partial class MagItemMovement
         var overlappingItems = new List<MagGraphItem>();
         foreach (var otherItem in _layout.Items.Values)
         {
-            if (_draggedItemIds.Contains(otherItem.Id) || !dragExtend.Overlaps(otherItem.Area))
+            if (_draggedItems.Contains(otherItem) || !dragExtend.Overlaps(otherItem.Area))
                 continue;
 
             overlappingItems.Add(otherItem);
@@ -527,7 +485,7 @@ internal sealed partial class MagItemMovement
         {
             foreach (var otherItem in _layout.Items.Values)
             {
-                if (_draggedItemIds.Contains(otherItem.Id))
+                if (_draggedItems.Contains(otherItem))
                     continue;
 
                 GetPotentialConnectionsAfterSnap(ref newConnections, draggedItem, otherItem);
@@ -804,19 +762,13 @@ internal sealed partial class MagItemMovement
     private void InitPrimaryDraggedOutput()
     {
         DraggedPrimaryOutputType = null;
-        PrimaryOutputItemId = Guid.Empty;
-        PrimaryOutputItem = null;
         ItemForInputSelection = null;
-        var primaryOutputItem = FindPrimaryOutputItem();
-        if (primaryOutputItem == null)
+
+        PrimaryOutputItem = FindPrimaryOutputItem();
+        if (PrimaryOutputItem == null)
             return;
 
-        DraggedPrimaryOutputType = primaryOutputItem.PrimaryType;
-
-        if (primaryOutputItem.InputLines.Length == 0)
-            return;
-
-        PrimaryOutputItemId = primaryOutputItem.Id;
+        DraggedPrimaryOutputType = PrimaryOutputItem.PrimaryType;
     }
 
     /// <summary>
@@ -899,7 +851,7 @@ internal sealed partial class MagItemMovement
         }
 
         // Create connection
-        var connectionToAdd = new Symbol.Connection(PrimaryOutputItemId,
+        var connectionToAdd = new Symbol.Connection(PrimaryOutputItem.Id,
                                                     PrimaryOutputItem.OutputLines[0].Id,
                                                     ItemForInputSelection.Id,
                                                     targetInputUi.Id);
@@ -990,44 +942,37 @@ internal sealed partial class MagItemMovement
         }
     }
 
-    internal void SetDraggedItemIds(List<Guid> selection)
+    internal void SetDraggedItemIds(List<Guid> selectedIds)
     {
-        _draggedItemIds.Clear();
-        _draggedItemIds.UnionWith(selection);
-        UpdateItemReferences();
+        _draggedItems.Clear();
+        foreach (var id in selectedIds)
+        {
+            if (_layout.Items.TryGetValue(id, out var i))
+            {
+                _draggedItems.Add(i);
+            }
+        }
     }
-    
+
     internal void SetDraggedItems(List<ISelectableCanvasObject> selection)
     {
-        _draggedItemIds.Clear();
+        _draggedItems.Clear();
         foreach (var s in selection)
         {
             if (_layout.Items.TryGetValue(s.Id, out var i))
             {
-                _draggedItemIds.Add(i.Id);
+                _draggedItems.Add(i);
             }
         }
-
-        UpdateItemReferences();
     }
-    
 
     internal void SetDraggedItemIdsToSnappedForItem(MagGraphItem item)
     {
         _draggedItems.Clear();
         CollectSnappedItems(item, _draggedItems);
-
-        _draggedItemIds.Clear();
-        foreach (var item1 in _draggedItems)
-        {
-            _draggedItemIds.Add(item1.Id);
-        }
-
-        UpdateItemReferences();
     }
-    
-    
-    internal static bool IsItemDragged(MagGraphItem item) => _draggedItemIds.Contains(item.Id);
+
+    internal static bool IsItemDragged(MagGraphItem item) => _draggedItems.Contains(item);
 
     internal double LastSnapTime = double.NegativeInfinity;
     internal Vector2 LastSnapPositionOnCanvas;
@@ -1035,7 +980,6 @@ internal sealed partial class MagItemMovement
     internal Type? DraggedPrimaryOutputType;
     internal MagGraphItem? PrimaryOutputItem;
     internal MagGraphItem? ItemForInputSelection;
-    internal Guid PrimaryOutputItemId;
 
     internal Vector2 PeekAnchorInCanvas => PrimaryOutputItem == null
                                                ? Vector2.Zero
@@ -1054,7 +998,7 @@ internal sealed partial class MagItemMovement
     private Vector2 _dragStartPosInOpOnCanvas;
 
     private static readonly HashSet<MagGraphItem> _draggedItems = [];
-    private static readonly HashSet<Guid> _draggedItemIds = [];
+    //private static readonly HashSet<Guid> _draggedItemIds = [];
 
     internal sealed record SplitInsertionPoint(
         Guid InputItemId,
@@ -1071,6 +1015,4 @@ internal sealed partial class MagItemMovement
     private readonly MagGraphLayout _layout;
     private readonly NodeSelection _nodeSelection;
     private const float SnapTolerance = 0.01f;
-
-
 }

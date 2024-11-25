@@ -379,7 +379,7 @@ internal sealed class MagGraphCanvas : ScalableCanvas
         }
 
         // Indicator primary output op peek position...
-        if (item.Id == _context.ItemMovement.PrimaryOutputItemId)
+        if (_context.ItemMovement.PrimaryOutputItem != null && item.Id == _context.ItemMovement.PrimaryOutputItem.Id)
         {
             drawList.AddCircleFilled(TransformPosition(new Vector2(item.Area.Max.X - MagGraphItem.GridSize.Y * 0.25f,
                                                                    item.Area.Min.Y + MagGraphItem.GridSize.Y * 0.5f)),

@@ -50,12 +50,10 @@ internal sealed class StateMachine
     public void UpdateAfterDraw(GraphUiContext c)
     {
         _currentState.Update(c);
-        c.ItemMovement.CompleteFrame();
     }
 
     internal void SetState(State newState, GraphUiContext context)
     {
-        //Log.Debug($"Exit {_currentState}...");
         _currentState.Exit(context);
         _currentState = newState;
         newState.EnterTime = Time;

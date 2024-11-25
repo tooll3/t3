@@ -44,6 +44,7 @@ internal sealed class MagGraphLayout
         _structureFlaggedAsChanged = true;
     }
 
+    private int _updateCycle;
     
 
     /** During connection operations when can request to expand normally hidden inputs of an operator */
@@ -51,6 +52,7 @@ internal sealed class MagGraphLayout
     
     private void RefreshDataStructure(Instance composition, SymbolUi parentSymbolUi)
     {
+        _updateCycle++;
         CollectItemReferences(composition, parentSymbolUi);
         UpdateConnectionSources(composition);
         UpdateVisibleItemLines();
@@ -63,8 +65,12 @@ internal sealed class MagGraphLayout
     /// </remarks>
     private void CollectItemReferences(Instance compositionOp, SymbolUi compositionSymbolUi)
     {
-        Items.Clear();
+        //Items.Clear();
 
+        var addedItemCount =0;
+        var updatedItemCount = 0;
+        var previousItemCount = Items.Count;
+        
         foreach (var (childId, childInstance) in compositionOp.Children)
         {
             if(!compositionSymbolUi.ChildUis.TryGetValue(childId, out var childUi))
@@ -72,50 +78,86 @@ internal sealed class MagGraphLayout
             
             if(!SymbolUiRegistry.TryGetSymbolUi(childInstance.Symbol.Id, out var symbolUi))
                 continue;
-            
-            Items.Add(childId, new MagGraphItem
-                                   {
-                                       Variant = MagGraphItem.Variants.Operator,
-                                       Id = childId,
-                                       Instance = childInstance,
-                                       Selectable = childUi,
-                                       SymbolUi = symbolUi,
-                                       SymbolChild =  childUi.SymbolChild,
-                                       PosOnCanvas = childUi.PosOnCanvas,
-                                       Size = MagGraphItem.GridSize,
-                                   });
+
+
+            if (Items.TryGetValue(childId, out var opItem))
+            {
+                opItem.Reset(_updateCycle);
+                updatedItemCount++;
+            }
+            else
+            {
+                Items[childId] = new MagGraphItem
+                                     {
+                                         Variant = MagGraphItem.Variants.Operator,
+                                         Id = childId,
+                                         Instance = childInstance,
+                                         Selectable = childUi,
+                                         SymbolUi = symbolUi,
+                                         SymbolChild = childUi.SymbolChild,
+                                         Size = MagGraphItem.GridSize,
+                                         LastUpdateCycle = _updateCycle,
+                                     };
+                addedItemCount++;
+            }
         }
 
         foreach (var input in compositionOp.Inputs)
         {
-            var inputUi = compositionSymbolUi.InputUis[input.Id];
-            Items.Add(input.Id, new MagGraphItem
-                                    {
-                                        Variant = MagGraphItem.Variants.Input,
-                                        Id = input.Id,
-                                        Instance = compositionOp,
-                                        Selectable = inputUi,
-                                        SymbolUi = null,
-                                        SymbolChild = null,
-                                        PosOnCanvas = inputUi.PosOnCanvas,
-                                        Size = MagGraphItem.GridSize,
-                                    });
+            if (Items.TryGetValue(input.Id, out var inputOp))
+            {
+                inputOp.Reset(_updateCycle);
+                updatedItemCount++;
+            }
+            else
+            {
+                var inputUi = compositionSymbolUi.InputUis[input.Id];
+                Items[input.Id]= new MagGraphItem
+                                        {
+                                            Variant = MagGraphItem.Variants.Input,
+                                            Id = input.Id,
+                                            Instance = compositionOp,
+                                            Selectable = inputUi,
+                                            Size = MagGraphItem.GridSize,
+                                        };
+                addedItemCount++;
+            }
         }
         
         foreach (var output in compositionOp.Outputs)
         {
-            var outputUi = compositionSymbolUi.OutputUis[output.Id];
-            Items.Add(output.Id, new MagGraphItem
-                                     {
-                                        Variant = MagGraphItem.Variants.Output,
-                                        Id = output.Id,
-                                        Instance = compositionOp,
-                                        Selectable = outputUi,
-                                        SymbolUi = null,
-                                        SymbolChild = null,
-                                        PosOnCanvas = outputUi.PosOnCanvas,
-                                        Size = MagGraphItem.GridSize,
-                                    });
+                var outputUi = compositionSymbolUi.OutputUis[output.Id];
+                if(Items.TryGetValue( output.Id, out var outputOp))
+                {
+                    outputOp.Reset(_updateCycle);
+                    updatedItemCount++;
+                }
+                else
+                {
+                    Items[output.Id] = new MagGraphItem
+                                           {
+                                               Variant = MagGraphItem.Variants.Output,
+                                               Id = output.Id,
+                                               Instance = compositionOp,
+                                               Selectable = outputUi,
+                                               Size = MagGraphItem.GridSize,
+                                           };
+                    addedItemCount++;
+                };
+        }
+
+        var hasObsoleteItems = Items.Count > updatedItemCount + addedItemCount;
+        if (hasObsoleteItems)
+        {
+            foreach (var item in Items.Values)
+            {
+                if (item.LastUpdateCycle >= _updateCycle)
+                    continue;
+                
+                Items.Remove(item.Id);
+                item.Variant = MagGraphItem.Variants.Obsolete;
+                Log.Debug("Remove obsolete item item " + item);
+            }
         }
     }
 
