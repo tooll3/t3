@@ -100,37 +100,40 @@ internal sealed class PlaceholderCreation
 
         _filter.UpdateIfNecessary(context.Selector);
 
-        //ImGui.PushID(_uiId);
+        DrawSearchInput(context, drawList);
+
+        // Might have been closed from input
+        if (PlaceholderItem == null)
+            return;
+        
+        var pMin = context.Canvas.TransformPosition(PlaceholderItem.PosOnCanvas);
+        var pMax = context.Canvas.TransformPosition(PlaceholderItem.Area.Max);
+        DrawResultsList(context, new ImRect(pMin, pMax));
+
+        // Cancel by click outside
+        var mousePos = ImGui.GetMousePos();
+        var wasClickedOutside = ImGui.IsMouseClicked(ImGuiMouseButton.Left) &&
+                                !(_placeholderAreaOnScreen.Contains(mousePos) || _resultAreaOnScreen.Contains(mousePos));
+        if (wasClickedOutside)
         {
-            // var posInWindow = pMin - ImGui.GetWindowPos();
-
-            //ImGui.SetCursorPos(posInWindow);
-            DrawSearchInput(context, drawList);
-
-            // Might have been closed from input
-            if (PlaceholderItem != null)
+            Cancel(context);
+        }
+        
+        
+        if (_selectedSymbolUi != null)
+        {
+            if (_filter.PresetFilterString != string.Empty && (_filter.WasUpdated || _selectedItemChanged))
             {
-                var pMin = context.Canvas.TransformPosition(PlaceholderItem.PosOnCanvas);
-                var pMax = context.Canvas.TransformPosition(PlaceholderItem.Area.Max);
-                DrawResultsList(context, new ImRect(pMin, pMax));
-
-                if (_selectedSymbolUi != null)
-                {
-                    if (_filter.PresetFilterString != string.Empty && (_filter.WasUpdated || _selectedItemChanged))
-                    {
-                        // TODO: Implement preset search
-                    }
-                }
-
-                if (_focusInputNextTime)
-                {
-                    ImGui.SetKeyboardFocusHere();
-                    _focusInputNextTime = false;
-                    _selectedItemChanged = true;
-                }
+                // TODO: Implement preset search
             }
         }
-        //ImGui.PopID();
+
+        if (_focusInputNextTime)
+        {
+            ImGui.SetKeyboardFocusHere();
+            _focusInputNextTime = false;
+            _selectedItemChanged = true;
+        }
     }
 
     private sealed record OpSuggestionGroup(string Name, List<Guid> Items);
@@ -189,7 +192,7 @@ internal sealed class PlaceholderCreation
                         Guid.Parse("17188f49-1243-4511-a46c-1804cae10768"), //PointsOnMesh
                         Guid.Parse("722e79cc-47bc-42cc-8fce-2e06f36f8caa"), //PointsOnImage
                     ]),
-                
+
                 new("draw", [
                         Guid.Parse("ffd94e5a-bc98-4e70-84d8-cce831e6925f"), //DrawPoints
                         Guid.Parse("836f211f-b387-417c-8316-658e0dc6e117"), //DrawLines
@@ -229,6 +232,8 @@ internal sealed class PlaceholderCreation
         var pMax = context.Canvas.TransformPosition(item.PosOnCanvas + item.Size);
         var pMinVisible = pMin;
         var pMaxVisible = pMax;
+
+        _placeholderAreaOnScreen = ImRect.RectBetweenPoints(pMin, pMax);
 
         // Background and Outline
         drawList.AddRectFilled(pMinVisible + Vector2.One * canvasScale, pMaxVisible - Vector2.One,
@@ -301,7 +306,6 @@ internal sealed class PlaceholderCreation
 
         if (shouldCancelConnectionMaker)
         {
-            //ConnectionMaker.AbortOperation();
             Cancel(context);
         }
 
@@ -329,8 +333,7 @@ internal sealed class PlaceholderCreation
         //                  "Search...");
     }
 
-    private string _favoriteGroup = string.Empty;
-    private static List<OpSuggestionGroup> _opGroups = [];
+
 
     private void DrawResultsList(GraphUiContext context, ImRect screenItemArea)
     {
@@ -346,6 +349,8 @@ internal sealed class PlaceholderCreation
                                                              windowPos.X + windowSize.X - size.X - 10);
         }
 
+        _resultAreaOnScreen = ImRect.RectWithSize(resultPosOnScreen, size);
+        
         var resultPosOnWindow = resultPosOnScreen - ImGui.GetWindowPos();
 
         ImGui.SetCursorPos(resultPosOnWindow);
@@ -364,7 +369,7 @@ internal sealed class PlaceholderCreation
         {
             if (!string.IsNullOrEmpty(_filter.SearchString))
             {
-                DrawSearchResults(context);
+                DrawSearchResultEntries(context);
             }
             else
             {
@@ -374,7 +379,7 @@ internal sealed class PlaceholderCreation
                     foreach (var g in groups)
                     {
                         if (g.Items == null)
-                        {   
+                        {
                             ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                             ImGui.PushFont(Fonts.FontSmall);
                             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.One);
@@ -412,7 +417,7 @@ internal sealed class PlaceholderCreation
         ImGui.PopStyleVar(4);
     }
 
-    private void DrawSearchResults(GraphUiContext context)
+    private void DrawSearchResultEntries(GraphUiContext context)
     {
         if (ImGui.IsKeyReleased((ImGuiKey)Key.CursorDown))
         {
@@ -536,10 +541,16 @@ internal sealed class PlaceholderCreation
 
         Close(context);
     }
-
+    
+    private string _favoriteGroup = string.Empty;
+    private static List<OpSuggestionGroup> _opGroups = [];
     private readonly SymbolFilter _filter = new();
     private bool _focusInputNextTime = true;
     private bool _selectedItemChanged;
+
+    private ImRect _placeholderAreaOnScreen;
+    private ImRect _resultAreaOnScreen;
+    
     private MagGraphItem.Directions Orientation = MagGraphItem.Directions.Horizontal;
 
     private SymbolUi _selectedSymbolUi;
