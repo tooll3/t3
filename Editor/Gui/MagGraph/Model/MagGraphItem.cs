@@ -31,9 +31,9 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
     public required ISelectableCanvasObject Selectable;
     public Vector2 PosOnCanvas { get => Selectable.PosOnCanvas; set => Selectable.PosOnCanvas = value; }
     public Vector2 Size { get; set; }
-    
+
     public ImRect Area => ImRect.RectWithSize(PosOnCanvas, Size);
-    
+
     public override string ToString() => ReadableName;
 
     public SymbolUi? SymbolUi;
@@ -46,14 +46,18 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
         {
             return Variant switch
                        {
-                           Variants.Operator => SymbolChild != null ? SymbolChild.ReadableName : "???",
-                           Variants.Input    => Selectable is IInputUi inputUi ? inputUi.InputDefinition.Name : "???",
-                           Variants.Output   => Selectable is IOutputUi outputUi ? outputUi.OutputDefinition.Name : "???",
-                           _                 => "???"
+                           Variants.Operator => SymbolChild == null
+                                                    ? "???"
+                                                    : SymbolChild.HasCustomName
+                                                        ? "\"" + SymbolChild.ReadableName + "\""
+                                                        : SymbolChild.ReadableName,
+                           Variants.Input  => Selectable is IInputUi inputUi ? inputUi.InputDefinition.Name : "???",
+                           Variants.Output => Selectable is IOutputUi outputUi ? outputUi.OutputDefinition.Name : "???",
+                           _               => "???"
                        };
         }
     }
-    
+
     // public bool IsSelected(NodeSelection nodeSelection)
     // {
     //     return nodeSelection.Selection.Any(c => c.Id == Id);
@@ -96,7 +100,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
         public Type ConnectionType;
         public int ConnectionHash;
         public Guid SlotId;
-        
+
         /** Test if a could be split be inserting b */
         public bool CountBeSplitBy(AnchorPoint b)
         {
@@ -117,7 +121,6 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
     public const float WidthHalf = Width / 2;
     public const float LineHeight = 35;
     public static readonly Vector2 GridSize = new(Width, LineHeight);
-
 
     public static ImRect GetItemsBounds(IEnumerable<MagGraphItem> items)
     {

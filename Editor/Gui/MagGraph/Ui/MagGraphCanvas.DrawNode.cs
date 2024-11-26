@@ -113,6 +113,8 @@ internal sealed partial class MagGraphCanvas
         drawList.AddRect(pMinVisible, pMaxVisible, outlineColor, 6 * CanvasScale, imDrawFlags);
 
         // Label...
+        var isNamed = item.ReadableName;
+        
         ImGui.PushFont(Fonts.FontBold);
         var labelSize = ImGui.CalcTextSize(item.ReadableName);
         ImGui.PopFont();

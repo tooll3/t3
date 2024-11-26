@@ -31,6 +31,7 @@ public partial class Symbol
         public string Name { get; set; }
 
         public string ReadableName => string.IsNullOrEmpty(Name) ? Symbol.Name : Name;
+        public bool HasCustomName => !string.IsNullOrEmpty(Name);
 
         public bool IsBypassed { get => _isBypassed; set => SetBypassed(value); }
 
