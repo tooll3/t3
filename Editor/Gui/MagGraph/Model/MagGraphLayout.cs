@@ -583,7 +583,10 @@ internal sealed class MagGraphLayout
             if (sc.OutputLineIndex == 0
                 && sc.InputLineIndex == 0
                 && sourceMax.Y < targetMin.Y
-                && MathF.Abs(sourceMin.X - targetMin.X) < MagGraphItem.GridSize.X / 2)
+                //&& MathF.Abs(sourceMin.X - targetMin.X) < MagGraphItem.GridSize.X / 2
+                && sourceMin.X > targetMin.X - MagGraphItem.GridSize.X / 2
+                
+                )
             {
                 sc.SourcePos = new Vector2(sourceMin.X + MagGraphItem.GridSize.X / 2, sourceMax.Y);
                 sc.TargetPos = new Vector2(targetMin.X + MagGraphItem.GridSize.X / 2, targetMin.Y);
