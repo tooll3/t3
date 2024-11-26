@@ -53,6 +53,8 @@ public class UserSettings : Settings<UserSettings.ConfigData>
         // Interaction
         public bool WarnBeforeLibEdit = true;
         public bool SmartGroupDragging = false;
+        public bool DisconnectOnUnsnap = false;
+        
         public bool ShowExplicitTextureFormatInOutputWindow = false;
         public bool UseArcConnections = true;
         public bool ResetTimeAfterPlayback;

@@ -68,6 +68,12 @@ public class SettingsWindow : Window
                                                       "Affects the shape of the connections between your operators",
                                                       UserSettings.Defaults.UseArcConnections);
 
+                    changed |= FormInputs.AddCheckBox("Disconnect on unsnap",
+                                                      ref UserSettings.Config.DisconnectOnUnsnap,
+                                                      "Defines if unsnapping operators from a block will automatically disconnect them.\nOps dragged out between snapped blocks will always be disconnected.",
+                                                      UserSettings.Defaults.DisconnectOnUnsnap);
+
+                    
                     changed |= FormInputs.AddCheckBox("Drag snapped nodes",
                                                       ref UserSettings.Config.SmartGroupDragging,
                                                       "An experimental features that will drag neighbouring snapped operators",

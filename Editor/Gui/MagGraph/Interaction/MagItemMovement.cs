@@ -276,12 +276,10 @@ internal sealed partial class MagItemMovement
         InitPrimaryDraggedOutput();
         
         _unsnappedBorderConnectionsBeforeDrag.Clear();
-        Log.Debug("StartDragOperation");
         foreach (var c in _borderConnections)
         {
             if (!c.IsSnapped)
             {
-                Log.Debug("is unsnapped before drag: " + c);
                 _unsnappedBorderConnectionsBeforeDrag.Add(c.ConnectionHash);
             }
         }
@@ -297,6 +295,10 @@ internal sealed partial class MagItemMovement
         Debug.Assert(context.MacroCommand != null);
 
         var unsnappedConnections = new List<MagGraphConnection>();
+
+        var enableDisconnected = UserSettings.Config.DisconnectOnUnsnap ^ ImGui.GetIO().KeyCtrl; 
+        if (!enableDisconnected)
+            return;
 
         // Delete unsnapped connections
         foreach (var mc in _layout.MagConnections)
@@ -1018,7 +1020,7 @@ internal sealed partial class MagItemMovement
 
     private static bool _hasDragged;
     private Vector2 _dragStartPosInOpOnCanvas;
-
+    
     private static readonly HashSet<MagGraphItem> _draggedItems = [];
     //private static readonly HashSet<Guid> _draggedItemIds = [];
 
