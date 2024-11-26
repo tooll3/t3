@@ -269,11 +269,25 @@ internal sealed partial class MagItemMovement
 
         _lastAppliedOffset = Vector2.Zero;
         _hasDragged = false;
-
+        
+        UpdateBorderConnections(_draggedItems);
+        UpdateSnappedBorderConnections();
         InitSplitInsertionPoints(_draggedItems);
-
         InitPrimaryDraggedOutput();
+        
+        _unsnappedBorderConnectionsBeforeDrag.Clear();
+        Log.Debug("StartDragOperation");
+        foreach (var c in _borderConnections)
+        {
+            if (!c.IsSnapped)
+            {
+                Log.Debug("is unsnapped before drag: " + c);
+                _unsnappedBorderConnectionsBeforeDrag.Add(c.ConnectionHash);
+            }
+        }
     }
+
+    private HashSet<int> _unsnappedBorderConnectionsBeforeDrag = [];
 
     /// <summary>
     /// Handles op disconnection and collapsed
@@ -290,6 +304,9 @@ internal sealed partial class MagItemMovement
             if (!_snappedBorderConnectionHashes.Contains(mc.ConnectionHash))
                 continue;
 
+            if (_unsnappedBorderConnectionsBeforeDrag.Contains(mc.ConnectionHash))
+                continue;
+            
             unsnappedConnections.Add(mc);
 
             var connection = new Symbol.Connection(mc.SourceItem.Id,
@@ -593,6 +610,9 @@ internal sealed partial class MagItemMovement
         }
     }
 
+    /// <summary>
+    /// This is updated every frame...
+    /// </summary>
     private void UpdateSnappedBorderConnections()
     {
         _snappedBorderConnectionHashes.Clear();

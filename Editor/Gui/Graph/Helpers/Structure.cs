@@ -296,24 +296,25 @@ public class Structure
     
     internal static bool CheckForCycle(Symbol compositionSymbol, Symbol.Connection connection)
     {
-        var hashSet = new HashSet<Guid>();
+        var dependingSourceItemIds = new HashSet<Guid>();
         
-        CollectDependentChildren(connection.TargetParentOrChildId, connection.TargetSlotId);
+        CollectDependentChildren(connection.SourceParentOrChildId);
 
-        return hashSet.Contains(connection.SourceParentOrChildId);
+        return dependingSourceItemIds.Contains(connection.TargetParentOrChildId);
 
-        void CollectDependentChildren(Guid childId, Guid childInputSlotId)
+        void CollectDependentChildren(Guid sourceChildId)
         {
-            if (!hashSet.Add(childId))
+            if (!dependingSourceItemIds.Add(sourceChildId))
                 return;
             
             // find all connections into child...
             foreach (var c in compositionSymbol.Connections)
             {
-                if (c.TargetParentOrChildId == childId && (childInputSlotId == Guid.Empty || c.TargetSlotId == childInputSlotId))
-                {
-                    CollectDependentChildren(c.SourceParentOrChildId,  Guid.Empty);    
-                }
+                if (c.TargetParentOrChildId != sourceChildId)
+                    continue;
+                
+                
+                CollectDependentChildren(c.SourceParentOrChildId);
             }
         }
         
