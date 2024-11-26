@@ -7,15 +7,30 @@ namespace T3.Editor.Gui.MagGraph.States;
 
 internal sealed class DefaultState(StateMachine s) : State(s)
 {
-    public override void Update(GraphUiContext c)
+    public override void Update(GraphUiContext context)
     {
+        // Tab create placeholder
+        {
+            if (context.Canvas.IsFocused
+                && context.Canvas.IsHovered
+                && ImGui.IsKeyReleased(ImGuiKey.Tab) && !ImGui.IsAnyItemActive())
+            {
+                Sm.SetState(Sm.PlaceholderState,context);
+                var posOnCanvas = context.Canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
+                context.Placeholder.OpenOnCanvas(context, posOnCanvas);
+                return;
+            }
+        }
+        
+        
+        // Click on background
         var clickedDown = ImGui.IsMouseClicked(ImGuiMouseButton.Left);
         if (!clickedDown)
             return;
         
-        Sm.SetState(c.ActiveItem != null 
+        Sm.SetState(context.ActiveItem != null 
                         ? Sm.HoldingItemState 
-                        : Sm.HoldingBackgroundState, c);
+                        : Sm.HoldingBackgroundState, context);
     }
 }
 
@@ -43,7 +58,7 @@ internal sealed class HoldingBackgroundState(StateMachine sm) : State(sm)
         if (!(longTapProgress > 1))
             return;
         
-        Log.Debug("Would do something...");
+        // TODO: setting both, state and placeholder, feels awkward.
         Sm.SetState(Sm.PlaceholderState,context);
         var posOnCanvas = context.Canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
         context.Placeholder.OpenOnCanvas(context, posOnCanvas);

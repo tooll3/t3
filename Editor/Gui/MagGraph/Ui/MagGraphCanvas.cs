@@ -29,10 +29,14 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         _nodeSelection = nodeSelection;
     }
 
-    public bool IsFocused { get; private set; } 
+    public bool IsFocused { get; private set; }
+    public bool IsHovered { get; private set; }
 
     public void Draw()
     {
+        IsFocused = ImGui.IsWindowFocused();
+        IsHovered = ImGui.IsWindowHovered();
+        
         if (_window.CompositionOp == null)
             return;
         
@@ -40,7 +44,6 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         if (_window.CompositionOp != _context.CompositionOp)
             _context = new GraphUiContext(_nodeSelection, this, _window.CompositionOp);
 
-        IsFocused = ImGui.IsWindowFocused();
             
         // Prepare frame
         //_context.Selector.HoveredIds.Clear();
