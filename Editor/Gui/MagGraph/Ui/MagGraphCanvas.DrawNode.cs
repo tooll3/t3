@@ -113,10 +113,19 @@ internal sealed partial class MagGraphCanvas
         drawList.AddRect(pMinVisible, pMaxVisible, outlineColor, 6 * CanvasScale, imDrawFlags);
 
         // Label...
-        var isNamed = item.ReadableName;
+
+        var name = item.ReadableName;
+        if (item.Variant == MagGraphItem.Variants.Output)
+        {
+            name = "OUT: " + name;
+        }
+        else if (item.Variant == MagGraphItem.Variants.Input)
+        {
+            name = "IN: " + name;
+        }
         
         ImGui.PushFont(Fonts.FontBold);
-        var labelSize = ImGui.CalcTextSize(item.ReadableName);
+        var labelSize = ImGui.CalcTextSize(name);
         ImGui.PopFont();
         var downScale = MathF.Min(1, MagGraphItem.Width * 0.9f / labelSize.X);
 
@@ -126,7 +135,7 @@ internal sealed partial class MagGraphCanvas
                          Fonts.FontBold.FontSize * downScale * CanvasScale,
                          labelPos,
                          labelColor,
-                         item.ReadableName);
+                         name);
 
         // Indicate hidden matching inputs...
         if (_context.ItemMovement.DraggedPrimaryOutputType != null

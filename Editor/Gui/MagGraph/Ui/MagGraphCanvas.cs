@@ -1,13 +1,10 @@
 ﻿#nullable enable
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
-using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Selection;
@@ -29,12 +26,26 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         _nodeSelection = nodeSelection;
     }
 
+    private ImRect _visibleCanvasArea;
+
+    public bool IsRectVisible(ImRect rect)
+    {
+        return _visibleCanvasArea.Overlaps(rect);
+        
+    }
+
+    public bool IsItemVisible(ISelectableCanvasObject item)
+    {
+        return IsRectVisible(ImRect.RectWithSize(item.PosOnCanvas, item.Size));
+    }
+    
+    
     public bool IsFocused { get; private set; }
     public bool IsHovered { get; private set; }
 
     public void Draw()
     {
-        IsFocused = ImGui.IsWindowFocused();
+        IsFocused = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows );
         IsHovered = ImGui.IsWindowHovered();
         
         if (_window.CompositionOp == null)
@@ -43,7 +54,9 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
             
         if (_window.CompositionOp != _context.CompositionOp)
             _context = new GraphUiContext(_nodeSelection, this, _window.CompositionOp);
-
+        
+        _visibleCanvasArea = ImRect.RectWithSize(InverseTransformPositionFloat(ImGui.GetWindowPos()),
+                                                 InverseTransformDirection(ImGui.GetWindowSize()));
             
         // Prepare frame
         //_context.Selector.HoveredIds.Clear();

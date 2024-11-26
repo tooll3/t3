@@ -783,7 +783,7 @@ internal sealed partial class MagItemMovement
     /// <returns>
     /// True if some items where moved
     /// </returns>
-    private void MoveSnappedItemsVertically(GraphUiContext context, HashSet<MagGraphItem> snappedItems, float yThreshold, float yDistance)
+    public static void MoveSnappedItemsVertically(GraphUiContext context, HashSet<MagGraphItem> snappedItems, float yThreshold, float yDistance)
     {
         Debug.Assert(context.MacroCommand != null);
         var movableItems = new List<MagGraphItem>();
@@ -800,7 +800,7 @@ internal sealed partial class MagItemMovement
 
         // Move items down...
         var affectedItemsAsNodes = movableItems.Select(i => i as ISelectableCanvasObject).ToList();
-        var newMoveComment = new ModifyCanvasElementsCommand(context.CompositionOp.Symbol.Id, affectedItemsAsNodes, _nodeSelection);
+        var newMoveComment = new ModifyCanvasElementsCommand(context.CompositionOp.Symbol.Id, affectedItemsAsNodes, context.Selector);
         context.MacroCommand.AddExecutedCommandForUndo(newMoveComment);
 
         foreach (var item in affectedItemsAsNodes)
@@ -960,7 +960,7 @@ internal sealed partial class MagItemMovement
     /// <summary>
     /// Add snapped items to the given set or create new set
     /// </summary>
-    private static HashSet<MagGraphItem> CollectSnappedItems(MagGraphItem rootItem, HashSet<MagGraphItem>? set = null)
+    public static HashSet<MagGraphItem> CollectSnappedItems(MagGraphItem rootItem, HashSet<MagGraphItem>? set = null)
     {
         set ??= [];
 

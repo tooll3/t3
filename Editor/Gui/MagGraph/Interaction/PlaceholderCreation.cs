@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
@@ -64,9 +65,64 @@ internal sealed class PlaceholderCreation
         _selectedItemChanged = true;
     }
 
+    private MagGraphItem _focusedItem;
+
+    public void OpenForItem(GraphUiContext context, ISelectableCanvasObject item)
+    {
+        if (!context.Layout.Items.TryGetValue(item.Id, out _focusedItem))
+        {
+            Log.Warning("Can't find item graph?");
+            return;
+        }
+
+        context.MacroCommand = new MacroCommand("Insert Operator");
+        PlaceholderItem = new MagGraphItem
+                              {
+                                  Selectable = _placeHoldSelectable,
+                                  PosOnCanvas = _focusedItem.PosOnCanvas + new Vector2(0, _focusedItem.Size.Y),
+                                  Id = PlaceHolderId,
+                                  Size = MagGraphItem.GridSize,
+                                  Variant = MagGraphItem.Variants.Placeholder,
+                              };
+
+        var snappedItems = MagItemMovement.CollectSnappedItems(_focusedItem);
+        
+
+        MagItemMovement
+           .MoveSnappedItemsVertically(context, 
+                                                   snappedItems, 
+                                                   _focusedItem.PosOnCanvas.Y + _focusedItem.Size.Y - MagGraphItem.GridSize.Y/2,  
+                                                   MagGraphItem.GridSize.Y);
+        
+        context.Selector.Selection.Clear();
+        context.Layout.Items[PlaceHolderId] = PlaceholderItem;
+        _focusInputNextTime = true;
+
+        _filter.WasUpdated = true;
+        _filter.SearchString = string.Empty;
+        _selectedSymbolUi = null;
+        _favoriteGroup = string.Empty;
+        _opGroups = GetOperatorSuggestions();
+        if (_focusedItem.OutputLines.Length > 0)
+        {
+            _filter.FilterInputType = _focusedItem.OutputLines[0].Output.ValueType;
+
+            if (_focusedItem.OutputLines[0].ConnectionsOut.Count > 0)
+                _filter.FilterOutputType = _focusedItem.OutputLines[0].Output.ValueType;
+        }
+
+        _filter.UpdateIfNecessary(context.Selector, forceUpdate: true);
+        _selectedItemChanged = true;
+    }
+
     public void Cancel(GraphUiContext context)
     {
         context.MacroCommand?.Undo();
+        if (_focusedItem != null)
+        {
+            context.Selector.SetSelection(_focusedItem.Selectable, _focusedItem.Instance);
+        }
+
         Reset(context);
     }
 
@@ -81,6 +137,8 @@ internal sealed class PlaceholderCreation
     private void Reset(GraphUiContext context)
     {
         context.MacroCommand = null;
+        _filter.Reset();
+        _focusedItem = null;
 
         if (PlaceholderItem == null)
             return;
@@ -105,7 +163,7 @@ internal sealed class PlaceholderCreation
         // Might have been closed from input
         if (PlaceholderItem == null)
             return;
-        
+
         var pMin = context.Canvas.TransformPosition(PlaceholderItem.PosOnCanvas);
         var pMax = context.Canvas.TransformPosition(PlaceholderItem.Area.Max);
         DrawResultsList(context, new ImRect(pMin, pMax));
@@ -118,8 +176,7 @@ internal sealed class PlaceholderCreation
         {
             Cancel(context);
         }
-        
-        
+
         if (_selectedSymbolUi != null)
         {
             if (_filter.PresetFilterString != string.Empty && (_filter.WasUpdated || _selectedItemChanged))
@@ -333,8 +390,6 @@ internal sealed class PlaceholderCreation
         //                  "Search...");
     }
 
-
-
     private void DrawResultsList(GraphUiContext context, ImRect screenItemArea)
     {
         var size = new Vector2(150, 235) * T3Ui.UiScaleFactor;
@@ -350,7 +405,7 @@ internal sealed class PlaceholderCreation
         }
 
         _resultAreaOnScreen = ImRect.RectWithSize(resultPosOnScreen, size);
-        
+
         var resultPosOnWindow = resultPosOnScreen - ImGui.GetWindowPos();
 
         ImGui.SetCursorPos(resultPosOnWindow);
@@ -367,12 +422,15 @@ internal sealed class PlaceholderCreation
                              ImGuiWindowFlags.None | ImGuiWindowFlags.AlwaysUseWindowPadding
                             ))
         {
-            if (!string.IsNullOrEmpty(_filter.SearchString))
+            if (!string.IsNullOrEmpty(_filter.SearchString)
+                || _filter.FilterInputType != null
+                || _filter.FilterOutputType != null)
             {
                 DrawSearchResultEntries(context);
             }
             else
             {
+                PrintTypeFilter();
                 var groups = GetOperatorSuggestions();
                 if (string.IsNullOrEmpty(_favoriteGroup))
                 {
@@ -415,6 +473,28 @@ internal sealed class PlaceholderCreation
 
         ImGui.PopStyleColor(2);
         ImGui.PopStyleVar(4);
+    }
+
+    private void PrintTypeFilter()
+    {
+        if (_filter.FilterInputType == null && _filter.FilterOutputType == null)
+            return;
+
+        ImGui.PushFont(Fonts.FontSmall);
+
+        var inputTypeName = _filter.FilterInputType != null
+                                ? TypeNameRegistry.Entries[_filter.FilterInputType]
+                                : string.Empty;
+
+        var outputTypeName = _filter.FilterOutputType != null
+                                 ? TypeNameRegistry.Entries[_filter.FilterOutputType]
+                                 : string.Empty;
+
+        var isMultiInput = _filter.OnlyMultiInputs ? "[..]" : "";
+
+        var headerLabel = $"{inputTypeName}{isMultiInput}  -> {outputTypeName}";
+        ImGui.TextDisabled(headerLabel);
+        ImGui.PopFont();
     }
 
     private void DrawSearchResultEntries(GraphUiContext context)
@@ -534,6 +614,49 @@ internal sealed class PlaceholderCreation
         var newInstance = context.CompositionOp.Children[newChildUi.Id];
         context.Selector.SetSelection(newChildUi, newInstance);
 
+        // Connect to focus node...
+        if (_focusedItem != null)
+        {
+            if (_focusedItem.OutputLines.Length > 0
+                && newInstance.Inputs.Count > 0
+               )
+            {
+                if (_focusedItem.OutputLines[0].ConnectionsOut.Count > 0)
+                {
+                    var newItemOutput = newInstance.Outputs[0];
+                
+                    // Reroute original connections...
+                    foreach (var mc in _focusedItem.OutputLines[0].ConnectionsOut)
+                    {
+                        context.MacroCommand
+                               .AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,
+                                                                              mc.AsSymbolConnection(), 0));
+                
+                        context.MacroCommand
+                               .AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+                                                                           new Symbol.Connection(newInstance.SymbolChildId,
+                                                                                                 newItemOutput.Id,
+                                                                                                 mc.TargetItem.Id,
+                                                                                                 mc.TargetInput.Id
+                                                                                                ),
+                                                                           0));
+                    }
+                }
+
+                // Create new Connection
+                context.MacroCommand
+                       .AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+                                                                   new Symbol.Connection(_focusedItem.Id,
+                                                                                         _focusedItem.OutputLines[0].Output.Id,
+                                                                                         newInstance.SymbolChildId,
+                                                                                         newInstance.Inputs[0].Id
+                                                                                        ),
+                                                                   0));
+            }
+        }
+
+        // TODO: push snapped ops further down if new op exceed default height 
+
         // TODO: add preset selection...
 
         ParameterPopUp.NodeIdRequestedForParameterWindowActivation = newSymbolChild.Id;
@@ -541,7 +664,7 @@ internal sealed class PlaceholderCreation
 
         Close(context);
     }
-    
+
     private string _favoriteGroup = string.Empty;
     private static List<OpSuggestionGroup> _opGroups = [];
     private readonly SymbolFilter _filter = new();
@@ -550,7 +673,7 @@ internal sealed class PlaceholderCreation
 
     private ImRect _placeholderAreaOnScreen;
     private ImRect _resultAreaOnScreen;
-    
+
     private MagGraphItem.Directions Orientation = MagGraphItem.Directions.Horizontal;
 
     private SymbolUi _selectedSymbolUi;
