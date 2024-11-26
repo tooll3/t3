@@ -479,7 +479,7 @@ internal class SelectableNodeMovement(GraphWindow window, INodeCanvas canvas, No
     private Guid _draggedNodeId = Guid.Empty;
     private List<ISelectableCanvasObject> _draggedNodes = new();
 
-    private class ShakeDetector
+    public class ShakeDetector
     {
         public bool TestDragForShake(Vector2 mousePosition)
         {

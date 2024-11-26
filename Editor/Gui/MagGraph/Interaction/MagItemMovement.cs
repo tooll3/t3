@@ -13,6 +13,7 @@ using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 using Vector2 = System.Numerics.Vector2;
 
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
@@ -82,6 +83,7 @@ internal sealed partial class MagItemMovement
         DraggedPrimaryOutputType = null;
 
         _draggedItems.Clear();
+        _shakeDetector.ResetShaking();
     }
 
     internal static void SelectActiveItem(GraphUiContext context)
@@ -114,6 +116,17 @@ internal sealed partial class MagItemMovement
 
     internal void UpdateDragging(GraphUiContext context)
     {
+
+        if (!T3Ui.IsCurrentlySaving && _shakeDetector.TestDragForShake(ImGui.GetMousePos()))
+        {
+            _shakeDetector.ResetShaking();
+            if (HandleShakeDisconnect(context))
+            {
+                _layout.FlagAsChanged();
+                return;
+            }
+        }
+        
         var snappingChanged = HandleSnappedDragging(context);
         if (!snappingChanged)
             return;
@@ -133,6 +146,21 @@ internal sealed partial class MagItemMovement
         {
             _layout.FlagAsChanged();
         }
+    }
+
+    private bool HandleShakeDisconnect(GraphUiContext context)
+    {
+        Log.Debug("Shake it!");
+        Debug.Assert(context.MacroCommand != null);
+        if (_borderConnections.Count == 0)
+            return false;
+        
+        foreach (var c in _borderConnections)
+        {
+            context.MacroCommand.AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol, c.AsSymbolConnection(), 0));
+        }
+        _layout.FlagAsChanged();
+        return true;
     }
 
     internal static void UpdateLongPressIndicator(float longTapProgress)
@@ -1021,6 +1049,8 @@ internal sealed partial class MagItemMovement
     private static bool _hasDragged;
     private Vector2 _dragStartPosInOpOnCanvas;
     
+    private readonly SelectableNodeMovement.ShakeDetector _shakeDetector = new();
+
     private static readonly HashSet<MagGraphItem> _draggedItems = [];
     //private static readonly HashSet<Guid> _draggedItemIds = [];
 
