@@ -11,6 +11,9 @@ internal sealed partial class MagGraphCanvas
 {
     private void DrawItem(MagGraphItem item, ImDrawListPtr drawList)
     {
+        if (item.Variant == MagGraphItem.Variants.Placeholder)
+            return;
+
         var typeUiProperties = TypeUiRegistry.GetPropertiesForType(item.PrimaryType);
 
         var typeColor = typeUiProperties.Color;
@@ -82,7 +85,6 @@ internal sealed partial class MagGraphCanvas
 
         if (_context.StateMachine.CurrentState is DefaultState && isItemHovered)
             _context.ActiveItem = item;
-        
 
         // Todo: We eventually need to handle right clicking to select and open context menu when dragging with right mouse button. 
         // var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickThreshold;
@@ -98,8 +100,10 @@ internal sealed partial class MagGraphCanvas
         // Background and Outline
         var imDrawFlags = _borderRoundings[(int)snappedBorders % 16];
 
+        var isHovered = isItemHovered || _context.Selector.HoveredIds.Contains(item.Id);
+        var fade = isHovered ? 1 : 0.7f;
         drawList.AddRectFilled(pMinVisible + Vector2.One * CanvasScale, pMaxVisible - Vector2.One,
-                               ColorVariations.OperatorBackground.Apply(typeColor).Fade(0.7f), 6 * CanvasScale,
+                               ColorVariations.OperatorBackground.Apply(typeColor).Fade(fade), 6 * CanvasScale,
                                imDrawFlags);
 
         var isSelected = _context.Selector.IsSelected(item);
@@ -231,6 +235,8 @@ internal sealed partial class MagGraphCanvas
             ShowAnchorPointDebugs(inputAnchor, true);
         }
 
+        var hoverFactor = isItemHovered ? 2 : 1;
+
         // Draw output sockets
         foreach (var oa in item.GetOutputAnchors())
         {
@@ -242,24 +248,29 @@ internal sealed partial class MagGraphCanvas
             if (oa.Direction == MagGraphItem.Directions.Vertical)
             {
                 var pp = new Vector2(p.X, pMaxVisible.Y);
-                drawList.AddTriangleFilled(pp + new Vector2(0, -1) + new Vector2(-1.5f, 0) * CanvasScale * 1.5f,
-                                           pp + new Vector2(0, -1) + new Vector2(1.5f, 0) * CanvasScale * 1.5f,
-                                           pp + new Vector2(0, -1) + new Vector2(0, 2) * CanvasScale * 1.5f,
+                drawList.AddTriangleFilled(pp + new Vector2(0, -1) + new Vector2(-1.5f, 0) * CanvasScale * 1.5f * hoverFactor,
+                                           pp + new Vector2(0, -1) + new Vector2(1.5f, 0) * CanvasScale * 1.5f * hoverFactor,
+                                           pp + new Vector2(0, -1) + new Vector2(0, 2) * CanvasScale * 1.5f * hoverFactor,
                                            color);
+
             }
             else
             {
                 var pp = new Vector2(pMaxVisible.X - 1, p.Y);
 
-                drawList.AddTriangleFilled(pp + new Vector2(0, 0) + new Vector2(-0, -1.5f) * CanvasScale * 1.5f,
-                                           pp + new Vector2(0, 0) + new Vector2(2, 0) * CanvasScale * 1.5f,
-                                           pp + new Vector2(0, 0) + new Vector2(0, 1.5f) * CanvasScale * 1.5f,
+                drawList.AddTriangleFilled(pp + new Vector2(0, 0) + new Vector2(-0, -1.5f) * CanvasScale * 1.5f * hoverFactor,
+                                           pp + new Vector2(0, 0) + new Vector2(2, 0) * CanvasScale * 1.5f * hoverFactor,
+                                           pp + new Vector2(0, 0) + new Vector2(0, 1.5f) * CanvasScale * 1.5f * hoverFactor,
                                            color);
+
+                if (isItemHovered)
+                {
+                    var color2 = ColorVariations.OperatorOutline.Apply(type2UiProperties.Color).Fade(0.7f);
+                    drawList.AddCircle(pp + new Vector2(-3,0), 3 * hoverFactor, color2);
+                }
             }
 
             ShowAnchorPointDebugs(oa);
         }
     }
-
-
 }

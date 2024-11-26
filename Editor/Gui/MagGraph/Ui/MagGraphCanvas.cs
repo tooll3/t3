@@ -43,6 +43,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         IsFocused = ImGui.IsWindowFocused();
             
         // Prepare frame
+        //_context.Selector.HoveredIds.Clear();
         _context.Layout.ComputeLayout(_context.CompositionOp);
         _context.ItemMovement.PrepareFrame();
 
@@ -79,13 +80,11 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         // Content
         foreach (var item in _context.Layout.Items.Values)
         {
-            // if (item.Variant == MagGraphItem.Variants.Placeholder)
-            // {
-            //     DrawPlaceholder(item, drawList);
-            // }
-            // else
             DrawItem(item, drawList);
         }
+        
+        if(_context.ActiveItem != null)
+            _context.Selector.HoveredIds.Add(_context.ActiveItem.Id);
 
         foreach (var connection in _context.Layout.MagConnections)
         {
