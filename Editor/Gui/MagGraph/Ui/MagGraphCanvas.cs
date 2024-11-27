@@ -76,22 +76,20 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
 
         UpdateCanvas(out _);
         var drawList = ImGui.GetWindowDrawList();
-        
-        if(_context.StateMachine.CurrentState is DefaultState)
+
+        if (_context.StateMachine.CurrentState is DefaultState)
+        {
             _context.ActiveItem = null;
+            _context.ActiveOutputId = Guid.Empty;
+        }
 
         DrawBackgroundGrids(drawList);
 
         // Selection fence...
-        
         {
-            //Log.Debug("" + _context.StateMachine.CurrentState + ""  + _context.StateMachine.CurrentState.Time);
             HandleFenceSelection(_context, _selectionFence);
         }
-        // else
-        // {
-        //     //_selectionFence.
-        // }
+
         
         // Content
         foreach (var item in _context.Layout.Items.Values)

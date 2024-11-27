@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using System.Diagnostics.CodeAnalysis;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Graph.Interaction;
@@ -234,6 +235,30 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
 
         return FreeAnchor;
     }
+
+    public bool TryGetPrimaryInConnection([NotNullWhen(true)]out  MagGraphConnection? connection)
+    {
+        connection = null;
+
+        if (InputLines.Length == 0)
+            return false;
+
+        connection= InputLines[0].ConnectionIn;
+        return connection != null;
+    }
+    
+    public bool TryGetPrimaryOutConnections(out List<MagGraphConnection> connections)
+    {
+        if (OutputLines.Length == 0)
+        {
+            connections = [];
+            return false;
+        }
+
+        connections= OutputLines[0].ConnectionsOut;
+        return connections.Count > 0;
+    }
+    
 
     public const int FreeAnchor = 0;
 

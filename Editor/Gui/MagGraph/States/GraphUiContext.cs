@@ -33,4 +33,5 @@ internal sealed class GraphUiContext
     public  MacroCommand? MacroCommand;
     public  ModifyCanvasElementsCommand? MoveElementsCommand;
     public MagGraphItem? ActiveItem { get; set; }
+    public Guid ActiveOutputId { get; set; }
 }

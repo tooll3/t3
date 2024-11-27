@@ -1,4 +1,5 @@
 ﻿using ImGuiNET;
+using T3.Core.Utils;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
@@ -276,8 +277,21 @@ internal sealed partial class MagGraphCanvas
 
                 if (isItemHovered)
                 {
-                    var color2 = ColorVariations.OperatorOutline.Apply(type2UiProperties.Color).Fade(0.7f);
-                    drawList.AddCircle(pp + new Vector2(-3,0), 3 * hoverFactor, color2);
+                    var color2 = ColorVariations.OperatorLabel.Apply(type2UiProperties.Color).Fade(0.7f);
+                    var circleCenter = pp + new Vector2(-3,0);
+                    var mouseDistance = Vector2.Distance(ImGui.GetMousePos(), circleCenter);
+                    
+                    var mouseDistanceFactor = mouseDistance.RemapAndClamp(30, 10, 0.6f, 1.1f);
+                    if (mouseDistance < 7)
+                    {
+                        drawList.AddCircleFilled(circleCenter, 3 * hoverFactor*0.8f, color2);
+                        _context.ActiveOutputId = oa.SlotId;
+                    }
+                    else
+                    {
+                        drawList.AddCircle(circleCenter, 3 * hoverFactor * mouseDistanceFactor, color2);
+                    }
+                    
                 }
             }
 

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using ImGuiNET;
+using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Ui;
 using MagItemMovement = T3.Editor.Gui.MagGraph.Interaction.MagItemMovement;
 
@@ -9,13 +10,11 @@ internal sealed class DefaultState(StateMachine s) : State(s)
 {
     public override void Update(GraphUiContext context)
     {
-        // Tab create placeholder
+        // Check keyboard commands if focused...
+        if (context.Canvas.IsFocused && context.Canvas.IsHovered && !ImGui.IsAnyItemActive())
         {
-            var tabPressedForWindow = context.Canvas.IsFocused
-                                      && context.Canvas.IsHovered
-                                      && ImGui.IsKeyReleased(ImGuiKey.Tab) && !ImGui.IsAnyItemActive();
-
-            if (tabPressedForWindow)
+            // Tab create placeholder
+            if (ImGui.IsKeyReleased(ImGuiKey.Tab))
             {
                 var focusedItem =
                     context.Selector.Selection.Count == 1 &&
@@ -31,10 +30,14 @@ internal sealed class DefaultState(StateMachine s) : State(s)
                 {
                     var posOnCanvas = context.Canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
                     context.Placeholder.OpenOnCanvas(context, posOnCanvas);
-                    return;
                 }
 
                 Sm.SetState(Sm.PlaceholderState, context);
+            }
+
+            else if (ImGui.IsKeyReleased(ImGuiKey.Delete) || ImGui.IsKeyReleased(ImGuiKey.Backspace))
+            {
+                Modifications.DeleteSelectedOps(context);
             }
         }
 
@@ -43,16 +46,29 @@ internal sealed class DefaultState(StateMachine s) : State(s)
         if (!clickedDown)
             return;
 
-        Sm.SetState(context.ActiveItem != null
-                        ? Sm.HoldingItemState
-                        : Sm.HoldingBackgroundState, context);
+        if (context.ActiveItem == null)
+        {
+            Sm.SetState(Sm.HoldBackgroundState, context);
+        }
+        else
+        {
+            if (context.ActiveOutputId == Guid.Empty)
+            {
+                Sm.SetState(Sm.HoldItemState, context);
+            }
+            else
+            {
+                var output = context.ActiveOutputId;
+                Sm.SetState(Sm.HoldOutputState, context);
+            }
+        }
     }
 }
 
 /// <summary>
 /// Active while long tapping on background for insertion
 /// </summary>
-internal sealed class HoldingBackgroundState(StateMachine sm) : State(sm)
+internal sealed class HoldBackgroundState(StateMachine sm) : State(sm)
 {
     public override void Update(GraphUiContext context)
     {
@@ -92,7 +108,7 @@ internal sealed class PlaceholderState(StateMachine sm) : State(sm)
     }
 }
 
-internal sealed class HoldingItemState(StateMachine sm) : State(sm)
+internal sealed class HoldItemState(StateMachine sm) : State(sm)
 {
     public override void Enter(GraphUiContext context)
     {
@@ -127,7 +143,7 @@ internal sealed class HoldingItemState(StateMachine sm) : State(sm)
 
         if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
         {
-            Sm.SetState(Sm.DraggingState, context);
+            Sm.SetState(Sm.DragItemsState, context);
             return;
         }
 
@@ -140,11 +156,11 @@ internal sealed class HoldingItemState(StateMachine sm) : State(sm)
 
         MagItemMovement.SelectActiveItem(context);
         context.ItemMovement.SetDraggedItemIds([context.ActiveItem.Id]);
-        Sm.SetState(Sm.HoldingItemAfterLongTapState, context);
+        Sm.SetState(Sm.HoldItemAfterLongTapState, context);
     }
 }
 
-internal sealed class HoldingItemAfterLongTapState(StateMachine sm) : State(sm)
+internal sealed class HoldItemAfterLongTapState(StateMachine sm) : State(sm)
 {
     public override void Update(GraphUiContext context)
     {
@@ -159,12 +175,12 @@ internal sealed class HoldingItemAfterLongTapState(StateMachine sm) : State(sm)
 
         if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
         {
-            Sm.SetState(Sm.DraggingState, context);
+            Sm.SetState(Sm.DragItemsState, context);
         }
     }
 }
 
-internal sealed class DraggingState(StateMachine s) : State(s)
+internal sealed class DragItemsState(StateMachine sm) : State(sm)
 {
     public override void Enter(GraphUiContext context)
     {
@@ -188,5 +204,52 @@ internal sealed class DraggingState(StateMachine s) : State(s)
     public override void Exit(GraphUiContext context)
     {
         context.ItemMovement.StopDragOperation();
+    }
+}
+
+/// <summary>
+/// Active while long tapping on background for insertion
+/// </summary>
+internal sealed class HoldOutputState(StateMachine sm) : State(sm)
+{
+    public override void Update(GraphUiContext context)
+    {
+        Debug.Assert(context.ActiveItem != null);
+
+        if (!ImGui.IsMouseDown(ImGuiMouseButton.Left))
+        {
+            context.Placeholder.OpenForItem(context, context.ActiveItem);
+            Sm.SetState(Sm.PlaceholderState, context);
+            return;
+        }
+
+        if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+        {
+            Sm.SetState(Sm.DragOutputState, context);
+            return;
+        }
+    }
+}
+
+internal sealed class DragOutputState(StateMachine sm) : State(sm)
+{
+    public override void Update(GraphUiContext context)
+    {
+        Debug.Assert(context.ActiveItem != null);
+
+        if (ImGui.IsKeyDown(ImGuiKey.Escape))
+        {
+            Sm.SetState(Sm.DefaultState, context);
+            return;
+        }
+        
+        if (!ImGui.IsMouseDown(ImGuiMouseButton.Left))
+        {
+            context.Placeholder.OpenForItem(context, context.ActiveItem);
+            Sm.SetState(Sm.PlaceholderState, context);
+            return;
+        }
+        
+        //Sm.SetState(Sm.DefaultState, context);
     }
 }

@@ -32,21 +32,25 @@ internal sealed class StateMachine
 {
     // States defined as fields
     internal readonly DefaultState DefaultState;
-    internal readonly HoldingBackgroundState HoldingBackgroundState;
-    internal readonly HoldingItemState HoldingItemState;
-    internal readonly DraggingState DraggingState;
-    internal readonly HoldingItemAfterLongTapState HoldingItemAfterLongTapState;
+    internal readonly HoldBackgroundState HoldBackgroundState;
+    internal readonly HoldItemState HoldItemState;
+    internal readonly DragItemsState DragItemsState;
+    internal readonly HoldItemAfterLongTapState HoldItemAfterLongTapState;
     internal readonly PlaceholderState PlaceholderState;
+    internal readonly HoldOutputState HoldOutputState;
+    internal readonly DragOutputState DragOutputState;
 
     public StateMachine(GraphUiContext context)
     {
         // Instantiate states
         DefaultState = new DefaultState(this);
-        DraggingState = new DraggingState(this);
-        HoldingBackgroundState = new HoldingBackgroundState(this);
-        HoldingItemState = new HoldingItemState(this);
-        HoldingItemAfterLongTapState = new HoldingItemAfterLongTapState(this);
+        DragItemsState = new DragItemsState(this);
+        HoldBackgroundState = new HoldBackgroundState(this);
+        HoldItemState = new HoldItemState(this);
+        HoldItemAfterLongTapState = new HoldItemAfterLongTapState(this);
         PlaceholderState = new PlaceholderState(this);
+        HoldOutputState = new HoldOutputState(this);
+        DragOutputState = new DragOutputState(this);
 
         _currentState = DefaultState;
         _currentState.Enter(context);
