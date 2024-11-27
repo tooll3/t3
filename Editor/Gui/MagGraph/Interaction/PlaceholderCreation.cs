@@ -10,6 +10,7 @@ using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.MagGraph.Model;
+using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
@@ -38,7 +39,7 @@ internal sealed class PlaceholderCreation
 
     public static Guid PlaceHolderId = Guid.Parse("ffffffff-eeee-47C7-A17F-E297672EE1F3");
 
-    public void OpenOnCanvas(GraphUiContext context, Vector2 posOnCanvas)
+    public void OpenOnCanvas(GraphUiContext context, Vector2 posOnCanvas, Type inputTypeFilter= null)
     {
         context.MacroCommand = new MacroCommand("Insert Operator");
 
@@ -55,6 +56,7 @@ internal sealed class PlaceholderCreation
         _focusInputNextTime = true;
 
         //_filter.PresetFilterString = string.Empty;
+        _filter.FilterInputType = inputTypeFilter;
         _filter.WasUpdated = true;
         _filter.SearchString = string.Empty;
         _selectedSymbolUi = null;

@@ -1,7 +1,6 @@
 ﻿using ImGuiNET;
 using T3.Core.Utils;
 using T3.Editor.Gui.InputUi;
-using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Styling;
@@ -10,7 +9,7 @@ namespace T3.Editor.Gui.MagGraph.Ui;
 
 internal sealed partial class MagGraphCanvas
 {
-    private void DrawItem(MagGraphItem item, ImDrawListPtr drawList)
+    private void DrawItem(MagGraphItem item, ImDrawListPtr drawList, GraphUiContext context)
     {
         if (item.Variant == MagGraphItem.Variants.Placeholder)
             return;
@@ -139,14 +138,14 @@ internal sealed partial class MagGraphCanvas
                          name);
 
         // Indicate hidden matching inputs...
-        if (_context.ItemMovement.DraggedPrimaryOutputType != null
+        if (_context.DraggedPrimaryOutputType != null
             && item.Variant == MagGraphItem.Variants.Operator
-            && !MagItemMovement.IsItemDragged(item))
+            && !context.ItemMovement.IsItemDragged(item))
         {
             var hasMatchingTypes = false;
             foreach (var i in item.Instance.Inputs)
             {
-                if (i.ValueType == _context.ItemMovement.DraggedPrimaryOutputType
+                if (i.ValueType == _context.DraggedPrimaryOutputType
                     && !i.HasInputConnections)
                 {
                     hasMatchingTypes = true;
@@ -156,10 +155,10 @@ internal sealed partial class MagGraphCanvas
 
             if (hasMatchingTypes)
             {
-                if (_context.ItemMovement.PrimaryOutputItem != null)
+                if (_context.PrimaryOutputItem != null)
                 {
                     var indicatorPos = new Vector2(pMin.X, pMin.Y + MagGraphItem.GridSize.Y / 2 * CanvasScale);
-                    var isPeeked = item.Area.Contains(_context.ItemMovement.PeekAnchorInCanvas);
+                    var isPeeked = item.Area.Contains(_context.PeekAnchorInCanvas);
                     if (isPeeked)
                     {
                         drawList.AddCircleFilled(indicatorPos, 4, UiColors.ForegroundFull);
@@ -206,7 +205,7 @@ internal sealed partial class MagGraphCanvas
         }
 
         // Indicator primary output op peek position...
-        if (_context.ItemMovement.PrimaryOutputItem != null && item.Id == _context.ItemMovement.PrimaryOutputItem.Id)
+        if (_context.PrimaryOutputItem != null && item.Id == _context.PrimaryOutputItem.Id)
         {
             drawList.AddCircleFilled(TransformPosition(new Vector2(item.Area.Max.X - MagGraphItem.GridSize.Y * 0.25f,
                                                                    item.Area.Min.Y + MagGraphItem.GridSize.Y * 0.5f)),

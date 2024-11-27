@@ -1,13 +1,20 @@
 ﻿using System.Diagnostics;
 using ImGuiNET;
 using T3.Editor.Gui.MagGraph.Interaction;
-using T3.Editor.Gui.MagGraph.Ui;
+using T3.Editor.Gui.MagGraph.Model;
 using MagItemMovement = T3.Editor.Gui.MagGraph.Interaction.MagItemMovement;
 
 namespace T3.Editor.Gui.MagGraph.States;
 
 internal sealed class DefaultState(StateMachine s) : State(s)
 {
+    public override void Enter(GraphUiContext context)
+    {
+        context.TempConnections.Clear();
+        context.PrimaryOutputItem = null;
+        context.DraggedPrimaryOutputType = null;
+    }
+
     public override void Update(GraphUiContext context)
     {
         // Check keyboard commands if focused...
@@ -58,7 +65,6 @@ internal sealed class DefaultState(StateMachine s) : State(s)
             }
             else
             {
-                var output = context.ActiveOutputId;
                 Sm.SetState(Sm.HoldOutputState, context);
             }
         }
@@ -215,6 +221,8 @@ internal sealed class HoldOutputState(StateMachine sm) : State(sm)
     public override void Update(GraphUiContext context)
     {
         Debug.Assert(context.ActiveItem != null);
+        Debug.Assert(context.ActiveItem.OutputLines.Length > 0);
+        Debug.Assert(context.ActiveOutputId != Guid.Empty);
 
         if (!ImGui.IsMouseDown(ImGuiMouseButton.Left))
         {
@@ -225,14 +233,40 @@ internal sealed class HoldOutputState(StateMachine sm) : State(sm)
 
         if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
         {
+            var outputLine = context.ActiveItem.OutputLines[0];
+            var output = outputLine.Output;
+            
+            var tempConnection = new MagGraphConnection
+                                     {
+                                         Style = MagGraphConnection.ConnectionStyles.Unknown,
+                                         SourcePos = context.ActiveItem.PosOnCanvas,
+                                         TargetPos = default,
+                                         SourceItem = context.ActiveItem,
+                                         TargetItem = null,
+                                         SourceOutput = output,
+                                         OutputLineIndex = 0,
+                                         VisibleOutputIndex = 0,
+                                         ConnectionHash = 0,
+                                         IsUnlinked = true,
+                                     };
+            context.TempConnections.Add(tempConnection);
+            context.PrimaryOutputItem = context.ActiveItem;
+            context.DraggedPrimaryOutputType = output.ValueType;
             Sm.SetState(Sm.DragOutputState, context);
-            return;
         }
     }
 }
 
 internal sealed class DragOutputState(StateMachine sm) : State(sm)
 {
+    public override void Exit(GraphUiContext context)
+    {
+        // TODO: Should be a reset method
+        //context.TempConnections.Clear();
+        //context.PrimaryOutputItem = null;
+        //context.DraggedPrimaryOutputType = null;
+    }
+
     public override void Update(GraphUiContext context)
     {
         Debug.Assert(context.ActiveItem != null);
@@ -242,14 +276,28 @@ internal sealed class DragOutputState(StateMachine sm) : State(sm)
             Sm.SetState(Sm.DefaultState, context);
             return;
         }
-        
-        if (!ImGui.IsMouseDown(ImGuiMouseButton.Left))
-        {
-            context.Placeholder.OpenForItem(context, context.ActiveItem);
-            Sm.SetState(Sm.PlaceholderState, context);
+
+        var mouseReleased = !ImGui.IsMouseDown(ImGuiMouseButton.Left);
+        if (!mouseReleased)
             return;
-        }
         
+        var posOnCanvas = context.Canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
+        if (InputPicking.TryInitializeAtPosition(context, posOnCanvas))
+        {
+            Sm.SetState(Sm.PickInputState, context);
+        }
+        else
+        {
+            context.Placeholder.OpenOnCanvas(context, posOnCanvas);
+            Sm.SetState(Sm.PlaceholderState, context);
+        }
+    }
+}
+
+internal sealed class PickInputState(StateMachine sm) : State(sm)
+{
+    public override void Update(GraphUiContext context)
+    {
         //Sm.SetState(Sm.DefaultState, context);
     }
 }

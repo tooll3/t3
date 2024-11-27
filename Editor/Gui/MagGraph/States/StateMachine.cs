@@ -1,5 +1,4 @@
 ﻿using ImGuiNET;
-using T3.Editor.Gui.MagGraph.Ui;
 
 namespace T3.Editor.Gui.MagGraph.States;
 
@@ -21,7 +20,7 @@ internal abstract class State(StateMachine s)
 
     public override string ToString()
     {
-        return this.GetType().Name.Replace("State", "" );
+        return GetType().Name.Replace("State", "" );
     }
 }
 
@@ -39,6 +38,7 @@ internal sealed class StateMachine
     internal readonly PlaceholderState PlaceholderState;
     internal readonly HoldOutputState HoldOutputState;
     internal readonly DragOutputState DragOutputState;
+    internal readonly PickInputState PickInputState;
 
     public StateMachine(GraphUiContext context)
     {
@@ -51,6 +51,7 @@ internal sealed class StateMachine
         PlaceholderState = new PlaceholderState(this);
         HoldOutputState = new HoldOutputState(this);
         DragOutputState = new DragOutputState(this);
+        PickInputState = new PickInputState(this);
 
         _currentState = DefaultState;
         _currentState.Enter(context);

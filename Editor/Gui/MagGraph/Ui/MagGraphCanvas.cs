@@ -5,6 +5,7 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Selection;
@@ -94,7 +95,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         // Content
         foreach (var item in _context.Layout.Items.Values)
         {
-            DrawItem(item, drawList);
+            DrawItem(item, drawList, _context);
         }
         
         if(_context.ActiveItem != null)
@@ -105,6 +106,32 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
             DrawConnection(connection, drawList);
         }
 
+        // Draw temp connections
+        foreach (var t in _context.TempConnections)
+        {
+            var mousePos = ImGui.GetMousePos();
+            var sourcePosOnScreen = Vector2.Zero;
+            if (t.SourceItem != null)
+            {
+                var outputLine = t.SourceItem.OutputLines[0];
+                var sourcePos = new Vector2(t.SourceItem.Area.Max.X,
+                                            t.SourceItem.Area.Min.Y + MagGraphItem.GridSize.Y * (0.5f + outputLine.VisibleIndex));
+                sourcePosOnScreen = TransformPosition(sourcePos);
+
+            }
+            
+            var targetPosOnScreen = t.TargetItem != null ? TransformPosition( t.TargetItem.PosOnCanvas) : mousePos;
+            var typeColor = TypeUiRegistry.GetPropertiesForType(t.Type).Color;
+            var d = Vector2.Distance(sourcePosOnScreen, targetPosOnScreen) / 2;
+            
+            drawList.AddBezierCubic(sourcePosOnScreen,
+                                                                 sourcePosOnScreen + new Vector2(d, 0),
+                                                                 targetPosOnScreen - new Vector2(d, 0),
+                                                                 targetPosOnScreen,
+                                                                 typeColor.Fade(0.6f),
+                                                                 2);
+        }
+        
         _context.Placeholder.DrawPlaceholder(_context, drawList);
 
         // Draw animated Snap indicator
@@ -119,7 +146,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
             }
         }
 
-        DrawHiddenInputSelector();
+        InputPicking.DrawHiddenInputSelector(_context);
 
         _context.StateMachine.UpdateAfterDraw(_context);
     }
@@ -217,69 +244,6 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
             ImDrawFlags.RoundCornersNone, //       1110 left down right  
             ImDrawFlags.RoundCornersNone, //       1111 left down right up  
         };
-
-    private void DrawHiddenInputSelector()
-    {
-        if (_context.ItemMovement.ItemForInputSelection == null)
-            return;
-
-        var screenPos = TransformPosition(_context.ItemMovement.PeekAnchorInCanvas);
-
-        ImGui.SetNextWindowPos(screenPos);
-
-        const ImGuiWindowFlags flags = ImGuiWindowFlags.NoTitleBar
-                                       | ImGuiWindowFlags.NoMove
-                                       | ImGuiWindowFlags.Tooltip // ugly as f**k. Sadly .PopUp will lead to random crashes.
-                                       | ImGuiWindowFlags.NoFocusOnAppearing
-                                       | ImGuiWindowFlags.NoScrollbar
-                                       | ImGuiWindowFlags.AlwaysUseWindowPadding;
-
-        ImGui.PushStyleVar(ImGuiStyleVar.ChildRounding, 5);
-        ImGui.PushStyleVar(ImGuiStyleVar.PopupBorderSize, 0);
-        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 4);
-
-        ImGui.PushStyleColor(ImGuiCol.PopupBg, UiColors.BackgroundFull.Fade(0.6f).Rgba);
-        if (ImGui.BeginChild("Popup",
-                             new Vector2(100, 120),
-                             true,
-                             flags))
-        {
-            var childUi = _context.ItemMovement.ItemForInputSelection.SymbolUi;
-            if (childUi != null)
-            {
-                var inputIndex = 0;
-                foreach (var inputUi in childUi.InputUis.Values)
-                {
-                    var input = _context.ItemMovement.ItemForInputSelection.Instance.Inputs[inputIndex];
-                    if (inputUi.Type == _context.ItemMovement.DraggedPrimaryOutputType)
-                    {
-                        var isConnected = input.HasInputConnections;
-                        var prefix = isConnected ? "> " : "   ";
-                        if (ImGui.Selectable(prefix + inputUi.InputDefinition.Name))
-                            _context.ItemMovement.TryConnectHiddenInput(_context, inputUi);
-                    }
-
-                    inputIndex++;
-                }
-            }
-
-            // Close
-            var isPopupHovered = ImRect.RectWithSize(ImGui.GetWindowPos(), ImGui.GetWindowSize())
-                                       .Contains(ImGui.GetMousePos());
-
-            if (!isPopupHovered && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
-            {
-                _context.ItemMovement.Reset();
-                //_itemMovement.FieldHoveredItem = null;
-            }
-
-            ImGui.PopStyleVar(1);
-        }
-
-        ImGui.EndChild();
-        ImGui.PopStyleVar(3);
-        ImGui.PopStyleColor();
-    }
 
     private void ShowAnchorPointDebugs(MagGraphItem.AnchorPoint a, bool isInput = false)
     {

@@ -4,7 +4,6 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
-using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.UiHelpers;
@@ -39,7 +38,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
 
     public SymbolUi? SymbolUi;
     public Symbol.Child? SymbolChild;
-    public Instance Instance;
+    public Instance? Instance;
 
     public string ReadableName
     {

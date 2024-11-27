@@ -10,6 +10,7 @@ using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.MagGraph.Model;
+using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
@@ -48,7 +49,7 @@ internal sealed partial class MagItemMovement
 
     internal void PrepareDragInteraction()
     {
-        UpdateBorderConnections(_draggedItems); // Sadly structure might change during drag...
+        UpdateBorderConnections(DraggedItems); // Sadly structure might change during drag...
         UpdateSnappedBorderConnections();
     }
 
@@ -60,7 +61,7 @@ internal sealed partial class MagItemMovement
             UndoRedoStack.Add(context.MacroCommand);
         }
 
-        if (!TryInitializeInputSelectionPicker())
+        if (!InputPicking.TryInitializeInputSelectionPicker(context))
             Reset();
     }
 
@@ -78,10 +79,11 @@ internal sealed partial class MagItemMovement
     /// </summary>
     internal void Reset()
     {
-        PrimaryOutputItem = null;
-        DraggedPrimaryOutputType = null;
+        // TODO: should be done by states...
+        _context.PrimaryOutputItem = null;
+        _context.DraggedPrimaryOutputType = null;
 
-        _draggedItems.Clear();
+        DraggedItems.Clear();
         _shakeDetector.ResetShaking();
     }
 
@@ -153,7 +155,7 @@ internal sealed partial class MagItemMovement
         if (_borderConnections.Count == 0)
             return false;
 
-        SelectableNodeMovement.DisconnectDraggedNodes(context.CompositionOp, _draggedItems.Select(i => i.Selectable).ToList());
+        SelectableNodeMovement.DisconnectDraggedNodes(context.CompositionOp, DraggedItems.Select(i => i.Selectable).ToList());
         
         // foreach (var c in _borderConnections)
         // {
@@ -186,7 +188,7 @@ internal sealed partial class MagItemMovement
         var mousePosOnCanvas = context.Canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
         var requestedDeltaOnCanvas = mousePosOnCanvas - _dragStartPosInOpOnCanvas;
 
-        var dragExtend = MagGraphItem.GetItemsBounds(_draggedItems);
+        var dragExtend = MagGraphItem.GetItemsBounds(DraggedItems);
         dragExtend.Expand(SnapThreshold * context.Canvas.Scale.X);
 
         if (_canvas.ShowDebug)
@@ -204,14 +206,14 @@ internal sealed partial class MagItemMovement
         var overlappingItems = new List<MagGraphItem>();
         foreach (var otherItem in _layout.Items.Values)
         {
-            if (_draggedItems.Contains(otherItem) || !dragExtend.Overlaps(otherItem.Area))
+            if (DraggedItems.Contains(otherItem) || !dragExtend.Overlaps(otherItem.Area))
                 continue;
 
             overlappingItems.Add(otherItem);
         }
 
         // Move back to non-snapped position
-        foreach (var n in _draggedItems)
+        foreach (var n in DraggedItems)
         {
             n.PosOnCanvas -= _lastAppliedOffset; // Move to position
             n.PosOnCanvas += requestedDeltaOnCanvas; // Move to request position
@@ -222,7 +224,7 @@ internal sealed partial class MagItemMovement
 
         foreach (var ip in SplitInsertionPoints)
         {
-            var insertionAnchorItem = _draggedItems.FirstOrDefault(i => i.Id == ip.InputItemId);
+            var insertionAnchorItem = DraggedItems.FirstOrDefault(i => i.Id == ip.InputItemId);
             if (insertionAnchorItem == null)
                 continue;
 
@@ -234,7 +236,7 @@ internal sealed partial class MagItemMovement
 
         foreach (var otherItem in overlappingItems)
         {
-            foreach (var draggedItem in _draggedItems)
+            foreach (var draggedItem in DraggedItems)
             {
                 _snapping.TestItemsForSnap(otherItem, draggedItem, false, _canvas);
                 _snapping.TestItemsForSnap(draggedItem, otherItem, true, _canvas);
@@ -269,7 +271,7 @@ internal sealed partial class MagItemMovement
                 LastSnapPositionOnCanvas = snapTargetPos;
             }
 
-            foreach (var n in _draggedItems)
+            foreach (var n in DraggedItems)
             {
                 n.PosOnCanvas += bestSnapDelta;
             }
@@ -290,7 +292,7 @@ internal sealed partial class MagItemMovement
 
     public void StartDragOperation(GraphUiContext context)
     {
-        var snapGraphItems = _draggedItems.Select(i => i as ISelectableCanvasObject).ToList();
+        var snapGraphItems = DraggedItems.Select(i => i as ISelectableCanvasObject).ToList();
 
         context.MacroCommand = new MacroCommand("Move nodes");
         context.MoveElementsCommand = new ModifyCanvasElementsCommand(context.CompositionOp.Symbol.Id, snapGraphItems, _nodeSelection);
@@ -299,9 +301,9 @@ internal sealed partial class MagItemMovement
         _lastAppliedOffset = Vector2.Zero;
         _hasDragged = false;
 
-        UpdateBorderConnections(_draggedItems);
+        UpdateBorderConnections(DraggedItems);
         UpdateSnappedBorderConnections();
-        InitSplitInsertionPoints(_draggedItems);
+        InitSplitInsertionPoints(DraggedItems);
         InitPrimaryDraggedOutput();
 
         _unsnappedBorderConnectionsBeforeDrag.Clear();
@@ -590,11 +592,11 @@ internal sealed partial class MagItemMovement
         Debug.Assert(context.MacroCommand != null);
 
         var newConnections = new List<Symbol.Connection>();
-        foreach (var draggedItem in _draggedItems)
+        foreach (var draggedItem in DraggedItems)
         {
             foreach (var otherItem in _layout.Items.Values)
             {
-                if (_draggedItems.Contains(otherItem))
+                if (DraggedItems.Contains(otherItem))
                     continue;
 
                 GetPotentialConnectionsAfterSnap(ref newConnections, draggedItem, otherItem);
@@ -873,14 +875,14 @@ internal sealed partial class MagItemMovement
 
     private void InitPrimaryDraggedOutput()
     {
-        DraggedPrimaryOutputType = null;
-        ItemForInputSelection = null;
+        _context.DraggedPrimaryOutputType = null;
+        _context.ItemForInputSelection = null;
 
-        PrimaryOutputItem = FindPrimaryOutputItem();
-        if (PrimaryOutputItem == null)
+        _context.PrimaryOutputItem = FindPrimaryOutputItem();
+        if (_context.PrimaryOutputItem == null)
             return;
 
-        DraggedPrimaryOutputType = PrimaryOutputItem.PrimaryType;
+        _context.DraggedPrimaryOutputType = _context.PrimaryOutputItem.PrimaryType;
     }
 
     /// <summary>
@@ -893,20 +895,20 @@ internal sealed partial class MagItemMovement
     /// This part is a little fishy. To have "some" solution we try to identify dragged
     /// constellations that has a single free horizontal output anchor on the left column.
     /// </summary>
-    private static MagGraphItem? FindPrimaryOutputItem()
+    private MagGraphItem? FindPrimaryOutputItem()
     {
-        if (_draggedItems.Count == 0)
+        if (DraggedItems.Count == 0)
             return null;
 
-        if (_draggedItems.Count == 1)
-            return _draggedItems.First();
+        if (DraggedItems.Count == 1)
+            return DraggedItems.First();
 
-        var itemsOrderedByX = _draggedItems.OrderByDescending(c => c.PosOnCanvas.X);
+        var itemsOrderedByX = DraggedItems.OrderByDescending(c => c.PosOnCanvas.X);
         var rightItem = itemsOrderedByX.First();
 
         // Check if there are multiple items on right edge column...
         var rightColumnItemCount = 0;
-        foreach (var i in _draggedItems)
+        foreach (var i in DraggedItems)
         {
             if (Math.Abs(i.PosOnCanvas.X - rightItem.PosOnCanvas.X) < SnapTolerance)
                 rightColumnItemCount++;
@@ -915,106 +917,10 @@ internal sealed partial class MagItemMovement
         if (rightColumnItemCount > 1)
             return null;
 
-        if (_draggedItems.Count != CollectSnappedItems(rightItem).Count)
+        if (DraggedItems.Count != CollectSnappedItems(rightItem).Count)
             return null;
 
         return rightItem;
-    }
-
-    private bool TryInitializeInputSelectionPicker()
-    {
-        if (PrimaryOutputItem == null)
-            return false;
-
-        foreach (var otherItem in _layout.Items.Values)
-        {
-            if (otherItem == PrimaryOutputItem)
-                continue;
-
-            if (!otherItem.Area.Contains(PeekAnchorInCanvas))
-                continue;
-
-            ItemForInputSelection = otherItem;
-            return true;
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// After snapping picking an hidden input field for connection, this
-    /// method can be called to...
-    /// - move the dragged items to the snapped position
-    /// - move all other relevant snapped items down
-    /// - create the connection
-    /// </summary>
-    internal void TryConnectHiddenInput(GraphUiContext context, IInputUi targetInputUi)
-    {
-        var composition = _context.CompositionOp;
-
-        Debug.Assert(PrimaryOutputItem != null && ItemForInputSelection != null);
-        Debug.Assert(context.MacroCommand != null);
-        Debug.Assert(ItemForInputSelection.Variant == MagGraphItem.Variants.Operator); // This will bite us later...
-
-        if (PrimaryOutputItem.OutputLines.Length == 0)
-        {
-            Log.Warning("no visible output to connect?");
-            return;
-        }
-
-        // Create connection
-        var connectionToAdd = new Symbol.Connection(PrimaryOutputItem.Id,
-                                                    PrimaryOutputItem.OutputLines[0].Id,
-                                                    ItemForInputSelection.Id,
-                                                    targetInputUi.Id);
-
-        if (Structure.CheckForCycle(composition.Symbol, connectionToAdd))
-        {
-            Log.Debug("Sorry, this connection would create a cycle.");
-            return;
-        }
-
-        context.MacroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol,
-                                                                        connectionToAdd,
-                                                                        0));
-
-        // Find insertion index
-        var inputLineIndex = 0;
-        foreach (var input in ItemForInputSelection.Instance.Inputs)
-        {
-            if (inputLineIndex < ItemForInputSelection.InputLines.Length
-                && input.Id == ItemForInputSelection.InputLines[inputLineIndex].Input.Id)
-                inputLineIndex++;
-
-            if (input.Id == targetInputUi.InputDefinition.Id)
-                break;
-        }
-
-        MoveSnappedItemsVertically(context,
-                                   CollectSnappedItems(ItemForInputSelection),
-                                   ItemForInputSelection.PosOnCanvas.Y + MagGraphItem.GridSize.Y * (inputLineIndex - 0.5f),
-                                   MagGraphItem.GridSize.Y);
-
-        // Snap items to input location (we assume that all dragged items are snapped...)
-        var targetPos = ItemForInputSelection.PosOnCanvas
-                        + new Vector2(-PrimaryOutputItem.Size.X,
-                                      (inputLineIndex) * MagGraphItem.GridSize.Y);
-
-        var moveDelta = targetPos - PrimaryOutputItem.PosOnCanvas;
-
-        var affectedItemsAsNodes = _draggedItems.Select(i => i as ISelectableCanvasObject).ToList();
-        var newMoveComment = new ModifyCanvasElementsCommand(composition.Symbol.Id, affectedItemsAsNodes, _nodeSelection);
-        context.MacroCommand.AddExecutedCommandForUndo(newMoveComment);
-
-        foreach (var item in affectedItemsAsNodes)
-        {
-            item.PosOnCanvas += moveDelta;
-        }
-
-        newMoveComment.StoreCurrentValues();
-
-        // Complete drag interaction
-        Reset();
     }
 
     /// <summary>
@@ -1068,47 +974,39 @@ internal sealed partial class MagItemMovement
 
     internal void SetDraggedItemIds(List<Guid> selectedIds)
     {
-        _draggedItems.Clear();
+        DraggedItems.Clear();
         foreach (var id in selectedIds)
         {
             if (_layout.Items.TryGetValue(id, out var i))
             {
-                _draggedItems.Add(i);
+                DraggedItems.Add(i);
             }
         }
     }
 
     internal void SetDraggedItems(List<ISelectableCanvasObject> selection)
     {
-        _draggedItems.Clear();
+        DraggedItems.Clear();
         foreach (var s in selection)
         {
             if (_layout.Items.TryGetValue(s.Id, out var i))
             {
-                _draggedItems.Add(i);
+                DraggedItems.Add(i);
             }
         }
     }
 
     internal void SetDraggedItemIdsToSnappedForItem(MagGraphItem item)
     {
-        _draggedItems.Clear();
-        CollectSnappedItems(item, _draggedItems);
+        DraggedItems.Clear();
+        CollectSnappedItems(item, DraggedItems);
     }
 
-    internal static bool IsItemDragged(MagGraphItem item) => _draggedItems.Contains(item);
+    internal bool IsItemDragged(MagGraphItem item) => DraggedItems.Contains(item);
 
     internal double LastSnapTime = double.NegativeInfinity;
     internal Vector2 LastSnapPositionOnCanvas;
 
-    internal Type? DraggedPrimaryOutputType;
-    internal MagGraphItem? PrimaryOutputItem;
-    internal MagGraphItem? ItemForInputSelection;
-
-    internal Vector2 PeekAnchorInCanvas => PrimaryOutputItem == null
-                                               ? Vector2.Zero
-                                               : new Vector2(PrimaryOutputItem.Area.Max.X - MagGraphItem.GridSize.Y * 0.25f,
-                                                             PrimaryOutputItem.Area.Min.Y + MagGraphItem.GridSize.Y * 0.5f);
 
     internal readonly List<SplitInsertionPoint> SplitInsertionPoints = [];
 
@@ -1123,7 +1021,7 @@ internal sealed partial class MagItemMovement
 
     private readonly SelectableNodeMovement.ShakeDetector _shakeDetector = new();
 
-    private static readonly HashSet<MagGraphItem> _draggedItems = [];
+    internal readonly HashSet<MagGraphItem> DraggedItems = [];
     //private static readonly HashSet<Guid> _draggedItemIds = [];
 
     internal sealed record SplitInsertionPoint(
