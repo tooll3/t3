@@ -10,10 +10,14 @@ public class RenameSymbolDialog : ModalDialog
 {
     public void Draw(List<SymbolUi.Child> selectedChildUis, ref string name)
     {
-        var canRename = selectedChildUis.Count == 1 && !selectedChildUis[0].SymbolChild.Symbol.SymbolPackage.IsReadOnly;
-            
-        if (!canRename)
-            return;
+        if (selectedChildUis.Count == 1)
+        {
+            var symbolChild = selectedChildUis[0].SymbolChild;
+            if (symbolChild == null || symbolChild.Symbol.SymbolPackage.IsReadOnly)
+            {
+                return;
+            }
+        }
             
         if (BeginDialog("Rename symbol"))
         {
