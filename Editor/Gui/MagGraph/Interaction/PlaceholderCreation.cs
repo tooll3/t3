@@ -39,7 +39,7 @@ internal sealed class PlaceholderCreation
 
     public static Guid PlaceHolderId = Guid.Parse("ffffffff-eeee-47C7-A17F-E297672EE1F3");
 
-    public void OpenOnCanvas(GraphUiContext context, Vector2 posOnCanvas, Type inputTypeFilter= null)
+    public void OpenOnCanvas(GraphUiContext context, Vector2 posOnCanvas, Type inputTypeFilter = null)
     {
         context.MacroCommand = new MacroCommand("Insert Operator");
 
@@ -87,15 +87,15 @@ internal sealed class PlaceholderCreation
                                   Variant = MagGraphItem.Variants.Placeholder,
                               };
 
-        var snappedItems = MagItemMovement.CollectSnappedItems(_focusedItem);
-        
+        // Keep for after creation because inserted node might exceed unit height and further pushing is required... 
+        _snappedItems = MagItemMovement.CollectSnappedItems(_focusedItem);
 
         MagItemMovement
-           .MoveSnappedItemsVertically(context, 
-                                                   snappedItems, 
-                                                   _focusedItem.PosOnCanvas.Y + _focusedItem.Size.Y - MagGraphItem.GridSize.Y/2,  
-                                                   MagGraphItem.GridSize.Y);
-        
+           .MoveSnappedItemsVertically(context,
+                                       _snappedItems,
+                                       _focusedItem.PosOnCanvas.Y + _focusedItem.Size.Y - MagGraphItem.GridSize.Y / 2,
+                                       MagGraphItem.GridSize.Y);
+
         context.Selector.Selection.Clear();
         context.Layout.Items[PlaceHolderId] = PlaceholderItem;
         _focusInputNextTime = true;
@@ -136,7 +136,7 @@ internal sealed class PlaceholderCreation
         Reset(context);
     }
 
-    private void Reset(GraphUiContext context)
+    internal void Reset(GraphUiContext context)
     {
         context.MacroCommand = null;
         _filter.Reset();
@@ -626,14 +626,14 @@ internal sealed class PlaceholderCreation
                 if (_focusedItem.OutputLines[0].ConnectionsOut.Count > 0)
                 {
                     var newItemOutput = newInstance.Outputs[0];
-                
+
                     // Reroute original connections...
                     foreach (var mc in _focusedItem.OutputLines[0].ConnectionsOut)
                     {
                         context.MacroCommand
                                .AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,
                                                                               mc.AsSymbolConnection(), 0));
-                
+
                         context.MacroCommand
                                .AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
                                                                            new Symbol.Connection(newInstance.SymbolChildId,
@@ -655,9 +655,51 @@ internal sealed class PlaceholderCreation
                                                                                         ),
                                                                    0));
             }
-        }
 
-        // TODO: push snapped ops further down if new op exceed default height 
+            // push snapped ops further down if new op exceed default height 
+            {
+                var newItem = new MagGraphItem
+                                  {
+                                      Variant = MagGraphItem.Variants.Operator,
+                                      Selectable = newChildUi,
+                                      Size = default,
+                                      SymbolUi = symbol.GetSymbolUi(),
+                                      SymbolChild = null,
+                                      Instance = newInstance,
+                                  };
+
+                List<MagGraphItem.InputLine> inputLines = [];
+                List<MagGraphItem.OutputLine> outputLines = [];
+                MagGraphLayout.CollectVisibleLines(newItem, inputLines, outputLines);
+                var newHeight = inputLines.Count + outputLines.Count - 1;
+                if (newHeight > 1)
+                {
+                    //var snappedItems = MagItemMovement.CollectSnappedItems(_focusedItem);
+
+                    MagItemMovement
+                       .MoveSnappedItemsVertically(context,
+                                                   _snappedItems,
+                                                   _focusedItem.PosOnCanvas.Y + _focusedItem.Size.Y - MagGraphItem.GridSize.Y / 2,
+                                                   MagGraphItem.GridSize.Y * (newHeight - 1));
+                }
+            }
+        }
+        else if (context.PrimaryOutputItem != null && context.PrimaryOutputItem.OutputLines.Length > 0)
+        {
+            var outlineLine = context.PrimaryOutputItem.OutputLines[0];
+            var primaryInput = newInstance.Inputs.FirstOrDefault();
+            if (primaryInput != null && primaryInput.ValueType == context.DraggedPrimaryOutputType)
+            {
+                var connectionToAdd = new Symbol.Connection(context.PrimaryOutputItem.Id,
+                                                            outlineLine.Id,
+                                                            newInstance.SymbolChildId,
+                                                            primaryInput.Id);
+                context.MacroCommand
+                       .AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+                                                                   connectionToAdd,
+                                                                   0));
+            }
+        }
 
         // TODO: add preset selection...
 
@@ -680,4 +722,5 @@ internal sealed class PlaceholderCreation
 
     private SymbolUi _selectedSymbolUi;
     private static readonly int _uiId = "DraftNode".GetHashCode();
+    private HashSet<MagGraphItem> _snappedItems = [];
 }

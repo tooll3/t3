@@ -49,6 +49,8 @@ internal sealed partial class MagGraphCanvas
                     drawList.AddCircleFilled(sourcePosOnScreen, anchorSize * 1.6f, typeColor, 3);
                     break;
                 }
+                
+                    
                 case MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical:
                 {
                     var isPotentialSplitTarget = _context.ItemMovement.SplitInsertionPoints.Count > 0
@@ -77,6 +79,7 @@ internal sealed partial class MagGraphCanvas
                 case MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal:
                     drawList.AddCircleFilled(sourcePosOnScreen, anchorSize * 1.6f, typeColor, 3);
                     break;
+                
                 case MagGraphConnection.ConnectionStyles.AdditionalOutToMainInputSnappedVertical:
                     drawList.AddCircleFilled(sourcePosOnScreen, anchorSize * 1.6f, Color.Red, 3);
                     break;
@@ -95,6 +98,12 @@ internal sealed partial class MagGraphCanvas
                                             targetPosOnScreen,
                                             typeColor.Fade(0.6f),
                                             2);
+                    
+                    drawList.AddTriangleFilled(
+                                               targetPosOnScreen + new Vector2(-1, -1 + 1) * CanvasScale * 3,
+                                               targetPosOnScreen + new Vector2(1, -1 + 1) * CanvasScale * 3,
+                                               targetPosOnScreen + new Vector2(0, 1 + 1) * CanvasScale * 3,
+                                               typeColor);                    
                     break;
                 case MagGraphConnection.ConnectionStyles.BottomToLeft:
                     drawList.AddBezierCubic(sourcePosOnScreen,
@@ -103,6 +112,7 @@ internal sealed partial class MagGraphCanvas
                                             targetPosOnScreen,
                                             typeColor.Fade(0.6f),
                                             2);
+                    
                     break;
                 case MagGraphConnection.ConnectionStyles.RightToTop:
                     drawList.AddBezierCubic(sourcePosOnScreen,
@@ -111,6 +121,12 @@ internal sealed partial class MagGraphCanvas
                                             targetPosOnScreen,
                                             typeColor.Fade(0.6f),
                                             2);
+                    
+                    drawList.AddTriangleFilled(
+                                               sourcePosOnScreen + new Vector2(-1, -1) * CanvasScale * 5,
+                                               sourcePosOnScreen + new Vector2(1, -1) * CanvasScale * 5,
+                                               sourcePosOnScreen + new Vector2(0, 1) * CanvasScale * 5,
+                                               typeColor);
                     break;
                 case MagGraphConnection.ConnectionStyles.RightToLeft:
                     // break;
@@ -140,6 +156,9 @@ internal sealed partial class MagGraphCanvas
                                             targetPosOnScreen,
                                             typeColor.Fade(0.6f),
                                             2);
+                    
+                    drawList.AddCircleFilled(targetPosOnScreen + new Vector2(3 * CanvasScale,0) , anchorSize * 1.2f, typeColor, 3);
+
                     break;
                 case MagGraphConnection.ConnectionStyles.Unknown:
                     break;

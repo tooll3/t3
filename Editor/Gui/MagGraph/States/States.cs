@@ -10,9 +10,11 @@ internal sealed class DefaultState(StateMachine s) : State(s)
 {
     public override void Enter(GraphUiContext context)
     {
+        // Todo: this should be a reset method in context
         context.TempConnections.Clear();
         context.PrimaryOutputItem = null;
         context.DraggedPrimaryOutputType = null;
+        context.Placeholder?.Reset(context);
     }
 
     public override void Update(GraphUiContext context)
@@ -288,7 +290,7 @@ internal sealed class DragOutputState(StateMachine sm) : State(sm)
         }
         else
         {
-            context.Placeholder.OpenOnCanvas(context, posOnCanvas);
+            context.Placeholder.OpenOnCanvas(context, posOnCanvas, context.DraggedPrimaryOutputType);
             Sm.SetState(Sm.PlaceholderState, context);
         }
     }

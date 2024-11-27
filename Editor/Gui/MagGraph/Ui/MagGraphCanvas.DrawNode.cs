@@ -1,7 +1,5 @@
 ﻿using ImGuiNET;
-using SharpDX.Direct3D11;
 using T3.Core.DataTypes.Vector;
-using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Rendering;
@@ -141,12 +139,12 @@ internal sealed partial class MagGraphCanvas
         var labelSize = ImGui.CalcTextSize(name);
         ImGui.PopFont();
         var paddingForPreview = hasPreview ? MagGraphItem.LineHeight + 10 : 0;
-        var downScale = MathF.Min(1.1f, (MagGraphItem.Width - paddingForPreview) * 0.9f / labelSize.X);
+        var downScale = MathF.Min(1f, (MagGraphItem.Width - paddingForPreview) * 0.9f / labelSize.X);
 
         var labelPos = pMin + new Vector2(8, 8) * CanvasScale + new Vector2(0, -1);
         labelPos = new Vector2(MathF.Round(labelPos.X), MathF.Round(labelPos.Y));
         drawList.AddText(Fonts.FontBold,
-                         Fonts.FontBold.FontSize * downScale * CanvasScale,
+                         Fonts.FontBold.FontSize * downScale * CanvasScale.Clamp(0.1f,2f),
                          labelPos,
                          labelColor,
                          name);
@@ -185,13 +183,38 @@ internal sealed partial class MagGraphCanvas
             }
         }
 
+        // Primary input indicator
+        if(item.InputLines.Length > 0 && item.InputLines[0].InputUi != null)
+        {
+            var inputLine = item.InputLines[0];
+            var isMissing = inputLine.InputUi.Relevancy == Relevancy.Required && inputLine.ConnectionIn == null;
+            if (isMissing)
+            {
+                drawList.AddCircleFilled(pMin 
+                                         //+ new Vector2(8, 9) * CanvasScale 
+                                         + new Vector2(0, GridSizeOnScreen.Y * ( 0.5f)),
+                                         3,
+                                         UiColors.StatusAttention);
+            }
+        }
         
         // Input labels...
         int inputIndex;
         for (inputIndex = 1; inputIndex < item.InputLines.Length; inputIndex++)
         {
             var inputLine = item.InputLines[inputIndex];
-            drawList.AddText(Fonts.FontSmall, Fonts.FontSmall.FontSize * CanvasScale,
+            var isMissing = inputLine.InputUi.Relevancy == Relevancy.Required && inputLine.ConnectionIn == null;
+            if (isMissing)
+            {
+                drawList.AddCircleFilled(pMin 
+                                         //+ new Vector2(8, 9) * CanvasScale 
+                                        + new Vector2(0, GridSizeOnScreen.Y * (inputIndex + 0.5f)),
+                                   3,
+                                   UiColors.StatusAttention);
+            }
+            
+            drawList.AddText(Fonts.FontSmall, 
+                             Fonts.FontSmall.FontSize * CanvasScale.Clamp(0.1f,2f),
                              pMin + new Vector2(8, 9) * CanvasScale + new Vector2(0, GridSizeOnScreen.Y * inputIndex),
                              labelColor.Fade(0.7f),
                              inputLine.InputUi.InputDefinition.Name ?? "?"
@@ -212,7 +235,7 @@ internal sealed partial class MagGraphCanvas
 
             drawList.AddText(Fonts.FontSmall, Fonts.FontSmall.FontSize * CanvasScale,
                              pMin
-                             + new Vector2(-8, 9) * CanvasScale
+                             + new Vector2(-8, 9) * CanvasScale.Clamp(0.1f,2f)
                              + new Vector2(0, GridSizeOnScreen.Y * (outputIndex + inputIndex - 1))
                              + new Vector2(MagGraphItem.Width * CanvasScale - outputLabelSize.X * CanvasScale, 0),
                              labelColor.Fade(0.7f),
@@ -227,9 +250,7 @@ internal sealed partial class MagGraphCanvas
                                      3 * CanvasScale,
                                      UiColors.ForegroundFull);
         }
-
-
-
+        
         // Draw input sockets
         foreach (var inputAnchor in item.GetInputAnchors())
         {
@@ -238,7 +259,7 @@ internal sealed partial class MagGraphCanvas
             {
                 continue;
             }
-
+            
             var type2UiProperties = TypeUiRegistry.GetPropertiesForType(inputAnchor.ConnectionType);
             var p = TransformPosition(inputAnchor.PositionOnCanvas);
             var color = ColorVariations.OperatorOutline.Apply(type2UiProperties.Color);
@@ -340,9 +361,10 @@ internal sealed partial class MagGraphCanvas
 
         var previewSize = new Vector2(unitScreenHeight * aspect, unitScreenHeight);
 
-        if (previewSize.X > unitScreenHeight * 1.2f)
+        var maxAspect = 1.6f;
+        if (previewSize.X > unitScreenHeight * maxAspect)
         {
-            previewSize *= unitScreenHeight / (previewSize.X) * 1.2f;
+            previewSize *= unitScreenHeight / (previewSize.X) * maxAspect;
         }
 
         var min = new Vector2(itemMax.X - previewSize.X - 3 * CanvasScale,

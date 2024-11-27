@@ -120,7 +120,18 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
 
             }
             
-            var targetPosOnScreen = t.TargetItem != null ? TransformPosition( t.TargetItem.PosOnCanvas) : mousePos;
+            
+            var targetPosOnScreen = mousePos;
+            if (t.TargetItem != null)
+            {
+                targetPosOnScreen = TransformPosition(t.TargetItem.PosOnCanvas);
+            }
+
+            else if (_context.Placeholder.PlaceholderItem != null)
+            {
+                targetPosOnScreen = TransformPosition(_context.Placeholder.PlaceholderItem.PosOnCanvas);
+            }
+                
             var typeColor = TypeUiRegistry.GetPropertiesForType(t.Type).Color;
             var d = Vector2.Distance(sourcePosOnScreen, targetPosOnScreen) / 2;
             
