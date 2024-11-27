@@ -28,7 +28,7 @@ public partial class SymbolUi
 
         internal Dictionary<Guid, ConnectionStyles> ConnectionStyleOverrides { get; } = new();
 
-        internal Symbol.Child SymbolChild => Parent.Children[Id];
+        internal Symbol.Child SymbolChild => Parent.Children.GetValueOrDefault(Id);
         private Symbol Parent => _parentSymbolPackage.Symbols[_symbolId];
 
         private readonly Guid _symbolId;
