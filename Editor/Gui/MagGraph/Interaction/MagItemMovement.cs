@@ -361,7 +361,7 @@ internal sealed partial class MagItemMovement
     {
         Debug.Assert(context.MacroCommand != null);
 
-        if (unsnappedConnections.Count <= 1)
+        if (unsnappedConnections.Count == 0)
             return false;
 
         var list = FindVerticalCollapsableConnectionPairs(unsnappedConnections);
@@ -509,12 +509,13 @@ internal sealed partial class MagItemMovement
             CollectSnappedItems(mc.TargetItem, snappedItems);
         }
 
-        // Collapse ops dragged from vertical stack...
+        // Collapse lines of no longer visible inputs stack...
         var collapseLines = new HashSet<float>();
         foreach (var mc in unsnappedConnections)
         {
             if (mc.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal
                 && mc.InputLineIndex > 0
+                && mc.TargetItem.InputLines[mc.InputLineIndex].InputUi.Relevancy == Relevancy.Optional
                )
             {
                 collapseLines.Add(mc.SourcePos.Y);
