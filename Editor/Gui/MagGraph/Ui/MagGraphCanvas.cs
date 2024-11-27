@@ -365,7 +365,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
     private Vector2 GridSizeOnScreen => TransformDirection(MagGraphItem.GridSize);
     private float CanvasScale => Scale.X;
 
-    public bool ShowDebug => ImGui.GetIO().KeyCtrl || _enableDebug;
+    public bool ShowDebug => ImGui.GetIO().KeyAlt || _enableDebug;
 
     //public GraphUiContext GraphUiContext { get { return _graphUiContext; } }
     private bool _enableDebug;

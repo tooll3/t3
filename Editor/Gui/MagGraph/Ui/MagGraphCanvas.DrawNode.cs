@@ -1,9 +1,16 @@
 ﻿using ImGuiNET;
+using SharpDX.Direct3D11;
+using T3.Core.DataTypes.Vector;
+using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Core.Utils;
+using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace T3.Editor.Gui.MagGraph.Ui;
 
@@ -72,8 +79,8 @@ internal sealed partial class MagGraphCanvas
             const int snapPadding = 1;
             if (!snappedBorders.HasFlag(Borders.Down)) pMaxVisible.Y -= snapPadding * CanvasScale;
             if (!snappedBorders.HasFlag(Borders.Right)) pMaxVisible.X -= snapPadding * CanvasScale;
-            if (!snappedBorders.HasFlag(Borders.Up)) pMinVisible.Y += snapPadding * CanvasScale;
-            if (!snappedBorders.HasFlag(Borders.Left)) pMinVisible.X += snapPadding * CanvasScale;
+            // if (!snappedBorders.HasFlag(Borders.Up)) pMinVisible.Y += snapPadding * CanvasScale;
+            // if (!snappedBorders.HasFlag(Borders.Left)) pMinVisible.X += snapPadding * CanvasScale;
         }
 
         // ImGUI element for selection
@@ -102,16 +109,22 @@ internal sealed partial class MagGraphCanvas
 
         var isHovered = isItemHovered || _context.Selector.HoveredIds.Contains(item.Id);
         var fade = isHovered ? 1 : 0.7f;
-        drawList.AddRectFilled(pMinVisible + Vector2.One * CanvasScale, pMaxVisible - Vector2.One,
-                               ColorVariations.OperatorBackground.Apply(typeColor).Fade(fade), 6 * CanvasScale,
+        drawList.AddRectFilled(pMinVisible + Vector2.One * CanvasScale, 
+                               pMaxVisible,
+                               ColorVariations.OperatorBackground.Apply(typeColor).Fade(fade), 5 * CanvasScale,
                                imDrawFlags);
 
         var isSelected = _context.Selector.IsSelected(item);
         var outlineColor = isSelected
                                ? UiColors.ForegroundFull
                                : UiColors.BackgroundFull.Fade(0f);
+        
         drawList.AddRect(pMinVisible, pMaxVisible, outlineColor, 6 * CanvasScale, imDrawFlags);
 
+        
+        // Draw Texture thumbnail
+        var hasPreview = TryDrawTexturePreview(item, pMinVisible, pMaxVisible, drawList, typeColor);
+        
         // Label...
 
         var name = item.ReadableName;
@@ -123,11 +136,12 @@ internal sealed partial class MagGraphCanvas
         {
             name = "IN: " + name;
         }
-        
+
         ImGui.PushFont(Fonts.FontBold);
         var labelSize = ImGui.CalcTextSize(name);
         ImGui.PopFont();
-        var downScale = MathF.Min(1, MagGraphItem.Width * 0.9f / labelSize.X);
+        var paddingForPreview = hasPreview ? MagGraphItem.LineHeight + 10 : 0;
+        var downScale = MathF.Min(1.1f, (MagGraphItem.Width - paddingForPreview) * 0.9f / labelSize.X);
 
         var labelPos = pMin + new Vector2(8, 8) * CanvasScale + new Vector2(0, -1);
         labelPos = new Vector2(MathF.Round(labelPos.X), MathF.Round(labelPos.Y));
@@ -171,13 +185,14 @@ internal sealed partial class MagGraphCanvas
             }
         }
 
+        
         // Input labels...
         int inputIndex;
         for (inputIndex = 1; inputIndex < item.InputLines.Length; inputIndex++)
         {
             var inputLine = item.InputLines[inputIndex];
             drawList.AddText(Fonts.FontSmall, Fonts.FontSmall.FontSize * CanvasScale,
-                             pMin + new Vector2(8, 9) * CanvasScale + new Vector2(0, GridSizeOnScreen.Y * (inputIndex)),
+                             pMin + new Vector2(8, 9) * CanvasScale + new Vector2(0, GridSizeOnScreen.Y * inputIndex),
                              labelColor.Fade(0.7f),
                              inputLine.InputUi.InputDefinition.Name ?? "?"
                             );
@@ -212,6 +227,8 @@ internal sealed partial class MagGraphCanvas
                                      3 * CanvasScale,
                                      UiColors.ForegroundFull);
         }
+
+
 
         // Draw input sockets
         foreach (var inputAnchor in item.GetInputAnchors())
@@ -263,7 +280,6 @@ internal sealed partial class MagGraphCanvas
                                            pp + new Vector2(0, -1) + new Vector2(1.5f, 0) * CanvasScale * 1.5f * hoverFactor,
                                            pp + new Vector2(0, -1) + new Vector2(0, 2) * CanvasScale * 1.5f * hoverFactor,
                                            color);
-
             }
             else
             {
@@ -277,24 +293,84 @@ internal sealed partial class MagGraphCanvas
                 if (isItemHovered)
                 {
                     var color2 = ColorVariations.OperatorLabel.Apply(type2UiProperties.Color).Fade(0.7f);
-                    var circleCenter = pp + new Vector2(-3,0);
+                    var circleCenter = pp + new Vector2(-3, 0);
                     var mouseDistance = Vector2.Distance(ImGui.GetMousePos(), circleCenter);
-                    
+
                     var mouseDistanceFactor = mouseDistance.RemapAndClamp(30, 10, 0.6f, 1.1f);
                     if (mouseDistance < 7)
                     {
-                        drawList.AddCircleFilled(circleCenter, 3 * hoverFactor*0.8f, color2);
+                        drawList.AddCircleFilled(circleCenter, 3 * hoverFactor * 0.8f, color2);
                         _context.ActiveOutputId = oa.SlotId;
                     }
                     else
                     {
                         drawList.AddCircle(circleCenter, 3 * hoverFactor * mouseDistanceFactor, color2);
                     }
-                    
                 }
             }
 
             ShowAnchorPointDebugs(oa);
         }
+    }
+
+    private bool TryDrawTexturePreview(MagGraphItem item, Vector2 itemMin, Vector2 itemMax, ImDrawListPtr drawList, Color typeColor)
+    {
+        if (item.Variant != MagGraphItem.Variants.Operator)
+            return false;
+
+        var instance = item.Instance;
+        if (instance == null || instance.Outputs.Count == 0)
+            return false;
+
+        var firstOutput = instance.Outputs[0];
+        if (firstOutput is not Slot<Texture2D> textureSlot)
+            return false;
+
+        var texture = textureSlot.Value;
+        if (texture == null || texture.IsDisposed)
+            return false;
+
+        var previewTextureView = SrvManager.GetSrvForTexture(texture);
+
+        var aspect = (float)texture.Description.Width / texture.Description.Height;
+
+        var usableScreenRect = new ImRect(itemMin, itemMax);
+        var opWidth = usableScreenRect.GetWidth();
+        var unitScreenHeight = MagGraphItem.GridSize.Y * CanvasScale - 6 * CanvasScale;
+
+        var previewSize = new Vector2(unitScreenHeight * aspect, unitScreenHeight);
+
+        if (previewSize.X > unitScreenHeight * 1.2f)
+        {
+            previewSize *= unitScreenHeight / (previewSize.X) * 1.2f;
+        }
+
+        var min = new Vector2(itemMax.X - previewSize.X - 3 * CanvasScale,
+                              itemMin.Y
+                              + (unitScreenHeight - previewSize.Y) / 2
+                              + 2 * CanvasScale);
+
+        //var min = new Vector2(itemMin.X, itemMin.Y - previewSize.Y - 1);
+        //var max = new Vector2(itemMin.X + previewSize.X, itemMin.Y - 1);
+
+        if (previewTextureView == null)
+            return false;
+
+        drawList.AddImage((IntPtr)previewTextureView, min,
+                          min + previewSize,
+                          Vector2.Zero,
+                          Vector2.One,
+                          Color.White);
+        if (CanvasScale > 0.5f)
+        {
+            drawList.AddRect(min- Vector2.One,
+                              min + previewSize+ Vector2.One,
+                              ColorVariations.OperatorBackground.Apply(typeColor),
+                              2 * CanvasScale, 
+                              ImDrawFlags.RoundCornersAll, 
+                              1 * CanvasScale);
+            
+        }
+        return true;
     }
 }
