@@ -159,14 +159,14 @@ public static class ValueUtils
         new()
             {
                 { typeof(float), v => v is not InputValue<float> vv ? string.Empty : $"{vv.Value:0.000}" },
-                { typeof(Vector2), v => v is not InputValue<System.Numerics.Vector2> vv ? string.Empty : $"{vv.Value.X:0.00} {vv.Value.Y:0.00}" },
+                { typeof(Vector2), v => v is not InputValue<Vector2> vv ? string.Empty : $"{vv.Value.X:0.00} {vv.Value.Y:0.00}" },
                 {
                     typeof(Vector3),
-                    v => v is not InputValue<System.Numerics.Vector3> vv ? string.Empty : $"{vv.Value.X:0.00} {vv.Value.Y:0.00} {vv.Value.Z:0.00} "
+                    v => v is not InputValue<Vector3> vv ? string.Empty : $"{vv.Value.X:0.00} {vv.Value.Y:0.00} {vv.Value.Z:0.00} "
                 },
                 {
                     typeof(Vector4),
-                    v => v is not InputValue<System.Numerics.Vector4> vv
+                    v => v is not InputValue<Vector4> vv
                              ? string.Empty
                              : $"{vv.Value.X:0.00} {vv.Value.Y:0.00} {vv.Value.Z:0.00} {vv.Value.W:0.00} "
                 },
@@ -444,4 +444,35 @@ public static class ValueUtils
                                   }
                 },
             };
+
+    public static string GetValueString(InputValue inputValue)
+    {
+        return inputValue switch
+                   {
+                       InputValue<float> f    => $"{f.Value:0.000}",
+                       InputValue<int> i      => $"{i.Value:G3}",
+                       InputValue<Int3> i     => $"{i.Value:G3}",
+                       InputValue<bool> b     => $"{b.Value}",
+                       InputValue<Vector3> v3 => $"{v3.Value:0.0}",
+                       InputValue<Vector2> v2 => $"{v2.Value:0.0}",
+                       InputValue<string> s   => s.Value.Truncate(),
+                       _                      => ""
+                   };
+    }
+
+    public static string GetValueString(IInputSlot outputSlot)
+    {
+            
+        return outputSlot switch
+                   {
+                       InputSlot<float> f                    => $"{f.GetCurrentValue():0.000}",
+                       InputSlot<int> i                      => $"{i.GetCurrentValue():G3}",
+                       InputSlot<Int3> i                     => $"{i.GetCurrentValue():G3}",
+                       InputSlot<bool> b                     => $"{b.GetCurrentValue()}",
+                       InputSlot<System.Numerics.Vector3> v3 => $"{v3.GetCurrentValue():0.0}",
+                       InputSlot<System.Numerics.Vector2> v2 => $"{v2.GetCurrentValue():0.0}",
+                       InputSlot<string> s                   => s.GetCurrentValue().Truncate(),
+                       _                                     => ""
+                   };
+    }
 }
