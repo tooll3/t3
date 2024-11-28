@@ -29,10 +29,18 @@ public class FloatListInputUi : SingleControlInputUi<List<float>>
     protected override void DrawReadOnlyControl(string name, ref List<float> list)
     {
         string outputString;
-        lock (list)
+        if (list == null)
         {
-            outputString = (list == null) ? "NULL" :  string.Join(", ", list);
+            outputString = "NULL";
         }
+        else
+        {
+            lock (list)
+            {
+                outputString = string.Join(", ", list);
+            }
+        }
+        
         ImGui.TextUnformatted($"{outputString}");
     }
 }
