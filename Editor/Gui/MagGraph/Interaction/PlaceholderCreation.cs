@@ -69,7 +69,7 @@ internal sealed class PlaceholderCreation
 
     private MagGraphItem _focusedItem;
 
-    public void OpenForItem(GraphUiContext context, ISelectableCanvasObject item)
+    public void OpenForItem(GraphUiContext context, ISelectableCanvasObject item, MagGraphItem.Directions direction = MagGraphItem.Directions.Vertical)
     {
         if (!context.Layout.Items.TryGetValue(item.Id, out _focusedItem))
         {
@@ -78,33 +78,46 @@ internal sealed class PlaceholderCreation
         }
 
         context.MacroCommand = new MacroCommand("Insert Operator");
+        
+        var focusedItemPosOnCanvas = direction == MagGraphItem.Directions.Vertical 
+        ? _focusedItem.PosOnCanvas + new Vector2(0, _focusedItem.Size.Y)
+          : _focusedItem.PosOnCanvas + new Vector2(_focusedItem.Size.X, 0);
+        
+        
         PlaceholderItem = new MagGraphItem
                               {
                                   Selectable = _placeHoldSelectable,
-                                  PosOnCanvas = _focusedItem.PosOnCanvas + new Vector2(0, _focusedItem.Size.Y),
+                                  PosOnCanvas = focusedItemPosOnCanvas,
                                   Id = PlaceHolderId,
                                   Size = MagGraphItem.GridSize,
                                   Variant = MagGraphItem.Variants.Placeholder,
                               };
 
-        // Keep for after creation because inserted node might exceed unit height and further pushing is required... 
-        _snappedItems = MagItemMovement.CollectSnappedItems(_focusedItem);
+        // Make space vertically
+        if (direction == MagGraphItem.Directions.Vertical)
+        {
+            // Keep for after creation because inserted node might exceed unit height and further pushing is required... 
+            _snappedItems = MagItemMovement.CollectSnappedItems(_focusedItem);
 
-        MagItemMovement
-           .MoveSnappedItemsVertically(context,
-                                       _snappedItems,
-                                       _focusedItem.PosOnCanvas.Y + _focusedItem.Size.Y - MagGraphItem.GridSize.Y / 2,
-                                       MagGraphItem.GridSize.Y);
+            MagItemMovement
+               .MoveSnappedItemsVertically(context,
+                                           _snappedItems,
+                                           _focusedItem.PosOnCanvas.Y + _focusedItem.Size.Y - MagGraphItem.GridSize.Y / 2,
+                                           MagGraphItem.GridSize.Y);
+        }
 
+        
         context.Selector.Selection.Clear();
         context.Layout.Items[PlaceHolderId] = PlaceholderItem;
         _focusInputNextTime = true;
 
+        // Initialize filters
         _filter.WasUpdated = true;
         _filter.SearchString = string.Empty;
         _selectedSymbolUi = null;
         _favoriteGroup = string.Empty;
         _opGroups = GetOperatorSuggestions();
+        
         if (_focusedItem.OutputLines.Length > 0)
         {
             _filter.FilterInputType = _focusedItem.OutputLines[0].Output.ValueType;
@@ -630,6 +643,12 @@ internal sealed class PlaceholderCreation
                     // Reroute original connections...
                     foreach (var mc in _focusedItem.OutputLines[0].ConnectionsOut)
                     {
+                        if (context.ActiveOutputDirection == MagGraphItem.Directions.Vertical &&
+                            (mc.Style == MagGraphConnection.ConnectionStyles.RightToLeft
+                             || mc.Style == MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal
+                             || mc.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal))
+                            continue;
+                        
                         context.MacroCommand
                                .AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,
                                                                               mc.AsSymbolConnection(), 0));

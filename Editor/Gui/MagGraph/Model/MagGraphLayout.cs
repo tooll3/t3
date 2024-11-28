@@ -158,7 +158,6 @@ internal sealed class MagGraphLayout
                 
                 Items.Remove(item.Id);
                 item.Variant = MagGraphItem.Variants.Obsolete;
-                Log.Debug("Remove obsolete item item " + item);
             }
         }
     }

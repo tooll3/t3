@@ -50,7 +50,7 @@ internal sealed class DefaultState(StateMachine s) : State(s)
             }
         }
 
-        // Click on background
+        // Mouse click
         var clickedDown = ImGui.IsMouseClicked(ImGuiMouseButton.Left);
         if (!clickedDown)
             return;
@@ -226,9 +226,10 @@ internal sealed class HoldOutputState(StateMachine sm) : State(sm)
         Debug.Assert(context.ActiveItem.OutputLines.Length > 0);
         Debug.Assert(context.ActiveOutputId != Guid.Empty);
 
+        // Click
         if (!ImGui.IsMouseDown(ImGuiMouseButton.Left))
         {
-            context.Placeholder.OpenForItem(context, context.ActiveItem);
+            context.Placeholder.OpenForItem(context, context.ActiveItem, context.ActiveOutputDirection);
             Sm.SetState(Sm.PlaceholderState, context);
             return;
         }

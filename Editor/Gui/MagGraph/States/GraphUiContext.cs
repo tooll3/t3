@@ -64,8 +64,11 @@ internal sealed class GraphUiContext
     internal readonly StateMachine StateMachine;
     internal  MacroCommand? MacroCommand;
     internal  ModifyCanvasElementsCommand? MoveElementsCommand;
+    
+    
     internal MagGraphItem? ActiveItem { get; set; }
     internal Guid ActiveOutputId { get; set; }
+    internal MagGraphItem.Directions ActiveOutputDirection { get; set; }
 
     // Picking...
     internal Type? DraggedPrimaryOutputType;
