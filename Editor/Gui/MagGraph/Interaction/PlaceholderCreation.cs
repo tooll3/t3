@@ -197,7 +197,7 @@ internal sealed class PlaceholderCreation
 
     private sealed record OpSuggestionGroup(string Name, List<Guid> Items);
 
-    private List<OpSuggestionGroup> GetOperatorSuggestions()
+    private List<OpSuggestionGroup> GetOperatorSuggestions() // would put these sorts of things in libEditor project
     {
         return
             [

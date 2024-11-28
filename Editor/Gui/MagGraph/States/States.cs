@@ -6,6 +6,16 @@ using MagItemMovement = T3.Editor.Gui.MagGraph.Interaction.MagItemMovement;
 
 namespace T3.Editor.Gui.MagGraph.States;
 
+/// <summary>
+/// Continuing on my musings in the StateMachine class, below is an example implementation that would avoid the issue altogether and
+/// would guarantee that State implementations have no internal state themselves
+///
+/// The statemachine would still call CurrentState?.Update?.Invoke(context), etc
+/// </summary>
+
+// this could be a class, struct, record, record struct, whatever really
+internal readonly record struct StateWithDelegatesInstead(Action<GraphUiContext>? Enter, Action<GraphUiContext>? Update, Action<GraphUiContext>? Exit);
+
 internal sealed class DefaultState(StateMachine s) : State(s)
 {
     public override void Enter(GraphUiContext context)

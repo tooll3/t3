@@ -5,6 +5,9 @@ using T3.Editor.Gui.Windows;
 
 namespace T3.Editor.Gui.MagGraph.Ui;
 
+// UX notes:
+// It's strange when snapping two operators into two inputs of another operator, that one can end up overlapping the other
+// 
 internal sealed class MagGraphWindow : Window
 {
     public MagGraphWindow()
@@ -24,6 +27,9 @@ internal sealed class MagGraphWindow : Window
         if (CompositionOp != focusedCompositionOp)
         {
             CompositionOp = focusedCompositionOp;
+            
+            // should the previous canvas be "disposed"?
+            // we can manage the lifetime of our compositions this way
             _magGraphCanvas = new MagGraphCanvas(this, GraphWindow.Focused.GraphCanvas.NodeSelection);
         }
         

@@ -13,6 +13,7 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.MagGraph.Model;
 
+// These seem like low-hanging fruit for object pooling
 internal sealed class MagGraphItem : ISelectableCanvasObject
 {
     public enum Variants
@@ -24,9 +25,9 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
         Obsolete,
     }
 
-    internal int LastUpdateCycle;
+    internal int LastUpdateCycle; // private set?
     public Guid Id { get; init; }
-    public Variants Variant;
+    public Variants Variant; // private set? 
     public Type PrimaryType = typeof(float);
     public required ISelectableCanvasObject Selectable;
     public Vector2 PosOnCanvas { get => Selectable.PosOnCanvas; set => Selectable.PosOnCanvas = value; }
@@ -64,7 +65,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
     // }
     public void ResetConnections(int updateCycle)
     {
-        InputLines = Array.Empty<InputLine>();
+        InputLines = Array.Empty<InputLine>(); // rider is yelling at me that you could just write '[]' instead
         OutputLines = Array.Empty<OutputLine>();
         LastUpdateCycle = updateCycle;
     }

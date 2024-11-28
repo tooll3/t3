@@ -66,6 +66,10 @@ internal sealed class GraphUiContext
     internal  ModifyCanvasElementsCommand? MoveElementsCommand;
     internal MagGraphItem? ActiveItem { get; set; }
     internal Guid ActiveOutputId { get; set; }
+    
+    // if Imgui's input pointers are safe to reference throughout the duration of the frame, i would add the Imgui input state here.
+    // that way states do not need to query them and other sorts of inputs (e.g. native non-imgui inputs for things like touch devices)
+    // could be added at some point in the future
 
     // Picking...
     internal Type? DraggedPrimaryOutputType;

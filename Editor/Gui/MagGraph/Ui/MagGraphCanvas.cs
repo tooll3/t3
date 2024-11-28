@@ -23,6 +23,10 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
     {
         EnableParentZoom = false;
         _window = window;
+        
+        // since this is the container for the composition op, I would the composition op as a parameter to the context, or pass in the context itself
+        // then, ideally, the window and the canvas are referencing the same field to access the composition op
+        // this is likely not a risk, but being able to just access the window.CompositionOp can pose risks for developers who don't yet know how this works
         _context = new GraphUiContext(nodeSelection, this, _window.CompositionOp);
         _nodeSelection = nodeSelection;
     }
@@ -49,12 +53,21 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         IsFocused = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows );
         IsHovered = ImGui.IsWindowHovered();
         
+        // --------------------------------------------------------------
+        // notes about composition are related to this too - it seems like the window
+        // is doing the exact same operation as this canvas with respect to the composition.
+        // this instance would be "discarded" in the event of a composition change,
+        // and so this would never run. If there are asynchronous things happening
+        // that require changes, maybe a proper disposal pattern could be warranted,
+        // and the _context could be a readonly field
         if (_window.CompositionOp == null)
             return;
         
             
+        // side note - crazy idea that is probably not worth it - contexts could live in a stack to preserve state when traversing children and parents
         if (_window.CompositionOp != _context.CompositionOp)
             _context = new GraphUiContext(_nodeSelection, this, _window.CompositionOp);
+        // --------------------------------------------------------------
         
         _visibleCanvasArea = ImRect.RectWithSize(InverseTransformPositionFloat(ImGui.GetWindowPos()),
                                                  InverseTransformDirection(ImGui.GetWindowSize()));
@@ -157,7 +170,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
             }
         }
 
-        InputPicking.DrawHiddenInputSelector(_context);
+        InputPicking.DrawHiddenInputSelector(_context); // this could be moved to the PickInputState.Update method, based on the guard present in the function
 
         _context.StateMachine.UpdateAfterDraw(_context);
     }
@@ -290,7 +303,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         var shouldBeActive =
             ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup)
             && _context.StateMachine.CurrentState is DefaultState
-            && _context.StateMachine.CurrentState.Time > 0.1f // Prevent glitches when coming from other states.
+            && _context.StateMachine.CurrentState.Time > 0.1f // Prevent glitches when coming from other states. 
             ;
         
         if(!shouldBeActive)
