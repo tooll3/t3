@@ -7,6 +7,7 @@ using T3.Core.Operator.Slots;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.OutputUi;
+using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
@@ -38,6 +39,7 @@ internal sealed class MagGraphLayout
             RefreshDataStructure(compositionOp, parentSymbolUi);
 
         UpdateConnectionLayout();
+        ComputeVerticalStackBoundaries();
     }
     
     public void FlagAsChanged()
@@ -527,6 +529,55 @@ internal sealed class MagGraphLayout
 
             inputIndex++;
         }
+    }
+
+    
+    /// <summary>
+    /// This improves the layout of arc connections inputs into multiple stacked ops so they
+    /// avoid overlap.
+    /// </summary>
+    private void ComputeVerticalStackBoundaries()
+    {
+        // Reuse list to avoid allocations
+        var listStackedItems = new List<MagGraphItem>();
+        MagGraphItem? previousItem = null;
+        
+        listStackedItems.Clear();
+        foreach (var item in Items.Values.OrderBy(i => MathF.Round(i.PosOnCanvas.X * 1f )).ThenBy(i => i.PosOnCanvas.Y))
+        {
+            item.VerticalStackArea = item.Area;
+            
+            if (previousItem == null)
+            {
+                listStackedItems.Clear();
+                listStackedItems.Add(item);
+                previousItem = item;
+                continue;
+            }
+            
+            // is stacked?
+            if (Math.Abs(item.PosOnCanvas.X - previousItem.PosOnCanvas.X) < 20f
+                && Math.Abs(item.PosOnCanvas.Y - previousItem.Area.Max.Y) < 20f)
+            {
+                listStackedItems.Add(item);
+                previousItem = item;
+            }
+            else
+            {
+                if (listStackedItems.Count > 1)
+                {
+                    var stackArea = new ImRect(listStackedItems[0].PosOnCanvas,
+                                               listStackedItems[^1].Area.Max);
+                    foreach (var x in listStackedItems)
+                    {
+                        x.VerticalStackArea = stackArea;
+                    }
+                }
+                listStackedItems.Clear();
+                listStackedItems.Add(item);
+                previousItem = item;
+            }
+        } 
     }
 
     /// <summary>

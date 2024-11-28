@@ -33,6 +33,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
     public Vector2 Size { get; set; }
 
     public ImRect Area => ImRect.RectWithSize(PosOnCanvas, Size);
+    public ImRect VerticalStackArea;
 
     public override string ToString() => ReadableName;
 

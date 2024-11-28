@@ -100,9 +100,23 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
 
         Fonts.FontSmall.Scale = 1;
 
-        if(_context.ActiveItem != null)
+        if (_context.ActiveItem != null)
+        {
+            if (_context.ActiveItem.Id != _lastHoverId)
+            {
+                _hoverStartTime = ImGui.GetTime();
+                _lastHoverId = _context.ActiveItem.Id;
+            }
+            
             _context.Selector.HoveredIds.Add(_context.ActiveItem.Id);
+        }
+        else
+        {
+            _hoverStartTime = ImGui.GetTime();//float.PositiveInfinity;
+            _lastHoverId = Guid.Empty;
+        }
 
+        
         foreach (var connection in _context.Layout.MagConnections)
         {
             DrawConnection(connection, drawList);
@@ -371,19 +385,26 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         FitAreaOnCanvas(visibleArea);
     }
 
+    private float GetHoverTimeForId(Guid id)
+    {
+        if (id != _lastHoverId)
+            return 0;
+
+        return HoverTime;
+    }
+
     private readonly MagGraphWindow _window;
 
-    //private Instance? _compositionOp;
     private readonly SelectionFence _selectionFence = new();
     private Vector2 GridSizeOnScreen => TransformDirection(MagGraphItem.GridSize);
     private float CanvasScale => Scale.X;
 
-    public bool ShowDebug => ImGui.GetIO().KeyAlt || _enableDebug;
+    public bool ShowDebug =>  _enableDebug;// || ImGui.GetIO().KeyAlt;
 
-    //public GraphUiContext GraphUiContext { get { return _graphUiContext; } }
+    private Guid _lastHoverId;
+    private double _hoverStartTime;
+    private float HoverTime => (float)(ImGui.GetTime() - _hoverStartTime);
     private bool _enableDebug;
     private GraphUiContext _context;
     private readonly NodeSelection _nodeSelection;
-
-    //public readonly GraphUiContext UiContext;
 }

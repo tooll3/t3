@@ -1,7 +1,12 @@
 ﻿using ImGuiNET;
-using T3.Core.DataTypes.Vector;
+using SharpDX;
+using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.MagGraph.Model;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
+using Color = T3.Core.DataTypes.Vector.Color;
+using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.MagGraph.Ui;
 
@@ -128,7 +133,27 @@ internal sealed partial class MagGraphCanvas
                                                sourcePosOnScreen + new Vector2(0, 1) * CanvasScale * 5,
                                                typeColor);
                     break;
+                
+                
                 case MagGraphConnection.ConnectionStyles.RightToLeft:
+                    
+                    Vector2 hoverPositionOnLine = ImGui.GetMousePos();
+                    var isHovering = ArcConnection.Draw(Vector2.One *  CanvasScale,
+                                       TransformRect(connection.SourceItem.Area), 
+                                       sourcePosOnScreen, 
+                                       TransformRect( connection.TargetItem.VerticalStackArea), 
+                                       targetPosOnScreen, 
+                                       typeColor,
+                                       1.5f,
+                                       ref hoverPositionOnLine);
+
+                    const float minDistanceToTargetSocket = 10;
+                    if (isHovering && Vector2.Distance(hoverPositionOnLine, targetPosOnScreen) > minDistanceToTargetSocket
+                                   && Vector2.Distance(hoverPositionOnLine, sourcePosOnScreen) > minDistanceToTargetSocket)
+                    {
+                        ConnectionSplitHelper.RegisterAsPotentialSplit(connection.AsSymbolConnection(), typeColor, hoverPositionOnLine);
+                    }                    
+                    
                     // break;
                     //case MagGraphConnection.ConnectionStyles.RightToLeft:
                     //var hoverPositionOnLine = Vector2.Zero;
@@ -150,12 +175,12 @@ internal sealed partial class MagGraphCanvas
                     //     ConnectionSplitHelper.RegisterAsPotentialSplit(Connection, ColorForType, hoverPositionOnLine);
                     // }                        
                     //
-                    drawList.AddBezierCubic(sourcePosOnScreen,
-                                            sourcePosOnScreen + new Vector2(d, 0),
-                                            targetPosOnScreen - new Vector2(d, 0),
-                                            targetPosOnScreen,
-                                            typeColor.Fade(0.6f),
-                                            2);
+                    // drawList.AddBezierCubic(sourcePosOnScreen,
+                    //                         sourcePosOnScreen + new Vector2(d, 0),
+                    //                         targetPosOnScreen - new Vector2(d, 0),
+                    //                         targetPosOnScreen,
+                    //                         typeColor.Fade(0.6f),
+                    //                         2);
                     
                     drawList.AddCircleFilled(targetPosOnScreen + new Vector2(3 * CanvasScale,0) , anchorSize * 1.2f, typeColor, 3);
 

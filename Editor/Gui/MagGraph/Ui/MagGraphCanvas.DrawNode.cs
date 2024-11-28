@@ -22,6 +22,8 @@ internal sealed partial class MagGraphCanvas
         if (item.Variant == MagGraphItem.Variants.Placeholder)
             return;
 
+        var hoverProgress = GetHoverTimeForId(item.Id).RemapAndClamp(0, 0.3f,0, 1);
+
         var smallFontScaleFactor = CanvasScale.Clamp(0.5f, 2);
         
         var typeUiProperties = TypeUiRegistry.GetPropertiesForType(item.PrimaryType);
@@ -350,7 +352,7 @@ internal sealed partial class MagGraphCanvas
             ShowAnchorPointDebugs(inputAnchor, true);
         }
 
-        var hoverFactor = isItemHovered ? 2 : 1;
+        var hoverFactor = hoverProgress.RemapAndClamp(0,1, 1,2);
 
         // Draw output sockets
         foreach (var oa in item.GetOutputAnchors())
@@ -368,6 +370,7 @@ internal sealed partial class MagGraphCanvas
                                            pp + new Vector2(0, -1) + new Vector2(1.5f, 0) * CanvasScale * 1.5f * hoverFactor,
                                            pp + new Vector2(0, -1) + new Vector2(0, 2) * CanvasScale * 1.5f * hoverFactor,
                                            color);
+                pp += new Vector2(0, -3);
             }
             else
             {
@@ -377,19 +380,34 @@ internal sealed partial class MagGraphCanvas
                                            pp + new Vector2(0, 0) + new Vector2(2, 0) * CanvasScale * 1.5f * hoverFactor,
                                            pp + new Vector2(0, 0) + new Vector2(0, 1.5f) * CanvasScale * 1.5f * hoverFactor,
                                            color);
+                pp += new Vector2(-3, 0);
                 
             }
-            // Draw primary output slot for drag
+            // Draw primary output socket for drag or click
             if (isItemHovered)
             {
-                var color2 = ColorVariations.OperatorLabel.Apply(type2UiProperties.Color).Fade(0.7f);
-                var circleCenter = pp + new Vector2(-3, 0);
+                var color2 = ColorVariations.OperatorLabel.Apply(type2UiProperties.Color).Fade(0.7f * hoverProgress);
+                var circleCenter = pp;
                 var mouseDistance = Vector2.Distance(ImGui.GetMousePos(), circleCenter);
 
-                var mouseDistanceFactor = mouseDistance.RemapAndClamp(30, 10, 0.6f, 1.1f);
-                if (mouseDistance < 7)
+                var animationStartRadius = 30 * CanvasScale;
+                var animationEndRadius = 10;
+                var mouseDistanceFactor = mouseDistance.RemapAndClamp(animationStartRadius, animationEndRadius, 0.6f, 1.1f);
+
+                var isActivated = mouseDistance < 7 * CanvasScale;
+                if (isActivated)
                 {
-                    drawList.AddCircleFilled(circleCenter, 3 * hoverFactor * 0.8f, color2);
+                    drawList.AddCircleFilled(circleCenter, 5 * CanvasScale, color2);
+                    
+                    var e = MathF.Round(2 * CanvasScale);
+                    drawList.AddRectFilled(circleCenter + new Vector2(-e,0),
+                                     circleCenter + new Vector2(e+1,1),
+                                     UiColors.BackgroundFull);
+                    
+                    drawList.AddRectFilled(circleCenter + new Vector2(0,-e),
+                                           circleCenter + new Vector2(1,e+1),
+                                           UiColors.BackgroundFull);
+                    
                     _context.ActiveOutputId = oa.SlotId;
                     _context.ActiveOutputDirection = oa.Direction;
                 }
