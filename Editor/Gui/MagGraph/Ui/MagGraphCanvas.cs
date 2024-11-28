@@ -97,7 +97,9 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         {
             DrawItem(item, drawList, _context);
         }
-        
+
+        Fonts.FontSmall.Scale = 1;
+
         if(_context.ActiveItem != null)
             _context.Selector.HoveredIds.Add(_context.ActiveItem.Id);
 

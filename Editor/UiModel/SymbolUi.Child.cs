@@ -117,10 +117,11 @@ public partial class SymbolUi
         {
             None = 0,
             Rendered = 1 << 2,
-            PreventTooltip = 1 << 3,
-            PreventOpenSubGraph = 1 << 4,
-            PreventOpenParameterPopUp = 1 << 5,
-            PreventInputLabels = 1 << 6,
+            IsActive = 1 << 3,
+            PreventTooltip = 1 << 4,
+            PreventOpenSubGraph = 1 << 5,
+            PreventOpenParameterPopUp = 1 << 6,
+            PreventInputLabels = 1 << 7,
         }
 
         internal Child Clone(SymbolUi parent, Symbol.Child symbolChild)

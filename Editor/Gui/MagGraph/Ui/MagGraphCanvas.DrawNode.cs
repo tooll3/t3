@@ -22,7 +22,7 @@ internal sealed partial class MagGraphCanvas
         if (item.Variant == MagGraphItem.Variants.Placeholder)
             return;
 
-        Fonts.FontSmall.Scale = CanvasScale.Clamp(0.5f, 2);
+        var smallFontScaleFactor = CanvasScale.Clamp(0.5f, 2);
         
         var typeUiProperties = TypeUiRegistry.GetPropertiesForType(item.PrimaryType);
 
@@ -86,31 +86,10 @@ internal sealed partial class MagGraphCanvas
             // if (!snappedBorders.HasFlag(Borders.Left)) pMinVisible.X += snapPadding * CanvasScale;
         }
 
-        // ImGUI element for selection
-        ImGui.SetCursorScreenPos(pMin);
-        ImGui.PushID(item.Id.GetHashCode());
-        ImGui.InvisibleButton(string.Empty, pMax - pMin);
-        var isItemHovered = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup
-                                                | ImGuiHoveredFlags.AllowWhenBlockedByActiveItem);
-
-        if (_context.StateMachine.CurrentState is DefaultState && isItemHovered)
-            _context.ActiveItem = item;
-
-        // Todo: We eventually need to handle right clicking to select and open context menu when dragging with right mouse button. 
-        // var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickThreshold;
-        // if (ImGui.IsMouseReleased(ImGuiMouseButton.Right)
-        //     && !wasDraggingRight
-        //     && ImGui.IsItemHovered()
-        //     && !_nodeSelection.IsNodeSelected(item))
-        // {
-        //     item.Select(_nodeSelection);
-        // }
-        ImGui.PopID();
-
         // Background and Outline
         var imDrawFlags = _borderRoundings[(int)snappedBorders % 16];
 
-        var isHovered = isItemHovered || _context.Selector.HoveredIds.Contains(item.Id);
+        var isHovered = _context.Selector.HoveredIds.Contains(item.Id);
         var fade = isHovered ? 1 : 0.7f;
         drawList.AddRectFilled(pMinVisible + Vector2.One * CanvasScale,
                                pMaxVisible,
@@ -123,20 +102,50 @@ internal sealed partial class MagGraphCanvas
                                : UiColors.BackgroundFull.Fade(0f);
 
         drawList.AddRect(pMinVisible, pMaxVisible, outlineColor, 6 * CanvasScale, imDrawFlags);
-
+        
+        
+        // Custom Ui
         SymbolUi.Child.CustomUiResult customUiResult = SymbolUi.Child.CustomUiResult.None;
         if (item.Variant == MagGraphItem.Variants.Operator)
         {
-            customUiResult = DrawCustomUi(item.Instance, drawList, new ImRect(pMinVisible, pMaxVisible), Vector2.One * CanvasScale);
+            customUiResult = DrawCustomUi(item.Instance, drawList, new ImRect(pMinVisible+Vector2.One, pMaxVisible-Vector2.One), Vector2.One * CanvasScale);
         }
+        
 
+        
+        // ImGUI element for selection
+        ImGui.SetCursorScreenPos(pMin);
+        ImGui.PushID(item.Id.GetHashCode());
+        ImGui.InvisibleButton(string.Empty, pMax - pMin);
+        var isItemHovered = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup
+                                                | ImGuiHoveredFlags.AllowWhenBlockedByActiveItem);
+        
+        if (_context.StateMachine.CurrentState is DefaultState 
+            && isItemHovered 
+            && !customUiResult.HasFlag(SymbolUi.Child.CustomUiResult.IsActive))
+            _context.ActiveItem = item;
+
+        if (customUiResult.HasFlag(SymbolUi.Child.CustomUiResult.IsActive))
+        {
+            context.StateMachine.SetState(context.StateMachine.DefaultState, context);
+        }
+        ImGui.PopID();
+        // Todo: We eventually need to handle right clicking to select and open context menu when dragging with right mouse button. 
+        // var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickThreshold;
+        // if (ImGui.IsMouseReleased(ImGuiMouseButton.Right)
+        //     && !wasDraggingRight
+        //     && ImGui.IsItemHovered()
+        //     && !_nodeSelection.IsNodeSelected(item))
+        // {
+        //     item.Select(_nodeSelection);
+        // }
+        
         if (customUiResult == SymbolUi.Child.CustomUiResult.None)
         {
             // Draw Texture thumbnail
             var hasPreview = TryDrawTexturePreview(item, pMinVisible, pMaxVisible, drawList, typeColor);
 
             // Label...
-
             var name = item.ReadableName;
             if (item.Variant == MagGraphItem.Variants.Output)
             {
@@ -150,6 +159,7 @@ internal sealed partial class MagGraphCanvas
             ImGui.PushFont(Fonts.FontBold);
             var labelSize = ImGui.CalcTextSize(name);
             ImGui.PopFont();
+            
             var paddingForPreview = hasPreview ? MagGraphItem.LineHeight + 10 : 0;
             var downScale = MathF.Min(1f, (MagGraphItem.Width - paddingForPreview) * 0.9f / labelSize.X);
 
@@ -228,14 +238,19 @@ internal sealed partial class MagGraphCanvas
                                              3,
                                              UiColors.StatusAttention);
                 }
-
+                
                 var labelPos = pMin + new Vector2(8, 9) * CanvasScale + new Vector2(0, GridSizeOnScreen.Y * inputIndex);
+                var label = inputLine.InputUi.InputDefinition.Name ?? "?";
+                if (inputLine.MultiInputIndex > 0)
+                {
+                    label += " +" + inputLine.MultiInputIndex;
+                }
                 drawList.AddText(Fonts.FontSmall,
-                                 Fonts.FontSmall.FontSize * Fonts.FontSmall.Scale,
+                                 Fonts.FontSmall.FontSize * Fonts.FontSmall.Scale * smallFontScaleFactor,
 
                                  labelPos,
                                  labelColor.Fade(0.7f),
-                                 inputLine.InputUi.InputDefinition.Name ?? "?"
+                                 label
                                 );
 
                 // Draw Value if possible
@@ -251,7 +266,7 @@ internal sealed partial class MagGraphCanvas
                         valueColor.Rgba.W *= 0.6f;
 
                         ImGui.PushFont(Fonts.FontSmall);
-                        var labelSize = ImGui.CalcTextSize(valueAsString);
+                        var labelSize = ImGui.CalcTextSize(valueAsString) *  smallFontScaleFactor;
                         ImGui.PopFont();
                         
                         var valuePos = new Vector2(pMin.X + (item.Size.X - 5)* CanvasScale - labelSize.X, labelPos.Y);
@@ -259,7 +274,7 @@ internal sealed partial class MagGraphCanvas
                         if (!string.IsNullOrEmpty(valueAsString))
                         {
                             drawList.AddText(Fonts.FontSmall,
-                                             Fonts.FontSmall.FontSize * Fonts.FontSmall.Scale,
+                                             Fonts.FontSmall.FontSize * Fonts.FontSmall.Scale * smallFontScaleFactor,
                                              valuePos,
                                              labelColor.Fade(0.5f),
                                              valueAsString
@@ -279,10 +294,11 @@ internal sealed partial class MagGraphCanvas
 
                 ImGui.PushFont(Fonts.FontSmall);
                 var outputDefinitionName = outputLine.OutputUi.OutputDefinition.Name;
-                var outputLabelSize = ImGui.CalcTextSize(outputDefinitionName);
+                var outputLabelSize = ImGui.CalcTextSize(outputDefinitionName) * smallFontScaleFactor;
                 ImGui.PopFont();
 
-                drawList.AddText(Fonts.FontSmall, Fonts.FontSmall.FontSize * CanvasScale.Clamp(0.5f, 2),
+                drawList.AddText(Fonts.FontSmall, 
+                                 Fonts.FontSmall.FontSize * smallFontScaleFactor,
                                  pMin
                                  + new Vector2(-8, 9) * CanvasScale.Clamp(0.1f, 2f)
                                  + new Vector2(0, GridSizeOnScreen.Y * (outputIndex + inputIndex - 1))

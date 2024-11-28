@@ -2,6 +2,8 @@ using System;
 using System.Numerics;
 using ImGuiNET;
 using Lib.anim;
+using T3.Core.DataTypes.Vector;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui;
@@ -20,13 +22,19 @@ public static class AnimValueUi
             || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
             return SymbolUi.Child.CustomUiResult.None;
 
+        var isNodeActivated = false;
         ImGui.PushID(instance.SymbolChildId.GetHashCode());
-        if (WidgetElements.DrawRateLabelWithTitle(animValue.Rate, screenRect, drawList,  "Anim " + (AnimMath.Shapes)animValue.Shape.TypedInputValue.Value, canvasScale))
+        if (WidgetElements.DrawRateLabelWithTitle(animValue.Rate, 
+                                                                     screenRect, 
+                                                                     drawList,  
+                                                                     "Anim " + (AnimMath.Shapes)animValue.Shape.TypedInputValue.Value, canvasScale))
         {
+            isNodeActivated = true;
             animValue.Rate.Input.IsDefault = false;
             animValue.Rate.DirtyFlag.Invalidate();
         }
 
+        // Graph dragging to edit Bias and Ratio
         var h = screenRect.GetHeight();
         var graphRect = screenRect;
             
@@ -34,26 +42,26 @@ public static class AnimValueUi
             
         graphRect.Expand(-3);
         graphRect.Min.X = graphRect.Max.X - graphRect.GetWidth() * relativeGraphWidth;
-            
-            
+        
         var highlightEditable = ImGui.GetIO().KeyCtrl;
 
         if (h > 14 * T3Ui.UiScaleFactor)
         {
-            ValueLabel.Draw(drawList, graphRect, new Vector2(1, 0), animValue.Amplitude);
-            ValueLabel.Draw(drawList, graphRect, new Vector2(1, 1), animValue.Offset);
+            isNodeActivated |= ValueLabel.Draw(drawList, graphRect, new Vector2(1, 0), animValue.Amplitude);
+            isNodeActivated |= ValueLabel.Draw(drawList, graphRect, new Vector2(1, 1), animValue.Offset);
         }
 
-        // Graph dragging to edit Bias and Ratio
-        var isActive = false;
 
+        var isGraphActive = false;
         ImGui.SetCursorScreenPos(graphRect.Min);
         if (ImGui.GetIO().KeyCtrl)
         {
             ImGui.InvisibleButton("dragMicroGraph", graphRect.GetSize());
-            if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Left) || ImGui.IsItemActive())
+            
+            if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) 
+                && ImGui.IsMouseClicked(ImGuiMouseButton.Left) || ImGui.IsItemActive())
             {
-                isActive = true;
+                isGraphActive = true;
             }
 
             if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup))
@@ -62,8 +70,9 @@ public static class AnimValueUi
             }
         }
 
-        if (isActive)
+        if (isGraphActive)
         {
+            isNodeActivated = true;
             var dragDelta = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 1);
 
             if (ImGui.IsItemActivated())
@@ -91,10 +100,12 @@ public static class AnimValueUi
         DrawCurve(drawList, graphRect, animValue, highlightEditable);
             
         ImGui.PopID();
+
         return SymbolUi.Child.CustomUiResult.Rendered 
                | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph 
                | SymbolUi.Child.CustomUiResult.PreventInputLabels
-               | SymbolUi.Child.CustomUiResult.PreventTooltip;
+               | SymbolUi.Child.CustomUiResult.PreventTooltip
+               | (isNodeActivated ? SymbolUi.Child.CustomUiResult.IsActive : SymbolUi.Child.CustomUiResult.None);
 
     }
 
