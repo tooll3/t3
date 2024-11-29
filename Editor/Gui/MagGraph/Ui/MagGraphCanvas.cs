@@ -91,8 +91,8 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
             HandleFenceSelection(_context, _selectionFence);
         }
 
-        
-        // Content
+
+        // Items
         foreach (var item in _context.Layout.Items.Values)
         {
             DrawItem(item, drawList, _context);
@@ -100,6 +100,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
 
         Fonts.FontSmall.Scale = 1;
 
+        
         if (_context.ActiveItem != null)
         {
             if (_context.ActiveItem.Id != _lastHoverId)
@@ -117,10 +118,12 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         }
 
         
+        // Connections
         foreach (var connection in _context.Layout.MagConnections)
         {
             DrawConnection(connection, drawList);
         }
+
 
         // Draw temp connections
         foreach (var t in _context.TempConnections)
@@ -377,8 +380,16 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
     private void CenterView()
     {
         var visibleArea = new ImRect();
+        var isFirst = true;
+        
         foreach (var item in _context.Layout.Items.Values)
         {
+            if (isFirst)
+            {
+                visibleArea = item.Area;
+                isFirst = false;
+                continue;
+            }
             visibleArea.Add(item.PosOnCanvas);
         }
 
