@@ -22,6 +22,9 @@ internal sealed partial class MagGraphCanvas
         if (item.Variant == MagGraphItem.Variants.Placeholder)
             return;
 
+        if (!IsRectVisible(item.Area))
+            return;
+
         var hoverProgress = GetHoverTimeForId(item.Id).RemapAndClamp(0, 0.3f,0, 1);
 
         var smallFontScaleFactor = CanvasScale.Clamp(0.5f, 2);
