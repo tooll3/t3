@@ -138,21 +138,37 @@ internal sealed partial class MagGraphCanvas
                 case MagGraphConnection.ConnectionStyles.RightToLeft:
                     
                     Vector2 hoverPositionOnLine = ImGui.GetMousePos();
-                    var isHovering = ArcConnection.Draw(Vector2.One *  CanvasScale,
-                                       TransformRect(connection.SourceItem.Area), 
-                                       sourcePosOnScreen, 
-                                       TransformRect( connection.TargetItem.VerticalStackArea), 
-                                       targetPosOnScreen, 
-                                       typeColor,
-                                       1.5f,
-                                       ref hoverPositionOnLine);
+                    // var isHovering = ArcConnection.Draw(
+                    //                                     Vector2.One *  CanvasScale,
+                    //                    TransformRect(connection.SourceItem.Area), 
+                    //                    sourcePosOnScreen, 
+                    //                    TransformRect( connection.TargetItem.VerticalStackArea), 
+                    //                    targetPosOnScreen, 
+                    //                    typeColor,
+                    //                    1.5f,
+                    //                    ref hoverPositionOnLine);
+                    //
+                    // const float minDistanceToTargetSocket = 10;
+                    // if (isHovering && Vector2.Distance(hoverPositionOnLine, targetPosOnScreen) > minDistanceToTargetSocket
+                    //                && Vector2.Distance(hoverPositionOnLine, sourcePosOnScreen) > minDistanceToTargetSocket)
+                    // {
+                    //     ConnectionSplitHelper.RegisterAsPotentialSplit(connection.AsSymbolConnection(), typeColor, hoverPositionOnLine);
+                    // }
 
-                    const float minDistanceToTargetSocket = 10;
-                    if (isHovering && Vector2.Distance(hoverPositionOnLine, targetPosOnScreen) > minDistanceToTargetSocket
-                                   && Vector2.Distance(hoverPositionOnLine, sourcePosOnScreen) > minDistanceToTargetSocket)
-                    {
-                        ConnectionSplitHelper.RegisterAsPotentialSplit(connection.AsSymbolConnection(), typeColor, hoverPositionOnLine);
-                    }                    
+                    var isHovering2 = GraphConnectionDrawer.DrawConnection(Vector2.One * CanvasScale,
+                                                         TransformRect(connection.SourceItem.Area),
+                                                         sourcePosOnScreen,
+                                                         TransformRect(connection.TargetItem.VerticalStackArea),
+                                                         targetPosOnScreen,
+                                                         typeColor,
+                                                         1.5f,
+                                                         ref hoverPositionOnLine);
+                    
+                    
+                    
+                    
+                    
+                    
                     
                     // break;
                     //case MagGraphConnection.ConnectionStyles.RightToLeft:
@@ -182,7 +198,7 @@ internal sealed partial class MagGraphCanvas
                     //                         typeColor.Fade(0.6f),
                     //                         2);
                     
-                    drawList.AddCircleFilled(targetPosOnScreen + new Vector2(3 * CanvasScale,0) , anchorSize * 1.2f, typeColor, 3);
+                    //drawList.AddCircleFilled(targetPosOnScreen + new Vector2(3 * CanvasScale,0) , anchorSize * 1.2f, typeColor, 3);
 
                     break;
                 case MagGraphConnection.ConnectionStyles.Unknown:
