@@ -164,12 +164,22 @@ internal sealed class MagGraphLayout
         }
     }
 
-    private readonly HashSet<long> _connectedOutputs = new(100);
+    private readonly HashSet<int> _connectedOutputs = new(100);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static long GetConnectionSourceHash(Symbol.Connection c)
+    private static int GetConnectionSourceHash(Symbol.Connection c)
     {
-        return  c.SourceParentOrChildId.GetHashCode() << 32 + c.SourceSlotId.GetHashCode();
+        var hash = c.SourceSlotId.GetHashCode();
+        hash = hash * 31 + c.SourceParentOrChildId.GetHashCode();
+        return hash;
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static int GetHashCodeForSlot(ISlot output)
+    {
+        var hash = output.Id.GetHashCode();
+        hash = hash * 31 + output.Parent.SymbolChildId.GetHashCode();
+        return hash;
     }
 
     /// <summary>
@@ -187,6 +197,7 @@ internal sealed class MagGraphLayout
             _connectedOutputs.Add(GetConnectionSourceHash(c));
         }
     }
+    
     
     private void UpdateVisibleItemLines()
     {
@@ -270,7 +281,7 @@ internal sealed class MagGraphLayout
     /// This is accessible because for some use-cases we need to compute the height of inserted items
     /// </summary>
     internal static int CollectVisibleLines(MagGraphItem item, List<MagGraphItem.InputLine> inputLines, List<MagGraphItem.OutputLine> outputLines,
-                                           HashSet<long>? connectedOutputs =null)
+                                           HashSet<int>? connectedOutputs =null)
     {
         Debug.Assert(item.Instance != null && item.SymbolUi != null);
         int visibleIndex = 0;
@@ -330,11 +341,12 @@ internal sealed class MagGraphLayout
                 Log.Warning("Can't find outputUi:" + output.Id);
                 continue;
             }
-
-            long outputHash = item.Id.GetHashCode() << 32 + output.Id.GetHashCode();
-            var isConnected = connectedOutputs != null && connectedOutputs.Contains(outputHash);
-            if (outputIndex > 0 && !isConnected)
-                continue;
+            
+            // Should non connected secondary outputs be visible?
+            // int outputHash2 = GetHashCodeForSlot(output);
+            // var isConnected = connectedOutputs != null && connectedOutputs.Contains(outputHash2);
+            // if (outputIndex > 0 && !isConnected)
+            //     continue;
 
             outputLines.Add(new MagGraphItem.OutputLine
                                 {
@@ -357,6 +369,8 @@ internal sealed class MagGraphLayout
 
         return visibleIndex;
     }
+
+
 
     private void CollectConnectionReferences(Instance composition)
     {
