@@ -158,6 +158,7 @@ public class Slot<T> : ISlot
         {
             OpUpdateCounter.CountUp();
             UpdateAction?.Invoke(context);
+            _dirtyFlag.Clear();
             _dirtyFlag.SetUpdated();
         }
     }
