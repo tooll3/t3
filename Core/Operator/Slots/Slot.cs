@@ -238,7 +238,7 @@ public class Slot<T> : ISlot
                 // if no connection is set anymore restore the default update action
                 RestoreUpdateAction();
             }
-            _dirtyFlag.Invalidate();
+            _dirtyFlag.ForceInvalidate();
         }
     }
 
