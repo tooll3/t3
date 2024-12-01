@@ -3,15 +3,17 @@ using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 
+// ReSharper disable InconsistentNaming
+
 namespace T3.Editor.Gui.UiHelpers;
 
-public static class GraphConnectionDrawer
+internal static class GraphConnectionDrawer
 {
     private const float Pi = (float)Math.PI;
 
-    public static bool DrawConnection(Vector2 canvasScale, ImRect Sn, Vector2 Sp,
-                                      ImRect Tn, Vector2 Tp, uint color, float thickness,
-                                      ref Vector2 hoverPosition)
+    internal static bool DrawConnection(Vector2 canvasScale, ImRect Sn, Vector2 Sp,
+                                        ImRect Tn, Vector2 Tp, uint color, float thickness,
+                                        ref Vector2 hoverPosition)
     {
         var currentCanvasScale = Clamp(canvasScale.X, 0.2f, 2f);
 
@@ -27,210 +29,215 @@ public static class GraphConnectionDrawer
         var drawList = ImGui.GetWindowDrawList();
         drawList.PathClear();
 
-        // Ensure rects have valid sizes
-        var fallbackRectSize = new Vector2(120, 50) * currentCanvasScale;
-        if (Sn.GetHeight() < 1)
+        var dx = Tp.X - Sp.X;
+        var dy = Tp.Y - Sp.Y;
+
+        if (dx > 0 && MathF.Abs(Tp.Y - Sp.Y) < 2)
         {
-            var rectAMin = new Vector2(Sp.X - fallbackRectSize.X, Sp.Y - fallbackRectSize.Y / 2);
-            Sn = new ImRect(rectAMin, rectAMin + fallbackRectSize);
-        }
-
-        if (Tn.GetHeight() < 1)
-        {
-            var rectBMin = new Vector2(Tp.X, Tp.Y - fallbackRectSize.Y / 2);
-            Tn = new ImRect(rectBMin, rectBMin + fallbackRectSize);
-        }
-
-        float dx = Tp.X - Sp.X;
-        float dy = Tp.Y - Sp.Y;
-
-        bool sourceAboveTarget = Sp.Y < Tp.Y;
-
-        // Determine radii
-        float Sc_r, Tc_r;
-        if (sourceAboveTarget)
-        {
-            Sc_r = Sn.Max.Y - Sp.Y; // Distance to bottom of source node
-            Tc_r = Tp.Y - Tn.Min.Y; // Distance from target point to top of target node
+            drawList.PathLineTo(Sp); // Start at source point
+            drawList.PathLineTo(Tp); // Start at source point
         }
         else
         {
-            Sc_r = Sp.Y - Sn.Min.Y; // Distance to top of source node
-            Tc_r = Tn.Max.Y - Tp.Y; // Distance from target point to bottom of target node
-        }
+            // Ensure rects have valid sizes
+            var fallbackRectSize = new Vector2(120, 50) * currentCanvasScale;
+            if (Sn.GetHeight() < 1)
+            {
+                var rectAMin = new Vector2(Sp.X - fallbackRectSize.X, Sp.Y - fallbackRectSize.Y / 2);
+                Sn = new ImRect(rectAMin, rectAMin + fallbackRectSize);
+            }
 
-        Tc_r *= 0.2f;
+            if (Tn.GetHeight() < 1)
+            {
+                var rectBMin = new Vector2(Tp.X, Tp.Y - fallbackRectSize.Y / 2);
+                Tn = new ImRect(rectBMin, rectBMin + fallbackRectSize);
+            }
 
-        var d = new Vector2(dx, dy).Length();
-        var minTargetRadius = MathF.Min(d * 0.1f, 20);
+            var sourceAboveTarget = Sp.Y < Tp.Y;
 
-        Tc_r = MathF.Max(Tc_r, minTargetRadius * canvasScale.X);
-        Tc_r = MathF.Max(Tc_r, minTargetRadius);
-        
-        
-        float possibleSourceRadius = MathF.Abs( dx - Tc_r);
-        float clampedSourceRadius = MathF.Min(possibleSourceRadius, UserSettings.Config.MaxCurveRadius * canvasScale.X);
-        Sc_r = MathF.Max(clampedSourceRadius, Sc_r);
+            // Determine radii
+            var Sc_r = sourceAboveTarget
+                           ? Sn.Max.Y - Sp.Y // Distance to bottom of source node
+                           : Sp.Y - Sn.Min.Y; // Distance to top of source node
 
-        float sumR = Sc_r + Tc_r;
+            var Tc_r = sourceAboveTarget
+                           ? Tp.Y - Tn.Min.Y + 10 // Distance from target point to top of target node
+                           // plus a small offset to avoid lines from top and bottom falling together
+                           : Tn.Max.Y - Tp.Y; // Distance from target point to bottom of target node
 
-        // Adjust Sc.x to be further left by Sc_r
-        float Sc_x = Sp.X + dx - Tc_r - Sc_r;
-        if (dx < sumR)
-        {
-            // If horizontal space is too small, adjust Sc_x to Sp.X
-            Sc_x = Sp.X;
-        }
+            const float horizontalCompress = 0.2f;
+            
+            
+            var minRadius = (dy > 0 ? 5: 3) * canvasScale.X;
 
-        float Tc_x = Tp.X;
-        float Sc_y, Tc_y;
+            // Compress packing towards input stacks...
+            Tc_r *= horizontalCompress;
+            Tc_r += minRadius;
 
-        if (sourceAboveTarget)
-        {
-            Sc_y = Sp.Y + Sc_r;
-            Tc_y = Tp.Y - Tc_r;
-        }
-        else
-        {
-            Sc_y = Sp.Y - Sc_r;
-            Tc_y = Tp.Y + Tc_r;
-        }
+            Sc_r *= horizontalCompress;
+            Sc_r += minRadius;
 
-        Vector2 Sc = new Vector2(Sc_x, Sc_y);
-        Vector2 Tc = new Vector2(Tc_x, Tc_y);
+            var possibleSourceRadius = dx - Tc_r;
+            var clampedSourceRadius = MathF.Min(possibleSourceRadius, UserSettings.Config.MaxCurveRadius * canvasScale.X);
+            Sc_r = MathF.Max(Sc_r, clampedSourceRadius);
 
-        drawList.AddCircle(Sc, Sc_r, Color.Orange.Fade(0.1f));
-        drawList.AddCircle(Tc, Tc_r, Color.Orange.Fade(0.1f));
+            var d = new Vector2(dx, dy).Length();
+            Sc_r = MathF.Min(Sc_r,d / 4f);
+            Tc_r = MathF.Min(Tc_r,d / 4f);
 
-        // Build the path
-        drawList.PathLineTo(Sp); // Start at source point
-        //drawList.PathLineTo(new Vector2(Sc_x, Sp.Y));  // Horizontal line to (Sc_x, Sp.Y)
+            // Use smaller wrap radius for back connections
+            var normalRadius = Tc_r;
+            var tightRadius = MathF.Min(Tc_r, MathF.Abs(dy) * 0.1f);
+            Tc_r = MathUtils.RemapAndClamp(dx, -400 * canvasScale.X, 20 * canvasScale.X,tightRadius, normalRadius );
+            
+            var sumR = Sc_r + Tc_r;
 
-        // Determine angles for arcs
-        float startAngle_Sc, endAngle_Sc;
-        float startAngle_Tc, endAngle_Tc;
+            // Adjust Sc.x to be further left by Sc_r
+            var Sc_x = Sp.X + dx - Tc_r - Sc_r;
+            if (dx < sumR)
+            {
+                // If horizontal space is too small, adjust Sc_x to Sp.X
+                Sc_x = Sp.X;
+            }
 
-        if (dx >= sumR && MathF.Abs(dy) > sumR)
-        {
-            // Ideal case, use fixed angles
+            var Tc_x = Tp.X;
+            float Sc_y, Tc_y;
+
             if (sourceAboveTarget)
             {
-                // Source Arc from 270 degrees to 360 degrees
-                startAngle_Sc = 1.5f * Pi;
-                endAngle_Sc = 2f * Pi;
-
-                // Target Arc from 180 degrees to 90 degrees
-                startAngle_Tc = Pi;
-                endAngle_Tc = 0.5f * Pi;
+                Sc_y = Sp.Y + Sc_r;
+                Tc_y = Tp.Y - Tc_r;
             }
             else
             {
-                // Source Arc from 90 degrees to 0 degrees
-                startAngle_Sc = 0.5f * Pi;
-                endAngle_Sc = 0f;
-
-                // Target Arc from 180 degrees to 270 degrees
-                startAngle_Tc = Pi;
-                endAngle_Tc = 1.5f * Pi;
-            }
-        }
-        else
-        {
-            float distanceBetweenCenters = Vector2.Distance(Sc, Tc);
-
-            if (distanceBetweenCenters < Math.Abs(Sc_r - Tc_r))
-            {
-                // Circles are overlapping; draw a straight line for simplicity
-                drawList.PathLineTo(Tp);
-                drawList.PathStroke(color, ImDrawFlags.None, thickness);
-                return false;
+                Sc_y = Sp.Y - Sc_r;
+                Tc_y = Tp.Y + Tc_r;
             }
 
-            if (MathF.Abs(dy) < sumR)
+            var Sc = new Vector2(Sc_x, Sc_y);
+            var Tc = new Vector2(Tc_x, Tc_y);
+
+            // Debug viz
+            // drawList.AddCircle(Sc, Sc_r, Color.Orange.Fade(0.1f));
+            // drawList.AddCircle(Tc, Tc_r, Color.Orange.Fade(0.1f));
+
+            // Determine angles for arcs
+            float startAngle_Sc, endAngle_Sc;
+            float startAngle_Tc, endAngle_Tc;
+
+            if(Sc_x > Sp.X)
+                drawList.PathLineTo(Sp); // Start at source point
+
+            if (dx >= sumR && MathF.Abs(dy) > sumR)
             {
-                // Vertical space is too small, adjust the start and end angles
-                var flipped = Sc_y > Tc_y 
-                              //&& Sc_x + Sc_r < Tc_x - Tc_r
-                              ;
-                              //
-                //flipped = false;
-                //flipped = true;
-                
-                
-                float angleAdjustment = ComputeInnerTangentAngle(Sc, Sc_r-1, Tc, Tc_r, flipped);
+                // Ideal case, use fixed angles
                 if (sourceAboveTarget)
                 {
-                    // Adjust angles for source arc
+                    // Source Arc from 270 degrees to 360 degrees
                     startAngle_Sc = 1.5f * Pi;
-                    //endAngle_Sc = angleBetweenCenters + angleAdjustment;
-                    endAngle_Sc = 2 * Pi + angleAdjustment;
+                    endAngle_Sc = 2f * Pi;
 
-                    // Adjust angles for target arc
-                    //startAngle_Tc = angleBetweenCenters + angleAdjustment;
-                    startAngle_Tc = 1f * Pi + angleAdjustment;
+                    // Target Arc from 180 degrees to 90 degrees
+                    startAngle_Tc = Pi;
                     endAngle_Tc = 0.5f * Pi;
                 }
                 else
                 {
-                    // Adjust angles for source arc
+                    // Source Arc from 90 degrees to 0 degrees
                     startAngle_Sc = 0.5f * Pi;
-                    //endAngle_Sc = angleBetweenCenters - angleAdjustment;
-                    endAngle_Sc = +angleAdjustment;
+                    endAngle_Sc = 0f;
 
-                    // Adjust angles for target arc
-                    //startAngle_Tc = angleBetweenCenters - angleAdjustment;
-                    startAngle_Tc = Pi + angleAdjustment;
+                    // Target Arc from 180 degrees to 270 degrees
+                    startAngle_Tc = Pi;
                     endAngle_Tc = 1.5f * Pi;
                 }
             }
             else
             {
-                // Horizontal space is too small, adjust the start and end angles
-                var flipped = Sc_x - Sc_r < Tc_x + Tc_r 
-                              || Sc_y + Sc_r > Tc_y - Tc_r;
+                
+                var distanceBetweenCenters = Vector2.Distance(Sc, Tc);
 
-                float angleAdjustment = ComputeInnerTangentAngle(Sc, Sc_r, Tc, Tc_r, flipped);
-                if (sourceAboveTarget)
+                if (distanceBetweenCenters < Math.Abs(Sc_r - Tc_r))
                 {
-                    // Adjust angles for source arc
-                    startAngle_Sc = 1.5f * Pi;
-                    //endAngle_Sc = angleBetweenCenters + angleAdjustment;
-                    endAngle_Sc = 2 * Pi + angleAdjustment;
+                    // Circles are overlapping; draw a straight line for simplicity
+                    drawList.PathLineTo(Tp);
+                    drawList.PathStroke(color, ImDrawFlags.None, thickness);
+                    return false;
+                }
 
-                    // Adjust angles for target arc
-                    //startAngle_Tc = angleBetweenCenters + angleAdjustment;
-                    startAngle_Tc = 1f * Pi + angleAdjustment;
-                    endAngle_Tc = 0.5f * Pi;
+                if (MathF.Abs(dy) < sumR)
+                {
+                    // Vertical space is too small, adjust the start and end angles
+                    var flipped = Sc_y > Tc_y;
+                    if (dx < 0)
+                        flipped = !flipped;
+
+                    var angleAdjustment = ComputeInnerTangentAngle(Sc, Sc_r - 1, Tc, Tc_r, flipped);
+                    if (sourceAboveTarget)
+                    {
+                        // Adjust angles for source arc
+                        startAngle_Sc = 1.5f * Pi;
+                        endAngle_Sc = 2 * Pi + angleAdjustment;
+
+                        // Adjust angles for target arc
+                        startAngle_Tc = 1f * Pi + angleAdjustment;
+                        endAngle_Tc = 0.5f * Pi;
+                    }
+                    else
+                    {
+                        // Adjust angles for source arc
+                        startAngle_Sc = 0.5f * Pi;
+                        endAngle_Sc = +angleAdjustment;
+
+                        // Adjust angles for target arc
+                        startAngle_Tc = Pi + angleAdjustment;
+                        endAngle_Tc = 1.5f * Pi;
+                    }
                 }
                 else
                 {
-                    // Adjust angles for source arc
-                    startAngle_Sc = 0.5f * Pi;
-                    //endAngle_Sc = angleBetweenCenters - angleAdjustment;
-                    endAngle_Sc = +angleAdjustment;
+                    // Horizontal space is too small, adjust the start and end angles
+                    var flipped = Sc_x - Sc_r <= Tc_x + Tc_r;
+                    if (dy < 0 && Sc_x > Tc_x + Tc_r + Sc_r)
+                        flipped = !flipped;
 
-                    // Adjust angles for target arc
-                    //startAngle_Tc = angleBetweenCenters - angleAdjustment;
-                    startAngle_Tc = Pi + angleAdjustment;
-                    endAngle_Tc = 1.5f * Pi;
+                    //Tc += Vector2.One * MathF.Sin((float)ImGui.GetTime() * 10);
+
+                    var angleAdjustment = ComputeInnerTangentAngle(Sc, Sc_r, Tc, Tc_r, flipped);
+                    if (sourceAboveTarget)
+                    {
+                        // Adjust angles for source arc
+                        startAngle_Sc = 1.5f * Pi;
+                        endAngle_Sc = 2 * Pi + angleAdjustment;
+
+                        // Adjust angles for target arc
+                        startAngle_Tc = 1f * Pi + angleAdjustment;
+                        endAngle_Tc = 0.5f * Pi;
+                    }
+                    else
+                    {
+                        // Adjust angles for source arc
+                        startAngle_Sc = 0.5f * Pi;
+                        endAngle_Sc = +angleAdjustment;
+
+                        // Adjust angles for target arc
+                        startAngle_Tc = Pi + angleAdjustment;
+                        endAngle_Tc = 1.5f * Pi;
+                    }
                 }
             }
+
+            const float anglePrecision = 12f;
+            var resS = (int)(MathF.Abs(startAngle_Sc - endAngle_Sc) * anglePrecision ).Clamp(1,30);
+
+            // Draw source arc
+            drawList.PathArcTo(Sc, Sc_r, startAngle_Sc, endAngle_Sc, resS);
+
+            // Draw target arc
+            var resT = (int)(MathF.Abs(startAngle_Tc - endAngle_Tc) * anglePrecision ).Clamp(1,30);
+            drawList.PathArcTo(Tc, Tc_r, startAngle_Tc, endAngle_Tc, resT);
+            //drawList.PathLineTo(Tp); // Line to target point
         }
-
-        // Draw source arc
-        drawList.PathArcTo(Sc, Sc_r, startAngle_Sc, endAngle_Sc, 10);
-
-        // If arcs are connected via inner tangent, no vertical line is needed
-        if (dx >= sumR)
-        {
-            // Vertical line from end of source arc to start of target arc
-            //drawList.PathLineTo(new Vector2(Sc_x, Tc_y));
-        }
-
-        // Draw target arc
-        drawList.PathArcTo(Tc, Tc_r, startAngle_Tc, endAngle_Tc, 10);
-
-        drawList.PathLineTo(Tp); // Line to target point
 
         // Finalize drawing
         var isHovering = TestHover(drawList, ref hoverPosition);
@@ -238,7 +245,7 @@ public static class GraphConnectionDrawer
         if (currentCanvasScale > 0.5f)
         {
             // Optionally draw an outline
-            drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, AdjustColor(color), ImDrawFlags.None, thickness + 3f);
+            drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, UiColors.WindowBackground.Fade(0.4f), ImDrawFlags.None, thickness + 5f);
         }
 
         drawList.PathStroke(color, ImDrawFlags.None, thickness);
@@ -263,7 +270,7 @@ public static class GraphConnectionDrawer
         return false;
     }
 
-    public static float ComputeInnerTangentAngle(Vector2 centerA, float radiusA, Vector2 centerB, float radiusB, bool flipped = false)
+    private static float ComputeInnerTangentAngle(Vector2 centerA, float radiusA, Vector2 centerB, float radiusB, bool flipped = false)
     {
         // Calculate the differences in x and y coordinates
         double deltaX = centerB.X - centerA.X;
