@@ -1,8 +1,8 @@
 ﻿using ImGuiNET;
-using SharpDX;
-using T3.Editor.Gui.Graph.Interaction.Connections;
+using T3.Core.Utils;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.MagGraph.Model;
+using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using Color = T3.Core.DataTypes.Vector.Color;
@@ -12,7 +12,7 @@ namespace T3.Editor.Gui.MagGraph.Ui;
 
 internal sealed partial class MagGraphCanvas
 {
-    private void DrawConnection(MagGraphConnection connection, ImDrawListPtr drawList)
+    private void DrawConnection(MagGraphConnection connection, ImDrawListPtr drawList, GraphUiContext context)
     {
         if (connection.Style == MagGraphConnection.ConnectionStyles.Unknown)
             return;
@@ -22,12 +22,22 @@ internal sealed partial class MagGraphCanvas
         // if (!TypeUiRegistry.TryGetPropertiesForType(type, out var typeUiProperties))
         //     return;
 
+        var isSelected = context.Selector.IsSelected(connection.SourceItem) ||
+                         context.Selector.IsSelected(connection.TargetItem);
+        
         var typeUiProperties = TypeUiRegistry.GetPropertiesForType(type);
 
         var anchorSize = 4 * CanvasScale;
-        var typeColor = typeUiProperties.Color;
+        var idleFadeProgress = MathUtils.RemapAndClamp(connection.SourceOutput.DirtyFlag.FramesSinceLastUpdate, 0, 100, 1, 0f);
+        
+        var color =  typeUiProperties.Color;
+        var selectedColor = isSelected ?  ColorVariations.OperatorLabel.Apply(color)
+                                : ColorVariations.ConnectionLines.Apply(color);
+        var typeColor = ColorVariations.ConnectionLines.Apply(selectedColor).Fade(MathUtils.Lerp(0.5f, 1, idleFadeProgress));
+        
         var sourcePosOnScreen = TransformPosition(connection.SourcePos);
         var targetPosOnScreen = TransformPosition(connection.TargetPos);
+
 
         if (connection.IsSnapped)
         {
@@ -161,44 +171,10 @@ internal sealed partial class MagGraphCanvas
                                                          TransformRect(connection.TargetItem.VerticalStackArea),
                                                          targetPosOnScreen,
                                                          typeColor,
-                                                         1.5f,
+                                                         MathUtils.Lerp(1f,2f,idleFadeProgress) + (isSelected ? 1:0),
                                                          ref hoverPositionOnLine);
                     
-                    
-                    
-                    
-                    
-                    
-                    
-                    // break;
-                    //case MagGraphConnection.ConnectionStyles.RightToLeft:
-                    //var hoverPositionOnLine = Vector2.Zero;
-                    // var isHovering = ArcConnection.Draw( Scale,
-                    //                                      new ImRect(sourcePosOnScreen, sourcePosOnScreen + new Vector2(10, 10)),
-                    //                                     sourcePosOnScreen,
-                    //                                     ImRect.RectWithSize(
-                    //                                                         TransformPosition(connection.TargetItem.PosOnCanvas),
-                    //                                                         TransformDirection(connection.TargetItem.Size)),
-                    //                                     targetPosOnScreen,
-                    //                                     typeColor,
-                    //                                     2,
-                    //                                     ref hoverPositionOnLine);
-
-                    // const float minDistanceToTargetSocket = 10;
-                    // if (isHovering && Vector2.Distance(hoverPositionOnLine, TargetPosition) > minDistanceToTargetSocket
-                    //                && Vector2.Distance(hoverPositionOnLine, SourcePosition) > minDistanceToTargetSocket)
-                    // {
-                    //     ConnectionSplitHelper.RegisterAsPotentialSplit(Connection, ColorForType, hoverPositionOnLine);
-                    // }                        
-                    //
-                    // drawList.AddBezierCubic(sourcePosOnScreen,
-                    //                         sourcePosOnScreen + new Vector2(d, 0),
-                    //                         targetPosOnScreen - new Vector2(d, 0),
-                    //                         targetPosOnScreen,
-                    //                         typeColor.Fade(0.6f),
-                    //                         2);
-                    
-                    //drawList.AddCircleFilled(targetPosOnScreen + new Vector2(3 * CanvasScale,0) , anchorSize * 1.2f, typeColor, 3);
+                    drawList.AddCircleFilled(targetPosOnScreen + new Vector2(3 * CanvasScale,0) , anchorSize * 1.2f, typeColor, 3);
 
                     break;
                 case MagGraphConnection.ConnectionStyles.Unknown:

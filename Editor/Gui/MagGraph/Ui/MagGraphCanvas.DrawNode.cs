@@ -25,6 +25,21 @@ internal sealed partial class MagGraphCanvas
         if (!IsRectVisible(item.Area))
             return;
 
+
+        var idleFadeFactor = 1f;
+        if (item.Variant == MagGraphItem.Variants.Operator && item.Instance != null)
+        {
+            var framesSinceLastUpdate = 100;
+            foreach (var output in item.Instance.Outputs)
+            {
+                framesSinceLastUpdate = Math.Min(framesSinceLastUpdate, output.DirtyFlag.FramesSinceLastUpdate);
+            }
+            
+            idleFadeFactor = MathUtils.RemapAndClamp(framesSinceLastUpdate, 0f, 60f, 1f, 0.4f);
+        }
+        
+        
+        
         var hoverProgress = GetHoverTimeForId(item.Id).RemapAndClamp(0, 0.3f,0, 1);
 
         var smallFontScaleFactor = CanvasScale.Clamp(0.5f, 2);
@@ -95,10 +110,11 @@ internal sealed partial class MagGraphCanvas
         var imDrawFlags = _borderRoundings[(int)snappedBorders % 16];
 
         var isHovered = _context.Selector.HoveredIds.Contains(item.Id);
-        var fade = isHovered ? 1 : 0.7f;
+        //var fade = isHovered ? 1 : 0.7f;
+        var fade = 0.9f;
         drawList.AddRectFilled(pMinVisible + Vector2.One * CanvasScale,
                                pMaxVisible,
-                               ColorVariations.OperatorBackground.Apply(typeColor).Fade(fade), 5 * CanvasScale,
+                               ColorVariations.OperatorBackground.Apply(typeColor).Fade(fade * idleFadeFactor), 5 * CanvasScale,
                                imDrawFlags);
 
         var isSelected = _context.Selector.IsSelected(item);

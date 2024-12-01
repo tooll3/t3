@@ -121,7 +121,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         // Connections
         foreach (var connection in _context.Layout.MagConnections)
         {
-            DrawConnection(connection, drawList);
+            DrawConnection(connection, drawList, _context);
         }
 
 

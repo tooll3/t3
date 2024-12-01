@@ -17,6 +17,8 @@ internal static class GraphConnectionDrawer
     {
         var currentCanvasScale = Clamp(canvasScale.X, 0.2f, 2f);
 
+        Sp += Vector2.One *0.5f;
+        Tp +=  Vector2.One *0.5f;
         // Early out if not visible
         var r2 = Sn;
         r2.Add(Tn);
