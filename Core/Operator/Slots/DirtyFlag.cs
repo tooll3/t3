@@ -35,6 +35,7 @@ public sealed class DirtyFlag
 
         return Target;
     }
+    
 
     public void ForceInvalidate()
     {
@@ -48,9 +49,9 @@ public sealed class DirtyFlag
         Reference = Target;
     }
 
+    // editor-specific function
     internal void SetUpdated()
     {
-        Clear();
         if (_lastUpdateTick >= _globalTickCount && _lastUpdateTick < _globalTickCount + GlobalTickDiffPerFrame - 1)
         {
             _lastUpdateTick++;
@@ -63,6 +64,8 @@ public sealed class DirtyFlag
 
     public int Reference;
     public int Target = 1; // initially dirty
+    
+    // editor-specific value
     public int FramesSinceLastUpdate => (_globalTickCount - 1 - _lastUpdateTick) / GlobalTickDiffPerFrame;
 
     public DirtyFlagTrigger Trigger
@@ -79,6 +82,7 @@ public sealed class DirtyFlag
     internal bool TriggerIsEnabled;
     internal bool TriggerIsAnimated;
 
+    // editor-specific value
     public int NumUpdatesWithinFrame
     {
         get

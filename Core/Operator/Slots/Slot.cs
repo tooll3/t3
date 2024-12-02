@@ -158,6 +158,7 @@ public class Slot<T> : ISlot
         {
             OpUpdateCounter.CountUp();
             UpdateAction?.Invoke(context);
+            _dirtyFlag.Clear();
             _dirtyFlag.SetUpdated();
         }
     }
@@ -238,7 +239,7 @@ public class Slot<T> : ISlot
                 // if no connection is set anymore restore the default update action
                 RestoreUpdateAction();
             }
-            _dirtyFlag.Invalidate();
+            _dirtyFlag.ForceInvalidate();
         }
     }
 
