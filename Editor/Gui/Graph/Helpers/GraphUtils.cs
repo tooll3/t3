@@ -169,7 +169,6 @@ internal static partial class GraphUtils
     private static readonly string[] ReservedWords = new string[] { "value", "Var", "instance", "item", "Input", "slot" };
     private static readonly Lazy<CodeDomProvider> IdentifierValidator = new(() => CodeDomProvider.CreateProvider("C#"));
 
-    // FIXME: This lines below are an attempt to replace the following line...
     [GeneratedRegex(@"^([A-Za-z][A-Za-z\d]*)(\.([A-Za-z_][A-Za-z_\d]*))*$")]
     private static partial Regex NamespaceRegex();
 }

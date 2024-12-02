@@ -4,8 +4,6 @@ using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Interaction.TransformGizmos;
-using T3.Editor.Gui.MagGraph.Model;
-using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.Gui.Selection;
 using T3.Editor.UiModel;
 
@@ -99,6 +97,8 @@ internal class NodeSelection : ISelection
                 yield return typedItem;
         }
     }
+
+
         
     public bool IsNodeSelected(ISelectableCanvasObject node) => Selection.Contains(node);
 
@@ -135,8 +135,9 @@ internal class NodeSelection : ISelection
 
         return null;
     }
-
+    
     public IEnumerable<SymbolUi.Child> GetSelectedChildUis() => GetSelectedNodes<SymbolUi.Child>();
+    
     public IEnumerable<Instance> GetSelectedInstances()
     {
         return GetSelectedNodes<SymbolUi.Child>()
@@ -195,7 +196,7 @@ internal class NodeSelection : ISelection
     private IReadOnlyList<Guid> _selectedCompositionPath;
     private readonly Dictionary<SymbolUi.Child, IReadOnlyList<Guid>> _childUiInstanceIdPaths = new();
 
-    public bool IsSelected(MagGraphItem item)
+    public bool IsSelected(ISelectableCanvasObject item)
     {
         // Avoid linq
         foreach (var i in Selection)

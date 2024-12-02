@@ -52,7 +52,6 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
         NodeNavigation = new NodeNavigation(() => window.CompositionOp, this, Structure, NavigationHistory);
         SelectableNodeMovement = new SelectableNodeMovement(window, this, NodeSelection);
         _graph = new Graph(window, this);
-            
 
         window.WindowDestroyed += (_, _) => Destroyed = true;
         window.FocusLost += (_, _) =>
@@ -87,7 +86,6 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
             editingFlags |= T3Ui.EditingFlags.PreventMouseInteractions;
 
         UpdateCanvas(out _, editingFlags);
-
     }
 
     public void DrawGraph(ImDrawListPtr drawList, GraphDrawingFlags drawingFlags, bool preventInteractions, float graphOpacity)
@@ -97,8 +95,8 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
             ImGui.SetScrollY(0);
             CustomComponents.DrawWindowFocusFrame();
             if (ImGui.IsWindowFocused())
-                _window.TakeFocus(); 
-                
+                _window.TakeFocus();
+
             DrawDropHandler(_window.CompositionOp, _window.CompositionOp.GetSymbolUi());
             ImGui.SetCursorScreenPos(Vector2.One * 100);
 
@@ -107,29 +105,29 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
                 var compositionOp = _window.CompositionOp;
                 var compositionUi = compositionOp.GetSymbolUi();
                 //compositionUi.FlagAsModified();
-                    
+
                 if (KeyboardBinding.Triggered(UserActions.FocusSelection))
                     FocusViewToSelection();
 
                 if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.Duplicate))
                 {
-                    CopySelectedNodesToClipboard(compositionOp);
-                    PasteClipboard(compositionOp);
+                    NodeActions.CopySelectedNodesToClipboard(NodeSelection, compositionOp);
+                    NodeActions.PasteClipboard(NodeSelection, this, compositionOp);
                 }
 
                 if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))
                 {
-                    DeleteSelectedElements(compositionUi);
+                    NodeActions.DeleteSelectedElements(NodeSelection, compositionUi);
                 }
 
                 if (KeyboardBinding.Triggered(UserActions.ToggleDisabled))
                 {
-                    ToggleDisabledForSelectedElements();
+                    NodeActions.ToggleDisabledForSelectedElements(NodeSelection);
                 }
 
                 if (KeyboardBinding.Triggered(UserActions.ToggleBypassed))
                 {
-                    ToggleBypassedForSelectedElements();
+                    NodeActions.ToggleBypassedForSelectedElements(NodeSelection);
                 }
 
                 if (KeyboardBinding.Triggered(UserActions.PinToOutputWindow))
@@ -144,10 +142,10 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
                     }
                     else
                     {
-                        PinSelectedToOutputWindow(compositionOp);
+                        NodeActions.PinSelectedToOutputWindow(this, NodeSelection, compositionOp);
                     }
                 }
-                    
+
                 if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
                 {
                     var selectedImage = NodeSelection.GetFirstSelectedInstance();
@@ -160,12 +158,12 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
 
                 if (KeyboardBinding.Triggered(UserActions.CopyToClipboard))
                 {
-                    CopySelectedNodesToClipboard(compositionOp);
+                    NodeActions.CopySelectedNodesToClipboard(NodeSelection, compositionOp);
                 }
 
                 if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.PasteFromClipboard))
                 {
-                    PasteClipboard(compositionOp);
+                    NodeActions.PasteClipboard(NodeSelection, this, compositionOp);
                 }
 
                 if (KeyboardBinding.Triggered(UserActions.LayoutSelection))
@@ -175,7 +173,8 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
 
                 if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.AddAnnotation))
                 {
-                    AddAnnotation(compositionOp);
+                    var newAnnotation = NodeActions.AddAnnotation(NodeSelection, this, compositionOp);
+                    _graph.RenameAnnotation(newAnnotation);
                 }
 
                 IReadOnlyList<Guid>? navigationPath = null;
@@ -290,22 +289,22 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
 
             RenameInstanceOverlay.Draw(_window);
             var tempConnections = ConnectionMaker.GetTempConnectionsFor(_window);
-                
+
             var doubleClicked = ImGui.IsMouseDoubleClicked(0);
 
             var isSomething = (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || ImGui.IsWindowFocused())
                               && !preventInteractions
                               && tempConnections.Count == 0;
-                
+
             var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
-            var shouldHandleFenceSelection = isSomething 
+            var shouldHandleFenceSelection = isSomething
                                              || isOnBackground && (ImGui.IsMouseDoubleClicked(0) || KeyboardBinding.Triggered(UserActions.CloseOperator));
-                
+
             if (shouldHandleFenceSelection)
             {
                 HandleFenceSelection(_window.CompositionOp, _selectionFence);
             }
-                
+
             if (isOnBackground && doubleClicked)
             {
                 _window.TrySetCompositionOpToParent();
@@ -334,22 +333,23 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
             }
 
             drawList.PopClipRect();
-                
+
             var compositionUpdated = _window.CompositionOp;
-                
+
             if (FrameStats.Current.OpenedPopUpName == string.Empty)
                 CustomComponents.DrawContextMenuForScrollCanvas(() => DrawContextMenuContent(compositionUpdated), ref _contextMenuIsOpen);
 
-            _duplicateSymbolDialog.Draw(compositionUpdated, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits,
+            _duplicateSymbolDialog.Draw(compositionUpdated, NodeSelection.GetSelectedChildUis().ToList(), ref _nameSpaceForDialogEdits,
+                                        ref _symbolNameForDialogEdits,
                                         ref _symbolDescriptionForDialog);
-            _combineToSymbolDialog.Draw(compositionUpdated, GetSelectedChildUis(),
+            _combineToSymbolDialog.Draw(compositionUpdated, NodeSelection.GetSelectedChildUis().ToList(),
                                         NodeSelection.GetSelectedNodes<Annotation>().ToList(),
                                         ref _nameSpaceForDialogEdits,
                                         ref _symbolNameForDialogEdits,
                                         ref _symbolDescriptionForDialog);
 
-            _renameSymbolDialog.Draw(GetSelectedChildUis(), ref _symbolNameForDialogEdits);
-                
+            _renameSymbolDialog.Draw(NodeSelection.GetSelectedChildUis().ToList(), ref _symbolNameForDialogEdits);
+
             EditCommentDialog.Draw(NodeSelection);
 
             if (compositionUpdated != _window.RootInstance.Instance && !compositionUpdated.Symbol.SymbolPackage.IsReadOnly)
@@ -403,7 +403,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
         {
             NodeSelection.Clear();
         }
-            
+
         var isRemoval = selectMode == SelectionFence.SelectModes.Remove;
 
         foreach (var node in nodesToSelect)
@@ -493,7 +493,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
                     {
                         Log.Warning($"Symbol {guid} not found in registry");
                     }
-                        
+
                     T3Ui.DraggingIsInProgress = false;
                 }
             }
@@ -520,9 +520,9 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
         var bounds = new ImRect(firstElement.PosOnCanvas, firstElement.PosOnCanvas + Vector2.One);
         foreach (var element in selectedOrAll)
         {
-            if(float.IsInfinity(element.PosOnCanvas.X) || float.IsInfinity(element.PosOnCanvas.Y))
+            if (float.IsInfinity(element.PosOnCanvas.X) || float.IsInfinity(element.PosOnCanvas.Y))
                 element.PosOnCanvas = Vector2.Zero;
-                
+
             bounds.Add(element.PosOnCanvas);
             bounds.Add(element.PosOnCanvas + element.Size);
         }
@@ -536,7 +536,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
         var clickPosition = ImGui.GetMousePosOnOpeningCurrentPopup();
         var compositionSymbolUi = compositionOp.GetSymbolUi();
 
-        var selectedChildUis = GetSelectedChildUis();
+        var selectedChildUis = NodeSelection.GetSelectedChildUis().ToList();
         var nextUndoTitle = UndoRedoStack.CanUndo ? $" ({UndoRedoStack.GetNextUndoTitle()})" : string.Empty;
         if (ImGui.MenuItem("Undo" + nextUndoTitle,
                            shortcut: KeyboardBinding.ListKeyboardShortcuts(UserActions.Undo, false),
@@ -551,7 +551,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
         // ------ for selection -----------------------
         var oneOpSelected = selectedChildUis.Count == 1;
         var someOpsSelected = selectedChildUis.Count > 0;
-        var snapShotsEnabledFromSomeOps 
+        var snapShotsEnabledFromSomeOps
             = selectedChildUis
                .Any(selectedChildUi => selectedChildUi.EnabledForSnapshots);
 
@@ -571,7 +571,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
                            selected: allSelectedDisabled,
                            enabled: selectedChildUis.Count > 0))
         {
-            ToggleDisabledForSelectedElements();
+            NodeActions.ToggleDisabledForSelectedElements(NodeSelection);
         }
 
         var allSelectedBypassed = selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.SymbolChild.IsBypassed);
@@ -580,7 +580,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
                            selected: allSelectedBypassed,
                            enabled: selectedChildUis.Count > 0))
         {
-            ToggleBypassedForSelectedElements();
+            NodeActions.ToggleBypassedForSelectedElements(NodeSelection);
         }
 
         if (ImGui.MenuItem("Rename", oneOpSelected))
@@ -689,7 +689,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
 
             if (ImGui.MenuItem("Pin to output", oneOpSelected))
             {
-                PinSelectedToOutputWindow(compositionOp);
+                NodeActions.PinSelectedToOutputWindow(this, NodeSelection, compositionOp);
             }
 
             ImGui.EndMenu();
@@ -702,16 +702,16 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
                            selected: false,
                            enabled: someOpsSelected))
         {
-            CopySelectedNodesToClipboard(compositionOp);
+            NodeActions.CopySelectedNodesToClipboard(NodeSelection, compositionOp);
         }
 
         if (ImGui.MenuItem("Paste", KeyboardBinding.ListKeyboardShortcuts(UserActions.PasteFromClipboard, false)))
         {
-            PasteClipboard(compositionOp);
+            NodeActions.PasteClipboard(NodeSelection, this, compositionOp);
         }
 
-        var selectedInputUis = GetSelectedInputUis().ToList();
-        var selectedOutputUis = GetSelectedOutputUis().ToList();
+        var selectedInputUis = NodeSelection.GetSelectedNodes<IInputUi>().ToList();
+        var selectedOutputUis = NodeSelection.GetSelectedNodes<IOutputUi>().ToList();
 
         var isSaving = T3Ui.IsCurrentlySaving;
 
@@ -720,7 +720,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
                            selected: false,
                            enabled: (someOpsSelected || selectedInputUis.Count > 0 || selectedOutputUis.Count > 0) && !isSaving))
         {
-            DeleteSelectedElements(compositionSymbolUi, selectedChildUis, selectedInputUis, selectedOutputUis);
+            NodeActions.DeleteSelectedElements(NodeSelection, compositionSymbolUi, selectedChildUis, selectedInputUis, selectedOutputUis);
         }
 
         if (ImGui.MenuItem("Duplicate",
@@ -728,8 +728,8 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
                            selected: false,
                            enabled: selectedChildUis.Count > 0 && !isSaving))
         {
-            CopySelectedNodesToClipboard(compositionOp);
-            PasteClipboard(compositionOp);
+            NodeActions.CopySelectedNodesToClipboard(NodeSelection, compositionOp);
+            NodeActions.PasteClipboard(NodeSelection, this, compositionOp);
         }
 
         ImGui.Separator();
@@ -784,7 +784,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
                 {
                     CoreUi.Instance.OpenWithDefaultApplication(symbolPackage.ResourcesFolder);
                 }
-                    
+
                 ImGui.EndMenu();
             }
         }
@@ -814,7 +814,8 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
                                selected: false,
                                enabled: true))
             {
-                AddAnnotation(compositionOp);
+                var newAnnotation = NodeActions.AddAnnotation(NodeSelection, this, compositionOp);
+                _graph.RenameAnnotation(newAnnotation);
             }
 
             ImGui.EndMenu();
@@ -848,7 +849,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
             // get instance that is currently selected
             var instance = compositionOp.Children[childUi.Id];
 
-            if (TryGetShaderPath(instance, out var filePath, out var owner))
+            if (NodeActions.TryGetShaderPath(instance, out var filePath, out var owner))
             {
                 var shaderIsReadOnly = owner.IsReadOnly;
 
@@ -901,295 +902,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
         newFilePath = Path.Combine(destinationDirectory, Path.GetFileName(filePath));
     }
 
-    // Todo: There must be a better way...
-    private static bool TryGetShaderPath(Instance instance, out string filePath, out IResourcePackage owner)
-    {
-        bool found = false;
-        if (instance is IShaderOperator<PixelShader> pixelShader)
-        {
-            found = TryGetSourceFile(pixelShader, out filePath, out owner);
-        }
-        else if (instance is IShaderOperator<ComputeShader> computeShader)
-        {
-            found = TryGetSourceFile(computeShader, out filePath, out owner);
-        }
-        else if (instance is IShaderOperator<GeometryShader> geometryShader)
-        {
-            found = TryGetSourceFile(geometryShader, out filePath, out owner);
-        }
-        else if (instance is IShaderOperator<VertexShader> vertexShader)
-        {
-            found = TryGetSourceFile(vertexShader, out filePath, out owner);
-        }
-        else
-        {
-            filePath = null;
-            owner = null;
-        }
-
-        return found;
-
-        static bool TryGetSourceFile<T>(IShaderOperator<T> op, out string filePath, out IResourcePackage package) where T : AbstractShader
-        {
-            var relative = op.Path.GetCurrentValue();
-            var instance = op.Instance;
-            return ResourceManager.TryResolvePath(relative, instance, out filePath, out package);
-        }
-    }
-
-    private void AddAnnotation(Instance compositionOp)
-    {
-        var size = new Vector2(100, 140);
-        var posOnCanvas = InverseTransformPositionFloat(ImGui.GetMousePos());
-        var area = new ImRect(posOnCanvas, posOnCanvas + size);
-
-        if (NodeSelection.IsAnythingSelected())
-        {
-            for (var index = 0; index < NodeSelection.Selection.Count; index++)
-            {
-                var node = NodeSelection.Selection[index];
-                var nodeArea = new ImRect(node.PosOnCanvas,
-                                          node.PosOnCanvas + node.Size);
-
-                if (index == 0)
-                {
-                    area = nodeArea;
-                }
-                else
-                {
-                    area.Add(nodeArea);
-                }
-            }
-
-            area.Expand(60);
-        }
-
-        var annotation = new Annotation()
-                             {
-                                 Id = Guid.NewGuid(),
-                                 Title = "Untitled Annotation",
-                                 Color = UiColors.Gray,
-                                 PosOnCanvas = area.Min,
-                                 Size = area.GetSize()
-                             };
-            
-        var command = new AddAnnotationCommand(compositionOp.GetSymbolUi(), annotation);
-        UndoRedoStack.AddAndExecute(command);
-
-        _graph.RenameAnnotation(annotation);
-    }
-
-    private void PinSelectedToOutputWindow(Instance compositionOp)
-    {
-        var outputWindow = OutputWindow.OutputWindowInstances.FirstOrDefault(ow => ow.Config.Visible) as OutputWindow;
-        if (outputWindow == null)
-        {
-            //Log.Warning("Can't pin selection without visible output window");
-            return;
-        }
-
-        var selection = GetSelectedChildUis();
-        if (selection.Count != 1)
-        {
-            Log.Info("Please select only one operator to pin to output window");
-            return;
-        }
-
-        if (compositionOp.TryGetChildInstance(selection[0].Id, false, out var child, out _))
-        {
-            outputWindow.Pinning.PinInstance(child, this);
-        }
-    }
-
     private bool _contextMenuIsOpen;
-
-    private void DeleteSelectedElements(SymbolUi compositionSymbolUi, List<SymbolUi.Child> selectedChildUis = null, List<IInputUi> selectedInputUis = null,
-                                        List<IOutputUi> selectedOutputUis = null)
-    {
-        var commands = new List<ICommand>();
-        selectedChildUis ??= GetSelectedChildUis();
-        if (selectedChildUis.Count != 0)
-        {
-            var cmd = new DeleteSymbolChildrenCommand(compositionSymbolUi, selectedChildUis);
-            commands.Add(cmd);
-        }
-
-        foreach (var selectedAnnotation in NodeSelection.GetSelectedNodes<Annotation>())
-        {
-            var cmd = new DeleteAnnotationCommand(compositionSymbolUi, selectedAnnotation);
-            commands.Add(cmd);
-        }
-
-        if (!compositionSymbolUi.Symbol.SymbolPackage.IsReadOnly)
-        {
-            selectedInputUis ??= NodeSelection.GetSelectedNodes<IInputUi>().ToList();
-            selectedOutputUis ??= NodeSelection.GetSelectedNodes<IOutputUi>().ToList();
-            if (selectedInputUis.Count > 0 || selectedOutputUis.Count > 0)
-            {
-                InputsAndOutputs.RemoveInputsAndOutputsFromSymbol(inputIdsToRemove: selectedInputUis.Select(entry => entry.Id).ToArray(), 
-                                                                  outputIdsToRemove: selectedOutputUis.Select(entry => entry.Id).ToArray(),
-                                                                  symbol: compositionSymbolUi.Symbol);
-            }
-        }
-
-        var deleteCommand = new MacroCommand("Delete elements", commands);
-        UndoRedoStack.AddAndExecute(deleteCommand);
-        NodeSelection.Clear();
-    }
-
-    private void ToggleDisabledForSelectedElements()
-    {
-        var selectedChildren = GetSelectedChildUis();
-
-        var allSelectedDisabled = selectedChildren.TrueForAll(selectedChildUi => selectedChildUi.IsDisabled);
-        var shouldDisable = !allSelectedDisabled;
-
-        var commands = new List<ICommand>();
-        foreach (var selectedChildUi in selectedChildren)
-        {
-            commands.Add(new ChangeInstanceIsDisabledCommand(selectedChildUi, shouldDisable));
-        }
-
-        UndoRedoStack.AddAndExecute(new MacroCommand("Disable/Enable", commands));
-    }
-
-    private void ToggleBypassedForSelectedElements()
-    {
-        var selectedChildUis = GetSelectedChildUis();
-
-        var allSelectedAreBypassed = selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.SymbolChild.IsBypassed);
-        var shouldBypass = !allSelectedAreBypassed;
-
-        var commands = new List<ICommand>();
-        foreach (var selectedChildUi in selectedChildUis)
-        {
-            commands.Add(new ChangeInstanceBypassedCommand(selectedChildUi.SymbolChild, shouldBypass));
-        }
-
-        UndoRedoStack.AddAndExecute(new MacroCommand("Changed Bypassed", commands));
-    }
-
-    private List<SymbolUi.Child> GetSelectedChildUis()
-    {
-        return NodeSelection.GetSelectedNodes<SymbolUi.Child>().ToList();
-    }
-
-    private IEnumerable<IInputUi> GetSelectedInputUis()
-    {
-        return NodeSelection.GetSelectedNodes<IInputUi>();
-    }
-
-    private IEnumerable<IOutputUi> GetSelectedOutputUis()
-    {
-        return NodeSelection.GetSelectedNodes<IOutputUi>();
-    }
-
-    #region Copy and paste
-    private void CopySelectedNodesToClipboard(Instance composition)
-    {
-        var selectedChildren = NodeSelection.GetSelectedNodes<SymbolUi.Child>().ToList();
-        var selectedAnnotations = NodeSelection.GetSelectedNodes<Annotation>().ToList();
-        if (selectedChildren.Count + selectedAnnotations.Count == 0)
-            return;
-            
-        if(!GraphOperations.TryCopyNodesAsJson(composition, selectedChildren, selectedAnnotations, out var resultJsonString))
-            return;
-            
-        EditorUi.Instance.SetClipboardText(resultJsonString);
-    }
-
-    private void PasteClipboard(Instance compositionOp)
-    {
-        try
-        {
-            var text = EditorUi.Instance.GetClipboardText();
-            using var reader = new StringReader(text);
-            var jsonReader = new JsonTextReader(reader);
-            if (JToken.ReadFrom(jsonReader, SymbolJson.LoadSettings) is not JArray jArray)
-                return;
-
-            var symbolJson = jArray[0];
-
-            if (!TryGetPastedSymbol(symbolJson, compositionOp.Symbol.SymbolPackage, out var containerSymbol))
-            {
-                Log.Error($"Failed to paste symbol due to invalid symbol json");
-                return;
-            }
-
-            var symbolUiJson = jArray[1];
-            var hasContainerSymbolUi = SymbolUiJson.TryReadSymbolUiExternal(symbolUiJson, containerSymbol, out var containerSymbolUi);
-            if (!hasContainerSymbolUi)
-            {
-                Log.Error($"Failed to paste symbol due to invalid symbol ui json");
-                return;
-            }
-
-            var compositionSymbolUi = compositionOp.GetSymbolUi();
-            var cmd = new CopySymbolChildrenCommand(containerSymbolUi,
-                                                    null,
-                                                    containerSymbolUi.Annotations.Values.ToList(),
-                                                    compositionSymbolUi,
-                                                    InverseTransformPositionFloat(ImGui.GetMousePos()),
-                                                    copyMode: CopySymbolChildrenCommand.CopyMode.ClipboardSource,
-                                                    sourceSymbol: containerSymbol);
-                
-            cmd.Do(); // FIXME: Shouldn't this be UndoRedoQueue.AddAndExecute() ? 
-
-            // Select new operators
-            NodeSelection.Clear();
-
-            foreach (var id in cmd.NewSymbolChildIds)
-            {
-                var newChildUi = compositionSymbolUi.ChildUis[id];
-                var instance = compositionOp.Children[id];
-                NodeSelection.AddSelection(newChildUi, instance);
-            }
-
-            foreach (var id in cmd.NewSymbolAnnotationIds)
-            {
-                var annotation = compositionSymbolUi.Annotations[id];
-                NodeSelection.AddSelection(annotation);
-            }
-        }
-        catch (Exception e)
-        {
-            Log.Warning("Could not paste selection from clipboard.");
-            Log.Debug("Paste exception: " + e);
-        }
-    }
-
-    // todo - better encapsulate this in SymbolJson
-    private static bool TryGetPastedSymbol(JToken jToken, SymbolPackage package, out Symbol symbol)
-    {
-        var guidString = jToken[SymbolJson.JsonKeys.Id].Value<string>();
-        var hasId = Guid.TryParse(guidString, out var guid);
-
-        if (!hasId)
-        {
-            Log.Error($"Failed to parse guid in symbol json: `{guidString}`");
-            symbol = null;
-            return false;
-        }
-
-        var jsonResult = SymbolJson.ReadSymbolRoot(guid, jToken, typeof(object), package);
-
-        if (jsonResult.Symbol is null)
-        {
-            symbol = null;
-            return false;
-        }
-
-        if (SymbolJson.TryReadAndApplySymbolChildren(jsonResult))
-        {
-            symbol = jsonResult.Symbol;
-            return true;
-        }
-
-        Log.Error($"Failed to get children of pasted token:\n{jToken}");
-        symbol = null;
-        return false;
-    }
-    #endregion Copy and paste
 
     private void DrawGrid(ImDrawListPtr drawList)
     {
@@ -1216,7 +929,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
             var compositionOp = _window.CompositionOp;
             var symbolUi = compositionOp.GetSymbolUi();
             _selectableItems.AddRange(compositionOp.Children.Values.Select(x => x.GetChildUi()));
-                                                            
+
             _selectableItems.AddRange(symbolUi.InputUis.Values);
             _selectableItems.AddRange(symbolUi.OutputUis.Values);
             _selectableItems.AddRange(symbolUi.Annotations.Values);
@@ -1227,7 +940,6 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
 
     private readonly List<ISelectableCanvasObject> _selectableItems = new();
     #endregion
-
 
     #region public API
     public bool Destroyed { get; private set; }
@@ -1240,7 +952,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
             _window.TrySetCompositionOp(path, ICanvas.Transition.JumpOut, path[0]);
             return;
         }
-            
+
         var compositionPath = path.Take(path.Count - 1).ToList();
         _window.TrySetCompositionOp(compositionPath, ICanvas.Transition.JumpIn, path[^1]);
     }

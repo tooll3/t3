@@ -114,7 +114,8 @@ internal sealed partial class MagGraphCanvas
         var fade = 0.9f;
         drawList.AddRectFilled(pMinVisible + Vector2.One * CanvasScale,
                                pMaxVisible,
-                               ColorVariations.OperatorBackground.Apply(typeColor).Fade(fade * idleFadeFactor), 5 * CanvasScale,
+                               Color.Mix(ColorVariations.OperatorBackgroundIdle.Apply(typeColor),
+                                         ColorVariations.OperatorBackground.Apply(typeColor), idleFadeFactor), 5 * CanvasScale,
                                imDrawFlags);
 
         var isSelected = _context.Selector.IsSelected(item);
