@@ -77,8 +77,8 @@
     {
       "InputId": "cc442161-e9ca-40ea-be3b-f87189d4e155"/*Color*/,
       "Position": {
-        "X": 1416.8268,
-        "Y": 3784.5186
+        "X": 1576.8268,
+        "Y": 3714.5186
       },
       "Description": "Defines the color of the Points.\nIf a Texture is used this color will be multiplied.",
       "AddPadding": "True"
@@ -137,8 +137,8 @@
     {
       "ChildId": "43937000-6623-4ae7-b4c3-e4ddeabe2a71"/*GetForegroundColor*/,
       "Position": {
-        "X": 1416.8268,
-        "Y": 3827.5186
+        "X": 1576.8268,
+        "Y": 3749.5186
       }
     },
     {
@@ -158,8 +158,8 @@
     {
       "ChildId": "5ce3570b-ecb6-4bbf-acff-a48a4dd45a4b"/*ContextCBuffers*/,
       "Position": {
-        "X": 1921.7997,
-        "Y": 4031.5884
+        "X": 1945.923,
+        "Y": 4044.8171
       }
     },
     {
@@ -208,8 +208,8 @@
     {
       "ChildId": "897c5510-e5d3-4852-8d65-9fb626b6d96c"/*SamplerState*/,
       "Position": {
-        "X": 1890.9011,
-        "Y": 4241.8447
+        "X": 1902.2495,
+        "Y": 4253.193
       }
     },
     {
@@ -257,22 +257,22 @@
     {
       "ChildId": "d8abd2d6-a08f-4ace-861f-87998df45a5e"/*PixelShader*/,
       "Position": {
-        "X": 1918.6809,
-        "Y": 3675.1619
+        "X": 1921.0175,
+        "Y": 3611.2947
       }
     },
     {
       "ChildId": "dbc238da-63e9-4af5-9559-1c8953f202f7"/*VertexShader*/,
       "Position": {
-        "X": 1918.6809,
-        "Y": 3632.1619
+        "X": 1921.0175,
+        "Y": 3568.2947
       }
     },
     {
       "ChildId": "dfb5bcac-3a5f-425c-902b-35100f6c2281"/*BoolToInt*/,
       "Position": {
-        "X": 1718.0432,
-        "Y": 4072.7695
+        "X": 1729.7158,
+        "Y": 4029.9702
       }
     },
     {
@@ -304,8 +304,8 @@
     {
       "ChildId": "fd0b19bc-ffcc-436f-800b-f934f82a0423"/*BlendColors*/,
       "Position": {
-        "X": 1566.8268,
-        "Y": 3784.5186
+        "X": 1716.8268,
+        "Y": 3714.5186
       }
     }
   ],

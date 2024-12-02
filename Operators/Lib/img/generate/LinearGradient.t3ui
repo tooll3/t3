@@ -17,8 +17,8 @@
     {
       "InputId": "1c70e502-90cc-4285-92ca-ec3d200967eb"/*BiasAndGain*/,
       "Position": {
-        "X": -356.7525,
-        "Y": 727.2588
+        "X": -78.05231,
+        "Y": 634.6894
       },
       "GroupTitle": "Options",
       "Description": "Applies bias and gain mapping. See the Wiki \"Realtime Rendering for Artists\"  for more details.",
@@ -39,8 +39,8 @@
     {
       "InputId": "29587763-5456-4d33-bfd4-5d47b133f1cd"/*OffsetMode*/,
       "Position": {
-        "X": -299.13272,
-        "Y": 447.4781
+        "X": -492.04956,
+        "Y": 447.2004
       },
       "Description": "Defines wether the offset delta is a factor of the screen width or the gradient width. "
     },
@@ -55,16 +55,16 @@
     {
       "InputId": "5774969c-ef4d-482e-ab37-b3a84b09debb"/*PingPong*/,
       "Position": {
-        "X": -304.36,
-        "Y": 188.64664
+        "X": -214.79941,
+        "Y": 128.23758
       },
       "Description": "If enabled the gradient is mirrored resulting in a seamless image."
     },
     {
       "InputId": "7f3fe86d-f259-458a-908a-0a71d39ca678"/*Repeat*/,
       "Position": {
-        "X": -304.36,
-        "Y": 233.64667
+        "X": -58.87918,
+        "Y": 69.94415
       },
       "Description": "Repeats the gradient. This can be effective with the Offset parameter."
     },
@@ -168,22 +168,22 @@
     {
       "ChildId": "67faeb1c-65dc-4b2c-9a33-2c99f979dfc3"/*BoolToFloat*/,
       "Position": {
-        "X": -19.799469,
-        "Y": 231.23749
+        "X": 81.12082,
+        "Y": 69.94415
       }
     },
     {
       "ChildId": "693baad7-d351-44de-af5c-cd0212003e35"/*BoolToFloat*/,
       "Position": {
-        "X": -19.799469,
-        "Y": 175.23752
+        "X": -74.79941,
+        "Y": 128.23758
       }
     },
     {
       "ChildId": "6e9cfe0c-c7ea-45d6-8b35-140208425b6c"/*GradientsToTexture*/,
       "Position": {
-        "X": -39.21425,
-        "Y": -148.24016
+        "X": -40.880936,
+        "Y": -113.240204
       }
     },
     {
@@ -196,8 +196,8 @@
     {
       "ChildId": "9b1378ec-a83d-432b-8f40-ecb21618087a"/*Vector2Components*/,
       "Position": {
-        "X": -73.89349,
-        "Y": 741.22876
+        "X": 61.947266,
+        "Y": 634.6894
       }
     },
     {

@@ -201,38 +201,36 @@ public sealed class AudioReaction : Instance<AudioReaction>
         Level,
         AccumulatedLevel,
     }
-        
-        
-    [Input(Guid = "44409811-1a0f-4be6-83ea-b2f040ebf08b", MappedType = typeof(InputModes))]
-    public readonly InputSlot<int> InputBand = new();
 
-    [Input(Guid = "F3D7C7FD-4280-4FB4-9F9A-C39B28D1A72B")]
-    public readonly InputSlot<float> WindowCenter = new();
+        [Input(Guid = "B1C43D3B-F425-4D62-9D48-07CCB5D08707")]
+        public readonly InputSlot<float> Amplitude = new InputSlot<float>();
 
-    [Input(Guid = "F920A79D-C946-4A78-9E68-F64FC3C4A696")]
-    public readonly InputSlot<float> WindowEdge = new();
-        
-    [Input(Guid = "1D3A1132-E8B9-4C04-99BF-80F6F1530309")]
-    public readonly InputSlot<float> WindowWidth = new();
-        
-    [Input(Guid = "02F71A92-D5C8-4DD7-AF5F-DA12330F60EB")]
-    public readonly InputSlot<float> Threshold = new();
+        [Input(Guid = "44409811-1a0f-4be6-83ea-b2f040ebf08b", MappedType = typeof(InputModes))]
+        public readonly InputSlot<int> InputBand = new InputSlot<int>();
 
-    [Input(Guid = "AECE14B8-88E0-4817-8204-B79159DB8102")]
-    public readonly InputSlot<float> MinTimeBetweenHits = new();
-        
-        
-    [Input(Guid = "80294096-AE64-471A-BCF1-622684E06D56", MappedType = typeof(OutputModes))]
-    public readonly InputSlot<int> Output = new();
-        
-    [Input(Guid = "B1C43D3B-F425-4D62-9D48-07CCB5D08707")]
-    public readonly InputSlot<float> Amplitude = new();
+        [Input(Guid = "F3D7C7FD-4280-4FB4-9F9A-C39B28D1A72B")]
+        public readonly InputSlot<float> WindowCenter = new InputSlot<float>();
 
-    [Input(Guid = "1139B245-76B4-4F51-A263-EE1A1371073F")]
-    public readonly InputSlot<float> Bias = new();
+        [Input(Guid = "F920A79D-C946-4A78-9E68-F64FC3C4A696")]
+        public readonly InputSlot<float> WindowEdge = new InputSlot<float>();
 
-    [Input(Guid = "D138C961-B163-428A-9479-2130F1E46314")]
-    public readonly InputSlot<bool> Reset = new();
+        [Input(Guid = "1D3A1132-E8B9-4C04-99BF-80F6F1530309")]
+        public readonly InputSlot<float> WindowWidth = new InputSlot<float>();
+
+        [Input(Guid = "02F71A92-D5C8-4DD7-AF5F-DA12330F60EB")]
+        public readonly InputSlot<float> Threshold = new InputSlot<float>();
+
+        [Input(Guid = "AECE14B8-88E0-4817-8204-B79159DB8102")]
+        public readonly InputSlot<float> MinTimeBetweenHits = new InputSlot<float>();
+
+        [Input(Guid = "80294096-AE64-471A-BCF1-622684E06D56", MappedType = typeof(OutputModes))]
+        public readonly InputSlot<int> Output = new InputSlot<int>();
+
+        [Input(Guid = "1139B245-76B4-4F51-A263-EE1A1371073F")]
+        public readonly InputSlot<float> Bias = new InputSlot<float>();
+
+        [Input(Guid = "D138C961-B163-428A-9479-2130F1E46314")]
+        public readonly InputSlot<bool> Reset = new InputSlot<bool>();
         
     private static readonly List<float> _emptyList = new();
     public double PlaybackTimeInSecs =>

@@ -16,8 +16,8 @@
     {
       "InputId": "3f5a284b-e2f0-47e2-bf79-2a7fe8949519"/*Gradient*/,
       "Position": {
-        "X": -291.90814,
-        "Y": -66.74634
+        "X": 215.29034,
+        "Y": 68.98285
       },
       "GroupTitle": "Gradient",
       "Description": "The gradient from the center towards to outer edge defined by Radius.\n\nTip: You can use the context menu to change gradient interpolation to Spline, Hold or Smooth.\nTip: You can also connect this an an input and to generate procedural gradients and switch between gradietn definitions."
@@ -25,8 +25,8 @@
     {
       "InputId": "54bca43c-fc2b-4a40-b991-8b76e35eee01"/*Image*/,
       "Position": {
-        "X": -292.81934,
-        "Y": -397.5083
+        "X": 419.61545,
+        "Y": -4.7734528
       },
       "Description": "An optional background image. If connected allows to apply different BlendingModes."
     },
@@ -159,8 +159,8 @@
     {
       "ChildId": "ae5ed14b-b7b8-4e0c-88ee-523a53222483"/*GradientsToTexture*/,
       "Position": {
-        "X": -141.90814,
-        "Y": -66.74634
+        "X": 365.29034,
+        "Y": 68.98285
       }
     }
   ],

@@ -85,8 +85,7 @@
       "Description": "Controls the speed of the animation\n\nLow values can look like noise in liquids\n\nHigh Values (50 an up) can look like TV Static or Filmgrain",
       "Min": 0.0,
       "Max": 20.0,
-      "Scale": 0.01,
-      "Clamp": true
+      "Scale": 0.01
     }
   ],
   "SymbolChildUis": [

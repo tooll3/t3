@@ -28,14 +28,16 @@ public static class AudioReactionUi
         {
             return SymbolUi.Child.CustomUiResult.None;
         }
-            
+
+        var isNodeActive = false;
+        
         ImGui.PushID(instance.SymbolChildId.GetHashCode());
         drawList.PushClipRect(screenRect.Min, screenRect.Max, true);
 
         // Draw bins and window
-        var windowCenter = audioReaction2.WindowCenter.Value;
-        var windowEdge = audioReaction2.WindowEdge.Value;
-        var windowWidth = audioReaction2.WindowWidth.Value;
+        var windowCenter = audioReaction2.WindowCenter.GetCurrentValue();
+        var windowEdge = audioReaction2.WindowEdge.GetCurrentValue();
+        var windowWidth = audioReaction2.WindowWidth.GetCurrentValue();
 
         var freqGraphWidth = w * 0.6f;
         var maxBars = 128;
@@ -117,7 +119,7 @@ public static class AudioReactionUi
                                new Vector2(x + w / 20, bottom),
                                Color.Mix(inactiveColor,UiColors.StatusAnimated, flashFactor));
 
-        var thresholdY = audioReaction2.Threshold.Value * h * valueScale;
+        var thresholdY = audioReaction2.Threshold.GetCurrentValue() * h * valueScale;
         drawList.AddRectFilled(new Vector2(x, bottom - thresholdY),
                                new Vector2(x + w / 20, bottom - thresholdY+ 2),
                                UiColors.StatusAnimated);
@@ -170,16 +172,17 @@ public static class AudioReactionUi
 
             if (Math.Abs(dragDelta.X) > 0.5f)
             {
-                audioReaction2.WindowCenter.TypedInputValue.Value = (_dragStartWindow + dragDelta.X / 200f).Clamp(0.001f, 1f);
-                audioReaction2.WindowCenter.DirtyFlag.Invalidate();
-                audioReaction2.WindowCenter.Input.IsDefault = false;
+                audioReaction2.WindowCenter.SetTypedInputValue((_dragStartWindow + dragDelta.X / 200f).Clamp(0.001f, 1f));
+                // audioReaction2.WindowCenter.DirtyFlag.Invalidate();
+                // audioReaction2.WindowCenter.Input.IsDefault = false;
             }
 
             if (Math.Abs(dragDelta.Y) > 0.5f)
             {
-                audioReaction2.Threshold.TypedInputValue.Value = (_dragStartThreshold - dragDelta.Y / 100f).Clamp(0.01f, 3f);
-                audioReaction2.Threshold.DirtyFlag.Invalidate();
-                audioReaction2.Threshold.Input.IsDefault = false;
+                audioReaction2.Threshold.SetTypedInputValue((_dragStartThreshold - dragDelta.Y / 100f).Clamp(0.01f, 3f));
+                //audioReaction2.Threshold.TypedInputValue.Value = ;
+                //audioReaction2.Threshold.DirtyFlag.Invalidate();
+                //audioReaction2.Threshold.Input.IsDefault = false;
             }
         }
 
@@ -189,7 +192,8 @@ public static class AudioReactionUi
         return SymbolUi.Child.CustomUiResult.Rendered 
                | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph 
                | SymbolUi.Child.CustomUiResult.PreventInputLabels
-               | SymbolUi.Child.CustomUiResult.PreventTooltip;
+               | SymbolUi.Child.CustomUiResult.PreventTooltip
+               | (isActive ? SymbolUi.Child.CustomUiResult.IsActive : SymbolUi.Child.CustomUiResult.None);
     }
 
         

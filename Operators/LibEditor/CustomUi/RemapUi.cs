@@ -104,7 +104,4 @@ public static class RemapUi
                | SymbolUi.Child.CustomUiResult.PreventTooltip
                | (isActive ? SymbolUi.Child.CustomUiResult.IsActive : SymbolUi.Child.CustomUiResult.None);
     }
-
-    // private const float TriangleSize = 4;
-    // private static readonly Vector2[] GraphLinePoints = new Vector2[4];
 }

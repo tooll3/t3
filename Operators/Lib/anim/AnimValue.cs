@@ -49,31 +49,31 @@ public sealed class AnimValue : Instance<AnimValue>
         WasHit.DirtyFlag.Clear();
         Result.DirtyFlag.Clear();
     }
-        
-    [Input(Guid = "4cf5d20b-7335-4584-b246-c260ac5cdf4f", MappedType = typeof(AnimMath.Shapes))]
-    public readonly InputSlot<int> Shape = new();
 
-    [Input(Guid = "48005727-0158-4795-ad70-8410c27fd01d")]
-    public readonly InputSlot<float> Rate = new();
+        [Input(Guid = "7b4992ba-30f7-42e5-b04b-ae4ec0be810e")]
+        public readonly InputSlot<float> OverrideTime = new InputSlot<float>();
 
-    [Input(Guid = "8327e7ec-4370-4a3e-bd69-db3f4aa4b1d7")]
-    public readonly InputSlot<float> Ratio = new();
+        [Input(Guid = "4cf5d20b-7335-4584-b246-c260ac5cdf4f", MappedType = typeof(AnimMath.Shapes))]
+        public readonly InputSlot<int> Shape = new InputSlot<int>();
 
-    [Input(Guid = "68f14205-f48d-4b44-823d-138eb61767b5")]
-    public readonly InputSlot<float> Phase = new();
+        [Input(Guid = "48005727-0158-4795-ad70-8410c27fd01d")]
+        public readonly InputSlot<float> Rate = new InputSlot<float>();
 
-    [Input(Guid = "79917ef7-64ca-4825-9c6a-c9b2a7f6ff86")]
-    public readonly InputSlot<float> Amplitude = new();
+        [Input(Guid = "8327e7ec-4370-4a3e-bd69-db3f4aa4b1d7")]
+        public readonly InputSlot<float> Ratio = new InputSlot<float>();
 
-    [Input(Guid = "ddd93b06-118e-43e0-85f6-c150faf91d04")]
-    public readonly InputSlot<float> Offset = new();
+        [Input(Guid = "68f14205-f48d-4b44-823d-138eb61767b5")]
+        public readonly InputSlot<float> Phase = new InputSlot<float>();
 
-    [Input(Guid = "f12fee9a-dd91-40c2-9aa5-ea34804a858d")]
-    public readonly InputSlot<float> Bias = new();
+        [Input(Guid = "79917ef7-64ca-4825-9c6a-c9b2a7f6ff86")]
+        public readonly InputSlot<float> Amplitude = new InputSlot<float>();
 
-    [Input(Guid = "7b4992ba-30f7-42e5-b04b-ae4ec0be810e")]
-    public readonly InputSlot<float> OverrideTime = new();
+        [Input(Guid = "ddd93b06-118e-43e0-85f6-c150faf91d04")]
+        public readonly InputSlot<float> Offset = new InputSlot<float>();
 
-    [Input(Guid = "738f6cfb-8b71-423c-b897-824c20397e5a", MappedType = typeof(AnimMath.SpeedFactors))]
-    public readonly InputSlot<int> AllowSpeedFactor = new();
+        [Input(Guid = "f12fee9a-dd91-40c2-9aa5-ea34804a858d")]
+        public readonly InputSlot<float> Bias = new InputSlot<float>();
+
+        [Input(Guid = "738f6cfb-8b71-423c-b897-824c20397e5a", MappedType = typeof(AnimMath.SpeedFactors))]
+        public readonly InputSlot<int> AllowSpeedFactor = new InputSlot<int>();
 }

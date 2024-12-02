@@ -25,7 +25,9 @@
         "Y": 45.0
       },
       "Description": "Defines how fast the curve fluctuates between the highest and lowest point",
-      "AddPadding": "True"
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Scale": 0.01
     },
     {
       "InputId": "9c66d915-af91-4ecd-955a-d9c15ef3edda"/*Input*/,
