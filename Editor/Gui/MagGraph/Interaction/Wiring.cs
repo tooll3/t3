@@ -3,25 +3,28 @@ using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
+using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
-using Color = T3.Core.DataTypes.Vector.Color;
-using Vector2 = System.Numerics.Vector2;
 
-namespace T3.Editor.Gui.Graph.Interaction.Connections;
+namespace T3.Editor.Gui.MagGraph.Interaction;
 
-internal  class ConnectionSplitHelper
+/// <summary>
+/// Handles rewiring of connections
+/// </summary>
+internal class Wiring
 {
     public static void PrepareNewFrame(GraphWindow window)
     {
         _mousePosition = ImGui.GetMousePos();
         BestMatchLastFrame = _bestMatchYetForCurrentFrame;
         var graphCanvas = window.GraphCanvas;
-            
+
         if (BestMatchLastFrame != null && !ConnectionMaker.HasTempConnectionsFor(window))
         {
             var time = ImGui.GetTime();
@@ -78,13 +81,11 @@ internal  class ConnectionSplitHelper
 
                 if (outputSlot != null && output != null && input != null)
                 {
-
                     var width = 160f;
-                    ImGui.SetNextWindowSizeConstraints(new Vector2(200, 200*9/16f), new Vector2(200, 200*9/16f));
+                    ImGui.SetNextWindowSizeConstraints(new Vector2(200, 200 * 9 / 16f), new Vector2(200, 200 * 9 / 16f));
 
                     ImGui.BeginChild("thumbnail", new Vector2(width, width * 9 / 16f));
                     {
-                            
                         TransformGizmoHandling.SetDrawList(drawList);
                         ImageCanvasForTooltips.Update();
                         ImageCanvasForTooltips.SetAsCurrent();
@@ -114,7 +115,7 @@ internal  class ConnectionSplitHelper
                     var type = output.OutputDefinition.ValueType;
                     var connectionSource = sourceOp.ReadableName + "." + output.OutputDefinition.Name;
                     ImGui.TextColored(UiColors.TextMuted, connectionSource);
-                            
+
                     ImGui.TextUnformatted(type.Name);
                     ImGui.SameLine();
                     var connectionTarget = "--> " + targetOp.ReadableName + "." + input.Name;

@@ -616,6 +616,9 @@ internal class ScalableCanvas : ICanvas
     {
         get
         {
+            if (!EnableParentZoom)
+                return false;
+            
             var focused = GraphWindow.Focused;
             if (focused == null)
                 return false;
@@ -634,6 +637,8 @@ internal class ScalableCanvas : ICanvas
     }
         
     public FillModes FillMode = FillModes.FillWindow;
+    
+    public bool EnableParentZoom { get; set; } = true;
         
     public readonly record struct InteractionState(bool UserPannedCanvas, bool UserZoomedCanvas, MouseState MouseState);
 

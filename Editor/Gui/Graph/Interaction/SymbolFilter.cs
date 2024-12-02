@@ -30,6 +30,17 @@ internal sealed class SymbolFilter
         }
     }
 
+    public void Reset()
+    {
+        _inputType = null;
+        _outputType = null;
+        SearchString = string.Empty;
+        PresetFilterString = string.Empty;
+        OnlyMultiInputs = false;
+        _needsUpdate = true;
+        
+    }
+
     public bool OnlyMultiInputs { get; set; }
     public List<SymbolUi> MatchingSymbolUis { get; private set; } = [];
 
@@ -138,11 +149,14 @@ internal sealed class SymbolFilter
 
             if (_inputType != null)
             {
-                var matchingInputDef = symbolUiSymbol.GetInputMatchingType(FilterInputType);
-                if (matchingInputDef == null)
+                if (symbolUiSymbol.InputDefinitions.Count == 0 || symbolUiSymbol.InputDefinitions[0].ValueType != _inputType)
                     continue;
+                
+                // var matchingInputDef = symbolUiSymbol.GetInputMatchingType(FilterInputType);
+                // if (matchingInputDef == null)
+                //     continue;
 
-                if (OnlyMultiInputs && !matchingInputDef.IsMultiInput)
+                if (OnlyMultiInputs && !symbolUiSymbol.InputDefinitions[0].IsMultiInput)
                     continue;
             }
 

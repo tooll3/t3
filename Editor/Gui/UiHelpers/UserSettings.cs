@@ -53,12 +53,15 @@ public class UserSettings : Settings<UserSettings.ConfigData>
         // Interaction
         public bool WarnBeforeLibEdit = true;
         public bool SmartGroupDragging = false;
+        public bool DisconnectOnUnsnap = false;
+        
         public bool ShowExplicitTextureFormatInOutputWindow = false;
         public bool UseArcConnections = true;
         public bool ResetTimeAfterPlayback;
         public float SnapStrength = 5;
         public ValueEditMethods ValueEditMethod;
         public float ScrollSmoothing = 0.1f;
+        public float MaxCurveRadius = 150;
 
         public float ClickThreshold = 5; // Increase for high-res display and pen tablets
         public bool AdjustCameraSpeedWithMouseWheel = false;

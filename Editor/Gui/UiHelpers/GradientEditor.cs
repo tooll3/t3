@@ -37,7 +37,7 @@ public static class GradientEditor
         Gradient.Step hoveredStep = null;
 
         // Draw handles
-        var modified = InputEditStateFlags.Nothing;
+        var editResult = InputEditStateFlags.Nothing;
 
         Gradient.Step removedStep = null;
         foreach (var step in gradientForEditing.Steps)
@@ -45,14 +45,14 @@ public static class GradientEditor
             var result = DrawHandle(step);
             if(result != InputEditStateFlags.Nothing)
             {
-                modified = result;
+                editResult = result;
             }
         }
 
         if (removedStep != null)
         {
             gradientForEditing.Steps.Remove(removedStep);
-            modified = InputEditStateFlags.ModifiedAndFinished;
+            editResult = InputEditStateFlags.ModifiedAndFinished;
         }
             
         if (cloneIfModified && hoveredStep != null)
@@ -77,7 +77,7 @@ public static class GradientEditor
                                                  Id = Guid.NewGuid(),
                                                  Color = gradientForEditing.Sample(normalizedPosition)
                                              });
-            modified = InputEditStateFlags.ModifiedAndFinished;
+            editResult = InputEditStateFlags.ModifiedAndFinished;
         }
 
         if (canInsertNewStep && ImGui.IsItemHovered() && !ImGui.IsItemActive())
@@ -96,7 +96,7 @@ public static class GradientEditor
                                                     }
 
                                                     gradientForEditing.SortHandles();
-                                                    modified = InputEditStateFlags.ModifiedAndFinished;
+                                                    editResult = InputEditStateFlags.ModifiedAndFinished;
                                                 }
 
                                                 if (ImGui.MenuItem("Distribute evenly", gradientForEditing.Steps.Count > 2))
@@ -112,7 +112,7 @@ public static class GradientEditor
                                                     }
 
                                                     gradientForEditing.SortHandles();
-                                                    modified = InputEditStateFlags.Finished;
+                                                    editResult = InputEditStateFlags.Finished;
                                                 }
 
                                                 if (ImGui.BeginMenu("Gradient presets..."))
@@ -129,7 +129,7 @@ public static class GradientEditor
                                                             var clone = preset.TypedClone();
                                                             gradientForEditing.Steps = clone.Steps;
                                                             gradientForEditing.Interpolation = clone.Interpolation;
-                                                            modified = InputEditStateFlags.ModifiedAndFinished;
+                                                            editResult = InputEditStateFlags.ModifiedAndFinished;
                                                         }
 
                                                         var rect = new ImRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax());
@@ -165,7 +165,7 @@ public static class GradientEditor
                                                         if (ImGui.MenuItem(value.ToString(), "", isSelected))
                                                         {
                                                             gradientForEditing.Interpolation = value;
-                                                            modified = InputEditStateFlags.ModifiedAndFinished;
+                                                            editResult = InputEditStateFlags.ModifiedAndFinished;
                                                         }
                                                     }
 
@@ -173,14 +173,14 @@ public static class GradientEditor
                                                 }
                                             }, "Gradient", "gradientContextMenu");
 
-        if (modified != InputEditStateFlags.Nothing && cloneIfModified)
+        if (editResult != InputEditStateFlags.Nothing && cloneIfModified)
         {
             gradientRef = gradientForEditing;
             _hoveredGradientRef = null;
             _hoveredGradientForEditing = null;
         }
-
-        return modified;
+        
+        return editResult;
 
         InputEditStateFlags DrawHandle(Gradient.Step step)
         {

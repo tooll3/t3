@@ -458,7 +458,7 @@ internal class GraphNode
                     //var inputSlot = instance.Inputs.Single(slot => inputDefinition.Id == slot.Id);
                     var inputSlot = instance.GetInput(inputDefinition.Id);
                     //var valueAsString = inputUi.GetSlotValue(inputSlot);
-                    var valueAsString = GetValueString(inputSlot);
+                    var valueAsString = ValueUtils.GetValueString(inputSlot);
                     // if (inputSlot is InputSlot<float> f)
                     // {
                     //     var xxx = f.TypedInputValue.Value;
@@ -1255,7 +1255,7 @@ internal class GraphNode
             {
                 var compInputDef = compositionUi.Symbol.InputDefinitions.SingleOrDefault(inp => inp.Id == connection.SourceSlotId);
                 var input = compositionOp.Inputs.SingleOrDefault(inp => inp.Id == connection.SourceSlotId);
-                sources.Insert(0, $". {compInputDef?.Name}  " + GetValueString(input?.Input.Value));
+                sources.Insert(0, $". {compInputDef?.Name}  " + ValueUtils.GetValueString(input?.Input.Value));
                 break;
             }
 
@@ -1287,37 +1287,6 @@ internal class GraphNode
         return sources;
     }
 
-    private static string GetValueString(InputValue inputValue)
-    {
-        return inputValue switch
-                   {
-                       InputValue<float> f    => $"{f.Value:0.000}",
-                       InputValue<int> i      => $"{i.Value:G3}",
-                       InputValue<Int3> i     => $"{i.Value:G3}",
-                       InputValue<bool> b     => $"{b.Value}",
-                       InputValue<Vector3> v3 => $"{v3.Value:0.0}",
-                       InputValue<Vector2> v2 => $"{v2.Value:0.0}",
-                       InputValue<string> s   => Truncate(s.Value),
-                       _                      => ""
-                   };
-    }
-        
-    private static string GetValueString(IInputSlot outputSlot)
-    {
-            
-        return outputSlot switch
-                   {
-                       InputSlot<float> f                    => $"{f.GetCurrentValue():0.000}",
-                       InputSlot<int> i                      => $"{i.GetCurrentValue():G3}",
-                       InputSlot<Int3> i                     => $"{i.GetCurrentValue():G3}",
-                       InputSlot<bool> b                     => $"{b.GetCurrentValue()}",
-                       InputSlot<System.Numerics.Vector3> v3 => $"{v3.GetCurrentValue():0.0}",
-                       InputSlot<System.Numerics.Vector2> v2 => $"{v2.GetCurrentValue():0.0}",
-                       InputSlot<string> s                   => Truncate(s.GetCurrentValue()),
-                       _                                     => ""
-                   };
-    }
-
     private static string GetValueString(ISlot outputSlot)
     {
         return outputSlot switch
@@ -1328,22 +1297,9 @@ internal class GraphNode
                        Slot<bool> b                     => $"{b.Value}",
                        Slot<System.Numerics.Vector3> v3 => $"{v3.Value:0.0}",
                        Slot<System.Numerics.Vector2> v2 => $"{v2.Value:0.0}",
-                       Slot<string> s                   => Truncate(s.Value),
+                       Slot<string> s                   => s.Value.Truncate(),
                        _                                => ""
                    };
-    }
-
-    private static string Truncate(string input, int maxLength = 10)
-    {
-        if (input == null)
-            return "null";
-
-        if (input.Length < maxLength)
-        {
-            return input;
-        }
-
-        return input[..Math.Min(input.Length, maxLength)] + "...";
     }
 
     private void DrawMultiInputSocket(ImDrawListPtr drawList, SymbolUi.Child targetUi, Symbol.InputDefinition inputDef, ImRect usableArea,

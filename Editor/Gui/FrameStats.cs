@@ -20,6 +20,7 @@ public static class FrameStats
         public bool IsItemContextMenuOpen;
         public bool UiColorsChanged;
         public bool SomethingWithTooltipHovered;
+        public bool UndoRedoTriggered;
             
         /// <summary>
         /// This is reset on Frame start and can be useful for allow context menu to stay open even if a
@@ -35,6 +36,7 @@ public static class FrameStats
             UiColorsChanged = false;
             OpenedPopUpName = string.Empty;
             SomethingWithTooltipHovered = false;
+            UndoRedoTriggered = false;
         }
 
     }

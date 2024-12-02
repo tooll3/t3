@@ -1,6 +1,6 @@
 using System;
-using System.Numerics;
 using T3.Core.Utils;
+// ReSharper disable UnusedMember.Global
 
 namespace T3.Core.DataTypes.Vector;
 
@@ -149,19 +149,19 @@ public struct Color
     public static readonly Color Transparent = new(1f, 1f, 1f, 0f);
 
     public static readonly Color TransparentBlack = new(0f, 0f, 0f, 0f);
-    public static readonly Color White = new(1f, 1f, 1f, 1f);
+    public static readonly Color White = new(1f, 1f, 1f);
     public static readonly Color Black = new(0, 0, 0, 1f);
-    public static readonly Color Red = new(1f, 0.2f, 0.2f, 1f);
-    public static readonly Color Green = new(0.2f, 0.9f, 0.2f, 1f);
-    public static readonly Color Blue = new(0.4f, 0.5f, 1f, 1);
-    public static readonly Color Orange = new(1, 0.5f, 0);
-    public static readonly Color Yellow = new(1, 1, 0);
-    public static readonly Color Cyan = new(0, 1, 1);
-    public static readonly Color Magenta = new(1, 0, 1);
+    public static readonly Color Red = new(1f, 0.2f, 0.2f);
+    public static readonly Color Green = new(0.2f, 0.9f, 0.2f);
+    public static readonly Color Blue = new(0.4f, 0.5f, 1f);
+    public static readonly Color Orange = new(1f, 0.5f, 0);
+    public static readonly Color Yellow = new(1f, 1f, 0);
+    public static readonly Color Cyan = new(0, 1f, 1f);
+    public static readonly Color Magenta = new(1f, 0, 1f);
     public static readonly Color Gray = new(0.5f, 0.5f, 0.5f);
     public static readonly Color LightGray = new(0.75f, 0.75f, 0.75f);
     public static readonly Color DarkGray = new(0.25f, 0.25f, 0.25f);
-    public static readonly Color Pink = new(1, 0.5f, 0.5f);
+    public static readonly Color Pink = new(1f, 0.5f, 0.5f);
     public static readonly Color Brown = new(0.5f, 0.25f, 0);
     public static readonly Color Purple = new(0.5f, 0, 0.5f);
     public static readonly Color Olive = new(0.5f, 0.5f, 0);
@@ -328,7 +328,7 @@ public struct Color
         }
 
         // clamp to valid color range
-        resultColor = new(Vector4.Clamp(resultColor.Rgba, Vector4.Zero, Vector4.One));
+        resultColor = new Color(Vector4.Clamp(resultColor.Rgba, Vector4.Zero, Vector4.One));
         return resultColor;
     }
 
@@ -344,10 +344,10 @@ public struct Color
         h %= 1f;
 
         int i = (int)(h * 6);
-        float f = h * 6 - i;
-        float p = v * Math.Max((1 - s), 0);
-        float q = v * Math.Max((1 - f * s), 0);
-        float t = v * Math.Max((1 - (1 - f) * s), 0);
+        var f = h * 6 - i;
+        var p = v * Math.Max((1 - s), 0);
+        var q = v * Math.Max((1 - f * s), 0);
+        var t = v * Math.Max((1 - (1 - f) * s), 0);
 
         switch (i % 6)
         {

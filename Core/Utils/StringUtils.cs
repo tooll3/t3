@@ -363,4 +363,17 @@ public static class StringUtils
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static string ToForwardSlashes(this string str) => str.Replace('\\', '/');
+
+    public static string Truncate(this string input, int maxLength = 10)
+    {
+        if (input == null)
+            return "null";
+
+        if (input.Length < maxLength)
+        {
+            return input;
+        }
+
+        return input[..Math.Min(input.Length, maxLength)] + "...";
+    }
 }

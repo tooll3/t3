@@ -64,7 +64,9 @@ public static class UndoRedoStack
             var command = _undoStack.Pop();
             command.Undo();
             _redoStack.Push(command);
+            FrameStats.Current.UndoRedoTriggered = true;
         }
+
     }
 
     public static void Redo()
@@ -74,6 +76,7 @@ public static class UndoRedoStack
             var command = _redoStack.Pop();
             command.Do();
             _undoStack.Push(command);
+            FrameStats.Current.UndoRedoTriggered = true;
         }
     }
 

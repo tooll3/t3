@@ -1,6 +1,7 @@
 using System.Numerics;
 using ImGuiNET;
 using Lib.color;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.ChildUi.WidgetUi;
@@ -31,12 +32,13 @@ public static class GradientSliderUi
         var gradient = (gradientInstance.Gradient.HasInputConnections) 
                            ? gradientInstance.Gradient.Value 
                            :gradientInstance.Gradient.TypedInputValue.Value;
-            
+
+        InputEditStateFlags editState = InputEditStateFlags.Nothing;
         if (gradient != null)   
         {
             var cloneIfModified = gradientInstance.Gradient.Input.IsDefault;
                 
-            var editState = GradientEditor.Draw(ref gradient, drawList, innerRect, cloneIfModified);
+            editState = GradientEditor.Draw(ref gradient, drawList, innerRect, cloneIfModified);
             var inputSlot = gradientInstance.Gradient;
 
             if (editState.HasFlag(InputEditStateFlags.Started) )
@@ -83,11 +85,11 @@ public static class GradientSliderUi
             drawList.AddRectFilled(pMin, pMax, UiColors.StatusAnimated);
         }
 
-
         return SymbolUi.Child.CustomUiResult.Rendered 
                | SymbolUi.Child.CustomUiResult.PreventInputLabels 
                | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph 
                | SymbolUi.Child.CustomUiResult.PreventTooltip 
-               | SymbolUi.Child.CustomUiResult.PreventOpenParameterPopUp;
+               | SymbolUi.Child.CustomUiResult.PreventOpenParameterPopUp
+               | (editState != InputEditStateFlags.Nothing ? SymbolUi.Child.CustomUiResult.IsActive : SymbolUi.Child.CustomUiResult.None);
     }
 }

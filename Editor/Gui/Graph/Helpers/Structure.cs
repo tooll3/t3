@@ -4,6 +4,7 @@ using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.UiModel;
+// ReSharper disable ForCanBeConvertedToForeach
 
 namespace T3.Editor.Gui.Graph.Helpers;
 
@@ -180,7 +181,7 @@ public class Structure
         return all;
     }
 
-    public HashSet<Guid> CollectConnectedChildren(Symbol.Child child, Instance composition, HashSet<Guid> set = null)
+    internal HashSet<Guid> CollectConnectedChildren(Symbol.Child child, Instance composition, HashSet<Guid> set = null)
     {
         set ??= new HashSet<Guid>();
 
@@ -206,48 +207,150 @@ public class Structure
     /// Scan all slots required for updating a Slot.
     /// This can be used for invalidation and cycle checking. 
     /// </summary>
-    public static void CollectSlotDependencies(ISlot slot, HashSet<ISlot> all)
+    private static HashSet<ISlot> CollectSlotDependencies(ISlot slot, HashSet<ISlot>? all= null)
     {
-        if (slot == null)
-        {
-            Log.Warning("skipping null slot");
-            return;
-        }
+        all ??= [];
+        
+        var stack = new Stack<ISlot>();
+        stack.Push(slot);
 
-        if (!all.Add(slot))
-            return;
+        while (stack.Count > 0)
+        {
+            var currentSlot = stack.Pop();
 
-        if (slot.TryGetFirstConnection(out var firstConnection))
-        {
-            CollectSlotDependencies(firstConnection, all);
-        }
-        else
-        {
-            var parentInstance = slot.Parent;
-            foreach (var input in parentInstance.Inputs)
+            if (!all.Add(currentSlot))
+                continue;
+
+            if (currentSlot.TryGetFirstConnection(out var firstConnection))
             {
-                if (slot.TryGetFirstConnection(out var inputFirstConnection))
+                stack.Push(firstConnection);
+            }
+            else
+            {
+                var op = currentSlot.Parent;
+                var opInputs = op.Inputs;
+
+                for (int i = 0; i < opInputs.Count; i++)
                 {
+                    var input = opInputs[i];
+
+                    // Skip if not connected
+                    if (!input.TryGetFirstConnection(out var connectedCompInputSlot))
+                        continue;
+                    
                     if (input.TryGetAsMultiInput(out var multiInput))
                     {
-                        foreach (var entry in multiInput.GetCollectedInputs())
+                        var collectedInputs = multiInput.GetCollectedInputs();
+                        for (var j = 0; j < collectedInputs.Count; j++)
                         {
-                            CollectSlotDependencies(entry, all);
+                            stack.Push(collectedInputs[j]);
                         }
                     }
                     else
                     {
-                        CollectSlotDependencies(inputFirstConnection, all);
+                        stack.Push(connectedCompInputSlot);
                     }
-                }
-                else if ((input.DirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
-                {
-                    input.DirtyFlag.Invalidate();
                 }
             }
         }
+
+        return all;
     }
 
+    /** Returns true if connecting the outputSlot to an input of the op with a symbolChildId would result in a cycle */
+    internal static bool CheckForCycle(ISlot outputSlot, Guid targetOpId)
+    {
+        var linkedSlots = CollectSlotDependencies(outputSlot);
+        foreach (var linkedSlot in linkedSlots)
+        {
+            if (linkedSlot.Parent.SymbolChildId != targetOpId)
+                continue;
+
+            return true;
+        }
+
+        return false;
+    }
+    
+    /** Returns true if connecting the outputSlot to an input of the op with a symbolChildId would result in a cycle */
+    internal static bool CheckForCycle( Instance sourceInstance, Guid targetOpId)
+    {
+        var linkedSlots = new HashSet<ISlot>();
+        foreach (var inputSlot in sourceInstance.Inputs)
+        {
+            CollectSlotDependencies(inputSlot, linkedSlots);
+        }
+        
+        //var linkedSlots = CollectSlotDependencies(outputSlot);
+        foreach (var linkedSlot in linkedSlots)
+        {
+            if (linkedSlot.Parent.SymbolChildId != targetOpId)
+                continue;
+
+            return true;
+        }
+
+        return false;
+    }
+    
+    
+    internal static bool CheckForCycle(Symbol compositionSymbol, Symbol.Connection connection)
+    {
+        var dependingSourceItemIds = new HashSet<Guid>();
+        
+        CollectDependentChildren(connection.SourceParentOrChildId);
+
+        return dependingSourceItemIds.Contains(connection.TargetParentOrChildId);
+
+        void CollectDependentChildren(Guid sourceChildId)
+        {
+            if (!dependingSourceItemIds.Add(sourceChildId))
+                return;
+            
+            // find all connections into child...
+            foreach (var c in compositionSymbol.Connections)
+            {
+                if (c.TargetParentOrChildId != sourceChildId)
+                    continue;
+                
+                
+                CollectDependentChildren(c.SourceParentOrChildId);
+            }
+        }
+        
+        // var hashSet = new HashSet<Guid>();
+        // var stack = new Stack<Guid>();
+        //
+        // stack.Push(connection.TargetParentOrChildId);
+        //
+        // while (stack.Count > 0)
+        // {
+        //     var currentId = stack.Pop();
+        //
+        //     if (!hashSet.Add(currentId))
+        //         continue;
+        //
+        //     for (var index = 0; index < compositionSymbol.Connections.Count; index++)
+        //     {
+        //         var c = compositionSymbol.Connections[index];
+        //         if (c.TargetParentOrChildId == currentId)
+        //         {
+        //             if (c.SourceParentOrChildId == connection.SourceParentOrChildId)
+        //                 return true;
+        //
+        //             stack.Push(c.SourceParentOrChildId);
+        //         }
+        //
+        //         // Early exit if a cycle is detected
+        //     }
+        // }
+        //
+        // return false;
+    }
+
+    
+    
+    
     public static IEnumerable<Instance> CollectParentInstances(Instance compositionOp)
     {
         var parents = new List<Instance>();
@@ -302,4 +405,6 @@ public class Structure
 
         return true;
     }
+
+    
 }

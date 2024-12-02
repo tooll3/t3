@@ -6,7 +6,7 @@ public static class TypeUiRegistry
 
     public static UiProperties GetPropertiesForType(Type type)
     {
-        return Entries.TryGetValue(type, out var properties) ? properties : UiProperties.Default;
+        return type != null && Entries.TryGetValue(type, out var properties) ? properties : UiProperties.Default;
     }
         
     public static bool TryGetPropertiesForType(Type type, out UiProperties properties)

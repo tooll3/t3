@@ -81,7 +81,7 @@ internal class SelectableNodeMovement(GraphWindow window, INodeCanvas canvas, No
             {
                 _moveCommand.StoreCurrentValues();
                 UndoRedoStack.Add(_moveCommand);
-                DisconnectDraggedNodes();
+                DisconnectDraggedNodes(window.CompositionOp, _draggedNodes);
             }
             HandleNodeDragging(node);
         }
@@ -194,17 +194,17 @@ internal class SelectableNodeMovement(GraphWindow window, INodeCanvas canvas, No
         }
     }
 
-    private void DisconnectDraggedNodes()
+    public static void DisconnectDraggedNodes(Instance compositionOp, List<ISelectableCanvasObject> draggedNodes)
     {
         var removeCommands = new List<ICommand>();
         var inputConnections = new List<(Symbol.Connection connection, Type connectionType, bool isMultiIndex, int multiInputIndex)>();
         var outputConnections = new List<(Symbol.Connection connection, Type connectionType, bool isMultiIndex, int multiInputIndex)>();
-        foreach (var node in _draggedNodes)
+        foreach (var node in draggedNodes)
         {
             if (node is not SymbolUi.Child childUi)
                 continue;
 
-            if (!window.CompositionOp.Children.TryGetValue(childUi.Id, out var instance))
+            if (!compositionOp.Children.TryGetValue(childUi.Id, out var instance))
             {
                 Log.Error("Can't disconnect missing instance");
                 continue;
@@ -213,7 +213,7 @@ internal class SelectableNodeMovement(GraphWindow window, INodeCanvas canvas, No
             // Get all input connections and
             // relative index if they have multi-index inputs
             var connectionsToInput = instance.Parent.Symbol.Connections.FindAll(c => c.TargetParentOrChildId == instance.SymbolChildId
-                                                                                     && _draggedNodes.All(c2 => c2.Id != c.SourceParentOrChildId));                
+                                                                                     && draggedNodes.All(c2 => c2.Id != c.SourceParentOrChildId));                
             var inConnectionInputIndex = 0;
             foreach (var connectionToInput in connectionsToInput)
             {
@@ -229,7 +229,7 @@ internal class SelectableNodeMovement(GraphWindow window, INodeCanvas canvas, No
             // Get all output connections and
             // relative index if they have multi-index inputs
             var connectionsToOutput = instance.Parent.Symbol.Connections.FindAll(c => c.SourceParentOrChildId == instance.SymbolChildId
-                                                                                      && _draggedNodes.All(c2 => c2.Id != c.TargetParentOrChildId));
+                                                                                      && draggedNodes.All(c2 => c2.Id != c.TargetParentOrChildId));
             var outConnectionInputIndex = 0;
             foreach (var connectionToOutput in connectionsToOutput)
             {
@@ -248,7 +248,7 @@ internal class SelectableNodeMovement(GraphWindow window, INodeCanvas canvas, No
         inputConnections.Sort((x, y) => y.multiInputIndex.CompareTo(x.multiInputIndex));
         foreach (var inputConnection in inputConnections)
         {
-            removeCommands.Add(new DeleteConnectionCommand(window.CompositionOp.Symbol, inputConnection.connection, inputConnection.multiInputIndex));
+            removeCommands.Add(new DeleteConnectionCommand(compositionOp.Symbol, inputConnection.connection, inputConnection.multiInputIndex));
         }
 
         // Remove the output connections in index descending order to
@@ -256,7 +256,7 @@ internal class SelectableNodeMovement(GraphWindow window, INodeCanvas canvas, No
         outputConnections.Sort((x, y) => y.multiInputIndex.CompareTo(x.multiInputIndex));
         foreach(var outputConnection in outputConnections)
         {
-            removeCommands.Add(new DeleteConnectionCommand(window.CompositionOp.Symbol, outputConnection.connection, outputConnection.multiInputIndex));
+            removeCommands.Add(new DeleteConnectionCommand(compositionOp.Symbol, outputConnection.connection, outputConnection.multiInputIndex));
         }
 
         // Reconnect inputs of 1th nodes and outputs of last nodes if are of the same type
@@ -275,7 +275,7 @@ internal class SelectableNodeMovement(GraphWindow window, INodeCanvas canvas, No
                                                               targetParentOrChildId: itemOutputConnectionRemaining.connection.TargetParentOrChildId,
                                                               targetSlotId: itemOutputConnectionRemaining.connection.TargetSlotId);
 
-                    removeCommands.Add(new AddConnectionCommand(window.CompositionOp.Symbol, newConnection, itemOutputConnectionRemaining.multiInputIndex));
+                    removeCommands.Add(new AddConnectionCommand(compositionOp.Symbol, newConnection, itemOutputConnectionRemaining.multiInputIndex));
                     outputConnectionsRemaining.Remove(itemOutputConnectionRemaining);
 
                     break;
@@ -479,7 +479,7 @@ internal class SelectableNodeMovement(GraphWindow window, INodeCanvas canvas, No
     private Guid _draggedNodeId = Guid.Empty;
     private List<ISelectableCanvasObject> _draggedNodes = new();
 
-    private class ShakeDetector
+    public class ShakeDetector
     {
         public bool TestDragForShake(Vector2 mousePosition)
         {

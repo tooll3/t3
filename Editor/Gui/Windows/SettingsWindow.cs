@@ -68,6 +68,12 @@ public class SettingsWindow : Window
                                                       "Affects the shape of the connections between your operators",
                                                       UserSettings.Defaults.UseArcConnections);
 
+                    changed |= FormInputs.AddCheckBox("Disconnect on unsnap",
+                                                      ref UserSettings.Config.DisconnectOnUnsnap,
+                                                      "Defines if unsnapping operators from a block will automatically disconnect them.\nOps dragged out between snapped blocks will always be disconnected.",
+                                                      UserSettings.Defaults.DisconnectOnUnsnap);
+
+                    
                     changed |= FormInputs.AddCheckBox("Drag snapped nodes",
                                                       ref UserSettings.Config.SmartGroupDragging,
                                                       "An experimental features that will drag neighbouring snapped operators",
@@ -119,6 +125,11 @@ public class SettingsWindow : Window
                                                    ref UserSettings.Config.GizmoSize,
                                                    0.0f, 10f, 0.01f, true);
 
+                    changed |= FormInputs.AddFloat("Connection radius",
+                                                   ref UserSettings.Config.MaxCurveRadius,
+                                                   0.0f, 1000f, 1f, true,"Controls the roundness of curve lines",
+                                                   UserSettings.Defaults.TimeRasterDensity);
+                    
                     changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.FrameStepAmount,
                                                           "Frame step amount",
                                                           "Controls the next rounding and step amount when jumping between frames.\nDefault shortcut is Shift+Cursor Left/Right");

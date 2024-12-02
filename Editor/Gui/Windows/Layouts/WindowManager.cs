@@ -1,6 +1,8 @@
 using T3.Editor.Gui.Graph;
 using ImGuiNET;
 using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.MagGraph;
+using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Exploration;
 using T3.Editor.Gui.Windows.Output;
@@ -65,6 +67,7 @@ public static partial class WindowManager
                            Program.ConsoleLogWindow,
                            new IoViewWindow(),
                            new SettingsWindow(),
+                           new MagGraphWindow(),
                        };
 
 

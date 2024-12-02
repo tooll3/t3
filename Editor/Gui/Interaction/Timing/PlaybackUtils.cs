@@ -93,28 +93,30 @@ public static class PlaybackUtils
             return settings;
         }
             
-            
-        var outputWindow = OutputWindow.GetPrimaryOutputWindow();
-
-        if (outputWindow == null)
-        {
-            owner = null;
-            return null;
-        }
-
-        if (outputWindow.Pinning.TryGetPinnedOrSelectedInstance(out var pinnedOutput, out _))
-        {
-            if (FindPlaybackSettingsForInstance(pinnedOutput, out var instanceWithSettings, out var settingsFromPinned))
-            {
-                owner = instanceWithSettings;
-                return settingsFromPinned;
-            }
-
-            owner = null;
-            return GetDefaultPlaybackSettings(composition?.Symbol.SymbolPackage);
-        }
-
         owner = null;
+        return null;
+            
+        // var outputWindow = OutputWindow.GetPrimaryOutputWindow();
+        //
+        // if (outputWindow == null)
+        // {
+        //     owner = null;
+        //     return null;
+        // }
+        //
+        // if (outputWindow.Pinning.TryGetPinnedOrSelectedInstance(out var pinnedOutput, out _))
+        // {
+        //     if (FindPlaybackSettingsForInstance(pinnedOutput, out var instanceWithSettings, out var settingsFromPinned))
+        //     {
+        //         owner = instanceWithSettings;
+        //         return settingsFromPinned;
+        //     }
+        //
+        //     owner = null;
+        //     return GetDefaultPlaybackSettings(composition?.Symbol.SymbolPackage);
+        // }
+        //
+        // owner = null;
         return null;
     }
 

@@ -15,6 +15,7 @@ public sealed partial class Symbol
         public Type ValueType { get; }
         public string Name { get; }
     }
+
     /// <summary>
     /// Options on the visual presentation of <see cref="Symbol"/> input.
     /// </summary>
@@ -91,7 +92,7 @@ public sealed partial class Symbol
             SourceSlotId = sourceSlotId;
             TargetParentOrChildId = targetParentOrChildId;
             TargetSlotId = targetSlotId;
-            
+
             Debug.Assert(Guid.Empty != sourceSlotId);
             Debug.Assert(Guid.Empty != targetSlotId);
 
@@ -99,9 +100,19 @@ public sealed partial class Symbol
             _hashCode = CalculateHashCode(sourceParentOrChildId, sourceSlotId, targetParentOrChildId, targetSlotId);
         }
 
+        public Connection Clone()
+        {
+            return new Connection(
+                                  SourceParentOrChildId,
+                                  SourceSlotId,
+                                  TargetParentOrChildId,
+                                  TargetSlotId
+                                 );
+        }
+
         public sealed override int GetHashCode() => _hashCode;
 
-        private int CalculateHashCode(in Guid sourceParentOrChildId, in Guid sourceSlotId, in Guid targetParentOrChildId, in Guid targetSlotId)
+        private static int CalculateHashCode(in Guid sourceParentOrChildId, in Guid sourceSlotId, in Guid targetParentOrChildId, in Guid targetSlotId)
         {
             int hash = sourceParentOrChildId.GetHashCode();
             hash = hash * 31 + sourceSlotId.GetHashCode();
