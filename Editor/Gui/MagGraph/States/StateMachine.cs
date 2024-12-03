@@ -25,7 +25,9 @@ internal abstract class State(StateMachine s)
 }
 
 /// <summary>
-/// A state machine that controls the interaction of manipulating the magnetic graph.
+/// The state machine is a very bare-bones (no hierarchy or events) implementation
+/// of a state machine that handles activation of <see cref="State"/>s. There can only be one state active.
+/// Most of the update interaction is done in State.Update() overrides.
 /// </summary>
 internal sealed class StateMachine
 {

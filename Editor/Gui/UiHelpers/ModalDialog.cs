@@ -35,7 +35,7 @@ namespace T3.Editor.Gui.UiHelpers;
 /// </summary>
 public abstract class ModalDialog
 {
-    public void ShowNextFrame()
+    internal void ShowNextFrame()
     {
         _shouldShowNextFrame = true;
         OnShowNextFrame();

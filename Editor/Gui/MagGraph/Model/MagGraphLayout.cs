@@ -17,6 +17,11 @@ using T3.Editor.UiModel;
 namespace T3.Editor.Gui.MagGraph.Model;
 
 /// <summary>
+/// Holds an intermediate view model that is updated if required. This view model
+/// builds referenceable items, view elements, and connections. This makes it much easier to traverse the
+/// graph without dictionary lookups. The layout also precomputes the visibility of input links, which simplifies
+/// the layout and rendering of connection lines (one of the most complicated parts of the legacy layout).
+
 /// Generate considerations:
 /// - The layout model is a temporary data that is completely generated from the t3ui data.
 /// - Its computation is expensive and should only be done if required.

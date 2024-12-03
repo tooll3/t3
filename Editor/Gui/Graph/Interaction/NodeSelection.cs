@@ -5,6 +5,7 @@ using T3.Core.Operator.Interfaces;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.Selection;
+using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Interaction;
@@ -205,5 +206,47 @@ internal class NodeSelection : ISelection
                 return true;
         }
         return false;
+    }
+
+    public static IEnumerable<ISelectableCanvasObject> GetSelectableChildren(Instance compositionOp )
+    {
+        List<ISelectableCanvasObject> selectableItems = [];
+        selectableItems.Clear();
+        //var compositionOp = _window.CompositionOp;
+        var symbolUi = compositionOp.GetSymbolUi();
+        selectableItems.AddRange(compositionOp.Children.Values.Select(x => x.GetChildUi()));
+
+        selectableItems.AddRange(symbolUi.InputUis.Values);
+        selectableItems.AddRange(symbolUi.OutputUis.Values);
+        selectableItems.AddRange(symbolUi.Annotations.Values);
+        return selectableItems;
+    }
+
+    internal static ImRect GetSelectionBounds(NodeSelection nodeSelection, Instance compositionOp, float padding = 50)
+    {
+        // var selectedOrAll = NodeSelection.IsAnythingSelected()
+        //                         ? NodeSelection.GetSelectedNodes<ISelectableCanvasObject>().ToArray()
+        //                         : SelectableChildren.ToArray();
+
+        var selectedOrAll = nodeSelection.IsAnythingSelected()
+                                ? nodeSelection.GetSelectedNodes<ISelectableCanvasObject>().ToArray()
+                                : NodeSelection.GetSelectableChildren(compositionOp).ToArray();
+
+        if (selectedOrAll.Length == 0)
+            return new ImRect();
+
+        var firstElement = selectedOrAll[0];
+        var bounds = new ImRect(firstElement.PosOnCanvas, firstElement.PosOnCanvas + Vector2.One);
+        foreach (var element in selectedOrAll)
+        {
+            if (float.IsInfinity(element.PosOnCanvas.X) || float.IsInfinity(element.PosOnCanvas.Y))
+                element.PosOnCanvas = Vector2.Zero;
+
+            bounds.Add(element.PosOnCanvas);
+            bounds.Add(element.PosOnCanvas + element.Size);
+        }
+
+        bounds.Expand(padding);
+        return bounds;
     }
 }

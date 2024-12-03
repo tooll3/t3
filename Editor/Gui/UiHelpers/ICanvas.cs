@@ -3,7 +3,7 @@ using T3.Editor.Gui.Selection;
 
 namespace T3.Editor.Gui.UiHelpers;
 
-public interface INodeCanvas:ICanvas
+internal interface INodeCanvas:ICanvas
 {
     IEnumerable<ISelectableCanvasObject> SelectableChildren { get; }
 }

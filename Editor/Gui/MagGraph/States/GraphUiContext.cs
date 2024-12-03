@@ -2,6 +2,8 @@
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Graph.Dialogs;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
@@ -12,6 +14,11 @@ namespace T3.Editor.Gui.MagGraph.States;
 
 
 /// <summary>
+/// Holds the current interaction state of the graph. It is passed as a parameter
+/// during most processing and makes "graph-global" components and states accessible to all related components.
+/// New instances of the context are created when the composition object or window changes.
+///</summary>
+/// <remarks>
 /// Overall concept of the graph UI system.
 ///
 /// Preface: The node graph is a central piece of Tooll's user interface and probably
@@ -41,7 +48,18 @@ namespace T3.Editor.Gui.MagGraph.States;
 /// "new" SymbolBrowser).
 /// - <see cref="ItemMovement"/> handles dragging, snapping, inserting, and unsnapping operators on the canvas.
 /// Grouping is handled on the fly by flood-filling "Snapped" Layout-Connections into HashSets.
-/// </summary>
+///
+/// Notes:
+/// -------
+/// Currently, a Context only holds information on a single composition and is discorded as soon as
+/// the user navigations to another composition-op (e.g. jumping up, down the composition stack.
+///
+/// Architectural questions:
+/// ------------------------
+/// We need to clarify how to deal with modal dialogs like "Edit Comment"
+///
+/// 
+///</remarks>
 internal sealed class GraphUiContext
 {
     internal GraphUiContext(NodeSelection selector, MagGraphCanvas canvas, Instance compositionOp)
@@ -52,15 +70,17 @@ internal sealed class GraphUiContext
         ItemMovement = new MagItemMovement(this, canvas, Layout, selector);
         StateMachine = new StateMachine(this);
         Placeholder = new PlaceholderCreation();
+        EditCommentDialog = new EditCommentDialog();
     }
 
+    internal readonly Instance CompositionOp;
+    
     internal readonly MagGraphCanvas Canvas;
     internal readonly MagItemMovement ItemMovement;
     internal readonly PlaceholderCreation Placeholder;
     internal readonly MagGraphLayout Layout = new();
-
+    
     internal readonly NodeSelection Selector;
-    internal readonly Instance CompositionOp;
     internal readonly StateMachine StateMachine;
     internal  MacroCommand? MacroCommand;
     internal  ModifyCanvasElementsCommand? MoveElementsCommand;
@@ -70,12 +90,15 @@ internal sealed class GraphUiContext
     internal Guid ActiveOutputId { get; set; }
     internal MagGraphItem.Directions ActiveOutputDirection { get; set; }
 
-    // Picking...
+    // Input picking... (should probably be move into Placeholder)
     internal Type? DraggedPrimaryOutputType;
     internal MagGraphItem? ItemForInputSelection;
     internal MagGraphItem? PrimaryOutputItem;
     internal Vector2 PeekAnchorInCanvas;
     internal bool ShouldAttemptToSnapToInput;
+    
+    // Dialogs
+    internal EditCommentDialog EditCommentDialog;
 
     // internal Vector2 PeekAnchorInCanvas => PrimaryOutputItem == null
     //                                            ? Vector2.Zero

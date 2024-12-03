@@ -6,7 +6,7 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Dialogs;
 
-internal class EditCommentDialog : ModalDialog
+internal sealed class EditCommentDialog : ModalDialog
 {
     public void Draw(NodeSelection selection)
     {

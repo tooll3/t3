@@ -58,7 +58,11 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         
         _visibleCanvasArea = ImRect.RectWithSize(InverseTransformPositionFloat(ImGui.GetWindowPos()),
                                                  InverseTransformDirection(ImGui.GetWindowSize()));
-            
+        
+        KeyboardActions.HandleKeyboardActions(_context);
+        
+        _context.EditCommentDialog.Draw(_context.Selector);
+        
         // Prepare frame
         //_context.Selector.HoveredIds.Clear();
         _context.Layout.ComputeLayout(_context.CompositionOp);
@@ -178,7 +182,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
 
         InputPicking.DrawHiddenInputSelector(_context);
 
-        _context.StateMachine.UpdateAfterDraw(_context);
+        _context.StateMachine. UpdateAfterDraw(_context);
     }
 
     private void DrawBackgroundGrids(ImDrawListPtr drawList)
@@ -253,6 +257,8 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         Down = 4,
         Left = 8,
     }
+
+    
 
     private static readonly ImDrawFlags[] _borderRoundings =
         {
@@ -418,4 +424,9 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
     private bool _enableDebug;
     private GraphUiContext _context;
     private readonly NodeSelection _nodeSelection;
+
+    public void FocusViewToSelection(GraphUiContext context)
+    {
+        FitAreaOnCanvas(NodeSelection.GetSelectionBounds(context.Selector, context.CompositionOp));
+    }
 }

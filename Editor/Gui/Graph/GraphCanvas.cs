@@ -394,10 +394,10 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
     private void HandleSelectionFenceUpdate(ImRect bounds, Instance compositionOp, SelectionFence.SelectModes selectMode)
     {
         var boundsInCanvas = InverseTransformRect(bounds);
-        var nodesToSelect = SelectableChildren
-           .Where(child => child is Annotation
-                               ? boundsInCanvas.Contains(child.Rect)
-                               : child.Rect.Overlaps(boundsInCanvas));
+        var nodesToSelect = NodeSelection.GetSelectableChildren(_window.CompositionOp)
+                                         .Where(child => child is Annotation
+                                                             ? boundsInCanvas.Contains(child.Rect)
+                                                             : child.Rect.Overlaps(boundsInCanvas));
 
         if (selectMode == SelectionFence.SelectModes.Replace)
         {
@@ -504,31 +504,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
 
     internal void FocusViewToSelection()
     {
-        FitAreaOnCanvas(GetSelectionBounds());
-    }
-
-    private ImRect GetSelectionBounds(float padding = 50)
-    {
-        var selectedOrAll = NodeSelection.IsAnythingSelected()
-                                ? NodeSelection.GetSelectedNodes<ISelectableCanvasObject>().ToArray()
-                                : SelectableChildren.ToArray();
-
-        if (selectedOrAll.Length == 0)
-            return new ImRect();
-
-        var firstElement = selectedOrAll[0];
-        var bounds = new ImRect(firstElement.PosOnCanvas, firstElement.PosOnCanvas + Vector2.One);
-        foreach (var element in selectedOrAll)
-        {
-            if (float.IsInfinity(element.PosOnCanvas.X) || float.IsInfinity(element.PosOnCanvas.Y))
-                element.PosOnCanvas = Vector2.Zero;
-
-            bounds.Add(element.PosOnCanvas);
-            bounds.Add(element.PosOnCanvas + element.Size);
-        }
-
-        bounds.Expand(padding);
-        return bounds;
+        FitAreaOnCanvas(NodeSelection.GetSelectionBounds(NodeSelection, _window.CompositionOp));
     }
 
     private void DrawContextMenuContent(Instance compositionOp)
@@ -921,24 +897,9 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
         }
     }
 
-    public IEnumerable<ISelectableCanvasObject> SelectableChildren
-    {
-        get
-        {
-            _selectableItems.Clear();
-            var compositionOp = _window.CompositionOp;
-            var symbolUi = compositionOp.GetSymbolUi();
-            _selectableItems.AddRange(compositionOp.Children.Values.Select(x => x.GetChildUi()));
+    public IEnumerable<ISelectableCanvasObject> SelectableChildren => NodeSelection.GetSelectableChildren(_window.CompositionOp);
 
-            _selectableItems.AddRange(symbolUi.InputUis.Values);
-            _selectableItems.AddRange(symbolUi.OutputUis.Values);
-            _selectableItems.AddRange(symbolUi.Annotations.Values);
-
-            return _selectableItems;
-        }
-    }
-
-    private readonly List<ISelectableCanvasObject> _selectableItems = new();
+    //private readonly List<ISelectableCanvasObject> _selectableItems = new();
     #endregion
 
     #region public API

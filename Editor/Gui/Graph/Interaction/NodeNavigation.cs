@@ -5,7 +5,7 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Interaction;
 
-internal class NodeNavigation
+internal sealed class NodeNavigation
 {
     public NodeNavigation(Func<Instance> getComposition, GraphCanvas canvas, Structure structure, NavigationHistory navigationHistory)
     {

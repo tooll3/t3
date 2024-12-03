@@ -4,6 +4,7 @@ using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.UiModel;
+
 // ReSharper disable ForCanBeConvertedToForeach
 
 namespace T3.Editor.Gui.Graph.Helpers;
@@ -12,7 +13,7 @@ namespace T3.Editor.Gui.Graph.Helpers;
 /// each GraphWindow class should have its own Structure object, and some of this logic should
 /// be moved out where applicable (i.e. dealing with packages, selecting root instances, etc.) 
 /// </summary>
-public class Structure
+internal sealed class Structure
 {
     private readonly Func<Instance> _getRootInstance;
 
@@ -20,26 +21,26 @@ public class Structure
     {
         _getRootInstance = getRootInstance;
     }
-    
+
     public Instance? GetInstanceFromIdPath(IReadOnlyList<Guid> compositionPath)
     {
         return TryGetInstanceFromIdPath(compositionPath, out var instance) ? instance : null;
     }
 
-    public List<string> GetReadableInstancePath(IReadOnlyList<Guid>? path, bool includeLeave= true)
+    public List<string> GetReadableInstancePath(IReadOnlyList<Guid>? path, bool includeLeave = true)
     {
-        if (path == null || (includeLeave && path.Count == 0) || (!includeLeave && path.Count == 1)) 
+        if (path == null || (includeLeave && path.Count == 0) || (!includeLeave && path.Count == 1))
             return ["Path empty"];
 
         var instance = GetInstanceFromIdPath(path);
-        
+
         if (instance == null)
             return ["Path invalid"];
 
         var newList = new List<string>();
 
         var isFirst = true;
-        
+
         while (true)
         {
             var parent = instance.Parent;
@@ -83,14 +84,14 @@ public class Structure
         return newList;
     }
 
-    public ITimeClip GetCompositionTimeClip(Instance compositionOp)
+    public static ITimeClip? GetCompositionTimeClip(Instance? compositionOp)
     {
         if (compositionOp == null)
         {
             Log.Error("Can't get time clip from null composition op");
             return null;
         }
-        
+
         foreach (var clipProvider in compositionOp.Outputs.OfType<ITimeClipProvider>())
         {
             return clipProvider.TimeClip;
@@ -108,15 +109,15 @@ public class Structure
         {
             foreach (var clipProvider in child.Outputs.OfType<ITimeClipProvider>())
             {
-                yield return clipProvider.TimeClip;//CHANGE
+                yield return clipProvider.TimeClip; //CHANGE
             }
         }
     }
 
-    public static bool TryGetUiAndInstanceInComposition(Guid id, 
-                                                 Instance compositionOp, 
-                                                 [NotNullWhen(true)] out SymbolUi.Child? childUi, 
-                                                 [NotNullWhen(true)] out Instance? instance)
+    public static bool TryGetUiAndInstanceInComposition(Guid id,
+                                                        Instance compositionOp,
+                                                        [NotNullWhen(true)] out SymbolUi.Child? childUi,
+                                                        [NotNullWhen(true)] out Instance? instance)
     {
         if (!compositionOp.Children.TryGetValue(id, out instance))
         {
@@ -169,7 +170,7 @@ public class Structure
 
     public static HashSet<Symbol> CollectRequiredSymbols(Symbol symbol, HashSet<Symbol>? all = null)
     {
-        all ??= new HashSet<Symbol>();
+        all ??= [];
 
         foreach (var symbolChild in symbol.Children.Values)
         {
@@ -182,9 +183,9 @@ public class Structure
         return all;
     }
 
-    internal HashSet<Guid> CollectConnectedChildren(Symbol.Child child, Instance composition, HashSet<Guid> set = null)
+    internal static HashSet<Guid> CollectConnectedChildren(Symbol.Child child, Instance composition, HashSet<Guid> set = null)
     {
-        set ??= new HashSet<Guid>();
+        set ??= [];
 
         set.Add(child.Id);
         var compositionSymbol = composition.Symbol;
@@ -208,10 +209,10 @@ public class Structure
     /// Scan all slots required for updating a Slot.
     /// This can be used for invalidation and cycle checking. 
     /// </summary>
-    private static HashSet<ISlot> CollectSlotDependencies(ISlot slot, HashSet<ISlot>? all= null)
+    private static HashSet<ISlot> CollectSlotDependencies(ISlot slot, HashSet<ISlot>? all = null)
     {
         all ??= [];
-        
+
         var stack = new Stack<ISlot>();
         stack.Push(slot);
 
@@ -238,7 +239,7 @@ public class Structure
                     // Skip if not connected
                     if (!input.TryGetFirstConnection(out var connectedCompInputSlot))
                         continue;
-                    
+
                     if (input.TryGetAsMultiInput(out var multiInput))
                     {
                         var collectedInputs = multiInput.GetCollectedInputs();
@@ -272,16 +273,16 @@ public class Structure
 
         return false;
     }
-    
+
     /** Returns true if connecting the outputSlot to an input of the op with a symbolChildId would result in a cycle */
-    internal static bool CheckForCycle( Instance sourceInstance, Guid targetOpId)
+    internal static bool CheckForCycle(Instance sourceInstance, Guid targetOpId)
     {
         var linkedSlots = new HashSet<ISlot>();
         foreach (var inputSlot in sourceInstance.Inputs)
         {
             CollectSlotDependencies(inputSlot, linkedSlots);
         }
-        
+
         //var linkedSlots = CollectSlotDependencies(outputSlot);
         foreach (var linkedSlot in linkedSlots)
         {
@@ -293,12 +294,11 @@ public class Structure
 
         return false;
     }
-    
-    
+
     internal static bool CheckForCycle(Symbol compositionSymbol, Symbol.Connection connection)
     {
         var dependingSourceItemIds = new HashSet<Guid>();
-        
+
         CollectDependentChildren(connection.SourceParentOrChildId);
 
         return dependingSourceItemIds.Contains(connection.TargetParentOrChildId);
@@ -307,20 +307,18 @@ public class Structure
         {
             if (!dependingSourceItemIds.Add(sourceChildId))
                 return;
-            
+
             // find all connections into child...
             foreach (var c in compositionSymbol.Connections)
             {
                 if (c.TargetParentOrChildId != sourceChildId)
                     continue;
-                
-                
+
                 CollectDependentChildren(c.SourceParentOrChildId);
             }
         }
     }
 
-    
     public static IEnumerable<Instance> CollectParentInstances(Instance compositionOp)
     {
         var parents = new List<Instance>();
@@ -353,17 +351,17 @@ public class Structure
             return false;
             //throw new ArgumentException("Path does not start with the root instance");
         }
-        
+
         var pathCount = childPath.Count;
-        
-        if(pathCount == 1)
+
+        if (pathCount == 1)
         {
             instance = rootInstance;
             return true;
         }
-        
+
         instance = rootInstance;
-        for(int i = 1; i < pathCount; i++)
+        for (int i = 1; i < pathCount; i++)
         {
             if (!instance.Children.TryGetValue(childPath[i], out instance))
             {
@@ -375,6 +373,4 @@ public class Structure
 
         return true;
     }
-
-    
 }

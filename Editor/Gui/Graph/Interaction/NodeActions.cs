@@ -11,6 +11,7 @@ using T3.Editor.Gui.Commands.Annotations;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -92,7 +93,7 @@ internal static class NodeActions
         nodeSelection.Clear();
     }
 
-    public static Annotation AddAnnotation(NodeSelection nodeSelection, GraphCanvas canvas, Instance compositionOp)
+    public static Annotation AddAnnotation(NodeSelection nodeSelection, ScalableCanvas canvas, Instance compositionOp)
     {
         var size = new Vector2(100, 140);
         var posOnCanvas = canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
@@ -171,7 +172,7 @@ internal static class NodeActions
 
     // todo - better encapsulate this in SymbolJson
 
-    public static void PasteClipboard(NodeSelection nodeSelection, GraphCanvas canvas, Instance compositionOp)
+    public static void PasteClipboard(NodeSelection nodeSelection, ScalableCanvas canvas, Instance compositionOp)
     {
         try
         {

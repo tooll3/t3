@@ -27,7 +27,7 @@ internal class NodeGraphLayouting
         foreach (var n in _nodeSelection.GetSelectedChildUis().ToList())
         {
             //var xxx = NodeOperations.CollectSlotDependencies(n)
-            var connectedChildren = _structure.CollectConnectedChildren(n.SymbolChild, composition);
+            var connectedChildren = Structure.CollectConnectedChildren(n.SymbolChild, composition);
 
             // First pass is rough layout
             var nodesForSecondPass = new Dictionary<ISelectableCanvasObject, int>();

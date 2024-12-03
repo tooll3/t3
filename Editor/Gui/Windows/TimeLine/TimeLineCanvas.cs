@@ -101,7 +101,7 @@ internal sealed class TimeLineCanvas : CurveEditCanvas
                         break;
                 }
 
-                var compositionTimeClip = _structure.GetCompositionTimeClip(compositionOp);
+                var compositionTimeClip = Structure.GetCompositionTimeClip(compositionOp);
 
                 if (Playback.IsLooping)
                 {
@@ -149,7 +149,7 @@ internal sealed class TimeLineCanvas : CurveEditCanvas
         var oldScale = Scale;
         var oldScroll = Scroll;
 
-        var clip = _structure.GetCompositionTimeClip(compositionOp);
+        var clip = Structure.GetCompositionTimeClip(compositionOp);
         if (clip == null) return;
 
         // determine scaling factor
