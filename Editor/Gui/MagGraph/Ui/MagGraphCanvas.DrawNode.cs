@@ -244,8 +244,6 @@ internal sealed partial class MagGraphCanvas
         }
 
         // Input labels...
-        var smallFontSize = Fonts.FontSmall.FontSize * CanvasScale.Clamp(0.1f, 2f);
-
         if (!customUiResult.HasFlag(SymbolUi.Child.CustomUiResult.PreventInputLabels))
         {
             int inputIndex;
@@ -404,7 +402,7 @@ internal sealed partial class MagGraphCanvas
                 
             }
             // Draw primary output socket for drag or click
-            if (isItemHovered)
+            if (isItemHovered && context.StateMachine.CurrentState == GraphStates.Default)
             {
                 var color2 = ColorVariations.OperatorLabel.Apply(type2UiProperties.Color).Fade(0.7f * hoverProgress);
                 var circleCenter = pp;

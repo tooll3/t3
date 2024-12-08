@@ -77,7 +77,7 @@ internal sealed partial class MagItemMovement
                 if (inConnection != null && outputLine.ConnectionsOut.All(c => c != inConnection))
                     return;
 
-                ShowDebugLine(outPos, inPos, a.PrimaryType);
+                //ShowDebugLine(outPos, inPos, a.PrimaryType);
 
                 var d = Vector2.Distance(outPos, inPos);
                 if (d >= BestDistance)
@@ -96,19 +96,19 @@ internal sealed partial class MagItemMovement
                 MultiInputIndex = multiInputIndexIfValid;
             }
 
-            void ShowDebugLine(Vector2 outPos, Vector2 inPos, Type connectionType)
-            {
-                if (!canvas.ShowDebug)
-                    return;
-
-                var drawList = ImGui.GetForegroundDrawList();
-                var uiPrimaryColor = TypeUiRegistry.GetPropertiesForType(connectionType).Color;
-                drawList.AddLine(canvas.TransformPosition(outPos),
-                                 canvas.TransformPosition(inPos),
-                                 uiPrimaryColor.Fade(0.4f));
-
-                drawList.AddCircleFilled(canvas.TransformPosition(inPos), 6, uiPrimaryColor.Fade(0.4f));
-            }
+            // void ShowDebugLine(Vector2 outPos, Vector2 inPos, Type connectionType)
+            // {
+            //     if (!canvas.ShowDebug)
+            //         return;
+            //
+            //     var drawList = ImGui.GetForegroundDrawList();
+            //     var uiPrimaryColor = TypeUiRegistry.GetPropertiesForType(connectionType).Color;
+            //     drawList.AddLine(canvas.TransformPosition(outPos),
+            //                      canvas.TransformPosition(inPos),
+            //                      uiPrimaryColor.Fade(0.4f));
+            //
+            //     drawList.AddCircleFilled(canvas.TransformPosition(inPos), 6, uiPrimaryColor.Fade(0.4f));
+            // }
         }
 
         public void TestItemsForInsertion(MagGraphItem item, MagGraphItem insertionAnchorItem, SplitInsertionPoint insertionPoint)

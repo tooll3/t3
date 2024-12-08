@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
@@ -102,16 +103,22 @@ internal sealed class ConnectionHovering
                 drawList.AddCircle(outputPosOnScreen, hoverIndicatorRadius, firstHover.Color, 24);
             }
 
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5,5));
             ImGui.BeginTooltip();
+            ImGui.PushFont(Fonts.FontSmall);
             ImGui.TextUnformatted("Click to insert operator or\ndrag to disconnect...");
+            //ImGui.Spacing();
+            FormInputs.AddVerticalSpace(10);
+            ImGui.PopFont();
             ImGui.EndTooltip();
+            ImGui.PopStyleVar();
 
         }
-        else if (firstOutput != null)
-        {
-            DrawTooltipForSingleOutput(context, firstHover, drawList);
+        //else if (firstOutput != null)
+        //{
+        DrawTooltipForSingleOutput(context, firstHover, drawList);
             // Inconsistent connection types...
-        }
+        //}
 
         // TODO: Implement splitting
         // var buttonMin = _mousePosition - Vector2.One * radius / 2;
@@ -127,10 +134,10 @@ internal sealed class ConnectionHovering
         //     //                                                  _bestMatchYetForCurrentFrame.Connection,
         //     //                                                  posOnScreen);
         // }
-        else
-        {
-            StopHover();
-        }
+        // else
+        // {
+        //     StopHover();
+        // }
         _bestSnapSplitDistance = float.PositiveInfinity;
     }
 
@@ -172,11 +179,13 @@ internal sealed class ConnectionHovering
                 ImGui.EndChild();
                 ImGui.PushFont(Fonts.FontSmall);
                 var connectionSource = sourceOpUi.Symbol.Name + "." + sourceOutputUi.OutputDefinition.Name;
+                
                 ImGui.TextColored(UiColors.TextMuted, connectionSource);
                 var symbolChildInput = connection.TargetItem.SymbolUi.InputUis[connection.TargetInput.Id];
 
-                ImGui.TextUnformatted(connection.Type.Name);
                 ImGui.SameLine();
+                var typeName = TypeNameRegistry.Entries.GetValueOrDefault(connection.Type, connection.Type.Name);
+                ImGui.TextUnformatted("<" +  typeName + ">");
                 var inputIndex = connection.MultiInputIndex > 0 ? "[" + connection.MultiInputIndex + "]" : String.Empty;
                 var connectionTarget = "--> " + targetOp.Symbol.Name + "." + symbolChildInput.InputDefinition.Name + inputIndex;
                 ImGui.TextColored(UiColors.TextMuted, connectionTarget);

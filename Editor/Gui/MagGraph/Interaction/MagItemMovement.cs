@@ -255,20 +255,23 @@ internal sealed partial class MagItemMovement
         var snapPositionChanged = false;
         if (_snapping.IsSnapped)
         {
-            var bestSnapDelta = !_snapping.Reverse
-                                    ? _snapping.OutAnchorPos - _snapping.InputAnchorPos
-                                    : _snapping.InputAnchorPos - _snapping.OutAnchorPos;
+            var bestSnapDelta = _snapping.Reverse
+                                    ? _snapping.InputAnchorPos - _snapping.OutAnchorPos
+                                    : _snapping.OutAnchorPos - _snapping.InputAnchorPos;
+
+            var snapPos = _snapping.Reverse
+                                    ? _snapping.InputAnchorPos 
+                                    : _snapping.OutAnchorPos;
 
             dl.AddLine(_canvas.TransformPosition(mousePosOnCanvas),
                        context.Canvas.TransformPosition(mousePosOnCanvas) + _canvas.TransformDirection(bestSnapDelta),
                        Color.White);
 
-            var snapTargetPos = mousePosOnCanvas + bestSnapDelta;
-            if (Vector2.Distance(snapTargetPos, LastSnapPositionOnCanvas) > 2) // ugh. Magic number
+            if (Vector2.Distance(snapPos, LastSnapPositionOnCanvas) > 2) // ugh. Magic number
             {
                 snapPositionChanged = true;
                 LastSnapTime = ImGui.GetTime();
-                LastSnapPositionOnCanvas = snapTargetPos;
+                LastSnapPositionOnCanvas = snapPos;
             }
 
             foreach (var n in DraggedItems)
