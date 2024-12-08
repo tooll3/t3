@@ -385,11 +385,11 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
             {
                 if (item.Variant == MagGraphItem.Variants.Operator)
                 {
-                    _context.Selector.AddSelection(item, item.Instance);
+                    _context.Selector.AddSelection(item.Selectable, item.Instance);
                 }
                 else
                 {
-                    _context.Selector.AddSelection(item);
+                    _context.Selector.AddSelection(item.Selectable);
                 }
             }
         }

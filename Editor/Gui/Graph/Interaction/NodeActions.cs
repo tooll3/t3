@@ -64,6 +64,7 @@ internal static class NodeActions
     {
         var commands = new List<ICommand>();
         selectedChildUis ??= nodeSelection.GetSelectedChildUis().ToList();
+        Log.Debug("Selected node count " + selectedChildUis.Count);
         if (selectedChildUis.Count != 0)
         {
             var cmd = new DeleteSymbolChildrenCommand(compositionSymbolUi, selectedChildUis);
