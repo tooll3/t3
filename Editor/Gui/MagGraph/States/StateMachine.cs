@@ -1,28 +1,10 @@
-﻿using ImGuiNET;
+﻿using System.Reflection;
+using ImGuiNET;
 
 namespace T3.Editor.Gui.MagGraph.States;
 
-internal abstract class State(StateMachine s)
-{
-    protected StateMachine Sm => s;
-    
-    public virtual void Enter(GraphUiContext context)
-    {
-    }
+internal readonly record struct State(Action<GraphUiContext> Enter, Action<GraphUiContext> Update, Action<GraphUiContext> Exit);
 
-    public virtual void Exit(GraphUiContext context)
-    {
-    }
-
-    public double EnterTime;
-    public double Time => Sm.Time - EnterTime;
-    public abstract void Update(GraphUiContext context);
-
-    public override string ToString()
-    {
-        return GetType().Name.Replace("State", "" );
-    }
-}
 
 /// <summary>
 /// The state machine is a very bare-bones (no hierarchy or events) implementation
@@ -31,31 +13,9 @@ internal abstract class State(StateMachine s)
 /// </summary>
 internal sealed class StateMachine
 {
-    // States defined as fields
-    internal readonly DefaultState DefaultState;
-    internal readonly HoldBackgroundState HoldBackgroundState;
-    internal readonly HoldItemState HoldItemState;
-    internal readonly DragItemsState DragItemsState;
-    internal readonly HoldItemAfterLongTapState HoldItemAfterLongTapState;
-    internal readonly PlaceholderState PlaceholderState;
-    internal readonly HoldOutputState HoldOutputState;
-    internal readonly DragOutputState DragOutputState;
-    internal readonly PickInputState PickInputState;
-
     public StateMachine(GraphUiContext context)
     {
-        // Instantiate states
-        DefaultState = new DefaultState(this);
-        DragItemsState = new DragItemsState(this);
-        HoldBackgroundState = new HoldBackgroundState(this);
-        HoldItemState = new HoldItemState(this);
-        HoldItemAfterLongTapState = new HoldItemAfterLongTapState(this);
-        PlaceholderState = new PlaceholderState(this);
-        HoldOutputState = new HoldOutputState(this);
-        DragOutputState = new DragOutputState(this);
-        PickInputState = new PickInputState(this);
-
-        _currentState = DefaultState;
+        _currentState = GraphStates.Default;
         _currentState.Enter(context);
     }
 
@@ -68,12 +28,37 @@ internal sealed class StateMachine
     {
         _currentState.Exit(context);
         _currentState = newState;
-        newState.EnterTime = Time;
-        Log.Debug($"--> {_currentState}  {context.ActiveItem}");
+        _stateEnterTime = ImGui.GetTime();
+        
+        Log.Debug($"--> {GetMatchingStateFieldName(typeof( GraphStates), _currentState)}  {context.ActiveItem}");
         _currentState.Enter(context);
     }
 
+    /// <summary>
+    /// Sadly, since states are defined as fields, we need to use reflection to infer their short names... 
+    /// </summary>
+    private static string GetMatchingStateFieldName(Type staticClassType, State state)
+    {
+        if (!staticClassType.IsClass || !staticClassType.IsAbstract || !staticClassType.IsSealed)
+            throw new ArgumentException("Provided type must be a static class.", nameof(staticClassType));
+
+        var fields = staticClassType.GetFields(BindingFlags.Public | BindingFlags.Static);
+    
+        foreach (var field in fields)
+        {
+            if (field.FieldType != typeof(State))
+                continue;
+            
+            var fieldValue = (State)field.GetValue(null)!;
+            if (fieldValue.Equals(state))
+                return field.Name;
+        }
+
+        return string.Empty; 
+    }
+    
     private State _currentState;
-    public double Time => ImGui.GetTime();
+    public float StateTime => (float) (ImGui.GetTime() - _stateEnterTime);
+    private double _stateEnterTime;
     public State CurrentState => _currentState;
 }

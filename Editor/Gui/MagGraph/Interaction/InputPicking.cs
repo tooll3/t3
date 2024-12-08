@@ -7,7 +7,6 @@ using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
-using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -149,7 +148,7 @@ internal static class InputPicking
         if (context.ItemForInputSelection == null)
             return;
 
-        if (context.StateMachine.CurrentState is not PickInputState)
+        if (context.StateMachine.CurrentState != GraphStates.PickInput)
             return;
 
         var screenPos = context.Canvas.TransformPosition(context.PeekAnchorInCanvas);
@@ -188,7 +187,7 @@ internal static class InputPicking
                         {
                             TryConnectHiddenInput(context, inputUi);
                             
-                            context.StateMachine.SetState(context.StateMachine.DefaultState, context); // will reset picking on enter...
+                            context.StateMachine.SetState(GraphStates.Default, context); // will reset picking on enter...
                             //Reset(context);
                         }
                     }
@@ -203,7 +202,7 @@ internal static class InputPicking
 
             if (!isPopupHovered && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
             {
-                context.StateMachine.SetState(context.StateMachine.DefaultState, context);
+                context.StateMachine.SetState(GraphStates.Default, context);
             }
 
             ImGui.PopStyleVar(1);

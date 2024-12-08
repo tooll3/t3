@@ -322,8 +322,8 @@ internal sealed class PlaceholderCreation
 
         var posInWindow = pMin - ImGui.GetWindowPos();
 
-        var odl = ImGui.GetForegroundDrawList();
-        odl.AddRect(ImGui.GetWindowPos(), ImGui.GetWindowPos() + ImGui.GetWindowSize(), Color.Red);
+        // var odl = ImGui.GetForegroundDrawList();
+        // odl.AddRect(ImGui.GetWindowPos(), ImGui.GetWindowPos() + ImGui.GetWindowSize(), Color.Red);
 
         ImGui.SetCursorPos(posInWindow);
         //

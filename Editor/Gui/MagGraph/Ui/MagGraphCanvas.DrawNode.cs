@@ -142,14 +142,14 @@ internal sealed partial class MagGraphCanvas
         var isItemHovered = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup
                                                 | ImGuiHoveredFlags.AllowWhenBlockedByActiveItem);
         
-        if (_context.StateMachine.CurrentState is DefaultState 
+        if (_context.StateMachine.CurrentState == GraphStates.Default 
             && isItemHovered 
             && !customUiResult.HasFlag(SymbolUi.Child.CustomUiResult.IsActive))
             _context.ActiveItem = item;
 
         if (customUiResult.HasFlag(SymbolUi.Child.CustomUiResult.IsActive))
         {
-            context.StateMachine.SetState(context.StateMachine.DefaultState, context);
+            context.StateMachine.SetState(GraphStates.Default, context);
         }
         ImGui.PopID();
         // Todo: We eventually need to handle right clicking to select and open context menu when dragging with right mouse button. 

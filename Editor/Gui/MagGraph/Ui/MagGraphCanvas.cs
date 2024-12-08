@@ -87,7 +87,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         UpdateCanvas(out _);
         var drawList = ImGui.GetWindowDrawList();
 
-        if (_context.StateMachine.CurrentState is DefaultState)
+        if (_context.StateMachine.CurrentState == GraphStates.Default)
         {
             _context.ActiveItem = null;
             _context.ActiveOutputId = Guid.Empty;
@@ -329,8 +329,8 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
     {
         var shouldBeActive =
             ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup)
-            && _context.StateMachine.CurrentState is DefaultState
-            && _context.StateMachine.CurrentState.Time > 0.1f // Prevent glitches when coming from other states.
+            && _context.StateMachine.CurrentState == GraphStates.Default
+            && _context.StateMachine.StateTime > 0.1f // Prevent glitches when coming from other states.
             ;
         
         if(!shouldBeActive)

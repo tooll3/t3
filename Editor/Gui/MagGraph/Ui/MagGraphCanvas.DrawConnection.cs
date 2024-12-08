@@ -160,7 +160,7 @@ internal sealed partial class MagGraphCanvas
                                                              out var hoverPositionOnLine,
                                                              out var normalizedHoverPos))
                     {
-                        if(context.StateMachine.CurrentState is DefaultState)
+                        if(context.StateMachine.CurrentState == GraphStates.Default)
                             ConnectionHovering.RegisterAsPotentialSplit(connection, typeColor, hoverPositionOnLine, normalizedHoverPos);                        
                     }
                     
