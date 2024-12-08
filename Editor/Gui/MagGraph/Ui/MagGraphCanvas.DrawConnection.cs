@@ -34,7 +34,7 @@ internal sealed partial class MagGraphCanvas
         var color =  typeUiProperties.Color;
         var selectedColor = isSelected ?  ColorVariations.OperatorLabel.Apply(color)
                                 : ColorVariations.ConnectionLines.Apply(color);
-        var typeColor = ColorVariations.ConnectionLines.Apply(selectedColor).Fade(MathUtils.Lerp(0.5f, 1, idleFadeProgress));
+        var typeColor = ColorVariations.ConnectionLines.Apply(selectedColor).Fade(MathUtils.Lerp(0.6f, 1, idleFadeProgress));
         
         var sourcePosOnScreen = TransformPosition(connection.SourcePos);
         var targetPosOnScreen = TransformPosition(connection.TargetPos);
@@ -149,6 +149,7 @@ internal sealed partial class MagGraphCanvas
                 case MagGraphConnection.ConnectionStyles.RightToLeft:
                     
                     var wasHoveredLastFrame = ConnectionHovering.IsHovered(connection); 
+                    // TODO: Implement this also for vertical connections.
                     if (GraphConnectionDrawer.DrawConnection(CanvasScale,
                                                              TransformRect(connection.SourceItem.Area),
                                                              sourcePosOnScreen,
@@ -159,7 +160,8 @@ internal sealed partial class MagGraphCanvas
                                                              out var hoverPositionOnLine,
                                                              out var normalizedHoverPos))
                     {
-                        ConnectionHovering.RegisterAsPotentialSplit(connection, typeColor, hoverPositionOnLine, normalizedHoverPos);                        
+                        if(context.StateMachine.CurrentState is DefaultState)
+                            ConnectionHovering.RegisterAsPotentialSplit(connection, typeColor, hoverPositionOnLine, normalizedHoverPos);                        
                     }
                     
                     // Draw triangle

@@ -136,11 +136,7 @@ internal static class ConnectionSplitHelper
         _bestMatchYetForCurrentFrame = null;
         _bestMatchDistance = float.PositiveInfinity;
     }
-
-    public static void ResetSnapping()
-    {
-        BestMatchLastFrame = null;
-    }
+    
 
     public static void RegisterAsPotentialSplit(Symbol.Connection connection, Color color, Vector2 position)
     {
