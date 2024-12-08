@@ -3,7 +3,7 @@ using ImGuiNET;
 
 namespace T3.Editor.Gui.MagGraph.States;
 
-internal readonly record struct State(Action<GraphUiContext> Enter, Action<GraphUiContext> Update, Action<GraphUiContext> Exit);
+internal record struct State(Action<GraphUiContext> Enter, Action<GraphUiContext> Update, Action<GraphUiContext> Exit);
 
 
 /// <summary>
@@ -42,7 +42,7 @@ internal sealed class StateMachine
         if (!staticClassType.IsClass || !staticClassType.IsAbstract || !staticClassType.IsSealed)
             throw new ArgumentException("Provided type must be a static class.", nameof(staticClassType));
 
-        var fields = staticClassType.GetFields(BindingFlags.Public | BindingFlags.Static);
+        var fields = staticClassType.GetFields(  BindingFlags.NonPublic|BindingFlags.Static);
     
         foreach (var field in fields)
         {
@@ -51,7 +51,10 @@ internal sealed class StateMachine
             
             var fieldValue = (State)field.GetValue(null)!;
             if (fieldValue.Equals(state))
+            {
+                //return field.ToString();
                 return field.Name;
+            }
         }
 
         return string.Empty; 

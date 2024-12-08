@@ -171,7 +171,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
                                                                  2);
         }
         
-        ConnectionHovering.PrepareNewFrame(_context);
+        _context.ConnectionHovering.PrepareNewFrame(_context);
         
         _context.Placeholder.DrawPlaceholder(_context, drawList);
 
@@ -186,9 +186,6 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
                                    UiColors.ForegroundFull.Fade(progress * 0.2f));
             }
         }
-
-        InputPicking.DrawHiddenInputSelector(_context);
-        
         
         
         if (FrameStats.Current.OpenedPopUpName == string.Empty)

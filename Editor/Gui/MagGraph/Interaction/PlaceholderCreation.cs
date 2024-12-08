@@ -41,7 +41,7 @@ internal sealed class PlaceholderCreation
 
     public void OpenOnCanvas(GraphUiContext context, Vector2 posOnCanvas, Type inputTypeFilter = null)
     {
-        context.MacroCommand = new MacroCommand("Insert Operator");
+        context.MacroCommand??= new MacroCommand("Insert Operator");
 
         PlaceholderItem = new MagGraphItem
                               {

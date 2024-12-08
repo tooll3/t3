@@ -49,5 +49,7 @@ internal sealed class MagGraphConnection
                              );
     }
 
-    public bool IsUnlinked;
+    public bool IsTemporary;
+    public bool WasDisconnected;
+
 }

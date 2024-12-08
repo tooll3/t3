@@ -186,6 +186,7 @@ internal static class InputPicking
                         if (ImGui.Selectable(prefix + inputUi.InputDefinition.Name))
                         {
                             TryConnectHiddenInput(context, inputUi);
+                            UndoRedoStack.Add(context.MacroCommand);
                             
                             context.StateMachine.SetState(GraphStates.Default, context); // will reset picking on enter...
                             //Reset(context);

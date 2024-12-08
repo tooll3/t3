@@ -348,7 +348,7 @@ internal sealed partial class MagItemMovement
                                                    mc.TargetItem.InputLines[mc.InputLineIndex].Input.Id);
 
             context.MacroCommand.AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol, connection, 0));
-            mc.IsUnlinked = true;
+            mc.IsTemporary = true;
         }
 
         if (TryCollapseDragFromVerticalStack(context, unsnappedConnections))
@@ -945,7 +945,7 @@ internal sealed partial class MagItemMovement
                 if (c == null)
                     continue;
 
-                if (c.IsSnapped && !c.IsUnlinked)
+                if (c.IsSnapped && !c.IsTemporary)
                     Collect(c.SourceItem);
             }
 

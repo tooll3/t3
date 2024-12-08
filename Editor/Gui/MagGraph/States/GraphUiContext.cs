@@ -78,6 +78,7 @@ internal sealed class GraphUiContext
     internal readonly MagGraphCanvas Canvas;
     internal readonly MagItemMovement ItemMovement;
     internal readonly PlaceholderCreation Placeholder;
+    internal readonly ConnectionHovering ConnectionHovering = new();
     internal readonly MagGraphLayout Layout = new();
     
     internal readonly NodeSelection Selector;

@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using ImGuiNET;
+using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
 using MagItemMovement = T3.Editor.Gui.MagGraph.Interaction.MagItemMovement;
@@ -252,7 +254,7 @@ internal static class GraphStates
                                                            OutputLineIndex = 0,
                                                            VisibleOutputIndex = 0,
                                                            ConnectionHash = 0,
-                                                           IsUnlinked = true,
+                                                           IsTemporary = true,
                                                        };
                               context.TempConnections.Add(tempConnection);
                               context.PrimaryOutputItem = context.ActiveItem;
@@ -274,7 +276,7 @@ internal static class GraphStates
                      },
               Update: context =>
                       {
-                          Debug.Assert(context.ActiveItem != null);
+                          //Debug.Assert(context.ActiveItem != null);
 
                           if (ImGui.IsKeyDown(ImGuiKey.Escape))
                           {
@@ -286,10 +288,19 @@ internal static class GraphStates
                           if (!mouseReleased)
                               return;
 
+                          var hasDisconnections = context.TempConnections.Any(c => c.WasDisconnected);
+                          
+                          // Was dropped on operator or background...
                           var posOnCanvas = context.Canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
                           if (InputPicking.TryInitializeAtPosition(context, posOnCanvas))
                           {
                               context.StateMachine.SetState(PickInput, context);
+                          }
+                          else if (hasDisconnections)
+                          {
+                              UndoRedoStack.Add(context.MacroCommand);
+                              context.StateMachine.SetState(Default, context);
+                              return;
                           }
                           else
                           {
@@ -303,10 +314,84 @@ internal static class GraphStates
     internal static State PickInput
         = new(
               Enter: _ => { },
-              Update: _ =>
+              Update: context =>
                       {
-                          // Huh? Nothing to do?
+                          InputPicking.DrawHiddenInputSelector(context);
                       },
               Exit: _ => { }
              );
+    
+    #region connection end dragging
+    internal static State HoldingConnectionEnd
+        = new(
+              Enter: _ => { },
+              Update: context =>
+                      {
+                          
+                          
+                          if (!ImGui.IsMouseDown(ImGuiMouseButton.Left))
+                          {
+                              context.StateMachine.SetState(Default, context);
+                              return;
+                          }
+
+                          // Start dragging...
+                          // TODO: Clarify how to deal with undo/redo for disrupted connections... 
+                          if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+                          {
+                              var connection = context.ConnectionHovering.HoveredInputConnection;
+                              //Debug.Assert(connection != null);
+                              if (connection == null)
+                                  return;
+                              
+                              context.MacroCommand = new MacroCommand("Reconnect from input");
+                              
+                              
+                              // Remove existing connection
+                              context.MacroCommand.AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,
+                                                                                                 connection.AsSymbolConnection(), 0));
+                              
+                              var tempConnection = new MagGraphConnection
+                                                       {
+                                                           Style = MagGraphConnection.ConnectionStyles.Unknown,
+                                                           SourcePos = connection.SourcePos,
+                                                           TargetPos = default,
+                                                           SourceItem = connection.SourceItem,
+                                                           TargetItem = null,
+                                                           SourceOutput = connection.SourceOutput,
+                                                           OutputLineIndex = 0,
+                                                           VisibleOutputIndex = 0,
+                                                           ConnectionHash = 0,
+                                                           IsTemporary = true,
+                                                           WasDisconnected = true,
+                                                       };
+                              context.TempConnections.Add(tempConnection);
+                              context.PrimaryOutputItem = connection.SourceItem;
+                              context.DraggedPrimaryOutputType = connection.Type;
+                              context.ActiveItem = connection.SourceItem;
+                              context.StateMachine.SetState(DragOutput, context);
+                              return;
+                          }
+                      },
+              Exit: _ => { }
+             );
+
+    internal static State DraggingConnectionEnd
+        = new(
+              Enter: _ => { },
+              Update: context =>
+                      {
+                          if (!ImGui.IsMouseDown(ImGuiMouseButton.Left))
+                          {
+                              context.StateMachine.SetState(Default, context);
+                              return;
+                          }
+                          
+                      },
+              Exit: _ => { }
+             );
+
+    
+    #endregion
+    
 }

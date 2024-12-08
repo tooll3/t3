@@ -25,9 +25,9 @@ namespace T3.Editor.Gui.MagGraph.Interaction;
 /// - indicate input / center / output region on the connection
 /// 
 /// </summary>
-internal static class ConnectionHovering
+internal sealed class ConnectionHovering
 {
-    internal static void PrepareNewFrame(GraphUiContext context)
+    internal void PrepareNewFrame(GraphUiContext context)
     {
         _mousePosition = ImGui.GetMousePos();
 
@@ -88,6 +88,13 @@ internal static class ConnectionHovering
                     var inputPosInScreen = context.Canvas.TransformPosition(firstHover.Connection.TargetPos);
                     drawList.AddCircle(inputPosInScreen, hoverIndicatorRadius, firstHover.Color, 24);
                 }
+
+                HoveredInputConnection = firstHover.Connection;
+                if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                {
+                    context.StateMachine.SetState(GraphStates.HoldingConnectionEnd, context);
+                }
+
             }
             else if (region == LineRegions.Beginning)
             {
@@ -98,6 +105,7 @@ internal static class ConnectionHovering
             ImGui.BeginTooltip();
             ImGui.TextUnformatted("Click to insert operator or\ndrag to disconnect...");
             ImGui.EndTooltip();
+
         }
         else if (firstOutput != null)
         {
@@ -182,9 +190,10 @@ internal static class ConnectionHovering
         ImGui.EndTooltip();
     }
 
-    private static void StopHover()
+    private void StopHover()
     {
         _hoverStartTime = -1;
+        //HoveredInputConnection = null;
     }
 
     internal enum LineRegions
@@ -229,6 +238,10 @@ internal static class ConnectionHovering
         _connectionHoversForCurrentFrame.Add(new HoverPoint(position, normalizedPosition, mcConnection, color));
     }
 
+    internal MagGraphConnection? HoveredInputConnection;
+    //internal readonly List<MagGraphConnection> _hoveredInputConnections = [];
+    
+    
     private static readonly ImageOutputCanvas _imageCanvasForTooltips = new() { DisableDamping = true };
     private static readonly EvaluationContext _evaluationContext = new();
 
