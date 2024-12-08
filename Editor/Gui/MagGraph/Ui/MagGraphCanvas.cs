@@ -59,7 +59,12 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         _visibleCanvasArea = ImRect.RectWithSize(InverseTransformPositionFloat(ImGui.GetWindowPos()),
                                                  InverseTransformDirection(ImGui.GetWindowSize()));
         
+        
+        
         KeyboardActions.HandleKeyboardActions(_context);
+        
+        if (FitViewToSelectionHandling.FitViewToSelectionRequested)
+            FocusViewToSelection(_context);
         
         _context.EditCommentDialog.Draw(_context.Selector);
         
@@ -181,9 +186,16 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         }
 
         InputPicking.DrawHiddenInputSelector(_context);
+        
+        if (FrameStats.Current.OpenedPopUpName == string.Empty)
+            CustomComponents.DrawContextMenuForScrollCanvas(() => ContextMenu.DrawContextMenuContent(_context), ref _contextMenuIsOpen);
+        
+        
 
         _context.StateMachine. UpdateAfterDraw(_context);
     }
+
+    private bool _contextMenuIsOpen;
 
     private void DrawBackgroundGrids(ImDrawListPtr drawList)
     {

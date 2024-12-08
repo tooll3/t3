@@ -356,6 +356,7 @@ internal static class CustomComponents
         }
 
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(6, 6));
 
 
         if (ImGui.BeginPopupContextWindow("windows_context_menu"))
@@ -371,7 +372,7 @@ internal static class CustomComponents
             contextMenuIsOpen = false;
         }
 
-        ImGui.PopStyleVar(1);
+        ImGui.PopStyleVar(2);
     }
 
     public static bool DisablableButton(string label, bool isEnabled, bool enableTriggerWithReturn = false)
