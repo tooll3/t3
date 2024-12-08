@@ -14,7 +14,7 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Graph.Interaction.Connections;
 
-internal  class ConnectionSplitHelper
+internal static class ConnectionSplitHelper
 {
     public static void PrepareNewFrame(GraphWindow window)
     {

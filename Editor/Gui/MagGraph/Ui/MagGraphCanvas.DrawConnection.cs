@@ -147,7 +147,7 @@ internal sealed partial class MagGraphCanvas
                 
                 case MagGraphConnection.ConnectionStyles.RightToLeft:
                     
-                    Vector2 hoverPositionOnLine = ImGui.GetMousePos();
+                    //Vector2 hoverPositionOnLine = ImGui.GetMousePos();
                     // var isHovering = ArcConnection.Draw(
                     //                                     Vector2.One *  CanvasScale,
                     //                    TransformRect(connection.SourceItem.Area), 
@@ -165,14 +165,18 @@ internal sealed partial class MagGraphCanvas
                     //     ConnectionSplitHelper.RegisterAsPotentialSplit(connection.AsSymbolConnection(), typeColor, hoverPositionOnLine);
                     // }
 
-                    var isHovering2 = GraphConnectionDrawer.DrawConnection(Vector2.One * CanvasScale,
+                    var isHovering2 = GraphConnectionDrawer.DrawConnection(CanvasScale,
                                                          TransformRect(connection.SourceItem.Area),
                                                          sourcePosOnScreen,
                                                          TransformRect(connection.TargetItem.VerticalStackArea),
                                                          targetPosOnScreen,
                                                          typeColor,
                                                          MathUtils.Lerp(1f,2f,idleFadeProgress) + (isSelected ? 1:0),
-                                                         ref hoverPositionOnLine);
+                                                         out var hoverPositionOnLine,
+                                                                           out var normalizedHoverPos);
+                    
+                    if(isHovering2)
+                        Log.Debug("is hovering " + connection + " " + normalizedHoverPos);
                     
                     drawList.AddCircleFilled(targetPosOnScreen + new Vector2(3 * CanvasScale,0) , anchorSize * 1.2f, typeColor, 3);
 

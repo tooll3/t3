@@ -11,11 +11,16 @@ internal static class GraphConnectionDrawer
 {
     private const float Pi = (float)Math.PI;
 
-    internal static bool DrawConnection(Vector2 canvasScale, ImRect Sn, Vector2 Sp,
+    /// <summary>
+    /// Returns true if hovering...
+    /// </summary>
+    internal static bool DrawConnection(float canvasScale, ImRect Sn, Vector2 Sp,
                                         ImRect Tn, Vector2 Tp, uint color, float thickness,
-                                        ref Vector2 hoverPosition)
+                                        out Vector2 hoverPosition, out float normalizedHoverPos)
     {
-        var currentCanvasScale = Clamp(canvasScale.X, 0.2f, 2f);
+        var currentCanvasScale = canvasScale.Clamp(0.2f, 2f);
+        hoverPosition = Vector2.Zero;
+        normalizedHoverPos = -1;
 
         Sp += Vector2.One *0.5f;
         Tp +=  Vector2.One *0.5f;
@@ -70,7 +75,7 @@ internal static class GraphConnectionDrawer
             const float horizontalCompress = 0.2f;
             
             
-            var minRadius = (dy > 0 ? 5: 3) * canvasScale.X;
+            var minRadius = (dy > 0 ? 5: 3) * canvasScale;
 
             // Compress packing towards input stacks...
             Tc_r *= horizontalCompress;
@@ -80,7 +85,7 @@ internal static class GraphConnectionDrawer
             Sc_r += minRadius;
 
             var possibleSourceRadius = dx - Tc_r;
-            var clampedSourceRadius = MathF.Min(possibleSourceRadius, UserSettings.Config.MaxCurveRadius * canvasScale.X);
+            var clampedSourceRadius = MathF.Min(possibleSourceRadius, UserSettings.Config.MaxCurveRadius * canvasScale);
             Sc_r = MathF.Max(Sc_r, clampedSourceRadius);
 
             var d = new Vector2(dx, dy).Length();
@@ -90,7 +95,7 @@ internal static class GraphConnectionDrawer
             // Use smaller wrap radius for back connections
             var normalRadius = Tc_r;
             var tightRadius = MathF.Min(Tc_r, MathF.Abs(dy) * 0.1f);
-            Tc_r = MathUtils.RemapAndClamp(dx, -400 * canvasScale.X, 20 * canvasScale.X,tightRadius, normalRadius );
+            Tc_r = MathUtils.RemapAndClamp(dx, -400 * canvasScale, 20 * canvasScale,tightRadius, normalRadius );
             
             var sumR = Sc_r + Tc_r;
 
@@ -156,9 +161,7 @@ internal static class GraphConnectionDrawer
             }
             else
             {
-                
                 var distanceBetweenCenters = Vector2.Distance(Sc, Tc);
-
                 if (distanceBetweenCenters < Math.Abs(Sc_r - Tc_r))
                 {
                     // Circles are overlapping; draw a straight line for simplicity
@@ -242,7 +245,7 @@ internal static class GraphConnectionDrawer
         }
 
         // Finalize drawing
-        var isHovering = TestHover(drawList, ref hoverPosition);
+        var isHovering = ArcConnection.TestHover(ref drawList, out hoverPosition, out  normalizedHoverPos);
 
         if (currentCanvasScale > 0.5f)
         {
@@ -254,52 +257,34 @@ internal static class GraphConnectionDrawer
 
         return isHovering;
     }
-
-    private static float Clamp(float value, float min, float max)
-    {
-        return Math.Max(min, Math.Min(max, value));
-    }
-
-    private static uint AdjustColor(uint color)
-    {
-        // Implement color adjustment if needed
-        return color;
-    }
-
-    private static bool TestHover(ImDrawListPtr drawList, ref Vector2 hoverPosition)
-    {
-        // Implement hover detection if needed
-        return false;
-    }
-
+    
     private static float ComputeInnerTangentAngle(Vector2 centerA, float radiusA, Vector2 centerB, float radiusB, bool flipped = false)
     {
         // Calculate the differences in x and y coordinates
-        double deltaX = centerB.X - centerA.X;
-        double deltaY = centerB.Y - centerA.Y;
+        var deltaX = centerB.X - centerA.X;
+        var deltaY = centerB.Y - centerA.Y;
 
         // Calculate the distance between the centers of the circles
-        double d = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+        var d = MathF.Sqrt(deltaX * deltaX + deltaY * deltaY);
 
         // Check if the inner tangent exists
-        if (d <= Math.Abs(radiusA - radiusB))
+        if (d <= MathF.Abs(radiusA - radiusB))
         {
             return 0;
-            //throw new Exception("No inner tangent exists since the circles overlap or one is contained within the other.");
         }
 
         // Base angle between the centers
-        double thetaBase = Math.Atan2(deltaY, deltaX);
+        var thetaBase = MathF.Atan2(deltaY, deltaX);
 
         // Angle offset for the inner tangent
-        double thetaOffset = Math.Acos((radiusA + radiusB) / d);
+        var thetaOffset = MathF.Acos((radiusA + radiusB) / d);
 
         // Calculate both possible angles of the inner tangents
-        double angle1 = NormalizeAngle(thetaBase + thetaOffset);
-        double angle2 = NormalizeAngle(thetaBase - thetaOffset);
+        var angle1 = NormalizeAngle(thetaBase + thetaOffset);
+        var angle2 = NormalizeAngle(thetaBase - thetaOffset);
 
         // Decide which angle to use based on the position of Circle B relative to Circle A
-        double selectedAngle;
+        float selectedAngle;
 
         if (flipped)
         {
@@ -312,13 +297,13 @@ internal static class GraphConnectionDrawer
             selectedAngle = (angle1 > 0) ? angle1 : angle2;
         }
 
-        return (float)selectedAngle;
+        return selectedAngle;
     }
 
-    public static double NormalizeAngle(double angle)
+    private static float NormalizeAngle(float angle)
     {
-        while (angle <= -Math.PI) angle += 2 * Math.PI;
-        while (angle > Math.PI) angle -= 2 * Math.PI;
+        while (angle <= -Math.PI) angle += 2 * MathF.PI;
+        while (angle > Math.PI) angle -= 2 * MathF.PI;
         return angle;
     }
 }
@@ -344,8 +329,10 @@ static class ArcConnection
     private const float TAU = Pi / 180;
 
     public static bool Draw(Vector2 canvasScale, ImRect rectA, Vector2 pointA, ImRect rectB, Vector2 pointB, Color color, float thickness,
-                            ref Vector2 hoverPosition)
+                            out Vector2 hoverPosition)
     {
+        hoverPosition = Vector2.Zero;
+        
         var currentCanvasScale = canvasScale.X.Clamp(0.2f, 2f);
         pointA.X -= (3 - 1 * currentCanvasScale).Clamp(1, 1);
         pointB.X += (4 - 4 * currentCanvasScale).Clamp(0, 4);
@@ -495,7 +482,7 @@ static class ArcConnection
             }
         }
 
-        var isHovering = TestHover(ref drawList, ref hoverPosition);
+        var isHovering = TestHover(ref drawList, out hoverPosition, out var normalizedLengthPos);
         if (currentCanvasScale > 0.5f)
         {
             drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, ColorVariations.OperatorOutline.Apply(color), ImDrawFlags.None,
@@ -507,9 +494,8 @@ static class ArcConnection
 
         void FnDrawBezierFallback()
         {
-            var tangentLength = MathUtils.RemapAndClamp(Vector2.Distance(pointA, pointB),
-                                                        30, 300,
-                                                        5, 200);
+            var tangentLength = Vector2.Distance(pointA, pointB).RemapAndClamp(30, 300,
+                                                                               5, 200);
             drawList.PathLineTo(pointA);
             drawList.PathBezierCubicCurveTo(pointA + new Vector2(tangentLength, 0),
                                             pointB + new Vector2(-tangentLength, 0),
@@ -527,8 +513,16 @@ static class ArcConnection
         drawList.PathArcTo(center, radius, angleA, angleB, radius < 50 ? 4 : 10);
     }
 
-    public static bool TestHover(ref ImDrawListPtr drawList, ref Vector2 positionOnLine)
+    /// <summary>
+    /// Uses the line segments of the path to test for hover intersection.
+    /// </summary>
+    internal static bool TestHover(ref ImDrawListPtr drawList, out Vector2 positionOnLine, out float normalizedLengthPos)
     {
+        normalizedLengthPos = 0f;
+        var hoverLengthPos = 0f;
+        positionOnLine= Vector2.Zero;
+        var isHovering = false;
+        
         var foreground = ImGui.GetForegroundDrawList();
         if (drawList._Path.Size < 2)
             return false;
@@ -537,42 +531,55 @@ static class ArcConnection
 
         var p1 = drawList._Path[0];
         var p2 = drawList._Path[drawList._Path.Size - 1];
-        //foreground.AddRect(p1, p2, Color.Orange);
-        var r = new ImRect(p2, p1).MakePositive();
+        var bounds = new ImRect(p2, p1).MakePositive();
 
-        r.Expand(distance);
+        // A very unfortunate hack to avoid computing the bounds of complex paths.
+        // Might not work for all situations...
+        var extraPaddingForBackwardsConnection = p1.X > p2.X ? 40 : 0;
+        
+        bounds.Expand(distance + extraPaddingForBackwardsConnection);
+        foreground.AddRect(bounds.Min, bounds.Max, Color.Orange);
+        
         var mousePos = ImGui.GetMousePos();
-        if (!r.Contains(mousePos))
+        if (!bounds.Contains(mousePos))
             return false;
 
+        var totalLength = 0f;   // Track total length of path to compute normalized pos
         var pLast = p1;
-        for (int i = 1; i < drawList._Path.Size; i++)
+        
+        // No iterate over all segments
+        for (var i = 1; i < drawList._Path.Size; i++)
         {
             var p = drawList._Path[i];
-
-            r = new ImRect(pLast, p).MakePositive();
-            r.Expand(distance);
-            //foreground.AddRect(r.Min, r.Max, Color.Gray);
-            if (r.Contains(mousePos))
+            
+            foreground.AddRect(bounds.Min, bounds.Max, Color.Green.Fade(0.1f));
+            var v = pLast - p;
+            var vLen = v.Length();
+            
+            bounds = new ImRect(pLast, p).MakePositive();
+            bounds.Expand(distance);
+            if (bounds.Contains(mousePos))
             {
                 //foreground.AddRect(r.Min, r.Max, Color.Orange);
-                var v = (pLast - p);
-                var vLen = v.Length();
 
                 var d = Vector2.Dot(v, mousePos - p) / vLen;
                 positionOnLine = p + v * d / vLen;
                 //foreground.AddCircleFilled(positionOnLine, 4f, Color.Red);
+                
                 if (Vector2.Distance(mousePos, positionOnLine) <= distance)
                 {
-                    return true;
+                    isHovering = true;
+                    hoverLengthPos = totalLength + (pLast - mousePos).Length();
                 }
-
-                return false;
             }
+            totalLength += vLen;
 
             pLast = p;
         }
 
-        return false;
+        if (isHovering)
+            normalizedLengthPos = hoverLengthPos / totalLength;
+
+        return isHovering;
     }
 }

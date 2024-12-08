@@ -242,14 +242,13 @@ internal partial class Graph
 
             if (UserSettings.Config.UseArcConnections)
             {
-                var hoverPositionOnLine = Vector2.Zero;
                 var isHovering = ArcConnection.Draw(canvasScale, new ImRect(SourcePosition, SourcePosition + new Vector2(10, 10)),
                                                     SourcePosition,
                                                     TargetNodeArea,
                                                     TargetPosition,
                                                     color,
                                                     thickness,
-                                                    ref hoverPositionOnLine);
+                                                    out var hoverPositionOnLine);
 
                 const float minDistanceToTargetSocket = 10;
                 if (isHovering && Vector2.Distance(hoverPositionOnLine, TargetPosition) > minDistanceToTargetSocket
