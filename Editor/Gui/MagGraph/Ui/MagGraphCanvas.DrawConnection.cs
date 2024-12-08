@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
 using T3.Core.Utils;
 using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Styling;
@@ -147,40 +148,24 @@ internal sealed partial class MagGraphCanvas
                 
                 case MagGraphConnection.ConnectionStyles.RightToLeft:
                     
-                    //Vector2 hoverPositionOnLine = ImGui.GetMousePos();
-                    // var isHovering = ArcConnection.Draw(
-                    //                                     Vector2.One *  CanvasScale,
-                    //                    TransformRect(connection.SourceItem.Area), 
-                    //                    sourcePosOnScreen, 
-                    //                    TransformRect( connection.TargetItem.VerticalStackArea), 
-                    //                    targetPosOnScreen, 
-                    //                    typeColor,
-                    //                    1.5f,
-                    //                    ref hoverPositionOnLine);
-                    //
-                    // const float minDistanceToTargetSocket = 10;
-                    // if (isHovering && Vector2.Distance(hoverPositionOnLine, targetPosOnScreen) > minDistanceToTargetSocket
-                    //                && Vector2.Distance(hoverPositionOnLine, sourcePosOnScreen) > minDistanceToTargetSocket)
-                    // {
-                    //     ConnectionSplitHelper.RegisterAsPotentialSplit(connection.AsSymbolConnection(), typeColor, hoverPositionOnLine);
-                    // }
-
-                    var isHovering2 = GraphConnectionDrawer.DrawConnection(CanvasScale,
-                                                         TransformRect(connection.SourceItem.Area),
-                                                         sourcePosOnScreen,
-                                                         TransformRect(connection.TargetItem.VerticalStackArea),
-                                                         targetPosOnScreen,
-                                                         typeColor,
-                                                         MathUtils.Lerp(1f,2f,idleFadeProgress) + (isSelected ? 1:0),
-                                                         out var hoverPositionOnLine,
-                                                                           out var normalizedHoverPos);
+                    var wasHoveredLastFrame = ConnectionHovering.IsHovered(connection); 
+                    if (GraphConnectionDrawer.DrawConnection(CanvasScale,
+                                                             TransformRect(connection.SourceItem.Area),
+                                                             sourcePosOnScreen,
+                                                             TransformRect(connection.TargetItem.VerticalStackArea),
+                                                             targetPosOnScreen,
+                                                             typeColor,
+                                                             MathUtils.Lerp(1f, 2f, idleFadeProgress) + (isSelected|wasHoveredLastFrame ? 1 : 0),
+                                                             out var hoverPositionOnLine,
+                                                             out var normalizedHoverPos))
+                    {
+                        ConnectionHovering.RegisterAsPotentialSplit(connection, typeColor, hoverPositionOnLine, normalizedHoverPos);                        
+                    }
                     
-                    if(isHovering2)
-                        Log.Debug("is hovering " + connection + " " + normalizedHoverPos);
-                    
+                    // Draw triangle
                     drawList.AddCircleFilled(targetPosOnScreen + new Vector2(3 * CanvasScale,0) , anchorSize * 1.2f, typeColor, 3);
-
                     break;
+                
                 case MagGraphConnection.ConnectionStyles.Unknown:
                     break;
                 case MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal:

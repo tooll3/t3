@@ -235,21 +235,17 @@ internal static class GraphConnectionDrawer
             const float anglePrecision = 12f;
             var resS = (int)(MathF.Abs(startAngle_Sc - endAngle_Sc) * anglePrecision ).Clamp(1,30);
 
-            // Draw source arc
             drawList.PathArcTo(Sc, Sc_r, startAngle_Sc, endAngle_Sc, resS);
 
-            // Draw target arc
             var resT = (int)(MathF.Abs(startAngle_Tc - endAngle_Tc) * anglePrecision ).Clamp(1,30);
             drawList.PathArcTo(Tc, Tc_r, startAngle_Tc, endAngle_Tc, resT);
-            //drawList.PathLineTo(Tp); // Line to target point
         }
 
-        // Finalize drawing
         var isHovering = ArcConnection.TestHover(ref drawList, out hoverPosition, out  normalizedHoverPos);
 
+        // Optionally draw an outline
         if (currentCanvasScale > 0.5f)
         {
-            // Optionally draw an outline
             drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, UiColors.WindowBackground.Fade(0.4f), ImDrawFlags.None, thickness + 5f);
         }
 
@@ -538,7 +534,7 @@ static class ArcConnection
         var extraPaddingForBackwardsConnection = p1.X > p2.X ? 40 : 0;
         
         bounds.Expand(distance + extraPaddingForBackwardsConnection);
-        foreground.AddRect(bounds.Min, bounds.Max, Color.Orange);
+        //foreground.AddRect(bounds.Min, bounds.Max, Color.Orange);
         
         var mousePos = ImGui.GetMousePos();
         if (!bounds.Contains(mousePos))
@@ -552,7 +548,8 @@ static class ArcConnection
         {
             var p = drawList._Path[i];
             
-            foreground.AddRect(bounds.Min, bounds.Max, Color.Green.Fade(0.1f));
+            //foreground.AddRect(bounds.Min, bounds.Max, Color.Green.Fade(0.1f));
+            
             var v = pLast - p;
             var vLen = v.Length();
             

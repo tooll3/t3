@@ -86,15 +86,15 @@ internal static class ConnectionSplitHelper
                     {
                             
                         TransformGizmoHandling.SetDrawList(drawList);
-                        ImageCanvasForTooltips.Update();
-                        ImageCanvasForTooltips.SetAsCurrent();
+                        _imageCanvasForTooltips.Update();
+                        _imageCanvasForTooltips.SetAsCurrent();
 
                         //var sourceOpUi = SymbolUiRegistry.Entries[graphCanvas.CompositionOp.Symbol.Id].ChildUis.Single(childUi => childUi.Id == sourceOp.Id);
                         var sourceOpUi = sourceOpInstance.GetSymbolUi();
                         IOutputUi outputUi = sourceOpUi.OutputUis[output.OutputDefinition.Id];
-                        EvaluationContext.Reset();
-                        EvaluationContext.RequestedResolution = new Int2(1280 / 2, 720 / 2);
-                        outputUi.DrawValue(outputSlot, EvaluationContext, recompute: UserSettings.Config.HoverMode == GraphHoverModes.Live);
+                        _evaluationContext.Reset();
+                        _evaluationContext.RequestedResolution = new Int2(1280 / 2, 720 / 2);
+                        outputUi.DrawValue(outputSlot, _evaluationContext, recompute: UserSettings.Config.HoverMode == GraphHoverModes.Live);
 
                         // if (!string.IsNullOrEmpty(sourceOpUi.Description))
                         // {
@@ -106,7 +106,7 @@ internal static class ConnectionSplitHelper
                         //     ImGui.PopFont();
                         // }
 
-                        ImageCanvasForTooltips.Deactivate();
+                        _imageCanvasForTooltips.Deactivate();
                         TransformGizmoHandling.RestoreDrawList();
                     }
                     ImGui.EndChild();
@@ -159,8 +159,8 @@ internal static class ConnectionSplitHelper
         _bestMatchDistance = distance;
     }
 
-    private static readonly ImageOutputCanvas ImageCanvasForTooltips = new() { DisableDamping = true };
-    private static readonly EvaluationContext EvaluationContext = new();
+    private static readonly ImageOutputCanvas _imageCanvasForTooltips = new() { DisableDamping = true };
+    private static readonly EvaluationContext _evaluationContext = new();
 
     public static PotentialConnectionSplit BestMatchLastFrame;
     private static PotentialConnectionSplit _bestMatchYetForCurrentFrame;

@@ -171,6 +171,8 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
                                                                  2);
         }
         
+        ConnectionHovering.PrepareNewFrame(_context);
+        
         _context.Placeholder.DrawPlaceholder(_context, drawList);
 
         // Draw animated Snap indicator
@@ -187,11 +189,12 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
 
         InputPicking.DrawHiddenInputSelector(_context);
         
+        
+        
         if (FrameStats.Current.OpenedPopUpName == string.Empty)
             CustomComponents.DrawContextMenuForScrollCanvas(() => ContextMenu.DrawContextMenuContent(_context), ref _contextMenuIsOpen);
         
         
-
         _context.StateMachine. UpdateAfterDraw(_context);
     }
 

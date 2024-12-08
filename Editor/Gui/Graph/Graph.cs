@@ -33,7 +33,7 @@ namespace T3.Editor.Gui.Graph;
 /// 5. Draw outputs 
 /// 6. Draw connection lines
 ///</remarks>
-internal partial class Graph
+internal sealed partial class Graph
 {
     private readonly GraphWindow _window;
     public Graph(GraphWindow window, GraphCanvas canvas)
@@ -204,7 +204,7 @@ internal partial class Graph
         annotationElement.StartRenaming();
     }
 
-    internal class ConnectionLineUi
+    internal sealed class ConnectionLineUi
     {
         public readonly Symbol.Connection Connection;
         public Vector2 TargetPosition;

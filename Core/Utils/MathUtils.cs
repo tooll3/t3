@@ -480,7 +480,7 @@ public static class MathUtils
     }
 }
 
-public class EaseFunctions
+public static class EaseFunctions
 {
     public static float EaseOutElastic(float x)
     {

@@ -9,7 +9,7 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph;
 
-internal partial class Graph
+internal sealed partial class Graph
 {
     internal sealed class ConnectionSorter
     {
