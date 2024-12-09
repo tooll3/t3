@@ -111,7 +111,7 @@ internal sealed partial class MagGraphCanvas
 
         var isHovered = _context.Selector.HoveredIds.Contains(item.Id);
         //var fade = isHovered ? 1 : 0.7f;
-        var fade = 0.9f;
+
         drawList.AddRectFilled(pMinVisible + Vector2.One * CanvasScale,
                                pMaxVisible,
                                Color.Mix(ColorVariations.OperatorBackgroundIdle.Apply(typeColor),
@@ -194,6 +194,23 @@ internal sealed partial class MagGraphCanvas
                              name);
         }
 
+        // Disabled indicator
+        if (item.SymbolChild.IsDisabled)
+        {
+            DrawUtils.DrawOverlayLine(drawList, idleFadeFactor, Vector2.Zero, Vector2.One, pMinVisible, pMaxVisible);
+            DrawUtils.DrawOverlayLine(drawList, idleFadeFactor, new Vector2(1,0), new Vector2(0,1), pMinVisible, pMaxVisible);
+        }
+                    
+        // Bypass indicator
+        if (item.SymbolChild.IsBypassed)
+        {
+            DrawUtils.DrawOverlayLine(drawList, idleFadeFactor, new Vector2(0.05f,0.5f), new Vector2(0.4f,0.5f), pMinVisible, pMaxVisible);
+            DrawUtils.DrawOverlayLine(drawList, idleFadeFactor, new Vector2(0.6f,0.5f), new Vector2(0.95f,0.5f), pMinVisible, pMaxVisible);
+                        
+            DrawUtils.DrawOverlayLine(drawList, idleFadeFactor, new Vector2(0.35f,0.1f), new Vector2(0.65f,0.9f), pMinVisible, pMaxVisible);
+            DrawUtils.DrawOverlayLine(drawList, idleFadeFactor, new Vector2(0.65f,0.1f), new Vector2(0.35f,0.9f), pMinVisible, pMaxVisible);
+        }
+        
         // Indicate hidden matching inputs...
         if (_context.DraggedPrimaryOutputType != null
             && item.Variant == MagGraphItem.Variants.Operator
