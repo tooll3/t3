@@ -161,7 +161,7 @@ internal sealed class PlaceholderCreation
         context.Layout.Items.Remove(PlaceHolderId);
         PlaceholderItem = null;
 
-        THelpers.RestoreImGuiKeyboardNavigation();
+        DrawUtils.RestoreImGuiKeyboardNavigation();
     }
 
     internal void DrawPlaceholder(GraphUiContext context, ImDrawListPtr drawList)

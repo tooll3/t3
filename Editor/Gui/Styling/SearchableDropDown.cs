@@ -39,7 +39,7 @@ public static class SearchableDropDown
                 _selectedFilteredResultIndex = -1;
 
                 _justOpened = true;
-                THelpers.DisableImGuiKeyboardNavigation();
+                DrawUtils.DisableImGuiKeyboardNavigation();
             }
             return false;
         }
@@ -156,7 +156,7 @@ public static class SearchableDropDown
         if (lostFocus)
         {
             _activeInputId = 0;
-            THelpers.RestoreImGuiKeyboardNavigation();
+            DrawUtils.RestoreImGuiKeyboardNavigation();
         }
 
         return wasChanged;

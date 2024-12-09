@@ -26,7 +26,7 @@ static class OutputNode
             ImGui.SetCursorScreenPos(LastScreenRect.Min);
             ImGui.InvisibleButton("node", LastScreenRect.GetSize());
 
-            THelpers.DebugItemRect();
+            DrawUtils.DebugItemRect();
             var hovered = ImGui.IsItemHovered();
             if (hovered)
             {
@@ -97,7 +97,7 @@ static class OutputNode
                     
                 ImGui.SetCursorScreenPos(usableSlotArea.Min);
                 ImGui.InvisibleButton("output", usableSlotArea.GetSize());
-                THelpers.DebugItemRect();
+                DrawUtils.DebugItemRect();
                 var color = TypeUiRegistry.GetPropertiesForType(outputDef.ValueType).Color;
 
                 //Note: isItemHovered will not work

@@ -11,7 +11,7 @@ public class ChangeInstanceIsDisabledCommand : ICommand
     {
         _inputParentSymbolId = symbolChildUi.SymbolChild.Parent.Id;
         _childId = symbolChildUi.Id;
-        _originalState = symbolChildUi.IsDisabled;
+        _originalState = symbolChildUi.SymbolChild.IsDisabled;
         _newState = setDisabledTo;
     }
 
@@ -36,7 +36,7 @@ public class ChangeInstanceIsDisabledCommand : ICommand
             return;
         }
 
-        childUi.IsDisabled = shouldBeDisabled;
+        childUi.SymbolChild.IsDisabled = shouldBeDisabled;
         symbolUi.FlagAsModified();
     }
 

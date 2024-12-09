@@ -28,7 +28,7 @@ static class InputNode
             ImGui.SetCursorScreenPos(_lastScreenRect.Min);
             ImGui.InvisibleButton("node", _lastScreenRect.GetSize());
 
-            THelpers.DebugItemRect();
+            DrawUtils.DebugItemRect();
             var hovered = ImGui.IsItemHovered();
             if (hovered)
             {
@@ -88,7 +88,7 @@ static class InputNode
                 var usableSlotArea = GetUsableOutputSlotArea(_lastScreenRect, canvas);
                 ImGui.SetCursorScreenPos(usableSlotArea.Min);
                 ImGui.InvisibleButton("output", usableSlotArea.GetSize());
-                THelpers.DebugItemRect();
+                DrawUtils.DebugItemRect();
                 var color = ColorVariations.ConnectionLines.Apply(typeColor).Fade(0.5f);
 
                 if (!ConnectionMaker.IsInputNodeCurrentConnectionSource(window, inputDef) && ImGui.IsItemHovered())

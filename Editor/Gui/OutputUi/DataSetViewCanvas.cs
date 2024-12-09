@@ -295,7 +295,7 @@ public class DataSetViewCanvas
                 var channelHash = pathString.GetHashCode();
                 
                 // Compute random unique color
-                var randomChannelColor = THelpers.RandomColorForHash(channelHash);
+                var randomChannelColor = DrawUtils.RandomColorForHash(channelHash);
                 
                 _channelValueRanges.TryGetValue(channelHash, out var valueRange);
                 

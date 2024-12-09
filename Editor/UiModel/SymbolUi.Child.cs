@@ -56,7 +56,7 @@ public partial class SymbolUi
         internal Styles Style;
         internal string Comment;
 
-        internal bool IsDisabled { get => SymbolChild.Outputs.FirstOrDefault().Value?.IsDisabled ?? false; set => SetDisabled(value); }
+        //internal bool IsDisabled { get => SymbolChild.Outputs.FirstOrDefault().Value?.IsDisabled ?? false; set => SetDisabled(value); }
 
         internal Child(Guid symbolChildId, Guid symbolId, EditorSymbolPackage parentSymbolPackage)
         {
@@ -70,44 +70,7 @@ public partial class SymbolUi
             _parentSymbolPackage = parentSymbolPackage;
         }
 
-        private void SetDisabled(bool shouldBeDisabled)
-        {
-            var outputDefinitions = SymbolChild.Symbol.OutputDefinitions;
 
-            // Set disabled status on this child's outputs
-            foreach (var outputDef in outputDefinitions)
-            {
-                if (outputDef == null)
-                {
-                    Log.Warning($"{SymbolChild.Symbol.GetType()} {SymbolChild.Symbol.Name} contains a null {typeof(Symbol.OutputDefinition)}", Id);
-                    continue;
-                }
-
-                var hasOutput = SymbolChild.Outputs.TryGetValue(outputDef.Id, out var childOutput);
-                if (!hasOutput)
-                {
-                    Log.Warning($"{typeof(Symbol.Child)} {SymbolChild.ReadableName} does not have the following child output as defined: " +
-                                $"{childOutput.OutputDefinition.Name}({nameof(Guid)}{childOutput.OutputDefinition.Id})");
-                    continue;
-                }
-
-                childOutput.IsDisabled = shouldBeDisabled;
-            }
-
-            // Set disabled status on outputs of each instanced copy of this child within all parents that contain it
-            foreach (var parentInstance in SymbolChild.Parent.InstancesOfSelf)
-            {
-                // This parent doesn't have an instance of our SymbolChild. Ignoring and continuing.
-                if (!parentInstance.Children.TryGetValue(Id, out var matchingChildInstance))
-                    continue;
-
-                // Set disabled status on all outputs of each instance
-                foreach (var slot in matchingChildInstance.Outputs)
-                {
-                    slot.IsDisabled = shouldBeDisabled;
-                }
-            }
-        }
 
         /// <summary>
         /// 

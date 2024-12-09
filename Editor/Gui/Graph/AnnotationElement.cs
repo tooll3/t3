@@ -74,7 +74,7 @@ class AnnotationElement
         ImGui.SetCursorScreenPos(clickableArea.Min);
         ImGui.InvisibleButton("##annotationHeader", clickableArea.GetSize());
 
-        THelpers.DebugItemRect();
+        DrawUtils.DebugItemRect();
         var isHeaderHovered = ImGui.IsItemHovered();
         if (isHeaderHovered)
         {

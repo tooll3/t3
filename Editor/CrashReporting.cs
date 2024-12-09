@@ -51,7 +51,7 @@ internal static class CrashReporting
             return null;
 
         var timeOfLastBackup = AutoBackup.GetTimeOfLastBackup();
-        var timeSpan = THelpers.GetReadableRelativeTime(timeOfLastBackup);
+        var timeSpan = DrawUtils.GetReadableRelativeTime(timeOfLastBackup);
 
         var canvas = GraphWindow.Focused?.GraphCanvas;
         

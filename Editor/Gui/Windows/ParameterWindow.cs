@@ -287,7 +287,7 @@ internal class ParameterWindow : Window
             {
                 ImGui.SameLine();
                 ImGui.PushFont(Fonts.FontBold);
-                if (symbolChildUi.IsDisabled)
+                if (symbolChildUi.SymbolChild.IsDisabled)
                 {
                     ImGui.PushStyleColor(ImGuiCol.Button, UiColors.StatusAttention.Rgba);
                     ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);

@@ -29,7 +29,7 @@ internal static class CurvePoint
 
         ImGui.SetCursorPos(pTopLeft - _curveEditCanvas.WindowPos + _fixOffset);
         ImGui.InvisibleButton("key" + vDef.GetHashCode(), _controlSize);
-        THelpers.DebugItemRect();
+        DrawUtils.DebugItemRect();
 
         if (ImGui.IsItemHovered())
         {
@@ -51,7 +51,7 @@ internal static class CurvePoint
             
         ImGui.SetCursorPos(leftTangentCenter - _tangentHandleSizeHalf - _curveEditCanvas.WindowPos + _fixOffset);
         ImGui.InvisibleButton("keyLT" + _vDef.GetHashCode(), _tangentHandleSize);
-        THelpers.DebugItemRect();
+        DrawUtils.DebugItemRect();
         var isHovered = ImGui.IsItemHovered();
         if (isHovered)
             ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);

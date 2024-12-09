@@ -219,7 +219,7 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
         var itemRectMax = position + clipSize - new Vector2(1, 0);
             
         var rounding = 3.5f;
-        var randomColor = THelpers.RandomColorForHash(timeClip.Id.GetHashCode());
+        var randomColor = DrawUtils.RandomColorForHash(timeClip.Id.GetHashCode());
                     
         _drawList.AddRectFilled(position, itemRectMax, randomColor.Fade(0.25f), rounding);
             

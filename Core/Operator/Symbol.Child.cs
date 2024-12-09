@@ -34,6 +34,7 @@ public partial class Symbol
         public bool HasCustomName => !string.IsNullOrEmpty(Name);
 
         public bool IsBypassed { get => _isBypassed; set => SetBypassed(value); }
+        public bool IsDisabled { get => Outputs.FirstOrDefault().Value?.IsDisabled ?? false; set => SetDisabled(value); }
 
         public Dictionary<Guid, Input> Inputs { get; private init; } = new();
         public Dictionary<Guid, Output> Outputs { get; private init; } = new();
@@ -67,6 +68,48 @@ public partial class Symbol
                 if (!Outputs.TryAdd(outputDefinition.Id, output))
                 {
                     throw new ApplicationException($"The ID for symbol output {symbol.Name}.{outputDefinition.Name} must be unique.");
+                }
+            }
+        }
+        
+        private void SetDisabled(bool shouldBeDisabled)
+        {
+            if (Parent == null)
+                return;
+            
+            var outputDefinitions = Symbol.OutputDefinitions;
+
+            // Set disabled status on this child's outputs
+            foreach (var outputDef in outputDefinitions)
+            {
+                if (outputDef == null)
+                {
+                    Log.Warning($"{Symbol.GetType()} {Symbol.Name} contains a null {typeof(Symbol.OutputDefinition)}", Id);
+                    continue;
+                }
+
+                var hasOutput = Outputs.TryGetValue(outputDef.Id, out var childOutput);
+                if (!hasOutput)
+                {
+                    Log.Warning($"{typeof(Symbol.Child)} {ReadableName} does not have the following child output as defined: " +
+                                $"{childOutput.OutputDefinition.Name}({nameof(Guid)}{childOutput.OutputDefinition.Id})");
+                    continue;
+                }
+
+                childOutput.IsDisabled = shouldBeDisabled;
+            }
+
+            // Set disabled status on outputs of each instanced copy of this child within all parents that contain it
+            foreach (var parentInstance in Parent.InstancesOfSelf)
+            {
+                // This parent doesn't have an instance of our SymbolChild. Ignoring and continuing.
+                if (!parentInstance.Children.TryGetValue(Id, out var matchingChildInstance))
+                    continue;
+
+                // Set disabled status on all outputs of each instance
+                foreach (var slot in matchingChildInstance.Outputs)
+                {
+                    slot.IsDisabled = shouldBeDisabled;
                 }
             }
         }

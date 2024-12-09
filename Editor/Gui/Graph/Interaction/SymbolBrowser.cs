@@ -62,7 +62,7 @@ internal sealed class SymbolBrowser
         _selectedSymbolUi = null;
         _filter.OnlyMultiInputs = onlyMultiInputs;
         _filter.UpdateIfNecessary(_canvas.NodeSelection, forceUpdate: true);
-        THelpers.DisableImGuiKeyboardNavigation();
+        DrawUtils.DisableImGuiKeyboardNavigation();
 
         if (_selectedSymbolUi == null && _filter.MatchingSymbolUis.Count > 0)
         {
@@ -252,7 +252,7 @@ internal sealed class SymbolBrowser
 
     private void Close()
     {
-        THelpers.RestoreImGuiKeyboardNavigation();
+        DrawUtils.RestoreImGuiKeyboardNavigation();
         IsOpen = false;
         _window.FocusFromSymbolBrowser();
     }

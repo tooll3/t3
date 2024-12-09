@@ -91,7 +91,7 @@ internal class ExploreVariationCanvas : ScalableCanvas
         }
 
         _hoveringVariation?.RestoreValues();
-        var size = THelpers.GetContentRegionArea();
+        var size = DrawUtils.GetContentRegionArea();
         ImGui.InvisibleButton("variationCanvas", size.GetSize());
 
         if (ImGui.IsItemHovered())

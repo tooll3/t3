@@ -115,7 +115,7 @@ public static class ResourceInputWithTypeAheadSearch
             
             _lastTypeAheadResults.Clear();
             _selectedResultIndex = -1;
-            THelpers.DisableImGuiKeyboardNavigation();
+            DrawUtils.DisableImGuiKeyboardNavigation();
         }
 
         var isItemDeactivated = ImGui.IsItemDeactivated();
@@ -260,7 +260,7 @@ public static class ResourceInputWithTypeAheadSearch
 
         if (lostFocus)
         {
-            THelpers.RestoreImGuiKeyboardNavigation();
+            DrawUtils.RestoreImGuiKeyboardNavigation();
         }
 
         return wasSelected;

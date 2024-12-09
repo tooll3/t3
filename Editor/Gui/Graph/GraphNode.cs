@@ -189,20 +189,20 @@ internal class GraphNode
                 }
 
                 // Disabled indicator
-                if (childUi.IsDisabled)
+                if (childUi.SymbolChild.IsDisabled)
                 {
-                    DrawOverlayLine(drawList, opacity, Vector2.Zero, Vector2.One );
-                    DrawOverlayLine(drawList, opacity, new Vector2(1,0), new Vector2(0,1) );
+                    DrawUtils.DrawOverlayLine(drawList, opacity, Vector2.Zero, Vector2.One, _usableScreenRect.Min, _usableScreenRect.Max);
+                    DrawUtils.DrawOverlayLine(drawList, opacity, new Vector2(1,0), new Vector2(0,1), _usableScreenRect.Min, _usableScreenRect.Max);
                 }
                     
                 // Bypass indicator
                 if (childUi.SymbolChild.IsBypassed)
                 {
-                    DrawOverlayLine(drawList, opacity, new Vector2(0.05f,0.5f), new Vector2(0.4f,0.5f) );
-                    DrawOverlayLine(drawList, opacity, new Vector2(0.6f,0.5f), new Vector2(0.95f,0.5f) );
-                        
-                    DrawOverlayLine(drawList, opacity, new Vector2(0.35f,0.1f), new Vector2(0.65f,0.9f) );
-                    DrawOverlayLine(drawList, opacity, new Vector2(0.65f,0.1f), new Vector2(0.35f,0.9f) );
+                    DrawUtils.DrawOverlayLine(drawList, opacity, new Vector2(0.05f,0.5f), new Vector2(0.4f,0.5f), _usableScreenRect.Min, _usableScreenRect.Max);
+                    DrawUtils.DrawOverlayLine(drawList, opacity, new Vector2(0.6f,0.5f), new Vector2(0.95f,0.5f), _usableScreenRect.Min, _usableScreenRect.Max);
+
+                    DrawUtils.DrawOverlayLine(drawList, opacity, new Vector2(0.35f,0.1f), new Vector2(0.65f,0.9f), _usableScreenRect.Min, _usableScreenRect.Max);
+                    DrawUtils.DrawOverlayLine(drawList, opacity, new Vector2(0.65f,0.1f), new Vector2(0.35f,0.9f), _usableScreenRect.Min, _usableScreenRect.Max);
                 }
 
                 // Interaction
@@ -415,7 +415,7 @@ internal class GraphNode
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode() + inputDefinition.GetHashCode());
             ImGui.SetCursorScreenPos(usableSlotArea.Min);
             ImGui.InvisibleButton("input", usableSlotArea.GetSize());
-            THelpers.DebugItemRect("input-slot");
+            DrawUtils.DebugItemRect("input-slot");
                 
             // Note: isItemHovered does not work when a connection is being dragged from another item
             var hovered = hasConnections
@@ -639,7 +639,7 @@ internal class GraphNode
                 
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode() + outputDef.Id.GetHashCode());
             ImGui.InvisibleButton("output", usableArea.GetSize());
-            THelpers.DebugItemRect();
+            DrawUtils.DebugItemRect();
             var valueType = outputDef.ValueType;
             var colorForType = TypeUiRegistry.GetPropertiesForType(valueType).Color.Fade(opacity);
             
@@ -717,16 +717,6 @@ internal class GraphNode
                          : SymbolUi.Child.CustomUiResult.None;
             
         return result;
-    }
-
-    private void DrawOverlayLine(ImDrawListPtr drawList, float opacity, Vector2 p1, Vector2 p2)
-    {
-        var padding = new Vector2(3, 2);
-        var size = _usableScreenRect.GetSize() - padding * 2;
-        drawList.AddLine(_usableScreenRect.Min + p1 * size + padding,
-                         _usableScreenRect.Min + p2 * size + padding,
-                         UiColors.StatusWarning.Fade(opacity), 3);
-
     }
 
     private void DrawIndicator(ImDrawListPtr drawList, Color color, float opacity, ref int indicatorCount)

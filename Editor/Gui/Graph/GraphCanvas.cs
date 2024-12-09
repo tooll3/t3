@@ -541,7 +541,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
         ImGui.PopStyleColor();
         ImGui.PopFont();
 
-        var allSelectedDisabled = selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.IsDisabled);
+        var allSelectedDisabled = selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.SymbolChild.IsDisabled);
         if (ImGui.MenuItem("Disable",
                            KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleDisabled, false),
                            selected: allSelectedDisabled,

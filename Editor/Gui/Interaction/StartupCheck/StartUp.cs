@@ -51,7 +51,7 @@ public static class StartUp
         Log.Debug("StartUpProgress lock file exists?");
 
         var timeOfLastBackup = AutoBackup.AutoBackup.GetTimeOfLastBackup();
-        var timeSpan = THelpers.GetReadableRelativeTime(timeOfLastBackup);
+        var timeSpan = DrawUtils.GetReadableRelativeTime(timeOfLastBackup);
 
         const string caption = "Oh no! Start up problems...";
         string message = "It looks like last start up was incomplete.\n\n" +

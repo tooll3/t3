@@ -140,7 +140,7 @@ internal static class ParameterPopUp
                 // Disable
                 {
                     ImGui.SameLine();
-                    var isDisabled = symbolChildUi.IsDisabled;
+                    var isDisabled = symbolChildUi.SymbolChild.IsDisabled;
                     if (CustomComponents.DrawIconToggle("disabled", Icon.OperatorDisabled, ref isDisabled, true))
                     {
                         UndoRedoStack.AddAndExecute(isDisabled

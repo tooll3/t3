@@ -46,7 +46,7 @@ internal static class NodeActions
     {
         var selectedChildren = nodeSelection.GetSelectedChildUis().ToList();
 
-        var allSelectedDisabled = selectedChildren.TrueForAll(selectedChildUi => selectedChildUi.IsDisabled);
+        var allSelectedDisabled = selectedChildren.TrueForAll(selectedChildUi => selectedChildUi.SymbolChild.IsDisabled);
         var shouldDisable = !allSelectedDisabled;
 
         var commands = new List<ICommand>();
