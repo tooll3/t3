@@ -29,6 +29,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
     public Variants Variant;
     public Type PrimaryType = typeof(float);
     public required ISelectableCanvasObject Selectable;
+    public SymbolUi.Child? ChildUi; // matches Selected for operators
     public Vector2 PosOnCanvas { get => Selectable.PosOnCanvas; set => Selectable.PosOnCanvas = value; }
     public Vector2 Size { get; set; }
 

@@ -194,22 +194,7 @@ internal sealed partial class MagGraphCanvas
                              name);
         }
 
-        // Disabled indicator
-        if (item.SymbolChild.IsDisabled)
-        {
-            DrawUtils.DrawOverlayLine(drawList, idleFadeFactor, Vector2.Zero, Vector2.One, pMinVisible, pMaxVisible);
-            DrawUtils.DrawOverlayLine(drawList, idleFadeFactor, new Vector2(1,0), new Vector2(0,1), pMinVisible, pMaxVisible);
-        }
-                    
-        // Bypass indicator
-        if (item.SymbolChild.IsBypassed)
-        {
-            DrawUtils.DrawOverlayLine(drawList, idleFadeFactor, new Vector2(0.05f,0.5f), new Vector2(0.4f,0.5f), pMinVisible, pMaxVisible);
-            DrawUtils.DrawOverlayLine(drawList, idleFadeFactor, new Vector2(0.6f,0.5f), new Vector2(0.95f,0.5f), pMinVisible, pMaxVisible);
-                        
-            DrawUtils.DrawOverlayLine(drawList, idleFadeFactor, new Vector2(0.35f,0.1f), new Vector2(0.65f,0.9f), pMinVisible, pMaxVisible);
-            DrawUtils.DrawOverlayLine(drawList, idleFadeFactor, new Vector2(0.65f,0.1f), new Vector2(0.35f,0.9f), pMinVisible, pMaxVisible);
-        }
+
         
         // Indicate hidden matching inputs...
         if (_context.DraggedPrimaryOutputType != null
@@ -354,6 +339,60 @@ internal sealed partial class MagGraphCanvas
             }
         }
 
+        if (item.Variant == MagGraphItem.Variants.Operator )
+        {
+            // Animation indicator
+            var indicatorCount = 0;
+            if (item.Instance.Symbol.Animator.IsInstanceAnimated(item.Instance))
+            {
+                DrawIndicator(drawList, UiColors.StatusAnimated, idleFadeFactor, pMin,pMax, ref indicatorCount);
+            }
+
+            // Pinned indicator
+            if (context.Selector.PinnedIds.Contains(item.Instance.SymbolChildId))
+            {
+                DrawIndicator(drawList, UiColors.Selection, idleFadeFactor, pMin,pMax, ref indicatorCount);
+            }
+
+            // Snapshot indicator
+            {
+                if (item.ChildUi.EnabledForSnapshots)
+                {
+                    DrawIndicator(drawList, UiColors.StatusAutomated, idleFadeFactor, pMin,pMax, ref indicatorCount);
+                }
+            }
+            
+            // Disabled indicator
+            if (item.SymbolChild.IsDisabled)
+            {
+                DrawUtils.DrawOverlayLine(drawList, idleFadeFactor, Vector2.Zero, Vector2.One, pMinVisible, pMaxVisible);
+                DrawUtils.DrawOverlayLine(drawList, idleFadeFactor, new Vector2(1,0), new Vector2(0,1), pMinVisible, pMaxVisible);
+            }
+                        
+            // Bypass indicator
+            if (item.SymbolChild.IsBypassed)
+            {
+                DrawUtils.DrawOverlayLine(drawList, idleFadeFactor, new Vector2(0.05f,0.5f), new Vector2(0.4f,0.5f), pMinVisible, pMaxVisible);
+                DrawUtils.DrawOverlayLine(drawList, idleFadeFactor, new Vector2(0.6f,0.5f), new Vector2(0.95f,0.5f), pMinVisible, pMaxVisible);
+                            
+                DrawUtils.DrawOverlayLine(drawList, idleFadeFactor, new Vector2(0.35f,0.1f), new Vector2(0.65f,0.9f), pMinVisible, pMaxVisible);
+                DrawUtils.DrawOverlayLine(drawList, idleFadeFactor, new Vector2(0.65f,0.1f), new Vector2(0.35f,0.9f), pMinVisible, pMaxVisible);
+            }
+            
+            if (!string.IsNullOrEmpty(item.ChildUi.Comment))
+            {
+                ImGui.SetCursorScreenPos(new Vector2(pMax.X,  pMin.Y) -  new Vector2(3, 12) * T3Ui.UiScaleFactor * T3Ui.UiScaleFactor);
+                if (ImGui.InvisibleButton("#comment", new Vector2(15, 15)))
+                {
+                    context.Selector.SetSelection(item.ChildUi, item.Instance);
+                    context.EditCommentDialog.ShowNextFrame();
+                }
+                Icons.DrawIconOnLastItem(Icon.Comment, UiColors.ForegroundFull);
+                CustomComponents.TooltipForLastItem( UiColors.Text, item.ChildUi.Comment, null, false);
+            }
+        }
+        
+        
         // Draw input sockets
         foreach (var inputAnchor in item.GetInputAnchors())
         {
@@ -455,6 +494,23 @@ internal sealed partial class MagGraphCanvas
             ShowAnchorPointDebugs(oa);
         }
     }
+    
+    
+    private void DrawIndicator(ImDrawListPtr drawList, Color color, float opacity, Vector2 areaMin, Vector2 areaMax, ref int indicatorCount)
+    {
+        const int s = 4;
+        var dx = (s + 1) * indicatorCount;
+
+        var pMin = new Vector2(areaMax.X - 2 - s - dx,
+                               (areaMax.Y - 2 - s).Clamp(areaMin.Y + 2, areaMax.Y));
+        var pMax = new Vector2(areaMax.X - 2 - dx, areaMax.Y - 2);
+        drawList.AddRectFilled(pMin, pMax, color.Fade(opacity));
+        drawList.AddRect(pMin-Vector2.One, 
+                         pMax+Vector2.One, 
+                         UiColors.WindowBackground.Fade(0.4f * opacity));
+        indicatorCount++;
+    }
+    
 
     // todo - move outta here
     internal static SymbolUi.Child.CustomUiResult DrawCustomUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect, Vector2 canvasScale)

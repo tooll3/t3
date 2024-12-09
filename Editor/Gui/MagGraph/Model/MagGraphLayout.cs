@@ -98,6 +98,7 @@ internal sealed class MagGraphLayout
                                          Selectable = childUi,
                                          SymbolUi = symbolUi,
                                          SymbolChild = childUi.SymbolChild,
+                                         ChildUi = childUi,
                                          Size = MagGraphItem.GridSize,
                                          LastUpdateCycle = _structureUpdateCycle,
                                      };
