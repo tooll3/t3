@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿using System.Diagnostics;
+using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -109,7 +110,7 @@ internal sealed partial class MagGraphCanvas
         // Background and Outline
         var imDrawFlags = _borderRoundings[(int)snappedBorders % 16];
 
-        var isHovered = _context.Selector.HoveredIds.Contains(item.Id);
+        //var isHovered = _context.Selector.HoveredIds.Contains(item.Id);
         //var fade = isHovered ? 1 : 0.7f;
 
         drawList.AddRectFilled(pMinVisible + Vector2.One * CanvasScale,
@@ -201,6 +202,8 @@ internal sealed partial class MagGraphCanvas
             && item.Variant == MagGraphItem.Variants.Operator
             && !context.ItemMovement.IsItemDragged(item))
         {
+            Debug.Assert(item.Instance != null); // should be true to operator variant
+            
             var hasMatchingTypes = false;
             foreach (var i in item.Instance.Inputs)
             {

@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using System.Diagnostics;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
@@ -68,9 +69,9 @@ internal sealed class GraphUiContext
         Canvas = canvas;
         CompositionOp = compositionOp;
         ItemMovement = new MagItemMovement(this, canvas, Layout, selector);
-        StateMachine = new StateMachine(this);
         Placeholder = new PlaceholderCreation();
         EditCommentDialog = new EditCommentDialog();
+        StateMachine = new StateMachine(this);// needs to be initialized last
     }
 
     internal readonly Instance CompositionOp;
@@ -97,8 +98,29 @@ internal sealed class GraphUiContext
     internal Vector2 PeekAnchorInCanvas;
     internal bool ShouldAttemptToSnapToInput;
     
+    internal void StartMacroCommand(string title)
+    {
+        Debug.Assert(MacroCommand == null);
+        MacroCommand = new MacroCommand(title);
+    }
+
+    
+    internal void CompleteMacroCommand()
+    {
+        Debug.Assert(MacroCommand != null);
+        UndoRedoStack.Add(MacroCommand);
+        MacroCommand = null;
+    }
+    
+    internal void CancelMacroCommand()
+    {
+        Debug.Assert(MacroCommand != null);
+        MacroCommand.Undo();
+        MacroCommand = null;
+    }
+    
     // Dialogs
-    internal EditCommentDialog EditCommentDialog;
+    internal readonly EditCommentDialog EditCommentDialog;
 
     // internal Vector2 PeekAnchorInCanvas => PrimaryOutputItem == null
     //                                            ? Vector2.Zero

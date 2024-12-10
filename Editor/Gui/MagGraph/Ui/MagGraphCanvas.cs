@@ -191,8 +191,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         if (FrameStats.Current.OpenedPopUpName == string.Empty)
             CustomComponents.DrawContextMenuForScrollCanvas(() => ContextMenu.DrawContextMenuContent(_context), ref _contextMenuIsOpen);
         
-        
-        _context.StateMachine. UpdateAfterDraw(_context);
+        _context.StateMachine.UpdateAfterDraw(_context);
     }
 
     private bool _contextMenuIsOpen;

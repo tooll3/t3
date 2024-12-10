@@ -619,6 +619,7 @@ internal sealed class MagGraphLayout
                              - (targetMin.Y + sc.InputLineIndex* MagGraphItem.GridSize.Y)) < 1)
             {
                 sc.Style = MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal;
+                
                 var p = new Vector2(sourceMax.X, sourceMin.Y + ( + sc.VisibleOutputIndex + 0.5f) * MagGraphItem.GridSize.Y);
                 sc.SourcePos = p;
                 sc.TargetPos = p;
@@ -643,9 +644,10 @@ internal sealed class MagGraphLayout
                 && MathF.Abs(sourceMin.Y - (targetMin.Y + sc.VisibleOutputIndex * MagGraphItem.GridSize.Y)) < 1
                 )
             {
-                sc.Style = MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal;
+                //sc.Style = MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal;
+                sc.Style = MagGraphConnection.ConnectionStyles.BottomToLeft;
                 var p = new Vector2(sourceMax.X, targetMin.Y + (0.5f + sc.InputLineIndex) * MagGraphItem.GridSize.Y);
-                sc.SourcePos = p;
+                sc.SourcePos = new Vector2( (sourceMin.X + sourceMax.X) / 2,  sourceMax.Y);
                 sc.TargetPos = p;
                 continue;
             }

@@ -35,17 +35,77 @@ internal sealed class PlaceholderCreation
         public Vector2 Size { get; set; }
     }
 
-    private static readonly PlaceholderSelectable _placeHoldSelectable = new();
+    private static readonly PlaceholderSelectable _placeHolderSelectable = new();
 
     public static Guid PlaceHolderId = Guid.Parse("ffffffff-eeee-47C7-A17F-E297672EE1F3");
 
+    public void OpenToSplitHoveredConnections(GraphUiContext context)
+    {
+        if (context.ConnectionHovering.ConnectionHoversWhenClicked.Count == 0)
+        {
+            Log.Warning("No connections found? ");
+            context.StateMachine.SetState(GraphStates.Default, context);
+            return;
+        }
+        
+        context.TempConnections.Clear();
+        
+        context.MacroCommand??= new MacroCommand("Insert Operator");
+        var posOnCanvas = context.Canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
+
+        var firstHover = context.ConnectionHovering.ConnectionHoversWhenClicked[0];
+        
+        // Add temp connection into placeholder...
+        var tempConnectionIn = new MagGraphConnection
+                                 {
+                                     Style = MagGraphConnection.ConnectionStyles.Unknown,
+                                     SourcePos = firstHover.Connection.SourcePos,
+                                     SourceItem = firstHover.Connection.SourceItem,
+                                     SourceOutput = firstHover.Connection.SourceOutput,
+                                     TargetPos = default,
+                                     TargetItem = null,
+                                     OutputLineIndex = 0,
+                                     VisibleOutputIndex = 0,
+                                     ConnectionHash = 0,
+                                     IsTemporary = true,
+                                 };
+        context.TempConnections.Add(tempConnectionIn);
+        
+
+        
+        PlaceholderItem = new MagGraphItem
+                              {
+                                  Selectable = _placeHolderSelectable,
+                                  PosOnCanvas = posOnCanvas,
+                                  Id = PlaceHolderId,
+                                  Size = MagGraphItem.GridSize,
+                                  Variant = MagGraphItem.Variants.Placeholder,
+                              };
+        
+        context.Layout.Items[PlaceHolderId] = PlaceholderItem;
+        _focusInputNextTime = true;
+        
+        _filter.FilterInputType = firstHover.Connection.Type;
+        _filter.FilterOutputType = firstHover.Connection.Type;
+        _filter.WasUpdated = true;
+        _filter.SearchString = string.Empty;
+        _selectedSymbolUi = null;
+        _favoriteGroup = string.Empty;
+        _opGroups = GetOperatorSuggestions();
+        _filter.UpdateIfNecessary(context.Selector, forceUpdate: true);
+        
+        //context.PrimaryOutputItem = context.ActiveItem;
+        //context.DraggedPrimaryOutputType = output.ValueType;
+        context.StateMachine.SetState(GraphStates.Placeholder, context);
+    }
+    
     public void OpenOnCanvas(GraphUiContext context, Vector2 posOnCanvas, Type inputTypeFilter = null)
     {
         context.MacroCommand??= new MacroCommand("Insert Operator");
 
         PlaceholderItem = new MagGraphItem
                               {
-                                  Selectable = _placeHoldSelectable,
+                                  Selectable = _placeHolderSelectable,
                                   PosOnCanvas = posOnCanvas,
                                   Id = PlaceHolderId,
                                   Size = MagGraphItem.GridSize,
@@ -86,7 +146,7 @@ internal sealed class PlaceholderCreation
         
         PlaceholderItem = new MagGraphItem
                               {
-                                  Selectable = _placeHoldSelectable,
+                                  Selectable = _placeHolderSelectable,
                                   PosOnCanvas = focusedItemPosOnCanvas,
                                   Id = PlaceHolderId,
                                   Size = MagGraphItem.GridSize,
@@ -717,6 +777,73 @@ internal sealed class PlaceholderCreation
                        .AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
                                                                    connectionToAdd,
                                                                    0));
+            }
+        }
+        // Wire connect temp connections
+        else
+        {
+            foreach(var h in context.ConnectionHovering.ConnectionHoversWhenClicked)
+            {
+                // Remove current connections
+                context.MacroCommand
+                       .AddAndExecCommand
+                            (new DeleteConnectionCommand(context.CompositionOp.Symbol,
+                                                         h.Connection.AsSymbolConnection(),
+                                                         h.Connection.MultiInputIndex
+                                                        ));
+    
+            
+                var tempConnectionOut = new MagGraphConnection
+                                            {
+                                                Style = MagGraphConnection.ConnectionStyles.Unknown,
+                                                SourcePos = default,
+                                                SourceOutput = null,
+                                                SourceItem = null,
+                                                TargetPos = default,
+                                                TargetItem = h.Connection.TargetItem,
+                                                InputLineIndex = h.Connection.InputLineIndex,
+                                                MultiInputIndex = h.Connection.MultiInputIndex,
+                                                OutputLineIndex = 0,
+                                                VisibleOutputIndex = 0,
+                                                ConnectionHash = 0,
+                                                IsTemporary = true,
+                                            };
+            
+                context.TempConnections.Add(tempConnectionOut);
+            }
+            
+            var primaryInput = newInstance.Inputs.FirstOrDefault();
+            var primaryOutput = newInstance.Outputs.FirstOrDefault();
+            if (primaryInput != null && primaryOutput != null)
+            {
+                foreach (var tc in context.TempConnections)
+                {
+                    if (!tc.IsTemporary)
+                        continue;
+                    
+                    if (tc.SourceItem != null && tc.TargetItem == null)
+                    {
+                        var connectionToAdd = new Symbol.Connection(tc.SourceItem.Id,
+                                                                    tc.SourceOutput.Id,
+                                                                    newInstance.SymbolChildId,
+                                                                    primaryInput.Id);
+                        context.MacroCommand
+                               .AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+                                                                           connectionToAdd,
+                                                                           tc.MultiInputIndex));
+                    }
+                    else if(tc.SourceItem == null && tc.TargetItem != null)
+                    {
+                        var connectionToAdd = new Symbol.Connection(newInstance.SymbolChildId,
+                                                                    primaryOutput.Id,
+                                                                    tc.TargetItem.Id,
+                                                                    tc.TargetInput.Id);
+                        context.MacroCommand
+                               .AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+                                                                           connectionToAdd,
+                                                                           tc.MultiInputIndex));
+                    }
+                }
             }
         }
 

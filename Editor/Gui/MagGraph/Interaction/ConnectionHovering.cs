@@ -76,7 +76,8 @@ internal sealed class ConnectionHovering
 
         var tooLarge = bounds.GetHeight() > 2 || bounds.GetWidth() > 2;
 
-        if (!tooLarge && typesMatch && region != LineRegions.Undefined && firstOutput != null)
+        var isConsistentTypeAndOutput = !tooLarge && typesMatch && region != LineRegions.Undefined && firstOutput != null;
+        if (isConsistentTypeAndOutput)
         {
             // We only draw first indicator, because hover points fall together closely...
             drawList.AddCircleFilled(firstHover.PositionOnScreen, hoverIndicatorRadius, firstHover.Color, 12);
@@ -88,21 +89,28 @@ internal sealed class ConnectionHovering
                 {
                     var inputPosInScreen = context.Canvas.TransformPosition(firstHover.Connection.TargetPos);
                     drawList.AddCircle(inputPosInScreen, hoverIndicatorRadius, firstHover.Color, 24);
-                }
 
-                HoveredInputConnection = firstHover.Connection;
-                if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
-                {
-                    context.StateMachine.SetState(GraphStates.HoldingConnectionEnd, context);
+                    if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                    {
+                        ConnectionHoversWhenClicked.Clear();
+                        ConnectionHoversWhenClicked.AddRange(_lastConnectionHovers);
+                        context.StateMachine.SetState(GraphStates.HoldingConnectionEnd, context);
+                    }
                 }
-
             }
-            else if (region == LineRegions.Beginning)
+            if (region == LineRegions.Beginning)
             {
                 var outputPosOnScreen = context.Canvas.TransformPosition(firstHover.Connection.SourcePos);
                 drawList.AddCircle(outputPosOnScreen, hoverIndicatorRadius, firstHover.Color, 24);
-            }
-
+                
+                if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                {
+                    ConnectionHoversWhenClicked.Clear();
+                    ConnectionHoversWhenClicked.AddRange(_lastConnectionHovers);
+                    context.StateMachine.SetState(GraphStates.HoldingConnectionBeginning, context);
+                }
+            }            
+            
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5,5));
             ImGui.BeginTooltip();
             ImGui.PushFont(Fonts.FontSmall);
@@ -138,7 +146,7 @@ internal sealed class ConnectionHovering
         // {
         //     StopHover();
         // }
-        _bestSnapSplitDistance = float.PositiveInfinity;
+        // _bestSnapSplitDistance = float.PositiveInfinity;
     }
 
     private static void DrawTooltipForSingleOutput(GraphUiContext context, HoverPoint bestMatchLastFrame, ImDrawListPtr drawList)
@@ -235,29 +243,27 @@ internal sealed class ConnectionHovering
         return false;
     }
 
-    // TODO: Implement for dragging.
     public static void RegisterAsPotentialSplit(MagGraphConnection mcConnection, Color color, Vector2 position, float normalizedPosition)
     {
-        var distance = Vector2.Distance(position, _mousePosition);
-        if (distance > SnapDistance || distance > _bestSnapSplitDistance)
-        {
-            return;
-        }
-
+        // var distance = Vector2.Distance(position, _mousePosition);
+        // if (distance > SnapDistance || distance > _bestSnapSplitDistance)
+        // {
+        //     return;
+        // }
+        //
         _connectionHoversForCurrentFrame.Add(new HoverPoint(position, normalizedPosition, mcConnection, color));
     }
 
-    internal MagGraphConnection? HoveredInputConnection;
-    //internal readonly List<MagGraphConnection> _hoveredInputConnections = [];
-    
+    //internal MagGraphConnection? HoveredInputConnection;
     
     private static readonly ImageOutputCanvas _imageCanvasForTooltips = new() { DisableDamping = true };
     private static readonly EvaluationContext _evaluationContext = new();
 
+    internal readonly List<HoverPoint> ConnectionHoversWhenClicked = [];
     private static List<HoverPoint> _lastConnectionHovers = [];
     private static List<HoverPoint> _connectionHoversForCurrentFrame = []; // deferred, because hovered is computed during draw.
 
-    private static float _bestSnapSplitDistance = float.PositiveInfinity;
+    //private static float _bestSnapSplitDistance = float.PositiveInfinity;
     private const int SnapDistance = 50;
     private static Vector2 _mousePosition;
     private static double _hoverStartTime = -1;
