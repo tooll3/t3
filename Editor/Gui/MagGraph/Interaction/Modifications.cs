@@ -86,7 +86,7 @@ internal static class Modifications
         {
             var mci = pair.Ca;
             var mco = pair.Cb;
-            var affectedItems = MagItemMovement.MoveToCollapseGaps(mci, mco, movableItems, true);
+            var affectedItems = MagItemMovement.MoveToCollapseVerticalGaps(mci, mco, movableItems, true);
             if (affectedItems.Count == 0)
                 continue;
             
@@ -94,7 +94,7 @@ internal static class Modifications
             var newMoveCommand = new ModifyCanvasElementsCommand(context.CompositionOp.Symbol.Id, affectedItemsAsNodes, context.Selector);
             macroCommand.AddExecutedCommandForUndo(newMoveCommand);
         
-            MagItemMovement.MoveToCollapseGaps(mci, mco, movableItems, dryRun:false);
+            MagItemMovement.MoveToCollapseVerticalGaps(mci, mco, movableItems, dryRun:false);
             
             newMoveCommand.StoreCurrentValues();
         
