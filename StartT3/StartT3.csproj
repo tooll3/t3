@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -27,6 +27,9 @@
     </PackageReference>
     <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0031" />
     <PackageReference Include="Svg" Version="3.3.0" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
     <PackageReference Include="unsplasharp.api" Version="0.7.0" />
   </ItemGroup>
 
