@@ -90,7 +90,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         if (_context.StateMachine.CurrentState == GraphStates.Default)
         {
             _context.ActiveItem = null;
-            _context.ActiveOutputId = Guid.Empty;
+            _context.ActiveSourceOutputId = Guid.Empty;
         }
 
         DrawBackgroundGrids(drawList);
@@ -141,13 +141,11 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
             var sourcePosOnScreen = Vector2.Zero;
             if (t.SourceItem != null)
             {
-                var outputLine = t.SourceItem.OutputLines[0];
+                //var outputLine = t.SourceItem.OutputLines[0];
                 var sourcePos = new Vector2(t.SourceItem.Area.Max.X,
-                                            t.SourceItem.Area.Min.Y + MagGraphItem.GridSize.Y * (0.5f + outputLine.VisibleIndex));
+                                            t.SourceItem.Area.Min.Y + MagGraphItem.GridSize.Y * (0.5f + t.OutputLineIndex));
                 sourcePosOnScreen = TransformPosition(sourcePos);
-
             }
-            
             
             var targetPosOnScreen = mousePos;
             if (t.TargetItem != null)
@@ -178,7 +176,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         // Draw animated Snap indicator
         {
             var timeSinceSnap = ImGui.GetTime() - _context.ItemMovement.LastSnapTime;
-            var progress = MathUtils.RemapAndClamp((float)timeSinceSnap, 0, 0.4f, 1, 0);
+            var progress = ((float)timeSinceSnap).RemapAndClamp(0, 0.4f, 1, 0);
             if (progress < 1)
             {
                 drawList.AddCircle(TransformPosition(_context.ItemMovement.LastSnapPositionOnCanvas),

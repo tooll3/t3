@@ -217,7 +217,7 @@ internal sealed partial class MagGraphCanvas
 
             if (hasMatchingTypes)
             {
-                if (_context.PrimaryOutputItem != null)
+                if (_context.ActiveSourceItem != null)
                 {
                     var indicatorPos = new Vector2(pMin.X, pMin.Y + MagGraphItem.GridSize.Y / 2 * CanvasScale);
                     var isPeeked = item.Area.Contains(_context.PeekAnchorInCanvas);
@@ -333,7 +333,7 @@ internal sealed partial class MagGraphCanvas
             }
 
             // Indicator primary output op peek position...
-            if (_context.PrimaryOutputItem != null && item.Id == _context.PrimaryOutputItem.Id)
+            if (_context.ActiveSourceItem != null && item.Id == _context.ActiveSourceItem.Id)
             {
                 drawList.AddCircleFilled(TransformPosition(new Vector2(item.Area.Max.X - MagGraphItem.GridSize.Y * 0.25f,
                                                                        item.Area.Min.Y + MagGraphItem.GridSize.Y * 0.5f)),
@@ -485,7 +485,8 @@ internal sealed partial class MagGraphCanvas
                                            circleCenter + new Vector2(1,e+1),
                                            UiColors.BackgroundFull);
                     
-                    _context.ActiveOutputId = oa.SlotId;
+                    // This will later be used for by DefaultState to create a connection
+                    _context.ActiveSourceOutputId = oa.SlotId;
                     _context.ActiveOutputDirection = oa.Direction;
                 }
                 else

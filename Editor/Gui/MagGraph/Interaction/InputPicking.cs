@@ -20,12 +20,12 @@ internal static class InputPicking
 {
     internal static bool TryInitializeInputSelectionPicker(GraphUiContext context)
     {
-        if (context.PrimaryOutputItem == null)
+        if (context.ActiveSourceItem == null)
             return false;
 
         foreach (var otherItem in context.Layout.Items.Values)
         {
-            if (otherItem == context.PrimaryOutputItem)
+            if (otherItem == context.ActiveSourceItem)
                 continue;
 
             if (!otherItem.Area.Contains(context.PeekAnchorInCanvas))
@@ -33,8 +33,8 @@ internal static class InputPicking
 
             context.ItemForInputSelection = otherItem;
             context.ShouldAttemptToSnapToInput = true;
-            context.PeekAnchorInCanvas= new Vector2(context.PrimaryOutputItem.Area.Max.X - MagGraphItem.GridSize.Y * 0.25f,
-                                                    context.PrimaryOutputItem.Area.Min.Y + MagGraphItem.GridSize.Y * 0.5f);
+            context.PeekAnchorInCanvas= new Vector2(context.ActiveSourceItem.Area.Max.X - MagGraphItem.GridSize.Y * 0.25f,
+                                                    context.ActiveSourceItem.Area.Min.Y + MagGraphItem.GridSize.Y * 0.5f);
             return true;
         }
 
@@ -43,14 +43,13 @@ internal static class InputPicking
     
     internal static bool TryInitializeAtPosition(GraphUiContext context, Vector2 peekPosInCanvas)
     {
-        if (context.PrimaryOutputItem == null)
+        if (context.ActiveSourceItem == null)
             return false;
 
-        context.MacroCommand ??= new MacroCommand("Connect operators");
 
         foreach (var otherItem in context.Layout.Items.Values)
         {
-            if (otherItem == context.PrimaryOutputItem)
+            if (otherItem == context.ActiveSourceItem)
                 continue;
 
             if (!otherItem.Area.Contains(peekPosInCanvas))
@@ -59,6 +58,7 @@ internal static class InputPicking
             context.ItemForInputSelection = otherItem;
             context.PeekAnchorInCanvas = peekPosInCanvas;
             context.ShouldAttemptToSnapToInput = false;
+            context.StartOrContinueMacroCommand("Connect operators");
             return true;
         }
 
@@ -76,19 +76,19 @@ internal static class InputPicking
     {
         var composition = context.CompositionOp;
 
-        Debug.Assert(context.PrimaryOutputItem != null && context.ItemForInputSelection != null);
+        Debug.Assert(context.ActiveSourceItem != null && context.ItemForInputSelection != null);
         Debug.Assert(context.MacroCommand != null);
         Debug.Assert(context.ItemForInputSelection.Variant == MagGraphItem.Variants.Operator); // This will bite us later...
 
-        if (context.PrimaryOutputItem.OutputLines.Length == 0)
+        if (context.ActiveSourceItem.OutputLines.Length == 0)
         {
             Log.Warning("no visible output to connect?");
             return;
         }
 
         // Create connection
-        var connectionToAdd = new Symbol.Connection(context.PrimaryOutputItem.Id,
-                                                    context.PrimaryOutputItem.OutputLines[0].Id,
+        var connectionToAdd = new Symbol.Connection(context.ActiveSourceItem.Id,
+                                                    context.ActiveSourceItem.OutputLines[0].Id,
                                                     context.ItemForInputSelection.Id,
                                                     targetInputUi.Id);
 
@@ -123,10 +123,10 @@ internal static class InputPicking
         {
             // Snap items to input location (we assume that all dragged items are snapped...)
             var targetPos = context.ItemForInputSelection.PosOnCanvas
-                            + new Vector2(-context.PrimaryOutputItem.Size.X,
+                            + new Vector2(-context.ActiveSourceItem.Size.X,
                                           (inputLineIndex) * MagGraphItem.GridSize.Y);
 
-            var moveDelta = targetPos - context.PrimaryOutputItem.PosOnCanvas;
+            var moveDelta = targetPos - context.ActiveSourceItem.PosOnCanvas;
 
             var affectedItemsAsNodes = context.ItemMovement.DraggedItems.Select(i => i as ISelectableCanvasObject).ToList();
             var newMoveComment = new ModifyCanvasElementsCommand(composition.Symbol.Id, affectedItemsAsNodes, context.Selector);
@@ -186,10 +186,8 @@ internal static class InputPicking
                         if (ImGui.Selectable(prefix + inputUi.InputDefinition.Name))
                         {
                             TryConnectHiddenInput(context, inputUi);
-                            UndoRedoStack.Add(context.MacroCommand);
-                            
+                            context.CompleteMacroCommand();
                             context.StateMachine.SetState(GraphStates.Default, context); // will reset picking on enter...
-                            //Reset(context);
                         }
                     }
 
@@ -219,7 +217,7 @@ internal static class InputPicking
     public static void Reset(GraphUiContext context)
     {
         context.TempConnections.Clear();
-        context.PrimaryOutputItem = null;
+        context.ActiveSourceItem = null;
         context.DraggedPrimaryOutputType = null;
     }
 }

@@ -84,26 +84,49 @@ internal sealed class GraphUiContext
     
     internal readonly NodeSelection Selector;
     internal readonly StateMachine StateMachine;
-    internal  MacroCommand? MacroCommand;
+    internal  MacroCommand? MacroCommand { get; private set; }
+    
+    /** Keep for continuous update of dragged items */
     internal  ModifyCanvasElementsCommand? MoveElementsCommand;
     
     internal MagGraphItem? ActiveItem { get; set; }
-    internal Guid ActiveOutputId { get; set; }
     internal MagGraphItem.Directions ActiveOutputDirection { get; set; }
 
-    // Input picking... (should probably be move into Placeholder)
+    // Input picking... (should probably be moved into Placeholder)
     internal Type? DraggedPrimaryOutputType;
     internal MagGraphItem? ItemForInputSelection;
-    internal MagGraphItem? PrimaryOutputItem;
+    internal MagGraphItem? ActiveSourceItem;
+    internal Guid ActiveSourceOutputId { get; set; }
+    internal bool TryGetActiveOutputLine(out MagGraphItem.OutputLine outputLine)
+    {
+        if (ActiveSourceItem == null || ActiveSourceItem.OutputLines.Length == 0)
+        {
+            outputLine = default;
+            return false;
+        }
+        
+        outputLine= ActiveSourceItem
+                       .OutputLines
+                       .FirstOrDefault(l => l.Id == ActiveSourceOutputId);
+        
+        return true;
+    }
+    
     internal Vector2 PeekAnchorInCanvas;
     internal bool ShouldAttemptToSnapToInput;
     
-    internal void StartMacroCommand(string title)
+    internal MacroCommand StartMacroCommand(string title)
     {
         Debug.Assert(MacroCommand == null);
         MacroCommand = new MacroCommand(title);
+        return MacroCommand;
     }
-
+    
+    internal MacroCommand StartOrContinueMacroCommand(string title)
+    {
+        MacroCommand ??= new MacroCommand(title);
+        return MacroCommand;
+    }
     
     internal void CompleteMacroCommand()
     {

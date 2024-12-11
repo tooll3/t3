@@ -55,10 +55,11 @@ internal sealed partial class MagItemMovement
 
     internal void CompleteDragOperation(GraphUiContext context)
     {
+        Debug.Assert(context.MacroCommand != null);
         if (context.MacroCommand != null)
         {
             context.MoveElementsCommand?.StoreCurrentValues();
-            UndoRedoStack.Add(context.MacroCommand);
+            context.CompleteMacroCommand();
         }
 
         if (!InputPicking.TryInitializeInputSelectionPicker(context))
@@ -80,7 +81,7 @@ internal sealed partial class MagItemMovement
     internal void Reset()
     {
         // TODO: should be done by states...
-        _context.PrimaryOutputItem = null;
+        _context.ActiveSourceItem = null;
         _context.DraggedPrimaryOutputType = null;
 
         DraggedItems.Clear();
@@ -296,10 +297,11 @@ internal sealed partial class MagItemMovement
     public void StartDragOperation(GraphUiContext context)
     {
         var snapGraphItems = DraggedItems.Select(i => i as ISelectableCanvasObject).ToList();
-
-        context.MacroCommand = new MacroCommand("Move nodes");
+        
+        var macroCommand = context.StartMacroCommand("Move nodes");
+            
         context.MoveElementsCommand = new ModifyCanvasElementsCommand(context.CompositionOp.Symbol.Id, snapGraphItems, _nodeSelection);
-        context.MacroCommand.AddExecutedCommandForUndo(context.MoveElementsCommand);
+        macroCommand.AddExecutedCommandForUndo(context.MoveElementsCommand);
 
         _lastAppliedOffset = Vector2.Zero;
         _hasDragged = false;
@@ -882,11 +884,11 @@ internal sealed partial class MagItemMovement
         _context.DraggedPrimaryOutputType = null;
         _context.ItemForInputSelection = null;
 
-        _context.PrimaryOutputItem = FindPrimaryOutputItem();
-        if (_context.PrimaryOutputItem == null)
+        _context.ActiveSourceItem = FindPrimaryOutputItem();
+        if (_context.ActiveSourceItem == null)
             return;
 
-        _context.DraggedPrimaryOutputType = _context.PrimaryOutputItem.PrimaryType;
+        _context.DraggedPrimaryOutputType = _context.ActiveSourceItem.PrimaryType;
     }
 
     /// <summary>
@@ -1026,7 +1028,6 @@ internal sealed partial class MagItemMovement
     private readonly SelectableNodeMovement.ShakeDetector _shakeDetector = new();
 
     internal readonly HashSet<MagGraphItem> DraggedItems = [];
-    //private static readonly HashSet<Guid> _draggedItemIds = [];
 
     internal sealed record SplitInsertionPoint(
         Guid InputItemId,

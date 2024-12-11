@@ -16,7 +16,6 @@ internal sealed class StateMachine
     public StateMachine(GraphUiContext context)
     {
         _currentState = GraphStates.Default;
-        _currentState.Enter(context);
     }
 
     public void UpdateAfterDraw(GraphUiContext c)
@@ -30,7 +29,8 @@ internal sealed class StateMachine
         _currentState = newState;
         _stateEnterTime = ImGui.GetTime();
         
-        Log.Debug($"--> {GetMatchingStateFieldName(typeof( GraphStates), _currentState)}  {context.ActiveItem}");
+        var activeCommand = context.MacroCommand != null ? "ActiveCmd:" + context.MacroCommand : string.Empty;
+        Log.Debug($"--> {GetMatchingStateFieldName(typeof( GraphStates), _currentState)}  {activeCommand}   {context.ActiveItem}");
         _currentState.Enter(context);
     }
 

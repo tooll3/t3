@@ -48,4 +48,8 @@ public class MacroCommand : ICommand
 
     public int Count => _commands.Count;
     private readonly List<ICommand> _commands;
+    public override string ToString()
+    {
+        return Name;
+    }
 }

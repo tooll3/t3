@@ -18,7 +18,7 @@ internal static class GraphStates
                      {
                          // Todo: this should be a reset method in context
                          context.TempConnections.Clear();
-                         context.PrimaryOutputItem = null;
+                         context.ActiveSourceItem = null;
                          context.DraggedPrimaryOutputType = null;
 
                          // ReSharper disable once ConstantConditionalAccessQualifier
@@ -69,7 +69,16 @@ internal static class GraphStates
                           }
                           else
                           {
-                              context.StateMachine.SetState(context.ActiveOutputId == Guid.Empty ? HoldItem : HoldOutput, context);
+                              var isHoveringOutput = context.ActiveSourceOutputId != Guid.Empty;
+                              if (isHoveringOutput)
+                              {
+                                  context.StateMachine.SetState(HoldOutput,context);
+                                  context.ActiveSourceItem = context.ActiveItem;
+                              }
+                              else
+                              {
+                                  context.StateMachine.SetState(HoldItem,context);
+                              }
                           }
                       },
               Exit: _ => { }
@@ -224,39 +233,48 @@ internal static class GraphStates
               Enter: _ => { },
               Update: context =>
                       {
-                          Debug.Assert(context.ActiveItem != null);
-                          Debug.Assert(context.ActiveItem.OutputLines.Length > 0);
-                          Debug.Assert(context.ActiveOutputId != Guid.Empty);
+                          var sourceItem = context.ActiveItem;
+                          Debug.Assert(sourceItem != null);
+                          Debug.Assert(sourceItem.OutputLines.Length > 0);
+                          Debug.Assert(context.ActiveSourceOutputId != Guid.Empty);
 
                           // Click
                           if (!ImGui.IsMouseDown(ImGuiMouseButton.Left))
                           {
-                              //context.Placeholder.OpenToSplitHoveredConnections(context); // Will change state implicitly
-                              context.Placeholder.OpenForItem(context, context.ActiveItem, context.ActiveOutputDirection);
+                              context.Placeholder.OpenForItem(context, sourceItem, context.ActiveOutputDirection);
                               context.StateMachine.SetState(Placeholder, context);
                               return;
                           }
 
+                          // Start dragging...
                           if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                           {
-                              var outputLine = context.ActiveItem.OutputLines[0];
+                              if (!context.TryGetActiveOutputLine(out var outputLine))
+                              {
+                                  Log.Warning("Output not found?");
+                                  context.StateMachine.SetState(Default, context);
+                                  return;
+                              }
+                              //var outputLine = context.GetActiveOutputLine();              
                               var output = outputLine.Output;
+                              var posOnCanvas = sourceItem.PosOnCanvas + new Vector2(MagGraphItem.GridSize.X, 
+                                                                                     MagGraphItem.GridSize.Y * (1.5f + outputLine.VisibleIndex) );
 
                               var tempConnection = new MagGraphConnection
                                                        {
                                                            Style = MagGraphConnection.ConnectionStyles.Unknown,
-                                                           SourcePos = context.ActiveItem.PosOnCanvas,
+                                                           SourcePos = posOnCanvas,
                                                            TargetPos = default,
-                                                           SourceItem = context.ActiveItem,
+                                                           SourceItem = sourceItem,
                                                            TargetItem = null,
                                                            SourceOutput = output,
-                                                           OutputLineIndex = 0,
+                                                           OutputLineIndex = outputLine.VisibleIndex,
                                                            VisibleOutputIndex = 0,
                                                            ConnectionHash = 0,
                                                            IsTemporary = true,
                                                        };
                               context.TempConnections.Add(tempConnection);
-                              context.PrimaryOutputItem = context.ActiveItem;
+                              context.ActiveSourceItem = sourceItem;
                               context.DraggedPrimaryOutputType = output.ValueType;
                               context.StateMachine.SetState(DragOutput, context);
                           }
@@ -275,8 +293,6 @@ internal static class GraphStates
                      },
               Update: context =>
                       {
-                          //Debug.Assert(context.ActiveItem != null);
-
                           if (ImGui.IsKeyDown(ImGuiKey.Escape))
                           {
                               context.StateMachine.SetState(Default, context);
@@ -289,19 +305,23 @@ internal static class GraphStates
 
                           var hasDisconnections = context.TempConnections.Any(c => c.WasDisconnected);
 
-                          // Was dropped on operator or background...
                           var posOnCanvas = context.Canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
-                          if (InputPicking.TryInitializeAtPosition(context, posOnCanvas))
+                          
+                          var droppedOnItem = InputPicking.TryInitializeAtPosition(context, posOnCanvas); 
+                          if (droppedOnItem)
                           {
                               context.StateMachine.SetState(PickInput, context);
                           }
                           else if (hasDisconnections)
                           {
-                              UndoRedoStack.Add(context.MacroCommand);
+                              // Ripped off input -> Avoid open place holder
+                              //UndoRedoStack.Add(context.MacroCommand);
+                              context.CompleteMacroCommand();
                               context.StateMachine.SetState(Default, context);
                           }
                           else
                           {
+                              // Was dropped on operator or background...
                               context.Placeholder.OpenOnCanvas(context, posOnCanvas, context.DraggedPrimaryOutputType);
                               context.StateMachine.SetState(Placeholder, context);
                           }
@@ -334,10 +354,8 @@ internal static class GraphStates
 
                               var connection = context.ConnectionHovering.ConnectionHoversWhenClicked[0].Connection;
                               
-                              context.MacroCommand = new MacroCommand("Reconnect from input");
-
                               // Remove existing connection
-                              context.MacroCommand
+                              context.StartMacroCommand("Reconnect from input")
                                      .AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,
                                                                                     connection.AsSymbolConnection(),
                                                                                     0));
@@ -358,7 +376,7 @@ internal static class GraphStates
                                                        };
 
                               context.TempConnections.Add(tempConnection);
-                              context.PrimaryOutputItem = connection.SourceItem;
+                              context.ActiveSourceItem = connection.SourceItem;
                               context.DraggedPrimaryOutputType = connection.Type;
                               context.ActiveItem = connection.SourceItem;
                               context.StateMachine.SetState(DragOutput, context);

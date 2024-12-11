@@ -11,7 +11,6 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
-using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -50,7 +49,9 @@ internal sealed class PlaceholderCreation
         
         context.TempConnections.Clear();
         
-        context.MacroCommand??= new MacroCommand("Insert Operator");
+        // TODO: This will crash... 
+        context.StartMacroCommand("Insert operator");
+        //context.MacroCommand??= new MacroCommand("Insert Operator");
         var posOnCanvas = context.Canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
 
         var firstHover = context.ConnectionHovering.ConnectionHoversWhenClicked[0];
@@ -101,7 +102,8 @@ internal sealed class PlaceholderCreation
     
     public void OpenOnCanvas(GraphUiContext context, Vector2 posOnCanvas, Type inputTypeFilter = null)
     {
-        context.MacroCommand??= new MacroCommand("Insert Operator");
+        //context.MacroCommand??= new MacroCommand("Insert Operator");
+        context.StartMacroCommand("Insert Operator");
 
         PlaceholderItem = new MagGraphItem
                               {
@@ -136,8 +138,9 @@ internal sealed class PlaceholderCreation
             Log.Warning("Can't find item graph?");
             return;
         }
-
-        context.MacroCommand = new MacroCommand("Insert Operator");
+        
+        context.StartMacroCommand("Insert Operator");
+        //context.MacroCommand = new MacroCommand("Insert Operator");
         
         var focusedItemPosOnCanvas = direction == MagGraphItem.Directions.Vertical 
         ? _focusedItem.PosOnCanvas + new Vector2(0, _focusedItem.Size.Y)
@@ -192,7 +195,10 @@ internal sealed class PlaceholderCreation
 
     public void Cancel(GraphUiContext context)
     {
-        context.MacroCommand?.Undo();
+        //context.MacroCommand?.Undo();
+        if(context.MacroCommand != null)
+            context.CancelMacroCommand();
+        
         if (_focusedItem != null)
         {
             context.Selector.SetSelection(_focusedItem.Selectable, _focusedItem.Instance);
@@ -203,17 +209,23 @@ internal sealed class PlaceholderCreation
 
     private void Close(GraphUiContext context)
     {
-        if (context.MacroCommand != null)
-            UndoRedoStack.Add(context.MacroCommand);
+        context.CompleteMacroCommand();
+        //if (context.MacroCommand != null)
+        //    UndoRedoStack.Add(context.MacroCommand);
 
         Reset(context);
     }
 
     internal void Reset(GraphUiContext context)
     {
-        context.MacroCommand = null;
+        if (context.MacroCommand != null)
+        {
+            Log.Debug("cancelling placeholder command... " + context.MacroCommand);
+            context.CancelMacroCommand();
+        }
         _filter.Reset();
         _focusedItem = null;
+        context.ConnectionHovering.ConnectionHoversWhenClicked.Clear();
 
         if (PlaceholderItem == null)
             return;
@@ -763,16 +775,16 @@ internal sealed class PlaceholderCreation
                 }
             }
         }
-        else if (context.PrimaryOutputItem != null && context.PrimaryOutputItem.OutputLines.Length > 0)
+        else if (context.TryGetActiveOutputLine(out var outputLine))
         {
-            var outlineLine = context.PrimaryOutputItem.OutputLines[0];
             var primaryInput = newInstance.Inputs.FirstOrDefault();
             if (primaryInput != null && primaryInput.ValueType == context.DraggedPrimaryOutputType)
             {
-                var connectionToAdd = new Symbol.Connection(context.PrimaryOutputItem.Id,
-                                                            outlineLine.Id,
+                var connectionToAdd = new Symbol.Connection(context.ActiveSourceItem!.Id,
+                                                            outputLine.Id,
                                                             newInstance.SymbolChildId,
                                                             primaryInput.Id);
+                
                 context.MacroCommand
                        .AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
                                                                    connectionToAdd,
