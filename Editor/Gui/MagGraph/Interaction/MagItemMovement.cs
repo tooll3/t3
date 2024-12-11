@@ -260,19 +260,26 @@ internal sealed partial class MagItemMovement
                                     ? _snapping.InputAnchorPos - _snapping.OutAnchorPos
                                     : _snapping.OutAnchorPos - _snapping.InputAnchorPos;
 
-            var snapPos = _snapping.Reverse
-                                    ? _snapping.InputAnchorPos 
-                                    : _snapping.OutAnchorPos;
-
+            // var snapTargetPos = _snapping.Reverse
+            //                         ? _snapping.InputAnchorPos 
+            //                         : _snapping.OutAnchorPos;
+            
+            var snapPos = mousePosOnCanvas + bestSnapDelta;
+            
             dl.AddLine(_canvas.TransformPosition(mousePosOnCanvas),
                        context.Canvas.TransformPosition(mousePosOnCanvas) + _canvas.TransformDirection(bestSnapDelta),
                        Color.White);
 
-            if (Vector2.Distance(snapPos, LastSnapPositionOnCanvas) > 2) // ugh. Magic number
+            if (Vector2.Distance(snapPos, LastSnapDragPositionOnCanvas) > 2) // ugh. Magic number
             {
+                var distance = Vector2.Distance(snapPos, LastSnapDragPositionOnCanvas);
+                Log.Debug("snapped changed: " + distance);
                 snapPositionChanged = true;
                 LastSnapTime = ImGui.GetTime();
-                LastSnapPositionOnCanvas = snapPos;
+                LastSnapDragPositionOnCanvas = snapPos;
+                LastSnapTargetPositionOnCanvas = _snapping.Reverse
+                                                     ? _snapping.InputAnchorPos
+                                                     : _snapping.OutAnchorPos;
             }
 
             foreach (var n in DraggedItems)
@@ -285,7 +292,7 @@ internal sealed partial class MagItemMovement
         // Unsnapped...
         else
         {
-            LastSnapPositionOnCanvas = Vector2.Zero;
+            LastSnapDragPositionOnCanvas = Vector2.Zero;
             LastSnapTime = double.NegativeInfinity;
         }
 
@@ -1011,7 +1018,10 @@ internal sealed partial class MagItemMovement
     internal bool IsItemDragged(MagGraphItem item) => DraggedItems.Contains(item);
 
     internal double LastSnapTime = double.NegativeInfinity;
-    internal Vector2 LastSnapPositionOnCanvas;
+    internal Vector2 LastSnapDragPositionOnCanvas;
+    
+    /** for visual indication only */
+    internal Vector2 LastSnapTargetPositionOnCanvas;
 
 
     internal readonly List<SplitInsertionPoint> SplitInsertionPoints = [];

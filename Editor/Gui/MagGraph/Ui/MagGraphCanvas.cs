@@ -179,7 +179,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
             var progress = ((float)timeSinceSnap).RemapAndClamp(0, 0.4f, 1, 0);
             if (progress < 1)
             {
-                drawList.AddCircle(TransformPosition(_context.ItemMovement.LastSnapPositionOnCanvas),
+                drawList.AddCircle(TransformPosition(_context.ItemMovement.LastSnapTargetPositionOnCanvas),
                                    progress * 50,
                                    UiColors.ForegroundFull.Fade(progress * 0.2f));
             }
