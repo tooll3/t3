@@ -104,17 +104,19 @@ internal static class InputPicking
 
         // Find insertion index
         var inputLineIndex = 0;
-        foreach (var input in context.ItemForInputSelection.Instance.Inputs)
+        foreach (var input in context.ItemForInputSelection.Instance!.Inputs)
         {
+            if (input.Id == targetInputUi.InputDefinition.Id)
+                break;
+            
             if (inputLineIndex < context.ItemForInputSelection.InputLines.Length
                 && input.Id == context.ItemForInputSelection.InputLines[inputLineIndex].Input.Id)
                 inputLineIndex++;
 
-            if (input.Id == targetInputUi.InputDefinition.Id)
-                break;
         }
 
-        MagItemMovement.MoveSnappedItemsVertically(context,
+        if(inputLineIndex > 0) 
+            MagItemMovement.MoveSnappedItemsVertically(context,
                                                    MagItemMovement.CollectSnappedItems(context.ItemForInputSelection),
                                                    context.ItemForInputSelection.PosOnCanvas.Y + MagGraphItem.GridSize.Y * (inputLineIndex - 0.5f),
                                                    MagGraphItem.GridSize.Y);
@@ -178,7 +180,7 @@ internal static class InputPicking
                 var inputIndex = 0;
                 foreach (var inputUi in childUi.InputUis.Values)
                 {
-                    var input = context.ItemForInputSelection.Instance.Inputs[inputIndex];
+                    var input = context.ItemForInputSelection.Instance!.Inputs[inputIndex];
                     if (inputUi.Type == context.DraggedPrimaryOutputType)
                     {
                         var isConnected = input.HasInputConnections;
@@ -187,7 +189,9 @@ internal static class InputPicking
                         {
                             TryConnectHiddenInput(context, inputUi);
                             context.CompleteMacroCommand();
-                            context.StateMachine.SetState(GraphStates.Default, context); // will reset picking on enter...
+                            
+                            Reset(context);
+                            context.StateMachine.SetState(GraphStates.Default, context);
                         }
                     }
 
@@ -195,7 +199,7 @@ internal static class InputPicking
                 }
             }
 
-            // Close
+            // Cancel by clicking outside
             var isPopupHovered = ImRect.RectWithSize(ImGui.GetWindowPos(), ImGui.GetWindowSize())
                                        .Contains(ImGui.GetMousePos());
 
