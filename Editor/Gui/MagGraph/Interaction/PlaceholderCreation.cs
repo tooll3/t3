@@ -129,22 +129,20 @@ internal sealed class PlaceholderCreation
         _selectedItemChanged = true;
     }
 
-    private MagGraphItem _focusedItem;
 
-    public void OpenForItem(GraphUiContext context, ISelectableCanvasObject item, MagGraphItem.Directions direction = MagGraphItem.Directions.Vertical)
+
+    public void OpenForItem(GraphUiContext context, 
+                            MagGraphItem item, 
+                            MagGraphItem.OutputLine outputLine,
+                            MagGraphItem.Directions direction = MagGraphItem.Directions.Vertical)
     {
-        if (!context.Layout.Items.TryGetValue(item.Id, out _focusedItem))
-        {
-            Log.Warning("Can't find item graph?");
-            return;
-        }
+        Debug.Assert(item.OutputLines.Length > 0);
         
         context.StartMacroCommand("Insert Operator");
-        //context.MacroCommand = new MacroCommand("Insert Operator");
         
         var focusedItemPosOnCanvas = direction == MagGraphItem.Directions.Vertical 
-        ? _focusedItem.PosOnCanvas + new Vector2(0, _focusedItem.Size.Y)
-          : _focusedItem.PosOnCanvas + new Vector2(_focusedItem.Size.X, 0);
+        ? item.PosOnCanvas + new Vector2(0, item.Size.Y)
+          : item.PosOnCanvas + new Vector2(item.Size.X, MagGraphItem.GridSize.Y * outputLine.VisibleIndex);
         
         
         PlaceholderItem = new MagGraphItem
@@ -160,12 +158,12 @@ internal sealed class PlaceholderCreation
         if (direction == MagGraphItem.Directions.Vertical)
         {
             // Keep for after creation because inserted node might exceed unit height and further pushing is required... 
-            _snappedItems = MagItemMovement.CollectSnappedItems(_focusedItem);
+            _snappedItems = MagItemMovement.CollectSnappedItems(item);
 
             MagItemMovement
                .MoveSnappedItemsVertically(context,
                                            _snappedItems,
-                                           _focusedItem.PosOnCanvas.Y + _focusedItem.Size.Y - MagGraphItem.GridSize.Y / 2,
+                                           item.PosOnCanvas.Y + item.Size.Y - MagGraphItem.GridSize.Y / 2,
                                            MagGraphItem.GridSize.Y);
         }
 
@@ -181,38 +179,34 @@ internal sealed class PlaceholderCreation
         _favoriteGroup = string.Empty;
         _opGroups = GetOperatorSuggestions();
         
-        if (_focusedItem.OutputLines.Length > 0)
-        {
-            _filter.FilterInputType = _focusedItem.OutputLines[0].Output.ValueType;
+        _filter.FilterInputType = outputLine.Output.ValueType;
 
-            if (_focusedItem.OutputLines[0].ConnectionsOut.Count > 0)
-                _filter.FilterOutputType = _focusedItem.OutputLines[0].Output.ValueType;
-        }
+        if (outputLine.ConnectionsOut.Count > 0)
+            _filter.FilterOutputType = outputLine.Output.ValueType;
 
         _filter.UpdateIfNecessary(context.Selector, forceUpdate: true);
         _selectedItemChanged = true;
+        _snappedSourceOutputLine = outputLine;
+        _snappedSourceItem = item;
+        _connectionOrientation = direction;
     }
 
     public void Cancel(GraphUiContext context)
     {
-        //context.MacroCommand?.Undo();
         if(context.MacroCommand != null)
             context.CancelMacroCommand();
         
-        if (_focusedItem != null)
+        if (_snappedSourceItem != null)
         {
-            context.Selector.SetSelection(_focusedItem.Selectable, _focusedItem.Instance);
+            context.Selector.SetSelection(_snappedSourceItem.Selectable, _snappedSourceItem.Instance);
         }
 
         Reset(context);
     }
 
-    private void Close(GraphUiContext context)
+    private void Complete(GraphUiContext context)
     {
         context.CompleteMacroCommand();
-        //if (context.MacroCommand != null)
-        //    UndoRedoStack.Add(context.MacroCommand);
-
         Reset(context);
     }
 
@@ -224,7 +218,7 @@ internal sealed class PlaceholderCreation
             context.CancelMacroCommand();
         }
         _filter.Reset();
-        _focusedItem = null;
+        _snappedSourceItem = null;
         context.ConnectionHovering.ConnectionHoversWhenClicked.Clear();
 
         if (PlaceholderItem == null)
@@ -483,7 +477,7 @@ internal sealed class PlaceholderCreation
         var windowSize = ImGui.GetWindowSize();
         var windowPos = ImGui.GetWindowPos();
         Vector2 resultPosOnScreen = new Vector2(screenItemArea.Min.X, screenItemArea.Max.Y + 3);
-        if (Orientation == MagGraphItem.Directions.Horizontal)
+        if (_connectionOrientation == MagGraphItem.Directions.Horizontal)
         {
             var y = screenItemArea.GetCenter().Y - 0.3f * size.Y;
             resultPosOnScreen.Y = y.Clamp(windowPos.Y + 10, windowSize.Y + windowPos.Y - size.Y - 10);
@@ -702,28 +696,30 @@ internal sealed class PlaceholderCreation
         context.Selector.SetSelection(newChildUi, newInstance);
 
         // Connect to focus node...
-        if (_focusedItem != null)
+        if (_snappedSourceItem != null)
         {
-            if (_focusedItem.OutputLines.Length > 0
-                && newInstance.Inputs.Count > 0
-               )
+            if (newInstance.Inputs.Count > 0)
             {
-                if (_focusedItem.OutputLines[0].ConnectionsOut.Count > 0)
+                if (_snappedSourceOutputLine.ConnectionsOut.Count > 0)
                 {
                     var newItemOutput = newInstance.Outputs[0];
 
                     // Reroute original connections...
-                    foreach (var mc in _focusedItem.OutputLines[0].ConnectionsOut)
+                    foreach (var mc in _snappedSourceOutputLine.ConnectionsOut)
                     {
-                        if (context.ActiveOutputDirection == MagGraphItem.Directions.Vertical &&
-                            (mc.Style == MagGraphConnection.ConnectionStyles.RightToLeft
-                             || mc.Style == MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal
-                             || mc.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal))
+                        var splitVertically = context.ActiveOutputDirection == MagGraphItem.Directions.Vertical
+                                              && mc.Style == MagGraphConnection.ConnectionStyles.BottomToTop;
+                        
+                        var splitHorizontal = context.ActiveOutputDirection == MagGraphItem.Directions.Horizontal &&
+                                              mc.Style == MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal;
+                        
+                        if (!splitVertically && !splitHorizontal)
                             continue;
                         
                         context.MacroCommand
                                .AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,
-                                                                              mc.AsSymbolConnection(), 0));
+                                                                              mc.AsSymbolConnection(), 
+                                                                              mc.MultiInputIndex));
 
                         context.MacroCommand
                                .AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
@@ -732,22 +728,23 @@ internal sealed class PlaceholderCreation
                                                                                                  mc.TargetItem.Id,
                                                                                                  mc.TargetInput.Id
                                                                                                 ),
-                                                                           0));
+                                                                           mc.MultiInputIndex));
                     }
                 }
 
                 // Create new Connection
                 context.MacroCommand
                        .AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
-                                                                   new Symbol.Connection(_focusedItem.Id,
-                                                                                         _focusedItem.OutputLines[0].Output.Id,
+                                                                   new Symbol.Connection(_snappedSourceItem.Id,
+                                                                                         _snappedSourceOutputLine.Id,
                                                                                          newInstance.SymbolChildId,
                                                                                          newInstance.Inputs[0].Id
                                                                                         ),
                                                                    0));
             }
 
-            // push snapped ops further down if new op exceed default height 
+            // Push snapped ops further down if new op exceed initial default height
+            if(_connectionOrientation == MagGraphItem.Directions.Vertical) 
             {
                 var newItem = new MagGraphItem
                                   {
@@ -762,15 +759,14 @@ internal sealed class PlaceholderCreation
                 List<MagGraphItem.InputLine> inputLines = [];
                 List<MagGraphItem.OutputLine> outputLines = [];
                 MagGraphLayout.CollectVisibleLines(newItem, inputLines, outputLines);
+                
                 var newHeight = inputLines.Count + outputLines.Count - 1;
                 if (newHeight > 1)
                 {
-                    //var snappedItems = MagItemMovement.CollectSnappedItems(_focusedItem);
-
                     MagItemMovement
                        .MoveSnappedItemsVertically(context,
                                                    _snappedItems,
-                                                   _focusedItem.PosOnCanvas.Y + _focusedItem.Size.Y - MagGraphItem.GridSize.Y / 2,
+                                                   _snappedSourceItem.PosOnCanvas.Y + _snappedSourceItem.Size.Y - MagGraphItem.GridSize.Y / 2,
                                                    MagGraphItem.GridSize.Y * (newHeight - 1));
                 }
             }
@@ -864,7 +860,7 @@ internal sealed class PlaceholderCreation
         ParameterPopUp.NodeIdRequestedForParameterWindowActivation = newSymbolChild.Id;
         context.Layout.FlagAsChanged();
 
-        Close(context);
+        Complete(context);
     }
 
     private string _favoriteGroup = string.Empty;
@@ -876,7 +872,12 @@ internal sealed class PlaceholderCreation
     private ImRect _placeholderAreaOnScreen;
     private ImRect _resultAreaOnScreen;
 
-    private MagGraphItem.Directions Orientation = MagGraphItem.Directions.Horizontal;
+    private MagGraphItem.Directions _connectionOrientation = MagGraphItem.Directions.Horizontal;
+    
+    /** Required For resetting selection and post creation layout changes */
+    private MagGraphItem _snappedSourceItem;
+    
+    private MagGraphItem.OutputLine _snappedSourceOutputLine;
 
     private SymbolUi _selectedSymbolUi;
     private static readonly int _uiId = "DraftNode".GetHashCode();
