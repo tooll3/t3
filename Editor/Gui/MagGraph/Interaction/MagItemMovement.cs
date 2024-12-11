@@ -885,7 +885,42 @@ internal sealed partial class MagItemMovement
 
         newMoveComment.StoreCurrentValues();
     }
-
+    
+    
+    /// <summary>
+    /// Creates and applies a command to move items vertically
+    /// </summary>
+    /// <returns>
+    /// True if some items where moved
+    /// </returns>
+    public static void MoveSnappedItemsHorizontally(GraphUiContext context, HashSet<MagGraphItem> snappedItems, float xThreshold, float xDistance)
+    {
+        Debug.Assert(context.MacroCommand != null);
+        var movableItems = new List<MagGraphItem>();
+        foreach (var otherItem in snappedItems)
+        {
+            if (otherItem.PosOnCanvas.X > xThreshold)
+            {
+                movableItems.Add(otherItem);
+            }
+        }
+        
+        if (movableItems.Count == 0)
+            return;
+        
+        // Move items down...
+        var affectedItemsAsNodes = movableItems.Select(i => i as ISelectableCanvasObject).ToList();
+        var newMoveComment = new ModifyCanvasElementsCommand(context.CompositionOp.Symbol.Id, affectedItemsAsNodes, context.Selector);
+        context.MacroCommand.AddExecutedCommandForUndo(newMoveComment);
+        
+        foreach (var item in affectedItemsAsNodes)
+        {
+            item.PosOnCanvas += new Vector2(xDistance,0);
+        }
+        
+        newMoveComment.StoreCurrentValues();
+    }
+    
     private void InitPrimaryDraggedOutput()
     {
         _context.DraggedPrimaryOutputType = null;

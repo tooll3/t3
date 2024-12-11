@@ -166,6 +166,17 @@ internal sealed class PlaceholderCreation
                                            item.PosOnCanvas.Y + item.Size.Y - MagGraphItem.GridSize.Y / 2,
                                            MagGraphItem.GridSize.Y);
         }
+        else
+        {
+            // Keep for after creation because inserted node might exceed unit height and further pushing is required... 
+            _snappedItems = MagItemMovement.CollectSnappedItems(item);
+            
+            MagItemMovement
+               .MoveSnappedItemsHorizontally(context,
+                                           _snappedItems,
+                                           item.PosOnCanvas.X + item.Size.X - MagGraphItem.GridSize.X / 2,
+                                           MagGraphItem.GridSize.X);
+        }
 
         
         context.Selector.Selection.Clear();
@@ -477,7 +488,7 @@ internal sealed class PlaceholderCreation
         var windowSize = ImGui.GetWindowSize();
         var windowPos = ImGui.GetWindowPos();
         Vector2 resultPosOnScreen = new Vector2(screenItemArea.Min.X, screenItemArea.Max.Y + 3);
-        if (_connectionOrientation == MagGraphItem.Directions.Horizontal)
+        if (_connectionOrientation == MagGraphItem.Directions.Vertical)
         {
             var y = screenItemArea.GetCenter().Y - 0.3f * size.Y;
             resultPosOnScreen.Y = y.Clamp(windowPos.Y + 10, windowSize.Y + windowPos.Y - size.Y - 10);
@@ -711,7 +722,7 @@ internal sealed class PlaceholderCreation
                                               && mc.Style == MagGraphConnection.ConnectionStyles.BottomToTop;
                         
                         var splitHorizontal = context.ActiveOutputDirection == MagGraphItem.Directions.Horizontal &&
-                                              mc.Style == MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal;
+                                              mc.Style == MagGraphConnection.ConnectionStyles.RightToLeft;
                         
                         if (!splitVertically && !splitHorizontal)
                             continue;
@@ -744,7 +755,7 @@ internal sealed class PlaceholderCreation
             }
 
             // Push snapped ops further down if new op exceed initial default height
-            if(_connectionOrientation == MagGraphItem.Directions.Vertical) 
+            //if(_connectionOrientation == MagGraphItem.Directions.Vertical) 
             {
                 var newItem = new MagGraphItem
                                   {
