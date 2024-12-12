@@ -47,17 +47,18 @@ internal sealed partial class MagGraphCanvas
                 case MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal:
                 {
                     var isPotentialSplitTarget = _context.ItemMovement.SplitInsertionPoints.Count > 0
+                                                 && !_context.ItemMovement.DraggedItems.Contains( connection.SourceItem)
                                                  && _context.ItemMovement.SplitInsertionPoints
-                                                            .Any(x
-                                                                     => x.Direction == MagGraphItem.Directions.Horizontal
-                                                                        && x.Type == type);
+                                                            .Any(sp
+                                                                     => sp.Direction == MagGraphItem.Directions.Horizontal
+                                                                        && sp.Type == type);
                     if (isPotentialSplitTarget)
                     {
                         var extend = new Vector2(0, MagGraphItem.GridSize.Y * CanvasScale * 0.4f);
 
                         drawList.AddRectFilled(
                                                sourcePosOnScreen - extend + new Vector2(-1, 0),
-                                               sourcePosOnScreen + extend + new Vector2(0, 0),
+                                               sourcePosOnScreen + extend + new Vector2(1, 0),
                                                typeColor.Fade(Blink)
                                               );
                     }
@@ -70,6 +71,7 @@ internal sealed partial class MagGraphCanvas
                 case MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical:
                 {
                     var isPotentialSplitTarget = _context.ItemMovement.SplitInsertionPoints.Count > 0
+                                                 && !_context.ItemMovement.DraggedItems.Contains( connection.SourceItem)
                                                  && _context.ItemMovement.SplitInsertionPoints
                                                             .Any(x
                                                                      => x.Direction == MagGraphItem.Directions.Vertical
@@ -79,8 +81,8 @@ internal sealed partial class MagGraphCanvas
                         var extend = new Vector2(MagGraphItem.GridSize.X * CanvasScale * 0.4f, 0);
 
                         drawList.AddRectFilled(
-                                               sourcePosOnScreen - extend + new Vector2(0, -1),
-                                               sourcePosOnScreen + extend + new Vector2(0, 0),
+                                               sourcePosOnScreen - extend + new Vector2(0, 0),
+                                               sourcePosOnScreen + extend + new Vector2(0, 1),
                                                typeColor.Fade(Blink)
                                               );
                     }

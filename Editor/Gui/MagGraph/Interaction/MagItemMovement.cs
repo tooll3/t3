@@ -192,6 +192,8 @@ internal sealed partial class MagItemMovement
         var dragExtend = MagGraphItem.GetItemsBounds(DraggedItems);
         dragExtend.Expand(SnapThreshold * context.Canvas.Scale.X);
 
+
+        
         if (_canvas.ShowDebug)
         {
             dl.AddCircle(_canvas.TransformPosition(_dragStartPosInOpOnCanvas), 10, Color.Blue);
@@ -913,7 +915,9 @@ internal sealed partial class MagItemMovement
                                                                 outputAnchor.SlotId,
                                                                 inputAnchor.Direction,
                                                                 inputAnchor.ConnectionType,
-                                                                outputAnchor.PositionOnCanvas[xy] - inputAnchor.PositionOnCanvas[xy]));
+                                                                outputAnchor.PositionOnCanvas[xy] - inputAnchor.PositionOnCanvas[xy],
+                                                                inputAnchor.PositionOnCanvas - itemA.PosOnCanvas
+                                                                ));
                     }
                 }
 
@@ -1229,7 +1233,8 @@ internal sealed partial class MagItemMovement
         Guid OutputId,
         MagGraphItem.Directions Direction,
         Type Type,
-        float Distance);
+        float Distance,
+        Vector2 AnchorOffset);
 
     private readonly HashSet<int> _snappedBorderConnectionHashes = [];
 

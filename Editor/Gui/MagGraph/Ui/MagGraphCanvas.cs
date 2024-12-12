@@ -32,42 +32,37 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
     public bool IsRectVisible(ImRect rect)
     {
         return _visibleCanvasArea.Overlaps(rect);
-        
     }
 
     public bool IsItemVisible(ISelectableCanvasObject item)
     {
         return IsRectVisible(ImRect.RectWithSize(item.PosOnCanvas, item.Size));
     }
-    
-    
+
     public bool IsFocused { get; private set; }
     public bool IsHovered { get; private set; }
 
     public void Draw()
     {
-        IsFocused = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows );
+        IsFocused = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows);
         IsHovered = ImGui.IsWindowHovered();
-        
+
         if (_window.CompositionOp == null)
             return;
-        
-            
+
         if (_window.CompositionOp != _context.CompositionOp)
             _context = new GraphUiContext(_nodeSelection, this, _window.CompositionOp);
-        
+
         _visibleCanvasArea = ImRect.RectWithSize(InverseTransformPositionFloat(ImGui.GetWindowPos()),
                                                  InverseTransformDirection(ImGui.GetWindowSize()));
-        
-        
-        
+
         KeyboardActions.HandleKeyboardActions(_context);
-        
+
         if (FitViewToSelectionHandling.FitViewToSelectionRequested)
             FocusViewToSelection(_context);
-        
+
         _context.EditCommentDialog.Draw(_context.Selector);
-        
+
         // Prepare frame
         //_context.Selector.HoveredIds.Clear();
         _context.Layout.ComputeLayout(_context.CompositionOp);
@@ -100,7 +95,6 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
             HandleFenceSelection(_context, _selectionFence);
         }
 
-
         // Items
         foreach (var item in _context.Layout.Items.Values)
         {
@@ -109,7 +103,6 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
 
         Fonts.FontSmall.Scale = 1;
 
-        
         if (_context.ActiveItem != null)
         {
             if (_context.ActiveItem.Id != _lastHoverId)
@@ -117,22 +110,22 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
                 _hoverStartTime = ImGui.GetTime();
                 _lastHoverId = _context.ActiveItem.Id;
             }
-            
+
             _context.Selector.HoveredIds.Add(_context.ActiveItem.Id);
         }
         else
         {
-            _hoverStartTime = ImGui.GetTime();//float.PositiveInfinity;
+            _hoverStartTime = ImGui.GetTime(); //float.PositiveInfinity;
             _lastHoverId = Guid.Empty;
         }
 
-        
+        HighlightSplitInsertionPoints(drawList, _context);
+
         // Connections
         foreach (var connection in _context.Layout.MagConnections)
         {
             DrawConnection(connection, drawList, _context);
         }
-
 
         // Draw temp connections
         foreach (var t in _context.TempConnections)
@@ -146,7 +139,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
                                             t.SourceItem.Area.Min.Y + MagGraphItem.GridSize.Y * (0.5f + t.OutputLineIndex));
                 sourcePosOnScreen = TransformPosition(sourcePos);
             }
-            
+
             var targetPosOnScreen = mousePos;
             if (t.TargetItem != null)
             {
@@ -157,20 +150,20 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
             {
                 targetPosOnScreen = TransformPosition(_context.Placeholder.PlaceholderItem.PosOnCanvas);
             }
-                
+
             var typeColor = TypeUiRegistry.GetPropertiesForType(t.Type).Color;
             var d = Vector2.Distance(sourcePosOnScreen, targetPosOnScreen) / 2;
-            
+
             drawList.AddBezierCubic(sourcePosOnScreen,
-                                                                 sourcePosOnScreen + new Vector2(d, 0),
-                                                                 targetPosOnScreen - new Vector2(d, 0),
-                                                                 targetPosOnScreen,
-                                                                 typeColor.Fade(0.6f),
-                                                                 2);
+                                    sourcePosOnScreen + new Vector2(d, 0),
+                                    targetPosOnScreen - new Vector2(d, 0),
+                                    targetPosOnScreen,
+                                    typeColor.Fade(0.6f),
+                                    2);
         }
-        
+
         _context.ConnectionHovering.PrepareNewFrame(_context);
-        
+
         _context.Placeholder.DrawPlaceholder(_context, drawList);
 
         // Draw animated Snap indicator
@@ -184,15 +177,37 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
                                    UiColors.ForegroundFull.Fade(progress * 0.2f));
             }
         }
-        
-        
+
         if (FrameStats.Current.OpenedPopUpName == string.Empty)
             CustomComponents.DrawContextMenuForScrollCanvas(() => ContextMenu.DrawContextMenuContent(_context), ref _contextMenuIsOpen);
-        
+
         _context.StateMachine.UpdateAfterDraw(_context);
     }
 
     private bool _contextMenuIsOpen;
+
+    private void HighlightSplitInsertionPoints(ImDrawListPtr drawList, GraphUiContext context)
+    {
+        foreach (var sp in context.ItemMovement.SplitInsertionPoints)
+        {
+            var inputItem = context.ItemMovement.DraggedItems.FirstOrDefault(i => i.Id == sp.InputItemId);
+            if (inputItem == null)
+                continue;
+
+            var center = TransformPosition(inputItem.PosOnCanvas + sp.AnchorOffset);
+
+            var offset = sp.Direction == MagGraphItem.Directions.Vertical 
+                             ? new Vector2(MagGraphItem.GridSize.X / 16 * CanvasScale,0 ) 
+                             : new Vector2(0, MagGraphItem.GridSize.Y / 8 * CanvasScale );
+
+            {
+                drawList.AddLine(center-offset, center+offset, 
+                                 UiColors.ForegroundFull.Fade(MagGraphCanvas.Blink),
+                                 2);
+                //drawList.AddCircle(TransformPosition(inputItem.PosOnCanvas + sp.AnchorOffset), 3, UiColors.ForegroundFull.Fade(MagGraphCanvas.Blink));
+            }
+        }
+    }
 
     private void DrawBackgroundGrids(ImDrawListPtr drawList)
     {
@@ -267,8 +282,6 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         Left = 8,
     }
 
-    
-
     private static readonly ImDrawFlags[] _borderRoundings =
         {
             ImDrawFlags.RoundCornersAll, //        0000      
@@ -317,19 +330,19 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         ImGui.PopFont();
     }
 
-    private static float Blink => MathF.Sin((float)ImGui.GetTime() * 10) * 0.5f + 0.5f;
+    internal static float Blink => MathF.Sin((float)ImGui.GetTime() * 10) * 0.5f + 0.5f;
 
     private void HandleFenceSelection(GraphUiContext context, SelectionFence selectionFence)
     {
         var shouldBeActive =
-            ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup)
-            && _context.StateMachine.CurrentState == GraphStates.Default
-            && _context.StateMachine.StateTime > 0.1f // Prevent glitches when coming from other states.
+                ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup)
+                && _context.StateMachine.CurrentState == GraphStates.Default
+                && _context.StateMachine.StateTime > 0.1f // Prevent glitches when coming from other states.
             ;
-        
-        if(!shouldBeActive)
+
+        if (!shouldBeActive)
             return;
-        
+
         switch (selectionFence.UpdateAndDraw(out var selectMode))
         {
             case SelectionFence.States.PressedButNotMoved:
@@ -396,7 +409,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
     {
         var visibleArea = new ImRect();
         var isFirst = true;
-        
+
         foreach (var item in _context.Layout.Items.Values)
         {
             if (isFirst)
@@ -405,6 +418,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
                 isFirst = false;
                 continue;
             }
+
             visibleArea.Add(item.PosOnCanvas);
         }
 
@@ -425,7 +439,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
     private Vector2 GridSizeOnScreen => TransformDirection(MagGraphItem.GridSize);
     private float CanvasScale => Scale.X;
 
-    public bool ShowDebug =>  _enableDebug;// || ImGui.GetIO().KeyAlt;
+    public bool ShowDebug => _enableDebug; // || ImGui.GetIO().KeyAlt;
 
     private Guid _lastHoverId;
     private double _hoverStartTime;
