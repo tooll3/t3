@@ -245,12 +245,12 @@ internal sealed partial class MagItemMovement
         }
 
         // Highlight best distance
-        if (_canvas.ShowDebug && _snapping.BestDistance < 500)
-        {
-            var p1 = _canvas.TransformPosition(_snapping.OutAnchorPos);
-            var p2 = _canvas.TransformPosition(_snapping.InputAnchorPos);
-            dl.AddLine(p1, p2, UiColors.ForegroundFull.Fade(0.1f), 6);
-        }
+        // if (_canvas.ShowDebug && _snapping.BestDistance < 500)
+        // {
+        //     var p1 = _canvas.TransformPosition(_snapping.OutAnchorPos);
+        //     var p2 = _canvas.TransformPosition(_snapping.InputAnchorPos);
+        //     dl.AddLine(p1, p2, UiColors.ForegroundFull.Fade(0.1f), 6);
+        // }
 
         // Snapped
         var snapPositionChanged = false;
@@ -266,14 +266,12 @@ internal sealed partial class MagItemMovement
             
             var snapPos = mousePosOnCanvas + bestSnapDelta;
             
-            dl.AddLine(_canvas.TransformPosition(mousePosOnCanvas),
-                       context.Canvas.TransformPosition(mousePosOnCanvas) + _canvas.TransformDirection(bestSnapDelta),
-                       Color.White);
+            // dl.AddLine(_canvas.TransformPosition(mousePosOnCanvas),
+            //            context.Canvas.TransformPosition(mousePosOnCanvas) + _canvas.TransformDirection(bestSnapDelta),
+            //            Color.White);
 
             if (Vector2.Distance(snapPos, LastSnapDragPositionOnCanvas) > 2) // ugh. Magic number
             {
-                var distance = Vector2.Distance(snapPos, LastSnapDragPositionOnCanvas);
-                Log.Debug("snapped changed: " + distance);
                 snapPositionChanged = true;
                 LastSnapTime = ImGui.GetTime();
                 LastSnapDragPositionOnCanvas = snapPos;
@@ -966,6 +964,7 @@ internal sealed partial class MagItemMovement
             return false;
         }
 
+
         context.MacroCommand.AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,
                                                                            connection.AsSymbolConnection(),
                                                                            0));
@@ -983,10 +982,21 @@ internal sealed partial class MagItemMovement
                                                                                               connection.TargetInput.Id
                                                                                              ), 0));
 
-        MoveSnappedItemsVertically(context,
-                                   CollectSnappedItems(_snapping.BestA),
-                                   _snapping.OutAnchorPos.Y - MagGraphItem.GridSize.Y / 2,
-                                   insertionPoint.Distance);
+        if (insertionPoint.Direction == MagGraphItem.Directions.Vertical)
+        {
+            
+            MoveSnappedItemsVertically(context,
+                                       CollectSnappedItems(_snapping.BestA),
+                                       _snapping.OutAnchorPos.Y - MagGraphItem.GridSize.Y / 2,
+                                       insertionPoint.Distance);
+        }
+        else
+        {
+            MoveSnappedItemsHorizontally(context,
+                                       CollectSnappedItems(_snapping.BestA),
+                                       _snapping.OutAnchorPos.X - MagGraphItem.GridSize.X / 2,
+                                       insertionPoint.Distance);
+        }
         return true;
     }
 
