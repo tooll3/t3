@@ -718,10 +718,11 @@ internal sealed class PlaceholderCreation
                     // Reroute original connections...
                     foreach (var mc in _snappedSourceOutputLine.ConnectionsOut)
                     {
-                        var splitVertically = context.ActiveOutputDirection == MagGraphItem.Directions.Vertical
-                                              && mc.Style == MagGraphConnection.ConnectionStyles.BottomToTop;
+                        var splitVertically = _connectionOrientation == MagGraphItem.Directions.Vertical
+                                              && (mc.Style == MagGraphConnection.ConnectionStyles.BottomToTop
+                                              );
                         
-                        var splitHorizontal = context.ActiveOutputDirection == MagGraphItem.Directions.Horizontal &&
+                        var splitHorizontal = _connectionOrientation == MagGraphItem.Directions.Horizontal &&
                                               mc.Style == MagGraphConnection.ConnectionStyles.RightToLeft;
                         
                         if (!splitVertically && !splitHorizontal)
