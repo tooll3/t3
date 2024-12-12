@@ -31,6 +31,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
     public required ISelectableCanvasObject Selectable;
     public SymbolUi.Child? ChildUi; // matches Selected for operators
     public Vector2 PosOnCanvas { get => Selectable.PosOnCanvas; set => Selectable.PosOnCanvas = value; }
+    public Vector2 DampedPosOnCanvas;
     public Vector2 Size { get; set; }
 
     public ImRect Area => ImRect.RectWithSize(PosOnCanvas, Size);

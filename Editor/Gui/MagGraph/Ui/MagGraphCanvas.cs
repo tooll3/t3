@@ -181,7 +181,28 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         if (FrameStats.Current.OpenedPopUpName == string.Empty)
             CustomComponents.DrawContextMenuForScrollCanvas(() => ContextMenu.DrawContextMenuContent(_context), ref _contextMenuIsOpen);
 
+        SmoothItemPositions();
+        
+        
         _context.StateMachine.UpdateAfterDraw(_context);
+    }
+
+    /// <summary>
+    /// This a very simple proof-of-concept implementation to test it's fidelity.
+    /// A simple optimization could be to only to this for some time after a drag manipulation and then apply
+    /// the correct position. Also, this animation does not affect connection lines.
+    ///
+    /// It still helps to understand what's going on and feels satisfying. So we're keeping it for now.
+    /// </summary>
+    private void SmoothItemPositions()
+    {
+        foreach (var i in _context.Layout.Items.Values)
+        {
+            var dampAmount =  _context.ItemMovement.DraggedItems.Contains(i)
+                                 ? 0.0f
+                                 : 0.6f;
+            i.DampedPosOnCanvas = Vector2.Lerp( i.PosOnCanvas, i.DampedPosOnCanvas,dampAmount);
+        }
     }
 
     private bool _contextMenuIsOpen;

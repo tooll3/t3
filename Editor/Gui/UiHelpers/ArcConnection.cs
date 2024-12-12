@@ -241,7 +241,7 @@ internal static class GraphConnectionDrawer
             drawList.PathArcTo(Tc, Tc_r, startAngle_Tc, endAngle_Tc, resT);
         }
 
-        var isHovering = ArcConnection.TestHover(ref drawList, out hoverPosition, out  normalizedHoverPos);
+        var isHovering = ArcConnection.TestHoverDrawListPath(ref drawList, out hoverPosition, out  normalizedHoverPos);
 
         // Optionally draw an outline
         if (currentCanvasScale > 0.5f)
@@ -478,7 +478,7 @@ static class ArcConnection
             }
         }
 
-        var isHovering = TestHover(ref drawList, out hoverPosition, out var normalizedLengthPos);
+        var isHovering = TestHoverDrawListPath(ref drawList, out hoverPosition, out var normalizedLengthPos);
         if (currentCanvasScale > 0.5f)
         {
             drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, ColorVariations.OperatorOutline.Apply(color), ImDrawFlags.None,
@@ -512,14 +512,13 @@ static class ArcConnection
     /// <summary>
     /// Uses the line segments of the path to test for hover intersection.
     /// </summary>
-    internal static bool TestHover(ref ImDrawListPtr drawList, out Vector2 positionOnLine, out float normalizedLengthPos)
+    internal static bool TestHoverDrawListPath(ref ImDrawListPtr drawList,  out Vector2 positionOnLine, out float normalizedLengthPos)
     {
         normalizedLengthPos = 0f;
         var hoverLengthPos = 0f;
         positionOnLine= Vector2.Zero;
         var isHovering = false;
         
-        var foreground = ImGui.GetForegroundDrawList();
         if (drawList._Path.Size < 2)
             return false;
 

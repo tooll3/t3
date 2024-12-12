@@ -50,8 +50,8 @@ internal sealed partial class MagGraphCanvas
         var typeColor = typeUiProperties.Color;
         var labelColor = ColorVariations.OperatorLabel.Apply(typeColor);
 
-        var pMin = TransformPosition(item.PosOnCanvas);
-        var pMax = TransformPosition(item.PosOnCanvas + item.Size);
+        var pMin = TransformPosition(item.DampedPosOnCanvas);
+        var pMax = TransformPosition(item.DampedPosOnCanvas + item.Size);
         var pMinVisible = pMin;
         var pMaxVisible = pMax;
 

@@ -101,6 +101,7 @@ internal sealed class MagGraphLayout
                                          ChildUi = childUi,
                                          Size = MagGraphItem.GridSize,
                                          LastUpdateCycle = _structureUpdateCycle,
+                                         DampedPosOnCanvas = childUi.PosOnCanvas,
                                      };
                 addedItemCount++;
             }

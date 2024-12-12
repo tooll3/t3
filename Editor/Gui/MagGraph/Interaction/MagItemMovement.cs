@@ -73,6 +73,7 @@ internal sealed partial class MagItemMovement
     {
         _lastAppliedOffset = Vector2.Zero;
         SplitInsertionPoints.Clear();
+        DraggedItems.Clear();
     }
 
     /// <summary>

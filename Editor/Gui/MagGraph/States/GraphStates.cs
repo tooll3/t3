@@ -151,8 +151,6 @@ internal static class GraphStates
                          {
                              context.ItemMovement.SetDraggedItemIdsToSnappedForItem(item);
                          }
-                         
-                         //context.ItemMovement.StartDragOperation(composition);
                      },
               Update: context =>
                       {
@@ -161,6 +159,7 @@ internal static class GraphStates
                           if (!ImGui.IsMouseDown(ImGuiMouseButton.Left))
                           {
                               MagItemMovement.SelectActiveItem(context);
+                              //context.ItemMovement.Reset();
                               context.StateMachine.SetState(Default, context);
                               return;
                           }

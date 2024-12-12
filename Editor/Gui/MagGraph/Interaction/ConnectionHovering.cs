@@ -83,33 +83,48 @@ internal sealed class ConnectionHovering
             drawList.AddCircleFilled(firstHover.PositionOnScreen, hoverIndicatorRadius, firstHover.Color, 12);
             
             // Prepare disconnecting from input slot...
+            var showIndicator = false;
             if (region == LineRegions.End)
             {
                 if (_lastConnectionHovers.Count == 1)
                 {
-                    var inputPosInScreen = context.Canvas.TransformPosition(firstHover.Connection.TargetPos);
-                    drawList.AddCircle(inputPosInScreen, hoverIndicatorRadius, firstHover.Color, 24);
-
                     if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
                     {
                         ConnectionHoversWhenClicked.Clear();
                         ConnectionHoversWhenClicked.AddRange(_lastConnectionHovers);
                         context.StateMachine.SetState(GraphStates.HoldingConnectionEnd, context);
                     }
+                    showIndicator = true;
                 }
             }
-            if (region == LineRegions.Beginning)
+            else if (region == LineRegions.Beginning)
             {
-                var outputPosOnScreen = context.Canvas.TransformPosition(firstHover.Connection.SourcePos);
-                drawList.AddCircle(outputPosOnScreen, hoverIndicatorRadius, firstHover.Color, 24);
-                
                 if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
                 {
                     ConnectionHoversWhenClicked.Clear();
                     ConnectionHoversWhenClicked.AddRange(_lastConnectionHovers);
                     context.StateMachine.SetState(GraphStates.HoldingConnectionBeginning, context);
                 }
+                showIndicator = true;
             }            
+            else if (region == LineRegions.Center)
+            {
+                if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                {
+                    ConnectionHoversWhenClicked.Clear();
+                    ConnectionHoversWhenClicked.AddRange(_lastConnectionHovers);
+                    context.StateMachine.SetState(GraphStates.HoldingConnectionBeginning, context);
+                }
+                showIndicator = true;
+
+            }
+
+            if (showIndicator)
+            {
+                var inputPosInScreen = context.Canvas.TransformPosition(firstHover.Connection.TargetPos);
+                drawList.AddCircle(inputPosInScreen, hoverIndicatorRadius, firstHover.Color, 24);
+            }
+
             
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5,5));
             ImGui.BeginTooltip();
@@ -223,7 +238,7 @@ internal sealed class ConnectionHovering
 
     internal static LineRegions GetLineRegion(HoverPoint hoverPoint)
     {
-        const float threshold = 0.3f;
+        const float threshold = 0.5f;
         return hoverPoint.NormalizedDistanceOnLine switch
                    {
                        < threshold     => LineRegions.Beginning,
