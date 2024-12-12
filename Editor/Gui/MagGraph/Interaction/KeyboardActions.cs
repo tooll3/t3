@@ -30,7 +30,7 @@ internal static class KeyboardActions
 
         if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))
         {
-            NodeActions.DeleteSelectedElements(context.Selector, compositionUi);
+            Modifications.DeleteSelectedOps(context);
         }
 
         if (KeyboardBinding.Triggered(UserActions.ToggleDisabled))

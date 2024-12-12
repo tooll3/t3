@@ -56,10 +56,10 @@ internal static class GraphStates
                                   context.StateMachine.SetState(Placeholder, context);
                               }
                               
-                              else if (ImGui.IsKeyReleased(ImGuiKey.Delete) || ImGui.IsKeyReleased(ImGuiKey.Backspace))
-                              {
-                                  Modifications.DeleteSelectedOps(context);
-                              }
+                              // else if (ImGui.IsKeyReleased(ImGuiKey.Delete) || ImGui.IsKeyReleased(ImGuiKey.Backspace))
+                              // {
+                              //     Modifications.DeleteSelectedOps(context);
+                              // }
                           }
                           
                           // Mouse click
@@ -159,7 +159,7 @@ internal static class GraphStates
                           if (!ImGui.IsMouseDown(ImGuiMouseButton.Left))
                           {
                               MagItemMovement.SelectActiveItem(context);
-                              //context.ItemMovement.Reset();
+                              context.ItemMovement.Reset();
                               context.StateMachine.SetState(Default, context);
                               return;
                           }
