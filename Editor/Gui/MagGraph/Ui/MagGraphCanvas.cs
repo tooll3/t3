@@ -100,7 +100,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         {
             DrawItem(item, drawList, _context);
         }
-
+        
         Fonts.FontSmall.Scale = 1;
 
         if (_context.ActiveItem != null)
@@ -143,7 +143,10 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
             var targetPosOnScreen = mousePos;
             if (t.TargetItem != null)
             {
-                targetPosOnScreen = TransformPosition(t.TargetItem.PosOnCanvas);
+                sourcePosOnScreen = mousePos;
+                var targetPos = new Vector2(t.TargetItem.Area.Min.X,
+                                            t.TargetItem.Area.Min.Y + MagGraphItem.GridSize.Y * (0.5f + t.InputLineIndex));
+                targetPosOnScreen = TransformPosition(targetPos);
             }
 
             else if (_context.Placeholder.PlaceholderItem != null)
@@ -357,12 +360,16 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
     {
         var shouldBeActive =
                 ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup)
-                && _context.StateMachine.CurrentState == GraphStates.Default
-                && _context.StateMachine.StateTime > 0.1f // Prevent glitches when coming from other states.
+                && (_context.StateMachine.CurrentState == GraphStates.Default 
+                    || _context.StateMachine.CurrentState == GraphStates.HoldBackground)
+                && _context.StateMachine.StateTime > 0.01f // Prevent glitches when coming from other states.
             ;
 
         if (!shouldBeActive)
+        {
+            selectionFence.Reset();
             return;
+        }
 
         switch (selectionFence.UpdateAndDraw(out var selectMode))
         {

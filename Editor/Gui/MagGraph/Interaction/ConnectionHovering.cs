@@ -83,7 +83,6 @@ internal sealed class ConnectionHovering
             drawList.AddCircleFilled(firstHover.PositionOnScreen, hoverIndicatorRadius, firstHover.Color, 12);
             
             // Prepare disconnecting from input slot...
-            var showIndicator = false;
             if (region == LineRegions.End)
             {
                 if (_lastConnectionHovers.Count == 1)
@@ -94,7 +93,10 @@ internal sealed class ConnectionHovering
                         ConnectionHoversWhenClicked.AddRange(_lastConnectionHovers);
                         context.StateMachine.SetState(GraphStates.HoldingConnectionEnd, context);
                     }
-                    showIndicator = true;
+                    
+                    // Show indicator at end...
+                    var inputPosInScreen = context.Canvas.TransformPosition(firstHover.Connection.TargetPos);
+                    drawList.AddCircle(inputPosInScreen, hoverIndicatorRadius, firstHover.Color, 24,2);
                 }
             }
             else if (region == LineRegions.Beginning)
@@ -105,25 +107,20 @@ internal sealed class ConnectionHovering
                     ConnectionHoversWhenClicked.AddRange(_lastConnectionHovers);
                     context.StateMachine.SetState(GraphStates.HoldingConnectionBeginning, context);
                 }
-                showIndicator = true;
+                
+                var outputPosInScreen = context.Canvas.TransformPosition(firstHover.Connection.SourcePos);
+                drawList.AddCircle(outputPosInScreen, hoverIndicatorRadius, firstHover.Color, 24,2); 
             }            
-            else if (region == LineRegions.Center)
-            {
-                if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
-                {
-                    ConnectionHoversWhenClicked.Clear();
-                    ConnectionHoversWhenClicked.AddRange(_lastConnectionHovers);
-                    context.StateMachine.SetState(GraphStates.HoldingConnectionBeginning, context);
-                }
-                showIndicator = true;
+            // else if (region == LineRegions.Center)
+            // {
+            //     if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+            //     {
+            //         ConnectionHoversWhenClicked.Clear();
+            //         ConnectionHoversWhenClicked.AddRange(_lastConnectionHovers);
+            //         context.StateMachine.SetState(GraphStates.HoldingConnectionBeginning, context);
+            //     }
+            // }
 
-            }
-
-            if (showIndicator)
-            {
-                var inputPosInScreen = context.Canvas.TransformPosition(firstHover.Connection.TargetPos);
-                drawList.AddCircle(inputPosInScreen, hoverIndicatorRadius, firstHover.Color, 24);
-            }
 
             
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5,5));

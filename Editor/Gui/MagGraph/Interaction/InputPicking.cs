@@ -96,10 +96,15 @@ internal static class InputPicking
             Log.Debug("Sorry, this connection would create a cycle.");
             return;
         }
+
+        var inputConnectionCount = context.CompositionOp.Symbol.Connections.Count(c => c.TargetParentOrChildId == context.ItemForInputSelection.Id
+                                                                                       && c.TargetSlotId == targetInputUi.Id);
         
-        context.MacroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol,
-                                                                        connectionToAdd,
-                                                                        0));
+        
+         context.MacroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol,
+                                                                         connectionToAdd,
+                                                                         inputConnectionCount));
+        
         
         // Find insertion index
         var inputLineIndex = 0;

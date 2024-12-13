@@ -88,6 +88,11 @@ public sealed class SelectionFence
         }
     }
 
+    public void Reset()
+    {
+        _state = States.Inactive;
+    }
+
     public enum SelectModes
     {
         Add = 0,

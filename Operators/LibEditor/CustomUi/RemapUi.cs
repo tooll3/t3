@@ -1,6 +1,7 @@
 using System;
 using ImGuiNET;
 using Lib.math.@float;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.ChildUi.WidgetUi;
@@ -29,23 +30,24 @@ public static class RemapUi
         // Draw interaction
         ImGui.SetCursorScreenPos(biasGraphRect.Min);
 
-        var value = remap.Value.Value;
-        var inMin = remap.RangeInMin.TypedInputValue.Value;
-        var inMax = remap.RangeInMax.TypedInputValue.Value;
-        var outMin = remap.RangeOutMin.TypedInputValue.Value;
-        var outMax = remap.RangeOutMax.TypedInputValue.Value;
+        var value = remap.Value.GetCurrentValue();
+        var inMin = remap.RangeInMin.GetCurrentValue();
+        var inMax = remap.RangeInMax.GetCurrentValue();
+        var outMin = remap.RangeOutMin.GetCurrentValue();
+        var outMax = remap.RangeOutMax.GetCurrentValue();
 
         var inFragment = Math.Abs(inMin - inMax) < 0.001f ? 0 : (value - inMin) / (inMax - inMin);
         var outFragment = Math.Abs(outMin - outMax) < 0.001f ? 0 : (remap.Result.Value - outMin) / (outMax - outMin);
         
         drawList.PushClipRect(biasGraphRect.Min, biasGraphRect.Max, true);
 
+        var canvasFade = canvasScale.X.RemapAndClamp(0.7f, 1.5f, 0, 1);
+        
         // Draw mapping graph...
         {
             const int steps = 35;
             var points = new Vector2[steps];
-            var biasAndGain = remap.BiasAndGain.Value;
-
+            var biasAndGain = new Vector2(0.5f, 0.5f);// remap.BiasAndGain.GetCurrentValue();
             var p = new Vector2(MathUtils.Lerp(biasGraphRect.Min.X, biasGraphRect.Max.X, inFragment),
                                 MathUtils.Lerp(biasGraphRect.Max.Y, biasGraphRect.Min.Y, outFragment));
             drawList.AddCircleFilled(p,
@@ -61,7 +63,7 @@ public static class RemapUi
                 var y = MathUtils.Lerp(biasGraphRect.Max.Y, biasGraphRect.Min.Y, f);
                 drawList.AddLine(new Vector2(biasGraphRect.Min.X, y), new
                                      Vector2(biasGraphRect.Max.X, y),
-                                 UiColors.BackgroundFull.Fade(0.2f), 1);
+                                 UiColors.BackgroundFull.Fade(0.2f * canvasFade), 1);
 
                 points[i] = new Vector2(MathUtils.Lerp(biasGraphRect.Min.X, biasGraphRect.Max.X, t),
                                         MathUtils.Lerp(biasGraphRect.Min.Y, biasGraphRect.Max.Y, 1 - f));

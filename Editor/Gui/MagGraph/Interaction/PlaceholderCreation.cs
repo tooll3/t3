@@ -386,9 +386,9 @@ internal sealed class PlaceholderCreation
 
         // Background and Outline
         drawList.AddRectFilled(pMinVisible + Vector2.One * canvasScale, pMaxVisible - Vector2.One,
-                               UiColors.BackgroundFull, 6 * canvasScale);
+                               UiColors.BackgroundFull, 2 * canvasScale);
 
-        drawList.AddRect(pMinVisible, pMaxVisible, UiColors.ForegroundFull, 6 * canvasScale);
+        //drawList.AddRect(pMinVisible, pMaxVisible, UiColors.ForegroundFull, 6 * canvasScale);
 
         if (_focusInputNextTime)
         {
@@ -397,16 +397,26 @@ internal sealed class PlaceholderCreation
             _selectedItemChanged = true;
         }
 
-        var posInWindow = pMin - ImGui.GetWindowPos();
+        var labelPos = new Vector2(pMin.X,
+                                   (pMin.Y + pMax.Y) / 2 - ImGui.GetFrameHeight() / 2);
+        
+        
+        var posInWindow = labelPos - ImGui.GetWindowPos();
 
         // var odl = ImGui.GetForegroundDrawList();
         // odl.AddRect(ImGui.GetWindowPos(), ImGui.GetWindowPos() + ImGui.GetWindowSize(), Color.Red);
 
         ImGui.SetCursorPos(posInWindow);
-        //
+        
+        
         if (string.IsNullOrEmpty(_favoriteGroup))
         {
-            var padding = new Vector2(7, 6);
+            var padding = new Vector2(9, 3);
+            if (string.IsNullOrEmpty(_filter.SearchString))
+            {
+                drawList.AddText(labelPos + padding, UiColors.TextDisabled, "search...");
+            }
+            
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, padding);
             ImGui.PushStyleColor(ImGuiCol.FrameBg, Color.Transparent.Rgba);
             ImGui.SetNextItemWidth(item.Size.X);
@@ -490,7 +500,7 @@ internal sealed class PlaceholderCreation
         Vector2 resultPosOnScreen = new Vector2(screenItemArea.Min.X, screenItemArea.Max.Y + 3);
         if (_connectionOrientation == MagGraphItem.Directions.Vertical)
         {
-            var y = screenItemArea.GetCenter().Y - 0.3f * size.Y;
+            var y = screenItemArea.GetCenter().Y - 0.1f * size.Y;
             resultPosOnScreen.Y = y.Clamp(windowPos.Y + 10, windowSize.Y + windowPos.Y - size.Y - 10);
             resultPosOnScreen.X = screenItemArea.Max.X.Clamp(windowPos.X + 10,
                                                              windowPos.X + windowSize.X - size.X - 10);
@@ -694,7 +704,7 @@ internal sealed class PlaceholderCreation
         var addSymbolChildCommand = new AddSymbolChildCommand(parentSymbol, symbol.Id) { PosOnCanvas = PlaceholderItem.PosOnCanvas };
         context.MacroCommand.AddAndExecCommand(addSymbolChildCommand);
 
-        // Select new node
+        // Get created node
         if (!parentSymbolUi.ChildUis.TryGetValue(addSymbolChildCommand.AddedChildId, out var newChildUi))
         {
             Log.Warning($"Unable to create new operator - failed to retrieve new child ui \"{addSymbolChildCommand.AddedChildId}\" " +
