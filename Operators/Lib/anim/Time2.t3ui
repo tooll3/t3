@@ -1,0 +1,48 @@
+{
+  "Id": "b0d75f21-df33-460b-beab-d8c5e1f23e5e"/*Time2*/,
+  "Description": "A cleaned up version of Time adds mode to clarify if time is returned in bars or seconds",
+  "InputUis": [
+    {
+      "InputId": "6d2f783a-23b7-425c-a4e3-cfcdcd61cf3a"/*Mode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "e0f765f3-ac71-45c9-87a4-e9be3fa9a9a0"/*SpeedFactor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Min": -5.0,
+      "Max": 5.0
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "fd3049aa-4c22-405b-b9b4-0a2474d0e377"/*TimeInBars*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "80c8a8c2-6441-48af-a35d-2cca4b73b947"/*TimeInSecs*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "09b2abf8-ec45-4248-8d85-ffc32c65c5c4",
+      "Title": "Time Magic",
+      "Description": "A 4min video tutorial about overriding time.",
+      "LinkUrl": "https://www.youtube.com/watch?v=COd7gkJB0KQ&list=PLj-rnPROvbn2cfnUwuyb5gRj-juOYUC7T&index=22",
+      "LinkType": "TutorialVideo"
+    }
+  ]
+}
