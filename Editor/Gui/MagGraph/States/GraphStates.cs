@@ -304,13 +304,15 @@ internal static class GraphStates
                               return;
                           }
                           
+                          var posOnCanvas = context.Canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
+                          context.PeekAnchorInCanvas = posOnCanvas;
+                          
                           var mouseReleased = !ImGui.IsMouseDown(ImGuiMouseButton.Left);
                           if (!mouseReleased)
                               return;
                           
                           var hasDisconnections = context.TempConnections.Any(c => c.WasDisconnected);
                           
-                          var posOnCanvas = context.Canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
                           
                           var droppedOnItem = InputPicking.TryInitializeAtPosition(context, posOnCanvas);
                           if (droppedOnItem)
@@ -436,6 +438,7 @@ internal static class GraphStates
                                   
                                   context.TempConnections.Add(tempConnection);
                                   context.DraggedPrimaryOutputType = connection.Type;
+                                  context.Layout.FlagAsChanged();
                               }
                               
                               //context.PrimaryOutputItem = connection.SourceItem;

@@ -499,7 +499,6 @@ internal class SelectableNodeMovement(GraphWindow window, INodeCanvas canvas, No
 
             // Queue length is optimized for 60 fps adjust length for different frame rates
             var queueLength = (int)(QueueLength * (60f / ImGui.GetIO().Framerate));
-            Log.Debug(" " + queueLength);
             if (Directions.Count > queueLength)
                 Directions.RemoveAt(0);
 

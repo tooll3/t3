@@ -39,9 +39,8 @@ internal sealed partial class MagGraphCanvas
             idleFadeFactor = MathUtils.RemapAndClamp(framesSinceLastUpdate, 0f, 60f, 1f, 0.6f);
         }
         
-        
-        
         var hoverProgress = GetHoverTimeForId(item.Id).RemapAndClamp(0, 0.3f,0, 1);
+        
 
         var smallFontScaleFactor = CanvasScale.Clamp(0.5f, 2);
         
@@ -200,7 +199,9 @@ internal sealed partial class MagGraphCanvas
         // Indicate hidden matching inputs...
         if (_context.DraggedPrimaryOutputType != null
             && item.Variant == MagGraphItem.Variants.Operator
-            && !context.ItemMovement.IsItemDragged(item))
+            && _context.StateMachine.CurrentState == GraphStates.DragOutput
+            && !context.ItemMovement.IsItemDragged(item)
+            && _context.ActiveSourceItem != null)
         {
             Debug.Assert(item.Instance != null); // should be true to operator variant
             
@@ -217,23 +218,50 @@ internal sealed partial class MagGraphCanvas
 
             if (hasMatchingTypes)
             {
-                if (_context.ActiveSourceItem != null)
+                var indicatorPos = new Vector2(pMin.X, pMin.Y + MagGraphItem.GridSize.Y / 2 * CanvasScale);
+                var isPeeked = item.Area.Contains(_context.PeekAnchorInCanvas);
+                if (isPeeked)
                 {
-                    var indicatorPos = new Vector2(pMin.X, pMin.Y + MagGraphItem.GridSize.Y / 2 * CanvasScale);
-                    var isPeeked = item.Area.Contains(_context.PeekAnchorInCanvas);
-                    if (isPeeked)
+                    drawList.AddCircleFilled(indicatorPos, 4, UiColors.ForegroundFull);
+                }
+                else
+                {
+                    drawList.AddCircle(indicatorPos, 3, UiColors.ForegroundFull.Fade(Blink));
+                }
+
+                var isHoveredForInputPicking = ImRect.RectWithSize(item.DampedPosOnCanvas, item.Size).Contains(context.PeekAnchorInCanvas);
+                if(isHoveredForInputPicking) 
+                {
+                    drawList.AddRect(pMinVisible, pMaxVisible, UiColors.ForegroundFull, 6 * CanvasScale, imDrawFlags);
+
+                    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8,8));
+                    ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 3);
+                    ImGui.BeginTooltip();
+                    var childUi = item.SymbolUi;
+                    if (childUi != null)
                     {
-                        drawList.AddCircleFilled(indicatorPos, 4, UiColors.ForegroundFull);
+                        var inputIndex = 0;
+                        foreach (var inputUi in childUi.InputUis.Values)
+                        {
+                            var input = item.Instance!.Inputs[inputIndex];
+                            if (inputUi.Type == context.DraggedPrimaryOutputType)
+                            {
+                                var isConnected = input.HasInputConnections;
+                                var prefix = isConnected ? "× " : "   ";
+                                ImGui.Selectable(prefix + inputUi.InputDefinition.Name);
+                            }
+                    
+                            inputIndex++;
+                        }
                     }
-                    else
-                    {
-                        drawList.AddCircle(indicatorPos, 3, UiColors.ForegroundFull.Fade(Blink));
-                    }
+                    ImGui.EndTooltip();
+                    ImGui.PopStyleVar(2);
+
                 }
             }
         }
 
-        // Primary input indicator
+        // Missing primary input indicator
         if (item.InputLines.Length > 0 && item.InputLines[0].InputUi != null)
         {
             var inputLine = item.InputLines[0];

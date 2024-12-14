@@ -62,7 +62,7 @@ internal sealed partial class MagItemMovement
             context.CompleteMacroCommand();
         }
 
-        if (!InputPicking.TryInitializeInputSelectionPicker(context))
+        if (!InputPicking.TryInitializeInputSelectionPickerForDraggedItem(context))
             Reset();
     }
 
@@ -327,7 +327,7 @@ internal sealed partial class MagItemMovement
         }
     }
 
-    private HashSet<int> _unsnappedBorderConnectionsBeforeDrag = [];
+    private readonly HashSet<int> _unsnappedBorderConnectionsBeforeDrag = [];
 
     /// <summary>
     /// Handles op disconnection and collapsed
@@ -338,7 +338,7 @@ internal sealed partial class MagItemMovement
 
         var unsnappedConnections = new List<MagGraphConnection>();
 
-        var enableDisconnected = UserSettings.Config.DisconnectOnUnsnap ^ ImGui.GetIO().KeyCtrl;
+        var enableDisconnected = UserSettings.Config.DisconnectOnUnsnap ^ ImGui.GetIO().KeyShift;
         if (!enableDisconnected)
             return;
 

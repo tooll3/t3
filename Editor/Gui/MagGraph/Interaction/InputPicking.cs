@@ -18,7 +18,7 @@ namespace T3.Editor.Gui.MagGraph.Interaction;
 /// </summary>
 internal static class InputPicking
 {
-    internal static bool TryInitializeInputSelectionPicker(GraphUiContext context)
+    internal static bool TryInitializeInputSelectionPickerForDraggedItem(GraphUiContext context)
     {
         if (context.ActiveSourceItem == null)
             return false;
@@ -189,7 +189,7 @@ internal static class InputPicking
                     if (inputUi.Type == context.DraggedPrimaryOutputType)
                     {
                         var isConnected = input.HasInputConnections;
-                        var prefix = isConnected ? "> " : "   ";
+                        var prefix = isConnected ? "× " : "   ";
                         if (ImGui.Selectable(prefix + inputUi.InputDefinition.Name))
                         {
                             TryConnectHiddenInput(context, inputUi);
