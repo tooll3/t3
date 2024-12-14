@@ -498,7 +498,9 @@ internal class SelectableNodeMovement(GraphWindow window, INodeCanvas canvas, No
                 return false;
 
             // Queue length is optimized for 60 fps adjust length for different frame rates
-            if (Directions.Count > QueueLength * (1 / 60f) / T3.Core.Animation.Playback.LastFrameDuration)
+            var queueLength = (int)(QueueLength * (60f / ImGui.GetIO().Framerate));
+            Log.Debug(" " + queueLength);
+            if (Directions.Count > queueLength)
                 Directions.RemoveAt(0);
 
             // Count direction changes
