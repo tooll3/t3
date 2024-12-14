@@ -60,6 +60,7 @@ internal sealed partial class MagItemMovement
                                                         MagGraphItem.Directions.Horizontal,
                                                         new Vector2(a.Area.Max.X, a.Area.Min.Y + (0.5f + outputLine.VisibleIndex) * MagGraphItem.LineHeight),
                                                         new Vector2(b.Area.Min.X, b.Area.Min.Y + (0.5f + bInputLine.VisibleIndex) * MagGraphItem.LineHeight));
+                        
                     }
                 }
             }
@@ -81,6 +82,8 @@ internal sealed partial class MagItemMovement
                 if (d >= BestDistance)
                     return;
 
+                ShowDebugLine(outPos, inPos, a.PrimaryType);
+                
                 BestDistance = d;
                 OutAnchorPos = outPos;
                 InputAnchorPos = inPos;
@@ -94,19 +97,19 @@ internal sealed partial class MagItemMovement
                 MultiInputIndex = multiInputIndexIfValid;
             }
 
-            // void ShowDebugLine(Vector2 outPos, Vector2 inPos, Type connectionType)
-            // {
-            //     if (!canvas.ShowDebug)
-            //         return;
-            //
-            //     var drawList = ImGui.GetForegroundDrawList();
-            //     var uiPrimaryColor = TypeUiRegistry.GetPropertiesForType(connectionType).Color;
-            //     drawList.AddLine(canvas.TransformPosition(outPos),
-            //                      canvas.TransformPosition(inPos),
-            //                      uiPrimaryColor.Fade(0.4f));
-            //
-            //     drawList.AddCircleFilled(canvas.TransformPosition(inPos), 6, uiPrimaryColor.Fade(0.4f));
-            // }
+            void ShowDebugLine(Vector2 outPos, Vector2 inPos, Type connectionType)
+            {
+                if (!canvas.ShowDebug)
+                    return;
+            
+                var drawList = ImGui.GetForegroundDrawList();
+                var uiPrimaryColor = TypeUiRegistry.GetPropertiesForType(connectionType).Color;
+                drawList.AddLine(canvas.TransformPosition(outPos),
+                                 canvas.TransformPosition(inPos),
+                                 uiPrimaryColor.Fade(0.4f));
+            
+                drawList.AddCircleFilled(canvas.TransformPosition(inPos), 6, uiPrimaryColor.Fade(0.4f));
+            }
         }
 
         public void TestItemsForInsertion(MagGraphItem item, MagGraphItem insertionAnchorItem, SplitInsertionPoint insertionPoint)

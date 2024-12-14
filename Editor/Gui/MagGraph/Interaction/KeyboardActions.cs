@@ -26,6 +26,7 @@ internal static class KeyboardActions
         {
             NodeActions.CopySelectedNodesToClipboard(context.Selector, compositionOp);
             NodeActions.PasteClipboard(context.Selector, context.Canvas, compositionOp);
+            context.Layout.FlagAsChanged();
         }
 
         if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))

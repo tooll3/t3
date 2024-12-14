@@ -147,6 +147,7 @@ internal static class InputPicking
         
         // Complete drag interaction
         context.ItemMovement.Reset();
+        context.Layout.FlagAsChanged();
     }
     
     internal static void DrawHiddenInputSelector(GraphUiContext context)

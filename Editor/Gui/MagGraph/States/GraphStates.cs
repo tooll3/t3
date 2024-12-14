@@ -295,13 +295,7 @@ internal static class GraphStates
     
     internal static State DragOutput
         = new(
-              Enter: _ =>
-                     {
-                         // TODO: Should be a reset method
-                         //context.TempConnections.Clear();
-                         //context.PrimaryOutputItem = null;
-                         //context.DraggedPrimaryOutputType = null;
-                     },
+              Enter: _ => { },
               Update: context =>
                       {
                           if (ImGui.IsKeyDown(ImGuiKey.Escape))
@@ -369,7 +363,7 @@ internal static class GraphStates
                               context.StartMacroCommand("Reconnect from input")
                                      .AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,
                                                                                     connection.AsSymbolConnection(),
-                                                                                    0));
+                                                                                    connection.MultiInputIndex));
                               
                               var tempConnection = new MagGraphConnection
                                                        {
@@ -391,6 +385,7 @@ internal static class GraphStates
                               context.DraggedPrimaryOutputType = connection.Type;
                               context.ActiveItem = connection.SourceItem;
                               context.StateMachine.SetState(DragOutput, context);
+                              context.Layout.FlagAsChanged();
                           }
                       },
               Exit: _ => { }

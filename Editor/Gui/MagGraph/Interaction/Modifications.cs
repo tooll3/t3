@@ -110,6 +110,7 @@ internal static class Modifications
         
         context.Layout.FlagAsChanged();
         context.Selector.Clear();
+        context.Layout.FlagAsChanged();
     }
 
     //private record ItemWithChildUi(MagGraphItem Item, SymbolUi.Child UiChild);
