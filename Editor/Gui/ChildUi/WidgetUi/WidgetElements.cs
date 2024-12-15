@@ -136,7 +136,6 @@ public static class WidgetElements
     public static bool DrawRateLabelWithTitle(InputSlot<float> inputSlot, ImRect selectableScreenRect, ImDrawListPtr drawList, string nodeLabel, Vector2 canvasScale)
     {
         var rate = inputSlot.Input.Value is InputValue<float> floatValue ? floatValue.Value : inputSlot.Value;
-        var modified = false;
 
         var currentRateIndex = SpeedRate.FindClosestRateIndex(rate);
         var formattedValue = currentRateIndex == -1
@@ -170,13 +169,11 @@ public static class WidgetElements
             {
                 if (dragDelta.Y > 0 && currentRateIndex > 0)
                 {
-                    inputSlot.TypedInputValue.Value = SpeedRate.RelevantRates[currentRateIndex - 1].Factor;
-                    modified = true;
+                    inputSlot.SetTypedInputValue(SpeedRate.RelevantRates[currentRateIndex - 1].Factor);
                 }
                 else if (dragDelta.Y < 0 && currentRateIndex < SpeedRate.RelevantRates.Length - 1)
                 {
-                    inputSlot.TypedInputValue.Value = SpeedRate.RelevantRates[currentRateIndex + 1].Factor;
-                    modified = true;
+                    inputSlot.SetTypedInputValue(SpeedRate.RelevantRates[currentRateIndex + 1].Factor);
                 }
 
                 ImGui.ResetMouseDragDelta();
@@ -185,7 +182,7 @@ public static class WidgetElements
 
         DrawSmallTitle(drawList, selectableScreenRect, nodeLabel, canvasScale);
 
-        return modified;
+        return isActive;
     }
 
     /// <summary>
