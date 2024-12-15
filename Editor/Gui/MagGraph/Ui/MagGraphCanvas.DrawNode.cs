@@ -201,7 +201,7 @@ internal sealed partial class MagGraphCanvas
         // Indicate hidden matching inputs...
         if (_context.DraggedPrimaryOutputType != null
             && item.Variant == MagGraphItem.Variants.Operator
-            && _context.StateMachine.CurrentState == GraphStates.DragOutput
+            && _context.StateMachine.CurrentState == GraphStates.DragConnectionEnd
             && !context.ItemMovement.IsItemDragged(item)
             && _context.ActiveSourceItem != null)
         {
@@ -457,6 +457,18 @@ internal sealed partial class MagGraphCanvas
             }
             else
             {
+                // Register for input snapping...
+                var isPotentialConnectionStartDropTarget = _context.StateMachine.CurrentState == GraphStates.DragConnectionEnd
+                                                           && _context.DraggedPrimaryOutputType == inputAnchor.ConnectionType
+                                                           && inputAnchor.SnappedConnectionHash == MagGraphItem.FreeAnchor;
+
+                if (isPotentialConnectionStartDropTarget)
+                {
+                    color = ColorVariations.OperatorBackground.Apply(type2UiProperties.Color).Fade(Blink);
+                    InputSnapper.RegisterAsPotentialTargetInput(context, item, inputAnchor);
+                }
+                
+                
                 var pp = new Vector2(pMinVisible.X - 1, p.Y);
                 drawList.AddTriangleFilled(pp + new Vector2(1, 0) + new Vector2(-0, -1.5f) * CanvasScale * 1.5f,
                                            pp + new Vector2(1, 0) + new Vector2(2, 0) * CanvasScale * 1.5f,
@@ -470,15 +482,15 @@ internal sealed partial class MagGraphCanvas
         var hoverFactor = hoverProgress.RemapAndClamp(0,1, 1,2);
 
         // Draw output sockets
-        foreach (var oa in item.GetOutputAnchors())
+        foreach (var outputAnchor in item.GetOutputAnchors())
         {
-            var type2UiProperties = TypeUiRegistry.GetPropertiesForType(oa.ConnectionType);
+            var type2UiProperties = TypeUiRegistry.GetPropertiesForType(outputAnchor.ConnectionType);
 
-            var posOnCanvas = TransformPosition(oa.PositionOnCanvas);
+            var posOnCanvas = TransformPosition(outputAnchor.PositionOnCanvas);
             var color = ColorVariations.OperatorBackground.Apply(type2UiProperties.Color).Fade(0.7f);
 
             Vector2 pp;
-            if (oa.Direction == MagGraphItem.Directions.Vertical)
+            if (outputAnchor.Direction == MagGraphItem.Directions.Vertical)
             {
                 pp = new Vector2(posOnCanvas.X, pMaxVisible.Y);
                 drawList.AddTriangleFilled(pp + new Vector2(0, -1) + new Vector2(-1.5f, 0) * CanvasScale * 1.5f * hoverFactor,
@@ -489,14 +501,15 @@ internal sealed partial class MagGraphCanvas
             }
             else
             {
+                // Register for output snapping...
                 var isPotentialConnectionStartDropTarget = _context.StateMachine.CurrentState == GraphStates.DragConnectionBeginning
-                                                           && _context.DraggedPrimaryOutputType == oa.ConnectionType
-                                                           && oa.SnappedConnectionHash == MagGraphItem.FreeAnchor;
+                                                           && _context.DraggedPrimaryOutputType == outputAnchor.ConnectionType
+                                                           && outputAnchor.SnappedConnectionHash == MagGraphItem.FreeAnchor;
 
                 if (isPotentialConnectionStartDropTarget)
                 {
                     color = ColorVariations.OperatorBackground.Apply(type2UiProperties.Color).Fade(Blink);
-                    OutputSnapper.RegisterAsPotentialTargetOutput(context, item, oa);
+                    OutputSnapper.RegisterAsPotentialTargetOutput(context, item, outputAnchor);
                 }
                 
                 pp = new Vector2(pMaxVisible.X - 1, posOnCanvas.Y);
@@ -535,8 +548,8 @@ internal sealed partial class MagGraphCanvas
                                            UiColors.BackgroundFull);
                     
                     // This will later be used for by DefaultState to create a connection
-                    _context.ActiveSourceOutputId = oa.SlotId;
-                    _context.ActiveOutputDirection = oa.Direction;
+                    _context.ActiveSourceOutputId = outputAnchor.SlotId;
+                    _context.ActiveOutputDirection = outputAnchor.Direction;
                 }
                 else
                 {
@@ -544,7 +557,7 @@ internal sealed partial class MagGraphCanvas
                 }
             }
 
-            ShowAnchorPointDebugs(oa);
+            ShowAnchorPointDebugs(outputAnchor);
         }
     }
     

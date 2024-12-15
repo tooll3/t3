@@ -135,14 +135,22 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
             var sourcePosOnScreen = mousePos;
             var targetPosOnScreen = mousePos;
             
+            // Dragging end to new target input...
             if (t.SourceItem != null)
             {
                 //var outputLine = t.SourceItem.OutputLines[0];
                 var sourcePos = new Vector2(t.SourceItem.Area.Max.X,
                                             t.SourceItem.Area.Min.Y + MagGraphItem.GridSize.Y * (0.5f + t.OutputLineIndex));
                 sourcePosOnScreen = TransformPosition(sourcePos);
+                
+                if (_context.StateMachine.CurrentState == GraphStates.DragConnectionEnd
+                    && InputSnapper.BestInputMatch.Item != null)
+                {
+                    targetPosOnScreen = TransformPosition(InputSnapper.BestInputMatch.Anchor.PositionOnCanvas);
+                }
             }
 
+            // Dragging beginning to new source output...
             if (t.TargetItem != null)
             {
                 var targetPos = new Vector2(t.TargetItem.Area.Min.X,
@@ -179,6 +187,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         }
         
         OutputSnapper.Update(_context);
+        InputSnapper.Update(_context);
 
         _context.ConnectionHovering.PrepareNewFrame(_context);
 

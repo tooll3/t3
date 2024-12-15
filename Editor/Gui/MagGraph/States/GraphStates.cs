@@ -287,13 +287,13 @@ internal static class GraphStates
                               context.TempConnections.Add(tempConnection);
                               context.ActiveSourceItem = sourceItem;
                               context.DraggedPrimaryOutputType = output.ValueType;
-                              context.StateMachine.SetState(DragOutput, context);
+                              context.StateMachine.SetState(DragConnectionEnd, context);
                           }
                       },
               Exit: _ => { }
              );
     
-    internal static State DragOutput
+    internal static State DragConnectionEnd
         = new(
               Enter: _ => { },
               Update: context =>
@@ -310,9 +310,16 @@ internal static class GraphStates
                           var mouseReleased = !ImGui.IsMouseDown(ImGuiMouseButton.Left);
                           if (!mouseReleased)
                               return;
+
+                          if (InputSnapper.TryToReconnect(context))
+                          { 
+                              context.Layout.FlagAsChanged();
+                              context.CompleteMacroCommand();
+                              context.StateMachine.SetState(Default, context);
+                              return;                              
+                          }
                           
                           var hasDisconnections = context.TempConnections.Any(c => c.WasDisconnected);
-                          
                           
                           var droppedOnItem = InputPicking.TryInitializeAtPosition(context, posOnCanvas);
                           if (droppedOnItem)
@@ -387,7 +394,7 @@ internal static class GraphStates
                               context.ActiveSourceItem = connection.SourceItem;
                               context.DraggedPrimaryOutputType = connection.Type;
                               context.ActiveItem = connection.SourceItem;
-                              context.StateMachine.SetState(DragOutput, context);
+                              context.StateMachine.SetState(DragConnectionEnd, context);
                               context.Layout.FlagAsChanged();
                           }
                       },

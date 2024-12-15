@@ -18,6 +18,9 @@ internal static class OutputSnapper
 {
     public static void Update(GraphUiContext context)
     {
+        if (context.StateMachine.CurrentState != GraphStates.HoldingConnectionBeginning)
+            return;
+
         BestOutputMatch = _bestOutputMatchForCurrentFrame;
         _bestOutputMatchForCurrentFrame = new OutputMatch();
 
@@ -71,7 +74,7 @@ internal static class OutputSnapper
         return didSomething;
     }
 
-    private const float SnapThreshold = 100;
+    public const float SnapThreshold = 100;
 
     public sealed record OutputMatch(MagGraphItem? Item = null, MagGraphItem.AnchorPoint Anchor = default, float Distance = SnapThreshold);
 
