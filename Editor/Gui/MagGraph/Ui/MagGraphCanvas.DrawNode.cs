@@ -1,12 +1,14 @@
 ﻿using System.Diagnostics;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 using T3.Editor.Gui.ChildUi;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Styling;
@@ -240,6 +242,14 @@ internal sealed partial class MagGraphCanvas
                     var childUi = item.SymbolUi;
                     if (childUi != null)
                     {
+
+                        if (!TypeNameRegistry.Entries.TryGetValue(_context.DraggedPrimaryOutputType, out var typeName))
+                            typeName = _context.DraggedPrimaryOutputType.Name;
+                        
+                        ImGui.PushFont(Fonts.FontSmall);
+                        ImGui.TextColored(UiColors.TextMuted, typeName + " inputs");
+                        ImGui.PopFont();
+                        
                         var inputIndex = 0;
                         foreach (var inputUi in childUi.InputUis.Values)
                         {
@@ -427,7 +437,7 @@ internal sealed partial class MagGraphCanvas
         // Draw input sockets
         foreach (var inputAnchor in item.GetInputAnchors())
         {
-            var isAlreadyUsed = inputAnchor.ConnectionHash != 0;
+            var isAlreadyUsed = inputAnchor.SnappedConnectionHash != 0;
             if (isAlreadyUsed)
             {
                 continue;
@@ -464,13 +474,13 @@ internal sealed partial class MagGraphCanvas
         {
             var type2UiProperties = TypeUiRegistry.GetPropertiesForType(oa.ConnectionType);
 
-            var p = TransformPosition(oa.PositionOnCanvas);
+            var posOnCanvas = TransformPosition(oa.PositionOnCanvas);
             var color = ColorVariations.OperatorBackground.Apply(type2UiProperties.Color).Fade(0.7f);
 
             Vector2 pp;
             if (oa.Direction == MagGraphItem.Directions.Vertical)
             {
-                pp = new Vector2(p.X, pMaxVisible.Y);
+                pp = new Vector2(posOnCanvas.X, pMaxVisible.Y);
                 drawList.AddTriangleFilled(pp + new Vector2(0, -1) + new Vector2(-1.5f, 0) * CanvasScale * 1.5f * hoverFactor,
                                            pp + new Vector2(0, -1) + new Vector2(1.5f, 0) * CanvasScale * 1.5f * hoverFactor,
                                            pp + new Vector2(0, -1) + new Vector2(0, 2) * CanvasScale * 1.5f * hoverFactor,
@@ -479,15 +489,26 @@ internal sealed partial class MagGraphCanvas
             }
             else
             {
-                pp = new Vector2(pMaxVisible.X - 1, p.Y);
+                var isPotentialConnectionStartDropTarget = _context.StateMachine.CurrentState == GraphStates.DragConnectionBeginning
+                                                           && _context.DraggedPrimaryOutputType == oa.ConnectionType
+                                                           && oa.SnappedConnectionHash == MagGraphItem.FreeAnchor;
+
+                if (isPotentialConnectionStartDropTarget)
+                {
+                    color = ColorVariations.OperatorBackground.Apply(type2UiProperties.Color).Fade(Blink);
+                    OutputSnapper.RegisterAsPotentialTargetOutput(context, item, oa);
+                }
+                
+                pp = new Vector2(pMaxVisible.X - 1, posOnCanvas.Y);
 
                 drawList.AddTriangleFilled(pp + new Vector2(0, 0) + new Vector2(-0, -1.5f) * CanvasScale * 1.5f * hoverFactor,
                                            pp + new Vector2(0, 0) + new Vector2(2, 0) * CanvasScale * 1.5f * hoverFactor,
                                            pp + new Vector2(0, 0) + new Vector2(0, 1.5f) * CanvasScale * 1.5f * hoverFactor,
                                            color);
                 pp += new Vector2(-3, 0);
-                
             }
+            
+            
             // Draw primary output socket for drag or click
             if (isItemHovered && context.StateMachine.CurrentState == GraphStates.Default)
             {
@@ -528,7 +549,7 @@ internal sealed partial class MagGraphCanvas
     }
     
     
-    private void DrawIndicator(ImDrawListPtr drawList, Color color, float opacity, Vector2 areaMin, Vector2 areaMax, ref int indicatorCount)
+    private static void DrawIndicator(ImDrawListPtr drawList, Color color, float opacity, Vector2 areaMin, Vector2 areaMax, ref int indicatorCount)
     {
         const int s = 4;
         var dx = (s + 1) * indicatorCount;
@@ -545,7 +566,7 @@ internal sealed partial class MagGraphCanvas
     
 
     // todo - move outta here
-    internal static SymbolUi.Child.CustomUiResult DrawCustomUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect, Vector2 canvasScale)
+    private static SymbolUi.Child.CustomUiResult DrawCustomUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect, Vector2 canvasScale)
     {
         var type = instance.Type;
         var result = CustomChildUiRegistry.TryGetValue(type, out var drawFunction)

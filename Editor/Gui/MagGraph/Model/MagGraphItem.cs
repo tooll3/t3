@@ -94,6 +94,11 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
         public int VisibleIndex;
         public int OutputIndex;
         public List<MagGraphConnection> ConnectionsOut;
+
+        public Vector2 GetRightAnchorPosition(MagGraphItem item)
+        {
+            return item.DampedPosOnCanvas + new Vector2(GridSize.X + GridSize.Y * (0.5f * VisibleIndex));
+        }
     }
 
     public struct AnchorPoint
@@ -101,17 +106,9 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
         public Vector2 PositionOnCanvas;
         public Directions Direction;
         public Type ConnectionType;
-        public int ConnectionHash;
+        public int SnappedConnectionHash;
         public Guid SlotId;
-
-        /** Test if a could be split be inserting b */
-        public bool CountBeSplitBy(AnchorPoint b)
-        {
-            return ConnectionType == b.ConnectionType
-                   && Direction == b.Direction
-                   && ConnectionHash != FreeAnchor
-                   && b.ConnectionHash == FreeAnchor;
-        }
+        
     }
 
     public enum Directions
@@ -167,7 +164,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
                                  PositionOnCanvas = new Vector2(WidthHalf, Size.Y) + PosOnCanvas,
                                  Direction = Directions.Vertical,
                                  ConnectionType = OutputLines[0].Output.ValueType,
-                                 ConnectionHash = GetSnappedConnectionHash(OutputLines[0].ConnectionsOut),
+                                 SnappedConnectionHash = GetSnappedConnectionHash(OutputLines[0].ConnectionsOut),
                                  SlotId = OutputLines[0].Output.Id,
                              };
         }
@@ -181,7 +178,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
                                      PositionOnCanvas = new Vector2(Width, (0.5f + outputLine.VisibleIndex) * LineHeight) + PosOnCanvas,
                                      Direction = Directions.Horizontal,
                                      ConnectionType = outputLine.Output.ValueType,
-                                     ConnectionHash = GetSnappedConnectionHash(outputLine.ConnectionsOut),
+                                     SnappedConnectionHash = GetSnappedConnectionHash(outputLine.ConnectionsOut),
                                      SlotId = outputLine.Output.Id,
                                  };
             }
@@ -207,7 +204,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
                              PositionOnCanvas = new Vector2(WidthHalf, 0) + PosOnCanvas,
                              Direction = Directions.Vertical,
                              ConnectionType = InputLines[0].Type,
-                             ConnectionHash = InputLines[0].ConnectionIn?.ConnectionHash ?? FreeAnchor,
+                             SnappedConnectionHash = InputLines[0].ConnectionIn?.ConnectionHash ?? FreeAnchor,
                              SlotId = InputLines[0].Id,
                          };
         // Side inputs
@@ -218,7 +215,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
                                  PositionOnCanvas = new Vector2(0, (0.5f + il.VisibleIndex) * LineHeight) + PosOnCanvas,
                                  Direction = Directions.Horizontal,
                                  ConnectionType = il.Type,
-                                 ConnectionHash = il.ConnectionIn?.ConnectionHash ?? FreeAnchor,
+                                 SnappedConnectionHash = il.ConnectionIn?.ConnectionHash ?? FreeAnchor,
                                  SlotId = il.Id,
                              };
         }

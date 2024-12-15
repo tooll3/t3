@@ -780,7 +780,7 @@ internal sealed class PlaceholderCreation
 
                 List<MagGraphItem.InputLine> inputLines = [];
                 List<MagGraphItem.OutputLine> outputLines = [];
-                MagGraphLayout.CollectVisibleLines(newItem, inputLines, outputLines);
+                MagGraphLayout.CollectVisibleLines(context, newItem, inputLines, outputLines);
                 
                 var newHeight = inputLines.Count + outputLines.Count - 1;
                 if (newHeight > 1)

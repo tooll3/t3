@@ -65,7 +65,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
 
         // Prepare frame
         //_context.Selector.HoveredIds.Clear();
-        _context.Layout.ComputeLayout(_context.CompositionOp);
+        _context.Layout.ComputeLayout(_context);
         _context.ItemMovement.PrepareFrame();
 
         // Debug UI
@@ -74,7 +74,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
 
         ImGui.SameLine(0, 5);
         if (ImGui.Button("Rescan"))
-            _context.Layout.ComputeLayout(_context.CompositionOp, forceUpdate: true);
+            _context.Layout.ComputeLayout(_context, forceUpdate: true);
 
         ImGui.SameLine(0, 5);
         ImGui.Checkbox("Debug", ref _enableDebug);
@@ -131,7 +131,10 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         foreach (var t in _context.TempConnections)
         {
             var mousePos = ImGui.GetMousePos();
-            var sourcePosOnScreen = Vector2.Zero;
+            
+            var sourcePosOnScreen = mousePos;
+            var targetPosOnScreen = mousePos;
+            
             if (t.SourceItem != null)
             {
                 //var outputLine = t.SourceItem.OutputLines[0];
@@ -140,18 +143,28 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
                 sourcePosOnScreen = TransformPosition(sourcePos);
             }
 
-            var targetPosOnScreen = mousePos;
             if (t.TargetItem != null)
             {
-                sourcePosOnScreen = mousePos;
                 var targetPos = new Vector2(t.TargetItem.Area.Min.X,
                                             t.TargetItem.Area.Min.Y + MagGraphItem.GridSize.Y * (0.5f + t.InputLineIndex));
                 targetPosOnScreen = TransformPosition(targetPos);
+                
+                if (_context.StateMachine.CurrentState == GraphStates.DragConnectionBeginning
+                    && OutputSnapper.BestOutputMatch.Item != null)
+                {
+                    sourcePosOnScreen = TransformPosition(OutputSnapper.BestOutputMatch.Anchor.PositionOnCanvas);
+                }
             }
-
-            else if (_context.Placeholder.PlaceholderItem != null)
+            else
             {
-                targetPosOnScreen = TransformPosition(_context.Placeholder.PlaceholderItem.PosOnCanvas);
+                if (_context.StateMachine.CurrentState == GraphStates.Placeholder)
+                {
+                    if (_context.Placeholder.PlaceholderItem != null)
+                    {
+                        targetPosOnScreen = TransformPosition(_context.Placeholder.PlaceholderItem.PosOnCanvas);
+                    }
+                }
+                
             }
 
             var typeColor = TypeUiRegistry.GetPropertiesForType(t.Type).Color;
@@ -164,6 +177,8 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
                                     typeColor.Fade(0.6f),
                                     2);
         }
+        
+        OutputSnapper.Update(_context);
 
         _context.ConnectionHovering.PrepareNewFrame(_context);
 
@@ -347,7 +362,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
             //ImGui.SetTooltip("hash:" + oa.ConnectionHash);
             ImGui.Text(isInput ? "Input" : "Output");
             ImGui.Text("" + a.ConnectionType.Name);
-            ImGui.Text("" + a.ConnectionHash);
+            ImGui.Text("" + a.SnappedConnectionHash);
             ImGui.EndTooltip();
         }
 

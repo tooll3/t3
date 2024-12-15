@@ -1,4 +1,5 @@
-﻿using T3.Core.Operator;
+﻿using System.Runtime.CompilerServices;
+using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 
 namespace T3.Editor.Gui.MagGraph.Model;
@@ -14,8 +15,7 @@ internal sealed class MagGraphConnection
     public ISlot SourceOutput;
     public ISlot TargetInput => TargetItem.InputLines[InputLineIndex].Input;
 
-    public Type Type => SourceOutput?.ValueType;
-    //public IInputSlot TargetInput;
+    public Type Type => SourceOutput?.ValueType ?? TargetInput?.ValueType;
     public int InputLineIndex;
     public int OutputLineIndex;
     public int VisibleOutputIndex; // Do we need that?
@@ -23,6 +23,7 @@ internal sealed class MagGraphConnection
     public int MultiInputIndex;
 
     public bool IsSnapped => Style < ConnectionStyles.BottomToTop;
+
 
     public enum ConnectionStyles
     {
@@ -47,6 +48,17 @@ internal sealed class MagGraphConnection
                               TargetItem.Id,
                               TargetInput.Id
                              );
+    }
+
+    public int GetItemInputHash()
+    {
+        return GetItemInputHash(TargetItem.Id, TargetInput.Id);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static int GetItemInputHash(Guid itemId, Guid inputId)
+    {
+        return itemId.GetHashCode() * 31 + inputId.GetHashCode();
     }
 
     public bool IsTemporary;

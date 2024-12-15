@@ -97,6 +97,10 @@ internal sealed class GraphUiContext
     internal MagGraphItem? ItemForInputSelection;
     internal MagGraphItem? ActiveSourceItem;
     internal Guid ActiveSourceOutputId { get; set; }
+
+    /** Used to prevent disconnected inputLines from collapsing... */
+    internal readonly HashSet<int> DisconnectedInputsHashes = []; 
+    
     internal bool TryGetActiveOutputLine(out MagGraphItem.OutputLine outputLine)
     {
         if (ActiveSourceItem == null || ActiveSourceItem.OutputLines.Length == 0)
@@ -141,6 +145,8 @@ internal sealed class GraphUiContext
         MacroCommand.Undo();
         MacroCommand = null;
     }
+    
+    
     
     // Dialogs
     internal readonly EditCommentDialog EditCommentDialog;

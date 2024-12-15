@@ -828,7 +828,6 @@ internal sealed partial class MagItemMovement
         return newConnections.Count > 0;
     }
 
-    private sealed record ConnectionWithMultiInputIndex(Symbol.Connection Connection, int Index);
 
     private static void GetPotentialConnectionsAfterSnap(ref List<PotentialConnection> result, MagGraphItem a, MagGraphItem b)
     {
@@ -943,8 +942,8 @@ internal sealed partial class MagItemMovement
             foreach (var inputAnchor in itemA.GetInputAnchors())
             {
                 // make sure it's a snapped border connection
-                if (inputAnchor.ConnectionHash != MagGraphItem.FreeAnchor
-                    && !_snappedBorderConnectionHashes.Contains(inputAnchor.ConnectionHash))
+                if (inputAnchor.SnappedConnectionHash != MagGraphItem.FreeAnchor
+                    && !_snappedBorderConnectionHashes.Contains(inputAnchor.SnappedConnectionHash))
                 {
                     continue;
                 }
@@ -959,8 +958,8 @@ internal sealed partial class MagItemMovement
 
                     foreach (var outputAnchor in itemB.GetOutputAnchors())
                     {
-                        if (outputAnchor.ConnectionHash != MagGraphItem.FreeAnchor
-                            && !_snappedBorderConnectionHashes.Contains(outputAnchor.ConnectionHash))
+                        if (outputAnchor.SnappedConnectionHash != MagGraphItem.FreeAnchor
+                            && !_snappedBorderConnectionHashes.Contains(outputAnchor.SnappedConnectionHash))
                         {
                             continue;
                         }

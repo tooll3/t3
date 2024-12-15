@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using ImGuiNET;
-using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
@@ -24,6 +23,7 @@ internal static class GraphStates
                          // ReSharper disable once ConstantConditionalAccessQualifier
                          // This might not be initialized on startup
                          context.Placeholder.Reset(context);
+                         context.DisconnectedInputsHashes.Clear();
                      },
               Update: context =>
                       {
@@ -360,6 +360,7 @@ internal static class GraphStates
                                   return;
                               
                               var connection = context.ConnectionHovering.ConnectionHoversWhenClicked[0].Connection;
+                              context.DisconnectedInputsHashes.Add(connection.GetItemInputHash()); // keep input visible until state is complete
                               
                               // Remove existing connection
                               context.StartMacroCommand("Reconnect from input")
@@ -414,6 +415,8 @@ internal static class GraphStates
                               foreach (var h in context.ConnectionHovering.ConnectionHoversWhenClicked)
                               {
                                   var connection = h.Connection;
+
+                                  context.DisconnectedInputsHashes.Add(connection.GetItemInputHash()); // keep input visible until state is complete
                                   
                                   // Remove existing connections
                                   context.MacroCommand!
@@ -424,14 +427,11 @@ internal static class GraphStates
                                   var tempConnection = new MagGraphConnection
                                                            {
                                                                Style = MagGraphConnection.ConnectionStyles.Unknown,
-                                                               //SourcePos = connection.SourcePos,
                                                                TargetPos = connection.TargetPos,
-                                                               TargetItem = connection.TargetItem, // FIXME: This seems inconsistent.
+                                                               TargetItem = connection.TargetItem, 
+                                                               InputLineIndex = connection.InputLineIndex,
                                                                SourceItem = null,
                                                                SourceOutput = null,
-                                                               //OutputLineIndex = 0,
-                                                               //VisibleOutputIndex = 0,
-                                                               //ConnectionHash = 0,
                                                                IsTemporary = true,
                                                                WasDisconnected = true,
                                                            };
@@ -441,22 +441,24 @@ internal static class GraphStates
                                   context.Layout.FlagAsChanged();
                               }
                               
-                              //context.PrimaryOutputItem = connection.SourceItem;
-                              //context.ActiveItem = connection.SourceItem;
-                              context.StateMachine.SetState(RipOffConnectionBeginning, context);
+                              context.StateMachine.SetState(DragConnectionBeginning, context);
                           }
                       },
               Exit:
               _ => { }
              );
     
-    internal static State RipOffConnectionBeginning
+    internal static State DragConnectionBeginning
         = new(
               Enter: _ => { },
               Update: context =>
                       {
                           if (!ImGui.IsMouseDown(ImGuiMouseButton.Left))
                           {
+                              if (OutputSnapper.TryToReconnect(context))
+                              {
+                                  context.Layout.FlagAsChanged();
+                              }
                               context.CompleteMacroCommand();
                               context.StateMachine.SetState(Default, context);
                               return;

@@ -2,11 +2,11 @@
 
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.MagGraph.Interaction;
+using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
@@ -35,14 +35,16 @@ namespace T3.Editor.Gui.MagGraph.Model;
 /// </summary>
 internal sealed class MagGraphLayout
 {
-    public void ComputeLayout(Instance compositionOp, bool forceUpdate = false)
+    public void ComputeLayout(GraphUiContext context , bool forceUpdate = false)
     {
+        var compositionOp = context.CompositionOp;
+        
         if (!SymbolUiRegistry.TryGetSymbolUi(compositionOp.Symbol.Id, out var parentSymbolUi))
             return;
 
         if (forceUpdate || FrameStats.Last.UndoRedoTriggered || _structureFlaggedAsChanged ||
             HasCompositionDataChanged(compositionOp.Symbol, ref _compositionModelHash))
-            RefreshDataStructure(compositionOp, parentSymbolUi);
+            RefreshDataStructure(context, parentSymbolUi);
 
         UpdateConnectionLayout();
         ComputeVerticalStackBoundaries();
@@ -55,12 +57,14 @@ internal sealed class MagGraphLayout
 
     private int _structureUpdateCycle;
 
-    private void RefreshDataStructure(Instance composition, SymbolUi parentSymbolUi)
+    private void RefreshDataStructure(GraphUiContext context, SymbolUi parentSymbolUi)
     {
+        var composition = context.CompositionOp;
+        
         _structureUpdateCycle++;
         CollectItemReferences(composition, parentSymbolUi);
         UpdateConnectionSources(composition);
-        UpdateVisibleItemLines();
+        UpdateVisibleItemLines(context);
         CollectConnectionReferences(composition);
         _structureFlaggedAsChanged = false;
     }
@@ -205,7 +209,7 @@ internal sealed class MagGraphLayout
         }
     }
 
-    private void UpdateVisibleItemLines()
+    private void UpdateVisibleItemLines(GraphUiContext context)
     {
         var inputLines = new List<MagGraphItem.InputLine>(8);
         var outputLines = new List<MagGraphItem.OutputLine>(4);
@@ -224,7 +228,7 @@ internal sealed class MagGraphLayout
                 // Collect inputs
                 case MagGraphItem.Variants.Operator:
                 {
-                    visibleIndex = CollectVisibleLines(item, inputLines, outputLines, _connectedOutputs);
+                    visibleIndex = CollectVisibleLines(context, item, inputLines, outputLines, _connectedOutputs);
                     break;
                 }
                 case MagGraphItem.Variants.Input:
@@ -285,10 +289,11 @@ internal sealed class MagGraphLayout
         }
     }
 
+    
     /// <summary>
     /// This is accessible because for some use-cases we need to compute the height of inserted items.
     /// </summary>
-    internal static int CollectVisibleLines(MagGraphItem item, List<MagGraphItem.InputLine> inputLines, List<MagGraphItem.OutputLine> outputLines,
+    internal static int CollectVisibleLines(GraphUiContext context,  MagGraphItem item, List<MagGraphItem.InputLine> inputLines, List<MagGraphItem.OutputLine> outputLines,
                                             HashSet<int>? connectedOutputs = null)
     {
         Debug.Assert(item.Instance != null && item.SymbolUi != null);
@@ -307,7 +312,9 @@ internal sealed class MagGraphLayout
             //var isMatchingType = false; //input.ValueType == typeof(float);//ConnectionTargetType;
 
             var isPrimaryInput = inputLineIndex == 0;
-            var shouldBeVisible = isRelevant || isPrimaryInput || input.HasInputConnections;
+            var shouldBeVisible = isRelevant || isPrimaryInput || input.HasInputConnections 
+                                  || (context.DisconnectedInputsHashes.Count > 0 
+                                      && context.DisconnectedInputsHashes.Contains(MagGraphConnection.GetItemInputHash(item.Id, input.Id)));
             if (!shouldBeVisible)
                 continue;
 
