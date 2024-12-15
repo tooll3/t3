@@ -27,8 +27,13 @@ internal static class GraphStates
                      },
               Update: context =>
                       {
+                          if (context.ItemWithActiveCustomUi != null)
+                              return;
+                          
                           // Check keyboard commands if focused...
-                          if (context.Canvas.IsFocused && context.Canvas.IsHovered && !ImGui.IsAnyItemActive())
+                          if (context.Canvas.IsFocused 
+                              && context.Canvas.IsHovered 
+                              && !ImGui.IsAnyItemActive())
                           {
                               // Tab create placeholder
                               if (ImGui.IsKeyReleased(ImGuiKey.Tab))

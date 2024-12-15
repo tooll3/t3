@@ -90,6 +90,7 @@ internal sealed class GraphUiContext
     internal  ModifyCanvasElementsCommand? MoveElementsCommand;
     
     internal MagGraphItem? ActiveItem { get; set; }
+    internal MagGraphItem? ItemWithActiveCustomUi { get; set; }
     internal MagGraphItem.Directions ActiveOutputDirection { get; set; }
 
     // Input picking... (should probably be moved into Placeholder)

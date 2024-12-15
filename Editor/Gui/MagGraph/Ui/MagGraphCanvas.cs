@@ -11,6 +11,7 @@ using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.MagGraph.Ui;
 
@@ -85,6 +86,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         if (_context.StateMachine.CurrentState == GraphStates.Default)
         {
             _context.ActiveItem = null;
+            _context.ItemWithActiveCustomUi = null;
             _context.ActiveSourceOutputId = Guid.Empty;
         }
 
@@ -103,6 +105,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         
         Fonts.FontSmall.Scale = 1;
 
+        // Update hover time
         if (_context.ActiveItem != null)
         {
             if (_context.ActiveItem.Id != _lastHoverId)
@@ -115,7 +118,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         }
         else
         {
-            _hoverStartTime = ImGui.GetTime(); //float.PositiveInfinity;
+            _hoverStartTime = ImGui.GetTime(); 
             _lastHoverId = Guid.Empty;
         }
 

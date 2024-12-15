@@ -23,7 +23,7 @@ internal sealed partial class MagGraphCanvas
     private void DrawItem(MagGraphItem item, ImDrawListPtr drawList, GraphUiContext context)
     {
         if (item.Variant == MagGraphItem.Variants.Placeholder)
-            return;
+            return ;
 
         if (!IsRectVisible(item.Area))
             return;
@@ -130,6 +130,10 @@ internal sealed partial class MagGraphCanvas
         if (item.Variant == MagGraphItem.Variants.Operator)
         {
             customUiResult = DrawCustomUi(item.Instance, drawList, new ImRect(pMinVisible + Vector2.One, pMaxVisible - Vector2.One), Vector2.One * CanvasScale);
+            if ((customUiResult.HasFlag(SymbolUi.Child.CustomUiResult.IsActive)))
+            {
+                context.ItemWithActiveCustomUi = item;
+            }
         }
 
         // ImGUI element for selection
@@ -146,7 +150,7 @@ internal sealed partial class MagGraphCanvas
 
         if (customUiResult.HasFlag(SymbolUi.Child.CustomUiResult.IsActive))
         {
-            context.StateMachine.SetState(GraphStates.Default, context);
+            //context.StateMachine.SetState(GraphStates.Default, context);
         }
 
         ImGui.PopID();
@@ -628,6 +632,7 @@ internal sealed partial class MagGraphCanvas
                          ? drawFunction(instance, drawList, selectableScreenRect, canvasScale)
                          : SymbolUi.Child.CustomUiResult.None;
 
+        
         return result;
     }
 

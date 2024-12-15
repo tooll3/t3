@@ -47,7 +47,7 @@ public static class RemapUi
         {
             const int steps = 35;
             var points = new Vector2[steps];
-            var biasAndGain = new Vector2(0.5f, 0.5f);// remap.BiasAndGain.GetCurrentValue();
+            var biasAndGain =  remap.BiasAndGain.GetCurrentValue();
             var p = new Vector2(MathUtils.Lerp(biasGraphRect.Min.X, biasGraphRect.Max.X, inFragment),
                                 MathUtils.Lerp(biasGraphRect.Max.Y, biasGraphRect.Min.Y, outFragment));
             drawList.AddCircleFilled(p,
