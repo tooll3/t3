@@ -419,7 +419,8 @@ internal static class GraphStates
                               
                               context.StartMacroCommand("Reconnect from output");
                               
-                              foreach (var h in context.ConnectionHovering.ConnectionHoversWhenClicked)
+                              foreach (var h in context.ConnectionHovering.ConnectionHoversWhenClicked
+                                                       .OrderByDescending( h => h.Connection.MultiInputIndex))
                               {
                                   var connection = h.Connection;
 
@@ -429,7 +430,10 @@ internal static class GraphStates
                                   context.MacroCommand!
                                          .AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,
                                                                                         connection.AsSymbolConnection(),
-                                                                                        0));
+                                                                                        h.Connection.MultiInputIndex));
+                                  
+                                  if(connection.MultiInputIndex > 0)
+                                      continue;
                                   
                                   var tempConnection = new MagGraphConnection
                                                            {
@@ -437,17 +441,22 @@ internal static class GraphStates
                                                                TargetPos = connection.TargetPos,
                                                                TargetItem = connection.TargetItem, 
                                                                InputLineIndex = connection.InputLineIndex,
+                                                               MultiInputIndex = connection.MultiInputIndex,
                                                                SourceItem = null,
                                                                SourceOutput = null,
                                                                IsTemporary = true,
                                                                WasDisconnected = true,
                                                            };
                                   
+                                  // Sadly keeping disconnected multi input slots visible is tricky,
+                                  // so, this is only a preparation for a potential later implementation
+                                  //Log.Debug("Keep input hash " + connection.GetItemInputHash());
+                                  //context.DisconnectedInputsHashes.Add(connection.GetItemInputHash());
                                   context.TempConnections.Add(tempConnection);
                                   context.DraggedPrimaryOutputType = connection.Type;
-                                  context.Layout.FlagAsChanged();
                               }
                               
+                              context.Layout.FlagAsChanged();
                               context.StateMachine.SetState(DragConnectionBeginning, context);
                           }
                       },
@@ -474,6 +483,7 @@ internal static class GraphStates
                           if (ImGui.IsKeyDown(ImGuiKey.Escape))
                           {
                               context.CancelMacroCommand();
+                              context.Layout.FlagAsChanged();
                               context.StateMachine.SetState(Default, context);
                           }
                       },

@@ -15,7 +15,28 @@ internal sealed class MagGraphConnection
     public ISlot SourceOutput;
     public ISlot TargetInput => TargetItem.InputLines[InputLineIndex].Input;
 
-    public Type Type => SourceOutput?.ValueType ?? TargetInput?.ValueType;
+    public Type Type
+    {
+        get
+        {
+            if (SourceOutput != null)
+            {
+                return SourceOutput.ValueType;
+            }
+
+            if (TargetItem != null)
+            {
+                if (InputLineIndex >= TargetItem.InputLines.Length)
+                {
+                    Log.Warning("Invalid target input for connection?");
+                    return null;
+                }
+                return TargetInput.ValueType;
+            }
+            return null;
+        }
+    }
+
     public int InputLineIndex;
     public int OutputLineIndex;
     public int VisibleOutputIndex; // Do we need that?
@@ -52,13 +73,13 @@ internal sealed class MagGraphConnection
 
     public int GetItemInputHash()
     {
-        return GetItemInputHash(TargetItem.Id, TargetInput.Id);
+        return GetItemInputHash(TargetItem.Id, TargetInput.Id, MultiInputIndex);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static int GetItemInputHash(Guid itemId, Guid inputId)
+    public static int GetItemInputHash(Guid itemId, Guid inputId, int multiInputIndex)
     {
-        return itemId.GetHashCode() * 31 + inputId.GetHashCode();
+        return itemId.GetHashCode() * 31 + inputId.GetHashCode() * 31 + multiInputIndex;
     }
 
     public bool IsTemporary;

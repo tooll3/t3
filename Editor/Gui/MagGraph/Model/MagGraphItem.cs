@@ -101,15 +101,25 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
         }
     }
 
-    public struct AnchorPoint
+    public struct InputAnchorPoint
     {
         public Vector2 PositionOnCanvas;
         public Directions Direction;
         public Type ConnectionType;
         public int SnappedConnectionHash;
         public Guid SlotId;
-        
+        public InputLine InputLine;
     }
+    
+    public struct OutputAnchorPoint
+    {
+        public Vector2 PositionOnCanvas;
+        public Directions Direction;
+        public Type ConnectionType;
+        public int SnappedConnectionHash;
+        public Guid SlotId;
+    }
+
 
     public enum Directions
     {
@@ -152,14 +162,14 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
     /// output anchor is taken if...
     /// - 
     /// </summary>
-    public IEnumerable<AnchorPoint> GetOutputAnchors()
+    public IEnumerable<OutputAnchorPoint> GetOutputAnchors()
     {
         if (OutputLines.Length == 0)
             yield break;
 
         // vertical output...
         {
-            yield return new AnchorPoint
+            yield return new OutputAnchorPoint
                              {
                                  PositionOnCanvas = new Vector2(WidthHalf, Size.Y) + PosOnCanvas,
                                  Direction = Directions.Vertical,
@@ -173,7 +183,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
         {
             foreach (var outputLine in OutputLines)
             {
-                yield return new AnchorPoint
+                yield return new OutputAnchorPoint
                                  {
                                      PositionOnCanvas = new Vector2(Width, (0.5f + outputLine.VisibleIndex) * LineHeight) + PosOnCanvas,
                                      Direction = Directions.Horizontal,
@@ -186,37 +196,39 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
     }
 
     /// <summary>
-    /// Get input anchors with current position and orientation.
+    /// Get input anchors with current position and orientation for drawing and snapping
     /// </summary>
     /// <remarks>
     /// Using an Enumerable interface here is bad, because it creates a lot of allocations.
     /// In the long term, this should be cached.
     /// </remarks>
     // TODO: Inline to draw anchors
-    public IEnumerable<AnchorPoint> GetInputAnchors()
+    public IEnumerable<InputAnchorPoint> GetInputAnchors()
     {
         if (InputLines.Length == 0)
             yield break;
 
         // Top input
-        yield return new AnchorPoint
+        yield return new InputAnchorPoint
                          {
                              PositionOnCanvas = new Vector2(WidthHalf, 0) + PosOnCanvas,
                              Direction = Directions.Vertical,
                              ConnectionType = InputLines[0].Type,
                              SnappedConnectionHash = InputLines[0].ConnectionIn?.ConnectionHash ?? FreeAnchor,
                              SlotId = InputLines[0].Id,
+                             InputLine = InputLines[0],
                          };
         // Side inputs
         foreach (var il in InputLines)
         {
-            yield return new AnchorPoint
+            yield return new InputAnchorPoint
                              {
                                  PositionOnCanvas = new Vector2(0, (0.5f + il.VisibleIndex) * LineHeight) + PosOnCanvas,
                                  Direction = Directions.Horizontal,
                                  ConnectionType = il.Type,
                                  SnappedConnectionHash = il.ConnectionIn?.ConnectionHash ?? FreeAnchor,
                                  SlotId = il.Id,
+                                 InputLine = il,
                              };
         }
     }

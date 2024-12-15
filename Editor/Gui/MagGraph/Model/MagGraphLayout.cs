@@ -214,7 +214,6 @@ internal sealed class MagGraphLayout
         var inputLines = new List<MagGraphItem.InputLine>(8);
         var outputLines = new List<MagGraphItem.OutputLine>(4);
 
-        // Todo: Implement connected multi-inputs
         foreach (var item in Items.Values)
         {
             inputLines.Clear();
@@ -312,29 +311,36 @@ internal sealed class MagGraphLayout
             //var isMatchingType = false; //input.ValueType == typeof(float);//ConnectionTargetType;
 
             var isPrimaryInput = inputLineIndex == 0;
-            var shouldBeVisible = isRelevant || isPrimaryInput || input.HasInputConnections 
-                                  || (context.DisconnectedInputsHashes.Count > 0 
-                                      && context.DisconnectedInputsHashes.Contains(MagGraphConnection.GetItemInputHash(item.Id, input.Id)));
-            if (!shouldBeVisible)
-                continue;
 
             if (input.IsMultiInput && input is IMultiInputSlot multiInputSlot)
             {
+                var shouldBeVisible = isRelevant || isPrimaryInput || input.HasInputConnections;
+                
                 var multiInputIndex = 0;
                 foreach (var _ in multiInputSlot.GetCollectedInputs())
                 {
-                    inputLines.Add(new MagGraphItem.InputLine
-                                       {
-                                           Id = input.Id,
-                                           Type = input.ValueType,
-                                           Input = input,
-                                           InputUi = inputUi,
-                                           VisibleIndex = visibleIndex,
-                                           MultiInputIndex = multiInputIndex++,
-                                       });
-                    visibleIndex++;
+                    var itemInputHash = MagGraphConnection.GetItemInputHash(item.Id, input.Id, multiInputIndex);
+                    var isVisibleMultiInputLine =     
+                                          context.DisconnectedInputsHashes.Count > 0 
+                                              && context.DisconnectedInputsHashes.Contains(itemInputHash);
+                    if (shouldBeVisible || isVisibleMultiInputLine)
+                    {
+                        inputLines.Add(new MagGraphItem.InputLine
+                                           {
+                                               Id = input.Id,
+                                               Type = input.ValueType,
+                                               Input = input,
+                                               InputUi = inputUi,
+                                               VisibleIndex = visibleIndex,
+                                               MultiInputIndex = multiInputIndex,
+                                           });
+                        
+                        visibleIndex++;
+                    }
+                    
+                    multiInputIndex++;
                 }
-
+                
                 if (isRelevant && multiInputIndex == 0)
                 {
                     inputLines.Add(new MagGraphItem.InputLine
@@ -351,6 +357,13 @@ internal sealed class MagGraphLayout
             }
             else
             {
+                var shouldBeVisible = isRelevant || isPrimaryInput || input.HasInputConnections 
+                                      || (context.DisconnectedInputsHashes.Count > 0 
+                                          && context.DisconnectedInputsHashes.Contains(MagGraphConnection.GetItemInputHash(item.Id, input.Id, 0)));
+                if (!shouldBeVisible)
+                    continue;
+
+                
                 inputLines.Add(new MagGraphItem.InputLine
                                    {
                                        Id = input.Id,

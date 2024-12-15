@@ -7,6 +7,7 @@ using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
+using T3.Editor.Gui.Styling;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.MagGraph.Interaction;
@@ -18,22 +19,23 @@ internal static class OutputSnapper
 {
     public static void Update(GraphUiContext context)
     {
-        if (context.StateMachine.CurrentState != GraphStates.HoldingConnectionBeginning)
-            return;
-
         BestOutputMatch = _bestOutputMatchForCurrentFrame;
         _bestOutputMatchForCurrentFrame = new OutputMatch();
-
+        
+        if (context.StateMachine.CurrentState != GraphStates.HoldingConnectionBeginning)
+            return;
+        
         if (BestOutputMatch.Item != null)
         {
             ImGui.GetWindowDrawList().AddCircle(context.Canvas.TransformPosition(BestOutputMatch.Anchor.PositionOnCanvas), 20, Color.Red);
         }
     }
 
-    public static void RegisterAsPotentialTargetOutput(GraphUiContext context, MagGraphItem item, MagGraphItem.AnchorPoint outputAnchor)
+    public static void RegisterAsPotentialTargetOutput(GraphUiContext context, MagGraphItem item, MagGraphItem.OutputAnchorPoint outputAnchor)
     {
         var posOnScreen = context.Canvas.TransformPosition(outputAnchor.PositionOnCanvas);
         var distance = Vector2.Distance(posOnScreen, ImGui.GetMousePos());
+        
         if (distance < _bestOutputMatchForCurrentFrame.Distance)
         {
             _bestOutputMatchForCurrentFrame = new OutputMatch(item, outputAnchor, distance);
@@ -74,9 +76,9 @@ internal static class OutputSnapper
         return didSomething;
     }
 
-    public const float SnapThreshold = 100;
+    public const float SnapThreshold = 50;
 
-    public sealed record OutputMatch(MagGraphItem? Item = null, MagGraphItem.AnchorPoint Anchor = default, float Distance = SnapThreshold);
+    public sealed record OutputMatch(MagGraphItem? Item = null, MagGraphItem.OutputAnchorPoint Anchor = default, float Distance = SnapThreshold);
 
     private static OutputMatch _bestOutputMatchForCurrentFrame = new();
     public static OutputMatch BestOutputMatch = new();

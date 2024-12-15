@@ -128,7 +128,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         }
 
         // Draw temp connections
-        foreach (var t in _context.TempConnections)
+        foreach (var tc in _context.TempConnections)
         {
             var mousePos = ImGui.GetMousePos();
             
@@ -136,25 +136,26 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
             var targetPosOnScreen = mousePos;
             
             // Dragging end to new target input...
-            if (t.SourceItem != null)
+            if (tc.SourceItem != null)
             {
                 //var outputLine = t.SourceItem.OutputLines[0];
-                var sourcePos = new Vector2(t.SourceItem.Area.Max.X,
-                                            t.SourceItem.Area.Min.Y + MagGraphItem.GridSize.Y * (0.5f + t.OutputLineIndex));
+                var sourcePos = new Vector2(tc.SourceItem.Area.Max.X,
+                                            tc.SourceItem.Area.Min.Y + MagGraphItem.GridSize.Y * (0.5f + tc.OutputLineIndex));
+                
                 sourcePosOnScreen = TransformPosition(sourcePos);
                 
                 if (_context.StateMachine.CurrentState == GraphStates.DragConnectionEnd
                     && InputSnapper.BestInputMatch.Item != null)
                 {
-                    targetPosOnScreen = TransformPosition(InputSnapper.BestInputMatch.Anchor.PositionOnCanvas);
+                    targetPosOnScreen = InputSnapper.BestInputMatch.PosOnScreen;
                 }
             }
 
             // Dragging beginning to new source output...
-            if (t.TargetItem != null)
+            if (tc.TargetItem != null)
             {
-                var targetPos = new Vector2(t.TargetItem.Area.Min.X,
-                                            t.TargetItem.Area.Min.Y + MagGraphItem.GridSize.Y * (0.5f + t.InputLineIndex));
+                var targetPos = new Vector2(tc.TargetItem.Area.Min.X,
+                                            tc.TargetItem.Area.Min.Y + MagGraphItem.GridSize.Y * (0.5f + tc.InputLineIndex));
                 targetPosOnScreen = TransformPosition(targetPos);
                 
                 if (_context.StateMachine.CurrentState == GraphStates.DragConnectionBeginning
@@ -162,6 +163,10 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
                 {
                     sourcePosOnScreen = TransformPosition(OutputSnapper.BestOutputMatch.Anchor.PositionOnCanvas);
                 }
+                
+                var isDisconnectedMultiInput = tc.InputLineIndex >= tc.TargetItem.InputLines.Length;
+                if (isDisconnectedMultiInput)
+                    continue;
             }
             else
             {
@@ -175,7 +180,8 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
                 
             }
 
-            var typeColor = TypeUiRegistry.GetPropertiesForType(t.Type).Color;
+
+            var typeColor = TypeUiRegistry.GetPropertiesForType(tc.Type).Color;
             var d = Vector2.Distance(sourcePosOnScreen, targetPosOnScreen) / 2;
 
             drawList.AddBezierCubic(sourcePosOnScreen,
@@ -306,18 +312,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
                                    new Vector2(window.Max.X, y + 1),
                                    color);
         }
-
-        // Commented out. Sadly drawing a point raster creates too many polys and eventually
-        // will case rendering artifacts...
-        //
-        // for (int ix = 0; ix < 200 && ix <= count.X+1; ix++)
-        // {
-        //     for (int iy = 0; iy < 200 && iy <= count.Y+1; iy++)
-        //     {
-        //         var pOnScreen = topLeftOnScreen + new Vector2(ix, iy) * screenGridSize;
-        //         drawList.AddRectFilled(pOnScreen, pOnScreen + Vector2.One, color);   
-        //     }
-        // }
+        
     }
 
     [Flags]
@@ -350,33 +345,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
             ImDrawFlags.RoundCornersNone, //       1110 left down right  
             ImDrawFlags.RoundCornersNone, //       1111 left down right up  
         };
-
-    private void ShowAnchorPointDebugs(MagGraphItem.AnchorPoint a, bool isInput = false)
-    {
-        if (!ShowDebug || ImGui.IsMouseDown(ImGuiMouseButton.Left))
-            return;
-
-        ImGui.PushFont(Fonts.FontSmall);
-        var typeUiProperties = TypeUiRegistry.GetPropertiesForType(a.ConnectionType);
-
-        ImGui.SetCursorScreenPos(TransformPosition(a.PositionOnCanvas) - Vector2.One * ImGui.GetFrameHeight() / 2);
-        ImGui.PushStyleColor(ImGuiCol.Text, typeUiProperties.Color.Rgba);
-        ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
-        var label = isInput ? "I" : "O";
-        ImGui.Button($"{label}##{a.GetHashCode()}");
-        ImGui.PopStyleColor(2);
-        if (ImGui.IsItemHovered())
-        {
-            ImGui.BeginTooltip();
-            //ImGui.SetTooltip("hash:" + oa.ConnectionHash);
-            ImGui.Text(isInput ? "Input" : "Output");
-            ImGui.Text("" + a.ConnectionType.Name);
-            ImGui.Text("" + a.SnappedConnectionHash);
-            ImGui.EndTooltip();
-        }
-
-        ImGui.PopFont();
-    }
+    
 
     internal static float Blink => MathF.Sin((float)ImGui.GetTime() * 10) * 0.5f + 0.5f;
 

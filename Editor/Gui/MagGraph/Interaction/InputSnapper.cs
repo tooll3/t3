@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using System.Diagnostics;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
@@ -19,25 +20,24 @@ internal static class InputSnapper
     {
         BestInputMatch = _bestInputMatchForCurrentFrame;
         _bestInputMatchForCurrentFrame = new InputMatch();
-        
+
         if (context.StateMachine.CurrentState != GraphStates.HoldingConnectionEnd)
             return;
-        
 
         if (BestInputMatch.Item != null)
         {
             // TODO: Make beautiful
-            ImGui.GetWindowDrawList().AddCircle(context.Canvas.TransformPosition(BestInputMatch.Anchor.PositionOnCanvas), 20, Color.Red);
+            ImGui.GetWindowDrawList().AddCircle(context.Canvas.TransformPosition(BestInputMatch.PosOnScreen), 20, Color.Red);
         }
     }
 
-    public static void RegisterAsPotentialTargetInput(GraphUiContext context, MagGraphItem item, MagGraphItem.AnchorPoint inputAnchor)
+    public static void RegisterAsPotentialTargetInput(MagGraphItem item, Vector2 posOnScreen, Guid slotId,
+                                                      InputSnapTypes inputSnapType = InputSnapTypes.Normal, int multiInputIndex = 0)
     {
-        var posOnScreen = context.Canvas.TransformPosition(inputAnchor.PositionOnCanvas);
         var distance = Vector2.Distance(posOnScreen, ImGui.GetMousePos());
         if (distance < _bestInputMatchForCurrentFrame.Distance)
         {
-            _bestInputMatchForCurrentFrame = new InputMatch(item, inputAnchor, distance);
+            _bestInputMatchForCurrentFrame = new InputMatch(item, slotId, posOnScreen, inputSnapType, multiInputIndex, distance);
         }
     }
 
@@ -56,33 +56,65 @@ internal static class InputSnapper
 
         //Debug.Assert(context.MacroCommand != null);
 
-        var didSomething = false;
-        foreach (var c in context.TempConnections)
-        {
-            // Create connection
-            var connectionToAdd = new Symbol.Connection(c.SourceItem.Id,
-                                                        c.SourceOutput.Id,
-                                                        BestInputMatch.Item.Id,
-                                                        BestInputMatch.Anchor.SlotId);
+        Debug.Assert(context.TempConnections.Count == 1);
 
-            if (Structure.CheckForCycle(context.CompositionOp.Symbol, connectionToAdd))
-            {
-                Log.Debug("Sorry, this connection would create a cycle.");
-                continue;
-            }
-            
-            context.MacroCommand!.AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
-                                                                            connectionToAdd,
-                                                                            c.MultiInputIndex));
-            didSomething = true;
+        var tempConnection = context.TempConnections[0];
+
+        // TODO: Use snap type...
+        // Create connection
+        var connectionToAdd = new Symbol.Connection(tempConnection.SourceItem.Id,
+                                                    tempConnection.SourceOutput.Id,
+                                                    BestInputMatch.Item.Id,
+                                                    BestInputMatch.SlotId);
+
+        if (Structure.CheckForCycle(context.CompositionOp.Symbol, connectionToAdd))
+        {
+            Log.Debug("Sorry, this connection would create a cycle.");
+            return false;
         }
 
-        return didSomething;
+        var multiInputIndex = BestInputMatch.MultiInputIndex;
+        if (BestInputMatch.InputSnapType == InputSnapTypes.InsertAfterMultiInput)
+        {
+            context.MacroCommand!.AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+                                                                             connectionToAdd,
+                                                                             multiInputIndex + 1));
+        }
+        else if (BestInputMatch.InputSnapType == InputSnapTypes.ReplaceMultiInput)
+        {
+            context.MacroCommand!.AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,
+                                                                                connectionToAdd,
+                                                                                multiInputIndex));
+
+            context.MacroCommand!.AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+                                                                             connectionToAdd,
+                                                                             multiInputIndex));
+        }
+        else
+        {
+            context.MacroCommand!.AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+                                                                             connectionToAdd,
+                                                                             multiInputIndex ));
+        }
+
+        return true;
     }
-    
-    public sealed record InputMatch(MagGraphItem? Item = null, 
-                                    MagGraphItem.AnchorPoint Anchor = default, 
-                                    float Distance = OutputSnapper.SnapThreshold);
+
+    public enum InputSnapTypes
+    {
+        Normal,
+        InsertBeforeMultiInput,
+        ReplaceMultiInput,
+        InsertAfterMultiInput,
+    }
+
+    public sealed record InputMatch(
+        MagGraphItem? Item = null,
+        Guid SlotId = default,
+        Vector2 PosOnScreen = default,
+        InputSnapTypes InputSnapType = InputSnapTypes.Normal,
+        int MultiInputIndex = 0,
+        float Distance = OutputSnapper.SnapThreshold);
 
     private static InputMatch _bestInputMatchForCurrentFrame = new();
     public static InputMatch BestInputMatch = new();
