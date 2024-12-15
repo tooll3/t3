@@ -56,9 +56,9 @@ internal static class KeyboardActions
             }
             else
             {
-                // TODO: implement
-                //NodeActions.PinSelectedToOutputWindow(context.Canvas, context.Selector, compositionOp);
-                Log.Debug("Not implemented yet");
+                // FIXME: This is a work around that needs a legacy graph window to be active
+                if(GraphWindow.Focused != null) 
+                    NodeActions.PinSelectedToOutputWindow(GraphWindow.Focused.GraphCanvas, context.Selector, compositionOp);
             }
         }
         
