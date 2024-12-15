@@ -21,12 +21,22 @@ internal class ViewSelectionPinning
     public void DrawPinning()
     {
         if (!TryGetPinnedOrSelectedInstance(out var pinnedOrSelectedInstance, out var canvas))
+        {
+            Unpin();
             return;
+        }
 
-        var selection = canvas.NodeSelection;
+        var nodeSelection = canvas.NodeSelection;
 
-        var shouldPin = false;
-        canvas.NodeSelection.PinnedIds.Add(pinnedOrSelectedInstance.SymbolChildId);
+        // Keep pinned if pinned operator changed
+        var oneSelected = nodeSelection.Selection.Count == 1;
+        var selectedOp = nodeSelection.GetFirstSelectedInstance();
+        var isPinnedToSelected = pinnedOrSelectedInstance == selectedOp;
+
+        // FIXME: This is a hack and will only work with a single output window...
+        nodeSelection.PinnedIds.Clear();
+        if (_isPinned)
+            nodeSelection.PinnedIds.Add(pinnedOrSelectedInstance.SymbolChildId);
 
         if (CustomComponents.IconButton(Icon.Pin,
                                         new Vector2(T3Style.ToolBarHeight, T3Style.ToolBarHeight) * T3Ui.UiScaleFactor,
@@ -35,29 +45,33 @@ internal class ViewSelectionPinning
         {
             if (_isPinned)
             {
-                // Keep pinned if pinned operator changed
-                var oneSelected = selection.Selection.Count == 1;
-                var selectedOp = selection.GetFirstSelectedInstance();
-                var opChanged = pinnedOrSelectedInstance != selectedOp;
-                if (!opChanged || !oneSelected)
-                {
-                    Unpin();
-                }
-                else
-                {
-                    shouldPin = true;
-                }
+                _isPinned = false;
             }
             else
             {
-                shouldPin = true;
+                PinInstance(pinnedOrSelectedInstance, canvas);
             }
-
-            if (shouldPin)
-                PinSelectionToView(canvas);
         }
 
         CustomComponents.TooltipForLastItem("Pin output to active operator.");
+
+        if (_isPinned)
+        {
+            ImGui.SameLine();
+            if (CustomComponents.IconButton(Icon.PlayOutput,
+                                            new Vector2(T3Style.ToolBarHeight, T3Style.ToolBarHeight) * T3Ui.UiScaleFactor,
+                                            isPinnedToSelected ? CustomComponents.ButtonStates.Disabled : CustomComponents.ButtonStates.Normal
+                                           )
+                && !isPinnedToSelected
+                && oneSelected)
+            {
+                PinSelectionToView(canvas);
+            }
+
+            CustomComponents.TooltipForLastItem(selectedOp != null
+                                                    ? $"Pin output to selected {selectedOp.Symbol.Name}."
+                                                    : $"Select an operator and click to update pinning.");
+        }
 
         ImGui.SameLine();
         ImGui.SetNextItemWidth(200);
@@ -108,7 +122,7 @@ internal class ViewSelectionPinning
             {
                 if (ImGui.MenuItem("Pin as start operator"))
                 {
-                    PinSelectionAsEvaluationStart(selection?.GetFirstSelectedInstance());
+                    PinSelectionAsEvaluationStart(nodeSelection.GetFirstSelectedInstance());
                 }
             }
 
@@ -120,9 +134,9 @@ internal class ViewSelectionPinning
                     var parentSymbolUi = parentInstance?.GetSymbolUi();
                     if (parentSymbolUi == null)
                         return;
-                    
+
                     var instanceChildUi = parentSymbolUi.ChildUis[pinnedOrSelectedInstance.SymbolChildId];
-                    selection?.SetSelection(instanceChildUi, pinnedOrSelectedInstance);
+                    nodeSelection.SetSelection(instanceChildUi, pinnedOrSelectedInstance);
                     FitViewToSelectionHandling.FitViewToSelection();
                 }
             }

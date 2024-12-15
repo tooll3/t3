@@ -89,8 +89,9 @@ internal class OutputWindow : Window
             // Move down to avoid overlapping with toolbar
             ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
 
-            Pinning.TryGetPinnedOrSelectedInstance(out var drawnInstance,  out var graphCanvas);
+            var okay =Pinning.TryGetPinnedOrSelectedInstance(out var drawnInstance,  out var graphCanvas);
 
+            
             if (graphCanvas != null)
             {
                 Pinning.TryGetPinnedEvaluationInstance(graphCanvas?.Structure, out var evaluationInstance);

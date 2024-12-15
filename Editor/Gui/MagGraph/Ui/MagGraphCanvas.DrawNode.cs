@@ -382,22 +382,22 @@ internal sealed partial class MagGraphCanvas
         {
             // Animation indicator
             var indicatorCount = 0;
-            if (item.Instance.Symbol.Animator.IsInstanceAnimated(item.Instance))
+            if (item.Instance.Parent.Symbol.Animator.IsInstanceAnimated(item.Instance))
             {
-                DrawIndicator(drawList, UiColors.StatusAnimated, idleFadeFactor, pMin, pMax, ref indicatorCount);
+                DrawIndicator(drawList, UiColors.StatusAnimated, idleFadeFactor, pMin, pMax, CanvasScale, ref indicatorCount);
             }
 
             // Pinned indicator
             if (context.Selector.PinnedIds.Contains(item.Instance.SymbolChildId))
             {
-                DrawIndicator(drawList, UiColors.Selection, idleFadeFactor, pMin, pMax, ref indicatorCount);
+                DrawIndicator(drawList, UiColors.Selection, idleFadeFactor, pMin, pMax, CanvasScale,ref indicatorCount);
             }
 
             // Snapshot indicator
             {
                 if (item.ChildUi.EnabledForSnapshots)
                 {
-                    DrawIndicator(drawList, UiColors.StatusAutomated, idleFadeFactor, pMin, pMax, ref indicatorCount);
+                    DrawIndicator(drawList, UiColors.StatusAutomated, idleFadeFactor, pMin, pMax, CanvasScale,ref indicatorCount);
                 }
             }
 
@@ -609,14 +609,18 @@ internal sealed partial class MagGraphCanvas
         InputSnapper.RegisterAsPotentialTargetInput(item, pOnScreen, slotId, snapType, multiInputIndex);
     }
 
-    private static void DrawIndicator(ImDrawListPtr drawList, Color color, float opacity, Vector2 areaMin, Vector2 areaMax, ref int indicatorCount)
+    private static void DrawIndicator(ImDrawListPtr drawList, Color color, float opacity, Vector2 areaMin, Vector2 areaMax, float canvasScale, ref int indicatorCount)
     {
         const int s = 4;
         var dx = (s + 1) * indicatorCount;
 
-        var pMin = new Vector2(areaMax.X - 2 - s - dx,
-                               (areaMax.Y - 2 - s).Clamp(areaMin.Y + 2, areaMax.Y));
-        var pMax = new Vector2(areaMax.X - 2 - dx, areaMax.Y - 2);
+        var pMin = new Vector2( s + dx,
+                               s) * canvasScale + areaMin;
+        
+        
+        var pMax = pMin + new Vector2(4,2) * canvasScale;
+        
+        
         drawList.AddRectFilled(pMin, pMax, color.Fade(opacity));
         drawList.AddRect(pMin - Vector2.One,
                          pMax + Vector2.One,
