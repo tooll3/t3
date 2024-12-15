@@ -2,6 +2,7 @@
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
@@ -11,7 +12,6 @@ using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.MagGraph.Ui;
 
@@ -20,11 +20,11 @@ namespace T3.Editor.Gui.MagGraph.Ui;
  */
 internal sealed partial class MagGraphCanvas : ScalableCanvas
 {
-    public MagGraphCanvas(MagGraphWindow window, NodeSelection nodeSelection)
+    public MagGraphCanvas(MagGraphWindow window, NodeSelection nodeSelection, GraphImageBackground graphImageBackground)
     {
         EnableParentZoom = false;
         _window = window;
-        _context = new GraphUiContext(nodeSelection, this, _window.CompositionOp);
+        _context = new GraphUiContext(nodeSelection, this, _window.CompositionOp, graphImageBackground);
         _nodeSelection = nodeSelection;
     }
 
@@ -52,7 +52,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
             return;
 
         if (_window.CompositionOp != _context.CompositionOp)
-            _context = new GraphUiContext(_nodeSelection, this, _window.CompositionOp);
+            _context = new GraphUiContext(_nodeSelection, this, _window.CompositionOp, _context.GraphImageBackground);
 
         _visibleCanvasArea = ImRect.RectWithSize(InverseTransformPositionFloat(ImGui.GetWindowPos()),
                                                  InverseTransformDirection(ImGui.GetWindowSize()));
@@ -215,7 +215,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         }
 
         if (FrameStats.Current.OpenedPopUpName == string.Empty)
-            CustomComponents.DrawContextMenuForScrollCanvas(() => ContextMenu.DrawContextMenuContent(_context), ref _contextMenuIsOpen);
+            CustomComponents.DrawContextMenuForScrollCanvas(() => GraphContextMenu.DrawContextMenuContent(_context), ref _contextMenuIsOpen);
 
         SmoothItemPositions();
         

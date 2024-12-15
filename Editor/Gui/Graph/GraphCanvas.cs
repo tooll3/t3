@@ -653,7 +653,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
 
             var isImage = oneOpSelected
                           && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions.Count > 0
-                          && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions[0].ValueType == typeof(Texture2D);
+                          && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions[0].ValueType == typeof(T3.Core.DataTypes.Texture2D);
             if (ImGui.MenuItem("Set image as graph background",
                                KeyboardBinding.ListKeyboardShortcuts(UserActions.DisplayImageAsBackground, false),
                                selected: false,

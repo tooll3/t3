@@ -1,4 +1,5 @@
 ﻿using ImGuiNET;
+using T3.Core.DataTypes;
 using T3.Core.SystemUi;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Graph;
@@ -13,7 +14,7 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.MagGraph.Interaction;
 
-internal static class ContextMenu
+internal static class GraphContextMenu
 {
     internal static void DrawContextMenuContent(GraphUiContext context)
     {
@@ -162,23 +163,24 @@ internal static class ContextMenu
             ImGui.Separator();
 
             // TODO: Implement
-            // var isImage = oneOpSelected
-            //               && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions.Count > 0
-            //               && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions[0].ValueType == typeof(Texture2D);
-            // if (ImGui.MenuItem("Set image as graph background",
-            //                    KeyboardBinding.ListKeyboardShortcuts(UserActions.DisplayImageAsBackground, false),
-            //                    selected: false,
-            //                    enabled: isImage))
-            // {
-            //     var instance = context.CompositionOp.Children[selectedChildUis[0].Id];
-            //     _window.GraphImageBackground.OutputInstance = instance;
-            // }
+            var isImage = oneOpSelected
+                          && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions.Count > 0
+                          && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions[0].ValueType == typeof(Texture2D);
+            if (ImGui.MenuItem("Set image as graph background",
+                               KeyboardBinding.ListKeyboardShortcuts(UserActions.DisplayImageAsBackground, false),
+                               selected: false,
+                               enabled: isImage))
+            {
+                var instance = context.CompositionOp.Children[selectedChildUis[0].Id];
+                context.GraphImageBackground.OutputInstance = instance;
+            }
 
             // TODO: Implement
-            // if (ImGui.MenuItem("Pin to output", oneOpSelected))
-            // {
-            //     NodeActions.PinSelectedToOutputWindow(this, nodeSelection, compositionOp);
-            // }
+            if (ImGui.MenuItem("Pin to output", oneOpSelected))
+            {
+                if (GraphWindow.Focused != null) 
+                    NodeActions.PinSelectedToOutputWindow(GraphWindow.Focused.GraphCanvas, nodeSelection, context.CompositionOp);
+            }
 
             ImGui.EndMenu();
         }

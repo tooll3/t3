@@ -47,7 +47,7 @@ internal sealed partial class GraphWindow
         var navigationHistory = new NavigationHistory(Structure);
         var nodeSelection = new NodeSelection(navigationHistory, Structure);
 
-        GraphImageBackground = new GraphImageBackground(this, nodeSelection, Structure);
+        GraphImageBackground = new GraphImageBackground(nodeSelection, Structure);
         GraphCanvas = new GraphCanvas(this, nodeSelection, navigationHistory);
         SymbolBrowser = new SymbolBrowser(this, GraphCanvas);
         _timeLineCanvas = new TimeLineCanvas(GraphCanvas);

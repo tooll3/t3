@@ -3,6 +3,7 @@ using System.Diagnostics;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
@@ -63,7 +64,7 @@ namespace T3.Editor.Gui.MagGraph.States;
 ///</remarks>
 internal sealed class GraphUiContext
 {
-    internal GraphUiContext(NodeSelection selector, MagGraphCanvas canvas, Instance compositionOp)
+    internal GraphUiContext(NodeSelection selector, MagGraphCanvas canvas, Instance compositionOp, GraphImageBackground graphImageBackground)
     {
         Selector = selector;
         Canvas = canvas;
@@ -72,6 +73,7 @@ internal sealed class GraphUiContext
         Placeholder = new PlaceholderCreation();
         EditCommentDialog = new EditCommentDialog();
         StateMachine = new StateMachine(this);// needs to be initialized last
+        GraphImageBackground = graphImageBackground;
     }
 
     internal readonly Instance CompositionOp;
@@ -98,6 +100,7 @@ internal sealed class GraphUiContext
     internal MagGraphItem? ItemForInputSelection;
     internal MagGraphItem? ActiveSourceItem;
     internal Guid ActiveSourceOutputId { get; set; }
+    internal GraphImageBackground GraphImageBackground { get;private set; }
 
     /** Used to prevent disconnected inputLines from collapsing... */
     internal readonly HashSet<int> DisconnectedInputsHashes = []; 

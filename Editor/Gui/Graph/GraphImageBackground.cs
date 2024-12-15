@@ -24,9 +24,9 @@ internal class GraphImageBackground
     public bool IsActive => _backgroundNodePath != null;
     public bool HasInteractionFocus;
 
-    public GraphImageBackground(GraphWindow window, NodeSelection nodeSelection, Structure structure)
+    public GraphImageBackground(NodeSelection nodeSelection, Structure structure)
     {
-        _window = window;
+        //_window = window;
             
         _camSelectionHandling = new CameraSelectionHandling(nodeSelection, () => Playback.Current);
         _structure = structure;
@@ -154,7 +154,7 @@ internal class GraphImageBackground
     private ResolutionHandling.Resolution _selectedResolution = ResolutionHandling.DefaultResolution;
     private readonly CameraInteraction _cameraInteraction = new();
     private IReadOnlyList<Guid> _backgroundNodePath;
-    private readonly GraphWindow _window;
+    //private readonly GraphWindow _window;
     private readonly Structure _structure;
     private readonly NodeSelection _nodeSelection;
 

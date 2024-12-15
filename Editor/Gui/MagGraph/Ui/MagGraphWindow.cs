@@ -12,6 +12,7 @@ internal sealed class MagGraphWindow : Window
         Config.Title = "MagGraph";
         MenuTitle = "Magnetic Graph View";
         WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
+        
     }
 
     
@@ -24,9 +25,12 @@ internal sealed class MagGraphWindow : Window
         if (CompositionOp != focusedCompositionOp)
         {
             CompositionOp = focusedCompositionOp;
-            _magGraphCanvas = new MagGraphCanvas(this, GraphWindow.Focused.GraphCanvas.NodeSelection);
+            var nodeSelection = GraphWindow.Focused.GraphCanvas.NodeSelection;
+            _graphImageBackground = new GraphImageBackground(nodeSelection, GraphWindow.Focused.Structure);
+            _magGraphCanvas = new MagGraphCanvas(this, nodeSelection, _graphImageBackground);
         }
         
+        _graphImageBackground?.Draw(1);
         _magGraphCanvas?.Draw();
     }
     
@@ -37,4 +41,5 @@ internal sealed class MagGraphWindow : Window
 
     internal Instance CompositionOp;
     private MagGraphCanvas _magGraphCanvas;
+    private GraphImageBackground _graphImageBackground;
 }
