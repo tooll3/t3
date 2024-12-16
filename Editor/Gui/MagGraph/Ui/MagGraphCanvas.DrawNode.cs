@@ -447,7 +447,8 @@ internal sealed partial class MagGraphCanvas
         // Draw free input sockets...
         foreach (var inputAnchor in item.GetInputAnchors())
         {
-            var isMultiInput = inputAnchor.InputLine.InputUi.InputDefinition.IsMultiInput;
+            
+            var isMultiInput =inputAnchor.InputLine.InputUi != null && inputAnchor.InputLine.InputUi.InputDefinition.IsMultiInput;
             var isAlreadyUsed = inputAnchor.SnappedConnectionHash != MagGraphItem.FreeAnchor;
             // if (!isMultiInput)
             //     continue;
