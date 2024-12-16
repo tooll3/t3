@@ -100,7 +100,7 @@ internal sealed partial class MagGraphCanvas
 
             // There is probably a better method than this...
             const int snapPadding = 2;
-            if (!snappedBorders.HasFlag(Borders.Down)) pMaxVisible.Y -= snapPadding * CanvasScale;
+            if (!snappedBorders.HasFlag(Borders.Down)) pMaxVisible.Y -= snapPadding  * 2 * CanvasScale;
             if (!snappedBorders.HasFlag(Borders.Right)) pMaxVisible.X -= snapPadding * CanvasScale;
         }
 
