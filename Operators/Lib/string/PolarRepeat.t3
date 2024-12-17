@@ -1,0 +1,15 @@
+{
+  "Id": "1d9f133d-eba6-4b28-9dfd-08f6c5417ed6"/*PolarRepeat*/,
+  "Inputs": [
+    {
+      "Id": "7248c680-7279-4c1d-b968-3864cb849c77"/*InputField*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "b4c551a3-28c1-418a-83b4-ebdd61ed599c"/*Repetitions*/,
+      "DefaultValue": 0.5
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

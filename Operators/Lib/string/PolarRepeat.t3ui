@@ -1,0 +1,30 @@
+{
+  "Id": "1d9f133d-eba6-4b28-9dfd-08f6c5417ed6"/*PolarRepeat*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "7248c680-7279-4c1d-b968-3864cb849c77"/*InputField*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "b4c551a3-28c1-418a-83b4-ebdd61ed599c"/*Repetitions*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "de78d5d8-b232-44f6-ab18-cc765f81eb38"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

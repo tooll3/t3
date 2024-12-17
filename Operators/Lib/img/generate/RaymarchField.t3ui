@@ -145,7 +145,7 @@
       "ChildId": "26bd6ac2-5849-48dd-af0a-17c34f894f0f"/*SetPixelAndVertexShaderStage*/,
       "Position": {
         "X": 1212.9978,
-        "Y": 433.08932
+        "Y": 413.69748
       }
     },
     {
@@ -276,7 +276,7 @@
       "ChildId": "a68f575a-fb8f-4a69-a709-03f35a501133"/*InputAssemblerStage*/,
       "Position": {
         "X": 1212.9978,
-        "Y": 580.08936
+        "Y": 567.08936
       }
     },
     {

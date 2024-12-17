@@ -16,13 +16,6 @@ internal sealed class SphereField : Instance<SphereField>, IGraphNodeOp
     private void Update(EvaluationContext context)
     {
         ShaderNode.Update(context);
-        // var fn = ShaderGraphNode.BuildNodeId(this);
-        // var sd = ShaderGraphNode.GetOrCreateDefinition(context, fn);
-        // Result.Value = sd;
-        
-        // sd.KeepVec3Parameter("Center", Center.GetValue(context), fn);
-        // sd.KeepScalarParameter("Radius", Radius.GetValue(context), fn);
-        // sd.KeepScalarParameter("FallOff", FallOff.GetValue(context), fn);
     }
     
     
@@ -32,7 +25,8 @@ internal sealed class SphereField : Instance<SphereField>, IGraphNodeOp
     {
         return $@"
 float {ShaderNode}(float3 p) {{
-    return saturate( ({ShaderNode}Radius / {ShaderNode}FallOff) - (length(p - {ShaderNode}Center) / {ShaderNode}FallOff) + 0.5  );
+    //return saturate( ({ShaderNode}Radius / {ShaderNode}FallOff) - (length(p - {ShaderNode}Center) / {ShaderNode}FallOff) + 0.5  );
+    return length(p - {ShaderNode}Center) + {ShaderNode}Radius;
 }} 
 ";
     }

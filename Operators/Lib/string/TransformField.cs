@@ -12,6 +12,7 @@ internal sealed class TransformField : Instance<TransformField>, IGraphNodeOp
     public TransformField()
     {
         ShaderNode = new ShaderGraphNode(this, null, InputField);
+        
         Result.Value = ShaderNode;
         ShaderNode.AdditionalParameters = [new ShaderGraphNode.Parameter("float4x4", "Transform", Matrix4x4.Identity)];
         Result.UpdateAction += Update;
@@ -62,7 +63,7 @@ internal sealed class TransformField : Instance<TransformField>, IGraphNodeOp
     {
         return $@" 
         float {ShaderNode}(float3 pos) {{
-            return {_inputFn}(mul(float4(pos.xyz,1), {ShaderNode}Transform).xyz);
+            return {_inputFn}( mul(float4(pos.xyz,1), {ShaderNode}Transform).xyz );
         }}
         ";
     }
