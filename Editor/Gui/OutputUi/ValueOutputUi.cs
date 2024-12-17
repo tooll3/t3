@@ -2,6 +2,7 @@
 using ImGuiNET;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Styling;
+using T3.Editor.SystemUi;
 
 namespace T3.Editor.Gui.OutputUi;
 
@@ -30,6 +31,11 @@ internal sealed class ValueOutputUi<T> : OutputUi<T>
                 case string s:
                     ImGui.BeginChild("scrollable");
                     ImGui.TextUnformatted(s);
+                    if (ImGui.IsItemClicked())
+                    {
+                        EditorUi.Instance.SetClipboardText(s);
+                        Log.Debug("Copied to clipboard");
+                    }
                     ImGui.EndChild();
                     break;
                 default:

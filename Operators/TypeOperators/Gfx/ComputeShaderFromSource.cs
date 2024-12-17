@@ -13,6 +13,7 @@ public sealed class ComputeShaderFromSource : Instance<ComputeShaderFromSource>,
 
     public ComputeShaderFromSource()
     {
+        ShaderOperatorImpl.Initialize();
         Shader.UpdateAction += Update;
     }
 

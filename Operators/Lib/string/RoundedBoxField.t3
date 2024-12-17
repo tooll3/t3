@@ -1,0 +1,27 @@
+{
+  "Id": "860da1cd-b341-4bc5-965a-4a9c295831f4"/*RoundedBoxField*/,
+  "Inputs": [
+    {
+      "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*Radius*/,
+      "DefaultValue": 0.1
+    },
+    {
+      "Id": "951b2983-1359-41e4-8fb0-8d97c50ed8d6"/*Center*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "c4ef07b4-853b-48d4-9ade-c93ee849071a"/*Size*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

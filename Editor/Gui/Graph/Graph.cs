@@ -120,7 +120,11 @@ internal sealed partial class Graph
             if (instance == null)
                 continue;
 
-            var childUi = compositionUi.ChildUis[instance.SymbolChildId];
+            if (!compositionUi.ChildUis.TryGetValue(instance.SymbolChildId, out var childUi))
+            {
+                Log.Warning($"ChildUi not found for {instance.SymbolChildId}");  
+                continue;
+            }
 
             var isSelected = canvas.NodeSelection.IsNodeSelected(childUi);
 

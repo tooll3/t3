@@ -1,0 +1,37 @@
+{
+  "Id": "fc2a33fc-d957-4113-8096-92d4dcbe14b5"/*SphereField*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "3dd7c779-7982-4e7c-b4ce-f1915f477ad0"/*Radius*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "ca582e39-37d7-4df6-b942-e2330f2bf2c6"/*Center*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "f6a672f3-0d9d-4f89-98d9-2ccfb0218ea7"/*FallOff*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "02f7d494-72ed-4247-88d7-0cbb730edf65"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

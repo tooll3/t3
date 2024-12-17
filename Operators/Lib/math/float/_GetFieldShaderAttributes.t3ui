@@ -1,0 +1,33 @@
+{
+  "Id": "73c028d1-3de2-4269-b503-97f62bbce320"/*_GetFieldShaderAttributes*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "bcf6de27-1ffd-422c-9f5b-910d89cad1a4"/*TemplateCode*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "ffc1c70e-b717-4337-916d-c3a13343e9cc"/*Field*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "a1ab0c16-ed15-4334-a529-10e3c217df1a"/*ShaderCode*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

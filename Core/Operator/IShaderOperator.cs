@@ -42,20 +42,22 @@ public interface IShaderCodeOperator<T> where T : AbstractShader
         var shaderSlot = ShaderSlot;
         var currentShader = shaderSlot.Value;
         if (currentShader != null)
-        {
             currentShader.Name = debugName;
-        }
 
         if (!sourceSlot.DirtyFlag.IsDirty && !entryPointSlot.DirtyFlag.IsDirty)
         {
             return;
         }
-
-        var source = sourceSlot.GetValue(context);
+        
+        var previousSource = Code.Value;
+        var newSource = sourceSlot.GetValue(context);
+        if(previousSource==newSource)
+            return;
+        
         var entryPoint = entryPointSlot.GetValue(context);
         var instance = sourceSlot.Parent;
 
-        if (string.IsNullOrWhiteSpace(source))
+        if (string.IsNullOrWhiteSpace(newSource))
         {
             SetWarning("Shader code is empty");
             return;
@@ -75,7 +77,7 @@ public interface IShaderCodeOperator<T> where T : AbstractShader
         }
 
         var compilationArgs = new ShaderCompiler.ShaderCompilationArgs(
-                                                                       SourceCode: source,
+                                                                       SourceCode: newSource,
                                                                        EntryPoint: entryPoint,
                                                                        Owner: instance,
                                                                        Name: debugName,
