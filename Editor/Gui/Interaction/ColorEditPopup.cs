@@ -28,7 +28,7 @@ internal static class ColorEditPopup
         var dontCloseIfColorPicking = ImGui.GetIO().KeyAlt ? ImGuiWindowFlags.Modal : ImGuiWindowFlags.None;
 
         var id = ImGui.GetID("colorPicker");
-        var composition = GraphWindow.Focused?.CompositionOp;
+        var composition = GraphWindow.Focused?.Components.CompositionOp;
         if (ImGui.BeginPopup(PopupId, dontCloseIfColorPicking))
         {
             if (_openedId != id)
@@ -611,7 +611,7 @@ internal static class ColorEditPopup
 
                     if (GraphWindow.Focused != null)
                     {
-                        var nodeSelection = GraphWindow.Focused.GraphCanvas.NodeSelection;
+                        var nodeSelection = GraphWindow.Focused.Components.NodeSelection;
                         foreach (var use in uses)
                         {
                             if (use.Instance == null)
@@ -690,7 +690,7 @@ internal static class ColorEditPopup
     {
         var selectedIds = new HashSet<Guid>();
 
-        var nodeSelection = GraphWindow.Focused?.GraphCanvas.NodeSelection;
+        var nodeSelection = GraphWindow.Focused?.Components.NodeSelection;
         nodeSelection?.Clear();
         foreach (var use in uses)
         {

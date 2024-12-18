@@ -55,7 +55,7 @@ internal static class ParameterPopUp
         _isOpen = false;
     }
 
-    public static void DrawParameterPopUp(GraphWindow graphWindow)
+    public static void DrawParameterPopUp(GraphComponents graphWindow)
     {
         if (!_isOpen || _selectedInstance == null)
             return;
@@ -68,7 +68,7 @@ internal static class ParameterPopUp
             return;
         }
 
-        if (!graphWindow.GraphCanvas.NodeSelection.IsAnythingSelected())
+        if (!graphWindow.NodeSelection.IsAnythingSelected())
         {
             Close();
             return;

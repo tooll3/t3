@@ -1,18 +1,12 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using ImGuiNET;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using T3.Core.DataTypes;
-using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Core.SystemUi;
 using T3.Core.UserData;
 using T3.Editor.External;
 using T3.Editor.Gui.Commands;
-using T3.Editor.Gui.Commands.Annotations;
-using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
@@ -25,34 +19,29 @@ using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.Windows.Output;
 using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 using T3.SystemUi;
-using ComputeShader = T3.Core.DataTypes.ComputeShader;
-using GeometryShader = T3.Core.DataTypes.GeometryShader;
-using PixelShader = T3.Core.DataTypes.PixelShader;
-using Texture2D = SharpDX.Direct3D11.Texture2D;
-using VertexShader = T3.Core.DataTypes.VertexShader;
 
 namespace T3.Editor.Gui.Graph;
 
 /// <summary>
 /// A <see cref="ICanvas"/> that displays the graph of an Operator.
 /// </summary>
-internal class GraphCanvas : ScalableCanvas, INodeCanvas
+internal class GraphCanvas : ScalableCanvas, INodeCanvas, IGraphCanvas
 {
-    internal GraphCanvas(GraphWindow window, NodeSelection nodeSelection, NavigationHistory navigationHistory)
+    private NodeSelection NodeSelection => _components.NodeSelection;
+    private NavigationHistory NavigationHistory => _components.NavigationHistory;
+    private NodeNavigation NodeNavigation => _components.NodeNavigation;
+    private Structure Structure => _components.OpenedProject.Structure;
+    private readonly GraphComponents _components;
+    internal GraphCanvas(GraphComponents components)
     {
-        _window = window;
-        Structure = window.Structure;
-        NavigationHistory = navigationHistory;
-        NodeSelection = nodeSelection;
+        _components = components;
         _nodeGraphLayouting = new NodeGraphLayouting(NodeSelection, Structure);
-        NodeNavigation = new NodeNavigation(() => window.CompositionOp, this, Structure, NavigationHistory);
-        SelectableNodeMovement = new SelectableNodeMovement(window, this, NodeSelection);
-        _graph = new Graph(window, this);
-
+        SelectableNodeMovement = new SelectableNodeMovement(components, this, NodeSelection);
+        _graph = new Graph(components, this);
+        
         window.WindowDestroyed += (_, _) => Destroyed = true;
         window.FocusLost += (_, _) =>
                             {
@@ -61,7 +50,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
                             };
     }
 
-    public void SetCompositionToChildInstance(Instance instance) => _window.TrySetCompositionOpToChild(instance.SymbolChildId);
+    public void SetCompositionToChildInstance(Instance instance) => _components.TrySetCompositionOpToChild(instance.SymbolChildId);
 
     [Flags]
     public enum GraphDrawingFlags
@@ -79,7 +68,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
     {
         var editingFlags = T3Ui.EditingFlags.None;
 
-        if (_window.SymbolBrowser.IsOpen)
+        if (SymbolBrowser.IsOpen)
             editingFlags |= T3Ui.EditingFlags.PreventZoomWithMouseWheel;
 
         if (preventInteractions)
@@ -97,12 +86,12 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
             if (ImGui.IsWindowFocused())
                 _window.TakeFocus();
 
-            DrawDropHandler(_window.CompositionOp, _window.CompositionOp.GetSymbolUi());
+            DrawDropHandler(_components.CompositionOp, _components.CompositionOp.GetSymbolUi());
             ImGui.SetCursorScreenPos(Vector2.One * 100);
 
             if (!preventInteractions)
             {
-                var compositionOp = _window.CompositionOp;
+                var compositionOp = _components.CompositionOp;
                 var compositionUi = compositionOp.GetSymbolUi();
                 //compositionUi.FlagAsModified();
 
@@ -137,12 +126,12 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
                         var selectedImage = NodeSelection.GetFirstSelectedInstance();
                         if (selectedImage != null && GraphWindow.Focused != null)
                         {
-                            GraphWindow.Focused.SetBackgroundOutput(selectedImage);
+                            GraphWindow.Focused.Components.SetBackgroundOutput(selectedImage);
                         }
                     }
                     else
                     {
-                        NodeActions.PinSelectedToOutputWindow(this, NodeSelection, compositionOp);
+                        NodeActions.PinSelectedToOutputWindow(_components, NodeSelection, compositionOp);
                     }
                 }
 
@@ -151,7 +140,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
                     var selectedImage = NodeSelection.GetFirstSelectedInstance();
                     if (selectedImage != null && GraphWindow.Focused != null)
                     {
-                        GraphWindow.Focused.SetBackgroundOutput(selectedImage);
+                        GraphWindow.Focused.Components.SetBackgroundOutput(selectedImage);
                         //GraphWindow.Focused..SetBackgroundInstanceForCurrentGraph(selectedImage);
                     }
                 }
@@ -191,7 +180,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
                 }
 
                 if (navigationPath != null)
-                    _window.TrySetCompositionOp(navigationPath);
+                    _components.TrySetCompositionOp(navigationPath);
 
                 if (KeyboardBinding.Triggered(UserActions.SelectToAbove))
                 {
@@ -223,7 +212,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
                     var selectedImage = NodeSelection.GetFirstSelectedInstance();
                     if (selectedImage != null)
                     {
-                        _window.GraphImageBackground.OutputInstance = selectedImage;
+                        _components.GraphImageBackground.OutputInstance = selectedImage;
                     }
                 }
             }
@@ -279,16 +268,16 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
 
             if (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem))
             {
-                ConnectionSplitHelper.PrepareNewFrame(_window);
+                ConnectionSplitHelper.PrepareNewFrame(_components);
             }
 
-            _window.SymbolBrowser.Draw();
+            SymbolBrowser.Draw();
 
             graphOpacity *= preventInteractions ? 0.3f : 1;
-            _graph.DrawGraph(drawList, drawingFlags.HasFlag(GraphDrawingFlags.PreventInteractions), _window.CompositionOp, graphOpacity);
+            _graph.DrawGraph(drawList, drawingFlags.HasFlag(GraphDrawingFlags.PreventInteractions), _components.CompositionOp, graphOpacity);
 
-            RenameInstanceOverlay.Draw(_window);
-            var tempConnections = ConnectionMaker.GetTempConnectionsFor(_window);
+            RenameInstanceOverlay.Draw(_components);
+            var tempConnections = ConnectionMaker.GetTempConnectionsFor(this);
 
             var doubleClicked = ImGui.IsMouseDoubleClicked(0);
 
@@ -302,12 +291,12 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
 
             if (shouldHandleFenceSelection)
             {
-                HandleFenceSelection(_window.CompositionOp, _selectionFence);
+                HandleFenceSelection(_components.CompositionOp, _selectionFence);
             }
 
             if (isOnBackground && doubleClicked)
             {
-                _window.TrySetCompositionOpToParent();
+                _components.TrySetCompositionOpToParent();
             }
 
             if (tempConnections.Count > 0 && ImGui.IsMouseReleased(0))
@@ -317,8 +306,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
                     ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem | ImGuiHoveredFlags.AllowWhenBlockedByPopup) && !isAnyItemHovered;
                 if (droppedOnBackground)
                 {
-                    ConnectionMaker.InitSymbolBrowserAtPosition(_window,
-                                                                InverseTransformPositionFloat(ImGui.GetIO().MousePos));
+                    ConnectionMaker.InitSymbolBrowserAtPosition(this, InverseTransformPositionFloat(ImGui.GetIO().MousePos));
                 }
                 else
                 {
@@ -334,7 +322,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
 
             drawList.PopClipRect();
 
-            var compositionUpdated = _window.CompositionOp;
+            var compositionUpdated = _components.CompositionOp;
 
             if (FrameStats.Current.OpenedPopUpName == string.Empty)
                 CustomComponents.DrawContextMenuForScrollCanvas(() => DrawContextMenuContent(compositionUpdated), ref _contextMenuIsOpen);
@@ -352,7 +340,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
 
             EditCommentDialog.Draw(NodeSelection);
 
-            if (compositionUpdated != _window.RootInstance.Instance && !compositionUpdated.Symbol.SymbolPackage.IsReadOnly)
+            if (compositionUpdated != _components.OpenedProject.RootInstance.Instance && !compositionUpdated.Symbol.SymbolPackage.IsReadOnly)
             {
                 var symbol = compositionUpdated.Symbol;
                 _addInputDialog.Draw(symbol);
@@ -394,7 +382,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
     private void HandleSelectionFenceUpdate(ImRect bounds, Instance compositionOp, SelectionFence.SelectModes selectMode)
     {
         var boundsInCanvas = InverseTransformRect(bounds);
-        var nodesToSelect = NodeSelection.GetSelectableChildren(_window.CompositionOp)
+        var nodesToSelect = NodeSelection.GetSelectableChildren(_components.CompositionOp)
                                          .Where(child => child is Annotation
                                                              ? boundsInCanvas.Contains(child.Rect)
                                                              : child.Rect.Overlaps(boundsInCanvas));
@@ -450,7 +438,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
     /// </remarks>
     public void OpenSymbolBrowserForOutput(SymbolUi.Child childUi, Symbol.OutputDefinition outputDef)
     {
-        ConnectionMaker.InitSymbolBrowserAtPosition(_window,
+        ConnectionMaker.InitSymbolBrowserAtPosition(this,
                                                     childUi.PosOnCanvas + new Vector2(childUi.Size.X + SelectableNodeMovement.SnapPadding.X, 0));
     }
 
@@ -502,9 +490,9 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
         }
     }
 
-    internal void FocusViewToSelection()
+    public void FocusViewToSelection()
     {
-        FitAreaOnCanvas(NodeSelection.GetSelectionBounds(NodeSelection, _window.CompositionOp));
+        FitAreaOnCanvas(NodeSelection.GetSelectionBounds(NodeSelection, _components.CompositionOp));
     }
 
     private void DrawContextMenuContent(Instance compositionOp)
@@ -660,12 +648,12 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
                                enabled: isImage))
             {
                 var instance = compositionOp.Children[selectedChildUis[0].Id];
-                _window.GraphImageBackground.OutputInstance = instance;
+                _components.GraphImageBackground.OutputInstance = instance;
             }
 
             if (ImGui.MenuItem("Pin to output", oneOpSelected))
             {
-                NodeActions.PinSelectedToOutputWindow(this, NodeSelection, compositionOp);
+                NodeActions.PinSelectedToOutputWindow(_components, NodeSelection, compositionOp);
             }
 
             ImGui.EndMenu();
@@ -714,7 +702,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
         {
             var startingSearchString = selectedChildUis[0].SymbolChild.Symbol.Name;
             var position = selectedChildUis.Count == 1 ? selectedChildUis[0].PosOnCanvas : InverseTransformPositionFloat(ImGui.GetMousePos());
-            _window.SymbolBrowser.OpenAt(position, null, null, false, startingSearchString,
+            SymbolBrowser.OpenAt(position, null, null, false, startingSearchString,
                                          symbol => { ChangeSymbol.ChangeOperatorSymbol(NodeSelection, compositionOp, selectedChildUis, symbol); });
         }
 
@@ -769,7 +757,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
         {
             if (ImGui.MenuItem("Add Node...", "TAB", false, true))
             {
-                _window.SymbolBrowser.OpenAt(InverseTransformPositionFloat(clickPosition), null, null, false);
+                SymbolBrowser.OpenAt(InverseTransformPositionFloat(clickPosition), null, null, false);
             }
 
             if (canModify)
@@ -897,25 +885,25 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
         }
     }
 
-    public IEnumerable<ISelectableCanvasObject> SelectableChildren => NodeSelection.GetSelectableChildren(_window.CompositionOp);
+    public IEnumerable<ISelectableCanvasObject> SelectableChildren => NodeSelection.GetSelectableChildren(_components.CompositionOp);
 
     //private readonly List<ISelectableCanvasObject> _selectableItems = new();
     #endregion
 
     #region public API
     public bool Destroyed { get; private set; }
-    public GraphWindow Window => _window;
+    public SymbolBrowser SymbolBrowser { get; set; }
 
     public void OpenAndFocusInstance(IReadOnlyList<Guid> path)
     {
         if (path.Count == 1)
         {
-            _window.TrySetCompositionOp(path, ICanvas.Transition.JumpOut, path[0]);
+            _components.TrySetCompositionOp(path, ICanvas.Transition.JumpOut, path[0]);
             return;
         }
 
         var compositionPath = path.Take(path.Count - 1).ToList();
-        _window.TrySetCompositionOp(compositionPath, ICanvas.Transition.JumpIn, path[^1]);
+        _components.TrySetCompositionOp(compositionPath, ICanvas.Transition.JumpIn, path[^1]);
     }
     #endregion
 
@@ -932,12 +920,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
     private string _symbolNameForDialogEdits = "";
     private string _symbolDescriptionForDialog = "";
     private string _nameSpaceForDialogEdits = "";
-    private readonly GraphWindow _window;
     private Vector2 _dampedScrollVelocity = Vector2.Zero;
-    internal readonly NavigationHistory NavigationHistory;
-    internal readonly Structure Structure;
-    internal readonly NodeNavigation NodeNavigation;
-    internal readonly NodeSelection NodeSelection;
     private readonly NodeGraphLayouting _nodeGraphLayouting;
     private readonly Graph _graph;
     internal readonly SelectableNodeMovement SelectableNodeMovement;

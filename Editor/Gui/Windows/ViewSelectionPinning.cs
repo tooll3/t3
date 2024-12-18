@@ -94,7 +94,7 @@ internal class ViewSelectionPinning
                     Unpin();
                 }
 
-                var instanceSelectedInGraph = _pinnedInstanceCanvas!.NodeSelection.GetFirstSelectedInstance();
+                var instanceSelectedInGraph = _pinnedComponents!.NodeSelection.GetFirstSelectedInstance();
                 if (instanceSelectedInGraph != pinnedOrSelectedInstance)
                 {
                     if (ImGui.MenuItem("Pin Selection to View"))
@@ -164,7 +164,7 @@ internal class ViewSelectionPinning
         ImGui.SameLine();
     }
 
-    private void PinSelectionToView(GraphCanvas canvas)
+    private void PinSelectionToView(GraphComponents canvas)
     {
         var firstSelectedInstance = canvas.NodeSelection.GetFirstSelectedInstance();
         PinInstance(firstSelectedInstance, canvas);
@@ -178,7 +178,7 @@ internal class ViewSelectionPinning
                                             : [];
     }
 
-    public bool TryGetPinnedOrSelectedInstance([NotNullWhen(true)] out Instance? instance, [NotNullWhen(true)] out GraphCanvas? canvas)
+    public bool TryGetPinnedOrSelectedInstance([NotNullWhen(true)] out Instance? instance, [NotNullWhen(true)] out GraphComponents? components)
     {
         var window = GraphWindow.Focused;
 
@@ -186,47 +186,47 @@ internal class ViewSelectionPinning
         {
             if (window == null)
             {
-                canvas = null;
+                components = null;
                 instance = null;
                 return false;
             }
 
-            canvas = window.GraphCanvas;
-            instance = canvas.NodeSelection.GetFirstSelectedInstance();
+            components = window.Components;
+            instance = window.Components.NodeSelection.GetFirstSelectedInstance();
             return instance != null;
         }
 
-        if (!_pinnedInstanceCanvas!.Destroyed)
+        if (!_pinnedComponents!.GraphCanvas.Destroyed)
         {
-            instance = _pinnedInstanceCanvas.Structure.GetInstanceFromIdPath(_pinnedInstancePath);
-            canvas = _pinnedInstanceCanvas;
+            instance = _pinnedComponents.Structure.GetInstanceFromIdPath(_pinnedInstancePath);
+            components = _pinnedComponents;
             return instance != null;
         }
 
         Unpin();
         if (window != null)
         {
-            canvas = window.GraphCanvas;
-            instance = canvas.NodeSelection.GetFirstSelectedInstance();
+            components = window.Components;
+            instance = window.Components.NodeSelection.GetFirstSelectedInstance();
             return instance != null;
         }
 
-        canvas = null;
+        components = null;
         instance = null;
         return false;
     }
 
-    public void PinInstance(Instance? instance, GraphCanvas canvas)
+    public void PinInstance(Instance? instance, GraphComponents canvas)
     {
         _pinnedInstancePath = instance != null ? instance.InstancePath : [];
-        _pinnedInstanceCanvas = canvas;
+        _pinnedComponents = canvas;
         _isPinned = true;
     }
 
     private void Unpin()
     {
         _isPinned = false;
-        _pinnedInstanceCanvas = null;
+        _pinnedComponents = null;
         _pinnedInstancePath = [];
     }
 
@@ -237,7 +237,7 @@ internal class ViewSelectionPinning
     }
 
     private bool _isPinned;
-    private GraphCanvas? _pinnedInstanceCanvas;
+    private GraphComponents? _pinnedComponents;
     private IReadOnlyList<Guid> _pinnedInstancePath = Array.Empty<Guid>();
     private IReadOnlyList<Guid> _pinnedEvaluationInstancePath = Array.Empty<Guid>();
 }

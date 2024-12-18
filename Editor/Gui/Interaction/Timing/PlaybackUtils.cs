@@ -85,7 +85,7 @@ public static class PlaybackUtils
     private static PlaybackSettings? FindPlaybackSettings(out IResourceConsumer? owner)
     {
         var primaryGraphWindow = GraphWindow.Focused;
-        var composition = primaryGraphWindow?.CompositionOp;
+        var composition = primaryGraphWindow?.Components.CompositionOp;
 
         if (FindPlaybackSettingsForInstance(composition, out var instance, out var settings))
         {

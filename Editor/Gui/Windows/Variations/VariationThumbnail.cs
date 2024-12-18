@@ -114,7 +114,7 @@ internal static class VariationThumbnail
 
                 if (variation.IsSnapshot && GraphWindow.Focused != null)
                 {
-                    var nodeSelection = GraphWindow.Focused.GraphCanvas.NodeSelection;
+                    var nodeSelection = GraphWindow.Focused.Components.NodeSelection;
                     foreach (var childId in variation.ParameterSetsForChildIds.Keys)
                     {
                         nodeSelection.HoveredIds.Add(childId);

@@ -15,7 +15,7 @@ public abstract class BaseRenderWindow : Window
 
     protected static int SoundtrackChannels()
     {
-        var composition = GraphWindow.Focused?.CompositionOp;
+        var composition = GraphWindow.Focused?.Components.CompositionOp;
         if (composition == null)
             return AudioEngine.GetClipSampleRate(null);
         
@@ -28,7 +28,7 @@ public abstract class BaseRenderWindow : Window
 
     protected static int SoundtrackSampleRate()
     {
-        var composition = GraphWindow.Focused?.CompositionOp;
+        var composition = GraphWindow.Focused?.Components.CompositionOp;
 
         if (composition == null)
             return AudioEngine.GetClipSampleRate(null);
@@ -230,7 +230,7 @@ public abstract class BaseRenderWindow : Window
     protected static void SetPlaybackTimeForThisFrame()
     {
         // get playback settings
-        var composition = GraphWindow.Focused?.CompositionOp;
+        var composition = GraphWindow.Focused?.Components.CompositionOp;
         PlaybackUtils.FindPlaybackSettingsForInstance(composition, out var instanceWithSettings, out var settings);
 
         // change settings for all playback before calculating times

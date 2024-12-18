@@ -22,12 +22,12 @@ namespace T3.Editor.Gui.Graph.Interaction;
 /// </summary>
 internal sealed class SymbolBrowser
 {
-    private readonly GraphWindow _window;
-    private readonly GraphCanvas _canvas;
+    private readonly GraphComponents _components;
+    private readonly IGraphCanvas _canvas;
         
-    public SymbolBrowser(GraphWindow window, GraphCanvas canvas)
+    public SymbolBrowser(GraphComponents components, IGraphCanvas canvas)
     {
-        _window = window;
+        _components = components;
         _canvas = canvas;
     }
     #region public API ------------------------------------------------------------------------
@@ -61,7 +61,7 @@ internal sealed class SymbolBrowser
         _filter.SearchString = startingSearchString;
         _selectedSymbolUi = null;
         _filter.OnlyMultiInputs = onlyMultiInputs;
-        _filter.UpdateIfNecessary(_canvas.NodeSelection, forceUpdate: true);
+        _filter.UpdateIfNecessary(_components.NodeSelection, forceUpdate: true);
         DrawUtils.DisableImGuiKeyboardNavigation();
 
         if (_selectedSymbolUi == null && _filter.MatchingSymbolUis.Count > 0)
@@ -72,8 +72,8 @@ internal sealed class SymbolBrowser
 
     public void Draw()
     {
-        var canvas = _window.GraphCanvas;
-        var nodeSelection = canvas.NodeSelection;
+        var canvas = _canvas;
+        var nodeSelection = _components.NodeSelection;
         if (!IsOpen)
         {
             var hasFocus =  ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows);
@@ -82,9 +82,9 @@ internal sealed class SymbolBrowser
             if (!hasFocus || anythingActive || !ImGui.IsKeyReleased((ImGuiKey)Key.Tab))
                 return;
 
-            if (canvas.NodeSelection.GetSelectedChildUis().Count() != 1)
+            if (nodeSelection.GetSelectedChildUis().Count() != 1)
             {
-                ConnectionMaker.StartOperation(_window, "Add operator");
+                ConnectionMaker.StartOperation(canvas, "Add operator");
                     
                 var screenPos = ImGui.GetIO().MousePos + new Vector2(-4, -20);
                 var canvasPosition = canvas.InverseTransformPositionFloat(screenPos);
@@ -118,14 +118,14 @@ internal sealed class SymbolBrowser
                     canvas.FitAreaOnCanvas(canvasRect);
                 }
                     
-                ConnectionMaker.OpenBrowserWithSingleSelection(_window, childUi, instance);
+                ConnectionMaker.OpenBrowserWithSingleSelection(_components, childUi, instance);
             }
             return;
         }
 
         FrameStats.Current.OpenedPopUpName = "SymbolBrowser";
 
-        _filter.UpdateIfNecessary(_canvas.NodeSelection);
+        _filter.UpdateIfNecessary(_components.NodeSelection);
 
         ImGui.PushID(_uiId);
         {
@@ -142,7 +142,7 @@ internal sealed class SymbolBrowser
 
             ImGui.SetCursorPos(browserPositionInWindow);
 
-            DrawResultsList(_window, browserSize);
+            DrawResultsList(browserSize);
 
             if (_selectedSymbolUi != null)
             {
@@ -160,7 +160,7 @@ internal sealed class SymbolBrowser
                 if ( _filter.PresetFilterString != string.Empty)
                 {
                     UiListHelpers.AdvanceSelectedItem(_matchingPresets, ref _selectedPreset, 0);
-                    DrawPresetPanel(_window, browserPositionInWindow, new Vector2(140, browserSize.Y));
+                    DrawPresetPanel(browserPositionInWindow, new Vector2(140, browserSize.Y));
                 }
                 else
                 {
@@ -240,7 +240,7 @@ internal sealed class SymbolBrowser
 
     private void Cancel()
     {
-        ConnectionMaker.AbortOperation(_window);
+        ConnectionMaker.AbortOperation(_canvas);
         // if (_prepareCommand != null)
         // {
         //     _prepareCommand.Undo();
@@ -254,12 +254,11 @@ internal sealed class SymbolBrowser
     {
         DrawUtils.RestoreImGuiKeyboardNavigation();
         IsOpen = false;
-        _window.FocusFromSymbolBrowser();
+        FocusRequested?.Invoke();
     }
 
-    private void DrawResultsList(GraphWindow window, Vector2 size)
+    private void DrawResultsList(Vector2 size)
     {
-        var canvas = window.GraphCanvas;
         ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(5, 5));
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 10));
             
@@ -290,7 +289,7 @@ internal sealed class SymbolBrowser
 
             PrintTypeFilter();
 
-            var compositionOp = _window.CompositionOp;
+            var compositionOp = _components.CompositionOp;
             var projectNamespace = "user." + compositionOp.Symbol.SymbolPackage.AssemblyInformation.Name + ".";
             var compositionNameSpace = "";
             var currentMainComposition = compositionOp;
@@ -398,7 +397,7 @@ internal sealed class SymbolBrowser
         ImGui.PopFont();
     }
 
-    private static void ClampPanelToCanvas(GraphCanvas canvas, ref Vector2 position, ref Vector2 size)
+    private static void ClampPanelToCanvas(IGraphCanvas canvas, ref Vector2 position, ref Vector2 size)
     {
         var maxXPos = position.X + size.X;
         var maxYPos = position.Y + size.Y;
@@ -417,10 +416,10 @@ internal sealed class SymbolBrowser
 
     private Variation _selectedPreset;
 
-    private void DrawPresetPanel(GraphWindow graphWindow, Vector2 position, Vector2 size)
+    private void DrawPresetPanel(Vector2 position, Vector2 size)
     {
         //size.X = 120;
-        if (!TryFindValidPanelPosition(graphWindow.GraphCanvas, ref position, size))
+        if (!TryFindValidPanelPosition(_canvas, ref position, size))
             return;
 
         ImGui.PushStyleColor(ImGuiCol.FrameBg, UiColors.BackgroundPopup.Rgba);
@@ -509,7 +508,7 @@ internal sealed class SymbolBrowser
         ImGui.PopStyleVar();
     }
 
-    private static bool TryFindValidPanelPosition(GraphCanvas canvas, ref Vector2 position, Vector2 size)
+    private static bool TryFindValidPanelPosition(IGraphCanvas canvas, ref Vector2 position, Vector2 size)
     {
         var maxXPos = position.X + size.X + ResultListSize.X;
         var wouldExceedWindowBounds = maxXPos >= canvas.WindowSize.X;
@@ -589,7 +588,7 @@ internal sealed class SymbolBrowser
         }
 
         var commandsForUndo = new List<ICommand>();
-        var parentOp = _window.CompositionOp;
+        var parentOp = _components.CompositionOp;
         var parentSymbol = parentOp.Symbol;
         var parentSymbolUi = parentSymbol.GetSymbolUi();
 
@@ -606,7 +605,7 @@ internal sealed class SymbolBrowser
         }
             
         var newSymbolChild = newChildUi.SymbolChild;
-        var newInstance = _window.CompositionOp.Children[newChildUi.Id];
+        var newInstance = _components.CompositionOp.Children[newChildUi.Id];
 
         var presetPool = VariationHandling.GetOrLoadVariations(_selectedSymbolUi.Symbol.Id);
         if (presetPool != null && _selectedPreset != null)
@@ -614,14 +613,14 @@ internal sealed class SymbolBrowser
             presetPool.Apply(newInstance, _selectedPreset);
         }
 
-        _window.GraphCanvas.NodeSelection.SetSelection(newChildUi, newInstance);
+        _components.NodeSelection.SetSelection(newChildUi, newInstance);
 
         // if (_prepareCommand != null)
         // {
         //     additionalCommands.Add(_prepareCommand);
         // }
 
-        var tempConnections = ConnectionMaker.GetTempConnectionsFor(_window);
+        var tempConnections = ConnectionMaker.GetTempConnectionsFor(_canvas);
 
         foreach (var c in tempConnections)
         {
@@ -665,7 +664,7 @@ internal sealed class SymbolBrowser
 
         // var newCommand = new MacroCommand("Insert Op", commands);
         // UndoRedoStack.Add(newCommand);
-        ConnectionMaker.CompleteOperation(_window, commandsForUndo, "Insert Op " + newChildUi.SymbolChild.ReadableName);
+        ConnectionMaker.CompleteOperation(_canvas, commandsForUndo, "Insert Op " + newChildUi.SymbolChild.ReadableName);
         ParameterPopUp.NodeIdRequestedForParameterWindowActivation = newSymbolChild.Id;
         Close();
     }
@@ -690,4 +689,5 @@ internal sealed class SymbolBrowser
     private SymbolUi _selectedSymbolUi;
     private static readonly int _uiId = "DraftNode".GetHashCode();
     private readonly List<Variation> _matchingPresets = new();
+    public event Action FocusRequested;
 }

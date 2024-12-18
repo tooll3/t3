@@ -48,7 +48,7 @@ internal class ExplorationWindow : Window
         {
             ImGui.PushStyleVar(ImGuiStyleVar.ItemInnerSpacing, new Vector2(4,4));
 
-            var currentGraphCanvas = GraphWindow.Focused?.GraphCanvas;
+            var currentGraphCanvas = GraphWindow.Focused?.Components;
 
             if (currentGraphCanvas != null)
             {
@@ -62,7 +62,7 @@ internal class ExplorationWindow : Window
         ImGui.SameLine();
         ImGui.BeginChild("canvas", new Vector2(-1, -1), false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
         {
-            _variationCanvas.Draw(GraphWindow.Focused?.GraphCanvas.Structure);
+            _variationCanvas.Draw(GraphWindow.Focused?.Components.Structure);
         }
         ImGui.EndChild();
     }

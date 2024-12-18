@@ -76,12 +76,12 @@ public class UtilitiesWindow : Window
                         ImGui.TreePop();
                     }
 
-                    var graphCanvas = GraphWindow.Focused?.GraphCanvas;
+                    var graphInfo = GraphWindow.Focused?.Components;
                     
-                    if (graphCanvas != null && ImGui.TreeNode("Navigation history"))
+                    if (graphInfo != null && ImGui.TreeNode("Navigation history"))
                     {
                         int index = 0;
-                        foreach (var c in graphCanvas.NavigationHistory.GetPreviouslySelectedInstances())
+                        foreach (var c in graphInfo.NavigationHistory.GetPreviouslySelectedInstances())
                         {
                             ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.5f / (index + 1) + 0.5f));
                             ImGui.PushFont(index == 0 ? Fonts.FontBold : Fonts.FontNormal);

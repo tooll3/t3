@@ -7,12 +7,14 @@ namespace T3.Editor.Gui.Graph.Interaction;
 
 internal sealed class NodeNavigation
 {
-    public NodeNavigation(Func<Instance> getComposition, GraphCanvas canvas, Structure structure, NavigationHistory navigationHistory)
+    private readonly GraphComponents _components;
+    public NodeNavigation(GraphComponents components)
     {
-        _canvas = canvas;
-        _structure = structure;
-        _navigationHistory = navigationHistory;
-        _getComposition = getComposition;
+        _components = components;
+        _getComposition = () => _components.CompositionOp;
+        _canvas = _components.GraphCanvas;
+        _structure = _components.OpenedProject.Structure;
+        _navigationHistory = _components.NavigationHistory;
     }
     
     public void SelectAbove()
@@ -113,7 +115,7 @@ internal sealed class NodeNavigation
     }
 
     private readonly Func<Instance> _getComposition;
-    private readonly GraphCanvas _canvas;
+    private readonly IGraphCanvas _canvas;
     private readonly Structure _structure;
     private readonly NavigationHistory _navigationHistory;
 }

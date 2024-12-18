@@ -284,7 +284,7 @@ public static class CurveInputEditing
                 }
 
                 var graphCanvas = GraphWindow.Focused?.GraphCanvas;
-                DrawCurveCanvas(graphCanvas, DrawCanvasContent, selectionFence, height, _interactionFlags);
+                DrawCurveCanvas(DrawCanvasContent, selectionFence, height, _interactionFlags);
 
                 void DrawCanvasContent(InteractionState interactionState)
                 {

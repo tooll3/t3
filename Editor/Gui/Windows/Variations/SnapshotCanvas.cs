@@ -40,7 +40,7 @@ internal class SnapshotCanvas : VariationBaseCanvas
         if (graphWindow == null)
             return;
 
-        var nodeSelection = graphWindow.GraphCanvas.NodeSelection;
+        var nodeSelection = graphWindow.Components.NodeSelection;
 
         if (ImGui.MenuItem("Select affected Operators",
                            "",

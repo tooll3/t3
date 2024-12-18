@@ -15,12 +15,11 @@ namespace T3.Editor.Gui.Graph;
 /// </summary>
 static class InputNode
 {
-    internal static bool Draw(GraphWindow window, ImDrawListPtr drawList, Symbol.InputDefinition inputDef, IInputUi inputUi, int index)
+    internal static bool Draw(GraphComponents components, GraphCanvas canvas, ImDrawListPtr drawList, Symbol.InputDefinition inputDef, IInputUi inputUi, int index)
     { 
         var isSelectedOrHovered = false;
         ImGui.PushID(inputDef.Id.GetHashCode());
         {
-            var canvas = window.GraphCanvas;
             _lastScreenRect = canvas.TransformRect(new ImRect(inputUi.PosOnCanvas, inputUi.PosOnCanvas + inputUi.Size));
             _lastScreenRect.Floor();
 
@@ -46,7 +45,7 @@ static class InputNode
                                        ? ColorVariations.OperatorBackgroundHover.Apply(typeColor)
                                        : ColorVariations.ConnectionLines.Apply(typeColor).Fade(0.5f));
 
-            var inputUiIsSelected = canvas.NodeSelection.IsNodeSelected(inputUi);
+            var inputUiIsSelected = components.NodeSelection.IsNodeSelected(inputUi);
             isSelectedOrHovered |= inputUiIsSelected;
                 
             if (inputUiIsSelected)
@@ -91,21 +90,21 @@ static class InputNode
                 DrawUtils.DebugItemRect();
                 var color = ColorVariations.ConnectionLines.Apply(typeColor).Fade(0.5f);
 
-                if (!ConnectionMaker.IsInputNodeCurrentConnectionSource(window, inputDef) && ImGui.IsItemHovered())
+                if (!ConnectionMaker.IsInputNodeCurrentConnectionSource(canvas, inputDef) && ImGui.IsItemHovered())
                 {
                     color = ColorVariations.Highlight.Apply(typeColor).Fade(0.8f);
-                    if (ConnectionMaker.IsMatchingInputType(window, inputDef.DefaultValue.ValueType))
+                    if (ConnectionMaker.IsMatchingInputType(canvas, inputDef.DefaultValue.ValueType))
                     {
                         if (ImGui.IsMouseReleased(0))
                         {
-                            ConnectionMaker.CompleteAtSymbolInputNode(window, window.CompositionOp.GetSymbolUi(), inputDef);
+                            ConnectionMaker.CompleteAtSymbolInputNode(canvas, components.CompositionOp.GetSymbolUi(), inputDef);
                         }
                     }
                     else
                     {
                         if (ImGui.IsItemClicked(0))
                         {
-                            ConnectionMaker.StartFromInputNode(window, inputDef);
+                            ConnectionMaker.StartFromInputNode(canvas, inputDef);
                         }
                     }
                 }

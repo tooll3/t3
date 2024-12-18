@@ -6,6 +6,7 @@ using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
+using T3.Editor.UiModel;
 using T3.SystemUi.Logging;
 
 namespace T3.Editor.Gui.Windows;
@@ -176,7 +177,7 @@ public class ConsoleLogWindow : Window, ILogWriter
         ImGui.SameLine(90);
 
         float opacity = 1f;
-        var nodeSelection = GraphWindow.Focused?.GraphCanvas.NodeSelection;
+        var nodeSelection = GraphWindow.Focused?.Components.NodeSelection;
         if (nodeSelection != null)
         {
             if(nodeSelection.HoveredIds.Contains(entry.SourceId))
@@ -197,7 +198,7 @@ public class ConsoleLogWindow : Window, ILogWriter
             if(nodeSelection != null)
                 nodeSelection.HoveredIds.Add(entry.SourceId);
 
-            GraphCanvas owner = null;
+            GraphComponents owner = null;
             bool foundOwner = false;
             var childIdPath = entry.SourceIdPath?.ToList();
 
@@ -205,14 +206,14 @@ public class ConsoleLogWindow : Window, ILogWriter
             {
                 foreach (var graphWindow in GraphWindow.GraphWindowInstances)
                 {
-                    var canvas = graphWindow.GraphCanvas;
-                    var hoveredSourceInstance = canvas.Structure.GetInstanceFromIdPath(childIdPath);
+                    var components = graphWindow.Components;
+                    var hoveredSourceInstance = components.Structure.GetInstanceFromIdPath(childIdPath);
                     if (hoveredSourceInstance == null)
                     {
                         continue;
                     }
 
-                    owner = canvas;
+                    owner = components;
                     foundOwner = true;
                     break;
                 }
@@ -254,7 +255,7 @@ public class ConsoleLogWindow : Window, ILogWriter
                 
             if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
             {
-                owner.OpenAndFocusInstance(entry.SourceIdPath?.ToList());
+                owner.GraphCanvas.OpenAndFocusInstance(entry.SourceIdPath?.ToList());
                 if (!string.IsNullOrEmpty(entry.Message))
                     EditorUi.Instance.SetClipboardText(entry.Message);
             }

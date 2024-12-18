@@ -20,7 +20,7 @@ public static class TemplateUse
             return;
         }
 
-        var compositionSymbolUi = defaultCanvasWindow.CompositionOp.GetSymbolUi();
+        var compositionSymbolUi = defaultCanvasWindow.Components.CompositionOp.GetSymbolUi();
 
         var graphCanvas = defaultCanvasWindow.GraphCanvas;
         var centerOnScreen = graphCanvas.WindowPos + graphCanvas.WindowSize / 2;
@@ -35,7 +35,7 @@ public static class TemplateUse
             return;
         }
         T3Ui.SelectAndCenterChildIdInView(newChildUi.SymbolChild.Id);
-        var newInstance = defaultCanvasWindow.GraphCanvas.NodeSelection.GetSelectedInstanceWithoutComposition(); 
+        var newInstance = defaultCanvasWindow.Components.NodeSelection.GetSelectedInstanceWithoutComposition(); 
         template.AfterSetupAction?.Invoke(newInstance,
                                           symbolName,
                                           nameSpace, 

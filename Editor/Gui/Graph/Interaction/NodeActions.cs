@@ -135,7 +135,7 @@ internal static class NodeActions
         return annotation;
     }
 
-    public static void PinSelectedToOutputWindow(GraphCanvas canvas, NodeSelection nodeSelection, Instance compositionOp)
+    public static void PinSelectedToOutputWindow(GraphComponents components, NodeSelection nodeSelection, Instance compositionOp)
     {
         var outputWindow = OutputWindow.OutputWindowInstances.FirstOrDefault(ow => ow.Config.Visible) as OutputWindow;
         if (outputWindow == null)
@@ -153,7 +153,7 @@ internal static class NodeActions
 
         if (compositionOp.TryGetChildInstance(selection[0].Id, false, out var child, out _))
         {
-            outputWindow.Pinning.PinInstance(child, canvas);
+            outputWindow.Pinning.PinInstance(child, components);
         }
     }
 

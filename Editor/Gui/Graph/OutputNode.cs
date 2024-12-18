@@ -5,6 +5,7 @@ using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph;
 
@@ -14,9 +15,8 @@ namespace T3.Editor.Gui.Graph;
 /// </summary>
 static class OutputNode
 {
-    public static void Draw(GraphWindow window, ImDrawListPtr drawList, Symbol.OutputDefinition outputDef, IOutputUi outputUi)
+    public static void Draw(GraphCanvas canvas, GraphComponents window, ImDrawListPtr drawList, Symbol.OutputDefinition outputDef, IOutputUi outputUi)
     {
-        var canvas = window.GraphCanvas;
         ImGui.PushID(outputDef.Id.GetHashCode());
         {
             LastScreenRect = canvas.TransformRect(new ImRect(outputUi.PosOnCanvas, outputUi.PosOnCanvas + outputUi.Size));
@@ -79,7 +79,7 @@ static class OutputNode
                 drawList.PopClipRect();
             }
 
-            if (canvas.NodeSelection.IsNodeSelected(outputUi))
+            if (window.NodeSelection.IsNodeSelected(outputUi))
             {
                 drawList.AddRect(LastScreenRect.Min - Vector2.One, LastScreenRect.Max + Vector2.One, UiColors.Selection, 1);
             }
@@ -92,7 +92,7 @@ static class OutputNode
                                                 new Vector2(LastScreenRect.Min.X,
                                                             LastScreenRect.Max.Y)); 
                     
-                ConnectionSnapEndHelper.RegisterAsPotentialTarget(window, outputUi, usableSlotArea);
+                ConnectionSnapEndHelper.RegisterAsPotentialTarget(canvas, outputUi, usableSlotArea);
                     
                     
                 ImGui.SetCursorScreenPos(usableSlotArea.Min);
@@ -101,23 +101,23 @@ static class OutputNode
                 var color = TypeUiRegistry.GetPropertiesForType(outputDef.ValueType).Color;
 
                 //Note: isItemHovered will not work
-                var slotHovered = ConnectionMaker.GetTempConnectionsFor(window).Count > 0
+                var slotHovered = ConnectionMaker.GetTempConnectionsFor(canvas).Count > 0
                                       ? usableSlotArea.Contains(ImGui.GetMousePos())
                                       : ImGui.IsItemHovered();
 
-                if (ConnectionMaker.IsOutputNodeCurrentConnectionTarget(window, outputDef))
+                if (ConnectionMaker.IsOutputNodeCurrentConnectionTarget(canvas, outputDef))
                 {
                     drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, color);
                 }
                 else if (ConnectionSnapEndHelper.IsNextBestTarget(outputUi) || slotHovered)
                 {
-                    if (ConnectionMaker.IsMatchingInputType(window, outputDef.ValueType))
+                    if (ConnectionMaker.IsMatchingInputType(canvas, outputDef.ValueType))
                     {
                         drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, color);
 
                         if (ImGui.IsMouseReleased(0))
                         {
-                            ConnectionMaker.CompleteAtSymbolOutputNode(window, window.CompositionOp.Symbol, outputDef);
+                            ConnectionMaker.CompleteAtSymbolOutputNode(canvas, window.CompositionOp.Symbol, outputDef);
                         }
                     }
                     else
@@ -125,13 +125,13 @@ static class OutputNode
                         drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, UiColors.Selection);
                         if (ImGui.IsItemClicked(0))
                         {
-                            ConnectionMaker.StartFromOutputNode(window, window.CompositionOp.Symbol, outputDef);
+                            ConnectionMaker.StartFromOutputNode(canvas, window.CompositionOp.Symbol, outputDef);
                         }
                     }
                 }
                 else
                 {
-                    var colorWithMatching = ConnectionMaker.IsMatchingInputType(window, outputDef.ValueType) ? UiColors.Selection : color;
+                    var colorWithMatching = ConnectionMaker.IsMatchingInputType(canvas, outputDef.ValueType) ? UiColors.Selection : color;
                     drawList.AddRectFilled(new Vector2(usableSlotArea.Max.X - GraphNode.InputSlotMargin- GraphNode.InputSlotThickness,
                                                        usableSlotArea.Min.Y), 
                                            new Vector2(

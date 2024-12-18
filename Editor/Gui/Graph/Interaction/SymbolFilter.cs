@@ -102,7 +102,7 @@ internal sealed class SymbolFilter
     /// Build hashes for symbol specific input slots. These are then used
     /// the compute relevancy. 
     /// </summary>
-    private void UpdateConnectSlotHashes(GraphWindow window)
+    private void UpdateConnectSlotHashes(IGraphCanvas window)
     {
         _sourceInputHash = 0;
         _targetInputHash = 0;
@@ -181,8 +181,8 @@ internal sealed class SymbolFilter
 
         if (GraphWindow.Focused != null)
         {
-            currentProject = GraphWindow.Focused.Package;
-            composition = GraphWindow.Focused.CompositionOp;
+            currentProject = GraphWindow.Focused.Components.OpenedProject.Package;
+            composition = GraphWindow.Focused.Components.CompositionOp;
         }
         
         MatchingSymbolUis = MatchingSymbolUis.OrderBy(s => ComputeRelevancy(s, _symbolFilterString, currentProject, composition))

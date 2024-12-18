@@ -66,7 +66,7 @@ internal class CameraSelectionHandling
     // preparation for each window to have its own playback
     private readonly Func<Playback> _getPlayback;
         
-    private NodeSelection? NodeSelection => _nodeSelection ?? GraphWindow.Focused?.GraphCanvas.NodeSelection;
+    private NodeSelection? NodeSelection => _nodeSelection ?? GraphWindow.Focused?.Components.NodeSelection;
         
         
     public void Update(Instance drawnInstance, Type drawnType, bool preventInteractions = false)

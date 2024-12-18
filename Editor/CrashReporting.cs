@@ -53,13 +53,13 @@ internal static class CrashReporting
         var timeOfLastBackup = AutoBackup.GetTimeOfLastBackup();
         var timeSpan = DrawUtils.GetReadableRelativeTime(timeOfLastBackup);
 
-        var canvas = GraphWindow.Focused?.GraphCanvas;
+        var components = GraphWindow.Focused?.Components;
         
         sentryEvent.SetTag("Nickname", UserSettings.Config.UserName);
         sentryEvent.Contexts["tooll3"]= new
                                             {
                                                 UndoStack = UndoRedoStack.GetUndoStackAsString(),
-                                                Selection = canvas == null ? string.Empty : string.Join("\n", canvas.NodeSelection),
+                                                Selection = components == null ? string.Empty : string.Join("\n", components.NodeSelection),
                                                 Nickname = "",
                                                 RuntimeSeconds = Playback.RunTimeInSecs,
                                                 RuntimeFrames = ImGui.GetFrameCount(),
@@ -69,7 +69,7 @@ internal static class CrashReporting
         string? json = null;
         try
         {
-            var primaryComposition = GraphWindow.Focused?.CompositionOp;
+            var primaryComposition = GraphWindow.Focused?.Components.CompositionOp;
             if (primaryComposition != null)
             {
                 var compositionUi = primaryComposition.Symbol.GetSymbolUi();

@@ -32,32 +32,23 @@ internal sealed partial class GraphWindow
     internal event EventHandler<GraphWindow>? FocusLost;
     public readonly int InstanceNumber;
 
-    private GraphWindow(EditorSymbolPackage package, int instanceNumber, Instance rootInstance)
+    private GraphWindow(int instanceNumber, GraphComponents components)
     {
         InstanceNumber = instanceNumber;
         WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
-        Package = package;
 
-        RootInstance = Composition.GetFor(rootInstance!);
         AllowMultipleInstances = true;
+        Components = components;
+        components.GraphCanvas.SymbolBrowser.FocusRequested += FocusFromSymbolBrowser;
 
-        ConnectionMaker.AddWindow(this);
-        Structure = new Structure(() => RootInstance.Instance);
-
-        var navigationHistory = new NavigationHistory(Structure);
-        var nodeSelection = new NodeSelection(navigationHistory, Structure);
-
-        GraphImageBackground = new GraphImageBackground(nodeSelection, Structure);
-        GraphCanvas = new GraphCanvas(this, nodeSelection, navigationHistory);
-        SymbolBrowser = new SymbolBrowser(this, GraphCanvas);
-        _timeLineCanvas = new TimeLineCanvas(GraphCanvas);
-        WindowDisplayTitle = package.DisplayName + "##" + InstanceNumber;
+        ConnectionMaker.AddWindow(components.GraphCanvas);
+        WindowDisplayTitle = components.OpenedProject.Package.DisplayName + "##" + InstanceNumber;
         SetWindowToNormal();
-        _duplicateSymbolDialog.Closed += DisposeLatestComposition;
     }
 
     public static bool CanOpenAnotherWindow => true;
     internal static readonly List<GraphWindow> GraphWindowInstances = new();
+    public GraphComponents Components { get; }
     public override IReadOnlyList<Window> GetInstances() => GraphWindowInstances;
     public event EventHandler<EditorSymbolPackage> WindowDestroyed;
 
@@ -76,9 +67,18 @@ internal sealed partial class GraphWindow
             shouldBeVisible = Focused.Config.Visible;
             Focused.Close();
         }
+        
+        if(!OpenedProject.TryCreate(package, out var openedProject))
+        {
+            LogFailure();
+            return false;
+        }
 
         instanceNumber = instanceNumber == NoInstanceNumber ? ++_instanceCounter : instanceNumber;
-        var newWindow = new GraphWindow(package, instanceNumber, root);
+        // check for existing OpenedProject object, if it doesnt exist then create one 
+        var components = new GraphComponents(openedProject);
+        components.GraphCanvas = new GraphCanvas(components);
+        var newWindow = new GraphWindow(instanceNumber, components);
 
         if (config == null)
         {
@@ -108,7 +108,7 @@ internal sealed partial class GraphWindow
         }
 
         const ICanvas.Transition transition = ICanvas.Transition.JumpIn;
-        if (!newWindow.TrySetCompositionOp(startPath, transition) && !newWindow.TrySetCompositionOp(rootPath, transition))
+        if (!components.TrySetCompositionOp(startPath, transition) && !components.TrySetCompositionOp(rootPath, transition))
         {
             LogFailure();
             newWindow.Close();

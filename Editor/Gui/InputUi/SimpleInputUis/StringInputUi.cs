@@ -141,7 +141,7 @@ public class StringInputUi : InputValueUi<string>
     {
         ImGui.SetNextItemWidth(-70);
 
-        var selectedInstances = GraphWindow.Focused!.GraphCanvas.NodeSelection.GetSelectedInstances().ToArray();
+        var selectedInstances = GraphWindow.Focused!.Components.NodeSelection.GetSelectedInstances().ToArray();
         var needsToGatherPackages = _searchResourceConsumer is null 
                                     || selectedInstances.Length != _selectedInstances.Length 
                                     || !selectedInstances.Except(_selectedInstances).Any();
@@ -258,7 +258,7 @@ public class StringInputUi : InputValueUi<string>
 
     private static InputEditStateFlags DrawCustomDropdown(Symbol.Child.Input input, ref string value)
     {
-        var instance = GraphWindow.Focused?.GraphCanvas.NodeSelection.GetSelectedInstanceWithoutComposition();
+        var instance = GraphWindow.Focused?.Components.NodeSelection.GetSelectedInstanceWithoutComposition();
         if (instance != null && instance is ICustomDropdownHolder customValueHolder)
         {
             var changed = false;

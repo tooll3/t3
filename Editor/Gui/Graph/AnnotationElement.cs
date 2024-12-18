@@ -17,9 +17,9 @@ namespace T3.Editor.Gui.Graph;
 class AnnotationElement
 {
     private readonly Annotation _annotation;
-    public AnnotationElement(GraphWindow window, Annotation annotation)
+    public AnnotationElement(GraphComponents components, Annotation annotation)
     {
-        _window = window;
+        _components = components;
         _annotation = annotation;
     }
         
@@ -30,10 +30,9 @@ class AnnotationElement
 
     private Guid _requestedRenameId = Guid.Empty;
 
-    internal void Draw(ImDrawListPtr drawList)
+    internal void Draw(ImDrawListPtr drawList, GraphCanvas canvas)
     {
         var annotation = _annotation;
-        var canvas = _window.GraphCanvas;
         var screenArea = canvas.TransformRect(new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size));
         var titleSize = annotation.Size;
         titleSize.Y = MathF.Min(titleSize.Y, 14 * T3Ui.UiScaleFactor);
@@ -93,7 +92,7 @@ class AnnotationElement
             _requestedRenameId = Guid.Empty;
         }
 
-        var borderColor = canvas.NodeSelection.IsNodeSelected(annotation)
+        var borderColor = _components.NodeSelection.IsNodeSelected(annotation)
                               ? UiColors.Selection
                               : UiColors.BackgroundFull.Fade(isHeaderHovered ? headerHoverAlpha : backgroundAlpha);
 
@@ -131,12 +130,12 @@ class AnnotationElement
 
     private void HandleDragging()
     {
-        var nodeSelection = _window.GraphCanvas.NodeSelection;
+        var nodeSelection = _components.NodeSelection;
         if (ImGui.IsItemActive())
         {
             if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
             {
-                var parentUi = _window.CompositionOp.GetSymbolUi();
+                var parentUi = _components.CompositionOp.GetSymbolUi();
                 _draggedNodeId = _annotation.Id;
                 if (nodeSelection.IsNodeSelected(_annotation))
                 {
@@ -236,7 +235,7 @@ class AnnotationElement
             return;
         }
             
-        var canvas = _window.GraphCanvas;
+        var canvas = _components.GraphCanvas;
 
         if (!_isDragging)
         {
@@ -302,9 +301,9 @@ class AnnotationElement
     bool _isDragging;
     Vector2 _dragStartDelta;
     ModifyCanvasElementsCommand _moveCommand;
+    private readonly GraphComponents _components;
 
     Guid _draggedNodeId = Guid.Empty;
     List<ISelectableCanvasObject> _draggedNodes = new();
 
-    readonly GraphWindow _window;
 }

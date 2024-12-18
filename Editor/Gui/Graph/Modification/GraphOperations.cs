@@ -33,7 +33,7 @@ internal static class GraphOperations
             
         resultJsonString = string.Empty;
             
-        var package = GraphWindow.Focused!.Package;
+        var package = GraphWindow.Focused!.Components.OpenedProject.Package;
         if (!package.TryCreateNewSymbol<object>(out var newContainerUi))
         {
             Log.Error($"Failed to copy nodes to clipboard. Could not create new symbol.");

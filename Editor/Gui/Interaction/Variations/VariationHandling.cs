@@ -37,7 +37,7 @@ internal static class VariationHandling
         if (primaryGraphWindow == null)
             return;
 
-        var nodeSelection = primaryGraphWindow.GraphCanvas.NodeSelection;
+        var nodeSelection = primaryGraphWindow.Components.NodeSelection;
         var singleSelectedInstance = nodeSelection.GetSelectedInstanceWithoutComposition();
         
         if (singleSelectedInstance != null)
@@ -52,7 +52,7 @@ internal static class VariationHandling
         {
             ActivePoolForPresets = null;
 
-            var activeCompositionInstance = primaryGraphWindow.CompositionOp;
+            var activeCompositionInstance = primaryGraphWindow.Components.CompositionOp;
             
             ActiveInstanceForSnapshots = activeCompositionInstance;
 

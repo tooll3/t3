@@ -16,13 +16,13 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections;
 
 internal static class ConnectionSplitHelper
 {
-    public static void PrepareNewFrame(GraphWindow window)
+    public static void PrepareNewFrame(GraphComponents components)
     {
         _mousePosition = ImGui.GetMousePos();
         BestMatchLastFrame = _bestMatchYetForCurrentFrame;
-        var graphCanvas = window.GraphCanvas;
+        var graphCanvas = components.GraphCanvas;
             
-        if (BestMatchLastFrame != null && !ConnectionMaker.HasTempConnectionsFor(window))
+        if (BestMatchLastFrame != null && !ConnectionMaker.HasTempConnectionsFor(graphCanvas))
         {
             var time = ImGui.GetTime();
             if (_hoverStartTime < 0)
@@ -43,7 +43,7 @@ internal static class ConnectionSplitHelper
                                   - new Vector2(SymbolUi.Child.DefaultOpSize.X * 0.25f,
                                                 SymbolUi.Child.DefaultOpSize.Y * 0.5f);
 
-                ConnectionMaker.SplitConnectionWithSymbolBrowser(window, window.CompositionOp!.Symbol,
+                ConnectionMaker.SplitConnectionWithSymbolBrowser(components, components.CompositionOp!.Symbol,
                                                                  _bestMatchYetForCurrentFrame.Connection,
                                                                  posOnScreen);
             }
@@ -56,7 +56,7 @@ internal static class ConnectionSplitHelper
                 Symbol.Child.Output output = null;
                 Symbol.OutputDefinition outputDefinition = null;
 
-                var op = window.CompositionOp!;
+                var op = components.CompositionOp!;
 
                 Symbol.Child? sourceOp = null;
                 if (op.Children.TryGetValue(connection.SourceParentOrChildId, out var sourceOpInstance))
@@ -121,7 +121,7 @@ internal static class ConnectionSplitHelper
                     ImGui.TextColored(UiColors.TextMuted, connectionTarget);
                     ImGui.PopFont();
 
-                    var nodeSelection = window.GraphCanvas.NodeSelection;
+                    var nodeSelection = components.NodeSelection;
                     nodeSelection.HoveredIds.Add(targetOp.Id);
                     nodeSelection.HoveredIds.Add(sourceOp.Id);
                 }

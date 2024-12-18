@@ -179,7 +179,7 @@ internal static class GraphContextMenu
             if (ImGui.MenuItem("Pin to output", oneOpSelected))
             {
                 if (GraphWindow.Focused != null) 
-                    NodeActions.PinSelectedToOutputWindow(GraphWindow.Focused.GraphCanvas, nodeSelection, context.CompositionOp);
+                    NodeActions.PinSelectedToOutputWindow(GraphWindow.Focused.Components, nodeSelection, context.CompositionOp);
             }
 
             ImGui.EndMenu();

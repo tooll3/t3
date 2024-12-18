@@ -25,11 +25,6 @@ namespace T3.Editor.Gui.Graph;
 /// </summary>
 internal sealed partial class GraphWindow : Window
 {
-    private Composition _composition;
-    internal Instance CompositionOp => _composition.Instance;
-
-    public readonly SymbolBrowser SymbolBrowser;
-    public readonly EditorSymbolPackage Package;
 
     protected override string WindowDisplayTitle { get; }
     private bool _focusOnNextFrame;
@@ -40,17 +35,12 @@ internal sealed partial class GraphWindow : Window
         _focusOnNextFrame = true;
     }
 
-    public void SetBackgroundOutput(Instance instance)
-    {
-        GraphImageBackground.OutputInstance = instance;
-    }
-
     protected override void DrawContent()
     {
         if (FitViewToSelectionHandling.FitViewToSelectionRequested)
             GraphCanvas.FocusViewToSelection();
             
-        RefreshRootInstance();
+        Components.OpenedProject.RefreshRootInstance();
 
         var fadeBackgroundImage = GraphImageBackground.IsActive 
                                       ? (ImGui.GetMousePos().X + 50).Clamp(0, 100) / 100 
@@ -107,10 +97,10 @@ internal sealed partial class GraphWindow : Window
             {
                 if (UserSettings.Config.ShowTitleAndDescription)
                 {
-                    TitleAndBreadCrumbs.Draw(this, _composition);
+                    TitleAndBreadCrumbs.Draw(Components);
                 }
 
-                DrawControlsAtBottom(_composition);
+                DrawControlsAtBottom(Components.Composition);
             }
 
             drawList.ChannelsSetCurrent(0);
@@ -167,7 +157,7 @@ internal sealed partial class GraphWindow : Window
                      */
                     if (!_initializedAfterLayoutReady && ImGui.GetFrameCount() > 1)
                     {
-                        ApplyComposition(ICanvas.Transition.JumpIn, null);
+                        GraphCanvas.ApplyComposition(ICanvas.Transition.JumpIn, null);
                         GraphCanvas.FocusViewToSelection();
                         _initializedAfterLayoutReady = true;
                     }
@@ -180,11 +170,11 @@ internal sealed partial class GraphWindow : Window
             }
             drawList.ChannelsMerge();
 
-            EditDescriptionDialog.Draw(_composition.Symbol);
+            EditDescriptionDialog.Draw(Components.Composition.Symbol);
         }
         ImGui.EndChild();
 
-        RefreshRootInstance();
+        Components.OpenedProject.RefreshRootInstance();
         if (UserSettings.Config.ShowTimeline)
         {
             const int splitterWidth = 3;
@@ -203,7 +193,7 @@ internal sealed partial class GraphWindow : Window
                                  | ImGuiWindowFlags.NoBackground
                                 );
                 {
-                    _timeLineCanvas.Draw(CompositionOp, Playback.Current);
+                    Components.TimeLineCanvas.Draw(Components.CompositionOp, Playback.Current);
                 }
                 ImGui.EndChild();
                 ImGui.PopStyleVar(1);
@@ -211,34 +201,14 @@ internal sealed partial class GraphWindow : Window
         }
 
         if (UserSettings.Config.ShowMiniMap)
-            DrawMiniMap(_composition, GraphCanvas);
+            DrawMiniMap(Components.Composition, GraphCanvas);
 
-        if (_compositionsForDisposal.TryPeek(out var latestComposition))
-        {
-            if (!_compositionPath.Contains(latestComposition.SymbolChildId))
-            {
-                if (latestComposition.NeedsReload)
-                {
-                    _duplicateSymbolDialog.ShowNextFrame(); // actually shows this frame
-                    var instance = latestComposition.Instance;
-                    var parent = instance.Parent;
-                    var symbolChildUi = parent.GetSymbolUi().ChildUis[instance.SymbolChildId];
-                    _duplicateSymbolDialog.Draw(compositionOp: latestComposition.Instance.Parent,
-                                                selectedChildUis: [symbolChildUi],
-                                                nameSpace: ref _dupeReadonlyNamespace,
-                                                newTypeName: ref _dupeReadonlyName,
-                                                description: ref _dupeReadonlyDescription,
-                                                isReload: true);
-                }
-                else
-                {
-                    DisposeLatestComposition();
-                }
-            }
-        }
+        Components.CheckDisposal();
     }
 
-    private static void DrawMiniMap(Composition compositionOp, ScalableCanvas canvas)
+
+
+    private static void DrawMiniMap(Composition compositionOp, IGraphCanvas canvas)
     {
         var widgetSize = new Vector2(200, 200);
         var localPos = new Vector2(ImGui.GetWindowWidth() - widgetSize.X, 0);
@@ -380,7 +350,7 @@ internal sealed partial class GraphWindow : Window
             ImGui.SameLine();
 
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
-            TimeControls.DrawTimeControls(_timeLineCanvas, composition.Instance);
+            TimeControls.DrawTimeControls(Components.TimeLineCanvas, composition.Instance);
             ImGui.PopStyleVar();
             ImGui.SetCursorPosX(ImGui.GetCursorPosX() + 10);
 
@@ -393,29 +363,30 @@ internal sealed partial class GraphWindow : Window
 
     protected override void Close()
     {
-        ConnectionMaker.RemoveWindow(this);
+        ConnectionMaker.RemoveWindow(GraphCanvas);
         GraphWindowInstances.Remove(this);
         if (Focused == this)
             Focused = GraphWindowInstances.FirstOrDefault();
             
-        WindowDestroyed?.Invoke(this, Package);
+        WindowDestroyed?.Invoke(this, Components.OpenedProject.Package);
     }
 
     protected override void AddAnotherInstance()
     {
-        TryOpenPackage(Package, false, CompositionOp);
+        TryOpenPackage(Components.OpenedProject.Package, false, Components.CompositionOp);
     }
         
     private static class TitleAndBreadCrumbs
     {
-        public static void Draw(GraphWindow window, Composition composition)
+        public static void Draw(GraphComponents window)
         {
-            DrawBreadcrumbs(window, composition);
-            DrawNameAndDescription(composition);
+            DrawBreadcrumbs(window);
+            DrawNameAndDescription(window.Composition);
         }
 
-        private static void DrawBreadcrumbs(GraphWindow window, Composition composition)
+        private static void DrawBreadcrumbs(GraphComponents components)
         {
+            var composition = components.Composition;
             ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + new Vector2(1, 1));
             FormInputs.AddVerticalSpace(10);
             var parents = Structure.CollectParentInstances(composition.Instance);
@@ -454,7 +425,7 @@ internal sealed partial class GraphWindow : Window
 
                     if (clicked)
                     {
-                        window.TrySetCompositionOpToParent();
+                        components.TrySetCompositionOpToParent();
                         break;
                     }
 
@@ -510,16 +481,15 @@ internal sealed partial class GraphWindow : Window
     internal readonly GraphImageBackground GraphImageBackground;
 
     private static readonly string BreadCrumbSeparator = (char)Icon.ChevronRight + "";
-    public readonly GraphCanvas GraphCanvas;
+    public IGraphCanvas GraphCanvas => Components.GraphCanvas;
     private const int UseComputedHeight = -1;
     private int _customTimeLineHeight = UseComputedHeight;
     private bool UsingCustomTimelineHeight => _customTimeLineHeight > UseComputedHeight;
 
-    private float ComputedTimelineHeight => (_timeLineCanvas.SelectedAnimationParameters.Count * DopeSheetArea.LayerHeight)
-                                            + _timeLineCanvas.LayersArea.LastHeight
+    private float ComputedTimelineHeight => (Components.TimeLineCanvas.SelectedAnimationParameters.Count * DopeSheetArea.LayerHeight)
+                                            + Components.TimeLineCanvas.LayersArea.LastHeight
                                             + TimeLineCanvas.TimeLineDragHeight
                                             + 1;
 
-    private readonly TimeLineCanvas _timeLineCanvas;
     private static readonly EditSymbolDescriptionDialog EditDescriptionDialog = new();
 }

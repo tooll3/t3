@@ -34,7 +34,7 @@ internal static class ConnectionSnapEndHelper
         BestMatchLastFrame = null;
     }
 
-    internal static void RegisterAsPotentialTarget(GraphWindow window, SymbolUi.Child childUi, IInputUi inputUi, int slotIndex, ImRect areaOnScreen)
+    internal static void RegisterAsPotentialTarget(IGraphCanvas window, SymbolUi.Child childUi, IInputUi inputUi, int slotIndex, ImRect areaOnScreen)
     {
         if (ConnectionMaker.IsTargetInvalid(window, inputUi.Type))
             return;
@@ -56,7 +56,7 @@ internal static class ConnectionSnapEndHelper
         _bestMatchDistance = distance;
     }
 
-    public static void RegisterAsPotentialTarget(GraphWindow window, IOutputUi outputUi, ImRect areaOnScreen)
+    public static void RegisterAsPotentialTarget(IGraphCanvas window, IOutputUi outputUi, ImRect areaOnScreen)
     {
         if (ConnectionMaker.IsTargetInvalid(window, outputUi.Type))
             return;

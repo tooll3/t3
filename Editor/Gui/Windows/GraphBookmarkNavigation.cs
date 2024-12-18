@@ -11,7 +11,7 @@ namespace T3.Editor.Gui.Windows;
 /// </summary>
 internal static class GraphBookmarkNavigation
 {
-    public static void HandleForCanvas(GraphWindow graphWindow)
+    public static void HandleForCanvas(GraphComponents components)
     {
         // var isNotFocused = !ImGui.IsWindowFocused();
         // if (isNotFocused)
@@ -29,14 +29,14 @@ internal static class GraphBookmarkNavigation
         {
             if (KeyboardBinding.Triggered(_saveBookmarkActions[i]))
             {
-                SaveBookmark(graphWindow, i);
+                SaveBookmark(components, i);
                 _lastInteractionFrame = ImGui.GetFrameCount();
                 break;
             }
 
             else if (KeyboardBinding.Triggered(_loadBookmarkActions[i]))
             {
-                LoadBookmark(graphWindow, i);
+                LoadBookmark(components, i);
                 _lastInteractionFrame = ImGui.GetFrameCount();
                 break;
             }
@@ -51,6 +51,8 @@ internal static class GraphBookmarkNavigation
             Log.Warning($"Cannot draw bookmark menu. No focused graph window.");
             return;
         }
+        
+        var components = currentWindow.Components;
 
         if (ImGui.BeginMenu("Load graph bookmark"))
         {
@@ -61,7 +63,7 @@ internal static class GraphBookmarkNavigation
                 var isAvailable = DoesBookmarkExist(index);
                 if (ImGui.MenuItem(action.ToString(), shortcuts, false, enabled: isAvailable))
                 {
-                    LoadBookmark(currentWindow, index);
+                    LoadBookmark(components, index);
                 }
             }
 
@@ -78,7 +80,7 @@ internal static class GraphBookmarkNavigation
                     
                 if (ImGui.MenuItem(action.ToString(), shortcuts))
                 {
-                    SaveBookmark(currentWindow, index);
+                    SaveBookmark(components, index);
                 }
             }
 
@@ -86,7 +88,7 @@ internal static class GraphBookmarkNavigation
         }
     }
 
-    private static void LoadBookmark(GraphWindow window, int index)
+    private static void LoadBookmark(GraphComponents window, int index)
     {
         var bookmark = GetBookmarkAt(index);
         if (bookmark == null)
@@ -107,7 +109,7 @@ internal static class GraphBookmarkNavigation
         //SelectionManager.SetSelection(bookmark.SelectedChildIds);
     }
 
-    private static void SaveBookmark(GraphWindow window, int index)
+    private static void SaveBookmark(GraphComponents window, int index)
     {
         Log.Debug("Saving bookmark " + index);
         var bookmarks = UserSettings.Config.Bookmarks;
@@ -124,7 +126,7 @@ internal static class GraphBookmarkNavigation
                                {
                                    IdPath = window.CompositionOp.InstancePath.ToList(),
                                    ViewScope = canvas.GetTargetScope(),
-                                   SelectedChildIds = canvas.NodeSelection.GetSelectedNodes<SymbolUi.Child>().Select(s => s.Id).ToList()
+                                   SelectedChildIds = window.NodeSelection.GetSelectedNodes<SymbolUi.Child>().Select(s => s.Id).ToList()
                                };
         ;
     }

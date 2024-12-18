@@ -141,10 +141,10 @@ public abstract class InputValueUi<T> : IInputUi
         if(window == null)
             return InputEditStateFlags.Nothing;
             
-        var graphCanvas = window.GraphCanvas;
-        var nodeSelection = graphCanvas.NodeSelection;
-        var structure = graphCanvas.Structure;
-        IReadOnlyList<ConnectionMaker.TempConnection> tempConnections = ConnectionMaker.GetTempConnectionsFor(window);
+        var components = window.Components;
+        var nodeSelection = components.NodeSelection;
+        var structure = components.Structure;
+        IReadOnlyList<ConnectionMaker.TempConnection> tempConnections = ConnectionMaker.GetTempConnectionsFor(window.GraphCanvas);
 
         if (inputSlot.HasInputConnections)
         {
@@ -255,8 +255,8 @@ public abstract class InputValueUi<T> : IInputUi
                                                         var graphWindow = GraphWindow.Focused;
                                                         if (graphWindow != null)
                                                         {
-                                                            var nodeSelection = graphWindow.GraphCanvas.NodeSelection;
-                                                            var structure = graphWindow.GraphCanvas.Structure;
+                                                            var nodeSelection = components.NodeSelection;
+                                                            var structure = components.Structure;
                                                             if (ImGui.MenuItem("Extract as connection operator"))
                                                             {
                                                                 ParameterExtraction.ExtractAsConnectedOperator(nodeSelection, typedInputSlot, symbolChildUi, inputSlot.Input);
@@ -413,7 +413,7 @@ public abstract class InputValueUi<T> : IInputUi
         InputEditStateFlags DrawNormalParameter()
         {
             // Connection area...
-            InputArea.DrawNormalInputArea<T>(window, nodeSelection,  typedInputSlot, compositionUi, symbolChildUi, input, IsAnimatable, typeColor, tempConnections);
+            InputArea.DrawNormalInputArea<T>(window.GraphCanvas, nodeSelection,  typedInputSlot, compositionUi, symbolChildUi, input, IsAnimatable, typeColor, tempConnections);
                 
             ImGui.SameLine();
 
@@ -637,7 +637,7 @@ internal static class InputArea
 {
     internal const float ConnectionAreaWidth = 25.0f;
 
-    internal static void DrawNormalInputArea<T>(GraphWindow graphWindow, NodeSelection nodeSelection, InputSlot<T> inputSlot, SymbolUi compositionUi,
+    internal static void DrawNormalInputArea<T>(IGraphCanvas canvas, NodeSelection nodeSelection, InputSlot<T> inputSlot, SymbolUi compositionUi,
                                                 SymbolUi.Child symbolChildUi,
                                                 Symbol.Child.Input input,
                                                 bool isAnimatable, Color typeColor, IReadOnlyList<ConnectionMaker.TempConnection> tempConnections)
@@ -688,9 +688,9 @@ internal static class InputArea
                     break;
                 case InputOperations.ConnectWithSearch:
                 {
-                    ConnectionMaker.StartFromInputSlot(graphWindow, compositionUi.Symbol, symbolChildUi, input.InputDefinition);
+                    ConnectionMaker.StartFromInputSlot(canvas, compositionUi.Symbol, symbolChildUi, input.InputDefinition);
                     var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(compositionUi.Symbol, symbolChildUi);
-                    ConnectionMaker.InitSymbolBrowserAtPosition(graphWindow, freePosition);
+                    ConnectionMaker.InitSymbolBrowserAtPosition(canvas, freePosition);
                     break;
                 }
             }
@@ -721,7 +721,7 @@ internal static class InputArea
         {
             if (tempConnections.Count == 0)
             {
-                ConnectionMaker.StartFromInputSlot(graphWindow, compositionUi.Symbol, symbolChildUi, input.InputDefinition);
+                ConnectionMaker.StartFromInputSlot(canvas, compositionUi.Symbol, symbolChildUi, input.InputDefinition);
             }
         }
             

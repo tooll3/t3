@@ -18,15 +18,19 @@ internal sealed class MagGraphWindow : Window
     
     protected override void DrawContent()
     {
-        var focusedCompositionOp = GraphWindow.Focused?.CompositionOp;
+        var info = GraphWindow.Focused?.Components;
+        if (info == null)
+            return;
+        
+        var focusedCompositionOp = info.CompositionOp;
         if (focusedCompositionOp == null)
             return;
 
         if (CompositionOp != focusedCompositionOp)
         {
             CompositionOp = focusedCompositionOp;
-            var nodeSelection = GraphWindow.Focused.GraphCanvas.NodeSelection;
-            _graphImageBackground = new GraphImageBackground(nodeSelection, GraphWindow.Focused.Structure);
+            var nodeSelection = info.NodeSelection;
+            _graphImageBackground = new GraphImageBackground(nodeSelection, info.Structure);
             _magGraphCanvas = new MagGraphCanvas(this, nodeSelection, _graphImageBackground);
         }
         

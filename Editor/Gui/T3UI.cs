@@ -99,7 +99,7 @@ public static class T3Ui
         ConnectionSnapEndHelper.PrepareNewFrame();
         CompatibleMidiDeviceHandling.UpdateConnectedDevices();
 
-        var nodeSelection = GraphWindow.Focused?.GraphCanvas.NodeSelection;
+        var nodeSelection = GraphWindow.Focused?.Components.NodeSelection;
 
         // Set selected id so operator can check if they are selected or not  
         var selectedInstance = nodeSelection?.GetSelectedInstanceWithoutComposition();
@@ -230,7 +230,7 @@ public static class T3Ui
         outputWindow = OutputWindow.GetPrimaryOutputWindow();
         if (!shouldBeFocusMode && outputWindow != null && primaryGraphWindow != null)
         {
-            outputWindow.Pinning.PinInstance(primaryGraphWindow.GraphImageBackground.OutputInstance, primaryGraphWindow.GraphCanvas);
+            outputWindow.Pinning.PinInstance(primaryGraphWindow.GraphImageBackground.OutputInstance, primaryGraphWindow.Components);
             primaryGraphWindow.GraphImageBackground.ClearBackground();
         }
     }
@@ -254,7 +254,7 @@ public static class T3Ui
             {
                 UserSettings.Config.ShowMainMenu = true;
 
-                var currentProject = GraphWindow.Focused?.Package;
+                var currentProject = GraphWindow.Focused?.Components.OpenedProject.Package;
                 var showNewTemplateOption = !IsCurrentlySaving && currentProject != null;
 
                 if (ImGui.MenuItem("New...", KeyboardBinding.ListKeyboardShortcuts(UserActions.New, false), false, showNewTemplateOption))
@@ -562,7 +562,8 @@ public static class T3Ui
         if (primaryGraphWindow == null)
             return;
 
-        var compositionOp = primaryGraphWindow.CompositionOp;
+        var components = primaryGraphWindow.Components;
+        var compositionOp = components.CompositionOp;
 
         var symbolUi = compositionOp.GetSymbolUi();
         
@@ -572,7 +573,7 @@ public static class T3Ui
         if(!compositionOp.Children.TryGetValue(symbolChildId, out var selectionTargetInstance))
             return;
         
-        primaryGraphWindow.GraphCanvas.NodeSelection.SetSelection(sourceChildUi, selectionTargetInstance);
+        components.NodeSelection.SetSelection(sourceChildUi, selectionTargetInstance);
         FitViewToSelectionHandling.FitViewToSelection();
     }
 

@@ -12,11 +12,29 @@ using T3.Editor.Gui.Windows.TimeLine;
 
 namespace T3.Editor.Gui.Interaction;
 
+// hacky interface to extend IGraphCanvas
+internal interface IScalableCanvas : ICanvas
+{
+    public void UpdateCanvas(out ScalableCanvas.InteractionState interactionState, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None);
+    public Vector2 ChildPosFromCanvas(Vector2 posOnCanvas);
+    public void SetVisibleRange(Vector2 scale, Vector2 scroll);
+    public void SetVisibleRangeHard(Vector2 scale, Vector2 scroll);
+    public void SetScaleToMatchPixels();
+    public void SetScopeWithTransition(Vector2 scale, Vector2 scroll, Transition transition);
+    public void SetScopeToCanvasArea(ImRect area, bool flipY = false, IScalableCanvas parent = null, float paddingX = 0, float paddingY = 0);
+    public void SetVerticalScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas parent = null);
+    public void ZoomWithMouseWheel(MouseState mouseState, out bool zoomed);
+    public Vector2 TransformPositionFloat(Vector2 posOnCanvas);
+    public void FitAreaOnCanvas(ImRect areaOnCanvas, bool flipY = false);
+    public void SetTargetScope(CanvasScope scope);
+    public CanvasScope GetTargetScope();
+    public bool EnableParentZoom { get; set; }
+}
 /// <summary>
 /// Implements transformations and interactions for a canvas that can
 /// be zoomed and panned.
 /// </summary>
-internal class ScalableCanvas : ICanvas
+internal class ScalableCanvas : ICanvas, IScalableCanvas
 {
     public ScalableCanvas(bool isCurveCanvas = false, float initialScale = 1)
     {
@@ -218,7 +236,7 @@ internal class ScalableCanvas : ICanvas
             
     }
         
-    public void SetScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas parent = null, float paddingX = 0, float paddingY = 0)
+    public void SetScopeToCanvasArea(ImRect area, bool flipY = false, IScalableCanvas parent = null, float paddingX = 0, float paddingY = 0)
     {
         var areaSize = area.GetSize();
         if (areaSize.X == 0)
@@ -309,7 +327,7 @@ internal class ScalableCanvas : ICanvas
         }
     }
 
-    internal void SetScopeWithTransition(Vector2 scale, Vector2 scroll, ICanvas.Transition transition)
+    public void SetScopeWithTransition(Vector2 scale, Vector2 scroll, ICanvas.Transition transition)
     {
         if (float.IsInfinity(scale.X) || float.IsNaN(scale.X)
                                       || float.IsInfinity(scale.Y) || float.IsNaN(scale.Y)
@@ -409,7 +427,7 @@ internal class ScalableCanvas : ICanvas
 
         if (isCurrentGraphCanvas)
         {
-            var tempConnections = ConnectionMaker.GetTempConnectionsFor(currentGraphWindow);
+            var tempConnections = ConnectionMaker.GetTempConnectionsFor(currentGraphWindow.GraphCanvas);
             isDraggingConnection = tempConnections.Count > 0 && ImGui.IsWindowFocused();
         }
             
@@ -479,7 +497,7 @@ internal class ScalableCanvas : ICanvas
                    : new Vector2(scale.X.Clamp(0.1f, 40), scale.Y.Clamp(0.1f, 40));
     }
 
-    internal void ZoomWithMouseWheel(MouseState mouseState, out bool zoomed)
+    public void ZoomWithMouseWheel(MouseState mouseState, out bool zoomed)
     { 
         var zoomDelta = ComputeZoomDeltaFromMouseWheel(mouseState);
         ApplyZoomDelta(mouseState.Position, zoomDelta, out zoomed);

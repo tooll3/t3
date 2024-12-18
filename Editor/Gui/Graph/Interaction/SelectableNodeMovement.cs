@@ -14,7 +14,7 @@ namespace T3.Editor.Gui.Graph.Interaction;
 /// <summary>
 /// Handles selection and dragging (with snapping) of node canvas elements
 /// </summary>
-internal class SelectableNodeMovement(GraphWindow window, INodeCanvas canvas, NodeSelection selection)
+internal class SelectableNodeMovement(GraphComponents window, INodeCanvas canvas, NodeSelection selection)
 {
     /// <summary>
     /// Reset to avoid accidental dragging of previous elements 
@@ -102,7 +102,7 @@ internal class SelectableNodeMovement(GraphWindow window, INodeCanvas canvas, No
                 if (singleDraggedNode != null && ConnectionSplitHelper.BestMatchLastFrame != null && singleDraggedNode is SymbolUi.Child childUi)
                 {
                     var instanceForUiChild = composition.Children[childUi.Id];
-                    ConnectionMaker.SplitConnectionWithDraggedNode(window, 
+                    ConnectionMaker.SplitConnectionWithDraggedNode(window.GraphCanvas, 
                                                                    childUi, 
                                                                    ConnectionSplitHelper.BestMatchLastFrame.Connection, 
                                                                    instanceForUiChild,

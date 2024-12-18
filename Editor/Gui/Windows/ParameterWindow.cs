@@ -63,7 +63,7 @@ internal class ParameterWindow : Window
         if(graphWindow == null)
             return;
 
-        var nodeSelection = graphWindow.GraphCanvas.NodeSelection;
+        var nodeSelection = graphWindow.Components.NodeSelection;
         if (DrawSettingsForSelectedAnnotations(nodeSelection))
             return;
         
@@ -83,7 +83,7 @@ internal class ParameterWindow : Window
             var selectedInputs = nodeSelection.GetSelectedNodes<IInputUi>().ToList();
             if (selectedInputs.Count > 0)
             {
-                instance = graphWindow.CompositionOp;
+                instance = graphWindow.Components.CompositionOp;
                 var inputUi = selectedInputs.First();
                 _viewMode = ViewModes.Settings;
                 _parameterSettings.SelectInput(inputUi.Id);

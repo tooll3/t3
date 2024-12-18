@@ -182,7 +182,7 @@ public static class SymbolTreeMenu
         if (graphWindow == null)
             return true;
 
-        var comp = graphWindow.CompositionOp;
+        var comp = graphWindow.Components.CompositionOp;
 
         if (comp.Symbol.Id == symbol.Id)
         {
@@ -234,9 +234,9 @@ public static class SymbolTreeMenu
                 {
                     Log.Error($"No focused graph window found");
                 }
-                else if (window.GraphCanvas.NodeSelection.GetSelectedChildUis().Count() == 1)
+                else if (window.Components.NodeSelection.GetSelectedChildUis().Count() == 1)
                 {
-                    ConnectionMaker.InsertSymbolInstance(window, symbol);
+                    ConnectionMaker.InsertSymbolInstance(window.Components, symbol);
                 }
             }
 

@@ -17,7 +17,7 @@ internal static class RenameInstanceOverlay
 
     private static Guid _nextFocusedInstanceId = Guid.Empty;
 
-    public static void Draw(GraphWindow window)
+    public static void Draw(GraphComponents components)
     {
         var justOpened = false;
 
@@ -31,7 +31,7 @@ internal static class RenameInstanceOverlay
                 && (renameTriggered || ImGui.IsKeyPressed((ImGuiKey)Key.Return))
                 && string.IsNullOrEmpty(FrameStats.Current.OpenedPopUpName))
             {
-                var selectedInstances = window.GraphCanvas.NodeSelection.GetSelectedNodes<SymbolUi.Child>().ToList();
+                var selectedInstances = components.NodeSelection.GetSelectedNodes<SymbolUi.Child>().ToList();
                 if (_nextFocusedInstanceId != Guid.Empty)
                 {
                     _focusedInstanceId = _nextFocusedInstanceId;
@@ -53,7 +53,7 @@ internal static class RenameInstanceOverlay
         if (_focusedInstanceId == Guid.Empty)
             return;
 
-        var parentSymbolUi = window.CompositionOp.GetSymbolUi();
+        var parentSymbolUi = components.CompositionOp.GetSymbolUi();
         if (!parentSymbolUi.ChildUis.TryGetValue(_focusedInstanceId, out var symbolChildUi))
         {
             Log.Error("canceling rename overlay of no longer valid selection");
@@ -63,7 +63,7 @@ internal static class RenameInstanceOverlay
 
         var symbolChild = symbolChildUi.SymbolChild;
 
-        var positionInScreen = window.GraphCanvas.TransformPosition(symbolChildUi.PosOnCanvas);
+        var positionInScreen = components.GraphCanvas.TransformPosition(symbolChildUi.PosOnCanvas);
 
         ImGui.SetCursorScreenPos(positionInScreen + Vector2.One);
             

@@ -41,7 +41,7 @@ internal class VariationsWindow : Window
         if (graphWindow == null)
             return;
 
-        var nodeSelection = graphWindow.GraphCanvas.NodeSelection;
+        var nodeSelection = graphWindow.Components.NodeSelection;
 
         var compositionHasVariations = VariationHandling.ActivePoolForSnapshots != null && VariationHandling.ActivePoolForSnapshots.AllVariations.Count > 0;
         var oneChildSelected = nodeSelection.Selection.Count == 1;

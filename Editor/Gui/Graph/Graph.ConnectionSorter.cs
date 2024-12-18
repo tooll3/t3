@@ -14,15 +14,13 @@ internal sealed partial class Graph
     internal sealed class ConnectionSorter
     {
         public readonly List<ConnectionLineUi> Lines = new();
-        private readonly GraphCanvas _canvas;
+        private readonly IGraphCanvas _canvas;
         private readonly Graph _graph;
-        private readonly GraphWindow _window;
 
-        public ConnectionSorter(Graph graph, GraphWindow window, GraphCanvas canvas)
+        public ConnectionSorter(Graph graph, IGraphCanvas canvas)
         {
             _graph = graph;
             _canvas = canvas;
-            _window = window;
         }
             
         public void Init()
@@ -123,7 +121,7 @@ internal sealed partial class Graph
             }
             else if (c.TargetParentOrChildId == ConnectionMaker.UseDraftChildId)
             {
-                newLine.TargetPosition = _canvas.TransformPosition(_window.SymbolBrowser.PosOnCanvas);
+                newLine.TargetPosition = _canvas.TransformPosition(_canvas.SymbolBrowser.PosOnCanvas);
                 //newLine.ColorForType = Color.White;
             }
             else if (c.SourceParentOrChildId == ConnectionMaker.NotConnectedId)
@@ -133,7 +131,7 @@ internal sealed partial class Graph
             }
             else if (c.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
             {
-                newLine.SourcePosition = _window.SymbolBrowser.OutputPositionOnScreen;
+                newLine.SourcePosition = _canvas.SymbolBrowser.OutputPositionOnScreen;
             }
             else
             {

@@ -25,12 +25,15 @@ namespace T3.Editor.Gui.Windows.TimeLine;
 /// </summary>
 internal sealed class TimeLineCanvas : CurveEditCanvas
 {
-    public TimeLineCanvas(GraphCanvas canvas)
+    public TimeLineCanvas(GraphComponents graphComponents)
     {
+        _nodeSelection = graphComponents.NodeSelection;
+        GraphComponents = graphComponents;
+        
         DopeSheetArea = new DopeSheetArea(SnapHandlerForU, this);
         _timelineCurveEditArea = new TimelineCurveEditArea(this, SnapHandlerForU, SnapHandlerForV);
         _timeSelectionRange = new TimeSelectionRange(this, SnapHandlerForU);
-        LayersArea = new LayersArea(SnapHandlerForU, canvas, this);
+        LayersArea = new LayersArea(SnapHandlerForU, this);
 
         SnapHandlerForV.AddSnapAttractor(_horizontalRaster);
         SnapHandlerForU.AddSnapAttractor(_clipRange);
@@ -38,13 +41,11 @@ internal sealed class TimeLineCanvas : CurveEditCanvas
         SnapHandlerForU.AddSnapAttractor(_timeRasterSwitcher);
         SnapHandlerForU.AddSnapAttractor(_currentTimeMarker);
         SnapHandlerForU.AddSnapAttractor(LayersArea);
-        _structure = canvas.Structure;
-        _nodeSelection = canvas.NodeSelection;
-        _graphCanvas = canvas;
     }
 
     public NodeSelection NodeSelection => _nodeSelection;
     public HashSet<Guid> HoveredIds => _nodeSelection.HoveredIds;
+    public GraphComponents GraphComponents { get; }
 
     public void Draw(Instance compositionOp, Playback playback)
     {
@@ -62,7 +63,7 @@ internal sealed class TimeLineCanvas : CurveEditCanvas
         ScrollToTimeAfterStopped();
 
         var modeChanged = UpdateMode();
-        DrawCurveCanvas(this, drawAdditionalCanvasContent: DrawCanvasContent, _selectionFence, 0, T3Ui.EditingFlags.AllowHoveredChildWindows | T3Ui.EditingFlags.IgnoreParentZoom);
+        DrawCurveCanvas(drawAdditionalCanvasContent: DrawCanvasContent, _selectionFence, 0, T3Ui.EditingFlags.AllowHoveredChildWindows | T3Ui.EditingFlags.IgnoreParentZoom);
         Current = null;
             
         T3Ui.UiScaleFactor = keepScale;
@@ -411,13 +412,11 @@ internal sealed class TimeLineCanvas : CurveEditCanvas
     public readonly LayersArea LayersArea;
 
     public static TimeLineCanvas Current;
+    private readonly NodeSelection _nodeSelection;
 
     private double _lastPlaybackSpeed;
     private readonly List<AnimationParameter> _pinnedParams = new(20);
     private readonly List<AnimationParameter> _curvesForSelection = new(64);
-    private readonly Structure _structure;
-    private readonly NodeSelection _nodeSelection;
-    private readonly GraphCanvas _graphCanvas;
     private readonly SelectionFence _selectionFence = new();
 
     // Styling

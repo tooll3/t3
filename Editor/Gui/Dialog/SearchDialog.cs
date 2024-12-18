@@ -5,6 +5,7 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using T3.SystemUi;
 
 namespace T3.Editor.Gui.Dialog;
@@ -137,7 +138,7 @@ public class SearchDialog : ModalDialog
     private void DrawItem(FoundInstance foundInstance)
     {
         var instance = foundInstance.Instance;
-        var canvas = foundInstance.GraphCanvas;
+        var components = foundInstance.GraphCanvas;
         var symbolHash = instance.Symbol.Id.GetHashCode();
         ImGui.PushID(symbolHash);
         {
@@ -168,18 +169,18 @@ public class SearchDialog : ModalDialog
             _selectedItemChanged |= hasBeenClicked; 
 
             var path = instance.InstancePath;
-            var readablePath = string.Join(" / ", canvas.Structure.GetReadableInstancePath(path, false));
+            var readablePath = string.Join(" / ", components.OpenedProject.Structure.GetReadableInstancePath(path, false));
                 
             if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
             {
-                canvas.OpenAndFocusInstance(path);
+                components.GraphCanvas.OpenAndFocusInstance(path);
                 _selectedInstance = foundInstance;
                 _selectedItemChanged = false;
             }
             else if (_selectedItemChanged && _selectedInstance == foundInstance)
             {
                 UiListHelpers.ScrollToMakeItemVisible();
-                canvas.OpenAndFocusInstance(path);
+                components.GraphCanvas.OpenAndFocusInstance(path);
                 _selectedItemChanged = false;
             }
 
@@ -220,13 +221,12 @@ public class SearchDialog : ModalDialog
             
         foreach (var graphWindow in GraphWindow.GraphWindowInstances)
         {
-            var canvas = graphWindow.GraphCanvas;
-            var package = graphWindow.Package;
+            var components = graphWindow.Components;
 
             if (string.IsNullOrEmpty(_searchString))
             {
-                var previousInstances = canvas.NavigationHistory.GetPreviouslySelectedInstances()
-                                              .Select(instance => new FoundInstance(instance, graphWindow.GraphCanvas));
+                var previousInstances = components.NavigationHistory.GetPreviouslySelectedInstances()
+                                              .Select(instance => new FoundInstance(instance, components));
                 _matchingInstances.AddRange(previousInstances);
 
                 if (_matchingInstances.Count > 0)
@@ -235,11 +235,11 @@ public class SearchDialog : ModalDialog
                 continue;
             }
 
-            var compositionOp = graphWindow.CompositionOp;
+            var compositionOp = components.CompositionOp;
 
             var composition = _searchMode switch
                                   {
-                                      SearchModes.Global             => graphWindow.RootInstance.Instance,
+                                      SearchModes.Global             => components.OpenedProject.RootInstance.Instance,
                                       SearchModes.Local              => compositionOp,
                                       SearchModes.LocalAndInChildren => compositionOp,
                                       _                              => throw new ArgumentOutOfRangeException()
@@ -254,7 +254,7 @@ public class SearchDialog : ModalDialog
                                 if (string.IsNullOrEmpty(_searchString)
                                     || instance.Symbol.Name.Contains(_searchString, StringComparison.InvariantCultureIgnoreCase))
                                 {
-                                    _matchingInstances.Add(new FoundInstance(instance, canvas));
+                                    _matchingInstances.Add(new FoundInstance(instance, components));
                                 }
                             });
 
@@ -274,7 +274,7 @@ public class SearchDialog : ModalDialog
     private bool _selectedItemChanged;
     private SearchModes _searchMode = SearchModes.Local;
 
-    private readonly record struct FoundInstance(Instance Instance, GraphCanvas GraphCanvas);
+    private readonly record struct FoundInstance(Instance Instance, GraphComponents GraphCanvas);
 
     private enum SearchModes
     {

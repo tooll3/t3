@@ -35,20 +35,22 @@ namespace T3.Editor.Gui.Graph;
 ///</remarks>
 internal sealed partial class Graph
 {
-    private readonly GraphWindow _window;
-    public Graph(GraphWindow window, GraphCanvas canvas)
+    private readonly GraphComponents _components;
+    private readonly GraphCanvas _canvas;
+    public Graph(GraphComponents components, GraphCanvas canvas)
     {
-        _window = window;
-        _connectionSorter = new ConnectionSorter(this, window, canvas);
+        _components = components;
+        _canvas = canvas;
+        _connectionSorter = new ConnectionSorter(this, canvas);
     }
         
     public void DrawGraph(ImDrawListPtr drawList, bool preventInteraction, Instance composition, float graphOpacity)
     {
-        var canvas = _window.GraphCanvas;
+        var canvas = _components.GraphCanvas;
         var needsReinit = false;
         var graphSymbol = composition.Symbol;
             
-        var tempConnections = ConnectionMaker.GetTempConnectionsFor(_window);
+        var tempConnections = ConnectionMaker.GetTempConnectionsFor(_components.GraphCanvas);
 
         // _symbolUi = SymbolUiRegistry.Entries[graphSymbol.Id];
         // _childUis = _symbolUi.ChildUis;
@@ -115,7 +117,7 @@ internal sealed partial class Graph
 
         compositionUi = composition.GetSymbolUi();
         // 3. Draw Nodes and their sockets and set positions for connection lines
-        foreach (var instance in _window.CompositionOp.Children.Values)
+        foreach (var instance in _components.CompositionOp.Children.Values)
         {
             if (instance == null)
                 continue;
@@ -126,12 +128,12 @@ internal sealed partial class Graph
                 continue;
             }
 
-            var isSelected = canvas.NodeSelection.IsNodeSelected(childUi);
+            var isSelected = _components.NodeSelection.IsNodeSelected(childUi);
 
             // todo - remove nodes that are not in the graph anymore?
             if (!_graphNodes.TryGetValue(childUi, out var node))
             {
-                node = new GraphNode(_window, _connectionSorter);
+                node = new GraphNode(_canvas, _connectionSorter);
                 _graphNodes[childUi] = node;
             }
 
@@ -143,7 +145,7 @@ internal sealed partial class Graph
         {
             var inputDef = graphSymbol.InputDefinitions[index];
             var inputUi = compositionUi.InputUis[inputDef.Id];
-            var isSelectedOrHovered = InputNode.Draw(_window, drawList, inputDef, inputUi, index);
+            var isSelectedOrHovered = InputNode.Draw(_components, _canvas, drawList, inputDef, inputUi, index);
 
             var sourcePos = new Vector2(
                                         InputNode._lastScreenRect.Max.X + GraphNode.UsableSlotThickness,
@@ -161,7 +163,7 @@ internal sealed partial class Graph
         foreach (var (outputId, outputNode) in compositionUi.OutputUis)
         {
             var outputDef = graphSymbol.OutputDefinitions.Find(od => od.Id == outputId);
-            OutputNode.Draw(_window, drawList, outputDef, outputNode);
+            OutputNode.Draw(_canvas, _components, drawList, outputDef, outputNode);
 
             var targetPos = new Vector2(OutputNode.LastScreenRect.Min.X ,
                                         OutputNode.LastScreenRect.GetCenter().Y);
@@ -187,11 +189,11 @@ internal sealed partial class Graph
             // todo - remove annotations that are not in the graph anymore?
             if(!_annotationElements.TryGetValue(annotation, out var annotationElement))
             {
-                annotationElement = new AnnotationElement(_window, annotation);
+                annotationElement = new AnnotationElement(_components, annotation);
                 _annotationElements[annotation] = annotationElement;
             }
                 
-            annotationElement.Draw(drawList);
+            annotationElement.Draw(drawList, _canvas);
         }
 
         drawList.ChannelsMerge();
@@ -201,7 +203,7 @@ internal sealed partial class Graph
     {
         if (!_annotationElements.TryGetValue(annotation, out var annotationElement))
         {
-            annotationElement = new AnnotationElement(_window, annotation);
+            annotationElement = new AnnotationElement(_components, annotation);
             _annotationElements[annotation] = annotationElement;
         }
             
