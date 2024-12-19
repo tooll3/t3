@@ -766,7 +766,6 @@ internal sealed class PlaceholderCreation
             }
 
             // Push snapped ops further down if new op exceed initial default height
-            //if(_connectionOrientation == MagGraphItem.Directions.Vertical) 
             {
                 var newItem = new MagGraphItem
                                   {

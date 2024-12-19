@@ -3,12 +3,12 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Commands.Graph;
 
-public class DeleteConnectionCommand : ICommand
+internal sealed class DeleteConnectionCommand : ICommand
 {
     public string Name => "Delete Connection";
     public bool IsUndoable => true;
 
-    public DeleteConnectionCommand(Symbol compositionSymbol, Symbol.Connection connectionToRemove, int multiInputIndex)
+    internal DeleteConnectionCommand(Symbol compositionSymbol, Symbol.Connection connectionToRemove, int multiInputIndex)
     {
         _removedConnection = connectionToRemove.Clone();
         _compositionSymbolId = compositionSymbol.Id;
@@ -22,6 +22,7 @@ public class DeleteConnectionCommand : ICommand
             
         var compositionSymbol = symbolUi.Symbol;
         compositionSymbol.RemoveConnection(_removedConnection, _multiInputIndex);
+
         symbolUi.FlagAsModified();
     }
 

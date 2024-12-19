@@ -354,10 +354,7 @@ internal sealed partial class MagItemMovement
             unsnappedConnections.Add(mc);
 
             var targetItemInputLine = mc.TargetItem.InputLines[mc.InputLineIndex];
-            var connection = new Symbol.Connection(mc.SourceItem.Id,
-                                                   mc.SourceOutput.Id,
-                                                   mc.TargetItem.Id,
-                                                   targetItemInputLine.Input.Id);
+            var connection = mc.AsSymbolConnection();
 
             context.MacroCommand.AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol, 
                                                                                connection,
@@ -807,12 +804,17 @@ internal sealed partial class MagItemMovement
                     continue;
                 }
             }
+
+            var sourceParentOfSymbolChildId =
+                potentialConnection.SourceItem.Variant == MagGraphItem.Variants.Input ? Guid.Empty : potentialConnection.SourceItem.Id;
             
+            var targetParentOfSymbolChildId =
+                potentialConnection.TargetItem.Variant == MagGraphItem.Variants.Output ? Guid.Empty : potentialConnection.TargetItem.Id;
             
-            var newConnection = new Symbol.Connection(potentialConnection.SourceItem.Id,
-                                                  potentialConnection.OutputLine.Id,
-                                                  potentialConnection.TargetItem.Id,
-                                                  potentialConnection.InputLine.Id);
+            var newConnection = new Symbol.Connection(sourceParentOfSymbolChildId,
+                                                      potentialConnection.OutputLine.Id,
+                                                      targetParentOfSymbolChildId,
+                                                      potentialConnection.InputLine.Id);
             
             if (Structure.CheckForCycle(context.CompositionOp.Symbol, newConnection))
             {

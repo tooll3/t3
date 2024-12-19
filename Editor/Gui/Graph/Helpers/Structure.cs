@@ -305,13 +305,13 @@ internal sealed class Structure
 
         void CollectDependentChildren(Guid sourceChildId)
         {
-            if (!dependingSourceItemIds.Add(sourceChildId))
+            if (sourceChildId == Guid.Empty || !dependingSourceItemIds.Add(sourceChildId))
                 return;
 
             // find all connections into child...
             foreach (var c in compositionSymbol.Connections)
             {
-                if (c.TargetParentOrChildId != sourceChildId)
+                if (sourceChildId == Guid.Empty || c.TargetParentOrChildId != sourceChildId)
                     continue;
 
                 CollectDependentChildren(c.SourceParentOrChildId);

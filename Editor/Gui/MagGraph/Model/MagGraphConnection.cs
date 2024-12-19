@@ -63,10 +63,17 @@ internal sealed class MagGraphConnection
 
     public Symbol.Connection AsSymbolConnection()
     {
+        var sourceParentOfSymbolChildId =
+            SourceItem.Variant == MagGraphItem.Variants.Input ? Guid.Empty : SourceItem.Id;
+            
+        var targetParentOfSymbolChildId =
+            TargetItem.Variant == MagGraphItem.Variants.Output ? Guid.Empty : TargetItem.Id;
+        
+        
         return new Symbol.Connection(
-                              SourceItem.Id,
+                                     sourceParentOfSymbolChildId,
                               SourceOutput.Id,
-                              TargetItem.Id,
+                              targetParentOfSymbolChildId,
                               TargetInput.Id
                              );
     }

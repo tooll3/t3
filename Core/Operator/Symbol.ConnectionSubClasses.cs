@@ -141,5 +141,10 @@ public sealed partial class Symbol
 
         public bool IsConnectedToSymbolOutput => TargetParentOrChildId == Guid.Empty;
         public bool IsConnectedToSymbolInput => SourceParentOrChildId == Guid.Empty;
+
+        public override string ToString()
+        {
+            return $"Connection {SourceParentOrChildId.ToString()[..8]}.{SourceSlotId.ToString()[..8]} -> {TargetParentOrChildId.ToString()[..8]}.{TargetSlotId.ToString()[..8]}";
+        }
     }
 }
