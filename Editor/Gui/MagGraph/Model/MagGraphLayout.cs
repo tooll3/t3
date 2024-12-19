@@ -341,7 +341,7 @@ internal sealed class MagGraphLayout
                     multiInputIndex++;
                 }
                 
-                if (isRelevant && multiInputIndex == 0)
+                if (shouldBeVisible && multiInputIndex == 0)
                 {
                     inputLines.Add(new MagGraphItem.InputLine
                                        {
