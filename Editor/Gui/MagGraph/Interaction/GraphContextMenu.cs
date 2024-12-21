@@ -198,6 +198,7 @@ internal static class GraphContextMenu
         if (ImGui.MenuItem("Paste", KeyboardBinding.ListKeyboardShortcuts(UserActions.PasteFromClipboard, false)))
         {
             NodeActions.PasteClipboard(nodeSelection, context.Canvas, context.CompositionOp);
+            context.Layout.FlagAsChanged();
         }
 
         var selectedInputUis = nodeSelection.GetSelectedNodes<IInputUi>().ToList();
@@ -211,6 +212,7 @@ internal static class GraphContextMenu
                            enabled: (someOpsSelected || selectedInputUis.Count > 0 || selectedOutputUis.Count > 0) && !isSaving))
         {
             NodeActions.DeleteSelectedElements(nodeSelection, compositionSymbolUi, selectedChildUis, selectedInputUis, selectedOutputUis);
+            context.Layout.FlagAsChanged();
         }
 
         if (ImGui.MenuItem("Duplicate",
@@ -220,6 +222,7 @@ internal static class GraphContextMenu
         {
             NodeActions.CopySelectedNodesToClipboard(nodeSelection, context.CompositionOp);
             NodeActions.PasteClipboard(nodeSelection, context.Canvas, context.CompositionOp);
+            context.Layout.FlagAsChanged();
         }
 
         ImGui.Separator();
