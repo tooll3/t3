@@ -426,22 +426,24 @@ internal sealed class MagGraphLayout
             
             if (c.IsConnectedToSymbolInput)
             {
-                if (!Items.TryGetValue(c.TargetParentOrChildId, out var targetItem2)
+                if (!Items.TryGetValue(c.TargetParentOrChildId, out var targetFromInputItem)
                     || !Items.TryGetValue(c.SourceSlotId, out var symbolInputItem))
                     continue;
+                        
+                Debug.Assert(targetFromInputItem.Instance != null);
 
                 var symbolInput = composition.Inputs.FirstOrDefault(i => i.Id == c.SourceSlotId);
-                var targetInput = targetItem2.Instance.Inputs.FirstOrDefault(i => i.Input.InputDefinition.Id == c.TargetSlotId);
+                var targetInput = targetFromInputItem.Instance.Inputs.FirstOrDefault(i => i.Input.InputDefinition.Id == c.TargetSlotId);
                 Debug.Assert(targetInput != null);
 
-                GetVisibleInputIndex(targetItem2, targetInput, out var targetInputIndex, out var targetMultiInputIndex);
+                GetVisibleInputIndex(targetFromInputItem, targetInput, out var targetInputIndex, out var targetMultiInputIndex);
 
                 var connectionFromSymbolInput = new MagGraphConnection
                                                     {
                                                         Style = MagGraphConnection.ConnectionStyles.Unknown,
                                                         SourceItem = symbolInputItem,
                                                         SourceOutput = symbolInput,
-                                                        TargetItem = targetItem2,
+                                                        TargetItem = targetFromInputItem,
                                                         //TargetInput = targetInput,
                                                         InputLineIndex = targetInputIndex,
                                                         OutputLineIndex = 0,
@@ -451,7 +453,7 @@ internal sealed class MagGraphLayout
                                                     };
 
                 symbolInputItem.OutputLines[0].ConnectionsOut.Add(connectionFromSymbolInput);
-                targetItem2.InputLines[targetInputIndex].ConnectionIn = connectionFromSymbolInput;
+                targetFromInputItem.InputLines[targetInputIndex].ConnectionIn = connectionFromSymbolInput;
                 MagConnections.Add(connectionFromSymbolInput);
                 continue;
             }
@@ -464,18 +466,13 @@ internal sealed class MagGraphLayout
                     Log.Warning("Inconsistent output connection " + c);
                     continue;
                 }
+                
+                Debug.Assert(sourceItem2.Instance != null);
 
                 var symbolOutput = composition.Outputs.FirstOrDefault((o => o.Id == c.TargetSlotId));
                 var sourceOutput = sourceItem2.Instance.Outputs.FirstOrDefault(o => o.Id == c.SourceSlotId);
 
                 Debug.Assert(sourceOutput != null);
-
-                if (sourceOutput == null)
-                {
-                    Log.Warning($"Failed to find output connection! from {sourceItem2} {sourceItem2.Id}. {sourceItem2.OutputLines[0].Id}   != {c.SourceSlotId}");
-                    continue;
-                }
-                
                 var outputIndex2 = 0;
                 foreach (var outLine in sourceItem2.OutputLines)
                 {
