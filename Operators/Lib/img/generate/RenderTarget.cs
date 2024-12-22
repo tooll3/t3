@@ -202,7 +202,7 @@ internal sealed class RenderTarget : Instance<RenderTarget>, IRenderStatsProvide
         
     private void SetupResolveShaderResources()
     {
-        if (_resolveComputeShaderResource != null)
+        if (_resolveComputeShaderResource != null && !_resolveComputeShaderResource.IsDisposed)
             return;
             
         const string sourcePath = @"dx11\resolve-multisampled-depth-buffer-cs.hlsl";
@@ -218,6 +218,13 @@ internal sealed class RenderTarget : Instance<RenderTarget>, IRenderStatsProvide
         
     private void ResolveDepthBuffer()
     {
+        if (_resolveComputeShaderResource == null || _resolveComputeShaderResource.IsDisposed)
+        {
+            SetupResolveShaderResources();
+            if (_resolveComputeShaderResource == null)
+                return;
+        } 
+
         var resolveShader = _resolveComputeShaderResource.Value;
         if (resolveShader == null)
             return;
@@ -453,6 +460,31 @@ internal sealed class RenderTarget : Instance<RenderTarget>, IRenderStatsProvide
 
         return wasChanged;
     }
+    
+    
+    protected override void Dispose(bool isDisposing)
+    {
+        if (!isDisposing)
+            return;
+
+        //Log.Debug("Disposing RenderTarget", this);
+        
+        Utilities.Dispose(ref _multiSampledColorBuffer);
+        Utilities.Dispose(ref _multiSampledColorBufferSrv);
+        Utilities.Dispose(ref _multiSampledColorBufferRtv);
+
+        Utilities.Dispose(ref _resolvedColorBuffer);
+        Utilities.Dispose(ref _resolvedColorBufferSrv);
+        Utilities.Dispose(ref _resolvedColorBufferRtv);
+
+        Utilities.Dispose(ref _multiSampledDepthBuffer);
+        Utilities.Dispose(ref _multiSampledDepthBufferDsv);
+        Utilities.Dispose(ref _multiSampledDepthBufferSrv);
+
+        Utilities.Dispose(ref _resolvedDepthBuffer);
+        Utilities.Dispose(ref _resolvedDepthBufferUav);        
+    }
+    
 
     private enum Samples
     {
