@@ -106,7 +106,7 @@ internal static class ProgramWindows
             }
             else
             {
-                EditorUi.Instance.ShowMessageBox("We are sorry but your graphics hardware might not be capable of running Tooll2\n\n" + e.Message, "Oh noooo",
+                EditorUi.Instance.ShowMessageBox("We are sorry but your graphics hardware might not be capable of running Tooll3\n\n" + e.Message, "Oh noooo",
                                                  PopUpButtons.Ok);
             }
 
