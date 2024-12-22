@@ -3,20 +3,6 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "10afeac5-971c-4762-b73f-fea73a21dcd3"/*Center*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "InputId": "267aeadd-ec11-445d-9166-a741c84813bf"/*Radius*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      }
-    },
-    {
       "InputId": "279730b7-c427-4924-9fde-77eb65a3076c"/*Pivot*/,
       "Position": {
         "X": -200.0,
@@ -35,7 +21,10 @@
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
     },
     {
       "InputId": "566f1619-1de0-4b41-b167-7fc261730d62"/*UniformScale*/,
@@ -56,13 +45,6 @@
       "Position": {
         "X": -200.0,
         "Y": 135.0
-      }
-    },
-    {
-      "InputId": "a1e1d1a9-0b8c-4756-b805-0839a2ee54c3"/*FallOff*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
       }
     },
     {
