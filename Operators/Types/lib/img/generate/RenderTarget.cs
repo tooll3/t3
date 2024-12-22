@@ -468,6 +468,29 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             return wasChanged;
         }
 
+            protected override void Dispose(bool isDisposing)
+            {
+                if (!isDisposing)
+                    return;
+        
+                //Log.Debug("Disposing RenderTarget", this);
+                
+                Utilities.Dispose(ref _multiSampledColorBuffer);
+                Utilities.Dispose(ref _multiSampledColorBufferSrv);
+                Utilities.Dispose(ref _multiSampledColorBufferRtv);
+        
+                Utilities.Dispose(ref _resolvedColorBuffer);
+                Utilities.Dispose(ref _resolvedColorBufferSrv);
+                Utilities.Dispose(ref _resolvedColorBufferRtv);
+        
+                Utilities.Dispose(ref _multiSampledDepthBuffer);
+                Utilities.Dispose(ref _multiSampledDepthBufferDsv);
+                Utilities.Dispose(ref _multiSampledDepthBufferSrv);
+        
+                Utilities.Dispose(ref _resolvedDepthBuffer);
+                Utilities.Dispose(ref _resolvedDepthBufferUav);        
+            }
+        
         private enum Samples
         {
             No_MSAA = 1,
