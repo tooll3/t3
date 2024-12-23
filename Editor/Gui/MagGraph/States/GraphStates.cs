@@ -66,6 +66,9 @@ internal static class GraphStates
                               //     Modifications.DeleteSelectedOps(context);
                               // }
                           }
+
+                          if (!context.Canvas.IsHovered)
+                              return;
                           
                           // Mouse click
                           var clickedDown = ImGui.IsMouseClicked(ImGuiMouseButton.Left);

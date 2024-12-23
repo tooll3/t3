@@ -36,6 +36,9 @@ internal sealed class ConnectionHovering
         (_lastConnectionHovers, _connectionHoversForCurrentFrame) = (_connectionHoversForCurrentFrame, _lastConnectionHovers);
         _connectionHoversForCurrentFrame.Clear();
 
+        if(!context.Canvas.IsHovered)
+            _lastConnectionHovers.Clear();
+        
         if (_lastConnectionHovers.Count == 0)
         {
             StopHover();
@@ -49,7 +52,7 @@ internal sealed class ConnectionHovering
 
         var hoverDuration = time - _hoverStartTime;
         var hoverIndicatorRadius = EaseFunctions.EaseOutElastic((float)hoverDuration) * 9;
-        var drawList = ImGui.GetForegroundDrawList();
+        var drawList = ImGui.GetWindowDrawList();
 
         drawList.AddCircleFilled(firstHover.PositionOnScreen, hoverIndicatorRadius, firstHover.Color, 30);
 
