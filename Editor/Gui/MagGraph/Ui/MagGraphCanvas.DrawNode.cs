@@ -230,7 +230,7 @@ internal sealed partial class MagGraphCanvas
 
             if (hasMatchingTypes)
             {
-                var indicatorPos = new Vector2(pMin.X, pMin.Y + MagGraphItem.GridSize.Y / 2 * CanvasScale);
+                var indicatorPos = new Vector2(pMinVisible.X + 5 * CanvasScale, pMaxVisible.Y -  5 * CanvasScale);
                 var isPeeked = item.Area.Contains(_context.PeekAnchorInCanvas);
                 if (isPeeked)
                 {
@@ -499,9 +499,8 @@ internal sealed partial class MagGraphCanvas
                     if (!isAlreadyUsed && isPotentialConnectionStartDropTarget)
                     {
                         color = ColorVariations.Highlight.Apply(type2UiProperties.Color).Fade(Blink);
+                        InputSnapper.RegisterAsPotentialTargetInput(item, p, inputAnchor.SlotId);
                     }
-                    
-                    InputSnapper.RegisterAsPotentialTargetInput(item, p, inputAnchor.SlotId);
                 }
 
                 if (showTriangleAnchor)
