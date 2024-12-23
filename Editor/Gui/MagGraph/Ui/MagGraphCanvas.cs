@@ -114,6 +114,9 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
 
         ImGui.SameLine(0, 5);
         ImGui.Checkbox("Debug", ref _enableDebug);
+        
+        ImGui.SameLine(0, 10);
+        ImGui.Text("" + GetTargetScope());
 
         UpdateCanvas(out _);
         var drawList = ImGui.GetWindowDrawList();

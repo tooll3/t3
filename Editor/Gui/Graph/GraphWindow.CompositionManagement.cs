@@ -1,5 +1,6 @@
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Helpers;
+using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 
@@ -116,28 +117,30 @@ internal sealed partial class GraphWindow
 
     private void ApplyComposition(ICanvas.Transition transition, Composition previousComposition)
     {
+        Log.Debug("Apply composition to legacy graph: " + CompositionOp);
         GraphCanvas.SelectableNodeMovement.Reset();
 
-        var compositionOp = CompositionOp;
+        var newCompositionOp = CompositionOp;
 
         if (previousComposition != null)
         {
+            // Keep previous scope
+            UserSettings.Config.OperatorViewSettings[previousComposition.SymbolChildId] = GraphCanvas.GetTargetScope();
+            
             // zoom timeline out if necessary
             if (transition == ICanvas.Transition.JumpOut)
             {
                 _timeLineCanvas.UpdateScaleAndTranslation(previousComposition.Instance, transition);
             }
-
-            var targetScope = GraphCanvas.GetTargetScope();
-            UserSettings.Config.OperatorViewSettings[previousComposition.SymbolChildId] = targetScope;
         }
 
         _timeLineCanvas.ClearSelection();
         GraphCanvas.FocusViewToSelection();
 
         var newCanvasScope = GraphCanvas.GetTargetScope();
-        if (UserSettings.Config.OperatorViewSettings.TryGetValue(compositionOp.SymbolChildId, out var savedCanvasScope))
+        if (UserSettings.Config.OperatorViewSettings.TryGetValue(newCompositionOp.SymbolChildId, out var savedCanvasScope))
         {
+
             newCanvasScope = savedCanvasScope;
         }
 
@@ -145,7 +148,7 @@ internal sealed partial class GraphWindow
 
         if (transition == ICanvas.Transition.JumpIn)
         {
-            _timeLineCanvas.UpdateScaleAndTranslation(compositionOp, transition);
+            _timeLineCanvas.UpdateScaleAndTranslation(newCompositionOp, transition);
         }
     }
 
