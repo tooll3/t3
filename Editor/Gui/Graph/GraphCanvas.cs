@@ -1,18 +1,12 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using ImGuiNET;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using T3.Core.DataTypes;
-using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Core.SystemUi;
 using T3.Core.UserData;
 using T3.Editor.External;
 using T3.Editor.Gui.Commands;
-using T3.Editor.Gui.Commands.Annotations;
-using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
@@ -25,15 +19,9 @@ using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.Windows.Output;
 using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 using T3.SystemUi;
-using ComputeShader = T3.Core.DataTypes.ComputeShader;
-using GeometryShader = T3.Core.DataTypes.GeometryShader;
-using PixelShader = T3.Core.DataTypes.PixelShader;
-using Texture2D = SharpDX.Direct3D11.Texture2D;
-using VertexShader = T3.Core.DataTypes.VertexShader;
 
 namespace T3.Editor.Gui.Graph;
 
@@ -292,12 +280,12 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
 
             var doubleClicked = ImGui.IsMouseDoubleClicked(0);
 
-            var isSomething = (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || ImGui.IsWindowFocused())
+            var isInteractive = (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || ImGui.IsWindowFocused())
                               && !preventInteractions
                               && tempConnections.Count == 0;
 
             var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
-            var shouldHandleFenceSelection = isSomething
+            var shouldHandleFenceSelection = isInteractive
                                              || isOnBackground && (ImGui.IsMouseDoubleClicked(0) || KeyboardBinding.Triggered(UserActions.CloseOperator));
 
             if (shouldHandleFenceSelection)

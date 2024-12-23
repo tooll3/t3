@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using ImGuiNET;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
 using MagItemMovement = T3.Editor.Gui.MagGraph.Interaction.MagItemMovement;
@@ -74,6 +75,15 @@ internal static class GraphStates
                           var clickedDown = ImGui.IsMouseClicked(ImGuiMouseButton.Left);
                           if (!clickedDown)
                               return;
+
+                          if (ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left))
+                          {
+                              var clickedBackground = context.ActiveItem == null;
+                              if (clickedBackground)
+                              {
+                                  GraphWindow.Focused?.TrySetCompositionOpToParent();
+                              }
+                          }
                           
                           if (context.ActiveItem == null)
                           {
