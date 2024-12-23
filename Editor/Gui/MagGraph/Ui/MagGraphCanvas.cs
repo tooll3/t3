@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
@@ -20,12 +21,14 @@ namespace T3.Editor.Gui.MagGraph.Ui;
  */
 internal sealed partial class MagGraphCanvas : ScalableCanvas
 {
-    public MagGraphCanvas(MagGraphWindow window, NodeSelection nodeSelection, GraphImageBackground graphImageBackground)
+    public MagGraphCanvas(MagGraphWindow window, Instance newCompositionOp , NodeSelection nodeSelection, GraphImageBackground graphImageBackground)
     {
         EnableParentZoom = false;
         _window = window;
-        _context = new GraphUiContext(nodeSelection, this, _window.CompositionOp, graphImageBackground);
+        _context = new GraphUiContext(nodeSelection, this, newCompositionOp , graphImageBackground);
         _nodeSelection = nodeSelection;
+        
+        InitializeCanvasScope(_context);
     }
 
     private ImRect _visibleCanvasArea;
@@ -43,16 +46,48 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
     public bool IsFocused { get; private set; }
     public bool IsHovered { get; private set; }
 
+    // private Guid _previousCompositionId;
+    
+    /// <summary>
+    /// This is an intermediate helper method that should be replaced with a generalized implementation shared by
+    /// all graph windows. It's especially unfortunate because it relies on GraphWindow.Focus to exist as open window :(
+    ///
+    /// It uses changes to context.CompositionOp to refresh the view to either the complete content or to the
+    /// view saved in user settings...
+    /// </summary>
+    private void InitializeCanvasScope(GraphUiContext context)
+    {
+        // if (context.CompositionOp.SymbolChildId == _previousCompositionId)
+        //     return;
+        //
+        if (GraphWindow.Focused == null)
+            return;
+        
+        // _previousCompositionId = context.CompositionOp.SymbolChildId;
+        
+        // Meh: This relies on TargetScope already being set to new composition.
+        var newCanvasScope = GraphWindow.Focused.GraphCanvas.GetTargetScope();
+        if (UserSettings.Config.OperatorViewSettings.TryGetValue(context.CompositionOp.SymbolChildId, out var savedCanvasScope))
+        {
+            newCanvasScope = savedCanvasScope;
+        }
+        context.Canvas.SetScopeWithTransition(newCanvasScope.Scale, newCanvasScope.Scroll, ICanvas.Transition.Undefined);
+    }
+    
+    
     public void Draw()
     {
         IsFocused = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows);
         IsHovered = ImGui.IsWindowHovered();
 
-        if (_window.CompositionOp == null)
-            return;
-
-        if (_window.CompositionOp != _context.CompositionOp)
-            _context = new GraphUiContext(_nodeSelection, this, _window.CompositionOp, _context.GraphImageBackground);
+        // if (_window.WindowCompositionOp == null)
+        //     return;
+        //
+        // if (_window.WindowCompositionOp != _context.CompositionOp)
+        // {
+        //     
+        //     _context = new GraphUiContext(_nodeSelection, this, _window.WindowCompositionOp, _context.GraphImageBackground);
+        // }
 
         _visibleCanvasArea = ImRect.RectWithSize(InverseTransformPositionFloat(ImGui.GetWindowPos()),
                                                  InverseTransformDirection(ImGui.GetWindowSize()));

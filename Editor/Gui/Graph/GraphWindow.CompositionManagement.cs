@@ -135,13 +135,13 @@ internal sealed partial class GraphWindow
         _timeLineCanvas.ClearSelection();
         GraphCanvas.FocusViewToSelection();
 
-        var newProps = GraphCanvas.GetTargetScope();
-        if (UserSettings.Config.OperatorViewSettings.TryGetValue(compositionOp.SymbolChildId, out var viewSetting))
+        var newCanvasScope = GraphCanvas.GetTargetScope();
+        if (UserSettings.Config.OperatorViewSettings.TryGetValue(compositionOp.SymbolChildId, out var savedCanvasScope))
         {
-            newProps = viewSetting;
+            newCanvasScope = savedCanvasScope;
         }
 
-        GraphCanvas.SetScopeWithTransition(newProps.Scale, newProps.Scroll, transition);
+        GraphCanvas.SetScopeWithTransition(newCanvasScope.Scale, newCanvasScope.Scroll, transition);
 
         if (transition == ICanvas.Transition.JumpIn)
         {

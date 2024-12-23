@@ -18,16 +18,16 @@ internal sealed class MagGraphWindow : Window
     
     protected override void DrawContent()
     {
-        var focusedCompositionOp = GraphWindow.Focused?.CompositionOp;
-        if (focusedCompositionOp == null)
+        var legacyFocusedCompositionOp = GraphWindow.Focused?.CompositionOp;
+        if (legacyFocusedCompositionOp == null)
             return;
 
-        if (CompositionOp != focusedCompositionOp)
+        if (_windowCompositionOp != legacyFocusedCompositionOp)
         {
-            CompositionOp = focusedCompositionOp;
+            _windowCompositionOp = legacyFocusedCompositionOp;
             var nodeSelection = GraphWindow.Focused.GraphCanvas.NodeSelection;
             _graphImageBackground = new GraphImageBackground(nodeSelection, GraphWindow.Focused.Structure);
-            _magGraphCanvas = new MagGraphCanvas(this, nodeSelection, _graphImageBackground);
+            _magGraphCanvas = new MagGraphCanvas(this,  _windowCompositionOp, nodeSelection, _graphImageBackground);
         }
         
         _graphImageBackground?.Draw(1);
@@ -39,7 +39,7 @@ internal sealed class MagGraphWindow : Window
         return [];
     }
 
-    internal Instance CompositionOp;
+    private Instance _windowCompositionOp;
     private MagGraphCanvas _magGraphCanvas;
     private GraphImageBackground _graphImageBackground;
 }
