@@ -24,11 +24,11 @@ public class EditSymbolDescriptionDialog : ModalDialog
             if (ImGui.IsWindowAppearing())
                 ImGui.SetKeyboardFocusHere();
 
-            ImGui.InputTextMultiline("##name", ref desc, 2000, new Vector2(-1, 400), ImGuiInputTextFlags.None);
+            var modified = false;
+            modified |= ImGui.InputTextMultiline("##name", ref desc, 2000, new Vector2(-1, 400), ImGuiInputTextFlags.None);
             symbolUi.Description = desc;
 
             ImGui.Text("Links...");
-            var modified = false;
             foreach (var l in symbolUi.Links.Values)
             {
                 ImGui.PushID(l.Id.GetHashCode());
