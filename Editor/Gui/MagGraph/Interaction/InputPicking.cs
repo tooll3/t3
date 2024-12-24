@@ -87,7 +87,7 @@ internal static class InputPicking
         
         // Create connection
         var connectionToAdd = new Symbol.Connection(context.ActiveSourceItem.Id,
-                                                    context.ActiveSourceItem.OutputLines[0].Id,
+                                                    context.ActiveSourceOutputId,
                                                     context.ItemForInputSelection.Id,
                                                     targetInputUi.Id);
         
