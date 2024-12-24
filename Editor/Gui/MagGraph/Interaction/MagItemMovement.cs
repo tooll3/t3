@@ -134,7 +134,7 @@ internal sealed partial class MagItemMovement
             return;
 
         _layout.FlagAsChanged();
-        
+
         HandleUnsnapAndCollapse(context);
 
         if (!_snapping.IsSnapped)
@@ -356,7 +356,7 @@ internal sealed partial class MagItemMovement
             var targetItemInputLine = mc.TargetItem.InputLines[mc.InputLineIndex];
             var connection = mc.AsSymbolConnection();
 
-            context.MacroCommand.AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol, 
+            context.MacroCommand.AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,
                                                                                connection,
                                                                                targetItemInputLine.MultiInputIndex));
             mc.IsTemporary = true;
@@ -754,7 +754,6 @@ internal sealed partial class MagItemMovement
 
         foreach (var potentialConnection in newConnections)
         {
-            
             // Avoid accidental vertical double connections to item above when snapping a horizontal connection
             if (potentialConnection.TargetItem.OutputLines.Length > 0
                 && potentialConnection.TargetItem.OutputLines[0].ConnectionsOut.Count > 0)
@@ -766,8 +765,8 @@ internal sealed partial class MagItemMovement
                         continue;
 
                     var newOutputPos = targetOutConnection.SourceItem.PosOnCanvas
-                                       + new Vector2(MagGraphItem.GridSize.X, MagGraphItem.GridSize.Y * (0.5f + targetOutConnection.VisibleOutputIndex)); 
-                    if(Vector2.Distance(newOutputPos, targetOutConnection.TargetPos) < 0.01f)
+                                       + new Vector2(MagGraphItem.GridSize.X, MagGraphItem.GridSize.Y * (0.5f + targetOutConnection.VisibleOutputIndex));
+                    if (Vector2.Distance(newOutputPos, targetOutConnection.TargetPos) < 0.01f)
                     {
                         wouldConnectionOutSnapAfterMove = true;
                     }
@@ -775,11 +774,11 @@ internal sealed partial class MagItemMovement
 
                 if (wouldConnectionOutSnapAfterMove)
                 {
-                    Log.Debug("Avoiding double connection...");
+                    Log.Debug("Avoiding double vertical connection...");
                     continue;
                 }
             }
-            
+
             // Avoid accidental vertical double connections to item below when snapping a horizontal connection
             if (potentialConnection.SourceItem.OutputLines.Length > 0
                 && potentialConnection.SourceItem.OutputLines[0].ConnectionsOut.Count > 0)
@@ -791,8 +790,8 @@ internal sealed partial class MagItemMovement
                     //     continue;
 
                     var newOutputPos = sourceOutConnection.SourceItem.PosOnCanvas
-                                       + new Vector2(MagGraphItem.GridSize.X, MagGraphItem.GridSize.Y * (0.5f + sourceOutConnection.VisibleOutputIndex)); 
-                    if(Vector2.Distance(newOutputPos, sourceOutConnection.TargetPos) < 100f)
+                                       + new Vector2(MagGraphItem.GridSize.X, MagGraphItem.GridSize.Y * (0.5f + sourceOutConnection.VisibleOutputIndex));
+                    if (Vector2.Distance(newOutputPos, sourceOutConnection.TargetPos) < 4f)
                     {
                         wouldConnectionOutSnapAfterMove = true;
                     }
@@ -807,29 +806,28 @@ internal sealed partial class MagItemMovement
 
             var sourceParentOfSymbolChildId =
                 potentialConnection.SourceItem.Variant == MagGraphItem.Variants.Input ? Guid.Empty : potentialConnection.SourceItem.Id;
-            
+
             var targetParentOfSymbolChildId =
                 potentialConnection.TargetItem.Variant == MagGraphItem.Variants.Output ? Guid.Empty : potentialConnection.TargetItem.Id;
-            
+
             var newConnection = new Symbol.Connection(sourceParentOfSymbolChildId,
                                                       potentialConnection.OutputLine.Id,
                                                       targetParentOfSymbolChildId,
                                                       potentialConnection.InputLine.Id);
-            
+
             if (Structure.CheckForCycle(context.CompositionOp.Symbol, newConnection))
             {
                 Log.Debug("Sorry, this connection would create a cycle. (4)");
                 continue;
             }
 
-            context.MacroCommand.AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol, 
+            context.MacroCommand.AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
                                                                             newConnection,
                                                                             potentialConnection.InputLine.MultiInputIndex));
         }
 
         return newConnections.Count > 0;
     }
-
 
     private static void GetPotentialConnectionsAfterSnap(ref List<PotentialConnection> result, MagGraphItem a, MagGraphItem b)
     {
