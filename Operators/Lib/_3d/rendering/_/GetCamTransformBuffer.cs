@@ -1,4 +1,5 @@
-using Lib.dx11.buffer;
+using Lib.dx11;
+using Lib.dx11.api;
 using T3.Core.Rendering;
 
 namespace Lib._3d.rendering.@_;

@@ -2,6 +2,7 @@ using SharpDX;
 
 namespace Lib.dx11.buffer;
 
+
 [Guid("c036b4f2-97bf-40f1-b4d5-c2067a4fa97f")]
 internal sealed class IntsToBufferWithViews : Instance<IntsToBufferWithViews>
 {
