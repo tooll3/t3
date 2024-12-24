@@ -24,33 +24,37 @@ internal sealed class GetAPrime : Instance<GetAPrime>
 
     private static int ComputePrime(int index)
     {
-        var count = 0;
-        var n = 2;
+        if (index < 1)
+            return -1;
+
+        int count = 0;
+        int n = 2;
+
         while (true)
         {
             if (count > 10000)
                 return -1;
-                
-            var isPrime = true;
-            for (var i = 2; i <= n / 2; i++)
+
+            bool isPrime = true;
+            int limit = (int)Math.Sqrt(n); // Only check divisors up to sqrt(n)
+            for (int i = 2; i <= limit; i++)
             {
-                if (n % i != 0)
-                    continue;
-                    
-                isPrime = false;
-                break;
+                if (n % i == 0)
+                {
+                    isPrime = false;
+                    break;
+                }
             }
 
             if (isPrime)
             {
                 count++;
-                if (count >= index)
-                {
+                if (count == index)
                     return n;
-                }
             }
 
-            n++;
+            // Increment to the next candidate number
+            n = (n == 2) ? 3 : n + 2; // Skip even numbers after 2
         }
     }
 

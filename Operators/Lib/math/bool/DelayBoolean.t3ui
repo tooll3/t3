@@ -1,6 +1,7 @@
 {
   "Id": "f997d943-7a71-4fdf-b182-7a521a73ba27"/*DelayBoolean*/,
   "Description": "",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "2141f8a4-0122-48a7-ae78-4f9b79e9ef1f"/*Trigger*/,

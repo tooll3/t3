@@ -1,0 +1,53 @@
+{
+  "Id": "c6d22dc3-a6ff-4a6f-aa14-8be6595da2b1"/*SetPlaybackTime*/,
+  "Description": "An advanced playback control that will move the current playhead to the defined time. \n\n\nThis can be useful in complex VJ setups. Only use this operator if you know what you're doing. \nSetting the PlaybackTime frequently can interfere with user interactions like editing keyframes. \n\nNote: For this operator to work, the playback must be running.",
+  "SymbolTags": "64",
+  "InputUis": [
+    {
+      "InputId": "16b2b1f5-4087-4e77-902b-3cdde1b22179"/*ShowLogMessages*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "24cf475d-a5b7-46b5-92cf-1ffcefb0693e"/*TimeInBars*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "61ad3f49-8188-45bd-8d72-bbb35c04ca3c"/*TriggerMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "68c3bd6d-aebf-4a0c-bb73-04c9997ebae9"/*SubGraph*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "bd88e545-743e-4caa-8fd1-e1f7f3c78b21"/*Enabled*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "0bd5fcb8-72fa-40d5-a922-63a2e7551a88"/*Commands*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 300.0
+      }
+    }
+  ]
+}

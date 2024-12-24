@@ -1,0 +1,43 @@
+{
+  "Id": "ae0c87d6-2b1e-4e28-b0d0-8611a2f7e152"/*Round*/,
+  "Description": "Advanced version of rounding. See https://www.desmos.com/calculator/rojg8taxot for more additional details.\n\nAlso see [Ceil] & [Floor]",
+  "SymbolTags": "1024",
+  "InputUis": [
+    {
+      "InputId": "31a045cf-9892-4d1b-b961-73bf73e58b6a"/*StepsPerUnit*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 328.0
+      },
+      "AddPadding": "True",
+      "Min": -100.0,
+      "Max": 100.0
+    },
+    {
+      "InputId": "b2d2d730-ed57-4b5f-aa34-2060d86efb47"/*RoundRatio*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 373.0
+      }
+    },
+    {
+      "InputId": "e911807f-b3a7-44e9-82d2-f04608b39ec3"/*Value*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "a886fa83-a8cc-4022-b4b1-26c134095223"/*Result*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 38.0
+      }
+    }
+  ]
+}

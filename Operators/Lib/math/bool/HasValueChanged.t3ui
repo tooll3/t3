@@ -1,6 +1,7 @@
 {
   "Id": "146fae64-18da-4183-9794-a322f47c669e"/*HasValueChanged*/,
   "Description": "Tests whether the incoming value has changed by a defined threshold and outputs this as a Boolean\n\nSimilar to [HasValueIncreased]",
+  "SymbolTags": "9",
   "InputUis": [
     {
       "InputId": "031ef11b-f6cc-497e-9528-ed9490e878b5"/*Mode*/,

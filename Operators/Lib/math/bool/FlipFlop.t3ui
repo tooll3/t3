@@ -1,6 +1,7 @@
 {
   "Id": "ec1ba1fb-ceb7-4d4f-86b4-389589c7e6f0"/*FlipFlop*/,
   "Description": "Holds the \"activated\" state of a boolean. Also check [DelayTrigger].",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "1e8c11a9-d0fc-4016-9428-bed7fbd0bf68"/*DefaultValue*/,

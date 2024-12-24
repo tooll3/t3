@@ -1,6 +1,7 @@
 {
   "Id": "3a6fd508-0272-4c18-96b8-bc2387d3b2fd"/*All*/,
   "Description": "Returns true if all of the connected booleans are true.",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "cf59ae3e-d111-479f-a42b-c5c014e65b32"/*Input*/,

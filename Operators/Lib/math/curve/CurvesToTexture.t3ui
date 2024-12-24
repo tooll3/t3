@@ -1,6 +1,7 @@
 {
   "Id": "ab511978-bad5-4b69-90b2-c028447fe9f7"/*CurvesToTexture*/,
   "Description": "Tip: Hold Shift for snapping. Press F to extend the view to the selection.",
+  "SymbolTags": "24",
   "InputUis": [
     {
       "InputId": "63c7f648-7e02-4e0b-aaee-3a4c6869d75f"/*SampleSize*/,

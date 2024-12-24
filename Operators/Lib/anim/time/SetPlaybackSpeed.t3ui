@@ -1,0 +1,38 @@
+{
+  "Id": "fcd32cac-6544-42a3-8a14-203b8ca3559e"/*SetPlaybackSpeed*/,
+  "Description": "An advanced option that allows you to slow down the playback (including audio). This might be useful in some situations, though some details might not work as expected.",
+  "SymbolTags": "64",
+  "InputUis": [
+    {
+      "InputId": "10f14ef0-7399-4a85-96ad-f445903eec1d"/*SpeedFactor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "4fdef030-d1d1-403a-b16c-a414f63fc913"/*SubGraph*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "f3b73860-e44d-4ae1-9709-51ab142a2d0a"/*TriggerUpdate*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "80fc0900-074f-43b8-a053-991159b7f56e"/*Commands*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 300.0
+      }
+    }
+  ]
+}
