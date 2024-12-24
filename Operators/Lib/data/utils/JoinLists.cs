@@ -1,4 +1,4 @@
-namespace Lib.data;
+namespace Lib.data.utils;
 
 [Guid("0b99ab8b-5d61-49da-9851-9ad723cad3ae")]
 internal sealed class JoinLists : Instance<JoinLists>

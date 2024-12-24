@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Lib.data;
+namespace Lib.data._obsolete;
 
 [Guid("d5607e3b-15e8-402c-8d54-b29e40415ab0")]
 internal sealed class ExportPointList : Instance<ExportPointList>

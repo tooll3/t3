@@ -1,4 +1,4 @@
-namespace Lib;
+namespace Lib.field.analyze;
 
 [Guid("89dd9ee0-8754-4e4c-abdc-74425c39dcc2")]
 public class VisualizeFiedlDistance : Instance<VisualizeFiedlDistance>

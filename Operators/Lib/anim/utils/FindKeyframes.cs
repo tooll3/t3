@@ -1,7 +1,7 @@
 using T3.Core.Animation;
 using T3.Core.Utils;
 
-namespace Lib.anim;
+namespace Lib.anim.utils;
 
 [Guid("127e1eb9-aca9-4f8e-b0c9-b709c8a0745a")]
 internal sealed class FindKeyframes : Instance<FindKeyframes>, IStatusProvider

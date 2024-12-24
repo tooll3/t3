@@ -1,7 +1,7 @@
 using System.Reflection;
 using T3.Core.Utils;
 
-namespace Lib.data;
+namespace Lib.data.utils;
 
 [Guid("37794826-a099-4af3-90f4-1e49092a09e1")]
 internal sealed class GetListItemAttribute : Instance<GetListItemAttribute>

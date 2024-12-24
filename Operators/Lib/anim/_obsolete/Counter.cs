@@ -2,7 +2,7 @@ using T3.Core.Utils;
 
 //using T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c;
 
-namespace Lib.anim;
+namespace Lib.anim._obsolete;
 
 [Guid("11882635-4757-4cac-a024-70bb4e8b504c")]
 public sealed class Counter : Instance<Counter>

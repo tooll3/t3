@@ -1,7 +1,7 @@
 using System.Reflection;
 using T3.Core.Utils;
 
-namespace Lib.data;
+namespace Lib.data._obsolete;
 
 [Guid("d86e9585-d233-455a-9059-fa93debfed01")]
 internal sealed class GetIteratedVec3 : Instance<GetIteratedVec3>

@@ -1,4 +1,4 @@
-namespace Lib;
+namespace Lib.point.modify;
 
 [Guid("1c54fdad-9eb4-49e8-8fde-1c78b0fa2b48")]
 internal sealed class SamplePointAttributes_v2 : Instance<SamplePointAttributes_v2>

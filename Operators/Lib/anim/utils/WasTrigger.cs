@@ -1,7 +1,7 @@
 using T3.Core.Animation;
 using T3.Core.Utils;
 
-namespace Lib.anim;
+namespace Lib.anim.utils;
 
 [Guid("d21652e9-4dc3-4ece-9205-51fced56c3bd")]
 internal sealed class WasTrigger : Instance<WasTrigger>

@@ -1,4 +1,4 @@
-namespace Lib.data;
+namespace Lib.data._obsolete;
 
 [Guid("4c088b67-be47-4599-bd64-5f277abb0113")]
 internal sealed class GetIteration : Instance<GetIteration>
