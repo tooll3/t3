@@ -1,6 +1,7 @@
 {
   "Id": "5a2752e8-95ae-4d76-b903-1f52ef43bcdc"/*DrawScreenQuad*/,
   "Description": "Renders a rectangle that is locked to the cameraview and automatically adjusts to the right image aspect ratio.",
+  "SymbolTags": "24",
   "InputUis": [
     {
       "InputId": "2680baf9-3dbd-4ade-b109-19b3b0f1d40f"/*EnableDepthWrite*/,

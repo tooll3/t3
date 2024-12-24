@@ -1,6 +1,7 @@
 {
   "Id": "dd3d7e16-f33e-4fb0-89c6-4d8cbc9d702f"/*LoadObjEdges*/,
   "Description": "Loads an Obj mesh file so its edges can be used for artistic line rendering.\n\nIt can be used like this:\n\n[LoadObjEdges]->[ListToBuffer]->[DrawLines]",
+  "SymbolTags": "72",
   "InputUis": [
     {
       "InputId": "b6932cbd-e6b6-447b-b416-701326227864"/*Path*/,

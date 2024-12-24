@@ -6,6 +6,10 @@
       "DefaultValue": null
     },
     {
+      "Id": "65077b57-f9eb-48aa-8195-588f906b0e72"/*DepthStencilView*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "d73d2fe7-1af4-48d6-9ad3-f8c87c3369d6"/*ClearColor*/,
       "DefaultValue": {
         "X": 1.0,

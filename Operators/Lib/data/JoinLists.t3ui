@@ -1,6 +1,7 @@
 {
   "Id": "0b99ab8b-5d61-49da-9851-9ad723cad3ae"/*JoinLists*/,
   "Description": "",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "f0eb99fd-5782-4a97-93cb-bed93394184c"/*Lists*/,

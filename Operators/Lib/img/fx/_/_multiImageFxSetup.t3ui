@@ -1,6 +1,7 @@
 {
   "Id": "a2567844-3314-48de-bda7-7904b5546535"/*_multiImageFxSetup*/,
   "Description": "",
+  "SymbolTags": "16",
   "InputUis": [
     {
       "InputId": "440e471b-9f67-435c-9e21-304cd57728aa"/*GenerateMips*/,

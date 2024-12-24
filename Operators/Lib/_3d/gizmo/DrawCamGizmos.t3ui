@@ -1,6 +1,7 @@
 {
   "Id": "cdf5dd6a-73dc-4779-a366-df19b69071a6"/*DrawCamGizmos*/,
   "Description": "An attempt to draw camera gizmos.",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "d8ac3b98-5738-41f2-8398-f832103f1dc1"/*Size*/,

@@ -1,6 +1,7 @@
 {
   "Id": "c6014c28-c6ab-4b4e-b6bf-0cee92fb4b40"/*ConvertEquirectangle*/,
   "Description": "",
+  "SymbolTags": "16",
   "InputUis": [
     {
       "InputId": "07d45e2f-75dd-455c-b8fe-b96ab2f830a2"/*Resolution*/,
@@ -49,8 +50,8 @@
     {
       "ChildId": "39dd9911-4bc3-415c-803f-2c4aa0691f24"/*LoadImage*/,
       "Position": {
-        "X": 404.79297,
-        "Y": 364.00003
+        "X": 289.27277,
+        "Y": 464.51755
       }
     },
     {

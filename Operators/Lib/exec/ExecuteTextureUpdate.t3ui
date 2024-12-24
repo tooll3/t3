@@ -1,6 +1,7 @@
 {
   "Id": "6c2f8241-9f4b-451e-8a1d-871631d21163"/*ExecuteTextureUpdate*/,
   "Description": "A helper that first evaluates a command input before returning a texture2d. This can be useful for compute shader processing.",
+  "SymbolTags": "24",
   "InputUis": [
     {
       "InputId": "088ddcee-1407-4cd8-85bc-6704b8ea73b1"/*UpdateCommands*/,

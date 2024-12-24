@@ -1,6 +1,7 @@
 {
   "Id": "83e4575c-2190-4c8d-b952-60b20b6c3489"/*RaymarchField*/,
   "Description": "",
+  "SymbolTags": "0",
   "InputUis": [
     {
       "InputId": "00874001-e2ff-45a4-891d-79f1a4049b4e"/*AoDistance*/,

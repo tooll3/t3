@@ -1,6 +1,7 @@
 {
   "Id": "94a392e6-3e03-4ccf-a114-e6fafa263b4f"/*SequenceAnim*/,
   "Description": "Creates a visual sequencer that can be controlled by adding a string of numbers",
+  "SymbolTags": "9",
   "InputUis": [
     {
       "InputId": "0e2fb821-460a-4147-99c0-5f6c696e7847"/*OverrideTime*/,

@@ -1,6 +1,7 @@
 {
   "Id": "a1e3b8d3-3888-4e18-80e4-f6c65a136e75"/*ColorGradeDepth*/,
   "Description": "A advanced color grade that uses a depth buffer based gradient look for additional effects.",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "11e8c433-deab-4979-9054-90dc373cb5f9"/*VignetteFeather*/,

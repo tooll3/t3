@@ -1,6 +1,7 @@
 {
   "Id": "0bd77dd6-a93a-4e2e-b69b-bbeb73cb5ae9"/*DefineMaterials*/,
   "Description": "Defines Materials for later use when drawing content or scenes.",
+  "SymbolTags": "72",
   "InputUis": [
     {
       "InputId": "6299a306-d96c-425d-b44c-0340358439cb"/*Materials*/,

@@ -1,6 +1,7 @@
 {
   "Id": "196e14c7-3a71-4afd-a53b-e51d0fe8f414"/*MotionBlur*/,
   "Description": "Applies a post processing motion blur to a RenderTarget texture and its DepthBuffer.\n\nSee also [RenderWithMotionBlur] for an operator using multi-pass rendering to achieve high quality at the cost of more resources. \nDesigned primarily for video rendering, it can also be used for real-time applications with just a few passes, in simple scenes or on fast hardware.\n\nAlso see [DepthOfField]",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "2ac4c1a2-c53e-4b78-90fc-15c0b69c8b28"/*VelocityOffset*/,

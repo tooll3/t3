@@ -1,6 +1,7 @@
 {
   "Id": "9e27c32d-b187-4b7c-9761-0c5bb4ae3c45"/*CameraWithRotation*/,
   "Description": "An alternative camera operator",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "0fe2745d-5a87-47e1-84d4-544e96df42a7"/*RotationOffset2*/,

@@ -1,6 +1,7 @@
 {
   "Id": "d38fe24e-be01-4a22-9595-b06bc906bf49"/*ShadowPlane*/,
   "Description": "Creates a Plane that is transparent except for a realtime rendered Shadowmap.\n\nSee [ShadowPlaneExample] on how to use it.",
+  "SymbolTags": "64",
   "InputUis": [
     {
       "InputId": "16527748-fe55-4ced-b08d-6c94377c5563"/*FOV*/,

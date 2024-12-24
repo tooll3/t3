@@ -1,6 +1,7 @@
 {
   "Id": "2d62dd4b-9597-4569-a09e-495abf880e34"/*DepthBufferAsGrayScale*/,
   "Description": "Converts the provided depth buffer into a grayscale texture.\n\nImportant: Requires the correct settings for near/far clipping.",
+  "SymbolTags": "24",
   "InputUis": [
     {
       "InputId": "05359bf0-eef3-4322-b5cd-8df009e6a236"/*Mode*/,

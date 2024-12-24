@@ -1,6 +1,7 @@
 {
   "Id": "a3c5471e-079b-4d4b-886a-ec02d6428ff6"/*DrawMesh*/,
   "Description": "Uses PBR rendering to draw incoming geometry and meshnodes according to the desired settings.\nFor convenience Tooll adds a default reflection and two point lights attached to the camera to a RenderTarget. You can override these by adding [SetEnvironment] and [SetMaterial] operators further up (further right) in your graph.\nYou can adjust various parameters to achieve wireframe or both sided rendering.\n\nAn interactive tutorial for the complete Tooll3 render pipeline can be found at [HowToDrawThings].\n\nThe most commonly used render methods are [Drawmesh], [DrawMeshUnlit] and [DrawMeshHatched] and [DrawMeshAtPoints].\n\nThey can then be combined with [SetMaterial], [SetFog], [SetPointLight] and many others to create the look of scenes.",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "155c2396-0e05-4437-8171-288048b1158a"/*Filter*/,

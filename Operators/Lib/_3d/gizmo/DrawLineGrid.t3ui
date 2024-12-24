@@ -1,6 +1,7 @@
 {
   "Id": "296dddbd-250b-4801-a039-bcb3cd555774"/*DrawLineGrid*/,
   "Description": "Renders a grid of lines in the given scaling. \nThis might be useful for debugging or to use as content.",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "0480e529-b790-4c6f-a993-2efdbfda35e4"/*Color*/,

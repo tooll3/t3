@@ -1,6 +1,7 @@
 {
   "Id": "c757cde3-511c-44cb-af62-39156557daa6"/*DrawMeshHatched*/,
   "Description": "Draws incoming geometry and meshnodes in an abstract shading style.\n\nAn interactive tutorial for the complete Tooll3 render pipeline can be found at [HowToDrawThings].\n\nThe most commonly used render methods are [Drawmesh], [DrawMeshUnlit] and [DrawMeshHatched] and [DrawMeshAtPoints].\n\nThey can then be combined with [SetMaterial], [SetFog], [SetPointLight] and many others to create the look of scenes.",
+  "SymbolTags": "64",
   "InputUis": [
     {
       "InputId": "120e2a56-c7fa-4eb8-80b0-ff75cc924960"/*ColorMap*/,

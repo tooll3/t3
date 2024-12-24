@@ -1,6 +1,7 @@
 {
   "Id": "80dff680-5abf-484a-b9e0-81d72f3b7aa4"/*GetBufferComponents*/,
   "Description": "",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "7a13b834-21e5-4cef-ad5b-23c3770ea763"/*BufferWithViews*/,

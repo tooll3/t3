@@ -24,6 +24,9 @@ public sealed class GetIntVar : Instance<GetIntVar>, ICustomDropdownHolder
         var fallbackValue = FallbackValue.GetValue(context);
         var variableName = VariableName.GetValue(context);
 
+        if (variableName == null)
+            return;
+        
         if (context.IntVariables.TryGetValue(variableName, out int currentValue))
         {
             Result.Value = currentValue;

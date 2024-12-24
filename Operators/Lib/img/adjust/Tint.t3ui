@@ -1,6 +1,7 @@
 {
   "Id": "d9a71078-8296-4a07-b7de-250d4e2b95ac"/*Tint*/,
   "Description": "Tints the bright and dark colors of an image. This can be an easy method for subtle color corrections the achive a wide variety of conversion effects, like grayscale or threshold.\n\n\nAlso, see [RemapColor] for a similar operator.",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "07d592c1-7c5a-4c97-ba97-ebd229304dc8"/*Exposure*/,

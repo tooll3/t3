@@ -1,6 +1,7 @@
 {
   "Id": "9b28e6b9-1d1f-42d8-8a9e-33497b1df820"/*Draw*/,
-  "Description": "",
+  "Description": "An internal operator that dispatches a draw call. \nYou only need this operator if you want to implement your own draw mesh operators. ",
+  "SymbolTags": "24",
   "InputUis": [
     {
       "InputId": "8716b11a-ef71-437e-9930-bb747da818a7"/*VertexCount*/,

@@ -1,6 +1,7 @@
 {
   "Id": "c276f4eb-f19c-405b-b247-3db159677571"/*CombineMeshes*/,
   "Description": "Combines the connected mesh buffers into a new mesh",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "815b313e-e661-43db-b788-54cf824c0d8a"/*Meshes*/,

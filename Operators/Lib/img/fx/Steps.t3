@@ -112,12 +112,6 @@
   ],
   "Children": [
     {
-      "Id": "05a13114-6b7a-4b4c-be23-8834b36675e3"/*TimeConstBuffer*/,
-      "SymbolId": "de8bc97a-8ef0-4d4a-9ffa-88046a2daf40",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "0898aaa0-65c5-487e-9ab7-173f8b00bbfa"/*OutputMergerStage*/,
       "SymbolId": "5efaf208-ba62-42ce-b3df-059b37fc1382",
       "InputValues": [

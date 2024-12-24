@@ -1,6 +1,7 @@
 {
   "Id": "a6e12383-09b6-4bbd-a4bb-8908598c3409"/*RotateAroundAxis*/,
   "Description": "Applies a rotation to the transform matrix.",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "12e6ea95-f7e9-450b-815f-5891e9ceeaf7"/*Angle*/,

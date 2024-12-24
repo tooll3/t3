@@ -1,6 +1,7 @@
 {
   "Id": "b9999f07-da19-45b9-ae12-f9d0662c694c"/*BlendGradients*/,
   "Description": "Blends two color gradients with the defined blendmode",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "afa38628-b616-4b06-878d-ec554050f2b0"/*GradientA*/,

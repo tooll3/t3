@@ -1,6 +1,7 @@
 {
   "Id": "facb7925-176a-4eae-bedc-cdbf532ff6ff"/*SetShadow*/,
   "Description": "Renders a shadow pass for a directional light source",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "3ee1e726-b5b8-4479-92cc-1a46886ddfd2"/*Resolution*/,

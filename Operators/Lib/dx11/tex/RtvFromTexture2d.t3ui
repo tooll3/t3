@@ -1,6 +1,7 @@
 {
   "Id": "57a1ee33-702a-41ad-a17e-b43033d58638"/*RtvFromTexture2d*/,
   "Description": "",
+  "SymbolTags": "24",
   "InputUis": [
     {
       "InputId": "00fc3534-0c07-41c2-9d56-3484d9b3a41f"/*ArrayIndex*/,

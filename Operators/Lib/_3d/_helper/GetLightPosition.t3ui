@@ -1,6 +1,7 @@
 {
   "Id": "5914f00f-6600-42a2-bbd5-4201053058ec"/*GetLightPosition*/,
   "Description": "Returns the light position with the given index in world space.",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "a5c6ce06-f260-43ae-8ac7-5ea1cfb3f94e"/*LightIndex*/,

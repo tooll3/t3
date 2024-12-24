@@ -1,6 +1,7 @@
 {
   "Id": "b470fdf9-ac0b-4eb9-9600-453b8c094e3f"/*UseFallbackTexture*/,
   "Description": "",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "38b478fa-c431-4dc1-80ef-d6c53c90389e"/*Fallback*/,

@@ -1,12 +1,20 @@
 {
   "Id": "b0d75f21-df33-460b-beab-d8c5e1f23e5e"/*Time2*/,
   "Description": "A cleaned up version of Time adds mode to clarify if time is returned in bars or seconds",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "6d2f783a-23b7-425c-a4e3-cfcdcd61cf3a"/*Mode*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
+      }
+    },
+    {
+      "InputId": "ba443b6a-487f-4739-94a3-915584ee2d46"/*Units*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
       }
     },
     {
@@ -22,14 +30,7 @@
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "fd3049aa-4c22-405b-b9b4-0a2474d0e377"/*TimeInBars*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "OutputId": "80c8a8c2-6441-48af-a35d-2cca4b73b947"/*TimeInSecs*/,
+      "OutputId": "fd3049aa-4c22-405b-b9b4-0a2474d0e377"/*Time*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0

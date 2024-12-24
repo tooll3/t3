@@ -1,12 +1,20 @@
 {
   "Id": "e3596381-c118-4e2e-a482-83049a9f74af"/*ClearRenderTarget*/,
   "Description": "",
+  "SymbolTags": "24",
   "InputUis": [
     {
       "InputId": "25c0c15c-5b95-4fe3-8d59-4e127fce1cf2"/*RenderTarget*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
+      }
+    },
+    {
+      "InputId": "65077b57-f9eb-48aa-8195-588f906b0e72"/*DepthStencilView*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
       }
     },
     {

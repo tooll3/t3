@@ -1,6 +1,7 @@
 {
   "Id": "55411442-d538-48bf-ab78-b8c24c85aa46"/*AdjustColors*/,
   "Description": "Adjusts various color properties of the incoming image and adds a slight vignette.\n\nAlso consider using [ColorGrade].",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "008b025e-64eb-44c3-8959-dc8ac5dc2cbb"/*PreventClamping*/,

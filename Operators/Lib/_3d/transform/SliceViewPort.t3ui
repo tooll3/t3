@@ -1,6 +1,7 @@
 {
   "Id": "8b888408-e472-4bf9-be25-17a3dd8b90fd"/*SliceViewPort*/,
   "Description": "Modifies the Viewport and projection matrix to help drawing grid cells. \n\nIn the simplest form this can be used to limit the rendering to a letter box format (I.e. with black bars on top and bottom).\nIn a more complex setup it can be combined with Loop to draw a grid of render passes. See example for more details.",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "0ec5edfc-426c-40bb-a68e-80e4caa4c7bf"/*CellIndex*/,

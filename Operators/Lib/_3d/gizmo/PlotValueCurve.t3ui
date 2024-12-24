@@ -1,6 +1,7 @@
 {
   "Id": "92f3193e-a7dd-4417-b569-129823607fbe"/*PlotValueCurve*/,
   "Description": "Plots a history curve of a value.\n\nThis can be useful for debugging executables. While using the editor you might want to try [KeepFloatValues] or pinning a value operator to the output window.",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "04c1a4d9-66f0-4d64-aed0-9b960c2bcbb7"/*Color*/,

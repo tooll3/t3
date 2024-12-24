@@ -1,6 +1,7 @@
 {
   "Id": "ab496711-8b99-4463-aac9-b41fdf46608d"/*RepeatMeshAtPoints*/,
   "Description": "Creates a new mesh that repeats the incoming mesh at each point.\nNote: \nWarning: With detailed meshes, or very large scaled meshes and or a very high number of points, this Operator can take up a lot of resources.\n\nAlso see: [DrawMeshAtPoints]",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "13852947-11aa-4f54-b415-6867421f3bc0"/*WStretchAmount*/,

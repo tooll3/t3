@@ -1,6 +1,7 @@
 {
   "Id": "23794a1f-372d-484b-ac31-9470d0e77819"/*_Jitter2d*/,
   "Description": "Generates a randomly moving position within an area.\n\nThis operator has been deprecated. Please consider using [AnimVec2].",
+  "SymbolTags": "4096",
   "InputUis": [
     {
       "InputId": "1df95beb-da6d-4263-8273-7a180fd190f5"/*Rate*/,

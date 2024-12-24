@@ -1,6 +1,7 @@
 {
   "Id": "5efaf208-ba62-42ce-b3df-059b37fc1382"/*OutputMergerStage*/,
   "Description": "",
+  "SymbolTags": "24",
   "InputUis": [
     {
       "InputId": "03166157-1e18-4513-8af5-398c6f4fcb1e"/*BlendSampleMask*/,

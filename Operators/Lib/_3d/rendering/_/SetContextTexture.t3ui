@@ -1,6 +1,7 @@
 {
   "Id": "944d1903-cd23-49ca-9b0d-2fc73bfcfd30"/*SetContextTexture*/,
   "Description": "An internal op that sets the pre-filtered specular map \nfor the environment to the context.",
+  "SymbolTags": "24",
   "InputUis": [
     {
       "InputId": "16863415-1d90-46a7-80a4-372602a49c6f"/*SubTree*/,

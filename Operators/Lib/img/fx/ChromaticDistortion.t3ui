@@ -1,6 +1,7 @@
 {
   "Id": "ecf2c782-4461-4a94-8995-067425e3f84b"/*ChromaticDistortion*/,
   "Description": "Simulates an imaging error of optical camera lenses that manifests itself as blurring or discoloration at the outer edges.\n\nAlso see [ChromaticAbberation]\n\nUseful Ops for a PostFX Pipeline: [MotionBlur] [DepthOfField] [ChromaticAbberation] [Glow] [Grain] [Blur]",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "1df828ad-2d74-47fc-9f0e-10f4ce10b170"/*Center*/,

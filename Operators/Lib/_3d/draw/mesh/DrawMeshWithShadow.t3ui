@@ -1,6 +1,7 @@
 {
   "Id": "c08a6847-e7c4-46e6-a8fb-24bb62a64b96"/*DrawMeshWithShadow*/,
   "Description": "",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "0a01af5b-3f25-43e2-9157-1aa961b2ffcf"/*ShadowColor*/,

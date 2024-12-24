@@ -1,6 +1,7 @@
 {
   "Id": "c30542d5-609c-452a-9168-78964a3a0927"/*ParamConstBuffer*/,
   "Description": "",
+  "SymbolTags": "4096",
   "InputUis": [
     {
       "InputId": "3bb4bab9-96cd-4e08-bab7-2a15fb4f11c0"/*Param1*/,

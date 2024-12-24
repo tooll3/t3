@@ -1,6 +1,7 @@
 {
   "Id": "787f44a8-8c51-4cfa-a7d5-7014d11b6a28"/*GetImageBrightness*/,
   "Description": "",
+  "SymbolTags": "72",
   "InputUis": [
     {
       "InputId": "380ee818-52f2-4eed-9a6b-4a44a90abd7b"/*Texture2d*/,

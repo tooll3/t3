@@ -1,6 +1,7 @@
 {
   "Id": "dee8f2de-5cbd-4ca7-9449-d6c74197546e"/*GetTextureFromContext*/,
   "Description": "",
+  "SymbolTags": "16",
   "InputUis": [
     {
       "InputId": "2986cf49-0ca3-46ce-8725-34f3c9d3c116"/*Id*/,

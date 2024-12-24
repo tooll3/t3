@@ -1,6 +1,7 @@
 {
   "Id": "1de7b1be-cab6-4beb-a837-4c817562efb2"/*GetPointDataFromList*/,
   "Description": "Returns Position, Rotation and W from a point.\nThis can be useful if combined with [PointsToCPU].",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "b478510f-eb33-4cf0-be0c-80ecea34e40d"/*DataList*/,

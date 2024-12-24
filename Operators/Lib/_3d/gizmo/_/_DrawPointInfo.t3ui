@@ -1,6 +1,7 @@
 {
   "Id": "ff5b93e3-d29f-489f-8cca-cb12cd1af65d"/*_DrawPointInfo*/,
   "Description": "Draws additional information like index or position on points.",
+  "SymbolTags": "16",
   "InputUis": [
     {
       "InputId": "0353313f-64dc-4e93-8bac-3c9b78df5cc9"/*Color*/,

@@ -1,6 +1,7 @@
 {
   "Id": "d61d7192-9ca3-494e-91e2-10a530ee9375"/*VisibleGizmos*/,
   "Description": "Only executes the subgraph if the set visibility matches the visibility of the evaluation context.\n\nThe user can toggle the gizmo visibility by the gizmo icon in the output window.",
+  "SymbolTags": "24",
   "InputUis": [
     {
       "InputId": "4d663aa5-e2d4-40e0-8901-abe09cb832c3"/*Commands*/,

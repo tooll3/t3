@@ -1,6 +1,7 @@
 {
   "Id": "b601be85-fa85-4358-9541-7e97341bf6b3"/*_CameraGizmo*/,
   "Description": "Renders a camera shape that can be used for visualization.",
+  "SymbolTags": "16",
   "InputUis": [],
   "SymbolChildUis": [
     {

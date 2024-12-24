@@ -1,6 +1,7 @@
 {
   "Id": "1cfe41c7-972e-4243-9ae4-a510ac038191"/*_LenseFlareHoopPosition*/,
   "Description": "",
+  "SymbolTags": "16",
   "InputUis": [
     {
       "InputId": "0ebf8ac6-e075-47c9-ba7a-8a2fd7b0e342"/*PositionFactor*/,

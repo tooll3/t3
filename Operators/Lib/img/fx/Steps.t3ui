@@ -1,6 +1,7 @@
 {
   "Id": "4cdc0f90-6ce9-4a03-9cd0-efeddee70567"/*Steps*/,
   "Description": "A versatile effect that uses the value of the input image to draw 'steps'. These can be shaded and animated.\n\nFor similar effects see: [DetectEdges] [DistortAndShade] [Displace] [Fakelight]",
+  "SymbolTags": "0",
   "InputUis": [
     {
       "InputId": "16745545-84e5-4290-a6c1-7df513c6a828"/*Highlight*/,
@@ -89,13 +90,6 @@
     }
   ],
   "SymbolChildUis": [
-    {
-      "ChildId": "05a13114-6b7a-4b4c-be23-8834b36675e3"/*TimeConstBuffer*/,
-      "Position": {
-        "X": 697.449,
-        "Y": 664.1866
-      }
-    },
     {
       "ChildId": "0898aaa0-65c5-487e-9ab7-173f8b00bbfa"/*OutputMergerStage*/,
       "Position": {

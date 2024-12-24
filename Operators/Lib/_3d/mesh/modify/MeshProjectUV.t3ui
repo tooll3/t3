@@ -1,6 +1,7 @@
 {
   "Id": "97ffb173-f4cc-4143-a479-80cf3465cc7e"/*MeshProjectUV*/,
   "Description": "Overwrites the existing UV coordinates with planar mapping.\n\nBecomes visible with [DrawMesh].\n\nTo manipulate existing UV Coordinates see [TransformMeshUVs].\n\n\nAlso see [ReprojectToUV].",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "10bc1ef8-e036-4da0-9bc8-65da0ddff7f0"/*Mesh*/,

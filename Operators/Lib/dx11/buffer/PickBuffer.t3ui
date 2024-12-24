@@ -1,6 +1,7 @@
 {
   "Id": "e6bbbeef-08d8-4105-b84d-39edadb549c0"/*PickBuffer*/,
   "Description": "Picks one of the connected GPU buffers. This can be useful for switching between different sets of Points or Vertices.",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "04776dc8-7b84-41f5-973c-22cadbf44f02"/*Index*/,

@@ -1,6 +1,7 @@
 {
   "Id": "1ba08d52-c8ec-479a-8dc0-95d92da36577"/*ColorGradeConstBuffer*/,
   "Description": "",
+  "SymbolTags": "4096",
   "InputUis": [
     {
       "InputId": "49b2f2c5-c170-4afc-99ca-0487d2fa66e4"/*Param2*/,

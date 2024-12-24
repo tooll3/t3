@@ -1,6 +1,7 @@
 {
   "Id": "20a10411-8a39-4ca3-85db-8f34537f66b8"/*FastDemo2*/,
   "Description": "",
+  "SymbolTags": "0",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -182,7 +183,7 @@
       "ChildId": "cc8c41d3-3afc-4858-baae-1a753bb0a116"/*BlendColors*/,
       "Position": {
         "X": -970.7131,
-        "Y": -814.042
+        "Y": -803.042
       }
     },
     {

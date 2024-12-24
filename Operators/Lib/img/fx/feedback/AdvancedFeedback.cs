@@ -1,4 +1,4 @@
-namespace Lib.img.fx;
+namespace Lib.img.fx.feedback;
 
 [Guid("33424f7f-ea2d-4753-bbc3-8df00830c4b5")]
 internal sealed class AdvancedFeedback : Instance<AdvancedFeedback>

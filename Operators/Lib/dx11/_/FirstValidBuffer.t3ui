@@ -1,6 +1,7 @@
 {
   "Id": "b4a8a055-6ae3-4b56-8b65-1b7b5f87d19a"/*FirstValidBuffer*/,
   "Description": "Checks all connected <BufferWithView> buffers and picks the first one with a valid (non-NULL) input. This can be useful for overriding buffers.",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "73cf2380-b592-4c63-9e62-70411e4f3ad5"/*Input*/,

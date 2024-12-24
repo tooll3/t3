@@ -1,6 +1,7 @@
 {
   "Id": "d31a8463-0699-46d7-8e96-9abc6adb997d"/*_AdjustFeedbackImage*/,
   "Description": "An internal image processing step that adjusts and stabilizes the values of a feedback buffer. ",
+  "SymbolTags": "16",
   "InputUis": [
     {
       "InputId": "1b29262b-d7b6-4df2-abb1-bf35aa7729a2"/*LimitDarks*/,

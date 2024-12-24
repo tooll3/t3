@@ -1,6 +1,7 @@
 {
   "Id": "d21652e9-4dc3-4ece-9205-51fced56c3bd"/*WasTrigger*/,
   "Description": "Returns true if one of the trigger variables have been set.",
+  "SymbolTags": "216",
   "InputUis": [
     {
       "InputId": "2d78e40b-11f8-4e49-b3a2-5f24f1015b2e"/*Trigger*/,

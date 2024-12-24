@@ -1,6 +1,7 @@
 {
   "Id": "d35a403b-7e6e-4725-a344-6e8008a4e1e1"/*PrefixSum*/,
-  "Description": "",
+  "Description": "A complex compute shader setup that uses a spatial hash map to assist with GPU nearest neighbour search.",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "c5561f3b-495e-47e1-95d4-ea3a750f1842"/*InputList2*/,

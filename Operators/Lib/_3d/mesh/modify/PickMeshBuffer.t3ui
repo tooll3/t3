@@ -1,6 +1,7 @@
 {
   "Id": "845371ef-a5c2-4ca2-8315-ea2b62f63ee2"/*PickMeshBuffer*/,
   "Description": "Switch between different mesh buffers",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "076afdcc-c9af-4875-b97a-d8132996b35a"/*Index*/,

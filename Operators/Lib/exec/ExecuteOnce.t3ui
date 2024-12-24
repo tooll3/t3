@@ -1,6 +1,7 @@
 {
   "Id": "7a09136e-18b2-46b7-afff-8ef999e3965d"/*ExecuteOnce*/,
-  "Description": "Executes the subgraph only once. This can be useful for initializing buffers or resetting states.",
+  "Description": "Executes the subgraph only once. This can be useful for initializing buffers or resetting states.\n\nThis is obsolete. Please consider using [Execute] or [RenderTarget] with [Once] connected to IsEnabled.",
+  "SymbolTags": "4096",
   "InputUis": [
     {
       "InputId": "2049d44d-81a4-493b-a630-a1b273a4e6f9"/*Trigger*/,

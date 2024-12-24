@@ -1,6 +1,7 @@
 {
   "Id": "037c89b0-f5d3-4509-b574-c34fa8ec21f3"/*CrossLinePoints*/,
-  "Description": "A simple helper that generates a point list for 3 crossing lines that can be used as a visual marker.",
+  "Description": "This operator is obsolete. Please use [CommonPointSets].\n\nA simple helper that generates a point list for 3 crossing lines that can be used as a visual marker.",
+  "SymbolTags": "4096",
   "InputUis": [
     {
       "InputId": "b4ba04f3-f09b-4b73-9499-b4bbed0eaf01"/*LengthFactor*/,

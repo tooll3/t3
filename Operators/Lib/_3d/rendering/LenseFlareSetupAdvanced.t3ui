@@ -1,6 +1,7 @@
 {
   "Id": "8f4ca295-7268-44a2-94b0-4e974fac22a4"/*LenseFlareSetupAdvanced*/,
   "Description": "Same as [LenseFlareSetup] but all elements can be tweaked seperately.\n\nNote: Some effects can have unpredicatable behaviour if the point light position matches the camera look target.\n",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "007b11db-6d0e-49e6-a747-6a2d8cdc0e6b"/*FlareSprites*/,

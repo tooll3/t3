@@ -1,6 +1,7 @@
 {
   "Id": "000e08d0-669f-48df-9083-7aa0a43bbc05"/*GpuMeasure*/,
   "Description": "",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "0c7ec1ae-e8d0-4acb-8050-44768f827b56"/*Enabled*/,

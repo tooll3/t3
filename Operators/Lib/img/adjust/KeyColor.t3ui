@@ -1,6 +1,7 @@
 {
   "Id": "2ab1bbef-8322-4638-8b1d-7e31aaa6a457"/*KeyColor*/,
   "Description": "A simple color keyer.",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "52942004-3a62-4c2d-95c0-0c18e531983e"/*WeightHue*/,

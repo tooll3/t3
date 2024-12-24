@@ -1,6 +1,7 @@
 {
   "Id": "ad28819d-be62-4ed7-932a-fc861562983d"/*TextGrid*/,
   "Description": "An experiment that users a texture to shade text characters written in a text block.\nThis is ",
+  "SymbolTags": "160",
   "InputUis": [
     {
       "InputId": "0b5244ef-3588-48c4-9e26-195409fbaac8"/*TextOffset*/,

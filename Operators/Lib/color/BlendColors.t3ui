@@ -1,6 +1,7 @@
 {
   "Id": "6b7c541a-ca36-4f21-ac95-89e874820c5a"/*BlendColors*/,
   "Description": "Blends two colors with the defined blendmode",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "40803d0e-c37c-4b5d-b64b-fd1ef090a4f7"/*Factor*/,

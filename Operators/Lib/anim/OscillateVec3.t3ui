@@ -1,6 +1,7 @@
 {
   "Id": "8a6ab5ec-caa6-4baa-a9d1-2079af22685c"/*OscillateVec3*/,
   "Description": "A helper that combines 3 sin waves into a vector\n\nSimilar Operators [OscillateVec2] [AnimValue] [AnimVec2] [AnimVec3]",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "0c53c29e-7e33-40b3-8825-945e55c84ad5"/*Offset*/,

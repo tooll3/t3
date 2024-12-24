@@ -1,6 +1,7 @@
 {
   "Id": "6e67d136-9285-48c6-a557-0a07361fc847"/*BlendScenes*/,
   "Description": "Uses a float index to alpha blend between draw scenes.",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "998b7cbc-b54c-4e81-bc61-31a7e05ce8e0"/*Scenes*/,

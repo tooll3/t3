@@ -1,6 +1,7 @@
 {
   "Id": "a83f2e4f-cb4d-4a6f-9f7a-2ea7fdfab54b"/*PickSDXVector4*/,
   "Description": "A helper to access elements of a transform matrix stored in a Vector4[]",
+  "SymbolTags": "16",
   "InputUis": [
     {
       "InputId": "0f9eebb0-6f13-4751-abac-15a467ad56c2"/*Input*/,

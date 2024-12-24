@@ -1,6 +1,7 @@
 {
   "Id": "edecd98f-209b-423d-8201-0fd7d590c4cf"/*SplinePoints*/,
   "Description": "Samples the incoming points into a set of spline points.",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "02968cef-1a5e-4a7f-b451-b692f4c9b6ab"/*Points*/,

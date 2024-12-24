@@ -1,6 +1,7 @@
 {
   "Id": "9d1266c5-23db-439f-a475-8000fdd1c318"/*InputAssemblerStage*/,
   "Description": "",
+  "SymbolTags": "24",
   "InputUis": [
     {
       "InputId": "1ea95430-b853-4a60-a981-f316905995e8"/*PrimitiveTopology*/,

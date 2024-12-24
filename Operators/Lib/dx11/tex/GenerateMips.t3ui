@@ -1,6 +1,7 @@
 {
   "Id": "32a6a351-6d22-4915-aa0e-e0483b7f4e76"/*GenerateMips*/,
-  "Description": "",
+  "Description": "Executes computing the mipmaps. This requires the mipmap feature to be enabled in the [Texture2d].\n\nIn most usecases this is done automatically and you don't need to care about this.",
+  "SymbolTags": "24",
   "InputUis": [
     {
       "InputId": "a4e3001c-0663-48ec-8f56-b11ff0b40850"/*Texture*/,

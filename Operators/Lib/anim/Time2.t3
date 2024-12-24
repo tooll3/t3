@@ -6,6 +6,10 @@
       "DefaultValue": 0
     },
     {
+      "Id": "ba443b6a-487f-4739-94a3-915584ee2d46"/*Units*/,
+      "DefaultValue": 0
+    },
+    {
       "Id": "e0f765f3-ac71-45c9-87a4-e9be3fa9a9a0"/*SpeedFactor*/,
       "DefaultValue": 1.0
     }

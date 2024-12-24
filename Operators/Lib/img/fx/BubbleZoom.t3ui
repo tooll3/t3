@@ -1,6 +1,7 @@
 {
   "Id": "ca3f3c1b-6f22-4bf3-b06b-d2b0d85a8881"/*BubbleZoom*/,
   "Description": "An image effect that enlarges the inner circular region with a smooth edge. Other terms for this would be 'Bulge', 'Blob distort', 'Fish Eye zoom'.",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "019b7a1a-0f86-48e2-b5e9-9a04480a3b07"/*Image*/,

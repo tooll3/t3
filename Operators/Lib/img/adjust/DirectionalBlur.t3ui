@@ -1,6 +1,7 @@
 {
   "Id": "1192ae86-b174-4b58-9cc6-38afb666ce35"/*DirectionalBlur*/,
   "Description": "Blurs the incoming image along a directional angle.\n\nYou can override the angle and strength through an FXTexture with:\nR - Angle\nG - Strength\n\nUsing an effects texture, especially one that is a blurred version of the input image, is particularly interesting.",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "11cb8f1e-fac5-4623-b61c-d6482633e505"/*Samples*/,

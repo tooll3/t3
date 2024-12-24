@@ -1,6 +1,7 @@
 {
   "Id": "6e32756e-4267-47f1-bad0-56ee8f58b070"/*_DispatchSceneDraws*/,
-  "Description": "",
+  "Description": "An internal helper that prepares the batching for drawing a [DrawScene] with multiple materials and meshes.",
+  "SymbolTags": "16",
   "InputUis": [
     {
       "InputId": "27405ecf-4994-4e67-8604-d86426345344"/*PrefilteredSpecular*/,

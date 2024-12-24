@@ -1,6 +1,7 @@
 {
   "Id": "92e28e50-bd40-4f93-ba92-8f69cded6ec1"/*WaveForm*/,
   "Description": "Visualizes the color and intensity distribution within an image by overlaying a Waveform and a Vectorscope.\n\nThese overlays can be incredibly valuable. Countless tutorials on YouTube demonstrate how they can be applied to color correction and other use cases.",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "381d9aa5-2685-4509-9640-1dcca64746fa"/*DimBackground*/,

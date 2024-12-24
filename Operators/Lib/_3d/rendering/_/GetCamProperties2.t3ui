@@ -1,6 +1,7 @@
 {
   "Id": "5b538cf5-e3b6-4674-b23e-ab55fc59ada6"/*GetCamProperties2*/,
-  "Description": "",
+  "Description": "Provides a list of all camera defined in the current composition symbol. This can ",
+  "SymbolTags": "208",
   "InputUis": [
     {
       "InputId": "f7d2b9bc-4d01-4e3b-91ed-4e41ff387196"/*CameraIndex*/,

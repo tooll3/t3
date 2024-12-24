@@ -1,6 +1,7 @@
 {
   "Id": "a368035f-2697-4ba5-a7bd-484eeb54c39b"/*TextureDisplaceMesh*/,
   "Description": "Uses a projected texture with a normal map to displace the mesh. \n\nThis is similar to [SamplePointAttributes].",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "02dff73c-273e-4d4c-b6d1-47523673a6a8"/*RotationLookupDistance*/,

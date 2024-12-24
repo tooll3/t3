@@ -1,6 +1,7 @@
 {
   "Id": "e07550cf-033a-443d-b6f3-73eb71c72d9d"/*SpreadLayout*/,
   "Description": "Spatially distributes the incoming graph elements.",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "2d59d002-838e-4150-ae8f-ff97bb19bd78"/*Translation*/,

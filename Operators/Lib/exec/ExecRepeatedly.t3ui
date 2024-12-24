@@ -1,6 +1,7 @@
 {
   "Id": "46420979-1e56-4de3-a6ca-0447be1b9813"/*ExecRepeatedly*/,
   "Description": "Controls how frequently the sub graph is being executed. \nThis can be useful for increasing or slowing down simulation speeds.",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "4ca4cf19-975e-479a-bd43-c49c96ce51b6"/*SkipFrameCount*/,

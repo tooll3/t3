@@ -1,6 +1,7 @@
 {
   "Id": "00618c91-f39a-44ea-b9d8-175c996460dc"/*LoadGltfScene*/,
   "Description": "Experimental op for loading complex scene setups using the glTF Format. Scenes have to be connected to a [DrawScene]-Op to be rendered.\nThis Operator supports *.glb and *.gltf + .bin + textures.\n\n\n\n\n\n\n\nAlso see [HowToDrawThings] ",
+  "SymbolTags": "72",
   "InputUis": [
     {
       "InputId": "292e80cf-ba31-4a50-9bf4-83712430f811"/*Path*/,

@@ -1,6 +1,7 @@
 {
   "Id": "37794826-a099-4af3-90f4-1e49092a09e1"/*GetListItemAttribute*/,
   "Description": "Fetches a float from a list item attribute via Reflection. This is slow.",
+  "SymbolTags": "128",
   "InputUis": [
     {
       "InputId": "09f5501d-5f51-4406-b0cd-4c3e572a376f"/*ItemIndex*/,

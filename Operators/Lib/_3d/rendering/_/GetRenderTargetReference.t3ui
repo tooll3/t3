@@ -1,6 +1,7 @@
 {
   "Id": "270c37b6-7633-4952-bade-a3ea2300583c"/*GetRenderTargetReference*/,
   "Description": "",
+  "SymbolTags": "4096",
   "InputUis": [
     {
       "InputId": "290cd1e8-4793-4a65-ad90-3578b4410973"/*TextureReference*/,

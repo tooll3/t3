@@ -1,6 +1,7 @@
 {
   "Id": "52d0df91-7464-4fff-9173-72c0ee29fced"/*CollapseVertices*/,
   "Description": "A simple effect the snaps the position of vertices to a grid.\nThis might look interesting.",
+  "SymbolTags": "64",
   "InputUis": [
     {
       "InputId": "052ddd9e-e4d4-4c68-b31c-1adf82696dda"/*Scale*/,

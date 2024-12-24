@@ -1,6 +1,7 @@
 {
   "Id": "4499dcb1-c936-49ed-861b-2ad8ae58cb28"/*DrawMeshUnlit*/,
   "Description": "Draws incoming geometry and meshnodes without any shading and according to the desired settings.\n\nAn interactive tutorial for the complete Tooll3 render pipeline can be found at [HowToDrawThings].\n\nThe most commonly used render methods are [Drawmesh], [DrawMeshUnlit] and [DrawMeshHatched] and [DrawMeshAtPoints].\n\nThey can then be combined with [SetMaterial], [SetFog], [SetPointLight] and many others to create the look of scenes.",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "2c88e7c4-04f8-4e45-94d8-214775c5609c"/*EnableZWrite*/,

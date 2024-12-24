@@ -1,4 +1,4 @@
-namespace Lib.img.adjust;
+namespace Lib.img.analyze;
 
 [Guid("a1e3b8d3-3888-4e18-80e4-f6c65a136e75")]
 internal sealed class ColorGradeDepth : Instance<ColorGradeDepth>

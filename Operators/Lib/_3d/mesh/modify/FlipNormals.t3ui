@@ -1,6 +1,7 @@
 {
   "Id": "0f61b638-7bda-4331-944a-50fdca401223"/*FlipNormals*/,
   "Description": "Reverses the normals of the input mesh. This can be useful for drawing shader \"inside\" surfaces of a mesh.",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "89400186-9c36-4ba6-ac8a-55b7801fb99a"/*Mesh*/,

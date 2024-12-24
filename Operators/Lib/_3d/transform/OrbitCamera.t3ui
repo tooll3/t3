@@ -1,6 +1,7 @@
 {
   "Id": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc"/*OrbitCamera*/,
   "Description": "Provides common camera movement utilities for an easy dynamic camera setup.\n\nThis operator was previously known as RandomCamera.",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "066cd0e7-de72-4e04-bf13-686ccc301c5a"/*AimYawAngleAndWobble*/,
