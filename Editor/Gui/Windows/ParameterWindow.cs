@@ -250,7 +250,7 @@ internal class ParameterWindow : Window
                         
                 foreach (SymbolUi.SymbolTags tagValue in Enum.GetValues(typeof(SymbolUi.SymbolTags)))
                 {
-                    if (!symbolUiTags.HasFlag(tagValue))
+                    if (!symbolUiTags.HasFlag(tagValue) || tagValue == SymbolUi.SymbolTags.None)
                         continue;
 
                     hadTags = true;
@@ -281,6 +281,9 @@ internal class ParameterWindow : Window
             
             foreach (SymbolUi.SymbolTags tagValue in Enum.GetValues(typeof(SymbolUi.SymbolTags)))
             {
+                if (tagValue == SymbolUi.SymbolTags.None)
+                    continue;
+                
                 if (DrawSymbolTag(symbolUiTags, tagValue))
                 {
                     modified = true;

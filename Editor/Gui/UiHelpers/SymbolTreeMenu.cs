@@ -124,10 +124,6 @@ public static class SymbolTreeMenu
                 ImGui.PopStyleColor();
             }
 
-            
-            {
-
-            }
 
             if (ExampleSymbolLinking.ExampleSymbolUis.TryGetValue(symbol.Id, out var examples))
             {
