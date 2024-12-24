@@ -116,18 +116,19 @@ internal sealed partial class MagGraphCanvas
                                          ColorVariations.OperatorBackground.Apply(typeColor), idleFadeFactor), 5 * CanvasScale,
                                imDrawFlags);
 
+        // Snapped borders
         if (snappedBorders.HasFlag(Borders.Down))
         {
             drawList.AddRectFilled(new Vector2(pMinVisible.X, pMaxVisible.Y),
                                    pMaxVisible - new Vector2(0,2),
-                                   ColorVariations.OperatorOutline.Apply(typeColor).Fade(idleFadeFactor));
+                                   ColorVariations.OperatorOutline.Apply(typeColor));
         }
         
         if (snappedBorders.HasFlag(Borders.Right))
         {
             drawList.AddRectFilled(new Vector2(pMaxVisible.X - 2, pMinVisible.Y),
                                    pMaxVisible,
-                                   ColorVariations.OperatorOutline.Apply(typeColor).Fade(idleFadeFactor));
+                                   ColorVariations.OperatorOutline.Apply(typeColor));
         }
 
         var isSelected = _context.Selector.IsSelected(item);
@@ -289,7 +290,7 @@ internal sealed partial class MagGraphCanvas
             {
                 drawList.AddCircleFilled(pMin
                                          //+ new Vector2(8, 9) * CanvasScale 
-                                         + new Vector2(0, GridSizeOnScreen.Y * (0.5f)),
+                                         + new Vector2(-GridSizeOnScreen.Y * 0.15f, GridSizeOnScreen.Y * (0.5f)),
                                          3,
                                          UiColors.StatusAttention);
             }
