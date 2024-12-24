@@ -14,7 +14,7 @@ internal static class Icons
 {
     public static ImFontPtr IconFont { get; set; }
 
-    private static void Draw(Icon icon)
+    public static void Draw(this Icon icon)
     {
         ImGui.PushFont(IconFont);
         ImGui.TextUnformatted(((char)(int)icon).ToString());
@@ -268,6 +268,9 @@ internal static class Icons
             new (Icon.ClampMaxOn, slotIndex:93),
             new (Icon.ClampMinOff, slotIndex:94),
             new (Icon.ClampMaxOff, slotIndex:95),
+            new (Icon.Bookmark, slotIndex:96),
+            new (Icon.Dependencies, slotIndex:97),
+            new (Icon.Referenced, slotIndex:98),
         };
 
     public static readonly string IconAtlasPath = Path.Combine(SharedResources.Directory, @"images\editor\t3-icons.png");
@@ -371,4 +374,7 @@ public enum Icon
     ClampMaxOn,
     ClampMinOff,
     ClampMaxOff,
+    Bookmark,
+    Dependencies,
+    Referenced,
 }

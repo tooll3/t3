@@ -60,10 +60,23 @@ public static class SymbolTreeMenu
     {
         ImGui.PushID(symbol.Id.GetHashCode());
         {
+            
             var color = symbol.OutputDefinitions.Count > 0
                             ? TypeUiRegistry.GetPropertiesForType(symbol.OutputDefinitions[0]?.ValueType).Color
                             : UiColors.Gray;
 
+            var symbolUi = symbol.GetSymbolUi();
+
+            // var state = ParameterWindow.GetButtonStatesForSymbolTags(symbolUi.Tags);
+            // if (CustomComponents.IconButton(Icon.Bookmark, Vector2.Zero, state))
+            // {
+            //     
+            // }
+            if(ParameterWindow.DrawSymbolTagsButton(symbolUi)) 
+                symbolUi.FlagAsModified();
+            
+            ImGui.SameLine();
+            
             ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.OperatorBackground.Apply(color).Rgba);
             ImGui.PushStyleColor(ImGuiCol.ButtonHovered, ColorVariations.OperatorBackgroundHover.Apply(color).Rgba);
             ImGui.PushStyleColor(ImGuiCol.ButtonActive, ColorVariations.OperatorBackgroundHover.Apply(color).Rgba);
@@ -77,6 +90,17 @@ public static class SymbolTreeMenu
             if (ImGui.IsItemHovered())
             {
                 ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
+                
+                if (!string.IsNullOrEmpty(symbolUi.Description))
+                {
+                    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(4,4));
+                    ImGui.BeginTooltip();
+                    ImGui.PushTextWrapPos(ImGui.GetFontSize() * 25.0f);
+                    ImGui.TextUnformatted(symbolUi.Description);
+                    ImGui.PopTextWrapPos();
+                    ImGui.PopStyleVar();
+                    ImGui.EndTooltip();
+                }                
             }
 
             ImGui.PopStyleColor(4);
@@ -89,8 +113,10 @@ public static class SymbolTreeMenu
             if (SymbolAnalysis.DetailsInitialized && SymbolAnalysis.InformationForSymbolIds.TryGetValue(symbol.Id, out var info))
             {
                 ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
-                ListSymbolSetWithTooltip("  (needs {0}/", "  (", info.RequiredSymbols);
-                if (ListSymbolSetWithTooltip("used by {0})  ", "NOT USED)  ", info.DependingSymbols))
+                //
+                ListSymbolSetWithTooltip(250,Icon.Dependencies,"{0}", string.Empty, "requires...", info.RequiredSymbols);
+                
+                if (ListSymbolSetWithTooltip(300, Icon.Referenced, "{0}", " NOT USED",  "used by...", info.DependingSymbols))
                 {
                     SymbolLibrary._symbolUsageReference = symbol;
                 }
@@ -98,21 +124,9 @@ public static class SymbolTreeMenu
                 ImGui.PopStyleColor();
             }
 
-            var symbolUi = symbol.GetSymbolUi();
+            
             {
-                if (!string.IsNullOrEmpty(symbolUi.Description))
-                {
-                    ImGui.SameLine();
-                    ImGui.TextDisabled("(?)");
-                    if (ImGui.IsItemHovered())
-                    {
-                        ImGui.BeginTooltip();
-                        ImGui.PushTextWrapPos(ImGui.GetFontSize() * 25.0f);
-                        ImGui.TextUnformatted(symbolUi.Description);
-                        ImGui.PopTextWrapPos();
-                        ImGui.EndTooltip();
-                    }
-                }
+
             }
 
             if (ExampleSymbolLinking.ExampleSymbolUis.TryGetValue(symbol.Id, out var examples))
@@ -135,11 +149,16 @@ public static class SymbolTreeMenu
         ImGui.PopID();
     }
 
-    private static bool ListSymbolSetWithTooltip(string setTitleFormat, string emptySetTitle, HashSet<Symbol> symbolSet)
+    private static bool ListSymbolSetWithTooltip(float x, Icon icon, string setTitleFormat, string emptySetTitle, string toolTopTitle, HashSet<Symbol> symbolSet)
     {
         var activated = false;
-        ImGui.PushID(setTitleFormat);
-        ImGui.SameLine();
+        ImGui.PushID(icon.ToString());
+        ImGui.SameLine(x,10);
+        if (symbolSet.Count > 0)
+        {
+            icon.Draw();
+            ImGui.SameLine(0, 5);
+        }
 
         if (symbolSet.Count == 0)
         {
@@ -151,6 +170,8 @@ public static class SymbolTreeMenu
             if (ImGui.IsItemHovered())
             {
                 ImGui.BeginTooltip();
+                ImGui.TextUnformatted(toolTopTitle);
+                FormInputs.AddVerticalSpace();
                 ListSymbols(symbolSet);
                 ImGui.EndTooltip();
             }
@@ -162,6 +183,7 @@ public static class SymbolTreeMenu
         }
 
         ImGui.PopID();
+        //ImGui.SameLine();
         return activated;
     }
 
