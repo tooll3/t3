@@ -315,9 +315,12 @@ internal sealed class MagGraphLayout
             if (input.IsMultiInput && input is IMultiInputSlot multiInputSlot)
             {
                 var shouldBeVisible = isRelevant || isPrimaryInput || input.HasInputConnections;
+
+                var connectionsToInput = context.CompositionOp.Symbol.Connections.FindAll(c => c.TargetParentOrChildId == item.Id
+                                                                                               && c.TargetSlotId == input.Id);
                 
                 var multiInputIndex = 0;
-                foreach (var _ in multiInputSlot.GetCollectedInputs())
+                foreach (var _ in connectionsToInput)
                 {
                     var itemInputHash = MagGraphConnection.GetItemInputHash(item.Id, input.Id, multiInputIndex);
                     var isVisibleMultiInputLine =     
