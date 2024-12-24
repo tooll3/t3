@@ -1,6 +1,7 @@
 {
   "Id": "4c496e8d-2a83-4493-a7a4-fdad29ef3f7d"/*StringLength*/,
   "Description": "Counts the characters in a string and outputs the amount as a float",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "5794d63a-3ef7-42c5-b726-e814ea9093e3"/*InputString*/,

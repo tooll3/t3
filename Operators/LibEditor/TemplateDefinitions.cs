@@ -1,5 +1,5 @@
 using System.ComponentModel;
-using Lib.dx11.fxsetup;
+using Lib.render._dx11.fxsetup;
 using T3.Core.Logging;
 using T3.Core.SystemUi;
 using T3.Editor.Gui.Templates;

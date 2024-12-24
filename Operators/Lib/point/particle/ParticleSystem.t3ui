@@ -1,6 +1,7 @@
 {
   "Id": "e44ae9b6-cd56-4224-8a5d-118eda4cd3f4"/*ParticleSystem*/,
   "Description": "Emits particles on emit points and applies the connected forces.\n\nPlease check the howto linked below [HowToUseParticles].",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "1eb32e4c-6785-4649-b0bf-7c70cddee619"/*MaxParticleCount*/,

@@ -1,6 +1,7 @@
 {
   "Id": "ffbbef55-3149-48c1-95cf-cad691ce15fe"/*BoundPoints*/,
   "Description": "Contraints points within a boundary volume\nIt's the opposite of [BoundingBoxPoints]",
+  "SymbolTags": "64",
   "InputUis": [
     {
       "InputId": "4d6700f1-23d3-4bfd-9563-a0b7beaa1795"/*Size*/,

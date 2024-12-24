@@ -1,0 +1,249 @@
+{
+  "Id": "cb28a67e-80cb-460a-8130-00e3cd85b7c2"/*RyojiPattern2*/,
+  "Description": "A pattern generator inspired by the work of Ryoji Ikeda. It subdivides the image space recursively and can generate a range of different patterns.\n\nFor an earlier version with less options see: [RyojiPattern1]\n\nOther interesting patterns can be generated with [SinForm] [ZollnerPattern] [FraserGrid] [Raster] [CheckerBoard]",
+  "SymbolTags": "72",
+  "InputUis": [
+    {
+      "InputId": "094f0b30-347a-4079-b6e4-cedf85063250"/*SplitProbability*/,
+      "Position": {
+        "X": -190.19121,
+        "Y": 473.28052
+      }
+    },
+    {
+      "InputId": "247a2d50-9f08-48d6-b9ac-97c0bb4934cf"/*ForgroundRatio*/,
+      "Position": {
+        "X": -183.68117,
+        "Y": 850.1131
+      },
+      "Min": 0.0,
+      "Max": 2.0
+    },
+    {
+      "InputId": "2d79a3fc-7e2a-41a3-a7c5-d3325f85c975"/*Padding*/,
+      "Position": {
+        "X": -190.19121,
+        "Y": 608.2805
+      }
+    },
+    {
+      "InputId": "316798ed-d1de-4374-9416-0f08a9a2ca6f"/*Contrast*/,
+      "Position": {
+        "X": -154.62659,
+        "Y": 719.4175
+      },
+      "Min": 0.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "677e9249-6d6c-43f2-a5a6-5ddc8637ea0c"/*HighlightProbability*/,
+      "Position": {
+        "X": -183.68117,
+        "Y": 895.1131
+      }
+    },
+    {
+      "InputId": "6e5d8458-e108-47d7-9f91-74851e9703a4"/*Splits*/,
+      "Position": {
+        "X": -201.84563,
+        "Y": 188.09204
+      },
+      "Min": 1.0,
+      "Scale": 1.0
+    },
+    {
+      "InputId": "71f15e21-e169-46b2-9ce5-e81efc92e220"/*ScrollProbability*/,
+      "Position": {
+        "X": -190.19121,
+        "Y": 563.2805
+      }
+    },
+    {
+      "InputId": "7b9ac96b-4b15-42e3-9329-c280503d47de"/*ScrollOffset*/,
+      "Position": {
+        "X": -183.68117,
+        "Y": 985.1131
+      }
+    },
+    {
+      "InputId": "7e96e51d-5ed9-4e94-82e5-0f7a8ae62cce"/*SplitC*/,
+      "Position": {
+        "X": -201.84563,
+        "Y": 278.09198
+      },
+      "Min": 1.0
+    },
+    {
+      "InputId": "8102e92f-b353-49b6-aab2-e78332fbdc9b"/*Highlight*/,
+      "Position": {
+        "X": -201.84563,
+        "Y": 143.09204
+      }
+    },
+    {
+      "InputId": "99703d55-754e-4bce-aa90-1fe385d2af8e"/*HighlightSeed*/,
+      "Position": {
+        "X": -183.68117,
+        "Y": 1075.113
+      }
+    },
+    {
+      "InputId": "a2bc64ce-c6c4-4fa1-a30c-288882a2bb84"/*SplitB*/,
+      "Position": {
+        "X": -201.84563,
+        "Y": 233.09204
+      },
+      "Min": 1.0
+    },
+    {
+      "InputId": "b00ecb8e-5990-4bab-afe9-265e13dcfe4a"/*ScrollSpeed*/,
+      "Position": {
+        "X": -190.19121,
+        "Y": 518.2805
+      }
+    },
+    {
+      "InputId": "b7571823-89a5-4a93-8828-eadf631438c9"/*Resolution*/,
+      "Position": {
+        "X": -183.68117,
+        "Y": 1030.113
+      }
+    },
+    {
+      "InputId": "b947dfe4-183c-40df-9480-8f6ae6fa87df"/*MixOriginal*/,
+      "Position": {
+        "X": -183.68117,
+        "Y": 940.1131
+      }
+    },
+    {
+      "InputId": "ce9797b3-223a-42cd-84aa-51346e8aa422"/*Background*/,
+      "Position": {
+        "X": -201.84563,
+        "Y": 53.092045
+      }
+    },
+    {
+      "InputId": "ddc2eb27-9854-4eca-98a4-b46f3a5326a0"/*Seed*/,
+      "Position": {
+        "X": -183.68117,
+        "Y": 805.1131
+      },
+      "Scale": 1.0
+    },
+    {
+      "InputId": "e40dd98b-339a-49e8-ab2e-7a47fc7118f5"/*Foreground*/,
+      "Position": {
+        "X": -201.84563,
+        "Y": 98.09204
+      }
+    },
+    {
+      "InputId": "e6b078e9-6df0-463c-b7af-ae0d425327db"/*Image*/,
+      "Position": {
+        "X": -201.84563,
+        "Y": 8.092045
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "158664bf-3eed-49b8-8e0f-b6f102df70bd"/*IntToFloat*/,
+      "Position": {
+        "X": -32.737183,
+        "Y": 1091.4719
+      }
+    },
+    {
+      "ChildId": "1a007e43-d525-43fb-bba9-733e531cb6bb"/*Vector4Components*/,
+      "Position": {
+        "X": -13.804397,
+        "Y": 145.41618
+      }
+    },
+    {
+      "ChildId": "2efcafab-47ab-4790-9960-a0603aebdaf5"/*Vector2Components*/,
+      "Position": {
+        "X": -13.804397,
+        "Y": 257.4162
+      }
+    },
+    {
+      "ChildId": "4ec8d6ef-bdcc-48d1-a340-4e0c475c478f"/*Vector2Components*/,
+      "Position": {
+        "X": -13.804397,
+        "Y": 298.99762
+      }
+    },
+    {
+      "ChildId": "771396db-4841-4c81-8b27-53704b60db30"/*Vector4Components*/,
+      "Position": {
+        "X": -13.804397,
+        "Y": 33.416046
+      }
+    },
+    {
+      "ChildId": "77546c21-ecb5-4974-aabe-fa9d64928ea9"/*Vector4Components*/,
+      "Position": {
+        "X": -13.804397,
+        "Y": 89.41618
+      }
+    },
+    {
+      "ChildId": "93d71f0f-dd21-4280-bd99-1e6c2f251c94"/*Vector2Components*/,
+      "Position": {
+        "X": -17.772799,
+        "Y": 522.01044
+      }
+    },
+    {
+      "ChildId": "ac37b6b2-2254-40b9-905e-f89088ca32a9"/*Vector2Components*/,
+      "Position": {
+        "X": -13.804397,
+        "Y": 201.41618
+      }
+    },
+    {
+      "ChildId": "b86e6b15-eb21-408c-8b0d-d954bb7f6efe"/*Vector2Components*/,
+      "Position": {
+        "X": -17.772799,
+        "Y": 423.01044
+      }
+    },
+    {
+      "ChildId": "d269c0e6-f32e-47b9-82d2-de8a137138b8"/*_ImageFxShaderSetup2*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 100.699715,
+        "Y": 1456.9192
+      },
+      "Position": {
+        "X": 287.84317,
+        "Y": -313.56143
+      }
+    },
+    {
+      "ChildId": "f18ca6cf-d901-40a8-a05d-a78b0e4d3ab2"/*Vector2Components*/,
+      "Position": {
+        "X": -17.772799,
+        "Y": 479.0104
+      }
+    },
+    {
+      "ChildId": "f778382d-9fb5-4a44-89e5-578cc96b7c06"/*Vector2Components*/,
+      "Position": {
+        "X": -17.772799,
+        "Y": 578.0103
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "c26d8fbe-19b5-475a-bf2e-8dd7c1136c4b"/*TextureOutput*/,
+      "Position": {
+        "X": 577.0464,
+        "Y": -29.479145
+      }
+    }
+  ]
+}

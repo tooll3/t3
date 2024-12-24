@@ -1,6 +1,7 @@
 {
   "Id": "87915d7b-f2aa-45da-80f9-bd1f6033d387"/*SimCentricalOffset*/,
   "Description": "Applies a directed force to points (acceleration stored in W). Use [SimForwardMovement] to move them as agents.",
+  "SymbolTags": "64",
   "InputUis": [
     {
       "InputId": "02f34a62-bd83-47ac-962a-f1af6a92f0b8"/*Amount*/,

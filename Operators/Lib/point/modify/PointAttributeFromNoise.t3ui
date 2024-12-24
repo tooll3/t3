@@ -1,6 +1,7 @@
 {
   "Id": "7af59063-88d2-4697-985c-e09b8c77a43f"/*PointAttributeFromNoise*/,
   "Description": "",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "0148ae7c-9c69-4dc1-9132-df243f0b31c7"/*RemapNoise*/,

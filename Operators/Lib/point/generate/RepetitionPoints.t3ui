@@ -1,6 +1,7 @@
 {
   "Id": "73d99108-f49a-48fb-aa5d-707c00abb1c2"/*RepetitionPoints*/,
   "Description": "Generate a list of points by repeating a transform operation.\nThis can be very useful in combination with [DrawMeshAtPoints].\n\nAlso, by driving the Offset parameter with an LFO, you can produce seamlessly animated endless scenes. This can be useful for VJ projects.",
+  "SymbolTags": "72",
   "InputUis": [
     {
       "InputId": "283f9939-7b04-4733-8130-edcf34305fe5"/*Pivot*/,

@@ -1,6 +1,7 @@
 {
   "Id": "20338d1c-e4d3-4208-8f65-e1b720b8b563"/*TransformSomePoints*/,
   "Description": "Transform some points",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "0538efbc-bf43-4d93-b7f3-1e307757d874"/*OffsetW*/,

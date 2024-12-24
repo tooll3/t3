@@ -1,6 +1,7 @@
 {
   "Id": "3f8376f2-b89a-4ab4-b6dc-a3e8bf88c0a5"/*TurbulenceForce*/,
   "Description": "Adds a turbulence force to a Particle Simulation.\n\nAlso see [SimNoiseOffset] and [AddNoise]",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "419b5ec5-8f6d-4c2d-a633-37d125cfcf07"/*Phase*/,

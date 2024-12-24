@@ -1,6 +1,7 @@
 {
   "Id": "5822b0d8-32ed-4db3-975b-0e8fb8d7dd17"/*SnapToPoints*/,
   "Description": "Generate a new point buffer with points snapped to other points if the distance is below a threshold.",
+  "SymbolTags": "64",
   "InputUis": [
     {
       "InputId": "1abba695-f044-459b-9c89-20441a32fa6b"/*PointsB_*/,

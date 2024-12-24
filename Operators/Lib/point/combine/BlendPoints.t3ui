@@ -1,6 +1,7 @@
 {
   "Id": "2dc5c9d1-ea93-4597-a4d9-7b610aad603a"/*BlendPoints*/,
   "Description": "Creates different transitions between two different point setups",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "91b903a2-5127-431b-ab66-d5a38ce1693c"/*PointsB_*/,

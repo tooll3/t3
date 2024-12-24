@@ -1,6 +1,7 @@
 {
   "Id": "2b00bb7a-92cc-41e5-a5f6-bc3e8b16c5eb"/*KeyboardInput*/,
   "Description": "Allows the real-time manipulation of any value using a key on the keyboard.\n\nUseful combinations: [BooltoFloat] [BoolToInt] [FlipFlop] [HasBooleanChanged] [TriggerAnim]\n\nAlso see: [MouseInput] [MidiInput]",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "73adae59-a27d-4d93-8aa6-fb845784befd"/*Mode*/,

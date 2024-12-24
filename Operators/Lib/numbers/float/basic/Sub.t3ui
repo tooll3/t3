@@ -1,0 +1,37 @@
+{
+  "Id": "3ba13faf-ea80-44ec-948a-02ed3d653a20"/*Sub*/,
+  "Description": "Subtracts two float values.",
+  "SymbolTags": "1",
+  "InputUis": [
+    {
+      "InputId": "4889e720-e47c-4617-8353-06acf0af5283"/*Input1*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    },
+    {
+      "InputId": "49ea5e01-cc8f-47a0-8988-3de2adb1805c"/*Input2*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 328.0
+      },
+      "Min": -100.0,
+      "Max": 100.0,
+      "Scale": 0.01
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "eb4fce05-0667-43fe-a7bb-4fb21fe891bc"/*Result*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 38.0
+      }
+    }
+  ]
+}

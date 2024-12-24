@@ -1,6 +1,7 @@
 {
   "Id": "56eda8f4-09fc-48a3-ab1d-fbff4f4b6438"/*KeepStrings*/,
   "Description": "Collects the input string to a list.",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "1b777f1e-e219-4b8f-b185-94466c280881"/*MaxCount*/,

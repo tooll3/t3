@@ -1,6 +1,6 @@
 using System.Numerics;
 using ImGuiNET;
-using Lib._3d.analyze;
+using Lib.render.analyze;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Editor.Gui.Styling;

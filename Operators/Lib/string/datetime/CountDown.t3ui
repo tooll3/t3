@@ -1,6 +1,7 @@
 {
   "Id": "e4a38f3c-bd4c-406a-9979-bb683d79b39b"/*CountDown*/,
   "Description": "Prints a formatted string counting down a duration or time to/since a fixed date.",
+  "SymbolTags": "192",
   "InputUis": [
     {
       "InputId": "61e5281b-b772-4bbd-b52f-e6b6310d259a"/*LaunchTime*/,

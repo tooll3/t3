@@ -1,6 +1,7 @@
 {
   "Id": "f925e9b9-5c7a-4fbf-9572-b11fe2d54d6c"/*ApplyRandomWalk*/,
   "Description": "Applies random steps to the position and rotation of points.",
+  "SymbolTags": "64",
   "InputUis": [
     {
       "InputId": "065cafa7-8da9-428b-aef7-5ce7f969f293"/*RandomStepWidth*/,

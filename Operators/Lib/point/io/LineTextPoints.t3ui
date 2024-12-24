@@ -1,6 +1,7 @@
 {
   "Id": "3d862455-6a7b-4bf6-a159-e4f7cdba6062"/*LineTextPoints*/,
   "Description": "",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "05acba8d-1dd1-4d6c-beff-e11e466f7253"/*FilePath*/,

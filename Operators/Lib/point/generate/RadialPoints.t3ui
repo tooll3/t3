@@ -1,6 +1,7 @@
 {
   "Id": "3352d3a1-ab04-4d0a-bb43-da69095b73fd"/*RadialPoints*/,
   "Description": "A versatile generator of circular point sets that can create a variety of circles, spirals, helixes, etc.\n\nTry the presets to get an overview.",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "01a62754-7629-487d-a43a-f0cd2fbfafce"/*OrientationAxis*/,

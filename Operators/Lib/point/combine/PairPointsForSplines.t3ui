@@ -1,6 +1,7 @@
 {
   "Id": "5c7b6f3e-d3d5-4cfa-b30e-1a8cb6dbb4ad"/*PairPointsForSplines*/,
   "Description": "Combines two lists of points into a buffer for rendering them as splines.",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "0dd04da6-3b16-4aad-8421-78dc24d0dc68"/*TangentA*/,

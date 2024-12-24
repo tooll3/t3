@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using ImGuiNET;
-using Lib.math.@float;
+using Lib.numbers.@float;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;

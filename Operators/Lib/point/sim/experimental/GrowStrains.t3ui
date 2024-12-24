@@ -1,6 +1,7 @@
 {
   "Id": "98df563e-fd59-4458-a490-b7b7604ec1f3"/*GrowStrains*/,
   "Description": "Uses CollectedSpawnPoints and lines to animate W\nas weights moving across the strain with the age of \nthe spawn point.\n\nWe use a look-up texture that defines the growth \nprogression as follows:\n\n- Age from left (birth) to right (death)\n- Strain-Length from bottom (root / spawn position) to top.\n- R - Width\n- G - Noise amount\n- B - Twist\n",
+  "SymbolTags": "64",
   "InputUis": [
     {
       "InputId": "08b98003-d96d-41e0-a88e-6912da407811"/*GTargets*/,

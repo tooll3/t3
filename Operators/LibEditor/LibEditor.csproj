@@ -41,9 +41,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup Label="OperatorPackages">
-    <Operators Include="Lib" Version="1.0.0" ResourcesOnly="False" />
-  </ItemGroup>
   <Target Name="CreatePackageInfo" AfterTargets="AfterBuild">
     <ItemGroup Label="Define json structure of referenced operator packages">
       <OpPacks Include="@(Operators)">

@@ -1,6 +1,7 @@
 {
   "Id": "1c54fdad-9eb4-49e8-8fde-1c78b0fa2b48"/*SamplePointAttributes_v2*/,
   "Description": "",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "09e4c062-db18-4249-a34d-2e1a7d0ff7e5"/*BlueFactor*/,

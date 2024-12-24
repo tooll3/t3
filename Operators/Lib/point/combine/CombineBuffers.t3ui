@@ -1,6 +1,7 @@
 {
   "Id": "4dd8a618-eb3b-40af-9851-89c50683d83e"/*CombineBuffers*/,
   "Description": "Combines multiple buffers of the same type (like points).",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "a9fd34c5-2583-4014-ab36-ea6c33362d78"/*IsEnabled*/,

@@ -1,0 +1,33 @@
+{
+  "Id": "81555155-ae6f-40aa-961d-b6badb77af21"/*PickInt*/,
+  "Description": "Picks a value from the connected Int inputs.",
+  "SymbolTags": "1",
+  "InputUis": [
+    {
+      "InputId": "2c0a4eb2-da56-449d-91b8-5ba0870fbeb4"/*InputValues*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "8bbc412b-f574-4a2b-9cbc-bf4f60aebb17"/*Index*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "AddPadding": "True"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "9ddd1c52-865a-4930-84ec-98d3c0ffaa9c"/*Selected*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    }
+  ]
+}

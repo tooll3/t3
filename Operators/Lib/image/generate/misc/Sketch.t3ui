@@ -1,0 +1,358 @@
+{
+  "Id": "8e6ed99c-a3e0-42c0-9f81-a89b1e340757"/*Sketch*/,
+  "Description": "Allows adding sketches as annotations or storyboards. You can create multiple pages and switch between them by selecting or animating the PageIndex. Use the ShowAs parameter to toggle between showing the sketches as a single frame (e.g., as a comment), until the next frame (e.g., as a storyboard or animation), or with onion skinning. You can also use the following keyboard shortcuts:\n\n[P] - Draw mode\n[E] - Erase mode\n[0-9] - Select brush size",
+  "SymbolTags": "64",
+  "InputUis": [
+    {
+      "InputId": "0d965690-5c83-47df-a48f-512e060b5e16"/*Scene*/,
+      "Position": {
+        "X": -729.5201,
+        "Y": 519.8527
+      }
+    },
+    {
+      "InputId": "1c5d0d86-c000-449e-903a-3212d19d8e1d"/*StrokeSize*/,
+      "Position": {
+        "X": -729.5201,
+        "Y": 249.8527
+      },
+      "Min": 0.0,
+      "Max": 10.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "2ded8235-157d-486b-a997-87d09d18f998"/*Filename*/,
+      "Position": {
+        "X": -729.5201,
+        "Y": 474.85272
+      },
+      "Usage": "FilePath"
+    },
+    {
+      "InputId": "31f3942e-bac5-407f-ad44-6d09920754d9"/*StrokeColor*/,
+      "Position": {
+        "X": -729.5201,
+        "Y": 294.85272
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "37093302-053a-47b2-ace6-b9d310d3f4b7"/*OverridePageIndex*/,
+      "Position": {
+        "X": -729.5201,
+        "Y": 654.8527
+      }
+    },
+    {
+      "InputId": "44b88a09-6374-4180-9bc9-713ccfbb36f0"/*Background*/,
+      "Position": {
+        "X": -729.5201,
+        "Y": 339.85272
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "5cdb04d5-9bef-4789-8082-ea04e56b3ca7"/*Resolution*/,
+      "Position": {
+        "X": -729.5201,
+        "Y": 699.8527
+      }
+    },
+    {
+      "InputId": "d9931f47-2fc9-4df3-ab97-1a71e45501d2"/*ShowOnionSkin*/,
+      "Position": {
+        "X": -729.5201,
+        "Y": 609.8527
+      }
+    },
+    {
+      "InputId": "f823fdfd-fc3d-41c4-bd9d-6badf764d702"/*InputImage*/,
+      "Position": {
+        "X": -729.5201,
+        "Y": 564.8527
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "023cdfc3-edaa-499e-9ff2-0afb6fed08ce"/*RadialPoints*/,
+      "Position": {
+        "X": -33.578186,
+        "Y": 265.7807
+      }
+    },
+    {
+      "ChildId": "07c4e1b0-661d-496f-bcc7-be4b168664d2"/*Add*/,
+      "Position": {
+        "X": 9.381592,
+        "Y": -238.78922
+      }
+    },
+    {
+      "ChildId": "114509c3-e248-4280-8a23-80211222fb61"/*Group*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 95.09828,
+        "Y": 359.78787
+      },
+      "Position": {
+        "X": 1099.6644,
+        "Y": -94.50528
+      }
+    },
+    {
+      "ChildId": "174762d7-030a-47d1-8b28-626e0388f660"/*UseFallbackTexture*/,
+      "Position": {
+        "X": -282.60046,
+        "Y": 792.60254
+      }
+    },
+    {
+      "ChildId": "1ea969a5-4a8b-4743-8281-64c06fa1e01d"/*PointsToCPU*/,
+      "Position": {
+        "X": 549.7591,
+        "Y": -576.85364
+      }
+    },
+    {
+      "ChildId": "238bb2a5-5588-4e9d-ac6c-adab8a388ac9"/*Loop*/,
+      "Position": {
+        "X": 609.3816,
+        "Y": -307.7892
+      }
+    },
+    {
+      "ChildId": "288f9f1d-f0c5-4ecf-a732-aa9b0af6226a"/*Execute*/,
+      "Position": {
+        "X": 759.3816,
+        "Y": -307.7892
+      }
+    },
+    {
+      "ChildId": "295e2a9f-218e-4318-91de-034560aa32f8"/*ListToBuffer*/,
+      "Position": {
+        "X": 309.3816,
+        "Y": -307.7892
+      }
+    },
+    {
+      "ChildId": "3acc495f-6973-4af4-817f-b0d2ba985e7b"/*Multiply*/,
+      "Position": {
+        "X": 116.421814,
+        "Y": 328.7807
+      }
+    },
+    {
+      "ChildId": "3bd440cc-e256-40c3-b592-fad1e040af40"/*MouseInput*/,
+      "Position": {
+        "X": -646.7199,
+        "Y": 69.194885
+      }
+    },
+    {
+      "ChildId": "470dce5e-62f1-474a-b822-17cc65cb1897"/*Text*/,
+      "Position": {
+        "X": 471.90454,
+        "Y": 197.42908
+      }
+    },
+    {
+      "ChildId": "615f4037-2e7c-4a3c-a66f-13d76ad39b2c"/*GetIntVar*/,
+      "Position": {
+        "X": -604.17957,
+        "Y": -295.18756
+      }
+    },
+    {
+      "ChildId": "85c39d79-f072-474d-b8ef-5ae8b963343b"/*_SketchImpl*/,
+      "Position": {
+        "X": -496.7199,
+        "Y": 69.194885
+      }
+    },
+    {
+      "ChildId": "88e27bcc-3c18-44c6-bb05-8a1d6ce064cf"/*RenderTarget*/,
+      "Position": {
+        "X": 1536.6023,
+        "Y": 17.708466
+      }
+    },
+    {
+      "ChildId": "8ab253ef-c411-4937-a9b9-2ddd83722b42"/*BlendColors*/,
+      "Position": {
+        "X": 330.3529,
+        "Y": -176.97885
+      }
+    },
+    {
+      "ChildId": "8aeee990-d52d-4357-90c0-9202271a82e6"/*DrawLines*/,
+      "Position": {
+        "X": 459.3816,
+        "Y": -307.7892
+      }
+    },
+    {
+      "ChildId": "92756a61-9eed-4eff-95d3-6c59734d03a8"/*SampleGradient*/,
+      "Position": {
+        "X": 159.38159,
+        "Y": -238.78922
+      }
+    },
+    {
+      "ChildId": "a3a18ed4-4537-4a2b-abd6-107a81724f8b"/*SubInts*/,
+      "Position": {
+        "X": -454.1796,
+        "Y": -295.18756
+      }
+    },
+    {
+      "ChildId": "a8afb3c5-721b-4806-b1ca-6b33e0c8128e"/*ListToBuffer*/,
+      "Position": {
+        "X": -68.024445,
+        "Y": 4.363556
+      }
+    },
+    {
+      "ChildId": "aee91aec-faeb-463b-b493-cfb99ec0a856"/*DrawLines*/,
+      "Position": {
+        "X": 116.421814,
+        "Y": 265.7807
+      }
+    },
+    {
+      "ChildId": "afa68593-28e1-4aff-b467-434d9f90209b"/*_GetSketchPoints*/,
+      "Position": {
+        "X": -304.1796,
+        "Y": -295.18756
+      }
+    },
+    {
+      "ChildId": "b57facda-16bd-4006-870d-2639d8c32258"/*Execute*/,
+      "Position": {
+        "X": 1386.6023,
+        "Y": 17.708466
+      }
+    },
+    {
+      "ChildId": "bbd6569f-f0c5-4a9e-937c-19b1abd98eb6"/*DrawScreenQuad*/,
+      "Position": {
+        "X": 843.3854,
+        "Y": -103.70987
+      }
+    },
+    {
+      "ChildId": "c078205f-25aa-4247-aa47-12b1a2bf1ac7"/*RenderTarget*/,
+      "Position": {
+        "X": -493.4286,
+        "Y": 833.43286
+      }
+    },
+    {
+      "ChildId": "c6288ad6-172c-4e84-b1d9-045bcd350f0a"/*DrawLines*/,
+      "Position": {
+        "X": 80.91098,
+        "Y": 34.171356
+      }
+    },
+    {
+      "ChildId": "df3cca6c-4dbc-47c0-ad8b-64ae1f628087"/*_GetSketchPoints*/,
+      "Position": {
+        "X": -218.02444,
+        "Y": 4.363556
+      }
+    },
+    {
+      "ChildId": "f3a094e7-2011-46bb-9bc5-8331d0b7f72a"/*Layer2d*/,
+      "Position": {
+        "X": -132.60046,
+        "Y": 792.60254
+      }
+    },
+    {
+      "ChildId": "f5b39d45-78e8-464c-aa45-4b2e6ce0ea47"/*Multiply*/,
+      "Position": {
+        "X": -140.61841,
+        "Y": -238.78922
+      }
+    },
+    {
+      "ChildId": "f6214762-274e-44f2-8f5d-bc46b00e699f"/*Transform*/,
+      "Position": {
+        "X": 621.90454,
+        "Y": 197.42908
+      }
+    },
+    {
+      "ChildId": "f87a1bfb-733b-401d-85b5-b3ddfa5834a9"/*Camera*/,
+      "Position": {
+        "X": 1236.6023,
+        "Y": 17.708466
+      }
+    },
+    {
+      "ChildId": "fb5f0168-647c-47fb-aaf6-7fb27095cb38"/*Transform*/,
+      "Position": {
+        "X": 266.4218,
+        "Y": 265.7807
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "8cedd2ef-75a2-46d9-8a07-02491389a89f"/*ColorBuffer*/,
+      "Position": {
+        "X": 1851.0117,
+        "Y": 41.965607
+      }
+    },
+    {
+      "OutputId": "6d0b50be-70d4-4539-8d9d-ebb7434075c2"/*Points*/,
+      "Position": {
+        "X": 1666.2502,
+        "Y": 550.4199
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "3c22fab6-384b-4bd8-b318-3f61458fcd4d",
+      "Title": "Onion Skin Rendering",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -766.0577,
+        "Y": -348.23804
+      },
+      "Size": {
+        "X": 1776.8591,
+        "Y": 297.91052
+      }
+    },
+    {
+      "Id": "8432acf4-59cc-4410-bba7-4f8118fb828c",
+      "Title": "Draw Brush Cursor",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -116.92676,
+        "Y": 197.66418
+      },
+      "Size": {
+        "X": 528.34424,
+        "Y": 198.50807
+      }
+    }
+  ]
+}

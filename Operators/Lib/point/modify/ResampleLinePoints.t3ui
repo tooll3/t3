@@ -1,6 +1,7 @@
 {
   "Id": "13ff9adb-2634-4129-8bb4-4fb764d38be6"/*ResampleLinePoints*/,
   "Description": "",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "14524523-801d-4c70-9f42-af4f8d37be8a"/*RotationUpVector*/,

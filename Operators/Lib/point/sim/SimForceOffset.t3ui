@@ -1,6 +1,7 @@
 {
   "Id": "9c378944-9a57-4ae4-a88e-36c07244bcf7"/*SimForceOffset*/,
   "Description": "",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "2c31a936-3b5a-4c85-ad9d-7a575453bb0d"/*GPoints*/,

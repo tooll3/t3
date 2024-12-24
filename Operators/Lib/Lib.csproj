@@ -8,7 +8,7 @@
     <AssemblyName>$(RootNamespace)</AssemblyName>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <VersionPrefix>1.146.264</VersionPrefix>
+    <VersionPrefix>1.146.348</VersionPrefix>
     <HomeGuid>00000000-0000-0000-0000-000000000000</HomeGuid>
     <EditorVersion>3.10.1</EditorVersion>
     <IsEditorOnly>false</IsEditorOnly>
@@ -118,9 +118,6 @@
       <Link>SourceCode/%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup Label="OperatorPackages">
-    <Operators Include="Types" Version="1.0.0" ResourcesOnly="False" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="io\video\" />

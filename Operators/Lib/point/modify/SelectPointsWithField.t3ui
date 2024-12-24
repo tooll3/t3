@@ -1,6 +1,7 @@
 {
   "Id": "695d20dc-d1fe-4648-80fb-e1159b8aead4"/*SelectPointsWithField*/,
   "Description": "",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "03558959-4190-4b5b-a544-b17d56fb77da"/*ClampResult*/,
