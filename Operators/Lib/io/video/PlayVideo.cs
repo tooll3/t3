@@ -42,7 +42,14 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
                                 ? OverrideTimeInSecs.GetValue(context)
                                 : context.Playback.SecondsFromBars(context.LocalTime);
 
-        if (_playbackController.HandleGettingFrames(Path.GetValue(context),
+        var relativePath = Path.GetValue(context);
+        if (!ResourceManager.TryResolvePath(relativePath, null, out var absolutePath, out _))
+        {
+            _playbackController.ErrorMessageForStatus = "Can't find video " + relativePath;
+            return;
+        }
+
+        if (_playbackController.HandleGettingFrames(absolutePath,
                                                     requestedTime,
                                                     ResyncThreshold.GetValue(context),
                                                     Loop.GetValue(context),
@@ -57,7 +64,7 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
         Duration.Value = _playbackController.Duration;
 
         //Playback.OpNotReady |= !_playbackController.IsReadyForRendering;
-            
+
         Texture.DirtyFlag.Clear();
         Duration.DirtyFlag.Clear();
         HasCompleted.DirtyFlag.Clear();
@@ -89,7 +96,7 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
 
     [Input(Guid = "21B5671B-862F-4CEA-A355-FA019996C936")]
     public readonly InputSlot<bool> Loop = new();
-        
+
     [Input(Guid = "B62C208C-3735-4130-87DE-8C03C8A9B5FA")]
     public readonly InputSlot<bool> IsPreciseAtPlayback = new();
 
@@ -112,8 +119,7 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
 
         public bool HandleGettingFrames(string url, double requestedTime, float resyncThreshold, bool loop, float volume, bool precisePlayback)
         {
-            requestedTime = (Math.Floor(requestedTime*60)/60).Clamp(0, Duration);
-            //Log.Debug($"requested time {requestedTime:0.000}  {requestedTime*60:0.000}", this);
+            requestedTime = (Math.Floor(requestedTime * 60) / 60);
             if (!_initialized)
             {
                 SetupMediaFoundation();
@@ -129,12 +135,14 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
             _lastUpdateTimeInSecs = Playback.RunTimeInSecs;
 
             SetMediaUrl(url);
-                
+
             const float completionThreshold = 0.016f; // A hack to prevent engine missing the end of playback
             var durationWithMargin = _engine.Duration - completionThreshold;
-            HasPlaybackCompleted = !loop && _engine.CurrentTime > durationWithMargin || requestedTime > durationWithMargin;
+            HasPlaybackCompleted = !loop && (_engine.CurrentTime > durationWithMargin || requestedTime > durationWithMargin);
 
-            var isPlayingForward = Math.Abs(Playback.Current.PlaybackSpeed - 1) < 0.001f && !Playback.Current.IsRenderingToFile;
+            var isPlayingForward = Math.Abs(Playback.Current.PlaybackSpeed - 1) < 0.001f
+                                   && !Playback.Current.IsRenderingToFile
+                                   && !HasPlaybackCompleted;
             _lastRequestedTime = requestedTime;
 
             /***
@@ -160,16 +168,23 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
             Trace("02e-engine.IsPaused", _engine.IsPaused);
             Trace("08e-engine.PlaybackRate", _engine.PlaybackRate);
 
-                
             // This is very unfortunate: Starting the video without seeking is only possible with a slight delay.
-            // But adding this offset will cause is also visible when pausing the video.
+            // But adding this offset will be visible when pausing the video which makes precise placement of keyframes
+            // difficult..
             // To still have precise timing during pause (e.g. for setting keyframes) we added this option. 
-            var playbackOffset = precisePlayback ? 2/60f : 0;
+            var playbackOffset = precisePlayback ? 2 / 60f : 0;
             var clampedSeekTime = LoopOrClampTimeToVideoDuration(requestedTime + playbackOffset);
-                
             var clampedVideoTime = LoopOrClampTimeToVideoDuration(_engine.CurrentTime);
-            var deltaTime = clampedSeekTime - clampedVideoTime;
-                
+
+            var deltaTimeRaw = clampedSeekTime - clampedVideoTime;
+            var deltaTime = deltaTimeRaw;
+            if (loop)
+            {
+                deltaTime = MathUtils.Fmod(deltaTimeRaw + _engine.Duration / 2, _engine.Duration) - _engine.Duration / 2;
+            }
+
+            //Log.Debug($"req: {requestedTime:0.00} seek:{clampedSeekTime:0.00}  video:{clampedVideoTime:0.00}  delta: {deltaTimeRaw:0.00} fmod: {deltaTime:0.00} playing:{isPlayingForward} enginePause:{_engine.IsPaused} completed:{HasPlaybackCompleted}", this);
+
             Trace("00-VideoTime", clampedVideoTime);
             Trace("02a-RequestedTime", clampedSeekTime);
             Trace("02a_-delta", deltaTime);
@@ -180,35 +195,24 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
                 const float thresholdWhenPaused = 0.5f / 60f;
                 seekThreshold = thresholdWhenPaused;
             }
-                
-            var shouldSeek = !_isSeeking && !_engine.IsSeeking && Math.Abs(deltaTime) > seekThreshold;
-                
+
+            var notLoopingCompleted = !loop & HasPlaybackCompleted;
+            var shouldSeek = !notLoopingCompleted && !_isSeeking && !_engine.IsSeeking && Math.Abs(deltaTime) > seekThreshold;
+
             if (shouldSeek)
             {
                 const float averageSeekTime = 0.05f;
                 var lookAheadOffsetDuringPlayback = isPlayingForward ? averageSeekTime : 0;
 
                 var seekTargetDuringPlayback = clampedSeekTime + lookAheadOffsetDuringPlayback;
-                //Log.Debug($"Seeking to {seekTargetDuringPlayback:0.000} from {clampedVideoTime:0.000}   dt |{deltaTime:0.0000}| > {seekThreshold} ", this);
-                    
+
                 _engine.CurrentTime = seekTargetDuringPlayback;
                 _seekOperationStartTime = Playback.RunTimeInSecs;
                 _isSeeking = true;
+                //Log.Debug($"should seek: {deltaTime:0.00} > {seekThreshold:0.00}  seeking to {seekTargetDuringPlayback:0.00} ", this);
             }
 
- 
             _engine.Loop = loop;
-
-            if (!_engine.Loop)
-            {
-                var currentTime = (float)_engine.CurrentTime;
-                const float loopStartTime = 0f;
-                var loopEndTime = (float)_engine.Duration;
-                if (currentTime < loopStartTime || currentTime > loopEndTime)
-                {
-                    _engine.CurrentTime = (float)_engine.PlaybackRate >= 0 ? loopStartTime : loopEndTime;
-                }
-            }
 
             // Finishes seeking operation?
             if (_isSeeking && !_engine.IsSeeking)
@@ -218,10 +222,10 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
                 //Log.Debug($"Seeking took {(Playback.RunTimeInSecs - _seekOperationStartTime) * 1000:0}ms");
                 _isSeeking = false;
             }
-                
-            if(Playback.Current.IsRenderingToFile)
+
+            if (Playback.Current.IsRenderingToFile)
                 Playback.OpNotReady |= _isSeeking;
-                
+
             if (isPlayingForward && _engine.IsPaused)
             {
                 Log.Debug("Starting playback", _instance);
@@ -233,7 +237,7 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
                 Log.Debug("Paused playback", _instance);
                 _engine.Pause();
             }
-                
+
             var hasNewFrame = _engine.OnVideoStreamTick(out var presentationTimeTicks);
 
             if ((ReadyStates)_engine.ReadyState < ReadyStates.HaveCurrentData || !hasNewFrame)
@@ -261,7 +265,7 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
             {
                 return loop
                            ? time % _engine.Duration
-                           : Math.Clamp(time, 0.0, _engine.Duration);
+                           : time.Clamp(0, _engine.Duration);
             }
         }
 
@@ -372,7 +376,7 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
                                                             SampleDescription = new SampleDescription(1, 0),
                                                             Usage = ResourceUsage.Default
                                                         });
-                    
+
                 // Texture = new Texture2D(device,
                 //                  new Texture2DDescription
                 //                      {
