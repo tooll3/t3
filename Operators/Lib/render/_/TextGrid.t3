@@ -238,6 +238,12 @@
       "Outputs": []
     },
     {
+      "Id": "7496f81a-c841-4227-96e9-5654b712d2e2"/*SrvFromTexture2d*/,
+      "SymbolId": "c2078514-cf1d-439c-a732-0d7b31b5084a",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "76669a3d-7c0c-4421-8231-ae552b3b1334"/*Draw*/,
       "SymbolId": "9b28e6b9-1d1f-42d8-8a9e-33497b1df820",
       "InputValues": [
@@ -256,7 +262,7 @@
         {
           "Id": "24646f06-1509-43ce-94c6-eeb608ad97cd"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\3d\\TextGrid-ps.hlsl"
+          "Value": "Resources/lib/3d/TextGrid-ps.hlsl"
         },
         {
           "Id": "501338b3-f432-49a5-bdbd-bcf209671305"/*EntryPoint*/,
@@ -349,7 +355,7 @@
         {
           "Id": "78fb7501-74d9-4a27-8db2-596f25482c87"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\3d\\TextGrid-vs.hlsl"
+          "Value": "Resources/lib/3d/TextGrid-vs.hlsl"
         },
         {
           "Id": "9a8b500e-c3b1-4be1-8270-202ef3f90793"/*EntryPoint*/,
@@ -740,8 +746,8 @@
       "TargetSlotId": "1b9be6eb-96c8-4b1c-b854-99b64eaf5618"
     },
     {
-      "SourceParentOrChildId": "48312cc6-05fd-412d-92f7-62169f0bb632",
-      "SourceSlotId": "a4a46c04-ff03-48ce-83c9-0c0baa0f72e7",
+      "SourceParentOrChildId": "7496f81a-c841-4227-96e9-5654b712d2e2",
+      "SourceSlotId": "dc71f39f-3fba-4fc6-b8ef-ce57c82bf78e",
       "TargetParentOrChildId": "590534a2-1d8d-4f41-ae68-0b27d428f546",
       "TargetSlotId": "50052906-4691-4a84-a69d-a109044b5300"
     },
@@ -780,6 +786,12 @@
       "SourceSlotId": "7f86c4ea-48d1-4d3a-9a5a-cfbca0da4daa",
       "TargetParentOrChildId": "717a2e3b-3453-4cb7-be80-aaac12ee311e",
       "TargetSlotId": "980ef785-6ae2-44d1-803e-febfc75791c5"
+    },
+    {
+      "SourceParentOrChildId": "48312cc6-05fd-412d-92f7-62169f0bb632",
+      "SourceSlotId": "e0c4fedd-5c2f-46c8-b67d-5667435fb037",
+      "TargetParentOrChildId": "7496f81a-c841-4227-96e9-5654b712d2e2",
+      "TargetSlotId": "d5afa102-2f88-431e-9cd4-af91e41f88f6"
     },
     {
       "SourceParentOrChildId": "d671112a-f3c5-4181-87cd-b65a929a0814",
