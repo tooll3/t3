@@ -27,6 +27,17 @@ internal sealed class LoadImage : Instance<LoadImage>, IDescriptiveFilename, ISt
             return;
         }
 
+        var currentSrv = SrvManager.GetSrvForTexture(Texture.Value);
+        
+        try
+        {
+            ResourceManager.Device.ImmediateContext.GenerateMips(currentSrv);
+        }
+        catch (Exception exception)
+        {
+            Log.Error($"Failed to generate mipmaps for texture {Path.Value}:" + exception);
+        }
+
         _lastErrorMessage = string.Empty;
     }
 

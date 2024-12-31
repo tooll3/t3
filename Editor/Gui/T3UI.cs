@@ -16,7 +16,6 @@ using T3.Editor.Gui.Dialog;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
-using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Midi;
 using T3.Editor.Gui.Interaction.Timing;
@@ -94,7 +93,7 @@ public static class T3Ui
         DragFieldHovered = false;
         
         FitViewToSelectionHandling.ProcessNewFrame();
-        SrvManager.FreeUnusedTextures();
+        SrvManager.RemoveForDisposedTextures();
         KeyboardBinding.InitFrame();
         ConnectionSnapEndHelper.PrepareNewFrame();
         CompatibleMidiDeviceHandling.UpdateConnectedDevices();

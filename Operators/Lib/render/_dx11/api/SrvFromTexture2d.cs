@@ -40,7 +40,10 @@ internal sealed class SrvFromTexture2d : Instance<SrvFromTexture2d>
                 }
                 else
                 {
-                    ShaderResourceView.Value = new ShaderResourceView(ResourceManager.Device, texture); // todo: create via resource manager
+                    // todo: create via resource manager
+                    // Sadly, this is not straight forward, because the texture resources are created and
+                    // disposed in various situations that are not really evident (e.g. in AbstractResource).
+                    ShaderResourceView.Value = new ShaderResourceView(ResourceManager.Device, texture); 
                 }
             }
             else

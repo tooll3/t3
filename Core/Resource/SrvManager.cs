@@ -1,7 +1,9 @@
-﻿using SharpDX.Direct3D11;
-using T3.Core.Resource;
+﻿using System;
+using System.Collections.Generic;
+using SharpDX.Direct3D11;
+using T3.Core.Logging;
 
-namespace T3.Editor.Gui.Graph.Rendering;
+namespace T3.Core.Resource;
 
 /// <summary>
 /// A helper class that manages the creating of srv's for textures
@@ -10,7 +12,8 @@ public static class SrvManager
 {
     public static ShaderResourceView GetSrvForTexture(Texture2D texture)
     {
-        if (_srvForTextures.TryGetValue(texture, out ShaderResourceView srv))
+        if (_srvForTextures.TryGetValue(texture, out var srv)
+            && !srv.IsDisposed)
         {
             return srv;
         }
@@ -19,8 +22,7 @@ public static class SrvManager
         if (srv == null)
             return null;
             
-        _srvForTextures.Add(texture, srv);
-
+        _srvForTextures[texture]= srv;
         return srv;
     }
 
@@ -28,21 +30,20 @@ public static class SrvManager
     {
         try
         {
-            if ((texture.Description.BindFlags & BindFlags.DepthStencil) > 0)
-                return null; // skip here for depth/stencil to prevent warning below
-            
-            return new ShaderResourceView(ResourceManager.Device, texture);
+            Log.Debug($"Create srv for {texture.Description.Width}×{texture.Description.Height}");
+            return (texture.Description.BindFlags & BindFlags.DepthStencil) > 0 
+                       ? null : // skip here for depth/stencil to prevent warning below
+                       new ShaderResourceView(ResourceManager.Device, texture);
         }
         catch (Exception e)
         {
-            Log.Warning("SrvManager::CreateNewSrv(...) - Could not create ShaderResourceView for texture.");
-            Log.Warning(e.Message);
+            Log.Warning("SrvManager::CreateNewSrv(...) - Could not create ShaderResourceView for texture. " + e.Message);
             return null;
         }
     }
 
         
-    public static void FreeUnusedTextures()
+    public static void RemoveForDisposedTextures()
     {
         var keysForRemoval = new List<KeyValuePair<Texture2D, ShaderResourceView>>();
         foreach (var pair in _srvForTextures)
@@ -55,13 +56,11 @@ public static class SrvManager
 
         foreach (var (texture,srv) in keysForRemoval)
         {
+            Log.Debug("Disposing SRV...");
             _srvForTextures.Remove(texture);
             srv.Dispose();
         }
     }
 
-    /// <summary>
-    /// Todo: optimize this by disposing obsolete SRVs
-    /// </summary>
-    private static Dictionary<Texture2D, ShaderResourceView> _srvForTextures = new();
+    private static readonly Dictionary<Texture2D, ShaderResourceView> _srvForTextures = new();
 }
