@@ -3,20 +3,14 @@
   "Inputs": [
     {
       "Id": "c3929959-29a5-4e1f-acd0-f6c4306f881c"/*Path*/,
-      "DefaultValue": "Resources\\common\\test-footage\\spray-1080p.mp4"
+      "DefaultValue": "/t3/videos/spray-1080p.mp4"
     }
   ],
   "Children": [
     {
       "Id": "04edba45-b503-4f6c-b33e-a29d471c54cf"/*PlayVideo*/,
       "SymbolId": "914fb032-d7eb-414b-9e09-2bdd7049e049",
-      "InputValues": [
-        {
-          "Id": "0e255347-08bc-4363-9ffa-ab863a1cea8e"/*Path*/,
-          "Type": "System.String",
-          "Value": "Resources\\common\\test-footage\\spray-1080p.mp4"
-        }
-      ],
+      "InputValues": [],
       "Outputs": []
     },
     {

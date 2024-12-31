@@ -1,6 +1,7 @@
 {
   "Id": "bd0f7059-021d-4dd1-8168-01e1e552fb04"/*OpticalFlow2*/,
   "Description": "",
+  "SymbolTags": "4096",
   "InputUis": [
     {
       "InputId": "7b952ebd-7d63-4b74-8aa2-977c23d0487d"/*Lod*/,
@@ -51,7 +52,7 @@
       "Style": "Expanded",
       "Size": {
         "X": 110.0,
-        "Y": 88.0
+        "Y": 127.0
       },
       "Position": {
         "X": 339.92276,

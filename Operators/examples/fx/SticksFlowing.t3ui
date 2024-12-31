@@ -1,6 +1,7 @@
 {
   "Id": "064c1f38-8b6d-44f0-aae3-32dd3916e2e9"/*SticksFlowing*/,
   "Description": "",
+  "SymbolTags": "4096",
   "InputUis": [
     {
       "InputId": "9dc910c7-810f-4787-946c-d0cc811d294d"/*Scale*/,
