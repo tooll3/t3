@@ -647,7 +647,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\common\\meshes\\cylinder_bevelled.obj"
+          "Value": "Resources/common/meshes/cylinder_bevelled.obj"
         },
         {
           "Id": "c39a61b3-fb6b-4611-8f13-273f13c9c491"/*ScaleFactor*/,
@@ -664,7 +664,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\1x\\LookTest\\PaintedBricks004_1K-JPG_NormalDX.jpg"
+          "Value": "Resources/user/1x/LookTest/PaintedBricks004_1K-JPG_NormalDX.jpg"
         }
       ],
       "Outputs": []
@@ -705,7 +705,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\1x\\LookTest\\PaintedBricks004_1K-JPG_AmbientOcclusion.jpg"
+          "Value": "Resources/user/1x/LookTest/PaintedBricks004_1K-JPG_AmbientOcclusion.jpg"
         }
       ],
       "Outputs": []
@@ -777,7 +777,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\common\\HDRI\\sunset.png"
+          "Value": "/t3/images/hdri/studio_small_08.dds"
         }
       ],
       "Outputs": []
@@ -881,7 +881,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\1x\\LookTest\\PaintedBricks004_1K-JPG_Roughness.jpg"
+          "Value": "Resources/user/1x/LookTest/PaintedBricks004_1K-JPG_Roughness.jpg"
         }
       ],
       "Outputs": []
