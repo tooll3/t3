@@ -1,0 +1,33 @@
+{
+  "Id": "195afff5-13f6-4c5d-af49-655a4f92c2f8"/*ApplyTransformMatrix*/,
+  "Description": "",
+  "SymbolTags": "16",
+  "InputUis": [
+    {
+      "InputId": "c3b1ba6c-4306-4ae4-9429-d1f2461e2e8c"/*TransformRows*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 15.714638,
+        "Y": 57.576042
+      }
+    },
+    {
+      "InputId": "f7d28833-d894-446f-9402-e8ac74794870"/*Command*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 15.714638,
+        "Y": 12.576044
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "51334471-d9fe-4574-8541-f87b67f2deab"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

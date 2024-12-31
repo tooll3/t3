@@ -1,0 +1,61 @@
+{
+  "Id": "8b888408-e472-4bf9-be25-17a3dd8b90fd"/*SliceViewPort*/,
+  "Description": "Modifies the Viewport and projection matrix to help drawing grid cells. \n\nIn the simplest form this can be used to limit the rendering to a letter box format (I.e. with black bars on top and bottom).\nIn a more complex setup it can be combined with Loop to draw a grid of render passes. See example for more details.",
+  "SymbolTags": "1",
+  "InputUis": [
+    {
+      "InputId": "0ec5edfc-426c-40bb-a68e-80e4caa4c7bf"/*CellIndex*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "21532b24-fed2-403b-abb1-6faa19311366"/*SubGraph*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "354eb18c-aba0-43e6-b534-c119176547ff"/*Mode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "4d4db9ad-b3a3-4da6-8716-23d21c5ffc4a"/*CellCounts*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "aa060596-ba04-4862-b123-e328f1ef58e1"/*Stretch*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "ba5c7143-d37b-494f-acd8-1ad139215f63"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "4c60ce60-1953-4822-83b8-14589559796e"/*Count*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    }
+  ]
+}

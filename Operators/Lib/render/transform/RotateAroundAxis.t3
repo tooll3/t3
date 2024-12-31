@@ -1,0 +1,23 @@
+{
+  "Id": "a6e12383-09b6-4bbd-a4bb-8908598c3409"/*RotateAroundAxis*/,
+  "Inputs": [
+    {
+      "Id": "12e6ea95-f7e9-450b-815f-5891e9ceeaf7"/*Angle*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "28e60531-4d5a-4de1-9f8b-5e885220292c"/*Axis*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 1.0
+      }
+    },
+    {
+      "Id": "7fee8751-6784-49d2-9862-c8fd3759e82f"/*Command*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

@@ -1,0 +1,148 @@
+{
+  "Id": "1998f949-5c0a-4f39-82cf-b0bda31f7f21"/*DrawSphereGizmo*/,
+  "Description": "Creates a 3D wireframe globe that can be used as a bounding box",
+  "SymbolTags": "8",
+  "InputUis": [
+    {
+      "InputId": "15f73f4f-a4f1-4ff0-aba5-074ea2d328bc"/*Radius*/,
+      "Position": {
+        "X": -10.3936615,
+        "Y": 186.16534
+      },
+      "Description": "Defines the size of the sphere"
+    },
+    {
+      "InputId": "188c2244-e55a-4c55-be93-cccbd6fd4e41"/*Color*/,
+      "Position": {
+        "X": -13.949599,
+        "Y": 313.66354
+      },
+      "Description": "Defines the color",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "a407fbe3-1f1b-4466-b4c2-511733046d00"/*InnerRadius*/,
+      "Position": {
+        "X": -10.3936615,
+        "Y": 231.16534
+      },
+      "Description": "Defines the size of an inner sphere consisting of points."
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "14be5539-3247-4857-92e8-d6317f78d1c7"/*Vector3*/,
+      "Position": {
+        "X": 783.01154,
+        "Y": 115.40672
+      }
+    },
+    {
+      "ChildId": "29e347ee-bf81-49b5-9e45-4853727fd6f4"/*LinePoints*/,
+      "Position": {
+        "X": 289.16174,
+        "Y": -112.76834
+      }
+    },
+    {
+      "ChildId": "3468be00-ddba-4254-b1ef-b91dbf68fe3b"/*RepeatAtGPoints*/,
+      "Position": {
+        "X": 589.16174,
+        "Y": -198.76834
+      }
+    },
+    {
+      "ChildId": "34c30ed0-b20d-4613-a809-f9b51c01991b"/*Vector3*/,
+      "Position": {
+        "X": 1079.1907,
+        "Y": 466.54034
+      }
+    },
+    {
+      "ChildId": "379b4030-26d4-4e46-bf03-5d4786e09a3e"/*Execute*/,
+      "Position": {
+        "X": 1118.332,
+        "Y": 44.489502
+      }
+    },
+    {
+      "ChildId": "40cd90cb-39c3-4b04-8c84-f537f0e2d0b4"/*Transform*/,
+      "Position": {
+        "X": 1248.332,
+        "Y": 44.489502
+      }
+    },
+    {
+      "ChildId": "4fe380ae-8749-4a3c-9859-eb792004b8b3"/*Value*/,
+      "Position": {
+        "X": 949.1907,
+        "Y": 466.54034
+      }
+    },
+    {
+      "ChildId": "64d33c5f-7911-44a6-9358-6af239d5dff8"/*DrawLines*/,
+      "Position": {
+        "X": 968.33203,
+        "Y": 148.38623
+      }
+    },
+    {
+      "ChildId": "7a86c7c3-0c4d-49d1-aff9-4b8588c97fa2"/*CombineBuffers*/,
+      "Position": {
+        "X": 439.16174,
+        "Y": -198.76834
+      }
+    },
+    {
+      "ChildId": "aec4013e-e4eb-4d1c-ae9f-91a1f6dfb988"/*DrawPoints*/,
+      "Position": {
+        "X": 783.01154,
+        "Y": 46.40672
+      }
+    },
+    {
+      "ChildId": "ccbc6ed6-4e96-4ca0-af3a-b9475588dc33"/*RadialPoints*/,
+      "Position": {
+        "X": 289.16174,
+        "Y": -155.76834
+      }
+    },
+    {
+      "ChildId": "d6156f1a-7196-43ff-bc78-d4f3386ca269"/*RadialPoints*/,
+      "Position": {
+        "X": 439.16174,
+        "Y": -49.76834
+      }
+    },
+    {
+      "ChildId": "dfab703d-1920-4afa-b790-0ea773124b58"/*Transform*/,
+      "Position": {
+        "X": 968.33203,
+        "Y": 44.489502
+      }
+    },
+    {
+      "ChildId": "e1b3b07a-4337-4a21-8cd3-c1cf80e5938e"/*Value*/,
+      "Position": {
+        "X": 289.16174,
+        "Y": -49.76834
+      }
+    },
+    {
+      "ChildId": "e8a92c99-a038-4007-96de-71bc23df9c52"/*RadialPoints*/,
+      "Position": {
+        "X": 289.16174,
+        "Y": -198.76834
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "0b43d459-2c94-4d5e-a75a-61d38d93118b"/*Output*/,
+      "Position": {
+        "X": 1503.6204,
+        "Y": -97.161224
+      }
+    }
+  ]
+}

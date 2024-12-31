@@ -1,0 +1,15 @@
+{
+  "Id": "0b5b14bf-c850-493a-afb1-72643926e214"/*UavFromStructuredBuffer*/,
+  "Inputs": [
+    {
+      "Id": "13b85721-7126-47bb-ab4f-096eae59e412"/*BufferFlags*/,
+      "DefaultValue": "None"
+    },
+    {
+      "Id": "5d888f13-0ad8-4034-99ca-da36c8fb261c"/*Buffer*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

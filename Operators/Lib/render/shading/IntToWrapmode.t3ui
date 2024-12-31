@@ -1,0 +1,24 @@
+{
+  "Id": "54ba8673-ff58-48d1-ae2e-ee2b83bc6860"/*IntToWrapmode*/,
+  "Description": "Picks a wrap mode with an index.",
+  "SymbolTags": "24",
+  "InputUis": [
+    {
+      "InputId": "f50c736b-dc80-424b-8517-af0ca4168666"/*ModeIndex*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "d3e48911-f6a6-439f-b34a-84fe9d75b388"/*Selected*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "Id": "a3f64d34-1fab-4230-86b3-1c3deba3f90b"/*Group*/,
+  "Description": "Groups a sequence of incoming draw commands.\n\nAlthough similar to [Execute] it also allows to [Transform] and override the color multiply for all operators further down (I.e. left) in the graph.\n",
+  "SymbolTags": "1",
+  "InputUis": [
+    {
+      "InputId": "25eb87f8-43b6-46fa-8066-3fdc1efb5e01"/*UniformScale*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      },
+      "Description": "Uniformly scales the incoming subgraph\n",
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Format": "{0:0.000} ×"
+    },
+    {
+      "InputId": "35a18838-b095-431f-a3af-2dba81dcc16f"/*ForceColorUpdate*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 180.0
+      },
+      "GroupTitle": "Additional Options",
+      "Description": "Forces constant updating if the colors animation is ignored."
+    },
+    {
+      "InputId": "4e15eb7a-3872-4f26-93e3-1dd38bce01a5"/*Rotation*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Description": "Rotates the incoming subgraph around the following axes:\n\nX: Horizontal axis\nY: Vertical axis\nZ: Forward axis\n",
+      "Min": -90.0,
+      "Max": 90.0,
+      "Format": "{0:0.0}°"
+    },
+    {
+      "InputId": "7db56b09-350e-4831-9620-fe68e0617b86"/*Scale*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Description": "Scales the incoming subgraph in the following directions:\n\nX: Width\nY: Height\nZ: Depth\n"
+    },
+    {
+      "InputId": "83d80b87-df2e-4a7e-8bb3-6d5f041a60e4"/*IsEnabled*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 90.0
+      },
+      "GroupTitle": "Settings",
+      "Description": "Enables / Disables the group"
+    },
+    {
+      "InputId": "996bd2d7-3741-4ade-b1b6-18eb3d884081"/*Color*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 135.0
+      },
+      "Description": "Everything in this group will be rendered with this color multiplied.",
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "9e24c5d1-191a-4c1a-b88e-03df826fffc0"/*Translation*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "GroupTitle": "Transformations",
+      "Description": "Moves the incoming subgraph\n\nX (-left / +right), \nY (-down / + up), \nZ (-forward/+backwards)\n"
+    },
+    {
+      "InputId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"/*Commands*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "b864bb2d-a9fd-4e63-8d3d-b0cc8da6a13c"/*EnableProfiling*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 225.0
+      },
+      "Description": "Enabling this option will measure the time it took to update the content of this group.\nThis can be very useful for profiling and optimizing your designs.\n\nYou can see the measurements in the \"IO Window\". "
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "977ca2f4-cddb-4b9a-82b2-ff66453bbf9b"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

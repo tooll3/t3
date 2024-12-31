@@ -1,0 +1,234 @@
+{
+  "Id": "b89c5923-cc58-4d7a-8dce-eb1f8cdfc6e8"/*RenderQuad*/,
+  "Description": "Draw a simple unlit quad geometry. \nPlease consider using [Layer2d] instead.",
+  "SymbolTags": "4096",
+  "InputUis": [
+    {
+      "InputId": "018dab29-db3b-49ee-872b-9042c4c0bced"/*Color*/,
+      "Position": {
+        "X": -158.25935,
+        "Y": 219.10832
+      },
+      "Description": "Selects a color which will be multiplied with the incoming image."
+    },
+    {
+      "InputId": "08a058b0-9889-49d3-87a0-a1a98278eb06"/*BlendMode*/,
+      "Position": {
+        "X": -158.25935,
+        "Y": 364.10834
+      },
+      "GroupTitle": "Options",
+      "Description": "Selects the Blendmode"
+    },
+    {
+      "InputId": "105d474f-a54e-4350-8de6-8bfd4dc0b0dd"/*Width*/,
+      "Position": {
+        "X": -158.25935,
+        "Y": 269.10834
+      },
+      "Description": "Multiplier for Width",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "307e2b98-a337-4636-969f-a19841b11511"/*Texture*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": -158.25935,
+        "Y": 163.10832
+      }
+    },
+    {
+      "InputId": "9fbee6ee-5933-48f6-84f0-1da5e4b744b2"/*Comparison*/,
+      "Position": {
+        "X": -158.25935,
+        "Y": 499.10834
+      },
+      "Description": "Selects the comparison mode",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "a2d39e5b-38c7-4751-bc29-7389f9e9d8e5"/*Height*/,
+      "Position": {
+        "X": -158.25935,
+        "Y": 319.10834
+      },
+      "Description": "Multiplier for Height"
+    },
+    {
+      "InputId": "a4630612-743f-4396-8e2f-982052d508f4"/*EnableDepthTest*/,
+      "Position": {
+        "X": -158.25935,
+        "Y": 409.10834
+      },
+      "Description": "This defines whether the Quad covers itself or is covered by or covers other meshes.",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "efc093f5-6fa4-4042-9cc3-6fdc96355a72"/*EnableDepthWrite*/,
+      "Position": {
+        "X": -158.25935,
+        "Y": 454.10834
+      },
+      "Description": "This defines whether the Quad covers itself or is covered by or covers other meshes."
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "0a67fe3d-ddd9-429a-adf4-be2e48a890ed"/*PixelShaderStage*/,
+      "Position": {
+        "X": 816.2118,
+        "Y": 188.83188
+      }
+    },
+    {
+      "ChildId": "397470de-82a9-42d9-ab6f-84f8397d9737"/*InputAssemblerStage*/,
+      "Position": {
+        "X": 823.0274,
+        "Y": -53.508522
+      }
+    },
+    {
+      "ChildId": "3fae5d30-54fe-4f6b-a550-b465c5bf9915"/*RasterizerState*/,
+      "Position": {
+        "X": 620.3133,
+        "Y": 122.43979
+      }
+    },
+    {
+      "ChildId": "50bfbb01-cd9d-4bf3-a298-de2cf0c3d54b"/*UseFallbackTexture*/,
+      "Position": {
+        "X": 230.36409,
+        "Y": 151.67978
+      }
+    },
+    {
+      "ChildId": "604894b9-1d2c-41c8-9cd9-95a6e725194c"/*VertexShader*/,
+      "Position": {
+        "X": 623.7093,
+        "Y": -3.6105804
+      }
+    },
+    {
+      "ChildId": "6e45418c-fc66-4259-9aa3-c308422c9d24"/*PixelShader*/,
+      "Position": {
+        "X": 666.2118,
+        "Y": 188.83188
+      }
+    },
+    {
+      "ChildId": "71f1c95e-d721-445a-82ff-558b1072a11f"/*DepthStencilState*/,
+      "Position": {
+        "X": 663.7761,
+        "Y": 490.78137
+      }
+    },
+    {
+      "ChildId": "79ad614d-edf0-40fb-86da-f20a37b5456e"/*LoadImage*/,
+      "Position": {
+        "X": 82.931335,
+        "Y": 193.02661
+      }
+    },
+    {
+      "ChildId": "8bd1ee57-f743-403a-a121-9453365dca34"/*Execute*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 98.75911,
+        "Y": 670.98834
+      },
+      "Position": {
+        "X": 1010.08453,
+        "Y": -58.78654
+      }
+    },
+    {
+      "ChildId": "9b9523a6-6e59-46a7-821f-8f522fcf218e"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 454.18555,
+        "Y": 170.9402
+      }
+    },
+    {
+      "ChildId": "b7fbc38a-4ca3-46b3-a1a2-31c9ce79c583"/*OutputMergerStage*/,
+      "Position": {
+        "X": 816.50616,
+        "Y": 496.3908
+      }
+    },
+    {
+      "ChildId": "ca3ffb2a-7532-43a2-a00c-4a5383f6ee5d"/*PickBlendMode*/,
+      "Position": {
+        "X": 663.7761,
+        "Y": 572.78174
+      }
+    },
+    {
+      "ChildId": "cacd8a02-06ab-4dd1-bec3-1c11fb224b32"/*Rasterizer*/,
+      "Position": {
+        "X": 816.2118,
+        "Y": 132.83188
+      }
+    },
+    {
+      "ChildId": "d3f58d89-2428-463a-b2b1-65d6f710ae3f"/*Draw*/,
+      "Position": {
+        "X": 816.50616,
+        "Y": 565.3911
+      }
+    },
+    {
+      "ChildId": "ea0e37d2-e3a7-49c5-b77c-66d7cbce62a0"/*VertexShaderStage*/,
+      "Position": {
+        "X": 823.0274,
+        "Y": -10.508526
+      }
+    },
+    {
+      "ChildId": "efb0d384-eec8-43c2-821f-82409f46a380"/*TransformsConstBuffer*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 463.19388,
+        "Y": 50.576996
+      }
+    },
+    {
+      "ChildId": "f2292804-1f39-4388-aa57-a3726d97a075"/*FloatsToBuffer*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 116.1401,
+        "Y": 128.82043
+      },
+      "Position": {
+        "X": 584.18555,
+        "Y": 226.9402
+      }
+    },
+    {
+      "ChildId": "f2634cff-730b-48e3-af27-6d96883297fd"/*Vector4Components*/,
+      "Position": {
+        "X": 454.18555,
+        "Y": 226.9402
+      }
+    },
+    {
+      "ChildId": "f55c66d6-8326-490a-ade7-f95219fa857b"/*SamplerState*/,
+      "Position": {
+        "X": 584.18555,
+        "Y": 375.76062
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "1ff16183-13b9-4c8f-a82a-77e8be0c641b"/*Output*/,
+      "Position": {
+        "X": 1165.4126,
+        "Y": 253.7989
+      }
+    }
+  ]
+}

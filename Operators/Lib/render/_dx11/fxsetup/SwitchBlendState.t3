@@ -1,0 +1,15 @@
+{
+  "Id": "179093f6-d3ef-43bc-a5af-1df2379ec081"/*SwitchBlendState*/,
+  "Inputs": [
+    {
+      "Id": "232a10e8-0357-4adc-935b-9cb1b7938730"/*Index*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "a737bb60-d98b-4405-914c-7df91a58d8bc"/*BlendStates*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

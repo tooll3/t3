@@ -1,0 +1,122 @@
+{
+  "Id": "1cfe41c7-972e-4243-9ae4-a510ac038191"/*_LenseFlareHoopPosition*/,
+  "Description": "",
+  "SymbolTags": "16",
+  "InputUis": [
+    {
+      "InputId": "0ebf8ac6-e075-47c9-ba7a-8a2fd7b0e342"/*PositionFactor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
+      }
+    },
+    {
+      "InputId": "0f5d8113-64cb-4022-a4b0-9f3ea4bd2596"/*RandomizeSize*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "2dffe933-1c5a-46df-aa7e-4e41a4cb2017"/*Distance*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "64f0b189-1d1e-4c9c-bf6a-9c42072352cd"/*FxZoneBrightness*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 540.0
+      }
+    },
+    {
+      "InputId": "92dec9db-e1b0-4f9e-aba5-b7e8900d5bc8"/*RandomizeColor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
+    },
+    {
+      "InputId": "937e6cd3-ea96-4d93-aa1d-32cf86180b4d"/*FxZoneMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 360.0
+      }
+    },
+    {
+      "InputId": "9aa570b6-06e6-4d92-8f5b-c9bba86a108e"/*EdgeFxZone*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 405.0
+      }
+    },
+    {
+      "InputId": "a2408edd-6629-47e2-89c3-a6626218e049"/*LightIndex*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "a2f601e5-1b11-49ea-8d5e-d98dfea91ae5"/*FxZoneScale*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 495.0
+      }
+    },
+    {
+      "InputId": "b28c80c4-e713-4635-a256-23211ea4bea9"/*Size*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "b6163e2d-1344-4ac5-9704-98e849d3248e"/*Color*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "e658e0ac-282b-4a56-bdf0-9b7efadc7e02"/*RandomSeed*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      }
+    },
+    {
+      "InputId": "f080db28-3d87-4525-8807-619a7a1c72fc"/*InnerFxZone*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 450.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "1fc7d2a4-ab6c-433e-be07-943560103c18"/*LightPosition*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    },
+    {
+      "OutputId": "2df9c5b9-22cb-413b-a753-03fd0137488a"/*TargetPosition*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 300.0
+      }
+    },
+    {
+      "OutputId": "87694759-9cf4-4e7f-85e0-af7c42d46750"/*LightColor*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 400.0
+      }
+    }
+  ]
+}

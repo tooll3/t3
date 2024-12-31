@@ -1,0 +1,19 @@
+{
+  "Id": "020573c5-acaa-442e-9b1b-01338b0f4b62"/*SwapBuffers*/,
+  "Inputs": [
+    {
+      "Id": "243160dd-c19d-48f2-b966-c9b4ee79c2d6"/*BufferAInput*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "3dc564ad-b534-4170-92a2-bf860d3604cb"/*EnableSwap*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "de95e30b-896e-4880-b940-82863554ce02"/*BufferBInput*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

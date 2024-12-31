@@ -1,0 +1,32 @@
+{
+  "Id": "843c9378-6836-4f39-b676-06fd2828af3e"/*GetCamTransformBuffer*/,
+  "Description": "Gets properties of a camera operator further down (further left) in the render graph. This can be useful for effects like motion blur.",
+  "SymbolTags": "8",
+  "InputUis": [
+    {
+      "InputId": "a3190889-5473-4870-97cf-93e6cf94132b"/*CameraReference*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "fb108d2d-04b0-427d-888d-79eb7ebf1e96"/*Buffer*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    },
+    {
+      "OutputId": "8edc2db1-a214-4b77-a334-fa4bf1ff1ab7"/*PreviousBuffer*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 300.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,486 @@
+{
+  "Id": "e1c294b5-1ea8-435e-a437-26d280d3c2f4"/*GodRays*/,
+  "Description": "Uses the z-buffer to draw god rays.\n\nA different approach [LightRaysFx]\n\nUseful Ops for a PostFX Pipeline: [MotionBlur] [DepthOfField] [ChromaticAbberation] [Glow] [Grain] [Blur]",
+  "SymbolTags": "65",
+  "InputUis": [
+    {
+      "InputId": "2e487d56-cc02-42d6-978e-aeb776516118"/*BlurSamples*/,
+      "Position": {
+        "X": -1133.0017,
+        "Y": 692.4446
+      },
+      "GroupTitle": "Blur",
+      "Description": "Amount of Blur samples",
+      "Min": 1,
+      "Max": 128,
+      "Scale": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "2f365f2a-8a2e-472c-af15-9352b54e2009"/*OriginalColor*/,
+      "Position": {
+        "X": -1100.6145,
+        "Y": 218.15916
+      },
+      "Description": "Tints / Multiplies a color with the original image input",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "500549e0-aa60-4555-b82a-a829568959ff"/*CenterIntensity*/,
+      "Position": {
+        "X": -1130.8816,
+        "Y": 332.4734
+      },
+      "Description": "Defines the intensity of the effect",
+      "Min": 0.0,
+      "Max": 20.0,
+      "Scale": 0.1,
+      "Clamp": true
+    },
+    {
+      "InputId": "5129404e-54c5-4c5a-9736-69361bb3077d"/*BlurOffset*/,
+      "Position": {
+        "X": -1120.325,
+        "Y": 826.4696
+      },
+      "Description": "Blur effect offset"
+    },
+    {
+      "InputId": "58c08101-ac16-4aed-aa84-259853734116"/*LightPosition*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -1117.0369,
+        "Y": 26.72271
+      },
+      "Description": "Center / Position of the Lightsource\nProTip: Use the position of a [Locator] for a [Pointlight] and as an Input"
+    },
+    {
+      "InputId": "59568136-2903-4fd5-a504-8a6308a2a2dc"/*Samples*/,
+      "Position": {
+        "X": -1130.8816,
+        "Y": 287.4734
+      },
+      "Description": "Controls the amount of samples.\nHigher values create smoother and brighter results at the price of performance",
+      "AddPadding": "True",
+      "Min": 0,
+      "Max": 128,
+      "Scale": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "6063bb2b-2255-4a0b-a222-7b8dd8397918"/*RayColor*/,
+      "Position": {
+        "X": -1100.6145,
+        "Y": 173.15916
+      },
+      "Description": "Selects a color that is multiplied with the rays",
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "6d985988-3107-4480-8852-f17fe1c6d002"/*ShiftDepth*/,
+      "Position": {
+        "X": -1130.4225,
+        "Y": 493.01138
+      },
+      "Description": "Defines the image depth up to which the effect should be applied",
+      "Min": -2.0,
+      "Max": 2.0,
+      "Scale": 0.001
+    },
+    {
+      "InputId": "71acc14a-e26a-4412-9556-d88e0ec70e63"/*Offset*/,
+      "Position": {
+        "X": -1130.1239,
+        "Y": 598.6106
+      },
+      "Description": "Scales the image effect separately from the original image",
+      "Min": -30.0,
+      "Max": 30.0,
+      "Scale": 0.01
+    },
+    {
+      "InputId": "9529d9b2-40ca-4f30-9142-1338dc4e07ff"/*BlurSize*/,
+      "Position": {
+        "X": -1134.7358,
+        "Y": 761.6322
+      },
+      "Description": "Size of the blur effect",
+      "Min": -3.0,
+      "Max": 3.0,
+      "Scale": 0.001
+    },
+    {
+      "InputId": "b64c4ece-8b59-4b32-a5fe-b99006286987"/*CameraReference*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -1117.0369,
+        "Y": -18.27729
+      },
+      "Description": "[Reference] from [Camera] Output"
+    },
+    {
+      "InputId": "b9ca7291-1f78-47e2-8ba9-35ccb282833c"/*Size*/,
+      "Position": {
+        "X": -1130.1239,
+        "Y": 553.6106
+      },
+      "Description": "Scales the samples to the depth of the image",
+      "Min": -10.0,
+      "Max": 10.0,
+      "Scale": 0.1,
+      "Clamp": true
+    },
+    {
+      "InputId": "bba257ae-e45d-43b6-9905-52e526583978"/*DepthBuffer*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -1074.1685,
+        "Y": -79.134636
+      },
+      "Description": "DepthBuffer Input\ne.g. from [RenderTarget]"
+    },
+    {
+      "InputId": "c59b6588-9e39-49ed-99b7-632e5f2b3bf4"/*RayIntensity*/,
+      "Position": {
+        "X": -1130.8816,
+        "Y": 376.45346
+      },
+      "Description": "Defines the brightness of the beams",
+      "Min": 0.0,
+      "Max": 100.0,
+      "Scale": 0.1,
+      "Clamp": true
+    },
+    {
+      "InputId": "c94e4bb6-d6fc-4184-bd71-3563f4416413"/*Image*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -1074.981,
+        "Y": -162.3269
+      },
+      "Description": "Image Input \nusually [Camera] -> [RenderTarget]"
+    },
+    {
+      "InputId": "ea737eeb-e936-48c0-aaa7-8247fea95228"/*Decay*/,
+      "Position": {
+        "X": -1130.4225,
+        "Y": 448.01138
+      },
+      "Description": "Defines the degree to which the effect decreases with greater distance from the light source.",
+      "Min": -3.0,
+      "Max": 3.0,
+      "Scale": 0.01
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "1464d441-2e9c-45e9-982a-b222975398fd"/*Vector4Components*/,
+      "Position": {
+        "X": -950.61426,
+        "Y": 162.15916
+      }
+    },
+    {
+      "ChildId": "1f9bb197-26f6-442f-a1c9-fc2de2d678c9"/*Execute*/,
+      "Position": {
+        "X": 1048.1501,
+        "Y": -11.581879
+      }
+    },
+    {
+      "ChildId": "1ff4f2f7-b1ae-4d66-bc57-bb7866938ea3"/*Texture2d*/,
+      "Position": {
+        "X": -121.701294,
+        "Y": 675.90326
+      }
+    },
+    {
+      "ChildId": "25884c90-179f-4fb9-9efb-d07668c84fe0"/*RtvFromTexture2d*/,
+      "Position": {
+        "X": 24.857666,
+        "Y": 93.93843
+      }
+    },
+    {
+      "ChildId": "3b93301b-37ac-4841-b2d9-705ca0af21a5"/*OutputMergerStage*/,
+      "Position": {
+        "X": 388.44415,
+        "Y": 115.4827
+      }
+    },
+    {
+      "ChildId": "41491804-26fd-409e-9dbc-3a2397c49c14"/*Viewport*/,
+      "Position": {
+        "X": 24.857666,
+        "Y": 24.93843
+      }
+    },
+    {
+      "ChildId": "481a8ddc-df42-4329-9781-c0e4bdce57dc"/*IntToFloat*/,
+      "Position": {
+        "X": -983.00146,
+        "Y": 692.4446
+      }
+    },
+    {
+      "ChildId": "4a3dfc6d-9a74-422d-a7a2-d5dba5fec60c"/*Vector3Components*/,
+      "Position": {
+        "X": -940.583,
+        "Y": 14.5132675
+      }
+    },
+    {
+      "ChildId": "4fa8561d-7f60-47e5-834a-ae30e2b4ecac"/*RtvFromTexture2d*/,
+      "Position": {
+        "X": 34.490845,
+        "Y": 814.58905
+      }
+    },
+    {
+      "ChildId": "5e605aa1-da4c-4a59-b50b-417b5b27a89c"/*Execute*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 155.77101,
+        "Y": 554.62256
+      },
+      "Position": {
+        "X": 596.7889,
+        "Y": -277.5173
+      }
+    },
+    {
+      "ChildId": "72e0e0e9-844c-436f-ab56-15e02da58c79"/*VertexShader*/,
+      "Position": {
+        "X": 15.350464,
+        "Y": -234.84145
+      }
+    },
+    {
+      "ChildId": "750432d3-562c-492b-8401-9e45c62d00a5"/*PixelShader*/,
+      "Position": {
+        "X": 24.857666,
+        "Y": 149.93843
+      }
+    },
+    {
+      "ChildId": "7a6438fd-4f8c-40fc-add0-98e873c5bb98"/*LinearSampler*/,
+      "Position": {
+        "X": 39.214996,
+        "Y": 259.3037
+      }
+    },
+    {
+      "ChildId": "85a13490-bca1-47e5-af5f-b79bbca8fe1b"/*InputAssemblerStage*/,
+      "Position": {
+        "X": 388.44415,
+        "Y": -277.5173
+      }
+    },
+    {
+      "ChildId": "8664f7b4-0804-4d57-9488-e559ca3822c3"/*SetPixelAndVertexShaderStage*/,
+      "Position": {
+        "X": 393.67792,
+        "Y": 393.53577
+      }
+    },
+    {
+      "ChildId": "876ffa84-b952-4b38-bb35-4d0a5fd0bdd2"/*GetCamTransformBuffer*/,
+      "Position": {
+        "X": -613.8004,
+        "Y": -208.59454
+      }
+    },
+    {
+      "ChildId": "9b160b6b-fc43-4fb2-a0ec-1f55ce872778"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": -924.1684,
+        "Y": -68.134636
+      }
+    },
+    {
+      "ChildId": "a2cb3949-0725-41ee-86d4-5e754e544906"/*VertexShaderStage*/,
+      "Position": {
+        "X": 388.44415,
+        "Y": -234.5173
+      }
+    },
+    {
+      "ChildId": "adab6788-8b76-44f4-9f14-ada08fab29a9"/*VertexShader*/,
+      "Position": {
+        "X": 113.99428,
+        "Y": 363.03873
+      }
+    },
+    {
+      "ChildId": "b8248c88-b56f-48ad-9965-df0f1a937aeb"/*Rasterizer*/,
+      "Position": {
+        "X": 388.44415,
+        "Y": -139.5173
+      }
+    },
+    {
+      "ChildId": "bb7b0f92-d921-4fe4-abcc-85c37fdfee5d"/*GetTextureSize*/,
+      "Position": {
+        "X": -330.58893,
+        "Y": 707.935
+      }
+    },
+    {
+      "ChildId": "bf99b3fb-c15e-4795-b0a6-65127f36515f"/*InputAssemblerStage*/,
+      "Position": {
+        "X": 915.0154,
+        "Y": -188.82571
+      }
+    },
+    {
+      "ChildId": "c0e41b80-7aec-4adf-a663-a118ee8349b3"/*Vector2Components*/,
+      "Position": {
+        "X": -125.142334,
+        "Y": 24.93843
+      }
+    },
+    {
+      "ChildId": "c361243d-11b3-41a0-a512-73263782ebd4"/*PointSampler*/,
+      "Position": {
+        "X": 36.459045,
+        "Y": 330.78207
+      }
+    },
+    {
+      "ChildId": "c3c1d118-6659-4dc4-8fe5-611db8159eab"/*Vector4Components*/,
+      "Position": {
+        "X": -950.61426,
+        "Y": 218.15916
+      }
+    },
+    {
+      "ChildId": "c3d89d47-3569-40de-b9e6-2c5d7041a1d3"/*Rasterizer*/,
+      "Position": {
+        "X": 393.67792,
+        "Y": 311.53577
+      }
+    },
+    {
+      "ChildId": "c7bc6c8c-faa3-4eb7-b9ee-3899409cce85"/*PixelShader*/,
+      "Position": {
+        "X": 120.144104,
+        "Y": 479.39755
+      }
+    },
+    {
+      "ChildId": "c976dca1-ea10-4b59-8866-c469ba1900bb"/*Draw*/,
+      "Position": {
+        "X": 397.82678,
+        "Y": 669.2288
+      }
+    },
+    {
+      "ChildId": "cee7111a-cc83-4c94-8f82-17778f513585"/*PixelShaderStage*/,
+      "Position": {
+        "X": 388.44415,
+        "Y": -57.517303
+      }
+    },
+    {
+      "ChildId": "d3b43dd5-b19c-4a68-bcef-23744db3fe45"/*Draw*/,
+      "Position": {
+        "X": 388.44415,
+        "Y": 184.4827
+      }
+    },
+    {
+      "ChildId": "df86e181-579c-4fc9-b6c7-6d4be11f3c5a"/*Execute*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 153.01604,
+        "Y": 422.9334
+      },
+      "Position": {
+        "X": 596.7889,
+        "Y": 297.10526
+      }
+    },
+    {
+      "ChildId": "e03ca39e-c912-483d-9e7e-e2f91f06af5a"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 28.298706,
+        "Y": 675.90326
+      }
+    },
+    {
+      "ChildId": "e0c6c469-895d-4d91-8920-9a545f42ed7a"/*FloatsToBuffer*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 177.86848,
+        "Y": 705.0376
+      },
+      "Position": {
+        "X": -543.0428,
+        "Y": 61.617096
+      }
+    },
+    {
+      "ChildId": "e293dd19-841d-4602-a0de-81fb5b4b030c"/*padding*/,
+      "Position": {
+        "X": -962.0487,
+        "Y": 83.28645
+      }
+    },
+    {
+      "ChildId": "ead25875-4ae4-4983-ae14-36c3410c87bd"/*IntToFloat*/,
+      "Position": {
+        "X": -980.88135,
+        "Y": 421.45346
+      }
+    },
+    {
+      "ChildId": "f2356384-6e82-4f9f-9704-dc0904884a0b"/*Texture2d*/,
+      "Position": {
+        "X": -126.37839,
+        "Y": 871.2606
+      }
+    },
+    {
+      "ChildId": "f301934e-ee78-4ff1-8ddb-949683e6d80c"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": -924.1684,
+        "Y": -124.134636
+      }
+    },
+    {
+      "ChildId": "f412a6be-44a6-47f9-bdb5-843c787029e4"/*ExecuteTextureUpdate*/,
+      "Position": {
+        "X": 1384.485,
+        "Y": 145.76984
+      }
+    },
+    {
+      "ChildId": "f66b213c-db87-4931-80ce-4caa57f5dc1e"/*RasterizerState*/,
+      "Position": {
+        "X": 24.857666,
+        "Y": -44.06157
+      }
+    },
+    {
+      "ChildId": "fa4a6de3-d53c-4a54-b97a-a20954b13d44"/*OutputMergerStage*/,
+      "Position": {
+        "X": 397.82678,
+        "Y": 600.2288
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "28bf4abe-e9a9-4302-bcca-67a6957b43a7"/*TextureOutput*/,
+      "Position": {
+        "X": 1534.485,
+        "Y": 145.76984
+      }
+    }
+  ]
+}

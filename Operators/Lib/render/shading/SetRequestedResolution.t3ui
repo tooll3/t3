@@ -1,0 +1,49 @@
+{
+  "Id": "5b3a0c1d-87d6-4d88-ae20-ff9f95049ecf"/*SetRequestedResolution*/,
+  "Description": "Set the requested resolution (similar to the Resolution drop down of the output windows).\n\nPlease be sure to understand how Tooll handles resolutions before using this operator. Check the tutorial linked below.\n\nAlso see: [RequestedResolution]",
+  "SymbolTags": "8",
+  "InputUis": [
+    {
+      "InputId": "c545b200-b3a8-42a8-ac83-d85c3b6e58ee"/*ScaleResolution*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      },
+      "Description": "An optional scaling factor that is apply to either the original original or the new requested resolution."
+    },
+    {
+      "InputId": "d6303c59-5ea2-43b3-8e73-218b99d7df5f"/*Resolution*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Description": "Enforces a new resolution of both of these are greater than 1."
+    },
+    {
+      "InputId": "dd52dd4f-84ee-421b-91e9-da0b90adb1a6"/*Texture*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "2abe986a-6a21-4ceb-b907-5b6e317e34a1"/*Result*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 600.0
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "f33c0808-ad8e-4719-be7a-c3af9e2a2d36",
+      "Title": "Resolution Magic Tutorial",
+      "Description": "A quick tutorial how Tooll handlers resolutions.",
+      "LinkUrl": "https://www.youtube.com/watch?v=f9E7lwUXfBM",
+      "LinkType": "TutorialVideo"
+    }
+  ]
+}

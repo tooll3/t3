@@ -1,0 +1,15 @@
+{
+  "Id": "724da755-2d0c-42ab-8335-8c88ec5fb078"/*FloatsToBuffer*/,
+  "Inputs": [
+    {
+      "Id": "49556d12-4cd1-4341-b9d8-c356668d296c"/*Params*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "914ea6e8-abc6-4294-b895-8bfbe5afea0e"/*Vec4Params*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

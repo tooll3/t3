@@ -1,0 +1,15 @@
+{
+  "Id": "845371ef-a5c2-4ca2-8315-ea2b62f63ee2"/*PickMeshBuffer*/,
+  "Inputs": [
+    {
+      "Id": "076afdcc-c9af-4875-b97a-d8132996b35a"/*Index*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "7bb6f999-214a-448a-a7f7-be447113785e"/*Input*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
