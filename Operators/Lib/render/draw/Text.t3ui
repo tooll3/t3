@@ -23,8 +23,8 @@
     {
       "InputId": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
       "Position": {
-        "X": 284.0777,
-        "Y": 664.8777
+        "X": 252.9892,
+        "Y": 818.09973
       },
       "GroupTitle": "Font & Size",
       "Description": "Defines which font is used",
@@ -180,8 +180,8 @@
     {
       "ChildId": "395e0473-ce2f-46e4-be5f-e38682ee3b8c"/*SearchAndReplace*/,
       "Position": {
-        "X": 458.59595,
-        "Y": 307.63022
+        "X": 382.65103,
+        "Y": 360.25864
       }
     },
     {

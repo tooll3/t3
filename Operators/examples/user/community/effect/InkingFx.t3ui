@@ -1,7 +1,16 @@
 {
   "Id": "9484cda8-a5ab-414d-a5bd-9a413796c7ab"/*InkingFx*/,
   "Description": "A good example of community work: A spectacular slideshow based on the great inking effect made by Leon Denise, pictures from Pixtur's folder and assembled by Newemka.",
-  "InputUis": [],
+  "InputUis": [
+    {
+      "InputId": "2418e72c-b15f-42a8-9689-a53fe59aa9ad"/*Folder*/,
+      "Position": {
+        "X": -1580.228,
+        "Y": 182.94412
+      },
+      "Usage": "DirectoryPath"
+    }
+  ],
   "SymbolChildUis": [
     {
       "ChildId": "06ad1825-a23c-494e-8244-960a9b77a755"/*AdjustColors*/,
@@ -27,8 +36,8 @@
     {
       "ChildId": "13ee32bf-1c4d-4bb8-ad26-cdb6384fe074"/*FilesInFolder*/,
       "Position": {
-        "X": -1196.8583,
-        "Y": 277.0308
+        "X": -1198.465,
+        "Y": 66.538315
       }
     },
     {
@@ -69,8 +78,8 @@
     {
       "ChildId": "3d84186c-569f-4583-92f5-35fb262b9208"/*CountInt*/,
       "Position": {
-        "X": -1196.8583,
-        "Y": 234.03079
+        "X": -1197.6617,
+        "Y": 167.34805
       }
     },
     {
@@ -132,8 +141,8 @@
     {
       "ChildId": "70357fc7-5134-400f-8222-fec2d50d7cb8"/*AnimValue*/,
       "Position": {
-        "X": -1394.4313,
-        "Y": 276.28146
+        "X": -1605.304,
+        "Y": 425.3758
       }
     },
     {
@@ -172,10 +181,24 @@
       }
     },
     {
+      "ChildId": "8250ba39-30b1-4b5e-b141-431b35eefa39"/*DrawScreenQuad*/,
+      "Position": {
+        "X": 867.8121,
+        "Y": -19.967758
+      }
+    },
+    {
       "ChildId": "83094bad-e531-4a6d-9984-4fc3722bb92b"/*DrawBillboards*/,
       "Position": {
         "X": 860.4005,
         "Y": 1129.2278
+      }
+    },
+    {
+      "ChildId": "84529309-366f-4a46-bc12-3eff59be6163"/*ChangeCase*/,
+      "Position": {
+        "X": -1314.8695,
+        "Y": -21.22963
       }
     },
     {
@@ -209,22 +232,22 @@
     {
       "ChildId": "a1653bde-652d-4d7b-afd6-bd7759a8fa2c"/*PickFromStringList*/,
       "Position": {
-        "X": -1004.74097,
-        "Y": 182.77988
+        "X": -990.27966,
+        "Y": 210.89911
       }
     },
     {
       "ChildId": "a2ca4515-f462-431c-87a4-2941be842654"/*PickString*/,
       "Position": {
-        "X": -809.5459,
-        "Y": 183.89526
+        "X": -804.3208,
+        "Y": 282.8481
       }
     },
     {
       "ChildId": "b41cb1f2-017f-4cbb-91cf-caa50a84d31b"/*PickFromStringList*/,
       "Position": {
-        "X": -1004.74097,
-        "Y": 251.77988
+        "X": -985.4592,
+        "Y": 59.765747
       }
     },
     {
@@ -237,8 +260,8 @@
     {
       "ChildId": "b97e5df0-d8ba-4768-943c-90552269f56f"/*FilesInFolder*/,
       "Position": {
-        "X": -1196.2396,
-        "Y": 192.28268
+        "X": -1199.4978,
+        "Y": 239.57205
       }
     },
     {
@@ -272,8 +295,8 @@
     {
       "ChildId": "e110b17e-b873-48ea-bc9e-bf2c217be4a2"/*CountInt*/,
       "Position": {
-        "X": -1196.8583,
-        "Y": 320.0308
+        "X": -944.3208,
+        "Y": 352.8481
       }
     },
     {

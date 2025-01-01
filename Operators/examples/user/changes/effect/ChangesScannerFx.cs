@@ -1,4 +1,4 @@
-namespace Examples.user.community.effect;
+namespace Examples.user.changes.effect;
 
 [Guid("dbd8e542-730a-4417-badf-acc721a3eca8")]
 internal sealed class ChangesScannerFx : Instance<ChangesScannerFx>
