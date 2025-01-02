@@ -30,7 +30,7 @@ public static class SrvManager
     {
         try
         {
-            Log.Debug($"Create srv for {texture.Description.Width}×{texture.Description.Height}");
+            //Log.Debug($"Create srv for {texture.Description.Width}×{texture.Description.Height}");
             return (texture.Description.BindFlags & BindFlags.DepthStencil) > 0 
                        ? null : // skip here for depth/stencil to prevent warning below
                        new ShaderResourceView(ResourceManager.Device, texture);
@@ -56,7 +56,7 @@ public static class SrvManager
 
         foreach (var (texture,srv) in keysForRemoval)
         {
-            Log.Debug("Disposing SRV...");
+            //Log.Debug("Disposing SRV...");
             _srvForTextures.Remove(texture);
             srv.Dispose();
         }
