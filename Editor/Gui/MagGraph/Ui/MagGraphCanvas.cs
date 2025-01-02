@@ -238,7 +238,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
 
         _context.ConnectionHovering.PrepareNewFrame(_context);
 
-        _context.Placeholder.DrawPlaceholder(_context, drawList);
+        _context.Placeholder.Update(_context);
 
         // Draw animated Snap indicator
         {
