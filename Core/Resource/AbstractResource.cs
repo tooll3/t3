@@ -78,8 +78,14 @@ public sealed class Resource<T> : IDisposable, IResource
         if (_slot is not { IsDirty: true })
             return _lazyValue.Value;
 
+        var oldPath = _slot.Value;
+        
         var newPath = _slot.GetValue(context);
-
+        var hasChanged = oldPath != newPath;
+        
+        if(!hasChanged)
+            return _lazyValue.Value;
+        
         if (!string.IsNullOrWhiteSpace(newPath))
         {
             if (!_slot.HasInputConnections)
