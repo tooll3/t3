@@ -29,6 +29,7 @@ internal sealed partial class MagGraphCanvas
             return;
 
         var idleFadeFactor = 1f;
+        var idleFactor = 0f;
         if (item.Variant == MagGraphItem.Variants.Operator && item.Instance != null)
         {
             var framesSinceLastUpdate = 100;
@@ -38,6 +39,7 @@ internal sealed partial class MagGraphCanvas
             }
 
             idleFadeFactor = MathUtils.RemapAndClamp(framesSinceLastUpdate, 0f, 60f, 1f, 0.6f);
+            idleFactor = MathUtils.RemapAndClamp(framesSinceLastUpdate, 0f, 60f, 0f, 1f);
         }
 
         var hoverProgress = GetHoverTimeForId(item.Id).RemapAndClamp(0, 0.3f, 0, 1);
@@ -112,8 +114,10 @@ internal sealed partial class MagGraphCanvas
 
         drawList.AddRectFilled(pMinVisible,
                                pMaxVisible,
-                               Color.Mix(ColorVariations.OperatorBackgroundIdle.Apply(typeColor),
-                                         ColorVariations.OperatorBackground.Apply(typeColor), idleFadeFactor), 5 * CanvasScale,
+                               Color.Mix(
+                                         ColorVariations.OperatorBackground.Apply(typeColor), 
+                                         ColorVariations.OperatorBackgroundIdle.Apply(typeColor),
+                                         idleFactor), 5 * CanvasScale,
                                imDrawFlags);
 
         // Snapped borders
