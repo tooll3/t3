@@ -17,6 +17,12 @@ internal sealed class ExecuteTextureUpdate : Instance<ExecuteTextureUpdate>
         if (!isEnabled || TriggerTexture.HasInputConnections && !TriggerTexture.DirtyFlag.IsDirty)
         {
             Output.DirtyFlag.Clear();
+            Texture.DirtyFlag.Clear();
+            if (Texture.HasInputConnections)
+            {
+                Texture.FirstConnection.DirtyFlag.Clear();
+            }
+            UpdateCommands.DirtyFlag.Clear();
             return;
         }
             
