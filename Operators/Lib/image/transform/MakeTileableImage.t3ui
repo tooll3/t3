@@ -16,6 +16,13 @@
       "Clamp": true
     },
     {
+      "InputId": "0fef83cc-01c5-4e4a-a716-5bbdf9d916a0"/*IsEnabled*/,
+      "Position": {
+        "X": -532.8175,
+        "Y": 99.2388
+      }
+    },
+    {
       "InputId": "e0f2826f-867d-461b-b1ec-95d30d592539"/*EdgeFallOff*/,
       "Position": {
         "X": -532.8175,
@@ -48,8 +55,8 @@
     {
       "ChildId": "2da10875-0de5-488f-b293-bf15675e205b"/*LinearGradient*/,
       "Position": {
-        "X": 44.40335,
-        "Y": -59.09671
+        "X": -58.10704,
+        "Y": -169.98846
       }
     },
     {
@@ -79,8 +86,8 @@
     {
       "ChildId": "835e9c38-d08b-4d97-a9f7-28edfb84285d"/*LinearGradient*/,
       "Position": {
-        "X": -262.01712,
-        "Y": 1066.5345
+        "X": -255.33267,
+        "Y": 988.5493
       }
     },
     {
@@ -99,6 +106,13 @@
       }
     },
     {
+      "ChildId": "c545a82e-80fb-4603-98fd-30be6a581eac"/*ExecuteTextureUpdate*/,
+      "Position": {
+        "X": 1139.4573,
+        "Y": -249.06305
+      }
+    },
+    {
       "ChildId": "d2ceb93f-c6a7-4f6f-967f-6647ad2478a3"/*LinearGradient*/,
       "Position": {
         "X": 374.1277,
@@ -109,8 +123,8 @@
       "ChildId": "ecfe2689-aeb5-4ae6-9f8f-1a66e4bdc89c"/*TransformImage*/,
       "Comment": "It's time to take care of the horizontal seam",
       "Position": {
-        "X": 432.18115,
-        "Y": 368.80255
+        "X": 430.32434,
+        "Y": 463.49893
       }
     }
   ],
@@ -118,8 +132,8 @@
     {
       "OutputId": "970d1691-47f4-43ce-937d-cad6a9c13922"/*Selected*/,
       "Position": {
-        "X": 1307.2495,
-        "Y": 105.23187
+        "X": 1315.1725,
+        "Y": -246.34848
       }
     }
   ],

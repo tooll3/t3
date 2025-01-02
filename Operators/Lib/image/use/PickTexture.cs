@@ -18,11 +18,26 @@ internal sealed class PickTexture : Instance<PickTexture>
         var connections = Input.GetCollectedTypedInputs();
         if (connections == null || connections.Count == 0)
             return;
+        
 
         var index = Index.GetValue(context).Mod(connections.Count);
         Selected.Value = connections[index].GetValue(context);
-    }
+        
+        // Clear dirty flag
+        if (_isFirstUpdate)
+        {
+            foreach (var c in connections)
+            {
+                c.GetValue(context);
+            }
 
+            _isFirstUpdate = false;
+        }
+        Input.DirtyFlag.Clear();
+
+    }
+    private bool _isFirstUpdate = true; 
+    
     [Input(Guid = "6C935163-1729-4DF0-A981-610B4AA7C6A3")]
     public readonly MultiInputSlot<Texture2D> Input = new();
 

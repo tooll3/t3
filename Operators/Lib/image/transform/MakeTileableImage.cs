@@ -16,4 +16,7 @@ internal sealed class MakeTileableImage : Instance<MakeTileableImage>
     [Input(Guid = "0cf0b6ec-93e4-4e08-939c-5588267c3991")]
     public readonly InputSlot<int> TilingMode = new InputSlot<int>();
 
+        [Input(Guid = "0fef83cc-01c5-4e4a-a716-5bbdf9d916a0")]
+        public readonly InputSlot<bool> IsEnabled = new InputSlot<bool>();
+
 }
