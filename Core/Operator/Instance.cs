@@ -105,7 +105,14 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
     {
         var symbol = SymbolRegistry.SymbolsByType[Type];
         var assemblyInfo = symbol.SymbolPackage.AssemblyInformation;
-        var operatorTypeInfo = assemblyInfo.OperatorTypeInfo[symbol.Id];
+        if (!assemblyInfo.OperatorTypeInfo.TryGetValue(symbol.Id, out var operatorTypeInfo))
+        {
+            Log.Error($"Can't find operatorTypeInfo for id {symbol} {symbol.Id} in {assemblyInfo}");
+            Debug.Assert(false);
+            
+        }
+        
+        //var operatorTypeInfo = assemblyInfo.OperatorTypeInfo[symbol.Id];
         foreach (var input in operatorTypeInfo.Inputs)
         {
             var attribute = input.Attribute;
