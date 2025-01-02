@@ -17,7 +17,7 @@ public class OperatorHelp
     public bool DrawHelpIcon(SymbolUi symbolUi, ref bool isEnabled)
     {
         var changed = false;
-        
+
         ImGui.SameLine();
         var w = ImGui.GetFrameHeight();
         ImGui.SetCursorPosX(ImGui.GetCursorPosX() + 2);
@@ -32,7 +32,7 @@ public class OperatorHelp
                                             : CustomComponents.ButtonStates.Dimmed
                                        ))
         {
-            changed= true;
+            changed = true;
             if (toggledToEdit)
             {
                 EditDescriptionDialog.ShowNextFrame();
@@ -62,10 +62,11 @@ public class OperatorHelp
         {
             _timeSinceTooltipHovered = 0;
         }
+
         return changed;
     }
 
-    public static bool DrawHelpSummary(SymbolUi symbolUi)
+    public static bool DrawHelpSummary(SymbolUi symbolUi, bool showMoreIndicator = true)
     {
         if (string.IsNullOrEmpty(symbolUi.Description))
             return false;
@@ -91,24 +92,28 @@ public class OperatorHelp
 
         ImGui.PopStyleColor();
 
-        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Fade(0.5f).Rgba);
-        FormInputs.AddVerticalSpace(5);
-        
-        var anyParameterHasDescription = symbolUi.InputUis
-                                                 .Values
-                                                 .Any(inputUi => !string.IsNullOrEmpty(inputUi.Description));
-
-        if (firstLine != symbolUi.Description || anyParameterHasDescription)
+        if (showMoreIndicator)
         {
-            ImGui.TextUnformatted("Read more...");
-            if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Fade(0.5f).Rgba);
+            FormInputs.AddVerticalSpace(5);
+
+            var anyParameterHasDescription = symbolUi.InputUis
+                                                     .Values
+                                                     .Any(inputUi => !string.IsNullOrEmpty(inputUi.Description));
+
+            if (firstLine != symbolUi.Description || anyParameterHasDescription)
             {
-                helpRequested = true;
+                ImGui.TextUnformatted("Read more...");
+                if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                {
+                    helpRequested = true;
+                }
             }
+
+            //FormInputs.AddVerticalSpace();
+            ImGui.PopStyleColor();
         }
-        
-        FormInputs.AddVerticalSpace();
-        ImGui.PopStyleColor();
+
         return helpRequested;
     }
 
@@ -290,7 +295,7 @@ public class OperatorHelp
                     if (referencedSymbol != null)
                     {
                         var package = (EditorSymbolPackage)referencedSymbol.SymbolPackage;
-                        if(!package.TryGetSymbolUi(referencedSymbol.Id, out var exampleSymbolUi))
+                        if (!package.TryGetSymbolUi(referencedSymbol.Id, out var exampleSymbolUi))
                             throw new Exception($"Can't find symbol ui for symbol {referencedSymbol.Id}");
                         SymbolBrowser.DrawExampleOperator(exampleSymbolUi, referencedName);
                     }
@@ -316,6 +321,7 @@ public class OperatorHelp
     private static readonly Regex _itemRegex = new(@"\[([A-Za-z\d_]+)\]", RegexOptions.Compiled);
 
     private static readonly List<IInputUi> _parametersWithDescription = new(10);
+
     // public bool IsActive => _isDocumentationActive;
     // private bool _isDocumentationActive = false;
     private static float _timeSinceTooltipHovered = 0;
