@@ -1,4 +1,4 @@
-namespace Examples.lib.render.mesh.modify;
+namespace Examples.Lib.mesh.modify;
 
 [Guid("a35676b8-bcbc-4806-845a-8853b57f8ec7")]
  internal sealed class ScatterMeshFacesExample : Instance<ScatterMeshFacesExample>

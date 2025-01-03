@@ -1,4 +1,4 @@
-namespace Lib.numbers.@float.trigonmetry;
+namespace Lib.numbers.@float.trigonometry;
 
 [Guid("61c70843-08ea-4249-ba90-9971493e45d1")]
 internal sealed class Cos : Instance<Cos>

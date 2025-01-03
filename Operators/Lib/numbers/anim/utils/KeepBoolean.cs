@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace Lib.numbers.anim.utils;
+namespace Lib.numbers.@bool.process;
 
 [Guid("743e18c7-eed5-40df-9a86-7caa996d94a2")]
 internal sealed class KeepBoolean : Instance<KeepBoolean>

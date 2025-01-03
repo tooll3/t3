@@ -1,4 +1,4 @@
-namespace Examples.lib.render.mesh.generate;
+namespace Examples.Lib.mesh.generate;
 
 [Guid("a469ca9f-a7f9-46b8-b34c-0a1c109e1222")]
  internal sealed class ExtrudeCurvesExample : Instance<ExtrudeCurvesExample>

@@ -1,7 +1,7 @@
 {
   "Id": "587dbb73-fd79-4481-a79e-f77055abda9a"/*FreezeValue*/,
   "Description": "Keeps the current input value as long as Keep is true.\nThis can be useful for building interactive features like stop watches.",
-  "SymbolTags": "8",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "7d64e809-3280-47fa-ad0f-218c6081534f"/*Value*/,

@@ -1,4 +1,4 @@
-namespace Lib.numbers.@float.trigonmetry;
+namespace Lib.numbers.@float.trigonometry;
 
 [Guid("7636bb3c-9f12-4323-b9be-e05f0eb561c5")]
 internal sealed class Atan2 : Instance<Atan2>

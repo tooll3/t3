@@ -1,4 +1,4 @@
-namespace Examples.lib.render.mesh;
+namespace Examples.Lib.mesh;
 
 [Guid("70e97e6b-3ddf-4a88-b080-c63fdbd251c9")]
  internal sealed class UVsViewerExample : Instance<UVsViewerExample>

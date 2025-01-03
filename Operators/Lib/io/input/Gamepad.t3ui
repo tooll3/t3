@@ -1,6 +1,7 @@
 {
   "Id": "d69e0f2e-8fe2-478b-ba4e-2a55a92670ae"/*Gamepad*/,
   "Description": "# Gamepad input using XInput. It supports up to four gamepads. \nUse in combination with these operators:\nThumbSticks: [SelectVec2FromDict]\nButtons: [SelectBoolFromFloatDict]\nTriggers: [SelectFloatFromDict]\nCheck the example: [GamePadExample]",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "b37ab751-1e41-4e58-9e27-5ac9052662d8"/*Index*/,

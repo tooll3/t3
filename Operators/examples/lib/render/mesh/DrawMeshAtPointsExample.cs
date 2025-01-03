@@ -1,4 +1,4 @@
-namespace Examples.lib.render.mesh;
+namespace Examples.Lib.mesh;
 
 [Guid("4f113e4a-eb27-4e40-8843-d15d54610f33")]
  internal sealed class DrawMeshAtPointsExample : Instance<DrawMeshAtPointsExample>
