@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Core.SystemUi;
@@ -85,7 +86,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
             if (ImGui.IsWindowFocused())
                 _window.TakeFocus();
 
-            DrawDropHandler(_window.CompositionOp, _window.CompositionOp.GetSymbolUi());
+            HandleSymbolDropping(_window.CompositionOp, _window.CompositionOp.GetSymbolUi());
             ImGui.SetCursorScreenPos(Vector2.One * 100);
 
             if (!preventInteractions)
@@ -281,8 +282,8 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
             var doubleClicked = ImGui.IsMouseDoubleClicked(0);
 
             var isInteractive = (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || ImGui.IsWindowFocused())
-                              && !preventInteractions
-                              && tempConnections.Count == 0;
+                                && !preventInteractions
+                                && tempConnections.Count == 0;
 
             var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
             var shouldHandleFenceSelection = isInteractive
@@ -448,45 +449,36 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas
     //     return selectedChildUi != null ? selectedChildUi.SymbolChild.Symbol : compositionOp.Symbol;
     // }
 
-    private void DrawDropHandler(Instance compositionOp, SymbolUi compositionOpSymbolUi)
+    private void HandleSymbolDropping(Instance compositionOp, SymbolUi compositionOpSymbolUi)
     {
-        if (!T3Ui.DraggingIsInProgress)
+        if (!DragHandling.IsDragging)
             return;
 
         ImGui.SetCursorPos(Vector2.Zero);
         ImGui.InvisibleButton("## drop", ImGui.GetWindowSize());
 
-        if (ImGui.BeginDragDropTarget())
+        if (!DragHandling.TryGetDataDroppedLastItem(DragHandling.SymbolDraggingId, out var data))
+            return;
+        
+        if (!Guid.TryParse(data, out var guid))
         {
-            var payload = ImGui.AcceptDragDropPayload("Symbol");
-            if (ImGui.IsMouseReleased(0))
-            {
-                var myString = Marshal.PtrToStringAuto(payload.Data);
-                if (myString != null)
-                {
-                    var guidString = myString.Split('|')[0];
-                    var guid = Guid.Parse(guidString);
-                    Log.Debug("dropped symbol here" + payload + " " + myString + "  " + guid);
+            Log.Warning("Invalid data format for drop? " + data);
+            return;
+        }
+        //Log.Debug("dropped symbol here" + payload + " " + dataString + "  " + guid);
 
-                    if (SymbolUiRegistry.TryGetSymbolUi(guid, out var symbolUi))
-                    {
-                        var symbol = symbolUi.Symbol;
-                        var posOnCanvas = InverseTransformPositionFloat(ImGui.GetMousePos());
-                        var childUi = GraphOperations.AddSymbolChild(symbol, compositionOpSymbolUi, posOnCanvas);
+        if (SymbolUiRegistry.TryGetSymbolUi(guid, out var symbolUi))
+        {
+            var symbol = symbolUi.Symbol;
+            var posOnCanvas = InverseTransformPositionFloat(ImGui.GetMousePos());
+            var childUi = GraphOperations.AddSymbolChild(symbol, compositionOpSymbolUi, posOnCanvas);
 
-                        var instance = compositionOp.Children[childUi.Id];
-                        NodeSelection.SetSelection(childUi, instance);
-                    }
-                    else
-                    {
-                        Log.Warning($"Symbol {guid} not found in registry");
-                    }
-
-                    T3Ui.DraggingIsInProgress = false;
-                }
-            }
-
-            ImGui.EndDragDropTarget();
+            var instance = compositionOp.Children[childUi.Id];
+            NodeSelection.SetSelection(childUi, instance);
+        }
+        else
+        {
+            Log.Warning($"Symbol {guid} not found in registry");
         }
     }
 

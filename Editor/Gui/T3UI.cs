@@ -65,6 +65,7 @@ public static class T3Ui
     {
         Profiling.KeepFrameData();
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
+        DragHandling.Update();
 
         CustomComponents.BeginFrame();
         FormInputs.BeginFrame();
@@ -612,8 +613,8 @@ public static class T3Ui
     //     GC.SuppressFinalize(this);
     //     OscDataRecording.Dispose();
     // }
-
-    internal static bool DraggingIsInProgress = false;
+    
+    private static bool DraggingIsInProgress = false;
     internal static bool MouseWheelFieldHovered { private get; set; }
     internal static bool MouseWheelFieldWasHoveredLastFrame { get; private set; }
     public static bool DragFieldHovered { private get; set; }

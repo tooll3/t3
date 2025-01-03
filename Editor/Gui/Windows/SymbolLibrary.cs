@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿#nullable enable
+
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.SystemUi;
@@ -14,9 +15,9 @@ namespace T3.Editor.Gui.Windows;
 /// <summary>
 /// Shows a tree of all defined symbols sorted by namespace 
 /// </summary>
-public class SymbolLibrary : Window
+internal sealed class SymbolLibrary : Window
 {
-    public SymbolLibrary()
+    internal SymbolLibrary()
     {
         _filter.SearchString = "";
         Config.Title = "Symbol Library";
@@ -30,12 +31,12 @@ public class SymbolLibrary : Window
 
         ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, 10);
 
-        if (_symbolUsageReference != null)
+        if (SymbolUsageReference != null)
         {
-            ImGui.Text("Usages of " + _symbolUsageReference.Name + ":");
+            ImGui.Text("Usages of " + SymbolUsageReference.Name + ":");
             if (ImGui.Button("Clear"))
             {
-                _symbolUsageReference = null;
+                SymbolUsageReference = null;
             }
             else
             {
@@ -43,7 +44,7 @@ public class SymbolLibrary : Window
 
                 ImGui.BeginChild("scrolling");
                 {
-                    if (SymbolAnalysis.DetailsInitialized && SymbolAnalysis.InformationForSymbolIds.TryGetValue(_symbolUsageReference.Id, out var info))
+                    if (SymbolAnalysis.DetailsInitialized && SymbolAnalysis.InformationForSymbolIds.TryGetValue(SymbolUsageReference.Id, out var info))
                     {
                         foreach (var symbol in info.DependingSymbols)
                         {
@@ -60,11 +61,6 @@ public class SymbolLibrary : Window
         }
 
         ImGui.PopStyleVar(1);
-
-        if (ImGui.IsMouseReleased(0))
-        {
-            StopDrag();
-        }
     }
 
     private void DrawSymbols()
@@ -97,14 +93,15 @@ public class SymbolLibrary : Window
 
             if (_showFilters)
             {
-                var totalOpCount = _onlyInLib 
-                                       ? SymbolAnalysis.InformationForSymbolIds.Values.Count(i => i.IsLibOperator) 
-                                       :  SymbolAnalysis.InformationForSymbolIds.Count;
+                var totalOpCount = _onlyInLib
+                                       ? SymbolAnalysis.InformationForSymbolIds.Values.Count(i => i.IsLibOperator)
+                                       : SymbolAnalysis.InformationForSymbolIds.Count;
                 CustomComponents.SmallGroupHeader($"Show only... ({totalOpCount} total)");
                 bool needsUpdate = false;
-                    
+
                 var helpMissingCount = SymbolAnalysis.InformationForSymbolIds.Values.Count(i => i.LacksDescription && (i.IsLibOperator || !_onlyInLib));
-                var missingAllParameterHelpCount = SymbolAnalysis.InformationForSymbolIds.Values.Count(i => i.LacksAllParameterDescription && (i.IsLibOperator || !_onlyInLib));
+                var missingAllParameterHelpCount =
+                    SymbolAnalysis.InformationForSymbolIds.Values.Count(i => i.LacksAllParameterDescription && (i.IsLibOperator || !_onlyInLib));
                 var lackGroupingCount = SymbolAnalysis.InformationForSymbolIds.Values.Count(i => i.LacksParameterGrouping && (i.IsLibOperator || !_onlyInLib));
                 var unusedCount = SymbolAnalysis.InformationForSymbolIds.Values.Count(i => i.DependingSymbols.Count == 0 && (i.IsLibOperator || !_onlyInLib));
 
@@ -115,26 +112,26 @@ public class SymbolLibrary : Window
                 needsUpdate |= ImGui.Checkbox($"Unused ({unusedCount})", ref _filterUnused);
                 FormInputs.AddVerticalSpace();
                 needsUpdate |= ImGui.Checkbox("Only in Lib", ref _onlyInLib);
-                    
+
                 if (needsUpdate)
                 {
-                    _filteredTree.PopulateCompleteTree((Symbol s) =>
+                    _filteredTree.PopulateCompleteTree(s =>
                                                        {
                                                            var info = SymbolAnalysis.InformationForSymbolIds[s.Id];
-                                                           if(info == null)
+                                                           if (info == null)
                                                                return false;
 
                                                            if (_onlyInLib && !info.IsLibOperator)
                                                                return false;
-                                                               
+
                                                            if (!AnyFilterActive)
                                                                return true;
-                                                               
-                                                           return ( (_filterMissingDescriptions && info.LacksDescription)
-                                                                    || (_filterMissingAllParameterDescriptions && info.LacksAllParameterDescription)
-                                                                    || (_filterMissingSomeParameterDescriptions && info.LacksSomeParameterDescription)
-                                                                    || (_filterMissingParameterGrouping && info.LacksParameterGrouping)
-                                                                    || (_filterUnused && info.DependingSymbols.Count== 0)
+
+                                                           return ((_filterMissingDescriptions && info.LacksDescription)
+                                                                   || (_filterMissingAllParameterDescriptions && info.LacksAllParameterDescription)
+                                                                   || (_filterMissingSomeParameterDescriptions && info.LacksSomeParameterDescription)
+                                                                   || (_filterMissingParameterGrouping && info.LacksParameterGrouping)
+                                                                   || (_filterUnused && info.DependingSymbols.Count == 0)
                                                                   );
                                                        });
                 }
@@ -177,10 +174,10 @@ public class SymbolLibrary : Window
     }
 
     private int _randomSeed;
-    private List<Symbol> _allLibSymbols;
+    private List<Symbol>? _allLibSymbols;
     private float _promptComplexity = 0.25f;
 
-    private bool _wasScanned = false;
+    private bool _wasScanned;
     private bool _showFilters;
     private bool _filterMissingDescriptions;
     private bool _filterMissingAllParameterDescriptions;
@@ -240,12 +237,7 @@ public class SymbolLibrary : Window
         }
     }
 
-    private static void StopDrag()
-    {
-        T3Ui.DraggingIsInProgress = false;
-    }
-
-    private NamespaceTreeNode _subtreeNodeToRename;
+    private NamespaceTreeNode? _subtreeNodeToRename;
     private bool _openedLibFolderOnce;
 
     private void DrawNode(NamespaceTreeNode subtree)
@@ -284,7 +276,7 @@ public class SymbolLibrary : Window
             }
             else
             {
-                if (T3Ui.DraggingIsInProgress)
+                if (DragHandling.IsDragging)
                 {
                     ImGui.SameLine();
                     ImGui.PushID("DropButton");
@@ -314,71 +306,50 @@ public class SymbolLibrary : Window
         }
     }
 
-    private void HandleDropTarget(NamespaceTreeNode subtree)
+    private static void HandleDropTarget(NamespaceTreeNode subtree)
     {
-        if (ImGui.BeginDragDropTarget())
+        if (!DragHandling.TryGetDataDroppedLastItem(DragHandling.SymbolDraggingId, out var data))
+            return;
+
+        if (!Guid.TryParse(data, out var symbolId))
+            return;
+
+        if (!MoveSymbolToNamespace(symbolId, subtree.GetAsString(), out var reason))
+            BlockingWindow.Instance.ShowMessageBox(reason, "Could not move symbol's namespace");
+    }
+
+    private static bool MoveSymbolToNamespace(Guid symbolId, string nameSpace, out string reason)
+    {
+        if (!SymbolUiRegistry.TryGetSymbolUi(symbolId, out var symbolUi))
         {
-            var payload = ImGui.AcceptDragDropPayload("Symbol");
-            if (ImGui.IsMouseReleased(0))
-            {
-                string myString = null;
-                try
-                {
-                    myString = Marshal.PtrToStringAuto(payload.Data);
-                }
-                catch (NullReferenceException)
-                {
-                    Log.Error("unable to get drop data");
-                }
-
-                if (myString != null)
-                {
-                    var guidString = myString.Split('|')[0];
-                    var guid = Guid.Parse(guidString);
-                    Log.Debug("dropped symbol here" + payload + " " + myString + "  " + guid);
-                    if(!MoveSymbolToNamespace(guid, subtree.GetAsString(), out var reason))
-                        BlockingWindow.Instance.ShowMessageBox(reason, "Could not move symbol's namespace");
-                }
-            }
-
-            ImGui.EndDragDropTarget();
+            reason = $"Could not find symbol with id '{symbolId}'";
+            return false;
         }
 
-        return;
-
-        static bool MoveSymbolToNamespace(Guid symbolId, string nameSpace, out string reason)
+        if (symbolUi.Symbol.Namespace == nameSpace)
         {
-            if (!SymbolUiRegistry.TryGetSymbolUi(symbolId, out var symbolUi))
-            {
-                reason = $"Could not find symbol with id '{symbolId}'";
-                return false;
-            }
-                
-            if (symbolUi!.Symbol.Namespace == nameSpace)
-            {
-                reason = string.Empty;
-                return true;
-            }
-                
-            if (symbolUi.Symbol.SymbolPackage.IsReadOnly)
-            {
-                reason = $"Could not move symbol [{symbolUi.Symbol.Name}] because its package is not modifiable";
-                return false;
-            }
-                
-            return EditableSymbolProject.ChangeSymbolNamespace(symbolUi.Symbol, nameSpace, out reason);
+            reason = string.Empty;
+            return true;
         }
+
+        if (symbolUi.Symbol.SymbolPackage.IsReadOnly)
+        {
+            reason = $"Could not move symbol [{symbolUi.Symbol.Name}] because its package is not modifiable";
+            return false;
+        }
+
+        return EditableSymbolProject.ChangeSymbolNamespace(symbolUi.Symbol, nameSpace, out reason);
     }
 
     public override List<Window> GetInstances()
     {
-        return new List<Window>();
+        return [];
     }
 
     private readonly NamespaceTreeNode _treeNode = new(NamespaceTreeNode.RootNodeId);
     private readonly SymbolFilter _filter = new();
     private static readonly RenameNamespaceDialog _renameNamespaceDialog = new();
-    public static Symbol _symbolUsageReference;
+    public static Symbol? SymbolUsageReference;
     private readonly NamespaceTreeNode _filteredTree = new(NamespaceTreeNode.RootNodeId);
     private bool AnyFilterActive => _filterMissingDescriptions || _filterMissingParameterGrouping || _filterMissingAllParameterDescriptions || _filterUnused;
 }

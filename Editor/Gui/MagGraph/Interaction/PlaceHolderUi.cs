@@ -68,11 +68,6 @@ internal static class PlaceHolderUi
             uiResult |= UiResults.Cancel;
         }
 
-        if (uiResult != UiResults.None)
-        {
-            Log.Debug("Here " + uiResult);
-        }
-
         // TODO: Implement preset search
         // if (_selectedSymbolUi != null)
         // {

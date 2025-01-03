@@ -5,6 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.MagGraph.Interaction;
@@ -13,6 +14,7 @@ using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.MagGraph.Ui;
 
@@ -99,6 +101,8 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
 
         _context.EditCommentDialog.Draw(_context.Selector);
 
+        HandleSymbolDropping(_context);
+        
         // Prepare frame
         //_context.Selector.HoveredIds.Clear();
         _context.Layout.ComputeLayout(_context);
@@ -303,6 +307,45 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
             }
         }
     }
+    
+    private void HandleSymbolDropping(GraphUiContext context)
+    {
+        if (!DragHandling.IsDragging)
+            return;
+
+        ImGui.SetCursorPos(Vector2.Zero);
+        ImGui.InvisibleButton("## drop", ImGui.GetWindowSize());
+
+        if (!DragHandling.TryGetDataDroppedLastItem(DragHandling.SymbolDraggingId, out var data))
+            return;
+        
+        if (!Guid.TryParse(data, out var guid))
+        {
+            Log.Warning("Invalid data format for drop? " + data);
+            return;
+        }
+
+        if (SymbolUiRegistry.TryGetSymbolUi(guid, out var symbolUi))
+        {
+            var symbol = symbolUi.Symbol;
+            var posOnCanvas = InverseTransformPositionFloat(ImGui.GetMousePos());
+            if (!SymbolUiRegistry.TryGetSymbolUi(context.CompositionOp.Symbol.Id, out var compositionOpSymbolUi))
+            {
+                Log.Warning("Failed to get symbol id for " + context.CompositionOp.SymbolChildId);
+                return;
+            }
+            
+            var childUi = GraphOperations.AddSymbolChild(symbol, compositionOpSymbolUi, posOnCanvas);
+            var instance = context.CompositionOp.Children[childUi.Id];
+            context.Selector.SetSelection(childUi, instance);
+            context.Layout.FlagAsChanged();
+        }
+        else
+        {
+            Log.Warning($"Symbol {guid} not found in registry");
+        }
+    }
+
 
     private void DrawBackgroundGrids(ImDrawListPtr drawList)
     {

@@ -118,7 +118,7 @@ public static class SymbolTreeMenu
                 
                 if (ListSymbolSetWithTooltip(300, Icon.Referenced, "{0}", " NOT USED",  "used by...", info.DependingSymbols))
                 {
-                    SymbolLibrary._symbolUsageReference = symbol;
+                    SymbolLibrary.SymbolUsageReference = symbol;
                 }
 
                 ImGui.PopStyleColor();
@@ -219,51 +219,30 @@ public static class SymbolTreeMenu
         return false;
     }
 
-    public static void HandleDragAndDropForSymbolItem(Symbol symbol)
+    internal static void HandleDragAndDropForSymbolItem(Symbol symbol)
     {
-        if (ImGui.IsItemActive())
+        if (IsSymbolCurrentCompositionOrAParent(symbol))
+            return;
+
+        DragHandling.HandleDragSourceForLastItem(DragHandling.SymbolDraggingId, symbol.Id.ToString(), "Create instance");
+
+        if (!ImGui.IsItemDeactivated())
+            return;
+        
+        var wasClick = ImGui.GetMouseDragDelta().Length() < 4;
+        if (wasClick)
         {
-            if (IsSymbolCurrentCompositionOrAParent(symbol))
+            var window = GraphWindow.Focused;
+            if (window == null)
             {
-                return;
+                Log.Error($"No focused graph window found");
             }
-
-            if (ImGui.BeginDragDropSource())
+            else if (window.GraphCanvas.NodeSelection.GetSelectedChildUis().Count() == 1)
             {
-                if (_dropData == new IntPtr(0))
-                {
-                    _guidSting = symbol.Id + "|";
-                    _dropData = Marshal.StringToHGlobalUni(_guidSting);
-                    T3Ui.DraggingIsInProgress = true;
-                }
-
-                ImGui.SetDragDropPayload("Symbol", _dropData, (uint)(_guidSting.Length * sizeof(Char)));
-
-                ImGui.Button(symbol.Name + " (creating instance)");
-                ImGui.EndDragDropSource();
+                ConnectionMaker.InsertSymbolInstance(window, symbol);
             }
-        }
-        else if (ImGui.IsItemDeactivated())
-        {
-            if (ImGui.GetMouseDragDelta().Length() < 4)
-            {
-                var window = GraphWindow.Focused;
-                if (window == null)
-                {
-                    Log.Error($"No focused graph window found");
-                }
-                else if (window.GraphCanvas.NodeSelection.GetSelectedChildUis().Count() == 1)
-                {
-                    ConnectionMaker.InsertSymbolInstance(window, symbol);
-                }
-            }
-
-            _dropData = new IntPtr(0);
         }
     }
 
     private static readonly NamespaceTreeNode _treeNode = new(NamespaceTreeNode.RootNodeId);
-
-    private static IntPtr _dropData = new(0);
-    private static string _guidSting;
 }
