@@ -2,9 +2,12 @@
 using System.Text;
 using ImGuiNET;
 using T3.Core.DataTypes;
+using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.MagGraph.Interaction;
@@ -20,14 +23,14 @@ internal static class SymbolBrowsing
         if (_path.Count == 0)
             return PlaceHolderUi.UiResults.Cancel;
 
-        ImGui.TextUnformatted(GetNamespaceString(_path));
-        
-        if (ImGui.IsItemClicked())
-        {
-            Reset();
-        }
-        
-        WindowContentExtend.ExtendToLastItem();
+        // ImGui.TextUnformatted(GetNamespaceString(_path));
+        //
+        // if (ImGui.IsItemClicked())
+        // {
+        //     Reset();
+        // }
+        //
+        // WindowContentExtend.ExtendToLastItem();
         FormInputs.AddVerticalSpace(5);
 
         ImGui.GetCursorPosY();
@@ -52,16 +55,28 @@ internal static class SymbolBrowsing
         }
         else
         {
+            var matchingSymbolUis = new List<SymbolUi>();
+            
+            var activeNamespace = ActiveNamespaceString;    // Outside of loop to away recomputing
             foreach (var symbolUi in EditorSymbolPackage.AllSymbolUis)
             {
-                if (symbolUi.Symbol.Namespace != ActiveNamespaceString)
-                    continue;
-                
+                if (symbolUi.Symbol.Namespace == activeNamespace)
+                    matchingSymbolUis.Add(symbolUi);
+            }
+            
+            var orderedEnumerable = matchingSymbolUis
+                                   .OrderByDescending(sui => SymbolFilter.ComputeRelevancy(sui,
+                                                                                           string.Empty,
+                                                                                           GraphWindow.Focused?.Package,
+                                                                                           context.CompositionOp))
+                                   .ToList();
+            foreach (var symbolUi in orderedEnumerable)
+            {
                 uiResult |= PlaceHolderUi.DrawSymbolUiEntry(context, symbolUi);
                 WindowContentExtend.ExtendToLastItem();
-            }            
+            }
         }
-        
+
         return uiResult;
 
         void DrawItemTree(List<Group> groupPath, Group group, int levelOnPage = 0)
@@ -89,11 +104,11 @@ internal static class SymbolBrowsing
                 }
                 case Variants.Page:
                 {
-                    var color = ColorVariations.OperatorLabel.Apply( TypeUiRegistry.GetPropertiesForType(group.Type).Color);
+                    var color = ColorVariations.OperatorLabel.Apply(TypeUiRegistry.GetPropertiesForType(group.Type).Color);
                     ImGui.PushStyleColor(ImGuiCol.Text, color.Rgba);
                     ImGui.TextUnformatted($"{group.Name}...");
                     ImGui.PopStyleColor();
-                    
+
                     if (ImGui.IsItemClicked())
                     {
                         _path.Clear();
@@ -105,7 +120,6 @@ internal static class SymbolBrowsing
                 }
                 case Variants.Namespace when levelOnPage == 1:
                 {
-                    //var groupNamespace = string.Join(".", [..path, group.Name]);
                     var groupNamespace = GetNamespaceString([..groupPath, group]);
 
                     var matchingSymbolUis = new List<SymbolUi>();
@@ -118,16 +132,20 @@ internal static class SymbolBrowsing
                     if (matchingSymbolUis.Count == 0)
                         break;
 
-                    ColumnLayout.StartGroupAndWrapIfRequired(matchingSymbolUis.Count + 1);
+                    var orderedEnumerable = matchingSymbolUis
+                                           .OrderByDescending(sui => SymbolFilter.ComputeRelevancy(sui,
+                                                                                                   string.Empty,
+                                                                                                   GraphWindow.Focused?.Package,
+                                                                                                   context.CompositionOp))
+                                           .ToList();
+
+                    ColumnLayout.StartGroupAndWrapIfRequired(orderedEnumerable.Count + 1);
 
                     DrawGroupHeader(group);
-                    foreach (var symbolUi in matchingSymbolUis)
+                    foreach (var symbolUi in orderedEnumerable)
                     {
                         ImGui.SetNextItemWidth(100);
                         uiResult |= PlaceHolderUi.DrawSymbolUiEntry(context, symbolUi);
-                        // if (result.HasFlag(PlaceHolderUi.UiResults.Create))
-                        //     _selectedSymbolUi = symbolUi;
-
                         WindowContentExtend.ExtendToLastItem();
                         ColumnLayout.ExtendWidth(ImGui.GetItemRectSize().X);
                     }
@@ -136,8 +154,7 @@ internal static class SymbolBrowsing
                 }
                 case Variants.Namespace:
                 {
-                    
-                    var color = ColorVariations.OperatorLabel.Apply( TypeUiRegistry.GetPropertiesForType(group.Type).Color);
+                    var color = ColorVariations.OperatorLabel.Apply(TypeUiRegistry.GetPropertiesForType(group.Type).Color);
                     ImGui.PushStyleColor(ImGuiCol.Text, color.Rgba);
                     ImGui.TextUnformatted(group.Name + "/");
                     ImGui.PopStyleColor();
@@ -148,8 +165,8 @@ internal static class SymbolBrowsing
                         _path.AddRange([..groupPath, group]);
                         ImGui.SetScrollY(0);
                     }
-                }
                     break;
+                }
 
                 case Variants.Grouping:
                 case Variants.NamespaceCategory:
@@ -162,12 +179,23 @@ internal static class SymbolBrowsing
                         WindowContentExtend.ExtendToLastItem();
                         ColumnLayout.ExtendWidth(ImGui.GetItemRectSize().X);
                     }
+
                     break;
                 }
             }
         }
     }
 
+    public static void Reset()
+    {
+        _path = [_libTree];
+    }
+
+    public static bool IsFilterActive => _path.Count > 1;
+    public static string FilterString => _path.Count <= 1 
+                                             ? string.Empty 
+                                             : string.Join(".", _path[1..].Select(t => t.Name));
+    
     private static string GetNamespaceString(List<Group> groupPath)
     {
         _stringBuilder.Clear();
@@ -185,13 +213,6 @@ internal static class SymbolBrowsing
         return _stringBuilder.ToString();
     }
 
-    private static string ActiveNamespaceString => GetNamespaceString(_path); 
-    
-
-    private static readonly StringBuilder _stringBuilder = new();
-
-    private static List<Group> _path = [];
-
     private static void DrawGroupHeader(Group group)
     {
         ImGui.PushFont(Fonts.FontSmall);
@@ -202,7 +223,7 @@ internal static class SymbolBrowsing
 
         WindowContentExtend.ExtendToLastItem();
     }
-    
+
     private static Group UpdateLibPage()
     {
         return new Group(SymbolBrowsing.Variants.Project, "Lib",
@@ -212,7 +233,6 @@ internal static class SymbolBrowsing
                                 new Group(Variants.Namespace, "time"),
                                 new Group(Variants.Namespace, "animators"),
                                 new Group(Variants.Namespace, "vj"),
-
                             ]),
                         new Group(Variants.Page, "float", [
                                 new Group(Variants.Namespace, "basic"),
@@ -226,51 +246,55 @@ internal static class SymbolBrowsing
                         new Group(Variants.Namespace, "vec3"),
                         new Group(Variants.Namespace, "color"),
                         new Group(Variants.Namespace, "bool"),
-                        new Group(Variants.Namespace, "int")
+                        new Group(Variants.Page, "int", [
+                                new Group(Variants.Namespace, "basic"),
+                                new Group(Variants.Namespace, "logic"),
+                                new Group(Variants.Namespace, "process"),
+                            ])
                     ]),
                 new Group(Variants.NamespaceCategory, "image", [
                         new Group(Variants.Page, "generate", [
-                                new Group(Variants.Namespace, "basic", type:typeof(Texture2D)),
-                                new Group(Variants.Namespace, "load", type:typeof(Texture2D)),
-                                new Group(Variants.Namespace, "noise", type:typeof(Texture2D)),
-                                new Group(Variants.Namespace, "pattern", type:typeof(Texture2D)),
-                            ], type:typeof(Texture2D)),
+                                new Group(Variants.Namespace, "load", type: typeof(Texture2D)),
+                                new Group(Variants.Namespace, "basic", type: typeof(Texture2D)),
+                                new Group(Variants.Namespace, "noise", type: typeof(Texture2D)),
+                                new Group(Variants.Namespace, "pattern", type: typeof(Texture2D)),
+                            ], type: typeof(Texture2D)),
                         new Group(Variants.Page, "fx", [
-                                new Group(Variants.Namespace, "blur", type:typeof(Texture2D)),
-                                new Group(Variants.Namespace, "distort", type:typeof(Texture2D)),
-                                new Group(Variants.Namespace, "stylize", type:typeof(Texture2D)),
-                                new Group(Variants.Namespace, "glitch", type:typeof(Texture2D)),
-                            ], type:typeof(Texture2D)),
-                        new Group(Variants.Namespace, "color", type:typeof(Texture2D)),
-                        new Group(Variants.Namespace, "transform", type:typeof(Texture2D)),
-                        new Group(Variants.Namespace, "analyze", type:typeof(Texture2D)),
-                        new Group(Variants.Namespace, "use", type:typeof(Texture2D)),
-                    ]),                
+                                new Group(Variants.Namespace, "blur", type: typeof(Texture2D)),
+                                new Group(Variants.Namespace, "distort", type: typeof(Texture2D)),
+                                new Group(Variants.Namespace, "stylize", type: typeof(Texture2D)),
+                                new Group(Variants.Namespace, "glitch", type: typeof(Texture2D)),
+                            ], type: typeof(Texture2D)),
+                        new Group(Variants.Namespace, "color", type: typeof(Texture2D)),
+                        new Group(Variants.Namespace, "transform", type: typeof(Texture2D)),
+                        new Group(Variants.Namespace, "analyze", type: typeof(Texture2D)),
+                        new Group(Variants.Namespace, "use", type: typeof(Texture2D)),
+                    ]),
                 new Group(Variants.NamespaceCategory, "render", [
-                        new Group(Variants.Namespace, "basic", type:typeof(Command)),
-                        new Group(Variants.Namespace, "camera", type:typeof(Command)),
-                        new Group(Variants.Namespace, "transform", type:typeof(Command)),
-                        new Group(Variants.Namespace, "shading", type:typeof(Command)),
-                        new Group(Variants.Namespace, "postfx", type:typeof(Texture2D)),
-                        new Group(Variants.Namespace, "gizmo", type:typeof(Command)),
-                        new Group(Variants.Namespace, "utils", type:typeof(Command)),
+                        new Group(Variants.Namespace, "basic", type: typeof(Command)),
+                        new Group(Variants.Namespace, "camera", type: typeof(Command)),
+                        new Group(Variants.Namespace, "transform", type: typeof(Command)),
+                        new Group(Variants.Namespace, "shading", type: typeof(Command)),
+                        new Group(Variants.Namespace, "postfx", type: typeof(Texture2D)),
+                        new Group(Variants.Namespace, "gizmo", type: typeof(Command)),
+                        new Group(Variants.Namespace, "utils", type: typeof(Command)),
                     ]),
 
                 new Group(Variants.Grouping, "misc", [
-                        new Group(Variants.Page, "mesh",[
-                                new Group(Variants.Namespace, "generate", type:typeof(MeshBuffers)),
-                                new Group(Variants.Namespace, "modify", type:typeof(MeshBuffers)),
-                                new Group(Variants.Namespace, "draw", type:typeof(Command)),
+                        new Group(Variants.Page, "mesh", [
+                                new Group(Variants.Namespace, "generate", type: typeof(MeshBuffers)),
+                                new Group(Variants.Namespace, "modify", type: typeof(MeshBuffers)),
+                                new Group(Variants.Namespace, "draw", type: typeof(Command)),
                             ]),
                         new Group(Variants.Page, "string", [
-                                new Group(Variants.Namespace, "combine", type:typeof(string)),
-                                new Group(Variants.Namespace, "convert", type:typeof(string)),
-                                new Group(Variants.Namespace, "search", type:typeof(string)),
-                                new Group(Variants.Namespace, "logic", type:typeof(string)),
-                                new Group(Variants.Namespace, "datetime", type:typeof(string)),
-                                new Group(Variants.Namespace, "list", type:typeof(string)),
-                                new Group(Variants.Namespace, "buffers", type:typeof(string)),
-                            ], type:typeof(string)),
+                                new Group(Variants.Namespace, "combine", type: typeof(string)),
+                                new Group(Variants.Namespace, "convert", type: typeof(string)),
+                                new Group(Variants.Namespace, "search", type: typeof(string)),
+                                new Group(Variants.Namespace, "logic", type: typeof(string)),
+                                new Group(Variants.Namespace, "datetime", type: typeof(string)),
+                                new Group(Variants.Namespace, "list", type: typeof(string)),
+                                new Group(Variants.Namespace, "buffers", type: typeof(string)),
+                            ], type: typeof(string)),
                         new Group(Variants.Page, "io", [
                                 new Group(Variants.Namespace, "audio"),
                                 new Group(Variants.Namespace, "file"),
@@ -279,13 +303,11 @@ internal static class SymbolBrowsing
                                 new Group(Variants.Namespace, "osc"),
                                 new Group(Variants.Namespace, "video"),
                             ]),
-                        new Group(Variants.Namespace, "flow", type:typeof(Command)),
+                        new Group(Variants.Namespace, "flow", type: typeof(Command)),
                     ]),
             ]);
     }
 
-    private static Group _libTree = UpdateLibPage();
-    private static Group? _activePage;
 
     private sealed class Group
     {
@@ -293,7 +315,7 @@ internal static class SymbolBrowsing
         {
             Variant = variant;
             Name = name;
-            Items = items?? [];
+            Items = items ?? [];
             Type = type;
         }
 
@@ -317,70 +339,12 @@ internal static class SymbolBrowsing
         Grouping,
     }
 
-    public static void Reset()
-    {
-        _path = [_libTree];
-    }
-}
 
-/// <summary>
-/// A small helper that helps to layout item blocks in a flexible column grid.
-/// </summary>
-/// <remarks>
-/// Using ImGui's Columns would require a pre-pass to calculate the count and width of columns.
-/// This method basically sets the cursor-position to "fake" a similar thing. Obviously this
-/// can't be nested.
-/// </remarks>
-internal static class ColumnLayout
-{
-    internal static void StartLayout()
-    {
-        _layoutStartPosY = ImGui.GetCursorPosY();
-        _currentColumnWidth = 0;
-    }
+        
+    private static Group _libTree = UpdateLibPage();
+    private static Group? _activePage;
+    private static string ActiveNamespaceString => GetNamespaceString(_path);
+    private static readonly StringBuilder _stringBuilder = new();
+    private static List<Group> _path = [];
 
-    internal static void StartGroupAndWrapIfRequired(int lineCountInGroup)
-    {
-        var y = ImGui.GetCursorPosY() - _layoutStartPosY;
-        var isFirstBlock = y < 10;
-        if (isFirstBlock)
-            return;
-
-        var requiredHeight = y + ImGui.GetFrameHeight() * lineCountInGroup;
-        var wrapHeight = _wrapLineCount * ImGui.GetFrameHeight();
-        if (requiredHeight < wrapHeight)
-            return;
-
-        // Start next column
-        ImGui.SetCursorPosY(_layoutStartPosY);
-        ImGui.Indent(_currentColumnWidth + Padding);
-        _currentColumnWidth = 0;
-    }
-
-    internal static void ExtendWidth(float itemWidth)
-    {
-        _currentColumnWidth = MathF.Max(_currentColumnWidth, itemWidth);
-    }
-
-    private static readonly float _wrapLineCount = 10;
-    private static float _layoutStartPosY;
-    private static float _currentColumnWidth;
-    private static float Padding => 30 * T3Ui.UiScaleFactor;
-}
-
-internal static class WindowContentExtend
-{
-    internal static void ExtendToLastItem()
-    {
-        _currentExtend = Vector2.Max(_currentExtend, ImGui.GetItemRectMax() - ImGui.GetWindowPos()) + new Vector2(ImGui.GetScrollX(), ImGui.GetScrollY());
-    }
-
-    internal static Vector2 GetLastAndReset()
-    {
-        var lastExtend = _currentExtend;
-        _currentExtend = Vector2.Zero;
-        return lastExtend;
-    }
-
-    private static Vector2 _currentExtend = Vector2.Zero;
 }

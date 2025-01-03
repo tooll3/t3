@@ -68,6 +68,11 @@ internal static class PlaceHolderUi
             uiResult |= UiResults.Cancel;
         }
 
+        if (uiResult != UiResults.None)
+        {
+            Log.Debug("Here " + uiResult);
+        }
+
         // TODO: Implement preset search
         // if (_selectedSymbolUi != null)
         // {
@@ -121,9 +126,9 @@ internal static class PlaceHolderUi
 
         ImGui.SetCursorPos(posInWindow);
 
-        string _favoriteGroup = null;
+        var favoriteGroup = SymbolBrowsing.IsFilterActive ? SymbolBrowsing.FilterString : string.Empty;
         
-        if (string.IsNullOrEmpty(_favoriteGroup))
+        if (string.IsNullOrEmpty(favoriteGroup))
         {
             var padding = new Vector2(9, 3);
             if (string.IsNullOrEmpty(Filter.SearchString))
@@ -142,15 +147,13 @@ internal static class PlaceHolderUi
         }
         else
         {
-            //var g = _opGroups.FirstOrDefault(gg => gg.Name == _favoriteGroup);
-            string g = null;
-            if (g != null)
+            if (!string.IsNullOrEmpty( favoriteGroup))
             {
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(5, 5));
                 ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 10);
-                if (ImGui.Button(g + "  ×"))
+                if (ImGui.Button(favoriteGroup + "  ×"))
                 {
-                    _favoriteGroup = string.Empty;
+                    SymbolBrowsing.Reset();
                 }
 
                 ImGui.PopStyleColor();
@@ -162,7 +165,6 @@ internal static class PlaceHolderUi
             if (_selectedSymbolUi != null)
             {
                 uiResult |= UiResults.Create;
-                //CreateInstance(context, _selectedSymbolUi.Symbol);
             }
         }
 
@@ -229,6 +231,7 @@ internal static class PlaceHolderUi
         var last = WindowContentExtend.GetLastAndReset() 
                    + ImGui.GetStyle().WindowPadding * 2
                    + new Vector2(10,3);
+        last.Y = last.Y.Clamp(0,300);
         
         var resultAreaOnScreen = ImRect.RectWithSize(resultPosOnScreen, last);
 
@@ -237,7 +240,7 @@ internal static class PlaceHolderUi
                              ImGuiWindowFlags.None 
                              | ImGuiWindowFlags.AlwaysUseWindowPadding
                              //| ImGuiWindowFlags.AlwaysAutoResize
-                             | ImGuiWindowFlags.NoScrollbar
+                             //| ImGuiWindowFlags.NoScrollbar
                              | ImGuiWindowFlags.NoResize
                             ))
         {
@@ -408,11 +411,11 @@ internal static class PlaceHolderUi
     [Flags]
     internal enum UiResults
     {
-        None,
-        SelectionChanged,
-        FilterChanged,
-        Create,
-        Cancel,
-        ClickedOutside,
+        None = 1<<1,
+        SelectionChanged = 1<<2,
+        FilterChanged = 1<<3,
+        Create = 1<<4,
+        Cancel = 1<<5,
+        ClickedOutside = 1<<6,
     }
 }
