@@ -21,9 +21,6 @@ internal sealed class VoronoiCells : Instance<VoronoiCells>
     [Input(Guid = "7328bfec-fad5-4262-9c10-fad57bd39e2e")]
     public readonly InputSlot<float> EdgeWidth = new InputSlot<float>();
 
-    [Input(Guid = "2bd55eb6-8bca-4f34-bc0e-d1223f47b410")]
-    public readonly InputSlot<bool> Animated = new InputSlot<bool>();
-
     [Input(Guid = "485ea866-3764-402b-8bb5-ade85efde0c1")]
     public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
