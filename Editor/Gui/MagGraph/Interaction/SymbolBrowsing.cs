@@ -1,6 +1,8 @@
 ﻿#nullable enable
 using System.Text;
 using ImGuiNET;
+using T3.Core.DataTypes;
+using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Styling;
 using T3.Editor.UiModel;
@@ -87,7 +89,11 @@ internal static class SymbolBrowsing
                 }
                 case Variants.Page:
                 {
+                    var color = ColorVariations.OperatorLabel.Apply( TypeUiRegistry.GetPropertiesForType(group.Type).Color);
+                    ImGui.PushStyleColor(ImGuiCol.Text, color.Rgba);
                     ImGui.TextUnformatted($"{group.Name}...");
+                    ImGui.PopStyleColor();
+                    
                     if (ImGui.IsItemClicked())
                     {
                         _path.Clear();
@@ -129,7 +135,12 @@ internal static class SymbolBrowsing
                     break;
                 }
                 case Variants.Namespace:
+                {
+                    
+                    var color = ColorVariations.OperatorLabel.Apply( TypeUiRegistry.GetPropertiesForType(group.Type).Color);
+                    ImGui.PushStyleColor(ImGuiCol.Text, color.Rgba);
                     ImGui.TextUnformatted(group.Name + "/");
+                    ImGui.PopStyleColor();
                     WindowContentExtend.ExtendToLastItem();
                     if (ImGui.IsItemClicked())
                     {
@@ -137,6 +148,7 @@ internal static class SymbolBrowsing
                         _path.AddRange([..groupPath, group]);
                         ImGui.SetScrollY(0);
                     }
+                }
                     break;
 
                 case Variants.Grouping:
@@ -144,21 +156,12 @@ internal static class SymbolBrowsing
                 {
                     ColumnLayout.StartGroupAndWrapIfRequired(group.Items.Count + 1);
                     DrawGroupHeader(group);
-                    //var maxWidth = 0f;
                     foreach (var subItem in group.Items)
                     {
-                        // var subPath = group.Variant == Variants.Grouping 
-                        //                   ?groupPath 
-                        //                   : [..groupPath, group.Name];
-                        
                         DrawItemTree([..groupPath, group], subItem, levelOnPage + 1);
                         WindowContentExtend.ExtendToLastItem();
                         ColumnLayout.ExtendWidth(ImGui.GetItemRectSize().X);
-                        //maxWidth = MathF.Max(ImGui.GetItemRectSize().X, maxWidth);
                     }
-
-                    // ImGui.SetCursorPosY(_columnAreaMinY);
-                    // ImGui.Indent(maxWidth + 20);
                     break;
                 }
             }
@@ -205,7 +208,12 @@ internal static class SymbolBrowsing
         return new Group(SymbolBrowsing.Variants.Project, "Lib",
             [
                 new Group(Variants.NamespaceCategory, "numbers", [
-                        new Group(Variants.Namespace, "anim"),
+                        new Group(Variants.Page, "anim", [
+                                new Group(Variants.Namespace, "time"),
+                                new Group(Variants.Namespace, "animators"),
+                                new Group(Variants.Namespace, "vj"),
+
+                            ]),
                         new Group(Variants.Page, "float", [
                                 new Group(Variants.Namespace, "basic"),
                                 new Group(Variants.Namespace, "trigonometry"),
@@ -220,43 +228,49 @@ internal static class SymbolBrowsing
                         new Group(Variants.Namespace, "bool"),
                         new Group(Variants.Namespace, "int")
                     ]),
-                new Group(Variants.NamespaceCategory, "render", [
-                        new Group(Variants.Namespace, "basic"),
-                        new Group(Variants.Namespace, "camera"),
-                        new Group(Variants.Namespace, "transform"),
-                        new Group(Variants.Namespace, "shading"),
-                        new Group(Variants.Namespace, "postfx"),
-                        new Group(Variants.Namespace, "gizmo"),
-                        new Group(Variants.Namespace, "utils"),
-                    ]),
                 new Group(Variants.NamespaceCategory, "image", [
                         new Group(Variants.Page, "generate", [
-                                new Group(Variants.Namespace, "basic"),
-                                new Group(Variants.Namespace, "load"),
-                                new Group(Variants.Namespace, "noise"),
-                                new Group(Variants.Namespace, "pattern"),
-                            ]),
+                                new Group(Variants.Namespace, "basic", type:typeof(Texture2D)),
+                                new Group(Variants.Namespace, "load", type:typeof(Texture2D)),
+                                new Group(Variants.Namespace, "noise", type:typeof(Texture2D)),
+                                new Group(Variants.Namespace, "pattern", type:typeof(Texture2D)),
+                            ], type:typeof(Texture2D)),
                         new Group(Variants.Page, "fx", [
-                                new Group(Variants.Namespace, "blur"),
-                                new Group(Variants.Namespace, "distort"),
-                                new Group(Variants.Namespace, "glitch"),
-                                new Group(Variants.Namespace, "stylize"),
-                            ]),
-                        new Group(Variants.Namespace, "color"),
-                        new Group(Variants.Namespace, "transform"),
-                        new Group(Variants.Namespace, "analyze"),
-                        new Group(Variants.Namespace, "use"),
+                                new Group(Variants.Namespace, "blur", type:typeof(Texture2D)),
+                                new Group(Variants.Namespace, "distort", type:typeof(Texture2D)),
+                                new Group(Variants.Namespace, "stylize", type:typeof(Texture2D)),
+                                new Group(Variants.Namespace, "glitch", type:typeof(Texture2D)),
+                            ], type:typeof(Texture2D)),
+                        new Group(Variants.Namespace, "color", type:typeof(Texture2D)),
+                        new Group(Variants.Namespace, "transform", type:typeof(Texture2D)),
+                        new Group(Variants.Namespace, "analyze", type:typeof(Texture2D)),
+                        new Group(Variants.Namespace, "use", type:typeof(Texture2D)),
+                    ]),                
+                new Group(Variants.NamespaceCategory, "render", [
+                        new Group(Variants.Namespace, "basic", type:typeof(Command)),
+                        new Group(Variants.Namespace, "camera", type:typeof(Command)),
+                        new Group(Variants.Namespace, "transform", type:typeof(Command)),
+                        new Group(Variants.Namespace, "shading", type:typeof(Command)),
+                        new Group(Variants.Namespace, "postfx", type:typeof(Texture2D)),
+                        new Group(Variants.Namespace, "gizmo", type:typeof(Command)),
+                        new Group(Variants.Namespace, "utils", type:typeof(Command)),
                     ]),
+
                 new Group(Variants.Grouping, "misc", [
-                        new Group(Variants.Page, "string", [
-                                new Group(Variants.Namespace, "combine"),
-                                new Group(Variants.Namespace, "convert"),
-                                new Group(Variants.Namespace, "search"),
-                                new Group(Variants.Namespace, "logic"),
-                                new Group(Variants.Namespace, "datetime"),
-                                new Group(Variants.Namespace, "list"),
-                                new Group(Variants.Namespace, "buffers"),
+                        new Group(Variants.Page, "mesh",[
+                                new Group(Variants.Namespace, "generate", type:typeof(MeshBuffers)),
+                                new Group(Variants.Namespace, "modify", type:typeof(MeshBuffers)),
+                                new Group(Variants.Namespace, "draw", type:typeof(Command)),
                             ]),
+                        new Group(Variants.Page, "string", [
+                                new Group(Variants.Namespace, "combine", type:typeof(string)),
+                                new Group(Variants.Namespace, "convert", type:typeof(string)),
+                                new Group(Variants.Namespace, "search", type:typeof(string)),
+                                new Group(Variants.Namespace, "logic", type:typeof(string)),
+                                new Group(Variants.Namespace, "datetime", type:typeof(string)),
+                                new Group(Variants.Namespace, "list", type:typeof(string)),
+                                new Group(Variants.Namespace, "buffers", type:typeof(string)),
+                            ], type:typeof(string)),
                         new Group(Variants.Page, "io", [
                                 new Group(Variants.Namespace, "audio"),
                                 new Group(Variants.Namespace, "file"),
@@ -265,7 +279,7 @@ internal static class SymbolBrowsing
                                 new Group(Variants.Namespace, "osc"),
                                 new Group(Variants.Namespace, "video"),
                             ]),
-                        new Group(Variants.Namespace, "flow"),
+                        new Group(Variants.Namespace, "flow", type:typeof(Command)),
                     ]),
             ]);
     }
@@ -275,20 +289,22 @@ internal static class SymbolBrowsing
 
     private sealed class Group
     {
-        internal Group(SymbolBrowsing.Variants variant, string name, List<Group>? items = null)
+        internal Group(SymbolBrowsing.Variants variant, string name, List<Group>? items = null, Type? type = null)
         {
             Variant = variant;
             Name = name;
             Items = items?? [];
+            Type = type;
         }
 
-        internal Variants Variant { get; }
-        internal string Name { get; }
-        internal List<Group> Items { get; }
+        internal readonly Variants Variant;
+        internal readonly string Name;
+        internal readonly List<Group> Items;
+        internal readonly Type? Type;
 
         public override string ToString()
         {
-            return $"{Variant} {Name}  {Items.Count}";
+            return $"{Variant} {Name} {Items.Count}";
         }
     }
 
