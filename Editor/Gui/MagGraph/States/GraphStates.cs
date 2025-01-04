@@ -426,7 +426,8 @@ internal static class GraphStates
 
                               var connection = context.ConnectionHovering.ConnectionHoversWhenClicked[0].Connection;
                               context.DisconnectedInputsHashes.Add(connection.GetItemInputHash()); // keep input visible until state is complete
-
+                              context.ActiveSourceOutputId = connection.SourceOutput.Id;
+                              
                               // Remove existing connection
                               context.StartMacroCommand("Reconnect from input")
                                      .AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,
