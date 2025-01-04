@@ -20,5 +20,4 @@ internal interface IGraphCanvas : IScalableCanvas
     public CanvasScope GetTargetScope();
     void BeginDraw(bool backgroundActive, bool bgHasInteractionFocus);
     void DrawGraph(ImDrawListPtr drawList, float graphOpacity);
-    void SetCompositionToChildInstance(Instance handledInstance);
 }

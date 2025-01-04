@@ -114,7 +114,7 @@ internal static class GraphStates
                                                   // Until we align the context switching between graphs, this hack applies the current
                                                   // MagGraph scope to the legacy graph, so it's correctly saved for the Symbol in the user settings...
                                                   GraphWindow.Focused.GraphCanvas.SetTargetScope(context.Canvas.GetTargetScope());
-                                                  GraphWindow.Focused.Components.GraphCanvas.SetCompositionToChildInstance(context.ActiveItem.Instance);
+                                                  GraphWindow.Focused.Components.TrySetCompositionOpToChild(context.ActiveItem.Instance.SymbolChildId);
                                                   ImGui.CloseCurrentPopup(); // ?? 
                                               }
                                           }

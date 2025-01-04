@@ -44,8 +44,6 @@ internal sealed class GraphCanvas : ScalableCanvas, INodeCanvas, IGraphCanvas
         _graph = new Graph(components, this);
     }
 
-    public void SetCompositionToChildInstance(Instance instance) => _components.TrySetCompositionOpToChild(instance.SymbolChildId);
-
     [Flags]
     public enum GraphDrawingFlags
     {
@@ -347,7 +345,7 @@ internal sealed class GraphCanvas : ScalableCanvas, INodeCanvas, IGraphCanvas
                 _addOutputDialog.Draw(symbol);
             }
 
-            LibWarningDialog.Draw(this);
+            LibWarningDialog.Draw(_components);
             EditNodeOutputDialog.Draw();
     }
 

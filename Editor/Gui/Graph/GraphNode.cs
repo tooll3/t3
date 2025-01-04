@@ -305,7 +305,7 @@ internal class GraphNode
 
                         if (!blocked)
                         {
-                            _canvas.SetCompositionToChildInstance(instance); ///////////////////////////
+                            _components.TrySetCompositionOpToChild(instance.SymbolChildId); ///////////////////////////
                             ImGui.CloseCurrentPopup();
                             justOpenedChild = true;
                         }
