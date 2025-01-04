@@ -24,8 +24,6 @@ internal sealed partial class GraphWindow
 
             _focused?.FocusLost?.Invoke(_focused, _focused);
             _focused = value;
-            if (value != null)
-                Log.Debug($"Focused! {value.Config.Title} + {value.InstanceNumber}");
         }
     }
 
@@ -34,11 +32,11 @@ internal sealed partial class GraphWindow
 
     private GraphWindow(int instanceNumber, GraphComponents components)
     {
+        Components = components;
         InstanceNumber = instanceNumber;
         WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
 
         AllowMultipleInstances = true;
-        Components = components;
         components.GraphCanvas.SymbolBrowser.FocusRequested += FocusFromSymbolBrowser;
         FocusLost += (_, _) =>
                      {
@@ -51,10 +49,22 @@ internal sealed partial class GraphWindow
                            {
                                components.GraphCanvas.Destroyed = true;
                            };
+        
+        components.CompositionChanged += OnCompositionChanged;
 
         ConnectionMaker.AddWindow(components.GraphCanvas);
         WindowDisplayTitle = components.OpenedProject.Package.DisplayName + "##" + InstanceNumber;
         SetWindowToNormal();
+    }
+
+    ~GraphWindow()
+    {
+        Components.CompositionChanged -= OnCompositionChanged;
+    }
+
+    private void OnCompositionChanged(GraphComponents _, Guid instanceId)
+    {
+        UserSettings.SaveLastViewedOpForWindow(Config.Title, instanceId);
     }
 
     public static bool CanOpenAnotherWindow => true;

@@ -664,6 +664,8 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
         return PoolForBlendOperations?.AllVariations;
     }
 
+    public override IScalableCanvas? Parent => null;
+
     public bool IsBlendingActive { get; private set; }
     private readonly List<float> _blendWeights = new(3);
     private readonly List<Vector2> _blendPoints = new(3);

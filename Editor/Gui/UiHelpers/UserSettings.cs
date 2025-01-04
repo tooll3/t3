@@ -148,8 +148,8 @@ public class UserSettings : Settings<UserSettings.ConfigData>
         return Config.LastOpsForWindows.TryGetValue(windowTitle, out var id) ? id : Guid.Empty;
     }
 
-    internal static void SaveLastViewedOpForWindow(GraphWindow window, Guid opInstanceId)
+    internal static void SaveLastViewedOpForWindow(string title, Guid opInstanceId)
     {
-        Config.LastOpsForWindows[window.Config.Title] = opInstanceId;
+        Config.LastOpsForWindows[title] = opInstanceId;
     }
 }

@@ -31,7 +31,7 @@ internal abstract class CurveEditCanvas : ScalableCanvas, ITimeObjectManipulatio
                          ImGuiWindowFlags.NoScrollWithMouse);
         {
             Drawlist = ImGui.GetWindowDrawList();
-            UpdateCanvas(out var interactionState, null, flags);
+            UpdateCanvas(out var interactionState, flags);
             Drawlist = ImGui.GetWindowDrawList();
                 
             HandleFenceUpdate(selectionFence, out _);
@@ -210,4 +210,5 @@ internal abstract class CurveEditCanvas : ScalableCanvas, ITimeObjectManipulatio
     public readonly ValueSnapHandler SnapHandlerForU = new();
     public readonly ValueSnapHandler SnapHandlerForV = new();
     protected ImDrawListPtr Drawlist;
+    public override ScalableCanvas Parent => null;
 }

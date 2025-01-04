@@ -1,5 +1,6 @@
 #nullable enable
 using ImGuiNET;
+using T3.Core.Operator;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction;
@@ -19,4 +20,5 @@ internal interface IGraphCanvas : IScalableCanvas
     public CanvasScope GetTargetScope();
     void BeginDraw(bool backgroundActive, bool bgHasInteractionFocus);
     void DrawGraph(ImDrawListPtr drawList, float graphOpacity);
+    void SetCompositionToChildInstance(Instance handledInstance);
 }

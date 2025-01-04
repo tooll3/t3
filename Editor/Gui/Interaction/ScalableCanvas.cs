@@ -15,7 +15,7 @@ namespace T3.Editor.Gui.Interaction;
 // hacky interface to extend IGraphCanvas
 internal interface IScalableCanvas : ICanvas
 {
-    public void UpdateCanvas(out ScalableCanvas.InteractionState interactionState, Vector2? scaleTarget, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None);
+    public void UpdateCanvas(out ScalableCanvas.InteractionState interactionState, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None);
     public Vector2 ChildPosFromCanvas(Vector2 posOnCanvas);
     public void SetVisibleRange(Vector2 scale, Vector2 scroll);
     public void SetVisibleRangeHard(Vector2 scale, Vector2 scroll);
@@ -29,27 +29,27 @@ internal interface IScalableCanvas : ICanvas
     public void SetTargetScope(CanvasScope scope);
     public CanvasScope GetTargetScope();
     public bool EnableParentZoom { get; set; }
+    public Vector2 ScaleTarget { get; }
 }
 /// <summary>
 /// Implements transformations and interactions for a canvas that can
 /// be zoomed and panned.
 /// </summary>
-internal class ScalableCanvas : ICanvas, IScalableCanvas
+internal abstract class ScalableCanvas : IScalableCanvas
 {
-    public ScalableCanvas(bool isCurveCanvas = false, float initialScale = 1)
+    public ScalableCanvas(Vector2? initialScale = null)
     {
-        if (!isCurveCanvas)
+        if (initialScale == null)
             return;
-            
-        Scale = new Vector2(initialScale, -initialScale);
-        ScaleTarget = new Vector2(initialScale, -initialScale);
+        
+        Scale = ScaleTarget = initialScale.Value;
     }
         
         
     /// <summary>
     /// This needs to be called by the inherited class before drawing its interface. 
     /// </summary>
-    public void UpdateCanvas(out InteractionState interactionState, Vector2? scaleTarget, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
+    public void UpdateCanvas(out InteractionState interactionState, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
     {
         var io = ImGui.GetIO();
         var mouse = new MouseState(io.MousePos, io.MouseDelta, io.MouseWheel);
@@ -68,7 +68,7 @@ internal class ScalableCanvas : ICanvas, IScalableCanvas
         //if (!UsingParentCanvas)
         DampScaling(io.DeltaTime);
 
-        HandleInteraction(flags, mouse, out var zoomed, out var panned, scaleTarget);
+        HandleInteraction(flags, mouse, out var zoomed, out var panned);
         interactionState = new InteractionState(panned, zoomed, mouse);
     }
         
@@ -197,6 +197,8 @@ internal class ScalableCanvas : ICanvas, IScalableCanvas
         
     public Vector2 Scale { get; protected set; } = Vector2.One;
     protected Vector2 ScaleTarget = Vector2.One;
+    
+    Vector2 IScalableCanvas.ScaleTarget => ScaleTarget;
         
     public Vector2 Scroll { get; protected set; } = new(0.0f, 0.0f);
     protected Vector2 ScrollTarget = new(0.0f, 0.0f);
@@ -413,7 +415,7 @@ internal class ScalableCanvas : ICanvas, IScalableCanvas
             Scroll = ScrollTarget;
     }
 
-    private void HandleInteraction(T3Ui.EditingFlags flags, in MouseState mouseState, out bool zoomed, out bool panned, Vector2? scaleTarget)
+    private void HandleInteraction(T3Ui.EditingFlags flags, in MouseState mouseState, out bool zoomed, out bool panned)
     {
         zoomed = false;
         panned = false;
@@ -463,9 +465,9 @@ internal class ScalableCanvas : ICanvas, IScalableCanvas
                 || (ImGui.IsMouseDragging(ImGuiMouseButton.Right) && !ImGui.GetIO().KeyAlt))
            )
         {
-            scaleTarget ??= Vector2.One;
+            var parentScaleTarget = Parent?.ScaleTarget ?? Vector2.One;
             
-            ScrollTarget -= mouseState.Delta / (scaleTarget.Value * ScaleTarget);
+            ScrollTarget -= mouseState.Delta / (parentScaleTarget * ScaleTarget);
             _draggedCanvas = this;
         }
             
@@ -638,6 +640,8 @@ internal class ScalableCanvas : ICanvas, IScalableCanvas
     public FillModes FillMode = FillModes.FillWindow;
     
     public bool EnableParentZoom { get; set; } = true;
+
+    public abstract IScalableCanvas? Parent { get; }
         
     public readonly record struct InteractionState(bool UserPannedCanvas, bool UserZoomedCanvas, MouseState MouseState);
 

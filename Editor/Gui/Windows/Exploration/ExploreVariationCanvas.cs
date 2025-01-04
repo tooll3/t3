@@ -413,6 +413,8 @@ internal class ExploreVariationCanvas : ScalableCanvas
     private float _lastScatter;
     private ISlot _firstOutputSlot;
 
+    public override ScalableCanvas? Parent => null;
+
     private readonly ThumbnailCanvasRendering _thumbnailCanvasRendering = new();
     private static readonly Vector2 _thumbnailSize = new(160, 160 / 16f * 9);
         

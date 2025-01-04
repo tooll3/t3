@@ -25,6 +25,8 @@ internal sealed class GraphComponents
 
     public readonly TimeLineCanvas TimeLineCanvas;
 
+    public event Action<GraphComponents, Guid> CompositionChanged; 
+
     public GraphComponents(OpenedProject openedProject)
     {
         var structure = openedProject.Structure;
@@ -98,16 +100,9 @@ internal sealed class GraphComponents
             NodeSelection.Clear();
         }
 
-
-        if (previousComposition != null)
-        {
-            UserSettings.Config.OperatorViewSettings[previousComposition.SymbolChildId] = GraphCanvas.GetTargetScope();
-            _compositionsForDisposal.Push(previousComposition);
-        }
-        
         GraphCanvas.ApplyComposition(transition, newCompositionInstance.SymbolChildId);
-
-        UserSettings.SaveLastViewedOpForWindow(this, Composition.SymbolChildId);
+        
+        CompositionChanged?.Invoke(this, Composition.SymbolChildId);
         return true;
     }
 

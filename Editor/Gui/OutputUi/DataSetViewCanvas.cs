@@ -656,7 +656,7 @@ public class DataSetViewCanvas
     private readonly PathTreeDrawer _pathTreeDrawer = new();
     private readonly StandardValueRaster _standardRaster = new() { EnableSnapping = true };
     
-    private readonly ScalableCanvas _canvas = new(isCurveCanvas: true, initialScale: 50)
+    private readonly ScalableCanvas _canvas = new CurrentGraphSubCanvas(initialScale: new Vector2(50, -50))
                                                   {
                                                       FillMode = ScalableCanvas.FillModes.FillAvailableContentRegion,
                                                   };

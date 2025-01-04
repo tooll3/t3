@@ -122,7 +122,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         ImGui.SameLine(0, 10);
         ImGui.Text("" + GetTargetScope());
 
-        UpdateCanvas(out _, ScaleTarget);
+        UpdateCanvas(out _);
         var drawList = ImGui.GetWindowDrawList();
 
         if (_context.StateMachine.CurrentState == GraphStates.Default)
@@ -552,6 +552,8 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
     private bool _enableDebug;
     private GraphUiContext _context;
     private readonly NodeSelection _nodeSelection;
+
+    public override ScalableCanvas? Parent => null;
 
     public void FocusViewToSelection(GraphUiContext context)
     {

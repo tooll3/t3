@@ -1,4 +1,5 @@
 #nullable enable
+using System.Diagnostics.CodeAnalysis;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Helpers;
@@ -14,7 +15,7 @@ internal class OpenedProject
     
     private static readonly Dictionary<EditorSymbolPackage, OpenedProject> OpenedProjects = new();
 
-    public static bool TryCreate(EditorSymbolPackage project, out OpenedProject? openedProject)
+    public static bool TryCreate(EditorSymbolPackage project, [NotNullWhen(true)] out OpenedProject? openedProject)
     {
         if(OpenedProjects.TryGetValue(project, out openedProject))
             return true;

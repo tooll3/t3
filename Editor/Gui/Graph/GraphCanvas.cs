@@ -81,7 +81,7 @@ internal sealed class GraphCanvas : ScalableCanvas, INodeCanvas, IGraphCanvas
         if (preventInteractions)
             editingFlags |= T3Ui.EditingFlags.PreventMouseInteractions;
 
-        UpdateCanvas(out _, ScaleTarget, editingFlags);
+        UpdateCanvas(out _, editingFlags);
     }
 
     public void DrawGraph(ImDrawListPtr drawList, float graphOpacity)
@@ -934,6 +934,8 @@ internal sealed class GraphCanvas : ScalableCanvas, INodeCanvas, IGraphCanvas
     private Vector2 _dampedScrollVelocity = Vector2.Zero;
     private readonly NodeGraphLayouting _nodeGraphLayouting;
     private readonly Graph _graph;
+
+    public override ScalableCanvas? Parent => null;
     public SelectableNodeMovement SelectableNodeMovement { get; }
 }
 
