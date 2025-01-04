@@ -15,7 +15,7 @@ namespace T3.Editor.Gui.Interaction;
 // hacky interface to extend IGraphCanvas
 internal interface IScalableCanvas : ICanvas
 {
-    public void UpdateCanvas(out ScalableCanvas.InteractionState interactionState, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None);
+    public void UpdateCanvas(out ScalableCanvas.InteractionState interactionState, Vector2? scaleTarget, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None);
     public Vector2 ChildPosFromCanvas(Vector2 posOnCanvas);
     public void SetVisibleRange(Vector2 scale, Vector2 scroll);
     public void SetVisibleRangeHard(Vector2 scale, Vector2 scroll);
@@ -49,7 +49,7 @@ internal class ScalableCanvas : ICanvas, IScalableCanvas
     /// <summary>
     /// This needs to be called by the inherited class before drawing its interface. 
     /// </summary>
-    public void UpdateCanvas(out InteractionState interactionState, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
+    public void UpdateCanvas(out InteractionState interactionState, Vector2? scaleTarget, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
     {
         var io = ImGui.GetIO();
         var mouse = new MouseState(io.MousePos, io.MouseDelta, io.MouseWheel);
@@ -68,7 +68,7 @@ internal class ScalableCanvas : ICanvas, IScalableCanvas
         //if (!UsingParentCanvas)
         DampScaling(io.DeltaTime);
 
-        HandleInteraction(flags, mouse, out var zoomed, out var panned);
+        HandleInteraction(flags, mouse, out var zoomed, out var panned, scaleTarget);
         interactionState = new InteractionState(panned, zoomed, mouse);
     }
         
@@ -413,7 +413,7 @@ internal class ScalableCanvas : ICanvas, IScalableCanvas
             Scroll = ScrollTarget;
     }
 
-    private void HandleInteraction(T3Ui.EditingFlags flags, in MouseState mouseState, out bool zoomed, out bool panned)
+    private void HandleInteraction(T3Ui.EditingFlags flags, in MouseState mouseState, out bool zoomed, out bool panned, Vector2? scaleTarget)
     {
         zoomed = false;
         panned = false;
@@ -463,11 +463,9 @@ internal class ScalableCanvas : ICanvas, IScalableCanvas
                 || (ImGui.IsMouseDragging(ImGuiMouseButton.Right) && !ImGui.GetIO().KeyAlt))
            )
         {
-            var parentScale =UsingParentCanvas && !flags.HasFlag(T3Ui.EditingFlags.IgnoreParentZoom) 
-                                 ? GraphWindow.Focused!.GraphCanvas.ScaleTarget : 
-                                 Vector2.One;
+            scaleTarget ??= Vector2.One;
             
-            ScrollTarget -= mouseState.Delta / (parentScale * ScaleTarget);
+            ScrollTarget -= mouseState.Delta / (scaleTarget.Value * ScaleTarget);
             _draggedCanvas = this;
         }
             
@@ -630,23 +628,6 @@ internal class ScalableCanvas : ICanvas, IScalableCanvas
         _lastZoomDelta = f;
     }
 
-    private bool UsingParentCanvas
-    {
-        get
-        {
-            if (!EnableParentZoom)
-                return false;
-            
-            var focused = GraphWindow.Focused;
-            if (focused == null)
-                return false;
-
-            var canvas = focused.GraphCanvas;
-            return canvas != this;
-        }
-    }
-
-    
 
     public enum FillModes
     {

@@ -86,7 +86,7 @@ internal static class GraphStates
                                   var clickedBackground = context.ActiveItem == null;
                                   if (clickedBackground)
                                   {
-                                      GraphWindow.Focused?.TrySetCompositionOpToParent();
+                                      GraphWindow.Focused?.Components.TrySetCompositionOpToParent();
                                   }
                                   else
                                   {
@@ -114,7 +114,7 @@ internal static class GraphStates
                                                   // Until we align the context switching between graphs, this hack applies the current
                                                   // MagGraph scope to the legacy graph, so it's correctly saved for the Symbol in the user settings...
                                                   GraphWindow.Focused.GraphCanvas.SetTargetScope(context.Canvas.GetTargetScope());
-                                                  GraphWindow.Focused.GraphCanvas.SetCompositionToChildInstance(context.ActiveItem.Instance);
+                                                  GraphWindow.Focused.Components.SetCompositionToChildInstance(context.ActiveItem.Instance);
                                                   ImGui.CloseCurrentPopup(); // ?? 
                                               }
                                           }

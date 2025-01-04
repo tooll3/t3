@@ -237,9 +237,9 @@ public static class SymbolTreeMenu
             {
                 Log.Error($"No focused graph window found");
             }
-            else if (window.GraphCanvas.NodeSelection.GetSelectedChildUis().Count() == 1)
+            else if (window.Components.NodeSelection.GetSelectedChildUis().Count() == 1)
             {
-                ConnectionMaker.InsertSymbolInstance(window, symbol);
+                ConnectionMaker.InsertSymbolInstance(window.Components, symbol);
             }
         }
     }

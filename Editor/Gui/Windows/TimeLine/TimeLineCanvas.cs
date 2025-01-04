@@ -63,7 +63,7 @@ internal sealed class TimeLineCanvas : CurveEditCanvas
         ScrollToTimeAfterStopped();
 
         var modeChanged = UpdateMode();
-        DrawCurveCanvas(drawAdditionalCanvasContent: DrawCanvasContent, _selectionFence, 0, T3Ui.EditingFlags.AllowHoveredChildWindows | T3Ui.EditingFlags.IgnoreParentZoom);
+        DrawCurveCanvas(drawAdditionalCanvasContent: DrawCanvasContent, _selectionFence, 0, T3Ui.EditingFlags.AllowHoveredChildWindows);
         Current = null;
             
         T3Ui.UiScaleFactor = keepScale;

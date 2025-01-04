@@ -113,19 +113,22 @@ internal sealed partial class GraphWindow : Window
                 var showBackgroundOnly = GraphImageBackground.IsActive && mousePos.X > windowSize.X + windowPos.X - activeBorderWidth;
 
                 var backgroundActive = GraphImageBackground.IsActive;
-                var graphFade = (backgroundActive && !ImGui.IsMouseDown(ImGuiMouseButton.Left))
+
+                
+                // Todo: clarify/simplify this opacity logic
+                var graphOpacity = (backgroundActive && !ImGui.IsMouseDown(ImGuiMouseButton.Left))
                                     ? (windowSize.X + windowPos.X - mousePos.X - activeBorderWidth).Clamp(0, 100) / 100
                                     : 1;
 
-                if (graphFade < 1)
+                if (graphOpacity < 1)
                 {
                     var x = windowPos.X + windowSize.X - activeBorderWidth;
-                    drawList.AddRectFilled(new Vector2(x, windowPos.Y ),
-                                           new Vector2(x+1, windowPos.Y + windowSize.Y),
-                                           UiColors.BackgroundFull.Fade((1-graphFade)) * 0.5f);
-                    drawList.AddRectFilled(new Vector2(x+1, windowPos.Y ),
-                                           new Vector2(x+2, windowPos.Y + windowSize.Y),
-                                           UiColors.ForegroundFull.Fade((1-graphFade)) * 0.5f);
+                    drawList.AddRectFilled(new Vector2(x, windowPos.Y),
+                                           new Vector2(x + 1, windowPos.Y + windowSize.Y),
+                                           UiColors.BackgroundFull.Fade((1 - graphOpacity)) * 0.5f);
+                    drawList.AddRectFilled(new Vector2(x + 1, windowPos.Y),
+                                           new Vector2(x + 2, windowPos.Y + windowSize.Y),
+                                           UiColors.ForegroundFull.Fade((1 - graphOpacity)) * 0.5f);
                 }
                     
 
@@ -136,16 +139,7 @@ internal sealed partial class GraphWindow : Window
                 }
                 else
                 {
-                    var flags = GraphCanvas.GraphDrawingFlags.None;
-                        
-                    if (backgroundActive)
-                        flags |= GraphCanvas.GraphDrawingFlags.HideGrid;
-
-                    if (GraphImageBackground.HasInteractionFocus)
-                        flags |= GraphCanvas.GraphDrawingFlags.PreventInteractions;
-
-                    var preventInteractions = flags.HasFlag(GraphCanvas.GraphDrawingFlags.PreventInteractions);
-                    GraphCanvas.Draw(preventInteractions);
+                    GraphCanvas.BeginDraw(backgroundActive, Components.GraphImageBackground.HasInteractionFocus);
 
                     /*
                      * This is a work around to delay setting the composition until ImGui has
@@ -157,13 +151,20 @@ internal sealed partial class GraphWindow : Window
                      */
                     if (!_initializedAfterLayoutReady && ImGui.GetFrameCount() > 1)
                     {
-                        GraphCanvas.ApplyComposition(ICanvas.Transition.JumpIn, null);
+                        GraphCanvas.ApplyComposition(ICanvas.Transition.JumpIn, Components.OpenedProject.RootInstance.SymbolChildId);
                         GraphCanvas.FocusViewToSelection();
                         _initializedAfterLayoutReady = true;
                     }
 
                     GraphBookmarkNavigation.HandleForCanvas(Components);
-                    GraphCanvas.DrawGraph(drawList, flags, preventInteractions, graphFade);
+                    
+                    
+                    ImGui.BeginGroup(); ImGui.SetScrollY(0);
+                                                   CustomComponents.DrawWindowFocusFrame();
+                                                   if (ImGui.IsWindowFocused())
+                                                       TakeFocus();
+                    GraphCanvas.DrawGraph(drawList, graphOpacity);
+                    ImGui.EndGroup();
                         
                     ParameterPopUp.DrawParameterPopUp(Components);
                 }
@@ -478,6 +479,7 @@ internal sealed partial class GraphWindow : Window
         }
     }
 
+    private bool _initializedAfterLayoutReady;
     internal GraphImageBackground GraphImageBackground => Components.GraphImageBackground;
 
     private static readonly string BreadCrumbSeparator = (char)Icon.ChevronRight + "";

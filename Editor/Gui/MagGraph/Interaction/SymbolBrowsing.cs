@@ -67,7 +67,7 @@ internal static class SymbolBrowsing
             var orderedEnumerable = matchingSymbolUis
                                    .OrderByDescending(sui => SymbolFilter.ComputeRelevancy(sui,
                                                                                            string.Empty,
-                                                                                           GraphWindow.Focused?.Package,
+                                                                                           GraphWindow.Focused?.Components.OpenedProject.Package,
                                                                                            context.CompositionOp))
                                    .ToList();
             foreach (var symbolUi in orderedEnumerable)
@@ -135,7 +135,7 @@ internal static class SymbolBrowsing
                     var orderedEnumerable = matchingSymbolUis
                                            .OrderByDescending(sui => SymbolFilter.ComputeRelevancy(sui,
                                                                                                    string.Empty,
-                                                                                                   GraphWindow.Focused?.Package,
+                                                                                                   GraphWindow.Focused?.Components.OpenedProject.Package,
                                                                                                    context.CompositionOp))
                                            .ToList();
 

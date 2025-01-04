@@ -31,7 +31,7 @@ internal abstract class CurveEditCanvas : ScalableCanvas, ITimeObjectManipulatio
                          ImGuiWindowFlags.NoScrollWithMouse);
         {
             Drawlist = ImGui.GetWindowDrawList();
-            UpdateCanvas(out var interactionState, flags);
+            UpdateCanvas(out var interactionState, null, flags);
             Drawlist = ImGui.GetWindowDrawList();
                 
             HandleFenceUpdate(selectionFence, out _);

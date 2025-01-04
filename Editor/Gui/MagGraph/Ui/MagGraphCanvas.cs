@@ -122,7 +122,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         ImGui.SameLine(0, 10);
         ImGui.Text("" + GetTargetScope());
 
-        UpdateCanvas(out _);
+        UpdateCanvas(out _, ScaleTarget);
         var drawList = ImGui.GetWindowDrawList();
 
         if (_context.StateMachine.CurrentState == GraphStates.Default)

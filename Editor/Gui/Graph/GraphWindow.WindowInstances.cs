@@ -40,6 +40,17 @@ internal sealed partial class GraphWindow
         AllowMultipleInstances = true;
         Components = components;
         components.GraphCanvas.SymbolBrowser.FocusRequested += FocusFromSymbolBrowser;
+        FocusLost += (_, _) =>
+                     {
+                         var nodeSelection = components.NodeSelection;
+                         nodeSelection.Clear();
+                         nodeSelection.HoveredIds.Clear();
+                     };
+
+        WindowDestroyed += (_, _) =>
+                           {
+                               components.GraphCanvas.Destroyed = true;
+                           };
 
         ConnectionMaker.AddWindow(components.GraphCanvas);
         WindowDisplayTitle = components.OpenedProject.Package.DisplayName + "##" + InstanceNumber;
