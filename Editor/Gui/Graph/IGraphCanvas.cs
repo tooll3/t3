@@ -11,7 +11,8 @@ internal interface IGraphCanvas : IScalableCanvas
     public SymbolBrowser SymbolBrowser { get; }
     bool Destroyed { get; }
 
-    void ApplyComposition(ICanvas.Transition transition, Composition? previousComposition);
+    void ApplyComposition(ICanvas.Transition transition, Guid compositionOpSymbolChildId);
     void FocusViewToSelection();
     void OpenAndFocusInstance(IReadOnlyList<Guid> path);
+    public CanvasScope GetTargetScope();
 }

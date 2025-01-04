@@ -162,10 +162,10 @@ internal sealed partial class GraphWindow : Window
                         _initializedAfterLayoutReady = true;
                     }
 
-                    GraphBookmarkNavigation.HandleForCanvas(this);
+                    GraphBookmarkNavigation.HandleForCanvas(Components);
                     GraphCanvas.DrawGraph(drawList, flags, preventInteractions, graphFade);
                         
-                    ParameterPopUp.DrawParameterPopUp(this);
+                    ParameterPopUp.DrawParameterPopUp(Components);
                 }
             }
             drawList.ChannelsMerge();
@@ -478,7 +478,7 @@ internal sealed partial class GraphWindow : Window
         }
     }
 
-    internal readonly GraphImageBackground GraphImageBackground;
+    internal GraphImageBackground GraphImageBackground => Components.GraphImageBackground;
 
     private static readonly string BreadCrumbSeparator = (char)Icon.ChevronRight + "";
     public IGraphCanvas GraphCanvas => Components.GraphCanvas;
