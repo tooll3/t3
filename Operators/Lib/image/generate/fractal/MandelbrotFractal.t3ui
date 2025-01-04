@@ -1,0 +1,96 @@
+{
+  "Id": "27e58fae-2b3d-404e-b9cd-307cb6ad4906"/*MandelbrotFractal*/,
+  "Description": "",
+  "SymbolTags": "64",
+  "InputUis": [
+    {
+      "InputId": "443997b5-3b8d-4925-b534-d794b7aafe35"/*Scale*/,
+      "Position": {
+        "X": 361.94125,
+        "Y": -12.4522705
+      },
+      "Min": 0.0,
+      "Max": 5.0,
+      "Format": "{0:0.000} ×"
+    },
+    {
+      "InputId": "4fe49e0c-3a46-4a79-944e-0cfb8d31ebb2"/*ColorScale*/,
+      "Position": {
+        "X": 361.94125,
+        "Y": 77.54773
+      }
+    },
+    {
+      "InputId": "67e309ff-e258-45af-b583-2f86f39de0d3"/*Phase*/,
+      "Position": {
+        "X": 361.94125,
+        "Y": -57.45227
+      }
+    },
+    {
+      "InputId": "ebae0adf-960c-4cd9-8d2b-532907e51ad3"/*Image*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 361.94125,
+        "Y": -102.45227
+      }
+    },
+    {
+      "InputId": "fa2fd0f7-45eb-44d9-b1de-cc45903fc2d4"/*Offset*/,
+      "Position": {
+        "X": 361.94125,
+        "Y": 32.54773
+      },
+      "Min": -2.0,
+      "Max": 2.0,
+      "Scale": 0.001,
+      "UseVec2Control": "Position"
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "22436272-1ed3-4ecd-bd57-6f4628c62db5"/*Vector2Components*/,
+      "Position": {
+        "X": 526.92346,
+        "Y": 45.40631
+      }
+    },
+    {
+      "ChildId": "7773cea7-f705-478d-b6e1-a50007dd51b6"/*_ImageFxShaderSetupStatic*/,
+      "Position": {
+        "X": 1044.2966,
+        "Y": -128.2431
+      }
+    },
+    {
+      "ChildId": "8c9194ec-2508-4855-9978-0e6182148499"/*GetTextureSize*/,
+      "Position": {
+        "X": 509.5827,
+        "Y": -190.37115
+      }
+    },
+    {
+      "ChildId": "8f5b5493-41e1-4e8f-86be-a52cb8f07641"/*Div*/,
+      "Position": {
+        "X": 809.5827,
+        "Y": -190.37115
+      }
+    },
+    {
+      "ChildId": "94904d15-78d9-4a57-b005-949fe7c410cf"/*Vector2Components*/,
+      "Position": {
+        "X": 659.5827,
+        "Y": -190.37115
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "70703977-c5bb-4e41-9f8b-2e6e8903d434"/*TextureOutput*/,
+      "Position": {
+        "X": 1194.2966,
+        "Y": -128.2431
+      }
+    }
+  ]
+}

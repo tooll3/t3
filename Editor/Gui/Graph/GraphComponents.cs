@@ -98,10 +98,14 @@ internal sealed class GraphComponents
             NodeSelection.Clear();
         }
 
-        GraphCanvas.ApplyComposition(transition, previousComposition);
 
         if (previousComposition != null)
+        {
+            UserSettings.Config.OperatorViewSettings[previousComposition.SymbolChildId] = GraphCanvas.GetTargetScope();
             _compositionsForDisposal.Push(previousComposition);
+        }
+        
+        GraphCanvas.ApplyComposition(transition, newCompositionInstance.SymbolChildId);
 
         UserSettings.SaveLastViewedOpForWindow(this, Composition.SymbolChildId);
         return true;

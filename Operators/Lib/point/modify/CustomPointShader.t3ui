@@ -1,6 +1,7 @@
 {
   "Id": "3d958f08-9c0f-45eb-a252-de880b5834f3"/*CustomPointShader*/,
   "Description": "A very fast method of writing simple compute shaders to manipulate the connected points.\n\nEach point has the following properties:\n\np.Position  // as float3\np.Rotation // as quaternion\np.W  // for scaling and other effects.\n\nThe following float values are initialized:\n\ni - index of the point\nf - a normalized float value of the index 0 ... 1.",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "01898885-4140-4435-bb44-a7a6f6f32657"/*Center*/,

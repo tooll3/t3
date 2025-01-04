@@ -1,6 +1,7 @@
 {
   "Id": "58afd953-d3fd-44a9-b54b-ccb287edc40c"/*FindClosestPointsOnMesh*/,
   "Description": "",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "603501a2-5581-47ca-a9e1-ab8e09fda1d8"/*Mesh*/,

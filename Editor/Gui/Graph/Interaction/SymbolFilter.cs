@@ -12,8 +12,10 @@ namespace T3.Editor.Gui.Graph.Interaction;
 /// </summary>
 internal sealed class SymbolFilter
 {
-    public string SearchString = string.Empty;  // not a property to allow ref passing
-    public Type? FilterInputType {
+    public string SearchString = string.Empty; // not a property to allow ref passing
+
+    public Type? FilterInputType
+    {
         get => _inputType;
         set
         {
@@ -21,7 +23,9 @@ internal sealed class SymbolFilter
             _inputType = value;
         }
     }
-    public Type? FilterOutputType {
+
+    public Type? FilterOutputType
+    {
         get => _outputType;
         set
         {
@@ -38,21 +42,20 @@ internal sealed class SymbolFilter
         PresetFilterString = string.Empty;
         OnlyMultiInputs = false;
         _needsUpdate = true;
-        
     }
 
     public bool OnlyMultiInputs { get; set; }
     public List<SymbolUi> MatchingSymbolUis { get; private set; } = [];
 
-    public void UpdateIfNecessary(NodeSelection? selection, bool forceUpdate = false, int limit=30)
+    public void UpdateIfNecessary(NodeSelection? selection, bool forceUpdate = false, int limit = 30)
     {
         _needsUpdate |= forceUpdate;
-        _needsUpdate |= UpdateFilters(SearchString, 
-                                      ref _lastSearchString, 
-                                      ref _symbolFilterString, 
-                                      ref PresetFilterString, 
+        _needsUpdate |= UpdateFilters(SearchString,
+                                      ref _lastSearchString,
+                                      ref _symbolFilterString,
+                                      ref PresetFilterString,
                                       ref _currentRegex);
-            
+
         if (_needsUpdate)
         {
             //UpdateConnectSlotHashes();  //TODO: Clarify why this is commented out
@@ -63,14 +66,14 @@ internal sealed class SymbolFilter
         _needsUpdate = false;
     }
 
-    private static bool UpdateFilters(string search, 
+    private static bool UpdateFilters(string search,
                                       ref string lastSearch, ref string symbolFilter, ref string presetFilter, ref Regex searchRegex)
     {
         if (search == lastSearch)
             return false;
-            
+
         lastSearch = search;
-            
+
         // Check if template search was initiated 
         var twoPartSearchResult = new Regex(@"(.+?)\s+(.*)").Match(search);
         if (twoPartSearchResult.Success)
@@ -83,7 +86,7 @@ internal sealed class SymbolFilter
             symbolFilter = search;
             presetFilter = string.Empty;
         }
-            
+
         var pattern = string.Join(".*", symbolFilter.ToCharArray());
         try
         {
@@ -96,8 +99,8 @@ internal sealed class SymbolFilter
         }
 
         return true;
-    }        
-        
+    }
+
     /// <summary>
     /// Build hashes for symbol specific input slots. These are then used
     /// the compute relevancy. 
@@ -106,9 +109,9 @@ internal sealed class SymbolFilter
     {
         _sourceInputHash = 0;
         _targetInputHash = 0;
-    
+
         var tempConnections = ConnectionMaker.GetTempConnectionsFor(window);
-    
+
         foreach (var c in tempConnections)
         {
             switch (c.GetStatus())
@@ -116,7 +119,7 @@ internal sealed class SymbolFilter
                 case ConnectionMaker.TempConnection.Status.SourceIsDraftNode:
                     _targetInputHash = c.TargetSlotId.GetHashCode();
                     break;
-    
+
                 case ConnectionMaker.TempConnection.Status.TargetIsDraftNode:
                     _sourceInputHash = c.SourceSlotId.GetHashCode();
                     break;
@@ -124,25 +127,25 @@ internal sealed class SymbolFilter
         }
     }
 
-        
     private void UpdateMatchingSymbols(NodeSelection? selection, int limit)
     {
         var compositionInstance = selection?.GetSelectedComposition();
         ICollection<Guid> parentSymbolIds = compositionInstance != null
-                                                ? new HashSet<Guid>(Structure.CollectParentInstances(compositionInstance).Append(compositionInstance).Select(p => p.Symbol.Id))
+                                                ? new HashSet<Guid>(Structure.CollectParentInstances(compositionInstance).Append(compositionInstance)
+                                                                             .Select(p => p.Symbol.Id))
                                                 : Array.Empty<Guid>();
 
         MatchingSymbolUis.Clear();
         foreach (var symbolUi in EditorSymbolPackage.AllSymbolUis)
         {
             var symbolUiSymbol = symbolUi.Symbol;
-                
+
             if (symbolUiSymbol == null)
             {
                 Log.Warning($"Skipping SymbolUi definition with inconsistent symbol...");
                 continue;
             }
-                
+
             // Prevent graph cycles
             if (parentSymbolIds.Contains(symbolUiSymbol.Id))
                 continue;
@@ -151,7 +154,7 @@ internal sealed class SymbolFilter
             {
                 if (symbolUiSymbol.InputDefinitions.Count == 0 || symbolUiSymbol.InputDefinitions[0].ValueType != _inputType)
                     continue;
-                
+
                 // var matchingInputDef = symbolUiSymbol.GetInputMatchingType(FilterInputType);
                 // if (matchingInputDef == null)
                 //     continue;
@@ -184,14 +187,20 @@ internal sealed class SymbolFilter
             currentProject = GraphWindow.Focused.Components.OpenedProject.Package;
             composition = GraphWindow.Focused.Components.CompositionOp;
         }
-        
+
         MatchingSymbolUis = MatchingSymbolUis.OrderBy(s => ComputeRelevancy(s, _symbolFilterString, currentProject, composition))
                                              .Reverse()
                                              .Take(limit)
                                              .ToList();
     }
 
-    private double ComputeRelevancy(SymbolUi symbolUi, string query, EditorSymbolPackage? currentProject, Instance? composition)
+    internal static double ComputeRelevancy(SymbolUi symbolUi,
+                                            string query,
+                                            EditorSymbolPackage? currentProject,
+                                            Instance? composition,
+                                            int targetInputHash = 0,
+                                            Type? filterInputType = null,
+                                            Type? filterOutputType = null)
     {
         float relevancy = 1;
 
@@ -295,7 +304,7 @@ internal sealed class SymbolFilter
             {
                 relevancy *= 5f;
             }
-            
+
             // or boost symbols from related namespaces
             else if (symbol.Namespace!.StartsWith(currentProject.RootNamespace))
             {
@@ -307,7 +316,7 @@ internal sealed class SymbolFilter
         {
             var compositionSymbol = composition.Symbol;
             var compositionPackage = compositionSymbol.SymbolPackage;
-            
+
             // boost symbols from the same package as composition, or from related namespaces
             if (compositionPackage.Symbols.ContainsKey(symbolId) || symbolPackage.RootNamespace.StartsWith(compositionPackage.RootNamespace))
             {
@@ -325,7 +334,7 @@ internal sealed class SymbolFilter
         var matchingConnectionsCount = 0;
         if (_sourceInputHash != 0)
         {
-            foreach (var inputDefinition in symbol.InputDefinitions.FindAll(i => i.DefaultValue.ValueType == FilterInputType))
+            foreach (var inputDefinition in symbol.InputDefinitions.FindAll(i => i.DefaultValue.ValueType == filterInputType))
             {
                 var connectionHash = _sourceInputHash * 31 + inputDefinition.Id.GetHashCode();
 
@@ -336,12 +345,12 @@ internal sealed class SymbolFilter
                 }
             }
         }
-            
-        if (_targetInputHash != 0)
+
+        if (targetInputHash != 0)
         {
-            foreach (var outputDefinition in symbol.OutputDefinitions.FindAll(o => o.ValueType == FilterOutputType))
+            foreach (var outputDefinition in symbol.OutputDefinitions.FindAll(o => o.ValueType == filterOutputType))
             {
-                var connectionHash = outputDefinition.Id.GetHashCode() * 31 + _targetInputHash;
+                var connectionHash = outputDefinition.Id.GetHashCode() * 31 + targetInputHash;
 
                 if (SymbolAnalysis.ConnectionHashCounts.TryGetValue(connectionHash, out var connectionCount))
                 {
@@ -360,7 +369,6 @@ internal sealed class SymbolFilter
         return relevancy;
     }
 
-        
     private bool _needsUpdate;
     private string _symbolFilterString = string.Empty;
     public string PresetFilterString = string.Empty;
@@ -373,5 +381,5 @@ internal sealed class SymbolFilter
     private int _targetInputHash;
 
     private Regex _currentRegex = new(".*", RegexOptions.IgnoreCase);
-    private string _lastSearchString =string.Empty;
+    private string _lastSearchString = string.Empty;
 }

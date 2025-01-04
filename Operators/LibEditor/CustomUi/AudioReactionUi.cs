@@ -29,8 +29,6 @@ public static class AudioReactionUi
             return SymbolUi.Child.CustomUiResult.None;
         }
 
-        var isNodeActive = false;
-        
         ImGui.PushID(instance.SymbolChildId.GetHashCode());
         drawList.PushClipRect(screenRect.Min, screenRect.Max, true);
 

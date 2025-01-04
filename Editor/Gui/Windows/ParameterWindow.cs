@@ -40,13 +40,12 @@ internal class ParameterWindow : Window
         _parameterWindowInstances.Remove(this);
     }
 
-
     protected override void AddAnotherInstance()
     {
         // ReSharper disable once ObjectCreationAsStatement
         new ParameterWindow(); // Required to call constructor
     }
-    
+
     protected override void DrawContent()
     {
         // Insert invisible spill over input to catch accidental imgui focus attempts
@@ -58,16 +57,16 @@ internal class ParameterWindow : Window
             ImGui.PopStyleColor();
             ImGui.SameLine();
         }
-        
+
         var graphWindow = GraphWindow.Focused;
-        if(graphWindow == null)
+        if (graphWindow == null)
             return;
 
         var nodeSelection = graphWindow.Components.NodeSelection;
         if (DrawSettingsForSelectedAnnotations(nodeSelection))
             return;
-        
-        var instance = nodeSelection.GetSelectedInstanceWithoutComposition() 
+
+        var instance = nodeSelection.GetSelectedInstanceWithoutComposition()
                        ?? nodeSelection.GetSelectedComposition();
 
         var id = instance?.SymbolChildId ?? Guid.Empty;
@@ -89,27 +88,26 @@ internal class ParameterWindow : Window
                 _parameterSettings.SelectInput(inputUi.Id);
             }
         }
-        
+
         if (instance == null)
             return;
 
-        
         // Draw dialogs
         OperatorHelp.EditDescriptionDialog.Draw(instance.Symbol); // TODO: This is probably not required...
         RenameInputDialog.Draw();
 
         if (!TryGetUiDefinitions(instance, out var symbolUi, out var symbolChildUi))
             return;
-        
+
         var modified = false;
         modified |= DrawSymbolHeader(instance, symbolUi);
-        
+
         if (instance.Parent == null)
         {
             CustomComponents.EmptyWindowMessage("Home canvas.");
             return;
         }
-        
+
         switch (_viewMode)
         {
             case ViewModes.Parameters:
@@ -119,17 +117,18 @@ internal class ParameterWindow : Window
                 modified |= _parameterSettings.DrawContent(symbolUi, nodeSelection);
                 break;
             case ViewModes.Help:
-                using (new ChildWindowScope("help",Vector2.Zero, ImGuiWindowFlags.None, Color.Transparent))
+                using (new ChildWindowScope("help", Vector2.Zero, ImGuiWindowFlags.None, Color.Transparent))
                 {
                     OperatorHelp.DrawHelp(symbolUi);
                 }
+
                 break;
         }
-        
+
         if (modified)
             symbolUi.FlagAsModified();
     }
-    
+
     private bool DrawSymbolHeader(Instance op, SymbolUi symbolUi)
     {
         var modified = false;
@@ -156,11 +155,12 @@ internal class ParameterWindow : Window
 
             ImGui.SameLine();
             ImGui.TextUnformatted(op.Symbol.SymbolPackage.RootNamespace);
-            
+
             ImGui.SameLine();
 
             var namespaceForEdit = op.Symbol.Namespace ?? "";
-            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 60); // the question mark is now aligned to the right
+            const int rightPaddingForHelpIcon = 90;
+            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - rightPaddingForHelpIcon);
 
             var symbol = op.Symbol;
             var package = symbol.SymbolPackage;
@@ -173,8 +173,8 @@ internal class ParameterWindow : Window
                                                                                                .OrderBy(i => i),
                                                                      GetTextInfo: i => new InputWithTypeAheadSearch.Texts(i, i, null),
                                                                      Warning: false);
-                
-                bool namespaceModified = InputWithTypeAheadSearch.Draw(args, ref namespaceForEdit,out _);
+
+                var namespaceModified = InputWithTypeAheadSearch.Draw(args, ref namespaceForEdit, out _);
                 if (namespaceModified && ImGui.IsKeyPressed((ImGuiKey)Key.Return))
                 {
                     if (!EditableSymbolProject.ChangeSymbolNamespace(symbol, namespaceForEdit, out var reason))
@@ -194,6 +194,11 @@ internal class ParameterWindow : Window
 
             ImGui.PopStyleColor();
 
+            // Tags...
+            {
+                ImGui.SameLine();
+                modified |= DrawSymbolTagsButton(symbolUi);
+            }
 
             // Settings Modes
             {
@@ -202,6 +207,7 @@ internal class ParameterWindow : Window
                 {
                     _viewMode = isSettingsMode ? ViewModes.Settings : ViewModes.Parameters;
                 }
+
                 CustomComponents.TooltipForLastItem("Click to toggle parameter settings.");
             }
 
@@ -219,6 +225,141 @@ internal class ParameterWindow : Window
         return modified;
     }
 
+    public static bool DrawSymbolTagsButton(SymbolUi symbolUi)
+    {
+        var modified = false;
+        var tagsPopupId = "##Tags" + symbolUi.Symbol.Id;
+        var symbolUiTags = symbolUi.Tags;
+        var state = GetButtonStatesForSymbolTags(symbolUiTags);
+
+        if (CustomComponents.IconButton(Icon.Bookmark, Vector2.Zero, state))
+        {
+            ImGui.OpenPopup(tagsPopupId);
+            UpdateTagColors();
+        }
+
+        if (ImGui.IsItemHovered())
+        {
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(7,7));
+            ImGui.SetNextWindowContentSize(new Vector2(250 * T3Ui.UiScaleFactor, 0));
+            if (ImGui.BeginTooltip())
+            {
+                CustomComponents.HelpText("Symbol Tags affect listing in the Symbol Library and Search widgets.");
+                FormInputs.AddVerticalSpace(10);
+                var hadTags = false;
+                        
+                foreach (SymbolUi.SymbolTags tagValue in Enum.GetValues(typeof(SymbolUi.SymbolTags)))
+                {
+                    if (!symbolUiTags.HasFlag(tagValue) || tagValue == SymbolUi.SymbolTags.None)
+                        continue;
+
+                    hadTags = true;
+                    DrawSymbolTag(symbolUiTags, tagValue);
+                    ImGui.SameLine(0, 4);
+                            
+                    if (ImGui.GetContentRegionAvail().X < 100)
+                        ImGui.NewLine();
+                }
+
+                if (hadTags)
+                {
+                    ImGui.NewLine();
+                    FormInputs.AddVerticalSpace(10);
+                }
+                
+                CustomComponents.HelpText("Click to Edit...");
+                ImGui.EndTooltip();
+            }
+            ImGui.PopStyleVar();
+        }
+
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(7,7));
+        if (ImGui.BeginPopup(tagsPopupId))
+        {
+            ImGui.Text("Symbol tags");
+            FormInputs.AddVerticalSpace(4 * T3Ui.UiScaleFactor);
+            
+            foreach (SymbolUi.SymbolTags tagValue in Enum.GetValues(typeof(SymbolUi.SymbolTags)))
+            {
+                if (tagValue == SymbolUi.SymbolTags.None)
+                    continue;
+                
+                if (DrawSymbolTag(symbolUiTags, tagValue))
+                {
+                    modified = true;
+                    symbolUi.Tags ^= tagValue;
+                }
+            }
+            
+            ImGui.EndPopup();
+        }
+        ImGui.PopStyleVar();
+
+        return modified;
+    }
+
+    public static CustomComponents.ButtonStates GetButtonStatesForSymbolTags(SymbolUi.SymbolTags symbolUiTags)
+    {
+        var state = (int)symbolUiTags == 0 ? CustomComponents.ButtonStates.Disabled : CustomComponents.ButtonStates.Normal;
+
+        if ((symbolUiTags & (SymbolUi.SymbolTags.Essential | SymbolUi.SymbolTags.Example | SymbolUi.SymbolTags.Project)) != 0)
+            state = CustomComponents.ButtonStates.Activated;
+
+        if ((symbolUiTags & (SymbolUi.SymbolTags.Obsolete | SymbolUi.SymbolTags.NeedsFix | SymbolUi.SymbolTags.HasUpdate)) != 0)
+            state = CustomComponents.ButtonStates.NeedsAttention;
+        return state;
+    }
+
+    private static bool DrawSymbolTag(SymbolUi.SymbolTags symbolUiTags, SymbolUi.SymbolTags tagValue)
+    {
+        ImGui.PushFont(Fonts.FontSmall);
+        var isClicked = false;
+        var drawList = ImGui.GetWindowDrawList();
+        var isActive = symbolUiTags.HasFlag(tagValue);
+        var tagName = tagValue.ToString().ToUpperInvariant();
+        var size = ImGui.CalcTextSize(tagName);
+        var padding = new Vector2(10, 4) * T3Ui.UiScaleFactor;
+        if (ImGui.InvisibleButton(tagName, size + padding * 2))
+        {
+            isClicked = true;
+        }
+
+        if (!_tagColors.TryGetValue(tagValue, out var color))
+            color = UiColors.TextMuted;
+
+        var textColor = isActive ? UiColors.ForegroundFull : ColorVariations.OperatorLabel.Apply(color).Fade(0.4f);
+        var bgColor = isActive ? color : ColorVariations.OperatorBackground.Apply(color).Fade(0.2f);
+
+        var isHovered = ImGui.IsItemHovered();
+        var hoverFade = isHovered ? 1 : 0.8f;
+
+        var pMin = ImGui.GetItemRectMin();
+        var pMax = ImGui.GetItemRectMax();
+        drawList.AddRectFilled(pMin, pMax, bgColor.Fade(hoverFade), 5);
+        drawList.AddText(pMin + padding, textColor.Fade(hoverFade), tagName);
+        ImGui.PopFont();
+        return isClicked;
+    }
+
+    /// <summary>
+    /// This is kind of annoying because the definition of the colors might change on theme switching.
+    /// So this list would need to be updated on popup open... :-/
+    /// </summary>
+    private static Dictionary<SymbolUi.SymbolTags, Color> UpdateTagColors()
+    {
+        return new Dictionary<SymbolUi.SymbolTags, Color>
+                   {
+                       { SymbolUi.SymbolTags.Essential, UiColors.StatusAutomated },
+                       { SymbolUi.SymbolTags.Example, UiColors.StatusAutomated },
+                       { SymbolUi.SymbolTags.Project, UiColors.StatusAutomated },
+                       { SymbolUi.SymbolTags.Obsolete, UiColors.StatusAttention },
+                       { SymbolUi.SymbolTags.NeedsFix, UiColors.StatusAttention },
+                       { SymbolUi.SymbolTags.HasUpdate, UiColors.StatusAttention },
+                   };
+    }
+
+    private static Dictionary<SymbolUi.SymbolTags, Color> _tagColors = UpdateTagColors();
+
     private void DrawParametersArea(Instance instance, SymbolUi.Child symbolChildUi, SymbolUi symbolUi)
     {
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
@@ -230,10 +371,10 @@ internal class ParameterWindow : Window
         var compositionSymbolUi = instance.Parent?.GetSymbolUi();
 
         // Draw parameters
-        DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi, false, this );
+        DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi, false, this);
         FormInputs.AddVerticalSpace(15);
 
-        if(OperatorHelp.DrawHelpSummary(symbolUi)) 
+        if (OperatorHelp.DrawHelpSummary(symbolUi))
             _viewMode = ViewModes.Help;
 
         OperatorHelp.DrawExamples(symbolUi);
@@ -248,7 +389,7 @@ internal class ParameterWindow : Window
             return;
 
         var symbolChildUi = op.GetChildUi();
-        
+
         // SymbolChild Name
         if (symbolChildUi != null)
         {
@@ -380,11 +521,11 @@ internal class ParameterWindow : Window
 
             // Draw the actual parameter line implemented
             // in the generic InputValueUi<T>.DrawParameterEdit() method
-            
+
             ImGui.PushID(inputSlot.Id.GetHashCode());
             var editState = inputUi.DrawParameterEdit(inputSlot, compositionSymbolUi, symbolChildUi, hideNonEssentials: hideNonEssentials, skipIfDefault);
             ImGui.PopID();
-            
+
             // ... and handle the edit state
             if (editState.HasFlag(InputEditStateFlags.Started))
             {
@@ -466,7 +607,7 @@ internal class ParameterWindow : Window
     private static bool TryGetUiDefinitions(Instance instance, out SymbolUi symbolUi, out SymbolUi.Child symbolChildUi)
     {
         symbolUi = instance.GetSymbolUi();
-        
+
         symbolChildUi = null;
         if (instance.Parent == null)
             return true;
@@ -479,7 +620,7 @@ internal class ParameterWindow : Window
         Log.Warning("Can't find UI definition for symbol " + instance.SymbolChildId);
         return false;
     }
-    
+
     // TODO: Refactor this into a separate class
     private static bool DrawSettingsForSelectedAnnotations(NodeSelection nodeSelection)
     {
@@ -499,7 +640,7 @@ internal class ParameterWindow : Window
 
         return somethingVisible;
     }
-    
+
     private enum GroupState
     {
         None,
@@ -527,7 +668,6 @@ internal class ParameterWindow : Window
     private static IInputSlot _inputSlotForActiveCommand;
     private static int _instanceCounter;
     private Guid _lastSelectedInstanceId;
-
 
     private readonly OperatorHelp _help = new();
     private readonly ParameterSettings _parameterSettings = new();

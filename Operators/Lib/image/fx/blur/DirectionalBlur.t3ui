@@ -1,0 +1,194 @@
+{
+  "Id": "1192ae86-b174-4b58-9cc6-38afb666ce35"/*DirectionalBlur*/,
+  "Description": "Blurs the incoming image along a directional angle.\n\nYou can override the angle and strength through an FXTexture with:\nR - Angle\nG - Strength\n\nUsing an effects texture, especially one that is a blurred version of the input image, is particularly interesting.",
+  "SymbolTags": "1",
+  "InputUis": [
+    {
+      "InputId": "11cb8f1e-fac5-4623-b61c-d6482633e505"/*Samples*/,
+      "Position": {
+        "X": -630.6626,
+        "Y": 130.77264
+      },
+      "Min": 0.0
+    },
+    {
+      "InputId": "3cc9487b-bf18-416c-9d69-86592130bfa6"/*Image*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -630.6626,
+        "Y": 40.772644
+      }
+    },
+    {
+      "InputId": "6c0cca14-6a0e-4a04-a67b-cbb134d90d03"/*Wrap*/,
+      "Position": {
+        "X": -630.07056,
+        "Y": 373.6601
+      }
+    },
+    {
+      "InputId": "815975d2-5613-4ca8-b208-f09ac07b0518"/*FxAngleFactor*/,
+      "Position": {
+        "X": -630.6626,
+        "Y": 220.77263
+      }
+    },
+    {
+      "InputId": "94099125-52d7-475d-aff2-bb1bbd0bd30a"/*Resolution*/,
+      "Position": {
+        "X": -630.07056,
+        "Y": 328.6601
+      }
+    },
+    {
+      "InputId": "a3af8d20-8c09-4250-b5bd-806c12ad7c05"/*RefinementSamples*/,
+      "Position": {
+        "X": -630.07056,
+        "Y": 508.6601
+      }
+    },
+    {
+      "InputId": "ab3206bf-9413-4f31-9c3d-0c1fe7477862"/*Angle*/,
+      "Position": {
+        "X": -630.6626,
+        "Y": 175.77264
+      },
+      "Min": -180.0,
+      "Max": 180.0,
+      "Scale": 0.1
+    },
+    {
+      "InputId": "b295586d-2339-4d69-868a-c17468e77998"/*RefinementPass*/,
+      "Position": {
+        "X": -630.07056,
+        "Y": 463.6601
+      }
+    },
+    {
+      "InputId": "dfa5e772-0cb4-440f-8483-dcc89b40107d"/*FxSizeFactor*/,
+      "Position": {
+        "X": -630.6626,
+        "Y": 265.7726
+      },
+      "Min": 0.0,
+      "Max": 10.0,
+      "Scale": 0.01,
+      "Clamp": true
+    },
+    {
+      "InputId": "e94e2b7e-6f0a-42b5-bf5e-abdffe728273"/*Size*/,
+      "Position": {
+        "X": -630.6626,
+        "Y": 85.772644
+      },
+      "Min": 0.0,
+      "Max": 2.0,
+      "Scale": 0.001,
+      "Clamp": true
+    },
+    {
+      "InputId": "ea812b8d-f275-4a91-bfae-cd3308c04362"/*RefineSizeFactor*/,
+      "Position": {
+        "X": -630.07056,
+        "Y": 553.6601
+      },
+      "Min": 0.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "fd99fc97-43a8-4a04-8e17-95c2abc289fc"/*FxTextures*/,
+      "Position": {
+        "X": -630.07056,
+        "Y": 418.6601
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "1d6d89aa-4e25-4ed2-a5cd-9c975b2ebabf"/*Div*/,
+      "Position": {
+        "X": -400.56342,
+        "Y": 685.9931
+      }
+    },
+    {
+      "ChildId": "1dc01264-c53e-459c-92b7-7a56af54fde3"/*IntToFloat*/,
+      "Position": {
+        "X": -56.5271,
+        "Y": 558.73456
+      }
+    },
+    {
+      "ChildId": "2b352f5b-e2f8-4e58-b029-b91db67ca0f7"/*_multiImageFxSetup*/,
+      "Position": {
+        "X": 260.06155,
+        "Y": 276.99542
+      }
+    },
+    {
+      "ChildId": "4194c8e2-5f6e-410b-b98f-71ed330e395c"/*_ImageFxShaderSetupStatic*/,
+      "Position": {
+        "X": 81.36603,
+        "Y": -1129.8193
+      }
+    },
+    {
+      "ChildId": "46f4e0b1-7fe7-4d83-a916-4d149364cfda"/*BoolToInt*/,
+      "Position": {
+        "X": 367.75134,
+        "Y": 474.0664
+      }
+    },
+    {
+      "ChildId": "728da07f-536c-49bb-8db6-692136fc3b46"/*_multiImageFxSetup*/,
+      "Position": {
+        "X": 49.260468,
+        "Y": 2.0201416
+      }
+    },
+    {
+      "ChildId": "8ca6add7-ca09-49f6-882c-e6a5b1a02fe4"/*PickTexture*/,
+      "Position": {
+        "X": 504.11707,
+        "Y": 281.86584
+      }
+    },
+    {
+      "ChildId": "c2ddd0ea-230b-47f1-982c-92dd229bf66c"/*UseFallbackTexture*/,
+      "Position": {
+        "X": -196.50159,
+        "Y": 407.31018
+      }
+    },
+    {
+      "ChildId": "d2d3cf3b-87f3-4804-98a5-44ebb4418c12"/*Multiply*/,
+      "Position": {
+        "X": -211.51486,
+        "Y": 698.8423
+      }
+    },
+    {
+      "ChildId": "d5e26444-fe59-4923-98cb-5c22be2815f8"/*LoadImage*/,
+      "Position": {
+        "X": -353.41815,
+        "Y": 457.28357
+      }
+    },
+    {
+      "ChildId": "e1463719-b383-4adf-bf68-d44c9adf6c0d"/*Multiply*/,
+      "Position": {
+        "X": -55.035797,
+        "Y": 487.07574
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "c57e38ab-a802-498c-b0f7-cad86e6426a3"/*TextureOutput*/,
+      "Position": {
+        "X": 683.74274,
+        "Y": 98.292076
+      }
+    }
+  ]
+}

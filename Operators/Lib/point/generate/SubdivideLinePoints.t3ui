@@ -1,6 +1,7 @@
 {
   "Id": "c7f100bf-05a0-44af-9cf4-c5a1b5937e33"/*SubdivideLinePoints*/,
   "Description": "Inserts additional points between line points.",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "07a2be27-ff93-4cea-8fbe-1ce72ab8a1e1"/*Points*/,

@@ -1,0 +1,35 @@
+{
+  "Id": "48ab9824-76ca-4238-800f-9cf95311e6c0"/*CombineStrings*/,
+  "Description": "Combines any number with strings with the provided optional separator.\n\nTo add line breaks use \"\\n\".\n\nAlternative titles: Concat, Join",
+  "SymbolTags": "1",
+  "InputUis": [
+    {
+      "InputId": "b5e72715-9339-484f-b197-5a28cd823798"/*Input*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "c832ba89-f4ae-4c47-b62b-52da52a09556"/*Separator*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      },
+      "Description": "Optional separator inserted between elements. \nUse \"\\n\" to insert line breaks.",
+      "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "e47bf25e-351a-44e6-84c6-ad3abc93531a"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

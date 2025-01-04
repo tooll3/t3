@@ -29,7 +29,7 @@ public static class ColorEditButton
         {
             _previousColor = color;
             _modifiedSlider = false;
-            ImGui.OpenPopup("##colorEdit");
+            ImGui.OpenPopup(ColorEditPopup.PopupId);
             ImGui.SetNextWindowPos(ImGui.GetItemRectMax() + new Vector2(4,10));
         }
             

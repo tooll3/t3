@@ -27,6 +27,8 @@ public static class SymbolUiJson
             writer.WriteComment(symbolUi.Symbol.Name);
 
             writer.WriteObject(JsonKeys.Description, symbolUi.Description);
+            if (symbolUi.Tags != SymbolUi.SymbolTags.None)
+                writer.WriteObject(JsonKeys.SymbolTags, (int)symbolUi.Tags); // Writing as bitmask might not be ideal...
 
             WriteInputUis(symbolUi, writer);
             WriteChildUis(symbolUi, writer);
@@ -208,12 +210,10 @@ public static class SymbolUiJson
         var success = TryReadSymbolUi(mainObject, symbol, out symbolUi);
         if (!success || symbolUi == null)
             return success;
-        
+
         symbolUi.UpdateConsistencyWithSymbol(symbol);
         return true;
     }
-
-
 
     internal static bool TryReadSymbolUi(JToken mainObject, Symbol symbol, [NotNullWhen(true)] out SymbolUi? symbolUi)
     {
@@ -223,7 +223,7 @@ public static class SymbolUiJson
             foreach (JToken uiInputToken in inputUiArray)
             {
                 //inputId = Guid.Parse(uiInputEntry[JsonKeys.InputId].Value<string>() ?? string.Empty);
-                
+
                 if (!JsonUtils.TryGetGuid(uiInputToken[JsonKeys.InputId], out var inputId))
                 {
                     Log.Error("Skipping input with missing or invalid id");
@@ -299,6 +299,10 @@ public static class SymbolUiJson
         if (descriptionEntry?.Value<string>() != null)
             symbolUi.Description = descriptionEntry.Value<string>();
 
+        var tagsEntry = mainObject[JsonKeys.SymbolTags];
+        if (tagsEntry?.Value<int>() != null)
+            symbolUi.Tags = (SymbolUi.SymbolTags)tagsEntry.Value<int>();
+
         return true;
     }
 
@@ -369,10 +373,9 @@ public static class SymbolUiJson
                 childUi.SnapshotGroupIndex = (childEntry[nameof(SymbolUi.Child.SnapshotGroupIndex)] ?? -1).Value<int>();
             }
 
-            childUi.Style = JsonUtils.TryGetEnum(childEntry[JsonKeys.Style], out SymbolUi.Child.Styles childStyle) 
+            childUi.Style = JsonUtils.TryGetEnum(childEntry[JsonKeys.Style], out SymbolUi.Child.Styles childStyle)
                                 ? childStyle
                                 : SymbolUi.Child.Styles.Default;
-            
 
             var conStyleEntry = childEntry[JsonKeys.ConnectionStyleOverrides];
             if (conStyleEntry != null)
@@ -386,6 +389,7 @@ public static class SymbolUiJson
                         Log.Warning($"Skipping connection style override for invalid id or style");
                         continue;
                     }
+
                     dict.Add(id, style);
                 }
             }
@@ -399,7 +403,7 @@ public static class SymbolUiJson
     private static OrderedDictionary<Guid, Annotation> ReadAnnotations(JToken token)
     {
         var annotationDict = new OrderedDictionary<Guid, Annotation>();
-        
+
         var annotationsToken = token[JsonKeys.Annotations];
         if (annotationsToken is not JArray annotationsArray)
             return annotationDict;
@@ -419,7 +423,6 @@ public static class SymbolUiJson
                                      PosOnCanvas = GetVec2OrDefault(annotationEntry[JsonKeys.Position]),
                                  };
 
-            
             var colorEntry = annotationEntry[JsonKeys.Color];
             if (colorEntry != null)
             {
@@ -436,10 +439,10 @@ public static class SymbolUiJson
     private static OrderedDictionary<Guid, ExternalLink> ReadLinks(JToken token)
     {
         var linkDict = new OrderedDictionary<Guid, ExternalLink>();
-        
+
         var linksToken = token[JsonKeys.Links];
         if (linksToken is not JArray linksArray)
-            return linkDict;        
+            return linkDict;
 
         foreach (var linkEntry in linksArray)
         {
@@ -451,7 +454,7 @@ public static class SymbolUiJson
                 Log.Warning("Skipping annotation with missing or invalid id");
                 continue;
             }
-            
+
             var link = new ExternalLink
                            {
                                Id = id,
@@ -467,10 +470,9 @@ public static class SymbolUiJson
         return linkDict;
     }
 
-    
     internal static Vector2 GetVec2OrDefault(JToken? token)
     {
-        return  token == null ? default : (Vector2)_jsonToVector2(token);
+        return token == null ? default : (Vector2)_jsonToVector2(token);
     }
 
     private readonly struct JsonKeys
@@ -494,6 +496,7 @@ public static class SymbolUiJson
         public const string ConnectionStyleOverrides = nameof(ConnectionStyleOverrides);
         public const string LinkType = nameof(LinkType);
         public const string LinkUrl = nameof(LinkUrl);
+        public const string SymbolTags = nameof(SymbolTags);
     }
 
     private static readonly Func<JToken, object> _jsonToVector2 = JsonToTypeValueConverters.Entries[typeof(Vector2)];

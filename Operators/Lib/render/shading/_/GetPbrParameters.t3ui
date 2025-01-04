@@ -1,0 +1,58 @@
+{
+  "Id": "ca4fe8c4-cf61-4196-84e4-d69dc8869a25"/*GetPbrParameters*/,
+  "Description": "Fetches the current render setting buffers from the context. This includes things like materials.",
+  "SymbolTags": "16",
+  "InputUis": [],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "3d2ebd10-2670-46b7-8f1a-9475a81a516d"/*PbrParameterBuffer*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "7c3d08e2-85e2-442a-9196-0e946571da5a"/*AlbedoColorMap*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "b6bad091-131a-49f3-8acc-7011a4919435"/*EmissiveColorMap*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "b48f674b-2b5a-4501-992e-26e07a247ddf"/*RoughnessMetallicOcclusionMap*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "b815bf49-0e44-4db0-bf32-9c7d188d6aa2"/*NormalMap*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "671f198d-4173-4fe9-af5a-fcd5d0a71895"/*BrdfLookupMap*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    },
+    {
+      "OutputId": "ab644673-9eaa-4cec-9663-fbfdc445d112"/*PrefilteredSpecularMap*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

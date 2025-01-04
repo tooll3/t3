@@ -1,6 +1,7 @@
 {
   "Id": "056ea55a-91a2-4b55-bcce-e44cc8602623"/*SamplePointColorAttributes*/,
   "Description": "Use a texture to color the points. Same as [SamplePointAttributes] but for colors only",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "32e576f6-bcee-4762-babf-86aa95930e52"/*Texture*/,

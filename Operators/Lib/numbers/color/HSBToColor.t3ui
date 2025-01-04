@@ -1,0 +1,55 @@
+{
+  "Id": "1677fd74-6e54-479a-b478-c2ac77288f9c"/*HSBToColor*/,
+  "Description": "Creates an RGBA color from HSB settings",
+  "SymbolTags": "1",
+  "InputUis": [
+    {
+      "InputId": "115e3d92-2e91-447d-ba81-18a508d3d36a"/*Brightness*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Min": 0.0,
+      "Max": 100.0
+    },
+    {
+      "InputId": "2c1adb2b-36bd-4ca0-8fbb-e7571163a98d"/*Hue*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Min": 0.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "9ee22450-f03f-40dd-8090-ce24d9bd04ed"/*Saturation*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "fb8c2263-804d-4204-80aa-ba21bbefdd8e"/*Alpha*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "a73dc8d3-ecc5-454a-999a-1c79442ff2e2"/*Color*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

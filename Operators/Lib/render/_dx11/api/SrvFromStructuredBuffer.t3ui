@@ -1,0 +1,31 @@
+{
+  "Id": "8c41b312-6628-411c-a61d-604413b73a72"/*SrvFromStructuredBuffer*/,
+  "Description": "Gets the ShaderResourceView from a buffer. \n\nThis operator is obsolete. Please use [GetBufferComponents].",
+  "SymbolTags": "4096",
+  "InputUis": [
+    {
+      "InputId": "bd65ef2c-f32a-4279-bb5c-7f6467b23283"/*Buffer*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "2a1fcdf6-9416-45b2-96ca-a9d6d2692278"/*ShaderResourceView*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "e96eed5c-ae63-49b7-8add-2a818e4a2b89"/*ElementCount*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

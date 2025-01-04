@@ -1,6 +1,7 @@
 {
   "Id": "0f40e5e5-e406-4f87-854b-fbdd670b5504"/*SamplePointsByCameraDistance*/,
   "Description": "",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "4b41cfe4-303e-4748-a585-45babdf18e0e"/*WForDistance*/,

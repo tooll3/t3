@@ -1,6 +1,7 @@
 {
   "Id": "dd586355-64b3-4e96-af6d-b4927595dee7"/*AddNoise*/,
   "Description": "Creates a new buffer by resampling the connected points. This can be useful for increasing resolution or smoothing out hard edges.\n\nAlso see [SimNoiseOffset] and [TurbulenceForce]",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "1dfb45ae-b376-41ea-a1d2-97b170645b50"/*Variation*/,

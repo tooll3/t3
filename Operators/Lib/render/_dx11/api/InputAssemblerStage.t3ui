@@ -1,0 +1,45 @@
+{
+  "Id": "9d1266c5-23db-439f-a475-8000fdd1c318"/*InputAssemblerStage*/,
+  "Description": "",
+  "SymbolTags": "24",
+  "InputUis": [
+    {
+      "InputId": "1ea95430-b853-4a60-a981-f316905995e8"/*PrimitiveTopology*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "4a1703d4-5958-4ede-a755-79a12fe85f3b"/*VertexBuffers*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "b8e07473-60f9-4f5e-995d-7165ef8f7993"/*InputLayout*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "c8fd1c4b-e6d6-4ca1-a718-4518e3bffc59"/*IndexBuffer*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "18cae035-c050-4f98-9e5e-b3a6db70dda7"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

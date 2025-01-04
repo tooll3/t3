@@ -1,6 +1,7 @@
 {
   "Id": "81377edc-0a42-4bb1-9440-2f2433d5757f"/*TransformFromClipSpace*/,
   "Description": "Transforms Point positions from world to clip space.",
+  "SymbolTags": "64",
   "InputUis": [
     {
       "InputId": "e02d3e37-4da6-4528-b06f-6f26c818d1d8"/*Points*/,

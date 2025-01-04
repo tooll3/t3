@@ -2,7 +2,6 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core.DataTypes;
 using T3.Core.Resource;
-using T3.Editor.Gui.Graph.Rendering;
 using ComputeShader = T3.Core.DataTypes.ComputeShader;
 using Texture2D = T3.Core.DataTypes.Texture2D;
 

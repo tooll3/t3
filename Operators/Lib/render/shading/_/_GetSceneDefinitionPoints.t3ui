@@ -1,0 +1,39 @@
+{
+  "Id": "5b127401-600c-4247-9d59-2f6ff359ba85"/*_GetSceneDefinitionPoints*/,
+  "Description": "An internal helper for [DrawMeshChunksAtPoints].",
+  "SymbolTags": "80",
+  "InputUis": [
+    {
+      "InputId": "41054d35-5564-42db-9109-263f8c447057"/*SceneSetup*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "d9c04756-8922-496d-8380-120f280ef65b"/*ResultList*/,
+      "Position": {
+        "X": 125.93762,
+        "Y": 98.906334
+      }
+    },
+    {
+      "OutputId": "cb0e5b54-1c68-43a6-9101-2c9bc9b67c51"/*ChunkDefsBuffer*/,
+      "Position": {
+        "X": 125.93762,
+        "Y": 198.90634
+      }
+    },
+    {
+      "OutputId": "11da2373-6f05-4818-8616-4f2c33f63301"/*Points*/,
+      "Position": {
+        "X": 125.93762,
+        "Y": 298.90634
+      }
+    }
+  ]
+}

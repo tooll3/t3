@@ -1,6 +1,7 @@
 {
   "Id": "b3de7a93-e921-4e43-8a56-6c84b2d18b74"/*SamplePointAttributes*/,
   "Description": "",
+  "SymbolTags": "4097",
   "InputUis": [
     {
       "InputId": "022f5d7d-b9fc-4c4f-8b7e-84aaedbfdd29"/*RedOffset*/,

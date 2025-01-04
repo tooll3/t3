@@ -1,0 +1,58 @@
+{
+  "Id": "0b337922-aeca-473a-bfe9-4ab6ff804b11"/*Spring*/,
+  "Description": "Adds a bounce effect to the incoming value.\n\nAlso known as jump, bounce, wobble, rubber, flex\n\nA similar op: [Damp] [SpringVec2] [SpringVec3]",
+  "SymbolTags": "1",
+  "InputUis": [
+    {
+      "InputId": "782eb1a4-ee2a-4326-a7dc-7a40c5fb9b7c"/*Value*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      },
+      "Description": "Value Input"
+    },
+    {
+      "InputId": "7b130212-e567-4fd3-89aa-0b833c2ae490"/*Strength*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 424.0
+      },
+      "Description": "Defines the strength of the spring.\nHigher values produce faster and longer bouncing.",
+      "Min": 0.01,
+      "Max": 5.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "8cd61153-9e93-42bf-9fb6-ad29988e780f"/*Tension*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 379.0
+      },
+      "GroupTitle": "Settings",
+      "Description": "Defines the rigidity of the spring.\nLower values produce slower and more intense bounce.",
+      "Min": 0.01,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "bafae88a-4000-442f-9698-7d4d50e3eccf"/*UseAppRunTime*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 469.0
+      },
+      "GroupTitle": "Advanced",
+      "Description": "Checking this box will cause the spring calculations to use RunTime instead of FxTime for their timing.\n\nThis means the damping shape/speed will not be affected by any changes you might make to playback speed (such as pausing or reversing the timeline)."
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "e989b1ae-c7c0-4209-89c7-3aa589695d85"/*Result*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 38.0
+      }
+    }
+  ]
+}

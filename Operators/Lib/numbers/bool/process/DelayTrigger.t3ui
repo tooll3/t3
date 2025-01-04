@@ -1,0 +1,53 @@
+{
+  "Id": "fbd9ac37-4427-4852-95d7-d8383fefbe36"/*DelayTrigger*/,
+  "Description": "Delays the change of a boolean flag. This can be useful for implementing interactions where a value needs to stay true for a minimum duration. In \"DelayTrue\" mode, it will immediately switch to true but delay switching back to false. Note: This is NOT a queue. Frequent changes of the incoming signal can lead to the delayed state filtering out changes within the delay duration. In vvvv, this op is called a MonoFlop.",
+  "SymbolTags": "8",
+  "InputUis": [
+    {
+      "InputId": "1d86c7d6-95c1-416c-a643-28745e099a53"/*TimeMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "ab225218-f4b6-4ab6-be28-f2526da4b1a0"/*Trigger*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "bfe68cee-b0f2-4140-931a-c8e089f7e2c2"/*DelayDuration*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "da8498e1-a466-435b-9750-80a751dea6c6"/*Mode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "04febb7c-e4c8-4252-9606-be433f82c8ad"/*DelayedTrigger*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "8b26b8c1-47ae-4ed2-bec6-1dffb077d553"/*RemainingTime*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    }
+  ]
+}

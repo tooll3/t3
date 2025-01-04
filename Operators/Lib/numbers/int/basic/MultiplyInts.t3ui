@@ -1,0 +1,25 @@
+{
+  "Id": "318072b7-9d7b-4ad3-b163-484c3a987895"/*MultiplyInts*/,
+  "Description": "Multiplies all connected integer values. This can be useful to calculate the capacity or volume defined by an arbitrary number of axis.",
+  "SymbolTags": "8",
+  "InputUis": [
+    {
+      "InputId": "20bac17b-0c5e-4a35-8fc1-7c20d5e101d2"/*InputValues*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "f4e00844-c5a7-4f57-9d75-14ee2143eb77"/*Result*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

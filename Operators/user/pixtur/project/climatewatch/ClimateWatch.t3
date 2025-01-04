@@ -435,7 +435,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\geometry\\skull_AO.jpg"
+          "Value": "Resources/user/pixtur/projects/proj-climatewatch/geometry/skull_AO.jpg"
         }
       ],
       "Outputs": []
@@ -447,7 +447,7 @@
         {
           "Id": "b6932cbd-e6b6-447b-b416-701326227864"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\geometry\\earth-water-low-poly.obj"
+          "Value": "Resources/user/pixtur/projects/proj-climatewatch/geometry/earth-water-low-poly.obj"
         }
       ],
       "Outputs": []
@@ -1364,7 +1364,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\common\\meshes\\sphere.obj"
+          "Value": "Resources/common/meshes/sphere.obj"
         }
       ],
       "Outputs": []
@@ -1448,7 +1448,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\geometry\\earth_AO.jpg"
+          "Value": "Resources/user/pixtur/projects/proj-climatewatch/geometry/earth_AO.jpg"
         }
       ],
       "Outputs": []
@@ -1963,7 +1963,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\geometry\\earth-land-low-poly.obj"
+          "Value": "Resources/user/pixtur/projects/proj-climatewatch/geometry/earth-land-low-poly.obj"
         }
       ],
       "Outputs": []
@@ -1975,7 +1975,7 @@
         {
           "Id": "b6932cbd-e6b6-447b-b416-701326227864"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\geometry\\earth-land-low-poly.obj"
+          "Value": "Resources/user/pixtur/projects/proj-climatewatch/geometry/earth-land-low-poly.obj"
         }
       ],
       "Outputs": []
@@ -2048,7 +2048,7 @@
         {
           "Id": "b6932cbd-e6b6-447b-b416-701326227864"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\geometry\\skull_600f.obj"
+          "Value": "Resources/user/pixtur/projects/proj-climatewatch/geometry/skull_600f.obj"
         }
       ],
       "Outputs": []
@@ -2097,7 +2097,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\images\\HourClassUi.png"
+          "Value": "Resources/user/pixtur/projects/proj-climatewatch/images/HourClassUi.png"
         }
       ],
       "Outputs": []
@@ -2527,7 +2527,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\geometry\\earth-water-low-poly.obj"
+          "Value": "Resources/user/pixtur/projects/proj-climatewatch/geometry/earth-water-low-poly.obj"
         }
       ],
       "Outputs": []
@@ -2579,7 +2579,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\geometry\\skull_600f.obj"
+          "Value": "Resources/user/pixtur/projects/proj-climatewatch/geometry/skull_600f.obj"
         },
         {
           "Id": "aa19e71d-329c-448b-901c-565bf8c0da4f"/*SortVertices*/,

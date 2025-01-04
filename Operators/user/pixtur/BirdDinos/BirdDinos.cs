@@ -1,4 +1,4 @@
-namespace user.pixtur.BirdDinos;
+namespace user.pixtur._obsolete;
 
 [Guid("c5d7b3e2-9030-455e-941f-3c550838b73a")]
 public class BirdDinos : Instance<BirdDinos>

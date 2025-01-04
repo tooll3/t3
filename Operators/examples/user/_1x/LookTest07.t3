@@ -66,7 +66,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\common\\meshes\\studio_backdrop_round_90.obj"
+          "Value": "Resources/common/meshes/studio_backdrop_round_90.obj"
         }
       ],
       "Outputs": []
@@ -134,11 +134,6 @@
           "Id": "4f573afe-8815-4fd3-a655-89ec40bf3c22"/*RenderBackground*/,
           "Type": "System.Boolean",
           "Value": false
-        },
-        {
-          "Id": "c3c815fa-8672-4d99-99a7-986844f2fc45"/*UpdateLive*/,
-          "Type": "System.Boolean",
-          "Value": false
         }
       ],
       "Outputs": []
@@ -196,7 +191,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\common\\meshes\\marblePlayer.obj"
+          "Value": "Resources/common/meshes/marblePlayer.obj"
         }
       ],
       "Outputs": []
@@ -410,7 +405,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\common\\HDRI\\sunset.png"
+          "Value": "/t3/images/hdri/studio_small_08.dds"
         }
       ],
       "Outputs": []

@@ -1,0 +1,24 @@
+{
+  "Id": "e3596381-c118-4e2e-a482-83049a9f74af"/*ClearRenderTarget*/,
+  "Inputs": [
+    {
+      "Id": "25c0c15c-5b95-4fe3-8d59-4e127fce1cf2"/*RenderTarget*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "65077b57-f9eb-48aa-8195-588f906b0e72"/*DepthStencilView*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "d73d2fe7-1af4-48d6-9ad3-f8c87c3369d6"/*ClearColor*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
+        "W": 1.0
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

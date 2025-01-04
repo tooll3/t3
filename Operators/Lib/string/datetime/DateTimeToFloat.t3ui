@@ -1,6 +1,7 @@
 {
   "Id": "10acf0aa-2cb3-446b-b837-b6abe24d44da"/*DateTimeToFloat*/,
   "Description": "Converts a DateTime into different float values like normalized time of day (between 0 ... 1), day of the year, etc.",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "5d9065a3-a124-4261-b5a9-25d969e30f73"/*OutputMapping*/,

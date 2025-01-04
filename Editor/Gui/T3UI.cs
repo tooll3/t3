@@ -16,7 +16,6 @@ using T3.Editor.Gui.Dialog;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
-using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Midi;
 using T3.Editor.Gui.Interaction.Timing;
@@ -66,6 +65,7 @@ public static class T3Ui
     {
         Profiling.KeepFrameData();
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
+        DragHandling.Update();
 
         CustomComponents.BeginFrame();
         FormInputs.BeginFrame();
@@ -94,7 +94,7 @@ public static class T3Ui
         DragFieldHovered = false;
         
         FitViewToSelectionHandling.ProcessNewFrame();
-        SrvManager.FreeUnusedTextures();
+        SrvManager.RemoveForDisposedTextures();
         KeyboardBinding.InitFrame();
         ConnectionSnapEndHelper.PrepareNewFrame();
         CompatibleMidiDeviceHandling.UpdateConnectedDevices();
@@ -614,8 +614,8 @@ public static class T3Ui
     //     GC.SuppressFinalize(this);
     //     OscDataRecording.Dispose();
     // }
-
-    internal static bool DraggingIsInProgress = false;
+    
+    private static bool DraggingIsInProgress = false;
     internal static bool MouseWheelFieldHovered { private get; set; }
     internal static bool MouseWheelFieldWasHoveredLastFrame { get; private set; }
     public static bool DragFieldHovered { private get; set; }

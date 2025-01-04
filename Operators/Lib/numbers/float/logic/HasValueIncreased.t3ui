@@ -1,0 +1,34 @@
+{
+  "Id": "c513c58d-e45c-408d-a0b8-250c9af31545"/*HasValueIncreased*/,
+  "Description": "Tests whether the incoming value has increased by a defined threshold and outputs this as a Boolean\n\nOperator with more Options: [HasValueChanged]\n\nSimilar to [HasValueIncreased], [IsGreater] and [HasValueDecreased]",
+  "SymbolTags": "4104",
+  "InputUis": [
+    {
+      "InputId": "2e43732b-48c4-4ee4-bf92-af5fab5b0597"/*Threshold*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Description": "If the value has increased more than is defined here the output boolean will be 'True'",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "ed88c6c7-1ea2-4593-9589-ec670afb4654"/*Value*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Description": "Value to be tested if it has increased"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "598e38d5-2347-4b93-a7a4-a23190d95dcd"/*HasIncreased*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

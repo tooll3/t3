@@ -1,6 +1,7 @@
 {
   "Id": "5d3ef365-dbeb-4d0a-b4b3-954e945d119f"/*LookTest01*/,
   "Description": "A little series of recreating and copying the look of certain stills / wallpapers found online to learn how to create certain looks in Tooll3.",
+  "SymbolTags": "2",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -146,8 +147,8 @@
     {
       "ChildId": "a5a41b2b-9548-4e57-a783-1a29ef387e03"/*LoadImage*/,
       "Position": {
-        "X": 1200.0,
-        "Y": 538.0
+        "X": 1180.5283,
+        "Y": 443.75723
       }
     },
     {

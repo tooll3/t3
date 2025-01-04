@@ -2,7 +2,6 @@
 using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.IO;
-using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Editor.Gui.Graph;
@@ -92,9 +91,9 @@ public static class PlaybackUtils
             owner = instance;
             return settings;
         }
-            
+        
         owner = null;
-        return null;
+        return _defaultPlaybackSettings;
             
         // var outputWindow = OutputWindow.GetPrimaryOutputWindow();
         //
@@ -137,14 +136,14 @@ public static class PlaybackUtils
     /// Try to find playback settings for an instance.
     /// </summary>
     /// <returns>false if falling back to default settings</returns>
-    public static bool FindPlaybackSettingsForInstance(Instance startInstance, out Instance instanceWithSettings, out PlaybackSettings settings)
+    internal static bool FindPlaybackSettingsForInstance(Instance startInstance, out Instance instanceWithSettings, out PlaybackSettings settings)
     {
         instanceWithSettings = startInstance;
         while (true)
         {
             if (instanceWithSettings == null)
             {
-                settings = GetDefaultPlaybackSettings(startInstance?.Symbol.SymbolPackage);
+                settings = _defaultPlaybackSettings;
                 instanceWithSettings = null;
                 return false;
             }
@@ -159,14 +158,18 @@ public static class PlaybackUtils
         }
     }
 
-    private static PlaybackSettings GetDefaultPlaybackSettings(SymbolPackage package) => new()
-                                                                                             {
-                                                                                                 Enabled = false,
-                                                                                                 Bpm = 120,
-                                                                                                 AudioSource = PlaybackSettings.AudioSources.ProjectSoundTrack,
-                                                                                                 Syncing = PlaybackSettings.SyncModes.Timeline,
-                                                                                                 AudioInputDeviceName = null,
-                                                                                                 AudioGainFactor = 1,
-                                                                                                 AudioDecayFactor = 1,
-                                                                                             };
+    
+    
+    private static readonly PlaybackSettings _defaultPlaybackSettings = new()
+                                                                   {
+                                                                       Enabled = false,
+                                                                       Bpm = 120,
+                                                                       AudioSource = PlaybackSettings.AudioSources.ProjectSoundTrack,
+                                                                       Syncing = PlaybackSettings.SyncModes.Timeline,
+                                                                       AudioInputDeviceName = null,
+                                                                       AudioGainFactor = 1,
+                                                                       AudioDecayFactor = 1,
+                                                                   };
+        
+    
 }

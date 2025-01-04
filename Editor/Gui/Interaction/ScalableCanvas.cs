@@ -679,6 +679,10 @@ public struct CanvasScope
 {
     public Vector2 Scale;
     public Vector2 Scroll;
+    public override string ToString()
+    {
+        return $"[{Scroll:0} ×{Scale:0.00}]";
+    }
 }
 
 public readonly record struct MouseState(Vector2 Position, Vector2 Delta, float ScrollWheel);

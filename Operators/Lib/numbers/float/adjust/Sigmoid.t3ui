@@ -1,0 +1,33 @@
+{
+  "Id": "fc56f945-ba04-4d10-a516-68a479147016"/*Sigmoid*/,
+  "Description": "Returns a sigmoid function 1/(1+e^x-1).\nIt's very similar to [SmoothStep] but never reaches the -1 and 1 boundaries.",
+  "SymbolTags": "1",
+  "InputUis": [
+    {
+      "InputId": "276596b1-9a24-48f9-9202-4658efe33d25"/*Value*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    },
+    {
+      "InputId": "35957f60-7f91-47cd-8ff1-e0079c31f295"/*Stretch*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 379.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "00b2d450-f19f-4deb-b88a-7c75972c0962"/*Result*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 38.0
+      }
+    }
+  ]
+}

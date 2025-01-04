@@ -24,7 +24,9 @@ public static class DescriptiveUi
         WidgetElements.DrawSmallTitle(drawList, area, !string.IsNullOrEmpty(symbolChild.Name) ? symbolChild.Name : symbolChild.Symbol.Name, canvasScale);
 
         var slot = descriptiveGraphNode.SourcePathSlot;
-        var filePath = Path.GetFileName(slot?.TypedInputValue?.Value);
+        var xxx = slot.GetCurrentValue();
+        
+        var filePath = xxx != null ?  Path.GetFileName(xxx) : "";
             
         WidgetElements.DrawPrimaryValue(drawList, area, filePath, canvasScale);
             

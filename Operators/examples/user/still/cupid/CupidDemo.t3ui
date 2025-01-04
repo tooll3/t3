@@ -1,6 +1,7 @@
 {
   "Id": "442d40e3-7c00-4161-a606-79c2fe6c36c1"/*CupidDemo*/,
   "Description": "A fast exploration in anaglyph (red cyan 3D) rendering demo for Deadline 2022.",
+  "SymbolTags": "6",
   "InputUis": [],
   "SymbolChildUis": [
     {

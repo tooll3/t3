@@ -1,0 +1,16 @@
+{
+  "Id": "862de1a8-f630-4823-8860-7afa918bb1bc"/*RunTime*/,
+  "Description": "Returns the application runtime in seconds. This is rarely useful. Consider using [Time].",
+  "SymbolTags": "8",
+  "InputUis": [],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "1c34d39c-0bef-4c4a-a3e4-dcb8d5664f3b"/*TimeInSeconds*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

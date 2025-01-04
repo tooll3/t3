@@ -1,0 +1,53 @@
+{
+  "Id": "32325c5b-53f7-4414-b4dd-a436e45528b0"/*SetCommandTime*/,
+  "Description": "Overrides the animation time of a sub-command graph.\n\nUseful combination [PlayVideo] -> [Layer2d] -> [SetCommandTime]",
+  "SymbolTags": "1",
+  "InputUis": [
+    {
+      "InputId": "01f2eef1-e3c1-49a5-b532-9c12da8caac5"/*SubTree*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Description": "Scene input"
+    },
+    {
+      "InputId": "d2c934bb-de5c-449c-adf8-7a2f48082e9c"/*NewTime*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Description": "Offsets the start time\ne.g. of a [PlayVideo] op when 'Offset mode' is set to 'Relative'",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "efa8c97d-769c-4a26-b442-e702ac74a1f4"/*OffsetMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      },
+      "Description": "Defines how the time is offset"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "fe01c3b6-72e2-494e-8511-6d50c527463f"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "aaf7ca1e-181c-43e7-be16-e2a73d5a9248",
+      "Title": "Video tutorial",
+      "Description": "A quick tutorial how to use this operator override the rendering time.",
+      "LinkUrl": "https://youtu.be/COd7gkJB0KQ",
+      "LinkType": "TutorialVideo"
+    }
+  ]
+}

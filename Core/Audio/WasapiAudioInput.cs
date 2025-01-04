@@ -15,8 +15,8 @@ namespace T3.Core.Audio;
 public static class WasapiAudioInput
 {
     /// <summary>
-    /// Needs to be called once a frame
-    /// Switches input device required
+    /// Needs to be called once a frame.
+    /// It switches audio input device if required
     /// </summary>
     public static void StartFrame(PlaybackSettings settings)
     {

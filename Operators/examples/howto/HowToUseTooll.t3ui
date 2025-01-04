@@ -1,6 +1,7 @@
 {
   "Id": "1ec749af-fe7d-4728-9855-d1fa3e879751"/*HowToUseTooll*/,
   "Description": "This interactive tutorial guides you through the user interface of Tooll3.",
+  "SymbolTags": "3",
   "InputUis": [],
   "SymbolChildUis": [
     {

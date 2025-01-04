@@ -1,6 +1,6 @@
 using System.Linq;
 using ImGuiNET;
-using Lib.math.@int;
+using Lib.numbers.@int;
 using T3.Core.Operator;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;

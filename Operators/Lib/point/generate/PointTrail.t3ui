@@ -1,6 +1,7 @@
 {
   "Id": "25db2a97-38b2-4503-8842-fab3922d7a6c"/*PointTrail*/,
   "Description": "Keeps previous copies of points in a cycling buffer that can be used to draw trails and other effects.\nHint: If some features don't work as expected try [PointTrail2]\n\nCan be used with [DrawPoints] [DrawLines] [DrawBillboards] and similar",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "4389838c-fd1d-4400-b8e5-f373a05adff7"/*GPoints*/,

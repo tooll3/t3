@@ -86,8 +86,10 @@ internal static class InputPicking
         }
         
         // Create connection
-        var connectionToAdd = new Symbol.Connection(context.ActiveSourceItem.Id,
-                                                    context.ActiveSourceItem.OutputLines[0].Id,
+
+        var sourceParentOrChildId = context.ActiveSourceItem.Variant == MagGraphItem.Variants.Input ? Guid.Empty : context.ActiveSourceItem.Id;
+        var connectionToAdd = new Symbol.Connection(sourceParentOrChildId,
+                                                    context.ActiveSourceOutputId,
                                                     context.ItemForInputSelection.Id,
                                                     targetInputUi.Id);
         

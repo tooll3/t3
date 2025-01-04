@@ -1,0 +1,25 @@
+{
+  "Id": "d86e9585-d233-455a-9059-fa93debfed01"/*GetIteratedVec3*/,
+  "Description": "",
+  "SymbolTags": "4224",
+  "InputUis": [
+    {
+      "InputId": "18dc4a34-f0c1-4763-be36-71b59533916a"/*FieldName*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      },
+      "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "e9839288-05db-41e7-8326-3be4f65f2410"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

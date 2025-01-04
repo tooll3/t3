@@ -62,9 +62,11 @@ internal static class InputSnapper
 
         // TODO: Use snap type...
         // Create connection
-        var connectionToAdd = new Symbol.Connection(tempConnection.SourceItem.Id,
+        var sourceParentOrChildId = tempConnection.SourceItem.Variant == MagGraphItem.Variants.Input ? Guid.Empty : tempConnection.SourceItem.Id;
+        var targetParentOrChildId =BestInputMatch.Item.Variant == MagGraphItem.Variants.Output? Guid.Empty:  BestInputMatch.Item.Id;
+        var connectionToAdd = new Symbol.Connection(sourceParentOrChildId,
                                                     tempConnection.SourceOutput.Id,
-                                                    BestInputMatch.Item.Id,
+                                                    targetParentOrChildId,
                                                     BestInputMatch.SlotId);
 
         if (Structure.CheckForCycle(context.CompositionOp.Symbol, connectionToAdd))

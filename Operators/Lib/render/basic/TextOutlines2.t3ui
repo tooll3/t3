@@ -1,0 +1,292 @@
+{
+  "Id": "84e9333f-38d2-422f-abf5-bf3929f01c7e"/*TextOutlines2*/,
+  "Description": "Creates outlined text to use in combination with [Text] ",
+  "SymbolTags": "8",
+  "InputUis": [
+    {
+      "InputId": "0abd9f81-bc91-4775-bf0e-472399b9778e"/*LineHeight*/,
+      "Position": {
+        "X": -245.7945,
+        "Y": 669.3257
+      }
+    },
+    {
+      "InputId": "21a2292d-1969-41ee-a71f-00a1621f9539"/*FontPath*/,
+      "Position": {
+        "X": -484.92914,
+        "Y": 898.59204
+      },
+      "GroupTitle": "Font & Size",
+      "Usage": "FilePath",
+      "FileFilter": "Fonts (*.fnt)|*.fnt"
+    },
+    {
+      "InputId": "2cb6bb45-a74a-4eba-a2f0-2895e8e38b07"/*EnableZTest*/,
+      "Position": {
+        "X": 216.59082,
+        "Y": 974.6477
+      }
+    },
+    {
+      "InputId": "4da54683-460e-4af6-a729-5c631e22285a"/*Color*/,
+      "Position": {
+        "X": -199.60559,
+        "Y": 255.3982
+      }
+    },
+    {
+      "InputId": "617108fa-e7a6-478d-852b-cd5baa7d0b1c"/*HorizontalAlign*/,
+      "Position": {
+        "X": -245.7945,
+        "Y": 774.3257
+      }
+    },
+    {
+      "InputId": "8efc35ee-875b-4181-aa1d-bd705f82bea9"/*InsideLine*/,
+      "Position": {
+        "X": 80.39441,
+        "Y": 395.3982
+      }
+    },
+    {
+      "InputId": "9c2089a2-266d-4022-b23d-4c67a8a19788"/*Position*/,
+      "Position": {
+        "X": -245.7945,
+        "Y": 704.3257
+      },
+      "AddPadding": "True",
+      "Scale": 0.01
+    },
+    {
+      "InputId": "a827c2c6-3286-4488-9a90-ed38c4184e6a"/*CullMode*/,
+      "Position": {
+        "X": 219.66818,
+        "Y": 873.8699
+      },
+      "GroupTitle": "Draw Options"
+    },
+    {
+      "InputId": "b15018a7-6c61-4cee-88fa-a43684ef5cc4"/*OutsideLine*/,
+      "Position": {
+        "X": 80.39441,
+        "Y": 430.3982
+      },
+      "GroupTitle": "Lines Thickness"
+    },
+    {
+      "InputId": "b8035f87-f293-4da0-8bdc-ec75cc6252e7"/*Size*/,
+      "Position": {
+        "X": -245.7945,
+        "Y": 599.3257
+      },
+      "Min": 0.0,
+      "Max": 500.0,
+      "Scale": 1.0
+    },
+    {
+      "InputId": "c4b53d8f-1357-47d4-aa73-ca6d07543994"/*InputText*/,
+      "Position": {
+        "X": -245.7945,
+        "Y": 529.3257
+      },
+      "Usage": "Multiline"
+    },
+    {
+      "InputId": "e148fac5-d905-4e74-a958-5ed45b152ae1"/*VerticalAlign*/,
+      "Position": {
+        "X": -245.7945,
+        "Y": 739.3257
+      },
+      "GroupTitle": "Alignment"
+    },
+    {
+      "InputId": "e6164880-eae5-468e-8dd8-084d20918bc9"/*Spacing*/,
+      "Position": {
+        "X": -245.7945,
+        "Y": 634.3257
+      },
+      "Min": -10.0,
+      "Max": 10.0,
+      "Scale": 0.1
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "1f3292f3-6891-4f88-a209-146825fe2e27"/*FloatsToBuffer*/,
+      "Position": {
+        "X": 220.39441,
+        "Y": 220.39821
+      }
+    },
+    {
+      "ChildId": "21e79b92-62f1-4f58-bc21-d0f92ab5a6da"/*LoadImage*/,
+      "Position": {
+        "X": 366.6356,
+        "Y": 756.9915
+      }
+    },
+    {
+      "ChildId": "3756f08e-141d-4337-b5fd-93a7234c414c"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 506.6356,
+        "Y": 756.9915
+      }
+    },
+    {
+      "ChildId": "3e023b35-277e-4545-bdb7-8d39670999c0"/*SetPixelAndVertexShaderStage*/,
+      "Position": {
+        "X": 751.126,
+        "Y": 254.03003
+      }
+    },
+    {
+      "ChildId": "4383b375-c916-4de8-9644-103765488e89"/*VertexShader*/,
+      "Position": {
+        "X": 611.126,
+        "Y": 254.03003
+      }
+    },
+    {
+      "ChildId": "44bcbcfd-245f-4e1b-8776-ba008340250d"/*SamplerState*/,
+      "Position": {
+        "X": 611.126,
+        "Y": 464.03003
+      }
+    },
+    {
+      "ChildId": "4821f8dd-0b31-402b-aebb-5dd941b0e9d0"/*GetForegroundColor*/,
+      "Position": {
+        "X": -199.60559,
+        "Y": 290.3982
+      }
+    },
+    {
+      "ChildId": "4d6b3594-6f04-44a7-95cb-ed18c2e363a3"/*BlendColors*/,
+      "Position": {
+        "X": -59.60559,
+        "Y": 255.3982
+      }
+    },
+    {
+      "ChildId": "5002054b-45e2-434c-8e8f-6e4f47750b56"/*Execute*/,
+      "Position": {
+        "X": 1029.5101,
+        "Y": 163.91046
+      }
+    },
+    {
+      "ChildId": "5018bb23-2143-4fe5-abeb-a958143aca74"/*PixelShader*/,
+      "Position": {
+        "X": 408.6469,
+        "Y": 353.38654
+      }
+    },
+    {
+      "ChildId": "59994f7e-dae6-4356-89e4-d5c8d07632b3"/*SearchAndReplace*/,
+      "Position": {
+        "X": 216.63559,
+        "Y": 756.9915
+      }
+    },
+    {
+      "ChildId": "6e76ff26-924a-41de-91d7-4b9a8e551a8f"/*_RenderFontBuffer*/,
+      "Position": {
+        "X": -105.794495,
+        "Y": 529.3257
+      }
+    },
+    {
+      "ChildId": "71c0881d-6d2b-45d7-a16f-13581dcd2a64"/*SrvFromStructuredBuffer*/,
+      "Position": {
+        "X": 411.8406,
+        "Y": 503.1332
+      }
+    },
+    {
+      "ChildId": "952abd5a-de96-425b-a551-9f147d161c62"/*RasterizerState*/,
+      "Position": {
+        "X": 359.66818,
+        "Y": 873.8699
+      }
+    },
+    {
+      "ChildId": "961e44b2-d654-4e3e-9939-a0d46bbbde40"/*OutputMergerStage*/,
+      "Position": {
+        "X": 496.59082,
+        "Y": 939.6477
+      }
+    },
+    {
+      "ChildId": "9b90ce7d-226e-4892-b82a-be9445115293"/*TransformsConstBuffer*/,
+      "Position": {
+        "X": 611.126,
+        "Y": 324.03003
+      }
+    },
+    {
+      "ChildId": "b7991b17-0b4c-4a32-a30b-aea3b214d10b"/*DepthStencilState*/,
+      "Position": {
+        "X": 356.59082,
+        "Y": 974.6477
+      }
+    },
+    {
+      "ChildId": "c5910345-783a-4aa5-bb64-7c25998505c3"/*InputAssemblerStage*/,
+      "Position": {
+        "X": 768.9238,
+        "Y": 162.5781
+      }
+    },
+    {
+      "ChildId": "c6d81c7b-8371-42b4-a155-bfc241ebe641"/*Vector4Components*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 111.079544,
+        "Y": 59.905018
+      },
+      "Position": {
+        "X": 80.39441,
+        "Y": 255.3982
+      }
+    },
+    {
+      "ChildId": "dcf3be83-a20e-40d9-9673-ebf4c15fdff6"/*PickBlendMode*/,
+      "Position": {
+        "X": 356.59082,
+        "Y": 1009.64777
+      }
+    },
+    {
+      "ChildId": "df94f1fa-8394-4e10-aacf-a342035a1d52"/*Draw*/,
+      "Position": {
+        "X": 797.7587,
+        "Y": 868.46686
+      }
+    },
+    {
+      "ChildId": "e3fe1f65-047f-4f9a-a373-b12e0e014df3"/*Rasterizer*/,
+      "Position": {
+        "X": 499.66818,
+        "Y": 873.8699
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "58150633-cb65-416c-aad3-3496e930dfd0"/*Output*/,
+      "Position": {
+        "X": 1795.0107,
+        "Y": 18.747711
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "aebb7945-b5f7-4312-a07a-be733292710c",
+      "Title": "Adding fonts",
+      "Description": "How to add new fonts to Tooll3",
+      "LinkUrl": "https://github.com/tooll3/t3/wiki/help.AddingFonts",
+      "LinkType": "Documentation"
+    }
+  ]
+}

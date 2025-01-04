@@ -1,6 +1,7 @@
 {
   "Id": "3ee8f66d-68df-43c1-b0eb-407259bf7e86"/*GridPoints*/,
   "Description": "Creates a buffer of GPU points distributed on a rectangular or hexagonal grid.\n\nTips:\n- Set any of the counts to 1 to create a plane of points.\n- Switch the SizeMode to set if the scaling refers to the padding between the points or the size of the volume.",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "062e3bd6-fe6d-4c9a-a34d-e26fe0d80283"/*F2*/,

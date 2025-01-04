@@ -1,10 +1,11 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+using ImGuiNET;
 
 namespace T3.Editor.Gui.Graph.Interaction;
 
-public abstract class UiListHelpers
+internal abstract class UiListHelpers
 {
-    public static void AdvanceSelectedItem<T>(IList<T> list, ref T currentItem, int offset)
+    internal static void AdvanceSelectedItem<T>(IList<T> list, ref T? currentItem, int offset)
     {
         if (list.Count == 0)
         {

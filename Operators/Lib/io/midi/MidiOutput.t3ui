@@ -1,6 +1,7 @@
 {
   "Id": "f9f4281b-92ee-430d-a930-6b588a5cb9a9"/*MidiOutput*/,
   "Description": "Send notes or controller change events to the selected device. This operator is experimental. The velocity is given as a normalized float value between 0 and 1.",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "0fff2ce2-defa-442c-a089-4b12e7d71620"/*NoteOrController*/,

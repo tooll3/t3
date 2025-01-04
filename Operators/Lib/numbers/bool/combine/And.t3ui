@@ -1,0 +1,31 @@
+{
+  "Id": "a18ae2d3-1735-40b8-bebb-65a6788bc872"/*And*/,
+  "Description": "Returns True if both inputs are true. Consider using [All] if you want to test more than two booleans for true.",
+  "SymbolTags": "8",
+  "InputUis": [
+    {
+      "InputId": "1931b0fe-0df0-4ba1-9da5-b3eceaa87888"/*A*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "af89954f-9f79-4782-95ab-f40bb50339c8"/*B*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "c02d701d-a915-4d2e-bb31-5c6cd27a999e"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

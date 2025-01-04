@@ -24,7 +24,7 @@
         {
           "Id": "ef2a461d-c66d-44d8-8b0e-e48a57ec991f"/*FilePath*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\testcontent\\T3-Logo\\t3-logo.svg"
+          "Value": "Resources/user/pixtur/testcontent/T3-Logo/t3-logo.svg"
         }
       ],
       "Outputs": []
@@ -75,16 +75,16 @@
           "Id": "db4c2d41-c369-4182-83fd-cb04aa04ec76"/*TopBottom*/,
           "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "X": 400,
-            "Y": 400
+            "X": 100,
+            "Y": 100
           }
         },
         {
           "Id": "eff02108-2335-46b5-95ba-4235b9a26349"/*LeftRight*/,
           "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "X": 400,
-            "Y": 400
+            "X": 100,
+            "Y": 100
           }
         }
       ],
@@ -127,7 +127,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\testcontent\\T3-Logo\\t3-logo.png"
+          "Value": "/t3/images/t3-logo-alpha.png"
         }
       ],
       "Outputs": []

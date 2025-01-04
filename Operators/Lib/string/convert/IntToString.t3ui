@@ -1,0 +1,32 @@
+{
+  "Id": "416a1c8d-4143-4de7-bcf9-466c4009112a"/*IntToString*/,
+  "Description": "Converts an [IntValue] to a string.\n\nTip: You can override the string formatting to something like... \"{0:0} times\" add prefixes or suffixes.",
+  "SymbolTags": "1",
+  "InputUis": [
+    {
+      "InputId": "3c1a8975-ab27-40b3-9fee-7de38643294a"/*Value*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "a9dd6368-455d-4b1d-8685-02d8f7640ecf"/*Format*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "460f2a09-b706-4e1e-a1fb-32eeab51524b"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

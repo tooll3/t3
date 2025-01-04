@@ -1,0 +1,108 @@
+{
+  "Id": "8bede700-4e3e-42d8-8097-9744abdb8ad3"/*DistortAndShade*/,
+  "Description": "Uses two images to distort (create a bevel / emboss effect) that can look like textured glass\n\nAlso see [Displace]\n\nFor similar effects see: [Steps] [DetectEdges] [FakeLight]",
+  "SymbolTags": "8",
+  "InputUis": [
+    {
+      "InputId": "17c45c4e-590e-4de6-90c2-befe2f89831d"/*ShadeColor*/,
+      "Position": {
+        "X": -237.45099,
+        "Y": 307.8106
+      },
+      "GroupTitle": "Settings",
+      "Description": "Defines a color which is multiplied with Image B\n\n(Only visible when the 'shading' value is increased)"
+    },
+    {
+      "InputId": "2596e8fb-00aa-4704-9978-a880c1016c18"/*ImageB*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "3a3acfbd-dca7-4f8a-b862-90eae2bc41ca"/*Center*/,
+      "Position": {
+        "X": -236.10194,
+        "Y": 162.53226
+      },
+      "Description": "Shifts the direction from which image A is distorted by image B"
+    },
+    {
+      "InputId": "824e1ad4-0d33-458f-aefe-f3780ab06529"/*ImageA*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "84cea304-79d9-4f8c-a171-584897b9b468"/*Displacement*/,
+      "Position": {
+        "X": -236.10194,
+        "Y": 117.53226
+      },
+      "GroupTitle": "Settings",
+      "Description": "Controls the direction and intensity of the effect"
+    },
+    {
+      "InputId": "f942fc0d-ed5f-4594-8690-d464c5b12ed8"/*Shading*/,
+      "Position": {
+        "X": -237.45099,
+        "Y": 262.8106
+      },
+      "Description": "Controls the visibility / brightness of image B"
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "0391973e-ae4b-4676-b974-c4d3cdd8a20c"/*_multiImageFxSetup*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 123.54739,
+        "Y": 490.93073
+      },
+      "Position": {
+        "X": 105.61008,
+        "Y": -20.52585
+      }
+    },
+    {
+      "ChildId": "0edf16eb-4f2b-4d4d-9290-681d5446c4a1"/*Vector4Components*/,
+      "Position": {
+        "X": -100.70581,
+        "Y": 304.56647
+      }
+    },
+    {
+      "ChildId": "32776b15-aad9-4677-9714-40f113c6883f"/*ColorGrade*/,
+      "Position": {
+        "X": -35.40545,
+        "Y": -61.59488
+      }
+    },
+    {
+      "ChildId": "3c2648f9-bf02-44b7-9a2e-9920c5e8e8dd"/*Vector2Components*/,
+      "Position": {
+        "X": -61.060883,
+        "Y": 439.8447
+      }
+    },
+    {
+      "ChildId": "c64e8840-3d50-4bbf-887d-e4735eec446c"/*ColorGrade*/,
+      "Position": {
+        "X": -65.81404,
+        "Y": -145.8522
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "5a639fac-b8e1-495b-a82f-e4877133b06f"/*Output*/,
+      "Position": {
+        "X": 235.61008,
+        "Y": -20.52585
+      }
+    }
+  ]
+}

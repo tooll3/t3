@@ -1,6 +1,7 @@
 {
   "Id": "eeec02e2-7db9-4132-935a-4caf03c828c6"/*ReconstructiveForce*/,
   "Description": "Blends the simulation particle points toward the original matching emit points.\n\nNote: The effect is likely to produce unpredictable results if the number of emit points does not match the number of simulation points.",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "2a8f498f-b91e-41ad-a7d2-8082d5e72f39"/*TargetPoints*/,

@@ -3,10 +3,11 @@ using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Model;
 using T3.Core.Operator;
+using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.ChildUi;
-using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
@@ -29,6 +30,7 @@ internal sealed partial class MagGraphCanvas
             return;
 
         var idleFadeFactor = 1f;
+        var idleFactor = 0f;
         if (item.Variant == MagGraphItem.Variants.Operator && item.Instance != null)
         {
             var framesSinceLastUpdate = 100;
@@ -38,6 +40,7 @@ internal sealed partial class MagGraphCanvas
             }
 
             idleFadeFactor = MathUtils.RemapAndClamp(framesSinceLastUpdate, 0f, 60f, 1f, 0.6f);
+            idleFactor = MathUtils.RemapAndClamp(framesSinceLastUpdate, 0f, 60f, 0f, 1f);
         }
 
         var hoverProgress = GetHoverTimeForId(item.Id).RemapAndClamp(0, 0.3f, 0, 1);
@@ -100,7 +103,7 @@ internal sealed partial class MagGraphCanvas
 
             // There is probably a better method than this...
             const int snapPadding = 2;
-            if (!snappedBorders.HasFlag(Borders.Down)) pMaxVisible.Y -= snapPadding  * 2 * CanvasScale;
+            if (!snappedBorders.HasFlag(Borders.Down)) pMaxVisible.Y -= snapPadding * 2 * CanvasScale;
             if (!snappedBorders.HasFlag(Borders.Right)) pMaxVisible.X -= snapPadding * CanvasScale;
         }
 
@@ -112,22 +115,25 @@ internal sealed partial class MagGraphCanvas
 
         drawList.AddRectFilled(pMinVisible,
                                pMaxVisible,
-                               Color.Mix(ColorVariations.OperatorBackgroundIdle.Apply(typeColor),
-                                         ColorVariations.OperatorBackground.Apply(typeColor), idleFadeFactor), 5 * CanvasScale,
+                               Color.Mix(
+                                         ColorVariations.OperatorBackground.Apply(typeColor),
+                                         ColorVariations.OperatorBackgroundIdle.Apply(typeColor),
+                                         idleFactor), 5 * CanvasScale,
                                imDrawFlags);
 
+        // Snapped borders
         if (snappedBorders.HasFlag(Borders.Down))
         {
             drawList.AddRectFilled(new Vector2(pMinVisible.X, pMaxVisible.Y),
-                                   pMaxVisible - new Vector2(0,2),
-                                   ColorVariations.OperatorOutline.Apply(typeColor).Fade(idleFadeFactor));
+                                   pMaxVisible - new Vector2(0, 2),
+                                   ColorVariations.OperatorOutline.Apply(typeColor));
         }
-        
+
         if (snappedBorders.HasFlag(Borders.Right))
         {
             drawList.AddRectFilled(new Vector2(pMaxVisible.X - 2, pMinVisible.Y),
                                    pMaxVisible,
-                                   ColorVariations.OperatorOutline.Apply(typeColor).Fade(idleFadeFactor));
+                                   ColorVariations.OperatorOutline.Apply(typeColor));
         }
 
         var isSelected = _context.Selector.IsSelected(item);
@@ -230,7 +236,7 @@ internal sealed partial class MagGraphCanvas
 
             if (hasMatchingTypes)
             {
-                var indicatorPos = new Vector2(pMin.X, pMin.Y + MagGraphItem.GridSize.Y / 2 * CanvasScale);
+                var indicatorPos = new Vector2(pMinVisible.X + 5 * CanvasScale, pMaxVisible.Y - 5 * CanvasScale);
                 var isPeeked = item.Area.Contains(_context.PeekAnchorInCanvas);
                 if (isPeeked)
                 {
@@ -289,7 +295,7 @@ internal sealed partial class MagGraphCanvas
             {
                 drawList.AddCircleFilled(pMin
                                          //+ new Vector2(8, 9) * CanvasScale 
-                                         + new Vector2(0, GridSizeOnScreen.Y * (0.5f)),
+                                         + new Vector2(-GridSizeOnScreen.Y * 0.15f, GridSizeOnScreen.Y * (0.5f)),
                                          3,
                                          UiColors.StatusAttention);
             }
@@ -447,8 +453,7 @@ internal sealed partial class MagGraphCanvas
         // Draw free input sockets...
         foreach (var inputAnchor in item.GetInputAnchors())
         {
-            
-            var isMultiInput =inputAnchor.InputLine.InputUi != null && inputAnchor.InputLine.InputUi.InputDefinition.IsMultiInput;
+            var isMultiInput = inputAnchor.InputLine.InputUi != null && inputAnchor.InputLine.InputUi.InputDefinition.IsMultiInput;
             var isAlreadyUsed = inputAnchor.SnappedConnectionHash != MagGraphItem.FreeAnchor;
             // if (!isMultiInput)
             //     continue;
@@ -499,9 +504,8 @@ internal sealed partial class MagGraphCanvas
                     if (!isAlreadyUsed && isPotentialConnectionStartDropTarget)
                     {
                         color = ColorVariations.Highlight.Apply(type2UiProperties.Color).Fade(Blink);
+                        InputSnapper.RegisterAsPotentialTargetInput(item, p, inputAnchor.SlotId);
                     }
-                    
-                    InputSnapper.RegisterAsPotentialTargetInput(item, p, inputAnchor.SlotId);
                 }
 
                 if (showTriangleAnchor)
@@ -587,6 +591,30 @@ internal sealed partial class MagGraphCanvas
                     // This will later be used for by DefaultState to create a connection
                     _context.ActiveSourceOutputId = outputAnchor.SlotId;
                     _context.ActiveOutputDirection = outputAnchor.Direction;
+
+                    // Show tooltip with output name and type
+                    if (item.Variant == MagGraphItem.Variants.Operator)
+                    {
+                        var outputLine = item.OutputLines.FirstOrDefault(o => o.Id == outputAnchor.SlotId);
+                        if (outputLine.Id == outputAnchor.SlotId)
+                        {
+                            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5,5));
+                            ImGui.BeginTooltip();
+                            ImGui.TextUnformatted(outputLine.OutputUi.OutputDefinition.Name);
+                            var type = outputLine.OutputUi.OutputDefinition.ValueType;
+                            var typeName = type.Name;
+                            if (typeName == "Single")
+                                typeName = "Float";
+                            
+                            var uiProperties = TypeUiRegistry.GetPropertiesForType(type);
+                            //var valueName = TypeUiRegistry.
+                            ImGui.PushStyleColor(ImGuiCol.Text, uiProperties.Color.Rgba);
+                            ImGui.TextUnformatted(typeName);
+                            ImGui.PopStyleColor();
+                            ImGui.EndTooltip();
+                            ImGui.PopStyleVar();
+                        }
+                    }
                 }
                 else
                 {
@@ -595,6 +623,28 @@ internal sealed partial class MagGraphCanvas
             }
 
             //ShowAnchorPointDebugs(outputAnchor);
+        }
+
+        if (item.Variant == MagGraphItem.Variants.Operator)
+        {
+            if (item.Instance is IStatusProvider statusProvider)
+            {
+                var statusLevel = statusProvider.GetStatusLevel();
+                if (statusLevel != IStatusProvider.StatusLevel.Success && statusLevel != IStatusProvider.StatusLevel.Undefined)
+                {
+                    ImGui.SetCursorScreenPos(pMinVisible - new Vector2(10, 12) * T3Ui.UiScaleFactor);
+                    ImGui.InvisibleButton("#warning", new Vector2(15, 15));
+                    var color = statusLevel switch
+                                    {
+                                        IStatusProvider.StatusLevel.Notice  => UiColors.StatusAttention,
+                                        IStatusProvider.StatusLevel.Warning => UiColors.StatusWarning,
+                                        IStatusProvider.StatusLevel.Error   => UiColors.StatusError,
+                                        _                                   => UiColors.StatusError
+                                    };
+                    Icons.DrawIconOnLastItem(Icon.Warning, color);
+                    CustomComponents.TooltipForLastItem(UiColors.StatusWarning, statusLevel.ToString(), statusProvider.GetStatusMessage(), false);
+                }
+            }
         }
     }
 
@@ -672,11 +722,10 @@ internal sealed partial class MagGraphCanvas
         var previewTextureView = SrvManager.GetSrvForTexture(texture);
 
         var aspect = (float)texture.Description.Width / texture.Description.Height;
+        
+        //var unitScreenHeight = MathF.Min(itemMax.Y - itemMin.Y,  MagGraphItem.GridSize.Y * CanvasScale ) - 2 * CanvasScale;
 
-        var usableScreenRect = new ImRect(itemMin, itemMax);
-        var opWidth = usableScreenRect.GetWidth();
-        var unitScreenHeight = MagGraphItem.GridSize.Y * CanvasScale - 6 * CanvasScale;
-
+        var unitScreenHeight = (MagGraphItem.GridSize.Y - 5) * CanvasScale;
         var previewSize = new Vector2(unitScreenHeight * aspect, unitScreenHeight);
 
         var maxAspect = 1.6f;
@@ -688,7 +737,7 @@ internal sealed partial class MagGraphCanvas
         var min = new Vector2(itemMax.X - previewSize.X - 2 * CanvasScale,
                               itemMin.Y
                               + (unitScreenHeight - previewSize.Y) / 2
-                              + 3 * CanvasScale);
+                              + 1 * CanvasScale);
 
         //var min = new Vector2(itemMin.X, itemMin.Y - previewSize.Y - 1);
         //var max = new Vector2(itemMin.X + previewSize.X, itemMin.Y - 1);
@@ -703,14 +752,14 @@ internal sealed partial class MagGraphCanvas
                           Color.White);
         if (CanvasScale > 0.5f)
         {
-            drawList.AddRect(min - Vector2.One,
-                             min + previewSize + Vector2.One,
-                             ColorVariations.OperatorBackground.Apply(typeColor),
+            drawList.AddRect(min - Vector2.One * 0.5f * CanvasScale,
+                             min + previewSize + Vector2.One * 0.5f * CanvasScale,
+                             ColorVariations.ConnectionLines.Apply(typeColor),
                              2 * CanvasScale,
                              ImDrawFlags.RoundCornersAll,
                              1 * CanvasScale);
         }
-
+        
         return true;
     }
 }

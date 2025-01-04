@@ -35,13 +35,14 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas, IGraphCanvas
     private NodeNavigation NodeNavigation => _components.NodeNavigation;
     private Structure Structure => _components.OpenedProject.Structure;
     private readonly GraphComponents _components;
+
     internal GraphCanvas(GraphComponents components)
     {
         _components = components;
         _nodeGraphLayouting = new NodeGraphLayouting(NodeSelection, Structure);
         SelectableNodeMovement = new SelectableNodeMovement(components, this, NodeSelection);
         _graph = new Graph(components, this);
-        
+
         window.WindowDestroyed += (_, _) => Destroyed = true;
         window.FocusLost += (_, _) =>
                             {
@@ -490,6 +491,17 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas, IGraphCanvas
         }
     }
 
+    public void ApplyComposition(ICanvas.Transition transition, Guid compositionSymbolChildId)
+    {
+        var newCanvasScope = GetTargetScope();
+        if (UserSettings.Config.OperatorViewSettings.TryGetValue(compositionSymbolChildId, out var savedCanvasScope))
+        {
+            newCanvasScope = savedCanvasScope;
+        }
+
+        SetScopeWithTransition(newCanvasScope.Scale, newCanvasScope.Scroll, transition);
+    }
+
     public void FocusViewToSelection()
     {
         FitAreaOnCanvas(NodeSelection.GetSelectionBounds(NodeSelection, _components.CompositionOp));
@@ -703,7 +715,7 @@ internal class GraphCanvas : ScalableCanvas, INodeCanvas, IGraphCanvas
             var startingSearchString = selectedChildUis[0].SymbolChild.Symbol.Name;
             var position = selectedChildUis.Count == 1 ? selectedChildUis[0].PosOnCanvas : InverseTransformPositionFloat(ImGui.GetMousePos());
             SymbolBrowser.OpenAt(position, null, null, false, startingSearchString,
-                                         symbol => { ChangeSymbol.ChangeOperatorSymbol(NodeSelection, compositionOp, selectedChildUis, symbol); });
+                                 symbol => { ChangeSymbol.ChangeOperatorSymbol(NodeSelection, compositionOp, selectedChildUis, symbol); });
         }
 
         if (ImGui.BeginMenu("Symbol definition...", !isSaving))

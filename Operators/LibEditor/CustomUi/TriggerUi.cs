@@ -1,8 +1,6 @@
-using System;
-using System.Linq;
 using System.Numerics;
 using ImGuiNET;
-using Lib.math.@bool;
+using Lib.numbers.@bool.logic;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Editor.Gui.ChildUi.WidgetUi;

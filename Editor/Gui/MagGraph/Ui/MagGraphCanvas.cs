@@ -1,9 +1,11 @@
 ﻿#nullable enable
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.MagGraph.Interaction;
@@ -12,6 +14,7 @@ using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.MagGraph.Ui;
 
@@ -20,12 +23,14 @@ namespace T3.Editor.Gui.MagGraph.Ui;
  */
 internal sealed partial class MagGraphCanvas : ScalableCanvas
 {
-    public MagGraphCanvas(MagGraphWindow window, NodeSelection nodeSelection, GraphImageBackground graphImageBackground)
+    public MagGraphCanvas(MagGraphWindow window, Instance newCompositionOp , NodeSelection nodeSelection, GraphImageBackground graphImageBackground)
     {
         EnableParentZoom = false;
         _window = window;
-        _context = new GraphUiContext(nodeSelection, this, _window.CompositionOp, graphImageBackground);
+        _context = new GraphUiContext(nodeSelection, this, newCompositionOp , graphImageBackground);
         _nodeSelection = nodeSelection;
+        
+        InitializeCanvasScope(_context);
     }
 
     private ImRect _visibleCanvasArea;
@@ -43,16 +48,48 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
     public bool IsFocused { get; private set; }
     public bool IsHovered { get; private set; }
 
+    // private Guid _previousCompositionId;
+    
+    /// <summary>
+    /// This is an intermediate helper method that should be replaced with a generalized implementation shared by
+    /// all graph windows. It's especially unfortunate because it relies on GraphWindow.Focus to exist as open window :(
+    ///
+    /// It uses changes to context.CompositionOp to refresh the view to either the complete content or to the
+    /// view saved in user settings...
+    /// </summary>
+    private void InitializeCanvasScope(GraphUiContext context)
+    {
+        // if (context.CompositionOp.SymbolChildId == _previousCompositionId)
+        //     return;
+        //
+        if (GraphWindow.Focused == null)
+            return;
+        
+        // _previousCompositionId = context.CompositionOp.SymbolChildId;
+        
+        // Meh: This relies on TargetScope already being set to new composition.
+        var newCanvasScope = GraphWindow.Focused.GraphCanvas.GetTargetScope();
+        if (UserSettings.Config.OperatorViewSettings.TryGetValue(context.CompositionOp.SymbolChildId, out var savedCanvasScope))
+        {
+            newCanvasScope = savedCanvasScope;
+        }
+        context.Canvas.SetScopeWithTransition(newCanvasScope.Scale, newCanvasScope.Scroll, ICanvas.Transition.Undefined);
+    }
+    
+    
     public void Draw()
     {
         IsFocused = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows);
         IsHovered = ImGui.IsWindowHovered();
 
-        if (_window.CompositionOp == null)
-            return;
-
-        if (_window.CompositionOp != _context.CompositionOp)
-            _context = new GraphUiContext(_nodeSelection, this, _window.CompositionOp, _context.GraphImageBackground);
+        // if (_window.WindowCompositionOp == null)
+        //     return;
+        //
+        // if (_window.WindowCompositionOp != _context.CompositionOp)
+        // {
+        //     
+        //     _context = new GraphUiContext(_nodeSelection, this, _window.WindowCompositionOp, _context.GraphImageBackground);
+        // }
 
         _visibleCanvasArea = ImRect.RectWithSize(InverseTransformPositionFloat(ImGui.GetWindowPos()),
                                                  InverseTransformDirection(ImGui.GetWindowSize()));
@@ -64,6 +101,8 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
 
         _context.EditCommentDialog.Draw(_context.Selector);
 
+        HandleSymbolDropping(_context);
+        
         // Prepare frame
         //_context.Selector.HoveredIds.Clear();
         _context.Layout.ComputeLayout(_context);
@@ -79,6 +118,9 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
 
         ImGui.SameLine(0, 5);
         ImGui.Checkbox("Debug", ref _enableDebug);
+        
+        ImGui.SameLine(0, 10);
+        ImGui.Text("" + GetTargetScope());
 
         UpdateCanvas(out _);
         var drawList = ImGui.GetWindowDrawList();
@@ -200,7 +242,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
 
         _context.ConnectionHovering.PrepareNewFrame(_context);
 
-        _context.Placeholder.DrawPlaceholder(_context, drawList);
+        _context.Placeholder.Update(_context);
 
         // Draw animated Snap indicator
         {
@@ -265,6 +307,45 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
             }
         }
     }
+    
+    private void HandleSymbolDropping(GraphUiContext context)
+    {
+        if (!DragHandling.IsDragging)
+            return;
+
+        ImGui.SetCursorPos(Vector2.Zero);
+        ImGui.InvisibleButton("## drop", ImGui.GetWindowSize());
+
+        if (!DragHandling.TryGetDataDroppedLastItem(DragHandling.SymbolDraggingId, out var data))
+            return;
+        
+        if (!Guid.TryParse(data, out var guid))
+        {
+            Log.Warning("Invalid data format for drop? " + data);
+            return;
+        }
+
+        if (SymbolUiRegistry.TryGetSymbolUi(guid, out var symbolUi))
+        {
+            var symbol = symbolUi.Symbol;
+            var posOnCanvas = InverseTransformPositionFloat(ImGui.GetMousePos());
+            if (!SymbolUiRegistry.TryGetSymbolUi(context.CompositionOp.Symbol.Id, out var compositionOpSymbolUi))
+            {
+                Log.Warning("Failed to get symbol id for " + context.CompositionOp.SymbolChildId);
+                return;
+            }
+            
+            var childUi = GraphOperations.AddSymbolChild(symbol, compositionOpSymbolUi, posOnCanvas);
+            var instance = context.CompositionOp.Children[childUi.Id];
+            context.Selector.SetSelection(childUi, instance);
+            context.Layout.FlagAsChanged();
+        }
+        else
+        {
+            Log.Warning($"Symbol {guid} not found in registry");
+        }
+    }
+
 
     private void DrawBackgroundGrids(ImDrawListPtr drawList)
     {

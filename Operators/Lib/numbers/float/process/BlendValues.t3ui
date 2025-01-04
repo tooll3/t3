@@ -1,0 +1,34 @@
+{
+  "Id": "a1341063-f893-4447-93cd-63cfe514495e"/*BlendValues*/,
+  "Description": "Blends a number of incoming values with a float value.",
+  "SymbolTags": "1",
+  "InputUis": [
+    {
+      "InputId": "03ce9de0-2fd3-4900-84f7-2510f39dff2a"/*F*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "1c15cce3-3054-47f8-96b5-b8b741df40be"/*Values*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "b9e4e703-f797-4750-8a1d-d82c6953ea09"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

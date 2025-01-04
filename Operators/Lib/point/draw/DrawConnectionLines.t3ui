@@ -1,6 +1,7 @@
 {
   "Id": "44d57201-addf-455c-9e31-709b018ba29f"/*DrawConnectionLines*/,
   "Description": "",
+  "SymbolTags": "64",
   "InputUis": [
     {
       "InputId": "09af14b3-b4c3-4044-b5d1-0d05ec29b6b4"/*ScatterLookUp*/,

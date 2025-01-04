@@ -44,6 +44,7 @@ struct vsOutput
 {
     float4 position : SV_POSITION;
     float2 texCoord : TEXCOORD;
+    float3 viewDir : VPOS;
     float3 worldTViewDir : TEXCOORD1;
     float3 worldTViewPos : TEXCOORD2;
 };
@@ -76,28 +77,29 @@ vsOutput vsMain4(uint vertexId : SV_VertexID)
     worldTFarFragPos /= worldTFarFragPos.w;
 
     output.worldTViewDir = normalize(worldTFarFragPos.xyz - worldTNearFragPos.xyz);
-
     output.worldTViewPos = worldTNearFragPos.xyz;
-    return output;
+
+    output.viewDir = -normalize(float3(CameraToWorld._31, CameraToWorld._32, CameraToWorld._33));
 
     return output;
 }
 
 /*{FIELD_FUNCTIONS}*/
 
-struct VS_IN
-{
-    float4 pos : POSITION;
-    float2 texCoord : TEXCOORD;
-};
+// struct VS_IN
+// {
+//     float4 pos : POSITION;
+//     float2 texCoord : TEXCOORD;
+// };
 
-struct PS_IN
-{
-    float4 pos : SV_POSITION;
-    float2 texCoord : TEXCOORD0;
-    float3 worldTViewPos : TEXCOORD1;
-    float3 worldTViewDir : TEXCOORD2;
-};
+// struct PS_IN
+// {
+//     float4 pos : SV_POSITION;
+//     float2 texCoord : TEXCOORD0;
+//     float3 viewDir;
+//     float3 worldTViewPos : TEXCOORD1;
+//     float3 worldTViewDir : TEXCOORD2;
+// };
 
 //---------------------------------------
 float GetDistance(float3 pos)
@@ -141,9 +143,33 @@ float ComputeAO(float3 aoposition, float3 aonormal, float aodistance, float aoit
 
 static float MAX_DIST = 300;
 
-float4 psMain(vsOutput input) : SV_TARGET
+float DepthFromWorldSpace(float distFromCamera, float nearPlane, float farPlane)
 {
-    float3 p = input.worldTViewPos;
+    // Convert a world-space distance to a 0..1 depth.
+    // Assumes a linear mapping from nearPlane..farPlane -> 0..1
+    return saturate((distFromCamera - nearPlane) / (farPlane - nearPlane));
+}
+
+float DepthFromWorldSpace2(float dist, float near, float far)
+{
+    // Convert a world-space distance to a 0..1 depth.
+    // Assumes a linear mapping from nearPlane..farPlane -> 0..1
+    // return saturate((distFromCamera - nearPlane) / (farPlane - nearPlane));
+    return far * (dist - near) / (dist * (far - near));
+}
+
+// float4 psMain(vsOutput input) : SV_TARGET
+
+struct PSOutput
+{
+    float4 color : SV_Target;
+    float depth : SV_Depth;
+};
+
+PSOutput psMain(vsOutput input)
+{
+    float3 eye = input.worldTViewPos;
+    float3 p = eye;
     float3 tmpP = p;
     float3 dp = normalize(input.worldTViewDir);
 
@@ -174,7 +200,7 @@ float4 psMain(vsOutput input) : SV_TARGET
         float3 n = normalize(GetNormal(p, D));
         n = normalize(n);
 
-        col = Specular;
+        col = Specular.rgb;
         col = ComputedShadedColor(n, -dp, LightPos, col);
 
         col = lerp(AmbientOcclusion.rgb, col, ComputeAO(p, n, AODistance, 3, AmbientOcclusion.a));
@@ -189,7 +215,7 @@ float4 psMain(vsOutput input) : SV_TARGET
     }
     else
     {
-        a = 0.5;
+        a = 0;
     }
 
     // Glow is based on the number of steps.
@@ -198,10 +224,24 @@ float4 psMain(vsOutput input) : SV_TARGET
     col = lerp(col, Background.rgb, f);
     a *= (1 - f * Background.a);
 
-    // if (a < 0.9)
-    // {
-    //     discard;
-    // }
+    if (a < 0.6)
+    {
+        discard;
+    }
+
+    PSOutput result;
+    // result.color = float4(1, 1, 0, 1);
+    result.color = float4(col, a);
+    // result.depth = totalD; // length(p);
+
+    float depth = dot(eye - p, -input.viewDir);
+
+    // result.depth = input.texCoord;
+    result.depth = DepthFromWorldSpace2(depth, 0.01, 1000);
+    // result.color = float4(depth.xxx, 1);
+    //  result.depth = DepthFromWorldSpace2(length(eye - p), 0.01, 1000);
+    return result;
+
     // return float4(a.xxx, 1);
-    return float4(col, a);
+    // return float4(col, a);
 }

@@ -1,6 +1,7 @@
 {
   "Id": "69273e39-c475-47da-8882-e60fd4ea74f2"/*LookTest12*/,
   "Description": "Fake shadows in practical scene",
+  "SymbolTags": "2",
   "InputUis": [],
   "SymbolChildUis": [
     {

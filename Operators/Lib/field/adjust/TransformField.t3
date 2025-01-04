@@ -1,0 +1,55 @@
+{
+  "Id": "c44d23c7-bfac-403d-b49e-49d00001a316"/*TransformField*/,
+  "Inputs": [
+    {
+      "Id": "279730b7-c427-4924-9fde-77eb65a3076c"/*Pivot*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "3b817e6c-f532-4a8c-a2ff-a00dc926eeb2"/*Translation*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "5339862d-5a18-4d0c-b908-9277f5997563"/*Rotation*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "566f1619-1de0-4b41-b167-7fc261730d62"/*UniformScale*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "58b9dfb6-0596-4f0d-baf6-7fb3ae426c94"/*Scale*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0
+      }
+    },
+    {
+      "Id": "7248c680-7279-4c1d-b968-3864cb849c77"/*InputField*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "f53f3311-e1fc-418b-8861-74adc175d5fa"/*Shear*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

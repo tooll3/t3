@@ -1,0 +1,24 @@
+{
+  "Id": "e5588101-5686-4b02-ab7d-e58199ba552e"/*_OutputWindowGrid*/,
+  "Description": "An internal wrapped used by the editor output window. \n\nShould not be used and must not have input parameters.\n\nPlease consider using [GridPlane].",
+  "SymbolTags": "16",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "b7280d50-5b52-4832-a408-4d0e7a06550b"/*GridPlane*/,
+      "Position": {
+        "X": -196.80994,
+        "Y": 3.8131108
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "34f1eab4-9379-4b4e-a160-1bfed9103597"/*Output*/,
+      "Position": {
+        "X": 79.031555,
+        "Y": 2.2029724
+      }
+    }
+  ]
+}

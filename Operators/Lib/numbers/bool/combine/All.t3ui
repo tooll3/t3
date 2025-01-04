@@ -1,0 +1,25 @@
+{
+  "Id": "3a6fd508-0272-4c18-96b8-bc2387d3b2fd"/*All*/,
+  "Description": "Returns true if all of the connected booleans are true.",
+  "SymbolTags": "1",
+  "InputUis": [
+    {
+      "InputId": "cf59ae3e-d111-479f-a42b-c5c014e65b32"/*Input*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "734bc5bc-caca-4367-abf5-a7ac94ed13d6"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    }
+  ]
+}

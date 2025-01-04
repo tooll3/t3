@@ -1,6 +1,7 @@
 {
   "Id": "ab6ab34f-4c6e-41ef-af69-48bb9393651b"/*PairPointsForLines*/,
   "Description": "Combines two point buffers so they can be drawn with connection lines between points.",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "10a6c6d5-9685-4bde-a1b6-e5456c886898"/*SetWTo01*/,

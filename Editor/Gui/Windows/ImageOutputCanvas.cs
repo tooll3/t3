@@ -1,7 +1,7 @@
 using ImGuiNET;
 using SharpDX.DXGI;
 using T3.Core.DataTypes;
-using T3.Editor.Gui.Graph.Rendering;
+using T3.Core.Resource;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
@@ -75,7 +75,7 @@ internal class ImageOutputCanvas : ScalableCanvas
         if (UserSettings.Config.ShowToolbar)
         {
             var format = "";
-            if (srv == null)
+            if (srv == null || srv.IsDisposed)
             {
                 format = "null?";
             } 

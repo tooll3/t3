@@ -1,0 +1,32 @@
+{
+  "Id": "4023bcbf-74a6-4e50-a12e-4c22be5dbbdf"/*DataRecording*/,
+  "Description": "An experimantal gateway to recorded data channels.\n\nEdit helpers can register their data channels which can then be access for review in the output window.\n",
+  "SymbolTags": "128",
+  "InputUis": [
+    {
+      "InputId": "48e9dd6c-87d2-4701-96ab-3971f3150ff1"/*ResetTrigger*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "88d15473-bd02-48cc-a1af-b822485ab58f"/*ActiveDataSetId*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Usage": "CustomDropdown"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "8c911387-bb2f-4d72-8528-b9f2d8cfe250"/*DataSet*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

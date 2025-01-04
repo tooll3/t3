@@ -1,6 +1,7 @@
 {
   "Id": "ec8111b7-09d4-411e-9409-4e877d14371d"/*PairPointsForGridWalkLines*/,
   "Description": "Special effects operator that works nicely with [CollectSpawnPoints].",
+  "SymbolTags": "64",
   "InputUis": [
     {
       "InputId": "0d9f5cc1-5aa1-4d2f-93f7-74baa1a0ded6"/*StrokeLength*/,

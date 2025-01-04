@@ -92,6 +92,7 @@ internal static class KeyboardActions
         if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.PasteFromClipboard))
         {
             NodeActions.PasteClipboard(context.Selector, context.Canvas, compositionOp);
+            context.Layout.FlagAsChanged();
         }
 
         // if (KeyboardBinding.Triggered(UserActions.LayoutSelection))

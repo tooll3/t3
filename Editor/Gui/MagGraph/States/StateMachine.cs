@@ -30,7 +30,7 @@ internal sealed class StateMachine
         _stateEnterTime = ImGui.GetTime();
         
         var activeCommand = context.MacroCommand != null ? "ActiveCmd:" + context.MacroCommand : string.Empty;
-        Log.Debug($"--> {GetMatchingStateFieldName(typeof( GraphStates), _currentState)}  {activeCommand}   {context.ActiveItem}");
+        //Log.Debug($"--> {GetMatchingStateFieldName(typeof( GraphStates), _currentState)}  {activeCommand}   {context.ActiveItem}");
         _currentState.Enter(context);
     }
 

@@ -1,0 +1,153 @@
+{
+  "Id": "d40966c3-2369-40f2-8202-e5c8ab6d9cc0"/*BlurWithMask*/,
+  "Description": "Applying a masked blur can be a very powerful effect for simulating tilt-shift cameras (with [LinearRamp] or depth of field (with [Blob]). \nIt can be also useful for fade-in transitions.\n\nTips:\n- Also try to apply it with animated patterns like [FractalNoise].\n- Some additional effects can be achieved by increasing .MaskContrast and animating .MaskOffset.\n- MaskContrast of -1 will invert the mask.\n\n",
+  "SymbolTags": "1",
+  "InputUis": [
+    {
+      "InputId": "0623d858-8986-4058-b209-28b0649f1441"/*Color*/,
+      "Position": {
+        "X": -614.52454,
+        "Y": 272.84418
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "1bfb5c46-a1dd-41fe-aa6b-96e3d602bc82"/*Offset*/,
+      "Position": {
+        "X": -614.52454,
+        "Y": 362.84418
+      },
+      "Min": -1.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "25091e3d-36ef-4892-965c-b7d3c983da22"/*Samples*/,
+      "Position": {
+        "X": -611.86176,
+        "Y": 188.07684
+      },
+      "Min": 0.0,
+      "Max": 100.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "29f6bc05-de55-4336-a275-f06b835c66f8"/*Image*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -611.86176,
+        "Y": 53.076843
+      }
+    },
+    {
+      "InputId": "4837051f-033c-4e9e-9d1c-0fe85c1467cb"/*Mask*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -611.86176,
+        "Y": 98.07684
+      }
+    },
+    {
+      "InputId": "62971a40-08ef-414c-8bb5-31ee050551ea"/*AddOriginal*/,
+      "Position": {
+        "X": -614.52454,
+        "Y": 407.84418
+      },
+      "Min": -1.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "684761a9-3bdf-4ef3-8d3e-191332609ecf"/*MaskOffset*/,
+      "Position": {
+        "X": -615.22235,
+        "Y": 631.74036
+      }
+    },
+    {
+      "InputId": "731eaf1c-aef0-4310-a470-62c0dfeb310a"/*ApplyMaskToAlpha*/,
+      "Position": {
+        "X": -615.2039,
+        "Y": 446.03854
+      }
+    },
+    {
+      "InputId": "d89ac5e9-9bdd-48f6-8118-3bbe04e3988d"/*MaskContrast*/,
+      "Position": {
+        "X": -615.22235,
+        "Y": 586.74036
+      },
+      "Min": -10.0,
+      "Max": 10.0
+    },
+    {
+      "InputId": "fa5bb047-7466-4d68-9977-7a86815ca0f2"/*Size*/,
+      "Position": {
+        "X": -611.86176,
+        "Y": 143.07684
+      },
+      "Min": 0.0,
+      "Max": 100.0,
+      "Scale": 0.1,
+      "Clamp": true
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "3045573f-0d4f-4d71-937a-305e6186c442"/*_multiImageFxSetup*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 106.2901,
+        "Y": 251.25096
+      },
+      "Position": {
+        "X": 291.50015,
+        "Y": -329.96057
+      }
+    },
+    {
+      "ChildId": "b2940c35-362a-4eb9-8f38-f14a5016a141"/*Vector2Components*/,
+      "Position": {
+        "X": -359.78207,
+        "Y": -35.74472
+      }
+    },
+    {
+      "ChildId": "bc328a71-c8ef-4907-84d0-ddd72fe94649"/*_multiImageFxSetup*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 107.217575,
+        "Y": 260.52576
+      },
+      "Position": {
+        "X": 97.61572,
+        "Y": -399.74332
+      }
+    },
+    {
+      "ChildId": "f626873a-4305-484a-9ccf-77289cd983f5"/*Vector4Components*/,
+      "Position": {
+        "X": -162.24867,
+        "Y": 273.48486
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "8d199a8d-b02e-4fa2-8f7d-b156e4302fe3"/*TextureOutput*/,
+      "Position": {
+        "X": 518.2661,
+        "Y": 119.74711
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "31a10418-3bbd-4a58-99ef-48838d9ece3c",
+      "Title": "Example",
+      "Description": "An example how this operator is being used in another project.",
+      "LinkUrl": "https://youtu.be/7S4aedYxqQE?feature=shared&t=1307",
+      "LinkType": "TutorialVideo"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "Id": "d32a5484-880c-41d4-88ea-6ee1a3e61f0b"/*ContextCBuffers*/,
+  "Description": "Get constant buffers (e.g. for rendering parameters) from evaluation context.",
+  "SymbolTags": "16",
+  "InputUis": [],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "d4171c74-5a90-4fe9-8334-10f9701c284c"/*FogParameters*/,
+      "Position": {
+        "X": 169.8139,
+        "Y": 41.25933
+      }
+    },
+    {
+      "OutputId": "5cb8c86e-c3a6-434c-b30a-a107121436b2"/*PointLights*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

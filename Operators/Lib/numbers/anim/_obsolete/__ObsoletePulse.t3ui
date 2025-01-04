@@ -1,0 +1,38 @@
+{
+  "Id": "5952d7b4-29ac-41fb-9324-287392d55048"/*__ObsoletePulse*/,
+  "Description": "Generates a pulse value with linear decay.\nAlso consider using [LFO].",
+  "SymbolTags": "4096",
+  "InputUis": [
+    {
+      "InputId": "168efb4d-e4cb-4264-b845-b6ede38c1919"/*Amplitude*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "a8d06cd6-ca17-404f-9852-a45ce35da623"/*Trigger*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "fb8cf1db-a1ac-4563-aca0-73a4726d46a4"/*Decay*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "56020950-21f1-4868-b753-07c5ad1d22e8"/*Result*/,
+      "Position": {
+        "X": 149.09799,
+        "Y": -6.8220024
+      }
+    }
+  ]
+}

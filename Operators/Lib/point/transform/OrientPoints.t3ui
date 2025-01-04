@@ -1,6 +1,7 @@
 {
   "Id": "acc71a14-daad-4b36-b0bc-cf0a796cc5d9"/*OrientPoints*/,
   "Description": "Orients the rotation of points so that Z points towards a center.",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "02ae76ba-7be8-4112-a59b-55616343f1dd"/*Flip*/,

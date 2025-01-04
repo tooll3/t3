@@ -1,6 +1,7 @@
 {
   "Id": "fc3a89d4-e7ea-45d8-b1c5-41170c7cd2b8"/*HowToUseOperators*/,
   "Description": "This example gives a playful, interactive introduction to Tooll's operators and how they work.",
+  "SymbolTags": "3",
   "InputUis": [],
   "SymbolChildUis": [
     {

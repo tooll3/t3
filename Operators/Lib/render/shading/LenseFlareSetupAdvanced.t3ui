@@ -1,0 +1,320 @@
+{
+  "Id": "8f4ca295-7268-44a2-94b0-4e974fac22a4"/*LenseFlareSetupAdvanced*/,
+  "Description": "Same as [LenseFlareSetup] but all elements can be tweaked seperately.\n\nNote: Some effects can have unpredicatable behaviour if the point light position matches the camera look target.\n",
+  "SymbolTags": "1",
+  "InputUis": [
+    {
+      "InputId": "007b11db-6d0e-49e6-a747-6a2d8cdc0e6b"/*FlareSprites*/,
+      "Position": {
+        "X": -564.8251,
+        "Y": 836.45776
+      },
+      "Description": "Brightness and intensity of the primary horizontal streak.",
+      "Min": 0.1,
+      "Max": 11.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "18b19778-3ff2-4e38-8fb6-fa748babb967"/*RandomSeed*/,
+      "Position": {
+        "X": -564.8251,
+        "Y": 399.45773
+      },
+      "Description": "Automatically creates different combinations of LenseFlares.\n\nElements include: MultiIris",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "240c75c2-f725-48b8-8abd-4bc4c05190f7"/*RandomizeColor*/,
+      "Position": {
+        "X": -564.8251,
+        "Y": 489.45773
+      },
+      "Description": "Select a color to tint various elements.",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "381c5f2f-b9bb-481f-9567-9fd949063338"/*ColorEdgeGlow*/,
+      "Position": {
+        "X": -564.8251,
+        "Y": 669.45776
+      },
+      "Description": "Intensity and size of the secondary blobs at the edge of the flare.",
+      "Min": 0.1,
+      "Max": 11.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "7a870089-8e1e-4cd4-a920-7cc5a50d7376"/*Star*/,
+      "Position": {
+        "X": -564.8251,
+        "Y": 579.45776
+      },
+      "Description": "Brightness and magnitude of the primary stellar element in the center of the light.",
+      "Min": 0.1,
+      "Max": 11.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "7a8b4acd-69db-4282-a6ce-d637a1339a27"/*MultiIris*/,
+      "Position": {
+        "X": -564.8251,
+        "Y": 714.45776
+      },
+      "Description": "Intensity and transparency of the secondary lens reflections.",
+      "Min": 0.1,
+      "Max": 11.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "7cd57dc9-e6a8-4bb6-8245-ffbe962f6bf4"/*Digital*/,
+      "Position": {
+        "X": -564.8251,
+        "Y": 534.45776
+      },
+      "GroupTitle": "Advanced Option",
+      "Description": "Intensity of secondary digital bars.",
+      "Min": 0.1,
+      "Max": 11.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "8fa8fbae-4d50-480e-ae20-677946d3e533"/*LightIndex*/,
+      "Position": {
+        "X": -564.8251,
+        "Y": 444.45773
+      },
+      "Description": "Select the Index / ID of the Pointlight to which the Lenseflare is attached.",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "94630a8b-c97d-42f3-8df4-a40791bc7e6c"/*Sparkle*/,
+      "Position": {
+        "X": -564.8251,
+        "Y": 746.45776
+      },
+      "Description": "Visibility and intensity of the secondary rainbow glitter at the edge of the image.",
+      "Min": 0.1,
+      "Max": 11.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "be8975c0-2748-4ace-8047-c941caad45c2"/*Shimmer*/,
+      "Position": {
+        "X": -564.8251,
+        "Y": 791.45776
+      },
+      "Description": "Brightness and intensity of the primary glowing god rays.",
+      "Min": 0.1,
+      "Max": 11.0
+    },
+    {
+      "InputId": "c3e3042d-b306-4c14-a4cb-9b2a6a54e841"/*Center*/,
+      "Position": {
+        "X": -564.8251,
+        "Y": 624.45776
+      },
+      "Description": "Intensity and magnitude of the primary element in the center of the light.",
+      "Min": 0.1,
+      "Max": 11.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "f2c310f0-a019-40e5-9b17-3c35d254bb82"/*Brightness*/,
+      "Position": {
+        "X": -564.8251,
+        "Y": 354.45773
+      },
+      "Description": "Controls the intensity of all elements listed in the advanced options.",
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 100.0,
+      "Scale": 0.001
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "006ea216-7634-4b65-b4cd-7bc5de29a04b"/*Multiply*/,
+      "Position": {
+        "X": 80.80969,
+        "Y": 243.62683
+      }
+    },
+    {
+      "ChildId": "0440bc67-3530-4d98-87ff-f25a0c2944d0"/*Multiply*/,
+      "Position": {
+        "X": -139.89325,
+        "Y": 1456.6986
+      }
+    },
+    {
+      "ChildId": "09036c16-2468-430a-8519-85e5137d8017"/*Multiply*/,
+      "Position": {
+        "X": 92.42566,
+        "Y": 506.68286
+      }
+    },
+    {
+      "ChildId": "09d2769f-ab22-406e-a1d7-c610b67f6060"/*Execute*/,
+      "Position": {
+        "X": 632.1852,
+        "Y": 242.57086
+      }
+    },
+    {
+      "ChildId": "0ef8f0e4-fbc1-4472-ac93-d1332772f1f3"/*Multiply*/,
+      "Position": {
+        "X": -74.42157,
+        "Y": 1077.5867
+      }
+    },
+    {
+      "ChildId": "20db18ed-dab8-44aa-84ce-44c338f7e3f6"/*Star*/,
+      "Position": {
+        "X": 242.42566,
+        "Y": 595.68286
+      }
+    },
+    {
+      "ChildId": "23aab48a-ff29-4eb1-a59c-4876166e6b0f"/*Sparkle*/,
+      "Position": {
+        "X": 10.1067505,
+        "Y": 1347.6986
+      }
+    },
+    {
+      "ChildId": "2c41db4e-d018-4f56-bf4f-7c4aec1f497a"/*DrawLensShimmer*/,
+      "Position": {
+        "X": 160.10675,
+        "Y": 1347.6986
+      }
+    },
+    {
+      "ChildId": "560c8134-29e4-4d0c-8245-1609e62bb326"/*DefineLensFlare*/,
+      "Position": {
+        "X": 242.42566,
+        "Y": 779.68286
+      }
+    },
+    {
+      "ChildId": "59074b5f-0f68-417f-8343-bda41c04debf"/*Multiply*/,
+      "Position": {
+        "X": 92.42566,
+        "Y": 803.68286
+      }
+    },
+    {
+      "ChildId": "79825b49-843e-4978-b30f-0a54e6bc97e1"/*MultiIris*/,
+      "Position": {
+        "X": 75.57843,
+        "Y": 1077.5867
+      }
+    },
+    {
+      "ChildId": "7ecc92b4-fea7-471c-b58f-ac2a20f26a9b"/*Multiply*/,
+      "Position": {
+        "X": 92.42566,
+        "Y": 595.68286
+      }
+    },
+    {
+      "ChildId": "7f172164-111b-45be-a42d-b7acca6fbb6f"/*Multiply*/,
+      "Position": {
+        "X": -139.89325,
+        "Y": 1347.6986
+      }
+    },
+    {
+      "ChildId": "84ab19cb-9c86-4114-b060-c3016cc819ac"/*Digital*/,
+      "Position": {
+        "X": 230.8097,
+        "Y": 243.62683
+      }
+    },
+    {
+      "ChildId": "8c1121e7-ff14-4d2b-b276-ae47a3e2c079"/*Shimmer*/,
+      "Position": {
+        "X": 10.1067505,
+        "Y": 1456.6986
+      }
+    },
+    {
+      "ChildId": "a9b3ad35-1b32-433e-a327-fd65d8fbfc23"/*Multiply*/,
+      "Position": {
+        "X": 92.42566,
+        "Y": 684.68286
+      }
+    },
+    {
+      "ChildId": "b8188da4-e4c3-4127-a2ff-45ba29ebf715"/*NGon*/,
+      "Position": {
+        "X": 230.8097,
+        "Y": 312.62683
+      }
+    },
+    {
+      "ChildId": "bbbc0cce-356f-4577-be64-de22ead7a36a"/*NGon*/,
+      "Position": {
+        "X": 242.42566,
+        "Y": 848.68286
+      }
+    },
+    {
+      "ChildId": "bd881da4-e969-43ef-83c3-a2462be2d93a"/*NGon*/,
+      "Position": {
+        "X": 71.17697,
+        "Y": 1229.8059
+      }
+    },
+    {
+      "ChildId": "c53a82af-2779-4356-a9e2-5712dbc37a91"/*DrawLensFlares*/,
+      "Position": {
+        "X": 225.57843,
+        "Y": 1077.5867
+      }
+    },
+    {
+      "ChildId": "d1e8995c-15a6-4680-900b-24d305376e7b"/*DrawLensFlares*/,
+      "Position": {
+        "X": 392.42566,
+        "Y": 506.68286
+      }
+    },
+    {
+      "ChildId": "dd469b79-dfd6-4e06-ac07-0d5ad51f4b7f"/*DrawLensFlares*/,
+      "Position": {
+        "X": 380.8097,
+        "Y": 243.62683
+      }
+    },
+    {
+      "ChildId": "dd9bb34d-33ac-4cd5-8479-711323fbcae3"/*CenterGlow*/,
+      "Position": {
+        "X": 242.42566,
+        "Y": 506.68286
+      }
+    },
+    {
+      "ChildId": "df281227-0f71-437f-ba18-e2592e74d26f"/*RandomColorEdgeGlow*/,
+      "Position": {
+        "X": 242.42566,
+        "Y": 684.68286
+      }
+    },
+    {
+      "ChildId": "e12e20fe-28e7-4beb-a3a6-7a2945df21b7"/*DrawLensShimmer*/,
+      "Position": {
+        "X": 160.10675,
+        "Y": 1456.6986
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "fe0eca40-4f2d-475b-8372-0351d9f67c59"/*Output*/,
+      "Position": {
+        "X": 782.1852,
+        "Y": 242.57086
+      }
+    }
+  ]
+}

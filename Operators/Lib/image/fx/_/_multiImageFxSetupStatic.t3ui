@@ -1,0 +1,219 @@
+{
+  "Id": "cc34a183-3978-4b6b-8ef1-dd8102410816"/*_multiImageFxSetupStatic*/,
+  "Description": "Setup for an image effect with two incoming textures that do not have any animated references.\nThe used with a fixed resolution this can be cached automatically.",
+  "SymbolTags": "16",
+  "InputUis": [
+    {
+      "InputId": "0bb90f8d-88c9-4a99-b44f-f284b505c65b"/*ImageB*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 656.6387,
+        "Y": 503.90515
+      }
+    },
+    {
+      "InputId": "2929c4c9-6d6a-47b7-b80e-d7a1f90b6945"/*FloatParams*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 284.06415,
+        "Y": 745.865
+      }
+    },
+    {
+      "InputId": "35f3b28b-2210-4f27-813a-5c857940d09c"/*TextureFormat*/,
+      "Position": {
+        "X": 1429.0942,
+        "Y": 674.8063
+      }
+    },
+    {
+      "InputId": "55126bff-8c94-415d-96dd-3c16e216e663"/*ImageA*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 144.06415,
+        "Y": 605.86505
+      }
+    },
+    {
+      "InputId": "6022a4b0-c6fc-49a3-811a-179dcceb8b44"/*WrapMode*/,
+      "Position": {
+        "X": 468.40155,
+        "Y": 581.03424
+      }
+    },
+    {
+      "InputId": "9851a909-a9fd-4feb-a8bd-48846cea8461"/*Resolution*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 4.064148,
+        "Y": 675.86505
+      }
+    },
+    {
+      "InputId": "e31b78eb-940b-41df-93fa-d0c1c9f864f4"/*GenerateMips*/,
+      "Position": {
+        "X": 1429.0942,
+        "Y": 709.8063
+      }
+    },
+    {
+      "InputId": "f6269be3-3331-43a6-91ec-138b47199f3e"/*ShaderPath*/,
+      "Position": {
+        "X": 412.88867,
+        "Y": 362.51642
+      },
+      "Usage": "FilePath"
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "019ac41b-4792-4000-994c-58576e4d9a70"/*RenderTarget*/,
+      "Position": {
+        "X": 1569.0942,
+        "Y": 604.80615
+      }
+    },
+    {
+      "ChildId": "01f4bf46-244d-4191-b1d5-3d2eff225cc7"/*RenderTargetBlendDescription*/,
+      "Position": {
+        "X": 1128.4272,
+        "Y": 484.69223
+      }
+    },
+    {
+      "ChildId": "0a63766d-6a4c-453e-9c7b-bc910c7392ad"/*BoolToFloat*/,
+      "Position": {
+        "X": 284.06415,
+        "Y": 780.8651
+      }
+    },
+    {
+      "ChildId": "3c24b2a6-b720-4daa-9ffa-92923cc225c7"/*Draw*/,
+      "Position": {
+        "X": 1429.0944,
+        "Y": 569.806
+      }
+    },
+    {
+      "ChildId": "404137db-1014-4e1d-b73f-155985b85b2c"/*FloatsToBuffer*/,
+      "Position": {
+        "X": 424.06415,
+        "Y": 710.865
+      }
+    },
+    {
+      "ChildId": "4ac515f0-074c-4638-b2a5-b4759d394239"/*OutputMergerStage*/,
+      "Position": {
+        "X": 1268.4272,
+        "Y": 484.69223
+      }
+    },
+    {
+      "ChildId": "5013dc38-aeb3-4776-b642-87bc9ef8d350"/*SamplerState*/,
+      "Position": {
+        "X": 608.40155,
+        "Y": 546.03424
+      }
+    },
+    {
+      "ChildId": "57654070-427b-45bc-8596-cfa7bc44aa36"/*SetPixelAndVertexShaderStage*/,
+      "Position": {
+        "X": 936.6387,
+        "Y": 328.90527
+      }
+    },
+    {
+      "ChildId": "5cc47903-c62f-41fb-b77e-585d619acd4d"/*VertexShader*/,
+      "Position": {
+        "X": 796.6387,
+        "Y": 328.90527
+      }
+    },
+    {
+      "ChildId": "6077ceb4-4957-4b79-87dc-ab819b5d9b6b"/*ClampedSampler*/,
+      "Position": {
+        "X": 796.6387,
+        "Y": 573.90515
+      }
+    },
+    {
+      "ChildId": "651b3c92-6be9-4636-ac57-6205b63e45bc"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 796.6387,
+        "Y": 468.90515
+      }
+    },
+    {
+      "ChildId": "713912ae-7135-4c98-a978-59f66a21b9aa"/*BlendState*/,
+      "Position": {
+        "X": 1128.4272,
+        "Y": 519.69214
+      }
+    },
+    {
+      "ChildId": "96bca09d-a4e9-4ec7-9037-b2febe5871f2"/*RasterizerState*/,
+      "Position": {
+        "X": 794.75885,
+        "Y": 257.64124
+      }
+    },
+    {
+      "ChildId": "9f222743-5d2c-4e6f-9b3f-f37b42865b51"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 796.6387,
+        "Y": 503.90515
+      }
+    },
+    {
+      "ChildId": "a8cac07b-81aa-49c2-858c-8fd93dedc849"/*ResolutionConstBuffer*/,
+      "Position": {
+        "X": 796.6387,
+        "Y": 433.90527
+      }
+    },
+    {
+      "ChildId": "bd526de0-a395-482f-9ed3-9e4deafa5e38"/*GetTextureSize*/,
+      "Position": {
+        "X": 144.06415,
+        "Y": 640.86505
+      }
+    },
+    {
+      "ChildId": "e084d65a-cd9b-4df4-a464-6343a7e1eeb3"/*PixelShader*/,
+      "Position": {
+        "X": 552.8887,
+        "Y": 362.51642
+      }
+    },
+    {
+      "ChildId": "eb992ff5-74f8-4bc0-86f5-94cbc34a82b3"/*Execute*/,
+      "Position": {
+        "X": 1569.0942,
+        "Y": 429.8061
+      }
+    },
+    {
+      "ChildId": "f321a1e5-b006-4d97-9a2d-bd71ce1d46fe"/*Rasterizer*/,
+      "Position": {
+        "X": 934.7589,
+        "Y": 257.64124
+      }
+    },
+    {
+      "ChildId": "fa068e3d-897b-4daa-9b22-f5549b9e9b91"/*InputAssemblerStage*/,
+      "Position": {
+        "X": 934.7589,
+        "Y": 222.64125
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "76b6c677-12db-4404-aff7-ee3391d2d831"/*Output*/,
+      "Position": {
+        "X": 1709.0942,
+        "Y": 604.80615
+      }
+    }
+  ]
+}

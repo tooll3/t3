@@ -1,0 +1,42 @@
+{
+  "Id": "eb818dd0-0c9c-40ee-b76e-2148f958b987"/*ScaleResolution*/,
+  "Description": "Non-Uniformly scales / multiplies an int2 which is used for defining resolutions\n\nFor a similar operator with less settings see [ScaleSize]\n\nAlso see [MakeResolution], [int2] etc.",
+  "SymbolTags": "1",
+  "InputUis": [
+    {
+      "InputId": "266b57dc-26b5-4267-854d-a8e1a25cf29c"/*Resolution*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Description": "Defines X and Y / Width and height of the resolution to be scaled"
+    },
+    {
+      "InputId": "94703070-18a3-41a7-b8e7-53d6e24d84cf"/*Factor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Description": "Defines the scaling factor for X and Y / Width and height",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "d14b7c37-e012-4659-98e9-226ab97291be"/*ClampToValidTextureSize*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      },
+      "Description": "Can limit the output to resolutions that are valid for textures (e.g. Powers of 2)"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "83b4187e-e4a6-45a4-816f-6d5cb75021d5"/*Size*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

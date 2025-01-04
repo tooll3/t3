@@ -20,14 +20,14 @@ public sealed partial class SymbolUi : ISelectionContainer
     {
         _id = symbol.Id;
         _package = symbol.SymbolPackage;
-        if(_package == null)
+        if (_package == null)
             throw new ArgumentException("Symbol must have a package");
-            
+
         InputUis = new Dictionary<Guid, IInputUi>();
         OutputUis = new Dictionary<Guid, IOutputUi>();
         Annotations = new OrderedDictionary<Guid, Annotation>();
         Links = new OrderedDictionary<Guid, ExternalLink>();
-            
+
         if (updateConsistency)
             UpdateConsistencyWithSymbol();
 
@@ -43,20 +43,20 @@ public sealed partial class SymbolUi : ISelectionContainer
                       bool updateConsistency) : this(symbol, false)
     {
         _childUis = childUis(symbol).ToDictionary(x => x.Id, x => x);
-            
+
         InputUis = inputs;
         OutputUis = outputs;
         Annotations = annotations;
         Links = links;
         ReadOnly = true;
-            
+
         if (updateConsistency)
             UpdateConsistencyWithSymbol(symbol);
     }
 
     internal void UpdateSymbolPackage(EditorSymbolPackage package)
     {
-        if(package == null)
+        if (package == null)
             throw new ArgumentException("Symbol must have a package");
         _package = package;
         foreach (var childUi in ChildUis.Values)
@@ -110,10 +110,10 @@ public sealed partial class SymbolUi : ISelectionContainer
 
         foreach (var childUi in _childUis.Values)
         {
-            if(!symbol.Children.ContainsKey(childUi.Id))
+            if (!symbol.Children.ContainsKey(childUi.Id))
                 childIdsToRemove.Add(childUi.Id);
         }
-            
+
         foreach (var id in childIdsToRemove)
         {
             _childUis.Remove(id);
@@ -235,16 +235,34 @@ public sealed partial class SymbolUi : ISelectionContainer
     }
 
     internal string Description { get; set; } = string.Empty;
+    internal SymbolTags Tags { get; set; }
+
+    [Flags]
+    internal enum SymbolTags
+    {
+        None = 0,
+        Essential = 1 << 0,
+        Example = 1 << 1,
+        Project = 1 << 2,
+        Advanced = 1 << 3,
+        Internal = 1 << 4,
+        Private = 1 << 5,
+        Experimental = 1 << 6,
+        Research = 1 << 7,
+        NeedsFix = 1 << 10,
+        HasUpdate = 1 << 11,
+        Obsolete = 1 << 12,
+    }
 
     internal bool ReadOnly;
     private bool _hasBeenModified;
     internal bool HasBeenModified => _hasBeenModified;
     internal bool NeedsSaving => _hasBeenModified && !ReadOnly;
-    private  Dictionary<Guid, Child> _childUis = new();
+    private Dictionary<Guid, Child> _childUis = new();
     internal IReadOnlyDictionary<Guid, Child> ChildUis => _childUis;
     internal IDictionary<Guid, ExternalLink> Links { get; private set; }
-    internal IDictionary<Guid, IInputUi> InputUis { get; private set; } 
-    internal IDictionary<Guid, IOutputUi> OutputUis{ get; private set; }
+    internal IDictionary<Guid, IInputUi> InputUis { get; private set; }
+    internal IDictionary<Guid, IOutputUi> OutputUis { get; private set; }
     internal IDictionary<Guid, Annotation> Annotations { get; private set; }
 
     internal void ReplaceWith(SymbolUi newSymbolUi)

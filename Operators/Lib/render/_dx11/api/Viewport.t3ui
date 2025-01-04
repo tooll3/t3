@@ -1,0 +1,73 @@
+{
+  "Id": "1f23db4a-871e-42a9-9255-49b956993eb1"/*Viewport*/,
+  "Description": "Defines a DirectX11 viewport that can be passed to an [Rasterizer] stage.",
+  "SymbolTags": "24",
+  "InputUis": [
+    {
+      "InputId": "33da799a-eff2-4e0a-9f8b-7f65ca03a350"/*Y*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    },
+    {
+      "InputId": "4f926315-5826-42cd-b35f-48db63e8d20e"/*MaxDepth*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    },
+    {
+      "InputId": "65647489-4ad9-4d8c-8b4f-eeb726846488"/*X*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    },
+    {
+      "InputId": "7a4dbbac-b863-49d9-ad42-3f218683bcb1"/*Width*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Min": -100.0,
+      "Max": 9999.0,
+      "Scale": 1.0
+    },
+    {
+      "InputId": "acc2b98a-ed9f-4b7a-a274-480af6f50335"/*Height*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Min": -100.0,
+      "Max": 9999.0,
+      "Scale": 1.0
+    },
+    {
+      "InputId": "e378460f-44d2-4d73-97de-34ccfacb11a3"/*MinDepth*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "c543af89-018e-4540-9f65-32cf6688cd42"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

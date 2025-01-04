@@ -1,0 +1,38 @@
+{
+  "Id": "fbd7f0f0-36a3-4fbb-91e1-cb33d4666d09"/*Rasterizer*/,
+  "Description": "",
+  "SymbolTags": "24",
+  "InputUis": [
+    {
+      "InputId": "35a52074-1e82-4352-91c3-d8e464f73bc7"/*RasterizerState*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "3f71be22-9dc2-4e47-8b3a-1ef3c9ecbd9d"/*ScissorRectangles*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "73945e5d-3c3c-4742-b341-a061b0dc116f"/*Viewports*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "c723ad69-ff0c-47b2-9327-bd27c0d7b6d1"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

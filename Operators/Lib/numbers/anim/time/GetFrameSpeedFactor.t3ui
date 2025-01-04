@@ -1,0 +1,25 @@
+{
+  "Id": "3be62864-30dd-4531-9980-28b634296e47"/*GetFrameSpeedFactor*/,
+  "Description": "This is set when rendering updates not at 60fps. This can happen for...\n\n- high framerate displays -> e.g. 2 for 120hz displays\n- when rendering low fps image sequences -> e.g. 25/60 for 25fps\n   \nIf possible simulation operators like [ParticleSystem] or [FeedbackEffect] should apply this factor to their overall speed factor.",
+  "SymbolTags": "16",
+  "InputUis": [],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "d5de5667-82f7-4556-9b44-5e6ebdcfdd4d"/*FrameSpeedFactor*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "09b2abf8-ec45-4248-8d85-ffc32c65c5c4",
+      "Title": "Time Magic",
+      "Description": "A 4min video tutorial about overriding time.",
+      "LinkUrl": "https://www.youtube.com/watch?v=COd7gkJB0KQ&list=PLj-rnPROvbn2cfnUwuyb5gRj-juOYUC7T&index=22",
+      "LinkType": "TutorialVideo"
+    }
+  ]
+}

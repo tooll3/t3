@@ -9,7 +9,7 @@
     <RootNamespace>Lib.Editor</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
     <HomeGuid>00000000-0000-0000-0000-000000000000</HomeGuid>
-    <EditorVersion>3.9.1</EditorVersion>
+    <EditorVersion>3.10.1</EditorVersion>
     <IsEditorOnly>true</IsEditorOnly>
     <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
   </PropertyGroup>
@@ -18,8 +18,7 @@
     <ProjectReference Include="..\..\Editor\Editor.csproj" Private="false" PrivateAssets="all" />
     <ProjectReference Include="..\..\SystemUi\SystemUi.csproj" />
     <ProjectReference Include="..\lib\Lib.csproj" Private="false" PrivateAssets="all" />
-    <ProjectReference Include="..\TypeOperators\TypeOperators.csproj" Private="false"
-      PrivateAssets="all" />
+    <ProjectReference Include="..\TypeOperators\TypeOperators.csproj" Private="false" PrivateAssets="all" />
     <ProjectReference Include="..\..\Logging\Logging.csproj" Private="false" PrivateAssets="all" />
   </ItemGroup>
   <!-- Include Resources/** into output/Resources -->
@@ -41,10 +40,6 @@
       <Link>SourceCode/%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup Label="OperatorPackages">
-    <Operators Include="Lib" Version="1.0.0" ResourcesOnly="False" />
-    <Operators Include="Types" Version="1.0.0" ResourcesOnly="False" />
   </ItemGroup>
   <Target Name="CreatePackageInfo" AfterTargets="AfterBuild">
     <ItemGroup Label="Define json structure of referenced operator packages">
@@ -73,7 +68,6 @@
         }
       </OperatorPackageInfoJson>
     </PropertyGroup>
-    <WriteLinesToFile File="$(OutputPath)/OperatorPackage.json" Lines="$(OperatorPackageInfoJson)"
-      Overwrite="True" Encoding="UTF-8" />
+    <WriteLinesToFile File="$(OutputPath)/OperatorPackage.json" Lines="$(OperatorPackageInfoJson)" Overwrite="True" Encoding="UTF-8" />
   </Target>
 </Project>

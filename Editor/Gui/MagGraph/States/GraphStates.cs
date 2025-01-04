@@ -1,8 +1,12 @@
 ﻿using System.Diagnostics;
 using ImGuiNET;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.Dialogs;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
+using T3.Editor.Gui.UiHelpers;
 using MagItemMovement = T3.Editor.Gui.MagGraph.Interaction.MagItemMovement;
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -19,7 +23,7 @@ internal static class GraphStates
                          context.TempConnections.Clear();
                          context.ActiveSourceItem = null;
                          context.DraggedPrimaryOutputType = null;
-                         
+
                          // ReSharper disable once ConstantConditionalAccessQualifier
                          // This might not be initialized on startup
                          context.Placeholder.Reset(context);
@@ -29,10 +33,10 @@ internal static class GraphStates
                       {
                           if (context.ItemWithActiveCustomUi != null)
                               return;
-                          
+
                           // Check keyboard commands if focused...
-                          if (context.Canvas.IsFocused 
-                              && context.Canvas.IsHovered 
+                          if (context.Canvas.IsFocused
+                              && context.Canvas.IsHovered
                               && !ImGui.IsAnyItemActive())
                           {
                               // Tab create placeholder
@@ -43,7 +47,7 @@ internal static class GraphStates
                                       context.Canvas.IsItemVisible(context.Selector.Selection[0])
                                           ? context.Selector.Selection[0]
                                           : null;
-                                  
+
                                   if (focusedObject != null
                                       && context.Layout.Items.TryGetValue(focusedObject.Id, out var focusedItem))
                                   {
@@ -57,21 +61,68 @@ internal static class GraphStates
                                       var posOnCanvas = context.Canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
                                       context.Placeholder.OpenOnCanvas(context, posOnCanvas);
                                   }
-                                  
+
                                   context.StateMachine.SetState(Placeholder, context);
                               }
-                              
+
                               // else if (ImGui.IsKeyReleased(ImGuiKey.Delete) || ImGui.IsKeyReleased(ImGuiKey.Backspace))
                               // {
                               //     Modifications.DeleteSelectedOps(context);
                               // }
                           }
-                          
+
+                          if (!context.Canvas.IsHovered)
+                              return;
+
                           // Mouse click
                           var clickedDown = ImGui.IsMouseClicked(ImGuiMouseButton.Left);
                           if (!clickedDown)
                               return;
-                          
+
+                          if (ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left))
+                          {
+                              if (GraphWindow.Focused != null)
+                              {
+                                  var clickedBackground = context.ActiveItem == null;
+                                  if (clickedBackground)
+                                  {
+                                      GraphWindow.Focused?.TrySetCompositionOpToParent();
+                                  }
+                                  else
+                                  {
+                                      if (ImGui.IsWindowFocused() || ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup))
+                                      {
+                                          // Instance might not be available for input and output nodes
+                                          if (context.ActiveItem.Variant == MagGraphItem.Variants.Operator && context.ActiveItem.Instance != null)
+                                          {
+                                              var blocked = false;
+                                              // FIXME: implement
+                                              // if (UserSettings.Config.WarnBeforeLibEdit && context.ActiveItem.Instance.Symbol.Namespace.StartsWith("Lib."))
+                                              // {
+                                              //     if (UserSettings.Config.WarnBeforeLibEdit)
+                                              //     {
+                                              //         var count = Structure.CollectDependingSymbols(instance.Symbol).Count();
+                                              //         LibWarningDialog.DependencyCount = count;
+                                              //         LibWarningDialog.HandledInstance = instance;
+                                              //         _canvas.LibWarningDialog.ShowNextFrame();
+                                              //         blocked = true;
+                                              //     }
+                                              // }
+
+                                              if (!blocked)
+                                              {
+                                                  // Until we align the context switching between graphs, this hack applies the current
+                                                  // MagGraph scope to the legacy graph, so it's correctly saved for the Symbol in the user settings...
+                                                  GraphWindow.Focused.GraphCanvas.SetTargetScope(context.Canvas.GetTargetScope());
+                                                  GraphWindow.Focused.GraphCanvas.SetCompositionToChildInstance(context.ActiveItem.Instance);
+                                                  ImGui.CloseCurrentPopup(); // ?? 
+                                              }
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+
                           if (context.ActiveItem == null)
                           {
                               context.StateMachine.SetState(HoldBackground, context);
@@ -90,9 +141,10 @@ internal static class GraphStates
                               }
                           }
                       },
-              Exit: _ => { }
+              Exit:
+              _ => { }
              );
-    
+
     /// <summary>
     /// Active while long tapping on background for insertion
     /// </summary>
@@ -108,14 +160,14 @@ internal static class GraphStates
                               context.StateMachine.SetState(Default, context);
                               return;
                           }
-                          
+
                           const float longTapDuration = 0.3f;
                           var longTapProgress = context.StateMachine.StateTime / longTapDuration;
                           MagItemMovement.UpdateLongPressIndicator(longTapProgress);
-                          
+
                           if (!(longTapProgress > 1))
                               return;
-                          
+
                           // TODO: setting both, state and placeholder, feels awkward.
                           context.StateMachine.SetState(Placeholder, context);
                           var posOnCanvas = context.Canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
@@ -123,7 +175,7 @@ internal static class GraphStates
                       },
               Exit: _ => { }
              );
-    
+
     internal static State Placeholder
         = new(
               Enter: _ => { },
@@ -131,22 +183,22 @@ internal static class GraphStates
                       {
                           if (context.Placeholder.PlaceholderItem != null)
                               return;
-                          
+
                           context.Placeholder.Cancel(context);
                           context.StateMachine.SetState(Default, context);
                       },
               Exit: _ => { }
              );
-    
+
     internal static State HoldItem
         = new(
               Enter: context =>
                      {
                          var item = context.ActiveItem;
                          Debug.Assert(item != null);
-                         
+
                          var selector = context.Selector;
-                         
+
                          var isPartOfSelection = selector.IsSelected(item);
                          if (isPartOfSelection)
                          {
@@ -160,7 +212,7 @@ internal static class GraphStates
               Update: context =>
                       {
                           Debug.Assert(context.ActiveItem != null);
-                          
+
                           if (!ImGui.IsMouseDown(ImGuiMouseButton.Left))
                           {
                               MagItemMovement.SelectActiveItem(context);
@@ -168,41 +220,41 @@ internal static class GraphStates
                               context.StateMachine.SetState(Default, context);
                               return;
                           }
-                          
+
                           if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                           {
                               context.StateMachine.SetState(DragItems, context);
                               return;
                           }
-                          
+
                           const float longTapDuration = 0.3f;
                           var longTapProgress = context.StateMachine.StateTime / longTapDuration;
                           MagItemMovement.UpdateLongPressIndicator(longTapProgress);
-                          
+
                           if (!(longTapProgress > 1))
                               return;
-                          
+
                           MagItemMovement.SelectActiveItem(context);
                           context.ItemMovement.SetDraggedItemIds([context.ActiveItem.Id]);
                           context.StateMachine.SetState(HoldItemAfterLongTap, context);
                       },
               Exit: _ => { }
              );
-    
+
     internal static State HoldItemAfterLongTap
         = new(
               Enter: _ => { },
               Update: context =>
                       {
                           Debug.Assert(context.ActiveItem != null);
-                          
+
                           if (!ImGui.IsMouseDown(ImGuiMouseButton.Left))
                           {
                               MagItemMovement.SelectActiveItem(context);
                               context.StateMachine.SetState(Default, context);
                               return;
                           }
-                          
+
                           if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                           {
                               context.StateMachine.SetState(DragItems, context);
@@ -210,7 +262,7 @@ internal static class GraphStates
                       },
               Exit: _ => { }
              );
-    
+
     internal static State DragItems
         = new(
               Enter: context =>
@@ -223,16 +275,16 @@ internal static class GraphStates
                           if (!ImGui.IsMouseDown(ImGuiMouseButton.Left))
                           {
                               context.ItemMovement.CompleteDragOperation(context);
-                              
+
                               context.StateMachine.SetState(Default, context);
                               return;
                           }
-                          
+
                           context.ItemMovement.UpdateDragging(context);
                       },
               Exit: context => { context.ItemMovement.StopDragOperation(); }
              );
-    
+
     /// <summary>
     /// Active while long tapping on background for insertion
     /// </summary>
@@ -245,7 +297,7 @@ internal static class GraphStates
                           Debug.Assert(sourceItem != null);
                           Debug.Assert(sourceItem.OutputLines.Length > 0);
                           Debug.Assert(context.ActiveSourceOutputId != Guid.Empty);
-                          
+
                           // Click
                           if (!ImGui.IsMouseDown(ImGuiMouseButton.Left))
                           {
@@ -258,9 +310,10 @@ internal static class GraphStates
                               {
                                   context.StateMachine.SetState(Default, context);
                               }
+
                               return;
                           }
-                          
+
                           // Start dragging...
                           if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                           {
@@ -270,12 +323,12 @@ internal static class GraphStates
                                   context.StateMachine.SetState(Default, context);
                                   return;
                               }
-                              
+
                               //var outputLine = context.GetActiveOutputLine();              
                               var output = outputLine.Output;
                               var posOnCanvas = sourceItem.PosOnCanvas + new Vector2(MagGraphItem.GridSize.X,
                                                                                      MagGraphItem.GridSize.Y * (1.5f + outputLine.VisibleIndex));
-                              
+
                               var tempConnection = new MagGraphConnection
                                                        {
                                                            Style = MagGraphConnection.ConnectionStyles.Unknown,
@@ -297,7 +350,7 @@ internal static class GraphStates
                       },
               Exit: _ => { }
              );
-    
+
     internal static State DragConnectionEnd
         = new(
               Enter: _ => { },
@@ -308,24 +361,24 @@ internal static class GraphStates
                               context.StateMachine.SetState(Default, context);
                               return;
                           }
-                          
+
                           var posOnCanvas = context.Canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
                           context.PeekAnchorInCanvas = posOnCanvas;
-                          
+
                           var mouseReleased = !ImGui.IsMouseDown(ImGuiMouseButton.Left);
                           if (!mouseReleased)
                               return;
 
                           if (InputSnapper.TryToReconnect(context))
-                          { 
+                          {
                               context.Layout.FlagAsChanged();
                               context.CompleteMacroCommand();
                               context.StateMachine.SetState(Default, context);
-                              return;                              
+                              return;
                           }
-                          
+
                           var hasDisconnections = context.TempConnections.Any(c => c.WasDisconnected);
-                          
+
                           var droppedOnItem = InputPicking.TryInitializeAtPosition(context, posOnCanvas);
                           if (droppedOnItem)
                           {
@@ -347,14 +400,14 @@ internal static class GraphStates
                       },
               Exit: _ => { }
              );
-    
+
     internal static State PickInput
         = new(
               Enter: _ => { },
               Update: context => { InputPicking.DrawHiddenInputSelector(context); },
               Exit: _ => { }
              );
-    
+
     internal static State HoldingConnectionEnd
         = new(
               Enter: _ => { },
@@ -365,21 +418,21 @@ internal static class GraphStates
                               context.Placeholder.OpenToSplitHoveredConnections(context); // Will change state implicitly
                               return;
                           }
-                          
+
                           if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                           {
                               if (context.ConnectionHovering.ConnectionHoversWhenClicked.Count == 0)
                                   return;
-                              
+
                               var connection = context.ConnectionHovering.ConnectionHoversWhenClicked[0].Connection;
                               context.DisconnectedInputsHashes.Add(connection.GetItemInputHash()); // keep input visible until state is complete
-                              
+
                               // Remove existing connection
                               context.StartMacroCommand("Reconnect from input")
                                      .AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,
                                                                                     connection.AsSymbolConnection(),
                                                                                     connection.MultiInputIndex));
-                              
+
                               var tempConnection = new MagGraphConnection
                                                        {
                                                            Style = MagGraphConnection.ConnectionStyles.Unknown,
@@ -394,7 +447,7 @@ internal static class GraphStates
                                                            IsTemporary = true,
                                                            WasDisconnected = true,
                                                        };
-                              
+
                               context.TempConnections.Add(tempConnection);
                               context.ActiveSourceItem = connection.SourceItem;
                               context.DraggedPrimaryOutputType = connection.Type;
@@ -405,7 +458,7 @@ internal static class GraphStates
                       },
               Exit: _ => { }
              );
-    
+
     internal static State HoldingConnectionBeginning
         = new(
               Enter: _ => { },
@@ -416,35 +469,35 @@ internal static class GraphStates
                               context.Placeholder.OpenToSplitHoveredConnections(context); // Will change state implicitly
                               return;
                           }
-                          
+
                           if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                           {
                               if (context.ConnectionHovering.ConnectionHoversWhenClicked.Count == 0)
                                   return;
-                              
+
                               context.StartMacroCommand("Reconnect from output");
-                              
+
                               foreach (var h in context.ConnectionHovering.ConnectionHoversWhenClicked
-                                                       .OrderByDescending( h => h.Connection.MultiInputIndex))
+                                                       .OrderByDescending(h => h.Connection.MultiInputIndex))
                               {
                                   var connection = h.Connection;
 
                                   context.DisconnectedInputsHashes.Add(connection.GetItemInputHash()); // keep input visible until state is complete
-                                  
+
                                   // Remove existing connections
                                   context.MacroCommand!
                                          .AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,
                                                                                         connection.AsSymbolConnection(),
                                                                                         h.Connection.MultiInputIndex));
-                                  
-                                  if(connection.MultiInputIndex > 0)
+
+                                  if (connection.MultiInputIndex > 0)
                                       continue;
-                                  
+
                                   var tempConnection = new MagGraphConnection
                                                            {
                                                                Style = MagGraphConnection.ConnectionStyles.Unknown,
                                                                TargetPos = connection.TargetPos,
-                                                               TargetItem = connection.TargetItem, 
+                                                               TargetItem = connection.TargetItem,
                                                                InputLineIndex = connection.InputLineIndex,
                                                                MultiInputIndex = connection.MultiInputIndex,
                                                                SourceItem = null,
@@ -452,7 +505,7 @@ internal static class GraphStates
                                                                IsTemporary = true,
                                                                WasDisconnected = true,
                                                            };
-                                  
+
                                   // Sadly keeping disconnected multi input slots visible is tricky,
                                   // so, this is only a preparation for a potential later implementation
                                   //Log.Debug("Keep input hash " + connection.GetItemInputHash());
@@ -460,7 +513,7 @@ internal static class GraphStates
                                   context.TempConnections.Add(tempConnection);
                                   context.DraggedPrimaryOutputType = connection.Type;
                               }
-                              
+
                               context.Layout.FlagAsChanged();
                               context.StateMachine.SetState(DragConnectionBeginning, context);
                           }
@@ -468,7 +521,7 @@ internal static class GraphStates
               Exit:
               _ => { }
              );
-    
+
     internal static State DragConnectionBeginning
         = new(
               Enter: _ => { },
@@ -480,11 +533,12 @@ internal static class GraphStates
                               {
                                   context.Layout.FlagAsChanged();
                               }
+
                               context.CompleteMacroCommand();
                               context.StateMachine.SetState(Default, context);
                               return;
                           }
-                          
+
                           if (ImGui.IsKeyDown(ImGuiKey.Escape))
                           {
                               context.CancelMacroCommand();

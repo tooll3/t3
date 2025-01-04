@@ -1,0 +1,25 @@
+{
+  "Id": "4494473b-1868-460e-8ac3-b5d57c8a156e"/*DsvFromTexture2d*/,
+  "Description": "Extracts the DepthStencilView from a Texture2d",
+  "SymbolTags": "24",
+  "InputUis": [
+    {
+      "InputId": "7a3a1f0c-9d60-4e8f-a199-7c3477886c68"/*Texture*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "a2e78cbd-cb22-4d14-ab0c-54f20cc4cad6"/*DepthStencilView*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    }
+  ]
+}
