@@ -22,12 +22,10 @@ internal sealed class FractalSDF : Instance<FractalSDF>
         if (iterations != _iterations)
         {
             _iterations=iterations;
-            ShaderNode.HasChangedCode = true;
+            ShaderNode.FlagCodeChanged();
         }
         
         ShaderNode.Update(context);
-        
-        
     }
     
     public ShaderGraphNode ShaderNode { get; }

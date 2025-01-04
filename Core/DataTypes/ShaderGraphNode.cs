@@ -5,8 +5,10 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+
 
 namespace T3.Core.DataTypes;
 
@@ -14,37 +16,214 @@ namespace T3.Core.DataTypes;
  * Represents the attributes and parameters required to build the a shader code from
  * nested instances. This basically replicates the instance graph structure so the graph
  * can be processed without actually updating instances. This is required for maintaining
- * the structure without while allowing to completely cache the output.
+ * the structure while allowing to completely cache the output.
  *
  * Storing the references to its instance here is unfortunate.
  *
+ *
+ * The process is somewhat complex:
+ *
+ * - [_GetFieldShaderAttributes] calls Update() on its connected graphNode.
+ * - This then invokes Update() on all connected graphNode-Ops which calls its...
+ * - ShaderGraphNode.Update() -> Which..
+ *   - updates its connected graph nodes
+ *     - recursively calls Update() on their connected ops
+ *   - checks with parameters are changed
  */
 public class ShaderGraphNode
 {
     #region node handling
     public ShaderGraphNode(Instance instance, MultiInputSlot<ShaderGraphNode>? nodeMultiInputInput = null, InputSlot<ShaderGraphNode>? inputSlot = null)
     {
-        Instance = instance;
+        _instance = instance;
         _connectedNodeMultiInput = nodeMultiInputInput;
         _connectedNodeInput = inputSlot;
     }
 
     public void Update(EvaluationContext context)
     {
-        // Deferred because symbolChildId is not set at construction time
+        CollectedChanges = ChangedFlags.None;
+        
+        if (_hasCodeChanges)
+            CollectedChanges |= ChangedFlags.Code;
+        
+        // Initialize prefix and collect parameters inputs.
+        // (Deferred because symbolChildId is not set at construction time)
         if (string.IsNullOrEmpty(Prefix))
         {
-            Prefix = BuildNodeId(Instance);
-            _shaderParameterInputs = ShaderParamHandling.CollectInputSlots(Instance, Prefix);
+            Prefix = BuildNodeId(_instance);
+            _shaderParameterInputs = ShaderParamHandling.CollectInputSlots(_instance, Prefix);
+        }
+        
+        
+        UpdateInputsNodes(context);
+        
+        var paramsNeedUpdate = IsAnyParameterDirty() || true;  
+        if (paramsNeedUpdate)
+        {
+            CollectedChanges |= ChangedFlags.Parameters;
+            foreach (var paramInput in _shaderParameterInputs)
+            {
+                paramInput.Update(context);
+            }
+        }
+        //Log.Debug($"Processed {_instance}  > {CollectedChanges.ToDetailedString()}", _instance);
+    }
+    
+    
+    public ChangedFlags CollectedChanges;
+
+    /// <summary>
+    /// Recursive update all connected inputs nodes and collect their changes..
+    /// </summary>
+    /// <remarks>
+    /// This is invoke Update() on the connected notes which will then call this methode there. 
+    /// </remarks>
+    private void UpdateInputsNodes(EvaluationContext context)
+    {
+        if (_connectedNodeMultiInput == null && _connectedNodeInput == null)
+            return;
+
+        _connectedNodeOps.Clear();
+        
+        //List<Slot<ShaderGraphNode>>? connectedFields = [];
+
+        if (_connectedNodeMultiInput != null)
+        {
+            _connectedNodeOps.AddRange( _connectedNodeMultiInput.GetCollectedTypedInputs());
         }
 
-        HasChangedParameters = false;
-        UpdateInputsNodes(context);
-        HasChangedParameters |= IsAnyParameterDirty();
-
-        foreach (var inputNode in _shaderParameterInputs)
+        if (_connectedNodeInput != null)
         {
-            inputNode.Update(context);
+            _connectedNodeOps.Add(_connectedNodeInput);
+        }
+
+        // If it HAS an input field, but it's not connected, we have an error
+        var hasConnectedInputFields = _connectedNodeOps.Count > 0;
+        if (!hasConnectedInputFields)
+        {
+            CollectedChanges |= ChangedFlags.HasErrors;
+            return;
+        }
+        
+        // Align size of input nodes to connected fields
+        if (_connectedNodeOps.Count != InputNodes.Count)
+        {
+            CollectedChanges |= ChangedFlags.Structural;
+            InputNodes.Clear();
+            InputNodes.AddRange(Enumerable.Repeat<ShaderGraphNode>(null!, _connectedNodeOps.Count).ToList());
+        }
+
+        // Update all connected nodes
+        for (var index = 0; index < _connectedNodeOps.Count; index++)
+        {
+            
+            // Update connected shader node...
+            var updatedNode = _connectedNodeOps[index].GetValue(context);
+            
+            if (updatedNode != InputNodes[index])
+            {
+                CollectedChanges |= ChangedFlags.Structural;
+                InputNodes[index] = updatedNode;
+            }
+
+            if (updatedNode == null)
+            {
+                CollectedChanges |= ChangedFlags.Structural | ChangedFlags.HasErrors;
+                continue;
+            }
+            
+            CollectedChanges |= updatedNode.CollectedChanges;
+        }
+
+        // Remove all nulls from InputNodes
+        InputNodes.RemoveAll(node => node == null);
+
+        // Clear dirty flags for multi input to prevent ops stuck in dirty state 
+        _connectedNodeMultiInput?.DirtyFlag.Clear();
+    }
+
+    public void FlagCodeChanged()
+    {
+        //_lastCodeUpdateFrame = -1;
+        _hasCodeChanges = true;
+    }
+
+    private bool _hasCodeChanges = true; // this will be clear once the shader code is being collected 
+
+    #endregion
+
+
+    private int _lastParamUpdateFrame = -1;
+    private int _lastCodeUpdateFrame = -1;
+    
+    public void CollectShaderCode(StringBuilder sb, int frameNumber)
+    {
+        // Prevent double evaluation
+        if (_lastCodeUpdateFrame == frameNumber)
+            return;
+        
+        _hasCodeChanges = false;
+        _lastCodeUpdateFrame = frameNumber;
+
+        foreach (var inputNode in InputNodes)
+        {
+            inputNode.CollectShaderCode(sb, frameNumber);
+        }
+
+        if (_instance is IGraphNodeOp nodeOp)
+        {
+            sb.AppendLine(nodeOp.GetShaderCode());
+        }
+    }
+
+    public void ClearAllChanges()
+    {
+        CollectedChanges = ChangedFlags.None;
+
+        foreach (var inputNode in InputNodes)
+        {
+            inputNode.ClearAllChanges();
+        }
+    }
+
+    
+    // Keep the input slot so we can detect and handle structural changes to the graph
+    private readonly MultiInputSlot<ShaderGraphNode>? _connectedNodeMultiInput;
+
+    private readonly List<Slot<ShaderGraphNode>> _connectedNodeOps = [];
+    private readonly InputSlot<ShaderGraphNode>? _connectedNodeInput;
+    public readonly List<ShaderGraphNode?> InputNodes = [];
+
+    #region parameters ----------------------
+    
+    private List<ShaderParamHandling.ShaderParamInput> _shaderParameterInputs = [];
+
+    public void CollectAllNodeParams(List<float> floatValues, List<ShaderParamHandling.ShaderCodeParameter> codeParams, int frameNumber)
+    {
+        // Prevent double evaluation (note that _lastUpdateFrame will be updated after getting the code)
+        if (_lastParamUpdateFrame == frameNumber)
+            return;
+
+        _lastParamUpdateFrame = frameNumber;
+        
+        foreach (var inputNode in InputNodes)
+        {
+            inputNode?.CollectAllNodeParams(floatValues, codeParams, frameNumber);
+        }
+
+        foreach (var input in _shaderParameterInputs)
+        {
+            input.GetFloat(floatValues, codeParams);
+        }
+
+        // Update non input parameters
+        foreach (var param in AdditionalParameters)
+        {
+            if (param.Value is Matrix4x4 matrix4X4)
+            {
+                ShaderParamHandling.AddMatrixParameter(floatValues, codeParams, $"{Prefix}{param.Name}", matrix4X4);
+            }
         }
     }
 
@@ -59,239 +238,14 @@ public class ShaderGraphNode
         return false;
     }
 
-    public Instance Instance;
-
-    #region prefix
-    public string Prefix;
-
-    private static string BuildNodeId(Instance instance)
-    {
-        return instance.GetType().Name + "_" + ShortenGuid(instance.SymbolChildId) + "_";
-    }
-
-    public override string ToString() => Prefix;
-
-    private static string ShortenGuid(Guid guid, int length = 7)
-    {
-        if (length < 1 || length > 22)
-            throw new ArgumentOutOfRangeException(nameof(length), "Length must be between 1 and 22.");
-
-        var guidBytes = guid.ToByteArray();
-        var base64 = Convert.ToBase64String(guidBytes);
-        var alphanumeric = base64.Replace("+", "").Replace("/", "").Replace("=", "");
-        return alphanumeric[..length];
-    }
-    #endregion
-
-    public bool HasErrors;
-    public bool HasChangedStructure;
-
-    /** Recursively update all dirty nodes and collect all parameters */
-    private void UpdateInputsNodes(EvaluationContext context)
-    {
-        if (_connectedNodeMultiInput == null && _connectedNodeInput == null)
-            return;
-
-        List<Slot<ShaderGraphNode>>? connectedFields = [];
-
-        if (_connectedNodeMultiInput != null)
-        {
-            connectedFields = _connectedNodeMultiInput.GetCollectedTypedInputs();
-        }
-
-        if (_connectedNodeInput != null)
-        {
-            connectedFields.Add(_connectedNodeInput);
-        }
-
-        // If it HAS an input field, but it's not connected, we have an error
-        var hasConnectedInputFields = connectedFields.Count > 0;
-        if (!hasConnectedInputFields)
-        {
-            HasErrors = true;
-            return;
-        }
-
-        HasChangedStructure = false;
-
-        // Align size of input nodes to connected fields
-        if (connectedFields.Count != InputNodes.Count)
-        {
-            HasChangedStructure = true;
-            InputNodes.Clear();
-            InputNodes.AddRange(Enumerable.Repeat<ShaderGraphNode>(null!, connectedFields.Count).ToList());
-        }
-
-        // Update all connected nodes
-        for (var index = 0; index < connectedFields.Count; index++)
-        {
-            var updatedNode = connectedFields[index].GetValue(context);
-
-            if (updatedNode != InputNodes[index])
-            {
-                HasChangedStructure = true;
-                InputNodes[index] = updatedNode;
-            }
-
-            if (updatedNode == null)
-            {
-                HasChangedStructure = true;
-                HasErrors = true;
-                continue;
-            }
-
-            HasErrors |= updatedNode.HasErrors;
-            HasChangedStructure |= updatedNode.HasChangedStructure;
-            HasChangedParameters |= updatedNode.HasChangedParameters;
-        }
-
-        // Remove all nulls from InputNodes
-        InputNodes.RemoveAll(node => node == null);
-
-        // Clear dirty flags for multi input to prevent ops stuck in dirty state 
-        _connectedNodeMultiInput?.DirtyFlag.Clear();
-    }
-
-    public bool HasChangedCode;
-    public bool HasChangedParameters;
-    #endregion
-
-    #region shader code generation
-    public string GenerateShaderCode(string templateCode)
-    {
-        InjectParameters(ref templateCode);
-        InjectFunctions(ref templateCode);
-        InjectCall(ref templateCode);
-        return templateCode;
-    }
-
-    private void InjectCall(ref string templateCode)
-    {
-        var commentHook = ToHlslTemplateTag("FIELD_CALL");
-        var code = $"{this}(pos);//"; // add comment to avoid syntax errors in generated code
-
-        templateCode = templateCode.Replace(commentHook, code);
-    }
-
-    private void InjectParameters(ref string templateCode)
-    {
-        AssembleParams();
-        var commentHook = ToHlslTemplateTag("FLOAT_PARAMS");
-
-        if (templateCode.IndexOf(commentHook, StringComparison.Ordinal) == -1)
-            return;
-
-        var sb = new StringBuilder();
-        foreach (var name in _allShaderCodeParams)
-        {
-            sb.AppendLine($"\t{name.ShaderTypeName}  {name.Name};");
-        }
-
-        templateCode = templateCode.Replace(commentHook, sb.ToString());
-    }
-
-    private void InjectFunctions(ref string templateCode)
-    {
-        AssembleShaderCode();
-        var commentHook = ToHlslTemplateTag("FIELD_FUNCTIONS");
-
-        if (templateCode.IndexOf(commentHook, StringComparison.Ordinal) == -1)
-            return;
-
-        templateCode = templateCode.Replace(commentHook, _shaderCodeBuilder.ToString());
-    }
-
-    private void AssembleShaderCode()
-    {
-        // if (!HasChangedStructure)
-        //     return;
-
-        //_allFloatParameterValues.Clear();
-        //_allShaderCodeParams.Clear();
-        _shaderCodeBuilder.Clear();
-        CollectShaderCode(_shaderCodeBuilder);
-    }
-
-    private void CollectShaderCode(StringBuilder sb)
-    {
-        // if (!HasChangedStructure)
-        //     return;
-
-        foreach (var inputNode in InputNodes)
-        {
-            inputNode.CollectShaderCode(sb);
-        }
-
-        if (Instance is IGraphNodeOp nodeOp)
-        {
-            sb.AppendLine(nodeOp.GetShaderCode());
-        }
-    }
-
-    private static string ToHlslTemplateTag(string hook)
-    {
-        return $"/*{{{hook}}}*/";
-    }
-
-    private readonly StringBuilder _shaderCodeBuilder = new();
-
-    // Keep the input slot so we can detect and handle structural changes to the graph
-    private readonly MultiInputSlot<ShaderGraphNode>? _connectedNodeMultiInput;
-
-    private readonly InputSlot<ShaderGraphNode>? _connectedNodeInput;
-    #endregion
-
-    #region parameters ----------------------
-    /**
-     * Before generating the complete shader, we need to collect all parameters of all nodes
-     * into to lists: One for the float constant buffer and one of parameter names and definition
-     */
-    private void AssembleParams()
-    {
-        if (!HasChangedParameters && !HasChangedStructure)
-            return;
-
-        _allFloatParameterValues.Clear();
-        _allShaderCodeParams.Clear();
-
-        CollectAllNodeParams(_allFloatParameterValues, _allShaderCodeParams);
-    }
-
-    public List<ShaderGraphNode> InputNodes = [];
-
-    private List<ShaderParamHandling.ShaderParamInput> _shaderParameterInputs = [];
-
-    private void CollectAllNodeParams(List<float> floatValues, List<ShaderParamHandling.ShaderCodeParameter> codeParams)
-    {
-        foreach (var inputNode in InputNodes)
-        {
-            inputNode.CollectAllNodeParams(floatValues, codeParams);
-        }
-
-        foreach (var input in _shaderParameterInputs)
-        {
-            input.GetFloat(floatValues, codeParams);
-        }
-
-        // Append non input parameters
-        foreach (var param in AdditionalParameters)
-        {
-            if (param.Value is Matrix4x4 matrix4X4)
-            {
-                ShaderParamHandling.AddMatrixParameter(floatValues, codeParams, $"{Prefix}{param.Name}", matrix4X4);
-            }
-        }
-    }
-
-    public IReadOnlyList<float> AllFloatValues => _allFloatParameterValues;
+    private readonly Instance? _instance;
+    
     public List<Parameter> AdditionalParameters = [];
-    private readonly List<float> _allFloatParameterValues = [];
 
     //public IReadOnlyCollection<ShaderParamHandling.ShaderCodeParameter> AllShaderCodeParams => _allShaderCodeParams;
-    private readonly List<ShaderParamHandling.ShaderCodeParameter> _allShaderCodeParams = [];
     #endregion
-
-    private static class ShaderParamHandling
+    
+    public static class ShaderParamHandling
     {
         public static List<ShaderParamInput> CollectInputSlots(Instance instance, string nodePrefix)
         {
@@ -317,7 +271,6 @@ public class ShaderGraphNode
                                                                 =>
                                                             {
                                                                 AddScalarParameter(floatValues, codeParams, $"{nodePrefix}{field.Name}", floatSlot.Value);
-                                                                //codeParams.Add(new ShaderCodeParameter("float", $"{nodePrefix}{field.Name}"));
                                                             },
                                                             context => { floatSlot.GetValue(context); }
                                                            ),
@@ -330,7 +283,6 @@ public class ShaderGraphNode
                                                                 =>
                                                             {
                                                                 AddVec2Parameter(floatValues, codeParams, $"{nodePrefix}{field.Name}", vec2Slot.Value);
-                                                                //codeParams.Add(new ShaderCodeParameter("float2", $"{nodePrefix}{field.Name}"));
                                                             },
                                                             context => { vec2Slot.GetValue(context); }
                                                            ),
@@ -342,7 +294,6 @@ public class ShaderGraphNode
                                                                 =>
                                                             {
                                                                 AddVec3Parameter(floatValues, codeParams, $"{nodePrefix}{field.Name}", vec3Slot.Value);
-                                                                //codeParams.Add(new ShaderCodeParameter("float3", $"{nodePrefix}{field.Name}"));
                                                             },
                                                             context => { vec3Slot.GetValue(context); }
                                                            ),
@@ -355,7 +306,6 @@ public class ShaderGraphNode
                                                                 =>
                                                             {
                                                                 AddMatrixParameter(floatValues, codeParams, $"{nodePrefix}{field.Name}", matrixSlot.Value);
-                                                                //codeParams.Add(new ShaderCodeParameter("float4x4", $"{nodePrefix}{field.Name}"));
                                                             },
                                                             context => { matrixSlot.GetValue(context); }
                                                            ),
@@ -368,7 +318,6 @@ public class ShaderGraphNode
                                                                 =>
                                                             {
                                                                 AddScalarParameter(floatValues, codeParams, $"{nodePrefix}{field.Name}", intSlot.Value);
-                                                                //codeParams.Add(new ShaderCodeParameter("int", $"{nodePrefix}{field.Name}"));
                                                             },
                                                             context => { intSlot.GetValue(context); }
                                                            ),
@@ -470,13 +419,45 @@ public class ShaderGraphNode
 
         public delegate void UpdateDelegate(EvaluationContext context);
     }
-
-    public class Parameter(string shaderTypeName, string name, object value)
+    
+    public sealed class Parameter(string shaderTypeName, string name, object value)
     {
         public string ShaderTypeName = shaderTypeName;
-        public string Name = name;
+        internal readonly string Name = name;
         public object Value = value;
     }
+
+    [Flags]
+    public enum ChangedFlags
+    {
+        None = 0,
+        Structural = 1<<1,
+        Code = 1<<2,        
+        Parameters = 1<<3,
+        HasErrors = 1<<4,
+    }
+    
+    #region prefix
+    public string Prefix;
+
+    private static string BuildNodeId(Instance instance)
+    {
+        return instance.GetType().Name + "_" + ShortenGuid(instance.SymbolChildId) + "_";
+    }
+
+    public override string ToString() => Prefix;
+
+    private static string ShortenGuid(Guid guid, int length = 7)
+    {
+        if (length < 1 || length > 22)
+            throw new ArgumentOutOfRangeException(nameof(length), "Length must be between 1 and 22.");
+
+        var guidBytes = guid.ToByteArray();
+        var base64 = Convert.ToBase64String(guidBytes);
+        var alphanumeric = base64.Replace("+", "").Replace("/", "").Replace("=", "");
+        return alphanumeric[..length];
+    }
+    #endregion
 }
 
 /**
@@ -488,4 +469,31 @@ public interface IGraphNodeOp
 {
     public ShaderGraphNode ShaderNode { get; }
     public string GetShaderCode();
+}
+
+
+public static class EnumExtensions
+{
+    public static string ToDetailedString<T>(this T flags) where T : Enum
+    {
+        var result = new StringBuilder();
+        long flagsValue = Convert.ToInt64(flags);
+
+        foreach (T value in Enum.GetValues(typeof(T)))
+        {
+            long valueAsLong = Convert.ToInt64(value);
+
+            if (valueAsLong != 0 && (flagsValue & valueAsLong) == valueAsLong)
+            {
+                result.Append($"{value} ({valueAsLong}), ");
+            }
+        }
+
+        if (result.Length > 0)
+        {
+            result.Length -= 2; // Remove the trailing ", "
+        }
+
+        return result.ToString();
+    }
 }

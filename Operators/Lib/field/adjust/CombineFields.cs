@@ -18,31 +18,33 @@ internal sealed class CombineFields : Instance<CombineFields>, IGraphNodeOp
 
     private void Update(EvaluationContext context)
     {
-        ShaderNode.Update(context);
-
         // Get all parameters to clear operator dirty flag
         var combineMethod = CombineMethod.GetEnumValue<CombineMethods>(context);
         if (combineMethod != _combineMethod)
         {
             _combineMethod = combineMethod;
-            ShaderNode.HasChangedCode = true;
+            ShaderNode.FlagCodeChanged();
         }
+        
+        ShaderNode.Update(context);
 
         InputFields.DirtyFlag.Clear();
     }
 
+    private int _frameUpdateCount;
+    
     public string GetShaderCode()
     {
         _callDef.Clear();
 
         if (ShaderNode.InputNodes == null || ShaderNode.InputNodes.Count == 0)
         {
-            _callDef.AppendLine($"float {ShaderNode}(float3 p) {ShaderNode}{{ return -999999; }}");
+            _callDef.AppendLine($"float {ShaderNode}(float3 p) {{ return -999999; }}");
         }
 
         else if (ShaderNode.InputNodes.Count == 1)
         {
-            _callDef.AppendLine($"float {ShaderNode}(float3 p) {ShaderNode}{{ return {ShaderNode.InputNodes[0]}(p); }}");
+            _callDef.AppendLine($"float {ShaderNode}(float3 p) {{ return {ShaderNode.InputNodes[0]}(p); }}");
         }
         else
         {

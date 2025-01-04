@@ -22,6 +22,7 @@ internal sealed class TransformField : Instance<TransformField>, IGraphNodeOp
     private void Update(EvaluationContext context)
     {
         ShaderNode.Update(context);
+        ShaderNode.CollectedChanges |= ShaderGraphNode.ChangedFlags.Parameters;
         
         _inputFn= ShaderNode.InputNodes.Count == 1 
                       ? ShaderNode.InputNodes[0].ToString() 
