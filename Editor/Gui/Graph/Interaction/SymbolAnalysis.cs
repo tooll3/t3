@@ -15,7 +15,7 @@ internal static class SymbolAnalysis
     /// </summary>
     internal static void UpdateSymbolUsageCounts()
     {
-        var usages = Structure.CollectSymbolUsageCounts();
+        var usages = CollectSymbolUsageCounts();
         ConnectionHashCounts = new Dictionary<int, int>();
             
         foreach (var symbolUi in EditorSymbolPackage.AllSymbolUis)
@@ -46,20 +46,22 @@ internal static class SymbolAnalysis
     /// </summary>
     internal static void UpdateDetails()
     {
-        var usages = Structure.CollectSymbolUsageCounts();
+        var usages = CollectSymbolUsageCounts();
             
         InformationForSymbolIds.Clear();
 
         foreach (var symbolUi in EditorSymbolPackage.AllSymbolUis)
         {
             usages.TryGetValue(symbolUi.Symbol.Id, out var usageCount);
-            var examples = 
+            var requiredSymbols = CollectRequiredSymbols(symbolUi.Symbol);
+            var invalidRequirements = CollectInvalidRequirements(symbolUi.Symbol, requiredSymbols).ToList();
             
             InformationForSymbolIds[symbolUi.Symbol.Id]
                 = new SymbolInformation
                       {
-                          RequiredSymbols = CollectRequiredSymbols(symbolUi.Symbol),
-                          DependingSymbols = Structure.CollectDependingSymbols(symbolUi.Symbol).ToHashSet(),
+                          RequiredSymbolIds = requiredSymbols.Select(s => s.Id).ToHashSet(),
+                          InvalidRequiredIds = invalidRequirements,
+                          DependingSymbols = Structure.CollectDependingSymbols(symbolUi.Symbol).Select(s => s.Id).ToHashSet(),
                           ExampleSymbolsIds =  ExampleSymbolLinking.GetExampleIds(symbolUi.Symbol.Id),
                           UsageCount = usageCount,
                           LacksDescription = string.IsNullOrWhiteSpace(symbolUi.Description),
@@ -67,6 +69,8 @@ internal static class SymbolAnalysis
                           LacksSomeParameterDescription = symbolUi.InputUis.Count > 2 && symbolUi.InputUis.Values.Any(i => string.IsNullOrWhiteSpace(i.Description)),
                           LacksParameterGrouping = symbolUi.InputUis.Count > 4 && !symbolUi.InputUis.Values.Any(i => i.AddPadding || !string.IsNullOrEmpty(i.GroupTitle)),
                           IsLibOperator = symbolUi.Symbol.Namespace.StartsWith("Lib.") && !symbolUi.Symbol.Name.StartsWith("_") && !symbolUi.Symbol.Namespace.Contains("._"),
+                          DependsOnObsoleteOps = requiredSymbols.Select(s => s.GetSymbolUi()).Any(ui => ui.Tags.HasFlag(SymbolUi.SymbolTags.Obsolete)),
+                          Tags = symbolUi.Tags,
                       };
                 
         }
@@ -90,30 +94,77 @@ internal static class SymbolAnalysis
     public sealed class SymbolInformation
     {
         public List<string> Warnings = [];
-        internal HashSet<Symbol> RequiredSymbols = [];
-        internal HashSet<Symbol> DependingSymbols = [];
+        internal HashSet<Guid> RequiredSymbolIds = [];
+        internal HashSet<Guid> DependingSymbols = [];
+        public List<Guid> InvalidRequiredIds= [];
         public IReadOnlyList<Guid> ExampleSymbolsIds = [];
-        internal int UsageCount { get; set; }
+        internal int UsageCount;
         internal bool LacksDescription;
         internal bool LacksAllParameterDescription;
         internal bool LacksSomeParameterDescription;
         internal bool LacksParameterGrouping;
         internal bool IsLibOperator;
-            
+        internal bool DependsOnObsoleteOps;
+        internal SymbolUi.SymbolTags Tags;  // Copy to avoid reference to symbolUi
     }
 
-    public static HashSet<Symbol> CollectRequiredSymbols(Symbol symbol, HashSet<Symbol>? all = null)
+    private static HashSet<Symbol> CollectRequiredSymbols(Symbol root)
     {
-        all ??= [];
+        var all = new HashSet<Symbol>();
+        Collect(root);
+        return all;
 
-        foreach (var symbolChild in symbol.Children.Values)
+        void Collect(Symbol symbol)
         {
-            if (!all.Add(symbolChild.Symbol))
+            foreach (var symbolChild in symbol.Children.Values)
+            {
+                if (!all.Add(symbolChild.Symbol))
+                    continue;
+
+                Collect(symbolChild.Symbol);
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Collect Ids to required symbols that are not within the list of projects
+    /// </summary>
+    private static IEnumerable<Guid> CollectInvalidRequirements(Symbol root, HashSet<Symbol> requiredSymbols)
+    {
+        var result = new List<Symbol>();
+        
+        // Todo: implement this correctly 
+        HashSet<string> validPackagesNames = [
+            "Types",
+            "Lib", 
+            root.Namespace.Split('.')[0]];
+
+        foreach (var r in requiredSymbols)
+        {
+            var projectId = r.Namespace.Split('.')[0];
+
+            if (validPackagesNames.Contains(projectId))
                 continue;
 
-            CollectRequiredSymbols(symbolChild.Symbol, all);
+            result.Add(r);
         }
 
-        return all;
+        return result.OrderBy(s => s.Namespace).ThenBy(s => s.Name).Select(s => s.Id);
+    }
+
+    private static Dictionary<Guid, int> CollectSymbolUsageCounts()
+    {
+        var results = new Dictionary<Guid, int>();
+
+        foreach (var s in EditorSymbolPackage.AllSymbols)
+        {
+            foreach (var child in s.Children.Values)
+            {
+                results.TryGetValue(child.Symbol.Id, out var currentCount);
+                results[child.Symbol.Id] = currentCount + 1;
+            }
+        }
+
+        return results;
     }
 }

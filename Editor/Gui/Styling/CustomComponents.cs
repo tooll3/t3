@@ -507,7 +507,8 @@ internal static class CustomComponents
 
         if (_toolTipHoverDelay > 0)
             return;
-            
+        
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(6,6));
         ImGui.BeginTooltip();
         ImGui.PushTextWrapPos(300);
         ImGui.TextColored(color, message);
@@ -519,6 +520,7 @@ internal static class CustomComponents
         ImGui.PopTextWrapPos();
 
         ImGui.EndTooltip();
+        ImGui.PopStyleVar();
     }
 
     public static void TooltipForLastItem(string message, string additionalNotes = null, bool useHoverDelay = true)

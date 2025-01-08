@@ -10,6 +10,7 @@ using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 using T3.SystemUi;
 
@@ -565,7 +566,7 @@ internal sealed class SymbolBrowser
         }
 
         ImGui.Button(label);
-        SymbolTreeMenu.HandleDragAndDropForSymbolItem(symbolUi.Symbol);
+        SymbolLibrary.HandleDragAndDropForSymbolItem(symbolUi.Symbol);
         if (ImGui.IsItemHovered())
         {
             ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
