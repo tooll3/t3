@@ -522,6 +522,29 @@ internal static class CustomComponents
         ImGui.EndTooltip();
         ImGui.PopStyleVar();
     }
+    
+    public static void TooltipForLastItem(Action drawContent, bool useHoverDelay = true)
+    {
+        if (!ImGui.IsItemHovered())
+            return;
+            
+        FrameStats.Current.SomethingWithTooltipHovered = true;
+        if (!useHoverDelay)
+            _toolTipHoverDelay = 0;
+
+        if (_toolTipHoverDelay > 0)
+            return;
+        
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(6,6));
+        ImGui.BeginTooltip();
+        
+        drawContent.Invoke();
+        
+        ImGui.EndTooltip();
+        ImGui.PopStyleVar();
+    }
+    
+    
 
     public static void TooltipForLastItem(string message, string additionalNotes = null, bool useHoverDelay = true)
     {

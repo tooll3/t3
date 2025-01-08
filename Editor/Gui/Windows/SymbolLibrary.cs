@@ -359,7 +359,8 @@ internal sealed class SymbolLibrary : Window
         if (symbolSet.Count > 0)
         {
             icon.Draw();
-            ImGui.SameLine(0, 5);
+            CustomComponents.TooltipForLastItem(DrawTooltip);
+            ImGui.SameLine(0, 0);
         }
 
         if (symbolSet.Count == 0)
@@ -369,22 +370,7 @@ internal sealed class SymbolLibrary : Window
         else
         {
             ImGui.TextUnformatted(string.Format(setTitleFormat, symbolSet.Count));
-            if (ImGui.IsItemHovered())
-            {
-                var allSymbolUis = EditorSymbolPackage
-                   .AllSymbolUis;
-
-                var matches = allSymbolUis
-                             .Where(s => symbolSet.Contains(s.Symbol.Id))
-                             .OrderBy(s => s.Symbol.Namespace)
-                             .ThenBy(s => s.Symbol.Name);
-
-                ImGui.BeginTooltip();
-                ImGui.TextUnformatted(toolTopTitle);
-                FormInputs.AddVerticalSpace();
-                ListSymbols(matches);
-                ImGui.EndTooltip();
-            }
+            CustomComponents.TooltipForLastItem(DrawTooltip);
 
             if (ImGui.IsItemClicked())
             {
@@ -395,13 +381,49 @@ internal sealed class SymbolLibrary : Window
         ImGui.PopID();
         //ImGui.SameLine();
         return activated;
+
+        void DrawTooltip()
+        {
+            var allSymbolUis = EditorSymbolPackage
+               .AllSymbolUis;
+
+            var matches = allSymbolUis
+                         .Where(s => symbolSet.Contains(s.Symbol.Id))
+                         .OrderBy(s => s.Symbol.Namespace)
+                         .ThenBy(s => s.Symbol.Name);
+
+            ImGui.BeginTooltip();
+
+            ImGui.TextUnformatted(toolTopTitle);
+            FormInputs.AddVerticalSpace();
+            ListSymbols(matches);
+            ImGui.EndTooltip();
+        }
     }
 
     private static void ListSymbols(IOrderedEnumerable<SymbolUi> symbolUis)
     {
+        var lastGroupName = string.Empty;
+        ColumnLayout.StartLayout(25);
         foreach (var required in symbolUis)
         {
+            var projectName = required.Symbol.SymbolPackage.RootNamespace;
+            if (projectName != lastGroupName)
+            {
+                lastGroupName = projectName;
+                FormInputs.AddVerticalSpace(5);
+                ImGui.PushFont(Fonts.FontSmall);
+                ImGui.TextUnformatted(projectName);
+                ImGui.PopFont();
+            }
+            
+            var hasIssues = required.Tags.HasFlag(SymbolUi.SymbolTags.Obsolete) | required.Tags.HasFlag(SymbolUi.SymbolTags.NeedsFix);
+            var color = hasIssues ? UiColors.StatusAttention : UiColors.Text;
+            ImGui.PushStyleColor(ImGuiCol.Text, color.Rgba);
+            ColumnLayout.StartGroupAndWrapIfRequired(1);
             ImGui.TextUnformatted(required.Symbol.Name);
+            ColumnLayout.ExtendWidth(ImGui.GetItemRectSize().X);
+            ImGui.PopStyleColor();
         }
     }
 
