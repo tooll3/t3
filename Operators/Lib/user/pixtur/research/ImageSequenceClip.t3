@@ -20,7 +20,7 @@
     },
     {
       "Id": "a1e08fde-2d9b-4a2d-bf09-a5e54ad8cfa0"/*FilePath*/,
-      "DefaultValue": ""
+      "DefaultValue": "/t3/images/sequences/agingFacesMale"
     }
   ],
   "Children": [

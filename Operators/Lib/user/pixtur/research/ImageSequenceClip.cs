@@ -1,4 +1,4 @@
-namespace user.pixtur.research;
+namespace Lib.image.generate.load;
 
 [Guid("927a77d5-7bf0-477b-b288-4bb48d4980cd")]
 public class ImageSequenceClip : Instance<ImageSequenceClip>

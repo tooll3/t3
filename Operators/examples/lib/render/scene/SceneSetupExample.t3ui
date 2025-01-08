@@ -1,6 +1,7 @@
 {
   "Id": "fa6d1930-b1f4-4655-8450-c876e8dd2803"/*SceneSetupExample*/,
   "Description": "Early experience on loading a gltf scene",
+  "SymbolTags": "5120",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -15,20 +16,6 @@
       "Position": {
         "X": 767.70746,
         "Y": 559.99854
-      }
-    },
-    {
-      "ChildId": "124a12a4-61a3-4174-bfdc-8943a439a3b0"/*FilesInFolderExample*/,
-      "Position": {
-        "X": 1146.6199,
-        "Y": 617.19586
-      }
-    },
-    {
-      "ChildId": "2682e626-ecca-41b1-ad94-b4fb08b990b5"/*HowToUsePoints*/,
-      "Position": {
-        "X": 1537.6292,
-        "Y": 1115.065
       }
     },
     {

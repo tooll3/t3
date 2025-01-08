@@ -224,13 +224,6 @@
       }
     },
     {
-      "ChildId": "a658212f-51dc-49a7-843e-2800c710bf65"/*Blend*/,
-      "Position": {
-        "X": 1798.3435,
-        "Y": 374.5388
-      }
-    },
-    {
       "ChildId": "a67cb616-1101-48e3-8e20-c46bd9fe65ae"/*Modulo*/,
       "Position": {
         "X": -170.29584,

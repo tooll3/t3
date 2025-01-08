@@ -1,6 +1,7 @@
 {
   "Id": "6ef2c96c-0ade-4dfb-bfe1-d852cf453a0e"/*DrawPointsExample*/,
   "Description": "",
+  "SymbolTags": "4096",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -855,7 +856,7 @@
       "Style": "Expanded",
       "Size": {
         "X": 110.0,
-        "Y": 127.0
+        "Y": 140.0
       },
       "Position": {
         "X": 786.1189,
@@ -1014,7 +1015,7 @@
       "Style": "Expanded",
       "Size": {
         "X": 110.0,
-        "Y": 127.0
+        "Y": 140.0
       },
       "Position": {
         "X": 767.53784,

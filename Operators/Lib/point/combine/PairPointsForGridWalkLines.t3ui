@@ -62,13 +62,6 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "2146f1a0-ad1e-46fc-924b-c477d38cd981"/*DrawParticles*/,
-      "Position": {
-        "X": -264.48227,
-        "Y": 87.69937
-      }
-    },
-    {
       "ChildId": "251d9a17-75dc-417c-bb18-f473c42839ec"/*Vector3Components*/,
       "Position": {
         "X": -11.507167,

@@ -1,4 +1,4 @@
-namespace Examples.lib.point.draw;
+namespace Examples._obsolete;
 
 [Guid("78ee50b0-910b-4edc-b8cd-5c24b2f1b7d9")]
  internal sealed class DrawRibbonsExample : Instance<DrawRibbonsExample>

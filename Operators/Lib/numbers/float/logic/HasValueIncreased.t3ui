@@ -1,7 +1,7 @@
 {
   "Id": "c513c58d-e45c-408d-a0b8-250c9af31545"/*HasValueIncreased*/,
   "Description": "Tests whether the incoming value has increased by a defined threshold and outputs this as a Boolean\n\nOperator with more Options: [HasValueChanged]\n\nSimilar to [HasValueIncreased], [IsGreater] and [HasValueDecreased]",
-  "SymbolTags": "4104",
+  "SymbolTags": "8",
   "InputUis": [
     {
       "InputId": "2e43732b-48c4-4ee4-bf92-af5fab5b0597"/*Threshold*/,
