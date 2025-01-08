@@ -1,13 +1,14 @@
-﻿using T3.Core.Animation;
+﻿#nullable enable
+using T3.Core.Animation;
 using T3.Core.DataTypes.DataSet;
 using T3.Editor.Gui.UiHelpers;
 using T3.SystemUi.Logging;
 
 namespace T3.Editor.App;
 
-public static class Profiling
+internal static class Profiling
 {
-    public static void KeepFrameData()
+    internal static void KeepFrameData()
     {
         if (UserSettings.Config.EnableFrameProfiling)
         {
@@ -24,8 +25,8 @@ public static class Profiling
             TraceGCLevel(2, ref gcMemoryInfo);
         }
     }
-    
-    public static void EndFrameData()
+
+    internal static void EndFrameData()
     {
         if (!UserSettings.Config.EnableFrameProfiling || _frameRegionChannel == null)
             return;
@@ -69,10 +70,10 @@ public static class Profiling
     private static readonly DataChannel[] _gcHeapSizeDeltaChannels = new DataChannel[MaxGCLevels];
     private static readonly long[] _lastHeapSizeBytes = new long[MaxGCLevels];
     
-    private static DataChannel _frameRegionChannel;
+    private static DataChannel? _frameRegionChannel; // Channels will be created on first use
     private static double _frameStartTime;
     
-    public class ProfilingLogWriterClass: ILogWriter
+    public sealed class ProfilingLogWriterClass: ILogWriter
     {
         public void ProcessEntry(ILogEntry entry)
         {
@@ -82,6 +83,6 @@ public static class Profiling
         // TODO: Ths can probably be removed
         public ILogEntry.EntryLevel Filter { get; set; }
         public void Dispose() { }
-        private DataChannel _logMessageChannel;
+        private DataChannel? _logMessageChannel;
     }
 }
