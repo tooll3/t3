@@ -377,7 +377,7 @@ internal class ParameterWindow : Window
         if (OperatorHelp.DrawHelpSummary(symbolUi))
             _viewMode = ViewModes.Help;
 
-        OperatorHelp.DrawExamples(symbolUi);
+        OperatorHelp.DrawLinksAndExamples(symbolUi);
         ImGui.EndChild();
         ImGui.PopStyleVar();
     }

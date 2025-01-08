@@ -1,3 +1,4 @@
+#nullable enable
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.UiModel;
@@ -7,12 +8,12 @@ namespace T3.Editor.Gui.Graph.Interaction;
 /// <summary>
 /// Can aggregate information about all symbols like warnings, dependencies and examples
 /// </summary>
-public static class SymbolAnalysis
+internal static class SymbolAnalysis
 {
     /// <summary>
     /// Basic information is used by symbol browser and for relevancy search 
     /// </summary>
-    public static void UpdateUsagesOnly()
+    internal static void UpdateSymbolUsageCounts()
     {
         var usages = Structure.CollectSymbolUsageCounts();
         ConnectionHashCounts = new Dictionary<int, int>();
@@ -23,7 +24,6 @@ public static class SymbolAnalysis
             if (!InformationForSymbolIds.TryGetValue(symbolId, out var info))
             {
                 info = new SymbolInformation();
-                    
                 InformationForSymbolIds[symbolId] = info;
             }
                 
@@ -39,32 +39,28 @@ public static class SymbolAnalysis
             info.UsageCount = count;
         }            
     }
-        
-        
-        
-    public static void UpdateDetails()
+
+    /// <summary>
+    /// Update <see cref="InformationForSymbolIds"/> collection with details that might be useful for tasks like
+    /// library structure cleanup. 
+    /// </summary>
+    internal static void UpdateDetails()
     {
         var usages = Structure.CollectSymbolUsageCounts();
             
         InformationForSymbolIds.Clear();
 
-        var allSymbolUis = EditorSymbolPackage.AllSymbolUis.ToArray();
-        foreach (var symbolUi in allSymbolUis)
+        foreach (var symbolUi in EditorSymbolPackage.AllSymbolUis)
         {
             usages.TryGetValue(symbolUi.Symbol.Id, out var usageCount);
-                
-                
-
+            var examples = 
+            
             InformationForSymbolIds[symbolUi.Symbol.Id]
-                = new SymbolInformation()
+                = new SymbolInformation
                       {
-                          RequiredSymbols = Structure.CollectRequiredSymbols(symbolUi.Symbol),
+                          RequiredSymbols = CollectRequiredSymbols(symbolUi.Symbol),
                           DependingSymbols = Structure.CollectDependingSymbols(symbolUi.Symbol).ToHashSet(),
-                          ExampleSymbols = allSymbolUis
-                                          .Where(c => c.Symbol.Name == symbolUi.Symbol.Name + "Example"
-                                                      || c.Symbol.Name == symbolUi.Symbol.Name + "Examples")
-                                          .Select(c => c.Symbol.Id)
-                                          .ToList(),
+                          ExampleSymbolsIds =  ExampleSymbolLinking.GetExampleIds(symbolUi.Symbol.Id),
                           UsageCount = usageCount,
                           LacksDescription = string.IsNullOrWhiteSpace(symbolUi.Description),
                           LacksAllParameterDescription = symbolUi.InputUis.Count > 2 && symbolUi.InputUis.Values.All(i => string.IsNullOrWhiteSpace(i.Description)),
@@ -77,31 +73,47 @@ public static class SymbolAnalysis
 
         DetailsInitialized = true;
     }
-        
-    public static readonly Dictionary<Guid, SymbolInformation> InformationForSymbolIds = new(1000);
+
+    internal static readonly Dictionary<Guid, SymbolInformation> InformationForSymbolIds = new(1000);
         
     /// <summary>
     /// We are storing all connections between input slots as hashes from _sourceSlotId x _targetSlotId.
     /// These are then used by SymbolBrowser to increase relevancy for frequent combinations.
     /// </summary>
-    public static Dictionary<int, int> ConnectionHashCounts = new();
-    public static bool DetailsInitialized { get; private set; } 
+    internal static Dictionary<int, int> ConnectionHashCounts = new();
+
+    internal static bool DetailsInitialized { get; private set; } 
 
     /// <summary>
     /// 
     /// </summary>
-    public class SymbolInformation
+    public sealed class SymbolInformation
     {
-        public List<string> Warnings = new();
-        public HashSet<Symbol> RequiredSymbols = new();
-        public HashSet<Symbol> DependingSymbols = new();
-        public List<Guid> ExampleSymbols = new();
-        public int UsageCount { get; set; }
-        public bool LacksDescription;
-        public bool LacksAllParameterDescription;
-        public bool LacksSomeParameterDescription;
-        public bool LacksParameterGrouping;
-        public bool IsLibOperator;
+        public List<string> Warnings = [];
+        internal HashSet<Symbol> RequiredSymbols = [];
+        internal HashSet<Symbol> DependingSymbols = [];
+        public IReadOnlyList<Guid> ExampleSymbolsIds = [];
+        internal int UsageCount { get; set; }
+        internal bool LacksDescription;
+        internal bool LacksAllParameterDescription;
+        internal bool LacksSomeParameterDescription;
+        internal bool LacksParameterGrouping;
+        internal bool IsLibOperator;
             
+    }
+
+    public static HashSet<Symbol> CollectRequiredSymbols(Symbol symbol, HashSet<Symbol>? all = null)
+    {
+        all ??= [];
+
+        foreach (var symbolChild in symbol.Children.Values)
+        {
+            if (!all.Add(symbolChild.Symbol))
+                continue;
+
+            CollectRequiredSymbols(symbolChild.Symbol, all);
+        }
+
+        return all;
     }
 }

@@ -3,20 +3,58 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Interaction;
 
-public static class ExampleSymbolLinking
+/// <summary>
+/// Provides <see cref="ExampleIdsForSymbolsId"/> collection of examples operators for each symbol.
+/// </summary>
+/// <remarks>
+/// Should be updated on editor startup. The only stores symbolIds to prevent references to
+/// outdated types after structural changes.
+/// </remarks>
+/// <todo>
+/// Should be "occasionally" structural changes like creating or renaming symbols.
+/// </todo>
+internal static class ExampleSymbolLinking
 {
-    // Todo: unlink Examples implementation from naming - this should be done in a different way via attribute, guid links, etc.
-    public static void UpdateExampleLinks()
+    internal static Dictionary<Guid, List<Guid>> ExampleIdsForSymbolsId { get; } = new(50);
+
+    public static IReadOnlyList<Guid> GetExampleIds(Guid id)
     {
-        ExampleSymbolUis.Clear();
+        return ExampleIdsForSymbolsId.TryGetValue(id, out var exampleIds) ? exampleIds : _emptyIdList;
+    } 
+    
+    public static bool TryGetExamples(Guid symbolId, out IReadOnlyList<SymbolUi> examples)
+    {
+        examples = _noSymbolUis;
+        if (!ExampleIdsForSymbolsId.TryGetValue(symbolId, out var exampleIds))
+            return false;
+
+        if (exampleIds.Count == 0)
+            return false;
+
+        var newList = new List<SymbolUi>(examples.Count);
+        foreach (var id in exampleIds)
+        {
+            if (SymbolUiRegistry.TryGetSymbolUi(id, out var symbolUi))
+                 newList.Add(symbolUi);
+        }
+
+        examples = newList;
+        return true;
+    }
+    
+    
+    // Todo: unlink Examples implementation from naming - this should be done in a different way via attribute, guid links, etc.
+    internal static void UpdateExampleLinks()
+    {
+        ExampleIdsForSymbolsId.Clear();
 
         const string exampleSuffix = "Example";
         const string examplesSuffix = "Examples";
-            
-
+        
         var potentialExamples = new List<(Range correspondingNameRange, SymbolUi exampleSymbol)>();
 
         var symbolUiCollection = EditorSymbolPackage.AllSymbolUis.ToList();
+        
         Dictionary<int, List<Symbol>> symbolsByName = new(capacity: symbolUiCollection.Count);
         foreach (var symbolUi in symbolUiCollection)
         {
@@ -57,18 +95,19 @@ public static class ExampleSymbolLinking
 
             foreach (var symbol in symbolsWithName)
             {
-                if (!ExampleSymbolUis.TryGetValue(symbol.Id, out var exampleList))
+                if (!ExampleIdsForSymbolsId.TryGetValue(symbol.Id, out var exampleList))
                 {
                     exampleList = [];
-                    ExampleSymbolUis.Add(symbol.Id, exampleList);
+                    ExampleIdsForSymbolsId.Add(symbol.Id, exampleList);
                 }
 
-                exampleList.Add(exampleSymbol);
+                exampleList.Add(exampleSymbol.Symbol.Id);
             }
         }
 
-        Log.Debug($"Found {ExampleSymbolUis.Sum(x=> x.Value.Count)} examples for {ExampleSymbolUis.Count} operators out of {potentialExamples.Count} potential examples");
+        Log.Debug($"Found {ExampleIdsForSymbolsId.Sum(x=> x.Value.Count)} examples for {ExampleIdsForSymbolsId.Count} operators out of {potentialExamples.Count} potential examples");
     }
 
-    public static Dictionary<Guid, List<SymbolUi>> ExampleSymbolUis { get; } = new(50);
+    private static readonly List<Guid> _emptyIdList = [];
+    private static readonly IReadOnlyList <SymbolUi> _noSymbolUis = []; 
 }

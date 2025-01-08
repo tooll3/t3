@@ -168,21 +168,6 @@ internal sealed class Structure
         return results;
     }
 
-    public static HashSet<Symbol> CollectRequiredSymbols(Symbol symbol, HashSet<Symbol>? all = null)
-    {
-        all ??= [];
-
-        foreach (var symbolChild in symbol.Children.Values)
-        {
-            if (!all.Add(symbolChild.Symbol))
-                continue;
-
-            CollectRequiredSymbols(symbolChild.Symbol, all);
-        }
-
-        return all;
-    }
-
     internal static HashSet<Guid> CollectConnectedChildren(Symbol.Child child, Instance composition, HashSet<Guid> set = null)
     {
         set ??= [];

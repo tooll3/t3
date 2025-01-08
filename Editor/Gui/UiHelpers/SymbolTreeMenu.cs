@@ -125,7 +125,7 @@ public static class SymbolTreeMenu
             }
 
 
-            if (ExampleSymbolLinking.ExampleSymbolUis.TryGetValue(symbol.Id, out var examples))
+            if (ExampleSymbolLinking.TryGetExamples(symbol.Id, out var examples))
             {
                 ImGui.PushFont(Fonts.FontSmall);
                 ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f * ImGui.GetStyle().Alpha);
