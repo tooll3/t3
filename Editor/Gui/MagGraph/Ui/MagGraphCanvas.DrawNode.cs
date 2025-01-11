@@ -34,8 +34,9 @@ internal sealed partial class MagGraphCanvas
         if (item.Variant == MagGraphItem.Variants.Operator && item.Instance != null)
         {
             var framesSinceLastUpdate = 100;
-            foreach (var output in item.Instance.Outputs)
+            for (var index = 0; index < item.Instance.Outputs.Count; index++)
             {
+                var output = item.Instance.Outputs[index];
                 framesSinceLastUpdate = Math.Min(framesSinceLastUpdate, output.DirtyFlag.FramesSinceLastUpdate);
             }
 
@@ -103,33 +104,32 @@ internal sealed partial class MagGraphCanvas
 
             // There is probably a better method than this...
             const int snapPadding = 2;
-            if (!snappedBorders.HasFlag(Borders.Down)) pMaxVisible.Y -= snapPadding * 2 * CanvasScale;
-            if (!snappedBorders.HasFlag(Borders.Right)) pMaxVisible.X -= snapPadding * CanvasScale;
+            if ((snappedBorders&Borders.Down) ==0) pMaxVisible.Y -= snapPadding * 2 * CanvasScale;
+            if ((snappedBorders&Borders.Right) == 0) pMaxVisible.X -= snapPadding * CanvasScale;
         }
 
         // Background and Outline
-        var imDrawFlags = _borderRoundings[(int)snappedBorders % 16];
+        var borders = (int)snappedBorders % 16;
+        var imDrawFlags = _borderRoundings[borders];
 
-        //var isHovered = _context.Selector.HoveredIds.Contains(item.Id);
-        //var fade = isHovered ? 1 : 0.7f;
 
         drawList.AddRectFilled(pMinVisible,
                                pMaxVisible,
                                Color.Mix(
                                          ColorVariations.OperatorBackground.Apply(typeColor),
                                          ColorVariations.OperatorBackgroundIdle.Apply(typeColor),
-                                         idleFactor), 5 * CanvasScale,
+                                         idleFactor), CanvasScale < 0.5f ? 0: 5 * CanvasScale,
                                imDrawFlags);
 
         // Snapped borders
-        if (snappedBorders.HasFlag(Borders.Down))
+        if ((snappedBorders&Borders.Down)!=0)
         {
             drawList.AddRectFilled(new Vector2(pMinVisible.X, pMaxVisible.Y),
                                    pMaxVisible - new Vector2(0, 2),
                                    ColorVariations.OperatorOutline.Apply(typeColor));
         }
 
-        if (snappedBorders.HasFlag(Borders.Right))
+        if ((snappedBorders&Borders.Right) !=0)
         {
             drawList.AddRectFilled(new Vector2(pMaxVisible.X - 2, pMinVisible.Y),
                                    pMaxVisible,
@@ -141,14 +141,16 @@ internal sealed partial class MagGraphCanvas
                                ? UiColors.ForegroundFull
                                : UiColors.BackgroundFull.Fade(0f);
 
-        drawList.AddRect(pMinVisible, pMaxVisible, outlineColor, 6 * CanvasScale, imDrawFlags);
+        drawList.AddRect(pMinVisible, pMaxVisible, outlineColor, 
+                         CanvasScale < 0.5 ? 0: 6 * CanvasScale, 
+                         imDrawFlags);
 
         // Custom Ui
         SymbolUi.Child.CustomUiResult customUiResult = SymbolUi.Child.CustomUiResult.None;
         if (item.Variant == MagGraphItem.Variants.Operator)
         {
             customUiResult = DrawCustomUi(item.Instance, drawList, new ImRect(pMinVisible + Vector2.One, pMaxVisible - Vector2.One), Vector2.One * CanvasScale);
-            if ((customUiResult.HasFlag(SymbolUi.Child.CustomUiResult.IsActive)))
+            if ((customUiResult & SymbolUi.Child.CustomUiResult.IsActive) !=0)
             {
                 context.ItemWithActiveCustomUi = item;
             }
@@ -163,10 +165,10 @@ internal sealed partial class MagGraphCanvas
 
         if (_context.StateMachine.CurrentState == GraphStates.Default
             && isItemHovered
-            && !customUiResult.HasFlag(SymbolUi.Child.CustomUiResult.IsActive))
+            && (customUiResult & SymbolUi.Child.CustomUiResult.IsActive) == 0)
             _context.ActiveItem = item;
 
-        if (customUiResult.HasFlag(SymbolUi.Child.CustomUiResult.IsActive))
+        if ((customUiResult&SymbolUi.Child.CustomUiResult.IsActive)!=0)
         {
             //context.StateMachine.SetState(GraphStates.Default, context);
         }
@@ -182,7 +184,7 @@ internal sealed partial class MagGraphCanvas
         //     item.Select(_nodeSelection);
         // }
 
-        if (customUiResult == SymbolUi.Child.CustomUiResult.None)
+        if (customUiResult == SymbolUi.Child.CustomUiResult.None && CanvasScale > 0.2f)
         {
             // Draw Texture thumbnail
             var hasPreview = TryDrawTexturePreview(item, pMinVisible, pMaxVisible, drawList, typeColor);
@@ -299,102 +301,107 @@ internal sealed partial class MagGraphCanvas
                                          //+ new Vector2(8, 9) * CanvasScale 
                                          + new Vector2(-GridSizeOnScreen.Y * 0.15f, GridSizeOnScreen.Y * (0.5f)),
                                          3,
-                                         UiColors.StatusAttention);
+                                         UiColors.StatusAttention, 6);
             }
         }
 
-        // Input labels...
-        if (!customUiResult.HasFlag(SymbolUi.Child.CustomUiResult.PreventInputLabels))
+        if (CanvasScale > 0.25f)
         {
-            int inputIndex;
-            for (inputIndex = 1; inputIndex < item.InputLines.Length; inputIndex++)
+
+            // Input labels...
+            if ((customUiResult & SymbolUi.Child.CustomUiResult.PreventInputLabels) == 0)
             {
-                var inputLine = item.InputLines[inputIndex];
-                var isMissing = inputLine.InputUi.Relevancy == Relevancy.Required && inputLine.ConnectionIn == null;
-                if (isMissing)
+                int inputIndex;
+                for (inputIndex = 1; inputIndex < item.InputLines.Length; inputIndex++)
                 {
-                    drawList.AddCircleFilled(pMin
-                                             + new Vector2(0, GridSizeOnScreen.Y * (inputIndex + 0.5f)),
-                                             3,
-                                             UiColors.StatusAttention);
-                }
-
-                var labelPos = pMin + new Vector2(8, 9) * CanvasScale + new Vector2(0, GridSizeOnScreen.Y * inputIndex);
-                var label = inputLine.InputUi.InputDefinition.Name ?? "?";
-                if (inputLine.MultiInputIndex > 0)
-                {
-                    label += " +" + inputLine.MultiInputIndex;
-                }
-
-                drawList.AddText(Fonts.FontSmall,
-                                 Fonts.FontSmall.FontSize * Fonts.FontSmall.Scale * smallFontScaleFactor,
-                                 labelPos,
-                                 labelColor.Fade(0.7f),
-                                 label
-                                );
-
-                // Draw Value if possible
-                if (CanvasScale > 0.4f)
-                {
-                    var inputSlot = item.Instance.GetInput(inputLine.Input.Id);
-                    var valueAsString = ValueUtils.GetValueString(inputSlot);
-
-                    if (!string.IsNullOrWhiteSpace(valueAsString))
+                    var inputLine = item.InputLines[inputIndex];
+                    var isMissing = inputLine.InputUi.Relevancy == Relevancy.Required && inputLine.ConnectionIn == null;
+                    if (isMissing)
                     {
-                        ImGui.PushStyleColor(ImGuiCol.Text, labelColor.Rgba);
-                        var valueColor = labelColor;
-                        valueColor.Rgba.W *= 0.6f;
+                        drawList.AddCircleFilled(pMin
+                                                 + new Vector2(0, GridSizeOnScreen.Y * (inputIndex + 0.5f)),
+                                                 3,
+                                                 UiColors.StatusAttention);
+                    }
 
-                        ImGui.PushFont(Fonts.FontSmall);
-                        var labelSize = ImGui.CalcTextSize(valueAsString) * smallFontScaleFactor;
-                        ImGui.PopFont();
+                    var labelPos = pMin + new Vector2(8, 9) * CanvasScale + new Vector2(0, GridSizeOnScreen.Y * inputIndex);
+                    var label = inputLine.InputUi.InputDefinition.Name ?? "?";
+                    if (inputLine.MultiInputIndex > 0)
+                    {
+                        label += " +" + inputLine.MultiInputIndex;
+                    }
 
-                        var valuePos = new Vector2(pMin.X + (item.Size.X - 5) * CanvasScale - labelSize.X, labelPos.Y);
+                    drawList.AddText(Fonts.FontSmall,
+                                     Fonts.FontSmall.FontSize * Fonts.FontSmall.Scale * smallFontScaleFactor,
+                                     labelPos,
+                                     labelColor.Fade(0.7f),
+                                     label
+                                    );
 
-                        if (!string.IsNullOrEmpty(valueAsString))
+                    // Draw Value if possible
+                    if (CanvasScale > 0.4f)
+                    {
+                        var inputSlot = item.Instance.GetInput(inputLine.Input.Id);
+                        var valueAsString = ValueUtils.GetValueString(inputSlot);
+
+                        if (!string.IsNullOrWhiteSpace(valueAsString))
                         {
-                            drawList.AddText(Fonts.FontSmall,
-                                             Fonts.FontSmall.FontSize * Fonts.FontSmall.Scale * smallFontScaleFactor,
-                                             valuePos,
-                                             labelColor.Fade(0.5f),
-                                             valueAsString
-                                            );
-                        }
+                            ImGui.PushStyleColor(ImGuiCol.Text, labelColor.Rgba);
+                            var valueColor = labelColor;
+                            valueColor.Rgba.W *= 0.6f;
 
-                        ImGui.PopStyleColor();
+                            ImGui.PushFont(Fonts.FontSmall);
+                            var labelSize = ImGui.CalcTextSize(valueAsString) * smallFontScaleFactor;
+                            ImGui.PopFont();
+
+                            var valuePos = new Vector2(pMin.X + (item.Size.X - 5) * CanvasScale - labelSize.X, labelPos.Y);
+
+                            if (!string.IsNullOrEmpty(valueAsString))
+                            {
+                                drawList.AddText(Fonts.FontSmall,
+                                                 Fonts.FontSmall.FontSize * Fonts.FontSmall.Scale * smallFontScaleFactor,
+                                                 valuePos,
+                                                 labelColor.Fade(0.5f),
+                                                 valueAsString
+                                                );
+                            }
+
+                            ImGui.PopStyleColor();
+                        }
                     }
                 }
-            }
 
-            // Draw output labels...
-            for (var outputIndex = 1; outputIndex < item.OutputLines.Length; outputIndex++)
-            {
-                var outputLine = item.OutputLines[outputIndex];
-                if (outputLine.OutputUi == null)
-                    continue;
 
-                ImGui.PushFont(Fonts.FontSmall);
-                var outputDefinitionName = outputLine.OutputUi.OutputDefinition.Name;
-                var outputLabelSize = ImGui.CalcTextSize(outputDefinitionName) * smallFontScaleFactor;
-                ImGui.PopFont();
+                // Draw output labels...
+                for (var outputIndex = 1; outputIndex < item.OutputLines.Length; outputIndex++)
+                {
+                    var outputLine = item.OutputLines[outputIndex];
+                    if (outputLine.OutputUi == null)
+                        continue;
 
-                drawList.AddText(Fonts.FontSmall,
-                                 Fonts.FontSmall.FontSize * smallFontScaleFactor,
-                                 pMin
-                                 + new Vector2(-8, 9) * CanvasScale.Clamp(0.1f, 2f)
-                                 + new Vector2(0, GridSizeOnScreen.Y * (outputIndex + inputIndex - 1))
-                                 + new Vector2(MagGraphItem.Width * CanvasScale - outputLabelSize.X, 0),
-                                 labelColor.Fade(0.7f),
-                                 outputDefinitionName);
-            }
+                    ImGui.PushFont(Fonts.FontSmall);
+                    var outputDefinitionName = outputLine.OutputUi.OutputDefinition.Name;
+                    var outputLabelSize = ImGui.CalcTextSize(outputDefinitionName) * smallFontScaleFactor;
+                    ImGui.PopFont();
 
-            // Indicator primary output op peek position...
-            if (_context.ActiveSourceItem != null && item.Id == _context.ActiveSourceItem.Id)
-            {
-                drawList.AddCircleFilled(TransformPosition(new Vector2(item.Area.Max.X - MagGraphItem.GridSize.Y * 0.25f,
-                                                                       item.Area.Min.Y + MagGraphItem.GridSize.Y * 0.5f)),
-                                         3 * CanvasScale,
-                                         UiColors.ForegroundFull);
+                    drawList.AddText(Fonts.FontSmall,
+                                     Fonts.FontSmall.FontSize * smallFontScaleFactor,
+                                     pMin
+                                     + new Vector2(-8, 9) * CanvasScale.Clamp(0.1f, 2f)
+                                     + new Vector2(0, GridSizeOnScreen.Y * (outputIndex + inputIndex - 1))
+                                     + new Vector2(MagGraphItem.Width * CanvasScale - outputLabelSize.X, 0),
+                                     labelColor.Fade(0.7f),
+                                     outputDefinitionName);
+                }
+
+                // Indicator primary output op peek position...
+                if (_context.ActiveSourceItem != null && item.Id == _context.ActiveSourceItem.Id)
+                {
+                    drawList.AddCircleFilled(TransformPosition(new Vector2(item.Area.Max.X - MagGraphItem.GridSize.Y * 0.25f,
+                                                                           item.Area.Min.Y + MagGraphItem.GridSize.Y * 0.5f)),
+                                             3 * CanvasScale,
+                                             UiColors.ForegroundFull);
+                }
             }
         }
 
