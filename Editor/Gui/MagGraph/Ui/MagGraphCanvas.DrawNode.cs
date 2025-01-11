@@ -224,10 +224,12 @@ internal sealed partial class MagGraphCanvas
             Debug.Assert(item.Instance != null); // should be true to operator variant
 
             var hasMatchingTypes = false;
-            foreach (var i in item.Instance.Inputs)
+            for (var inputIndex = 0; inputIndex < item.Instance.Inputs.Count; inputIndex++)
             {
-                if (i.ValueType == _context.DraggedPrimaryOutputType
-                    && !i.HasInputConnections)
+                var inputSlot = item.Instance.Inputs[inputIndex];
+                
+                if (inputSlot.ValueType == _context.DraggedPrimaryOutputType
+                    && !inputSlot.HasInputConnections)
                 {
                     hasMatchingTypes = true;
                     break;
@@ -450,9 +452,16 @@ internal sealed partial class MagGraphCanvas
             }
         }
 
+        if(CanvasScale < 0.5f) 
+            return;
+        
         // Draw free input sockets...
-        foreach (var inputAnchor in item.GetInputAnchors())
+        MagGraphItem.InputAnchorPoint inputAnchor = default;
+        
+        var inputAnchorCount = item.GetInputAnchorCount();
+        for(var inputIndex=0; inputIndex < inputAnchorCount; inputIndex++)
         {
+            item.GetInputAnchorAtIndex(inputIndex, ref inputAnchor);
             var isMultiInput = inputAnchor.InputLine.InputUi != null && inputAnchor.InputLine.InputUi.InputDefinition.IsMultiInput;
             var isAlreadyUsed = inputAnchor.SnappedConnectionHash != MagGraphItem.FreeAnchor;
             // if (!isMultiInput)
@@ -517,15 +526,17 @@ internal sealed partial class MagGraphCanvas
                                                color);
                 }
             }
-
-            //ShowAnchorPointDebugs(inputAnchor, true);
         }
 
         var hoverFactor = hoverProgress.RemapAndClamp(0, 1, 1, 2);
 
         // Draw output sockets
-        foreach (var outputAnchor in item.GetOutputAnchors())
+        var count = item.GetOutputAnchorCount();
+        MagGraphItem.OutputAnchorPoint outputAnchor = default;
+        for(var index=0; index < count; index++)
         {
+            item.GetOutputAnchorAtIndex(index, ref outputAnchor);
+            
             var type2UiProperties = TypeUiRegistry.GetPropertiesForType(outputAnchor.ConnectionType);
 
             var posOnCanvas = TransformPosition(outputAnchor.PositionOnCanvas);
@@ -589,14 +600,16 @@ internal sealed partial class MagGraphCanvas
                                            UiColors.BackgroundFull);
 
                     // This will later be used for by DefaultState to create a connection
-                    _context.ActiveSourceOutputId = outputAnchor.SlotId;
+                    var contextActiveSourceOutputId = outputAnchor.SlotId;
+                    _context.ActiveSourceOutputId = contextActiveSourceOutputId;
                     _context.ActiveOutputDirection = outputAnchor.Direction;
 
                     // Show tooltip with output name and type
                     if (item.Variant == MagGraphItem.Variants.Operator)
                     {
-                        var outputLine = item.OutputLines.FirstOrDefault(o => o.Id == outputAnchor.SlotId);
-                        if (outputLine.Id == outputAnchor.SlotId)
+                        var outputLine = item.OutputLines.FirstOrDefault(o => o.Id == contextActiveSourceOutputId);
+                        
+                        if (outputLine.Id == contextActiveSourceOutputId)
                         {
                             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5,5));
                             ImGui.BeginTooltip();
@@ -723,8 +736,6 @@ internal sealed partial class MagGraphCanvas
 
         var aspect = (float)texture.Description.Width / texture.Description.Height;
         
-        //var unitScreenHeight = MathF.Min(itemMax.Y - itemMin.Y,  MagGraphItem.GridSize.Y * CanvasScale ) - 2 * CanvasScale;
-
         var unitScreenHeight = (MagGraphItem.GridSize.Y - 5) * CanvasScale;
         var previewSize = new Vector2(unitScreenHeight * aspect, unitScreenHeight);
 
@@ -738,9 +749,6 @@ internal sealed partial class MagGraphCanvas
                               itemMin.Y
                               + (unitScreenHeight - previewSize.Y) / 2
                               + 1 * CanvasScale);
-
-        //var min = new Vector2(itemMin.X, itemMin.Y - previewSize.Y - 1);
-        //var max = new Vector2(itemMin.X + previewSize.X, itemMin.Y - 1);
 
         if (previewTextureView == null)
             return false;

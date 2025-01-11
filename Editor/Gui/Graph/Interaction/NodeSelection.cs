@@ -190,6 +190,7 @@ internal class NodeSelection : ISelection
     private readonly NavigationHistory _history;
     private readonly Structure _structure;
 
+    //TODO: This should be a dict because selecting many (> 500) ops will lead to framedrops
     public readonly List<ISelectableCanvasObject> Selection = new();
     private IReadOnlyList<Guid> _selectedCompositionPath;
     private readonly Dictionary<SymbolUi.Child, IReadOnlyList<Guid>> _childUiInstanceIdPaths = new();
@@ -210,7 +211,6 @@ internal class NodeSelection : ISelection
     {
         List<ISelectableCanvasObject> selectableItems = [];
         selectableItems.Clear();
-        //var compositionOp = _window.CompositionOp;
         try
         {
             var symbolUi = compositionOp.GetSymbolUi();
@@ -230,10 +230,6 @@ internal class NodeSelection : ISelection
 
     internal static ImRect GetSelectionBounds(NodeSelection nodeSelection, Instance compositionOp, float padding = 50)
     {
-        // var selectedOrAll = NodeSelection.IsAnythingSelected()
-        //                         ? NodeSelection.GetSelectedNodes<ISelectableCanvasObject>().ToArray()
-        //                         : SelectableChildren.ToArray();
-
         var selectedOrAll = nodeSelection.IsAnythingSelected()
                                 ? nodeSelection.GetSelectedNodes<ISelectableCanvasObject>().ToArray()
                                 : NodeSelection.GetSelectableChildren(compositionOp).ToArray();

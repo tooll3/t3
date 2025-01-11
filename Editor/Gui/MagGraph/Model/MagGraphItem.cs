@@ -154,7 +154,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
 
         return extend;
     }
-
+    
     /// <summary>
     /// input anchor taken if
     /// - connected
@@ -162,38 +162,28 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
     /// output anchor is taken if...
     /// - 
     /// </summary>
-    public IEnumerable<OutputAnchorPoint> GetOutputAnchors()
+    public void GetOutputAnchorAtIndex(int index, ref OutputAnchorPoint point)
     {
-        if (OutputLines.Length == 0)
-            yield break;
-
-        // vertical output...
+        if (index == 0)
         {
-            yield return new OutputAnchorPoint
-                             {
-                                 PositionOnCanvas = new Vector2(WidthHalf, Size.Y) + PosOnCanvas,
-                                 Direction = Directions.Vertical,
-                                 ConnectionType = OutputLines[0].Output.ValueType,
-                                 SnappedConnectionHash = GetSnappedConnectionHash(OutputLines[0].ConnectionsOut),
-                                 SlotId = OutputLines[0].Output.Id,
-                             };
+            point.PositionOnCanvas = new Vector2(WidthHalf, Size.Y) + PosOnCanvas;
+            point.Direction = Directions.Vertical;
+            point.ConnectionType = OutputLines[0].Output.ValueType;
+            point.SnappedConnectionHash = GetSnappedConnectionHash(OutputLines[0].ConnectionsOut);
+            point.SlotId = OutputLines[0].Output.Id;
+            return;
         }
 
-        // Horizontal outputs
-        {
-            foreach (var outputLine in OutputLines)
-            {
-                yield return new OutputAnchorPoint
-                                 {
-                                     PositionOnCanvas = new Vector2(Width, (0.5f + outputLine.VisibleIndex) * LineHeight) + PosOnCanvas,
-                                     Direction = Directions.Horizontal,
-                                     ConnectionType = outputLine.Output.ValueType,
-                                     SnappedConnectionHash = GetSnappedConnectionHash(outputLine.ConnectionsOut),
-                                     SlotId = outputLine.Output.Id,
-                                 };
-            }
-        }
+        var lineIndex = index - 1;
+        point.PositionOnCanvas = new Vector2(Width, (0.5f + OutputLines[lineIndex].VisibleIndex) * LineHeight) + PosOnCanvas;
+        point.Direction = Directions.Horizontal;
+        point.ConnectionType = OutputLines[lineIndex].Output.ValueType;
+        point.SnappedConnectionHash = GetSnappedConnectionHash(OutputLines[lineIndex].ConnectionsOut);
+        point.SlotId = OutputLines[lineIndex].Output.Id;
     }
+
+    public int GetOutputAnchorCount() => OutputLines.Length == 0 ? 0 : OutputLines.Length + 1;
+
 
     /// <summary>
     /// Get input anchors with current position and orientation for drawing and snapping
@@ -202,36 +192,29 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
     /// Using an Enumerable interface here is bad, because it creates a lot of allocations.
     /// In the long term, this should be cached.
     /// </remarks>
-    // TODO: Inline to draw anchors
-    public IEnumerable<InputAnchorPoint> GetInputAnchors()
+    public void GetInputAnchorAtIndex(int index, ref InputAnchorPoint anchorPoint)
     {
-        if (InputLines.Length == 0)
-            yield break;
-
-        // Top input
-        yield return new InputAnchorPoint
-                         {
-                             PositionOnCanvas = new Vector2(WidthHalf, 0) + PosOnCanvas,
-                             Direction = Directions.Vertical,
-                             ConnectionType = InputLines[0].Type,
-                             SnappedConnectionHash = InputLines[0].ConnectionIn?.ConnectionHash ?? FreeAnchor,
-                             SlotId = InputLines[0].Id,
-                             InputLine = InputLines[0],
-                         };
-        // Side inputs
-        foreach (var il in InputLines)
+        if (index == 0)
         {
-            yield return new InputAnchorPoint
-                             {
-                                 PositionOnCanvas = new Vector2(0, (0.5f + il.VisibleIndex) * LineHeight) + PosOnCanvas,
-                                 Direction = Directions.Horizontal,
-                                 ConnectionType = il.Type,
-                                 SnappedConnectionHash = il.ConnectionIn?.ConnectionHash ?? FreeAnchor,
-                                 SlotId = il.Id,
-                                 InputLine = il,
-                             };
+            anchorPoint.PositionOnCanvas = new Vector2(WidthHalf, 0) + PosOnCanvas;
+            anchorPoint.Direction = Directions.Vertical;
+            anchorPoint.ConnectionType = InputLines[0].Type;
+            anchorPoint.SnappedConnectionHash = InputLines[0].ConnectionIn?.ConnectionHash ?? FreeAnchor;
+            anchorPoint.SlotId = InputLines[0].Id;
+            anchorPoint.InputLine = InputLines[0];
+            return;
         }
+        
+        var lineIndex = index - 1;
+        anchorPoint.PositionOnCanvas = new Vector2(0, (0.5f + InputLines[lineIndex].VisibleIndex) * LineHeight) + PosOnCanvas;
+        anchorPoint.Direction = Directions.Horizontal;
+        anchorPoint.ConnectionType = InputLines[lineIndex].Type;
+        anchorPoint.SnappedConnectionHash = InputLines[lineIndex].ConnectionIn?.ConnectionHash ?? FreeAnchor;
+        anchorPoint.SlotId = InputLines[lineIndex].Id;
+        anchorPoint.InputLine = InputLines[lineIndex]; //TODO avoid copy
     }
+    
+    public int GetInputAnchorCount() => InputLines.Length == 0 ? 0 : InputLines.Length + 1;
 
     /** Assume as free (I.e. not connected) unless an connection is snapped, then return this connection as hash. */
     private static int GetSnappedConnectionHash(List<MagGraphConnection> snapGraphConnections)
