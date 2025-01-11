@@ -231,14 +231,12 @@ internal static class GraphConnectionDrawer
                     }
                 }
             }
+            
+            var segments = ComputerSegmentCount(MathF.Abs(startAngle_Sc - endAngle_Sc), canvasScale);
+            drawList.PathArcTo(Sc, Sc_r, startAngle_Sc, endAngle_Sc, segments);
 
-            const float anglePrecision = 12f;
-            var resS = (int)(MathF.Abs(startAngle_Sc - endAngle_Sc) * anglePrecision ).Clamp(1,30);
-
-            drawList.PathArcTo(Sc, Sc_r, startAngle_Sc, endAngle_Sc, resS);
-
-            var resT = (int)(MathF.Abs(startAngle_Tc - endAngle_Tc) * anglePrecision ).Clamp(1,30);
-            drawList.PathArcTo(Tc, Tc_r, startAngle_Tc, endAngle_Tc, resT);
+            var segmentsT = ComputerSegmentCount(MathF.Abs(startAngle_Tc - endAngle_Tc), canvasScale);
+            drawList.PathArcTo(Tc, Tc_r, startAngle_Tc, endAngle_Tc, segmentsT);
         }
 
         var isHovering = ArcConnection.TestHoverDrawListPath(ref drawList, out hoverPosition, out  normalizedHoverPos);
@@ -252,6 +250,12 @@ internal static class GraphConnectionDrawer
         drawList.PathStroke(color, ImDrawFlags.None, thickness);
 
         return isHovering;
+    }
+
+    private static int ComputerSegmentCount(float arcLengthRad, float canvasScale)
+    {
+        var circleResolution = (int) canvasScale.RemapAndClamp(0.2f, 1.5f, 4, 10);
+        return (int)(arcLengthRad * circleResolution).Clamp(1,100);
     }
     
     private static float ComputeInnerTangentAngle(Vector2 centerA, float radiusA, Vector2 centerB, float radiusB, bool flipped = false)
