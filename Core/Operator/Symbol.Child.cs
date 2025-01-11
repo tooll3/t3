@@ -34,7 +34,22 @@ public partial class Symbol
         public bool HasCustomName => !string.IsNullOrEmpty(Name);
 
         public bool IsBypassed { get => _isBypassed; set => SetBypassed(value); }
-        public bool IsDisabled { get => Outputs.FirstOrDefault().Value?.IsDisabled ?? false; set => SetDisabled(value); }
+        public bool IsDisabled
+        {
+            get
+            {
+                // Avoid LINQ because of allocations in inner loop
+                foreach (var x in Outputs.Values)
+                {
+                    if (x.IsDisabled)
+                        return true;
+                }
+
+                return false;
+                //return Outputs.FirstOrDefault().Value?.IsDisabled ?? false;
+            }
+            set => SetDisabled(value);
+        }
 
         public Dictionary<Guid, Input> Inputs { get; private init; } = new();
         public Dictionary<Guid, Output> Outputs { get; private init; } = new();
