@@ -22,9 +22,11 @@ namespace T3.Editor.Gui.Windows.TimeLine;
 /// </summary>
 internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
 {
-    public LayersArea(ValueSnapHandler snapHandler, TimeLineCanvas timeLineCanvas)
+    public LayersArea(ValueSnapHandler snapHandler, TimeLineCanvas timeLineCanvas, Func<Instance> getCompositionOp, Func<Guid, bool> requestChildComposition)
     {
         _snapHandler = snapHandler;
+        _getCompositionOp = getCompositionOp;
+        _requestChildComposition = requestChildComposition;
         _clipSelection = new ClipSelection(timeLineCanvas.NodeSelection);
         _timelineCanvas = timeLineCanvas;
     }
@@ -308,7 +310,7 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
             //ClipSelection.Select(timeClip);
             if (Structure.TryGetUiAndInstanceInComposition(timeClip.Id, compositionOp, out var childUi, out var instance))
             {
-                _timelineCanvas.GraphComponents.TrySetCompositionOpToChild(instance.SymbolChildId);
+                _requestChildComposition(instance.SymbolChildId);
             }
         }
             
@@ -491,7 +493,7 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
         
     public void UpdateSelectionForArea(ImRect screenArea, SelectionFence.SelectModes selectMode)
     {
-        var compositionOp = _timelineCanvas.GraphComponents.CompositionOp;
+        var compositionOp = _getCompositionOp();
             
         if (selectMode == SelectionFence.SelectModes.Replace)
             _clipSelection.Clear();
@@ -528,7 +530,7 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
 
     public ICommand StartDragCommand(in Guid compositionSymbolId)
     {
-        var composition = _timelineCanvas.GraphComponents.CompositionOp;
+        var composition = _getCompositionOp();
             
         _moveClipsCommand = new MoveTimeClipsCommand(composition, _clipSelection.SelectedClips.ToList());
         return _moveClipsCommand;
@@ -649,7 +651,7 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
     /// </summary>
     SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
     {
-        var currentComp = _timelineCanvas.GraphComponents.CompositionOp;
+        var currentComp = _getCompositionOp();
         SnapResult bestSnapResult = null;
 
         var allClips = Structure.GetAllTimeClips(currentComp);
@@ -681,6 +683,8 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
     private readonly Color _timeRemappingColor = UiColors.StatusAnimated.Fade(0.5f);
     private readonly ClipSelection _clipSelection;
     private readonly TimeLineCanvas _timelineCanvas;
+    private readonly Func<Instance> _getCompositionOp;
+    private readonly Func<Guid, bool> _requestChildComposition;
     private int _layerIndexOnDragStart;
 
     /// <summary>

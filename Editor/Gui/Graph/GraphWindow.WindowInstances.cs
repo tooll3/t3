@@ -97,8 +97,7 @@ internal sealed partial class GraphWindow
 
         instanceNumber = instanceNumber == NoInstanceNumber ? ++_instanceCounter : instanceNumber;
         // check for existing OpenedProject object, if it doesnt exist then create one 
-        var components = new GraphComponents(openedProject);
-        components.GraphCanvas = new GraphCanvas(components);
+        var components = GraphComponents.FromLegacyGraphCanvas(openedProject);
         var newWindow = new GraphWindow(instanceNumber, components);
 
         if (config == null)

@@ -25,15 +25,14 @@ namespace T3.Editor.Gui.Windows.TimeLine;
 /// </summary>
 internal sealed class TimeLineCanvas : CurveEditCanvas
 {
-    public TimeLineCanvas(GraphComponents graphComponents)
+    public TimeLineCanvas(NodeSelection nodeSelection, Func<Instance> getCompositionOp, Func<Guid, bool> requestChildComposition)
     {
-        _nodeSelection = graphComponents.NodeSelection;
-        GraphComponents = graphComponents;
+        _nodeSelection = nodeSelection;
         
         DopeSheetArea = new DopeSheetArea(SnapHandlerForU, this);
         _timelineCurveEditArea = new TimelineCurveEditArea(this, SnapHandlerForU, SnapHandlerForV);
         _timeSelectionRange = new TimeSelectionRange(this, SnapHandlerForU);
-        LayersArea = new LayersArea(SnapHandlerForU, this);
+        LayersArea = new LayersArea(SnapHandlerForU, this, getCompositionOp, requestChildComposition);
 
         SnapHandlerForV.AddSnapAttractor(_horizontalRaster);
         SnapHandlerForU.AddSnapAttractor(_clipRange);
@@ -45,7 +44,6 @@ internal sealed class TimeLineCanvas : CurveEditCanvas
 
     public NodeSelection NodeSelection => _nodeSelection;
     public HashSet<Guid> HoveredIds => _nodeSelection.HoveredIds;
-    public GraphComponents GraphComponents { get; }
 
     public void Draw(Instance compositionOp, Playback playback)
     {

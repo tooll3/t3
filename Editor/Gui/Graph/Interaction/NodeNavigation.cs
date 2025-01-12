@@ -7,14 +7,12 @@ namespace T3.Editor.Gui.Graph.Interaction;
 
 internal sealed class NodeNavigation
 {
-    private readonly GraphComponents _components;
-    public NodeNavigation(GraphComponents components)
+    public event Action<IReadOnlyList<Guid>> FocusInstanceRequested;
+    public NodeNavigation(Structure structure, NavigationHistory navigationHistory, Func<Instance> getComposition)
     {
-        _components = components;
-        _getComposition = () => _components.CompositionOp;
-        _canvas = _components.GraphCanvas;
-        _structure = _components.OpenedProject.Structure;
-        _navigationHistory = _components.NavigationHistory;
+        _getComposition = getComposition;
+        _structure = structure;
+        _navigationHistory = navigationHistory;
     }
     
     public void SelectAbove()
@@ -85,7 +83,7 @@ internal sealed class NodeNavigation
         if (_structure.GetInstanceFromIdPath(path) == null)
             return;
             
-        _canvas.OpenAndFocusInstance(path);
+        FocusInstanceRequested?.Invoke(path);
 
         if (!ParameterWindow.IsAnyInstanceVisible())
         {
@@ -115,7 +113,6 @@ internal sealed class NodeNavigation
     }
 
     private readonly Func<Instance> _getComposition;
-    private readonly IGraphCanvas _canvas;
     private readonly Structure _structure;
     private readonly NavigationHistory _navigationHistory;
 }

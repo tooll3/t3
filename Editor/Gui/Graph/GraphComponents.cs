@@ -16,7 +16,10 @@ internal sealed class GraphComponents
     public readonly GraphImageBackground GraphImageBackground;
     public readonly NodeNavigation NodeNavigation;
     public Structure Structure => OpenedProject.Structure;
-    public IGraphCanvas GraphCanvas { get; set; }
+
+    private IGraphCanvas _graphCanvas;
+    public IGraphCanvas GraphCanvas => _graphCanvas;
+    
     private readonly Stack<Composition> _compositionsForDisposal = new();
     public OpenedProject OpenedProject { get; }
     private readonly List<Guid> _compositionPath = [];
@@ -25,18 +28,30 @@ internal sealed class GraphComponents
 
     public readonly TimeLineCanvas TimeLineCanvas;
 
-    public event Action<GraphComponents, Guid> CompositionChanged; 
+    public event Action<GraphComponents, Guid> CompositionChanged;
 
-    public GraphComponents(OpenedProject openedProject)
+    private GraphComponents(OpenedProject openedProject)
     {
         var structure = openedProject.Structure;
+        OpenedProject = openedProject;
         NavigationHistory = new NavigationHistory(structure);
         NodeSelection = new NodeSelection(NavigationHistory, structure);
         GraphImageBackground = new GraphImageBackground(NodeSelection, structure);
-        NodeNavigation = new NodeNavigation(this);
-        TimeLineCanvas = new TimeLineCanvas(this);
-        OpenedProject = openedProject;
+        
+        var getCompositionOp = () => CompositionOp;
+        NodeNavigation = new NodeNavigation(structure, NavigationHistory, getCompositionOp);
+        TimeLineCanvas = new TimeLineCanvas(NodeSelection, getCompositionOp, TrySetCompositionOpToChild);
+        
         _duplicateSymbolDialog.Closed += DisposeLatestComposition;
+    }
+
+    public static GraphComponents FromLegacyGraphCanvas(OpenedProject openedProject)
+    {
+        var components = new GraphComponents(openedProject);
+        components._graphCanvas = new GraphCanvas(components.NodeSelection, components.Structure, components.NavigationHistory, components.NodeNavigation, 
+                                                  getComposition: () => components.CompositionOp);
+        components._graphCanvas.Components = components;
+        return components;
     }
 
     public void DisposeLatestComposition()

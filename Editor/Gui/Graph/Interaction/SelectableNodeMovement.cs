@@ -14,7 +14,7 @@ namespace T3.Editor.Gui.Graph.Interaction;
 /// <summary>
 /// Handles selection and dragging (with snapping) of node canvas elements
 /// </summary>
-internal class SelectableNodeMovement(GraphComponents window, INodeCanvas canvas, NodeSelection selection)
+internal class SelectableNodeMovement(IGraphCanvas graphCanvas, Func<Instance> getCompositionOp, Func<IEnumerable<ISelectableCanvasObject>> getSelectableChildren, NodeSelection selection)
 {
     /// <summary>
     /// Reset to avoid accidental dragging of previous elements 
@@ -52,7 +52,7 @@ internal class SelectableNodeMovement(GraphComponents window, INodeCanvas canvas
     public void Handle(ISelectableCanvasObject node, Instance instance = null)
     {
 
-        var composition = window.CompositionOp;
+        var composition = getCompositionOp();
         var justClicked = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Left);
             
         var isActiveNode = node.Id == _draggedNodeId;
@@ -81,7 +81,7 @@ internal class SelectableNodeMovement(GraphComponents window, INodeCanvas canvas
             {
                 _moveCommand.StoreCurrentValues();
                 UndoRedoStack.Add(_moveCommand);
-                DisconnectDraggedNodes(window.CompositionOp, _draggedNodes);
+                DisconnectDraggedNodes(getCompositionOp(), _draggedNodes);
             }
             HandleNodeDragging(node);
         }
@@ -102,7 +102,7 @@ internal class SelectableNodeMovement(GraphComponents window, INodeCanvas canvas
                 if (singleDraggedNode != null && ConnectionSplitHelper.BestMatchLastFrame != null && singleDraggedNode is SymbolUi.Child childUi)
                 {
                     var instanceForUiChild = composition.Children[childUi.Id];
-                    ConnectionMaker.SplitConnectionWithDraggedNode(window.GraphCanvas, 
+                    ConnectionMaker.SplitConnectionWithDraggedNode(graphCanvas, 
                                                                    childUi, 
                                                                    ConnectionSplitHelper.BestMatchLastFrame.Connection, 
                                                                    instanceForUiChild,
@@ -306,12 +306,12 @@ internal class SelectableNodeMovement(GraphComponents window, INodeCanvas canvas
 
         if (!_isDragging)
         {
-            _dragStartPosInOpOnCanvas =  canvas.InverseTransformPositionFloat(ImGui.GetMousePos()) - draggedNode.PosOnCanvas;
+            _dragStartPosInOpOnCanvas =  graphCanvas.InverseTransformPositionFloat(ImGui.GetMousePos()) - draggedNode.PosOnCanvas;
             _isDragging = true;
         }
 
 
-        var mousePosOnCanvas = canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
+        var mousePosOnCanvas = graphCanvas.InverseTransformPositionFloat(ImGui.GetMousePos());
         var newDragPosInCanvas = mousePosOnCanvas - _dragStartPosInOpOnCanvas;
 
         var bestDistanceInCanvas = float.PositiveInfinity;
@@ -332,7 +332,7 @@ internal class SelectableNodeMovement(GraphComponents window, INodeCanvas canvas
                 }
             }
 
-            foreach (var neighbor in canvas.SelectableChildren)
+            foreach (var neighbor in getSelectableChildren())
             {
                 if (neighbor == draggedNode || _draggedNodes.Contains(neighbor))
                     continue;
@@ -349,7 +349,7 @@ internal class SelectableNodeMovement(GraphComponents window, INodeCanvas canvas
             }
         }
 
-        var snapDistanceInCanvas = canvas.InverseTransformDirection(new Vector2(20, 0)).X;
+        var snapDistanceInCanvas = graphCanvas.InverseTransformDirection(new Vector2(20, 0)).X;
         var isSnapping = bestDistanceInCanvas < snapDistanceInCanvas;
 
         var moveDeltaOnCanvas = isSnapping
@@ -369,17 +369,17 @@ internal class SelectableNodeMovement(GraphComponents window, INodeCanvas canvas
             return;
 
         var drawList = ImGui.GetWindowDrawList();
-        var parentUi = window.CompositionOp.GetSymbolUi();
+        var parentUi = getCompositionOp().GetSymbolUi();
         var snappedNeighbours = FindSnappedNeighbours(childUi);
 
         var color = new Color(1f, 1f, 1f, 0.08f);
         snappedNeighbours.Add(childUi);
-        var expandOnScreen = canvas.TransformDirection(SelectableNodeMovement.SnapPadding).X / 2;
+        var expandOnScreen = graphCanvas.TransformDirection(SelectableNodeMovement.SnapPadding).X / 2;
 
         foreach (var snappedNeighbour in snappedNeighbours)
         {
             var areaOnCanvas = new ImRect(snappedNeighbour.PosOnCanvas, snappedNeighbour.PosOnCanvas + snappedNeighbour.Size);
-            var areaOnScreen = canvas.TransformRect(areaOnCanvas);
+            var areaOnScreen = graphCanvas.TransformRect(areaOnCanvas);
             areaOnScreen.Expand(expandOnScreen);
             drawList.AddRect(areaOnScreen.Min, areaOnScreen.Max, color, rounding: 10, ImDrawFlags.RoundCornersAll, thickness: 4);
         }
@@ -388,7 +388,7 @@ internal class SelectableNodeMovement(GraphComponents window, INodeCanvas canvas
     public List<ISelectableCanvasObject> FindSnappedNeighbours(ISelectableCanvasObject childUi)
     {
         //var pool = new HashSet<ISelectableNode>(parentUi.ChildUis);
-        var pool = new HashSet<ISelectableCanvasObject>(canvas.SelectableChildren);
+        var pool = new HashSet<ISelectableCanvasObject>(getSelectableChildren());
         pool.Remove(childUi);
         return RecursivelyFindSnappedInPool(childUi, pool).Distinct().ToList();
     }
