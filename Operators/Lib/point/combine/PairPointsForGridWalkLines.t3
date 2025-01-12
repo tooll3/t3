@@ -48,44 +48,6 @@
   ],
   "Children": [
     {
-      "Id": "2146f1a0-ad1e-46fc-924b-c477d38cd981"/*DrawParticles*/,
-      "SymbolId": "73a55607-c892-4a85-946b-e37354c4c0e4",
-      "InputValues": [
-        {
-          "Id": "3cb3866f-48d0-4824-9302-73a92ba6b132"/*ColorOverLife*/,
-          "Type": "T3.Core.DataTypes.Gradient",
-          "Value": {
-            "Gradient": {
-              "Interpolation": "Linear",
-              "Steps": [
-                {
-                  "Id": "4a4e9c37-e74b-441d-be53-49ca10e9393e",
-                  "NormalizedPosition": 0.0,
-                  "Color": {
-                    "R": 1.0,
-                    "G": 0.99999,
-                    "B": 1.0,
-                    "A": 1.0
-                  }
-                },
-                {
-                  "Id": "3ede8480-c275-40f7-907a-a2cad8703392",
-                  "NormalizedPosition": 1.0,
-                  "Color": {
-                    "R": 0.99999,
-                    "G": 0.99999,
-                    "B": 1.0,
-                    "A": 1.0
-                  }
-                }
-              ]
-            }
-          }
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "251d9a17-75dc-417c-bb18-f473c42839ec"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
@@ -104,7 +66,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\combine\\PairPointsForGridWalkLine.hlsl"
+          "Value": "Resources/lib/points/combine/PairPointsForGridWalkLine.hlsl"
         }
       ],
       "Outputs": []

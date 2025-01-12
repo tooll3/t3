@@ -6,9 +6,6 @@ public class RaymarchField : Instance<RaymarchField>
     [Output(Guid = "6cfa828f-e874-4c5c-ba2e-6db538490bfd")]
     public readonly Slot<Command> DrawCommand = new();
 
-    [Output(Guid = "5c9c1d56-2e07-4231-938a-1748bcfcdfbb")]
-    public readonly Slot<Texture2D> TextureOutput = new();
-
     [Input(Guid = "596e7b55-06c2-4988-b9a2-67c635ad47b7")]
     public readonly InputSlot<float> MaxSteps = new();
 

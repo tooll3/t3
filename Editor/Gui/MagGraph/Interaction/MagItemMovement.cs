@@ -939,8 +939,12 @@ internal sealed partial class MagItemMovement
 
         foreach (var itemA in draggedItems)
         {
-            foreach (var inputAnchor in itemA.GetInputAnchors())
+            var itemAInputCount = itemA.GetInputAnchorCount();
+            MagGraphItem.InputAnchorPoint inputAnchor = default;
+            
+            for(var inputAnchorIndex = 0; inputAnchorIndex < itemAInputCount; inputAnchorIndex++)
             {
+                itemA.GetInputAnchorAtIndex(inputAnchorIndex, ref inputAnchor);
                 // make sure it's a snapped border connection
                 if (inputAnchor.SnappedConnectionHash != MagGraphItem.FreeAnchor
                     && !_snappedBorderConnectionHashes.Contains(inputAnchor.SnappedConnectionHash))
@@ -956,8 +960,12 @@ internal sealed partial class MagItemMovement
                     if (Math.Abs(itemA.PosOnCanvas[1 - xy] - itemB.PosOnCanvas[1 - xy]) > SnapTolerance)
                         continue;
 
-                    foreach (var outputAnchor in itemB.GetOutputAnchors())
+                    var count = itemB.GetOutputAnchorCount();
+                    MagGraphItem.OutputAnchorPoint outputAnchor = default;
+
+                    for(var index = 0; index < count; index++) 
                     {
+                        itemB.GetOutputAnchorAtIndex(index, ref outputAnchor);
                         if (outputAnchor.SnappedConnectionHash != MagGraphItem.FreeAnchor
                             && !_snappedBorderConnectionHashes.Contains(outputAnchor.SnappedConnectionHash))
                         {

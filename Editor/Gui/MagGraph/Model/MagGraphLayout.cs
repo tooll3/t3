@@ -94,21 +94,33 @@ internal sealed class MagGraphLayout
             }
             else
             {
-                Items[childId] = new MagGraphItem
-                                     {
-                                         Variant = MagGraphItem.Variants.Operator,
-                                         Id = childId,
-                                         Instance = childInstance,
-                                         Selectable = childUi,
-                                         SymbolUi = symbolUi,
-                                         SymbolChild = childUi.SymbolChild,
-                                         ChildUi = childUi,
-                                         Size = MagGraphItem.GridSize,
-                                         LastUpdateCycle = _structureUpdateCycle,
-                                         DampedPosOnCanvas = childUi.PosOnCanvas,
-                                     };
+                opItem = new MagGraphItem
+                             {
+                                 // Variant = MagGraphItem.Variants.Operator,
+                                 Id = childId,
+                                 // Instance = childInstance,
+                                 Selectable = childUi,
+                                 // SymbolUi = symbolUi,
+                                 // SymbolChild = childUi.SymbolChild,
+                                 // ChildUi = childUi,
+                                 // Size = MagGraphItem.GridSize,
+                                 // LastUpdateCycle = _structureUpdateCycle,
+                                 // DampedPosOnCanvas = childUi.PosOnCanvas,
+                             };
+                Items[childId] = opItem; 
                 addedItemCount++;
             }
+
+            opItem.Variant = MagGraphItem.Variants.Operator;
+            //opItem.Id = childId;
+            opItem.Instance = childInstance;
+            opItem.Selectable = childUi;
+            opItem.SymbolUi = symbolUi;
+            opItem.SymbolChild = childUi.SymbolChild;
+            opItem.ChildUi = childUi;
+            opItem.Size = MagGraphItem.GridSize;
+            opItem.LastUpdateCycle = _structureUpdateCycle;
+            opItem.DampedPosOnCanvas = childUi.PosOnCanvas;
         }
 
         foreach (var input in compositionOp.Inputs)

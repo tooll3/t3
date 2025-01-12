@@ -158,7 +158,7 @@ internal static class Program
             EditorUi.Instance.ExitApplication();
         }
 
-        SymbolAnalysis.UpdateUsagesOnly();
+        SymbolAnalysis.UpdateSymbolUsageCounts();
             
         UiContentContentDrawer.InitializeScaling();
         UiContentUpdate.CheckScaling();

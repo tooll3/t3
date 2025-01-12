@@ -1,6 +1,7 @@
 {
   "Id": "dd00cb1b-1c0e-4e79-9ea2-4b23686c6f37"/*_LegacySetAudioReaction*/,
   "Description": "",
+  "SymbolTags": "4096",
   "InputUis": [
     {
       "InputId": "a8900010-bf6d-44e4-bd72-28427a5dadd8"/*InputSource*/,

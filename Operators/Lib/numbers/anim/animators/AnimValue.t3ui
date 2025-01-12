@@ -70,8 +70,7 @@
       "Description": "Defines the ratio",
       "Min": 0.0,
       "Max": 2.0,
-      "Clamp": true,
-      "Format": "{0:P2}"
+      "Clamp": true
     },
     {
       "InputId": "ddd93b06-118e-43e0-85f6-c150faf91d04"/*Offset*/,

@@ -56,8 +56,8 @@ internal class NodeSelection : ISelection
     {
         Clear();
         AddSelection(node, instance);
-            
-        if(node is SymbolUi.Child)
+
+        if (node is SymbolUi.Child)
         {
             Debug.Assert(instance != null);
             _history.UpdateSelectedInstance(instance);
@@ -99,8 +99,6 @@ internal class NodeSelection : ISelection
         }
     }
 
-
-        
     public bool IsNodeSelected(ISelectableCanvasObject node) => Selection.Contains(node);
 
     public bool IsAnythingSelected() => Selection.Count > 0;
@@ -116,7 +114,7 @@ internal class NodeSelection : ISelection
         var selection = GetFirstSelectedInstance();
         return selection == _structure.GetInstanceFromIdPath(_selectedCompositionPath) ? null : selection;
     }
-        
+
     public Instance? GetFirstSelectedInstance()
     {
         if (Selection.Count == 0)
@@ -136,9 +134,9 @@ internal class NodeSelection : ISelection
 
         return null;
     }
-    
+
     public IEnumerable<SymbolUi.Child> GetSelectedChildUis() => GetSelectedNodes<SymbolUi.Child>();
-    
+
     public IEnumerable<Instance> GetSelectedInstances()
     {
         return GetSelectedNodes<SymbolUi.Child>()
@@ -150,7 +148,6 @@ internal class NodeSelection : ISelection
                       });
     }
 
-        
     /// <summary>
     /// Returns null if there are other selections
     /// </summary>
@@ -193,6 +190,7 @@ internal class NodeSelection : ISelection
     private readonly NavigationHistory _history;
     private readonly Structure _structure;
 
+    //TODO: This should be a dict because selecting many (> 500) ops will lead to framedrops
     public readonly List<ISelectableCanvasObject> Selection = new();
     private IReadOnlyList<Guid> _selectedCompositionPath;
     private readonly Dictionary<SymbolUi.Child, IReadOnlyList<Guid>> _childUiInstanceIdPaths = new();
@@ -205,29 +203,33 @@ internal class NodeSelection : ISelection
             if (i.Id == item.Id)
                 return true;
         }
+
         return false;
     }
 
-    public static IEnumerable<ISelectableCanvasObject> GetSelectableChildren(Instance compositionOp )
+    public static IEnumerable<ISelectableCanvasObject> GetSelectableChildren(Instance compositionOp)
     {
         List<ISelectableCanvasObject> selectableItems = [];
         selectableItems.Clear();
-        //var compositionOp = _window.CompositionOp;
-        var symbolUi = compositionOp.GetSymbolUi();
-        selectableItems.AddRange(compositionOp.Children.Values.Select(x => x.GetChildUi()));
+        try
+        {
+            var symbolUi = compositionOp.GetSymbolUi();
+            selectableItems.AddRange(compositionOp.Children.Values.Select(x => x.GetChildUi()));
 
-        selectableItems.AddRange(symbolUi.InputUis.Values);
-        selectableItems.AddRange(symbolUi.OutputUis.Values);
-        selectableItems.AddRange(symbolUi.Annotations.Values);
+            selectableItems.AddRange(symbolUi.InputUis.Values);
+            selectableItems.AddRange(symbolUi.OutputUis.Values);
+            selectableItems.AddRange(symbolUi.Annotations.Values);
+        }
+        catch (Exception e)
+        {
+            Log.Error("Failed to get selected children. This might be caused be recompilation. Please report");
+        }
+
         return selectableItems;
     }
 
     internal static ImRect GetSelectionBounds(NodeSelection nodeSelection, Instance compositionOp, float padding = 50)
     {
-        // var selectedOrAll = NodeSelection.IsAnythingSelected()
-        //                         ? NodeSelection.GetSelectedNodes<ISelectableCanvasObject>().ToArray()
-        //                         : SelectableChildren.ToArray();
-
         var selectedOrAll = nodeSelection.IsAnythingSelected()
                                 ? nodeSelection.GetSelectedNodes<ISelectableCanvasObject>().ToArray()
                                 : NodeSelection.GetSelectableChildren(compositionOp).ToArray();

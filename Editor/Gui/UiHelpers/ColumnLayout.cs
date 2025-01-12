@@ -12,8 +12,9 @@ namespace T3.Editor.Gui.UiHelpers;
 /// </remarks>
 internal static class ColumnLayout
 {
-    internal static void StartLayout()
+    internal static void StartLayout(int wrapCount = 10)
     {
+        _wrapLineCount = wrapCount;
         _layoutStartPosY = ImGui.GetCursorPosY();
         _currentColumnWidth = 0;
     }
@@ -41,7 +42,7 @@ internal static class ColumnLayout
         _currentColumnWidth = MathF.Max(_currentColumnWidth, itemWidth);
     }
 
-    private static readonly float _wrapLineCount = 10;
+    private static  int _wrapLineCount = 10;
     private static float _layoutStartPosY;
     private static float _currentColumnWidth;
     private static float Padding => 30 * T3Ui.UiScaleFactor;

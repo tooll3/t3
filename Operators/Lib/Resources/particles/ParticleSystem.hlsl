@@ -24,9 +24,9 @@ cbuffer IntParams : register(b1)
     int IsAutoCount;
 }
 
-StructuredBuffer<LegacyPoint> EmitPoints : t0;
+StructuredBuffer<Point> EmitPoints : t0;
 RWStructuredBuffer<Particle> Particles : u0;
-RWStructuredBuffer<LegacyPoint> ResultPoints : u1;
+RWStructuredBuffer<Point> ResultPoints : u1;
 
 #define W_KEEP_ORIGINAL 0
 #define W_PARTICLE_AGE 1
@@ -75,17 +75,17 @@ RWStructuredBuffer<LegacyPoint> ResultPoints : u1;
 
         Particles[gi].Position = EmitPoints[addIndex].Position;
         Particles[gi].Rotation = EmitPoints[addIndex].Rotation;
-        Particles[gi].Radius = EmitPoints[addIndex].W * RadiusFromW;
+        Particles[gi].Radius = EmitPoints[addIndex].Scale.x * RadiusFromW;
         Particles[gi].BirthTime = Time;
         Particles[gi].Velocity = qRotateVec3(float3(0, 0, 1), normalize(Particles[gi].Rotation)) * InitialVelocity;
-        Particles[gi].Radius = EmitPoints[addIndex].W * RadiusFromW;
+        // Particles[gi].Radius = EmitPoints[addIndex].W * RadiusFromW;
 
         // These will not change over lifetime...
         Particles[gi].Color = EmitPoints[addIndex].Color;
         // Particles[gi].Color = EmitPoints[addIndex].Color;
-        ResultPoints[gi].Stretch = EmitPoints[addIndex].Stretch;
-        ResultPoints[gi].Selected = EmitPoints[addIndex].Selected;
-        ResultPoints[gi].Color = EmitPoints[addIndex].Selected;
+        ResultPoints[gi].Scale = EmitPoints[addIndex].Scale;
+        ResultPoints[gi].FX2 = EmitPoints[addIndex].FX2;
+        ResultPoints[gi].Color = EmitPoints[addIndex].Color;
 
         // Particles[gi].Selected = EmitPoints[addIndex].Selected;
     }
@@ -128,22 +128,20 @@ RWStructuredBuffer<LegacyPoint> ResultPoints : u1;
 
     if (WMode == W_KEEP_ORIGINAL)
     {
-        if (tooOld)
-        {
-            ResultPoints[gi].W = NAN;
-        }
-        else
-        {
-            ResultPoints[gi].W = Particles[gi].Radius / RadiusFromW;
-        }
+        // Maybe we could skip this?
+        ResultPoints[gi].Scale = Particles[gi].Radius / RadiusFromW;
     }
     else if (WMode == W_PARTICLE_AGE)
     {
-        ResultPoints[gi].W = (isnan(Particles[gi].BirthTime) || tooOld) ? NAN : normalizedAge;
+        ResultPoints[gi].FX1 = normalizedAge;
     }
     else if (WMode == W_PARTICLE_SPEED)
     {
-        ResultPoints[gi].W = tooOld ? NAN : speed * 100;
+        ResultPoints[gi].FX1 = speed * 100;
     }
 
+    if (tooOld)
+    {
+        ResultPoints[gi].Scale = NAN;
+    }
 }

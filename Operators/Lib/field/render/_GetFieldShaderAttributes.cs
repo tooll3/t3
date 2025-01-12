@@ -25,8 +25,6 @@ namespace Lib.field.render;
  * If CodeNeedsUpdate is true, the shader code will be updated.
  * 
  * 
- *  - &&
- * 
  */
 [Guid("73c028d1-3de2-4269-b503-97f62bbce320")]
 internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttributes>, IStatusProvider
@@ -45,33 +43,187 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
         ShaderCode.UpdateAction += Update;
     }
 
+    private bool _needsInvalidation = true;
+
+    private int Invalidate(ISlot slot)
+    {
+        var slotFlag = slot.DirtyFlag;
+        if (slot.TryGetFirstConnection(out var firstConnection))
+        {
+            // slot is an output of an composition op
+            slotFlag.Target = Invalidate(firstConnection);
+        }
+        else
+        {
+            Instance parent = slot.Parent;
+
+            foreach (var input in parent.Inputs)
+            {
+                var inputFlag = input.DirtyFlag;
+                if (input.TryGetFirstConnection(out var inputConnection))
+                {
+                    if (input.IsMultiInput)
+                    {
+                        var multiInput = (IMultiInputSlot)input;
+                        int dirtySum = 0;
+                        foreach (var entry in multiInput.GetCollectedInputs())
+                        {
+                            dirtySum += Invalidate(entry);
+                        }
+
+                        inputFlag.Target = dirtySum;
+                    }
+                    else
+                    {
+                        inputFlag.Target = Invalidate(inputConnection);
+                    }
+                }
+                else
+                {
+                    inputFlag.Invalidate();
+                }
+            }
+
+            slotFlag.Invalidate();
+        }
+
+        return slotFlag.Target;
+    }
+    
+    /// <summary>
+    /// This is only updated if subgraph has been changed.
+    /// </summary>
     private void Update(EvaluationContext context)
     {
-        var shaderGraph = Field.GetValue(context);
-        if (shaderGraph == null)
-        {
-            _lastErrorMessage = "Missing input field";
-            return;
-        }
         
+        //Log.Debug("_GetShaderAttributes.Update", this);
         var templateCode = TemplateCode.GetValue(context);
         if (string.IsNullOrEmpty(templateCode))
         {
             _lastErrorMessage = "Missing input template code";
             return;
         }
+
+        //Invalidate(Field);
+        if (_needsInvalidation)
+        {
+            _needsInvalidation = false;
+        }
         
-        ShaderCode.Value = shaderGraph.GenerateShaderCode(templateCode);
+        // Recursively update complete shader graph and collect changes
+        _graphNode = Field.GetValue(context); 
         
-        var floatParams = shaderGraph.AllFloatValues;
-        if(floatParams.Count == 0)
+        if (_graphNode == null)
+        {
+            _lastErrorMessage = "Missing input field";
+            _needsInvalidation = true;
             return;
+        }
+
         
-        CreateBuffer(FloatParams, floatParams);
+        var changes = _graphNode.CollectedChanges;
+        if (changes == ShaderGraphNode.ChangedFlags.None)
+            return;
+
+        Log.Debug(" Update parameter buffer...");
+        AssembleParams();
+        var floatParams = AllFloatValues;
+        if (floatParams.Count > 0)
+        {
+            CreateParameterBuffer(FloatParams, floatParams);
+            //Log.Debug("No params?");
+            //return;
+        }
+        
+        if ((changes & (ShaderGraphNode.ChangedFlags.Code|ShaderGraphNode.ChangedFlags.Structural)) != 0)
+        {
+            Log.Debug(" Regenerate shader code");
+            ShaderCode.Value = GenerateShaderCode(templateCode);
+        }
+
+        _graphNode.ClearAllChanges();
+        _frameUpdateCount++;
     }
 
+    private string GenerateShaderCode(string code)
+    {
+        AssembleAndInjectParameters(ref code);
+        AssembleAndInjectFunctions(ref code);
+        InjectCall(ref code);
+        return code;
+    }
 
-    private static void CreateBuffer(Slot<Buffer> floatSlotBuffer, IReadOnlyList<float> floatParams)
+    private void InjectCall(ref string code)
+    {
+        var commentHook =  ToHlslTemplateTag("FIELD_CALL");
+        var callCode = $"{_graphNode}(pos);//"; // add comment to avoid syntax errors in generated code
+
+        code = code.Replace(commentHook, callCode);
+    }
+
+    private void AssembleAndInjectParameters(ref string templateCode)
+    {
+        //AssembleParams();
+        var commentHook = ToHlslTemplateTag("FLOAT_PARAMS");
+
+        if (templateCode.IndexOf((string)commentHook, StringComparison.Ordinal) == -1)
+            return;
+
+        var sb = new StringBuilder();
+        foreach (var name in _allShaderCodeParams)
+        {
+            sb.AppendLine($"\t{name.ShaderTypeName}  {name.Name};");
+        }
+
+        templateCode = templateCode.Replace(commentHook, sb.ToString());
+    }
+    
+    /**
+     * Before generating the complete shader, we need to collect all parameters of all nodes
+     * into to lists: One for the float constant buffer and one of parameter names and definition
+     */
+    public void AssembleParams()
+    {
+        // if (_graphNode.CollectedChanges == ShaderGraphNode.ChangedFlags.None)
+        //     return;
+
+        _allFloatParameterValues.Clear();
+        _allShaderCodeParams.Clear();
+
+        _graphNode.CollectAllNodeParams(_allFloatParameterValues, _allShaderCodeParams, _frameUpdateCount);
+    }
+    
+    private readonly List<ShaderGraphNode.ShaderParamHandling.ShaderCodeParameter> _allShaderCodeParams = [];
+    public IReadOnlyList<float> AllFloatValues => _allFloatParameterValues;
+    private readonly List<float> _allFloatParameterValues = [];
+
+
+    private void AssembleAndInjectFunctions(ref string templateCode)
+    {
+        AssembleShaderCode();
+        var commentHook = ToHlslTemplateTag("FIELD_FUNCTIONS");
+
+        if (templateCode.IndexOf((string)commentHook, StringComparison.Ordinal) == -1)
+            return;
+
+        templateCode = templateCode.Replace(commentHook, _shaderCodeBuilder.ToString());
+    }
+
+    private void AssembleShaderCode()
+    {
+        // if (!HasChangedStructure)
+        //     return;
+
+        //_allFloatParameterValues.Clear();
+        //_allShaderCodeParams.Clear();
+        _shaderCodeBuilder.Clear();
+        _graphNode.CollectShaderCode(_shaderCodeBuilder, _frameUpdateCount);
+    }
+    
+    private readonly StringBuilder _shaderCodeBuilder = new();
+    private int _frameUpdateCount;
+    
+    private static void CreateParameterBuffer(Slot<Buffer> floatSlotBuffer, IReadOnlyList<float> floatParams)
     {
         try
         {
@@ -129,9 +281,18 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
     private string _lastErrorMessage = string.Empty;
     #endregion
     
+    private ShaderGraphNode _graphNode;
+    private string _templateCode;
+    
+    
     [Input(Guid = "FFC1C70E-B717-4337-916D-C3A13343E9CC")]
     public readonly InputSlot<ShaderGraphNode> Field = new();
     
     [Input(Guid = "BCF6DE27-1FFD-422C-9F5B-910D89CAD1A4")]
     public readonly InputSlot<string> TemplateCode = new();
+
+    public static string ToHlslTemplateTag(string hook)
+    {
+        return $"/*{{{hook}}}*/";
+    }
 }

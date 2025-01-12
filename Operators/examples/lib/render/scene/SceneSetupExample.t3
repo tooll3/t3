@@ -40,18 +40,6 @@
       "Outputs": []
     },
     {
-      "Id": "124a12a4-61a3-4174-bfdc-8943a439a3b0"/*FilesInFolderExample*/,
-      "SymbolId": "897a5f40-7970-4770-bd51-08a085f8355b",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "2682e626-ecca-41b1-ad94-b4fb08b990b5"/*HowToUsePoints*/,
-      "SymbolId": "e6a11c29-11f9-49a3-9eff-463a93503420",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "2ae060a8-6788-4149-854f-953ada306376"/*SetFog*/,
       "SymbolId": "74cbfce0-f8b8-46a1-b5d6-38477d4eec99",
       "InputValues": [
@@ -465,12 +453,6 @@
       "SourceSlotId": "3ac76b2a-7b1c-4762-a3f6-50529cd42fa8",
       "TargetParentOrChildId": "60cb45f1-158a-40b9-9b41-7e252f742e48",
       "TargetSlotId": "e15b6dc7-aaf9-4244-a4b8-4ac13ee7d23f"
-    },
-    {
-      "SourceParentOrChildId": "f8621463-4c72-4dff-ab65-91d84af76386",
-      "SourceSlotId": "c830b31a-b0d9-4a12-8883-da7734541e54",
-      "TargetParentOrChildId": "6b915a14-43ea-4bf9-9262-bc5f1c65ad03",
-      "TargetSlotId": "97429e1f-3f30-4789-89a6-8e930e356ee6"
     },
     {
       "SourceParentOrChildId": "6b915a14-43ea-4bf9-9262-bc5f1c65ad03",

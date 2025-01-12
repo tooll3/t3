@@ -43,7 +43,7 @@
     },
     {
       "Id": "ca8724d8-a362-4af4-bdf8-a80a1b0ef72e"/*FolderWithImages*/,
-      "DefaultValue": "Resources\\images"
+      "DefaultValue": "/t3/images/sequences/agingFacesMale"
     },
     {
       "Id": "cabb74b7-72c3-4916-8096-5890fc8e7023"/*BackgroundColor*/,
@@ -234,11 +234,6 @@
               ]
             }
           }
-        },
-        {
-          "Id": "7270a7df-744e-4b66-8f85-71fbdf0848d6"/*BlendMode*/,
-          "Type": "System.Int32",
-          "Value": 3
         }
       ],
       "Outputs": []
@@ -274,7 +269,7 @@
         {
           "Id": "252276fb-8de1-42cc-ba41-07d6862015bd"/*RangeOutMax*/,
           "Type": "System.Single",
-          "Value": 1.53
+          "Value": 3.6
         },
         {
           "Id": "f2baf278-adde-42de-afce-336b6c8d0387"/*RangeOutMin*/,
@@ -388,12 +383,6 @@
           }
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "a658212f-51dc-49a7-843e-2800c710bf65"/*Blend*/,
-      "SymbolId": "9f43f769-d32a-4f49-92ac-e0be3ba250cf",
-      "InputValues": [],
       "Outputs": []
     },
     {

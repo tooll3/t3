@@ -200,7 +200,7 @@ public class OperatorHelp
 
         ImGui.Dummy(Vector2.One);
 
-        DrawExamples(symbolUi);
+        DrawLinksAndExamples(symbolUi);
 
         ImGui.PopStyleVar();
         ImGui.Unindent();
@@ -208,7 +208,7 @@ public class OperatorHelp
         ImGui.PopFont();
     }
 
-    public static void DrawExamples(SymbolUi symbolUi)
+    public static void DrawLinksAndExamples(SymbolUi symbolUi)
     {
         ImGui.PushFont(Fonts.FontSmall);
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(5, 5));
@@ -257,12 +257,12 @@ public class OperatorHelp
         }
 
         var groupLabel = "Also see:";
-        if (ExampleSymbolLinking.ExampleSymbolUis.TryGetValue(symbolUi.Symbol.Id, out var examplesOpIds))
+        if (ExampleSymbolLinking.TryGetExamples(symbolUi.Symbol.Id, out var examples))
         {
-            foreach (var guid in examplesOpIds)
+            foreach (var exampleUi in examples)
             {
                 const string label = "Example";
-                SymbolBrowser.DrawExampleOperator(guid, label);
+                SymbolBrowser.DrawExampleOperator(exampleUi, label);
             }
         }
 

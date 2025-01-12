@@ -152,37 +152,6 @@ internal sealed class Structure
         }
     }
 
-    public static Dictionary<Guid, int> CollectSymbolUsageCounts()
-    {
-        var results = new Dictionary<Guid, int>();
-
-        foreach (var s in EditorSymbolPackage.AllSymbols)
-        {
-            foreach (var child in s.Children.Values)
-            {
-                results.TryGetValue(child.Symbol.Id, out var currentCount);
-                results[child.Symbol.Id] = currentCount + 1;
-            }
-        }
-
-        return results;
-    }
-
-    public static HashSet<Symbol> CollectRequiredSymbols(Symbol symbol, HashSet<Symbol>? all = null)
-    {
-        all ??= [];
-
-        foreach (var symbolChild in symbol.Children.Values)
-        {
-            if (!all.Add(symbolChild.Symbol))
-                continue;
-
-            CollectRequiredSymbols(symbolChild.Symbol, all);
-        }
-
-        return all;
-    }
-
     internal static HashSet<Guid> CollectConnectedChildren(Symbol.Child child, Instance composition, HashSet<Guid> set = null)
     {
         set ??= [];

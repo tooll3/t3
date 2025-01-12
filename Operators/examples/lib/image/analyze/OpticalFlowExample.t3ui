@@ -1,6 +1,7 @@
 {
   "Id": "db89bacd-db5a-4d52-a073-ed141f413f8d"/*OpticalFlowExample*/,
   "Description": "Illustrates how to use the [OpticalFlowEffect] on a [PlayVideo] texture.",
+  "SymbolTags": "10",
   "InputUis": [
     {
       "InputId": "c3929959-29a5-4e1f-acd0-f6c4306f881c"/*Path*/,

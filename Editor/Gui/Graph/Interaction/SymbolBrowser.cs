@@ -10,6 +10,7 @@ using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 using T3.SystemUi;
 
@@ -471,8 +472,8 @@ internal sealed class SymbolBrowser
         if (_selectedSymbolUi == null)
             return;
 
-        var hasExamples = ExampleSymbolLinking.ExampleSymbolUis.TryGetValue(_selectedSymbolUi.Symbol.Id, out var examples2)
-                          && examples2.Count > 0;
+        var hasExamples = ExampleSymbolLinking.ExampleIdsForSymbolsId.TryGetValue(_selectedSymbolUi.Symbol.Id, out var examplesIds)
+                          && examplesIds.Count > 0;
 
         var hasDescription = !string.IsNullOrEmpty(_selectedSymbolUi.Description);
 
@@ -498,7 +499,7 @@ internal sealed class SymbolBrowser
             if (hasExamples)
             {
                 ImGui.Dummy(new Vector2(10, 10));
-                ListExampleOperators(_selectedSymbolUi);
+                ListExampleOperators(examplesIds);
             }
 
             ImGui.EndChildFrame();
@@ -529,16 +530,16 @@ internal sealed class SymbolBrowser
         return true;
     }
 
-    public static void ListExampleOperators(SymbolUi itemForHelp)
+    private static void ListExampleOperators(IEnumerable<Guid> exampleIds)
     {
-        if (!ExampleSymbolLinking.ExampleSymbolUis.TryGetValue(itemForHelp.Symbol.Id, out var examples))
-            return;
-
         ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f * ImGui.GetStyle().Alpha);
-        foreach (var guid in examples)
+        foreach (var guid in exampleIds)
         {
+            if (!SymbolUiRegistry.TryGetSymbolUi(guid, out var symbolUi))
+                return;
+            
             const string label = "Example";
-            DrawExampleOperator(guid, label);
+            DrawExampleOperator(symbolUi, label);
         }
 
         ImGui.PopStyleVar();
@@ -564,7 +565,7 @@ internal sealed class SymbolBrowser
         }
 
         ImGui.Button(label);
-        SymbolTreeMenu.HandleDragAndDropForSymbolItem(symbolUi.Symbol);
+        SymbolLibrary.HandleDragAndDropForSymbolItem(symbolUi.Symbol);
         if (ImGui.IsItemHovered())
         {
             ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);

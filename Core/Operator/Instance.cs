@@ -92,6 +92,14 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
         Disposing?.Invoke();
         foreach (var child in ChildInstances.Values)
         {
+            Debug.Assert(child != null);
+            
+            var parentSymbol = child.Parent?.Symbol;
+            if (parentSymbol == null || !parentSymbol.Children.TryGetValue(child.SymbolChildId, out var childSymbol))
+            {
+                Log.Error($"SymbolChild {child.Symbol.Name} {child.SymbolChildId} is no longer valid for disposal?");
+                continue;
+            }
             child.SymbolChild!.DisposeOfInstance(child);
         }
         Dispose(true);

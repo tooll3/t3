@@ -1,6 +1,7 @@
 {
   "Id": "78ee50b0-910b-4edc-b8cd-5c24b2f1b7d9"/*DrawRibbonsExample*/,
   "Description": "",
+  "SymbolTags": "4096",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -48,8 +49,8 @@
     {
       "ChildId": "2cae3969-e698-47be-8aeb-a6cdf7ac8bce"/*FadingFaces*/,
       "Position": {
-        "X": 5544.3135,
-        "Y": 2558.3916
+        "X": 384.31348,
+        "Y": 98.3916
       }
     },
     {
@@ -125,8 +126,8 @@
     {
       "ChildId": "d785a0cb-53b2-41b5-b819-4a552a3fd295"/*_BlobOld*/,
       "Position": {
-        "X": 6351.15,
-        "Y": 2340.8254
+        "X": 1191.1504,
+        "Y": -119.17456
       }
     },
     {
