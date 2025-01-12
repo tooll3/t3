@@ -45,7 +45,7 @@ internal static class ConnectionSplitHelper
 
                 ConnectionMaker.SplitConnectionWithSymbolBrowser(components, components.CompositionOp!.Symbol,
                                                                  _bestMatchYetForCurrentFrame.Connection,
-                                                                 posOnScreen);
+                                                                 posOnScreen, components.SymbolBrowser);
             }
 
             ImGui.BeginTooltip();

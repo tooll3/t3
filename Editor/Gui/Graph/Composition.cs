@@ -116,14 +116,6 @@ internal sealed class Composition : IDisposable
         return composition;
     }
 
-    private void ReloadIfNecessary()
-    {
-        if (_isReadOnly && SymbolUi.HasBeenModified)
-        {
-            _symbolPackage.Reload(SymbolUi);
-        }
-    }
-
     // it must be the last instance checked out, read only, and modified to qualify for reload
     public bool NeedsReload => _checkoutCount == 1 && _isReadOnly && SymbolUi.HasBeenModified;
 
@@ -142,6 +134,16 @@ internal sealed class Composition : IDisposable
         {
             ReloadIfNecessary();
             _compositions.Remove(_instance);
+        }
+
+        return;
+
+        void ReloadIfNecessary()
+        {
+            if (_isReadOnly && SymbolUi.HasBeenModified)
+            {
+                _symbolPackage.Reload(SymbolUi);
+            }
         }
     }
 

@@ -37,7 +37,7 @@ internal sealed partial class GraphWindow
         WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
 
         AllowMultipleInstances = true;
-        components.GraphCanvas.SymbolBrowser.FocusRequested += FocusFromSymbolBrowser;
+        components.SymbolBrowser.FocusRequested += FocusFromSymbolBrowser;
         FocusLost += (_, _) =>
                      {
                          var nodeSelection = components.NodeSelection;

@@ -1,6 +1,7 @@
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.OutputUi;
@@ -32,7 +33,7 @@ internal sealed partial class Graph
             _linesFromInputNodes = new Dictionary<IInputUi, List<ConnectionLineUi>>();
         }
 
-        public void CreateAndSortLineUi(Symbol.Connection c, SymbolUi symbolUi)
+        public void CreateAndSortLineUi(Symbol.Connection c, SymbolUi symbolUi, SymbolBrowser symbolBrowser)
         {
             var newLine = new ConnectionLineUi(c, _graph);
             Lines.Add(newLine);
@@ -89,10 +90,10 @@ internal sealed partial class Graph
                 _linesFromNodes[sourceNode].Add(newLine);
             }
 
-            InitTempConnection(newLine);
+            InitTempConnection(newLine, symbolBrowser);
         }
 
-        private void InitTempConnection(ConnectionLineUi newLine)
+        private void InitTempConnection(ConnectionLineUi newLine, SymbolBrowser symbolBrowser)
         {
             if (!(newLine.Connection is ConnectionMaker.TempConnection c))
                 return;
@@ -121,7 +122,7 @@ internal sealed partial class Graph
             }
             else if (c.TargetParentOrChildId == ConnectionMaker.UseDraftChildId)
             {
-                newLine.TargetPosition = _canvas.TransformPosition(_canvas.SymbolBrowser.PosOnCanvas);
+                newLine.TargetPosition = _canvas.TransformPosition(symbolBrowser.PosOnCanvas);
                 //newLine.ColorForType = Color.White;
             }
             else if (c.SourceParentOrChildId == ConnectionMaker.NotConnectedId)
@@ -131,7 +132,7 @@ internal sealed partial class Graph
             }
             else if (c.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
             {
-                newLine.SourcePosition = _canvas.SymbolBrowser.OutputPositionOnScreen;
+                newLine.SourcePosition = symbolBrowser.OutputPositionOnScreen;
             }
             else
             {

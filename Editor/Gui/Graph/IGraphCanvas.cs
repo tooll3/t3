@@ -8,7 +8,6 @@ namespace T3.Editor.UiModel;
 
 internal interface IGraphCanvas : IScalableCanvas
 {
-    public SymbolBrowser SymbolBrowser { get; }
     bool Destroyed { get; set;  }
     SelectableNodeMovement SelectableNodeMovement { get; }
 

@@ -482,7 +482,7 @@ internal static class ConnectionMaker
     /// <remarks>
     /// Assumes that a temp connection has be created earlier and is now dropped on the background
     /// </remarks>
-    public static void InitSymbolBrowserAtPosition(IGraphCanvas window, Vector2 canvasPosition)
+    public static void InitSymbolBrowserAtPosition(IGraphCanvas window, SymbolBrowser symbolBrowser, Vector2 canvasPosition)
     {
         var inProgress = _inProgress[window];
         var connectionList = inProgress.TempConnections;
@@ -494,8 +494,6 @@ internal static class ConnectionMaker
             CompleteOperation(inProgress);
             return;
         }
-
-        var symbolBrowser = window.SymbolBrowser;
 
         var firstConnectionType = connectionList[0].ConnectionType;
         if (connectionList.Count == 1)
@@ -560,7 +558,7 @@ internal static class ConnectionMaker
         var canvas = components.GraphCanvas;
         var connectionList = _inProgress[canvas];
         StartOperation(connectionList, "Insert Operator");
-        InsertSymbolBrowser(components, childUi, instance, primaryOutput);
+        InsertSymbolBrowser(components, childUi, instance, primaryOutput, components.SymbolBrowser);
     }
 
     public static void InsertSymbolInstance(GraphComponents components, Symbol symbol)
@@ -687,7 +685,7 @@ internal static class ConnectionMaker
         ParameterPopUp.NodeIdRequestedForParameterWindowActivation = newSymbolChild.Id;
     }
 
-    public static void OpenBrowserWithSingleSelection(GraphComponents components, SymbolUi.Child childUi, Instance instance)
+    public static void OpenBrowserWithSingleSelection(GraphComponents components, SymbolUi.Child childUi, Instance instance, SymbolBrowser symbolBrowser)
     {
         if (instance.Outputs.Count < 1)
             return;
@@ -695,10 +693,10 @@ internal static class ConnectionMaker
         //StartOperation("Insert Operator");
         var primaryOutput = instance.Outputs[0];
 
-        InsertSymbolBrowser(components, childUi, instance, primaryOutput);
+        InsertSymbolBrowser(components, childUi, instance, primaryOutput, symbolBrowser);
     }
 
-    private static void InsertSymbolBrowser(GraphComponents components, SymbolUi.Child childUi, Instance instance, ISlot primaryOutput)
+    private static void InsertSymbolBrowser(GraphComponents components, SymbolUi.Child childUi, Instance instance, ISlot primaryOutput, SymbolBrowser symbolBrowser)
     {
         if (instance.Parent == null)
             return;
@@ -755,13 +753,13 @@ internal static class ConnectionMaker
             }
         }
 
-        canvas.SymbolBrowser.OpenAt(childUi.PosOnCanvas + new Vector2(childUi.Size.X, 0)
+        symbolBrowser.OpenAt(childUi.PosOnCanvas + new Vector2(childUi.Size.X, 0)
                                                         + new Vector2(SelectableNodeMovement.SnapPadding.X, 0),
                                     primaryOutput.ValueType, filterOutputType, false);
     }
 
     public static void SplitConnectionWithSymbolBrowser(GraphComponents components, Symbol parentSymbol, Symbol.Connection connection,
-                                                        Vector2 positionInCanvas)
+                                                        Vector2 positionInCanvas, SymbolBrowser symbolBrowser)
     {
         if (connection.IsConnectedToSymbolOutput)
         {
@@ -810,7 +808,7 @@ internal static class ConnectionMaker
                                               connectionType,
                                               multiInputIndex));
 
-        canvas.SymbolBrowser.OpenAt(positionInCanvas, connectionType, connectionType, false);
+        symbolBrowser.OpenAt(positionInCanvas, connectionType, connectionType, false);
     }
     #endregion
 

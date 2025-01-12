@@ -42,7 +42,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         set
         {
             _components = value;
-            _graph = new Graph(_components, this);
+            _graph = new Graph(_components, this, () => _components.SymbolBrowser);
         }
     }
 
@@ -90,7 +90,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         
         var editingFlags = T3Ui.EditingFlags.None;
 
-        if (SymbolBrowser.IsOpen)
+        if (_components.SymbolBrowser.IsOpen)
             editingFlags |= T3Ui.EditingFlags.PreventZoomWithMouseWheel;
 
         if (preventInteractions)
@@ -286,7 +286,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
                 ConnectionSplitHelper.PrepareNewFrame(_components);
             }
 
-            SymbolBrowser.Draw();
+            _components.SymbolBrowser.Draw();
 
             graphOpacity *= _preventInteractions ? 0.3f : 1;
             _graph.DrawGraph(drawList, _drawingFlags.HasFlag(GraphDrawingFlags.PreventInteractions), _components.CompositionOp, graphOpacity);
@@ -321,7 +321,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
                     ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem | ImGuiHoveredFlags.AllowWhenBlockedByPopup) && !isAnyItemHovered;
                 if (droppedOnBackground)
                 {
-                    ConnectionMaker.InitSymbolBrowserAtPosition(this, InverseTransformPositionFloat(ImGui.GetIO().MousePos));
+                    ConnectionMaker.InitSymbolBrowserAtPosition(this, _components.SymbolBrowser, InverseTransformPositionFloat(ImGui.GetIO().MousePos));
                 }
                 else
                 {
@@ -437,22 +437,6 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
                 }
             }
         }
-    }
-
-    /// <remarks>
-    /// This method is complex, because it has to handle several edge cases and has potential to remove previous user data:
-    /// - We have to preserve the previous state.
-    /// - We have to make space -> Shift all connected operators towards the right.
-    /// - We have to convert all existing connections from the output into temporary connections.
-    /// - We have to insert a new temp connection line between output and symbol browser
-    ///
-    /// - If the user completes the symbol browser, it must complete the previous connections from the temp connections.
-    /// - If the user cancels the operation, the previous state has to be restored. This might be tricky
-    /// </remarks>
-    public void OpenSymbolBrowserForOutput(SymbolUi.Child childUi, Symbol.OutputDefinition outputDef)
-    {
-        ConnectionMaker.InitSymbolBrowserAtPosition(this,
-                                                    childUi.PosOnCanvas + new Vector2(childUi.Size.X + SelectableNodeMovement.SnapPadding.X, 0));
     }
 
     // private Symbol GetSelectedSymbol()
@@ -726,7 +710,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         {
             var startingSearchString = selectedChildUis[0].SymbolChild.Symbol.Name;
             var position = selectedChildUis.Count == 1 ? selectedChildUis[0].PosOnCanvas : InverseTransformPositionFloat(ImGui.GetMousePos());
-            SymbolBrowser.OpenAt(position, null, null, false, startingSearchString,
+            _components.SymbolBrowser.OpenAt(position, null, null, false, startingSearchString,
                                  symbol => { ChangeSymbol.ChangeOperatorSymbol(_nodeSelection, compositionOp, selectedChildUis, symbol); });
         }
 
@@ -781,7 +765,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         {
             if (ImGui.MenuItem("Add Node...", "TAB", false, true))
             {
-                SymbolBrowser.OpenAt(InverseTransformPositionFloat(clickPosition), null, null, false);
+                _components.SymbolBrowser.OpenAt(InverseTransformPositionFloat(clickPosition), null, null, false);
             }
 
             if (canModify)
@@ -914,7 +898,6 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
     #region public API
     bool IGraphCanvas.Destroyed { get; set; }
-    public SymbolBrowser SymbolBrowser { get; set; }
 
     public void OpenAndFocusInstance(IReadOnlyList<Guid> path)
     {

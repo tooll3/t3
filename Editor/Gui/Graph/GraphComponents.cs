@@ -19,7 +19,7 @@ internal sealed class GraphComponents
 
     private IGraphCanvas _graphCanvas;
     public IGraphCanvas GraphCanvas => _graphCanvas;
-    
+
     private readonly Stack<Composition> _compositionsForDisposal = new();
     public OpenedProject OpenedProject { get; }
     private readonly List<Guid> _compositionPath = [];
@@ -27,30 +27,45 @@ internal sealed class GraphComponents
     public Instance? CompositionOp => Composition?.Instance;
 
     public readonly TimeLineCanvas TimeLineCanvas;
+    public SymbolBrowser SymbolBrowser { get; private set; }
 
     public event Action<GraphComponents, Guid> CompositionChanged;
 
-    private GraphComponents(OpenedProject openedProject)
+    private GraphComponents(OpenedProject openedProject, NavigationHistory navigationHistory, NodeSelection nodeSelection, GraphImageBackground graphImageBackground)
+    {
+        OpenedProject = openedProject;
+        _duplicateSymbolDialog.Closed += DisposeLatestComposition;
+
+        NavigationHistory = navigationHistory;
+        NodeSelection = nodeSelection;
+        GraphImageBackground = graphImageBackground;
+
+        var getCompositionOp = () => CompositionOp;
+        NodeNavigation = new NodeNavigation(openedProject.Structure, NavigationHistory, getCompositionOp);
+        TimeLineCanvas = new TimeLineCanvas(NodeSelection, getCompositionOp, TrySetCompositionOpToChild);
+    }
+
+    public static void CreateIndependentComponents(OpenedProject openedProject, out NavigationHistory navigationHistory, out NodeSelection nodeSelection,
+                                        out GraphImageBackground graphImageBackground)
     {
         var structure = openedProject.Structure;
-        OpenedProject = openedProject;
-        NavigationHistory = new NavigationHistory(structure);
-        NodeSelection = new NodeSelection(NavigationHistory, structure);
-        GraphImageBackground = new GraphImageBackground(NodeSelection, structure);
-        
-        var getCompositionOp = () => CompositionOp;
-        NodeNavigation = new NodeNavigation(structure, NavigationHistory, getCompositionOp);
-        TimeLineCanvas = new TimeLineCanvas(NodeSelection, getCompositionOp, TrySetCompositionOpToChild);
-        
-        _duplicateSymbolDialog.Closed += DisposeLatestComposition;
+        navigationHistory = new NavigationHistory(structure);
+        nodeSelection = new NodeSelection(navigationHistory, structure);
+        graphImageBackground = new GraphImageBackground(nodeSelection, structure);
     }
 
     public static GraphComponents FromLegacyGraphCanvas(OpenedProject openedProject)
     {
-        var components = new GraphComponents(openedProject);
-        components._graphCanvas = new GraphCanvas(components.NodeSelection, components.Structure, components.NavigationHistory, components.NodeNavigation, 
-                                                  getComposition: () => components.CompositionOp);
-        components._graphCanvas.Components = components;
+        CreateIndependentComponents(openedProject, out var navigationHistory, out var nodeSelection, out var graphImageBackground);
+        var components = new GraphComponents(openedProject, navigationHistory, nodeSelection, graphImageBackground);
+        var canvas = new GraphCanvas(nodeSelection, openedProject.Structure, navigationHistory, components.NodeNavigation,
+                                     getComposition: () => components.CompositionOp)
+                         {
+                             Components = components
+                         };
+
+        components._graphCanvas = canvas;
+        components.SymbolBrowser = new SymbolBrowser(components, canvas);
         return components;
     }
 
@@ -116,7 +131,7 @@ internal sealed class GraphComponents
         }
 
         GraphCanvas.ApplyComposition(transition, newCompositionInstance.SymbolChildId);
-        
+
         CompositionChanged?.Invoke(this, Composition.SymbolChildId);
         return true;
     }
@@ -149,13 +164,13 @@ internal sealed class GraphComponents
     {
         GraphImageBackground.OutputInstance = instance;
     }
-    
+
     public void CheckDisposal()
     {
         if (!_compositionsForDisposal.TryPeek(out var latestComposition)) return;
 
         if (_compositionPath.Contains(latestComposition.SymbolChildId)) return;
-        
+
         if (latestComposition.NeedsReload)
         {
             _duplicateSymbolDialog.ShowNextFrame(); // actually shows this frame

@@ -33,17 +33,18 @@ namespace T3.Editor.Gui.Graph;
 /// </summary>
 internal class GraphNode
 {
-    public GraphNode(GraphCanvas canvas, Graph.ConnectionSorter sorter)
+    public GraphNode(GraphComponents components, GraphCanvas canvas, Graph.ConnectionSorter sorter)
     {
+        _components = components;
         _canvas = canvas;
         _sorter = sorter;
 
         lock (DraggedIds)
         {
-            if (!DraggedIds.TryGetValue(canvas, out _dragInfo))
+            if (!DraggedIds.TryGetValue(_canvas, out _dragInfo))
             {
                 _dragInfo = new DraggedIdInfo();
-                DraggedIds[canvas] = _dragInfo;
+                DraggedIds[_canvas] = _dragInfo;
             }
         }
     }
@@ -223,7 +224,7 @@ internal class GraphNode
 
                 isNodeHovered = !preventInteraction 
                                 && ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) 
-                                && !_canvas.SymbolBrowser.IsOpen
+                                && !_components.SymbolBrowser.IsOpen
                                 && ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup);
                     
                 // Tooltip
@@ -944,7 +945,17 @@ internal class GraphNode
             if (isMouseReleasedWithoutDrag)
             {
                 //Graph.Connections.GetLinesFromNodeOutput(childUi, outputDef.Id);
-                _canvas.OpenSymbolBrowserForOutput(childUi, outputDef);
+
+                // This method is complex, because it has to handle several edge cases and has potential to remove previous user data:
+                // - We have to preserve the previous state.
+                // - We have to make space -> Shift all connected operators towards the right.
+                // - We have to convert all existing connections from the output into temporary connections.
+                // - We have to insert a new temp connection line between output and symbol browser
+                //
+                // - If the user completes the symbol browser, it must complete the previous connections from the temp connections.
+                // - If the user cancels the operation, the previous state has to be restored. This might be tricky
+                ConnectionMaker.InitSymbolBrowserAtPosition(_canvas, _components.SymbolBrowser,
+                                                            childUi.PosOnCanvas + new Vector2(childUi.Size.X + SelectableNodeMovement.SnapPadding.X, 0));
             }
         }
         else if (hovered)
@@ -1149,7 +1160,7 @@ internal class GraphNode
                         {
                             ConnectionMaker.StartFromInputSlot(_canvas, targetUi.SymbolChild.Parent, targetUi, inputDef);
                             var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(targetUi.SymbolChild.Parent, targetUi);
-                            ConnectionMaker.InitSymbolBrowserAtPosition(_canvas, freePosition);
+                            ConnectionMaker.InitSymbolBrowserAtPosition(_canvas, _components.SymbolBrowser, freePosition);
                         }
                         else if (ImGui.IsMouseReleased(ImGuiMouseButton.Right) && ImGui.GetIO().KeyCtrl)
                         {

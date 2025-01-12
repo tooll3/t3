@@ -143,7 +143,6 @@ public abstract class InputValueUi<T> : IInputUi
             
         var components = window.Components;
         var nodeSelection = components.NodeSelection;
-        var structure = components.Structure;
         IReadOnlyList<ConnectionMaker.TempConnection> tempConnections = ConnectionMaker.GetTempConnectionsFor(window.GraphCanvas);
 
         if (inputSlot.HasInputConnections)
@@ -413,7 +412,7 @@ public abstract class InputValueUi<T> : IInputUi
         InputEditStateFlags DrawNormalParameter()
         {
             // Connection area...
-            InputArea.DrawNormalInputArea<T>(window.GraphCanvas, nodeSelection,  typedInputSlot, compositionUi, symbolChildUi, input, IsAnimatable, typeColor, tempConnections);
+            InputArea.DrawNormalInputArea<T>(window.GraphCanvas, window.Components.SymbolBrowser, nodeSelection, typedInputSlot, compositionUi, symbolChildUi, input, IsAnimatable, typeColor, tempConnections);
                 
             ImGui.SameLine();
 
@@ -637,7 +636,7 @@ internal static class InputArea
 {
     internal const float ConnectionAreaWidth = 25.0f;
 
-    internal static void DrawNormalInputArea<T>(IGraphCanvas canvas, NodeSelection nodeSelection, InputSlot<T> inputSlot, SymbolUi compositionUi,
+    internal static void DrawNormalInputArea<T>(IGraphCanvas canvas, SymbolBrowser symbolBrowser, NodeSelection nodeSelection, InputSlot<T> inputSlot, SymbolUi compositionUi,
                                                 SymbolUi.Child symbolChildUi,
                                                 Symbol.Child.Input input,
                                                 bool isAnimatable, Color typeColor, IReadOnlyList<ConnectionMaker.TempConnection> tempConnections)
@@ -690,7 +689,7 @@ internal static class InputArea
                 {
                     ConnectionMaker.StartFromInputSlot(canvas, compositionUi.Symbol, symbolChildUi, input.InputDefinition);
                     var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(compositionUi.Symbol, symbolChildUi);
-                    ConnectionMaker.InitSymbolBrowserAtPosition(canvas, freePosition);
+                    ConnectionMaker.InitSymbolBrowserAtPosition(canvas, symbolBrowser, freePosition);
                     break;
                 }
             }

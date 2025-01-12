@@ -2,6 +2,7 @@
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Utils;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -37,10 +38,12 @@ internal sealed partial class Graph
 {
     private readonly GraphComponents _components;
     private readonly GraphCanvas _canvas;
-    public Graph(GraphComponents components, GraphCanvas canvas)
+    private readonly Func<SymbolBrowser> _getSymbolBrowser;
+    public Graph(GraphComponents components, GraphCanvas canvas, Func<SymbolBrowser> getSymbolBrowser)
     {
         _components = components;
         _canvas = canvas;
+        _getSymbolBrowser = getSymbolBrowser;
         _connectionSorter = new ConnectionSorter(this, canvas);
     }
         
@@ -99,9 +102,10 @@ internal sealed partial class Graph
             _connectionSorter.Init();
 
             // 2. Collect which nodes are connected to which lines
+            var symbolBrowser = _getSymbolBrowser();
             foreach (var c in AllConnections)
             {
-                _connectionSorter.CreateAndSortLineUi(c, compositionUi);
+                _connectionSorter.CreateAndSortLineUi(c, compositionUi, symbolBrowser);
             }
         }
         else
@@ -133,7 +137,7 @@ internal sealed partial class Graph
             // todo - remove nodes that are not in the graph anymore?
             if (!_graphNodes.TryGetValue(childUi, out var node))
             {
-                node = new GraphNode(_canvas, _connectionSorter);
+                node = new GraphNode(_components, _canvas, _connectionSorter);
                 _graphNodes[childUi] = node;
             }
 

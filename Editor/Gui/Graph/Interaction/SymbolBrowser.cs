@@ -119,7 +119,7 @@ internal sealed class SymbolBrowser
                     canvas.FitAreaOnCanvas(canvasRect);
                 }
                     
-                ConnectionMaker.OpenBrowserWithSingleSelection(_components, childUi, instance);
+                ConnectionMaker.OpenBrowserWithSingleSelection(_components, childUi, instance, this);
             }
             return;
         }
