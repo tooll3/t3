@@ -77,10 +77,21 @@ namespace T3.Operators.Types.Id_e3ddfd41_2d0b_4620_9f61_a201bbd25875
             }
         }
 
-        [Input(Guid = "2aa9e2e4-1830-4483-88e5-1f2ca50bfe3f")]
+        private enum Modes
+        {
+            IsDown,
+            KeepActive,
+        }
+        private enum Zones
+        {
+            NumRow,
+            Numpad,
+        }
+
+        [Input(Guid = "2aa9e2e4-1830-4483-88e5-1f2ca50bfe3f", MappedType = typeof(Zones))]
         public readonly InputSlot<int> Zone = new();
 
-        [Input(Guid = "8846aa50-e4d0-433c-9e5b-013a93f17f79")]
+        [Input(Guid = "8846aa50-e4d0-433c-9e5b-013a93f17f79", MappedType = typeof(Modes))]
         public readonly InputSlot<int> Mode = new();
     }
 }
