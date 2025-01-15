@@ -18,7 +18,7 @@ internal sealed class PerlinNoise3 : Instance<PerlinNoise3>
         var value = OverrideTime.HasInputConnections
                         ? OverrideTime.GetValue(context)
                         : (float)context.LocalFxTime;
-            
+
         var seed = Seed.GetValue(context);
         var period = Frequency.GetValue(context);
         var octaves = Octaves.GetValue(context);
@@ -32,14 +32,15 @@ internal sealed class PerlinNoise3 : Instance<PerlinNoise3>
         var scaleToUniformFactor = 1.37f;
         var vec = new Vector3(ScalarNoise(0), ScalarNoise(123), ScalarNoise(234));
 
-        Result.Value = Remap3(vec, Vector3.Zero,  Vector3.One, rangeMin, rangeMax) * scaleXYZ *scale +offset;//new Vector3(x, y, z) + offset;
+        Result.Value = Remap3(vec, Vector3.Zero, Vector3.One, rangeMin, rangeMax) * scaleXYZ * scale + offset; //new Vector3(x, y, z) + offset;
         return;
 
         float ScalarNoise(int seedOffset)
         {
-            return (MathUtils.PerlinNoise(value, period, octaves, seed + seedOffset)*scaleToUniformFactor + 1f) * 0.5f.ApplyBiasAndGain(biasAndGain.X, biasAndGain.Y);
+            return (MathUtils.PerlinNoise(value,period, octaves, seed + seedOffset) * scaleToUniformFactor + 1f) 
+                   * 0.5f.ApplyGainAndBias(biasAndGain.X, biasAndGain.Y);
         }
-            
+
         Vector3 Remap3(Vector3 value3, Vector3 inMin, Vector3 inMax, Vector3 outMin, Vector3 outMax)
         {
             var factor = (value3 - inMin) / (inMax - inMin);
@@ -56,27 +57,25 @@ internal sealed class PerlinNoise3 : Instance<PerlinNoise3>
 
     [Input(Guid = "2693cb7d-33b3-4a0c-929f-e6911d2d4a0c")]
     public readonly InputSlot<int> Octaves = new();
-        
+
     [Input(Guid = "E0F4333D-8BEE-4F9E-BB29-9F76BD72E61F")]
     public readonly InputSlot<float> Amplitude = new();
-        
+
     [Input(Guid = "C427D83B-1046-4B8D-B44A-E616A64A702A")]
     public readonly InputSlot<Vector3> AmplitudeXYZ = new();
-        
+
     [Input(Guid = "3065B319-7C6F-4447-A32A-454EE690BA36")]
     public readonly InputSlot<Vector3> Offset = new();
-        
-        
+
     [Input(Guid = "B4B38D87-F661-4B8B-B978-70BF34152422")]
     public readonly InputSlot<Vector3> RangeMin = new();
 
     [Input(Guid = "5401E715-7A82-43AB-BA16-D0E55A1D83D4")]
     public readonly InputSlot<Vector3> RangeMax = new();
-        
+
     [Input(Guid = "B7B95FC2-C73F-4DB1-BDAB-2445FE62F032")]
-    public readonly InputSlot<Vector2> BiasAndGain = new();        
+    public readonly InputSlot<Vector2> BiasAndGain = new();
 
     [Input(Guid = "1cd2174e-aeb2-4258-8395-a9cc16f276b5")]
     public readonly InputSlot<int> Seed = new();
-
 }

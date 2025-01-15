@@ -36,18 +36,58 @@ public static class MathUtils
         n = (n << 13) ^ n;
         return (float)(1.0 - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);
     }
-
-    public static float ApplyBiasAndGainOld(this float x, float s, float t)
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static float GetBias(float b, float x)
     {
-        const float eps = 0.0001f;
-        const float r = 200;
-        s *= 2;
-        s = s < 1 ? (MathF.Pow(r, 1 - s)) : 1 / MathF.Pow(r, s - 1);
-        return x < t
-                   ? (t * x) / (x + s * (t - x) + eps)
-                   : ((1 - t) * (x - 1)) / (1 - x - s * (t - x) + eps) + 1;
+        return x / (((1f / b - 2f) * (1f - x)) + 1f);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static float GetSchlickBias(float g, float x)
+    {
+        if (x < 0.5f)
+        {
+            x *= 2f;
+            x = 0.5f * GetBias(g, x);
+        }
+        else
+        {
+            x = 2f * x - 1f;
+            x = 0.5f * GetBias(1f - g, x) + 0.5f;
+        }
+        return x;
     }
     
+    public static float ApplyGainAndBias(this float value, float gain, float bias)
+    {
+        var b = bias.Clamp(0,1);
+        var g = gain.Clamp(0,1);
+
+        if (value > 0.999f)
+            return 1f;
+
+        if (value < 0.00001f)
+            return 0f;
+
+        if (g < 0.5f)
+        {
+            value = GetBias(b, value);
+            value = GetSchlickBias(g, value);
+        }
+        else
+        {
+            value = GetSchlickBias(g, value);
+            value = GetBias(b, value);
+        }
+
+        return value;
+    }
+    
+    
+    
+    
+    [Obsolete("Please use ApplyGainAndBias()")]
     public static float ApplyBiasAndGain(this float value, float gain,float bias )
     {
         bias = Clamp(bias, 0.001f, 0.999f);

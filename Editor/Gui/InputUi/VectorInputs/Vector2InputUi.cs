@@ -85,7 +85,7 @@ internal class Vector2InputUi : FloatVectorInputValueUi<Vector2>
                 for(var i=0; i < steps ; i ++)
                 {
                     var t = (float)i / (steps-1); 
-                    var f = t.ApplyBiasAndGain(float2Value.X, float2Value.Y);
+                    var f = t.ApplyGainAndBias(float2Value.X, float2Value.Y);
                     var x = MathUtils.Lerp(min.X, max.X, f);
                     var y = MathUtils.Lerp(max.Y, min.Y, f);
                     // drawList.AddLine(new Vector2(x, min.Y), new Vector2(x, max.Y),

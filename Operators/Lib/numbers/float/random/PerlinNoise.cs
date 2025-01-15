@@ -33,7 +33,7 @@ internal sealed class PerlinNoise : Instance<PerlinNoise>
         var dist = rangeMax - rangeMin;
         var scaleToUniformFactor = 1.37f;
             
-        Result.Value = ((scale * noiseSum * scaleToUniformFactor + 1f) * 0.5f).ApplyBiasAndGain(biasAndGain.X, biasAndGain.Y) * dist + rangeMin;
+        Result.Value = ((scale * noiseSum * scaleToUniformFactor + 1f) * 0.5f).ApplyGainAndBias(biasAndGain.X, biasAndGain.Y) * dist + rangeMin;
     }
 
         

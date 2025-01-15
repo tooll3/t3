@@ -59,7 +59,7 @@ public static class RemapUi
             for (var i = 0; i < steps; i++)
             {
                 var t = (float)i / (steps - 1);
-                var f = t.ApplyBiasAndGain(biasAndGain.X, biasAndGain.Y);
+                var f = t.ApplyGainAndBias(biasAndGain.X, biasAndGain.Y);
                 var x = MathUtils.Lerp(biasGraphRect.Min.X, biasGraphRect.Max.X, f);
                 var y = MathUtils.Lerp(biasGraphRect.Max.Y, biasGraphRect.Min.Y, f);
                 drawList.AddLine(new Vector2(biasGraphRect.Min.X, y), new

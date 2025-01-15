@@ -27,7 +27,7 @@ public sealed class Remap : Instance<Remap>
         var normalized = (value - inMin) / (inMax - inMin);
         if (normalized > 0 && normalized < 1)
         {
-            normalized = normalized.ApplyBiasAndGain(biasAndGain.X, biasAndGain.Y);
+            normalized = normalized.ApplyGainAndBias(biasAndGain.X, biasAndGain.Y);
         }
             
         var v = normalized * (outMax - outMin) + outMin;

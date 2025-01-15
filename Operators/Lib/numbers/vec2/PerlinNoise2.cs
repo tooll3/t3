@@ -29,10 +29,10 @@ internal sealed class PerlinNoise2 : Instance<PerlinNoise2>
         var biasAndGain = BiasAndGain.GetValue(context);
 
         var scaleToUniformFactor = 1.37f;
-        var x = ((MathUtils.PerlinNoise(value, period, octaves, seed) * scaleToUniformFactor + 1f) * 0.5f).ApplyBiasAndGain(biasAndGain.X, biasAndGain.Y) 
+        var x = ((MathUtils.PerlinNoise(value, period, octaves, seed) * scaleToUniformFactor + 1f) * 0.5f).ApplyGainAndBias(biasAndGain.X, biasAndGain.Y) 
                 * (rangeMax.X - rangeMin.X) + rangeMin.X;
 
-        var y = ((MathUtils.PerlinNoise(value, period, octaves, seed + 123) * scaleToUniformFactor + 1f) * 0.5f).ApplyBiasAndGain(biasAndGain.X, biasAndGain.Y) 
+        var y = ((MathUtils.PerlinNoise(value, period, octaves, seed + 123) * scaleToUniformFactor + 1f) * 0.5f).ApplyGainAndBias(biasAndGain.X, biasAndGain.Y) 
                 * (rangeMax.Y - rangeMin.Y) + rangeMin.Y;
             
         Result.Value  = new Vector2(x, y) * scaleXY  * scale;

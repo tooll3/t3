@@ -134,14 +134,6 @@
       }
     },
     {
-      "InputId": "9e0ea169-fbbd-4ec0-9644-0ab0c0aa0ffd"/*RotationSpace*/,
-      "Position": {
-        "X": 360.544,
-        "Y": 2072.5037
-      },
-      "GroupTitle": "Additional Options"
-    },
-    {
       "InputId": "a01fb917-5c3a-4278-91aa-ff853183a6d5"/*Scale*/,
       "Position": {
         "X": -408.17175,
