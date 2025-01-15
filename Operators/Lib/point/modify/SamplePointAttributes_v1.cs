@@ -1,13 +1,13 @@
 namespace Lib.point.modify;
 
-[Guid("1c54fdad-9eb4-49e8-8fde-1c78b0fa2b48")]
-internal sealed class SamplePointAttributes_v2 : Instance<SamplePointAttributes_v2>
+[Guid("b3de7a93-e921-4e43-8a56-6c84b2d18b74")]
+internal sealed class SamplePointAttributes_v1 : Instance<SamplePointAttributes_v1>
 ,ITransformable
 {
-    [Output(Guid = "1fc67380-4e34-48c1-a1bf-e6f6d145aed0")]
+    [Output(Guid = "bdc65f4c-6eac-44bf-af39-6655605b8fae")]
     public readonly TransformCallbackSlot<BufferWithViews> OutBuffer = new();
 
-    public SamplePointAttributes_v2()
+    public SamplePointAttributes_v1()
     {
         OutBuffer.TransformableOp = this;
     }
@@ -17,101 +17,98 @@ internal sealed class SamplePointAttributes_v2 : Instance<SamplePointAttributes_
     IInputSlot ITransformable.ScaleInput => Stretch;
     public Action<Instance, EvaluationContext> TransformCallback { get; set; }
 
-        [Input(Guid = "ad53eb20-1e8b-4c69-9ed2-b5e20da14a50")]
+        [Input(Guid = "d42b8adc-f1d6-4f32-94a3-24802630d763")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
-        [Input(Guid = "68087e68-504d-4b89-aa76-199473c893c2", MappedType = typeof(Attributes))]
+        [Input(Guid = "2b5ee35d-bb00-4dd1-abdc-c4584c7ce7c5", MappedType = typeof(Attributes))]
         public readonly InputSlot<int> Brightness = new InputSlot<int>();
 
-        [Input(Guid = "c91340d9-faf9-4c5a-a0c9-34a93c2e2d12")]
+        [Input(Guid = "ce9c0841-a1f3-4f5d-9cd8-636390112ece")]
         public readonly InputSlot<float> BrightnessFactor = new InputSlot<float>();
 
-        [Input(Guid = "7f1959f5-903b-4521-aea6-53decfcf28e5")]
+        [Input(Guid = "62e68350-739a-4220-bb84-70b33ea1baf0")]
         public readonly InputSlot<float> BrightnessOffset = new InputSlot<float>();
 
-        [Input(Guid = "bb19d1e6-e9c0-451d-9f8a-9d2094d7af9d", MappedType = typeof(Attributes))]
+        [Input(Guid = "f5f424a1-42a4-4429-8d99-47a7c6176400", MappedType = typeof(Attributes))]
         public readonly InputSlot<int> Red = new InputSlot<int>();
 
-        [Input(Guid = "88978d11-4227-4795-861b-e0fc92fecb78")]
+        [Input(Guid = "1531e949-fe17-4718-9ac6-4dc3884c23fc")]
         public readonly InputSlot<float> RedFactor = new InputSlot<float>();
 
-        [Input(Guid = "88b13f5a-24c7-484b-b6d7-6392bddaf0b8")]
+        [Input(Guid = "022f5d7d-b9fc-4c4f-8b7e-84aaedbfdd29")]
         public readonly InputSlot<float> RedOffset = new InputSlot<float>();
 
-        [Input(Guid = "faf18518-6ce5-4af2-906c-b31176c52b0d", MappedType = typeof(Attributes))]
+        [Input(Guid = "d87c9071-2636-4136-b488-410591be47c6", MappedType = typeof(Attributes))]
         public readonly InputSlot<int> Green = new InputSlot<int>();
 
-        [Input(Guid = "98415cd6-b1ea-47a7-ade7-4b37e9f301da")]
+        [Input(Guid = "6b05ba32-f445-4403-aaba-160c7876b03b")]
         public readonly InputSlot<float> GreenFactor = new InputSlot<float>();
 
-        [Input(Guid = "b6b0362c-2894-475b-a668-9de951dcaf04")]
+        [Input(Guid = "f6b64f46-ce50-43cb-bc83-e1a3822067db")]
         public readonly InputSlot<float> GreenOffset = new InputSlot<float>();
 
-        [Input(Guid = "69f76f56-9e6c-4fab-9f30-55eb5ddc2926", MappedType = typeof(Attributes))]
+        [Input(Guid = "c631114f-9ebc-4ea6-b6e5-4c999144e36c", MappedType = typeof(Attributes))]
         public readonly InputSlot<int> Blue = new InputSlot<int>();
 
-        [Input(Guid = "09e4c062-db18-4249-a34d-2e1a7d0ff7e5")]
+        [Input(Guid = "d4a0385e-1dfb-4af0-bf52-5fab61f713bb")]
         public readonly InputSlot<float> BlueFactor = new InputSlot<float>();
 
-        [Input(Guid = "91739865-4711-40e6-8f4f-a94780be1a41")]
+        [Input(Guid = "b9cff4dd-52cd-4a36-ab17-b04794402d94")]
         public readonly InputSlot<float> BlueOffset = new InputSlot<float>();
 
+        [Input(Guid = "b9203690-4052-4e06-8071-9e969a896d7e", MappedType = typeof(Attributes))]
+        public readonly InputSlot<int> Alpha = new InputSlot<int>();
 
-        [Input(Guid = "9093530f-e5c6-48d3-ba2f-d528a5548bfa")]
+        [Input(Guid = "550b51f1-6f56-4fb8-88df-825a77938361")]
+        public readonly InputSlot<float> AlphaFactor = new InputSlot<float>();
+
+        [Input(Guid = "8432ce55-81d5-4791-b2a7-655c977985b1")]
+        public readonly InputSlot<float> AlphaOffset = new InputSlot<float>();
+
+        [Input(Guid = "d1f3b362-7ed4-4833-99e9-0fdc46ca2319")]
         public readonly InputSlot<T3.Core.DataTypes.Texture2D> Texture = new InputSlot<T3.Core.DataTypes.Texture2D>();
 
-        [Input(Guid = "b1013848-0dcd-4d74-9b49-d5ef4ef539d3")]
+        [Input(Guid = "a82bc040-a398-41ed-93e1-74309d44a663")]
         public readonly InputSlot<System.Numerics.Vector3> Center = new InputSlot<System.Numerics.Vector3>();
 
-        [Input(Guid = "5154b839-f530-459d-950d-81c992a6381b")]
+        [Input(Guid = "7e86bf8f-1d9d-4212-bf9f-987a03b55565")]
         public readonly InputSlot<System.Numerics.Vector2> Stretch = new InputSlot<System.Numerics.Vector2>();
 
-        [Input(Guid = "791a6c0e-190b-46d1-ad91-66d6c2f6748b")]
+        [Input(Guid = "3afdb344-0a09-4907-89f1-447c991273da")]
         public readonly InputSlot<float> Scale = new InputSlot<float>();
 
-        [Input(Guid = "81f273e7-9704-4648-9b66-50c51bbe7c19")]
+        [Input(Guid = "9c53bca4-57fc-495f-ba07-02278c023680")]
         public readonly InputSlot<System.Numerics.Vector3> TextureRotate = new InputSlot<System.Numerics.Vector3>();
 
-        [Input(Guid = "82940438-3f90-44a1-b7bd-0b8332c2ace9")]
+        [Input(Guid = "d5c1a82b-5633-446e-9836-a735a55c7a91")]
         public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> TextureMode = new InputSlot<SharpDX.Direct3D11.TextureAddressMode>();
 
-        [Input(Guid = "36a6f356-0e8c-4df1-9079-27ff496b4d75")]
+        [Input(Guid = "27fad3f7-a795-4d14-aa69-7f5e14159421")]
         public readonly InputSlot<T3.Core.Operator.GizmoVisibility> Visibility = new InputSlot<T3.Core.Operator.GizmoVisibility>();
 
-        [Input(Guid = "6957dfd9-bbc3-49b9-bd22-a7d4540bbe50", MappedType = typeof(Modes))]
+        [Input(Guid = "fcc59369-bb28-41e5-a7cf-452f0a844e77", MappedType = typeof(Modes))]
         public readonly InputSlot<int> Mode = new InputSlot<int>();
 
-        [Input(Guid = "e864651e-06df-427d-978e-5adaa5366d0c", MappedType = typeof(Spaces))]
+        [Input(Guid = "5225DB75-5F9D-49F9-BCEB-0CBC8A56A3F4", MappedType = typeof(Spaces))]
         public readonly InputSlot<int> RotationSpace = new InputSlot<int>();
 
-        [Input(Guid = "f936817b-b430-4bd2-b373-c5242261ce9e", MappedType = typeof(Spaces))]
+        [Input(Guid = "D22095C2-15B5-4708-93B2-D6AE2DCD0DCA", MappedType = typeof(Spaces))]
         public readonly InputSlot<int> TranslationSpace = new InputSlot<int>();
-
-        [Input(Guid = "44b76ec7-8f8c-4f49-a8ac-e945b5ccf884")]
-        public readonly InputSlot<float> Strength = new InputSlot<float>();
-
-        [Input(Guid = "e29b049f-431a-4590-81d5-f42ff9762acf", MappedType = typeof(FModes))]
-        public readonly InputSlot<int> StrengthFactor = new InputSlot<int>();
-
-        [Input(Guid = "93f5697b-943f-482a-95b8-26db776bb7ce")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
 
 
     private enum Attributes
     {
         NotUsed = 0,
-        X = 1,
-        Y = 2,
-        Z = 3,
-        F1 = 4,
-        F2 = 5,
-        Rotate_X = 6,
-        Rotate_Y = 7,
-        Rotate_Z = 8,
-        Scale_Uniform= 9,
-        Scale_X = 10,
-        Scale_Y = 11,
-        Scale_Z = 12,
+        For_X = 1,
+        For_Y = 2,
+        For_Z = 3,
+        For_W = 4,
+        Rotate_X = 5,
+        Rotate_Y = 6,
+        Rotate_Z = 7,
+        Stretch_X = 8,
+        Stretch_Y = 9,
+        Stretch_Z = 10,
     }
 
     private enum Modes
@@ -124,12 +121,5 @@ internal sealed class SamplePointAttributes_v2 : Instance<SamplePointAttributes_
     {
         Object,
         Point,
-    }
-    
-    private enum FModes
-    {
-        None,
-        F1,
-        F2,
     }
 }

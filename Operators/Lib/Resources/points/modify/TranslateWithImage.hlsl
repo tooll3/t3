@@ -1,30 +1,42 @@
-#include "shared/hash-functions.hlsl"
-#include "shared/noise-functions.hlsl"
 #include "shared/point.hlsl"
 #include "shared/quat-functions.hlsl"
+#include "shared/bias-functions.hlsl"
+#include "shared/hash-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
+    float4x4 transformSampleSpace;
     float4x4 TransformMatrix;
+
     float Strength;
-    // float UpdateRotation;
-    // float ScaleW;
-    // float OffsetW;
-    // float WIsWeight;
+    float3 Translate;
+
+    float3 Scale;
+    float ScaleUniform;
+
+    float3 Rotate;
+    float Scatter;
+
+    float ScaleFx1;
+    float ScaleFx2;
+    float2 BiasAndGain;
+
+    float3 Center;
+    float StrengthOffset;
 }
 
 cbuffer Params : register(b1)
 {
-    int CoordinateSpace;
     int StrengthFactor;
+    int Channel;
+    int TranslationSpace;
 }
 
-StructuredBuffer<Point> SourcePoints : t0;
-RWStructuredBuffer<Point> ResultPoints : u0;
+StructuredBuffer<Point> Points : register(t0);
+Texture2D<float4> inputTexture : register(t1);
+RWStructuredBuffer<Point> ResultPoints : register(u0); // output
 
-static const float PointSpace = 0;
-static const float ObjectSpace = 1;
-static const float WorldSpace = 2;
+sampler texSampler : register(s0);
 
 float3 ExtractScale(float4x4 TransformMatrix)
 {
@@ -35,20 +47,36 @@ float3 ExtractScale(float4x4 TransformMatrix)
     return scale;
 }
 
-[numthreads(64, 1, 1)] void main(uint3 i : SV_DispatchThreadID)
+[numthreads(256, 4, 1)] void main(uint3 i
+                                  : SV_DispatchThreadID)
 {
-    uint numStructs, stride;
-    SourcePoints.GetDimensions(numStructs, stride);
-    if (i.x >= numStructs)
+    uint pointCount, stride;
+    ResultPoints.GetDimensions(pointCount, stride);
+    if (i.x >= pointCount)
         return;
 
-    Point p = SourcePoints[i.x];
+    uint index = i.x;
+
+    Point p = Points[index];
 
     float3 pos = p.Position;
+    pos -= Center;
+
+    float3 posInObject = mul(float4(pos.xyz, 0), transformSampleSpace).xyz;
+    float4 c = inputTexture.SampleLevel(texSampler, posInObject.xy * float2(0.5, -0.5) + float2(0.5, 0.5), 0.0);
+    float gray = (c.r + c.g + c.b) / 3;
+
+    float f = gray + (hash11u(index) - 0.5) * Scatter;
+
+    f = ApplyGainAndBias(f, BiasAndGain.xy);
+
+    float strength = Strength * (f + StrengthOffset) * (StrengthFactor == 0 ? 1 : (StrengthFactor == 1) ? p.FX1
+                                                                                                        : p.FX2);
+
     float4 orgRot = p.Rotation;
     float4 rotation = orgRot;
 
-    if (CoordinateSpace < 0.5)
+    if (TranslationSpace < 0.5)
     {
         pos.xyz = 0;
         rotation = float4(0, 0, 0, 1);
@@ -70,7 +98,7 @@ float3 ExtractScale(float4x4 TransformMatrix)
     newRotation = normalize(qFromMatrix3Precise(transpose(rotationMatrix)));
 
     // Adjust rotation in point space
-    if (CoordinateSpace < 0.5)
+    if (TranslationSpace < 0.5)
     {
         newRotation = qMul(orgRot, newRotation);
     }
@@ -79,12 +107,7 @@ float3 ExtractScale(float4x4 TransformMatrix)
         newRotation = qMul(newRotation, orgRot);
     }
 
-    float strength = Strength * (StrengthFactor == 0
-                                     ? 1
-                                 : (StrengthFactor == 1) ? p.FX1
-                                                         : p.FX2);
-
-    if (CoordinateSpace == 0)
+    if (TranslationSpace == 0)
     {
         pos.xyz = qRotateVec3(pos.xyz, orgRot).xyz;
         pos += p.Position;
@@ -95,5 +118,6 @@ float3 ExtractScale(float4x4 TransformMatrix)
 
     p.Position = lerp(p.Position, pos.xyz, strength);
     p.Rotation = qSlerp(p.Rotation, newRotation, strength);
-    ResultPoints[i.x] = p;
+
+    ResultPoints[index] = p;
 }

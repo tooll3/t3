@@ -1,5 +1,5 @@
 {
-  "Id": "b3de7a93-e921-4e43-8a56-6c84b2d18b74"/*SamplePointAttributes*/,
+  "Id": "b3de7a93-e921-4e43-8a56-6c84b2d18b74"/*SamplePointAttributes_v1*/,
   "Inputs": [
     {
       "Id": "022f5d7d-b9fc-4c4f-8b7e-84aaedbfdd29"/*RedOffset*/,
@@ -299,7 +299,7 @@
       "Outputs": []
     },
     {
-      "Id": "8f28a346-043c-4a91-879f-7307d575e2c9"/*RenderQuad*/,
+      "Id": "8f28a346-043c-4a91-879f-7307d575e2c9"/*DrawQuad*/,
       "SymbolId": "b89c5923-cc58-4d7a-8dce-eb1f8cdfc6e8",
       "InputValues": [
         {

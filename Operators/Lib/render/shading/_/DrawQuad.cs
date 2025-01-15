@@ -3,7 +3,7 @@ using T3.Core.Utils;
 namespace Lib.render.shading.@_;
 
 [Guid("b89c5923-cc58-4d7a-8dce-eb1f8cdfc6e8")]
-internal sealed class RenderQuad : Instance<RenderQuad>
+internal sealed class DrawQuad : Instance<DrawQuad>
 {
     [Output(Guid = "1ff16183-13b9-4c8f-a82a-77e8be0c641b", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Command> Output = new();

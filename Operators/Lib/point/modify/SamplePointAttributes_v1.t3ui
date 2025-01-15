@@ -1,6 +1,6 @@
 {
-  "Id": "b3de7a93-e921-4e43-8a56-6c84b2d18b74"/*SamplePointAttributes*/,
-  "Description": "",
+  "Id": "b3de7a93-e921-4e43-8a56-6c84b2d18b74"/*SamplePointAttributes_v1*/,
+  "Description": "Samples point attributes from the RGB channels of the connected operator.\n\nThis version has been deprecated, please use [SetAttrFromImageRgba]",
   "SymbolTags": "4097",
   "InputUis": [
     {
@@ -354,7 +354,7 @@
       }
     },
     {
-      "ChildId": "8f28a346-043c-4a91-879f-7307d575e2c9"/*RenderQuad*/,
+      "ChildId": "8f28a346-043c-4a91-879f-7307d575e2c9"/*DrawQuad*/,
       "Position": {
         "X": 164.93536,
         "Y": 1126.9474

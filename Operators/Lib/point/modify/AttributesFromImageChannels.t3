@@ -1,5 +1,5 @@
 {
-  "Id": "1c54fdad-9eb4-49e8-8fde-1c78b0fa2b48"/*SamplePointAttributes_v2*/,
+  "Id": "1c54fdad-9eb4-49e8-8fde-1c78b0fa2b48"/*AttributesFromImageChannels*/,
   "Inputs": [
     {
       "Id": "09e4c062-db18-4249-a34d-2e1a7d0ff7e5"/*BlueFactor*/,
@@ -158,7 +158,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "/Lib/points/modify/SamplePointAttributes_v2.hlsl"
+          "Value": "/Lib/points/modify/AttributesFromImageChannels.hlsl"
         }
       ],
       "Outputs": []
@@ -182,24 +182,13 @@
       "Outputs": []
     },
     {
-      "Id": "182e5a5f-514f-4e34-af72-600950cf3703"/*StructuredBuffer*/,
-      "SymbolId": "a8a0e6c4-1f49-4ed8-8d0b-e7aa6cdf8a87",
-      "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "c10e66c8-c887-4a82-b557-642990581767"/*StructuredBuffer*/,
-          "DirtyFlagTrigger": "Animated"
-        }
-      ]
-    },
-    {
       "Id": "1a1e129f-dc19-4f37-b5f7-af497eaefdd4"/*TransformMatrix*/,
       "SymbolId": "17324ce1-8920-4653-ac67-c211ad507a81",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "1f491566-1479-4bf2-bfd6-d340863330b3"/*RenderQuad*/,
+      "Id": "1f491566-1479-4bf2-bfd6-d340863330b3"/*DrawQuad*/,
       "SymbolId": "b89c5923-cc58-4d7a-8dce-eb1f8cdfc6e8",
       "InputValues": [
         {
@@ -374,12 +363,6 @@
       "Outputs": []
     },
     {
-      "Id": "9cc5f836-a4f4-4965-9b36-f2a3af8d10f7"/*TransformsConstBuffer*/,
-      "SymbolId": "a60adc26-d7c6-4615-af78-8d2d6da46b79",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "a053fc38-894c-424b-bdf4-c3fc6bef5175"/*ClampInt*/,
       "SymbolId": "5f734c25-9f1a-436c-b56c-7e0a1e07fdda",
       "InputValues": [
@@ -415,26 +398,15 @@
       "Outputs": []
     },
     {
-      "Id": "d51c1cbd-7657-4a3e-8783-96e06bb78180"/*UavFromStructuredBuffer*/,
-      "SymbolId": "0b5b14bf-c850-493a-afb1-72643926e214",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "d5a3940b-d99d-4701-9086-8912773eae56"/*SrvFromStructuredBuffer*/,
-      "SymbolId": "8c41b312-6628-411c-a61d-604413b73a72",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "dab74335-3038-4691-b5a1-0e925c216065"/*ScaleVector3*/,
       "SymbolId": "646d6a5d-a1d7-471e-86ab-e1fb2542a2c2",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "fd7a9650-888a-4c4e-89cf-2c03d05a8c45"/*Value*/,
+      "Id": "fd7a9650-888a-4c4e-89cf-2c03d05a8c45"/*"Aspect"*/,
       "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
+      "Name": "\"Aspect\"",
       "InputValues": [],
       "Outputs": []
     }
@@ -487,12 +459,6 @@
       "SourceSlotId": "f83f1835-477e-4bb6-93f0-14bf273b8e94",
       "TargetParentOrChildId": "12b3932b-0256-4fde-982b-ae3d89db9748",
       "TargetSlotId": "6b9d0106-78f9-4507-a0f6-234c5dfb0f85"
-    },
-    {
-      "SourceParentOrChildId": "a053fc38-894c-424b-bdf4-c3fc6bef5175",
-      "SourceSlotId": "e6aae72f-8c22-4133-ba0d-c3635751d715",
-      "TargetParentOrChildId": "182e5a5f-514f-4e34-af72-600950cf3703",
-      "TargetSlotId": "b1ceddfd-d289-41eb-bfc5-f36b789bfd4e"
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
@@ -847,18 +813,6 @@
       "SourceSlotId": "b1013848-0dcd-4d74-9b49-d5ef4ef539d3",
       "TargetParentOrChildId": "b7b3e4c6-edfd-4dc1-9ea3-672348e76837",
       "TargetSlotId": "bc217d95-25d4-44e8-b5ba-05b7facd9a20"
-    },
-    {
-      "SourceParentOrChildId": "182e5a5f-514f-4e34-af72-600950cf3703",
-      "SourceSlotId": "c10e66c8-c887-4a82-b557-642990581767",
-      "TargetParentOrChildId": "d51c1cbd-7657-4a3e-8783-96e06bb78180",
-      "TargetSlotId": "5d888f13-0ad8-4034-99ca-da36c8fb261c"
-    },
-    {
-      "SourceParentOrChildId": "182e5a5f-514f-4e34-af72-600950cf3703",
-      "SourceSlotId": "c10e66c8-c887-4a82-b557-642990581767",
-      "TargetParentOrChildId": "d5a3940b-d99d-4701-9086-8912773eae56",
-      "TargetSlotId": "bd65ef2c-f32a-4279-bb5c-7f6467b23283"
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
