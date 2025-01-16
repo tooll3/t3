@@ -1,5 +1,7 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -181,7 +183,7 @@ public static class SymbolJson
         var symbolChildJson = childJsonResult.Json;
         var nameToken = symbolChildJson[JsonKeys.SymbolChildName]?.Value<string>();
         string? name = null;
-        bool isBypassed = false;
+        var isBypassed = false;
         if (nameToken != null)
         {
             name = nameToken;
@@ -195,32 +197,42 @@ public static class SymbolJson
 
         var modifyAction = new Action<Symbol.Child>(child =>
                                                     {
-                                                        foreach (var inputValue in (JArray)symbolChildJson[JsonKeys.InputValues])
+                                                        var jInputValueArray = (JArray?)symbolChildJson[JsonKeys.InputValues];
+                                                        if (jInputValueArray != null)
                                                         {
-                                                            ReadChildInputValue(child, inputValue);
+                                                            foreach (var inputValue in jInputValueArray)
+                                                            {
+                                                                ReadChildInputValue(child, inputValue);
+                                                            }
                                                         }
 
-                                                        foreach (var outputJson in (JArray)symbolChildJson[JsonKeys.Outputs])
+                                                        var jOutputsArray = (JArray?)symbolChildJson[JsonKeys.Outputs];
+                                                        if (jOutputsArray != null)
                                                         {
-                                                            var outputId = Guid.Parse(outputJson[JsonKeys.Id].Value<string>());
-                                                            var outputDataJson = outputJson[JsonKeys.OutputData];
-                                                            if (outputDataJson != null)
+                                                            foreach (var outputJson in jOutputsArray)
                                                             {
-                                                                ReadChildOutputData(child, outputId, outputDataJson);
-                                                            }
+                                                                TryGetGuidFromJsonToken(outputJson[JsonKeys.Id], out var outputId);
+                                                                var outputDataJson = outputJson[JsonKeys.OutputData];
+                                                                if (outputDataJson != null)
+                                                                {
+                                                                    ReadChildOutputData(child, outputId, outputDataJson);
+                                                                }
 
-                                                            var dirtyFlagJson = outputJson[JsonKeys.DirtyFlagTrigger];
-                                                            if (dirtyFlagJson != null)
-                                                            {
-                                                                child.Outputs[outputId].DirtyFlagTrigger =
-                                                                    (DirtyFlagTrigger)Enum.Parse(typeof(DirtyFlagTrigger), dirtyFlagJson.Value<string>());
-                                                            }
+                                                                var dirtyFlagJson = outputJson[JsonKeys.DirtyFlagTrigger];
+                                                                if (dirtyFlagJson != null)
+                                                                {
+                                                                    if(Enum.TryParse<DirtyFlagTrigger>(dirtyFlagJson.Value<string>(), out var x))
+                                                                        child.Outputs[outputId].DirtyFlagTrigger = x;
+                                                                        
+                                                                    //(DirtyFlagTrigger)Enum.Parse(typeof(DirtyFlagTrigger), readOnlySpan);
+                                                                }
 
-                                                            var isDisabledJson = outputJson[JsonKeys.IsDisabled];
-                                                            if (isDisabledJson != null)
-                                                            {
-                                                                if (child.Outputs.TryGetValue(outputId, out var output))
-                                                                    output.IsDisabled = isDisabledJson.Value<bool>();
+                                                                var isDisabledJson = outputJson[JsonKeys.IsDisabled];
+                                                                if (isDisabledJson != null)
+                                                                {
+                                                                    if (child.Outputs.TryGetValue(outputId, out var output))
+                                                                        output.IsDisabled = isDisabledJson.Value<bool>();
+                                                                }
                                                             }
                                                         }
                                                     });
@@ -230,39 +242,44 @@ public static class SymbolJson
         return true;
     }
 
-    private static (Guid, JToken) ReadSymbolInputDefaults(JToken jsonInput)
+    private static (Guid, JToken?) ReadSymbolInputDefaults(JToken jsonInput)
     {
-        var id = Guid.Parse(jsonInput[JsonKeys.Id].Value<string>());
+        TryGetGuidFromJsonToken(jsonInput[JsonKeys.Id], out var id);
+        //var id = Guid.Parse(jsonInput[JsonKeys.Id].Value<string>());
         var jsonValue = jsonInput[JsonKeys.DefaultValue];
         return (id, jsonValue);
     }
 
-    private static bool TryReadConnection(JToken jsonConnection, out Symbol.Connection? connection)
+    private static bool TryReadConnection(JToken jsonConnection, [NotNullWhen(true)] out Symbol.Connection? connection)
     {
-        var sourceChildString = jsonConnection[JsonKeys.SourceParentOrChildId].Value<string>();
-        var targetChildString = jsonConnection[JsonKeys.TargetParentOrChildId].Value<string>();
-        var sourceSlotString = jsonConnection[JsonKeys.SourceSlotId].Value<string>();
-        var targetSlotString = jsonConnection[JsonKeys.TargetSlotId].Value<string>();
-        
-        if(!Guid.TryParse(sourceChildString, out var sourceInstanceId) ||
-           !Guid.TryParse(targetChildString, out var targetInstanceId) ||
-           !Guid.TryParse(sourceSlotString, out var sourceSlotId) ||
-           !Guid.TryParse(targetSlotString, out var targetSlotId))
+        connection = null;
+
+        if (!TryGetGuidFromJsonToken(jsonConnection[JsonKeys.SourceParentOrChildId], out var sourceInstanceId) ||
+            !TryGetGuidFromJsonToken(jsonConnection[JsonKeys.TargetParentOrChildId], out var targetInstanceId) ||
+            !TryGetGuidFromJsonToken(jsonConnection[JsonKeys.SourceSlotId], out var sourceSlotId) ||
+            !TryGetGuidFromJsonToken(jsonConnection[JsonKeys.TargetSlotId], out var targetSlotId))
         {
             connection = null;
             return false;
         }
-
+        
         connection = new Symbol.Connection(sourceInstanceId, sourceSlotId, targetInstanceId, targetSlotId);
         return true;
     }
 
+    private static bool TryGetGuidFromJsonToken(JToken? jToken, out Guid id)
+    {
+        id= Guid.Empty;
+        return jToken != null && Guid.TryParse(jToken.Value<string>(), out id);
+    }
+    
+
     private static void ReadChildInputValue(Symbol.Child symbolChild, JToken inputJson)
     {
-        var id = Guid.Parse(inputJson[JsonKeys.Id].Value<string>());
+        TryGetGuidFromJsonToken(inputJson[JsonKeys.Id], out var id);
         var jsonValue = inputJson[JsonKeys.Value];
         var gotInput = symbolChild.Inputs.TryGetValue(id, out var input);
-        if (!gotInput)
+        if (!gotInput || input == null)
         {
             Log.Warning($"Skipping definition of obsolete input in [{symbolChild.Symbol.Name}]: " + id);
             return;
@@ -295,31 +312,46 @@ public static class SymbolJson
 
     public static SymbolReadResult ReadSymbolRoot(in Guid id, JToken jToken, Type instanceType, SymbolPackage package)
     {
-        // Read symbol with Id - dictionary of Guid-JToken?
+        // Read symbol with Id -> dictionary of Guid-JToken?
+        var jChildrenJsonArray = (JArray?)jToken[JsonKeys.Children];
 
-        var childrenJsonArray = (JArray)jToken[JsonKeys.Children];
-        JsonChildResult[] childrenJsons = new JsonChildResult[childrenJsonArray.Count];
-        for (int i = 0; i < childrenJsonArray.Count; i++)
+        JsonChildResult[] childrenJsons = [];
+        
+        if (jChildrenJsonArray != null)
         {
-            childrenJsons[i] = new JsonChildResult(childrenJsonArray[i]);
+            childrenJsons = new JsonChildResult[jChildrenJsonArray.Count];
+            for (var i = 0; i < jChildrenJsonArray.Count; i++)
+            {
+                childrenJsons[i] = new JsonChildResult(jChildrenJsonArray[i]);
+            }
         }
-
+        
         var connections = new List<Symbol.Connection>();
-        var connectionsJson = ((JArray)jToken[JsonKeys.Connections]);
-        var hasConnections = connectionsJson.Count > 0;
-        if (hasConnections)
+        var connectionsJson = (JArray?)jToken[JsonKeys.Connections];
+
+        var hasConnections = false;
+        if (connectionsJson != null)
         {
-            ObtainConnections(connectionsJson, connections, instanceType);
+            hasConnections = connectionsJson.Count > 0;
+            if (hasConnections)
+            {
+                ObtainConnections(connectionsJson, connections, instanceType);
+            }
         }
 
-        var inputJsonArray = (JArray)jToken[JsonKeys.Inputs];
-        var inputDefaults = inputJsonArray
-                           .Select(ReadSymbolInputDefaults).ToArray();
+        var inputJsonArray = (JArray?)jToken[JsonKeys.Inputs];
+        var inputDefaults = inputJsonArray?
+                           .Select(ReadSymbolInputDefaults)
+                           .ToArray();
 
-        var inputDefaultValues = new Dictionary<Guid, JToken>();
-        foreach (var idAndValue in inputDefaults)
+        var inputDefaultValueTokens = new Dictionary<Guid, JToken>();
+        if (inputDefaults != null)
         {
-            inputDefaultValues[idAndValue.Item1] = idAndValue.Item2;
+            foreach (var (inputId,valueToken) in inputDefaults)
+            {
+                if(valueToken !=null)
+                    inputDefaultValueTokens[inputId] = valueToken;
+            }
         }
 
         var symbol = package.CreateSymbol(instanceType, id);
@@ -330,7 +362,7 @@ public static class SymbolJson
         foreach (var input in symbol.InputDefinitions)
         {
             // If no entry is present just the value default is used, happens for new inputs
-            if (inputDefaultValues.TryGetValue(input.Id, out var jsonDefaultValue))
+            if (inputDefaultValueTokens.TryGetValue(input.Id, out var jsonDefaultValue))
             {
                 input.DefaultValue.SetValueFromJson(jsonDefaultValue);
             }
@@ -338,8 +370,8 @@ public static class SymbolJson
 
         symbol.PlaybackSettings = PlaybackSettings.ReadFromJson(jToken);
 
-        var animatorData = (JArray)jToken[JsonKeys.Animator];
-        return new SymbolReadResult(symbol, childrenJsons, animatorData);
+        var animatorJsonData = (JArray?)jToken[JsonKeys.Animator];
+        return new SymbolReadResult(symbol, childrenJsons, animatorJsonData);
     }
 
     private static void ObtainConnections(JArray connectionsJson, List<Symbol.Connection> connections, Type type)
@@ -359,44 +391,52 @@ public static class SymbolJson
 
     public readonly struct JsonKeys
     {
-        public const string Connections = "Connections";
-        public const string SourceParentOrChildId = "SourceParentOrChildId";
-        public const string SourceSlotId = "SourceSlotId";
-        public const string TargetParentOrChildId = "TargetParentOrChildId";
-        public const string TargetSlotId = "TargetSlotId";
-        public const string Children = "Children";
+        internal const string Connections = "Connections";
+        internal const string SourceParentOrChildId = "SourceParentOrChildId";
+        internal const string SourceSlotId = "SourceSlotId";
+        internal const string TargetParentOrChildId = "TargetParentOrChildId";
+        internal const string TargetSlotId = "TargetSlotId";
+        internal const string Children = "Children";
         public const string Id = "Id";
-        public const string SymbolChildName = "Name";
-        public const string SymbolId = "SymbolId";
-        public const string InputValues = "InputValues";
-        public const string OutputData = "OutputData";
-        public const string Type = "Type";
-        public const string IsBypassed = "IsBypassed";
-        public const string DirtyFlagTrigger = "DirtyFlagTrigger";
-        public const string IsDisabled = "IsDisabled";
-        public const string DefaultValue = "DefaultValue";
-        public const string Value = "Value";
-        public const string Inputs = "Inputs";
-        public const string Outputs = "Outputs";
-        public const string Animator = "Animator";
+        internal const string SymbolChildName = "Name";
+        internal const string SymbolId = "SymbolId";
+        internal const string InputValues = "InputValues";
+        internal const string OutputData = "OutputData";
+        internal const string Type = "Type";
+        internal const string IsBypassed = "IsBypassed";
+        internal const string DirtyFlagTrigger = "DirtyFlagTrigger";
+        internal const string IsDisabled = "IsDisabled";
+        internal const string DefaultValue = "DefaultValue";
+        internal const string Value = "Value";
+        internal const string Inputs = "Inputs";
+        internal const string Outputs = "Outputs";
+        internal const string Animator = "Animator";
     }
 
-    public readonly record struct SymbolReadResult(Symbol Symbol, JsonChildResult[] ChildrenJsonArray, JArray AnimatorJsonData);
+    public readonly record struct SymbolReadResult(Symbol Symbol, JsonChildResult[] ChildrenJsonArray, JArray? AnimatorJsonData);
 
     public readonly struct JsonChildResult
     {
-        public readonly Guid SymbolId;
-        public readonly Guid ChildId;
-        public readonly JToken Json;
+        internal readonly Guid SymbolId;
+        internal readonly Guid ChildId;
+        internal readonly JToken Json;
 
-        public JsonChildResult(JToken json)
+        internal JsonChildResult(JToken json)
         {
             // todo: handle failure
-            var symbolIdString = json[JsonKeys.SymbolId].Value<string>();
-            _ = Guid.TryParse(symbolIdString, out SymbolId);
+            var idToken = json[JsonKeys.SymbolId];
+            if (idToken != null)
+            {
+                var symbolIdString = idToken.Value<string>();
+                _ = Guid.TryParse(symbolIdString, out SymbolId);
+            }
 
-            var childIdString = json[JsonKeys.Id].Value<string>();
-            _ = Guid.TryParse(childIdString, out ChildId);
+            var childIdToken = json[JsonKeys.Id];
+            if (childIdToken != null)
+            {
+                var childIdString = childIdToken.Value<string>();
+                _ = Guid.TryParse(childIdString, out ChildId);
+            }
 
             Json = json;
         }
