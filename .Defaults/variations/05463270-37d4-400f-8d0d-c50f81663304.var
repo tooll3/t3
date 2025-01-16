@@ -7,8 +7,8 @@
       "ActivationIndex": 1,
       "Title": "FlowerPower",
       "PosOnCanvas": {
-        "X": 163.0,
-        "Y": 0.0
+        "X": 86.049515,
+        "Y": 0.97406006
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -78,8 +78,8 @@
       "ActivationIndex": 3,
       "Title": "Propeller",
       "PosOnCanvas": {
-        "X": 163.0,
-        "Y": -93.0
+        "X": 86.049515,
+        "Y": -92.02594
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -136,8 +136,8 @@
       "ActivationIndex": 3,
       "Title": "TriangleStripes",
       "PosOnCanvas": {
-        "X": 326.0,
-        "Y": 0.0
+        "X": 249.04951,
+        "Y": 0.97406006
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {

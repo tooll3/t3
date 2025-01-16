@@ -59,7 +59,7 @@ inline float4 GetSchlickBias(float4 x, float gain)
                    : GetBias(1.0 - gain, x * 2.0 - 1.0) / 2.0 + 0.5;
 }
 
-inline float ApplyGainAndBias(float4 v4, float2 gainBias)
+inline float4 ApplyGainAndBias(float4 v4, float2 gainBias)
 {
     float g = saturate(gainBias.x);
     float b = saturate(gainBias.y);
@@ -72,11 +72,11 @@ inline float ApplyGainAndBias(float4 v4, float2 gainBias)
     if (g < 0.5)
     {
         v4 = GetBias(b, v4);
-        v4 = GetSchlickBias(g, v4);
+        v4 = GetSchlickBias(v4, g);
     }
     else
     {
-        v4 = GetSchlickBias(g, v4);
+        v4 = GetSchlickBias(v4, g);
         v4 = GetBias(b, v4);
     }
 
