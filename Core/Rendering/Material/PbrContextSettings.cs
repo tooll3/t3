@@ -43,8 +43,8 @@ public static class PbrContextSettings
         texture.CreateShaderResourceView(ref srv, imagePath);
         return true;
     }
-    
-    public static void SetDefaultToContext(EvaluationContext context)
+
+    internal static void SetDefaultToContext(EvaluationContext context)
     { 
         context.Materials.Clear();
         context.PbrMaterial = _defaultMaterial;
