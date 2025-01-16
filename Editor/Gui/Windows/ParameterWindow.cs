@@ -214,7 +214,7 @@ internal class ParameterWindow : Window
             // Help-Mode
             {
                 var isHelpMode = _viewMode == ViewModes.Help;
-                if (_help.DrawHelpIcon(symbolUi, ref isHelpMode))
+                if (OperatorHelp.DrawHelpIcon(symbolUi, ref isHelpMode))
                 {
                     _viewMode = isHelpMode ? ViewModes.Help : ViewModes.Parameters;
                 }

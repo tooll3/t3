@@ -1,12 +1,11 @@
 ﻿using ImGuiNET;
-using T3.Editor.Gui.Graph.Legacy.Interaction;
 using T3.Editor.Gui.Windows;
 
 namespace T3.Editor.Gui.UiHelpers;
 
 /// <summary>
 /// Shows a tree of all defined symbols sorted by namespace.
-/// This is used by <see cref="SymbolBrowser"/> and <see cref="T3Ui.DrawAppMenu"/>
+/// This is used by <see cref="SymbolLibrary"/> and <see cref="AppMenu"/>
 /// </summary>
 internal static class SymbolTreeMenu
 {

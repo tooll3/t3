@@ -3,12 +3,12 @@ using T3.Core.DataTypes.Vector;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.GraphUiModel;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Graph;
@@ -541,44 +541,10 @@ internal sealed class SymbolBrowser
                 return;
             
             const string label = "Example";
-            DrawExampleOperator(symbolUi, label);
+            UiElements.DrawExampleOperator(symbolUi, label);
         }
 
         ImGui.PopStyleVar();
-    }
-
-    public static void DrawExampleOperator(SymbolUi symbolUi, string label)
-    {
-        var color = symbolUi.Symbol.OutputDefinitions.Count > 0
-                        ? TypeUiRegistry.GetPropertiesForType(symbolUi.Symbol.OutputDefinitions[0]?.ValueType).Color
-                        : UiColors.Gray;
-
-        ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.OperatorBackground.Apply(color).Rgba);
-        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, ColorVariations.OperatorBackgroundHover.Apply(color).Rgba);
-        ImGui.PushStyleColor(ImGuiCol.ButtonActive, ColorVariations.OperatorBackgroundHover.Apply(color).Rgba);
-        ImGui.PushStyleColor(ImGuiCol.Text, ColorVariations.OperatorLabel.Apply(color).Rgba);
-
-        ImGui.SameLine();
-
-        var restSpace = ImGui.GetWindowWidth() - ImGui.GetCursorPos().X;
-        if (restSpace < 100)
-        {
-            ImGui.Dummy(new Vector2(10,10));
-        }
-
-        ImGui.Button(label);
-        SymbolLibrary.HandleDragAndDropForSymbolItem(symbolUi.Symbol);
-        if (ImGui.IsItemHovered())
-        {
-            ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
-        }
-            
-        if (!string.IsNullOrEmpty(symbolUi.Description))
-        {
-            CustomComponents.TooltipForLastItem(symbolUi.Description);
-        }
-
-        ImGui.PopStyleColor(4);
     }
 
     private void CreateInstance(Symbol symbol)

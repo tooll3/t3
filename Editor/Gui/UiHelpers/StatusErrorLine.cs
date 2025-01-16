@@ -3,7 +3,6 @@ using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows;
-using T3.SystemUi.Logging;
 
 namespace T3.Editor.Gui.UiHelpers;
 

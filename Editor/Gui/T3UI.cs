@@ -1,3 +1,4 @@
+#nullable  enable
 using System.Diagnostics;
 using System.Threading.Tasks;
 using ImGuiNET;
@@ -11,8 +12,6 @@ using T3.Core.Resource;
 using T3.Editor.App;
 using T3.Editor.Gui.Dialog;
 using T3.Editor.Gui.Graph.Dialogs;
-using T3.Editor.Gui.Graph.Legacy.Interaction;
-using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Midi;
 using T3.Editor.Gui.Interaction.Timing;
@@ -93,14 +92,14 @@ public static class T3Ui
         FitViewToSelectionHandling.ProcessNewFrame();
         SrvManager.RemoveForDisposedTextures();
         KeyboardBinding.InitFrame();
-        ConnectionSnapEndHelper.PrepareNewFrame();
+        
         CompatibleMidiDeviceHandling.UpdateConnectedDevices();
 
         var nodeSelection = ProjectEditing.Components?.NodeSelection;
         if (nodeSelection != null)
         {
             // Set selected id so operator can check if they are selected or not  
-            var selectedInstance = nodeSelection?.GetSelectedInstanceWithoutComposition();
+            var selectedInstance = nodeSelection.GetSelectedInstanceWithoutComposition();
             MouseInput.SelectedChildId = selectedInstance?.SymbolChildId ?? Guid.Empty;
             InvalidateSelectedOpsForTransormGizmo(nodeSelection);
         }
@@ -114,7 +113,7 @@ public static class T3Ui
             
         // Complete frame
         SingleValueEdit.StartNextFrame();
-        SelectableNodeMovement.CompleteFrame();
+        
         
         FrameStats.CompleteFrame();
         TriggerGlobalActionsFromKeyBindings();
@@ -232,7 +231,7 @@ public static class T3Ui
         }
     }
 
-    public static void ToggleAllUiElements()
+    internal static void ToggleAllUiElements()
     {
         //T3Ui.MaximalView = !T3Ui.MaximalView;
         if (UserSettings.Config.ShowToolbar)
@@ -254,7 +253,7 @@ public static class T3Ui
         }
     }
 
-    public static void SaveInBackground(bool saveAll)
+    internal static void SaveInBackground(bool saveAll)
     {
         Task.Run(() => Save(saveAll));
     }
@@ -300,36 +299,28 @@ public static class T3Ui
         components.NodeSelection.SetSelection(sourceChildUi, selectionTargetInstance);
         FitViewToSelectionHandling.FitViewToSelection();
     }
-
-    // private static void SwapHoveringBuffers()
-    // {
-    //     (HoveredIdsLastFrame, _hoveredIdsForNextFrame) = (_hoveredIdsForNextFrame, HoveredIdsLastFrame);
-    //     _hoveredIdsForNextFrame.Clear();
-    //     
-    //     (RenderedIdsLastFrame, _renderedIdsForNextFrame) = (_renderedIdsForNextFrame, RenderedIdsLastFrame);
-    //     _renderedIdsForNextFrame.Clear();            
-    // }
+    
 
     /// <summary>
     /// Statistics method for debug purpose
     /// </summary>
-    private static void CountSymbolUsage()
-    {
-        var counts = new Dictionary<Symbol, int>();
-        foreach (var s in EditorSymbolPackage.AllSymbols)
-        {
-            foreach (var child in s.Children.Values)
-            {
-                counts.TryAdd(child.Symbol, 0);
-                counts[child.Symbol]++;
-            }
-        }
-
-        foreach (var (s, c) in counts.OrderBy(c => counts[c.Key]).Reverse())
-        {
-            Log.Debug($"{s.Name} - {s.Namespace}  {c}");
-        }
-    }
+    // private static void CountSymbolUsage()
+    // {
+    //     var counts = new Dictionary<Symbol, int>();
+    //     foreach (var s in EditorSymbolPackage.AllSymbols)
+    //     {
+    //         foreach (var child in s.Children.Values)
+    //         {
+    //             counts.TryAdd(child.Symbol, 0);
+    //             counts[child.Symbol]++;
+    //         }
+    //     }
+    //
+    //     foreach (var (s, c) in counts.OrderBy(c => counts[c.Key]).Reverse())
+    //     {
+    //         Log.Debug($"{s.Name} - {s.Namespace}  {c}");
+    //     }
+    // }
     
 
     //@imdom: needs clarification how to handle osc data disconnection on shutdown

@@ -33,15 +33,16 @@ namespace T3.Editor.Gui.Graph.Legacy;
 internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 {
     public SymbolBrowser SymbolBrowser { get; set; }
-    
+
     private readonly NodeSelection _nodeSelection;
     private readonly NavigationHistory _navigationHistory;
     private readonly NodeNavigation _nodeNavigation;
     private readonly NodeGraphLayouting _nodeGraphLayouting;
-    private  Legacy.Graph _graph;
+    private Legacy.Graph _graph;
     private Structure Structure => _components.OpenedProject.Structure;
-    
+
     private GraphComponents _components;
+
     public GraphComponents Components
     {
         set
@@ -51,7 +52,8 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         }
     }
 
-    internal GraphCanvas(NodeSelection nodeSelection, Structure structure, NavigationHistory navigationHistory, NodeNavigation nodeNavigation, Func<Instance> getComposition)
+    internal GraphCanvas(NodeSelection nodeSelection, Structure structure, NavigationHistory navigationHistory, NodeNavigation nodeNavigation,
+                         Func<Instance> getComposition)
     {
         _nodeNavigation = nodeNavigation;
         _nodeSelection = nodeSelection;
@@ -60,7 +62,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         _nodeGraphLayouting = new NodeGraphLayouting(nodeSelection, structure);
         SelectableNodeMovement = new SelectableNodeMovement(this, getComposition, () => SelectableChildren, _nodeSelection);
     }
-    
+
     ~GraphCanvas()
     {
         _nodeNavigation.FocusInstanceRequested -= OpenAndFocusInstance;
@@ -89,10 +91,10 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
             flags |= GraphDrawingFlags.PreventInteractions;
 
         var preventInteractions = flags.HasFlag(GraphDrawingFlags.PreventInteractions);
-        
+
         _preventInteractions = preventInteractions;
         _drawingFlags = flags;
-        
+
         var editingFlags = T3Ui.EditingFlags.None;
 
         if (SymbolBrowser.IsOpen)
@@ -106,269 +108,272 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
     public void DrawGraph(ImDrawListPtr drawList, float graphOpacity)
     {
-            DrawDropHandler(_components.CompositionOp, _components.CompositionOp.GetSymbolUi());
-            ImGui.SetCursorScreenPos(Vector2.One * 100);
+        ConnectionSnapEndHelper.PrepareNewFrame();
 
-            if (!_preventInteractions)
+        DrawDropHandler(_components.CompositionOp, _components.CompositionOp.GetSymbolUi());
+        ImGui.SetCursorScreenPos(Vector2.One * 100);
+
+        if (!_preventInteractions)
+        {
+            var compositionOp = _components.CompositionOp;
+            var compositionUi = compositionOp.GetSymbolUi();
+            //compositionUi.FlagAsModified();
+
+            if (KeyboardBinding.Triggered(UserActions.FocusSelection))
+                FocusViewToSelection();
+
+            if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.Duplicate))
             {
-                var compositionOp = _components.CompositionOp;
-                var compositionUi = compositionOp.GetSymbolUi();
-                //compositionUi.FlagAsModified();
+                NodeActions.CopySelectedNodesToClipboard(_nodeSelection, compositionOp);
+                NodeActions.PasteClipboard(_nodeSelection, this, compositionOp);
+            }
 
-                if (KeyboardBinding.Triggered(UserActions.FocusSelection))
-                    FocusViewToSelection();
+            if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))
+            {
+                NodeActions.DeleteSelectedElements(_nodeSelection, compositionUi);
+            }
 
-                if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.Duplicate))
-                {
-                    NodeActions.CopySelectedNodesToClipboard(_nodeSelection, compositionOp);
-                    NodeActions.PasteClipboard(_nodeSelection, this, compositionOp);
-                }
+            if (KeyboardBinding.Triggered(UserActions.ToggleDisabled))
+            {
+                NodeActions.ToggleDisabledForSelectedElements(_nodeSelection);
+            }
 
-                if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))
-                {
-                    NodeActions.DeleteSelectedElements(_nodeSelection, compositionUi);
-                }
+            if (KeyboardBinding.Triggered(UserActions.ToggleBypassed))
+            {
+                NodeActions.ToggleBypassedForSelectedElements(_nodeSelection);
+            }
 
-                if (KeyboardBinding.Triggered(UserActions.ToggleDisabled))
-                {
-                    NodeActions.ToggleDisabledForSelectedElements(_nodeSelection);
-                }
-
-                if (KeyboardBinding.Triggered(UserActions.ToggleBypassed))
-                {
-                    NodeActions.ToggleBypassedForSelectedElements(_nodeSelection);
-                }
-
-                if (KeyboardBinding.Triggered(UserActions.PinToOutputWindow))
-                {
-                    if (UserSettings.Config.FocusMode)
-                    {
-                        var selectedImage = _nodeSelection.GetFirstSelectedInstance();
-                        if (selectedImage != null && ProjectEditing.Components != null)
-                        {
-                            ProjectEditing.Components.SetBackgroundOutput(selectedImage);
-                        }
-                    }
-                    else
-                    {
-                        NodeActions.PinSelectedToOutputWindow(_components, _nodeSelection, compositionOp);
-                    }
-                }
-
-                if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
+            if (KeyboardBinding.Triggered(UserActions.PinToOutputWindow))
+            {
+                if (UserSettings.Config.FocusMode)
                 {
                     var selectedImage = _nodeSelection.GetFirstSelectedInstance();
                     if (selectedImage != null && ProjectEditing.Components != null)
                     {
                         ProjectEditing.Components.SetBackgroundOutput(selectedImage);
-                        //GraphWindow.Focused.SetBackgroundInstanceForCurrentGraph(selectedImage);
                     }
-                }
-
-                if (KeyboardBinding.Triggered(UserActions.CopyToClipboard))
-                {
-                    NodeActions.CopySelectedNodesToClipboard(_nodeSelection, compositionOp);
-                }
-
-                if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.PasteFromClipboard))
-                {
-                    NodeActions.PasteClipboard(_nodeSelection, this, compositionOp);
-                }
-
-                if (KeyboardBinding.Triggered(UserActions.LayoutSelection))
-                {
-                    _nodeGraphLayouting.ArrangeOps(compositionOp);
-                }
-
-                if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.AddAnnotation))
-                {
-                    var newAnnotation = NodeActions.AddAnnotation(_nodeSelection, this, compositionOp);
-                    _graph.RenameAnnotation(newAnnotation);
-                }
-
-                IReadOnlyList<Guid>? navigationPath = null;
-
-                // Navigation
-                if (KeyboardBinding.Triggered(UserActions.NavigateBackwards))
-                {
-                    navigationPath = _navigationHistory.NavigateBackwards();
-                }
-
-                if (KeyboardBinding.Triggered(UserActions.NavigateForward))
-                {
-                    navigationPath = _navigationHistory.NavigateForward();
-                }
-
-                if (navigationPath != null)
-                    _components.TrySetCompositionOp(navigationPath);
-
-                if (KeyboardBinding.Triggered(UserActions.SelectToAbove))
-                {
-                    _nodeNavigation.SelectAbove();
-                }
-
-                if (KeyboardBinding.Triggered(UserActions.SelectToRight))
-                {
-                    _nodeNavigation.SelectRight();
-                }
-
-                if (KeyboardBinding.Triggered(UserActions.SelectToBelow))
-                {
-                    _nodeNavigation.SelectBelow();
-                }
-
-                if (KeyboardBinding.Triggered(UserActions.AddComment))
-                {
-                    EditCommentDialog.ShowNextFrame();
-                }
-
-                if (KeyboardBinding.Triggered(UserActions.SelectToLeft))
-                {
-                    _nodeNavigation.SelectLeft();
-                }
-
-                if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
-                {
-                    var selectedImage = _nodeSelection.GetFirstSelectedInstance();
-                    if (selectedImage != null)
-                    {
-                        _components.GraphImageBackground.OutputInstance = selectedImage;
-                    }
-                }
-            }
-
-            if (ImGui.IsWindowFocused() && !_preventInteractions)
-            {
-                var io = ImGui.GetIO();
-                var editingSomething = ImGui.IsAnyItemActive();
-
-                if (!io.KeyCtrl && !io.KeyShift && !io.KeyAlt && !editingSomething)
-                {
-                    if (ImGui.IsKeyDown((ImGuiKey)Key.W))
-                    {
-                        _dampedScrollVelocity.Y -= InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).Y;
-                    }
-
-                    if (ImGui.IsKeyDown((ImGuiKey)Key.S))
-                    {
-                        _dampedScrollVelocity.Y += InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).Y;
-                    }
-
-                    if (ImGui.IsKeyDown((ImGuiKey)Key.A))
-                    {
-                        _dampedScrollVelocity.X -= InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).X;
-                    }
-
-                    if (ImGui.IsKeyDown((ImGuiKey)Key.D))
-                    {
-                        _dampedScrollVelocity.X += InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).X;
-                    }
-
-                    if (ImGui.IsKeyDown((ImGuiKey)Key.Q))
-                    {
-                        var center = WindowPos + WindowSize / 2;
-                        ApplyZoomDelta(center, 1.05f, out _);
-                    }
-
-                    if (ImGui.IsKeyDown((ImGuiKey)Key.E))
-                    {
-                        var center = WindowPos + WindowSize / 2;
-                        ApplyZoomDelta(center, 1 / 1.05f, out _);
-                    }
-                }
-            }
-
-            ScrollTarget += _dampedScrollVelocity;
-            _dampedScrollVelocity *= 0.90f;
-
-            drawList.PushClipRect(WindowPos, WindowPos + WindowSize);
-
-            if (!_drawingFlags.HasFlag(GraphDrawingFlags.HideGrid))
-                DrawGrid(drawList);
-
-            if (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem))
-            {
-                ConnectionSplitHelper.PrepareNewFrame(_components);
-            }
-
-            SymbolBrowser.Draw();
-
-            graphOpacity *= _preventInteractions ? 0.3f : 1;
-            _graph.DrawGraph(drawList, _drawingFlags.HasFlag(GraphDrawingFlags.PreventInteractions), _components.CompositionOp, graphOpacity);
-
-            RenameInstanceOverlay.Draw(_components);
-            var tempConnections = ConnectionMaker.GetTempConnectionsFor(this);
-
-            var doubleClicked = ImGui.IsMouseDoubleClicked(0);
-
-            var isSomething = (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || ImGui.IsWindowFocused())
-                              && !_preventInteractions
-                              && tempConnections.Count == 0;
-
-            var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
-            var shouldHandleFenceSelection = isSomething
-                                             || isOnBackground && (ImGui.IsMouseDoubleClicked(0) || KeyboardBinding.Triggered(UserActions.CloseOperator));
-
-            if (shouldHandleFenceSelection)
-            {
-                HandleFenceSelection(_components.CompositionOp, _selectionFence);
-            }
-
-            if (isOnBackground && doubleClicked)
-            {
-                _components.TrySetCompositionOpToParent();
-            }
-
-            if (tempConnections.Count > 0 && ImGui.IsMouseReleased(0))
-            {
-                var isAnyItemHovered = ImGui.IsAnyItemHovered();
-                var droppedOnBackground =
-                    ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem | ImGuiHoveredFlags.AllowWhenBlockedByPopup) && !isAnyItemHovered;
-                if (droppedOnBackground)
-                {
-                    ConnectionMaker.InitSymbolBrowserAtPosition(this, SymbolBrowser, InverseTransformPositionFloat(ImGui.GetIO().MousePos));
                 }
                 else
                 {
-                    var connectionDroppedOnBackground =
-                        tempConnections[0].GetStatus() != ConnectionMaker.TempConnection.Status.TargetIsDraftNode;
-                    if (connectionDroppedOnBackground)
-                    {
-                        //Log.Warning("Skipping complete operation on background drop?");
-                        //  ConnectionMaker.CompleteOperation();
-                    }
+                    NodeActions.PinSelectedToOutputWindow(_components, _nodeSelection, compositionOp);
                 }
             }
 
-            drawList.PopClipRect();
-
-            var compositionUpdated = _components.CompositionOp;
-
-            if (FrameStats.Current.OpenedPopUpName == string.Empty)
-                CustomComponents.DrawContextMenuForScrollCanvas(() => DrawContextMenuContent(compositionUpdated), ref _contextMenuIsOpen);
-
-            _duplicateSymbolDialog.Draw(compositionUpdated, _nodeSelection.GetSelectedChildUis().ToList(), ref _nameSpaceForDialogEdits,
-                                        ref _symbolNameForDialogEdits,
-                                        ref _symbolDescriptionForDialog);
-            _combineToSymbolDialog.Draw(compositionUpdated, _nodeSelection.GetSelectedChildUis().ToList(),
-                                        _nodeSelection.GetSelectedNodes<Annotation>().ToList(),
-                                        ref _nameSpaceForDialogEdits,
-                                        ref _symbolNameForDialogEdits,
-                                        ref _symbolDescriptionForDialog);
-
-            _renameSymbolDialog.Draw(_nodeSelection.GetSelectedChildUis().ToList(), ref _symbolNameForDialogEdits);
-
-            EditCommentDialog.Draw(_nodeSelection);
-
-            if (compositionUpdated != _components.OpenedProject.RootInstance.Instance && !compositionUpdated.Symbol.SymbolPackage.IsReadOnly)
+            if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
             {
-                var symbol = compositionUpdated.Symbol;
-                _addInputDialog.Draw(symbol);
-                _addOutputDialog.Draw(symbol);
+                var selectedImage = _nodeSelection.GetFirstSelectedInstance();
+                if (selectedImage != null && ProjectEditing.Components != null)
+                {
+                    ProjectEditing.Components.SetBackgroundOutput(selectedImage);
+                    //GraphWindow.Focused.SetBackgroundInstanceForCurrentGraph(selectedImage);
+                }
             }
 
-            LibWarningDialog.Draw(_components);
-            EditNodeOutputDialog.Draw();
+            if (KeyboardBinding.Triggered(UserActions.CopyToClipboard))
+            {
+                NodeActions.CopySelectedNodesToClipboard(_nodeSelection, compositionOp);
+            }
+
+            if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.PasteFromClipboard))
+            {
+                NodeActions.PasteClipboard(_nodeSelection, this, compositionOp);
+            }
+
+            if (KeyboardBinding.Triggered(UserActions.LayoutSelection))
+            {
+                _nodeGraphLayouting.ArrangeOps(compositionOp);
+            }
+
+            if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.AddAnnotation))
+            {
+                var newAnnotation = NodeActions.AddAnnotation(_nodeSelection, this, compositionOp);
+                _graph.RenameAnnotation(newAnnotation);
+            }
+
+            IReadOnlyList<Guid>? navigationPath = null;
+
+            // Navigation
+            if (KeyboardBinding.Triggered(UserActions.NavigateBackwards))
+            {
+                navigationPath = _navigationHistory.NavigateBackwards();
+            }
+
+            if (KeyboardBinding.Triggered(UserActions.NavigateForward))
+            {
+                navigationPath = _navigationHistory.NavigateForward();
+            }
+
+            if (navigationPath != null)
+                _components.TrySetCompositionOp(navigationPath);
+
+            if (KeyboardBinding.Triggered(UserActions.SelectToAbove))
+            {
+                _nodeNavigation.SelectAbove();
+            }
+
+            if (KeyboardBinding.Triggered(UserActions.SelectToRight))
+            {
+                _nodeNavigation.SelectRight();
+            }
+
+            if (KeyboardBinding.Triggered(UserActions.SelectToBelow))
+            {
+                _nodeNavigation.SelectBelow();
+            }
+
+            if (KeyboardBinding.Triggered(UserActions.AddComment))
+            {
+                EditCommentDialog.ShowNextFrame();
+            }
+
+            if (KeyboardBinding.Triggered(UserActions.SelectToLeft))
+            {
+                _nodeNavigation.SelectLeft();
+            }
+
+            if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
+            {
+                var selectedImage = _nodeSelection.GetFirstSelectedInstance();
+                if (selectedImage != null)
+                {
+                    _components.GraphImageBackground.OutputInstance = selectedImage;
+                }
+            }
+        }
+
+        if (ImGui.IsWindowFocused() && !_preventInteractions)
+        {
+            var io = ImGui.GetIO();
+            var editingSomething = ImGui.IsAnyItemActive();
+
+            if (!io.KeyCtrl && !io.KeyShift && !io.KeyAlt && !editingSomething)
+            {
+                if (ImGui.IsKeyDown((ImGuiKey)Key.W))
+                {
+                    _dampedScrollVelocity.Y -= InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).Y;
+                }
+
+                if (ImGui.IsKeyDown((ImGuiKey)Key.S))
+                {
+                    _dampedScrollVelocity.Y += InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).Y;
+                }
+
+                if (ImGui.IsKeyDown((ImGuiKey)Key.A))
+                {
+                    _dampedScrollVelocity.X -= InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).X;
+                }
+
+                if (ImGui.IsKeyDown((ImGuiKey)Key.D))
+                {
+                    _dampedScrollVelocity.X += InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).X;
+                }
+
+                if (ImGui.IsKeyDown((ImGuiKey)Key.Q))
+                {
+                    var center = WindowPos + WindowSize / 2;
+                    ApplyZoomDelta(center, 1.05f, out _);
+                }
+
+                if (ImGui.IsKeyDown((ImGuiKey)Key.E))
+                {
+                    var center = WindowPos + WindowSize / 2;
+                    ApplyZoomDelta(center, 1 / 1.05f, out _);
+                }
+            }
+        }
+
+        ScrollTarget += _dampedScrollVelocity;
+        _dampedScrollVelocity *= 0.90f;
+
+        drawList.PushClipRect(WindowPos, WindowPos + WindowSize);
+
+        if (!_drawingFlags.HasFlag(GraphDrawingFlags.HideGrid))
+            DrawGrid(drawList);
+
+        if (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem))
+        {
+            ConnectionSplitHelper.PrepareNewFrame(_components);
+        }
+
+        SymbolBrowser.Draw();
+
+        graphOpacity *= _preventInteractions ? 0.3f : 1;
+        _graph.DrawGraph(drawList, _drawingFlags.HasFlag(GraphDrawingFlags.PreventInteractions), _components.CompositionOp, graphOpacity);
+
+        RenameInstanceOverlay.Draw(_components);
+        var tempConnections = ConnectionMaker.GetTempConnectionsFor(this);
+
+        var doubleClicked = ImGui.IsMouseDoubleClicked(0);
+
+        var isSomething = (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || ImGui.IsWindowFocused())
+                          && !_preventInteractions
+                          && tempConnections.Count == 0;
+
+        var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
+        var shouldHandleFenceSelection = isSomething
+                                         || isOnBackground && (ImGui.IsMouseDoubleClicked(0) || KeyboardBinding.Triggered(UserActions.CloseOperator));
+
+        if (shouldHandleFenceSelection)
+        {
+            HandleFenceSelection(_components.CompositionOp, _selectionFence);
+        }
+
+        if (isOnBackground && doubleClicked)
+        {
+            _components.TrySetCompositionOpToParent();
+        }
+
+        if (tempConnections.Count > 0 && ImGui.IsMouseReleased(0))
+        {
+            var isAnyItemHovered = ImGui.IsAnyItemHovered();
+            var droppedOnBackground =
+                ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem | ImGuiHoveredFlags.AllowWhenBlockedByPopup) && !isAnyItemHovered;
+            if (droppedOnBackground)
+            {
+                ConnectionMaker.InitSymbolBrowserAtPosition(this, SymbolBrowser, InverseTransformPositionFloat(ImGui.GetIO().MousePos));
+            }
+            else
+            {
+                var connectionDroppedOnBackground =
+                    tempConnections[0].GetStatus() != ConnectionMaker.TempConnection.Status.TargetIsDraftNode;
+                if (connectionDroppedOnBackground)
+                {
+                    //Log.Warning("Skipping complete operation on background drop?");
+                    //  ConnectionMaker.CompleteOperation();
+                }
+            }
+        }
+
+        drawList.PopClipRect();
+
+        var compositionUpdated = _components.CompositionOp;
+
+        if (FrameStats.Current.OpenedPopUpName == string.Empty)
+            CustomComponents.DrawContextMenuForScrollCanvas(() => DrawContextMenuContent(compositionUpdated), ref _contextMenuIsOpen);
+
+        _duplicateSymbolDialog.Draw(compositionUpdated, _nodeSelection.GetSelectedChildUis().ToList(), ref _nameSpaceForDialogEdits,
+                                    ref _symbolNameForDialogEdits,
+                                    ref _symbolDescriptionForDialog);
+        _combineToSymbolDialog.Draw(compositionUpdated, _nodeSelection.GetSelectedChildUis().ToList(),
+                                    _nodeSelection.GetSelectedNodes<Annotation>().ToList(),
+                                    ref _nameSpaceForDialogEdits,
+                                    ref _symbolNameForDialogEdits,
+                                    ref _symbolDescriptionForDialog);
+
+        _renameSymbolDialog.Draw(_nodeSelection.GetSelectedChildUis().ToList(), ref _symbolNameForDialogEdits);
+
+        EditCommentDialog.Draw(_nodeSelection);
+
+        if (compositionUpdated != _components.OpenedProject.RootInstance.Instance && !compositionUpdated.Symbol.SymbolPackage.IsReadOnly)
+        {
+            var symbol = compositionUpdated.Symbol;
+            _addInputDialog.Draw(symbol);
+            _addOutputDialog.Draw(symbol);
+        }
+
+        LibWarningDialog.Draw(_components);
+        EditNodeOutputDialog.Draw();
+        SelectableNodeMovement.CompleteFrame();
     }
 
     public bool HasActiveInteraction
@@ -459,7 +464,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
     //     var selectedChildUi = GetSelectedChildUis().FirstOrDefault();
     //     return selectedChildUi != null ? selectedChildUi.SymbolChild.Symbol : compositionOp.Symbol;
     // }
-        
+
     private void DrawDropHandler(Instance compositionOp, SymbolUi compositionOpSymbolUi)
     {
         if (!T3Ui.DraggingIsInProgress)
@@ -926,7 +931,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         _components.TrySetCompositionOp(compositionPath, ICanvas.Transition.JumpIn, path[^1]);
     }
     #endregion
-    
+
     private bool _contextMenuIsOpen;
     private bool _preventInteractions;
     private GraphDrawingFlags _drawingFlags;
@@ -949,4 +954,3 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
     protected override ScalableCanvas? Parent => null;
     public SelectableNodeMovement SelectableNodeMovement { get; }
 }
-

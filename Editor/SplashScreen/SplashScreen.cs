@@ -1,7 +1,6 @@
 using System.Drawing;
 using System.Windows.Forms;
 using T3.SystemUi;
-using T3.SystemUi.Logging;
 
 namespace T3.Editor.SplashScreen;
 
