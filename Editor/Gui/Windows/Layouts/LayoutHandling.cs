@@ -20,7 +20,6 @@ namespace T3.Editor.Gui.Windows.Layouts;
 /// </summary>    
 internal static class LayoutHandling
 {
-        
     public static void ProcessKeyboardShortcuts()
     {
         // Process Keyboard shortcuts
@@ -80,7 +79,7 @@ internal static class LayoutHandling
                                            .ToList()
                         });
     }
-        
+
     public static string GraphPrefix => "Graph##";
     public static string OutputPrefix => "Output##";
     public static string ParametersPrefix => "Parameters##";
@@ -89,7 +88,7 @@ internal static class LayoutHandling
     {
         // todo - layout should refer to actual project rather than this random bs
         var editableProjects = EditableSymbolProject.AllProjects.OrderBy(x => x.DisplayName).ToArray();
-            
+
         // First update windows settings
         foreach (var config in layout.WindowConfigs)
         {
@@ -97,32 +96,8 @@ internal static class LayoutHandling
                                               .FirstOrDefault(window => window.Config.Title == config.Title);
             if (matchingWindow == null)
             {
-                if (config.Title.StartsWith(GraphPrefix))
+                if (TryOpenProjectForGraphWindows(config, editableProjects))
                 {
-                    if (!GraphWindow.CanOpenAnotherWindow)
-                        continue;
-                        
-                    var title = config.Title.Substring(GraphPrefix.Length);
-                    if (!int.TryParse(title, out var number))
-                    {
-                        Log.Warning($"Can't parse number from \"{config.Title}\"");
-                        continue;
-                    }
-
-                    if (number >= editableProjects.Length)
-                        continue;
-
-                    var project = editableProjects[number];
-                    if (!project.TryGetRootInstance(out var rootInstance))
-                    {
-                        Log.Warning($"Can't find root instance in project \"{project.DisplayName}\"");
-                        continue;
-                    }
-
-                    if (GraphWindow.TryOpenPackage(project, false, rootInstance!, config, number))
-                    {
-                        Log.Debug($"Initialized graph window layout for project \"{project.DisplayName}\"");
-                    }
                 }
                 else if (config.Title.StartsWith(OutputPrefix))
                 {
@@ -158,6 +133,50 @@ internal static class LayoutHandling
         }
     }
 
+    /// <summary>
+    /// We use the window name ##suffix as an index to identify and load project for restoring layouts. 
+    /// </summary>
+    /// <todo>
+    /// This should be changed because:
+    /// - it will not work for pre-defined layouts
+    /// - it will break if new projects are added and the sorting order changes (a work around would be to use GetHashCode())
+    ///
+    /// Before we invest more time here, we should first clarify what the expected UI-behaviour should be.
+    /// </todo>
+    private static bool TryOpenProjectForGraphWindows(Window.WindowConfig config, IReadOnlyList<EditableSymbolProject> editableProjects)
+    {
+        if (!config.Title.StartsWith(GraphPrefix))
+            return false;
+
+        if (!GraphWindow.CanOpenAnotherWindow)
+            return false;
+
+        var indexSuffix = config.Title.Substring(GraphPrefix.Length);
+        if (!int.TryParse(indexSuffix, out var number))
+        {
+            Log.Warning($"Can't parse number from \"{config.Title}\"");
+            return false;
+        }
+
+        if (number >= editableProjects.Count)
+            return false;
+
+        var project = editableProjects[number];
+        if (!project.TryGetRootInstance(out var rootInstance))
+        {
+            //Log.Warning($"Can't use project for layout: \"{project.DisplayName}\"");
+            return false;
+        }
+
+        if (!GraphWindow.TryOpenPackage(project, false, rootInstance, config, number))
+        {
+            Log.Warning($"Failed to open project \"{project.DisplayName}\"");
+            return false;
+        }
+        Log.Debug($"Initialized graph window layout for project \"{project.DisplayName}\"");
+        return true;
+    }
+
     private static void SaveLayout(int index)
     {
         Directory.CreateDirectory(LayoutFolder);
@@ -182,9 +201,9 @@ internal static class LayoutHandling
         var isFocusMode = index == 11;
 
         var relativePath = Path.Combine(LayoutSubfolder, GetLayoutFilename(index));
-        if(!UserData.TryLoadOrWriteToUser(relativePath, out var jsonBlob))
+        if (!UserData.TryLoadOrWriteToUser(relativePath, out var jsonBlob))
             return;
-            
+
         var serializer = JsonSerializer.Create();
         var fileTextReader = new StringReader(jsonBlob);
         if (serializer.Deserialize(fileTextReader, typeof(Layout)) is not Layout layout)
@@ -198,6 +217,7 @@ internal static class LayoutHandling
         {
             graphWindow.SetWindowToNormal();
         }
+
         if (!isFocusMode)
         {
             UserSettings.Config.WindowLayoutIndex = index;
