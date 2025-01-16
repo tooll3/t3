@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Numerics;
 using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Resource;
 
 // ReSharper disable RedundantNameQualifier
 

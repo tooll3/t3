@@ -4,14 +4,14 @@ using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.SystemUi;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Dialogs;
-using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Graph.Interaction.Connections;
+using T3.Editor.Gui.Graph.Legacy;
+using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Helpers;
 
 namespace T3.Editor.Gui.Windows;
 

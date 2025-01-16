@@ -2,11 +2,11 @@
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.GraphUiModel;
+using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
-using T3.Editor.UiModel;
 using T3.SystemUi.Logging;
 
 namespace T3.Editor.Gui.Windows;

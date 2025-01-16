@@ -3,12 +3,12 @@ using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.ProjectSession;
 using Vector2 = System.Numerics.Vector2;
 
 

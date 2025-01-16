@@ -2,7 +2,6 @@ using System.Diagnostics;
 using NewTek;
 using NewTek.NDI;
 using SharpDX.Direct3D11;
-using SharpDX.DXGI;
 using T3.Core.Animation;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.Utils;

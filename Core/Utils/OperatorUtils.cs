@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using T3.Core.Operator;
-using T3.Core.Resource;
 
 namespace T3.Core.Utils;
 

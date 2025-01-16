@@ -1,6 +1,6 @@
 ﻿#nullable enable
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.UiHelpers;

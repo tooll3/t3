@@ -2,13 +2,13 @@
 using System.Text;
 using ImGuiNET;
 using T3.Core.DataTypes;
-using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Helpers;
 
 namespace T3.Editor.Gui.MagGraph.Interaction;
 

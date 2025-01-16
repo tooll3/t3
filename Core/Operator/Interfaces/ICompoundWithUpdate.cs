@@ -1,7 +1,4 @@
-﻿using System;
-using T3.Core.Operator.Slots;
-
-namespace T3.Core.Operator.Interfaces;
+﻿namespace T3.Core.Operator.Interfaces;
 
 /// <summary>
 /// Provides a special hook to combine compound operators with an update method.

@@ -2,11 +2,11 @@
 using ImGuiNET;
 using T3.Core.Model;
 using T3.Core.Operator;
-using T3.Editor.Gui.Graph.Helpers;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Modification;
+using GraphUtils = T3.Editor.UiModel.Helpers.GraphUtils;
 
 namespace T3.Editor.Gui.Graph.Dialogs;
 

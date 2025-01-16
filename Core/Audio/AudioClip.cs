@@ -1,7 +1,6 @@
 ﻿#nullable enable
 using System;
 using System.Diagnostics.CodeAnalysis;
-using ManagedBass;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Logging;

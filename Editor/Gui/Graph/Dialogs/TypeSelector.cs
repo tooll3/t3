@@ -6,9 +6,9 @@ using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.Graph.Dialogs;
 
-public static class TypeSelector
+internal static class TypeSelector
 {
-    public static void Draw(ref Type selectedType)
+    internal static void Draw(ref Type selectedType)
     {
         if (!_initialized)
         {

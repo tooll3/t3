@@ -1,8 +1,6 @@
 #nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 
 // ReSharper disable ConvertToLocalFunction

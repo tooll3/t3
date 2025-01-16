@@ -3,16 +3,15 @@ using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Editor.Gui.Commands;
-using T3.Editor.Gui.Commands.Animation;
-using T3.Editor.Gui.Commands.Graph;
-using T3.Editor.Gui.Graph.Helpers;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.Snapping;
-using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Commands;
+using T3.Editor.UiModel.Commands.Animation;
+using T3.Editor.UiModel.Commands.Graph;
+using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.Windows.TimeLine;
 

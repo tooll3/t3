@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 using Int3 = T3.Core.DataTypes.Vector.Int3;
 

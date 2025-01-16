@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using T3.Core.DataTypes;
 using T3.Core.Logging;

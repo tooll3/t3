@@ -2,8 +2,7 @@
 using ImGuiNET;
 using T3.Core.Resource;
 using T3.Core.SystemUi;
-using T3.Editor.Gui.Commands;
-using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -12,6 +11,7 @@ using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Commands;
 
 namespace T3.Editor.Gui;
 

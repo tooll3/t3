@@ -1,9 +1,9 @@
 ﻿using ImGuiNET;
 using T3.Core.DataTypes;
 using T3.Core.SystemUi;
-using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Variations;
@@ -11,6 +11,7 @@ using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Commands;
 
 namespace T3.Editor.Gui.MagGraph.Interaction;
 

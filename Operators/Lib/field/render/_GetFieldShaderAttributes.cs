@@ -1,5 +1,4 @@
 using Lib.render._dx11.api;
-using Lib.render._dx11.buffer;
 using SharpDX;
 using SharpDX.Direct3D11;
 using Utilities = T3.Core.Utils.Utilities;

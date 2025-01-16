@@ -1,6 +1,7 @@
 #nullable enable
 using ImGuiNET;
-using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.GraphUiModel;
+using T3.Editor.Gui.Graph.Legacy.Interaction;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 

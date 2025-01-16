@@ -2,7 +2,7 @@
 using ImGuiNET;
 using Newtonsoft.Json;
 using T3.Core.UserData;
-using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;

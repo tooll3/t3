@@ -1,6 +1,5 @@
 using System.Collections.Frozen;
 using System.Numerics;
-using T3.Core.Logging;
 using T3.SystemUi;
 using MouseButtons = T3.SystemUi.MouseButtons;
 

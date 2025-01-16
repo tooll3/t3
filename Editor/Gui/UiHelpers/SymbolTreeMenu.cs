@@ -1,5 +1,5 @@
 ﻿using ImGuiNET;
-using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Legacy.Interaction;
 using T3.Editor.Gui.Windows;
 
 namespace T3.Editor.Gui.UiHelpers;

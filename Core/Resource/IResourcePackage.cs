@@ -1,7 +1,6 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
-using T3.Core.Compilation;
 using T3.Core.Model;
 
 namespace T3.Core.Resource;

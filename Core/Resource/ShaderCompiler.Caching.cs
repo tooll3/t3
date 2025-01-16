@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
-using SharpDX.D3DCompiler;
 using T3.Core.Logging;
 using T3.Core.SystemUi;
 

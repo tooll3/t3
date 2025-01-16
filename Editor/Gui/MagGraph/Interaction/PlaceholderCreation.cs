@@ -2,13 +2,13 @@
 using System.Diagnostics;
 using ImGuiNET;
 using T3.Core.Operator;
-using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
-using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Commands.Graph;
+using T3.Editor.UiModel.Selection;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.MagGraph.Interaction;

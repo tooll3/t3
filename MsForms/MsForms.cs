@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using Microsoft.VisualBasic.Logging;
 using T3.SystemUi;
 
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter

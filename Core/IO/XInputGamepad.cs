@@ -1,4 +1,3 @@
-using SharpDX;
 using SharpDX.XInput;
 
 

@@ -1,7 +1,7 @@
 ﻿using ImGuiNET;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
-using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.Interaction;
 
 namespace T3.Editor.Gui.InputUi.CombinedInputs;

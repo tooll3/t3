@@ -1,9 +1,12 @@
-﻿using T3.Core.Model;
+﻿#nullable enable
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Editor.Gui.Commands;
-using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Graph.Legacy.Interaction;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Commands;
+using T3.Editor.UiModel.Commands.Graph;
+using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.Graph.Interaction;
 

@@ -1,6 +1,3 @@
-using T3.Core.Utils;
-using static Lib.Utils.HitFilmComposite;
-
 namespace Lib.field.analyze;
 
 [Guid("c7ef5f64-2654-47a8-a2ab-30b28446b934")]

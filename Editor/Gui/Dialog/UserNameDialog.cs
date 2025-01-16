@@ -1,7 +1,7 @@
 ﻿using ImGuiNET;
-using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using GraphUtils = T3.Editor.UiModel.Helpers.GraphUtils;
 
 namespace T3.Editor.Gui.Dialog;
 

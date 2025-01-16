@@ -1,6 +1,4 @@
-﻿using SharpDX.Direct3D11;
-
-namespace T3.Core.DataTypes;
+﻿namespace T3.Core.DataTypes;
 
 public class RenderTargetReference
 {

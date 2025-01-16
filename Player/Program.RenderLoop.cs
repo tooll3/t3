@@ -7,7 +7,6 @@ using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.Logging;
 using T3.Core.Operator.Slots;
-using T3.Core.SystemUi;
 
 namespace T3.Player;
 

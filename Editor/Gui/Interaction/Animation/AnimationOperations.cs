@@ -1,9 +1,9 @@
 ﻿using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
-using T3.Editor.Gui.Commands;
-using T3.Editor.Gui.Commands.Animation;
 using T3.Editor.Gui.Windows.TimeLine;
+using T3.Editor.UiModel.Commands;
+using T3.Editor.UiModel.Commands.Animation;
 
 namespace T3.Editor.Gui.Interaction.Animation;
 

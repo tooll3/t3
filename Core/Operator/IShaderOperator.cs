@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Concurrent;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator.Interfaces;

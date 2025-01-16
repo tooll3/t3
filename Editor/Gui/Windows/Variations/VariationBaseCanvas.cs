@@ -5,13 +5,13 @@ using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.OutputUi;
-using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.UiHelpers.DelaunayVoronoi;
 using T3.Editor.Gui.Windows.Exploration;
 using T3.Editor.Gui.Windows.Output;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Selection;
 using Point = T3.Editor.Gui.UiHelpers.DelaunayVoronoi.Point;
 using Vector2 = System.Numerics.Vector2;
 

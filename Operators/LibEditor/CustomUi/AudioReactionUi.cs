@@ -1,4 +1,3 @@
-using System;
 using System.Numerics;
 using ImGuiNET;
 using Lib.io.audio;

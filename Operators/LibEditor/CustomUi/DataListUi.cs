@@ -1,10 +1,8 @@
 using ImGuiNET;
-using Lib.numbers.data;
 using T3.Core.Operator;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-using Types;
 using Types.Collections;
 using Vector2 = System.Numerics.Vector2;
 

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.IO;
 using ManagedBass;
 using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Logging;
-using T3.Core.Resource;
 
 namespace T3.Core.Audio;
 

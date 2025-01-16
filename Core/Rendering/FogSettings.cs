@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.Resource;
 

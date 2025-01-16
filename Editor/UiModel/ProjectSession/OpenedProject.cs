@@ -1,6 +1,7 @@
 #nullable enable
 using System.Diagnostics.CodeAnalysis;
 using T3.Core.Operator;
+using T3.Editor.Gui.Graph.GraphUiModel;
 
 namespace T3.Editor.UiModel.ProjectSession;
 

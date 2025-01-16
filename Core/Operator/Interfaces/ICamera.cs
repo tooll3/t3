@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using T3.Core.Utils;
+﻿using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 
 namespace T3.Core.Operator.Interfaces;

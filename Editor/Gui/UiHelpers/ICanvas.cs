@@ -1,5 +1,5 @@
 using T3.Core.Operator;
-using T3.Editor.Gui.Selection;
+using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.UiHelpers;
     

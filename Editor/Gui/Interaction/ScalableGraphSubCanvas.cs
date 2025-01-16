@@ -1,6 +1,6 @@
 
 #nullable enable
-using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.Legacy;
 
 namespace T3.Editor.Gui.Interaction;
 

@@ -2,12 +2,13 @@
 using System.Diagnostics.CodeAnalysis;
 using ImGuiNET;
 using T3.Core.Operator;
-using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Helpers;
-using T3.Editor.Gui.Selection;
+using T3.Editor.Gui.Graph.GraphUiModel;
+using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.Output;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.Selection;
 using Icon = T3.Editor.Gui.Styling.Icon;
 
 namespace T3.Editor.Gui.Windows;
