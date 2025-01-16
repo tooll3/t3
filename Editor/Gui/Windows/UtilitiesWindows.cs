@@ -1,8 +1,8 @@
 ﻿using ImGuiNET;
-using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.Utilities;
 using T3.Editor.UiModel.Commands;
+using T3.Editor.UiModel.ProjectSession;
 
 // ReSharper disable PossibleMultipleEnumeration
 
@@ -76,7 +76,7 @@ public class UtilitiesWindow : Window
                         ImGui.TreePop();
                     }
 
-                    var graphInfo = GraphWindow.Focused?.Components;
+                    var graphInfo = ProjectEditing.Components;
                     
                     if (graphInfo != null && ImGui.TreeNode("Navigation history"))
                     {

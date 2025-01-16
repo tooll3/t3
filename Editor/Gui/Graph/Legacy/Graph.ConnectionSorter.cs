@@ -3,10 +3,10 @@ using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Legacy.Interaction;
 using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.InputsAndTypes;
 
 namespace T3.Editor.Gui.Graph.Legacy;
 

@@ -558,10 +558,12 @@ internal static class ConnectionMaker
         if (primaryOutput == null)
             return;
 
-        var canvas = components.GraphCanvas;
+        if (components.GraphCanvas is not GraphCanvas canvas)
+            return;
+        
         var connectionList = _graphWindowInProgressConnections[canvas];
         StartOperation(connectionList, "Insert Operator");
-        InsertSymbolBrowser(components, childUi, instance, primaryOutput, components.SymbolBrowser);
+        InsertSymbolBrowser(components, childUi, instance, primaryOutput, canvas.SymbolBrowser);
     }
 
     public static void InsertSymbolInstance(GraphComponents components, Symbol symbol)

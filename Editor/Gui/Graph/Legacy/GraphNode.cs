@@ -13,13 +13,13 @@ using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Graph.Legacy.Interaction;
 using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.InputsAndTypes;
 using T3.Editor.UiModel.ProjectSession;
 using T3.Editor.UiModel.Selection;
 using Color = T3.Core.DataTypes.Vector.Color;
@@ -57,7 +57,7 @@ internal sealed class GraphNode
         var visibleInputUis = FindVisibleInputUis(symbolUi, childUi, ref nodeHasHiddenMatchingInputs);
         var tempConnections = ConnectionMaker.GetTempConnectionsFor(_canvas);
         bool hasConnections = tempConnections.Count > 0;
-        bool inActiveWindow = _canvas == GraphWindow.Focused?.GraphCanvas;
+        bool inActiveWindow = _canvas == ProjectEditing.FocusedCanvas;
 
         var framesSinceLastUpdate = 100;
         foreach (var output in instance.Outputs)
@@ -225,7 +225,7 @@ internal sealed class GraphNode
 
                 isNodeHovered = !preventInteraction 
                                 && ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) 
-                                && !_components.SymbolBrowser.IsOpen
+                                && !_canvas.SymbolBrowser.IsOpen
                                 && ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup);
                     
                 // Tooltip
@@ -955,7 +955,7 @@ internal sealed class GraphNode
                 //
                 // - If the user completes the symbol browser, it must complete the previous connections from the temp connections.
                 // - If the user cancels the operation, the previous state has to be restored. This might be tricky
-                ConnectionMaker.InitSymbolBrowserAtPosition(_canvas, _components.SymbolBrowser,
+                ConnectionMaker.InitSymbolBrowserAtPosition(_canvas, _canvas.SymbolBrowser,
                                                             childUi.PosOnCanvas + new Vector2(childUi.Size.X + SelectableNodeMovement.SnapPadding.X, 0));
             }
         }
@@ -1161,7 +1161,7 @@ internal sealed class GraphNode
                         {
                             ConnectionMaker.StartFromInputSlot(_canvas, targetUi.SymbolChild.Parent, targetUi, inputDef);
                             var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(targetUi.SymbolChild.Parent, targetUi);
-                            ConnectionMaker.InitSymbolBrowserAtPosition(_canvas, _components.SymbolBrowser, freePosition);
+                            ConnectionMaker.InitSymbolBrowserAtPosition(_canvas, _canvas.SymbolBrowser, freePosition);
                         }
                         else if (ImGui.IsMouseReleased(ImGuiMouseButton.Right) && ImGui.GetIO().KeyCtrl)
                         {

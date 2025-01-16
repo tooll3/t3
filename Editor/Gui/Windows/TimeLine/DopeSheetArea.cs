@@ -3,7 +3,6 @@ using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Utils;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Animation;
@@ -13,6 +12,7 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Animation;
+using T3.Editor.UiModel.InputsAndTypes;
 using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.Windows.TimeLine;

@@ -11,7 +11,6 @@ using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Legacy.Interaction;
 using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.OutputUi;
@@ -20,6 +19,7 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
+using T3.Editor.UiModel.InputsAndTypes;
 using T3.Editor.UiModel.Modification;
 using T3.Editor.UiModel.ProjectSession;
 using T3.Editor.UiModel.Selection;
@@ -32,19 +32,22 @@ namespace T3.Editor.Gui.Graph.Legacy;
 /// </summary>
 internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 {
+    public SymbolBrowser SymbolBrowser { get; set; }
+    
     private readonly NodeSelection _nodeSelection;
     private readonly NavigationHistory _navigationHistory;
     private readonly NodeNavigation _nodeNavigation;
     private readonly NodeGraphLayouting _nodeGraphLayouting;
     private  Legacy.Graph _graph;
     private Structure Structure => _components.OpenedProject.Structure;
+    
     private GraphComponents _components;
     public GraphComponents Components
     {
         set
         {
             _components = value;
-            _graph = new Legacy.Graph(_components, this, () => _components.SymbolBrowser);
+            _graph = new Legacy.Graph(_components, this, () => SymbolBrowser);
         }
     }
 
@@ -92,7 +95,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         
         var editingFlags = T3Ui.EditingFlags.None;
 
-        if (_components.SymbolBrowser.IsOpen)
+        if (SymbolBrowser.IsOpen)
             editingFlags |= T3Ui.EditingFlags.PreventZoomWithMouseWheel;
 
         if (preventInteractions)
@@ -141,9 +144,9 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
                     if (UserSettings.Config.FocusMode)
                     {
                         var selectedImage = _nodeSelection.GetFirstSelectedInstance();
-                        if (selectedImage != null && GraphWindow.Focused != null)
+                        if (selectedImage != null && ProjectEditing.Components != null)
                         {
-                            GraphWindow.Focused.Components.SetBackgroundOutput(selectedImage);
+                            ProjectEditing.Components.SetBackgroundOutput(selectedImage);
                         }
                     }
                     else
@@ -155,9 +158,9 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
                 if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
                 {
                     var selectedImage = _nodeSelection.GetFirstSelectedInstance();
-                    if (selectedImage != null && GraphWindow.Focused != null)
+                    if (selectedImage != null && ProjectEditing.Components != null)
                     {
-                        GraphWindow.Focused.Components.SetBackgroundOutput(selectedImage);
+                        ProjectEditing.Components.SetBackgroundOutput(selectedImage);
                         //GraphWindow.Focused.SetBackgroundInstanceForCurrentGraph(selectedImage);
                     }
                 }
@@ -288,7 +291,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
                 ConnectionSplitHelper.PrepareNewFrame(_components);
             }
 
-            _components.SymbolBrowser.Draw();
+            SymbolBrowser.Draw();
 
             graphOpacity *= _preventInteractions ? 0.3f : 1;
             _graph.DrawGraph(drawList, _drawingFlags.HasFlag(GraphDrawingFlags.PreventInteractions), _components.CompositionOp, graphOpacity);
@@ -323,7 +326,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
                     ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem | ImGuiHoveredFlags.AllowWhenBlockedByPopup) && !isAnyItemHovered;
                 if (droppedOnBackground)
                 {
-                    ConnectionMaker.InitSymbolBrowserAtPosition(this, _components.SymbolBrowser, InverseTransformPositionFloat(ImGui.GetIO().MousePos));
+                    ConnectionMaker.InitSymbolBrowserAtPosition(this, SymbolBrowser, InverseTransformPositionFloat(ImGui.GetIO().MousePos));
                 }
                 else
                 {
@@ -366,6 +369,16 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
             LibWarningDialog.Draw(_components);
             EditNodeOutputDialog.Draw();
+    }
+
+    public bool HasActiveInteraction
+    {
+        get
+        {
+            var t = ConnectionMaker.GetTempConnectionsFor(this);
+            return t.Count > 0;
+        }
+        set { }
     }
 
     private void HandleFenceSelection(Instance compositionOp, SelectionFence selectionFence)
@@ -712,7 +725,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         {
             var startingSearchString = selectedChildUis[0].SymbolChild.Symbol.Name;
             var position = selectedChildUis.Count == 1 ? selectedChildUis[0].PosOnCanvas : InverseTransformPositionFloat(ImGui.GetMousePos());
-            _components.SymbolBrowser.OpenAt(position, null, null, false, startingSearchString,
+            SymbolBrowser.OpenAt(position, null, null, false, startingSearchString,
                                  symbol => { ChangeSymbol.ChangeOperatorSymbol(_nodeSelection, compositionOp, selectedChildUis, symbol); });
         }
 
@@ -767,7 +780,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         {
             if (ImGui.MenuItem("Add Node...", "TAB", false, true))
             {
-                _components.SymbolBrowser.OpenAt(InverseTransformPositionFloat(clickPosition), null, null, false);
+                SymbolBrowser.OpenAt(InverseTransformPositionFloat(clickPosition), null, null, false);
             }
 
             if (canModify)

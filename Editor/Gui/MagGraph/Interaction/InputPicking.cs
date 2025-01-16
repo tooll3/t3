@@ -1,12 +1,12 @@
 ﻿using System.Diagnostics;
 using ImGuiNET;
 using T3.Core.Operator;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel.Commands.Graph;
+using T3.Editor.UiModel.InputsAndTypes;
 using T3.Editor.UiModel.ProjectSession;
 using T3.Editor.UiModel.Selection;
 

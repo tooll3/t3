@@ -19,5 +19,10 @@ internal interface IGraphCanvas : IScalableCanvas
     void BeginDraw(bool backgroundActive, bool bgHasInteractionFocus);
     void DrawGraph(ImDrawListPtr drawList, float graphOpacity);
     
+    /// <summary>
+    /// Should be active during actions like dragging a connection.
+    /// </summary>
+    bool HasActiveInteraction { get; }
+    
     public GraphComponents Components { set; }
 }

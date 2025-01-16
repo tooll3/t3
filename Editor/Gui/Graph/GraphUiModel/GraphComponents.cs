@@ -1,8 +1,6 @@
 #nullable enable
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Dialogs;
-using T3.Editor.Gui.Graph.Legacy;
-using T3.Editor.Gui.Graph.Legacy.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.TimeLine;
 using T3.Editor.UiModel;
@@ -19,8 +17,7 @@ internal sealed class GraphComponents
     public readonly NodeNavigation NodeNavigation;
     public Structure Structure => OpenedProject.Structure;
 
-    public IGraphCanvas _graphCanvas;
-    public IGraphCanvas GraphCanvas => _graphCanvas;
+    public IGraphCanvas GraphCanvas { get; set; } // TODO: remove set accessibility
 
     private readonly Stack<Composition> _compositionsForDisposal = new();
     public OpenedProject OpenedProject { get; }
@@ -29,7 +26,7 @@ internal sealed class GraphComponents
     public Instance? CompositionOp => Composition?.Instance;
 
     public readonly TimeLineCanvas TimeLineCanvas;
-    public SymbolBrowser SymbolBrowser { get; set; }
+    // public SymbolBrowser SymbolBrowser { get; set; }
 
     public event Action<GraphComponents, Guid> OnCompositionChanged;
 

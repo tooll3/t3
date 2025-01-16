@@ -2,10 +2,10 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.ChildUi.WidgetUi;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.InputsAndTypes;
 using String = Types.Values.String;
 
 namespace libEditor.CustomUi;

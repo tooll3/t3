@@ -11,7 +11,6 @@ using T3.Core.Resource;
 using T3.Editor.App;
 using T3.Editor.Gui.Dialog;
 using T3.Editor.Gui.Graph.Dialogs;
-using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.Graph.Legacy.Interaction;
 using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
 using T3.Editor.Gui.Interaction;
@@ -27,6 +26,7 @@ using T3.Editor.Gui.Windows.RenderExport;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Helpers;
+using T3.Editor.UiModel.ProjectSession;
 using T3.Editor.UiModel.Selection;
 using T3.SystemUi;
 
@@ -71,7 +71,7 @@ public static class T3Ui
         // Prepare the current frame 
         RenderStatsCollector.StartNewFrame();
             
-        if (!Playback.Current.IsRenderingToFile && GraphWindow.Focused != null)
+        if (!Playback.Current.IsRenderingToFile && ProjectEditing.Components != null)
         {
             PlaybackUtils.UpdatePlaybackAndSyncing();
             AudioEngine.CompleteFrame(Playback.Current, Playback.LastFrameDuration);    // Update
@@ -96,14 +96,12 @@ public static class T3Ui
         ConnectionSnapEndHelper.PrepareNewFrame();
         CompatibleMidiDeviceHandling.UpdateConnectedDevices();
 
-        var nodeSelection = GraphWindow.Focused?.Components.NodeSelection;
-
-        // Set selected id so operator can check if they are selected or not  
-        var selectedInstance = nodeSelection?.GetSelectedInstanceWithoutComposition();
-        MouseInput.SelectedChildId = selectedInstance?.SymbolChildId ?? Guid.Empty;
-
+        var nodeSelection = ProjectEditing.Components?.NodeSelection;
         if (nodeSelection != null)
         {
+            // Set selected id so operator can check if they are selected or not  
+            var selectedInstance = nodeSelection?.GetSelectedInstanceWithoutComposition();
+            MouseInput.SelectedChildId = selectedInstance?.SymbolChildId ?? Guid.Empty;
             InvalidateSelectedOpsForTransormGizmo(nodeSelection);
         }
 
@@ -205,17 +203,20 @@ public static class T3Ui
         else if (KeyboardBinding.Triggered(UserActions.ToggleFocusMode)) ToggleFocusMode();
     }
 
-    public static void ToggleFocusMode()
+    internal static void ToggleFocusMode()
     {
+        var activeComponents = ProjectEditing.Components;
+        if (activeComponents == null)
+            return;
+        
         var shouldBeFocusMode = !UserSettings.Config.FocusMode;
 
         var outputWindow = OutputWindow.GetPrimaryOutputWindow();
-        var primaryGraphWindow = GraphWindow.Focused;
 
-        if (shouldBeFocusMode && outputWindow != null && primaryGraphWindow != null)
+        if (shouldBeFocusMode && outputWindow != null)
         {
             outputWindow.Pinning.TryGetPinnedOrSelectedInstance(out var instance, out _);
-            primaryGraphWindow.GraphImageBackground.OutputInstance = instance;
+            activeComponents.GraphImageBackground.OutputInstance = instance;
         }
 
         UserSettings.Config.FocusMode = shouldBeFocusMode;
@@ -224,10 +225,10 @@ public static class T3Ui
         LayoutHandling.LoadAndApplyLayoutOrFocusMode(shouldBeFocusMode ? 11 : UserSettings.Config.WindowLayoutIndex);
 
         outputWindow = OutputWindow.GetPrimaryOutputWindow();
-        if (!shouldBeFocusMode && outputWindow != null && primaryGraphWindow != null)
+        if (!shouldBeFocusMode && outputWindow != null)
         {
-            outputWindow.Pinning.PinInstance(primaryGraphWindow.GraphImageBackground.OutputInstance, primaryGraphWindow.Components);
-            primaryGraphWindow.GraphImageBackground.ClearBackground();
+            outputWindow.Pinning.PinInstance(activeComponents.GraphImageBackground.OutputInstance, activeComponents);
+            activeComponents.GraphImageBackground.ClearBackground();
         }
     }
 
@@ -282,11 +283,10 @@ public static class T3Ui
 
     internal static void SelectAndCenterChildIdInView(Guid symbolChildId)
     {
-        var primaryGraphWindow = GraphWindow.Focused;
-        if (primaryGraphWindow == null)
+        var components = ProjectEditing.Components;
+        if (components == null || components.CompositionOp == null)
             return;
 
-        var components = primaryGraphWindow.Components;
         var compositionOp = components.CompositionOp;
 
         var symbolUi = compositionOp.GetSymbolUi();

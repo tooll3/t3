@@ -490,6 +490,7 @@ internal sealed partial class GraphWindow : Window
 
     private static readonly string _breadCrumbSeparator = (char)Icon.ChevronRight + "";
     public IGraphCanvas GraphCanvas => Components.GraphCanvas;
+    
     private const int UseComputedHeight = -1;
     private int _customTimeLineHeight = UseComputedHeight;
     private bool UsingCustomTimelineHeight => _customTimeLineHeight > UseComputedHeight;

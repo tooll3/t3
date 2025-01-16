@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using ImGuiNET;
-using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.UiModel.Commands.Graph;
+using T3.Editor.UiModel.ProjectSession;
 using MagItemMovement = T3.Editor.Gui.MagGraph.Interaction.MagItemMovement;
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -78,12 +78,12 @@ internal static class GraphStates
 
                           if (ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left))
                           {
-                              if (GraphWindow.Focused != null)
+                              if (ProjectEditing.Components != null)
                               {
                                   var clickedBackground = context.ActiveItem == null;
                                   if (clickedBackground)
                                   {
-                                      GraphWindow.Focused?.Components.TrySetCompositionOpToParent();
+                                      ProjectEditing.Components.TrySetCompositionOpToParent();
                                   }
                                   else
                                   {
@@ -110,8 +110,8 @@ internal static class GraphStates
                                               {
                                                   // Until we align the context switching between graphs, this hack applies the current
                                                   // MagGraph scope to the legacy graph, so it's correctly saved for the Symbol in the user settings...
-                                                  GraphWindow.Focused.GraphCanvas.SetTargetScope(context.Canvas.GetTargetScope());
-                                                  GraphWindow.Focused.Components.TrySetCompositionOpToChild(context.ActiveItem.Instance.SymbolChildId);
+                                                  ProjectEditing.FocusedCanvas?.SetTargetScope(context.Canvas.GetTargetScope());
+                                                  ProjectEditing.Components.TrySetCompositionOpToChild(context.ActiveItem.Instance.SymbolChildId);
                                                   ImGui.CloseCurrentPopup(); // ?? 
                                               }
                                           }

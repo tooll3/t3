@@ -1,8 +1,8 @@
 ﻿using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.Windows;
+using T3.Editor.UiModel.ProjectSession;
 
 namespace T3.Editor.Gui.MagGraph.Ui;
 
@@ -19,19 +19,17 @@ internal sealed class MagGraphWindow : Window
     
     protected override void DrawContent()
     {
-        var focused = GraphWindow.Focused?.Components;
-        if (focused == null)
-            return;
-        
-        var legacyFocusedCompositionOp = focused.CompositionOp;
+        var graphComponents = ProjectEditing.Components;
+
+        var legacyFocusedCompositionOp = graphComponents?.CompositionOp;
         if (legacyFocusedCompositionOp == null)
             return;
 
         if (_windowCompositionOp != legacyFocusedCompositionOp)
         {
             _windowCompositionOp = legacyFocusedCompositionOp;
-            var nodeSelection = focused.NodeSelection;
-            _graphImageBackground = new GraphImageBackground(nodeSelection, focused.Structure);
+            var nodeSelection = graphComponents.NodeSelection;
+            _graphImageBackground = new GraphImageBackground(nodeSelection, graphComponents.Structure);
             _magGraphCanvas = new MagGraphCanvas(this,  _windowCompositionOp, nodeSelection, _graphImageBackground);
         }
         

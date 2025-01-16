@@ -4,12 +4,12 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.InputsAndTypes;
 
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator

@@ -7,11 +7,11 @@ using T3.Core.Animation;
 using T3.Core.Compilation;
 using T3.Core.SystemUi;
 using T3.Editor.Gui.AutoBackup;
-using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Modification;
+using T3.Editor.UiModel.ProjectSession;
 
 namespace T3.Editor;
 
@@ -52,7 +52,7 @@ internal static class CrashReporting
         var timeOfLastBackup = AutoBackup.GetTimeOfLastBackup();
         var timeSpan = DrawUtils.GetReadableRelativeTime(timeOfLastBackup);
 
-        var components = GraphWindow.Focused?.Components;
+        var components = ProjectEditing.Components;
         
         sentryEvent.SetTag("Nickname", UserSettings.Config.UserName);
         sentryEvent.Contexts["tooll3"]= new
@@ -68,7 +68,7 @@ internal static class CrashReporting
         string? json = null;
         try
         {
-            var primaryComposition = GraphWindow.Focused?.Components.CompositionOp;
+            var primaryComposition = ProjectEditing.Components.CompositionOp;
             if (primaryComposition != null)
             {
                 var compositionUi = primaryComposition.Symbol.GetSymbolUi();

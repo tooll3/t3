@@ -4,12 +4,12 @@ using Lib.numbers.color;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.ChildUi.WidgetUi;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Graph;
+using T3.Editor.UiModel.InputsAndTypes;
 
 namespace libEditor.CustomUi;
 

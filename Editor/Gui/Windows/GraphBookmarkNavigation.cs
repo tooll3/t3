@@ -1,9 +1,9 @@
 using ImGuiNET;
 using T3.Editor.Gui.Graph.GraphUiModel;
-using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.ProjectSession;
 
 namespace T3.Editor.Gui.Windows;
 
@@ -46,14 +46,12 @@ internal static class GraphBookmarkNavigation
 
     public static void DrawBookmarksMenu()
     {
-        var currentWindow = GraphWindow.Focused;
-        if (currentWindow == null)
+        var components = ProjectEditing.Components;
+        if (components == null)
         {
             Log.Warning($"Cannot draw bookmark menu. No focused graph window.");
             return;
         }
-        
-        var components = currentWindow.Components;
 
         if (ImGui.BeginMenu("Load graph bookmark"))
         {

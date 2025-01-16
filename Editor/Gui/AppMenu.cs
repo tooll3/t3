@@ -12,6 +12,7 @@ using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
+using T3.Editor.UiModel.ProjectSession;
 
 namespace T3.Editor.Gui;
 
@@ -36,7 +37,7 @@ internal static class AppMenu
             {
                 UserSettings.Config.ShowMainMenu = true;
 
-                var currentProject = GraphWindow.Focused?.Components.OpenedProject.Package;
+                var currentProject = ProjectEditing.Components?.OpenedProject.Package;
                 var showNewTemplateOption = !T3Ui.IsCurrentlySaving && currentProject != null;
 
                 if (ImGui.MenuItem("New...", KeyboardBinding.ListKeyboardShortcuts(UserActions.New, false), false, showNewTemplateOption))

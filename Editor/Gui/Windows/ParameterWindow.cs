@@ -4,14 +4,14 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.SystemUi;
 using T3.Editor.Gui.Graph.Dialogs;
-using T3.Editor.Gui.Graph.Legacy;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Graph;
+using T3.Editor.UiModel.InputsAndTypes;
+using T3.Editor.UiModel.ProjectSession;
 using T3.Editor.UiModel.Selection;
 using T3.SystemUi;
 
@@ -58,11 +58,11 @@ internal class ParameterWindow : Window
             ImGui.SameLine();
         }
 
-        var graphWindow = GraphWindow.Focused;
-        if (graphWindow == null)
+        var components = ProjectEditing.Components;
+        if (components == null)
             return;
 
-        var nodeSelection = graphWindow.Components.NodeSelection;
+        var nodeSelection = components.NodeSelection;
         if (DrawSettingsForSelectedAnnotations(nodeSelection))
             return;
 
@@ -82,7 +82,7 @@ internal class ParameterWindow : Window
             var selectedInputs = nodeSelection.GetSelectedNodes<IInputUi>().ToList();
             if (selectedInputs.Count > 0)
             {
-                instance = graphWindow.Components.CompositionOp;
+                instance = components.CompositionOp;
                 var inputUi = selectedInputs.First();
                 _viewMode = ViewModes.Settings;
                 _parameterSettings.SelectInput(inputUi.Id);

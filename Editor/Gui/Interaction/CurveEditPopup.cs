@@ -2,9 +2,9 @@
 using ImGuiNET;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.CombinedInputs;
 using T3.Editor.Gui.Styling;
+using T3.Editor.UiModel.InputsAndTypes;
 using Icon = T3.Editor.Gui.Styling.Icon;
 
 namespace T3.Editor.Gui.Interaction;

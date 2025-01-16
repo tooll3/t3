@@ -1,10 +1,10 @@
 ﻿using ImGuiNET;
 using T3.Core.SystemUi;
-using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Styling;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.ProjectSession;
 
 namespace T3.Editor.Gui.Windows.Variations;
 
@@ -37,11 +37,11 @@ internal class VariationsWindow : Window
             _variationsToBeDeletedNextFrame.Clear();
         }
 
-        var graphWindow = GraphWindow.Focused;
-        if (graphWindow == null)
+        var components = ProjectEditing.Components;
+        if (components == null)
             return;
 
-        var nodeSelection = graphWindow.Components.NodeSelection;
+        var nodeSelection = components.NodeSelection;
 
         var compositionHasVariations = VariationHandling.ActivePoolForSnapshots != null && VariationHandling.ActivePoolForSnapshots.AllVariations.Count > 0;
         var oneChildSelected = nodeSelection.Selection.Count == 1;

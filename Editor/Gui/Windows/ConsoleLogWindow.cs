@@ -7,6 +7,7 @@ using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
+using T3.Editor.UiModel.ProjectSession;
 using T3.SystemUi.Logging;
 
 namespace T3.Editor.Gui.Windows;
@@ -177,7 +178,7 @@ public class ConsoleLogWindow : Window, ILogWriter
         ImGui.SameLine(90);
 
         float opacity = 1f;
-        var nodeSelection = GraphWindow.Focused?.Components.NodeSelection;
+        var nodeSelection = ProjectEditing.Components?.NodeSelection;
         if (nodeSelection != null)
         {
             if(nodeSelection.HoveredIds.Contains(entry.SourceId))

@@ -2,10 +2,10 @@
 using System.Diagnostics.CodeAnalysis;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.InputsAndTypes;
 using T3.Editor.UiModel.Selection;
 
 // ReSharper disable UseWithExpressionToCopyStruct

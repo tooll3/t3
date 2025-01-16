@@ -4,7 +4,6 @@ using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.SystemUi;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 using T3.SystemUi;
@@ -435,11 +434,11 @@ internal static class CustomComponents
         ImGui.PopFont();
     }
 
-    public static void FillWithStripes(ImDrawListPtr drawList, ImRect areaOnScreen, float patternWidth = 16)
+    public static void FillWithStripes(ImDrawListPtr drawList, ImRect areaOnScreen, float canvasScale, float patternWidth = 16)
     {
         drawList.PushClipRect(areaOnScreen.Min, areaOnScreen.Max, true);
         var lineColor = new Color(0f, 0f, 0f, 0.2f);
-        var stripeOffset = GraphWindow.Focused == null ? patternWidth : (patternWidth / 2 * GraphWindow.Focused.GraphCanvas.Scale.X);
+        var stripeOffset = (patternWidth / 2 * canvasScale);
         var lineWidth = stripeOffset / 2.7f;
 
         var h = areaOnScreen.GetHeight();

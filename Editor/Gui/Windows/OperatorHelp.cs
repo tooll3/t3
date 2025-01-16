@@ -6,10 +6,10 @@ using T3.Core.SystemUi;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Legacy.Interaction;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Helpers;
+using T3.Editor.UiModel.InputsAndTypes;
 
 namespace T3.Editor.Gui.Windows;
 

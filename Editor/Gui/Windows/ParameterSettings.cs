@@ -1,9 +1,9 @@
 ﻿using ImGuiNET;
 using T3.Core.DataTypes.Vector;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.InputsAndTypes;
 using T3.Editor.UiModel.Modification;
 using T3.Editor.UiModel.Selection;
 

@@ -3,8 +3,8 @@ using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.External.Truncon.Collections;
 using T3.Editor.Gui.Graph.Legacy.Interaction;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.OutputUi;
+using T3.Editor.UiModel.InputsAndTypes;
 using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.UiModel;

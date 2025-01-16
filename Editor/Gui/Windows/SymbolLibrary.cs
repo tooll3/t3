@@ -5,13 +5,13 @@ using T3.Core.Operator;
 using T3.Core.SystemUi;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
-using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Helpers;
+using T3.Editor.UiModel.InputsAndTypes;
+using T3.Editor.UiModel.ProjectSession;
 
 namespace T3.Editor.Gui.Windows;
 
@@ -440,26 +440,25 @@ internal sealed class SymbolLibrary : Window
         var wasClick = ImGui.GetMouseDragDelta().Length() < 4;
         if (wasClick)
         {
-            var window = GraphWindow.Focused;
-            if (window == null)
+            var components = ProjectEditing.Components;
+            if (components == null)
             {
                 Log.Error($"No focused graph window found");
             }
-            else if (window.Components.NodeSelection.GetSelectedChildUis().Count() == 1)
+            else if (components.NodeSelection.GetSelectedChildUis().Count() == 1)
             {
-                ConnectionMaker.InsertSymbolInstance(window.Components, symbol);
+                ConnectionMaker.InsertSymbolInstance(components, symbol);
             }
         }
     }
 
     private static bool IsSymbolCurrentCompositionOrAParent(Symbol symbol)
     {
-        var graphWindow = GraphWindow.Focused;
+        var components = ProjectEditing.Components;
+        if (components?.CompositionOp == null)
+            return false;
 
-        if (graphWindow == null)
-            return true;
-
-        var comp = graphWindow.Components.CompositionOp;
+        var comp = components.CompositionOp;
 
         if (comp.Symbol.Id == symbol.Id)
         {

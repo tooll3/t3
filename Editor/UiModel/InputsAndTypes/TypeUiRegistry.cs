@@ -1,4 +1,4 @@
-﻿namespace T3.Editor.Gui.InputUi;
+﻿namespace T3.Editor.UiModel.InputsAndTypes;
 
 public static class TypeUiRegistry
 {

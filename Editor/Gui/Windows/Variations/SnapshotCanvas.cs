@@ -1,10 +1,10 @@
 ﻿using ImGuiNET;
 using T3.Core.Operator;
-using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Styling;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.ProjectSession;
 using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.Windows.Variations;
@@ -31,16 +31,16 @@ internal class SnapshotCanvas : VariationBaseCanvas
                    : string.Empty;
     }
 
-    protected override void DrawAdditionalContextMenuContent(Instance InstanceForBlendOperations)
+    protected override void DrawAdditionalContextMenuContent(Instance instanceForBlendOperations)
     {
         var oneSelected = CanvasElementSelection.SelectedElements.Count == 1;
         var oneOrMoreSelected = CanvasElementSelection.SelectedElements.Count > 0;
 
-        var graphWindow = GraphWindow.Focused;
-        if (graphWindow == null)
+        var components = ProjectEditing.Components;
+        if (components == null)
             return;
 
-        var nodeSelection = graphWindow.Components.NodeSelection;
+        var nodeSelection = components.NodeSelection;
 
         if (ImGui.MenuItem("Select affected Operators",
                            "",
@@ -54,14 +54,14 @@ internal class SnapshotCanvas : VariationBaseCanvas
                 if (element is not Variation selectedVariation)
                     continue;
 
-                var parentSymbolUi = InstanceForBlendOperations.Symbol.GetSymbolUi();
+                var parentSymbolUi = instanceForBlendOperations.Symbol.GetSymbolUi();
 
                 foreach (var symbolChildUi in parentSymbolUi.ChildUis.Values)
                 {
                     if (!selectedVariation.ParameterSetsForChildIds.ContainsKey(symbolChildUi.Id))
                         continue;
 
-                    if (InstanceForBlendOperations.Children.TryGetValue(symbolChildUi.Id, out var instance))
+                    if (instanceForBlendOperations.Children.TryGetValue(symbolChildUi.Id, out var instance))
                         nodeSelection.AddSelection(symbolChildUi, instance);
                 }
             }

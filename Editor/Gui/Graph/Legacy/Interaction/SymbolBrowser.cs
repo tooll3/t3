@@ -4,7 +4,6 @@ using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Styling;
@@ -14,6 +13,7 @@ using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Graph;
 using T3.Editor.UiModel.Helpers;
+using T3.Editor.UiModel.InputsAndTypes;
 using T3.SystemUi;
 
 namespace T3.Editor.Gui.Graph.Legacy.Interaction;

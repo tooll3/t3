@@ -8,6 +8,7 @@ using T3.Core.DataTypes.Vector;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Editor.Gui;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.Graph.Legacy.Interaction;
@@ -17,15 +18,15 @@ using T3.Editor.Gui.Interaction.Animation;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
-using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Animation;
 using T3.Editor.UiModel.Commands.Graph;
 using T3.Editor.UiModel.Modification;
+using T3.Editor.UiModel.ProjectSession;
 using T3.Editor.UiModel.Selection;
 using T3.Serialization;
 
-namespace T3.Editor.Gui.InputUi;
+namespace T3.Editor.UiModel.InputsAndTypes;
 
 /// <summary>
 /// This abstract implementation for drawing and serializing parameters. 
@@ -137,14 +138,13 @@ public abstract class InputValueUi<T> : IInputUi
         if (input.IsDefault && skipIfDefault)
             return InputEditStateFlags.Nothing;
 
-        var window = GraphWindow.Focused;
-            
-        if(window == null)
+        //var window = GraphWindow.Focused;
+        var components = ProjectEditing.Components;
+        if(components == null)
             return InputEditStateFlags.Nothing;
             
-        var components = window.Components;
         var nodeSelection = components.NodeSelection;
-        IReadOnlyList<ConnectionMaker.TempConnection> tempConnections = ConnectionMaker.GetTempConnectionsFor(window.GraphCanvas);
+        IReadOnlyList<ConnectionMaker.TempConnection> tempConnections = ConnectionMaker.GetTempConnectionsFor(components.GraphCanvas);
 
         if (inputSlot.HasInputConnections)
         {
@@ -252,11 +252,11 @@ public abstract class InputValueUi<T> : IInputUi
                                                                                             input));
                                                         }
 
-                                                        var graphWindow = GraphWindow.Focused;
-                                                        if (graphWindow != null)
+                                                        //var graphWindow = ProjectEditing.Components;
+                                                        if (components.NodeSelection != null)
                                                         {
-                                                            var nodeSelection = components.NodeSelection;
-                                                            var structure = components.Structure;
+                                                            //var nodeSelection = components.NodeSelection;
+                                                            //var structure = components.Structure;
                                                             if (ImGui.MenuItem("Extract as connection operator"))
                                                             {
                                                                 ParameterExtraction.ExtractAsConnectedOperator(nodeSelection, typedInputSlot, symbolChildUi, inputSlot.Input);
@@ -412,8 +412,11 @@ public abstract class InputValueUi<T> : IInputUi
 
         InputEditStateFlags DrawNormalParameter()
         {
+            if (ProjectEditing.Components?.GraphCanvas is not GraphCanvas graphCanvas)
+                return InputEditStateFlags.Nothing;
+            
             // Connection area...
-            InputArea.DrawNormalInputArea<T>(window.GraphCanvas, window.Components.SymbolBrowser, nodeSelection, typedInputSlot, compositionUi, symbolChildUi, input, IsAnimatable, typeColor, tempConnections);
+            InputArea.DrawNormalInputArea<T>(graphCanvas, graphCanvas.SymbolBrowser, nodeSelection, typedInputSlot, compositionUi, symbolChildUi, input, IsAnimatable, typeColor, tempConnections);
                 
             ImGui.SameLine();
 

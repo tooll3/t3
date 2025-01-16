@@ -21,7 +21,8 @@ internal static class ConnectionSplitHelper
     {
         _mousePosition = ImGui.GetMousePos();
         BestMatchLastFrame = _bestMatchYetForCurrentFrame;
-        var graphCanvas = components.GraphCanvas;
+        if (components.GraphCanvas is not GraphCanvas graphCanvas)
+            return;
             
         if (BestMatchLastFrame != null && !ConnectionMaker.HasTempConnectionsFor(graphCanvas))
         {
@@ -46,7 +47,7 @@ internal static class ConnectionSplitHelper
 
                 ConnectionMaker.SplitConnectionWithSymbolBrowser(components, components.CompositionOp!.Symbol,
                                                                  _bestMatchYetForCurrentFrame.Connection,
-                                                                 posOnScreen, components.SymbolBrowser);
+                                                                 posOnScreen, graphCanvas.SymbolBrowser);
             }
 
             ImGui.BeginTooltip();

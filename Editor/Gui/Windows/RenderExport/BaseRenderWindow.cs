@@ -4,9 +4,9 @@ using T3.Core.Audio;
 using T3.Core.DataTypes;
 using T3.Core.SystemUi;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Styling;
+using T3.Editor.UiModel.ProjectSession;
 
 namespace T3.Editor.Gui.Windows.RenderExport;
 
@@ -15,7 +15,7 @@ public abstract class BaseRenderWindow : Window
 
     protected static int SoundtrackChannels()
     {
-        var composition = GraphWindow.Focused?.Components.CompositionOp;
+        var composition = ProjectEditing.Components?.CompositionOp;
         if (composition == null)
             return AudioEngine.GetClipSampleRate(null);
         
@@ -28,7 +28,7 @@ public abstract class BaseRenderWindow : Window
 
     protected static int SoundtrackSampleRate()
     {
-        var composition = GraphWindow.Focused?.Components.CompositionOp;
+        var composition = ProjectEditing.Components?.CompositionOp;
 
         if (composition == null)
             return AudioEngine.GetClipSampleRate(null);
@@ -230,7 +230,7 @@ public abstract class BaseRenderWindow : Window
     protected static void SetPlaybackTimeForThisFrame()
     {
         // get playback settings
-        var composition = GraphWindow.Focused?.Components.CompositionOp;
+        var composition = ProjectEditing.Components?.CompositionOp;
         PlaybackUtils.FindPlaybackSettingsForInstance(composition, out var instanceWithSettings, out var settings);
 
         // change settings for all playback before calculating times

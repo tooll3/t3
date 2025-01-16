@@ -42,7 +42,12 @@ internal sealed partial class GraphWindow
         WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
 
         AllowMultipleInstances = true;
-        components.SymbolBrowser.OnFocusRequested += FocusFromSymbolBrowserHandler;
+
+        if (components.GraphCanvas is not Legacy.GraphCanvas canvas)
+            return;
+        
+        canvas.SymbolBrowser.OnFocusRequested += FocusFromSymbolBrowserHandler;
+        
         OnFocusLost += (_, _) =>
                      {
                          var nodeSelection = components.NodeSelection;
@@ -161,8 +166,8 @@ internal sealed partial class GraphWindow
                              Components = components
                          };
 
-        components._graphCanvas = canvas;
-        components.SymbolBrowser = new SymbolBrowser(components, canvas);
+        components.GraphCanvas = canvas;
+        canvas.SymbolBrowser = new SymbolBrowser(components, canvas);
         return components;
     }
 

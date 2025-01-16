@@ -4,11 +4,11 @@ using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph.Legacy;
-using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
+//using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.TimeLine;
+using T3.Editor.UiModel.ProjectSession;
 
 namespace T3.Editor.Gui.Interaction;
 
@@ -423,14 +423,15 @@ internal abstract class ScalableCanvas : IScalableCanvas
         if (_draggedCanvas == this && !ImGui.IsMouseDragging(ImGuiMouseButton.Right))
             _draggedCanvas = null;
             
-        var currentGraphWindow = GraphWindow.Focused;
-        bool isCurrentGraphCanvas = currentGraphWindow?.GraphCanvas == this;
+        var currentGraphWindow = ProjectEditing.FocusedCanvas;
+        bool isCurrentGraphCanvas = currentGraphWindow == this;
         bool isDraggingConnection = false;
 
         if (isCurrentGraphCanvas)
         {
-            var tempConnections = ConnectionMaker.GetTempConnectionsFor(currentGraphWindow.GraphCanvas);
-            isDraggingConnection = tempConnections.Count > 0 && ImGui.IsWindowFocused();
+            isDraggingConnection = currentGraphWindow.HasActiveInteraction;
+            // var tempConnections = ConnectionMaker.GetTempConnectionsFor(currentGraphWindow);
+            // isDraggingConnection = tempConnections.Count > 0 && ImGui.IsWindowFocused();
         }
             
         // This is a work around to allow the curve edit canvas to control zooming the timeline window

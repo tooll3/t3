@@ -1,7 +1,6 @@
 ﻿using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
@@ -48,7 +47,7 @@ internal class ExplorationWindow : Window
         {
             ImGui.PushStyleVar(ImGuiStyleVar.ItemInnerSpacing, new Vector2(4,4));
 
-            var currentGraphCanvas = GraphWindow.Focused?.Components;
+            var currentGraphCanvas = ProjectEditing.Components;
 
             if (currentGraphCanvas != null)
             {
@@ -62,7 +61,7 @@ internal class ExplorationWindow : Window
         ImGui.SameLine();
         ImGui.BeginChild("canvas", new Vector2(-1, -1), false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
         {
-            _variationCanvas.Draw(GraphWindow.Focused?.Components.Structure);
+            _variationCanvas.Draw(ProjectEditing.Components?.Structure);
         }
         ImGui.EndChild();
     }

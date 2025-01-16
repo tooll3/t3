@@ -2,10 +2,9 @@
 using Newtonsoft.Json.Linq;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Editor.UiModel;
 using T3.Editor.UiModel.Selection;
 
-namespace T3.Editor.Gui.InputUi;
+namespace T3.Editor.UiModel.InputsAndTypes;
 
 [Flags]
 public enum InputEditStateFlags

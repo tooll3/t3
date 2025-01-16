@@ -1,10 +1,11 @@
+#nullable enable
 using System.IO;
 using Newtonsoft.Json;
 using T3.Core.Model;
 using T3.Core.Operator;
-using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Graph;
+using T3.Editor.UiModel.ProjectSession;
 using Vector2 = System.Numerics.Vector2;
 
 // ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
@@ -30,10 +31,12 @@ internal static class GraphOperations
                                           IEnumerable<SymbolUi.Child> selectedChildren, 
                                           List<Annotation> selectedAnnotations, out string resultJsonString)
     {
-            
         resultJsonString = string.Empty;
-            
-        var package = GraphWindow.Focused!.Components.OpenedProject.Package;
+        
+        if (ProjectEditing.Components == null)
+            return false;
+        
+        var package = ProjectEditing.Components.OpenedProject.Package;
         if (!package.TryCreateNewSymbol<object>(out var newContainerUi))
         {
             Log.Error($"Failed to copy nodes to clipboard. Could not create new symbol.");

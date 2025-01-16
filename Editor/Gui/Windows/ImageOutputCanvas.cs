@@ -41,7 +41,7 @@ internal class ImageOutputCanvas : ScalableCanvas
         
     public void DrawTexture(Texture2D texture)
     {
-        CustomComponents.FillWithStripes(ImGui.GetWindowDrawList(), DrawUtils.GetContentRegionArea());
+        CustomComponents.FillWithStripes(ImGui.GetWindowDrawList(), DrawUtils.GetContentRegionArea(), Scale.X);
         LastTexture = texture;
             
         if (texture == null || texture.IsDisposed)

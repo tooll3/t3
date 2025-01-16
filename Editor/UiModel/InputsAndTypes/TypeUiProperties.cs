@@ -1,7 +1,7 @@
 ﻿using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.Styling;
 
-namespace T3.Editor.Gui.InputUi;
+namespace T3.Editor.UiModel.InputsAndTypes;
 
 public readonly struct UiProperties(Func<Color> getColor)
 {

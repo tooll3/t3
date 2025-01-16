@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.GraphUiModel;
-using T3.Editor.Gui.Graph.Legacy;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.Output;
 using T3.Editor.UiModel;
@@ -127,7 +126,7 @@ internal class ViewSelectionPinning
                 }
             }
 
-            if (GraphWindow.Focused != null)
+            if (ProjectEditing.Components != null)
             {
                 if (ImGui.MenuItem("Show in Graph"))
                 {
@@ -181,19 +180,19 @@ internal class ViewSelectionPinning
 
     public bool TryGetPinnedOrSelectedInstance([NotNullWhen(true)] out Instance? instance, [NotNullWhen(true)] out GraphComponents? components)
     {
-        var window = GraphWindow.Focused;
+        var focusedComponents = ProjectEditing.Components;
 
         if (!_isPinned)
         {
-            if (window == null)
+            if (focusedComponents == null)
             {
                 components = null;
                 instance = null;
                 return false;
             }
 
-            components = window.Components;
-            instance = window.Components.NodeSelection.GetFirstSelectedInstance();
+            components = focusedComponents;
+            instance = focusedComponents.NodeSelection.GetFirstSelectedInstance();
             return instance != null;
         }
 
@@ -205,10 +204,10 @@ internal class ViewSelectionPinning
         }
 
         Unpin();
-        if (window != null)
+        if (focusedComponents != null)
         {
-            components = window.Components;
-            instance = window.Components.NodeSelection.GetFirstSelectedInstance();
+            components = focusedComponents;
+            instance = focusedComponents.NodeSelection.GetFirstSelectedInstance();
             return instance != null;
         }
 

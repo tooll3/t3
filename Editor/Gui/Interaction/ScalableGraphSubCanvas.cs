@@ -1,6 +1,6 @@
 
 #nullable enable
-using T3.Editor.Gui.Graph.Legacy;
+using T3.Editor.UiModel.ProjectSession;
 
 namespace T3.Editor.Gui.Interaction;
 
@@ -16,5 +16,5 @@ internal sealed class ScalableGraphSubCanvas : ScalableCanvas
 internal sealed class CurrentGraphSubCanvas : ScalableCanvas
 {
     public CurrentGraphSubCanvas(Vector2? initialScale = null) : base(initialScale) { }
-    public override IScalableCanvas? Parent => GraphWindow.Focused?.GraphCanvas;
+    public override IScalableCanvas? Parent => ProjectEditing.FocusedCanvas;
 }
