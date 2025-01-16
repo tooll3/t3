@@ -4,6 +4,7 @@ using System.Diagnostics;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Legacy.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
@@ -156,7 +157,7 @@ internal sealed partial class MagItemMovement
         if (_borderConnections.Count == 0)
             return false;
 
-        SelectableNodeMovement.DisconnectDraggedNodes(context.CompositionOp, DraggedItems.Select(i => i.Selectable).ToList());
+        NodeActions.DisconnectDraggedNodes(context.CompositionOp, DraggedItems.Select(i => i.Selectable).ToList());
 
         // foreach (var c in _borderConnections)
         // {
@@ -389,11 +390,13 @@ internal sealed partial class MagItemMovement
             return false;
 
         var pair = list[0];
-
-        if (Structure.CheckForCycle(pair.Ca.SourceItem.Instance, pair.Cb.TargetItem.Id))
+        if (pair.Ca.SourceItem.Instance != null)
         {
-            Log.Debug("Sorry, this connection would create a cycle. (1)");
-            return false;
+            if (Structure.CheckForCycle(pair.Ca.SourceItem.Instance, pair.Cb.TargetItem.Id))
+            {
+                Log.Debug("Sorry, this connection would create a cycle. (1)");
+                return false;
+            }
         }
 
         var potentialMovers = CollectSnappedItems(pair.Cb.TargetItem);
@@ -441,10 +444,13 @@ internal sealed partial class MagItemMovement
 
         var pair = list[0];
 
-        if (Structure.CheckForCycle(pair.Ca.SourceItem.Instance, pair.Cb.TargetItem.Id))
+        if (pair.Ca.SourceItem.Instance != null)
         {
-            Log.Debug("Sorry, this connection would create a cycle. (1)");
-            return false;
+            if (Structure.CheckForCycle(pair.Ca.SourceItem.Instance, pair.Cb.TargetItem.Id))
+            {
+                Log.Debug("Sorry, this connection would create a cycle. (1)");
+                return false;
+            }
         }
 
         var potentialMovers = CollectSnappedItems(pair.Cb.TargetItem);
@@ -731,10 +737,10 @@ internal sealed partial class MagItemMovement
     ///<summary>
     /// Search for potential new connections through snapping
     /// </summary>
-    private bool TryCreateNewConnectionFromSnap(GraphUiContext context)
+    private void TryCreateNewConnectionFromSnap(GraphUiContext context)
     {
         if (!_snapping.IsSnapped)
-            return false;
+            return;
 
         Debug.Assert(context.MacroCommand != null);
 
@@ -824,8 +830,6 @@ internal sealed partial class MagItemMovement
                                                                             newConnection,
                                                                             potentialConnection.InputLine.MultiInputIndex));
         }
-
-        return newConnections.Count > 0;
     }
 
     private static void GetPotentialConnectionsAfterSnap(ref List<PotentialConnection> result, MagGraphItem a, MagGraphItem b)
@@ -1002,7 +1006,8 @@ internal sealed partial class MagItemMovement
     ///<summary>
     /// Search for potential new connections through snapping
     /// </summary>
-    private bool TrySplitInsert(GraphUiContext context)
+    // ReSharper disable once UnusedMethodReturnValue.Local
+    private static bool TrySplitInsert(GraphUiContext context)
     {
         if (!_snapping.IsSnapped || _snapping.BestA == null)
             return false;
@@ -1025,16 +1030,22 @@ internal sealed partial class MagItemMovement
             return false;
         }
 
-        if (Structure.CheckForCycle(connection.SourceItem.Instance, insertionPoint.InputItemId))
+        if (connection.SourceItem.Instance != null)
         {
-            Log.Debug("Sorry, this connection would create a cycle. (2)");
-            return false;
+            if (Structure.CheckForCycle(connection.SourceItem.Instance, insertionPoint.InputItemId))
+            {
+                Log.Debug("Sorry, this connection would create a cycle. (2)");
+                return false;
+            }
         }
 
-        if (Structure.CheckForCycle(connection.TargetItem.Instance, insertionPoint.OutputItemId))
+        if (connection.TargetItem.Instance != null)
         {
-            Log.Debug("Sorry, this connection would create a cycle. (3)");
-            return false;
+            if (Structure.CheckForCycle(connection.TargetItem.Instance, insertionPoint.OutputItemId))
+            {
+                Log.Debug("Sorry, this connection would create a cycle. (3)");
+                return false;
+            }
         }
 
         context.MacroCommand.AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,

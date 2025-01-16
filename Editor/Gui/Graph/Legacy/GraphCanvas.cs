@@ -950,9 +950,3 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
     public SelectableNodeMovement SelectableNodeMovement { get; }
 }
 
-public enum GraphHoverModes
-{
-    Disabled,
-    Live,
-    LastValue,
-}

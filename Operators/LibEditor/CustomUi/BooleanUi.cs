@@ -10,9 +10,9 @@ using Boolean = Types.Values.Boolean;
 
 namespace libEditor.CustomUi;
 
-public static class BooleanUi
+internal static class BooleanUi
 {
-    public static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
+    internal static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
     {
         if (instance is not Boolean boolean)
             return SymbolUi.Child.CustomUiResult.None;

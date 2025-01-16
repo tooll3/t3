@@ -242,7 +242,7 @@ internal sealed class GraphNode
                     //ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
                     _components.NodeSelection.HoveredIds.Add(childUi.SymbolChild.Id);
 
-                    if (UserSettings.Config.HoverMode != GraphHoverModes.Disabled
+                    if (UserSettings.Config.HoverMode != UserSettings.GraphHoverModes.Disabled
                         && !ImGui.IsMouseDragging(ImGuiMouseButton.Left)
                         && !RenameInstanceOverlay.IsOpen)
                     {
@@ -261,7 +261,7 @@ internal sealed class GraphNode
                                     _evaluationContext.Reset();
                                     _evaluationContext.RequestedResolution = new Int2(1280 / 2, 720 / 2);
                                     outputUi.DrawValue(firstOutput, _evaluationContext,
-                                                       recompute: UserSettings.Config.HoverMode == GraphHoverModes.Live);
+                                                       recompute: UserSettings.Config.HoverMode == UserSettings.GraphHoverModes.Live);
                                         
                                 }
                                 _imageCanvasForTooltips.Deactivate();

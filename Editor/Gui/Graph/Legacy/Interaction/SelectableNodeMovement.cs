@@ -1,6 +1,7 @@
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
@@ -81,7 +82,7 @@ internal sealed class SelectableNodeMovement(IGraphCanvas graphCanvas, Func<Inst
             {
                 _moveCommand.StoreCurrentValues();
                 UndoRedoStack.Add(_moveCommand);
-                DisconnectDraggedNodes(getCompositionOp(), _draggedNodes);
+                NodeActions.DisconnectDraggedNodes(getCompositionOp(), _draggedNodes);
             }
             HandleNodeDragging(node);
         }
@@ -194,107 +195,6 @@ internal sealed class SelectableNodeMovement(IGraphCanvas graphCanvas, Func<Inst
         }
     }
 
-    public static void DisconnectDraggedNodes(Instance compositionOp, List<ISelectableCanvasObject> draggedNodes)
-    {
-        var removeCommands = new List<ICommand>();
-        var inputConnections = new List<(Symbol.Connection connection, Type connectionType, bool isMultiIndex, int multiInputIndex)>();
-        var outputConnections = new List<(Symbol.Connection connection, Type connectionType, bool isMultiIndex, int multiInputIndex)>();
-        foreach (var node in draggedNodes)
-        {
-            if (node is not SymbolUi.Child childUi)
-                continue;
-
-            if (!compositionOp.Children.TryGetValue(childUi.Id, out var instance))
-            {
-                Log.Error("Can't disconnect missing instance");
-                continue;
-            }
-
-            // Get all input connections and
-            // relative index if they have multi-index inputs
-            var connectionsToInput = instance.Parent.Symbol.Connections.FindAll(c => c.TargetParentOrChildId == instance.SymbolChildId
-                                                                                     && draggedNodes.All(c2 => c2.Id != c.SourceParentOrChildId));                
-            var inConnectionInputIndex = 0;
-            foreach (var connectionToInput in connectionsToInput)
-            {
-                bool isMultiInput = instance.Parent.Symbol.IsTargetMultiInput(connectionToInput);
-                if (isMultiInput)
-                {
-                    inConnectionInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(connectionToInput);
-                }
-                Type connectionType = instance.Inputs.Single(c => c.Id == connectionToInput.TargetSlotId).ValueType;
-                inputConnections.Add((connectionToInput, connectionType, isMultiInput, isMultiInput ? inConnectionInputIndex : 0));
-            }
-
-            // Get all output connections and
-            // relative index if they have multi-index inputs
-            var connectionsToOutput = instance.Parent.Symbol.Connections.FindAll(c => c.SourceParentOrChildId == instance.SymbolChildId
-                                                                                      && draggedNodes.All(c2 => c2.Id != c.TargetParentOrChildId));
-            var outConnectionInputIndex = 0;
-            foreach (var connectionToOutput in connectionsToOutput)
-            {
-                bool isMultiInput = instance.Parent.Symbol.IsTargetMultiInput(connectionToOutput);
-                if (isMultiInput)
-                {
-                    outConnectionInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(connectionToOutput);
-                }
-                Type connectionType = instance.Outputs.Single(c => c.Id == connectionToOutput.SourceSlotId).ValueType;
-                outputConnections.Add((connectionToOutput, connectionType, isMultiInput, isMultiInput ? outConnectionInputIndex : 0));
-            }
-        }
-
-        // Remove the input connections in index descending order to
-        // prevent to get the wrong index in case of multi-input properties
-        inputConnections.Sort((x, y) => y.multiInputIndex.CompareTo(x.multiInputIndex));
-        foreach (var inputConnection in inputConnections)
-        {
-            removeCommands.Add(new DeleteConnectionCommand(compositionOp.Symbol, inputConnection.connection, inputConnection.multiInputIndex));
-        }
-
-        // Remove the output connections in index descending order to
-        // prevent to get the wrong index in case of multi-input properties
-        outputConnections.Sort((x, y) => y.multiInputIndex.CompareTo(x.multiInputIndex));
-        foreach(var outputConnection in outputConnections)
-        {
-            removeCommands.Add(new DeleteConnectionCommand(compositionOp.Symbol, outputConnection.connection, outputConnection.multiInputIndex));
-        }
-
-        // Reconnect inputs of 1th nodes and outputs of last nodes if are of the same type
-        // and reconnect them in ascending order
-        outputConnections.Sort((x, y) => x.multiInputIndex.CompareTo(y.multiInputIndex));
-        inputConnections.Sort((x, y) => x.multiInputIndex.CompareTo(y.multiInputIndex));
-        var outputConnectionsRemaining = new List<(Symbol.Connection connection, Type connectionType, bool isMultiIndex, int multiInputIndex)>(outputConnections);
-        foreach (var itemInputConnection in inputConnections)
-        {
-            foreach (var itemOutputConnectionRemaining in outputConnectionsRemaining)
-            {
-                if (itemInputConnection.connectionType == itemOutputConnectionRemaining.connectionType)
-                {
-                    var newConnection = new Symbol.Connection(sourceParentOrChildId: itemInputConnection.connection.SourceParentOrChildId,
-                                                              sourceSlotId: itemInputConnection.connection.SourceSlotId,
-                                                              targetParentOrChildId: itemOutputConnectionRemaining.connection.TargetParentOrChildId,
-                                                              targetSlotId: itemOutputConnectionRemaining.connection.TargetSlotId);
-
-                    removeCommands.Add(new AddConnectionCommand(compositionOp.Symbol, newConnection, itemOutputConnectionRemaining.multiInputIndex));
-                    outputConnectionsRemaining.Remove(itemOutputConnectionRemaining);
-
-                    break;
-                }
-            }
-            if (outputConnectionsRemaining.Count < 1)
-            {
-                break;
-            }
-        }
-
-        if (removeCommands.Count > 0)
-        {
-            var macro = new MacroCommand("Shake off connections", removeCommands);
-            UndoRedoStack.AddAndExecute(macro);
-        }
-    }
-
-        
     private void HandleNodeDragging(ISelectableCanvasObject draggedNode)
     {
             

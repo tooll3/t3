@@ -542,12 +542,12 @@ internal static class TimeControls
             CustomComponents.ButtonStates state = CustomComponents.ButtonStates.Normal;
             switch (UserSettings.Config.HoverMode)
             {
-                case GraphHoverModes.Disabled:
+                case UserSettings.GraphHoverModes.Disabled:
                     state = CustomComponents.ButtonStates.Dimmed;
                     icon = Icon.HoverPreviewDisabled;
                     hoverModeTooltip = "No preview images on hover";
                     break;
-                case GraphHoverModes.Live:
+                case UserSettings.GraphHoverModes.Live:
                     icon = Icon.HoverPreviewPlay;
                     hoverModeTooltip = "Live Hover Preview - Render explicit thumbnail image.";
                     hoverModeAdditionalTooltip = "This can interfere with the rendering of the current output.";
@@ -562,7 +562,7 @@ internal static class TimeControls
             if (CustomComponents.IconButton(icon, ControlSize, state))
             {
                 UserSettings.Config.HoverMode =
-                    (GraphHoverModes)(((int)UserSettings.Config.HoverMode + 1) % Enum.GetNames(typeof(GraphHoverModes)).Length);
+                    (UserSettings.GraphHoverModes)(((int)UserSettings.Config.HoverMode + 1) % Enum.GetNames(typeof(UserSettings.GraphHoverModes)).Length);
             }
 
             CustomComponents.TooltipForLastItem(hoverModeTooltip, hoverModeAdditionalTooltip);

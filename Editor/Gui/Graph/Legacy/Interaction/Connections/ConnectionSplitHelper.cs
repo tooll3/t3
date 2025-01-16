@@ -96,7 +96,7 @@ internal static class ConnectionSplitHelper
                         IOutputUi outputUi = sourceOpUi.OutputUis[output.OutputDefinition.Id];
                         _evaluationContext.Reset();
                         _evaluationContext.RequestedResolution = new Int2(1280 / 2, 720 / 2);
-                        outputUi.DrawValue(outputSlot, _evaluationContext, recompute: UserSettings.Config.HoverMode == GraphHoverModes.Live);
+                        outputUi.DrawValue(outputSlot, _evaluationContext, recompute: UserSettings.Config.HoverMode == UserSettings.GraphHoverModes.Live);
 
                         // if (!string.IsNullOrEmpty(sourceOpUi.Description))
                         // {
