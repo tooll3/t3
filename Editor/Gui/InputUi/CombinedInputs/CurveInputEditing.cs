@@ -3,15 +3,16 @@ using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Editor.Gui.Commands;
-using T3.Editor.Gui.Commands.Animation;
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.WithCurves;
-using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.TimeLine;
 using T3.Editor.Gui.Windows.TimeLine.Raster;
+using T3.Editor.UiModel.Commands;
+using T3.Editor.UiModel.Commands.Animation;
+using T3.Editor.UiModel.InputsAndTypes;
+using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.InputUi.CombinedInputs;
 
@@ -283,8 +284,8 @@ public static class CurveInputEditing
                     }
                 }
 
-                var graphCanvas = GraphWindow.Focused?.GraphCanvas;
-                DrawCurveCanvas(graphCanvas, DrawCanvasContent, selectionFence, height, _interactionFlags);
+                var graphCanvas = ProjectEditing.FocusedCanvas;
+                DrawCurveCanvas(DrawCanvasContent, selectionFence, height, _interactionFlags);
 
                 void DrawCanvasContent(InteractionState interactionState)
                 {
@@ -320,7 +321,7 @@ public static class CurveInputEditing
                     if (NeedToAdjustScopeAfterFirstRendering)
                     {
                         var bounds = GetBoundsOnCanvas(interaction.GetAllKeyframes());
-                        SetScopeToCanvasArea(bounds, flipY: true, GraphWindow.Focused?.GraphCanvas, 30, 15);
+                        SetScopeToCanvasArea(bounds, flipY: true, ProjectEditing.FocusedCanvas, 30, 15);
                         NeedToAdjustScopeAfterFirstRendering = false;
                     }
                 }

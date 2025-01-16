@@ -12,13 +12,13 @@ using T3.Core.UserData;
 using T3.Editor.App;
 using T3.Editor.Compilation;
 using T3.Editor.Gui;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.Camera;
 using T3.Editor.Gui.Interaction.StartupCheck;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.SystemUi;
+using T3.Editor.UiModel.Helpers;
 using T3.MsForms;
 using T3.SystemUi;
 

@@ -1,18 +1,16 @@
-using System;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.ChildUi.WidgetUi;
-using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.InputsAndTypes;
 using String = Types.Values.String;
 
 namespace libEditor.CustomUi;
 
-public static class StringUi
+internal static class StringUi
 {
     /// <summary>
     /// Draws a custom ui that allows direct editing of strings within the graph 
@@ -24,7 +22,7 @@ public static class StringUi
     ///
     /// Using an invisibleButton interfered with the drag interaction of the node.
     /// </remarks>
-    public static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
+    internal static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
     {
         if (!(instance is String stringInstance))
             return SymbolUi.Child.CustomUiResult.None;

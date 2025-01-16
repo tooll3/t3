@@ -1,9 +1,9 @@
 ﻿#nullable enable
 using System.Diagnostics.CodeAnalysis;
 using ImGuiNET;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.Ui;
+using T3.Editor.UiModel.InputsAndTypes;
 
 namespace T3.Editor.Gui.MagGraph.Interaction;
 

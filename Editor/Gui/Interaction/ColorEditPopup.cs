@@ -6,12 +6,12 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.SystemUi;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.InputUi;
-using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.InputsAndTypes;
+using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.Selection;
 using Color = T3.Core.DataTypes.Vector.Color;
 using Point = System.Drawing.Point;
 
@@ -21,6 +21,10 @@ internal static class ColorEditPopup
 {
     public static InputEditStateFlags DrawPopup(ref Vector4 color, Vector4 previousColor)
     {
+        var composition = ProjectEditing.Components?.CompositionOp;
+        if (composition == null)
+            return InputEditStateFlags.Nothing;
+        
         var edited = InputEditStateFlags.Nothing;
         var cColor = new Color(color);
         ImGui.SetNextWindowSize(new Vector2(257, 360));
@@ -28,7 +32,7 @@ internal static class ColorEditPopup
         var dontCloseIfColorPicking = ImGui.GetIO().KeyAlt ? ImGuiWindowFlags.Modal : ImGuiWindowFlags.None;
 
         var id = ImGui.GetID("colorPicker");
-        var composition = GraphWindow.Focused?.CompositionOp;
+        
         if (ImGui.BeginPopup(PopupId, dontCloseIfColorPicking))
         {
             if (_openedId != id)
@@ -285,7 +289,7 @@ internal static class ColorEditPopup
 
             var area = new ImRect(pMin, pMax);
             drawList.AddRectFilled(pMin - Vector2.One, pMax + Vector2.One, new Color(0.1f, 0.1f, 0.1f));
-            CustomComponents.FillWithStripes(drawList, area);
+            CustomComponents.FillWithStripes(drawList, area, 1);
 
             drawList.AddRectFilledMultiColor(pMin, pMax,
                                              ImGui.ColorConvertFloat4ToU32(transparentColor),
@@ -609,9 +613,9 @@ internal static class ColorEditPopup
                     _isHoveringColor = true;
                     _hoveredColor = c;
 
-                    if (GraphWindow.Focused != null)
+                    if (ProjectEditing.Components != null)
                     {
-                        var nodeSelection = GraphWindow.Focused.GraphCanvas.NodeSelection;
+                        var nodeSelection = ProjectEditing.Components.NodeSelection;
                         foreach (var use in uses)
                         {
                             if (use.Instance == null)
@@ -690,8 +694,11 @@ internal static class ColorEditPopup
     {
         var selectedIds = new HashSet<Guid>();
 
-        var nodeSelection = GraphWindow.Focused?.GraphCanvas.NodeSelection;
-        nodeSelection?.Clear();
+        var nodeSelection = ProjectEditing.Components?.NodeSelection;
+        if (nodeSelection == null)
+            return;
+        
+        nodeSelection.Clear();
         foreach (var use in uses)
         {
             if (use.Instance == null || selectedIds.Contains(use.Instance.SymbolChildId))

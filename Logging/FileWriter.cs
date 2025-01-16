@@ -1,6 +1,4 @@
-﻿using T3.SystemUi.Logging;
-
-namespace T3.Core.Logging;
+﻿namespace T3.Core.Logging;
 
 /// <summary>
 /// Write Debug-Log messages to log files

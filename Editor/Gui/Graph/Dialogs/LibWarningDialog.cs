@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
@@ -7,7 +8,7 @@ namespace T3.Editor.Gui.Graph.Dialogs;
 
 internal class LibWarningDialog : ModalDialog
 {
-    public void Draw(GraphCanvas canvas)
+    public void Draw(GraphComponents components)
     {
         if (BeginDialog("Careful now"))
         {
@@ -27,9 +28,8 @@ internal class LibWarningDialog : ModalDialog
             ImGui.SameLine();
             if (ImGui.Button("I know what I'm doing"))
             {
-                canvas.SetCompositionToChildInstance(HandledInstance);
+                components.TrySetCompositionOpToChild(HandledInstance.SymbolChildId);
                 ImGui.CloseCurrentPopup();
-
             }
 
             // no sane way to "mirror" a ref, note: this whole section could be replaced

@@ -1,5 +1,3 @@
-using System.Numerics;
-
 namespace T3.Core.DataTypes.Vector;
 
 public static class VectorExtensions

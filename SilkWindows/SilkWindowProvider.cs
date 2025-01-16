@@ -1,10 +1,8 @@
-﻿using ImGuiVulkan;
-using T3.SystemUi;
+﻿using T3.SystemUi;
 using Silk.NET.Windowing;
 using Silk.NET.Maths;
 using SilkWindows.Implementations;
 using SilkWindows.OpenGL;
-using ImGuiVulkanWindowImpl = SilkWindows.Vulkan.Silk.NET_Lab.ImGuiVulkanWindowImpl;
 
 namespace SilkWindows;
 

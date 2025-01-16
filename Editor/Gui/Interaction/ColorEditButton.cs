@@ -1,9 +1,9 @@
 ﻿using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel.InputsAndTypes;
 
 namespace T3.Editor.Gui.Interaction;
 
@@ -114,7 +114,7 @@ public static class ColorEditButton
 
     private static bool _modifiedSlider = false;
 
-    public static void VerticalColorSlider(Vector4 color, Vector2 pCenter, float valuePos)
+    internal static void VerticalColorSlider(Vector4 color, Vector2 pCenter, float valuePos)
     {
         const int barHeight = 100;
         const int barWidth = 10;
@@ -123,7 +123,7 @@ public static class ColorEditButton
         var pMax = pMin + new Vector2(barWidth, barHeight);
         var area = new ImRect(pMin, pMax);
         drawList.AddRectFilled(pMin - Vector2.One, pMax + Vector2.One, new Color(0.1f, 0.1f, 0.1f));
-        CustomComponents.FillWithStripes(drawList, area);
+        CustomComponents.FillWithStripes(drawList, area, 1);
 
         // Draw Slider
         var opaqueColor = color;

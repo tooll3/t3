@@ -1,7 +1,4 @@
-using System;
-using System.Linq;
 using ImGuiNET;
-using Lib.numbers.@float;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
@@ -10,7 +7,6 @@ using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-using Types;
 using Types.Values;
 using Vector2 = System.Numerics.Vector2;
 

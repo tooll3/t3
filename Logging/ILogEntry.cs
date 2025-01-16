@@ -1,4 +1,4 @@
-namespace T3.SystemUi.Logging;
+namespace T3.Core.Logging;
 
 public interface ILogEntry
 {

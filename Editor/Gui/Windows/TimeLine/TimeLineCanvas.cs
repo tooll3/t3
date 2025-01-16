@@ -3,18 +3,17 @@ using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Helpers;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Interaction.WithCurves;
-using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.TimeLine.Raster;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.Selection;
+
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 
 namespace T3.Editor.Gui.Windows.TimeLine;
@@ -25,12 +24,14 @@ namespace T3.Editor.Gui.Windows.TimeLine;
 /// </summary>
 internal sealed class TimeLineCanvas : CurveEditCanvas
 {
-    public TimeLineCanvas(GraphCanvas canvas)
+    public TimeLineCanvas(NodeSelection nodeSelection, Func<Instance> getCompositionOp, Func<Guid, bool> requestChildComposition)
     {
+        _nodeSelection = nodeSelection;
+        
         DopeSheetArea = new DopeSheetArea(SnapHandlerForU, this);
         _timelineCurveEditArea = new TimelineCurveEditArea(this, SnapHandlerForU, SnapHandlerForV);
         _timeSelectionRange = new TimeSelectionRange(this, SnapHandlerForU);
-        LayersArea = new LayersArea(SnapHandlerForU, canvas, this);
+        LayersArea = new LayersArea(SnapHandlerForU, this, getCompositionOp, requestChildComposition);
 
         SnapHandlerForV.AddSnapAttractor(_horizontalRaster);
         SnapHandlerForU.AddSnapAttractor(_clipRange);
@@ -38,9 +39,6 @@ internal sealed class TimeLineCanvas : CurveEditCanvas
         SnapHandlerForU.AddSnapAttractor(_timeRasterSwitcher);
         SnapHandlerForU.AddSnapAttractor(_currentTimeMarker);
         SnapHandlerForU.AddSnapAttractor(LayersArea);
-        _structure = canvas.Structure;
-        _nodeSelection = canvas.NodeSelection;
-        _graphCanvas = canvas;
     }
 
     public NodeSelection NodeSelection => _nodeSelection;
@@ -62,7 +60,7 @@ internal sealed class TimeLineCanvas : CurveEditCanvas
         ScrollToTimeAfterStopped();
 
         var modeChanged = UpdateMode();
-        DrawCurveCanvas(this, drawAdditionalCanvasContent: DrawCanvasContent, _selectionFence, 0, T3Ui.EditingFlags.AllowHoveredChildWindows | T3Ui.EditingFlags.IgnoreParentZoom);
+        DrawCurveCanvas(drawAdditionalCanvasContent: DrawCanvasContent, _selectionFence, 0, T3Ui.EditingFlags.AllowHoveredChildWindows);
         Current = null;
             
         T3Ui.UiScaleFactor = keepScale;
@@ -411,13 +409,11 @@ internal sealed class TimeLineCanvas : CurveEditCanvas
     public readonly LayersArea LayersArea;
 
     public static TimeLineCanvas Current;
+    private readonly NodeSelection _nodeSelection;
 
     private double _lastPlaybackSpeed;
     private readonly List<AnimationParameter> _pinnedParams = new(20);
     private readonly List<AnimationParameter> _curvesForSelection = new(64);
-    private readonly Structure _structure;
-    private readonly NodeSelection _nodeSelection;
-    private readonly GraphCanvas _graphCanvas;
     private readonly SelectionFence _selectionFence = new();
 
     // Styling

@@ -1,12 +1,7 @@
 using T3.Core.Operator;
-using T3.Editor.Gui.Selection;
+using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.UiHelpers;
-
-internal interface INodeCanvas:ICanvas
-{
-    IEnumerable<ISelectableCanvasObject> SelectableChildren { get; }
-}
     
 /// <summary>
 /// A zoomable canvas that can hold <see cref="ISelectableCanvasObject"/> elements.

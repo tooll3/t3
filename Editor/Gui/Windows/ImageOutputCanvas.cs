@@ -35,11 +35,13 @@ internal class ImageOutputCanvas : ScalableCanvas
     /// </summary>
     public static ImageOutputCanvas Current = null;
 
+    protected override IScalableCanvas? Parent => null;
+
     public Texture2D LastTexture;
         
     public void DrawTexture(Texture2D texture)
     {
-        CustomComponents.FillWithStripes(ImGui.GetWindowDrawList(), DrawUtils.GetContentRegionArea());
+        CustomComponents.FillWithStripes(ImGui.GetWindowDrawList(), DrawUtils.GetContentRegionArea(), Scale.X);
         LastTexture = texture;
             
         if (texture == null || texture.IsDisposed)

@@ -1,10 +1,10 @@
 ﻿using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
-using T3.Editor.Gui.Commands;
-using T3.Editor.Gui.Commands.Graph;
-using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Commands;
+using T3.Editor.UiModel.Commands.Graph;
+using T3.Editor.UiModel.ProjectSession;
 using Vector2 = System.Numerics.Vector2;
 
 using Vector4 = System.Numerics.Vector4;

@@ -1,6 +1,4 @@
-﻿using T3.SystemUi.Logging;
-
-namespace T3.Core.Logging;
+﻿namespace T3.Core.Logging;
 
 /// <summary>
 /// A singleton that allows to log messages that are forwarded to <see cref="ILogWriter"/>s.

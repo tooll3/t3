@@ -2,8 +2,8 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using T3.Core.Operator;
-using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.UiModel;
+using GraphUtils = T3.Editor.UiModel.Helpers.GraphUtils;
 
 namespace T3.Editor.Compilation;
 

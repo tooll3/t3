@@ -1,10 +1,10 @@
 ﻿using ImGuiNET;
 using T3.Core.SystemUi;
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.ProjectSession;
 
 namespace T3.Editor.Gui.Templates;
 
@@ -26,9 +26,9 @@ public class CreateFromTemplateDialog : ModalDialog
             
         if (BeginDialog("Create"))
         {
-            var graphWindow = GraphWindow.Focused;
+            var graphCanvas = ProjectEditing.FocusedCanvas;
 
-            if (graphWindow == null)
+            if (graphCanvas == null)
             {
                 BlockingWindow.Instance.ShowMessageBox("Can't create from template without open graph window");
                 EndDialog();

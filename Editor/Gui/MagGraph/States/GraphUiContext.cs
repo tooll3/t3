@@ -1,15 +1,14 @@
 ﻿#nullable enable
 using System.Diagnostics;
 using T3.Core.Operator;
-using T3.Editor.Gui.Commands;
-using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Dialogs;
-using T3.Editor.Gui.Graph.Helpers;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.Ui;
+using T3.Editor.UiModel.Commands;
+using T3.Editor.UiModel.Commands.Graph;
+using T3.Editor.UiModel.Selection;
 using MagItemMovement = T3.Editor.Gui.MagGraph.Interaction.MagItemMovement;
 
 namespace T3.Editor.Gui.MagGraph.States;

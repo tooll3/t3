@@ -2,8 +2,6 @@
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
-using T3.Editor.Gui.Graph.Helpers;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.Camera;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
@@ -11,6 +9,8 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Output;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.Selection;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Graph;
@@ -18,7 +18,7 @@ namespace T3.Editor.Gui.Graph;
 /// <summary>
 /// A helper class to render an image output into the background of the graph window 
 /// </summary>
-internal class GraphImageBackground
+internal sealed class GraphImageBackground
 {
 
     public bool IsActive => _backgroundNodePath != null;

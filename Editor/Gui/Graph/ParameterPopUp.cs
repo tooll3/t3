@@ -1,14 +1,15 @@
 ﻿using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Utils;
-using T3.Editor.Gui.Commands;
-using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.Gui.Windows.Variations;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Commands;
+using T3.Editor.UiModel.Commands.Graph;
 
 namespace T3.Editor.Gui.Graph;
 
@@ -55,7 +56,7 @@ internal static class ParameterPopUp
         _isOpen = false;
     }
 
-    public static void DrawParameterPopUp(GraphWindow graphWindow)
+    public static void DrawParameterPopUp(GraphComponents graphWindow)
     {
         if (!_isOpen || _selectedInstance == null)
             return;
@@ -68,7 +69,7 @@ internal static class ParameterPopUp
             return;
         }
 
-        if (!graphWindow.GraphCanvas.NodeSelection.IsAnythingSelected())
+        if (!graphWindow.NodeSelection.IsAnythingSelected())
         {
             Close();
             return;

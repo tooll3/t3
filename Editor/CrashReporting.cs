@@ -7,12 +7,11 @@ using T3.Core.Animation;
 using T3.Core.Compilation;
 using T3.Core.SystemUi;
 using T3.Editor.Gui.AutoBackup;
-using T3.Editor.Gui.Commands;
-using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Commands;
+using T3.Editor.UiModel.Modification;
+using T3.Editor.UiModel.ProjectSession;
 
 namespace T3.Editor;
 
@@ -53,13 +52,13 @@ internal static class CrashReporting
         var timeOfLastBackup = AutoBackup.GetTimeOfLastBackup();
         var timeSpan = DrawUtils.GetReadableRelativeTime(timeOfLastBackup);
 
-        var canvas = GraphWindow.Focused?.GraphCanvas;
+        var components = ProjectEditing.Components;
         
         sentryEvent.SetTag("Nickname", UserSettings.Config.UserName);
         sentryEvent.Contexts["tooll3"]= new
                                             {
                                                 UndoStack = UndoRedoStack.GetUndoStackAsString(),
-                                                Selection = canvas == null ? string.Empty : string.Join("\n", canvas.NodeSelection),
+                                                Selection = components == null ? string.Empty : string.Join("\n", components.NodeSelection),
                                                 Nickname = "",
                                                 RuntimeSeconds = Playback.RunTimeInSecs,
                                                 RuntimeFrames = ImGui.GetFrameCount(),
@@ -69,7 +68,7 @@ internal static class CrashReporting
         string? json = null;
         try
         {
-            var primaryComposition = GraphWindow.Focused?.CompositionOp;
+            var primaryComposition = ProjectEditing.Components.CompositionOp;
             if (primaryComposition != null)
             {
                 var compositionUi = primaryComposition.Symbol.GetSymbolUi();

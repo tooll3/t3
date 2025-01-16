@@ -1,6 +1,6 @@
+#nullable  enable
 using System.Diagnostics;
 using System.Threading.Tasks;
-using T3.Editor.Gui.Graph;
 using ImGuiNET;
 using Operators.Utils.Recording;
 using T3.Core.Animation;
@@ -9,28 +9,24 @@ using T3.Core.DataTypes.DataSet;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Resource;
-using T3.Core.SystemUi;
 using T3.Editor.App;
-using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Dialog;
 using T3.Editor.Gui.Graph.Dialogs;
-using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Midi;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Interaction.Variations;
-using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Templates;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.UiHelpers.Wiki;
-using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.Gui.Windows.Output;
 using T3.Editor.Gui.Windows.RenderExport;
-using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Commands;
+using T3.Editor.UiModel.Helpers;
+using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.Selection;
 using T3.SystemUi;
 
 namespace T3.Editor.Gui;
@@ -74,7 +70,7 @@ public static class T3Ui
         // Prepare the current frame 
         RenderStatsCollector.StartNewFrame();
             
-        if (!Playback.Current.IsRenderingToFile && GraphWindow.Focused != null)
+        if (!Playback.Current.IsRenderingToFile && ProjectEditing.Components != null)
         {
             PlaybackUtils.UpdatePlaybackAndSyncing();
             AudioEngine.CompleteFrame(Playback.Current, Playback.LastFrameDuration);    // Update
@@ -96,17 +92,15 @@ public static class T3Ui
         FitViewToSelectionHandling.ProcessNewFrame();
         SrvManager.RemoveForDisposedTextures();
         KeyboardBinding.InitFrame();
-        ConnectionSnapEndHelper.PrepareNewFrame();
+        
         CompatibleMidiDeviceHandling.UpdateConnectedDevices();
 
-        var nodeSelection = GraphWindow.Focused?.GraphCanvas.NodeSelection;
-
-        // Set selected id so operator can check if they are selected or not  
-        var selectedInstance = nodeSelection?.GetSelectedInstanceWithoutComposition();
-        MouseInput.SelectedChildId = selectedInstance?.SymbolChildId ?? Guid.Empty;
-
+        var nodeSelection = ProjectEditing.Components?.NodeSelection;
         if (nodeSelection != null)
         {
+            // Set selected id so operator can check if they are selected or not  
+            var selectedInstance = nodeSelection.GetSelectedInstanceWithoutComposition();
+            MouseInput.SelectedChildId = selectedInstance?.SymbolChildId ?? Guid.Empty;
             InvalidateSelectedOpsForTransormGizmo(nodeSelection);
         }
 
@@ -119,20 +113,19 @@ public static class T3Ui
             
         // Complete frame
         SingleValueEdit.StartNextFrame();
-        SelectableNodeMovement.CompleteFrame();
+        
         
         FrameStats.CompleteFrame();
         TriggerGlobalActionsFromKeyBindings();
 
         if (UserSettings.Config.ShowMainMenu || ImGui.GetMousePos().Y < 20)
         {
-            DrawAppMenuBar();
+            AppMenu.DrawAppMenuBar();
         }
             
         _searchDialog.Draw();
-        _importDialog.Draw();
-        _newProjectDialog.Draw();
-        _createFromTemplateDialog.Draw();
+        NewProjectDialog.Draw();
+        CreateFromTemplateDialog.Draw();
         _userNameDialog.Draw();
 
         if (IsWindowLayoutComplete())
@@ -209,17 +202,20 @@ public static class T3Ui
         else if (KeyboardBinding.Triggered(UserActions.ToggleFocusMode)) ToggleFocusMode();
     }
 
-    private static void ToggleFocusMode()
+    internal static void ToggleFocusMode()
     {
+        var activeComponents = ProjectEditing.Components;
+        if (activeComponents == null)
+            return;
+        
         var shouldBeFocusMode = !UserSettings.Config.FocusMode;
 
         var outputWindow = OutputWindow.GetPrimaryOutputWindow();
-        var primaryGraphWindow = GraphWindow.Focused;
 
-        if (shouldBeFocusMode && outputWindow != null && primaryGraphWindow != null)
+        if (shouldBeFocusMode && outputWindow != null)
         {
             outputWindow.Pinning.TryGetPinnedOrSelectedInstance(out var instance, out _);
-            primaryGraphWindow.GraphImageBackground.OutputInstance = instance;
+            activeComponents.GraphImageBackground.OutputInstance = instance;
         }
 
         UserSettings.Config.FocusMode = shouldBeFocusMode;
@@ -228,286 +224,14 @@ public static class T3Ui
         LayoutHandling.LoadAndApplyLayoutOrFocusMode(shouldBeFocusMode ? 11 : UserSettings.Config.WindowLayoutIndex);
 
         outputWindow = OutputWindow.GetPrimaryOutputWindow();
-        if (!shouldBeFocusMode && outputWindow != null && primaryGraphWindow != null)
+        if (!shouldBeFocusMode && outputWindow != null)
         {
-            outputWindow.Pinning.PinInstance(primaryGraphWindow.GraphImageBackground.OutputInstance, primaryGraphWindow.GraphCanvas);
-            primaryGraphWindow.GraphImageBackground.ClearBackground();
+            outputWindow.Pinning.PinInstance(activeComponents.GraphImageBackground.OutputInstance, activeComponents);
+            activeComponents.GraphImageBackground.ClearBackground();
         }
     }
 
-    private static void DrawAppMenuBar()
-    {
-        ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6) * T3Ui.UiScaleFactor);
-        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowPaddingForMenus * T3Ui.UiScaleFactor);
-        ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0);
-
-        if (ImGui.BeginMainMenuBar())
-        {
-            if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
-            {
-                UserSettings.Config.ShowMainMenu = true;
-            }
-
-            ImGui.SetCursorPos(new Vector2(0, -1)); // Shift to make menu items selected when hitting top of screen
-
-            if (ImGui.BeginMenu("Project"))
-            {
-                UserSettings.Config.ShowMainMenu = true;
-
-                var currentProject = GraphWindow.Focused?.Package;
-                var showNewTemplateOption = !IsCurrentlySaving && currentProject != null;
-
-                if (ImGui.MenuItem("New...", KeyboardBinding.ListKeyboardShortcuts(UserActions.New, false), false, showNewTemplateOption))
-                {
-                    _createFromTemplateDialog.ShowNextFrame();
-                }
-
-                if (ImGui.MenuItem("New Project"))
-                {
-                    _newProjectDialog.ShowNextFrame();
-                }
-
-                if (currentProject is { IsReadOnly: false } && currentProject is EditableSymbolProject project)
-                {
-                    ImGui.Separator();
-
-                    if (ImGui.BeginMenu("Open.."))
-                    {
-                        if (ImGui.MenuItem("Project Folder"))
-                        {
-                            CoreUi.Instance.OpenWithDefaultApplication(project.Folder);
-                        }
-
-                        if (ImGui.MenuItem("Resource Folder"))
-                        {
-                            CoreUi.Instance.OpenWithDefaultApplication(project.ResourcesFolder);
-                        }
-
-                        if (ImGui.MenuItem("Project in IDE"))
-                        {
-                            CoreUi.Instance.OpenWithDefaultApplication(project.CsProjectFile.FullPath);
-                        }
-                        
-                        ImGui.EndMenu();
-                    }
-                }
-
-                ImGui.Separator();
-
-                // Disabled, at least for now, as this is an incomplete (or not even started) operation on the Main branch atm
-                if (ImGui.MenuItem("Import Operators", null, false, !IsCurrentlySaving))
-                {
-                    BlockingWindow.Instance.ShowMessageBox("This feature is not yet implemented on the main branch - stay tuned for updates!", "Not yet implemented");
-                    //_importDialog.ShowNextFrame();
-                }
-
-                if (ImGui.MenuItem("Fix File references", ""))
-                {
-                    BlockingWindow.Instance.ShowMessageBox("This feature is not yet implemented on the main branch - stay tuned for updates!", "Not yet implemented");
-                    //FileReferenceOperations.FixOperatorFilepathsCommand_Executed();
-                }
-
-                ImGui.Separator();
-
-                if (ImGui.MenuItem("Save", KeyboardBinding.ListKeyboardShortcuts(UserActions.Save, false), false, !IsCurrentlySaving))
-                {
-                    SaveInBackground(saveAll: false);
-                }
-                
-                if (ImGui.MenuItem("Save All", !IsCurrentlySaving))
-                {
-                    Task.Run(() =>
-                             {
-                                 Save(true);
-                             });
-                }
-                
-                ImGui.Separator();
-                
-                if(ImGui.BeginMenu("Load Project", !IsCurrentlySaving && EditableSymbolProject.AllProjects.Any(x => x.HasHome)))
-                {
-                    foreach (var package in EditableSymbolProject.AllProjects)
-                    {
-                        if (!package.HasHome)
-                            continue;
-
-                        var name = package.DisplayName;
-                        
-                        if (ImGui.MenuItem(name))
-                        {
-                            bool replaceFocusedWindow = false;
-
-                            if (GraphWindow.GraphWindowInstances.Count > 0)
-                            {
-                                var choice = BlockingWindow.Instance.ShowMessageBox("Would you like to create a new window?", "Opening " + name, "Yes", "No");
-                                replaceFocusedWindow = choice == "No";
-                            }
-                            
-                            if (!GraphWindow.TryOpenPackage(package, replaceFocusedWindow))
-                            {
-                                Log.Error("Failed to open package " + name);
-                            };
-                        }
-                    }
-                    
-                    ImGui.EndMenu();
-                }
-                
-                ImGui.Separator();
-                
-                if(ImGui.BeginMenu("Clear shader cache"))
-                {
-                    if (ImGui.MenuItem("Editor only"))
-                    {
-                        ShaderCompiler.DeleteShaderCache(all: false);
-                    }
-
-                    if (ImGui.MenuItem("All editor and player versions"))
-                    {
-                        ShaderCompiler.DeleteShaderCache(all: true);
-                    }
-                    
-                    ImGui.EndMenu();
-                }
-                
-                ImGui.Separator();
-
-                if (ImGui.MenuItem("Quit", !IsCurrentlySaving))
-                {
-                    EditorUi.Instance.ExitApplication();
-                }
-
-                if (ImGui.IsItemHovered() && IsCurrentlySaving)
-                {
-                    ImGui.SetTooltip("Can't exit while saving is in progress");
-                }
-
-                ImGui.EndMenu();
-            }
-
-            if (ImGui.BeginMenu("Edit"))
-            {
-                UserSettings.Config.ShowMainMenu = true;
-                if (ImGui.MenuItem("Undo", "CTRL+Z", false, UndoRedoStack.CanUndo))
-                {
-                    UndoRedoStack.Undo();
-                }
-
-                if (ImGui.MenuItem("Redo", "CTRL+SHIFT+Z", false, UndoRedoStack.CanRedo))
-                {
-                    UndoRedoStack.Redo();
-                }
-
-                ImGui.Separator();
-
-                if (ImGui.BeginMenu("Bookmarks"))
-                {
-                    GraphBookmarkNavigation.DrawBookmarksMenu();
-                    ImGui.EndMenu();
-                }
-
-                if (ImGui.BeginMenu("Tools"))
-                {
-                    if (ImGui.MenuItem("Export Operator Descriptions"))
-                    {
-                        ExportWikiDocumentation.ExportWiki();
-                    }
-
-                    if (ImGui.MenuItem("Export Documentation to JSON"))
-                    {
-                        ExportDocumentationStrings.ExportDocumentationAsJson();
-                    }
-
-                    if (ImGui.MenuItem("Import documentation from JSON"))
-                    {
-                        ExportDocumentationStrings.ImportDocumentationAsJson();
-                    }
-
-                    ImGui.EndMenu();
-                }
-
-                ImGui.EndMenu();
-            }
-
-            if (ImGui.BeginMenu("Add"))
-            {
-                UserSettings.Config.ShowMainMenu = true;
-                SymbolTreeMenu.Draw();
-                ImGui.EndMenu();
-            }
-
-            if (ImGui.BeginMenu("View"))
-            {
-                UserSettings.Config.ShowMainMenu = true;
-
-                ImGui.Separator();
-                ImGui.MenuItem("Show Main Menu", "", ref UserSettings.Config.ShowMainMenu);
-                ImGui.MenuItem("Show Title", "", ref UserSettings.Config.ShowTitleAndDescription);
-                ImGui.MenuItem("Show Timeline", "", ref UserSettings.Config.ShowTimeline);
-                ImGui.MenuItem("Show Minimap", "", ref UserSettings.Config.ShowMiniMap);
-                ImGui.MenuItem("Show Toolbar", "", ref UserSettings.Config.ShowToolbar);
-                ImGui.MenuItem("Show Interaction Overlay", "", ref UserSettings.Config.ShowInteractionOverlay);
-                if (ImGui.MenuItem("Toggle All UI Elements", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleAllUiElements, false), false,
-                                   !IsCurrentlySaving))
-                {
-                    ToggleAllUiElements();
-                }
-
-                ImGui.MenuItem("Fullscreen", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFullscreen, false), ref UserSettings.Config.FullScreen);
-                if (ImGui.MenuItem("Focus Mode", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFocusMode, false), UserSettings.Config.FocusMode))
-                {
-                    ToggleFocusMode();
-                }
-
-                ImGui.EndMenu();
-            }
-
-            if (ImGui.BeginMenu("Windows"))
-            {
-                WindowManager.DrawWindowMenuContent();
-                ImGui.EndMenu();
-            }
-            
-            #if DEBUG
-            
-            if (ImGui.BeginMenu("Debug"))
-            {
-                if (ImGui.MenuItem("Show Popup"))
-                {
-                    const string bodyText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sagittis quis ligula sit amet ornare. " +
-                                            "Donec auctor, nisl vel ultricies tincidunt, nisl nisl aliquam nisl, nec pulvinar nisl nisl vitae nisl. " +
-                                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sagittis quis ligula sit amet ornare. ";
-                        
-                    var result = BlockingWindow.Instance.ShowMessageBox(bodyText, "Debug Popup", "Ok", "Maybe", "Idk", "Possibly", "Affirmative", "Negatory", "NO!");
-                    Log.Debug($"Result: \"{result}\"");
-                }
-                ImGui.EndMenu();
-                
-            }
-            
-            #endif
-            
-            if (UserSettings.Config.FullScreen)
-            {
-                ImGui.Dummy(new Vector2(10, 10));
-                ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 1);
-
-                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.ForegroundFull.Fade(0.2f).Rgba);
-                ImGui.TextUnformatted(Program.VersionText);
-                ImGui.PopStyleColor();
-            }
-
-            T3Metrics.DrawRenderPerformanceGraph();
-
-            Program.StatusErrorLine.Draw();
-
-            ImGui.EndMainMenuBar();
-        }
-
-        ImGui.PopStyleVar(3);
-    }
-
-    private static void ToggleAllUiElements()
+    internal static void ToggleAllUiElements()
     {
         //T3Ui.MaximalView = !T3Ui.MaximalView;
         if (UserSettings.Config.ShowToolbar)
@@ -529,20 +253,20 @@ public static class T3Ui
         }
     }
 
-    private static void SaveInBackground(bool saveAll)
+    internal static void SaveInBackground(bool saveAll)
     {
         Task.Run(() => Save(saveAll));
     }
 
     internal static void Save(bool saveAll)
     {
-        if (SaveStopwatch.IsRunning)
+        if (_saveStopwatch.IsRunning)
         {
             Log.Debug("Can't save modified while saving is in progress");
             return;
         }
 
-        SaveStopwatch.Restart();
+        _saveStopwatch.Restart();
 
         // Todo - parallelize? 
         foreach (var package in EditableSymbolProject.AllProjects)
@@ -553,16 +277,16 @@ public static class T3Ui
                 package.SaveModifiedSymbols();
         }
 
-        SaveStopwatch.Stop();
+        _saveStopwatch.Stop();
     }
 
     internal static void SelectAndCenterChildIdInView(Guid symbolChildId)
     {
-        var primaryGraphWindow = GraphWindow.Focused;
-        if (primaryGraphWindow == null)
+        var components = ProjectEditing.Components;
+        if (components == null || components.CompositionOp == null)
             return;
 
-        var compositionOp = primaryGraphWindow.CompositionOp;
+        var compositionOp = components.CompositionOp;
 
         var symbolUi = compositionOp.GetSymbolUi();
         
@@ -572,39 +296,31 @@ public static class T3Ui
         if(!compositionOp.Children.TryGetValue(symbolChildId, out var selectionTargetInstance))
             return;
         
-        primaryGraphWindow.GraphCanvas.NodeSelection.SetSelection(sourceChildUi, selectionTargetInstance);
+        components.NodeSelection.SetSelection(sourceChildUi, selectionTargetInstance);
         FitViewToSelectionHandling.FitViewToSelection();
     }
-
-    // private static void SwapHoveringBuffers()
-    // {
-    //     (HoveredIdsLastFrame, _hoveredIdsForNextFrame) = (_hoveredIdsForNextFrame, HoveredIdsLastFrame);
-    //     _hoveredIdsForNextFrame.Clear();
-    //     
-    //     (RenderedIdsLastFrame, _renderedIdsForNextFrame) = (_renderedIdsForNextFrame, RenderedIdsLastFrame);
-    //     _renderedIdsForNextFrame.Clear();            
-    // }
+    
 
     /// <summary>
     /// Statistics method for debug purpose
     /// </summary>
-    private static void CountSymbolUsage()
-    {
-        var counts = new Dictionary<Symbol, int>();
-        foreach (var s in EditorSymbolPackage.AllSymbols)
-        {
-            foreach (var child in s.Children.Values)
-            {
-                counts.TryAdd(child.Symbol, 0);
-                counts[child.Symbol]++;
-            }
-        }
-
-        foreach (var (s, c) in counts.OrderBy(c => counts[c.Key]).Reverse())
-        {
-            Log.Debug($"{s.Name} - {s.Namespace}  {c}");
-        }
-    }
+    // private static void CountSymbolUsage()
+    // {
+    //     var counts = new Dictionary<Symbol, int>();
+    //     foreach (var s in EditorSymbolPackage.AllSymbols)
+    //     {
+    //         foreach (var child in s.Children.Values)
+    //         {
+    //             counts.TryAdd(child.Symbol, 0);
+    //             counts[child.Symbol]++;
+    //         }
+    //     }
+    //
+    //     foreach (var (s, c) in counts.OrderBy(c => counts[c.Key]).Reverse())
+    //     {
+    //         Log.Debug($"{s.Name} - {s.Namespace}  {c}");
+    //     }
+    // }
     
 
     //@imdom: needs clarification how to handle osc data disconnection on shutdown
@@ -614,35 +330,33 @@ public static class T3Ui
     //     OscDataRecording.Dispose();
     // }
     
-    private static bool DraggingIsInProgress = false;
+    internal static bool DraggingIsInProgress = false;
     internal static bool MouseWheelFieldHovered { private get; set; }
     internal static bool MouseWheelFieldWasHoveredLastFrame { get; private set; }
-    public static bool DragFieldHovered { private get; set; }
-    public static bool DragFieldWasHoveredLastFrame { get; private set; }
+    internal static bool DragFieldHovered { private get; set; }
+    internal static bool DragFieldWasHoveredLastFrame { get; private set; }
     
     internal static bool ShowSecondaryRenderWindow => WindowManager.ShowSecondaryRenderWindow;
     internal const string FloatNumberFormat = "{0:F2}";
 
-    private static readonly Stopwatch SaveStopwatch = new();
+    private static readonly Stopwatch _saveStopwatch = new();
 
     // ReSharper disable once InconsistentlySynchronizedField
-    internal static bool IsCurrentlySaving => SaveStopwatch is { IsRunning: true };
+    internal static bool IsCurrentlySaving => _saveStopwatch is { IsRunning: true };
 
     public static float UiScaleFactor { get; internal set; } = 1;
     internal static float DisplayScaleFactor { get; set; } = 1;
     internal static bool IsAnyPopupOpen => !string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName);
 
-    public static readonly MidiDataRecording MidiDataRecording = new(DataRecording.ActiveRecordingSet);
-    public static readonly OscDataRecording OscDataRecording = new(DataRecording.ActiveRecordingSet);
+    internal static readonly MidiDataRecording MidiDataRecording = new(DataRecording.ActiveRecordingSet);
+    internal static readonly OscDataRecording OscDataRecording = new(DataRecording.ActiveRecordingSet);
 
     //private static readonly AutoBackup.AutoBackup _autoBackup = new();
 
-    private static readonly CreateFromTemplateDialog _createFromTemplateDialog = new();
+    internal static readonly CreateFromTemplateDialog CreateFromTemplateDialog = new();
     private static readonly UserNameDialog _userNameDialog = new();
     private static readonly SearchDialog _searchDialog = new();
-    private static readonly NewProjectDialog _newProjectDialog = new();
-    
-    private static readonly MigrateOperatorsDialog _importDialog = new();
+    internal static readonly NewProjectDialog NewProjectDialog = new();
 
     [Flags]
     public enum EditingFlags
@@ -653,7 +367,6 @@ public static class T3Ui
         PreventZoomWithMouseWheel = 1 << 3,
         PreventPanningWithMouse = 1 << 4,
         AllowHoveredChildWindows = 1 << 5,
-        IgnoreParentZoom = 1 << 6,
     }
 
     internal static bool UseVSync = true;

@@ -3,16 +3,16 @@ using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.SystemUi;
-using T3.Editor.Gui.Commands;
-using T3.Editor.Gui.Commands.Graph;
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Dialogs;
-using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Commands;
+using T3.Editor.UiModel.Commands.Graph;
+using T3.Editor.UiModel.InputsAndTypes;
+using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.Selection;
 using T3.SystemUi;
 
 namespace T3.Editor.Gui.Windows;
@@ -58,11 +58,11 @@ internal class ParameterWindow : Window
             ImGui.SameLine();
         }
 
-        var graphWindow = GraphWindow.Focused;
-        if (graphWindow == null)
+        var components = ProjectEditing.Components;
+        if (components == null)
             return;
 
-        var nodeSelection = graphWindow.GraphCanvas.NodeSelection;
+        var nodeSelection = components.NodeSelection;
         if (DrawSettingsForSelectedAnnotations(nodeSelection))
             return;
 
@@ -82,7 +82,7 @@ internal class ParameterWindow : Window
             var selectedInputs = nodeSelection.GetSelectedNodes<IInputUi>().ToList();
             if (selectedInputs.Count > 0)
             {
-                instance = graphWindow.CompositionOp;
+                instance = components.CompositionOp;
                 var inputUi = selectedInputs.First();
                 _viewMode = ViewModes.Settings;
                 _parameterSettings.SelectInput(inputUi.Id);
@@ -214,7 +214,7 @@ internal class ParameterWindow : Window
             // Help-Mode
             {
                 var isHelpMode = _viewMode == ViewModes.Help;
-                if (_help.DrawHelpIcon(symbolUi, ref isHelpMode))
+                if (OperatorHelp.DrawHelpIcon(symbolUi, ref isHelpMode))
                 {
                     _viewMode = isHelpMode ? ViewModes.Help : ViewModes.Parameters;
                 }

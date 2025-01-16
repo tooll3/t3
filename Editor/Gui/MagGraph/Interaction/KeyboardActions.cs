@@ -1,10 +1,10 @@
 ﻿#nullable enable
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.ProjectSession;
 
 namespace T3.Editor.Gui.MagGraph.Interaction;
 
@@ -49,16 +49,16 @@ internal static class KeyboardActions
             if (UserSettings.Config.FocusMode)
             {
                 var selectedImage = context.Selector.GetFirstSelectedInstance();
-                if (selectedImage != null && GraphWindow.Focused != null)
+                if (selectedImage != null && ProjectEditing.Components != null)
                 {
-                    GraphWindow.Focused.SetBackgroundOutput(selectedImage);
+                    ProjectEditing.Components.SetBackgroundOutput(selectedImage);
                 }
             }
             else
             {
                 // FIXME: This is a work around that needs a legacy graph window to be active
-                if(GraphWindow.Focused != null) 
-                    NodeActions.PinSelectedToOutputWindow(GraphWindow.Focused.GraphCanvas, context.Selector, compositionOp);
+                if(ProjectEditing.Components != null) 
+                    NodeActions.PinSelectedToOutputWindow(ProjectEditing.Components, context.Selector, compositionOp);
             }
         }
         
@@ -77,9 +77,9 @@ internal static class KeyboardActions
         if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
         {
             var selectedImage = context.Selector.GetFirstSelectedInstance();
-            if (selectedImage != null && GraphWindow.Focused != null)
+            if (selectedImage != null && ProjectEditing.Components != null)
             {
-                GraphWindow.Focused.SetBackgroundOutput(selectedImage);
+                ProjectEditing.Components.SetBackgroundOutput(selectedImage);
                 //GraphWindow.Focused..SetBackgroundInstanceForCurrentGraph(selectedImage);
             }
         }

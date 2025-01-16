@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace T3.Core.Rendering;
+﻿namespace T3.Core.Rendering;
 
 public static class MeshUtils
 {

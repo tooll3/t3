@@ -5,14 +5,13 @@ using T3.Core.DataTypes.DataSet;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Layouts;
+using T3.Editor.UiModel.InputsAndTypes;
 using Icon = T3.Editor.Gui.Styling.Icon;
 using Vector2 = System.Numerics.Vector2;
 using Vector4 = System.Numerics.Vector4;
@@ -542,12 +541,12 @@ internal static class TimeControls
             CustomComponents.ButtonStates state = CustomComponents.ButtonStates.Normal;
             switch (UserSettings.Config.HoverMode)
             {
-                case GraphHoverModes.Disabled:
+                case UserSettings.GraphHoverModes.Disabled:
                     state = CustomComponents.ButtonStates.Dimmed;
                     icon = Icon.HoverPreviewDisabled;
                     hoverModeTooltip = "No preview images on hover";
                     break;
-                case GraphHoverModes.Live:
+                case UserSettings.GraphHoverModes.Live:
                     icon = Icon.HoverPreviewPlay;
                     hoverModeTooltip = "Live Hover Preview - Render explicit thumbnail image.";
                     hoverModeAdditionalTooltip = "This can interfere with the rendering of the current output.";
@@ -562,7 +561,7 @@ internal static class TimeControls
             if (CustomComponents.IconButton(icon, ControlSize, state))
             {
                 UserSettings.Config.HoverMode =
-                    (GraphHoverModes)(((int)UserSettings.Config.HoverMode + 1) % Enum.GetNames(typeof(GraphHoverModes)).Length);
+                    (UserSettings.GraphHoverModes)(((int)UserSettings.Config.HoverMode + 1) % Enum.GetNames(typeof(UserSettings.GraphHoverModes)).Length);
             }
 
             CustomComponents.TooltipForLastItem(hoverModeTooltip, hoverModeAdditionalTooltip);

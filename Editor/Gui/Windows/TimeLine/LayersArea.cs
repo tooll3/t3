@@ -1,19 +1,17 @@
-using T3.Editor.Gui.Graph;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Editor.Gui.Commands;
-using T3.Editor.Gui.Commands.Animation;
-using T3.Editor.Gui.Commands.Graph;
-using T3.Editor.Gui.Graph.Helpers;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.Snapping;
-using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Commands;
+using T3.Editor.UiModel.Commands.Animation;
+using T3.Editor.UiModel.Commands.Graph;
+using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.Windows.TimeLine;
 
@@ -22,11 +20,12 @@ namespace T3.Editor.Gui.Windows.TimeLine;
 /// </summary>
 internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
 {
-    public LayersArea(ValueSnapHandler snapHandler, GraphCanvas graphCanvas, TimeLineCanvas timeLineCanvas)
+    public LayersArea(ValueSnapHandler snapHandler, TimeLineCanvas timeLineCanvas, Func<Instance> getCompositionOp, Func<Guid, bool> requestChildComposition)
     {
         _snapHandler = snapHandler;
-        _graphCanvas = graphCanvas;
-        _clipSelection = new ClipSelection(graphCanvas.NodeSelection);
+        _getCompositionOp = getCompositionOp;
+        _requestChildComposition = requestChildComposition;
+        _clipSelection = new ClipSelection(timeLineCanvas.NodeSelection);
         _timelineCanvas = timeLineCanvas;
     }
         
@@ -309,13 +308,13 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
             //ClipSelection.Select(timeClip);
             if (Structure.TryGetUiAndInstanceInComposition(timeClip.Id, compositionOp, out var childUi, out var instance))
             {
-                _graphCanvas.SetCompositionToChildInstance(instance);
+                _requestChildComposition(instance.SymbolChildId);
             }
         }
             
         if (ImGui.IsItemHovered())
         {
-            _graphCanvas.NodeSelection.HoveredIds.Add(symbolChildUi.Id);
+            _timelineCanvas.NodeSelection.HoveredIds.Add(symbolChildUi.Id);
         }
             
         var notClickingOrDragging = !ImGui.IsItemActive() && !ImGui.IsMouseDragging(ImGuiMouseButton.Left);
@@ -492,7 +491,7 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
         
     public void UpdateSelectionForArea(ImRect screenArea, SelectionFence.SelectModes selectMode)
     {
-        var compositionOp = _graphCanvas.Window.CompositionOp;
+        var compositionOp = _getCompositionOp();
             
         if (selectMode == SelectionFence.SelectModes.Replace)
             _clipSelection.Clear();
@@ -529,7 +528,7 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
 
     public ICommand StartDragCommand(in Guid compositionSymbolId)
     {
-        var composition = _graphCanvas.Window.CompositionOp;
+        var composition = _getCompositionOp();
             
         _moveClipsCommand = new MoveTimeClipsCommand(composition, _clipSelection.SelectedClips.ToList());
         return _moveClipsCommand;
@@ -650,7 +649,7 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
     /// </summary>
     SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
     {
-        var currentComp = _graphCanvas.Window.CompositionOp;
+        var currentComp = _getCompositionOp();
         SnapResult bestSnapResult = null;
 
         var allClips = Structure.GetAllTimeClips(currentComp);
@@ -680,9 +679,10 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
     private readonly ValueSnapHandler _snapHandler;
     private Playback _playback;
     private readonly Color _timeRemappingColor = UiColors.StatusAnimated.Fade(0.5f);
-    private readonly GraphCanvas _graphCanvas;
     private readonly ClipSelection _clipSelection;
     private readonly TimeLineCanvas _timelineCanvas;
+    private readonly Func<Instance> _getCompositionOp;
+    private readonly Func<Guid, bool> _requestChildComposition;
     private int _layerIndexOnDragStart;
 
     /// <summary>

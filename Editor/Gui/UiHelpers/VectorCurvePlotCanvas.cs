@@ -146,7 +146,7 @@ public class VectorCurvePlotCanvas<T>
     private float[] _lastValues = new float[MaxComponents];
 
     private readonly HorizontalRaster _raster = new();
-    private readonly ScalableCanvas _canvas = new() { FillMode = ScalableCanvas.FillModes.FillAvailableContentRegion };
+    private readonly ScalableCanvas _canvas = new CurrentGraphSubCanvas { FillMode = ScalableCanvas.FillModes.FillAvailableContentRegion };
     private const int MaxComponents = 4;
         
     private static readonly Color _grayCurveColor = new(1f, 1f, 1.0f, 0.3f);

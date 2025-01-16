@@ -1,5 +1,4 @@
 using Lib.render.analyze;
-using Lib.numbers.anim;
 using Lib.numbers.anim._obsolete;
 using Lib.numbers.color;
 using Lib.numbers.data.utils;
@@ -7,7 +6,6 @@ using Lib.flow.context;
 using Lib.io.audio;
 using Lib.io.midi;
 using Lib.numbers.anim.animators;
-using Lib.numbers.@bool;
 using Lib.numbers.@bool.logic;
 using Lib.numbers.curve;
 using Lib.numbers.@float.adjust;

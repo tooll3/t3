@@ -4,12 +4,12 @@ using Lib.numbers.curve;
 using T3.Core.Operator;
 using T3.Editor.Gui;
 using T3.Editor.Gui.ChildUi.WidgetUi;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.CombinedInputs;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.InputsAndTypes;
 
 namespace libEditor.CustomUi;
 

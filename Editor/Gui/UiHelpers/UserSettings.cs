@@ -1,10 +1,10 @@
-﻿using System.IO;
+﻿#nullable enable
+using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.IO;
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.TimeLine;
@@ -15,125 +15,131 @@ namespace T3.Editor.Gui.UiHelpers;
 /// Saves view layout, currently open node and other user settings 
 /// </summary>
 ///  todo - make internal, make extendable by external packaages
-public class UserSettings : Settings<UserSettings.ConfigData>
+public sealed class UserSettings : Settings<UserSettings.ConfigData>
 {
-    public UserSettings(bool saveOnQuit) : base("userSettings.json", saveOnQuit:saveOnQuit)
+    internal UserSettings(bool saveOnQuit) : base("userSettings.json", saveOnQuit:saveOnQuit)
     {
     }
-
-        
-    public class ConfigData
+    
+    public sealed class ConfigData
     {
-        public readonly Dictionary<Guid, CanvasScope> OperatorViewSettings = new();
-        public readonly Dictionary<string, Guid> LastOpsForWindows = new();
+        internal readonly Dictionary<Guid, CanvasScope> OperatorViewSettings = new();
+        internal readonly Dictionary<string, Guid> LastOpsForWindows = new();
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public GraphHoverModes HoverMode = GraphHoverModes.LastValue;
+        internal GraphHoverModes HoverMode = GraphHoverModes.LastValue;
 
-        public bool AudioMuted;
+        internal bool AudioMuted;
             
         // UI-Elements
-        public bool ShowThumbnails = true;
-        public bool ShowMainMenu = true;
-        public bool ShowTitleAndDescription = true;
-        public bool ShowToolbar = true;
-        public bool ShowTimeline = true;
-        public bool ShowMiniMap = false;
-        public bool ShowInteractionOverlay = false;
+        internal bool ShowThumbnails = true;
+        internal bool ShowMainMenu = true;
+        internal bool ShowTitleAndDescription = true;
+        internal bool ShowToolbar = true;
+        internal bool ShowTimeline = true;
+        internal bool ShowMiniMap = false;
+        internal bool ShowInteractionOverlay = false;
             
         // UI-State
-        public float UiScaleFactor = 1;
-        public bool FullScreen = false;
-        public bool FocusMode = false;
-        public int WindowLayoutIndex = 0;
-        public bool EnableIdleMotion = true;
-        public bool SuspendRenderingWhenHidden = true;
-        public bool MirrorUiOnSecondView = false;
+        internal float UiScaleFactor = 1;
+        internal bool FullScreen = false;
+        internal bool FocusMode = false;
+        internal int WindowLayoutIndex = 0;
+        internal bool EnableIdleMotion = true;
+        internal bool SuspendRenderingWhenHidden = true;
+        internal bool MirrorUiOnSecondView = false;
             
         // Interaction
-        public bool WarnBeforeLibEdit = true;
-        public bool SmartGroupDragging = false;
-        public bool DisconnectOnUnsnap = false;
+        internal bool WarnBeforeLibEdit = true;
+        internal bool SmartGroupDragging = false;
+        internal bool DisconnectOnUnsnap = false;
         
-        public bool ShowExplicitTextureFormatInOutputWindow = false;
-        public bool UseArcConnections = true;
-        public bool ResetTimeAfterPlayback;
-        public float SnapStrength = 5;
-        public ValueEditMethods ValueEditMethod;
-        public float ScrollSmoothing = 0.1f;
-        public float MaxCurveRadius = 150;
+        internal readonly bool ShowExplicitTextureFormatInOutputWindow = false;
+        internal bool UseArcConnections = true;
+        internal bool ResetTimeAfterPlayback;
+        internal float SnapStrength = 5;
+        internal ValueEditMethods ValueEditMethod;
+        internal float ScrollSmoothing = 0.1f;
+        internal float MaxCurveRadius = 150;
 
         public float ClickThreshold = 5; // Increase for high-res display and pen tablets
-        public bool AdjustCameraSpeedWithMouseWheel = false;
-        public float CameraSpeed = 1;
+        internal bool AdjustCameraSpeedWithMouseWheel = false;
+        internal float CameraSpeed = 1;
 
-        public bool MiddleMouseButtonZooms = false;
+        internal bool MiddleMouseButtonZooms = false;
 
-        public FrameStepAmount FrameStepAmount = FrameStepAmount.FrameAt30Fps;
+        internal FrameStepAmount FrameStepAmount = FrameStepAmount.FrameAt30Fps;
             
-        public bool MouseWheelEditsNeedCtrlKey = true;
-        public bool AutoPinAllAnimations = false;
+        internal bool MouseWheelEditsNeedCtrlKey = true;
+        internal bool AutoPinAllAnimations = false;
 
             
-        public float KeyboardScrollAcceleration = 2.5f;
+        internal readonly float KeyboardScrollAcceleration = 2.5f;
 
-        public bool VariationLiveThumbnails = true;
-        public bool VariationHoverPreview = true;
+        internal bool VariationLiveThumbnails = true;
+        internal bool VariationHoverPreview = true;
 
-        public bool EditorHoverPreview = true;
+        internal bool EditorHoverPreview = true;
             
         // Load Save
-        public string UserName = UndefinedUserName;
-        public bool EnableAutoBackup = true;
+        internal string UserName = UndefinedUserName;
+        internal bool EnableAutoBackup = true;
 
         // Other settings
-        public float GizmoSize = 100;
-        public int FullScreenIndexMain = 0;
-        public int FullScreenIndexViewer = 0;
+        internal float GizmoSize = 100;
+        internal int FullScreenIndexMain = 0;
+        internal int FullScreenIndexViewer = 0;
             
 
 
         // Timeline
-        public float TimeRasterDensity = 1f;
+        internal float TimeRasterDensity = 1f;
 
         // Space mouse
-        public float SpaceMouseRotationSpeedFactor = 1f;
-        public float SpaceMouseMoveSpeedFactor = 1f;
-        public float SpaceMouseDamping = 0.5f;
+        internal float SpaceMouseRotationSpeedFactor = 1f;
+        internal float SpaceMouseMoveSpeedFactor = 1f;
+        internal float SpaceMouseDamping = 0.5f;
             
 
         // Rendering (controlled from render windows)
-        public string RenderVideoFilePath = "./Render/render-v01.mp4";
-        public string RenderSequenceFilePath = "./ImageSequence/";
+        internal string RenderVideoFilePath = "./Render/render-v01.mp4";
+        internal string RenderSequenceFilePath = "./ImageSequence/";
 
         // Profiling
-        public bool EnableFrameProfiling = true;
-        public bool KeepTraceForLogMessages = false;
-        public bool EnableGCProfiling = false;
+        internal bool EnableFrameProfiling = true;
+        internal bool KeepTraceForLogMessages = false;
+        internal bool EnableGCProfiling = false;
 
             
         [JsonConverter(typeof(StringEnumConverter))]
-        public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
+        internal TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
             
-        public List<Bookmark> Bookmarks = new();
-        public List<Gradient> GradientPresets = new();
+        internal readonly List<Bookmark> Bookmarks = [];
+        internal List<Gradient> GradientPresets = [];
 
-        public string ColorThemeName;
+        internal string ColorThemeName = string.Empty;
             
-        public bool ExpandSpectrumVisualizerVertically = true;
+        internal bool ExpandSpectrumVisualizerVertically = true;
             
-        private string _defaultNewProjectDirectory = DefaultProjectFolder;
-        public string DefaultNewProjectDirectory => _defaultNewProjectDirectory ??= DefaultProjectFolder;
+        private string _defaultNewProjectDirectory = _defaultProjectFolder;
+        internal string DefaultNewProjectDirectory => _defaultNewProjectDirectory ??= _defaultProjectFolder;
 
-        private static readonly string DefaultProjectFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "T3Projects");
+        private static readonly string _defaultProjectFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "T3Projects");
     }
 
-    public enum ValueEditMethods
+    internal enum ValueEditMethods
     {
         InfinitySlider,
         RadialSlider,
         JogDial,
         ValueLadder,
+    }
+    
+    internal enum GraphHoverModes
+    {
+        Disabled,
+        Live,
+        LastValue,
     }
         
     internal static bool IsUserNameDefined()
@@ -148,8 +154,8 @@ public class UserSettings : Settings<UserSettings.ConfigData>
         return Config.LastOpsForWindows.TryGetValue(windowTitle, out var id) ? id : Guid.Empty;
     }
 
-    internal static void SaveLastViewedOpForWindow(GraphWindow window, Guid opInstanceId)
+    internal static void SaveLastViewedOpForWindow(string title, Guid opInstanceId)
     {
-        Config.LastOpsForWindows[window.Config.Title] = opInstanceId;
+        Config.LastOpsForWindows[title] = opInstanceId;
     }
 }

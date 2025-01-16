@@ -3,7 +3,6 @@ using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
-using T3.Core.Resource;
 
 namespace T3.Core.Model;
 

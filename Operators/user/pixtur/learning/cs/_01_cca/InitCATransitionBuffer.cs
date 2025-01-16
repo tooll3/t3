@@ -1,4 +1,3 @@
-using SharpDX.Direct3D11;
 using T3.Core.Utils;
 
 namespace user.pixtur.learning.cs._01_cca;

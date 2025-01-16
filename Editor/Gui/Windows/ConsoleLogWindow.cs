@@ -1,21 +1,22 @@
-﻿using System.Text;
+﻿#nullable enable
+using System.Text;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
-using T3.SystemUi.Logging;
+using T3.Editor.UiModel.ProjectSession;
 
 namespace T3.Editor.Gui.Windows;
 
 /// <summary>
 /// Renders the <see cref="ConsoleLogWindow"/>
 /// </summary>
-public class ConsoleLogWindow : Window, ILogWriter
+internal sealed class ConsoleLogWindow : Window, ILogWriter
 {
-    public ConsoleLogWindow()
+    internal ConsoleLogWindow()
     {
         Config.Title = "Console";
         Config.Visible = true;
@@ -38,7 +39,8 @@ public class ConsoleLogWindow : Window, ILogWriter
             {
                 _logEntries.Clear();
             }
-            _shouldScrollToBottom= true;
+
+            _shouldScrollToBottom = true;
 
             Log.Info("Console cleared!");
         }
@@ -71,9 +73,6 @@ public class ConsoleLogWindow : Window, ILogWriter
         var itemIndex = 0;
         ImGui.BeginChild("scrolling");
         {
-            if (_logEntries == null)
-                return;
-
             lock (_logEntries)
             {
                 var items = _logEntries;
@@ -176,15 +175,15 @@ public class ConsoleLogWindow : Window, ILogWriter
         ImGui.SameLine(90);
 
         float opacity = 1f;
-        var nodeSelection = GraphWindow.Focused?.GraphCanvas.NodeSelection;
+        var nodeSelection = ProjectEditing.Components?.NodeSelection;
         if (nodeSelection != null)
         {
-            if(nodeSelection.HoveredIds.Contains(entry.SourceId))
+            if (nodeSelection.HoveredIds.Contains(entry.SourceId))
                 opacity = 0.8f;
         }
 
         var color = GetColorForLogLevel(entryLevel).Fade(opacity);
-            
+
         var lineBreak = entry.Message.IndexOf('\n');
         var hasMessageWithLineBreaks = lineBreak != -1;
         var firstLine = hasMessageWithLineBreaks ? entry.Message.Substring(0, lineBreak) : entry.Message;
@@ -192,72 +191,67 @@ public class ConsoleLogWindow : Window, ILogWriter
         ImGui.TextColored(color, firstLine);
 
         var hasInstancePath = entry.SourceIdPath.Count > 0;
-        if (IsLineHovered() && (hasInstancePath || hasMessageWithLineBreaks))
+        if (!IsLineHovered() || (!hasInstancePath && !hasMessageWithLineBreaks))
+            return;
+
+        nodeSelection?.HoveredIds.Add(entry.SourceId);
+
+        GraphComponents? owner = null;
+        var childIdPath = entry.SourceIdPath.ToList();
+
+        if (hasInstancePath)
         {
-            if(nodeSelection != null)
-                nodeSelection.HoveredIds.Add(entry.SourceId);
+            var components = ProjectEditing.Components;
+            if (components != null)
+            {
+                //var components = graphWindow.Components;
+                var hoveredSourceInstance = components.Structure.GetInstanceFromIdPath(childIdPath);
+                if (hoveredSourceInstance == null)
+                    return;
 
-            GraphCanvas owner = null;
-            bool foundOwner = false;
-            var childIdPath = entry.SourceIdPath?.ToList();
+                owner = components;
+            }
+        }
 
+        ImGui.BeginTooltip();
+        {
+            // Show instance details
             if (hasInstancePath)
             {
-                foreach (var graphWindow in GraphWindow.GraphWindowInstances)
+                if (owner == null)
                 {
-                    var canvas = graphWindow.GraphCanvas;
-                    var hoveredSourceInstance = canvas.Structure.GetInstanceFromIdPath(childIdPath);
-                    if (hoveredSourceInstance == null)
-                    {
-                        continue;
-                    }
+                    ImGui.Text("Source Instance of message not longer valid");
+                }
+                else
+                {
+                    ImGui.TextColored(UiColors.TextMuted, "from ");
 
-                    owner = canvas;
-                    foundOwner = true;
-                    break;
+                    foreach (var p in owner.Structure.GetReadableInstancePath(childIdPath))
+                    {
+                        ImGui.SameLine();
+                        ImGui.TextColored(UiColors.TextMuted, " / ");
+
+                        ImGui.SameLine();
+                        ImGui.Text(p);
+                    }
                 }
             }
 
-            ImGui.BeginTooltip();
+            if (hasMessageWithLineBreaks)
             {
-                // Show instance details
-                if (hasInstancePath)
-                {
-                    if (!foundOwner)
-                    {
-                        ImGui.Text("Source Instance of message not longer valid");
-                    }
-                    else
-                    {
-                        ImGui.TextColored(UiColors.TextMuted, "from ");
-
-                        foreach (var p in owner.Structure.GetReadableInstancePath(childIdPath))
-                        {
-                            ImGui.SameLine();
-                            ImGui.TextColored(UiColors.TextMuted, " / ");
-
-                            ImGui.SameLine();
-                            ImGui.Text(p);
-                        }
-                    }
-                }
-
-                if (hasMessageWithLineBreaks)
-                {
-                    ImGui.Text(entry.Message);
-                }
+                ImGui.Text(entry.Message);
             }
-            ImGui.EndTooltip();
+        }
+        ImGui.EndTooltip();
 
-            if (!foundOwner)
-                return;
-                
-            if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
-            {
-                owner.OpenAndFocusInstance(entry.SourceIdPath?.ToList());
-                if (!string.IsNullOrEmpty(entry.Message))
-                    EditorUi.Instance.SetClipboardText(entry.Message);
-            }
+        if (owner == null)
+            return;
+
+        if (ImGui.IsMouseClicked(ImGuiMouseButton.Left) && entry.SourceIdPath.Count > 0)
+        {
+            owner.GraphCanvas.OpenAndFocusInstance(entry.SourceIdPath.ToList());
+            if (!string.IsNullOrEmpty(entry.Message))
+                EditorUi.Instance.SetClipboardText(entry.Message);
         }
     }
 
@@ -313,14 +307,14 @@ public class ConsoleLogWindow : Window, ILogWriter
 
     public void Dispose()
     {
-        _logEntries = null;
+        _logEntries.Clear();
     }
 
     public ILogEntry.EntryLevel Filter { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
     private bool FilterIsActive => !string.IsNullOrEmpty(_filterString);
     private const float LinePadding = 3;
-    private List<ILogEntry> _logEntries = new();
+    private readonly List<ILogEntry> _logEntries = [];
     private bool _shouldScrollToBottom = true;
     private string _filterString = "";
     private bool _isAtBottom = true;

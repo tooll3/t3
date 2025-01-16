@@ -1,10 +1,10 @@
 ﻿#nullable enable
 using ImGuiNET;
 using T3.Core.Operator;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Modification;
 
 namespace T3.Editor.Gui.Graph.Dialogs;
 

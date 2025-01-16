@@ -1,8 +1,8 @@
 ﻿using T3.Core.SystemUi;
-using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Modification;
+using T3.Editor.UiModel.ProjectSession;
 
 namespace T3.Editor.Gui.Templates;
 
@@ -13,16 +13,16 @@ public static class TemplateUse
 {
     internal static void TryToApplyTemplate(TemplateDefinition template, string symbolName, string nameSpace, string description, EditableSymbolProject project)
     {
-        var defaultCanvasWindow = GraphWindow.Focused;
-        if (defaultCanvasWindow == null)
+        var components = ProjectEditing.Components;
+        if (components == null || components.CompositionOp == null)
         {
             BlockingWindow.Instance.ShowMessageBox("Can't create from template without open graph window");
             return;
         }
 
-        var compositionSymbolUi = defaultCanvasWindow.CompositionOp.GetSymbolUi();
+        var compositionSymbolUi = components.CompositionOp.GetSymbolUi();
 
-        var graphCanvas = defaultCanvasWindow.GraphCanvas;
+        var graphCanvas = components.GraphCanvas;
         var centerOnScreen = graphCanvas.WindowPos + graphCanvas.WindowSize / 2;
         var positionOnCanvas2 = graphCanvas.InverseTransformPositionFloat(centerOnScreen);
         var freePosition = FindFreePositionOnCanvas(compositionSymbolUi, positionOnCanvas2);
@@ -35,7 +35,7 @@ public static class TemplateUse
             return;
         }
         T3Ui.SelectAndCenterChildIdInView(newChildUi.SymbolChild.Id);
-        var newInstance = defaultCanvasWindow.GraphCanvas.NodeSelection.GetSelectedInstanceWithoutComposition(); 
+        var newInstance = components.NodeSelection.GetSelectedInstanceWithoutComposition(); 
         template.AfterSetupAction?.Invoke(newInstance,
                                           symbolName,
                                           nameSpace, 

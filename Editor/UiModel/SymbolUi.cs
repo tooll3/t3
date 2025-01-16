@@ -1,12 +1,11 @@
+#nullable enable
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.External.Truncon.Collections;
-using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.OutputUi;
-using T3.Editor.Gui.Selection;
+using T3.Editor.UiModel.InputsAndTypes;
+using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.UiModel;
 
@@ -87,7 +86,7 @@ public sealed partial class SymbolUi : ISelectionContainer
     /// Requires providing a symbol as an argument if the symbol is not part of a package - i.e. if it is a pasted symbol
     /// </summary>
     /// <param name="symbol"></param>
-    internal void UpdateConsistencyWithSymbol(Symbol symbol = null)
+    internal void UpdateConsistencyWithSymbol(Symbol? symbol = null)
     {
         symbol ??= Symbol;
         // Check if child entries are missing
@@ -208,14 +207,14 @@ public sealed partial class SymbolUi : ISelectionContainer
         return new Vector2(300, 200);
     }
 
-    private Vector2 GetCanvasPositionForNextInputUi(SymbolUi symbolUi)
+    private static Vector2 GetCanvasPositionForNextInputUi(SymbolUi symbolUi)
     {
         if (symbolUi.Symbol.InputDefinitions.Count == 0)
         {
             return new Vector2(-200, 0);
         }
 
-        IInputUi lastInputUi = null;
+        IInputUi? lastInputUi = null;
 
         foreach (var inputDef in symbolUi.Symbol.InputDefinitions)
         {
@@ -226,7 +225,7 @@ public sealed partial class SymbolUi : ISelectionContainer
         if (lastInputUi == null)
             return new Vector2(-200, 0);
 
-        return lastInputUi.PosOnCanvas + new Vector2(0, lastInputUi.Size.Y + SelectableNodeMovement.SnapPadding.Y);
+        return lastInputUi.PosOnCanvas + new Vector2(0, lastInputUi.Size.Y + 50);
     }
 
     internal void ClearModifiedFlag()

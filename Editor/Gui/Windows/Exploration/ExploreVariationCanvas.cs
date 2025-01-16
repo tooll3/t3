@@ -3,12 +3,12 @@ using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.ProjectSession;
 using Vector2 = System.Numerics.Vector2;
 
 
@@ -412,6 +412,8 @@ internal class ExploreVariationCanvas : ScalableCanvas
     public float Scatter = 20f;
     private float _lastScatter;
     private ISlot _firstOutputSlot;
+
+    protected override ScalableCanvas? Parent => null;
 
     private readonly ThumbnailCanvasRendering _thumbnailCanvasRendering = new();
     private static readonly Vector2 _thumbnailSize = new(160, 160 / 16f * 9);

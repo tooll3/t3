@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿#nullable enable
+using System.IO;
 using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
@@ -6,15 +7,16 @@ using T3.Core.SystemUi;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Helpers;
+using T3.Editor.UiModel.InputsAndTypes;
 
 namespace T3.Editor.Gui.Windows;
 
-public class OperatorHelp
+internal sealed class OperatorHelp
 {
-    public bool DrawHelpIcon(SymbolUi symbolUi, ref bool isEnabled)
+    public static bool DrawHelpIcon(SymbolUi symbolUi, ref bool isEnabled)
     {
         var changed = false;
 
@@ -262,7 +264,7 @@ public class OperatorHelp
             foreach (var exampleUi in examples)
             {
                 const string label = "Example";
-                SymbolBrowser.DrawExampleOperator(exampleUi, label);
+                UiElements.DrawExampleOperator(exampleUi, label);
             }
         }
 
@@ -297,7 +299,7 @@ public class OperatorHelp
                         var package = (EditorSymbolPackage)referencedSymbol.SymbolPackage;
                         if (!package.TryGetSymbolUi(referencedSymbol.Id, out var exampleSymbolUi))
                             throw new Exception($"Can't find symbol ui for symbol {referencedSymbol.Id}");
-                        SymbolBrowser.DrawExampleOperator(exampleSymbolUi, referencedName);
+                        UiElements.DrawExampleOperator(exampleSymbolUi, referencedName);
                     }
 
                     alreadyListedSymbolNames.Add(referencedName);

@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using System.Text;
 using T3.Core.Operator;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.InputsAndTypes;
 
 namespace T3.Editor.Gui.UiHelpers.Wiki;
 

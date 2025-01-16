@@ -4,9 +4,8 @@ using T3.Core.Audio;
 using T3.Core.IO;
 using T3.Core.Operator;
 using T3.Core.Resource;
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.Windows.Output;
+using T3.Editor.UiModel.ProjectSession;
 
 namespace T3.Editor.Gui.Interaction.Timing;
 
@@ -83,8 +82,7 @@ public static class PlaybackUtils
 
     private static PlaybackSettings? FindPlaybackSettings(out IResourceConsumer? owner)
     {
-        var primaryGraphWindow = GraphWindow.Focused;
-        var composition = primaryGraphWindow?.CompositionOp;
+        var composition = ProjectEditing.Components?.CompositionOp;
 
         if (FindPlaybackSettingsForInstance(composition, out var instance, out var settings))
         {

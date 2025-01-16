@@ -1,16 +1,17 @@
 ﻿using ImGuiNET;
 using T3.Core.DataTypes;
 using T3.Core.SystemUi;
-using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Commands;
+using T3.Editor.UiModel.InputsAndTypes;
+using T3.Editor.UiModel.ProjectSession;
 
 namespace T3.Editor.Gui.MagGraph.Interaction;
 
@@ -178,8 +179,8 @@ internal static class GraphContextMenu
             // TODO: Implement
             if (ImGui.MenuItem("Pin to output", oneOpSelected))
             {
-                if (GraphWindow.Focused != null) 
-                    NodeActions.PinSelectedToOutputWindow(GraphWindow.Focused.GraphCanvas, nodeSelection, context.CompositionOp);
+                if (ProjectEditing.Components != null) 
+                    NodeActions.PinSelectedToOutputWindow(ProjectEditing.Components, nodeSelection, context.CompositionOp);
             }
 
             ImGui.EndMenu();

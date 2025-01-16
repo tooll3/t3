@@ -4,7 +4,6 @@ using T3.Core.DataTypes.Vector;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
@@ -194,7 +193,7 @@ internal sealed class ConnectionHovering
                     var outputUi = connection.SourceItem.SymbolUi.OutputUis[outputSlot.Id];
                     _evaluationContext.Reset();
                     _evaluationContext.RequestedResolution = new Int2(1280 / 2, 720 / 2);
-                    outputUi.DrawValue(outputSlot, _evaluationContext, recompute: UserSettings.Config.HoverMode == GraphHoverModes.Live);
+                    outputUi.DrawValue(outputSlot, _evaluationContext, recompute: UserSettings.Config.HoverMode == UserSettings.GraphHoverModes.Live);
 
                     _imageCanvasForTooltips.Deactivate();
                     TransformGizmoHandling.RestoreDrawList();

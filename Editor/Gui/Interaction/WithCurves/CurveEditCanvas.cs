@@ -2,12 +2,12 @@ using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
-using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Interaction.Snapping;
-using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.TimeLine;
+using T3.Editor.UiModel.Commands;
+using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.Interaction.WithCurves;
 
@@ -22,7 +22,7 @@ internal abstract class CurveEditCanvas : ScalableCanvas, ITimeObjectManipulatio
     public string ImGuiTitle = "timeline";
 
         
-    protected void DrawCurveCanvas(ScalableCanvas canvas, Action<InteractionState> drawAdditionalCanvasContent, SelectionFence selectionFence, float height = 0, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
+    protected void DrawCurveCanvas(Action<InteractionState> drawAdditionalCanvasContent, SelectionFence selectionFence, float height = 0, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
     {
 
         ImGui.BeginChild(ImGuiTitle, new Vector2(0, height), true,
@@ -210,4 +210,5 @@ internal abstract class CurveEditCanvas : ScalableCanvas, ITimeObjectManipulatio
     public readonly ValueSnapHandler SnapHandlerForU = new();
     public readonly ValueSnapHandler SnapHandlerForV = new();
     protected ImDrawListPtr Drawlist;
+    protected override ScalableCanvas Parent => null;
 }

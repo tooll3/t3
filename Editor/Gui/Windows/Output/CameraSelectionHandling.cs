@@ -1,13 +1,14 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
-using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.Camera;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.Styling;
+using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.Windows.Output;
 
@@ -66,7 +67,7 @@ internal class CameraSelectionHandling
     // preparation for each window to have its own playback
     private readonly Func<Playback> _getPlayback;
         
-    private NodeSelection? NodeSelection => _nodeSelection ?? GraphWindow.Focused?.GraphCanvas.NodeSelection;
+    private NodeSelection? NodeSelection => _nodeSelection ?? ProjectEditing.Components?.NodeSelection;
         
         
     public void Update(Instance drawnInstance, Type drawnType, bool preventInteractions = false)
@@ -387,10 +388,10 @@ internal class CameraSelectionHandling
 
     private Guid _pickedCameraId = Guid.Empty;
         
-    private Instance _drawnInstance;
+    private Instance? _drawnInstance;
     private readonly List<ICamera> _recentlyUsedCameras = [];
 
     private ControlModes _lastControlMode;
 
-    private ICamera _firstCamInGraph;
+    private ICamera? _firstCamInGraph;
 }

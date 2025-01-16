@@ -110,5 +110,5 @@ public class CurvePlotCanvas
     private float _lastValue;
 
     private readonly HorizontalRaster _raster = new();
-    private readonly ScalableCanvas _canvas = new() { FillMode = ScalableCanvas.FillModes.FillAvailableContentRegion };
+    private readonly ScalableCanvas _canvas = new CurrentGraphSubCanvas { FillMode = ScalableCanvas.FillModes.FillAvailableContentRegion };
 }

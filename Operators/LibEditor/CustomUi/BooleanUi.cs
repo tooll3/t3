@@ -1,11 +1,8 @@
-using System;
-using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Editor.Gui.ChildUi.WidgetUi;
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
@@ -13,9 +10,9 @@ using Boolean = Types.Values.Boolean;
 
 namespace libEditor.CustomUi;
 
-public static class BooleanUi
+internal static class BooleanUi
 {
-    public static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
+    internal static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
     {
         if (instance is not Boolean boolean)
             return SymbolUi.Child.CustomUiResult.None;

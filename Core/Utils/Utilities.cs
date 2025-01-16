@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 
