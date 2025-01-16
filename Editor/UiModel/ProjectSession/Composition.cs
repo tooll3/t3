@@ -1,9 +1,11 @@
 #nullable enable
 using T3.Core.Operator;
-using T3.Editor.UiModel;
 
-namespace T3.Editor.Gui.Graph;
+namespace T3.Editor.UiModel.ProjectSession;
 
+/// <todo>
+/// Class needs documentation 
+/// </todo>
 internal sealed class Composition : IDisposable
 {
     public SymbolUi SymbolUi => _symbolPackage.SymbolUis[_symbolId];

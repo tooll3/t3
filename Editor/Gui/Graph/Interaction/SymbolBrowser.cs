@@ -255,7 +255,7 @@ internal sealed class SymbolBrowser
     {
         DrawUtils.RestoreImGuiKeyboardNavigation();
         IsOpen = false;
-        FocusRequested?.Invoke();
+        OnFocusRequested?.Invoke();
     }
 
     private void DrawResultsList(Vector2 size)
@@ -690,5 +690,5 @@ internal sealed class SymbolBrowser
     private SymbolUi _selectedSymbolUi;
     private static readonly int _uiId = "DraftNode".GetHashCode();
     private readonly List<Variation> _matchingPresets = new();
-    public event Action FocusRequested;
+    public event Action OnFocusRequested;
 }

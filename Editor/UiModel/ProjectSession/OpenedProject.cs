@@ -1,16 +1,17 @@
 #nullable enable
 using System.Diagnostics.CodeAnalysis;
 using T3.Core.Operator;
-using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Helpers;
 
-namespace T3.Editor.UiModel;
+namespace T3.Editor.UiModel.ProjectSession;
 
-internal class OpenedProject
+internal sealed class OpenedProject
 {
     public readonly EditorSymbolPackage Package;
     public readonly Structure Structure;
-    private readonly List<GraphComponents> GraphWindowsComponents = [];
+    
+    // TODO: This updated or used?
+    private readonly List<GraphComponents> _graphWindowsComponents = [];
+    
     public Composition RootInstance { get; private set; }
     
     private static readonly Dictionary<EditorSymbolPackage, OpenedProject> OpenedProjects = new();
@@ -52,7 +53,7 @@ internal class OpenedProject
 
         // check if the root instance was a window's composition
         // if it was, it needs to be replaced
-        foreach (var components in GraphWindowsComponents)
+        foreach (var components in _graphWindowsComponents)
         {
             if (components.Composition?.Instance == previousRoot)
                 continue;

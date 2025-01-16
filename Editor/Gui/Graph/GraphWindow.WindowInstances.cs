@@ -1,17 +1,20 @@
 #nullable enable
 using ImGuiNET;
 using T3.Core.Operator;
-using T3.Editor.Gui.Graph.Helpers;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Layouts;
-using T3.Editor.Gui.Windows.TimeLine;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.ProjectSession;
 
 namespace T3.Editor.Gui.Graph;
 
+/// <summary>
+/// Features related to create a GraphWindow with a <see cref="EditableSymbolProject"/>.
+/// After loading the project it will initialize the window's <see cref="GraphComponents"/>
+/// and handle tear down if the window is closed.
+/// </summary>
 internal sealed partial class GraphWindow
 {
     public static GraphWindow? Focused
@@ -22,57 +25,60 @@ internal sealed partial class GraphWindow
             if (_focused == value)
                 return;
 
-            _focused?.FocusLost?.Invoke(_focused, _focused);
+            _focused?.OnFocusLost?.Invoke(_focused, _focused);
             _focused = value;
         }
     }
 
-    internal event EventHandler<GraphWindow>? FocusLost;
-    public readonly int InstanceNumber;
+    internal event EventHandler<GraphWindow>? OnFocusLost;
+    private readonly int _instanceNumber;
 
     private GraphWindow(int instanceNumber, GraphComponents components)
     {
         Components = components;
-        InstanceNumber = instanceNumber;
+        _instanceNumber = instanceNumber;
         WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
 
         AllowMultipleInstances = true;
-        components.SymbolBrowser.FocusRequested += FocusFromSymbolBrowser;
-        FocusLost += (_, _) =>
+        components.SymbolBrowser.OnFocusRequested += FocusFromSymbolBrowserHandler;
+        OnFocusLost += (_, _) =>
                      {
                          var nodeSelection = components.NodeSelection;
                          nodeSelection.Clear();
                          nodeSelection.HoveredIds.Clear();
                      };
 
-        WindowDestroyed += (_, _) =>
+        OnWindowDestroyed += (_, _) =>
                            {
                                components.GraphCanvas.Destroyed = true;
                            };
         
-        components.CompositionChanged += OnCompositionChanged;
+        components.OnCompositionChanged += CompositionChangedHandler;
 
         ConnectionMaker.AddWindow(components.GraphCanvas);
-        WindowDisplayTitle = components.OpenedProject.Package.DisplayName + "##" + InstanceNumber;
+        WindowDisplayTitle = components.OpenedProject.Package.DisplayName + "##" + _instanceNumber;
         SetWindowToNormal();
     }
 
+    // TODO: this might not work because the deconstructor is only called by the GC later. GraphWindow should be IDisposable 
     ~GraphWindow()
     {
-        Components.CompositionChanged -= OnCompositionChanged;
+        Components.OnCompositionChanged -= CompositionChangedHandler;
     }
 
-    private void OnCompositionChanged(GraphComponents _, Guid instanceId)
+    private void CompositionChangedHandler(GraphComponents _, Guid instanceId)
     {
         UserSettings.SaveLastViewedOpForWindow(Config.Title, instanceId);
     }
 
-    public static bool CanOpenAnotherWindow => true;
-    internal static readonly List<GraphWindow> GraphWindowInstances = new();
     public GraphComponents Components { get; }
     public override IReadOnlyList<Window> GetInstances() => GraphWindowInstances;
-    public event EventHandler<EditorSymbolPackage> WindowDestroyed;
+    public event EventHandler<EditorSymbolPackage>? OnWindowDestroyed;
 
+    
+    public static bool CanOpenAnotherWindow => true;
+    internal static readonly List<GraphWindow> GraphWindowInstances = [];
+    
     public static bool TryOpenPackage(EditorSymbolPackage package, bool replaceFocused, Instance? startingComposition = null, WindowConfig? config = null,
                                       int instanceNumber = NoInstanceNumber)
     {
@@ -82,6 +88,12 @@ internal sealed partial class GraphWindow
             return false;
         }
 
+        if(!OpenedProject.TryCreate(package, out var openedProject))
+        {
+            LogFailure();
+            return false;
+        }
+        
         var shouldBeVisible = true;
         if (replaceFocused && Focused != null)
         {
@@ -89,13 +101,8 @@ internal sealed partial class GraphWindow
             Focused.Close();
         }
         
-        if(!OpenedProject.TryCreate(package, out var openedProject))
-        {
-            LogFailure();
-            return false;
-        }
-
         instanceNumber = instanceNumber == NoInstanceNumber ? ++_instanceCounter : instanceNumber;
+        
         // check for existing OpenedProject object, if it doesnt exist then create one 
         var components = GraphComponents.FromLegacyGraphCanvas(openedProject);
         var newWindow = new GraphWindow(instanceNumber, components);
@@ -148,7 +155,7 @@ internal sealed partial class GraphWindow
                          ImGuiWindowFlags.NoResize);
     }
 
-    public void TakeFocus()
+    private void TakeFocus()
     {
         Focused = this;
     }

@@ -1,4 +1,3 @@
-using T3.Editor.Gui.Graph;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;

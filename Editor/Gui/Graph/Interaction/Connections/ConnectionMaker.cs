@@ -7,7 +7,6 @@ using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Selection;
-using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 
@@ -17,10 +16,13 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections;
 /// Handles the creation of new  <see cref="Symbol.Connection"/>s. 
 /// It provides accessors for highlighting matching input slots and methods that need to be
 /// called when connections are completed or aborted.
+///
+/// To support multiple parallel <see cref="IGraphCanvas"/> we keep the <see cref="ConnectionInProgress"/>
+/// for each window in a dictionary.
 /// </summary>
 internal static class ConnectionMaker
 {
-    private static readonly Dictionary<IGraphCanvas, ConnectionInProgress> _inProgress = new();
+    private static readonly Dictionary<IGraphCanvas, ConnectionInProgress> _graphWindowInProgressConnections = new();
 
     private sealed class ConnectionInProgress
     {
@@ -44,17 +46,17 @@ internal static class ConnectionMaker
 
     public static void AddWindow(IGraphCanvas window)
     {
-        _inProgress.Add(window, new ConnectionInProgress());
+        _graphWindowInProgressConnections.Add(window, new ConnectionInProgress());
     }
 
     public static void RemoveWindow(IGraphCanvas window)
     {
-        _inProgress.Remove(window);
+        _graphWindowInProgressConnections.Remove(window);
     }
 
     public static bool IsMatchingInputType(IGraphCanvas window, Type valueType)
     {
-        var connectionList = _inProgress[window].TempConnections;
+        var connectionList = _graphWindowInProgressConnections[window].TempConnections;
         return connectionList.Count > 0
                && connectionList[0].TargetSlotId == NotConnectedId
                && connectionList[0].ConnectionType == valueType;
@@ -62,7 +64,7 @@ internal static class ConnectionMaker
 
     public static bool IsMatchingOutputType(IGraphCanvas window, Type valueType)
     {
-        var connectionList = _inProgress[window].TempConnections;
+        var connectionList = _graphWindowInProgressConnections[window].TempConnections;
         return connectionList.Count == 1
                && connectionList[0].SourceSlotId == NotConnectedId
                && connectionList[0].ConnectionType == valueType;
@@ -70,7 +72,7 @@ internal static class ConnectionMaker
 
     public static bool IsOutputSlotCurrentConnectionSource(IGraphCanvas window, SymbolUi.Child sourceUi, Symbol.OutputDefinition outputDef)
     {
-        var connectionList = _inProgress[window].TempConnections;
+        var connectionList = _graphWindowInProgressConnections[window].TempConnections;
         return connectionList.Count == 1
                && connectionList[0].SourceParentOrChildId == sourceUi.SymbolChild.Id
                && connectionList[0].SourceSlotId == outputDef.Id;
@@ -78,7 +80,7 @@ internal static class ConnectionMaker
 
     public static bool IsInputSlotCurrentConnectionTarget(IGraphCanvas window, SymbolUi.Child targetUi, Symbol.InputDefinition inputDef, int multiInputIndex = 0)
     {
-        var connectionList = _inProgress[window].TempConnections;
+        var connectionList = _graphWindowInProgressConnections[window].TempConnections;
         return connectionList.Count == 1
                && connectionList[0].TargetParentOrChildId == targetUi.SymbolChild.Id
                && connectionList[0].TargetSlotId == inputDef.Id;
@@ -86,7 +88,7 @@ internal static class ConnectionMaker
 
     public static bool IsInputNodeCurrentConnectionSource(IGraphCanvas window, Symbol.InputDefinition inputDef)
     {
-        var connectionList = _inProgress[window].TempConnections;
+        var connectionList = _graphWindowInProgressConnections[window].TempConnections;
         return connectionList.Count == 1
                && connectionList[0].SourceParentOrChildId == UseSymbolContainerId
                && connectionList[0].SourceSlotId == inputDef.Id;
@@ -94,7 +96,7 @@ internal static class ConnectionMaker
 
     public static bool IsOutputNodeCurrentConnectionTarget(IGraphCanvas window, Symbol.OutputDefinition outputDef)
     {
-        var connectionList = _inProgress[window].TempConnections;
+        var connectionList = _graphWindowInProgressConnections[window].TempConnections;
         return connectionList.Count == 1
                && connectionList[0].TargetParentOrChildId == UseSymbolContainerId
                && connectionList[0].TargetSlotId == outputDef.Id;
@@ -102,7 +104,7 @@ internal static class ConnectionMaker
 
     public static void StartFromOutputSlot(IGraphCanvas window, NodeSelection selection, SymbolUi.Child sourceUi, Symbol.OutputDefinition outputDef)
     {
-        var inProgress = _inProgress[window];
+        var inProgress = _graphWindowInProgressConnections[window];
         StartOperation(inProgress, $"Connect from {sourceUi.SymbolChild.ReadableName}.{outputDef.Name}");
 
         var selectedSymbolChildUis = selection.GetSelectedChildUis().OrderBy(c => c.PosOnCanvas.Y * 100 + c.PosOnCanvas.X).ToList();
@@ -149,7 +151,7 @@ internal static class ConnectionMaker
     public static void StartFromInputSlot(IGraphCanvas window, Symbol parentSymbol, SymbolUi.Child targetUi, Symbol.InputDefinition inputDef,
                                           int multiInputIndex = 0)
     {
-        var inProgress = _inProgress[window];
+        var inProgress = _graphWindowInProgressConnections[window];
 
         if (FindConnectionToInputSlot(parentSymbol, targetUi, inputDef, multiInputIndex, out var existingConnection))
         {
@@ -178,7 +180,7 @@ internal static class ConnectionMaker
 
     public static void StartFromInputNode(IGraphCanvas window, Symbol.InputDefinition inputDef)
     {
-        var inProgress = _inProgress[window];
+        var inProgress = _graphWindowInProgressConnections[window];
         StartOperation(inProgress, $"Connecting from {inputDef.Name}");
         inProgress.SetTempConnection(new TempConnection(
                                                         sourceParentOrChildId: UseSymbolContainerId,
@@ -190,7 +192,7 @@ internal static class ConnectionMaker
 
     public static void StartFromOutputNode(IGraphCanvas window, Symbol parentSymbol, Symbol.OutputDefinition outputDef)
     {
-        var inProgress = _inProgress[window];
+        var inProgress = _graphWindowInProgressConnections[window];
 
         var newCommand = StartOperation(inProgress, $"Connecting to {outputDef.Name}");
         var existingConnection = parentSymbol.Connections.Find(c => c.TargetParentOrChildId == UseSymbolContainerId
@@ -219,7 +221,7 @@ internal static class ConnectionMaker
         }
     }
 
-    public static void StartOperation(IGraphCanvas window, string commandName) => StartOperation(_inProgress[window], commandName);
+    public static void StartOperation(IGraphCanvas window, string commandName) => StartOperation(_graphWindowInProgressConnections[window], commandName);
 
     private static MacroCommand StartOperation(ConnectionInProgress inProgress, string commandName)
     {
@@ -233,7 +235,7 @@ internal static class ConnectionMaker
     }
 
     public static void CompleteOperation(IGraphCanvas window, List<ICommand> doneCommands, string newCommandTitle)
-        => CompleteOperation(_inProgress[window], doneCommands, newCommandTitle);
+        => CompleteOperation(_graphWindowInProgressConnections[window], doneCommands, newCommandTitle);
 
     private static void CompleteOperation(ConnectionInProgress inProgress, List<ICommand>? doneCommands = null, string? newCommandTitle = null)
     {
@@ -256,7 +258,7 @@ internal static class ConnectionMaker
         Reset(inProgress);
     }
 
-    public static void AbortOperation(IGraphCanvas graphWindow) => AbortOperation(_inProgress[graphWindow]);
+    public static void AbortOperation(IGraphCanvas graphWindow) => AbortOperation(_graphWindowInProgressConnections[graphWindow]);
 
     private static void AbortOperation(ConnectionInProgress inProgress)
     {
@@ -358,7 +360,7 @@ internal static class ConnectionMaker
         Debug.Assert(symbolInstance != null);
         
         
-        var inProgress = _inProgress[window];
+        var inProgress = _graphWindowInProgressConnections[window];
         var inProgressCommand = inProgress.Command;
         
         // This can happen if a connection would lead to a cycle
@@ -441,7 +443,7 @@ internal static class ConnectionMaker
 
     public static void CompleteAtOutputSlot(IGraphCanvas window, Instance sourceInstance, SymbolUi.Child sourceUi, Symbol.OutputDefinition output)
     {
-        var connectionProgress = _inProgress[window];
+        var connectionProgress = _graphWindowInProgressConnections[window];
         if (sourceInstance.Parent == null)
             return;
         
@@ -484,7 +486,7 @@ internal static class ConnectionMaker
     /// </remarks>
     public static void InitSymbolBrowserAtPosition(IGraphCanvas window, SymbolBrowser symbolBrowser, Vector2 canvasPosition)
     {
-        var inProgress = _inProgress[window];
+        var inProgress = _graphWindowInProgressConnections[window];
         var connectionList = inProgress.TempConnections;
         if (connectionList.Count == 0)
             return;
@@ -556,7 +558,7 @@ internal static class ConnectionMaker
             return;
 
         var canvas = components.GraphCanvas;
-        var connectionList = _inProgress[canvas];
+        var connectionList = _graphWindowInProgressConnections[canvas];
         StartOperation(connectionList, "Insert Operator");
         InsertSymbolBrowser(components, childUi, instance, primaryOutput, components.SymbolBrowser);
     }
@@ -564,7 +566,7 @@ internal static class ConnectionMaker
     public static void InsertSymbolInstance(GraphComponents components, Symbol symbol)
     {
         var canvas = components.GraphCanvas;
-        var inProgress = _inProgress[canvas];
+        var inProgress = _graphWindowInProgressConnections[canvas];
         
         var selection = components.NodeSelection;
         var instance = selection.GetSelectedInstanceWithoutComposition();
@@ -702,7 +704,7 @@ internal static class ConnectionMaker
             return;
 
         var canvas = components.GraphCanvas;
-        var inProgress = _inProgress[canvas];
+        var inProgress = _graphWindowInProgressConnections[canvas];
         
         var newCommand =StartOperation(inProgress, "Insert Operator");
         
@@ -774,7 +776,7 @@ internal static class ConnectionMaker
         }
 
         var canvas = components.GraphCanvas;
-        var inProgress = _inProgress[canvas];
+        var inProgress = _graphWindowInProgressConnections[canvas];
 
         StartOperation(inProgress, "Split connection with new Operator");
         Debug.Assert(inProgress.Command != null);
@@ -814,7 +816,7 @@ internal static class ConnectionMaker
 
     internal static bool IsTargetInvalid(IGraphCanvas window, Type type)
     {
-        var connectionList = _inProgress[window].TempConnections;
+        var connectionList = _graphWindowInProgressConnections[window].TempConnections;
         return T3Ui.IsAnyPopupOpen
                || connectionList.Count == 0
                || connectionList.All(c => c.ConnectionType != type);
@@ -827,7 +829,7 @@ internal static class ConnectionMaker
         if (parent == null)
             return;
         
-        var inProgress = _inProgress[window];
+        var inProgress = _graphWindowInProgressConnections[window];
         StartOperation(inProgress, $"Split connection with {childUi.SymbolChild.ReadableName}");
 
         var inProgressCommand = inProgress.Command;
@@ -906,7 +908,7 @@ internal static class ConnectionMaker
 
     public static void CompleteAtSymbolInputNode(IGraphCanvas window, SymbolUi parentSymbolUi, Symbol.InputDefinition inputDef)
     {
-        var inProgress = _inProgress[window];
+        var inProgress = _graphWindowInProgressConnections[window];
         Debug.Assert(inProgress.Command != null);
 
         foreach (var c in inProgress.TempConnections)
@@ -923,7 +925,7 @@ internal static class ConnectionMaker
 
     public static void CompleteAtSymbolOutputNode(IGraphCanvas window, Symbol parentSymbol, Symbol.OutputDefinition outputDef)
     {
-        var connectionList = _inProgress[window].TempConnections;
+        var connectionList = _graphWindowInProgressConnections[window].TempConnections;
         bool added = false;
         foreach (var c in connectionList)
         {
@@ -1039,12 +1041,12 @@ internal static class ConnectionMaker
 
     public static bool HasTempConnectionsFor(IGraphCanvas window)
     {
-        return _inProgress[window].TempConnections.Count > 0;
+        return _graphWindowInProgressConnections[window].TempConnections.Count > 0;
     }
 
     public static IReadOnlyList<TempConnection> GetTempConnectionsFor(IGraphCanvas window)
     {
-        return _inProgress.TryGetValue(window, out var inProgress)
+        return _graphWindowInProgressConnections.TryGetValue(window, out var inProgress)
                    ? inProgress.TempConnections
                    : _emptyList;
     }

@@ -1,4 +1,5 @@
 #nullable enable
+using System.Diagnostics;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
@@ -6,7 +7,6 @@ using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Helpers;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.TransformGizmos;
@@ -16,6 +16,7 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.TimeLine;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.ProjectSession;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Graph;
@@ -29,7 +30,7 @@ internal sealed partial class GraphWindow : Window
     protected override string WindowDisplayTitle { get; }
     private bool _focusOnNextFrame;
 
-    public void FocusFromSymbolBrowser()
+    private void FocusFromSymbolBrowserHandler()
     {
         TakeFocus();
         _focusOnNextFrame = true;
@@ -171,11 +172,12 @@ internal sealed partial class GraphWindow : Window
             }
             drawList.ChannelsMerge();
 
-            EditDescriptionDialog.Draw(Components.Composition.Symbol);
+            _editDescriptionDialog.Draw(Components.Composition.Symbol);
         }
         ImGui.EndChild();
 
-        Components.OpenedProject.RefreshRootInstance();
+        Components.OpenedProject.RefreshRootInstance(); // Why is this called again?
+        
         if (UserSettings.Config.ShowTimeline)
         {
             const int splitterWidth = 3;
@@ -369,7 +371,7 @@ internal sealed partial class GraphWindow : Window
         if (Focused == this)
             Focused = GraphWindowInstances.FirstOrDefault();
             
-        WindowDestroyed?.Invoke(this, Components.OpenedProject.Package);
+        OnWindowDestroyed?.Invoke(this, Components.OpenedProject.Package);
     }
 
     protected override void AddAnotherInstance()
@@ -381,6 +383,9 @@ internal sealed partial class GraphWindow : Window
     {
         public static void Draw(GraphComponents window)
         {
+            if (window.Composition == null)
+                return;
+            
             DrawBreadcrumbs(window);
             DrawNameAndDescription(window.Composition);
         }
@@ -388,8 +393,9 @@ internal sealed partial class GraphWindow : Window
         private static void DrawBreadcrumbs(GraphComponents components)
         {
             var composition = components.Composition;
+            Debug.Assert(composition != null);
             ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + new Vector2(1, 1));
-            FormInputs.AddVerticalSpace(10);
+            FormInputs.AddVerticalSpace();
             var parents = Structure.CollectParentInstances(composition.Instance);
 
             ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
@@ -433,7 +439,7 @@ internal sealed partial class GraphWindow : Window
                     ImGui.SameLine();
                     ImGui.PopID();
                     ImGui.PushFont(Icons.IconFont);
-                    ImGui.TextUnformatted(BreadCrumbSeparator);
+                    ImGui.TextUnformatted(_breadCrumbSeparator);
                     ImGui.PopFont();
                 }
                     
@@ -482,7 +488,7 @@ internal sealed partial class GraphWindow : Window
     private bool _initializedAfterLayoutReady;
     internal GraphImageBackground GraphImageBackground => Components.GraphImageBackground;
 
-    private static readonly string BreadCrumbSeparator = (char)Icon.ChevronRight + "";
+    private static readonly string _breadCrumbSeparator = (char)Icon.ChevronRight + "";
     public IGraphCanvas GraphCanvas => Components.GraphCanvas;
     private const int UseComputedHeight = -1;
     private int _customTimeLineHeight = UseComputedHeight;
@@ -493,5 +499,5 @@ internal sealed partial class GraphWindow : Window
                                             + TimeLineCanvas.TimeLineDragHeight
                                             + 1;
 
-    private static readonly EditSymbolDescriptionDialog EditDescriptionDialog = new();
+    private static readonly EditSymbolDescriptionDialog _editDescriptionDialog = new();
 }

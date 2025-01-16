@@ -6,6 +6,7 @@ using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.TimeLine;
+using T3.Editor.UiModel.ProjectSession;
 
 namespace T3.Editor.UiModel;
 
@@ -29,7 +30,7 @@ internal sealed class GraphComponents
     public readonly TimeLineCanvas TimeLineCanvas;
     public SymbolBrowser SymbolBrowser { get; private set; }
 
-    public event Action<GraphComponents, Guid> CompositionChanged;
+    public event Action<GraphComponents, Guid> OnCompositionChanged;
 
     private GraphComponents(OpenedProject openedProject, NavigationHistory navigationHistory, NodeSelection nodeSelection, GraphImageBackground graphImageBackground)
     {
@@ -132,7 +133,7 @@ internal sealed class GraphComponents
 
         GraphCanvas.ApplyComposition(transition, newCompositionInstance.SymbolChildId);
 
-        CompositionChanged?.Invoke(this, Composition.SymbolChildId);
+        OnCompositionChanged?.Invoke(this, Composition.SymbolChildId);
         return true;
     }
 

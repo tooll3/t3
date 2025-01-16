@@ -3,11 +3,10 @@ using System.Diagnostics.CodeAnalysis;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Editor.UiModel;
 
 // ReSharper disable ForCanBeConvertedToForeach
 
-namespace T3.Editor.Gui.Graph.Helpers;
+namespace T3.Editor.UiModel;
 
 /// <summary>
 /// each GraphWindow class should have its own Structure object, and some of this logic should
