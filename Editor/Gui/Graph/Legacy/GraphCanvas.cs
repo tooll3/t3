@@ -946,7 +946,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
     private string _nameSpaceForDialogEdits = "";
     private Vector2 _dampedScrollVelocity = Vector2.Zero;
 
-    public override ScalableCanvas? Parent => null;
+    protected override ScalableCanvas? Parent => null;
     public SelectableNodeMovement SelectableNodeMovement { get; }
 }
 

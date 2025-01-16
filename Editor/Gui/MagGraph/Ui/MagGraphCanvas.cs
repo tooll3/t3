@@ -553,7 +553,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
     private GraphUiContext _context;
     private readonly NodeSelection _nodeSelection;
 
-    public override ScalableCanvas? Parent => null;
+    protected override ScalableCanvas? Parent => null;
 
     public void FocusViewToSelection(GraphUiContext context)
     {

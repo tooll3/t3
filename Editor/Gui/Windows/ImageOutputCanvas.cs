@@ -35,7 +35,7 @@ internal class ImageOutputCanvas : ScalableCanvas
     /// </summary>
     public static ImageOutputCanvas Current = null;
 
-    public override IScalableCanvas? Parent => null;
+    protected override IScalableCanvas? Parent => null;
 
     public Texture2D LastTexture;
         

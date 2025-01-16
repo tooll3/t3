@@ -10,11 +10,12 @@ internal sealed class ScalableGraphSubCanvas : ScalableCanvas
     {
         Parent = parent;
     }
-    public override IScalableCanvas? Parent { get; }
+
+    protected override IScalableCanvas? Parent { get; }
 }
 
 internal sealed class CurrentGraphSubCanvas : ScalableCanvas
 {
     public CurrentGraphSubCanvas(Vector2? initialScale = null) : base(initialScale) { }
-    public override IScalableCanvas? Parent => ProjectEditing.FocusedCanvas;
+    protected override IScalableCanvas? Parent => ProjectEditing.FocusedCanvas;
 }
