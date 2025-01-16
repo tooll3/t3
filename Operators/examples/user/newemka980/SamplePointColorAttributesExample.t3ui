@@ -117,7 +117,7 @@
       }
     },
     {
-      "ChildId": "c0396e08-267b-48c8-9080-0433db29e4a2"/*SamplePointAttributes*/,
+      "ChildId": "c0396e08-267b-48c8-9080-0433db29e4a2"/*SamplePointAttributes_v1*/,
       "Comment": "We control/modify the W value of the points ",
       "Position": {
         "X": 1106.2498,

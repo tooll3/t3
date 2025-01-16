@@ -37,7 +37,7 @@ internal sealed class WorleyNoise : Instance<WorleyNoise>
     public readonly InputSlot<Vector2> Clamping = new InputSlot<Vector2>();
 
     [Input(Guid = "dce72235-839e-41f1-a2a4-e19f0ef66e5c")]
-    public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
+    public readonly InputSlot<Vector2> GainAndBias = new InputSlot<Vector2>();
 
     [Input(Guid = "b4277cab-d286-410f-81be-ff4d53a9eca9", MappedType = typeof(Methods))]
     public readonly InputSlot<int> Method = new InputSlot<int>();

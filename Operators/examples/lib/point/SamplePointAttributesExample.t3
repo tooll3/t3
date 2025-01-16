@@ -3,7 +3,7 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "0bbfa4d8-0a02-49b9-af4f-16555f79a909"/*AttributesFromImage*/,
+      "Id": "0bbfa4d8-0a02-49b9-af4f-16555f79a909"/*AttributesFromImageChannels*/,
       "SymbolId": "1c54fdad-9eb4-49e8-8fde-1c78b0fa2b48",
       "InputValues": [],
       "Outputs": []

@@ -31,7 +31,7 @@ internal sealed class TextureMapForce : Instance<TextureMapForce>
     public readonly InputSlot<float> SpinVariation = new InputSlot<float>();
 
     [Input(Guid = "41491794-082d-4394-b6c2-efb4780623ea")]
-    public readonly InputSlot<Vector2> VariationBiasGain = new InputSlot<Vector2>();
+    public readonly InputSlot<Vector2> VariationGainAndBias = new InputSlot<Vector2>();
 
     [Input(Guid = "0de3d1e6-63d4-4dbf-a426-cbd4e6019c45")]
     public readonly InputSlot<float> ViewConfinement = new InputSlot<float>();

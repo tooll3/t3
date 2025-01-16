@@ -20,7 +20,7 @@ internal sealed class RemapColor : Instance<RemapColor>
     public readonly InputSlot<float> Exposure = new InputSlot<float>();
 
     [Input(Guid = "97771732-56fb-4e0c-915d-c79321ba27b5")]
-    public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
+    public readonly InputSlot<Vector2> GainAndBias = new InputSlot<Vector2>();
 
     [Input(Guid = "b1763a8b-aa98-4e00-a47c-a5d0d750ae6e")]
     public readonly InputSlot<float> Cycle = new InputSlot<float>();

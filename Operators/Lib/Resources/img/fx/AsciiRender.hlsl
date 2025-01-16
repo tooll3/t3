@@ -9,7 +9,7 @@ cbuffer ParamConstants : register(b0)
     float2 FontCharSize;
     float ScaleFactor;
     float MaxInColors;
-    float2 BiasAndGain;
+    float2 GainAndBias;
 
     float Scatter;
 }
@@ -65,7 +65,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float4 colFromImageA = ImageA.Sample(texSampler, cellTiles);
     float grayScale = (colFromImageA.r + colFromImageA.g + colFromImageA.b) / 3;
 
-    float dBiased = ApplyBiasAndGain(grayScale, BiasAndGain.x, BiasAndGain.y);
+    float dBiased = ApplyGainAndBias(grayScale, GainAndBias);
 
     // float cellId =
     float randomOffset = hash11u((uint)(cellIds.x * TargetWidth + 0.0001) + (uint)(cellIds.y * TargetHeight + 0.0001) * 73939133);

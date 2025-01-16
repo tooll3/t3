@@ -19,7 +19,7 @@ cbuffer Params : register(b0)
 
     float ScaleFx1;
     float ScaleFx2;
-    float2 BiasAndGain;
+    float2 GainAndBias;
 
     float3 Center;
     float StrengthOffset;
@@ -68,7 +68,7 @@ float3 ExtractScale(float4x4 TransformMatrix)
 
     float f = gray + (hash11u(index) - 0.5) * Scatter;
 
-    f = ApplyGainAndBias(f, BiasAndGain.xy);
+    f = ApplyGainAndBias(f, GainAndBias);
 
     float strength = Strength * (f + StrengthOffset) * (StrengthFactor == 0 ? 1 : (StrengthFactor == 1) ? p.FX1
                                                                                                         : p.FX2);

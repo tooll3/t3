@@ -23,7 +23,7 @@ internal sealed class LinePoints : Instance<LinePoints>
         public readonly InputSlot<float> Pivot = new InputSlot<float>();
 
         [Input(Guid = "28081e5f-da01-46dc-81ad-699df29a49a4")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<System.Numerics.Vector2> GainAndBias = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "4ab30d37-dec7-4c7a-a44c-25baf18f25ae")]
         public readonly InputSlot<System.Numerics.Vector2> Scale = new InputSlot<System.Numerics.Vector2>();

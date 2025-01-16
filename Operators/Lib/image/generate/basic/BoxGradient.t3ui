@@ -1,7 +1,7 @@
 {
   "Id": "dc2273a7-8a54-4e6f-8d8e-9a675c1ef599"/*BoxGradient*/,
   "Description": "A box gradient using the signed distance field \"Box - Exact\" desbribed  in the \"2D distance functions\" article on Inigo Quilez's website. \n\nBased on [RadialGradient]\n\n2D, SDF, sdBox, [RoundedRect]",
-  "SymbolTags": "8",
+  "SymbolTags": "1032",
   "InputUis": [
     {
       "InputId": "06553d30-0a71-435b-8796-b61db670fbc6"/*CornersRadius*/,

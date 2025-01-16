@@ -57,7 +57,7 @@
           "Value": 0.125
         },
         {
-          "Id": "1c70e502-90cc-4285-92ca-ec3d200967eb"/*BiasAndGain*/,
+          "Id": "1c70e502-90cc-4285-92ca-ec3d200967eb"/*GainAndBias*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.010000005,

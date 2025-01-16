@@ -2,7 +2,6 @@
 #include "shared/noise-functions.hlsl"
 #include "shared/point.hlsl"
 #include "shared/quat-functions.hlsl"
-#include "shared/bias-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -17,8 +16,6 @@ cbuffer Params : register(b0)
     float3 NoiseOffset;
     float __padding;
     // float UseSelection;
-
-    float2 BiasAndGain;
 }
 
 cbuffer Params : register(b1)
@@ -42,7 +39,7 @@ void GetTranslationAndRotation(float weight, float3 pointPos, float4 rotation,
 {
     float4 noise = float4(GetNoise(pointPos + NoiseOffset, variationOffset), 0);
 
-    offset = ApplyBiasAndGain(noise, BiasAndGain.x, BiasAndGain.y).xyz * weight;
+    offset = noise.xyz * weight;
 
     float3 xDir = qRotateVec3(float3(RotationLookupDistance, 0, 0), rotation);
     float3 offsetAtPosXDir = GetNoise(pointPos + xDir, variationOffset) * weight;

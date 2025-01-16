@@ -31,7 +31,7 @@ internal sealed class SubdivisionStretch : Instance<SubdivisionStretch>
     public readonly InputSlot<Vector2> ScrollOffset = new InputSlot<Vector2>();
 
     [Input(Guid = "22afde68-08c5-438f-9425-fe255b2e079f")]
-    public readonly InputSlot<Vector2> ScrollBiasAndGain = new InputSlot<Vector2>();
+    public readonly InputSlot<Vector2> ScrollGainAndBias = new InputSlot<Vector2>();
 
     [Input(Guid = "7a8684c9-ee81-49c1-ad13-d91d62799efb")]
     public readonly InputSlot<float> RandomPhase = new InputSlot<float>();

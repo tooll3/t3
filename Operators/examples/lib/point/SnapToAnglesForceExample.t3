@@ -180,7 +180,7 @@
       "SymbolId": "e34c88f6-815e-4ce1-a6a8-59e2c8101849",
       "InputValues": [
         {
-          "Id": "22afde68-08c5-438f-9425-fe255b2e079f"/*ScrollBiasAndGain*/,
+          "Id": "22afde68-08c5-438f-9425-fe255b2e079f"/*ScrollGainAndBias*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.0,
@@ -795,7 +795,7 @@
       "Outputs": []
     },
     {
-      "Id": "6c9c97ac-1c02-4c07-aadb-2e94c02294cb"/*SamplePointAttributes*/,
+      "Id": "6c9c97ac-1c02-4c07-aadb-2e94c02294cb"/*SamplePointAttributes_v1*/,
       "SymbolId": "b3de7a93-e921-4e43-8a56-6c84b2d18b74",
       "InputValues": [
         {

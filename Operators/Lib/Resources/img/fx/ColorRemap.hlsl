@@ -7,10 +7,9 @@ cbuffer ParamConstants : register(b0)
     float Offset;
     float Exposure;
 
-    float2 BiasAndGain; 
+    float2 GainAndBias;
     float Repeat;
 }
-
 
 struct vsOutput
 {
@@ -23,7 +22,6 @@ Texture2D<float4> Gradient : register(t1);
 sampler linearSampler : register(s0);
 sampler clampedSampler : register(s1);
 
-
 float4 psMain(vsOutput psInput) : SV_TARGET
 {
     float4 orgColor = ImageA.Sample(linearSampler, psInput.texCoord);
@@ -32,14 +30,14 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     if (Mode < 0.5)
     {
         float gray = (orgColor.r + orgColor.g + orgColor.b) / 3 * Exposure;
-        orgColor = ApplyBiasAndGain(saturate(gray), BiasAndGain.x, BiasAndGain.y) * Repeat;
+        orgColor = ApplyGainAndBias(saturate(gray), GainAndBias) * Repeat;
         gradient = Gradient.Sample(linearSampler, float2(orgColor.r + Offset, 0));
     }
     else
     {
         orgColor.rgb *= Exposure;
-        orgColor = ApplyBiasAndGain(saturate(orgColor), BiasAndGain.x, BiasAndGain.y)  * Repeat;
-    
+        orgColor = ApplyGainAndBias(saturate(orgColor), GainAndBias) * Repeat;
+
         gradient = float4(
             Gradient.Sample(linearSampler, float2(orgColor.r + Offset, 0)).r,
             Gradient.Sample(linearSampler, float2(orgColor.g + Offset, 0)).g,

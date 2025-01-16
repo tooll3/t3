@@ -31,7 +31,7 @@
       "Outputs": []
     },
     {
-      "Id": "0d1f8a09-cd03-4219-ab5d-d236fa40257b"/*SamplePointAttributes*/,
+      "Id": "0d1f8a09-cd03-4219-ab5d-d236fa40257b"/*SamplePointAttributes_v1*/,
       "SymbolId": "b3de7a93-e921-4e43-8a56-6c84b2d18b74",
       "InputValues": [
         {
@@ -465,7 +465,7 @@
           "Value": 0
         },
         {
-          "Id": "ca5da68e-9c64-4331-b434-79bb139c6d3e"/*BiasAndGain*/,
+          "Id": "ca5da68e-9c64-4331-b434-79bb139c6d3e"/*GainAndBias*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.42499998,
@@ -528,7 +528,7 @@
       "SymbolId": "2c3d2c26-ac45-42e9-8f13-6ea338333568",
       "InputValues": [
         {
-          "Id": "1c70e502-90cc-4285-92ca-ec3d200967eb"/*BiasAndGain*/,
+          "Id": "1c70e502-90cc-4285-92ca-ec3d200967eb"/*GainAndBias*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.79499996,

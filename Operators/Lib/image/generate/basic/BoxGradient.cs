@@ -42,7 +42,7 @@ internal sealed class BoxGradient : Instance<BoxGradient>
     public readonly InputSlot<bool> Repeat = new InputSlot<bool>();
 
     [Input(Guid = "94516412-20a6-41a9-a036-a3b5ed67b04a")]
-    public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
+    public readonly InputSlot<Vector2> GainAndBias = new InputSlot<Vector2>();
 
     [Input(Guid = "63241bae-bfe6-415f-9288-ffcf1be15fc6", MappedType = typeof(SharedEnums.RgbBlendModes))]
     public readonly InputSlot<int> BlendMode = new InputSlot<int>();

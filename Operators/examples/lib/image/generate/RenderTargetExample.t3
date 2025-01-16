@@ -205,7 +205,7 @@
       "Outputs": []
     },
     {
-      "Id": "c15b45ca-dfa5-46d6-8a33-17d9c0fdd169"/*RenderQuad*/,
+      "Id": "c15b45ca-dfa5-46d6-8a33-17d9c0fdd169"/*DrawQuad*/,
       "SymbolId": "b89c5923-cc58-4d7a-8dce-eb1f8cdfc6e8",
       "InputValues": [
         {

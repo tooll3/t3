@@ -1,7 +1,6 @@
 {
   "Id": "89682afb-0c4a-4142-9cb0-6e84e322a4ea"/*AudioInk*/,
   "Description": "Experiment to draw with ink",
-  "SymbolTags": "0",
   "InputUis": [],
   "SymbolChildUis": [
     {

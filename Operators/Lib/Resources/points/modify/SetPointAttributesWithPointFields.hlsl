@@ -30,7 +30,7 @@ cbuffer Params : register(b0)
 
     float AffectW;
     float AffectColor;
-    float2 BiasAndGain;
+    float2 GainAndBias;
     float Variation;
 }
 
@@ -99,7 +99,7 @@ float3 fmod(float3 x, float3 y)
         float dd = 1 / (len + 0.1);
 
         float f = (1 - saturate((len - OffsetRange) / Range)) + noise;
-        f = ApplyBiasAndGain(f, BiasAndGain.x, BiasAndGain.y);
+        f = ApplyGainAndBias(f, GainAndBias);
         f *= p.Selected;
 
         float fw = CurveImage.SampleLevel(texSampler, float2(f, 0.5), 0).r;

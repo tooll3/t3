@@ -18,14 +18,6 @@
       }
     },
     {
-      "ChildId": "22d30a22-07db-45d8-9a02-498b3bf2c439"/*RadialPoints*/,
-      "Comment": "We emit a bunch of points for aligned orientation axis so their z-axis can be use for initial velocity in [ParticleSystem].",
-      "Position": {
-        "X": 900.0001,
-        "Y": 69.0
-      }
-    },
-    {
       "ChildId": "36cc16e3-95d3-4da2-83f4-93c3e49dbaf5"/*ImageLevels*/,
       "Comment": "As usual [ImageLevels] is your friend to understand what's going on.\n\nWhat we can see here:\n\n1. Most of the values are \"blue\" - This indicates the Z-axis is high the the normal is pointing towards the camera.\n2. Some values at the edges have Red and Green components (with less Blue). This values are changing betwen NormalMap.Twist is animated.\n3. You see the slight gradient created by the [Glow].",
       "Position": {
@@ -143,6 +135,14 @@
       "Position": {
         "X": 750.0001,
         "Y": 175.0
+      }
+    },
+    {
+      "ChildId": "fff2f405-2905-4fb1-87dd-4679e9fa0c22"/*RadialPoints*/,
+      "Comment": "We emit a bunch of points for aligned orientation axis so their z-axis can be use for initial velocity in [ParticleSystem].",
+      "Position": {
+        "X": 900.0001,
+        "Y": 69.0
       }
     }
   ],

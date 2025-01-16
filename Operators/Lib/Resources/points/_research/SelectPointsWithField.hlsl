@@ -66,7 +66,7 @@ static const float NoisePhase = 0;
 
     float scatter = Scatter * (hash11u(i.x) - 0.5);
 
-    s = ApplyBiasAndGain(s, GainAndBias.x, GainAndBias.y);
+    s = ApplyGainAndBias(s, GainAndBias);
 
     float w = WriteTo == 0
                   ? 1

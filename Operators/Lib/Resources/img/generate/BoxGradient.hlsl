@@ -6,13 +6,13 @@ cbuffer ParamConstants : register(b0)
     float2 Center;
     float2 Size;
     float4 CornersRadius;
-    float Rotation; 
+    float Rotation;
     float UniformScale;
     float Width;
     float Offset;
     float PingPong;
     float Repeat;
-    float2 BiasAndGain;
+    float2 GainAndBias;
     float BlendMode;
 
     float IsTextureValid; // Automatically added by _FxShaderSetup
@@ -40,15 +40,14 @@ float fmod(float x, float y)
     return (x - y * floor(x / y));
 }
 
-//source: https://iquilezles.org/articles/distfunctions2d/
-float sdRoundedBox( in float2 p, in float2 b, in float4 r )
+// source: https://iquilezles.org/articles/distfunctions2d/
+float sdRoundedBox(in float2 p, in float2 b, in float4 r)
 {
-    r.xy = (p.x>0.0)?r.xy : r.zw;
-    r.x  = (p.y>0.0)?r.x  : r.y;
-    float2 q = abs(p)-b+r.x;
-    return min(max(q.x,q.y),0.0) + length(max(q,0.0)) - r.x;
+    r.xy = (p.x > 0.0) ? r.xy : r.zw;
+    r.x = (p.y > 0.0) ? r.x : r.y;
+    float2 q = abs(p) - b + r.x;
+    return min(max(q.x, q.y), 0.0) + length(max(q, 0.0)) - r.x;
 }
-
 
 // Function to rotate a point around the origin
 inline float2 rotatePoint(float2 p, float angle)
@@ -57,8 +56,7 @@ inline float2 rotatePoint(float2 p, float angle)
     float sinAngle = sin(angle);
     return float2(
         p.x * cosAngle - p.y * sinAngle,
-        p.x * sinAngle + p.y * cosAngle
-    );
+        p.x * sinAngle + p.y * cosAngle);
 }
 
 float4 psMain(vsOutput psInput) : SV_TARGET
@@ -69,17 +67,16 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float2 p = uv;
     p -= 0.5;
     p.x *= aspectRation;
-    p+=Center * float2(-1,1);
+    p += Center * float2(-1, 1);
     // Convert the rotation angle from degrees to radians
     float rotationRadians = radians(Rotation);
     // Apply the rotation to the point
     p = rotatePoint(p, rotationRadians);
-    
+
     float c = 0;
 
-    c = sdRoundedBox(p, Size*UniformScale, CornersRadius*UniformScale)* 2 - Offset * Width;
-   
-    
+    c = sdRoundedBox(p, Size * UniformScale, CornersRadius * UniformScale) * 2 - Offset * Width;
+
     float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
 
     c = PingPong > 0.5
@@ -91,9 +88,9 @@ float4 psMain(vsOutput psInput) : SV_TARGET
             ? fmod(c, 1)
             : saturate(c);
 
-    float dBiased = ApplyBiasAndGain(c, BiasAndGain.x, BiasAndGain.y);
+    float dBiased = ApplyGainAndBias(c, GainAndBias);
 
-    dBiased = clamp(dBiased, 0.001, 0.999); 
+    dBiased = clamp(dBiased, 0.001, 0.999);
     float4 gradient = Gradient.Sample(clammpedSampler, float2(dBiased, 0));
 
     return (IsTextureValid < 0.5) ? gradient : BlendColors(orgColor, gradient, (int)BlendMode);

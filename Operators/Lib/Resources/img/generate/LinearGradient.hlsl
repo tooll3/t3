@@ -9,7 +9,7 @@ cbuffer ParamConstants : register(b0)
 
     float PingPong;
     float Repeat;
-    float2 BiasAndGain;
+    float2 GainAndBias;
 
     float Offset;
     float SizeMode;
@@ -72,7 +72,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
             ? fmod(c, 1)
             : saturate(c);
 
-    float dBiased = ApplyBiasAndGain(saturate(c), BiasAndGain.x, BiasAndGain.y);
+    float dBiased = ApplyGainAndBias(saturate(c), GainAndBias);
     // float dBiased = Bias >= 0
     //                     ? pow(c, Bias + 1)
     //                     : 1 - pow(clamp(1 - c, 0, 10), -Bias + 1);

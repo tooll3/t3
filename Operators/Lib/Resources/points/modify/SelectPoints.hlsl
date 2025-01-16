@@ -85,7 +85,6 @@ inline float LinearStep(float min, float max, float t)
         return;
     }
 
-
     float3 posInObject = p.Position;
     float3 posInVolume = mul(float4(posInObject, 1), TransformVolume).xyz;
 
@@ -120,17 +119,17 @@ inline float LinearStep(float min, float max, float t)
         s = LinearStep(Threshold + FallOff, Threshold, noise + scatter);
     }
 
+    s = ApplyGainAndBias(s, GainAndBias);
 
-    s = ApplyBiasAndGain(s, GainAndBias.x, GainAndBias.y);
+    float w = WriteTo == 0
+                  ? 1
+              : (WriteTo == 1) ? p.FX1
+                               : p.FX2;
 
-    float w = WriteTo == 0 
-        ? 1
-        : (WriteTo == 1) ? p.FX1 : p.FX2;
-
-
-    float strength = Strength * (StrengthFactor == 0 
-        ? 1
-        : (StrengthFactor == 1) ? p.FX1 : p.FX2);
+    float strength = Strength * (StrengthFactor == 0
+                                     ? 1
+                                 : (StrengthFactor == 1) ? p.FX1
+                                                         : p.FX2);
 
     if (SelectMode == ModeOverride)
     {
@@ -153,27 +152,26 @@ inline float LinearStep(float min, float max, float t)
         s = s * (1 - w);
     }
 
-
     float result = (DiscardNonSelected && s <= 0)
                        ? NAN
                    : (ClampResult)
                        ? saturate(s)
                        : s;
 
-    switch(WriteTo)
+    switch (WriteTo)
     {
-        case 1:
-            p.FX1 = result;
-            break;
-        case 2:
-            p.FX2 = result;
-            break;
+    case 1:
+        p.FX1 = result;
+        break;
+    case 2:
+        p.FX2 = result;
+        break;
     }
-    //p.Selected = result;
-    // if (SetW)
-    // {
-    //     p.W = result;
-    // }
+    // p.Selected = result;
+    //  if (SetW)
+    //  {
+    //      p.W = result;
+    //  }
 
     ResultPoints[i.x] = p;
 }

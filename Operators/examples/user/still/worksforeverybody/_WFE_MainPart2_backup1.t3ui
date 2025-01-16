@@ -389,7 +389,7 @@
       }
     },
     {
-      "ChildId": "2a3928af-df8d-4df4-a71a-5cdc7a364d0d"/*SamplePointAttributes*/,
+      "ChildId": "2a3928af-df8d-4df4-a71a-5cdc7a364d0d"/*SamplePointAttributes_v1*/,
       "Position": {
         "X": -2250.8262,
         "Y": 1166.7239
@@ -592,7 +592,7 @@
       }
     },
     {
-      "ChildId": "424852c1-592e-41d4-86fa-902ea736bb23"/*SamplePointAttributes*/,
+      "ChildId": "424852c1-592e-41d4-86fa-902ea736bb23"/*SamplePointAttributes_v1*/,
       "Position": {
         "X": -1872.8206,
         "Y": 61.885864
@@ -949,7 +949,7 @@
       }
     },
     {
-      "ChildId": "7208c9fd-eb87-4db0-85fc-5312cb31a66c"/*SamplePointAttributes*/,
+      "ChildId": "7208c9fd-eb87-4db0-85fc-5312cb31a66c"/*SamplePointAttributes_v1*/,
       "Position": {
         "X": -2705.6868,
         "Y": 8957.43
@@ -1136,7 +1136,7 @@
       }
     },
     {
-      "ChildId": "85233f49-cc53-47a2-ae9f-2101d99a851d"/*SamplePointAttributes*/,
+      "ChildId": "85233f49-cc53-47a2-ae9f-2101d99a851d"/*SamplePointAttributes_v1*/,
       "Position": {
         "X": -1285.2515,
         "Y": 1505.6267
@@ -1692,14 +1692,14 @@
       }
     },
     {
-      "ChildId": "cf446a17-77be-47ad-8e2b-3d9f63f588da"/*SamplePointAttributes*/,
+      "ChildId": "cf446a17-77be-47ad-8e2b-3d9f63f588da"/*SamplePointAttributes_v1*/,
       "Position": {
         "X": -2310.4805,
         "Y": 9907.117
       }
     },
     {
-      "ChildId": "cf57bef9-12ff-46ed-b6c2-195848e99dae"/*SamplePointAttributes*/,
+      "ChildId": "cf57bef9-12ff-46ed-b6c2-195848e99dae"/*SamplePointAttributes_v1*/,
       "Position": {
         "X": -1860.0251,
         "Y": -361.0907
@@ -1790,7 +1790,7 @@
       }
     },
     {
-      "ChildId": "d6edd677-2f41-4ed9-ab59-360cce2af20c"/*SamplePointAttributes*/,
+      "ChildId": "d6edd677-2f41-4ed9-ab59-360cce2af20c"/*SamplePointAttributes_v1*/,
       "Position": {
         "X": -2001.4788,
         "Y": 4534.9844
@@ -1867,7 +1867,7 @@
       }
     },
     {
-      "ChildId": "e1194c08-2b32-425f-800f-f72f8dfb583f"/*SamplePointAttributes*/,
+      "ChildId": "e1194c08-2b32-425f-800f-f72f8dfb583f"/*SamplePointAttributes_v1*/,
       "Position": {
         "X": -2210.852,
         "Y": 3587.7703
@@ -1937,7 +1937,7 @@
       }
     },
     {
-      "ChildId": "e8b6f9bf-79c2-4979-a2fb-013ce07e2d5d"/*SamplePointAttributes*/,
+      "ChildId": "e8b6f9bf-79c2-4979-a2fb-013ce07e2d5d"/*SamplePointAttributes_v1*/,
       "Position": {
         "X": -1690.5006,
         "Y": 5926.828

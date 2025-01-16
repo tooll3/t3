@@ -7,16 +7,16 @@ cbuffer ParamConstants : register(b0)
     float4 ColorA;
     float4 ColorB;
 
-    float2 Offset;  //8
+    float2 Offset; // 8
     float2 Stretch;
 
-    float Scale;   // 12
+    float Scale; // 12
     float Phase;
     float Iterations;
     float __padding;
 
-    float2 BiasAndGain; //16
-    float2 WarpOffsetXY; 
+    float2 GainAndBias; // 16
+    float2 WarpOffsetXY;
 
     float WarpOffsetZ;
 }
@@ -86,8 +86,6 @@ float noise_sum_abs(float3 p)
     return f;
 }
 
-
-
 float4 psMain(vsOutput psInput) : SV_TARGET
 {
     float aspectRatio = TargetWidth / TargetHeight;
@@ -112,9 +110,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     }
     f = 2 * f - 1;
 
-    //float fBiased = f;
-    float fBiased = ApplyBiasAndGain(f, BiasAndGain.x, BiasAndGain.y);
+    // float fBiased = f;
+    float fBiased = ApplyGainAndBias(f, GainAndBias);
 
     return lerp(ColorA, ColorB, saturate(fBiased));
-
 }

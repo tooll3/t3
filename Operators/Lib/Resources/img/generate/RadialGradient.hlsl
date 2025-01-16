@@ -10,7 +10,7 @@ cbuffer ParamConstants : register(b0)
     float Repeat;
     float PolarOrientation;
     float BlendMode;
-    float2 BiasAndGain;
+    float2 GainAndBias;
 
     float IsTextureValid; // Automatically added by _FxShaderSetup
 }
@@ -45,20 +45,20 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float2 p = uv;
     p -= 0.5;
     p.x *= aspectRation;
-    
+
     float c = 0;
 
     if (PolarOrientation < 0.5)
     {
-        c = distance(p, Center * float2(1,-1)) * 2 - Offset * Width;
+        c = distance(p, Center * float2(1, -1)) * 2 - Offset * Width;
     }
     else
     {
-        p += Center * float2(-1,1);
+        p += Center * float2(-1, 1);
         float Radius = 1;
         float l = 2 * length(p) / Radius;
 
-        float2 polar = float2(atan2(p.x, p.y) / 3.141578 / 2 + 0.5, l) + Center  - Center.x;
+        float2 polar = float2(atan2(p.x, p.y) / 3.141578 / 2 + 0.5, l) + Center - Center.x;
         c = polar.x + Offset * Width;
     }
 
@@ -73,7 +73,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
             ? fmod(c, 1)
             : saturate(c);
 
-    float dBiased = ApplyBiasAndGain(c, BiasAndGain.x, BiasAndGain.y);
+    float dBiased = ApplyGainAndBias(c, GainAndBias);
     // float dBiased = Bias >= 0
     //                     ? pow(c, Bias + 1)
     //                     : 1 - pow(clamp(1 - c, 0, 10), -Bias + 1);

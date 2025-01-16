@@ -26,6 +26,6 @@ internal sealed class Tint : Instance<Tint>
     public readonly InputSlot<Vector4> ChannelWeights = new InputSlot<Vector4>();
 
     [Input(Guid = "7db67f48-5947-422b-8eb3-33d641cc276e")]
-    public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
+    public readonly InputSlot<Vector2> GainAndBias = new InputSlot<Vector2>();
 
 }

@@ -46,6 +46,6 @@ internal sealed class AsciiRender : Instance<AsciiRender>
     public readonly InputSlot<bool> GenerateMips = new();
 
     [Input(Guid = "a842bd72-abb2-4207-8397-7e727aaa6c63")]
-    public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
+    public readonly InputSlot<Vector2> GainAndBias = new InputSlot<Vector2>();
 
 }

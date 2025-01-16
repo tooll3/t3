@@ -53,7 +53,7 @@ internal sealed class SelectPoints : Instance<SelectPoints>, ITransformable
         public readonly InputSlot<float> FallOff = new InputSlot<float>();
 
         [Input(Guid = "418d7362-3c4b-4749-8f11-62a953065689")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<System.Numerics.Vector2> GainAndBias = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "45957158-9924-46c2-8b48-f90f72b7148f")]
         public readonly InputSlot<float> Scatter = new InputSlot<float>();

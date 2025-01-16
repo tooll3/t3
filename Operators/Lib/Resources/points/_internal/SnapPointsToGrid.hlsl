@@ -13,7 +13,7 @@ cbuffer Params : register(b0)
 
     float Scatter;
     float Mode;
-    float2 BiasAndGain;
+    float2 GainAndBias;
 
     float UseWAsWeight;
     float UseSelection;
@@ -58,7 +58,7 @@ RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
         snapAmount = 1 - abs(signedFraction + scatter);
     }
 
-    float3 biasedSnap = ApplyBiasAndGain(snapAmount.xyzz, BiasAndGain.x, BiasAndGain.y).xyz;
+    float3 biasedSnap = ApplyGainAndBias(snapAmount.xyzz, GainAndBias).xyz;
 
     float3 ff = (1 - saturate(biasedSnap - Amount * 2 + 1)) * selectionFactor * wFactor;
     p.Position = lerp(orgPosition, centerPoint, ff);

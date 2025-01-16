@@ -93,7 +93,7 @@ internal sealed class AttributesFromImageChannels : Instance<AttributesFromImage
         public readonly InputSlot<int> StrengthFactor = new InputSlot<int>();
 
         [Input(Guid = "93f5697b-943f-482a-95b8-26db776bb7ce")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<System.Numerics.Vector2> GainAndBias = new InputSlot<System.Numerics.Vector2>();
 
 
     private enum Attributes

@@ -793,7 +793,7 @@
           "Value": 0.5
         },
         {
-          "Id": "ef8d1fe2-8470-4113-8d20-40a92d0dab97"/*BiasAndGain*/,
+          "Id": "ef8d1fe2-8470-4113-8d20-40a92d0dab97"/*GainAndBias*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.61,
@@ -993,7 +993,7 @@
       "Outputs": []
     },
     {
-      "Id": "d33b2f20-23d5-40d3-be00-8f370050da3a"/*SamplePointAttributes*/,
+      "Id": "d33b2f20-23d5-40d3-be00-8f370050da3a"/*SamplePointAttributes_v1*/,
       "SymbolId": "b3de7a93-e921-4e43-8a56-6c84b2d18b74",
       "InputValues": [],
       "Outputs": []

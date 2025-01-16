@@ -771,7 +771,7 @@
           }
         },
         {
-          "Id": "dce72235-839e-41f1-a2a4-e19f0ef66e5c"/*BiasAndGain*/,
+          "Id": "dce72235-839e-41f1-a2a4-e19f0ef66e5c"/*GainAndBias*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.395,
@@ -2993,7 +2993,7 @@
           "Value": 1.11
         },
         {
-          "Id": "1c70e502-90cc-4285-92ca-ec3d200967eb"/*BiasAndGain*/,
+          "Id": "1c70e502-90cc-4285-92ca-ec3d200967eb"/*GainAndBias*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.28500003,
@@ -3249,7 +3249,7 @@
           "Value": 4.25
         },
         {
-          "Id": "1c70e502-90cc-4285-92ca-ec3d200967eb"/*BiasAndGain*/,
+          "Id": "1c70e502-90cc-4285-92ca-ec3d200967eb"/*GainAndBias*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.28500003,
@@ -3866,7 +3866,7 @@
           "Value": 6.2
         },
         {
-          "Id": "ca5da68e-9c64-4331-b434-79bb139c6d3e"/*BiasAndGain*/,
+          "Id": "ca5da68e-9c64-4331-b434-79bb139c6d3e"/*GainAndBias*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.4,

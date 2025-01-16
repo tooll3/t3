@@ -44,7 +44,7 @@ internal sealed class RadialPoints : Instance<RadialPoints>
         public readonly InputSlot<float> Rotations = new InputSlot<float>();
 
         [Input(Guid = "ef8d1fe2-8470-4113-8d20-40a92d0dab97")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<System.Numerics.Vector2> GainAndBias = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "76124db6-4b89-4d7c-bd25-2ebf95b1c141")]
         public readonly InputSlot<bool> CloseCircleLine = new InputSlot<bool>();

@@ -13,7 +13,7 @@ internal sealed class FractalNoise : Instance<FractalNoise>
     public readonly InputSlot<Vector4> ColorB = new InputSlot<Vector4>();
 
     [Input(Guid = "ca5da68e-9c64-4331-b434-79bb139c6d3e")]
-    public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
+    public readonly InputSlot<Vector2> GainAndBias = new InputSlot<Vector2>();
 
     [Input(Guid = "751f9a41-d97f-4e04-8338-cebe9be88c5a")]
     public readonly InputSlot<Vector2> Offset = new InputSlot<Vector2>();

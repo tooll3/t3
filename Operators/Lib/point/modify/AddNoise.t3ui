@@ -20,19 +20,6 @@
       "Description": "Shifts the noise per axis."
     },
     {
-      "InputId": "30ceafce-455a-449c-9ffd-928280d7a862"/*BiasAndGain*/,
-      "Position": {
-        "X": -351.6601,
-        "Y": 1349.9845
-      },
-      "Description": "Bias And Gain to accentuate the noise both in time and space",
-      "AddPadding": "True",
-      "Min": 0.0,
-      "Max": 1.0,
-      "Clamp": true,
-      "UseVec2Control": "BiasAndGain"
-    },
-    {
       "InputId": "3f5abde2-66e1-4b04-9bff-5a19a58aab86"/*Points*/,
       "Relevancy": "Required",
       "Position": {
@@ -103,13 +90,6 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "1ba7d170-1f30-4b65-80c6-f66e613e31a4"/*Vector2Components*/,
-      "Position": {
-        "X": 70.32176,
-        "Y": 1330.553
-      }
-    },
-    {
       "ChildId": "22be2e8f-3ed8-47b7-88d7-677bb6cd2fca"/*FloatsToBuffer*/,
       "Style": "Resizable",
       "Size": {
@@ -140,13 +120,6 @@
       "Position": {
         "X": 473.44153,
         "Y": 578.99976
-      }
-    },
-    {
-      "ChildId": "526c2301-a159-49b8-9a5f-188e7cde0b71"/*__padding*/,
-      "Position": {
-        "X": 46.52594,
-        "Y": 1294.5292
       }
     },
     {

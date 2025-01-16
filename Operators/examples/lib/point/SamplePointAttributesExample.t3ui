@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "0bbfa4d8-0a02-49b9-af4f-16555f79a909"/*AttributesFromImage*/,
+      "ChildId": "0bbfa4d8-0a02-49b9-af4f-16555f79a909"/*AttributesFromImageChannels*/,
       "Position": {
         "X": 857.53503,
         "Y": 369.0668

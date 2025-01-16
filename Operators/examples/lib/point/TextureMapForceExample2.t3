@@ -575,7 +575,7 @@
           "Value": 9.0
         },
         {
-          "Id": "41491794-082d-4394-b6c2-efb4780623ea"/*VariationBiasGain*/,
+          "Id": "41491794-082d-4394-b6c2-efb4780623ea"/*VariationGainAndBias*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.59,

@@ -13,7 +13,7 @@ internal sealed class PointsOnImage : Instance<PointsOnImage>
     public readonly InputSlot<int> Count = new InputSlot<int>();
 
     [Input(Guid = "effde91f-2cbc-4400-b1fb-17677c538fe6")]
-    public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
+    public readonly InputSlot<Vector2> GainAndBias = new InputSlot<Vector2>();
 
     [Input(Guid = "71d1e34f-bf8c-4e24-87b2-177bb3249b12")]
     public readonly InputSlot<float> ScatterWithinPixel = new InputSlot<float>();

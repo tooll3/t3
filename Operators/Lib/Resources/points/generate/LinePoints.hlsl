@@ -19,7 +19,7 @@ cbuffer Params : register(b0)
     float4 ColorA;
     float4 ColorB;
 
-    float2 BiasGain;
+    float2 GainAndBias;
     float2 FX1;
     float2 FX2;
 
@@ -60,7 +60,7 @@ float3 RotatePointAroundAxis(float3 In, float3 Axis, float Rotation)
 
     int seperatorOffset = AddSeparator ? 1 : 0;
     int steps = (pointCount - 1 - seperatorOffset);
-    float f1 = ApplyBiasAndGain(steps > 0 ? (float)(index) / steps : 0.5, BiasGain.x, BiasGain.y);
+    float f1 = ApplyGainAndBias(steps > 0 ? (float)(index) / steps : 0.5, GainAndBias);
     float f = f1 - Pivot;
 
     ResultPoints[index].Position = lerp(Center, Center + Direction * LengthFactor, f);

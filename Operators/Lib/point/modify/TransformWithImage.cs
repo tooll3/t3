@@ -72,7 +72,7 @@ internal sealed class TransformWithImage : Instance<TransformWithImage>
         public readonly InputSlot<int> TranslationSpace = new InputSlot<int>();
 
         [Input(Guid = "099019c1-f27c-44a4-9e9c-c22b8313310c")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<System.Numerics.Vector2> GainAndBias = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "61f306a3-8799-452c-b9cf-4c71efdb633c")]
         public readonly InputSlot<float> Scatter = new InputSlot<float>();

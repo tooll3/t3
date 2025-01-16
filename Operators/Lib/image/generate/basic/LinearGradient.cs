@@ -39,7 +39,7 @@ internal sealed class LinearGradient : Instance<LinearGradient>
     public readonly InputSlot<int> OffsetMode = new InputSlot<int>();
 
     [Input(Guid = "1c70e502-90cc-4285-92ca-ec3d200967eb")]
-    public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
+    public readonly InputSlot<Vector2> GainAndBias = new InputSlot<Vector2>();
 
     [Input(Guid = "1d0cf561-858d-4510-95c4-f3ad9148355d", MappedType = typeof(SharedEnums.RgbBlendModes))]
     public readonly InputSlot<int> BlendMode = new InputSlot<int>();

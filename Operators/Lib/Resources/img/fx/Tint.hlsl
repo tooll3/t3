@@ -13,7 +13,6 @@ cbuffer ParamConstants : register(b0)
     float Exposure;
 }
 
-
 cbuffer TimeConstants : register(b1)
 {
     float globalTime;
@@ -36,9 +35,9 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     float t = length(c * normalize(ChannelWeights)) + 0.001;
 
-    t= ApplyBiasAndGain(saturate(t), GainAndBias.x, GainAndBias.y); 
-    float4 mapped = lerp(MapBlackTo, MapWhiteTo, t); 
+    t = ApplyGainAndBias(saturate(t), GainAndBias);
+    float4 mapped = lerp(MapBlackTo, MapWhiteTo, t);
     float4 cout = lerp(c, mapped, Amount);
-    cout.a = clamp(cout.a, 0,1);
+    cout.a = clamp(cout.a, 0, 1);
     return cout;
 }

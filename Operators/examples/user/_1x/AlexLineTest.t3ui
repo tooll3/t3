@@ -390,7 +390,7 @@
       }
     },
     {
-      "ChildId": "47f986a0-64b2-4a31-8b67-3a3183f3130e"/*SamplePointAttributes*/,
+      "ChildId": "47f986a0-64b2-4a31-8b67-3a3183f3130e"/*SamplePointAttributes_v1*/,
       "Position": {
         "X": 3357.8767,
         "Y": 275.03992
@@ -643,13 +643,6 @@
     },
     {
       "ChildId": "9f3c16c2-4392-4e98-944c-912a278a6a25"/*MeshVerticesToPoints*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 1388.9164
-      }
-    },
-    {
-      "ChildId": "a09924d6-0523-499f-ba2d-a4ecf2a8e8a2"/*EvokeInvitationExperiment*/,
       "Position": {
         "X": 0.0,
         "Y": 1388.9164

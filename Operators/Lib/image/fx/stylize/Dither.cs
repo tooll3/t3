@@ -24,7 +24,7 @@ internal sealed class Dither : Instance<Dither>
     public readonly InputSlot<Vector4> GrayScaleWeights = new InputSlot<Vector4>();
 
     [Input(Guid = "3a6f87d6-913b-4200-807c-bb4da3f64fb7")]
-    public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();
+    public readonly InputSlot<Vector2> GainAndBias = new InputSlot<Vector2>();
 
     [Input(Guid = "41d59091-a974-43ed-b45b-0849fb91f6d1")]
     public readonly InputSlot<float> Scale = new InputSlot<float>();

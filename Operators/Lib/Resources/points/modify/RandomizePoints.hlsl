@@ -75,8 +75,8 @@ float3 rgb2hsb(float3 c)
 
     float t = fmod(phase, 1);
     t = Interpolation == 0 ? 0 : (Interpolation == 1 ? t : smoothstep(0, 1, t));
-    float4 biasedA = ApplyBiasAndGain(lerp(hash41u(phaseIndex), hash41u(phaseIndex + 1), t), GainAndBias.x, GainAndBias.y);
-    float4 biasedB = ApplyBiasAndGain(lerp(hash41u(phaseIndex + _PRIME0), hash41u(phaseIndex + _PRIME0 + 1), t), GainAndBias.x, GainAndBias.y);
+    float4 biasedA = ApplyGainAndBias(lerp(hash41u(phaseIndex), hash41u(phaseIndex + 1), t), GainAndBias);
+    float4 biasedB = ApplyGainAndBias(lerp(hash41u(phaseIndex + _PRIME0), hash41u(phaseIndex + _PRIME0 + 1), t), GainAndBias);
 
     float strength = Strength * (StrengthFactor == 0
                                      ? 1

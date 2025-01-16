@@ -1595,7 +1595,7 @@
           "Value": true
         },
         {
-          "Id": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*BiasAndGain*/,
+          "Id": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*GainAndBias*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.96,
@@ -1635,7 +1635,7 @@
           }
         },
         {
-          "Id": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*BiasAndGain*/,
+          "Id": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*GainAndBias*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.03,

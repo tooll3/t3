@@ -825,7 +825,7 @@
       "Outputs": []
     },
     {
-      "Id": "47f986a0-64b2-4a31-8b67-3a3183f3130e"/*SamplePointAttributes*/,
+      "Id": "47f986a0-64b2-4a31-8b67-3a3183f3130e"/*SamplePointAttributes_v1*/,
       "SymbolId": "b3de7a93-e921-4e43-8a56-6c84b2d18b74",
       "InputValues": [
         {
@@ -1475,12 +1475,6 @@
     {
       "Id": "9f3c16c2-4392-4e98-944c-912a278a6a25"/*MeshVerticesToPoints*/,
       "SymbolId": "2467e1ed-f7fc-4c90-8230-b80ba6b42a2d",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "a09924d6-0523-499f-ba2d-a4ecf2a8e8a2"/*EvokeInvitationExperiment*/,
-      "SymbolId": "ce469ec7-708e-492f-8b6a-44eda127c28e",
       "InputValues": [],
       "Outputs": []
     },

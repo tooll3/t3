@@ -12,7 +12,7 @@ cbuffer Params : register(b0)
 
 cbuffer Params : register(b1)
 {
-    float2 BiasAndGain;
+    float2 GainAndBias;
     float ScatterWithinPixel;
 }
 

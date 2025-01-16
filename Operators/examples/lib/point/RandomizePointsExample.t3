@@ -237,7 +237,7 @@
           }
         },
         {
-          "Id": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*BiasAndGain*/,
+          "Id": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*GainAndBias*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.57,
@@ -337,7 +337,7 @@
           "Value": 2
         },
         {
-          "Id": "418d7362-3c4b-4749-8f11-62a953065689"/*BiasAndGain*/,
+          "Id": "418d7362-3c4b-4749-8f11-62a953065689"/*GainAndBias*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.45,
@@ -435,7 +435,7 @@
           }
         },
         {
-          "Id": "ef8d1fe2-8470-4113-8d20-40a92d0dab97"/*BiasAndGain*/,
+          "Id": "ef8d1fe2-8470-4113-8d20-40a92d0dab97"/*GainAndBias*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.588,
@@ -500,7 +500,7 @@
           }
         },
         {
-          "Id": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*BiasAndGain*/,
+          "Id": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*GainAndBias*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.3,
@@ -671,7 +671,7 @@
       "SymbolId": "ec0675d7-6b72-4b15-b141-80bdd2367cd8",
       "InputValues": [
         {
-          "Id": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*BiasAndGain*/,
+          "Id": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*GainAndBias*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 1.0,

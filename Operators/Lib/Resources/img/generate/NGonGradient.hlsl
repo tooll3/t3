@@ -5,20 +5,19 @@ cbuffer ParamConstants : register(b0)
 {
     float2 Position;
     float Sides;
-    float Radius; 
+    float Radius;
     float Curvature;
     float Blades;
 
     float Rotate;
- 
+
     float Width;
     float Offset;
     float PingPong;
     float Repeat;
 
     float BlendMode;
-    float2 BiasAndGain;
-    
+    float2 GainAndBias;
 
     float IsTextureValid; // Automatically added by _FxShaderSetup
 }
@@ -48,8 +47,6 @@ float fmod(float x, float y)
     return (x - y * floor(x / y));
 }
 
-
-
 // based on https://www.shadertoy.com/view/Wll3R2
 float sdNgon(in float2 p, in float r, in float n)
 {
@@ -75,23 +72,23 @@ float sdNgon(in float2 p, in float r, in float n)
 
 /* ------- experimentation ---------- */
 
-//What if we could use this instead? https://www.shadertoy.com/view/7tSXzt
+// What if we could use this instead? https://www.shadertoy.com/view/7tSXzt
 /*float sdRegularPolygon(in float2 p, in float r, in int n )
 {
     // these 4 lines can be precomputed for a given shape
     float an = 3.141593/float(n);
     float2 acs = float2(cos(an),sin(an));
-    
+
     // reduce to first sector
     float bn = fmod(atan2(p.x,p.y),2.0*an) - an;
-    bn *= bn > 0 ? (1 - saturate(Blades)) : 1; //Blades parameter is working 
+    bn *= bn > 0 ? (1 - saturate(Blades)) : 1; //Blades parameter is working
     p = length(p)*float2(cos(bn),abs(sin(bn)));
- 
+
     // line sdf
     p -= r*acs;
-    
+
     p.y += clamp( -p.y, 0.0, r*acs.y);
-    
+
    // p.y *= p.y > 0 ? (1 - saturate(Roundness)) : 1; // we can control the roundness
     return length(p)*sign(p.x);
 }*/
@@ -103,8 +100,7 @@ inline float2 rotatePoint(float2 p, float angle)
     float sinAngle = sin(angle);
     return float2(
         p.x * cosAngle - p.y * sinAngle,
-        p.x * sinAngle + p.y * cosAngle
-    );
+        p.x * sinAngle + p.y * cosAngle);
 }
 
 float4 psMain(vsOutput psInput) : SV_TARGET
@@ -119,11 +115,10 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float rotationRadians = radians(Rotate);
     // Apply the rotation to the point
     p = rotatePoint(p, rotationRadians);
-    
-    p += Position.yx ;
-    float c = sdNgon(p, Radius, Sides) *2 - Offset * Width ;
-    //float c = sdRegularPolygon(p, Radius, Sides) * 2 - Offset * Width ;
-    
+
+    p += Position.yx;
+    float c = sdNgon(p, Radius, Sides) * 2 - Offset * Width;
+    // float c = sdRegularPolygon(p, Radius, Sides) * 2 - Offset * Width ;
 
     float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
 
@@ -135,12 +130,10 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     c = Repeat > 0.5
             ? fmod(c, 1)
             : saturate(c);
-    
 
-    float dBiased = ApplyBiasAndGain(c, BiasAndGain.x, BiasAndGain.y);
+    float dBiased = ApplyGainAndBias(c, GainAndBias);
     dBiased = clamp(dBiased, 0.001, 0.999);
     float4 gradient = Gradient.Sample(clammpedSampler, float2(dBiased, 0));
-
 
     return (IsTextureValid < 0.5) ? gradient : BlendColors(orgColor, gradient, (int)BlendMode);
 }

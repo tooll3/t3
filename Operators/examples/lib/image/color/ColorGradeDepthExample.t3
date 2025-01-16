@@ -120,7 +120,7 @@
       "Outputs": []
     },
     {
-      "Id": "d22fc9ae-a76a-495e-a7a1-629fcc026771"/*SamplePointAttributes*/,
+      "Id": "d22fc9ae-a76a-495e-a7a1-629fcc026771"/*SamplePointAttributes_v1*/,
       "SymbolId": "b3de7a93-e921-4e43-8a56-6c84b2d18b74",
       "InputValues": [
         {

@@ -11,7 +11,7 @@ cbuffer Params : register(b0)
 
 cbuffer Params : register(b1)
 {
-    float2 BiasAndGain;
+    float2 GainAndBias;
     float ScatterWithinPixel;
     float __padding;
     float4 ColorWeight;
@@ -24,12 +24,12 @@ RWTexture2D<float> CDF : register(u0);
 inline float ComputeIntensity(float4 rgba)
 {
     float4 ccc = rgba * ColorWeight;
-    float l1 =  ColorWeight 
-                    ? saturate( (ccc.r + ccc.g + ccc.b + ccc.a) / (ColorWeight.r + ColorWeight.g + ColorWeight.b + ColorWeight.a) - ClampEmit)
-                    : saturate(1.2 - distance(rgba.rgb, ColorWeight.rgb) - ClampEmit);
+    float l1 = ColorWeight
+                   ? saturate((ccc.r + ccc.g + ccc.b + ccc.a) / (ColorWeight.r + ColorWeight.g + ColorWeight.b + ColorWeight.a) - ClampEmit)
+                   : saturate(1.2 - distance(rgba.rgb, ColorWeight.rgb) - ClampEmit);
 
-    float l = ApplyBiasAndGain(l1, BiasAndGain.x, BiasAndGain.y);
-    return  l;
+    float l = ApplyGainAndBias(l1, GainAndBias);
+    return l;
 }
 
 [numthreads(4, 1, 1)] void SumRows(uint3 threadID : SV_DispatchThreadID)

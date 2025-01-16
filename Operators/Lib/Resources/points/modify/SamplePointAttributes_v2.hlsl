@@ -40,7 +40,7 @@ cbuffer Params : register(b0)
 
     float3 Center;
     float Strength;
-    float2 BiasAndGain;
+    float2 GainAndBias;
 }
 
 cbuffer Params : register(b1)
@@ -77,26 +77,6 @@ RWStructuredBuffer<Point> ResultPoints : register(u0); // output
 
 sampler texSampler : register(s0);
 
-inline float SBiasGain(float4 value, float2 biasGain)
-{
-    float bias = saturate(biasGain.x);
-    float gain = saturate(biasGain.y);
-
-    // Apply bias
-    value /= (1.0 / bias - 2.0) * (1.0 - value) + 1.0;
-
-    // Calculate gain factors
-    float gainFactorLow = 1.0 / gain - 2.0;
-    float gainFactorHigh = 1.0 / (1.0 - gain) - 2.0;
-
-    // Use a conditional expression to remove branching
-    float scaledValue = (value < 0.5)
-                            ? (value * 2.0) / (gainFactorLow * (1.0 - value * 2.0) + 1.0) * 0.5
-                            : ((value * 2.0 - 1.0) / (gainFactorHigh * (1.0 - (value * 2.0 - 1.0)) + 1.0)) * 0.5 + 0.5;
-
-    return scaledValue;
-}
-
 [numthreads(256, 4, 1)] void main(uint3 i
                                   : SV_DispatchThreadID)
 {
@@ -116,7 +96,7 @@ inline float SBiasGain(float4 value, float2 biasGain)
     float4 c = inputTexture.SampleLevel(texSampler, posInObject.xy * float2(0.5, -0.5) + float2(0.5, 0.5), 0.0);
     float gray = (c.r + c.g + c.b) / 3;
 
-    float4 rgbl = SBiasGain(float4(c.rgb, gray), BiasAndGain.yx);
+    float4 rgbl = ApplyGainAndBias(float4(c.rgb, gray), GainAndBias);
 
     float factors[Attribute_Count] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
