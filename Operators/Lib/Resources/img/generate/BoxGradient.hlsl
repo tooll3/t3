@@ -1,5 +1,5 @@
-#include "lib/shared/blend-functions.hlsl"
-#include "lib/shared/bias-functions.hlsl"
+#include "shared/blend-functions.hlsl"
+#include "shared/bias-functions.hlsl"
 
 cbuffer ParamConstants : register(b0)
 {
