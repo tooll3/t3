@@ -6,7 +6,6 @@ using T3.Core.DataTypes;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
-using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
@@ -19,6 +18,7 @@ using T3.Editor.UiModel.Commands.Annotations;
 using T3.Editor.UiModel.Commands.Graph;
 using T3.Editor.UiModel.InputsAndTypes;
 using T3.Editor.UiModel.Modification;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.Graph.Interaction;
@@ -137,7 +137,7 @@ internal static class NodeActions
         return annotation;
     }
 
-    public static void PinSelectedToOutputWindow(GraphComponents components, NodeSelection nodeSelection, Instance compositionOp)
+    public static void PinSelectedToOutputWindow(ProjectView components, NodeSelection nodeSelection, Instance compositionOp)
     {
         var outputWindow = OutputWindow.OutputWindowInstances.FirstOrDefault(ow => ow.Config.Visible) as OutputWindow;
         if (outputWindow == null)

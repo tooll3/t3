@@ -11,7 +11,7 @@ using T3.Editor.Gui.Windows.TimeLine.Raster;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Animation;
 using T3.Editor.UiModel.InputsAndTypes;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.InputUi.CombinedInputs;
@@ -284,7 +284,7 @@ public static class CurveInputEditing
                     }
                 }
 
-                var graphCanvas = ProjectEditing.FocusedCanvas;
+                var graphCanvas = ProjectManager.FocusedCanvas;
                 DrawCurveCanvas(DrawCanvasContent, selectionFence, height, _interactionFlags);
 
                 void DrawCanvasContent(InteractionState interactionState)
@@ -321,7 +321,7 @@ public static class CurveInputEditing
                     if (NeedToAdjustScopeAfterFirstRendering)
                     {
                         var bounds = GetBoundsOnCanvas(interaction.GetAllKeyframes());
-                        SetScopeToCanvasArea(bounds, flipY: true, ProjectEditing.FocusedCanvas, 30, 15);
+                        SetScopeToCanvasArea(bounds, flipY: true, ProjectManager.FocusedCanvas, 30, 15);
                         NeedToAdjustScopeAfterFirstRendering = false;
                     }
                 }

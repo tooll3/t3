@@ -2,19 +2,19 @@
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.Utilities;
 using T3.Editor.UiModel.Commands;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 
 // ReSharper disable PossibleMultipleEnumeration
 
 namespace T3.Editor.Gui.Windows;
 
-internal class SimulatedCrashException : Exception
+internal sealed class SimulatedCrashException : Exception
 {
 }
 
-public class UtilitiesWindow : Window
+internal sealed class UtilitiesWindow : Window
 {
-    public UtilitiesWindow()
+    internal UtilitiesWindow()
     {
         Config.Title = "Utilities";
     }
@@ -76,7 +76,7 @@ public class UtilitiesWindow : Window
                         ImGui.TreePop();
                     }
 
-                    var graphInfo = ProjectEditing.Components;
+                    var graphInfo = ProjectManager.Components;
                     
                     if (graphInfo != null && ImGui.TreeNode("Navigation history"))
                     {
@@ -154,7 +154,7 @@ public class UtilitiesWindow : Window
         throw new SimulatedCrashException();
     }
 
-    public override List<Window> GetInstances()
+    internal override List<Window> GetInstances()
     {
         return new List<Window>();
     }

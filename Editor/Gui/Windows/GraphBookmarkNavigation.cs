@@ -1,9 +1,8 @@
 using ImGuiNET;
-using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.Windows;
 
@@ -12,7 +11,7 @@ namespace T3.Editor.Gui.Windows;
 /// </summary>
 internal static class GraphBookmarkNavigation
 {
-    public static void HandleForCanvas(GraphComponents components)
+    public static void HandleForCanvas(ProjectView components)
     {
         // var isNotFocused = !ImGui.IsWindowFocused();
         // if (isNotFocused)
@@ -46,7 +45,7 @@ internal static class GraphBookmarkNavigation
 
     public static void DrawBookmarksMenu()
     {
-        var components = ProjectEditing.Components;
+        var components = ProjectManager.Components;
         if (components == null)
         {
             Log.Warning($"Cannot draw bookmark menu. No focused graph window.");
@@ -87,7 +86,7 @@ internal static class GraphBookmarkNavigation
         }
     }
 
-    private static void LoadBookmark(GraphComponents window, int index)
+    private static void LoadBookmark(ProjectView window, int index)
     {
         var bookmark = GetBookmarkAt(index);
         if (bookmark == null)
@@ -108,7 +107,7 @@ internal static class GraphBookmarkNavigation
         //SelectionManager.SetSelection(bookmark.SelectedChildIds);
     }
 
-    private static void SaveBookmark(GraphComponents window, int index)
+    private static void SaveBookmark(ProjectView window, int index)
     {
         Log.Debug("Saving bookmark " + index);
         var bookmarks = UserSettings.Config.Bookmarks;

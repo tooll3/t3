@@ -1,7 +1,7 @@
 ﻿#nullable enable
 using System.Text.RegularExpressions;
 using T3.Core.Operator;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.UiModel.Helpers;
@@ -157,10 +157,10 @@ internal sealed class SymbolFilter
         EditorSymbolPackage? currentProject = null;
         Instance? composition = null;
 
-        if (ProjectEditing.Components != null)
+        if (ProjectManager.Components != null)
         {
-            currentProject = ProjectEditing.Components.OpenedProject.Package;
-            composition = ProjectEditing.Components.CompositionOp;
+            currentProject = ProjectManager.Components.OpenedProject.Package;
+            composition = ProjectManager.Components.CompositionOp;
         }
 
         MatchingSymbolUis = MatchingSymbolUis.OrderBy(s => ComputeRelevancy(s, _symbolFilterString, currentProject, composition))

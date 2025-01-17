@@ -13,7 +13,7 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.InputsAndTypes;
 using T3.Editor.UiModel.Modification;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.MagGraph.Ui;
@@ -62,13 +62,13 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas
         // if (context.CompositionOp.SymbolChildId == _previousCompositionId)
         //     return;
         //
-        if (ProjectEditing.FocusedCanvas == null)
+        if (ProjectManager.FocusedCanvas == null)
             return;
         
         // _previousCompositionId = context.CompositionOp.SymbolChildId;
         
         // Meh: This relies on TargetScope already being set to new composition.
-        var newCanvasScope = ProjectEditing.FocusedCanvas.GetTargetScope();
+        var newCanvasScope = ProjectManager.FocusedCanvas.GetTargetScope();
         if (UserSettings.Config.OperatorViewSettings.TryGetValue(context.CompositionOp.SymbolChildId, out var savedCanvasScope))
         {
             newCanvasScope = savedCanvasScope;

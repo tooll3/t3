@@ -1,10 +1,9 @@
 ﻿using ImGuiNET;
 using T3.Core.Operator;
-using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel.InputsAndTypes;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.SystemUi;
 
 namespace T3.Editor.Gui.Dialog;
@@ -211,7 +210,7 @@ public class SearchDialog : ModalDialog
     {
         _matchingInstances.Clear();
 
-        var components = ProjectEditing.Components;
+        var components = ProjectManager.Components;
         if (components == null)
             return;
 
@@ -265,7 +264,7 @@ public class SearchDialog : ModalDialog
     private bool _selectedItemChanged;
     private SearchModes _searchMode = SearchModes.Local;
 
-    private readonly record struct FoundInstance(Instance Instance, GraphComponents GraphCanvas);
+    private readonly record struct FoundInstance(Instance Instance, ProjectView GraphCanvas);
 
     private enum SearchModes
     {

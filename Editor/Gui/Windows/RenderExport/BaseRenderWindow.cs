@@ -6,16 +6,16 @@ using T3.Core.SystemUi;
 using T3.Core.Utils;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Styling;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.Windows.RenderExport;
 
-public abstract class BaseRenderWindow : Window
+internal abstract class BaseRenderWindow : Window
 {
 
     protected static int SoundtrackChannels()
     {
-        var composition = ProjectEditing.Components?.CompositionOp;
+        var composition = ProjectManager.Components?.CompositionOp;
         if (composition == null)
             return AudioEngine.GetClipSampleRate(null);
         
@@ -28,7 +28,7 @@ public abstract class BaseRenderWindow : Window
 
     protected static int SoundtrackSampleRate()
     {
-        var composition = ProjectEditing.Components?.CompositionOp;
+        var composition = ProjectManager.Components?.CompositionOp;
 
         if (composition == null)
             return AudioEngine.GetClipSampleRate(null);
@@ -230,7 +230,7 @@ public abstract class BaseRenderWindow : Window
     protected static void SetPlaybackTimeForThisFrame()
     {
         // get playback settings
-        var composition = ProjectEditing.Components?.CompositionOp;
+        var composition = ProjectManager.Components?.CompositionOp;
         PlaybackUtils.FindPlaybackSettingsForInstance(composition, out var instanceWithSettings, out var settings);
 
         // change settings for all playback before calculating times
@@ -293,7 +293,7 @@ public abstract class BaseRenderWindow : Window
         _audioRecording = false;
     }
 
-    public override List<Window> GetInstances()
+    internal override List<Window> GetInstances()
     {
         return new List<Window>();
     }
@@ -335,7 +335,7 @@ public abstract class BaseRenderWindow : Window
 
     // ReSharper disable once InconsistentNaming
     //protected static bool _isExporting;
-    public static int OverrideMotionBlurSamples => _overrideMotionBlurSamples;
+    internal static int OverrideMotionBlurSamples => _overrideMotionBlurSamples;
     private static int _overrideMotionBlurSamples = -1;
 
     protected static int FrameIndex;

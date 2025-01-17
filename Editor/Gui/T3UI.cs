@@ -25,7 +25,7 @@ using T3.Editor.Gui.Windows.RenderExport;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Helpers;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 using T3.SystemUi;
 
@@ -70,7 +70,7 @@ public static class T3Ui
         // Prepare the current frame 
         RenderStatsCollector.StartNewFrame();
             
-        if (!Playback.Current.IsRenderingToFile && ProjectEditing.Components != null)
+        if (!Playback.Current.IsRenderingToFile && ProjectManager.Components != null)
         {
             PlaybackUtils.UpdatePlaybackAndSyncing();
             AudioEngine.CompleteFrame(Playback.Current, Playback.LastFrameDuration);    // Update
@@ -95,7 +95,7 @@ public static class T3Ui
         
         CompatibleMidiDeviceHandling.UpdateConnectedDevices();
 
-        var nodeSelection = ProjectEditing.Components?.NodeSelection;
+        var nodeSelection = ProjectManager.Components?.NodeSelection;
         if (nodeSelection != null)
         {
             // Set selected id so operator can check if they are selected or not  
@@ -204,7 +204,7 @@ public static class T3Ui
 
     internal static void ToggleFocusMode()
     {
-        var activeComponents = ProjectEditing.Components;
+        var activeComponents = ProjectManager.Components;
         if (activeComponents == null)
             return;
         
@@ -282,7 +282,7 @@ public static class T3Ui
 
     internal static void SelectAndCenterChildIdInView(Guid symbolChildId)
     {
-        var components = ProjectEditing.Components;
+        var components = ProjectManager.Components;
         if (components == null || components.CompositionOp == null)
             return;
 

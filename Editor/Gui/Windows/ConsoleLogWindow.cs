@@ -3,11 +3,10 @@ using System.Text;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.Windows;
 
@@ -175,7 +174,7 @@ internal sealed class ConsoleLogWindow : Window, ILogWriter
         ImGui.SameLine(90);
 
         float opacity = 1f;
-        var nodeSelection = ProjectEditing.Components?.NodeSelection;
+        var nodeSelection = ProjectManager.Components?.NodeSelection;
         if (nodeSelection != null)
         {
             if (nodeSelection.HoveredIds.Contains(entry.SourceId))
@@ -196,12 +195,12 @@ internal sealed class ConsoleLogWindow : Window, ILogWriter
 
         nodeSelection?.HoveredIds.Add(entry.SourceId);
 
-        GraphComponents? owner = null;
+        ProjectView? owner = null;
         var childIdPath = entry.SourceIdPath.ToList();
 
         if (hasInstancePath)
         {
-            var components = ProjectEditing.Components;
+            var components = ProjectManager.Components;
             if (components != null)
             {
                 //var components = graphWindow.Components;
@@ -262,7 +261,7 @@ internal sealed class ConsoleLogWindow : Window, ILogWriter
                    : UiColors.TextMuted;
     }
 
-    public override List<Window> GetInstances()
+    internal override List<Window> GetInstances()
     {
         return new List<Window>();
     }

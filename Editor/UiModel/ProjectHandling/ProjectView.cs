@@ -1,15 +1,15 @@
 #nullable enable
 using T3.Core.Operator;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Dialogs;
+using T3.Editor.Gui.Graph.Window;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.TimeLine;
-using T3.Editor.UiModel;
-using T3.Editor.UiModel.ProjectSession;
 using T3.Editor.UiModel.Selection;
 
-namespace T3.Editor.Gui.Graph.GraphUiModel;
+namespace T3.Editor.UiModel.ProjectHandling;
 
-internal sealed class GraphComponents
+internal sealed class ProjectView
 {
     public readonly NavigationHistory NavigationHistory;
     public readonly NodeSelection NodeSelection;
@@ -26,11 +26,10 @@ internal sealed class GraphComponents
     public Instance? CompositionOp => Composition?.Instance;
 
     public readonly TimeLineCanvas TimeLineCanvas;
-    // public SymbolBrowser SymbolBrowser { get; set; }
 
-    public event Action<GraphComponents, Guid> OnCompositionChanged;
+    public event Action<ProjectView, Guid> OnCompositionChanged;
 
-    public GraphComponents(OpenedProject openedProject, NavigationHistory navigationHistory, NodeSelection nodeSelection, GraphImageBackground graphImageBackground)
+    public ProjectView(OpenedProject openedProject, NavigationHistory navigationHistory, NodeSelection nodeSelection, GraphImageBackground graphImageBackground)
     {
         OpenedProject = openedProject;
         _duplicateSymbolDialog.Closed += DisposeLatestComposition;
@@ -179,4 +178,42 @@ internal sealed class GraphComponents
     private string _dupeReadonlyNamespace = "";
     private string _dupeReadonlyName = "";
     private string _dupeReadonlyDescription = "";
+
+    public void Close()
+    {
+        GraphCanvas.Close();
+        if (Focused != this)
+            return;
+        
+        foreach (var graphWindow in GraphWindow.GraphWindowInstances)
+        {
+            if (graphWindow.ProjectView == this)
+                graphWindow.CloseView();
+            
+            if (graphWindow.Config.Visible && graphWindow.ProjectView != null)
+                Focused = graphWindow.ProjectView;
+        }
+
+        OpenedProject.UnregisterView(this);
+    }
+    
+    public void TakeFocus()
+    {
+        Focused = this;
+    }
+    
+    public static ProjectView? Focused
+    {
+        get => _focused;
+        private set
+        {
+            //TODO: check if we need this
+            // if (_focused == value)
+            //     return;
+            //_focused?.OnFocusLost?.Invoke(_focused, _focused);
+            _focused = value;
+        }
+    }
+    private static ProjectView? _focused;
+
 }

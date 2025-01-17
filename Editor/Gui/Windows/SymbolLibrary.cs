@@ -11,7 +11,7 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Helpers;
 using T3.Editor.UiModel.InputsAndTypes;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.Windows;
 
@@ -240,7 +240,7 @@ internal sealed class SymbolLibrary : Window
         return EditableSymbolProject.ChangeSymbolNamespace(symbolUi.Symbol, nameSpace, out reason);
     }
 
-    public override List<Window> GetInstances()
+    internal override List<Window> GetInstances()
     {
         return [];
     }
@@ -440,7 +440,7 @@ internal sealed class SymbolLibrary : Window
         var wasClick = ImGui.GetMouseDragDelta().Length() < 4;
         if (wasClick)
         {
-            var components = ProjectEditing.Components;
+            var components = ProjectManager.Components;
             if (components == null)
             {
                 Log.Error($"No focused graph window found");
@@ -454,7 +454,7 @@ internal sealed class SymbolLibrary : Window
 
     private static bool IsSymbolCurrentCompositionOrAParent(Symbol symbol)
     {
-        var components = ProjectEditing.Components;
+        var components = ProjectManager.Components;
         if (components?.CompositionOp == null)
             return false;
 

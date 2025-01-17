@@ -9,7 +9,7 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Graph;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.Windows.Variations;
@@ -18,7 +18,7 @@ internal static class VariationThumbnail
 {
     public static bool Draw(VariationBaseCanvas canvas, Variation variation, Instance instanceForBlending, ImDrawListPtr drawList, ShaderResourceView canvasSrv, ImRect uvRect)
     {
-        var components = ProjectEditing.Components;
+        var components = ProjectManager.Components;
         if (components == null)
             return false;
         

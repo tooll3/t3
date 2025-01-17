@@ -5,7 +5,7 @@ using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.UiModel;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 using Vector2 = System.Numerics.Vector2;
 
@@ -47,7 +47,7 @@ internal class ExplorationWindow : Window
         {
             ImGui.PushStyleVar(ImGuiStyleVar.ItemInnerSpacing, new Vector2(4,4));
 
-            var currentGraphCanvas = ProjectEditing.Components;
+            var currentGraphCanvas = ProjectManager.Components;
 
             if (currentGraphCanvas != null)
             {
@@ -61,7 +61,7 @@ internal class ExplorationWindow : Window
         ImGui.SameLine();
         ImGui.BeginChild("canvas", new Vector2(-1, -1), false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
         {
-            _variationCanvas.Draw(ProjectEditing.Components?.Structure);
+            _variationCanvas.Draw(ProjectManager.Components?.Structure);
         }
         ImGui.EndChild();
     }
@@ -391,7 +391,7 @@ internal class ExplorationWindow : Window
 
     private List<ExplorationVariation> _blendedVariations = new();
 
-    public override List<Window> GetInstances()
+    internal override List<Window> GetInstances()
     {
         return new List<Window>();
     }

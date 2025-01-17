@@ -5,9 +5,9 @@ using T3.Editor.Gui.OutputUi;
 
 namespace T3.Editor.Gui.Windows;
 
-public class IoViewWindow : Window
+internal sealed class IoViewWindow : Window
 {
-    public IoViewWindow()
+    internal IoViewWindow()
     {
         Config.Title = "IO Events";
     }
@@ -17,7 +17,7 @@ public class IoViewWindow : Window
         _canvas.Draw(DataRecording.ActiveRecordingSet);
     }
 
-    public override List<Window> GetInstances()
+    internal override List<Window> GetInstances()
     {
         return new List<Window>();
     }

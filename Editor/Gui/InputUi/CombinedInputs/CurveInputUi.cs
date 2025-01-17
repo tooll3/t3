@@ -3,7 +3,7 @@ using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.UiModel.InputsAndTypes;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.InputUi.CombinedInputs;
 
@@ -23,7 +23,7 @@ public class CurveInputUi : InputValueUi<Curve>
         
     protected override InputEditStateFlags DrawEditControl(string name, Symbol.Child.Input input, ref Curve curve, bool readOnly)
     {
-        var comp = ProjectEditing.Components?.CompositionOp;
+        var comp = ProjectManager.Components?.CompositionOp;
         if (comp == null)
             return InputEditStateFlags.Nothing;
             

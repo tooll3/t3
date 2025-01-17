@@ -13,9 +13,9 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Windows.RenderExport;
 
-public class RenderVideoWindow : BaseRenderWindow
+internal sealed class RenderVideoWindow : BaseRenderWindow
 {
-    public RenderVideoWindow()
+    internal RenderVideoWindow()
     {
         Config.Title = "Render Video";
         _lastHelpString = BaseRenderWindow.PreferredInputFormatHint;

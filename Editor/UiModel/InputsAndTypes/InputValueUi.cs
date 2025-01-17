@@ -22,7 +22,7 @@ using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Animation;
 using T3.Editor.UiModel.Commands.Graph;
 using T3.Editor.UiModel.Modification;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 using T3.Serialization;
 
@@ -139,7 +139,7 @@ public abstract class InputValueUi<T> : IInputUi
             return InputEditStateFlags.Nothing;
 
         //var window = GraphWindow.Focused;
-        var components = ProjectEditing.Components;
+        var components = ProjectManager.Components;
         if(components == null)
             return InputEditStateFlags.Nothing;
             
@@ -412,7 +412,7 @@ public abstract class InputValueUi<T> : IInputUi
 
         InputEditStateFlags DrawNormalParameter()
         {
-            if (ProjectEditing.Components?.GraphCanvas is not GraphCanvas graphCanvas)
+            if (ProjectManager.Components?.GraphCanvas is not GraphCanvas graphCanvas)
                 return InputEditStateFlags.Nothing;
             
             // Connection area...

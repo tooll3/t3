@@ -11,7 +11,7 @@ using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Graph;
 using T3.Editor.UiModel.InputsAndTypes;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 using T3.SystemUi;
 
@@ -30,7 +30,7 @@ internal class ParameterWindow : Window
         _parameterWindowInstances.Add(this);
     }
 
-    public override List<Window> GetInstances()
+    internal override List<Window> GetInstances()
     {
         return _parameterWindowInstances;
     }
@@ -58,7 +58,7 @@ internal class ParameterWindow : Window
             ImGui.SameLine();
         }
 
-        var components = ProjectEditing.Components;
+        var components = ProjectManager.Components;
         if (components == null)
             return;
 

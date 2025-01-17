@@ -10,7 +10,7 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.InputsAndTypes;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 using Color = T3.Core.DataTypes.Vector.Color;
 using Point = System.Drawing.Point;
@@ -21,7 +21,7 @@ internal static class ColorEditPopup
 {
     public static InputEditStateFlags DrawPopup(ref Vector4 color, Vector4 previousColor)
     {
-        var composition = ProjectEditing.Components?.CompositionOp;
+        var composition = ProjectManager.Components?.CompositionOp;
         if (composition == null)
             return InputEditStateFlags.Nothing;
         
@@ -613,9 +613,9 @@ internal static class ColorEditPopup
                     _isHoveringColor = true;
                     _hoveredColor = c;
 
-                    if (ProjectEditing.Components != null)
+                    if (ProjectManager.Components != null)
                     {
-                        var nodeSelection = ProjectEditing.Components.NodeSelection;
+                        var nodeSelection = ProjectManager.Components.NodeSelection;
                         foreach (var use in uses)
                         {
                             if (use.Instance == null)
@@ -694,7 +694,7 @@ internal static class ColorEditPopup
     {
         var selectedIds = new HashSet<Guid>();
 
-        var nodeSelection = ProjectEditing.Components?.NodeSelection;
+        var nodeSelection = ProjectManager.Components?.NodeSelection;
         if (nodeSelection == null)
             return;
         

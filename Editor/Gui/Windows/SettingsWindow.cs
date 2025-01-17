@@ -8,9 +8,9 @@ using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Windows;
 
-public class SettingsWindow : Window
+internal sealed class SettingsWindow : Window
 {
-    public SettingsWindow()
+    internal SettingsWindow()
     {
         Config.Title = "Settings";
     }
@@ -356,7 +356,7 @@ public class SettingsWindow : Window
         ImGui.PopStyleVar();
     }
 
-    public override List<Window> GetInstances()
+    internal override List<Window> GetInstances()
     {
         return new List<Window>();
     }

@@ -2,15 +2,14 @@
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
-using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Styling;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.Graph.Interaction;
 
 internal static class GraphTitleAndBreadCrumbs
 {
-    public static void Draw(GraphComponents window)
+    public static void Draw(ProjectView window)
     {
         if (window.Composition == null)
             return;
@@ -19,11 +18,16 @@ internal static class GraphTitleAndBreadCrumbs
         DrawNameAndDescription(window.Composition);
     }
 
-    private static void DrawBreadcrumbs(GraphComponents components)
+    private static void DrawBreadcrumbs(ProjectView components)
     {
         var composition = components.Composition;
         Debug.Assert(composition != null);
         ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + new Vector2(1, 1));
+        if (ImGui.Button("Hub"))
+        {
+            components.Close();
+        }
+        
         FormInputs.AddVerticalSpace();
         var parents = Structure.CollectParentInstances(composition.Instance);
 

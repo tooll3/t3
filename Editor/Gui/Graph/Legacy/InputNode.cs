@@ -1,12 +1,12 @@
 ﻿using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.InputsAndTypes;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.Graph.Legacy;
 
@@ -16,7 +16,7 @@ namespace T3.Editor.Gui.Graph.Legacy;
 /// </summary>
 static class InputNode
 {
-    internal static bool Draw(GraphComponents components, GraphCanvas canvas, ImDrawListPtr drawList, Symbol.InputDefinition inputDef, IInputUi inputUi, int index)
+    internal static bool Draw(ProjectView components, GraphCanvas canvas, ImDrawListPtr drawList, Symbol.InputDefinition inputDef, IInputUi inputUi, int index)
     { 
         var isSelectedOrHovered = false;
         ImGui.PushID(inputDef.Id.GetHashCode());

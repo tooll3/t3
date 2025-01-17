@@ -1,7 +1,6 @@
 ﻿using ImGuiNET;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph.GraphUiModel;
-using T3.Editor.Gui.Graph.Legacy;
+using T3.Editor.Gui.Graph.Window;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -9,7 +8,7 @@ using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.TimeLine;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.InputsAndTypes;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.Graph.Interaction;
 
@@ -169,7 +168,7 @@ internal sealed class UiElements
         ImGui.EndChild();
     }
 
-    public static void DrawProjectControlToolbar(GraphComponents components)
+    public static void DrawProjectControlToolbar(ProjectView components)
     {
         TimeControls.HandleTimeControlActions();
         if (!UserSettings.Config.ShowToolbar)
@@ -201,5 +200,37 @@ internal sealed class UiElements
             ImGui.PopStyleVar();
         }
         ImGui.EndChild();
+    }
+
+    public static void DrawProjectList(GraphWindow window)
+    {
+        foreach (var package in EditableSymbolProject.AllProjects)
+        {
+            if (!package.HasHome)
+                continue;
+
+            var name = package.DisplayName;
+            var isOpened = OpenedProject.OpenedProjects.TryGetValue(package, out var openedProject);
+            if (isOpened)
+                name += " (Opened)";
+
+            var clicked = ImGui.Selectable(name);
+            if (clicked)
+            {
+                if (!isOpened)
+                {
+                    if(!OpenedProject.TryCreate(package, out  openedProject))
+                    {
+                        Log.Warning("Failed to load project");
+                        continue;
+                    }                        
+                }
+
+                if (openedProject != null)
+                {
+                    window.TrySetToProject(openedProject);
+                }
+            }
+        }
     }
 }

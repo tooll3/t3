@@ -6,7 +6,7 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.TimeLine;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.Interaction;
 
@@ -421,7 +421,7 @@ internal abstract class ScalableCanvas : IScalableCanvas
         if (_draggedCanvas == this && !ImGui.IsMouseDragging(ImGuiMouseButton.Right))
             _draggedCanvas = null;
             
-        var currentGraphWindow = ProjectEditing.FocusedCanvas;
+        var currentGraphWindow = ProjectManager.FocusedCanvas;
         if (currentGraphWindow == null)
             return;
         

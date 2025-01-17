@@ -1,12 +1,12 @@
 using ImGuiNET;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Annotations;
 using T3.Editor.UiModel.Commands.Graph;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 using T3.SystemUi;
 
@@ -18,7 +18,7 @@ namespace T3.Editor.Gui.Graph.Legacy;
 internal sealed class AnnotationElement
 {
     private readonly Annotation _annotation;
-    public AnnotationElement(GraphComponents components, Annotation annotation)
+    public AnnotationElement(ProjectView components, Annotation annotation)
     {
         _components = components;
         _annotation = annotation;
@@ -302,7 +302,7 @@ internal sealed class AnnotationElement
     bool _isDragging;
     Vector2 _dragStartDelta;
     ModifyCanvasElementsCommand _moveCommand;
-    private readonly GraphComponents _components;
+    private readonly ProjectView _components;
 
     Guid _draggedNodeId = Guid.Empty;
     List<ISelectableCanvasObject> _draggedNodes = new();

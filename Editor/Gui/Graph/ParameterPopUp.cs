@@ -1,7 +1,6 @@
 ﻿using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
@@ -10,6 +9,7 @@ using T3.Editor.Gui.Windows.Variations;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Graph;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.Graph;
 
@@ -56,7 +56,7 @@ internal static class ParameterPopUp
         _isOpen = false;
     }
 
-    public static void DrawParameterPopUp(GraphComponents graphWindow)
+    public static void DrawParameterPopUp(ProjectView graphWindow)
     {
         if (!_isOpen || _selectedInstance == null)
             return;

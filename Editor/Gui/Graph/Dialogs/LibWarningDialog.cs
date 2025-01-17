@@ -1,14 +1,14 @@
 ﻿using ImGuiNET;
 using T3.Core.Operator;
-using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.Graph.Dialogs;
 
 internal class LibWarningDialog : ModalDialog
 {
-    public void Draw(GraphComponents components)
+    public void Draw(ProjectView components)
     {
         if (BeginDialog("Careful now"))
         {

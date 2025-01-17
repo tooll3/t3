@@ -1,6 +1,6 @@
 #nullable enable
 using T3.Core.Operator;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.UiModel.Helpers;
 

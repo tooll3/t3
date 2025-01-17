@@ -32,7 +32,7 @@
 ### **On _Windows_, _GraphEditor_, and _OpenProjects_**
 The content of a `GraphWindow` can be switched to an **OpenProject** and its structure via `GraphWindow.ViewProject(OpenProject, InstancePath?)`. This discards all previous components and initializes a new `ProjectView`, including _NavigationHistory_.
 
-Navigation within a structure is handled by `ProjectView.Canvas.SetComposition(InstancePath)`.
+Navigation within a structure is handled by `ProjectView.TrySetComposition(InstancePath)`.
 
 ### **Focused ProjectView**
 In most scenarios, there will be a focused `ProjectView`. Only if all project views are closed or the user is in the **ProjectList** will the focused view be `null`. In this case, some windows (such as the **ParameterWindow** and **SymbolLibrary**) will no longer be able to display meaningful content and _must_ indicate this with a message like **"No project active."**

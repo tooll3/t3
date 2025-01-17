@@ -1,8 +1,8 @@
 #nullable enable
 using ImGuiNET;
-using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.UiModel;
 
@@ -22,5 +22,6 @@ internal interface IGraphCanvas : IScalableCanvas
     /// </summary>
     bool HasActiveInteraction { get; }
     
-    public GraphComponents Components { set; }
+    public ProjectView ProjectView { set; }
+    void Close();
 }

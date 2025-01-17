@@ -1,7 +1,7 @@
 #nullable enable
 using T3.Core.Operator;
 
-namespace T3.Editor.UiModel.ProjectSession;
+namespace T3.Editor.UiModel.ProjectHandling;
 
 /// <todo>
 /// An Instance currently edited by a GraphCanvas.

@@ -6,7 +6,7 @@ using T3.Core.Operator.Slots;
 
 // ReSharper disable ForCanBeConvertedToForeach
 
-namespace T3.Editor.UiModel.ProjectSession;
+namespace T3.Editor.UiModel.ProjectHandling;
 
 /// <summary>
 /// each GraphWindow class should have its own Structure object, and some of this logic should

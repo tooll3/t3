@@ -11,7 +11,7 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.InputsAndTypes;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.MagGraph.Interaction;
 
@@ -179,8 +179,8 @@ internal static class GraphContextMenu
             // TODO: Implement
             if (ImGui.MenuItem("Pin to output", oneOpSelected))
             {
-                if (ProjectEditing.Components != null) 
-                    NodeActions.PinSelectedToOutputWindow(ProjectEditing.Components, nodeSelection, context.CompositionOp);
+                if (ProjectManager.Components != null) 
+                    NodeActions.PinSelectedToOutputWindow(ProjectManager.Components, nodeSelection, context.CompositionOp);
             }
 
             ImGui.EndMenu();

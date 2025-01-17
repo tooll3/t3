@@ -2,7 +2,7 @@
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Windows;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.MagGraph.Ui;
 
@@ -19,7 +19,7 @@ internal sealed class MagGraphWindow : Window
     
     protected override void DrawContent()
     {
-        var graphComponents = ProjectEditing.Components;
+        var graphComponents = ProjectManager.Components;
 
         var legacyFocusedCompositionOp = graphComponents?.CompositionOp;
         if (legacyFocusedCompositionOp == null)
@@ -36,8 +36,8 @@ internal sealed class MagGraphWindow : Window
         _graphImageBackground?.Draw(1);
         _magGraphCanvas?.Draw();
     }
-    
-    public override List<Window> GetInstances()
+
+    internal override List<Window> GetInstances()
     {
         return [];
     }

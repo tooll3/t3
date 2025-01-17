@@ -2,7 +2,7 @@
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Windows;
 
-namespace T3.Editor.UiModel.ProjectSession;
+namespace T3.Editor.UiModel.ProjectHandling;
 
 /// <summary>
 /// Handles spacial navigation between nodes on a graph (up/down/left/right, etc) 

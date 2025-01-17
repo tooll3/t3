@@ -4,7 +4,7 @@ using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Styling;
 using T3.Editor.UiModel;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.Windows.Variations;
@@ -36,7 +36,7 @@ internal class SnapshotCanvas : VariationBaseCanvas
         var oneSelected = CanvasElementSelection.SelectedElements.Count == 1;
         var oneOrMoreSelected = CanvasElementSelection.SelectedElements.Count > 0;
 
-        var components = ProjectEditing.Components;
+        var components = ProjectManager.Components;
         if (components == null)
             return;
 

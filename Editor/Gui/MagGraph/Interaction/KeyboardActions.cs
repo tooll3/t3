@@ -4,7 +4,7 @@ using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.MagGraph.Interaction;
 
@@ -49,16 +49,16 @@ internal static class KeyboardActions
             if (UserSettings.Config.FocusMode)
             {
                 var selectedImage = context.Selector.GetFirstSelectedInstance();
-                if (selectedImage != null && ProjectEditing.Components != null)
+                if (selectedImage != null && ProjectManager.Components != null)
                 {
-                    ProjectEditing.Components.SetBackgroundOutput(selectedImage);
+                    ProjectManager.Components.SetBackgroundOutput(selectedImage);
                 }
             }
             else
             {
                 // FIXME: This is a work around that needs a legacy graph window to be active
-                if(ProjectEditing.Components != null) 
-                    NodeActions.PinSelectedToOutputWindow(ProjectEditing.Components, context.Selector, compositionOp);
+                if(ProjectManager.Components != null) 
+                    NodeActions.PinSelectedToOutputWindow(ProjectManager.Components, context.Selector, compositionOp);
             }
         }
         
@@ -77,9 +77,9 @@ internal static class KeyboardActions
         if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
         {
             var selectedImage = context.Selector.GetFirstSelectedInstance();
-            if (selectedImage != null && ProjectEditing.Components != null)
+            if (selectedImage != null && ProjectManager.Components != null)
             {
-                ProjectEditing.Components.SetBackgroundOutput(selectedImage);
+                ProjectManager.Components.SetBackgroundOutput(selectedImage);
                 //GraphWindow.Focused..SetBackgroundInstanceForCurrentGraph(selectedImage);
             }
         }

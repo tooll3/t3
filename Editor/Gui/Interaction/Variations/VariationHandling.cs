@@ -2,7 +2,7 @@
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Windows.Variations;
 using T3.Editor.UiModel;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.Interaction.Variations;
 
@@ -36,10 +36,10 @@ internal static class VariationHandling
         // var primaryGraphWindow = GraphWindow.Focused;
         // if (primaryGraphWindow == null)
         //     return;
-        if (ProjectEditing.Components == null)
+        if (ProjectManager.Components == null)
             return;
 
-        var nodeSelection = ProjectEditing.Components.NodeSelection;
+        var nodeSelection = ProjectManager.Components.NodeSelection;
         var singleSelectedInstance = nodeSelection.GetSelectedInstanceWithoutComposition();
         
         if (singleSelectedInstance != null)
@@ -54,7 +54,7 @@ internal static class VariationHandling
         {
             ActivePoolForPresets = null;
 
-            var activeCompositionInstance = ProjectEditing.Components.CompositionOp;
+            var activeCompositionInstance = ProjectManager.Components.CompositionOp;
             
             ActiveInstanceForSnapshots = activeCompositionInstance;
 

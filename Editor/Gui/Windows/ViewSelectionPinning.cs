@@ -2,11 +2,10 @@
 using System.Diagnostics.CodeAnalysis;
 using ImGuiNET;
 using T3.Core.Operator;
-using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.Output;
 using T3.Editor.UiModel;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 using Icon = T3.Editor.Gui.Styling.Icon;
 
@@ -126,7 +125,7 @@ internal class ViewSelectionPinning
                 }
             }
 
-            if (ProjectEditing.Components != null)
+            if (ProjectManager.Components != null)
             {
                 if (ImGui.MenuItem("Show in Graph"))
                 {
@@ -164,7 +163,7 @@ internal class ViewSelectionPinning
         ImGui.SameLine();
     }
 
-    private void PinSelectionToView(GraphComponents canvas)
+    private void PinSelectionToView(ProjectView canvas)
     {
         var firstSelectedInstance = canvas.NodeSelection.GetFirstSelectedInstance();
         PinInstance(firstSelectedInstance, canvas);
@@ -178,9 +177,9 @@ internal class ViewSelectionPinning
                                             : [];
     }
 
-    public bool TryGetPinnedOrSelectedInstance([NotNullWhen(true)] out Instance? instance, [NotNullWhen(true)] out GraphComponents? components)
+    public bool TryGetPinnedOrSelectedInstance([NotNullWhen(true)] out Instance? instance, [NotNullWhen(true)] out ProjectView? components)
     {
-        var focusedComponents = ProjectEditing.Components;
+        var focusedComponents = ProjectManager.Components;
 
         if (!_isPinned)
         {
@@ -216,7 +215,7 @@ internal class ViewSelectionPinning
         return false;
     }
 
-    public void PinInstance(Instance? instance, GraphComponents canvas)
+    public void PinInstance(Instance? instance, ProjectView canvas)
     {
         _pinnedInstancePath = instance != null ? instance.InstancePath : [];
         _pinnedComponents = canvas;
@@ -237,7 +236,7 @@ internal class ViewSelectionPinning
     }
 
     private bool _isPinned;
-    private GraphComponents? _pinnedComponents;
+    private ProjectView? _pinnedComponents;
     private IReadOnlyList<Guid> _pinnedInstancePath = Array.Empty<Guid>();
     private IReadOnlyList<Guid> _pinnedEvaluationInstancePath = Array.Empty<Guid>();
 }

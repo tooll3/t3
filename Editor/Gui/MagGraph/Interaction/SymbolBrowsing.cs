@@ -8,7 +8,7 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Helpers;
 using T3.Editor.UiModel.InputsAndTypes;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.MagGraph.Interaction;
 
@@ -16,7 +16,7 @@ internal static class SymbolBrowsing
 {
     internal static PlaceHolderUi.UiResults Draw(GraphUiContext context)
     {
-        if (ProjectEditing.Components == null)
+        if (ProjectManager.Components == null)
             return PlaceHolderUi.UiResults.None;
         
         var uiResult = PlaceHolderUi.UiResults.None;
@@ -70,7 +70,7 @@ internal static class SymbolBrowsing
             var orderedEnumerable = matchingSymbolUis
                                    .OrderByDescending(sui => SymbolFilter.ComputeRelevancy(sui,
                                                                                            string.Empty,
-                                                                                           ProjectEditing.Components.OpenedProject.Package,
+                                                                                           ProjectManager.Components.OpenedProject.Package,
                                                                                            context.CompositionOp))
                                    .ToList();
             foreach (var symbolUi in orderedEnumerable)
@@ -138,7 +138,7 @@ internal static class SymbolBrowsing
                     var orderedEnumerable = matchingSymbolUis
                                            .OrderByDescending(sui => SymbolFilter.ComputeRelevancy(sui,
                                                                                                    string.Empty,
-                                                                                                   ProjectEditing.Components!.OpenedProject.Package,
+                                                                                                   ProjectManager.Components!.OpenedProject.Package,
                                                                                                    context.CompositionOp))
                                            .ToList();
 

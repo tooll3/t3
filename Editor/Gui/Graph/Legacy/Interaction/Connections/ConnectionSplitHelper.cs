@@ -3,13 +3,13 @@ using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.ProjectHandling;
 using Color = T3.Core.DataTypes.Vector.Color;
 using Vector2 = System.Numerics.Vector2;
 
@@ -17,7 +17,7 @@ namespace T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
 
 internal static class ConnectionSplitHelper
 {
-    public static void PrepareNewFrame(GraphComponents components)
+    public static void PrepareNewFrame(ProjectView components)
     {
         _mousePosition = ImGui.GetMousePos();
         BestMatchLastFrame = _bestMatchYetForCurrentFrame;

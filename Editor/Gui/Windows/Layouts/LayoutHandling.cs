@@ -6,7 +6,6 @@ using T3.Editor.Gui.Graph.Window;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
-using T3.Editor.UiModel;
 
 #nullable enable
 
@@ -86,18 +85,25 @@ internal static class LayoutHandling
 
     private static void ApplyLayout(Layout layout)
     {
-        // todo - layout should refer to actual project rather than this random bs
-        var editableProjects = EditableSymbolProject.AllProjects.OrderBy(x => x.DisplayName).ToArray();
-
         // First update windows settings
         foreach (var config in layout.WindowConfigs)
         {
+            if (string.IsNullOrEmpty(config.Title))
+            {
+                Log.Warning("Skipping invalid view layout configuration.");
+                continue;
+            }
+
             var matchingWindow = WindowManager.GetAllWindows()
                                               .FirstOrDefault(window => window.Config.Title == config.Title);
             if (matchingWindow == null)
             {
-                if (TryOpenProjectForGraphWindows(config, editableProjects))
+                if (config.Title.StartsWith(GraphPrefix))
                 {
+                    // new window
+                    // TODO: check userSettings to check if we should try loading a project.
+                    matchingWindow = new GraphWindow();
+                    matchingWindow.Config = config;
                 }
                 else if (config.Title.StartsWith(OutputPrefix))
                 {
@@ -131,50 +137,6 @@ internal static class LayoutHandling
         {
             Program.NewImGuiLayoutDefinition = layout.ImGuiSettings;
         }
-    }
-
-    /// <summary>
-    /// We use the window name ##suffix as an index to identify and load project for restoring layouts. 
-    /// </summary>
-    /// <todo>
-    /// This should be changed because:
-    /// - it will not work for pre-defined layouts
-    /// - it will break if new projects are added and the sorting order changes (a work around would be to use GetHashCode())
-    ///
-    /// Before we invest more time here, we should first clarify what the expected UI-behaviour should be.
-    /// </todo>
-    private static bool TryOpenProjectForGraphWindows(Window.WindowConfig config, IReadOnlyList<EditableSymbolProject> editableProjects)
-    {
-        if (!config.Title.StartsWith(GraphPrefix))
-            return false;
-
-        if (!GraphWindow.CanOpenAnotherWindow)
-            return false;
-
-        var indexSuffix = config.Title.Substring(GraphPrefix.Length);
-        if (!int.TryParse(indexSuffix, out var number))
-        {
-            Log.Warning($"Can't parse number from \"{config.Title}\"");
-            return false;
-        }
-
-        if (number >= editableProjects.Count)
-            return false;
-
-        var project = editableProjects[number];
-        if (!project.TryGetRootInstance(out var rootInstance))
-        {
-            //Log.Warning($"Can't use project for layout: \"{project.DisplayName}\"");
-            return false;
-        }
-
-        if (!GraphWindow.TryOpenPackage(project, false, rootInstance, config, number))
-        {
-            Log.Warning($"Failed to open project \"{project.DisplayName}\"");
-            return false;
-        }
-        Log.Debug($"Initialized graph window layout for project \"{project.DisplayName}\"");
-        return true;
     }
 
     private static void SaveLayout(int index)

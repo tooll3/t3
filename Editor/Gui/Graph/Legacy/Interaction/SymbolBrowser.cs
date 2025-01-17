@@ -2,7 +2,6 @@ using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Model;
 using T3.Core.Operator;
-using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
 using T3.Editor.Gui.Interaction.Variations;
@@ -14,6 +13,7 @@ using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Graph;
 using T3.Editor.UiModel.Helpers;
 using T3.Editor.UiModel.InputsAndTypes;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.SystemUi;
 
 namespace T3.Editor.Gui.Graph.Legacy.Interaction;
@@ -25,10 +25,10 @@ namespace T3.Editor.Gui.Graph.Legacy.Interaction;
 /// </summary>
 internal sealed class SymbolBrowser
 {
-    private readonly GraphComponents _components;
+    private readonly ProjectView _components;
     private readonly IGraphCanvas _canvas;
         
-    public SymbolBrowser(GraphComponents components, IGraphCanvas canvas)
+    public SymbolBrowser(ProjectView components, IGraphCanvas canvas)
     {
         _components = components;
         _canvas = canvas;

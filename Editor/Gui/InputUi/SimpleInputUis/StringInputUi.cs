@@ -13,7 +13,7 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel.InputsAndTypes;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Serialization;
 
 namespace T3.Editor.Gui.InputUi.SimpleInputUis;
@@ -142,7 +142,7 @@ public class StringInputUi : InputValueUi<string>
     {
         ImGui.SetNextItemWidth(-70);
 
-        var componentsNodeSelection = ProjectEditing.Components?.NodeSelection;
+        var componentsNodeSelection = ProjectManager.Components?.NodeSelection;
         if (componentsNodeSelection == null)
             return InputEditStateFlags.Nothing;
         
@@ -263,7 +263,7 @@ public class StringInputUi : InputValueUi<string>
 
     private static InputEditStateFlags DrawCustomDropdown(Symbol.Child.Input input, ref string value)
     {
-        var instance = ProjectEditing.Components?.NodeSelection.GetSelectedInstanceWithoutComposition();
+        var instance = ProjectManager.Components?.NodeSelection.GetSelectedInstanceWithoutComposition();
         if (instance != null && instance is ICustomDropdownHolder customValueHolder)
         {
             var changed = false;

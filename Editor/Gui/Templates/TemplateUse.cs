@@ -2,7 +2,7 @@
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Modification;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.Templates;
 
@@ -13,7 +13,7 @@ public static class TemplateUse
 {
     internal static void TryToApplyTemplate(TemplateDefinition template, string symbolName, string nameSpace, string description, EditableSymbolProject project)
     {
-        var components = ProjectEditing.Components;
+        var components = ProjectManager.Components;
         if (components == null || components.CompositionOp == null)
         {
             BlockingWindow.Instance.ShowMessageBox("Can't create from template without open graph window");

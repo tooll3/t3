@@ -1,26 +1,123 @@
-#nullable enable
+﻿#nullable enable
 using ImGuiNET;
 using T3.Core.Animation;
+using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
+using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Graph.Window;
 
-/// <summary>
-/// A window that renders a node graph 
-/// </summary>
-internal sealed partial class GraphWindow : Windows.Window
+internal sealed class GraphWindow : Windows.Window
 {
+    #region Window implementation --------------------
+    public GraphWindow()
+    {
+        Config.Title = LayoutHandling.GraphPrefix + _instanceNumber;
+        Config.Visible = true;
 
-    protected override string WindowDisplayTitle { get; }
+        AllowMultipleInstances = true;
+        Config.Visible = true;
+        WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
+
+        _instanceNumber++;
+        GraphWindowInstances.Add(this);
+    }
+
+    private readonly int _instanceNumber;
+
+    internal override IReadOnlyList<Gui.Windows.Window> GetInstances() => GraphWindowInstances;
+    internal static readonly List<GraphWindow> GraphWindowInstances = [];
+
+    public void SetWindowToNormal()
+    {
+        WindowFlags &= ~(ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoMove |
+                         ImGuiWindowFlags.NoResize);
+    }
+    #endregion
+
+    #region Handling project view ----------------------
+    public ProjectView? ProjectView { get; private set; }
+
+    [Obsolete("Please use TrySetToProject()")]
+    public static bool TryOpenPackage(EditorSymbolPackage package, bool replaceFocused, Instance? startingComposition = null, WindowConfig? config = null,
+                                      int instanceNumber = 0)
+    {
+        return false;
+    }
+
+    /// <summary>
+    /// Initialize <see cref="ProjectView"/> to for a loaded project 
+    /// </summary>
+    internal bool TrySetToProject(OpenedProject project)
+    {
+        if (!project.Package.TryGetRootInstance(out var root))
+        {
+            Log.Warning("Failed to get root instance.");
+            return false;
+        }
+
+        ProjectView = Legacy.GraphCanvas.CreateWithComponents(project);
+        ProjectView.OnCompositionChanged += CompositionChangedHandler;
+
+        IReadOnlyList<Guid> rootPath = [root.SymbolChildId];
+        var startPath = rootPath;
+        var opId = UserSettings.GetLastOpenOpForWindow(Config.Title);
+        if (opId != Guid.Empty && opId != root.SymbolChildId)
+        {
+            if (root.TryGetChildInstance(opId, true, out _, out var path))
+            {
+                startPath = path;
+            }
+        }
+
+        const ICanvas.Transition transition = ICanvas.Transition.JumpIn;
+        if (!ProjectView.TrySetCompositionOp(startPath, transition)
+            && !ProjectView.TrySetCompositionOp(rootPath, transition))
+        {
+            Log.Warning("Can't set composition op");
+            return false;
+        }
+
+        project.RegisterView(ProjectView);
+        return true;
+    }
+
+    /** Called when view is closed or changed */
+    public void CloseView()
+    {
+        if (ProjectView != null)
+            ProjectView.OnCompositionChanged -= CompositionChangedHandler;
+
+        ProjectView = null;
+    }
+
+    /** Called when windows is closed */
+    protected override void Close()
+    {
+        if (ProjectView == null)
+            return;
+
+        ProjectView.OnCompositionChanged -= CompositionChangedHandler;
+
+        ProjectView.Close();
+        GraphWindowInstances.Remove(this);
+    }
+
+    // TODO: callers should use view directly
+    private void TakeFocus()
+    {
+        ProjectView?.TakeFocus();
+    }
+
     private bool _focusOnNextFrame;
 
     private void FocusRequestedHandler()
@@ -29,23 +126,36 @@ internal sealed partial class GraphWindow : Windows.Window
         _focusOnNextFrame = true;
     }
 
+    private void CompositionChangedHandler(ProjectView _, Guid instanceId)
+    {
+        UserSettings.SaveLastViewedOpForWindow(Config.Title, instanceId);
+    }
+    #endregion
+
+    #region Drawing ---------------------------------------
     protected override void DrawContent()
     {
+        if (ProjectView == null)
+        {
+            UiElements.DrawProjectList(this);
+            return;
+        }
+
         if (FitViewToSelectionHandling.FitViewToSelectionRequested)
-            GraphCanvas.FocusViewToSelection();
-            
-        Components.OpenedProject.RefreshRootInstance();
-        
-        if (Components.Composition == null)
+            GraphCanvas?.FocusViewToSelection();
+
+        ProjectView.OpenedProject.RefreshRootInstance(ProjectView);
+
+        if (ProjectView.Composition == null)
             return;
 
-        ImageBackgroundFading.HandleImageBackgroundFading(Components.GraphImageBackground, out var backgroundImageOpacity);
+        ImageBackgroundFading.HandleImageBackgroundFading(ProjectView.GraphImageBackground, out var backgroundImageOpacity);
 
-        Components.GraphImageBackground.Draw(backgroundImageOpacity);
+        ProjectView.GraphImageBackground.Draw(backgroundImageOpacity);
 
         ImGui.SetCursorPos(Vector2.Zero);
 
-        var graphHiddenWhileInteractiveWithBackground = Components.GraphImageBackground.IsActive && TransformGizmoHandling.IsDragging;
+        var graphHiddenWhileInteractiveWithBackground = ProjectView.GraphImageBackground.IsActive && TransformGizmoHandling.IsDragging;
         if (graphHiddenWhileInteractiveWithBackground)
             return;
 
@@ -54,7 +164,7 @@ internal sealed partial class GraphWindow : Windows.Window
 
         if (UserSettings.Config.ShowTimeline)
         {
-            Components.TimeLineCanvas.Folding.DrawSplit(out windowContentHeight);
+            ProjectView.TimeLineCanvas.Folding.DrawSplit(out windowContentHeight);
         }
 
         ImGui.BeginChild("##graph", new Vector2(0, windowContentHeight), false,
@@ -66,74 +176,13 @@ internal sealed partial class GraphWindow : Windows.Window
                          | ImGuiWindowFlags.NoBackground
                          | ImGuiWindowFlags.ChildWindow);
         {
-            if (_focusOnNextFrame)
-            {
-                ImGui.SetWindowFocus();
-                _focusOnNextFrame = false;
-            }
-
-            ImGui.SetScrollX(0);
-
-            drawList.ChannelsSplit(2);
-            
-            // Draw Foreground content first
-            drawList.ChannelsSetCurrent(1);
-            {
-                if (UserSettings.Config.ShowTitleAndDescription)
-                    GraphTitleAndBreadCrumbs.Draw(Components);
-
-                UiElements.DrawProjectControlToolbar(Components);
-            }
-
-            // Draw content
-            drawList.ChannelsSetCurrent(0);
-            {
-                ImageBackgroundFading.HandleGraphFading(Components.GraphImageBackground, drawList, out var graphOpacity);
-
-                var isGraphHidden = graphOpacity <= 0;
-                if (!isGraphHidden)
-                {
-                    GraphCanvas.BeginDraw(Components.GraphImageBackground.IsActive, 
-                                          Components.GraphImageBackground.HasInteractionFocus);
-
-                    /*
-                     * This is a work around to delay setting the composition until ImGui has
-                     * finally updated its window size and applied its layout so we can use
-                     * Graph window size to properly fit the content into view.
-                     *
-                     * The side effect of this hack is that CompositionOp stays undefined for
-                     * multiple frames with requires many checks in GraphWindow's Draw().
-                     */
-                    if (!_initializedAfterLayoutReady && ImGui.GetFrameCount() > 1)
-                    {
-                        GraphCanvas.ApplyComposition(ICanvas.Transition.JumpIn, Components.OpenedProject.RootInstance.SymbolChildId);
-                        GraphCanvas.FocusViewToSelection();
-                        _initializedAfterLayoutReady = true;
-                    }
-
-                    GraphBookmarkNavigation.HandleForCanvas(Components);
-
-                    ImGui.BeginGroup();
-                    ImGui.SetScrollY(0);
-                    CustomComponents.DrawWindowFocusFrame();
-                    if (ImGui.IsWindowFocused())
-                        TakeFocus();
-                    
-                    GraphCanvas.DrawGraph(drawList, graphOpacity);
-                    
-                    ImGui.EndGroup();
-
-                    ParameterPopUp.DrawParameterPopUp(Components);
-                }
-            }
-            drawList.ChannelsMerge();
-
-            _editDescriptionDialog.Draw(Components.Composition.Symbol);
+            DrawGraphContent(drawList);
         }
         ImGui.EndChild();
 
-        Components.OpenedProject.RefreshRootInstance(); // Why is this called again?
-        
+        if (ProjectView == null)
+            return;
+
         if (UserSettings.Config.ShowTimeline)
         {
             const int splitterWidth = 3;
@@ -152,7 +201,7 @@ internal sealed partial class GraphWindow : Windows.Window
                                  | ImGuiWindowFlags.NoBackground
                                 );
                 {
-                    Components.TimeLineCanvas.Draw(Components.CompositionOp, Playback.Current);
+                    ProjectView.TimeLineCanvas.Draw(ProjectView.CompositionOp, Playback.Current);
                 }
                 ImGui.EndChild();
                 ImGui.PopStyleVar(1);
@@ -160,27 +209,85 @@ internal sealed partial class GraphWindow : Windows.Window
         }
 
         if (UserSettings.Config.ShowMiniMap)
-            UiElements.DrawMiniMap(Components.Composition, GraphCanvas);
+            UiElements.DrawMiniMap(ProjectView.Composition, GraphCanvas);
 
-        Components.CheckDisposal();
+        ProjectView.CheckDisposal();
     }
 
-    protected override void Close()
+    private void DrawGraphContent(ImDrawListPtr drawList)
     {
-        ConnectionMaker.RemoveWindow(GraphCanvas);
-        GraphWindow.GraphWindowInstances.Remove(this);
-        if (GraphWindow.Focused == this)
-            GraphWindow.Focused = GraphWindow.GraphWindowInstances.FirstOrDefault();
-            
-        OnWindowDestroyed?.Invoke(this, Components.OpenedProject.Package);
-    }
+        if (_focusOnNextFrame)
+        {
+            ImGui.SetWindowFocus();
+            _focusOnNextFrame = false;
+        }
 
-    protected override void AddAnotherInstance()
-    {
-        GraphWindow.TryOpenPackage(Components.OpenedProject.Package, false, Components.CompositionOp);
+        ImGui.SetScrollX(0);
+
+        drawList.ChannelsSplit(2);
+
+        // Draw Foreground content first
+        drawList.ChannelsSetCurrent(1);
+        {
+            if (UserSettings.Config.ShowTitleAndDescription)
+                GraphTitleAndBreadCrumbs.Draw(ProjectView);
+
+            // Breadcrumbs may have requested close...
+            if (ProjectView == null)
+                return;
+
+            UiElements.DrawProjectControlToolbar(ProjectView);
+        }
+
+        // Draw content
+        drawList.ChannelsSetCurrent(0);
+        {
+            ImageBackgroundFading.HandleGraphFading(ProjectView.GraphImageBackground, drawList, out var graphOpacity);
+
+            var isGraphHidden = graphOpacity <= 0;
+            if (!isGraphHidden && GraphCanvas != null)
+            {
+                GraphCanvas.BeginDraw(ProjectView.GraphImageBackground.IsActive,
+                                      ProjectView.GraphImageBackground.HasInteractionFocus);
+
+                /*
+                 * This is a work around to delay setting the composition until ImGui has
+                 * finally updated its window size and applied its layout so we can use
+                 * Graph window size to properly fit the content into view.
+                 *
+                 * The side effect of this hack is that CompositionOp stays undefined for
+                 * multiple frames with requires many checks in GraphWindow's Draw().
+                 */
+                if (!_initializedAfterLayoutReady && ImGui.GetFrameCount() > 1)
+                {
+                    GraphCanvas.ApplyComposition(ICanvas.Transition.JumpIn, ProjectView.OpenedProject.RootInstance.SymbolChildId);
+                    GraphCanvas.FocusViewToSelection();
+                    _initializedAfterLayoutReady = true;
+                }
+
+                GraphBookmarkNavigation.HandleForCanvas(ProjectView);
+
+                ImGui.BeginGroup();
+                ImGui.SetScrollY(0);
+                CustomComponents.DrawWindowFocusFrame();
+                if (ImGui.IsWindowFocused())
+                    TakeFocus();
+
+                GraphCanvas.DrawGraph(drawList, graphOpacity);
+
+                ImGui.EndGroup();
+
+                ParameterPopUp.DrawParameterPopUp(ProjectView);
+            }
+        }
+        drawList.ChannelsMerge();
+
+        if (ProjectView?.Composition != null)
+            _editDescriptionDialog.Draw(ProjectView.Composition.Symbol);
     }
+    #endregion
 
     private bool _initializedAfterLayoutReady;
-    public IGraphCanvas GraphCanvas => Components.GraphCanvas;
+    private IGraphCanvas? GraphCanvas => ProjectView?.GraphCanvas;
     private static readonly EditSymbolDescriptionDialog _editDescriptionDialog = new();
 }

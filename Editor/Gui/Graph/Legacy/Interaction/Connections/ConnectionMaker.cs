@@ -3,11 +3,10 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Graph;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 using Vector2 = System.Numerics.Vector2;
 
@@ -551,7 +550,7 @@ internal static class ConnectionMaker
         }
     }
 
-    public static void OpenSymbolBrowserAtOutput(GraphComponents components, SymbolUi.Child childUi, Instance instance,
+    public static void OpenSymbolBrowserAtOutput(ProjectView components, SymbolUi.Child childUi, Instance instance,
                                                  Guid outputId)
     {
         var primaryOutput = instance.Outputs.SingleOrDefault(o => o.Id == outputId);
@@ -566,7 +565,7 @@ internal static class ConnectionMaker
         InsertSymbolBrowser(components, childUi, instance, primaryOutput, canvas.SymbolBrowser);
     }
 
-    public static void InsertSymbolInstance(GraphComponents components, Symbol symbol)
+    public static void InsertSymbolInstance(ProjectView components, Symbol symbol)
     {
         var canvas = components.GraphCanvas;
         var inProgress = _graphWindowInProgressConnections[canvas];
@@ -690,7 +689,7 @@ internal static class ConnectionMaker
         ParameterPopUp.NodeIdRequestedForParameterWindowActivation = newSymbolChild.Id;
     }
 
-    public static void OpenBrowserWithSingleSelection(GraphComponents components, SymbolUi.Child childUi, Instance instance, SymbolBrowser symbolBrowser)
+    public static void OpenBrowserWithSingleSelection(ProjectView components, SymbolUi.Child childUi, Instance instance, SymbolBrowser symbolBrowser)
     {
         if (instance.Outputs.Count < 1)
             return;
@@ -701,7 +700,7 @@ internal static class ConnectionMaker
         InsertSymbolBrowser(components, childUi, instance, primaryOutput, symbolBrowser);
     }
 
-    private static void InsertSymbolBrowser(GraphComponents components, SymbolUi.Child childUi, Instance instance, ISlot primaryOutput, SymbolBrowser symbolBrowser)
+    private static void InsertSymbolBrowser(ProjectView components, SymbolUi.Child childUi, Instance instance, ISlot primaryOutput, SymbolBrowser symbolBrowser)
     {
         if (instance.Parent == null)
             return;
@@ -763,7 +762,7 @@ internal static class ConnectionMaker
                                     primaryOutput.ValueType, filterOutputType, false);
     }
 
-    public static void SplitConnectionWithSymbolBrowser(GraphComponents components, Symbol parentSymbol, Symbol.Connection connection,
+    public static void SplitConnectionWithSymbolBrowser(ProjectView components, Symbol parentSymbol, Symbol.Connection connection,
                                                         Vector2 positionInCanvas, SymbolBrowser symbolBrowser)
     {
         if (connection.IsConnectedToSymbolOutput)

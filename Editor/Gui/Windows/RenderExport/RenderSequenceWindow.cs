@@ -10,9 +10,9 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Windows.RenderExport;
 
-public class RenderSequenceWindow : BaseRenderWindow
+internal sealed class RenderSequenceWindow : BaseRenderWindow
 {
-    public RenderSequenceWindow()
+    internal RenderSequenceWindow()
     {
         Config.Title = "Render Sequence";
         _lastHelpString = PreferredInputFormatHint;

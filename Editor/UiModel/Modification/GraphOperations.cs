@@ -5,7 +5,7 @@ using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Graph;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 using Vector2 = System.Numerics.Vector2;
 
 // ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
@@ -33,10 +33,10 @@ internal static class GraphOperations
     {
         resultJsonString = string.Empty;
         
-        if (ProjectEditing.Components == null)
+        if (ProjectManager.Components == null)
             return false;
         
-        var package = ProjectEditing.Components.OpenedProject.Package;
+        var package = ProjectManager.Components.OpenedProject.Package;
         if (!package.TryCreateNewSymbol<object>(out var newContainerUi))
         {
             Log.Error($"Failed to copy nodes to clipboard. Could not create new symbol.");

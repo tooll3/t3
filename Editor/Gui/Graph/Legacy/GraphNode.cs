@@ -10,7 +10,6 @@ using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.ChildUi;
 using T3.Editor.Gui.Graph.Dialogs;
-using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Graph.Legacy.Interaction;
 using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
 using T3.Editor.Gui.Interaction.TransformGizmos;
@@ -20,7 +19,7 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.InputsAndTypes;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 using Color = T3.Core.DataTypes.Vector.Color;
 using Texture2D = T3.Core.DataTypes.Texture2D;
@@ -34,7 +33,7 @@ namespace T3.Editor.Gui.Graph.Legacy;
 /// </summary>
 internal sealed class GraphNode
 {
-    public GraphNode(GraphComponents components, GraphCanvas canvas, Legacy.Graph.ConnectionSorter sorter)
+    public GraphNode(ProjectView components, GraphCanvas canvas, Legacy.Graph.ConnectionSorter sorter)
     {
         _components = components;
         _canvas = canvas;
@@ -57,7 +56,7 @@ internal sealed class GraphNode
         var visibleInputUis = FindVisibleInputUis(symbolUi, childUi, ref nodeHasHiddenMatchingInputs);
         var tempConnections = ConnectionMaker.GetTempConnectionsFor(_canvas);
         bool hasConnections = tempConnections.Count > 0;
-        bool inActiveWindow = _canvas == ProjectEditing.FocusedCanvas;
+        bool inActiveWindow = _canvas == ProjectManager.FocusedCanvas;
 
         var framesSinceLastUpdate = 100;
         foreach (var output in instance.Outputs)
@@ -1436,7 +1435,7 @@ internal sealed class GraphNode
     private static Guid _hoveredNodeIdForConnectionTarget;
 
     private readonly GraphCanvas _canvas;
-    private readonly GraphComponents _components;
+    private readonly ProjectView _components;
     private readonly Legacy.Graph.ConnectionSorter _sorter;
     private readonly DraggedIdInfo _dragInfo;
     private static readonly Dictionary<IGraphCanvas, DraggedIdInfo> DraggedIds = new();

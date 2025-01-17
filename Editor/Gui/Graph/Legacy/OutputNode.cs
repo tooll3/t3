@@ -1,11 +1,11 @@
 ﻿using ImGuiNET;
 using T3.Core.Operator;
-using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel.InputsAndTypes;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.Graph.Legacy;
 
@@ -15,7 +15,7 @@ namespace T3.Editor.Gui.Graph.Legacy;
 /// </summary>
 static class OutputNode
 {
-    public static void Draw(GraphCanvas canvas, GraphComponents window, ImDrawListPtr drawList, Symbol.OutputDefinition outputDef, IOutputUi outputUi)
+    public static void Draw(GraphCanvas canvas, ProjectView window, ImDrawListPtr drawList, Symbol.OutputDefinition outputDef, IOutputUi outputUi)
     {
         ImGui.PushID(outputDef.Id.GetHashCode());
         {

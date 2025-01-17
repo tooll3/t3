@@ -1,7 +1,7 @@
 ﻿using ImGuiNET;
-using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Styling;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.SystemUi;
 
 namespace T3.Editor.Gui.Graph;
@@ -18,7 +18,7 @@ internal static class RenameInstanceOverlay
 
     private static Guid _nextFocusedInstanceId = Guid.Empty;
 
-    public static void Draw(GraphComponents components)
+    public static void Draw(ProjectView components)
     {
         var justOpened = false;
 

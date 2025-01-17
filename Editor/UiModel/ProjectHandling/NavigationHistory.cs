@@ -1,6 +1,6 @@
 ﻿using T3.Core.Operator;
 
-namespace T3.Editor.UiModel.ProjectSession;
+namespace T3.Editor.UiModel.ProjectHandling;
 
 /// <summary>
 /// Manage the navigation between previously selected instances.

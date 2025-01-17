@@ -10,7 +10,7 @@ using T3.Editor.Compilation;
 using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Graph;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 using GraphUtils = T3.Editor.UiModel.Helpers.GraphUtils;
 
 namespace T3.Editor.UiModel;

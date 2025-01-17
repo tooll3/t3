@@ -7,7 +7,6 @@ using T3.Core.SystemUi;
 using T3.Core.UserData;
 using T3.Editor.External;
 using T3.Editor.Gui.Graph.Dialogs;
-using T3.Editor.Gui.Graph.GraphUiModel;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Legacy.Interaction;
 using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
@@ -21,7 +20,7 @@ using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.InputsAndTypes;
 using T3.Editor.UiModel.Modification;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 using T3.SystemUi;
 
@@ -41,9 +40,9 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
     private Legacy.Graph _graph;
     private Structure Structure => _components.OpenedProject.Structure;
 
-    private GraphComponents _components;
+    private ProjectView _components;
 
-    public GraphComponents Components
+    public ProjectView ProjectView
     {
         set
         {
@@ -51,25 +50,33 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
             _graph = new Legacy.Graph(_components, this, () => SymbolBrowser);
         }
     }
-    
-    public static GraphComponents CreateWithComponents(OpenedProject openedProject)
+
+    public void Close()
     {
-        GraphComponents.CreateIndependentComponents(openedProject, out var navigationHistory, out var nodeSelection, out var graphImageBackground);
-        var components = new GraphComponents(openedProject, navigationHistory, nodeSelection, graphImageBackground);
-        var canvas = new GraphCanvas(nodeSelection, openedProject.Structure, navigationHistory, components.NodeNavigation,
-                                     getComposition: () => components.CompositionOp)
-                         {
-                             Components = components
-                         };
-
-        components.GraphCanvas = canvas;
-        canvas.SymbolBrowser = new SymbolBrowser(components, canvas);
-        return components;
+        ConnectionMaker.RemoveWindow(this);
     }
-    
 
-    internal GraphCanvas(NodeSelection nodeSelection, Structure structure, NavigationHistory navigationHistory, NodeNavigation nodeNavigation,
-                         Func<Instance> getComposition)
+    public static ProjectView CreateWithComponents(OpenedProject openedProject)
+    {
+        ProjectView.CreateIndependentComponents(openedProject, out var navigationHistory, out var nodeSelection, out var graphImageBackground);
+        var projectView = new ProjectView(openedProject, navigationHistory, nodeSelection, graphImageBackground);
+        var canvas = new GraphCanvas(nodeSelection,
+                                     openedProject.Structure,
+                                     navigationHistory,
+                                     projectView.NodeNavigation,
+                                     getComposition: () => projectView.CompositionOp)
+        {
+            ProjectView = projectView
+        };
+
+        projectView.GraphCanvas = canvas;
+        canvas.SymbolBrowser = new SymbolBrowser(projectView, canvas);
+        ConnectionMaker.AddWindow(canvas);
+        return projectView;
+    }
+
+    private GraphCanvas(NodeSelection nodeSelection, Structure structure, NavigationHistory navigationHistory, NodeNavigation nodeNavigation,
+                        Func<Instance> getComposition)
     {
         _nodeNavigation = nodeNavigation;
         _nodeSelection = nodeSelection;
@@ -164,9 +171,9 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
                 if (UserSettings.Config.FocusMode)
                 {
                     var selectedImage = _nodeSelection.GetFirstSelectedInstance();
-                    if (selectedImage != null && ProjectEditing.Components != null)
+                    if (selectedImage != null && ProjectManager.Components != null)
                     {
-                        ProjectEditing.Components.SetBackgroundOutput(selectedImage);
+                        ProjectManager.Components.SetBackgroundOutput(selectedImage);
                     }
                 }
                 else
@@ -178,9 +185,9 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
             if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
             {
                 var selectedImage = _nodeSelection.GetFirstSelectedInstance();
-                if (selectedImage != null && ProjectEditing.Components != null)
+                if (selectedImage != null && ProjectManager.Components != null)
                 {
-                    ProjectEditing.Components.SetBackgroundOutput(selectedImage);
+                    ProjectManager.Components.SetBackgroundOutput(selectedImage);
                     //GraphWindow.Focused.SetBackgroundInstanceForCurrentGraph(selectedImage);
                 }
             }

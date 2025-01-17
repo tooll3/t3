@@ -4,7 +4,7 @@ using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.Templates;
 
@@ -26,7 +26,7 @@ public class CreateFromTemplateDialog : ModalDialog
             
         if (BeginDialog("Create"))
         {
-            var graphCanvas = ProjectEditing.FocusedCanvas;
+            var graphCanvas = ProjectManager.FocusedCanvas;
 
             if (graphCanvas == null)
             {

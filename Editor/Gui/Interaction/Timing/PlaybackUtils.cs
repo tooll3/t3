@@ -5,7 +5,7 @@ using T3.Core.IO;
 using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.Interaction.Timing;
 
@@ -82,7 +82,7 @@ public static class PlaybackUtils
 
     private static PlaybackSettings? FindPlaybackSettings(out IResourceConsumer? owner)
     {
-        var composition = ProjectEditing.Components?.CompositionOp;
+        var composition = ProjectManager.Components?.CompositionOp;
 
         if (FindPlaybackSettingsForInstance(composition, out var instance, out var settings))
         {

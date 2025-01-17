@@ -14,7 +14,7 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Windows.Output;
 
-internal class OutputWindow : Window
+internal sealed class OutputWindow : Window
 {
     #region Window implementation
     public OutputWindow()
@@ -66,7 +66,7 @@ internal class OutputWindow : Window
         new OutputWindow();
     }
 
-    public override List<Window> GetInstances()
+    internal override List<Window> GetInstances()
     {
         return OutputWindowInstances;
     }

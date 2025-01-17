@@ -4,7 +4,7 @@ using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Styling;
 using T3.Editor.UiModel;
-using T3.Editor.UiModel.ProjectSession;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.Windows.Variations;
 
@@ -37,7 +37,7 @@ internal class VariationsWindow : Window
             _variationsToBeDeletedNextFrame.Clear();
         }
 
-        var components = ProjectEditing.Components;
+        var components = ProjectManager.Components;
         if (components == null)
             return;
 
@@ -166,7 +166,7 @@ internal class VariationsWindow : Window
 
     private static readonly List<string> _options = new() { "Presets", "Snapshots" };
 
-    public override List<Window> GetInstances()
+    internal override List<Window> GetInstances()
     {
         return new List<Window>();
     }
