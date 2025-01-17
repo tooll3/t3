@@ -1,6 +1,6 @@
 ﻿#nullable enable
 using T3.Editor.Gui.Graph.GraphUiModel;
-using T3.Editor.Gui.Graph.Legacy;
+using T3.Editor.Gui.Graph.Window;
 
 namespace T3.Editor.UiModel.ProjectSession;
 

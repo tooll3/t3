@@ -2,15 +2,13 @@
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.GraphUiModel;
-using T3.Editor.Gui.Graph.Legacy.Interaction;
 using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.ProjectSession;
 
-namespace T3.Editor.Gui.Graph.Legacy;
+namespace T3.Editor.Gui.Graph.Window;
 
 /// <summary>
 /// Features related to create a GraphWindow with a <see cref="EditableSymbolProject"/>.
@@ -46,7 +44,7 @@ internal sealed partial class GraphWindow
         if (components.GraphCanvas is not Legacy.GraphCanvas canvas)
             return;
         
-        canvas.SymbolBrowser.OnFocusRequested += FocusFromSymbolBrowserHandler;
+        canvas.SymbolBrowser.OnFocusRequested += FocusRequestedHandler;
         
         OnFocusLost += (_, _) =>
                      {
@@ -79,7 +77,7 @@ internal sealed partial class GraphWindow
     }
 
     public GraphComponents Components { get; }
-    public override IReadOnlyList<Window> GetInstances() => GraphWindowInstances;
+    public override IReadOnlyList<Gui.Windows.Window> GetInstances() => GraphWindowInstances;
     public event EventHandler<EditorSymbolPackage>? OnWindowDestroyed;
 
     
@@ -111,7 +109,7 @@ internal sealed partial class GraphWindow
         instanceNumber = instanceNumber == NoInstanceNumber ? ++_instanceCounter : instanceNumber;
         
         // check for existing OpenedProject object, if it doesnt exist then create one 
-        var components = CreateComponentsForLegacyGraphCanvas(openedProject);
+        var components = Legacy.GraphCanvas.CreateWithComponents(openedProject);
         var newWindow = new GraphWindow(instanceNumber, components);
 
         if (config == null)
@@ -155,22 +153,6 @@ internal sealed partial class GraphWindow
 
         void LogFailure() => Log.Error($"Failed to open operator graph for {package.DisplayName}");
     }
-
-    public static GraphComponents CreateComponentsForLegacyGraphCanvas(OpenedProject openedProject)
-    {
-        GraphComponents.CreateIndependentComponents(openedProject, out var navigationHistory, out var nodeSelection, out var graphImageBackground);
-        var components = new GraphComponents(openedProject, navigationHistory, nodeSelection, graphImageBackground);
-        var canvas = new GraphCanvas(nodeSelection, openedProject.Structure, navigationHistory, components.NodeNavigation,
-                                     getComposition: () => components.CompositionOp)
-                         {
-                             Components = components
-                         };
-
-        components.GraphCanvas = canvas;
-        canvas.SymbolBrowser = new SymbolBrowser(components, canvas);
-        return components;
-    }
-
     
     public void SetWindowToNormal()
     {

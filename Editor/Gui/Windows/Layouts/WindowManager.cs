@@ -1,5 +1,5 @@
 using ImGuiNET;
-using T3.Editor.Gui.Graph.Legacy;
+using T3.Editor.Gui.Graph.Window;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.Gui.UiHelpers;
@@ -10,9 +10,9 @@ using T3.Editor.Gui.Windows.Variations;
 
 namespace T3.Editor.Gui.Windows.Layouts;
 
-public static partial class WindowManager
+internal static partial class WindowManager
 {
-    public static void Draw()
+    internal static void Draw()
     {
         TryToInitialize(); // We have to keep initializing until window sizes are initialized
         if (!_hasBeenInitialized)

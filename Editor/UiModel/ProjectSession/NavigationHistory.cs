@@ -4,7 +4,7 @@ namespace T3.Editor.UiModel.ProjectSession;
 
 /// <summary>
 /// Manage the navigation between previously selected instances.
-/// This can also be used sort items by relevance in search dialog.
+/// This can also be used sort items by relevancy in search dialog.
 /// </summary>
 internal sealed class NavigationHistory
 {

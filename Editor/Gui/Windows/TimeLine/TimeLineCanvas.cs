@@ -39,6 +39,8 @@ internal sealed class TimeLineCanvas : CurveEditCanvas
         SnapHandlerForU.AddSnapAttractor(_timeRasterSwitcher);
         SnapHandlerForU.AddSnapAttractor(_currentTimeMarker);
         SnapHandlerForU.AddSnapAttractor(LayersArea);
+
+        Folding = new TimelineHeight(this);
     }
 
     public NodeSelection NodeSelection => _nodeSelection;
@@ -425,6 +427,44 @@ internal sealed class TimeLineCanvas : CurveEditCanvas
         public IInputSlot Input;
         public Instance Instance;
         public SymbolUi.Child ChildUi;
+    }
+
+    internal TimelineHeight Folding;
+    
+    internal sealed class TimelineHeight
+    {
+        public TimelineHeight(TimeLineCanvas timeline)
+        {
+            _timeline = timeline;
+        }
+
+        public void DrawSplit(out int newContentHeight)
+        {
+            var currentTimelineHeight = _timeline.Folding.CurrentHeight;
+            if (CustomComponents.SplitFromBottom(ref currentTimelineHeight))
+            {
+                _customTimeLineHeight = (int)currentTimelineHeight;
+            }
+
+            newContentHeight = (int)ImGui.GetWindowHeight() - (int)currentTimelineHeight -
+                               4; // Hack that also depends on when a window-title is being rendered            
+        }
+        
+        private const int UseComputedHeight = -1;
+        private int _customTimeLineHeight = UseComputedHeight;
+        private readonly TimeLineCanvas _timeline;
+        public bool UsingCustomTimelineHeight => _customTimeLineHeight > UseComputedHeight;
+
+        public float CurrentHeight => UsingCustomTimelineHeight ? _customTimeLineHeight : ComputedTimelineHeight;
+        public float ComputedTimelineHeight => _timeline.SelectedAnimationParameters.Count * DopeSheetArea.LayerHeight
+                                                + _timeline.LayersArea.LastHeight
+                                                + TimeLineDragHeight
+                                                + 1;
+
+        public void Toggle()
+        {
+            _customTimeLineHeight = UsingCustomTimelineHeight ? UseComputedHeight : 200;
+        }
     }
 }
 

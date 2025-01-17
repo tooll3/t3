@@ -10,7 +10,7 @@ internal sealed class OpenedProject
     public readonly EditorSymbolPackage Package;
     public readonly Structure Structure;
     
-    // TODO: This updated or used?
+    // TODO: This is not updated or used?
     private readonly List<GraphComponents> _graphWindowsComponents = [];
     
     public Composition RootInstance { get; private set; }

@@ -4,7 +4,7 @@ using T3.Editor.SystemUi;
 
 namespace T3.Editor.Gui.Windows.Layouts;
 
-public static partial class WindowManager
+internal static partial class WindowManager
 {
     public static void DrawWindowMenuContent()
     {

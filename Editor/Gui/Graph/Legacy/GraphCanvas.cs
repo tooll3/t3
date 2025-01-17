@@ -51,6 +51,22 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
             _graph = new Legacy.Graph(_components, this, () => SymbolBrowser);
         }
     }
+    
+    public static GraphComponents CreateWithComponents(OpenedProject openedProject)
+    {
+        GraphComponents.CreateIndependentComponents(openedProject, out var navigationHistory, out var nodeSelection, out var graphImageBackground);
+        var components = new GraphComponents(openedProject, navigationHistory, nodeSelection, graphImageBackground);
+        var canvas = new GraphCanvas(nodeSelection, openedProject.Structure, navigationHistory, components.NodeNavigation,
+                                     getComposition: () => components.CompositionOp)
+                         {
+                             Components = components
+                         };
+
+        components.GraphCanvas = canvas;
+        canvas.SymbolBrowser = new SymbolBrowser(components, canvas);
+        return components;
+    }
+    
 
     internal GraphCanvas(NodeSelection nodeSelection, Structure structure, NavigationHistory navigationHistory, NodeNavigation nodeNavigation,
                          Func<Instance> getComposition)

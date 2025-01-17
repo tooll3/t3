@@ -4,6 +4,12 @@ using T3.Editor.Gui.Windows;
 
 namespace T3.Editor.UiModel.ProjectSession;
 
+/// <summary>
+/// Handles spacial navigation between nodes on a graph (up/down/left/right, etc) 
+/// </summary>
+/// <todo>
+/// Should be static
+/// </todo>
 internal sealed class NodeNavigation
 {
     public event Action<IReadOnlyList<Guid>> FocusInstanceRequested;

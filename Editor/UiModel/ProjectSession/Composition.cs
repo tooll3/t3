@@ -4,7 +4,8 @@ using T3.Core.Operator;
 namespace T3.Editor.UiModel.ProjectSession;
 
 /// <todo>
-/// Class needs documentation 
+/// An Instance currently edited by a GraphCanvas.
+/// Manages switching between instances and loading from packages(?) 
 /// </todo>
 internal sealed class Composition : IDisposable
 {
