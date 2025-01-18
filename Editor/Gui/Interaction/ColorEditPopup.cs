@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿#nullable enable
+using System.Drawing;
 using ImGuiNET;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
@@ -47,7 +48,7 @@ internal static class ColorEditPopup
             var compareColor = _isHoveringColor ? _hoveredColor : (Color)previousColor;
             _dampedCompareColor = Vector4.Max(Vector4.Lerp(_dampedCompareColor, compareColor, 0.2f), Vector4.Zero);
             edited = DrawCircleAndSliders(ref cColor, _dampedCompareColor, ref hNormalized, ref linearSaturation, v, drawList);
-            edited |= PickColor(ref cColor, previousColor);
+            edited |= PickColor(ref cColor);
             edited |= DrawColorInputs(ref cColor, hNormalized, linearSaturation, v);
             edited |= DrawUsedColors(ref cColor);
 
@@ -69,17 +70,16 @@ internal static class ColorEditPopup
         return edited;
     }
 
-    private static InputEditStateFlags PickColor(ref Color cColor, Vector4 previousColor)
+    private static InputEditStateFlags PickColor(ref Color cColor)
     {
         InputEditStateFlags edited = InputEditStateFlags.Nothing;
 
-        Color pickedColor;
         // Pick colors
         var altKeyPressed = ImGui.GetIO().KeyAlt;
         if (!altKeyPressed)
             return edited;
             
-        pickedColor = GetColorAtMousePosition();
+        var pickedColor = GetColorAtMousePosition();
         if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
         {
             edited |= InputEditStateFlags.ModifiedAndFinished;
@@ -90,7 +90,6 @@ internal static class ColorEditPopup
         var pos = ImGui.GetMousePos();
 
         pos += Vector2.One * 25;
-        var padding = new Vector2(5, 5);
         dl.AddRectFilled(pos, pos + new Vector2(80, 38), UiColors.BackgroundFull);
         ImGui.PushFont(Fonts.FontSmall);
         dl.AddText(pos + new Vector2(15, 2 + 0), UiColors.ForegroundFull, $"{pickedColor.R:0.000}");
@@ -349,6 +348,7 @@ internal static class ColorEditPopup
     {
         Hsl,
         Rgba,
+        // ReSharper disable once InconsistentNaming
         iRgba,
         Hex,
     }
@@ -527,7 +527,7 @@ internal static class ColorEditPopup
 
                 ImGui.SameLine();
                 var a = MathF.Round(cColor.A * 255);
-                ;
+                
                 ImGui.PushID("a");
                 if (SingleValueEdit.Draw(ref a, inputSize, 0, 255, false, 1, "{0:0}") is InputEditStateFlags.Modified)
                 {
@@ -753,9 +753,9 @@ internal static class ColorEditPopup
 internal static class ColorUsage
 {
     public static readonly Dictionary<Vector4, List<ColorUse>> ColorUses = new();
-    public static List<Vector4> ColorsOrderedByFrequency = new();
+    public static List<Vector4> ColorsOrderedByFrequency = [];
 
-    public static void CollectUsedColors(Instance op)
+    public static void CollectUsedColors(Instance? op)
     {
         ColorUses.Clear();
 
@@ -806,6 +806,7 @@ internal static class ColorUsage
                                         {
                                             Instance = child,
                                             GradientParameter = gradientInput,
+                                            GradientStep = step,
                                         });
                         }
 
@@ -822,7 +823,7 @@ internal static class ColorUsage
                                             .ToList();
     }
 
-    public static void SaveUse(Vector4 color, ColorUse use)
+    private static void SaveUse(Vector4 color, ColorUse use)
     {
         var roundedColor = new Vector4(MathF.Round(color.X, 3),
                                        MathF.Round(color.Y, 3),
@@ -840,22 +841,23 @@ internal static class ColorUsage
 
     public abstract class ColorUse
     {
-        public Instance Instance;
+        public Instance? Instance; // null if default color
     }
 
-    public class GradientColorUse : ColorUse
+    public sealed class GradientColorUse : ColorUse
     {
-        public InputSlot<Gradient> GradientParameter;
-        public Gradient.Step Gradient;
+        // ReSharper disable once NotAccessedField.Global
+        public required InputSlot<Gradient> GradientParameter;
+        // ReSharper disable once NotAccessedField.Global
+        public required Gradient.Step GradientStep;
     }
 
-    public class LibraryColorUse : ColorUse
-    {
-    }
+    private sealed class LibraryColorUse : ColorUse;
 
-    public class ParameterColorUse : ColorUse
+    private sealed class ParameterColorUse : ColorUse
     {
-        public InputSlot<System.Numerics.Vector4> ColorParameter;
+        // ReSharper disable once NotAccessedField.Local
+        public required InputSlot<System.Numerics.Vector4> ColorParameter;
     }
 
     /// <summary>

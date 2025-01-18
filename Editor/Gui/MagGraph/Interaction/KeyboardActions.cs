@@ -3,7 +3,6 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.UiModel;
 using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.MagGraph.Interaction;
@@ -13,7 +12,7 @@ internal static class KeyboardActions
     internal static void HandleKeyboardActions(GraphUiContext context)
     {
         var compositionOp = context.CompositionOp;
-        var compositionUi = compositionOp.GetSymbolUi();
+        //var compositionUi = compositionOp.GetSymbolUi();
 
         if (KeyboardBinding.Triggered(UserActions.FocusSelection))
         {
@@ -100,14 +99,14 @@ internal static class KeyboardActions
         //     _nodeGraphLayouting.ArrangeOps(compositionOp);
         // }
 
-        if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.AddAnnotation))
-        {
-            var newAnnotation = NodeActions.AddAnnotation(context.Selector, context.Canvas, compositionOp);
-            // TODO: enable rename annotation state...
-            //_graph.RenameAnnotation(newAnnotation);
-        }
+        // if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.AddAnnotation))
+        // {
+        //     var newAnnotation = NodeActions.AddAnnotation(context.Selector, context.Canvas, compositionOp);
+        //     // TODO: enable rename annotation state...
+        //     //_graph.RenameAnnotation(newAnnotation);
+        // }
 
-        IReadOnlyList<Guid>? navigationPath = null;
+        //IReadOnlyList<Guid>? navigationPath = null;
 
         // Navigation (this should eventually be part of the graph window)
         // if (KeyboardBinding.Triggered(UserActions.NavigateBackwards))

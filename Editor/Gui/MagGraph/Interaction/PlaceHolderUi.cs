@@ -295,12 +295,12 @@ internal static class PlaceHolderUi
         var result = UiResults.None;
         if (ImGui.IsKeyReleased((ImGuiKey)Key.CursorDown))
         {
-            UiListHelpers.AdvanceSelectedItem(filter.MatchingSymbolUis, ref _selectedSymbolUi, 1);
+            UiListHelpers.AdvanceSelectedItem(filter.MatchingSymbolUis!, ref _selectedSymbolUi, 1);
             result = UiResults.SelectionChanged;
         }
         else if (ImGui.IsKeyReleased((ImGuiKey)Key.CursorUp))
         {
-            UiListHelpers.AdvanceSelectedItem(filter.MatchingSymbolUis, ref _selectedSymbolUi, -1);
+            UiListHelpers.AdvanceSelectedItem(filter.MatchingSymbolUis!, ref _selectedSymbolUi, -1);
             result = UiResults.SelectionChanged;
         }
 

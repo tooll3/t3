@@ -15,14 +15,12 @@ namespace T3.Editor.UiModel;
 [DebuggerDisplay("{DisplayName}")]
 internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 {
-    public override AssemblyInformation AssemblyInformation => CsProjectFile.Assembly;
+    public override AssemblyInformation AssemblyInformation => CsProjectFile.Assembly!;
     public override string DisplayName { get; }
 
     /// <summary>
     /// Create a new <see cref="EditableSymbolProject"/> using the given <see cref="CsProjectFile"/>.
     /// </summary>
-    /// <param name="csProjectFile"></param>
-    /// <param name="releaseInfo"></param>
     public EditableSymbolProject(CsProjectFile csProjectFile) : base(assembly: csProjectFile.Assembly!, directory: csProjectFile.Directory)
     {
         CsProjectFile = csProjectFile;
@@ -124,7 +122,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     public override void Dispose()
     {
         base.Dispose();
-        FileWatcher.Dispose();
+        FileWatcher?.Dispose();
         ProjectSetup.RemoveSymbolPackage(this, false);
     }
 
@@ -133,8 +131,8 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     /// </summary>
     public event Action<Guid, EditableSymbolProject?>? OnSymbolMoved;
     public readonly CsProjectFile CsProjectFile;
-    private ResourceFileWatcher _resourceFileWatcher;
-    public override ResourceFileWatcher FileWatcher => _resourceFileWatcher;
+    private ResourceFileWatcher? _resourceFileWatcher;
+    public override ResourceFileWatcher? FileWatcher => _resourceFileWatcher;
     public override bool IsReadOnly => false;
 
     public static IEnumerable<EditableSymbolProject> AllProjects => ProjectSetup.AllPackages.Where(x => x is EditableSymbolProject).Cast<EditableSymbolProject>();

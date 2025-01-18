@@ -1,10 +1,10 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 using T3.Editor.Gui.Interaction.TransformGizmos;
-using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
@@ -24,7 +24,8 @@ internal static class ConnectionSplitHelper
         if (components.GraphCanvas is not GraphCanvas graphCanvas)
             return;
             
-        if (BestMatchLastFrame != null && !ConnectionMaker.HasTempConnectionsFor(graphCanvas))
+        if (BestMatchLastFrame != null 
+            && !ConnectionMaker.HasTempConnectionsFor(graphCanvas))
         {
             var time = ImGui.GetTime();
             if (_hoverStartTime < 0)
@@ -34,29 +35,29 @@ internal static class ConnectionSplitHelper
             var radius = EaseFunctions.EaseOutElastic((float)hoverDuration) * 4;
             var drawList = ImGui.GetForegroundDrawList();
 
-            drawList.AddCircleFilled(_bestMatchYetForCurrentFrame.PositionOnScreen, radius, _bestMatchYetForCurrentFrame.Color, 30);
+            drawList.AddCircleFilled(BestMatchLastFrame.PositionOnScreen, radius, BestMatchLastFrame.Color, 30);
 
             var buttonMin = _mousePosition - Vector2.One * radius / 2;
             ImGui.SetCursorScreenPos(buttonMin);
 
             if (ImGui.InvisibleButton("splitMe", Vector2.One * radius))
             {
-                var posOnScreen = graphCanvas.InverseTransformPositionFloat(_bestMatchYetForCurrentFrame.PositionOnScreen)
+                var posOnScreen = graphCanvas.InverseTransformPositionFloat(BestMatchLastFrame.PositionOnScreen)
                                   - new Vector2(SymbolUi.Child.DefaultOpSize.X * 0.25f,
                                                 SymbolUi.Child.DefaultOpSize.Y * 0.5f);
 
                 ConnectionMaker.SplitConnectionWithSymbolBrowser(components, components.CompositionOp!.Symbol,
-                                                                 _bestMatchYetForCurrentFrame.Connection,
+                                                                 BestMatchLastFrame.Connection,
                                                                  posOnScreen, graphCanvas.SymbolBrowser);
             }
 
             ImGui.BeginTooltip();
             {
-                var connection = _bestMatchYetForCurrentFrame.Connection;
+                var connection = BestMatchLastFrame.Connection;
 
-                ISlot outputSlot = null;
-                Symbol.Child.Output output = null;
-                Symbol.OutputDefinition outputDefinition = null;
+                ISlot? outputSlot = null;
+                Symbol.Child.Output? output = null;
+                Symbol.OutputDefinition? outputDefinition;
 
                 var op = components.CompositionOp!;
 
@@ -72,7 +73,7 @@ internal static class ConnectionSplitHelper
                     }
                 }
 
-                Symbol.Child.Input input = null;
+                Symbol.Child.Input? input = null;
                 if (op.Symbol.Children.TryGetValue(connection.TargetParentOrChildId, out var targetOp))
                 {
                     input = targetOp.Inputs[connection.TargetSlotId];
@@ -92,11 +93,14 @@ internal static class ConnectionSplitHelper
                         _imageCanvasForTooltips.SetAsCurrent();
 
                         //var sourceOpUi = SymbolUiRegistry.Entries[graphCanvas.CompositionOp.Symbol.Id].ChildUis.Single(childUi => childUi.Id == sourceOp.Id);
-                        var sourceOpUi = sourceOpInstance.GetSymbolUi();
-                        IOutputUi outputUi = sourceOpUi.OutputUis[output.OutputDefinition.Id];
-                        _evaluationContext.Reset();
-                        _evaluationContext.RequestedResolution = new Int2(1280 / 2, 720 / 2);
-                        outputUi.DrawValue(outputSlot, _evaluationContext, recompute: UserSettings.Config.HoverMode == UserSettings.GraphHoverModes.Live);
+                        if (sourceOpInstance != null)
+                        {
+                            var sourceOpUi = sourceOpInstance.GetSymbolUi();
+                            var outputUi = sourceOpUi.OutputUis[output.OutputDefinition.Id];
+                            _evaluationContext.Reset();
+                            _evaluationContext.RequestedResolution = new Int2(1280 / 2, 720 / 2);
+                            outputUi.DrawValue(outputSlot, _evaluationContext, recompute: UserSettings.Config.HoverMode == UserSettings.GraphHoverModes.Live);
+                        }
 
                         // if (!string.IsNullOrEmpty(sourceOpUi.Description))
                         // {
@@ -112,20 +116,24 @@ internal static class ConnectionSplitHelper
                         TransformGizmoHandling.RestoreDrawList();
                     }
                     ImGui.EndChild();
-                    ImGui.PushFont(Fonts.FontSmall);
-                    var type = output.OutputDefinition.ValueType;
-                    var connectionSource = sourceOp.ReadableName + "." + output.OutputDefinition.Name;
-                    ImGui.TextColored(UiColors.TextMuted, connectionSource);
-                            
-                    ImGui.TextUnformatted(type.Name);
-                    ImGui.SameLine();
-                    var connectionTarget = "--> " + targetOp.ReadableName + "." + input.Name;
-                    ImGui.TextColored(UiColors.TextMuted, connectionTarget);
-                    ImGui.PopFont();
 
-                    var nodeSelection = components.NodeSelection;
-                    nodeSelection.HoveredIds.Add(targetOp.Id);
-                    nodeSelection.HoveredIds.Add(sourceOp.Id);
+                    if (sourceOp != null && targetOp != null)
+                    {
+                        ImGui.PushFont(Fonts.FontSmall);
+                        var type = output.OutputDefinition.ValueType;
+                        var connectionSource = sourceOp.ReadableName + "." + output.OutputDefinition.Name;
+                        ImGui.TextColored(UiColors.TextMuted, connectionSource);
+                                
+                        ImGui.TextUnformatted(type.Name);
+                        ImGui.SameLine();
+                        var connectionTarget = "--> " + targetOp.ReadableName + "." + input.Name;
+                        ImGui.TextColored(UiColors.TextMuted, connectionTarget);
+                        ImGui.PopFont();
+                        
+                        var nodeSelection = components.NodeSelection;
+                        nodeSelection.HoveredIds.Add(targetOp.Id);
+                        nodeSelection.HoveredIds.Add(sourceOp.Id);
+                    }
                 }
             }
             ImGui.EndTooltip();
@@ -160,8 +168,8 @@ internal static class ConnectionSplitHelper
     private static readonly ImageOutputCanvas _imageCanvasForTooltips = new() { DisableDamping = true };
     private static readonly EvaluationContext _evaluationContext = new();
 
-    public static PotentialConnectionSplit BestMatchLastFrame;
-    private static PotentialConnectionSplit _bestMatchYetForCurrentFrame;
+    public static PotentialConnectionSplit? BestMatchLastFrame;
+    private static PotentialConnectionSplit? _bestMatchYetForCurrentFrame;
     private static float _bestMatchDistance = float.PositiveInfinity;
     private const int SnapDistance = 50;
     private static Vector2 _mousePosition;
@@ -170,7 +178,7 @@ internal static class ConnectionSplitHelper
     public sealed class PotentialConnectionSplit
     {
         public Vector2 PositionOnScreen;
-        public Symbol.Connection Connection;
+        public required Symbol.Connection Connection;
         public Color Color;
     }
 }

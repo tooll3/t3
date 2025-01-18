@@ -7,9 +7,9 @@ using T3.Core.Compilation;
 using T3.Core.Model;
 using T3.Core.Resource;
 using T3.Editor.External;
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Exporting;
 
 namespace T3.Editor.Compilation;
 

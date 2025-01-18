@@ -92,8 +92,7 @@ internal sealed class ProjectView
             }
         }
 
-        var previousComposition = Composition;
-        Composition = Composition.GetFor(newCompositionInstance)!;
+        Composition = Composition.GetFor(newCompositionInstance);
         _compositionPath.Clear();
         _compositionPath.AddRange(path);
 
@@ -160,13 +159,16 @@ internal sealed class ProjectView
             _duplicateSymbolDialog.ShowNextFrame(); // actually shows this frame
             var instance = latestComposition.Instance;
             var parent = instance.Parent;
-            var symbolChildUi = parent.GetSymbolUi().ChildUis[instance.SymbolChildId];
-            _duplicateSymbolDialog.Draw(compositionOp: latestComposition.Instance.Parent,
-                                        selectedChildUis: [symbolChildUi],
-                                        nameSpace: ref _dupeReadonlyNamespace,
-                                        newTypeName: ref _dupeReadonlyName,
-                                        description: ref _dupeReadonlyDescription,
-                                        isReload: true);
+            var symbolChildUi = parent?.GetSymbolUi().ChildUis[instance.SymbolChildId];
+            if (symbolChildUi != null && latestComposition.Instance.Parent != null)
+            {
+                _duplicateSymbolDialog.Draw(compositionOp: latestComposition.Instance.Parent,
+                                            selectedChildUis: [symbolChildUi],
+                                            nameSpace: ref _dupeReadonlyNamespace,
+                                            newTypeName: ref _dupeReadonlyName,
+                                            description: ref _dupeReadonlyDescription,
+                                            isReload: true);
+            }
         }
         else
         {

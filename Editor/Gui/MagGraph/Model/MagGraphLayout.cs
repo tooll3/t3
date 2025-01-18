@@ -197,13 +197,13 @@ internal sealed class MagGraphLayout
         return hash;
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static int GetHashCodeForSlot(ISlot output)
-    {
-        var hash = output.Id.GetHashCode();
-        hash = hash * 31 + output.Parent.SymbolChildId.GetHashCode();
-        return hash;
-    }
+    // [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    // private static int GetHashCodeForSlot(ISlot output)
+    // {
+    //     var hash = output.Id.GetHashCode();
+    //     hash = hash * 31 + output.Parent.SymbolChildId.GetHashCode();
+    //     return hash;
+    // }
 
     /// <summary>
     /// Sadly there is no easy method to store if an output has a connection 
@@ -324,7 +324,7 @@ internal sealed class MagGraphLayout
 
             var isPrimaryInput = inputLineIndex == 0;
 
-            if (input.IsMultiInput && input is IMultiInputSlot multiInputSlot)
+            if (input.IsMultiInput && input is IMultiInputSlot)
             {
                 var shouldBeVisible = isRelevant || isPrimaryInput || input.HasInputConnections;
 
@@ -484,7 +484,7 @@ internal sealed class MagGraphLayout
                 
                 Debug.Assert(sourceItem2.Instance != null);
 
-                var symbolOutput = composition.Outputs.FirstOrDefault((o => o.Id == c.TargetSlotId));
+                //var symbolOutput = composition.Outputs.FirstOrDefault((o => o.Id == c.TargetSlotId));
                 var sourceOutput = sourceItem2.Instance.Outputs.FirstOrDefault(o => o.Id == c.SourceSlotId);
 
                 Debug.Assert(sourceOutput != null);
@@ -535,6 +535,9 @@ internal sealed class MagGraphLayout
             }
 
             // Connections between nodes
+            if (sourceItem.Instance == null || targetItem.Instance == null)
+                continue;
+            
             var output = sourceItem.Variant == MagGraphItem.Variants.Input
                              ? sourceItem.Instance.Inputs.FirstOrDefault(o => o.Id == c.SourceSlotId)
                              : sourceItem.Instance.Outputs.FirstOrDefault(o => o.Id == c.SourceSlotId);

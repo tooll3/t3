@@ -171,7 +171,7 @@ internal static class TextureReadAccess
 
         const string sourcePath = @"img\ConvertFormat-cs.hlsl";
         const string entryPoint = "main";
-        const string debugName = "resolve-convert-texture-format";
+        //const string debugName = "resolve-convert-texture-format";
 
         _convertComputeShaderResource = ResourceManager.CreateShaderResource<ComputeShader>(sourcePath, null, () => entryPoint);
        

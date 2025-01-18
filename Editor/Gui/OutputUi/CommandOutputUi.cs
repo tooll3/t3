@@ -130,7 +130,7 @@ internal class CommandOutputUi : OutputUi<Command>
 
     protected override void DrawTypedValue(ISlot slot)
     {
-        if (slot is Slot<Command>)
+        if (ImageOutputCanvas.Current != null && slot is Slot<Command>)
         {
             ImageOutputCanvas.Current.DrawTexture(_colorBuffer);
         }
@@ -140,7 +140,7 @@ internal class CommandOutputUi : OutputUi<Command>
         }
     }
 
-    private bool UpdateTextures(Device device, Int2 size, Format format)
+    private void UpdateTextures(Device device, Int2 size, Format format)
     {
         try
         {
@@ -153,8 +153,8 @@ internal class CommandOutputUi : OutputUi<Command>
                     if (currentColorDesc.Width == size.Width
                         && currentColorDesc.Height == size.Height
                         && currentColorDesc.Format == format)
-                        return false; // nothing changed
-                        
+                        return;
+
                     _colorBuffer.Dispose();
                 }
 
@@ -199,10 +199,8 @@ internal class CommandOutputUi : OutputUi<Command>
         catch (Exception e)
         {
             Log.Warning("Failed to generate texture: " + e.Message);
-            return false;
+            return;
         }
-            
-        return true;
     }
 
     private static readonly Texture2DDescription _defaultColorDescription = new()

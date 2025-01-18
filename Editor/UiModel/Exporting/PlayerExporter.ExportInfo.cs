@@ -4,11 +4,11 @@ using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
 
-namespace T3.Editor.Gui.Graph;
+namespace T3.Editor.UiModel.Exporting;
 
 internal static partial class PlayerExporter
 {
-    private class ExportInfo
+    private sealed class ExportInfo
     {
         public IReadOnlyCollection<ResourcePath> ResourcePaths => _resourcePaths;
         public IEnumerable<SymbolPackage> SymbolPackages => _symbolPackages.Keys;

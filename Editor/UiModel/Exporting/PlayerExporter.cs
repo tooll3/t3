@@ -10,13 +10,13 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.SystemUi;
+using T3.Editor.Gui;
 using T3.Editor.Gui.InputUi.SimpleInputUis;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.UiModel;
 using T3.Serialization;
 
-namespace T3.Editor.Gui.Graph;
+namespace T3.Editor.UiModel.Exporting;
 
 internal static partial class PlayerExporter
 {
@@ -78,7 +78,7 @@ internal static partial class PlayerExporter
 
         if (TryFindSoundtrack(exportedInstance, symbol, out var file, out var relativePath))
         {
-            var fileInfo = file!.FileInfo;
+            var fileInfo = file.FileInfo;
             if (fileInfo is null || !fileInfo.Exists)
             {
                 reason = $"Soundtrack file does not exist: {fileInfo?.FullName}";
@@ -94,7 +94,7 @@ internal static partial class PlayerExporter
                 return false;
             }
 
-            var newPath = Path.Combine(resourceDir, relativePath!);
+            var newPath = Path.Combine(resourceDir, relativePath);
             if (!TryCopyFile(absolutePath, newPath))
             {
                 reason = $"Failed to copy soundtrack from \"{absolutePath}\" to \"{newPath}\"";
@@ -131,7 +131,7 @@ internal static partial class PlayerExporter
                                                 ApplicationTitle: symbol.Name, 
                                                 WindowMode: WindowMode.Fullscreen, 
                                                 ConfigData: ProjectSettings.Config,
-                                                Author: symbol.SymbolPackage.AssemblyInformation.Name, // todo - actual author name
+                                                Author: symbol.SymbolPackage.AssemblyInformation?.Name ?? string.Empty, // todo - actual author name
                                                 BuildId: Guid.NewGuid(),
                                                 EditorVersion: Program.VersionText);
             
@@ -152,9 +152,16 @@ internal static partial class PlayerExporter
         string[] excludeSubdirectories = [EditorSymbolPackage.SymbolUiSubFolder, EditorSymbolPackage.SourceCodeSubFolder, ".git", ResourceManager.ResourcesSubfolder];
         foreach (var package in symbolPackages)
         {
-            Log.Debug($"Exporting package {package.AssemblyInformation.Name}");
-            var name = package.AssemblyInformation.Name;
-            var targetDirectory = Path.Combine(operatorDir, name);
+            Log.Debug($"Exporting package {package.AssemblyInformation?.Name}");
+            var packageName = package.AssemblyInformation?.Name;
+            if (packageName == null)
+            {
+                Log.Warning(" Skipping unnamed package " + package);
+                continue;
+            }
+            
+            
+            var targetDirectory = Path.Combine(operatorDir, packageName);
             _ = Directory.CreateDirectory(targetDirectory);
             if (package is EditableSymbolProject project)
             {
@@ -162,7 +169,7 @@ internal static partial class PlayerExporter
                 var compiled = project.CsProjectFile.TryCompileRelease(targetDirectory);
                 if (!compiled)
                 {
-                    reason = $"Failed to compile project \"{name}\"";
+                    reason = $"Failed to compile project \"{packageName}\"";
                     return false;
                 }
 
@@ -184,8 +191,14 @@ internal static partial class PlayerExporter
             }
             else
             {
-                // copy full directory into target directory recursively, maintaining folder layout
-                var directoryToCopy = package.AssemblyInformation.Directory;
+                // Copy full directory into target directory recursively, maintaining folder layout
+                var directoryToCopy = package?.AssemblyInformation?.Directory;
+                if (directoryToCopy == null)
+                {
+                    reason = "invalid package AssemblyInformation";
+                    return false;
+                }
+                
                 if (!TryCopyDirectory(directoryToCopy, targetDirectory, out reason, excludeSubdirectories))
                     return false;
             }
@@ -251,7 +264,7 @@ internal static partial class PlayerExporter
                     reason = $"Failed to get directory for \"{targetPath}\" - is it missing a file extension?";
                     return false;
                 }
-                Directory.CreateDirectory(targetDir!);
+                Directory.CreateDirectory(targetDir);
                 File.Copy(file, targetPath, true);
             }
         }
@@ -399,7 +412,10 @@ internal static partial class PlayerExporter
         if (stringInputUi.Usage != StringInputUi.UsageType.FilePath && stringInputUi.Usage != StringInputUi.UsageType.DirectoryPath)
             return;
 
-        var compositionSymbol = parent.Parent.Symbol;
+        var compositionSymbol = parent.Parent?.Symbol;
+        if (compositionSymbol == null)
+            return;
+        
         var parentSymbolChild = compositionSymbol.Children[parent.SymbolChildId];
         var value = parentSymbolChild.Inputs[inputSlot.Id].Value;
         if (value is not InputValue<string> stringValue)

@@ -5,7 +5,7 @@ namespace T3.Editor.Gui.UiHelpers;
 
 internal abstract class UiListHelpers
 {
-    internal static void AdvanceSelectedItem<T>(IList<T> list, ref T? currentItem, int offset)
+    internal static void AdvanceSelectedItem<T>(IList<T?> list, ref T? currentItem, int offset)
     {
         if (list.Count == 0)
         {

@@ -307,19 +307,20 @@ internal sealed class SymbolFilter
 
         // Bump operators with matching connections 
         var matchingConnectionsCount = 0;
-        if (_sourceInputHash != 0)
-        {
-            foreach (var inputDefinition in symbol.InputDefinitions.FindAll(i => i.DefaultValue.ValueType == filterInputType))
-            {
-                var connectionHash = _sourceInputHash * 31 + inputDefinition.Id.GetHashCode();
-
-                if (SymbolAnalysis.ConnectionHashCounts.TryGetValue(connectionHash, out var connectionCount))
-                {
-                    //Log.Debug($" <{connectionCount}x> --> {symbol.Name}");
-                    matchingConnectionsCount += connectionCount;
-                }
-            }
-        }
+        // TODO: fix implementation
+        // if (SourceInputHash != 0)
+        // {
+        //     foreach (var inputDefinition in symbol.InputDefinitions.FindAll(i => i.DefaultValue.ValueType == filterInputType))
+        //     {
+        //         var connectionHash = SourceInputHash * 31 + inputDefinition.Id.GetHashCode();
+        //
+        //         if (SymbolAnalysis.ConnectionHashCounts.TryGetValue(connectionHash, out var connectionCount))
+        //         {
+        //             //Log.Debug($" <{connectionCount}x> --> {symbol.Name}");
+        //             matchingConnectionsCount += connectionCount;
+        //         }
+        //     }
+        // }
 
         if (targetInputHash != 0)
         {
@@ -352,8 +353,10 @@ internal sealed class SymbolFilter
     private Type? _outputType;
     public bool WasUpdated;
 
-    private static int _sourceInputHash;
-    private int _targetInputHash;
+    // TODO:  implement for relevancy filter for matching outputs
+    private const int SourceInputHash = 0;
+
+    //private int _targetInputHash =0;
 
     private Regex _currentRegex = new(".*", RegexOptions.IgnoreCase);
     private string _lastSearchString = string.Empty;

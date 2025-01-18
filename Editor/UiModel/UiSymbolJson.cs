@@ -296,7 +296,7 @@ public static class SymbolUiJson
 
         var descriptionEntry = mainObject[JsonKeys.Description];
         if (descriptionEntry?.Value<string>() != null)
-            symbolUi.Description = descriptionEntry.Value<string>();
+            symbolUi.Description = descriptionEntry.Value<string>() ?? string.Empty;
 
         var tagsEntry = mainObject[JsonKeys.SymbolTags];
         if (tagsEntry?.Value<int>() != null)

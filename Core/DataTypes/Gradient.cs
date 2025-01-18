@@ -186,7 +186,7 @@ public class Gradient : IEditableInputType
                    };
     }
 
-    public class Step
+    public sealed class Step
     {
         public float NormalizedPosition;
         public Vector4 Color;
@@ -200,7 +200,7 @@ public class Gradient : IEditableInputType
         /// Constructor to clone the provided <see cref="Step"/>
         /// </summary>
         /// <param name="original"></param>
-        public Step(Step original)
+        internal Step(Step original)
         {
             NormalizedPosition = original.NormalizedPosition;
             Color = original.Color;

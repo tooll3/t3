@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿#nullable enable
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
@@ -53,7 +54,7 @@ internal static class InputsAndOutputs
         }
     }
 
-    private sealed class NodeByAttributeIdFinder(Guid[] inputIds) : CSharpSyntaxRewriter
+    private sealed class NodeByAttributeIdFinder(Guid[]? inputIds) : CSharpSyntaxRewriter
     {
         public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
         {
@@ -92,7 +93,7 @@ internal static class InputsAndOutputs
             return node;
         }
 
-        public SyntaxNode LastInputNodeFound { get; private set; }
+        public SyntaxNode? LastInputNodeFound { get; private set; }
     }
 
     private sealed class OutputNodeByTypeFinder : CSharpSyntaxRewriter
@@ -109,7 +110,7 @@ internal static class InputsAndOutputs
             return node;
         }
 
-        public SyntaxNode LastOutputNodeFound { get; private set; }
+        public SyntaxNode? LastOutputNodeFound { get; private set; }
     }
 
     private sealed class ClassDeclarationFinder : CSharpSyntaxWalker
@@ -119,7 +120,7 @@ internal static class InputsAndOutputs
             ClassDeclarationNode = node;
         }
 
-        public ClassDeclarationSyntax ClassDeclarationNode;
+        public ClassDeclarationSyntax? ClassDeclarationNode;
     }
 
     private sealed class AllInputNodesFinder : CSharpSyntaxRewriter
@@ -160,7 +161,7 @@ internal static class InputsAndOutputs
         }
 
         private int _index;
-        public SyntaxNode[] ReplacementNodes;
+        public SyntaxNode[] ReplacementNodes =[];
     }
 
     public static bool AddInputToSymbol(string inputName, bool multiInput, Type inputType, Symbol symbol)
@@ -200,9 +201,15 @@ internal static class InputsAndOutputs
         var inputString = "        public readonly " + slotString + " " + inputName + " = new " + slotString + "();\n";
 
         var inputDeclaration = SyntaxFactory.ParseMemberDeclaration(attributeString + inputString);
+        if (inputDeclaration == null)
+        {
+            Log.Error("Invalid input declaration");
+            return false;
+        }
         if (inputNodeFinder.LastInputNodeFound != null)
         {
-            root = root.InsertNodesAfter(inputNodeFinder.LastInputNodeFound, new[] { inputDeclaration });
+            root = root.InsertNodesAfter(inputNodeFinder.LastInputNodeFound, 
+                                         new[] { inputDeclaration });
         }
         else if (blockFinder.ClassDeclarationNode != null)
         {
@@ -261,6 +268,11 @@ internal static class InputsAndOutputs
         var inputString = $"        public readonly {slotString} {outputName} = new {slotString}();\n";
 
         var outputDeclaration = SyntaxFactory.ParseMemberDeclaration(attributeString + inputString);
+        if (outputDeclaration == null)
+        {
+            Log.Error("Invalid output declaration");
+            return false;
+        }
         if (outputNodeFinder.LastOutputNodeFound != null)
         {
             root = root.InsertNodesAfter(outputNodeFinder.LastOutputNodeFound, new[] { outputDeclaration });
@@ -269,7 +281,7 @@ internal static class InputsAndOutputs
         {
             var node = blockFinder.ClassDeclarationNode;
             var classDeclaration = node.AddMembers(outputDeclaration);
-            root = SyntaxNodeExtensions.ReplaceNode(root, (SyntaxNode)blockFinder.ClassDeclarationNode, (SyntaxNode)classDeclaration);
+            root = SyntaxNodeExtensions.ReplaceNode(root, blockFinder.ClassDeclarationNode, classDeclaration);
         }
         else
         {
@@ -324,13 +336,13 @@ internal static class InputsAndOutputs
             else
                 @namespace += ".";
 
-            string foundAttributeString = null;
+            string? foundAttributeString = null;
             foreach (var (nodeName, syntaxNode) in inputNodeFinder.InputNodesFound)
             {
                 if (nodeName != inputDef.Name)
                     continue;
 
-                foundAttributeString = Enumerable.First<string>(syntaxNode.ToString().Split("\n"));
+                foundAttributeString = syntaxNode.ToString().Split("\n").First();
                 break;
             }
 
@@ -343,7 +355,13 @@ internal static class InputsAndOutputs
             var slotString = (inputDef.IsMultiInput ? "MultiInputSlot<" : "InputSlot<") + @namespace + typeName + ">";
             var inputString = "        public readonly " + slotString + " " + inputDef.Name + " = new " + slotString + "();\n";
 
-            var inputDeclaration = SyntaxFactory.ParseMemberDeclaration(attributeString + inputString);
+            var code = attributeString + inputString;
+            var inputDeclaration = SyntaxFactory.ParseMemberDeclaration(code);
+            if (inputDeclaration == null)
+            {
+                Log.Error("Skipping invalid input declaration " + code);
+                continue;
+            }
             inputDeclarations.Add(inputDeclaration);
         }
 
@@ -360,7 +378,7 @@ internal static class InputsAndOutputs
     }
     
     
-    public static bool RenameInput(Symbol symbol, Guid inputId, string newName, bool dryRun, out string warning)
+    public static bool RenameInput(Symbol symbol, Guid inputId, string newName, bool dryRun, out string? warning)
     {
         warning = null;
 

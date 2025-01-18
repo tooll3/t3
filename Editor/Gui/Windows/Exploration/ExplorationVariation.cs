@@ -50,13 +50,13 @@ internal class ExplorationVariation
         _changeCommand?.Undo();
     }
 
-    private void InvalidateParameters()
-    {
-        foreach (var param in ValuesForParameters.Keys)
-        {
-            param.InputSlot.DirtyFlag.ForceInvalidate();
-        }
-    }
+    // private void InvalidateParameters()
+    // {
+    //     foreach (var param in ValuesForParameters.Keys)
+    //     {
+    //         param.InputSlot.DirtyFlag.ForceInvalidate();
+    //     }
+    // }
 
     public void UpdateUndoCommand(Structure structure)
     {
@@ -101,7 +101,7 @@ internal class ExplorationVariation
                 }
 
                 value *= 1f / sumWeight;
-                value += Random.NextFloat(-scatter, scatter) * param.ParameterScale * param.ScatterStrength;
+                value += _random.NextFloat(-scatter, scatter) * param.ParameterScale * param.ScatterStrength;
                 valuesForParameters.Add(param, new InputValue<float>(value));
             }
 
@@ -123,8 +123,8 @@ internal class ExplorationVariation
 
                 value *= 1f / sumWeight;
                 value += new Vector2(
-                                     Random.NextFloat(-scatter, scatter),
-                                     Random.NextFloat(-scatter, scatter)
+                                     _random.NextFloat(-scatter, scatter),
+                                     _random.NextFloat(-scatter, scatter)
                                     ) * param.ParameterScale * param.ScatterStrength;
 
                 valuesForParameters.Add(param, new InputValue<Vector2>(value));
@@ -148,9 +148,9 @@ internal class ExplorationVariation
 
                 value *= 1f / sumWeight;
                 value += new Vector3(
-                                     Random.NextFloat(-scatter, scatter),
-                                     Random.NextFloat(-scatter, scatter),
-                                     Random.NextFloat(-scatter, scatter)
+                                     _random.NextFloat(-scatter, scatter),
+                                     _random.NextFloat(-scatter, scatter),
+                                     _random.NextFloat(-scatter, scatter)
                                     ) * param.ParameterScale * param.ScatterStrength;
 
                 valuesForParameters.Add(param, new InputValue<Vector3>(value));
@@ -174,10 +174,10 @@ internal class ExplorationVariation
 
                 value *= 1f / sumWeight;
                 value += new Vector4(
-                                     Random.NextFloat(-scatter, scatter),
-                                     Random.NextFloat(-scatter, scatter),
-                                     Random.NextFloat(-scatter, scatter),
-                                     Random.NextFloat(-scatter, scatter)
+                                     _random.NextFloat(-scatter, scatter),
+                                     _random.NextFloat(-scatter, scatter),
+                                     _random.NextFloat(-scatter, scatter),
+                                     _random.NextFloat(-scatter, scatter)
                                     ) * param.ParameterScale * param.ScatterStrength;
 
                 valuesForParameters.Add(param, new InputValue<Vector4>(value));
@@ -223,12 +223,12 @@ internal class ExplorationVariation
         public float ParameterMin = float.NegativeInfinity;
         public float ParameterMax = float.PositiveInfinity;
         public bool ParameterClamp = false;
-        public bool IsHidden;
+        //public bool IsHidden;
     }
 
 
     public readonly Dictionary<VariationParameter, InputValue> ValuesForParameters;
 
-    private static readonly Random Random = new();
+    private static readonly Random _random = new();
     private ICommand _changeCommand;
 }

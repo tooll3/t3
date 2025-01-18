@@ -289,7 +289,7 @@ public abstract class InputValueUi<T> : IInputUi
                 ImGui.PushStyleColor(ImGuiCol.Text, typeColor.Rgba);
                 ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0, 0.5f));
 
-                DrawReadOnlyControl(connectedName, ref typedInputSlot.Value);
+                DrawReadOnlyControl(connectedName, ref typedInputSlot.Value!);
                 ImGui.PopStyleVar();
                 ImGui.PopStyleColor(1);
                 ImGui.PopItemWidth();
@@ -509,7 +509,7 @@ public abstract class InputValueUi<T> : IInputUi
                 input.Value.Assign(input.DefaultValue);
             }
 
-            editState |= DrawEditControl(name, input, ref typedInputSlot.TypedInputValue.Value, false);
+            editState |= DrawEditControl(name, input, ref typedInputSlot.TypedInputValue.Value!, false);
             if ((editState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified ||
                 (editState & InputEditStateFlags.Finished) == InputEditStateFlags.Finished)
             {
