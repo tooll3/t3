@@ -30,13 +30,11 @@ internal sealed class CombineFields : Instance<CombineFields>, IGraphNodeOp
         InputFields.DirtyFlag.Clear();
     }
 
-    private int _frameUpdateCount;
-    
     public string GetShaderCode()
     {
         _callDef.Clear();
 
-        if (ShaderNode.InputNodes == null || ShaderNode.InputNodes.Count == 0)
+        if ( ShaderNode.InputNodes.Count == 0)
         {
             _callDef.AppendLine($"float {ShaderNode}(float3 p) {{ return -999999; }}");
         }

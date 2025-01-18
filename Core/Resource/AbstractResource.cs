@@ -21,8 +21,10 @@ public sealed class Resource<T> : IDisposable, IResource
     IResourcePackage? IResource.OwningPackage => _owner?.Package;
         
     #region Constructors
-    public Resource(InputSlot<string> slot, TryGenerate<T> tryGenerate,
-                    bool allowDisposal = true, EqualityComparer<T?>? comparer = null)
+    public Resource(InputSlot<string> slot, 
+                    TryGenerate<T> tryGenerate,
+                    bool allowDisposal = true, 
+                    EqualityComparer<T?>? comparer = null)
         : this(slot.Value, slot.Parent, tryGenerate, allowDisposal, comparer)
     {
         _slot = slot;

@@ -35,7 +35,10 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         Mesh.UpdateAction += Update;
     }
 
-    private bool OnFileChanged(FileResource file, SceneSetup currentValue, out SceneSetup newValue, out string failureReason)
+    private bool OnFileChanged(FileResource file, 
+                               SceneSetup? currentValue, 
+                               [NotNullWhen(true)]out SceneSetup? newValue, 
+                               [NotNullWhen(false)]out string? failureReason)
     {
         LoadFile(file.AbsolutePath, 0, true);
         // if (BmFontDescription.TryInitializeFromFile(file.AbsolutePath, out newValue))
@@ -180,6 +183,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
     
     // Todo adjust shader implementation new stride
     [StructLayout(LayoutKind.Explicit, Size = Stride)]
+    // ReSharper disable once MemberCanBePrivate.Global
     public struct MeshChunkDef
     {
         [FieldOffset(0)]
@@ -193,8 +197,8 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         
         [FieldOffset(12)]
         public int VertexCount;
-        
-        public const int Stride = 16;
+
+        internal const int Stride = 16;
     }    
     
 

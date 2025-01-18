@@ -68,7 +68,7 @@ public sealed partial class ImGuiVulkanWindowImpl : IWindowImplementation
         if(!IsResultAcceptable(_beginFrameResult))
         {
             throw new Exception("failed to acquire swap chain image!");
-            return false;
+            //return false;
         }
         
         _currentImageIndex = imageIndex;

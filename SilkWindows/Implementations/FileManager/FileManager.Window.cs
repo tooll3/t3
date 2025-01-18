@@ -68,23 +68,23 @@ public sealed partial class FileManager
         
         DragFileDragIndicators(fonts);
         
-        return;
-        
         // todo - log toasts
-        ImGui.SetNextWindowScroll(new Vector2(0f, float.MaxValue));
-        ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-        ImGui.BeginChild("Logs" + _tableId);
-        while (_logs.Count > MaxLogCount)
-        {
-            _logs.TryDequeue(out _);
-        }
+        //return;
         
-        foreach (var log in _logs)
-        {
-            ImGui.Text(log);
-        }
-        
-        ImGui.EndChild();
+        // ImGui.SetNextWindowScroll(new Vector2(0f, float.MaxValue));
+        // ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
+        // ImGui.BeginChild("Logs" + _tableId);
+        // while (_logs.Count > MaxLogCount)
+        // {
+        //     _logs.TryDequeue(out _);
+        // }
+        //
+        // foreach (var log in _logs)
+        // {
+        //     ImGui.Text(log);
+        // }
+        //
+        // ImGui.EndChild();
     }
     
     protected override void OnWindowUpdateImpl(double deltaSeconds)

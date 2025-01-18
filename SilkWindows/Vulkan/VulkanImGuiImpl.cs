@@ -10,7 +10,7 @@ using SilkWindows.Vulkan;
 
 namespace ImGuiVulkan;
 
-public class VulkanImGuiImpl(SilkWindows.Vulkan.Silk.NET_Lab.ImGuiVulkanWindowImpl vulkanWindow, KhrDynamicRendering rendering, Silk.NET.Vulkan.Vk vk, IWindow window, IInputContext inputContext)
+internal sealed class VulkanImGuiImpl(SilkWindows.Vulkan.Silk.NET_Lab.ImGuiVulkanWindowImpl vulkanWindow, KhrDynamicRendering rendering, Silk.NET.Vulkan.Vk vk, IWindow window, IInputContext inputContext)
     : IImguiImplementation
 {
     public string Title { get; } = window.Title;
@@ -53,5 +53,5 @@ public class VulkanImGuiImpl(SilkWindows.Vulkan.Silk.NET_Lab.ImGuiVulkanWindowIm
         _imGuiControllerVk.Dispose();
     }
     
-    private ImGuiControllerVk _imGuiControllerVk;
+    private ImGuiControllerVk _imGuiControllerVk = default!;
 }

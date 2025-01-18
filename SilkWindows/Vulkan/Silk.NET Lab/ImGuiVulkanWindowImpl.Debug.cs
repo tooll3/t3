@@ -98,10 +98,12 @@ public sealed partial class ImGuiVulkanWindowImpl
     private unsafe void CheckValidationLayerSupport()
     {
         if (ValidationMode == ValidationModes.None)
+            #pragma warning disable CS0162 // Unreachable code detected
         {
             _validationLayersEnabled = false;
             return;
         }
+        #pragma warning restore CS0162 // Unreachable code detected
         
         uint layerCount = 0;
         _vk.EnumerateInstanceLayerProperties(&layerCount, (LayerProperties*) 0);

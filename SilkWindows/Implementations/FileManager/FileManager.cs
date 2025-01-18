@@ -67,12 +67,12 @@ public sealed partial class FileManager : AsyncImguiDrawer<PathInformation>, IFi
             drawer.Draw(fonts, true);
             ImGui.SameLine();
             continue;
-            if (ImGui.Button(drawer.DisplayName + "##expand_" + drawer.Path))
-            {
-                column.Drawn = true;
-            }
-            
-            ImGui.SameLine();
+            // if (ImGui.Button(drawer.DisplayName + "##expand_" + drawer.Path))
+            // {
+            //     column.Drawn = true;
+            // }
+            //
+            // ImGui.SameLine();
         }
         
         ImGui.NewLine();
@@ -284,7 +284,7 @@ public sealed partial class FileManager : AsyncImguiDrawer<PathInformation>, IFi
     private static readonly HashSet<FileSystemDrawer> _selections = [];
     
     private static DirectoryDrawer? _selectedRoot;
-    private static Vector2 _tabDragPosition;
+    //private static Vector2 _tabDragPosition;
     
     private static int _fileManagerCount = 0;
     private readonly string _tableId = "##" + Interlocked.Increment(ref _fileManagerCount);

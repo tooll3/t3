@@ -281,9 +281,7 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
     #endregion
     
     private ShaderGraphNode _graphNode;
-    private string _templateCode;
-    
-    
+
     [Input(Guid = "FFC1C70E-B717-4337-916D-C3A13343E9CC")]
     public readonly InputSlot<ShaderGraphNode> Field = new();
     
