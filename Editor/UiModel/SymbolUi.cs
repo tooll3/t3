@@ -2,7 +2,6 @@
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Utils;
-using T3.Editor.External.Truncon.Collections;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.UiModel.InputsAndTypes;
 using T3.Editor.UiModel.Selection;

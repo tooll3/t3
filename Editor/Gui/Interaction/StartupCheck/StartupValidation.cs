@@ -35,7 +35,7 @@ public static class StartupValidation
                                      RequiredFilePaths = new List<string>()
                                                              {
                                                                  LayoutHandling.LayoutFolder + "layout1.json",
-                                                                 @"Editor\bin\Release\net8.0-windows\bass.dll",
+                                                                 @"Editor\bin\Release\net9.0-windows\bass.dll",
                                                                  @"Editor\bin\Debug\net8.0-windows\bass.dll",
                                                              },
                                      Message = "Please run Install/install.bat.",
