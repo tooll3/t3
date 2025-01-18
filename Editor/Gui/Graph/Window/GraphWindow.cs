@@ -25,6 +25,7 @@ internal sealed class GraphWindow : Windows.Window
         Config.Visible = true;
 
         AllowMultipleInstances = true;
+        MayNotCloseLastInstance = true;
         Config.Visible = true;
         WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
 

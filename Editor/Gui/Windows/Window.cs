@@ -10,6 +10,8 @@ namespace T3.Editor.Gui.Windows;
 internal abstract class Window
 {
     internal bool AllowMultipleInstances = false;
+    protected bool MayNotCloseLastInstance = false;
+    
     protected ImGuiWindowFlags WindowFlags;
 
     internal abstract IReadOnlyList<Window> GetInstances();
@@ -45,7 +47,14 @@ internal abstract class Window
         if (hideFrameBorder)
             ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0);
 
-        if (ImGui.Begin(WindowDisplayTitle, ref Config.Visible, WindowFlags))
+
+        var mayNotClose = MayNotCloseLastInstance && GetVisibleInstanceCount() == 1;
+
+        var isVisible = mayNotClose
+                            ? ImGui.Begin(WindowDisplayTitle, WindowFlags)
+                            : ImGui.Begin(WindowDisplayTitle, ref Config.Visible, WindowFlags);
+        
+        if (isVisible)
         {
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowPaddingForWindows);
 
@@ -89,6 +98,18 @@ internal abstract class Window
             ImGui.PopStyleVar();
     }
 
+    private int GetVisibleInstanceCount()
+    {
+        var count = 0;
+        foreach(var x in GetInstances())
+        {
+            if (x.Config.Visible)
+                count++;
+        }
+
+        return count;
+    }
+    
     private bool _wasVisible;
 
     internal void DrawMenuItemToggle()
