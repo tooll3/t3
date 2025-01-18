@@ -95,6 +95,7 @@ internal sealed class GraphWindow : Windows.Window
         }
 
         project.RegisterView(ProjectView);
+        _focusOnNextFrame = true;
         return true;
     }
 
@@ -127,7 +128,7 @@ internal sealed class GraphWindow : Windows.Window
 
     private bool _focusOnNextFrame;
 
-    private void FocusRequestedHandler()
+    private void FocusRequested()
     {
         TakeFocus();
         _focusOnNextFrame = true;

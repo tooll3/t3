@@ -1,11 +1,12 @@
-﻿using System.Diagnostics;
+﻿#nullable enable
+using System.Diagnostics;
 using ImGuiNET;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.Windows;
 
-public static class T3Metrics
+internal static class T3Metrics
 {
     public static void UiRenderingStarted()
     {
@@ -18,6 +19,13 @@ public static class T3Metrics
         _watchImgRenderTime.Stop();
         _uiRenderDurationMs = (float)((double)_watchImgRenderTime.ElapsedTicks / Stopwatch.Frequency * 1000.0);
         _frameDurations.Enqueue(_uiRenderDurationMs);
+        
+        // Collect GC
+        var currentGCCount = GC.GetTotalAllocatedBytes(); // Gen 0 collections
+        _gcAllocationsLastFrame = currentGCCount - _totalGCAllocations;
+        _gcAllocationsInKb.Enqueue( (float)(_gcAllocationsLastFrame/1024.0));
+
+        _totalGCAllocations = currentGCCount;
     }
         
         
@@ -39,23 +47,34 @@ public static class T3Metrics
         {
             ImGui.BeginTooltip();
             {
-                var values = _frameDurations.ToArray();
-                ImGui.PlotLines("##test", ref values[0], values.Length, 0,
+                _frameDurations.CopyTo(_floatGraphBuffer);
+                ImGui.PlotLines("##test", ref _floatGraphBuffer[0], _frameDurations.Count, 0,
                                 null,
                                 0.00f,15f
                                 );
                 
-                var average = values.Average();
-                var min = values.Min();
-                var jitter = values.Max()-min;
+                var average = _floatGraphBuffer.Average();
+                var min = _floatGraphBuffer.Min();
+                var jitter = _floatGraphBuffer.Max()-min;
                 
+                _gcAllocationsInKb.CopyTo(_floatGraphBuffer);
+                var averageGC = _floatGraphBuffer.Average();
                 
                 ImGui.Text($"""
                             UI: {_peakUiRenderDurationMs:0.0}ms (~{average:0.0}  {min:0.0}  +{jitter:0.0})
                             Render: {_peakDeltaTimeMs:0.0}ms
                             VSync: {(T3Ui.UseVSync?"On":"Off")} (Click to toggle)
+                            GC: {averageGC:0.0}k
                             """);
                     
+
+                ImGui.PlotLines("##test", ref _floatGraphBuffer[0], _gcAllocationsInKb.Count, 0,
+                                null,
+                                0,
+                                1000
+                                
+                               );
+                
                 ImGui.Spacing();
                     
                 ImGui.PushFont(Fonts.FontSmall);
@@ -133,11 +152,14 @@ public static class T3Metrics
 
     private static float _peakUiRenderDurationMs;
     private static float _peakDeltaTimeMs;
-
+    private static long _totalGCAllocations = 0;
+    private static long _gcAllocationsLastFrame;
 
     private static float _uiRenderDurationMs;
     private static float _uiSmoothedRenderDurationMs;
     private static readonly Stopwatch _watchImgRenderTime = new();
-    
-    private static readonly CircularBuffer<float> _frameDurations = new(100);
+    private const int BufferSize = 100;
+    private static readonly float[] _floatGraphBuffer = new float[BufferSize]; // reusable to avoid allocations
+    private static readonly CircularBuffer<float> _frameDurations = new(BufferSize);
+    private static readonly CircularBuffer<float> _gcAllocationsInKb = new(BufferSize);
 }
