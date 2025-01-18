@@ -7,7 +7,9 @@ using Sentry;
 using T3.Core.Animation;
 using T3.Core.Compilation;
 using T3.Core.SystemUi;
+using T3.Editor.Gui.AutoBackup;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Modification;
@@ -51,8 +53,8 @@ internal static class CrashReporting
             return null;
 
         // Keep once auto backup is up again
-        //var timeOfLastBackup = AutoBackup.GetTimeOfLastBackup();
-        //var timeSpan = DrawUtils.GetReadableRelativeTime(timeOfLastBackup);
+        var timeOfLastBackup = AutoBackup.GetTimeOfLastBackup();
+        var timeSpan = DrawUtils.GetReadableRelativeTime(timeOfLastBackup);
 
         var components = ProjectManager.Components;
         
@@ -67,6 +69,7 @@ internal static class CrashReporting
                                                 UndoActions = UndoRedoStack.UndoStack.Count,
                                             };
 
+        string? json = null;
         try
         {
             var primaryComposition = ProjectManager.Components?.CompositionOp;
@@ -76,7 +79,7 @@ internal static class CrashReporting
                 GraphOperations.TryCopyNodesAsJson(primaryComposition,
                                                    compositionUi.ChildUis.Values,
                                                    compositionUi.Annotations.Values.ToList(),
-                                                   out _);
+                                                   out json);
             }
         }
         catch (Exception e)
