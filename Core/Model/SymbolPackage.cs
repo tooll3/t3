@@ -18,11 +18,13 @@ using T3.Core.Stats;
 namespace T3.Core.Model;
 
 /// <summary>
-/// Base class of essentially what is a read only project.
+/// The runtime-loaded Symbol information and base class of essentially what is a read only project. 
 /// </summary>
 /// <remarks>
 /// Regarding naming, we consider all t3 operator packages as packages for the sake of consistency with future nuget terminology etc.
 /// -- only the user's editable "packages" are referred to as projects
+///
+/// Is used to create an EditorSymbolPackage.
 ///</remarks>
 public abstract partial class SymbolPackage : IResourcePackage
 {

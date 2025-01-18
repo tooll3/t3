@@ -1,4 +1,5 @@
 ﻿using ImGuiNET;
+using T3.Core.SystemUi;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Window;
 using T3.Editor.Gui.Interaction;
@@ -204,17 +205,66 @@ internal sealed class UiElements
 
     public static void DrawProjectList(GraphWindow window)
     {
+        ImGui.Indent(30);
+        FormInputs.AddVerticalSpace(20);
+        FormInputs.AddSectionHeader("Select Project");
+        FormInputs.AddVerticalSpace(20);
+
+        var dl = ImGui.GetWindowDrawList();
+        ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(5,5));
         foreach (var package in EditableSymbolProject.AllProjects)
         {
             if (!package.HasHome)
                 continue;
 
-            var name = package.DisplayName;
+            ImGui.PushID(package.DisplayName);
             var isOpened = OpenedProject.OpenedProjects.TryGetValue(package, out var openedProject);
-            if (isOpened)
-                name += " (Opened)";
+            var size = new Vector2(400, 65) * T3Ui.UiScaleFactor;
+            var name = package.DisplayName;
+            var clicked = ImGui.InvisibleButton(name, size);
+            var isHovered = ImGui.IsItemHovered();
+            var backgroundColor = isHovered
+                                      ? UiColors.ForegroundFull.Fade(0.1f)
+                                      : UiColors.ForegroundFull.Fade(0.05f);
+            
+            var min = ImGui.GetItemRectMin();
+            var max = ImGui.GetItemRectMax();
+            dl.AddRectFilled(min, max, backgroundColor, 6);
 
-            var clicked = ImGui.Selectable(name);
+            var padding = 3f * T3Ui.UiScaleFactor;
+            if (isOpened)
+            {
+                dl.AddRectFilled( min + Vector2.One * padding,
+                                  new Vector2(min.X+padding+4, max.Y - padding),
+                                      UiColors.BackgroundActive, 2);
+            }
+
+            var rootName = package.RootNamespace.Split(".")[^1];
+            if (isOpened)
+                rootName += " (loaded)";
+
+            var y = padding;
+            var x = 20f;
+            dl.AddText(Fonts.FontBold, 
+                       Fonts.FontBold.FontSize,
+                       min+ new Vector2(x, y), 
+                       UiColors.Text, rootName);
+
+            y += Fonts.FontNormal.FontSize + 5;
+            
+            dl.AddText(Fonts.FontSmall, 
+                       Fonts.FontSmall.FontSize,
+                       min+ new Vector2(x, y), 
+                       UiColors.TextMuted, package.RootNamespace);
+
+            y += Fonts.FontSmall.FontSize + 5;
+            
+            dl.AddText(Fonts.FontSmall, 
+                       Fonts.FontSmall.FontSize,
+                       min+ new Vector2(x, y), 
+                       UiColors.TextMuted, package.Folder);
+
+            
             if (clicked)
             {
                 if (!isOpened)
@@ -231,6 +281,28 @@ internal sealed class UiElements
                     window.TrySetToProject(openedProject);
                 }
             }
+            
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5,5));
+            if (ImGui.BeginPopupContextWindow("windows_context_menu"))
+            {
+                if (ImGui.MenuItem("Open in Explorer"))
+                {
+                    CoreUi.Instance.OpenWithDefaultApplication(package.Folder);
+                }
+
+                if (ImGui.MenuItem("Unload project", "", isOpened))
+                {
+                    Log.Warning("Not implemented yet");
+                } 
+                
+                ImGui.EndPopup();
+            }
+            ImGui.PopStyleVar();
+            
+            ImGui.PopID();
+            
         }
+        ImGui.PopStyleVar(2);
+        ImGui.Unindent();
     }
 }
