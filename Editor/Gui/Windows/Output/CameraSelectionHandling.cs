@@ -12,9 +12,9 @@ using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.Windows.Output;
 
-internal class CameraSelectionHandling
+internal sealed class CameraSelectionHandling
 {
-    public ICamera CameraForRendering { get; private set; }
+    public ICamera? CameraForRendering { get; private set; }
     public bool BypassCamera { get; private set; }
         
     public bool PreventCameraInteraction { get; private set; }
@@ -70,7 +70,7 @@ internal class CameraSelectionHandling
     private NodeSelection? NodeSelection => _nodeSelection ?? ProjectManager.Components?.NodeSelection;
         
         
-    public void Update(Instance drawnInstance, Type drawnType, bool preventInteractions = false)
+    public void Update(Instance? drawnInstance, Type drawnType, bool preventInteractions = false)
     {
         var currentPlayback = _getPlayback();
         var timeInBars = currentPlayback.TimeInBars;
@@ -90,7 +90,7 @@ internal class CameraSelectionHandling
         // Update recently used cameras (this is expensive!)
         UpdateRecentCameras(drawnInstance);
 
-        ICamera cameraForManipulation = null;
+        ICamera? cameraForManipulation = null;
         CameraForRendering = null;
 
         PreventCameraInteraction = preventInteractions;
@@ -246,6 +246,9 @@ internal class CameraSelectionHandling
 
     public void DrawCameraControlSelection()
     {
+        if (_drawnInstance == null)
+            return;
+        
         ImGui.SetNextItemWidth(145);
 
         var label = String.Empty;
@@ -345,7 +348,7 @@ internal class CameraSelectionHandling
                     // This is expensive, but happens only if dropdown is open...
                     var symbolChild = _drawnInstance.SymbolChild;
                         
-                    if(ImGui.MenuItem(symbolChild.ReadableName, "",cameraInstance.SymbolChildId == _pickedCameraId, true))
+                    if(symbolChild != null && ImGui.MenuItem(symbolChild.ReadableName, "",cameraInstance.SymbolChildId == _pickedCameraId, true))
                     {
                         _lastControlMode = _controlMode;
                         _controlMode = ControlModes.PickedACamera;

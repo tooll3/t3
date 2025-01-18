@@ -29,7 +29,7 @@ using Vector2 = System.Numerics.Vector2;
 namespace T3.Editor.Gui.Graph.Legacy;
 
 /// <summary>
-/// Renders a graphic representation of a <see cref="SymbolChild"/> within the current <see cref="GraphWindow"/>
+/// Renders a graphic representation of a SymbolChild within the current GraphWindow.
 /// </summary>
 internal sealed class GraphNode
 {
@@ -263,7 +263,7 @@ internal sealed class GraphNode
                                                        recompute: UserSettings.Config.HoverMode == UserSettings.GraphHoverModes.Live);
                                         
                                 }
-                                _imageCanvasForTooltips.Deactivate();
+                                ImageOutputCanvas.Deactivate();
                                 TransformGizmoHandling.RestoreDrawList();
                             }
                             ImGui.EndChild();

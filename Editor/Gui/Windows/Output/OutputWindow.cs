@@ -106,7 +106,7 @@ internal sealed class OutputWindow : Window
                 Pinning.TryGetPinnedEvaluationInstance(graphCanvas?.Structure, out var evaluationInstance);
 
                 var drawnType = UpdateAndDrawOutput(drawnInstance, evaluationInstance);
-                _imageCanvas.Deactivate();
+                ImageOutputCanvas.Deactivate();
                 _camSelectionHandling.Update(drawnInstance, drawnType);
                 var editingFlags = _camSelectionHandling.PreventCameraInteraction | _camSelectionHandling.PreventImageCanvasInteraction |  drawnType != typeof(Texture2D)
                                        ? T3Ui.EditingFlags.PreventMouseInteractions

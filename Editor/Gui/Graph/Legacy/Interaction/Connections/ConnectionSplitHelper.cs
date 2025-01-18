@@ -108,7 +108,7 @@ internal static class ConnectionSplitHelper
                         //     ImGui.PopFont();
                         // }
 
-                        _imageCanvasForTooltips.Deactivate();
+                        ImageOutputCanvas.Deactivate();
                         TransformGizmoHandling.RestoreDrawList();
                     }
                     ImGui.EndChild();

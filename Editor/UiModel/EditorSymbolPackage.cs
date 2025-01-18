@@ -159,13 +159,13 @@ internal class EditorSymbolPackage : SymbolPackage
     
     public override void Dispose()
     {
-        base.Dispose();
         ClearSymbolUis();
+        base.Dispose();
         UnregisterAllCustomUi();
         ShaderLinter.RemovePackage(this);
     }
 
-    private void ClearSymbolUis()
+    private void ClearSymbolUis() 
     {
         var symbolUis = SymbolUiDict.Values.ToArray();
 

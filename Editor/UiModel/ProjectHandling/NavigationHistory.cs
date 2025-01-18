@@ -1,4 +1,5 @@
-﻿using T3.Core.Operator;
+﻿#nullable enable
+using T3.Core.Operator;
 
 namespace T3.Editor.UiModel.ProjectHandling;
 
@@ -62,12 +63,14 @@ internal sealed class NavigationHistory
         _currentIndex = 0;
     }
 
-    public Instance GetLastSelectedInstance()
+    public Instance? GetLastSelectedInstance()
     {
         if (_previousSelections.Count == 0)
             return null;
         
-        return _previousSelections.Count < _currentIndex ? null : _structure.GetInstanceFromIdPath(_previousSelections[_currentIndex]);
+        return _previousSelections.Count < _currentIndex 
+                   ? null 
+                   : _structure.GetInstanceFromIdPath(_previousSelections[_currentIndex]);
     }
 
     public IEnumerable<Instance> GetPreviouslySelectedInstances()

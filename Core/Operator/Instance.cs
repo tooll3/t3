@@ -45,12 +45,12 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
 
     public abstract Symbol Symbol { get; }
 
-    private readonly List<ISlot> _outputs = new();
+    private readonly List<ISlot> _outputs = [];
     public readonly IReadOnlyList<ISlot> Outputs;
 
     internal readonly Dictionary<Guid, Instance> ChildInstances = new();
     public readonly IReadOnlyDictionary<Guid, Instance> Children;
-    private readonly List<IInputSlot> _inputs = new();
+    private readonly List<IInputSlot> _inputs = [];
     public readonly IReadOnlyList<IInputSlot> Inputs;
 
     public IReadOnlyList<IResourcePackage> AvailableResourcePackages

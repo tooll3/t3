@@ -1,3 +1,5 @@
+#nullable enable
+using System.Diagnostics;
 using ImGuiNET;
 using SharpDX.DXGI;
 using T3.Core.DataTypes;
@@ -10,7 +12,7 @@ using T3.SystemUi;
 
 namespace T3.Editor.Gui.Windows;
 
-internal class ImageOutputCanvas : ScalableCanvas
+internal sealed class ImageOutputCanvas : ScalableCanvas
 {
     public void Update(T3Ui.EditingFlags editingFlags = T3Ui.EditingFlags.None)
     {
@@ -23,27 +25,29 @@ internal class ImageOutputCanvas : ScalableCanvas
         Current = this;
     }
 
-    public void Deactivate()
+    public static void Deactivate()
     {
         Current = null;
     }
 
     /// <summary>
-    /// The image canvas that is currently being drawn from the UI.
+    /// The image canvas that is currently being drawn from the UI. 
     /// Note that <see cref="ImageOutputCanvas"/> is NOT a singleton so you can't rely on this to be valid outside of the Draw()ing context.
     /// It is used by <see cref="Texture2dOutputUi"/> to draw its content.
     /// </summary>
-    public static ImageOutputCanvas Current = null;
+    public static ImageOutputCanvas? Current;
 
     protected override IScalableCanvas? Parent => null;
 
-    public Texture2D LastTexture;
+    public Texture2D? LastTexture;
         
-    public void DrawTexture(Texture2D texture)
+    public void DrawTexture(Texture2D? texture)
     {
         CustomComponents.FillWithStripes(ImGui.GetWindowDrawList(), DrawUtils.GetContentRegionArea(), Scale.X);
         LastTexture = texture;
             
+        Debug.Assert(Current != null);
+        
         if (texture == null || texture.IsDisposed)
             return;
 
@@ -52,7 +56,7 @@ internal class ImageOutputCanvas : ScalableCanvas
 
         if (_viewMode == Modes.Fitted)
         {
-            ImageOutputCanvas.Current.FitAreaOnCanvas(area);
+            Current.FitAreaOnCanvas(area);
             if (DisableDamping)
             {
                 Scale = ScaleTarget;
@@ -60,10 +64,10 @@ internal class ImageOutputCanvas : ScalableCanvas
         }
 
         var topLeft = Vector2.Zero;
-        var topLeftOnScreen = ImageOutputCanvas.Current.TransformPosition(topLeft);
+        var topLeftOnScreen = Current.TransformPosition(topLeft);
         ImGui.SetCursorScreenPos(topLeftOnScreen);
 
-        var sizeOnScreen = ImageOutputCanvas.Current.TransformDirection(size);
+        var sizeOnScreen = Current.TransformDirection(size);
 
         var srv = SrvManager.GetSrvForTexture(texture);
         ImGui.Image((IntPtr)srv, sizeOnScreen);
@@ -76,7 +80,7 @@ internal class ImageOutputCanvas : ScalableCanvas
             
         if (UserSettings.Config.ShowToolbar)
         {
-            var format = "";
+            string format;
             if (srv == null || srv.IsDisposed)
             {
                 format = "null?";
@@ -130,11 +134,11 @@ internal class ImageOutputCanvas : ScalableCanvas
         {
             case Modes.Pixel:
                 SetScaleToMatchPixels();
-                UserZoomedView = false;
+                // UserZoomedView = false;
                 break;
             case Modes.Fitted:
-                UserZoomedView = false;
-                UserPannedView = false;
+                // UserZoomedView = false;
+                // UserPannedView = false;
                 break;
 
         }
@@ -146,8 +150,8 @@ internal class ImageOutputCanvas : ScalableCanvas
     /// </summary>
     private void UpdateViewMode(InteractionState interactionState)
     {
-        UserZoomedView |= interactionState.UserZoomedCanvas;
-        UserPannedView |= interactionState.UserPannedCanvas;
+        // UserZoomedView |= interactionState.UserZoomedCanvas;
+        // UserPannedView |= interactionState.UserPannedCanvas;
             
         switch (_viewMode)
         {
@@ -177,6 +181,6 @@ internal class ImageOutputCanvas : ScalableCanvas
     private Modes _viewMode = Modes.Fitted;
     public bool DisableDamping = false;
         
-    public bool UserPannedView = false;
-    public bool UserZoomedView = false; 
+    // public bool UserPannedView;
+    // public bool UserZoomedView; 
 }

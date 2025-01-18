@@ -195,7 +195,7 @@ internal sealed class ConnectionHovering
                     _evaluationContext.RequestedResolution = new Int2(1280 / 2, 720 / 2);
                     outputUi.DrawValue(outputSlot, _evaluationContext, recompute: UserSettings.Config.HoverMode == UserSettings.GraphHoverModes.Live);
 
-                    _imageCanvasForTooltips.Deactivate();
+                    ImageOutputCanvas.Deactivate();
                     TransformGizmoHandling.RestoreDrawList();
                 }
                 ImGui.EndChild();

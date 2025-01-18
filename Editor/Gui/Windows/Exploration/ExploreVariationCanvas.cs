@@ -1,3 +1,4 @@
+#nullable enable
 using ImGuiNET;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
@@ -14,7 +15,7 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Windows.Exploration;
 
-internal class ExploreVariationCanvas : ScalableCanvas
+internal sealed class ExploreVariationCanvas : ScalableCanvas
 {
     public ExploreVariationCanvas(ExplorationWindow explorationWindow)
     {
@@ -22,7 +23,7 @@ internal class ExploreVariationCanvas : ScalableCanvas
         _explorationWindow = explorationWindow;
     }
 
-    public void Draw(Structure structure)
+    public void Draw(Structure? structure)
     {
         _thumbnailCanvasRendering.InitializeCanvasTexture(_thumbnailSize);
 
@@ -40,7 +41,7 @@ internal class ExploreVariationCanvas : ScalableCanvas
         }
 
         var instance = outputWindow.ShownInstance;
-        if (instance == null || instance.Outputs == null || instance.Outputs.Count == 0)
+        if (instance == null || instance.Outputs.Count == 0)
         {
             CustomComponents.EmptyWindowMessage("To explore variations\nselect a graph operator and\none or more of its parameters.");
             return;
@@ -243,7 +244,7 @@ internal class ExploreVariationCanvas : ScalableCanvas
             var hasVariation = _variationByGridIndex.TryGetValue(cell.GridIndex, out var variation);
             if (hasVariation)
             {
-                if (!variation.ThumbnailNeedsUpdate)
+                if (!variation!.ThumbnailNeedsUpdate)
                     continue;
 
                 RenderThumbnail(variation, structure);
@@ -368,7 +369,7 @@ internal class ExploreVariationCanvas : ScalableCanvas
         ImGui.PushClipRect(new Vector2(0, 0), new Vector2(1, 1), true);
         _explorationWindow.OutputUi.DrawValue(_firstOutputSlot, _thumbnailCanvasRendering.EvaluationContext);
         ImGui.PopClipRect();
-        _imageCanvas.Deactivate();
+        ImageOutputCanvas.Deactivate();
 
         if (_firstOutputSlot is Slot<Texture2D> textureSlot)
         {
@@ -395,7 +396,7 @@ internal class ExploreVariationCanvas : ScalableCanvas
     private readonly ImageOutputCanvas _imageCanvas = new();
 
     private readonly ExplorationWindow _explorationWindow;
-    private ExplorationVariation _hoveringVariation;
+    private ExplorationVariation? _hoveringVariation;
 
     private static readonly GridCell[] _neighbourOffsets =
         {
@@ -411,7 +412,7 @@ internal class ExploreVariationCanvas : ScalableCanvas
 
     public float Scatter = 20f;
     private float _lastScatter;
-    private ISlot _firstOutputSlot;
+    private ISlot? _firstOutputSlot;
 
     protected override ScalableCanvas? Parent => null;
 

@@ -38,7 +38,6 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
     private readonly NodeNavigation _nodeNavigation;
     private readonly NodeGraphLayouting _nodeGraphLayouting;
     private Legacy.Graph _graph;
-    private Structure Structure => _components.OpenedProject.Structure;
 
     private ProjectView _components;
 
@@ -131,6 +130,9 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
     public void DrawGraph(ImDrawListPtr drawList, float graphOpacity)
     {
+        if (_components?.CompositionOp == null)
+            return;
+        
         ConnectionSnapEndHelper.PrepareNewFrame();
 
         DrawDropHandler(_components.CompositionOp, _components.CompositionOp.GetSymbolUi());
@@ -213,7 +215,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
                 _graph.RenameAnnotation(newAnnotation);
             }
 
-            IReadOnlyList<Guid>? navigationPath = null;
+            IReadOnlyList<Guid> navigationPath = null;
 
             // Navigation
             if (KeyboardBinding.Triggered(UserActions.NavigateBackwards))
@@ -406,13 +408,11 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
             var t = ConnectionMaker.GetTempConnectionsFor(this);
             return t.Count > 0;
         }
-        set { }
     }
 
     private void HandleFenceSelection(Instance compositionOp, SelectionFence selectionFence)
     {
-        const bool allowRectOutOfBounds = true;
-        switch (selectionFence.UpdateAndDraw(out var selectMode, allowRectOutOfBounds))
+        switch (selectionFence.UpdateAndDraw(out var selectMode))
         {
             case SelectionFence.States.PressedButNotMoved:
                 if (selectMode == SelectionFence.SelectModes.Replace)
@@ -420,7 +420,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
                 break;
 
             case SelectionFence.States.Updated:
-                var bounds = allowRectOutOfBounds ? selectionFence.BoundsUnclamped : selectionFence.BoundsInScreen;
+                var bounds = selectionFence.BoundsUnclamped;
                 HandleSelectionFenceUpdate(bounds, compositionOp, selectMode);
                 break;
 
@@ -438,10 +438,10 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
     private void HandleSelectionFenceUpdate(ImRect bounds, Instance compositionOp, SelectionFence.SelectModes selectMode)
     {
         var boundsInCanvas = InverseTransformRect(bounds);
-        var nodesToSelect = NodeSelection.GetSelectableChildren(_components.CompositionOp)
+        var nodesToSelect = NodeSelection.GetSelectableChildren(compositionOp)
                                          .Where(child => child is Annotation
                                                              ? boundsInCanvas.Contains(child.Rect)
-                                                             : child.Rect.Overlaps(boundsInCanvas));
+                                                             : child !=null && child.Rect.Overlaps(boundsInCanvas));
 
         if (selectMode == SelectionFence.SelectModes.Replace)
         {
@@ -543,6 +543,9 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
     public void FocusViewToSelection()
     {
+        if (_components?.CompositionOp == null)
+            return;
+        
         FitAreaOnCanvas(NodeSelection.GetSelectionBounds(_nodeSelection, _components.CompositionOp));
     }
 
@@ -566,9 +569,6 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         // ------ for selection -----------------------
         var oneOpSelected = selectedChildUis.Count == 1;
         var someOpsSelected = selectedChildUis.Count > 0;
-        var snapShotsEnabledFromSomeOps
-            = selectedChildUis
-               .Any(selectedChildUi => selectedChildUi.EnabledForSnapshots);
 
         var label = oneOpSelected
                         ? $"{selectedChildUis[0].SymbolChild.ReadableName}..."
@@ -905,7 +905,6 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
         // copy all files in directory to temp directory for intellisense to work
         var allFilesInDirectory = Directory.EnumerateFiles(directory);
-        FileInfo copiedFile;
         foreach (var file in allFilesInDirectory)
         {
             var destinationPath = Path.Combine(destinationDirectory, Path.GetFileName(file));
@@ -934,7 +933,9 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         }
     }
 
-    public IEnumerable<ISelectableCanvasObject> SelectableChildren => NodeSelection.GetSelectableChildren(_components.CompositionOp);
+    private IEnumerable<ISelectableCanvasObject> SelectableChildren => _components?.CompositionOp != null 
+                                                                           ? NodeSelection.GetSelectableChildren(_components.CompositionOp)
+                                                                           : []; 
 
     //private readonly List<ISelectableCanvasObject> _selectableItems = new();
     #endregion
@@ -974,6 +975,6 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
     private string _nameSpaceForDialogEdits = "";
     private Vector2 _dampedScrollVelocity = Vector2.Zero;
 
-    protected override ScalableCanvas? Parent => null;
+    protected override ScalableCanvas Parent => null;
     public SelectableNodeMovement SelectableNodeMovement { get; }
 }

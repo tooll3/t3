@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿#nullable enable
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -33,11 +34,16 @@ internal partial class EditableSymbolProject
         }
     }
 
-    public bool TryCompile(string sourceCode, string newSymbolName, Guid newSymbolId, string nameSpace, out Symbol newSymbol, out SymbolUi newSymbolUi)
+    public bool TryCompile(string sourceCode, 
+                           string newSymbolName, 
+                           Guid newSymbolId, 
+                           string nameSpace, 
+                           [NotNullWhen(true)] out Symbol? newSymbol, 
+                           [NotNullWhen(true)] out SymbolUi? newSymbolUi)
     {
         var path = SymbolPathHandler.GetCorrectPath(newSymbolName, nameSpace, Folder, CsProjectFile.RootNamespace!, SourceCodeExtension);
             
-        var alreadyExists = false;
+        bool alreadyExists;
 
         try
         {
@@ -56,10 +62,11 @@ internal partial class EditableSymbolProject
         {
             ProjectSetup.UpdateSymbolPackage(this);
             newSymbolUi = null;
-            var gotSymbol = SymbolDict.TryGetValue(newSymbolId, out newSymbol) && SymbolUiDict.TryGetValue(newSymbolId, out newSymbolUi);
+            var gotSymbol = SymbolDict.TryGetValue(newSymbolId, out newSymbol) 
+                            && SymbolUiDict.TryGetValue(newSymbolId, out newSymbolUi);
             if(gotSymbol)
             {
-                newSymbolUi.FlagAsModified();
+                newSymbolUi!.FlagAsModified();
             }
 
             return gotSymbol;
@@ -83,7 +90,7 @@ internal partial class EditableSymbolProject
         return false;
     }
 
-    private bool TryRecompileWithNewSource(Symbol symbol, string newSource, [NotNullWhen(false)] out string reason)
+    private bool TryRecompileWithNewSource(Symbol symbol, string newSource, [NotNullWhen(false)] out string? reason)
     {
         var id = symbol.Id;
         var gotCurrentSource = FilePathHandlers.TryGetValue(id, out var currentSourcePath);
@@ -189,7 +196,7 @@ internal partial class EditableSymbolProject
                 return $"Could not find symbol with id {symbolId} in registry";
             }
                 
-            var symbol = symbolUi!.Symbol;
+            var symbol = symbolUi.Symbol;
             var currentNamespace = symbol.Namespace;
             var reason = string.Empty;
             if (currentNamespace == nameSpace)
@@ -205,7 +212,7 @@ internal partial class EditableSymbolProject
         if (_recompiling)
             return;
 
-        while (RecompiledProjects.TryDequeue(out var project))
+        while (_recompiledProjects.TryDequeue(out var project))
         {
             ProjectSetup.UpdateSymbolPackage(project);
         }
@@ -235,7 +242,7 @@ internal partial class EditableSymbolProject
             foreach (var project in dirtyProjects)
             {
                 if (project.TryRecompile())
-                    RecompiledProjects.Enqueue(project);
+                    _recompiledProjects.Enqueue(project);
             }
 
             _recompiling = false;
@@ -262,21 +269,22 @@ internal partial class EditableSymbolProject
         return updated;
     }
 
-    internal static bool TryGetEditableProjectOfNamespace(string targetNamespace, out EditableSymbolProject targetProject)
+    internal static bool TryGetEditableProjectOfNamespace(string targetNamespace, 
+                                                          [NotNullWhen(true)]  out EditableSymbolProject? targetProject)
     {
         var namespaceInfos = AllProjects
-           .Select(package => new PackageNamespaceInfo(package, package.CsProjectFile.RootNamespace));
+           .Select(package => new PackageNamespaceInfo(package, 
+                                                       package.CsProjectFile.RootNamespace
+                                                       ));
 
-        foreach (var namespaceInfo in namespaceInfos)
+        foreach (var (editableSymbolProject, projectNamespace) in namespaceInfos)
         {
-            var projectNamespace = namespaceInfo.RootNamespace;
-
             if (projectNamespace == null)
                 continue;
 
             if (targetNamespace.StartsWith(projectNamespace))
             {
-                targetProject = namespaceInfo.Project;
+                targetProject = editableSymbolProject;
                 return true;
             }
         }
@@ -313,7 +321,7 @@ internal partial class EditableSymbolProject
         }
     }
 
-    private void ChangeNamespaceOf(Symbol symbol, string newNamespace, EditableSymbolProject newDestinationProject, string sourceNamespace = null)
+    private void ChangeNamespaceOf(Symbol symbol, string newNamespace, EditableSymbolProject newDestinationProject, string? sourceNamespace = null)
     {
         var id = symbol.Id;
         if (HasHome && ReleaseInfo.HomeGuid == id)
@@ -398,15 +406,15 @@ internal partial class EditableSymbolProject
         _needsCompilation = true;
     }
 
-    private readonly record struct PackageNamespaceInfo(EditableSymbolProject Project, string RootNamespace);
+    private readonly record struct PackageNamespaceInfo(EditableSymbolProject Project, string? RootNamespace);
 
     private readonly CodeFileWatcher _csFileWatcher;
     private bool _needsCompilation;
     private static volatile bool _recompiling;
-    private static readonly ConcurrentQueue<EditableSymbolProject> RecompiledProjects = new();
+    private static readonly ConcurrentQueue<EditableSymbolProject> _recompiledProjects = new();
     private readonly ConcurrentDictionary<Guid, string> _pendingSource = new();
 
-    public static bool RecompileSymbol(Symbol symbol, string newSource, bool flagDependentOpsAsModified, out string reason)
+    public static bool RecompileSymbol(Symbol symbol, string newSource, bool flagDependentOpsAsModified, out string? reason)
     {
         if (!UpdateSymbolWithNewSource(symbol, newSource, out reason))
         {
@@ -423,7 +431,7 @@ internal partial class EditableSymbolProject
 
         static void FlagDependentOpsAsModified(Symbol symbol)
         {
-            List<SymbolUi> readOnlyDependents = null;
+            List<SymbolUi> readOnlyDependents = [];
             foreach (var dependent in Structure.CollectDependingSymbols(symbol))
             {
                 var package = (EditorSymbolPackage)dependent.SymbolPackage;
@@ -439,12 +447,11 @@ internal partial class EditableSymbolProject
                 }
                 else
                 {
-                    readOnlyDependents ??= [];
                     readOnlyDependents.Add(symbolUi);
                 }
             }
 
-            if (readOnlyDependents != null)
+            if (readOnlyDependents.Count > 0)
             {
                 var packages = readOnlyDependents.Select(x => x.Symbol.SymbolPackage).Distinct();
                 foreach (var package in packages)

@@ -20,7 +20,7 @@ public class ThumbnailCanvasRendering
 {
     public void InitializeCanvasTexture(Vector2 thumbnailSize)
     {
-        if (_initialized == true)
+        if (_initialized)
             return;
             
         // if (_canvasTexture != null || _canvasTextureRtv == null)

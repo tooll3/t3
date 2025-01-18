@@ -13,7 +13,7 @@ internal interface IGraphCanvas : IScalableCanvas
     void ApplyComposition(ICanvas.Transition transition, Guid compositionOpSymbolChildId);
     void FocusViewToSelection();
     void OpenAndFocusInstance(IReadOnlyList<Guid> path);
-    public CanvasScope GetTargetScope();
+    public new CanvasScope GetTargetScope();
     void BeginDraw(bool backgroundActive, bool bgHasInteractionFocus);
     void DrawGraph(ImDrawListPtr drawList, float graphOpacity);
     

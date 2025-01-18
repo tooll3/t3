@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.UiHelpers;
 using T3.SystemUi;
@@ -17,12 +18,13 @@ namespace T3.Editor.Gui.Styling;
 ///
 /// It should work for now, but it's likely to break with future versions of ImGui.
 /// </remarks>
-public static class InputWithTypeAheadSearch
+internal static class InputWithTypeAheadSearch
 {
-    public readonly record struct Texts(string DisplayText, string SearchText, string? Tooltip);
-    public readonly record struct Args<T>(string Label, IEnumerable<T> Items, Func<T, Texts> GetTextInfo, bool Warning);
-        
-    public static bool Draw<T>(Args<T> args, ref string filter, out T selected, bool outlineOnly=false)
+    internal readonly record struct Texts(string DisplayText, string SearchText, string? Tooltip);
+
+    internal readonly record struct Args<T>(string Label, IEnumerable<T> Items, Func<T, Texts> GetTextInfo, bool Warning);
+
+    internal static bool Draw<T>(Args<T> args, ref string? filter, out T? selected, bool outlineOnly=false)
     {
         var inputId = ImGui.GetID(args.Label); 
         var isSearchResultWindowOpen = inputId == _activeInputId;
@@ -181,17 +183,17 @@ public static class InputWithTypeAheadSearch
         return wasChanged;
     }
 
-    private struct ResultWithRelevancy
-    {
-        public ResultWithRelevancy(string word, float relevancy)
-        {
-            Word = word;
-            Relevancy = relevancy;
-        }
-
-        public string Word;
-        public float Relevancy;
-    }
+    // private struct ResultWithRelevancy
+    // {
+    //     public ResultWithRelevancy(string word, float relevancy)
+    //     {
+    //         Word = word;
+    //         Relevancy = relevancy;
+    //     }
+    //
+    //     public string Word;
+    //     public float Relevancy;
+    // }
 
     private static readonly List<string> _lastTypeAheadResults = new();
     private static int _selectedResultIndex;

@@ -71,7 +71,7 @@ internal sealed class Structure
                 indexLabel = $"#{index}";
             }
 
-            var readableNameSuffice = !string.IsNullOrEmpty(symbolUiChild?.SymbolChild.Name)
+            var readableNameSuffice = !string.IsNullOrEmpty(symbolUiChild.SymbolChild.Name)
                                           ? $" ({symbolUiChild.SymbolChild.Name})"
                                           : "";
 
@@ -151,7 +151,7 @@ internal sealed class Structure
         }
     }
 
-    internal static HashSet<Guid> CollectConnectedChildren(Symbol.Child child, Instance composition, HashSet<Guid> set = null)
+    internal static HashSet<Guid> CollectConnectedChildren(Symbol.Child child, Instance composition, HashSet<Guid>? set = null)
     {
         set ??= [];
 

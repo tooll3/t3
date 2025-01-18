@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿#nullable enable
+using System.Diagnostics;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -43,22 +44,22 @@ public abstract class InputValueUi<T> : IInputUi
     public Relevancy Relevancy { get; set; } = Relevancy.Optional;
 
     /** If not empty adds a group headline above parameter */
-    public string GroupTitle { get; set; }
+    public string? GroupTitle { get; set; }
 
     /** Adds a gap above parameter */
     public bool AddPadding { get; set; }
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
     #endregion
 
         
     private static float ParameterNameWidth => MathF.Max(ImGui.GetTextLineHeight() * 130.0f / 16, ImGui.GetWindowWidth() * 0.35f);
 
-    public SymbolUi Parent { get; set; }
-    public Symbol.InputDefinition InputDefinition { get; set; }
+    public SymbolUi? Parent { get; set; }
+    public Symbol.InputDefinition InputDefinition { get; set; } = default!; // should be not null after initialization
     public Guid Id => InputDefinition.Id;
     public virtual bool IsAnimatable => false;
-    protected Type MappedType { get; private set; }
+    protected Type? MappedType { get; private set; }
 
     public abstract IInputUi Clone();
 
@@ -72,9 +73,9 @@ public abstract class InputValueUi<T> : IInputUi
     /// <summary>
     /// Wraps the implementation of an parameter control to handle <see cref="InputEditStateFlags"/>
     /// </summary>
-    protected abstract InputEditStateFlags DrawEditControl(string name, Symbol.Child.Input input, ref T value, bool readOnly);
+    protected abstract InputEditStateFlags DrawEditControl(string name, Symbol.Child.Input input, ref T? value, bool readOnly);
 
-    protected abstract void DrawReadOnlyControl(string name, ref T value);
+    protected abstract void DrawReadOnlyControl(string name, ref T? value);
 
     protected virtual string GetSlotValueAsString(ref T value)
     {
@@ -124,7 +125,7 @@ public abstract class InputValueUi<T> : IInputUi
         var compositionSymbol = compositionUi.Symbol;
         var animator = compositionSymbol.Animator;
 
-        Curve animationCurve = null;
+        Curve? animationCurve = null;
         var isAnimated = IsAnimatable && animator.TryGetFirstInputAnimationCurve(inputSlot, out animationCurve);
         MappedType = inputSlot.MappedType;
 
@@ -194,7 +195,7 @@ public abstract class InputValueUi<T> : IInputUi
                     ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
                         
                     var slot = allInputs[multiInputIndex];
-                    var connectedName = slot?.Parent?.Symbol?.Name?? "???";
+                    var connectedName = slot?.Parent?.Symbol.Name?? "???";
                         
                     ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                     ImGui.Button($"{multiInputIndex}.", new Vector2(ParameterNameWidth, 0.0f));

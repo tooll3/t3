@@ -71,7 +71,7 @@ internal sealed class PlaceholderCreation
         context.StateMachine.SetState(GraphStates.Placeholder, context);
     }
 
-    internal void OpenOnCanvas(GraphUiContext context, Vector2 posOnCanvas, Type inputTypeFilter = null)
+    internal void OpenOnCanvas(GraphUiContext context, Vector2 posOnCanvas, Type? inputTypeFilter = null)
     {
         context.StartMacroCommand("Insert Operator");
 
@@ -186,7 +186,7 @@ internal sealed class PlaceholderCreation
     internal void Update(GraphUiContext context)
     {
         var uiResult = PlaceHolderUi.Draw(context, out var selectedUi);
-        if (uiResult.HasFlag(PlaceHolderUi.UiResults.Create))
+        if (uiResult.HasFlag(PlaceHolderUi.UiResults.Create) && selectedUi != null) 
         {
             CreateInstance(context, selectedUi.Symbol);
         }

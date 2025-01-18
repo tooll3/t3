@@ -23,7 +23,7 @@ public static partial class ResourceManager
             
     }
         
-    public static bool TryResolvePath(string relativePath, IResourceConsumer? consumer, out string absolutePath, out IResourcePackage? resourceContainer, bool isFolder = false)
+    public static bool TryResolvePath(string? relativePath, IResourceConsumer? consumer, out string absolutePath, out IResourcePackage? resourceContainer, bool isFolder = false)
     {
         var packages = consumer?.AvailableResourcePackages.ToArray();
         if (string.IsNullOrWhiteSpace(relativePath))

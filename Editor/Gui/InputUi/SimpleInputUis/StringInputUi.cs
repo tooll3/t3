@@ -18,7 +18,7 @@ using T3.Serialization;
 
 namespace T3.Editor.Gui.InputUi.SimpleInputUis;
 
-public class StringInputUi : InputValueUi<string>
+public sealed class StringInputUi : InputValueUi<string>
 {
     private const int MaxStringLength = 4000;
 
@@ -72,26 +72,30 @@ public class StringInputUi : InputValueUi<string>
                 ImGui.SameLine();
                 if (ImGui.Button("Edit"))
                 {
-                    var exists = ResourceManager.TryResolvePath(value, _searchResourceConsumer, out var absolutePath, out var resourceContainer, false);
-                    if (!File.Exists(absolutePath))
+                    if (value != null)
                     {
-                        Log.Error("Can't open non-existing file " + absolutePath);
+                        ResourceManager.TryResolvePath(value, _searchResourceConsumer, out var absolutePath, out _);
+                        if (!File.Exists(absolutePath))
+                        {
+                            Log.Error("Can't open non-existing file " + absolutePath);
+                        }
+                        else
+                        {
+                            CoreUi.Instance.OpenWithDefaultApplication(absolutePath);
+                        }
+                        //OpenFileManager(FileOperations.FilePickerTypes.File, _searchResourceConsumer.AvailableResourcePackages, new string[0], isFolder: false, async: true);
                     }
-                    else
-                    {
-                        CoreUi.Instance.OpenWithDefaultApplication(absolutePath);
-                    }
-                    //OpenFileManager(FileOperations.FilePickerTypes.File, _searchResourceConsumer.AvailableResourcePackages, new string[0], isFolder: false, async: true);
                 }
-                    
+
                 NormalizePathSeparators(inputEditStateFlags, ref value);
                 break;
             case UsageType.DirectoryPath:
                 inputEditStateFlags = DrawTypeAheadSearch(FileOperations.FilePickerTypes.Folder, ref value);
+                
                 NormalizePathSeparators(inputEditStateFlags, ref value);
                 break;
             case UsageType.CustomDropdown:
-                inputEditStateFlags = DrawCustomDropdown(input, ref value);
+                inputEditStateFlags = DrawCustomDropdown(input);
                 break;
         }
 
@@ -101,8 +105,11 @@ public class StringInputUi : InputValueUi<string>
         return inputEditStateFlags;
 
             
-        static void NormalizePathSeparators(InputEditStateFlags inputEditStateFlags, ref string value)
+        static void NormalizePathSeparators(InputEditStateFlags inputEditStateFlags, ref string? value)
         {
+            if (value == null)
+                return;
+                
             // normalize path separators when modified
             // use only forward slashes as windows is the only OS that supports backslashes
             if ((inputEditStateFlags & InputEditStateFlags.Modified) == InputEditStateFlags.Modified
@@ -117,7 +124,7 @@ public class StringInputUi : InputValueUi<string>
         }
     }
 
-    private InputEditStateFlags DrawTypeAheadSearch(FileOperations.FilePickerTypes type, ref string value)
+    private InputEditStateFlags DrawTypeAheadSearch(FileOperations.FilePickerTypes type, ref string? value)
     {
         return DrawFileInput(type, ref value, FileFilter, Draw);
             
@@ -138,7 +145,7 @@ public class StringInputUi : InputValueUi<string>
 
     private readonly record struct InputRequest(string Value, string[] FileExtensionFilters, bool IsFolder, bool ShowWarning, IResourceConsumer ResourcePackageContainer);
 
-    private static InputEditStateFlags DrawFileInput(FileOperations.FilePickerTypes type, ref string value, string? filter, Func<InputRequest, InputResult> draw)
+    private static InputEditStateFlags DrawFileInput(FileOperations.FilePickerTypes type, ref string? filePathValue, string? filter, Func<InputRequest, InputResult> draw)
     {
         ImGui.SetNextItemWidth(-70);
 
@@ -157,7 +164,7 @@ public class StringInputUi : InputValueUi<string>
         }
             
         var isFolder = type == FileOperations.FilePickerTypes.Folder;
-        var exists = ResourceManager.TryResolvePath(value, _searchResourceConsumer, out _, out _, isFolder);
+        var exists = ResourceManager.TryResolvePath(filePathValue, _searchResourceConsumer, out _, out _, isFolder);
             
         var warning = type switch
                           {
@@ -194,17 +201,21 @@ public class StringInputUi : InputValueUi<string>
                                  .Distinct()
                                  .ToArray();
 
-        var result = draw(new InputRequest(value, fileFiltersInCommon, isFolder, ShowWarning: !exists, _searchResourceConsumer));
-        value = result.Value;
-        var inputEditStateFlags = result.Modified ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
+        var inputEditStateFlags = InputEditStateFlags.Nothing;
+        if(filePathValue != null && _searchResourceConsumer != null)
+        {
+            var result = draw(new InputRequest(filePathValue, fileFiltersInCommon, isFolder, ShowWarning: !exists, _searchResourceConsumer));
+            filePathValue = result.Value;
+            inputEditStateFlags = result.Modified ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
+        }
 
         if (warning != string.Empty)
             ImGui.PopStyleColor();
 
-        if (ImGui.IsItemHovered() && value.Length > 0 && ImGui.CalcTextSize(value).X > ImGui.GetItemRectSize().X)
+        if (ImGui.IsItemHovered() && filePathValue != null && filePathValue.Length > 0 && ImGui.CalcTextSize(filePathValue).X > ImGui.GetItemRectSize().X)
         {
             ImGui.BeginTooltip();
-            ImGui.TextUnformatted(warning + value);
+            ImGui.TextUnformatted(warning + filePathValue);
             ImGui.EndTooltip();
         }
             
@@ -213,7 +224,14 @@ public class StringInputUi : InputValueUi<string>
             
         if (ImGui.Button("...##fileSelector"))
         {
-            OpenFileManager(type, _searchResourceConsumer.AvailableResourcePackages, fileFiltersInCommon, isFolder, async: true);
+            if (_searchResourceConsumer != null)
+            {
+                OpenFileManager(type, _searchResourceConsumer.AvailableResourcePackages, fileFiltersInCommon, isFolder, async: true);
+            }
+            else
+            {
+                Log.Warning("Can open file manager with undefined resource consumer");
+            }
         }
             
         if (fileManagerOpen)
@@ -230,11 +248,11 @@ public class StringInputUi : InputValueUi<string>
             _latestFileManagerResult = null;
         }
             
-        var valueIsUpdated = !string.IsNullOrEmpty(fileManValue) && fileManValue != value;
+        var valueIsUpdated = !string.IsNullOrEmpty(fileManValue) && fileManValue != filePathValue;
             
         if (valueIsUpdated)
         {
-            value = fileManValue;
+            filePathValue = fileManValue;
             inputEditStateFlags |= InputEditStateFlags.Modified;
         }
             
@@ -261,7 +279,7 @@ public class StringInputUi : InputValueUi<string>
         return changed ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
     }
 
-    private static InputEditStateFlags DrawCustomDropdown(Symbol.Child.Input input, ref string value)
+    private static InputEditStateFlags DrawCustomDropdown(Symbol.Child.Input input)
     {
         var instance = ProjectManager.Components?.NodeSelection.GetSelectedInstanceWithoutComposition();
         if (instance != null && instance is ICustomDropdownHolder customValueHolder)
@@ -294,7 +312,7 @@ public class StringInputUi : InputValueUi<string>
                                                                       customValueHolder.GetOptionsForInput(input.InputDefinition.Id), 
                                                                       GetTextInfo, 
                                                                       false);
-            if (InputWithTypeAheadSearch.Draw<string>(inputArgs, ref currentValue, out var selected))
+            if (InputWithTypeAheadSearch.Draw(inputArgs, ref currentValue, out var selected))
             {
                 ImGui.CloseCurrentPopup();
                 customValueHolder.HandleResultForInput(input.InputDefinition.Id, selected);
@@ -316,7 +334,7 @@ public class StringInputUi : InputValueUi<string>
         return new InputWithTypeAheadSearch.Texts(arg, arg, null);
     }
 
-    protected override void DrawReadOnlyControl(string name, ref string value)
+    protected override void DrawReadOnlyControl(string name, ref string? value)
     {
         if (value != null)
         {
@@ -324,7 +342,7 @@ public class StringInputUi : InputValueUi<string>
         }
         else
         {
-            string nullString = "<null>";
+            var nullString = "<null>";
             ImGui.InputText(name, ref nullString, MaxStringLength, ImGuiInputTextFlags.ReadOnly);
         }
     }
@@ -378,14 +396,15 @@ public class StringInputUi : InputValueUi<string>
             writer.WriteObject(nameof(FileFilter), FileFilter);
     }
 
-    public override void Read(JToken inputToken)
+    public override void Read(JToken? inputToken)
     {
         if (inputToken == null)
             return;
 
         base.Read(inputToken);
 
-        if (Enum.TryParse<UsageType>(inputToken[nameof(Usage)].Value<string>(), out var enumValue))
+        var usageEnumToken = inputToken[nameof(Usage)];
+        if (usageEnumToken != null && Enum.TryParse<UsageType>(usageEnumToken.Value<string>(), out var enumValue))
         {
             Usage = enumValue;
         }

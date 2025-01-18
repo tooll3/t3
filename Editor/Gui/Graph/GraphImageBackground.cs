@@ -101,7 +101,7 @@ internal sealed class GraphImageBackground
         viewOutputUi.DrawValue(viewOutput, _evaluationContext, recompute: true);
         UserSettings.Config.ShowToolbar = hackToHideResolution;
             
-        _imageCanvas.Deactivate();
+        ImageOutputCanvas.Deactivate();
 
         if (imageOpacity < 1)
         {

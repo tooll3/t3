@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+using ImGuiNET;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -24,12 +25,15 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
 {
     protected abstract string GetTitle();
 
-    private protected abstract Instance InstanceForBlendOperations { get; }
-    private protected abstract SymbolVariationPool PoolForBlendOperations { get; }
+    private protected abstract Instance? InstanceForBlendOperations { get; }
+    private protected abstract SymbolVariationPool? PoolForBlendOperations { get; }
     protected abstract void DrawAdditionalContextMenuContent(Instance instanceForBlendOperations);
 
     public void DrawBaseCanvas( ImDrawListPtr drawList, bool hideHeader = false)
     {
+        if (PoolForBlendOperations == null || InstanceForBlendOperations == null)
+            return;
+        
         UpdateCanvas(out _);
 
         // Complete deferred actions
@@ -60,7 +64,7 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
         {
             //TODO: Check if this is required
             //_instanceForBlending = InstanceForBlendOperations;
-            RefreshView(hideHeader);
+            RefreshView();
         }
 
         //UpdateCanvas();
@@ -101,7 +105,7 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
         DrawContextMenu(InstanceForBlendOperations);
     }
 
-    private bool _rerenderManuallyRequested = false;
+    private bool _rerenderManuallyRequested;
 
     /// <summary>
     /// Updates keeps rendering thumbnails until all are processed.
@@ -123,60 +127,60 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
 
     private void DrawBlendingOverlay(ImDrawListPtr drawList, Instance instanceForBlending)
     {
-        if (IsBlendingActive)
+        if (!IsBlendingActive || PoolForBlendOperations == null)
+            return;
+        
+        var mousePos = ImGui.GetMousePos();
+        if (_blendPoints.Count == 1)
         {
-            var mousePos = ImGui.GetMousePos();
-            if (_blendPoints.Count == 1)
-            {
-                PoolForBlendOperations.BeginWeightedBlend(instanceForBlending, _blendVariations, _blendWeights);
+            PoolForBlendOperations.BeginWeightedBlend(instanceForBlending, _blendVariations, _blendWeights);
 
-                if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-                {
-                    PoolForBlendOperations.ApplyCurrentBlend();
-                }
+            if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+            {
+                PoolForBlendOperations.ApplyCurrentBlend();
             }
-            else if (_blendPoints.Count == 2)
+        }
+        else if (_blendPoints.Count == 2)
+        {
+            foreach (var p in _blendPoints)
             {
-                foreach (var p in _blendPoints)
-                {
-                    drawList.AddCircleFilled(p, 5, UiColors.BackgroundFull.Fade(0.5f));
-                    drawList.AddCircleFilled(p, 3, UiColors.ForegroundFull);
-                }
-
-                drawList.AddLine(_blendPoints[0], _blendPoints[1], UiColors.ForegroundFull, 2);
-                var blendPosition = _blendPoints[0] * _blendWeights[0] + _blendPoints[1] * _blendWeights[1];
-
-                drawList.AddCircleFilled(blendPosition, 5, UiColors.ForegroundFull);
-
-                PoolForBlendOperations.BeginWeightedBlend(instanceForBlending, _blendVariations, _blendWeights);
-
-                if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-                {
-                    PoolForBlendOperations.ApplyCurrentBlend();
-                }
+                drawList.AddCircleFilled(p, 5, UiColors.BackgroundFull.Fade(0.5f));
+                drawList.AddCircleFilled(p, 3, UiColors.ForegroundFull);
             }
-            else if (_blendPoints.Count == 3)
+
+            drawList.AddLine(_blendPoints[0], _blendPoints[1], UiColors.ForegroundFull, 2);
+            var blendPosition = _blendPoints[0] * _blendWeights[0] + _blendPoints[1] * _blendWeights[1];
+
+            drawList.AddCircleFilled(blendPosition, 5, UiColors.ForegroundFull);
+
+            PoolForBlendOperations.BeginWeightedBlend(instanceForBlending, _blendVariations, _blendWeights);
+
+            if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
             {
-                drawList.AddTriangleFilled(_blendPoints[0], _blendPoints[1], _blendPoints[2], UiColors.BackgroundFull.Fade(0.3f));
-                foreach (var p in _blendPoints)
-                {
-                    drawList.AddCircleFilled(p, 5, UiColors.BackgroundFull.Fade(0.5f));
-                    drawList.AddLine(mousePos, p, UiColors.ForegroundFull, 2);
-                    drawList.AddCircleFilled(p, 3, UiColors.ForegroundFull);
-                }
+                PoolForBlendOperations.ApplyCurrentBlend();
+            }
+        }
+        else if (_blendPoints.Count == 3)
+        {
+            drawList.AddTriangleFilled(_blendPoints[0], _blendPoints[1], _blendPoints[2], UiColors.BackgroundFull.Fade(0.3f));
+            foreach (var p in _blendPoints)
+            {
+                drawList.AddCircleFilled(p, 5, UiColors.BackgroundFull.Fade(0.5f));
+                drawList.AddLine(mousePos, p, UiColors.ForegroundFull, 2);
+                drawList.AddCircleFilled(p, 3, UiColors.ForegroundFull);
+            }
 
-                drawList.AddCircleFilled(mousePos, 5, UiColors.ForegroundFull);
-                PoolForBlendOperations.BeginWeightedBlend(instanceForBlending, _blendVariations, _blendWeights);
+            drawList.AddCircleFilled(mousePos, 5, UiColors.ForegroundFull);
+            PoolForBlendOperations.BeginWeightedBlend(instanceForBlending, _blendVariations, _blendWeights);
 
-                if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-                {
-                    PoolForBlendOperations.ApplyCurrentBlend();
-                }
+            if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+            {
+                PoolForBlendOperations.ApplyCurrentBlend();
             }
         }
     }
 
-    private Vector2 HandleBlendingInteraction()
+    private void HandleBlendingInteraction()
     {
         IsBlendingActive = (ImGui.IsWindowHovered() || ImGui.IsWindowFocused()) && ImGui.GetIO().KeyAlt;
 
@@ -185,125 +189,124 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
         _blendWeights.Clear();
         _blendVariations.Clear();
 
-        if (IsBlendingActive)
+        if (!IsBlendingActive || PoolForBlendOperations == null)
+            return;
+        
+        foreach (var s in CanvasElementSelection.SelectedElements)
         {
-            foreach (var s in CanvasElementSelection.SelectedElements)
-            {
-                _blendPoints.Add(GetNodeCenterOnScreen(s));
-                _blendVariations.Add(s as Variation);
-            }
+            _blendPoints.Add(GetNodeCenterOnScreen(s));
+            if(s is Variation v)
+                _blendVariations.Add(v);
+        }
 
-            if (CanvasElementSelection.SelectedElements.Count == 1)
-            {
-                var posOnScreen = TransformPosition(_blendVariations[0].PosOnCanvas);
-                var sizeOnScreen = TransformDirection(_blendVariations[0].Size);
-                var a = (mousePos.X - posOnScreen.X) / sizeOnScreen.X;
+        if (CanvasElementSelection.SelectedElements.Count == 1)
+        {
+            var posOnScreen = TransformPosition(_blendVariations[0].PosOnCanvas);
+            var sizeOnScreen = TransformDirection(_blendVariations[0].Size);
+            var a = (mousePos.X - posOnScreen.X) / sizeOnScreen.X;
 
-                _blendWeights.Add(a);
-            }
-            else if (CanvasElementSelection.SelectedElements.Count == 2)
+            _blendWeights.Add(a);
+        }
+        else if (CanvasElementSelection.SelectedElements.Count == 2)
+        {
+            if (_blendPoints[0] == _blendPoints[1])
             {
-                if (_blendPoints[0] == _blendPoints[1])
-                {
-                    _blendWeights.Add(0.5f);
-                    _blendWeights.Add(0.5f);
-                }
-                else
-                {
-                    var v1 = _blendPoints[1] - _blendPoints[0];
-                    var v2 = mousePos - _blendPoints[0];
-                    var lengthV1 = v1.Length();
-
-                    var a = Vector2.Dot(v1 / lengthV1, v2 / lengthV1);
-                    _blendWeights.Add(1 - a);
-                    _blendWeights.Add(a);
-                }
-            }
-            else if (CanvasElementSelection.SelectedElements.Count == 3)
-            {
-                Barycentric(mousePos, _blendPoints[0], _blendPoints[1], _blendPoints[2], out var u, out var v, out var w);
-                _blendWeights.Add(u);
-                _blendWeights.Add(v);
-                _blendWeights.Add(w);
+                _blendWeights.Add(0.5f);
+                _blendWeights.Add(0.5f);
             }
             else
             {
-                var points = new List<Point>();
+                var v1 = _blendPoints[1] - _blendPoints[0];
+                var v2 = mousePos - _blendPoints[0];
+                var lengthV1 = v1.Length();
 
-                Vector2 minPos = new Vector2(float.PositiveInfinity, float.PositiveInfinity);
-                Vector2 maxPos = new Vector2(float.NegativeInfinity, float.NegativeInfinity);
-
-                foreach (var v in PoolForBlendOperations.AllVariations)
-                {
-                    var vec2 = GetNodeCenterOnScreen(v);
-                    minPos = Vector2.Min(vec2, minPos);
-                    maxPos = Vector2.Max(vec2, maxPos);
-                    points.Add(new Point(vec2.X, vec2.Y));
-                }
-
-                minPos -= Vector2.One * 100;
-                maxPos += Vector2.One * 100;
-
-                var triangulator = new DelaunayTriangulator();
-                var borderPoints = triangulator.SetBorder(new Point(minPos.X, minPos.Y), new Point(maxPos.X, maxPos.Y));
-                points.AddRange(borderPoints);
-
-                var triangles = triangulator.BowyerWatson(points);
-
-                foreach (var t in triangles)
-                {
-                    var p0 = t.Vertices[0].ToVec2();
-                    var p1 = t.Vertices[1].ToVec2();
-                    var p2 = t.Vertices[2].ToVec2();
-                    Barycentric(mousePos,
-                                p0,
-                                p1,
-                                p2,
-                                out var u,
-                                out var v,
-                                out var w);
-
-                    var insideTriangle = u >= 0 && u <= 1 && v >= 0 && v <= 1 && w >= 0 && w <= 1;
-                    if (!insideTriangle)
-                        continue;
-
-                    _blendPoints.Clear();
-                    _blendWeights.Clear();
-                    _blendVariations.Clear();
-
-                    var weights = new[] { u, v, w };
-
-                    for (var vertexIndex = 0; vertexIndex < t.Vertices.Length; vertexIndex++)
-                    {
-                        var vertex = t.Vertices[vertexIndex];
-                        var variationIndex = points.IndexOf(vertex);
-                        if (variationIndex < PoolForBlendOperations.AllVariations.Count)
-                        {
-                            _blendVariations.Add(PoolForBlendOperations.AllVariations[variationIndex]);
-                            _blendWeights.Add(weights[vertexIndex]);
-                            _blendPoints.Add(vertex.ToVec2());
-                        }
-                    }
-
-                    if (_blendWeights.Count == 2)
-                    {
-                        var sum = _blendWeights[0] + _blendWeights[1];
-                        _blendWeights[0] /= sum;
-                        _blendWeights[1] /= sum;
-                    }
-                    else if (_blendWeights.Count == 1)
-                    {
-                        _blendWeights.Clear();
-                        _blendPoints.Clear();
-                        _blendVariations.Clear();
-                    }
-
-                    break;
-                }
+                var a = Vector2.Dot(v1 / lengthV1, v2 / lengthV1);
+                _blendWeights.Add(1 - a);
+                _blendWeights.Add(a);
             }
         }
+        else if (CanvasElementSelection.SelectedElements.Count == 3)
+        {
+            Barycentric(mousePos, _blendPoints[0], _blendPoints[1], _blendPoints[2], out var u, out var v, out var w);
+            _blendWeights.Add(u);
+            _blendWeights.Add(v);
+            _blendWeights.Add(w);
+        }
+        else
+        {
+            var points = new List<Point>();
 
-        return mousePos;
+            Vector2 minPos = new Vector2(float.PositiveInfinity, float.PositiveInfinity);
+            Vector2 maxPos = new Vector2(float.NegativeInfinity, float.NegativeInfinity);
+
+            foreach (var v in PoolForBlendOperations.AllVariations)
+            {
+                var vec2 = GetNodeCenterOnScreen(v);
+                minPos = Vector2.Min(vec2, minPos);
+                maxPos = Vector2.Max(vec2, maxPos);
+                points.Add(new Point(vec2.X, vec2.Y));
+            }
+
+            minPos -= Vector2.One * 100;
+            maxPos += Vector2.One * 100;
+
+            var triangulator = new DelaunayTriangulator();
+            var borderPoints = triangulator.SetBorder(new Point(minPos.X, minPos.Y), new Point(maxPos.X, maxPos.Y));
+            points.AddRange(borderPoints);
+
+            var triangles = triangulator.BowyerWatson(points);
+
+            foreach (var t in triangles)
+            {
+                var p0 = t.Vertices[0].ToVec2();
+                var p1 = t.Vertices[1].ToVec2();
+                var p2 = t.Vertices[2].ToVec2();
+                Barycentric(mousePos,
+                            p0,
+                            p1,
+                            p2,
+                            out var u,
+                            out var v,
+                            out var w);
+
+                var insideTriangle = u >= 0 && u <= 1 && v >= 0 && v <= 1 && w >= 0 && w <= 1;
+                if (!insideTriangle)
+                    continue;
+
+                _blendPoints.Clear();
+                _blendWeights.Clear();
+                _blendVariations.Clear();
+
+                var weights = new[] { u, v, w };
+
+                for (var vertexIndex = 0; vertexIndex < t.Vertices.Length; vertexIndex++)
+                {
+                    var vertex = t.Vertices[vertexIndex];
+                    var variationIndex = points.IndexOf(vertex);
+                    if (variationIndex < PoolForBlendOperations.AllVariations.Count)
+                    {
+                        _blendVariations.Add(PoolForBlendOperations.AllVariations[variationIndex]);
+                        _blendWeights.Add(weights[vertexIndex]);
+                        _blendPoints.Add(vertex.ToVec2());
+                    }
+                }
+
+                if (_blendWeights.Count == 2)
+                {
+                    var sum = _blendWeights[0] + _blendWeights[1];
+                    _blendWeights[0] /= sum;
+                    _blendWeights[1] /= sum;
+                }
+                else if (_blendWeights.Count == 1)
+                {
+                    _blendWeights.Clear();
+                    _blendPoints.Clear();
+                    _blendVariations.Clear();
+                }
+
+                break;
+            }
+        }
     }
 
     public bool TryGetBlendWeight(Variation v, out float weight)
@@ -375,26 +378,26 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
 
     public void StartHover(Variation variation, Instance instanceForBlending)
     {
-        PoolForBlendOperations.BeginHover(instanceForBlending, variation);
+        PoolForBlendOperations?.BeginHover(instanceForBlending, variation);
     }
 
     public void Apply(Variation variation, Instance instanceForBlending)
     {
-        PoolForBlendOperations.StopHover();
-        PoolForBlendOperations.Apply(instanceForBlending, variation);
+        PoolForBlendOperations?.StopHover();
+        PoolForBlendOperations?.Apply(instanceForBlending, variation);
     }
 
     public void StartBlendTo(Variation variation, float blend, Instance instanceForBlending)
     {
         if (variation.IsPreset)
         {
-            PoolForBlendOperations.BeginBlendToPresent(instanceForBlending, variation, blend);
+            PoolForBlendOperations?.BeginBlendToPresent(instanceForBlending, variation, blend);
         }
     }
 
     public void StopHover()
     {
-        PoolForBlendOperations.StopHover();
+        PoolForBlendOperations?.StopHover();
     }
 
     protected void TriggerThumbnailUpdate()
@@ -441,6 +444,9 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
 
     private void HandleSelectionFenceUpdate(ImRect boundsInScreen)
     {
+        if (PoolForBlendOperations == null)
+            return;
+        
         var boundsInCanvas = InverseTransformRect(boundsInScreen);
         var elementsToSelect = (from child in PoolForBlendOperations.AllVariations
                                 let rect = new ImRect(child.PosOnCanvas, child.PosOnCanvas + child.Size)
@@ -456,6 +462,9 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
 
     private void DeleteSelectedElements()
     {
+        if (PoolForBlendOperations == null)
+            return;
+        
         if (CanvasElementSelection.SelectedElements.Count <= 0)
             return;
 
@@ -475,7 +484,7 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
     #region thumbnail rendering
     private void UpdateNextVariationThumbnail(IOutputUi outputUi, Slot<Texture2D> textureSlot, Instance instanceForBlending)
     {
-        if (_allThumbnailsRendered)
+        if (_allThumbnailsRendered || PoolForBlendOperations == null)
             return;
 
         _thumbnailCanvasRendering.InitializeCanvasTexture(VariationThumbnail.ThumbnailSize);
@@ -501,6 +510,9 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
 
     private void RenderThumbnail(Variation variation, int atlasIndex, Instance instanceForBlending, IOutputUi outputUi, Slot<Texture2D> textureSlot)
     {
+        if (PoolForBlendOperations == null)
+            return;
+        
         // Set variation values
         PoolForBlendOperations.BeginHover(instanceForBlending, variation);
 
@@ -514,7 +526,7 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
         ImGui.PushClipRect(new Vector2(0, 0), new Vector2(1, 1), true);
         outputUi.DrawValue(textureSlot, _thumbnailCanvasRendering.EvaluationContext);
         ImGui.PopClipRect();
-        _imageCanvas.Deactivate();
+        ImageOutputCanvas.Deactivate();
 
         var rect = GetPixelRectForIndex(atlasIndex);
 
@@ -550,14 +562,14 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
     #endregion
 
     #region layout and view
-    public void RefreshView(bool hideHeader = false)
+    public void RefreshView()
     {
         TriggerThumbnailUpdate();
         CanvasElementSelection.Clear();
         ResetView();
     }
 
-    private static bool TryToGetBoundingBox(IEnumerable<Variation> variations, float extend, out ImRect area)
+    private static bool TryToGetBoundingBox(IEnumerable<Variation>? variations, float extend, out ImRect area)
     {
         area = new ImRect();
         if (variations == null)
@@ -590,7 +602,7 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
     /// Then step through possible positions and check if a position would intersect with an existing element.
     /// Wrap columns to enforce some kind of grid.  
     /// </summary>
-    internal static Vector2 FindFreePositionForNewThumbnail(IEnumerable<Variation> variations)
+    internal static Vector2 FindFreePositionForNewThumbnail(IReadOnlyList<Variation> variations)
     {
         if (!TryToGetBoundingBox(variations, 0, out var area))
         {
@@ -661,7 +673,7 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
     /// </summary>
     public IEnumerable<ISelectableCanvasObject> GetSelectables()
     {
-        return PoolForBlendOperations?.AllVariations;
+        return PoolForBlendOperations?.AllVariations ?? [];
     }
 
     protected override IScalableCanvas? Parent => null;
@@ -671,13 +683,11 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
     private readonly List<Vector2> _blendPoints = new(3);
     private readonly List<Variation> _blendVariations = new(3);
 
-    private Instance _previousInstanceForBlending;
-
     private int _renderThumbnailIndex;
     private bool _allThumbnailsRendered;
     private readonly ImageOutputCanvas _imageCanvas = new();
     private readonly ThumbnailCanvasRendering _thumbnailCanvasRendering = new();
     internal readonly CanvasElementSelection CanvasElementSelection = new();
-    private Instance _currentRenderInstance;
+    private Instance? _currentRenderInstance;
     private readonly SelectionFence _selectionFence = new();
 }
