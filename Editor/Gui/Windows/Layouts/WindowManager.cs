@@ -32,14 +32,6 @@ internal static partial class WindowManager
             windowType.Draw();
         }
 
-        // use a separate list to avoid enumerator modified exceptions
-        _currentGraphWindows.AddRange(GraphWindow.GraphWindowInstances);
-        foreach (var graphWindow in _currentGraphWindows)
-        {
-            graphWindow.Draw();
-        }
-        _currentGraphWindows.Clear();
-
         if (_demoWindowVisible)
             ImGui.ShowDemoWindow(ref _demoWindowVisible);
 
@@ -57,6 +49,7 @@ internal static partial class WindowManager
                        {
                            new ParameterWindow(),
                            new OutputWindow(),
+                           new GraphWindow(),
                            new VariationsWindow(),
                            new ExplorationWindow(),
                            new SymbolLibrary(),
@@ -148,5 +141,4 @@ internal static partial class WindowManager
     private static bool _metricsWindowVisible;
     public static bool ShowSecondaryRenderWindow { get; private set; }
     private static bool _hasBeenInitialized;
-    private static List<GraphWindow> _currentGraphWindows = new();
 }

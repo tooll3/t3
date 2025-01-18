@@ -14,13 +14,18 @@ using T3.Editor.Gui.ChildUi;
 namespace T3.Editor.UiModel;
 
 // todo - make abstract, create NugetSymbolPackage
+/// <summary>
+/// EditorSymbolPackage is a readonly <see cref="SymbolPackage"/>  with  <see cref="SymbolUi"/>s.
+/// </summary>
+/// <remarks>
+/// Is used to created an <see cref="EditableSymbolProject"/>.
+/// </remarks>
 internal class EditorSymbolPackage : SymbolPackage
 {
     /// <summary>
     /// Constructor for a successfully compiled package
     /// </summary>
     /// <param name="assembly">Main assembly of the package</param>
-    /// <param name="releaseInfo">Release info of the package</param>
     public EditorSymbolPackage(AssemblyInformation assembly) : base(assembly)
     {
         Log.Debug($"Added package {assembly.Name}");
@@ -166,9 +171,16 @@ internal class EditorSymbolPackage : SymbolPackage
 
         foreach (var symbolUi in symbolUis)
         {
-            var symbol = symbolUi.Symbol;
-            SymbolUiDict.TryRemove(symbol.Id, out _);
-            CustomChildUiRegistry.Remove(symbol.InstanceType);
+            try
+            {
+                var symbol = symbolUi.Symbol;
+                SymbolUiDict.TryRemove(symbol.Id, out _);
+                CustomChildUiRegistry.Remove(symbol.InstanceType);
+            }
+            catch (KeyNotFoundException)
+            {
+                Log.Warning("Can't remove obsolete symbol.");                
+            } 
         }
     }
 

@@ -42,6 +42,13 @@ internal sealed class GraphWindow : Windows.Window
         WindowFlags &= ~(ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoMove |
                          ImGuiWindowFlags.NoResize);
     }
+    
+    protected override void AddAnotherInstance()
+    {
+        // ReSharper disable once ObjectCreationAsStatement
+        new GraphWindow();
+    }
+    
     #endregion
 
     #region Handling project view ----------------------

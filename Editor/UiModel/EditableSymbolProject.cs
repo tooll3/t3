@@ -9,6 +9,9 @@ using T3.Editor.Compilation;
 
 namespace T3.Editor.UiModel;
 
+/// <summary>
+/// EditableSymbolProject is an <see cref="EditorSymbolPackage"/> that contains runtime package manipulation logic.
+/// </summary>
 [DebuggerDisplay("{DisplayName}")]
 internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 {

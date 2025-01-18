@@ -45,6 +45,15 @@ internal sealed class OutputWindow : Window
         }
     }
 
+    // protected override void DrawAllInstances()
+    // {
+    //     // Convert to array to enable removing of members during iteration
+    //     foreach (var w in OutputWindowInstances.ToArray())
+    //     {
+    //         w.DrawOneInstance();
+    //     }
+    // }
+    
     public static OutputWindow GetPrimaryOutputWindow()
     {
         return GetVisibleInstances().FirstOrDefault();

@@ -16,7 +16,19 @@ internal abstract class Window
 
     protected virtual string WindowDisplayTitle => Config.Title;
 
-    internal void Draw()
+    public void Draw()
+    {
+        if (AllowMultipleInstances)
+        {
+            DrawAllInstances();
+        }
+        else
+        {
+            DrawOneInstance();
+        }
+    }
+
+    internal void DrawOneInstance()
     {
         UpdateBeforeDraw();
 
@@ -43,20 +55,20 @@ internal abstract class Window
             if (windowPos.Y <= 0) windowPos.Y = 0;
             ImGui.SetWindowPos(windowPos);
 
-            var preventMouseScrolling = T3Ui.MouseWheelFieldWasHoveredLastFrame 
-                                            ? ImGuiWindowFlags.NoScrollWithMouse 
+            var preventMouseScrolling = T3Ui.MouseWheelFieldWasHoveredLastFrame
+                                            ? ImGuiWindowFlags.NoScrollWithMouse
                                             : ImGuiWindowFlags.None;
 
             // Draw child to prevent imgui window dragging
             {
-                ImGui.BeginChild("inner", ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin(), 
+                ImGui.BeginChild("inner", ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin(),
                                  false,
                                  ImGuiWindowFlags.NoMove | preventMouseScrolling | WindowFlags);
-                
+
                 var idBefore = ImGui.GetID(0);
-                
+
                 DrawContent();
-                
+
                 var idAfter = ImGui.GetID(0);
                 if (idBefore != idAfter)
                     Log.Warning($"Inconsistent ImGui-ID after rendering {this}  {idBefore} != {idAfter}");
@@ -83,7 +95,7 @@ internal abstract class Window
     {
         if (AllowMultipleInstances)
         {
-            var menuTitle = string.IsNullOrEmpty(MenuTitle) 
+            var menuTitle = string.IsNullOrEmpty(MenuTitle)
                                 ? $"Open new {Config.Title} Window"
                                 : MenuTitle;
             if (ImGui.MenuItem(menuTitle))
@@ -93,8 +105,8 @@ internal abstract class Window
         }
         else
         {
-            var menuTitle = string.IsNullOrEmpty(MenuTitle) 
-                                ? Config.Title 
+            var menuTitle = string.IsNullOrEmpty(MenuTitle)
+                                ? Config.Title
                                 : MenuTitle;
 
             if (ImGui.MenuItem(menuTitle, "", Config.Visible))
@@ -106,13 +118,21 @@ internal abstract class Window
                 Close();
         }
     }
-        
+
     protected abstract void DrawContent();
 
     protected virtual void UpdateBeforeDraw()
     {
     }
-       
+
+    protected virtual void DrawAllInstances()
+    {
+        foreach (var w in GetInstances().ToArray())
+        {
+            w.DrawOneInstance();
+        }
+    }
+
     protected virtual void Close()
     {
     }
