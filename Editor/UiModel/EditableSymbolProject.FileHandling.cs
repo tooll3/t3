@@ -55,8 +55,14 @@ internal sealed partial class EditableSymbolProject
     {
         path ??= SymbolPathHandler.GetCorrectPath(symbol.Name, symbol.Namespace, Folder, CsProjectFile.RootNamespace, SymbolExtension);
         base.OnSymbolAdded(path, symbol);
-        if(AutoOrganizeOnStartup)
-            FilePathHandlers[symbol.Id].AllFilesReady += CorrectFileLocations;
+
+        if (!AutoOrganizeOnStartup)
+            return;
+        
+        // ReSharper disable once HeuristicUnreachableCode
+        #pragma warning disable CS0162 // Unreachable code detected
+        FilePathHandlers[symbol.Id].AllFilesReady += CorrectFileLocations;
+        #pragma warning restore CS0162 // Unreachable code detected
     }
     
 
@@ -155,7 +161,7 @@ internal sealed partial class EditableSymbolProject
 
     private static void WriteSymbolUi(SymbolUi symbolUi, string uiFilePath)
     {
-        using var sw = new StreamWriter(uiFilePath, SaveOptions);
+        using var sw = new StreamWriter(uiFilePath, _saveOptions);
         using var writer = new JsonTextWriter(sw);
 
         writer.Formatting = Formatting.Indented;
@@ -166,7 +172,7 @@ internal sealed partial class EditableSymbolProject
 
     private void SaveSymbolDefinition(Symbol symbol, string filePath)
     {
-        using var sw = new StreamWriter(filePath, SaveOptions);
+        using var sw = new StreamWriter(filePath, _saveOptions);
         using var writer = new JsonTextWriter(sw);
         writer.Formatting = Formatting.Indented;
         SymbolJson.WriteSymbol(symbol, writer);
@@ -177,7 +183,7 @@ internal sealed partial class EditableSymbolProject
         if(!_pendingSource.Remove(id, out var sourceCode))
             return;
 
-        using var sw = new StreamWriter(sourcePath, SaveOptions);
+        using var sw = new StreamWriter(sourcePath, _saveOptions);
         sw.Write(sourceCode);
         MarkAsNeedingRecompilation();
     }
@@ -222,7 +228,7 @@ internal sealed partial class EditableSymbolProject
 
     public static bool IsSaving => Interlocked.Read(ref _savingCount) > 0 || CheckCompilation(out _);
     private static long _savingCount;
-    static readonly FileStreamOptions SaveOptions = new() { Mode = FileMode.Create, Access = FileAccess.ReadWrite };
+    private static readonly FileStreamOptions _saveOptions = new() { Mode = FileMode.Create, Access = FileAccess.ReadWrite };
 
     private const bool AutoOrganizeOnStartup = false;
 

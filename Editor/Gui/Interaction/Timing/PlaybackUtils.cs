@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿#nullable enable
+using System.Diagnostics.CodeAnalysis;
 using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.IO;
@@ -11,17 +12,16 @@ namespace T3.Editor.Gui.Interaction.Timing;
 
 public static class PlaybackUtils
 {
-    public static IBpmProvider BpmProvider;
-    public static ITapProvider TapProvider;
+    public static IBpmProvider? BpmProvider;
+    public static ITapProvider? TapProvider;
 
-    private static readonly HashSet<AudioClipInfo> AudioClipInstances = new();
-        
-    public static void UpdatePlaybackAndSyncing()
+    internal static void UpdatePlaybackAndSyncing()
     {
         var settings = FindPlaybackSettings(out var audioComposition);
 
-        if (settings == null)
-            return;
+        // Should always be at least default settings
+        // if (settings == null)
+        //     return;
 
         WasapiAudioInput.StartFrame(settings);
             
@@ -32,8 +32,6 @@ public static class PlaybackUtils
                 AudioEngine.UseAudioClip(soundtrack.Value, Playback.Current.TimeInSecs);
             }
         }
-
-        bool hasBpmProvider = BpmProvider != null;
 
         if (settings.AudioSource == PlaybackSettings.AudioSources.ExternalDevice
             && settings.Syncing == PlaybackSettings.SyncModes.Tapping)
@@ -55,7 +53,7 @@ public static class PlaybackUtils
                 //BeatTiming.SlideSyncTime = ForwardBeatTaps.SlideSyncTime;
                 Playback.Current.Settings.Bpm = (float)Playback.Current.Bpm;
                     
-                if (hasBpmProvider && BpmProvider.TryGetNewBpmRate(out var newBpmRate2))
+                if (BpmProvider != null &&  BpmProvider.TryGetNewBpmRate(out _))
                 {
                     Log.Warning("SetBpm in BeatTapping mode has no effect.");
                     // settings.Bpm = newBpmRate2;
@@ -70,7 +68,7 @@ public static class PlaybackUtils
         }
             
         // Process callback from [SetBpm] operator
-        if (hasBpmProvider && BpmProvider.TryGetNewBpmRate(out var newBpmRate))
+        if (BpmProvider != null && BpmProvider.TryGetNewBpmRate(out var newBpmRate))
         {
             settings.Bpm = newBpmRate;
         }
@@ -80,11 +78,11 @@ public static class PlaybackUtils
         Playback.Current.Settings = settings;
     }
 
-    private static PlaybackSettings? FindPlaybackSettings(out IResourceConsumer? owner)
+    private static PlaybackSettings FindPlaybackSettings(out IResourceConsumer? owner)
     {
         var composition = ProjectManager.Components?.CompositionOp;
 
-        if (FindPlaybackSettingsForInstance(composition, out var instance, out var settings))
+        if (composition != null && FindPlaybackSettingsForInstance(composition, out var instance, out var settings))
         {
             owner = instance;
             return settings;
@@ -114,16 +112,17 @@ public static class PlaybackUtils
         // }
         //
         // owner = null;
-        return null;
+        //return null;
     }
 
     /// <summary>
     /// Scans the current composition path and its parents for a soundtrack 
     /// </summary>
-    public static bool TryFindingSoundtrack([NotNullWhen(true)] out AudioClipInfo? soundtrack, out IResourceConsumer composition)
+    internal static bool TryFindingSoundtrack([NotNullWhen(true)] out AudioClipInfo? soundtrack, 
+                                              out IResourceConsumer? composition)
     {
         var settings = FindPlaybackSettings(out composition);
-        if (settings != null)
+        if (composition != null)
             return settings.GetMainSoundtrack(composition, out soundtrack);
             
         soundtrack = null;
@@ -134,7 +133,7 @@ public static class PlaybackUtils
     /// Try to find playback settings for an instance.
     /// </summary>
     /// <returns>false if falling back to default settings</returns>
-    internal static bool FindPlaybackSettingsForInstance(Instance startInstance, out Instance instanceWithSettings, out PlaybackSettings settings)
+    internal static bool FindPlaybackSettingsForInstance(Instance startInstance, out Instance? instanceWithSettings, out PlaybackSettings settings)
     {
         instanceWithSettings = startInstance;
         while (true)

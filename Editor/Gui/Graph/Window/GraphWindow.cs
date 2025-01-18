@@ -55,12 +55,12 @@ internal sealed class GraphWindow : Windows.Window
     #region Handling project view ----------------------
     public ProjectView? ProjectView { get; private set; }
 
-    [Obsolete("Please use TrySetToProject()")]
-    public static bool TryOpenPackage(EditorSymbolPackage package, bool replaceFocused, Instance? startingComposition = null, WindowConfig? config = null,
-                                      int instanceNumber = 0)
-    {
-        return false;
-    }
+    // [Obsolete("Please use TrySetToProject()")]
+    // public static bool TryOpenPackage(EditorSymbolPackage package, bool replaceFocused, Instance? startingComposition = null, WindowConfig? config = null,
+    //                                   int instanceNumber = 0)
+    // {
+    //     return false;
+    // }
 
     /// <summary>
     /// Initialize <see cref="ProjectView"/> to for a loaded project 

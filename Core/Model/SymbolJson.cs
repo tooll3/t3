@@ -211,7 +211,7 @@ public static class SymbolJson
                                                         {
                                                             foreach (var outputJson in jOutputsArray)
                                                             {
-                                                                TryGetGuidFromJsonToken(outputJson[JsonKeys.Id], out var outputId);
+                                                                JsonUtils.TryGetGuid(outputJson[JsonKeys.Id], out var outputId);
                                                                 var outputDataJson = outputJson[JsonKeys.OutputData];
                                                                 if (outputDataJson != null)
                                                                 {
@@ -244,7 +244,7 @@ public static class SymbolJson
 
     private static (Guid, JToken?) ReadSymbolInputDefaults(JToken jsonInput)
     {
-        TryGetGuidFromJsonToken(jsonInput[JsonKeys.Id], out var id);
+        JsonUtils.TryGetGuid(jsonInput[JsonKeys.Id], out var id);
         //var id = Guid.Parse(jsonInput[JsonKeys.Id].Value<string>());
         var jsonValue = jsonInput[JsonKeys.DefaultValue];
         return (id, jsonValue);
@@ -254,10 +254,10 @@ public static class SymbolJson
     {
         connection = null;
 
-        if (!TryGetGuidFromJsonToken(jsonConnection[JsonKeys.SourceParentOrChildId], out var sourceInstanceId) ||
-            !TryGetGuidFromJsonToken(jsonConnection[JsonKeys.TargetParentOrChildId], out var targetInstanceId) ||
-            !TryGetGuidFromJsonToken(jsonConnection[JsonKeys.SourceSlotId], out var sourceSlotId) ||
-            !TryGetGuidFromJsonToken(jsonConnection[JsonKeys.TargetSlotId], out var targetSlotId))
+        if (!JsonUtils.TryGetGuid(jsonConnection[JsonKeys.SourceParentOrChildId], out var sourceInstanceId) ||
+            !JsonUtils.TryGetGuid(jsonConnection[JsonKeys.TargetParentOrChildId], out var targetInstanceId) ||
+            !JsonUtils.TryGetGuid(jsonConnection[JsonKeys.SourceSlotId], out var sourceSlotId) ||
+            !JsonUtils.TryGetGuid(jsonConnection[JsonKeys.TargetSlotId], out var targetSlotId))
         {
             connection = null;
             return false;
@@ -266,17 +266,10 @@ public static class SymbolJson
         connection = new Symbol.Connection(sourceInstanceId, sourceSlotId, targetInstanceId, targetSlotId);
         return true;
     }
-
-    private static bool TryGetGuidFromJsonToken(JToken? jToken, out Guid id)
-    {
-        id= Guid.Empty;
-        return jToken != null && Guid.TryParse(jToken.Value<string>(), out id);
-    }
     
-
     private static void ReadChildInputValue(Symbol.Child symbolChild, JToken inputJson)
     {
-        TryGetGuidFromJsonToken(inputJson[JsonKeys.Id], out var id);
+        JsonUtils.TryGetGuid(inputJson[JsonKeys.Id], out var id);
         var jsonValue = inputJson[JsonKeys.Value];
         var gotInput = symbolChild.Inputs.TryGetValue(id, out var input);
         if (!gotInput || input == null)

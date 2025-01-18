@@ -80,7 +80,8 @@ internal sealed class NewProjectDialog : ModalDialog
                     T3Ui.Save(false); // todo : this is probably not needed
                     ImGui.CloseCurrentPopup();
 
-                    GraphWindow.TryOpenPackage(project, false);
+                    //GraphWindow.TryOpenPackage(project, false);
+                    Log.Warning("Not implemented yet.");
                 }
                 else
                 {

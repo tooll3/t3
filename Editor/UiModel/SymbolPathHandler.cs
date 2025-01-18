@@ -49,7 +49,7 @@ internal sealed class SymbolPathHandler
     
     public event Action<SymbolPathHandler>? AllFilesReady;
 
-    public SymbolPathHandler(Symbol symbol, string symbolFilePath)
+    public SymbolPathHandler(Symbol symbol, string? symbolFilePath)
     {
         Symbol = symbol;
         _symbolFilePath = symbolFilePath;

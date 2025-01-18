@@ -44,6 +44,7 @@ internal class EditorSymbolPackage : SymbolPackage
         var id = symbol.Id;
         if (_filePathHandlers.TryGetValue(id, out var handler))
             return;
+        
         handler = new SymbolPathHandler(symbol, path);
         _filePathHandlers[id] = handler;
     }
@@ -290,7 +291,7 @@ internal class EditorSymbolPackage : SymbolPackage
             return true;
         }
 
-        var rootSymboLUi = SymbolUiDict[ReleaseInfo!.HomeGuid];
+        var rootSymboLUi = SymbolUiDict[ReleaseInfo.HomeGuid];
         Log.Debug($"{DisplayName}: Found home symbol");
 
         var symbol = rootSymboLUi.Symbol;
@@ -320,7 +321,7 @@ internal class EditorSymbolPackage : SymbolPackage
         get
         {
             var releaseInfo = ReleaseInfo;
-            return releaseInfo != null && releaseInfo.HomeGuid != Guid.Empty;
+            return releaseInfo.HomeGuid != Guid.Empty;
         }
     }
 

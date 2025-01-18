@@ -52,7 +52,6 @@ public abstract class InputValueUi<T> : IInputUi
     public string? Description { get; set; }
     #endregion
 
-        
     private static float ParameterNameWidth => MathF.Max(ImGui.GetTextLineHeight() * 130.0f / 16, ImGui.GetWindowWidth() * 0.35f);
 
     public SymbolUi? Parent { get; set; }
@@ -141,9 +140,9 @@ public abstract class InputValueUi<T> : IInputUi
 
         //var window = GraphWindow.Focused;
         var components = ProjectManager.Components;
-        if(components == null)
+        if (components == null)
             return InputEditStateFlags.Nothing;
-            
+
         var nodeSelection = components.NodeSelection;
         IReadOnlyList<ConnectionMaker.TempConnection> tempConnections = ConnectionMaker.GetTempConnectionsFor(components.GraphCanvas);
 
@@ -151,9 +150,9 @@ public abstract class InputValueUi<T> : IInputUi
         {
             editState = DrawConnectedParameter();
         }
-        else if (isAnimated)
+        else if (isAnimated && animationCurve !=null)
         {
-            editState = DrawAnimatedParameter();
+            editState = DrawAnimatedParameter(animationCurve);
         }
         else
         {
@@ -169,7 +168,6 @@ public abstract class InputValueUi<T> : IInputUi
             {
                 // Just show actual values
                 InputArea.DrawConnectedMultiInputHeader(name, ParameterNameWidth);
-                    
 
                 if (ImGui.BeginPopupContextItem("##parameterOptions", 0))
                 {
@@ -189,26 +187,27 @@ public abstract class InputValueUi<T> : IInputUi
                     {
                         // TODO: implement with proper SelectionManager
                     }
+
                     Icons.DrawIconOnLastItem(Icon.ConnectedParameter, typeColor);
                     ImGui.SameLine();
 
                     ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
-                        
+
                     var slot = allInputs[multiInputIndex];
-                    var connectedName = slot?.Parent?.Symbol.Name?? "???";
-                        
+                    var connectedName = slot?.Parent?.Symbol.Name ?? "???";
+
                     ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                     ImGui.Button($"{multiInputIndex}.", new Vector2(ParameterNameWidth, 0.0f));
                     ImGui.PopStyleColor();
-                        
+
                     ImGui.PopStyleVar();
                     ImGui.SameLine();
 
                     ImGui.SetNextItemWidth(-1);
                     ImGui.PushStyleColor(ImGuiCol.Text, typeColor.Rgba);
-                    ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0,0.5f));
-                        
-                    var dummy  = slot != null ? slot.Value: default;
+                    ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0, 0.5f));
+
+                    var dummy = slot != null ? slot.Value : default;
                     DrawReadOnlyControl(connectedName, ref dummy);
                     ImGui.PopStyleVar();
                     ImGui.PopStyleColor();
@@ -220,7 +219,7 @@ public abstract class InputValueUi<T> : IInputUi
             else
             {
                 InputArea.DrawConnectedSingleInputArea(nodeSelection, inputSlot, compositionUi, typeColor, compositionSymbol, symbolChildUi);
-                    
+
                 // Draw Name
                 ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
                 ImGui.PushStyleColor(ImGuiCol.Text, UiColors.ForegroundFull.Rgba);
@@ -254,23 +253,17 @@ public abstract class InputValueUi<T> : IInputUi
                                                         }
 
                                                         //var graphWindow = ProjectEditing.Components;
-                                                        if (components.NodeSelection != null)
+                                                        //var nodeSelection = components.NodeSelection;
+                                                        //var structure = components.Structure;
+                                                        if (ImGui.MenuItem("Extract as connection operator"))
                                                         {
-                                                            //var nodeSelection = components.NodeSelection;
-                                                            //var structure = components.Structure;
-                                                            if (ImGui.MenuItem("Extract as connection operator"))
-                                                            {
-                                                                ParameterExtraction.ExtractAsConnectedOperator(nodeSelection, typedInputSlot, symbolChildUi, inputSlot.Input);
-                                                            }
-
-                                                            if (ImGui.MenuItem("Publish as Input"))
-                                                            {
-                                                                InputArea.PublishAsInput(nodeSelection, inputSlot, symbolChildUi, input);
-                                                            }
+                                                            ParameterExtraction.ExtractAsConnectedOperator(nodeSelection, typedInputSlot, symbolChildUi,
+                                                                inputSlot.Input);
                                                         }
-                                                        else
+
+                                                        if (ImGui.MenuItem("Publish as Input"))
                                                         {
-                                                            Log.Error($"Graph window not found");
+                                                            InputArea.PublishAsInput(nodeSelection, inputSlot, symbolChildUi, input);
                                                         }
 
                                                         if (ImGui.MenuItem("Parameters settings"))
@@ -292,9 +285,9 @@ public abstract class InputValueUi<T> : IInputUi
                 {
                     connectedName = "???";
                 }
-                    
+
                 ImGui.PushStyleColor(ImGuiCol.Text, typeColor.Rgba);
-                ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0,0.5f));
+                ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0, 0.5f));
 
                 DrawReadOnlyControl(connectedName, ref typedInputSlot.Value);
                 ImGui.PopStyleVar();
@@ -305,11 +298,11 @@ public abstract class InputValueUi<T> : IInputUi
             return editState;
         }
 
-        InputEditStateFlags DrawAnimatedParameter()
+        InputEditStateFlags DrawAnimatedParameter(Curve curve)
         {
-            var hasKeyframeAtCurrentTime = animationCurve.HasVAt(Playback.Current.TimeInBars);
-            var hasKeyframeBefore = animationCurve.HasKeyBefore(Playback.Current.TimeInBars);
-            var hasKeyframeAfter = animationCurve.HasKeyAfter(Playback.Current.TimeInBars);
+            var hasKeyframeAtCurrentTime = curve.HasVAt(Playback.Current.TimeInBars);
+            var hasKeyframeBefore = curve.HasKeyBefore(Playback.Current.TimeInBars);
+            var hasKeyframeAfter = curve.HasKeyAfter(Playback.Current.TimeInBars);
 
             var iconIndex = 0;
             const int leftBit = 1 << 0;
@@ -415,10 +408,11 @@ public abstract class InputValueUi<T> : IInputUi
         {
             if (ProjectManager.Components?.GraphCanvas is not GraphCanvas graphCanvas)
                 return InputEditStateFlags.Nothing;
-            
+
             // Connection area...
-            InputArea.DrawNormalInputArea<T>(graphCanvas, graphCanvas.SymbolBrowser, nodeSelection, typedInputSlot, compositionUi, symbolChildUi, input, IsAnimatable, typeColor, tempConnections);
-                
+            InputArea.DrawNormalInputArea(graphCanvas, graphCanvas.SymbolBrowser, nodeSelection, typedInputSlot, compositionUi, symbolChildUi, input,
+                                             IsAnimatable, typeColor, tempConnections);
+
             ImGui.SameLine();
 
             // Draw Name Button
@@ -432,16 +426,14 @@ public abstract class InputValueUi<T> : IInputUi
                 ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                 hasStyleCount = 2;
             }
-                
 
-            var isClicked =ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
-                
+            var isClicked = ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
+
             if (hasStyleCount > 0)
             {
                 ImGui.PopStyleColor(hasStyleCount);
             }
-                
-                
+
             if (ImGui.IsItemHovered())
             {
                 var text = "";
@@ -450,15 +442,14 @@ public abstract class InputValueUi<T> : IInputUi
                     text += Description;
                 }
 
-                var additionalNotes = input.IsDefault ? null: "Click to reset to default";
+                var additionalNotes = input.IsDefault ? null : "Click to reset to default";
 
                 if (!string.IsNullOrEmpty(text) || !string.IsNullOrEmpty(additionalNotes))
                 {
-                    CustomComponents.TooltipForLastItem( text, 
-                                                         additionalNotes);
+                    CustomComponents.TooltipForLastItem(text,
+                                                        additionalNotes);
                 }
-                    
-                
+
                 if (!input.IsDefault)
                     Icons.DrawIconAtScreenPosition(Icon.Revert, ImGui.GetItemRectMin() + new Vector2(6, 4) * T3Ui.UiScaleFactor);
             }
@@ -489,7 +480,6 @@ public abstract class InputValueUi<T> : IInputUi
                                                                              input));
                      }
 
-                         
                      if (ImGui.MenuItem("Extract as connection operator"))
                      {
                          ParameterExtraction.ExtractAsConnectedOperator(nodeSelection, typedInputSlot, symbolChildUi, inputSlot.Input);
@@ -499,7 +489,6 @@ public abstract class InputValueUi<T> : IInputUi
                      {
                          InputArea.PublishAsInput(nodeSelection, inputSlot, symbolChildUi, input);
                      }
-                         
 
                      if (ImGui.MenuItem("Parameters settings"))
                          editState = InputEditStateFlags.ShowOptions;
@@ -540,62 +529,12 @@ public abstract class InputValueUi<T> : IInputUi
         }
         #endregion
 
-        void ShowInputContextMenu(bool showRename)
-        {
-            var instance = inputSlot.Parent;
-            var isReadOnly = instance.Parent.Symbol.SymbolPackage.IsReadOnly;
-            CustomComponents.ContextMenuForItem(() =>
-                                                {
-                                                    if (ImGui.MenuItem("Set as default", !input.IsDefault))
-                                                    {
-                                                        input.SetCurrentValueAsDefault();
-                                                        var symbolUi = instance.GetSymbolUi();
-                                                        symbolUi.Symbol.InvalidateInputDefaultInInstances(inputSlot);
-                                                        symbolUi.FlagAsModified();
-                                                    }
-
-                                                    if (ImGui.MenuItem("Reset to default", !input.IsDefault))
-                                                    {
-                                                        UndoRedoStack.AddAndExecute(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id,
-                                                                                        input));
-                                                    }
-
-                                                    if (ImGui.MenuItem("Extract as connection operator"))
-                                                    {
-                                                        ParameterExtraction.ExtractAsConnectedOperator(nodeSelection, typedInputSlot, symbolChildUi, input);
-                                                    }
-
-                                                    if (!isReadOnly)
-                                                    {
-                                                        if (ImGui.MenuItem("Publish as Input"))
-                                                        {
-                                                            InputArea.PublishAsInput(nodeSelection, inputSlot, symbolChildUi, input);
-                                                        }
-                                                    }
-
-                                                    if (ImGui.MenuItem("Parameters settings"))
-                                                        editState = InputEditStateFlags.ShowOptions;
-
-                                                    if (showRename && !isReadOnly)
-                                                    {
-                                                        if (ParameterWindow.IsAnyInstanceVisible() && ImGui.MenuItem("Rename input"))
-                                                        {
-                                                            ParameterWindow.RenameInputDialog.ShowNextFrame(symbolChildUi.SymbolChild.Symbol,
-                                                                input.Id);
-                                                        }
-                                                    }
-                                                });
-        }
     }
 
-
-        
     public virtual bool DrawSettings()
     {
         return false;
     }
-
-
 
     public virtual void Write(JsonTextWriter writer)
     {
@@ -615,13 +554,21 @@ public abstract class InputValueUi<T> : IInputUi
             writer.WriteObject(nameof(AddPadding), AddPadding);
     }
 
-    public virtual void Read(JToken inputToken)
+    public virtual void Read(JToken? inputToken)
     {
-        Relevancy = (inputToken[nameof(Relevancy)] == null)
-                        ? DefaultRelevancy
-                        : (Relevancy)Enum.Parse(typeof(Relevancy), inputToken["Relevancy"].ToString());
+        if (inputToken == null)
+            return;
 
-        JToken positionToken = inputToken["Position"];
+        Relevancy = JsonUtils.TryGetEnum<Relevancy>(inputToken["Relevancy"], out var relevancy) 
+                        ? relevancy 
+                        : DefaultRelevancy;
+        
+        // Keeping for reference...
+        // Relevancy = (inputToken[nameof(Relevancy)] == null)
+        //                 ? DefaultRelevancy
+        //                 : (Relevancy)Enum.Parse(typeof(Relevancy), inputToken["Relevancy"].ToString());
+        
+        var positionToken = inputToken["Position"];
         if (positionToken != null)
             PosOnCanvas = new Vector2((positionToken["X"] ?? 0).Value<float>(),
                                       (positionToken["Y"] ?? 0).Value<float>());
@@ -641,15 +588,16 @@ internal static class InputArea
 {
     internal const float ConnectionAreaWidth = 25.0f;
 
-    internal static void DrawNormalInputArea<T>(IGraphCanvas canvas, SymbolBrowser symbolBrowser, NodeSelection nodeSelection, InputSlot<T> inputSlot, SymbolUi compositionUi,
+    internal static void DrawNormalInputArea<T>(IGraphCanvas canvas, SymbolBrowser symbolBrowser, NodeSelection nodeSelection, InputSlot<T> inputSlot,
+                                                SymbolUi compositionUi,
                                                 SymbolUi.Child symbolChildUi,
                                                 Symbol.Child.Input input,
                                                 bool isAnimatable, Color typeColor, IReadOnlyList<ConnectionMaker.TempConnection> tempConnections)
     {
         var buttonClicked = CustomComponents.RoundedButton(string.Empty, ConnectionAreaWidth, ImDrawFlags.RoundCornersLeft);
-            
+
         var inputOperation = InputOperations.None;
-            
+
         if (tempConnections.Count == 0)
         {
             if (isAnimatable && ImGui.GetIO().KeyAlt)
@@ -660,14 +608,13 @@ internal static class InputArea
             {
                 inputOperation = InputOperations.Extract;
             }
-            else if(ImGui.IsItemHovered())
+            else if (ImGui.IsItemHovered())
             {
                 inputOperation = InputOperations.ConnectWithSearch;
             }
         }
-            
-            
-        if(buttonClicked)
+
+        if (buttonClicked)
         {
             switch (inputOperation)
             {
@@ -680,7 +627,7 @@ internal static class InputArea
                                                                                    inputSlot.Input.Value),
                                                        new AddAnimationCommand(compositionUi.Symbol.Animator, inputSlot),
                                                    });
-                        
+
                     UndoRedoStack.AddAndExecute(cmd);
                     break;
                 }
@@ -699,8 +646,8 @@ internal static class InputArea
                 }
             }
         }
-            
-        if(inputOperation != InputOperations.None)
+
+        if (inputOperation != InputOperations.None)
         {
             var icon = inputOperation switch
                            {
@@ -710,7 +657,7 @@ internal static class InputArea
                                InputOperations.Extract           => Icon.ExtractInput,
                                _                                 => throw new ArgumentOutOfRangeException()
                            };
-                
+
             Icons.DrawIconOnLastItem(icon, typeColor);
         }
         else
@@ -719,7 +666,7 @@ internal static class InputArea
             var dl = ImGui.GetWindowDrawList();
             dl.AddCircleFilled(center, 3, typeColor.Fade(0.5f));
         }
-            
+
         // Drag out connection lines
         if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() > UserSettings.Config.ClickThreshold)
         {
@@ -728,18 +675,18 @@ internal static class InputArea
                 ConnectionMaker.StartFromInputSlot(canvas, compositionUi.Symbol, symbolChildUi, input.InputDefinition);
             }
         }
-            
+
         if (ImGui.IsItemHovered())
         {
             ImGui.BeginTooltip();
-                
+
             if (!TypeNameRegistry.Entries.TryGetValue(input.DefaultValue.ValueType, out var typeName))
             {
                 typeName = input.DefaultValue.ValueType.ToString();
             }
-                 
+
             ImGui.TextUnformatted($"{typeName} - Input");
-                
+
             ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
             ImGui.PushFont(Fonts.FontSmall);
             FormInputs.AddVerticalSpace(4);
@@ -748,17 +695,18 @@ internal static class InputArea
             {
                 ImGui.TextUnformatted("ALT+Click to animate");
             }
-                
+
             if (ParameterExtraction.IsInputSlotExtractable(inputSlot))
             {
                 ImGui.TextUnformatted("CTRL+Click to extract");
             }
+
             ImGui.PopFont();
             ImGui.PopStyleColor();
             ImGui.EndTooltip();
         }
     }
-        
+
     private enum InputOperations
     {
         None,
@@ -784,7 +732,7 @@ internal static class InputArea
         if (updatedComposition == null)
         {
             Log.Error("Can't find composition to publish input to");
-            return;            
+            return;
         }
 
         var newInputDefinition = updatedComposition.Symbol.InputDefinitions.SingleOrDefault(i => i.Name == input.Name);
@@ -815,40 +763,42 @@ internal static class InputArea
 
         UndoRedoStack.Clear();
     }
-        
+
     public static void DrawConnectedSingleInputArea(NodeSelection nodeSelection, IInputSlot inputSlot, SymbolUi compositionUi, Color typeColor,
                                                     Symbol compositionSymbol, SymbolUi.Child symbolChildUi)
     {
         // Connected single inputs
-        if (CustomComponents.RoundedButton(String.Empty,  ConnectionAreaWidth, ImDrawFlags.RoundCornersLeft))
+        if (CustomComponents.RoundedButton(String.Empty, ConnectionAreaWidth, ImDrawFlags.RoundCornersLeft))
         {
             var sourceUi = FindConnectedSymbolChildUi(inputSlot.Id, compositionUi, symbolChildUi);
             // Try to find instance
             if (sourceUi is SymbolUi.Child sourceSymbolChildUi)
             {
                 var selectedInstance = nodeSelection.GetFirstSelectedInstance();
-                var parent = selectedInstance.Parent;
-                var selectionTargetInstance = parent.Children[sourceUi.Id];
-                nodeSelection.SetSelection(sourceSymbolChildUi, selectionTargetInstance);
-                FitViewToSelectionHandling.FitViewToSelection();
+                if (selectedInstance?.Parent != null)
+                {
+                    var selectionTargetInstance = selectedInstance.Parent.Children[sourceUi.Id];
+                    nodeSelection.SetSelection(sourceSymbolChildUi, selectionTargetInstance);
+                    FitViewToSelectionHandling.FitViewToSelection();
+                }
             }
         }
-            
+
         Icons.DrawIconOnLastItem(Icon.ConnectedParameter, typeColor.Rgba);
         ImGui.SameLine();
     }
-        
-    public static ISelectableCanvasObject FindConnectedSymbolChildUi(Guid inputSlotId, SymbolUi compositionUi, SymbolUi.Child targetChildUi)
+
+    private static ISelectableCanvasObject? FindConnectedSymbolChildUi(Guid inputSlotId, SymbolUi compositionUi, SymbolUi.Child targetChildUi)
     {
         var connection = compositionUi.Symbol.Connections.FirstOrDefault(c => c.IsTargetOf(targetChildUi.Id, inputSlotId));
-            
+
         if (connection == null)
             return null;
-            
+
         return compositionUi.GetSelectables()
                             .First(ui => ui.Id == connection.SourceParentOrChildId || ui.Id == connection.SourceSlotId);
     }
-        
+
     public static bool DrawConnectedMultiInputHeader(string name, float parameterNameWidth)
     {
         ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.0f, 0.5f));

@@ -126,10 +126,10 @@ internal static class AppMenu
                                 replaceFocusedWindow = choice == "No";
                             }
                             
-                            if (!GraphWindow.TryOpenPackage(package, replaceFocusedWindow))
-                            {
-                                Log.Error("Failed to open package " + name);
-                            };
+                            //if (!GraphWindow.TryOpenPackage(package, replaceFocusedWindow))
+                            //{
+                            Log.Error("Not implemented yet");
+                            //};
                         }
                     }
                     

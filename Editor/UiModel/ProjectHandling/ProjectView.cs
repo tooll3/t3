@@ -17,7 +17,7 @@ internal sealed class ProjectView
     public readonly NodeNavigation NodeNavigation;
     public Structure Structure => OpenedProject.Structure;
 
-    public IGraphCanvas GraphCanvas { get; set; } // TODO: remove set accessibility
+    public IGraphCanvas GraphCanvas { get; set; } = default!; // TODO: remove set accessibility
 
     private readonly Stack<Composition> _compositionsForDisposal = new();
     public OpenedProject OpenedProject { get; }
@@ -27,7 +27,7 @@ internal sealed class ProjectView
 
     public readonly TimeLineCanvas TimeLineCanvas;
 
-    public event Action<ProjectView, Guid> OnCompositionChanged;
+    public event Action<ProjectView, Guid>? OnCompositionChanged;
 
     public ProjectView(OpenedProject openedProject, NavigationHistory navigationHistory, NodeSelection nodeSelection, GraphImageBackground graphImageBackground)
     {

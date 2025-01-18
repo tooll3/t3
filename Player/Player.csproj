@@ -37,8 +37,6 @@
         </Reference>
         <Reference Include="System.Windows.Forms">
         </Reference>
-        <Reference Include="Microsoft.VisualBasic.Forms">
-        </Reference>
     </ItemGroup>
 
     <ItemGroup>

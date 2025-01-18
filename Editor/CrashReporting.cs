@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿#nullable enable
+using System.IO;
 using System.Text;
 using System.Text.Json;
 using ImGuiNET;
@@ -30,11 +31,12 @@ internal static class CrashReporting
                            o.AutoSessionTracking = false;
                            o.SendDefaultPii = false;
                            o.Release = Program.Version.ToBasicVersionString();
-                           o.SetBeforeSend((Func<SentryEvent, SentryHint, SentryEvent>)CrashHandler);
+                           o.SetBeforeSend(CrashHandler);
                        });
 
         //SentrySdk.ConfigureScope(scope => { scope.SetTag("IsStandAlone", Program.IsStandAlone ? "Yes" : "No"); });
 
+        // ReSharper disable once RedundantAssignment
         var configuration = "Release";
         #if DEBUG
         configuration = "Debug";
@@ -43,14 +45,15 @@ internal static class CrashReporting
         SentrySdk.ConfigureScope(scope => { scope.SetTag("Configuration", configuration); });
     }
 
-    private static SentryEvent CrashHandler(SentryEvent sentryEvent, SentryHint hint)
+    private static SentryEvent? CrashHandler(SentryEvent sentryEvent, SentryHint hint)
     {
         // Aggregate exception normally don't cause crashes
         if (sentryEvent.Exception is AggregateException)
             return null;
 
-        var timeOfLastBackup = AutoBackup.GetTimeOfLastBackup();
-        var timeSpan = DrawUtils.GetReadableRelativeTime(timeOfLastBackup);
+        // Keep once auto backup is up again
+        //var timeOfLastBackup = AutoBackup.GetTimeOfLastBackup();
+        //var timeSpan = DrawUtils.GetReadableRelativeTime(timeOfLastBackup);
 
         var components = ProjectManager.Components;
         
@@ -64,18 +67,17 @@ internal static class CrashReporting
                                                 RuntimeFrames = ImGui.GetFrameCount(),
                                                 UndoActions = UndoRedoStack.UndoStack.Count,
                                             };
-        
-        string? json = null;
+
         try
         {
-            var primaryComposition = ProjectManager.Components.CompositionOp;
+            var primaryComposition = ProjectManager.Components?.CompositionOp;
             if (primaryComposition != null)
             {
                 var compositionUi = primaryComposition.Symbol.GetSymbolUi();
                 GraphOperations.TryCopyNodesAsJson(primaryComposition,
                                                    compositionUi.ChildUis.Values,
                                                    compositionUi.Annotations.Values.ToList(),
-                                                   out json);
+                                                   out _);
             }
         }
         catch (Exception e)
@@ -145,13 +147,14 @@ internal static class CrashReporting
     }
     
     /** Additional to logging the crash we also write a copy to a dedicated crash file. */
-    private static void WriteCrashReportFile(SentryEvent sentryEvent)
+    private static void WriteCrashReportFile(SentryEvent? sentryEvent)
     {
-        if (sentryEvent?.Exception == null)
+        if (sentryEvent?.Exception == null || FileWriter.Instance == null)
             return;
         
         var exceptionTitle = sentryEvent.Exception.GetType().Name;
-        var filepath= Path.Combine(FileWriter.Instance.LogDirectory,$@"crash {DateTime.Now:yyyy-MM-dd  HH-mm-ss} - {exceptionTitle}.txt");
+        
+        var filepath= Path.Combine(FileWriter.Instance.LogDirectory,$"crash {DateTime.Now:yyyy-MM-dd  HH-mm-ss} - {exceptionTitle}.txt");
         
         using var streamFileWriter = new StreamWriter(filepath);
         streamFileWriter.WriteLine($"{sentryEvent.Exception.Message}\n{sentryEvent.Exception}");
@@ -166,5 +169,6 @@ internal static class CrashReporting
         streamFileWriter.Flush();
     }
 
-    public static string LogPath { get; set; }
+    // ReSharper disable once UnusedMember.Global
+    public static string? LogPath { get; set; }
 }

@@ -10,6 +10,9 @@ using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.Graph.Interaction;
 
+/// <summary>
+/// Breaking out parameters into connected value operators with original value and renamed to parameter named.
+/// </summary>
 internal static class ParameterExtraction
 {
     public static bool IsInputSlotExtractable(IInputSlot inputSlot)
@@ -20,7 +23,7 @@ internal static class ParameterExtraction
     public static void ExtractAsConnectedOperator<T>(NodeSelection nodeSelection, InputSlot<T> inputSlot, SymbolUi.Child symbolChildUi, Symbol.Child.Input input)
     {
         SymbolUi? compositionUi = null;
-        Instance composition;
+        Instance? composition;
         var potentialComposition = nodeSelection.GetSelectedComposition();
         if (potentialComposition != null)
         {
@@ -83,7 +86,7 @@ internal static class ParameterExtraction
         // Set type
         // Todo - make this undoable - currently not implemented with the new extraction system
         var newInstance = composition.Children[newChildUi.Id];
-        ExtractInputValues(inputSlot, newInstance, out var outputSlot, out var previousValue);
+        ExtractInputValues(inputSlot, newInstance, out var outputSlot);
 
         // Create connection
         var newConnection = new Symbol.Connection(sourceParentOrChildId: newSymbolChild.Id,
@@ -96,11 +99,10 @@ internal static class ParameterExtraction
         UndoRedoStack.Add(new MacroCommand("Extract as operator", commands));
         return;
 
-        static void ExtractInputValues(InputSlot<T> slot, Instance newInstance, out Slot<T> outputSlot, out T previousValue)
+        static void ExtractInputValues(InputSlot<T> slot, Instance newInstance, out Slot<T> outputSlot)
         {
             var extractableInput = (IExtractedInput<T>)newInstance;
             outputSlot = extractableInput.OutputSlot;
-            previousValue = outputSlot.Value;
             extractableInput.SetTypedInputValuesTo(slot.TypedInputValue.Value, out var changedSlots);
             foreach (var changedSlot in changedSlots)
             {
@@ -117,20 +119,43 @@ internal static class ParameterExtraction
     // todo: define this elsewhere so they can be properly hot reloaded
     private static Dictionary<Type, Guid>? _symbolsExtractableFromInputs;
     private static Dictionary<Type, Guid> SymbolsExtractableFromInputs => _symbolsExtractableFromInputs ??=
-                                                                              SymbolPackage.AllPackages
-                                                                                           .SelectMany(package =>
-                                                                                                       {
-                                                                                                           return package.Symbols.Values
-                                                                                                              .Select(x =>
-                                                                                                               {
-                                                                                                                   var typeInfo = package
-                                                                                                                      .AssemblyInformation
-                                                                                                                      .OperatorTypeInfo[x.Id];
-                                                                                                                   return (x, typeInfo);
-                                                                                                               });
-                                                                                                       })
-                                                                                           .Where(x => x.typeInfo.ExtractableTypeInfo.IsExtractable)
-                                                                                           .ToDictionary(x => x.typeInfo.ExtractableTypeInfo.ExtractableType,
-                                                                                                         x => x.x.Id);
+                                                                               SymbolPackage.AllPackages
+                                                                                            .SelectMany(package =>
+                                                                                                        {
+                                                                                                            return package.Symbols.Values
+                                                                                                               .Select(x =>
+                                                                                                                {
+                                                                                                                    var typeInfo = package
+                                                                                                                       .AssemblyInformation
+                                                                                                                       .OperatorTypeInfo[x.Id];
+                                                                                                                    return (x, typeInfo);
+                                                                                                                });
+                                                                                                        })
+                                                                                            .Where(x => x.typeInfo.ExtractableTypeInfo.IsExtractable)
+                                                                                            .ToDictionary(x => x.typeInfo.ExtractableTypeInfo.ExtractableType!,
+                                                                                                              x => x.x.Id);
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

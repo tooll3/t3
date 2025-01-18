@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿#nullable enable
+using System.Text;
 using System.Text.RegularExpressions;
 using ImGuiNET;
 using ManagedBass;
@@ -13,9 +14,9 @@ using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Windows.TimeLine;
 
-public static class PlaybackSettingsPopup
+internal static class PlaybackSettingsPopup
 {
-    public static void DrawPlaybackSettings(Instance? composition)
+    internal static void DrawPlaybackSettings(Instance? composition)
     {
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(2, 2));
         ImGui.SetNextWindowSize(new Vector2(650, 500) * T3Ui.UiScaleFactor);
@@ -77,7 +78,7 @@ public static class PlaybackSettingsPopup
 
         // Explanation hint
         string hint;
-        if (settings != null && isEnabledForCurrent)
+        if (isEnabledForCurrent)
         {
             hint = "You're defining new settings for this Project Operator.";
         }
@@ -281,14 +282,11 @@ public static class PlaybackSettingsPopup
             FormInputs.DrawInputLabel("Input Device");
             ImGui.BeginGroup();
 
-            var found = false;
-
             if (ImGui.BeginCombo("##SelectDevice", settings.AudioInputDeviceName, ImGuiComboFlags.HeightLarge))
             {
                 foreach (var d in WasapiAudioInput.InputDevices)
                 {
                     var isSelected = d.DeviceInfo.Name == settings.AudioInputDeviceName;
-                    found |= isSelected;
                     if (ImGui.Selectable($"{d.DeviceInfo.Name}", isSelected, ImGuiSelectableFlags.DontClosePopups))
                     {
                         Bass.Configure(Configuration.UpdateThreads, false);
@@ -378,7 +376,7 @@ public static class PlaybackSettingsPopup
         }
     }
 
-    private static void UpdateBpmFromSoundtrackConfig(AudioClip audioClip)
+    private static void UpdateBpmFromSoundtrackConfig(AudioClip? audioClip)
     {
         if (audioClip == null || string.IsNullOrEmpty(audioClip.FilePath))
         {
