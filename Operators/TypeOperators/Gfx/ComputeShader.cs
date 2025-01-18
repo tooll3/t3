@@ -58,7 +58,7 @@ public sealed class ComputeShader : Instance<ComputeShader>, IDescriptiveFilenam
     InputSlot<string> IShaderOperator<ComputeShaderT3>.EntryPoint => EntryPoint;
     InputSlot<string> IShaderOperator<ComputeShaderT3>.DebugName => DebugName;
 
-    string? IShaderOperator<ComputeShaderT3>.CachedEntryPoint { get; set; }
+    string IShaderOperator<ComputeShaderT3>.CachedEntryPoint { get; set; } = default!; // set by Initialize()
 
     Slot<ComputeShaderT3> IShaderOperator<ComputeShaderT3>.ShaderSlot => Shader;
     #endregion

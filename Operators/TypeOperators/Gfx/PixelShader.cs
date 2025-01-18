@@ -39,7 +39,7 @@ public sealed class PixelShader : Instance<PixelShader>, IDescriptiveFilename, I
     InputSlot<string> IShaderOperator<PixelShaderT3>.EntryPoint => EntryPoint;
     InputSlot<string> IShaderOperator<PixelShaderT3>.DebugName => DebugName;
     Slot<PixelShaderT3> IShaderOperator<PixelShaderT3>.ShaderSlot => Shader;
-    string? IShaderOperator<PixelShaderT3>.CachedEntryPoint { get; set; }
+    string IShaderOperator<PixelShaderT3>.CachedEntryPoint { get; set; } = default!; // set by Initialize()
     #endregion
         
     #region IStatusProvider implementation

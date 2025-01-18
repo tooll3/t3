@@ -53,14 +53,14 @@ public sealed class Texture2D(SharpDX.Direct3D11.Texture2D texture) : Texture<Sh
         return new Texture2D(dxTexture);
     }
 
-    public static Texture2D CreateTexture2D(Texture2DDescription description, DataRectangle[] dataRectangles = null)
+    public static Texture2D CreateTexture2D(Texture2DDescription description, DataRectangle[]? dataRectangles = null)
     {
         var dxTexture = new SharpDX.Direct3D11.Texture2D(ResourceManager.Device, description, dataRectangles);
         return new Texture2D(dxTexture);
     }
 
-    public static bool TryLoadFromStream(FileStream stream, [NotNullWhen(true)] out Texture2D? texture,
-                                         [NotNullWhen(false)] out string? failureReason)
+    internal static bool TryLoadFromStream(FileStream stream, [NotNullWhen(true)] out Texture2D? texture,
+                                           [NotNullWhen(false)] out string? failureReason)
     {
         var extension = Path.GetExtension(stream.Name);
         if (string.Equals(extension, ".dds", StringComparison.OrdinalIgnoreCase))
@@ -140,10 +140,11 @@ public abstract class Texture<T>(T texture) : AbstractTexture(texture)
 
 public abstract class AbstractTexture(IDisposable disposable) : IDisposable
 {
-    private IDisposable _disposable = disposable;
+    private IDisposable? _disposable = disposable;
     public abstract string Name { get; set; }
     
-    public static implicit operator SharpDX.Direct3D11.Resource(AbstractTexture texture) => (SharpDX.Direct3D11.Resource)texture._disposable;
+    public static implicit operator SharpDX.Direct3D11.Resource(AbstractTexture texture) 
+        => (SharpDX.Direct3D11.Resource)texture._disposable;
 
     public void Dispose()
     {

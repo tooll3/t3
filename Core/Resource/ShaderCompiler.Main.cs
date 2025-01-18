@@ -35,11 +35,11 @@ public abstract partial class ShaderCompiler
         var hashCombination = new ULongFromTwoInts(args.SourceCode.GetHashCode(), args.EntryPoint.GetHashCode());
         var hash = hashCombination.Value;
         bool success = false;
-        byte[] compiledBlob;
+        byte[]? compiledBlob;
 
         if (useCache)
         {
-            lock (ShaderCacheLock)
+            lock (_shaderCacheLock)
             {
                 if (!forceRecompile && TryLoadCached(hash, out compiledBlob, out reason))
                 {
@@ -66,7 +66,8 @@ public abstract partial class ShaderCompiler
         var name = args.Name;
         if (success)
         {
-            Instance.CreateShaderInstance(name, compiledBlob, out shader!);
+            Instance.CreateShaderInstance(name, compiledBlob, out TShader s);
+            shader = s; // make nullable happy
             Log.Debug($"{name} - {args.EntryPoint} {reason}");
             return true;
         }
@@ -77,7 +78,7 @@ public abstract partial class ShaderCompiler
 
         static bool TryLoadCached(ulong hash, [NotNullWhen(true)] out byte[]? compiledBlob, out string reason)
         {
-            if (ShaderBytecodeCache.TryGetValue(hash, out compiledBlob))
+            if (_shaderBytecodeCache.TryGetValue(hash, out compiledBlob))
             {
                 reason = string.Empty;
                 reason = "Shader already compiled.";

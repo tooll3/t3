@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
@@ -89,7 +90,7 @@ public interface IShaderCodeOperator<T> where T : AbstractShader
             Log.Error($"Failed to compile shader '{debugName}'");
         }
                 
-        shaderSlot.Value = currentShader;
+        shaderSlot.Value = currentShader!;
         shaderSlot.DirtyFlag.Clear();
 
         if (!compiled)
@@ -98,7 +99,7 @@ public interface IShaderCodeOperator<T> where T : AbstractShader
         }
         else
         {
-            currentShader.Name = debugName;
+            currentShader!.Name = debugName;
         }
         
         SetWarning(errorMessage);
@@ -139,7 +140,7 @@ public interface IShaderOperator<T> : IDescriptiveFilename where T : AbstractSha
                                       _ = DebugName.GetValue(context);
                                       
                                       var shader = resource.GetValue(context);
-                                      ShaderSlot.Value = shader;
+                                      ShaderSlot.Value = shader!;
                                       OnShaderUpdate(context, shader);
                                   };
     }

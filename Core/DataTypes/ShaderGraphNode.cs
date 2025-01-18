@@ -29,7 +29,7 @@ namespace T3.Core.DataTypes;
  *     - recursively calls Update() on their connected ops
  *   - checks with parameters are changed
  */
-public class ShaderGraphNode
+public sealed class ShaderGraphNode
 {
     #region node handling
     public ShaderGraphNode(Instance instance, MultiInputSlot<ShaderGraphNode>? nodeMultiInputInput = null, InputSlot<ShaderGraphNode>? inputSlot = null)
@@ -48,10 +48,10 @@ public class ShaderGraphNode
         
         // Initialize prefix and collect parameters inputs.
         // (Deferred because symbolChildId is not set at construction time)
-        if (string.IsNullOrEmpty(Prefix))
+        if (string.IsNullOrEmpty(_prefix))
         {
-            Prefix = BuildNodeId(_instance);
-            _shaderParameterInputs = ShaderParamHandling.CollectInputSlots(_instance, Prefix);
+            _prefix = BuildNodeId(_instance);
+            _shaderParameterInputs = ShaderParamHandling.CollectInputSlots(_instance, _prefix);
         }
         
         
@@ -167,7 +167,7 @@ public class ShaderGraphNode
 
         foreach (var inputNode in InputNodes)
         {
-            inputNode.CollectShaderCode(sb, frameNumber);
+            inputNode?.CollectShaderCode(sb, frameNumber);
         }
 
         if (_instance is IGraphNodeOp nodeOp)
@@ -182,7 +182,7 @@ public class ShaderGraphNode
 
         foreach (var inputNode in InputNodes)
         {
-            inputNode.ClearAllChanges();
+            inputNode?.ClearAllChanges();
         }
     }
 
@@ -221,7 +221,7 @@ public class ShaderGraphNode
         {
             if (param.Value is Matrix4x4 matrix4X4)
             {
-                ShaderParamHandling.AddMatrixParameter(floatValues, codeParams, $"{Prefix}{param.Name}", matrix4X4);
+                ShaderParamHandling.AddMatrixParameter(floatValues, codeParams, $"{_prefix}{param.Name}", matrix4X4);
             }
         }
     }
@@ -237,7 +237,7 @@ public class ShaderGraphNode
         return false;
     }
 
-    private readonly Instance? _instance;
+    private readonly Instance _instance;
     
     public List<Parameter> AdditionalParameters = [];
 
@@ -437,14 +437,14 @@ public class ShaderGraphNode
     }
     
     #region prefix
-    public string Prefix;
+    private string? _prefix;
 
     private static string BuildNodeId(Instance instance)
     {
         return instance.GetType().Name + "_" + ShortenGuid(instance.SymbolChildId) + "_";
     }
 
-    public override string ToString() => Prefix;
+    public override string? ToString() => _prefix;
 
     private static string ShortenGuid(Guid guid, int length = 7)
     {

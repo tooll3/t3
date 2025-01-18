@@ -243,16 +243,22 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
         return gotTargetSlot;
     }
 
-    private static void GatherResourcePackages(Instance instance, ref List<SymbolPackage> resourceFolders)
+    private static void GatherResourcePackages(Instance? instance, ref List<SymbolPackage> resourceFolders)
     {
-        if (!instance._resourceFoldersDirty)
+        if (instance == null || !instance._resourceFoldersDirty)
             return;
             
         instance._resourceFoldersDirty = false;
-        if(resourceFolders != null)
+
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+        if (resourceFolders != null)
+        {
             resourceFolders.Clear();
+        }
         else
+        {
             resourceFolders = [];
+        }
             
         while (instance != null)
         {
@@ -307,7 +313,7 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
 
     public IReadOnlyList<Guid> InstancePath => OperatorUtils.BuildIdPathForInstance(this);
 
-    private List<SymbolPackage> _availableResourcePackages;
+    private List<SymbolPackage> _availableResourcePackages = [];
     private bool _resourceFoldersDirty = true;
 
 

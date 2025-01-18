@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Diagnostics.CodeAnalysis;
 using T3.Core.DataTypes;
 using T3.Core.Operator.Slots;
 
@@ -18,7 +19,10 @@ public static partial class ResourceManager
         where TShader : AbstractShader
     {
         ArgumentNullException.ThrowIfNull(getEntryPoint, nameof(getEntryPoint));
-        TryGenerate<TShader> func = (FileResource fileResource, TShader? currentValue, out TShader? newShader, out string? reason) =>
+        TryGenerate<TShader> func = (FileResource fileResource, 
+                                     TShader? currentValue, 
+                                     [NotNullWhen(true)]out TShader? newShader, 
+                                     [NotNullWhen(false)]out string? reason) =>
                                     {
                                         var success = ShaderCompiler.TryGetShaderFromFile(fileResource, ref currentValue, instance, out reason, getEntryPoint());
                                         newShader = currentValue;
@@ -28,13 +32,16 @@ public static partial class ResourceManager
 
         return new Resource<TShader>(relativePath, instance, func);
     }
-    
-    public static Resource<TShader> CreateShaderResource<TShader>(InputSlot<string> sourceSlot, Func<string> getEntryPoint)
+
+    internal static Resource<TShader> CreateShaderResource<TShader>(InputSlot<string> sourceSlot, Func<string> getEntryPoint)
         where TShader : AbstractShader
     {
         ArgumentNullException.ThrowIfNull(getEntryPoint, nameof(getEntryPoint));
         var instance = sourceSlot.Parent;
-        TryGenerate<TShader> func = (FileResource fileResource, TShader? currentValue, out TShader? newShader, out string? reason) =>
+        TryGenerate<TShader> func = (FileResource fileResource, 
+                                     TShader? currentValue, 
+                                     [NotNullWhen(true)]out TShader? newShader, 
+                                     [NotNullWhen(false)]out string? reason) =>
                                     {
                                         var success = ShaderCompiler.TryGetShaderFromFile(fileResource, ref currentValue, instance, out reason, getEntryPoint());
                                         newShader = currentValue;

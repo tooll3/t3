@@ -34,7 +34,7 @@ public static class PbrContextSettings
         _defaultMaterial = PbrMaterial.CreateDefault();
     }
 
-    private static bool TryLoadTextureAsSrv(string imagePath, out Resource<Texture2D> textureResource, [NotNullWhen(false)] ref ShaderResourceView? srv)
+    private static bool TryLoadTextureAsSrv(string imagePath, out Resource<Texture2D> textureResource, [NotNullWhen(false)] ref ShaderResourceView srv)
     {
         textureResource = ResourceManager.CreateTextureResource(imagePath, null);
         var texture = textureResource.Value;

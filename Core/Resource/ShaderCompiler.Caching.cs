@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -18,14 +19,14 @@ public abstract partial class ShaderCompiler
         int total = 0;
         long totalFileSize = 0;
 
-        var directory = all ? ShaderCacheRootPath : _shaderCacheDirectory;
+        var directory = all ? _shaderCacheRootPath : _shaderCacheDirectory;
         if(!Directory.Exists(directory))
         {
             BlockingWindow.Instance.ShowMessageBox($"No shader cache found at \"{directory}\".", "No shader cache found");
             return;
         }
         
-        lock (ShaderCacheLock)
+        lock (_shaderCacheLock)
         {
             Directory.EnumerateFiles(directory, $"*{FileExtension}", SearchOption.AllDirectories)
                      .AsParallel()
@@ -67,7 +68,7 @@ public abstract partial class ShaderCompiler
             title = "Shader Cache Deleted Successfully";
         }
 
-        var finalMessage = $"Deleted {deletionsString} of shader cache from \"{ShaderCacheRootPath}\".\n{message}\n" +
+        var finalMessage = $"Deleted {deletionsString} of shader cache from \"{_shaderCacheRootPath}\".\n{message}\n" +
                            $"Restart the application to refresh the removed cache, as all shaders still reside in memory.";
         BlockingWindow.Instance.ShowMessageBox(finalMessage, title);
     }
@@ -89,7 +90,7 @@ public abstract partial class ShaderCompiler
         File.WriteAllBytes(path, byteCode);
     }
 
-    private static bool TryLoadBytecodeFromDisk(ulong hash, [NotNullWhen(true)] out byte[] bytecode)
+    private static bool TryLoadBytecodeFromDisk(ulong hash, [NotNullWhen(true)] out byte[]? bytecode)
     {
         if (!_diskCachingEnabled)
         {
@@ -113,14 +114,14 @@ public abstract partial class ShaderCompiler
     {
         if (oldBytecode != null)
         {
-            if (ShaderBytecodeHashes.Remove(oldBytecode, out var oldHash))
+            if (_shaderBytecodeHashes.Remove(oldBytecode, out var oldHash))
             {
-                ShaderBytecodeCache.Remove(oldHash);
+                _shaderBytecodeCache.Remove(oldHash);
             }
         }
 
-        ShaderBytecodeCache[hash] = newBytecode;
-        ShaderBytecodeHashes[newBytecode] = hash;
+        _shaderBytecodeCache[hash] = newBytecode;
+        _shaderBytecodeHashes[newBytecode] = hash;
     }
 
     private static string GetPathForShaderCache(ulong hashCode)
@@ -129,8 +130,8 @@ public abstract partial class ShaderCompiler
         return Path.Combine(_shaderCacheDirectory, hashCode + FileExtension);
     }
 
-    private static readonly Dictionary<byte[], ulong> ShaderBytecodeHashes = new();
-    private static readonly Dictionary<ulong, byte[]> ShaderBytecodeCache = new();
+    private static readonly Dictionary<byte[], ulong> _shaderBytecodeHashes = new();
+    private static readonly Dictionary<ulong, byte[]> _shaderBytecodeCache = new();
     
     [StructLayout(LayoutKind.Explicit)]
     private readonly struct ULongFromTwoInts(int a, int b)
@@ -145,18 +146,18 @@ public abstract partial class ShaderCompiler
         public readonly int B = b;
     }
     
-    private static readonly object ShaderCacheLock = new();
-    private static readonly string ShaderCacheRootPath = Path.Combine(UserData.UserData.TempFolder, "cache");
-    private static string _shaderCacheDirectory;
+    private static readonly object _shaderCacheLock = new();
+    private static readonly string _shaderCacheRootPath = Path.Combine(UserData.UserData.TempFolder, "cache");
+    private static string _shaderCacheDirectory = string.Empty;
 
     public static string ShaderCacheSubdirectory
     {
         set
         {
-            if(_shaderCacheDirectory != null)
+            if(!string.IsNullOrEmpty(_shaderCacheDirectory) )
                 throw new InvalidOperationException("Shader cache subdirectory can only be set once.");
             
-            _shaderCacheDirectory = Path.Combine(ShaderCacheRootPath, value);
+            _shaderCacheDirectory = Path.Combine(_shaderCacheRootPath, value);
             
             var potentialCacheFilePath = Path.Combine(_shaderCacheDirectory, ulong.MaxValue + FileExtension);
 

@@ -34,7 +34,7 @@ public sealed class VertexShader : Instance<VertexShader>, IDescriptiveFilename,
     InputSlot<string> IShaderOperator<VertexShaderT3>.EntryPoint => EntryPoint;
     InputSlot<string> IShaderOperator<VertexShaderT3>.DebugName => DebugName;
     Slot<VertexShaderT3> IShaderOperator<VertexShaderT3>.ShaderSlot => Shader;
-    string? IShaderOperator<VertexShaderT3>.CachedEntryPoint { get; set; }
+    string IShaderOperator<VertexShaderT3>.CachedEntryPoint { get; set; } = default!; // set by Initialize()
     public void OnShaderUpdate(EvaluationContext context, VertexShaderT3? shader)
     {
             

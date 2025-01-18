@@ -403,11 +403,11 @@ public abstract partial class SymbolPackage : IResourcePackage
     }
 }
 
-public record DependencyCounter
+public sealed record DependencyCounter
 {
-    public IResourcePackage Package { get; init; }
-    public int SymbolChildCount { get; internal set; }
-    public int ResourceCount { get; internal set; }
+    public required IResourcePackage Package { get; init; }
+    internal int SymbolChildCount { get; set; }
+    internal int ResourceCount { get; set; }
     
     public override string ToString()
     {

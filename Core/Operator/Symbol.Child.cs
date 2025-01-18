@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -52,12 +53,12 @@ public partial class Symbol
 
         public Dictionary<Guid, Input> Inputs { get; private init; } = new();
         public Dictionary<Guid, Output> Outputs { get; private init; } = new();
-        public IReadOnlyList<Instance> Instances => _instancesOfSelf;
+        internal IReadOnlyList<Instance> Instances => _instancesOfSelf;
         private readonly List<Instance> _instancesOfSelf = new();
 
         private readonly bool _isGeneric;
 
-        internal Child(Symbol symbol, Guid childId, Symbol parent, string name, bool isBypassed)
+        internal Child(Symbol symbol, Guid childId, Symbol? parent, string? name, bool isBypassed)
         {
             Symbol = symbol;
             Id = childId;
@@ -102,15 +103,17 @@ public partial class Symbol
                     continue;
                 }
 
-                var hasOutput = Outputs.TryGetValue(outputDef.Id, out var childOutput);
-                if (!hasOutput)
+                if (Outputs.TryGetValue(outputDef.Id, out var childOutput))
+                {
+                    childOutput.IsDisabled = shouldBeDisabled;
+                    
+                }
+                else 
                 {
                     Log.Warning($"{typeof(Symbol.Child)} {ReadableName} does not have the following child output as defined: " +
-                                $"{childOutput.OutputDefinition.Name}({nameof(Guid)}{childOutput.OutputDefinition.Id})");
-                    continue;
+                                $"{childOutput?.OutputDefinition.Name}({nameof(Guid)}{childOutput?.OutputDefinition.Id})");
                 }
 
-                childOutput.IsDisabled = shouldBeDisabled;
             }
 
             // Set disabled status on outputs of each instanced copy of this child within all parents that contain it
@@ -421,7 +424,7 @@ public partial class Symbol
 
         public override string ToString()
         {
-            return Parent.Name + ">" + ReadableName;
+            return Parent?.Name + ">" + ReadableName;
         }
 
         internal static Guid CreateIdDeterministically(Symbol symbol, Symbol? parent)
@@ -501,7 +504,7 @@ public partial class Symbol
             }
 
             // we dont need to update our instances/connections - our parents do that for us if they need it
-            if (Parent.NeedsTypeUpdate)
+            if (Parent !=null && Parent.NeedsTypeUpdate)
             {
                 // destroy all instances if necessary? probably not...
                 //DestroyAndClearAllInstances();
@@ -575,7 +578,8 @@ public partial class Symbol
             }
         }
         
-        internal bool TryCreateNewInstance(Instance parentInstance, [NotNullWhen(true)] out Instance newInstance)
+        internal bool TryCreateNewInstance(Instance? parentInstance, 
+                                           [NotNullWhen(true)] out Instance? newInstance)
         {
             if (!TryCreateInstance(parentInstance, out newInstance, out var reason))
             {
@@ -658,11 +662,13 @@ public partial class Symbol
 
             return true;
 
-            bool TryCreateInstance(Instance parent, [NotNullWhen(true)] out Instance newInstance, out string reason)
+            bool TryCreateInstance(Instance? parent, 
+                                   [NotNullWhen(true)] out Instance? newInstance, 
+                                   [NotNullWhen(false)]out string? reason2)
             {
                 if (parent != null && parent.Children.ContainsKey(Id))
                 {
-                    reason = $"Instance {Name} with id ({Id}) already exists in {parent.Symbol}";
+                    reason2 = $"Instance {Name} with id ({Id}) already exists in {parent.Symbol}";
                     newInstance = null;
                     return false;
                 }
@@ -673,9 +679,9 @@ public partial class Symbol
                     Symbol.UpdateInstanceType();
                 }
 
-                if (!TryInstantiate(out newInstance, out reason))
+                if (!TryInstantiate(out newInstance, out reason2))
                 {
-                    Log.Error(reason);
+                    Log.Error(reason2);
                     return false;
                 }
 
@@ -724,7 +730,8 @@ public partial class Symbol
 
                 return true;
 
-                bool TryInstantiate([NotNullWhen(true)] out Instance instance, out string reason)
+                bool TryInstantiate([NotNullWhen(true)] out Instance? instance, 
+                                    [NotNullWhen(false)]out string? reason3)
                 {
                     var symbolPackage = Symbol.SymbolPackage;
                     if (symbolPackage.AssemblyInformation.OperatorTypeInfo.TryGetValue(Symbol.Id, out var typeInfo))
@@ -733,12 +740,12 @@ public partial class Symbol
                         try
                         {
                             instance = (Instance)constructor.Invoke();
-                            reason = string.Empty;
+                            reason3 = string.Empty;
                             return true;
                         }
                         catch (Exception e)
                         {
-                            reason = $"Failed to create instance of type {Symbol.InstanceType} with id {Id}: {e}";
+                            reason3 = $"Failed to create instance of type {Symbol.InstanceType} with id {Id}: {e}";
                             instance = null;
                             return false;
                         }
@@ -749,24 +756,27 @@ public partial class Symbol
                     try
                     {
                         // create instance through reflection
-                        instance = (Instance)Activator.CreateInstance(Symbol.InstanceType, AssemblyInformation.ConstructorBindingFlags,
-                                                                      binder: null, args: Array.Empty<object>(), culture: null);
+                        instance = Activator.CreateInstance(Symbol.InstanceType, 
+                                                                      AssemblyInformation.ConstructorBindingFlags,
+                                                                      binder: null, 
+                                                                      args: Array.Empty<object>(), 
+                                                                      culture: null) as Instance;
 
                         if (instance is null)
                         {
-                            reason = $"(Instance creation fallback failure) Failed to create instance of type " +
+                            reason3 = $"(Instance creation fallback failure) Failed to create instance of type " +
                                      $"{Symbol.InstanceType} with id {Id} - result was null";
                             return false;
                         }
 
                         Log.Warning($"(Instance creation fallback) Created instance of type {Symbol.InstanceType} with id {Id} through reflection");
 
-                        reason = string.Empty;
+                        reason3 = string.Empty;
                         return true;
                     }
                     catch (Exception e)
                     {
-                        reason = $"(Instance creation fallback failure) Failed to create instance of type {Symbol.InstanceType} with id {Id}: {e}";
+                        reason3 = $"(Instance creation fallback failure) Failed to create instance of type {Symbol.InstanceType} with id {Id}: {e}";
                         instance = null;
                         return false;
                     }

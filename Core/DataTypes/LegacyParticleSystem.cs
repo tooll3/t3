@@ -106,7 +106,7 @@ public class LegacyParticleSystem
         SetupIndirectBuffer(sizeInBytes, ref IndirectArgsBuffer);
         ResourceManager.CreateBufferUav<uint>(IndirectArgsBuffer, Format.R32_UInt, ref IndirectArgsBufferUav);
 
-        static void SetupIndirectBuffer(int sizeInBytes, ref Buffer? buffer)
+        static void SetupIndirectBuffer(int sizeInBytes, ref Buffer buffer)
         {
             if (buffer != null)
                 return;

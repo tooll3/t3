@@ -503,7 +503,7 @@ public partial class SymbolPackage
         
     }
 
-    private static void RegisterType(Type type, string? typeName,
+    private static void RegisterType(Type type, string typeName,
                                      Func<InputValue> defaultValueCreator,
                                      Action<JsonTextWriter, object> valueToJsonConverter,
                                      Func<JToken, object> jsonToValueConverter)

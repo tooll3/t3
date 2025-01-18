@@ -11,7 +11,9 @@ namespace T3.Core.Resource;
 
 public static partial class ResourceManager
 {
-    private static bool RelativePathBackwardsCompatibility(string relativePath, out bool isAbsolute, [NotNullWhen(true)] out List<Range>? backCompatPaths)
+    private static bool RelativePathBackwardsCompatibility(string relativePath, 
+                                                           out bool isAbsolute, 
+                                                           [NotNullWhen(true)] out List<Range>? backCompatPaths)
     {
         backCompatPaths = null;
         if (Path.IsPathRooted(relativePath))
@@ -37,7 +39,7 @@ public static partial class ResourceManager
 
         var subfolderRanges = subfolderRangeArray.AsSpan(0, subfolderCount);
 
-        List<Range>? backCompatRanges = null;
+        List<Range>? backCompatRanges = [];
 
         // test for shaders that reference using lib/etc
         int index = 0;
@@ -95,6 +97,7 @@ public static partial class ResourceManager
             return false;
         }
 
+        // TODO: this is too hard to read and should be static instead.
         bool AddNextRangeIfMatch(string testString, ReadOnlySpan<char> pathSpan, Span<Range> subfolderRanges)
         {
             if(index >= subfolderRanges.Length)
