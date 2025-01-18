@@ -122,6 +122,7 @@ public sealed partial class DX11ShaderCompiler : ShaderCompiler
 
         public void Dispose()
         {
+            Disposing?.Invoke(); // Notify subscribers
             _streamReader?.Dispose();
         }
 

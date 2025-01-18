@@ -210,7 +210,7 @@ public abstract partial class ShaderCompiler
             }
         }
 
-        public SymbolPackage? Package => _resourceConsumer?.Package;
-        public event Action? Disposing;
+        //public SymbolPackage? Package => _resourceConsumer?.Package;
+        //public event Action? Disposing;
     }
 }

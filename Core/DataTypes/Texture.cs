@@ -142,9 +142,13 @@ public abstract class AbstractTexture(IDisposable disposable) : IDisposable
 {
     private IDisposable? _disposable = disposable;
     public abstract string Name { get; set; }
+
+    public static implicit operator SharpDX.Direct3D11.Resource?(AbstractTexture texture)
+        => texture._disposable as SharpDX.Direct3D11.Resource;
     
-    public static implicit operator SharpDX.Direct3D11.Resource(AbstractTexture texture) 
-        => (SharpDX.Direct3D11.Resource)texture._disposable;
+    // The original implementation. Not sure, if the above is valid.
+    // public static implicit operator SharpDX.Direct3D11.Resource(AbstractTexture texture) 
+    //     => (SharpDX.Direct3D11.Resource)texture._disposable;
 
     public void Dispose()
     {
