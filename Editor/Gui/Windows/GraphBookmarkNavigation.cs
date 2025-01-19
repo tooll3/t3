@@ -122,7 +122,7 @@ internal static class GraphBookmarkNavigation
 
         bookmarks[index] = new Bookmark()
                                {
-                                   IdPath = window.CompositionOp.InstancePath.ToList(),
+                                   IdPath = window.CompositionInstance.InstancePath.ToList(),
                                    ViewScope = canvas.GetTargetScope(),
                                    SelectedChildIds = window.NodeSelection.GetSelectedNodes<SymbolUi.Child>().Select(s => s.Id).ToList()
                                };

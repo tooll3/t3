@@ -192,7 +192,7 @@ internal sealed class UiElements
             ImGui.SameLine();
 
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
-            TimeControls.DrawTimeControls(components.TimeLineCanvas, components.CompositionOp);
+            TimeControls.DrawTimeControls(components.TimeLineCanvas, components.CompositionInstance);
             ImGui.PopStyleVar();
             ImGui.SetCursorPosX(ImGui.GetCursorPosX() + 10);
 

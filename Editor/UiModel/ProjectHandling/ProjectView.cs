@@ -24,7 +24,7 @@ internal sealed class ProjectView
     public OpenedProject OpenedProject { get; }
     private readonly List<Guid> _compositionPath = [];
     public Composition? Composition { get; set; }
-    public Instance? CompositionOp => Composition?.Instance;
+    public Instance? CompositionInstance => Composition?.Instance;
 
     public readonly TimeLineCanvas TimeLineCanvas;
 
@@ -39,7 +39,7 @@ internal sealed class ProjectView
         NodeSelection = nodeSelection;
         GraphImageBackground = graphImageBackground;
 
-        var getCompositionOp = () => CompositionOp;
+        var getCompositionOp = () => CompositionInstance;
         NodeNavigation = new NodeNavigation(openedProject.Structure, NavigationHistory, getCompositionOp);
         TimeLineCanvas = new TimeLineCanvas(NodeSelection, getCompositionOp, TrySetCompositionOpToChild);
     }

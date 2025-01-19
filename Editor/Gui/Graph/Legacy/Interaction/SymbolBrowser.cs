@@ -292,7 +292,7 @@ internal sealed class SymbolBrowser
 
             PrintTypeFilter();
 
-            var compositionOp = _components.CompositionOp;
+            var compositionOp = _components.CompositionInstance;
             var projectNamespace = "user." + compositionOp.Symbol.SymbolPackage.AssemblyInformation.Name + ".";
             var compositionNameSpace = "";
             var currentMainComposition = compositionOp;
@@ -557,7 +557,7 @@ internal sealed class SymbolBrowser
         }
 
         var commandsForUndo = new List<ICommand>();
-        var parentOp = _components.CompositionOp;
+        var parentOp = _components.CompositionInstance;
         var parentSymbol = parentOp.Symbol;
         var parentSymbolUi = parentSymbol.GetSymbolUi();
 
@@ -574,7 +574,7 @@ internal sealed class SymbolBrowser
         }
             
         var newSymbolChild = newChildUi.SymbolChild;
-        var newInstance = _components.CompositionOp.Children[newChildUi.Id];
+        var newInstance = _components.CompositionInstance.Children[newChildUi.Id];
 
         var presetPool = VariationHandling.GetOrLoadVariations(_selectedSymbolUi.Symbol.Id);
         if (presetPool != null && _selectedPreset != null)

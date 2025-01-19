@@ -22,7 +22,7 @@ internal static class ColorEditPopup
 {
     public static InputEditStateFlags DrawPopup(ref Vector4 color, Vector4 previousColor)
     {
-        var composition = ProjectView.Focused?.CompositionOp;
+        var composition = ProjectView.Focused?.CompositionInstance;
         if (composition == null)
             return InputEditStateFlags.Nothing;
         

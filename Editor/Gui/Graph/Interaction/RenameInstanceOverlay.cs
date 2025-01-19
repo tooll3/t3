@@ -54,7 +54,7 @@ internal static class RenameInstanceOverlay
         if (_focusedInstanceId == Guid.Empty)
             return;
 
-        var parentSymbolUi = components.CompositionOp.GetSymbolUi();
+        var parentSymbolUi = components.CompositionInstance.GetSymbolUi();
         if (!parentSymbolUi.ChildUis.TryGetValue(_focusedInstanceId, out var symbolChildUi))
         {
             Log.Error("canceling rename overlay of no longer valid selection");

@@ -14,13 +14,13 @@ public static class TemplateUse
     internal static void TryToApplyTemplate(TemplateDefinition template, string symbolName, string nameSpace, string description, EditableSymbolProject project)
     {
         var components = ProjectView.Focused;
-        if (components == null || components.CompositionOp == null)
+        if (components == null || components.CompositionInstance == null)
         {
             BlockingWindow.Instance.ShowMessageBox("Can't create from template without open graph window");
             return;
         }
 
-        var compositionSymbolUi = components.CompositionOp.GetSymbolUi();
+        var compositionSymbolUi = components.CompositionInstance.GetSymbolUi();
 
         var graphCanvas = components.GraphCanvas;
         var centerOnScreen = graphCanvas.WindowPos + graphCanvas.WindowSize / 2;

@@ -122,7 +122,7 @@ internal sealed partial class Graph
 
         compositionUi = composition.GetSymbolUi();
         // 3. Draw Nodes and their sockets and set positions for connection lines
-        foreach (var instance in _components.CompositionOp.Children.Values)
+        foreach (var instance in _components.CompositionInstance.Children.Values)
         {
             if (instance == null)
                 continue;

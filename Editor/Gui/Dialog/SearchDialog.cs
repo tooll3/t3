@@ -226,7 +226,7 @@ public class SearchDialog : ModalDialog
             return;
         }
 
-        var compositionOp = components.CompositionOp;
+        var compositionOp = components.CompositionInstance;
 
         var composition = _searchMode switch
                               {

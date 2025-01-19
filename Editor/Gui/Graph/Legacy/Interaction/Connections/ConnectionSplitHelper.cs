@@ -46,7 +46,7 @@ internal static class ConnectionSplitHelper
                                   - new Vector2(SymbolUi.Child.DefaultOpSize.X * 0.25f,
                                                 SymbolUi.Child.DefaultOpSize.Y * 0.5f);
 
-                ConnectionMaker.SplitConnectionWithSymbolBrowser(components, components.CompositionOp!.Symbol,
+                ConnectionMaker.SplitConnectionWithSymbolBrowser(components, components.CompositionInstance!.Symbol,
                                                                  BestMatchLastFrame.Connection,
                                                                  posOnScreen, graphCanvas.SymbolBrowser);
             }
@@ -59,7 +59,7 @@ internal static class ConnectionSplitHelper
                 Symbol.Child.Output? output = null;
                 Symbol.OutputDefinition? outputDefinition;
 
-                var op = components.CompositionOp!;
+                var op = components.CompositionInstance!;
 
                 Symbol.Child? sourceOp = null;
                 if (op.Children.TryGetValue(connection.SourceParentOrChildId, out var sourceOpInstance))

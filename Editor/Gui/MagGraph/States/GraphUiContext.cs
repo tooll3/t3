@@ -75,7 +75,7 @@ internal sealed class GraphUiContext
     }
 
     internal readonly ProjectView ProjectView;
-    internal Instance CompositionOp => ProjectView.CompositionOp!;
+    internal Instance CompositionOp => ProjectView.CompositionInstance!;
     internal NodeSelection Selector => ProjectView.NodeSelection;
     
     

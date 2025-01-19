@@ -1006,7 +1006,7 @@ internal sealed class GraphNode
                         }
                         else if (ImGui.IsMouseReleased(ImGuiMouseButton.Right) && ImGui.GetIO().KeyCtrl)
                         {
-                            _canvas.EditNodeOutputDialog.OpenForOutput(_projectView.CompositionOp.Symbol, childUi, outputDef);
+                            _canvas.EditNodeOutputDialog.OpenForOutput(_projectView.CompositionInstance.Symbol, childUi, outputDef);
                         }
                     }
                 }

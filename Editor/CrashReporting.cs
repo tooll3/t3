@@ -72,7 +72,7 @@ internal static class CrashReporting
         string? json = null;
         try
         {
-            var primaryComposition = ProjectView.Focused?.CompositionOp;
+            var primaryComposition = ProjectView.Focused?.CompositionInstance;
             if (primaryComposition != null)
             {
                 var compositionUi = primaryComposition.Symbol.GetSymbolUi();

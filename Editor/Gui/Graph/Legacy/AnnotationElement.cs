@@ -136,7 +136,7 @@ internal sealed class AnnotationElement
         {
             if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
             {
-                var parentUi = _components.CompositionOp.GetSymbolUi();
+                var parentUi = _components.CompositionInstance.GetSymbolUi();
                 _draggedNodeId = _annotation.Id;
                 if (nodeSelection.IsNodeSelected(_annotation))
                 {

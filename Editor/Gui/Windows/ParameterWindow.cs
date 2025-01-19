@@ -1,3 +1,5 @@
+#nullable enable
+using System.Diagnostics.CodeAnalysis;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
@@ -17,7 +19,7 @@ using T3.SystemUi;
 
 namespace T3.Editor.Gui.Windows;
 
-internal class ParameterWindow : Window
+internal sealed class ParameterWindow : Window
 {
     public ParameterWindow()
     {
@@ -82,7 +84,7 @@ internal class ParameterWindow : Window
             var selectedInputs = nodeSelection.GetSelectedNodes<IInputUi>().ToList();
             if (selectedInputs.Count > 0)
             {
-                instance = components.CompositionOp;
+                instance = components.CompositionInstance;
                 var inputUi = selectedInputs.First();
                 _viewMode = ViewModes.Settings;
                 _parameterSettings.SelectInput(inputUi.Id);
@@ -175,7 +177,7 @@ internal class ParameterWindow : Window
                                                                      Warning: false);
 
                 var namespaceModified = InputWithTypeAheadSearch.Draw(args, ref namespaceForEdit, out _);
-                if (namespaceModified && ImGui.IsKeyPressed((ImGuiKey)Key.Return))
+                if (namespaceModified && !string.IsNullOrEmpty(namespaceForEdit) && ImGui.IsKeyPressed((ImGuiKey)Key.Return))
                 {
                     if (!EditableSymbolProject.ChangeSymbolNamespace(symbol, namespaceForEdit, out var reason))
                     {
@@ -245,7 +247,7 @@ internal class ParameterWindow : Window
             if (ImGui.BeginTooltip())
             {
                 CustomComponents.HelpText("Symbol Tags affect listing in the Symbol Library and Search widgets.");
-                FormInputs.AddVerticalSpace(10);
+                FormInputs.AddVerticalSpace();
                 var hadTags = false;
                         
                 foreach (SymbolUi.SymbolTags tagValue in Enum.GetValues(typeof(SymbolUi.SymbolTags)))
@@ -264,7 +266,7 @@ internal class ParameterWindow : Window
                 if (hadTags)
                 {
                     ImGui.NewLine();
-                    FormInputs.AddVerticalSpace(10);
+                    FormInputs.AddVerticalSpace();
                 }
                 
                 CustomComponents.HelpText("Click to Edit...");
@@ -368,7 +370,10 @@ internal class ParameterWindow : Window
         DrawChildNameAndFlags(instance);
 
         var selectedChildSymbolUi = instance.GetSymbolUi();
-        var compositionSymbolUi = instance.Parent?.GetSymbolUi();
+        
+        var compositionSymbolUi = ProjectView.Focused?.Composition?.SymbolUi;
+        if (compositionSymbolUi == null)
+            return;
 
         // Draw parameters
         DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi, false, this);
@@ -400,7 +405,8 @@ internal class ParameterWindow : Window
             ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 5);
             if (ImGui.InputText("##symbolChildName", ref nameForEdit, 128))
             {
-                _symbolChildNameCommand.NewName = nameForEdit;
+                if(_symbolChildNameCommand != null)
+                    _symbolChildNameCommand.NewName = nameForEdit;
                 symbolChildUi.SymbolChild.Name = nameForEdit;
             }
 
@@ -494,7 +500,7 @@ internal class ParameterWindow : Window
     /// The actual implementation is done in <see cref="InputValueUi{T}.DrawParameterEdit"/>  
     /// </summary>
     public static void DrawParameters(Instance instance, SymbolUi symbolUi, SymbolUi.Child symbolChildUi,
-                                      SymbolUi compositionSymbolUi, bool hideNonEssentials, ParameterWindow parameterWindow = null)
+                                      SymbolUi compositionSymbolUi, bool hideNonEssentials, ParameterWindow? parameterWindow = null)
     {
         var groupState = GroupState.None;
 
@@ -508,7 +514,7 @@ internal class ParameterWindow : Window
         ImGui.PushStyleColor(ImGuiCol.FrameBgHovered, UiColors.BackgroundHover.Rgba);
         foreach (var inputSlot in instance.Inputs)
         {
-            if (!symbolUi.InputUis.TryGetValue(inputSlot.Id, out IInputUi inputUi))
+            if (!symbolUi.InputUis.TryGetValue(inputSlot.Id, out IInputUi? inputUi))
             {
                 Log.Warning("Trying to access an non existing input, probably the op instance is not the actual one.");
                 continue;
@@ -604,21 +610,18 @@ internal class ParameterWindow : Window
         }
     }
 
-    private static bool TryGetUiDefinitions(Instance instance, out SymbolUi symbolUi, out SymbolUi.Child symbolChildUi)
+    private static bool TryGetUiDefinitions(Instance instance, 
+                                            [NotNullWhen(true)] out SymbolUi? symbolUi, 
+                                            [NotNullWhen(true)] out SymbolUi.Child? symbolChildUi)
     {
         symbolUi = instance.GetSymbolUi();
-
         symbolChildUi = null;
         if (instance.Parent == null)
-            return true;
+            return false;
 
         var parentUi = instance.Parent.GetSymbolUi();
         symbolChildUi = parentUi.ChildUis[instance.SymbolChildId];
-        if (symbolChildUi != null)
             return true;
-
-        Log.Warning("Can't find UI definition for symbol " + instance.SymbolChildId);
-        return false;
     }
 
     // TODO: Refactor this into a separate class
@@ -663,13 +666,12 @@ internal class ParameterWindow : Window
     }
 
     private static readonly List<Window> _parameterWindowInstances = new();
-    private ChangeSymbolChildNameCommand _symbolChildNameCommand;
-    private static ChangeInputValueCommand _inputValueCommandInFlight;
-    private static IInputSlot _inputSlotForActiveCommand;
+    private ChangeSymbolChildNameCommand? _symbolChildNameCommand;
+    private static ChangeInputValueCommand? _inputValueCommandInFlight;
+    private static IInputSlot? _inputSlotForActiveCommand;
     private static int _instanceCounter;
     private Guid _lastSelectedInstanceId;
 
-    private readonly OperatorHelp _help = new();
     private readonly ParameterSettings _parameterSettings = new();
     public static readonly RenameInputDialog RenameInputDialog = new();
 }

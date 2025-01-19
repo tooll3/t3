@@ -54,7 +54,7 @@ internal static class VariationHandling
         {
             ActivePoolForPresets = null;
 
-            var activeCompositionInstance = ProjectView.Focused.CompositionOp;
+            var activeCompositionInstance = ProjectView.Focused.CompositionInstance;
             
             ActiveInstanceForSnapshots = activeCompositionInstance;
 

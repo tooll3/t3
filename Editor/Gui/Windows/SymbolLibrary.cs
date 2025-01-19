@@ -455,10 +455,10 @@ internal sealed class SymbolLibrary : Window
     private static bool IsSymbolCurrentCompositionOrAParent(Symbol symbol)
     {
         var components = ProjectView.Focused;
-        if (components?.CompositionOp == null)
+        if (components?.CompositionInstance == null)
             return false;
 
-        var comp = components.CompositionOp;
+        var comp = components.CompositionInstance;
 
         if (comp.Symbol.Id == symbol.Id)
         {

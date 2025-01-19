@@ -29,7 +29,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
                                   Composition = openedProject.RootInstance
                               };
 
-        if (projectView.CompositionOp == null)
+        if (projectView.CompositionInstance == null)
         {
             Log.Error("Can't create graph without defined composition op");
             return projectView; // TODO: handle this properly
@@ -79,9 +79,9 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
     void IGraphCanvas.BeginDraw(bool backgroundActive, bool bgHasInteractionFocus)
     {
         //TODO: This should probably be handled by CompositionChangedHandler
-        if (_projectView.CompositionOp != null && _projectView.CompositionOp != _previousInstance)
+        if (_projectView.CompositionInstance != null && _projectView.CompositionInstance != _previousInstance)
         {
-            _previousInstance = _projectView.CompositionOp;
+            _previousInstance = _projectView.CompositionInstance;
             _context = new GraphUiContext(_projectView, this);
         }
     }
@@ -113,7 +113,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
         EnableParentZoom = false;
         _context = new GraphUiContext(projectView, this);
         _nodeSelection = projectView.NodeSelection;
-        _previousInstance = projectView.CompositionOp!;
+        _previousInstance = projectView.CompositionInstance!;
 
         InitializeCanvasScope(_context);
     }

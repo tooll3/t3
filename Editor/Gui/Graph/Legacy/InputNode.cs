@@ -98,7 +98,7 @@ static class InputNode
                     {
                         if (ImGui.IsMouseReleased(0))
                         {
-                            ConnectionMaker.CompleteAtSymbolInputNode(canvas, components.CompositionOp.GetSymbolUi(), inputDef);
+                            ConnectionMaker.CompleteAtSymbolInputNode(canvas, components.CompositionInstance.GetSymbolUi(), inputDef);
                         }
                     }
                     else

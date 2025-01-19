@@ -117,7 +117,7 @@ static class OutputNode
 
                         if (ImGui.IsMouseReleased(0))
                         {
-                            ConnectionMaker.CompleteAtSymbolOutputNode(canvas, window.CompositionOp.Symbol, outputDef);
+                            ConnectionMaker.CompleteAtSymbolOutputNode(canvas, window.CompositionInstance.Symbol, outputDef);
                         }
                     }
                     else
@@ -125,7 +125,7 @@ static class OutputNode
                         drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, UiColors.Selection);
                         if (ImGui.IsItemClicked(0))
                         {
-                            ConnectionMaker.StartFromOutputNode(canvas, window.CompositionOp.Symbol, outputDef);
+                            ConnectionMaker.StartFromOutputNode(canvas, window.CompositionInstance.Symbol, outputDef);
                         }
                     }
                 }

@@ -89,7 +89,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
                                      openedProject.Structure,
                                      navigationHistory,
                                      projectView.NodeNavigation,
-                                     getComposition: () => projectView.CompositionOp)
+                                     getComposition: () => projectView.CompositionInstance)
         {
             ProjectView = projectView
         };
@@ -157,17 +157,17 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
     public void DrawGraph(ImDrawListPtr drawList, float graphOpacity)
     {
-        if (_projectView?.CompositionOp == null)
+        if (_projectView?.CompositionInstance == null)
             return;
         
         ConnectionSnapEndHelper.PrepareNewFrame();
 
-        DrawDropHandler(_projectView.CompositionOp, _projectView.CompositionOp.GetSymbolUi());
+        DrawDropHandler(_projectView.CompositionInstance, _projectView.CompositionInstance.GetSymbolUi());
         ImGui.SetCursorScreenPos(Vector2.One * 100);
 
         if (!_preventInteractions)
         {
-            var compositionOp = _projectView.CompositionOp;
+            var compositionOp = _projectView.CompositionInstance;
             var compositionUi = compositionOp.GetSymbolUi();
             //compositionUi.FlagAsModified();
 
@@ -350,7 +350,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         SymbolBrowser.Draw();
 
         graphOpacity *= _preventInteractions ? 0.3f : 1;
-        _graph.DrawGraph(drawList, _drawingFlags.HasFlag(GraphDrawingFlags.PreventInteractions), _projectView.CompositionOp, graphOpacity);
+        _graph.DrawGraph(drawList, _drawingFlags.HasFlag(GraphDrawingFlags.PreventInteractions), _projectView.CompositionInstance, graphOpacity);
 
         RenameInstanceOverlay.Draw(_projectView);
         var tempConnections = ConnectionMaker.GetTempConnectionsFor(this);
@@ -367,7 +367,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
         if (shouldHandleFenceSelection)
         {
-            HandleFenceSelection(_projectView.CompositionOp, _selectionFence);
+            HandleFenceSelection(_projectView.CompositionInstance, _selectionFence);
         }
 
         if (isOnBackground && doubleClicked)
@@ -398,7 +398,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
         drawList.PopClipRect();
 
-        var compositionUpdated = _projectView.CompositionOp;
+        var compositionUpdated = _projectView.CompositionInstance;
 
         if (FrameStats.Current.OpenedPopUpName == string.Empty)
             CustomComponents.DrawContextMenuForScrollCanvas(() => DrawContextMenuContent(compositionUpdated), ref _contextMenuIsOpen);
@@ -574,10 +574,10 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
     public void FocusViewToSelection()
     {
-        if (_projectView?.CompositionOp == null)
+        if (_projectView?.CompositionInstance == null)
             return;
         
-        FitAreaOnCanvas(NodeSelection.GetSelectionBounds(_nodeSelection, _projectView.CompositionOp));
+        FitAreaOnCanvas(NodeSelection.GetSelectionBounds(_nodeSelection, _projectView.CompositionInstance));
     }
 
     private void DrawContextMenuContent(Instance compositionOp)
@@ -964,8 +964,8 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         }
     }
 
-    private IEnumerable<ISelectableCanvasObject> SelectableChildren => _projectView?.CompositionOp != null 
-                                                                           ? NodeSelection.GetSelectableChildren(_projectView.CompositionOp)
+    private IEnumerable<ISelectableCanvasObject> SelectableChildren => _projectView?.CompositionInstance != null 
+                                                                           ? NodeSelection.GetSelectableChildren(_projectView.CompositionInstance)
                                                                            : []; 
 
     //private readonly List<ISelectableCanvasObject> _selectableItems = new();

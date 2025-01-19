@@ -15,7 +15,7 @@ internal abstract class BaseRenderWindow : Window
 
     protected static int SoundtrackChannels()
     {
-        var composition = ProjectView.Focused?.CompositionOp;
+        var composition = ProjectView.Focused?.CompositionInstance;
         if (composition == null)
             return AudioEngine.GetClipSampleRate(null);
         
@@ -28,7 +28,7 @@ internal abstract class BaseRenderWindow : Window
 
     protected static int SoundtrackSampleRate()
     {
-        var composition = ProjectView.Focused?.CompositionOp;
+        var composition = ProjectView.Focused?.CompositionInstance;
 
         if (composition == null)
             return AudioEngine.GetClipSampleRate(null);
@@ -230,7 +230,7 @@ internal abstract class BaseRenderWindow : Window
     protected static void SetPlaybackTimeForThisFrame()
     {
         // get playback settings
-        var composition = ProjectView.Focused?.CompositionOp;
+        var composition = ProjectView.Focused?.CompositionInstance;
         PlaybackUtils.FindPlaybackSettingsForInstance(composition, out var instanceWithSettings, out var settings);
 
         // change settings for all playback before calculating times

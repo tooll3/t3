@@ -283,10 +283,10 @@ public static class T3Ui
     internal static void SelectAndCenterChildIdInView(Guid symbolChildId)
     {
         var components = ProjectView.Focused;
-        if (components == null || components.CompositionOp == null)
+        if (components == null || components.CompositionInstance == null)
             return;
 
-        var compositionOp = components.CompositionOp;
+        var compositionOp = components.CompositionInstance;
 
         var symbolUi = compositionOp.GetSymbolUi();
         

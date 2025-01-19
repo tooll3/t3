@@ -160,7 +160,7 @@ internal sealed class SymbolFilter
         if (ProjectView.Focused != null)
         {
             currentProject = ProjectView.Focused.OpenedProject.Package;
-            composition = ProjectView.Focused.CompositionOp;
+            composition = ProjectView.Focused.CompositionInstance;
         }
 
         MatchingSymbolUis = MatchingSymbolUis.OrderBy(s => ComputeRelevancy(s, _symbolFilterString, currentProject, composition))

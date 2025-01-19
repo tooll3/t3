@@ -215,7 +215,7 @@ internal sealed class GraphWindow : Windows.Window
                                  | ImGuiWindowFlags.NoBackground
                                 );
                 {
-                    ProjectView.TimeLineCanvas.Draw(ProjectView.CompositionOp, Playback.Current);
+                    ProjectView.TimeLineCanvas.Draw(ProjectView.CompositionInstance, Playback.Current);
                 }
                 ImGui.EndChild();
                 ImGui.PopStyleVar(1);
