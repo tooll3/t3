@@ -274,7 +274,7 @@ internal sealed class GraphWindow : Windows.Window
                  */
                 if (!_initializedAfterLayoutReady && ImGui.GetFrameCount() > 1)
                 {
-                    GraphCanvas.SetViewToChild(ICanvas.Transition.JumpIn, ProjectView.OpenedProject.RootInstance.SymbolChildId);
+                    GraphCanvas.RestoreLastSavedUserViewForComposition(ICanvas.Transition.JumpIn, ProjectView.OpenedProject.RootInstance.SymbolChildId);
                     GraphCanvas.FocusViewToSelection();
                     _initializedAfterLayoutReady = true;
                 }

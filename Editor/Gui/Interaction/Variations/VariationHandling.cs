@@ -36,10 +36,10 @@ internal static class VariationHandling
         // var primaryGraphWindow = GraphWindow.Focused;
         // if (primaryGraphWindow == null)
         //     return;
-        if (ProjectManager.Components == null)
+        if (ProjectView.Focused == null)
             return;
 
-        var nodeSelection = ProjectManager.Components.NodeSelection;
+        var nodeSelection = ProjectView.Focused.NodeSelection;
         var singleSelectedInstance = nodeSelection.GetSelectedInstanceWithoutComposition();
         
         if (singleSelectedInstance != null)
@@ -54,7 +54,7 @@ internal static class VariationHandling
         {
             ActivePoolForPresets = null;
 
-            var activeCompositionInstance = ProjectManager.Components.CompositionOp;
+            var activeCompositionInstance = ProjectView.Focused.CompositionOp;
             
             ActiveInstanceForSnapshots = activeCompositionInstance;
 

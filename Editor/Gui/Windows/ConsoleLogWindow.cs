@@ -174,7 +174,7 @@ internal sealed class ConsoleLogWindow : Window, ILogWriter
         ImGui.SameLine(90);
 
         float opacity = 1f;
-        var nodeSelection = ProjectManager.Components?.NodeSelection;
+        var nodeSelection = ProjectView.Focused?.NodeSelection;
         if (nodeSelection != null)
         {
             if (nodeSelection.HoveredIds.Contains(entry.SourceId))
@@ -200,7 +200,7 @@ internal sealed class ConsoleLogWindow : Window, ILogWriter
 
         if (hasInstancePath)
         {
-            var components = ProjectManager.Components;
+            var components = ProjectView.Focused;
             if (components != null)
             {
                 //var components = graphWindow.Components;

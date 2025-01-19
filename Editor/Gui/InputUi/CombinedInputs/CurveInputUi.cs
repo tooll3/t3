@@ -23,7 +23,7 @@ public class CurveInputUi : InputValueUi<Curve>
         
     protected override InputEditStateFlags DrawEditControl(string name, Symbol.Child.Input input, ref Curve curve, bool readOnly)
     {
-        var comp = ProjectManager.Components?.CompositionOp;
+        var comp = ProjectView.Focused?.CompositionOp;
         if (comp == null)
             return InputEditStateFlags.Nothing;
             

@@ -139,7 +139,7 @@ public abstract class InputValueUi<T> : IInputUi
             return InputEditStateFlags.Nothing;
 
         //var window = GraphWindow.Focused;
-        var components = ProjectManager.Components;
+        var components = ProjectView.Focused;
         if (components == null)
             return InputEditStateFlags.Nothing;
 
@@ -406,7 +406,7 @@ public abstract class InputValueUi<T> : IInputUi
 
         InputEditStateFlags DrawNormalParameter()
         {
-            if (ProjectManager.Components?.GraphCanvas is not GraphCanvas graphCanvas)
+            if (ProjectView.Focused?.GraphCanvas is not GraphCanvas graphCanvas)
                 return InputEditStateFlags.Nothing;
 
             // Connection area...

@@ -149,7 +149,7 @@ public sealed class StringInputUi : InputValueUi<string>
     {
         ImGui.SetNextItemWidth(-70);
 
-        var componentsNodeSelection = ProjectManager.Components?.NodeSelection;
+        var componentsNodeSelection = ProjectView.Focused?.NodeSelection;
         if (componentsNodeSelection == null)
             return InputEditStateFlags.Nothing;
         
@@ -281,7 +281,7 @@ public sealed class StringInputUi : InputValueUi<string>
 
     private static InputEditStateFlags DrawCustomDropdown(Symbol.Child.Input input)
     {
-        var instance = ProjectManager.Components?.NodeSelection.GetSelectedInstanceWithoutComposition();
+        var instance = ProjectView.Focused?.NodeSelection.GetSelectedInstanceWithoutComposition();
         if (instance != null && instance is ICustomDropdownHolder customValueHolder)
         {
             var changed = false;

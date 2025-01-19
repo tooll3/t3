@@ -26,7 +26,7 @@ public class CreateFromTemplateDialog : ModalDialog
             
         if (BeginDialog("Create"))
         {
-            var graphCanvas = ProjectManager.FocusedCanvas;
+            var graphCanvas = ProjectView.Focused?.GraphCanvas;
 
             if (graphCanvas == null)
             {

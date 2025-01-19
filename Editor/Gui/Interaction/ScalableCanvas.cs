@@ -327,6 +327,11 @@ internal abstract class ScalableCanvas : IScalableCanvas
         }
     }
 
+    public void SetScopeWithTransition(CanvasScope scope, ICanvas.Transition transition)
+    {
+        SetScopeWithTransition( scope.Scale,  scope.Scroll, transition);
+    }
+    
     public void SetScopeWithTransition(Vector2 scale, Vector2 scroll, ICanvas.Transition transition)
     {
         if (float.IsInfinity(scale.X) || float.IsNaN(scale.X)
@@ -421,7 +426,7 @@ internal abstract class ScalableCanvas : IScalableCanvas
         if (_draggedCanvas == this && !ImGui.IsMouseDragging(ImGuiMouseButton.Right))
             _draggedCanvas = null;
             
-        var currentGraphWindow = ProjectManager.FocusedCanvas;
+        var currentGraphWindow = ProjectView.Focused?.GraphCanvas;
         if (currentGraphWindow == null)
             return;
         

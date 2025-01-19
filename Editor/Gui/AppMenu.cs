@@ -37,7 +37,7 @@ internal static class AppMenu
             {
                 UserSettings.Config.ShowMainMenu = true;
 
-                var currentProject = ProjectManager.Components?.OpenedProject.Package;
+                var currentProject = ProjectView.Focused?.OpenedProject.Package;
                 var showNewTemplateOption = !T3Ui.IsCurrentlySaving && currentProject != null;
 
                 if (ImGui.MenuItem("New...", KeyboardBinding.ListKeyboardShortcuts(UserActions.New, false), false, showNewTemplateOption))

@@ -56,7 +56,7 @@ internal sealed class GraphNode
         var visibleInputUis = FindVisibleInputUis(symbolUi, childUi, ref nodeHasHiddenMatchingInputs);
         var tempConnections = ConnectionMaker.GetTempConnectionsFor(_canvas);
         bool hasConnections = tempConnections.Count > 0;
-        bool inActiveWindow = _canvas == ProjectManager.FocusedCanvas;
+        bool inActiveWindow = _canvas == ProjectView.Focused?.GraphCanvas;
 
         var framesSinceLastUpdate = 100;
         foreach (var output in instance.Outputs)

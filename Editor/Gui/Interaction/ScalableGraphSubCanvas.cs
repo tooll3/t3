@@ -17,5 +17,5 @@ internal sealed class ScalableGraphSubCanvas : ScalableCanvas
 internal sealed class CurrentGraphSubCanvas : ScalableCanvas
 {
     public CurrentGraphSubCanvas(Vector2? initialScale = null) : base(initialScale) { }
-    protected override IScalableCanvas? Parent => ProjectManager.FocusedCanvas;
+    protected override IScalableCanvas? Parent => ProjectView.Focused?.GraphCanvas;
 }

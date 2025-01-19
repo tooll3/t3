@@ -22,7 +22,7 @@ internal static class ColorEditPopup
 {
     public static InputEditStateFlags DrawPopup(ref Vector4 color, Vector4 previousColor)
     {
-        var composition = ProjectManager.Components?.CompositionOp;
+        var composition = ProjectView.Focused?.CompositionOp;
         if (composition == null)
             return InputEditStateFlags.Nothing;
         
@@ -613,9 +613,9 @@ internal static class ColorEditPopup
                     _isHoveringColor = true;
                     _hoveredColor = c;
 
-                    if (ProjectManager.Components != null)
+                    if (ProjectView.Focused != null)
                     {
-                        var nodeSelection = ProjectManager.Components.NodeSelection;
+                        var nodeSelection = ProjectView.Focused.NodeSelection;
                         foreach (var use in uses)
                         {
                             if (use.Instance == null)
@@ -694,7 +694,7 @@ internal static class ColorEditPopup
     {
         var selectedIds = new HashSet<Guid>();
 
-        var nodeSelection = ProjectManager.Components?.NodeSelection;
+        var nodeSelection = ProjectView.Focused?.NodeSelection;
         if (nodeSelection == null)
             return;
         

@@ -56,7 +56,7 @@ internal static class CrashReporting
         var timeOfLastBackup = AutoBackup.GetTimeOfLastBackup();
         var timeSpan = DrawUtils.GetReadableRelativeTime(timeOfLastBackup);
 
-        var components = ProjectManager.Components;
+        var components = ProjectView.Focused;
         
         sentryEvent.SetTag("Nickname", UserSettings.Config.UserName);
         sentryEvent.Contexts["tooll3"]= new
@@ -72,7 +72,7 @@ internal static class CrashReporting
         string? json = null;
         try
         {
-            var primaryComposition = ProjectManager.Components?.CompositionOp;
+            var primaryComposition = ProjectView.Focused?.CompositionOp;
             if (primaryComposition != null)
             {
                 var compositionUi = primaryComposition.Symbol.GetSymbolUi();

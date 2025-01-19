@@ -440,7 +440,7 @@ internal sealed class SymbolLibrary : Window
         var wasClick = ImGui.GetMouseDragDelta().Length() < 4;
         if (wasClick)
         {
-            var components = ProjectManager.Components;
+            var components = ProjectView.Focused;
             if (components == null)
             {
                 Log.Error($"No focused graph window found");
@@ -454,7 +454,7 @@ internal sealed class SymbolLibrary : Window
 
     private static bool IsSymbolCurrentCompositionOrAParent(Symbol symbol)
     {
-        var components = ProjectManager.Components;
+        var components = ProjectView.Focused;
         if (components?.CompositionOp == null)
             return false;
 

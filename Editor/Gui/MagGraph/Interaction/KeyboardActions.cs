@@ -48,16 +48,16 @@ internal static class KeyboardActions
             if (UserSettings.Config.FocusMode)
             {
                 var selectedImage = context.Selector.GetFirstSelectedInstance();
-                if (selectedImage != null && ProjectManager.Components != null)
+                if (selectedImage != null && ProjectView.Focused != null)
                 {
-                    ProjectManager.Components.SetBackgroundOutput(selectedImage);
+                    ProjectView.Focused.SetBackgroundOutput(selectedImage);
                 }
             }
             else
             {
                 // FIXME: This is a work around that needs a legacy graph window to be active
-                if(ProjectManager.Components != null) 
-                    NodeActions.PinSelectedToOutputWindow(ProjectManager.Components, context.Selector, compositionOp);
+                if(ProjectView.Focused != null) 
+                    NodeActions.PinSelectedToOutputWindow(ProjectView.Focused, context.Selector, compositionOp);
             }
         }
         
@@ -76,9 +76,9 @@ internal static class KeyboardActions
         if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
         {
             var selectedImage = context.Selector.GetFirstSelectedInstance();
-            if (selectedImage != null && ProjectManager.Components != null)
+            if (selectedImage != null && ProjectView.Focused != null)
             {
-                ProjectManager.Components.SetBackgroundOutput(selectedImage);
+                ProjectView.Focused.SetBackgroundOutput(selectedImage);
                 //GraphWindow.Focused..SetBackgroundInstanceForCurrentGraph(selectedImage);
             }
         }

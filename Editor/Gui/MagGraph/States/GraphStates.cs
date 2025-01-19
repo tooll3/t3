@@ -76,46 +76,42 @@ internal static class GraphStates
                           if (!clickedDown)
                               return;
 
-                          if (ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left))
+                          // Open children or parent component
+                          if (ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left) && ProjectView.Focused != null)
                           {
-                              if (ProjectManager.Components != null)
+                              var clickedBackground = context.ActiveItem == null;
+                              if (clickedBackground)
                               {
-                                  var clickedBackground = context.ActiveItem == null;
-                                  if (clickedBackground)
+                                  ProjectView.Focused.TrySetCompositionOpToParent();
+                              }
+                              else
+                              {
+                                  var isWindowActive = ImGui.IsWindowFocused() || ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup);
+                                  if (isWindowActive && context.ActiveItem.Variant == MagGraphItem.Variants.Operator)
                                   {
-                                      ProjectManager.Components.TrySetCompositionOpToParent();
-                                  }
-                                  else
-                                  {
-                                      if (ImGui.IsWindowFocused() || ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup))
-                                      {
-                                          // Instance might not be available for input and output nodes
-                                          if (context.ActiveItem.Variant == MagGraphItem.Variants.Operator && context.ActiveItem.Instance != null)
-                                          {
-                                              var blocked = false;
-                                              // FIXME: implement
-                                              // if (UserSettings.Config.WarnBeforeLibEdit && context.ActiveItem.Instance.Symbol.Namespace.StartsWith("Lib."))
-                                              // {
-                                              //     if (UserSettings.Config.WarnBeforeLibEdit)
-                                              //     {
-                                              //         var count = Structure.CollectDependingSymbols(instance.Symbol).Count();
-                                              //         LibWarningDialog.DependencyCount = count;
-                                              //         LibWarningDialog.HandledInstance = instance;
-                                              //         _canvas.LibWarningDialog.ShowNextFrame();
-                                              //         blocked = true;
-                                              //     }
-                                              // }
-
-                                              if (!blocked)
-                                              {
-                                                  // Until we align the context switching between graphs, this hack applies the current
-                                                  // MagGraph scope to the legacy graph, so it's correctly saved for the Symbol in the user settings...
-                                                  ProjectManager.FocusedCanvas?.SetTargetScope(context.Canvas.GetTargetScope());
-                                                  ProjectManager.Components.TrySetCompositionOpToChild(context.ActiveItem.Instance.SymbolChildId);
-                                                  ImGui.CloseCurrentPopup(); // ?? 
-                                              }
-                                          }
-                                      }
+                                      Debug.Assert(context.ActiveItem.Instance != null);
+                                      // TODO: implement lib edit warning popup
+                                      // var blocked = false;
+                                      // if (UserSettings.Config.WarnBeforeLibEdit && context.ActiveItem.Instance.Symbol.Namespace.StartsWith("Lib."))
+                                      // {
+                                      //     if (UserSettings.Config.WarnBeforeLibEdit)
+                                      //     {
+                                      //         var count = Structure.CollectDependingSymbols(instance.Symbol).Count();
+                                      //         LibWarningDialog.DependencyCount = count;
+                                      //         LibWarningDialog.HandledInstance = instance;
+                                      //         _canvas.LibWarningDialog.ShowNextFrame();
+                                      //         blocked = true;
+                                      //     }
+                                      // }
+                                      // if (!blocked)
+                                      // {
+                                      // Until we align the context switching between graphs, this hack applies the current
+                                      // MagGraph scope to the legacy graph, so it's correctly saved for the Symbol in the user settings...
+                                      //ProjectView.Focused?.GraphCanvas?.SetTargetScope(context.Canvas.GetTargetScope());
+                                      
+                                      ProjectView.Focused.TrySetCompositionOpToChild(context.ActiveItem.Instance.SymbolChildId);
+                                      //ImGui.CloseCurrentPopup(); // ?? 
+                                      //}
                                   }
                               }
                           }

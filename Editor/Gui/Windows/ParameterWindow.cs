@@ -58,7 +58,7 @@ internal class ParameterWindow : Window
             ImGui.SameLine();
         }
 
-        var components = ProjectManager.Components;
+        var components = ProjectView.Focused;
         if (components == null)
             return;
 

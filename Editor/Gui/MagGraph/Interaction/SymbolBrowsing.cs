@@ -16,7 +16,7 @@ internal static class SymbolBrowsing
 {
     internal static PlaceHolderUi.UiResults Draw(GraphUiContext context)
     {
-        if (ProjectManager.Components == null)
+        if (ProjectView.Focused == null)
             return PlaceHolderUi.UiResults.None;
         
         var uiResult = PlaceHolderUi.UiResults.None;
@@ -70,7 +70,7 @@ internal static class SymbolBrowsing
             var orderedEnumerable = matchingSymbolUis
                                    .OrderByDescending(sui => SymbolFilter.ComputeRelevancy(sui,
                                                                                            string.Empty,
-                                                                                           ProjectManager.Components.OpenedProject.Package,
+                                                                                           ProjectView.Focused.OpenedProject.Package,
                                                                                            context.CompositionOp))
                                    .ToList();
             foreach (var symbolUi in orderedEnumerable)
@@ -138,7 +138,7 @@ internal static class SymbolBrowsing
                     var orderedEnumerable = matchingSymbolUis
                                            .OrderByDescending(sui => SymbolFilter.ComputeRelevancy(sui,
                                                                                                    string.Empty,
-                                                                                                   ProjectManager.Components!.OpenedProject.Package,
+                                                                                                   ProjectView.Focused!.OpenedProject.Package,
                                                                                                    context.CompositionOp))
                                            .ToList();
 

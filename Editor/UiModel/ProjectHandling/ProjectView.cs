@@ -1,4 +1,5 @@
 #nullable enable
+using System.Diagnostics;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Dialogs;
@@ -59,7 +60,7 @@ internal sealed class ProjectView
         composition.Dispose();
     }
 
-    public bool TrySetCompositionOp(IReadOnlyList<Guid> newIdPath, ICanvas.Transition transition = ICanvas.Transition.Undefined, Guid? nextSelectedUi = null)
+    public bool TrySetCompositionOp(IReadOnlyList<Guid> newIdPath, ICanvas.Transition transition = ICanvas.Transition.Undefined, Guid? alsoSelectChildId = null)
     {
         var structure = OpenedProject.Structure;
         var newCompositionInstance = structure.GetInstanceFromIdPath(newIdPath);
@@ -71,51 +72,49 @@ internal sealed class ProjectView
             return false;
         }
 
-        // composition is only null once in the very first call to TrySetCompositionOp
-        // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-        if (Composition != null)
+        // Save previous view for user
+        if (_compositionPath.Count > 0)
+        {
+            var lastSymbolChildId = _compositionPath[^1];
+            UserSettings.Config.OperatorViewSettings[lastSymbolChildId] = GraphCanvas.GetTargetScope();
+        }
+        
+        // Set new Composition if required
+        var targetCompositionAlreadyActive = Composition != null 
+                                             && Composition.SymbolChildId == newCompositionInstance.SymbolChildId;
+        if (targetCompositionAlreadyActive)
         {
             if (newIdPath[0] != OpenedProject.RootInstance.Instance.SymbolChildId)
             {
                 throw new Exception("Root instance is not the first element in the path");
             }
-
-            if (Composition.SymbolChildId == newCompositionInstance.SymbolChildId)
-            {
-                if (nextSelectedUi != null)
-                {
-                    var instance = Composition.Instance.Children[nextSelectedUi.Value];
-                    NodeSelection.SetSelection(instance.GetChildUi()!, instance);
-                }
-
-                return true;
-            }
-        }
-
-        Composition = Composition.GetForInstance(newCompositionInstance);
-        _compositionPath.Clear();
-        _compositionPath.AddRange(newIdPath);
-        
-        TimeLineCanvas.ClearSelection();
-
-        if (nextSelectedUi != null)
-        {
-            var instance = Composition.Instance.Children[nextSelectedUi.Value];
-            var symbolChildUi = instance.GetChildUi();
-
-            if (symbolChildUi != null)
-                NodeSelection.SetSelection(symbolChildUi, instance);
-            else
-                NodeSelection.Clear();
         }
         else
         {
-            NodeSelection.Clear();
+            Composition = Composition.GetForInstance(newCompositionInstance);
+            OnCompositionChanged?.Invoke(this, Composition.SymbolChildId);
         }
+        // Although the composition might already be active, the _compositionPath might not have been initialized yet.
+        // TODO: This probably is an indication, that this should be refactored into CompositionOp and avoid holding this twice
+        _compositionPath.Clear();
+        _compositionPath.AddRange(newIdPath);
+        
+        Debug.Assert(Composition != null);
+        
+        // Additionally select a child
+        NodeSelection.Clear();
+        TimeLineCanvas.ClearSelection();
 
-        GraphCanvas?.SetViewToChild(transition, newCompositionInstance.SymbolChildId);
-
-        OnCompositionChanged?.Invoke(this, Composition.SymbolChildId);
+        if (alsoSelectChildId != null)
+        {
+            var instance = Composition.Instance.Children[alsoSelectChildId.Value];
+            NodeSelection.SetSelection(instance.GetChildUi()!, instance);
+        }
+        else
+        {
+            GraphCanvas.RestoreLastSavedUserViewForComposition(transition, newCompositionInstance.SymbolChildId);
+        }
+        
         return true;
     }
 

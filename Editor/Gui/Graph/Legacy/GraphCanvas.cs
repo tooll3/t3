@@ -54,6 +54,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
     public void Close()
     {
         ConnectionMaker.RemoveWindow(this);
+        _nodeNavigation.FocusInstanceRequested -= OpenAndFocusInstance;
     }
 
     public static ProjectView CreateWithComponents(OpenedProject openedProject)
@@ -86,10 +87,11 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         SelectableNodeMovement = new SelectableNodeMovement(this, getComposition, () => SelectableChildren, _nodeSelection);
     }
 
-    ~GraphCanvas()
-    {
-        _nodeNavigation.FocusInstanceRequested -= OpenAndFocusInstance;
-    }
+    // moved to Close()
+    // ~GraphCanvas()
+    // {
+    //     _nodeNavigation.FocusInstanceRequested -= OpenAndFocusInstance;
+    // }
 
     [Flags]
     public enum GraphDrawingFlags
@@ -174,9 +176,9 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
                 if (UserSettings.Config.FocusMode)
                 {
                     var selectedImage = _nodeSelection.GetFirstSelectedInstance();
-                    if (selectedImage != null && ProjectManager.Components != null)
+                    if (selectedImage != null && ProjectView.Focused != null)
                     {
-                        ProjectManager.Components.SetBackgroundOutput(selectedImage);
+                        ProjectView.Focused.SetBackgroundOutput(selectedImage);
                     }
                 }
                 else
@@ -188,9 +190,9 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
             if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
             {
                 var selectedImage = _nodeSelection.GetFirstSelectedInstance();
-                if (selectedImage != null && ProjectManager.Components != null)
+                if (selectedImage != null && ProjectView.Focused != null)
                 {
-                    ProjectManager.Components.SetBackgroundOutput(selectedImage);
+                    ProjectView.Focused.SetBackgroundOutput(selectedImage);
                     //GraphWindow.Focused.SetBackgroundInstanceForCurrentGraph(selectedImage);
                 }
             }
@@ -532,7 +534,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
     }
 
     // TODO: either the method title or the code is wrong
-    public void SetViewToChild(ICanvas.Transition transition, Guid compositionSymbolChildId)
+    public void RestoreLastSavedUserViewForComposition(ICanvas.Transition transition, Guid compositionSymbolChildId)
     {
         var newCanvasScope = GetTargetScope();
         if (UserSettings.Config.OperatorViewSettings.TryGetValue(compositionSymbolChildId, out var savedCanvasScope))

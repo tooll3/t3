@@ -80,7 +80,7 @@ public static class PlaybackUtils
 
     private static PlaybackSettings FindPlaybackSettings(out IResourceConsumer? owner)
     {
-        var composition = ProjectManager.Components?.CompositionOp;
+        var composition = ProjectView.Focused?.CompositionOp;
 
         if (composition != null && FindPlaybackSettingsForInstance(composition, out var instance, out var settings))
         {

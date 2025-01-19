@@ -181,8 +181,8 @@ internal static class GraphContextMenu
             // TODO: Implement
             if (ImGui.MenuItem("Pin to output", oneOpSelected))
             {
-                if (ProjectManager.Components != null) 
-                    NodeActions.PinSelectedToOutputWindow(ProjectManager.Components, nodeSelection, context.CompositionOp);
+                if (ProjectView.Focused != null) 
+                    NodeActions.PinSelectedToOutputWindow(ProjectView.Focused, nodeSelection, context.CompositionOp);
             }
 
             ImGui.EndMenu();

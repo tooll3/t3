@@ -45,7 +45,7 @@ internal static class GraphBookmarkNavigation
 
     public static void DrawBookmarksMenu()
     {
-        var components = ProjectManager.Components;
+        var components = ProjectView.Focused;
         if (components == null)
         {
             Log.Warning($"Cannot draw bookmark menu. No focused graph window.");

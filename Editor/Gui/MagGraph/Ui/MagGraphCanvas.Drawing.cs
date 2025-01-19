@@ -13,7 +13,7 @@ namespace T3.Editor.Gui.MagGraph.Ui;
 
 internal sealed partial class MagGraphCanvas
 {
-    public void Draw()
+    public void DrawGraph(ImDrawListPtr drawList, float graphOpacity)
     {
         IsFocused = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows);
         IsHovered = ImGui.IsWindowHovered();
@@ -58,8 +58,14 @@ internal sealed partial class MagGraphCanvas
         ImGui.SameLine(0, 10);
         ImGui.Text("" + GetTargetScope());
 
+        if (_viewChangeRequested)
+        {
+            SetScopeWithTransition(_requestedTargetScope, ICanvas.Transition.Undefined);
+            _viewChangeRequested = false;
+        }
+        
         UpdateCanvas(out _);
-        var drawList = ImGui.GetWindowDrawList();
+        //var drawList = ImGui.GetWindowDrawList();
 
         if (_context.StateMachine.CurrentState == GraphStates.Default)
         {
@@ -324,4 +330,5 @@ internal sealed partial class MagGraphCanvas
         };
 
     internal static float Blink => MathF.Sin((float)ImGui.GetTime() * 10) * 0.5f + 0.5f;
+
 }

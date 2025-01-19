@@ -37,7 +37,7 @@ internal class VariationsWindow : Window
             _variationsToBeDeletedNextFrame.Clear();
         }
 
-        var components = ProjectManager.Components;
+        var components = ProjectView.Focused;
         if (components == null)
             return;
 

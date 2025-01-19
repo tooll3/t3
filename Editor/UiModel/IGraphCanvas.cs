@@ -10,7 +10,7 @@ internal interface IGraphCanvas : IScalableCanvas
 {
     bool Destroyed { get; set;  }
 
-    void SetViewToChild(ICanvas.Transition transition, Guid compositionOpSymbolChildId);
+    void RestoreLastSavedUserViewForComposition(ICanvas.Transition transition, Guid compositionOpSymbolChildId);
     void FocusViewToSelection();
     void OpenAndFocusInstance(IReadOnlyList<Guid> path);
     public new CanvasScope GetTargetScope();

@@ -18,7 +18,7 @@ internal static class VariationThumbnail
 {
     public static bool Draw(VariationBaseCanvas canvas, Variation variation, Instance instanceForBlending, ImDrawListPtr drawList, ShaderResourceView canvasSrv, ImRect uvRect)
     {
-        var components = ProjectManager.Components;
+        var components = ProjectView.Focused;
         if (components == null)
             return false;
         

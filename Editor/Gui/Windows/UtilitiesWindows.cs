@@ -76,7 +76,7 @@ internal sealed class UtilitiesWindow : Window
                         ImGui.TreePop();
                     }
 
-                    var graphInfo = ProjectManager.Components;
+                    var graphInfo = ProjectView.Focused;
                     
                     if (graphInfo != null && ImGui.TreeNode("Navigation history"))
                     {

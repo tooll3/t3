@@ -36,7 +36,7 @@ internal class SnapshotCanvas : VariationBaseCanvas
         var oneSelected = CanvasElementSelection.SelectedElements.Count == 1;
         var oneOrMoreSelected = CanvasElementSelection.SelectedElements.Count > 0;
 
-        var components = ProjectManager.Components;
+        var components = ProjectView.Focused;
         if (components == null)
             return;
 

@@ -157,10 +157,10 @@ internal sealed class SymbolFilter
         EditorSymbolPackage? currentProject = null;
         Instance? composition = null;
 
-        if (ProjectManager.Components != null)
+        if (ProjectView.Focused != null)
         {
-            currentProject = ProjectManager.Components.OpenedProject.Package;
-            composition = ProjectManager.Components.CompositionOp;
+            currentProject = ProjectView.Focused.OpenedProject.Package;
+            composition = ProjectView.Focused.CompositionOp;
         }
 
         MatchingSymbolUis = MatchingSymbolUis.OrderBy(s => ComputeRelevancy(s, _symbolFilterString, currentProject, composition))

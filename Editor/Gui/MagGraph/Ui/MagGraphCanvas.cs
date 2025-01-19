@@ -1,17 +1,11 @@
 ﻿#nullable enable
 using ImGuiNET;
-using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
-using T3.Core.Utils;
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction;
-using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
-using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-using T3.Editor.UiModel.InputsAndTypes;
 using T3.Editor.UiModel.Modification;
 using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
@@ -25,83 +19,92 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
 {
     public static ProjectView CreateWithComponents(OpenedProject openedProject)
     {
-        ProjectView.CreateIndependentComponents(openedProject, 
-                                                out var navigationHistory, 
-                                                out var nodeSelection, 
+        ProjectView.CreateIndependentComponents(openedProject,
+                                                out var navigationHistory,
+                                                out var nodeSelection,
                                                 out var graphImageBackground);
 
         var projectView = new ProjectView(openedProject, navigationHistory, nodeSelection, graphImageBackground)
                               {
-                    Composition = openedProject.RootInstance    
+                                  Composition = openedProject.RootInstance
                               };
-        //projectView.Instance = openedProject.RootInstance.Instance;
+
         if (projectView.CompositionOp == null)
         {
             Log.Error("Can't create graph without defined composition op");
             return projectView; // TODO: handle this properly
         }
+
         var canvas = new MagGraphCanvas(projectView);
-        
+        projectView.OnCompositionChanged += canvas.CompositionChangedHandler;
 
         projectView.GraphCanvas = canvas;
         return projectView;
     }
 
-    public ProjectView ProjectView;
-    
+    private void CompositionChangedHandler(ProjectView arg1, Guid arg2)
+    {
+        _context.Layout.FlagAsChanged();
+    }
+
+    private readonly ProjectView _projectView;
+
     #region implement IGraph canvas
     bool IGraphCanvas.Destroyed { get => _destroyed; set => _destroyed = value; }
 
-    void IGraphCanvas.SetViewToChild(ICanvas.Transition transition, Guid compositionOpSymbolChildId)
+    private bool _viewChangeRequested;
+    private CanvasScope _requestedTargetScope;
+
+    void IGraphCanvas.RestoreLastSavedUserViewForComposition(ICanvas.Transition transition, Guid compositionOpSymbolChildId)
     {
-        Log.Debug("Not implemented yet");
+        if (!UserSettings.Config.OperatorViewSettings.TryGetValue(compositionOpSymbolChildId, out var savedCanvasScope))
+            return;
+
+        _viewChangeRequested = true;
+        _requestedTargetScope = savedCanvasScope;
     }
-    
+
     void IGraphCanvas.FocusViewToSelection()
     {
-        Log.Debug("Not implemented yet");
+        Log.Debug("MagGraphCanvas.FocusViewToSelection() Not implemented yet");
     }
 
     void IGraphCanvas.OpenAndFocusInstance(IReadOnlyList<Guid> path)
     {
-        Log.Debug("Not implemented yet");
+        Log.Debug("MagGraphCanvas.OpenAndFocusInstance() Not implemented yet");
     }
 
     private Instance _previousInstance;
 
     void IGraphCanvas.BeginDraw(bool backgroundActive, bool bgHasInteractionFocus)
     {
-        if (ProjectView.CompositionOp != null && ProjectView.CompositionOp != _previousInstance)
+        //TODO: This should probably be handled by CompositionChangedHandler
+        if (_projectView.CompositionOp != null && _projectView.CompositionOp != _previousInstance)
         {
-            Log.Debug("Composition changed");
-            _previousInstance = ProjectView.CompositionOp;
-            _context = new GraphUiContext(ProjectView, this);
+            _previousInstance = _projectView.CompositionOp;
+            _context = new GraphUiContext(_projectView, this);
         }
     }
 
-    void IGraphCanvas.DrawGraph(ImDrawListPtr drawList, float graphOpacity)
-    {
-        Draw();
-    }
-
-    bool IGraphCanvas.HasActiveInteraction { get; }
+    public bool HasActiveInteraction => _context.StateMachine.CurrentState != GraphStates.Default;
 
     ProjectView IGraphCanvas.ProjectView { set => throw new NotImplementedException(); }
 
     void IGraphCanvas.Close()
     {
         _destroyed = true;
+        _projectView.OnCompositionChanged -= CompositionChangedHandler;
     }
     #endregion
-    
+
     public MagGraphCanvas(ProjectView projectView)
     {
-        ProjectView = projectView;
+        _projectView = projectView;
         EnableParentZoom = false;
         _context = new GraphUiContext(projectView, this);
         _nodeSelection = projectView.NodeSelection;
         _previousInstance = projectView.CompositionOp!;
-        
+
         InitializeCanvasScope(_context);
     }
 
@@ -121,7 +124,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
     public bool IsHovered { get; private set; }
 
     // private Guid _previousCompositionId;
-    
+
     /// <summary>
     /// This is an intermediate helper method that should be replaced with a generalized implementation shared by
     /// all graph windows. It's especially unfortunate because it relies on GraphWindow.Focus to exist as open window :(
@@ -134,21 +137,21 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
         // if (context.CompositionOp.SymbolChildId == _previousCompositionId)
         //     return;
         //
-        if (ProjectManager.FocusedCanvas == null)
+        if (ProjectView.Focused?.GraphCanvas == null)
             return;
-        
+
         // _previousCompositionId = context.CompositionOp.SymbolChildId;
-        
+
         // Meh: This relies on TargetScope already being set to new composition.
-        var newCanvasScope = ProjectManager.FocusedCanvas.GetTargetScope();
+        var newCanvasScope = ProjectView.Focused.GraphCanvas.GetTargetScope();
         if (UserSettings.Config.OperatorViewSettings.TryGetValue(context.CompositionOp.SymbolChildId, out var savedCanvasScope))
         {
             newCanvasScope = savedCanvasScope;
         }
+
         context.Canvas.SetScopeWithTransition(newCanvasScope.Scale, newCanvasScope.Scroll, ICanvas.Transition.Undefined);
     }
-    
-    
+
     private void HandleSymbolDropping(GraphUiContext context)
     {
         if (!DragHandling.IsDragging)
@@ -159,7 +162,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
 
         if (!DragHandling.TryGetDataDroppedLastItem(DragHandling.SymbolDraggingId, out var data))
             return;
-        
+
         if (!Guid.TryParse(data, out var guid))
         {
             Log.Warning("Invalid data format for drop? " + data);
@@ -175,7 +178,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
                 Log.Warning("Failed to get symbol id for " + context.CompositionOp.SymbolChildId);
                 return;
             }
-            
+
             var childUi = GraphOperations.AddSymbolChild(symbol, compositionOpSymbolUi, posOnCanvas);
             var instance = context.CompositionOp.Children[childUi.Id];
             context.Selector.SetSelection(childUi, instance);
@@ -191,7 +194,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
     {
         var shouldBeActive =
                 ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup)
-                && (_context.StateMachine.CurrentState == GraphStates.Default 
+                && (_context.StateMachine.CurrentState == GraphStates.Default
                     || _context.StateMachine.CurrentState == GraphStates.HoldBackground)
                 && _context.StateMachine.StateTime > 0.01f // Prevent glitches when coming from other states.
             ;
@@ -292,7 +295,6 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
         return HoverTime;
     }
 
-
     private readonly SelectionFence _selectionFence = new();
     private Vector2 GridSizeOnScreen => TransformDirection(MagGraphItem.GridSize);
     private float CanvasScale => Scale.X;
@@ -313,6 +315,4 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
     {
         FitAreaOnCanvas(NodeSelection.GetSelectionBounds(context.Selector, context.CompositionOp));
     }
-
-
 }

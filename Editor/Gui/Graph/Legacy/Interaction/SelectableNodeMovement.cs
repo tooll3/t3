@@ -33,7 +33,7 @@ internal sealed class SelectableNodeMovement(IGraphCanvas graphCanvas, Func<Inst
     /// </summary>
     public static void CompleteFrame()
     {
-        if (ProjectManager.FocusedCanvas is not GraphCanvas canvas)
+        if (ProjectView.Focused?.GraphCanvas is not GraphCanvas canvas)
             return;
         
         canvas.SelectableNodeMovement.DoCompleteFrame();

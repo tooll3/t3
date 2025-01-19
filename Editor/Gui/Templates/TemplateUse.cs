@@ -13,7 +13,7 @@ public static class TemplateUse
 {
     internal static void TryToApplyTemplate(TemplateDefinition template, string symbolName, string nameSpace, string description, EditableSymbolProject project)
     {
-        var components = ProjectManager.Components;
+        var components = ProjectView.Focused;
         if (components == null || components.CompositionOp == null)
         {
             BlockingWindow.Instance.ShowMessageBox("Can't create from template without open graph window");

@@ -125,7 +125,7 @@ internal class ViewSelectionPinning
                 }
             }
 
-            if (ProjectManager.Components != null)
+            if (ProjectView.Focused != null)
             {
                 if (ImGui.MenuItem("Show in Graph"))
                 {
@@ -179,7 +179,7 @@ internal class ViewSelectionPinning
 
     public bool TryGetPinnedOrSelectedInstance([NotNullWhen(true)] out Instance? instance, [NotNullWhen(true)] out ProjectView? components)
     {
-        var focusedComponents = ProjectManager.Components;
+        var focusedComponents = ProjectView.Focused;
 
         if (!_isPinned)
         {

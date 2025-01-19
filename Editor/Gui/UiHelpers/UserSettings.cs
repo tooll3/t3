@@ -24,6 +24,14 @@ public sealed class UserSettings : Settings<UserSettings.ConfigData>
     
     public sealed class ConfigData
     {
+        /// <summary>
+        /// Last saved user view for symbolChildIds.
+        /// </summary>
+        /// <remarks>
+        /// Note that we are using symbolChildId instead of symbol, because we can assume that
+        /// symbolChildIds provide more context, e.g. there are many LayerId instances with different
+        /// Ids and the user scope might be different.
+        /// </remarks>
         public readonly Dictionary<Guid, CanvasScope> OperatorViewSettings = new();
         public readonly Dictionary<string, Guid> LastOpsForWindows = new();
 

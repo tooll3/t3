@@ -47,7 +47,7 @@ internal class ExplorationWindow : Window
         {
             ImGui.PushStyleVar(ImGuiStyleVar.ItemInnerSpacing, new Vector2(4,4));
 
-            var currentGraphCanvas = ProjectManager.Components;
+            var currentGraphCanvas = ProjectView.Focused;
 
             if (currentGraphCanvas != null)
             {
@@ -61,7 +61,7 @@ internal class ExplorationWindow : Window
         ImGui.SameLine();
         ImGui.BeginChild("canvas", new Vector2(-1, -1), false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
         {
-            _variationCanvas.Draw(ProjectManager.Components?.Structure);
+            _variationCanvas.Draw(ProjectView.Focused?.Structure);
         }
         ImGui.EndChild();
     }
