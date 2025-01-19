@@ -50,7 +50,7 @@ internal sealed class OpenedProject
     private OpenedProject(EditorSymbolPackage project, Instance rootInstance)
     {
         Package = project;
-        RootInstance = Composition.GetFor(rootInstance);
+        RootInstance = Composition.GetForInstance(rootInstance);
         Structure = new Structure(() => RootInstance.Instance);
     }
 
@@ -74,10 +74,10 @@ internal sealed class OpenedProject
             if (components.Composition?.Instance == previousRoot)
                 continue;
 
-            components.Composition = Composition.GetFor(newRootInstance);
+            components.Composition = Composition.GetForInstance(newRootInstance);
         }
 
-        RootInstance = Composition.GetFor(newRootInstance);
+        RootInstance = Composition.GetForInstance(newRootInstance);
     }
 
 }

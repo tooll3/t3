@@ -49,7 +49,9 @@ public sealed class UserSettings : Settings<UserSettings.ConfigData>
         public bool EnableIdleMotion = true;
         public bool SuspendRenderingWhenHidden = true;
         public bool MirrorUiOnSecondView = false;
-            
+
+        public GraphStyles GraphStyle = GraphStyles.Magnetic;
+        
         // Interaction
         public bool WarnBeforeLibEdit = true;
         public bool SmartGroupDragging = false;
@@ -143,6 +145,13 @@ public sealed class UserSettings : Settings<UserSettings.ConfigData>
         LastValue,
     }
         
+    public enum GraphStyles
+    {
+        Legacy,
+        Magnetic,
+    }
+
+    
     internal static bool IsUserNameDefined()
     {
         return !string.IsNullOrEmpty(Config.UserName) && Config.UserName != UndefinedUserName;

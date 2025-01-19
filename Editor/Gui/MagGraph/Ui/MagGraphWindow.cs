@@ -19,22 +19,22 @@ internal sealed class MagGraphWindow : Window
     
     protected override void DrawContent()
     {
-        var graphComponents = ProjectManager.Components;
-
-        var legacyFocusedCompositionOp = graphComponents?.CompositionOp;
-        if (legacyFocusedCompositionOp == null)
-            return;
-
-        if (_windowCompositionOp != legacyFocusedCompositionOp)
-        {
-            _windowCompositionOp = legacyFocusedCompositionOp;
-            var nodeSelection = graphComponents.NodeSelection;
-            _graphImageBackground = new GraphImageBackground(nodeSelection, graphComponents.Structure);
-            _magGraphCanvas = new MagGraphCanvas(this,  _windowCompositionOp, nodeSelection, _graphImageBackground);
-        }
-        
-        _graphImageBackground?.Draw(1);
-        _magGraphCanvas?.Draw();
+        // var graphComponents = ProjectManager.Components;
+        //
+        // var legacyFocusedCompositionOp = graphComponents?.CompositionOp;
+        // if (legacyFocusedCompositionOp == null)
+        //     return;
+        //
+        // if (_windowCompositionOp != legacyFocusedCompositionOp)
+        // {
+        //     _windowCompositionOp = legacyFocusedCompositionOp;
+        //     var nodeSelection = graphComponents.NodeSelection;
+        //     _graphImageBackground = new GraphImageBackground(nodeSelection, graphComponents.Structure);
+        //     _magGraphCanvas = new MagGraphCanvas(_windowCompositionOp, nodeSelection, _graphImageBackground);
+        // }
+        //
+        // _graphImageBackground?.Draw(1);
+        // _magGraphCanvas?.Draw();
     }
 
     internal override List<Window> GetInstances()
@@ -42,7 +42,7 @@ internal sealed class MagGraphWindow : Window
         return [];
     }
 
-    private Instance _windowCompositionOp;
-    private MagGraphCanvas _magGraphCanvas;
-    private GraphImageBackground _graphImageBackground;
+    // private Instance _windowCompositionOp;
+    // private MagGraphCanvas _magGraphCanvas;
+    // private GraphImageBackground _graphImageBackground;
 }

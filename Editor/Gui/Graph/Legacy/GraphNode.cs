@@ -33,9 +33,9 @@ namespace T3.Editor.Gui.Graph.Legacy;
 /// </summary>
 internal sealed class GraphNode
 {
-    public GraphNode(ProjectView components, GraphCanvas canvas, Legacy.Graph.ConnectionSorter sorter)
+    public GraphNode(ProjectView projectView, GraphCanvas canvas, Legacy.Graph.ConnectionSorter sorter)
     {
-        _components = components;
+        _projectView = projectView;
         _canvas = canvas;
         _sorter = sorter;
 
@@ -106,7 +106,7 @@ internal sealed class GraphNode
                     ImGui.SetCursorScreenPos(new Vector2(_usableScreenRect.Max.X,  _usableScreenRect.Min.Y) -  new Vector2(3, 12) * T3Ui.UiScaleFactor * T3Ui.UiScaleFactor);
                     if (ImGui.InvisibleButton("#comment", new Vector2(15, 15)))
                     {
-                        _components.NodeSelection.SetSelection(childUi, instance);
+                        _projectView.NodeSelection.SetSelection(childUi, instance);
                         _canvas.EditCommentDialog.ShowNextFrame();
                     }
                     Icons.DrawIconOnLastItem(Icon.Comment, UiColors.ForegroundFull);
@@ -137,7 +137,7 @@ internal sealed class GraphNode
                 var backgroundColor = typeColor;
 
                 // Background
-                var isHighlighted = _components.NodeSelection.HoveredIds.Contains(instance.SymbolChildId);
+                var isHighlighted = _projectView.NodeSelection.HoveredIds.Contains(instance.SymbolChildId);
                 if (framesSinceLastUpdate > 2)
                 {
                     var fadeFactor = MathUtils.RemapAndClamp(framesSinceLastUpdate, 0f, 60f, 0f, 1.0f);
@@ -230,7 +230,7 @@ internal sealed class GraphNode
                 // Tooltip
                 if (!isNodeHovered)
                 {
-                    _components.NodeSelection.HoveredIds.Remove(childUi.SymbolChild.Id);
+                    _projectView.NodeSelection.HoveredIds.Remove(childUi.SymbolChild.Id);
                 }
                 else if (UserSettings.Config.EditorHoverPreview
                          && (customUiResult & SymbolUi.Child.CustomUiResult.PreventTooltip) != SymbolUi.Child.CustomUiResult.PreventTooltip)
@@ -239,7 +239,7 @@ internal sealed class GraphNode
                         _canvas.SelectableNodeMovement.HighlightSnappedNeighbours(childUi);
 
                     //ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
-                    _components.NodeSelection.HoveredIds.Add(childUi.SymbolChild.Id);
+                    _projectView.NodeSelection.HoveredIds.Add(childUi.SymbolChild.Id);
 
                     if (UserSettings.Config.HoverMode != UserSettings.GraphHoverModes.Disabled
                         && !ImGui.IsMouseDragging(ImGuiMouseButton.Left)
@@ -280,7 +280,7 @@ internal sealed class GraphNode
                 }
 
                 var hovered = inActiveWindow && (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) ||
-                                                 _components.NodeSelection.HoveredIds.Contains(instance.SymbolChildId));
+                                                 _projectView.NodeSelection.HoveredIds.Contains(instance.SymbolChildId));
 
                 // A horrible work around to prevent exception because CompositionOp changed during drawing.
                 // A better solution would defer setting the compositionOp to the beginning of next frame.
@@ -306,7 +306,7 @@ internal sealed class GraphNode
 
                         if (!blocked)
                         {
-                            _components.TrySetCompositionOpToChild(instance.SymbolChildId); ///////////////////////////
+                            _projectView.TrySetCompositionOpToChild(instance.SymbolChildId); ///////////////////////////
                             ImGui.CloseCurrentPopup();
                             justOpenedChild = true;
                         }
@@ -344,7 +344,7 @@ internal sealed class GraphNode
                 }
 
                 // Pinned indicator
-                if (_components.NodeSelection.PinnedIds.Contains(instance.SymbolChildId))
+                if (_projectView.NodeSelection.PinnedIds.Contains(instance.SymbolChildId))
                 {
                     DrawIndicator(drawList, UiColors.Selection, opacity, ref indicatorCount);
                 }
@@ -546,7 +546,7 @@ internal sealed class GraphNode
                             ImGui.PopStyleVar();
                         }
 
-                        var isChildSelected = _components.NodeSelection.IsNodeSelected(childUi);
+                        var isChildSelected = _projectView.NodeSelection.IsNodeSelected(childUi);
                 
                         line.TargetPosition = targetPos;
                         line.TargetNodeArea = connectionBorderArea;
@@ -601,7 +601,7 @@ internal sealed class GraphNode
                 ConnectionSnapEndHelper.RegisterAsPotentialTarget(_canvas, childUi, inputUi, 0, usableSlotArea);
                 //ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id,0)
                 var isAboutToBeReconnected = ConnectionSnapEndHelper.IsNextBestTarget(childUi, inputDefinition.Id, 0);
-                var isChildSelected = _components.NodeSelection.IsNodeSelected(childUi);
+                var isChildSelected = _projectView.NodeSelection.IsNodeSelected(childUi);
                 foreach (var line in connectedLines)
                 {
                     line.TargetPosition = new Vector2(usableSlotArea.Max.X - 4,
@@ -652,7 +652,7 @@ internal sealed class GraphNode
             // Update connection lines
             var dirtyFlagNumUpdatesWithinFrame = output.DirtyFlag.NumUpdatesWithinFrame;
 
-            var isChildSelected = _components.NodeSelection.IsNodeSelected(childUi);
+            var isChildSelected = _projectView.NodeSelection.IsNodeSelected(childUi);
             foreach (var line in _sorter.GetLinesFromNodeOutput(childUi, outputDef.Id))
             {
                 line.SourcePosition = new Vector2(usableArea.Max.X, usableArea.GetCenter().Y);
@@ -1001,12 +1001,12 @@ internal sealed class GraphNode
                             _dragInfo.DraggedOutputDefId = Guid.Empty;
                             if (ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickThreshold)
                             {
-                                ConnectionMaker.OpenSymbolBrowserAtOutput(_components, childUi, instance, output.Id);
+                                ConnectionMaker.OpenSymbolBrowserAtOutput(_projectView, childUi, instance, output.Id);
                             }
                         }
                         else if (ImGui.IsMouseReleased(ImGuiMouseButton.Right) && ImGui.GetIO().KeyCtrl)
                         {
-                            _canvas.EditNodeOutputDialog.OpenForOutput(_components.CompositionOp.Symbol, childUi, outputDef);
+                            _canvas.EditNodeOutputDialog.OpenForOutput(_projectView.CompositionOp.Symbol, childUi, outputDef);
                         }
                     }
                 }
@@ -1019,7 +1019,7 @@ internal sealed class GraphNode
             {
                 _dragInfo.DraggedOutputOpId = Guid.Empty;
                 _dragInfo.DraggedOutputDefId = Guid.Empty;
-                ConnectionMaker.StartFromOutputSlot(_canvas, _components.NodeSelection, childUi, outputDef);
+                ConnectionMaker.StartFromOutputSlot(_canvas, _projectView.NodeSelection, childUi, outputDef);
             }
         }
         else
@@ -1131,7 +1131,7 @@ internal sealed class GraphNode
                         {
                             Log.Debug("Cloning connection from source op...");
                             var sourceOpUi = parentSymbol.GetSymbolUi().ChildUis[sourceOp.Id]!;
-                            ConnectionMaker.StartFromOutputSlot(_canvas, _components.NodeSelection, sourceOpUi, output.OutputDefinition);
+                            ConnectionMaker.StartFromOutputSlot(_canvas, _projectView.NodeSelection, sourceOpUi, output.OutputDefinition);
                         }
                         else if (connection.IsConnectedToSymbolInput)
                         {
@@ -1435,7 +1435,7 @@ internal sealed class GraphNode
     private static Guid _hoveredNodeIdForConnectionTarget;
 
     private readonly GraphCanvas _canvas;
-    private readonly ProjectView _components;
+    private readonly ProjectView _projectView;
     private readonly Legacy.Graph.ConnectionSorter _sorter;
     private readonly DraggedIdInfo _dragInfo;
     private static readonly Dictionary<IGraphCanvas, DraggedIdInfo> DraggedIds = new();

@@ -4,8 +4,7 @@ using T3.Core.Operator;
 namespace T3.Editor.UiModel.ProjectHandling;
 
 /// <todo>
-/// An Instance currently edited by a GraphCanvas.
-/// Manages switching between instances and loading from packages(?) 
+/// documentation missing. Probably should be refactored into ProjectManager or Structure
 /// </todo>
 internal sealed class Composition : IDisposable
 {
@@ -16,6 +15,7 @@ internal sealed class Composition : IDisposable
     {
         get
         {
+            // TODO: This check looks strange. Is this valid?
             if (!_hasParent)
                 return _instance;
 
@@ -102,7 +102,7 @@ internal sealed class Composition : IDisposable
         //  Dispose();
     }
 
-    internal static Composition GetFor(Instance instance)
+    internal static Composition GetForInstance(Instance instance)
     {
         Composition? composition;
         lock (_compositions)
@@ -119,7 +119,7 @@ internal sealed class Composition : IDisposable
         return composition;
     }
 
-    // it must be the last instance checked out, read only, and modified to qualify for reload
+    // It must be the last instance checked out, read only, and modified to qualify for reload
     public bool NeedsReload => _checkoutCount == 1 && _isReadOnly && SymbolUi.HasBeenModified;
 
     public void Dispose()

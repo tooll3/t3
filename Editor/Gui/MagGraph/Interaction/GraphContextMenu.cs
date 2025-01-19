@@ -174,7 +174,8 @@ internal static class GraphContextMenu
                                enabled: isImage))
             {
                 var instance = context.CompositionOp.Children[selectedChildUis[0].Id];
-                context.GraphImageBackground.OutputInstance = instance;
+                //context.GraphImageBackground.OutputInstance = instance;
+                // TODO: pin to imagebackground?
             }
 
             // TODO: Implement

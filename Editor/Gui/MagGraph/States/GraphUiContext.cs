@@ -8,6 +8,7 @@ using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Graph;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 using MagItemMovement = T3.Editor.Gui.MagGraph.Interaction.MagItemMovement;
 
@@ -63,19 +64,20 @@ namespace T3.Editor.Gui.MagGraph.States;
 ///</remarks>
 internal sealed class GraphUiContext
 {
-    internal GraphUiContext(NodeSelection selector, MagGraphCanvas canvas, Instance compositionOp, GraphImageBackground graphImageBackground)
+    internal GraphUiContext(ProjectView projectView,  MagGraphCanvas canvas)
     {
-        Selector = selector;
+        ProjectView = projectView;
         Canvas = canvas;
-        CompositionOp = compositionOp;
-        ItemMovement = new MagItemMovement(this, canvas, Layout, selector);
+        ItemMovement = new MagItemMovement(this, canvas, Layout, projectView.NodeSelection);
         Placeholder = new PlaceholderCreation();
         EditCommentDialog = new EditCommentDialog();
         StateMachine = new StateMachine(this);// needs to be initialized last
-        GraphImageBackground = graphImageBackground;
     }
 
-    internal readonly Instance CompositionOp;
+    internal readonly ProjectView ProjectView;
+    internal Instance CompositionOp => ProjectView.CompositionOp!;
+    internal NodeSelection Selector => ProjectView.NodeSelection;
+    
     
     internal readonly MagGraphCanvas Canvas;
     internal readonly MagItemMovement ItemMovement;
@@ -83,7 +85,6 @@ internal sealed class GraphUiContext
     internal readonly ConnectionHovering ConnectionHovering = new();
     internal readonly MagGraphLayout Layout = new();
     
-    internal readonly NodeSelection Selector;
     internal readonly StateMachine StateMachine;
     internal  MacroCommand? MacroCommand { get; private set; }
     
@@ -99,7 +100,7 @@ internal sealed class GraphUiContext
     internal MagGraphItem? ItemForInputSelection;
     internal MagGraphItem? ActiveSourceItem;
     internal Guid ActiveSourceOutputId { get; set; }
-    internal GraphImageBackground GraphImageBackground { get;private set; }
+    // internal GraphImageBackground GraphImageBackground { get;private set; }
 
     /** Used to prevent disconnected inputLines from collapsing... */
     internal readonly HashSet<int> DisconnectedInputsHashes = []; 

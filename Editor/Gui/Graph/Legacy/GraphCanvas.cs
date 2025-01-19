@@ -40,14 +40,14 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
     private readonly NodeGraphLayouting _nodeGraphLayouting;
     private Legacy.Graph _graph;
 
-    private ProjectView _components;
+    private ProjectView _projectView;
 
     public ProjectView ProjectView
     {
         set
         {
-            _components = value;
-            _graph = new Legacy.Graph(_components, this, () => SymbolBrowser);
+            _projectView = value;
+            _graph = new Legacy.Graph(_projectView, this, () => SymbolBrowser);
         }
     }
 
@@ -131,17 +131,17 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
     public void DrawGraph(ImDrawListPtr drawList, float graphOpacity)
     {
-        if (_components?.CompositionOp == null)
+        if (_projectView?.CompositionOp == null)
             return;
         
         ConnectionSnapEndHelper.PrepareNewFrame();
 
-        DrawDropHandler(_components.CompositionOp, _components.CompositionOp.GetSymbolUi());
+        DrawDropHandler(_projectView.CompositionOp, _projectView.CompositionOp.GetSymbolUi());
         ImGui.SetCursorScreenPos(Vector2.One * 100);
 
         if (!_preventInteractions)
         {
-            var compositionOp = _components.CompositionOp;
+            var compositionOp = _projectView.CompositionOp;
             var compositionUi = compositionOp.GetSymbolUi();
             //compositionUi.FlagAsModified();
 
@@ -181,7 +181,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
                 }
                 else
                 {
-                    NodeActions.PinSelectedToOutputWindow(_components, _nodeSelection, compositionOp);
+                    NodeActions.PinSelectedToOutputWindow(_projectView, _nodeSelection, compositionOp);
                 }
             }
 
@@ -230,7 +230,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
             }
 
             if (navigationPath != null)
-                _components.TrySetCompositionOp(navigationPath);
+                _projectView.TrySetCompositionOp(navigationPath);
 
             if (KeyboardBinding.Triggered(UserActions.SelectToAbove))
             {
@@ -262,7 +262,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
                 var selectedImage = _nodeSelection.GetFirstSelectedInstance();
                 if (selectedImage != null)
                 {
-                    _components.GraphImageBackground.OutputInstance = selectedImage;
+                    _projectView.GraphImageBackground.OutputInstance = selectedImage;
                 }
             }
         }
@@ -318,15 +318,15 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
         if (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem))
         {
-            ConnectionSplitHelper.PrepareNewFrame(_components);
+            ConnectionSplitHelper.PrepareNewFrame(_projectView);
         }
 
         SymbolBrowser.Draw();
 
         graphOpacity *= _preventInteractions ? 0.3f : 1;
-        _graph.DrawGraph(drawList, _drawingFlags.HasFlag(GraphDrawingFlags.PreventInteractions), _components.CompositionOp, graphOpacity);
+        _graph.DrawGraph(drawList, _drawingFlags.HasFlag(GraphDrawingFlags.PreventInteractions), _projectView.CompositionOp, graphOpacity);
 
-        RenameInstanceOverlay.Draw(_components);
+        RenameInstanceOverlay.Draw(_projectView);
         var tempConnections = ConnectionMaker.GetTempConnectionsFor(this);
 
         var doubleClicked = ImGui.IsMouseDoubleClicked(0);
@@ -341,12 +341,12 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
         if (shouldHandleFenceSelection)
         {
-            HandleFenceSelection(_components.CompositionOp, _selectionFence);
+            HandleFenceSelection(_projectView.CompositionOp, _selectionFence);
         }
 
         if (isOnBackground && doubleClicked)
         {
-            _components.TrySetCompositionOpToParent();
+            _projectView.TrySetCompositionOpToParent();
         }
 
         if (tempConnections.Count > 0 && ImGui.IsMouseReleased(0))
@@ -372,7 +372,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
         drawList.PopClipRect();
 
-        var compositionUpdated = _components.CompositionOp;
+        var compositionUpdated = _projectView.CompositionOp;
 
         if (FrameStats.Current.OpenedPopUpName == string.Empty)
             CustomComponents.DrawContextMenuForScrollCanvas(() => DrawContextMenuContent(compositionUpdated), ref _contextMenuIsOpen);
@@ -390,14 +390,14 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
         EditCommentDialog.Draw(_nodeSelection);
 
-        if (compositionUpdated != _components.OpenedProject.RootInstance.Instance && !compositionUpdated.Symbol.SymbolPackage.IsReadOnly)
+        if (compositionUpdated != _projectView.OpenedProject.RootInstance.Instance && !compositionUpdated.Symbol.SymbolPackage.IsReadOnly)
         {
             var symbol = compositionUpdated.Symbol;
             _addInputDialog.Draw(symbol);
             _addOutputDialog.Draw(symbol);
         }
 
-        LibWarningDialog.Draw(_components);
+        LibWarningDialog.Draw(_projectView);
         EditNodeOutputDialog.Draw();
         SelectableNodeMovement.CompleteFrame();
     }
@@ -531,7 +531,8 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         }
     }
 
-    public void ApplyComposition(ICanvas.Transition transition, Guid compositionSymbolChildId)
+    // TODO: either the method title or the code is wrong
+    public void SetViewToChild(ICanvas.Transition transition, Guid compositionSymbolChildId)
     {
         var newCanvasScope = GetTargetScope();
         if (UserSettings.Config.OperatorViewSettings.TryGetValue(compositionSymbolChildId, out var savedCanvasScope))
@@ -544,10 +545,10 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
     public void FocusViewToSelection()
     {
-        if (_components?.CompositionOp == null)
+        if (_projectView?.CompositionOp == null)
             return;
         
-        FitAreaOnCanvas(NodeSelection.GetSelectionBounds(_nodeSelection, _components.CompositionOp));
+        FitAreaOnCanvas(NodeSelection.GetSelectionBounds(_nodeSelection, _projectView.CompositionOp));
     }
 
     private void DrawContextMenuContent(Instance compositionOp)
@@ -700,12 +701,12 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
                                enabled: isImage))
             {
                 var instance = compositionOp.Children[selectedChildUis[0].Id];
-                _components.GraphImageBackground.OutputInstance = instance;
+                _projectView.GraphImageBackground.OutputInstance = instance;
             }
 
             if (ImGui.MenuItem("Pin to output", oneOpSelected))
             {
-                NodeActions.PinSelectedToOutputWindow(_components, _nodeSelection, compositionOp);
+                NodeActions.PinSelectedToOutputWindow(_projectView, _nodeSelection, compositionOp);
             }
 
             ImGui.EndMenu();
@@ -934,8 +935,8 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         }
     }
 
-    private IEnumerable<ISelectableCanvasObject> SelectableChildren => _components?.CompositionOp != null 
-                                                                           ? NodeSelection.GetSelectableChildren(_components.CompositionOp)
+    private IEnumerable<ISelectableCanvasObject> SelectableChildren => _projectView?.CompositionOp != null 
+                                                                           ? NodeSelection.GetSelectableChildren(_projectView.CompositionOp)
                                                                            : []; 
 
     //private readonly List<ISelectableCanvasObject> _selectableItems = new();
@@ -948,12 +949,12 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
     {
         if (path.Count == 1)
         {
-            _components.TrySetCompositionOp(path, ICanvas.Transition.JumpOut, path[0]);
+            _projectView.TrySetCompositionOp(path, ICanvas.Transition.JumpOut, path[0]);
             return;
         }
 
         var compositionPath = path.Take(path.Count - 1).ToList();
-        _components.TrySetCompositionOp(compositionPath, ICanvas.Transition.JumpIn, path[^1]);
+        _projectView.TrySetCompositionOp(compositionPath, ICanvas.Transition.JumpIn, path[^1]);
     }
     #endregion
 

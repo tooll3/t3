@@ -124,6 +124,7 @@ internal sealed class SettingsWindow : Window
                     changed |= FormInputs.AddFloat("Gizmo size",
                                                    ref UserSettings.Config.GizmoSize,
                                                    0.0f, 10f, 0.01f, true);
+                    
 
                     changed |= FormInputs.AddFloat("Connection radius",
                                                    ref UserSettings.Config.MaxCurveRadius,
@@ -139,6 +140,10 @@ internal sealed class SettingsWindow : Window
                                                           "The control that pops up when dragging on a number value"
                                                          );
                         
+                    changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.GraphStyle,
+                                                          "Graph Style",
+                                                          "Allows to switch between different graphical representations.\nThis also will affect usability and performance"
+                                                         );
                         
 
 

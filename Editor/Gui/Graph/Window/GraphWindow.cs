@@ -4,6 +4,7 @@ using T3.Core.Animation;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.TransformGizmos;
+using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
@@ -72,7 +73,12 @@ internal sealed class GraphWindow : Windows.Window
             return false;
         }
 
-        ProjectView = Legacy.GraphCanvas.CreateWithComponents(project);
+        ProjectView = UserSettings.Config.GraphStyle == UserSettings.GraphStyles.Magnetic
+                          ? MagGraphCanvas.CreateWithComponents(project)
+                          : Legacy.GraphCanvas.CreateWithComponents(project);
+        
+        // ProjectView = MagGraphCanvas.CreateWithComponents(project);
+        // ProjectView = Legacy.GraphCanvas.CreateWithComponents(project);
         ProjectView.OnCompositionChanged += CompositionChangedHandler;
 
         IReadOnlyList<Guid> rootPath = [root.SymbolChildId];
@@ -268,7 +274,7 @@ internal sealed class GraphWindow : Windows.Window
                  */
                 if (!_initializedAfterLayoutReady && ImGui.GetFrameCount() > 1)
                 {
-                    GraphCanvas.ApplyComposition(ICanvas.Transition.JumpIn, ProjectView.OpenedProject.RootInstance.SymbolChildId);
+                    GraphCanvas.SetViewToChild(ICanvas.Transition.JumpIn, ProjectView.OpenedProject.RootInstance.SymbolChildId);
                     GraphCanvas.FocusViewToSelection();
                     _initializedAfterLayoutReady = true;
                 }

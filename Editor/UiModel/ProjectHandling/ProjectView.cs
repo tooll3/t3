@@ -59,14 +59,14 @@ internal sealed class ProjectView
         composition.Dispose();
     }
 
-    public bool TrySetCompositionOp(IReadOnlyList<Guid> path, ICanvas.Transition transition = ICanvas.Transition.Undefined, Guid? nextSelectedUi = null)
+    public bool TrySetCompositionOp(IReadOnlyList<Guid> newIdPath, ICanvas.Transition transition = ICanvas.Transition.Undefined, Guid? nextSelectedUi = null)
     {
         var structure = OpenedProject.Structure;
-        var newCompositionInstance = structure.GetInstanceFromIdPath(path);
+        var newCompositionInstance = structure.GetInstanceFromIdPath(newIdPath);
 
         if (newCompositionInstance == null)
         {
-            var pathString = string.Join('/', structure.GetReadableInstancePath(path));
+            var pathString = string.Join('/', structure.GetReadableInstancePath(newIdPath));
             Log.Error("Failed to find instance with path " + pathString);
             return false;
         }
@@ -75,7 +75,7 @@ internal sealed class ProjectView
         // ReSharper disable once ConditionIsAlwaysTrueOrFalse
         if (Composition != null)
         {
-            if (path[0] != OpenedProject.RootInstance.Instance.SymbolChildId)
+            if (newIdPath[0] != OpenedProject.RootInstance.Instance.SymbolChildId)
             {
                 throw new Exception("Root instance is not the first element in the path");
             }
@@ -92,10 +92,10 @@ internal sealed class ProjectView
             }
         }
 
-        Composition = Composition.GetFor(newCompositionInstance);
+        Composition = Composition.GetForInstance(newCompositionInstance);
         _compositionPath.Clear();
-        _compositionPath.AddRange(path);
-
+        _compositionPath.AddRange(newIdPath);
+        
         TimeLineCanvas.ClearSelection();
 
         if (nextSelectedUi != null)
@@ -113,7 +113,7 @@ internal sealed class ProjectView
             NodeSelection.Clear();
         }
 
-        GraphCanvas.ApplyComposition(transition, newCompositionInstance.SymbolChildId);
+        GraphCanvas?.SetViewToChild(transition, newCompositionInstance.SymbolChildId);
 
         OnCompositionChanged?.Invoke(this, Composition.SymbolChildId);
         return true;
@@ -122,11 +122,12 @@ internal sealed class ProjectView
     public bool TrySetCompositionOpToChild(Guid symbolChildId)
     {
         // new list as _compositionPath is mutable
-        var newPathList = new List<Guid>(_compositionPath.Count + 1);
-        newPathList.AddRange(_compositionPath);
-        newPathList.Add(symbolChildId);
-
-        return TrySetCompositionOp(newPathList, ICanvas.Transition.JumpIn);
+        // var path = new List<Guid>(_compositionPath.Count + 1);
+        // path.AddRange(_compositionPath);
+        // path.Add(symbolChildId);
+        List<Guid> path = [.._compositionPath, symbolChildId];
+        
+        return TrySetCompositionOp(path, ICanvas.Transition.JumpIn);
     }
 
     public bool TrySetCompositionOpToParent()
