@@ -50,9 +50,119 @@ internal sealed class SettingsWindow : Window
             {
                 case Categories.Interface:
                     FormInputs.SetIndentToLeft();
-
                     FormInputs.AddSectionHeader("User Interface");
+
                     FormInputs.AddVerticalSpace();
+                    FormInputs.SetIndentToParameters();
+                    changed |= FormInputs.AddFloat("UI Scale",
+                                                   ref UserSettings.Config.UiScaleFactor,
+                                                   0.1f, 5f, 0.01f, true,
+                                                   "The global scale of all rendered UI in the application",
+                                                   UserSettings.Defaults.UiScaleFactor);
+
+                    changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.ValueEditMethod,
+                                                          "Value input method",
+                                                          "The control that pops up when dragging on a number value"
+                                                         );
+                    FormInputs.AddVerticalSpace();
+                    FormInputs.SetIndentToParameters();
+                    FormInputs.AddSectionSubHeader("Graph style");
+
+                    changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.GraphStyle,
+                                                          "Graph Style",
+                                                          "Allows to switch between different graphical representations.\nThis also will affect usability and performance"
+                                                         );
+                    if (UserSettings.Config.GraphStyle == UserSettings.GraphStyles.Magnetic)
+                    {
+                        changed |= FormInputs.AddCheckBox("Disconnect on unsnap",
+                                                          ref UserSettings.Config.DisconnectOnUnsnap,
+                                                          "Defines if unsnapping operators from a block will automatically disconnect them.\nOps dragged out between snapped blocks will always be disconnected.",
+                                                          UserSettings.Defaults.DisconnectOnUnsnap);
+
+                        changed |= FormInputs.AddFloat("Connection radius",
+                                                       ref UserSettings.Config.MaxCurveRadius,
+                                                       0.0f, 1000f, 1f, true, "Controls the roundness of curve lines",
+                                                       UserSettings.Defaults.TimeRasterDensity);
+                    }
+                    else
+                    {
+
+                        changed |= FormInputs.AddCheckBox("Use arc connections",
+                                                          ref UserSettings.Config.UseArcConnections,
+                                                          "Affects the shape of the connections between your operators",
+                                                          UserSettings.Defaults.UseArcConnections);
+
+                        changed |= FormInputs.AddCheckBox("Drag snapped nodes",
+                                                          ref UserSettings.Config.SmartGroupDragging,
+                                                          "An experimental features that will drag neighbouring snapped operators",
+                                                          UserSettings.Defaults.SmartGroupDragging);
+                        
+                        changed |= FormInputs.AddCheckBox("Show Graph thumbnails",
+                                                          ref UserSettings.Config.ShowThumbnails, null,
+                                                          UserSettings.Defaults.ShowThumbnails);
+
+                        changed |= FormInputs.AddCheckBox("Show nodes thumbnails when hovering",
+                                                          ref UserSettings.Config.EditorHoverPreview, null,
+                                                          UserSettings.Defaults.EditorHoverPreview);
+
+                    }
+                    
+                    FormInputs.AddVerticalSpace();
+
+                    changed |= FormInputs.AddFloat("Scroll smoothing",
+                                                   ref UserSettings.Config.ScrollSmoothing,
+                                                   0.0f, 0.2f, 0.01f, true,
+                                                   null,
+                                                   UserSettings.Defaults.ScrollSmoothing);
+
+                    changed |= FormInputs.AddFloat("Click threshold",
+                                                   ref UserSettings.Config.ClickThreshold,
+                                                   0.0f, 10f, 0.1f, true,
+                                                   "The threshold in pixels until a click becomes a drag. Adjusting this might be useful for stylus input",
+                                                   UserSettings.Defaults.ClickThreshold);
+                    
+                                        
+                    changed |= FormInputs.AddFloat("Gizmo size",
+                                                   ref UserSettings.Config.GizmoSize,
+                                                   0.0f, 200f, 0.01f, true, "Size of the transform gizmo in 3d views",
+                                                   UserSettings.Defaults.GizmoSize);
+                    
+                    FormInputs.AddVerticalSpace();
+                    FormInputs.AddSectionSubHeader("Timeline");
+
+
+                    changed |= FormInputs.AddFloat("Grid density",
+                                                   ref UserSettings.Config.TimeRasterDensity,
+                                                   0.0f, 10f, 0.01f, true,
+                                                   "Density/opacity of the marks (time or beat) at the bottom of the timeline",
+                                                   UserSettings.Defaults.TimeRasterDensity);
+                    
+                    changed |= FormInputs.AddFloat("Snap strength",
+                                                   ref UserSettings.Config.SnapStrength,
+                                                   0.0f, 0.2f, 0.01f, true,
+                                                   "Controls the distance until items such as keyframes snap in the timeline",
+                                                   UserSettings.Defaults.SnapStrength);
+
+
+                    
+                    changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.FrameStepAmount,
+                                                          "Frame step amount",
+                                                          "Controls the next rounding and step amount when jumping between frames.\nDefault shortcut is Shift+Cursor Left/Right"
+                                                          ,UserSettings.Defaults.FrameStepAmount);
+
+                    changed |= FormInputs.AddCheckBox("Reset time after playback",
+                                                      ref UserSettings.Config.ResetTimeAfterPlayback,
+                                                      "After the playback is halted, the time will reset to the moment when the playback began. This feature proves beneficial for iteratively reviewing animations without requiring manual rewinding.",
+                                                      UserSettings.Defaults.ResetTimeAfterPlayback);
+
+
+                    FormInputs.SetIndentToLeft();
+                    FormInputs.AddVerticalSpace();
+
+
+                    FormInputs.AddVerticalSpace();
+                    FormInputs.AddSectionSubHeader("Advanced options");
+                    
                     changed |= FormInputs.AddCheckBox("Editing values with mousewheel needs CTRL key",
                                                       ref UserSettings.Config.MouseWheelEditsNeedCtrlKey,
                                                       "In parameter window you can edit numeric values by using the mouse wheel. This setting will prevent accidental modifications while scrolling because by using ctrl key for activation.",
@@ -63,113 +173,21 @@ internal sealed class SettingsWindow : Window
                                                       "If enabled, scrolling the mouse wheel while holding left of right mouse button will control navigation speed with WASD keys. This is similar to Unity and Unreal",
                                                       UserSettings.Defaults.AdjustCameraSpeedWithMouseWheel);
 
-                    changed |= FormInputs.AddCheckBox("Use arc connections",
-                                                      ref UserSettings.Config.UseArcConnections,
-                                                      "Affects the shape of the connections between your operators",
-                                                      UserSettings.Defaults.UseArcConnections);
-
-                    changed |= FormInputs.AddCheckBox("Disconnect on unsnap",
-                                                      ref UserSettings.Config.DisconnectOnUnsnap,
-                                                      "Defines if unsnapping operators from a block will automatically disconnect them.\nOps dragged out between snapped blocks will always be disconnected.",
-                                                      UserSettings.Defaults.DisconnectOnUnsnap);
-
-                    
-                    changed |= FormInputs.AddCheckBox("Drag snapped nodes",
-                                                      ref UserSettings.Config.SmartGroupDragging,
-                                                      "An experimental features that will drag neighbouring snapped operators",
-                                                      UserSettings.Defaults.SmartGroupDragging);
-
                     changed |= FormInputs.AddCheckBox("Mirror UI on second view",
                                                       ref UserSettings.Config.MirrorUiOnSecondView,
                                                       "On Windows mirroring displays can be extremely slow. This settings is will copy the UI to the second view instead of mirroring it.",
                                                       UserSettings.Defaults.MirrorUiOnSecondView);
-                        
-                                                          
+
                     changed |= FormInputs.AddCheckBox("Balance soundtrack visualizer",
                                                       ref UserSettings.Config.ExpandSpectrumVisualizerVertically,
                                                       "If true, changes the visualized pitch's logarithmic scale from base 'e' to base 10.\nLower frequencies will become more visible, making the frequency spectrum\n appear more \"balanced\"",
-                                                      UserSettings.Defaults.ExpandSpectrumVisualizerVertically);
-                    FormInputs.AddVerticalSpace();
-                    FormInputs.SetIndentToParameters();
-                    changed |= FormInputs.AddFloat("UI Scale",
-                                                   ref UserSettings.Config.UiScaleFactor,
-                                                   0.1f, 5f, 0.01f, true,
-                                                   "The global scale of all rendered UI in the application",
-                                                   UserSettings.Defaults.UiScaleFactor);
-
-                    changed |= FormInputs.AddFloat("Scroll smoothing",
-                                                   ref UserSettings.Config.ScrollSmoothing,
-                                                   0.0f, 0.2f, 0.01f, true,
-                                                   null,
-                                                   UserSettings.Defaults.ScrollSmoothing);
-
-                    changed |= FormInputs.AddFloat("Snap strength",
-                                                   ref UserSettings.Config.SnapStrength,
-                                                   0.0f, 0.2f, 0.01f, true,
-                                                   "Controls the distance until items such as keyframes snap in the timeline",
-                                                   UserSettings.Defaults.SnapStrength);
-
-                    changed |= FormInputs.AddFloat("Click threshold",
-                                                   ref UserSettings.Config.ClickThreshold,
-                                                   0.0f, 10f, 0.1f, true,
-                                                   "The threshold in pixels until a click becomes a drag. Adjusting this might be useful for stylus input",
-                                                   UserSettings.Defaults.ClickThreshold);
-
-                    changed |= FormInputs.AddFloat("Timeline marks density",
-                                                   ref UserSettings.Config.TimeRasterDensity,
-                                                   0.0f, 10f, 0.01f, true,
-                                                   "Density/opacity of the marks (time or beat) at the bottom of the timeline",
-                                                   UserSettings.Defaults.TimeRasterDensity);
-
-                    changed |= FormInputs.AddFloat("Gizmo size",
-                                                   ref UserSettings.Config.GizmoSize,
-                                                   0.0f, 10f, 0.01f, true);
-                    
-
-                    changed |= FormInputs.AddFloat("Connection radius",
-                                                   ref UserSettings.Config.MaxCurveRadius,
-                                                   0.0f, 1000f, 1f, true,"Controls the roundness of curve lines",
-                                                   UserSettings.Defaults.TimeRasterDensity);
-                    
-                    changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.FrameStepAmount,
-                                                          "Frame step amount",
-                                                          "Controls the next rounding and step amount when jumping between frames.\nDefault shortcut is Shift+Cursor Left/Right");
-
-                    changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.ValueEditMethod,
-                                                          "Value input method",
-                                                          "The control that pops up when dragging on a number value"
-                                                         );
-                        
-                    changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.GraphStyle,
-                                                          "Graph Style",
-                                                          "Allows to switch between different graphical representations.\nThis also will affect usability and performance"
-                                                         );
-                        
-
-
-                    FormInputs.SetIndentToLeft();
-                    FormInputs.AddVerticalSpace();
-                    FormInputs.AddSectionHeader("Previews");
-                    FormInputs.AddVerticalSpace();
-                    changed |= FormInputs.AddCheckBox("Show Graph thumbnails",
-                                                      ref UserSettings.Config.ShowThumbnails, null,
-                                                      UserSettings.Defaults.ShowThumbnails);
-
-                    changed |= FormInputs.AddCheckBox("Show nodes thumbnails when hovering",
-                                                      ref UserSettings.Config.EditorHoverPreview, null,
-                                                      UserSettings.Defaults.EditorHoverPreview);
-
-                    FormInputs.AddVerticalSpace();
-                    FormInputs.AddSectionHeader("Advanced");
+                                                      UserSettings.Defaults.ExpandSpectrumVisualizerVertically);                    
                     FormInputs.AddVerticalSpace();
                     changed |= FormInputs.AddCheckBox("Middle mouse button zooms canvas",
                                                       ref UserSettings.Config.MiddleMouseButtonZooms,
                                                       "This can be useful if you're working with tablets or other input devices that lack a mouse wheel.",
                                                       UserSettings.Defaults.MiddleMouseButtonZooms);
-                    changed |= FormInputs.AddCheckBox("Reset time after playback",
-                                                      ref UserSettings.Config.ResetTimeAfterPlayback,
-                                                      "After the playback is halted, the time will reset to the moment when the playback began. This feature proves beneficial for iteratively reviewing animations without requiring manual rewinding.",
-                                                      UserSettings.Defaults.ResetTimeAfterPlayback);
+                    
                     changed |= FormInputs.AddCheckBox("Suspend invalidation of inactive time clips",
                                                       ref ProjectSettings.Config.TimeClipSuspending,
                                                       "An experimental optimization that avoids dirty flag evaluation of graph behind inactive TimeClips. This is only relevant for very complex projects and multiple parts separated by timelines.",
@@ -193,6 +211,7 @@ internal sealed class SettingsWindow : Window
 
                     ColorThemeEditor.DrawEditor();
                     break;
+                
                 case Categories.Project:
                 {
                     FormInputs.AddSectionHeader("Project specific settings");
@@ -207,7 +226,7 @@ internal sealed class SettingsWindow : Window
                                                                      ref ProjectSettings.Config.EnablePlaybackControlWithKeyboard,
                                                                      "Users can use cursor left/right to skip through time\nand space key to pause playback\nof exported executable.",
                                                                      ProjectSettings.Defaults.EnablePlaybackControlWithKeyboard);
-                        
+
                     projectSettingsChanged |= CustomComponents.DrawDropdown(selectedValue: ref ProjectSettings.Config.DefaultWindowMode,
                                                                             label: "Default Export Window Mode",
                                                                             tooltip: "The default window mode when exporting an executable.",
@@ -258,20 +277,20 @@ internal sealed class SettingsWindow : Window
                 case Categories.OSC:
                 {
                     FormInputs.AddSectionHeader("OSC");
-                        
+
                     CustomComponents
                        .HelpText("On startup, Tooll will listen for OSC messages on the default port." +
                                  "The IO indicator in the timeline will show incoming messages.\n" +
                                  "You can also use the OscInput operator to receive OSC from other ports.");
-                            
+
                     CustomComponents
                        .HelpText("Changing the port will require a restart of Tooll.");
-                        
+
                     FormInputs.AddInt("Default Port", ref ProjectSettings.Config.DefaultOscPort,
                                       0, 65535, 1,
                                       "If a valid port is set, Tooll will listen for OSC messages on this port by default.",
                                       -1);
-                        
+
                     FormInputs.AddVerticalSpace();
                     break;
                 }
@@ -325,6 +344,7 @@ internal sealed class SettingsWindow : Window
 
                         ImGui.EndTable();
                     }
+
                     break;
                 case Categories.Profiling:
                 {
@@ -334,7 +354,7 @@ internal sealed class SettingsWindow : Window
                     FormInputs.AddVerticalSpace();
 
                     FormInputs.SetIndentToLeft();
-                        
+
                     changed |= FormInputs.AddCheckBox("Enable Frame Profiling",
                                                       ref UserSettings.Config.EnableFrameProfiling,
                                                       "A basic frame profile for the duration of frame processing. Overhead is minimal.",
@@ -343,7 +363,7 @@ internal sealed class SettingsWindow : Window
                                                       ref UserSettings.Config.KeepTraceForLogMessages,
                                                       "Store log messages in the profiling data. This can be useful to see correlation between frame drops and log messages.",
                                                       UserSettings.Defaults.KeepTraceForLogMessages);
-                        
+
                     changed |= FormInputs.AddCheckBox("Log GC Profiling",
                                                       ref UserSettings.Config.EnableGCProfiling,
                                                       "Log garbage collection information. This can be useful to see correlation between frame drops and GC activity.",
