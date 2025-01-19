@@ -257,8 +257,7 @@ public abstract class InputValueUi<T> : IInputUi
                                                         //var structure = components.Structure;
                                                         if (ImGui.MenuItem("Extract as connection operator"))
                                                         {
-                                                            ParameterExtraction.ExtractAsConnectedOperator(nodeSelection, typedInputSlot, symbolChildUi,
-                                                                inputSlot.Input);
+                                                            ParameterExtraction.ExtractAsConnectedOperator(typedInputSlot, symbolChildUi, inputSlot.Input);
                                                         }
 
                                                         if (ImGui.MenuItem("Publish as Input"))
@@ -406,11 +405,8 @@ public abstract class InputValueUi<T> : IInputUi
 
         InputEditStateFlags DrawNormalParameter()
         {
-            if (ProjectView.Focused?.GraphCanvas is not GraphCanvas graphCanvas)
-                return InputEditStateFlags.Nothing;
-
             // Connection area...
-            InputArea.DrawNormalInputArea(graphCanvas, graphCanvas.SymbolBrowser, nodeSelection, typedInputSlot, compositionUi, symbolChildUi, input,
+            InputArea.DrawNormalInputArea(typedInputSlot, compositionUi, symbolChildUi, input,
                                              IsAnimatable, typeColor, tempConnections);
 
             ImGui.SameLine();
@@ -482,7 +478,7 @@ public abstract class InputValueUi<T> : IInputUi
 
                      if (ImGui.MenuItem("Extract as connection operator"))
                      {
-                         ParameterExtraction.ExtractAsConnectedOperator(nodeSelection, typedInputSlot, symbolChildUi, inputSlot.Input);
+                         ParameterExtraction.ExtractAsConnectedOperator(typedInputSlot, symbolChildUi, inputSlot.Input);
                      }
 
                      if (ImGui.MenuItem("Publish as Input"))
@@ -588,7 +584,7 @@ internal static class InputArea
 {
     internal const float ConnectionAreaWidth = 25.0f;
 
-    internal static void DrawNormalInputArea<T>(IGraphCanvas canvas, SymbolBrowser symbolBrowser, NodeSelection nodeSelection, InputSlot<T> inputSlot,
+    internal static void DrawNormalInputArea<T>( InputSlot<T> inputSlot,
                                                 SymbolUi compositionUi,
                                                 SymbolUi.Child symbolChildUi,
                                                 Symbol.Child.Input input,
@@ -635,13 +631,12 @@ internal static class InputArea
                     //ParameterExtraction.ExtractAsConnectedOperator(nodeSelection, compositionUi, inputSlot, symbolChildUi);
                     //public static void ExtractAsConnectedOperator<T>(NodeSelection nodeSelection, InputSlot<T> inputSlot, SymbolUi.Child symbolChildUi, Symbol.Child.Input input)
 
-                    ParameterExtraction.ExtractAsConnectedOperator(nodeSelection, inputSlot, symbolChildUi, input);
+                    ParameterExtraction.ExtractAsConnectedOperator(inputSlot, symbolChildUi, input);
                     break;
+                
                 case InputOperations.ConnectWithSearch:
                 {
-                    ConnectionMaker.StartFromInputSlot(canvas, compositionUi.Symbol, symbolChildUi, input.InputDefinition);
-                    var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(compositionUi.Symbol, symbolChildUi);
-                    ConnectionMaker.InitSymbolBrowserAtPosition(canvas, symbolBrowser, freePosition);
+                    ProjectView.Focused?.GraphCanvas.CreatePlaceHolderConnectedToInput(symbolChildUi, input.InputDefinition);
                     break;
                 }
             }
@@ -672,7 +667,8 @@ internal static class InputArea
         {
             if (tempConnections.Count == 0)
             {
-                ConnectionMaker.StartFromInputSlot(canvas, compositionUi.Symbol, symbolChildUi, input.InputDefinition);
+                ProjectView.Focused?.GraphCanvas.StartDraggingFromInputSlot(symbolChildUi, input.InputDefinition);
+                //ConnectionMaker.StartFromInputSlot(canvas, compositionUi.Symbol, symbolChildUi, input.InputDefinition);
             }
         }
 

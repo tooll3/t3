@@ -148,10 +148,10 @@ internal static class ConnectionMaker
         }
     }
 
-    public static void StartFromInputSlot(IGraphCanvas window, Symbol parentSymbol, SymbolUi.Child targetUi, Symbol.InputDefinition inputDef,
+    public static void StartFromInputSlot(IGraphCanvas graphCanvas, Symbol parentSymbol, SymbolUi.Child targetUi, Symbol.InputDefinition inputDef,
                                           int multiInputIndex = 0)
     {
-        var inProgress = _graphWindowInProgressConnections[window];
+        var inProgress = _graphWindowInProgressConnections[graphCanvas];
 
         if (FindConnectionToInputSlot(parentSymbol, targetUi, inputDef, multiInputIndex, out var existingConnection))
         {

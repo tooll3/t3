@@ -57,6 +57,30 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         _nodeNavigation.FocusInstanceRequested -= OpenAndFocusInstance;
     }
 
+    public void CreatePlaceHolderConnectedToInput(SymbolUi.Child symbolChildUi, Symbol.InputDefinition inputInputDefinition)
+    {
+        if (_projectView.Composition == null)
+        {
+            Log.Error("Failed to access composition op?");
+            return;
+        }
+        
+        ConnectionMaker.StartFromInputSlot(this, _projectView.Composition.Symbol, symbolChildUi, inputInputDefinition);
+        var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(_projectView.Composition.SymbolUi, symbolChildUi);
+        ConnectionMaker.InitSymbolBrowserAtPosition(this, SymbolBrowser, freePosition);
+    }
+
+    public void StartDraggingFromInputSlot(SymbolUi.Child symbolChildUi, Symbol.InputDefinition inputInputDefinition)
+    {
+        if (_projectView.Composition == null)
+        {
+            Log.Error("Failed to access composition op?");
+            return;
+        }
+        
+        ConnectionMaker.StartFromInputSlot(this,  _projectView.Composition.Symbol, symbolChildUi, inputInputDefinition);
+    }
+
     public static ProjectView CreateWithComponents(OpenedProject openedProject)
     {
         ProjectView.CreateIndependentComponents(openedProject, out var navigationHistory, out var nodeSelection, out var graphImageBackground);
@@ -404,6 +428,9 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         SelectableNodeMovement.CompleteFrame();
     }
 
+    
+    
+    
     public bool HasActiveInteraction
     {
         get

@@ -6,6 +6,7 @@ using T3.Editor.Gui.Graph.Legacy.Interaction;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Graph;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.Graph.Interaction;
@@ -20,33 +21,40 @@ internal static class ParameterExtraction
         return SymbolsExtractableFromInputs.ContainsKey(inputSlot.ValueType);
     }
     
-    public static void ExtractAsConnectedOperator<T>(NodeSelection nodeSelection, InputSlot<T> inputSlot, SymbolUi.Child symbolChildUi, Symbol.Child.Input input)
+    public static void ExtractAsConnectedOperator<T>(InputSlot<T> inputSlot, SymbolUi.Child symbolChildUi, Symbol.Child.Input input)
     {
-        SymbolUi? compositionUi = null;
-        Instance? composition;
-        var potentialComposition = nodeSelection.GetSelectedComposition();
-        if (potentialComposition != null)
+        var view = ProjectView.Focused;
+        if (view?.Composition == null)
         {
-            compositionUi = potentialComposition.GetSymbolUi();
-            composition = potentialComposition;
-        }
-        else
-        {
-            composition = inputSlot.Parent.Parent;
-        }
-        
-        if (composition == null)
-        {
-            Log.Warning("Can't publish input to undefined composition");
+            Log.Warning("Unable to access current view for extractions?");
             return;
         }
+        
+        var nodeSelection = view.NodeSelection;
+        var compositionUi = view.Composition.SymbolUi;
+        var compositionInstance = view.Composition.Instance;
+        
+        //var compositionUi = view.;
+        //Instance? composition;
+        
+        // var potentialComposition = nodeSelection.GetSelectedComposition();
+        // if (potentialComposition != null)
+        // {
+        //     compositionUi = potentialComposition.GetSymbolUi();
+        //     composition = potentialComposition;
+        // }
+        // else
+        // {
+        //     composition = inputSlot.Parent.Parent;
+        // }
+        //
+        // if (composition == null)
+        // {
+        //     Log.Warning("Can't publish input to undefined composition");
+        //     return;
+        // }
+        // compositionUi = composition.GetSymbolUi();
 
-        if (compositionUi == null)
-        {
-            compositionUi = composition.GetSymbolUi();
-        }
-
-        var compositionSymbol = composition.Symbol;
         var commands = new List<ICommand>();
 
         // cast input slot to constructedInputSlotType
@@ -58,8 +66,8 @@ internal static class ParameterExtraction
         }
 
         // Add Child
-        var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(compositionSymbol, symbolChildUi);
-        var addSymbolChildCommand = new AddSymbolChildCommand(composition.Symbol, symbolId)
+        var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(compositionUi, symbolChildUi);
+        var addSymbolChildCommand = new AddSymbolChildCommand(compositionUi.Symbol, symbolId)
                                         {
                                             PosOnCanvas = freePosition,
                                             ChildName = input.Name
@@ -72,8 +80,7 @@ internal static class ParameterExtraction
 
         commands.Add(addSymbolChildCommand);
         addSymbolChildCommand.Do();
-
-
+        
         var newChildUi = compositionUi.ChildUis[addSymbolChildCommand.AddedChildId];
         var newSymbolChild = newChildUi.SymbolChild;
 
@@ -85,7 +92,7 @@ internal static class ParameterExtraction
 
         // Set type
         // Todo - make this undoable - currently not implemented with the new extraction system
-        var newInstance = composition.Children[newChildUi.Id];
+        var newInstance = compositionInstance.Children[newChildUi.Id];
         ExtractInputValues(inputSlot, newInstance, out var outputSlot);
 
         // Create connection

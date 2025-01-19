@@ -171,12 +171,12 @@ internal sealed class NodeGraphLayouting
         return childUi.SymbolChild.Symbol.OutputDefinitions.Count > 0 && childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType == typeof(Texture2D);
     }
 
-    public static Vector2 FindPositionForNodeConnectedToInput(Symbol compositionSymbol, SymbolUi.Child connectionTargetUi)
+    public static Vector2 FindPositionForNodeConnectedToInput(SymbolUi symbolUi, SymbolUi.Child connectionTargetUi)
     {
         var idealPos = connectionTargetUi.PosOnCanvas 
                        + new Vector2(-SelectableNodeMovement.PaddedDefaultOpSize.X, 0);
 
-        var symbolUi = compositionSymbol.GetSymbolUi();
+        //var symbolUi = compositionSymbolUi.GetSymbolUi();
         var interferingOps = symbolUi.ChildUis.Values
                                      .Where(op =>
                                                 op.PosOnCanvas.Y >= idealPos.Y

@@ -95,6 +95,16 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
         _destroyed = true;
         _projectView.OnCompositionChanged -= CompositionChangedHandler;
     }
+
+    void IGraphCanvas.CreatePlaceHolderConnectedToInput(SymbolUi.Child symbolChildUi, Symbol.InputDefinition inputInputDefinition)
+    {
+        Log.Debug($"{nameof(IGraphCanvas.CreatePlaceHolderConnectedToInput)}() not implemented yet");
+    }
+
+    void IGraphCanvas.StartDraggingFromInputSlot(SymbolUi.Child symbolChildUi, Symbol.InputDefinition inputInputDefinition)
+    {
+        Log.Debug($"{nameof(IGraphCanvas.StartDraggingFromInputSlot)}() not implemented yet");
+    }
     #endregion
 
     public MagGraphCanvas(ProjectView projectView)

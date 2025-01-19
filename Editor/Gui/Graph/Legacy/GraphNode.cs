@@ -1159,8 +1159,11 @@ internal sealed class GraphNode
                         if (ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickThreshold)
                         {
                             ConnectionMaker.StartFromInputSlot(_canvas, targetUi.SymbolChild.Parent, targetUi, inputDef);
-                            var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(targetUi.SymbolChild.Parent, targetUi);
-                            ConnectionMaker.InitSymbolBrowserAtPosition(_canvas, _canvas.SymbolBrowser, freePosition);
+                            if (SymbolUiRegistry.TryGetSymbolUi(parentSymbol.Id, out var compositionUi))
+                            {
+                                var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(compositionUi, targetUi);
+                                ConnectionMaker.InitSymbolBrowserAtPosition(_canvas, _canvas.SymbolBrowser, freePosition);
+                            }
                         }
                         else if (ImGui.IsMouseReleased(ImGuiMouseButton.Right) && ImGui.GetIO().KeyCtrl)
                         {
