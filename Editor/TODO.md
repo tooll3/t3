@@ -12,10 +12,13 @@ x somewhat presentable project list
 - Load last project from user settings
 x focus graph imgui-window after creation
 
-- Fix parameter window
-- Update view after TimeClip Slip
+x Fix parameter window
+xUpdate view after TimeClip Split
+
 - Add input parameters
 - Remove input output params
 - Add output parameters
 - Remove output params
 - Fix background control in mag graph
+- Fix fence selection for timeline and preset view
+

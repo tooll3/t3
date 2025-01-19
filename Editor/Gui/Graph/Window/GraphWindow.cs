@@ -125,20 +125,15 @@ internal sealed class GraphWindow : Windows.Window
         ProjectView.Close();
         GraphWindowInstances.Remove(this);
     }
-
-    // TODO: callers should use view directly
-    private void TakeFocus()
-    {
-        ProjectView?.TakeFocus();
-    }
+    
 
     private bool _focusOnNextFrame;
 
-    private void FocusRequested()
-    {
-        TakeFocus();
-        _focusOnNextFrame = true;
-    }
+    // private void FocusRequested()
+    // {
+    //     TakeFocus();
+    //     _focusOnNextFrame = true;
+    // }
 
     private void CompositionChangedHandler(ProjectView _, Guid instanceId)
     {
@@ -265,7 +260,7 @@ internal sealed class GraphWindow : Windows.Window
                                       ProjectView.GraphImageBackground.HasInteractionFocus);
 
                 /*
-                 * This is a work around to delay setting the composition until ImGui has
+                 * This is a workaround to delay setting the composition until ImGui has
                  * finally updated its window size and applied its layout so we can use
                  * Graph window size to properly fit the content into view.
                  *
@@ -284,8 +279,11 @@ internal sealed class GraphWindow : Windows.Window
                 ImGui.BeginGroup();
                 ImGui.SetScrollY(0);
                 CustomComponents.DrawWindowFocusFrame();
+
                 if (ImGui.IsWindowFocused())
-                    TakeFocus();
+                {
+                    ProjectView?.SetAsFocused();
+                }
 
                 GraphCanvas.DrawGraph(drawList, graphOpacity);
 

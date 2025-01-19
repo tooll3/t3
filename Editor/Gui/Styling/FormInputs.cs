@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+using ImGuiNET;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel.InputsAndTypes;
@@ -9,7 +10,7 @@ namespace T3.Editor.Gui.Styling;
 /// A set of custom widgets that allow to quickly draw dialogs with a more "traditional" labels on the left side of input fields.
 /// It also provides a bunch of helper methods for minimal layout control. 
 /// </summary>
-public static class FormInputs
+internal static class FormInputs
 {
     public static void BeginFrame()
     {
@@ -24,12 +25,32 @@ public static class FormInputs
         ImGui.PopFont();
         //AddVerticalSpace(20);
     }
-
-    public static void DrawFieldSetHeader(string label)
+    
+    public static void AddSectionSubHeader(string label)
     {
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
-        ImGui.PushFont(Fonts.FontSmall);
+        ImGui.PushFont(Fonts.FontBold);
+        
+        AddVerticalSpace(7);
+        ImGui.TextUnformatted(label);
         AddVerticalSpace(5);
+        ImGui.PopFont();
+        ImGui.PopStyleColor();
+    }
+
+    public static void DrawFieldSetHeader(string label, bool useParamIndent = false)
+    {
+        //    ImGui.SameLine(0,_paramIndent);
+        
+        
+        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+        ImGui.PushFont(Fonts.FontSmall);
+        
+        AddVerticalSpace(5);
+        
+        if(useParamIndent)
+            ImGui.SetCursorPosX(DefaultParameterIndent);
+        
         ImGui.TextUnformatted(label.ToUpperInvariant());
         AddVerticalSpace(1);
         ImGui.PopFont();

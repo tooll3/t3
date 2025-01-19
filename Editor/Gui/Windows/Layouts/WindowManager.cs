@@ -59,7 +59,6 @@ internal static partial class WindowManager
                            Program.ConsoleLogWindow,
                            new IoViewWindow(),
                            new SettingsWindow(),
-                           new MagGraphWindow(),
                        };
 
 

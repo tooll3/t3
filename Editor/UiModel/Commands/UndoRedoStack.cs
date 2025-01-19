@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿#nullable enable
+using System.Text;
 using T3.Editor.Gui;
 
 namespace T3.Editor.UiModel.Commands;
@@ -27,10 +28,10 @@ internal static class CommandExtensions
 
 public static class UndoRedoStack
 {
-    public static bool CanUndo => _undoStack.Count > 0;
-    public static bool CanRedo => _redoStack.Count > 0;
+    internal static bool CanUndo => UndoStack.Count > 0;
+    internal static bool CanRedo => RedoStack.Count > 0;
 
-    public static void AddAndExecute(ICommand command)
+    internal static void AddAndExecute(ICommand command)
     {
         Add(command);
 
@@ -41,8 +42,8 @@ public static class UndoRedoStack
     {
         if (command.IsUndoable)
         {
-            _undoStack.Push(command);
-            _redoStack.Clear();
+            UndoStack.Push(command);
+            RedoStack.Clear();
         }
         else
         {
@@ -50,48 +51,45 @@ public static class UndoRedoStack
         }
     }
 
-    public static string GetNextUndoTitle()
+    internal static string? GetNextUndoTitle()
     {
-        if (!CanUndo)
-            return null;
-
-        return _undoStack.Peek().Name;
+        return !CanUndo ? null : UndoStack.Peek().Name;
     }
 
-    public static void Undo()
+    internal static void Undo()
     {
         if (CanUndo)
         {
-            var command = _undoStack.Pop();
+            var command = UndoStack.Pop();
             command.Undo();
-            _redoStack.Push(command);
+            RedoStack.Push(command);
             FrameStats.Current.UndoRedoTriggered = true;
         }
 
     }
 
-    public static void Redo()
+    internal static void Redo()
     {
         if (CanRedo)
         {
-            var command = _redoStack.Pop();
+            var command = RedoStack.Pop();
             command.Do();
-            _undoStack.Push(command);
+            UndoStack.Push(command);
             FrameStats.Current.UndoRedoTriggered = true;
         }
     }
 
-    public static void Clear()
+    internal static void Clear()
     {
-        _undoStack.Clear();
-        _redoStack.Clear();
+        UndoStack.Clear();
+        RedoStack.Clear();
     }
 
-    public static string GetUndoStackAsString()
+    internal static string GetUndoStackAsString()
     {
         var sb = new StringBuilder();
         var index = 0;
-        foreach (var a in _undoStack)
+        foreach (var a in UndoStack)
         {
             sb.Append(a.Name);
             sb.Append('\n');
@@ -103,9 +101,6 @@ public static class UndoRedoStack
         return sb.ToString();
     }
 
-    private static readonly Stack<ICommand> _undoStack = new();
-    private static readonly Stack<ICommand> _redoStack = new();
-
-    public static Stack<ICommand> UndoStack => _undoStack;
-    public static Stack<ICommand> RedoStack => _redoStack;
+    internal static Stack<ICommand> UndoStack { get; } = new();
+    private static Stack<ICommand> RedoStack { get; } = new();
 }

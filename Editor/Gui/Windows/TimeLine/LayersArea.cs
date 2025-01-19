@@ -1,3 +1,5 @@
+#nullable enable
+using System.Diagnostics;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
@@ -18,7 +20,7 @@ namespace T3.Editor.Gui.Windows.TimeLine;
 /// <summary>
 /// Shows a list of Layers with <see cref="TimeClip"/>s
 /// </summary>
-internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
+internal sealed class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
 {
     public LayersArea(ValueSnapHandler snapHandler, TimeLineCanvas timeLineCanvas, Func<Instance> getCompositionOp, Func<Guid, bool> requestChildComposition)
     {
@@ -49,6 +51,8 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
 
     private void DrawContextMenu(Instance compositionOp)
     {
+        Debug.Assert(_playback !=null);
+        
         if (!_contextMenuIsOpen && !ImGui.IsWindowHovered())
             return;
 
@@ -86,57 +90,7 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
                 
             if (ImGui.MenuItem("Cut at time"))
             {
-                // FIXME: This command is incomplete and like to lead to inconsistent data.
-                // On the other hand, added it to the UndoRedoQueue prevents an obvious crash...
-                var commands = new List<ICommand>();
-                    
-                var timeInBars = _playback.TimeInBars;
-                var matchingClips = _clipSelection.AllOrSelectedClips.Where(clip => clip.TimeRange.Contains(timeInBars)).ToList();
-
-                foreach (var clip in matchingClips)
-                {
-                    var symbolChildUi = compositionSymbolUi.ChildUis[clip.Id];
-
-                    var originalName = symbolChildUi.SymbolChild.ReadableName;
-                    Vector2 newPos = symbolChildUi.PosOnCanvas;
-                    newPos.Y += symbolChildUi.Size.Y + 5.0f;
-                    var cmd = new CopySymbolChildrenCommand(compositionSymbolUi,
-                                                            new[] { symbolChildUi },
-                                                            null,
-                                                            compositionSymbolUi,
-                                                            newPos);
-                    commands.Add(cmd);
-                    cmd.Do();
-                        
-                    // Set new end to the original time clip
-                    float orgTimeRangeEnd = clip.TimeRange.End;
-                    float originalSourceDuration = clip.SourceRange.Duration;
-                    float normalizedCutPosition = ((float)_playback.TimeInBars - clip.TimeRange.Start) / clip.TimeRange.Duration;
-                        
-                    clip.TimeRange.End = (float)_playback.TimeInBars;
-                        
-                    // Apply new time range to newly added instance
-                    Guid newChildId = cmd.OldToNewIdDict[clip.Id];
-                    var newInstance = compositionOp.Children[newChildId];
-                    var newTimeClip = newInstance.Outputs.OfType<ITimeClipProvider>().Single().TimeClip;
-                        
-                    var newSymbolUiChild = compositionSymbolUi.ChildUis[newChildId];
-                    var renameCommand = new ChangeSymbolChildNameCommand(newSymbolUiChild, compositionSymbolUi.Symbol);
-                    renameCommand.NewName = originalName;
-                    renameCommand.Do();
-                    commands.Add(renameCommand);
-                        
-                    newSymbolUiChild.SymbolChild.Name = originalName;
-                            
-                    newTimeClip.TimeRange = new TimeRange((float)_playback.TimeInBars, orgTimeRangeEnd);
-                    newTimeClip.SourceRange.Start = newTimeClip.SourceRange.Start + originalSourceDuration * normalizedCutPosition;
-                    newTimeClip.SourceRange.End = clip.SourceRange.End;
-                        
-                    clip.SourceRange.Duration = originalSourceDuration * normalizedCutPosition;
-                }
-                    
-                var macroCommands = new MacroCommand("split clip", commands);
-                UndoRedoStack.Add(macroCommands);
+                SplitClipsAtTime(compositionOp, compositionSymbolUi);
             }
                 
             ImGui.Separator();
@@ -148,7 +102,74 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
             _contextMenuIsOpen = false;
         }
     }
+
+    /// <remarks>
+    /// This command is incomplete and likely to lead to inconsistent data
+    /// </remarks>
+    private void SplitClipsAtTime(Instance compositionOp, SymbolUi compositionSymbolUi)
+    {
+        Debug.Assert(_playback!=null);
         
+                    
+        var timeInBars = _playback.TimeInBars;
+        var matchingClips = _clipSelection.AllOrSelectedClips.Where(clip => clip.TimeRange.Contains(timeInBars)).ToList();
+        if (matchingClips.Count == 0)
+        {
+            Log.Debug($"There are no time clips at current time {timeInBars:0.0}");
+            return;
+        }
+
+        var commands = new List<ICommand>();
+        foreach (var clip in matchingClips)
+        {
+            var symbolChildUi = compositionSymbolUi.ChildUis[clip.Id];
+
+            var originalName = symbolChildUi.SymbolChild.ReadableName;
+            var newPos = symbolChildUi.PosOnCanvas;
+            newPos.Y += symbolChildUi.Size.Y + 15.0f;
+            var cmd = new CopySymbolChildrenCommand(compositionSymbolUi,
+                                                    new[] { symbolChildUi },
+                                                    null,
+                                                    compositionSymbolUi,
+                                                    newPos);
+            commands.Add(cmd);
+            cmd.Do();
+                        
+            // Set new end to the original time clip
+            var orgTimeRangeEnd = clip.TimeRange.End;
+            var originalSourceDuration = clip.SourceRange.Duration;
+            var normalizedCutPosition = ((float)_playback.TimeInBars - clip.TimeRange.Start) / clip.TimeRange.Duration;
+                        
+            clip.TimeRange.End = (float)_playback.TimeInBars;
+                        
+            // Apply new time range to newly added instance
+            var newChildId = cmd.OldToNewIdDict[clip.Id];
+            var newInstance = compositionOp.Children[newChildId];
+            var newTimeClip = newInstance.Outputs.OfType<ITimeClipProvider>().Single().TimeClip;
+                        
+            var newSymbolUiChild = compositionSymbolUi.ChildUis[newChildId];
+            var renameCommand = new ChangeSymbolChildNameCommand(newSymbolUiChild, compositionSymbolUi.Symbol)
+                                    {
+                                        NewName = originalName
+                                    };
+            renameCommand.Do();
+            commands.Add(renameCommand);
+                        
+            newSymbolUiChild.SymbolChild.Name = originalName;
+                            
+            newTimeClip.TimeRange = new TimeRange((float)_playback.TimeInBars, orgTimeRangeEnd);
+            newTimeClip.SourceRange.Start = newTimeClip.SourceRange.Start + originalSourceDuration * normalizedCutPosition;
+            newTimeClip.SourceRange.End = clip.SourceRange.End;
+                        
+            clip.SourceRange.Duration = originalSourceDuration * normalizedCutPosition;
+        }
+                    
+        var macroCommands = new MacroCommand("split clip", commands);
+        UndoRedoStack.Add(macroCommands);
+
+        ProjectView.Focused?.FlagChanges(ProjectView.ChangeTypes.Children); 
+    }
+
     private int _minLayerIndex = int.MaxValue;
     private int _maxLayerIndex = int.MinValue;
         
@@ -306,7 +327,7 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
                 
             //FitViewToSelectionHandling.FitViewToSelection();
             //ClipSelection.Select(timeClip);
-            if (Structure.TryGetUiAndInstanceInComposition(timeClip.Id, compositionOp, out var childUi, out var instance))
+            if (Structure.TryGetUiAndInstanceInComposition(timeClip.Id, compositionOp, out _, out var instance))
             {
                 _requestChildComposition(instance.SymbolChildId);
             }
@@ -320,14 +341,15 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
         var notClickingOrDragging = !ImGui.IsItemActive() && !ImGui.IsMouseDragging(ImGuiMouseButton.Left);
         if (notClickingOrDragging && _moveClipsCommand != null)
         {
-            _timelineCanvas.CompleteDragCommand();
+            // store values and nullify command
+            _timelineCanvas.CompleteDragCommand(); 
+            //_moveClipsCommand.StoreCurrentValues();
 
-            if (_moveClipsCommand != null)
-            {
-                _moveClipsCommand.StoreCurrentValues();
-                UndoRedoStack.Add(_moveClipsCommand);
-                _moveClipsCommand = null;
-            }
+            // if (_moveClipsCommand != null)
+            // {
+            //     UndoRedoStack.Add(_moveClipsCommand);
+            //     _moveClipsCommand = null;
+            // }
         }
             
         if (wasClicked)
@@ -647,10 +669,10 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
     /// <summary>
     /// Snap to all non-selected Clips
     /// </summary>
-    SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
+    SnapResult? IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
     {
         var currentComp = _getCompositionOp();
-        SnapResult bestSnapResult = null;
+        SnapResult? bestSnapResult = null;
 
         var allClips = Structure.GetAllTimeClips(currentComp);
 
@@ -670,14 +692,14 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
     private Vector2 _minScreenPos;
         
     //public readonly HashSet<ITimeClip> SelectedTimeClips = new HashSet<ITimeClip>();
-    private static MoveTimeClipsCommand _moveClipsCommand;
+    private static MoveTimeClipsCommand? _moveClipsCommand;
     private const int LayerHeight = 28;
     private const float HandleWidth = 7;
     private readonly Vector2 _handleOffset = new(HandleWidth, 0);
         
     private ImDrawListPtr _drawList;
     private readonly ValueSnapHandler _snapHandler;
-    private Playback _playback;
+    private Playback? _playback;
     private readonly Color _timeRemappingColor = UiColors.StatusAnimated.Fade(0.5f);
     private readonly ClipSelection _clipSelection;
     private readonly TimeLineCanvas _timelineCanvas;
@@ -689,7 +711,7 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
     /// Maps selection of <see cref="ITimeClip"/>s
     /// to <see cref="NodeSelection"/> with <see cref="ISelectableCanvasObject"/>s.
     /// </summary>
-    private class ClipSelection
+    private sealed class ClipSelection
     {
         public ClipSelection(NodeSelection nodeSelection)
         {
@@ -731,6 +753,9 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
 
         public void Clear()
         {
+            if (_compositionOp == null) 
+                return;
+            
             foreach (var c in _selectedClips)
             {
                 _nodeSelection.DeselectCompositionChild(_compositionOp, c.Id);
@@ -741,6 +766,9 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
 
         public void Select(ITimeClip timeClip)
         {
+            if (_compositionOp == null) 
+                return;
+            
             foreach (var c in _selectedClips)
             {
                 _nodeSelection.DeselectCompositionChild(_compositionOp, c.Id);
@@ -751,29 +779,38 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
 
         public void Deselect(ITimeClip timeClip)
         {
+            if (_compositionOp == null) 
+                return;
+
             _nodeSelection.DeselectCompositionChild(_compositionOp, timeClip.Id);
             _selectedClips.Remove(timeClip);
         }
             
-        public void Deselect(List<ITimeClip> matchingClips)
-        {
-            matchingClips.ForEach(Deselect);
-        }
+        // public void Deselect(List<ITimeClip> matchingClips)
+        // {
+        //     matchingClips.ForEach(Deselect);
+        // }
+        // public void AddSelection(List<ITimeClip> matchingClips)
+        // {
+        //     if (_compositionOp == null) 
+        //         return;
+        //
+        //     foreach (var timeClip in matchingClips)
+        //     {
+        //         _nodeSelection.SelectCompositionChild(_compositionOp, timeClip.Id);
+        //         _selectedClips.Add(timeClip);
+        //     }
+        // }
 
         public void AddSelection(ITimeClip matchingClip)
         {
+            if (_compositionOp == null) 
+                return;
+
             _nodeSelection.SelectCompositionChild(_compositionOp, matchingClip.Id);
             _selectedClips.Add(matchingClip);
         }
             
-        public void AddSelection(List<ITimeClip> matchingClips)
-        {
-            foreach (var timeClip in matchingClips)
-            {
-                _nodeSelection.SelectCompositionChild(_compositionOp, timeClip.Id);
-                _selectedClips.Add(timeClip);
-            }
-        }
 
 
         public bool Contains(ITimeClip clip)
@@ -786,7 +823,7 @@ internal class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
         /// </summary>
         private readonly Dictionary<Guid, ITimeClip> _compositionTimeClips = new(100);
         private readonly List<ITimeClip> _selectedClips = new(100);
-        private Instance _compositionOp;
+        private Instance? _compositionOp;
         private readonly NodeSelection _nodeSelection;
     }
 }

@@ -30,6 +30,27 @@ internal sealed class ProjectView
 
     public event Action<ProjectView, Guid>? OnCompositionChanged;
 
+    public void FlagChanges(ChangeTypes changeTypes)
+    {
+        OnCompositionContentChanged?.Invoke(this, changeTypes);
+    }
+    
+    public event Action<ProjectView, ChangeTypes>? OnCompositionContentChanged;
+
+    [Flags]
+    public enum ChangeTypes
+    {
+        None =0,
+        Connections = 1<< 1,
+        Children = 1<<2,
+        Layout = 1<<3,
+        Composition = 1<<4,
+        GraphStyle = 1<<5,
+    }
+
+    #region initialization ---------------------------------------------------------
+    
+
     public ProjectView(OpenedProject openedProject, NavigationHistory navigationHistory, NodeSelection nodeSelection, GraphImageBackground graphImageBackground)
     {
         OpenedProject = openedProject;
@@ -142,11 +163,10 @@ internal sealed class ProjectView
         // pass the child UI only in case the previous composition was a cloned instance
         return TrySetCompositionOp(path, ICanvas.Transition.JumpOut, previousComposition!.SymbolChildId);
     }
-
-    public void SetBackgroundOutput(Instance instance)
-    {
-        GraphImageBackground.OutputInstance = instance;
-    }
+    #endregion
+    
+    
+    
 
     public void CheckDisposal()
     {
@@ -176,6 +196,12 @@ internal sealed class ProjectView
         }
     }
 
+    public void SetBackgroundOutput(Instance instance)
+    {
+        GraphImageBackground.OutputInstance = instance;
+    }
+
+    
     private readonly DuplicateSymbolDialog _duplicateSymbolDialog = new();
     private string _dupeReadonlyNamespace = "";
     private string _dupeReadonlyName = "";
@@ -199,23 +225,10 @@ internal sealed class ProjectView
         OpenedProject.UnregisterView(this);
     }
     
-    public void TakeFocus()
+    public void SetAsFocused()
     {
         Focused = this;
     }
     
-    public static ProjectView? Focused
-    {
-        get => _focused;
-        private set
-        {
-            //TODO: check if we need this
-            // if (_focused == value)
-            //     return;
-            //_focused?.OnFocusLost?.Invoke(_focused, _focused);
-            _focused = value;
-        }
-    }
-    private static ProjectView? _focused;
-
+    public static ProjectView? Focused { get; private set; }
 }

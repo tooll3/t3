@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using System.Diagnostics;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Interaction;
@@ -37,6 +38,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
 
         var canvas = new MagGraphCanvas(projectView);
         projectView.OnCompositionChanged += canvas.CompositionChangedHandler;
+        projectView.OnCompositionContentChanged += canvas.CompositionContentChangedHandler;
 
         projectView.GraphCanvas = canvas;
         return projectView;
@@ -47,6 +49,15 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
         _context.Layout.FlagAsChanged();
     }
 
+    private void CompositionContentChangedHandler(ProjectView view, ProjectView.ChangeTypes changes)
+    {
+        Debug.Assert(view == _projectView);
+        if ((changes & (ProjectView.ChangeTypes.Connections | ProjectView.ChangeTypes.Children)) != 0)
+        {
+            _context.Layout.FlagAsChanged();    
+        }
+    }
+    
     private readonly ProjectView _projectView;
 
     #region implement IGraph canvas
@@ -94,7 +105,10 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
     {
         _destroyed = true;
         _projectView.OnCompositionChanged -= CompositionChangedHandler;
+        _projectView.OnCompositionContentChanged -= CompositionContentChangedHandler;
     }
+
+
 
     void IGraphCanvas.CreatePlaceHolderConnectedToInput(SymbolUi.Child symbolChildUi, Symbol.InputDefinition inputInputDefinition)
     {
@@ -112,7 +126,6 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
         _projectView = projectView;
         EnableParentZoom = false;
         _context = new GraphUiContext(projectView, this);
-        _nodeSelection = projectView.NodeSelection;
         _previousInstance = projectView.CompositionInstance!;
 
         InitializeCanvasScope(_context);
@@ -316,13 +329,14 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
     private float HoverTime => (float)(ImGui.GetTime() - _hoverStartTime);
     private bool _enableDebug;
     private GraphUiContext _context;
-    private readonly NodeSelection _nodeSelection;
     private bool _destroyed;
 
     protected override ScalableCanvas? Parent => null;
 
     public void FocusViewToSelection(GraphUiContext context)
     {
-        FitAreaOnCanvas(NodeSelection.GetSelectionBounds(context.Selector, context.CompositionOp));
+        var areaOnCanvas = NodeSelection.GetSelectionBounds(context.Selector, context.CompositionOp);
+        areaOnCanvas.Expand(200);
+        FitAreaOnCanvas(areaOnCanvas);
     }
 }
