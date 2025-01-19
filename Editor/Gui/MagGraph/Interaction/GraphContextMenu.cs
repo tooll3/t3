@@ -6,6 +6,7 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.MagGraph.States;
+using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.UiModel;
@@ -18,7 +19,7 @@ namespace T3.Editor.Gui.MagGraph.Interaction;
 
 internal static class GraphContextMenu
 {
-    internal static void DrawContextMenuContent(GraphUiContext context)
+    internal static void DrawContextMenuContent(GraphUiContext context, ProjectView projectView)
     {
         var clickPosition = ImGui.GetMousePosOnOpeningCurrentPopup();
         var compositionSymbolUi = context.CompositionOp.GetSymbolUi();
@@ -181,7 +182,7 @@ internal static class GraphContextMenu
             // TODO: Implement
             if (ImGui.MenuItem("Pin to output", oneOpSelected))
             {
-                if (ProjectView.Focused != null) 
+                if (ProjectView.Focused != null)
                     NodeActions.PinSelectedToOutputWindow(ProjectView.Focused, nodeSelection, context.CompositionOp);
             }
 
@@ -232,39 +233,42 @@ internal static class GraphContextMenu
 
         // if (ImGui.MenuItem("Change Symbol", someOpsSelected && !isSaving))
         // {
-        //     var startingSearchString = selectedChildUis[0].SymbolChild.Symbol.Name;
-        //     var position = selectedChildUis.Count == 1 ? selectedChildUis[0].PosOnCanvas : InverseTransformPositionFloat(ImGui.GetMousePos());
-        //     _window.SymbolBrowser.OpenAt(position, null, null, false, startingSearchString,
-        //                                  symbol => { ChangeSymbol.ChangeOperatorSymbol(nodeSelection, context.CompositionOp, selectedChildUis, symbol); });
+        //     // var startingSearchString = selectedChildUis[0].SymbolChild.Symbol.Name;
+        //     // var position = selectedChildUis.Count == 1 ? selectedChildUis[0].PosOnCanvas : InverseTransformPositionFloat(ImGui.GetMousePos());
+        //     // _window.SymbolBrowser.OpenAt(position, null, null, false, startingSearchString,
+        //     //                              symbol => { ChangeSymbol.ChangeOperatorSymbol(nodeSelection, context.CompositionOp, selectedChildUis, symbol); });
         // }
 
-        // TODO: Implement
-        // if (ImGui.BeginMenu("Symbol definition...", !isSaving))
-        // {
-        //     if (ImGui.MenuItem("Rename Symbol", oneOpSelected))
-        //     {
-        //         _renameSymbolDialog.ShowNextFrame();
-        //         _symbolNameForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Name;
-        //         //NodeOperations.RenameSymbol(selectedChildUis[0].SymbolChild.Symbol, "NewName");
-        //     }
-        //
-        //     if (ImGui.MenuItem("Duplicate as new type...", oneOpSelected))
-        //     {
-        //         _symbolNameForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Name ?? string.Empty;
-        //         _nameSpaceForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Namespace ?? string.Empty;
-        //         _symbolDescriptionForDialog = "";
-        //         _duplicateSymbolDialog.ShowNextFrame();
-        //     }
-        //
-        //     if (ImGui.MenuItem("Combine into new type...", someOpsSelected))
-        //     {
-        //         _nameSpaceForDialogEdits = compositionOp.Symbol.Namespace ?? string.Empty;
-        //         _symbolDescriptionForDialog = "";
-        //         _combineToSymbolDialog.ShowNextFrame();
-        //     }
-        //
-        //     ImGui.EndMenu();
-        // }
+        if (projectView.GraphCanvas is MagGraphCanvas canvas)
+        {
+            if (ImGui.BeginMenu("Symbol definition...", !isSaving))
+            {
+                if (ImGui.MenuItem("Rename Symbol", oneOpSelected))
+                {
+                    context.RenameSymbolDialog.ShowNextFrame();
+                    context.SymbolNameForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Name;
+                }
+                //NodeOperations.RenameSymbol(selectedChildUis[0].SymbolChild.Symbol, "NewName");
+
+
+                if (ImGui.MenuItem("Duplicate as new type...", oneOpSelected))
+                {
+                    context.SymbolNameForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Name ?? string.Empty;
+                    context.NameSpaceForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Namespace ?? string.Empty;
+                    context.SymbolDescriptionForDialog = "";
+                    context.DuplicateSymbolDialog.ShowNextFrame();
+                }
+
+                if (ImGui.MenuItem("Combine into new type...", someOpsSelected))
+                {
+                    context.NameSpaceForDialogEdits = projectView.CompositionInstance.Symbol.Namespace ?? string.Empty;
+                    context.SymbolDescriptionForDialog = "";
+                    context.CombineToSymbolDialog.ShowNextFrame();
+                }
+
+                ImGui.EndMenu();
+            }
+        }
 
         var symbolPackage = compositionSymbolUi.Symbol.SymbolPackage;
         if (!symbolPackage.IsReadOnly)
@@ -285,38 +289,39 @@ internal static class GraphContextMenu
             }
         }
 
-        // TODO: Implement with mag graph logic
-        // if (ImGui.BeginMenu("Add..."))
-        // {
-        //     if (ImGui.MenuItem("Add Node...", "TAB", false, true))
-        //     {
-        //         _window.SymbolBrowser.OpenAt(InverseTransformPositionFloat(clickPosition), null, null, false);
-        //     }
-        //
-        //     if (canModify)
-        //     {
-        //         if (ImGui.MenuItem("Add input parameter..."))
-        //         {
-        //             _addInputDialog.ShowNextFrame();
-        //         }
-        //
-        //         if (ImGui.MenuItem("Add output..."))
-        //         {
-        //             _addOutputDialog.ShowNextFrame();
-        //         }
-        //     }
-        //
-        //     if (ImGui.MenuItem("Add Annotation",
-        //                        shortcut: KeyboardBinding.ListKeyboardShortcuts(UserActions.AddAnnotation, false),
-        //                        selected: false,
-        //                        enabled: true))
-        //     {
-        //         var newAnnotation = NodeActions.AddAnnotation(nodeSelection, this, context.CompositionOp);
-        //         _graph.RenameAnnotation(newAnnotation);
-        //     }
-        //
-        //     ImGui.EndMenu();
-        // }
+        if (ImGui.BeginMenu("Add..."))
+        {
+            // TODO: implement
+            // if (ImGui.MenuItem("Add Node...", "TAB", false, true))
+            // {
+            //     _window.SymbolBrowser.OpenAt(InverseTransformPositionFloat(clickPosition), null, null, false);
+            // }
+        
+            if (canModify)
+            {
+                if (ImGui.MenuItem("Add input parameter..."))
+                {
+                    context.AddInputDialog.ShowNextFrame();
+                }
+        
+                if (ImGui.MenuItem("Add output..."))
+                {
+                    context.AddOutputDialog.ShowNextFrame();
+                }
+            }
+
+            // TODO: implement
+            // if (ImGui.MenuItem("Add Annotation",
+            //                    shortcut: KeyboardBinding.ListKeyboardShortcuts(UserActions.AddAnnotation, false),
+            //                    selected: false,
+            //                    enabled: true))
+            // {
+            //     var newAnnotation = NodeActions.AddAnnotation(nodeSelection, this, context.CompositionOp);
+            //     _graph.RenameAnnotation(newAnnotation);
+            // }
+        
+            ImGui.EndMenu();
+        }
 
         ImGui.Separator();
 
@@ -365,5 +370,6 @@ internal static class GraphContextMenu
         //         }
         //     }
         // }
+        //ImGui.EndMenu();
     }
 }

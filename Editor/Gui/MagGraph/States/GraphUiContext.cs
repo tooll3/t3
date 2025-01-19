@@ -6,6 +6,7 @@ using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.Ui;
+using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Graph;
 using T3.Editor.UiModel.ProjectHandling;
@@ -70,7 +71,7 @@ internal sealed class GraphUiContext
         Canvas = canvas;
         ItemMovement = new MagItemMovement(this, canvas, Layout, projectView.NodeSelection);
         Placeholder = new PlaceholderCreation();
-        EditCommentDialog = new EditCommentDialog();
+        //EditCommentDialog = new EditCommentDialog();
         StateMachine = new StateMachine(this);// needs to be initialized last
     }
 
@@ -150,10 +151,19 @@ internal sealed class GraphUiContext
         MacroCommand = null;
     }
     
-    
-    
     // Dialogs
-    internal readonly EditCommentDialog EditCommentDialog;
+    internal readonly EditCommentDialog EditCommentDialog = new();
+    internal readonly AddInputDialog AddInputDialog = new();
+    internal readonly AddOutputDialog AddOutputDialog = new();
+    internal readonly CombineToSymbolDialog CombineToSymbolDialog = new();
+    internal readonly DuplicateSymbolDialog DuplicateSymbolDialog = new();
+    public readonly RenameSymbolDialog RenameSymbolDialog = new();
+
+    // Variables for dialogs
+    internal string SymbolNameForDialogEdits = "";
+    internal string NameSpaceForDialogEdits = "";
+    internal string SymbolDescriptionForDialog ="";
+
 
     // internal Vector2 PeekAnchorInCanvas => PrimaryOutputItem == null
     //                                            ? Vector2.Zero
@@ -162,4 +172,33 @@ internal sealed class GraphUiContext
 
     
     internal readonly List<MagGraphConnection> TempConnections = [];
+
+    public void DrawDialogs(ProjectView projectView)
+    {
+        EditCommentDialog.Draw(Selector);
+        
+        var compInstance = projectView.CompositionInstance;
+        if (compInstance != null)
+        {
+            if (compInstance != projectView.OpenedProject.RootInstance.Instance 
+                && !compInstance.Symbol.SymbolPackage.IsReadOnly)
+            {
+                var symbol = compInstance.Symbol;
+                AddInputDialog.Draw(symbol);
+                AddOutputDialog.Draw(symbol);
+            }
+            DuplicateSymbolDialog.Draw(compInstance, 
+                                                projectView.NodeSelection.GetSelectedChildUis().ToList(), 
+                                                ref NameSpaceForDialogEdits,
+                                                ref SymbolNameForDialogEdits,
+                                                ref SymbolDescriptionForDialog);
+            CombineToSymbolDialog.Draw(compInstance, projectView,
+                                                ref NameSpaceForDialogEdits,
+                                                ref SymbolNameForDialogEdits,
+                                                ref SymbolDescriptionForDialog);
+            
+            RenameSymbolDialog.Draw(projectView.NodeSelection.GetSelectedChildUis().ToList(), 
+                                             ref SymbolNameForDialogEdits);
+        }
+    }
 }

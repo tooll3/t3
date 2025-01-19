@@ -1,11 +1,13 @@
 ﻿using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
+using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using T3.Editor.UiModel.InputsAndTypes;
 using T3.Editor.UiModel.Selection;
 
@@ -15,6 +17,9 @@ internal sealed partial class MagGraphCanvas
 {
     public void DrawGraph(ImDrawListPtr drawList, float graphOpacity)
     {
+        // if (_projectView.CompositionInstance == null)
+        //     return;
+        
         IsFocused = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows);
         IsHovered = ImGui.IsWindowHovered();
 
@@ -35,8 +40,9 @@ internal sealed partial class MagGraphCanvas
         if (FitViewToSelectionHandling.FitViewToSelectionRequested)
             FocusViewToSelection(_context);
 
-        _context.EditCommentDialog.Draw(_context.Selector);
-
+        // Draw Dialogs
+        _context.DrawDialogs(_projectView);
+        
         HandleSymbolDropping(_context);
 
         // Prepare frame
@@ -45,18 +51,18 @@ internal sealed partial class MagGraphCanvas
         _context.ItemMovement.PrepareFrame();
 
         // Debug UI
-        if (ImGui.Button("Center"))
-            CenterView();
-
-        ImGui.SameLine(0, 5);
-        if (ImGui.Button("Rescan"))
-            _context.Layout.ComputeLayout(_context, forceUpdate: true);
-
-        ImGui.SameLine(0, 5);
-        ImGui.Checkbox("Debug", ref _enableDebug);
-
-        ImGui.SameLine(0, 10);
-        ImGui.Text("" + GetTargetScope());
+        // if (ImGui.Button("Center"))
+        //     CenterView();
+        //
+        // ImGui.SameLine(0, 5);
+        // if (ImGui.Button("Rescan"))
+        //     _context.Layout.ComputeLayout(_context, forceUpdate: true);
+        //
+        // ImGui.SameLine(0, 5);
+        // ImGui.Checkbox("Debug", ref _enableDebug);
+        //
+        // ImGui.SameLine(0, 10);
+        // ImGui.Text("" + GetTargetScope());
 
         if (_viewChangeRequested)
         {
@@ -197,7 +203,7 @@ internal sealed partial class MagGraphCanvas
         }
 
         if (FrameStats.Current.OpenedPopUpName == string.Empty)
-            CustomComponents.DrawContextMenuForScrollCanvas(() => GraphContextMenu.DrawContextMenuContent(_context), ref _contextMenuIsOpen);
+            CustomComponents.DrawContextMenuForScrollCanvas(() => GraphContextMenu.DrawContextMenuContent(_context, _projectView), ref _contextMenuIsOpen);
 
         SmoothItemPositions();
 

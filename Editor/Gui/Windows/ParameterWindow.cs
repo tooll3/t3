@@ -419,7 +419,9 @@ internal sealed class ParameterWindow : Window
 
             if (ImGui.IsItemDeactivatedAfterEdit())
             {
-                UndoRedoStack.Add(_symbolChildNameCommand);
+                if(_symbolChildNameCommand != null)
+                    UndoRedoStack.Add(_symbolChildNameCommand);
+                
                 _symbolChildNameCommand = null;
             }
 

@@ -4,18 +4,22 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Modification;
+using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.Graph.Dialogs;
 
-internal class CombineToSymbolDialog : ModalDialog
+internal sealed class CombineToSymbolDialog : ModalDialog
 {
-    public void Draw(Instance compositionOp, List<SymbolUi.Child> selectedChildUis, List<Annotation> selectedAnnotations, ref string nameSpace,
+    public void Draw(Instance compositionOp, ProjectView projectView, ref string nameSpace,
                      ref string combineName, ref string description)
     {
         DialogSize = new Vector2(500, 350);
 
         if (BeginDialog("Combine into symbol"))
         {
+            var selectedChildUis = projectView.NodeSelection.GetSelectedChildUis().ToList();
+            var selectedAnnotations = projectView.NodeSelection.GetSelectedNodes<Annotation>().ToList();
+            
             _ = SymbolModificationInputs.DrawProjectDropdown(ref nameSpace, ref _projectToCopyTo);
 
             if (_projectToCopyTo != null)

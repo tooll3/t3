@@ -97,7 +97,7 @@ internal static class FormInputs
                               int min = int.MinValue,
                               int max = int.MaxValue,
                               float scale = 1,
-                              string tooltip = null,
+                              string? tooltip = null,
                               int defaultValue = NotADefaultValue)
     {
         DrawInputLabel(label);
@@ -129,7 +129,7 @@ internal static class FormInputs
                                 float max = float.PositiveInfinity,
                                 float scale = 0.01f,
                                 bool clamp = false,
-                                string tooltip = null,
+                                string? tooltip = null,
                                 float defaultValue = float.NaN)
     {
         var hasReset = !float.IsNaN(defaultValue);
@@ -162,7 +162,7 @@ internal static class FormInputs
         return modified;
     }
 
-    public static bool AddEnumDropdown<T>(ref T selectedValue, string label, string tooltip = null, T defaultValue= default) where T : struct, Enum, IConvertible, IFormattable
+    public static bool AddEnumDropdown<T>(ref T selectedValue, string? label, string? tooltip = null, T defaultValue= default) where T : struct, Enum, IConvertible, IFormattable
     {
         DrawInputLabel(label);
 
@@ -176,7 +176,7 @@ internal static class FormInputs
         return modified;
     }
 
-    public static bool DrawEnumDropdown<T>(ref T selectedValue, string label, T defaultValue= default) where T : struct, Enum, IConvertible, IFormattable, IComparable
+    public static bool DrawEnumDropdown<T>(ref T selectedValue, string? label, T defaultValue= default) where T : struct, Enum, IConvertible, IFormattable, IComparable
     {
         var names = Enum.GetNames<T>();
         var index = 0;
@@ -209,7 +209,7 @@ internal static class FormInputs
     }
 
 
-    public static bool AddDropdown(ref string selectedValue, IEnumerable<string> values, string label, string tooltip = null)
+    public static bool AddDropdown(ref string selectedValue, IEnumerable<string?> values, string label, string? tooltip = null)
     {
         DrawInputLabel(label);
 
@@ -293,11 +293,11 @@ internal static class FormInputs
     /// Draws string input or file picker. 
     /// </summary>
     public static bool AddStringInput(string label,
-                                      ref string value,
-                                      string placeHolder = null,
-                                      string warning = null,
-                                      string tooltip = null,
-                                      string defaultValue = NoDefaultString,
+                                      ref string? value,
+                                      string? placeHolder = null,
+                                      string? warning = null,
+                                      string? tooltip = null,
+                                      string? defaultValue = NoDefaultString,
                                       bool autoFocus = false)
     {
         if (string.IsNullOrEmpty(label))
@@ -366,9 +366,9 @@ internal static class FormInputs
     /// Draws string input or file picker. 
     /// </summary>
     public static bool AddFilePicker(string label,
-                                     ref string value,
-                                     string placeHolder = null,
-                                     string warning = null,
+                                     ref string? value,
+                                     string? placeHolder = null,
+                                     string? warning = null,
                                      FileOperations.FilePickerTypes showFilePicker = FileOperations.FilePickerTypes.None)
     {
         DrawInputLabel(label);
@@ -407,11 +407,11 @@ internal static class FormInputs
 
     public static bool AddCheckBox(string label,
                                    ref bool value,
-                                   string tooltip = null,
+                                   string? tooltip = null,
                                    bool? defaultValue = null)
     {
         var hasDefault = defaultValue != null;
-        var isDefault = hasDefault && value == (bool)defaultValue;
+        var isDefault = defaultValue != null && value == (bool)defaultValue;
 
         if (isDefault)
         {
@@ -492,7 +492,7 @@ internal static class FormInputs
         _widthRatio = 1;
     }
 
-    public static void DrawInputLabel(string label)
+    public static void DrawInputLabel(string? label)
     {
         if (string.IsNullOrEmpty(label) || label.StartsWith("##"))
             return;
@@ -633,7 +633,7 @@ internal static class FormInputs
         return (totalWidth - fixedWidthItemCount * height) / flexItemCount;
     }
 
-    private static void DrawWarningBelowField(string warning)
+    private static void DrawWarningBelowField(string? warning)
     {
         if (string.IsNullOrEmpty(warning))
             return;
@@ -648,7 +648,7 @@ internal static class FormInputs
     #endregion
 
     #region internal helpers
-    private static Vector2 GetAvailableInputSize(string tooltip, bool hasReset, bool fillWidth = false, float rightPadding = 0)
+    private static Vector2 GetAvailableInputSize(string? tooltip, bool hasReset, bool fillWidth = false, float rightPadding = 0)
     {
         var toolWidth = 20f * T3Ui.UiScaleFactor;
         var sizeForResetToDefault = hasReset ? toolWidth : 0;
@@ -666,7 +666,7 @@ internal static class FormInputs
         return vector2;
     }
 
-    private static void AppendTooltip(string tooltip)
+    private static void AppendTooltip(string? tooltip)
     {
         if (string.IsNullOrEmpty(tooltip))
             return;
@@ -700,7 +700,7 @@ internal static class FormInputs
         ImGui.PopStyleColor();
     }
 
-    private static bool AppendResetButton(bool hasReset, string id)
+    private static bool AppendResetButton(bool hasReset, string? id)
     {
         if (!hasReset)
             return false;

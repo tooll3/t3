@@ -398,16 +398,15 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
         drawList.PopClipRect();
 
-        var compositionUpdated = _projectView.CompositionInstance;
+        var compositionInstance = _projectView.CompositionInstance;
 
         if (FrameStats.Current.OpenedPopUpName == string.Empty)
-            CustomComponents.DrawContextMenuForScrollCanvas(() => DrawContextMenuContent(compositionUpdated), ref _contextMenuIsOpen);
+            CustomComponents.DrawContextMenuForScrollCanvas(() => DrawContextMenuContent(compositionInstance), ref _contextMenuIsOpen);
 
-        _duplicateSymbolDialog.Draw(compositionUpdated, _nodeSelection.GetSelectedChildUis().ToList(), ref _nameSpaceForDialogEdits,
+        _duplicateSymbolDialog.Draw(compositionInstance, _nodeSelection.GetSelectedChildUis().ToList(), ref _nameSpaceForDialogEdits,
                                     ref _symbolNameForDialogEdits,
                                     ref _symbolDescriptionForDialog);
-        _combineToSymbolDialog.Draw(compositionUpdated, _nodeSelection.GetSelectedChildUis().ToList(),
-                                    _nodeSelection.GetSelectedNodes<Annotation>().ToList(),
+        _combineToSymbolDialog.Draw(compositionInstance, _projectView,
                                     ref _nameSpaceForDialogEdits,
                                     ref _symbolNameForDialogEdits,
                                     ref _symbolDescriptionForDialog);
@@ -416,9 +415,9 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
         EditCommentDialog.Draw(_nodeSelection);
 
-        if (compositionUpdated != _projectView.OpenedProject.RootInstance.Instance && !compositionUpdated.Symbol.SymbolPackage.IsReadOnly)
+        if (compositionInstance != _projectView.OpenedProject.RootInstance.Instance && !compositionInstance.Symbol.SymbolPackage.IsReadOnly)
         {
-            var symbol = compositionUpdated.Symbol;
+            var symbol = compositionInstance.Symbol;
             _addInputDialog.Draw(symbol);
             _addOutputDialog.Draw(symbol);
         }
@@ -780,7 +779,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
         ImGui.Separator();
 
-        if (ImGui.MenuItem("Change Symbol", someOpsSelected && !isSaving))
+        if (ImGui.MenuItem("Replace with...", someOpsSelected && !isSaving))
         {
             var startingSearchString = selectedChildUis[0].SymbolChild.Symbol.Name;
             var position = selectedChildUis.Count == 1 ? selectedChildUis[0].PosOnCanvas : InverseTransformPositionFloat(ImGui.GetMousePos());

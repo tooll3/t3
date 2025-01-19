@@ -322,12 +322,12 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
     private Vector2 GridSizeOnScreen => TransformDirection(MagGraphItem.GridSize);
     private float CanvasScale => Scale.X;
 
-    public bool ShowDebug => _enableDebug; // || ImGui.GetIO().KeyAlt;
+    public bool ShowDebug = false; // || ImGui.GetIO().KeyAlt;
 
     private Guid _lastHoverId;
     private double _hoverStartTime;
     private float HoverTime => (float)(ImGui.GetTime() - _hoverStartTime);
-    private bool _enableDebug;
+    ////private bool _enableDebug;
     private GraphUiContext _context;
     private bool _destroyed;
 

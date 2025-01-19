@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using T3.Core.Operator;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.UiModel.InputsAndTypes;
@@ -63,6 +64,10 @@ public sealed partial class SymbolUi
 
     internal void FlagAsModified()
     {
+        var stackTrace = new StackTrace();
+        var method = stackTrace.GetFrame(1)?.GetMethod();        
+        
+        //Log.Debug($" SymbolUi FlagAsModified called by {method}");
         _hasBeenModified = true;
     }
 
