@@ -281,6 +281,23 @@
         }
       ],
       "Outputs": []
+    },
+    {
+      "Id": "ccabc807-8adf-4587-830f-3640379480f8"/*PixelShader*/,
+      "SymbolId": "f7c625da-fede-4993-976c-e259e0ee4985",
+      "InputValues": [
+        {
+          "Id": "24646f06-1509-43ce-94c6-eeb608ad97cd"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\img\\fx\\ConvertEquirectangle.hlsl"
+        },
+        {
+          "Id": "501338b3-f432-49a5-bdbd-bcf209671305"/*EntryPoint*/,
+          "Type": "System.String",
+          "Value": "psMain"
+        }
+      ],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -327,8 +344,8 @@
       "TargetSlotId": "4da253b7-4953-439a-b03f-1d515a78bddf"
     },
     {
-      "SourceParentOrChildId": "a625dbd9-566d-402d-8b49-11e6cf000ea7",
-      "SourceSlotId": "c513f15d-3a7e-4501-b825-ef3e585293c7",
+      "SourceParentOrChildId": "ccabc807-8adf-4587-830f-3640379480f8",
+      "SourceSlotId": "9c6e72f8-5ce6-42c3-abaa-1829d2c066c1",
       "TargetParentOrChildId": "62aefa7d-1dd3-4751-b9b1-58e051e838f5",
       "TargetSlotId": "1b9be6eb-96c8-4b1c-b854-99b64eaf5618"
     },
