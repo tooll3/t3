@@ -79,8 +79,8 @@ internal static partial class ProjectSetup
                          || !releaseInfo.EditorVersion.Matches(Program.Version) && (!releaseInfo.RootNamespace.StartsWith("Lib") && !releaseInfo.RootNamespace.StartsWith("Types") && !releaseInfo.RootNamespace.StartsWith("Examples")); // force recompile if the project was authored with a different version of the editor
         
         var success = forceRecompile
-                          ? csProj.TryRecompile(out _, true) || csProj.TryLoadLatestAssembly() // recompile - if failed, load latest
-                          : csProj.TryLoadLatestAssembly() || csProj.TryRecompile(out _, true); // load latest - if failed, recompile
+                          ? csProj.TryRecompile(out _, true) || csProj.TryLoadAssembly() // recompile - if failed, load latest
+                          : csProj.TryLoadAssembly() || csProj.TryRecompile(out _, true); // load latest - if failed, recompile
         if (!success)
         {
             Log.Error($"Failed to load {csProj.Name}");

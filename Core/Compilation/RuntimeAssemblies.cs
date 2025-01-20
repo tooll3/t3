@@ -17,6 +17,9 @@ public static class RuntimeAssemblies
     public static readonly string CorePath = CoreAssembly.Location;
     public static readonly string CoreDirectory = Path.GetDirectoryName(CorePath)!;
     public static readonly Version Version = CoreAssembly.GetName().Version!;
+
+    public const string NetVersion = "9.0";
+    
     public static readonly IReadOnlyList<Assembly> CoreAssemblies;
     
     static RuntimeAssemblies()

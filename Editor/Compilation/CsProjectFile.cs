@@ -3,65 +3,102 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Microsoft.Build.Construction;
+using SharpDX.MediaFoundation;
 using T3.Core.Compilation;
 using T3.Core.Resource;
 using T3.Core.UserData;
 using Encoding = System.Text.Encoding;
+
 // ReSharper disable SuggestBaseTypeForParameterInConstructor
 
 namespace T3.Editor.Compilation;
 
-internal sealed partial class CsProjectFile
+internal sealed class CsProjectFile
 {
     public string FullPath => _projectRootElement.FullPath;
     public string Directory => _projectRootElement.DirectoryPath;
     public string Name => Path.GetFileNameWithoutExtension(FullPath);
-    public readonly string? RootNamespace;
+    public string RootNamespace => _projectRootElement.GetProperty(PropertyType.RootNamespace, Name);
+    public string VersionString => _projectRootElement.GetProperty(PropertyType.VersionPrefix, "1.0.0");
+    public Version Version => new(VersionString!);
     public AssemblyInformation? Assembly { get; private set; }
-    public event Action<CsProjectFile>? Recompiled;
+    public event Action<CsProjectFile>? AssemblyLoaded;
 
-    private uint _buildId = GetNewBuildId();
-    private readonly string _targetFramework;
     private readonly string _releaseRootDirectory;
     private readonly string _debugRootDirectory;
     private readonly ProjectRootElement _projectRootElement;
+
+    private string TargetFramework => _projectRootElement.GetProperty(PropertyType.TargetFramework, ProjectXml.TargetFramework);
 
     private CsProjectFile(ProjectRootElement projectRootElement)
     {
         _projectRootElement = projectRootElement;
 
-        RootNamespace = GetProperty(PropertyType.RootNamespace, _projectRootElement, Name);
-        _targetFramework = GetProperty(PropertyType.TargetFramework, _projectRootElement, DefaultProperties[PropertyType.TargetFramework]);
+        var targetFramework = TargetFramework;
+        if (!ProjectXml.FrameworkIsCurrent(targetFramework))
+        {
+            var newFramework = ProjectXml.UpdateFramework(targetFramework);
+            _projectRootElement.SetOrAddProperty(PropertyType.TargetFramework, newFramework);
+        }
 
         var dir = Directory;
         _releaseRootDirectory = Path.Combine(dir, "bin", "Release");
         _debugRootDirectory = Path.Combine(dir, "bin", "Debug");
-        
+
         // clear the release info on recompilation
-        Recompiled += file => _cachedReleaseInfo = null;
+        AssemblyLoaded += file => _cachedReleaseInfo = null;
     }
 
-    public static bool TryLoad(string filePath, [NotNullWhen(true)] out CsProjectFile? csProjFile, [NotNullWhen(false)] out string? error)
+    public readonly struct CsProjectLoadInfo
+    {
+        public readonly string? Error;
+        public readonly CsProjectFile? CsProjectFile;
+        public readonly bool NeedsUpgrade;
+        public readonly bool NeedsRecompile;
+
+        internal CsProjectLoadInfo(CsProjectFile? file, string? error)
+        {
+            Error = error;
+            CsProjectFile = file;
+
+            if (file == null)
+            {
+                NeedsUpgrade = false;
+                NeedsRecompile = false;
+                return;
+            }
+
+            var targetFramework = file.TargetFramework;
+            var currentFramework = RuntimeInformation.FrameworkDescription;
+
+            // todo - additional version checks
+            var needsUpgrade = !targetFramework.Contains(currentFramework);
+            NeedsUpgrade = needsUpgrade;
+            NeedsRecompile = needsUpgrade;
+        }
+    }
+
+    public static bool TryLoad(string filePath, out CsProjectLoadInfo loadInfo)
     {
         try
         {
             var root = ProjectRootElement.Open(filePath);
             if (root == null)
             {
-                csProjFile = null;
-                error = $"Failed to open project file at \"{filePath}\"";
+                loadInfo = new CsProjectLoadInfo(null, $"Failed to open project file at \"{filePath}\"");
                 return false;
             }
-            
-            csProjFile = new CsProjectFile(root);
-            error = null;
+
+            loadInfo = new CsProjectLoadInfo(new CsProjectFile(root), null);
             return true;
         }
         catch (Exception e)
         {
-            error = $"Failed to open project file at \"{filePath}\":\n{e}";
-            csProjFile = null;
+            var error = $"Failed to open project file at \"{filePath}\":\n{e}";
+            loadInfo = new CsProjectLoadInfo(null, error);
             return false;
         }
     }
@@ -76,39 +113,34 @@ internal sealed partial class CsProjectFile
     {
         get
         {
-            var defaultAssemblyName = UnevaluatedVariable(GetNameOf(PropertyType.RootNamespace));
-            var property = GetProperty(PropertyType.AssemblyName, _projectRootElement, defaultAssemblyName);
-            if(property != defaultAssemblyName)
+            var defaultAssemblyName = ProjectXml.UnevaluatedVariable((PropertyType.RootNamespace.GetItemName()));
+            var property = _projectRootElement.GetProperty(PropertyType.AssemblyName, defaultAssemblyName);
+            if (property != defaultAssemblyName)
                 return property + ".dll";
-            
+
             return RootNamespace + ".dll";
         }
     }
 
     public string GetBuildTargetDirectory()
     {
-        return Path.Combine(GetRootDirectory(EditorBuildMode), _buildId.ToString(CultureInfo.InvariantCulture), _targetFramework);
+        return Path.Combine(GetRootDirectory(EditorBuildMode), VersionSubfolder, TargetFramework);
     }
+    
+    private string VersionSubfolder => Version.ToBasicVersionString();
 
     private string GetRootDirectory(Compiler.BuildMode buildMode) => buildMode == Compiler.BuildMode.Debug ? _debugRootDirectory : _releaseRootDirectory;
-
-    // int to keep directory name smaller
-    private static uint GetNewBuildId() => unchecked((uint)DateTime.UtcNow.Ticks);
-
 
     // todo - rate limit recompiles for when multiple files change
     public bool TryRecompile([NotNullWhen(true)] out ReleaseInfo? releaseInfo, bool nugetRestore)
     {
-        var previousBuildId = _buildId;
         var previousAssembly = Assembly;
-        _buildId = GetNewBuildId();
-        ModifyBuildVersion(0, 0 , 1);
+        ModifyBuildVersion(0, 0, 1);
         var success = Compiler.TryCompile(this, EditorBuildMode, nugetRestore);
 
         if (!success)
         {
             ModifyBuildVersion(0, 0, -1);
-            _buildId = previousBuildId;
             releaseInfo = null;
             return false;
         }
@@ -116,7 +148,7 @@ internal sealed partial class CsProjectFile
         previousAssembly?.Unload();
         Stopwatch stopwatch = new();
         stopwatch.Start();
-        var loaded = TryLoadAssembly(null);
+        var loaded = TryLoadAssembly();
         stopwatch.Stop();
         Log.Info($"{(loaded ? "Loading" : "Failing to load")} assembly took {stopwatch.ElapsedMilliseconds} ms");
 
@@ -132,7 +164,7 @@ internal sealed partial class CsProjectFile
         {
             releaseInfo = null;
         }
-        
+
         return loaded;
     }
 
@@ -143,20 +175,13 @@ internal sealed partial class CsProjectFile
 
     private void ModifyBuildVersion(int majorModify, int minorModify, int buildModify)
     {
-        SetOrAddProperty(PropertyType.EditorVersion, Program.Version.ToBasicVersionString(), _projectRootElement);
-        
-        var version = GetCurrentVersion();
-        var newVersion = new Version(version.Major + majorModify, version.Minor + minorModify, version.Build + buildModify);
-        SetOrAddProperty(PropertyType.VersionPrefix, newVersion.ToBasicVersionString(), _projectRootElement);
-         
-        _projectRootElement.Save();
-    }
+        _projectRootElement.SetOrAddProperty(PropertyType.EditorVersion, Program.Version.ToBasicVersionString());
 
-    private Version GetCurrentVersion()
-    {
-        var versionString = GetProperty(PropertyType.VersionPrefix, _projectRootElement, "1.0.0");
-        var actualVersion = new Version(versionString!);
-        return actualVersion;
+        var version = Version;
+        var newVersion = new Version(version.Major + majorModify, version.Minor + minorModify, version.Build + buildModify);
+        _projectRootElement.SetOrAddProperty(PropertyType.VersionPrefix, newVersion.ToBasicVersionString());
+
+        _projectRootElement.Save();
     }
 
     public bool TryCompileRelease(string externalDirectory, bool nugetRestore = false)
@@ -173,7 +198,7 @@ internal sealed partial class CsProjectFile
         destinationDirectory = Path.GetFullPath(destinationDirectory);
         System.IO.Directory.CreateDirectory(destinationDirectory);
 
-        var dependenciesDirectory = Path.Combine(destinationDirectory, DependenciesFolder);
+        var dependenciesDirectory = Path.Combine(destinationDirectory, ProjectXml.DependenciesFolder);
         System.IO.Directory.CreateDirectory(dependenciesDirectory);
 
         var resourcesDirectory = Path.Combine(destinationDirectory, ResourceManager.ResourcesSubfolder);
@@ -191,11 +216,11 @@ internal sealed partial class CsProjectFile
 
         var shouldShareResources = shareResources ? "true" : "false";
         var username = nameSpace.Split('.').First();
-        
+
         var homeGuid = Guid.NewGuid();
         var homeGuidString = homeGuid.ToString();
 
-        var projRoot = CreateNewProjectRootElement(nameSpace, homeGuid);
+        var projRoot = ProjectXml.CreateNewProjectRootElement(nameSpace, homeGuid);
 
         foreach (var file in files)
         {
@@ -218,69 +243,28 @@ internal sealed partial class CsProjectFile
         return new CsProjectFile(projRoot);
     }
 
-    public bool TryLoadLatestAssembly()
-    {
-        if (!TryGetBuildDirectories(EditorBuildMode, out _, out var latestDll))
-        {
-            return false;
-        }
-
-        if (!TryLoadAssembly(latestDll))
-        {
-            Log.Error($"Could not load latest assembly at \"{latestDll.FullName}\"");
-            return false;
-        }
-
-        return true;
-    }
-
-    private bool TryGetBuildDirectories(Compiler.BuildMode buildMode, out DirectoryInfo[] compatibleDirectories, [NotNullWhen(true)]out FileInfo? latestDll)
-    {
-        var rootDir = new DirectoryInfo(GetRootDirectory(buildMode));
-        if (!rootDir.Exists)
-        {
-            compatibleDirectories = Array.Empty<DirectoryInfo>();
-            latestDll = null;
-            return false;
-        }
-
-        compatibleDirectories = rootDir.EnumerateDirectories($"*{_targetFramework}", SearchOption.AllDirectories).ToArray();
-
-        var dllName = DllName;
-        latestDll = compatibleDirectories
-                   .Select(x => new FileInfo(Path.Combine(x.FullName, dllName)))
-                   .Where(file => file.Exists)
-                   .MaxBy(x => x.LastWriteTime);
-        return latestDll != null;
-    }
-
     public void RemoveOldBuilds(Compiler.BuildMode buildMode)
     {
-        if (!TryGetBuildDirectories(buildMode, out var compatibleDirectories, out var latestDll))
-            return;
+        var versionSubfolder = VersionSubfolder;
+        var rootDir = new DirectoryInfo(GetRootDirectory(buildMode));
 
-        var latestDir = Assembly != null ? Assembly.Directory : latestDll.Directory!.FullName;
-
-        // delete all other dll directories
-        compatibleDirectories
-           .AsParallel()
-           .ForAll(directory =>
-                   {
-                       if (directory.FullName == latestDir)
-                           return;
-
-                       try
+        rootDir.EnumerateDirectories("*", SearchOption.TopDirectoryOnly)
+               .AsParallel()
+               .Where(x => !x.FullName.Contains(versionSubfolder)) // ignore our current version
+               .ForAll(directory =>
                        {
-                           directory.Delete(recursive: true);
-                       }
-                       catch (Exception e)
-                       {
-                           Log.Error($"Could not delete directory \"{directory.FullName}\": {e}");
-                       }
-                   });
+                           try
+                           {
+                               directory.Delete(recursive: true);
+                           }
+                           catch (Exception e)
+                           {
+                               Log.Error($"Could not delete directory \"{directory.FullName}\": {e}");
+                           }
+                       });
     }
 
-    private bool TryLoadAssembly(FileInfo? assemblyFile)
+    public bool TryLoadAssembly(FileInfo? assemblyFile = null)
     {
         assemblyFile ??= GetBuildTargetPath();
         if (!assemblyFile.Exists)
@@ -297,7 +281,7 @@ internal sealed partial class CsProjectFile
 
         Assembly = assembly;
 
-        Recompiled?.Invoke(this);
+        AssemblyLoaded?.Invoke(this);
         return true;
     }
 
@@ -315,13 +299,13 @@ internal sealed partial class CsProjectFile
 
         if (Assembly == null)
         {
-            if (!TryLoadLatestAssembly())
+            if (!TryLoadAssembly())
             {
                 releaseInfo = null;
                 return false;
             }
         }
-        
+
         var success = Assembly!.TryGetReleaseInfo(out _cachedReleaseInfo);
         releaseInfo = _cachedReleaseInfo;
         return success;

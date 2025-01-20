@@ -134,11 +134,13 @@ internal static partial class ProjectSetup
                       .AsParallel()
                       .Select(fileInfo =>
                               {
-                                  if (!CsProjectFile.TryLoad(fileInfo.FullName, out var csProjFile, out var error))
+                                  if (!CsProjectFile.TryLoad(fileInfo.FullName, out var loadInfo))
                                   {
-                                      Log.Error($"Failed to load project at \"{fileInfo.FullName}\":\n{error}");
+                                      Log.Error($"Failed to load project at \"{fileInfo.FullName}\":\n{loadInfo.Error}");
                                       return new ProjectWithReleaseInfo(fileInfo, null, null);
                                   }
+                                  
+                                  var csProjFile = loadInfo.CsProjectFile!;
 
                                   // this may call for some reworking of how that works (MSBuild actions in C#?), or generation at project creation time
                                   if (!csProjFile.TryGetReleaseInfo(out var releaseInfo) && !csProjFile.TryRecompile(out releaseInfo, true))
