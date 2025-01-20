@@ -46,11 +46,11 @@ public sealed class SelectionFence
         var interactionMin = Vector2.Max(_startPositionInScreen, globalMousePos);
         var interactionMax = Vector2.Min(_startPositionInScreen, globalMousePos);
             
-        var minContentRegion = ImGui.GetWindowContentRegionMin();
-        var maxContentRegion = ImGui.GetWindowContentRegionMax();
+        var minContentRegion = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos();
+        var maxContentRegion = ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos();
         var onScreenMin = Vector2.Max(minContentRegion, interactionMin);
         var onScreenMax = Vector2.Min(maxContentRegion, interactionMax);
-            
+        
         BoundsInScreen = ImRect.RectBetweenPoints(onScreenMin, onScreenMax);
         BoundsUnclamped = ImRect.RectBetweenPoints(_startPositionInScreen, globalMousePos);
 
