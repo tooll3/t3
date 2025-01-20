@@ -12,7 +12,7 @@ internal sealed partial class CsProjectFile
     private static readonly FrozenDictionary<PropertyType, string> DefaultProperties =
         new[]
                 {
-                    (Type: PropertyType.TargetFramework, Value: "net8.0-windows"),
+                    (Type: PropertyType.TargetFramework, Value: "net9.0-windows"),
                     (Type: PropertyType.DisableTransitiveProjectReferences, Value: "true"),
                     (Type: PropertyType.VersionPrefix, Value: "1.0.0"),
                     (Type: PropertyType.Nullable, Value: "enable"),
