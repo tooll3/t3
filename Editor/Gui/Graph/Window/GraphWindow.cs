@@ -67,9 +67,9 @@ internal sealed class GraphWindow : Windows.Window
     /// </summary>
     internal bool TrySetToProject(OpenedProject project)
     {
-        if (!project.Package.TryGetRootInstance(out var root))
+        if (!project.Package.HasHome)
         {
-            Log.Warning("Failed to get root instance.");
+            Log.Error("Project has no home.");
             return false;
         }
 
@@ -81,12 +81,14 @@ internal sealed class GraphWindow : Windows.Window
         // ProjectView = Legacy.GraphCanvas.CreateWithComponents(project);
         ProjectView.OnCompositionChanged += CompositionChangedHandler;
 
-        IReadOnlyList<Guid> rootPath = [root.SymbolChildId];
+        var rootInstance = project.RootInstance;
+        var rootSymbolChildId = rootInstance.SymbolChildId;
+        IReadOnlyList<Guid> rootPath = [rootSymbolChildId];
         var startPath = rootPath;
         var opId = UserSettings.GetLastOpenOpForWindow(Config.Title);
-        if (opId != Guid.Empty && opId != root.SymbolChildId)
+        if (opId != Guid.Empty && opId != rootSymbolChildId)
         {
-            if (root.TryGetChildInstance(opId, true, out _, out var path))
+            if (rootInstance.TryGetChildInstance(opId, true, out _, out var path))
             {
                 startPath = path;
             }
@@ -152,8 +154,6 @@ internal sealed class GraphWindow : Windows.Window
 
         if (FitViewToSelectionHandling.FitViewToSelectionRequested)
             GraphCanvas?.FocusViewToSelection();
-
-        ProjectView.OpenedProject.RefreshRootInstance(ProjectView);
 
         if (ProjectView.Composition == null)
             return;

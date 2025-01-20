@@ -84,7 +84,6 @@ internal sealed partial class EditableSymbolProject
         }
         
         filePathHandler.UpdateFromSymbol();
-        RootInstance = null;
     }
 
     /// <summary>

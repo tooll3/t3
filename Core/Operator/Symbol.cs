@@ -35,7 +35,7 @@ public sealed partial class Symbol : IDisposable, IResource
 
     public string Name => _instanceType.Name;
     public string Namespace => _instanceType.Namespace ?? SymbolPackage.AssemblyInformation.Name;
-    public Animator Animator { get; } = new();
+    public Animator Animator { get; private set; } = new();
     public PlaybackSettings PlaybackSettings { get; set; } = new();
         
     public SymbolPackage SymbolPackage { get; set; }
@@ -337,8 +337,8 @@ public sealed partial class Symbol : IDisposable, IResource
         }
     }
 
-    private bool NeedsTypeUpdate { get; set; } = true;
+    internal bool NeedsTypeUpdate { get; set; } = true;
     //private IEnumerable<Instance> _instancesOfSelf => _childrenCreatedFromMe.SelectMany(x => x.Instances);
-    private ConcurrentDictionary<Guid, Child> _children = new();
+    private readonly ConcurrentDictionary<Guid, Child> _children = new();
     private readonly SynchronizedCollection<Child> _childrenCreatedFromMe = new();
 }

@@ -19,16 +19,124 @@ internal sealed class ProjectView
     public Structure Structure => OpenedProject.Structure;
 
     public IGraphCanvas GraphCanvas { get; set; } = default!; // TODO: remove set accessibility
-
-    private readonly Stack<Composition> _compositionsForDisposal = new();
     public OpenedProject OpenedProject { get; }
     private readonly List<Guid> _compositionPath = [];
-    public Composition? Composition { get; set; }
+    
+    private Composition? _composition;
+    public Composition? Composition => _composition;
     public Instance? CompositionInstance => Composition?.Instance;
+    
+    private readonly Stack<Composition> _compositionsAwaitingDisposal = [];
+    private readonly Stack<Composition> _compositionReloadStack = [];
+    private bool _waitingOnReload = false;
+
+    public void SetCompositionOp(Instance? newCompositionOp)
+    {
+        if (newCompositionOp == null)
+        {
+            if (_composition != null)
+            {
+                DisposeComposition(_composition, []);
+            }
+            
+            _composition = null;
+            return;
+        }
+        
+        if (_composition != null)
+        {
+            if (_composition.Is(newCompositionOp))
+            {
+                return;
+            }
+            
+            var path = new List<Guid>();
+            Structure.PopulateInstancePath(newCompositionOp, path);
+            DisposeComposition(_composition, path);
+        }
+
+        _composition = Composition.GetForInstance(newCompositionOp);
+
+        if (_composition != null)
+        {
+            OnCompositionChanged?.Invoke(this, _composition.SymbolChildId);
+        }
+
+        return;
+
+        void DisposeComposition(Composition oldComposition, List<Guid> path)
+        {
+            _compositionsAwaitingDisposal.Push(oldComposition);
+            
+            while (_compositionsAwaitingDisposal.TryPop(out var compositionToDispose))
+            {
+                if (path.Contains(compositionToDispose.SymbolChildId))
+                {
+                    // not ready yet to dispose as it is still part of the current composition stack
+                    _compositionsAwaitingDisposal.Push(compositionToDispose);
+                    break;
+                }
+
+                compositionToDispose.Dispose();
+                if (compositionToDispose.NeedsReload)
+                {
+                    _compositionReloadStack.Push(compositionToDispose);
+                }
+            }
+
+        }
+    }
+
+    public void CheckDisposal()
+    {
+        if (_compositionReloadStack.TryPeek(out var nextToReload))
+        {
+            ShowSymbolReloadDialog(nextToReload);
+        }
+
+        return;
+
+        void ShowSymbolReloadDialog(Composition composition)
+        {
+            var instance = composition.Instance;
+            var parent = instance.Parent;
+            var symbolChildUi = parent?.GetSymbolUi().ChildUis[instance.SymbolChildId];
+            if (symbolChildUi != null && parent != null)
+            {
+                _duplicateSymbolDialog.ShowNextFrame(); // actually shows this frame
+                _duplicateSymbolDialog.Draw(compositionOp: parent,
+                                            selectedChildUis: [symbolChildUi],
+                                            nameSpace: ref _dupeReadonlyNamespace,
+                                            newTypeName: ref _dupeReadonlyName,
+                                            description: ref _dupeReadonlyDescription,
+                                            isReload: true);
+
+                if (!_waitingOnReload)
+                {
+                    _duplicateSymbolDialog.Closed += ReloadSymbol;
+                    _waitingOnReload = true;
+                }
+            }
+
+            return;
+
+            void ReloadSymbol()
+            {
+                _duplicateSymbolDialog.Closed -= ReloadSymbol;
+                _compositionReloadStack.Pop();
+                _waitingOnReload = false;
+                var symbol = instance.Symbol;
+                var symbolPackage = (EditorSymbolPackage)symbol.SymbolPackage;
+                symbolPackage.Reload(symbol.GetSymbolUi());
+            }
+        }
+    }
+    
 
     public readonly TimeLineCanvas TimeLineCanvas;
 
-    public event Action<ProjectView, Guid>? OnCompositionChanged;
+    public delegate void CompositionChangedHandler(ProjectView projectView, Guid symbolChildId);
+    public event CompositionChangedHandler? OnCompositionChanged;
 
     public void FlagChanges(ChangeTypes changeTypes)
     {
@@ -54,7 +162,6 @@ internal sealed class ProjectView
     public ProjectView(OpenedProject openedProject, NavigationHistory navigationHistory, NodeSelection nodeSelection, GraphImageBackground graphImageBackground)
     {
         OpenedProject = openedProject;
-        _duplicateSymbolDialog.Closed += DisposeLatestComposition;
 
         NavigationHistory = navigationHistory;
         NodeSelection = nodeSelection;
@@ -63,6 +170,8 @@ internal sealed class ProjectView
         var getCompositionOp = () => CompositionInstance;
         NodeNavigation = new NodeNavigation(openedProject.Structure, NavigationHistory, getCompositionOp);
         TimeLineCanvas = new TimeLineCanvas(NodeSelection, getCompositionOp, TrySetCompositionOpToChild);
+        
+        SetCompositionOp(openedProject.RootInstance);
     }
 
     public static void CreateIndependentComponents(OpenedProject openedProject, out NavigationHistory navigationHistory, out NodeSelection nodeSelection,
@@ -72,13 +181,6 @@ internal sealed class ProjectView
         navigationHistory = new NavigationHistory(structure);
         nodeSelection = new NodeSelection(navigationHistory, structure);
         graphImageBackground = new GraphImageBackground(nodeSelection, structure);
-    }
-
-
-    public void DisposeLatestComposition()
-    {
-        var composition = _compositionsForDisposal.Pop();
-        composition.Dispose();
     }
 
     public bool TrySetCompositionOp(IReadOnlyList<Guid> newIdPath, ICanvas.Transition transition = ICanvas.Transition.Undefined, Guid? alsoSelectChildId = null)
@@ -105,16 +207,16 @@ internal sealed class ProjectView
                                              && Composition.SymbolChildId == newCompositionInstance.SymbolChildId;
         if (targetCompositionAlreadyActive)
         {
-            if (newIdPath[0] != OpenedProject.RootInstance.Instance.SymbolChildId)
+            if (newIdPath[0] != OpenedProject.RootInstance.SymbolChildId)
             {
                 throw new Exception("Root instance is not the first element in the path");
             }
         }
         else
         {
-            Composition = Composition.GetForInstance(newCompositionInstance);
-            OnCompositionChanged?.Invoke(this, Composition.SymbolChildId);
+            SetCompositionOp(newCompositionInstance);
         }
+        
         // Although the composition might already be active, the _compositionPath might not have been initialized yet.
         // TODO: This probably is an indication, that this should be refactored into CompositionOp and avoid holding this twice
         _compositionPath.Clear();
@@ -167,41 +269,10 @@ internal sealed class ProjectView
     
     
     
-
-    public void CheckDisposal()
-    {
-        if (!_compositionsForDisposal.TryPeek(out var latestComposition)) return;
-
-        if (_compositionPath.Contains(latestComposition.SymbolChildId)) return;
-
-        if (latestComposition.NeedsReload)
-        {
-            _duplicateSymbolDialog.ShowNextFrame(); // actually shows this frame
-            var instance = latestComposition.Instance;
-            var parent = instance.Parent;
-            var symbolChildUi = parent?.GetSymbolUi().ChildUis[instance.SymbolChildId];
-            if (symbolChildUi != null && latestComposition.Instance.Parent != null)
-            {
-                _duplicateSymbolDialog.Draw(compositionOp: latestComposition.Instance.Parent,
-                                            selectedChildUis: [symbolChildUi],
-                                            nameSpace: ref _dupeReadonlyNamespace,
-                                            newTypeName: ref _dupeReadonlyName,
-                                            description: ref _dupeReadonlyDescription,
-                                            isReload: true);
-            }
-        }
-        else
-        {
-            DisposeLatestComposition();
-        }
-    }
-
     public void SetBackgroundOutput(Instance instance)
     {
         GraphImageBackground.OutputInstance = instance;
     }
-
-    
     private readonly DuplicateSymbolDialog _duplicateSymbolDialog = new();
     private string _dupeReadonlyNamespace = "";
     private string _dupeReadonlyName = "";

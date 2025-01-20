@@ -25,10 +25,9 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
                                                 out var nodeSelection,
                                                 out var graphImageBackground);
 
-        var projectView = new ProjectView(openedProject, navigationHistory, nodeSelection, graphImageBackground)
-                              {
-                                  Composition = openedProject.RootInstance
-                              };
+        var projectView = new ProjectView(openedProject, navigationHistory, nodeSelection, graphImageBackground);
+        
+        projectView.SetCompositionOp(openedProject.RootInstance);
 
         if (projectView.CompositionInstance == null)
         {

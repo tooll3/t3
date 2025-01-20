@@ -180,7 +180,7 @@ internal sealed class GraphUiContext
         var compInstance = projectView.CompositionInstance;
         if (compInstance != null)
         {
-            if (compInstance != projectView.OpenedProject.RootInstance.Instance 
+            if (compInstance != projectView.OpenedProject.RootInstance 
                 && !compInstance.Symbol.SymbolPackage.IsReadOnly)
             {
                 var symbol = compInstance.Symbol;

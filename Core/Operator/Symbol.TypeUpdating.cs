@@ -9,9 +9,9 @@ namespace T3.Core.Operator;
 
 public sealed partial class Symbol
 {
-    internal void UpdateInstanceType()
+    internal void UpdateInstanceType(bool forceTypeUpdate = false)
     {
-        if (!NeedsTypeUpdate)
+        if (!NeedsTypeUpdate && !forceTypeUpdate)
             return;
         
         NeedsTypeUpdate = false;
@@ -255,12 +255,34 @@ public sealed partial class Symbol
 
     public void ReplaceWithContentsOf(Symbol newSymbol)
     {
-        if (newSymbol != this)
+        if (newSymbol == this)
         {
-            Connections.Clear();
-            Connections.AddRange(newSymbol.Connections);
-            _children = newSymbol._children;
+            SymbolRegistry.SymbolsByType[InstanceType] = this; // todo: ugly - the other one replaced this value with itself when it was created
+            return;
         }
+
+        while (_children.Count > 0)
+        {
+            var kvp = _children.Last();
+            var child = kvp.Value;
+            child.Dispose();
+            _children.Remove(kvp.Key, out _);
+        }
+
+        var otherChildren = newSymbol._children;
+        foreach (var child in otherChildren)
+        {
+            _children.TryAdd(child.Key, child.Value);
+        }
+
+        Connections.Clear();
+        Connections.AddRange(newSymbol.Connections);
+        InputDefinitions.Clear();
+        InputDefinitions.AddRange(newSymbol.InputDefinitions);
+        OutputDefinitions.Clear();
+        OutputDefinitions.AddRange(newSymbol.OutputDefinitions);
+        Animator = newSymbol.Animator;
+        PlaybackSettings = newSymbol.PlaybackSettings;
 
         SymbolRegistry.SymbolsByType[InstanceType] = this; // todo: ugly - the other one replaced this value with itself when it was created
     }

@@ -415,7 +415,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
         EditCommentDialog.Draw(_nodeSelection);
 
-        if (compositionInstance != _projectView.OpenedProject.RootInstance.Instance && !compositionInstance.Symbol.SymbolPackage.IsReadOnly)
+        if (compositionInstance != _projectView.OpenedProject.RootInstance && !compositionInstance.Symbol.SymbolPackage.IsReadOnly)
         {
             var symbol = compositionInstance.Symbol;
             _addInputDialog.Draw(symbol);

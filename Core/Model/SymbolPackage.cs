@@ -250,9 +250,9 @@ public abstract partial class SymbolPackage : IResourcePackage
         }
     }
 
-    protected static void UpdateSymbolInstances(Symbol symbol)
+    protected static void UpdateSymbolInstances(Symbol symbol, bool forceTypeUpdate = false)
     {
-        symbol.UpdateInstanceType();
+        symbol.UpdateInstanceType(forceTypeUpdate);
         symbol.CreateAnimationUpdateActionsForSymbolInstances();
     }
 

@@ -53,6 +53,9 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
     private readonly List<IInputSlot> _inputs = [];
     public readonly IReadOnlyList<IInputSlot> Inputs;
 
+    private bool _hasDisposed = false;
+    public bool IsDisposed => _hasDisposed;
+
     public IReadOnlyList<IResourcePackage> AvailableResourcePackages
     {
         get
@@ -86,8 +89,24 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
         Children = ChildInstances;
     }
 
+    ~Instance()
+    {
+        if (!_hasDisposed)
+        {
+            Log.Error($"Instance {this} was not disposed properly");
+            // todo : do we want to invoke disposal here? could this prevent memory leaks or other shutdown/reload issues?
+        }
+    }
+
     internal void Dispose()
     {
+        if (_hasDisposed)
+        {
+            Log.Error($"{this} has already been disposed");
+            return;
+        }
+        
+        _hasDisposed = true;
         Disposing?.Invoke();
         foreach (var child in ChildInstances.Values)
         {

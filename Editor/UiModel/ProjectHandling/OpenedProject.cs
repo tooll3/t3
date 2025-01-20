@@ -13,8 +13,37 @@ internal sealed class OpenedProject
     // TODO: This is not updated or used?
     private readonly List<ProjectView> _projectViews = [];
     
-    public Composition RootInstance { get; private set; }
-    
+    private Instance? _rootInstance;
+    public Instance RootInstance
+    {
+        get
+        {
+            if (_rootInstance != null) return _rootInstance;
+            
+            var rootSymbolId = Package.HomeSymbolId;
+            if (!Package.Symbols.TryGetValue(rootSymbolId, out var rootSymbol))
+            {
+                throw new Exception("Root symbol not found in project.");
+            }
+
+            if (!rootSymbol.TryGetParentlessInstance(out var rootInstance))
+            {
+                throw new Exception("Root instance could not be created?");
+            }
+                
+            _rootInstance = rootInstance;
+            rootInstance.Disposing += OnRootDisposed;
+
+            return _rootInstance;
+        }
+    }
+
+    private void OnRootDisposed()
+    {
+        _rootInstance!.Disposing -= OnRootDisposed;
+        _rootInstance = null;
+    }
+
     public static readonly Dictionary<EditorSymbolPackage, OpenedProject> OpenedProjects = new();
 
     public static bool TryCreate(EditorSymbolPackage project, [NotNullWhen(true)] out OpenedProject? openedProject)
@@ -24,13 +53,13 @@ internal sealed class OpenedProject
             return true;
         }
         
-        if (!project.TryGetRootInstance(out var rootInstance))
+        if (!project.HasHome)
         {
             openedProject = null;
             return false;
         }
 
-        openedProject = new OpenedProject(project, rootInstance);
+        openedProject = new OpenedProject(project);
         OpenedProjects[openedProject.Package] = openedProject;
         return true;
     }
@@ -47,37 +76,9 @@ internal sealed class OpenedProject
         _projectViews.Remove(view);
     }
 
-    private OpenedProject(EditorSymbolPackage project, Instance rootInstance)
+    private OpenedProject(EditorSymbolPackage project)
     {
         Package = project;
-        RootInstance = Composition.GetForInstance(rootInstance);
-        Structure = new Structure(() => RootInstance.Instance);
+        Structure = new Structure(() => RootInstance.SymbolChildId, () => Package.HomeSymbolId, project);
     }
-
-    public void RefreshRootInstance(ProjectView projectView)
-    {
-        if (!Package.TryGetRootInstance(out var newRootInstance))
-        {
-            throw new Exception("Could not get root instance from package");
-        }
-
-        var previousRoot = RootInstance.Instance;
-        if (newRootInstance == previousRoot)
-            return;
-
-        RootInstance.Dispose();
-
-        // Check if the root instance was a window's composition.
-        // If it was, it needs to be replaced
-        foreach (var components in _projectViews)
-        {
-            if (components.Composition?.Instance == previousRoot)
-                continue;
-
-            components.Composition = Composition.GetForInstance(newRootInstance);
-        }
-
-        RootInstance = Composition.GetForInstance(newRootInstance);
-    }
-
 }

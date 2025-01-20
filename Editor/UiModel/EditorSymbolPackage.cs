@@ -275,53 +275,12 @@ internal class EditorSymbolPackage : SymbolPackage
         ShaderLinter.AddPackage(this, sharedShaderPackages);
     }
 
-    protected Instance? RootInstance;
-
-    public bool TryGetRootInstance([NotNullWhen(true)] out Instance? rootInstance)
-    {
-        if (!HasHome)
-        {
-            rootInstance = null;
-            return false;
-        }
-
-        if (RootInstance != null)
-        {
-            rootInstance = RootInstance;
-            return true;
-        }
-
-        var rootSymboLUi = SymbolUiDict[ReleaseInfo.HomeGuid];
-        Log.Debug($"{DisplayName}: Found home symbol");
-
-        var symbol = rootSymboLUi.Symbol;
-        
-        Log.Debug($"Creating home instance for {AssemblyInformation.Name}'s symbol {symbol}");
-        if (!symbol.TryGetParentlessInstance(out rootInstance))
-        {
-            Log.Error($"Failed to create home instance for {AssemblyInformation.Name}'s symbol {symbol.Name} with id {symbol.Id}");
-            return false;
-        }
-        
-        RootInstance = rootInstance;
-        rootInstance.Disposing += OnRootInstanceDisposed;
-        return true;
-    }
-
-    private void OnRootInstanceDisposed()
-    {
-        if (RootInstance == null)
-            return;
-        RootInstance!.Disposing -= OnRootInstanceDisposed;
-        RootInstance = null;
-    }
-
     internal bool HasHome
     {
         get
         {
             var releaseInfo = ReleaseInfo;
-            return releaseInfo.HomeGuid != Guid.Empty;
+            return releaseInfo.HomeGuid != Guid.Empty && Symbols.ContainsKey(releaseInfo.HomeGuid);
         }
     }
 
@@ -334,7 +293,8 @@ internal class EditorSymbolPackage : SymbolPackage
     protected virtual IEnumerable<string> SourceCodeSearchFiles => Directory.EnumerateFiles(Path.Combine(Folder, SourceCodeSubFolder), $"*{SourceCodeExtension}", SearchOption.AllDirectories);
     private readonly ConcurrentDictionary<Guid, SymbolPathHandler> _filePathHandlers = new();
     protected IDictionary<Guid, SymbolPathHandler> FilePathHandlers => _filePathHandlers;
-    
+    public Guid HomeSymbolId => ReleaseInfo.HomeGuid;
+
     internal const string SourceCodeExtension = ".cs";
     public const string SymbolUiExtension = ".t3ui";
     public const string SymbolUiSubFolder = "SymbolUis";
@@ -386,7 +346,8 @@ internal class EditorSymbolPackage : SymbolPackage
         
         // transfer instances over to the new symbol and update them
         symbol.ReplaceWithContentsOf(newSymbol);
-        UpdateSymbolInstances(symbol);
+
+        UpdateSymbolInstances(symbol, forceTypeUpdate: true);
         
         var symbolUiJson = JsonFileResult<SymbolUi>.ReadAndCreate(symbolUiPath);
 

@@ -13,6 +13,11 @@ public abstract partial class ShaderCompiler
         get => _instance!;
         set
         {
+            if (_shutdown)
+            {
+                throw new InvalidOperationException($"Can't set {nameof(ShaderCompiler)}.{nameof(Instance)} after shutdown.");
+            }
+            
             if (_instance != null)
             {
                 throw new InvalidOperationException($"Can't set {nameof(ShaderCompiler)}.{nameof(Instance)} twice.");
@@ -27,4 +32,12 @@ public abstract partial class ShaderCompiler
 
     protected abstract void CreateShaderInstance<TShader>(string name, in byte[] blob, out TShader shader)
         where TShader : AbstractShader;
+
+    public static void Shutdown()
+    {
+        _instance = null;
+        _shutdown = true;
+    }
+
+    private static bool _shutdown;
 }

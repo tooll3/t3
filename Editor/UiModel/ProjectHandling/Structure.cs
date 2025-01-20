@@ -14,11 +14,15 @@ namespace T3.Editor.UiModel.ProjectHandling;
 /// </summary>
 internal sealed class Structure
 {
-    private readonly Func<Instance> _getRootInstance;
+    private readonly Func<Guid> _getRootInstanceId;
+    private readonly Func<Guid> _getRootSymbolId;
+    private readonly EditorSymbolPackage _package;
 
-    public Structure(Func<Instance> getRootInstance)
+    public Structure(Func<Guid> getRootInstanceId, Func<Guid> getRootSymbolId,EditorSymbolPackage package)
     {
-        _getRootInstance = getRootInstance;
+        _getRootInstanceId = getRootInstanceId;
+        _getRootSymbolId = getRootSymbolId;
+        _package = package;
     }
 
     public Instance? GetInstanceFromIdPath(IReadOnlyList<Guid>? compositionPath)
@@ -301,6 +305,17 @@ internal sealed class Structure
         return parents;
     }
 
+    public static void PopulateInstancePath(Instance instance, IList<Guid> path)
+    {
+        path.Insert(0, instance.SymbolChildId);
+        var parent = instance.Parent;
+        while (parent != null)
+        {
+            path.Insert(0, parent.SymbolChildId);
+            parent = parent.Parent;
+        }
+    }
+
     private bool TryGetInstanceFromIdPath([NotNullWhen(true)] IReadOnlyList<Guid>? childPath, [NotNullWhen(true)] out Instance? instance)
     {
         if (childPath == null || childPath.Count == 0)
@@ -309,26 +324,30 @@ internal sealed class Structure
             return false;
         }
 
-        var rootInstance = _getRootInstance();
-        var rootId = rootInstance.SymbolChildId;
+        var rootId = _getRootInstanceId();
 
         if (childPath[0] != rootId)
         {
             instance = null;
-            Log.Warning("Can't access instance after root changed.");
+            Log.Warning("Can't access instance after root changed.\n" + Environment.StackTrace);
             return false;
             //throw new ArgumentException("Path does not start with the root instance");
         }
 
         var pathCount = childPath.Count;
+        var homeSymbol = _package.Symbols[_getRootSymbolId()];
+
+        if (!homeSymbol.TryGetParentlessInstance(out instance))
+        {
+            Log.Error("Did not find root instance.\n" + Environment.StackTrace);
+            return false;
+        }
 
         if (pathCount == 1)
         {
-            instance = rootInstance;
             return true;
         }
 
-        instance = rootInstance;
         for (int i = 1; i < pathCount; i++)
         {
             if (!instance.Children.TryGetValue(childPath[i], out instance))

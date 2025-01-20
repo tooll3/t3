@@ -314,6 +314,7 @@ internal static partial class Program
         void CloseApplication(bool error, string message)
         {
             CoreUi.Instance.Cursor.SetVisible(true);
+            ShaderCompiler.Shutdown();
             bool openLogs = false;
                 
             if (!string.IsNullOrWhiteSpace(message))
