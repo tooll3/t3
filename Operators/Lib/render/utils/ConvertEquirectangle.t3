@@ -94,18 +94,6 @@
       "Outputs": []
     },
     {
-      "Id": "5b4054db-ab07-4d21-8bfd-3a490f3da760"/*String*/,
-      "SymbolId": "5880cbc3-a541-4484-a06a-0e6f77cdbe8e",
-      "InputValues": [
-        {
-          "Id": "ceeae47b-d792-471d-a825-49e22749b7b9"/*InputString*/,
-          "Type": "System.String",
-          "Value": "cbuffer ParamConstants : register(b0)\n{\n    float2 Center;\n    float A;\n    float B;\n    float C;\n    float D;\n\n}\n\ncbuffer Resolution : register(b1)\n{\n    float TargetWidth;\n    float TargetHeight;\n}\n\nstruct vsOutput\n{\n    float4 position : SV_POSITION;\n    float2 texCoord : TEXCOORD;\n};\n\nTexture2D<float4> Image : register(t0);\nsampler Sampler : register(s0);\n\nfloat4 psMain(vsOutput input) : SV_TARGET\n{\n    float width, height;\n    Image.GetDimensions(width, height);\n    float4 c=float4(1,1,0,1);\n\n    float2 uv = input.texCoord;\n\n    // from Bartosz\n    // https://stackoverflow.com/questions/34250742/converting-a-cubemap-into-equirectangular-panorama\n\n    float phi = input.texCoord.x * 3.1415 * 2;\n    float theta = input.texCoord.y * 3.1415;\n\n    float x = sin(phi) * sin(theta) * -1;\n    float y = cos(theta);\n    float z = cos(phi) * sin(theta) * -1;\n\n    float a = max(abs(x), max(abs(y), abs(z)));\n    float xa = x / a;\n    float ya = y / a;\n    float za = z / a;\n\n    c.rgb = float3(x,y,z);\n\n    if (abs(xa-1.) < 0.001)\n    {\n      uv = (float2(-za, -ya)+1)/2;\n      uv.x /= 6;\n      uv.x += 0./6.;\n      c.rgb = Image.Sample(Sampler, uv);\n    }\n    else if (abs(xa+1.) < 0.001)\n    {\n      uv = (float2(za, -ya)+1)/2;\n      uv.x /= 6;\n      uv.x += 2./6.;\n      c.rgb = Image.Sample(Sampler, uv);\n    }\n    else if (abs(za-1.) < 0.001)\n    {\n      uv = (float2(xa, -ya)+1)/2;\n      uv.x /= 6;\n      uv.x += 3./6.;\n      c.rgb = Image.Sample(Sampler, uv);\n    }\n    else if (abs(za+1.) < 0.001)\n    {\n      uv = (float2(-xa, -ya)+1)/2;\n      uv.x /= 6;\n      uv.x += 1./6.;\n      c.rgb = Image.Sample(Sampler, uv);\n    }\n    else if (abs(ya-1.) < 0.001)\n    {\n      uv = (float2(-xa, -za)+1)/2;\n      uv.x /= 6;\n      uv.x += 4./6.;\n      c.rgb = Image.Sample(Sampler, uv);\n    }\n    else if (abs(ya+1.) < 0.001)\n    {\n      uv = (float2(xa, -za)+1)/2;\n      uv.x /= 6;\n      uv.x += 5./6.;\n      c.rgb = Image.Sample(Sampler, uv);\n    }\n    \n    return c;\n}"
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "6251edf0-5dfa-4eff-a438-090623aaaa4d"/*RenderTarget*/,
       "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
       "InputValues": [
@@ -196,11 +184,16 @@
       "Outputs": []
     },
     {
-      "Id": "a625dbd9-566d-402d-8b49-11e6cf000ea7"/*PixelShaderFromSource*/,
-      "SymbolId": "9f784a4a-857f-41ad-afc1-0de08c1cfec6",
+      "Id": "b53b925f-5ccc-4456-bb1f-c139b9b06be6"/*PixelShader*/,
+      "SymbolId": "f7c625da-fede-4993-976c-e259e0ee4985",
       "InputValues": [
         {
-          "Id": "2b616fb0-2966-45a9-a0cc-da960ca509cf"/*EntryPoint*/,
+          "Id": "24646f06-1509-43ce-94c6-eeb608ad97cd"/*Source*/,
+          "Type": "System.String",
+          "Value": "/Lib/img/fx/ConvertEquirectangle.hlsl"
+        },
+        {
+          "Id": "501338b3-f432-49a5-bdbd-bcf209671305"/*EntryPoint*/,
           "Type": "System.String",
           "Value": "psMain"
         }
@@ -325,8 +318,8 @@
       "TargetSlotId": "4da253b7-4953-439a-b03f-1d515a78bddf"
     },
     {
-      "SourceParentOrChildId": "a625dbd9-566d-402d-8b49-11e6cf000ea7",
-      "SourceSlotId": "c513f15d-3a7e-4501-b825-ef3e585293c7",
+      "SourceParentOrChildId": "b53b925f-5ccc-4456-bb1f-c139b9b06be6",
+      "SourceSlotId": "9c6e72f8-5ce6-42c3-abaa-1829d2c066c1",
       "TargetParentOrChildId": "62aefa7d-1dd3-4751-b9b1-58e051e838f5",
       "TargetSlotId": "1b9be6eb-96c8-4b1c-b854-99b64eaf5618"
     },
@@ -377,12 +370,6 @@
       "SourceSlotId": "57ce1074-7971-4542-95c8-86f58ed75c7d",
       "TargetParentOrChildId": "8663fdab-5ea0-472e-b280-3544c50180b9",
       "TargetSlotId": "91bffbba-b815-44d7-8f93-3238376935bf"
-    },
-    {
-      "SourceParentOrChildId": "5b4054db-ab07-4d21-8bfd-3a490f3da760",
-      "SourceSlotId": "dd9d8718-addc-49b1-bd33-aac22b366f94",
-      "TargetParentOrChildId": "a625dbd9-566d-402d-8b49-11e6cf000ea7",
-      "TargetSlotId": "a192e8cc-2874-4f02-bbf1-4622e99666e1"
     },
     {
       "SourceParentOrChildId": "c91db98c-bab0-4eef-9769-ac9f29b07012",
