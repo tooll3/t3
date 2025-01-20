@@ -13,12 +13,29 @@ x somewhat presentable project list
 x focus graph imgui-window after creation
 
 x Fix parameter window
-xUpdate view after TimeClip Split
+x Update view after TimeClip Split
 
-- Add input parameters
-- Remove input output params
-- Add output parameters
-- Remove output params
+Graph:
+- Fix initial view 
+- Show all content of initial view scope is empty
+x Add input parameters
+x Add output parameters
+x Remove input output params
+x Remove output params
 - Fix background control in mag graph
-- Fix fence selection for timeline and preset view
+x Fix fence selection for timeline and preset view
+- Add annotations
+- Fix MultiInput on disconnect re-layout
+- Add options for hidden secondary outputs
+- Fix overlapping outputs in RevisionPanic
 
+Feats:
+- Copy and Paste Values
+- Maybe show tags in symbolBrowser / Placeholder
+
+Ops
+- Sort out obsolete pixtur examples
+- Remove Time 2nd output
+- Fix SnapToPoints
+- Fix BoxGradient
+- 

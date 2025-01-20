@@ -1,9 +1,12 @@
 ﻿using T3.Core.Operator;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
+using T3.Editor.Gui.OutputUi;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Graph;
+using T3.Editor.UiModel.InputsAndTypes;
+using T3.Editor.UiModel.Modification;
 using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.MagGraph.Interaction;
@@ -27,6 +30,8 @@ internal static class Modifications
 
         var deletedItems = new List<MagGraphItem>();
         var deletedChildUis = new List<SymbolUi.Child>();
+        var deletedInputUis = new List<IInputUi>();
+        var deletedOutputUis = new List<IOutputUi>();
         foreach (var s in context.Selector.Selection)
         {
             if(!context.Layout.Items.TryGetValue(s.Id, out var item))
@@ -37,7 +42,20 @@ internal static class Modifications
 
             if (item.Variant != MagGraphItem.Variants.Operator)
             {
-                Log.Debug("Sorry, deleting outputs and inputs is not yet supported");
+                if (compositionUi.Symbol.SymbolPackage.IsReadOnly)
+                {
+                    Log.Warning("Can't delete inputs or outputs from a read only symbol.");
+                    continue;
+                }
+                if (item.Variant == MagGraphItem.Variants.Input)
+                {
+                    deletedInputUis.Add(item.Selectable as IInputUi);
+                }
+                else if (item.Variant == MagGraphItem.Variants.Output)
+                {
+                    deletedOutputUis.Add(item.Selectable as IOutputUi);
+                }
+                
                 continue;
             }
 
@@ -69,43 +87,54 @@ internal static class Modifications
             }
         }
         
-        if (deletedChildUis.Count == 0)
+        if (deletedChildUis.Count == 0 && deletedInputUis.Count == 0 && deletedOutputUis.Count == 0)
             return;
-        
-        var collapsableConnectionPairs= MagItemMovement.FindLinkedVerticalCollapsableConnectionPairs(obsoleteConnections.ToList());
+
         var macroCommand = new MacroCommand("Delete items");
-
-        // Delete items...
-        macroCommand.AddAndExecCommand(new DeleteSymbolChildrenCommand(compositionUi, deletedChildUis));
-
-        // Collapse vertical gaps
-        var relevantItems = MagItemMovement.CollectSnappedItems(deletedItems);
-        var movableItems = new HashSet<MagGraphItem>(relevantItems.Except(deletedItems));
-
-        foreach (var pair in collapsableConnectionPairs)
+        if (deletedChildUis.Count > 0)
         {
-            var mci = pair.Ca;
-            var mco = pair.Cb;
-            var affectedItems = MagItemMovement.MoveToCollapseVerticalGaps(mci, mco, movableItems, true);
-            if (affectedItems.Count == 0)
-                continue;
+            var collapsableConnectionPairs= MagItemMovement.FindLinkedVerticalCollapsableConnectionPairs(obsoleteConnections.ToList());
+
+            // Delete items...
+            macroCommand.AddAndExecCommand(new DeleteSymbolChildrenCommand(compositionUi, deletedChildUis));
+
+            // Collapse vertical gaps
+            var relevantItems = MagItemMovement.CollectSnappedItems(deletedItems);
+            var movableItems = new HashSet<MagGraphItem>(relevantItems.Except(deletedItems));
+
+            foreach (var pair in collapsableConnectionPairs)
+            {
+                var mci = pair.Ca;
+                var mco = pair.Cb;
+                var affectedItems = MagItemMovement.MoveToCollapseVerticalGaps(mci, mco, movableItems, true);
+                if (affectedItems.Count == 0)
+                    continue;
+                
+                var affectedItemsAsNodes = movableItems.Select(i => i as ISelectableCanvasObject).ToList();
+                var newMoveCommand = new ModifyCanvasElementsCommand(context.CompositionOp.Symbol.Id, affectedItemsAsNodes, context.Selector);
+                macroCommand.AddExecutedCommandForUndo(newMoveCommand);
             
-            var affectedItemsAsNodes = movableItems.Select(i => i as ISelectableCanvasObject).ToList();
-            var newMoveCommand = new ModifyCanvasElementsCommand(context.CompositionOp.Symbol.Id, affectedItemsAsNodes, context.Selector);
-            macroCommand.AddExecutedCommandForUndo(newMoveCommand);
-        
-            MagItemMovement.MoveToCollapseVerticalGaps(mci, mco, movableItems, dryRun:false);
+                MagItemMovement.MoveToCollapseVerticalGaps(mci, mco, movableItems, dryRun:false);
+                
+                newMoveCommand.StoreCurrentValues();
             
-            newMoveCommand.StoreCurrentValues();
-        
-            macroCommand.AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
-                                                                    new Symbol.Connection(mci.SourceItem.Id,
-                                                                                              mci.SourceOutput.Id,
-                                                                                              mco.TargetItem.Id,
-                                                                                              mco.TargetInput.Id),
-                                                                    0));                            
+                macroCommand.AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+                                                                        new Symbol.Connection(mci.SourceItem.Id,
+                                                                                                  mci.SourceOutput.Id,
+                                                                                                  mco.TargetItem.Id,
+                                                                                                  mco.TargetInput.Id),
+                                                                        0));                            
+            }
         }
-        
+
+
+        if (deletedInputUis.Count > 0 || deletedOutputUis.Count > 0)
+        {
+            InputsAndOutputs.RemoveInputsAndOutputsFromSymbol(inputIdsToRemove: deletedInputUis.Select(entry => entry.Id).ToArray(),
+                                                              outputIdsToRemove: deletedOutputUis.Select(entry => entry.Id).ToArray(),
+                                                              symbol: compositionUi.Symbol);
+        }            
+
         UndoRedoStack.Add(macroCommand);
         
         context.Layout.FlagAsChanged();
