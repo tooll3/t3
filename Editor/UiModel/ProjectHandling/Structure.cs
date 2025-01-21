@@ -14,15 +14,11 @@ namespace T3.Editor.UiModel.ProjectHandling;
 /// </summary>
 internal sealed class Structure
 {
-    private readonly Func<Guid> _getRootInstanceId;
-    private readonly Func<Guid> _getRootSymbolId;
-    private readonly EditorSymbolPackage _package;
+    private readonly Func<Instance> _getRootInstance;
 
-    public Structure(Func<Guid> getRootInstanceId, Func<Guid> getRootSymbolId,EditorSymbolPackage package)
+    public Structure(Func<Instance> getRootInstance)
     {
-        _getRootInstanceId = getRootInstanceId;
-        _getRootSymbolId = getRootSymbolId;
-        _package = package;
+        _getRootInstance = getRootInstance;
     }
 
     public Instance? GetInstanceFromIdPath(IReadOnlyList<Guid>? compositionPath)
@@ -324,7 +320,8 @@ internal sealed class Structure
             return false;
         }
 
-        var rootId = _getRootInstanceId();
+        var rootInstance = _getRootInstance();
+        var rootId = rootInstance.SymbolChildId;
 
         if (childPath[0] != rootId)
         {
@@ -334,14 +331,8 @@ internal sealed class Structure
             //throw new ArgumentException("Path does not start with the root instance");
         }
 
+        instance = rootInstance;
         var pathCount = childPath.Count;
-        var homeSymbol = _package.Symbols[_getRootSymbolId()];
-
-        if (!homeSymbol.TryGetParentlessInstance(out instance))
-        {
-            Log.Error("Did not find root instance.\n" + Environment.StackTrace);
-            return false;
-        }
 
         if (pathCount == 1)
         {

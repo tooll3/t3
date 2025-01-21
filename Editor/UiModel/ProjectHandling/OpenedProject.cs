@@ -20,8 +20,7 @@ internal sealed class OpenedProject
         {
             if (_rootInstance != null) return _rootInstance;
             
-            var rootSymbolId = Package.HomeSymbolId;
-            if (!Package.Symbols.TryGetValue(rootSymbolId, out var rootSymbol))
+            if (!Package.Symbols.TryGetValue(Package.HomeSymbolId, out var rootSymbol))
             {
                 throw new Exception("Root symbol not found in project.");
             }
@@ -79,6 +78,6 @@ internal sealed class OpenedProject
     private OpenedProject(EditorSymbolPackage project)
     {
         Package = project;
-        Structure = new Structure(() => RootInstance.SymbolChildId, () => Package.HomeSymbolId, project);
+        Structure = new Structure(() => RootInstance);
     }
 }

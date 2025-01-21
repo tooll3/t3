@@ -261,14 +261,6 @@ public sealed partial class Symbol
             return;
         }
 
-        while (_children.Count > 0)
-        {
-            var kvp = _children.Last();
-            var child = kvp.Value;
-            child.Dispose();
-            _children.Remove(kvp.Key, out _);
-        }
-
         var otherChildren = newSymbol._children;
         foreach (var child in otherChildren)
         {

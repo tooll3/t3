@@ -274,13 +274,13 @@ public sealed partial class Symbol : IDisposable, IResource
             
         var removedFromSymbol = _children.Remove(childId, out var symbolChild);
 
-        foreach (var me in _childrenCreatedFromMe)
-        {
-            me.DestroyChildInstances(symbolChild);
-        }
-
         if (removedFromSymbol)
         {
+            foreach (var me in _childrenCreatedFromMe)
+            {
+                me.DestroyChildInstances(symbolChild);
+            }
+
             SymbolPackage.RemoveDependencyOn(symbolChild.Symbol);
         }
 

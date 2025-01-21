@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using T3.Core.Logging;
 using T3.Core.Model;
@@ -98,29 +99,43 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
         }
     }
 
-    internal void Dispose()
+    internal void Dispose(Symbol.Child symbolChild, int index = -1)
     {
         if (_hasDisposed)
         {
-            Log.Error($"{this} has already been disposed");
+            throw new Exception($"{this} has already been disposed\n" + Environment.StackTrace);
             return;
         }
         
         _hasDisposed = true;
-        Disposing?.Invoke();
-        foreach (var child in ChildInstances.Values)
+
+        try
         {
-            Debug.Assert(child != null);
-            
-            var parentSymbol = child.Parent?.Symbol;
-            if (parentSymbol == null || !parentSymbol.Children.TryGetValue(child.SymbolChildId, out var childSymbol))
-            {
-                Log.Error($"SymbolChild {child.Symbol.Name} {child.SymbolChildId} is no longer valid for disposal?");
-                continue;
-            }
-            child.SymbolChild!.DisposeOfInstance(child);
+            Disposing?.Invoke();
         }
-        Dispose(true);
+        catch (Exception e)
+        {
+            Log.Error($"Error on dispose event for {this}: {e}");
+        }
+
+        // kill children
+        while (ChildInstances.Values.Count > 0)
+        {
+            var child = ChildInstances.Values.Last();
+            child.Dispose(child.SymbolChild!);
+        }
+
+        try
+        {
+            Dispose(true);
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Error disposing instance {this}: {e}");
+        }
+
+        Parent?.ChildInstances.Remove(SymbolChildId);
+        symbolChild.RemoveInstance(this, index);
     }
 
     protected virtual void Dispose(bool disposing)

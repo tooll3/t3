@@ -450,7 +450,7 @@ public partial class Symbol
             {
                 if (instance.ChildInstances.Remove(idToDestroy, out var childInstance))
                 {
-                    childInstance.Dispose();
+                    childInstance.Dispose(child);
                 }
             }
         }
@@ -459,17 +459,13 @@ public partial class Symbol
         {
             for (int i = _instancesOfSelf.Count - 1; i >= 0; i--)
             {
-                DestroyAndRemoveInstanceAtIndex(i, out _);
+                DestroyAndRemoveInstanceAtIndex(i);
             }
         }
 
-        private void DestroyAndRemoveInstanceAtIndex(int index, out Instance? parent)
+        private void DestroyAndRemoveInstanceAtIndex(int index)
         {
-            var instance = _instancesOfSelf[index];
-            parent = instance.Parent;
-            parent?.ChildInstances.Remove(instance.SymbolChildId);
-            instance.Dispose();
-            _instancesOfSelf.RemoveAt(index);
+            _instancesOfSelf[index].Dispose(this, index);
         }
 
         internal void Dispose()
@@ -562,7 +558,8 @@ public partial class Symbol
             // Recreate all instances fresh
             for (var index = _instancesOfSelf.Count - 1; index >= 0; index--)
             {
-                DestroyAndRemoveInstanceAtIndex(index, out var parent);
+                var parent = _instancesOfSelf[index].Parent;
+                DestroyAndRemoveInstanceAtIndex(index);
 
                 if (!TryCreateNewInstance(parent, newInstance: out _))
                 {
@@ -856,14 +853,19 @@ public partial class Symbol
             }
         }
 
-        internal void DisposeOfInstance(Instance child)
+        internal void RemoveInstance(Instance child, int index)
         {
-            if (!_instancesOfSelf.Remove(child))
+            if (index == -1)
             {
-                Log.Error($"Could not remove instance {child} from {this}");
+                index = _instancesOfSelf.IndexOf(child);
+                if (index == -1)
+                {
+                    Log.Error($"Could not find instance {child} to remove from {this}");
+                    return;
+                }
             }
             
-            child.Dispose();
+            _instancesOfSelf.RemoveAt(index);
         }
     }
 }
