@@ -54,22 +54,37 @@ internal static partial class ProjectXml
     public static ProjectPropertyElement SetOrAddProperty(this ProjectRootElement project, PropertyType propertyType, string value)
     {
         var properties = project.Properties;
+        List<ProjectPropertyElement> propsWithName = [];
         var propertyName = GetItemName(propertyType);
-        var property = properties.SingleOrDefault(x => x.Name == propertyName);
 
-        if (property == null)
+        foreach (var prop in properties)
         {
-            if (properties.Any(x => x.Name == propertyName))
-                throw new Exception($"Multiple properties with the same name: {propertyName}");
-
-            property = project.AddProperty(propertyName, value);
-        }
-        else
-        {
-            property.Value = value;
+            if (prop.Name == propertyName)
+            {
+                propsWithName.Add(prop);
+            }
         }
 
-        return property;
+        switch (propsWithName.Count)
+        {
+            case > 1:
+            {
+                Log.Warning($"Multiple properties with the same name: {propertyName}:");
+                foreach (var prop in propsWithName)
+                {
+                    Log.Warning($"  {prop}");
+                    prop.Value = value;    
+                }            
+            
+                return propsWithName[^1];
+            }
+            case 1:
+                var property = propsWithName[0];
+                property.Value = value;
+                return property;
+            default:
+                return project.AddProperty(propertyName, value);
+        }
     }
 
     private static void AddDefaultUsings(this ProjectRootElement project)
