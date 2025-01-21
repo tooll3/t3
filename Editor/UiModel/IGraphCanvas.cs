@@ -1,4 +1,5 @@
 #nullable enable
+using System.Diagnostics;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Interaction;
@@ -11,7 +12,8 @@ internal interface IGraphCanvas : IScalableCanvas
 {
     bool Destroyed { get; set;  }
 
-    void RestoreLastSavedUserViewForComposition(ICanvas.Transition transition, Guid compositionOpSymbolChildId);
+    void RestoreLastSavedUserViewForProjectView(ICanvas.Transition transition);
+    
     void FocusViewToSelection();
     void OpenAndFocusInstance(IReadOnlyList<Guid> path);
     public new CanvasScope GetTargetScope();

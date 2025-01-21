@@ -5,7 +5,7 @@ x Prevent last project window from being closed
 x Show project after NewProjectDialog -> ProjectManager.TryOpenInstancePath().
 x Test AppMenu -> New Graph Window
 
-/ fix view regions when navigating in/out
+x fix view regions when navigating in/out
 - unload projects from project list
 x somewhat presentable project list
 
@@ -16,7 +16,7 @@ x Fix parameter window
 x Update view after TimeClip Split
 
 Graph:
-- Fix initial view 
+xFix initial view 
 - Show all content of initial view scope is empty
 x Add input parameters
 x Add output parameters
@@ -38,4 +38,7 @@ Ops
 - Remove Time 2nd output
 - Fix SnapToPoints
 - Fix BoxGradient
-- 
+
+Refactoring
+- Remove ICanvas
+- Refactor to use Scopes

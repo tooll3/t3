@@ -20,6 +20,7 @@ internal interface IScalableCanvas : ICanvas
     public void SetScaleToMatchPixels();
     public void SetScopeWithTransition(Vector2 scale, Vector2 scroll, Transition transition);
     public void SetScopeToCanvasArea(ImRect area, bool flipY = false, IScalableCanvas? parent = null, float paddingX = 0, float paddingY = 0);
+    //public CanvasScope GetScopeForCanvasArea(ImRect areaOnCanvas, bool flipY = false);
     public void SetVerticalScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas? parent = null);
     public void ZoomWithMouseWheel(MouseState mouseState, out bool zoomed);
     public Vector2 TransformPositionFloat(Vector2 posOnCanvas);
@@ -191,7 +192,7 @@ internal abstract class ScalableCanvas : IScalableCanvas
     }
         
     public Vector2 WindowPos { get; private set; }
-    public Vector2 WindowSize { get; private set; }
+    public Vector2 WindowSize { get; private set; } = new Vector2(200, 200);
         
     public Vector2 Scale { get; protected set; } = Vector2.One;
     protected Vector2 ScaleTarget = Vector2.One;
@@ -288,26 +289,20 @@ internal abstract class ScalableCanvas : IScalableCanvas
             
         ScrollTarget.Y = area.Max.Y;
     }
-        
-    public void FitAreaOnCanvas(ImRect areaOnCanvas, bool flipY = false)
+
+    public CanvasScope GetScopeForCanvasArea(ImRect areaOnCanvas, bool flipY = false)
     {
         var heightOnCanvas = areaOnCanvas.GetHeight();
         var widthOnCanvas = areaOnCanvas.GetWidth();
         var aspectOnCanvas = widthOnCanvas / heightOnCanvas;
-            
-        // Use a fallback resolution to fix initial call from constructor
-        // where img has not been initialized yet.
-        if (WindowSize == Vector2.Zero)
-        {
-            WindowSize = new Vector2(200, 200);
-        }
-            
+
+        Vector2 scrollTarget;
         float scale;
         if (aspectOnCanvas > WindowSize.X / WindowSize.Y)
         {
             // Center in a high window...
             scale = WindowSize.X / widthOnCanvas;
-            ScrollTarget = new Vector2(
+            scrollTarget = new Vector2(
                                        areaOnCanvas.Min.X,
                                        areaOnCanvas.Min.Y - (WindowSize.Y / scale - heightOnCanvas) / 2);
         }
@@ -315,16 +310,25 @@ internal abstract class ScalableCanvas : IScalableCanvas
         {
             // Center in a wide window... 
             scale = WindowSize.Y / heightOnCanvas;
-            ScrollTarget = new Vector2(
+            scrollTarget = new Vector2(
                                        areaOnCanvas.Min.X - (WindowSize.X / scale - widthOnCanvas) / 2,
                                        areaOnCanvas.Min.Y);
         }
             
-        ScaleTarget = new Vector2(scale, scale);
+        var scaleTarget = new Vector2(scale, scale);
         if (flipY)
         {
-            ScaleTarget.Y *= -1;
+            scaleTarget.Y *= -1;
         }
+
+        return new CanvasScope { Scale = scaleTarget, Scroll = scrollTarget};
+    }
+    
+    public void FitAreaOnCanvas(ImRect areaOnCanvas, bool flipY = false)
+    {
+        var scope = GetScopeForCanvasArea(areaOnCanvas, flipY);
+        ScaleTarget = scope.Scale;
+        ScrollTarget = scope.Scroll;
     }
 
     public void SetScopeWithTransition(CanvasScope scope, ICanvas.Transition transition)

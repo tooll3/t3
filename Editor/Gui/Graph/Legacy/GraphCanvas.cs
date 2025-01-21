@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using ImGuiNET;
@@ -559,17 +560,24 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         }
     }
 
-    // TODO: either the method title or the code is wrong
-    public void RestoreLastSavedUserViewForComposition(ICanvas.Transition transition, Guid compositionSymbolChildId)
+    
+    public void RestoreLastSavedUserViewForProjectView(ICanvas.Transition transition)
     {
-        var newCanvasScope = GetTargetScope();
-        if (UserSettings.Config.OperatorViewSettings.TryGetValue(compositionSymbolChildId, out var savedCanvasScope))
+        Debug.Assert(_projectView.CompositionInstance != null);
+        
+        var compositionOpSymbolChildId = _projectView.CompositionInstance.SymbolChildId;
+        
+        var newCanvasScope = GetTargetScope();  // TODO: Clarify, if this is correct.
+        
+        if (UserSettings.Config.OperatorViewSettings.TryGetValue(compositionOpSymbolChildId, out var savedCanvasScope))
         {
             newCanvasScope = savedCanvasScope;
         }
 
         SetScopeWithTransition(newCanvasScope.Scale, newCanvasScope.Scroll, transition);
     }
+    
+
 
     public void FocusViewToSelection()
     {

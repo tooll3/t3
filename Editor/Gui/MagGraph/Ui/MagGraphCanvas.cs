@@ -64,19 +64,27 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
 
     private bool _viewChangeRequested;
     private CanvasScope _requestedTargetScope;
-
-    void IGraphCanvas.RestoreLastSavedUserViewForComposition(ICanvas.Transition transition, Guid compositionOpSymbolChildId)
+    
+    /** Assumes projectView to be initialized */
+    void IGraphCanvas.RestoreLastSavedUserViewForProjectView(ICanvas.Transition transition)
     {
+        Debug.Assert(_projectView.CompositionInstance != null);
+        
+        var compositionOpSymbolChildId = _projectView.CompositionInstance.SymbolChildId;
         if (!UserSettings.Config.OperatorViewSettings.TryGetValue(compositionOpSymbolChildId, out var savedCanvasScope))
             return;
 
         _viewChangeRequested = true;
         _requestedTargetScope = savedCanvasScope;
     }
-
+    
     void IGraphCanvas.FocusViewToSelection()
     {
-        Log.Debug("MagGraphCanvas.FocusViewToSelection() Not implemented yet");
+        if (_projectView.CompositionInstance == null)
+            return;
+        
+        var selectionBounds = NodeSelection.GetSelectionBounds(_projectView.NodeSelection, _projectView.CompositionInstance);
+        FitAreaOnCanvas(selectionBounds);
     }
 
     void IGraphCanvas.OpenAndFocusInstance(IReadOnlyList<Guid> path)
@@ -127,7 +135,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
         _context = new GraphUiContext(projectView, this);
         _previousInstance = projectView.CompositionInstance!;
 
-        InitializeCanvasScope(_context);
+        //InitializeCanvasScope(_context);
     }
 
     private ImRect _visibleCanvasArea;

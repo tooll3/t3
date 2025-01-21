@@ -17,62 +17,37 @@ internal sealed partial class MagGraphCanvas
 {
     public void DrawGraph(ImDrawListPtr drawList, float graphOpacity)
     {
-        // if (_projectView.CompositionInstance == null)
-        //     return;
-        
         IsFocused = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows);
         IsHovered = ImGui.IsWindowHovered();
 
-        // if (_window.WindowCompositionOp == null)
-        //     return;
-        //
-        // if (_window.WindowCompositionOp != _context.CompositionOp)
-        // {
-        //     
-        //     _context = new GraphUiContext(_nodeSelection, this, _window.WindowCompositionOp, _context.GraphImageBackground);
-        // }
-
-        _visibleCanvasArea = ImRect.RectWithSize(InverseTransformPositionFloat(ImGui.GetWindowPos()),
-                                                 InverseTransformDirection(ImGui.GetWindowSize()));
-
-        KeyboardActions.HandleKeyboardActions(_context);
-
-        if (FitViewToSelectionHandling.FitViewToSelectionRequested)
-            FocusViewToSelection(_context);
-
-        // Draw Dialogs
+        // General pre-update
         _context.DrawDialogs(_projectView);
-        
+        KeyboardActions.HandleKeyboardActions(_context);
         HandleSymbolDropping(_context);
 
-        // Prepare frame
-        //_context.Selector.HoveredIds.Clear();
-        _context.Layout.ComputeLayout(_context);
-        _context.ItemMovement.PrepareFrame();
-
-        // Debug UI
-        // if (ImGui.Button("Center"))
-        //     CenterView();
-        //
-        // ImGui.SameLine(0, 5);
-        // if (ImGui.Button("Rescan"))
-        //     _context.Layout.ComputeLayout(_context, forceUpdate: true);
-        //
-        // ImGui.SameLine(0, 5);
-        // ImGui.Checkbox("Debug", ref _enableDebug);
-        //
-        // ImGui.SameLine(0, 10);
-        // ImGui.Text("" + GetTargetScope());
-
+        // Update view scope if required
+        if (FitViewToSelectionHandling.FitViewToSelectionRequested)
+        {
+            Log.Debug("### Fit view to selection");
+            FocusViewToSelection(_context);
+        }
         if (_viewChangeRequested)
         {
+            Log.Debug("### Fit view to new scope " + _requestedTargetScope);
             SetScopeWithTransition(_requestedTargetScope, ICanvas.Transition.Undefined);
             _viewChangeRequested = false;
         }
+
+        // Keep visible canvas area to cull non-visible objects later
+        _visibleCanvasArea = ImRect.RectWithSize(InverseTransformPositionFloat(ImGui.GetWindowPos()),
+                                                 InverseTransformDirection(ImGui.GetWindowSize()));
         
         UpdateCanvas(out _);
-        //var drawList = ImGui.GetWindowDrawList();
 
+        // Prepare UiModel for frame
+        _context.Layout.ComputeLayout(_context);
+        _context.ItemMovement.PrepareFrame();
+        
         if (_context.StateMachine.CurrentState == GraphStates.Default)
         {
             _context.ActiveItem = null;
@@ -87,15 +62,17 @@ internal sealed partial class MagGraphCanvas
             HandleFenceSelection(_context, _selectionFence);
         }
 
-        // Items
+        // Draw items
         foreach (var item in _context.Layout.Items.Values)
         {
             DrawItem(item, drawList, _context);
         }
 
-        Fonts.FontSmall.Scale = 1;
+        Fonts.FontSmall.Scale = 1; // WTF
 
-        // Update hover time
+        // Update active or hovered item
+        // Doing this after rendering will add slight frame delay but will
+        // keep drag operations more consistent.
         if (_context.ActiveItem != null)
         {
             if (_context.ActiveItem.Id != _lastHoverId)
@@ -114,7 +91,7 @@ internal sealed partial class MagGraphCanvas
 
         HighlightSplitInsertionPoints(drawList, _context);
 
-        // Connections
+        // Draw connections
         foreach (var connection in _context.Layout.MagConnections)
         {
             DrawConnection(connection, drawList, _context);
@@ -187,7 +164,6 @@ internal sealed partial class MagGraphCanvas
         InputSnapper.Update(_context);
 
         _context.ConnectionHovering.PrepareNewFrame(_context);
-
         _context.Placeholder.Update(_context);
 
         // Draw animated Snap indicator

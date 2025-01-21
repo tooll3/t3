@@ -107,9 +107,10 @@ internal sealed class GraphWindow : Windows.Window
         return true;
     }
 
-    /** Called when view is closed or changed */
+    /** Called when view is closed (e.g. when jumping to hub) or changed */
     public void CloseView()
     {
+
         if (ProjectView != null)
             ProjectView.OnCompositionChanged -= CompositionChangedHandler;
 
@@ -259,21 +260,6 @@ internal sealed class GraphWindow : Windows.Window
                 GraphCanvas.BeginDraw(ProjectView.GraphImageBackground.IsActive,
                                       ProjectView.GraphImageBackground.HasInteractionFocus);
 
-                /*
-                 * This is a workaround to delay setting the composition until ImGui has
-                 * finally updated its window size and applied its layout so we can use
-                 * Graph window size to properly fit the content into view.
-                 *
-                 * The side effect of this hack is that CompositionOp stays undefined for
-                 * multiple frames with requires many checks in GraphWindow's Draw().
-                 */
-                if (!_initializedAfterLayoutReady && ImGui.GetFrameCount() > 1)
-                {
-                    GraphCanvas.RestoreLastSavedUserViewForComposition(ICanvas.Transition.JumpIn, ProjectView.OpenedProject.RootInstance.SymbolChildId);
-                    GraphCanvas.FocusViewToSelection();
-                    _initializedAfterLayoutReady = true;
-                }
-
                 GraphBookmarkNavigation.HandleForCanvas(ProjectView);
 
                 ImGui.BeginGroup();
@@ -299,7 +285,6 @@ internal sealed class GraphWindow : Windows.Window
     }
     #endregion
 
-    private bool _initializedAfterLayoutReady;
     private IGraphCanvas? GraphCanvas => ProjectView?.GraphCanvas;
     private static readonly EditSymbolDescriptionDialog _editDescriptionDialog = new();
 }

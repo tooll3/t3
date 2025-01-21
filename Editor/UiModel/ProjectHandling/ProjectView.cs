@@ -4,6 +4,7 @@ using T3.Core.Operator;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Window;
+using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.TimeLine;
 using T3.Editor.UiModel.Selection;
@@ -20,6 +21,7 @@ internal sealed partial class ProjectView
 
     public IGraphCanvas GraphCanvas { get; set; } = null!; // TODO: remove set accessibility
     public OpenedProject OpenedProject { get; }
+    public IReadOnlyList<Guid> CompositionPath => _compositionPath;
     private readonly List<Guid> _compositionPath = [];
     
     private InstanceView? _composition;
@@ -183,6 +185,25 @@ internal sealed partial class ProjectView
         graphImageBackground = new GraphImageBackground(nodeSelection, structure);
     }
 
+
+    public void DisposeLatestComposition()
+    {
+        var composition = _compositionsForDisposal.Pop();
+        composition.Dispose();
+    }
+    
+    
+    public void SaveUsersViewForCurrentComposition()
+    {
+        Debug.Assert(CompositionInstance != null);
+
+        if (CompositionInstance == null) 
+            return;
+    
+        var lastSymbolChildId = CompositionInstance.SymbolChildId;
+        UserSettings.Config.OperatorViewSettings[lastSymbolChildId] = GraphCanvas.GetTargetScope();
+    }
+
     public bool TrySetCompositionOp(IReadOnlyList<Guid> newIdPath, ICanvas.Transition transition = ICanvas.Transition.Undefined, Guid? alsoSelectChildId = null)
     {
         var structure = OpenedProject.Structure;
@@ -196,10 +217,9 @@ internal sealed partial class ProjectView
         }
 
         // Save previous view for user
-        if (_compositionPath.Count > 0)
+        if (CompositionInstance != null && CompositionInstance != newCompositionInstance)
         {
-            var lastSymbolChildId = _compositionPath[^1];
-            UserSettings.Config.OperatorViewSettings[lastSymbolChildId] = GraphCanvas.GetTargetScope();
+            SaveUsersViewForCurrentComposition();
         }
         
         // Set new Composition if required
@@ -228,18 +248,24 @@ internal sealed partial class ProjectView
         NodeSelection.Clear();
         TimeLineCanvas.ClearSelection();
 
-        if (alsoSelectChildId != null)
+        // This happens when jumping out of an open.
+        if (alsoSelectChildId != null && ScalableCanvas != null)
         {
             var instance = Composition.Instance.Children[alsoSelectChildId.Value];
             NodeSelection.SetSelection(instance.GetChildUi()!, instance);
+            var bounds = NodeSelection.GetSelectionBounds(NodeSelection, instance);
+            var viewScope = ScalableCanvas.GetScopeForCanvasArea(bounds);
+            ScalableCanvas.SetScopeWithTransition(viewScope, ICanvas.Transition.JumpOut);
         }
         else
         {
-            GraphCanvas.RestoreLastSavedUserViewForComposition(transition, newCompositionInstance.SymbolChildId);
+            GraphCanvas.RestoreLastSavedUserViewForProjectView(transition);
         }
         
         return true;
     }
+    
+    private ScalableCanvas? ScalableCanvas => GraphCanvas as ScalableCanvas;
 
     public bool TrySetCompositionOpToChild(Guid symbolChildId)
     {
@@ -280,6 +306,9 @@ internal sealed partial class ProjectView
 
     public void Close()
     {
+        if(CompositionInstance != null)
+            SaveUsersViewForCurrentComposition();
+        
         GraphCanvas.Close();
         if (Focused != this)
             return;
