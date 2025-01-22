@@ -1,12 +1,9 @@
 #nullable enable
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Microsoft.Build.Construction;
-using SharpDX.MediaFoundation;
 using T3.Core.Compilation;
 using T3.Core.Resource;
 using T3.Core.UserData;

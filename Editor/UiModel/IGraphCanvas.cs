@@ -1,5 +1,4 @@
 #nullable enable
-using System.Diagnostics;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Interaction;

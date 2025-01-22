@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using System.Numerics;
 using ImGuiNET;
 using SilkWindows.Implementations.FileManager.ItemDrawers;
 using T3.Core.SystemUi;

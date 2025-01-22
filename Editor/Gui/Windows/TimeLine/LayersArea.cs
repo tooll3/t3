@@ -399,7 +399,6 @@ internal sealed class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
     }
         
     private float _timeWithinDraggedClip;
-    private float _posYInsideDraggedClip;
 
     private void HandleDragging(Instance compositionOp, ITimeClip timeClip, bool isSelected, bool wasClicked, HandleDragMode mode, Vector2 position)
     {

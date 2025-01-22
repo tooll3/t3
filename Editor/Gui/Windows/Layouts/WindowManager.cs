@@ -1,7 +1,6 @@
 using ImGuiNET;
 using T3.Editor.Gui.Graph.Window;
 using T3.Editor.Gui.Interaction;
-using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Exploration;
 using T3.Editor.Gui.Windows.Output;

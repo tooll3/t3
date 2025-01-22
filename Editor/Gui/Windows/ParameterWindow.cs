@@ -371,7 +371,7 @@ internal sealed class ParameterWindow : Window
 
         var selectedChildSymbolUi = instance.GetSymbolUi();
         
-        var compositionSymbolUi = ProjectView.Focused?.Composition?.SymbolUi;
+        var compositionSymbolUi = ProjectView.Focused?.InstView?.SymbolUi;
         if (compositionSymbolUi == null)
             return;
 

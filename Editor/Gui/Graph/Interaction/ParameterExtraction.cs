@@ -7,7 +7,6 @@ using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Graph;
 using T3.Editor.UiModel.ProjectHandling;
-using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.Graph.Interaction;
 
