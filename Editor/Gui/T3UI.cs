@@ -101,7 +101,7 @@ public static class T3Ui
             // Set selected id so operator can check if they are selected or not  
             var selectedInstance = nodeSelection.GetSelectedInstanceWithoutComposition();
             MouseInput.SelectedChildId = selectedInstance?.SymbolChildId ?? Guid.Empty;
-            InvalidateSelectedOpsForTransormGizmo(nodeSelection);
+            InvalidateSelectedOpsForTransformGizmo(nodeSelection);
         }
 
         // Draw everything!
@@ -145,7 +145,7 @@ public static class T3Ui
         Profiling.EndFrameData();
     }
 
-    private static void InvalidateSelectedOpsForTransormGizmo(NodeSelection nodeSelection)
+    private static void InvalidateSelectedOpsForTransformGizmo(NodeSelection nodeSelection)
     {
         // Keep invalidating selected op to enforce rendering of Transform gizmo  
         foreach (var si in nodeSelection.GetSelectedInstances().ToList())

@@ -39,6 +39,12 @@ internal sealed class OpenedProject
 
     private void OnRootDisposed()
     {
+        
+        foreach (var view in _projectViews)
+        {
+            view.NodeSelection.Clear();
+            view.FlagChanges(ProjectView.ChangeTypes.Children|ProjectView.ChangeTypes.Composition);
+        }
         _rootInstance!.Disposing -= OnRootDisposed;
         _rootInstance = null;
     }

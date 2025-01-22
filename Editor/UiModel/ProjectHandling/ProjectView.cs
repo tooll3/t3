@@ -21,7 +21,6 @@ internal sealed partial class ProjectView
 
     public IGraphCanvas GraphCanvas { get; set; } = null!; // TODO: remove set accessibility
     public OpenedProject OpenedProject { get; }
-    public IReadOnlyList<Guid> CompositionPath => _compositionPath;
     private readonly List<Guid> _compositionPath = [];
     
     private InstanceView? _composition;
@@ -30,7 +29,7 @@ internal sealed partial class ProjectView
     
     private readonly Stack<InstanceView> _compositionsAwaitingDisposal = [];
     private readonly Stack<InstanceView> _compositionReloadStack = [];
-    private bool _waitingOnReload = false;
+    private bool _waitingOnReload;
 
     public void SetCompositionOp(Instance? newCompositionOp)
     {
@@ -185,15 +184,7 @@ internal sealed partial class ProjectView
         graphImageBackground = new GraphImageBackground(nodeSelection, structure);
     }
 
-
-    public void DisposeLatestComposition()
-    {
-        var composition = _compositionsForDisposal.Pop();
-        composition.Dispose();
-    }
-    
-    
-    public void SaveUsersViewForCurrentComposition()
+    private void SaveUsersViewForCurrentComposition()
     {
         Debug.Assert(CompositionInstance != null);
 
