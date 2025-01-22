@@ -95,7 +95,7 @@ internal static class GraphTitleAndBreadCrumbs
         }
     }
 
-    private static void DrawNameAndDescription(Composition compositionOp)
+    private static void DrawNameAndDescription(ProjectView.InstanceView compositionOp)
     {
         ImGui.SetCursorPosX(8);
         ImGui.PushFont(Fonts.FontLarge);

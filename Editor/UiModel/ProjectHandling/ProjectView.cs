@@ -10,7 +10,7 @@ using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.UiModel.ProjectHandling;
 
-internal sealed class ProjectView
+internal sealed partial class ProjectView
 {
     public readonly NavigationHistory NavigationHistory;
     public readonly NodeSelection NodeSelection;
@@ -18,16 +18,16 @@ internal sealed class ProjectView
     public readonly NodeNavigation NodeNavigation;
     public Structure Structure => OpenedProject.Structure;
 
-    public IGraphCanvas GraphCanvas { get; set; } = default!; // TODO: remove set accessibility
+    public IGraphCanvas GraphCanvas { get; set; } = null!; // TODO: remove set accessibility
     public OpenedProject OpenedProject { get; }
     private readonly List<Guid> _compositionPath = [];
     
-    private Composition? _composition;
-    public Composition? Composition => _composition;
+    private InstanceView? _composition;
+    public InstanceView? Composition => _composition;
     public Instance? CompositionInstance => Composition?.Instance;
     
-    private readonly Stack<Composition> _compositionsAwaitingDisposal = [];
-    private readonly Stack<Composition> _compositionReloadStack = [];
+    private readonly Stack<InstanceView> _compositionsAwaitingDisposal = [];
+    private readonly Stack<InstanceView> _compositionReloadStack = [];
     private bool _waitingOnReload = false;
 
     public void SetCompositionOp(Instance? newCompositionOp)
@@ -55,7 +55,7 @@ internal sealed class ProjectView
             DisposeComposition(_composition, path);
         }
 
-        _composition = Composition.GetForInstance(newCompositionOp);
+        _composition = InstanceView.GetForInstance(newCompositionOp);
 
         if (_composition != null)
         {
@@ -64,7 +64,7 @@ internal sealed class ProjectView
 
         return;
 
-        void DisposeComposition(Composition oldComposition, List<Guid> path)
+        void DisposeComposition(InstanceView oldComposition, List<Guid> path)
         {
             _compositionsAwaitingDisposal.Push(oldComposition);
             
@@ -78,7 +78,7 @@ internal sealed class ProjectView
                 }
 
                 compositionToDispose.Dispose();
-                if (compositionToDispose.NeedsReload)
+                if (compositionToDispose is { CheckoutCount: 0, IsReadOnly: true, HasBeenModified: true })
                 {
                     _compositionReloadStack.Push(compositionToDispose);
                 }
@@ -96,7 +96,7 @@ internal sealed class ProjectView
 
         return;
 
-        void ShowSymbolReloadDialog(Composition composition)
+        void ShowSymbolReloadDialog(InstanceView composition)
         {
             var instance = composition.Instance;
             var parent = instance.Parent;
