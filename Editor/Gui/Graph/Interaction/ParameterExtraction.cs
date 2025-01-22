@@ -23,15 +23,15 @@ internal static class ParameterExtraction
     public static void ExtractAsConnectedOperator<T>(InputSlot<T> inputSlot, SymbolUi.Child symbolChildUi, Symbol.Child.Input input)
     {
         var view = ProjectView.Focused;
-        if (view?.Composition == null)
+        if (view?.InstView == null)
         {
             Log.Warning("Unable to access current view for extractions?");
             return;
         }
         
         var nodeSelection = view.NodeSelection;
-        var compositionUi = view.Composition.SymbolUi;
-        var compositionInstance = view.Composition.Instance;
+        var compositionUi = view.InstView.SymbolUi;
+        var compositionInstance = view.InstView.Instance;
         
         //var compositionUi = view.;
         //Instance? composition;

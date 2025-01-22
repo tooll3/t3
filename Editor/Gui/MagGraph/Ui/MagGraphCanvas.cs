@@ -174,7 +174,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
 
         // Meh: This relies on TargetScope already being set to new composition.
         var newCanvasScope = ProjectView.Focused.GraphCanvas.GetTargetScope();
-        if (UserSettings.Config.OperatorViewSettings.TryGetValue(context.CompositionOp.SymbolChildId, out var savedCanvasScope))
+        if (UserSettings.Config.OperatorViewSettings.TryGetValue(context.CompositionInstance.SymbolChildId, out var savedCanvasScope))
         {
             newCanvasScope = savedCanvasScope;
         }
@@ -203,14 +203,14 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
         {
             var symbol = symbolUi.Symbol;
             var posOnCanvas = InverseTransformPositionFloat(ImGui.GetMousePos());
-            if (!SymbolUiRegistry.TryGetSymbolUi(context.CompositionOp.Symbol.Id, out var compositionOpSymbolUi))
+            if (!SymbolUiRegistry.TryGetSymbolUi(context.CompositionInstance.Symbol.Id, out var compositionOpSymbolUi))
             {
-                Log.Warning("Failed to get symbol id for " + context.CompositionOp.SymbolChildId);
+                Log.Warning("Failed to get symbol id for " + context.CompositionInstance.SymbolChildId);
                 return;
             }
 
             var childUi = GraphOperations.AddSymbolChild(symbol, compositionOpSymbolUi, posOnCanvas);
-            var instance = context.CompositionOp.Children[childUi.Id];
+            var instance = context.CompositionInstance.Children[childUi.Id];
             context.Selector.SetSelection(childUi, instance);
             context.Layout.FlagAsChanged();
         }
@@ -252,7 +252,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
                     break;
 
                 _context.Selector.Clear();
-                _context.Selector.SetSelectionToComposition(context.CompositionOp);
+                _context.Selector.SetSelectionToComposition(context.CompositionInstance);
                 break;
             case SelectionFence.States.Inactive:
                 break;
@@ -342,7 +342,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
 
     public void FocusViewToSelection(GraphUiContext context)
     {
-        var areaOnCanvas = NodeSelection.GetSelectionBounds(context.Selector, context.CompositionOp);
+        var areaOnCanvas = NodeSelection.GetSelectionBounds(context.Selector, context.CompositionInstance);
         areaOnCanvas.Expand(200);
         FitAreaOnCanvas(areaOnCanvas);
     }

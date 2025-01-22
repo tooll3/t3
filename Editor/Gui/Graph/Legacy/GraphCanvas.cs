@@ -60,26 +60,26 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
     public void CreatePlaceHolderConnectedToInput(SymbolUi.Child symbolChildUi, Symbol.InputDefinition inputInputDefinition)
     {
-        if (_projectView.Composition == null)
+        if (_projectView.InstView == null)
         {
             Log.Error("Failed to access composition op?");
             return;
         }
         
-        ConnectionMaker.StartFromInputSlot(this, _projectView.Composition.Symbol, symbolChildUi, inputInputDefinition);
-        var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(_projectView.Composition.SymbolUi, symbolChildUi);
+        ConnectionMaker.StartFromInputSlot(this, _projectView.InstView.Symbol, symbolChildUi, inputInputDefinition);
+        var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(_projectView.InstView.SymbolUi, symbolChildUi);
         ConnectionMaker.InitSymbolBrowserAtPosition(this, SymbolBrowser, freePosition);
     }
 
     public void StartDraggingFromInputSlot(SymbolUi.Child symbolChildUi, Symbol.InputDefinition inputInputDefinition)
     {
-        if (_projectView.Composition == null)
+        if (_projectView.InstView == null)
         {
             Log.Error("Failed to access composition op?");
             return;
         }
         
-        ConnectionMaker.StartFromInputSlot(this,  _projectView.Composition.Symbol, symbolChildUi, inputInputDefinition);
+        ConnectionMaker.StartFromInputSlot(this,  _projectView.InstView.Symbol, symbolChildUi, inputInputDefinition);
     }
 
     public static ProjectView CreateWithComponents(OpenedProject openedProject)

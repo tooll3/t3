@@ -156,7 +156,7 @@ internal sealed partial class MagItemMovement
         if (_borderConnections.Count == 0)
             return false;
 
-        NodeActions.DisconnectDraggedNodes(context.CompositionOp, DraggedItems.Select(i => i.Selectable).ToList());
+        NodeActions.DisconnectDraggedNodes(context.CompositionInstance, DraggedItems.Select(i => i.Selectable).ToList());
 
         // foreach (var c in _borderConnections)
         // {
@@ -305,7 +305,7 @@ internal sealed partial class MagItemMovement
 
         var macroCommand = context.StartMacroCommand("Move nodes");
 
-        context.MoveElementsCommand = new ModifyCanvasElementsCommand(context.CompositionOp.Symbol.Id, snapGraphItems, _nodeSelection);
+        context.MoveElementsCommand = new ModifyCanvasElementsCommand(context.CompositionInstance.Symbol.Id, snapGraphItems, _nodeSelection);
         macroCommand.AddExecutedCommandForUndo(context.MoveElementsCommand);
 
         _lastAppliedOffset = Vector2.Zero;
@@ -355,7 +355,7 @@ internal sealed partial class MagItemMovement
             var targetItemInputLine = mc.TargetItem.InputLines[mc.InputLineIndex];
             var connection = mc.AsSymbolConnection();
 
-            context.MacroCommand.AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,
+            context.MacroCommand.AddAndExecCommand(new DeleteConnectionCommand(context.CompositionInstance.Symbol,
                                                                                connection,
                                                                                targetItemInputLine.MultiInputIndex));
             mc.IsTemporary = true;
@@ -408,13 +408,13 @@ internal sealed partial class MagItemMovement
             return false;
 
         var affectedItemsAsNodes = movableItems.Select(i => i as ISelectableCanvasObject).ToList();
-        var newMoveCommand = new ModifyCanvasElementsCommand(context.CompositionOp.Symbol.Id, affectedItemsAsNodes, _nodeSelection);
+        var newMoveCommand = new ModifyCanvasElementsCommand(context.CompositionInstance.Symbol.Id, affectedItemsAsNodes, _nodeSelection);
         context.MacroCommand.AddExecutedCommandForUndo(newMoveCommand);
 
         MoveToCollapseVerticalGaps(pair.Ca, pair.Cb, movableItems, false);
         newMoveCommand.StoreCurrentValues();
 
-        context.MacroCommand.AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+        context.MacroCommand.AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
                                                                         new Symbol.Connection(pair.Ca.SourceItem.Id,
                                                                                               pair.Ca.SourceOutput.Id,
                                                                                               pair.Cb.TargetItem.Id,
@@ -460,13 +460,13 @@ internal sealed partial class MagItemMovement
             return false;
 
         var affectedItemsAsNodes = movableItems.Select(i => i as ISelectableCanvasObject).ToList();
-        var newMoveCommand = new ModifyCanvasElementsCommand(context.CompositionOp.Symbol.Id, affectedItemsAsNodes, _nodeSelection);
+        var newMoveCommand = new ModifyCanvasElementsCommand(context.CompositionInstance.Symbol.Id, affectedItemsAsNodes, _nodeSelection);
         context.MacroCommand.AddExecutedCommandForUndo(newMoveCommand);
 
         MoveToCollapseHorizontalGaps(pair.Ca, pair.Cb, movableItems, false);
         newMoveCommand.StoreCurrentValues();
 
-        context.MacroCommand.AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+        context.MacroCommand.AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
                                                                         new Symbol.Connection(pair.Ca.SourceItem.Id,
                                                                                               pair.Ca.SourceOutput.Id,
                                                                                               pair.Cb.TargetItem.Id,
@@ -819,13 +819,13 @@ internal sealed partial class MagItemMovement
                                                       targetParentOfSymbolChildId,
                                                       potentialConnection.InputLine.Id);
 
-            if (Structure.CheckForCycle(context.CompositionOp.Symbol, newConnection))
+            if (Structure.CheckForCycle(context.CompositionInstance.Symbol, newConnection))
             {
                 Log.Debug("Sorry, this connection would create a cycle. (4)");
                 continue;
             }
 
-            context.MacroCommand.AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+            context.MacroCommand.AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
                                                                             newConnection,
                                                                             potentialConnection.InputLine.MultiInputIndex));
         }
@@ -1047,17 +1047,17 @@ internal sealed partial class MagItemMovement
             }
         }
 
-        context.MacroCommand.AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,
+        context.MacroCommand.AddAndExecCommand(new DeleteConnectionCommand(context.CompositionInstance.Symbol,
                                                                            connection.AsSymbolConnection(),
                                                                            0));
-        context.MacroCommand.AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+        context.MacroCommand.AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
                                                                         new Symbol.Connection(connection.SourceItem.Id,
                                                                                               connection.SourceOutput.Id,
                                                                                               insertionPoint.InputItemId,
                                                                                               insertionPoint.InputId
                                                                                              ), 0));
 
-        context.MacroCommand.AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+        context.MacroCommand.AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
                                                                         new Symbol.Connection(insertionPoint.OutputItemId,
                                                                                               insertionPoint.OutputId,
                                                                                               connection.TargetItem.Id,
@@ -1105,7 +1105,7 @@ internal sealed partial class MagItemMovement
 
         // Move items down...
         var affectedItemsAsNodes = movableItems.Select(i => i as ISelectableCanvasObject).ToList();
-        var newMoveComment = new ModifyCanvasElementsCommand(context.CompositionOp.Symbol.Id, affectedItemsAsNodes, context.Selector);
+        var newMoveComment = new ModifyCanvasElementsCommand(context.CompositionInstance.Symbol.Id, affectedItemsAsNodes, context.Selector);
         context.MacroCommand.AddExecutedCommandForUndo(newMoveComment);
 
         foreach (var item in affectedItemsAsNodes)
@@ -1139,7 +1139,7 @@ internal sealed partial class MagItemMovement
 
         // Move items down...
         var affectedItemsAsNodes = movableItems.Select(i => i as ISelectableCanvasObject).ToList();
-        var newMoveComment = new ModifyCanvasElementsCommand(context.CompositionOp.Symbol.Id, affectedItemsAsNodes, context.Selector);
+        var newMoveComment = new ModifyCanvasElementsCommand(context.CompositionInstance.Symbol.Id, affectedItemsAsNodes, context.Selector);
         context.MacroCommand.AddExecutedCommandForUndo(newMoveComment);
 
         foreach (var item in affectedItemsAsNodes)

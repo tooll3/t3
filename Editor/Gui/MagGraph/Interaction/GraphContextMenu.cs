@@ -22,7 +22,7 @@ internal static class GraphContextMenu
     internal static void DrawContextMenuContent(GraphUiContext context, ProjectView projectView)
     {
         var clickPosition = ImGui.GetMousePosOnOpeningCurrentPopup();
-        var compositionSymbolUi = context.CompositionOp.GetSymbolUi();
+        var compositionSymbolUi = context.CompositionInstance.GetSymbolUi();
 
         var nodeSelection = context.Selector;
 
@@ -119,7 +119,7 @@ internal static class GraphContextMenu
                 else
                 {
                     var selectedInstances = selectedChildUis
-                                           .Select(ui => context.CompositionOp.Children[ui.Id])
+                                           .Select(ui => context.CompositionInstance.Children[ui.Id])
                                            .ToList();
                     foreach (var snapshot in allSnapshots)
                     {
@@ -174,7 +174,7 @@ internal static class GraphContextMenu
                                selected: false,
                                enabled: isImage))
             {
-                var instance = context.CompositionOp.Children[selectedChildUis[0].Id];
+                var instance = context.CompositionInstance.Children[selectedChildUis[0].Id];
                 //context.GraphImageBackground.OutputInstance = instance;
                 // TODO: pin to imagebackground?
             }
@@ -183,7 +183,7 @@ internal static class GraphContextMenu
             if (ImGui.MenuItem("Pin to output", oneOpSelected))
             {
                 if (ProjectView.Focused != null)
-                    NodeActions.PinSelectedToOutputWindow(ProjectView.Focused, nodeSelection, context.CompositionOp);
+                    NodeActions.PinSelectedToOutputWindow(ProjectView.Focused, nodeSelection, context.CompositionInstance);
             }
 
             ImGui.EndMenu();
@@ -196,12 +196,12 @@ internal static class GraphContextMenu
                            selected: false,
                            enabled: someOpsSelected))
         {
-            NodeActions.CopySelectedNodesToClipboard(nodeSelection, context.CompositionOp);
+            NodeActions.CopySelectedNodesToClipboard(nodeSelection, context.CompositionInstance);
         }
 
         if (ImGui.MenuItem("Paste", KeyboardBinding.ListKeyboardShortcuts(UserActions.PasteFromClipboard, false)))
         {
-            NodeActions.PasteClipboard(nodeSelection, context.Canvas, context.CompositionOp);
+            NodeActions.PasteClipboard(nodeSelection, context.Canvas, context.CompositionInstance);
             context.Layout.FlagAsChanged();
         }
 
@@ -224,8 +224,8 @@ internal static class GraphContextMenu
                            selected: false,
                            enabled: selectedChildUis.Count > 0 && !isSaving))
         {
-            NodeActions.CopySelectedNodesToClipboard(nodeSelection, context.CompositionOp);
-            NodeActions.PasteClipboard(nodeSelection, context.Canvas, context.CompositionOp);
+            NodeActions.CopySelectedNodesToClipboard(nodeSelection, context.CompositionInstance);
+            NodeActions.PasteClipboard(nodeSelection, context.Canvas, context.CompositionInstance);
             context.Layout.FlagAsChanged();
         }
 
@@ -327,7 +327,7 @@ internal static class GraphContextMenu
 
         if (ImGui.MenuItem("Export as Executable", oneOpSelected))
         {
-            switch (PlayerExporter.TryExportInstance(context.CompositionOp, selectedChildUis.Single(), out var reason, out var exportDir))
+            switch (PlayerExporter.TryExportInstance(context.CompositionInstance, selectedChildUis.Single(), out var reason, out var exportDir))
             {
                 case false:
                     Log.Error(reason);

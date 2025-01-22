@@ -11,7 +11,7 @@ internal static class KeyboardActions
 {
     internal static void HandleKeyboardActions(GraphUiContext context)
     {
-        var compositionOp = context.CompositionOp;
+        var compositionOp = context.CompositionInstance;
         //var compositionUi = compositionOp.GetSymbolUi();
 
         if (KeyboardBinding.Triggered(UserActions.FocusSelection))

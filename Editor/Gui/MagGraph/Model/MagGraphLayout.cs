@@ -37,12 +37,12 @@ internal sealed class MagGraphLayout
 {
     public void ComputeLayout(GraphUiContext context , bool forceUpdate = false)
     {
-        var compositionOp = context.CompositionOp;
+        var compositionOp = context.CompositionInstance;
         
         if (!SymbolUiRegistry.TryGetSymbolUi(compositionOp.Symbol.Id, out var parentSymbolUi))
             return;
 
-        if (forceUpdate || FrameStats.Last.UndoRedoTriggered || _structureFlaggedAsChanged ||
+        if (forceUpdate || FrameStats.Last.UndoRedoTriggered || StructureFlaggedAsChanged ||
             HasCompositionDataChanged(compositionOp.Symbol, ref _compositionModelHash))
             RefreshDataStructure(context, parentSymbolUi);
 
@@ -52,21 +52,22 @@ internal sealed class MagGraphLayout
 
     public void FlagAsChanged()
     {
-        _structureFlaggedAsChanged = true;
+        StructureFlaggedAsChanged = true;
     }
-
+    
+    
     private int _structureUpdateCycle;
 
     private void RefreshDataStructure(GraphUiContext context, SymbolUi parentSymbolUi)
     {
-        var composition = context.CompositionOp;
+        var composition = context.CompositionInstance;
         
         _structureUpdateCycle++;
         CollectItemReferences(composition, parentSymbolUi);
         UpdateConnectionSources(composition);
         UpdateVisibleItemLines(context);
         CollectConnectionReferences(composition);
-        _structureFlaggedAsChanged = false;
+        StructureFlaggedAsChanged = false;
     }
 
     /// <remarks>
@@ -328,7 +329,7 @@ internal sealed class MagGraphLayout
             {
                 var shouldBeVisible = isRelevant || isPrimaryInput || input.HasInputConnections;
 
-                var connectionsToInput = context.CompositionOp.Symbol.Connections.FindAll(c => c.TargetParentOrChildId == item.Id
+                var connectionsToInput = context.CompositionInstance.Symbol.Connections.FindAll(c => c.TargetParentOrChildId == item.Id
                                                                                                && c.TargetSlotId == input.Id);
                 
                 var multiInputIndex = 0;
@@ -765,5 +766,5 @@ internal sealed class MagGraphLayout
     public readonly Dictionary<Guid, MagGraphItem> Items = new(127);
     public readonly List<MagGraphConnection> MagConnections = new(127);
     private int _compositionModelHash;
-    private bool _structureFlaggedAsChanged;
+    public bool StructureFlaggedAsChanged { get; private set; }
 }

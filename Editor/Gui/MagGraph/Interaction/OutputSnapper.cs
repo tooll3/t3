@@ -60,13 +60,13 @@ internal static class OutputSnapper
                                                         c.TargetItem.Id,
                                                         c.TargetInput.Id);
 
-            if (Structure.CheckForCycle(context.CompositionOp.Symbol, connectionToAdd))
+            if (Structure.CheckForCycle(context.CompositionInstance.Symbol, connectionToAdd))
             {
                 Log.Debug("Sorry, this connection would create a cycle.");
                 continue;
             }
             
-            context.MacroCommand.AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+            context.MacroCommand.AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
                                                                             connectionToAdd,
                                                                             c.MultiInputIndex));
             didSomething = true;

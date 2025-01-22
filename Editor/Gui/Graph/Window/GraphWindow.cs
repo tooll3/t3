@@ -156,7 +156,7 @@ internal sealed class GraphWindow : Windows.Window
         if (FitViewToSelectionHandling.FitViewToSelectionRequested)
             GraphCanvas?.FocusViewToSelection();
 
-        if (ProjectView.Composition == null)
+        if (ProjectView.InstView == null)
             return;
 
         ImageBackgroundFading.HandleImageBackgroundFading(ProjectView.GraphImageBackground, out var backgroundImageOpacity);
@@ -219,7 +219,7 @@ internal sealed class GraphWindow : Windows.Window
         }
 
         if (UserSettings.Config.ShowMiniMap)
-            UiElements.DrawMiniMap(ProjectView.Composition, GraphCanvas);
+            UiElements.DrawMiniMap(ProjectView.InstView, GraphCanvas);
 
         ProjectView.CheckDisposal();
     }
@@ -280,8 +280,8 @@ internal sealed class GraphWindow : Windows.Window
         }
         drawList.ChannelsMerge();
 
-        if (ProjectView?.Composition != null)
-            _editDescriptionDialog.Draw(ProjectView.Composition.Symbol);
+        if (ProjectView?.InstView != null)
+            _editDescriptionDialog.Draw(ProjectView.InstView.Symbol);
     }
     #endregion
 

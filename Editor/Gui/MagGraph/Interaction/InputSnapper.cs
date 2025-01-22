@@ -69,7 +69,7 @@ internal static class InputSnapper
                                                     targetParentOrChildId,
                                                     BestInputMatch.SlotId);
 
-        if (Structure.CheckForCycle(context.CompositionOp.Symbol, connectionToAdd))
+        if (Structure.CheckForCycle(context.CompositionInstance.Symbol, connectionToAdd))
         {
             Log.Debug("Sorry, this connection would create a cycle.");
             return false;
@@ -78,23 +78,23 @@ internal static class InputSnapper
         var multiInputIndex = BestInputMatch.MultiInputIndex;
         if (BestInputMatch.InputSnapType == InputSnapTypes.InsertAfterMultiInput)
         {
-            context.MacroCommand!.AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+            context.MacroCommand!.AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
                                                                              connectionToAdd,
                                                                              multiInputIndex + 1));
         }
         else if (BestInputMatch.InputSnapType == InputSnapTypes.ReplaceMultiInput)
         {
-            context.MacroCommand!.AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,
+            context.MacroCommand!.AddAndExecCommand(new DeleteConnectionCommand(context.CompositionInstance.Symbol,
                                                                                 connectionToAdd,
                                                                                 multiInputIndex));
 
-            context.MacroCommand!.AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+            context.MacroCommand!.AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
                                                                              connectionToAdd,
                                                                              multiInputIndex));
         }
         else
         {
-            context.MacroCommand!.AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+            context.MacroCommand!.AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
                                                                              connectionToAdd,
                                                                              multiInputIndex ));
         }

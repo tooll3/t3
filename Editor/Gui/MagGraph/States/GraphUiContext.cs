@@ -1,12 +1,10 @@
 ﻿#nullable enable
 using System.Diagnostics;
 using T3.Core.Operator;
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.Ui;
-using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Graph;
 using T3.Editor.UiModel.ProjectHandling;
@@ -76,7 +74,7 @@ internal sealed class GraphUiContext
     }
 
     internal readonly ProjectView ProjectView;
-    internal Instance CompositionOp => ProjectView.CompositionInstance!;
+    internal Instance CompositionInstance => ProjectView.CompositionInstance!;
     internal NodeSelection Selector => ProjectView.NodeSelection;
     
     

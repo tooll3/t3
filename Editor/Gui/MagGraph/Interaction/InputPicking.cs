@@ -72,7 +72,7 @@ internal static class InputPicking
     /// </summary>
     private static void TryConnectHiddenInput(GraphUiContext context, IInputUi targetInputUi)
     {
-        var composition = context.CompositionOp;
+        var composition = context.CompositionInstance;
         
         Debug.Assert(context.ActiveSourceItem != null && context.ItemForInputSelection != null);
         Debug.Assert(context.MacroCommand != null);
@@ -98,7 +98,7 @@ internal static class InputPicking
             return;
         }
 
-        var inputConnectionCount = context.CompositionOp.Symbol.Connections.Count(c => c.TargetParentOrChildId == context.ItemForInputSelection.Id
+        var inputConnectionCount = context.CompositionInstance.Symbol.Connections.Count(c => c.TargetParentOrChildId == context.ItemForInputSelection.Id
                                                                                        && c.TargetSlotId == targetInputUi.Id);
         
         

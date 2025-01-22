@@ -71,7 +71,7 @@ internal static class SymbolBrowsing
                                    .OrderByDescending(sui => SymbolFilter.ComputeRelevancy(sui,
                                                                                            string.Empty,
                                                                                            ProjectView.Focused.OpenedProject.Package,
-                                                                                           context.CompositionOp))
+                                                                                           context.CompositionInstance))
                                    .ToList();
             foreach (var symbolUi in orderedEnumerable)
             {
@@ -139,7 +139,7 @@ internal static class SymbolBrowsing
                                            .OrderByDescending(sui => SymbolFilter.ComputeRelevancy(sui,
                                                                                                    string.Empty,
                                                                                                    ProjectView.Focused!.OpenedProject.Package,
-                                                                                                   context.CompositionOp))
+                                                                                                   context.CompositionInstance))
                                            .ToList();
 
                     ColumnLayout.StartGroupAndWrapIfRequired(orderedEnumerable.Count + 1);

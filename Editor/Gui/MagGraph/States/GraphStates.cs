@@ -423,7 +423,7 @@ internal static class GraphStates
                               
                               // Remove existing connection
                               context.StartMacroCommand("Reconnect from input")
-                                     .AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,
+                                     .AddAndExecCommand(new DeleteConnectionCommand(context.CompositionInstance.Symbol,
                                                                                     connection.AsSymbolConnection(),
                                                                                     connection.MultiInputIndex));
 
@@ -480,7 +480,7 @@ internal static class GraphStates
 
                                   // Remove existing connections
                                   context.MacroCommand!
-                                         .AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,
+                                         .AddAndExecCommand(new DeleteConnectionCommand(context.CompositionInstance.Symbol,
                                                                                         connection.AsSymbolConnection(),
                                                                                         h.Connection.MultiInputIndex));
 

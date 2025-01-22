@@ -1,13 +1,11 @@
 ﻿using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.UiModel;
 using T3.Editor.UiModel.InputsAndTypes;
 using T3.Editor.UiModel.Selection;
 
@@ -22,6 +20,10 @@ internal sealed partial class MagGraphCanvas
 
         // General pre-update
         _context.DrawDialogs(_projectView);
+
+        if (_context.Layout.StructureFlaggedAsChanged)
+            return;
+        
         KeyboardActions.HandleKeyboardActions(_context);
         HandleSymbolDropping(_context);
 

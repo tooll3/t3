@@ -204,7 +204,7 @@ internal sealed class PlaceholderCreation
             return;
         }
 
-        var parentSymbol = context.CompositionOp.Symbol;
+        var parentSymbol = context.CompositionInstance.Symbol;
         var parentSymbolUi = parentSymbol.GetSymbolUi();
 
         var addSymbolChildCommand = new AddSymbolChildCommand(parentSymbol, symbol.Id) { PosOnCanvas = PlaceholderItem.PosOnCanvas };
@@ -219,7 +219,7 @@ internal sealed class PlaceholderCreation
         }
 
         var newSymbolChild = newChildUi.SymbolChild;
-        var newInstance = context.CompositionOp.Children[newChildUi.Id];
+        var newInstance = context.CompositionInstance.Children[newChildUi.Id];
         context.Selector.SetSelection(newChildUi, newInstance);
 
         // Connect to focus node...
@@ -244,12 +244,12 @@ internal sealed class PlaceholderCreation
                             continue;
 
                         context.MacroCommand
-                               .AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol,
+                               .AddAndExecCommand(new DeleteConnectionCommand(context.CompositionInstance.Symbol,
                                                                               mc.AsSymbolConnection(),
                                                                               mc.MultiInputIndex));
 
                         context.MacroCommand
-                               .AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+                               .AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
                                                                            new Symbol.Connection(newInstance.SymbolChildId,
                                                                                                  newItemOutput.Id,
                                                                                                  mc.TargetItem.Id,
@@ -261,7 +261,7 @@ internal sealed class PlaceholderCreation
 
                 // Create new Connection
                 context.MacroCommand
-                       .AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+                       .AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
                                                                    new Symbol.Connection(_snappedSourceItem.Id,
                                                                                          _snappedSourceOutputLine.Id,
                                                                                          newInstance.SymbolChildId,
@@ -308,7 +308,7 @@ internal sealed class PlaceholderCreation
                                                             primaryInput.Id);
 
                 context.MacroCommand
-                       .AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+                       .AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
                                                                    connectionToAdd,
                                                                    0));
             }
@@ -321,7 +321,7 @@ internal sealed class PlaceholderCreation
                 // Remove current connections
                 context.MacroCommand
                        .AddAndExecCommand
-                            (new DeleteConnectionCommand(context.CompositionOp.Symbol,
+                            (new DeleteConnectionCommand(context.CompositionInstance.Symbol,
                                                          h.Connection.AsSymbolConnection(),
                                                          h.Connection.MultiInputIndex
                                                         ));
@@ -361,7 +361,7 @@ internal sealed class PlaceholderCreation
                                                                     newInstance.SymbolChildId,
                                                                     primaryInput.Id);
                         context.MacroCommand
-                               .AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+                               .AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
                                                                            connectionToAdd,
                                                                            tc.MultiInputIndex));
                     }
@@ -372,7 +372,7 @@ internal sealed class PlaceholderCreation
                                                                     tc.TargetItem.Id,
                                                                     tc.TargetInput.Id);
                         context.MacroCommand
-                               .AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+                               .AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
                                                                            connectionToAdd,
                                                                            tc.MultiInputIndex));
                     }

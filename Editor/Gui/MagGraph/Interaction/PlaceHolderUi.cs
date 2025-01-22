@@ -384,8 +384,8 @@ internal static class PlaceHolderUi
 
     private static bool IsRelevantNamespace(GraphUiContext context, string symbolNamespace)
     {
-        var projectNamespace = "user." + context.CompositionOp.Symbol.SymbolPackage.AssemblyInformation.Name + ".";
-        var compositionNameSpace = context.CompositionOp.Symbol.Namespace;
+        var projectNamespace = "user." + context.CompositionInstance.Symbol.SymbolPackage.AssemblyInformation.Name + ".";
+        var compositionNameSpace = context.CompositionInstance.Symbol.Namespace;
 
         var isRelevantNamespace = symbolNamespace.StartsWith("Lib.")
                                   || symbolNamespace.StartsWith("Types.")

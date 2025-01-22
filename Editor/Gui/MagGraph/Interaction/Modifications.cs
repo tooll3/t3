@@ -22,7 +22,7 @@ internal static class Modifications
         if (context.Selector.Selection.Count == 0)
             return;
 
-        if(!SymbolUiRegistry.TryGetSymbolUi(context.CompositionOp.Symbol.Id, out var compositionUi))
+        if(!SymbolUiRegistry.TryGetSymbolUi(context.CompositionInstance.Symbol.Id, out var compositionUi))
         {
             Log.Warning("Can't find composition ui?");
             return;
@@ -111,14 +111,14 @@ internal static class Modifications
                     continue;
                 
                 var affectedItemsAsNodes = movableItems.Select(i => i as ISelectableCanvasObject).ToList();
-                var newMoveCommand = new ModifyCanvasElementsCommand(context.CompositionOp.Symbol.Id, affectedItemsAsNodes, context.Selector);
+                var newMoveCommand = new ModifyCanvasElementsCommand(context.CompositionInstance.Symbol.Id, affectedItemsAsNodes, context.Selector);
                 macroCommand.AddExecutedCommandForUndo(newMoveCommand);
             
                 MagItemMovement.MoveToCollapseVerticalGaps(mci, mco, movableItems, dryRun:false);
                 
                 newMoveCommand.StoreCurrentValues();
             
-                macroCommand.AddAndExecCommand(new AddConnectionCommand(context.CompositionOp.Symbol,
+                macroCommand.AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
                                                                         new Symbol.Connection(mci.SourceItem.Id,
                                                                                                   mci.SourceOutput.Id,
                                                                                                   mco.TargetItem.Id,

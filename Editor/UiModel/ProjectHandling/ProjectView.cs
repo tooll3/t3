@@ -23,9 +23,9 @@ internal sealed partial class ProjectView
     public OpenedProject OpenedProject { get; }
     private readonly List<Guid> _compositionPath = [];
     
-    private InstanceView? _composition;
-    public InstanceView? Composition => _composition;
-    public Instance? CompositionInstance => Composition?.Instance;
+    private InstanceView? _instView;
+    public InstanceView? InstView => _instView;
+    public Instance? CompositionInstance => InstView?.Instance;
     
     private readonly Stack<InstanceView> _compositionsAwaitingDisposal = [];
     private readonly Stack<InstanceView> _compositionReloadStack = [];
@@ -35,32 +35,32 @@ internal sealed partial class ProjectView
     {
         if (newCompositionOp == null)
         {
-            if (_composition != null)
+            if (_instView != null)
             {
-                DisposeComposition(_composition, []);
+                DisposeComposition(_instView, []);
             }
             
-            _composition = null;
+            _instView = null;
             return;
         }
         
-        if (_composition != null)
+        if (_instView != null)
         {
-            if (_composition.Is(newCompositionOp))
+            if (_instView.Is(newCompositionOp))
             {
                 return;
             }
             
             var path = new List<Guid>();
             Structure.PopulateInstancePath(newCompositionOp, path);
-            DisposeComposition(_composition, path);
+            DisposeComposition(_instView, path);
         }
 
-        _composition = InstanceView.GetForInstance(newCompositionOp);
+        _instView = InstanceView.GetForInstance(newCompositionOp);
 
-        if (_composition != null)
+        if (_instView != null)
         {
-            OnCompositionChanged?.Invoke(this, _composition.SymbolChildId);
+            OnCompositionChanged?.Invoke(this, _instView.SymbolChildId);
         }
 
         return;
@@ -214,8 +214,8 @@ internal sealed partial class ProjectView
         }
         
         // Set new Composition if required
-        var targetCompositionAlreadyActive = Composition != null 
-                                             && Composition.SymbolChildId == newCompositionInstance.SymbolChildId;
+        var targetCompositionAlreadyActive = InstView != null 
+                                             && InstView.SymbolChildId == newCompositionInstance.SymbolChildId;
         if (targetCompositionAlreadyActive)
         {
             if (newIdPath[0] != OpenedProject.RootInstance.SymbolChildId)
@@ -233,7 +233,7 @@ internal sealed partial class ProjectView
         _compositionPath.Clear();
         _compositionPath.AddRange(newIdPath);
         
-        Debug.Assert(Composition != null);
+        Debug.Assert(InstView != null);
         
         // Additionally select a child
         NodeSelection.Clear();
@@ -242,7 +242,7 @@ internal sealed partial class ProjectView
         // This happens when jumping out of an open.
         if (alsoSelectChildId != null && ScalableCanvas != null)
         {
-            var instance = Composition.Instance.Children[alsoSelectChildId.Value];
+            var instance = InstView.Instance.Children[alsoSelectChildId.Value];
             NodeSelection.SetSelection(instance.GetChildUi()!, instance);
             var bounds = NodeSelection.GetSelectionBounds(NodeSelection, instance);
             var viewScope = ScalableCanvas.GetScopeForCanvasArea(bounds);
@@ -274,7 +274,7 @@ internal sealed partial class ProjectView
         if (_compositionPath.Count == 1)
             return false;
 
-        var previousComposition = Composition;
+        var previousComposition = InstView;
 
         // new list as _compositionPath is mutable
         var path = _compositionPath.GetRange(0, _compositionPath.Count - 1);

@@ -11,16 +11,16 @@ internal static class GraphTitleAndBreadCrumbs
 {
     public static void Draw(ProjectView window)
     {
-        if (window.Composition == null)
+        if (window.InstView == null)
             return;
             
         DrawBreadcrumbs(window);
-        DrawNameAndDescription(window.Composition);
+        DrawNameAndDescription(window.InstView);
     }
 
     private static void DrawBreadcrumbs(ProjectView components)
     {
-        var composition = components.Composition;
+        var composition = components.InstView;
         Debug.Assert(composition != null);
         ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + new Vector2(1, 1));
         if (ImGui.Button("Hub"))
