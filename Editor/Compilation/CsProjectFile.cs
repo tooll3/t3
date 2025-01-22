@@ -21,8 +21,8 @@ internal sealed class CsProjectFile
     public string FullPath => _projectRootElement.FullPath;
     public string Directory => _projectRootElement.DirectoryPath;
     public string Name => Path.GetFileNameWithoutExtension(FullPath);
-    public string RootNamespace => _projectRootElement.GetProperty(PropertyType.RootNamespace, Name);
-    public string VersionString => _projectRootElement.GetProperty(PropertyType.VersionPrefix, "1.0.0");
+    public string RootNamespace => _projectRootElement.GetOrAddProperty(PropertyType.RootNamespace, Name);
+    public string VersionString => _projectRootElement.GetOrAddProperty(PropertyType.VersionPrefix, "1.0.0");
     public Version Version => new(VersionString!);
     public AssemblyInformation? Assembly { get; private set; }
     public event Action<CsProjectFile>? AssemblyLoaded;
@@ -31,7 +31,7 @@ internal sealed class CsProjectFile
     private readonly string _debugRootDirectory;
     private readonly ProjectRootElement _projectRootElement;
 
-    private string TargetFramework => _projectRootElement.GetProperty(PropertyType.TargetFramework, ProjectXml.TargetFramework);
+    private string TargetFramework => _projectRootElement.GetOrAddProperty(PropertyType.TargetFramework, ProjectXml.TargetFramework);
 
     private CsProjectFile(ProjectRootElement projectRootElement)
     {
@@ -103,23 +103,13 @@ internal sealed class CsProjectFile
         }
     }
 
-    private FileInfo GetBuildTargetPath()
+    private FileInfo GetBuildTargetFileInfo()
     {
         var directory = GetBuildTargetDirectory();
-        return new FileInfo(Path.Combine(directory, DllName));
-    }
-
-    private string DllName
-    {
-        get
-        {
-            var defaultAssemblyName = ProjectXml.UnevaluatedVariable((PropertyType.RootNamespace.GetItemName()));
-            var property = _projectRootElement.GetProperty(PropertyType.AssemblyName, defaultAssemblyName);
-            if (property != defaultAssemblyName)
-                return property + ".dll";
-
-            return RootNamespace + ".dll";
-        }
+        var defaultAssemblyName = ProjectXml.UnevaluatedVariable(PropertyType.RootNamespace.GetItemName());
+        var property = _projectRootElement.GetOrAddProperty(PropertyType.AssemblyName, defaultAssemblyName);
+        var dllName = property != defaultAssemblyName ? property + ".dll" : RootNamespace + ".dll";
+        return new FileInfo(Path.Combine(directory, dllName));
     }
 
     public string GetBuildTargetDirectory()
@@ -184,7 +174,7 @@ internal sealed class CsProjectFile
         _projectRootElement.Save();
     }
 
-    public bool TryCompileRelease(string externalDirectory, bool nugetRestore = false)
+    public bool TryCompileRelease(string externalDirectory, bool nugetRestore)
     {
         return Compiler.TryCompile(this, PlayerBuildMode, nugetRestore, targetDirectory: externalDirectory);
     }
@@ -266,7 +256,7 @@ internal sealed class CsProjectFile
 
     public bool TryLoadAssembly(FileInfo? assemblyFile = null)
     {
-        assemblyFile ??= GetBuildTargetPath();
+        assemblyFile ??= GetBuildTargetFileInfo();
         if (!assemblyFile.Exists)
         {
             Log.Error($"Could not find assembly at \"{assemblyFile.FullName}\"");

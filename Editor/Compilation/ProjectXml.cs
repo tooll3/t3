@@ -27,64 +27,57 @@ internal static partial class ProjectXml
     }
 
     [return: NotNullIfNotNull(nameof(defaultValue))]
-    public static string? GetProperty(this ProjectRootElement project, PropertyType propertyType, string? defaultValue = null)
+    public static string? GetOrAddProperty(this ProjectRootElement project, PropertyType propertyType, string? defaultValue = null)
     {
-        var properties = project.Properties;
-        var propertyName = GetItemName(propertyType);
-        var property = properties.SingleOrDefault(x => x.Name == propertyName);
+        var propertyName = propertyType.GetItemName();
 
-        if (property != null)
-            return property.Value;
-
-        if (properties.Any(x => x.Name == propertyName))
-            throw new Exception($"Multiple properties with the same name: {propertyName}");
-
-        if (defaultValue == null)
+        ProjectPropertyElement? property = null;
+        foreach(var prop in project.Properties)
         {
-            if (!_defaultProperties.TryGetValue(propertyType, out defaultValue))
+            if (prop.Name != propertyName)
+                continue;
+            
+            if(property != null)
             {
-                return null;
+                throw new Exception($"Multiple properties with the same name: {propertyName}");
             }
+            
+            property = prop;
         }
 
-        property = project.SetOrAddProperty(propertyType, defaultValue);
-        return property.Value;
+        if (property == null && (defaultValue != null || _defaultProperties.TryGetValue(propertyType, out defaultValue)))
+        {
+            property = project.SetOrAddProperty(propertyType, defaultValue);
+        }
+            
+        return property?.Value;
     }
 
     public static ProjectPropertyElement SetOrAddProperty(this ProjectRootElement project, PropertyType propertyType, string value)
     {
-        var properties = project.Properties;
-        List<ProjectPropertyElement> propsWithName = [];
-        var propertyName = GetItemName(propertyType);
+        var propertyName = propertyType.GetItemName();
+        var count = 0;
+        ProjectPropertyElement? property = null;
 
-        foreach (var prop in properties)
+        foreach (var prop in project.Properties)
         {
             if (prop.Name == propertyName)
             {
-                propsWithName.Add(prop);
+                property = prop;
+                ++count;
             }
         }
+        
+        if(property == null)
+            return project.AddProperty(propertyName, value);
 
-        switch (propsWithName.Count)
+        if (count > 1)
         {
-            case > 1:
-            {
-                Log.Warning($"Multiple properties with the same name: {propertyName}:");
-                foreach (var prop in propsWithName)
-                {
-                    Log.Warning($"  {prop}");
-                    prop.Value = value;    
-                }            
-            
-                return propsWithName[^1];
-            }
-            case 1:
-                var property = propsWithName[0];
-                property.Value = value;
-                return property;
-            default:
-                return project.AddProperty(propertyName, value);
+            Log.Error($"Multiple properties with the same name '{propertyName}' in the project file '{project.FullPath}'");
         }
+        
+        property.Value = value;
+        return property;
     }
 
     private static void AddDefaultUsings(this ProjectRootElement project)
