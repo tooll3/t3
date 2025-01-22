@@ -100,10 +100,6 @@
     <!-- ===============================//================================== -->
 
     <!-- ====================== Player ============================ -->
-    <!-- This builds the Player project - Unnecessary with the proper Build configurations in IDE, but it's nicer to have it here -->
-    <Target Name="BuildPlayer" AfterTargets="AfterBuild">
-        <MSBuild Projects="../Player/Player.csproj" Targets="Build" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
-    </Target>
 
     <!-- This copies the Player build into the output directory -->
     <!-- Notice the similarities (and differences) between this and the CopyLibs target below -->
@@ -117,14 +113,6 @@
             DestinationFiles="@(Player->'$(OutputPath)/Player/%(RecursiveDir)%(Filename)%(Extension)')" />
     </Target>
     <!-- =========================//=============================== -->
-
-    <!-- ====================== Build LibEditor (Symbol Uis) ============================ -->
-    <!-- This builds the LibEditor project - LibEditor depends on this project so we must build it before copying it in -->
-    <Target Name="BuildLibEditor" AfterTargets="AfterBuild">
-        <MSBuild Projects="../Operators/LibEditor/libEditor.csproj" Targets="Build" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
-    </Target>
-    <!-- ===================================//=========================================== -->
-
 
     <!-- ======================== Operator Packages ========================== -->
     <!-- This copies built-in operator projects into the output directory -->
