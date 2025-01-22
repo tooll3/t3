@@ -104,7 +104,6 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
         if (_hasDisposed)
         {
             throw new Exception($"{this} has already been disposed\n" + Environment.StackTrace);
-            return;
         }
         
         _hasDisposed = true;
