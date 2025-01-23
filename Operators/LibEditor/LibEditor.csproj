@@ -9,7 +9,7 @@
     <RootNamespace>Lib.Editor</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
     <HomeGuid>00000000-0000-0000-0000-000000000000</HomeGuid>
-    <EditorVersion>3.10.1</EditorVersion>
+    <EditorVersion>3.10.2</EditorVersion>
     <IsEditorOnly>true</IsEditorOnly>
     <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
   </PropertyGroup>
