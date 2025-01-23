@@ -21,8 +21,8 @@ internal sealed partial class MagGraphCanvas
         // General pre-update
         _context.DrawDialogs(_projectView);
 
-        if (_context.Layout.StructureFlaggedAsChanged)
-            return;
+        // if (_context.Layout.StructureFlaggedAsChanged)
+        //     return;
         
         KeyboardActions.HandleKeyboardActions(_context);
         HandleSymbolDropping(_context);
