@@ -49,7 +49,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "..\Editor\bin\Release\net9.0-windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 Source: "..\..\t3-install-dependencies\dotnet-sdk-9.0.102-win-x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 Source: "..\..\t3-install-dependencies\VC_redist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
-Source: ".\grafiktools.bat"; DestDir: "{tmp}"; Flags: deleteafterinstall ignoreversion
+Source: "dependencies\grafiktools.bat"; DestDir: "{tmp}"; Flags: deleteafterinstall ignoreversion
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
@@ -58,7 +58,7 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 [Code]
 function GetDotNetVersion: Boolean;
 begin
-  Result := FileExists(ExpandConstant('{pf}\dotnet\host\fxr\6.0.36\hostfxr.dll'));
+  Result := FileExists(ExpandConstant('{pf}\dotnet\sdk\9.0.102\dotnet.runtimeconfig.json'));
   
 end;
 
