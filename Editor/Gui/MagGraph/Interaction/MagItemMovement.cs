@@ -619,7 +619,9 @@ internal sealed partial class MagItemMovement
         {
             if (mc.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal
                 && mc.InputLineIndex > 0
-                && mc.TargetItem.InputLines[mc.InputLineIndex].InputUi.Relevancy == Relevancy.Optional
+                && (mc.TargetItem.InputLines[mc.InputLineIndex].InputUi.Relevancy == Relevancy.Optional
+                    ||mc.TargetItem.InputLines[mc.InputLineIndex].MultiInputIndex > 0)
+                
                )
             {
                 collapseLines.Add(mc.SourcePos.Y);
