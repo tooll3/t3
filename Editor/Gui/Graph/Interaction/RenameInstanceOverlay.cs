@@ -4,7 +4,7 @@ using T3.Editor.UiModel;
 using T3.Editor.UiModel.ProjectHandling;
 using T3.SystemUi;
 
-namespace T3.Editor.Gui.Graph;
+namespace T3.Editor.Gui.Graph.Interaction;
 
 /// <summary>
 /// If active renders a small input field above a symbolChildUi. Handles its state 
@@ -29,7 +29,7 @@ internal static class RenameInstanceOverlay
             if ((renameTriggered || ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows) || ImGui.IsWindowFocused()) 
                 && !ImGui.IsAnyItemActive() 
                 && !ImGui.IsAnyItemFocused() 
-                && (renameTriggered || ImGui.IsKeyPressed((ImGuiKey)Key.Return))
+                && (renameTriggered || ImGui.IsKeyPressed((ImGuiKey)Key.Return)) // TODO: Should be keyboard action 
                 && string.IsNullOrEmpty(FrameStats.Current.OpenedPopUpName))
             {
                 var selectedInstances = components.NodeSelection.GetSelectedNodes<SymbolUi.Child>().ToList();

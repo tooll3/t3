@@ -393,6 +393,8 @@ internal sealed class MagGraphLayout
             }
         }
 
+        var hasNoInputs = visibleIndex ==0;
+        
         // Collect outputs
         for (var outputIndex = 0; outputIndex < item.Instance.Outputs.Count; outputIndex++)
         {
@@ -427,6 +429,10 @@ internal sealed class MagGraphLayout
                 visibleIndex++;
             }
         }
+
+        // Fix height
+        if (hasNoInputs)
+            visibleIndex++;
 
         return visibleIndex;
     }

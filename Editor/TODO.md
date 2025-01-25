@@ -27,8 +27,8 @@ x Fix fence selection for timeline and preset view
 - Add annotations
 x Fix MultiInput on disconnect re-layout
 - Add options for hidden secondary outputs
-- Fix overlapping outputs in RevisionPanic
-- Rename children with Return
+x Fix overlapping outputs in RevisionPanic
+xRename children with Return
 
 Feats:
 - Copy and Paste Values

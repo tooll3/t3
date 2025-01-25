@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+using ImGuiNET;
 using T3.SystemUi;
 
 namespace T3.Editor.Gui.Interaction;
@@ -7,7 +8,7 @@ namespace T3.Editor.Gui.Interaction;
 /// UserAction represent single atomic commands that can be mapped to a keyboard shortcuts
 /// </summary>
 /// 
-public enum UserActions
+internal enum UserActions
 {
     // General
     Undo,
@@ -53,6 +54,7 @@ public enum UserActions
     ToggleBypassed,
     AddAnnotation,
     AddComment,
+    RenameChild,
 
     ToggleSnapshotControl,
 
@@ -124,23 +126,23 @@ public enum UserActions
     SaveBookmark9,
 }
 
-public static class UserActionRegistry
+internal static class UserActionRegistry
 {
-    public static readonly HashSet<UserActions> DeferredActions = new();
-
+    public static readonly HashSet<UserActions> DeferredActions = [];
+    
     public static bool WasActionQueued(UserActions action)
     {
         if (!DeferredActions.Contains(action))
             return false;
-
+    
         DeferredActions.Remove(action);
         return true;
     }
 }
 
-public class KeyboardBinding
+internal sealed class KeyboardBinding
 {
-    public static void InitFrame()
+    internal static void InitFrame()
     {
         if (!_initialized)
         {
@@ -158,7 +160,7 @@ public class KeyboardBinding
     private readonly KeyCombination _combination;
     private static bool _initialized;
 
-    public static bool Triggered(UserActions action)
+    internal static bool Triggered(UserActions action)
     {
         // Checking all bindings is expensive, so we only do this if any keys are pressed.
         if (!_anyKeysPressed)
@@ -199,7 +201,7 @@ public class KeyboardBinding
 
     private static readonly Dictionary<UserActions, string> _keyboardShortCutLabels = new();
 
-    public static void InitializeShortcutLabels()
+    private static void InitializeShortcutLabels()
     {
         _keyboardShortCutLabels.Clear();
         foreach (var action in Enum.GetValues<UserActions>())
@@ -214,7 +216,7 @@ public class KeyboardBinding
         }
     }
 
-    public static string ListKeyboardShortcuts(UserActions action, bool showLabel = true)
+    internal static string ListKeyboardShortcuts(UserActions action, bool showLabel = true)
     {
         if (!_keyboardShortCutLabels.TryGetValue(action, out var shortCuts))
             return string.Empty;
@@ -227,7 +229,7 @@ public class KeyboardBinding
                + string.Join(" and ", shortCuts);
     }
 
-    private class KeyCombination
+    private sealed class KeyCombination
     {
         public KeyCombination(Key key, bool ctrl = false, bool alt = false, bool shift = false)
         {
@@ -310,6 +312,7 @@ public class KeyboardBinding
                   new KeyboardBinding(UserActions.SearchGraph, new KeyCombination(Key.F, ctrl: true)) { _needsWindowFocus = false },
                   new KeyboardBinding(UserActions.OpenOperator, new KeyCombination(Key.I)) { _needsWindowFocus = true },
                   new KeyboardBinding(UserActions.CloseOperator, new KeyCombination(Key.U)) { _needsWindowFocus = true },
+                  new KeyboardBinding(UserActions.RenameChild, new KeyCombination(Key.Return)) { _needsWindowFocus = true },
 
                   new KeyboardBinding(UserActions.NavigateBackwards, new KeyCombination(Key.CursorLeft, alt: true)) { _needsWindowFocus = false },
                   new KeyboardBinding(UserActions.NavigateForward, new KeyCombination(Key.CursorRight, alt: true)) { _needsWindowFocus = false },

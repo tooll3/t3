@@ -10,6 +10,7 @@ using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.ChildUi;
 using T3.Editor.Gui.Graph.Dialogs;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Legacy.Interaction;
 using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
 using T3.Editor.Gui.Interaction.TransformGizmos;

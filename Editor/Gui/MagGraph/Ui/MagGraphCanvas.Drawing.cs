@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
@@ -95,6 +96,15 @@ internal sealed partial class MagGraphCanvas
             DrawConnection(connection, drawList, _context);
         }
 
+        if (_context.StateMachine.CurrentState == GraphStates.RenameChild)
+        {
+            RenameInstanceOverlay.Draw(_projectView);
+            if (!RenameInstanceOverlay.IsOpen)
+            {
+                _context.StateMachine.SetState(GraphStates.Default, _context);
+            }
+        }
+        
         // Draw temp connections
         foreach (var tc in _context.TempConnections)
         {

@@ -1,9 +1,11 @@
 ﻿#nullable enable
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel.ProjectHandling;
+using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.MagGraph.Interaction;
 
@@ -56,11 +58,11 @@ internal static class KeyboardActions
             else
             {
                 // FIXME: This is a work around that needs a legacy graph window to be active
-                if(ProjectView.Focused != null) 
+                if (ProjectView.Focused != null)
                     NodeActions.PinSelectedToOutputWindow(ProjectView.Focused, context.Selector, compositionOp);
             }
         }
-        
+
         if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
         {
             var selectedImage = context.Selector.GetFirstSelectedInstance();
@@ -69,7 +71,6 @@ internal static class KeyboardActions
                 // TODO: implement
                 //_window.GraphImageBackground.OutputInstance = selectedImage;
                 Log.Debug("Not implemented yet");
-
             }
         }
 
@@ -146,6 +147,20 @@ internal static class KeyboardActions
         if (KeyboardBinding.Triggered(UserActions.AddComment))
         {
             context.EditCommentDialog.ShowNextFrame();
+        }
+
+        if (context.StateMachine.CurrentState == GraphStates.Default)
+        {
+            var oneSelected = context.Selector.Selection.Count == 1;
+            if (oneSelected && KeyboardBinding.Triggered(UserActions.RenameChild))
+            {
+                if (context.Layout.Items.TryGetValue(context.Selector.Selection[0].Id, out var item)
+                                                     && item.Variant == MagGraphItem.Variants.Operator)
+                {
+                    RenameInstanceOverlay.OpenForChildUi(item.ChildUi);
+                    context.StateMachine.SetState(GraphStates.RenameChild, context);
+                }
+            }
         }
     }
 }

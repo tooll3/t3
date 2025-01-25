@@ -541,4 +541,11 @@ internal static class GraphStates
                           }
                       },
               Exit: _ => { });
+    
+    internal static State RenameChild
+        = new(
+              Enter: _ => { },
+              Update: _ => { },
+              Exit: _ => { }
+             );
 }
