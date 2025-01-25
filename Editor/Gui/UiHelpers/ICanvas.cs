@@ -6,6 +6,9 @@ namespace T3.Editor.Gui.UiHelpers;
 /// <summary>
 /// A zoomable canvas that can hold <see cref="ISelectableCanvasObject"/> elements.
 /// </summary>
+/// <todo>
+/// This should be refactored away. See notes in ScalableCanvas...
+/// </todo>
 public interface ICanvas
 {
     /// <summary>
@@ -40,9 +43,10 @@ public interface ICanvas
 
     public enum Transition
     {
+        Instant,
         JumpIn,
         JumpOut,
-        Undefined,
+        Smooth, // Only set target
     }
 
     /// <summary>

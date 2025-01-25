@@ -2,7 +2,6 @@
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Interaction;
-using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.UiModel;
@@ -11,8 +10,6 @@ internal interface IGraphCanvas : IScalableCanvas
 {
     bool Destroyed { get; set;  }
 
-    void RestoreLastSavedUserViewForProjectView(ICanvas.Transition transition);
-    
     void FocusViewToSelection();
     void OpenAndFocusInstance(IReadOnlyList<Guid> path);
     public new CanvasScope GetTargetScope();

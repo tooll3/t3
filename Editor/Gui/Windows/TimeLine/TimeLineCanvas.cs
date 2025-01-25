@@ -137,13 +137,12 @@ internal sealed class TimeLineCanvas : CurveEditCanvas
             }
         }
     }
-
-
-
+    
     #region handle nested timelines ----------------------------------
     public override void UpdateScaleAndTranslation(Instance compositionOp, ICanvas.Transition transition)
     {
-        if (transition == ICanvas.Transition.Undefined) return;
+        if (transition == ICanvas.Transition.Instant) 
+            return;
 
         // remember the old scroll state
         var oldScale = Scale;

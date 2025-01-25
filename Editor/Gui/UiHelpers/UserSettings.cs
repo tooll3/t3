@@ -32,7 +32,8 @@ public sealed class UserSettings : Settings<UserSettings.ConfigData>
         /// symbolChildIds provide more context, e.g. there are many LayerId instances with different
         /// Ids and the user scope might be different.
         /// </remarks>
-        public readonly Dictionary<Guid, CanvasScope> OperatorViewSettings = new();
+        //public readonly Dictionary<Guid, CanvasScope> OperatorViewSettings = new();
+        public readonly Dictionary<Guid, ImRect> ViewedCanvasAreaForSymbolChildId = new();
         public readonly Dictionary<string, Guid> LastOpsForWindows = new();
 
         [JsonConverter(typeof(StringEnumConverter))]

@@ -239,7 +239,7 @@ public class DataSetViewCanvas
                 var width = _canvas.InverseTransformDirection(ImGui.GetWindowSize()).X;
                 var scale = windowWidth / width;
                 
-                _canvas.SetVisibleRangeHard(new Vector2(scale, -1),
+                _canvas.SetViewInstant(new Vector2(scale, -1),
                                             new Vector2((float)currentTime - (windowWidth - 50 * T3Ui.UiScaleFactor) / scale, 0));                
             }
             

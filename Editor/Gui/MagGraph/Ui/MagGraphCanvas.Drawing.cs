@@ -21,29 +21,25 @@ internal sealed partial class MagGraphCanvas
         // General pre-update
         _context.DrawDialogs(_projectView);
 
-        // if (_context.Layout.StructureFlaggedAsChanged)
-        //     return;
-        
         KeyboardActions.HandleKeyboardActions(_context);
         HandleSymbolDropping(_context);
 
         // Update view scope if required
         if (FitViewToSelectionHandling.FitViewToSelectionRequested)
         {
-            Log.Debug("### Fit view to selection");
             FocusViewToSelection(_context);
         }
-        if (_viewChangeRequested)
-        {
-            Log.Debug("### Fit view to new scope " + _requestedTargetScope);
-            SetScopeWithTransition(_requestedTargetScope, ICanvas.Transition.Undefined);
-            _viewChangeRequested = false;
-        }
+        drawList.AddText( new Vector2(100,50), Color.White, $"Sca:{Scale.X:0.00} Scr:{Scroll:0.00}");
+        
+        // if (_viewRequest != null)
+        // {
+        //     SetTargetViewAreaWithTransition(_viewRequest.ViewArea, _viewRequest.Transition);
+        //     _viewRequest = null;
+        // }
 
         // Keep visible canvas area to cull non-visible objects later
-        _visibleCanvasArea = ImRect.RectWithSize(InverseTransformPositionFloat(ImGui.GetWindowPos()),
-                                                 InverseTransformDirection(ImGui.GetWindowSize()));
-        
+        _visibleCanvasArea = GetVisibleCanvasArea();
+
         UpdateCanvas(out _);
 
         // Prepare UiModel for frame
@@ -70,7 +66,7 @@ internal sealed partial class MagGraphCanvas
             DrawItem(item, drawList, _context);
         }
 
-        Fonts.FontSmall.Scale = 1; // WTF
+        Fonts.FontSmall.Scale = 1; // WTF. Some of the drawNode seems to spill out fontSize
 
         // Update active or hovered item
         // Doing this after rendering will add slight frame delay but will
@@ -110,7 +106,6 @@ internal sealed partial class MagGraphCanvas
             // Dragging end to new target input...
             if (tc.SourceItem != null)
             {
-                //var outputLine = t.SourceItem.OutputLines[0];
                 var sourcePos = new Vector2(tc.SourceItem.Area.Max.X,
                                             tc.SourceItem.Area.Min.Y + MagGraphItem.GridSize.Y * (0.5f + tc.OutputLineIndex));
 

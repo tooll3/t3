@@ -103,7 +103,7 @@ internal static class GraphBookmarkNavigation
         }
 
         window.TrySetCompositionOp(bookmark.IdPath);
-        window.GraphCanvas.SetVisibleRange(bookmark.ViewScope.Scale, bookmark.ViewScope.Scroll);
+        window.GraphCanvas.SetTargetView(bookmark.ViewScope.Scale, bookmark.ViewScope.Scroll);
         //SelectionManager.SetSelection(bookmark.SelectedChildIds);
     }
 

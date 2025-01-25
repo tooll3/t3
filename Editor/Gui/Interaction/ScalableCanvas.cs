@@ -1,4 +1,5 @@
 #nullable enable
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using ImGuiNET;
 using T3.Core.Operator;
@@ -15,12 +16,11 @@ internal interface IScalableCanvas : ICanvas
 {
     public void UpdateCanvas(out ScalableCanvas.InteractionState interactionState, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None);
     public Vector2 ChildPosFromCanvas(Vector2 posOnCanvas);
-    public void SetVisibleRange(Vector2 scale, Vector2 scroll);
-    public void SetVisibleRangeHard(Vector2 scale, Vector2 scroll);
+    public void SetTargetView(Vector2 scale, Vector2 scroll);
+    public void SetViewInstant(Vector2 scale, Vector2 scroll);
     public void SetScaleToMatchPixels();
     public void SetScopeWithTransition(Vector2 scale, Vector2 scroll, Transition transition);
     public void SetScopeToCanvasArea(ImRect area, bool flipY = false, IScalableCanvas? parent = null, float paddingX = 0, float paddingY = 0);
-    //public CanvasScope GetScopeForCanvasArea(ImRect areaOnCanvas, bool flipY = false);
     public void SetVerticalScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas? parent = null);
     public void ZoomWithMouseWheel(MouseState mouseState, out bool zoomed);
     public Vector2 TransformPositionFloat(Vector2 posOnCanvas);
@@ -30,13 +30,21 @@ internal interface IScalableCanvas : ICanvas
     public bool EnableParentZoom { get; set; }
     public Vector2 ScaleTarget { get; }
 }
+
 /// <summary>
-/// Implements transformations and interactions for a canvas that can
-/// be zoomed and panned.
+/// Implements transformations and interactions for a canvas that can be zoomed and panned.
 /// </summary>
+/// <todo>
+/// This should be refactored into two parts:
+/// - struct ViewTransform {Scroll, Zoom} -> For all transforms and conversion operations
+/// - sealed class InteractiveCanvas -> For transitions, interactions, etc.
+
+/// Other canvas should not inherit from this but use composition.
+/// IScalableCanvas should be removed
+/// </todo>
 internal abstract class ScalableCanvas : IScalableCanvas
 {
-    public ScalableCanvas(Vector2? initialScale = null)
+    protected ScalableCanvas(Vector2? initialScale = null)
     {
         if (initialScale == null)
             return;
@@ -50,9 +58,19 @@ internal abstract class ScalableCanvas : IScalableCanvas
     /// </summary>
     public void UpdateCanvas(out InteractionState interactionState, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
     {
+        UpdateWindowRect();
+        
         var io = ImGui.GetIO();
         var mouse = new MouseState(io.MousePos, io.MouseDelta, io.MouseWheel);
+        
+        DampScaling(io.DeltaTime);
 
+        HandleInteraction(flags, mouse, out var zoomed, out var panned);
+        interactionState = new InteractionState(panned, zoomed, mouse);
+    }
+
+    private void UpdateWindowRect()
+    {
         if (FillMode == FillModes.FillWindow)
         {
             WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + Vector2.One;
@@ -63,14 +81,8 @@ internal abstract class ScalableCanvas : IScalableCanvas
             WindowSize = ImGui.GetContentRegionAvail();
             WindowPos = ImGui.GetCursorScreenPos();
         }
-
-        //if (!UsingParentCanvas)
-        DampScaling(io.DeltaTime);
-
-        HandleInteraction(flags, mouse, out var zoomed, out var panned);
-        interactionState = new InteractionState(panned, zoomed, mouse);
     }
-        
+
     #region implement ICanvas =================================================================
     /// <summary>
     /// Convert canvas position (e.g. of an Operator) into screen position  
@@ -188,7 +200,6 @@ internal abstract class ScalableCanvas : IScalableCanvas
     public Vector2 ChildPosFromCanvas(Vector2 posOnCanvas)
     {
         return TransformPositionFloat(posOnCanvas) - WindowPos;
-        // (posOnCanvas - Scroll) * Scale;
     }
         
     public Vector2 WindowPos { get; private set; }
@@ -203,9 +214,19 @@ internal abstract class ScalableCanvas : IScalableCanvas
     protected Vector2 ScrollTarget = new(0.0f, 0.0f);
     #endregion
 
+    public CanvasScope GetCurrentScope()
+    {
+        return new CanvasScope
+                   {
+                       Scale = Scale,
+                       Scroll = Scroll
+                   };
+    }
+
+    
     public CanvasScope GetTargetScope()
     {
-        return new CanvasScope()
+        return new CanvasScope
                    {
                        Scale = ScaleTarget,
                        Scroll = ScrollTarget
@@ -218,13 +239,21 @@ internal abstract class ScalableCanvas : IScalableCanvas
         ScrollTarget = scope.Scroll;
     }
         
-    public void SetVisibleRange(Vector2 scale, Vector2 scroll)
+    public void SetTargetView(Vector2 scale, Vector2 scroll)
     {
         ScaleTarget = scale;
         ScrollTarget = scroll;
     }
-        
-    public void SetVisibleRangeHard(Vector2 scale, Vector2 scroll)
+
+    
+    public void SetTargetViewAreaWithTransition(ImRect viewArea,ICanvas.Transition transition)
+    {
+        var scope = GetScopeForCanvasArea(viewArea);
+        SetScopeWithTransition(scope, transition);
+    }
+
+    
+    public void SetViewInstant(Vector2 scale, Vector2 scroll)
     {
         Scale = ScaleTarget = scale;
         Scroll = ScrollTarget = scroll;
@@ -259,17 +288,26 @@ internal abstract class ScalableCanvas : IScalableCanvas
         ScrollTarget = new Vector2(area.Min.X - (paddingX / newScale.X) / 2,
                                    area.Max.Y - (paddingY / newScale.Y) / 2);
             
-        // if (parent != null)
-        // {
-        //     newScale /= parent.Scale;
-        // }
         ScaleTarget = newScale;
-            
-        if(ScaleTarget.X == 0 || ScaleTarget.Y == 0 || float.IsNaN(ScaleTarget.X) || float.IsNaN(ScaleTarget.Y) || float.IsInfinity(ScaleTarget.X) || float.IsInfinity(ScaleTarget.Y))
+
+        // FIXME: This is looks like a bug...
+        var isScaleTargetInvalid = ScaleTarget.X == 0 
+                    || ScaleTarget.Y == 0 
+                    || float.IsNaN(ScaleTarget.X) 
+                    || float.IsNaN(ScaleTarget.Y) 
+                    || float.IsInfinity(ScaleTarget.X) 
+                    || float.IsInfinity(ScaleTarget.Y);
+        if (isScaleTargetInvalid)
+        {
+            Debug.Assert(false);    // should never happen
             Scale = ScaleTarget;
-            
+        }
+
         if (float.IsNaN(ScrollTarget.X) || float.IsNaN(ScrollTarget.Y) || float.IsInfinity(ScrollTarget.X) || float.IsInfinity(ScrollTarget.Y))
+        {
+            Debug.Assert(false);    // should never happen
             Scroll = ScrollTarget;
+        }
     }
         
     public void SetVerticalScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas? parent = null)
@@ -292,6 +330,7 @@ internal abstract class ScalableCanvas : IScalableCanvas
 
     public CanvasScope GetScopeForCanvasArea(ImRect areaOnCanvas, bool flipY = false)
     {
+        UpdateWindowRect();
         var heightOnCanvas = areaOnCanvas.GetHeight();
         var widthOnCanvas = areaOnCanvas.GetWidth();
         var aspectOnCanvas = widthOnCanvas / heightOnCanvas;
@@ -324,6 +363,46 @@ internal abstract class ScalableCanvas : IScalableCanvas
         return new CanvasScope { Scale = scaleTarget, Scroll = scrollTarget};
     }
     
+    public ImRect GetCanvasAreaForScope(CanvasScope scope)
+    {
+        var scale = scope.Scale;
+        if (scale.Y < 0) // Handle flipped Y
+        {
+            scale.Y = -scale.Y;
+        }
+
+        float widthOnCanvas = WindowSize.X / scale.X;
+        float heightOnCanvas = WindowSize.Y / scale.Y;
+
+        Vector2 minOnCanvas;
+        if (WindowSize.X / WindowSize.Y > widthOnCanvas / heightOnCanvas)
+        {
+            // Inverse of centering in a high window
+            minOnCanvas = new Vector2(
+                                      scope.Scroll.X,
+                                      scope.Scroll.Y + (WindowSize.Y / scale.Y - heightOnCanvas) / 2
+                                     );
+        }
+        else
+        {
+            // Inverse of centering in a wide window
+            minOnCanvas = new Vector2(
+                                      scope.Scroll.X + (WindowSize.X / scale.X - widthOnCanvas) / 2,
+                                      scope.Scroll.Y
+                                     );
+        }
+
+        Vector2 maxOnCanvas = minOnCanvas + new Vector2(widthOnCanvas, heightOnCanvas);
+        return new ImRect(minOnCanvas, maxOnCanvas);
+    }    
+    
+    public ImRect GetVisibleCanvasArea()
+    {
+        UpdateWindowRect();
+        var rectWithSize = ImRect.RectWithSize(WindowPos,  WindowSize);
+        return InverseTransformRect(rectWithSize);
+    }
+    
     public void FitAreaOnCanvas(ImRect areaOnCanvas, bool flipY = false)
     {
         var scope = GetScopeForCanvasArea(areaOnCanvas, flipY);
@@ -354,28 +433,34 @@ internal abstract class ScalableCanvas : IScalableCanvas
         switch (transition)
         {
             case ICanvas.Transition.JumpIn:
-                Scale = ScaleTarget * 0.3f;
-                var sizeOnCanvas = WindowSize / Scale;
-                Scroll = ScrollTarget - sizeOnCanvas / 2;
+                SetZoomedScope(14);
                 break;
                 
             case ICanvas.Transition.JumpOut:
-                Scale = ScaleTarget * 3f;
-                var sizeOnCanvas2 = WindowSize / Scale;
-                Scroll = ScrollTarget + sizeOnCanvas2 / 2;
-                    
+                SetZoomedScope(0.05f);
                 break;
-            default:
+            
+            case ICanvas.Transition.Instant:
                 Scroll = ScaleTarget;
                 Scroll = ScrollTarget;
                 break;
+        }
+
+        return;
+
+        void SetZoomedScope(float factor)
+        {
+            var targetArea = GetCanvasAreaForScope(GetTargetScope());
+            var zoomedInSize = targetArea.GetSize() * factor;
+            var zoomedInArea = ImRect.RectWithSize(targetArea.GetCenter() - zoomedInSize * 0.5f, zoomedInSize);
+            var zoomedInScope = GetScopeForCanvasArea(zoomedInArea);
+            Scale = zoomedInScope.Scale;
+            Scroll = zoomedInScope.Scroll;
         }
     }
 
     private void DampScaling(float deltaTime)
     {
-            
-            
         var completed = Scale.X > 1000 || Math.Abs(Scroll.X - ScrollTarget.X) < 1f
                         && Math.Abs(Scroll.Y - ScrollTarget.Y) < 1f
                         && Math.Abs(Scale.X - ScaleTarget.X) < 0.05f
@@ -673,6 +758,20 @@ public struct CanvasScope
 {
     internal Vector2 Scale;
     internal Vector2 Scroll;
+
+    internal bool IsValid()
+    {
+        return Scale.X != 0
+               && Scale.Y != 0
+               && !float.IsNaN(Scale.X)
+               && !float.IsNaN(Scale.Y)
+               && !float.IsInfinity(Scale.X)
+               && !float.IsInfinity(Scale.Y)
+               && !float.IsNaN(Scroll.X)
+               && !float.IsNaN(Scroll.Y)
+               && !float.IsInfinity(Scroll.X)
+               && !float.IsInfinity(Scroll.Y);
+    }
     public override string ToString()
     {
         return $"[{Scroll:0} ×{Scale:0.00}]";

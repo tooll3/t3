@@ -62,22 +62,6 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
     #region implement IGraph canvas
     bool IGraphCanvas.Destroyed { get => _destroyed; set => _destroyed = value; }
 
-    private bool _viewChangeRequested;
-    private CanvasScope _requestedTargetScope;
-    
-    /** Assumes projectView to be initialized */
-    void IGraphCanvas.RestoreLastSavedUserViewForProjectView(ICanvas.Transition transition)
-    {
-        Debug.Assert(_projectView.CompositionInstance != null);
-        
-        var compositionOpSymbolChildId = _projectView.CompositionInstance.SymbolChildId;
-        if (!UserSettings.Config.OperatorViewSettings.TryGetValue(compositionOpSymbolChildId, out var savedCanvasScope))
-            return;
-
-        _viewChangeRequested = true;
-        _requestedTargetScope = savedCanvasScope;
-    }
-    
     void IGraphCanvas.FocusViewToSelection()
     {
         if (_projectView.CompositionInstance == null)
@@ -128,19 +112,17 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
     }
     #endregion
 
-    public MagGraphCanvas(ProjectView projectView)
+    private MagGraphCanvas(ProjectView projectView)
     {
         _projectView = projectView;
         EnableParentZoom = false;
         _context = new GraphUiContext(projectView, this);
         _previousInstance = projectView.CompositionInstance!;
-
-        //InitializeCanvasScope(_context);
     }
 
     private ImRect _visibleCanvasArea;
 
-    public bool IsRectVisible(ImRect rect)
+    private bool IsRectVisible(ImRect rect)
     {
         return _visibleCanvasArea.Overlaps(rect);
     }
@@ -164,22 +146,19 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
     /// </summary>
     private void InitializeCanvasScope(GraphUiContext context)
     {
-        // if (context.CompositionOp.SymbolChildId == _previousCompositionId)
-        //     return;
-        //
-        if (ProjectView.Focused?.GraphCanvas == null)
+        if (ProjectView.Focused?.GraphCanvas is not ScalableCanvas canvas)
             return;
 
-        // _previousCompositionId = context.CompositionOp.SymbolChildId;
 
         // Meh: This relies on TargetScope already being set to new composition.
-        var newCanvasScope = ProjectView.Focused.GraphCanvas.GetTargetScope();
-        if (UserSettings.Config.OperatorViewSettings.TryGetValue(context.CompositionInstance.SymbolChildId, out var savedCanvasScope))
+        var newViewArea = canvas.GetVisibleCanvasArea();
+        if (UserSettings.Config.ViewedCanvasAreaForSymbolChildId.TryGetValue(context.CompositionInstance.SymbolChildId, out var savedCanvasView))
         {
-            newCanvasScope = savedCanvasScope;
+            newViewArea = savedCanvasView;
         }
 
-        context.Canvas.SetScopeWithTransition(newCanvasScope.Scale, newCanvasScope.Scroll, ICanvas.Transition.Undefined);
+        var scope = GetScopeForCanvasArea(newViewArea);
+        context.Canvas.SetScopeWithTransition(scope, ICanvas.Transition.Instant);
     }
 
     private void HandleSymbolDropping(GraphUiContext context)
@@ -334,9 +313,10 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
     private Guid _lastHoverId;
     private double _hoverStartTime;
     private float HoverTime => (float)(ImGui.GetTime() - _hoverStartTime);
-    ////private bool _enableDebug;
     private GraphUiContext _context;
     private bool _destroyed;
+    //private sealed record ViewRequest(ImRect ViewArea, ICanvas.Transition Transition);
+    //private ViewRequest? _viewRequest;
 
     protected override ScalableCanvas? Parent => null;
 

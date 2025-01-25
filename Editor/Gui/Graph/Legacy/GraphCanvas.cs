@@ -559,26 +559,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
             ImGui.EndDragDropTarget();
         }
     }
-
     
-    public void RestoreLastSavedUserViewForProjectView(ICanvas.Transition transition)
-    {
-        Debug.Assert(_projectView.CompositionInstance != null);
-        
-        var compositionOpSymbolChildId = _projectView.CompositionInstance.SymbolChildId;
-        
-        var newCanvasScope = GetTargetScope();  // TODO: Clarify, if this is correct.
-        
-        if (UserSettings.Config.OperatorViewSettings.TryGetValue(compositionOpSymbolChildId, out var savedCanvasScope))
-        {
-            newCanvasScope = savedCanvasScope;
-        }
-
-        SetScopeWithTransition(newCanvasScope.Scale, newCanvasScope.Scroll, transition);
-    }
-    
-
-
     public void FocusViewToSelection()
     {
         if (_projectView?.CompositionInstance == null)

@@ -188,14 +188,17 @@ internal sealed partial class ProjectView
     {
         Debug.Assert(CompositionInstance != null);
 
-        if (CompositionInstance == null) 
+        if (CompositionInstance == null || GraphCanvas is not ScalableCanvas canvas) 
             return;
     
         var lastSymbolChildId = CompositionInstance.SymbolChildId;
-        UserSettings.Config.OperatorViewSettings[lastSymbolChildId] = GraphCanvas.GetTargetScope();
+
+        var visibleCanvasArea = canvas.GetVisibleCanvasArea();
+        UserSettings.Config.ViewedCanvasAreaForSymbolChildId[lastSymbolChildId] = visibleCanvasArea;
+        UserSettings.Save();
     }
 
-    public bool TrySetCompositionOp(IReadOnlyList<Guid> newIdPath, ICanvas.Transition transition = ICanvas.Transition.Undefined, Guid? alsoSelectChildId = null)
+    public bool TrySetCompositionOp(IReadOnlyList<Guid> newIdPath, ICanvas.Transition transition = ICanvas.Transition.JumpIn, Guid? alsoSelectChildId = null)
     {
         var structure = OpenedProject.Structure;
         var newCompositionInstance = structure.GetInstanceFromIdPath(newIdPath);
@@ -240,17 +243,26 @@ internal sealed partial class ProjectView
         TimeLineCanvas.ClearSelection();
 
         // This happens when jumping out of an open.
-        if (alsoSelectChildId != null && ScalableCanvas != null)
+        if (ScalableCanvas != null)
         {
-            var instance = InstView.Instance.Children[alsoSelectChildId.Value];
-            NodeSelection.SetSelection(instance.GetChildUi()!, instance);
-            var bounds = NodeSelection.GetSelectionBounds(NodeSelection, instance);
-            var viewScope = ScalableCanvas.GetScopeForCanvasArea(bounds);
-            ScalableCanvas.SetScopeWithTransition(viewScope, ICanvas.Transition.JumpOut);
-        }
-        else
-        {
-            GraphCanvas.RestoreLastSavedUserViewForProjectView(transition);
+            if (alsoSelectChildId != null)
+            {
+                var instance = InstView.Instance.Children[alsoSelectChildId.Value];
+                NodeSelection.SetSelection(instance.GetChildUi()!, instance);
+                var bounds = NodeSelection.GetSelectionBounds(NodeSelection, instance);
+                bounds.Expand(400);
+                var viewScope = ScalableCanvas.GetScopeForCanvasArea(bounds);
+                ScalableCanvas.SetScopeWithTransition(viewScope, ICanvas.Transition.JumpOut);
+            }
+            else
+            {
+                Debug.Assert(CompositionInstance != null);
+            
+                var compositionOpSymbolChildId = CompositionInstance.SymbolChildId;
+                IEnumerable<ISelectableCanvasObject> childUisValues = InstView.SymbolUi.ChildUis.Values;
+                var savedOrValidView = CanvasHelpers.GetSavedOrValidViewForComposition(compositionOpSymbolChildId, childUisValues);
+                ScalableCanvas.SetTargetViewAreaWithTransition(savedOrValidView, transition);
+            }
         }
         
         return true;
@@ -260,10 +272,6 @@ internal sealed partial class ProjectView
 
     public bool TrySetCompositionOpToChild(Guid symbolChildId)
     {
-        // new list as _compositionPath is mutable
-        // var path = new List<Guid>(_compositionPath.Count + 1);
-        // path.AddRange(_compositionPath);
-        // path.Add(symbolChildId);
         List<Guid> path = [.._compositionPath, symbolChildId];
         
         return TrySetCompositionOp(path, ICanvas.Transition.JumpIn);
