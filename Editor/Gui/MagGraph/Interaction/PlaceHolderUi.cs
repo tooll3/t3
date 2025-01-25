@@ -232,10 +232,7 @@ internal static class PlaceHolderUi
 
         //ImGui.SetNextWindowSize(new Vector2(200,200));
         if (ImGui.BeginChild(999, last, true,
-                             ImGuiWindowFlags.None 
-                             | ImGuiWindowFlags.AlwaysUseWindowPadding
-                             //| ImGuiWindowFlags.AlwaysAutoResize
-                             //| ImGuiWindowFlags.NoScrollbar
+                             ImGuiWindowFlags.AlwaysUseWindowPadding
                              | ImGuiWindowFlags.NoResize
                             ))
         {

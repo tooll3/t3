@@ -29,7 +29,7 @@ internal sealed partial class MagGraphCanvas
         {
             FocusViewToSelection(_context);
         }
-        drawList.AddText( new Vector2(100,50), Color.White, $"Sca:{Scale.X:0.00} Scr:{Scroll:0.00}");
+        //drawList.AddText( new Vector2(100,50), Color.White, $"Sca:{Scale.X:0.00} Scr:{Scroll:0.00}");
         
         // if (_viewRequest != null)
         // {
@@ -185,7 +185,7 @@ internal sealed partial class MagGraphCanvas
 
     /// <summary>
     /// This a very simple proof-of-concept implementation to test it's fidelity.
-    /// A simple optimization could be to only to this for some time after a drag manipulation and then apply
+    /// A simple optimization could be to only do this for some time after a drag manipulation and then apply
     /// the correct position. Also, this animation does not affect connection lines.
     ///
     /// It still helps to understand what's going on and feels satisfying. So we're keeping it for now.
@@ -196,7 +196,7 @@ internal sealed partial class MagGraphCanvas
         {
             var dampAmount = _context.ItemMovement.DraggedItems.Contains(i)
                                  ? 0.0f
-                                 : 0.6f;
+                                 : 0.7f;
             i.DampedPosOnCanvas = Vector2.Lerp(i.PosOnCanvas, i.DampedPosOnCanvas, dampAmount);
         }
     }

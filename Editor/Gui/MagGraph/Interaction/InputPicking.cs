@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using ImGuiNET;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
@@ -150,48 +151,79 @@ internal static class InputPicking
         context.ItemMovement.Reset();
         context.Layout.FlagAsChanged();
     }
+
     
     internal static void DrawHiddenInputSelector(GraphUiContext context)
     {
-        if (context.ItemForInputSelection == null)
+        if (context.ItemForInputSelection == null || context.DraggedPrimaryOutputType == null)
+        {
             return;
-        
+        }
+
         if (context.StateMachine.CurrentState != GraphStates.PickInput)
+        {
             return;
+        }
         
         var screenPos = context.Canvas.TransformPosition(context.PeekAnchorInCanvas);
         
         ImGui.SetNextWindowPos(screenPos);
-        
-        const ImGuiWindowFlags flags = ImGuiWindowFlags.NoTitleBar
-                                       | ImGuiWindowFlags.NoMove
-                                       | ImGuiWindowFlags.Tooltip // ugly as f**k. Sadly .PopUp will lead to random crashes.
-                                       | ImGuiWindowFlags.NoFocusOnAppearing
-                                       | ImGuiWindowFlags.NoScrollbar
-                                       | ImGuiWindowFlags.AlwaysUseWindowPadding;
-        
+
         ImGui.PushStyleVar(ImGuiStyleVar.ChildRounding, 5);
         ImGui.PushStyleVar(ImGuiStyleVar.PopupBorderSize, 0);
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 4);
+        ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0,0));
+        ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(0,0));
+        //ImGui.PushStyleColor(ImGuiCol.ScrollbarBg, Color.Transparent.Rgba);
+        var lastSize = WindowContentExtend.GetLastAndReset(); 
+                   // + ImGui.GetStyle().WindowPadding * 2
+                   // + new Vector2(10,3);
         
-        ImGui.PushStyleColor(ImGuiCol.PopupBg, UiColors.BackgroundFull.Fade(0.6f).Rgba);
+        //lastSize.Y = lastSize.Y.Clamp(0f,300f);
+
+        
+        ImGui.PushStyleColor(ImGuiCol.ChildBg, UiColors.BackgroundFull.Fade(0.7f).Rgba);
+        ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundFull.Fade(0.0f).Rgba);
+        
+        //ImGui.PushStyleColor(ImGuiCol.PopupBg, UiColors.BackgroundFull.Fade(0.6f).Rgba);
         if (ImGui.BeginChild("Popup",
-                             new Vector2(100, 120),
+                             lastSize,
                              true,
-                             flags))
+                             ImGuiWindowFlags.NoResize
+                             | ImGuiWindowFlags.NoScrollbar
+                             | ImGuiWindowFlags.AlwaysUseWindowPadding
+                             ))
         {
             var childUi = context.ItemForInputSelection.SymbolUi;
             if (childUi != null)
             {
+                if (context.DraggedPrimaryOutputType == null || !TypeNameRegistry.Entries.TryGetValue(context.DraggedPrimaryOutputType, out var typeName))
+                {
+                    typeName = context.DraggedPrimaryOutputType.Name;
+                }
+
+                ImGui.PushFont(Fonts.FontSmall);
+                ImGui.TextColored(UiColors.TextMuted, typeName + " inputs");
+                ImGui.PopFont();                
+                
                 var inputIndex = 0;
                 foreach (var inputUi in childUi.InputUis.Values)
                 {
+
+                    
                     var input = context.ItemForInputSelection.Instance!.Inputs[inputIndex];
                     if (inputUi.Type == context.DraggedPrimaryOutputType)
                     {
+                        //var parameterHelp = "";
+                        
                         var isConnected = input.HasInputConnections;
                         var prefix = isConnected ? "× " : "   ";
-                        if (ImGui.Selectable(prefix + inputUi.InputDefinition.Name))
+                        var inputDefinitionName = prefix + inputUi.InputDefinition.Name;
+                        var labelSize = ImGui.CalcTextSize(inputDefinitionName);
+                        var width = MathF.Max(lastSize.X  -4, labelSize.X +30);
+                        var buttonSize = new Vector2(width, ImGui.GetFrameHeight());
+                        
+                        if (ImGui.Button(inputDefinitionName, buttonSize))
                         {
                             TryConnectHiddenInput(context, inputUi);
                             context.CompleteMacroCommand();
@@ -199,6 +231,13 @@ internal static class InputPicking
                             Reset(context);
                             context.StateMachine.SetState(GraphStates.Default, context);
                         }
+
+                        if (!string.IsNullOrEmpty(inputUi.Description))
+                        {
+                            CustomComponents.TooltipForLastItem(inputUi.Description);
+                        }
+                        
+                        WindowContentExtend.ExtendToLastItem();
                     }
                     
                     inputIndex++;
@@ -218,8 +257,8 @@ internal static class InputPicking
         }
         
         ImGui.EndChild();
-        ImGui.PopStyleVar(3);
-        ImGui.PopStyleColor();
+        ImGui.PopStyleVar(5);
+        ImGui.PopStyleColor(2);
     }
     
     public static void Reset(GraphUiContext context)
@@ -227,5 +266,10 @@ internal static class InputPicking
         context.TempConnections.Clear();
         context.ActiveSourceItem = null;
         context.DraggedPrimaryOutputType = null;
+    }
+    
+    public static void Init(GraphUiContext context)
+    {
+        WindowContentExtend.GetLastAndReset();
     }
 }

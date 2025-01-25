@@ -258,6 +258,7 @@ internal sealed partial class MagGraphCanvas
 
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 3);
+                    ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(3,4));
                     ImGui.BeginTooltip();
                     var childUi = item.SymbolUi;
                     if (childUi != null)
@@ -285,7 +286,7 @@ internal sealed partial class MagGraphCanvas
                     }
 
                     ImGui.EndTooltip();
-                    ImGui.PopStyleVar(2);
+                    ImGui.PopStyleVar(3);
                 }
             }
         }

@@ -16,8 +16,8 @@ x Fix parameter window
 x Update view after TimeClip Split
 
 Graph:
-xFix initial view 
-- Show all content of initial view scope is empty
+x Fix initial view 
+x Show all content of initial view scope is empty
 x Add input parameters
 x Add output parameters
 x Remove input output params
@@ -25,9 +25,10 @@ x Remove output params
 - Fix background control in mag graph
 x Fix fence selection for timeline and preset view
 - Add annotations
-- Fix MultiInput on disconnect re-layout
+x Fix MultiInput on disconnect re-layout
 - Add options for hidden secondary outputs
 - Fix overlapping outputs in RevisionPanic
+- Rename children with Return
 
 Feats:
 - Copy and Paste Values

@@ -396,9 +396,9 @@ internal static class GraphStates
 
     internal static State PickInput
         = new(
-              Enter: _ => { },
-              Update: context => { InputPicking.DrawHiddenInputSelector(context); },
-              Exit: _ => { }
+              Enter:  InputPicking.Init,
+              Update: InputPicking.DrawHiddenInputSelector,
+              Exit: InputPicking.Reset
              );
 
     internal static State HoldingConnectionEnd

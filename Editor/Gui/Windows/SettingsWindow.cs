@@ -82,7 +82,7 @@ internal sealed class SettingsWindow : Window
                         changed |= FormInputs.AddFloat("Connection radius",
                                                        ref UserSettings.Config.MaxCurveRadius,
                                                        0.0f, 1000f, 1f, true, "Controls the roundness of curve lines",
-                                                       UserSettings.Defaults.TimeRasterDensity);
+                                                       UserSettings.Defaults.MaxCurveRadius);
                     }
                     else
                     {
