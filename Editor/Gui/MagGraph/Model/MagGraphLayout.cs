@@ -108,6 +108,7 @@ internal sealed class MagGraphLayout
                                  // LastUpdateCycle = _structureUpdateCycle,
                                  // DampedPosOnCanvas = childUi.PosOnCanvas,
                              };
+                opItem.DampedPosOnCanvas = childUi.PosOnCanvas;
                 Items[childId] = opItem; 
                 addedItemCount++;
             }
@@ -121,7 +122,7 @@ internal sealed class MagGraphLayout
             opItem.ChildUi = childUi;
             opItem.Size = MagGraphItem.GridSize;
             opItem.LastUpdateCycle = _structureUpdateCycle;
-            opItem.DampedPosOnCanvas = childUi.PosOnCanvas;
+            
         }
 
         foreach (var input in compositionOp.Inputs)
