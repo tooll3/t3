@@ -77,7 +77,7 @@ internal static class Compiler
     private static readonly object _processLock = new();
     private static readonly Stopwatch stopwatch = new();
     
-    public static bool TryCompile(CsProjectFile projectFile, BuildMode buildMode, bool nugetRestore, string? targetDirectory = null, Verbosity verbosity = Verbosity.Quiet)
+    public static bool TryCompile(CsProjectFile projectFile, BuildMode buildMode, bool nugetRestore, string? targetDirectory = null, Verbosity verbosity = Verbosity.Detailed)
     {
         bool success;
         string logMessage;
@@ -101,7 +101,7 @@ internal static class Compiler
             var compilationOptions = new CompilationOptions(projectFile, buildMode, targetDirectory, verbosity, nugetRestore);
             var command = new Command<CompilationOptions>(GetCommandFor, Evaluate);
 
-            if (!_processCommander.TryCommand(command, compilationOptions, out var response, projectFile.Directory, suppressOutput: true))
+            if (!_processCommander.TryCommand(command, compilationOptions, out var response, projectFile.Directory, suppressOutput: false))
             {
                 success = false;
                 logMessage = $"{projectFile.Name}: Build failed in {stopwatch.ElapsedMilliseconds}ms:\n{response}";
