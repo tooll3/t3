@@ -15,22 +15,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Silk.NET.Input" Version="2.20.0" />
+      <PackageReference Include="Silk.NET.Input.Glfw" Version="2.22.0" />
       <PackageReference Include="Silk.NET.OpenGL" Version="2.20.0" />
       <PackageReference Include="Silk.NET.OpenGL.Extensions.ImGui" Version="2.20.0" />
-      <PackageReference Include="Silk.NET.Shaderc" Version="2.20.0" />
-      <PackageReference Include="Silk.NET.Vulkan" Version="2.20.0" />
-      <PackageReference Include="Silk.NET.Vulkan.Extensions.EXT" Version="2.20.0" />
-      <PackageReference Include="Silk.NET.Vulkan.Extensions.KHR" Version="2.20.0" />
       <PackageReference Include="Silk.NET.Windowing" Version="2.20.0" />
-      <PackageReference Include="Silk.NET.XInput" Version="2.20.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Update="Vulkan\Silk.NET Lab\Shaders\imgui-background.frag.glsl" CopyToOutputDirectory="Always"/>
-      <None Update="Vulkan\Silk.NET Lab\Shaders\imgui-background.vert.glsl" CopyToOutputDirectory="Always"/>
-      <None Update="Vulkan\Silk.NET Lab\Shaders\triangle.frag.glsl" CopyToOutputDirectory="Always"/>
-      <None Update="Vulkan\Silk.NET Lab\Shaders\triangle.vert.glsl" CopyToOutputDirectory="Always"/>
     </ItemGroup>
 
 </Project>
