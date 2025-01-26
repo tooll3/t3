@@ -165,13 +165,6 @@
       }
     },
     {
-      "ChildId": "7472fea2-de4f-43a7-bd02-f1594ebcac7c"/*ScrambleBuffer*/,
-      "Position": {
-        "X": -109.745544,
-        "Y": 388.11148
-      }
-    },
-    {
       "ChildId": "75c0cad9-7fb5-45c5-9ee6-15a6bfe7ec0b"/*AnimValue*/,
       "Position": {
         "X": -916.83795,

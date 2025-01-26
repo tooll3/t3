@@ -241,7 +241,7 @@
       }
     },
     {
-      "ChildId": "a03df04c-e4fa-43db-a795-5b9fcd1ca52f"/*RenderQuad*/,
+      "ChildId": "a03df04c-e4fa-43db-a795-5b9fcd1ca52f"/*DrawQuad*/,
       "Position": {
         "X": 164.93536,
         "Y": 1126.9474

@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "00f70188-5f7a-4438-bb59-411134e03b1a"/*RenderQuad*/,
+      "ChildId": "00f70188-5f7a-4438-bb59-411134e03b1a"/*DrawQuad*/,
       "Position": {
         "X": -1969.7024,
         "Y": 5712.3447

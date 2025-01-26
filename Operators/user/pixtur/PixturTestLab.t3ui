@@ -23,13 +23,6 @@
       }
     },
     {
-      "ChildId": "055524b2-5685-4eb7-8dfa-e6e2810d5268"/*EvokeInvitationExperiment*/,
-      "Position": {
-        "X": -3963.546,
-        "Y": -824.6683
-      }
-    },
-    {
       "ChildId": "06641005-0a4f-4a9e-9d38-447ed60ee960"/*PinkyDemo*/,
       "Position": {
         "X": -4090.0894,
@@ -208,7 +201,7 @@
       }
     },
     {
-      "ChildId": "7ac75d11-a220-4a6f-a2c6-8c1db42182e7"/*SvgLineTransitionExample*/,
+      "ChildId": "7ac75d11-a220-4a6f-a2c6-8c1db42182e7"/*DrawLinesBuildupExample*/,
       "Position": {
         "X": -2735.4888,
         "Y": -778.581

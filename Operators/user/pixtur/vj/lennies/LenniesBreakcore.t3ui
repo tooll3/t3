@@ -256,13 +256,6 @@
       }
     },
     {
-      "ChildId": "5a967cca-7da1-46e5-b973-93f06bbb4ad8"/*CrossLinePoints*/,
-      "Position": {
-        "X": 927.4646,
-        "Y": 1174.4941
-      }
-    },
-    {
       "ChildId": "5c7e41f6-33ec-4fd8-8b58-009b9c2f982f"/*RadialPoints*/,
       "Position": {
         "X": 627.46375,

@@ -5625,6 +5625,36 @@
       }
     },
     {
+      "InstanceId": "700e6173-a63c-4653-9f55-7fac7400b5c9",
+      "InputId": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6",
+      "Curve": {
+        "PreCurve": "Constant",
+        "PostCurve": "Constant",
+        "Keys": [
+          {
+            "Time": 1078.9868,
+            "Value": 0.11100000143051147,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Linear",
+            "OutEditMode": "Linear",
+            "InTangentAngle": -0.026884472949408433,
+            "OutTangentAngle": 3.1147081806403847
+          },
+          {
+            "Time": 1080.7346,
+            "Value": 0.06399999558925629,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Linear",
+            "OutEditMode": "Linear",
+            "InTangentAngle": -0.026884472949408433,
+            "OutTangentAngle": -3.1684771265392015
+          }
+        ]
+      }
+    },
+    {
       "InstanceId": "74b9c6fd-52ed-4c46-ad55-4e5bb88a79f1",
       "InputId": "b4a8c16d-5a0f-4867-ae03-92a675abe709",
       "Curve": {
@@ -6230,36 +6260,6 @@
             "OutEditMode": "Linear",
             "InTangentAngle": 0.253399964715219,
             "OutTangentAngle": -2.8881926888745744
-          }
-        ]
-      }
-    },
-    {
-      "InstanceId": "700e6173-a63c-4653-9f55-7fac7400b5c9",
-      "InputId": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6",
-      "Curve": {
-        "PreCurve": "Constant",
-        "PostCurve": "Constant",
-        "Keys": [
-          {
-            "Time": 1078.9868,
-            "Value": 0.11100000143051147,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Linear",
-            "OutEditMode": "Linear",
-            "InTangentAngle": -0.026884472949408433,
-            "OutTangentAngle": 3.1147081806403847
-          },
-          {
-            "Time": 1080.7346,
-            "Value": 0.06399999558925629,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Linear",
-            "OutEditMode": "Linear",
-            "InTangentAngle": -0.026884472949408433,
-            "OutTangentAngle": -3.1684771265392015
           }
         ]
       }

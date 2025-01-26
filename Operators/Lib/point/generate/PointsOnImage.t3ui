@@ -77,7 +77,7 @@
       "Description": "Samples the image color (including alpha) to the Point attribute. If disabled, points will be white."
     },
     {
-      "InputId": "effde91f-2cbc-4400-b1fb-17677c538fe6"/*BiasAndGain*/,
+      "InputId": "effde91f-2cbc-4400-b1fb-17677c538fe6"/*GainAndBias*/,
       "Position": {
         "X": -1229.6033,
         "Y": 1463.8694

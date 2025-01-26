@@ -14,7 +14,7 @@
       "DefaultValue": 1
     },
     {
-      "Id": "099019c1-f27c-44a4-9e9c-c22b8313310c"/*BiasAndGain*/,
+      "Id": "099019c1-f27c-44a4-9e9c-c22b8313310c"/*GainAndBias*/,
       "DefaultValue": {
         "X": 0.5,
         "Y": 0.5

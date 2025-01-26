@@ -16,13 +16,6 @@
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "a4a46c04-ff03-48ce-83c9-0c0baa0f72e7"/*ShaderResourceView*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
       "OutputId": "e0c4fedd-5c2f-46c8-b67d-5667435fb037"/*Texture*/,
       "Position": {
         "X": 0.0,

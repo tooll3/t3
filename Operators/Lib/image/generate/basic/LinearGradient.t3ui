@@ -16,7 +16,7 @@
       "Format": "{0:0.000} ×"
     },
     {
-      "InputId": "1c70e502-90cc-4285-92ca-ec3d200967eb"/*BiasAndGain*/,
+      "InputId": "1c70e502-90cc-4285-92ca-ec3d200967eb"/*GainAndBias*/,
       "Position": {
         "X": 59.73242,
         "Y": 127.69351

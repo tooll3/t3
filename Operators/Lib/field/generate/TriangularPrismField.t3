@@ -9,10 +9,6 @@
       }
     },
     {
-      "Id": "b9d9d45a-e363-4bf4-b9cd-9e79f93f5dee"/*Round*/,
-      "DefaultValue": 0.0
-    },
-    {
       "Id": "f088b205-2587-4f7c-903d-ee162b8d919b"/*Center*/,
       "DefaultValue": {
         "X": 0.0,

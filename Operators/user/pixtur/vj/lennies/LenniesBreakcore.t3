@@ -806,18 +806,6 @@
       "Outputs": []
     },
     {
-      "Id": "5a967cca-7da1-46e5-b973-93f06bbb4ad8"/*CrossLinePoints*/,
-      "SymbolId": "037c89b0-f5d3-4509-b574-c34fa8ec21f3",
-      "InputValues": [
-        {
-          "Id": "b4ba04f3-f09b-4b73-9499-b4bbed0eaf01"/*LengthFactor*/,
-          "Type": "System.Single",
-          "Value": 0.030000003
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "5c7e41f6-33ec-4fd8-8b58-009b9c2f982f"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [

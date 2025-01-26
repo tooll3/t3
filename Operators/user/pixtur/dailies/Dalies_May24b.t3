@@ -659,48 +659,6 @@
       "Outputs": []
     },
     {
-      "Id": "636b7954-ea04-4e04-9b6f-1b12f3f7be9c"/*ScrambleBuffer*/,
-      "SymbolId": "bf76bc78-74e1-45c3-9c67-de50262a48ae",
-      "InputValues": [
-        {
-          "Id": "10a1209a-15f1-42ac-b105-2ccbc0f4ff4d"/*FillDirection*/,
-          "Type": "System.Int32",
-          "Value": 1
-        },
-        {
-          "Id": "262511b2-3a96-4600-8325-0fe84568b42f"/*TriggerFillJump*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
-          "Id": "2a078b1d-0115-467f-8625-6d36ef2fdaf9"/*MinLength*/,
-          "Type": "System.Int32",
-          "Value": 1
-        },
-        {
-          "Id": "7e68d5fd-f9be-4f23-bc1b-0bdb72e63137"/*MaxLength*/,
-          "Type": "System.Int32",
-          "Value": 1
-        },
-        {
-          "Id": "aa458c22-a874-4200-af62-0da94d82631f"/*TriggerFill*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
-          "Id": "b5deeff1-7188-4742-a438-cb3ce1afde59"/*TriggerChop*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
-          "Id": "eb856f4f-2b57-40cc-bf7e-ee6bfc955f34"/*FillString*/,
-          "Type": "System.String",
-          "Value": "_______________"
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "67e1ec58-0d65-4090-90ba-d13cab8e172e"/*BuildRandomString*/,
       "SymbolId": "7b21f10b-3548-4a23-95df-360addaeb03d",
       "InputValues": [

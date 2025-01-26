@@ -2571,6 +2571,36 @@
       }
     },
     {
+      "InstanceId": "ad456f7e-5b6a-4332-98cb-8261d60bd3eb",
+      "InputId": "749a9cb1-9dd7-43c7-af91-d5624e26423c",
+      "Curve": {
+        "PreCurve": "Constant",
+        "PostCurve": "Constant",
+        "Keys": [
+          {
+            "Time": 32.5,
+            "Value": 11.300000190734863,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Linear",
+            "OutEditMode": "Linear",
+            "InTangentAngle": -1.4980651980572022,
+            "OutTangentAngle": 1.643527455532591
+          },
+          {
+            "Time": 32.9153,
+            "Value": 5.599999904632568,
+            "InType": "Linear",
+            "OutType": "Linear",
+            "InEditMode": "Linear",
+            "OutEditMode": "Linear",
+            "InTangentAngle": -1.4980651980572022,
+            "OutTangentAngle": -4.639657851646995
+          }
+        ]
+      }
+    },
+    {
       "InstanceId": "5f3d9dfa-b4d8-46de-8307-57a3421637bb",
       "InputId": "7773837e-104a-4b3d-a41f-cadbd9249af2",
       "Curve": {
@@ -2676,36 +2706,6 @@
             "OutEditMode": "Linear",
             "InTangentAngle": -0.011867644952250345,
             "OutTangentAngle": -3.1534602985420435
-          }
-        ]
-      }
-    },
-    {
-      "InstanceId": "ad456f7e-5b6a-4332-98cb-8261d60bd3eb",
-      "InputId": "749a9cb1-9dd7-43c7-af91-d5624e26423c",
-      "Curve": {
-        "PreCurve": "Constant",
-        "PostCurve": "Constant",
-        "Keys": [
-          {
-            "Time": 32.5,
-            "Value": 11.300000190734863,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Linear",
-            "OutEditMode": "Linear",
-            "InTangentAngle": -1.4980651980572022,
-            "OutTangentAngle": 1.643527455532591
-          },
-          {
-            "Time": 32.9153,
-            "Value": 5.599999904632568,
-            "InType": "Linear",
-            "OutType": "Linear",
-            "InEditMode": "Linear",
-            "OutEditMode": "Linear",
-            "InTangentAngle": -1.4980651980572022,
-            "OutTangentAngle": -4.639657851646995
           }
         ]
       }

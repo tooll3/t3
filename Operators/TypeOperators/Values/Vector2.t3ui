@@ -3,17 +3,17 @@
   "Description": "Converts 2 single values to a vec2\n\nFor the opposite see [Vector2Components]",
   "InputUis": [
     {
-      "InputId": "6b9d0106-78f9-4507-a0f6-234c5dfb0f85"/*X*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "2d9c040d-5244-40ac-8090-d8d57323487b"/*Y*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "6b9d0106-78f9-4507-a0f6-234c5dfb0f85"/*X*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
       }
     }
   ],

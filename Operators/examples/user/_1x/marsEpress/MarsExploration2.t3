@@ -609,18 +609,6 @@
       "Outputs": []
     },
     {
-      "Id": "892ec3e3-5997-45f5-b248-a4b9ac761a4f"/*CrossLinePoints*/,
-      "SymbolId": "037c89b0-f5d3-4509-b574-c34fa8ec21f3",
-      "InputValues": [
-        {
-          "Id": "b4ba04f3-f09b-4b73-9499-b4bbed0eaf01"/*LengthFactor*/,
-          "Type": "System.Single",
-          "Value": 0.05
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "89303068-2e7f-42cc-b621-b6ae28fb65a2"/*Layer2d*/,
       "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
       "InputValues": [],

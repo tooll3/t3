@@ -2586,37 +2586,6 @@
       }
     },
     {
-      "InstanceId": "7962a221-05f3-4dd2-98d1-7cf6851ff338",
-      "InputId": "523b7acd-d8e7-4473-9ec7-15eec1d795df",
-      "Index": 1,
-      "Curve": {
-        "PreCurve": "Constant",
-        "PostCurve": "Constant",
-        "Keys": [
-          {
-            "Time": 4.0625,
-            "Value": 1.0,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Horizontal",
-            "OutEditMode": "Horizontal",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": 3.141592653589793
-          },
-          {
-            "Time": 4.3241,
-            "Value": 0.0,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Horizontal",
-            "OutEditMode": "Horizontal",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": -3.141592653589793
-          }
-        ]
-      }
-    },
-    {
       "InstanceId": "178e500c-b5b6-43ff-b917-dcb8c09f720d",
       "InputId": "a384be77-c5fc-47b3-9ec3-960db9f9bae9",
       "Index": 1,
@@ -2801,6 +2770,37 @@
       }
     },
     {
+      "InstanceId": "7962a221-05f3-4dd2-98d1-7cf6851ff338",
+      "InputId": "523b7acd-d8e7-4473-9ec7-15eec1d795df",
+      "Index": 1,
+      "Curve": {
+        "PreCurve": "Constant",
+        "PostCurve": "Constant",
+        "Keys": [
+          {
+            "Time": 4.0625,
+            "Value": 1.0,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Horizontal",
+            "OutEditMode": "Horizontal",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": 3.141592653589793
+          },
+          {
+            "Time": 4.3241,
+            "Value": 0.0,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Horizontal",
+            "OutEditMode": "Horizontal",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": -3.141592653589793
+          }
+        ]
+      }
+    },
+    {
       "InstanceId": "e139175d-7857-4e68-8632-6991fc245517",
       "InputId": "f37c11a5-b210-4e83-8ebd-64ea49ee9b96",
       "Index": 1,
@@ -2851,37 +2851,6 @@
           },
           {
             "Time": 4.5337,
-            "Value": 1.0,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Horizontal",
-            "OutEditMode": "Horizontal",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": -3.141592653589793
-          }
-        ]
-      }
-    },
-    {
-      "InstanceId": "7962a221-05f3-4dd2-98d1-7cf6851ff338",
-      "InputId": "523b7acd-d8e7-4473-9ec7-15eec1d795df",
-      "Index": 2,
-      "Curve": {
-        "PreCurve": "Constant",
-        "PostCurve": "Constant",
-        "Keys": [
-          {
-            "Time": 4.0625,
-            "Value": 1.0,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Horizontal",
-            "OutEditMode": "Horizontal",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": 3.141592653589793
-          },
-          {
-            "Time": 4.3241,
             "Value": 1.0,
             "InType": "Spline",
             "OutType": "Spline",
@@ -3009,6 +2978,37 @@
             "OutType": "Linear",
             "InEditMode": "Linear",
             "OutEditMode": "Linear",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": -3.141592653589793
+          }
+        ]
+      }
+    },
+    {
+      "InstanceId": "7962a221-05f3-4dd2-98d1-7cf6851ff338",
+      "InputId": "523b7acd-d8e7-4473-9ec7-15eec1d795df",
+      "Index": 2,
+      "Curve": {
+        "PreCurve": "Constant",
+        "PostCurve": "Constant",
+        "Keys": [
+          {
+            "Time": 4.0625,
+            "Value": 1.0,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Horizontal",
+            "OutEditMode": "Horizontal",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": 3.141592653589793
+          },
+          {
+            "Time": 4.3241,
+            "Value": 1.0,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Horizontal",
+            "OutEditMode": "Horizontal",
             "InTangentAngle": 0.0,
             "OutTangentAngle": -3.141592653589793
           }

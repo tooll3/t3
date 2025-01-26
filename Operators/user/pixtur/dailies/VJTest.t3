@@ -247,38 +247,6 @@
       "Outputs": []
     },
     {
-      "Id": "7472fea2-de4f-43a7-bd02-f1594ebcac7c"/*ScrambleBuffer*/,
-      "SymbolId": "bf76bc78-74e1-45c3-9c67-de50262a48ae",
-      "InputValues": [
-        {
-          "Id": "262511b2-3a96-4600-8325-0fe84568b42f"/*TriggerFillJump*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
-          "Id": "2a078b1d-0115-467f-8625-6d36ef2fdaf9"/*MinLength*/,
-          "Type": "System.Int32",
-          "Value": 100
-        },
-        {
-          "Id": "aa458c22-a874-4200-af62-0da94d82631f"/*TriggerFill*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
-          "Id": "b5deeff1-7188-4742-a438-cb3ce1afde59"/*TriggerChop*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
-          "Id": "eb856f4f-2b57-40cc-bf7e-ee6bfc955f34"/*FillString*/,
-          "Type": "System.String",
-          "Value": "2"
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "75c0cad9-7fb5-45c5-9ee6-15a6bfe7ec0b"/*AnimValue*/,
       "SymbolId": "ea7b8491-2f8e-4add-b0b1-fd068ccfed0d",
       "InputValues": [

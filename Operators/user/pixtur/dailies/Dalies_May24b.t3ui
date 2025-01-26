@@ -228,13 +228,6 @@
       }
     },
     {
-      "ChildId": "636b7954-ea04-4e04-9b6f-1b12f3f7be9c"/*ScrambleBuffer*/,
-      "Position": {
-        "X": -281.9615,
-        "Y": 138.31252
-      }
-    },
-    {
       "ChildId": "67e1ec58-0d65-4090-90ba-d13cab8e172e"/*BuildRandomString*/,
       "Position": {
         "X": -411.96158,

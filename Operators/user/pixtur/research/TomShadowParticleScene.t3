@@ -3,7 +3,7 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "00f70188-5f7a-4438-bb59-411134e03b1a"/*RenderQuad*/,
+      "Id": "00f70188-5f7a-4438-bb59-411134e03b1a"/*DrawQuad*/,
       "SymbolId": "b89c5923-cc58-4d7a-8dce-eb1f8cdfc6e8",
       "InputValues": [],
       "Outputs": []

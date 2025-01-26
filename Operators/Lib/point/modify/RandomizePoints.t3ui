@@ -50,7 +50,7 @@
       "GroupTitle": "Seed"
     },
     {
-      "InputId": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*BiasAndGain*/,
+      "InputId": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*GainAndBias*/,
       "Position": {
         "X": -532.4194,
         "Y": 1296.7771

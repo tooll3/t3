@@ -23,7 +23,7 @@
       "Format": "{0:0.00º}"
     },
     {
-      "InputId": "28081e5f-da01-46dc-81ad-699df29a49a4"/*BiasAndGain*/,
+      "InputId": "28081e5f-da01-46dc-81ad-699df29a49a4"/*GainAndBias*/,
       "Position": {
         "X": -78.61072,
         "Y": 1199.0425

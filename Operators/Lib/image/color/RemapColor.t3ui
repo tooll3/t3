@@ -35,7 +35,7 @@
       "Max": 5.0
     },
     {
-      "InputId": "97771732-56fb-4e0c-915d-c79321ba27b5"/*BiasAndGain*/,
+      "InputId": "97771732-56fb-4e0c-915d-c79321ba27b5"/*GainAndBias*/,
       "Position": {
         "X": -32.43463,
         "Y": 676.1441

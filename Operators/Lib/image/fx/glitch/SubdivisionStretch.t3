@@ -2,7 +2,7 @@
   "Id": "e34c88f6-815e-4ce1-a6a8-59e2c8101849"/*SubdivisionStretch*/,
   "Inputs": [
     {
-      "Id": "22afde68-08c5-438f-9425-fe255b2e079f"/*ScrollBiasAndGain*/,
+      "Id": "22afde68-08c5-438f-9425-fe255b2e079f"/*ScrollGainAndBias*/,
       "DefaultValue": {
         "X": 0.5,
         "Y": 0.5

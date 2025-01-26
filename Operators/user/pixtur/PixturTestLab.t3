@@ -16,12 +16,6 @@
       "Outputs": []
     },
     {
-      "Id": "055524b2-5685-4eb7-8dfa-e6e2810d5268"/*EvokeInvitationExperiment*/,
-      "SymbolId": "ce469ec7-708e-492f-8b6a-44eda127c28e",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "06641005-0a4f-4a9e-9d38-447ed60ee960"/*PinkyDemo*/,
       "SymbolId": "ace28a0c-b71a-41eb-bd50-b57da38a23ce",
       "InputValues": [],
@@ -251,7 +245,7 @@
       "Outputs": []
     },
     {
-      "Id": "7ac75d11-a220-4a6f-a2c6-8c1db42182e7"/*SvgLineTransitionExample*/,
+      "Id": "7ac75d11-a220-4a6f-a2c6-8c1db42182e7"/*DrawLinesBuildupExample*/,
       "SymbolId": "214828be-a784-4da7-8f0c-303f5ea8c486",
       "InputValues": [],
       "Outputs": []

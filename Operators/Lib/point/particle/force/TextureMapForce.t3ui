@@ -23,7 +23,7 @@
       "Format": "{0:0.0}°"
     },
     {
-      "InputId": "41491794-082d-4394-b6c2-efb4780623ea"/*VariationBiasGain*/,
+      "InputId": "41491794-082d-4394-b6c2-efb4780623ea"/*VariationGainAndBias*/,
       "Position": {
         "X": -50.516357,
         "Y": 954.0927

@@ -6,10 +6,6 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "2bd55eb6-8bca-4f34-bc0e-d1223f47b410"/*Animated*/,
-      "DefaultValue": false
-    },
-    {
       "Id": "485ea866-3764-402b-8bb5-ade85efde0c1"/*Resolution*/,
       "DefaultValue": {
         "X": 0,

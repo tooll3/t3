@@ -1213,36 +1213,6 @@
       }
     },
     {
-      "InstanceId": "72864aba-49e5-4141-88a8-5b0d9fcec898",
-      "InputId": "29e289be-e735-4dd4-8826-5e434cc995fa",
-      "Curve": {
-        "PreCurve": "Constant",
-        "PostCurve": "Constant",
-        "Keys": [
-          {
-            "Time": 0.0,
-            "Value": 1.0,
-            "InType": "Constant",
-            "OutType": "Constant",
-            "InEditMode": "Constant",
-            "OutEditMode": "Constant",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": 3.141592653589793
-          },
-          {
-            "Time": 0.1417,
-            "Value": 0.0,
-            "InType": "Constant",
-            "OutType": "Constant",
-            "InEditMode": "Constant",
-            "OutEditMode": "Constant",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": -3.141592653589793
-          }
-        ]
-      }
-    },
-    {
       "InstanceId": "e8f11708-6e75-4b16-962f-48170c1cafe9",
       "InputId": "a9d8c898-545e-4c0e-af61-6d2251209460",
       "Curve": {
@@ -2018,6 +1988,36 @@
             "OutEditMode": "Linear",
             "InTangentAngle": -0.025708619815389078,
             "OutTangentAngle": -3.167301273405182
+          }
+        ]
+      }
+    },
+    {
+      "InstanceId": "72864aba-49e5-4141-88a8-5b0d9fcec898",
+      "InputId": "29e289be-e735-4dd4-8826-5e434cc995fa",
+      "Curve": {
+        "PreCurve": "Constant",
+        "PostCurve": "Constant",
+        "Keys": [
+          {
+            "Time": 0.0,
+            "Value": 1.0,
+            "InType": "Constant",
+            "OutType": "Constant",
+            "InEditMode": "Constant",
+            "OutEditMode": "Constant",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": 3.141592653589793
+          },
+          {
+            "Time": 0.1417,
+            "Value": 0.0,
+            "InType": "Constant",
+            "OutType": "Constant",
+            "InEditMode": "Constant",
+            "OutEditMode": "Constant",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": -3.141592653589793
           }
         ]
       }

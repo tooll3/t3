@@ -1,5 +1,5 @@
 {
-  "Id": "b89c5923-cc58-4d7a-8dce-eb1f8cdfc6e8"/*RenderQuad*/,
+  "Id": "b89c5923-cc58-4d7a-8dce-eb1f8cdfc6e8"/*DrawQuad*/,
   "Inputs": [
     {
       "Id": "018dab29-db3b-49ee-872b-9042c4c0bced"/*Color*/,

@@ -128,12 +128,7 @@
       "Id": "95432194-a127-438d-a35b-e624c0a29e59"/*Once*/,
       "SymbolId": "e8d2b4ac-0ba2-400f-9c82-e5dd15a23d32",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "68389552-6d8a-433b-a75f-18e76435519b"/*Once*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "982604ab-57ff-4f42-938a-c35b43f890d4"/*ComputeShaderStage*/,

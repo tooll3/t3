@@ -11,15 +11,6 @@
       }
     },
     {
-      "InputId": "2bd55eb6-8bca-4f34-bc0e-d1223f47b410"/*Animated*/,
-      "Position": {
-        "X": -198.16037,
-        "Y": 257.12244
-      },
-      "Description": "Activates a wafting animation of the cells",
-      "AddPadding": "True"
-    },
-    {
       "InputId": "485ea866-3764-402b-8bb5-ade85efde0c1"/*Resolution*/,
       "Position": {
         "X": 132.2552,

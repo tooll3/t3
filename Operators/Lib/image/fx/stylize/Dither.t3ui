@@ -35,7 +35,7 @@
       "Clamp": true
     },
     {
-      "InputId": "3a6f87d6-913b-4200-807c-bb4da3f64fb7"/*BiasAndGain*/,
+      "InputId": "3a6f87d6-913b-4200-807c-bb4da3f64fb7"/*GainAndBias*/,
       "Position": {
         "X": 128.1916,
         "Y": 315.1541
