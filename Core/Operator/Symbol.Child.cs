@@ -831,7 +831,13 @@ public partial class Symbol
             for(int i = 0; i < _instancesOfSelf.Count; i++)
             {
                 var instance = _instancesOfSelf[i];
-                var child = instance.Children[childId];
+                //var child = instance.Children[childId];
+                if (!instance.Children.TryGetValue(childId, out var child))
+                {
+                    Log.Debug("Failed to invalid missing child");
+                    continue;
+                }
+                
                 var inputSlots = child.Inputs;
                 for (int j = 0; j < inputSlots.Count; j++)
                 {
