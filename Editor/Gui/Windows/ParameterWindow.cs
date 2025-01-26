@@ -364,6 +364,10 @@ internal sealed class ParameterWindow : Window
 
     private void DrawParametersArea(Instance instance, SymbolUi.Child symbolChildUi, SymbolUi symbolUi)
     {
+        var compositionSymbolUi = ProjectView.Focused?.InstView?.SymbolUi;
+        if (compositionSymbolUi == null)
+            return;
+        
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
         ImGui.BeginChild("parameters", Vector2.Zero, false, ImGuiWindowFlags.AlwaysUseWindowPadding);
 
@@ -371,18 +375,15 @@ internal sealed class ParameterWindow : Window
 
         var selectedChildSymbolUi = instance.GetSymbolUi();
         
-        var compositionSymbolUi = ProjectView.Focused?.InstView?.SymbolUi;
-        if (compositionSymbolUi == null)
-            return;
-
         // Draw parameters
         DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi, false, this);
         FormInputs.AddVerticalSpace(15);
 
+        
         if (OperatorHelp.DrawHelpSummary(symbolUi))
             _viewMode = ViewModes.Help;
 
-        OperatorHelp.DrawLinksAndExamples(symbolUi);
+        OperatorHelp.SymbolUiRenderer.DrawLinksAndExamples(symbolUi);
         ImGui.EndChild();
         ImGui.PopStyleVar();
     }
@@ -516,7 +517,7 @@ internal sealed class ParameterWindow : Window
         ImGui.PushStyleColor(ImGuiCol.FrameBgHovered, UiColors.BackgroundHover.Rgba);
         foreach (var inputSlot in instance.Inputs)
         {
-            if (!symbolUi.InputUis.TryGetValue(inputSlot.Id, out IInputUi? inputUi))
+            if (!symbolUi.InputUis.TryGetValue(inputSlot.Id, out var inputUi))
             {
                 Log.Warning("Trying to access an non existing input, probably the op instance is not the actual one.");
                 continue;
@@ -535,14 +536,14 @@ internal sealed class ParameterWindow : Window
             ImGui.PopID();
 
             // ... and handle the edit state
-            if (editState.HasFlag(InputEditStateFlags.Started))
+            if ((editState&InputEditStateFlags.Started) != 0)
             {
                 _inputSlotForActiveCommand = inputSlot;
                 _inputValueCommandInFlight =
                     new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input, inputSlot.Input.Value);
             }
 
-            if (editState.HasFlag(InputEditStateFlags.Modified))
+            if ((editState&InputEditStateFlags.Modified) != 0)
             {
                 if (_inputValueCommandInFlight == null || _inputSlotForActiveCommand != inputSlot)
                 {
@@ -555,7 +556,7 @@ internal sealed class ParameterWindow : Window
                 inputSlot.DirtyFlag.Invalidate();
             }
 
-            if (editState.HasFlag(InputEditStateFlags.Finished))
+            if ((editState&InputEditStateFlags.Finished) != 0)
             {
                 if (_inputValueCommandInFlight != null && _inputSlotForActiveCommand == inputSlot)
                 {

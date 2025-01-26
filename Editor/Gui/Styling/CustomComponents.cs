@@ -307,6 +307,7 @@ internal static class CustomComponents
         return backgroundColor;
     }
 
+    private static Action _cachedDrawMenuItems;
     public static void ContextMenuForItem(Action drawMenuItems, string title = null, string id = "context_menu",
                                           ImGuiPopupFlags flags = ImGuiPopupFlags.MouseButtonRight)
     {
@@ -332,7 +333,10 @@ internal static class CustomComponents
                 ImGui.PopFont();
             }
 
-            drawMenuItems?.Invoke();
+            // Assign to static field to avoid closure allocations
+            _cachedDrawMenuItems = drawMenuItems;
+            _cachedDrawMenuItems.Invoke();
+
             ImGui.EndPopup();
         }
 
@@ -363,7 +367,10 @@ internal static class CustomComponents
             ImGui.GetMousePosOnOpeningCurrentPopup();
             contextMenuIsOpen = true;
 
-            drawMenuContent.Invoke();
+            // Assign to static field to avoid closure allocations
+            _cachedDrawMenuItems = drawMenuContent;
+            _cachedDrawMenuItems.Invoke();
+            //drawMenuContent.Invoke();
             ImGui.EndPopup();
         }
         else

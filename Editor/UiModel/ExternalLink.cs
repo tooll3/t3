@@ -1,8 +1,11 @@
-﻿using T3.Editor.Gui.Styling;
+﻿using System.Diagnostics.CodeAnalysis;
+using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.UiModel;
 
-public class ExternalLink
+// Public for serialization...
+[SuppressMessage("ReSharper", "MemberCanBeInternal")]
+public sealed class ExternalLink
 {
     public ExternalLink()
     {
@@ -37,7 +40,7 @@ public class ExternalLink
                    };
     }
 
-    public static readonly Dictionary<ExternalLink.LinkTypes, Icon> _linkIcons
+    public static readonly Dictionary<ExternalLink.LinkTypes, Icon> LinkIcons
         = new()
               {
                   { ExternalLink.LinkTypes.TutorialVideo, Icon.PlayOutput },

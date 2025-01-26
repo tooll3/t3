@@ -3,6 +3,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Operator;
 using T3.Core.SystemUi;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
@@ -202,7 +203,7 @@ internal sealed class OperatorHelp
 
         ImGui.Dummy(Vector2.One);
 
-        DrawLinksAndExamples(symbolUi);
+        SymbolUiRenderer.DrawLinksAndExamples(symbolUi);
 
         ImGui.PopStyleVar();
         ImGui.Unindent();
@@ -210,34 +211,98 @@ internal sealed class OperatorHelp
         ImGui.PopFont();
     }
 
-    public static void DrawLinksAndExamples(SymbolUi symbolUi)
+    public static class SymbolUiRenderer
     {
-        ImGui.PushFont(Fonts.FontSmall);
-        ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(5, 5));
+        private static SymbolUi? _cachedSymbolUi;
+        private static Guid _cachedSymbolId;
 
-        // Draw links
-        if (symbolUi.Links.Count > 0)
+        private static readonly List<(string Title, string Url, Icon? Icon)> _cachedLinks = new();
+        private static readonly List<(SymbolUi SymbolUi, string Name)> _cachedReferencedSymbols = new();
+
+        public static void DrawLinksAndExamples(SymbolUi symbolUi)
         {
+            // Check if symbolUi changed
+            if (symbolUi != _cachedSymbolUi || symbolUi.Symbol.Id != _cachedSymbolId)
+            {
+                _cachedSymbolUi = symbolUi;
+                _cachedSymbolId = symbolUi.Symbol.Id;
+                CacheSymbolData(symbolUi);
+            }
+
+            ImGui.PushFont(Fonts.FontSmall);
+            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(5, 5));
+
+            DrawLinks();
+            DrawExamples();
+            DrawReferencedSymbols();
+
+            ImGui.PopFont();
+            ImGui.PopStyleVar();
+        }
+
+        private static void CacheSymbolData(SymbolUi symbolUi)
+        {
+            _cachedLinks.Clear();
+            _cachedReferencedSymbols.Clear();
+
+            // Cache links
+            foreach (var link in symbolUi.Links.Values)
+            {
+                if (!string.IsNullOrEmpty(link.Url))
+                {
+                    var title = link.Title ?? link.Type.ToString();
+                    _cachedLinks.Add((title, link.Url, ExternalLink.LinkIcons.TryGetValue(link.Type, out var icon) ? icon : (Icon?)null));
+                }
+            }
+
+            // Cache referenced symbols
+            if (!string.IsNullOrEmpty(symbolUi.Description))
+            {
+                foreach (Match match in _itemRegex.Matches(symbolUi.Description))
+                {
+                    var referencedName = match.Groups[1].Value;
+
+                    if (referencedName == symbolUi.Symbol.Name || _cachedReferencedSymbols.Any(x => x.Name == referencedName))
+                        continue;
+
+                    foreach (var symbol in EditorSymbolPackage.AllSymbols)
+                    {
+                        if (symbol.Name == referencedName)
+                        {
+                            var package = (EditorSymbolPackage)symbol.SymbolPackage;
+                            if (package.TryGetSymbolUi(symbol.Id, out var exampleSymbolUi))
+                            {
+                                _cachedReferencedSymbols.Add((exampleSymbolUi, referencedName));
+                            }
+
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void DrawLinks()
+        {
+            if (_cachedLinks.Count == 0) return;
+
             ImGui.AlignTextToFramePadding();
             ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
             ImGui.TextUnformatted("Links:");
             ImGui.PopStyleColor();
             ImGui.SameLine();
-
             ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
-            foreach (var l in symbolUi.Links.Values)
-            {
-                if (string.IsNullOrEmpty(l.Url))
-                    continue;
 
-                ImGui.PushID(l.Id.GetHashCode());
+            foreach (var (title, url, icon) in _cachedLinks)
+            {
                 ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusAutomated.Rgba);
-                var title = string.IsNullOrEmpty(l.Title) ? l.Type.ToString() : l.Title;
-                var clicked = false;
-                if (ExternalLink._linkIcons.TryGetValue(l.Type, out var icon))
+                bool clicked;
+
+                if (icon.HasValue)
                 {
-                    clicked = ImGui.Button("    " + title);
-                    Icons.DrawIconOnLastItem(icon, UiColors.StatusAutomated, 0);
+                    ImGui.Button("    " + title);
+                    Icons.DrawIconOnLastItem(icon.Value, UiColors.StatusAutomated, 0);
+                    clicked = ImGui.IsItemClicked();
                 }
                 else
                 {
@@ -245,12 +310,11 @@ internal sealed class OperatorHelp
                 }
 
                 ImGui.PopStyleColor();
-                CustomComponents.TooltipForLastItem(!string.IsNullOrEmpty(l.Description) ? l.Description : "Open link in browser", l.Url);
+                CustomComponents.TooltipForLastItem("Open link in browser", url);
 
                 if (clicked)
-                    CoreUi.Instance.OpenWithDefaultApplication(l.Url);
+                    CoreUi.Instance.OpenWithDefaultApplication(url);
 
-                ImGui.PopID();
                 ImGui.SameLine();
             }
 
@@ -258,57 +322,31 @@ internal sealed class OperatorHelp
             ImGui.PopStyleColor();
         }
 
-        var groupLabel = "Also see:";
-        if (ExampleSymbolLinking.TryGetExamples(symbolUi.Symbol.Id, out var examples))
+        private static void DrawExamples()
         {
-            foreach (var exampleUi in examples)
+            if (ExampleSymbolLinking.TryGetExamples(_cachedSymbolUi!.Symbol.Id, out var examples))
             {
-                const string label = "Example";
-                UiElements.DrawExampleOperator(exampleUi, label);
-            }
-        }
-
-        if (!string.IsNullOrEmpty(symbolUi.Description))
-        {
-            var alreadyListedSymbolNames = new HashSet<string>();
-
-            var matches = _itemRegex.Matches(symbolUi.Description);
-            if (matches.Count > 0)
-            {
-                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
-                ImGui.TextUnformatted(groupLabel);
-                ImGui.PopStyleColor();
-
-                ImGui.Dummy(Vector2.One);
-
-                foreach (Match match in matches)
+                foreach (var exampleUi in examples)
                 {
-                    var referencedName = match.Groups[1].Value;
-
-                    if (referencedName == symbolUi.Symbol.Name)
-                        continue;
-
-                    if (alreadyListedSymbolNames.Contains(referencedName))
-                        continue;
-
-                    // This is slow and could be optimized by dictionary
-                    // todo: this should deal with actual guid references, not names
-                    var referencedSymbol = EditorSymbolPackage.AllSymbols.FirstOrDefault(s => s.Name == referencedName);
-                    if (referencedSymbol != null)
-                    {
-                        var package = (EditorSymbolPackage)referencedSymbol.SymbolPackage;
-                        if (!package.TryGetSymbolUi(referencedSymbol.Id, out var exampleSymbolUi))
-                            throw new Exception($"Can't find symbol ui for symbol {referencedSymbol.Id}");
-                        UiElements.DrawExampleOperator(exampleSymbolUi, referencedName);
-                    }
-
-                    alreadyListedSymbolNames.Add(referencedName);
+                    UiElements.DrawExampleOperator(exampleUi, "Example");
                 }
             }
         }
 
-        ImGui.PopFont();
-        ImGui.PopStyleVar();
+        private static void DrawReferencedSymbols()
+        {
+            if (_cachedReferencedSymbols.Count == 0) return;
+
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+            ImGui.TextUnformatted("Also see:");
+            ImGui.PopStyleColor();
+            ImGui.Dummy(Vector2.One);
+
+            foreach (var (exampleSymbolUi, referencedName) in _cachedReferencedSymbols)
+            {
+                UiElements.DrawExampleOperator(exampleSymbolUi, referencedName);
+            }
+        }
     }
 
     private static void DrawGroupLabel(string title)
