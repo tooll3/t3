@@ -1,6 +1,7 @@
 {
   "Id": "44f364ed-0dee-4586-a60b-77572cc8f2b7"/*PairPointsForGridWalkLinesExample*/,
   "Description": "",
+  "SymbolTags": "4096",
   "InputUis": [],
   "SymbolChildUis": [
     {

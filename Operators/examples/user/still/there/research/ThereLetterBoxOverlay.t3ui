@@ -1,6 +1,7 @@
 {
   "Id": "2d388f2b-3d07-4cbd-a86a-63c5cb83ed26"/*ThereLetterBoxOverlay*/,
   "Description": "",
+  "SymbolTags": "16",
   "InputUis": [
     {
       "InputId": "1885bd1c-d612-48e0-97db-5614e49d7c3e"/*Color*/,

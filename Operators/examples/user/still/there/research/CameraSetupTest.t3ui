@@ -1,6 +1,7 @@
 {
   "Id": "ef88a1f2-a541-4c7d-a6c7-ce6f768db2f5"/*CameraSetupTest*/,
   "Description": "A quick experiment to visualize how cameras could be used with gizmos.",
+  "SymbolTags": "4096",
   "InputUis": [],
   "SymbolChildUis": [
     {

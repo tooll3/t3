@@ -166,7 +166,7 @@
       "Outputs": []
     },
     {
-      "Id": "1d14aa42-f35d-40ef-858d-202d58640059"/*RenderQuad*/,
+      "Id": "1d14aa42-f35d-40ef-858d-202d58640059"/*DrawQuad*/,
       "SymbolId": "b89c5923-cc58-4d7a-8dce-eb1f8cdfc6e8",
       "InputValues": [],
       "Outputs": []
@@ -2160,6 +2160,86 @@
       }
     },
     {
+      "InstanceId": "ee298a30-f1ce-463b-ad99-76bcb19d9961",
+      "InputId": "981e17e2-6f92-4651-90a5-7c6ee4f04438",
+      "Curve": {
+        "PreCurve": "Constant",
+        "PostCurve": "Constant",
+        "Keys": [
+          {
+            "Time": 9.9177,
+            "Value": 0.07306677848100662,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Smooth",
+            "OutEditMode": "Smooth",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": 3.141592653589793
+          },
+          {
+            "Time": 11.4245,
+            "Value": 0.16877940723530996,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Smooth",
+            "OutEditMode": "Smooth",
+            "InTangentAngle": 6.378179224871596,
+            "OutTangentAngle": 3.2365865712818027
+          },
+          {
+            "Time": 14.8702,
+            "Value": 0.6564000844955444,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Smooth",
+            "OutEditMode": "Smooth",
+            "InTangentAngle": 0.12952410411579218,
+            "OutTangentAngle": 3.2711167577055855
+          },
+          {
+            "Time": 16.2706,
+            "Value": 0.800000011920929,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Smooth",
+            "OutEditMode": "Smooth",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": -3.141592653589793
+          }
+        ]
+      }
+    },
+    {
+      "InstanceId": "ee298a30-f1ce-463b-ad99-76bcb19d9961",
+      "InputId": "b7cff360-cbb6-4d28-98a1-dd0fd31145f7",
+      "Curve": {
+        "PreCurve": "Constant",
+        "PostCurve": "Constant",
+        "Keys": [
+          {
+            "Time": 17.5503,
+            "Value": 2.7633330821990967,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Smooth",
+            "OutEditMode": "Smooth",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": 3.141592653589793
+          },
+          {
+            "Time": 18.9335,
+            "Value": 8.723333358764648,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Smooth",
+            "OutEditMode": "Smooth",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": -3.141592653589793
+          }
+        ]
+      }
+    },
+    {
       "InstanceId": "a3ae5965-73bd-49dc-84df-eeebb4df344b",
       "InputId": "08624ca6-8b69-48f5-8896-a483b403778e",
       "Curve": {
@@ -2370,56 +2450,6 @@
       }
     },
     {
-      "InstanceId": "ee298a30-f1ce-463b-ad99-76bcb19d9961",
-      "InputId": "981e17e2-6f92-4651-90a5-7c6ee4f04438",
-      "Curve": {
-        "PreCurve": "Constant",
-        "PostCurve": "Constant",
-        "Keys": [
-          {
-            "Time": 9.9177,
-            "Value": 0.07306677848100662,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Smooth",
-            "OutEditMode": "Smooth",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": 3.141592653589793
-          },
-          {
-            "Time": 11.4245,
-            "Value": 0.16877940723530996,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Smooth",
-            "OutEditMode": "Smooth",
-            "InTangentAngle": 6.378179224871596,
-            "OutTangentAngle": 3.2365865712818027
-          },
-          {
-            "Time": 14.8702,
-            "Value": 0.6564000844955444,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Smooth",
-            "OutEditMode": "Smooth",
-            "InTangentAngle": 0.12952410411579218,
-            "OutTangentAngle": 3.2711167577055855
-          },
-          {
-            "Time": 16.2706,
-            "Value": 0.800000011920929,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Smooth",
-            "OutEditMode": "Smooth",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": -3.141592653589793
-          }
-        ]
-      }
-    },
-    {
       "InstanceId": "ad927358-5711-4c5f-b03e-9f047091713e",
       "InputId": "99188668-b6ac-468b-a892-cd020a3862b2",
       "Curve": {
@@ -2449,36 +2479,6 @@
           {
             "Time": 6.5584,
             "Value": 0.0,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Smooth",
-            "OutEditMode": "Smooth",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": -3.141592653589793
-          }
-        ]
-      }
-    },
-    {
-      "InstanceId": "ee298a30-f1ce-463b-ad99-76bcb19d9961",
-      "InputId": "b7cff360-cbb6-4d28-98a1-dd0fd31145f7",
-      "Curve": {
-        "PreCurve": "Constant",
-        "PostCurve": "Constant",
-        "Keys": [
-          {
-            "Time": 17.5503,
-            "Value": 2.7633330821990967,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Smooth",
-            "OutEditMode": "Smooth",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": 3.141592653589793
-          },
-          {
-            "Time": 18.9335,
-            "Value": 8.723333358764648,
             "InType": "Spline",
             "OutType": "Spline",
             "InEditMode": "Smooth",

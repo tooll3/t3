@@ -1,6 +1,7 @@
 {
   "Id": "0c3a8cc9-85bf-4ded-b35b-7b447c7e13dd"/*Scene13*/,
   "Description": "",
+  "SymbolTags": "4096",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -60,7 +61,7 @@
       }
     },
     {
-      "ChildId": "1d14aa42-f35d-40ef-858d-202d58640059"/*RenderQuad*/,
+      "ChildId": "1d14aa42-f35d-40ef-858d-202d58640059"/*DrawQuad*/,
       "Position": {
         "X": 3977.137,
         "Y": 1083.3313

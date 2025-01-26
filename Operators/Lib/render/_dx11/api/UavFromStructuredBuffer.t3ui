@@ -1,7 +1,7 @@
 {
   "Id": "0b5b14bf-c850-493a-afb1-72643926e214"/*UavFromStructuredBuffer*/,
   "Description": "This operator is obsolete. please use [GetBufferComponents] instead.",
-  "SymbolTags": "4096",
+  "SymbolTags": "24",
   "InputUis": [
     {
       "InputId": "13b85721-7126-47bb-ab4f-096eae59e412"/*BufferFlags*/,

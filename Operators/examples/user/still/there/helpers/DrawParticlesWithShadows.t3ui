@@ -1,6 +1,7 @@
 {
   "Id": "b1ffe4dd-d734-4392-a644-7c587979066e"/*DrawParticlesWithShadows*/,
   "Description": "",
+  "SymbolTags": "4096",
   "InputUis": [
     {
       "InputId": "11e59dd7-1197-433c-a0aa-cf2acad6d33a"/*ParticleSystem*/,
@@ -413,7 +414,7 @@
       }
     },
     {
-      "ChildId": "6ba80cb7-44af-41af-be34-534d3a9b7819"/*RenderQuad*/,
+      "ChildId": "6ba80cb7-44af-41af-be34-534d3a9b7819"/*DrawQuad*/,
       "Position": {
         "X": 786.053,
         "Y": 4237.332

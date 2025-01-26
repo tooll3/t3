@@ -1,6 +1,7 @@
 {
   "Id": "73a55607-c892-4a85-946b-e37354c4c0e4"/*DrawParticles*/,
   "Description": "",
+  "SymbolTags": "4096",
   "InputUis": [
     {
       "InputId": "0a4f49d0-8b4b-47f1-a2cf-134ebb62cb74"/*Size*/,

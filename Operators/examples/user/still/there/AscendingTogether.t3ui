@@ -1,6 +1,7 @@
 {
   "Id": "44d744da-cf4e-43e5-853a-126cfed6c865"/*AscendingTogether*/,
   "Description": "",
+  "SymbolTags": "16",
   "InputUis": [
     {
       "InputId": "8c6f79e9-5298-4973-a1bf-7575d013ea65"/*UniformScale*/,

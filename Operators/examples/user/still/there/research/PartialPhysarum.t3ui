@@ -1,6 +1,7 @@
 {
   "Id": "8adede33-fbdd-4ee9-b76e-cf2af28999c5"/*PartialPhysarum*/,
   "Description": "",
+  "SymbolTags": "4096",
   "InputUis": [],
   "SymbolChildUis": [
     {
