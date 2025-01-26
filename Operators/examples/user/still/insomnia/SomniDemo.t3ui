@@ -1,6 +1,7 @@
 {
   "Id": "f05356b6-3456-4a1b-988c-0c8f89fb4816"/*SomniDemo*/,
   "Description": "A quick production for Evoke 2022. Ranked 3rd.",
+  "SymbolTags": "4096",
   "InputUis": [],
   "SymbolChildUis": [
     {

@@ -1,4 +1,4 @@
-namespace Examples.user.still.fc3;
+namespace Examples.user.still.fc3_noloops;
 
 [Guid("6d594c55-a180-4742-8182-20b38929bab5")]
 internal sealed class _LenseFlareSetupFc3 : Instance<_LenseFlareSetupFc3>

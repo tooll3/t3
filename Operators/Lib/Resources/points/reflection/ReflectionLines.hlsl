@@ -11,12 +11,11 @@ cbuffer Params : register(b0)
     float SpreadColorShift;
 }
 
-StructuredBuffer<LegacyPoint> SourcePoints : t0;
-StructuredBuffer<PbrVertex> Vertices: t1;
-StructuredBuffer<int3> Indices: t2;
+StructuredBuffer<Point> SourcePoints : t0;
+StructuredBuffer<PbrVertex> Vertices : t1;
+StructuredBuffer<int3> Indices : t2;
 
-RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
-
+RWStructuredBuffer<Point> ResultPoints : u0;
 
 // Casual Moller-Trumbore GPU Ray-Triangle Intersection Routine
 // bool intersectMT(
@@ -46,7 +45,7 @@ RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
 //     inverseD = 1.0f / inverseD;
 //     float u = (uv * wv -  vv * wu) * inverseD;
 
-//     if (u < 0.0f || u > 1.0f) 
+//     if (u < 0.0f || u > 1.0f)
 //         //return -1.0f;
 //         return false;
 
@@ -79,7 +78,8 @@ bool intersect(
     float a = dot(e_1, q);
 
     // Backfacing / nearly parallel, or close to the limit of precision?
-    if ((dot(n, dir) >= 0) || (abs(a) <= kEpsilon)) return false;
+    if ((dot(n, dir) >= 0) || (abs(a) <= kEpsilon))
+        return false;
 
     float3 s = (orig - v0) / a;
     float3 r = cross(s, e_1);
@@ -88,7 +88,7 @@ bool intersect(
     b[1] = dot(r, dir);
     b[2] = 1.0f - b[0] - b[1];
 
-    t = dot(e_2,r);
+    t = dot(e_2, r);
 
     // Intersected inside triangle?
     return ((b[0] >= 0) && (b[1] >= 0) && (b[2] >= 0) && (t >= 0));
@@ -97,17 +97,14 @@ bool intersect(
 static const float NaN = sqrt(-1);
 
 static const int RAY_THREAD_COUNT = 8;
-static const int FACE_THREAD_COUNT = 512/RAY_THREAD_COUNT;
+static const int FACE_THREAD_COUNT = 512 / RAY_THREAD_COUNT;
 
 groupshared int BestHitIntDistances[RAY_THREAD_COUNT];
 groupshared int BestHitIndices[RAY_THREAD_COUNT];
 groupshared float3 BestHitPositions[RAY_THREAD_COUNT];
 groupshared float2 BestHitBaryUV[RAY_THREAD_COUNT];
 
-
-
-[numthreads(RAY_THREAD_COUNT,FACE_THREAD_COUNT,1)]
-void main(uint3 i : SV_DispatchThreadID, uint3 GTid : SV_GroupThreadID)
+[numthreads(RAY_THREAD_COUNT, FACE_THREAD_COUNT, 1)] void main(uint3 i : SV_DispatchThreadID, uint3 GTid : SV_GroupThreadID)
 {
     uint rayCount, stride;
     SourcePoints.GetDimensions(rayCount, stride);
@@ -120,29 +117,28 @@ void main(uint3 i : SV_DispatchThreadID, uint3 GTid : SV_GroupThreadID)
     uint faceThreadId = i.y;
 
     uint stepCount = (uint)StepCount; // including separator
-    uint rayGroupStartIndex= i.x * stepCount;
+    uint rayGroupStartIndex = i.x * stepCount;
 
-    LegacyPoint p = SourcePoints[i.x];
+    Point p = SourcePoints[i.x];
 
     // Write ray start and seperator
     ResultPoints[rayGroupStartIndex + 0] = p;
-    ResultPoints[rayGroupStartIndex + stepCount -1].W = NaN;
+    ResultPoints[rayGroupStartIndex + stepCount - 1].Scale = NaN;
 
     float3 rayOrigin = p.Position;
-    float3 rayDirection = qRotateVec3( float3(0,0,1), p.Rotation);
-    float w = p.W;
+    float3 rayDirection = qRotateVec3(float3(0, 0, 1), p.Rotation);
+    float fx1 = p.FX1;
 
     int _bestHitIndex = -1;
     float3 _bestHitPosition = rayOrigin + rayDirection * Extend;
     float2 _bestHitBaryUv = 0;
-    for(uint stepIndex=1; stepIndex < (stepCount - 1); stepIndex++ )
+    for (uint stepIndex = 1; stepIndex < (stepCount - 1); stepIndex++)
     {
-
-        if(faceThreadId == 0) 
+        if (faceThreadId == 0)
         {
-            if(rayId < rayCount) 
+            if (rayId < rayCount)
             {
-                BestHitIntDistances[rayThreadId] = 99999999;        
+                BestHitIntDistances[rayThreadId] = 99999999;
                 BestHitIndices[rayThreadId] = -1;
                 BestHitPositions[rayThreadId] = rayOrigin + rayDirection * Extend;
 
@@ -153,59 +149,71 @@ void main(uint3 i : SV_DispatchThreadID, uint3 GTid : SV_GroupThreadID)
         }
         GroupMemoryBarrierWithGroupSync();
 
-        int faceGroupCount = faceCount/FACE_THREAD_COUNT;
-        for(uint faceGroupStartIndex = 0 ; faceGroupStartIndex < faceCount ; faceGroupStartIndex += FACE_THREAD_COUNT ) 
+        int faceGroupCount = faceCount / FACE_THREAD_COUNT;
+        for (uint faceGroupStartIndex = 0; faceGroupStartIndex < faceCount; faceGroupStartIndex += FACE_THREAD_COUNT)
         {
             uint faceId = faceThreadId + faceGroupStartIndex;
-            if(faceId < faceCount) 
+            if (faceId < faceCount)
             {
                 int3 f = Indices[faceId];
                 float3 bary;
                 float t;
 
-                if(intersect(
-                    rayOrigin,
-                    rayDirection,
-                    Vertices[f[0]].Position,
-                    Vertices[f[1]].Position,
-                    Vertices[f[2]].Position,
-                    bary,
-                    t
-                )) {
+                if (intersect(
+                        rayOrigin,
+                        rayDirection,
+                        Vertices[f[0]].Position,
+                        Vertices[f[1]].Position,
+                        Vertices[f[2]].Position,
+                        bary,
+                        t))
+                {
                     float org;
                     int intt = t * 1000;
                     InterlockedMin(BestHitIntDistances[rayThreadId], intt, org);
-                    if(org > intt) {
+                    if (org > intt)
+                    {
                         BestHitIndices[rayThreadId] = faceId;
                         BestHitBaryUV[rayThreadId] = bary.zx;
-                        BestHitPositions[rayThreadId] = rayOrigin + rayDirection *t;
+                        BestHitPositions[rayThreadId] = rayOrigin + rayDirection * t;
 
                         _bestHitIndex = faceId;
                         _bestHitBaryUv = bary.zx;
-                        _bestHitPosition = rayOrigin + rayDirection *t;
+                        _bestHitPosition = rayOrigin + rayDirection * t;
                     }
                 }
             }
-            //GroupMemoryBarrierWithGroupSync();
+            // GroupMemoryBarrierWithGroupSync();
         }
         GroupMemoryBarrierWithGroupSync();
 
+        _bestHitIndex = BestHitIndices[rayThreadId];
 
-        _bestHitIndex = BestHitIndices[rayThreadId]; 
-
-
-        if(_bestHitIndex < 0)
+        if (_bestHitIndex < 0)
         {
             rayOrigin += rayDirection * Extend;
             ResultPoints[rayGroupStartIndex + stepIndex].Rotation = p.Rotation;
             ResultPoints[rayGroupStartIndex + stepIndex].Position = rayOrigin;
-            ResultPoints[rayGroupStartIndex + stepIndex].W = w;
+
+            ResultPoints[rayGroupStartIndex + stepIndex].Scale = p.Scale;
+            ResultPoints[rayGroupStartIndex + stepIndex].FX2 = p.FX2;
+            ResultPoints[rayGroupStartIndex + stepIndex].Color = p.Color;
+
+            ResultPoints[rayGroupStartIndex + stepIndex].Position = rayOrigin;
+
+            ResultPoints[rayGroupStartIndex + stepIndex].FX1 = fx1;
         }
-        else {            
-            _bestHitPosition = BestHitPositions[rayThreadId];  
+        else
+        {
+            _bestHitPosition = BestHitPositions[rayThreadId];
             rayOrigin = _bestHitPosition;
             ResultPoints[rayGroupStartIndex + stepIndex].Position = rayOrigin;
-            ResultPoints[rayGroupStartIndex + stepIndex].W = w;
+            ResultPoints[rayGroupStartIndex + stepIndex].Rotation = p.Rotation;
+            ResultPoints[rayGroupStartIndex + stepIndex].FX1 = fx1;
+
+            ResultPoints[rayGroupStartIndex + stepIndex].Scale = p.Scale;
+            ResultPoints[rayGroupStartIndex + stepIndex].FX2 = p.FX2;
+            ResultPoints[rayGroupStartIndex + stepIndex].Color = p.Color;
 
             float3 n0 = normalize(Vertices[Indices[_bestHitIndex][0]].Normal);
             float3 n1 = normalize(Vertices[Indices[_bestHitIndex][1]].Normal);
@@ -215,20 +223,21 @@ void main(uint3 i : SV_DispatchThreadID, uint3 GTid : SV_GroupThreadID)
             float u = _bestHitBaryUv.x;
             float v = _bestHitBaryUv.y;
 
-            float3 n = normalize(u*n0 + v*n1 + (1 - u - v)*n2);
-            w *= DecayW;
+            float3 n = normalize(u * n0 + v * n1 + (1 - u - v) * n2);
+            fx1 *= DecayW;
 
-            //rayDirection= reflect( rayDirection, n * 1);
+            // rayDirection= reflect( rayDirection, n * 1);
             float3 I = rayDirection;
-            //float3 R = I - 2* ( dot(n,I)* n);
+            // float3 R = I - 2* ( dot(n,I)* n);
 
-            float phi = acos(dot( n,I ));
-            phi += (w- SpreadColorShift) * SpreadColor;
-            float3 R= I - 2*cos(phi) * n;
+            float phi = acos(dot(n, I));
+            phi += (fx1 - SpreadColorShift) * SpreadColor;
+            float3 R = I - 2 * cos(phi) * n;
             rayDirection = R;
-            //rayDirection= reflect( rayDirection, n);
+            // rayDirection= reflect( rayDirection, n);
         }
 
         GroupMemoryBarrierWithGroupSync();
+        ResultPoints[rayGroupStartIndex + stepCount - 1].Scale = NaN;
     }
 }

@@ -1,6 +1,7 @@
 {
   "Id": "3ddae933-ed91-4773-af39-a35c89dcec11"/*Nevoke*/,
   "Description": "A quick render test",
+  "SymbolTags": "5120",
   "InputUis": [],
   "SymbolChildUis": [
     {

@@ -29,9 +29,11 @@ x Fix MultiInput on disconnect re-layout
 - Add options for hidden secondary outputs
 x Fix overlapping outputs in RevisionPanic
 x Rename children with Return
+- Fix dragging from parameter window
+- Fix extracting from parameter window
 
 Feats:
-- Copy and Paste Values
+x Copy and Paste Values
 - Maybe show tags in symbolBrowser / Placeholder
 
 Ops

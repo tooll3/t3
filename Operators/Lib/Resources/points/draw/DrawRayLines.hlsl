@@ -1,6 +1,6 @@
 #include "shared/point.hlsl"
 #include "shared/quat-functions.hlsl"
-// struct LegacyPoint
+// struct Point
 // {
 //     float3 position;
 //     float size;
@@ -58,7 +58,7 @@ struct psInput
 
 sampler texSampler : register(s0);
 
-StructuredBuffer<LegacyPoint> Points : t0;
+StructuredBuffer<Point> Points : t0;
 Texture2D<float4> texture2 : register(t1);
 
 psInput vsMain(uint id : SV_VertexID)
@@ -75,11 +75,11 @@ psInput vsMain(uint id : SV_VertexID)
     uint particleId = id / 6;
     float3 cornerFactors = Corners[quadIndex];
 
-    // LegacyPoint pointAA = Points[ particleId<1 ? 0: particleId-1];
-    LegacyPoint pointA = Points[particleId];
-    LegacyPoint pointB = Points[particleId + 1];
+    // Point pointAA = Points[ particleId<1 ? 0: particleId-1];
+    Point pointA = Points[particleId];
+    Point pointB = Points[particleId + 1];
 
-    if (isnan(pointA.W) || isnan(pointB.W))
+    if (isnan(pointA.Scale.x) || isnan(pointB.Scale.x))
     {
         output.position = 0;
         return output;

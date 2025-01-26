@@ -1,6 +1,7 @@
 {
   "Id": "71ac2f3c-c85f-43d1-9929-a8445b797e68"/*Meteoriks23*/,
   "Description": "Some visuals for the meteoriks ceremony.",
+  "SymbolTags": "4096",
   "InputUis": [],
   "SymbolChildUis": [
     {

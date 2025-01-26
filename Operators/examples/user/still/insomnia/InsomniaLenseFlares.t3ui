@@ -1,6 +1,7 @@
 {
   "Id": "41dbfc2d-06e7-40b2-a2f3-720fb1d28ed8"/*InsomniaLenseFlares*/,
   "Description": "",
+  "SymbolTags": "4096",
   "InputUis": [
     {
       "InputId": "1aa4e644-d634-4d5e-a4fa-cdf14df08548"/*RandomSeed*/,

@@ -317,7 +317,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\prod-insomnia\\images\\sonmi-logo.png"
+          "Value": "Resources/user/still/prod-insomnia/images/sonmi-logo.png"
         }
       ],
       "Outputs": []
@@ -1512,7 +1512,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\prod-insomnia\\geometry\\scans\\death_10k.obj"
+          "Value": "Resources/user/still/prod-insomnia/geometry/scans/death_10k.obj"
         },
         {
           "Id": "aa19e71d-329c-448b-901c-565bf8c0da4f"/*SortVertices*/,
@@ -3921,7 +3921,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\common\\meshes\\cube-bevelled.obj"
+          "Value": "Resources/common/meshes/cube-bevelled.obj"
         }
       ],
       "Outputs": []
@@ -5360,7 +5360,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\prod-insomnia\\geometry\\scans\\the-announcement-lightmap.png"
+          "Value": "Resources/user/still/prod-insomnia/geometry/scans/the-announcement-lightmap.png"
         }
       ],
       "Outputs": []
@@ -5372,7 +5372,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\prod-insomnia\\geometry\\scans\\the-announcement-4k.obj"
+          "Value": "Resources/user/still/prod-insomnia/geometry/scans/the-announcement-4k.obj"
         }
       ],
       "Outputs": [
@@ -5389,7 +5389,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\prod-insomnia\\geometry\\somni-layout-v02.obj"
+          "Value": "Resources/user/still/prod-insomnia/geometry/somni-layout-v02.obj"
         },
         {
           "Id": "aa19e71d-329c-448b-901c-565bf8c0da4f"/*SortVertices*/,
@@ -7440,7 +7440,7 @@
         "Bpm": 165.0,
         "DiscardAfterUse": true,
         "IsSoundtrack": true,
-        "FilePath": "user\\still\\prod-insomnia\\soundtrack\\jungleDeez_4Evoke-01.3_master-1.mp3"
+        "FilePath": "user/still/prod-insomnia/soundtrack/jungleDeez_4Evoke-01.3_master-1.mp3"
       }
     ]
   },
