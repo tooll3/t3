@@ -423,6 +423,9 @@ internal sealed class MagGraphLayout
             if (outputIndex == 0)
             {
                 item.PrimaryType = output.ValueType;
+                if (hasNoInputs)
+                    visibleIndex++;
+
             }
             else
             {
@@ -431,8 +434,6 @@ internal sealed class MagGraphLayout
         }
 
         // Fix height
-        if (hasNoInputs)
-            visibleIndex++;
 
         return visibleIndex;
     }
