@@ -33,7 +33,8 @@ public sealed partial class Symbol
             }
         }
 
-        Animator.CreateUpdateActionsForExistingCurves(newChildInstances);
+        
+        Animator.CreateUpdateActionsForExistingCurves( newChildInstances);
         return newChild;
     }
 

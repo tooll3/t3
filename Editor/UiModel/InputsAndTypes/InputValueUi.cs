@@ -467,26 +467,26 @@ public abstract class InputValueUi<T> : IInputUi
                              symbolUi.FlagAsModified();
                          }
                      }
-
+                     
                      if (ImGui.MenuItem("Reset to default", !input.IsDefault))
                      {
                          UndoRedoStack.AddAndExecute(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id,
                                                                              input));
                      }
-
+                     
                      if (ImGui.MenuItem("Extract as connection operator"))
                      {
                          ParameterExtraction.ExtractAsConnectedOperator(typedInputSlot, symbolChildUi, inputSlot.Input);
                      }
-
+                     
                      if (ImGui.MenuItem("Publish as Input"))
                      {
                          InputArea.PublishAsInput(nodeSelection, inputSlot, symbolChildUi, input);
                      }
-
+                     
                      if (ImGui.MenuItem("Parameters settings"))
                          editState = InputEditStateFlags.ShowOptions;
-
+                     
                      if (ParameterWindow.IsAnyInstanceVisible() && ImGui.MenuItem("Rename input"))
                      {
                          ParameterWindow.RenameInputDialog.ShowNextFrame(symbolChildUi.SymbolChild.Symbol,
