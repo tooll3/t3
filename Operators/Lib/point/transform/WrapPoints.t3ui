@@ -1,7 +1,7 @@
 {
   "Id": "b263a6a1-0872-4223-80e7-5e09f4aea19d"/*WrapPoints*/,
   "Description": "Wraps points within a boundary volume.",
-  "SymbolTags": "4096",
+  "SymbolTags": "1024",
   "InputUis": [
     {
       "InputId": "4d74f19f-0f8b-4918-9999-8ae980e33d39"/*Points*/,

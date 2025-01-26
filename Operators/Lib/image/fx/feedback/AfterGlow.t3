@@ -99,7 +99,7 @@
       "Outputs": []
     },
     {
-      "Id": "2c8f062a-7e5c-4464-b8df-f601ada6e32b"/*RenderQuad*/,
+      "Id": "2c8f062a-7e5c-4464-b8df-f601ada6e32b"/*DrawQuad*/,
       "SymbolId": "b89c5923-cc58-4d7a-8dce-eb1f8cdfc6e8",
       "InputValues": [
         {
@@ -197,7 +197,7 @@
       "Outputs": []
     },
     {
-      "Id": "4f2d6e89-60ab-4b7b-8f60-47783e77cbf1"/*RenderQuad*/,
+      "Id": "4f2d6e89-60ab-4b7b-8f60-47783e77cbf1"/*DrawQuad*/,
       "SymbolId": "b89c5923-cc58-4d7a-8dce-eb1f8cdfc6e8",
       "InputValues": [
         {

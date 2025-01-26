@@ -1,6 +1,7 @@
 {
   "Id": "957961ad-797c-48ac-b9d6-7f2fa2ce17eb"/*ParamBlender*/,
   "Description": "A helper that uses the mouse input to explore two parameter ranges.\n\nIt either returns are default value or a alternative ranges mapped to mouse x y.\n",
+  "SymbolTags": "16",
   "InputUis": [
     {
       "InputId": "46801ba5-4e1d-4148-aa91-fe2491822e26"/*B_ExploreRange*/,
