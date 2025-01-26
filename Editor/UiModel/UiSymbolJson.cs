@@ -13,9 +13,9 @@ using T3.Serialization;
 
 namespace T3.Editor.UiModel;
 
-public static class SymbolUiJson
+internal static class SymbolUiJson
 {
-    public static void WriteSymbolUi(SymbolUi symbolUi, JsonTextWriter writer)
+    internal static void WriteSymbolUi(SymbolUi symbolUi, JsonTextWriter writer)
     {
         try
         {

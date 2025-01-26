@@ -4,6 +4,7 @@ using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel.Modification;
 using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 
@@ -92,6 +93,12 @@ internal static class KeyboardActions
         if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.PasteFromClipboard))
         {
             NodeActions.PasteClipboard(context.Selector, context.Canvas, compositionOp);
+            context.Layout.FlagAsChanged();
+        }
+        
+        if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.PasteValues))
+        {
+            NodeActions.PasteValues(context.Selector, context.Canvas, context.CompositionInstance);
             context.Layout.FlagAsChanged();
         }
 

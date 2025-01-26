@@ -18,6 +18,7 @@ internal enum UserActions
     DeleteSelection,
     CopyToClipboard,
     PasteFromClipboard,
+    PasteValues,
     New,
 
     // Playback
@@ -272,6 +273,7 @@ internal sealed class KeyboardBinding
                   new KeyboardBinding(UserActions.DeleteSelection, new KeyCombination(Key.Backspace)) { _needsWindowFocus = true },
                   new KeyboardBinding(UserActions.CopyToClipboard, new KeyCombination(Key.C, ctrl: true)) { _needsWindowFocus = true },
                   new KeyboardBinding(UserActions.PasteFromClipboard, new KeyCombination(Key.V, ctrl: true)) { _needsWindowFocus = true },
+                  new KeyboardBinding(UserActions.PasteValues, new KeyCombination(Key.V, ctrl: true, shift:true)) { _needsWindowFocus = true },
 
                   // Playback
                   new KeyboardBinding(UserActions.PlaybackForward, new KeyCombination(Key.L)),

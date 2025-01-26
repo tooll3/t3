@@ -1,30 +1,33 @@
-﻿using T3.Core.DataTypes;
+﻿#nullable enable
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 
 namespace T3.Editor.UiModel.Commands.Animation;
 
-public class RemoveAnimationsCommand : ICommand
+internal sealed class RemoveAnimationsCommand : ICommand
 {
     public string Name { get; set; }
     public bool IsUndoable => true;
-        
-    public RemoveAnimationsCommand(Animator animator, IInputSlot[] inputSlots)
+
+    internal RemoveAnimationsCommand(Animator animator, IInputSlot[] inputSlots)
     {
         _animator = animator;
         _inputSlots = inputSlots;
-        if (inputSlots.Length == 1)
-        {
-            Name = $"Remove animation from {inputSlots[0].Parent.Symbol.Name}.{inputSlots[0].Input.Name}";
-        }
-        else
-        {
-            Name = $"Remove animation from {inputSlots.Length} parameters";
-        }
+        Name = inputSlots.Length == 1 
+                   ? $"Remove animation from {inputSlots[0].Parent.Symbol.Name}.{inputSlots[0].Input.Name}" 
+                   : $"Remove animation from {inputSlots.Length} parameters";
     }
         
     public void Do()
     {
+        var composition = _inputSlots[0].Parent.Parent;
+        if (composition == null)
+        {
+            Log.Error("Failed to remove keyframes");
+            return;
+        }
+        
         foreach (var input in _inputSlots)
         {
             var curveSet = new List<Curve>();
@@ -34,9 +37,8 @@ public class RemoveAnimationsCommand : ICommand
             }
             _curveSets.Add(curveSet);
             _animator.RemoveAnimationFrom(input);
-                
         }
-        _inputSlots[0].Parent.Parent.Symbol.CreateOrUpdateActionsForAnimatedChildren();
+        composition.Symbol.CreateOrUpdateActionsForAnimatedChildren();
     }
         
     public void Undo()

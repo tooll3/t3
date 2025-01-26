@@ -4,27 +4,27 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Editor.UiModel.Commands.Graph;
 
-public class ChangeInputValueCommand : ICommand
+public sealed class ChangeInputValueCommand : ICommand
 {
     public string Name => "Change Input Value";
     public bool IsUndoable => true;
 
-    public ChangeInputValueCommand(Symbol symbol, Guid symbolChildId, Symbol.Child.Input input, InputValue newValue)
+    public ChangeInputValueCommand(Symbol composition, Guid symbolChildId, Symbol.Child.Input input, InputValue newValue)
     {
-        _inputParentSymbol = symbol;
-        _inputParentSymbolId = symbol.Id;
+        _inputParentSymbol = composition;
+        _inputParentSymbolId = composition.Id;
             
         _childId = symbolChildId;
         _inputId = input.InputDefinition.Id;
-        _isAnimated = symbol.Animator.IsAnimated(_childId, _inputId);
+        _wasAnimated = composition.Animator.IsAnimated(_childId, _inputId);
         _wasDefault = input.IsDefault;
         _animationTime = Playback.Current.TimeInBars;
         OriginalValue = input.Value.Clone();
         _newValue = newValue == null ? input.Value.Clone() : newValue.Clone();
             
-        if (_isAnimated)
+        if (_wasAnimated)
         {
-            _originalKeyframes = symbol.Animator.GetTimeKeys(_childId, _inputId, _animationTime).ToList();
+            _originalKeyframes = composition.Animator.GetTimeKeys(_childId, _inputId, _animationTime).ToList();
         }
     }
 
@@ -34,29 +34,25 @@ public class ChangeInputValueCommand : ICommand
             throw new Exception("Symbol not found: " + _inputParentSymbolId);
             
         var inputParentSymbol = inputParentSymbolUi.Symbol;
-        if (_isAnimated)
+        if (_wasAnimated)
         {
-            var wasNewKeyframe = false;
+            var hasNewKeyframes = false;
             foreach (var v in _originalKeyframes)
             {
                 if (v == null)
                 {
-                    wasNewKeyframe = true;
+                    hasNewKeyframes = true;
                     break;
                 }
             }
 
             var animator = inputParentSymbol.Animator;
-            if (wasNewKeyframe) // todo: these are identical?
+            if (hasNewKeyframes) 
             {
-                //Log.Debug("  was new keyframe...");
-                animator.SetTimeKeys(_childId, _inputId,_animationTime, _originalKeyframes); // Remove keyframes
+                // todo: these are identical?
             }
-            else
-            {
-                //Log.Debug("  restore original keyframes...");
-                animator.SetTimeKeys(_childId, _inputId,_animationTime, _originalKeyframes);
-            }
+
+            animator.SetTimeKeys(_childId, _inputId,_animationTime, _originalKeyframes); // TODO: Remove keyframes
 
             var symbolChild = inputParentSymbol.Children[_childId];
                 
@@ -112,7 +108,7 @@ public class ChangeInputValueCommand : ICommand
             return;
         }
 
-        if (_isAnimated)
+        if (_wasAnimated)
         {
             var inputUi = symbolUi.InputUis[_inputId];
             var animator = inputParentSymbol.Animator;
@@ -154,7 +150,7 @@ public class ChangeInputValueCommand : ICommand
     private readonly Guid _childId;
     private readonly Guid _inputId;
     private readonly bool _wasDefault;
-    private readonly bool _isAnimated;
+    private readonly bool _wasAnimated;
     private readonly double _animationTime;
     private readonly List<VDefinition> _originalKeyframes;
 }

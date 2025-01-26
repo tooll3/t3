@@ -13,6 +13,7 @@ using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Exporting;
 using T3.Editor.UiModel.InputsAndTypes;
+using T3.Editor.UiModel.Modification;
 using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.MagGraph.Interaction;
@@ -203,6 +204,12 @@ internal static class GraphContextMenu
         if (ImGui.MenuItem("Paste", KeyboardBinding.ListKeyboardShortcuts(UserActions.PasteFromClipboard, false)))
         {
             NodeActions.PasteClipboard(nodeSelection, context.Canvas, context.CompositionInstance);
+            context.Layout.FlagAsChanged();
+        }
+        
+        if (ImGui.MenuItem("Paste Values", KeyboardBinding.ListKeyboardShortcuts(UserActions.PasteValues, false)))
+        {
+            NodeActions.PasteValues(nodeSelection, context.Canvas, context.CompositionInstance);
             context.Layout.FlagAsChanged();
         }
 

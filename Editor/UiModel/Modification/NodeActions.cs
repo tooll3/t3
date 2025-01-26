@@ -1,4 +1,8 @@
-﻿using System.IO;
+﻿#nullable enable
+
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,16 +16,16 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
 using T3.Editor.SystemUi;
-using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
+using T3.Editor.UiModel.Commands.Animation;
 using T3.Editor.UiModel.Commands.Annotations;
 using T3.Editor.UiModel.Commands.Graph;
 using T3.Editor.UiModel.InputsAndTypes;
-using T3.Editor.UiModel.Modification;
 using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
+using T3.Serialization;
 
-namespace T3.Editor.Gui.Graph.Interaction;
+namespace T3.Editor.UiModel.Modification;
 
 /// <summary>
 /// Various actions performed on selected nodes triggered by hotkeys for context menus
@@ -60,9 +64,11 @@ internal static class NodeActions
         UndoRedoStack.AddAndExecute(new MacroCommand("Disable/Enable", commands));
     }
 
-    public static void DeleteSelectedElements(NodeSelection nodeSelection, SymbolUi compositionSymbolUi, List<SymbolUi.Child> selectedChildUis = null,
-                                              List<IInputUi> selectedInputUis = null,
-                                              List<IOutputUi> selectedOutputUis = null)
+    public static void DeleteSelectedElements(NodeSelection nodeSelection, 
+                                              SymbolUi compositionSymbolUi, 
+                                              List<SymbolUi.Child>? selectedChildUis = null,
+                                              List<IInputUi>? selectedInputUis = null,
+                                              List<IOutputUi>? selectedOutputUis = null)
     {
         var commands = new List<ICommand>();
         selectedChildUis ??= nodeSelection.GetSelectedChildUis().ToList();
@@ -195,7 +201,7 @@ internal static class NodeActions
 
             var symbolUiJson = jArray[1];
             var hasContainerSymbolUi = SymbolUiJson.TryReadSymbolUiExternal(symbolUiJson, containerSymbol, out var containerSymbolUi);
-            if (!hasContainerSymbolUi)
+            if (!hasContainerSymbolUi || containerSymbolUi == null)
             {
                 Log.Error($"Failed to paste symbol due to invalid symbol ui json");
                 return;
@@ -234,18 +240,182 @@ internal static class NodeActions
             Log.Debug("Paste exception: " + e);
         }
     }
-
-    private static bool TryGetPastedSymbol(JToken jToken, SymbolPackage package, out Symbol symbol)
+    
+    /// <summary>
+    /// Pasting values and other properties onto selected nodes works under the following situation:
+    /// - For a single op Symbol (e.g. Remap)
+    ///   - its values can be pasted onto all selected operators of that type (but not itself)
+    /// - If there were more than instance of that Symbol, the assignment would be undefined. So nothing should be done.
+    /// - Ideally, special cases like Animation, IsBypassed should also be transferred.
+    /// - If there is only a single Child in the clipboard and the Symbol does NOT match any of the selected children,
+    ///   we could still try to paste values onto parameters with identical names. This would be extremely valuable for
+    ///   copying values between different versions of ops 
+    /// 
+    /// </summary>
+    public static void PasteValues(NodeSelection nodeSelection, ScalableCanvas canvas, Instance compositionOp)
     {
-        var guidString = jToken[SymbolJson.JsonKeys.Id].Value<string>();
-        var hasId = Guid.TryParse(guidString, out var guid);
-
-        if (!hasId)
+        try
         {
-            Log.Error($"Failed to parse guid in symbol json: `{guidString}`");
+            var selectedChildUis = nodeSelection.GetSelectedChildUis().ToList();
+            if (selectedChildUis.Count ==0)
+            {
+                Log.Debug("Please select ops to paste values into.");
+                return;
+            }
+            
+            var text = EditorUi.Instance.GetClipboardText();
+            using var reader = new StringReader(text);
+            var jsonReader = new JsonTextReader(reader);
+            if (JToken.ReadFrom(jsonReader, SymbolJson.LoadSettings) is not JArray jArray)
+                return;
+
+            var symbolJson = jArray[0];
+
+            if (!TryGetPastedSymbol(symbolJson, compositionOp.Symbol.SymbolPackage, out var containerSymbol))
+            {
+                Log.Error("Failed to paste values. Incorrect format.");
+                return;
+            }
+
+            //var cmd = new MacroCommand("Paste values");
+            var cmds = new List<ICommand>();
+
+            // First pass collect symbol types
+            Dictionary<Symbol, List<Symbol.Child>> templateSymbols = [];
+            foreach (var child in containerSymbol.Children.Values)
+            {
+                if (!templateSymbols.TryGetValue(child.Symbol, out var list))
+                {
+                    list = [];
+                    templateSymbols.Add(child.Symbol, list);
+                }
+                list.Add(child);
+            }
+            
+            // Filter arbitrary symbol
+            var sourceChildUis = new List<Symbol.Child>();
+            foreach (var (symbol, symbolChildren) in templateSymbols)
+            {
+                if (symbolChildren.Count > 1)
+                {
+                    Log.Debug($"Can't paste values from {symbolChildren.Count} {symbol.Name}. Skipping.");
+                }
+                else
+                {
+                    sourceChildUis.Add(symbolChildren[0]);
+                }
+            }
+
+            var singleSource = sourceChildUis.Count == 1 ? sourceChildUis[0] : null;
+            
+            foreach (var target in selectedChildUis)
+            {
+                var source = sourceChildUis.FirstOrDefault(s => s.Symbol == target.SymbolChild.Symbol);
+                if(source !=null) 
+                {
+                    Log.Debug(" Found match op for" + target);
+                    foreach (var sourceInput in source.Inputs.Values)
+                    {
+                        if (target.SymbolChild.Inputs.TryGetValue(sourceInput.Id, out var targetInput))
+                        {
+                            ApplyChangesToInput(source, sourceInput, target.SymbolChild, targetInput, cmds);
+                        }
+                    }
+                }
+                else  if (singleSource != null)
+                {
+                    foreach (var targetInput in target.SymbolChild.Inputs.Values)
+                    {
+                        var targetInputName = targetInput.InputDefinition.Name;
+                        var targetInputType = targetInput.InputDefinition.ValueType;
+
+                        foreach (var sourceInput in singleSource.Inputs.Values)
+                        {
+                            var singleSourceName = sourceInput.InputDefinition.Name;
+                            var singleSourceType = sourceInput.InputDefinition.ValueType;
+
+                            if (singleSourceName == targetInputName && singleSourceType == targetInputType)
+                            {
+                                ApplyChangesToInput(singleSource, sourceInput, target.SymbolChild, targetInput, cmds);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (cmds.Count > 0)
+            {
+                UndoRedoStack.AddAndExecute(new MacroCommand("Paste values", cmds));
+            }
+            
+        }
+        catch (Exception e)
+        {
+            Log.Warning("Could not paste selection from clipboard.");
+            Log.Debug("Paste exception: " + e);
+        }
+
+        return;
+
+        void ApplyChangesToInput(Symbol.Child source, Symbol.Child.Input sourceInput,
+                                 Symbol.Child target,
+                                 Symbol.Child.Input targetInput,
+                                 List<ICommand> commands)
+        {
+            Debug.Assert(source.Parent != null);
+            Debug.Assert(target.Parent != null);
+            
+            // Copy default state
+            if (sourceInput.IsDefault)
+            {
+                if (targetInput.IsDefault)
+                    return;
+
+                commands.Add(new ResetInputToDefault(target.Parent, target.Id, targetInput));
+                return;
+            }
+
+            var isSourceAnimated = source.Parent.Animator.IsInputAnimated(source, sourceInput);
+            var isTargetAnimated = target.Parent.Animator.IsInputAnimated(target, targetInput);
+
+            if (isTargetAnimated || isSourceAnimated)
+            {
+                Log.Debug($" skipping animated parameter {source} {sourceInput}...");
+                //commands.Add(new RemoveAnimationsCommand(target.Parent.Animator, ));
+            }
+            
+            if (source.Parent.Animator.IsInputAnimated(source, sourceInput))
+            {
+                commands.Add(new ChangeInputValueCommand(target.Parent, target.Id, targetInput, sourceInput.Value));
+                //var x = new AddAnimationCommand(target.Parent!.Animator, inputSlot),
+            }
+            else
+            {
+                // Copy values
+                commands.Add(new ChangeInputValueCommand(target.Parent, target.Id, targetInput, sourceInput.Value));
+            }
+            
+        }
+    }
+
+    private static bool TryGetPastedSymbol(JToken jToken, SymbolPackage package, [NotNullWhen(true)]out  Symbol? symbol)
+    {
+        if (!JsonUtils.TryGetGuid(jToken[SymbolJson.JsonKeys.Id], out var guid))
+        {
+            Log.Error($"Failed to parse guid in symbol json");
             symbol = null;
             return false;
         }
+        
+        //var guidString = jToken[SymbolJson.JsonKeys.Id].Value<string>();
+        // var hasId = Guid.TryParse(guidString, out var guid);
+        //
+        // if (!hasId)
+        // {
+        //     Log.Error($"Failed to parse guid in symbol json: `{guidString}`");
+        //     symbol = null;
+        //     return false;
+        // }
 
         var jsonResult = SymbolJson.ReadSymbolRoot(guid, jToken, typeof(object), package);
 
@@ -271,7 +441,9 @@ internal static class NodeActions
     /// <summary>
     /// Todo: There must be a better way... 
     /// </summary>
-    internal static bool TryGetShaderPath(Instance instance, out string filePath, out IResourcePackage owner)
+    internal static bool TryGetShaderPath(Instance instance, 
+                                          [NotNullWhen(true)] out string? filePath, 
+                                          [NotNullWhen(true)]out IResourcePackage? owner)
     {
         bool found = false;
         if (instance is IShaderOperator<PixelShader> pixelShader)
@@ -298,7 +470,8 @@ internal static class NodeActions
 
         return found;
 
-        static bool TryGetSourceFile<T>(IShaderOperator<T> op, out string filePath, out IResourcePackage package) where T : AbstractShader
+        static bool TryGetSourceFile<T>(IShaderOperator<T> op, out string filePath, 
+                                        [NotNullWhen(true)] out IResourcePackage? package) where T : AbstractShader
         {
             var relative = op.Path.GetCurrentValue();
             var instance = op.Instance;
@@ -316,7 +489,7 @@ internal static class NodeActions
             if (node is not SymbolUi.Child childUi)
                 continue;
 
-            if (!compositionOp.Children.TryGetValue(childUi.Id, out var instance))
+            if (!compositionOp.Children.TryGetValue(childUi.Id, out var instance) || instance.Parent == null)
             {
                 Log.Error("Can't disconnect missing instance");
                 continue;
