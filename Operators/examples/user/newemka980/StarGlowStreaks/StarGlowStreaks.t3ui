@@ -1,6 +1,7 @@
 {
   "Id": "ecbb40c4-aef4-49a8-ac89-e82c3a09862f"/*StarGlowStreaks*/,
   "Description": "Renders streaks onto the incoming image. You can use the threshold to limit the range that is used for streaks. Also, check out the presets.",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "069a3776-3084-4a13-aee3-dd9fe6c6c9e1"/*GlareModes*/,

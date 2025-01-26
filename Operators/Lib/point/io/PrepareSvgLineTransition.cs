@@ -57,7 +57,7 @@ internal sealed class PrepareSvgLineTransition : Instance<PrepareSvgLineTransiti
         segments.Clear();
         for (var pointIndex = 0; pointIndex < sourcePoints.NumElements; pointIndex++)
         {
-            if (float.IsNaN(sourcePoints.TypedElements[pointIndex].F1))
+            if (float.IsNaN(sourcePoints.TypedElements[pointIndex].Scale.X))
             {
                 var hasAtLeastTwoPoints = indexWithinSegment > 1;
                 if (hasAtLeastTwoPoints)
@@ -182,20 +182,20 @@ internal sealed class PrepareSvgLineTransition : Instance<PrepareSvgLineTransiti
         return progress;
     }
 
-    [Input(Guid = "5FD5EEA5-B7AB-406F-8C10-8435D59297B5")]
-    public readonly InputSlot<float> Spread = new();
+        [Input(Guid = "82b2e8d3-40c2-4a4c-a9ad-806d5097a8fd")]
+        public readonly InputSlot<T3.Core.DataTypes.StructuredList> SourcePoints = new InputSlot<T3.Core.DataTypes.StructuredList>();
 
-    [Input(Guid = "C1FA1A4E-8884-4A6F-AC80-F22D3B5DFE2F", MappedType = typeof(SpreadModes))]
-    public readonly InputSlot<int> SpreadMode = new();
+        [Input(Guid = "5FD5EEA5-B7AB-406F-8C10-8435D59297B5")]
+        public readonly InputSlot<float> Spread = new InputSlot<float>();
 
-    [Input(Guid = "8CEF763E-48E4-41F9-B429-0AD32B849ADF")]
-    public readonly InputSlot<float> RandomizeStart = new();
+        [Input(Guid = "C1FA1A4E-8884-4A6F-AC80-F22D3B5DFE2F", MappedType = typeof(SpreadModes))]
+        public readonly InputSlot<int> SpreadMode = new InputSlot<int>();
 
-    [Input(Guid = "0BCFBD7A-C01B-409F-A661-135DD27E8580")]
-    public readonly InputSlot<float> RandomizeDuration = new();
+        [Input(Guid = "8CEF763E-48E4-41F9-B429-0AD32B849ADF")]
+        public readonly InputSlot<float> RandomizeStart = new InputSlot<float>();
 
-    [Input(Guid = "82b2e8d3-40c2-4a4c-a9ad-806d5097a8fd")]
-    public readonly InputSlot<StructuredList> SourcePoints = new();
+        [Input(Guid = "0BCFBD7A-C01B-409F-A661-135DD27E8580")]
+        public readonly InputSlot<float> RandomizeDuration = new InputSlot<float>();
 
     private Random _random = new();
 

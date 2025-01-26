@@ -15,38 +15,13 @@
       "Outputs": []
     },
     {
-      "Id": "112d9cf0-f363-43a1-9a0f-e8d23961f401"/*Camera*/,
-      "SymbolId": "746d886c-5ab6-44b1-bb15-f3ce2fadf7e6",
-      "InputValues": [
-        {
-          "Id": "313596cc-3854-436b-89da-5fd40164ce76"/*Position*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": -0.4453594,
-            "Y": 0.5580569,
-            "Z": 1.5048687
-          }
-        },
-        {
-          "Id": "a7acb25c-d60c-43a6-b1df-2cd5c6e183f3"/*Target*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": -0.19509107,
-            "Y": 0.06450667,
-            "Z": 0.19724225
-          }
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "14d44ce8-ff89-48dc-ad8a-9a8d0c987fd5"/*LoadObj*/,
       "SymbolId": "be52b670-9749-4c0d-89f0-d8b101395227",
       "InputValues": [
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\still\\proj-there\\meshes\\statue-river-13k.obj"
+          "Value": "/Examples/user/still/proj-there/meshes/statue-river-5k.obj"
         }
       ],
       "Outputs": []
@@ -194,7 +169,34 @@
         {
           "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*LineWidth*/,
           "Type": "System.Single",
-          "Value": 0.015000001
+          "Value": 0.51
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "73ebf863-ba71-421c-bee7-312f13c5eff0"/*DrawLines*/,
+          "IsDisabled": true
+        }
+      ]
+    },
+    {
+      "Id": "783ae446-04b1-41a7-a431-cb305f60b5c2"/*PointTrail2*/,
+      "SymbolId": "945014cf-ba0b-40b3-85f9-f7deed70fa8d",
+      "InputValues": [
+        {
+          "Id": "274f1a1f-4dfa-4426-b53e-77c0c96cf7d8"/*IsEnabled*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
+          "Id": "98366176-fdf3-42e1-afbc-a87fc0f9d82d"/*Reset*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
+          "Id": "9a3998f9-f68a-4f8f-84dc-643e89f8c4f2"/*TrailLength*/,
+          "Type": "System.Int32",
+          "Value": 200
         }
       ],
       "Outputs": []
@@ -204,6 +206,11 @@
       "SymbolId": "25db2a97-38b2-4503-8842-fab3922d7a6c",
       "InputValues": [
         {
+          "Id": "56eac471-ad48-41ec-b617-cbcb67646c97"/*AddSeperatorThreshold*/,
+          "Type": "System.Single",
+          "Value": 0.16
+        },
+        {
           "Id": "63621a98-874b-4d1a-9724-f4fa70b8ccf1"/*Reset*/,
           "Type": "System.Boolean",
           "Value": false
@@ -211,7 +218,7 @@
         {
           "Id": "6a2cb3f0-3b5a-4551-a809-3dc172bb7d79"/*TrailLength*/,
           "Type": "System.Int32",
-          "Value": 500
+          "Value": 200
         },
         {
           "Id": "bcb7260e-8a84-4987-83ca-f31981ae94aa"/*IsEnabled*/,
@@ -243,11 +250,6 @@
       "Id": "ad81b40d-a6f5-415b-b0c3-a6eeb28702ca"/*SimFollowMeshSurface*/,
       "SymbolId": "03aa5f28-3f74-4feb-aa6a-36cdb2d7f0d9",
       "InputValues": [
-        {
-          "Id": "73e0911b-a10b-44aa-a8b3-7a31c4d2180b"/*SurfaceDistance*/,
-          "Type": "System.Single",
-          "Value": 0.012
-        },
         {
           "Id": "f13d61c1-c16b-44a4-bc29-471c2dff5a4c"/*Speed*/,
           "Type": "System.Single",
@@ -493,12 +495,6 @@
       "TargetSlotId": "b2e25cdf-a743-4e10-bf1f-c9b0f7474e11"
     },
     {
-      "SourceParentOrChildId": "58f00736-3fdb-42ef-8147-af3bcadc2ee7",
-      "SourceSlotId": "2d329133-29b9-4f56-b5a6-5ff7d83638fa",
-      "TargetParentOrChildId": "112d9cf0-f363-43a1-9a0f-e8d23961f401",
-      "TargetSlotId": "047b8fae-468c-48a7-8f3a-5fac8dd5b3c6"
-    },
-    {
       "SourceParentOrChildId": "5cd35ca5-335c-41b3-95fe-68147eb6103f",
       "SourceSlotId": "d80e1028-a48d-4171-8c8c-e6856bd2143d",
       "TargetParentOrChildId": "21074208-e2fe-4e38-9c12-84a72e930391",
@@ -535,16 +531,16 @@
       "TargetSlotId": "6d859756-0243-42c5-973d-6de2dcdc5609"
     },
     {
-      "SourceParentOrChildId": "856f3bd8-d29f-460d-8cb0-c34c0cb7ee4e",
-      "SourceSlotId": "6e3ca38f-78d6-4e2b-b8ab-10a906e058e2",
+      "SourceParentOrChildId": "783ae446-04b1-41a7-a431-cb305f60b5c2",
+      "SourceSlotId": "2a23b42c-ec03-401a-842a-6bdc0c633b7e",
       "TargetParentOrChildId": "62260e0f-db80-46d1-9e4b-a21dad34e83a",
       "TargetSlotId": "e15b6dc7-aaf9-4244-a4b8-4ac13ee7d23f"
     },
     {
       "SourceParentOrChildId": "ad81b40d-a6f5-415b-b0c3-a6eeb28702ca",
       "SourceSlotId": "124342ba-0117-4969-90d4-8085a9a42e52",
-      "TargetParentOrChildId": "856f3bd8-d29f-460d-8cb0-c34c0cb7ee4e",
-      "TargetSlotId": "4389838c-fd1d-4400-b8e5-f373a05adff7"
+      "TargetParentOrChildId": "783ae446-04b1-41a7-a431-cb305f60b5c2",
+      "TargetSlotId": "f22a4834-6333-4ed5-b07d-237692c61dc6"
     },
     {
       "SourceParentOrChildId": "14d44ce8-ff89-48dc-ad8a-9a8d0c987fd5",
@@ -613,8 +609,8 @@
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },
     {
-      "SourceParentOrChildId": "856f3bd8-d29f-460d-8cb0-c34c0cb7ee4e",
-      "SourceSlotId": "6e3ca38f-78d6-4e2b-b8ab-10a906e058e2",
+      "SourceParentOrChildId": "783ae446-04b1-41a7-a431-cb305f60b5c2",
+      "SourceSlotId": "2a23b42c-ec03-401a-842a-6bdc0c633b7e",
       "TargetParentOrChildId": "e730dd35-c83b-4741-8f8b-4b3ed0daf5fb",
       "TargetSlotId": "bbec658b-84fa-4528-ad03-6b306531b152"
     },
