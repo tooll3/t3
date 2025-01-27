@@ -8,7 +8,7 @@ namespace T3.Operators.Types.Id_6ae8ebb8_3174_463d_9ffb_e14e12eb3029
 {
     public class GetBpm : Instance<GetBpm>
     {
-        [Output(Guid = "551EBFF2-2044-4F28-A6BA-2384A74C8919")]
+        [Output(Guid = "551EBFF2-2044-4F28-A6BA-2384A74C8919", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> Result = new();
         
         public GetBpm()
@@ -18,14 +18,16 @@ namespace T3.Operators.Types.Id_6ae8ebb8_3174_463d_9ffb_e14e12eb3029
 
         private void Update(EvaluationContext context)
         {
-
             if (Playback.Current == null)
             {
-                Log.Warning("Can't get BPM rate without value playback", this);
+              
                 return;
             }
 
             Result.Value = (float)Playback.Current.Bpm;
+
+          
         }
+
     }
 }
