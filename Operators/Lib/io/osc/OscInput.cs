@@ -8,10 +8,10 @@ namespace Lib.io.osc;
 [Guid("3a1d7ea0-5445-4df0-b08a-6596e53f815a")]
 internal sealed class OscInput : Instance<OscInput>, OscConnectionManager.IOscConsumer, IStatusProvider, ICustomDropdownHolder
 {
-    [Output(Guid = "F697732E-46F3-4037-AFC5-56F396BD70AD")]
+    [Output(Guid = "F697732E-46F3-4037-AFC5-56F396BD70AD", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<Dict<float>> Contents = new();
 
-    [Output(Guid = "1E2EC3D2-B242-4E6F-8D15-290584315AA9")]
+    [Output(Guid = "1E2EC3D2-B242-4E6F-8D15-290584315AA9", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
     public readonly Slot<List<float>> Values = new();
 
     [Output(Guid = "3291E15A-1900-4252-8591-D016281527F0", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
