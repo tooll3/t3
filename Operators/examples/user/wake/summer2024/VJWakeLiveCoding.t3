@@ -476,6 +476,12 @@
       ]
     },
     {
+      "Id": "2010666a-e0fb-4c67-bfea-cc9091edb0d8"/*Value*/,
+      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "221874d0-4acc-442b-95bf-3fab440979b8"/*Group*/,
       "SymbolId": "a3f64d34-1fab-4230-86b3-1c3deba3f90b",
       "InputValues": [],
@@ -1471,6 +1477,12 @@
       "Outputs": []
     },
     {
+      "Id": "6d979f59-463d-4667-b8a8-6cd0eece9aeb"/*FadingSlideShow*/,
+      "SymbolId": "cb89ed1d-03ea-4880-bfa0-1dd723e4bdab",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "6ee80fc7-a57b-4a70-aaea-1cd455cf94b1"/*TwinkleArps*/,
       "SymbolId": "3036067a-a4c2-434b-b0e3-ac95c5c943f4",
       "Name": "TwinkleArps",
@@ -1627,6 +1639,23 @@
       "Id": "75c15d46-64b1-4f3b-ab04-21301962fe07"/*HasValueDecreased*/,
       "SymbolId": "f376121a-2360-4232-9724-0db6937062c3",
       "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "78b5e52b-3460-4a94-8252-7309c57c1c03"/*OscInput*/,
+      "SymbolId": "3a1d7ea0-5445-4df0-b08a-6596e53f815a",
+      "InputValues": [
+        {
+          "Id": "6c15e743-9a70-47e7-a0a4-75636817e441"/*PrintLogMessages*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
+          "Id": "87efd3c4-f2df-4996-924f-12c631bad8d8"/*Port*/,
+          "Type": "System.Int32",
+          "Value": 8500
+        }
+      ],
       "Outputs": []
     },
     {
@@ -2011,7 +2040,7 @@
         {
           "Id": "4515c98e-05bc-4186-8773-4d2b31a8c323"/*Int*/,
           "Type": "System.Int32",
-          "Value": 5
+          "Value": 0
         }
       ],
       "Outputs": []
@@ -2183,6 +2212,23 @@
       "Id": "b9e96be4-263c-4c05-90ae-b0181bbeeea9"/*PeopleDoStuff*/,
       "SymbolId": "37cb4087-463a-4790-b3f2-07971d3cf6c3",
       "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "bda613e0-09b8-41a6-a227-716eb68b22d4"/*OscInput*/,
+      "SymbolId": "3a1d7ea0-5445-4df0-b08a-6596e53f815a",
+      "InputValues": [
+        {
+          "Id": "6c15e743-9a70-47e7-a0a4-75636817e441"/*PrintLogMessages*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
+          "Id": "87efd3c4-f2df-4996-924f-12c631bad8d8"/*Port*/,
+          "Type": "System.Int32",
+          "Value": 8500
+        }
+      ],
       "Outputs": []
     },
     {
@@ -3955,10 +4001,10 @@
   "PlaybackSettings": {
     "Enabled": true,
     "Bpm": 125.0,
-    "AudioSource": 1,
+    "AudioSource": 0,
     "Syncing": 0,
     "AudioDecayFactor": 0.9,
     "AudioGainFactor": 1.0,
-    "AudioInputDeviceName": "Microphone Builtin (Realtek(R) Audio)"
+    "AudioInputDeviceName": "t-Bone (USB MICROPHONE )"
   }
 }

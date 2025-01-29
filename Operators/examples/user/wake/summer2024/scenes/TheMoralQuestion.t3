@@ -20,18 +20,6 @@
       "Outputs": []
     },
     {
-      "Id": "3692b7e3-af55-4e41-9f30-8bcb085dc997"/*Multiply*/,
-      "SymbolId": "17b60044-9125-4961-8a79-ca94697b3726",
-      "InputValues": [
-        {
-          "Id": "5ae4bb07-4214-4ec3-a499-24d9f6d404a5"/*B*/,
-          "Type": "System.Single",
-          "Value": 1.0
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "46859cde-bb27-41e3-acf7-4094daacf996"/*SetRequestedResolution*/,
       "SymbolId": "5b3a0c1d-87d6-4d88-ae20-ff9f95049ecf",
       "InputValues": [
@@ -193,11 +181,6 @@
           "Id": "c3765d6d-4f45-4425-a86c-1cdd13eff296"/*Scale*/,
           "Type": "System.Single",
           "Value": 1.73
-        },
-        {
-          "Id": "ca8724d8-a362-4af4-bdf8-a80a1b0ef72e"/*FolderWithImages*/,
-          "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\VJ\\agingFacesMale2"
         }
       ],
       "Outputs": []

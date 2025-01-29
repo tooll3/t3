@@ -3,31 +3,6 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "0b6f5361-dc59-45fc-9cfc-2c87f36bdd78"/*Text*/,
-      "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
-      "InputValues": [
-        {
-          "Id": "0e5f05b4-5e8a-4f6d-8cac-03b04649eb67"/*Color*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 1.0,
-            "Y": 1.0,
-            "Z": 1.0,
-            "W": 0.9
-          }
-        },
-        {
-          "Id": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": -0.415,
-            "Y": -0.005
-          }
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "11837579-776f-4e42-bbaf-1e84d73928e6"/*AnimValue*/,
       "SymbolId": "ea7b8491-2f8e-4add-b0b1-fd068ccfed0d",
       "InputValues": [
@@ -468,7 +443,7 @@
         {
           "Id": "ca9778e7-072c-4304-9043-eeb2dc4ca5d7"/*Folder*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\VJ\\agingCombined"
+          "Value": "/t3/images/sequences/agingFacesMale"
         },
         {
           "Id": "e14a4aae-e253-4d14-80ef-a90271cd306a"/*TriggerUpdate*/,
