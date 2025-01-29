@@ -148,8 +148,8 @@ public sealed class WindowsUiContentDrawer : IUiContentDrawer<Device>
                 {
                     Log.Debug($"Null {nameof(ShaderResourceView)} for 2nd render view");
                 }
-                //Todo: @pixtur. Clarify this
-                Log.Warning("Render 2nd view is currently broken.");
+                ////Todo: @pixtur. Clarify this
+                //Log.Warning("Render 2nd view is currently broken.");
                 ProgramWindows.DrawTextureToSecondaryRenderOutput();
                 //ProgramWindows.CopyToSecondaryRenderOutput();
                 //ProgramWindows.CopyUiContentToShareTexture();
