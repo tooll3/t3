@@ -25,10 +25,10 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
         Texture.UpdateAction += Update;
     }
 
-    ~NdiInput()
-    {
-        Dispose(false);
-    }
+    // ~NdiInput()
+    // {
+    //     Dispose(false);
+    // }
 
 
     private double _lastUpdateRunTime;
@@ -66,18 +66,24 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
         if (_initialized)
             return _initialized;
 
-        _initialized = NDIlib.initialize();
-
-        if (_initialized)
-            return _initialized;
-
+        try
+        {
+            _initialized = NDIlib.initialize();
+            if (_initialized)
+                return _initialized;
+        }
+        catch (Exception e)
+        {
+            Log.Error("Failed to initialize NDIInput. One possible reason could be 'Processing.NDI.Lib.x64.dll' missing: " + e.Message);
+            return false;
+        }
+        
         // Cannot run NDI. Most likely because the CPU is not sufficient (see SDK documentation).
         // you can check this directly with a call to NDIlib.is_supported_CPU()
         // not sure why, but it's not going to run
         SetErrorMessage(!NDIlib.is_supported_CPU() 
                             ? "CPU unsupported." 
                             : "Cannot run NDI.");
-
         return false;
     }
 
@@ -504,7 +510,7 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
         
     IEnumerable<string> ICustomDropdownHolder.GetOptionsForInput(Guid inputId)
     {
-        if (inputId != SourceName.Id)
+        if (inputId != SourceName.Id || _ndiInputFinder == null)
         {
             yield return "undefined";
             yield break;
