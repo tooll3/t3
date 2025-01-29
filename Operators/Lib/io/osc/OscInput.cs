@@ -434,6 +434,9 @@ internal sealed class OscInput : Instance<OscInput>, OscConnectionManager.IOscCo
 
     void ICustomDropdownHolder.HandleResultForInput(Guid inputId, string result)
     {
+        if (string.IsNullOrEmpty(result))
+            return;
+        
         var parts = result.Split(Separator);
         if (parts.Length > 1)
         {
