@@ -50,7 +50,7 @@ public partial class SymbolUi
         public bool EnabledForSnapshots
         {
             get => GroupIndexForSnapshots == SnapshotGroupIndex;
-            set => SnapshotGroupIndex = value ? SnapshotGroupIndex : 0;
+            set => SnapshotGroupIndex = value ? GroupIndexForSnapshots : 0;
         }            
             
         internal Styles Style;

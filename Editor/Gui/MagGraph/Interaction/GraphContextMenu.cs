@@ -99,38 +99,44 @@ internal static class GraphContextMenu
         var canModify = !compositionSymbolUi.Symbol.SymbolPackage.IsReadOnly;
         if (canModify)
         {
-            // Disable if already enabled for all
-            var disableBecauseAllEnabled
-                = selectedChildUis
-                   .TrueForAll(c2 => c2.EnabledForSnapshots);
+            if (ImGui.MenuItem("Enable for snapshots",
+                               KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleSnapshotControl, false),
+                               selected: snapShotsEnabledFromSomeOps,
+                               enabled: someOpsSelected))
+            {            
+                // Disable if already enabled for all
+                var disableBecauseAllEnabled
+                    = selectedChildUis
+                       .TrueForAll(c2 => c2.EnabledForSnapshots);
 
-            foreach (var c in selectedChildUis)
-            {
-                c.EnabledForSnapshots = !disableBecauseAllEnabled;
-            }
-
-            // Add to add snapshots
-            var allSnapshots = VariationHandling.ActivePoolForSnapshots?.AllVariations;
-            if (allSnapshots != null && allSnapshots.Count > 0)
-            {
-                if (disableBecauseAllEnabled)
+                foreach (var c in selectedChildUis)
                 {
-                    VariationHandling.RemoveInstancesFromVariations(selectedChildUis.Select(ui => ui.Id), allSnapshots);
+                    c.EnabledForSnapshots = !disableBecauseAllEnabled;
                 }
-                // Remove from snapshots
-                else
+
+                // Add to add snapshots
+                var allSnapshots = VariationHandling.ActivePoolForSnapshots?.AllVariations;
+                if (allSnapshots != null && allSnapshots.Count > 0)
                 {
-                    var selectedInstances = selectedChildUis
-                                           .Select(ui => context.CompositionInstance.Children[ui.Id])
-                                           .ToList();
-                    foreach (var snapshot in allSnapshots)
+                    if (disableBecauseAllEnabled)
                     {
-                        VariationHandling.ActivePoolForSnapshots.UpdateVariationPropertiesForInstances(snapshot, selectedInstances);
+                        VariationHandling.RemoveInstancesFromVariations(selectedChildUis.Select(ui => ui.Id), allSnapshots);
+                    }
+                    // Remove from snapshots
+                    else
+                    {
+                        var selectedInstances = selectedChildUis
+                                               .Select(ui => context.CompositionInstance.Children[ui.Id])
+                                               .ToList();
+                        foreach (var snapshot in allSnapshots)
+                        {
+                            VariationHandling.ActivePoolForSnapshots.UpdateVariationPropertiesForInstances(snapshot, selectedInstances);
+                        }
                     }
                 }
-            }
 
-            compositionSymbolUi.FlagAsModified();
+                compositionSymbolUi.FlagAsModified();
+            }
         }
 
         if (ImGui.BeginMenu("Display as..."))
