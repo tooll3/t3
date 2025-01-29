@@ -50,12 +50,7 @@ public sealed class StringInputUi : InputValueUi<string>
 
     protected override InputEditStateFlags DrawEditControl(string name, Symbol.Child.Input input, ref string? value, bool readOnly)
     {
-        if (value == null)
-        {
-            // value was null!
-            ImGui.TextUnformatted(name + " is null?!");
-            return InputEditStateFlags.Nothing;
-        }
+        value ??= string.Empty;
 
         var inputEditStateFlags = InputEditStateFlags.Nothing;
 
