@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
@@ -260,14 +261,25 @@ internal sealed class PlaceholderCreation
                 }
 
                 // Create new Connection
-                context.MacroCommand
-                       .AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
-                                                                   new Symbol.Connection(_snappedSourceItem.Id,
-                                                                                         _snappedSourceOutputLine.Id,
-                                                                                         newInstance.SymbolChildId,
-                                                                                         newInstance.Inputs[0].Id
-                                                                                        ),
-                                                                   0));
+                // Find first input with matching type
+                var outputType = _snappedSourceOutputLine.Output.ValueType;
+                var matchingInputSlot = newInstance.Inputs.FirstOrDefault(i => i.ValueType == outputType);
+                if (matchingInputSlot != null)
+                {
+                    context.MacroCommand
+                           .AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
+                                                                       new Symbol.Connection(_snappedSourceItem.Id,
+                                                                                             _snappedSourceOutputLine.Id,
+                                                                                             newInstance.SymbolChildId,
+                                                                                             matchingInputSlot.Id
+                                                                                            ),
+                                                                       0));
+                }
+                else
+                {
+                    Log.Debug($"Can't find input with type {outputType}");
+                }
+                
             }
 
             // Push snapped ops further down if new op exceed initial default height

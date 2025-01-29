@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using T3.Core.Operator;
 using T3.Editor.UiModel.ProjectHandling;
@@ -114,25 +115,23 @@ internal sealed class SymbolFilter
         foreach (var symbolUi in EditorSymbolPackage.AllSymbolUis)
         {
             var symbolUiSymbol = symbolUi.Symbol;
-
-            if (symbolUiSymbol == null)
-            {
-                Log.Warning($"Skipping SymbolUi definition with inconsistent symbol...");
-                continue;
-            }
-
+            Debug.Assert(symbolUiSymbol != null);
+            
             // Prevent graph cycles
             if (parentSymbolIds.Contains(symbolUiSymbol.Id))
                 continue;
 
             if (_inputType != null)
             {
-                if (symbolUiSymbol.InputDefinitions.Count == 0 || symbolUiSymbol.InputDefinitions[0].ValueType != _inputType)
+                // if (symbolUiSymbol.InputDefinitions.Count == 0 || symbolUiSymbol.InputDefinitions[0].ValueType != _inputType)
+                //     continue;
+
+                if (symbolUiSymbol.InputDefinitions.Count == 0)
                     continue;
 
-                // var matchingInputDef = symbolUiSymbol.GetInputMatchingType(FilterInputType);
-                // if (matchingInputDef == null)
-                //     continue;
+                var matchingInputDef = symbolUiSymbol.GetInputMatchingType(FilterInputType);
+                if (matchingInputDef == null)
+                    continue;
 
                 if (OnlyMultiInputs && !symbolUiSymbol.InputDefinitions[0].IsMultiInput)
                     continue;
@@ -182,6 +181,9 @@ internal sealed class SymbolFilter
         var symbol = symbolUi.Symbol;
         var symbolName = symbol.Name;
 
+        if(symbol.Namespace.StartsWith("Types.", StringComparison.InvariantCulture))
+            relevancy *= 4;
+        
         if (symbolName.Equals(query, StringComparison.InvariantCultureIgnoreCase))
         {
             relevancy *= 5;
