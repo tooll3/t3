@@ -10,6 +10,7 @@ using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands.Graph;
 using T3.Editor.UiModel.InputsAndTypes;
 using T3.Editor.UiModel.Modification;
@@ -119,6 +120,7 @@ internal sealed partial class MagItemMovement
 
     internal void UpdateDragging(GraphUiContext context)
     {
+        
         if (!T3Ui.IsCurrentlySaving && _shakeDetector.TestDragForShake(ImGui.GetMousePos()))
         {
             _shakeDetector.ResetShaking();
@@ -325,6 +327,8 @@ internal sealed partial class MagItemMovement
                 _unsnappedBorderConnectionsBeforeDrag.Add(c.ConnectionHash);
             }
         }
+        
+        _context.CompositionInstance.Symbol.GetSymbolUi().FlagAsModified();             
     }
 
     private readonly HashSet<int> _unsnappedBorderConnectionsBeforeDrag = [];
