@@ -2,6 +2,7 @@
 #include "shared/noise-functions.hlsl"
 #include "shared/point.hlsl"
 #include "shared/quat-functions.hlsl"
+#include "shared/bias-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -19,12 +20,12 @@ cbuffer Params : register(b0)
     float UseSelection;
 }
 
-StructuredBuffer<LegacyPoint> Points1 : t0;
-RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
+StructuredBuffer<Point> Points1 : t0;
+RWStructuredBuffer<Point> ResultPoints : u0;
 
 [numthreads(64, 1, 1)] void main(uint3 i : SV_DispatchThreadID)
 {
-    LegacyPoint p = Points1[i.x];
+    Point p = Points1[i.x];
 
     float3 gridSize = GridScale * GridStretch;
     float3 orgPosition = p.Position;
@@ -35,8 +36,8 @@ RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
     float3 signedFraction = (mod(normlizedOffsetPosition, 1) - 0.5) * 2;
     float3 centerPoint = pos - signedFraction * gridSize / 2;
 
-    float wFactor = UseWAsWeight > 0.5 ? p.W : 1;
-    float selectionFactor = UseSelection > 0.5 ? p.Selected : 1;
+    float wFactor = UseWAsWeight > 0.5 ? p.FX1 : 1;
+    float selectionFactor = UseSelection > 0.5 ? p.FX2 : 1;
 
     float3 scatter = (hash41u(i.x) - 0.5) * Scatter;
 
