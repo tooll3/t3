@@ -73,7 +73,14 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
 
     void IGraphCanvas.OpenAndFocusInstance(IReadOnlyList<Guid> path)
     {
-        Log.Debug("MagGraphCanvas.OpenAndFocusInstance() Not implemented yet");
+        if (path.Count == 1)
+        {
+            _projectView.TrySetCompositionOp(path, ICanvas.Transition.JumpOut, path[0]);
+            return;
+        }
+
+        var compositionPath = path.Take(path.Count - 1).ToList();
+        _projectView.TrySetCompositionOp(compositionPath, ICanvas.Transition.JumpIn, path[^1]);
     }
 
     private Instance _previousInstance;
