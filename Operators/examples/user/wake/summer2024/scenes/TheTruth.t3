@@ -251,7 +251,7 @@
         {
           "Id": "82384eba-1d7a-41c8-a703-9184c961d766"/*Strength*/,
           "Type": "System.Single",
-          "Value": 1.0
+          "Value": 0.0
         },
         {
           "Id": "e5b7c7b0-a207-44c2-b5d4-ef393c5dccb2"/*F1*/,
@@ -291,11 +291,6 @@
           "Id": "c3765d6d-4f45-4425-a86c-1cdd13eff296"/*Scale*/,
           "Type": "System.Single",
           "Value": 2.05
-        },
-        {
-          "Id": "ca8724d8-a362-4af4-bdf8-a80a1b0ef72e"/*FolderWithImages*/,
-          "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\VJ\\agingFacesFemale"
         }
       ],
       "Outputs": []
@@ -654,12 +649,12 @@
         {
           "Id": "022f5d7d-b9fc-4c4f-8b7e-84aaedbfdd29"/*RedOffset*/,
           "Type": "System.Single",
-          "Value": -23.79
+          "Value": -7.3
         },
         {
           "Id": "1531e949-fe17-4718-9ac6-4dc3884c23fc"/*RedFactor*/,
           "Type": "System.Single",
-          "Value": 60.0
+          "Value": 8.6
         },
         {
           "Id": "2b5ee35d-bb00-4dd1-abdc-c4584c7ce7c5"/*Brightness*/,
@@ -670,11 +665,6 @@
           "Id": "3afdb344-0a09-4907-89f1-447c991273da"/*Scale*/,
           "Type": "System.Single",
           "Value": 4.1
-        },
-        {
-          "Id": "62e68350-739a-4220-bb84-70b33ea1baf0"/*BrightnessOffset*/,
-          "Type": "System.Single",
-          "Value": -0.8929134
         },
         {
           "Id": "7e86bf8f-1d9d-4212-bf9f-987a03b55565"/*Stretch*/,

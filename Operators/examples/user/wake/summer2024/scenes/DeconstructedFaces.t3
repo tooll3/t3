@@ -69,11 +69,6 @@
           "Id": "8b5fb93a-ee65-44d9-88be-66ee2e174385"/*FadeType*/,
           "Type": "System.Int32",
           "Value": 1
-        },
-        {
-          "Id": "ca8724d8-a362-4af4-bdf8-a80a1b0ef72e"/*FolderWithImages*/,
-          "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\VJ\\agingFacesMale2"
         }
       ],
       "Outputs": []
@@ -93,11 +88,6 @@
           "Value": true
         },
         {
-          "Id": "c38647f6-c6ea-40a0-b872-0df6d4168c05"/*Offset*/,
-          "Type": "System.Single",
-          "Value": 0.0
-        },
-        {
           "Id": "e4739314-4075-4d14-a80d-79e149081dac"/*SizeMode*/,
           "Type": "System.Int32",
           "Value": 1
@@ -110,7 +100,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "399819b8-bf5b-4726-9a38-6a41373a0aef",
+                  "Id": "08ad9344-8623-4bc5-90f8-8107e58dd0c5",
                   "NormalizedPosition": 0.040983606,
                   "Color": {
                     "R": 0.0,
@@ -120,7 +110,7 @@
                   }
                 },
                 {
-                  "Id": "cd503d22-a121-44a2-b95f-ad0f63b9c58a",
+                  "Id": "cf441e7b-da9c-42de-ac50-6169f0f46e79",
                   "NormalizedPosition": 0.13114753,
                   "Color": {
                     "R": 0.0,
@@ -158,18 +148,6 @@
       "Id": "17d30df9-e9d0-41a9-a90f-c161c8d2e3a4"/*IntToFloat*/,
       "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
       "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "1b08baad-e518-4b37-8c81-7b5544b70034"/*AnimValue*/,
-      "SymbolId": "ea7b8491-2f8e-4add-b0b1-fd068ccfed0d",
-      "InputValues": [
-        {
-          "Id": "4cf5d20b-7335-4584-b246-c260ac5cdf4f"/*Shape*/,
-          "Type": "System.Int32",
-          "Value": 0
-        }
-      ],
       "Outputs": []
     },
     {
@@ -214,7 +192,7 @@
         {
           "Id": "c3c815fa-8672-4d99-99a7-986844f2fc45"/*UpdateLive*/,
           "Type": "System.Boolean",
-          "Value": true
+          "Value": false
         }
       ],
       "Outputs": []
@@ -354,12 +332,12 @@
         {
           "Id": "5c7e5e27-2eb8-4933-97cb-fc49d576d625"/*Count*/,
           "Type": "System.Int32",
-          "Value": 11560
+          "Value": 11000
         },
         {
           "Id": "a970dad9-e5e9-4756-a84c-86737cce7e8f"/*ClampThreshold*/,
           "Type": "System.Single",
-          "Value": 0.24
+          "Value": 0.31
         }
       ],
       "Outputs": []
@@ -450,7 +428,7 @@
         {
           "Id": "79080698-1097-4178-b7da-7d10fd86be28"/*MixOriginal*/,
           "Type": "System.Single",
-          "Value": 0.84
+          "Value": 0.439
         }
       ],
       "Outputs": []
@@ -551,26 +529,17 @@
         {
           "Id": "1dfb45ae-b376-41ea-a1d2-97b170645b50"/*Variation*/,
           "Type": "System.Single",
-          "Value": 14.0
+          "Value": 0.1
         },
         {
           "Id": "5894156a-cc31-4236-908c-de0e5385fd84"/*Strength*/,
           "Type": "System.Single",
-          "Value": 8.0
+          "Value": 5.0
         },
         {
           "Id": "929db7b2-f19c-4a28-b4c2-187365b99760"/*Frequency*/,
           "Type": "System.Single",
           "Value": 1.1
-        },
-        {
-          "Id": "c2df1fa3-88e1-4be2-954e-8c44edd9d421"/*AmountDistribution*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 1.0,
-            "Y": 1.18,
-            "Z": 1.0
-          }
         }
       ],
       "Outputs": []
@@ -587,7 +556,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "ee80621b-848b-4e02-8210-28fbce3a7258",
+                  "Id": "156f9dfb-0739-4a84-a390-1e4a18edf1d6",
                   "NormalizedPosition": 0.0,
                   "Color": {
                     "R": 3.263219,
@@ -597,7 +566,7 @@
                   }
                 },
                 {
-                  "Id": "28c4abda-1b8e-4fa7-8817-dcbf47ebaf97",
+                  "Id": "9cf3b386-1ea6-4189-82b0-7151a0651dcf",
                   "NormalizedPosition": 0.10687023,
                   "Color": {
                     "R": 14.903193,
@@ -607,7 +576,7 @@
                   }
                 },
                 {
-                  "Id": "0b2b27d3-3baa-4dc4-9f00-5943630fa1fa",
+                  "Id": "04150e3a-6664-4168-8eac-2f7e0f40ce7e",
                   "NormalizedPosition": 1.0,
                   "Color": {
                     "R": 1.0,
@@ -688,11 +657,6 @@
           "Id": "8b5fb93a-ee65-44d9-88be-66ee2e174385"/*FadeType*/,
           "Type": "System.Int32",
           "Value": 1
-        },
-        {
-          "Id": "ca8724d8-a362-4af4-bdf8-a80a1b0ef72e"/*FolderWithImages*/,
-          "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\VJ\\agingFacesFemale"
         }
       ],
       "Outputs": []
@@ -807,17 +771,7 @@
         {
           "Id": "32d082f5-d6e1-4068-bcd9-a01977ed72df"/*MaxSubdivisions*/,
           "Type": "System.Int32",
-          "Value": 8
-        },
-        {
-          "Id": "5cae4d6e-d441-42f7-8e17-3aeb58719f08"/*GapColor*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0,
-            "W": 1.0
-          }
+          "Value": 14
         },
         {
           "Id": "6bdb499c-1300-4fe1-8634-7d3edc4d4050"/*UseAspectForSplit*/,
@@ -827,17 +781,12 @@
         {
           "Id": "6d3c2c76-df35-411a-8e25-450dc9cd6f4e"/*DirectionBias*/,
           "Type": "System.Single",
-          "Value": 0.20000002
+          "Value": -0.4
         },
         {
           "Id": "71c99158-cf0e-4ceb-82ee-5ef5685441b3"/*Threshold*/,
           "Type": "System.Single",
           "Value": 0.04
-        },
-        {
-          "Id": "7a8684c9-ee81-49c1-ad13-d91d62799efb"/*RandomPhase*/,
-          "Type": "System.Single",
-          "Value": 0.0
         },
         {
           "Id": "819898d2-230b-4176-a1b7-a008aed9631d"/*RandomSeed*/,
@@ -857,7 +806,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "d753a580-f85f-4641-807e-81e567670d15",
+                  "Id": "a9d658f8-bbe2-4df6-b85d-4b0c28c69f48",
                   "NormalizedPosition": 0.0,
                   "Color": {
                     "R": 0.99999,
@@ -867,7 +816,7 @@
                   }
                 },
                 {
-                  "Id": "fd0ae838-2b70-4287-b0ab-1cc30beadefa",
+                  "Id": "9f70ff3d-7ded-4e4c-b789-d8985d494834",
                   "NormalizedPosition": 0.9614129,
                   "Color": {
                     "R": 1.0,
@@ -877,7 +826,7 @@
                   }
                 },
                 {
-                  "Id": "2aa892d6-d70c-4070-9cc6-ac6b2fa8d82d",
+                  "Id": "2ad67598-ae77-413e-8253-2ea3107cd176",
                   "NormalizedPosition": 0.99703175,
                   "Color": {
                     "R": 0.12649402,
@@ -891,22 +840,9 @@
           }
         },
         {
-          "Id": "c6f0a794-ba0f-44cf-95cb-9ec6484f9f02"/*ScrollOffset*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.0,
-            "Y": 0.0
-          }
-        },
-        {
           "Id": "c8550e83-bd37-4db3-a859-4a6bcd64a63c"/*SplitCenterVariation*/,
           "Type": "System.Single",
-          "Value": 0.73
-        },
-        {
-          "Id": "d30b5542-d564-46e1-9f9e-987351eb425b"/*SplitCenter*/,
-          "Type": "System.Single",
-          "Value": 0.36
+          "Value": 0.42
         },
         {
           "Id": "d90350a0-9fa8-4747-805b-ba7ab8125595"/*Use4xMSAA*/,
@@ -959,6 +895,13 @@
     {
       "Id": "84acb777-3825-4d11-8c13-9178b128d025"/*TextureToCubeMap*/,
       "SymbolId": "e85d98cf-9240-4f5d-8df6-35425d325778",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "85608a68-5150-48da-8de9-0f3c89bfad68"/*StepIndex*/,
+      "SymbolId": "cc07b314-4582-4c2c-84b8-bb32f59fc09b",
+      "Name": "StepIndex",
       "InputValues": [],
       "Outputs": []
     },
@@ -1054,18 +997,6 @@
           "Id": "ceeae47b-d792-471d-a825-49e22749b7b9"/*InputString*/,
           "Type": "System.String",
           "Value": "John\nMary\nJames\nEliza\nRobert\nMargret\nWilliam\nHelen\nRichard\nPatrik\nCharles\nBarbara\nThomas\nSusan\nMichael\nLinda\nJoseph\nKaren\nDavid\nNancy\nSilvio\nBetty\nDaniel\nSandra\nMatthew\nDonna\nAnthony\nCarol\nMark\nRuth\nPaul\nSharon\nSteven\nMichael\nAndrew\nLaura\nJoshua\nSarah\nKevin\nTom\nBrian\nDeborah\nGeorge\nJessica\nEdward\nAmanda\nRonald\nSteffi\nTimothy\nRebecca\nJason\nMelissa\nJeffrey\nAngela\nRyan\nEmily\nJacob\nAnna\nJames\nAlice\nChris\nMarie\nBen\nJane\nJustin\nCathy\nSamuel\nRachel\nPatrick\nAlex\nAdam\nDaniel\nNichol\nVictor\nPeter\nSophia\nOlivia\nSimon\nIsabell\nMartin\nEva\nArthur\nChloe\nDavid\nSara\nMaxim\nLayla\nSergei\nYasmin\nIgor\nAisha\nDmitry\nFatima\nAmir\nZainab\nAhmed\nMariam\nMohammed\nAmina"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "a3b840be-eca3-4d7c-bbcc-25cdde04bb2e"/*FadingSlideShowSoftEdge*/,
-      "SymbolId": "92750028-5fac-4e6d-84fe-f779f6d0ae33",
-      "InputValues": [
-        {
-          "Id": "6c52d99d-9361-4d99-b9b0-4397e564ca19"/*FolderWithImages*/,
-          "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\VJ\\agingFacesFemale"
         }
       ],
       "Outputs": []
@@ -1286,9 +1217,9 @@
       "Outputs": []
     },
     {
-      "Id": "bc6b7d70-1848-4130-9b21-a775c3772081"/*MaxCount*/,
+      "Id": "bc6b7d70-1848-4130-9b21-a775c3772081"/*MaxNameCount*/,
       "SymbolId": "cc07b314-4582-4c2c-84b8-bb32f59fc09b",
-      "Name": "MaxCount",
+      "Name": "MaxNameCount",
       "InputValues": [
         {
           "Id": "4515c98e-05bc-4186-8773-4d2b31a8c323"/*Int*/,
@@ -1580,8 +1511,8 @@
       "TargetSlotId": "eefdb8ca-68e7-4e39-b302-22eb8930fb8c"
     },
     {
-      "SourceParentOrChildId": "9660d733-f7a5-4687-bf05-8cb5c30595b7",
-      "SourceSlotId": "2e172f90-3995-4b16-af33-9957be07323b",
+      "SourceParentOrChildId": "85608a68-5150-48da-8de9-0f3c89bfad68",
+      "SourceSlotId": "8a65b34b-40be-4dbf-812c-d4c663464c7f",
       "TargetParentOrChildId": "17d30df9-e9d0-41a9-a90f-c161c8d2e3a4",
       "TargetSlotId": "01809b63-4b4a-47be-9588-98d5998ddb0c"
     },
@@ -1652,8 +1583,8 @@
       "TargetSlotId": "3b193782-2a56-4031-a0c6-9ebb576e66a5"
     },
     {
-      "SourceParentOrChildId": "9660d733-f7a5-4687-bf05-8cb5c30595b7",
-      "SourceSlotId": "2e172f90-3995-4b16-af33-9957be07323b",
+      "SourceParentOrChildId": "85608a68-5150-48da-8de9-0f3c89bfad68",
+      "SourceSlotId": "8a65b34b-40be-4dbf-812c-d4c663464c7f",
       "TargetParentOrChildId": "33bed232-05ea-40d2-83ec-d3dd6e47b66b",
       "TargetSlotId": "f32458a5-f19f-487b-8ae2-a575de0b4ff2"
     },
@@ -1832,6 +1763,12 @@
       "TargetSlotId": "2a95ac54-5ef7-4d3c-a90b-ecd5b422bddc"
     },
     {
+      "SourceParentOrChildId": "a4fa588a-10d2-44ea-82c5-9363f46ec2ff",
+      "SourceSlotId": "c21800d0-ee83-43f6-8f1c-9cee2e495056",
+      "TargetParentOrChildId": "70b8dc5c-310e-4e7c-a006-546f0b01e950",
+      "TargetSlotId": "286cbbfb-796d-499f-93d3-d467512110be"
+    },
+    {
       "SourceParentOrChildId": "81daa78f-00d9-4f6e-9dc5-131c756dc9ad",
       "SourceSlotId": "1680781d-af5e-4b77-beb6-3e4a12d73d59",
       "TargetParentOrChildId": "767639f1-4c40-4d2a-a72b-dbdad6385f2d",
@@ -1844,8 +1781,8 @@
       "TargetSlotId": "7a8684c9-ee81-49c1-ad13-d91d62799efb"
     },
     {
-      "SourceParentOrChildId": "9660d733-f7a5-4687-bf05-8cb5c30595b7",
-      "SourceSlotId": "2e172f90-3995-4b16-af33-9957be07323b",
+      "SourceParentOrChildId": "85608a68-5150-48da-8de9-0f3c89bfad68",
+      "SourceSlotId": "8a65b34b-40be-4dbf-812c-d4c663464c7f",
       "TargetParentOrChildId": "767639f1-4c40-4d2a-a72b-dbdad6385f2d",
       "TargetSlotId": "819898d2-230b-4176-a1b7-a008aed9631d"
     },
@@ -1878,6 +1815,12 @@
       "SourceSlotId": "babd085b-5099-4ddb-87d6-ab9d983067f1",
       "TargetParentOrChildId": "84acb777-3825-4d11-8c13-9178b128d025",
       "TargetSlotId": "d5aa1045-5471-42c3-bfc2-c5fa9663817f"
+    },
+    {
+      "SourceParentOrChildId": "9660d733-f7a5-4687-bf05-8cb5c30595b7",
+      "SourceSlotId": "2e172f90-3995-4b16-af33-9957be07323b",
+      "TargetParentOrChildId": "85608a68-5150-48da-8de9-0f3c89bfad68",
+      "TargetSlotId": "4515c98e-05bc-4186-8773-4d2b31a8c323"
     },
     {
       "SourceParentOrChildId": "9660d733-f7a5-4687-bf05-8cb5c30595b7",

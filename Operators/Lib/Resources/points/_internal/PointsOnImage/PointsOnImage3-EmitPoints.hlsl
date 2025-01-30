@@ -18,7 +18,7 @@ cbuffer Params : register(b1)
 
 Texture2D<float> CDF : register(t0);
 Texture2D<float4> Image : register(t1);
-RWStructuredBuffer<LegacyPoint> ResultPoints : u0;
+RWStructuredBuffer<Point> ResultPoints : u0;
 
 sampler texSampler : register(s0);
 
@@ -99,8 +99,9 @@ sampler texSampler : register(s0);
     float2 posXY = (samplePosInUV - 0.5) * 2 * float2(1 / aspectRatio, 1) + (scatter - 0.5) * ScatterWithinPixel * 2 / float2(ImageWidth * aspectRatio, ImageHeight);
     ResultPoints[threadID.x].Position = float3(posXY, 0);
 
-    ResultPoints[threadID.x].W = 1;
+    ResultPoints[threadID.x].FX1 = 1;
+    ResultPoints[threadID.x].FX1 = 2;
     ResultPoints[threadID.x].Rotation = float4(0, 0, 0, 1);
-    ResultPoints[threadID.x].Selected = 1;
-    ResultPoints[threadID.x].Stretch = float3(probability, 0);
+
+    ResultPoints[threadID.x].Scale = 1;
 }

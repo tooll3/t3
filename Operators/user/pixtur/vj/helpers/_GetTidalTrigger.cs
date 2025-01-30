@@ -1,4 +1,4 @@
-namespace Types.user.pixtur.vj.helpers;
+namespace user.pixtur.vj.helpers;
 
 [Guid("8fb63c4d-80a8-4023-b55b-7f97bffbee48")]
 public class _GetTidalTrigger : Instance<_GetTidalTrigger>

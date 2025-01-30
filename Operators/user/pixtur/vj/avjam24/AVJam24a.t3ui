@@ -1,7 +1,15 @@
 {
   "Id": "45615cbf-3cf5-46f3-b709-905b359b4362"/*AVJam24a*/,
   "Description": "An unstructured piece of mess.",
-  "InputUis": [],
+  "InputUis": [
+    {
+      "InputId": "3f6d41be-25f6-46ec-bb08-b0754b952d33"/*TestInput*/,
+      "Position": {
+        "X": 1943.5106,
+        "Y": 353.76633
+      }
+    }
+  ],
   "SymbolChildUis": [
     {
       "ChildId": "10ba18d6-3fb2-4dfa-92b6-5a962b368d2a"/*_FadeFade2*/,
@@ -89,6 +97,13 @@
       }
     },
     {
+      "ChildId": "87b29bd4-04a5-4d6b-a62d-2aab2eb6c4e4"/*Value*/,
+      "Position": {
+        "X": 2034.1798,
+        "Y": 501.05432
+      }
+    },
+    {
       "ChildId": "9e110d89-d982-4c4a-940e-a7ff00298534"/*AudioInk*/,
       "Position": {
         "X": 2668.0374,
@@ -117,6 +132,13 @@
       }
     },
     {
+      "ChildId": "e48a799c-48f6-4f2e-8cfe-4d1a44e08184"/*Value*/,
+      "Position": {
+        "X": 2064.3525,
+        "Y": 246.57703
+      }
+    },
+    {
       "ChildId": "ee536f28-99c8-40e6-853a-b16b3b12bc29"/*SetVJVariables*/,
       "Position": {
         "X": 3530.6016,
@@ -128,6 +150,13 @@
       "Position": {
         "X": 2765.803,
         "Y": 625.24274
+      }
+    },
+    {
+      "ChildId": "fd5b09fd-201e-4309-ab0d-89fac9efff2c"/*Sum*/,
+      "Position": {
+        "X": 2233.7197,
+        "Y": 332.63623
       }
     }
   ],

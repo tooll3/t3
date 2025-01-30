@@ -1,6 +1,11 @@
 {
   "Id": "45615cbf-3cf5-46f3-b709-905b359b4362"/*AVJam24a*/,
-  "Inputs": [],
+  "Inputs": [
+    {
+      "Id": "3f6d41be-25f6-46ec-bb08-b0754b952d33"/*TestInput*/,
+      "DefaultValue": 0.0
+    }
+  ],
   "Children": [
     {
       "Id": "10ba18d6-3fb2-4dfa-92b6-5a962b368d2a"/*_FadeFade2*/,
@@ -28,7 +33,7 @@
         {
           "Id": "4515c98e-05bc-4186-8773-4d2b31a8c323"/*Int*/,
           "Type": "System.Int32",
-          "Value": 1
+          "Value": 3
         }
       ],
       "Outputs": []
@@ -134,6 +139,12 @@
       "Outputs": []
     },
     {
+      "Id": "87b29bd4-04a5-4d6b-a62d-2aab2eb6c4e4"/*Value*/,
+      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "9e110d89-d982-4c4a-940e-a7ff00298534"/*AudioInk*/,
       "SymbolId": "89682afb-0c4a-4142-9cb0-6e84e322a4ea",
       "InputValues": [],
@@ -190,6 +201,12 @@
       "Outputs": []
     },
     {
+      "Id": "e48a799c-48f6-4f2e-8cfe-4d1a44e08184"/*Value*/,
+      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "ee536f28-99c8-40e6-853a-b16b3b12bc29"/*SetVJVariables*/,
       "SymbolId": "e14af8a3-8672-4348-af9e-735714c31c92",
       "InputValues": [],
@@ -235,6 +252,12 @@
           "Value": 48
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "fd5b09fd-201e-4309-ab0d-89fac9efff2c"/*Sum*/,
+      "SymbolId": "2f851b5b-b66d-40b0-9445-e733dc4b907d",
+      "InputValues": [],
       "Outputs": []
     }
   ],
@@ -328,25 +351,33 @@
       "SourceSlotId": "7a4c4feb-be2f-463e-96c6-cd9a6bad77a2",
       "TargetParentOrChildId": "ee536f28-99c8-40e6-853a-b16b3b12bc29",
       "TargetSlotId": "693345bd-0cd8-4dca-9416-42a9bdcbc293"
+    },
+    {
+      "SourceParentOrChildId": "e48a799c-48f6-4f2e-8cfe-4d1a44e08184",
+      "SourceSlotId": "f83f1835-477e-4bb6-93f0-14bf273b8e94",
+      "TargetParentOrChildId": "fd5b09fd-201e-4309-ab0d-89fac9efff2c",
+      "TargetSlotId": "af4a49e6-1ecd-4e94-ae6d-fb5d2bc8430c"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "3f6d41be-25f6-46ec-bb08-b0754b952d33",
+      "TargetParentOrChildId": "fd5b09fd-201e-4309-ab0d-89fac9efff2c",
+      "TargetSlotId": "af4a49e6-1ecd-4e94-ae6d-fb5d2bc8430c"
+    },
+    {
+      "SourceParentOrChildId": "87b29bd4-04a5-4d6b-a62d-2aab2eb6c4e4",
+      "SourceSlotId": "f83f1835-477e-4bb6-93f0-14bf273b8e94",
+      "TargetParentOrChildId": "fd5b09fd-201e-4309-ab0d-89fac9efff2c",
+      "TargetSlotId": "af4a49e6-1ecd-4e94-ae6d-fb5d2bc8430c"
     }
   ],
   "PlaybackSettings": {
     "Enabled": true,
-    "Bpm": 82.52485,
+    "Bpm": 60.0,
     "AudioSource": 1,
-    "Syncing": 1,
+    "Syncing": 0,
     "AudioDecayFactor": 0.8,
     "AudioGainFactor": 1.0,
-    "AudioInputDeviceName": "Microphone Builtin (Realtek(R) Audio)",
-    "AudioClips": [
-      {
-        "Id": "00000000-0000-0000-0000-000000000000",
-        "StartTime": 0.0,
-        "EndTime": 0.0,
-        "Bpm": 120.0,
-        "DiscardAfterUse": true,
-        "IsSoundtrack": true
-      }
-    ]
+    "AudioInputDeviceName": "Microphone Builtin (Realtek(R) Audio)"
   }
 }

@@ -52,16 +52,14 @@
       "Position": {
         "X": -198.22305,
         "Y": -271.81592
-      },
-      "SnapshotGroupIndex": "1"
+      }
     },
     {
       "ChildId": "24324ef7-993d-44f3-9381-d0d06a811802"/*PickString*/,
       "Position": {
         "X": 1076.518,
         "Y": 34.09912
-      },
-      "SnapshotGroupIndex": "1"
+      }
     },
     {
       "ChildId": "29ec1ca0-024e-4e52-ab26-e697d1596786"/*MockStrings*/,
@@ -82,8 +80,7 @@
       "Position": {
         "X": 200.06091,
         "Y": 565.7988
-      },
-      "SnapshotGroupIndex": "1"
+      }
     },
     {
       "ChildId": "3d7bb8cc-6336-4ffe-baaa-8ec6b4e21098"/*Grain*/,
@@ -139,8 +136,7 @@
       "Position": {
         "X": -27.772034,
         "Y": -431.70114
-      },
-      "SnapshotGroupIndex": "1"
+      }
     },
     {
       "ChildId": "6e313449-92de-4f11-9b67-dd438d98a17e"/*DrawPointSpritesShaded*/,
@@ -154,8 +150,7 @@
       "Position": {
         "X": 1925.4749,
         "Y": -17.268433
-      },
-      "SnapshotGroupIndex": "1"
+      }
     },
     {
       "ChildId": "73c96b49-8113-4ce9-b8d5-3fc844b227b5"/*StringRepeat*/,
@@ -183,8 +178,7 @@
       "Position": {
         "X": 903.69617,
         "Y": 152.73517
-      },
-      "SnapshotGroupIndex": "1"
+      }
     },
     {
       "ChildId": "88903cde-1ab1-4f9c-bd58-255ff7f11549"/*String*/,
@@ -240,8 +234,7 @@
       "Position": {
         "X": 450.0,
         "Y": 40.0
-      },
-      "SnapshotGroupIndex": "1"
+      }
     },
     {
       "ChildId": "b66e66b8-5818-41c6-967f-b46502c58fed"/*PointLight*/,
@@ -262,8 +255,7 @@
       "Position": {
         "X": 1625.4749,
         "Y": 22.731567
-      },
-      "SnapshotGroupIndex": "1"
+      }
     },
     {
       "ChildId": "b84b725c-4a0c-49c0-bbcc-f85337f4852a"/*SubString*/,
@@ -284,8 +276,7 @@
       "Position": {
         "X": 600.0,
         "Y": 213.0
-      },
-      "SnapshotGroupIndex": "1"
+      }
     },
     {
       "ChildId": "c193bd03-8d26-4004-ae1c-34250dcfd8f6"/*WrapString*/,
@@ -320,8 +311,7 @@
       "Position": {
         "X": 1775.4749,
         "Y": -17.268433
-      },
-      "SnapshotGroupIndex": "1"
+      }
     },
     {
       "ChildId": "e5fd26e8-ad61-40a6-a94d-5e3e3819502d"/*PickFromStringList*/,

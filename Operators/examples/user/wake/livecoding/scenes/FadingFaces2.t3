@@ -431,12 +431,6 @@
       "Outputs": []
     },
     {
-      "Id": "bcd044d9-ec8f-497b-9a5d-dc96b7c167e0"/*AdjustColors*/,
-      "SymbolId": "55411442-d538-48bf-ab78-b8c24c85aa46",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "ce898201-e684-44c7-b640-983099e07bb3"/*FilesInFolder*/,
       "SymbolId": "f90fcd0a-eab9-4e2a-b393-e8d3a0380823",
       "InputValues": [

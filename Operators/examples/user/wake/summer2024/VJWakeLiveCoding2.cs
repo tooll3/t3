@@ -1,4 +1,4 @@
-namespace Examples.user.wake;
+namespace Examples.user.wake.summer2024;
 
 [Guid("413478b6-9a7b-4ff5-821b-c7d837e39bcc")]
  internal sealed class VJWakeLiveCoding2 : Instance<VJWakeLiveCoding2>

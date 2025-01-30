@@ -5,7 +5,7 @@
     <Nullable>disable</Nullable>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <VersionPrefix>1.0.10</VersionPrefix>
+    <VersionPrefix>1.0.11</VersionPrefix>
     <RootNamespace>Lib.Editor</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
     <HomeGuid>00000000-0000-0000-0000-000000000000</HomeGuid>
