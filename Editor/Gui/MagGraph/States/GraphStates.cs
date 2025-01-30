@@ -458,7 +458,8 @@ internal static class GraphStates
               Enter: _ => { },
               Update: context =>
                       {
-                          if (!ImGui.IsMouseDown(ImGuiMouseButton.Left))
+                          var wasClick = !ImGui.IsMouseDown(ImGuiMouseButton.Left);
+                          if (wasClick)
                           {
                               context.Placeholder.OpenToSplitHoveredConnections(context); // Will change state implicitly
                               return;
@@ -484,8 +485,8 @@ internal static class GraphStates
                                                                                         connection.AsSymbolConnection(),
                                                                                         h.Connection.MultiInputIndex));
 
-                                  if (connection.MultiInputIndex > 0)
-                                      continue;
+                                  //if (connection.MultiInputIndex > 0)
+                                  //    continue;
 
                                   var tempConnection = new MagGraphConnection
                                                            {

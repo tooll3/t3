@@ -35,10 +35,10 @@ namespace T3.Editor.Gui.MagGraph.Model;
 /// </summary>
 internal sealed class MagGraphLayout
 {
-    public void ComputeLayout(GraphUiContext context , bool forceUpdate = false)
+    public void ComputeLayout(GraphUiContext context, bool forceUpdate = false)
     {
         var compositionOp = context.CompositionInstance;
-        
+
         if (!SymbolUiRegistry.TryGetSymbolUi(compositionOp.Symbol.Id, out var parentSymbolUi))
             return;
 
@@ -54,19 +54,18 @@ internal sealed class MagGraphLayout
     {
         StructureFlaggedAsChanged = true;
     }
-    
-    
+
     private int _structureUpdateCycle;
 
     private void RefreshDataStructure(GraphUiContext context, SymbolUi parentSymbolUi)
     {
         var composition = context.CompositionInstance;
-        
+
         _structureUpdateCycle++;
         CollectItemReferences(composition, parentSymbolUi);
         UpdateConnectionSources(composition);
         UpdateVisibleItemLines(context);
-        CollectConnectionReferences(composition);
+        CollectConnectionReferences(composition, context);
         StructureFlaggedAsChanged = false;
     }
 
@@ -109,7 +108,7 @@ internal sealed class MagGraphLayout
                                  // DampedPosOnCanvas = childUi.PosOnCanvas,
                              };
                 opItem.DampedPosOnCanvas = childUi.PosOnCanvas;
-                Items[childId] = opItem; 
+                Items[childId] = opItem;
                 addedItemCount++;
             }
 
@@ -122,7 +121,6 @@ internal sealed class MagGraphLayout
             opItem.ChildUi = childUi;
             opItem.Size = MagGraphItem.GridSize;
             opItem.LastUpdateCycle = _structureUpdateCycle;
-            
         }
 
         foreach (var input in compositionOp.Inputs)
@@ -235,7 +233,6 @@ internal sealed class MagGraphLayout
 
             var visibleIndex = 0;
 
-            
             switch (item.Variant)
             {
                 // Collect inputs
@@ -291,9 +288,6 @@ internal sealed class MagGraphLayout
                     throw new ArgumentOutOfRangeException();
             }
 
-            
-
-
             item.InputLines = inputLines.ToArray();
             item.OutputLines = outputLines.ToArray();
 
@@ -302,11 +296,11 @@ internal sealed class MagGraphLayout
         }
     }
 
-    
     /// <summary>
     /// This is accessible because for some use-cases we need to compute the height of inserted items.
     /// </summary>
-    internal static int CollectVisibleLines(GraphUiContext context,  MagGraphItem item, List<MagGraphItem.InputLine> inputLines, List<MagGraphItem.OutputLine> outputLines,
+    internal static int CollectVisibleLines(GraphUiContext context, MagGraphItem item, List<MagGraphItem.InputLine> inputLines,
+                                            List<MagGraphItem.OutputLine> outputLines,
                                             HashSet<int>? connectedOutputs = null)
     {
         Debug.Assert(item.Instance != null && item.SymbolUi != null);
@@ -328,19 +322,23 @@ internal sealed class MagGraphLayout
 
             if (input.IsMultiInput && input is IMultiInputSlot)
             {
-                var shouldBeVisible = isRelevant || isPrimaryInput || input.HasInputConnections;
+                var shouldInputBeVisible = isRelevant || isPrimaryInput || input.HasInputConnections;
 
-                var connectionsToInput = context.CompositionInstance.Symbol.Connections.FindAll(c => c.TargetParentOrChildId == item.Id
-                                                                                               && c.TargetSlotId == input.Id);
-                
-                var multiInputIndex = 0;
-                foreach (var _ in connectionsToInput)
+                var connectionsToInput = context
+                                        .CompositionInstance
+                                        .Symbol
+                                        .Connections
+                                        .FindAll(c => c.TargetParentOrChildId == item.Id
+                                                      && c.TargetSlotId == input.Id);
+
+                //var multiInputIndex = 0;
+                var visibleInputIndex = 0;
+                var multiConIndex = 0;
+                for (multiConIndex = 0; multiConIndex < connectionsToInput.Count + 1; multiConIndex++)
                 {
-                    var itemInputHash = MagGraphConnection.GetItemInputHash(item.Id, input.Id, multiInputIndex);
-                    var isVisibleMultiInputLine =     
-                                          context.DisconnectedInputsHashes.Count > 0 
-                                              && context.DisconnectedInputsHashes.Contains(itemInputHash);
-                    if (shouldBeVisible || isVisibleMultiInputLine)
+                    //var _ = connectionsToInput[multiConIndex];
+
+                    if (IsDisconnectedVisibleMultiInputLine(context, item.Id, input.Id, visibleInputIndex))
                     {
                         inputLines.Add(new MagGraphItem.InputLine
                                            {
@@ -349,16 +347,31 @@ internal sealed class MagGraphLayout
                                                Input = input,
                                                InputUi = inputUi,
                                                VisibleIndex = visibleIndex,
-                                               MultiInputIndex = multiInputIndex,
+                                               MultiInputIndex = multiConIndex,
                                            });
-                        
                         visibleIndex++;
                     }
-                    
-                    multiInputIndex++;
+
+                    if (shouldInputBeVisible && multiConIndex<connectionsToInput.Count)
+                    {
+                        inputLines.Add(new MagGraphItem.InputLine
+                                           {
+                                               Id = input.Id,
+                                               Type = input.ValueType,
+                                               Input = input,
+                                               InputUi = inputUi,
+                                               VisibleIndex = visibleIndex,
+                                               MultiInputIndex = multiConIndex,
+                                           });
+
+                        visibleIndex++;
+                    }
+
+                    visibleInputIndex++;
                 }
-                
-                if (shouldBeVisible && multiInputIndex == 0)
+
+                // Show input even it not connected
+                if (shouldInputBeVisible && multiConIndex == 0)
                 {
                     inputLines.Add(new MagGraphItem.InputLine
                                        {
@@ -367,20 +380,19 @@ internal sealed class MagGraphLayout
                                            Input = input,
                                            InputUi = inputUi,
                                            VisibleIndex = visibleIndex,
-                                           MultiInputIndex = multiInputIndex,
+                                           MultiInputIndex = multiConIndex,
                                        });
                     visibleIndex++;
                 }
             }
             else
             {
-                var shouldBeVisible = isRelevant || isPrimaryInput || input.HasInputConnections 
-                                      || (context.DisconnectedInputsHashes.Count > 0 
+                var shouldBeVisible = isRelevant || isPrimaryInput || input.HasInputConnections
+                                      || (context.DisconnectedInputsHashes.Count > 0
                                           && context.DisconnectedInputsHashes.Contains(MagGraphConnection.GetItemInputHash(item.Id, input.Id, 0)));
                 if (!shouldBeVisible)
                     continue;
 
-                
                 inputLines.Add(new MagGraphItem.InputLine
                                    {
                                        Id = input.Id,
@@ -393,8 +405,8 @@ internal sealed class MagGraphLayout
             }
         }
 
-        var hasNoInputs = visibleIndex ==0;
-        
+        var hasNoInputs = visibleIndex == 0;
+
         // Collect outputs
         for (var outputIndex = 0; outputIndex < item.Instance.Outputs.Count; outputIndex++)
         {
@@ -425,7 +437,6 @@ internal sealed class MagGraphLayout
                 item.PrimaryType = output.ValueType;
                 if (hasNoInputs)
                     visibleIndex++;
-
             }
             else
             {
@@ -438,7 +449,17 @@ internal sealed class MagGraphLayout
         return visibleIndex;
     }
 
-    private void CollectConnectionReferences(Instance composition)
+    private static bool IsDisconnectedVisibleMultiInputLine(GraphUiContext context, Guid itemId, Guid inputId,
+                                                            int visibleInputIndex)
+    {
+        var itemInputHash = MagGraphConnection.GetItemInputHash(itemId, inputId, visibleInputIndex);
+        var isDisconnectedVisibleMultiInputLine =
+            context.DisconnectedInputsHashes.Count > 0
+            && context.DisconnectedInputsHashes.Contains(itemInputHash);
+        return isDisconnectedVisibleMultiInputLine;
+    }
+
+    private void CollectConnectionReferences(Instance composition, GraphUiContext context)
     {
         MagConnections.Clear();
         MagConnections.Capacity = composition.Symbol.Connections.Count;
@@ -447,20 +468,20 @@ internal sealed class MagGraphLayout
         for (var cIndex = 0; cIndex < composition.Symbol.Connections.Count; cIndex++)
         {
             c = composition.Symbol.Connections[cIndex];
-            
+
             if (c.IsConnectedToSymbolInput)
             {
                 if (!Items.TryGetValue(c.TargetParentOrChildId, out var targetFromInputItem)
                     || !Items.TryGetValue(c.SourceSlotId, out var symbolInputItem))
                     continue;
-                        
+
                 Debug.Assert(targetFromInputItem.Instance != null);
 
                 var symbolInput = composition.Inputs.FirstOrDefault(i => i.Id == c.SourceSlotId);
                 var targetInput = targetFromInputItem.Instance.Inputs.FirstOrDefault(i => i.Input.InputDefinition.Id == c.TargetSlotId);
                 Debug.Assert(targetInput != null);
 
-                GetVisibleInputIndex(targetFromInputItem, targetInput, out var targetInputIndex, out var targetMultiInputIndex);
+                FindVisibleIndex(targetFromInputItem, targetInput, out var targetInputIndex, out var targetMultiInputIndex, context);
 
                 var connectionFromSymbolInput = new MagGraphConnection
                                                     {
@@ -490,7 +511,7 @@ internal sealed class MagGraphLayout
                     Log.Warning("Inconsistent output connection " + c);
                     continue;
                 }
-                
+
                 Debug.Assert(sourceItem2.Instance != null);
 
                 //var symbolOutput = composition.Outputs.FirstOrDefault((o => o.Id == c.TargetSlotId));
@@ -546,7 +567,7 @@ internal sealed class MagGraphLayout
             // Connections between nodes
             if (sourceItem.Instance == null || targetItem.Instance == null)
                 continue;
-            
+
             var output = sourceItem.Variant == MagGraphItem.Variants.Input
                              ? sourceItem.Instance.Inputs.FirstOrDefault(o => o.Id == c.SourceSlotId)
                              : sourceItem.Instance.Outputs.FirstOrDefault(o => o.Id == c.SourceSlotId);
@@ -559,7 +580,7 @@ internal sealed class MagGraphLayout
                 continue;
             }
 
-            GetVisibleInputIndex(targetItem, input, out var inputIndex, out var multiInputIndex2);
+            FindVisibleIndex(targetItem, input, out var inputIndex, out var multiInputIndex2, context);
 
             var outputIndex = 0;
             foreach (var outLine in sourceItem.OutputLines)
@@ -596,26 +617,34 @@ internal sealed class MagGraphLayout
         }
     }
 
-    private static void GetVisibleInputIndex(MagGraphItem targetItem, IInputSlot input, out int inputIndex, out int multiInputIndex)
+    /// <summary>
+    /// This method needs to be rethought and cleaned up.
+    /// MultiInputIndex will always return max count?
+    /// </summary>
+    private static void FindVisibleIndex(MagGraphItem targetItem, IInputSlot input, out int visibleInputIndex, out int multiInputIndex, GraphUiContext context)
     {
         // Find connected index
-        inputIndex = 0;
         multiInputIndex = 0;
-        for (var index = 0; index < targetItem.InputLines.Length; index++)
+        for (visibleInputIndex = 0; visibleInputIndex < targetItem.InputLines.Length; visibleInputIndex++)
         {
-            if (targetItem.InputLines[index].Id == input.Id)
+            if (targetItem.InputLines[visibleInputIndex].Id == input.Id)
             {
-                while (targetItem.InputLines[index].ConnectionIn != null && index < targetItem.InputLines.Length)
+                // var xxx = IsDisconnectedVisibleMultiInputLine(context, targetItem.Id, input.Id, multiInputIndex);
+                // if (xxx)
+                // {
+                //     Log.Debug("Found tmp multiinput slot");
+                // }
+                // Skip already connected multi-inputs slots...
+                // (This assumes ConnectionIn to be nullified before using this)
+                while (targetItem.InputLines[visibleInputIndex].ConnectionIn != null 
+                       && visibleInputIndex < targetItem.InputLines.Length)
                 {
-                    index++;
-                    inputIndex++;
+                    visibleInputIndex++;
                     multiInputIndex++;
                 }
 
-                break;
+                return;
             }
-
-            inputIndex++;
         }
     }
 
