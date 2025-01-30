@@ -18,8 +18,11 @@ public static partial class ResourceManager
         backCompatPaths = null;
         if (Path.IsPathRooted(relativePath))
         {
-            Log.Warning($"Path '{relativePath}' is not relative. This is deprecated and should be relative to the project Resources folder as " +
-                        $"live updates will not occur. Please update your project settings.");
+            var isProbablyFromFilePathScanning = relativePath.IndexOf("Editor/bin/Debug/net9.0-windows/Resources", StringComparison.Ordinal) != -1;
+            if(!isProbablyFromFilePathScanning)
+                Log.Warning($"Path '{relativePath}' is not relative. This is deprecated and should be relative to the project Resources folder as " +
+                            $"live updates will not occur. Please update your project settings.");
+            
             isAbsolute = true;
             return false;
         }
