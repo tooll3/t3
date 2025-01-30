@@ -67,6 +67,11 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
             RefreshView();
         }
 
+        if(KeyboardBinding.Triggered(UserActions.FocusSelection))
+        {
+            ResetView();
+        }
+
         //UpdateCanvas();
         HandleFenceSelection(_selectionFence);
 
@@ -407,7 +412,7 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
         _allThumbnailsRendered = false;
     }
 
-    protected void ResetView(bool hideHide = false)
+    protected void ResetView(bool hideHeader = false)
     {
         var pool = PoolForBlendOperations;
         if (pool == null)
@@ -415,7 +420,7 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
 
         if (TryToGetBoundingBox(pool.AllVariations, 40, out var area))
         {
-            if (!hideHide)
+            if (!hideHeader)
             {
                 area.Min.Y -= 150;
             }

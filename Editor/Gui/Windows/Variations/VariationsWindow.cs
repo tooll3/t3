@@ -81,8 +81,8 @@ internal class VariationsWindow : Window
                 if (FormInputs.SegmentedButton(ref _interactionMode))
                 {
                     // _interactionMode = (InteractionModes)viewModeIndex;
-                    _presetCanvas.RefreshView();
-                    _snapshotCanvas.RefreshView();
+                    //_presetCanvas.RefreshView();
+                    //_snapshotCanvas.RefreshView();
                 }
 
                 ImGui.SameLine();
