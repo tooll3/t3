@@ -29,7 +29,7 @@ internal sealed class NewProjectDialog : ModalDialog
             // Name and namespace
             string namespaceWarningText = null;
             bool namespaceCorrect = true;
-            if (!_newNamespace.StartsWith(_userName) || _newNamespace.Length > _userName.Length && _newNamespace[_userName.Length] != '.')
+            if (!_newNamespace.StartsWith(_userName))
             {
                 namespaceCorrect = false;
                 namespaceWarningText = $"Namespace must be within the \"{_userName}\" namespace";

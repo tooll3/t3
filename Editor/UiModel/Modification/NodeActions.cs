@@ -186,6 +186,12 @@ internal static class NodeActions
         try
         {
             var text = EditorUi.Instance.GetClipboardText();
+            if (string.IsNullOrEmpty(text))
+            {
+                Log.Debug($"Can't paste empty clipboard.");
+                return;
+            }
+            
             using var reader = new StringReader(text);
             var jsonReader = new JsonTextReader(reader);
             if (JToken.ReadFrom(jsonReader, SymbolJson.LoadSettings) is not JArray jArray)
