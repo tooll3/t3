@@ -119,7 +119,8 @@ public static class SequenceAnimUi
         return SymbolUi.Child.CustomUiResult.Rendered 
                | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph 
                | SymbolUi.Child.CustomUiResult.PreventInputLabels
-               | SymbolUi.Child.CustomUiResult.PreventTooltip;
+               | SymbolUi.Child.CustomUiResult.PreventTooltip
+               | (isEditActive ? SymbolUi.Child.CustomUiResult.IsActive : SymbolUi.Child.CustomUiResult.None);
     }
 
     // private static float _dragStartBias;

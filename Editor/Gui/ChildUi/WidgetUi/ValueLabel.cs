@@ -17,9 +17,10 @@ public static class ValueLabel
             
         var modified = false;
         //var value = (double)inputSlot.TypedInputValue.Value;
-        var value = (inputSlot.HasInputConnections) 
-                        ? (double)inputSlot.Value 
-                        :(double)inputSlot.TypedInputValue.Value;
+        var value = (double)inputSlot.GetCurrentValue();
+            // // (inputSlot.HasInputConnections) 
+            //             ? (double)inputSlot.Value 
+            //             :(double)inputSlot.TypedInputValue.Value;
             
         var valueText = $"{value:G5}";
         var hashCode = inputSlot.GetHashCode();
@@ -38,7 +39,7 @@ public static class ValueLabel
             {
                 ImGui.InvisibleButton("button", labelSize);
                     
-                double value2 = inputSlot.TypedInputValue.Value;
+                //double value2 = inputSlot.TypedInputValue.Value;
                 var restarted = false;
                 if (ImGui.IsItemActivated() && ImGui.GetIO().KeyCtrl)
                 {

@@ -26,6 +26,8 @@ public static class TriggerAnimUi
         //     triggerAnimation.Rate.DirtyFlag.Invalidate();
         // }
 
+        var isEditActive = false;
+
         var h = screenRect.GetHeight();
         var graphRect = screenRect;
 
@@ -45,49 +47,46 @@ public static class TriggerAnimUi
 
         if (h > 14)
         {
-            ValueLabel.Draw(drawList, graphRect, new Vector2(1, 0), anim.Amplitude);
-            ValueLabel.Draw(drawList, graphRect, new Vector2(1, 1), anim.Base);
+            isEditActive|=ValueLabel.Draw(drawList, graphRect, new Vector2(1, 0), anim.Amplitude);
+            isEditActive|=ValueLabel.Draw(drawList, graphRect, new Vector2(1, 1), anim.Base);
         }
             
         // Graph dragging to edit Bias and Ratio
-        var isActive = false;
+        var isGraphActive = false;
             
         ImGui.SetCursorScreenPos(graphRect.Min);
         if (ImGui.GetIO().KeyCtrl)
         {
             ImGui.InvisibleButton("dragMicroGraph", graphRect.GetSize());
-            isActive = ImGui.IsItemActive();
+            isGraphActive = ImGui.IsItemActive();
         }
 
-        var duration = anim.Duration.Value;
+        var duration = anim.Duration.GetCurrentValue();
             
-        if (isActive)
+        if (isGraphActive)
         {
+            isEditActive = true;
             var dragDelta = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 1);
             
             if (ImGui.IsItemActivated())
             {
                 //_dragStartPosition = ImGui.GetMousePos();
-                _dragStartBias = anim.Bias.TypedInputValue.Value;
-                _dragStartDuration = anim.Duration.TypedInputValue.Value;
+                _dragStartBias = anim.Bias.GetCurrentValue();// anim.Bias.TypedInputValue.Value;
+                _dragStartDuration = anim.Duration.GetCurrentValue();
             }
             
             if (MathF.Abs(dragDelta.X) > 0.5f)
             {
-                anim.Duration.TypedInputValue.Value = (_dragStartDuration + dragDelta.X / 100f).Clamp(0.001f, 4f);
-                anim.Duration.DirtyFlag.Invalidate();
-                anim.Duration.Input.IsDefault = false;
+                anim.Duration.SetTypedInputValue((_dragStartDuration + dragDelta.X / 100f).Clamp(0.001f, 4f));
             }
             
             if (Math.Abs(dragDelta.Y) > 0.5f)
             {
-                anim.Bias.TypedInputValue.Value = (_dragStartBias - dragDelta.Y / 100f).Clamp(0.01f, 0.99f);
-                anim.Bias.DirtyFlag.Invalidate();
-                anim.Bias.Input.IsDefault = false;
+                anim.Bias.SetTypedInputValue((_dragStartBias - dragDelta.Y / 100f).Clamp(0.01f, 0.99f));
             }
         }
 
-        var delay = anim.Delay.Value;
+        var delay = anim.Delay.GetCurrentValue();//.Value;
             
         // Draw Graph
         {
@@ -118,10 +117,10 @@ public static class TriggerAnimUi
             //        |
                 
                 
-            var shapeValue = anim.Shape.HasInputConnections 
-                                 ? anim.Shape.Value 
-                                 :anim.Shape.TypedInputValue.Value;
-            var shapeIndex = shapeValue.Clamp(0, Enum.GetNames<TriggerAnim.Shapes>().Length -1 );
+            // var shapeValue = anim.Shape.HasInputConnections 
+            //                      ? anim.Shape.Value 
+            //                      :anim.Shape.TypedInputValue.Value;
+            var shapeIndex = anim.Shape.GetCurrentValue().Clamp(0, Enum.GetNames<TriggerAnim.Shapes>().Length -1 );
 
             for (var i = 0; i < GraphListSteps; i++)
             {
@@ -140,7 +139,8 @@ public static class TriggerAnimUi
         return SymbolUi.Child.CustomUiResult.Rendered 
                | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph 
                | SymbolUi.Child.CustomUiResult.PreventInputLabels
-               | SymbolUi.Child.CustomUiResult.PreventTooltip;
+               | SymbolUi.Child.CustomUiResult.PreventTooltip
+               | (isEditActive ? SymbolUi.Child.CustomUiResult.IsActive : SymbolUi.Child.CustomUiResult.None);
     }
 
     private static float _dragStartBias;

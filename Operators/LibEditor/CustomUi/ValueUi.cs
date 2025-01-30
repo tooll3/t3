@@ -33,7 +33,8 @@ public static class ValueUi
         var value = (isAnimated || valueInstance.Float.HasInputConnections) 
                         ? (double)valueInstance.Float.Value 
                         :(double)valueInstance.Float.TypedInputValue.Value;
-            
+
+        var isActive = false;
         // Draw slider
         const float rangeMin = 0f;
         const float rangeMax = 1f;
@@ -63,6 +64,7 @@ public static class ValueUi
             var inputSlot = valueInstance.Float;
             if (editingUnlocked)
             {
+                isActive = true;
                 ImGui.SetCursorScreenPos(area.Min);
                 ImGui.InvisibleButton("button", area.GetSize());
                     
@@ -104,7 +106,8 @@ public static class ValueUi
         return SymbolUi.Child.CustomUiResult.Rendered 
                | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph 
                | SymbolUi.Child.CustomUiResult.PreventInputLabels
-               | SymbolUi.Child.CustomUiResult.PreventTooltip;
+               | SymbolUi.Child.CustomUiResult.PreventTooltip
+               | (isActive  ? SymbolUi.Child.CustomUiResult.IsActive : SymbolUi.Child.CustomUiResult.None);
     }
 
     private static Vector2 _jogDialCenter;

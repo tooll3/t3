@@ -3,6 +3,7 @@ using ImGuiNET;
 using Lib.numbers.@bool.logic;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
@@ -56,15 +57,27 @@ public static class TriggerUi
                                     ImGui.IsWindowHovered() && activeRect.Contains(ImGui.GetMousePos());
             if (isHoveredOrActive)
             {
+                var wasChanged = false;
                 if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
                 {
                     trigger.BoolValue.SetTypedInputValue(true);
                     activeInputId = trigger.SymbolChildId;
+                    trigger.Result.DirtyFlag.Invalidate();
+                    wasChanged = true;
+
                 }
                 else if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                 {
                     activeInputId = Guid.Empty;
+                    
                     trigger.BoolValue.SetTypedInputValue(false);
+                    wasChanged = true;
+                }
+
+                if (wasChanged)
+                {
+                    // TODO: This hack to enforce invalidation should not be necessary
+                    trigger.Result.DirtyFlag.Trigger = DirtyFlagTrigger.Animated;
                 }
             }
         }
