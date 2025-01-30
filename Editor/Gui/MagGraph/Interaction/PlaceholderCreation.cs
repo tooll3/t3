@@ -86,7 +86,7 @@ internal sealed class PlaceholderCreation
                               };
 
         context.Layout.Items[PlaceHolderId] = PlaceholderItem;
-        PlaceHolderUi.Open(context, PlaceholderItem, outputFilter: inputTypeFilter);
+        PlaceHolderUi.Open(context, PlaceholderItem, inputFilter: inputTypeFilter);
     }
 
     internal void OpenForItem(GraphUiContext context,
