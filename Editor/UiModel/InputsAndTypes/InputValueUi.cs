@@ -368,7 +368,12 @@ public abstract class InputValueUi<T> : IInputUi
                                                     {
                                                         UndoRedoStack.AddAndExecute(new RemoveAnimationsCommand(animator, new[] { inputSlot }));
                                                     }
-
+                                                    
+                                                    if (ParameterWindow.IsAnyInstanceVisible() && ImGui.MenuItem("Rename input"))
+                                                    {
+                                                        ParameterWindow.RenameInputDialog.ShowNextFrame(symbolChildUi.SymbolChild.Symbol, input.InputDefinition.Id);
+                                                    }
+                                                    
                                                     if (ImGui.MenuItem("Parameters settings"))
                                                         editState = InputEditStateFlags.ShowOptions;
                                                 });
@@ -483,15 +488,14 @@ public abstract class InputValueUi<T> : IInputUi
                      {
                          InputArea.PublishAsInput(nodeSelection, inputSlot, symbolChildUi, input);
                      }
+                     if (ParameterWindow.IsAnyInstanceVisible() && ImGui.MenuItem("Rename input"))
+                     {
+                         ParameterWindow.RenameInputDialog.ShowNextFrame(symbolChildUi.SymbolChild.Symbol, input.InputDefinition.Id);
+                     }
                      
                      if (ImGui.MenuItem("Parameters settings"))
                          editState = InputEditStateFlags.ShowOptions;
                      
-                     if (ParameterWindow.IsAnyInstanceVisible() && ImGui.MenuItem("Rename input"))
-                     {
-                         ParameterWindow.RenameInputDialog.ShowNextFrame(symbolChildUi.SymbolChild.Symbol,
-                                                                         input.InputDefinition.Id);
-                     }
                  });
             ImGui.PopStyleVar();
 
