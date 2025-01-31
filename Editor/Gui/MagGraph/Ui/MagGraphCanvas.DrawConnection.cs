@@ -158,7 +158,7 @@ internal sealed partial class MagGraphCanvas
                                                              TransformRect(connection.TargetItem.VerticalStackArea),
                                                              targetPosOnScreen,
                                                              typeColor,
-                                                             MathUtils.Lerp(1f, 2f, idleFadeProgress) + (isSelected|wasHoveredLastFrame ? 1 : 0),
+                                                             MathUtils.Lerp(0.25f, 1f, idleFadeProgress) + (isSelected|wasHoveredLastFrame ? 1 : 0),
                                                              out var hoverPositionOnLine,
                                                              out var normalizedHoverPos))
                     {

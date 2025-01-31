@@ -254,7 +254,7 @@ internal static class GraphConnectionDrawer
 
     private static int ComputerSegmentCount(float arcLengthRad, float canvasScale)
     {
-        var circleResolution = (int) canvasScale.RemapAndClamp(0.2f, 1.5f, 4, 10);
+        var circleResolution = (int) canvasScale.RemapAndClamp(0.2f, 1.5f, 6, 15);
         return (int)(arcLengthRad * circleResolution).Clamp(1,100);
     }
     
