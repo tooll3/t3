@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+using ImGuiNET;
 using T3.Editor.Gui.Styling;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.ProjectHandling;
@@ -54,8 +55,8 @@ internal static class RenameInstanceOverlay
         if (_focusedInstanceId == Guid.Empty)
             return;
 
-        var parentSymbolUi = components.CompositionInstance.GetSymbolUi();
-        if (!parentSymbolUi.ChildUis.TryGetValue(_focusedInstanceId, out var symbolChildUi))
+        var parentSymbolUi = components.CompositionInstance?.GetSymbolUi();
+        if (parentSymbolUi == null || !parentSymbolUi.ChildUis.TryGetValue(_focusedInstanceId, out var symbolChildUi))
         {
             Log.Error("canceling rename overlay of no longer valid selection");
             _focusedInstanceId = Guid.Empty;
@@ -69,10 +70,16 @@ internal static class RenameInstanceOverlay
         ImGui.SetCursorScreenPos(positionInScreen + Vector2.One);
             
         var text = symbolChild.Name;
-        //ImGui.SetNextItemWidth(160);
-        CustomComponents.DrawInputFieldWithPlaceholder("Untitled", ref text, 200, false, ImGuiInputTextFlags.AutoSelectAll);
-        //ImGui.InputText("##input", ref text, 256, ImGuiInputTextFlags.AutoSelectAll);
-        symbolChild.Name = text;
+        if (CustomComponents.DrawInputFieldWithPlaceholder("Untitled", 
+                                                           ref text,
+                                                           200, 
+                                                           false, 
+                                                           ImGuiInputTextFlags.AutoSelectAll))
+        {
+            symbolChild.Name = text;
+            parentSymbolUi.FlagAsModified();
+            
+        }
             
         if (!justOpened && (ImGui.IsItemDeactivated() || ImGui.IsKeyPressed((ImGuiKey)Key.Return)))
         {
