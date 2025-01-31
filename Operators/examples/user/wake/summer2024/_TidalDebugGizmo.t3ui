@@ -5,8 +5,8 @@
     {
       "InputId": "11a66dbf-000d-4241-bc67-1acb7a3771d2"/*UseNotesForBeats*/,
       "Position": {
-        "X": -1017.3175,
-        "Y": 304.39523
+        "X": -620.2769,
+        "Y": 163.83467
       }
     },
     {
@@ -20,23 +20,31 @@
     {
       "InputId": "2a0e7afe-8903-44c7-b99d-399d7a6243e1"/*LogDebug*/,
       "Position": {
-        "X": -1013.464,
-        "Y": 508.2263
+        "X": -620.2769,
+        "Y": 198.83467
       }
     },
     {
       "InputId": "656303da-90bf-4790-84e8-7b9f5aac2ebd"/*Notes*/,
       "Position": {
-        "X": -1013.464,
-        "Y": 463.2263
+        "X": 32.864624,
+        "Y": 619.3308
       },
       "Usage": "Multiline"
     },
     {
+      "InputId": "7897e809-fe33-4cea-957e-9460f469a254"/*FilterNotes*/,
+      "Position": {
+        "X": -620.2769,
+        "Y": 58.83467
+      },
+      "Usage": "Default"
+    },
+    {
       "InputId": "ba924ff3-b386-42f9-b2b1-a408a5d1c66a"/*Name*/,
       "Position": {
-        "X": -1013.464,
-        "Y": 418.2263
+        "X": 18.685608,
+        "Y": 550.0528
       },
       "GroupTitle": "Notes",
       "Usage": "Multiline"
@@ -52,7 +60,7 @@
     {
       "InputId": "ff44cec1-765d-420b-8c3c-77f971b5f50b"/*DictionaryInput*/,
       "Position": {
-        "X": -630.2769,
+        "X": -620.2769,
         "Y": 23.834671
       }
     }
@@ -68,8 +76,8 @@
     {
       "ChildId": "0d05cc81-7bd8-4e30-a3cd-268c5820995d"/*GetIntVar*/,
       "Position": {
-        "X": -149.30856,
-        "Y": 328.82993
+        "X": -206.91092,
+        "Y": 324.39896
       }
     },
     {
@@ -192,24 +200,10 @@
       }
     },
     {
-      "ChildId": "8adf7eec-3271-4d58-92e9-9000bcdef5ea"/*CombineStrings*/,
-      "Position": {
-        "X": -786.9805,
-        "Y": 119.8772
-      }
-    },
-    {
       "ChildId": "8e3eeba4-dcb8-496b-a52d-6989d235ea4f"/*_GetTidalTrigger*/,
       "Position": {
         "X": -480.27692,
         "Y": 23.834671
-      }
-    },
-    {
-      "ChildId": "94331f3d-92d3-4dce-9058-c680524e36cb"/*String*/,
-      "Position": {
-        "X": -1024.5795,
-        "Y": 128.37907
       }
     },
     {
@@ -257,8 +251,8 @@
     {
       "ChildId": "d58c9034-b52a-44e2-822f-71db5a1c9d14"/*DelayBoolean*/,
       "Position": {
-        "X": -174.15613,
-        "Y": 111.49759
+        "X": -66.91092,
+        "Y": 289.39896
       }
     },
     {

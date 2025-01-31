@@ -426,7 +426,7 @@
         {
           "Id": "fd1fca6b-a3be-440b-86ba-6b7b1bbd2a8c"/*SourceName*/,
           "Type": "System.String",
-          "Value": "LENAS-LAPTOP.LOCAL (OBS14)"
+          "Value": "LENAS-LAPTOP.LOCAL (OBS21)"
         }
       ],
       "Outputs": []
@@ -815,6 +815,12 @@
       "SourceSlotId": "1d5f3a4c-227d-4875-a2ad-0ef445a675fe",
       "TargetParentOrChildId": "c2805634-7a4b-4809-b96a-8da96e53fa1f",
       "TargetSlotId": "f06e5ede-f7ff-48ed-b2cf-9a87ef5932ec"
+    },
+    {
+      "SourceParentOrChildId": "b353c066-a835-4d38-8cbf-ccc6fbf244fe",
+      "SourceSlotId": "85f1af38-074e-475d-94f5-f48079979509",
+      "TargetParentOrChildId": "d3febda4-9ff8-488b-bf1a-a17d5f1f5551",
+      "TargetSlotId": "2a95ac54-5ef7-4d3c-a90b-ecd5b422bddc"
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",

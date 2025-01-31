@@ -127,7 +127,7 @@
         {
           "Id": "54ecb0e0-6fc0-4441-b26b-b820e95475a0"/*ShiftBrightness*/,
           "Type": "System.Single",
-          "Value": -0.0186
+          "Value": -0.0025
         },
         {
           "Id": "73ba7691-784f-4706-8a88-9305f723c4cc"/*Displacement*/,
@@ -142,7 +142,7 @@
         {
           "Id": "c027bc94-4ef8-4828-8df5-d30abbd31cbc"/*AmplifyEdges*/,
           "Type": "System.Single",
-          "Value": 3.06
+          "Value": 1.2
         },
         {
           "Id": "c7f25ad5-1907-4851-8057-7c73f82da1be"/*RangeClamping*/,
@@ -221,7 +221,6 @@
     },
     {
       "Id": "55fa0d12-8067-456b-a5d0-021a831cfde9"/*ColorGrade*/,
-      "IsBypassed": true,
       "SymbolId": "42d86738-d644-47c8-ab92-cc426d958e51",
       "InputValues": [
         {
@@ -248,9 +247,9 @@
           "Id": "e8cc8a26-313e-4399-b800-901019bbaa78"/*Lift*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.64,
-            "Y": 0.64,
-            "Z": 0.64,
+            "X": 0.49999997,
+            "Y": 0.49999997,
+            "Z": 0.49999997,
             "W": 0.25
           }
         }

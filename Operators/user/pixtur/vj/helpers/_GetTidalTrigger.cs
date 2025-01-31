@@ -48,42 +48,66 @@ public class _GetTidalTrigger : Instance<_GetTidalTrigger>
         var notePath = path + NoteChannel.GetValue(context);
         var cyclePath = path + CycleChannel.GetValue(context);
 
-        if (logDebug)
+        if (FilterNotes.DirtyFlag.IsDirty)
         {
-            Log.Debug($"Note: {notePath}   Cycle: {cyclePath}", this);
+            _noteFilter.Clear();
+            var noteFilter = FilterNotes.GetValue(context);
+            if (!string.IsNullOrEmpty(noteFilter))
+            {
+                foreach (var x in noteFilter.Split(","))
+                {
+                    if(int.TryParse(x.Trim(), out var n))
+                    {
+                        _noteFilter.Add(n);
+                    }
+                }
+            }
         }
-
+        
         if (
             _dict.TryGetValue(notePath, out var note)
             && _dict.TryGetValue(cyclePath, out var cycle))
         {
-            if (useNotesForBeats)
+            if (IsValidNote(note))
             {
-                Note.Value = note;
-                WasTrigger.Value = cycle > _lastCycle;
-                _lastCycle = cycle;
-                if (logDebug)
+                if (useNotesForBeats)
                 {
-                    Log.Debug($"found beat {notePath} '{note}'  '{channel}' " ,this);
+                    Note.Value = note;
+                    WasTrigger.Value = cycle > _lastCycle;
+                    _lastCycle = cycle;
+                    if (logDebug)
+                    {
+                        Log.Debug($"found beat {notePath} '{note}'  '{channel}' " ,this);
+                    }
                 }
-            }
-            else
-            {
-                Note.Value = note;
-                WasTrigger.Value = cycle > _lastCycle;
-                _lastCycle = cycle;
+                else
+                {
+                    Note.Value = note;
+                    WasTrigger.Value = cycle > _lastCycle;
+                    _lastCycle = cycle;
+                }
             }
             SetStatus(null, IStatusProvider.StatusLevel.Success);
         }
-
+        
+        if (logDebug)
+        {
+            Log.Debug($"Note: {notePath} {note}   Cycle: {cyclePath} {_lastCycle}", this);
+        }
 
         Note.DirtyFlag.Clear();
         WasTrigger.DirtyFlag.Clear();
     }
 
+    private bool IsValidNote(float note)
+    {
+        return _noteFilter.Count == 0 || _noteFilter.Contains((int)note);
+    }
+    
     private float _lastCycle = 0;
 
     private Dict<float> _dict;
+    private readonly HashSet<int> _noteFilter=[];
 
     #region implement status provider
     private void SetStatus(string message, IStatusProvider.StatusLevel level)
@@ -131,6 +155,9 @@ public class _GetTidalTrigger : Instance<_GetTidalTrigger>
     [Input(Guid = "E594E270-B748-4B96-AB19-9A0D30CDBCCA")]
     public readonly InputSlot<string> NoteChannel = new();
 
+    [Input(Guid = "255ADFB5-CF8B-4DD7-958F-3D810D48760F")]
+    public readonly InputSlot<string> FilterNotes = new();
+    
     [Input(Guid = "FF5A9352-8BFA-4D73-9992-306AF55213AE")]
     public readonly InputSlot<string> CycleChannel = new();
 

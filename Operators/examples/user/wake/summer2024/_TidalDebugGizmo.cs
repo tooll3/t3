@@ -33,4 +33,7 @@ namespace Examples.user.wake.summer2024;
     [Input(Guid = "2a0e7afe-8903-44c7-b99d-399d7a6243e1")]
     public readonly InputSlot<bool> LogDebug = new InputSlot<bool>();
 
+        [Input(Guid = "7897e809-fe33-4cea-957e-9460f469a254")]
+        public readonly InputSlot<string> FilterNotes = new InputSlot<string>();
+
 }

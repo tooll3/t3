@@ -626,7 +626,7 @@
       }
     },
     {
-      "ChildId": "74279837-2bbc-40b3-acc3-9d6e7b248cdd"/*Bass 1x*/,
+      "ChildId": "74279837-2bbc-40b3-acc3-9d6e7b248cdd"/*Synth*/,
       "Position": {
         "X": -8358.249,
         "Y": 989.49976
@@ -673,7 +673,7 @@
       }
     },
     {
-      "ChildId": "79232fc1-5607-4551-b960-a8e59dacf0ee"/*Clap*/,
+      "ChildId": "79232fc1-5607-4551-b960-a8e59dacf0ee"/*Synth*/,
       "Comment": "TODO: Connected to sub bass comming in later.",
       "Position": {
         "X": -7558.8145,
@@ -831,7 +831,7 @@
       }
     },
     {
-      "ChildId": "8f48a250-ecf9-48c5-9b45-444f538408d1"/*Bass 1x*/,
+      "ChildId": "8f48a250-ecf9-48c5-9b45-444f538408d1"/*Buzz Bass*/,
       "Position": {
         "X": -8361.688,
         "Y": 872.9138
@@ -937,7 +937,7 @@
       }
     },
     {
-      "ChildId": "a2cbe4b3-5989-4374-a3cf-e2b90c2dfe9f"/*Set 125 BPM*/,
+      "ChildId": "a2cbe4b3-5989-4374-a3cf-e2b90c2dfe9f"/*Set 60 BPM*/,
       "Position": {
         "X": -5944.051,
         "Y": 2156.764
@@ -976,6 +976,13 @@
       "Position": {
         "X": -7321.751,
         "Y": 654.9645
+      }
+    },
+    {
+      "ChildId": "b008d9a9-cd0a-409a-9d4b-e48163783850"/*NewBeginning*/,
+      "Position": {
+        "X": -7085.569,
+        "Y": 1150.4136
       }
     },
     {
@@ -1179,7 +1186,7 @@
       }
     },
     {
-      "ChildId": "d641f91c-739b-4fea-9795-df0159dea93f"/*Clap*/,
+      "ChildId": "d641f91c-739b-4fea-9795-df0159dea93f"/*BuzzBass*/,
       "Comment": "TODO: Connected to sub bass comming in later.",
       "Position": {
         "X": -7575.636,
@@ -1358,8 +1365,8 @@
     {
       "ChildId": "f2b224c4-c0c4-4a0b-8233-ad9aef7c57ab"/*SetTidalDelayFrame*/,
       "Position": {
-        "X": -5630.987,
-        "Y": 1289.5924
+        "X": -5511.199,
+        "Y": 1326.3693
       }
     },
     {
@@ -1374,6 +1381,13 @@
       "Position": {
         "X": -7698.8145,
         "Y": 1073.2551
+      }
+    },
+    {
+      "ChildId": "f552dab7-e3c5-4201-b524-d97ca56c95d9"/*Beats*/,
+      "Position": {
+        "X": -8367.844,
+        "Y": 493.08344
       }
     },
     {

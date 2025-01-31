@@ -8,12 +8,12 @@ cbuffer Params : register(b0)
     // float HasPointCountChanged;
 }
 
-RWStructuredBuffer<LegacyPoint> TrailPoints : register(u0); // output
+RWStructuredBuffer<Point> TrailPoints : register(u0); // output
 
 [numthreads(64, 1, 1)] void main(uint3 i : SV_DispatchThreadID)
 {
     uint pointCount, stride;
     TrailPoints.GetDimensions(pointCount, stride);
 
-    TrailPoints[i.x].W = sqrt(-1);
+    TrailPoints[i.x].Scale = NAN;
 }
