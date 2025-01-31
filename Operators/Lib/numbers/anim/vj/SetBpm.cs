@@ -1,4 +1,6 @@
+using Lib.Utils;
 using T3.Core.Animation;
+using T3.Core.Audio;
 using T3.Core.Utils;
 
 namespace Lib.numbers.anim.vj;
@@ -16,7 +18,6 @@ internal sealed class SetBpm : Instance<SetBpm>
 
     private void Update(EvaluationContext context)
     {
-            
         var bpm = BpmRate.GetValue(context);
 
         var wasTriggered = MathUtils.WasTriggered(TriggerUpdate.GetValue(context), ref _triggerUpdate);
@@ -27,31 +28,36 @@ internal sealed class SetBpm : Instance<SetBpm>
             if (Playback.Current == null)
             {
                 Log.Warning("Can't set BPM-Rate without active Playback", this);
-                return;
             }
-            Log.Debug($"Setting BPM rate to {clampedRate}", this);
-            //Playback.Current.Bpm = clampedRate;
-            _setBpmTriggered = true;
-            _newBpmRate = clampedRate;
+            else
+            {
+                Log.Debug($"Setting BPM rate to {clampedRate}", this);
+                _setBpmTriggered = true;
+                _newBpmRate = clampedRate;
+
+                // This will be picked up by PlaybackUtils
+                BpmProvider.Instance.NewBpmRate = clampedRate;
+                BpmProvider.Instance.SetBpmTriggered = true;
+            }
         }
-            
         SubGraph.GetValue(context);
     }
 
         
-    // This will be process every frame by the editor
-    public static bool TryGetNewBpmRate(out float bpm)
-    {
-        if (!_setBpmTriggered)
-        {
-            bpm = _newBpmRate;
-            return false;
-        }
-
-        _setBpmTriggered = false;
-        bpm = _newBpmRate;
-        return true;
-    }
+    // NOTE: This used to be process every frame by the editor
+    // TODO: this is now obsolete and should be removed
+    // public static bool TryGetNewBpmRate(out float bpm)
+    // {
+    //     if (!_setBpmTriggered)
+    //     {
+    //         bpm = _newBpmRate;
+    //         return false;
+    //     }
+    //
+    //     _setBpmTriggered = false;
+    //     bpm = _newBpmRate;
+    //     return true;
+    // }
         
     private static bool _setBpmTriggered;
     private static float _newBpmRate;

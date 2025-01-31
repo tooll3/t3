@@ -50,13 +50,13 @@ public static class PlaybackUtils
                         
                 }
                     
-                //BeatTiming.SlideSyncTime = ForwardBeatTaps.SlideSyncTime;
                 Playback.Current.Settings.Bpm = (float)Playback.Current.Bpm;
-                    
-                if (BpmProvider != null &&  BpmProvider.TryGetNewBpmRate(out _))
+                
+                // Process callback from [SetBpm] operator
+                if (BpmProvider != null && BpmProvider.TryGetNewBpmRate(out var newBpmRate2))
                 {
-                    Log.Warning("SetBpm in BeatTapping mode has no effect.");
-                    // settings.Bpm = newBpmRate2;
+                    Log.Debug($" Setting new bpm rate {newBpmRate2}");
+                    BeatTiming.SetBpmRate(newBpmRate2);
                 }
                     
                 BeatTiming.Update();
@@ -70,9 +70,10 @@ public static class PlaybackUtils
         // Process callback from [SetBpm] operator
         if (BpmProvider != null && BpmProvider.TryGetNewBpmRate(out var newBpmRate))
         {
+            Log.Debug($" Applying {newBpmRate} BPM to settings");
             settings.Bpm = newBpmRate;
         }
-
+        
         Playback.Current.Bpm = settings.Bpm;
         Playback.Current.Update(UserSettings.Config.EnableIdleMotion);
         Playback.Current.Settings = settings;

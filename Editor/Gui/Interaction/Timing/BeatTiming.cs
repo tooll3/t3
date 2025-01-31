@@ -17,6 +17,7 @@ public static class BeatTiming
     public static void SetBpmRate(float bpm)
     {
         _beatDuration = 60f / bpm;
+        _tapTimes.Clear();
     }
 
     public static void TriggerSyncTap() => _tapTriggeredLastFrame = true;

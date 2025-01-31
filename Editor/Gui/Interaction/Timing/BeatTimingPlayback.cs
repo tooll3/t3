@@ -6,7 +6,7 @@ namespace T3.Editor.Gui.Interaction.Timing;
 /// Override the default Playback to support continuous playback synchronized to BPM.
 /// This basically joins Core.Playback with Editor.BeatTiming.
 /// </summary>
-public class BeatTimingPlayback : Playback
+internal sealed class BeatTimingPlayback : Playback
 {
     public override void Update(bool idleMotionEnabled = false)
     {
