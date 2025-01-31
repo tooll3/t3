@@ -259,6 +259,7 @@ internal sealed class MagGraphLayout
                                             ConnectionsOut = [],
                                         });
 
+                    item.PrimaryType = parentInput.ValueType;
                     break;
                 }
                 case MagGraphItem.Variants.Output:
