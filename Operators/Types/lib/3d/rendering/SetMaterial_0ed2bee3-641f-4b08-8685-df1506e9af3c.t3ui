@@ -97,6 +97,13 @@
       },
       "Description": "ID used in context with [LoadGltfScene] and [DefineMaterials]",
       "Usage": "Default"
+    },
+    {
+      "InputId": "c3df717c-822a-4aae-a5a8-a27e4d98fda8"/*BaseColorMap2*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 450.0
+      }
     }
   ],
   "SymbolChildUis": [],

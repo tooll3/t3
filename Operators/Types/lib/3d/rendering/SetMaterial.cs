@@ -53,7 +53,7 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
             UpdateSrv(NormalMap, context, ref _pbrMaterial.NormalSrv, PbrMaterial.DefaultNormalSrv);
             UpdateSrv(EmissiveColorMap, context, ref _pbrMaterial.EmissiveMapSrv, PbrMaterial.DefaultEmissiveColorSrv);
             UpdateSrv(RoughnessMetallicOcclusionMap, context, ref _pbrMaterial.RoughnessMetallicOcclusionSrv, PbrMaterial.DefaultRoughnessMetallicOcclusionSrv);
-
+            UpdateSrv(BaseColorMap2, context, ref _pbrMaterial.AlbedoMap2Srv, PbrMaterial.DefaultAlbedoColor2Srv);
             var previousMaterial = context.PbrMaterial;
             context.PbrMaterial = _pbrMaterial;
             
@@ -143,6 +143,9 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
 
         [Input(Guid = "71E289F0-382B-4D0F-A2E0-701C7019A360")]
         public readonly InputSlot<string> MaterialId = new();
+
+        [Input(Guid = "c3df717c-822a-4aae-a5a8-a27e4d98fda8")]
+        public readonly InputSlot<Texture2D> BaseColorMap2 = new();
 
 
     }

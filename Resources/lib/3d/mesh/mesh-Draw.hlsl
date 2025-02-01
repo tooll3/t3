@@ -49,15 +49,17 @@ cbuffer PbrParams : register(b4)
 struct psInput
 {
     float2 texCoord : TEXCOORD;
+    float2 texCoord2 : TEXCOORD2;
     float4 pixelPosition : SV_POSITION;
     float3 worldPosition : POSITION;
     float3x3 tbnToWorld : TBASIS;
-    float fog : VPOS;
+    float fog : VPOS; 
 };
 
 sampler texSampler : register(s0);
 sampler linearSampler : register(s1);
 sampler clampedSampler : register(s2);
+sampler texSampler2 : register(s3);
 
 
 StructuredBuffer<PbrVertex> PbrVertices : register(t0);
@@ -70,6 +72,7 @@ Texture2D<float4> NormalMap : register(t5);
 
 TextureCube<float4> PrefilteredSpecular : register(t6);
 Texture2D<float4> BRDFLookup : register(t7);
+Texture2D<float4> BaseColorMap2 : register(t8);
 
 psInput vsMain(uint id: SV_VertexID)
 {
@@ -87,6 +90,8 @@ psInput vsMain(uint id: SV_VertexID)
 
     float2 uv = vertex.TexCoord;
     output.texCoord = float2(uv.x, 1 - uv.y);
+    float2 uv2 = vertex.TexCoord2;
+    output.texCoord2 = float2(uv2.x, 1 - uv2.y);
 
     // Pass tangent space basis vectors (for normal mapping).
     float3x3 TBN = float3x3(vertex.Tangent, vertex.Bitangent, vertex.Normal);
@@ -115,6 +120,11 @@ float4 psMain(psInput pin) : SV_TARGET
 {
     // Sample input textures to get shading model params.
     float4 albedo = BaseColorMap.Sample(texSampler, pin.texCoord);
+    
+
+    //albedo.rgb = 1 - (1 - albedo.rgb) * (1 - albedo2.rgb * albedo2.a);
+
+    BaseColorMap.Sample(texSampler, pin.texCoord);
     if (AlphaCutOff > 0 && albedo.a < AlphaCutOff)
     {
         discard;
@@ -221,8 +231,9 @@ float4 psMain(psInput pin) : SV_TARGET
     }
 
     // Final fragment color.
+    float4 albedo2 = BaseColorMap2.Sample(texSampler2, pin.texCoord2)* BaseColor;
     float4 litColor = float4(directLighting + ambientLighting, 1.0) * BaseColor * Color;
-    litColor += float4(EmissiveColorMap.Sample(texSampler, pin.texCoord).rgb * EmissiveColor.rgb, 0);
+    litColor += float4(EmissiveColorMap.Sample(texSampler2, pin.texCoord2).rgb * EmissiveColor.rgb, 0);
     litColor.rgb = lerp(litColor.rgb, FogColor.rgb, pin.fog * FogColor.a);
     litColor.a *= albedo.a;
     return litColor;

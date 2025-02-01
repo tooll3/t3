@@ -28,6 +28,9 @@ namespace T3.Operators.Types.Id_ca4fe8c4_cf61_4196_84e4_d69dc8869a25
         
         [Output(Guid = "AB644673-9EAA-4CEC-9663-FBFDC445D112", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
         public readonly Slot<Texture2D> PrefilteredSpecularMap = new();
+
+        [Output(Guid = "2169fa1b-078f-44d6-adc2-7abf4ec2659b")]
+        public readonly Slot<SharpDX.Direct3D11.ShaderResourceView> AlbedoColorMap2 = new Slot<SharpDX.Direct3D11.ShaderResourceView>();
         
         public GetPbrParameters()
         {

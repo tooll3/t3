@@ -56,6 +56,10 @@
     {
       "Id": "71e289f0-382b-4d0f-a2e0-701c7019a360"/*MaterialId*/,
       "DefaultValue": ""
+    },
+    {
+      "Id": "c3df717c-822a-4aae-a5a8-a27e4d98fda8"/*BaseColorMap2*/,
+      "DefaultValue": null
     }
   ],
   "Children": [],

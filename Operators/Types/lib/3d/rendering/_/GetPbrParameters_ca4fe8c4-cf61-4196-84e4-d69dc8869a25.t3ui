@@ -7,29 +7,29 @@
     {
       "OutputId": "3d2ebd10-2670-46b7-8f1a-9475a81a516d"/*PbrParameterBuffer*/,
       "Position": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": -2.4299011,
+        "Y": -34.01869
       }
     },
     {
       "OutputId": "7c3d08e2-85e2-442a-9196-0e946571da5a"/*AlbedoColorMap*/,
       "Position": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 8.099686,
+        "Y": 39.68847
       }
     },
     {
       "OutputId": "b6bad091-131a-49f3-8acc-7011a4919435"/*EmissiveColorMap*/,
       "Position": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 127.57008,
+        "Y": 8.504677
       }
     },
     {
       "OutputId": "b48f674b-2b5a-4501-992e-26e07a247ddf"/*RoughnessMetallicOcclusionMap*/,
       "Position": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 127.165115,
+        "Y": 66.01246
       }
     },
     {
@@ -49,8 +49,15 @@
     {
       "OutputId": "ab644673-9eaa-4cec-9663-fbfdc445d112"/*PrefilteredSpecularMap*/,
       "Position": {
-        "X": 0.0,
-        "Y": 200.0
+        "X": -3.6448593,
+        "Y": 162.33646
+      }
+    },
+    {
+      "OutputId": "2169fa1b-078f-44d6-adc2-7abf4ec2659b"/*AlbedoColorMap2*/,
+      "Position": {
+        "X": 127.57008,
+        "Y": 262.33646
       }
     }
   ]
