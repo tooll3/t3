@@ -103,7 +103,8 @@
       "Position": {
         "X": -200.0,
         "Y": 450.0
-      }
+      },
+      "GroupTitle": "2nd UV Map / TexCoord2"
     }
   ],
   "SymbolChildUis": [],

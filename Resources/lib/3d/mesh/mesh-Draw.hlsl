@@ -124,8 +124,8 @@ float4 psMain(psInput pin) : SV_TARGET
     
 
     //albedo.rgb = 1 - (1 - albedo.rgb) * (1 - albedo2.rgb * albedo2.a);
-    albedo.rgb = (1.0 - albedo2.a) * albedo.rgb + albedo2.a * albedo2.rgb;
-   
+    //albedo.rgb = (1.0 - albedo2.a) * albedo.rgb + albedo2.a * albedo2.rgb;
+    albedo.rgb = albedo.rgb * albedo2.rgb;
     if (AlphaCutOff > 0 && albedo.a < AlphaCutOff)
     {
         discard;
