@@ -120,11 +120,12 @@ float4 psMain(psInput pin) : SV_TARGET
 {
     // Sample input textures to get shading model params.
     float4 albedo = BaseColorMap.Sample(texSampler, pin.texCoord);
+    float4 albedo2 = BaseColorMap2.Sample(texSampler2, pin.texCoord2);
     
 
     //albedo.rgb = 1 - (1 - albedo.rgb) * (1 - albedo2.rgb * albedo2.a);
-
-    BaseColorMap.Sample(texSampler, pin.texCoord);
+    albedo.rgb = (1.0 - albedo2.a) * albedo.rgb + albedo2.a * albedo2.rgb;
+   
     if (AlphaCutOff > 0 && albedo.a < AlphaCutOff)
     {
         discard;
@@ -231,7 +232,7 @@ float4 psMain(psInput pin) : SV_TARGET
     }
 
     // Final fragment color.
-    float4 albedo2 = BaseColorMap2.Sample(texSampler2, pin.texCoord2)* BaseColor;
+    
     float4 litColor = float4(directLighting + ambientLighting, 1.0) * BaseColor * Color;
     litColor += float4(EmissiveColorMap.Sample(texSampler2, pin.texCoord2).rgb * EmissiveColor.rgb, 0);
     litColor.rgb = lerp(litColor.rgb, FogColor.rgb, pin.fog * FogColor.a);

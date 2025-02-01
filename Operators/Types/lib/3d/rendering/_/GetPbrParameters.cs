@@ -29,8 +29,8 @@ namespace T3.Operators.Types.Id_ca4fe8c4_cf61_4196_84e4_d69dc8869a25
         [Output(Guid = "AB644673-9EAA-4CEC-9663-FBFDC445D112", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
         public readonly Slot<Texture2D> PrefilteredSpecularMap = new();
 
-        [Output(Guid = "2169fa1b-078f-44d6-adc2-7abf4ec2659b")]
-        public readonly Slot<SharpDX.Direct3D11.ShaderResourceView> AlbedoColorMap2 = new Slot<SharpDX.Direct3D11.ShaderResourceView>();
+        [Output(Guid = "2169fa1b-078f-44d6-adc2-7abf4ec2659b", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
+        public readonly Slot<ShaderResourceView> AlbedoColorMap2 = new();
         
         public GetPbrParameters()
         {
@@ -41,6 +41,7 @@ namespace T3.Operators.Types.Id_ca4fe8c4_cf61_4196_84e4_d69dc8869a25
             NormalMap.UpdateAction = UpdateNormalMap;
             BrdfLookupMap.UpdateAction = UpdateBrdfLookupMap;
             PrefilteredSpecularMap.UpdateAction = UpdatePrefilteredSpecularMap;
+            AlbedoColorMap2.UpdateAction = UpdateAlbedoColorMap2;
         }
 
         
@@ -50,6 +51,7 @@ namespace T3.Operators.Types.Id_ca4fe8c4_cf61_4196_84e4_d69dc8869a25
         private void UpdateRoughnessMetallicOcclusionMap(EvaluationContext context) => RoughnessMetallicOcclusionMap.Value = context.PbrMaterial.RoughnessMetallicOcclusionSrv;
         private void UpdateNormalMap(EvaluationContext context) => NormalMap.Value = context.PbrMaterial.NormalSrv;
         private void UpdateBrdfLookupMap(EvaluationContext context) => BrdfLookupMap.Value = PbrContextSettings.PbrLookUpTextureSrv;
+        private void UpdateAlbedoColorMap2(EvaluationContext context) => AlbedoColorMap2.Value = context.PbrMaterial.AlbedoMap2Srv;
 
         private void UpdatePrefilteredSpecularMap(EvaluationContext context)
         {
