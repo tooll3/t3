@@ -32,7 +32,7 @@ internal sealed class SetBpm : Instance<SetBpm>
             else
             {
                 Log.Debug($"Setting BPM rate to {clampedRate}", this);
-                _setBpmTriggered = true;
+                //_setBpmTriggered = true;
                 _newBpmRate = clampedRate;
 
                 // This will be picked up by PlaybackUtils
@@ -59,7 +59,7 @@ internal sealed class SetBpm : Instance<SetBpm>
     //     return true;
     // }
         
-    private static bool _setBpmTriggered;
+    //private static bool _setBpmTriggered;
     private static float _newBpmRate;
     private bool _triggerUpdate;
         
