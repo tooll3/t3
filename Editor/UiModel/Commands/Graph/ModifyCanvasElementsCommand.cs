@@ -50,7 +50,7 @@ internal class ModifyCanvasElementsCommand : ICommand
             
         foreach (var entry in _entries)
         {
-            var selectable = selectables.SingleOrDefault(s => s.Id == entry.SelectableId);
+            var selectable = selectables.FirstOrDefault(s => s.Id == entry.SelectableId);
             if (selectable == null)
                 continue;
                 
@@ -72,7 +72,7 @@ internal class ModifyCanvasElementsCommand : ICommand
         var changed = false;
         foreach (var entry in _entries)
         {
-            var selectable = selectables.SingleOrDefault(s => s.Id == entry.SelectableId);
+            var selectable = selectables.FirstOrDefault(s => s.Id == entry.SelectableId);
             if (selectable == null)
                 continue;
                 
