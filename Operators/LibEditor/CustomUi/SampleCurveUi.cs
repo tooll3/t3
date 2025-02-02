@@ -76,7 +76,7 @@ public static class SampleCurveUi
                     sampleCurve.Curve.SetTypedInputValue(curve);
                 }
                 sampleCurve.Result.DirtyFlag.Invalidate();
-                sampleCurve.CurveOutput.DirtyFlag.Invalidate();
+                sampleCurve.CurveOutput.DirtyFlag.ForceInvalidate();
             }
 
             DrawSamplePointIndicator();
