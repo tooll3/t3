@@ -40,6 +40,13 @@
         "Y": 1105.2872
       },
       "Description": "Uniformly scales the mapping"
+    },
+    {
+      "InputId": "14e8cc1a-0fee-4162-9192-45b635e154a8"/*TexCoord2*/,
+      "Position": {
+        "X": -1598.1094,
+        "Y": 1150.2872
+      }
     }
   ],
   "SymbolChildUis": [
@@ -319,6 +326,13 @@
       "Position": {
         "X": -1184.6838,
         "Y": 620.65784
+      }
+    },
+    {
+      "ChildId": "10241097-0d17-4090-b2e1-f821a31c12fe"/*BoolToFloat*/,
+      "Position": {
+        "X": -664.0912,
+        "Y": 1370.3538
       }
     }
   ],

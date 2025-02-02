@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
@@ -18,6 +18,7 @@ public class PbrMaterial: IDisposable
     public ShaderResourceView EmissiveMapSrv;
     public ShaderResourceView RoughnessMetallicOcclusionSrv;
     public ShaderResourceView NormalSrv;
+    public ShaderResourceView AlbedoMap2Srv;
 
     public PbrParameters Parameters;
     public Buffer ParameterBuffer;
@@ -46,7 +47,7 @@ public class PbrMaterial: IDisposable
         public float Metal;
 
         [FieldOffset(11 * 4)]
-        private float __padding;
+        public float BlendMode;
 
         public const int Stride = 12 * 4;
     }
@@ -65,7 +66,8 @@ public class PbrMaterial: IDisposable
         DefaultEmissiveColorSrv = new ShaderResourceView(ResourceManager.Device, PbrContextSettings.WhitePixelTexture);
         DefaultRoughnessMetallicOcclusionSrv = new ShaderResourceView(ResourceManager.Device, _defaultRmoTexture);
         DefaultNormalSrv = new ShaderResourceView(ResourceManager.Device, _defaultNormalTexture);
-        
+        DefaultAlbedoColor2Srv = WhitePixelSrv;
+
         var newMaterial= new PbrMaterial()
                              {
                                  Name = "Default",
@@ -74,8 +76,10 @@ public class PbrMaterial: IDisposable
                                  EmissiveMapSrv = DefaultEmissiveColorSrv,
                                  RoughnessMetallicOcclusionSrv = DefaultRoughnessMetallicOcclusionSrv,
                                  NormalSrv = DefaultNormalSrv,
+                                 AlbedoMap2Srv = DefaultAlbedoColor2Srv,
 
-                             };
+
+        };
         newMaterial.UpdateParameterBuffer();
         return newMaterial;
     }
@@ -88,14 +92,16 @@ public class PbrMaterial: IDisposable
                                                                        EmissiveColor = new Vector4(0, 0, 0, 1),
                                                                        Roughness = 0.5f,
                                                                        Specular = 10,
-                                                                       Metal = 0
+                                                                       Metal = 0,
+                                                                       BlendMode = 0
                                                                    };
     public static ShaderResourceView DefaultEmissiveColorSrv;
     public static ShaderResourceView DefaultAlbedoColorSrv;
     public static ShaderResourceView WhitePixelSrv;
     public static ShaderResourceView DefaultRoughnessMetallicOcclusionSrv;
     public static ShaderResourceView DefaultNormalSrv;
-    
+    public static ShaderResourceView DefaultAlbedoColor2Srv;
+
     public static Texture2D _defaultRmoTexture;
     public static Texture2D _defaultNormalTexture;
     
@@ -109,5 +115,6 @@ public class PbrMaterial: IDisposable
         RoughnessMetallicOcclusionSrv?.Dispose();
         NormalSrv?.Dispose();
         ParameterBuffer?.Dispose();
+        AlbedoMap2Srv?.Dispose();
     }
 }

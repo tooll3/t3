@@ -19,6 +19,7 @@ cbuffer Transforms : register(b0)
 cbuffer Params : register(b1)
 {
     float4x4 Transform;
+    float TexCoord2;
 }
 
 
@@ -47,7 +48,12 @@ void main(uint3 i : SV_DispatchThreadID)
     //float4x4 orientationMatrix = transpose(qToMatrix(p.rotation));
     //float4x4 t = Transform;
     //t=transpose(t);
-
-    v.TexCoord = mul( float4(posInObject.xyz,1), Transform).xy;
+    if ((bool)TexCoord2==true){
+      v.TexCoord2 = mul( float4(posInObject.xyz,1), Transform).xy + float2(1,1); 
+    }
+    else{
+        v.TexCoord = mul( float4(posInObject.xyz,1), Transform).xy + float2(1,1);
+    }
+   
     ResultVertices[vertexIndex] = v;
 }

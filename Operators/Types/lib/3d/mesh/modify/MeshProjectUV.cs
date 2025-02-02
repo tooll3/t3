@@ -37,6 +37,9 @@ namespace T3.Operators.Types.Id_97ffb173_f4cc_4143_a479_80cf3465cc7e
 
         [Input(Guid = "2ce29895-0bfd-4b73-ad57-50aca7fd1a96")]
         public readonly InputSlot<float> Scale = new();
+
+        [Input(Guid = "14e8cc1a-0fee-4162-9192-45b635e154a8")]
+        public readonly InputSlot<bool> TexCoord2 = new InputSlot<bool>();
     }
 }
 
