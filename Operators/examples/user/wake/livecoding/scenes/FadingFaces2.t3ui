@@ -25,6 +25,13 @@
       }
     },
     {
+      "ChildId": "15e829ed-aede-43a4-a541-0ebf0709fbb4"/*MidiInput*/,
+      "Position": {
+        "X": 1445.3208,
+        "Y": 42.20999
+      }
+    },
+    {
       "ChildId": "25a37d63-412a-4746-8543-74d8f8f967a1"/*FloatToInt*/,
       "Position": {
         "X": 2546.7852,

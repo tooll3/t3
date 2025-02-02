@@ -49,7 +49,7 @@
         {
           "Id": "16dce9bc-02d9-48f8-b07e-94a9af48d27b"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\generate\\Grain.hlsl"
+          "Value": "Resources/lib/img/generate/Grain.hlsl"
         },
         {
           "Id": "499e7ff0-3b6a-414b-be19-03c615931ab8"/*BufferColor*/,
