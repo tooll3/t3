@@ -67,6 +67,10 @@ public sealed class MultiInputSlot<T> : InputSlot<T>, IMultiInputSlot
                 target += collectedInputs[index].Invalidate();
             }
         }
+        else if (collectedCount == 0)
+        {
+            target += _dirtyFlag.Target;
+        }
         else
         {
             for (int i = 0; i < collectedCount; i++)
