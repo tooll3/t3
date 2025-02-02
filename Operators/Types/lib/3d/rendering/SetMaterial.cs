@@ -34,6 +34,7 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
                                              Roughness.DirtyFlag.IsDirty ||
                                              Specular.DirtyFlag.IsDirty ||
                                              Metal.DirtyFlag.IsDirty ||
+                                             BlendMode.DirtyFlag.IsDirty ||
                                              _pbrMaterial == null;
             
             _pbrMaterial ??= new PbrMaterial();
@@ -45,6 +46,7 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
                 _pbrMaterial.Parameters.Roughness = Roughness.GetValue(context);
                 _pbrMaterial.Parameters.Specular = Specular.GetValue(context);
                 _pbrMaterial.Parameters.Metal = Metal.GetValue(context);
+                _pbrMaterial.Parameters.BlendMode = BlendMode.GetValue(context);
 
                 _pbrMaterial.UpdateParameterBuffer();
             }
@@ -146,6 +148,9 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
 
         [Input(Guid = "c3df717c-822a-4aae-a5a8-a27e4d98fda8")]
         public readonly InputSlot<Texture2D> BaseColorMap2 = new();
+
+        [Input(Guid = "f574046e-e10b-42e2-84af-8b28759ba636", MappedType = typeof(SharedEnums.RgbBlendModes))]
+        public readonly InputSlot<int> BlendMode = new();
 
 
     }

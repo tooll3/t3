@@ -60,6 +60,10 @@
     {
       "Id": "c3df717c-822a-4aae-a5a8-a27e4d98fda8"/*BaseColorMap2*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "f574046e-e10b-42e2-84af-8b28759ba636"/*BlendMode*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [],

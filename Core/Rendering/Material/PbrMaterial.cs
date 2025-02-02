@@ -47,7 +47,7 @@ public class PbrMaterial: IDisposable
         public float Metal;
 
         [FieldOffset(11 * 4)]
-        private float __padding;
+        public float BlendMode;
 
         public const int Stride = 12 * 4;
     }
@@ -92,7 +92,8 @@ public class PbrMaterial: IDisposable
                                                                        EmissiveColor = new Vector4(0, 0, 0, 1),
                                                                        Roughness = 0.5f,
                                                                        Specular = 10,
-                                                                       Metal = 0
+                                                                       Metal = 0,
+                                                                       BlendMode = 0
                                                                    };
     public static ShaderResourceView DefaultEmissiveColorSrv;
     public static ShaderResourceView DefaultAlbedoColorSrv;

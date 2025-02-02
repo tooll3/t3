@@ -105,6 +105,13 @@
         "Y": 450.0
       },
       "GroupTitle": "2nd UV Map / TexCoord2"
+    },
+    {
+      "InputId": "f574046e-e10b-42e2-84af-8b28759ba636"/*BlendMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 495.0
+      }
     }
   ],
   "SymbolChildUis": [],

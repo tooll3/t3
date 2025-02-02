@@ -2,6 +2,7 @@
 #include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/point-light.hlsl"
 #include "lib/shared/pbr.hlsl"
+#include "lib/shared/blend-functions.hlsl"
 
 cbuffer Transforms : register(b0)
 {
@@ -44,6 +45,7 @@ cbuffer PbrParams : register(b4)
     float Roughness;
     float Specular;
     float Metal;
+    float BlendMode;
 }
 
 struct psInput
@@ -118,14 +120,26 @@ psInput vsMain(uint id: SV_VertexID)
 // based on https://github.com/Nadrin/PBR/blob/master/data/shaders/hlsl/pbr.hlsl
 float4 psMain(psInput pin) : SV_TARGET
 {
+     int height, width;
+
+    BaseColorMap2.GetDimensions(width, height);
+    int testBCM2 = width;
+    
     // Sample input textures to get shading model params.
     float4 albedo = BaseColorMap.Sample(texSampler, pin.texCoord);
     float4 albedo2 = BaseColorMap2.Sample(texSampler2, pin.texCoord2);
-    
+
+    /* if (testBCM2 > 1){
+        BlendColors(albedo, albedo2, (int)BlendMode);
+        return albedo;
+    }    
+    */
+
+    albedo = BlendColors(albedo, albedo2, (int)BlendMode);
 
     //albedo.rgb = 1 - (1 - albedo.rgb) * (1 - albedo2.rgb * albedo2.a);
     //albedo.rgb = (1.0 - albedo2.a) * albedo.rgb + albedo2.a * albedo2.rgb;
-    albedo.rgb = albedo.rgb * albedo2.rgb;
+    //albedo.rgb = albedo.rgb * albedo2.rgb;
     if (AlphaCutOff > 0 && albedo.a < AlphaCutOff)
     {
         discard;
