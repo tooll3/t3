@@ -104,8 +104,8 @@ internal sealed partial class MagGraphCanvas
 
             // There is probably a better method than this...
             const int snapPadding = 2;
-            if ((snappedBorders&Borders.Down) ==0) pMaxVisible.Y -= snapPadding * 2 * CanvasScale;
-            if ((snappedBorders&Borders.Right) == 0) pMaxVisible.X -= snapPadding * CanvasScale;
+            if ((snappedBorders&Borders.Down) ==0) pMaxVisible.Y -= (int)(snapPadding * 2 * CanvasScale);
+            if ((snappedBorders&Borders.Right) == 0) pMaxVisible.X -= (int)(snapPadding * CanvasScale);
         }
 
         // Background and Outline
@@ -198,16 +198,13 @@ internal sealed partial class MagGraphCanvas
             }
             else if (item.Variant == MagGraphItem.Variants.Input)
             {
-                // TODO: Reuse array
                 var t = pMaxVisible.Y - pMinVisible.Y;
-                var points = new Vector2[5] {
-                    pMinVisible,
-                    pMinVisible + new Vector2(0.2f, 0) *t,
-                    pMinVisible + new Vector2(0.5f, 0.5f) *t,
-                    pMinVisible + new Vector2(0.2f, 1f) *t,
-                    pMinVisible + new Vector2(0.0f, 1f) *t
-                    };
-                drawList.AddConvexPolyFilled(ref points[0], 5, ColorVariations.Highlight.Apply( typeColor));
+                _inputIndicatorPoints[0]= pMinVisible;
+                _inputIndicatorPoints[1]= pMinVisible + new Vector2(0.2f, 0) *t;
+                _inputIndicatorPoints[2]= pMinVisible + new Vector2(0.5f, 0.5f) *t;
+                _inputIndicatorPoints[3]= pMinVisible + new Vector2(0.2f, 1f) *t;
+                _inputIndicatorPoints[4]= pMinVisible + new Vector2(0.0f, 1f) *t;
+                drawList.AddConvexPolyFilled(ref _inputIndicatorPoints[0], 5, ColorVariations.Highlight.Apply( typeColor));
                 name = "   " +name;
             }
 
@@ -218,10 +215,15 @@ internal sealed partial class MagGraphCanvas
             var paddingForPreview = hasPreview ? MagGraphItem.LineHeight + 10 : 0;
             var downScale = MathF.Min(1f, (MagGraphItem.Width - paddingForPreview) * 0.9f / labelSize.X);
 
-            var labelPos = pMin + new Vector2(8, 8) * CanvasScale + new Vector2(0, -1);
+            var fontSize = Fonts.FontBold.FontSize * downScale * CanvasScale.Clamp(0.1f, 2f);
+            var yCenter = pMin.Y + MagGraphItem.GridSize.Y/2 * CanvasScale - fontSize/2 -2;
+            
+            //var labelPos = pMin + new Vector2(8, 8) * CanvasScale + new Vector2(0, -1);
+            var labelPos = new Vector2(pMin.X + 8 * CanvasScale, yCenter);
+            
             labelPos = new Vector2(MathF.Round(labelPos.X), MathF.Round(labelPos.Y));
             drawList.AddText(Fonts.FontBold,
-                             Fonts.FontBold.FontSize * downScale * CanvasScale.Clamp(0.1f, 2f),
+                             fontSize,
                              labelPos,
                              labelColor,
                              name);
@@ -336,7 +338,10 @@ internal sealed partial class MagGraphCanvas
                                                  UiColors.StatusAttention);
                     }
 
-                    var labelPos = pMin + new Vector2(8, 9) * CanvasScale + new Vector2(0, GridSizeOnScreen.Y * inputIndex);
+                    var inputLabelFontSize = Fonts.FontSmall.FontSize * Fonts.FontSmall.Scale * smallFontScaleFactor;
+                    var yCenter = pMin.Y + GridSizeOnScreen.Y * (inputIndex+0.5f) - inputLabelFontSize / 2 -2;
+                    var labelPos = new Vector2(pMin.X + 8 * CanvasScale, yCenter);
+                    //var labelPos = pMin + new Vector2(8, 9) * CanvasScale + new Vector2(0, GridSizeOnScreen.Y * inputIndex);
                     var label = inputLine.InputUi.InputDefinition.Name ?? "?";
                     if (inputLine.MultiInputIndex > 0)
                     {
@@ -344,7 +349,7 @@ internal sealed partial class MagGraphCanvas
                     }
 
                     drawList.AddText(Fonts.FontSmall,
-                                     Fonts.FontSmall.FontSize * Fonts.FontSmall.Scale * smallFontScaleFactor,
+                                     inputLabelFontSize,
                                      labelPos,
                                      labelColor.Fade(0.7f),
                                      label
@@ -371,7 +376,7 @@ internal sealed partial class MagGraphCanvas
                             if (!string.IsNullOrEmpty(valueAsString))
                             {
                                 drawList.AddText(Fonts.FontSmall,
-                                                 Fonts.FontSmall.FontSize * Fonts.FontSmall.Scale * smallFontScaleFactor,
+                                                 inputLabelFontSize,
                                                  valuePos,
                                                  labelColor.Fade(0.5f),
                                                  valueAsString
@@ -476,6 +481,11 @@ internal sealed partial class MagGraphCanvas
         
         // Draw free input sockets...
         MagGraphItem.InputAnchorPoint inputAnchor = default;
+
+        
+        var anchorWidth = 1.5f * 2;
+        var anchorHeight = 2f * 2;
+        
         
         var inputAnchorCount = item.GetInputAnchorCount();
         for(var inputIndex=0; inputIndex < inputAnchorCount; inputIndex++)
@@ -492,10 +502,10 @@ internal sealed partial class MagGraphCanvas
 
             if (inputAnchor.Direction == MagGraphItem.Directions.Vertical)
             {
-                var pp = new Vector2(p.X + 2, pMinVisible.Y);
-                drawList.AddTriangleFilled(pp + new Vector2(-1.5f, 0) * CanvasScale * 2.5f,
-                                           pp + new Vector2(1.5f, 0) * CanvasScale * 2.5f,
-                                           pp + new Vector2(0, 2) * CanvasScale * 2.5f,
+                var pp = new Vector2(p.X, pMinVisible.Y);
+                drawList.AddTriangleFilled(pp + new Vector2(-anchorWidth, 0) * CanvasScale,
+                                           pp + new Vector2(anchorWidth, 0) * CanvasScale,
+                                           pp + new Vector2(0, anchorHeight) * CanvasScale,
                                            color);
             }
             else
@@ -536,18 +546,18 @@ internal sealed partial class MagGraphCanvas
                     }
                 }
 
-                if (showTriangleAnchor)
+                if (!isAlreadyUsed && showTriangleAnchor)
                 {
                     var pp = new Vector2(pMinVisible.X - 1, p.Y);
-                    drawList.AddTriangleFilled(pp + new Vector2(1, 0) + new Vector2(-0, -1.5f) * CanvasScale * 1.5f,
-                                               pp + new Vector2(1, 0) + new Vector2(2, 0) * CanvasScale * 1.5f,
-                                               pp + new Vector2(1, 0) + new Vector2(0, 1.5f) * CanvasScale * 1.5f,
+                    drawList.AddTriangleFilled(pp + new Vector2(1, 0) + new Vector2(-0, -anchorWidth) * CanvasScale,
+                                               pp + new Vector2(1, 0) + new Vector2(anchorHeight, 0) * CanvasScale,
+                                               pp + new Vector2(1, 0) + new Vector2(0, anchorWidth) * CanvasScale,
                                                color);
                 }
             }
         }
 
-        var hoverFactor = hoverProgress.RemapAndClamp(0, 1, 1, 2);
+        var hoverFactor = hoverProgress.RemapAndClamp(0, 1, 1, 1.5f);
 
         // Draw output sockets
         var count = item.GetOutputAnchorCount();
@@ -565,9 +575,9 @@ internal sealed partial class MagGraphCanvas
             if (outputAnchor.Direction == MagGraphItem.Directions.Vertical)
             {
                 pp = new Vector2(posOnCanvas.X, pMaxVisible.Y);
-                drawList.AddTriangleFilled(pp + new Vector2(0, -1) + new Vector2(-1.5f, 0) * CanvasScale * 1.5f * hoverFactor,
-                                           pp + new Vector2(0, -1) + new Vector2(1.5f, 0) * CanvasScale * 1.5f * hoverFactor,
-                                           pp + new Vector2(0, -1) + new Vector2(0, 2) * CanvasScale * 1.5f * hoverFactor,
+                drawList.AddTriangleFilled(pp + new Vector2(-anchorWidth, 0) * CanvasScale * hoverFactor,
+                                           pp + new Vector2(anchorWidth, 0) * CanvasScale * hoverFactor,
+                                           pp + new Vector2(0, anchorHeight) * CanvasScale * hoverFactor,
                                            color);
                 pp += new Vector2(0, -3);
             }
@@ -584,11 +594,11 @@ internal sealed partial class MagGraphCanvas
                     OutputSnapper.RegisterAsPotentialTargetOutput(context, item, outputAnchor);
                 }
 
-                pp = new Vector2(pMaxVisible.X - 1, posOnCanvas.Y);
+                pp = new Vector2(pMaxVisible.X , posOnCanvas.Y);
 
-                drawList.AddTriangleFilled(pp + new Vector2(0, 0) + new Vector2(-0, -1.5f) * CanvasScale * 1.5f * hoverFactor,
-                                           pp + new Vector2(0, 0) + new Vector2(2, 0) * CanvasScale * 1.5f * hoverFactor,
-                                           pp + new Vector2(0, 0) + new Vector2(0, 1.5f) * CanvasScale * 1.5f * hoverFactor,
+                drawList.AddTriangleFilled(pp + new Vector2(0, 0) + new Vector2(0, -anchorWidth) * CanvasScale * hoverFactor,
+                                           pp + new Vector2(0, 0) + new Vector2(anchorHeight, 0) * CanvasScale * hoverFactor,
+                                           pp + new Vector2(0, 0) + new Vector2(0, anchorWidth) * CanvasScale * hoverFactor,
                                            color);
                 pp += new Vector2(-3, 0);
             }
@@ -789,4 +799,6 @@ internal sealed partial class MagGraphCanvas
         
         return true;
     }
+
+    private static readonly Vector2[] _inputIndicatorPoints = new Vector2[5];
 }

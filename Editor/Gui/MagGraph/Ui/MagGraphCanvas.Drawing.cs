@@ -223,15 +223,27 @@ internal sealed partial class MagGraphCanvas
 
             var center = TransformPosition(inputItem.PosOnCanvas + sp.AnchorOffset);
 
-            var offset = sp.Direction == MagGraphItem.Directions.Vertical
-                             ? new Vector2(MagGraphItem.GridSize.X / 16 * CanvasScale, 0)
-                             : new Vector2(0, MagGraphItem.GridSize.Y / 8 * CanvasScale);
+            var typeColor = TypeUiRegistry.GetPropertiesForType(inputItem.InputLines[0].Type).Color;
 
+            if (sp.Direction == MagGraphItem.Directions.Vertical)
             {
-                drawList.AddLine(center - offset, center + offset,
-                                 UiColors.ForegroundFull.Fade(MagGraphCanvas.Blink),
-                                 2);
-                //drawList.AddCircle(TransformPosition(inputItem.PosOnCanvas + sp.AnchorOffset), 3, UiColors.ForegroundFull.Fade(MagGraphCanvas.Blink));
+                var offset = MagGraphItem.GridSize.X / 16 * CanvasScale;
+                // var offset = sp.Direction == MagGraphItem.Directions.Vertical
+                //                  ? new Vector2(MagGraphItem.GridSize.X / 16 * CanvasScale, 0)
+                //                  : new Vector2(0, MagGraphItem.GridSize.Y / 8 * CanvasScale);
+
+                drawList.AddRectFilled(center+ new Vector2(-offset, -1),
+                                       center+ new Vector2(offset, 1),
+                                       ColorVariations.ConnectionLines.Apply(typeColor).Fade(Blink)   
+                                      );
+            }
+            else
+            {
+                var offset = MagGraphItem.GridSize.Y *0.25f * CanvasScale;
+                drawList.AddRectFilled(center+ new Vector2(0, -offset),
+                                       center+ new Vector2(2, offset),
+                                       ColorVariations.ConnectionLines.Apply(typeColor).Fade(Blink)   
+                                      );
             }
         }
     }

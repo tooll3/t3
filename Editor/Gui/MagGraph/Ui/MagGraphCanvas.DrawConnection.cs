@@ -39,6 +39,8 @@ internal sealed partial class MagGraphCanvas
         var sourcePosOnScreen = TransformPosition(connection.SourcePos);
         var targetPosOnScreen = TransformPosition(connection.TargetPos);
 
+        var anchorWidth = 1.5f * 2;
+        var anchorHeight = 2f * 2;
 
         if (connection.IsSnapped)
         {
@@ -54,16 +56,21 @@ internal sealed partial class MagGraphCanvas
                                                                         && sp.Type == type);
                     if (isPotentialSplitTarget)
                     {
-                        var extend = new Vector2(0, MagGraphItem.GridSize.Y * CanvasScale * 0.4f);
+                        var extend = new Vector2(0, MagGraphItem.GridSize.Y * CanvasScale * 0.25f);
 
                         drawList.AddRectFilled(
-                                               sourcePosOnScreen - extend + new Vector2(-1, 0),
-                                               sourcePosOnScreen + extend + new Vector2(1, 0),
+                                               sourcePosOnScreen - extend + new Vector2(-2, 0),
+                                               sourcePosOnScreen + extend + new Vector2(0, 0),
                                                typeColor.Fade(Blink)
                                               );
                     }
 
-                    drawList.AddCircleFilled(sourcePosOnScreen, anchorSize * 1.6f, typeColor, 3);
+                    //drawList.AddCircleFilled(sourcePosOnScreen, anchorSize * 1.6f, typeColor, 3);
+                    drawList.AddTriangleFilled(
+                                               sourcePosOnScreen + new Vector2(-anchorHeight/2, -anchorWidth ) * CanvasScale * 2,
+                                               sourcePosOnScreen + new Vector2(anchorHeight/2,0 ) * CanvasScale * 2,
+                                               sourcePosOnScreen + new Vector2(-anchorHeight/2, anchorWidth) * CanvasScale * 2,
+                                               typeColor);
                     break;
                 }
                 
@@ -78,19 +85,19 @@ internal sealed partial class MagGraphCanvas
                                                                         && x.Type == type);
                     if (isPotentialSplitTarget)
                     {
-                        var extend = new Vector2(MagGraphItem.GridSize.X * CanvasScale * 0.4f, 0);
+                        var extend = new Vector2(MagGraphItem.GridSize.X * CanvasScale * 0.06f, 0);
 
                         drawList.AddRectFilled(
-                                               sourcePosOnScreen - extend + new Vector2(0, 0),
-                                               sourcePosOnScreen + extend + new Vector2(0, 1),
+                                               sourcePosOnScreen - extend + new Vector2(0, -2),
+                                               sourcePosOnScreen + extend + new Vector2(0, 0),
                                                typeColor.Fade(Blink)
                                               );
                     }
 
                     drawList.AddTriangleFilled(
-                                               sourcePosOnScreen + new Vector2(-1, -1) * CanvasScale * 5,
-                                               sourcePosOnScreen + new Vector2(1, -1) * CanvasScale * 5,
-                                               sourcePosOnScreen + new Vector2(0, 1) * CanvasScale * 5,
+                                               sourcePosOnScreen + new Vector2(-anchorWidth, -anchorHeight/2) * CanvasScale * 2,
+                                               sourcePosOnScreen + new Vector2(anchorWidth, -anchorHeight/2) * CanvasScale * 2,
+                                               sourcePosOnScreen + new Vector2(0, anchorHeight/2) * CanvasScale * 2,
                                                typeColor);
                     break;
                 }
@@ -167,7 +174,12 @@ internal sealed partial class MagGraphCanvas
                     }
                     
                     // Draw triangle
-                    drawList.AddCircleFilled(targetPosOnScreen + new Vector2(3 * CanvasScale,0) , anchorSize * 1.2f, typeColor, 3);
+                    //drawList.AddCircleFilled(targetPosOnScreen + new Vector2(3 * CanvasScale,0) , anchorSize * 1.2f, typeColor, 3);
+                    drawList.AddTriangleFilled(
+                                               targetPosOnScreen + new Vector2(0, -anchorWidth ) * CanvasScale * 1,
+                                               targetPosOnScreen + new Vector2(anchorHeight,0 ) * CanvasScale * 1,
+                                               targetPosOnScreen + new Vector2(0, anchorWidth) * CanvasScale * 1,
+                                               typeColor);                    
                     break;
                 
                 case MagGraphConnection.ConnectionStyles.Unknown:
