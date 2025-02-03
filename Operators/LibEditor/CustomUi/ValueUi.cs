@@ -82,6 +82,7 @@ public static class ValueUi
                     {
                         SingleValueEdit.DrawValueEditMethod(ref value,  restarted, _jogDialCenter,double.NegativeInfinity, double.PositiveInfinity, false, 0.025f);
                         inputSlot.SetTypedInputValue((float)value);
+                        inputSlot.DirtyFlag.ForceInvalidate();
                     }
                     else
                     {

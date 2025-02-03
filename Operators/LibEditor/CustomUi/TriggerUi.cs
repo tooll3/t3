@@ -76,8 +76,7 @@ public static class TriggerUi
 
                 if (wasChanged)
                 {
-                    // TODO: This hack to enforce invalidation should not be necessary
-                    trigger.Result.DirtyFlag.Trigger = DirtyFlagTrigger.Animated;
+                    trigger.Result.DirtyFlag.ForceInvalidate();
                 }
             }
         }
