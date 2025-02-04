@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ManagedBass;
@@ -161,10 +161,10 @@ public static class WasapiAudioInput
 
     private static int Process(IntPtr buffer, int length, IntPtr user)
     {
-        //Log.Debug("Wasapi.Process() #1");
+        //Log.Debug($"Wasapi.Process() called with buffer length: {length}");
         var level = BassWasapi.GetLevel();
-        if (length < 3000)
-            return length;
+        //if (length < 3000)
+            //return length;
 
         _lastUpdateTime = Playback.RunTimeInSecs;
 
