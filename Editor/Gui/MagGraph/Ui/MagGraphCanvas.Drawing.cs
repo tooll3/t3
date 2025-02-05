@@ -223,7 +223,8 @@ internal sealed partial class MagGraphCanvas
 
             var center = TransformPosition(inputItem.PosOnCanvas + sp.AnchorOffset);
 
-            var typeColor = TypeUiRegistry.GetPropertiesForType(inputItem.InputLines[0].Type).Color;
+            var type = inputItem.InputLines.Length > 0 ? inputItem.InputLines[0].Type : null;
+            var typeColor = TypeUiRegistry.GetPropertiesForType(type).Color;
 
             if (sp.Direction == MagGraphItem.Directions.Vertical)
             {
