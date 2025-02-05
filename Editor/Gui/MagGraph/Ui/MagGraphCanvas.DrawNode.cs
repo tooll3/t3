@@ -305,27 +305,13 @@ internal sealed partial class MagGraphCanvas
         }
 
         // Missing primary input indicator
-        var s = GridSizeOnScreen.Y;
         if (item.InputLines.Length > 0)
         {
             var inputLine = item.InputLines[0];
             var isMissing = inputLine.InputUi.Relevancy == Relevancy.Required && inputLine.ConnectionIn == null;
             if (isMissing)
             {
-                var c = pMin + new Vector2(-s * 0.2f, s * 0.45f) ;
-                var s2 = s * 0.4f;
-                drawList.AddTriangleFilled(c +new Vector2(0, -0.2f) * s2,
-                                         c +new Vector2(-0.2f, 0.2f) * s2,
-                                         c +new Vector2(0.2f, 0.2f) * s2,
-                                         //+ new Vector2(8, 9) * CanvasScale 
-                                         UiColors.StatusAttention);
-                
-                ImGui.SetCursorScreenPos(c- Vector2.One * s2/2);
-                ImGui.InvisibleButton("warningArea", new Vector2(s2, s2));
-                if (ImGui.IsItemHovered())
-                {
-                    CustomComponents.TooltipForLastItem("Requires " + inputLine.InputUi.InputDefinition.Name);
-                }
+                DrawMissingInputIndicator(drawList, pMin, inputLine);
             }
         }
 
@@ -342,14 +328,15 @@ internal sealed partial class MagGraphCanvas
                     var isMissing = inputLine.InputUi.Relevancy == Relevancy.Required && inputLine.ConnectionIn == null;
                     if (isMissing)
                     {
-                        drawList.AddCircleFilled(pMin
-                                                 + new Vector2(0, s * (inputIndex + 0.5f)),
-                                                 3,
-                                                 UiColors.StatusAttention);
+                        DrawMissingInputIndicator(drawList, pMin + new Vector2(0, GridSizeOnScreen.Y * inputIndex), inputLine);
+                        // drawList.AddCircleFilled(pMin
+                        //                          + new Vector2(0, GridSizeOnScreen.Y * (inputIndex + 0.5f)),
+                        //                          3,
+                        //                          UiColors.StatusAttention);
                     }
 
                     var inputLabelFontSize = Fonts.FontSmall.FontSize * Fonts.FontSmall.Scale * smallFontScaleFactor;
-                    var yCenter = pMin.Y + s * (inputIndex+0.5f) - inputLabelFontSize / 2 -2;
+                    var yCenter = pMin.Y + GridSizeOnScreen.Y * (inputIndex+0.5f) - inputLabelFontSize / 2 -2;
                     var labelPos = new Vector2(pMin.X + 8 * CanvasScale, yCenter);
                     //var labelPos = pMin + new Vector2(8, 9) * CanvasScale + new Vector2(0, GridSizeOnScreen.Y * inputIndex);
                     var label = inputLine.InputUi.InputDefinition.Name ?? "?";
@@ -415,7 +402,7 @@ internal sealed partial class MagGraphCanvas
                                      Fonts.FontSmall.FontSize * smallFontScaleFactor,
                                      pMin
                                      + new Vector2(-8, 9) * CanvasScale.Clamp(0.1f, 2f)
-                                     + new Vector2(0, s * (outputIndex + inputIndex - 1))
+                                     + new Vector2(0, GridSizeOnScreen.Y * (outputIndex + inputIndex - 1))
                                      + new Vector2(MagGraphItem.Width * CanvasScale - outputLabelSize.X, 0),
                                      labelColor.Fade(0.7f),
                                      outputDefinitionName);
@@ -697,6 +684,25 @@ internal sealed partial class MagGraphCanvas
                     CustomComponents.TooltipForLastItem(UiColors.StatusWarning, statusLevel.ToString(), statusProvider.GetStatusMessage(), false);
                 }
             }
+        }
+    }
+
+    private void DrawMissingInputIndicator(ImDrawListPtr drawList, Vector2 pMin, MagGraphItem.InputLine inputLine)
+    {
+        var s = GridSizeOnScreen.Y;
+        var c = pMin + new Vector2(-s * 0.2f, s * 0.45f) ;
+        var s2 = s * 0.4f;
+        drawList.AddTriangleFilled(c +new Vector2(0, -0.2f) * s2,
+                                   c +new Vector2(-0.2f, 0.2f) * s2,
+                                   c +new Vector2(0.2f, 0.2f) * s2,
+                                   //+ new Vector2(8, 9) * CanvasScale 
+                                   UiColors.StatusAttention);
+                
+        ImGui.SetCursorScreenPos(c- Vector2.One * s2/2);
+        ImGui.InvisibleButton("warningArea", new Vector2(s2, s2));
+        if (ImGui.IsItemHovered())
+        {
+            CustomComponents.TooltipForLastItem("Requires " + inputLine.InputUi.InputDefinition.Name);
         }
     }
 

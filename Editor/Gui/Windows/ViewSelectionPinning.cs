@@ -19,8 +19,6 @@ internal sealed class ViewSelectionPinning
 {
     public void DrawPinning()
     {
-        if (_pinnedProjectView == null)
-            return;
         
         if (!TryGetPinnedOrSelectedInstance(out var pinnedOrSelectedInstance, out var canvas))
         {
@@ -96,12 +94,15 @@ internal sealed class ViewSelectionPinning
                     Unpin();
                 }
 
-                var instanceSelectedInGraph = _pinnedProjectView!.NodeSelection.GetFirstSelectedInstance();
-                if (instanceSelectedInGraph != pinnedOrSelectedInstance)
+                if (_pinnedProjectView != null)
                 {
-                    if (ImGui.MenuItem("Pin Selection to View"))
+                    var instanceSelectedInGraph = _pinnedProjectView!.NodeSelection.GetFirstSelectedInstance();
+                    if (instanceSelectedInGraph != pinnedOrSelectedInstance)
                     {
-                        PinSelectionToView(canvas);
+                        if (ImGui.MenuItem("Pin Selection to View"))
+                        {
+                            PinSelectionToView(canvas);
+                        }
                     }
                 }
             }
