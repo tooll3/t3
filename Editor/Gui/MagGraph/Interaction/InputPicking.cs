@@ -120,10 +120,12 @@ internal static class InputPicking
                 inputLineIndex++;
         }
         
-        if (inputLineIndex > 0)
+        var isInputLineNotConnected = context.ItemForInputSelection.InputLines[inputLineIndex].ConnectionIn == null;
+        
+        if (!isInputLineNotConnected && inputLineIndex > 0)
             MagItemMovement.MoveSnappedItemsVertically(context,
                                                        MagItemMovement.CollectSnappedItems(context.ItemForInputSelection),
-                                                       context.ItemForInputSelection.PosOnCanvas.Y + MagGraphItem.GridSize.Y * (inputLineIndex - 0.5f),
+                                                       context.ItemForInputSelection.PosOnCanvas.Y + MagGraphItem.GridSize.Y * (inputLineIndex + 0.5f),
                                                        MagGraphItem.GridSize.Y);
         
         if (context.ShouldAttemptToSnapToInput)

@@ -418,7 +418,7 @@ internal static class GraphStates
                                   return;
 
                               var connection = context.ConnectionHovering.ConnectionHoversWhenClicked[0].Connection;
-                              context.DisconnectedInputsHashes.Add(connection.GetItemInputHash()); // keep input visible until state is complete
+                              //context.DisconnectedInputsHashes.Add(connection.GetItemInputHash()); // keep input visible until state is complete
                               context.ActiveSourceOutputId = connection.SourceOutput.Id;
                               
                               // Remove existing connection
@@ -427,6 +427,23 @@ internal static class GraphStates
                                                                                     connection.AsSymbolConnection(),
                                                                                     connection.MultiInputIndex));
 
+                              if (MagItemMovement.DisconnectedInputWouldCollapseLine(connection))
+                              {
+                                  var collectSnappedItems = MagItemMovement.CollectSnappedItems(connection.TargetItem);
+                                  collectSnappedItems.Remove(connection.TargetItem);
+                                  MagItemMovement.MoveSnappedItemsVertically(context,
+                                                                             collectSnappedItems,
+                                                                             connection.TargetItem.PosOnCanvas.Y + MagGraphItem.GridSize.Y * (connection.InputLineIndex + 0.5f),
+                                                                             -MagGraphItem.GridSize.Y);
+                              }
+                              // var deletedLineIndex = 0;
+                              // var lines = connection.TargetItem.InputLines;
+                              // while ( deletedLineIndex < lines.Length && lines[deletedLineIndex].Id != connection.TargetInput.Id)
+                              // {
+                              //     deletedLineIndex++;
+                              // }                              
+                              
+                              
                               var tempConnection = new MagGraphConnection
                                                        {
                                                            Style = MagGraphConnection.ConnectionStyles.Unknown,

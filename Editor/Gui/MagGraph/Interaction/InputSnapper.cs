@@ -63,7 +63,7 @@ internal static class InputSnapper
         // TODO: Use snap type...
         // Create connection
         var sourceParentOrChildId = tempConnection.SourceItem.Variant == MagGraphItem.Variants.Input ? Guid.Empty : tempConnection.SourceItem.Id;
-        var targetParentOrChildId =BestInputMatch.Item.Variant == MagGraphItem.Variants.Output? Guid.Empty:  BestInputMatch.Item.Id;
+        var targetParentOrChildId = BestInputMatch.Item.Variant == MagGraphItem.Variants.Output ? Guid.Empty : BestInputMatch.Item.Id;
         var connectionToAdd = new Symbol.Connection(sourceParentOrChildId,
                                                     tempConnection.SourceOutput.Id,
                                                     targetParentOrChildId,
@@ -76,29 +76,47 @@ internal static class InputSnapper
         }
 
         var multiInputIndex = BestInputMatch.MultiInputIndex;
-        if (BestInputMatch.InputSnapType == InputSnapTypes.InsertAfterMultiInput)
-        {
-            context.MacroCommand!.AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
-                                                                             connectionToAdd,
-                                                                             multiInputIndex + 1));
-        }
-        else if (BestInputMatch.InputSnapType == InputSnapTypes.ReplaceMultiInput)
+        var adjustedMultiInputIndex = multiInputIndex + (BestInputMatch.InputSnapType == InputSnapTypes.InsertAfterMultiInput ? 1 : 0);
+        
+        if (BestInputMatch.InputSnapType == InputSnapTypes.ReplaceMultiInput)
         {
             context.MacroCommand!.AddAndExecCommand(new DeleteConnectionCommand(context.CompositionInstance.Symbol,
                                                                                 connectionToAdd,
-                                                                                multiInputIndex));
+                                                                                adjustedMultiInputIndex));
 
             context.MacroCommand!.AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
                                                                              connectionToAdd,
-                                                                             multiInputIndex));
+                                                                             adjustedMultiInputIndex));
         }
         else
         {
             context.MacroCommand!.AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
                                                                              connectionToAdd,
-                                                                             multiInputIndex ));
+                                                                             adjustedMultiInputIndex));
         }
 
+        // Push down other items
+        {
+            var lines = BestInputMatch.Item.InputLines;
+            var inputLineIndex = 0;
+            while ( inputLineIndex < lines.Length && lines[inputLineIndex].Id != BestInputMatch.SlotId)
+            {
+                inputLineIndex++;
+            }
+
+            var isInputLineNotConnected = lines[inputLineIndex].ConnectionIn == null;
+            
+            if (!isInputLineNotConnected && inputLineIndex < lines.Length)
+            {
+                var insertionIndex = inputLineIndex + adjustedMultiInputIndex;
+                var collectSnappedItems = MagItemMovement.CollectSnappedItems(BestInputMatch.Item);
+                collectSnappedItems.Remove(BestInputMatch.Item);
+                MagItemMovement.MoveSnappedItemsVertically(context,
+                                                           collectSnappedItems,
+                                                           BestInputMatch.Item.PosOnCanvas.Y + MagGraphItem.GridSize.Y * (insertionIndex - 0.5f),
+                                                           MagGraphItem.GridSize.Y);
+            }
+        }
         return true;
     }
 

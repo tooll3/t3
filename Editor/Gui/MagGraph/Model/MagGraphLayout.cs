@@ -333,13 +333,14 @@ internal sealed class MagGraphLayout
                                                       && c.TargetSlotId == input.Id);
 
                 //var multiInputIndex = 0;
-                var visibleInputIndex = 0;
+                //var visibleInputIndex = 0;
                 var multiConIndex = 0;
-                for (multiConIndex = 0; multiConIndex < connectionsToInput.Count + 1; multiConIndex++)
+                var virtualConnectionCount = 0; // including disconnected
+                for (var virtualSubIndex = 0; virtualSubIndex < connectionsToInput.Count + 1; virtualSubIndex++)
                 {
                     //var _ = connectionsToInput[multiConIndex];
 
-                    if (IsDisconnectedVisibleMultiInputLine(context, item.Id, input.Id, visibleInputIndex))
+                    if (IsDisconnectedVisibleMultiInputLine(context, item.Id, input.Id, visibleIndex))
                     {
                         inputLines.Add(new MagGraphItem.InputLine
                                            {
@@ -351,6 +352,8 @@ internal sealed class MagGraphLayout
                                                MultiInputIndex = multiConIndex,
                                            });
                         visibleIndex++;
+                        virtualConnectionCount++;
+                        //virtualSubIndex++;
                     }
 
                     if (shouldInputBeVisible && multiConIndex<connectionsToInput.Count)
@@ -364,15 +367,16 @@ internal sealed class MagGraphLayout
                                                VisibleIndex = visibleIndex,
                                                MultiInputIndex = multiConIndex,
                                            });
-
+                        virtualConnectionCount++;
                         visibleIndex++;
+                        multiConIndex++;
                     }
 
-                    visibleInputIndex++;
+                    //visibleIndex++;
                 }
 
                 // Show input even it not connected
-                if (shouldInputBeVisible && multiConIndex == 0)
+                if (shouldInputBeVisible && virtualConnectionCount == 0)
                 {
                     inputLines.Add(new MagGraphItem.InputLine
                                        {

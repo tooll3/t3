@@ -622,12 +622,8 @@ internal sealed partial class MagItemMovement
         var collapseLines = new HashSet<float>();
         foreach (var mc in unsnappedConnections)
         {
-            if (mc.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal
-                && mc.InputLineIndex > 0
-                && (mc.TargetItem.InputLines[mc.InputLineIndex].InputUi.Relevancy == Relevancy.Optional
-                    ||mc.TargetItem.InputLines[mc.InputLineIndex].MultiInputIndex > 0)
-                
-               )
+            var disconnectedInputWouldCollapseLine = DisconnectedInputWouldCollapseLine(mc);
+            if (disconnectedInputWouldCollapseLine )
             {
                 collapseLines.Add(mc.SourcePos.Y);
             }
@@ -644,6 +640,26 @@ internal sealed partial class MagItemMovement
                                        -MagGraphItem.GridSize.Y
                                       );
         }
+    }
+
+    public static bool DisconnectedInputWouldCollapseLine(MagGraphConnection connection)
+    {
+        var inputWasNotPrimary = connection.InputLineIndex > 0;
+        var inputWasOptional = connection.TargetItem.InputLines[connection.InputLineIndex].InputUi.Relevancy == Relevancy.Optional;
+        var otherConnectionsCounts = 0;
+            
+        foreach (var line in connection.TargetItem.InputLines)
+        {
+            if (line.InputUi.Id == connection.TargetItem.InputLines[connection.InputLineIndex].Id)
+                otherConnectionsCounts++;
+                
+        }
+        var multiInputHadOtherConnectedMultiInput = otherConnectionsCounts > 1;
+
+        var disconnectedInputWouldCollapseLine = connection.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal
+                                                 && (inputWasNotPrimary && inputWasOptional) 
+                                                 || multiInputHadOtherConnectedMultiInput;
+        return disconnectedInputWouldCollapseLine;
     }
 
     ///<summary>

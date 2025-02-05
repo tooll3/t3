@@ -15,10 +15,13 @@ namespace T3.Editor.Gui.Windows;
 /// A helper that decides which graph element to show.
 /// This is used by <see cref="OutputWindow"/> and eventually in <see cref="ParameterWindow"/>.
 /// </summary>
-internal class ViewSelectionPinning
+internal sealed class ViewSelectionPinning
 {
     public void DrawPinning()
     {
+        if (_pinnedProjectView == null)
+            return;
+        
         if (!TryGetPinnedOrSelectedInstance(out var pinnedOrSelectedInstance, out var canvas))
         {
             Unpin();
@@ -93,7 +96,7 @@ internal class ViewSelectionPinning
                     Unpin();
                 }
 
-                var instanceSelectedInGraph = _pinnedComponents!.NodeSelection.GetFirstSelectedInstance();
+                var instanceSelectedInGraph = _pinnedProjectView!.NodeSelection.GetFirstSelectedInstance();
                 if (instanceSelectedInGraph != pinnedOrSelectedInstance)
                 {
                     if (ImGui.MenuItem("Pin Selection to View"))
@@ -195,10 +198,10 @@ internal class ViewSelectionPinning
             return instance != null;
         }
 
-        if (!_pinnedComponents!.GraphCanvas.Destroyed)
+        if (!_pinnedProjectView!.GraphCanvas.Destroyed)
         {
-            instance = _pinnedComponents.Structure.GetInstanceFromIdPath(_pinnedInstancePath);
-            components = _pinnedComponents;
+            instance = _pinnedProjectView.Structure.GetInstanceFromIdPath(_pinnedInstancePath);
+            components = _pinnedProjectView;
             return instance != null;
         }
 
@@ -218,14 +221,14 @@ internal class ViewSelectionPinning
     public void PinInstance(Instance? instance, ProjectView canvas)
     {
         _pinnedInstancePath = instance != null ? instance.InstancePath : [];
-        _pinnedComponents = canvas;
+        _pinnedProjectView = canvas;
         _isPinned = true;
     }
 
     private void Unpin()
     {
         _isPinned = false;
-        _pinnedComponents = null;
+        _pinnedProjectView = null;
         _pinnedInstancePath = [];
     }
 
@@ -236,7 +239,7 @@ internal class ViewSelectionPinning
     }
 
     private bool _isPinned;
-    private ProjectView? _pinnedComponents;
+    private ProjectView? _pinnedProjectView;
     private IReadOnlyList<Guid> _pinnedInstancePath = Array.Empty<Guid>();
     private IReadOnlyList<Guid> _pinnedEvaluationInstancePath = Array.Empty<Guid>();
 }
