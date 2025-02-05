@@ -529,7 +529,7 @@ internal abstract class ScalableCanvas : IScalableCanvas
             // isDraggingConnection = tempConnections.Count > 0 && ImGui.IsWindowFocused();
         }
             
-        // This is a work around to allow the curve edit canvas to control zooming the timeline window
+        // This is a workaround to allow the curve edit canvas to control zooming the timeline window
         var allowChildHover = flags.HasFlag(T3Ui.EditingFlags.AllowHoveredChildWindows)
                                   ? ImGuiHoveredFlags.ChildWindows
                                   : ImGuiHoveredFlags.None;
@@ -566,8 +566,10 @@ internal abstract class ScalableCanvas : IScalableCanvas
             ScrollTarget -= mouseState.Delta / (parentScaleTarget * ScaleTarget);
             _draggedCanvas = this;
         }
+
+        var isWindowHoveredDirectly = ImGui.IsWindowHovered(ImGuiHoveredFlags.None);
             
-        var preventZoom = flags.HasFlag(T3Ui.EditingFlags.PreventZoomWithMouseWheel);
+        var preventZoom = flags.HasFlag(T3Ui.EditingFlags.PreventZoomWithMouseWheel) || !isWindowHoveredDirectly;
 
         if (!preventZoom)
             //&& !ImGui.IsPopupOpen("", ImGuiPopupFlags.AnyPopup))
