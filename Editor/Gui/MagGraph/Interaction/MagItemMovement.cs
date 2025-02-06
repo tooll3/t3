@@ -120,7 +120,6 @@ internal sealed partial class MagItemMovement
 
     internal void UpdateDragging(GraphUiContext context)
     {
-        
         if (!T3Ui.IsCurrentlySaving && _shakeDetector.TestDragForShake(ImGui.GetMousePos()))
         {
             _shakeDetector.ResetShaking();
@@ -327,8 +326,8 @@ internal sealed partial class MagItemMovement
                 _unsnappedBorderConnectionsBeforeDrag.Add(c.ConnectionHash);
             }
         }
-        
-        _context.CompositionInstance.Symbol.GetSymbolUi().FlagAsModified();             
+
+        _context.CompositionInstance.Symbol.GetSymbolUi().FlagAsModified();
     }
 
     private readonly HashSet<int> _unsnappedBorderConnectionsBeforeDrag = [];
@@ -623,7 +622,7 @@ internal sealed partial class MagItemMovement
         foreach (var mc in unsnappedConnections)
         {
             var disconnectedInputWouldCollapseLine = DisconnectedInputWouldCollapseLine(mc);
-            if (disconnectedInputWouldCollapseLine )
+            if (disconnectedInputWouldCollapseLine)
             {
                 collapseLines.Add(mc.SourcePos.Y);
             }
@@ -646,20 +645,27 @@ internal sealed partial class MagItemMovement
     {
         var inputWasNotPrimary = connection.InputLineIndex > 0;
         var inputWasOptional = connection.TargetItem.InputLines[connection.InputLineIndex].InputUi.Relevancy == Relevancy.Optional;
-        var otherConnectionsCounts = 0;
-            
+
+        var multiInputConnectionCount = 0;
+
         foreach (var line in connection.TargetItem.InputLines)
         {
             if (line.InputUi.Id == connection.TargetItem.InputLines[connection.InputLineIndex].Id)
-                otherConnectionsCounts++;
-                
+                multiInputConnectionCount++;
         }
-        var multiInputHadOtherConnectedMultiInput = otherConnectionsCounts > 1;
 
-        var disconnectedInputWouldCollapseLine = connection.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal
-                                                 && (inputWasNotPrimary && inputWasOptional) 
-                                                 || multiInputHadOtherConnectedMultiInput;
-        return disconnectedInputWouldCollapseLine;
+        var multiInputHadOtherConnectedMultiInput = multiInputConnectionCount > 1;
+        var connectedToLeftInput =
+            connection.Style == MagGraphConnection.ConnectionStyles.BottomToLeft
+            || connection.Style == MagGraphConnection.ConnectionStyles.RightToLeft
+            || connection.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal;
+
+        if (connectedToLeftInput
+            && (inputWasNotPrimary && inputWasOptional)
+            || multiInputHadOtherConnectedMultiInput)
+            return true;
+        
+        return false;
     }
 
     ///<summary>
@@ -966,8 +972,8 @@ internal sealed partial class MagItemMovement
         {
             var itemAInputCount = itemA.GetInputAnchorCount();
             MagGraphItem.InputAnchorPoint inputAnchor = default;
-            
-            for(var inputAnchorIndex = 0; inputAnchorIndex < itemAInputCount; inputAnchorIndex++)
+
+            for (var inputAnchorIndex = 0; inputAnchorIndex < itemAInputCount; inputAnchorIndex++)
             {
                 itemA.GetInputAnchorAtIndex(inputAnchorIndex, ref inputAnchor);
                 // make sure it's a snapped border connection
@@ -988,7 +994,7 @@ internal sealed partial class MagItemMovement
                     var count = itemB.GetOutputAnchorCount();
                     MagGraphItem.OutputAnchorPoint outputAnchor = default;
 
-                    for(var index = 0; index < count; index++) 
+                    for (var index = 0; index < count; index++)
                     {
                         itemB.GetOutputAnchorAtIndex(index, ref outputAnchor);
                         if (outputAnchor.SnappedConnectionHash != MagGraphItem.FreeAnchor

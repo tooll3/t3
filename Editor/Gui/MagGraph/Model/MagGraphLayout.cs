@@ -2,6 +2,8 @@
 
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.MagGraph.Interaction;
@@ -35,6 +37,7 @@ namespace T3.Editor.Gui.MagGraph.Model;
 /// </summary>
 internal sealed class MagGraphLayout
 {
+    
     public void ComputeLayout(GraphUiContext context, bool forceUpdate = false)
     {
         var compositionOp = context.CompositionInstance;
@@ -46,8 +49,9 @@ internal sealed class MagGraphLayout
             HasCompositionDataChanged(compositionOp.Symbol, ref _compositionModelHash))
             RefreshDataStructure(context, parentSymbolUi);
 
+        // TODO: This only needs to be done, on structural changes or when items have been moved
         UpdateConnectionLayout();
-        ComputeVerticalStackBoundaries();
+        ComputeVerticalStackBoundaries(context);
     }
 
     public void FlagAsChanged()
@@ -657,11 +661,13 @@ internal sealed class MagGraphLayout
     /// This improves the layout of arc connections inputs into multiple stacked ops so they
     /// avoid overlap.
     /// </summary>
-    private void ComputeVerticalStackBoundaries()
+    /// <param name="context"></param>
+    private void ComputeVerticalStackBoundaries(GraphUiContext context)
     {
         // Reuse list to avoid allocations
         var listStackedItems = new List<MagGraphItem>();
         MagGraphItem? previousItem = null;
+        var dl = ImGui.GetWindowDrawList();
 
         listStackedItems.Clear();
         foreach (var item in Items.Values.OrderBy(i => MathF.Round(i.PosOnCanvas.X * 1f)).ThenBy(i => i.PosOnCanvas.Y))
@@ -685,20 +691,33 @@ internal sealed class MagGraphLayout
             }
             else
             {
-                if (listStackedItems.Count > 1)
-                {
-                    var stackArea = new ImRect(listStackedItems[0].PosOnCanvas,
-                                               listStackedItems[^1].Area.Max);
-                    foreach (var x in listStackedItems)
-                    {
-                        x.VerticalStackArea = stackArea;
-                    }
-                }
-
-                listStackedItems.Clear();
+                ApplyStackToItems();
                 listStackedItems.Add(item);
                 previousItem = item;
             }
+        }
+        ApplyStackToItems();
+
+        return;
+
+        void ApplyStackToItems()
+        {
+            if (listStackedItems.Count > 1)
+            {
+                var stackArea = new ImRect(listStackedItems[0].PosOnCanvas,
+                                           listStackedItems[^1].Area.Max);
+                foreach (var x in listStackedItems)
+                {
+                    x.VerticalStackArea = stackArea;
+                }
+
+                // Draw Debug
+                // var aOnScreen = context.Canvas.TransformRect(stackArea);
+                // dl.AddRect(aOnScreen.Min, aOnScreen.Max, Color.Green);
+                    
+            }
+
+            listStackedItems.Clear();
         }
     }
 

@@ -102,7 +102,6 @@ internal static class InputPicking
         var inputConnectionCount = context.CompositionInstance.Symbol.Connections.Count(c => c.TargetParentOrChildId == context.ItemForInputSelection.Id
                                                                                        && c.TargetSlotId == targetInputUi.Id);
         
-        
          context.MacroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol,
                                                                          connectionToAdd,
                                                                          inputConnectionCount));
@@ -112,25 +111,38 @@ internal static class InputPicking
         var allInputSlots = context.ItemForInputSelection.Instance!.Inputs;
         var selectedInputId = targetInputUi.InputDefinition.Id;
         
-        var inputLineIndex = 0;
+        var insertionLineIndex = 0;
+        var isSlotVisible = false;
+        var isMultiInput = false;
         foreach (var slot in allInputSlots)
         {
-            if (slot.Id == selectedInputId)
+            var slotId = slot.Id;
+            isSlotVisible = insertionLineIndex < visibleInputLines.Length
+                                && slotId == visibleInputLines[insertionLineIndex].Input.Id;
+
+            if (isSlotVisible)
+            {
+                isMultiInput = visibleInputLines[insertionLineIndex].InputUi.InputDefinition.IsMultiInput;
+                
+                // Go through end of visible input group (could be multiple lines for multiInputs)
+                while (insertionLineIndex < visibleInputLines.Length && visibleInputLines[insertionLineIndex].Input.Id == slotId)
+                {
+                    insertionLineIndex++;
+                }
+            }
+            else
+            {
+                isMultiInput = false;
+            }
+            
+            if (slotId == selectedInputId)
                 break;
-            
-            
-            if (inputLineIndex < visibleInputLines.Length
-                && slot.Id == visibleInputLines[inputLineIndex].Input.Id)
-                inputLineIndex++;
         }
         
-        var isInputLineNotConnected = inputLineIndex >= visibleInputLines.Length  
-                                      || visibleInputLines[inputLineIndex].ConnectionIn == null;
-        
-        if (isInputLineNotConnected)
+        if (!isSlotVisible || isMultiInput)
             MagItemMovement.MoveSnappedItemsVertically(context,
                                                        MagItemMovement.CollectSnappedItems(context.ItemForInputSelection),
-                                                       context.ItemForInputSelection.PosOnCanvas.Y + MagGraphItem.GridSize.Y * (inputLineIndex - 0.5f),
+                                                       context.ItemForInputSelection.PosOnCanvas.Y + MagGraphItem.GridSize.Y * (insertionLineIndex - 0.5f),
                                                        MagGraphItem.GridSize.Y);
         
         context.ItemMovement.Reset();
