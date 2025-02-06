@@ -106,50 +106,33 @@ internal static class InputPicking
          context.MacroCommand.AddAndExecCommand(new AddConnectionCommand(composition.Symbol,
                                                                          connectionToAdd,
                                                                          inputConnectionCount));
-        
-        
+         
         // Find insertion index
+        var visibleInputLines = context.ItemForInputSelection.InputLines;
+        var allInputSlots = context.ItemForInputSelection.Instance!.Inputs;
+        var selectedInputId = targetInputUi.InputDefinition.Id;
+        
         var inputLineIndex = 0;
-        foreach (var input in context.ItemForInputSelection.Instance!.Inputs)
+        foreach (var slot in allInputSlots)
         {
-            if (input.Id == targetInputUi.InputDefinition.Id)
+            if (slot.Id == selectedInputId)
                 break;
             
-            if (inputLineIndex < context.ItemForInputSelection.InputLines.Length
-                && input.Id == context.ItemForInputSelection.InputLines[inputLineIndex].Input.Id)
+            
+            if (inputLineIndex < visibleInputLines.Length
+                && slot.Id == visibleInputLines[inputLineIndex].Input.Id)
                 inputLineIndex++;
         }
         
-        var isInputLineNotConnected = context.ItemForInputSelection.InputLines[inputLineIndex].ConnectionIn == null;
+        var isInputLineNotConnected = inputLineIndex >= visibleInputLines.Length  
+                                      || visibleInputLines[inputLineIndex].ConnectionIn == null;
         
-        if (!isInputLineNotConnected && inputLineIndex > 0)
+        if (isInputLineNotConnected)
             MagItemMovement.MoveSnappedItemsVertically(context,
                                                        MagItemMovement.CollectSnappedItems(context.ItemForInputSelection),
-                                                       context.ItemForInputSelection.PosOnCanvas.Y + MagGraphItem.GridSize.Y * (inputLineIndex + 0.5f),
+                                                       context.ItemForInputSelection.PosOnCanvas.Y + MagGraphItem.GridSize.Y * (inputLineIndex - 0.5f),
                                                        MagGraphItem.GridSize.Y);
         
-        if (context.ShouldAttemptToSnapToInput)
-        {
-            // Snap items to input location (we assume that all dragged items are snapped...)
-            var targetPos = context.ItemForInputSelection.PosOnCanvas
-                            + new Vector2(-context.ActiveSourceItem.Size.X,
-                                          (inputLineIndex) * MagGraphItem.GridSize.Y);
-            
-            var moveDelta = targetPos - context.ActiveSourceItem.PosOnCanvas;
-            
-            var affectedItemsAsNodes = context.ItemMovement.DraggedItems.Select(i => i as ISelectableCanvasObject).ToList();
-            var newMoveComment = new ModifyCanvasElementsCommand(composition.Symbol.Id, affectedItemsAsNodes, context.Selector);
-            context.MacroCommand.AddExecutedCommandForUndo(newMoveComment);
-            
-            foreach (var item in affectedItemsAsNodes)
-            {
-                item.PosOnCanvas += moveDelta;
-            }
-            
-            newMoveComment.StoreCurrentValues();
-        }
-        
-        // Complete drag interaction
         context.ItemMovement.Reset();
         context.Layout.FlagAsChanged();
     }
