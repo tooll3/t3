@@ -105,12 +105,19 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
         _projectView.OnCompositionChanged -= CompositionChangedHandler;
         _projectView.OnCompositionContentChanged -= CompositionContentChangedHandler;
     }
-
-
-
+    
     void IGraphCanvas.CreatePlaceHolderConnectedToInput(SymbolUi.Child symbolChildUi, Symbol.InputDefinition inputInputDefinition)
     {
-        Log.Debug($"{nameof(IGraphCanvas.CreatePlaceHolderConnectedToInput)}() not implemented yet");
+        if (_context.StateMachine.CurrentState != GraphStates.Default)
+        {
+            Log.Debug("Can't insert placeholder while interaction is active");
+            return;
+        }
+
+        if (_context.Layout.Items.TryGetValue(symbolChildUi.Id, out var item))
+        {
+            _context.Placeholder.OpenForItemInput(_context, item, inputInputDefinition.Id);
+        }
     }
 
     void IGraphCanvas.StartDraggingFromInputSlot(SymbolUi.Child symbolChildUi, Symbol.InputDefinition inputInputDefinition)

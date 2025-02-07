@@ -24,7 +24,7 @@ internal static class GraphStates
                          // ReSharper disable once ConstantConditionalAccessQualifier
                          // This might not be initialized on startup
                          context.Placeholder.Reset(context);
-                         context.DisconnectedInputsHashes.Clear();
+                         context.DisconnectedInputHashes.Clear();
                      },
               Update: context =>
                       {
@@ -494,7 +494,7 @@ internal static class GraphStates
                               {
                                   var connection = h.Connection;
 
-                                  context.DisconnectedInputsHashes.Add(connection.GetItemInputHash()); // keep input visible until state is complete
+                                  context.DisconnectedInputHashes.Add(connection.GetItemInputHash()); // keep input visible until state is complete
 
                                   // Remove existing connections
                                   context.MacroCommand!

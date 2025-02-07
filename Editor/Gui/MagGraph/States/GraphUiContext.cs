@@ -102,7 +102,7 @@ internal sealed class GraphUiContext
     // internal GraphImageBackground GraphImageBackground { get;private set; }
 
     /** Used to prevent disconnected inputLines from collapsing... */
-    internal readonly HashSet<int> DisconnectedInputsHashes = []; 
+    internal readonly HashSet<int> DisconnectedInputHashes = []; 
     
     internal bool TryGetActiveOutputLine(out MagGraphItem.OutputLine outputLine)
     {

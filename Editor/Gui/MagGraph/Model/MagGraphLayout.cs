@@ -397,8 +397,8 @@ internal sealed class MagGraphLayout
             else
             {
                 var shouldBeVisible = isRelevant || isPrimaryInput || input.HasInputConnections
-                                      || (context.DisconnectedInputsHashes.Count > 0
-                                          && context.DisconnectedInputsHashes.Contains(MagGraphConnection.GetItemInputHash(item.Id, input.Id, 0)));
+                                      || (context.DisconnectedInputHashes.Count > 0
+                                          && context.DisconnectedInputHashes.Contains(MagGraphConnection.GetItemInputHash(item.Id, input.Id, 0)));
                 if (!shouldBeVisible)
                     continue;
 
@@ -463,8 +463,8 @@ internal sealed class MagGraphLayout
     {
         var itemInputHash = MagGraphConnection.GetItemInputHash(itemId, inputId, visibleInputIndex);
         var isDisconnectedVisibleMultiInputLine =
-            context.DisconnectedInputsHashes.Count > 0
-            && context.DisconnectedInputsHashes.Contains(itemInputHash);
+            context.DisconnectedInputHashes.Count > 0
+            && context.DisconnectedInputHashes.Contains(itemInputHash);
         return isDisconnectedVisibleMultiInputLine;
     }
 

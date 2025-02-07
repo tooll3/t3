@@ -2,6 +2,7 @@
 using ImGuiNET;
 using T3.Core.Model;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Styling;
@@ -111,6 +112,21 @@ internal static class InputPicking
         var allInputSlots = context.ItemForInputSelection.Instance!.Inputs;
         var selectedInputId = targetInputUi.InputDefinition.Id;
         
+        var insertionLineIndex = GetInsertionLineIndex(allInputSlots, visibleInputLines, selectedInputId, out var shouldPushDown);
+
+        if (shouldPushDown)
+            MagItemMovement.MoveSnappedItemsVertically(context,
+                                                       MagItemMovement.CollectSnappedItems(context.ItemForInputSelection),
+                                                       context.ItemForInputSelection.PosOnCanvas.Y + MagGraphItem.GridSize.Y * (insertionLineIndex - 0.5f),
+                                                       MagGraphItem.GridSize.Y);
+        
+        context.ItemMovement.Reset();
+        context.Layout.FlagAsChanged();
+    }
+
+    public static int GetInsertionLineIndex(IReadOnlyList<IInputSlot> allInputSlots, MagGraphItem.InputLine[] visibleInputLines,
+                                             Guid selectedInputId, out bool shouldPushDown)
+    {
         var insertionLineIndex = 0;
         var isSlotVisible = false;
         var isMultiInput = false;
@@ -118,7 +134,7 @@ internal static class InputPicking
         {
             var slotId = slot.Id;
             isSlotVisible = insertionLineIndex < visibleInputLines.Length
-                                && slotId == visibleInputLines[insertionLineIndex].Input.Id;
+                            && slotId == visibleInputLines[insertionLineIndex].Input.Id;
 
             if (isSlotVisible)
             {
@@ -138,18 +154,11 @@ internal static class InputPicking
             if (slotId == selectedInputId)
                 break;
         }
-        
-        if (!isSlotVisible || isMultiInput)
-            MagItemMovement.MoveSnappedItemsVertically(context,
-                                                       MagItemMovement.CollectSnappedItems(context.ItemForInputSelection),
-                                                       context.ItemForInputSelection.PosOnCanvas.Y + MagGraphItem.GridSize.Y * (insertionLineIndex - 0.5f),
-                                                       MagGraphItem.GridSize.Y);
-        
-        context.ItemMovement.Reset();
-        context.Layout.FlagAsChanged();
+
+        shouldPushDown = !isSlotVisible || isMultiInput;
+        return insertionLineIndex;
     }
 
-    
     internal static void DrawHiddenInputSelector(GraphUiContext context)
     {
         if (context.ItemForInputSelection == null || context.DraggedPrimaryOutputType == null)
