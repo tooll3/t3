@@ -308,7 +308,7 @@ internal sealed partial class MagGraphCanvas
         if (item.InputLines.Length > 0)
         {
             var inputLine = item.InputLines[0];
-            var isMissing = inputLine.InputUi.Relevancy == Relevancy.Required && inputLine.ConnectionIn == null;
+            var isMissing = inputLine.InputUi?.Relevancy == Relevancy.Required && inputLine.ConnectionIn == null;
             if (isMissing)
             {
                 DrawMissingInputIndicator(drawList, pMin, inputLine);
