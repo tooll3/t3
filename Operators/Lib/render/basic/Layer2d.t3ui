@@ -6,16 +6,16 @@
     {
       "InputId": "022f1959-a62b-49de-817a-3930bc8ec32b"/*EnableDepthWrite*/,
       "Position": {
-        "X": 275.7265,
-        "Y": 995.89105
+        "X": 416.5924,
+        "Y": 886.76996
       },
       "Description": "This defines whether the mesh / plane covers itself or is covered by or covers other meshes."
     },
     {
       "InputId": "1d9ccc5d-bed4-4d07-b664-0903442e4f58"/*ScaleMode*/,
       "Position": {
-        "X": 952.30725,
-        "Y": 1103.9789
+        "X": 1014.23206,
+        "Y": 1162.8093
       },
       "Description": "Selects the mode in which the Plane should dynamically adapt to the aspect ratio of the viewport."
     },
@@ -23,16 +23,16 @@
       "InputId": "2a95ac54-5ef7-4d3c-a90b-ecd5b422bddc"/*Texture*/,
       "Relevancy": "Relevant",
       "Position": {
-        "X": -276.4753,
-        "Y": 1091.3247
+        "X": -13.199188,
+        "Y": 1089.728
       },
       "Description": "Texture Input for any 2D Op.\ne.g. [RenderTarget], [Loadimage] etc."
     },
     {
       "InputId": "38f34034-b36f-4351-84e1-1a4f96e03fc6"/*Scale*/,
       "Position": {
-        "X": 952.30725,
-        "Y": 1013.9789
+        "X": 1014.23206,
+        "Y": 1092.8093
       },
       "Description": "Uniformly scales the Plane.",
       "Min": 0.01,
@@ -44,8 +44,8 @@
     {
       "InputId": "4618d8e0-2718-4373-a071-88ec1843b0c8"/*Stretch*/,
       "Position": {
-        "X": 952.30725,
-        "Y": 968.9791
+        "X": 1014.23206,
+        "Y": 1057.8093
       },
       "Description": "Non-Uniform scaling of the plane.\nX = Width\nY = Height",
       "AddPadding": "True",
@@ -56,16 +56,16 @@
     {
       "InputId": "4ac0a4d8-367c-4ece-9c1d-7abfbb2bfe27"/*PositionZ*/,
       "Position": {
-        "X": 952.30725,
-        "Y": 923.97943
+        "X": 1014.23206,
+        "Y": 1022.8094
       },
       "Description": "Distance to the viewport.\nPositive values reduce the distance. Negative values increase it."
     },
     {
       "InputId": "a384be77-c5fc-47b3-9ec3-960db9f9bae9"/*Position*/,
       "Position": {
-        "X": 952.30725,
-        "Y": 878.9792
+        "X": 1014.23206,
+        "Y": 987.8094
       },
       "Description": "The horizontal and vertical position of the layer in world space. \\nWith the default camera the viewport at that distance is precisely two units high. So setting y to 1 will align the lower layer border to the screen center.",
       "Min": 0.0,
@@ -77,16 +77,16 @@
     {
       "InputId": "a83bdfb1-c92d-4844-9e43-8ce09959fae9"/*EnableDepthTest*/,
       "Position": {
-        "X": 275.7265,
-        "Y": 950.8912
+        "X": 416.5924,
+        "Y": 851.76996
       },
       "Description": "This defines whether the mesh / plane covers itself or is covered by or covers other meshes."
     },
     {
       "InputId": "c8d0e44e-acd1-4045-b565-e1ce0b722e70"/*BlendMode*/,
       "Position": {
-        "X": 275.7265,
-        "Y": 1040.8911
+        "X": 439.18604,
+        "Y": 935.5263
       },
       "GroupTitle": "Additional Options",
       "Description": "Selects the Blendmode."
@@ -94,8 +94,8 @@
     {
       "InputId": "da0941c9-c700-4552-9d8a-799bf7a08826"/*Rotate*/,
       "Position": {
-        "X": 952.30725,
-        "Y": 1058.9789
+        "X": 1014.23206,
+        "Y": 1127.8093
       },
       "Description": "Positive values turn the plane counterclockwise, negative values turn it clockwise.",
       "Min": -90.0,
@@ -105,8 +105,8 @@
     {
       "InputId": "ed4f8c30-7b71-4649-97e6-710a718039b0"/*Color*/,
       "Position": {
-        "X": 33.497772,
-        "Y": 694.74426
+        "X": -131.77287,
+        "Y": 643.8898
       },
       "Description": "Selects a color which will be multiplied with the incoming image.",
       "AddPadding": "True"
@@ -116,15 +116,15 @@
     {
       "ChildId": "176b0705-f9d8-46b9-a4cd-b614cba2cb4f"/*Draw*/,
       "Position": {
-        "X": 636.6529,
-        "Y": 959.9784
+        "X": 720.1034,
+        "Y": 1019.2916
       }
     },
     {
       "ChildId": "2d7a0d50-d3fd-42fb-b411-158e7ea708af"/*SamplerState*/,
       "Position": {
-        "X": 488.1454,
-        "Y": 793.56696
+        "X": 580.66754,
+        "Y": 676.7888
       }
     },
     {
@@ -135,78 +135,78 @@
         "Y": 365.7782
       },
       "Position": {
-        "X": 803.07007,
-        "Y": 617.9807
+        "X": 1044.5198,
+        "Y": 469.63873
       }
     },
     {
       "ChildId": "39c61687-703d-4ff2-b1ba-9b3b92e9149e"/*UseFallbackTexture*/,
       "Position": {
-        "X": -124.04263,
-        "Y": 817.7008
+        "X": -13.199188,
+        "Y": 1124.728
       }
     },
     {
       "ChildId": "409f7ef6-f0d2-4c18-89a6-5ee2b872f12d"/*OutputMergerStage*/,
       "Position": {
-        "X": 636.6529,
-        "Y": 890.97845
+        "X": 719.18604,
+        "Y": 865.5263
       }
     },
     {
       "ChildId": "5b880701-7935-48c4-8cad-f3fc0cc9cb3f"/*InputAssemblerStage*/,
       "Position": {
-        "X": 636.6529,
-        "Y": 625.62683
+        "X": 904.5198,
+        "Y": 469.63873
       }
     },
     {
       "ChildId": "6943c6cc-4caa-42f3-b68c-49b6dc79e513"/*SrvFromTexture2d*/,
       "Position": {
-        "X": 25.957367,
-        "Y": 817.7008
+        "X": -13.199188,
+        "Y": 1194.728
       }
     },
     {
       "ChildId": "696dc3f8-a9b0-4e11-b8ca-0036ec3bce08"/*Value*/,
       "Position": {
-        "X": 333.49777,
-        "Y": 750.74426
+        "X": 148.22717,
+        "Y": 783.8898
       }
     },
     {
       "ChildId": "6a7dd7a0-5d91-4d5b-85a4-c0d6f7a46c42"/*PickBlendMode*/,
       "Position": {
-        "X": 486.6529,
-        "Y": 983.9784
+        "X": 579.18604,
+        "Y": 935.5263
       }
     },
     {
       "ChildId": "6b395d16-7f2d-407a-955f-4a101a8e47fe"/*SetPixelAndVertexShaderStage*/,
       "Position": {
-        "X": 636.6529,
-        "Y": 667.97845
+        "X": 720.66754,
+        "Y": 501.78882
       }
     },
     {
       "ChildId": "6cf2eb84-2d72-4a11-9482-20221cc78e28"/*_ProcessLayer2d*/,
       "Position": {
-        "X": 1102.3073,
-        "Y": 878.9792
+        "X": 1154.232,
+        "Y": 987.8094
       }
     },
     {
       "ChildId": "9766e402-9293-49cb-9992-c2a9964edd6a"/*Vector4Components*/,
       "Position": {
-        "X": 333.49777,
-        "Y": 694.74426
+        "X": 148.22717,
+        "Y": 643.8898
       }
     },
     {
       "ChildId": "990fe4c0-1f9e-4d30-ad2b-cf23bde82902"/*Rasterizer*/,
       "Position": {
-        "X": 636.6529,
-        "Y": 827.97845
+        "X": 717.1893,
+        "Y": 749.56146
       }
     },
     {
@@ -217,29 +217,29 @@
         "Y": 78.82269
       },
       "Position": {
-        "X": 488.1454,
-        "Y": 694.74426
+        "X": 288.22717,
+        "Y": 608.8898
       }
     },
     {
       "ChildId": "9de06603-4ac4-48df-94b7-32c83d5c0f69"/*VertexShader*/,
       "Position": {
-        "X": 488.1454,
-        "Y": 565.74426
+        "X": 580.66754,
+        "Y": 501.78882
       }
     },
     {
       "ChildId": "9eef3178-c2b0-4f17-8735-d839b1b02901"/*BlendColors*/,
       "Position": {
-        "X": 183.49777,
-        "Y": 694.74426
+        "X": 8.227173,
+        "Y": 643.8898
       }
     },
     {
       "ChildId": "be317db4-dae6-47c5-8a23-5d50581e2a1a"/*GetForegroundColor*/,
       "Position": {
-        "X": 33.497772,
-        "Y": 737.74426
+        "X": -131.77287,
+        "Y": 678.8898
       }
     },
     {
@@ -250,43 +250,43 @@
         "Y": 23.0
       },
       "Position": {
-        "X": 488.1454,
-        "Y": 651.74426
+        "X": 580.66754,
+        "Y": 571.7888
       }
     },
     {
       "ChildId": "e37b1218-9942-4370-941c-3fd1eea84628"/*RasterizerState*/,
       "Position": {
-        "X": 486.6529,
-        "Y": 827.97845
+        "X": 577.1893,
+        "Y": 749.56146
       }
     },
     {
       "ChildId": "e76bed8a-fa21-4016-88b1-37cb772c07d0"/*DepthStencilState*/,
       "Position": {
-        "X": 486.6529,
-        "Y": 890.97845
+        "X": 556.5924,
+        "Y": 851.76996
       }
     },
     {
       "ChildId": "f45818a8-aa1a-4dc4-86ce-9e01d8d02c8a"/*ApplyTransformMatrix*/,
       "Position": {
-        "X": 1248.3723,
-        "Y": 756.9979
+        "X": 1344.5919,
+        "Y": 518.7447
       }
     },
     {
       "ChildId": "f6847626-d6b8-4e90-8314-6883cc4eb23d"/*LoadImage*/,
       "Position": {
-        "X": -274.04263,
-        "Y": 817.7008
+        "X": -153.19919,
+        "Y": 1159.728
       }
     },
     {
       "ChildId": "fd4027eb-b931-4447-93c8-17efa05895e4"/*PixelShader*/,
       "Position": {
-        "X": 488.1454,
-        "Y": 608.74426
+        "X": 347.5894,
+        "Y": 529.6306
       }
     }
   ],
@@ -294,8 +294,8 @@
     {
       "OutputId": "e4a8d926-7abd-4d2a-82a1-b7d140cb457f"/*Output*/,
       "Position": {
-        "X": 1398.3723,
-        "Y": 756.9979
+        "X": 1344.5919,
+        "Y": 588.74445
       }
     }
   ]
