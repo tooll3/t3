@@ -406,7 +406,7 @@ internal sealed class PlaceholderCreation
             if (primaryInput != null && primaryInput.ValueType == context.DraggedPrimaryOutputType)
             {
                 var connectionToAdd = new Symbol.Connection(context.ActiveSourceItem!.Id,
-                                                            outputLine.Id,
+                                                            context.ActiveSourceOutputId,
                                                             newInstance.SymbolChildId,
                                                             primaryInput.Id);
 

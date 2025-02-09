@@ -108,8 +108,12 @@ internal static class GraphStates
                                       // Until we align the context switching between graphs, this hack applies the current
                                       // MagGraph scope to the legacy graph, so it's correctly saved for the Symbol in the user settings...
                                       //ProjectView.Focused?.GraphCanvas?.SetTargetScope(context.Canvas.GetTargetScope());
+
+                                      if (context.ActiveItem.Instance.Children.Count > 1)
+                                      { 
+                                          ProjectView.Focused.TrySetCompositionOpToChild(context.ActiveItem.Instance.SymbolChildId);
+                                      }
                                       
-                                      ProjectView.Focused.TrySetCompositionOpToChild(context.ActiveItem.Instance.SymbolChildId);
                                       //ImGui.CloseCurrentPopup(); // ?? 
                                       //}
                                   }
@@ -358,7 +362,7 @@ internal static class GraphStates
                           var posOnCanvas = context.Canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
                           context.PeekAnchorInCanvas = posOnCanvas;
 
-                          var mouseReleased = !ImGui.IsMouseDown(ImGuiMouseButton.Left);
+                          var mouseReleased =  context.StateMachine.StateTime > 0 && ImGui.IsMouseReleased(ImGuiMouseButton.Left);
                           if (!mouseReleased)
                               return;
 
@@ -379,7 +383,7 @@ internal static class GraphStates
                           }
                           else if (hasDisconnections)
                           {
-                              // Ripped off input -> Avoid open place holder
+                              // Ripped off input -> Avoid open placeholder
                               //UndoRedoStack.Add(context.MacroCommand);
                               context.CompleteMacroCommand();
                               context.StateMachine.SetState(Default, context);
@@ -401,6 +405,13 @@ internal static class GraphStates
               Exit: InputPicking.Reset
              );
 
+    internal static State PickOutput
+        = new(
+              Enter:  OutputPicking.Init,
+              Update=> {},//OutputPicking.DrawHiddenOutputSelector,
+              Exit: OutputPicking.Reset
+             );
+    
     internal static State HoldingConnectionEnd
         = new(
               Enter: _ => { },
@@ -418,7 +429,6 @@ internal static class GraphStates
                                   return;
 
                               var connection = context.ConnectionHovering.ConnectionHoversWhenClicked[0].Connection;
-                              //context.DisconnectedInputsHashes.Add(connection.GetItemInputHash()); // keep input visible until state is complete
                               context.ActiveSourceOutputId = connection.SourceOutput.Id;
                               
                               // Remove existing connection
@@ -566,4 +576,6 @@ internal static class GraphStates
               Update: _ => { },
               Exit: _ => { }
              );
+    
+
 }

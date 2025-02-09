@@ -7,7 +7,7 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.InputsAndTypes;
 using T3.Editor.UiModel.Selection;
-
+// ReSharper disable UseCollectionExpression
 // ReSharper disable UseWithExpressionToCopyStruct
 
 namespace T3.Editor.Gui.MagGraph.Model;
@@ -73,6 +73,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
 
     public InputLine[] InputLines = Array.Empty<InputLine>();
     public OutputLine[] OutputLines = Array.Empty<OutputLine>();
+    public bool HasHiddenOutputs;
 
     public struct InputLine
     {

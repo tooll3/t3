@@ -227,8 +227,6 @@ internal static class InputPicking
                     var input = context.ItemForInputSelection.Instance!.Inputs[inputIndex];
                     if (inputUi.Type == context.DraggedPrimaryOutputType)
                     {
-                        //var parameterHelp = "";
-                        
                         var isConnected = input.HasInputConnections;
                         var prefix = isConnected ? "× " : "   ";
                         var inputDefinitionName = prefix + inputUi.InputDefinition.Name;

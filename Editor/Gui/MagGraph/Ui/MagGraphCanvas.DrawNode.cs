@@ -21,7 +21,7 @@ namespace T3.Editor.Gui.MagGraph.Ui;
 
 internal sealed partial class MagGraphCanvas
 {
-    private void DrawItem(MagGraphItem item, ImDrawListPtr drawList, GraphUiContext context)
+    private void DrawNode(MagGraphItem item, ImDrawListPtr drawList, GraphUiContext context)
     {
         if (item.Variant == MagGraphItem.Variants.Placeholder)
             return;
@@ -272,7 +272,7 @@ internal sealed partial class MagGraphCanvas
                         var centerLerp = MathUtils.SmootherStep(0, 1, _hoverPickingProgress);
                         var center = Vector2.Lerp(indicatorPos, ImGui.GetMousePos(), centerLerp);
                         var radius = 3 + smoothedProgress * 3;
-                        var circleColor = UiColors.ForegroundFull.Fade(1 - _hoverPickingProgress*0.5f);
+                        var circleColor = UiColors.ForegroundFull.Fade(1 - _hoverPickingProgress * 0.5f);
                         CircleInBoxHelper.DrawClippedCircle(pMinVisible, pMaxVisible, center, radius, circleColor, drawList);
                     }
 
@@ -281,18 +281,18 @@ internal sealed partial class MagGraphCanvas
 
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 3);
-                    ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(3,4));
+                    ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(3, 4));
                     ImGui.BeginTooltip();
                     var childUi = item.SymbolUi;
                     if (childUi != null)
                     {
                         if (!TypeNameRegistry.Entries.TryGetValue(_context.DraggedPrimaryOutputType, out var typeName))
                             typeName = _context.DraggedPrimaryOutputType.Name;
-                    
+
                         ImGui.PushFont(Fonts.FontSmall);
                         ImGui.TextColored(UiColors.TextMuted, typeName + " inputs");
                         ImGui.PopFont();
-                    
+
                         var inputIndex = 0;
                         foreach (var inputUi in childUi.InputUis.Values)
                         {
@@ -303,11 +303,11 @@ internal sealed partial class MagGraphCanvas
                                 var prefix = isConnected ? "× " : "   ";
                                 ImGui.Selectable(prefix + inputUi.InputDefinition.Name);
                             }
-                    
+
                             inputIndex++;
                         }
                     }
-                    
+
                     ImGui.EndTooltip();
                     ImGui.PopStyleVar(3);
                 }
@@ -668,6 +668,151 @@ internal sealed partial class MagGraphCanvas
             }
 
             //ShowAnchorPointDebugs(outputAnchor);
+        }
+
+        // Draw additional output indicator
+        if (item.Variant == MagGraphItem.Variants.Operator)
+        {
+            if (item.HasHiddenOutputs)
+            {
+                if (_context.StateMachine.CurrentState == GraphStates.PickOutput && _context.ActiveItem == item)
+                {
+                    ImGui.PushStyleVar(ImGuiStyleVar.ChildRounding, 5);
+                    ImGui.PushStyleVar(ImGuiStyleVar.PopupBorderSize, 0);
+                    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 4);
+                    ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0, 0));
+                    ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(0, 0));
+
+                    ImGui.PushStyleColor(ImGuiCol.ChildBg, UiColors.BackgroundFull.Fade(0.7f).Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundFull.Fade(0.0f).Rgba);
+                    
+                    if (ImGui.BeginPopup("pickOutput", ImGuiWindowFlags.Popup))
+                    {
+                        CustomComponents.HintLabel("Pick output...");
+                        WindowContentExtend.ExtendToLastItem();
+
+                        foreach (var o in context.ActiveItem.SymbolUi!.OutputUis.Values)
+                        {
+                            var isVisible = false;
+                            foreach (var visibleOutput in context.ActiveItem.OutputLines)
+                            {
+                                if (visibleOutput.Id != o.Id) continue;
+                                isVisible = true;
+                                break;
+                            }
+
+                            if (isVisible)
+                                continue;
+
+                            var name = o.OutputDefinition.Name;
+                            var labelSize = ImGui.CalcTextSize(name);
+                            var width = MathF.Max(200 - 4, labelSize.X + 30);
+                            var buttonSize = new Vector2(width, ImGui.GetFrameHeight());
+
+                            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0,0.5f));
+                            ImGui.Button(name);
+                            ImGui.PopStyleVar();
+
+                            if (ImGui.IsItemHovered()
+                                && (ImGui.IsItemClicked(ImGuiMouseButton.Left)
+                                    || ImGui.IsMouseReleased(ImGuiMouseButton.Left)
+                                   )
+                               )
+                            {
+                                var outputSlot = context.ActiveItem?.Instance?.Outputs.FirstOrDefault(os => os.Id == o.Id);
+                                if (outputSlot == null)
+                                    break;
+
+                                var tempConnection = new MagGraphConnection
+                                                         {
+                                                             Style = MagGraphConnection.ConnectionStyles.Unknown,
+                                                             SourcePos = context.ActiveItem.PosOnCanvas,
+                                                             TargetPos = default,
+                                                             SourceItem = context.ActiveItem,
+                                                             TargetItem = null,
+                                                             SourceOutput = outputSlot,
+                                                             OutputLineIndex = 0,
+                                                             VisibleOutputIndex = 0,
+                                                             ConnectionHash = 0,
+                                                             IsTemporary = true,
+                                                         };
+                                context.TempConnections.Add(tempConnection);
+                                context.ActiveSourceItem = context.ActiveItem;
+                                context.ActiveSourceOutputId = outputSlot.Id;
+                                context.DraggedPrimaryOutputType = outputSlot.ValueType;
+                                context.StateMachine.SetState(GraphStates.DragConnectionEnd, context);
+                                ImGui.CloseCurrentPopup();
+                            }
+
+                            WindowContentExtend.ExtendToLastItem();
+
+                        }
+                        ImGui.EndPopup();
+                    }
+                    else
+                    {
+                        // Reset on release?
+                        context.StateMachine.SetState(GraphStates.Default, context);
+                    }
+                    ImGui.PopStyleVar(5);
+                    ImGui.PopStyleColor(2);
+                }
+                else
+                {
+                    var opacity = hoverProgress.RemapAndClamp(0, 1, 0.1f, 0.7f);
+                    var padding = 0.1f;
+                    var p = pMaxVisible - new Vector2(GridSizeOnScreen.Y * padding, GridSizeOnScreen.Y * padding);
+                    drawList.AddTriangleFilled(
+                                               p + new Vector2(-0.4f, -0.5f) * CanvasScale * 4,
+                                               p + new Vector2(0.4f, 0) * CanvasScale * 4,
+                                               p + new Vector2(-0.4f, 0.5f) * CanvasScale * 4,
+                                               UiColors.ForegroundFull.Fade(opacity)
+                                              );
+
+                    if (hoverProgress > 0.5f)
+                    {
+                        var area = new ImRect(p + new Vector2(-0.4f, -0.5f) * CanvasScale * 6,
+                                              p + new Vector2(0.4f, 0.5f) * CanvasScale * 6);
+                        var isToggleHovered = area.Contains(ImGui.GetMousePos());
+                        if (isToggleHovered)
+                        {
+                            ImGui.SetNextWindowPos(p);
+                            CustomComponents
+                               .TooltipForLastItem(() =>
+                                                   {
+                                                       CustomComponents.HintLabel("Show more outputs...");
+                                                       foreach (var o in item.SymbolUi!.OutputUis.Values)
+                                                       {
+                                                           var isVisible = false;
+                                                           foreach (var visibleOutput in item.OutputLines)
+                                                           {
+                                                               if (visibleOutput.Id != o.Id) continue;
+                                                               isVisible = true;
+                                                               break;
+                                                           }
+
+                                                           if (isVisible)
+                                                               continue;
+
+                                                           ImGui.TextUnformatted(o.OutputDefinition.Name);
+                                                           ImGui.SameLine();
+                                                           ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                                                           ImGui.TextUnformatted($" <{o.OutputDefinition.ValueType.Name}>");
+                                                           ImGui.PopStyleColor();
+                                                       }
+                                                   }, false);
+
+                            if (ImGui.IsMouseClicked(ImGuiMouseButton.Left)
+                                || ImGui.IsMouseClicked(ImGuiMouseButton.Right))
+                            {
+                                ImGui.OpenPopup("pickOutput");
+                                _context.StateMachine.SetState(GraphStates.PickOutput, context);
+                                _context.ActiveItem = item;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         if (item.Variant == MagGraphItem.Variants.Operator)

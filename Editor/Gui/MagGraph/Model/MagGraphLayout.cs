@@ -3,7 +3,6 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using ImGuiNET;
-using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.MagGraph.Interaction;
@@ -51,7 +50,7 @@ internal sealed class MagGraphLayout
 
         // TODO: This only needs to be done, on structural changes or when items have been moved
         UpdateConnectionLayout();
-        ComputeVerticalStackBoundaries(context);
+        ComputeVerticalStackBoundaries();
     }
 
     public void FlagAsChanged()
@@ -69,7 +68,7 @@ internal sealed class MagGraphLayout
         CollectItemReferences(composition, parentSymbolUi);
         UpdateConnectionSources(composition);
         UpdateVisibleItemLines(context);
-        CollectConnectionReferences(composition, context);
+        CollectConnectionReferences(composition);
         StructureFlaggedAsChanged = false;
     }
 
@@ -201,16 +200,17 @@ internal sealed class MagGraphLayout
         return hash;
     }
 
-    // [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    // private static int GetHashCodeForSlot(ISlot output)
-    // {
-    //     var hash = output.Id.GetHashCode();
-    //     hash = hash * 31 + output.Parent.SymbolChildId.GetHashCode();
-    //     return hash;
-    // }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static int GetHashCodeForOutputSlot(ISlot output)
+    {
+        var hash = output.Id.GetHashCode();
+        hash = hash * 31 + output.Parent.SymbolChildId.GetHashCode();
+        return hash;
+    }
 
     /// <summary>
-    /// Sadly there is no easy method to store if an output has a connection 
+    /// Sadly there is no obvious easy method to store if an output has a connection.
+    /// So we collect connected outputs in a hashset. 
     /// </summary>
     private void UpdateConnectionSources(Instance composition)
     {
@@ -302,14 +302,18 @@ internal sealed class MagGraphLayout
     }
 
     /// <summary>
-    /// This is accessible because for some use-cases we need to compute the height of inserted items.
+    /// Aggregate visible inputs and outputs into a consistent stack
     /// </summary>
+    /// <remarks>
+    /// This is accessible because for some use-cases we need to compute the height of inserted items.
+    /// </remarks>
     internal static int CollectVisibleLines(GraphUiContext context, MagGraphItem item, List<MagGraphItem.InputLine> inputLines,
                                             List<MagGraphItem.OutputLine> outputLines,
                                             HashSet<int>? connectedOutputs = null)
     {
         Debug.Assert(item.Instance != null && item.SymbolUi != null);
         int visibleIndex = 0;
+        item.HasHiddenOutputs = false;
 
         for (var inputLineIndex = 0; inputLineIndex < item.Instance.Inputs.Count; inputLineIndex++)
         {
@@ -336,14 +340,10 @@ internal sealed class MagGraphLayout
                                         .FindAll(c => c.TargetParentOrChildId == item.Id
                                                       && c.TargetSlotId == input.Id);
 
-                //var multiInputIndex = 0;
-                //var visibleInputIndex = 0;
                 var multiConIndex = 0;
                 var virtualConnectionCount = 0; // including disconnected
                 for (var virtualSubIndex = 0; virtualSubIndex < connectionsToInput.Count + 1; virtualSubIndex++)
                 {
-                    //var _ = connectionsToInput[multiConIndex];
-
                     if (IsDisconnectedVisibleMultiInputLine(context, item.Id, input.Id, visibleIndex))
                     {
                         inputLines.Add(new MagGraphItem.InputLine
@@ -357,7 +357,6 @@ internal sealed class MagGraphLayout
                                            });
                         visibleIndex++;
                         virtualConnectionCount++;
-                        //virtualSubIndex++;
                     }
 
                     if (shouldInputBeVisible && multiConIndex<connectionsToInput.Count)
@@ -375,8 +374,6 @@ internal sealed class MagGraphLayout
                         visibleIndex++;
                         multiConIndex++;
                     }
-
-                    //visibleIndex++;
                 }
 
                 // Show input even it not connected
@@ -427,10 +424,13 @@ internal sealed class MagGraphLayout
             }
 
             // Should non connected secondary outputs be visible?
-            // int outputHash2 = GetHashCodeForSlot(output);
-            // var isConnected = connectedOutputs != null && connectedOutputs.Contains(outputHash2);
-            // if (outputIndex > 0 && !isConnected)
-            //     continue;
+            int outputHash2 = GetHashCodeForOutputSlot(output);
+            var isConnected = connectedOutputs != null && connectedOutputs.Contains(outputHash2);
+            if (outputIndex > 0 && !isConnected)
+            {
+                item.HasHiddenOutputs = true;
+                continue;
+            }
 
             outputLines.Add(new MagGraphItem.OutputLine
                                 {
@@ -468,7 +468,7 @@ internal sealed class MagGraphLayout
         return isDisconnectedVisibleMultiInputLine;
     }
 
-    private void CollectConnectionReferences(Instance composition, GraphUiContext context)
+    private void CollectConnectionReferences(Instance composition)
     {
         MagConnections.Clear();
         MagConnections.Capacity = composition.Symbol.Connections.Count;
@@ -490,7 +490,7 @@ internal sealed class MagGraphLayout
                 var targetInput = targetFromInputItem.Instance.Inputs.FirstOrDefault(i => i.Input.InputDefinition.Id == c.TargetSlotId);
                 Debug.Assert(targetInput != null);
 
-                FindVisibleIndex(targetFromInputItem, targetInput, out var targetInputIndex, out var targetMultiInputIndex, context);
+                FindVisibleIndex(targetFromInputItem, targetInput, out var targetInputIndex, out var targetMultiInputIndex);
 
                 var connectionFromSymbolInput = new MagGraphConnection
                                                     {
@@ -589,7 +589,7 @@ internal sealed class MagGraphLayout
                 continue;
             }
 
-            FindVisibleIndex(targetItem, input, out var inputIndex, out var multiInputIndex2, context);
+            FindVisibleIndex(targetItem, input, out var inputIndex, out var multiInputIndex2);
 
             var outputIndex = 0;
             foreach (var outLine in sourceItem.OutputLines)
@@ -630,7 +630,7 @@ internal sealed class MagGraphLayout
     /// This method needs to be rethought and cleaned up.
     /// MultiInputIndex will always return max count?
     /// </summary>
-    private static void FindVisibleIndex(MagGraphItem targetItem, IInputSlot input, out int visibleInputIndex, out int multiInputIndex, GraphUiContext context)
+    private static void FindVisibleIndex(MagGraphItem targetItem, IInputSlot input, out int visibleInputIndex, out int multiInputIndex)
     {
         // Find connected index
         multiInputIndex = 0;
@@ -661,13 +661,12 @@ internal sealed class MagGraphLayout
     /// This improves the layout of arc connections inputs into multiple stacked ops so they
     /// avoid overlap.
     /// </summary>
-    /// <param name="context"></param>
-    private void ComputeVerticalStackBoundaries(GraphUiContext context)
+    private void ComputeVerticalStackBoundaries()
     {
         // Reuse list to avoid allocations
         var listStackedItems = new List<MagGraphItem>();
         MagGraphItem? previousItem = null;
-        var dl = ImGui.GetWindowDrawList();
+        ImGui.GetWindowDrawList();
 
         listStackedItems.Clear();
         foreach (var item in Items.Values.OrderBy(i => MathF.Round(i.PosOnCanvas.X * 1f)).ThenBy(i => i.PosOnCanvas.Y))

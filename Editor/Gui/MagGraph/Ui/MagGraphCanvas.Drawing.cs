@@ -64,7 +64,7 @@ internal sealed partial class MagGraphCanvas
         // Draw items
         foreach (var item in _context.Layout.Items.Values)
         {
-            DrawItem(item, drawList, _context);
+            DrawNode(item, drawList, _context);
         }
 
         Fonts.FontSmall.Scale = 1; // WTF. Some of the drawNode seems to spill out fontSize
