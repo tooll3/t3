@@ -1,0 +1,30 @@
+{
+    "Id": "6e29bd11-7927-4f74-a35e-a6b129464a55" /*EaseVec2*/,
+    "Inputs": [
+        {
+            "Id": "3156deda-67ba-42eb-9418-7f28ea4b4ca5" /*Value*/,
+            "DefaultValue": {
+                "X": 0.0,
+                "Y": 0.0
+            }
+        },
+        {
+            "Id": "51989ff4-a9c6-4fbc-bbc1-79b7af859e23" /*Duration*/,
+            "DefaultValue": 0.25
+        },
+        {
+            "Id": "38f566a4-d41f-43d7-9ee5-1be3cb20e21c" /*UseAppRunTime*/,
+            "DefaultValue": false
+        },
+        {
+            "Id": "5f2c66dd-dfaf-4aa0-b184-01e89819b317" /*Mode*/,
+            "DefaultValue": 3
+        },
+        {
+            "Id": "19da524f-6cea-4da0-8ee2-9b47ef8a93a7" /*Interpolation*/,
+            "DefaultValue": 6
+        }
+    ],
+    "Children": [],
+    "Connections": []
+}
