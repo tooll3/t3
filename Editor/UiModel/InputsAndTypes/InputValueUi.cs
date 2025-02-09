@@ -255,7 +255,7 @@ public abstract class InputValueUi<T> : IInputUi
                                                         //var structure = components.Structure;
                                                         if (ImGui.MenuItem("Extract as connection operator"))
                                                         {
-                                                            ParameterExtraction.ExtractAsConnectedOperator(typedInputSlot, symbolChildUi, inputSlot.Input);
+                                                            ProjectView.Focused?.GraphCanvas.ExtractAsConnectedOperator(typedInputSlot, symbolChildUi, input);
                                                         }
 
                                                         if (ImGui.MenuItem("Publish as Input"))
@@ -481,7 +481,7 @@ public abstract class InputValueUi<T> : IInputUi
                      
                      if (ImGui.MenuItem("Extract as connection operator"))
                      {
-                         ParameterExtraction.ExtractAsConnectedOperator(typedInputSlot, symbolChildUi, inputSlot.Input);
+                         ProjectView.Focused?.GraphCanvas.ExtractAsConnectedOperator(typedInputSlot, symbolChildUi, input);
                      }
                      
                      if (ImGui.MenuItem("Publish as Input"))
@@ -630,10 +630,7 @@ internal static class InputArea
                     break;
                 }
                 case InputOperations.Extract:
-                    //ParameterExtraction.ExtractAsConnectedOperator(nodeSelection, compositionUi, inputSlot, symbolChildUi);
-                    //public static void ExtractAsConnectedOperator<T>(NodeSelection nodeSelection, InputSlot<T> inputSlot, SymbolUi.Child symbolChildUi, Symbol.Child.Input input)
-
-                    ParameterExtraction.ExtractAsConnectedOperator(inputSlot, symbolChildUi, input);
+                    ProjectView.Focused?.GraphCanvas.ExtractAsConnectedOperator(inputSlot, symbolChildUi, input);
                     break;
                 
                 case InputOperations.ConnectWithSearch:

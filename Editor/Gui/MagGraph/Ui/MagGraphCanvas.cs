@@ -2,11 +2,15 @@
 using System.Diagnostics;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Modification;
 using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
@@ -119,6 +123,36 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
             _context.Placeholder.OpenForItemInput(_context, item, inputInputDefinition.Id);
         }
     }
+
+    void IGraphCanvas.ExtractAsConnectedOperator<T>(InputSlot<T> inputSlot, SymbolUi.Child symbolChildUi, Symbol.Child.Input input)
+    {
+        if(!_context.Layout.Items.TryGetValue(symbolChildUi.Id, out var sourceItem))
+        {
+            return;
+        }
+        
+        var insertionLineIndex = InputPicking.GetInsertionLineIndex(inputSlot.Parent.Inputs, 
+                                                                    sourceItem.InputLines, 
+                                                                    input.Id, 
+                                                                    out var shouldPushDown);
+        
+        var focusedItemPosOnCanvas = sourceItem.PosOnCanvas + new Vector2(-sourceItem.Size.X, MagGraphItem.GridSize.Y * insertionLineIndex);
+
+        _context.StartMacroCommand("Extract parameters");
+        if (shouldPushDown)
+        {
+            MagItemMovement
+               .MoveSnappedItemsVertically(_context,
+                                           MagItemMovement.CollectSnappedItems(sourceItem, includeRoot: false),
+                                           sourceItem.PosOnCanvas.Y + (insertionLineIndex -0.5f) * MagGraphItem.GridSize.Y,
+                                           MagGraphItem.GridSize.Y);            
+        }
+        // Todo: This should use undo/redo
+        ParameterExtraction.ExtractAsConnectedOperator(inputSlot, symbolChildUi, input,focusedItemPosOnCanvas);
+        _context.Layout.FlagAsChanged();
+        _context.CompleteMacroCommand();
+    }
+
 
     void IGraphCanvas.StartDraggingFromInputSlot(SymbolUi.Child symbolChildUi, Symbol.InputDefinition inputInputDefinition)
     {

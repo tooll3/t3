@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.SystemUi;
 using T3.Core.UserData;
@@ -70,6 +71,16 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(_projectView.InstView.SymbolUi, symbolChildUi);
         ConnectionMaker.InitSymbolBrowserAtPosition(this, SymbolBrowser, freePosition);
     }
+    
+    void IGraphCanvas.ExtractAsConnectedOperator<T>(InputSlot<T> inputSlot, SymbolUi.Child symbolChildUi, Symbol.Child.Input input)
+    {
+        if (_projectView?.InstView == null)
+            return;
+        
+        var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(_projectView.InstView.SymbolUi, symbolChildUi);
+        ParameterExtraction.ExtractAsConnectedOperator(inputSlot, symbolChildUi, input, freePosition);
+    }
+
 
     public void StartDraggingFromInputSlot(SymbolUi.Child symbolChildUi, Symbol.InputDefinition inputInputDefinition)
     {

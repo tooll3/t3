@@ -20,7 +20,7 @@ internal static class ParameterExtraction
         return SymbolsExtractableFromInputs.ContainsKey(inputSlot.ValueType);
     }
     
-    public static void ExtractAsConnectedOperator<T>(InputSlot<T> inputSlot, SymbolUi.Child symbolChildUi, Symbol.Child.Input input)
+    public static void ExtractAsConnectedOperator<T>(InputSlot<T> inputSlot, SymbolUi.Child symbolChildUi, Symbol.Child.Input input, Vector2 freePosition)
     {
         var view = ProjectView.Focused;
         if (view?.InstView == null)
@@ -33,27 +33,6 @@ internal static class ParameterExtraction
         var compositionUi = view.InstView.SymbolUi;
         var compositionInstance = view.InstView.Instance;
         
-        //var compositionUi = view.;
-        //Instance? composition;
-        
-        // var potentialComposition = nodeSelection.GetSelectedComposition();
-        // if (potentialComposition != null)
-        // {
-        //     compositionUi = potentialComposition.GetSymbolUi();
-        //     composition = potentialComposition;
-        // }
-        // else
-        // {
-        //     composition = inputSlot.Parent.Parent;
-        // }
-        //
-        // if (composition == null)
-        // {
-        //     Log.Warning("Can't publish input to undefined composition");
-        //     return;
-        // }
-        // compositionUi = composition.GetSymbolUi();
-
         var commands = new List<ICommand>();
 
         // cast input slot to constructedInputSlotType
@@ -65,7 +44,6 @@ internal static class ParameterExtraction
         }
 
         // Add Child
-        var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(compositionUi, symbolChildUi);
         var addSymbolChildCommand = new AddSymbolChildCommand(compositionUi.Symbol, symbolId)
                                         {
                                             PosOnCanvas = freePosition,
@@ -83,7 +61,7 @@ internal static class ParameterExtraction
         var newChildUi = compositionUi.ChildUis[addSymbolChildCommand.AddedChildId];
         var newSymbolChild = newChildUi.SymbolChild;
 
-        // Sadly, we have have apply size manually.
+        // Sadly, we have to apply size manually.
         if (_sizesForTypes.TryGetValue(input.DefaultValue.ValueType, out _))
         {
             newChildUi.Style = SymbolUi.Child.Styles.Resizable;

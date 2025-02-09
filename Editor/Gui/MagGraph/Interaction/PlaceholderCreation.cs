@@ -190,7 +190,7 @@ internal sealed class PlaceholderCreation
             MagItemMovement
               .MoveSnappedItemsVertically(context,
                                           _snappedItems,
-                                          targetItem.PosOnCanvas.Y + MagGraphItem.GridSize.Y / 2,
+                                          targetItem.PosOnCanvas.Y + (insertionLineIndex - 0.5f) * MagGraphItem.GridSize.Y,
                                           MagGraphItem.GridSize.Y);            
         }
 

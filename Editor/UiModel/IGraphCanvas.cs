@@ -1,6 +1,7 @@
 #nullable enable
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.UiModel.ProjectHandling;
 
@@ -25,4 +26,5 @@ internal interface IGraphCanvas : IScalableCanvas
     void Close();
     void CreatePlaceHolderConnectedToInput(SymbolUi.Child symbolChildUi, Symbol.InputDefinition inputInputDefinition);
     void StartDraggingFromInputSlot(SymbolUi.Child symbolChildUi, Symbol.InputDefinition inputInputDefinition);
+    void ExtractAsConnectedOperator<T>(InputSlot<T> inputSlot, SymbolUi.Child symbolChildUi, Symbol.Child.Input input);
 }
