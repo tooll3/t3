@@ -98,7 +98,7 @@ internal sealed class GraphImageBackground
 
         var hackToHideResolution = UserSettings.Config.ShowToolbar;
         UserSettings.Config.ShowToolbar = false;
-        viewOutputUi.DrawValue(viewOutput, _evaluationContext, recompute: true);
+        viewOutputUi.DrawValue(viewOutput, _evaluationContext, "graphBackground", recompute: true);
         UserSettings.Config.ShowToolbar = hackToHideResolution;
             
         ImageOutputCanvas.Deactivate();

@@ -5,7 +5,7 @@ using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.OutputUi;
 
-public class FloatListOutputUi : OutputUi<List<float>>
+internal sealed class FloatListOutputUi : OutputUi<List<float>>
 {
     public override IOutputUi Clone()
     {
@@ -21,7 +21,7 @@ public class FloatListOutputUi : OutputUi<List<float>>
     private static float _minFit = -1;
     private static float _maxFit = 1;
         
-    protected override void DrawTypedValue(ISlot slot)
+    protected override void DrawTypedValue(ISlot slot, string viewId)
     {
         if (slot is Slot<List<float>> typedSlot)
         {

@@ -7,7 +7,7 @@ using T3.Editor.Gui.Windows;
 
 namespace T3.Editor.Gui.OutputUi;
 
-public class Texture2dOutputUi : OutputUi<Texture2D>
+internal sealed class Texture2dOutputUi : OutputUi<Texture2D>
 {
     public override IOutputUi Clone()
     {
@@ -19,7 +19,7 @@ public class Texture2dOutputUi : OutputUi<Texture2D>
                    };
     }
 
-    protected override void DrawTypedValue(ISlot slot)
+    protected override void DrawTypedValue(ISlot slot, string viewId)
     {
         if (slot is Slot<Texture2D> typedSlot)
         {

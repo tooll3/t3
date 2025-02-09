@@ -193,7 +193,10 @@ internal sealed class ConnectionHovering
                     var outputUi = connection.SourceItem.SymbolUi.OutputUis[outputSlot.Id];
                     _evaluationContext.Reset();
                     _evaluationContext.RequestedResolution = new Int2(1280 / 2, 720 / 2);
-                    outputUi.DrawValue(outputSlot, _evaluationContext, recompute: UserSettings.Config.HoverMode == UserSettings.GraphHoverModes.Live);
+                    outputUi.DrawValue(outputSlot, 
+                                       _evaluationContext,
+                                       "connectionLineThumbnail",
+                                       recompute: UserSettings.Config.HoverMode == UserSettings.GraphHoverModes.Live);
 
                     ImageOutputCanvas.Deactivate();
                     TransformGizmoHandling.RestoreDrawList();

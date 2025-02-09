@@ -260,7 +260,9 @@ internal sealed class GraphNode
                                     IOutputUi outputUi = symbolUi.OutputUis[firstOutput.Id];
                                     _evaluationContext.Reset();
                                     _evaluationContext.RequestedResolution = new Int2(1280 / 2, 720 / 2);
-                                    outputUi.DrawValue(firstOutput, _evaluationContext,
+                                    outputUi.DrawValue(firstOutput,
+                                                       _evaluationContext,
+                                                       "thumbnail",
                                                        recompute: UserSettings.Config.HoverMode == UserSettings.GraphHoverModes.Live);
                                         
                                 }

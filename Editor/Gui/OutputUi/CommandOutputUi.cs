@@ -15,7 +15,7 @@ using Utilities = T3.Core.Utils.Utilities;
 
 namespace T3.Editor.Gui.OutputUi;
 
-internal class CommandOutputUi : OutputUi<Command>
+internal sealed class CommandOutputUi : OutputUi<Command>
 {
     public bool GizmosEnabled { get; set; } = false;
 
@@ -128,7 +128,7 @@ internal class CommandOutputUi : OutputUi<Command>
                    };
     }
 
-    protected override void DrawTypedValue(ISlot slot)
+    protected override void DrawTypedValue(ISlot slot, string viewId)
     {
         if (ImageOutputCanvas.Current != null && slot is Slot<Command>)
         {

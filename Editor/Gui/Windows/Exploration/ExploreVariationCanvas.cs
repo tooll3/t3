@@ -367,7 +367,7 @@ internal sealed class ExploreVariationCanvas : ScalableCanvas
         // DrawValue will use the current ImageOutputCanvas for rendering
         _imageCanvas.SetAsCurrent();
         ImGui.PushClipRect(new Vector2(0, 0), new Vector2(1, 1), true);
-        _explorationWindow.OutputUi.DrawValue(_firstOutputSlot, _thumbnailCanvasRendering.EvaluationContext);
+        _explorationWindow.OutputUi.DrawValue(_firstOutputSlot, _thumbnailCanvasRendering.EvaluationContext, "thumbnail");
         ImGui.PopClipRect();
         ImageOutputCanvas.Deactivate();
 

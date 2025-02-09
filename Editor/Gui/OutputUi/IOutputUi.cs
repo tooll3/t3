@@ -9,5 +9,5 @@ public interface IOutputUi : ISelectableCanvasObject
     Symbol.OutputDefinition OutputDefinition { get; set; }
     Type Type { get; }
     IOutputUi Clone();
-    void DrawValue(ISlot slot, EvaluationContext context, bool recompute = true);
+    void DrawValue(ISlot slot, EvaluationContext context, string viewId, bool recompute = true);
 }

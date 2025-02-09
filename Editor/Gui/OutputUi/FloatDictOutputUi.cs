@@ -7,7 +7,7 @@ using T3.Editor.SystemUi;
 
 namespace T3.Editor.Gui.OutputUi;
 
-public class FloatDictOutputUi : OutputUi<Dict<float>>
+internal sealed class FloatDictOutputUi : OutputUi<Dict<float>>
 {
     public override IOutputUi Clone()
     {
@@ -29,7 +29,7 @@ public class FloatDictOutputUi : OutputUi<Dict<float>>
     private static readonly List<string> _keysForDrawing = new(10);
     private static readonly List<float> _valuesForDrawing = new(10);
 
-    protected override void DrawTypedValue(ISlot slot)
+    protected override void DrawTypedValue(ISlot slot, string viewId)
     {
         if (slot is Slot<Dict<float>> typedSlot)
         {

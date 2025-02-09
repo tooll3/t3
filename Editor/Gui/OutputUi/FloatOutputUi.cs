@@ -1,43 +1,52 @@
-﻿using System.Diagnostics;
+﻿#nullable enable
+
+using System.Runtime.CompilerServices;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.OutputUi;
 
-public class FloatOutputUi : OutputUi<float>
+internal sealed class FloatOutputUi : OutputUi<float>
 {
     public override IOutputUi Clone()
     {
-        return new FloatOutputUi()
+        return new FloatOutputUi
                    {
                        OutputDefinition = OutputDefinition,
                        PosOnCanvas = PosOnCanvas,
                        Size = Size
                    };
-        // TODO: check if curve should be cloned too
     }
         
-    protected override void DrawTypedValue(ISlot slot)
+    protected override void DrawTypedValue(ISlot slot, string viewId)
     {
-        if (slot is Slot<float> typedSlot)
+        if (slot is not Slot<float> typedSlot)
+            return;
+     
+        if (!_viewSettings.TryGetValue(viewId, out var settings))
         {
-            var value = typedSlot.Value;
-                
-            if (slot != _lastSlot)
-            {
-                _lastSlot = slot;
-                _curve.Reset(value);
-            }
-
-            _curve.Draw(value);
+            settings = new ViewSettings
+                           {
+                               CurrentSlot = typedSlot
+                           };
+            _viewSettings.Add(viewId,settings);
         }
-        else
-        {
-            Debug.Assert(false);
-        }
-    }
         
-    private ISlot _lastSlot;
-    private readonly CurvePlotCanvas _curve = new(resolution: 500);
-    private readonly VectorCurvePlotCanvas<float> _curve2 = new(resolution: 500);
+        var value = typedSlot.Value;
+            
+        if (slot != settings.CurrentSlot)
+        {
+            settings.CurrentSlot = slot;
+            settings.CurveCanvas.Reset(value);
+        }
+        settings.CurveCanvas.Draw(value);
+    }
+
+    private sealed class ViewSettings
+    {
+        public readonly CurvePlotCanvas CurveCanvas = new() ;
+        public required ISlot CurrentSlot;
+    }
+    
+    private static readonly ConditionalWeakTable<string, ViewSettings> _viewSettings = [];
 }

@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Editor.Gui.OutputUi;
 
-public class ShaderResourceViewOutputUi : OutputUi<ShaderResourceView>
+internal class ShaderResourceViewOutputUi : OutputUi<ShaderResourceView>
 {
     public override IOutputUi Clone()
     {
@@ -17,7 +17,7 @@ public class ShaderResourceViewOutputUi : OutputUi<ShaderResourceView>
                    };
     }
         
-    protected override void DrawTypedValue(ISlot slot)
+    protected override void DrawTypedValue(ISlot slot, string viewId)
     {
         if (slot is Slot<ShaderResourceView> typedSlot)
         {

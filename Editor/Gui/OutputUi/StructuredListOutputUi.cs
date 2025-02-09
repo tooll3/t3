@@ -6,7 +6,7 @@ using T3.Editor.Gui.TableView;
 
 namespace T3.Editor.Gui.OutputUi;
 
-public class StructuredListOutputUi : OutputUi<StructuredList>
+internal sealed class StructuredListOutputUi : OutputUi<StructuredList>
 {
     public override IOutputUi Clone()
     {
@@ -18,7 +18,7 @@ public class StructuredListOutputUi : OutputUi<StructuredList>
                    };
     }
         
-    protected override void DrawTypedValue(ISlot slot)
+    protected override void DrawTypedValue(ISlot slot, string viewId)
     {
         if (slot is Slot<StructuredList> typedSlot)
         {

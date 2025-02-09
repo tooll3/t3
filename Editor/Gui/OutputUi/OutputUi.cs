@@ -7,7 +7,7 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.OutputUi;
 
-public abstract class OutputUi<T> : IOutputUi
+internal abstract class OutputUi<T> : IOutputUi
 {
     public Symbol.OutputDefinition OutputDefinition { get; set; }
     public Guid Id => OutputDefinition.Id;
@@ -17,7 +17,7 @@ public abstract class OutputUi<T> : IOutputUi
 
     public abstract IOutputUi Clone();
 
-    public void DrawValue(ISlot slot, EvaluationContext context, bool recompute)
+    public void DrawValue(ISlot slot, EvaluationContext context, string viewId, bool recompute)
     {
         var drawList = ImGui.GetWindowDrawList();
         drawList.ChannelsSplit(2);
@@ -31,7 +31,7 @@ public abstract class OutputUi<T> : IOutputUi
         }
         drawList.ChannelsSetCurrent(0);
         {
-            DrawTypedValue(slot);
+            DrawTypedValue(slot, viewId);
         }
         drawList.ChannelsMerge();
         TransformGizmoHandling.RestoreDrawList();
@@ -43,9 +43,9 @@ public abstract class OutputUi<T> : IOutputUi
         slot.Update(context);
     }
 
-    protected abstract void DrawTypedValue(ISlot slot);
+    protected abstract void DrawTypedValue(ISlot slot, string viewId);
 
-    public void StartInvalidation(ISlot slot)
+    protected void StartInvalidation(ISlot slot)
     {
         DirtyFlag.InvalidationRefFrame++;
         slot.Invalidate();

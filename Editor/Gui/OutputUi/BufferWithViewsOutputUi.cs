@@ -5,7 +5,7 @@ using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.OutputUi;
 
-public class BufferWithViewsOutputUi : OutputUi<BufferWithViews>
+internal sealed class BufferWithViewsOutputUi : OutputUi<BufferWithViews>
 {
     public override IOutputUi Clone()
     {
@@ -17,7 +17,7 @@ public class BufferWithViewsOutputUi : OutputUi<BufferWithViews>
                    };
     }
 
-    protected override void DrawTypedValue(ISlot slot)
+    protected override void DrawTypedValue(ISlot slot, string viewId)
     {
         var type = typeof(BufferWithViews);
         ImGui.PushFont(Fonts.FontSmall);

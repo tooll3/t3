@@ -18,7 +18,7 @@ internal sealed class ValueOutputUi<T> : OutputUi<T>
                    };
     }
 
-    protected override void DrawTypedValue(ISlot slot)
+    protected override void DrawTypedValue(ISlot slot, string viewId)
     {
         if (slot is Slot<T> typedSlot)
         {

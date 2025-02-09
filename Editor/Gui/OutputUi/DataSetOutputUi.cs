@@ -3,7 +3,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Editor.Gui.OutputUi;
 
-public class DataSetOutputUi : OutputUi<float>
+internal sealed class DataSetOutputUi : OutputUi<float>
 {
     public override IOutputUi Clone()
     {
@@ -16,7 +16,7 @@ public class DataSetOutputUi : OutputUi<float>
     }
 
 
-    protected override void DrawTypedValue(ISlot slot)
+    protected override void DrawTypedValue(ISlot slot, string viewId)
     {
         if (slot is not Slot<DataSet> dataSetSlot)
             return;

@@ -529,7 +529,7 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
         // DrawValue will use the current ImageOutputCanvas for rendering
         _imageCanvas.SetAsCurrent();
         ImGui.PushClipRect(new Vector2(0, 0), new Vector2(1, 1), true);
-        outputUi.DrawValue(textureSlot, _thumbnailCanvasRendering.EvaluationContext);
+        outputUi.DrawValue(textureSlot, _thumbnailCanvasRendering.EvaluationContext, "variationsThumbnail");
         ImGui.PopClipRect();
         ImageOutputCanvas.Deactivate();
 

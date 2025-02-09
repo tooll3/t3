@@ -5,7 +5,7 @@ using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.OutputUi;
 
-public class StringListOutputUi : OutputUi<List<string>>
+internal sealed class StringListOutputUi : OutputUi<List<string>>
 {
     public override IOutputUi Clone()
     {
@@ -17,7 +17,7 @@ public class StringListOutputUi : OutputUi<List<string>>
                    };
     }
         
-    protected override void DrawTypedValue(ISlot slot)
+    protected override void DrawTypedValue(ISlot slot, string viewId)
     {
         if (slot is Slot<List<string>> typedSlot)
         {

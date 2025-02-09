@@ -14,9 +14,9 @@ using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace T3.Editor.Gui.OutputUi;
 
-public class Texture3dOutputUi : OutputUi<Texture3dWithViews>
+internal sealed class Texture3dOutputUi : OutputUi<Texture3dWithViews>
 {
-    public Texture3dOutputUi()
+    internal Texture3dOutputUi()
     {
         const string sourcePath = @"img/internal/render-volume-slice-cs.hlsl";
         const string debugName = "render-volume-slice";
@@ -57,7 +57,7 @@ public class Texture3dOutputUi : OutputUi<Texture3dWithViews>
                    };
     }
 
-    protected override void DrawTypedValue(ISlot slot)
+    protected override void DrawTypedValue(ISlot slot, string viewId)
     {
         if (slot is Slot<Texture3dWithViews> typedSlot)
         {

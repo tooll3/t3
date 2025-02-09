@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Editor.Gui.OutputUi;
 
-public class PointArrayOutputUi : OutputUi<Point[]>
+internal sealed class PointArrayOutputUi : OutputUi<Point[]>
 {
     public override IOutputUi Clone()
     {
@@ -17,7 +17,7 @@ public class PointArrayOutputUi : OutputUi<Point[]>
                    };
     }
         
-    protected override void DrawTypedValue(ISlot slot)
+    protected override void DrawTypedValue(ISlot slot, string viewId)
     {
         if (slot is Slot<Point[]> typedSlot)
         {

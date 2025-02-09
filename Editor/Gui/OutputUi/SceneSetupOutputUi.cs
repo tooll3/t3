@@ -5,7 +5,7 @@ using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.OutputUi;
 
-public class SceneSetupOutputUi : OutputUi<float>
+internal sealed class SceneSetupOutputUi : OutputUi<float>
 {
     public override IOutputUi Clone()
     {
@@ -17,7 +17,7 @@ public class SceneSetupOutputUi : OutputUi<float>
                    };
     }
     
-    protected override void DrawTypedValue(ISlot slot)
+    protected override void DrawTypedValue(ISlot slot, string viewId)
     {
         if (slot is not Slot<SceneSetup> sceneSetupSlot)
             return;

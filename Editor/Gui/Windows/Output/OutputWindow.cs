@@ -268,7 +268,7 @@ internal sealed class OutputWindow : Window
         {
             ImGui.BeginChild("hidden", Vector2.One);
             {
-                evaluatedOutputUi.DrawValue(evalOutput, _evaluationContext);
+                evaluatedOutputUi.DrawValue(evalOutput, _evaluationContext, Config.Title);
             }
             ImGui.EndChild();
 
@@ -281,13 +281,13 @@ internal sealed class OutputWindow : Window
                 return null;
 
             // Render!
-            viewOutputUi.DrawValue(viewOutput, _evaluationContext, recompute: false);
+            viewOutputUi.DrawValue(viewOutput, _evaluationContext, Config.Title, recompute: false);
             return viewOutputUi.Type;
         }
         else
         {
             // Render!
-            evaluatedOutputUi.DrawValue(evalOutput, _evaluationContext);
+            evaluatedOutputUi.DrawValue(evalOutput, _evaluationContext, Config.Title);
             return evalOutput.ValueType;
         }
     }

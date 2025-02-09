@@ -1,43 +1,51 @@
-﻿using System.Diagnostics;
+﻿#nullable enable
+using System.Runtime.CompilerServices;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.OutputUi;
 
-public class VectorOutputUi<T> : OutputUi<T>
+internal sealed class VectorOutputUi<T> : OutputUi<T>
 {
     public override IOutputUi Clone()
     {
-        return new VectorOutputUi<T>()
+        return new VectorOutputUi<T>
                    {
                        OutputDefinition = OutputDefinition,
                        PosOnCanvas = PosOnCanvas,
                        Size = Size
                    };
-        // TODO: check if curve should be cloned too
     }
 
-    protected override void DrawTypedValue(ISlot slot)
+    protected override void DrawTypedValue(ISlot slot, string viewId)
     {
-        if (slot is Slot<T> typedSlot)
-        {
-            var value = typedSlot.Value;
+        if (slot is not Slot<T> typedSlot)
+            return;
 
-            if (slot != _lastSlot)
-            {
-                _lastSlot = slot;
-                _curve2.Reset(default);
-            }
-
-            _curve2.Draw(value);
-        }
-        else
+        if (!_viewSettings.TryGetValue(viewId, out var settings)) 
         {
-            Debug.Assert(false);
+            settings = new ViewSettings
+                           {
+                               CurrentSlot = typedSlot
+                           };
+            _viewSettings.Add(viewId,settings);
         }
+        
+        var value = typedSlot.Value;
+
+        if (slot != settings.CurrentSlot)
+        {
+            settings.CurrentSlot = slot;
+            settings.CurveCanvas.Reset(value);
+        }
+        settings.CurveCanvas.Draw(value);
     }
 
-    private ISlot _lastSlot;
+    private sealed class ViewSettings
+    {
+        public readonly VectorCurvePlotCanvas<T> CurveCanvas = new();
+        public required ISlot CurrentSlot;
+    }
 
-    private readonly VectorCurvePlotCanvas<T> _curve2 = new(resolution: 500);
+    private static readonly ConditionalWeakTable<string, ViewSettings> _viewSettings = [];
 }

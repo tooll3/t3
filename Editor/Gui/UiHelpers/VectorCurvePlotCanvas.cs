@@ -1,4 +1,6 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+using System.Diagnostics.CodeAnalysis;
+using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
 using T3.Editor.Gui.Interaction;
@@ -7,13 +9,12 @@ using T3.Editor.Gui.Windows.TimeLine.Raster;
 
 namespace T3.Editor.Gui.UiHelpers;
 
-public class VectorCurvePlotCanvas<T>
+internal sealed class VectorCurvePlotCanvas<T>
 {
-    public VectorCurvePlotCanvas(int resolution = 500)
+    internal VectorCurvePlotCanvas(int resolution = 500)
     {
         _sampleCount = resolution;
         _graphValues = new T[_sampleCount];
-        _graphPoints = new Vector2[MaxComponents, _sampleCount];
 
         if (typeof(T) == typeof(float))
         {
@@ -31,9 +32,16 @@ public class VectorCurvePlotCanvas<T>
         {
             _componentCount = 4;
         }
+        else
+        {
+            _componentCount = 0;
+        }
+        
+        _graphPoints = new Vector2[_componentCount, _sampleCount];
+        _lastValues = new float[_componentCount];
     }
 
-    private readonly int _componentCount = 1;
+    private readonly int _componentCount;
 
     public void Draw(T value)
     {
@@ -45,7 +53,7 @@ public class VectorCurvePlotCanvas<T>
 
         foreach (var vv in _graphValues)
         {
-            var components = Utilities.GetFloatsFromVector<T>(vv);
+            var components = Utilities.GetFloatsFromVector(vv);
             foreach (var v in components)
             {
                 if (v > max)
@@ -101,7 +109,7 @@ public class VectorCurvePlotCanvas<T>
 
         for(int cIndex= 0; cIndex< _componentCount; cIndex ++)
         {
-            var color = _componentCount == 1 ? _grayCurveColor : _curveColors[cIndex];
+            var color = _componentCount == 1 ? CurveComponentColors.GrayCurveColor : CurveComponentColors.CurveColors[cIndex];
             dl.AddPolyline(ref _graphPoints[cIndex,0], _sampleCount - 1, color, ImDrawFlags.None, 1);
             dl.AddCircleFilled(_graphPoints[cIndex, _sampleCount - 1], 3, color);
         }
@@ -111,7 +119,7 @@ public class VectorCurvePlotCanvas<T>
 
         for (var cIndex = 0; cIndex < _lastValues.Length; cIndex++)
         {
-            var color = _componentCount == 1 ? _grayCurveColor : _textColors[cIndex];
+            var color = _componentCount == 1 ? CurveComponentColors.GrayCurveColor : CurveComponentColors.TextColors[cIndex];
             color.Rgba.W= 1;
                 
             var lastValue = _lastValues[cIndex];
@@ -143,29 +151,33 @@ public class VectorCurvePlotCanvas<T>
     private readonly int _sampleCount;
 
     private bool _paused;
-    private float[] _lastValues = new float[MaxComponents];
+    private float[] _lastValues;
 
     private readonly HorizontalRaster _raster = new();
     private readonly ScalableCanvas _canvas = new CurrentGraphSubCanvas { FillMode = ScalableCanvas.FillModes.FillAvailableContentRegion };
-    private const int MaxComponents = 4;
-        
-    private static readonly Color _grayCurveColor = new(1f, 1f, 1.0f, 0.3f);
+    //private const int MaxComponents = 4;
+}
 
-    private static readonly Color[] _curveColors =
-        {
+[SuppressMessage("ReSharper", "RedundantArgumentDefaultValue")]
+internal static class CurveComponentColors
+{
+    internal static readonly Color GrayCurveColor = new(1f, 1f, 1.0f, 0.3f);
+
+    internal static readonly Color[] CurveColors =
+        [
             new(1f, 0.2f, 0.2f, 0.3f),
             new(0.1f, 1f, 0.2f, 0.3f),
             new(0.1f, 0.4f, 1.0f, 0.5f),
             new(0.5f, 0.5f, 0.5f, 0.5f),
-            _grayCurveColor,
-        };
+            GrayCurveColor
+        ];
 
-    private static readonly Color[] _textColors =
-        {
+    internal static readonly Color[] TextColors =
+        [
             new(1f, 0.5f, 0.5f, 1f),
             new(0.4f, 1f, 0.5f, 1f),
             new(0.6f, 0.671f, 1.0f, 1f),
             new(0.6f, 0.6f, 0.6f, 1f),
-            _grayCurveColor,
-        };        
-}
+            GrayCurveColor
+        ];        
+    }
