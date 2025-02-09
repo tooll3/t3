@@ -1232,11 +1232,14 @@ internal sealed partial class MagItemMovement
     /// <summary>
     /// Add snapped items to the given set or create new set
     /// </summary>
-    public static HashSet<MagGraphItem> CollectSnappedItems(MagGraphItem rootItem, HashSet<MagGraphItem>? set = null)
+    public static HashSet<MagGraphItem> CollectSnappedItems(MagGraphItem rootItem,  HashSet<MagGraphItem>? set = null, bool includeRoot= true)
     {
         set ??= [];
 
         Collect(rootItem);
+        if (!includeRoot)
+            set.Remove(rootItem);
+        
         return set;
 
         void Collect(MagGraphItem item)

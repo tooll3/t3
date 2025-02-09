@@ -130,6 +130,7 @@ internal static class InputPicking
         var insertionLineIndex = 0;
         var isSlotVisible = false;
         var isMultiInput = false;
+        var isConnected = false;
         foreach (var slot in allInputSlots)
         {
             var slotId = slot.Id;
@@ -143,12 +144,14 @@ internal static class InputPicking
                 // Go through end of visible input group (could be multiple lines for multiInputs)
                 while (insertionLineIndex < visibleInputLines.Length && visibleInputLines[insertionLineIndex].Input.Id == slotId)
                 {
+                    isConnected = visibleInputLines[insertionLineIndex].ConnectionIn != null;
                     insertionLineIndex++;
                 }
             }
             else
             {
                 isMultiInput = false;
+                isConnected = false;
             }
             
             if (slotId == selectedInputId)
@@ -156,6 +159,10 @@ internal static class InputPicking
         }
 
         shouldPushDown = !isSlotVisible || isMultiInput;
+
+        if (isSlotVisible && !isConnected)
+            insertionLineIndex--;
+        
         return insertionLineIndex;
     }
 

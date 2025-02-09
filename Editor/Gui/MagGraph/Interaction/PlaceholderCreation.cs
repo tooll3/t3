@@ -183,14 +183,14 @@ internal sealed class PlaceholderCreation
         _snappedTargetInputId = selectedInputId; 
         
         // Keep for after creation because inserted node might exceed unit height and further pushing is required... 
-        _snappedItems = MagItemMovement.CollectSnappedItems(targetItem);
+        _snappedItems = MagItemMovement.CollectSnappedItems(targetItem, includeRoot: false);
 
         if (shouldPushDown)
         {
             MagItemMovement
               .MoveSnappedItemsVertically(context,
                                           _snappedItems,
-                                          targetItem.PosOnCanvas.Y + targetItem.Size.Y - MagGraphItem.GridSize.Y / 2,
+                                          targetItem.PosOnCanvas.Y + MagGraphItem.GridSize.Y / 2,
                                           MagGraphItem.GridSize.Y);            
         }
 
@@ -368,21 +368,7 @@ internal sealed class PlaceholderCreation
 
             // Push snapped ops further down if new op exceed initial default height
             {
-                var newItem = new MagGraphItem
-                                  {
-                                      Variant = MagGraphItem.Variants.Operator,
-                                      Selectable = newChildUi,
-                                      Size = default,
-                                      SymbolUi = symbol.GetSymbolUi(),
-                                      SymbolChild = null,
-                                      Instance = newInstance,
-                                  };
-
-                List<MagGraphItem.InputLine> inputLines = [];
-                List<MagGraphItem.OutputLine> outputLines = [];
-                MagGraphLayout.CollectVisibleLines(context, newItem, inputLines, outputLines);
-
-                var newHeight = inputLines.Count + outputLines.Count - 1;
+                var newHeight = ComputeNewItemUnitsHeight(context, symbol, newChildUi, newInstance);
                 if (newHeight > 1)
                 {
                     MagItemMovement
@@ -395,18 +381,24 @@ internal sealed class PlaceholderCreation
         }
         else if (_snappedTargetItem != null)
         {
-            //if (_snappedSourceOutputLine.ConnectionsOut.Count > 0)
+            var newItemOutput = newInstance.Outputs[0];
+            context.MacroCommand
+                   .AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
+                                                               new Symbol.Connection(newInstance.SymbolChildId,
+                                                                                     newItemOutput.Id,
+                                                                                     _snappedTargetItem.Id,
+                                                                                     _snappedTargetInputId
+                                                                                    ),
+                                                               0));
+            var newHeight = ComputeNewItemUnitsHeight(context, symbol, newChildUi, newInstance);
+            if (newHeight > 1)
             {
-                var newItemOutput = newInstance.Outputs[0];
-                context.MacroCommand
-                       .AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
-                                                                   new Symbol.Connection(newInstance.SymbolChildId,
-                                                                                         newItemOutput.Id,
-                                                                                         _snappedTargetItem.Id,
-                                                                                         _snappedTargetInputId
-                                                                                        ),
-                                                                   0));
-            }
+                MagItemMovement
+                   .MoveSnappedItemsVertically(context,
+                                               _snappedItems,
+                                               newChildUi.PosOnCanvas.Y + MagGraphItem.GridSize.Y / 2,
+                                               MagGraphItem.GridSize.Y * (newHeight - 1));
+            }            
         }
         else if (context.TryGetActiveOutputLine(out var outputLine))
         {
@@ -425,7 +417,7 @@ internal sealed class PlaceholderCreation
             }
         }
         // Wire connect temp connections
-        else
+        else if(context.TempConnections.Count > 0 || context.ConnectionHovering.ConnectionHoversWhenClicked.Count > 0)
         {
             foreach (var h in context.ConnectionHovering.ConnectionHoversWhenClicked)
             {
@@ -497,6 +489,27 @@ internal sealed class PlaceholderCreation
         context.Layout.FlagAsChanged();
 
         Complete(context);
+    }
+
+    private static int ComputeNewItemUnitsHeight(GraphUiContext context, Symbol symbol, SymbolUi.Child newChildUi,
+                                                 Instance newInstance)
+    {
+        var newItem = new MagGraphItem
+                          {
+                              Variant = MagGraphItem.Variants.Operator,
+                              Selectable = newChildUi,
+                              Size = default,
+                              SymbolUi = symbol.GetSymbolUi(),
+                              SymbolChild = null,
+                              Instance = newInstance,
+                          };
+
+        List<MagGraphItem.InputLine> inputLines = [];
+        List<MagGraphItem.OutputLine> outputLines = [];
+        MagGraphLayout.CollectVisibleLines(context, newItem, inputLines, outputLines);
+
+        var newHeight = inputLines.Count + outputLines.Count - 1;
+        return newHeight;
     }
 
     private void Complete(GraphUiContext context)
