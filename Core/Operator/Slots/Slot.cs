@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
@@ -342,4 +343,21 @@ public class Slot<T> : ISlot
     private bool _valueIsCommand;
     private protected bool HasInvalidationOverride;
     private bool _parentIsICompoundWithUpdate;
+
+    public override string ToString()
+    {
+        if (_isInputSlot)
+        {
+            var i =  Parent.Inputs.FirstOrDefault(i => i.Id == Id);
+            return i != null 
+                       ? $"{i.Parent.Symbol.Name}.{i.Input.Name}" 
+                       : "ISlot";
+        }
+
+        var symbol = Parent.Symbol;
+        var outputDef =  Parent.Symbol.OutputDefinitions.FirstOrDefault(o => o.Id == Id);
+        return outputDef != null 
+                   ? $"{symbol.Name}.{outputDef.Name} (Output)" 
+                   : "IOutputSlot";
+    }
 }
