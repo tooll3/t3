@@ -36,7 +36,14 @@ public static class WasapiAudioInput
 
         var deviceName = settings.AudioInputDeviceName;
         if (ActiveInputDeviceName == deviceName)
-            return;
+        {
+            // Try to restart capture
+            if(!_failedToGetLastFffData)
+                return;
+
+            Log.Debug("Trying to restart WASAPI...");
+            _failedToGetLastFffData = false;
+        }
             
         if (string.IsNullOrEmpty(deviceName))
         {
@@ -187,7 +194,8 @@ public static class WasapiAudioInput
             }
         }
 
-        if (resultCode < 0)
+        _failedToGetLastFffData = resultCode < 0;
+        if (_failedToGetLastFffData)
         {
             Log.Debug($"Can't get Wasapi FFT-Data: {Bass.LastError}");
         }
@@ -199,6 +207,7 @@ public static class WasapiAudioInput
     }
 
     private static int _fftUpdatesSinceLastFrame;
+    private static bool _failedToGetLastFffData;
 
     public class WasapiInputDevice
     {
