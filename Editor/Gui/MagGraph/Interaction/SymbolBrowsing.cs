@@ -274,10 +274,10 @@ internal static class SymbolBrowsing
                         new Group(Variants.Namespace, "use", type: typeof(Texture2D)),
                     ]),
                 new Group(Variants.NamespaceCategory, "point", [
-                        new Group(Variants.Namespace, "generate", type: typeof(Command)),
-                        new Group(Variants.Namespace, "transform", type: typeof(Command)),
-                        new Group(Variants.Namespace, "modify", type: typeof(Command)),
-                        new Group(Variants.Namespace, "particle", type: typeof(Command)),
+                        new Group(Variants.Namespace, "generate", type: typeof(BufferWithViews)),
+                        new Group(Variants.Namespace, "transform", type: typeof(BufferWithViews)),
+                        new Group(Variants.Namespace, "modify", type: typeof(BufferWithViews)),
+                        new Group(Variants.Namespace, "particle", type: typeof(BufferWithViews)),
                         new Group(Variants.Namespace, "draw", type: typeof(Texture2D)),
                     ]),                
                 new Group(Variants.NamespaceCategory, "render", [
