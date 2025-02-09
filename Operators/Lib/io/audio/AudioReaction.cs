@@ -34,14 +34,12 @@ public sealed class AudioReaction : Instance<AudioReaction>
                 //Log.Debug($"Skip motion blur pass {motionBlurPass}");
                 return;
             }
-        } 
-            
-        if (Math.Abs(context.LocalFxTime - _lastEvalTime) < 0.001f)
-        {
-            return;
         }
+        
+        if (Math.Abs(context.LocalFxTime - _lastEvalTime) < 0.001f)
+            return;
 
-        _lastEvalTime = PlaybackTimeInSecs;
+        _lastEvalTime = context.LocalFxTime;
         var timeSinceLastHit = _lastEvalTime - _lastHitTime;
         if (timeSinceLastHit < -1)
         {

@@ -14,6 +14,12 @@ internal sealed class HasIntChanged : Instance<HasIntChanged>
 
     private void Update(EvaluationContext context)
     {
+        // Prevent double evaluations
+        if (Math.Abs(context.LocalFxTime - _lastEvalTime) < double.Epsilon)
+            return;
+        
+        _lastEvalTime = context.LocalFxTime;
+        
         var v = Value.GetValue(context);
         var result = false;
             
@@ -44,6 +50,7 @@ internal sealed class HasIntChanged : Instance<HasIntChanged>
     }
 
     private int _lastValue;
+    private double _lastEvalTime = -1;
         
     [Input(Guid = "A1462674-13D2-4380-8A93-11D0A23DA5AC")]
     public readonly InputSlot<int> Value = new();

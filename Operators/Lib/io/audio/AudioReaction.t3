@@ -23,7 +23,7 @@
     },
     {
       "Id": "aece14b8-88e0-4817-8204-b79159db8102"/*MinTimeBetweenHits*/,
-      "DefaultValue": 0.05
+      "DefaultValue": 0.025
     },
     {
       "Id": "b1c43d3b-f425-4d62-9d48-07ccb5d08707"/*Amplitude*/,

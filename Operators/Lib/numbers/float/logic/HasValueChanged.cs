@@ -22,7 +22,6 @@ internal sealed class HasValueChanged : Instance<HasValueChanged>
         Delta.UpdateAction += Update;
     }
 
-    private double _lastEvalTime = 0;
 
     private void Update(EvaluationContext context)
     {
@@ -31,10 +30,10 @@ internal sealed class HasValueChanged : Instance<HasValueChanged>
         var minTimeBetweenHits = MinTimeBetweenHits.GetValue(context);
         var preventContinuedChanges = PreventContinuedChanges.GetValue(context);
 
-        if (Math.Abs(Playback.RunTimeInSecs - _lastEvalTime) < 0.010f)
+        if (Math.Abs(context.LocalFxTime - _lastEvalTime) < 0.010f)
             return;
 
-        _lastEvalTime = Playback.RunTimeInSecs;
+        _lastEvalTime = context.LocalFxTime;
 
             
         var hasChanged = false;
@@ -89,7 +88,8 @@ internal sealed class HasValueChanged : Instance<HasValueChanged>
     private double _lastHitTime;
     private float _lastHitDelta;
     private bool _wasHit;
-
+    private double _lastEvalTime = -1;
+    
     [Input(Guid = "7f5fb125-8aca-4344-8b30-e7d4e7873c1c")]
     public readonly InputSlot<float> Value = new();
 

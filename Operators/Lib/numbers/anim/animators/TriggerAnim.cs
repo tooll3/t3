@@ -27,6 +27,12 @@ public sealed class TriggerAnim : Instance<TriggerAnim>
 
     private void Update(EvaluationContext context)
     {
+        // Prevent double evaluation to so all connected outputs to WasHit receive event.
+        if (Math.Abs(context.LocalFxTime - _lastUpdateTime) < double.Epsilon)
+            return;
+
+        _lastUpdateTime = context.LocalFxTime;
+        
         _baseValue = Base.GetValue(context);
         _amplitudeValue = Amplitude.GetValue(context);
         _bias = Bias.GetValue(context);
@@ -186,6 +192,7 @@ public sealed class TriggerAnim : Instance<TriggerAnim>
     private float _amplitudeValue;
     private float _duration = 1;
     private float _delay;
+    private double _lastUpdateTime = -1;
 
     private double _startProgress;
     public double LastFraction;
