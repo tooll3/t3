@@ -20,7 +20,6 @@ public static class ValueUi
             return SymbolUi.Child.CustomUiResult.None;
 
         var dragWidth = WidgetElements.DrawDragIndicator(area, drawList, canvasScale);
-        var usableArea = area;
         area.Min.X += dragWidth;
 
         drawList.AddRectFilled(area.Min, area.Max, UiColors.BackgroundFull.Fade(0.1f));
@@ -51,15 +50,11 @@ public static class ValueUi
                                    new Vector2(area.Min.X + w + 1, area.Max.Y),
                                    UiColors.WidgetActiveLine);
         }
-            
-        // // Slider Range
-        // if (rangeMin == 0 && rangeMax != 0)
-        // {
-        //     ValueLabel.Draw(drawList, area, new Vector2(1, 1), valueInstance.SliderMax);
-        // }
+        
 
         // Interaction
         {
+            ImGui.PushID(instance.GetHashCode());
             var editingUnlocked = ImGui.GetIO().KeyCtrl || _activeJogDialInputSlot != null;
             var inputSlot = valueInstance.Float;
             if (editingUnlocked)
@@ -90,6 +85,7 @@ public static class ValueUi
                     }
                 }
             }
+            ImGui.PopID();
         }
             
         // Label if instance has title
