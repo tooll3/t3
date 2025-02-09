@@ -20,27 +20,12 @@ public sealed class Trigger : Instance<Trigger>
         var onlyOnDown = OnlyOnDown.GetValue(context);
 
         Result.Value = onlyOnDown ? wasHit : value;
-
-        var needsRefreshNextFrame = onlyOnDown && wasHit;
-        Result.DirtyFlag.Trigger = needsRefreshNextFrame ? DirtyFlagTrigger.Animated : DirtyFlagTrigger.None;
-            
+        
         ColorInGraph.DirtyFlag.Clear();
+        Result.DirtyFlag.Clear();
     }
 
     private bool _isSet;
-        
-    public void Activate()
-    {
-        SetTriggered(true);
-    }
-
-    private void SetTriggered(bool state)
-    {
-        BoolValue.TypedInputValue.Value = state;
-        BoolValue.Input.IsDefault = false;
-        BoolValue.DirtyFlag.Invalidate();
-    }
-
         
     [Input(Guid = "E7C1F0AF-DA6D-4E33-AC86-7DC96BFE7EB3")]
     public readonly InputSlot<bool> BoolValue = new();
