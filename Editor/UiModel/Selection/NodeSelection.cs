@@ -102,7 +102,7 @@ internal sealed class NodeSelection : ISelection
     public bool IsAnythingSelected() => Selection.Count > 0;
 
     /// <summary>
-    /// Returns null if more than onl
+    /// Returns null if more than one
     /// </summary>
     public Instance? GetSelectedInstanceWithoutComposition()
     {
@@ -110,6 +110,11 @@ internal sealed class NodeSelection : ISelection
             return null;
 
         var selection = GetFirstSelectedInstance();
+        
+        // Clear invalid or obsolete selection
+        if(selection==null)
+            Clear();
+        
         return selection == _structure.GetInstanceFromIdPath(_selectedCompositionPath) ? null : selection;
     }
 

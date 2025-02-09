@@ -328,7 +328,6 @@ internal sealed class Structure
             instance = null;
             Log.Warning("Can't access instance after root changed.\n" + Environment.StackTrace);
             return false;
-            //throw new ArgumentException("Path does not start with the root instance");
         }
 
         instance = rootInstance;
