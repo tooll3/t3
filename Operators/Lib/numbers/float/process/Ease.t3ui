@@ -1,0 +1,55 @@
+{
+    "Id": "6e29bd11-7927-4f74-a35e-a6b129464a55" /*Ease*/,
+    "Description": "",
+    "InputUis": [
+        {
+            "InputId": "c2107af4-7b4f-43ef-97fe-934833790032" /*Value*/,
+            "Relevancy": "Required",
+            "Position": {
+                "X": 36.0,
+                "Y": 334.0
+            }
+        },
+        {
+            "InputId": "da40ddcd-cef8-494a-a7f8-cd8ddfbd7603" /*Duration*/,
+            "Position": {
+                "X": 36.0,
+                "Y": 379.0
+            },
+            "Min": 0.01,
+            "Max": 1.0,
+            "Clamp": true
+        },
+        {
+            "InputId": "5580eee8-db7b-4e9b-898d-5c7680b0c302" /*UseAppRunTime*/,
+            "Position": {
+                "X": 36.0,
+                "Y": 469.0
+            }
+        },
+        {
+            "InputId": "fe0231d9-03b6-466f-82e9-852b892adf2e" /*Mode*/,
+            "Position": {
+                "X": 36.0,
+                "Y": 604.0
+            }
+        },
+        {
+            "InputId": "bc388ea3-e1e6-4773-95e5-b8a649c3344f" /*Interpolation*/,
+            "Position": {
+                "X": 36.0,
+                "Y": 514.0
+            }
+        }
+    ],
+    "SymbolChildUis": [],
+    "OutputUis": [
+        {
+            "OutputId": "4d1e77d8-bfee-4451-9dcf-f187cd82ec26" /*Result*/,
+            "Position": {
+                "X": 133.0,
+                "Y": 38.0
+            }
+        }
+    ]
+}
