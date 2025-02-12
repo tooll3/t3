@@ -127,8 +127,9 @@ internal sealed class RenderSequenceWindow : BaseRenderWindow
     private static string Extension => _fileFormat.ToString().ToLower(); 
 
     private static double _exportStartedTime;
-    private static string _targetFolder = UserSettings.Config.RenderSequenceFilePath;
-
+    private static string _targetFolder = Path.Combine(UserSettings.Config.DefaultNewProjectDirectory, RenderSequenceFolderName);
+    private const string RenderSequenceFolderName = "RenderSequence";
+    
     private static ScreenshotWriter.FileFormats _fileFormat;
     private static string _lastHelpString = string.Empty;
 }

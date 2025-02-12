@@ -9,6 +9,7 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
+using T3.Editor.UiModel.ProjectHandling;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Windows.RenderExport;
@@ -58,6 +59,7 @@ internal sealed class RenderVideoWindow : BaseRenderWindow
 
         FormInputs.AddStringInput("Filename", ref UserSettings.Config.RenderVideoFilePath);
         ImGui.SameLine();
+        
         FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.File, ref UserSettings.Config.RenderVideoFilePath);
 
         if (IsFilenameIncrementable())
@@ -67,6 +69,8 @@ internal sealed class RenderVideoWindow : BaseRenderWindow
             ImGui.PopStyleVar();
         }
 
+        var filePath = AttemptToCreateFilePathInProjectsFolder();
+        
         FormInputs.AddCheckBox("Export Audio (experimental)", ref _exportAudio);
 
         FormInputs.AddVerticalSpace(5);
@@ -77,7 +81,7 @@ internal sealed class RenderVideoWindow : BaseRenderWindow
         {
             if (ImGui.Button("Start Render"))
             {
-                if (ValidateOrCreateTargetFolder(UserSettings.Config.RenderVideoFilePath))
+                if (ValidateOrCreateTargetFolder(filePath))
                 {
                     IsExportingVideo = true;
                     _exportStartedTime = Playback.RunTimeInSecs;
@@ -86,7 +90,7 @@ internal sealed class RenderVideoWindow : BaseRenderWindow
 
                     if (_videoWriter == null)
                     {
-                        _videoWriter = new Mp4VideoWriter(UserSettings.Config.RenderVideoFilePath, size, _exportAudio);
+                        _videoWriter = new Mp4VideoWriter(filePath, size, _exportAudio);
                         _videoWriter.Bitrate = _bitrate;
 
                         // FIXME: Allow floating point FPS in a future version
@@ -137,7 +141,21 @@ internal sealed class RenderVideoWindow : BaseRenderWindow
         CustomComponents.HelpText(_lastHelpString);
     }
 
-
+    private static string AttemptToCreateFilePathInProjectsFolder()
+    {
+        var filePath = UserSettings.Config.RenderVideoFilePath;
+        var project = ProjectView.Focused?.OpenedProject;
+        if (project != null)
+        {
+            return Path.Combine(project.Package.Folder, filePath);
+        }
+        
+        return filePath.StartsWith('.') 
+                   ? Path.Combine(UserSettings.Config.DefaultNewProjectDirectory, RenderVideoFolderName, filePath) 
+                   : filePath;
+    }
+    
+    private const string RenderVideoFolderName = "Render";
     private static readonly Regex _matchFileVersionPattern = new Regex(@"\bv(\d{2,4})\b");
     
     private static bool IsFilenameIncrementable()

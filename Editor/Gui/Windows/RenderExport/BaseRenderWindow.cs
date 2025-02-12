@@ -1,3 +1,4 @@
+#nullable enable
 using System.IO;
 using T3.Core.Animation;
 using T3.Core.Audio;
@@ -22,8 +23,8 @@ internal abstract class BaseRenderWindow : Window
         PlaybackUtils.FindPlaybackSettingsForInstance(composition, out var instanceWithSettings, out var settings);
         if (settings.GetMainSoundtrack(instanceWithSettings, out var soundtrack))
             return AudioEngine.GetClipChannelCount(soundtrack);
-        else
-            return AudioEngine.GetClipChannelCount(null);
+        
+        return AudioEngine.GetClipChannelCount(null);
     }
 
     protected static int SoundtrackSampleRate()
@@ -34,10 +35,9 @@ internal abstract class BaseRenderWindow : Window
             return AudioEngine.GetClipSampleRate(null);
         
         PlaybackUtils.FindPlaybackSettingsForInstance(composition, out var instanceWithSettings, out var settings);
-        if (settings.GetMainSoundtrack(instanceWithSettings, out var soundtrack))
-            return AudioEngine.GetClipSampleRate(soundtrack);
-        else
-            return AudioEngine.GetClipSampleRate(null);
+        return AudioEngine.GetClipSampleRate(settings.GetMainSoundtrack(instanceWithSettings, out var soundtrack) 
+                                                 ? soundtrack 
+                                                 : null);
     }
 
     protected static void SetRenderingStarted()
@@ -93,7 +93,7 @@ internal abstract class BaseRenderWindow : Window
         var endTimeInSeconds = ReferenceTimeToSeconds(_endTimeInBars, _timeReference);
         FrameCount = (int)Math.Round((endTimeInSeconds - startTimeInSeconds) * Fps);
         
-        FormInputs.AddFloat($"ResolutionFactor", ref ResolutionFactor, 0.125f, 4, 0.1f, true,
+        FormInputs.AddFloat($"ResolutionFactor", ref _resolutionFactor, 0.125f, 4, 0.1f, true,
                             "A factor applied to the output resolution of the rendered frames.");
         
         if (FormInputs.AddInt($"Motion Blur Samples", ref _overrideMotionBlurSamples, -1, 50, 1,
@@ -147,10 +147,10 @@ internal abstract class BaseRenderWindow : Window
             }
             case TimeRanges.Soundtrack:
             {
-                if (PlaybackUtils.TryFindingSoundtrack(out var soundtrackInfo, out var composition))
+                if (PlaybackUtils.TryFindingSoundtrack(out var soundtrackInfo, out _))
                 {
                     var playback = Playback.Current; // TODO, this should be non-static eventually
-                    var soundtrack = soundtrackInfo!.Value.Clip;
+                    var soundtrack = soundtrackInfo.Value.Clip;
                     _startTimeInBars = (float)SecondsToReferenceTime(playback.SecondsFromBars(soundtrack.StartTime), _timeReference);
                     if (soundtrack.EndTime > 0)
                     {
@@ -229,8 +229,15 @@ internal abstract class BaseRenderWindow : Window
 
     protected static void SetPlaybackTimeForThisFrame()
     {
+        
         // get playback settings
         var composition = ProjectView.Focused?.CompositionInstance;
+        if (composition == null)
+        {
+            Log.Warning("Can't find focused composition instance.");
+            return;
+        }
+        
         PlaybackUtils.FindPlaybackSettingsForInstance(composition, out var instanceWithSettings, out var settings);
 
         // change settings for all playback before calculating times
@@ -298,7 +305,7 @@ internal abstract class BaseRenderWindow : Window
         return new List<Window>();
     }
 
-    protected static bool FindIssueWithTexture(Texture2D texture, List<SharpDX.DXGI.Format> supportedInputFormats, out string warning)
+    protected static bool FindIssueWithTexture(Texture2D? texture, List<SharpDX.DXGI.Format> supportedInputFormats, out string warning)
     {
         if (texture == null || texture.IsDisposed)
         {
@@ -311,7 +318,7 @@ internal abstract class BaseRenderWindow : Window
         return false;
     }
     
-    protected string HumanReadableDurationFromSeconds(double seconds)
+    protected static string HumanReadableDurationFromSeconds(double seconds)
     {
         return $"{(int)(seconds / 60 / 60):00}:{(seconds / 60)%60:00}:{seconds%60:00}";
     }
@@ -326,15 +333,13 @@ internal abstract class BaseRenderWindow : Window
     private static float _startTimeInBars;
     private static float _endTimeInBars = 4.0f; 
     protected static float Fps = 60.0f;
-    protected static float ResolutionFactor = 1;
+    private static float _resolutionFactor = 1;
     private static float _lastValidFps = Fps;
 
     private static double _timingOverhang; // Time that could not be updated due to MS resolution (in seconds)
     private static bool _audioRecording; 
-    //public static bool IsExporting => _isExporting;
 
     // ReSharper disable once InconsistentNaming
-    //protected static bool _isExporting;
     internal static int OverrideMotionBlurSamples => _overrideMotionBlurSamples;
     private static int _overrideMotionBlurSamples = -1;
 
