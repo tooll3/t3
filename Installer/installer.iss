@@ -47,8 +47,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "..\Editor\bin\Release\net9.0-windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
-Source: "..\..\t3-install-dependencies\dotnet-sdk-9.0.102-win-x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
-Source: "..\..\t3-install-dependencies\VC_redist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
+Source: "dependencies\downloads\dotnet-sdk-9.0.102-win-x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
+Source: "dependencies\downloads\VC_redist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 Source: "dependencies\grafiktools.bat"; DestDir: "{tmp}"; Flags: deleteafterinstall ignoreversion
 
 [Icons]
