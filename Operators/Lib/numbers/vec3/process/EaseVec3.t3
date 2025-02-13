@@ -1,33 +1,32 @@
 {
-  "Name": "EaseVec3",
-  "Id": "12dccab1-1d7d-4005-a4c1-0bebeeaeb6d3",
-  "Namespace": "lib.math.float",
-  "Inputs": [
-    {
-      "Id": "16e48eb8-3baf-4e0b-a75e-72a747c9fead"/*Value*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      }
-    },
-    {
-      "Id": "c7ebf4ed-5477-4461-ac68-8a7ac9849ce6"/*Duration*/,
-      "DefaultValue": 0.25
-    },
-    {
-      "Id": "2a450207-489e-4a8d-83ab-37ed8167eebe"/*UseAppRunTime*/,
-      "DefaultValue": false
-    },
-    {
-      "Id": "1867ff18-f510-4c84-a3be-a4123e878133"/*Mode*/,
-      "DefaultValue": 2
-    },
-    {
-      "Id": "9ef45ff9-9d59-44b7-b03d-37a1be40a776"/*Interpolation*/,
-      "DefaultValue": 0
-    }
-  ],
-  "Children": [],
-  "Connections": []
+
+    "Id": "F617C7B9-F2A6-429A-BC6A-0131341D1378" /*EaseVec3*/,
+    "Inputs": [
+        {
+            "Id": "16e48eb8-3baf-4e0b-a75e-72a747c9fead" /*Value*/,
+            "DefaultValue": {
+                "X": 0.0,
+                "Y": 0.0,
+                "Z": 0.0
+            }
+        },
+        {
+            "Id": "c7ebf4ed-5477-4461-ac68-8a7ac9849ce6" /*Duration*/,
+            "DefaultValue": 0.25
+        },
+        {
+            "Id": "2a450207-489e-4a8d-83ab-37ed8167eebe" /*UseAppRunTime*/,
+            "DefaultValue": false
+        },
+        {
+            "Id": "1867ff18-f510-4c84-a3be-a4123e878133" /*Mode*/,
+            "DefaultValue": 2
+        },
+        {
+            "Id": "9ef45ff9-9d59-44b7-b03d-37a1be40a776" /*Interpolation*/,
+            "DefaultValue": 0
+        }
+    ],
+    "Children": [],
+    "Connections": []
 }
