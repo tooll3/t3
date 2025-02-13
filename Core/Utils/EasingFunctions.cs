@@ -214,6 +214,71 @@ namespace T3.Core.Utils
             return t < 0.5 ? (1 - OutBounce(1 - 2 * t)) / 2 : (1 + OutBounce(2 * t - 1)) / 2;
         }
 
+        public static float ApplyEasing(float progress, EaseDirection direction, Interpolations easeMode)
+        {
+            return direction switch
+            {
+                EaseDirection.In => ApplyEaseIn(progress, easeMode),
+                EaseDirection.Out => ApplyEaseOut(progress, easeMode),
+                EaseDirection.InOut => ApplyEaseInOut(progress, easeMode),
+                _ => progress
+            };
+        }
+
+        private static float ApplyEaseIn(float progress, Interpolations easeMode)
+        {
+            return easeMode switch
+            {
+                Interpolations.Sine => InSine(progress),
+                Interpolations.Quad => InQuad(progress),
+                Interpolations.Cubic => InCubic(progress),
+                Interpolations.Quart => InQuart(progress),
+                Interpolations.Quint => InQuint(progress),
+                Interpolations.Expo => InExpo(progress),
+                Interpolations.Circ => InCirc(progress),
+                Interpolations.Back => InBack(progress),
+                Interpolations.Elastic => InElastic(progress),
+                Interpolations.Bounce => InBounce(progress),
+                _ => progress
+            };
+        }
+
+        private static float ApplyEaseOut(float progress, Interpolations easeMode)
+        {
+            return easeMode switch
+            {
+                Interpolations.Sine => OutSine(progress),
+                Interpolations.Quad => OutQuad(progress),
+                Interpolations.Cubic => OutCubic(progress),
+                Interpolations.Quart => OutQuart(progress),
+                Interpolations.Quint => OutQuint(progress),
+                Interpolations.Expo => OutExpo(progress),
+                Interpolations.Circ => OutCirc(progress),
+                Interpolations.Back => OutBack(progress),
+                Interpolations.Elastic => OutElastic(progress),
+                Interpolations.Bounce => OutBounce(progress),
+                _ => progress
+            };
+        }
+
+        private static float ApplyEaseInOut(float progress, Interpolations easeMode)
+        {
+            return easeMode switch
+            {
+                Interpolations.Sine => InOutSine(progress),
+                Interpolations.Quad => InOutQuad(progress),
+                Interpolations.Cubic => InOutCubic(progress),
+                Interpolations.Quart => InOutQuart(progress),
+                Interpolations.Quint => InOutQuint(progress),
+                Interpolations.Expo => InOutExpo(progress),
+                Interpolations.Circ => InOutCirc(progress),
+                Interpolations.Back => InOutBack(progress),
+                Interpolations.Elastic => InOutElastic(progress),
+                Interpolations.Bounce => InOutBounce(progress),
+                _ => progress
+            };
+        }
+
         public enum Interpolations
         {
             Linear = 0,

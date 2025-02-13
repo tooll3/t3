@@ -48,60 +48,8 @@ internal sealed class EaseVec2 : Instance<EaseVec2>
         var elapsedTime = (float)(currentTime - _startTime);
         var progress = (elapsedTime / duration).Clamp(0f, 1f);
 
-        var easedProgress = progress;
-        switch (easeDirection)
-        {
-            case EaseDirection.In:
-                easedProgress = easeMode switch
-                {
-                    Interpolations.Sine => EasingFunctions.InSine(progress),
-                    Interpolations.Quad => EasingFunctions.InQuad(progress),
-                    Interpolations.Cubic => EasingFunctions.InCubic(progress),
-                    Interpolations.Quart => EasingFunctions.InQuart(progress),
-                    Interpolations.Quint => EasingFunctions.InQuint(progress),
-                    Interpolations.Expo => EasingFunctions.InExpo(progress),
-                    Interpolations.Circ => EasingFunctions.InCirc(progress),
-                    Interpolations.Back => EasingFunctions.InBack(progress),
-                    Interpolations.Elastic => EasingFunctions.InElastic(progress),
-                    Interpolations.Bounce => EasingFunctions.InBounce(progress),
-                    _ => progress
-                };
-                break;
+        var easedProgress = EasingFunctions.ApplyEasing(progress, easeDirection, easeMode);
 
-            case EaseDirection.Out:
-                easedProgress = easeMode switch
-                {
-                    Interpolations.Sine => EasingFunctions.OutSine(progress),
-                    Interpolations.Quad => EasingFunctions.OutQuad(progress),
-                    Interpolations.Cubic => EasingFunctions.OutCubic(progress),
-                    Interpolations.Quart => EasingFunctions.OutQuart(progress),
-                    Interpolations.Quint => EasingFunctions.OutQuint(progress),
-                    Interpolations.Expo => EasingFunctions.OutExpo(progress),
-                    Interpolations.Circ => EasingFunctions.OutCirc(progress),
-                    Interpolations.Back => EasingFunctions.OutBack(progress),
-                    Interpolations.Elastic => EasingFunctions.OutElastic(progress),
-                    Interpolations.Bounce => EasingFunctions.OutBounce(progress),
-                    _ => progress
-                };
-                break;
-
-            case EaseDirection.InOut:
-                easedProgress = easeMode switch
-                {
-                    Interpolations.Sine => EasingFunctions.InOutSine(progress),
-                    Interpolations.Quad => EasingFunctions.InOutQuad(progress),
-                    Interpolations.Cubic => EasingFunctions.InOutCubic(progress),
-                    Interpolations.Quart => EasingFunctions.InOutQuart(progress),
-                    Interpolations.Quint => EasingFunctions.InOutQuint(progress),
-                    Interpolations.Expo => EasingFunctions.InOutExpo(progress),
-                    Interpolations.Circ => EasingFunctions.InOutCirc(progress),
-                    Interpolations.Back => EasingFunctions.InOutBack(progress),
-                    Interpolations.Elastic => EasingFunctions.InOutElastic(progress),
-                    Interpolations.Bounce => EasingFunctions.InOutBounce(progress),
-                    _ => progress
-                };
-                break;
-        }
         Result.Value = MathUtils.Lerp(_initialValue, _targetValue, easedProgress);
         _previousInputValue = inputValue;
     }
