@@ -1,55 +1,64 @@
 {
-    "Id": "6e29bd11-7927-4f74-a35e-a6b129464a55" /*Ease*/,
-    "Description": "",
-    "InputUis": [
-        {
-            "InputId": "c2107af4-7b4f-43ef-97fe-934833790032" /*Value*/,
-            "Relevancy": "Required",
-            "Position": {
-                "X": 36.0,
-                "Y": 334.0
-            }
-        },
-        {
-            "InputId": "da40ddcd-cef8-494a-a7f8-cd8ddfbd7603" /*Duration*/,
-            "Position": {
-                "X": 36.0,
-                "Y": 379.0
-            },
-            "Min": 0.01,
-            "Max": 1.0,
-            "Clamp": true
-        },
-        {
-            "InputId": "5580eee8-db7b-4e9b-898d-5c7680b0c302" /*UseAppRunTime*/,
-            "Position": {
-                "X": 36.0,
-                "Y": 469.0
-            }
-        },
-        {
-            "InputId": "fe0231d9-03b6-466f-82e9-852b892adf2e" /*Mode*/,
-            "Position": {
-                "X": 36.0,
-                "Y": 604.0
-            }
-        },
-        {
-            "InputId": "bc388ea3-e1e6-4773-95e5-b8a649c3344f" /*Interpolation*/,
-            "Position": {
-                "X": 36.0,
-                "Y": 514.0
-            }
-        }
-    ],
-    "SymbolChildUis": [],
-    "OutputUis": [
-        {
-            "OutputId": "4d1e77d8-bfee-4451-9dcf-f187cd82ec26" /*Result*/,
-            "Position": {
-                "X": 133.0,
-                "Y": 38.0
-            }
-        }
-    ]
+  "Id": "6e29bd11-7927-4f74-a35e-a6b129464a55"/*Ease*/,
+  "Description": "Note: The input value should evolve by steps (e.g., sudden changes) to fully utilize the easing effect.\nThis operator creates smooth, ease-in-out transitions between changing input values, perfect for animating any step change. Customize the transition style with options like cubic, exponential, or back easing, or choose a linear fallback for a simple interpolation. \n[Damp] [Spring] [EaseVec2] [EaseVec3]",
+  "InputUis": [
+    {
+      "InputId": "5580eee8-db7b-4e9b-898d-5c7680b0c302"/*UseAppRunTime*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 469.0
+      }
+    },
+    {
+      "InputId": "bc388ea3-e1e6-4773-95e5-b8a649c3344f"/*Interpolation*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 514.0
+      }
+    },
+    {
+      "InputId": "c2107af4-7b4f-43ef-97fe-934833790032"/*Value*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      }
+    },
+    {
+      "InputId": "da40ddcd-cef8-494a-a7f8-cd8ddfbd7603"/*Duration*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 379.0
+      },
+      "Min": 0.001,
+      "Max": 999.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "fe0231d9-03b6-466f-82e9-852b892adf2e"/*Direction*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 604.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "75ff4efa-7ca7-4989-bd9c-42302cb248ca"/*Result*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "11312bc4-15f5-4e8e-8b42-fdaa59c77645",
+      "Title": "easings.net",
+      "Description": "This page helps you choose the right easing function.",
+      "LinkUrl": "https://easings.net/",
+      "LinkType": "Reference"
+    }
+  ]
 }
