@@ -1,16 +1,10 @@
-using System;
-using System.Numerics;
 using T3.Core.Animation;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
-using static T3.Core.Animation.VDefinition;
 using static T3.Core.Utils.EasingFunctions;
 
-namespace T3.Operators.Types.Id_12dccab1_1d7d_4005_a4c1_0bebeeaeb6d3
-{
-    public class EaseVec3 : Instance<EaseVec3>
+namespace Lib.numbers.@vec3.process;
+[Guid("F617C7B9-F2A6-429A-BC6A-0131341D1378")]
+internal sealed class EaseVec3 : Instance<EaseVec3>
     {
         [Output(Guid = "b54d5398-3671-44b7-961f-0fb092a2c78b", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<Vector3> Result = new();
@@ -140,7 +134,7 @@ namespace T3.Operators.Types.Id_12dccab1_1d7d_4005_a4c1_0bebeeaeb6d3
         [Input(Guid = "1867ff18-f510-4c84-a3be-a4123e878133", MappedType = typeof(EaseDirection))]
         public readonly InputSlot<int> Mode = new InputSlot<int>();
 
-        [Input(Guid = "9ef45ff9-9d59-44b7-b03d-37a1be40a776", MappedType = typeof(EasingFunctions.EasingType))]
+        [Input(Guid = "9ef45ff9-9d59-44b7-b03d-37a1be40a776", MappedType = typeof(Interpolations))]
         public readonly InputSlot<int> Interpolation = new InputSlot<int>();
 
         
@@ -148,4 +142,4 @@ namespace T3.Operators.Types.Id_12dccab1_1d7d_4005_a4c1_0bebeeaeb6d3
 
         
     }
-}
+

@@ -2,7 +2,7 @@ using T3.Core.Animation;
 using T3.Core.Utils;
 using static T3.Core.Utils.EasingFunctions;
 
-namespace Lib.numbers.vec2.process;
+namespace Lib.numbers.@vec2.process;
 
 [Guid("93d9b8f4-d92f-4727-8d06-c1add3a74fe7")]
 internal sealed class EaseVec2 : Instance<EaseVec2>
