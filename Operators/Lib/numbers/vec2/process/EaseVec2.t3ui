@@ -1,51 +1,54 @@
 {
-    "Id": "93d9b8f4-d92f-4727-8d06-c1add3a74fe7" /*EaseVec2*/,
-    "Description": "[SpringVec2] [DampVec2] [Ease]",
-    "InputUis": [
-        {
-            "InputId": "3156deda-67ba-42eb-9418-7f28ea4b4ca5" /*Value*/,
-            "Position": {
-                "X": -200.0,
-                "Y": 0.0
-            }
-        },
-        {
-            "InputId": "51989ff4-a9c6-4fbc-bbc1-79b7af859e23" /*Duration*/,
-            "Position": {
-                "X": -200.0,
-                "Y": 45.0
-            }
-        },
-        {
-            "InputId": "38f566a4-d41f-43d7-9ee5-1be3cb20e21c" /*UseAppRunTime*/,
-            "Position": {
-                "X": -200.0,
-                "Y": 90.0
-            }
-        },
-        {
-            "InputId": "5f2c66dd-dfaf-4aa0-b184-01e89819b317" /*Mode*/,
-            "Position": {
-                "X": -200.0,
-                "Y": 180.0
-            }
-        },
-        {
-            "InputId": "19da524f-6cea-4da0-8ee2-9b47ef8a93a7" /*Interpolation*/,
-            "Position": {
-                "X": -200.0,
-                "Y": 135.0
-            }
-        }
-    ],
-    "SymbolChildUis": [],
-    "OutputUis": [
-        {
-            "OutputId": "8e972216-4a0b-47a3-856a-37a3861e2017" /*Result*/,
-            "Position": {
-                "X": 300.0,
-                "Y": 200.0
-            }
-        }
-    ]
+  "Id": "93d9b8f4-d92f-4727-8d06-c1add3a74fe7"/*EaseVec2*/,
+  "Description": "[Ease] [SpringVec2] [DampVec2]",
+  "InputUis": [
+    {
+      "InputId": "19da524f-6cea-4da0-8ee2-9b47ef8a93a7"/*Interpolation*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "3156deda-67ba-42eb-9418-7f28ea4b4ca5"/*Value*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "38f566a4-d41f-43d7-9ee5-1be3cb20e21c"/*UseAppRunTime*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "51989ff4-a9c6-4fbc-bbc1-79b7af859e23"/*Duration*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Min": 0.001,
+      "Max": 999.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "5f2c66dd-dfaf-4aa0-b184-01e89819b317"/*Direction*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "8e972216-4a0b-47a3-856a-37a3861e2017"/*Result*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ]
 }
