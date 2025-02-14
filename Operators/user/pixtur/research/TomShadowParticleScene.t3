@@ -72,7 +72,7 @@
         {
           "Id": "78fb7501-74d9-4a27-8db2-596f25482c87"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\cynic\\particles\\vs-particle-shadowmap.hlsl"
+          "Value": "Resources/user/cynic/particles/vs-particle-shadowmap.hlsl"
         },
         {
           "Id": "9a8b500e-c3b1-4be1-8270-202ef3f90793"/*EntryPoint*/,
@@ -109,7 +109,7 @@
         {
           "Id": "78fb7501-74d9-4a27-8db2-596f25482c87"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\cynic\\particles\\vs-particle-quad-shawdowmap.hlsl"
+          "Value": "Resources/user/cynic/particles/vs-particle-quad-shawdowmap.hlsl"
         },
         {
           "Id": "9a8b500e-c3b1-4be1-8270-202ef3f90793"/*EntryPoint*/,
@@ -129,73 +129,6 @@
       "Id": "263e8fec-fea2-4d41-bb21-20631c66233c"/*Viewport*/,
       "SymbolId": "1f23db4a-871e-42a9-9255-49b956993eb1",
       "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "2ce677f7-c976-45b7-879c-43f8c03e3b01"/*DrawParticles*/,
-      "SymbolId": "73a55607-c892-4a85-946b-e37354c4c0e4",
-      "InputValues": [
-        {
-          "Id": "0a4f49d0-8b4b-47f1-a2cf-134ebb62cb74"/*Size*/,
-          "Type": "System.Single",
-          "Value": 1.596666
-        },
-        {
-          "Id": "1b9b4455-d510-4151-93c6-e03a5eb325b8"/*LightDecay*/,
-          "Type": "System.Single",
-          "Value": 0.43999997
-        },
-        {
-          "Id": "3cb3866f-48d0-4824-9302-73a92ba6b132"/*ColorOverLife*/,
-          "Type": "T3.Core.DataTypes.Gradient",
-          "Value": {
-            "Gradient": {
-              "Interpolation": "Linear",
-              "Steps": [
-                {
-                  "Id": "c2a43be8-0718-4c6e-9b0e-9fcb6fe26e5f",
-                  "NormalizedPosition": 0.0,
-                  "Color": {
-                    "R": 1.0,
-                    "G": 0.99999,
-                    "B": 1.0,
-                    "A": 1.0
-                  }
-                },
-                {
-                  "Id": "bdd9b2f3-05f8-468b-8db7-119a57015982",
-                  "NormalizedPosition": 0.96153843,
-                  "Color": {
-                    "R": 1.0,
-                    "G": 0.99999,
-                    "B": 1.0,
-                    "A": 0.0
-                  }
-                }
-              ]
-            }
-          }
-        },
-        {
-          "Id": "981e17e2-6f92-4651-90a5-7c6ee4f04438"/*RoundShading*/,
-          "Type": "System.Single",
-          "Value": 0.7100001
-        },
-        {
-          "Id": "b7cff360-cbb6-4d28-98a1-dd0fd31145f7"/*LightIntensity*/,
-          "Type": "System.Single",
-          "Value": 6.3366656
-        },
-        {
-          "Id": "c34e46fd-b1be-4224-bd8a-32e418eed96c"/*LightPosition*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 0.0,
-            "Y": 7.759999,
-            "Z": 15.336667
-          }
-        }
-      ],
       "Outputs": []
     },
     {
@@ -263,7 +196,7 @@
         {
           "Id": "24646f06-1509-43ce-94c6-eeb608ad97cd"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\dx11\\research-DrawParticleShadowMap-ps.hlsl"
+          "Value": "Resources/lib/dx11/research-DrawParticleShadowMap-ps.hlsl"
         },
         {
           "Id": "501338b3-f432-49a5-bdbd-bcf209671305"/*EntryPoint*/,
@@ -393,7 +326,7 @@
         {
           "Id": "78fb7501-74d9-4a27-8db2-596f25482c87"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\dx11\\research-DrawShadowQuad-vs.hlsl"
+          "Value": "Resources/lib/dx11/research-DrawShadowQuad-vs.hlsl"
         },
         {
           "Id": "9a8b500e-c3b1-4be1-8270-202ef3f90793"/*EntryPoint*/,
@@ -535,7 +468,7 @@
         {
           "Id": "24646f06-1509-43ce-94c6-eeb608ad97cd"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\cynic\\particles\\ps-particle-quad-shadowmap.hlsl"
+          "Value": "Resources/user/cynic/particles/ps-particle-quad-shadowmap.hlsl"
         },
         {
           "Id": "501338b3-f432-49a5-bdbd-bcf209671305"/*EntryPoint*/,
@@ -820,97 +753,12 @@
         {
           "Id": "24646f06-1509-43ce-94c6-eeb608ad97cd"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\cynic\\particles\\ps-particle-shadowmap.hlsl"
+          "Value": "Resources/user/cynic/particles/ps-particle-shadowmap.hlsl"
         },
         {
           "Id": "501338b3-f432-49a5-bdbd-bcf209671305"/*EntryPoint*/,
           "Type": "System.String",
           "Value": "psMain"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "b7801017-d72d-401a-a7aa-0f35ed9a0008"/*DrawParticlesWithShadows*/,
-      "SymbolId": "b1ffe4dd-d734-4392-a644-7c587979066e",
-      "InputValues": [
-        {
-          "Id": "3b14fc1e-3b56-4498-9da3-8b7cfba3a8ca"/*LightPos*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": -14.29,
-            "Y": 46.826668,
-            "Z": 0.0
-          }
-        },
-        {
-          "Id": "3f3dba11-7dc4-4af8-a9df-49b43e575b61"/*RoundShading*/,
-          "Type": "System.Single",
-          "Value": 0.52666676
-        },
-        {
-          "Id": "4932f88a-81b2-41a6-bd5d-64ca53115615"/*ColorOverLife*/,
-          "Type": "T3.Core.DataTypes.Gradient",
-          "Value": {
-            "Gradient": {
-              "Interpolation": "Linear",
-              "Steps": [
-                {
-                  "Id": "c2a43be8-0718-4c6e-9b0e-9fcb6fe26e5f",
-                  "NormalizedPosition": 0.0,
-                  "Color": {
-                    "R": 1.0,
-                    "G": 0.99999,
-                    "B": 1.0,
-                    "A": 1.0
-                  }
-                },
-                {
-                  "Id": "bdd9b2f3-05f8-468b-8db7-119a57015982",
-                  "NormalizedPosition": 0.96153843,
-                  "Color": {
-                    "R": 1.0,
-                    "G": 0.99999,
-                    "B": 1.0,
-                    "A": 0.0
-                  }
-                }
-              ]
-            }
-          }
-        },
-        {
-          "Id": "4eabf56b-52af-4728-b974-689278477a32"/*LightDecay*/,
-          "Type": "System.Single",
-          "Value": 0.43999997
-        },
-        {
-          "Id": "6b704357-289a-4830-a1f9-e5d936aded62"/*LightPosition*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 10.7,
-            "Y": 39.366665,
-            "Z": 18.683334
-          }
-        },
-        {
-          "Id": "77f344db-32c0-4f86-b56e-7db51a68723b"/*Size*/,
-          "Type": "System.Single",
-          "Value": 2.2499993
-        },
-        {
-          "Id": "9d76f7ed-ce58-4632-b499-2165dde90c86"/*LightIntensity*/,
-          "Type": "System.Single",
-          "Value": 6.3366656
-        },
-        {
-          "Id": "f83171f4-8e18-4a83-9bd1-5829545ffaaa"/*LightTarget*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 19.0,
-            "Y": 0.0,
-            "Z": 9.0
-          }
         }
       ],
       "Outputs": []
@@ -1161,12 +1009,6 @@
     {
       "SourceParentOrChildId": "c9e7e98b-c3e0-45d4-a4be-26a58d18e081",
       "SourceSlotId": "2d329133-29b9-4f56-b5a6-5ff7d83638fa",
-      "TargetParentOrChildId": "02a06064-7cec-4003-beba-e639a499ad39",
-      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
-    },
-    {
-      "SourceParentOrChildId": "b7801017-d72d-401a-a7aa-0f35ed9a0008",
-      "SourceSlotId": "09cbb463-d3bf-46d8-867f-3fe3dbc3a79b",
       "TargetParentOrChildId": "02a06064-7cec-4003-beba-e639a499ad39",
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },

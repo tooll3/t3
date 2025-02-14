@@ -84,13 +84,6 @@
       }
     },
     {
-      "ChildId": "2ce677f7-c976-45b7-879c-43f8c03e3b01"/*DrawParticles*/,
-      "Position": {
-        "X": -1079.615,
-        "Y": 2628.1284
-      }
-    },
-    {
       "ChildId": "308466e9-bb68-4866-9565-de037be6dab3"/*Viewport*/,
       "Position": {
         "X": -2931.19,
@@ -441,13 +434,6 @@
       "Position": {
         "X": -2387.0698,
         "Y": 3300.7114
-      }
-    },
-    {
-      "ChildId": "b7801017-d72d-401a-a7aa-0f35ed9a0008"/*DrawParticlesWithShadows*/,
-      "Position": {
-        "X": 589.89777,
-        "Y": 2377.1738
       }
     },
     {

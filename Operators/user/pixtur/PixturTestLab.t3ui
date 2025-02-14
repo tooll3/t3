@@ -23,20 +23,6 @@
       }
     },
     {
-      "ChildId": "06641005-0a4f-4a9e-9d38-447ed60ee960"/*PinkyDemo*/,
-      "Position": {
-        "X": -4090.0894,
-        "Y": -1149.1738
-      }
-    },
-    {
-      "ChildId": "0c5597a2-7ff5-4b1e-a460-c91739a515a2"/*SomniDemo*/,
-      "Position": {
-        "X": -4136.9736,
-        "Y": -1013.9326
-      }
-    },
-    {
       "ChildId": "0d4f0e63-d0f1-412e-92f6-147b2980b561"/*Time*/,
       "Position": {
         "X": -3660.248,
@@ -128,8 +114,8 @@
     {
       "ChildId": "3ead9fb1-9a92-4aed-a690-2a4b94468971"/*WorksForEverybody*/,
       "Position": {
-        "X": -4274.356,
-        "Y": -666.6881
+        "X": -4442.5195,
+        "Y": -545.0929
       }
     },
     {
@@ -191,13 +177,6 @@
       "Position": {
         "X": -3620.9934,
         "Y": -886.3966
-      }
-    },
-    {
-      "ChildId": "78e2fac2-3d2a-4292-813d-e632de9e55ad"/*DrawPointsExample*/,
-      "Position": {
-        "X": -7531.37,
-        "Y": -631.5544
       }
     },
     {

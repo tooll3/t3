@@ -10,6 +10,14 @@
       }
     },
     {
+      "InputId": "255adfb5-cf8b-4dd7-958f-3d810d48760f"/*FilterNotes*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 120.0
+      },
+      "Usage": "Default"
+    },
+    {
       "InputId": "8e355d24-4934-4008-990d-76448a647281"/*UseNotesForBeats*/,
       "Position": {
         "X": -200.0,

@@ -16,18 +16,6 @@
       "Outputs": []
     },
     {
-      "Id": "06641005-0a4f-4a9e-9d38-447ed60ee960"/*PinkyDemo*/,
-      "SymbolId": "ace28a0c-b71a-41eb-bd50-b57da38a23ce",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "0c5597a2-7ff5-4b1e-a460-c91739a515a2"/*SomniDemo*/,
-      "SymbolId": "f05356b6-3456-4a1b-988c-0c8f89fb4816",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "0d4f0e63-d0f1-412e-92f6-147b2980b561"/*Time*/,
       "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
       "InputValues": [],
@@ -237,12 +225,6 @@
           }
         }
       ]
-    },
-    {
-      "Id": "78e2fac2-3d2a-4292-813d-e632de9e55ad"/*DrawPointsExample*/,
-      "SymbolId": "6ef2c96c-0ade-4dfb-bfe1-d852cf453a0e",
-      "InputValues": [],
-      "Outputs": []
     },
     {
       "Id": "7ac75d11-a220-4a6f-a2c6-8c1db42182e7"/*DrawLinesBuildupExample*/,
