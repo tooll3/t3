@@ -256,6 +256,7 @@ internal sealed class PlaceholderCreation
         context.DisconnectedInputHashes.Clear();
         context.Layout.FlagAsChanged();
         context.ConnectionHovering.ConnectionHoversWhenClicked.Clear();
+        context.TempConnections.Clear();
 
         PlaceHolderUi.Reset();
 
