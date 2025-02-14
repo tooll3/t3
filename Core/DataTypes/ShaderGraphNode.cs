@@ -12,24 +12,32 @@ using T3.Core.Operator.Slots;
 namespace T3.Core.DataTypes;
 
 /**
- * Represents the attributes and parameters required to build the a shader code from
+ * Represents the attributes and parameters required to build a shader code from
  * nested instances. This basically replicates the instance graph structure so the graph
  * can be processed without actually updating instances. This is required for maintaining
  * the structure while allowing to completely cache the output.
  *
- * Storing the references to its instance here is unfortunate.
- *
+ * Storing the references to its operator Instance here is unfortunate.
  *
  * The process is somewhat complex:
  *
- * - [_GetFieldShaderAttributes] calls Update() on its connected graphNode.
- * - This then invokes Update() on all connected graphNode-Ops which calls its...
- * - ShaderGraphNode.Update() -> Which..
+ * - [_GetFieldShaderAttributes] calls Update() on its connected graphNode(s).
+ * - This then invokes .Update() on all connected graphNode-Ops which calls its...
+ * - ShaderGraphNode.Update() -> Which...
  *   - updates its connected graph nodes
  *     - recursively calls Update() on their connected ops
- *   - checks with parameters are changed
+ *   - checks if parameters are changed
  */
-public sealed class ShaderGraphNode
+
+public class Color2dField : ShaderGraphNode
+{
+    public Color2dField(Instance instance, MultiInputSlot<ShaderGraphNode>? nodeMultiInputInput = null, InputSlot<ShaderGraphNode>? inputSlot = null) 
+        : base(instance, nodeMultiInputInput, inputSlot)
+    {
+    }
+}
+
+public class ShaderGraphNode
 {
     #region node handling
     public ShaderGraphNode(Instance instance, MultiInputSlot<ShaderGraphNode>? nodeMultiInputInput = null, InputSlot<ShaderGraphNode>? inputSlot = null)
@@ -246,7 +254,7 @@ public sealed class ShaderGraphNode
     
     public static class ShaderParamHandling
     {
-        public static List<ShaderParamInput> CollectInputSlots(Instance instance, string nodePrefix)
+        internal static List<ShaderParamInput> CollectInputSlots(Instance instance, string nodePrefix)
         {
             List<ShaderParamInput> inputSlots = [];
             var fields = instance.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -350,7 +358,7 @@ public sealed class ShaderGraphNode
             codeParams.Add(new ShaderCodeParameter("float3", name));
         }
 
-        public static void AddMatrixParameter(List<float> floatValues, List<ShaderCodeParameter> codeParams, string name, Matrix4x4 matrix)
+        internal static void AddMatrixParameter(List<float> floatValues, List<ShaderCodeParameter> codeParams, string name, Matrix4x4 matrix)
         {
             PadFloatParametersToVectorComponentCount(floatValues, codeParams, 4);
             Span<float> elements = MemoryMarshal.CreateSpan(ref matrix.M11, 16);
@@ -403,8 +411,8 @@ public sealed class ShaderGraphNode
             }
         }
 
-        /** When collect these at instance construction to to avoid later casting */
-        public sealed record ShaderParamInput(
+        /** We collect these at instance construction to avoid later casting */
+        internal sealed record ShaderParamInput(
             IInputSlot Slot,
             string Name,
             string ShaderTypeName,
@@ -413,10 +421,10 @@ public sealed class ShaderGraphNode
 
         public sealed record ShaderCodeParameter(string ShaderTypeName, string Name);
 
-        public delegate void GetFloatDelegate(List<float> floatValues,
-                                              List<ShaderCodeParameter> codeParams);
+        internal delegate void GetFloatDelegate(List<float> floatValues,
+                                                List<ShaderCodeParameter> codeParams);
 
-        public delegate void UpdateDelegate(EvaluationContext context);
+        internal delegate void UpdateDelegate(EvaluationContext context);
     }
     
     public sealed class Parameter(string shaderTypeName, string name, object value)
@@ -460,9 +468,9 @@ public sealed class ShaderGraphNode
 }
 
 /**
- * Mark a field as a parameter for a shader graph node so it can be automatically checked for changes
+ * Marks a field as a parameter for a shader graph node so it can be automatically checked for changes
  */
-public class GraphParamAttribute : Attribute;
+public sealed class GraphParamAttribute : Attribute;
 
 public interface IGraphNodeOp
 {

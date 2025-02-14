@@ -16,7 +16,7 @@ internal static partial class ProcessUtils
         RemoveAnsiEscapeSequencesRegex.Replace(input, "");
 }
 
-public class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
+public sealed class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
 {
     private Process? _process;
 
@@ -63,16 +63,16 @@ public class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
             if (!process.Start())
             {
                 Close(process, 0f);
-                T3.Core.Logging.Log.Warning(crossPlatformFailureMessage);
+                T3.Core.Logging.Log.Debug(crossPlatformFailureMessage);
             }
             else
             {
-                T3.Core.Logging.Log.Info("Started cross-platform powershell");
+                T3.Core.Logging.Log.Debug("Started cross-platform powershell");
             }
         }
         catch (Exception e)
         {
-            T3.Core.Logging.Log.Error($"{crossPlatformFailureMessage}: {e.Message}");
+            T3.Core.Logging.Log.Debug($"{crossPlatformFailureMessage}: {e.Message}");
         }
         
         // fallback to legacy powershell
@@ -87,7 +87,7 @@ public class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
                 return false;
             }
             
-            T3.Core.Logging.Log.Info("Started legacy powershell");
+            T3.Core.Logging.Log.Debug("Started legacy powershell");
         }
         catch (Exception e)
         {
@@ -301,7 +301,7 @@ public class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
         if (isError)
             T3.Core.Logging.Log.Error(message);
         else
-            T3.Core.Logging.Log.Info(message);
+            T3.Core.Logging.Log.Debug(message);
     }
 
     private static void WriteToProcess(Process process, string message)
