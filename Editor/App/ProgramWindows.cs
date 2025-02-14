@@ -73,9 +73,10 @@ internal static class ProgramWindows
             _deviceContext = device.ImmediateContext;
             _factory = swapchain.GetParent<Factory>();
 
+            // Log used graphics card
             foreach (var a in _factory.Adapters)
             {
-                Log.Debug($"using {a.Description.Description}");
+                Log.Info($"Using {a.Description.Description}");
                 break;
             }
 

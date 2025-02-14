@@ -115,7 +115,7 @@ public abstract partial class SymbolPackage : IResourcePackage
 
     public void LoadSymbols(bool parallel, out List<SymbolJson.SymbolReadResult> newlyRead, out List<Symbol> allNewSymbols)
     {
-        Log.Debug($"{AssemblyInformation.Name}: Loading symbols...");
+        Log.Info($"{AssemblyInformation.Name}: Loading symbols...");
 
         if (!AssemblyInformation.TryLoadTypes())
         {
@@ -264,9 +264,9 @@ public abstract partial class SymbolPackage : IResourcePackage
 
     public void ApplySymbolChildren(List<SymbolJson.SymbolReadResult> symbolsRead)
     {
-        Log.Debug($"{AssemblyInformation.Name}: Applying symbol children...");
+        //Log.Debug($"{AssemblyInformation.Name}: Applying symbol children...");
         Parallel.ForEach(symbolsRead, result => TryReadAndApplyChildren(result));
-        Log.Debug($"{AssemblyInformation.Name}: Done applying symbol children.");
+        //Log.Debug($"{AssemblyInformation.Name}: Done applying symbol children.");
     }
 
     protected static bool TryReadAndApplyChildren(SymbolJson.SymbolReadResult result)

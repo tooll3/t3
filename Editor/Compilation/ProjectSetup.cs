@@ -99,7 +99,7 @@ internal static partial class ProjectSetup
             operatorPackage = null;
         }
 
-        Log.Info($"Loaded CSProj file {csProj.Name}");
+        Log.Debug($"Loaded CSProj file {csProj.Name}");
         return true;
     }
 

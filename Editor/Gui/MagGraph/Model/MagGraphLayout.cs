@@ -143,6 +143,7 @@ internal sealed class MagGraphLayout
                                           Instance = compositionOp,
                                           Selectable = inputUi,
                                           Size = MagGraphItem.GridSize,
+                                          DampedPosOnCanvas = inputUi.PosOnCanvas,
                                       };
                 addedItemCount++;
             }
@@ -165,6 +166,7 @@ internal sealed class MagGraphLayout
                                            Instance = compositionOp,
                                            Selectable = outputUi,
                                            Size = MagGraphItem.GridSize,
+                                           DampedPosOnCanvas = outputUi.PosOnCanvas,
                                        };
                 addedItemCount++;
             }

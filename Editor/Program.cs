@@ -89,7 +89,7 @@ internal static class Program
         Log.AddWriter(StatusErrorLine);
         Log.AddWriter(ConsoleLogWindow);
             
-        Log.Debug($"Starting {VersionText}");
+        Log.Info($"Starting {VersionText}");
             
         CrashReporting.LogPath = logPath;
         //if (IsStandAlone)
@@ -112,7 +112,7 @@ internal static class Program
         // ReSharper disable once UnusedVariable
         var projectSettings = new ProjectSettings(saveOnQuit: true);
 
-        Log.Debug($"About to initialize ProgramWindows");
+        Log.Debug("Initializing ProgramWindows...");
         ProgramWindows.InitializeMainWindow(VersionText, out var device);
 
         Device = device;
@@ -122,21 +122,21 @@ internal static class Program
 
         shaderCompiler.Device = device;
 
-        Log.Debug($"About to initialize UiContentContentDrawer");
+        Log.Debug("Initializing UiContentContentDrawer...");
         var contentDrawer = new WindowsUiContentDrawer();
         UiContentContentDrawer = contentDrawer;
         contentDrawer.Initialize(device, ProgramWindows.Main.Width, ProgramWindows.Main.Height, imguiContextLock, out var context);
 
-        Log.Debug($"About to initialize Camera Interaction");
+        Log.Debug("Initialize Camera Interaction...");
         var spaceMouse = new SpaceMouse(ProgramWindows.Main.HwndHandle);
         CameraInteraction.ManipulationDevices = [spaceMouse];
         ProgramWindows.SetInteractionDevices(spaceMouse);
 
-        Log.Debug($"About to initialize Resource Manager");
+        Log.Debug("Initialize Resource Manager...");
         ResourceManager.Init(device);
         SharedResources.Initialize();
 
-        Log.Debug($"About to initialize T3 UI");
+        Log.Debug("Initialize User Interface...");
 
         bool forceRecompileProjects;
             
@@ -180,7 +180,7 @@ internal static class Program
         StartUp.FlagStartupSequenceComplete();
 
         startupStopWatch.Stop();
-        Log.Debug($"Startup took {startupStopWatch.ElapsedMilliseconds}ms.");
+        Log.Info($"Startup took {startupStopWatch.ElapsedMilliseconds}ms.");
 
         UiContentUpdate.StartMeasureFrame();
 

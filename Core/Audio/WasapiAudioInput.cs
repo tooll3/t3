@@ -103,7 +103,7 @@ public static class WasapiAudioInput
         }
         else
         {
-            Log.Debug($"Initializing WASAPI audio input for  {device.DeviceInfo.Name}... ");
+            Log.Info($"Initializing WASAPI audio input for  {device.DeviceInfo.Name}... ");
             inputDeviceIndex = device.WasapiDeviceIndex;
         }
 

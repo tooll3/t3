@@ -92,7 +92,7 @@ internal static partial class ProjectSetup
 
         #if DEBUG
         totalStopwatch.Stop();
-        Log.Debug($"Total load time: {totalStopwatch.ElapsedMilliseconds}ms");
+        Log.Info($"Total load time: {totalStopwatch.ElapsedMilliseconds}ms");
         #endif
     }
 

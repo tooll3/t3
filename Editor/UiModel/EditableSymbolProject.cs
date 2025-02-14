@@ -24,7 +24,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     public EditableSymbolProject(CsProjectFile csProjectFile) : base(assembly: csProjectFile.Assembly!, directory: csProjectFile.Directory)
     {
         CsProjectFile = csProjectFile;
-        Log.Debug($"Added project {csProjectFile.Name}");
+        Log.Info($"Adding project {csProjectFile.Name}...");
         _csFileWatcher = new CodeFileWatcher(this, OnFileChanged, OnFileRenamed);
         DisplayName = $"{csProjectFile.Name} ({CsProjectFile.RootNamespace})";
         SymbolUpdated += OnSymbolUpdated;

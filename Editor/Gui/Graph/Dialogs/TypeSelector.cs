@@ -66,8 +66,6 @@ internal static class TypeSelector
         if (typeChanged)
         {
             selectedType = SelectedType;
-            //SelectedType = TypeNameRegistry.Entries.Keys.ToList()[_selectedTypeIndex];
-            Log.Debug("Modified! " + SelectedTypeName);
         }
     }
     
