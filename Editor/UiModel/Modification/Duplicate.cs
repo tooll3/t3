@@ -125,6 +125,7 @@ internal static class Duplicate
         Log.Debug($"Created new symbol '{newTypeName}'");
 
         newSymbolUi.FlagAsModified();
+        compositionUi.FlagAsModified();
         project.SaveModifiedSymbols();
 
         return newSymbol;
