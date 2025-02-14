@@ -174,6 +174,7 @@ internal sealed class GraphUiContext
     public void DrawDialogs(ProjectView projectView)
     {
         EditCommentDialog.Draw(Selector);
+        var modified = false;
         
         var compInstance = projectView.CompositionInstance;
         if (compInstance != null)
@@ -185,7 +186,7 @@ internal sealed class GraphUiContext
                 AddInputDialog.Draw(symbol);
                 AddOutputDialog.Draw(symbol);
             }
-            DuplicateSymbolDialog.Draw(compInstance, 
+            modified |= DuplicateSymbolDialog.Draw(compInstance, 
                                                 projectView.NodeSelection.GetSelectedChildUis().ToList(), 
                                                 ref NameSpaceForDialogEdits,
                                                 ref SymbolNameForDialogEdits,
@@ -197,6 +198,9 @@ internal sealed class GraphUiContext
             
             RenameSymbolDialog.Draw(projectView.NodeSelection.GetSelectedChildUis().ToList(), 
                                              ref SymbolNameForDialogEdits);
+            
+            if(modified)
+                Layout.FlagAsChanged();
         }
     }
 }

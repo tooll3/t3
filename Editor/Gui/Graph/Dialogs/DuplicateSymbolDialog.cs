@@ -8,15 +8,18 @@ using T3.Editor.UiModel.Modification;
 
 namespace T3.Editor.Gui.Graph.Dialogs;
 
-internal class DuplicateSymbolDialog : ModalDialog
+internal sealed class DuplicateSymbolDialog : ModalDialog
 {
     public event Action? Closed;
         
-    public void Draw(Instance compositionOp, List<SymbolUi.Child> selectedChildUis, ref string nameSpace, ref string newTypeName, ref string description, bool isReload = false)
+    /** returns true if modified */
+    public bool Draw(Instance compositionOp, List<SymbolUi.Child> selectedChildUis, ref string nameSpace, ref string newTypeName, ref string description, bool isReload = false)
     {
         if(selectedChildUis.Count != 1)
-            return;
-            
+            return false;
+
+        var modified = false;
+        
         if(isReload && !_completedReloadPrompt)
         {
             DialogSize = new Vector2(400, 200);
@@ -41,7 +44,7 @@ internal class DuplicateSymbolDialog : ModalDialog
             }
                 
             EndDialog();
-            return;
+            return modified;
         }
 
         DialogSize = new Vector2(600, 400);
@@ -70,6 +73,7 @@ internal class DuplicateSymbolDialog : ModalDialog
 
                     Duplicate.DuplicateAsNewType(compositionSymbolUi, _projectToCopyTo, selectedChildUis.First().SymbolChild.Symbol.Id, newTypeName, nameSpace, description,
                                                  position);
+                    modified = true;
                     T3Ui.Save(false);
                     ImGui.CloseCurrentPopup();
                     _completedReloadPrompt = false;
@@ -95,6 +99,7 @@ internal class DuplicateSymbolDialog : ModalDialog
         }
 
         EndDialog();
+        return modified;
     }
 
     private EditableSymbolProject? _projectToCopyTo;
