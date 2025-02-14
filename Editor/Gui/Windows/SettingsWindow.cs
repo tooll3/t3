@@ -369,7 +369,24 @@ internal sealed class SettingsWindow : Window
                                                       "Log garbage collection information. This can be useful to see correlation between frame drops and GC activity.",
                                                       UserSettings.Defaults.EnableGCProfiling);
 
+                    FormInputs.AddVerticalSpace();
+                    changed |= FormInputs.AddCheckBox("Log C# Compilation Details",
+                                                      ref UserSettings.Config.LogCsCompilationDetails,
+                                                      "Logs additional compilation details with the given severity",
+                                                      UserSettings.Defaults.LogCsCompilationDetails);
+
                     FormInputs.SetIndentToParameters();
+                    
+                    if (UserSettings.Defaults.LogCsCompilationDetails)
+                    {
+                        FormInputs.SetIndentToParameters();
+                        changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.CompileCsVerbosity,
+                                                              "C# compiler logs",
+                                                              null,
+                                                              UserSettings.Defaults.CompileCsVerbosity
+                                                             );
+                        
+                    }
                     break;
                 }
             }

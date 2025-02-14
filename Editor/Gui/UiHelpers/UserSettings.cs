@@ -5,6 +5,7 @@ using Newtonsoft.Json.Converters;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.IO;
+using T3.Editor.Compilation;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.TimeLine;
@@ -101,8 +102,6 @@ public sealed class UserSettings : Settings<UserSettings.ConfigData>
         public float GizmoSize = 100;
         public int FullScreenIndexMain = 0;
         public int FullScreenIndexViewer = 0;
-            
-
 
         // Timeline
         public float TimeRasterDensity = 1f;
@@ -111,17 +110,18 @@ public sealed class UserSettings : Settings<UserSettings.ConfigData>
         public float SpaceMouseRotationSpeedFactor = 1f;
         public float SpaceMouseMoveSpeedFactor = 1f;
         public float SpaceMouseDamping = 0.5f;
-            
-
+        
         // Rendering (controlled from render windows)
         public string RenderVideoFilePath = "./Render/render-v01.mp4";
         public string RenderSequenceFilePath = "./ImageSequence/";
 
-        // Profiling
+        // Profiling and debugging
         public bool EnableFrameProfiling = true;
         public bool KeepTraceForLogMessages = false;
         public bool EnableGCProfiling = false;
 
+        public bool LogCsCompilationDetails = false;
+        public CompilerOptions.Verbosity CompileCsVerbosity = CompilerOptions.Verbosity.Normal;
             
         [JsonConverter(typeof(StringEnumConverter))]
         public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
