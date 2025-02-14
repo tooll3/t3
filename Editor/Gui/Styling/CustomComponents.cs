@@ -514,9 +514,7 @@ internal static class CustomComponents
         if (_toolTipHoverDelay > 0)
             return;
         
-        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(6,6));
-        ImGui.BeginTooltip();
-        ImGui.PushTextWrapPos(300);
+        BeginTooltip();
         ImGui.TextColored(color, message);
         if (!string.IsNullOrEmpty(additionalNotes))
         {
@@ -525,10 +523,23 @@ internal static class CustomComponents
 
         ImGui.PopTextWrapPos();
 
+        EndTooltip();
+    }
+
+    /** Should be used for drawing consistently styled tooltips */
+    public static void BeginTooltip(float wrapPos = 300)
+    {
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(6,6));
+        ImGui.BeginTooltip();
+        ImGui.PushTextWrapPos(wrapPos);
+    }
+
+    public static void EndTooltip()
+    {
         ImGui.EndTooltip();
         ImGui.PopStyleVar();
     }
-    
+
     public static void TooltipForLastItem(Action drawContent, bool useHoverDelay = true)
     {
         if (!ImGui.IsItemHovered())

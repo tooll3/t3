@@ -2,6 +2,7 @@
 using System.Text;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -46,23 +47,30 @@ internal sealed class ConsoleLogWindow : Window, ILogWriter
 
         ImGui.SameLine();
 
-        if (ImGui.Button("Copy"))
         {
-            lock (_logEntries)
+            var highlightFactor = (float)(ImGui.GetTime() - _lastCopyTime).Clamp(0, 1);
+            ImGui.PushStyleColor(ImGuiCol.Button, Color.Mix( UiColors.StatusActivated, UiColors.BackgroundButton, highlightFactor).Rgba  );
+            if (ImGui.Button("Copy"))
             {
-                var sb = new StringBuilder();
-                foreach (var entry in _logEntries)
+                lock (_logEntries)
                 {
-                    sb.Append($"{(entry.TimeStamp - _startTime).Ticks / 10000000f:  0.000}");
-                    sb.Append('\t');
-                    sb.Append(entry.Level);
-                    sb.Append('\t');
-                    sb.Append(entry.Message);
-                    sb.Append('\n');
-                }
+                    var sb = new StringBuilder();
+                    foreach (var entry in _logEntries)
+                    {
+                        sb.Append($"{(entry.TimeStamp - _startTime).Ticks / 10000000f:  0.000}");
+                        sb.Append('\t');
+                        sb.Append(entry.Level);
+                        sb.Append('\t');
+                        sb.Append(entry.Message);
+                        sb.Append('\n');
+                    }
 
-                EditorUi.Instance.SetClipboardText(sb.ToString());
+                    EditorUi.Instance.SetClipboardText(sb.ToString());
+                }
             }
+            ImGui.PopStyleColor();
+
+            CustomComponents.TooltipForLastItem("Tip: You can also click on lines to copy them to the clipboard.");
         }
 
         ImGui.SameLine();
@@ -148,20 +156,20 @@ internal sealed class ConsoleLogWindow : Window, ILogWriter
         ImGui.EndChild();
     }
 
-    private static double _lastLimeTime;
+    private static double _lastLineTime;
 
     public static void DrawEntry(ILogEntry entry)
     {
         var entryLevel = entry.Level;
 
         var time = entry.SecondsSinceStart;
-        var dt = time - _lastLimeTime;
+        var dt = time - _lastLineTime;
 
         var fade = 1f;
         var frameFraction = (float)dt / (1.5f / 60f);
         if (frameFraction < 1)
         {
-            fade = MathUtils.RemapAndClamp(frameFraction, 0, 1, 0.2f, 0.8f);
+            fade = frameFraction.RemapAndClamp(0, 1, 0.2f, 0.8f);
         }
 
         // Timestamp
@@ -170,7 +178,7 @@ internal sealed class ConsoleLogWindow : Window, ILogWriter
         var timeLabelSize = ImGui.CalcTextSize(timeLabel);
         ImGui.SetCursorPosX(80 - timeLabelSize.X);
         ImGui.TextColored(timeColor, timeLabel);
-        _lastLimeTime = time;
+        _lastLineTime = time;
         ImGui.SameLine(90);
 
         float opacity = 1f;
@@ -181,76 +189,89 @@ internal sealed class ConsoleLogWindow : Window, ILogWriter
                 opacity = 0.8f;
         }
 
-        var color = GetColorForLogLevel(entryLevel).Fade(opacity);
+        var color = GetColorForLogLevel(entryLevel);
 
-        var lineBreak = entry.Message.IndexOf('\n');
-        var hasMessageWithLineBreaks = lineBreak != -1;
-        var firstLine = hasMessageWithLineBreaks ? entry.Message.Substring(0, lineBreak) : entry.Message;
+        var lineBreakIndex = entry.Message.IndexOf('\n');
+        var hasLineBreaks = lineBreakIndex != -1;
+        var firstLine = hasLineBreaks ? entry.Message[..lineBreakIndex] : entry.Message;
 
-        ImGui.TextColored(color, firstLine);
+        var lineHovered = IsLineHovered(out var lineArea);
 
+        if (lineHovered)
+        {
+            ImGui.GetWindowDrawList().AddRectFilled(lineArea.Min, lineArea.Max, Color.Mix(color, UiColors.BackgroundFull, 0.95f).Fade(0.3f));
+        }
+
+        ImGui.TextColored(color.Fade(opacity), firstLine);
+        if (hasLineBreaks)
+        {
+            ImGui.SameLine();
+
+            var lineCount = 1;
+            foreach (var c in entry.Message)
+            {
+                if (c == '\n')
+                    lineCount++;
+            }
+            ImGui.TextColored(UiColors.TextMuted.Fade(0.6f),  $"  {lineCount} lines...");
+        }
+
+        if (!lineHovered)
+            return;
+
+        var focusedView = ProjectView.Focused;
+
+        // Try to get instance path...
         var hasInstancePath = entry.SourceIdPath.Count > 0;
-        if (!IsLineHovered() || (!hasInstancePath && !hasMessageWithLineBreaks))
+        var childIdPath = entry.SourceIdPath.ToList();
+        var hoveredSourceInstance = hasInstancePath && focusedView != null
+                                        ? focusedView.Structure.GetInstanceFromIdPath(childIdPath)
+                                        : null;
+
+        var isMouseClicked = ImGui.IsMouseClicked(ImGuiMouseButton.Left);
+        if (isMouseClicked)
+        {
+            if (!string.IsNullOrEmpty(entry.Message))
+            {
+                EditorUi.Instance.SetClipboardText(entry.Message);
+                _lastCopyTime = ImGui.GetTime();
+            }
+        }
+
+        var hasLongMessages = entry.Message.Length > 100;
+        if (!hasInstancePath && !hasLongMessages)
             return;
 
         nodeSelection?.HoveredIds.Add(entry.SourceId);
 
-        ProjectView? owner = null;
-        var childIdPath = entry.SourceIdPath.ToList();
-
-        if (hasInstancePath)
-        {
-            var components = ProjectView.Focused;
-            if (components != null)
-            {
-                //var components = graphWindow.Components;
-                var hoveredSourceInstance = components.Structure.GetInstanceFromIdPath(childIdPath);
-                if (hoveredSourceInstance == null)
-                    return;
-
-                owner = components;
-            }
-        }
-
-        ImGui.BeginTooltip();
+        CustomComponents.BeginTooltip(800);
         {
             // Show instance details
-            if (hasInstancePath)
+            if (hoveredSourceInstance != null)
             {
-                if (owner == null)
-                {
-                    ImGui.Text("Source Instance of message not longer valid");
-                }
-                else
-                {
-                    ImGui.TextColored(UiColors.TextMuted, "from ");
+                ImGui.TextColored(UiColors.TextMuted, "from ");
 
-                    foreach (var p in owner.Structure.GetReadableInstancePath(childIdPath))
-                    {
-                        ImGui.SameLine();
-                        ImGui.TextColored(UiColors.TextMuted, " / ");
+                foreach (var p in focusedView!.Structure.GetReadableInstancePath(childIdPath))
+                {
+                    ImGui.SameLine();
+                    ImGui.TextColored(UiColors.TextMuted, " / ");
 
-                        ImGui.SameLine();
-                        ImGui.Text(p);
-                    }
+                    ImGui.SameLine();
+                    ImGui.Text(p);
                 }
             }
 
-            if (hasMessageWithLineBreaks)
+            if (hasLineBreaks || hasLongMessages)
             {
-                ImGui.Text(entry.Message);
+                ImGui.TextWrapped(entry.Message);
             }
         }
-        ImGui.EndTooltip();
+        CustomComponents.EndTooltip();
 
-        if (owner == null)
-            return;
-
-        if (ImGui.IsMouseClicked(ImGuiMouseButton.Left) && entry.SourceIdPath.Count > 0)
+        if (isMouseClicked)
         {
-            owner.GraphCanvas.OpenAndFocusInstance(entry.SourceIdPath.ToList());
-            if (!string.IsNullOrEmpty(entry.Message))
-                EditorUi.Instance.SetClipboardText(entry.Message);
+            if (hoveredSourceInstance != null)
+                focusedView!.GraphCanvas.OpenAndFocusInstance(entry.SourceIdPath.ToList());
         }
     }
 
@@ -266,15 +287,19 @@ internal sealed class ConsoleLogWindow : Window, ILogWriter
         return new List<Window>();
     }
 
-    private static bool IsLineHovered()
+    private static bool IsLineHovered(out ImRect areaOnScreen)
     {
         if (!ImGui.IsWindowHovered())
+        {
+            areaOnScreen = default;
             return false;
+        }
 
         var min = new Vector2(ImGui.GetWindowPos().X, ImGui.GetItemRectMin().Y);
         var size = new Vector2(ImGui.GetWindowWidth() - 10, ImGui.GetItemRectSize().Y + LinePadding - 2);
-        var lineRect = new ImRect(min, min + size);
-        return lineRect.Contains(ImGui.GetMousePos());
+        areaOnScreen = new ImRect(min, min + size);
+
+        return areaOnScreen.Contains(ImGui.GetMousePos());
     }
 
     private static Dictionary<ILogEntry.EntryLevel, Color> _colorForLogLevel
@@ -282,9 +307,9 @@ internal sealed class ConsoleLogWindow : Window, ILogWriter
 
     private static Dictionary<ILogEntry.EntryLevel, Color> UpdateLogLevelColors()
     {
-        return new()
+        return new Dictionary<ILogEntry.EntryLevel, Color>
                    {
-                       { ILogEntry.EntryLevel.Debug, UiColors.Text },
+                       { ILogEntry.EntryLevel.Debug, UiColors.TextMuted },
                        { ILogEntry.EntryLevel.Info, UiColors.Text },
                        { ILogEntry.EntryLevel.Warning, UiColors.StatusWarning },
                        { ILogEntry.EntryLevel.Error, UiColors.StatusError },
@@ -318,4 +343,5 @@ internal sealed class ConsoleLogWindow : Window, ILogWriter
     private string _filterString = "";
     private bool _isAtBottom = true;
     private readonly DateTime _startTime = DateTime.Now;
+    private static double _lastCopyTime = double.NegativeInfinity;
 }
