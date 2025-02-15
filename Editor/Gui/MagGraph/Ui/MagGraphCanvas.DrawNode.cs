@@ -822,7 +822,7 @@ internal sealed partial class MagGraphCanvas
                 var statusLevel = statusProvider.GetStatusLevel();
                 if (statusLevel != IStatusProvider.StatusLevel.Success && statusLevel != IStatusProvider.StatusLevel.Undefined)
                 {
-                    ImGui.SetCursorScreenPos(pMinVisible - new Vector2(10, 12) * T3Ui.UiScaleFactor);
+                    ImGui.SetCursorScreenPos(pMinVisible + new Vector2(8, -7) * T3Ui.UiScaleFactor);
                     ImGui.InvisibleButton("#warning", new Vector2(15, 15));
                     var color = statusLevel switch
                                     {
