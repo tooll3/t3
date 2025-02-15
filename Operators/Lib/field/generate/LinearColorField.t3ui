@@ -1,0 +1,30 @@
+{
+  "Id": "e589af25-4c03-4fcd-8ec3-0af77969f99c"/*LinearColorField*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "bbfcfd1c-7969-410a-aaf5-e0edfbeb0ac8"/*Center*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "d849ad46-d653-4f63-b149-53efc9978749"/*Size*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "9ed929e6-29a9-4bc4-8027-b0d94019508e"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

@@ -304,7 +304,19 @@ public class ShaderGraphNode
                                                             },
                                                             context => { vec3Slot.GetValue(context); }
                                                            ),
+                                Slot<Vector4> vec4Slot
+                                    => new ShaderParamInput(slot,
+                                                            field.Name,
+                                                            "float4",
+                                                            (floatValues, codeParams)
+                                                                =>
+                                                            {
+                                                                AddVec4Parameter(floatValues, codeParams, $"{nodePrefix}{field.Name}", vec4Slot.Value);
+                                                            },
+                                                            context => { vec4Slot.GetValue(context); }
+                                                           ),
 
+                                
                                 Slot<Matrix4x4> matrixSlot
                                     => new ShaderParamInput(slot,
                                                             field.Name,
@@ -358,6 +370,16 @@ public class ShaderGraphNode
             codeParams.Add(new ShaderCodeParameter("float3", name));
         }
 
+        private static void AddVec4Parameter(List<float> floatValues, List<ShaderCodeParameter> codeParams, string name, Vector4 value)
+        {
+            PadFloatParametersToVectorComponentCount(floatValues, codeParams, 3);
+            floatValues.Add(value.X);
+            floatValues.Add(value.Y);
+            floatValues.Add(value.Z);
+            floatValues.Add(value.W);
+            codeParams.Add(new ShaderCodeParameter("float4", name));
+        }
+        
         internal static void AddMatrixParameter(List<float> floatValues, List<ShaderCodeParameter> codeParams, string name, Matrix4x4 matrix)
         {
             PadFloatParametersToVectorComponentCount(floatValues, codeParams, 4);

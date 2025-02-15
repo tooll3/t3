@@ -16,14 +16,12 @@ namespace Lib.field.render;
  * 
  * ## Field is dirty:
  * Update the invalidated part of connected FieldGraph-instances and their GraphNodes. Each GraphNode
- * will fetch is updated float parameters. It will try to detected changes in the the graph setup by comparing
- * if the connected graph nodes have change.
+ * will fetch is updated float parameters. It will try to detected changes in the graph setup by comparing
+ * if the connected graph nodes have changed.
  *
  * They will recursively return an invalidate settings for CodeNeedsUpdate and ParamsNeedUpdate. 
  *
  * If CodeNeedsUpdate is true, the shader code will be updated.
- * 
- * 
  */
 [Guid("73c028d1-3de2-4269-b503-97f62bbce320")]
 internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttributes>, IStatusProvider
@@ -44,58 +42,60 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
 
     private bool _needsInvalidation = true;
 
-    private int Invalidate(ISlot slot)
-    {
-        var slotFlag = slot.DirtyFlag;
-        if (slot.TryGetFirstConnection(out var firstConnection))
-        {
-            // slot is an output of an composition op
-            slotFlag.Target = Invalidate(firstConnection);
-        }
-        else
-        {
-            Instance parent = slot.Parent;
-
-            foreach (var input in parent.Inputs)
-            {
-                var inputFlag = input.DirtyFlag;
-                if (input.TryGetFirstConnection(out var inputConnection))
-                {
-                    if (input.IsMultiInput)
-                    {
-                        var multiInput = (IMultiInputSlot)input;
-                        int dirtySum = 0;
-                        foreach (var entry in multiInput.GetCollectedInputs())
-                        {
-                            dirtySum += Invalidate(entry);
-                        }
-
-                        inputFlag.Target = dirtySum;
-                    }
-                    else
-                    {
-                        inputFlag.Target = Invalidate(inputConnection);
-                    }
-                }
-                else
-                {
-                    inputFlag.Invalidate();
-                }
-            }
-
-            slotFlag.Invalidate();
-        }
-
-        return slotFlag.Target;
-    }
+    // private int Invalidate(ISlot slot)
+    // {
+    //     var slotFlag = slot.DirtyFlag;
+    //     if (slot.TryGetFirstConnection(out var firstConnection))
+    //     {
+    //         // slot is an output of an composition op
+    //         slotFlag.Target = Invalidate(firstConnection);
+    //     }
+    //     else
+    //     {
+    //         Instance parent = slot.Parent;
+    //
+    //         foreach (var input in parent.Inputs)
+    //         {
+    //             var inputFlag = input.DirtyFlag;
+    //             if (input.TryGetFirstConnection(out var inputConnection))
+    //             {
+    //                 if (input.IsMultiInput)
+    //                 {
+    //                     var multiInput = (IMultiInputSlot)input;
+    //                     int dirtySum = 0;
+    //                     foreach (var entry in multiInput.GetCollectedInputs())
+    //                     {
+    //                         dirtySum += Invalidate(entry);
+    //                     }
+    //
+    //                     inputFlag.Target = dirtySum;
+    //                 }
+    //                 else
+    //                 {
+    //                     inputFlag.Target = Invalidate(inputConnection);
+    //                 }
+    //             }
+    //             else
+    //             {
+    //                 inputFlag.Invalidate();
+    //             }
+    //         }
+    //
+    //         slotFlag.Invalidate();
+    //     }
+    //
+    //     return slotFlag.Target;
+    // }
     
     /// <summary>
     /// This is only updated if subgraph has been changed.
     /// </summary>
     private void Update(EvaluationContext context)
     {
+        var hasTemplateChanged = TemplateCode.DirtyFlag.IsDirty;
+        if(hasTemplateChanged)
+            Log.Debug("templateChanged", this);
         
-        //Log.Debug("_GetShaderAttributes.Update", this);
         var templateCode = TemplateCode.GetValue(context);
         if (string.IsNullOrEmpty(templateCode))
         {
@@ -103,14 +103,25 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
             return;
         }
 
-        //Invalidate(Field);
         if (_needsInvalidation)
         {
             _needsInvalidation = false;
         }
+
+        _needsInvalidation = hasTemplateChanged;
         
         // Recursively update complete shader graph and collect changes
-        _graphNode = Field.GetValue(context); 
+        
+        
+        _graphNode = Field.GetValue(context);
+        var colorField = ColorField.GetValue(context);
+        
+        if (_graphNode == null)
+        {
+            _graphNode = colorField;
+            if(_graphNode != null)
+                _lastErrorMessage = "Using color field";
+        }
         
         if (_graphNode == null)
         {
@@ -118,10 +129,9 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
             _needsInvalidation = true;
             return;
         }
-
         
         var changes = _graphNode.CollectedChanges;
-        if (changes == ShaderGraphNode.ChangedFlags.None)
+        if (changes == ShaderGraphNode.ChangedFlags.None && !hasTemplateChanged)
             return;
 
         Log.Debug(" Update parameter buffer...");
@@ -285,9 +295,13 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
     [Input(Guid = "FFC1C70E-B717-4337-916D-C3A13343E9CC")]
     public readonly InputSlot<ShaderGraphNode> Field = new();
     
+    [Input(Guid = "F1E138AC-F226-43AD-BCAF-E48350FFE4B4")]
+    public readonly InputSlot<Color2dField> ColorField = new();
+    
     [Input(Guid = "BCF6DE27-1FFD-422C-9F5B-910D89CAD1A4")]
     public readonly InputSlot<string> TemplateCode = new();
 
+    
     public static string ToHlslTemplateTag(string hook)
     {
         return $"/*{{{hook}}}*/";

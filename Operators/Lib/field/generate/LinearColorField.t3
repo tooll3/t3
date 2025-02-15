@@ -1,0 +1,22 @@
+{
+  "Id": "e589af25-4c03-4fcd-8ec3-0af77969f99c"/*LinearColorField*/,
+  "Inputs": [
+    {
+      "Id": "bbfcfd1c-7969-410a-aaf5-e0edfbeb0ac8"/*Center*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "d849ad46-d653-4f63-b149-53efc9978749"/*Size*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 0.25
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
