@@ -90,7 +90,6 @@ internal sealed class OutputWindow : Window
         {
             // Very ugly hack to prevent scaling the output above window size
             var keepScale = T3Ui.UiScaleFactor;
-            T3Ui.UiScaleFactor = 1;
                 
             // Draw output
             _imageCanvas.SetAsCurrent();
@@ -99,7 +98,6 @@ internal sealed class OutputWindow : Window
             ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
 
             var okay =Pinning.TryGetPinnedOrSelectedInstance(out var drawnInstance,  out var graphCanvas);
-
             
             if (graphCanvas != null)
             {
@@ -112,6 +110,9 @@ internal sealed class OutputWindow : Window
                                        ? T3Ui.EditingFlags.PreventMouseInteractions
                                        : T3Ui.EditingFlags.None;
 
+                if((editingFlags&T3Ui.EditingFlags.PreventMouseInteractions) !=0)
+                    T3Ui.UiScaleFactor = 1;
+                
                 _imageCanvas.Update(editingFlags);
 
                 T3Ui.UiScaleFactor = keepScale;

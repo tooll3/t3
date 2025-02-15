@@ -331,8 +331,8 @@ internal abstract class ScalableCanvas : IScalableCanvas
     public CanvasScope GetScopeForCanvasArea(ImRect areaOnCanvas, bool flipY = false)
     {
         UpdateWindowRect();
-        var heightOnCanvas = areaOnCanvas.GetHeight();
-        var widthOnCanvas = areaOnCanvas.GetWidth();
+        var heightOnCanvas = areaOnCanvas.GetHeight() * T3Ui.UiScaleFactor;
+        var widthOnCanvas = areaOnCanvas.GetWidth() * T3Ui.UiScaleFactor;
         var aspectOnCanvas = widthOnCanvas / heightOnCanvas;
 
         Vector2 scrollTarget;
