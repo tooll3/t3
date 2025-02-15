@@ -72,7 +72,7 @@ public sealed class UserSettings : Settings<UserSettings.ConfigData>
         public bool ResetTimeAfterPlayback;
         public float SnapStrength = 5;
         public ValueEditMethods ValueEditMethod;
-        public float ScrollSmoothing = 0.1f;
+        public float ScrollSmoothing = 0.075f;
         public float MaxCurveRadius = 350;
 
         public float ClickThreshold = 5; // Increase for high-res display and pen tablets
