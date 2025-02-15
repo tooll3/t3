@@ -201,8 +201,29 @@ internal sealed class ConsoleLogWindow : Window, ILogWriter
         {
             ImGui.GetWindowDrawList().AddRectFilled(lineArea.Min, lineArea.Max, Color.Mix(color, UiColors.BackgroundFull, 0.95f).Fade(0.3f));
         }
+        
+        // Try to get instance path...
+        var hasInstancePath = entry.SourceIdPath.Count > 0;
+        var focusedView = ProjectView.Focused;
 
+        var childIdPath = entry.SourceIdPath.ToList();
+        var hoveredSourceInstance = hasInstancePath && focusedView != null
+                                        ? focusedView.Structure.GetInstanceFromIdPath(childIdPath)
+                                        : null;
+        
+        var readableInstancePath = hoveredSourceInstance != null ? focusedView!.Structure.GetReadableInstancePath(childIdPath) : [];
+        
+        // Instance
+        if (readableInstancePath.Count > 0)
+        {
+            ImGui.TextColored(UiColors.TextMuted.Fade(0.4f),  readableInstancePath[0]);
+            ImGui.SameLine(0, 10);
+        }
+
+        // Actual message
         ImGui.TextColored(color.Fade(opacity), firstLine);
+        
+        // Multiple Line indicator
         if (hasLineBreaks)
         {
             ImGui.SameLine();
@@ -213,20 +234,12 @@ internal sealed class ConsoleLogWindow : Window, ILogWriter
                 if (c == '\n')
                     lineCount++;
             }
-            ImGui.TextColored(UiColors.TextMuted.Fade(0.6f),  $"  {lineCount} lines...");
+            ImGui.TextColored(UiColors.TextMuted.Fade(0.4f),  $"  {lineCount} lines...");
         }
-
+        
         if (!lineHovered)
             return;
-
-        var focusedView = ProjectView.Focused;
-
-        // Try to get instance path...
-        var hasInstancePath = entry.SourceIdPath.Count > 0;
-        var childIdPath = entry.SourceIdPath.ToList();
-        var hoveredSourceInstance = hasInstancePath && focusedView != null
-                                        ? focusedView.Structure.GetInstanceFromIdPath(childIdPath)
-                                        : null;
+        
 
         var isMouseClicked = ImGui.IsMouseClicked(ImGuiMouseButton.Left);
         if (isMouseClicked)
@@ -249,9 +262,10 @@ internal sealed class ConsoleLogWindow : Window, ILogWriter
             // Show instance details
             if (hoveredSourceInstance != null)
             {
-                ImGui.TextColored(UiColors.TextMuted, "from ");
+                ImGui.TextColored(UiColors.TextMuted, "select ");
 
-                foreach (var p in focusedView!.Structure.GetReadableInstancePath(childIdPath))
+
+                foreach (var p in readableInstancePath)
                 {
                     ImGui.SameLine();
                     ImGui.TextColored(UiColors.TextMuted, " / ");

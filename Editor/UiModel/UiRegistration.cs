@@ -103,8 +103,8 @@ internal static class UiRegistration
         RegisterIOType(typeof(Quaternion), () => new Vector4InputUi(), () => new VectorOutputUi<Quaternion>());
 
         RegisterIOType(typeof(List<float>), () => new FloatListInputUi(), () => new FloatListOutputUi());
-        RegisterIOType(typeof(string), () => new StringInputUi());
-        RegisterIOType(typeof(List<string>), () => new StringListInputUi(), () => new StringListOutputUi());;
+        RegisterIOType(typeof(string), () => new StringInputUi(), () => new StringOutputUi());
+        RegisterIOType(typeof(List<string>), () => new StringListInputUi(), () => new StringListOutputUi());
 
 
         // t3 core types
