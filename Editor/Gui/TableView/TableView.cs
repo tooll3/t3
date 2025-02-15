@@ -24,10 +24,11 @@ public static class TableList
     {
         ImGui.BeginChild("child", size);
         ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(2, 2));
-        const float valueColumnWidth = 50;
-        const float lineNumberWidth = 40;
-        const float headerHeight = 30;
+        var valueColumnWidth = 50 * T3Ui.UiScaleFactor;
+        var lineNumberWidth = 40 * T3Ui.UiScaleFactor;
+        var headerHeight = 30 * T3Ui.UiScaleFactor;
         var listModified = false;
+        
         ImGui.PushFont(Fonts.FontSmall);
         {
             FieldInfo[] members = list.Type.GetFields();
@@ -46,7 +47,9 @@ public static class TableList
                     bool isFirst = true;
                     foreach (var c in components)
                     {
-                        ImGui.Selectable((isFirst ? " " + fi.Name : "_") + "\n" + c, false, ImGuiSelectableFlags.None,
+                        ImGui.Selectable((isFirst ? " " + fi.Name : "_") + "\n" + c, 
+                                         false, 
+                                         ImGuiSelectableFlags.None,
                                          new Vector2(valueColumnWidth, headerHeight));
                         if (ImGui.IsItemHovered())
                         {
@@ -59,7 +62,10 @@ public static class TableList
                 }
                 else
                 {
-                    ImGui.Selectable(" " + fi.Name, false, ImGuiSelectableFlags.None, new Vector2(valueColumnWidth, headerHeight));
+                    ImGui.Selectable(" " + fi.Name, 
+                                     false, ImGuiSelectableFlags.None, 
+                                     new Vector2(valueColumnWidth, 
+                                                 headerHeight));
                     if (ImGui.IsItemHovered())
                     {
                         ImGui.SetTooltip(fieldIndex + ": " +fi.Name);
@@ -70,7 +76,7 @@ public static class TableList
             }
 
             ImGui.NewLine();
-
+            
             // Values
             for (var objectIndex = 0; objectIndex < Math.Min(list.NumElements, 9999); objectIndex++)
             {
