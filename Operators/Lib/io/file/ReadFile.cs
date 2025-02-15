@@ -46,6 +46,7 @@ internal sealed class ReadFile : Instance<ReadFile>, IDescriptiveFilename
     {
         Result.Value = _fileContents.GetValue(context);
         Result.DirtyFlag.Clear();
+        TriggerUpdate.GetValue(context);
     }
         
     [Input(Guid = "24b7e7e1-fe0b-46be-807e-0afacd4800f9")]
