@@ -205,9 +205,21 @@ internal sealed class UiElements
 
     public static void DrawProjectList(GraphWindow window)
     {
+        var projectItemSize = new Vector2(400, 65) * T3Ui.UiScaleFactor;
+        
         ImGui.Indent(30);
         FormInputs.AddVerticalSpace(20);
         FormInputs.AddSectionHeader("Select Project");
+        ImGui.SameLine();
+
+        var iconSize = new Vector2(Fonts.FontLarge.FontSize);
+        // set cursor to the right
+        ImGui.SetCursorPosX(projectItemSize.X);
+        if (CustomComponents.IconButton(Icon.Plus, iconSize))
+        {
+            T3Ui.NewProjectDialog.ShowNextFrame();
+        }
+        
         FormInputs.AddVerticalSpace(20);
 
         var dl = ImGui.GetWindowDrawList();
@@ -219,9 +231,8 @@ internal sealed class UiElements
 
             ImGui.PushID(package.DisplayName);
             var isOpened = OpenedProject.OpenedProjects.TryGetValue(package, out var openedProject);
-            var size = new Vector2(400, 65) * T3Ui.UiScaleFactor;
             var name = package.DisplayName;
-            var clicked = ImGui.InvisibleButton(name, size);
+            var clicked = ImGui.InvisibleButton(name, projectItemSize);
             var isHovered = ImGui.IsItemHovered();
             var backgroundColor = isHovered
                                       ? UiColors.ForegroundFull.Fade(0.1f)

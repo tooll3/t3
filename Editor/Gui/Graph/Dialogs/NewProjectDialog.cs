@@ -14,27 +14,22 @@ internal sealed class NewProjectDialog : ModalDialog
     protected override void OnShowNextFrame()
     {
         _shareResources = true;
-        _newName = string.Empty;
+        _newName = "projectName";
         _userName = UserSettings.Config.UserName;
-        _newNamespace = _userName;
+        _newNamespace = "experiments";
         _needsAutoFocus = true;
     }
         
     public void Draw()
     {
-        DialogSize = new Vector2(550, 300);
+        DialogSize = new Vector2(550, 320);
 
         if (BeginDialog("Create new project"))
         {
             // Name and namespace
             string namespaceWarningText = null;
             bool namespaceCorrect = true;
-            if (!_newNamespace.StartsWith(_userName))
-            {
-                namespaceCorrect = false;
-                namespaceWarningText = $"Namespace must be within the \"{_userName}\" namespace";
-            }
-            else if(!GraphUtils.IsNamespaceValid(_newNamespace, true, out _))
+            if(!GraphUtils.IsNamespaceValid(_newNamespace, true, out _))
             {
                 namespaceCorrect = false;
                 namespaceWarningText = "Namespace must be a valid and unique C# namespace";
@@ -46,18 +41,39 @@ internal sealed class NewProjectDialog : ModalDialog
             _needsAutoFocus = false;
                 
             var warning = string.Empty;
-            var nameCorrect = GraphUtils.IsIdentifierValid(_newName);
-            if (!nameCorrect)
-                warning = "Name must be a valid C# identifier.";   
-                
-            var isProjectNameUnique = !DoesProjectWithNameExists(_newName);
-            if(!isProjectNameUnique)
+            var nameCorrect = true;
+            if (!GraphUtils.IsIdentifierValid(_newName))
+            {
+                warning = "Name must be a valid C# identifier.";
+                nameCorrect = false;
+            }   
+            else if (_newName.Contains('.'))
+            {
+                warning = "Name must not contain dots.";
+                nameCorrect = false;
+            }
+            else if (string.IsNullOrWhiteSpace(_newName))
+            {
+                nameCorrect = false;
+            }
+            else if(DoesProjectWithNameExists(_newName))
+            {
+                // Todo - can we actually just allow this provided the project namespaces are different?
                 warning = "A project with this name already exists.";
+                nameCorrect = false;
+            }
                 
             //ImGui.SetKeyboardFocusHere();
+            
             FormInputs.AddStringInput("Name", ref _newName,
                                       tooltip: "Is used to identify your project. Must not contain spaces or special characters.",
                                       warning: warning);
+
+            var allValid = namespaceCorrect && nameCorrect;
+            var fullName = $"{_userName}.{_newNamespace}.{_newName}";
+            FormInputs.SetCursorToParameterEdit();                
+            ImGui.TextColored(allValid ? UiColors.TextMuted : UiColors.StatusError, fullName);
+            
                 
             FormInputs.AddCheckBox("Share Resources", ref _shareResources, "Enabling this allows anyone with this package to reference shaders, " +
                                                                            "images, and other resources that belong to this package in other projects.\n" +
@@ -68,19 +84,18 @@ internal sealed class NewProjectDialog : ModalDialog
                 ImGui.TextColored(UiColors.StatusWarning, "Warning: there is no way to change this without editing the project code at this time.");
             }
                 
-
-                
             if (CustomComponents.DisablableButton(label: "Create",
-                                                  isEnabled: namespaceCorrect && nameCorrect && isProjectNameUnique,
+                                                  isEnabled: allValid,
                                                   enableTriggerWithReturn: false))
             {
-                if (ProjectSetup.TryCreateProject(_newName, _newNamespace + '.' + _newName, _shareResources, out var project))
+                if (ProjectSetup.TryCreateProject(fullName, _shareResources, out var project))
                 {
                     T3Ui.Save(false); // todo : this is probably not needed
                     ImGui.CloseCurrentPopup();
 
                     //GraphWindow.TryOpenPackage(project, false);
                     Log.Warning("Not implemented yet.");
+                    BlockingWindow.Instance.ShowMessageBox($"Project \"{project.DisplayName}\"created successfully! It can be opened from the project list.");
                 }
                 else
                 {

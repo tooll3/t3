@@ -18,8 +18,9 @@ namespace T3.Editor.Compilation;
 /// </summary>
 internal static partial class ProjectSetup
 {
-    public static bool TryCreateProject(string name, string nameSpace, bool shareResources, [NotNullWhen(true)] out EditableSymbolProject? newProject)
+    public static bool TryCreateProject(string nameSpace, bool shareResources, [NotNullWhen(true)] out EditableSymbolProject? newProject)
     {
+        var name = nameSpace.Split('.').Last();
         var newCsProj = CsProjectFile.CreateNewProject(name, nameSpace, shareResources, UserSettings.Config.DefaultNewProjectDirectory);
 
         if (!newCsProj.TryRecompile(out var releaseInfo, true))
