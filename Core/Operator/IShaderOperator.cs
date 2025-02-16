@@ -1,10 +1,11 @@
 #nullable enable
 using System;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using T3.Core.Stats;
+using T3.Core.Utils;
 
 namespace T3.Core.Operator;
 
@@ -84,21 +85,24 @@ public interface IShaderCodeOperator<T> where T : AbstractShader
                                                                        OldBytecode: currentShader?.CompiledBytecode);
         
         var compiled = ShaderCompiler.TryCompileShaderFromSource(compilationArgs, true, true, out currentShader, out var errorMessage);
-
-        if (!compiled)
-        {
-            Log.Error($"Failed to compile shader '{debugName}'");
-        }
                 
         shaderSlot.Value = currentShader!;
         shaderSlot.DirtyFlag.Clear();
 
         if (!compiled)
         {
-            Log.Error($"Failed to update shader \"{debugName}\" in package \"{instance.Symbol.SymbolPackage.AssemblyInformation.Name}\":\n{errorMessage}");
+            var errors = StringUtils.ParseShaderCompilationError(errorMessage);
+            if (errors.Count > 0)
+            {
+                instance.LogErrorState(string.Join('\n',errors));
+            }
+            
+            // This error has been logged earlier...
+            //Log.Error($"Failed to update shader \"{debugName}\" in package \"{instance.Symbol.SymbolPackage.AssemblyInformation.Name}\":\n{errorMessage}");
         }
         else
         {
+            instance.ClearErrorState();
             currentShader!.Name = debugName;
         }
         

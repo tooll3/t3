@@ -1,3 +1,5 @@
+using T3.Core.Stats;
+
 namespace Lib.io.file;
 
 [Guid("5f71d2f8-98c8-4502-8f40-2ea4a1e18cca")]
@@ -32,11 +34,13 @@ internal sealed class ReadFile : Instance<ReadFile>, IDescriptiveFilename
             using var fileStream = stream;
             using var reader = new StreamReader(fileStream);
             newValue = reader.ReadToEnd();
+            this.ClearErrorState();
             return true;
         }
         catch (Exception e)
         {
             failureReason = $"Failed to read file {file.AbsolutePath}:" + e.Message;
+            this.LogErrorState( failureReason);
             newValue = null;
             return false;
         }

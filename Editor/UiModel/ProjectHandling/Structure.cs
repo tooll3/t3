@@ -350,4 +350,19 @@ internal sealed class Structure
 
         return true;
     }
+
+    public static bool TryGetInstanceFromPath(IReadOnlyList<Guid> entrySourceIdPath, out Instance? hoveredSourceInstance,
+                                              out List<string> readableInstancePath)
+    {
+        var hasInstancePath = entrySourceIdPath.Count > 0;
+        var focusedView = ProjectView.Focused;
+
+        var childIdPath = entrySourceIdPath.ToList();
+        hoveredSourceInstance = hasInstancePath && focusedView != null
+                                    ? focusedView.Structure.GetInstanceFromIdPath(childIdPath)
+                                    : null;
+        
+        readableInstancePath = hoveredSourceInstance != null ? focusedView!.Structure.GetReadableInstancePath(childIdPath) : [];
+        return hasInstancePath;
+    }
 }

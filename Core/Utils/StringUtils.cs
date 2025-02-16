@@ -1,8 +1,14 @@
+#nullable enable
 using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace T3.Core.Utils;
 
+[SuppressMessage("ReSharper", "MemberCanBeInternal")]
 public static class StringUtils
 {
     public static unsafe bool Equals(ReadOnlySpan<char> a, ReadOnlySpan<char> b, bool ignoreCase)
@@ -211,7 +217,7 @@ public static class StringUtils
         nextChar = default;
         return -1;
     }
-    
+
     public static int IndexOf(this ReadOnlySpan<char> span, char c, bool ignoreCase)
     {
         if (ignoreCase)
@@ -234,7 +240,7 @@ public static class StringUtils
 
         return -1;
     }
-    
+
     public static int LastIndexOf(this ReadOnlySpan<char> span, char c, bool ignoreCase)
     {
         if (ignoreCase)
@@ -257,7 +263,7 @@ public static class StringUtils
 
         return -1;
     }
-    
+
     public static int LastIndexOfNot(this ReadOnlySpan<char> span, char c, bool ignoreCase, out char precedingChar)
     {
         if (ignoreCase)
@@ -265,26 +271,27 @@ public static class StringUtils
             c = char.ToLowerInvariant(c);
             for (var i = span.Length - 1; i >= 0; i--)
             {
-                precedingChar = span[i];;
+                precedingChar = span[i];
+                ;
                 if (char.ToLowerInvariant(precedingChar) != c)
                     return i;
             }
-            
+
             precedingChar = default;
             return -1;
         }
-        
+
         for (var i = span.Length - 1; i >= 0; i--)
         {
             precedingChar = span[i];
             if (precedingChar != c)
                 return i;
         }
-        
+
         precedingChar = default;
         return -1;
     }
-    
+
     /// <summary>
     /// A naive implementation of a filtering algorithm that supports wildcards ('*').
     /// 
@@ -307,9 +314,9 @@ public static class StringUtils
         while (filter.Length > 0)
         {
             // the possible match has been exhausted but the filter has not
-            if(possibleMatch.Length == 0)
+            if (possibleMatch.Length == 0)
                 return false;
-            
+
             var nextFilterChar = filter[^1];
 
             if (nextFilterChar == '*')
@@ -338,11 +345,11 @@ public static class StringUtils
                 return false;
             }
         }
-        
+
         // we finished the filter - it's a match!
         return true;
     }
-    
+
     public static unsafe void ReplaceCharUnsafe(this string str, char toReplace, char replacement)
     {
         fixed (char* strPtr = str)
@@ -354,17 +361,17 @@ public static class StringUtils
             }
         }
     }
-    
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ToForwardSlashesUnsafe(this string str)
     {
         str.ReplaceCharUnsafe('\\', '/');
     }
-    
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static string ToForwardSlashes(this string str) => str.Replace('\\', '/');
 
-    public static string Truncate(this string input, int maxLength = 10)
+    public static string Truncate(this string? input, int maxLength = 10)
     {
         if (input == null)
             return "null";
@@ -375,5 +382,104 @@ public static class StringUtils
         }
 
         return input[..Math.Min(input.Length, maxLength)] + "...";
+    }
+
+    public static string HumanReadableDurationFromSeconds(double seconds)
+    {
+        return $"{(int)(seconds / 60 / 60):00}:{(seconds / 60) % 60:00}:{seconds % 60:00}";
+    }
+
+    public static string GetReadableRelativeTime(this DateTime? time)
+    {
+        if (time == null)
+            return "Unknown time";
+
+        var timeSpan = DateTime.Now - time;
+        return GetReadableRelativeTime(timeSpan);
+    }
+
+    public static string GetReadableRelativeTime(double time)
+    {
+        return GetReadableRelativeTime(TimeSpan.FromSeconds(time));
+    }
+
+    private static string GetReadableRelativeTime([DisallowNull] TimeSpan? timeSpan)
+    {
+        var seconds = timeSpan.Value.TotalSeconds;
+        if (seconds < 60)
+        {
+            return "seconds ago";
+        }
+
+        
+        var minutes = timeSpan.Value.TotalMinutes;
+        if (minutes < 120)
+        {
+            return $"{minutes:0} min ago";
+        }
+
+        var hours = timeSpan.Value.TotalHours;
+        if (hours < 30)
+        {
+            return $"{hours:0.0} h ago";
+        }
+
+        var days = timeSpan.Value.TotalDays;
+        return $"{days:0.0} days ago";
+    }
+
+    /// <summary>
+    /// Parse a string like...
+    ///
+    /// Failed to update shader "PixelShader_PixelShaderFromSource (5e6d5cb9-df8f-494d-b50e-31499b257f34)" in package "Types":
+    /// Failed to compile shader 'PixelShader_PixelShaderFromSource (5e6d5cb9-df8f-494d-b50e-31499b257f34)'.
+    /// Line 37,31:  error X3000: unrecognized identifier 'x'
+    /// </summary>
+    public static List<string> ParseShaderCompilationError(string log)
+    {
+        List<string> results = new();
+        ReadOnlySpan<char> logSpan = log;
+
+        ReadOnlySpan<char> separator = ": ";
+
+        while (!logSpan.IsEmpty)
+        {
+            var newlineIndex = logSpan.IndexOf('\n');
+            var line = newlineIndex >= 0 ? logSpan[..newlineIndex] : logSpan;
+
+            line = line.TrimStart();
+
+            if (line.StartsWith("Line "))
+            {
+                var commaIndex = line.IndexOf(',');
+                if (commaIndex > 5 && int.TryParse(line.Slice(5, commaIndex - 5), out var lineNumber))
+                {
+                    // Find the error message after ": "
+                    var firstColonIndex = line.IndexOf(": ");
+                    if (firstColonIndex >= 0)
+                    {
+                        var t = firstColonIndex + separator.Length;
+                        var secondColonIndex = line[t..].IndexOf(separator) + t;
+                        if (secondColonIndex >= 0 && secondColonIndex + 2 < line.Length)
+                        {
+                            var errorMessage = line.Slice(secondColonIndex + 2);
+
+                            // Skip the error code (first word)
+                            var spaceIndex = errorMessage.IndexOf(' ');
+                            if (spaceIndex >= 0 && spaceIndex + 1 < errorMessage.Length)
+                            {
+                                var errorString = new string(errorMessage.Slice(spaceIndex + 1)); // Minimal allocation
+                                results.Add($"Line {lineNumber}: {errorString}");
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (newlineIndex < 0) break;
+            logSpan = logSpan[(newlineIndex + 1)..]; // Move to next line
+        }
+
+        return results;
     }
 }

@@ -203,16 +203,9 @@ internal sealed class ConsoleLogWindow : Window, ILogWriter
         }
         
         // Try to get instance path...
-        var hasInstancePath = entry.SourceIdPath.Count > 0;
-        var focusedView = ProjectView.Focused;
+        var entrySourceIdPath = entry.SourceIdPath;
+        var hasInstancePath = Structure.TryGetInstanceFromPath(entrySourceIdPath, out var hoveredSourceInstance, out var readableInstancePath);
 
-        var childIdPath = entry.SourceIdPath.ToList();
-        var hoveredSourceInstance = hasInstancePath && focusedView != null
-                                        ? focusedView.Structure.GetInstanceFromIdPath(childIdPath)
-                                        : null;
-        
-        var readableInstancePath = hoveredSourceInstance != null ? focusedView!.Structure.GetReadableInstancePath(childIdPath) : [];
-        
         // Instance
         if (readableInstancePath.Count > 0)
         {
@@ -271,7 +264,7 @@ internal sealed class ConsoleLogWindow : Window, ILogWriter
                     ImGui.TextColored(UiColors.TextMuted, " / ");
 
                     ImGui.SameLine();
-                    ImGui.Text(p);
+                    ImGui.TextUnformatted(p);
                 }
             }
 
@@ -285,7 +278,7 @@ internal sealed class ConsoleLogWindow : Window, ILogWriter
         if (isMouseClicked)
         {
             if (hoveredSourceInstance != null)
-                focusedView!.GraphCanvas.OpenAndFocusInstance(entry.SourceIdPath.ToList());
+                ProjectView.Focused!.GraphCanvas.OpenAndFocusInstance(entrySourceIdPath.ToList());
         }
     }
 

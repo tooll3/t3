@@ -9,9 +9,9 @@ namespace T3.Editor.Gui.UiHelpers;
 /// <summary>
 /// Renders the <see cref="ConsoleLogWindow"/>
 /// </summary>
-public class StatusErrorLine : ILogWriter
+internal sealed class StatusErrorLine : ILogWriter
 {
-    public void Draw()
+    internal void Draw()
     {
         lock (_logEntries)
         {
@@ -21,23 +21,34 @@ public class StatusErrorLine : ILogWriter
                 return;
             }
 
-            var lastEntry = _logEntries[_logEntries.Count - 1];
+            var lastEntry = _logEntries[^1];
             var color = ConsoleLogWindow.GetColorForLogLevel(lastEntry.Level)
-                                        .Fade(MathUtils.RemapAndClamp((float)lastEntry.SecondsAgo, 0, 1.5f, 1, 0.4f));
+                                        .Fade(((float)lastEntry.SecondsAgo).RemapAndClamp(0, 1.5f, 1, 0.4f));
 
             ImGui.PushFont(Fonts.FontBold);
 
+            var firstLine = lastEntry.Message.AsSpan();
+            var newlineIndex = firstLine.IndexOf('\n');
+            
+            if (newlineIndex >= 0)
+                firstLine = firstLine[..newlineIndex];
+
+            const int maxLength = 100;
+            if (firstLine.Length > maxLength)
+                firstLine = firstLine[..maxLength];
+            
+            var width = ImGui.CalcTextSize(firstLine).X;
+            
             var logMessage = lastEntry.Message;
             if (lastEntry.Level == ILogEntry.EntryLevel.Error)
             {
                 logMessage = DX11ShaderCompiler.ExtractMeaningfulShaderErrorMessage(logMessage);
             }
-
-            var width = ImGui.CalcTextSize(logMessage);
+            
             var availableSpace = ImGui.GetWindowContentRegionMax().X;
-            ImGui.SetCursorPosX(availableSpace - width.X);
+            ImGui.SetCursorPosX(availableSpace - width);
 
-            ImGui.TextColored(color, logMessage);
+            ImGui.TextColored(color, firstLine);
             if (ImGui.IsItemClicked())
             {
                 _logEntries.Clear();
@@ -81,5 +92,5 @@ public class StatusErrorLine : ILogWriter
         }
     }
 
-    private readonly List<ILogEntry> _logEntries = new();
+    private readonly List<ILogEntry> _logEntries = [];
 }

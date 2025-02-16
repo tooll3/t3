@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using T3.Core.SystemUi;
 using T3.Core.UserData;
+using T3.Core.Utils;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
 
@@ -51,7 +52,7 @@ public static class StartUp
         Log.Debug("StartUpProgress lock file exists?");
 
         var timeOfLastBackup = AutoBackup.AutoBackup.GetTimeOfLastBackup();
-        var timeSpan = DrawUtils.GetReadableRelativeTime(timeOfLastBackup);
+        var timeSpan = StringUtils.GetReadableRelativeTime(timeOfLastBackup);
 
         const string caption = "Oh no! Start up problems...";
         string message = "It looks like last start up was incomplete.\n\n" +

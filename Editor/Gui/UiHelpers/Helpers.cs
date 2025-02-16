@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.Styling;
@@ -7,6 +8,7 @@ namespace T3.Editor.Gui.UiHelpers;
 /// <summary>
 /// A collection of helper and debug function for IMGUI development
 /// </summary>
+[SuppressMessage("ReSharper", "MemberCanBeInternal")]
 public static class DrawUtils
 {
     public static ImDrawListPtr OutlinedRect(ref ImDrawListPtr drawList, Vector2 position, Vector2 size, uint fill, uint outline, float cornerRadius = 4)
@@ -78,28 +80,6 @@ public static class DrawUtils
             ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
     }
     private static bool _keepNavEnableKeyboard;
-
-    public static string GetReadableRelativeTime(DateTime? timeOfLastBackup)
-    {
-        if (timeOfLastBackup == null)
-            return "Unknown time";
-
-        var timeSinceLastBack = DateTime.Now - timeOfLastBackup;
-        var minutes = timeSinceLastBack.Value.TotalMinutes;
-        if (minutes < 120)
-        {
-            return $"{minutes:0} minutes ago";
-        }
-
-        var hours = timeSinceLastBack.Value.TotalHours;
-        if (hours < 30)
-        {
-            return $"{hours:0.0} hours ago";
-        }
-
-        var days = timeSinceLastBack.Value.TotalDays;
-        return $"{days:0.0} days ago";
-    }
 
     public static Color RandomColorForHash(int channelHash)
     {

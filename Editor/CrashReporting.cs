@@ -7,6 +7,7 @@ using Sentry;
 using T3.Core.Animation;
 using T3.Core.Compilation;
 using T3.Core.SystemUi;
+using T3.Core.Utils;
 using T3.Editor.Gui.AutoBackup;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
@@ -54,7 +55,7 @@ internal static class CrashReporting
 
         // Keep once auto backup is up again
         var timeOfLastBackup = AutoBackup.GetTimeOfLastBackup();
-        var timeSpan = DrawUtils.GetReadableRelativeTime(timeOfLastBackup);
+        var timeSpan = StringUtils.GetReadableRelativeTime(timeOfLastBackup);
 
         var components = ProjectView.Focused;
         

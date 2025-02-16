@@ -114,20 +114,20 @@ internal sealed class RenderVideoWindow : BaseRenderWindow
             if (GetRealFrame() >= FrameCount || !success)
             {
                 var successful = success ? "successfully" : "unsuccessfully";
-                _lastHelpString = $"Sequence export finished {successful} in {HumanReadableDurationFromSeconds(durationSoFar)}";
+                _lastHelpString = $"Sequence export finished {successful} in {StringUtils.HumanReadableDurationFromSeconds(durationSoFar)}";
                 IsExportingVideo = false;
                 TryIncrementingFileName();
             }
             else if (ImGui.Button("Cancel"))
             {
-                _lastHelpString = $"Sequence export cancelled after {HumanReadableDurationFromSeconds(durationSoFar)}";
+                _lastHelpString = $"Sequence export cancelled after {StringUtils.HumanReadableDurationFromSeconds(durationSoFar)}";
                 IsExportingVideo = false;
             }
             else
             {
                 var estimatedTimeLeft = durationSoFar / Progress - durationSoFar;
                 _lastHelpString = $"Saved {_videoWriter.FilePath} frame {GetRealFrame()}/{FrameCount}  ";
-                _lastHelpString += $"{Progress * 100.0:0}%%  {HumanReadableDurationFromSeconds(estimatedTimeLeft)} left";
+                _lastHelpString += $"{Progress * 100.0:0}%%  {StringUtils.HumanReadableDurationFromSeconds(estimatedTimeLeft)} left";
             }
 
             if (!IsExportingVideo)

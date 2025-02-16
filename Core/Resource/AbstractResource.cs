@@ -7,6 +7,7 @@ using System.Threading;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Core.Stats;
 using T3.Core.Utils;
 
 namespace T3.Core.Resource;
@@ -189,7 +190,7 @@ public sealed class Resource<T> : IDisposable, IResource
 
     private void OnFileUpdate(object? sender, WatcherChangeTypes changeTypes)
     {
-        Log.Debug($"Resource file '{_fileResource!.AbsolutePath}' changed: {changeTypes}");
+        //Log.Debug($"Resource file '{_fileResource!.AbsolutePath}' changed: {changeTypes}");
         // change type-in value to the new path
         if (changeTypes.WasMoved())
         {
@@ -229,7 +230,7 @@ public sealed class Resource<T> : IDisposable, IResource
             }
             catch (Exception e)
             {
-                failureReason = e.ToString();
+                failureReason = e.Message;
                 success = false;
                 newValue = default;
             }
@@ -238,28 +239,42 @@ public sealed class Resource<T> : IDisposable, IResource
         {
             success = false;
 
-            #if !DEBUG
+            // #if !DEBUG
             failureReason = "File not found";
-            #else
-                failureReason = "File not found:\n" + Environment.StackTrace;
-            #endif
-
+            // #else
+            //     failureReason = "File not found:\n" + Environment.StackTrace;
+            // #endif
             newValue = default;
         }
 
-        if (!success)
-        {
-            var errorLog = $"Failed to generate {typeof(T)} from file {GetPathLog()}: {failureReason ?? "No reason given"}";
+        if (success) 
+            return newValue;
+        
+        // Log error state with readable warning
+        var absolute = _fileResource?.AbsolutePath !=null ?
+                           $"'{_fileResource?.AbsolutePath}'"
+                           :string.Empty;
+            
+        var reason = failureReason ?? "Failed";
+        var errorLog = $"{reason} '{_userPath}' {absolute} for {typeof(T).Name}";
 
-            if (_owner != null)
-                Log.Error(errorLog, _owner);
+        if (_owner != null)
+        {
+            if (_owner is Instance instance)
+            {
+                instance.LogErrorState(errorLog);    
+            }
             else
-                Log.Error(errorLog);
+            {
+                Log.Error(errorLog, _owner);
+            }
+        }
+        else
+        {
+            Log.Error(errorLog);
         }
 
         return newValue;
-
-        string GetPathLog() => $"'{_userPath}' ({_fileResource?.AbsolutePath ?? "unresolved"})'";
     }
     #endregion
 

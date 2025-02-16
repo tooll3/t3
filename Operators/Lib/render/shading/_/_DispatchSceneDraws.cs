@@ -3,7 +3,6 @@ using T3.Core.Rendering.Material;
 
 namespace Lib.render.shading._;
 
-[Guid("6e32756e-4267-47f1-bad0-56ee8f58b070")]
 /// <summary>
 /// Draws the nodes defined in the scene setup by dispatching a series of draw calls.
 /// To improve performance we:
@@ -18,6 +17,7 @@ namespace Lib.render.shading._;
 /// - Sorting draw order to draw batches of matching materials, meshes etc points.  
 /// 
 /// </summary>
+[Guid("6e32756e-4267-47f1-bad0-56ee8f58b070")]
 internal sealed class _DispatchSceneDraws : Instance<_DispatchSceneDraws>
 {
     [Output(Guid = "bda1583a-f5ea-4c3b-ae7d-0bac614d29ec")]

@@ -5,7 +5,7 @@ namespace T3.Editor.Gui.UiHelpers;
 
 /// <summary>
 /// Shows a tree of all defined symbols sorted by namespace.
-/// This is used by <see cref="SymbolLibrary"/> and <see cref="AppMenu"/>
+/// This is used by <see cref="SymbolLibrary"/> and <see cref="AppMenuBar"/>
 /// </summary>
 internal static class SymbolTreeMenu
 {

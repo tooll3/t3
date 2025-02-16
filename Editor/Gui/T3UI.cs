@@ -120,7 +120,7 @@ public static class T3Ui
 
         if (UserSettings.Config.ShowMainMenu || ImGui.GetMousePos().Y < 20)
         {
-            AppMenu.DrawAppMenuBar();
+            AppMenuBar.DrawAppMenuBar();
         }
             
         _searchDialog.Draw();

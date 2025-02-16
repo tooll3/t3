@@ -1,6 +1,7 @@
 using NAudio.Midi;
 using Operators.Utils;
 using T3.Core.Animation;
+using T3.Core.Stats;
 using T3.Core.Utils;
 
 namespace Lib.io.midi;
@@ -44,10 +45,17 @@ public sealed class MidiInput : Instance<MidiInput>, MidiConnectionManager.IMidi
             
         _trainedDeviceName = Device.GetValue(context);
 
-        _warningMessage = MidiConnectionManager.TryGetMidiIn(_trainedDeviceName, out _) 
-                              ? null 
-                              : $"Midi device '{_trainedDeviceName}' is not captured.\nYou can try Windows » Settings » Midi » Rescan Devices.";
-            
+        if (MidiConnectionManager.TryGetMidiIn(_trainedDeviceName, out _))
+        {
+            _warningMessage = null;
+            this.ClearErrorState();
+        }
+        else
+        {
+            _warningMessage = $"Midi device '{_trainedDeviceName}' is not captured.\nYou can try Windows » Settings » Midi » Rescan Devices.";
+            this.LogWarningState(_warningMessage);
+        }
+
         _trainedChannel = Channel.GetValue(context);
         _trainedControllerId = Control.GetValue(context);
         _trainedEventType = EventType.GetEnumValue<MidiEventTypes>(context);
@@ -132,6 +140,13 @@ public sealed class MidiInput : Instance<MidiInput>, MidiConnectionManager.IMidi
             _lastMatchingSignals.Clear();
         }
             
+        if (ResetToDefaultTrigger.GetValue(context))
+        {
+            ResetToDefaultTrigger.SetTypedInputValue(false);
+            _isDefaultValue = true;
+        }
+
+        
         if (_isDefaultValue && _trainedEventType != MidiEventTypes.MidiTime)
         {
             Result.Value = defaultOutputValue;
@@ -152,13 +167,7 @@ public sealed class MidiInput : Instance<MidiInput>, MidiConnectionManager.IMidi
             
 
         _dampedOutputValue = MathUtils.Lerp(currentValue, _dampedOutputValue, damping);
-
-        if (ResetToDefaultTrigger.GetValue(context))
-        {
-            ResetToDefaultTrigger.SetTypedInputValue(false);
-            _isDefaultValue = true;
-        }
-            
+        
         var reachTarget = MathF.Abs(_dampedOutputValue - currentValue) < 0.0001f;
         var needsUpdateNextFrame = !reachTarget || wasHit;
         Result.DirtyFlag.Trigger = needsUpdateNextFrame ? DirtyFlagTrigger.Animated : DirtyFlagTrigger.None;

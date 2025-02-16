@@ -22,7 +22,7 @@ namespace T3.Editor.App;
 /// <summary>
 /// Functions and properties related to rendering DX11 content into  RenderForm windows
 /// </summary>
-internal class AppWindow
+internal sealed class AppWindow
 {
     public IntPtr HwndHandle => Form.Handle;
     public Int2 Size => new(Width, Height);

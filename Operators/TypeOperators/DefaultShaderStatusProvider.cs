@@ -1,7 +1,6 @@
-#nullable enable
 namespace Types;
 
-public sealed class DefaultShaderStatusProvider : IStatusProvider
+internal sealed class DefaultShaderStatusProvider : IStatusProvider
 {
     public string? Warning { private get; set; }
     public IStatusProvider.StatusLevel GetStatusLevel()

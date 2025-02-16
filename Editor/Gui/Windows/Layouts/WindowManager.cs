@@ -1,3 +1,4 @@
+#nullable enable
 using ImGuiNET;
 using T3.Editor.Gui.Graph.Window;
 using T3.Editor.Gui.Interaction;
@@ -44,21 +45,21 @@ internal static partial class WindowManager
         if (ImGui.GetTime() > 0.2f || _hasBeenInitialized)
             return;
             
-        _windows = new List<Window>()
-                       {
-                           new ParameterWindow(),
-                           new OutputWindow(),
-                           new GraphWindow(),
-                           new VariationsWindow(),
-                           new ExplorationWindow(),
-                           new SymbolLibrary(),
-                           new RenderSequenceWindow(),
-                           new RenderVideoWindow(),
-                           new UtilitiesWindow(),
-                           Program.ConsoleLogWindow,
-                           new IoViewWindow(),
-                           new SettingsWindow(),
-                       };
+        _windows =
+            [
+                new ParameterWindow(),
+                new OutputWindow(),
+                new GraphWindow(),
+                new VariationsWindow(),
+                new ExplorationWindow(),
+                new SymbolLibrary(),
+                new RenderSequenceWindow(),
+                new RenderVideoWindow(),
+                new UtilitiesWindow(),
+                Program.ConsoleLogWindow,
+                new IoViewWindow(),
+                new SettingsWindow()
+            ];
 
 
         ReApplyLayout();
@@ -66,7 +67,7 @@ internal static partial class WindowManager
         _hasBeenInitialized = true;
     }
 
-    public static void ReApplyLayout()
+    private static void ReApplyLayout()
     {
         LayoutHandling.LoadAndApplyLayoutOrFocusMode(UserSettings.Config.WindowLayoutIndex);
     }
@@ -134,7 +135,7 @@ internal static partial class WindowManager
     }
 
     private static Vector2 _appWindowSize;
-    private static List<Window> _windows;
+    private static List<Window> _windows = [];
     private static bool _demoWindowVisible;
     private static bool _metricsWindowVisible;
     public static bool ShowSecondaryRenderWindow { get; private set; }

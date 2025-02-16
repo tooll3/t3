@@ -11,7 +11,7 @@ public interface ILogEntry
         Error = 8,
         All = Debug | Info | Warning | Error
     }
-
+    
     DateTime TimeStamp { get; }
     EntryLevel Level { get; }
     string Message { get; }

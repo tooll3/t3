@@ -3,24 +3,16 @@
 /// <summary>
 /// A singleton that allows to log messages that are forwarded to <see cref="ILogWriter"/>s.
 /// </summary>
-public class Log
+public static class Log
 {
-    public static void Dispose()
-    {
-        foreach (var w in _instance._logWriters)
-        {
-            w.Dispose();
-        }
-    }
-
     public static void AddWriter(ILogWriter writer)
     {
-        _instance._logWriters.Add(writer);
+        _logWriters.Add(writer);
     }
         
     public static void RemoveWriter(ILogWriter writer)
     {
-        _instance._logWriters.Remove(writer);
+        _logWriters.Remove(writer);
     }
 
     #region API for logging
@@ -55,7 +47,8 @@ public class Log
         DoLog(new LogEntry(ILogEntry.EntryLevel.Warning, message, sourceId));
     }
 
-        
+
+    
     /// <summary>
     /// A helper function to unite different method API 
     /// </summary>
@@ -63,24 +56,22 @@ public class Log
     {
         switch (args)
         {
-            case { Length: 1 } when args[0] is IGuidPathContainer instance:
-            {
+            case [IGuidPathContainer instance]:
                 DoLog(new LogEntry(level, message, instance.InstancePath));
                 break;
-            }
                 
-            case { Length: 1 } when args[0] is List<Guid> idPath:
+            case [List<Guid> idPath]:
                 DoLog(new LogEntry(level, message, idPath.ToArray()));
                 break;
-            case { Length: 1 } when args[0] is Guid[] idPathArray:
+            
+            case [Guid[] idPathArray]:
                 DoLog(new LogEntry(level, message, idPathArray));
                 break;
+            
             default:
-            {
                 var messageString = FormatMessageWithArguments(message, args);
                 DoLog(new LogEntry(level, messageString));
                 break;
-            }
         }
     } 
         
@@ -102,11 +93,8 @@ public class Log
         
     private static void DoLog(ILogEntry entry)
     {
-        _instance._logWriters.ForEach(writer => writer.ProcessEntry(entry));
+        _logWriters.ForEach(writer => writer.ProcessEntry(entry));
     }
 
-        
-    private static readonly Log _instance = new();
-    private readonly List<ILogWriter> _logWriters = new();
-    private Log() { }   // Prevent construction
+    private static readonly List<ILogWriter> _logWriters = [];
 }

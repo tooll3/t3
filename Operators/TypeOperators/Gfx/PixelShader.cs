@@ -1,3 +1,4 @@
+using T3.Core.Stats;
 using PixelShaderT3 = T3.Core.DataTypes.PixelShader;
 
 namespace Types.Gfx;
@@ -44,7 +45,18 @@ public sealed class PixelShader : Instance<PixelShader>, IDescriptiveFilename, I
         
     #region IStatusProvider implementation
     private readonly DefaultShaderStatusProvider _statusProviderImplementation = new ();
-    public void SetWarning(string message) => _statusProviderImplementation.Warning = message;
+    public void SetWarning(string message)
+    {
+        if (string.IsNullOrEmpty(message))
+        {
+            this.ClearErrorState();
+        }
+        else
+        {
+            this.LogErrorState(message);
+        }
+        _statusProviderImplementation.Warning = message;
+    }
 
     IStatusProvider.StatusLevel IStatusProvider.GetStatusLevel() => _statusProviderImplementation.GetStatusLevel();
     string IStatusProvider.GetStatusMessage() => _statusProviderImplementation.GetStatusMessage();

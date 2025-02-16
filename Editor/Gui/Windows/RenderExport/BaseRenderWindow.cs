@@ -317,11 +317,6 @@ internal abstract class BaseRenderWindow : Window
         warning = string.Empty;
         return false;
     }
-    
-    protected static string HumanReadableDurationFromSeconds(double seconds)
-    {
-        return $"{(int)(seconds / 60 / 60):00}:{(seconds / 60)%60:00}:{seconds%60:00}";
-    }
 
     protected const string PreferredInputFormatHint = "Ready to export to video.";
 

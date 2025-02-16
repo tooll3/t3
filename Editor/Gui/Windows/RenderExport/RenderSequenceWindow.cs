@@ -3,6 +3,7 @@ using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.DataTypes;
+using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
@@ -71,7 +72,7 @@ internal sealed class RenderSequenceWindow : BaseRenderWindow
             {
                 var estimatedTimeLeft = durationSoFar / Progress - durationSoFar;
                 _lastHelpString = $"Saved {ScreenshotWriter.LastFilename} frame {FrameIndex+1}/{FrameCount}  ";
-                _lastHelpString += $"{Progress * 100.0:0}%%  {HumanReadableDurationFromSeconds( estimatedTimeLeft)} left";
+                _lastHelpString += $"{Progress * 100.0:0}%%  {StringUtils.HumanReadableDurationFromSeconds( estimatedTimeLeft)} left";
             }
             
             if (!IsExportingImages)

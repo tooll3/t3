@@ -14,8 +14,14 @@ internal static class Icons
 {
     public static ImFontPtr IconFont { get; set; }
 
+    /** Draws icon vertically aligned to current font */
     public static void Draw(this Icon icon)
     {
+        var defaultFontSize = ImGui.GetFontSize(); 
+        var glyph = IconFont.FindGlyph((char)icon);
+        var iconHeight = glyph.Y0; // Not sure if this is correct
+        var dy = (int)((defaultFontSize - iconHeight) / 2) +2;
+        ImGui.SetCursorPosY( ImGui.GetCursorPosY() + dy);
         ImGui.PushFont(IconFont);
         ImGui.TextUnformatted(((char)(int)icon).ToString());
         ImGui.PopFont();

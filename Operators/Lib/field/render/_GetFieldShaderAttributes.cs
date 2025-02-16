@@ -1,6 +1,7 @@
 using Lib.render._dx11.api;
 using SharpDX;
 using SharpDX.Direct3D11;
+using T3.Core.Stats;
 using Utilities = T3.Core.Utils.Utilities;
 
 namespace Lib.field.render;
@@ -93,13 +94,14 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
     private void Update(EvaluationContext context)
     {
         var hasTemplateChanged = TemplateCode.DirtyFlag.IsDirty;
-        if(hasTemplateChanged)
-            Log.Debug("templateChanged", this);
+        // if(hasTemplateChanged)
+        //     Log.Debug("templateChanged", this);
         
         var templateCode = TemplateCode.GetValue(context);
         if (string.IsNullOrEmpty(templateCode))
         {
-            _lastErrorMessage = "Missing input template code";
+            this.LogErrorState("Missing input template code");
+            //_lastErrorMessage = "Missing input template code";
             return;
         }
 
@@ -119,8 +121,11 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
         if (_graphNode == null)
         {
             _graphNode = colorField;
-            if(_graphNode != null)
-                _lastErrorMessage = "Using color field";
+            if (_graphNode != null)
+            {
+                //this.LogErrorState("Using color field");
+                //_lastErrorMessage = "Using color field";
+            }
         }
         
         if (_graphNode == null)
@@ -134,7 +139,7 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
         if (changes == ShaderGraphNode.ChangedFlags.None && !hasTemplateChanged)
             return;
 
-        Log.Debug(" Update parameter buffer...");
+        //Log.Debug(" Update parameter buffer...");
         AssembleParams();
         var floatParams = AllFloatValues;
         if (floatParams.Count > 0)
@@ -144,9 +149,9 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
             //return;
         }
         
-        if ((changes & (ShaderGraphNode.ChangedFlags.Code|ShaderGraphNode.ChangedFlags.Structural)) != 0)
+        if (hasTemplateChanged || (changes & (ShaderGraphNode.ChangedFlags.Code|ShaderGraphNode.ChangedFlags.Structural)) != 0)
         {
-            Log.Debug(" Regenerate shader code");
+            //Log.Debug(" Regenerate shader code", this);
             ShaderCode.Value = GenerateShaderCode(templateCode);
         }
 
