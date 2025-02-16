@@ -99,10 +99,10 @@ internal static class AppMenuBar
                             
                     foreach (var x in OperatorDiagnostics.StatusUpdates.Values.OrderByDescending(x => x.Time))
                     {
-                        if (Structure.TryGetInstanceFromPath(x.IdPath, out var instance, out var readableInstancePath))
+                        if (Structure.TryGetInstanceFromPath(x.IdPath, out _, out var readableInstancePath))
                         {
                             var timeSince = ImGui.GetTime() - x.Time;
-                            var fadeLine = MathUtils.RemapAndClamp((float)timeSince, 10, 100, 1, 0.4f);
+                            var fadeLine = ((float)timeSince).RemapAndClamp(10, 100, 1, 0.4f);
                                     
                             ImGui.PushFont(Fonts.FontSmall);
                             ImGui.PushStyleVar(ImGuiStyleVar.Alpha, fadeLine);
@@ -250,7 +250,7 @@ internal static class AppMenuBar
                     {
                         if (GraphWindow.GraphWindowInstances.Count > 0)
                         {
-                            var choice = BlockingWindow.Instance.ShowMessageBox("Would you like to create a new window?", "Opening " + name, "Yes", "No");
+                            BlockingWindow.Instance.ShowMessageBox("Would you like to create a new window?", "Opening " + name, "Yes", "No");
                         }
 
                         Log.Error("Not implemented yet");
@@ -374,25 +374,6 @@ internal static class AppMenuBar
             WindowManager.DrawWindowMenuContent();
             ImGui.EndMenu();
         }
-
-        // #if DEBUG
-        //
-        // if (ImGui.BeginMenu("Debug"))
-        // {
-        //     if (ImGui.MenuItem("Show Popup"))
-        //     {
-        //         const string bodyText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sagittis quis ligula sit amet ornare. " +
-        //                                 "Donec auctor, nisl vel ultricies tincidunt, nisl nisl aliquam nisl, nec pulvinar nisl nisl vitae nisl. " +
-        //                                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sagittis quis ligula sit amet ornare. ";
-        //             
-        //         var result = BlockingWindow.Instance.ShowMessageBox(bodyText, "Debug Popup", "Ok", "Maybe", "Idk", "Possibly", "Affirmative", "Negatory", "NO!");
-        //         Log.Debug($"Result: \"{result}\"");
-        //     }
-        //     ImGui.EndMenu();
-        //     
-        // }
-        //
-        // #endif
     }
 
     public static float AppBarSpacingX = 20;

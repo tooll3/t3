@@ -100,4 +100,3 @@ float4 psMain(vsOutput input) : SV_TARGET
 {
     return GetColor(input.texCoord);
 }
-asjfkadjhf

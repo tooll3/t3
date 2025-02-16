@@ -6,11 +6,11 @@ using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.OutputUi;
 
-internal sealed class BooleanOutputUi : OutputUi<bool>
+internal sealed class BoolOutputUi : OutputUi<bool>
 {
     public override IOutputUi Clone()
     {
-        return new BooleanOutputUi
+        return new BoolOutputUi
                    {
                        OutputDefinition = OutputDefinition,
                        PosOnCanvas = PosOnCanvas,
@@ -20,7 +20,7 @@ internal sealed class BooleanOutputUi : OutputUi<bool>
         
     protected override void DrawTypedValue(ISlot slot, string viewId)
     {
-        if (slot is not Slot<float> typedSlot)
+        if (slot is not Slot<bool> typedSlot)
             return;
      
         if (!_viewSettings.TryGetValue(viewId, out var settings))
@@ -37,9 +37,9 @@ internal sealed class BooleanOutputUi : OutputUi<bool>
         if (slot != settings.CurrentSlot)
         {
             settings.CurrentSlot = slot;
-            settings.CurveCanvas.Reset(value);
+            settings.CurveCanvas.Reset(value?1:0);
         }
-        settings.CurveCanvas.Draw(value);
+        settings.CurveCanvas.Draw(value?1:0);
     }
 
     private sealed class ViewSettings
