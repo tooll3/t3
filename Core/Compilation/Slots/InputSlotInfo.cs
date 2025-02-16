@@ -6,6 +6,9 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Core.Compilation;
 
+/// <summary>
+/// Used to organize type information about input slots in <see cref="AssemblyInformation"/>
+/// </summary>
 public readonly record struct InputSlotInfo
 {
     public InputSlotInfo(string Name,

@@ -5,6 +5,11 @@ using System.Linq.Expressions;
 
 namespace T3.Core.Compilation;
 
+/// <summary>
+/// Just a helper class to create instances of T based on a type.
+/// Provides "constructors" (Func&lt;T&gt;) for types that are not known at runtime that are considerably faster than Activator.CreateInstance.
+/// </summary>
+/// <typeparam name="T">The type to create instances of</typeparam>
 public sealed class GenericFactory<T>
 {
     private readonly Type _defaultType;

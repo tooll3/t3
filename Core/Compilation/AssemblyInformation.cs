@@ -16,6 +16,11 @@ using T3.Core.Resource;
 
 namespace T3.Core.Compilation;
 
+/// <summary>
+/// This class is used as the primary entry point for loading assemblies and extracting information about the types within them.
+/// This is where we find all of the operators and their slots, as well as any other type implementations that are relevant to tooll.
+/// This is also where C# dependencies need to be resolved, which is why each instance of this class has a reference to a <see cref="T3AssemblyLoadContext"/>.
+/// </summary>
 public sealed class AssemblyInformation
 {
     internal AssemblyInformation(AssemblyNameAndPath assemblyInfo)
@@ -44,7 +49,7 @@ public sealed class AssemblyInformation
     internal bool ShouldShareResources;
     public readonly bool IsEditorOnly;
 
-    private T3AssemblyLoadContext? _loadContextUnsafe;
+    private T3AssemblyLoadContext? _loadContextUnsafe; // named as such because it should not usually be referenced directly
 
     private Assembly? _assemblyUnsafe;
 
@@ -75,6 +80,10 @@ public sealed class AssemblyInformation
         return _loadContextUnsafe;
     }
 
+    /// <summary>
+    /// The entry point for loading the assembly and extracting information about the types within it - particularly the operators.
+    /// However, loading an assembly's types in this way will also trigger the <see cref="T3AssemblyLoadContext"/> so that its dependencies are resolved.
+    /// </summary>
     internal bool TryLoadTypes()
     {
         lock (_assemblyLock)
@@ -111,6 +120,13 @@ public sealed class AssemblyInformation
         }
     }
 
+    /// <summary>
+    /// The routine that calls relevant methods to extract operator information from the types in the assembly and caches them.
+    /// </summary>
+    /// <param name="types"></param>
+    /// <param name="assembly"></param>
+    /// <param name="shouldShareResources"></param>
+    /// <param name="typeDict"></param>
     private void LoadTypes(Type[] types, Assembly assembly, out bool shouldShareResources, out Dictionary<string, Type> typeDict)
     {
         var typesByName = new Dictionary<string, Type>();
@@ -150,10 +166,10 @@ public sealed class AssemblyInformation
                                                   {
                                                       SetUpOperatorType(type);
                                                   }
-                                                    catch (Exception e)
-                                                    {
-                                                        Log.Error($"Failed to set up operator type {type.FullName}\n{e.Message}");
-                                                    }
+                                                  catch (Exception e)
+                                                  {
+                                                      Log.Error($"Failed to set up operator type {type.FullName}\n{e.Message}");
+                                                  }
                                               }
                                           });
 
@@ -193,6 +209,9 @@ public sealed class AssemblyInformation
         typeDict = typesByName;
     }
 
+    /// <summary>
+    /// Actually extracts operator information from the type - this is the meat and beans of how we get the operator's slots, implemented interfaces, etc
+    /// </summary>
     private void SetUpOperatorType(Type type)
     {
         var gotGuid = TryGetGuidOfType(type, out var id);
@@ -316,6 +335,10 @@ public sealed class AssemblyInformation
         }
     }
 
+    /// <summary>
+    /// Tries to get the GuidAttribute from the given type. If the type has no GuidAttribute, or multiple GuidAttributes, this method will return false.
+    /// Todo: this should support multiple guids for operator refactoring/replacement/deprecation purposes
+    /// </summary>
     private static bool TryGetGuidOfType(Type newType, out Guid guid)
     {
         var guidAttributes = newType.GetCustomAttributes(typeof(GuidAttribute), false);
@@ -347,6 +370,11 @@ public sealed class AssemblyInformation
         }
     }
 
+    /// <summary>
+    /// Does all within its power to unload the assembly from its load context.
+    /// In order for an assembly to properly be unloaded, ALL references to it, including existing instances, references to its types, etc,
+    /// must be released and dereferenced.
+    /// </summary>
     public void Unload()
     {
         _operatorTypeInfo.Clear();
@@ -361,8 +389,9 @@ public sealed class AssemblyInformation
                 return;
 
             // it's not on me to unload the context if it is not mine
-            if (_loadContextOverridden)
+            if (_loadContextIsOverridden)
             {
+                // todo - should this alert the "parent" load context that it should be unloaded?
                 _loadContextUnsafe = null;
                 return;
             }
@@ -372,6 +401,11 @@ public sealed class AssemblyInformation
         }
     }
 
+    /// <summary>
+    /// Tries to get the release info for the package by looking for <see cref="RuntimeAssemblies.PackageInfoFileName"/> in the directory of the assembly.
+    /// </summary>
+    /// <param name="releaseInfo"></param>
+    /// <returns></returns>
     public bool TryGetReleaseInfo([NotNullWhen(true)] out ReleaseInfo? releaseInfo)
     {
         var releaseInfoPath = System.IO.Path.Combine(Directory, RuntimeAssemblies.PackageInfoFileName);
@@ -414,12 +448,25 @@ public sealed class AssemblyInformation
         return false;
     }
 
-    // todo - should this relationship be inverted? should the load contexts
-    // of the operator assemblies be responsible for loading the editor assemblies? that way 
-    // one operator assembly can load multiple editor assemblies
-    // probably not, editor references etc
+  
+    /// <summary>
+    /// This method is primarily used by the editor to ensure that editor extensions (e.g. libEditor) are reloaded/resolved based on the operator packages
+    /// they apply to.
+    ///
+    /// In general, this is where we establish dependency relationships - basically If this method finds a package that it depends on,
+    /// it will replace the load context of the dependent package with its own load context.
+    ///
+    /// This will need to be expanded upon or further refined as we grapple with multiple packages depending on the same package.
+    /// </summary>
+    /// <param name="packages"></param>
+    /// <returns></returns>
     public bool ReplaceResolversOf(IReadOnlyList<PackageWithReleaseInfo> packages)
     {
+        // todo - should this relationship be inverted? should the load contexts
+        // of the operator assemblies be responsible for loading the editor assemblies? that way 
+        // one operator assembly can load multiple editor assemblies
+        // probably not, editor references etc
+
         var loadContext = GetLoadContext();
 
         var matched = false;
@@ -439,13 +486,21 @@ public sealed class AssemblyInformation
         return matched;
     }
 
+    /// <summary>
+    /// This method replaces our own load context with the given one. This is used in establishing relationships between
+    /// dependent packages.
+    /// </summary>
+    /// <param name="loadContext"></param>
     private void ReplaceLoadContextWith(T3AssemblyLoadContext loadContext)
     {
         Log.Debug($"Replacing load context for {Name} with {loadContext.Name}");
         _loadContextUnsafe = loadContext;
-        _loadContextOverridden = true;
+        _loadContextIsOverridden = true;
     }
 
+    /// <summary>
+    /// Returns true if the given package reference matches the given release info.
+    /// </summary>
     public static bool Matches(OperatorPackageReference reference, ReleaseInfo releaseInfo)
     {
         if (reference.ResourcesOnly)
@@ -459,8 +514,11 @@ public sealed class AssemblyInformation
         return identity.SequenceEqual(assemblyFileName);
     }
 
-    private bool _loadContextOverridden;
+    private bool _loadContextIsOverridden;
 
+    /// <summary>
+    /// Creates an instance of the given type using this assembly via (slow) reflection.
+    /// </summary>
     public object? CreateInstance(Type constructorInfoInstanceType)
     {
         var assembly = GetAssembly();

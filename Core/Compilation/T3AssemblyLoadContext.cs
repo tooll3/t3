@@ -12,6 +12,20 @@ using T3.Core.Logging;
 
 namespace T3.Core.Compilation;
 
+/// <summary>
+/// This is the actual place where assemblies are loaded and dependencies are resolved on a per-dll level.
+/// Inheriting from <see cref="AssemblyLoadContext"/> allows us to load assemblies in a custom way, which is required
+/// as assemblies are loaded from different locations for each package.
+///
+/// Each package has its own <see cref="T3AssemblyLoadContext"/> that is used to load the assemblies of that package. If a package relies on another package
+/// from a CSProj-level, the dependency's load context and dlls are added to the dependent's load context such that the dependent's dlls can be loaded
+/// referencing the types provided by the dependency.
+///
+/// For example, the LibEditor package has a dependency on Lib. When LibEditor is loaded, the Lib package is loaded first via LibEditor's load context. Then
+/// the loading procedure continues until LibEditor is fully loaded with all its dependencies.
+///
+/// Unfortunately this process is very complex, and is not thoroughly tested with large dependency chains.
+/// </summary>
 internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
 {
     private readonly string _path;
@@ -42,6 +56,11 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
         }
     }
 
+    /// <summary>
+    /// This function is used to establish dependencies between packages. 
+    /// </summary>
+    /// <param name="packageOwner"></param>
+    /// <param name="assemblyInformationPath"></param>
     internal void AddAssemblyPath(object packageOwner, string assemblyInformationPath)
     {
         lock (_assemblyLock)

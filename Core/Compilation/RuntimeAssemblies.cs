@@ -10,6 +10,11 @@ using T3.Serialization;
 
 namespace T3.Core.Compilation;
 
+/// <summary>
+/// This is a common entrypoint for package loading and versioning.
+/// It also sets an important environment variable for linking external projects with the installed T3 editor assemblies.
+/// Many things here can probably be moved elsewhere, but it's a result of a fairly iterative process growing this compilation system.
+/// </summary>
 public static class RuntimeAssemblies
 {
     public const string EnvironmentVariableName = "T3_ASSEMBLY_PATH";

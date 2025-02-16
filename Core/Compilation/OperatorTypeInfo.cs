@@ -8,6 +8,10 @@ using T3.Core.Logging;
 
 namespace T3.Core.Compilation;
 
+/// <summary>
+/// The Big Operator Info container, which contains most all relevant information about a given operator type, precalculated and cached for runtime efficiency
+/// by <see cref="AssemblyInformation"/>.
+/// </summary>
 public sealed class OperatorTypeInfo
 {
     internal OperatorTypeInfo(List<InputSlotInfo> inputs,

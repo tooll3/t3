@@ -7,6 +7,9 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Core.Compilation;
 
+/// <summary>
+/// Used to organize type information about output slots in <see cref="AssemblyInformation"/>
+/// </summary>
 public readonly record struct OutputSlotInfo
 {
     internal readonly Type? OutputDataType;
