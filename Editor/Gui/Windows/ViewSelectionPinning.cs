@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.Output;
 using T3.Editor.UiModel;
@@ -19,7 +20,6 @@ internal sealed class ViewSelectionPinning
 {
     public void DrawPinning()
     {
-        
         if (!TryGetPinnedOrSelectedInstance(out var pinnedOrSelectedInstance, out var canvas))
         {
             Unpin();
@@ -148,9 +148,17 @@ internal sealed class ViewSelectionPinning
             {
                 if (ImGui.BeginMenu("Show Output..."))
                 {
-                    foreach (var output in pinnedOrSelectedInstance.Outputs)
+                    var isDefaultOutput = _selectedOutputId == Guid.Empty;
+                    
+                    for (var outputIndex = 0; outputIndex < pinnedOrSelectedInstance.Outputs.Count; outputIndex++)
                     {
-                        ImGui.MenuItem(output.ToString());
+                        var output = pinnedOrSelectedInstance.Outputs[outputIndex];
+                        var isSelected = outputIndex == 0 && isDefaultOutput
+                                         || output.Id == _selectedOutputId;
+                        if (ImGui.MenuItem(output.ToString(), null, isSelected))
+                        {
+                            _selectedOutputId = outputIndex == 0 ? Guid.Empty : output.Id;
+                        }
                     }
 
                     ImGui.EndMenu();
@@ -167,6 +175,7 @@ internal sealed class ViewSelectionPinning
         ImGui.SameLine();
     }
 
+    
     private void PinSelectionToView(ProjectView canvas)
     {
         var firstSelectedInstance = canvas.NodeSelection.GetFirstSelectedInstance();
@@ -240,7 +249,25 @@ internal sealed class ViewSelectionPinning
     }
 
     private bool _isPinned;
+    private Guid _selectedOutputId; // Empty if default
     private ProjectView? _pinnedProjectView;
     private IReadOnlyList<Guid> _pinnedInstancePath = Array.Empty<Guid>();
     private IReadOnlyList<Guid> _pinnedEvaluationInstancePath = Array.Empty<Guid>();
+
+    public ISlot? GetPinnedOrDefaultOutput(IReadOnlyList<ISlot> outputs)
+    {
+        if (outputs.Count == 0)
+            return null;
+
+        if (_selectedOutputId == Guid.Empty)
+            return outputs[0];
+
+        foreach (var o in outputs)
+        {
+            if (o.Id == _selectedOutputId)
+                return o;
+        }
+        
+        return outputs[0];
+    }
 }

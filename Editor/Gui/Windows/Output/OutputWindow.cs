@@ -2,6 +2,7 @@
 using ImGuiNET;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
@@ -225,10 +226,9 @@ internal sealed class OutputWindow : Window
             return null;
 
         var evaluatedSymbolUi = instanceForEvaluation.GetSymbolUi();
-            
-        // Todo: support different outputs...
-        var evalOutput = instanceForEvaluation.Outputs[0];
-        if (!evaluatedSymbolUi.OutputUis.TryGetValue(evalOutput.Id, out IOutputUi evaluatedOutputUi))
+        var evalOutput = Pinning.GetPinnedOrDefaultOutput(instanceForEvaluation.Outputs);
+
+        if (evalOutput == null || !evaluatedSymbolUi.OutputUis.TryGetValue(evalOutput.Id, out IOutputUi evaluatedOutputUi))
             return null;
 
         if (_imageCanvas.ViewMode != ImageOutputCanvas.Modes.Fitted
@@ -276,9 +276,10 @@ internal sealed class OutputWindow : Window
             if (instanceForOutput == null || instanceForOutput.Outputs.Count == 0)
                 return null;
 
-            var viewOutput = instanceForOutput.Outputs[0];
+            var viewOutput = Pinning.GetPinnedOrDefaultOutput(instanceForOutput.Outputs);
+
             var viewSymbolUi = instanceForOutput.GetSymbolUi();
-            if (!viewSymbolUi.OutputUis.TryGetValue(viewOutput.Id, out IOutputUi viewOutputUi))
+            if (viewOutput == null || !viewSymbolUi.OutputUis.TryGetValue(viewOutput.Id, out IOutputUi viewOutputUi))
                 return null;
 
             // Render!
