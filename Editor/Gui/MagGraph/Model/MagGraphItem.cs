@@ -300,7 +300,8 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
         }
         else
         {
-            nodeSelection.SetSelection(this);
+            //nodeSelection.Clear();
+            nodeSelection.SetSelection(Selectable);
         }
     }
 

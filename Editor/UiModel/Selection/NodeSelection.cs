@@ -15,7 +15,7 @@ namespace T3.Editor.UiModel.Selection;
 ///   reason we save id-paths: Basically the nesting path of instances from the dashboard operator down.
 ///
 /// - Frequently we want to select the parent operator when clicking on the background of a composition (e.g. to
-///   to show it's parameters.  
+///   show its parameters.  
 /// </summary>
 internal sealed class NodeSelection : ISelection
 {
@@ -112,8 +112,8 @@ internal sealed class NodeSelection : ISelection
         var selection = GetFirstSelectedInstance();
         
         // Clear invalid or obsolete selection
-        if(selection==null)
-            Clear();
+        //if(selection==null)
+        //    Clear();
         
         return selection == _structure.GetInstanceFromIdPath(_selectedCompositionPath) ? null : selection;
     }
@@ -128,7 +128,7 @@ internal sealed class NodeSelection : ISelection
             if (!_childUiInstanceIdPaths.TryGetValue(firstNode, out var idPath))
             {
                 Log.Error("Failed to access id-path of selected childUi " + firstNode.SymbolChild.Name);
-                Clear();
+                //Clear();
                 return null;
             }
 

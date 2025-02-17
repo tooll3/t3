@@ -58,7 +58,7 @@ internal sealed partial class MagGraphCanvas
 
         // Selection fence...
         {
-            HandleFenceSelection(_context, _selectionFence);
+            //HandleFenceSelection(_context, _selectionFence);
         }
 
         // Draw items
