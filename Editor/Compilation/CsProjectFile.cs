@@ -13,21 +13,58 @@ using Encoding = System.Text.Encoding;
 
 namespace T3.Editor.Compilation;
 
+/// <summary>
+/// A class that assists in the creation, modification, and compilation of a csproj file.
+/// Each editable project is currently represented by a csproj file, which is compiled and loaded at runtime.
+/// There are several unusual properties in the csproj file that are used to accommodate T3's feature set - see <see cref="ProjectXml"/>
+/// for more details. This can be considered a higher-level utility class that handles versioning, provides simple compilation methods, and provides
+/// straightforward access to properties within the csproj file.
+/// </summary>
 internal sealed class CsProjectFile
 {
+    /// <summary>
+    /// The path to the csproj file.
+    /// </summary>
     public string FullPath => _projectRootElement.FullPath;
+    
+    /// <summary>
+    /// The directory containing the csproj file.
+    /// </summary>
     public string Directory => _projectRootElement.DirectoryPath;
+    
+    /// <summary>
+    /// The name of the csproj file.
+    /// </summary>
     public string Name => Path.GetFileNameWithoutExtension(FullPath);
+    
+    /// <summary>
+    /// The root namespace of the project, as defined in the csproj file.
+    /// </summary>
     public string RootNamespace => _projectRootElement.GetOrAddProperty(PropertyType.RootNamespace, Name);
+    
+    /// <summary>
+    /// The version string of the project, as defined in the csproj file.
+    /// </summary>
     public string VersionString => _projectRootElement.GetOrAddProperty(PropertyType.VersionPrefix, "1.0.0");
+    
+    /// <summary>
+    /// The version of the project, as defined in the csproj file.
+    /// </summary>
     public Version Version => new(VersionString!);
+    
+    /// <summary>
+    /// The assembly information for the project, provided the assembly has been loaded.
+    /// </summary>
     public AssemblyInformation? Assembly { get; private set; }
+    
+    /// <summary>
+    /// An event that is triggered when the assembly for this project is loaded. Currently this is largely unused.
+    /// </summary>
     public event Action<CsProjectFile>? AssemblyLoaded;
 
-    private readonly string _releaseRootDirectory;
-    private readonly string _debugRootDirectory;
-    private readonly ProjectRootElement _projectRootElement;
-
+    /// <summary>
+    /// Returns the target dotnet framework for the project, or adds the default framework if none is found and returns that.
+    /// </summary>
     private string TargetFramework => _projectRootElement.GetOrAddProperty(PropertyType.TargetFramework, ProjectXml.TargetFramework);
 
     private CsProjectFile(ProjectRootElement projectRootElement)
@@ -35,6 +72,8 @@ internal sealed class CsProjectFile
         _projectRootElement = projectRootElement;
 
         var targetFramework = TargetFramework;
+        
+        // check if the project needs its dotnet version upgraded. If so, update the project file accordingly.
         if (!ProjectXml.FrameworkIsCurrent(targetFramework))
         {
             var newFramework = ProjectXml.UpdateFramework(targetFramework);
@@ -49,6 +88,9 @@ internal sealed class CsProjectFile
         AssemblyLoaded += file => _cachedReleaseInfo = null;
     }
 
+    /// <summary>
+    /// Details about a loaded csproj file, including any errors that occurred during loading.
+    /// </summary>
     public readonly struct CsProjectLoadInfo
     {
         public readonly string? Error;
@@ -78,6 +120,11 @@ internal sealed class CsProjectFile
         }
     }
 
+    /// <summary>
+    /// Loads the csproj file at the given path, returning a <see cref="CsProjectLoadInfo"/> struct that contains the loaded file and any errors.
+    /// Does not actually handle any assemblies or type loading - it's just a way to load the xml file.
+    /// </summary>
+    /// <returns>True if successful</returns>
     public static bool TryLoad(string filePath, out CsProjectLoadInfo loadInfo)
     {
         try
@@ -100,6 +147,9 @@ internal sealed class CsProjectFile
         }
     }
 
+    /// <summary>
+    /// Returns the file info for this project's primary dll. This file may or may not exist, as this is simply a "functional" way to generate the file path.
+    /// </summary>
     private FileInfo GetBuildTargetFileInfo()
     {
         var directory = GetBuildTargetDirectory();
@@ -109,16 +159,35 @@ internal sealed class CsProjectFile
         return new FileInfo(Path.Combine(directory, dllName));
     }
 
+    /// <summary>
+    /// Returns the directory where the primary dll for this project is built. This directory may or may not exist, as this is simply a "functional"
+    /// way to generate the directory path.
+    /// </summary>
     public string GetBuildTargetDirectory()
     {
         return Path.Combine(GetRootDirectory(EditorBuildMode), VersionSubfolder, TargetFramework);
     }
     
+    /// <summary>
+    /// We separate out builds by version so we can attempt to reload a new version before the old one is fully unloaded since we cannot guarantee
+    /// when the old version will be unloaded. This is a simple property to ensure the way we generate these directories is consistent.
+    /// </summary>
     private string VersionSubfolder => Version.ToBasicVersionString();
 
+    /// <summary>
+    /// Returns the debug & release build directories for this project.
+    /// </summary>
+    /// <param name="buildMode"></param>
+    /// <returns></returns>
     private string GetRootDirectory(Compiler.BuildMode buildMode) => buildMode == Compiler.BuildMode.Debug ? _debugRootDirectory : _releaseRootDirectory;
 
     // todo - rate limit recompiles for when multiple files change
+    /// <summary>
+    /// Compiles/recompiles this project in debug mode for runtime use in the Editor.
+    /// </summary>
+    /// <param name="releaseInfo">The resulting release info if successful</param>
+    /// <param name="nugetRestore">True if NuGet packages should be restored</param>
+    /// <returns>True if successful</returns>
     public bool TryRecompile([NotNullWhen(true)] out ReleaseInfo? releaseInfo, bool nugetRestore)
     {
         var previousAssembly = Assembly;
@@ -171,12 +240,33 @@ internal sealed class CsProjectFile
         _projectRootElement.Save();
     }
 
+    /// <summary>
+    /// For building release-mode assemblies for use in the Player. All other runtime-compilation is done in debug mode.
+    /// </summary>
+    /// <param name="externalDirectory">Output directory</param>
+    /// <param name="nugetRestore">True if NuGet packages should be restored</param>
+    /// <returns>True if successful</returns>
     public bool TryCompileRelease(string externalDirectory, bool nugetRestore)
     {
         return Compiler.TryCompile(this, PlayerBuildMode, nugetRestore, targetDirectory: externalDirectory);
     }
 
     // todo- use Microsoft.Build.Construction and Microsoft.Build.Evaluation
+    /// <summary>
+    /// Creates a new .csproj file and populates all required files for a new T3 project.
+    /// </summary>
+    /// <param name="projectName">The name of the new project</param>
+    /// <param name="nameSpace">The root namespace of the new project</param>
+    /// <param name="shareResources">True if the project should share its resources with other packages</param>
+    /// <param name="parentDirectory">The directory inside which the new project should be created. The project will actually reside inside
+    /// "parentDirectory/projectName"</param>
+    /// <returns></returns>
+    /// <remarks>
+    /// todo - find a better home for this
+    /// todo: - files copied into the new project should be generated at runtime where possible -
+    /// for example, the default home canvas symbol/symbolui
+    /// should probably be copied from the Examples package wholesale, with replaced guids.
+    /// </remarks>
     public static CsProjectFile CreateNewProject(string projectName, string nameSpace, bool shareResources, string parentDirectory)
     {
         var defaultHomeDir = Path.Combine(UserData.ReadOnlySettingsFolder, "default-home");
@@ -230,6 +320,9 @@ internal sealed class CsProjectFile
         return new CsProjectFile(projRoot);
     }
 
+    /// <summary>
+    /// Deletes all build directories that are not the current version of the specified <see cref="Compiler.BuildMode"/>
+    /// </summary>
     public void RemoveOldBuilds(Compiler.BuildMode buildMode)
     {
         var versionSubfolder = VersionSubfolder;
@@ -251,6 +344,9 @@ internal sealed class CsProjectFile
                        });
     }
 
+    /// <summary>
+    /// Tries to load the assembly file provided - if none are provided, it will attempt to load the assembly from the default build directory.
+    /// </summary>
     public bool TryLoadAssembly(FileInfo? assemblyFile = null)
     {
         assemblyFile ??= GetBuildTargetFileInfo();
@@ -272,10 +368,20 @@ internal sealed class CsProjectFile
         return true;
     }
 
-    private const Compiler.BuildMode EditorBuildMode = Compiler.BuildMode.Debug;
-    private const Compiler.BuildMode PlayerBuildMode = Compiler.BuildMode.Release;
-    private ReleaseInfo? _cachedReleaseInfo;
-
+    /// <summary>
+    /// Attempts to retrieve the release info for this project. If the release info has already been loaded, it will return that.
+    /// Note that this method is only valid if the assembly has been loaded, or can be loaded. Therefore, the project will need to have been compiled at least
+    /// once prior to calling this method.
+    ///
+    /// The reason it must be compiled is that the release info is generated from this csproj file at build time.
+    /// </summary>
+    /// <param name="releaseInfo"></param>
+    /// <returns>True if successful</returns>
+    /// <remarks>
+    /// Todo: investigate the use of 
+    /// <a href="https://learn.microsoft.com/en-us/dotnet/standard/assembly/set-attributes-project-file">custom assembly metadata</a> to store this information
+    /// in the assembly itself
+    /// </remarks>
     public bool TryGetReleaseInfo([NotNullWhen(true)] out ReleaseInfo? releaseInfo)
     {
         if (_cachedReleaseInfo != null)
@@ -297,4 +403,13 @@ internal sealed class CsProjectFile
         releaseInfo = _cachedReleaseInfo;
         return success;
     }
+    
+
+    private const Compiler.BuildMode EditorBuildMode = Compiler.BuildMode.Debug;
+    private const Compiler.BuildMode PlayerBuildMode = Compiler.BuildMode.Release;
+    private ReleaseInfo? _cachedReleaseInfo;
+
+    private readonly string _releaseRootDirectory;
+    private readonly string _debugRootDirectory;
+    private readonly ProjectRootElement _projectRootElement;
 }

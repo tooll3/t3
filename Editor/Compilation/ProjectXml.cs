@@ -11,6 +11,9 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Compilation;
 
+/// <summary>
+/// Hosts the logic for creating and modifying a csproj file for a T3 operator package
+/// </summary>
 internal static partial class ProjectXml
 {
     public static ProjectRootElement CreateNewProjectRootElement(string projectNamespace, Guid homeGuid)
