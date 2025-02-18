@@ -16,6 +16,13 @@ internal static partial class ProcessUtils
         RemoveAnsiEscapeSequencesRegex.Replace(input, "");
 }
 
+/// <summary>
+/// A generic class for running commands in an external shell.
+/// By default, this is a powershell shell, though this can be adapted in the future to handle other standard shells.
+/// </summary>
+/// <param name="workingDirectory">The working directory to begin each command in</param>
+/// <param name="logPrefix">An optional prefix to prepend to each log message with</param>
+/// <typeparam name="T">The input type associated with each command</typeparam>
 public sealed class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
 {
     private Process? _process;
@@ -68,6 +75,7 @@ public sealed class ProcessCommander<T>(string workingDirectory, string logPrefi
             else
             {
                 T3.Core.Logging.Log.Debug("Started cross-platform powershell");
+                return true;
             }
         }
         catch (Exception e)
@@ -137,6 +145,15 @@ public sealed class ProcessCommander<T>(string workingDirectory, string logPrefi
         _process = null;
     }
 
+    /// <summary>
+    /// Tries to execute the given command with the data provided. Requires the process to be running already.
+    /// </summary>
+    /// <param name="cmd">The command to execute</param>
+    /// <param name="currentData">The data to execute the command with</param>
+    /// <param name="response">The output of the command - can be intercepted by the command's evaluator</param>
+    /// <param name="inDirectory">An optional specifier for the command's starting directory</param>
+    /// <param name="suppressOutput">An option to suppress process output from being logged</param>
+    /// <returns></returns>
     public bool TryCommand(Command<T> cmd, T currentData, out string response, string? inDirectory = null, bool suppressOutput = false)
     {
         if(_process == null || _process.HasExited)
@@ -198,6 +215,11 @@ public sealed class ProcessCommander<T>(string workingDirectory, string logPrefi
         return false;
     }
 
+    /// <summary>
+    /// Changes the working directory of the process to the given directory.
+    /// Uses native powershell commands to do so.
+    /// </summary>
+    /// <param name="inDirectory">Directory to change to</param>
     public void ChangeDirectory(string inDirectory)
     {
         lock (_commandLock)

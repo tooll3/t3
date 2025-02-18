@@ -8,18 +8,20 @@ using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Compilation;
 
+/// <summary>
+/// The class that executes runtime compilation commands to build a csproj file via the dotnet CLI
+/// </summary>
 internal static class Compiler
 {
     internal static void StopProcess()
     {
-        lock (_processLock)
-        {
-            if (_processCommander == null)
-                return;
+        _processLock.Enter();
+        if (_processCommander == null)
+            return;
             
-            _processCommander.Close();
-            _processCommander = null;
-        }
+        _processCommander.Close();
+        _processCommander = null;
+        _processLock.Exit();
     }
     
     private static readonly string _workingDirectory = Path.Combine(T3.Core.UserData.UserData.TempFolder, "CompilationWorkingDirectory");
@@ -29,6 +31,9 @@ internal static class Compiler
         Directory.CreateDirectory(_workingDirectory);
     }
 
+    /// <summary>
+    /// Returns the string-based command for the given compilation options
+    /// </summary>
     private static string GetCommandFor(in CompilationOptions compilationOptions)
     {
         var projectFile = compilationOptions.ProjectFile;
@@ -43,6 +48,13 @@ internal static class Compiler
         return string.Format(fmt, projectFile.FullPath, buildModeName, _verbosityArgs[compilationOptions.Verbosity], targetDirectory, restoreArg);
     }
 
+    /// <summary>
+    /// Evaluates the output of the compilation process to check if compilation has failed.
+    /// Somewhat crude approach, but it works for now.
+    /// </summary>
+    /// <param name="output">The output of the compilation process. Can be modified here if desired (e.g. to print more useful/succinct information)</param>
+    /// <param name="options">The compilation options associated with this execution output</param>
+    /// <returns>True if compilation was successful</returns>
     private static bool Evaluate(ref string output, in CompilationOptions options)
     {
         if (output.Contains("Build succeeded")) return true;
@@ -72,10 +84,13 @@ internal static class Compiler
         return false;
     }
     
+    /// <summary>
+    /// The struct that holds the information necessary to create the dotnet build command
+    /// </summary>
     private readonly record struct CompilationOptions(CsProjectFile ProjectFile, BuildMode BuildMode, string? TargetDirectory, CompilerOptions.Verbosity Verbosity, bool RestoreNuGet);
     
     private static ProcessCommander<CompilationOptions>? _processCommander;
-    private static readonly object _processLock = new();
+    private static readonly System.Threading.Lock _processLock = new();
     private static readonly Stopwatch _stopwatch = new();
 
     internal static bool TryCompile(CsProjectFile projectFile, BuildMode buildMode, bool nugetRestore, string? targetDirectory = null)
@@ -88,46 +103,46 @@ internal static class Compiler
         
         bool success;
         string logMessage;
-        lock (_processLock)
+        _processLock.Enter();
+        _stopwatch.Restart();
+        if (_processCommander == null)
         {
-            _stopwatch.Restart();
-            if (_processCommander == null)
-            {
-                _processCommander = new ProcessCommander<CompilationOptions>(_workingDirectory, "Compilation: ");
-                //Log.Debug("Compilation process started");
-            }
+            _processCommander = new ProcessCommander<CompilationOptions>(_workingDirectory, "Compilation: ");
+            //Log.Debug("Compilation process started");
+        }
             
-            if (!_processCommander.TryBeginProcess(out var isRunning) && !isRunning)
-            {
-                Log.Error("Failed to start compilation process");
-                return false;
-            }
+        if (!_processCommander.TryBeginProcess(out var isRunning) && !isRunning)
+        {
+            Log.Error("Failed to start compilation process");
+            return false;
+        }
             
-            Log.Debug($"Compiling {projectFile.Name} in {buildMode} mode");
+        Log.Debug($"Compiling {projectFile.Name} in {buildMode} mode");
 
-            var compilationOptions = new CompilationOptions(projectFile, buildMode, targetDirectory, verbosity, nugetRestore);
-            var command = new Command<CompilationOptions>(GetCommandFor, Evaluate);
+        var compilationOptions = new CompilationOptions(projectFile, buildMode, targetDirectory, verbosity, nugetRestore);
+        var command = new Command<CompilationOptions>(GetCommandFor, Evaluate);
 
-            var noOutput = UserSettings.Config == null || UserSettings.Config.LogCsCompilationDetails==false;
-            if (!_processCommander.TryCommand(command, compilationOptions, out var response, projectFile.Directory, suppressOutput: noOutput))
+        var noOutput = UserSettings.Config == null || UserSettings.Config.LogCsCompilationDetails==false;
+        if (!_processCommander.TryCommand(command, compilationOptions, out var response, projectFile.Directory, suppressOutput: noOutput))
+        {
+            success = false;
+            logMessage = $"{projectFile.Name}: Build failed in {_stopwatch.ElapsedMilliseconds}ms:\n{response}";
+            foreach (var line in response.Split('\n'))
             {
-                success = false;
-                logMessage = $"{projectFile.Name}: Build failed in {_stopwatch.ElapsedMilliseconds}ms:\n{response}";
-                foreach (var line in response.Split('\n'))
+                var warningIndex = line.IndexOf("error CS", StringComparison.Ordinal);
+                if (warningIndex != -1)
                 {
-                    var warningIndex = line.IndexOf("error CS", StringComparison.Ordinal);
-                    if (warningIndex != -1)
-                    {
-                        Log.Warning(line.Substring(warningIndex,line.Length -warningIndex));
-                    }
+                    Log.Warning(line.Substring(warningIndex,line.Length -warningIndex));
                 }
             }
-            else
-            {
-                success = true;
-                logMessage = $"{projectFile.Name}: Build succeeded in {_stopwatch.ElapsedMilliseconds}ms";
-            }
         }
+        else
+        {
+            success = true;
+            logMessage = $"{projectFile.Name}: Build succeeded in {_stopwatch.ElapsedMilliseconds}ms";
+        }
+        
+        _processLock.Exit();
 
         if (!success)
         {
@@ -147,8 +162,6 @@ internal static class Compiler
         Release
     }
     
-    //public enum Verbosity { Quiet, Minimal, Normal, Detailed, Diagnostic }
-
     private static readonly FrozenDictionary<CompilerOptions.Verbosity, string> _verbosityArgs = new Dictionary<CompilerOptions.Verbosity, string>()
                                                                                     {
                                                                                         { CompilerOptions.Verbosity.Quiet, "q" },
