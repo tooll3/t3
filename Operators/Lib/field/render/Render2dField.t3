@@ -57,10 +57,6 @@
       "DefaultValue": null
     },
     {
-      "Id": "bc1606a0-30d5-4636-9045-9c55e29b843a"/*SdfField*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "cff144b3-bb6f-412a-89cf-6ef1b70d4ffd"/*AoDistance*/,
       "DefaultValue": 2.8
     },

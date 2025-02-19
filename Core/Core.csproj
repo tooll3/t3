@@ -9,8 +9,8 @@
         <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
         <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU</Platforms>
-        <VersionPrefix>3.10.2</VersionPrefix>
-        <Version>3.10.2</Version>
+        <VersionPrefix>3.10.4</VersionPrefix>
+        <Version>3.10.4</Version>
     </PropertyGroup>
 
     <ItemGroup>

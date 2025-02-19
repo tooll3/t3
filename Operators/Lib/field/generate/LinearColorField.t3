@@ -2,18 +2,35 @@
   "Id": "e589af25-4c03-4fcd-8ec3-0af77969f99c"/*LinearColorField*/,
   "Inputs": [
     {
-      "Id": "bbfcfd1c-7969-410a-aaf5-e0edfbeb0ac8"/*Center*/,
+      "Id": "78b3b3f0-7ceb-4426-8c1c-90d23bccb559"/*Center*/,
       "DefaultValue": {
         "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
+        "Y": 0.0
       }
     },
     {
-      "Id": "d849ad46-d653-4f63-b149-53efc9978749"/*Size*/,
+      "Id": "d849ad46-d653-4f63-b149-53efc9978749"/*Width*/,
       "DefaultValue": {
         "X": 1.0,
         "Y": 0.25
+      }
+    },
+    {
+      "Id": "db50797b-bc24-4c33-bc65-79c419d3d003"/*ColorB*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
+        "W": 1.0
+      }
+    },
+    {
+      "Id": "e00571de-b0c5-46e0-9a8f-53295d8674fc"/*ColorA*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
+        "W": 1.0
       }
     }
   ],

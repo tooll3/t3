@@ -71,14 +71,6 @@
       }
     },
     {
-      "InputId": "bc1606a0-30d5-4636-9045-9c55e29b843a"/*SdfField*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": 389.5282,
-        "Y": 298.73044
-      }
-    },
-    {
       "InputId": "cff144b3-bb6f-412a-89cf-6ef1b70d4ffd"/*AoDistance*/,
       "Position": {
         "X": 567.2724,

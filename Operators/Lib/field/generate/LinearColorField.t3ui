@@ -3,27 +3,47 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "bbfcfd1c-7969-410a-aaf5-e0edfbeb0ac8"/*Center*/,
+      "InputId": "78b3b3f0-7ceb-4426-8c1c-90d23bccb559"/*Center*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
       }
     },
     {
-      "InputId": "d849ad46-d653-4f63-b149-53efc9978749"/*Size*/,
+      "InputId": "d849ad46-d653-4f63-b149-53efc9978749"/*Width*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
       }
+    },
+    {
+      "InputId": "db50797b-bc24-4c33-bc65-79c419d3d003"/*ColorB*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 195.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "e00571de-b0c5-46e0-9a8f-53295d8674fc"/*ColorA*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 120.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "9ed929e6-29a9-4bc4-8027-b0d94019508e"/*Result*/,
+      "OutputId": "e0eb3494-675d-4185-9799-8ab8893cb311"/*Result*/,
       "Position": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 300.0,
+        "Y": 200.0
       }
     }
   ]

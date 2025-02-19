@@ -6,6 +6,10 @@
       "DefaultValue": ""
     },
     {
+      "Id": "f1e138ac-f226-43ad-bcaf-e48350ffe4b4"/*ColorField*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "ffc1c70e-b717-4337-916d-c3a13343e9cc"/*Field*/,
       "DefaultValue": null
     }
