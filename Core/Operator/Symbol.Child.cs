@@ -276,6 +276,21 @@ public partial class Symbol
                 _isBypassed = shouldBypass; // while duplicating / cloning as new symbol there are no instances yet.
                 return;
             }
+            
+            // check if there is a connection
+            var isOutputConnected = false;
+            var mainOutputDef = Symbol.OutputDefinitions[0];
+            foreach (var connection in Parent.Connections)
+            {
+                if (connection.SourceSlotId != mainOutputDef.Id || connection.SourceParentOrChildId != Id) 
+                    continue;
+                
+                isOutputConnected = true;
+                break;
+            }
+
+            if (!isOutputConnected)
+                return;
 
             var id = Id;
             foreach (var parentInstance in Parent.InstancesOfSelf)
