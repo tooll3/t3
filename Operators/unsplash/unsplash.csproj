@@ -13,6 +13,8 @@
     <EditorVersion>3.10.4</EditorVersion>
     <IsEditorOnly>false</IsEditorOnly>
     <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+ 
   </PropertyGroup>
   <ItemGroup>
     <Using Include="System" />
