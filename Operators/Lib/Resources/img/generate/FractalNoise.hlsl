@@ -91,8 +91,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float aspectRatio = TargetWidth / TargetHeight;
     float2 uv = psInput.texCoord;
     uv -= 0.5;
-    uv /= Stretch * Scale;
-    uv += Offset * float2(-1 / aspectRatio, 1);
+    uv *= Stretch * Scale;
+    uv += Offset * float2(-1 / aspectRatio, 1) * Scale * Stretch;
     uv.x *= aspectRatio;
 
     float3 pos = float3(uv, Phase / 10);
