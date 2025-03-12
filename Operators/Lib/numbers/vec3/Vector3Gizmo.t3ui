@@ -1,0 +1,30 @@
+{
+  "Id": "e9dc80e1-8898-4b77-b515-bf6d589302de"/*Vector3Gizmo*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "059ceeaa-8683-4d6e-aca3-c95d411663f0"/*ShowGizmo*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 75.0
+      }
+    },
+    {
+      "InputId": "a2025ddf-423f-4683-a4ce-ec8c7bda42ee"/*Position*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "75ca1280-f3af-4c08-b19b-90b0eff05fbd"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

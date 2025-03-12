@@ -1,0 +1,19 @@
+{
+  "Id": "e9dc80e1-8898-4b77-b515-bf6d589302de"/*Vector3Gizmo*/,
+  "Inputs": [
+    {
+      "Id": "059ceeaa-8683-4d6e-aca3-c95d411663f0"/*ShowGizmo*/,
+      "DefaultValue": true
+    },
+    {
+      "Id": "a2025ddf-423f-4683-a4ce-ec8c7bda42ee"/*Position*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
