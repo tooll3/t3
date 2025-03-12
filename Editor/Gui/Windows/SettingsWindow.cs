@@ -377,7 +377,7 @@ internal sealed class SettingsWindow : Window
 
                     FormInputs.SetIndentToParameters();
                     
-                    if (UserSettings.Defaults.LogCsCompilationDetails)
+                    if (UserSettings.Config.LogCsCompilationDetails)
                     {
                         FormInputs.SetIndentToParameters();
                         changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.CompileCsVerbosity,
