@@ -14,7 +14,7 @@
         <Platforms>AnyCPU</Platforms>
         <VersionPrefix>3.9.1</VersionPrefix>
         <LangVersion>default</LangVersion>
-        <Version>3.10.4</Version>
+        <Version>3.10.6</Version>
         <!-- <ApplicationManifest>app.manifest</ApplicationManifest> -->
     </PropertyGroup>
 
