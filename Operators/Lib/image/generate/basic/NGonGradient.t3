@@ -2,7 +2,7 @@
   "Id": "05463270-37d4-400f-8d0d-c50f81663304"/*NGonGradient*/,
   "Inputs": [
     {
-      "Id": "08937f41-a722-4d5b-8cf6-0b7d48323af4"/*Gradients*/,
+      "Id": "08937f41-a722-4d5b-8cf6-0b7d48323af4"/*Gradient*/,
       "DefaultValue": {
         "Gradient": {
           "Interpolation": "Linear",
@@ -42,6 +42,10 @@
     {
       "Id": "15a72217-4a3e-4e03-a767-0494ea1943f7"/*Sides*/,
       "DefaultValue": 3.0
+    },
+    {
+      "Id": "3493fb54-55a1-497d-8eb0-4a8fa5b92a9c"/*Roundness*/,
+      "DefaultValue": 0.0
     },
     {
       "Id": "3bc236ab-c5f8-4dee-b933-84cf627118ef"/*Image*/,
@@ -129,7 +133,7 @@
         {
           "Id": "f6269be3-3331-43a6-91ec-138b47199f3e"/*ShaderPath*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\generate\\NGonGradient.hlsl"
+          "Value": "Resources/lib/img/generate/NGonGradient.hlsl"
         }
       ],
       "Outputs": []
@@ -217,6 +221,12 @@
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "SourceSlotId": "d3cf9f75-ec08-4162-bad6-514173ef974c",
+      "TargetParentOrChildId": "b6c914eb-0a3e-46cf-9ab5-5b47a2f4e40b",
+      "TargetSlotId": "2929c4c9-6d6a-47b7-b80e-d7a1f90b6945"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "3493fb54-55a1-497d-8eb0-4a8fa5b92a9c",
       "TargetParentOrChildId": "b6c914eb-0a3e-46cf-9ab5-5b47a2f4e40b",
       "TargetSlotId": "2929c4c9-6d6a-47b7-b80e-d7a1f90b6945"
     },

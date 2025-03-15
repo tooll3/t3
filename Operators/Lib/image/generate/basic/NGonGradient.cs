@@ -27,7 +27,7 @@ internal sealed class NGonGradient : Instance<NGonGradient>
     public readonly InputSlot<float> Rotate = new InputSlot<float>();
 
     [Input(Guid = "08937f41-a722-4d5b-8cf6-0b7d48323af4")]
-    public readonly MultiInputSlot<Gradient> Gradients = new MultiInputSlot<Gradient>();
+    public readonly InputSlot<Gradient> Gradient = new InputSlot<Gradient>();
 
     [Input(Guid = "134a9879-54f7-4b9c-8494-195a159d6428")]
     public readonly InputSlot<float> Width = new InputSlot<float>();
@@ -52,4 +52,7 @@ internal sealed class NGonGradient : Instance<NGonGradient>
 
     [Input(Guid = "3bc236ab-c5f8-4dee-b933-84cf627118ef")]
     public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
+
+        [Input(Guid = "3493fb54-55a1-497d-8eb0-4a8fa5b92a9c")]
+        public readonly InputSlot<float> Roundness = new InputSlot<float>();
 }
