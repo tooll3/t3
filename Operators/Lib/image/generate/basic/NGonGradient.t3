@@ -8,22 +8,22 @@
           "Interpolation": "Linear",
           "Steps": [
             {
-              "Id": "5e28886e-724a-4dc0-8342-a52e8dc3940b",
+              "Id": "dfa71896-0de8-47d7-9f2d-e7e28ab7bedb",
               "NormalizedPosition": 0.0,
               "Color": {
                 "R": 1.0,
-                "G": 0.0,
+                "G": 1.0,
                 "B": 1.0,
                 "A": 1.0
               }
             },
             {
-              "Id": "7ba622bd-cba8-4084-ad3d-7f02e8b36fe5",
+              "Id": "f6f198f5-be17-4715-88d2-550585672e4b",
               "NormalizedPosition": 1.0,
               "Color": {
                 "R": 0.0,
                 "G": 0.0,
-                "B": 1.0,
+                "B": 0.0,
                 "A": 1.0
               }
             }
@@ -37,15 +37,15 @@
     },
     {
       "Id": "134a9879-54f7-4b9c-8494-195a159d6428"/*Width*/,
-      "DefaultValue": 0.04
+      "DefaultValue": 0.14
     },
     {
       "Id": "15a72217-4a3e-4e03-a767-0494ea1943f7"/*Sides*/,
-      "DefaultValue": 3.0
+      "DefaultValue": 5.0
     },
     {
       "Id": "3493fb54-55a1-497d-8eb0-4a8fa5b92a9c"/*Roundness*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 1.0
     },
     {
       "Id": "3bc236ab-c5f8-4dee-b933-84cf627118ef"/*Image*/,
@@ -53,7 +53,7 @@
     },
     {
       "Id": "49066387-92a6-46b2-a471-be0104e70651"/*Rotate*/,
-      "DefaultValue": -90.0
+      "DefaultValue": 180.0
     },
     {
       "Id": "4bfe03f0-f1c3-47c0-98c3-873087e40c17"/*Resolution*/,
@@ -72,7 +72,7 @@
     },
     {
       "Id": "b96527a6-0392-4e50-aa17-564976141290"/*Radius*/,
-      "DefaultValue": 0.15
+      "DefaultValue": 0.33
     },
     {
       "Id": "d3cf9f75-ec08-4162-bad6-514173ef974c"/*Blades*/,
