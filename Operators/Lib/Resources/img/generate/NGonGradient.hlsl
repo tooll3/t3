@@ -1,5 +1,5 @@
-#include "lib/shared/blend-functions.hlsl"
-#include "lib/shared/bias-functions.hlsl"
+#include "shared/blend-functions.hlsl"
+#include "shared/bias-functions.hlsl"
 
 cbuffer ParamConstants : register(b0)
 {
@@ -8,6 +8,7 @@ cbuffer ParamConstants : register(b0)
     float Radius;
     float Curvature;
     float Blades;
+    float Roundness;
 
     float Rotate;
 
@@ -37,7 +38,7 @@ struct vsOutput
 Texture2D<float4> ImageA : register(t0);
 Texture2D<float4> Gradient : register(t1);
 sampler texSampler : register(s0);
-sampler clammpedSampler : register(s1);
+sampler clammpedSampler : register(s1); //sadly this is not solving the issue
 
 static float PI = 3.141592653;
 static float TAU = (3.1415926535 * 2);
@@ -46,8 +47,9 @@ float fmod(float x, float y)
 {
     return (x - y * floor(x / y));
 }
-
+/* ------- Previous version ---------- */
 // based on https://www.shadertoy.com/view/Wll3R2
+/*
 float sdNgon(in float2 p, in float r, in float n)
 {
     // Can precompute these
@@ -68,30 +70,40 @@ float sdNgon(in float2 p, in float r, in float n)
 
     float sd = length(max(d, float2(0, 0))) + min(d.x, 0.0);
     return sd;
-}
+}*/
 
-/* ------- experimentation ---------- */
-
+/* ------- New version ---------- */
 // What if we could use this instead? https://www.shadertoy.com/view/7tSXzt
-/*float sdRegularPolygon(in float2 p, in float r, in int n )
-{
-    // these 4 lines can be precomputed for a given shape
+float sdRegularPolygon(in float2 p, in float r, in float n) 
+{   // these lines can be precomputed for a given shape
     float an = 3.141593/float(n);
     float2 acs = float2(cos(an),sin(an));
-
+    
+    // Store original length for curvature calculation
+    float originalLen = length(p);
+    
     // reduce to first sector
     float bn = fmod(atan2(p.x,p.y),2.0*an) - an;
     bn *= bn > 0 ? (1 - saturate(Blades)) : 1; //Blades parameter is working
+    
     p = length(p)*float2(cos(bn),abs(sin(bn)));
-
+    
     // line sdf
     p -= r*acs;
-
-    p.y += clamp( -p.y, 0.0, r*acs.y);
-
-   // p.y *= p.y > 0 ? (1 - saturate(Roundness)) : 1; // we can control the roundness
-    return length(p)*sign(p.x);
-}*/
+    
+    p.y += clamp(-p.y, 0.0, r*acs.y);
+    p.y *= p.y > 0 ? (saturate(Roundness)) : 1;  // we can control the roundness
+    
+    // Apply curvature effect to the distance field
+    float dist = length(p)*sign(p.x);
+    
+    // Adjust distance based on curvature (flower effect)
+    // This pulls points toward or away from the boundary
+    float flowerEffect = (r - originalLen) * Curvature; // Curvature is working again ^_^
+    dist += flowerEffect;
+    
+    return dist;
+}
 
 // Function to rotate a point around the origin
 inline float2 rotatePoint(float2 p, float angle)
@@ -117,8 +129,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     p = rotatePoint(p, rotationRadians);
 
     p += Position.yx;
-    float c = sdNgon(p, Radius, Sides) * 2 - Offset * Width;
-    // float c = sdRegularPolygon(p, Radius, Sides) * 2 - Offset * Width ;
+    //float c = sdNgon(p, Radius, Sides) * 2 - Offset * Width;
+    float c = sdRegularPolygon(p, Radius, Sides) * 2 - Offset * Width ;
 
     float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
 
