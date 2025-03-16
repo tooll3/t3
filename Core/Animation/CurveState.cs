@@ -7,11 +7,11 @@ using T3.Serialization;
 
 namespace T3.Core.Animation;
 
-public class CurveState
+internal sealed class CurveState
 {
-    public SortedList<double, VDefinition> Table { get; set; }
+    internal SortedList<double, VDefinition> Table { get; set; }
 
-    public Utils.OutsideCurveBehavior PreCurveMapping
+    internal Utils.OutsideCurveBehavior PreCurveMapping
     {
         get => _preCurveMapping;
         set
@@ -20,7 +20,7 @@ public class CurveState
             PreCurveMapper = Utils.CreateOutsideCurveMapper(value);
         }
     }
-    public Utils.OutsideCurveBehavior PostCurveMapping
+    internal Utils.OutsideCurveBehavior PostCurveMapping
     {
         get => _postCurveMapping;
         set
@@ -30,17 +30,17 @@ public class CurveState
         }
     }
 
-    public IOutsideCurveMapper PreCurveMapper { get; private set; }
-    public IOutsideCurveMapper PostCurveMapper { get; private set; }
+    internal IOutsideCurveMapper PreCurveMapper { get; private set; }
+    internal IOutsideCurveMapper PostCurveMapper { get; private set; }
 
-    public CurveState()
+    internal CurveState()
     {
         Table = new SortedList<double, VDefinition>();
         PreCurveMapping = Utils.OutsideCurveBehavior.Constant;
         PostCurveMapping = Utils.OutsideCurveBehavior.Constant;
     }
 
-    public CurveState Clone()
+    internal CurveState Clone()
     {
         var clone = new CurveState {PreCurveMapping = _preCurveMapping, PostCurveMapping = _postCurveMapping};
 
@@ -50,7 +50,7 @@ public class CurveState
         return clone;
     }
 
-    public virtual void Write(JsonTextWriter writer)
+    internal void Write(JsonTextWriter writer)
     {
         writer.WritePropertyName("Curve");
         writer.WriteStartObject();
@@ -77,7 +77,7 @@ public class CurveState
         writer.WriteEndObject();
     }
 
-    public virtual void Read(JToken inputToken)
+    internal void Read(JToken inputToken)
     {
         JToken curveToken = inputToken["Curve"];
         if (curveToken == null)

@@ -25,6 +25,21 @@ public class VDefinition
         Cubic,
     }
 
+    /** Proposed modes for improved keyframe handling
+     * This would require converting the original animations on import and calculating
+     * default tangent weights.
+     */
+    public enum Mode
+    {
+        Linear,
+        Constant,
+        Horizontal,
+        AutoClamped,
+        Auto,
+        FreeAligned,
+        Free,
+    }
+    
     private double _u;
     public double U
     {
