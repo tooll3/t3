@@ -18,6 +18,8 @@ public static class FrameStats
         public bool HasKeyframesAfterCurrentTime;
         public bool HasAnimatedParameters => HasKeyframesBeforeCurrentTime || HasKeyframesAfterCurrentTime;
         public bool IsItemContextMenuOpen;
+        public bool OpenedPopupCapturedMouse;
+        public bool OpenedPopupHovered;
         public bool UiColorsChanged;
         public bool SomethingWithTooltipHovered;
         public bool UndoRedoTriggered;
@@ -35,6 +37,8 @@ public static class FrameStats
             IsItemContextMenuOpen = false;
             UiColorsChanged = false;
             OpenedPopUpName = string.Empty;
+            OpenedPopupCapturedMouse = false;
+            OpenedPopupHovered = false;
             SomethingWithTooltipHovered = false;
             UndoRedoTriggered = false;
         }

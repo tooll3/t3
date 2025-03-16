@@ -236,6 +236,7 @@ internal static class PlaceHolderUi
                              | ImGuiWindowFlags.NoResize
                             ))
         {
+            FrameStats.Current.OpenedPopupHovered = ImGui.IsWindowHovered();
             if (!string.IsNullOrEmpty(filter.SearchString)
                 || filter.FilterInputType != null
                 || filter.FilterOutputType != null)

@@ -93,7 +93,7 @@ internal static class ParameterPopUp
             {
                 Close();
             }
-
+            FrameStats.Current.OpenedPopUpName = ParameterPopUpName;
             ImGui.GetWindowDrawList().AddRectFilled(ImGui.GetWindowPos(),
                                                     ImGui.GetWindowPos() + ImGui.GetWindowSize(),
                                                     UiColors.BackgroundFull);
@@ -109,6 +109,8 @@ internal static class ParameterPopUp
             {
                 Close();
             }
+            
+            FrameStats.Current.OpenedPopupHovered = ImGui.IsItemHovered();
 
 
             // Toolbar
@@ -168,7 +170,7 @@ internal static class ParameterPopUp
             switch (_viewMode)
             {
                 case ViewModes.Parameters:
-                    FrameStats.Current.OpenedPopUpName = ParameterPopUpName;
+                    
                     ImGui.BeginChild("Scrolling", new Vector2(DefaultWindowSize.X, height - 5 ), false);
                     CustomComponents.HandleDragScrolling(_parameterPopUpReference);
                     ImGui.PushFont(Fonts.FontSmall);

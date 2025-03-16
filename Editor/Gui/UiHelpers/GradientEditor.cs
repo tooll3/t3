@@ -260,7 +260,7 @@ public static class GradientEditor
                 && ImGui.GetIO().MouseDragMaxDistanceAbs[0].Length() < UserSettings.Config.ClickThreshold
                 && !ImGui.IsPopupOpen("##colorEdit"))
             {
-                FrameStats.Current.OpenedPopUpName = "##colorEdit";
+                //FrameStats.Current.OpenedPopUpName = "##colorEdit";
                 ImGui.OpenPopup("##colorEdit");
                 ImGui.SetNextWindowPos(new Vector2(handleArea.Min.X, handleArea.Max.Y));
             }

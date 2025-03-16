@@ -27,6 +27,7 @@ internal static class PlaybackSettingsPopup
         }
 
         FrameStats.Current.OpenedPopUpName = PlaybackSettingsPopupId;
+        FrameStats.Current.OpenedPopupHovered = ImGui.IsWindowHovered();
         FrameStats.Current.IsItemContextMenuOpen = true;
 
         ImGui.PushFont(Fonts.FontLarge);

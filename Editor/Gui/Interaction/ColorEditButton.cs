@@ -92,6 +92,7 @@ public static class ColorEditButton
         if (showBrightnessSlider)
         {
             FrameStats.Current.OpenedPopUpName = "ColorBrightnessSlider";
+            FrameStats.Current.OpenedPopupCapturedMouse = true;
             var hsb = new Color(color).AsHsl;
             var previousHsb = new Color(_previousColor).AsHsl;
 
