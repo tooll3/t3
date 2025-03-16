@@ -118,6 +118,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
         public Type ConnectionType;
         public int SnappedConnectionHash;
         public Guid SlotId;
+        public int OutputLineIndex;
     }
 
 
@@ -171,6 +172,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
             point.ConnectionType = OutputLines[0].Output.ValueType;
             point.SnappedConnectionHash = GetSnappedConnectionHash(OutputLines[0].ConnectionsOut);
             point.SlotId = OutputLines[0].Output.Id;
+            point.OutputLineIndex = 0;
             return;
         }
 
@@ -180,6 +182,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
         point.ConnectionType = OutputLines[lineIndex].Output.ValueType;
         point.SnappedConnectionHash = GetSnappedConnectionHash(OutputLines[lineIndex].ConnectionsOut);
         point.SlotId = OutputLines[lineIndex].Output.Id;
+        point.OutputLineIndex = lineIndex;
     }
 
     public int GetOutputAnchorCount() => OutputLines.Length == 0 ? 0 : OutputLines.Length + 1;
@@ -202,6 +205,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
             anchorPoint.SnappedConnectionHash = InputLines[0].ConnectionIn?.ConnectionHash ?? FreeAnchor;
             anchorPoint.SlotId = InputLines[0].Id;
             anchorPoint.InputLine = InputLines[0];
+            
             return;
         }
         

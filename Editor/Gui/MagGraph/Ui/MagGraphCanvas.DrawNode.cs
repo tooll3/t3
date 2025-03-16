@@ -44,7 +44,7 @@ internal sealed partial class MagGraphCanvas
             idleFactor = MathUtils.RemapAndClamp(framesSinceLastUpdate, 0f, 60f, 0f, 1f);
         }
 
-        var hoverProgress = GetHoverTimeForId(item.Id).RemapAndClamp(0, 0.3f, 0, 1);
+        var hoverProgress = GetHoverTimeForId(item.Id).RemapAndClamp(0, 0.2f, 0, 1);
 
         var smallFontScaleFactor = CanvasScale.Clamp(0.5f, 2);
 
@@ -136,13 +136,12 @@ internal sealed partial class MagGraphCanvas
         }
 
         var isSelected = _context.Selector.IsSelected(item);
-        var outlineColor = isSelected
-                               ? UiColors.ForegroundFull
-                               : UiColors.BackgroundFull.Fade(0f);
-
-        drawList.AddRect(pMinVisible, pMaxVisible, outlineColor,
-                         CanvasScale < 0.5 ? 0 : 6 * CanvasScale,
-                         imDrawFlags);
+        if (isSelected)
+        {
+            drawList.AddRect(pMinVisible, pMaxVisible, UiColors.ForegroundFull,
+                             CanvasScale < 0.5 ? 0 : 6 * CanvasScale,
+                             imDrawFlags);
+        }
 
         // Custom Ui
         SymbolUi.Child.CustomUiResult customUiResult = SymbolUi.Child.CustomUiResult.None;
@@ -206,21 +205,20 @@ internal sealed partial class MagGraphCanvas
                 name = "   " + name;
             }
 
-            ImGui.PushFont(Fonts.FontBold);
+            ImGui.PushFont(Fonts.FontNormal);
             var labelSize = ImGui.CalcTextSize(name);
             ImGui.PopFont();
 
             var paddingForPreview = hasPreview ? MagGraphItem.LineHeight + 10 : 0;
             var downScale = MathF.Min(1f, (MagGraphItem.Width - paddingForPreview) * 0.9f / labelSize.X);
 
-            var fontSize = Fonts.FontBold.FontSize * downScale * CanvasScale.Clamp(0.1f, 2f);
-            var yCenter = pMin.Y + MagGraphItem.GridSize.Y / 2 * CanvasScale - fontSize / 2 - 2;
-
-            //var labelPos = pMin + new Vector2(8, 8) * CanvasScale + new Vector2(0, -1);
+            var fontSize = Fonts.FontNormal.FontSize * downScale * CanvasScale.Clamp(0.1f, 2f);
+            var visibleLineHeight = Math.Min((pMaxVisible.Y - pMinVisible.Y), MagGraphItem.LineHeight * CanvasScale);
+            var yCenter = pMin.Y + visibleLineHeight / 2 - fontSize / 2 ;
             var labelPos = new Vector2(pMin.X + 8 * CanvasScale, yCenter);
 
             labelPos = new Vector2(MathF.Round(labelPos.X), MathF.Round(labelPos.Y));
-            drawList.AddText(Fonts.FontBold,
+            drawList.AddText(Fonts.FontNormal,
                              fontSize,
                              labelPos,
                              labelColor,
@@ -417,13 +415,13 @@ internal sealed partial class MagGraphCanvas
                 }
 
                 // Indicator primary output op peek position...
-                if (_context.ActiveSourceItem != null && item.Id == _context.ActiveSourceItem.Id)
-                {
-                    drawList.AddCircleFilled(TransformPosition(new Vector2(item.Area.Max.X - MagGraphItem.GridSize.Y * 0.25f,
-                                                                           item.Area.Min.Y + MagGraphItem.GridSize.Y * 0.5f)),
-                                             3 * CanvasScale,
-                                             UiColors.ForegroundFull);
-                }
+                // if (_context.ActiveSourceItem != null && item.Id == _context.ActiveSourceItem.Id)
+                // {
+                //     drawList.AddCircleFilled(TransformPosition(new Vector2(item.Area.Max.X - MagGraphItem.GridSize.Y * 0.25f,
+                //                                                            item.Area.Min.Y + MagGraphItem.GridSize.Y * 0.5f)),
+                //                              3 * CanvasScale,
+                //                              UiColors.ForegroundFull);
+                // }
             }
         }
 
@@ -562,7 +560,7 @@ internal sealed partial class MagGraphCanvas
 
         var hoverFactor = hoverProgress.RemapAndClamp(0, 1, 1, 1.5f);
 
-        // Draw output sockets
+        // Draw output sockets...
         var count = item.GetOutputAnchorCount();
         MagGraphItem.OutputAnchorPoint outputAnchor = default;
         for (var index = 0; index < count; index++)
@@ -572,98 +570,127 @@ internal sealed partial class MagGraphCanvas
             var type2UiProperties = TypeUiRegistry.GetPropertiesForType(outputAnchor.ConnectionType);
 
             var posOnCanvas = TransformPosition(outputAnchor.PositionOnCanvas);
-            var color = ColorVariations.OperatorBackground.Apply(type2UiProperties.Color).Fade(0.7f);
 
-            Vector2 pp;
+            Vector2 center;
+            bool isPotentialConnectionStartDropTarget = false;
+            // ...below
             if (outputAnchor.Direction == MagGraphItem.Directions.Vertical)
             {
-                pp = new Vector2(posOnCanvas.X, pMaxVisible.Y);
-                drawList.AddTriangleFilled(pp + new Vector2(-anchorWidth, 0) * CanvasScale * hoverFactor,
-                                           pp + new Vector2(anchorWidth, 0) * CanvasScale * hoverFactor,
-                                           pp + new Vector2(0, anchorHeight) * CanvasScale * hoverFactor,
-                                           color);
-                pp += new Vector2(0, -3);
+                center = new Vector2(posOnCanvas.X, pMaxVisible.Y);
+                // drawList.AddTriangleFilled(pp + new Vector2(-anchorWidth, 0) * CanvasScale * hoverFactor,
+                //                            pp + new Vector2(anchorWidth, 0) * CanvasScale * hoverFactor,
+                //                            pp + new Vector2(0, anchorHeight) * CanvasScale * hoverFactor,
+                //                            color);
+                center += new Vector2(0, -1);
             }
+            // ... on the right
             else
             {
                 // Register for output snapping...
-                var isPotentialConnectionStartDropTarget = _context.StateMachine.CurrentState == GraphStates.DragConnectionBeginning
-                                                           && _context.DraggedPrimaryOutputType == outputAnchor.ConnectionType
-                                                           && outputAnchor.SnappedConnectionHash == MagGraphItem.FreeAnchor;
+                isPotentialConnectionStartDropTarget = _context.StateMachine.CurrentState == GraphStates.DragConnectionBeginning
+                                                       && _context.DraggedPrimaryOutputType == outputAnchor.ConnectionType
+                                                       && outputAnchor.SnappedConnectionHash == MagGraphItem.FreeAnchor;
 
                 if (isPotentialConnectionStartDropTarget)
                 {
-                    color = ColorVariations.OperatorBackground.Apply(type2UiProperties.Color).Fade(Blink);
+                    //fillColor = ColorVariations.OperatorBackground.Apply(type2UiProperties.Color).Fade(Blink);
                     OutputSnapper.RegisterAsPotentialTargetOutput(context, item, outputAnchor);
                 }
 
-                pp = new Vector2(pMaxVisible.X, posOnCanvas.Y);
+                center = new Vector2(pMaxVisible.X, posOnCanvas.Y);
 
-                drawList.AddTriangleFilled(pp + new Vector2(0, 0) + new Vector2(0, -anchorWidth) * CanvasScale * hoverFactor,
-                                           pp + new Vector2(0, 0) + new Vector2(anchorHeight, 0) * CanvasScale * hoverFactor,
-                                           pp + new Vector2(0, 0) + new Vector2(0, anchorWidth) * CanvasScale * hoverFactor,
-                                           color);
-                pp += new Vector2(-3, 0);
+                // drawList.AddTriangleFilled(pp + new Vector2(0, 0) + new Vector2(0, -anchorWidth) * CanvasScale * hoverFactor,
+                //                            pp + new Vector2(0, 0) + new Vector2(anchorHeight, 0) * CanvasScale * hoverFactor,
+                //                            pp + new Vector2(0, 0) + new Vector2(0, anchorWidth) * CanvasScale * hoverFactor,
+                //                            color);
+                center += new Vector2(-2, 0);
             }
 
-            // Draw primary output socket for drag or click
-            if (isItemHovered && context.StateMachine.CurrentState == GraphStates.Default)
+            var hasSnappedConnection = false;
+
+            foreach (var c in item.OutputLines[outputAnchor.OutputLineIndex].ConnectionsOut)
             {
-                var color2 = ColorVariations.OperatorLabel.Apply(type2UiProperties.Color).Fade(0.7f * hoverProgress);
-                var circleCenter = pp;
-                var mouseDistance = Vector2.Distance(ImGui.GetMousePos(), circleCenter);
+                if (!c.IsSnapped)
+                    continue;
 
-                var animationStartRadius = 30 * CanvasScale;
-                var animationEndRadius = 10;
-                var mouseDistanceFactor = mouseDistance.RemapAndClamp(animationStartRadius, animationEndRadius, 0.6f, 1.1f);
-
-                var isActivated = mouseDistance < 7 * CanvasScale;
-                if (isActivated)
+                if (outputAnchor.Direction == MagGraphItem.Directions.Vertical &&
+                    c.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical
+                    
+                    || outputAnchor.Direction == MagGraphItem.Directions.Horizontal &&
+                    c.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal)
                 {
-                    drawList.AddCircleFilled(circleCenter, 5 * CanvasScale, color2);
-
-                    var e = MathF.Round(2 * CanvasScale);
-                    drawList.AddRectFilled(circleCenter + new Vector2(-e, 0),
-                                           circleCenter + new Vector2(e + 1, 1),
-                                           UiColors.BackgroundFull);
-
-                    drawList.AddRectFilled(circleCenter + new Vector2(0, -e),
-                                           circleCenter + new Vector2(1, e + 1),
-                                           UiColors.BackgroundFull);
-
-                    // This will later be used for by DefaultState to create a connection
-                    var contextActiveSourceOutputId = outputAnchor.SlotId;
-                    _context.ActiveSourceOutputId = contextActiveSourceOutputId;
-                    _context.ActiveOutputDirection = outputAnchor.Direction;
-
-                    // Show tooltip with output name and type
-                    if (item.Variant == MagGraphItem.Variants.Operator)
-                    {
-                        var outputLine = item.OutputLines.FirstOrDefault(o => o.Id == contextActiveSourceOutputId);
-
-                        if (outputLine.Id == contextActiveSourceOutputId)
-                        {
-                            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
-                            ImGui.BeginTooltip();
-                            ImGui.TextUnformatted(outputLine.OutputUi.OutputDefinition.Name);
-                            var type = outputLine.OutputUi.OutputDefinition.ValueType;
-                            var typeName = type.Name;
-                            if (typeName == "Single")
-                                typeName = "Float";
-
-                            var uiProperties = TypeUiRegistry.GetPropertiesForType(type);
-                            //var valueName = TypeUiRegistry.
-                            ImGui.PushStyleColor(ImGuiCol.Text, uiProperties.Color.Rgba);
-                            ImGui.TextUnformatted(typeName);
-                            ImGui.PopStyleColor();
-                            ImGui.EndTooltip();
-                            ImGui.PopStyleVar();
-                        }
-                    }
+                    hasSnappedConnection = true;
+                    break;
                 }
-                else
+            }
+            
+
+            var isOutputHovered = isItemHovered
+                                  && Vector2.Distance(ImGui.GetMousePos(), center) < 7 * CanvasScale
+                                  && context.StateMachine.CurrentState == GraphStates.Default;
+
+            var anchorOutlineColor = ColorVariations.OperatorOutline.Apply(type2UiProperties.Color);
+
+            var fillColor = ColorVariations.OperatorBackground.Apply(type2UiProperties.Color);
+            if (isOutputHovered)
+            {
+                fillColor = ColorVariations.Highlight.Apply(type2UiProperties.Color);
+            }
+            else if (isPotentialConnectionStartDropTarget)
+            {
+                fillColor = ColorVariations.ConnectionLines.Apply(type2UiProperties.Color).Fade(Blink);
+            }
+
+            var hoverOutputFactor = isOutputHovered ? 1.3f : 1;
+
+            //var hasSnappedConnection = outputAnchor.
+            
+            if (!hasSnappedConnection
+                || isItemHovered
+                || isOutputHovered)
+            {
+                drawList.AddCircleFilled(center, (1 + 2 * hoverOutputFactor) * CanvasScale - 1, fillColor, 12);
+                drawList.AddCircle(center, (1 + 2 * hoverOutputFactor) * CanvasScale, anchorOutlineColor, 12);
+            }
+            
+            if (isOutputHovered)
+            {
+                var e = MathF.Round(2 * CanvasScale);
+                drawList.AddRectFilled(center + new Vector2(-e, 0),
+                                       center + new Vector2(e + 1, 1),
+                                       anchorOutlineColor);
+
+                drawList.AddRectFilled(center + new Vector2(0, -e),
+                                       center + new Vector2(1, e + 1),
+                                       anchorOutlineColor);
+
+                // This will later be used for by DefaultState to create a connection
+                var contextActiveSourceOutputId = outputAnchor.SlotId;
+                _context.ActiveSourceOutputId = contextActiveSourceOutputId;
+                _context.ActiveOutputDirection = outputAnchor.Direction;
+
+                // Show tooltip with output name and type
+                if (item.Variant == MagGraphItem.Variants.Operator)
                 {
-                    drawList.AddCircle(circleCenter, 3 * hoverFactor * mouseDistanceFactor, color2);
+                    var outputLine = item.OutputLines.FirstOrDefault(o => o.Id == contextActiveSourceOutputId);
+
+                    if (outputLine.Id == contextActiveSourceOutputId)
+                    {
+                        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
+                        ImGui.BeginTooltip();
+                        ImGui.TextUnformatted(outputLine.OutputUi.OutputDefinition.Name);
+                        var type = outputLine.OutputUi.OutputDefinition.ValueType;
+                        var typeName = type.Name;
+                        if (typeName == "Single")
+                            typeName = "Float";
+
+                        var uiProperties = TypeUiRegistry.GetPropertiesForType(type);
+                        ImGui.PushStyleColor(ImGuiCol.Text, uiProperties.Color.Rgba);
+                        ImGui.TextUnformatted(typeName);
+                        ImGui.PopStyleColor();
+                        ImGui.EndTooltip();
+                        ImGui.PopStyleVar();
+                    }
                 }
             }
 
@@ -677,85 +704,7 @@ internal sealed partial class MagGraphCanvas
             {
                 if (_context.StateMachine.CurrentState == GraphStates.PickOutput && _context.ActiveItem == item)
                 {
-                    ImGui.PushStyleVar(ImGuiStyleVar.ChildRounding, 5);
-                    ImGui.PushStyleVar(ImGuiStyleVar.PopupBorderSize, 0);
-                    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 4);
-                    ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0, 0));
-                    ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(0, 0));
-
-                    ImGui.PushStyleColor(ImGuiCol.ChildBg, UiColors.BackgroundFull.Fade(0.7f).Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundFull.Fade(0.0f).Rgba);
-                    
-                    if (ImGui.BeginPopup("pickOutput", ImGuiWindowFlags.Popup))
-                    {
-                        CustomComponents.HintLabel("Pick output...");
-                        WindowContentExtend.ExtendToLastItem();
-
-                        foreach (var o in context.ActiveItem.SymbolUi!.OutputUis.Values)
-                        {
-                            var isVisible = false;
-                            foreach (var visibleOutput in context.ActiveItem.OutputLines)
-                            {
-                                if (visibleOutput.Id != o.Id) continue;
-                                isVisible = true;
-                                break;
-                            }
-
-                            if (isVisible)
-                                continue;
-
-                            var name = o.OutputDefinition.Name;
-                            var labelSize = ImGui.CalcTextSize(name);
-                            var width = MathF.Max(200 - 4, labelSize.X + 30);
-                            var buttonSize = new Vector2(width, ImGui.GetFrameHeight());
-
-                            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0,0.5f));
-                            ImGui.Button(name);
-                            ImGui.PopStyleVar();
-
-                            if (ImGui.IsItemHovered()
-                                && (ImGui.IsItemClicked(ImGuiMouseButton.Left)
-                                    || ImGui.IsMouseReleased(ImGuiMouseButton.Left)
-                                   )
-                               )
-                            {
-                                var outputSlot = context.ActiveItem?.Instance?.Outputs.FirstOrDefault(os => os.Id == o.Id);
-                                if (outputSlot == null)
-                                    break;
-
-                                var tempConnection = new MagGraphConnection
-                                                         {
-                                                             Style = MagGraphConnection.ConnectionStyles.Unknown,
-                                                             SourcePos = context.ActiveItem.PosOnCanvas,
-                                                             TargetPos = default,
-                                                             SourceItem = context.ActiveItem,
-                                                             TargetItem = null,
-                                                             SourceOutput = outputSlot,
-                                                             OutputLineIndex = 0,
-                                                             VisibleOutputIndex = 0,
-                                                             ConnectionHash = 0,
-                                                             IsTemporary = true,
-                                                         };
-                                context.TempConnections.Add(tempConnection);
-                                context.ActiveSourceItem = context.ActiveItem;
-                                context.ActiveSourceOutputId = outputSlot.Id;
-                                context.DraggedPrimaryOutputType = outputSlot.ValueType;
-                                context.StateMachine.SetState(GraphStates.DragConnectionEnd, context);
-                                ImGui.CloseCurrentPopup();
-                            }
-
-                            WindowContentExtend.ExtendToLastItem();
-
-                        }
-                        ImGui.EndPopup();
-                    }
-                    else
-                    {
-                        // Reset on release?
-                        context.StateMachine.SetState(GraphStates.Default, context);
-                    }
-                    ImGui.PopStyleVar(5);
-                    ImGui.PopStyleColor(2);
+                    DrawAdditionOutputSelector(context);
                 }
                 else
                 {
@@ -836,6 +785,98 @@ internal sealed partial class MagGraphCanvas
                 }
             }
         }
+    }
+
+    private static void DrawAdditionOutputSelector(GraphUiContext context)
+    {
+        ImGui.PushStyleVar(ImGuiStyleVar.ChildRounding, 5);
+        ImGui.PushStyleVar(ImGuiStyleVar.PopupBorderSize, 0);
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 4);
+        ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0, 0));
+        ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(0, 0));
+
+        ImGui.PushStyleColor(ImGuiCol.ChildBg, UiColors.BackgroundFull.Fade(0.7f).Rgba);
+        ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundFull.Fade(0.0f).Rgba);
+        
+        ImGui.SetNextWindowPos(ImGui.GetMousePos() - new Vector2(10, 10), ImGuiCond.Appearing);
+                    
+        if (ImGui.BeginPopup("pickOutput", ImGuiWindowFlags.Popup))
+        {
+            CustomComponents.HintLabel("Pick output...");
+            WindowContentExtend.ExtendToLastItem();
+                        
+                        
+            if (ImGui.IsMouseDown(ImGuiMouseButton.Left) && !ImGui.IsWindowHovered())
+            {
+                Log.Debug("Down and exited");
+            }
+
+            foreach (var o in context.ActiveItem.SymbolUi!.OutputUis.Values)
+            {
+                var isVisible = false;
+                foreach (var visibleOutput in context.ActiveItem.OutputLines)
+                {
+                    if (visibleOutput.Id != o.Id) continue;
+                    isVisible = true;
+                    break;
+                }
+
+                if (isVisible)
+                    continue;
+
+                var name = o.OutputDefinition.Name;
+                var labelSize = ImGui.CalcTextSize(name);
+                var width = MathF.Max(200 - 4, labelSize.X + 30);
+                var buttonSize = new Vector2(width, ImGui.GetFrameHeight());
+
+                ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0, 0.5f));
+                ImGui.Button(name);
+                ImGui.PopStyleVar();
+
+                if (ImGui.IsItemHovered()
+                    && (ImGui.IsItemClicked(ImGuiMouseButton.Left)
+                        || ImGui.IsMouseReleased(ImGuiMouseButton.Left)
+                       )
+                   )
+                {
+                    var outputSlot = context.ActiveItem?.Instance?.Outputs.FirstOrDefault(os => os.Id == o.Id);
+                    if (outputSlot == null)
+                        break;
+
+                    var tempConnection = new MagGraphConnection
+                                             {
+                                                 Style = MagGraphConnection.ConnectionStyles.Unknown,
+                                                 SourcePos = context.ActiveItem.PosOnCanvas,
+                                                 TargetPos = default,
+                                                 SourceItem = context.ActiveItem,
+                                                 TargetItem = null,
+                                                 SourceOutput = outputSlot,
+                                                 OutputLineIndex = 0,
+                                                 VisibleOutputIndex = 0,
+                                                 ConnectionHash = 0,
+                                                 IsTemporary = true,
+                                             };
+                    context.TempConnections.Add(tempConnection);
+                    context.ActiveSourceItem = context.ActiveItem;
+                    context.ActiveSourceOutputId = outputSlot.Id;
+                    context.DraggedPrimaryOutputType = outputSlot.ValueType;
+                    context.StateMachine.SetState(GraphStates.DragConnectionEnd, context);
+                    ImGui.CloseCurrentPopup();
+                }
+
+                WindowContentExtend.ExtendToLastItem();
+            }
+
+            ImGui.EndPopup();
+        }
+        else
+        {
+            // Reset on release?
+            context.StateMachine.SetState(GraphStates.Default, context);
+        }
+
+        ImGui.PopStyleVar(5);
+        ImGui.PopStyleColor(2);
     }
 
     private void DrawMissingInputIndicator(ImDrawListPtr drawList, Vector2 pMin, MagGraphItem.InputLine inputLine)
