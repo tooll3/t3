@@ -170,7 +170,7 @@ internal sealed partial class MagGraphCanvas
                                                              out var normalizedHoverPos))
                     {
                         if(context.StateMachine.CurrentState == GraphStates.Default)
-                            ConnectionHovering.RegisterAsPotentialSplit(connection, typeColor, hoverPositionOnLine, normalizedHoverPos);                        
+                            ConnectionHovering.RegisterHoverPoint(connection, typeColor, hoverPositionOnLine, normalizedHoverPos, sourcePosOnScreen);                        
                     }
                     
                     // Draw triangle

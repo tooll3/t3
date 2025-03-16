@@ -60,7 +60,7 @@ internal sealed class ConnectionHovering
         var firstType = firstHover.Connection.Type;
         var firstOutput = firstHover.Connection.SourceOutput;
         var typesMatch = true;
-        var region = GetLineRegion(firstHover);
+        var region = firstHover.Region;
 
         for (var index = 1; index < _lastConnectionHovers.Count; index++)
         {
@@ -69,8 +69,11 @@ internal sealed class ConnectionHovering
             if (h.Connection.Type != firstType)
                 typesMatch = false;
 
-            if (region != GetLineRegion(h))
+            if (region != h.Region)
+            {
                 region = LineRegions.Undefined;
+                break;
+            }
 
             if (firstOutput != h.Connection.SourceOutput)
                 firstOutput = null;
@@ -237,17 +240,7 @@ internal sealed class ConnectionHovering
         Center,
         End,
     }
-
-    internal static LineRegions GetLineRegion(HoverPoint hoverPoint)
-    {
-        const float threshold = 0.5f;
-        return hoverPoint.NormalizedDistanceOnLine switch
-                   {
-                       < threshold     => LineRegions.Beginning,
-                       > 1 - threshold => LineRegions.End,
-                       _               => LineRegions.Center
-                   };
-    }
+    
 
     internal static bool IsHovered(MagGraphConnection connection)
     {
@@ -260,15 +253,22 @@ internal sealed class ConnectionHovering
         return false;
     }
 
-    public static void RegisterAsPotentialSplit(MagGraphConnection mcConnection, Color color, Vector2 position, float normalizedPosition)
+    public static void RegisterHoverPoint(MagGraphConnection mcConnection, Color color, Vector2 positionOnScreen, float normalizedPosition,
+                                                Vector2 sourcePosOnScreen)
     {
-        // var distance = Vector2.Distance(position, _mousePosition);
-        // if (distance > SnapDistance || distance > _bestSnapSplitDistance)
-        // {
-        //     return;
-        // }
-        //
-        _connectionHoversForCurrentFrame.Add(new HoverPoint(position, normalizedPosition, mcConnection, color));
+        var overlapWithOutputThreshold = 10;
+        if (Vector2.Distance(positionOnScreen, sourcePosOnScreen) < overlapWithOutputThreshold)
+            return;
+        
+        const float threshold = 0.5f;
+        var region = normalizedPosition switch
+                         {
+                             < threshold     => LineRegions.Beginning,
+                             > 1 - threshold => LineRegions.End,
+                             _               => LineRegions.Center
+                         };
+
+        _connectionHoversForCurrentFrame.Add(new HoverPoint(positionOnScreen, normalizedPosition, mcConnection, color, region));
     }
 
     //internal MagGraphConnection? HoveredInputConnection;
@@ -289,5 +289,6 @@ internal sealed class ConnectionHovering
         Vector2 PositionOnScreen,
         float NormalizedDistanceOnLine,
         MagGraphConnection Connection,
-        Color Color);
+        Color Color,
+        LineRegions Region);
 }
