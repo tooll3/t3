@@ -4,7 +4,7 @@ using T3.Core.Utils;
 using Device = SharpDX.Direct3D11.Device;
 using Utilities = T3.Core.Utils.Utilities;
 
-namespace Lib.image.generate.render;
+namespace Lib.image.generate.basic;
 
 [Guid("f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1")]
 internal sealed class RenderTarget : Instance<RenderTarget>, IRenderStatsProvider

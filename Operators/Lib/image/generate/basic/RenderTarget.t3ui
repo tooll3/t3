@@ -1,6 +1,7 @@
 {
   "Id": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1"/*RenderTarget*/,
   "Description": "The primary method of rendering 3D data into a 2D image texture. You will need this for all post-processing image effects and many other applications.",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "03749b41-cc3c-4f38-aea6-d7cea19fc073"/*Resolution*/,
