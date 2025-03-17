@@ -27,7 +27,7 @@ public struct PbrVertex
     public float Selection;
 
     [FieldOffset(17 * 4)]
-    private float __padding;
+    private Vector3 __padding;
 
-    public const int Stride = 18 * 4; // Total size: 18 floats -> 72 bytes
+    public const int Stride = 20 * 4; // Total size: 20 floats -> 80 bytes
 }

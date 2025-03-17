@@ -1,6 +1,6 @@
-#include "lib/shared/hash-functions.hlsl"
-#include "lib/shared/noise-functions.hlsl"
-#include "lib/shared/pbr.hlsl"
+#include "shared/hash-functions.hlsl"
+#include "shared/noise-functions.hlsl"
+#include "shared/pbr.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -118,6 +118,7 @@ inline float3 TwistFunction(float3 position, float twistAmount)
     ResultVerts[i.x].Bitangent = SourceVerts[i.x].Bitangent;
 
     ResultVerts[i.x].TexCoord = SourceVerts[i.x].TexCoord;
+    ResultVerts[i.x].TexCoord2 = SourceVerts[i.x].TexCoord2;
 
     ResultVerts[i.x].Selected = SourceVerts[i.x].Selected;
 }

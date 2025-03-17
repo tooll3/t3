@@ -6,12 +6,12 @@
       "DefaultValue": 1.0
     },
     {
-      "Id": "4ccfb3fe-5c64-45d6-8b3f-63249c69e146"/*Mesh*/,
-      "DefaultValue": null
+      "Id": "35a63cbe-7fd5-45da-9d69-322dd79db493"/*SwitchUV*/,
+      "DefaultValue": false
     },
     {
-      "Id": "d9e27d5d-bc00-4482-a4e7-8bc83c577913"/*SwitchUV*/,
-      "DefaultValue": false
+      "Id": "4ccfb3fe-5c64-45d6-8b3f-63249c69e146"/*Mesh*/,
+      "DefaultValue": null
     }
   ],
   "Children": [
@@ -252,7 +252,7 @@
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
-      "SourceSlotId": "d9e27d5d-bc00-4482-a4e7-8bc83c577913",
+      "SourceSlotId": "35a63cbe-7fd5-45da-9d69-322dd79db493",
       "TargetParentOrChildId": "fad06111-d66e-4d3b-92e4-3f194a6ff790",
       "TargetSlotId": "253b9ae4-fac5-4641-bf0c-d8614606a840"
     }
