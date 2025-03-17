@@ -52,6 +52,7 @@ internal sealed partial class MagGraphCanvas
             _context.ActiveItem = null;
             _context.ItemWithActiveCustomUi = null;
             _context.ActiveSourceOutputId = Guid.Empty;
+            _context.ActiveTargetInputId = Guid.Empty;
         }
 
         DrawBackgroundGrids(drawList);

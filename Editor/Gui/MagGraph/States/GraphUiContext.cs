@@ -99,6 +99,11 @@ internal sealed class GraphUiContext
     internal MagGraphItem? ItemForInputSelection;
     internal MagGraphItem? ActiveSourceItem;
     internal Guid ActiveSourceOutputId { get; set; }
+    
+    internal MagGraphItem? ActiveTargetItem;
+    internal Guid ActiveTargetInputId { get; set; }
+
+    
     // internal GraphImageBackground GraphImageBackground { get;private set; }
 
     /** Used to prevent disconnected inputLines from collapsing... */
@@ -111,12 +116,39 @@ internal sealed class GraphUiContext
             outputLine = default;
             return false;
         }
+
+        foreach (var l in ActiveSourceItem
+                    .OutputLines)
+        {
+            if (l.Id != ActiveSourceOutputId) 
+                continue;
+            
+            outputLine = l;
+            return true;
+        }
+        outputLine = default;
+        return false;
+    }
+    
+    internal bool TryGetActiveInputLine(out MagGraphItem.InputLine inputLine)
+    {
+        if (ActiveTargetItem == null || ActiveTargetItem.InputLines.Length == 0)
+        {
+            inputLine = default;
+            return false;
+        }
         
-        outputLine= ActiveSourceItem
-                       .OutputLines
-                       .FirstOrDefault(l => l.Id == ActiveSourceOutputId);
-        
-        return true;
+        foreach (var l in ActiveTargetItem
+                    .InputLines)
+        {
+            if (l.Id != ActiveTargetInputId) 
+                continue;
+            
+            inputLine = l;
+            return true;
+        }
+        inputLine = default;
+        return false;
     }
     
     internal Vector2 PeekAnchorInCanvas;
