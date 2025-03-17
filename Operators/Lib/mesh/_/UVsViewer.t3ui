@@ -13,18 +13,18 @@
       "Clamp": true
     },
     {
+      "InputId": "35a63cbe-7fd5-45da-9d69-322dd79db493"/*SwitchUV*/,
+      "Position": {
+        "X": -485.13284,
+        "Y": 1067.2579
+      }
+    },
+    {
       "InputId": "4ccfb3fe-5c64-45d6-8b3f-63249c69e146"/*Mesh*/,
       "Relevancy": "Required",
       "Position": {
         "X": -493.16177,
         "Y": 823.9202
-      }
-    },
-    {
-      "InputId": "d9e27d5d-bc00-4482-a4e7-8bc83c577913"/*SwitchUV*/,
-      "Position": {
-        "X": -485.13284,
-        "Y": 1067.2579
       }
     }
   ],
