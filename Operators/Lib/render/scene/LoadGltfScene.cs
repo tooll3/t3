@@ -931,11 +931,15 @@ public class LoadGltfScene : Instance<LoadGltfScene>
 
             // Collect texture coords
             Vector2[]? texCoords = null;
+            Vector2[]? texCoords2 = null;
             if (vertexAccessors.TryGetValue("TEXCOORD_0", out var texAccess))
             {
                 texCoords = texAccess.AsVector2Array().ToArray();
             }
-
+            if (vertexAccessors.TryGetValue("TEXCOORD_1", out var texAccess2))  // Check for second texture coordinate set
+            {
+                texCoords2 = texAccess2.AsVector2Array().ToArray();
+            }
             // Write vertex buffer
             for (var vertexIndex = 0; vertexIndex < positions.Count; vertexIndex++)
             {
@@ -950,7 +954,11 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                                                                        ? Vector2.Zero
                                                                        : new Vector2(texCoords[vertexIndex].X,
                                                                                      1 - texCoords[vertexIndex].Y),
-                                                        Selection = 1,
+                                                        Texcoord2 = texCoords2 == null
+                                                                       ? Vector2.Zero
+                                                                       : new Vector2(texCoords2[vertexIndex].X,
+                                                                                     1 - texCoords2[vertexIndex].Y),
+                    Selection = 1,
                                                     };
             }
             
