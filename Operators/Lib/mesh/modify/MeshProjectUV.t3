@@ -2,6 +2,10 @@
   "Id": "97ffb173-f4cc-4143-a479-80cf3465cc7e"/*MeshProjectUV*/,
   "Inputs": [
     {
+      "Id": "02c87571-ebaa-4cf9-bc6d-335911b50d07"/*ToTexCoord2*/,
+      "DefaultValue": false
+    },
+    {
       "Id": "10bc1ef8-e036-4da0-9bc8-65da0ddff7f0"/*Mesh*/,
       "DefaultValue": null
     },
@@ -344,6 +348,12 @@
           "Value": 32
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "d7d5b264-4922-45e4-83ee-25e3ab36b2c7"/*BoolToFloat*/,
+      "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -709,6 +719,12 @@
       "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
     },
     {
+      "SourceParentOrChildId": "d7d5b264-4922-45e4-83ee-25e3ab36b2c7",
+      "SourceSlotId": "f0321a54-e844-482f-a161-7f137abc54b0",
+      "TargetParentOrChildId": "b5b60e5f-b096-4c24-9da1-25303395888f",
+      "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
+    },
+    {
       "SourceParentOrChildId": "c73dbb0a-4897-4777-b2d4-bef13a2e7931",
       "SourceSlotId": "956f31aa-8c84-4d2d-9fc7-e63d753f6941",
       "TargetParentOrChildId": "b8f088da-2c6d-4dfa-b99f-5edbd42d4b65",
@@ -779,6 +795,12 @@
       "SourceSlotId": "e6aae72f-8c22-4133-ba0d-c3635751d715",
       "TargetParentOrChildId": "d77e2728-9ef7-444a-893d-caed0aad783d",
       "TargetSlotId": "16f98211-fe97-4235-b33a-ddbbd2b5997f"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "02c87571-ebaa-4cf9-bc6d-335911b50d07",
+      "TargetParentOrChildId": "d7d5b264-4922-45e4-83ee-25e3ab36b2c7",
+      "TargetSlotId": "253b9ae4-fac5-4641-bf0c-d8614606a840"
     },
     {
       "SourceParentOrChildId": "c25aa975-b656-4686-940d-2b262f16c4ee",
