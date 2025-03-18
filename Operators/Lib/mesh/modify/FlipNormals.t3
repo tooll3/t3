@@ -72,7 +72,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\3d\\mesh\\mesh-FlipNormals.hlsl"
+          "Value": "Resources/lib/3d/mesh/mesh-FlipNormals.hlsl"
         }
       ],
       "Outputs": []
@@ -187,6 +187,12 @@
       "SourceSlotId": "1368ab8e-d75e-429f-8ecd-0944f3ede9ab",
       "TargetParentOrChildId": "99f61513-879b-4fd5-9fc4-ff914b470b3d",
       "TargetSlotId": "88938b09-d5a7-437c-b6e1-48a5b375d756"
+    },
+    {
+      "SourceParentOrChildId": "3f2e7e43-8e1c-4d2f-8a56-2715164e948c",
+      "SourceSlotId": "6d7a9493-6210-462a-b9c2-525b925de6c8",
+      "TargetParentOrChildId": "d92b11c5-1ef4-4d82-8d37-8a48c0b724fb",
+      "TargetSlotId": "4515c98e-05bc-4186-8773-4d2b31a8c323"
     },
     {
       "SourceParentOrChildId": "b2d979cf-39d1-427c-82f9-7d2aeafd2245",
