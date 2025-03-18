@@ -28,6 +28,9 @@ internal sealed class TransformMeshUVs : Instance<TransformMeshUVs>
     [Input(Guid = "590e24cc-00cc-4c9a-8f96-850857686c4a")]
     public readonly InputSlot<Vector3> Pivot = new InputSlot<Vector3>();
 
+        [Input(Guid = "b9724cb4-1a5f-4250-8d2d-d0f5a12dbeb1")]
+        public readonly InputSlot<bool> TexCoord2 = new InputSlot<bool>();
+
         
     private enum Spaces
     {

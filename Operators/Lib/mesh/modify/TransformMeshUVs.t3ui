@@ -39,6 +39,14 @@
       "Description": "Moves the UV coordinates linearly"
     },
     {
+      "InputId": "b9724cb4-1a5f-4250-8d2d-d0f5a12dbeb1"/*TexCoord2*/,
+      "Position": {
+        "X": 194.30124,
+        "Y": 3179.135
+      },
+      "GroupTitle": "UvMap Selection"
+    },
+    {
       "InputId": "b9e7efdf-98d6-4d5a-94e8-16f38cfe4e55"/*InputMesh*/,
       "Relevancy": "Required",
       "Position": {
@@ -83,6 +91,13 @@
       }
     },
     {
+      "ChildId": "498d6ea3-82c3-4fec-842a-43c2b4430ede"/*BoolToFloat*/,
+      "Position": {
+        "X": 664.31287,
+        "Y": 3367.9426
+      }
+    },
+    {
       "ChildId": "4d7e6822-ebc9-49e5-9897-2584e3821cde"/*CalcDispatchCount*/,
       "Position": {
         "X": 1200.6622,
@@ -92,8 +107,8 @@
     {
       "ChildId": "5e6dcd3c-b73c-4276-82ea-8702de443923"/*TransformMatrix*/,
       "Position": {
-        "X": 1069.6938,
-        "Y": 2932.324
+        "X": 1070.3541,
+        "Y": 2840.5498
       }
     },
     {
@@ -153,8 +168,8 @@
         "Y": 132.53978
       },
       "Position": {
-        "X": 1219.6938,
-        "Y": 2932.324
+        "X": 1271.1932,
+        "Y": 2950.1506
       }
     },
     {
@@ -168,7 +183,7 @@
       "ChildId": "fd753508-f28a-4626-9dda-16d0877b4945"/*BoolToFloat*/,
       "Position": {
         "X": 1069.6938,
-        "Y": 3040.324
+        "Y": 3029.76
       }
     }
   ],
