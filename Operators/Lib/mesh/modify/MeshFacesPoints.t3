@@ -15,7 +15,7 @@
     },
     {
       "Id": "9361aeff-d96f-400c-8837-7d98fb6da99e"/*W*/,
-      "DefaultValue": 100.0
+      "DefaultValue": 2.0
     },
     {
       "Id": "bad1db42-201c-4d3b-8e62-82e812a8388f"/*InputMesh*/,
