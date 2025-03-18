@@ -225,7 +225,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\3d\\mesh\\mesh-Warp2d.hlsl"
+          "Value": "Resources/lib/3d/mesh/mesh-Warp2d.hlsl"
         }
       ],
       "Outputs": []
@@ -424,6 +424,12 @@
       "SourceSlotId": "431b39fd-4b62-478b-bbfa-4346102c3f61",
       "TargetParentOrChildId": "710fcddc-09c2-436b-8572-88ec2b401291",
       "TargetSlotId": "f79ccc37-05fd-4f81-97d6-6c1cafca180c"
+    },
+    {
+      "SourceParentOrChildId": "8f7f2cb2-2f46-4449-9236-88103c5e8474",
+      "SourceSlotId": "6d7a9493-6210-462a-b9c2-525b925de6c8",
+      "TargetParentOrChildId": "82976e5a-16f6-49ef-b959-7f9eff171841",
+      "TargetSlotId": "4515c98e-05bc-4186-8773-4d2b31a8c323"
     },
     {
       "SourceParentOrChildId": "99a2f977-a8e0-4db4-ad58-41b933f77349",

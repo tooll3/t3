@@ -94,6 +94,13 @@
       }
     },
     {
+      "ChildId": "348b0165-ac96-4a07-b7fb-d99e4b63ecb0"/*_MeshBufferComponents*/,
+      "Position": {
+        "X": -154.60034,
+        "Y": 1233.7513
+      }
+    },
+    {
       "ChildId": "38f8f253-f167-4af6-afdd-88283dd5e911"/*Indices*/,
       "Position": {
         "X": 63.014954,
@@ -178,13 +185,6 @@
       "Position": {
         "X": 1471.4971,
         "Y": 1893.568
-      }
-    },
-    {
-      "ChildId": "6deb47f3-95d9-4195-8da5-95e38bdae99f"/*_MeshBufferComponents*/,
-      "Position": {
-        "X": -87.48065,
-        "Y": 1320.5765
       }
     },
     {

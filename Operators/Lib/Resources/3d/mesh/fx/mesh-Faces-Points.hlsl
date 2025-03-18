@@ -1,8 +1,8 @@
-#include "lib/shared/hash-functions.hlsl"
-#include "lib/shared/noise-functions.hlsl"
-#include "lib/shared/point.hlsl"
-#include "lib/shared/quat-functions.hlsl"
-#include "lib/shared/pbr.hlsl"
+#include "shared/hash-functions.hlsl"
+#include "shared/noise-functions.hlsl"
+#include "shared/point.hlsl"
+#include "shared/quat-functions.hlsl"
+#include "shared/pbr.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -10,7 +10,7 @@ cbuffer Params : register(b0)
     float OffsetScale;
     
     float4 Color;
-    float W;
+    float Size;
     float StretchZ;
 }
 
@@ -57,24 +57,19 @@ float3 CalculateInscribedCircleCenter(float3 vertexA, float3 vertexB, float3 ver
 
 float CalculateInscribedCircleRadius(float3 vertexA, float3 vertexB, float3 vertexC)
 {
-    float3 side1 = normalize(vertexB - vertexA);
-    float3 side2 = normalize(vertexC - vertexA);
-    float3 side3 = normalize(vertexC - vertexB);
-
-    float cosA = dot(side2, side3);
-    float cosB = dot(side1, side3);
-    float cosC = dot(side1, side2);
-
-    float sinA = sqrt(1.0 - cosA * cosA);
-    float sinB = sqrt(1.0 - cosB * cosB);
-    float sinC = sqrt(1.0 - cosC * cosC);
-
-    float semiPerimeter = length(vertexA - vertexB) + length(vertexB - vertexC) + length(vertexC - vertexA);
-    semiPerimeter *= 0.5;
-
-    float area = sqrt(semiPerimeter * (semiPerimeter - length(vertexA - vertexB)) * (semiPerimeter - length(vertexB - vertexC)) * (semiPerimeter - length(vertexC - vertexA)));
-
-    return area / semiPerimeter;
+    // Calculate the lengths of the sides
+    float a = length(vertexB - vertexC);
+    float b = length(vertexC - vertexA);
+    float c = length(vertexA - vertexB);
+    
+    // Calculate semi-perimeter
+    float s = (a + b + c) * 0.5;
+    
+    // Calculate area using Heron's formula
+    float area = sqrt(s * (s - a) * (s - b) * (s - c));
+    
+    // Radius of inscribed circle
+    return area / s;
 }
 
 void CalculateTangentBitangent(
@@ -147,7 +142,7 @@ void CalculateTangentBitangent(
     float3 upVector = float3(0, 1, 0);
     float4 orientation = qLookAt(normal, upVector);
 
-    ResultPoints[index].W = CalculateInscribedCircleRadius(a, b, c) * W;
+    ResultPoints[index].W = CalculateInscribedCircleRadius(a, b, c) * Size;
     ResultPoints[index].Position = pCenter;
     ResultPoints[index].Rotation = normalize(orientation);
     ResultPoints[index].Color = Color;
