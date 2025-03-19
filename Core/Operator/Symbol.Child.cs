@@ -849,7 +849,7 @@ public partial class Symbol
                 //var child = instance.Children[childId];
                 if (!instance.Children.TryGetValue(childId, out var child))
                 {
-                    Log.Debug("Failed to invalid missing child");
+                    Log.Debug("Failed to invalidate missing child");
                     continue;
                 }
                 
