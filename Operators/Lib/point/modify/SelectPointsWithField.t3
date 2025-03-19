@@ -89,12 +89,6 @@
       "Outputs": []
     },
     {
-      "Id": "4fd6a3b4-5074-40a5-8439-c2b4ff96d48a"/*_GetFieldShaderAttributes*/,
-      "SymbolId": "73c028d1-3de2-4269-b503-97f62bbce320",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "524f075f-06dc-4771-9201-b9e122f31cb7"/*GetBufferComponents*/,
       "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
       "InputValues": [],
