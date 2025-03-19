@@ -1,4 +1,4 @@
-#include "lib/shared/point-light.hlsl"
+#include "shared/point-light.hlsl"
 
 Texture2D<float> DepthTexture : register(t0);
 RWTexture2D<float> OutputTexture : register(u0);
