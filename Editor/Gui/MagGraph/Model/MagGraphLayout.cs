@@ -593,20 +593,17 @@ internal sealed class MagGraphLayout
 
             FindVisibleIndex(targetItem, input, out var inputIndex, out var multiInputIndex2);
 
-            var outputIndex = 0;
-            foreach (var outLine in sourceItem.OutputLines)
+            var outputLineIndex = 0;
+            for (outputLineIndex = 0; outputLineIndex < sourceItem.OutputLines.Length; outputLineIndex++)
             {
-                if (outLine.Output != output)
-                    continue;
-
-                outputIndex = outLine.OutputIndex;
-                break;
+                if(sourceItem.OutputLines[outputLineIndex].Output == output)
+                    break;
             }
 
-            if (outputIndex >= sourceItem.OutputLines.Length)
+            if (outputLineIndex >= sourceItem.OutputLines.Length)
             {
-                Log.Warning($"OutputIndex {outputIndex} exceeds number of output lines {sourceItem.OutputLines.Length} in {sourceItem}");
-                outputIndex = sourceItem.OutputLines.Length - 1;
+                Log.Warning($"OutputIndex {outputLineIndex} exceeds number of output lines {sourceItem.OutputLines.Length} in {sourceItem}");
+                outputLineIndex = sourceItem.OutputLines.Length - 1;
             }
 
             var snapGraphConnection = new MagGraphConnection
@@ -616,14 +613,14 @@ internal sealed class MagGraphLayout
                                               SourceOutput = output,
                                               TargetItem = targetItem,
                                               InputLineIndex = inputIndex,
-                                              OutputLineIndex = outputIndex,
+                                              OutputLineIndex = outputLineIndex,
                                               ConnectionHash = c.GetHashCode(),
                                               MultiInputIndex = multiInputIndex2,
-                                              VisibleOutputIndex = sourceItem.OutputLines[outputIndex].VisibleIndex,
+                                              VisibleOutputIndex = sourceItem.OutputLines[outputLineIndex].VisibleIndex,
                                           };
 
             targetItem.InputLines[inputIndex].ConnectionIn = snapGraphConnection;
-            sourceItem.OutputLines[outputIndex].ConnectionsOut.Add(snapGraphConnection);
+            sourceItem.OutputLines[outputLineIndex].ConnectionsOut.Add(snapGraphConnection);
             MagConnections.Add(snapGraphConnection);
         }
     }
