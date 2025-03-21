@@ -29,6 +29,7 @@ Graph:
 - [ ] Fix dragging from parameter window
 - [x] Fix extracting from parameter window
 
+- [x] Fix tab search result output type filtering
 - [ ] Improve connecting from additional (hidden) outputs
 - [ ] Fix additional output warning
 - [ ] Allow dragging connection from horizontal input slot

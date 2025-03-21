@@ -138,21 +138,46 @@ internal sealed class PlaceholderCreation
         context.Selector.Selection.Clear();
         context.Layout.Items[PlaceHolderId] = PlaceholderItem;
 
+        var outputValueType = SnappedOutputValueType(outputLine, direction);
         PlaceHolderUi.Open(context,
                            PlaceholderItem,
                            direction,
                            outputLine.Output.ValueType,
-                           outputLine.ConnectionsOut.Count > 0 ? outputLine.Output.ValueType : null);
+                           outputValueType);
 
         _snappedSourceOutputLine = outputLine;
         _snappedSourceItem = item;
         _connectionOrientation = direction;
     }
-    
-    
+
+    private static Type? SnappedOutputValueType(MagGraphItem.OutputLine outputLine, MagGraphItem.Directions direction)
+    {
+        if (outputLine.ConnectionsOut.Count == 0)
+            return null;
+
+        foreach (var c in outputLine.ConnectionsOut)
+        {
+            if (direction == MagGraphItem.Directions.Vertical)
+            {
+                if(c.Style == MagGraphConnection.ConnectionStyles.AdditionalOutToMainInputSnappedVertical)
+                    return c.SourceOutput.ValueType;
+            }
+            else
+            {
+                if (c.Style == MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal
+                    || c.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal)
+                {
+                    return c.SourceOutput.ValueType;
+                }
+            }
+        }
+
+        return null;
+    }
+
     internal void OpenForItemInput(GraphUiContext context,
-                              MagGraphItem targetItem,
-                              Guid selectedInputId)
+                                   MagGraphItem targetItem,
+                                   Guid selectedInputId)
     {
         Debug.Assert(targetItem.Instance != null);
 
