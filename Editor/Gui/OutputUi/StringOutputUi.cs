@@ -2,6 +2,7 @@
 using ImGuiNET;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Styling;
+using T3.Editor.SystemUi;
 
 namespace T3.Editor.Gui.OutputUi;
 
@@ -29,6 +30,11 @@ internal sealed class StringOutputUi : OutputUi<string>
             }
                 
             ImGui.BeginChild("ScrollableList");
+            if (ImGui.IsWindowHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+            {
+                EditorUi.Instance.SetClipboardText(stringValue);
+                Log.Debug("Copied string to clipboard");
+            }
                 
             ImGui.Indent(10);
             int index = 0;
