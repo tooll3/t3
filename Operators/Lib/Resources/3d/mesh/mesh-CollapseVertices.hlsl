@@ -1,9 +1,9 @@
-#include "lib/shared/hash-functions.hlsl"
-#include "lib/shared/noise-functions.hlsl"
-#include "lib/shared/point.hlsl"
-#include "lib/shared/quat-functions.hlsl"
-#include "lib/shared/pbr.hlsl"
-#include "lib/shared/bias-functions.hlsl"
+#include "shared/hash-functions.hlsl"
+#include "shared/noise-functions.hlsl"
+#include "shared/point.hlsl"
+#include "shared/quat-functions.hlsl"
+#include "shared/pbr.hlsl"
+#include "shared/bias-functions.hlsl"
 
 cbuffer Params : register(b0)
 {

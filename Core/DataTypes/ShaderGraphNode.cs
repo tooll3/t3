@@ -5,9 +5,10 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using Microsoft.VisualBasic.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-
+using Log = T3.Core.Logging.Log;
 
 namespace T3.Core.DataTypes;
 
@@ -46,9 +47,16 @@ public class ShaderGraphNode
         _connectedNodeMultiInput = nodeMultiInputInput;
         _connectedNodeInput = inputSlot;
     }
+    
+    private double _lastUpdateTime;
 
     public void Update(EvaluationContext context)
     {
+        if (Math.Abs(_lastUpdateTime - context.LocalFxTime) < 0.00001)
+            return;
+        
+        _lastUpdateTime = context.LocalFxTime;
+        
         CollectedChanges = ChangedFlags.None;
         
         if (_hasCodeChanges)
@@ -61,7 +69,6 @@ public class ShaderGraphNode
             _prefix = BuildNodeId(_instance);
             _shaderParameterInputs = ShaderParamHandling.CollectInputSlots(_instance, _prefix);
         }
-        
         
         UpdateInputsNodes(context);
         
@@ -79,12 +86,13 @@ public class ShaderGraphNode
     
     
     public ChangedFlags CollectedChanges;
-
+    public int StructureHash = 0;
+    
     /// <summary>
     /// Recursive update all connected inputs nodes and collect their changes..
     /// </summary>
     /// <remarks>
-    /// This is invoke Update() on the connected notes which will then call this methode there. 
+    /// This invokes Update() on the connected notes which will then call this methode there. 
     /// </remarks>
     private void UpdateInputsNodes(EvaluationContext context)
     {
@@ -97,7 +105,7 @@ public class ShaderGraphNode
 
         if (_connectedNodeMultiInput != null)
         {
-            _connectedNodeOps.AddRange( _connectedNodeMultiInput.GetCollectedTypedInputs());
+            _connectedNodeOps.AddRange( _connectedNodeMultiInput.GetCollectedTypedInputs(true));
         }
 
         if (_connectedNodeInput != null)
@@ -122,27 +130,35 @@ public class ShaderGraphNode
         }
 
         // Update all connected nodes
+        var lastStructureHash = StructureHash;
+        StructureHash = _instance.SymbolChildId.GetHashCode();
+        
         for (var index = 0; index < _connectedNodeOps.Count; index++)
         {
-            
             // Update connected shader node...
             var updatedNode = _connectedNodeOps[index].GetValue(context);
-            
-            if (updatedNode != InputNodes[index])
-            {
-                CollectedChanges |= ChangedFlags.Structural;
-                InputNodes[index] = updatedNode;
-            }
-
             if (updatedNode == null)
             {
                 CollectedChanges |= ChangedFlags.Structural | ChangedFlags.HasErrors;
                 continue;
             }
             
+            StructureHash = StructureHash * 31 + updatedNode.StructureHash;
+            
+            if (updatedNode != InputNodes[index])
+            {
+                CollectedChanges |= ChangedFlags.Structural;
+                InputNodes[index] = updatedNode;
+            }
+            
             CollectedChanges |= updatedNode.CollectedChanges;
         }
 
+        if (StructureHash != lastStructureHash)
+        {
+            CollectedChanges |= ChangedFlags.Structural;
+        }
+                
         // Remove all nulls from InputNodes
         InputNodes.RemoveAll(node => node == null);
 

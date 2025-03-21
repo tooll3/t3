@@ -1,4 +1,4 @@
-#include "lib/shared/point.hlsl"
+#include "shared/point.hlsl"
 
 #define THREADS_PER_GROUP 256
 

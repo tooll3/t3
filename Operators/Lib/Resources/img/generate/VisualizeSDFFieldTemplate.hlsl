@@ -4,6 +4,7 @@ cbuffer ParamConstants : register(b0)
     float4 Color;
 }
 
+
 cbuffer Transforms : register(b1)
 {
     float4x4 CameraToClipSpace;
@@ -16,7 +17,8 @@ cbuffer Transforms : register(b1)
     float4x4 WorldToObject;
     float4x4 ObjectToCamera;
     float4x4 ObjectToClipSpace;
-};
+}
+
 
 cbuffer Params : register(b2)
 {
@@ -121,8 +123,8 @@ float4 psMain(vsOutput input) : SV_TARGET
     float3 camPos = mul(float4(0, 0, 0, 1), CameraToWorld).xyz;
     float dToCam = length(camPos - input.posInWorld);
 
-    return float4(DistanceMeter(d, 0.1, float3(1, 1, 0), 10 / dToCam), 1);
+    return float4(DistanceMeter(d, 0.1, float3(1, 1, 0), 10 / dToCam), 1) * Color;
 
     float2 c = fmod(d * (-s.y) * 1000, 1) < 0.05 ? 1 : 0;
-    return float4(c.xx, dToCam, 1);
+    return float4(c.xx, dToCam, 1) * Color;
 }

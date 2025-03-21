@@ -19,7 +19,7 @@ public class CameraInteraction
     {
         if (camera == null)
             return;
-
+        
         var cameraNodeModified = !_smoothedSetup.Matches(camera) && !_intendedSetup.Matches(camera);
         if (cameraNodeModified)
         {
@@ -40,12 +40,14 @@ public class CameraInteraction
             _lastCameraNode = camera;
         }
 
+        var wasManipulated = false;
+        
         //if (allowCameraInteraction && ImGui.IsWindowHovered())
         if (allowCameraInteraction)
         {
-            ManipulateCameraByMouse();
+            wasManipulated |= ManipulateCameraByMouse();
             //if (ImGui.IsWindowFocused())
-            ManipulateCameraByKeyboard();
+            wasManipulated |= ManipulateCameraByKeyboard();
         }
 
         var frameTime = ImGui.GetTime();
@@ -55,7 +57,7 @@ public class CameraInteraction
             device.ManipulateCamera(_intendedSetup, frameTime);
         }
 
-        var updateRequired = ComputeSmoothMovement();
+        var updateRequired = ComputeSmoothMovement(wasManipulated);
         if (!updateRequired)
             return;
 
@@ -69,18 +71,19 @@ public class CameraInteraction
         _intendedSetup.Reset();
     }
 
-    private bool ComputeSmoothMovement()
+    private bool ComputeSmoothMovement(bool isInteracting)
     {
         var stillDamping = !_smoothedSetup.MatchesSetup(_intendedSetup);
         var stillSliding = _moveVelocity.Length() > CameraInteractionParameters.StopDistanceThreshold;
-        var stillOrbiting = _orbitVelocity.Length() > 0.001f;
+        var stillOrbiting = _orbitVelocity.Length() > 0.0002f;
 
         var cameraIsStillMoving = stillDamping
                                   || stillSliding
                                   || stillOrbiting
                                   || _manipulatedByMouseWheel
                                   || _manipulatedByKeyboard;
-        if (!cameraIsStillMoving)
+        
+        if (!isInteracting && !cameraIsStillMoving)
         {
             _smoothedSetup.SetTo(_intendedSetup);
             _orbitVelocity = Vector2.Zero;
@@ -88,7 +91,7 @@ public class CameraInteraction
             return false;
         }
 
-        if (_orbitVelocity.Length() > 0.001f)
+        if (_orbitVelocity.Length() > 0.0002f)
         {
             ApplyOrbitVelocity(_orbitVelocity);
             _orbitVelocity = Vector2.Lerp(_orbitVelocity, Vector2.Zero, _deltaTime * CameraInteractionParameters.OrbitHorizontalDamping * 60);
@@ -115,12 +118,13 @@ public class CameraInteraction
         return true;
     }
 
-    private void ManipulateCameraByMouse()
+    private bool ManipulateCameraByMouse()
     {
         if (!( ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup | ImGuiHoveredFlags.ChildWindows)))
-            return;
-            
-        HandleMouseWheel();
+            return false;
+        
+        var modified = false;
+        modified |= HandleMouseWheel();
         if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
         {
             if (ImGui.GetIO().KeyAlt)
@@ -129,30 +133,36 @@ public class CameraInteraction
             }
             else if (ImGui.GetIO().KeyCtrl)
             {
-                LookAround();
+                modified |= LookAround();
             }
             else
             {
                 var delta = new Vector2(ImGui.GetIO().MouseDelta.X,
                                         -ImGui.GetIO().MouseDelta.Y);
-                _orbitVelocity += delta * _deltaTime * -0.1f;
+                if (delta.Length() > 0)
+                {
+                    modified = true;   
+                    _orbitVelocity += delta * _deltaTime * -0.1f;
+                }
             }
         }
         else if (ImGui.IsMouseDragging(ImGuiMouseButton.Right) && !CustomComponents.IsDragScrolling && !ScalableCanvas.IsAnyCanvasDragged)
         {
-            Pan();
+            modified  |= Pan();
         }
         else if (ImGui.IsMouseDragging(ImGuiMouseButton.Middle))
         {
-            LookAround();
+            modified  |= LookAround();
         }
+
+        return modified;
     }
 
-    private void HandleMouseWheel()
+    private bool HandleMouseWheel()
     {
         var delta = ImGui.GetIO().MouseWheel;
         if (Math.Abs(delta) < 0.01f)
-            return;
+            return false;
 
         var viewDistance = _intendedSetup.Position - _intendedSetup.Target;
         var zoomFactorForCurrentFramerate = 1 + (CameraInteractionParameters.ZoomSpeed * FrameDurationFactor);
@@ -205,14 +215,19 @@ public class CameraInteraction
             _intendedSetup.Position = _intendedSetup.Target + viewDistance;
             _manipulatedByMouseWheel = true;
         }
+
+        return true;
     }
 
-    private void LookAround()
+    private bool LookAround()
     {
         if (!ImGui.IsWindowHovered())
-            return;
-
+            return false;
+        
         var dragDelta = ImGui.GetIO().MouseDelta;
+        if (dragDelta.Length() == 0)
+            return false;
+        
         var factorX = -dragDelta.X * CameraInteractionParameters.RotateMouseSensitivity * 1.5f;
         var factorY = dragDelta.Y * CameraInteractionParameters.RotateMouseSensitivity * 1.5f;
         var rotAroundY = Matrix4x4.CreateFromAxisAngle(_viewAxis.Up, factorX);
@@ -225,6 +240,7 @@ public class CameraInteraction
 
         var newTarget = _intendedSetup.Position + new Vector3(viewDirRotated.X, viewDirRotated.Y, viewDirRotated.Z);
         _intendedSetup.Target = newTarget;
+        return true;
     }
 
     private void ApplyOrbitVelocity(Vector2 orbitVelocity)
@@ -277,12 +293,15 @@ public class CameraInteraction
 
 
 
-    private void Pan()
+    private bool Pan()
     {
         if (!ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows))
-            return;
-
+            return false;
+        
         var dragDelta = ImGui.GetIO().MouseDelta;
+        if (dragDelta.Length() == 0)
+            return false;
+        
         var factorX = dragDelta.X / CameraInteractionParameters.RenderWindowHeight;
         var factorY = dragDelta.Y / CameraInteractionParameters.RenderWindowHeight;
 
@@ -292,56 +311,58 @@ public class CameraInteraction
 
         _intendedSetup.Position += delta;
         _intendedSetup.Target += delta;
+        return false;
     }
 
-    private void ManipulateCameraByKeyboard()
+    private bool ManipulateCameraByKeyboard()
     {
         if (!ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows) || ImGui.GetIO().KeyCtrl)
-            return;
+            return false;
 
         var acc = CameraInteractionParameters.CameraAcceleration * UserSettings.Config.CameraSpeed * _deltaTime * 60;
+        var wasModified = false;
 
         if (ImGui.IsKeyDown((ImGuiKey)Key.A))
         {
             _moveVelocity += _viewAxis.Left * acc;
-            _manipulatedByKeyboard = true;
+            wasModified = true;
         }
 
         if (ImGui.IsKeyDown((ImGuiKey)Key.D))
         {
             _moveVelocity -= _viewAxis.Left * acc;
-            _manipulatedByKeyboard = true;
+            wasModified = true;
         }
 
         if (ImGui.IsKeyDown((ImGuiKey)Key.W))
         {
             _moveVelocity += Vector3.Normalize(_viewAxis.ViewDistance) * acc;
-            _manipulatedByKeyboard = true;
+            wasModified = true;
         }
 
         if (ImGui.IsKeyDown((ImGuiKey)Key.S))
         {
             _moveVelocity -= Vector3.Normalize(_viewAxis.ViewDistance) * acc;
-            _manipulatedByKeyboard = true;
+            wasModified = true;
         }
 
         if (ImGui.IsKeyDown((ImGuiKey)Key.E))
         {
             _moveVelocity += _viewAxis.Up * acc;
-            _manipulatedByKeyboard = true;
+            wasModified = true;
         }
 
         if (ImGui.IsKeyDown((ImGuiKey)Key.Q))
         {
             _moveVelocity -= _viewAxis.Up * acc;
-            _manipulatedByKeyboard = true;
+            wasModified = true;
         }
 
         if (ImGui.IsKeyDown((ImGuiKey)Key.F))
         {
             _moveVelocity = Vector3.Zero;
             _intendedSetup.Reset();
-            _manipulatedByKeyboard = true;
+            wasModified = true;
         }
 
         if (ImGui.IsKeyDown((ImGuiKey)Key.C))
@@ -349,8 +370,11 @@ public class CameraInteraction
             _moveVelocity = Vector3.Zero;
             //_intendedSetup.Reset();
             _intendedSetup.Target = TransformGizmoHandling.GetLatestSelectionCenter();
-            _manipulatedByKeyboard = true;
+            wasModified = true;
         }
+
+        _manipulatedByKeyboard |= wasModified;
+        return wasModified;
     }
 
     private struct ViewAxis

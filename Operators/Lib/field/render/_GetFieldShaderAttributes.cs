@@ -93,6 +93,7 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
     /// </summary>
     private void Update(EvaluationContext context)
     {
+        _lastErrorMessage = null;
         var hasTemplateChanged = TemplateCode.DirtyFlag.IsDirty;
         // if(hasTemplateChanged)
         //     Log.Debug("templateChanged", this);
@@ -113,8 +114,6 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
         _needsInvalidation = hasTemplateChanged;
         
         // Recursively update complete shader graph and collect changes
-        
-        
         _graphNode = Field.GetValue(context);
         var colorField = ColorField.GetValue(context);
         
@@ -130,16 +129,22 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
         
         if (_graphNode == null)
         {
-            _lastErrorMessage = "Missing input field";
+            //_lastErrorMessage = "Missing input field";
             _needsInvalidation = true;
             return;
         }
         
         var changes = _graphNode.CollectedChanges;
-        if (changes == ShaderGraphNode.ChangedFlags.None && !hasTemplateChanged)
+        if (_graphNode.StructureHash != _lastStructureHash)
+        {
+            _lastStructureHash = _graphNode.StructureHash;
+            changes |= ShaderGraphNode.ChangedFlags.Structural;
+        }
+        
+        if ((changes == ShaderGraphNode.ChangedFlags.None) && !hasTemplateChanged)
             return;
 
-        //Log.Debug(" Update parameter buffer...");
+        //Log.Debug(" Update parameter buffer...", this);
         AssembleParams();
         var floatParams = AllFloatValues;
         if (floatParams.Count > 0)
@@ -155,7 +160,7 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
             ShaderCode.Value = GenerateShaderCode(templateCode);
         }
 
-        _graphNode.ClearAllChanges();
+        //_graphNode.ClearAllChanges();
         _frameUpdateCount++;
     }
 
@@ -210,6 +215,7 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
     private readonly List<ShaderGraphNode.ShaderParamHandling.ShaderCodeParameter> _allShaderCodeParams = [];
     public IReadOnlyList<float> AllFloatValues => _allFloatParameterValues;
     private readonly List<float> _allFloatParameterValues = [];
+    private int _lastStructureHash = 0;
 
 
     private void AssembleAndInjectFunctions(ref string templateCode)

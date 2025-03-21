@@ -19,6 +19,9 @@ internal static class GraphStates
                          // Todo: this should be a reset method in context
                          context.TempConnections.Clear();
                          context.ActiveSourceItem = null;
+                         context.ActiveTargetItem = null;
+                         context.ActiveTargetInputId = Guid.Empty;
+                         
                          context.DraggedPrimaryOutputType = null;
 
                          // ReSharper disable once ConstantConditionalAccessQualifier
@@ -126,11 +129,15 @@ internal static class GraphStates
                           }
                           else
                           {
-                              var isHoveringOutput = context.ActiveSourceOutputId != Guid.Empty;
-                              if (isHoveringOutput)
+                              if (context.ActiveSourceOutputId != Guid.Empty)
                               {
                                   context.StateMachine.SetState(HoldOutput, context);
                                   context.ActiveSourceItem = context.ActiveItem;
+                              }
+                              else if(context.ActiveTargetInputId != Guid.Empty)
+                              {
+                                  context.StateMachine.SetState(HoldInput, context);
+                                  context.ActiveTargetItem = context.ActiveItem;
                               }
                               else
                               {
@@ -348,6 +355,74 @@ internal static class GraphStates
               Exit: _ => { }
              );
 
+    /// <summary>
+    /// Active while long tapping on background for insertion
+    /// </summary>
+    internal static State HoldInput
+        = new(
+              Enter: _ => { },
+              Update: context =>
+                      {
+                          var sourceItem = context.ActiveItem;
+                          Debug.Assert(sourceItem != null);
+                          Debug.Assert(sourceItem.OutputLines.Length > 0);
+                          Debug.Assert(context.ActiveTargetInputId != Guid.Empty);
+
+                          // Click
+                          var released = !ImGui.IsMouseDown(ImGuiMouseButton.Left);
+                          if (released)
+                          {
+                              if (context.TryGetActiveInputLine(out var inputLine))
+                              {
+                                  //context.Placeholder.OpenForItem(context, sourceItem, inputLine, context.ActiveOutputDirection);
+                                  context.Placeholder.OpenForItemInput(context, context.ActiveTargetItem, inputLine.Id);
+                                  context.StateMachine.SetState(Placeholder, context);
+                              }
+                              else
+                              {
+                                context.StateMachine.SetState(Default, context);
+                              }
+                              Log.Debug("Click");
+                              return;
+                          }
+
+                          // // Start dragging...
+                          // if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+                          // {
+                          //     if (!context.TryGetActiveOutputLine(out var outputLine))
+                          //     {
+                          //         Log.Warning("Output not found?");
+                          //         context.StateMachine.SetState(Default, context);
+                          //         return;
+                          //     }
+                          //
+                          //     //var outputLine = context.GetActiveOutputLine();              
+                          //     var output = outputLine.Output;
+                          //     var posOnCanvas = sourceItem.PosOnCanvas + new Vector2(MagGraphItem.GridSize.X,
+                          //                                                            MagGraphItem.GridSize.Y * (1.5f + outputLine.VisibleIndex));
+                          //
+                          //     var tempConnection = new MagGraphConnection
+                          //                              {
+                          //                                  Style = MagGraphConnection.ConnectionStyles.Unknown,
+                          //                                  SourcePos = posOnCanvas,
+                          //                                  TargetPos = default,
+                          //                                  SourceItem = sourceItem,
+                          //                                  TargetItem = null,
+                          //                                  SourceOutput = output,
+                          //                                  OutputLineIndex = outputLine.VisibleIndex,
+                          //                                  VisibleOutputIndex = 0,
+                          //                                  ConnectionHash = 0,
+                          //                                  IsTemporary = true,
+                          //                              };
+                          //     context.TempConnections.Add(tempConnection);
+                          //     context.ActiveSourceItem = sourceItem;
+                          //     context.DraggedPrimaryOutputType = output.ValueType;
+                          //     context.StateMachine.SetState(DragConnectionEnd, context);
+                          // }
+                      },
+              Exit: _ => { }
+             );    
+    
     internal static State DragConnectionEnd
         = new(
               Enter: _ => { },

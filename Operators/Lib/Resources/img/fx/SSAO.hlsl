@@ -2,7 +2,7 @@ Texture2D<float4> ImageTexture : register(t0);
 Texture2D<float4> DepthTexture : register(t1);
 Texture2D<float4> NoiseTexture : register(t2);
 
-#include "lib/shared/hash-functions.hlsl"
+#include "shared/hash-functions.hlsl"
 
 sampler texSampler : register(s0);
 
