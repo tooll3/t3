@@ -54,7 +54,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\3d\\mesh\\mesh-MoveToLinePoints.hlsl"
+          "Value": "Resources/lib/3d/mesh/mesh-MoveToLinePoints.hlsl"
         }
       ],
       "Outputs": []
@@ -214,6 +214,12 @@
       "SourceSlotId": "c997268d-6709-49de-980e-64d7a47504f7",
       "TargetParentOrChildId": "78abb4db-c7a9-48c5-b6aa-f8e19c6f6d55",
       "TargetSlotId": "7a13b834-21e5-4cef-ad5b-23c3770ea763"
+    },
+    {
+      "SourceParentOrChildId": "5cb3c32a-6db8-4a89-843a-8dbeb15bcae6",
+      "SourceSlotId": "6d7a9493-6210-462a-b9c2-525b925de6c8",
+      "TargetParentOrChildId": "8adefdf5-87b0-4a88-ae2d-1d25b39b7578",
+      "TargetSlotId": "4515c98e-05bc-4186-8773-4d2b31a8c323"
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",

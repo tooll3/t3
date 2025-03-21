@@ -163,8 +163,8 @@
     {
       "ChildId": "b7541737-e1c5-45cf-b34d-4bb9f1a96f60"/*ComputeShader*/,
       "Position": {
-        "X": 632.5737,
-        "Y": 1208.2806
+        "X": 627.5567,
+        "Y": 1169.8165
       }
     },
     {
@@ -198,8 +198,8 @@
     {
       "ChildId": "fe86fd62-c52f-4b1b-bcae-efa9c5e99cbe"/*GetBufferComponents*/,
       "Position": {
-        "X": 570.08966,
-        "Y": 1432.443
+        "X": 604.2057,
+        "Y": 1485.9583
       }
     }
   ],

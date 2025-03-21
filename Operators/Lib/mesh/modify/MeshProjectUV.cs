@@ -32,4 +32,7 @@ internal sealed class MeshProjectUV : Instance<MeshProjectUV>
 
     [Input(Guid = "2ce29895-0bfd-4b73-ad57-50aca7fd1a96")]
     public readonly InputSlot<float> Scale = new();
+
+        [Input(Guid = "02c87571-ebaa-4cf9-bc6d-335911b50d07")]
+        public readonly InputSlot<bool> ToTexCoord2 = new InputSlot<bool>();
 }

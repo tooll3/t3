@@ -15,7 +15,7 @@
     },
     {
       "Id": "9361aeff-d96f-400c-8837-7d98fb6da99e"/*W*/,
-      "DefaultValue": 100.0
+      "DefaultValue": 2.0
     },
     {
       "Id": "bad1db42-201c-4d3b-8e62-82e812a8388f"/*InputMesh*/,
@@ -76,18 +76,6 @@
       "Outputs": []
     },
     {
-      "Id": "66fa7660-485c-4c3e-a770-1be56f146f48"/*IntValue*/,
-      "SymbolId": "cc07b314-4582-4c2c-84b8-bb32f59fc09b",
-      "InputValues": [
-        {
-          "Id": "4515c98e-05bc-4186-8773-4d2b31a8c323"/*Int*/,
-          "Type": "System.Int32",
-          "Value": 64
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "731a874d-edcf-4696-ba28-74eb2b99c345"/*StructuredBufferWithViews*/,
       "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
@@ -106,7 +94,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\3d\\mesh\\fx\\mesh-Faces-Points.hlsl"
+          "Value": "Resources/lib/3d/mesh/fx/mesh-Faces-Points.hlsl"
         }
       ],
       "Outputs": []

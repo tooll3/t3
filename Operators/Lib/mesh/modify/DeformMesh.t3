@@ -293,7 +293,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\3d\\mesh\\mesh-Deform.hlsl"
+          "Value": "Resources/lib/3d/mesh/mesh-Deform.hlsl"
         }
       ],
       "Outputs": []
@@ -473,6 +473,12 @@
       "SourceSlotId": "cf8e1065-164d-4ba9-8c60-9ab545aaaee2",
       "TargetParentOrChildId": "4e37b67f-4e4d-4dd4-961e-a1566d969651",
       "TargetSlotId": "bc217d95-25d4-44e8-b5ba-05b7facd9a20"
+    },
+    {
+      "SourceParentOrChildId": "a5517829-8774-441d-84b1-c4fddc0f001b",
+      "SourceSlotId": "6d7a9493-6210-462a-b9c2-525b925de6c8",
+      "TargetParentOrChildId": "533d512b-056f-4806-80d7-17716e924d2d",
+      "TargetSlotId": "4515c98e-05bc-4186-8773-4d2b31a8c323"
     },
     {
       "SourceParentOrChildId": "e56f8933-bb16-440f-be33-817d23cfc6f1",
