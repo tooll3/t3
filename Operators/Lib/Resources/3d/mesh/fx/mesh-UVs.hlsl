@@ -2,7 +2,7 @@
 //#include "shared/point.hlsl"
 //#include "shared/quat-functions.hlsl"
 #include "shared/pbr.hlsl"
-
+ 
 cbuffer Params : register(b0)
 {
     float BlendFactor;
