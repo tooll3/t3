@@ -7,7 +7,7 @@ using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.MagGraph.Interaction;
 
-internal class OutputPicking
+internal static class OutputPicking
 {
     internal static void Init(GraphUiContext context)
     {
@@ -16,24 +16,13 @@ internal class OutputPicking
 
     internal static void Reset(GraphUiContext context)
     {
-        //context.TempConnections.Clear();
-        //context.ActiveSourceItem = null;
-        //context.DraggedPrimaryOutputType = null;
+        _hoveredOutputId = Guid.Empty;
     }
 
-    internal static void DrawHiddenOutputSelector(GraphUiContext context)
+    public static void DrawAdditionOutputSelector(GraphUiContext context)
     {
-        Debug.Assert(context.StateMachine.CurrentState == GraphStates.PickOutput);
-
-        if (context.ActiveItem == null)
-        {
-            return;
-        }
-
-        var screenPos = context.Canvas.TransformPosition(context.ActiveItem.PosOnCanvas + context.ActiveItem.Size);
-
-        ImGui.SetNextWindowPos(screenPos);
-
+        Debug.Assert(context.ActiveItem != null);
+        
         ImGui.PushStyleVar(ImGuiStyleVar.ChildRounding, 5);
         ImGui.PushStyleVar(ImGuiStyleVar.PopupBorderSize, 0);
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 4);
@@ -42,104 +31,105 @@ internal class OutputPicking
 
         ImGui.PushStyleColor(ImGuiCol.ChildBg, UiColors.BackgroundFull.Fade(0.7f).Rgba);
         ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundFull.Fade(0.0f).Rgba);
-
-        var lastSize = WindowContentExtend.GetLastAndReset();
-        if(ImGui.BeginPopup("pickOutput", ImGuiWindowFlags.Popup))
-        // if (ImGui.BeginChild("Popup",
-        //                      lastSize,
-        //                      true,
-        //                      ImGuiWindowFlags.NoResize
-        //                      | ImGuiWindowFlags.NoScrollbar
-        //                      | ImGuiWindowFlags.AlwaysUseWindowPadding
-        //                     ))
+        
+        ImGui.SetNextWindowPos(ImGui.GetMousePos() - new Vector2(15, 15), ImGuiCond.Appearing);
+                    
+        if (ImGui.BeginPopup("pickOutput", ImGuiWindowFlags.Popup))
         {
-            CustomComponents.HintLabel("Additional outputs...");
+            CustomComponents.HintLabel("Pick output...");
             WindowContentExtend.ExtendToLastItem();
 
+            var appearing = ImGui.IsWindowAppearing();
+            
+            // checking hover rect because window hover was inconsistent
+            var hovered2 = ImRect.RectWithSize(ImGui.GetWindowPos(), ImGui.GetWindowSize()).Contains(ImGui.GetMousePos());
+            
+            var selectedWithoutRelease= !appearing 
+                                        && ImGui.IsMouseDown(ImGuiMouseButton.Left) 
+                                        && !hovered2;
+            var isFirst = true;
+            
             foreach (var o in context.ActiveItem.SymbolUi!.OutputUis.Values)
             {
-                var isVisible = false;
+                var isAdditional = true;
                 foreach (var visibleOutput in context.ActiveItem.OutputLines)
                 {
                     if (visibleOutput.Id != o.Id) continue;
-                    isVisible = true;
+                    isAdditional = false;
                     break;
                 }
-
-                if (isVisible)
-                    continue;
-
-                var name = o.OutputDefinition.Name;
-                var labelSize = ImGui.CalcTextSize(name);
-                var width = MathF.Max(lastSize.X - 4, labelSize.X + 30);
-                var buttonSize = new Vector2(width, ImGui.GetFrameHeight());
-
-                ImGui.Button(name, buttonSize);
-                
-                if(ImGui.IsItemHovered() && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+            
+                if (isAdditional)
                 {
-                    var outputSlot = context.ActiveItem?.Instance?.Outputs.FirstOrDefault(os => os.Id == o.Id);
-                    if (outputSlot == null)
-                        break;
+                    var name = o.OutputDefinition.Name;
+                    var labelSize = ImGui.CalcTextSize(name);
+                    var width = MathF.Max(200 - 4, labelSize.X + 30);
+                    var buttonSize = new Vector2(width, ImGui.GetFrameHeight());
 
-                    // if (!context.TryGetActiveOutputLine(out var outputLine))
-                    // {
-                    //     Log.Warning("Output not found?");
-                    //     context.StateMachine.SetState(Default, context);
-                    //     return;
-                    // }
-
-                    //var outputLine = context.GetActiveOutputLine();              
-                    // var output = outputLine.Output;
-                    // var posOnCanvas = sourceItem.PosOnCanvas + new Vector2(MagGraphItem.GridSize.X,
-                    //                                                        MagGraphItem.GridSize.Y * (1.5f + outputLine.VisibleIndex));
-
-                    var tempConnection = new MagGraphConnection
-                                             {
-                                                 Style = MagGraphConnection.ConnectionStyles.Unknown,
-                                                 SourcePos = context.ActiveItem.PosOnCanvas,
-                                                 TargetPos = default,
-                                                 SourceItem = context.ActiveItem,
-                                                 TargetItem = null,
-                                                 SourceOutput = outputSlot,
-                                                 OutputLineIndex = 0,
-                                                 VisibleOutputIndex = 0,
-                                                 ConnectionHash = 0,
-                                                 IsTemporary = true,
-                                             };
-                    context.TempConnections.Add(tempConnection);
-                    context.ActiveSourceItem = context.ActiveItem;
-                    context.ActiveSourceOutputId = outputSlot.Id;
-                    context.DraggedPrimaryOutputType = outputSlot.ValueType;
-                    context.StateMachine.SetState(GraphStates.DragConnectionEnd, context);
-                    //Reset(context);
+                    var isActive = _hoveredOutputId == o.Id || (_hoveredOutputId == Guid.Empty && isFirst);
+                    
+                    
+                    ImGui.PushStyleColor(ImGuiCol.Button, isActive ? UiColors.BackgroundActive: UiColors.BackgroundButton.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, isActive ? UiColors.BackgroundActive: UiColors.BackgroundButton.Rgba);
+                    ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0, 0.5f));
+                    ImGui.Button(name);
+                    ImGui.PopStyleVar();
+                    ImGui.PopStyleColor(2);
+                    
+                    if (ImGui.IsItemHovered())
+                    {
+                        _hoveredOutputId = o.Id;
+                        isActive = true;
+                    }
+                    
+                    
+                    if (isActive
+                        && (ImGui.IsItemClicked(ImGuiMouseButton.Left)
+                            || ImGui.IsMouseReleased(ImGuiMouseButton.Left)
+                            || selectedWithoutRelease
+                           )
+                       )
+                    {
+                        var outputSlot = context.ActiveItem?.Instance?.Outputs.FirstOrDefault(os => os.Id == o.Id);
+                        if (outputSlot == null)
+                            break;
+                        
+                        var tempConnection = new MagGraphConnection
+                                                 {
+                                                     Style = MagGraphConnection.ConnectionStyles.Unknown,
+                                                     SourcePos = context.ActiveItem.PosOnCanvas,
+                                                     TargetPos = default,
+                                                     SourceItem = context.ActiveItem,
+                                                     TargetItem = null,
+                                                     SourceOutput = outputSlot,
+                                                     OutputLineIndex = 0,
+                                                     VisibleOutputIndex = 0,
+                                                     ConnectionHash = 0,
+                                                     IsTemporary = true,
+                                                 };
+                        context.TempConnections.Add(tempConnection);
+                        context.ActiveSourceItem = context.ActiveItem;
+                        context.ActiveSourceOutputId = outputSlot.Id;
+                        context.DraggedPrimaryOutputType = outputSlot.ValueType;
+                        context.StateMachine.SetState(GraphStates.DragConnectionEnd, context);
+                        ImGui.CloseCurrentPopup();
+                    }
+                    isFirst = false;
                 }
-
-                WindowContentExtend.ExtendToLastItem();
-
-                // if (!string.IsNullOrEmpty(inputUi.Description))
-                // {
-                //     CustomComponents.TooltipForLastItem(inputUi.Description);
-                // }
-
-                // ImGui.TextUnformatted(o.OutputDefinition.Name);
-                // ImGui.SameLine();
-                // ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
-                // ImGui.TextUnformatted($" <{o.OutputDefinition.ValueType.Name}>");
-                // WindowContentExtend.ExtendToLastItem();
-                // ImGui.PopStyleColor();
+            
             }
+
             ImGui.EndPopup();
         }
         else
         {
             // Reset on release?
             context.StateMachine.SetState(GraphStates.Default, context);
-            //Log.Debug("here");
         }
-        //ImGui.EndChild();
 
         ImGui.PopStyleVar(5);
         ImGui.PopStyleColor(2);
     }
+
+    private static Guid _hoveredOutputId = Guid.Empty;
 }

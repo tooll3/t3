@@ -527,11 +527,13 @@ internal static class CustomComponents
     }
 
     /** Should be used for drawing consistently styled tooltips */
-    public static void BeginTooltip(float wrapPos = 300)
+    public static bool BeginTooltip(float wrapPos = 300)
     {
+        var isHovered = false;
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(6,6));
-        ImGui.BeginTooltip();
+        isHovered = ImGui.BeginTooltip();
         ImGui.PushTextWrapPos(wrapPos);
+        return isHovered;
     }
 
     public static void EndTooltip()

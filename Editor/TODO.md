@@ -28,7 +28,15 @@ Graph:
 - [x] Rename children with Return
 - [ ] Fix dragging from parameter window
 - [x] Fix extracting from parameter window
-- [ ] Fix selection of chara
+
+- [ ] Improve connecting from additional (hidden) outputs
+- [ ] Fix additional output warning
+- [ ] Allow dragging connection from horizontal input slot
+- [ ] Allow clicking vertical input slot
+- [ ] Allow dragging connections from vertical output slot
+- [ ] Split Connections
+- [ ] Rewiring of vertical connection lines
+
 
 General UX-ideas:
 
