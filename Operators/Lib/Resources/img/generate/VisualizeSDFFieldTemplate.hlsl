@@ -59,6 +59,7 @@ vsOutput vsMain4(uint vertexId : SV_VertexID)
     return output;
 }
 
+//---- Field functions --------------------------
 /*{FIELD_FUNCTIONS}*/
 
 //---------------------------------------
