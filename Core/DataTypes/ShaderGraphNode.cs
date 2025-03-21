@@ -180,18 +180,19 @@ public class ShaderGraphNode
     private int _lastParamUpdateFrame = -1;
     private int _lastCodeUpdateFrame = -1;
     
-    public void CollectShaderCode(StringBuilder sb, int frameNumber)
+    public void CollectShaderCode(StringBuilder sb, int frameNumber, Guid graphId)
     {
         // Prevent double evaluation
-        if (_lastCodeUpdateFrame == frameNumber)
+        if (_lastCodeUpdateFrame == frameNumber && _lastCodeGraphId == graphId)
             return;
         
         _hasCodeChanges = false;
+        _lastCodeGraphId = graphId;
         _lastCodeUpdateFrame = frameNumber;
 
         foreach (var inputNode in InputNodes)
         {
-            inputNode?.CollectShaderCode(sb, frameNumber);
+            inputNode?.CollectShaderCode(sb, frameNumber, graphId);
         }
 
         if (_instance is IGraphNodeOp nodeOp)
@@ -217,22 +218,25 @@ public class ShaderGraphNode
     private readonly List<Slot<ShaderGraphNode>> _connectedNodeOps = [];
     private readonly InputSlot<ShaderGraphNode>? _connectedNodeInput;
     public readonly List<ShaderGraphNode?> InputNodes = [];
+    private Guid _lastParamGraphId;
+    private Guid _lastCodeGraphId;
 
     #region parameters ----------------------
     
     private List<ShaderParamHandling.ShaderParamInput> _shaderParameterInputs = [];
 
-    public void CollectAllNodeParams(List<float> floatValues, List<ShaderParamHandling.ShaderCodeParameter> codeParams, int frameNumber)
+    public void CollectAllNodeParams(List<float> floatValues, List<ShaderParamHandling.ShaderCodeParameter> codeParams, int frameNumber, Guid graphId)
     {
         // Prevent double evaluation (note that _lastUpdateFrame will be updated after getting the code)
-        if (_lastParamUpdateFrame == frameNumber)
+        if (_lastParamUpdateFrame == frameNumber && _lastParamGraphId == graphId)
             return;
 
         _lastParamUpdateFrame = frameNumber;
+        _lastParamGraphId = graphId;
         
         foreach (var inputNode in InputNodes)
         {
-            inputNode?.CollectAllNodeParams(floatValues, codeParams, frameNumber);
+            inputNode?.CollectAllNodeParams(floatValues, codeParams, frameNumber, graphId);
         }
 
         foreach (var input in _shaderParameterInputs)

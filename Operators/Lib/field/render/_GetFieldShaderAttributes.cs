@@ -209,7 +209,7 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
         _allFloatParameterValues.Clear();
         _allShaderCodeParams.Clear();
 
-        _graphNode.CollectAllNodeParams(_allFloatParameterValues, _allShaderCodeParams, _frameUpdateCount);
+        _graphNode.CollectAllNodeParams(_allFloatParameterValues, _allShaderCodeParams, _frameUpdateCount, SymbolChildId);
     }
     
     private readonly List<ShaderGraphNode.ShaderParamHandling.ShaderCodeParameter> _allShaderCodeParams = [];
@@ -237,7 +237,7 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
         //_allFloatParameterValues.Clear();
         //_allShaderCodeParams.Clear();
         _shaderCodeBuilder.Clear();
-        _graphNode.CollectShaderCode(_shaderCodeBuilder, _frameUpdateCount);
+        _graphNode.CollectShaderCode(_shaderCodeBuilder, _frameUpdateCount, SymbolChildId);
     }
     
     private readonly StringBuilder _shaderCodeBuilder = new();
