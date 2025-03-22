@@ -46,6 +46,7 @@ cbuffer Params : register(b2)
     int UsePointScale;
 };
 
+// Context C Buffers
 cbuffer FogParams : register(b3)
 {
     float4 FogColor;
@@ -145,29 +146,18 @@ float4 psMain(psInput pin) : SV_TARGET
     if (d > 0.93)
         discard;
 
-    float z = sqrt(1 - d * d) * 1.2;
-    float3 normal = normalize(float3(p, z));
-    float3 lightDir = normalize(LightPosition - pin.posInWorld.xyz);
-    // lightDir = mul(float4(lightDir,1), ObjectToWorld);
-    normal = mul(float4(normal, 0), CameraToWorld).xyz;
-
     // Sample input textures to get shading model params.
-    // float4 albedo =   BaseColorMap.Sample(texSampler, pin.texCoord);
     float4 albedo = pin.color;
-    // return float4(normal,1);
-    //  if(AlphaCutOff > 0 && albedo.a < AlphaCutOff) {
-    //      discard;
-    //  }
-
-    // float4 roughnessSpecularMetallic = RSMOMap.Sample(texSampler, pin.texCoord);
-    // float metalness = roughnessSpecularMetallic.z + Metal;
-    // float normalStrength = roughnessSpecularMetallic.y;
-    // float roughness = roughnessSpecularMetallic.x + Roughness;
-
     float4 roughnessMetallicOcclusion = RSMOMap.Sample(texSampler, pin.texCoord);
     float roughness = saturate(roughnessMetallicOcclusion.x + Roughness);
     float metalness = saturate(roughnessMetallicOcclusion.y + Metal);
     float occlusion = roughnessMetallicOcclusion.z;
+
+    float z = sqrt(1 - d * d) * 1.2;
+    float3 normal = normalize(float3(p, z));
+    normal = mul(float4(normal, 0), CameraToWorld).xyz;
+
+    float3 lightDir = normalize(LightPosition - pin.posInWorld.xyz);
 
     // Outgoing light direction (vector from world-space fragment position to the "eye").
     float3 eyePosition = mul(float4(0, 0, 0, 1), CameraToWorld);

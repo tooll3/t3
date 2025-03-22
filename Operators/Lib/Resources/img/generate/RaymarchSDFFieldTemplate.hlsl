@@ -1,4 +1,9 @@
-cbuffer ParamConstants : register(b0)
+cbuffer Params : register(b0)
+{
+    /*{FLOAT_PARAMS}*/
+}
+
+cbuffer ParamConstants : register(b1)
 {
     float MaxSteps;
     float StepSize;
@@ -21,7 +26,7 @@ cbuffer ParamConstants : register(b0)
     float2 Spec;
 }
 
-cbuffer Transforms : register(b1)
+cbuffer Transforms : register(b2)
 {
     float4x4 CameraToClipSpace;
     float4x4 ClipSpaceToCamera;
@@ -34,11 +39,6 @@ cbuffer Transforms : register(b1)
     float4x4 ObjectToCamera;
     float4x4 ObjectToClipSpace;
 };
-
-cbuffer Params : register(b2)
-{
-    /*{FLOAT_PARAMS}*/
-}
 
 struct vsOutput
 {
@@ -104,7 +104,7 @@ vsOutput vsMain4(uint vertexId : SV_VertexID)
 //---------------------------------------
 float GetDistance(float3 pos)
 {
-    //pos = mul(float4(pos.xyz,1), ObjectToWorld).xyz;
+    // pos = mul(float4(pos.xyz,1), ObjectToWorld).xyz;
     return /*{FIELD_CALL}*/ 0;
 }
 //---------------------------------------------------
@@ -172,11 +172,11 @@ PSOutput psMain(vsOutput input)
     float3 eye = input.worldTViewPos;
 
     // Early test. This will lead to z-problems later
-    //eye = mul(float4(eye,1), ObjectToWorld).xyz;
+    // eye = mul(float4(eye,1), ObjectToWorld).xyz;
     float3 p = eye;
     float3 tmpP = p;
     float3 dp = normalize(input.worldTViewDir);
-    //dp = mul(float4(dp,0), ObjectToWorld).xyz;
+    // dp = mul(float4(dp,0), ObjectToWorld).xyz;
 
     float totalD = 0.0;
     float D = 3.4e38;
@@ -236,8 +236,8 @@ PSOutput psMain(vsOutput input)
 
     PSOutput result;
     result.color = float4(col, a);
-    //result.color = float4(1, 1, 0, 1);
-    // result.depth = totalD; // length(p);
+    // result.color = float4(1, 1, 0, 1);
+    //   result.depth = totalD; // length(p);
 
     float depth = dot(eye - p, -input.viewDir);
 

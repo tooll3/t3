@@ -13,14 +13,14 @@
     {
       "Id": "701747e9-fdf5-40ea-bbf5-4f4aa71c1d02"/*Size*/,
       "DefaultValue": {
-        "X": 1.0,
-        "Y": 1.0
+        "X": 5.0,
+        "Y": 5.0
       }
     },
     {
       "Id": "8f8cad00-c152-47e6-8a4c-55f88ab985e2"/*Rotation*/,
       "DefaultValue": {
-        "X": 0.0,
+        "X": 90.0,
         "Y": 0.0,
         "Z": 0.0
       }
@@ -208,6 +208,11 @@
       "Id": "ac33855c-67c3-4350-b06e-125e55aa4169"/*DepthStencilState*/,
       "SymbolId": "04858a08-f0fe-4536-9152-686659f0ab58",
       "InputValues": [
+        {
+          "Id": "2342df71-a162-4db7-afc3-514916239897"/*EnableZWrite*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
         {
           "Id": "956b735b-c38a-4e8e-8186-caf4d36d4d20"/*EnableZTest*/,
           "Type": "System.Boolean",
