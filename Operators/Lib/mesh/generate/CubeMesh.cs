@@ -20,7 +20,7 @@ internal sealed class CubeMesh : Instance<CubeMesh>
     {
         try
         {
-
+            var uvMapStyle = UvMap.GetValue(context);
             var scale = Scale.GetValue(context);
             var stretch = Stretch.GetValue(context);
             var pivot = Pivot.GetValue(context);
@@ -102,6 +102,86 @@ internal sealed class CubeMesh : Instance<CubeMesh>
 
                         var v0 = (rowIndex) / ((float)rowCount - 1);
                         var uv0 = new Vector2(u0, v0);
+
+                        if (uvMapStyle == 1) // Unwrapped cube map with padding
+                        {
+                            // UV island padding (adjust as needed)
+                            float padding = 0.01f;
+
+                            // Calculate usable space (accounting for padding)
+                            float usableWidth = (1.0f - (4 * padding)) / 3.0f;  // 3 columns with 4 padding spaces
+                            float usableHeight = (1.0f - (3 * padding)) / 2.0f; // 2 rows with 3 padding spaces
+
+                            // Determine face position
+                            int column = sideIndex % 3;
+                            int row = sideIndex / 3;
+
+                            // Calculate actual face dimensions to maintain square aspect ratio
+                            float faceSize = Math.Min(usableWidth, usableHeight);
+
+                            // Center the face in its cell if there's extra space
+                            float xOffset = column * (usableWidth + padding) + padding;
+                            float yOffset = row * (usableHeight + padding) + padding;
+
+                            // If we're maintaining square aspect ratio and have extra space,
+                            // center the square in the available space
+                            if (usableWidth > usableHeight)
+                            {
+                                xOffset += (usableWidth - faceSize) / 2;
+                            }
+                            else if (usableHeight > usableWidth)
+                            {
+                                yOffset += (usableHeight - faceSize) / 2;
+                            }
+
+                            // Adjust UV coordinates to fit in the right grid cell with padding
+                            uv0.X = (u0 * faceSize) + xOffset;
+                            uv0.Y = (v0 * faceSize) + yOffset;
+                        }
+                        else if (uvMapStyle == 2) // Custom layout with face-specific control
+                        {
+                            // Here we can define specific UV regions for each face
+                            // This gives maximum control for texture artists
+
+                            // Define UV regions for each face [x, y, width, height]
+                            var faceRegions = new Vector4[]
+                            {
+                                new Vector4(0.00f, 0.00f, 0.33f, 0.5f), // Front
+                                new Vector4(0.33f, 0.00f, 0.33f, 0.5f), // Right
+                                new Vector4(0.66f, 0.00f, 0.33f, 0.5f), // Back
+                                new Vector4(0.00f, 0.50f, 0.33f, 0.5f), // Left
+                                new Vector4(0.33f, 0.50f, 0.33f, 0.5f), // Top
+                                new Vector4(0.66f, 0.50f, 0.33f, 0.5f)  // Bottom
+                            };
+
+                            // Padding within each region (inset from edges)
+                            float padding = 0.005f;
+
+                            // Get region for current face
+                            var region = faceRegions[sideIndex];
+
+                            // Apply padding to avoid texture bleeding
+                            float x = region.X + padding;
+                            float y = region.Y + padding;
+                            float width = region.Z - (padding * 2);
+                            float height = region.W - (padding * 2);
+
+                            // Make it square if needed (using the smaller dimension)
+                            if (uvMapStyle == 2) // Only if square aspect ratio is desired
+                            {
+                                float size = Math.Min(width, height);
+                                float xCenter = region.X + region.Z / 2;
+                                float yCenter = region.Y + region.W / 2;
+                                x = xCenter - size / 2 + padding;
+                                y = yCenter - size / 2 + padding;
+                                width = height = size - (padding * 2);
+                            }
+
+                            // Map UV to the adjusted region
+                            uv0.X = x + (u0 * width);
+                            uv0.Y = y + (v0 * height);
+                        }
+
                         var position = (Vector3.TransformNormal(p + offset, sideRotationMatrix) + pivot) * stretch * scale;
                         position = Vector3.TransformNormal(position, cubeRotationMatrix);
 
@@ -286,16 +366,16 @@ internal sealed class CubeMesh : Instance<CubeMesh>
 
     private readonly MeshBuffers _data = new();
 
-    [Input(Guid = "E445A6DA-0B66-46AE-AD2B-650E9CC50798")]
+    [Input(Guid = "e445a6da-0b66-46ae-ad2b-650e9cc50798")]
     public readonly InputSlot<Int3> Segments = new();
 
-    [Input(Guid = "97C9849E-751C-49A9-823D-0AF839FA503E")]
+    [Input(Guid = "97c9849e-751c-49a9-823d-0af839fa503e")]
     public readonly InputSlot<Vector3> Stretch = new();
 
     [Input(Guid = "9a7d34a1-ca39-48bc-b977-9a786d23f3b1")]
     public readonly InputSlot<float> Scale = new();
 
-    [Input(Guid = "FEBFAE90-13E8-4F0A-8CCF-B8825EA525F8")]
+    [Input(Guid = "febfae90-13e8-4f0a-8ccf-b8825ea525f8")]
     public readonly InputSlot<Vector3> Pivot = new();
 
     [Input(Guid = "f4a78f77-8d8c-4b7b-8545-ea80947b428d")]
@@ -303,4 +383,7 @@ internal sealed class CubeMesh : Instance<CubeMesh>
 
     [Input(Guid = "e641c244-9dc8-444d-8dee-c3e9b710f9db")]
     public readonly InputSlot<Vector3> Rotation = new();
+
+    [Input(Guid = "e1adb865-42f5-46a9-a4ac-bfae00b03caa")]    
+    public readonly InputSlot<int> UvMap = new();
 }
