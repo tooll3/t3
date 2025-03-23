@@ -1,3 +1,4 @@
+using Lib.numbers.@float.adjust;
 using T3.Core.Rendering;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
@@ -33,6 +34,7 @@ internal sealed class CubeMesh : Instance<CubeMesh>
             // var offset = new SharpDX.Vector3(stretch.X * scale * (pivot.X - 0.5f),
             //                                  stretch.Y * scale * (pivot.Y - 0.5f),
             //                                  stretch.Z * scale * (pivot.Z - 0.5f));
+            var uvMapMode = UvMapMode.GetValue(context);
 
             var offset = -Vector3.One * 0.5f;
 
@@ -102,6 +104,88 @@ internal sealed class CubeMesh : Instance<CubeMesh>
 
                         var v0 = (rowIndex) / ((float)rowCount - 1);
                         var uv0 = new Vector2(u0, v0);
+
+                        // other UV maps
+
+                        if (uvMapMode == 1) // Unwrapped cube map with padding
+                        {
+                            // UV island padding (adjust as needed)
+                            float padding = 0.01f;
+
+                            // Calculate usable space (accounting for padding)
+                            float usableWidth = (1.0f - (4 * padding)) / 3.0f;  // 3 columns with 4 padding spaces
+                            float usableHeight = (1.0f - (3 * padding)) / 2.0f; // 2 rows with 3 padding spaces
+
+                            // Determine face position
+                            int column = sideIndex % 3;
+                            int row = sideIndex / 3;
+
+                            // Calculate actual face dimensions to maintain square aspect ratio
+                            float faceSize = Math.Min(usableWidth, usableHeight);
+
+                            // Center the face in its cell if there's extra space
+                            float xOffset = column * (usableWidth + padding) + padding;
+                            float yOffset = row * (usableHeight + padding) + padding;
+
+                            // If we're maintaining square aspect ratio and have extra space,
+                            // center the square in the available space
+                            if (usableWidth > usableHeight)
+                            {
+                                xOffset += (usableWidth - faceSize) / 2;
+                            }
+                            else if (usableHeight > usableWidth)
+                            {
+                                yOffset += (usableHeight - faceSize) / 2;
+                            }
+
+                            // Adjust UV coordinates to fit in the right grid cell with padding
+                            uv0.X = (u0 * faceSize) + xOffset;
+                            uv0.Y = (v0 * faceSize) + yOffset;
+                        }
+                        else if (uvMapMode == 2) // Custom layout with face-specific control
+                        {
+                            // Here we can define specific UV regions for each face
+                            // This gives maximum control for texture artists
+
+                            // Define UV regions for each face [x, y, width, height]
+                            var faceRegions = new Vector4[]
+                            {
+                                new Vector4(0.00f, 0.00f, 0.33f, 0.5f), // Front
+                                new Vector4(0.33f, 0.00f, 0.33f, 0.5f), // Right
+                                new Vector4(0.66f, 0.00f, 0.33f, 0.5f), // Back
+                                new Vector4(0.00f, 0.50f, 0.33f, 0.5f), // Left
+                                new Vector4(0.33f, 0.50f, 0.33f, 0.5f), // Top
+                                new Vector4(0.66f, 0.50f, 0.33f, 0.5f)  // Bottom
+                            };
+
+                            // Padding within each region (inset from edges)
+                            float padding = 0.005f;
+
+                            // Get region for current face
+                            var region = faceRegions[sideIndex];
+
+                            // Apply padding to avoid texture bleeding
+                            float x = region.X + padding;
+                            float y = region.Y + padding;
+                            float width = region.Z - (padding * 2);
+                            float height = region.W - (padding * 2);
+
+                            // Make it square if needed (using the smaller dimension)
+                            if (uvMapMode == 2) // Only if square aspect ratio is desired
+                            {
+                                float size = Math.Min(width, height);
+                                float xCenter = region.X + region.Z / 2;
+                                float yCenter = region.Y + region.W / 2;
+                                x = xCenter - size / 2 + padding;
+                                y = yCenter - size / 2 + padding;
+                                width = height = size - (padding * 2);
+                            }
+
+                            // Map UV to the adjusted region
+                            uv0.X = x + (u0 * width);
+                            uv0.Y = y + (v0 * height);
+                        }
+
                         var position = (Vector3.TransformNormal(p + offset, sideRotationMatrix) + pivot) * stretch * scale;
                         position = Vector3.TransformNormal(position, cubeRotationMatrix);
 
@@ -303,4 +387,7 @@ internal sealed class CubeMesh : Instance<CubeMesh>
 
     [Input(Guid = "e641c244-9dc8-444d-8dee-c3e9b710f9db")]
     public readonly InputSlot<Vector3> Rotation = new();
+
+    [Input(Guid = "e1adb865-42f5-46a9-a4ac-bfae00b03caa")]
+    public readonly InputSlot<int> UvMapMode = new();
 }

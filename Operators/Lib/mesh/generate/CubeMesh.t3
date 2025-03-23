@@ -1,51 +1,55 @@
 {
   "Id": "c47ab830-aae7-4f8f-b67c-9119bcbaf7df"/*CubeMesh*/,
-  "Inputs": [
-    {
-      "Id": "97c9849e-751c-49a9-823d-0af839fa503e"/*Stretch*/,
-      "DefaultValue": {
-        "X": 1.0,
-        "Y": 1.0,
-        "Z": 1.0
-      }
-    },
-    {
-      "Id": "9a7d34a1-ca39-48bc-b977-9a786d23f3b1"/*Scale*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "e445a6da-0b66-46ae-ad2b-650e9cc50798"/*Segments*/,
-      "DefaultValue": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
-      }
-    },
-    {
-      "Id": "e641c244-9dc8-444d-8dee-c3e9b710f9db"/*Rotation*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      }
-    },
-    {
-      "Id": "f4a78f77-8d8c-4b7b-8545-ea80947b428d"/*Center*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      }
-    },
-    {
-      "Id": "febfae90-13e8-4f0a-8ccf-b8825ea525f8"/*Pivot*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      }
-    }
-  ],
+    "Inputs": [
+        {
+            "Id": "97c9849e-751c-49a9-823d-0af839fa503e" /*Stretch*/,
+            "DefaultValue": {
+                "X": 1.0,
+                "Y": 1.0,
+                "Z": 1.0
+            }
+        },
+        {
+            "Id": "9a7d34a1-ca39-48bc-b977-9a786d23f3b1" /*Scale*/,
+            "DefaultValue": 1.0
+        },
+        {
+            "Id": "e445a6da-0b66-46ae-ad2b-650e9cc50798" /*Segments*/,
+            "DefaultValue": {
+                "X": 1,
+                "Y": 1,
+                "Z": 1
+            }
+        },
+        {
+            "Id": "e641c244-9dc8-444d-8dee-c3e9b710f9db" /*Rotation*/,
+            "DefaultValue": {
+                "X": 0.0,
+                "Y": 0.0,
+                "Z": 0.0
+            }
+        },
+        {
+            "Id": "f4a78f77-8d8c-4b7b-8545-ea80947b428d" /*Center*/,
+            "DefaultValue": {
+                "X": 0.0,
+                "Y": 0.0,
+                "Z": 0.0
+            }
+        },
+        {
+            "Id": "febfae90-13e8-4f0a-8ccf-b8825ea525f8" /*Pivot*/,
+            "DefaultValue": {
+                "X": 0.0,
+                "Y": 0.0,
+                "Z": 0.0
+            }
+        },
+        {
+            "Id": "e1adb865-42f5-46a9-a4ac-bfae00b03caa" /*UvMapMode*/,
+            "DefaultValue": 0
+        }
+    ],
   "Children": [],
   "Connections": []
 }
