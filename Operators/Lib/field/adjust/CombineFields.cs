@@ -1,4 +1,5 @@
 using T3.Core.Utils;
+// ReSharper disable UnusedMember.Local
 
 namespace Lib.field.adjust;
 
@@ -90,13 +91,13 @@ inline float {ShaderNode}CombineFunc(float d1, float d2) {{
 
     private readonly CombineMethodDefs[] _combineModes =
         [
-            new CombineMethodDefs("(a) + (b)", 0),
-            new CombineMethodDefs("(a) - (b)", 0),
-            new CombineMethodDefs("(a) * (b)", 1),
-            new CombineMethodDefs("min(a, b)", 999999),
-            new CombineMethodDefs("max(a, b)", -999999),
-            new CombineMethodDefs("SmoothUnion(a, b)", 999999),
-            new CombineMethodDefs("max(a,-b)", 999999),
+            new("(a) + (b)", 0),
+            new("(a) - (b)", 0),
+            new("(a) * (b)", 1),
+            new("min(a, b)", 999999),
+            new("max(a, b)", -999999),
+            new("SmoothUnion(a, b)", 999999),
+            new("max(a,-b)", 999999),
         ];
 
     private enum CombineMethods

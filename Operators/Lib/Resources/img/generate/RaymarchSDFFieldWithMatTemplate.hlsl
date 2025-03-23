@@ -230,8 +230,17 @@ PSOutput psMain(vsOutput input)
 
     // Tri-planar mappping
     float3 absN = abs(normal);
+
+#if MAPPING_TRIPLANAR
     float2 uv = (absN.x > absN.y && absN.x > absN.z) ? p.yz / TextureScale : (absN.y > absN.z) ? p.zx / TextureScale
                                                                                                : p.xy / TextureScale;
+#elif MAPPING_XY
+    float2 uv = p.xy;
+#elif MAPPING_XZ
+    float2 uv = p.xz;
+#else
+    float2 uv = p.yz;
+#endif
 
     float4 albedo = BaseColorMap.Sample(texSampler, uv);
 

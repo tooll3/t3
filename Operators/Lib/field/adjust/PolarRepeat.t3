@@ -6,6 +6,10 @@
       "DefaultValue": null
     },
     {
+      "Id": "a0231b91-8ab8-4591-a3da-3cd7f3980d2f"/*Offset*/,
+      "DefaultValue": 0.0
+    },
+    {
       "Id": "b4c551a3-28c1-418a-83b4-ebdd61ed599c"/*Repetitions*/,
       "DefaultValue": 0.5
     }

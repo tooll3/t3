@@ -33,60 +33,12 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
     [Output(Guid = "1a9b5e15-e9a7-4ed4-aa1a-2072398921b4")]
     public readonly Slot<Buffer> FloatParams = new();
     
-    // [Output(Guid = "1791B00E-583F-4E3A-BEB9-7C4CA6648935")]
-    // public readonly Slot<List<float>> FloatParams = new();
     
     public _GetFieldShaderAttributes()
     {
         ShaderCode.UpdateAction += Update;
     }
 
-    private bool _needsInvalidation = true;
-
-    // private int Invalidate(ISlot slot)
-    // {
-    //     var slotFlag = slot.DirtyFlag;
-    //     if (slot.TryGetFirstConnection(out var firstConnection))
-    //     {
-    //         // slot is an output of an composition op
-    //         slotFlag.Target = Invalidate(firstConnection);
-    //     }
-    //     else
-    //     {
-    //         Instance parent = slot.Parent;
-    //
-    //         foreach (var input in parent.Inputs)
-    //         {
-    //             var inputFlag = input.DirtyFlag;
-    //             if (input.TryGetFirstConnection(out var inputConnection))
-    //             {
-    //                 if (input.IsMultiInput)
-    //                 {
-    //                     var multiInput = (IMultiInputSlot)input;
-    //                     int dirtySum = 0;
-    //                     foreach (var entry in multiInput.GetCollectedInputs())
-    //                     {
-    //                         dirtySum += Invalidate(entry);
-    //                     }
-    //
-    //                     inputFlag.Target = dirtySum;
-    //                 }
-    //                 else
-    //                 {
-    //                     inputFlag.Target = Invalidate(inputConnection);
-    //                 }
-    //             }
-    //             else
-    //             {
-    //                 inputFlag.Invalidate();
-    //             }
-    //         }
-    //
-    //         slotFlag.Invalidate();
-    //     }
-    //
-    //     return slotFlag.Target;
-    // }
     
     /// <summary>
     /// This is only updated if subgraph has been changed.
@@ -97,6 +49,17 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
         var hasTemplateChanged = TemplateCode.DirtyFlag.IsDirty;
         // if(hasTemplateChanged)
         //     Log.Debug("templateChanged", this);
+
+        var definesAreDirty = AdditionalDefines.DirtyFlag.IsDirty;
+        if (definesAreDirty)
+        {
+            var additionalDefines = AdditionalDefines.GetValue(context);
+            if (additionalDefines != _additionalDefines)
+            {
+                _additionalDefines = additionalDefines;
+                hasTemplateChanged= true;
+            }
+        }
         
         var templateCode = TemplateCode.GetValue(context);
         if (string.IsNullOrEmpty(templateCode))
@@ -157,7 +120,7 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
         if (hasTemplateChanged || (changes & (ShaderGraphNode.ChangedFlags.Code|ShaderGraphNode.ChangedFlags.Structural)) != 0)
         {
             //Log.Debug(" Regenerate shader code", this);
-            ShaderCode.Value = GenerateShaderCode(templateCode);
+            ShaderCode.Value = GenerateShaderCode(_additionalDefines + "\n\n" + templateCode);    // Should probably use a string builder here...
         }
 
         //_graphNode.ClearAllChanges();
@@ -247,11 +210,9 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
     {
         try
         {
-            //var floatParams = Params.GetValue(context);
             if (floatParams == null || floatParams.Count == 0)
                 return;
             
-            //var array = floatParams.ToArray();
             var arraySize = (floatParams.Count / 4 + (floatParams.Count % 4 == 0 ? 0 : 1)) * 4; // always 16byte slices for alignment
             var array = new float[arraySize];
             
@@ -302,6 +263,9 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
     #endregion
     
     private ShaderGraphNode _graphNode;
+    private bool _needsInvalidation = true;
+    private string _additionalDefines = "";
+
 
     [Input(Guid = "FFC1C70E-B717-4337-916D-C3A13343E9CC")]
     public readonly InputSlot<ShaderGraphNode> Field = new();
@@ -311,6 +275,9 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
     
     [Input(Guid = "BCF6DE27-1FFD-422C-9F5B-910D89CAD1A4")]
     public readonly InputSlot<string> TemplateCode = new();
+
+    [Input(Guid = "F6FB3BE8-53F2-4D68-BF0F-3F519BC09FF4")]
+    public readonly InputSlot<string> AdditionalDefines = new();
 
     
     public static string ToHlslTemplateTag(string hook)

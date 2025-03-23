@@ -10,6 +10,16 @@
       }
     },
     {
+      "InputId": "a0231b91-8ab8-4591-a3da-3cd7f3980d2f"/*Offset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 120.0
+      },
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
+    },
+    {
       "InputId": "b4c551a3-28c1-418a-83b4-ebdd61ed599c"/*Repetitions*/,
       "Position": {
         "X": -200.0,
