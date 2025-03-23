@@ -1,4 +1,4 @@
-using Lib.numbers.@float.adjust;
+using System.Windows.Forms;
 using T3.Core.Rendering;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
@@ -35,6 +35,9 @@ internal sealed class CubeMesh : Instance<CubeMesh>
             //                                  stretch.Y * scale * (pivot.Y - 0.5f),
             //                                  stretch.Z * scale * (pivot.Z - 0.5f));
             var uvMapMode = UvMapMode.GetValue(context);
+            var margin = Margin.GetValue(context);
+            // Initialize UV mapper based on selected mode
+            IUvMapper uvMapper = GetUvMapper(uvMapMode);
 
             var offset = -Vector3.One * 0.5f;
 
@@ -103,88 +106,8 @@ internal sealed class CubeMesh : Instance<CubeMesh>
                                             depthScale);
 
                         var v0 = (rowIndex) / ((float)rowCount - 1);
-                        var uv0 = new Vector2(u0, v0);
-
-                        // other UV maps
-
-                        if (uvMapMode == 1) // Unwrapped cube map with padding
-                        {
-                            // UV island padding (adjust as needed)
-                            float padding = 0.01f;
-
-                            // Calculate usable space (accounting for padding)
-                            float usableWidth = (1.0f - (4 * padding)) / 3.0f;  // 3 columns with 4 padding spaces
-                            float usableHeight = (1.0f - (3 * padding)) / 2.0f; // 2 rows with 3 padding spaces
-
-                            // Determine face position
-                            int column = sideIndex % 3;
-                            int row = sideIndex / 3;
-
-                            // Calculate actual face dimensions to maintain square aspect ratio
-                            float faceSize = Math.Min(usableWidth, usableHeight);
-
-                            // Center the face in its cell if there's extra space
-                            float xOffset = column * (usableWidth + padding) + padding;
-                            float yOffset = row * (usableHeight + padding) + padding;
-
-                            // If we're maintaining square aspect ratio and have extra space,
-                            // center the square in the available space
-                            if (usableWidth > usableHeight)
-                            {
-                                xOffset += (usableWidth - faceSize) / 2;
-                            }
-                            else if (usableHeight > usableWidth)
-                            {
-                                yOffset += (usableHeight - faceSize) / 2;
-                            }
-
-                            // Adjust UV coordinates to fit in the right grid cell with padding
-                            uv0.X = (u0 * faceSize) + xOffset;
-                            uv0.Y = (v0 * faceSize) + yOffset;
-                        }
-                        else if (uvMapMode == 2) // Custom layout with face-specific control
-                        {
-                            // Here we can define specific UV regions for each face
-                            // This gives maximum control for texture artists
-
-                            // Define UV regions for each face [x, y, width, height]
-                            var faceRegions = new Vector4[]
-                            {
-                                new Vector4(0.00f, 0.00f, 0.33f, 0.5f), // Front
-                                new Vector4(0.33f, 0.00f, 0.33f, 0.5f), // Right
-                                new Vector4(0.66f, 0.00f, 0.33f, 0.5f), // Back
-                                new Vector4(0.00f, 0.50f, 0.33f, 0.5f), // Left
-                                new Vector4(0.33f, 0.50f, 0.33f, 0.5f), // Top
-                                new Vector4(0.66f, 0.50f, 0.33f, 0.5f)  // Bottom
-                            };
-
-                            // Padding within each region (inset from edges)
-                            float padding = 0.005f;
-
-                            // Get region for current face
-                            var region = faceRegions[sideIndex];
-
-                            // Apply padding to avoid texture bleeding
-                            float x = region.X + padding;
-                            float y = region.Y + padding;
-                            float width = region.Z - (padding * 2);
-                            float height = region.W - (padding * 2);
-
-                            // Make it square if needed (using the smaller dimension)
-                            if (uvMapMode == 2) // Only if square aspect ratio is desired
-                            {
-                                float size = Math.Min(width, height);
-                                float xCenter = region.X + region.Z / 2;
-                                float yCenter = region.Y + region.W / 2;
-                                x = xCenter - size / 2 + padding;
-                                y = yCenter - size / 2 + padding;
-                                width = height = size - (padding * 2);
-                            }
-
-                            // Map UV to the adjusted region
-                            uv0.X = x + (u0 * width);
-                            uv0.Y = y + (v0 * height);
-                        }
+                        // Apply UV mapping based on selected mode
+                        var uv0 = uvMapper.CalculateUV(u0, v0, sideIndex, margin);
 
                         var position = (Vector3.TransformNormal(p + offset, sideRotationMatrix) + pivot) * stretch * scale;
                         position = Vector3.TransformNormal(position, cubeRotationMatrix);
@@ -360,6 +283,114 @@ internal sealed class CubeMesh : Instance<CubeMesh>
                 },
         };
 
+    private IUvMapper GetUvMapper(int uvMapMode)
+    {
+        return uvMapMode switch
+        {
+            0 => new StandardUvMapper(),           // Standard/Default mapping
+            1 => new UnwrappedCubeMapper(),        // Unwrapped cube map with padding
+            2 => new CustomLayoutMapper(),         // Custom layout with face-specific control
+            _ => new StandardUvMapper()            // Default fallback
+        };
+    }
+    // Interface for UV mapping strategies
+    private interface IUvMapper
+    {
+        Vector2 CalculateUV(float u, float v, int sideIndex, float padding);
+    }
+    // Standard/Default UV mapping
+    private class StandardUvMapper : IUvMapper
+    {
+        public Vector2 CalculateUV(float u, float v, int sideIndex, float padding)
+        {
+            return new Vector2(u, v);
+        }
+    }
+    // Unwrapped cube map with padding
+    private class UnwrappedCubeMapper : IUvMapper
+    {
+        public Vector2 CalculateUV(float u, float v, int sideIndex, float padding)
+        {
+            // UV island padding (adjust as needed)
+            //float padding = 0.00f;
+
+            // Calculate usable space (accounting for padding)
+            float usableWidth = (1.0f - (4 * padding)) / 3.0f;  // 3 columns with 4 padding spaces
+            float usableHeight = (1.0f - (3 * padding)) / 2.0f; // 2 rows with 3 padding spaces
+
+            // Determine face position
+            int column = sideIndex % 3;
+            int row = sideIndex / 3;
+
+            // Calculate actual face dimensions to maintain square aspect ratio
+            float faceSize = Math.Min(usableWidth, usableHeight);
+
+            // Center the face in its cell if there's extra space
+            float xOffset = column * (usableWidth + padding) + padding;
+            float yOffset = row * (usableHeight + padding) + padding;
+
+            // If we're maintaining square aspect ratio and have extra space,
+            // center the square in the available space
+            if (usableWidth > usableHeight)
+            {
+                xOffset += (usableWidth - faceSize) / 2;
+            }
+            else if (usableHeight > usableWidth)
+            {
+                yOffset += (usableHeight - faceSize) / 2;
+            }
+
+            // Adjust UV coordinates to fit in the right grid cell with padding
+            return new Vector2(
+                (u * faceSize) + xOffset,
+                (v * faceSize) + yOffset
+            );
+        }
+    }
+    // Custom layout with face-specific control
+    private class CustomLayoutMapper : IUvMapper
+    {
+        // Define UV regions for each face [x, y, width, height]
+        private static readonly Vector4[] _faceRegions = new Vector4[]
+        {
+        new Vector4(0.00f, 0.00f, 0.25f, 0.25f), // Front
+        new Vector4(0.25f, 0.00f, 0.25f, 0.25f), // Right
+        new Vector4(0.50f, 0.00f, 0.25f, 0.25f), // Back
+        new Vector4(0.75f, 0.00f, 0.25f, 0.25f), // Left
+        new Vector4(0.00f, 0.50f, 0.50f, 0.5f), // Top
+        new Vector4(0.50f, 0.50f, 0.50f, 0.5f)  // Bottom
+        };
+
+        public Vector2 CalculateUV(float u, float v, int sideIndex, float padding)
+        {
+            // Padding within each region (inset from edges)
+            //float padding = 0.005f; pop
+
+            // Get region for current face
+            var region = _faceRegions[sideIndex];
+
+            // Apply padding to avoid texture bleeding
+            float x = region.X + padding;
+            float y = region.Y + padding;
+            float width = region.Z - (padding * 2);
+            float height = region.W - (padding * 2);
+
+            // Make it square (using the smaller dimension)
+            float size = Math.Min(width, height);
+            float xCenter = region.X + region.Z / 2;
+            float yCenter = region.Y + region.W / 2;
+            x = xCenter - size / 2 + padding;
+            y = yCenter - size / 2 + padding;
+            width = height = size - (padding * 2);
+
+            // Map UV to the adjusted region
+            return new Vector2(
+                x + (u * width),
+                y + (v * height)
+            );
+        }
+    }
+
     private Buffer _vertexBuffer;
     private PbrVertex[] _vertexBufferData = new PbrVertex[0];
     private readonly BufferWithViews _vertexBufferWithViews = new();
@@ -390,4 +421,7 @@ internal sealed class CubeMesh : Instance<CubeMesh>
 
     [Input(Guid = "e1adb865-42f5-46a9-a4ac-bfae00b03caa")]
     public readonly InputSlot<int> UvMapMode = new();
+
+    [Input(Guid = "ba355fc0-0f1c-41d9-842e-d8ae9bee162a")]
+    public readonly InputSlot<float> Margin = new();
 }
