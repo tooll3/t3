@@ -13,22 +13,13 @@ cbuffer ParamConstants : register(b1)
     float MaxSteps;
     float StepSize;
     float MinDistance;
-    float MaxDistance;
-
-    float Fog;
     float DistToColor;
-    float AODistance;
-    float __padding1;
 
-    float4 Specular;
-    float4 Glow;
+    float4 Color;
     float4 AmbientOcclusion;
-    float4 Background;
 
-    float3 LightPos;
-    float __padding;
-
-    float2 Spec;
+    float TextureScale;
+    float AODistance;
 }
 
 cbuffer Transforms : register(b2)
@@ -134,17 +125,6 @@ float GetDistance(float3 pos)
 }
 //---------------------------------------------------
 
-// Blinn-Phong shading model with rim lighting (diffuse light bleeding to the other side).
-// |normal|, |view| and |light| should be normalized.
-float3 ComputedShadedColor(float3 normal, float3 view, float3 light, float3 diffuseColor)
-{
-    float3 halfLV = normalize(light + view);
-    float clampedSpecPower = max(Spec.y, 0.001);
-    float spe = pow(max(dot(normal, halfLV), Spec.x), clampedSpecPower);
-    float dif = dot(normal, light) * 0.1 + 0.15;
-    return dif * diffuseColor + spe * Specular.rgb;
-}
-
 float3 GetNormal(float3 p, float offset)
 {
     float dt = .0001;
@@ -184,8 +164,6 @@ float DepthFromWorldSpace2(float dist, float near, float far)
     return far * (dist - near) / (dist * (far - near));
 }
 
-// float4 psMain(vsOutput input) : SV_TARGET
-
 struct PSOutput
 {
     float4 color : SV_Target;
@@ -221,7 +199,7 @@ PSOutput psMain(vsOutput input)
     p += totalD * dp;
 
     // Color the surface with Blinn-Phong shading, ambient occlusion and glow.
-    float3 col = Background.rgb;
+    float3 col = 0;
     float a = 1;
 
     float3 normal = 0;
@@ -231,45 +209,30 @@ PSOutput psMain(vsOutput input)
     {
         normal = normalize(GetNormal(p, D));
 
-        col = Specular.rgb;
-        // col = ComputedShadedColor(n, -dp, LightPos, col);
-
-        // col = lerp(AmbientOcclusion.rgb, col, ComputeAO(p, n, AODistance, 3, AmbientOcclusion.a));
-
-        // // We've gone through all steps, but we haven't hit anything.
-        // // Mix in the background color.
-        // if (D > MinDistance)
-        // {
-        //     a = 1 - clamp(log(D / MinDistance) * DistToColor, 0.0, 1.0);
-        //     col = lerp(col, Background.rgb, a);
-        // }
+        col = Color.rgb;
+        // We've gone through all steps, but we haven't hit anything.
+        // Mix in the background color.
+        if (D > MinDistance)
+        {
+            a = 1 - clamp(log(D / MinDistance) * DistToColor, 0.0, 1.0); // Clarify if this is actually useful
+        }
     }
     else
     {
         a = 0;
     }
 
-    // ----------------
-
-    // Glow is based on the number of steps.
-    // col = lerp(col, Glow.rgb, float(steps) / float(MaxSteps) * Glow.a);
-
     // Discard transparent fragments...
-    float f = clamp(log(length(p - input.worldTViewPos) / Fog), 0, 1);
-    col = lerp(col, Background.rgb, f);
-    a *= (1 - f * Background.a);
-
-    if (a < 0.6)
-    {
+    if (a < 0.1)
         discard;
-    }
 
-    // PBR shading -----------------------
+    // PBR shading -------------------------------------------------------------------------
 
-    // Sample input textures to get shading model params.
+    // Tri-planar mappping
+    float3 absN = abs(normal);
+    float2 uv = (absN.x > absN.y && absN.x > absN.z) ? p.yz / TextureScale : (absN.y > absN.z) ? p.zx / TextureScale
+                                                                                               : p.xy / TextureScale;
 
-    // TODO: tri-planar mappping
-    float2 uv = p.xy;
     float4 albedo = BaseColorMap.Sample(texSampler, uv);
 
     float4 roughnessMetallicOcclusion = RSMOMap.Sample(texSampler, uv);
@@ -277,14 +240,13 @@ PSOutput psMain(vsOutput input)
     float metalness = saturate(roughnessMetallicOcclusion.y + Metal);
     float occlusion = roughnessMetallicOcclusion.z;
 
-    float3 N = normal;
     float3 Lo = -dp;
 
     // Angle between surface normal and outgoing light direction.
-    float cosLo = max(0.0, dot(N, Lo));
+    float cosLo = max(0.0, dot(normal, Lo));
 
     // Specular reflection vector.
-    float3 Lr = 2.0 * cosLo * N - Lo;
+    float3 Lr = 2.0 * cosLo * normal - Lo;
 
     // Fresnel reflectance at normal incidence (for metals use albedo color).
     float3 F0 = lerp(Fdielectric.xxx, albedo.rgb, metalness).rgb;
@@ -306,8 +268,8 @@ PSOutput psMain(vsOutput input)
         float3 Lh = normalize(Li + Lo);
 
         // Calculate angles between surface normal and various light vectors.
-        float cosLi = max(0.0, dot(N, Li));
-        float cosLh = max(0.0, dot(N, Lh));
+        float cosLi = max(0.0, dot(normal, Li));
+        float cosLh = max(0.0, dot(normal, Lh));
 
         // Calculate Fresnel term for direct lighting.
         float3 F = fresnelSchlick(F0, max(0.0, dot(Lh, Lo)));
@@ -329,7 +291,7 @@ PSOutput psMain(vsOutput input)
         float3 diffuseBRDF = kd * albedo.rgb;
 
         // Cook-Torrance specular microfacet BRDF.
-        float3 specularBRDF = ((F * D * G) / max(Epsilon, 4.0 * cosLi * cosLo)) * Specular.rgb;
+        float3 specularBRDF = ((F * D * G) / max(Epsilon, 4.0 * cosLi * cosLo)) * Color.rgb;
 
         // Total contribution for this light.
         directLighting += (diffuseBRDF + specularBRDF) * Lradiance * cosLi;
@@ -341,7 +303,7 @@ PSOutput psMain(vsOutput input)
         // Sample diffuse irradiance at normal direction.
         uint width, height, levels;
         PrefilteredSpecular.GetDimensions(0, width, height, levels);
-        float3 irradiance = PrefilteredSpecular.SampleLevel(texSampler, N, 0.6 * levels).rgb;
+        float3 irradiance = PrefilteredSpecular.SampleLevel(texSampler, normal, 0.6 * levels).rgb;
 
         // Calculate Fresnel term for ambient lighting.
         // Since we use pre-filtered cubemap(s) and irradiance is coming from many directions
@@ -370,14 +332,23 @@ PSOutput psMain(vsOutput input)
     float4 litColor = float4(directLighting + ambientLighting, 1.0) * BaseColor; // TODO Add parameter * Color;
 
     // TODO: Fog
-    // litColor.rgb = lerp(litColor.rgb, FogColor.rgb, pin.fog);
+    // Fog
+    float depth = dot(eye - p, -dp);
+    if (FogDistance > 0)
+    {
+        // float4 posInCamera = mul(posInObject, ObjectToCamera);
+        // float fog = pow(saturate(-posInCamera.z / FogDistance), FogBias);
+
+        float fog = pow(saturate(depth / FogDistance), FogBias);
+        litColor.rgb = lerp(litColor.rgb, FogColor.rgb, fog);
+    }
+
     litColor += float4(EmissiveColorMap.Sample(texSampler, uv).rgb * EmissiveColor.rgb, 0);
     litColor.a *= albedo.a;
 
-    litColor.rgb = lerp(AmbientOcclusion.rgb, litColor.rgb, ComputeAO(p, N, AODistance, 3, AmbientOcclusion.a));
+    litColor.rgb = lerp(AmbientOcclusion.rgb, litColor.rgb, ComputeAO(p, normal, AODistance, 3, AmbientOcclusion.a));
 
     PSOutput result;
-    float depth = dot(eye - p, -dp);
     result.depth = DepthFromWorldSpace2(depth, 0.01, 1000);
     result.color = litColor;
     return result;
