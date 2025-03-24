@@ -10,6 +10,10 @@
       "DefaultValue": null
     },
     {
+      "Id": "f6fb3be8-53f2-4d68-bf0f-3f519bc09ff4"/*AdditionalDefines*/,
+      "DefaultValue": ""
+    },
+    {
       "Id": "ffc1c70e-b717-4337-916d-c3a13343e9cc"/*Field*/,
       "DefaultValue": null
     }

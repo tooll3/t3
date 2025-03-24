@@ -3,6 +3,13 @@
   "Description": "",
   "InputUis": [
     {
+      "InputId": "02e4130f-8a0c-4efb-b75f-f7da29cc95eb"/*Axis*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 75.0
+      }
+    },
+    {
       "InputId": "7248c680-7279-4c1d-b968-3864cb849c77"/*InputField*/,
       "Position": {
         "X": -200.0,
