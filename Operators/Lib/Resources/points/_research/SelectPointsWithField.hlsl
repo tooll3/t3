@@ -11,6 +11,9 @@ cbuffer Params : register(b0)
     float Strength;
     float2 GainAndBias;
     float Scatter;
+
+    float2 FieldValueRange;
+
 }
 
 cbuffer Params : register(b1)
@@ -61,8 +64,11 @@ static const float NoisePhase = 0;
     // float3 posInObject = p.Position;
     // float3 posInVolume = mul(float4(posInObject, 1), TransformVolume).xyz;
     float3 pos = p.Position;
-    ;
+    
     float s = /*{FIELD_CALL}*/ 0;
+
+    s = (s - FieldValueRange.x) / (FieldValueRange.y - FieldValueRange.x);
+
 
     float scatter = Scatter * (hash11u(i.x) - 0.5);
 
