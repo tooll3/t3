@@ -55,23 +55,19 @@ void main(uint3 i : SV_DispatchThreadID)
     float4 rotation = normalize(qMul( railPoint.Rotation ,shapePoint.Rotation ));
     float3 position = qRotateVec3(shapePoint.Position * scaleFactor, railPoint.Rotation) + railPoint.Position;
 
-    //float3 normal =
-
     v.Position =  position;
     v.Normal = qRotateVec3(float3(0,0,1), rotation);
     v.Tangent = qRotateVec3(float3(0,1,0), rotation);
     v.Bitangent = qRotateVec3(float3(1,0,0), rotation);
 
-    if (UVsMode > 0.5)
-        {
-        v.TexCoord2 = float2(-(float)columnIndex/(columns-1),(float)rowIndex/(rows-1));
-        v.TexCoord = float2((float)rowIndex/(rows-1), (float)columnIndex/(columns-1)) + float2(1,0);
-        }
-    else{
-        v.TexCoord = float2(-(float)columnIndex/(columns-1),(float)rowIndex/(rows-1)) + float2(1,0) ;
-        v.TexCoord2 = float2((float)rowIndex/(rows-1), (float)columnIndex/(columns-1));
-        }
-    
+    bool swapUVs = (UVsMode > 0.5);
+
+    float2 uv1 = float2(-(float)columnIndex / (columns - 1), (float)rowIndex / (rows - 1)) + float2(1, 0);
+    float2 uv2 = float2((float)rowIndex / (rows - 1), (float)columnIndex / (columns - 1));
+
+    v.TexCoord = swapUVs ? uv2 : uv1;
+    v.TexCoord2 = swapUVs ? uv1 : uv2;
+
     v.Selected = 1;
     v.__padding =0;
 
