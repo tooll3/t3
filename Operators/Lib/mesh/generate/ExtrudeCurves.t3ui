@@ -47,7 +47,7 @@
         "Y": 1419.127
       },
       "GroupTitle": "Alternative Method",
-      "Description": "Activate if the mesh doesn't look right (holes). We noticed a compatibility issue with some GPUs.",
+      "Description": "Switch the direction of the generated UV maps ",
       "AddPadding": "True"
     }
   ],
