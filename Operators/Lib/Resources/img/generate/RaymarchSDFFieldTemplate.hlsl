@@ -122,7 +122,7 @@ float3 ComputedShadedColor(float3 normal, float3 view, float3 light, float3 diff
 
 float3 GetNormal(float3 p, float offset)
 {
-    float dt = .0001;
+    float dt = .01;
     float3 n = float3(GetDistance(p + float3(dt, 0, 0)),
                       GetDistance(p + float3(0, dt, 0)),
                       GetDistance(p + float3(0, 0, dt))) -
@@ -235,7 +235,7 @@ PSOutput psMain(vsOutput input)
     }
 
     PSOutput result;
-    result.color = float4(col, a);
+    result.color = float4(clamp(col, 0, 1000) , saturate(a));
     // result.color = float4(1, 1, 0, 1);
     //   result.depth = totalD; // length(p);
 

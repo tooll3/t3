@@ -127,7 +127,7 @@ float GetDistance(float3 pos)
 
 float3 GetNormal(float3 p, float offset)
 {
-    float dt = .0001;
+    float dt = .01;
     float3 n = float3(GetDistance(p + float3(dt, 0, 0)),
                       GetDistance(p + float3(0, dt, 0)),
                       GetDistance(p + float3(0, 0, dt))) -
