@@ -20,41 +20,42 @@ internal static partial class WindowManager
         }
 
         ImGui.Separator();
-
-        if (ImGui.MenuItem("2nd Render Window", "", ShowSecondaryRenderWindow))
-            ShowSecondaryRenderWindow = !ShowSecondaryRenderWindow;
-
-        var screens = EditorUi.Instance.AllScreens;
-        if (ImGui.BeginMenu("2nd Render Window Fullscreen On"))
         {
-            for (var index = 0; index < screens.Count; index++)
+            var screens = EditorUi.Instance.AllScreens;
+            if (ImGui.BeginMenu("Editor Window Fullscreen On"))
             {
-                var screen = screens.ElementAt(index);
-                var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
-                            $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
-                if (ImGui.MenuItem(label, "", index == UserSettings.Config.FullScreenIndexViewer))
+                for (var index = 0; index < screens.Count; index++)
                 {
-                    UserSettings.Config.FullScreenIndexViewer = index;
+                    var screen = screens.ElementAt(index);
+                    var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
+                                $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
+                    if (ImGui.MenuItem(label, "", index == UserSettings.Config.FullScreenIndexMain))
+                    {
+                        UserSettings.Config.FullScreenIndexMain = index;
+                    }
                 }
+
+                ImGui.EndMenu();
             }
 
-            ImGui.EndMenu();
-        }
+            if (ImGui.MenuItem("2nd Render Window", "", ShowSecondaryRenderWindow))
+                ShowSecondaryRenderWindow = !ShowSecondaryRenderWindow;
 
-        if (ImGui.BeginMenu("Editor Window Fullscreen On"))
-        {
-            for (var index = 0; index < screens.Count; index++)
+            if (ImGui.BeginMenu("2nd Render Window Fullscreen On"))
             {
-                var screen = screens.ElementAt(index);
-                var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
-                            $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
-                if (ImGui.MenuItem(label, "", index == UserSettings.Config.FullScreenIndexMain))
+                for (var index = 0; index < screens.Count; index++)
                 {
-                    UserSettings.Config.FullScreenIndexMain = index;
+                    var screen = screens.ElementAt(index);
+                    var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
+                                $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
+                    if (ImGui.MenuItem(label, "", index == UserSettings.Config.FullScreenIndexViewer))
+                    {
+                        UserSettings.Config.FullScreenIndexViewer = index;
+                    }
                 }
-            }
 
-            ImGui.EndMenu();
+                ImGui.EndMenu();
+            }
         }
 
         ImGui.Separator();
