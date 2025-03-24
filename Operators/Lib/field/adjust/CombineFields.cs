@@ -58,11 +58,20 @@ inline float {ShaderNode}CombineFunc(float d1, float d2) {{
 }}
 ");
             }
+            else if (_combineMethod == CombineMethods.TestBlend)
+            {
+                _callDef.AppendLine($@"
+inline float {ShaderNode}CombineFunc(float d1, float d2) {{
+    float k = {ShaderNode}K;
+    return lerp(d1,d2,k);    
+}}
+");
+            }
             else
             {
                 _callDef.AppendLine($"#define {ShaderNode}CombineFunc(a,b) ({mode.Code})\n");
             }
-
+            
             _callDef.AppendLine("");
             
             // Combine all input fields
@@ -98,6 +107,7 @@ inline float {ShaderNode}CombineFunc(float d1, float d2) {{
             new("max(a, b)", -999999),
             new("SmoothUnion(a, b)", 999999),
             new("max(a,-b)", 999999),
+            new("TestBlend(a,b)", 999999),
         ];
 
     private enum CombineMethods
@@ -109,6 +119,7 @@ inline float {ShaderNode}CombineFunc(float d1, float d2) {{
         Max,
         SmoothUnion,
         CutOut,
+        TestBlend,
     }
 
     [Input(Guid = "7248C680-7279-4C1D-B968-3864CB849C77")]
