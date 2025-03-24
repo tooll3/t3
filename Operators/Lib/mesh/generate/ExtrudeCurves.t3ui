@@ -41,10 +41,10 @@
       }
     },
     {
-      "InputId": "8104d7e7-0cea-4009-851d-1b0a23802ad8"/*FixHoles*/,
+      "InputId": "8104d7e7-0cea-4009-851d-1b0a23802ad8"/*UVsMode*/,
       "Position": {
-        "X": -1423.521,
-        "Y": 1214.9822
+        "X": -1403.2418,
+        "Y": 1419.127
       },
       "GroupTitle": "Alternative Method",
       "Description": "Activate if the mesh doesn't look right (holes). We noticed a compatibility issue with some GPUs.",
@@ -53,22 +53,10 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "05d1072c-ee6e-40e6-80a4-106d6a0dbda6"/*Source*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 171.57288,
-        "Y": 17.878124
-      },
-      "Position": {
-        "X": -585.38196,
-        "Y": 475.74628
-      }
-    },
-    {
       "ChildId": "1641928b-9226-453d-803c-36e1340513ad"/*ComputeShader*/,
       "Position": {
-        "X": -172.07574,
-        "Y": 488.50433
+        "X": -168.01984,
+        "Y": 426.31454
       }
     },
     {
@@ -81,8 +69,8 @@
     {
       "ChildId": "2b43c2d3-ff99-4d59-9d15-f989499ed6c6"/*FloatsToBuffer*/,
       "Position": {
-        "X": 82.98674,
-        "Y": 662.2196
+        "X": 88.487015,
+        "Y": 605.0167
       }
     },
     {
@@ -137,8 +125,8 @@
     {
       "ChildId": "6875ab1c-6d80-46ad-a436-e4f075e021d8"/*StructuredBufferWithViews*/,
       "Position": {
-        "X": -103.46431,
-        "Y": 776.13965
+        "X": -110.374985,
+        "Y": 778.69354
       }
     },
     {
@@ -146,6 +134,13 @@
       "Position": {
         "X": -747.9115,
         "Y": 1058.7078
+      }
+    },
+    {
+      "ChildId": "837fc938-9fbc-4de9-b22e-03efc188eded"/*Stride*/,
+      "Position": {
+        "X": -318.96225,
+        "Y": 809.178
       }
     },
     {
@@ -160,6 +155,13 @@
       "Position": {
         "X": -747.9115,
         "Y": 962.7078
+      }
+    },
+    {
+      "ChildId": "9b6575c9-5197-412a-bb83-ef1056208d0e"/*BoolToFloat*/,
+      "Position": {
+        "X": -1053.471,
+        "Y": 1494.9222
       }
     },
     {
@@ -179,15 +181,8 @@
     {
       "ChildId": "b37a8171-7379-42eb-956e-35ae7ff593f9"/*CalcDispatchCount*/,
       "Position": {
-        "X": 82.98674,
-        "Y": 593.2196
-      }
-    },
-    {
-      "ChildId": "bd7770dc-9639-476d-9a36-7173ad9bc9f4"/*BoolToInt*/,
-      "Position": {
-        "X": -1074.1956,
-        "Y": 1343.9025
+        "X": 93.98729,
+        "Y": 533.81665
       }
     },
     {
@@ -200,34 +195,22 @@
     {
       "ChildId": "d886b15d-f366-43fd-8a72-380eaed4d3fe"/*GetBufferComponents*/,
       "Position": {
-        "X": 105.493996,
-        "Y": 863.6104
+        "X": 108.79416,
+        "Y": 1141.9243
       }
     },
     {
       "ChildId": "d8933fdb-fb5e-474e-b065-8cefa0ed910c"/*ComputeShaderStage*/,
       "Position": {
-        "X": 334.87833,
-        "Y": 583.85754
+        "X": 386.5809,
+        "Y": 444.15057
       }
     },
     {
       "ChildId": "df410598-e163-4a1d-9c82-36093a380355"/*GetBufferComponents*/,
       "Position": {
-        "X": 82.98674,
-        "Y": 757.2196
-      }
-    },
-    {
-      "ChildId": "e6cc1859-fea7-48a8-96a9-3dbba9d71f27"/*Source*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 171.57288,
-        "Y": 17.878124
-      },
-      "Position": {
-        "X": -583.1848,
-        "Y": 415.87204
+        "X": 215.36809,
+        "Y": 771.18176
       }
     },
     {
@@ -235,13 +218,6 @@
       "Position": {
         "X": -937.3934,
         "Y": 1231.455
-      }
-    },
-    {
-      "ChildId": "ea94207b-a29a-4cf1-99e6-12b1bfc61791"/*PickString*/,
-      "Position": {
-        "X": -322.7276,
-        "Y": 455.8299
       }
     },
     {
@@ -254,8 +230,8 @@
     {
       "ChildId": "ffbe58cd-0f09-4e90-98db-1f5f0541a718"/*_AssembleMeshBuffers*/,
       "Position": {
-        "X": 733.89856,
-        "Y": 926.1421
+        "X": 740.8749,
+        "Y": 760.7043
       }
     }
   ],

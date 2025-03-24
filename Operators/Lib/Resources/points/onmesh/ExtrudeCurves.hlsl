@@ -9,6 +9,7 @@ cbuffer Params : register(b0)
     float UseWAsWidth;
     float UseStretch;
     float Width;
+    float UVsMode;
 }
 
 StructuredBuffer<LegacyPoint> RailPoints : t0;
@@ -19,7 +20,7 @@ RWStructuredBuffer<int3> TriangleIndices : u1;
 
 
 
-[numthreads(64,1,1)]
+[numthreads(80,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
 
@@ -60,7 +61,17 @@ void main(uint3 i : SV_DispatchThreadID)
     v.Normal = qRotateVec3(float3(0,0,1), rotation);
     v.Tangent = qRotateVec3(float3(0,1,0), rotation);
     v.Bitangent = qRotateVec3(float3(1,0,0), rotation);
-    v.TexCoord = float2((float)columnIndex/(columns-1),(float)rowIndex/(rows-1));
+
+    if (UVsMode > 0.5)
+        {
+        v.TexCoord2 = float2(-(float)columnIndex/(columns-1),(float)rowIndex/(rows-1));
+        v.TexCoord = float2((float)rowIndex/(rows-1), (float)columnIndex/(columns-1)) + float2(1,0);
+        }
+    else{
+        v.TexCoord = float2(-(float)columnIndex/(columns-1),(float)rowIndex/(rows-1)) + float2(1,0) ;
+        v.TexCoord2 = float2((float)rowIndex/(rows-1), (float)columnIndex/(columns-1));
+        }
+    
     v.Selected = 1;
     v.__padding =0;
 
