@@ -18,8 +18,8 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "e1adb865-42f5-46a9-a4ac-bfae00b03caa"/*UvMapMode*/,
-      "DefaultValue": 0
+        "Id": "e1adb865-42f5-46a9-a4ac-bfae00b03caa" /*TexCoord*/,
+        "DefaultValue": 0
     },
     {
       "Id": "e445a6da-0b66-46ae-ad2b-650e9cc50798"/*Segments*/,
@@ -44,6 +44,10 @@
         "Y": 0.0,
         "Z": 0.0
       }
+    },
+    {
+      "Id": "f946d7a1-8bb6-4ba1-a3bb-f2f95fc2242d"/*TexCoord2*/,
+      "DefaultValue": 0
     },
     {
       "Id": "febfae90-13e8-4f0a-8ccf-b8825ea525f8"/*Pivot*/,
