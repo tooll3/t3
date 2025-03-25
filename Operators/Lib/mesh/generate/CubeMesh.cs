@@ -1,3 +1,5 @@
+using Lib.image.transform;
+using System;
 using System.Windows.Forms;
 using T3.Core.Rendering;
 using T3.Core.Utils;
@@ -37,6 +39,7 @@ internal sealed class CubeMesh : Instance<CubeMesh>
             var uvMapMode = TexCoord.GetValue(context);
             var uvMapMode2 = TexCoord2.GetValue(context);
             var margin = Margin.GetValue(context);
+            var margin2 = Margin2.GetValue(context);
             // Initialize UV mapper based on selected mode
             IUvMapper uvMapper = GetUvMapper(uvMapMode);
             IUvMapper uvMapper2 = GetUvMapper(uvMapMode2);
@@ -110,7 +113,7 @@ internal sealed class CubeMesh : Instance<CubeMesh>
                         var v0 = (rowIndex) / ((float)rowCount - 1);
                         // Apply UV mapping based on selected mode
                         var uv0 = uvMapper.CalculateUV(u0, v0, sideIndex, margin);
-                        var uv1 = uvMapper2.CalculateUV(u0, v0, sideIndex, margin);
+                        var uv1 = uvMapper2.CalculateUV(u0, v0, sideIndex, margin2);
 
                         var position = (Vector3.TransformNormal(p + offset, sideRotationMatrix) + pivot) * stretch * scale;
                         position = Vector3.TransformNormal(position, cubeRotationMatrix);
@@ -293,7 +296,8 @@ internal sealed class CubeMesh : Instance<CubeMesh>
         {
             0 => new StandardUvMapper(),           // Standard/Default mapping
             1 => new UnwrappedCubeMapper(),        // Unwrapped cube map with padding
-            2 => new CustomLayoutMapper(),         // Custom layout with face-specific control
+            2 => new CubeMap(),                    // CubeMap normalized
+            3 => new CubeMapSquare(),              // CubeMap for square texture
             _ => new StandardUvMapper()            // Default fallback
         };
     }
@@ -307,7 +311,11 @@ internal sealed class CubeMesh : Instance<CubeMesh>
     {
         public Vector2 CalculateUV(float u, float v, int sideIndex, float padding)
         {
-            return new Vector2(u, v);
+            // Compute the scaled UVs centered at (0.5, 0.5)
+            float scaledU = 0.5f + (u - 0.5f) * (1f - 2f * padding);
+            float scaledV = 0.5f + (v - 0.5f) * (1f - 2f * padding);
+
+            return new Vector2(scaledU, scaledV);
         }
     }
     // Unwrapped cube map with padding
@@ -352,25 +360,62 @@ internal sealed class CubeMesh : Instance<CubeMesh>
         }
     }
     // Custom layout with face-specific control
-    private class CustomLayoutMapper : IUvMapper
+    private class CubeMap : IUvMapper
     {
-     
+        private static float _oneThird = 1.0f / 3.0f;
         // Define UV regions for each face [x, y, width, height]
         private static readonly Vector4[] _faceRegions = new Vector4[]
         {
-        new Vector4(0.25f, 0.33f, 0.25f, 0.33f), // Front
-        new Vector4(0.50f, 0.33f, 0.25f, 0.33f), // Right
-        new Vector4(0.75f, 0.33f, 0.25f, 0.33f), // Back
-        new Vector4(0.0f, 0.33f, 0.25f, 0.33f), // Left
-        new Vector4(0.25f, 0.00f, 0.25f, 0.33f), // Top
-        new Vector4(0.25f, 0.66f, 0.25f, 0.33f)  // Bottom
+        new Vector4(0.25f, _oneThird, 0.25f, _oneThird), // Front
+        new Vector4(0.50f, _oneThird, 0.25f, _oneThird), // Right
+        new Vector4(0.75f, _oneThird, 0.25f, _oneThird), // Back
+        new Vector4(0.0f, _oneThird, 0.25f, _oneThird), // Left
+        new Vector4(0.25f, 0.00f, 0.25f, _oneThird), // Top
+        new Vector4(0.25f, _oneThird*2, 0.25f, _oneThird)  // Bottom
         };
+        
+        public Vector2 CalculateUV(float u, float v, int sideIndex, float padding)
+        {
+            // Get region for current face
+            var region = _faceRegions[sideIndex];
+
+            // Apply padding to avoid texture bleeding
+            float x = region.X + padding;
+            float y = region.Y + padding;
+            float width = region.Z - (padding * 2);
+            float height = region.W - (padding * 2);
+
+            float xCenter = region.X + region.Z / 2;
+            float yCenter = region.Y + region.W / 2;
+            x = xCenter - width / 2 + padding;
+            y = yCenter - height / 2 + padding;
+            width = width - (padding * 2);
+            height = height - (padding * 2);
+
+
+            // Map UV to the adjusted region
+            return new Vector2(
+                x + (u * width),
+                y + (v * height)
+            );
+        }
+    }
+    private class CubeMapSquare : IUvMapper
+    {
+        // Define UV regions for each face [x, y, width, height]
+     
+        private static readonly Vector4[] _faceRegions = new Vector4[]
+       {
+        new Vector4(0.25f, 0.25f+0.125f, 0.25f, 0.25f), // Front
+        new Vector4(0.50f, 0.25f+0.125f, 0.25f, 0.25f), // Right
+        new Vector4(0.75f, 0.25f+0.125f, 0.25f, 0.25f), // Back
+        new Vector4(0.00f, 0.25f+0.125f, 0.25f, 0.25f), // Left
+        new Vector4(0.25f, 0.00f+0.125f, 0.25f, 0.25f), // Top
+        new Vector4(0.25f, 0.50f+0.125f, 0.25f, 0.25f)  // Bottom
+       };
 
         public Vector2 CalculateUV(float u, float v, int sideIndex, float padding)
         {
-            // Padding within each region (inset from edges)
-            //float padding = 0.005f; pop
-
             // Get region for current face
             var region = _faceRegions[sideIndex];
 
@@ -408,6 +453,15 @@ internal sealed class CubeMesh : Instance<CubeMesh>
 
     private readonly MeshBuffers _data = new();
 
+    private enum UvModes
+    {
+        Default,
+        Rows,
+        CubeMap,
+        CubeMapForSquare,
+    }
+
+
     [Input(Guid = "E445A6DA-0B66-46AE-AD2B-650E9CC50798")]
     public readonly InputSlot<Int3> Segments = new();
 
@@ -426,12 +480,16 @@ internal sealed class CubeMesh : Instance<CubeMesh>
     [Input(Guid = "e641c244-9dc8-444d-8dee-c3e9b710f9db")]
     public readonly InputSlot<Vector3> Rotation = new();
 
-    [Input(Guid = "e1adb865-42f5-46a9-a4ac-bfae00b03caa")]
+    [Input(Guid = "e1adb865-42f5-46a9-a4ac-bfae00b03caa", MappedType = typeof(UvModes))]
     public readonly InputSlot<int> TexCoord = new();
 
-    [Input(Guid = "f946d7a1-8bb6-4ba1-a3bb-f2f95fc2242d")]
+    [Input(Guid = "573b74e2-8ab9-4364-9de7-605248528cee")]
+    public readonly InputSlot<float> Margin = new();
+
+    [Input(Guid = "f946d7a1-8bb6-4ba1-a3bb-f2f95fc2242d", MappedType = typeof(UvModes))]
     public readonly InputSlot<int> TexCoord2 = new();
    
     [Input(Guid = "ba355fc0-0f1c-41d9-842e-d8ae9bee162a")]
-    public readonly InputSlot<float> Margin = new();
+    public readonly InputSlot<float> Margin2 = new();
+
 }
