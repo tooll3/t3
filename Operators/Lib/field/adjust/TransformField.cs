@@ -61,13 +61,14 @@ internal sealed class TransformField : Instance<TransformField>, IGraphNodeOp
 
 
     public ShaderGraphNode ShaderNode { get; }
-    public string GetShaderCode()
+    public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
     {
-        return $@" 
-        float {ShaderNode}(float3 pos) {{
-            return {_inputFn}( mul(float4(pos.xyz,1), {ShaderNode}Transform).xyz );
-        }}
-        ";
+        shaderStringBuilder.AppendLine( $$"""
+                                          float {{ShaderNode}}(float3 pos) {
+                                              return {{_inputFn}}( mul(float4(pos.xyz,1), {{ShaderNode}}Transform).xyz );
+                                          }
+                                                  
+                                          """);
     }
     
     private string _inputFn;

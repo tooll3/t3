@@ -107,10 +107,10 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
             changes |= ShaderGraphNode.ChangedFlags.Structural;
         }
         
-        if ((changes == ShaderGraphNode.ChangedFlags.None) && !hasTemplateChanged)
+        if (changes == ShaderGraphNode.ChangedFlags.None && !hasTemplateChanged)
             return;
 
-        //Log.Debug(" Update parameter buffer...", this);
+        //Log.Debug("Update parameter buffer...", this);
         AssembleParams();
         var floatParams = AllFloatValues;
         if (floatParams.Count > 0)
@@ -174,16 +174,30 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
     private readonly List<float> _allFloatParameterValues = [];
     private int _lastStructureHash = 0;
 
-
+    private readonly Dictionary<string, string> _globalFunctionDefinitions = new();
+    
     private void AssembleAndInjectFunctions(ref string templateCode)
     {
         _shaderCodeBuilder.Clear();
-        _graphNode.CollectShaderCode(_shaderCodeBuilder, _updateCycleCount, SymbolChildId);
+        _globalFunctionDefinitions.Clear();
+        _graphNode.CollectShaderCode(_shaderCodeBuilder, _globalFunctionDefinitions , _updateCycleCount, SymbolChildId);
         var commentHook = ToHlslTemplateTag("FIELD_FUNCTIONS");
 
         if (templateCode.IndexOf((string)commentHook, StringComparison.Ordinal) == -1)
             return;
 
+        _shaderCodeBuilder.Insert(0, "// --- op functions -------------------\n");
+
+        foreach (var (key, value) in _globalFunctionDefinitions)
+        {
+            _shaderCodeBuilder.Insert(0, "\n");
+            _shaderCodeBuilder.Insert(0, value);
+            
+        }
+        
+        _shaderCodeBuilder.Insert(0, "// --- globals -------------------\n");
+
+        
         templateCode = templateCode.Replace(commentHook, _shaderCodeBuilder.ToString());
     }
 

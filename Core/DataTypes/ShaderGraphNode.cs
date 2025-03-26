@@ -187,7 +187,7 @@ public class ShaderGraphNode
     private int _lastParamUpdateFrame = -1;
     private int _lastCodeUpdateFrame = -1;
     
-    public void CollectShaderCode(StringBuilder sb, int frameNumber, Guid graphId)
+    public void CollectShaderCode(StringBuilder sb, Dictionary<string, string> globals, int frameNumber, Guid graphId)
     {
         // Prevent double evaluation
         if (_lastCodeUpdateFrame == frameNumber && _lastCodeGraphId == graphId)
@@ -199,12 +199,12 @@ public class ShaderGraphNode
 
         foreach (var inputNode in InputNodes)
         {
-            inputNode?.CollectShaderCode(sb, frameNumber, graphId);
+            inputNode?.CollectShaderCode(sb, globals, frameNumber, graphId);
         }
 
         if (_instance is IGraphNodeOp nodeOp)
         {
-            sb.AppendLine(nodeOp.GetShaderCode());
+            nodeOp.GetShaderCode(sb, globals);
         }
     }
 
@@ -523,7 +523,7 @@ public sealed class GraphParamAttribute : Attribute;
 
 public interface IGraphNodeOp
 {
-    public ShaderGraphNode ShaderNode { get; }
-    public string GetShaderCode();
+    ShaderGraphNode ShaderNode { get; }
+    void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals);
 }
 

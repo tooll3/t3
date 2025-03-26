@@ -30,9 +30,10 @@ internal sealed class NoiseOffsetField : Instance<NoiseOffsetField>
     
     
     public ShaderGraphNode ShaderNode { get; }
-    public string GetShaderCode()
+
+    public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
     {
-        return $@" 
+        shaderStringBuilder.AppendLine( $@" 
 float {ShaderNode}mod289(float x) {{
     return x - floor(x * (1.0 / 289.0)) * 289.0;
 }}
@@ -124,7 +125,7 @@ float {ShaderNode}(float3 pos) {{
     float d= {_inputFn}( pos );
     float fallOff = 1;///(d+0.3);
     return d - {ShaderNode}simplexNoise3D(pos / {ShaderNode}Scale + {ShaderNode}Offset ) * {ShaderNode}Amount * fallOff;
-}}";
+}}");
     }
     
     private string _inputFn;

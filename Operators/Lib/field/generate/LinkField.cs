@@ -22,9 +22,9 @@ internal sealed class LinkField : Instance<LinkField>
     
     public ShaderGraphNode ShaderNode { get; }
 
-    public string GetShaderCode()
+    public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
     { 
-        return $@"
+        shaderStringBuilder.AppendLine( $@"
         float {ShaderNode}(float3 p) {{
         p = p - {ShaderNode}Center;
         float le = {ShaderNode}Length;
@@ -34,7 +34,7 @@ internal sealed class LinkField : Instance<LinkField>
         float3 q = float3( p.x, max(abs(p.y)-le,0.0), p.z );
         return length(float2(length(q.xy)-r1,q.z)) - r2;;
             
-        }}";
+        }}");
     }
     
     [GraphParam]

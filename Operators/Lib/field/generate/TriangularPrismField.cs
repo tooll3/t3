@@ -22,15 +22,15 @@ internal sealed class TriangularPrismField : Instance<TriangularPrismField>
     
     public ShaderGraphNode ShaderNode { get; }
 
-    public string GetShaderCode()
+    public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
     { 
-        return $@"
+        shaderStringBuilder.AppendLine( $@"
         float {ShaderNode}(float3 p) {{
         p = p - {ShaderNode}Center;
         float2 h = {ShaderNode}RadiusLength;
         float3 q = abs(p);
         return max(q.z-h.y,max(q.x*0.866025+p.y*0.5,-p.y)-h.x*0.5);
-        }}";
+        }}");
     }
     
     [GraphParam]

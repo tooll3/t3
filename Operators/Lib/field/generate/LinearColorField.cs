@@ -24,15 +24,15 @@ internal sealed class LinearColorField : Instance<LinearColorField>
     
     public ShaderGraphNode ShaderNode  => _fieldNode;
    
-    public string GetShaderCode()
+    public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
     { 
-        return $@"
+        shaderStringBuilder.AppendLine( $@"
 float4 {ShaderNode}(float2 uv) {{
     uv = uv - {ShaderNode}Center;
     //float2 t = {ShaderNode}Width;
     float2 q = float2(uv);
     return lerp({ShaderNode}ColorA, {ShaderNode}ColorB, length(q));
-}}";
+}}");
     }
     
     [GraphParam]

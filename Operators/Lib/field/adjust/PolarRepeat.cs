@@ -38,7 +38,7 @@ internal sealed class PolarRepeat : Instance<PolarRepeat>
     
     public ShaderGraphNode ShaderNode { get; }
     
-    public string GetShaderCode()
+    public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
     {
 // Repeat around the origin by a fixed angle.
 // For easier use, num of repetitions is use to specify the angle.
@@ -46,7 +46,7 @@ internal sealed class PolarRepeat : Instance<PolarRepeat>
 
 
 
-        return $@"
+shaderStringBuilder.AppendLine($@"
 
 #ifndef PI
 #define PI 3.14159265359f
@@ -67,7 +67,7 @@ float {ShaderNode}(float3 p)
     p = {_axisCodes2[(int)_axis]};
     return {_inputFn}(p);                
 }}
-";
+");
     }
 
     private readonly string[] _axisCodes0 =[

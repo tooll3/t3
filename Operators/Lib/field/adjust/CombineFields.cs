@@ -30,10 +30,12 @@ internal sealed class CombineFields : Instance<CombineFields>, IGraphNodeOp
 
         InputFields.DirtyFlag.Clear();
     }
+    
+    
 
-    public string GetShaderCode()
+    public void GetShaderCode(StringBuilder _callDef, Dictionary<string, string> globals)
     {
-        _callDef.Clear();
+        //_callDef.Clear();
 
         if ( ShaderNode.InputNodes.Count == 0)
         {
@@ -87,14 +89,14 @@ inline float {ShaderNode}CombineFunc(float d1, float d2) {{
             _callDef.AppendLine("    return d;");
             _callDef.AppendLine("}");
         }
-
-        return _callDef.ToString();
     }
 
+
     public ShaderGraphNode ShaderNode { get; }
+    
 
     private CombineMethods _combineMethod;
-    private readonly StringBuilder _callDef = new();
+    //private readonly StringBuilder _callDef = new();
 
     private sealed record CombineMethodDefs(string Code, float StartValue);
 

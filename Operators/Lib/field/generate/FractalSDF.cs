@@ -29,9 +29,9 @@ internal sealed class FractalSDF : Instance<FractalSDF>
     }
     
     public ShaderGraphNode ShaderNode { get; }
-    public string GetShaderCode()
+    public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
     { 
-        return @$"
+        shaderStringBuilder.AppendLine( @$"
 static int mandelBoxIterations = {_iterations};
 
 inline float {ShaderNode}(float3 pos) 
@@ -65,7 +65,7 @@ inline float {ShaderNode}(float3 pos)
     float d = ((length(p.xyz) - absScalem1) / p.w - AbsScaleRaisedTo1mIters);
     return d;
 }}
-";
+");
     }
 
     private int _iterations = 5;

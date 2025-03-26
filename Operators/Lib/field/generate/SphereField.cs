@@ -21,14 +21,16 @@ internal sealed class SphereField : Instance<SphereField>, IGraphNodeOp
     
     public ShaderGraphNode ShaderNode { get; }
 
-    string IGraphNodeOp.GetShaderCode()
+    public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
     {
-        return $@"
-float {ShaderNode}(float3 p) {{
-    //return saturate( ({ShaderNode}Radius / {ShaderNode}FallOff) - (length(p - {ShaderNode}Center) / {ShaderNode}FallOff) + 0.5  );
-    return length(p - {ShaderNode}Center) + {ShaderNode}Radius;
-}} 
-";
+        shaderStringBuilder.AppendLine( $$"""
+
+                                          float {{ShaderNode}}(float3 p) {
+                                              //return saturate( ({{ShaderNode}}Radius / {{ShaderNode}}FallOff) - (length(p - {{ShaderNode}}Center) / {{ShaderNode}}FallOff) + 0.5  );
+                                              return length(p - {{ShaderNode}}Center) + {{ShaderNode}}Radius;
+                                          } 
+
+                                          """);
     }
 
     [GraphParam]

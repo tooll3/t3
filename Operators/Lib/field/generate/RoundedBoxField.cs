@@ -20,14 +20,14 @@ internal sealed class RoundedBoxField : Instance<RoundedBoxField>, IGraphNodeOp
     }
     
     public ShaderGraphNode ShaderNode { get; }
-    public string GetShaderCode()
+    public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
     { 
-        return $@"
+        shaderStringBuilder.AppendLine( $@"
 float {ShaderNode}(float3 p) {{
    float3 q = abs(p- {ShaderNode}Center) - {ShaderNode}Size + {ShaderNode}Radius;
    return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0) - {ShaderNode}Radius;
 }}
-";
+");
     }
     
     [GraphParam]

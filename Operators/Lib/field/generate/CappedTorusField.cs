@@ -22,9 +22,9 @@ internal sealed class CappedTorusField : Instance<CappedTorusField>
     
     public ShaderGraphNode ShaderNode { get; }
 
-    public string GetShaderCode()
+    public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
     { 
-        return $@"
+        shaderStringBuilder.AppendLine( $@"
         float {ShaderNode}(float3 p) {{
         p = p - {ShaderNode}Center;
         float ra = {ShaderNode}RadiusA;
@@ -37,7 +37,7 @@ internal sealed class CappedTorusField : Instance<CappedTorusField>
         float k = (sc.y*p.x>sc.x*p.y) ? dot(p.xy,sc) : length(p.xy);
         return sqrt(dot(p,p) + ra*ra - 2.0*ra*k ) - rb;
             
-        }}";
+        }}");
     }
     
     [GraphParam]

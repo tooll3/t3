@@ -26,12 +26,12 @@ internal sealed class BendField : Instance<BendField>
     
     public ShaderGraphNode ShaderNode { get; }
     
-    public string GetShaderCode()
+    public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
     {
 // Repeat around the origin by a fixed angle.
 // For easier use, num of repetitions is use to specify the angle.
             
-            return $@"
+            shaderStringBuilder.AppendLine( $@"
 
 #ifndef PI
 #define PI 3.14159265359f
@@ -50,7 +50,7 @@ float2x2  m = float2x2(c,-s,s,c);
 float3  q = float3( mul(m,p.xy),p.z);
 return {_inputFn}(q);
         }}
-        ";
+        ");
     }
     
     private string _inputFn;

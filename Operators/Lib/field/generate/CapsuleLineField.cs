@@ -21,9 +21,9 @@ internal sealed class CapsuleLineField : Instance<CapsuleLineField>
     }
     
     public ShaderGraphNode ShaderNode { get; }
-    public string GetShaderCode()
+    public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
     { 
-        return $@"
+        shaderStringBuilder.AppendLine( $@"
         float {ShaderNode}(float3 p) {{
             p = p - {ShaderNode}Center;
             float3 a = {ShaderNode}A;
@@ -33,7 +33,7 @@ internal sealed class CapsuleLineField : Instance<CapsuleLineField>
             float3 ba = b - a;
             float h = clamp( dot(pa,ba)/dot(ba,ba), 0.0, 1.0 );
             return length( pa - ba*h ) - r;
-        }}";
+        }}");
     }
     
     [GraphParam]

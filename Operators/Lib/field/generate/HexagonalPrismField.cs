@@ -22,9 +22,9 @@ internal sealed class HexagonalPrismField : Instance<HexagonalPrismField>
     
     public ShaderGraphNode ShaderNode { get; }
 
-    public string GetShaderCode()
+    public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
     { 
-        return $@"
+        shaderStringBuilder.AppendLine( $@"
         float {ShaderNode}(float3 p) {{
         p = p - {ShaderNode}Center;
         float2 h = {ShaderNode}RadiusLength;
@@ -36,7 +36,7 @@ internal sealed class HexagonalPrismField : Instance<HexagonalPrismField>
         float2 d = float2(length(p.xy-float2(clamp(p.x,-k.z*h.x,k.z*h.x), h.x))*sign(p.y-h.x),p.z-h.y );
         return min(max(d.x,d.y),0.0) + length(max(d,0.0))-{ShaderNode}Round;
             
-        }}";
+        }}");
     }
     
     [GraphParam]
