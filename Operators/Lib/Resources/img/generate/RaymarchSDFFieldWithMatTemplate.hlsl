@@ -20,6 +20,7 @@ cbuffer ParamConstants : register(b1)
 
     float TextureScale;
     float AODistance;
+    float NormalSamplingDistance;
 }
 
 cbuffer Transforms : register(b2)
@@ -127,12 +128,20 @@ float GetDistance(float3 pos)
 
 float3 GetNormal(float3 p, float offset)
 {
-    float dt = .01;
-    float3 n = float3(GetDistance(p + float3(dt, 0, 0)),
-                      GetDistance(p + float3(0, dt, 0)),
-                      GetDistance(p + float3(0, 0, dt))) -
-               GetDistance(p);
-    return normalize(n);
+    // float dt = .01;
+    // float3 n = float3(GetDistance(p + float3(dt, 0, 0)),
+    //                   GetDistance(p + float3(0, dt, 0)),
+    //                   GetDistance(p + float3(0, 0, dt))) -
+    //            GetDistance(p);
+    // return normalize(n);
+    //NormalSamplingDistance;
+
+    return normalize(
+    GetDistance(p + float3( NormalSamplingDistance, -NormalSamplingDistance, -NormalSamplingDistance)) * float3( 1, -1, -1) +
+    GetDistance(p + float3(-NormalSamplingDistance,  NormalSamplingDistance, -NormalSamplingDistance)) * float3(-1,  1, -1) +
+    GetDistance(p + float3(-NormalSamplingDistance, -NormalSamplingDistance,  NormalSamplingDistance)) * float3(-1, -1,  1) +
+    GetDistance(p + float3( NormalSamplingDistance,  NormalSamplingDistance,  NormalSamplingDistance)) * float3( 1,  1,  1)
+);    
 }
 
 float ComputeAO(float3 aoposition, float3 aonormal, float aodistance, float aoiterations, float aofactor)
@@ -149,20 +158,6 @@ float ComputeAO(float3 aoposition, float3 aonormal, float aodistance, float aoit
 
 static float MAX_DIST = 300;
 
-float DepthFromWorldSpace(float distFromCamera, float nearPlane, float farPlane)
-{
-    // Convert a world-space distance to a 0..1 depth.
-    // Assumes a linear mapping from nearPlane..farPlane -> 0..1
-    return saturate((distFromCamera - nearPlane) / (farPlane - nearPlane));
-}
-
-float DepthFromWorldSpace2(float dist, float near, float far)
-{
-    // Convert a world-space distance to a 0..1 depth.
-    // Assumes a linear mapping from nearPlane..farPlane -> 0..1
-    // return saturate((distFromCamera - nearPlane) / (farPlane - nearPlane));
-    return far * (dist - near) / (dist * (far - near));
-}
 
 struct PSOutput
 {
@@ -172,15 +167,8 @@ struct PSOutput
 
 float ComputeDepthFromViewZ(float viewZ)
 {
-    // Reconstruct clip space Z (before perspective divide)
-    float clipZ = CameraToClipSpace._33 * viewZ + CameraToClipSpace._43;
-    float clipW = viewZ;
-
-    // Perspective divide to get normalized depth
-    float depth = clipZ / clipW;
-
-    // Map to [0,1] for DirectX
-    return saturate(depth);
+    float4 clipPos = mul(float4(0,0,viewZ,1), CameraToClipSpace);
+    return clipPos.z / clipPos.w;
 }
 
 
@@ -366,14 +354,11 @@ PSOutput psMain(vsOutput input)
     litColor.a *= albedo.a;
     litColor.rgb = lerp(AmbientOcclusion.rgb, litColor.rgb, ComputeAO(p, normal, AODistance, 3, AmbientOcclusion.a));
 
-
     PSOutput result;
-    // TODO: Fix depth calculation for other new far clip ranges)
-    //result.depth = DepthFromWorldSpace(depth, nearZ, farZ);
-    //result.depth = DepthFromWorldSpace2(depth, nearZ, farZ);
-    //result.depth =  ComputeDepthFromViewZ(depth);
-    result.depth = DepthFromWorldSpace2(depth, 0.01, 1000);
-
     result.color = clamp(litColor, 0, float4(1000,1000,1000,1));
+
+    float viewZ = mul(float4(p, 1), WorldToCamera).z;
+    result.color.a  = 1;
+    result.depth =  ComputeDepthFromViewZ(viewZ);
     return result;
 }
