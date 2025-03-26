@@ -165,6 +165,13 @@
       }
     },
     {
+      "ChildId": "923499cb-4341-4e4e-bc9f-53c4ca099f21"/*PickBlendMode*/,
+      "Position": {
+        "X": 962.6688,
+        "Y": 402.42242
+      }
+    },
+    {
       "ChildId": "a1c062cb-6c68-43c5-9169-610bb57773eb"/*FloatsToBuffer*/,
       "Style": "Resizable",
       "Size": {

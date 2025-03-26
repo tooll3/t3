@@ -170,6 +170,20 @@ struct PSOutput
     float depth : SV_Depth;
 };
 
+float ComputeDepthFromViewZ(float viewZ)
+{
+    // Reconstruct clip space Z (before perspective divide)
+    float clipZ = CameraToClipSpace._33 * viewZ + CameraToClipSpace._43;
+    float clipW = viewZ;
+
+    // Perspective divide to get normalized depth
+    float depth = clipZ / clipW;
+
+    // Map to [0,1] for DirectX
+    return saturate(depth);
+}
+
+
 PSOutput psMain(vsOutput input)
 {
     float3 eye = input.worldTViewPos;
@@ -340,25 +354,26 @@ PSOutput psMain(vsOutput input)
     // Final fragment color.
     float4 litColor = float4(directLighting + ambientLighting, 1.0) * BaseColor; // TODO Add parameter * Color;
 
-    // TODO: Fog
     // Fog
-    float depth = dot(eye - p, -dp);
+    float depth = dot(eye - p, -input.viewDir);
     if (FogDistance > 0)
     {
-        // float4 posInCamera = mul(posInObject, ObjectToCamera);
-        // float fog = pow(saturate(-posInCamera.z / FogDistance), FogBias);
-
         float fog = pow(saturate(depth / FogDistance), FogBias);
-        litColor.rgb = lerp(litColor.rgb, FogColor.rgb, fog);
+        litColor.rgb = lerp(litColor.rgb, FogColor.rgb, fog * FogColor.a);
     }
 
     litColor += float4(EmissiveColorMap.Sample(texSampler, uv).rgb * EmissiveColor.rgb, 0);
     litColor.a *= albedo.a;
-
     litColor.rgb = lerp(AmbientOcclusion.rgb, litColor.rgb, ComputeAO(p, normal, AODistance, 3, AmbientOcclusion.a));
 
+
     PSOutput result;
+    // TODO: Fix depth calculation for other new far clip ranges)
+    //result.depth = DepthFromWorldSpace(depth, nearZ, farZ);
+    //result.depth = DepthFromWorldSpace2(depth, nearZ, farZ);
+    //result.depth =  ComputeDepthFromViewZ(depth);
     result.depth = DepthFromWorldSpace2(depth, 0.01, 1000);
-    result.color = litColor;
+
+    result.color = clamp(litColor, 0, float4(1000,1000,1000,1));
     return result;
 }

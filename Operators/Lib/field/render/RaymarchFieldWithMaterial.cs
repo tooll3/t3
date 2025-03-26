@@ -33,6 +33,15 @@ public class RaymarchFieldWithMaterial : Instance<RaymarchFieldWithMaterial>
         [Input(Guid = "89218016-a0ca-4150-95d4-23f415cf07f0")]
         public readonly InputSlot<float> TextureScale = new InputSlot<float>();
 
-        [Input(Guid = "3a23730d-09b9-44bd-84b7-c252dd83e1f9")]
+        [Input(Guid = "3a23730d-09b9-44bd-84b7-c252dd83e1f9", MappedType = typeof(MappingModes))]
         public readonly InputSlot<int> UVMapping = new InputSlot<int>();
+
+        private enum MappingModes
+        {
+            Triplanar,
+            XY,
+            YZ,
+            XZ,
+        }
+        
 }
