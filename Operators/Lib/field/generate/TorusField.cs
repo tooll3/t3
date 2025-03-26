@@ -31,7 +31,7 @@ internal sealed class TorusField : Instance<TorusField>
         float {ShaderNode}(float3 p) {{
             p = p - {ShaderNode}Center;
             float2 t = {ShaderNode}Size;
-            float2 q = float2(length(p.xz) - t.x, p.y);
+            float2 q = float2(length(p.xy) - t.x, p.z);
             return length(q) - t.y;
         }}";
     }
