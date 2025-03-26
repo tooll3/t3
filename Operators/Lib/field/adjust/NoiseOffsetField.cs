@@ -123,7 +123,7 @@ float {ShaderNode}simplexNoise3D(float3 v) {{
 float {ShaderNode}(float3 pos) {{
     float d= {_inputFn}( pos );
     float fallOff = 1;///(d+0.3);
-    return d - {ShaderNode}simplexNoise3D(pos * {ShaderNode}Scale + {ShaderNode}Offset ) * {ShaderNode}Amount * fallOff;
+    return d - {ShaderNode}simplexNoise3D(pos / {ShaderNode}Scale + {ShaderNode}Offset ) * {ShaderNode}Amount * fallOff;
 }}";
     }
     

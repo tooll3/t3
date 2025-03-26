@@ -7,7 +7,7 @@
     },
     {
       "Id": "285d7cd9-1057-4ea8-bd0b-20ff52adc562"/*Amount*/,
-      "DefaultValue": 1.0
+      "DefaultValue": 0.5
     },
     {
       "Id": "6cd7b3ca-323c-4a69-989b-1b10009b8a90"/*Offset*/,
@@ -19,7 +19,7 @@
     },
     {
       "Id": "b7a2e12b-9e55-43a5-be79-510f4a28a1f4"/*Scale*/,
-      "DefaultValue": 0.2
+      "DefaultValue": 1.0
     }
   ],
   "Children": [],
