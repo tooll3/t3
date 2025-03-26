@@ -1,0 +1,179 @@
+{
+  "Id": "0920c9cf-91b3-42ee-9db4-a5a63c16d71e"/*VisualizeUvMap*/,
+  "Description": "A draw helper to check the UV maps of a given mesh",
+  "InputUis": [
+    {
+      "InputId": "2772f510-8cdc-4d99-bf22-4c2054cf9491"/*Texture*/,
+      "Position": {
+        "X": -203.94487,
+        "Y": 182.8262
+      }
+    },
+    {
+      "InputId": "35a9cbb6-fd1d-4137-bcb3-741f5061a711"/*SwitchUV*/,
+      "Position": {
+        "X": -173.70093,
+        "Y": 519.50195
+      },
+      "Description": "Switch between TexCoord and TexCoord2"
+    },
+    {
+      "InputId": "55351998-2a43-46d4-b1c3-d506225070e6"/*Mesh*/,
+      "Position": {
+        "X": -201.0958,
+        "Y": 106.292114
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "00739b00-6fe7-4af6-a2b4-016adab590eb"/*String*/,
+      "Position": {
+        "X": 634.333,
+        "Y": 482.38818
+      }
+    },
+    {
+      "ChildId": "05e2130d-6243-4e70-83d5-6b49dd330634"/*DrawLines*/,
+      "Position": {
+        "X": 626.58545,
+        "Y": 70.0
+      }
+    },
+    {
+      "ChildId": "0d893908-5474-4247-9d1b-7602cae15872"/*Transform*/,
+      "Position": {
+        "X": 634.1599,
+        "Y": 360.6582
+      }
+    },
+    {
+      "ChildId": "1d728ccf-2b8d-4075-baec-bfec00092c79"/*String*/,
+      "Position": {
+        "X": 634.333,
+        "Y": 447.38965
+      }
+    },
+    {
+      "ChildId": "1ef5a555-f401-4db6-a22a-5d69bd1f5acb"/*Vector3*/,
+      "Position": {
+        "X": 280.0,
+        "Y": 382.2627
+      }
+    },
+    {
+      "ChildId": "21a2261e-5822-43e2-a924-045062d8c034"/*Group*/,
+      "Position": {
+        "X": 1023.5867,
+        "Y": 199.00293
+      }
+    },
+    {
+      "ChildId": "33e9982f-8ece-45aa-a04d-fc911699f8a9"/*BoolToInt*/,
+      "Position": {
+        "X": 634.333,
+        "Y": 517.3882
+      }
+    },
+    {
+      "ChildId": "486cfd8b-3b5b-46d4-94f2-a3a64ca761f1"/*GetTextureSize*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 277.2627
+      }
+    },
+    {
+      "ChildId": "54611037-436a-4723-94ed-26c2763c67d2"/*TransformPoints*/,
+      "Position": {
+        "X": 486.58545,
+        "Y": 70.0
+      }
+    },
+    {
+      "ChildId": "5825e2fc-eb38-4ddb-8536-2dec079ff008"/*UVsViewer*/,
+      "Position": {
+        "X": 634.1599,
+        "Y": 255.6582
+      }
+    },
+    {
+      "ChildId": "5c6c02ee-73d1-4975-86ed-b759fdeca5b0"/*Div*/,
+      "Position": {
+        "X": 280.0,
+        "Y": 312.2627
+      }
+    },
+    {
+      "ChildId": "665c6cd7-0af5-4ce5-86cd-35d4abefb1d8"/*ListToBuffer*/,
+      "Position": {
+        "X": 486.58545,
+        "Y": 35.0
+      }
+    },
+    {
+      "ChildId": "6ad21023-f3b7-4c77-9324-bfcb344173e4"/*Text*/,
+      "Position": {
+        "X": 774.333,
+        "Y": 552.3882
+      }
+    },
+    {
+      "ChildId": "7b7ab1c2-b1ed-45de-bf25-3b33e8716655"/*DrawMeshUnlit*/,
+      "Position": {
+        "X": 631.2422,
+        "Y": 166.06152
+      }
+    },
+    {
+      "ChildId": "84918405-d691-41bc-98ec-712c1f1b0532"/*CommonPointSets*/,
+      "Position": {
+        "X": 486.58545,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "88d16ddc-46e5-4eaf-ad45-a93d44ad8457"/*PickString*/,
+      "Position": {
+        "X": 774.333,
+        "Y": 447.38965
+      }
+    },
+    {
+      "ChildId": "92dd6a80-d91b-4f7b-a1b2-97001cd3f8fe"/*QuadMesh*/,
+      "Position": {
+        "X": 631.2422,
+        "Y": 131.06152
+      }
+    },
+    {
+      "ChildId": "c3b4cb68-e86d-488d-beb0-d59ae7fbb81f"/*DrawMesh*/,
+      "Position": {
+        "X": 634.1599,
+        "Y": 325.6582
+      }
+    },
+    {
+      "ChildId": "cef097eb-1c87-4c2e-b879-4159274d7e58"/*Execute*/,
+      "Position": {
+        "X": 1192.2856,
+        "Y": 407.29056
+      }
+    },
+    {
+      "ChildId": "da50b97a-0ffd-404d-9e90-5c4fb74cdb61"/*Vector2Components*/,
+      "Position": {
+        "X": 140.0,
+        "Y": 312.2627
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "e1297eb9-ba31-4ded-a1c9-4a0ee115188e"/*Output*/,
+      "Position": {
+        "X": 1437.3079,
+        "Y": 288.6941
+      }
+    }
+  ]
+}
