@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.VisualBasic.Logging;
+using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using Log = T3.Core.Logging.Log;
@@ -28,6 +29,12 @@ namespace T3.Core.DataTypes;
  *   - updates its connected graph nodes
  *     - recursively calls Update() on their connected ops
  *   - checks if parameters are changed
+ * - after completing this first pass of traversing the tree, we know if parameters, the code or the whole graph structure changed.
+ * - [_GetFieldShaderAttributes]
+ *      then calls...
+ *          _graphNode.CollectShaderCode()
+ *          _graphNode.CollectAllNodeParams()
+ *      to recursively collect all required code and parameter fragments.
  */
 
 public class Color2dField : ShaderGraphNode
@@ -48,14 +55,14 @@ public class ShaderGraphNode
         _connectedNodeInput = inputSlot;
     }
     
-    private double _lastUpdateTime;
+    private int _lastUpdateFrame;
 
     public void Update(EvaluationContext context)
     {
-        if (Math.Abs(_lastUpdateTime - context.LocalFxTime) < 0.00001)
+        if (_lastUpdateFrame == Playback.FrameCount)
             return;
         
-        _lastUpdateTime = context.LocalFxTime;
+        _lastUpdateFrame = Playback.FrameCount;
         
         CollectedChanges = ChangedFlags.None;
         
@@ -520,29 +527,3 @@ public interface IGraphNodeOp
     public string GetShaderCode();
 }
 
-
-public static class EnumExtensions
-{
-    public static string ToDetailedString<T>(this T flags) where T : Enum
-    {
-        var result = new StringBuilder();
-        long flagsValue = Convert.ToInt64(flags);
-
-        foreach (T value in Enum.GetValues(typeof(T)))
-        {
-            long valueAsLong = Convert.ToInt64(value);
-
-            if (valueAsLong != 0 && (flagsValue & valueAsLong) == valueAsLong)
-            {
-                result.Append($"{value} ({valueAsLong}), ");
-            }
-        }
-
-        if (result.Length > 0)
-        {
-            result.Length -= 2; // Remove the trailing ", "
-        }
-
-        return result.ToString();
-    }
-}

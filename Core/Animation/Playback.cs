@@ -90,11 +90,13 @@ public class Playback
     public static bool OpNotReady;
         
     public static double RunTimeInSecs => RunTimeWatch.Elapsed.TotalSeconds;
+    public static int FrameCount;
     public static double LastFrameDuration { get; protected set; }
     public double LastFrameDurationInBars => BarsFromSeconds(LastFrameDuration);
         
     public virtual void Update(bool idleMotionEnabled = false)
     {
+        FrameCount++;
         // If we are not live, TimeInBars is provided externally
         Current = this;
         var currentRuntime = IsRenderingToFile ?   TimeInSecs : RunTimeInSecs;

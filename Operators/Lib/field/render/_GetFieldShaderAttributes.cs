@@ -9,6 +9,9 @@ namespace Lib.field.render;
 /** *
  * Handles triggering the generation of shader graph code and updating the float parameters.
  *
+ * Also see <see cref="ShaderGraphNode"/> for more documentation.
+ * 
+ *
  * The focus of this is to avoid all unnecessary updates or even recompilations. For this we
  * follow the following strategy:
  *
@@ -78,17 +81,17 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
         
         // Recursively update complete shader graph and collect changes
         _graphNode = Field.GetValue(context);
-        var colorField = ColorField.GetValue(context);
-        
-        if (_graphNode == null)
-        {
-            _graphNode = colorField;
-            if (_graphNode != null)
-            {
-                //this.LogErrorState("Using color field");
-                //_lastErrorMessage = "Using color field";
-            }
-        }
+        // var colorField = ColorField.GetValue(context);
+        //
+        // if (_graphNode == null)
+        // {
+        //     _graphNode = colorField;
+        //     if (_graphNode != null)
+        //     {
+        //         //this.LogErrorState("Using color field");
+        //         //_lastErrorMessage = "Using color field";
+        //     }
+        // }
         
         if (_graphNode == null)
         {
@@ -113,26 +116,22 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
         if (floatParams.Count > 0)
         {
             CreateParameterBuffer(FloatParams, floatParams);
-            //Log.Debug("No params?");
-            //return;
         }
         
         if (hasTemplateChanged || (changes & (ShaderGraphNode.ChangedFlags.Code|ShaderGraphNode.ChangedFlags.Structural)) != 0)
         {
-            //Log.Debug(" Regenerate shader code", this);
             ShaderCode.Value = GenerateShaderCode(_additionalDefines + "\n\n" + templateCode);    // Should probably use a string builder here...
         }
-
-        //_graphNode.ClearAllChanges();
-        _frameUpdateCount++;
+        
+        _updateCycleCount++;
     }
 
-    private string GenerateShaderCode(string code)
+    private string GenerateShaderCode(string templateCode)
     {
-        AssembleAndInjectParameters(ref code);
-        AssembleAndInjectFunctions(ref code);
-        InjectCall(ref code);
-        return code;
+        AssembleAndInjectParameters(ref templateCode);
+        AssembleAndInjectFunctions(ref templateCode);
+        InjectCall(ref templateCode);
+        return templateCode;
     }
 
     private void InjectCall(ref string code)
@@ -145,9 +144,7 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
 
     private void AssembleAndInjectParameters(ref string templateCode)
     {
-        //AssembleParams();
         var commentHook = ToHlslTemplateTag("FLOAT_PARAMS");
-
         if (templateCode.IndexOf((string)commentHook, StringComparison.Ordinal) == -1)
             return;
 
@@ -164,26 +161,24 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
      * Before generating the complete shader, we need to collect all parameters of all nodes
      * into to lists: One for the float constant buffer and one of parameter names and definition
      */
-    public void AssembleParams()
+    private void AssembleParams()
     {
-        // if (_graphNode.CollectedChanges == ShaderGraphNode.ChangedFlags.None)
-        //     return;
-
         _allFloatParameterValues.Clear();
         _allShaderCodeParams.Clear();
 
-        _graphNode.CollectAllNodeParams(_allFloatParameterValues, _allShaderCodeParams, _frameUpdateCount, SymbolChildId);
+        _graphNode.CollectAllNodeParams(_allFloatParameterValues, _allShaderCodeParams, _updateCycleCount, SymbolChildId);
     }
     
     private readonly List<ShaderGraphNode.ShaderParamHandling.ShaderCodeParameter> _allShaderCodeParams = [];
-    public IReadOnlyList<float> AllFloatValues => _allFloatParameterValues;
+    private IReadOnlyList<float> AllFloatValues => _allFloatParameterValues;
     private readonly List<float> _allFloatParameterValues = [];
     private int _lastStructureHash = 0;
 
 
     private void AssembleAndInjectFunctions(ref string templateCode)
     {
-        AssembleShaderCode();
+        _shaderCodeBuilder.Clear();
+        _graphNode.CollectShaderCode(_shaderCodeBuilder, _updateCycleCount, SymbolChildId);
         var commentHook = ToHlslTemplateTag("FIELD_FUNCTIONS");
 
         if (templateCode.IndexOf((string)commentHook, StringComparison.Ordinal) == -1)
@@ -192,19 +187,8 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
         templateCode = templateCode.Replace(commentHook, _shaderCodeBuilder.ToString());
     }
 
-    private void AssembleShaderCode()
-    {
-        // if (!HasChangedStructure)
-        //     return;
-
-        //_allFloatParameterValues.Clear();
-        //_allShaderCodeParams.Clear();
-        _shaderCodeBuilder.Clear();
-        _graphNode.CollectShaderCode(_shaderCodeBuilder, _frameUpdateCount, SymbolChildId);
-    }
-    
     private readonly StringBuilder _shaderCodeBuilder = new();
-    private int _frameUpdateCount;
+    private int _updateCycleCount;
     
     private static void CreateParameterBuffer(Slot<Buffer> floatSlotBuffer, IReadOnlyList<float> floatParams)
     {
@@ -270,8 +254,8 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
     [Input(Guid = "FFC1C70E-B717-4337-916D-C3A13343E9CC")]
     public readonly InputSlot<ShaderGraphNode> Field = new();
     
-    [Input(Guid = "F1E138AC-F226-43AD-BCAF-E48350FFE4B4")]
-    public readonly InputSlot<Color2dField> ColorField = new();
+    // [Input(Guid = "F1E138AC-F226-43AD-BCAF-E48350FFE4B4")]
+    // public readonly InputSlot<Color2dField> ColorField = new();
     
     [Input(Guid = "BCF6DE27-1FFD-422C-9F5B-910D89CAD1A4")]
     public readonly InputSlot<string> TemplateCode = new();
