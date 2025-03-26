@@ -123,6 +123,13 @@
       }
     },
     {
+      "ChildId": "1e4f59e7-18e4-40b0-b8cf-f18f2b5a346d"/*BlendOnWhites*/,
+      "Position": {
+        "X": 690.15015,
+        "Y": 371.77643
+      }
+    },
+    {
       "ChildId": "2f96c1fb-bf32-4e73-8be2-879a5e0578cc"/*SrvFromTexture2d*/,
       "Position": {
         "X": 719.4821,
@@ -172,13 +179,6 @@
       }
     },
     {
-      "ChildId": "923499cb-4341-4e4e-bc9f-53c4ca099f21"/*PickBlendMode*/,
-      "Position": {
-        "X": 962.6688,
-        "Y": 402.42242
-      }
-    },
-    {
       "ChildId": "a1c062cb-6c68-43c5-9169-610bb57773eb"/*FloatsToBuffer*/,
       "Style": "Resizable",
       "Size": {
@@ -188,6 +188,13 @@
       "Position": {
         "X": 358.2935,
         "Y": 703.45105
+      }
+    },
+    {
+      "ChildId": "a6abf7ea-3d55-4136-ad8e-c25828bb6f0c"/*BlendState*/,
+      "Position": {
+        "X": 830.15015,
+        "Y": 371.77643
       }
     },
     {

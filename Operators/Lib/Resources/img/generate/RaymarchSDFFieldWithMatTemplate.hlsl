@@ -211,7 +211,7 @@ PSOutput psMain(vsOutput input)
     {
         normal = normalize(GetNormal(p, D));
 
-        col = Color.rgb;
+        //col = Color.rgb;
         // We've gone through all steps, but we haven't hit anything.
         // Mix in the background color.
         if (D > MinDistance)
@@ -340,7 +340,7 @@ PSOutput psMain(vsOutput input)
     }
 
     // Final fragment color.
-    float4 litColor = float4(directLighting + ambientLighting, 1.0) * BaseColor; // TODO Add parameter * Color;
+    float4 litColor = float4(directLighting + ambientLighting, 1.0) * BaseColor * Color; // TODO Add parameter * Color;
 
     // Fog
     float depth = dot(eye - p, -input.viewDir);
@@ -358,7 +358,7 @@ PSOutput psMain(vsOutput input)
     result.color = clamp(litColor, 0, float4(1000,1000,1000,1));
 
     float viewZ = mul(float4(p, 1), WorldToCamera).z;
-    result.color.a  = 1;
+    //result.color.a  = 1;
     result.depth =  ComputeDepthFromViewZ(viewZ);
     return result;
 }
