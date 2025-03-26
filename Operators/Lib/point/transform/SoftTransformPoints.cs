@@ -68,6 +68,12 @@ internal sealed class SoftTransformPoints : Instance<SoftTransformPoints>, ITran
     [Input(Guid = "f9025937-8e74-4f2d-b8f1-90e56e601137")]
     public readonly InputSlot<GizmoVisibility> Visibility = new InputSlot<GizmoVisibility>();
 
+    [Input(Guid = "87873b0f-cc86-438a-a46f-920456a50e75")]
+    public readonly InputSlot<System.Numerics.Vector2> GainAndBias = new InputSlot<System.Numerics.Vector2>();
+
+    [Input(Guid = "a7960bff-b388-4ebe-828d-4aedccf62d72", MappedType = typeof(FModes))]
+    public readonly InputSlot<int> StrengthFactor = new InputSlot<int>();
+
         
     private enum Shapes
     {
@@ -75,6 +81,13 @@ internal sealed class SoftTransformPoints : Instance<SoftTransformPoints>, ITran
         Box,
         Plane,
         Zebra,
+    }
+    
+    private enum FModes
+    {
+        None,
+        F1,
+        F2,
     }
         
 }
