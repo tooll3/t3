@@ -24,6 +24,9 @@ namespace Lib.mesh.draw{
         [Input(Guid = "35a9cbb6-fd1d-4137-bcb3-741f5061a711")]
         public readonly InputSlot<bool> SwitchUV = new InputSlot<bool>();
 
+        [Input(Guid = "b1da0217-3d9a-48dd-90a0-7195f0eaf12a")]
+        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
+
     }
 }
 
