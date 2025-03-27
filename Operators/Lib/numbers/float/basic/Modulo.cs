@@ -22,7 +22,7 @@ internal sealed class Modulo : Instance<Modulo>
         }
         else
         {
-            Log.Debug("Modulo caused division by zero", this);
+            T3.Core.Logging.Log.Debug("Modulo caused division by zero", this);
             Result.Value = 0;
         }
     }
