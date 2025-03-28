@@ -47,6 +47,9 @@ internal sealed class Displace : Instance<Displace>
 
     [Input(Guid = "b2f58dc7-e5c6-4c57-a704-94aaa0b1e002")]
     public readonly InputSlot<bool> GenerateMips = new();
+
+        [Input(Guid = "ea2b9f80-49b9-4c90-ba34-f0274169ece3")]
+        public readonly InputSlot<bool> RGSS_4xAA = new InputSlot<bool>();
         
     private enum DisplaceModes {
         IntensityGradient,

@@ -8,12 +8,15 @@ cbuffer ParamConstants : register(b0)
     float DisplaceOffset;
     float Twist;
     float Shade;
+
     float SampleCount;
     float SampleRadius;
     float SampleSpread;
     float SampleOffset;
+
     float2 DisplaceMapOffset;
     float DisplaceMode;
+    float UseRGSSMultiSampling;
 }
 
 cbuffer TimeConstants : register(b1)
@@ -45,14 +48,12 @@ float IsBetween(float value, float low, float high)
     return (value >= low && value <= high) ? 1 : 0;
 }
 
-float4 psMain(vsOutput psInput) : SV_TARGET
+static int samples = 1;
+static float displaceMapWidth;
+static float displaceMapHeight;
+
+float4 DoDisplace(float2 uv)
 {
-    int samples = (int)clamp(SampleCount + 0.5, 1, 32);
-    float displaceMapWidth, displaceMapHeight;
-    DisplaceMap.GetDimensions(displaceMapWidth, displaceMapHeight);
-
-    float2 uv = psInput.texCoord;
-
     float4 cx1, cx2, cy1, cy2;
     cx1 = cx2 = cy2 = cy1 = float4(0, 0, 0, 0);
     int dSamples = 2;
@@ -88,20 +89,23 @@ float4 psMain(vsOutput psInput) : SV_TARGET
                 padding /= 1.5;
             }
         }
-        else if (DisplaceMode < 1.5)
+        else
         {
             float4 rgba = DisplaceMap.Sample(texSampler, uv + DisplaceMapOffset) * padding;
-            d = float2(0, (rgba.r + rgba.g + rgba.b) / 3) / 10;
+            d = float2(0.0, (rgba.r + rgba.g + rgba.b) / 3.0) / 10;
         }
-        float a = (d.x == 0 && d.y == 0) ? 0 : atan2(d.x, d.y) + Twist / 180 * 3.14158;
+        float a = (d.x == 0 && d.y == 0)
+                      ? 0
+                      : (atan2(d.x, d.y) + Twist / 180 * 3.14158);
+
         direction = float2(sin(a), cos(a));
-        len = length(d) + 0.00001;
+        len = length(d) + 0.0001;
     }
     else
     {
         float4 rgba = DisplaceMap.Sample(texSampler, uv + DisplaceMapOffset) * padding;
         d = DisplaceMode < 0.5 ? (rgba.rg - 0.5) * 0.01
-        : rgba.rg * 0.01;
+                               : rgba.rg * 0.01;
         len = length(d) + 0.000001;
 
         float rRad = Twist / 180 * 3.14158;
@@ -111,13 +115,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
             cosa * d.x - sina * d.y,
             cosa * d.y + sina * d.x);
 
-        // d = float2(cos(Twist / 180 * 3.14158) * d.x, sin(Twist / 180 * 3.14158) * d.y);
-
         direction = d / len;
     }
-
-
-    // float len = length(d);
 
     float2 p2 = direction * (-DisplaceAmount * len * 10 + DisplaceOffset); // * float2(height/ height, 1);
     float imgAspect = TargetWidth / TargetHeight;
@@ -129,9 +128,38 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         t1 += Image.Sample(texSampler, uv + p2 * (i * SampleSpread + 1 - SampleOffset));
     }
 
-    // c.r=1;
     float4 c2 = t1 / samples;
     c2.rgb *= (1 - len * Shade * 100);
     c2.a = clamp(c2.a, 0.00001, 1);
     return c2;
+}
+
+float4 psMain(vsOutput psInput) : SV_TARGET
+{
+
+    // int samples = (int)clamp(SampleCount + 0.5, 1, 32);
+    // float displaceMapWidth, displaceMapHeight;
+    DisplaceMap.GetDimensions(displaceMapWidth, displaceMapHeight);
+
+    float2 uv = psInput.texCoord;
+
+    if (UseRGSSMultiSampling > 0.5)
+    {
+        // 4x rotated grid
+        float4 offsets[2];
+        offsets[0] = float4(-0.375, 0.125, 0.125, 0.375);
+        offsets[1] = float4(0.375, -0.125, -0.125, -0.375);
+
+        float2 sxy = float2(TargetWidth, TargetHeight);
+
+        return (DoDisplace(uv + offsets[0].xy / sxy) +
+                DoDisplace(uv + offsets[0].zw / sxy) +
+                DoDisplace(uv + offsets[1].xy / sxy) +
+                DoDisplace(uv + offsets[1].zw / sxy)) /
+               4;
+    }
+    else
+    {
+        return DoDisplace(uv);
+    }
 }
