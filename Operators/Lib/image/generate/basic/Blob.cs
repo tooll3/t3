@@ -44,4 +44,7 @@ internal sealed class Blob : Instance<Blob>
 
     [Input(Guid = "a9d505ce-2cb1-4911-acc3-c509e1eebc2b", MappedType = typeof(SharedEnums.RgbBlendModes))]
     public readonly InputSlot<int> BlendMode = new();
+
+        [Input(Guid = "fb6ff541-7ffe-4d3e-8b23-2f812f54f689")]
+        public readonly InputSlot<SharpDX.DXGI.Format> TextureFormat = new InputSlot<SharpDX.DXGI.Format>();
 }

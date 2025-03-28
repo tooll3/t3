@@ -6,8 +6,8 @@
     {
       "InputId": "0c49c872-852a-4f15-8cde-f3cda743c28e"/*FeatherBias*/,
       "Position": {
-        "X": -200.0,
-        "Y": 315.0
+        "X": 306.71823,
+        "Y": 431.74536
       },
       "Description": "Weights the feathering towards one edge or the other of the blurred region.",
       "Min": -10.0,
@@ -17,8 +17,8 @@
     {
       "InputId": "33f31c62-b0ea-42f9-a226-d0f5154731ee"/*Scale*/,
       "Position": {
-        "X": -200.0,
-        "Y": 224.99998
+        "X": 306.71823,
+        "Y": 361.74536
       },
       "Description": "Scales the blob evenly.",
       "Min": 0.0,
@@ -27,8 +27,8 @@
     {
       "InputId": "37da22d0-56ca-444a-9c9d-27a70283b7c0"/*Stretch*/,
       "Position": {
-        "X": -200.0,
-        "Y": 135.00002
+        "X": 166.71823,
+        "Y": 221.74538
       },
       "Description": "Stretches the blob unevenly.",
       "Min": -1.0,
@@ -38,8 +38,8 @@
     {
       "InputId": "77544b82-e897-4e69-bfaf-e861891d1fd4"/*Rotate*/,
       "Position": {
-        "X": -200.0,
-        "Y": 405.0
+        "X": 306.71823,
+        "Y": 466.74536
       },
       "Description": "Rotation amount in degrees.\nRotation is applied after Stretch and Scale, but before Position.",
       "Min": -180.0,
@@ -49,8 +49,8 @@
     {
       "InputId": "7daacb43-54de-47d2-afcd-694f6afce59d"/*Position*/,
       "Position": {
-        "X": -200.0,
-        "Y": 180.00002
+        "X": -236.36365,
+        "Y": 281.81818
       },
       "Description": "X/Y position, in relative units.",
       "Min": -1.0,
@@ -60,48 +60,48 @@
     {
       "InputId": "89ca8093-8d13-471d-bfb4-613b13bc084d"/*GenerateMips*/,
       "Position": {
-        "X": -200.0,
-        "Y": 450.0
+        "X": 306.71823,
+        "Y": 641.74536
       },
       "Description": "Generate mipmaps (scaled-down versions of this image for use in situations where many small copies are shown on screen.)\nWill increase memory usage."
     },
     {
       "InputId": "8cc15ea0-074f-40ed-813d-b93f48681094"/*Image*/,
       "Position": {
-        "X": -200.0,
-        "Y": -123.96756
+        "X": 306.71823,
+        "Y": -93.25465
       },
       "Description": "Image to use as a background for the blob.\nDrawn behind the background color."
     },
     {
       "InputId": "a9d505ce-2cb1-4911-acc3-c509e1eebc2b"/*BlendMode*/,
       "Position": {
-        "X": -200.0,
-        "Y": 495.0
+        "X": 166.71823,
+        "Y": 501.74536
       },
       "Description": "Blend mode between the generated blob graphic and the backgrund image, if one is provided."
     },
     {
       "InputId": "d2b0dd99-c289-4c1b-9335-c29a6b4a6ba3"/*Color*/,
       "Position": {
-        "X": -200.0,
-        "Y": 45.0
+        "X": 166.71823,
+        "Y": -58.254646
       },
       "Description": "Fill color of the blob."
     },
     {
       "InputId": "e45f325d-cf2d-4972-aea6-9545aec66ea7"/*Resolution*/,
       "Position": {
-        "X": -200.0,
-        "Y": 360.0
+        "X": 306.71823,
+        "Y": 536.74536
       },
       "Description": "Output resolution in pixels. Set to 0 for dynamic resolution."
     },
     {
       "InputId": "f0c128b1-27a1-42e0-a8a4-6fd94d527c05"/*Feather*/,
       "Position": {
-        "X": -200.0,
-        "Y": 270.0
+        "X": 306.71823,
+        "Y": 396.74536
       },
       "Description": "Feather edges to reduce pixel artifacts.\nCan also be used to blur the blob.\nSet to a negative value to create a vignette.",
       "AddPadding": "True",
@@ -109,10 +109,17 @@
       "Max": 1.0
     },
     {
+      "InputId": "fb6ff541-7ffe-4d3e-8b23-2f812f54f689"/*TextureFormat*/,
+      "Position": {
+        "X": 306.71823,
+        "Y": 571.74536
+      }
+    },
+    {
       "InputId": "fd05c355-7afa-4af6-9529-d4071d145d3b"/*Background*/,
       "Position": {
-        "X": -200.0,
-        "Y": 89.999985
+        "X": -125.45456,
+        "Y": 579.9998
       },
       "Description": "Background color of the blob."
     }
@@ -121,22 +128,22 @@
     {
       "ChildId": "29bc4f56-37c3-43b2-ab55-30ac1d815c7e"/*Vector4Components*/,
       "Position": {
-        "X": -25.082056,
-        "Y": 85.952194
+        "X": 306.71823,
+        "Y": 81.74535
       }
     },
     {
       "ChildId": "31ff2db0-ea51-4862-af34-7c4628018ebf"/*Vector4Components*/,
       "Position": {
-        "X": -25.082056,
-        "Y": 29.952059
+        "X": 306.71823,
+        "Y": -58.254646
       }
     },
     {
       "ChildId": "842128f1-e123-4cec-813d-e9eed580e3ef"/*IntToFloat*/,
       "Position": {
-        "X": 63.381744,
-        "Y": 531.01843
+        "X": 306.71823,
+        "Y": 501.74536
       }
     },
     {
@@ -149,22 +156,15 @@
     {
       "ChildId": "c5c91c08-cbb3-4bd2-acb5-d07c181b6c65"/*Vector2Components*/,
       "Position": {
-        "X": -25.082056,
-        "Y": 141.9522
+        "X": 306.71823,
+        "Y": 221.74538
       }
     },
     {
       "ChildId": "d74b78a8-7ba7-4ae7-b7b2-37a6b5dfbdd6"/*Vector2Components*/,
       "Position": {
-        "X": -25.082056,
-        "Y": 197.95222
-      }
-    },
-    {
-      "ChildId": "d7b5108d-35f2-4570-b191-3861661e6b51"/*Vector2Components*/,
-      "Position": {
-        "X": -25.082056,
-        "Y": 253.95222
+        "X": 306.71823,
+        "Y": 291.74536
       }
     }
   ],
@@ -172,8 +172,8 @@
     {
       "OutputId": "b882de23-5b94-4791-af13-e195211cffb3"/*TextureOutput*/,
       "Position": {
-        "X": 577.0464,
-        "Y": -29.479145
+        "X": 586.71826,
+        "Y": -93.25465
       }
     }
   ],
