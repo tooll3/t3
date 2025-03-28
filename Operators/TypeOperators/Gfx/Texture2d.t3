@@ -7,7 +7,7 @@
     },
     {
       "Id": "58ff26e7-6beb-44cb-910b-fe467402cee9"/*MipLevels*/,
-      "DefaultValue": 1
+      "DefaultValue": 0
     },
     {
       "Id": "67cd82c3-504b-4c80-8c49-5b303733ed52"/*Format*/,
