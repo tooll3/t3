@@ -25,7 +25,10 @@ internal sealed class GetPbrParameters : Instance<GetPbrParameters>
         
     [Output(Guid = "AB644673-9EAA-4CEC-9663-FBFDC445D112", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
     public readonly Slot<Texture2D> PrefilteredSpecularMap = new();
-        
+
+    [Output(Guid = "2169fa1b-078f-44d6-adc2-7abf4ec2659b", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
+    public readonly Slot<ShaderResourceView> AlbedoColorMap2 = new();
+
     public GetPbrParameters()
     {
         PbrParameterBuffer.UpdateAction += UpdatePbrParameterBuffer;
@@ -35,6 +38,7 @@ internal sealed class GetPbrParameters : Instance<GetPbrParameters>
         NormalMap.UpdateAction += UpdateNormalMap;
         BrdfLookupMap.UpdateAction += UpdateBrdfLookupMap;
         PrefilteredSpecularMap.UpdateAction += UpdatePrefilteredSpecularMap;
+        AlbedoColorMap2.UpdateAction = UpdateAlbedoColorMap2;
     }
 
         
@@ -44,6 +48,7 @@ internal sealed class GetPbrParameters : Instance<GetPbrParameters>
     private void UpdateRoughnessMetallicOcclusionMap(EvaluationContext context) => RoughnessMetallicOcclusionMap.Value = context.PbrMaterial.RoughnessMetallicOcclusionSrv;
     private void UpdateNormalMap(EvaluationContext context) => NormalMap.Value = context.PbrMaterial.NormalSrv;
     private void UpdateBrdfLookupMap(EvaluationContext context) => BrdfLookupMap.Value = PbrContextSettings.PbrLookUpTextureSrv;
+    private void UpdateAlbedoColorMap2(EvaluationContext context) => AlbedoColorMap2.Value = context.PbrMaterial.AlbedoMap2Srv;
 
     private void UpdatePrefilteredSpecularMap(EvaluationContext context)
     {
