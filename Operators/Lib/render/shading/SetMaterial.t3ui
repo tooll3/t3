@@ -80,6 +80,14 @@
       "Description": "Defines the Color which is multiplied with the \"BaseColorMap\"."
     },
     {
+      "InputId": "c3df717c-822a-4aae-a5a8-a27e4d98fda8"/*BaseColorMap2*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 450.0
+      },
+      "GroupTitle": "2nd UV Map / TexCoord2"
+    },
+    {
       "InputId": "c8003fbd-c6ce-440c-9f1f-6b15b5ee5274"/*RoughnessMetallicOcclusionMap*/,
       "Position": {
         "X": -200.0,
@@ -96,6 +104,13 @@
       "Min": -1.0,
       "Max": 1.0,
       "Clamp": true
+    },
+    {
+      "InputId": "f574046e-e10b-42e2-84af-8b28759ba636"/*BlendMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 495.0
+      }
     }
   ],
   "SymbolChildUis": [],
