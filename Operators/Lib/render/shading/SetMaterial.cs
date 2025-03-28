@@ -144,6 +144,6 @@ internal sealed class SetMaterial : Instance<SetMaterial>
 
     [Input(Guid = "f574046e-e10b-42e2-84af-8b28759ba636", MappedType = typeof(SharedEnums.RgbBlendModes))]
     public readonly InputSlot<int> BlendMode = new();
-
+   
 
 }
