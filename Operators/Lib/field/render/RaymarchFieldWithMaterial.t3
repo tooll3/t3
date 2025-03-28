@@ -11,7 +11,7 @@
     },
     {
       "Id": "3148d927-8779-47ab-9e0a-fa63206f3002"/*MaxSteps*/,
-      "DefaultValue": 60.0
+      "DefaultValue": 100.0
     },
     {
       "Id": "340ca675-9356-4548-ba64-732181bebeef"/*SdfField*/,

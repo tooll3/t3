@@ -37,6 +37,9 @@ internal sealed class RemapColor : Instance<RemapColor>
     [Input(Guid = "7023f71c-1c13-4d66-85e7-b0918cb8b02c")]
     public readonly InputSlot<float> Repeat = new InputSlot<float>();
 
+        [Input(Guid = "58f9492f-7866-4fb0-a4d8-1b304f812a6f")]
+        public readonly InputSlot<int> GradientSteps = new InputSlot<int>();
+
 
     private enum Modes
     {
