@@ -154,13 +154,6 @@
       "Outputs": []
     },
     {
-      "Id": "6b9c1e6f-064d-4b3b-a948-8b10e12be3ca"/*texSampler2*/,
-      "SymbolId": "9515d59d-0bd5-406b-96da-6a5f60215700",
-      "Name": "texSampler2",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "818d5323-00f1-45d9-b88f-6991ba26fb81"/*MultiplyInt*/,
       "SymbolId": "6a4edb6a-5ced-4356-9090-4bf770cdeb52",
       "InputValues": [
@@ -443,12 +436,6 @@
     },
     {
       "SourceParentOrChildId": "6483c4a0-43f8-46c3-83b7-62cc38db958c",
-      "SourceSlotId": "0e45c596-c80f-4927-941f-e3199401aa10",
-      "TargetParentOrChildId": "69767494-70bc-4ac8-aa51-a552037edf79",
-      "TargetSlotId": "60bae25c-64fe-40df-a2e6-a99297a92e0b"
-    },
-    {
-      "SourceParentOrChildId": "6b9c1e6f-064d-4b3b-a948-8b10e12be3ca",
       "SourceSlotId": "0e45c596-c80f-4927-941f-e3199401aa10",
       "TargetParentOrChildId": "69767494-70bc-4ac8-aa51-a552037edf79",
       "TargetSlotId": "60bae25c-64fe-40df-a2e6-a99297a92e0b"

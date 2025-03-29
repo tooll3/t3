@@ -2,6 +2,7 @@
 #include "shared/quat-functions.hlsl"
 #include "shared/point-light.hlsl"
 #include "shared/pbr.hlsl"
+#include "shared/blend-functions.hlsl"
 
 cbuffer Transforms : register(b0)
 {
@@ -51,11 +52,13 @@ cbuffer PbrParams : register(b5)
     float Roughness;
     float Specular;
     float Metal;
+    float BlendMode;
 }
 
 struct psInput
 {
     float2 texCoord : TEXCOORD;
+    float2 texCoord2 : TEXCOORD2;
     float4 pixelPosition : SV_POSITION;
     float4 color : COLOR;
     float3 worldPosition : POSITION;
@@ -76,6 +79,7 @@ Texture2D<float4> RSMOMap : register(t5);
 Texture2D<float4> NormalMap : register(t6);
 TextureCube<float4> PrefilteredSpecular : register(t7);
 Texture2D<float4> BRDFLookup : register(t8);
+Texture2D<float4> BaseColorMap2 : register(t9);
 
 psInput vsMain(uint id
                : SV_VertexID)
@@ -121,6 +125,9 @@ psInput vsMain(uint id
     float2 uv = vertex.TexCoord;
     output.texCoord = float2(uv.x, 1 - uv.y);
 
+    float2 uv2 = vertex.TexCoord2;
+    output.texCoord2 = float2(uv2.x, 1 - uv2.y);
+
     // Pass tangent space basis vectors (for normal mapping).
     float3x3 TBN = float3x3(vertex.Tangent, vertex.Bitangent, vertex.Normal);
     TBN = mul(TBN, (float3x3)orientationMatrix);
@@ -148,6 +155,8 @@ float4 psMain(psInput pin) : SV_TARGET
 {
     // Sample input textures to get shading model params.
     float4 albedo = BaseColorMap.Sample(texSampler, pin.texCoord) * pin.color;
+    float4 albedo2 = BaseColorMap2.Sample(texSampler, pin.texCoord2);
+    albedo = BlendColors(albedo, albedo2, (int)BlendMode);
     if (AlphaCutOff > 0 && albedo.a < AlphaCutOff)
         discard;
 
