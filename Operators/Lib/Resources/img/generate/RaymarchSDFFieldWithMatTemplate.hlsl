@@ -184,20 +184,22 @@ float ComputeDepthFromViewZ(float viewZ)
 
     float2 GetUVMapping(float3 p, float3 absN, int mappingType)
 {
+    
     switch (mappingType)
     {
         case MAP_TRIPLANAR:
-            return (absN.x > absN.y && absN.x > absN.z) ? p.yz / TextureScale : 
-                   (absN.y > absN.z) ? p.zx / TextureScale : p.xy / TextureScale;
+            p.yz *= -1;
+            return (absN.x > absN.y && absN.x > absN.z) ? (p.zy / TextureScale)+.5 : 
+                   (absN.y > absN.z) ? (p.zx / TextureScale)+.5 : (p.xy / TextureScale)+.5;
         
         case MAP_XY:
-            return p.xy;
+            return (-p.xy+.5)/TextureScale;
             
         case MAP_XZ:
-            return p.xz;
+            return -p.xz+.5;
             
         case MAP_POLAR:
-            return (float2(atan2(p.x, p.z)/6.2832, -TextureScale*p.y/3.0)+.5);
+            return (float2(atan2(p.x, p.z)/6.2832, p.y/3.0)+.5);
             
         default: // YZ mapping
             return p.yz;

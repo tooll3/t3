@@ -235,7 +235,7 @@
         {
           "Id": "05d7962b-a02e-4ab5-9927-865375348ccd"/*InputText*/,
           "Type": "System.String",
-          "Value": "#define MAPPING_TRIPLANAR2 1 \n#define MAPPING_XY2 1\n#define MAPPING_XZ2 1\n#define MAPPING_YZ2 1"
+          "Value": "#define MAPPING_TRIPLANAR2 1 \n#define MAPPING_XY2 1\n#define MAPPING_XZ2 1\n#define MAPPING_YZ2 1\n#define MAPPING_POLAR2 1"
         }
       ],
       "Outputs": []
