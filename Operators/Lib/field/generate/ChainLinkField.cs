@@ -32,7 +32,7 @@ internal sealed class ChainLinkField : Instance<ChainLinkField>
               """;
 
         var n = ShaderNode;
-        c.AppendCall($"f{c}.w = fChainLink(p{c} - {n}Center, {n}Length, {n}RadiusA, {n}RadiusB);");
+        c.AppendCall($"f{c}.w = fChainLink(p{c}.xyz - {n}Center, {n}Length, {n}RadiusA, {n}RadiusB);");
     }
 
     public void GetPostShaderCode(CodeAssembleContext c, int inputIndex)

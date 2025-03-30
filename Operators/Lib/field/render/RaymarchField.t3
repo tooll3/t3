@@ -36,7 +36,7 @@
     },
     {
       "Id": "779f396e-c28a-4b67-babe-e16e12b49f4d"/*MaxDistance*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 100.0
     },
     {
       "Id": "7bdc7eb1-e8ec-4861-9408-e92f63a6ba65"/*Glow_*/,

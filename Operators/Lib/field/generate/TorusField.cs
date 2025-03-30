@@ -1,4 +1,5 @@
 using T3.Core.DataTypes.ShaderGraph;
+using T3.Core.Utils;
 
 namespace Lib.field.generate;
 
@@ -19,6 +20,15 @@ internal sealed class TorusField : Instance<TorusField>
     private void Update(EvaluationContext context)
     {
         ShaderNode.Update(context);
+        
+        var axis = Axis.GetEnumValue<AxisTypes>(context);
+        
+        var templateChanged = axis != _axis;
+        if (!templateChanged)
+            return;
+
+        _axis = axis;
+        ShaderNode.FlagCodeChanged();      
     }
 
     public ShaderGraphNode ShaderNode { get; }
@@ -27,15 +37,16 @@ internal sealed class TorusField : Instance<TorusField>
     {
         cac.Globals["fTorus"]
             = """
-              float fTorus(float3 p, float3 center, float2 size) {
-                  p = p - center;
+              float fTorus(float3 p, float2 size) {
                   float2 q = float2(length(p.xy) - size.x, p.z);
                   return length(q) - size.y;
               }
               """;
         
         var c = cac.ContextIdStack[^1];
-        cac.AppendCall($"f{c}.w = fTorus(p{c}.xyz, {ShaderNode}Center, {ShaderNode}Size);");
+        var a = _axisCodes0[(int)_axis];
+
+        cac.AppendCall($"f{c}.w = fTorus(p{c}.{a} - {ShaderNode}Center.{a} , {ShaderNode}Size);");
         cac.AppendCall($"f{c}.xyz = p{c}.xyz;");
     }
 
@@ -43,6 +54,28 @@ internal sealed class TorusField : Instance<TorusField>
     {
     }
 
+    
+    private readonly string[] _axisCodes0 =
+        [
+            "yzx",
+            "xzy",
+            "xyz",
+        ];
+
+    private AxisTypes _axis;
+
+    private enum AxisTypes
+    {
+        X,
+        Y,
+        Z,
+    }
+    
+    [Input(Guid = "522A9640-CA8C-47E6-AD36-5C316A9092AE", MappedType = typeof(AxisTypes))]
+    public readonly InputSlot<int> Axis = new();
+
+
+    
     [GraphParam]
     [Input(Guid = "dbc72bd7-6191-4145-a69f-d17b3808b3ab")]
     public readonly InputSlot<Vector3> Center = new();

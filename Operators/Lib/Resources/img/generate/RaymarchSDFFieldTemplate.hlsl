@@ -84,28 +84,20 @@ vsOutput vsMain4(uint vertexId : SV_VertexID)
     return output;
 }
 
+//--- Field functions -----------------------
 /*{FIELD_FUNCTIONS}*/
 
-// struct VS_IN
-// {
-//     float4 pos : POSITION;
-//     float2 texCoord : TEXCOORD;
-// };
-
-// struct PS_IN
-// {
-//     float4 pos : SV_POSITION;
-//     float2 texCoord : TEXCOORD0;
-//     float3 viewDir;
-//     float3 worldTViewPos : TEXCOORD1;
-//     float3 worldTViewDir : TEXCOORD2;
-// };
-
-//---------------------------------------
-float GetDistance(float3 pos)
+//-------------------------------------------
+float4 GetField(float4 p)
 {
-    // pos = mul(float4(pos.xyz,1), ObjectToWorld).xyz;
-    return /*{FIELD_CALL}*/ 0;
+    float4 f = 1;
+    /*{FIELD_CALL}*/
+    return f;
+}
+
+float GetDistance(float3 p3)
+{
+    return GetField(float4(p3.xyz, 0)).w;
 }
 //---------------------------------------------------
 
@@ -187,7 +179,7 @@ PSOutput psMain(vsOutput input)
     int maxSteps = (int)(MaxSteps - 0.5);
 
     // Simple iterator
-    for (steps = 0; steps < maxSteps && abs(D) > MinDistance; steps++)
+    for (steps = 0; steps < maxSteps && abs(D) > MinDistance && D < MaxDistance; steps++)
     {
         D = GetDistance(p);
         p += dp * D;
@@ -220,29 +212,43 @@ PSOutput psMain(vsOutput input)
     }
     else
     {
-        a = 0;
-    }
-
-    // Glow is based on the number of steps.
-    col = lerp(col, Glow.rgb, float(steps) / float(MaxSteps) * Glow.a);
-    float f = clamp(log(length(p - input.worldTViewPos) / Fog), 0, 1);
-    col = lerp(col, Background.rgb, f);
-    a *= (1 - f * Background.a);
-
-    if (a < 0.6)
-    {
-        discard;
+        //        a = 0;
     }
 
     PSOutput result;
-    result.color = float4(clamp(col, 0, 1000) , saturate(a));
-    // result.color = float4(1, 1, 0, 1);
-    //   result.depth = totalD; // length(p);
 
+    // Glow is based on the number of steps.
+    float glowEffect = float(steps) / MaxSteps;
+    result.color = float4(glowEffect.rrr, 1);
     float depth = dot(eye - p, -input.viewDir);
 
     // result.depth = input.texCoord;
     result.depth = DepthFromWorldSpace2(depth, 0.01, 1000);
+    return result;
+
+    //
+
+    col = lerp(col, Glow.rgb, float(steps) / float(MaxSteps) * Glow.a);
+
+    float f = clamp(log(length(p - input.worldTViewPos) / Fog), 0, 1);
+
+    // col = lerp(col, Background.rgb, f);
+
+    // a *= (1 - f * Background.a);
+
+    // if (a < 0.6)
+    // {
+    //     discard;
+    // }
+
+    result.color = float4(clamp(col, 0, 1000), saturate(a));
+    // result.color = float4(1, 1, 0, 1);
+    //   result.depth = totalD; // length(p);
+
+    // float depth = dot(eye - p, -input.viewDir);
+
+    // result.depth = input.texCoord;
+    // result.depth = DepthFromWorldSpace2(depth, 0.01, 1000);
     // result.color = float4(depth.xxx, 1);
     //  result.depth = DepthFromWorldSpace2(length(eye - p), 0.01, 1000);
     return result;

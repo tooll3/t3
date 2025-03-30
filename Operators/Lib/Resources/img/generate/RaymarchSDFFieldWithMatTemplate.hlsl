@@ -13,7 +13,7 @@ cbuffer ParamConstants : register(b1)
     float MaxSteps;
     float StepSize;
     float MinDistance;
-    float DistToColor;
+    float MaxDistance;
 
     float4 Color;
     float4 AmbientOcclusion;
@@ -21,6 +21,7 @@ cbuffer ParamConstants : register(b1)
     float TextureScale;
     float AODistance;
     float NormalSamplingDistance;
+    float DistToColor;
 }
 
 cbuffer Transforms : register(b2)
@@ -196,9 +197,9 @@ PSOutput psMain(vsOutput input)
     int maxSteps = (int)(MaxSteps - 0.5);
 
     // Simple iterator
-    for (steps = 0; steps < maxSteps && abs(D) > MinDistance; steps++)
+    for (steps = 0; steps < maxSteps && abs(D) > MinDistance && D < MaxDistance; steps++)
     {
-        D = GetDistance(p);
+        D = GetDistance(p) * StepSize;
         p += dp * D;
     }
 

@@ -1,3 +1,5 @@
+using T3.Core.Utils;
+
 namespace Lib.field.generate;
 
 [Guid("1e1e65cd-3564-45e1-88f8-6cb4b4b18c5a")]
@@ -17,6 +19,15 @@ internal sealed class HexagonalPrismField : Instance<HexagonalPrismField>
     private void Update(EvaluationContext context)
     {
         ShaderNode.Update(context);
+        
+        var axis = Axis.GetEnumValue<AxisTypes>(context);
+        
+        var templateChanged = axis != _axis;
+        if (!templateChanged)
+            return;
+
+        _axis = axis;
+        ShaderNode.FlagCodeChanged();        
     }
 
     public ShaderGraphNode ShaderNode { get; }
@@ -36,13 +47,35 @@ internal sealed class HexagonalPrismField : Instance<HexagonalPrismField>
                                  """;
 
         var n = ShaderNode;
-        c.AppendCall($"f{c}.w = fHexPrism(p{c}.xyz - {n}Center, {n}RadiusLength, {n}Round);");
+        var a = _axisCodes0[(int)_axis];
+        c.AppendCall($"f{c}.w = fHexPrism(p{c}.{a} - {n}Center.{a}, {n}RadiusLength, {n}Round);");
     }
 
     public void GetPostShaderCode(CodeAssembleContext c, int inputIndex)
     {
     }
 
+    private readonly string[] _axisCodes0 =
+        [
+            "yzx",
+            "xzy",
+            "xyz",
+        ];
+
+    private AxisTypes _axis;
+
+    private enum AxisTypes
+    {
+        X,
+        Y,
+        Z,
+    }
+    
+    [Input(Guid = "522A9640-CA8C-47E6-AD36-5C316A9092AE", MappedType = typeof(AxisTypes))]
+    public readonly InputSlot<int> Axis = new();
+
+
+    
     [GraphParam]
     [Input(Guid = "cfc6f8f3-94b4-46f6-9501-11d7b7916bb7")]
     public readonly InputSlot<Vector3> Center = new();

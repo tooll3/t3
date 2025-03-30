@@ -67,7 +67,7 @@ public class ShaderGraphNode
     {
         if (_lastUpdateFrame == Playback.FrameCount)
         {
-            Log.Debug($"Re-eval {OutputCounts++}", _instance);
+            //Log.Debug($"Re-eval {OutputCounts++}", _instance);
             return;
         }
 

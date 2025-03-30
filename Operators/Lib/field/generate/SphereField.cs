@@ -23,7 +23,7 @@ internal sealed class SphereField : Instance<SphereField>, IGraphNodeOp
     public void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
     {
         var n = ShaderNode;
-        c.AppendCall($"f{c}.w = length(p{c} - {n}Center) - {n}Radius;");
+        c.AppendCall($"f{c}.w = length(p{c}.xyz - {n}Center) - {n}Radius;");
     }
 
     public void GetPostShaderCode(CodeAssembleContext c, int inputIndex)

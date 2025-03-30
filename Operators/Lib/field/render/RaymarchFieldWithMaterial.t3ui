@@ -16,7 +16,7 @@
       "InputId": "1251368b-f8f4-4210-be1e-4d05223caf21"/*DistToColor*/,
       "Position": {
         "X": 218.2935,
-        "Y": 843.45105
+        "Y": 1263.451
       }
     },
     {
@@ -25,6 +25,7 @@
         "X": 218.2935,
         "Y": 738.45105
       },
+      "GroupTitle": "Quality",
       "Min": 0.0,
       "Max": 150.0
     },
@@ -48,7 +49,9 @@
       "Position": {
         "X": 218.2935,
         "Y": 773.45105
-      }
+      },
+      "Min": 0.9,
+      "Max": 1.1
     },
     {
       "InputId": "89218016-a0ca-4150-95d4-23f415cf07f0"/*TextureScale*/,
@@ -58,32 +61,46 @@
       }
     },
     {
-      "InputId": "9715075b-b02b-4290-9332-9bbfe67933f2"/*Specular*/,
+      "InputId": "9715075b-b02b-4290-9332-9bbfe67933f2"/*Color*/,
       "Position": {
         "X": 78.29352,
         "Y": 878.45105
       }
     },
     {
+      "InputId": "adeb374b-bce0-4af2-867b-efb3ce6289c9"/*MaxDistance*/,
+      "Position": {
+        "X": 218.29349,
+        "Y": 843.45105
+      },
+      "Min": 0.0,
+      "Max": 1000.0
+    },
+    {
       "InputId": "e3a85c27-b94c-4e77-b0c2-4644cd3a22d4"/*AmbientOcclusion*/,
       "Position": {
         "X": 78.29346,
         "Y": 1018.45105
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "f14e7a2f-cd4e-4399-b137-ea0b87c7dfbd"/*NormalSamplingD*/,
       "Position": {
         "X": 218.29349,
         "Y": 1228.451
-      }
+      },
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 0.1
     },
     {
       "InputId": "ffb73f4d-6d24-4f4c-866b-5bdd6f876e6f"/*AoDistance*/,
       "Position": {
         "X": 218.29349,
         "Y": 1193.4509
-      }
+      },
+      "GroupTitle": "Appearance"
     }
   ],
   "SymbolChildUis": [
