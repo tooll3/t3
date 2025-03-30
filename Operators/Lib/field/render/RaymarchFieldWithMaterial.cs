@@ -39,12 +39,16 @@ public class RaymarchFieldWithMaterial : Instance<RaymarchFieldWithMaterial>
         [Input(Guid = "f14e7a2f-cd4e-4399-b137-ea0b87c7dfbd")]
         public readonly InputSlot<float> NormalSamplingD = new InputSlot<float>();
 
+        [Input(Guid = "43aeec6a-b6f5-4935-a551-35e95f094f90", MappedType = typeof(MappingModes))]
+        public readonly InputSlot<int> UVMapping2 = new InputSlot<int>();
+
         private enum MappingModes
         {
             Triplanar,
             XY,
             YZ,
             XZ,
+            Polar,
         }
         
 }

@@ -2,6 +2,7 @@
 #include "shared/quat-functions.hlsl"
 #include "shared/point-light.hlsl"
 #include "shared/pbr.hlsl"
+#include "shared/blend-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -58,6 +59,7 @@ cbuffer PbrParams : register(b5)
     float Roughness;
     float Specular2;
     float Metal;
+    float BlendMode;
 }
 
 Texture2D<float4> BaseColorMap : register(t0);
@@ -66,6 +68,7 @@ Texture2D<float4> RSMOMap : register(t2);
 Texture2D<float4> NormalMap : register(t3);
 Texture2D<float4> BRDFLookup : register(t4);
 TextureCube<float4> PrefilteredSpecular : register(t5);
+Texture2D<float4> BaseColorMap2 : register(t6);
 
 sampler texSampler : register(s0);
 sampler clampedSampler : register(s1);
@@ -172,6 +175,36 @@ float ComputeDepthFromViewZ(float viewZ)
 }
 
 
+// Define mapping type constants
+#define MAP_YZ 0          // Default
+#define MAP_TRIPLANAR 1
+#define MAP_XY 2
+#define MAP_XZ 3
+#define MAP_POLAR 4
+
+    float2 GetUVMapping(float3 p, float3 absN, int mappingType)
+{
+    switch (mappingType)
+    {
+        case MAP_TRIPLANAR:
+            return (absN.x > absN.y && absN.x > absN.z) ? p.yz / TextureScale : 
+                   (absN.y > absN.z) ? p.zx / TextureScale : p.xy / TextureScale;
+        
+        case MAP_XY:
+            return p.xy;
+            
+        case MAP_XZ:
+            return p.xz;
+            
+        case MAP_POLAR:
+            return (float2(atan2(p.x, p.z)/6.2832, -TextureScale*p.y/3.0)+.5);
+            
+        default: // YZ mapping
+            return p.yz;
+    }
+}
+
+
 PSOutput psMain(vsOutput input)
 {
     float3 eye = input.worldTViewPos;
@@ -232,19 +265,35 @@ PSOutput psMain(vsOutput input)
 
     // Tri-planar mappping
     float3 absN = abs(normal);
+ 
+    #if MAPPING_TRIPLANAR
+        float2 uv = GetUVMapping(p, absN, MAP_TRIPLANAR);
+    #elif MAPPING_XY
+        float2 uv = GetUVMapping(p, absN, MAP_XY);
+    #elif MAPPING_XZ
+        float2 uv = GetUVMapping(p, absN, MAP_XZ);
+    #elif MAPPING_POLAR
+        float2 uv = GetUVMapping(p, absN, MAP_POLAR);
+    #else
+        float2 uv = GetUVMapping(p, absN, MAP_YZ); // Default
+    #endif
 
-#if MAPPING_TRIPLANAR
-    float2 uv = (absN.x > absN.y && absN.x > absN.z) ? p.yz / TextureScale : (absN.y > absN.z) ? p.zx / TextureScale
-                                                                                               : p.xy / TextureScale;
-#elif MAPPING_XY
-    float2 uv = p.xy;
-#elif MAPPING_XZ
-    float2 uv = p.xz;
-#else
-    float2 uv = p.yz;
-#endif
+    #if MAPPING_TRIPLANAR2
+        float2 uv2 = GetUVMapping(p, absN, MAP_TRIPLANAR);
+    #elif MAPPING_XY2
+        float2 uv2 = GetUVMapping(p, absN, MAP_XY);
+    #elif MAPPING_XZ2
+        float2 uv2 = GetUVMapping(p, absN, MAP_XZ);
+    #elif MAPPING_POLAR
+        float2 uv2 = GetUVMapping(p, absN, MAP_POLAR);
+    #else
+        float2 uv2 = GetUVMapping(p, absN, MAP_YZ); // Default
+    #endif
 
     float4 albedo = BaseColorMap.Sample(texSampler, uv);
+
+    float4 albedo2 = BaseColorMap2.Sample(texSampler, uv2);
+    albedo = BlendColors(albedo, albedo2, (int)BlendMode);
 
     float4 roughnessMetallicOcclusion = RSMOMap.Sample(texSampler, uv);
     float roughness = saturate(roughnessMetallicOcclusion.x + Roughness);
