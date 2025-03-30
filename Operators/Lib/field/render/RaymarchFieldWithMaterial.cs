@@ -49,10 +49,11 @@ public class RaymarchFieldWithMaterial : Instance<RaymarchFieldWithMaterial>
 
         private enum MappingModes
         {
-            Triplanar,
-            XY,
-            YZ,
-            XZ,
+            Global_Triplanar,
+            Local_Triplanar,
+            Local_XY,
+            Local_YZ,
+            Local_XZ,
         }
         
 }

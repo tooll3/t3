@@ -80,7 +80,7 @@
         {
           "Id": "05d7962b-a02e-4ab5-9927-865375348ccd"/*InputText*/,
           "Type": "System.String",
-          "Value": "#define MAPPING_TRIPLANAR 1 \n#define MAPPING_XY 1\n#define MAPPING_XZ 1\n#define MAPPING_YZ 1"
+          "Value": "#define MAPPING_GLOBAL_TRIPLANAR 1 \n#define MAPPING_LOCAL_TRIPLANAR 1 \n#define MAPPING_XY 1\n#define MAPPING_XZ 1\n#define MAPPING_YZ 1"
         }
       ],
       "Outputs": []

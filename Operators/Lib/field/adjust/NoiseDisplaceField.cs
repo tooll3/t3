@@ -1,13 +1,13 @@
 namespace Lib.field.adjust;
 
 [Guid("54f28d0a-d367-4b59-8480-5b762b8f2a9c")]
-internal sealed class NoiseOffsetField : Instance<NoiseOffsetField>
+internal sealed class NoiseDisplaceField : Instance<NoiseDisplaceField>
 ,IGraphNodeOp
 {
     [Output(Guid = "dbf31b38-5221-414c-83b1-800770fcfaa6")]
     public readonly Slot<ShaderGraphNode> Result = new();
 
-    public NoiseOffsetField()
+    public NoiseDisplaceField()
     {
         ShaderNode = new ShaderGraphNode(this, null, InputField);
         Result.Value = ShaderNode;
@@ -24,7 +24,7 @@ internal sealed class NoiseOffsetField : Instance<NoiseOffsetField>
 
     public void GetPreShaderCode(CodeAssembleContext cac, int inputIndex)
     {
-        cac.Globals["SimplexNoiseOffset"]= """
+        cac.Globals["fSimplexNoiseDisplace"]= """
                                            float mod289(float x) {
                                                return x - floor(x * (1.0 / 289.0)) * 289.0;
                                            }
@@ -109,7 +109,7 @@ internal sealed class NoiseOffsetField : Instance<NoiseOffsetField>
                                                return 42.0 * dot(m * m, float4(dot(g0,x0), dot(g1,x1), dot(g2,x2), dot(g3,x3)));
                                            }
 
-                                           float SimplexNoiseOffset(float3 pos, float amount, float scale, float3 offset) {
+                                           float fSimplexNoiseDisplace(float3 pos, float amount, float scale, float3 offset) {
                                                return simplexNoise3D(pos / scale + offset ) * amount;
                                            }
                                            """;
@@ -118,7 +118,8 @@ internal sealed class NoiseOffsetField : Instance<NoiseOffsetField>
     public void GetPostShaderCode(CodeAssembleContext cac, int inputIndex)
     {
         var c = cac.ContextIdStack[^1];
-        cac.AppendCall( $"f{c}.w += SimplexNoiseOffset(p{c}.xyz, {ShaderNode}Amount, {ShaderNode}Scale, -{ShaderNode}Offset);");
+        //cac.AppendCall( $"f{c}.w += fSimplexNoiseDisplace(p{c}.xyz, {ShaderNode}Amount, {ShaderNode}Scale, -{ShaderNode}Offset);");
+        cac.AppendCall( $"p{c}.x += fSimplexNoiseDisplace(p{c}.xyz, {ShaderNode}Amount, {ShaderNode}Scale, -{ShaderNode}Offset);");
     }
     
     [Input(Guid = "1799f18f-92c5-4885-b6c1-6a196eee805f")]

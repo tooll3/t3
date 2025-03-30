@@ -212,6 +212,11 @@ public class ShaderGraphNode
         {
             nodeOp.GetPreShaderCode(cac, 0);
             nodeOp.GetPostShaderCode(cac, 0);
+            
+            // We assume that a node without an input field is a distance function
+            // We copy the local coordinates to the field result, so we can use
+            // it later for things like UV mapping.
+            cac.AppendCall($"f{cac}.xyz = p{cac}.xyz;");    
             return;
         }
         
@@ -265,9 +270,11 @@ public class ShaderGraphNode
         else
         {
             nodeOp.GetPreShaderCode(cac, 0);
-            
+
             if (InputNodes.Count == 1)
+            {
                 InputNodes[0]?.CollectEmbeddedShaderCode(cac);
+            }
             
             nodeOp.GetPostShaderCode(cac, 0);
         }
@@ -405,7 +412,7 @@ public sealed class CodeAssembleContext
 
     public void AppendCall(string code)
     {
-        Calls.Append(new string('\t', (IndentCount)));
+        Calls.Append(new string('\t', (IndentCount+1)));
         Calls.AppendLine(code);
     }
     

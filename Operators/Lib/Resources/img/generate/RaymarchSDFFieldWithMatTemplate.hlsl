@@ -241,15 +241,19 @@ PSOutput psMain(vsOutput input)
     // Tri-planar mappping
     float3 absN = abs(normal);
 
-#if MAPPING_TRIPLANAR
+#if MAPPING_GLOBAL_TRIPLANAR
     float2 uv = (absN.x > absN.y && absN.x > absN.z) ? p.yz / TextureScale : (absN.y > absN.z) ? p.zx / TextureScale
                                                                                                : p.xy / TextureScale;
+#elif MAPPING_LOCAL_TRIPLANAR
+    float2 uv = (absN.x > absN.y && absN.x > absN.z) ? pObject.yz / TextureScale : (absN.y > absN.z) ? pObject.zx / TextureScale
+                                                                                                     : pObject.xy / TextureScale;
+
 #elif MAPPING_XY
-    float2 uv = pObject.xy;
+    float2 uv = pObject.xy / TextureScale;
 #elif MAPPING_XZ
-    float2 uv = pObject.xz;
+    float2 uv = pObject.xz / TextureScale;
 #else
-    float2 uv = pObject.yz;
+    float2 uv = pObject.yz / TextureScale;
 #endif
 
     float4 albedo = BaseColorMap.Sample(texSampler, uv);
@@ -365,5 +369,6 @@ PSOutput psMain(vsOutput input)
     float viewZ = mul(float4(p, 1), WorldToCamera).z;
     // result.color.a  = 1;
     result.depth = ComputeDepthFromViewZ(viewZ);
+    // result.color.xyz = pObject.xyz;
     return result;
 }
