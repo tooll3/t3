@@ -1,3 +1,5 @@
+using T3.Core.DataTypes.ShaderGraph;
+
 namespace Lib.point.modify;
 
 [Guid("695d20dc-d1fe-4648-80fb-e1159b8aead4")]
@@ -34,7 +36,7 @@ internal sealed class SelectPointsWithField : Instance<SelectPointsWithField>
     public readonly InputSlot<bool> DiscardNonSelected = new InputSlot<bool>();
 
     [Input(Guid = "3da5b21f-f31b-4f11-9f1c-0deee0efac40")]
-    public readonly InputSlot<T3.Core.DataTypes.ShaderGraphNode> Field = new InputSlot<T3.Core.DataTypes.ShaderGraphNode>();
+    public readonly InputSlot<ShaderGraphNode> Field = new InputSlot<ShaderGraphNode>();
 
         [Input(Guid = "7169297b-9597-4922-b3e3-01b560039153")]
         public readonly InputSlot<System.Numerics.Vector2> FieldValueRange = new InputSlot<System.Numerics.Vector2>();

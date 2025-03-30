@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using T3.Core.DataTypes.ShaderGraph;
 using T3.Core.Utils;
 // ReSharper disable UnusedMember.Local
 
@@ -18,7 +20,6 @@ internal sealed class CombineFields : Instance<CombineFields>, IGraphNodeOp
 
     private void Update(EvaluationContext context)
     {
-        // Get all parameters to clear operator dirty flag
         var combineMethod = CombineMethod.GetEnumValue<CombineMethods>(context);
         if (combineMethod != _combineMethod)
         {
@@ -28,90 +29,87 @@ internal sealed class CombineFields : Instance<CombineFields>, IGraphNodeOp
         
         ShaderNode.Update(context);
 
+        // Get all parameters to clear operator dirty flag
         InputFields.DirtyFlag.Clear();
+    }
+
+    public void GetPreShaderCode(CodeAssembleContext cac, int inputIndex)
+    {
+        // Register global method
+        switch (_combineMethod)
+        {
+            case CombineMethods.SmoothUnion:
+                cac.Globals["fOpSmoothUnion"] = """
+                                                float fOpSmoothUnion(float a, float b, float k) {
+                                                    float h = max(k - abs(a - b), 0.0);
+                                                    return min(a, b) - (h * h) / (4.0 * k);
+                                                };
+                                                """;
+                break;
+        }
     }
     
     
-
-    public void GetShaderCode(StringBuilder _callDef, Dictionary<string, string> globals)
+    public void GetPostShaderCode(CodeAssembleContext cac, int inputIndex)
     {
-        //_callDef.Clear();
-
-        if ( ShaderNode.InputNodes.Count == 0)
+        // Just pass along subcontext if not enough connected fields...
+        if ( ShaderNode.InputNodes.Count <= 1)
         {
-            _callDef.AppendLine($"float {ShaderNode}(float3 p) {{ return -999999; }}");
+            cac.AppendCall("// skipping combine with single or no input...");
+            return;
         }
-
-        else if (ShaderNode.InputNodes.Count == 1)
+        
+        Debug.Assert(cac.ContextIdStack.Count>=2);
+        
+        var contextId = cac.ContextIdStack[^2];
+        var subContextId = cac.ContextIdStack[^1];
+        
+        if (inputIndex == 0)
         {
-            _callDef.AppendLine($"float {ShaderNode}(float3 p) {{ return {ShaderNode.InputNodes[0]}(p); }}");
+            // Keep initial value
+            cac.AppendCall($"f{contextId} = f{subContextId};");
         }
         else
         {
-            // Define combine method
-            var mode = _combineModes[(int)_combineMethod];
-            if (_combineMethod == CombineMethods.SmoothUnion)
+            // Combine initial value with new value...
+            switch (_combineMethod)
             {
-                _callDef.AppendLine($@"
-inline float {ShaderNode}CombineFunc(float d1, float d2) {{
-    float k = {ShaderNode}K;
-    float h = max(k - abs(d1 - d2), 0.0);
-    return min(d1, d2) - (h * h) / (4.0 * k);
-}}
-");
-            }
-            else if (_combineMethod == CombineMethods.TestBlend)
-            {
-                _callDef.AppendLine($@"
-inline float {ShaderNode}CombineFunc(float d1, float d2) {{
-    float k = {ShaderNode}K;
-    return lerp(d1,d2,k);    
-}}
-");
-            }
-            else
-            {
-                _callDef.AppendLine($"#define {ShaderNode}CombineFunc(a,b) ({mode.Code})\n");
+                case CombineMethods.Add:
+                    cac.AppendCall($"f{contextId}.w += f{subContextId}.w;");
+                    break;
+                case CombineMethods.Sub:
+                    cac.AppendCall($"f{contextId}.w -=  f{subContextId}.w;");
+                    break;
+                case CombineMethods.Multiply:
+                    cac.AppendCall($"f{contextId}.w *= f{subContextId}.w;");
+                    break;
+                case CombineMethods.Min:
+                    cac.AppendCall($"f{contextId}.w = min(f{contextId}.w, f{subContextId}.w);");
+                    break;
+                case CombineMethods.Max:
+                    cac.AppendCall($"f{contextId}.w = max(f{contextId}.w, f{subContextId}.w);");
+                    break;
+                case CombineMethods.SmoothUnion:
+                    cac.AppendCall($"f{contextId}.w = fOpSmoothUnion(f{contextId}.w, f{subContextId}.w, {ShaderNode}K);");
+                    break;
+                case CombineMethods.CutOut:
+                    cac.AppendCall($"f{contextId}.w = max(f{contextId}.w, -f{subContextId}.w);");
+                    break;
+                case CombineMethods.TestBlend:
+                    cac.AppendCall($"f{contextId}.w = lerp(f{contextId}.w, f{subContextId}.w, {ShaderNode}K);");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
             
-            _callDef.AppendLine("");
-            
-            // Combine all input fields
-            _callDef.AppendLine($"inline float {ShaderNode}(float3 p) {{");
-            _callDef.AppendLine($"    float d={ShaderNode.InputNodes[0]}(p);");
-
-            for (var index = 1; index < ShaderNode.InputNodes.Count; index++)
-            {
-                var inputNode = ShaderNode.InputNodes[index];
-                _callDef.AppendLine($"    d = {ShaderNode}CombineFunc(d,  {inputNode}(p));");
-            }
-
-            _callDef.AppendLine("    return d;");
-            _callDef.AppendLine("}");
+            cac.AppendCall($"f{contextId}.xyz = f{contextId}.w < f{subContextId}.w ? f{contextId}.xyz : f{subContextId}.xyz;");
         }
     }
-
-
-    public ShaderGraphNode ShaderNode { get; }
     
+    public ShaderGraphNode ShaderNode { get; }
 
     private CombineMethods _combineMethod;
-    //private readonly StringBuilder _callDef = new();
-
-    private sealed record CombineMethodDefs(string Code, float StartValue);
-
-    private readonly CombineMethodDefs[] _combineModes =
-        [
-            new("(a) + (b)", 0),
-            new("(a) - (b)", 0),
-            new("(a) * (b)", 1),
-            new("min(a, b)", 999999),
-            new("max(a, b)", -999999),
-            new("SmoothUnion(a, b)", 999999),
-            new("max(a,-b)", 999999),
-            new("TestBlend(a,b)", 999999),
-        ];
-
+    
     private enum CombineMethods
     {
         Add,

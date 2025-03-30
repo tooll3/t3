@@ -22,17 +22,22 @@ internal sealed class TriangularPrismField : Instance<TriangularPrismField>
     
     public ShaderGraphNode ShaderNode { get; }
 
-    public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
-    { 
-        shaderStringBuilder.AppendLine( $@"
-        float {ShaderNode}(float3 p) {{
-        p = p - {ShaderNode}Center;
-        float2 h = {ShaderNode}RadiusLength;
-        float3 q = abs(p);
-        return max(q.z-h.y,max(q.x*0.866025+p.y*0.5,-p.y)-h.x*0.5);
-        }}");
+    public void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
+    {
+        c.Globals["fTriangularPrism"] = """
+                                        float fTriangularPrism(float3 p, float2 h) {{
+                                            float3 q = abs(p);
+                                            return max(q.z-h.y,max(q.x*0.866025+p.y*0.5,-p.y)-h.x*0.5);
+                                        }
+                                        """;
+        var n = ShaderNode;
+        c.AppendCall($"f{c}.w = fTriangularPrism(p{c}- {n}Center, {n}RadiusLength);");
     }
-    
+
+    public void GetPostShaderCode(CodeAssembleContext c, int inputIndex)
+    {
+    }
+
     [GraphParam]
     [Input(Guid = "f088b205-2587-4f7c-903d-ee162b8d919b")]
     public readonly InputSlot<Vector3> Center = new();

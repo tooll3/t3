@@ -117,13 +117,20 @@ vsOutput vsMain4(uint vertexId : SV_VertexID)
 
 //--- Field functions -----------------------
 /*{FIELD_FUNCTIONS}*/
-//-------------------------------------------
 
-float GetDistance(float3 pos)
+//-------------------------------------------
+float4 GetField(float4 p)
 {
-    // pos = mul(float4(pos.xyz,1), ObjectToWorld).xyz;
-    return /*{FIELD_CALL}*/ 0;
+    float4 f = 1;
+    /*{FIELD_CALL}*/
+    return f;
 }
+
+float GetDistance(float3 p3)
+{
+    return GetField(float4(p3.xyz, 0)).w;
+}
+
 //---------------------------------------------------
 
 float3 GetNormal(float3 p, float offset)
@@ -134,14 +141,13 @@ float3 GetNormal(float3 p, float offset)
     //                   GetDistance(p + float3(0, 0, dt))) -
     //            GetDistance(p);
     // return normalize(n);
-    //NormalSamplingDistance;
+    // NormalSamplingDistance;
 
     return normalize(
-    GetDistance(p + float3( NormalSamplingDistance, -NormalSamplingDistance, -NormalSamplingDistance)) * float3( 1, -1, -1) +
-    GetDistance(p + float3(-NormalSamplingDistance,  NormalSamplingDistance, -NormalSamplingDistance)) * float3(-1,  1, -1) +
-    GetDistance(p + float3(-NormalSamplingDistance, -NormalSamplingDistance,  NormalSamplingDistance)) * float3(-1, -1,  1) +
-    GetDistance(p + float3( NormalSamplingDistance,  NormalSamplingDistance,  NormalSamplingDistance)) * float3( 1,  1,  1)
-);    
+        GetDistance(p + float3(NormalSamplingDistance, -NormalSamplingDistance, -NormalSamplingDistance)) * float3(1, -1, -1) +
+        GetDistance(p + float3(-NormalSamplingDistance, NormalSamplingDistance, -NormalSamplingDistance)) * float3(-1, 1, -1) +
+        GetDistance(p + float3(-NormalSamplingDistance, -NormalSamplingDistance, NormalSamplingDistance)) * float3(-1, -1, 1) +
+        GetDistance(p + float3(NormalSamplingDistance, NormalSamplingDistance, NormalSamplingDistance)) * float3(1, 1, 1));
 }
 
 float ComputeAO(float3 aoposition, float3 aonormal, float aodistance, float aoiterations, float aofactor)
@@ -158,7 +164,6 @@ float ComputeAO(float3 aoposition, float3 aonormal, float aodistance, float aoit
 
 static float MAX_DIST = 300;
 
-
 struct PSOutput
 {
     float4 color : SV_Target;
@@ -167,10 +172,9 @@ struct PSOutput
 
 float ComputeDepthFromViewZ(float viewZ)
 {
-    float4 clipPos = mul(float4(0,0,viewZ,1), CameraToClipSpace);
+    float4 clipPos = mul(float4(0, 0, viewZ, 1), CameraToClipSpace);
     return clipPos.z / clipPos.w;
 }
-
 
 PSOutput psMain(vsOutput input)
 {
@@ -211,9 +215,9 @@ PSOutput psMain(vsOutput input)
     {
         normal = normalize(GetNormal(p, D));
 
-        //col = Color.rgb;
-        // We've gone through all steps, but we haven't hit anything.
-        // Mix in the background color.
+        // col = Color.rgb;
+        //  We've gone through all steps, but we haven't hit anything.
+        //  Mix in the background color.
         if (D > MinDistance)
         {
             a = 1 - clamp(log(D / MinDistance) * DistToColor, 0.0, 1.0); // Clarify if this is actually useful
@@ -228,6 +232,9 @@ PSOutput psMain(vsOutput input)
     if (a < 0.1)
         discard;
 
+    float4 f = float4(GetField(float4(p, 1)).rgb, 1);
+    float3 pObject = f.xyz;
+
     // PBR shading -------------------------------------------------------------------------
 
     // Tri-planar mappping
@@ -237,11 +244,11 @@ PSOutput psMain(vsOutput input)
     float2 uv = (absN.x > absN.y && absN.x > absN.z) ? p.yz / TextureScale : (absN.y > absN.z) ? p.zx / TextureScale
                                                                                                : p.xy / TextureScale;
 #elif MAPPING_XY
-    float2 uv = p.xy;
+    float2 uv = pObject.xy;
 #elif MAPPING_XZ
-    float2 uv = p.xz;
+    float2 uv = pObject.xz;
 #else
-    float2 uv = p.yz;
+    float2 uv = pObject.yz;
 #endif
 
     float4 albedo = BaseColorMap.Sample(texSampler, uv);
@@ -267,12 +274,9 @@ PSOutput psMain(vsOutput input)
 
     for (uint i = 0; i < ActiveLightCount; ++i)
     {
-        if (i < 0)
-            continue;
-
         float3 Li = Lights[i].position - p; //- Lights[i].direction;
         float distance = length(Li);
-        float intensity = Lights[i].intensity / (pow(distance / Lights[i].range, Lights[i].decay) + 1);
+        float intensity = Lights[i].intensity / (pow(abs(distance / Lights[i].range), Lights[i].decay) + 1);
         float3 Lradiance = Lights[i].color.rgb * intensity; // Lights[i].radiance;
 
         // Half-vector between Li and Lo.
@@ -355,10 +359,10 @@ PSOutput psMain(vsOutput input)
     litColor.rgb = lerp(AmbientOcclusion.rgb, litColor.rgb, ComputeAO(p, normal, AODistance, 3, AmbientOcclusion.a));
 
     PSOutput result;
-    result.color = clamp(litColor, 0, float4(1000,1000,1000,1));
+    result.color = clamp(litColor, 0, float4(1000, 1000, 1000, 1));
 
     float viewZ = mul(float4(p, 1), WorldToCamera).z;
-    //result.color.a  = 1;
-    result.depth =  ComputeDepthFromViewZ(viewZ);
+    // result.color.a  = 1;
+    result.depth = ComputeDepthFromViewZ(viewZ);
     return result;
 }

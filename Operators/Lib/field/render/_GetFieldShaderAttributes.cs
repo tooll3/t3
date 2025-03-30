@@ -1,6 +1,7 @@
 using Lib.render._dx11.api;
 using SharpDX;
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes.ShaderGraph;
 using T3.Core.Stats;
 using Utilities = T3.Core.Utils.Utilities;
 
@@ -81,17 +82,7 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
         
         // Recursively update complete shader graph and collect changes
         _graphNode = Field.GetValue(context);
-        // var colorField = ColorField.GetValue(context);
-        //
-        // if (_graphNode == null)
-        // {
-        //     _graphNode = colorField;
-        //     if (_graphNode != null)
-        //     {
-        //         //this.LogErrorState("Using color field");
-        //         //_lastErrorMessage = "Using color field";
-        //     }
-        // }
+
         
         if (_graphNode == null)
         {
@@ -129,17 +120,8 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
     private string GenerateShaderCode(string templateCode)
     {
         AssembleAndInjectParameters(ref templateCode);
-        AssembleAndInjectFunctions(ref templateCode);
-        InjectCall(ref templateCode);
+        AssembleAndInjectCode(ref templateCode);
         return templateCode;
-    }
-
-    private void InjectCall(ref string code)
-    {
-        var commentHook =  ToHlslTemplateTag("FIELD_CALL");
-        var callCode = $"{_graphNode}(pos);//"; // add comment to avoid syntax errors in generated code
-
-        code = code.Replace(commentHook, callCode);
     }
 
     private void AssembleAndInjectParameters(ref string templateCode)
@@ -166,43 +148,55 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
         _allFloatParameterValues.Clear();
         _allShaderCodeParams.Clear();
 
-        _graphNode.CollectAllNodeParams(_allFloatParameterValues, _allShaderCodeParams, _updateCycleCount, SymbolChildId);
+        _graphNode.CollectAllNodeParams(_allFloatParameterValues, _allShaderCodeParams, _updateCycleCount, this.GetHashCode());
     }
     
-    private readonly List<ShaderGraphNode.ShaderParamHandling.ShaderCodeParameter> _allShaderCodeParams = [];
+    private readonly List<ShaderParamHandling.ShaderCodeParameter> _allShaderCodeParams = [];
     private IReadOnlyList<float> AllFloatValues => _allFloatParameterValues;
     private readonly List<float> _allFloatParameterValues = [];
     private int _lastStructureHash = 0;
 
-    private readonly Dictionary<string, string> _globalFunctionDefinitions = new();
+    //private readonly Dictionary<string, string> _globalFunctionDefinitions = new();
     
-    private void AssembleAndInjectFunctions(ref string templateCode)
+    private void AssembleAndInjectCode(ref string templateCode)
     {
-        _shaderCodeBuilder.Clear();
-        _globalFunctionDefinitions.Clear();
-        _graphNode.CollectShaderCode(_shaderCodeBuilder, _globalFunctionDefinitions , _updateCycleCount, SymbolChildId);
-        var commentHook = ToHlslTemplateTag("FIELD_FUNCTIONS");
-
-        if (templateCode.IndexOf((string)commentHook, StringComparison.Ordinal) == -1)
-            return;
-
-        _shaderCodeBuilder.Insert(0, "// --- op functions -------------------\n");
-
-        foreach (var (key, value) in _globalFunctionDefinitions)
+        _codeAssembleContext.Reset();
+        
+        // Recursively collect code from connected nodes
+        _graphNode.CollectEmbeddedShaderCode(_codeAssembleContext);
+        
+        // Build and inject definitions...
+        _sb.Clear();
+        _sb.AppendLine("// --- globals -------------------");
+        foreach (var code in _codeAssembleContext.Globals.Values)
         {
-            _shaderCodeBuilder.Insert(0, "\n");
-            _shaderCodeBuilder.Insert(0, value);
-            
+            _sb.AppendLine(code);
+            _sb.AppendLine("");
+
         }
         
-        _shaderCodeBuilder.Insert(0, "// --- globals -------------------\n");
-
+        _sb.AppendLine("// --- instance functions -------------------");
+        _sb.AppendLine(_codeAssembleContext.Definitions.ToString());
+        TryInject("FIELD_FUNCTIONS", ref templateCode, _sb.ToString());
         
-        templateCode = templateCode.Replace(commentHook, _shaderCodeBuilder.ToString());
+        // Build and inject calls...
+        TryInject("FIELD_CALL", ref templateCode, _codeAssembleContext.Calls.ToString());
     }
 
-    private readonly StringBuilder _shaderCodeBuilder = new();
+    private static bool TryInject(string hookId, ref string code, string insert)
+    {
+        var hookString = ToHlslTemplateTag(hookId);
+        
+        if (code.IndexOf(hookString, StringComparison.Ordinal) == -1)
+            return false;
+        
+        code = code.Replace(hookString, insert);
+        return true;
+    } 
+
+    private readonly CodeAssembleContext _codeAssembleContext = new();
     private int _updateCycleCount;
+    private static readonly StringBuilder _sb = new();
     
     private static void CreateParameterBuffer(Slot<Buffer> floatSlotBuffer, IReadOnlyList<float> floatParams)
     {

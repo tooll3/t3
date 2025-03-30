@@ -1,3 +1,5 @@
+using T3.Core.DataTypes.ShaderGraph;
+
 namespace Lib.point.particle.force;
 
 [Guid("42394232-51fa-4e75-851b-c2bca39de71a")]
@@ -7,7 +9,7 @@ internal sealed class FieldDistanceForce : Instance<FieldDistanceForce>
     public readonly Slot<T3.Core.DataTypes.ParticleSystem> Particles = new();
 
         [Input(Guid = "43e90070-5841-441c-8658-7854b80003b9")]
-        public readonly InputSlot<T3.Core.DataTypes.ShaderGraphNode> Field = new InputSlot<T3.Core.DataTypes.ShaderGraphNode>();
+        public readonly InputSlot<ShaderGraphNode> Field = new InputSlot<ShaderGraphNode>();
 
         [Input(Guid = "3fd1169e-1640-4d67-b859-70815cb3d28f")]
         public readonly InputSlot<float> Amount = new InputSlot<float>();

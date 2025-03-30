@@ -1,6 +1,7 @@
 
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.DataSet;
+using T3.Core.DataTypes.ShaderGraph;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Rendering.Material;

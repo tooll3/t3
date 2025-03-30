@@ -1,3 +1,4 @@
+using T3.Core.DataTypes.ShaderGraph;
 using T3.Core.Utils;
 
 namespace Lib.field.adjust;
@@ -21,56 +22,48 @@ internal sealed class PolarRepeat : Instance<PolarRepeat>
         ShaderNode.Update(context);
 
         var axis = Axis.GetEnumValue<AxisTypes>(context);
+        
         var templateChanged = axis != _axis;
-        if (templateChanged)
-        {
-            _axis = axis;
-            ShaderNode.CollectedChanges |= ShaderGraphNode.ChangedFlags.Code;
-        }
+        if (!templateChanged)
+            return;
 
-        _inputFn = ShaderNode.InputNodes.Count == 1
-                       ? ShaderNode.InputNodes[0].ToString()
-                       : string.Empty;
+        _axis = axis;
+        ShaderNode.FlagCodeChanged();
     }
 
     public ShaderGraphNode ShaderNode { get; }
 
-    public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
+    public void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
     {
-        globals["PI"] = """
-                        #ifndef PI
-                        #define PI 3.14159265359
-                        #endif
-                        """;
+        c.Globals["PI"] = """
+                          #ifndef PI
+                          #define PI 3.14159265359
+                          #endif
+                          """;
 
-        globals["mod"] = """
-                         #ifndef mod
-                         #define mod(x, y) ((x) - (y) * floor((x) / (y)))
-                         #endif
-                         """;
+        c.Globals["mod"] = """
+                           #ifndef mod
+                           #define mod(x, y) ((x) - (y) * floor((x) / (y)))
+                           #endif
+                           """;
 
-        // Repeat around the origin by a fixed angle.
-        // For easier use, num of repetitions is use to specify the angle.
-        
-        globals["pModPolar"] =  """
-                                // https://mercury.sexy/hg_sdf/
-                                void pModPolar(inout float2 p, float repetitions, float offset) {
-                                    float angle = 2*PI/repetitions;
-                                    float a = atan2(p.y, p.x) + angle/2. +  offset / (180 *PI);
-                                    float r = length(p);
-                                    float c = floor(a/angle);
-                                    a = mod(a,angle) - angle/2.;
-                                    p = float2(cos(a), sin(a))*r;
-                                }
-                                """;
+        c.Globals["pModPolar"] = """
+                                 // https://mercury.sexy/hg_sdf/
+                                 void pModPolar(inout float2 p, float repetitions, float offset) {
+                                     float angle = 2*PI/repetitions;
+                                     float a = atan2(p.y, p.x) + angle/2. +  offset / (180 *PI);
+                                     float r = length(p);
+                                     float c = floor(a/angle);
+                                     a = mod(a,angle) - angle/2.;
+                                     p = float2(cos(a), sin(a))*r;
+                                 }
+                                 """;
 
-        shaderStringBuilder.AppendLine($$"""
-                                         float {{ShaderNode}}(float3 p) 
-                                         {
-                                             pModPolar(p.{{_axisCodes0[(int)_axis]}}, {{ShaderNode}}Repetitions, {{ShaderNode}}Offset); 
-                                             return {{_inputFn}}(p);                
-                                         }
-                                         """);
+        c.AppendCall($"pModPolar(p{c}.{_axisCodes0[(int)_axis]}, {ShaderNode}Repetitions, {ShaderNode}Offset);");
+    }
+
+    public void GetPostShaderCode(CodeAssembleContext cac, int inputIndex)
+    {
     }
 
     private readonly string[] _axisCodes0 =
@@ -79,8 +72,7 @@ internal sealed class PolarRepeat : Instance<PolarRepeat>
             "zx",
             "yx",
         ];
-    
-    private string _inputFn;
+
     private AxisTypes _axis;
 
     private enum AxisTypes

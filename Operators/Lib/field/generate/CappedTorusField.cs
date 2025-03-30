@@ -1,9 +1,8 @@
 namespace Lib.field.generate;
 
-
 [Guid("b85198a8-6475-45e1-b2d2-83ec8f59d6ed")]
 internal sealed class CappedTorusField : Instance<CappedTorusField>
-,IGraphNodeOp
+                                       , IGraphNodeOp
 {
     [Output(Guid = "170b545f-c7c0-47d9-8b19-d8d8e8a3d2fa")]
     public readonly Slot<ShaderGraphNode> Result = new();
@@ -19,31 +18,36 @@ internal sealed class CappedTorusField : Instance<CappedTorusField>
     {
         ShaderNode.Update(context);
     }
-    
+
     public ShaderGraphNode ShaderNode { get; }
 
-    public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
-    { 
-        shaderStringBuilder.AppendLine( $@"
-        float {ShaderNode}(float3 p) {{
-        p = p - {ShaderNode}Center;
-        float ra = {ShaderNode}RadiusA;
-        float rb = {ShaderNode}RadiusB;
-        
-        float an = 2.5*(0.5+0.5*({ShaderNode}Size*1.1+3.0));
-        float2 sc = float2(sin(an),cos(an));
+    public void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
+    {
+        c.Globals["fCappedTorus"] = """
+                                    float fCappedTorus(float3 p, float3 size, float ra, float rb) 
+                                    {
+                                        float an = 2.5*(0.5+0.5*(size*1.1+3.0));
+                                        float2 sc = float2(sin(an),cos(an));
+                                    
+                                        p.x = abs(p.x);
+                                        float k = (sc.y*p.x>sc.x*p.y) ? dot(p.xy,sc) : length(p.xy);
+                                        return sqrt(dot(p,p) + ra*ra - 2.0*ra*k ) - rb;
+                                    }
+                                    """;
 
-        p.x = abs(p.x);
-        float k = (sc.y*p.x>sc.x*p.y) ? dot(p.xy,sc) : length(p.xy);
-        return sqrt(dot(p,p) + ra*ra - 2.0*ra*k ) - rb;
-            
-        }}");
+        var n = ShaderNode;
+        c.AppendCall($"f{c}.w = fCappedTorus(p{c}.xyz - {n}Center, {n}Size, {n}RadiusA, {n}RadiusB);");
     }
-    
+
+    public void GetPostShaderCode(CodeAssembleContext c, int inputIndex)
+    {
+    }
+
+
     [GraphParam]
     [Input(Guid = "f5a24e80-741a-49c5-9a0b-d7074e80940a")]
     public readonly InputSlot<Vector3> Center = new();
-    
+
     [GraphParam]
     [Input(Guid = "d37914dd-7bbd-47fa-ad90-9921621afb9e")]
     public readonly InputSlot<float> Size = new();
@@ -55,7 +59,4 @@ internal sealed class CappedTorusField : Instance<CappedTorusField>
     [GraphParam]
     [Input(Guid = "e1dc5cdc-24d2-409f-9ea6-6dd14fdb70d3")]
     public readonly InputSlot<float> RadiusB = new();
-    
-   
 }
-

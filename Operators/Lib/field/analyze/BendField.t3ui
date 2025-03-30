@@ -1,7 +1,14 @@
 {
   "Id": "c7ef5f64-2654-47a8-a2ab-30b28446b934"/*BendField*/,
-  "Description": "",
+  "Description": "Blends the input field along the given axis.\nThis works best for small source volumes within unit range.",
   "InputUis": [
+    {
+      "InputId": "4930de03-6a81-4403-bb79-5b0a14591f05"/*Axis*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 75.0
+      }
+    },
     {
       "InputId": "adaf8efd-47b3-4d4b-9102-d8a3c6a7e34a"/*InputField*/,
       "Position": {
@@ -14,7 +21,9 @@
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "Min": -0.5,
+      "Max": 0.5
     }
   ],
   "SymbolChildUis": [],
@@ -25,6 +34,15 @@
         "X": 0.0,
         "Y": 0.0
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "8f486b3a-142b-4e0a-aa41-bd6b9d4b9cea",
+      "Title": "Reference",
+      "Description": "original code by iq",
+      "LinkUrl": "https://iquilezles.org/articles/distfunctions/",
+      "LinkType": "Reference"
     }
   ]
 }

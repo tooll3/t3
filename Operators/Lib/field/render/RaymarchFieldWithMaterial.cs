@@ -1,3 +1,5 @@
+using T3.Core.DataTypes.ShaderGraph;
+
 namespace Lib.field.render;
 
 [Guid("9323e32f-078c-4156-941b-203f4c265ff5")]
@@ -6,8 +8,11 @@ public class RaymarchFieldWithMaterial : Instance<RaymarchFieldWithMaterial>
     [Output(Guid = "e178ef02-c9ac-48cd-a8cb-df3aec5941bb")]
     public readonly Slot<Command> DrawCommand = new();
 
+        [Output(Guid = "8e293517-dc6f-4b1f-9710-069420f9da09")]
+        public readonly Slot<string> ShaderCode = new Slot<string>();
+
         [Input(Guid = "340ca675-9356-4548-ba64-732181bebeef")]
-        public readonly InputSlot<T3.Core.DataTypes.ShaderGraphNode> SdfField = new InputSlot<T3.Core.DataTypes.ShaderGraphNode>();
+        public readonly InputSlot<ShaderGraphNode> SdfField = new InputSlot<ShaderGraphNode>();
 
         [Input(Guid = "3148d927-8779-47ab-9e0a-fa63206f3002")]
         public readonly InputSlot<float> MaxSteps = new InputSlot<float>();

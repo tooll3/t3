@@ -4,7 +4,6 @@ cbuffer ParamConstants : register(b0)
     float4 Color;
 }
 
-
 cbuffer Transforms : register(b1)
 {
     float4x4 CameraToClipSpace;
@@ -19,7 +18,6 @@ cbuffer Transforms : register(b1)
     float4x4 ObjectToClipSpace;
 }
 
-
 cbuffer Params : register(b2)
 {
     /*{FLOAT_PARAMS}*/
@@ -31,8 +29,6 @@ struct vsOutput
     float2 texCoord : TEXCOORD;
     float3 posInWorld : POSITION;
     float distToCamera : DEPTH;
-    // float3 worldTViewDir : TEXCOORD1;
-    // float3 worldTViewPos : TEXCOORD2;
 };
 
 static const float3 Quad[] =
@@ -59,13 +55,20 @@ vsOutput vsMain4(uint vertexId : SV_VertexID)
     return output;
 }
 
-//---- Field functions --------------------------
+//--- Field functions -----------------------
 /*{FIELD_FUNCTIONS}*/
 
-//---------------------------------------
-float GetDistance(float3 pos)
+//-------------------------------------------
+float4 GetField(float4 p)
 {
-    return /*{FIELD_CALL}*/ 0;
+    float4 f = 1;
+    /*{FIELD_CALL}*/
+    return f;
+}
+
+float GetDistance(float3 p3)
+{
+    return GetField(float4(p3.xyz, 0)).w;
 }
 //---------------------------------------------------
 

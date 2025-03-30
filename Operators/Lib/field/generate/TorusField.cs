@@ -1,3 +1,5 @@
+using T3.Core.DataTypes.ShaderGraph;
+
 namespace Lib.field.generate;
 
 [Guid("a54e0946-71d0-4985-90bc-184cdb1b6b34")]
@@ -21,22 +23,24 @@ internal sealed class TorusField : Instance<TorusField>
 
     public ShaderGraphNode ShaderNode { get; }
 
-    public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
+    public void GetPreShaderCode(CodeAssembleContext cac, int inputIndex)
     {
-        globals["sdTorus"]
+        cac.Globals["fTorus"]
             = """
-              float sdTorus(float3 p, float3 center, float2 size) {
+              float fTorus(float3 p, float3 center, float2 size) {
                   p = p - center;
                   float2 q = float2(length(p.xy) - size.x, p.z);
                   return length(q) - size.y;
               }
               """;
+        
+        var c = cac.ContextIdStack[^1];
+        cac.AppendCall($"f{c}.w = fTorus(p{c}.xyz, {ShaderNode}Center, {ShaderNode}Size);");
+        cac.AppendCall($"f{c}.xyz = p{c}.xyz;");
+    }
 
-        shaderStringBuilder
-           .AppendLine($$"""
-                         float {{ShaderNode}}(float3 p) { return sdTorus(p, {{ShaderNode}}Center, {{ShaderNode}}Size); } 
-
-                         """);
+    public void GetPostShaderCode(CodeAssembleContext cac, int inputIndex)
+    {
     }
 
     [GraphParam]

@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using T3.Core.Compilation;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.ShaderGraph;
 using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 using Texture2D = T3.Core.DataTypes.Texture2D;

@@ -568,7 +568,12 @@ internal static class ConnectionMaker
     public static void InsertSymbolInstance(ProjectView components, Symbol symbol)
     {
         var canvas = components.GraphCanvas;
-        var inProgress = _graphWindowInProgressConnections[canvas];
+
+        if (_graphWindowInProgressConnections.TryGetValue(canvas, out var inProgress) || inProgress == null)
+        {
+            Log.Warning("Can't insert connection without active canvas.");
+            return;
+        }
         
         var selection = components.NodeSelection;
         var instance = selection.GetSelectedInstanceWithoutComposition();
