@@ -1,6 +1,6 @@
 using T3.Core.Utils;
 
-namespace Lib.field.analyze;
+namespace Lib.field.adjust;
 
 [Guid("c7ef5f64-2654-47a8-a2ab-30b28446b934")]
 internal sealed class BendField : Instance<BendField>

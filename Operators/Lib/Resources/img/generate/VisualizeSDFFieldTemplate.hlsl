@@ -55,10 +55,10 @@ vsOutput vsMain4(uint vertexId : SV_VertexID)
     return output;
 }
 
-//--- Field functions -----------------------
+//=== Field functions ===============================================
 /*{FIELD_FUNCTIONS}*/
 
-//-------------------------------------------
+//-------------------------------------------------------------------
 float4 GetField(float4 p)
 {
     float4 f = 1;
@@ -70,7 +70,8 @@ float GetDistance(float3 p3)
 {
     return GetField(float4(p3.xyz, 0)).w;
 }
-//---------------------------------------------------
+
+//===================================================================
 
 inline float fmod(float x, float y)
 {

@@ -1,6 +1,7 @@
 {
   "Id": "42394232-51fa-4e75-851b-c2bca39de71a"/*FieldDistanceForce*/,
   "Description": "Tries to keep particles within an SDF distance range.",
+  "SymbolTags": "1152",
   "InputUis": [
     {
       "InputId": "00b5006c-1d22-4ce2-958e-ad7e002e7821"/*RandomSpin*/,
@@ -114,8 +115,8 @@
     {
       "ChildId": "46848bda-c266-4ce4-b905-2d3d2ed7d32d"/*ReadFile*/,
       "Position": {
-        "X": 663.24866,
-        "Y": 102.598816
+        "X": 683.24866,
+        "Y": 92.598816
       }
     },
     {

@@ -116,12 +116,13 @@ vsOutput vsMain4(uint vertexId : SV_VertexID)
     return output;
 }
 
-//--- Field functions -----------------------
+//=== Field functions ===============================================
 /*{FIELD_FUNCTIONS}*/
 
-//-------------------------------------------
+//-------------------------------------------------------------------
 float4 GetField(float4 p)
 {
+    p.xyz = mul(float4(p.xyz, 1), WorldToObject).xyz;
     float4 f = 1;
     /*{FIELD_CALL}*/
     return f;
@@ -132,18 +133,10 @@ float GetDistance(float3 p3)
     return GetField(float4(p3.xyz, 0)).w;
 }
 
-//---------------------------------------------------
+//=== Field functions ===============================================
 
 float3 GetNormal(float3 p, float offset)
 {
-    // float dt = .01;
-    // float3 n = float3(GetDistance(p + float3(dt, 0, 0)),
-    //                   GetDistance(p + float3(0, dt, 0)),
-    //                   GetDistance(p + float3(0, 0, dt))) -
-    //            GetDistance(p);
-    // return normalize(n);
-    // NormalSamplingDistance;
-
     return normalize(
         GetDistance(p + float3(NormalSamplingDistance, -NormalSamplingDistance, -NormalSamplingDistance)) * float3(1, -1, -1) +
         GetDistance(p + float3(-NormalSamplingDistance, NormalSamplingDistance, -NormalSamplingDistance)) * float3(-1, 1, -1) +

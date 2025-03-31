@@ -21,8 +21,8 @@
       "InputId": "3da5b21f-f31b-4f11-9f1c-0deee0efac40"/*Field*/,
       "Relevancy": "Required",
       "Position": {
-        "X": 450.71863,
-        "Y": 887.40094
+        "X": 537.42883,
+        "Y": 972.1018
       }
     },
     {
@@ -181,18 +181,6 @@
       }
     },
     {
-      "ChildId": "dd052349-3e16-4357-b79d-efa63f2f3e0a"/*String*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 128.91852,
-        "Y": 345.7641
-      },
-      "Position": {
-        "X": 339.04153,
-        "Y": 1060.0328
-      }
-    },
-    {
       "ChildId": "de3fceff-9373-4a2a-a438-fa19cce87cf3"/*FloatsToBuffer*/,
       "Position": {
         "X": 1040.7295,
@@ -202,7 +190,7 @@
     {
       "ChildId": "f5e9fee7-5a08-483a-b534-8b864d38b0a2"/*ComputeShaderFromSource*/,
       "Position": {
-        "X": 827.42883,
+        "X": 817.42883,
         "Y": 972.1018
       }
     },
