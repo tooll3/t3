@@ -207,7 +207,13 @@ public class ShaderGraphNode
     {
         if (_instance is not IGraphNodeOp nodeOp)
             return;
-
+        
+        var isRoot = cac.ContextIdStack.Count==0;
+        if (isRoot)
+        {
+            cac.ContextIdStack.Add("");
+        }
+        
         if (InputNodes.Count == 0)
         {
             nodeOp.GetPreShaderCode(cac, 0);
@@ -218,12 +224,6 @@ public class ShaderGraphNode
             // it later for things like UV mapping.
             cac.AppendCall($"f{cac}.xyz = p{cac}.xyz;");    
             return;
-        }
-        
-        var isRoot = cac.ContextIdStack.Count==0;
-        if (isRoot)
-        {
-            cac.ContextIdStack.Add("");
         }
         
         var hasMultipleInputFields = InputNodes.Count > 1;
