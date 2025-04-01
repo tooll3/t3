@@ -35,17 +35,7 @@ internal sealed class PolarRepeat : Instance<PolarRepeat>
 
     public void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
     {
-        c.Globals["PI"] = """
-                          #ifndef PI
-                          #define PI 3.14159265359
-                          #endif
-                          """;
-
-        c.Globals["mod"] = """
-                           #ifndef mod
-                           #define mod(x, y) ((x) - (y) * floor((x) / (y)))
-                           #endif
-                           """;
+        c.Globals["Common"] = ShaderGraphIncludes.Common;
 
         c.Globals["pModPolar"] = """
                                  // https://mercury.sexy/hg_sdf/

@@ -23,4 +23,10 @@ public class VisualizeFiedlDistance : Instance<VisualizeFiedlDistance>
 
         [Input(Guid = "0abd3f44-27f3-4f4c-a56b-e1fbfcb32cb6")]
         public readonly InputSlot<System.Numerics.Vector4> Background = new InputSlot<System.Numerics.Vector4>();
+
+        [Input(Guid = "819710f4-6f09-4e23-8bee-be6f9c777e06")]
+        public readonly InputSlot<bool> EnableZTest = new InputSlot<bool>();
+
+        [Input(Guid = "5fc455af-f66a-4f04-8cc2-0498ee479f26")]
+        public readonly InputSlot<bool> EnableZWrite = new InputSlot<bool>();
 }

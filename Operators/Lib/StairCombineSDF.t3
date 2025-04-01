@@ -1,0 +1,23 @@
+{
+  "Id": "dda268e8-fed6-4137-b21d-56ed907e3a51"/*StairCombineSDF*/,
+  "Inputs": [
+    {
+      "Id": "2607bb4f-a9cc-4289-9404-841c12a03e96"/*K*/,
+      "DefaultValue": 0.5
+    },
+    {
+      "Id": "750c399c-9f8c-4bcd-8d5d-a7e26d6510c0"/*CombineMethod*/,
+      "DefaultValue": 3
+    },
+    {
+      "Id": "d5dc3fe0-3b7d-4afb-a941-8e632ed80ae2"/*Steps*/,
+      "DefaultValue": 3.0
+    },
+    {
+      "Id": "f6e33d8e-b5eb-490c-94d0-69bf7efe06f9"/*InputFields*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

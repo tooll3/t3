@@ -21,10 +21,24 @@
       "Clamp": true
     },
     {
+      "InputId": "5fc455af-f66a-4f04-8cc2-0498ee479f26"/*EnableZWrite*/,
+      "Position": {
+        "X": 1091.9409,
+        "Y": 417.19614
+      }
+    },
+    {
       "InputId": "701747e9-fdf5-40ea-bbf5-4f4aa71c1d02"/*Size*/,
       "Position": {
         "X": 338.29108,
         "Y": 712.72205
+      }
+    },
+    {
+      "InputId": "819710f4-6f09-4e23-8bee-be6f9c777e06"/*EnableZTest*/,
+      "Position": {
+        "X": 1091.9409,
+        "Y": 382.19614
       }
     },
     {
@@ -58,14 +72,14 @@
       "ChildId": "044fc894-3da2-427d-91d8-76034adf890a"/*RasterizerState*/,
       "Position": {
         "X": 1091.9409,
-        "Y": 557.19617
+        "Y": 592.19617
       }
     },
     {
       "ChildId": "05402356-285a-4b6d-88f6-9f4b7f90d17d"/*Draw*/,
       "Position": {
         "X": 1231.9409,
-        "Y": 592.1961
+        "Y": 627.1961
       }
     },
     {
@@ -79,14 +93,14 @@
       "ChildId": "0bda17a9-d81b-496d-8692-ecc7c0174634"/*Rasterizer*/,
       "Position": {
         "X": 1231.9409,
-        "Y": 557.19617
+        "Y": 592.19617
       }
     },
     {
       "ChildId": "127905d8-ac1f-40db-8c82-b30604c1bda4"/*InputAssemblerStage*/,
       "Position": {
         "X": 1231.9409,
-        "Y": 522.19617
+        "Y": 557.19617
       }
     },
     {
@@ -174,8 +188,8 @@
     {
       "ChildId": "9fac5a0e-8fee-43fb-a909-c274d400d90b"/*PickBlendMode*/,
       "Position": {
-        "X": 1231.9409,
-        "Y": 417.19614
+        "X": 1204.1632,
+        "Y": 176.94363
       }
     },
     {
@@ -203,7 +217,7 @@
       "ChildId": "dc653a98-5b13-4c51-8ca8-4c2e7c1b24ab"/*Execute*/,
       "Position": {
         "X": 1371.9409,
-        "Y": 452.19614
+        "Y": 487.19614
       }
     }
   ],
@@ -212,7 +226,7 @@
       "OutputId": "a6fb7868-37ea-48c8-921a-aa097cca885c"/*DrawCommand*/,
       "Position": {
         "X": 1371.9409,
-        "Y": 627.19617
+        "Y": 662.19617
       }
     }
   ]

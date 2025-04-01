@@ -382,7 +382,7 @@ public sealed class GraphParamAttribute : Attribute;
 public interface IGraphNodeOp
 {
     ShaderGraphNode ShaderNode { get; }
-    void GetPreShaderCode(CodeAssembleContext cac, int inputIndex);
+    void GetPreShaderCode(CodeAssembleContext c, int inputIndex);
     void GetPostShaderCode(CodeAssembleContext cac, int inputIndex);
 }
 

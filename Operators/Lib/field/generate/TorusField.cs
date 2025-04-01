@@ -33,9 +33,9 @@ internal sealed class TorusField : Instance<TorusField>
 
     public ShaderGraphNode ShaderNode { get; }
 
-    public void GetPreShaderCode(CodeAssembleContext cac, int inputIndex)
+    public void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
     {
-        cac.Globals["fTorus"]
+        c.Globals["fTorus"]
             = """
               float fTorus(float3 p, float2 size) {
                   float2 q = float2(length(p.xy) - size.x, p.z);
@@ -43,11 +43,10 @@ internal sealed class TorusField : Instance<TorusField>
               }
               """;
         
-        var c = cac.ContextIdStack[^1];
         var a = _axisCodes0[(int)_axis];
 
-        cac.AppendCall($"f{c}.w = fTorus(p{c}.{a} - {ShaderNode}Center.{a} , {ShaderNode}Size);");
-        cac.AppendCall($"f{c}.xyz = p{c}.xyz;");
+        c.AppendCall($"f{c}.w = fTorus(p{c}.{a} - {ShaderNode}Center.{a} , {ShaderNode}Size);");
+        c.AppendCall($"f{c}.xyz = p{c}.xyz;");
     }
 
     public void GetPostShaderCode(CodeAssembleContext cac, int inputIndex)
