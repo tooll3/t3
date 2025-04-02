@@ -1,6 +1,6 @@
 {
   "Id": "c08a6847-e7c4-46e6-a8fb-24bb62a64b96"/*DrawMeshWithShadow*/,
-  "Description": "",
+  "Description": "Is used together with [SetShadow] and a [SetPointLight] to render incoming geometry with a shadow map.\nSee [SetShadowExample]",
   "SymbolTags": "1",
   "InputUis": [
     {
