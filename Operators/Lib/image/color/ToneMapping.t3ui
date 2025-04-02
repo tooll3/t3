@@ -19,6 +19,13 @@
       }
     },
     {
+      "InputId": "b3ac35c2-7f59-49fb-a4ad-84dc5a8c3841"/*Exposure*/,
+      "Position": {
+        "X": 155.58875,
+        "Y": 589.0668
+      }
+    },
+    {
       "InputId": "be44974c-2685-40ff-86b6-bdf1cc38eee4"/*CorrectGamma*/,
       "Position": {
         "X": 153.79459,

@@ -20,12 +20,17 @@ internal sealed class ToneMapping : Instance<ToneMapping>
     [Input(Guid = "dfd590f5-a930-42df-aecd-52f8d0195369")]
     public readonly InputSlot<float> Gamma = new InputSlot<float>();
 
+        [Input(Guid = "b3ac35c2-7f59-49fb-a4ad-84dc5a8c3841")]
+        public readonly InputSlot<float> Exposure = new InputSlot<float>();
+
     private enum Modes
     {
         Aces,
         Reinhard,
         Filmic,
         Uncharted2,
+        AgX,
+        AgX_Punchy,
         None,
     }
 }
