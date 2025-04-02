@@ -26,46 +26,53 @@ cbuffer Params : register(b1)
 cbuffer Params : register(b2)
 {
     uint ParticleCount;
-} 
+}
 
-RWStructuredBuffer<Particle> Particles : u0; 
-StructuredBuffer<PbrVertex> Vertices: t0;
-StructuredBuffer<int3> Indices: t1;
+RWStructuredBuffer<Particle> Particles : u0;
+StructuredBuffer<PbrVertex> Vertices : t0;
+StructuredBuffer<int3> Indices : t1;
 /*{RESOURCES}*/
 
+//=== Field functions ===============================================
 /*{FIELD_FUNCTIONS}*/
 
+//-------------------------------------------------------------------
+float4 GetField(float4 p)
+{
+    float4 f = 1;
+    /*{FIELD_CALL}*/
+    return f;
+}
+
+inline float GetDistance(float3 p3)
+{
+    return GetField(float4(p3.xyz, 0)).w;
+}
+
+//===================================================================
 
 float4 q_from_tangentAndNormal(float3 dx, float3 dz)
 {
     dx = normalize(dx);
     dz = normalize(dz);
     float3 dy = -cross(dx, dz);
-    
-    float3x3 orientationDest= float3x3(
-        dx, 
+
+    float3x3 orientationDest = float3x3(
+        dx,
         dy,
-        dz
-        );
-    
-    return normalize( qFromMatrix3Precise( transpose( orientationDest)));
+        dz);
+
+    return normalize(qFromMatrix3Precise(transpose(orientationDest)));
 }
 
-
-float getDistance(float3 pos) 
-{    
-    return /*{FIELD_CALL}*/ 0;
-}
-
-[numthreads(64,1,1)]
-void main(uint3 i : SV_DispatchThreadID)
+[numthreads(64, 1, 1)] void main(uint3 i : SV_DispatchThreadID)
 {
-    if(i.x >= ParticleCount)
+    if (i.x >= ParticleCount)
         return;
 
     Particle p = Particles[i.x];
 
-    //float signedPointHash = hash11u(i.x) * 2-1;
+    // float signedPointHash = hash11u(i.x) * 2-1;
 
     // float phase = ((Phase + (133.1123 * i.x) ) % 10000) * (1 + signedPointHash * 0.5);
     // int phaseId = (int)phase;
@@ -75,41 +82,40 @@ void main(uint3 i : SV_DispatchThreadID)
     //                                            phase - phaseId));
     // float3 signedNoise = normalizedNoise * 2 - 1;
 
-    float3 forward = p.Velocity;// qRotateVec3( float3(1,0,0), p.Rotation);
+    float3 forward = p.Velocity; // qRotateVec3( float3(1,0,0), p.Rotation);
     float lForward = length(forward);
-    if(lForward < 0.0001)
+    if (lForward < 0.0001)
         return;
 
-    float3 forwardDir = forward/lForward;
-    float usedSpeed = Amount * 0.01f;// * (1+signedPointHash * RandomizeSpeed);
+    float3 forwardDir = forward / lForward;
+    float usedSpeed = Amount * 0.01f; // * (1+signedPointHash * RandomizeSpeed);
 
     float3 pos = p.Position;
     float e = 0.0001;
 
     float3 n = float3(
-         getDistance(pos + float3(-e,0,0)) - getDistance(pos + float3(e,0,0)),
-         getDistance(pos + float3(0,-e,0)) - getDistance(pos + float3(0,e,0)),
-         getDistance(pos + float3(0,0,-e)) - getDistance(pos + float3(0,0,e)));
-    
+        GetDistance(pos + float3(-e, 0, 0)) - GetDistance(pos + float3(e, 0, 0)),
+        GetDistance(pos + float3(0, -e, 0)) - GetDistance(pos + float3(0, e, 0)),
+        GetDistance(pos + float3(0, 0, -e)) - GetDistance(pos + float3(0, 0, e)));
+
     float l = length(n);
 
-    if(l <= 0.0001)
+    if (l <= 0.0001)
         return;
 
     n = normalize(n);
 
     float3 side = cross(normalize(p.Velocity), n);
 
-    //qRotateVec3( float3(1,0,0), p.Rotation);
+    // qRotateVec3( float3(1,0,0), p.Rotation);
     float4 rotateAroundSide = qFromAngleAxis(Spin, side);
     float3 force = qRotateVec3(n, rotateAroundSide);
-
 
     p.Velocity = lerp(forwardDir, force, Amount);
 
     Particles[i.x] = p;
 
-    //float3 pos2 = pos + forward * usedSpeed;
+    // float3 pos2 = pos + forward * usedSpeed;
 
     // int closestFaceIndex;
     // float3 closestSurfacePoint;
@@ -117,7 +123,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     // // Keep outside
     // float3 distanceFromSurface= normalize(pos2 - closestSurfacePoint) * (SurfaceDistance + signedPointHash * RandomSurfaceDistance);
-    // distanceFromSurface *= dot(distanceFromSurface, Vertices[Indices[closestFaceIndex].x].Normal) > 0 
+    // distanceFromSurface *= dot(distanceFromSurface, Vertices[Indices[closestFaceIndex].x].Normal) > 0
     //     ? 1 : -1;
 
     // float3 targetPosWithDistance = closestSurfacePoint + distanceFromSurface;
@@ -128,21 +134,21 @@ void main(uint3 i : SV_DispatchThreadID)
     // float speedFactor = clampedSpeed / requiredSpeed;
     // movement *= speedFactor;
 
-    // if(!isnan(movement.x) ) 
+    // if(!isnan(movement.x) )
     // {
     //     p.Velocity += movement;
     //     float4 orientation = normalize(q_from_tangentAndNormal(movement, distanceFromSurface));
     //     float4 mixedOrientation = qSlerp(orientation, p.Rotation, 0.96);
 
     //     float usedSpin = (Spin + RandomSpin) * signedNoise;
-    //     if(abs(usedSpin) > 0.001) 
+    //     if(abs(usedSpin) > 0.001)
     //     {
     //         float randomAngle = signedPointHash  * usedSpin;
     //         mixedOrientation = normalize(qMul( mixedOrientation, qFromAngleAxis(randomAngle, distanceFromSurface )));
     //     }
-            
+
     //     p.Rotation = mixedOrientation;
     // }
-    //p.Velocity.z +=0.1f;
-    //Particles[i.x] = p;
+    // p.Velocity.z +=0.1f;
+    // Particles[i.x] = p;
 }

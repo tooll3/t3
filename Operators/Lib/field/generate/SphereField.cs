@@ -18,20 +18,18 @@ internal sealed class SphereField : Instance<SphereField>, IGraphNodeOp
         ShaderNode.Update(context);
     }
     
-    
     public ShaderGraphNode ShaderNode { get; }
 
-    public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
+    public void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
     {
-        shaderStringBuilder.AppendLine( $$"""
-
-                                          float {{ShaderNode}}(float3 p) {
-                                              //return saturate( ({{ShaderNode}}Radius / {{ShaderNode}}FallOff) - (length(p - {{ShaderNode}}Center) / {{ShaderNode}}FallOff) + 0.5  );
-                                              return length(p - {{ShaderNode}}Center) + {{ShaderNode}}Radius;
-                                          } 
-
-                                          """);
+        var n = ShaderNode;
+        c.AppendCall($"f{c}.w = length(p{c}.xyz - {n}Center) - {n}Radius;");
     }
+
+    public void GetPostShaderCode(CodeAssembleContext c, int inputIndex)
+    {
+    }
+
 
     [GraphParam]
     [Input(Guid = "CA582E39-37D7-4DF6-B942-E2330F2BF2C6")]
@@ -41,9 +39,6 @@ internal sealed class SphereField : Instance<SphereField>, IGraphNodeOp
     [Input(Guid = "3DD7C779-7982-4E7C-B4CE-F1915F477AD0")]
     public readonly InputSlot<float> Radius = new(); 
     
-    [GraphParam]
-    [Input(Guid = "F6A672F3-0D9D-4F89-98D9-2CCFB0218EA7")]
-    public readonly InputSlot<float> FallOff = new();
 
 }
 

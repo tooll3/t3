@@ -14,7 +14,7 @@ cbuffer ParamConstants : register(b1)
     float MaxSteps;
     float StepSize;
     float MinDistance;
-    float DistToColor;
+    float MaxDistance;
 
     float4 Color;
     float4 AmbientOcclusion;
@@ -22,6 +22,7 @@ cbuffer ParamConstants : register(b1)
     float TextureScale;
     float AODistance;
     float NormalSamplingDistance;
+    float DistToColor;
 }
 
 cbuffer Transforms : register(b2)
@@ -118,33 +119,32 @@ vsOutput vsMain4(uint vertexId : SV_VertexID)
     return output;
 }
 
-//--- Field functions -----------------------
+//=== Field functions ===============================================
 /*{FIELD_FUNCTIONS}*/
-//-------------------------------------------
 
-float GetDistance(float3 pos)
+//-------------------------------------------------------------------
+float4 GetField(float4 p)
 {
-    // pos = mul(float4(pos.xyz,1), ObjectToWorld).xyz;
-    return /*{FIELD_CALL}*/ 0;
+    p.xyz = mul(float4(p.xyz, 1), WorldToObject).xyz;
+    float4 f = 1;
+    /*{FIELD_CALL}*/
+    return f;
 }
-//---------------------------------------------------
+
+float GetDistance(float3 p3)
+{
+    return GetField(float4(p3.xyz, 0)).w;
+}
+
+//=== Field functions ===============================================
 
 float3 GetNormal(float3 p, float offset)
 {
-    // float dt = .01;
-    // float3 n = float3(GetDistance(p + float3(dt, 0, 0)),
-    //                   GetDistance(p + float3(0, dt, 0)),
-    //                   GetDistance(p + float3(0, 0, dt))) -
-    //            GetDistance(p);
-    // return normalize(n);
-    //NormalSamplingDistance;
-
     return normalize(
-    GetDistance(p + float3( NormalSamplingDistance, -NormalSamplingDistance, -NormalSamplingDistance)) * float3( 1, -1, -1) +
-    GetDistance(p + float3(-NormalSamplingDistance,  NormalSamplingDistance, -NormalSamplingDistance)) * float3(-1,  1, -1) +
-    GetDistance(p + float3(-NormalSamplingDistance, -NormalSamplingDistance,  NormalSamplingDistance)) * float3(-1, -1,  1) +
-    GetDistance(p + float3( NormalSamplingDistance,  NormalSamplingDistance,  NormalSamplingDistance)) * float3( 1,  1,  1)
-);    
+        GetDistance(p + float3(NormalSamplingDistance, -NormalSamplingDistance, -NormalSamplingDistance)) * float3(1, -1, -1) +
+        GetDistance(p + float3(-NormalSamplingDistance, NormalSamplingDistance, -NormalSamplingDistance)) * float3(-1, 1, -1) +
+        GetDistance(p + float3(-NormalSamplingDistance, -NormalSamplingDistance, NormalSamplingDistance)) * float3(-1, -1, 1) +
+        GetDistance(p + float3(NormalSamplingDistance, NormalSamplingDistance, NormalSamplingDistance)) * float3(1, 1, 1));
 }
 
 float ComputeAO(float3 aoposition, float3 aonormal, float aodistance, float aoiterations, float aofactor)
@@ -161,7 +161,6 @@ float ComputeAO(float3 aoposition, float3 aonormal, float aodistance, float aoit
 
 static float MAX_DIST = 300;
 
-
 struct PSOutput
 {
     float4 color : SV_Target;
@@ -170,42 +169,9 @@ struct PSOutput
 
 float ComputeDepthFromViewZ(float viewZ)
 {
-    float4 clipPos = mul(float4(0,0,viewZ,1), CameraToClipSpace);
+    float4 clipPos = mul(float4(0, 0, viewZ, 1), CameraToClipSpace);
     return clipPos.z / clipPos.w;
 }
-
-
-// Define mapping type constants
-#define MAP_YZ 0          // Default
-#define MAP_TRIPLANAR 1
-#define MAP_XY 2
-#define MAP_XZ 3
-#define MAP_POLAR 4
-
-    float2 GetUVMapping(float3 p, float3 absN, int mappingType)
-{
-    
-    switch (mappingType)
-    {
-        case MAP_TRIPLANAR:
-            p.yz *= -1;
-            return (absN.x > absN.y && absN.x > absN.z) ? (p.zy / TextureScale)+.5 : 
-                   (absN.y > absN.z) ? (p.zx / TextureScale)+.5 : (p.xy / TextureScale)+.5;
-        
-        case MAP_XY:
-            return (-p.xy+.5)/TextureScale;
-            
-        case MAP_XZ:
-            return -p.xz+.5;
-            
-        case MAP_POLAR:
-            return (float2(atan2(p.x, p.z)/6.2832, p.y/3.0)+.5);
-            
-        default: // YZ mapping
-            return p.yz;
-    }
-}
-
 
 PSOutput psMain(vsOutput input)
 {
@@ -227,9 +193,9 @@ PSOutput psMain(vsOutput input)
     int maxSteps = (int)(MaxSteps - 0.5);
 
     // Simple iterator
-    for (steps = 0; steps < maxSteps && abs(D) > MinDistance; steps++)
+    for (steps = 0; steps < maxSteps && abs(D) > MinDistance && D < MaxDistance; steps++)
     {
-        D = GetDistance(p);
+        D = GetDistance(p) * StepSize;
         p += dp * D;
     }
 
@@ -246,9 +212,9 @@ PSOutput psMain(vsOutput input)
     {
         normal = normalize(GetNormal(p, D));
 
-        //col = Color.rgb;
-        // We've gone through all steps, but we haven't hit anything.
-        // Mix in the background color.
+        // col = Color.rgb;
+        //  We've gone through all steps, but we haven't hit anything.
+        //  Mix in the background color.
         if (D > MinDistance)
         {
             a = 1 - clamp(log(D / MinDistance) * DistToColor, 0.0, 1.0); // Clarify if this is actually useful
@@ -262,6 +228,9 @@ PSOutput psMain(vsOutput input)
     // Discard transparent fragments...
     if (a < 0.1)
         discard;
+
+    float4 f = float4(GetField(float4(p, 1)).rgb, 1);
+    float3 pObject = f.xyz;
 
     // PBR shading -------------------------------------------------------------------------
 
@@ -280,17 +249,20 @@ PSOutput psMain(vsOutput input)
         float2 uv = GetUVMapping(p, absN, MAP_YZ); // Default
     #endif
 
-    #if MAPPING_TRIPLANAR2
-        float2 uv2 = GetUVMapping(p, absN, MAP_TRIPLANAR);
-    #elif MAPPING_XY2
-        float2 uv2 = GetUVMapping(p, absN, MAP_XY);
-    #elif MAPPING_XZ2
-        float2 uv2 = GetUVMapping(p, absN, MAP_XZ);
-    #elif MAPPING_POLAR
-        float2 uv2 = GetUVMapping(p, absN, MAP_POLAR);
-    #else
-        float2 uv2 = GetUVMapping(p, absN, MAP_YZ); // Default
-    #endif
+#if MAPPING_GLOBAL_TRIPLANAR
+    float2 uv = (absN.x > absN.y && absN.x > absN.z) ? p.yz / TextureScale : (absN.y > absN.z) ? p.zx / TextureScale
+                                                                                               : p.xy / TextureScale;
+#elif MAPPING_LOCAL_TRIPLANAR
+    float2 uv = (absN.x > absN.y && absN.x > absN.z) ? pObject.yz / TextureScale : (absN.y > absN.z) ? pObject.zx / TextureScale
+                                                                                                     : pObject.xy / TextureScale;
+
+#elif MAPPING_XY
+    float2 uv = pObject.xy / TextureScale;
+#elif MAPPING_XZ
+    float2 uv = pObject.xz / TextureScale;
+#else
+    float2 uv = pObject.yz / TextureScale;
+#endif
 
     float4 albedo = BaseColorMap.Sample(texSampler, uv);
 
@@ -318,12 +290,9 @@ PSOutput psMain(vsOutput input)
 
     for (uint i = 0; i < ActiveLightCount; ++i)
     {
-        if (i < 0)
-            continue;
-
         float3 Li = Lights[i].position - p; //- Lights[i].direction;
         float distance = length(Li);
-        float intensity = Lights[i].intensity / (pow(distance / Lights[i].range, Lights[i].decay) + 1);
+        float intensity = Lights[i].intensity / (pow(abs(distance / Lights[i].range), Lights[i].decay) + 1);
         float3 Lradiance = Lights[i].color.rgb * intensity; // Lights[i].radiance;
 
         // Half-vector between Li and Lo.
@@ -406,10 +375,11 @@ PSOutput psMain(vsOutput input)
     litColor.rgb = lerp(AmbientOcclusion.rgb, litColor.rgb, ComputeAO(p, normal, AODistance, 3, AmbientOcclusion.a));
 
     PSOutput result;
-    result.color = clamp(litColor, 0, float4(1000,1000,1000,1));
+    result.color = clamp(litColor, 0, float4(1000, 1000, 1000, 1));
 
     float viewZ = mul(float4(p, 1), WorldToCamera).z;
-    //result.color.a  = 1;
-    result.depth =  ComputeDepthFromViewZ(viewZ);
+    // result.color.a  = 1;
+    result.depth = ComputeDepthFromViewZ(viewZ);
+    // result.color.xyz = pObject.xyz;
     return result;
 }

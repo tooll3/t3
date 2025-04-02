@@ -2,6 +2,10 @@
   "Id": "c7ef5f64-2654-47a8-a2ab-30b28446b934"/*BendField*/,
   "Inputs": [
     {
+      "Id": "4930de03-6a81-4403-bb79-5b0a14591f05"/*Axis*/,
+      "DefaultValue": 0
+    },
+    {
       "Id": "adaf8efd-47b3-4d4b-9102-d8a3c6a7e34a"/*InputField*/,
       "DefaultValue": null
     },

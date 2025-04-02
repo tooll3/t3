@@ -154,18 +154,6 @@
       "Outputs": []
     },
     {
-      "Id": "dd052349-3e16-4357-b79d-efa63f2f3e0a"/*String*/,
-      "SymbolId": "5880cbc3-a541-4484-a06a-0e6f77cdbe8e",
-      "InputValues": [
-        {
-          "Id": "ceeae47b-d792-471d-a825-49e22749b7b9"/*InputString*/,
-          "Type": "System.String",
-          "Value": "#include \"shared/hash-functions.hlsl\"\n#include \"shared/noise-functions.hlsl\"\n#include \"shared/point.hlsl\"\n#include \"shared/quat-functions.hlsl\"\n#include \"shared/bias-functions.hlsl\"\n\n/*{ADDITIONAL_INCLUDES}*/\n\n\n\ncbuffer Params : register(b0)\n{\n    float Strength;\n    float2 GainAndBias;\n    float Scatter;\n\n}\n\ncbuffer Params : register(b1)\n{\n    /*{FLOAT_PARAMS}*/\n}\n\ncbuffer Params : register(b2)\n{\n    int SelectMode;\n    int ClampResult;\n    int DiscardNonSelected;\n    int StrengthFactor;\n\n    int WriteTo;\n}\n\nStructuredBuffer<Point> SourcePoints : t0;\nRWStructuredBuffer<Point> ResultPoints : u0;\n/*{RESOURCES}*/\n\n/*{FIELD_FUNCTIONS}*/\n\nstatic const float NoisePhase = 0;\n\n#define ModeOverride 0\n#define ModeAdd 1\n#define ModeSub 2\n#define ModeMultiply 3\n#define ModeInvert 4\n\n[numthreads(64, 1, 1)] void main(uint3 i\n                                 : SV_DispatchThreadID)\n{\n    uint numStructs, stride;\n    SourcePoints.GetDimensions(numStructs, stride);\n    if (i.x >= numStructs)\n        return;\n\n    Point p = SourcePoints[i.x];\n\n    if (isnan(p.Scale.x))\n    {\n        ResultPoints[i.x] = p;\n        return;\n    }\n\n    //float3 posInObject = p.Position;\n    //float3 posInVolume = mul(float4(posInObject, 1), TransformVolume).xyz;\n    float3 pos= p.Position;;\n    float s = /*{FIELD_CALL}*/ 0;\n\n    float scatter = Scatter * (hash11u(i.x) - 0.5);\n\n    s = ApplyBiasAndGain(s, GainAndBias.x, GainAndBias.y);\n\n    float w = WriteTo == 0\n                  ? 1\n              : (WriteTo == 1) ? p.FX1\n                               : p.FX2;\n\n    float strength = Strength * (StrengthFactor == 0\n                                     ? 1\n                                 : (StrengthFactor == 1) ? p.FX1\n                                                         : p.FX2);\n\n    if (SelectMode == ModeOverride)\n    {\n        s *= strength;\n    }\n    else if (SelectMode == ModeAdd)\n    {\n        s += w * strength;\n    }\n    else if (SelectMode == ModeSub)\n    {\n        s = w - s * strength;\n    }\n    else if (SelectMode == ModeMultiply)\n    {\n        s = lerp(w, w * s, strength);\n    }\n    else if (SelectMode == ModeInvert)\n    {\n        s = s * (1 - w);\n    }\n\n    float result = (DiscardNonSelected && s <= 0)\n                       ? NAN\n                   : (ClampResult)\n                       ? saturate(s)\n                       : s;\n\n    switch (WriteTo)\n    {\n    case 1:\n        p.FX1 = result;\n        break;\n    case 2:\n        p.FX2 = result;\n        break;\n    }\n    // p.Selected = result;\n    //  if (SetW)\n    //  {\n    //      p.W = result;\n    //  }\n    ResultPoints[i.x] = p;\n}\n"
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "de3fceff-9373-4a2a-a438-fa19cce87cf3"/*FloatsToBuffer*/,
       "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
       "InputValues": [],

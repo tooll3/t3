@@ -1,5 +1,5 @@
 #include "shared/hash-functions.hlsl"
-#include "shared/noise-functions.hlsl"
+// #include "shared/noise-functions.hlsl"
 #include "shared/point.hlsl"
 #include "shared/quat-functions.hlsl"
 #include "shared/bias-functions.hlsl"
@@ -13,7 +13,6 @@ cbuffer Params : register(b0)
     float Scatter;
 
     float2 FieldValueRange;
-
 }
 
 cbuffer Params : register(b1)
@@ -35,7 +34,23 @@ StructuredBuffer<Point> SourcePoints : t0;
 RWStructuredBuffer<Point> ResultPoints : u0;
 /*{RESOURCES}*/
 
+//=== Field functions ===============================================
 /*{FIELD_FUNCTIONS}*/
+
+//-------------------------------------------------------------------
+float4 GetField(float4 p)
+{
+    float4 f = 1;
+    /*{FIELD_CALL}*/
+    return f;
+}
+
+inline float GetDistance(float3 p3)
+{
+    return GetField(float4(p3.xyz, 0)).w;
+}
+
+//===================================================================
 
 static const float NoisePhase = 0;
 
@@ -45,8 +60,7 @@ static const float NoisePhase = 0;
 #define ModeMultiply 3
 #define ModeInvert 4
 
-[numthreads(64, 1, 1)] void main(uint3 i
-                                 : SV_DispatchThreadID)
+[numthreads(64, 1, 1)] void main(uint3 i : SV_DispatchThreadID)
 {
     uint numStructs, stride;
     SourcePoints.GetDimensions(numStructs, stride);
@@ -61,14 +75,11 @@ static const float NoisePhase = 0;
         return;
     }
 
-    // float3 posInObject = p.Position;
-    // float3 posInVolume = mul(float4(posInObject, 1), TransformVolume).xyz;
     float3 pos = p.Position;
-    
-    float s = /*{FIELD_CALL}*/ 0;
+
+    float s = GetDistance(pos);
 
     s = (s - FieldValueRange.x) / (FieldValueRange.y - FieldValueRange.x);
-
 
     float scatter = Scatter * (hash11u(i.x) - 0.5);
 

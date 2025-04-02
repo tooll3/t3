@@ -10,6 +10,13 @@
       }
     },
     {
+      "InputId": "522a9640-ca8c-47e6-ad36-5c316a9092ae"/*Axis*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
       "InputId": "a87ec8e0-ad88-45f4-8ce4-33baad9ab1a9"/*RadiusLength*/,
       "Position": {
         "X": -200.0,

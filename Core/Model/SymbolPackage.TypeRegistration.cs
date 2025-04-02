@@ -11,6 +11,7 @@ using SharpDX.Mathematics.Interop;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.DataSet;
+using T3.Core.DataTypes.ShaderGraph;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering.Material;

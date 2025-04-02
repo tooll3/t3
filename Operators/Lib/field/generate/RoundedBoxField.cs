@@ -1,5 +1,6 @@
-namespace Lib.field.generate;
+using T3.Core.DataTypes.ShaderGraph;
 
+namespace Lib.field.generate;
 
 [Guid("860da1cd-b341-4bc5-965a-4a9c295831f4")]
 internal sealed class RoundedBoxField : Instance<RoundedBoxField>, IGraphNodeOp
@@ -18,28 +19,36 @@ internal sealed class RoundedBoxField : Instance<RoundedBoxField>, IGraphNodeOp
     {
         ShaderNode.Update(context);
     }
-    
+
     public ShaderGraphNode ShaderNode { get; }
-    public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
-    { 
-        shaderStringBuilder.AppendLine( $@"
-float {ShaderNode}(float3 p) {{
-   float3 q = abs(p- {ShaderNode}Center) - {ShaderNode}Size + {ShaderNode}Radius;
-   return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0) - {ShaderNode}Radius;
-}}
-");
+
+    //public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
+    public void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
+    {
+        c.Globals["fRoundedRect"] = """
+                                      float fRoundedRect(float3 p, float3 center, float3 size, float r) {
+                                          float3 q = abs(p- center) - size + r;
+                                          return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0) - r;
+                                      }
+                                      """;
+        
+        c.AppendCall($"f{c}.w = fRoundedRect(p{c}.xyz, {ShaderNode}Center, {ShaderNode}Size, {ShaderNode}Radius);"); 
+        c.AppendCall($"f{c}.xyz = p{c}.xyz;");
+    }
+    
+    public void GetPostShaderCode(CodeAssembleContext cac, int inputIndex)
+    {
     }
     
     [GraphParam]
     [Input(Guid = "951b2983-1359-41e4-8fb0-8d97c50ed8d6")]
     public readonly InputSlot<Vector3> Center = new();
-    
+
     [GraphParam]
     [Input(Guid = "C4EF07B4-853B-48D4-9ADE-C93EE849071A")]
     public readonly InputSlot<Vector3> Size = new();
-    
+
     [GraphParam]
     [Input(Guid = "787e5d70-0aba-400f-8616-6ece6c5895bc")]
     public readonly InputSlot<float> Radius = new();
 }
-

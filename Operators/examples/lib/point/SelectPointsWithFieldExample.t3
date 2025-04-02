@@ -3,7 +3,7 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "012321a6-b3a2-43e9-8ead-13b2390ee7e7"/*LinkField*/,
+      "Id": "012321a6-b3a2-43e9-8ead-13b2390ee7e7"/*ChainLinkField*/,
       "SymbolId": "27c6aa52-7b3e-4a9a-b6e5-0359f7155cee",
       "InputValues": [
         {
@@ -126,11 +126,6 @@
             "Y": 0.0,
             "Z": 0.0
           }
-        },
-        {
-          "Id": "f6a672f3-0d9d-4f89-98d9-2ccfb0218ea7"/*FallOff*/,
-          "Type": "System.Single",
-          "Value": 0.45
         }
       ],
       "Outputs": []
@@ -226,7 +221,7 @@
       "Outputs": []
     },
     {
-      "Id": "0efe8620-c10e-479d-9683-e84e0a54ba2f"/*RaymarchField*/,
+      "Id": "0efe8620-c10e-479d-9683-e84e0a54ba2f"/*RaymarchField_L1*/,
       "SymbolId": "83e4575c-2190-4c8d-b952-60b20b6c3489",
       "InputValues": [
         {
@@ -352,11 +347,6 @@
             "Y": 0.06,
             "Z": 0.0
           }
-        },
-        {
-          "Id": "f6a672f3-0d9d-4f89-98d9-2ccfb0218ea7"/*FallOff*/,
-          "Type": "System.Single",
-          "Value": 0.16
         }
       ],
       "Outputs": []
@@ -945,11 +935,6 @@
             "Y": -0.48,
             "Z": 0.0
           }
-        },
-        {
-          "Id": "f6a672f3-0d9d-4f89-98d9-2ccfb0218ea7"/*FallOff*/,
-          "Type": "System.Single",
-          "Value": 0.41
         }
       ],
       "Outputs": []
@@ -1055,11 +1040,6 @@
             "Y": 0.0,
             "Z": 0.0
           }
-        },
-        {
-          "Id": "f6a672f3-0d9d-4f89-98d9-2ccfb0218ea7"/*FallOff*/,
-          "Type": "System.Single",
-          "Value": 0.41
         }
       ],
       "Outputs": []
@@ -1167,7 +1147,7 @@
       "Outputs": []
     },
     {
-      "Id": "47a9a4c5-9b1b-4042-9402-fa41ba2dd759"/*RaymarchField*/,
+      "Id": "47a9a4c5-9b1b-4042-9402-fa41ba2dd759"/*RaymarchField_L1*/,
       "SymbolId": "83e4575c-2190-4c8d-b952-60b20b6c3489",
       "InputValues": [
         {
@@ -1381,7 +1361,7 @@
       "Outputs": []
     },
     {
-      "Id": "4f7d8349-efc7-4120-8a93-926392f938c5"/*RaymarchField*/,
+      "Id": "4f7d8349-efc7-4120-8a93-926392f938c5"/*RaymarchField_L1*/,
       "SymbolId": "83e4575c-2190-4c8d-b952-60b20b6c3489",
       "InputValues": [
         {
@@ -1560,11 +1540,6 @@
             "Y": -0.04,
             "Z": -0.03
           }
-        },
-        {
-          "Id": "f6a672f3-0d9d-4f89-98d9-2ccfb0218ea7"/*FallOff*/,
-          "Type": "System.Single",
-          "Value": 0.33
         }
       ],
       "Outputs": []
@@ -1609,7 +1584,7 @@
       "Outputs": []
     },
     {
-      "Id": "5c854979-ebac-49cb-ae51-43dee548450f"/*LinkField*/,
+      "Id": "5c854979-ebac-49cb-ae51-43dee548450f"/*ChainLinkField*/,
       "SymbolId": "27c6aa52-7b3e-4a9a-b6e5-0359f7155cee",
       "InputValues": [
         {
@@ -1689,11 +1664,6 @@
             "Y": 0.0,
             "Z": 0.0
           }
-        },
-        {
-          "Id": "f6a672f3-0d9d-4f89-98d9-2ccfb0218ea7"/*FallOff*/,
-          "Type": "System.Single",
-          "Value": 0.45
         }
       ],
       "Outputs": []
@@ -1915,11 +1885,6 @@
           "Id": "3dd7c779-7982-4e7c-b4ce-f1915f477ad0"/*Radius*/,
           "Type": "System.Single",
           "Value": 1.0
-        },
-        {
-          "Id": "f6a672f3-0d9d-4f89-98d9-2ccfb0218ea7"/*FallOff*/,
-          "Type": "System.Single",
-          "Value": 23.0
         }
       ],
       "Outputs": []
@@ -2394,7 +2359,7 @@
       "Outputs": []
     },
     {
-      "Id": "a019ea80-1cec-4152-8f6f-79e2b5aa2760"/*LinkField*/,
+      "Id": "a019ea80-1cec-4152-8f6f-79e2b5aa2760"/*ChainLinkField*/,
       "SymbolId": "27c6aa52-7b3e-4a9a-b6e5-0359f7155cee",
       "InputValues": [
         {
@@ -2622,7 +2587,7 @@
       "Outputs": []
     },
     {
-      "Id": "b3a1f215-feaa-403d-92bc-e8eae1e78d77"/*RaymarchField*/,
+      "Id": "b3a1f215-feaa-403d-92bc-e8eae1e78d77"/*RaymarchField_L1*/,
       "SymbolId": "83e4575c-2190-4c8d-b952-60b20b6c3489",
       "InputValues": [
         {
@@ -2699,11 +2664,6 @@
             "Y": 4.79,
             "Z": 0.0
           }
-        },
-        {
-          "Id": "f6a672f3-0d9d-4f89-98d9-2ccfb0218ea7"/*FallOff*/,
-          "Type": "System.Single",
-          "Value": 0.2
         }
       ],
       "Outputs": []
@@ -2899,7 +2859,7 @@
       "Outputs": []
     },
     {
-      "Id": "c3648cf3-a964-4064-aa29-4a1054985dcc"/*LinkField*/,
+      "Id": "c3648cf3-a964-4064-aa29-4a1054985dcc"/*ChainLinkField*/,
       "SymbolId": "27c6aa52-7b3e-4a9a-b6e5-0359f7155cee",
       "InputValues": [
         {
@@ -3238,11 +3198,6 @@
           "Id": "3dd7c779-7982-4e7c-b4ce-f1915f477ad0"/*Radius*/,
           "Type": "System.Single",
           "Value": 2.51
-        },
-        {
-          "Id": "f6a672f3-0d9d-4f89-98d9-2ccfb0218ea7"/*FallOff*/,
-          "Type": "System.Single",
-          "Value": 5.3
         }
       ],
       "Outputs": []
@@ -3494,11 +3449,6 @@
             "Y": 0.0,
             "Z": 0.0
           }
-        },
-        {
-          "Id": "f6a672f3-0d9d-4f89-98d9-2ccfb0218ea7"/*FallOff*/,
-          "Type": "System.Single",
-          "Value": -0.21
         }
       ],
       "Outputs": []
@@ -3557,7 +3507,7 @@
       "Outputs": []
     },
     {
-      "Id": "efaa3d9d-9f30-42f8-bfed-911a0f6a9e31"/*RaymarchField*/,
+      "Id": "efaa3d9d-9f30-42f8-bfed-911a0f6a9e31"/*RaymarchField_L1*/,
       "SymbolId": "83e4575c-2190-4c8d-b952-60b20b6c3489",
       "InputValues": [
         {
@@ -3618,7 +3568,7 @@
       "Outputs": []
     },
     {
-      "Id": "f2385af7-ac95-4071-b5f4-efc0b71ca742"/*RaymarchField*/,
+      "Id": "f2385af7-ac95-4071-b5f4-efc0b71ca742"/*RaymarchField_L1*/,
       "SymbolId": "83e4575c-2190-4c8d-b952-60b20b6c3489",
       "InputValues": [
         {

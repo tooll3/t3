@@ -1,9 +1,9 @@
 cbuffer ParamConstants : register(b0)
 {
     float4x4 TransformMatrix;
-    float4 Color;
+    float4 LineColor;
+    float4 BackgroundColor;
 }
-
 
 cbuffer Transforms : register(b1)
 {
@@ -19,7 +19,6 @@ cbuffer Transforms : register(b1)
     float4x4 ObjectToClipSpace;
 }
 
-
 cbuffer Params : register(b2)
 {
     /*{FLOAT_PARAMS}*/
@@ -31,8 +30,6 @@ struct vsOutput
     float2 texCoord : TEXCOORD;
     float3 posInWorld : POSITION;
     float distToCamera : DEPTH;
-    // float3 worldTViewDir : TEXCOORD1;
-    // float3 worldTViewPos : TEXCOORD2;
 };
 
 static const float3 Quad[] =
@@ -55,19 +52,26 @@ vsOutput vsMain4(uint vertexId : SV_VertexID)
     output.position = mul(posInObj, ObjectToClipSpace);
     output.posInWorld = mul(posInObj, ObjectToWorld).xyz;
     output.texCoord = quadVertex * float2(0.5, -0.5) + 0.5;
-    // output.distToCamera = mul
     return output;
 }
 
-//---- Field functions --------------------------
+//=== Field functions ===============================================
 /*{FIELD_FUNCTIONS}*/
 
-//---------------------------------------
-float GetDistance(float3 pos)
+//-------------------------------------------------------------------
+float4 GetField(float4 p)
 {
-    return /*{FIELD_CALL}*/ 0;
+    float4 f = 1;
+    /*{FIELD_CALL}*/
+    return f;
 }
-//---------------------------------------------------
+
+float GetDistance(float3 p3)
+{
+    return GetField(float4(p3.xyz, 0)).w;
+}
+
+//===================================================================
 
 inline float fmod(float x, float y)
 {
@@ -77,21 +81,8 @@ inline float fmod(float x, float y)
 #define PI acos(-1.)
 #define INFINITY pow(2., 8.)
 
-float3 fusion(float x)
+float4 DistanceMeter(float dist, float rayLength, float3 rayDir, float camHeight, float horizonFade)
 {
-    float t = clamp(x, 0.0, 1.0);
-    return clamp(float3(sqrt(t), t * t * t, max(sin(PI * 1.75 * t), pow(t, 12.0))), 0.0, 1.0);
-}
-
-float3 FusionHDR(float x)
-{
-    float t = clamp(x, 0.0, 1.0);
-    return fusion(sqrt(t)) * (0.5 + 2. * t);
-}
-
-float3 DistanceMeter(float dist, float rayLength, float3 rayDir, float camHeight)
-{
-    // float idealGridDistance = 20.0 / rayLength * pow(abs(rayDir.y), 0.8);
     float idealGridDistance = camHeight;
     float nearestBase = floor(log(idealGridDistance) / log(10.0));
     float relativeDist = abs(dist / camHeight);
@@ -99,33 +90,38 @@ float3 DistanceMeter(float dist, float rayLength, float3 rayDir, float camHeight
     float largerDistance = pow(10.0, nearestBase + 1.0);
     float smallerDistance = pow(10.0, nearestBase);
 
-    float3 col = FusionHDR(log(1.0 + relativeDist));
+    float3 col = 1;
     col = max(float3(0.0, 0.0, 0.0), col);
     if (sign(dist) < 0.0)
     {
-        col = col.grb * 3.0;
+        // col = col.grb * 0.1;
     }
 
-    float l0 = pow(0.5 + 0.5 * cos(dist * 3.14159265359 * 2.0 * smallerDistance), 10.0);
-    float l1 = pow(0.5 + 0.5 * cos(dist * 3.14159265359 * 2.0 * largerDistance), 10.0);
+    float l0 = pow(0.5 + 0.5 * cos(dist * 3.14159265359 * 2.0 * smallerDistance), 20.0);
+    float l1 = pow(0.5 + 0.5 * cos(dist * 3.14159265359 * 2.0 * largerDistance), 5.0);
+    float l = log(idealGridDistance) / log(10.0);
+    float x = frac(l);
+    l0 = lerp(l0, 0.0, smoothstep(0.4, 1.0, x));
+    l1 = lerp(0.0, l1, smoothstep(0.0, 0.4, x));
 
-    float x = frac(log(idealGridDistance) / log(10.0));
-    l0 = lerp(l0, 0.0, smoothstep(0.5, 1.0, x));
-    l1 = lerp(0.0, l1, smoothstep(0.0, 0.5, x));
+    float lines = pow(1 - (0.01 + 0.99 * (1.0 - l0) * (1.0 - l1)), 20);
+    float cutline = pow(1 - clamp(abs(dist), 0, 1) + 0.01 / camHeight, 20);
 
-    col.rgb *= 0.1 + 0.9 * (1.0 - l0) * (1.0 - l1);
-    return col;
+    float inside = sign(dist) < 0 ? 0.3 : 0;
+
+    float lineAlpha = (lines * 0.7 + cutline + inside) * horizonFade;
+    return lerp(BackgroundColor, LineColor, lineAlpha);
 }
 
 float4 psMain(vsOutput input) : SV_TARGET
 {
-    float d = GetDistance(input.posInWorld);
-    float2 s = float2(ddx(input.texCoord.x), ddy(input.texCoord.y));
+    float dist = GetDistance(input.posInWorld);
+    float2 s = length(float2(ddy(input.texCoord.x), ddy(input.texCoord.y)));
+
     float3 camPos = mul(float4(0, 0, 0, 1), CameraToWorld).xyz;
     float dToCam = length(camPos - input.posInWorld);
+    float3 ray = float3(0, 0, 1);
 
-    return float4(DistanceMeter(d, 0.1, float3(1, 1, 0), 10 / dToCam), 1) * Color;
-
-    float2 c = fmod(d * (-s.y) * 1000, 1) < 0.05 ? 1 : 0;
-    return float4(c.xx, dToCam, 1) * Color;
+    float sideView = saturate(max(abs(s.x), abs(s.y)) * 1000);
+    return DistanceMeter(dist, 0.1, ray, 15 / dToCam, 1 - sideView);
 }
