@@ -46,7 +46,6 @@ internal sealed class TorusField : Instance<TorusField>
         var a = _axisCodes0[(int)_axis];
 
         c.AppendCall($"f{c}.w = fTorus(p{c}.{a} - {ShaderNode}Center.{a} , {ShaderNode}Size);");
-        c.AppendCall($"f{c}.xyz = p{c}.xyz;");
     }
 
     public void GetPostShaderCode(CodeAssembleContext cac, int inputIndex)

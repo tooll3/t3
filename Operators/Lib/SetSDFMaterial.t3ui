@@ -1,0 +1,46 @@
+{
+  "Id": "88926602-4694-4632-9fd7-04c8d6ddd728"/*SetSDFMaterial*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "032161d0-6e0d-46c7-a0b2-b1ef4a6bdd7c"/*Offset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 120.0
+      },
+      "Min": -180.0,
+      "Max": 180.0
+    },
+    {
+      "InputId": "762d68f8-1ecd-47e1-9914-9bd16aeefd2a"/*Repetitions*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "7c656067-ef12-4990-b094-7f8160a242d1"/*InputField*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "8038789b-dc0b-44b1-9557-aae02db8f111"/*Axis*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 75.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "51c8b9dd-9798-44e6-a9d0-0baecfc9c9a5"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

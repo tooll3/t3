@@ -222,7 +222,7 @@ public class ShaderGraphNode
             // We assume that a node without an input field is a distance function
             // We copy the local coordinates to the field result, so we can use
             // it later for things like UV mapping.
-            cac.AppendCall($"f{cac}.xyz = p{cac}.xyz;");    
+            cac.AppendCall($"f{cac}.xyz = p.w < 0.5 ?  p{cac}.xyz : 1; // #{string.Join(' ', cac.ContextIdStack)} {this}");    
             return;
         }
         

@@ -40,6 +40,15 @@ internal sealed class CombineSDF : Instance<CombineSDF>
         c.Globals["Common"] = ShaderGraphIncludes.Common;
         c.Globals["CommonHgSdf"] = ShaderGraphIncludes.CommonHgSdf;
 
+        c.Globals["smoothBlendColor"]
+            = """
+              float getBlendFactor(float d2, float d1, float k) 
+              {
+                return  clamp(0.5 + 0.5 * (d2 - d1) / k, 0.0, 1.0);
+                //float d = lerp(d2, d1, h) - k * h * (1.0 - h);
+              };
+              """;
+        
         // Register global method
         switch (_combineMethod)
         {
@@ -165,6 +174,8 @@ internal sealed class CombineSDF : Instance<CombineSDF>
         }
         else
         {
+            cac.AppendCall($"f{contextId}.xyz = lerp(f{contextId}.xyz, f{subContextId}.xyz, getBlendFactor(f{contextId}.w, f{subContextId}.w, {ShaderNode}K + 0.5));");
+            
             // Combine initial value with new value...
             switch (_combineMethod)
             {
@@ -210,10 +221,10 @@ internal sealed class CombineSDF : Instance<CombineSDF>
                 case CombineMethods.Engrave:
                     cac.AppendCall($"f{contextId}.w = fOpEngrave(f{contextId}.w, f{subContextId}.w, {ShaderNode}K);");
                     break;
-
             }
-
-            cac.AppendCall($"f{contextId}.xyz = f{contextId}.w < f{subContextId}.w ? f{contextId}.xyz : f{subContextId}.xyz;");
+            //cac.AppendCall($"f{contextId}.xyz = f{contextId}.w < f{subContextId}.w ?  f{contextId}.xyz : f{subContextId}.xyz;");
+            //cac.AppendCall("{ float3 v3=");
+            
         }
     }
 

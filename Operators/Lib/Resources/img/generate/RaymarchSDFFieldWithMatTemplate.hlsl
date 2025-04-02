@@ -249,7 +249,9 @@ PSOutput psMain(vsOutput input)
     float2 uv = pObject.yz / TextureScale;
 #endif
 
-    float4 albedo = BaseColorMap.Sample(texSampler, uv);
+    //float4 albedo = BaseColorMap.Sample(texSampler, uv) *
+    float4 albedo = float4(GetField(float4(p,1)).rgb,1);
+    //float4 fieldAlbedo = GetField(float4(p,1));
 
     float4 roughnessMetallicOcclusion = RSMOMap.Sample(texSampler, uv);
     float roughness = saturate(roughnessMetallicOcclusion.x + Roughness);
