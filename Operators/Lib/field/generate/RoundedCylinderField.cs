@@ -1,4 +1,5 @@
 using T3.Core.DataTypes.ShaderGraph;
+using T3.Core.Utils;
 
 namespace Lib.field.generate;
 
@@ -19,6 +20,15 @@ internal sealed class RoundedCylinderField : Instance<RoundedCylinderField>
     private void Update(EvaluationContext context)
     {
         ShaderNode.Update(context);
+
+        var axis = Axis.GetEnumValue<AxisTypes>(context);
+
+        var templateChanged = axis != _axis;
+        if (!templateChanged)
+            return;
+
+        _axis = axis;
+        ShaderNode.FlagCodeChanged();
     }
 
     public ShaderGraphNode ShaderNode { get; }
@@ -32,15 +42,34 @@ internal sealed class RoundedCylinderField : Instance<RoundedCylinderField>
                                           return min(max(d.x,d.y),0.0) + length(max(d,0.0)) - rb;
                                       }
                                       """;
-        
-        c.AppendCall($"f{c}.w = fRoundedCyl(p{c}.xyz, {ShaderNode}Center, {ShaderNode}Radius, {ShaderNode}Rounding, {ShaderNode}Height);"); 
-        c.AppendCall($"f{c}.xyz = p{c}.xyz;");
+        var a = _axisCodes0[(int)_axis];
+        c.AppendCall($"f{c}.w = fRoundedCyl(p{c}.{a}, {ShaderNode}Center.{a}, {ShaderNode}Radius, {ShaderNode}Rounding, {ShaderNode}Height);"); 
+       // c.AppendCall($"f{c}.xyz = p{c}.xyz;");
     }
     
     public void GetPostShaderCode(CodeAssembleContext cac, int inputIndex)
     {
     }
+
+    private readonly string[] _axisCodes0 =
+       [
+            "yxz",
+            "xyz",
+            "xzy",
+        ];
+
+    private AxisTypes _axis;
+
+    private enum AxisTypes
+    {
+        X,
+        Y,
+        Z,
+    }
     
+    [Input(Guid = "1F65CD48-CAA9-4B25-925C-7CBCC12EABBC", MappedType = typeof(AxisTypes))]
+    public readonly InputSlot<int> Axis = new();
+
     [GraphParam]
     [Input(Guid = "29d6303f-34ba-4e1e-a910-3366104e26e3")]
     public readonly InputSlot<Vector3> Center = new();
