@@ -46,14 +46,14 @@ internal sealed class RoundedCylinderField : Instance<RoundedCylinderField>
     public readonly InputSlot<Vector3> Center = new();
 
     [GraphParam]
-    [Input(Guid = "c409c9a7-5c45-47f7-a49e-2b0fadcf7892")]
-    public readonly InputSlot<float> Rounding = new();
-
-    [GraphParam]
     [Input(Guid = "04ce1364-f421-4bd1-8f45-60921c8605df")]
     public readonly InputSlot<float> Radius = new();
     
     [GraphParam]
     [Input(Guid = "8780e976-ae85-43fb-a822-def6ea21b407")]
     public readonly InputSlot<float> Height = new();
+
+    [GraphParam]
+    [Input(Guid = "c409c9a7-5c45-47f7-a49e-2b0fadcf7892")]
+    public readonly InputSlot<float> Rounding = new();
 }
