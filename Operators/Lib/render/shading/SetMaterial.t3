@@ -48,12 +48,20 @@
       }
     },
     {
+      "Id": "c3df717c-822a-4aae-a5a8-a27e4d98fda8"/*BaseColorMap2*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "c8003fbd-c6ce-440c-9f1f-6b15b5ee5274"/*RoughnessMetallicOcclusionMap*/,
       "DefaultValue": null
     },
     {
       "Id": "e14dcc43-7c18-4ed7-ad39-dfeab10e3d33"/*Roughness*/,
       "DefaultValue": 0.25
+    },
+    {
+      "Id": "f574046e-e10b-42e2-84af-8b28759ba636"/*BlendMode*/,
+      "DefaultValue": 2
     }
   ],
   "Children": [],

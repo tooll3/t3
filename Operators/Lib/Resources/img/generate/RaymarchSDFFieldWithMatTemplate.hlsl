@@ -2,6 +2,7 @@
 #include "shared/quat-functions.hlsl"
 #include "shared/point-light.hlsl"
 #include "shared/pbr.hlsl"
+#include "shared/blend-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -59,6 +60,7 @@ cbuffer PbrParams : register(b5)
     float Roughness;
     float Specular2;
     float Metal;
+    float BlendMode;
 }
 
 Texture2D<float4> BaseColorMap : register(t0);
@@ -67,6 +69,7 @@ Texture2D<float4> RSMOMap : register(t2);
 Texture2D<float4> NormalMap : register(t3);
 Texture2D<float4> BRDFLookup : register(t4);
 TextureCube<float4> PrefilteredSpecular : register(t5);
+Texture2D<float4> BaseColorMap2 : register(t6);
 
 sampler texSampler : register(s0);
 sampler clampedSampler : register(s1);
@@ -233,6 +236,18 @@ PSOutput psMain(vsOutput input)
 
     // Tri-planar mappping
     float3 absN = abs(normal);
+ 
+    #if MAPPING_TRIPLANAR
+        float2 uv = GetUVMapping(p, absN, MAP_TRIPLANAR);
+    #elif MAPPING_XY
+        float2 uv = GetUVMapping(p, absN, MAP_XY);
+    #elif MAPPING_XZ
+        float2 uv = GetUVMapping(p, absN, MAP_XZ);
+    #elif MAPPING_POLAR
+        float2 uv = GetUVMapping(p, absN, MAP_POLAR);
+    #else
+        float2 uv = GetUVMapping(p, absN, MAP_YZ); // Default
+    #endif
 
 #if MAPPING_GLOBAL_TRIPLANAR
     float2 uv = (absN.x > absN.y && absN.x > absN.z) ? p.yz / TextureScale : (absN.y > absN.z) ? p.zx / TextureScale
@@ -252,6 +267,9 @@ PSOutput psMain(vsOutput input)
     //float4 albedo = BaseColorMap.Sample(texSampler, uv) *
     float4 albedo = float4(GetField(float4(p,1)).rgb,1);
     //float4 fieldAlbedo = GetField(float4(p,1));
+
+    float4 albedo2 = BaseColorMap2.Sample(texSampler, uv2);
+    albedo = BlendColors(albedo, albedo2, (int)BlendMode);
 
     float4 roughnessMetallicOcclusion = RSMOMap.Sample(texSampler, uv);
     float roughness = saturate(roughnessMetallicOcclusion.x + Roughness);
