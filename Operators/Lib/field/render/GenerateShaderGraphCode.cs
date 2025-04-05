@@ -29,7 +29,8 @@ namespace Lib.field.render;
  * If CodeNeedsUpdate is true, the shader code will be updated.
  */
 [Guid("73c028d1-3de2-4269-b503-97f62bbce320")]
-internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttributes>, IStatusProvider
+internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode>
+,IStatusProvider
 {
     [Output(Guid = "A1AB0C16-ED15-4334-A529-10E3C217DF1A")]
     public readonly Slot<string> ShaderCode = new();
@@ -38,7 +39,7 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
     public readonly Slot<Buffer> FloatParams = new();
     
     
-    public _GetFieldShaderAttributes()
+    public GenerateShaderGraphCode()
     {
         ShaderCode.UpdateAction += Update;
     }
@@ -83,7 +84,6 @@ internal sealed class _GetFieldShaderAttributes : Instance<_GetFieldShaderAttrib
         // Recursively update complete shader graph and collect changes
         _graphNode = Field.GetValue(context);
 
-        
         if (_graphNode == null)
         {
             //_lastErrorMessage = "Missing input field";

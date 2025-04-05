@@ -21,8 +21,7 @@ internal sealed class RoundedBoxField : Instance<RoundedBoxField>, IGraphNodeOp
     }
 
     public ShaderGraphNode ShaderNode { get; }
-
-    //public void GetShaderCode(StringBuilder shaderStringBuilder, Dictionary<string, string> globals)
+    
     public void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
     {
         c.Globals["fRoundedRect"] = """

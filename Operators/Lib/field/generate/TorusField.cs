@@ -1,4 +1,3 @@
-using T3.Core.DataTypes.ShaderGraph;
 using T3.Core.Utils;
 
 namespace Lib.field.generate;
@@ -51,7 +50,6 @@ internal sealed class TorusField : Instance<TorusField>
     public void GetPostShaderCode(CodeAssembleContext cac, int inputIndex)
     {
     }
-
     
     private readonly string[] _axisCodes0 =
         [
@@ -71,7 +69,6 @@ internal sealed class TorusField : Instance<TorusField>
     
     [Input(Guid = "522A9640-CA8C-47E6-AD36-5C316A9092AE", MappedType = typeof(AxisTypes))]
     public readonly InputSlot<int> Axis = new();
-
 
     
     [GraphParam]
