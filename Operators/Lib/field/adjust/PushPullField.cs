@@ -12,7 +12,7 @@ internal sealed class PushPullField : Instance<PushPullField>
 
     public PushPullField()
     {
-        ShaderNode = new ShaderGraphNode(this, null, InputField);
+        ShaderNode = new ShaderGraphNode(this, null, SdfField, AmountField);
         Result.Value = ShaderNode;
         Result.UpdateAction += Update;
     }
@@ -25,20 +25,60 @@ internal sealed class PushPullField : Instance<PushPullField>
 
     public ShaderGraphNode ShaderNode { get; }
 
-    public void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
+    bool IGraphNodeOp.TryBuildCustomCode(CodeAssembleContext c)
     {
-    }
+        var subContextIndex = c.ContextIdStack.Count;
 
-    public void GetPostShaderCode(CodeAssembleContext c, int inputIndex)
-    {
-        c.AppendCall($"f{c}.w += {ShaderNode}Offset;");
+        var inputNodeIndex = 0;
+        
+        // Return base distance (required for blending)
+        if (SdfField.HasInputConnections)
+        {
+            ShaderNode.InputNodes[inputNodeIndex]?.CollectEmbeddedShaderCode(c);
+            inputNodeIndex++;
+        }
+        //c.AppendCall($"f{c}.w += {ShaderNode}Offset;");
+        
+
+        c.AppendCall("{");
+        c.Indent();
+
+        if (AmountField.HasInputConnections)
+        {
+            c.PushContext(subContextIndex, "amount");
+            var subContextId = c.ToString();
+            ShaderNode.InputNodes[inputNodeIndex]?.CollectEmbeddedShaderCode(c);
+            c.PopContext();
+            c.AppendCall($"f{c}.w += f{subContextId}.r *{ShaderNode}Amount;");
+        }
+        else
+        {
+            c.AppendCall($"f{c}.w += {ShaderNode}Amount;");
+        }
+        
+        c.Unindent();
+        c.AppendCall("}");
+
+        return true;
     }
+    
+    // public void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
+    // {
+    // }
+    //
+    // public void GetPostShaderCode(CodeAssembleContext c, int inputIndex)
+    // {
+    //     c.AppendCall($"f{c}.w += {ShaderNode}Amount;");
+    // }
     
     
     [Input(Guid = "c57d91b6-a26a-4e69-be1f-dc04f86594b6")]
-    public readonly InputSlot<ShaderGraphNode> InputField = new();
+    public readonly InputSlot<ShaderGraphNode> SdfField = new();
+
+    [Input(Guid = "91C09FAC-0B50-4F62-97CA-18461801B442")]
+    public readonly InputSlot<ShaderGraphNode> AmountField = new();
     
     [GraphParam]
     [Input(Guid = "9cd1120d-81fa-43ab-b023-c462fe651ffb")]
-    public readonly InputSlot<float> Offset = new();
+    public readonly InputSlot<float> Amount = new();
 }

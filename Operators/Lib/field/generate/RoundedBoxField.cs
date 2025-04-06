@@ -21,8 +21,9 @@ internal sealed class RoundedBoxField : Instance<RoundedBoxField>, IGraphNodeOp
     }
 
     public ShaderGraphNode ShaderNode { get; }
-    
-    public void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
+
+
+    void IGraphNodeOp.AddDefinitions(CodeAssembleContext c)
     {
         c.Globals["fRoundedRect"] = """
                                       float fRoundedRect(float3 p, float3 center, float3 size, float r) {
@@ -30,13 +31,12 @@ internal sealed class RoundedBoxField : Instance<RoundedBoxField>, IGraphNodeOp
                                           return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0) - r;
                                       }
                                       """;
-        
-        c.AppendCall($"f{c}.w = fRoundedRect(p{c}.xyz, {ShaderNode}Center, {ShaderNode}Size, {ShaderNode}Radius);"); 
-        c.AppendCall($"f{c}.xyz = p{c}.xyz;");
     }
     
-    public void GetPostShaderCode(CodeAssembleContext cac, int inputIndex)
+    public void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
     {
+        c.AppendCall($"f{c}.w = fRoundedRect(p{c}.xyz, {ShaderNode}Center, {ShaderNode}Size, {ShaderNode}Radius);"); 
+        //c.AppendCall($"f{c}.xyz = p{c}.xyz;");
     }
     
     [GraphParam]

@@ -171,10 +171,13 @@ internal sealed class CombineSDF : Instance<CombineSDF>
         {
             // Keep initial value
             cac.AppendCall($"f{contextId} = f{subContextId};");
+            //cac.AppendCall($"f{contextId} =  p{contextId}.w < 0.5 ? f{subContextId}: float4(1,1,1,f{subContextId}.w);");
+            
         }
         else
         {
-            cac.AppendCall($"f{contextId}.xyz = lerp(f{contextId}.xyz, f{subContextId}.xyz, getBlendFactor(f{contextId}.w, f{subContextId}.w, {ShaderNode}K + 0.5));");
+            cac.AppendCall($"f{contextId}.xyz = lerp(f{contextId}.xyz, f{subContextId}.xyz, getBlendFactor(f{contextId}.w, f{subContextId}.w, {ShaderNode}K ));");
+            //cac.AppendCall($"f{contextId}.xyz = f{contextId}.w < f{subContextId}.w ? f{contextId}.xyz : f{subContextId}.xyz;");
             
             // Combine initial value with new value...
             switch (_combineMethod)

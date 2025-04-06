@@ -1,9 +1,9 @@
 {
-  "Id": "82270977-07b5-4d86-8544-5aebc638d46c"/*CombineFields*/,
+  "Id": "82270977-07b5-4d86-8544-5aebc638d46c"/*CombineSDF*/,
   "Inputs": [
     {
       "Id": "4648e514-b48c-4a98-a728-3ebf9bcfa0b7"/*CombineMethod*/,
-      "DefaultValue": 3
+      "DefaultValue": 2
     },
     {
       "Id": "7248c680-7279-4c1d-b968-3864cb849c77"/*InputFields*/,

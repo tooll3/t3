@@ -1,0 +1,31 @@
+{
+  "Id": "edfc71fc-2d54-4226-b819-0340bb1fdd65"/*Raster3dField*/,
+  "Inputs": [
+    {
+      "Id": "1108ec25-8d77-4c0b-8f17-5308ea017df4"/*Feather*/,
+      "DefaultValue": 0.002
+    },
+    {
+      "Id": "3938188b-41ba-4efe-b7e1-9720d2e58cd4"/*Offset*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "606584e3-2c4a-432f-a7a4-c3093a34685e"/*LineWidth*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "9b324ca4-2116-489d-a829-8348a9984235"/*Scale*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

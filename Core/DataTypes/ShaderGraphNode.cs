@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using T3.Core.Animation;
@@ -46,15 +47,17 @@ public sealed class Color2dField : ShaderGraphNode
 public class ShaderGraphNode
 {
     #region node handling
-    public ShaderGraphNode(Instance instance, MultiInputSlot<ShaderGraphNode>? nodeMultiInputInput = null, InputSlot<ShaderGraphNode>? inputSlot = null)
+    public ShaderGraphNode(Instance instance,
+                           MultiInputSlot<ShaderGraphNode>? nodeMultiInputInput = null,
+                           params InputSlot<ShaderGraphNode>[] inputsSlots)
     {
         _instance = instance;
         _connectedNodeMultiInput = nodeMultiInputInput;
-        _connectedNodeInput = inputSlot;
+        _connectedNodeInputs = inputsSlots;
     }
 
     private int _lastUpdateFrame;
-    
+
     /**
      * A counter that will be updated after op was updated by a connected output field.
      * This can later be used to optimize embedding shader code.
@@ -78,7 +81,10 @@ public class ShaderGraphNode
         CollectedChanges = ChangedFlags.None;
 
         if (_hasCodeChanges)
+        {
             CollectedChanges |= ChangedFlags.Code;
+            _hasCodeChanges = false;
+        }
 
         // Initialize prefix and collect parameters inputs.
         // (Deferred because symbolChildId is not set at construction time)
@@ -103,7 +109,7 @@ public class ShaderGraphNode
     }
 
     public ChangedFlags CollectedChanges;
-    
+
     /**
      * While collecting connected input nodes we computed a checksum to detect of the
      * graph structure has been changed and the shader code needs to be regenerated.
@@ -118,8 +124,8 @@ public class ShaderGraphNode
     /// </remarks>
     private void UpdateInputsNodes(EvaluationContext context)
     {
-        if (_connectedNodeMultiInput == null && _connectedNodeInput == null)
-            return;
+        //if (_connectedNodeMultiInput == null)
+        //    return;
 
         _connectedNodeOps.Clear();
 
@@ -128,18 +134,15 @@ public class ShaderGraphNode
             _connectedNodeOps.AddRange(_connectedNodeMultiInput.GetCollectedTypedInputs(true));
         }
 
-        if (_connectedNodeInput != null)
-        {
-            _connectedNodeOps.Add(_connectedNodeInput);
-        }
+        _connectedNodeOps.AddRange(_connectedNodeInputs);
 
         // If it HAS an input field, but it's not connected, we have an error
         var hasConnectedInputFields = _connectedNodeOps.Count > 0;
-        if (!hasConnectedInputFields)
-        {
-            CollectedChanges |= ChangedFlags.HasErrors;
-            return;
-        }
+        // if (!hasConnectedInputFields)
+        // {
+        //     CollectedChanges |= ChangedFlags.HasErrors;
+        //     return;
+        // }
 
         // Align size of input nodes to connected fields
         if (_connectedNodeOps.Count != InputNodes.Count)
@@ -157,13 +160,13 @@ public class ShaderGraphNode
         {
             // Update connected shader node...
             var updatedNode = _connectedNodeOps[index].GetValue(context);
-            
+
             if (updatedNode == null)
             {
                 CollectedChanges |= ChangedFlags.Structural | ChangedFlags.HasErrors;
                 continue;
             }
-            
+
             updatedNode.OutputCounts++;
             //Log.Debug($"Updated {updatedNode} to {updatedNode.OutputCounts}");
             StructureHash = StructureHash * 31 + updatedNode.StructureHash;
@@ -196,42 +199,46 @@ public class ShaderGraphNode
     }
 
     /** this will be cleared once the shader code is being collected */
-    private bool _hasCodeChanges = true; 
+    private bool _hasCodeChanges = true;
     #endregion
 
     private int _lastParamUpdateFrame = -1;
     private int _lastCodeUpdateFrame = -1;
-    
 
     public void CollectEmbeddedShaderCode(CodeAssembleContext cac)
     {
         if (_instance is not IGraphNodeOp nodeOp)
             return;
-        
-        var isRoot = cac.ContextIdStack.Count==0;
+
+        var isRoot = cac.ContextIdStack.Count == 0;
         if (isRoot)
         {
             cac.ContextIdStack.Add("");
+        }
+        
+        nodeOp.AddDefinitions(cac);
+
+        if (nodeOp.TryBuildCustomCode(cac))
+        {
+            return;
         }
         
         if (InputNodes.Count == 0)
         {
             nodeOp.GetPreShaderCode(cac, 0);
             nodeOp.GetPostShaderCode(cac, 0);
-            
+
             // We assume that a node without an input field is a distance function
             // We copy the local coordinates to the field result, so we can use
             // it later for things like UV mapping.
-            cac.AppendCall($"f{cac}.xyz = p.w < 0.5 ?  p{cac}.xyz : 1; // #{string.Join(' ', cac.ContextIdStack)} {this}");    
+            //cac.AppendCall($"f{cac}.xyz = p.w < 0.5 ?  p{cac}.xyz : 1; // #{string.Join(' ', cac.ContextIdStack)} {this}");
             return;
         }
-        
-        var hasMultipleInputFields = InputNodes.Count > 1;
-        
+
         // We need to start a new fieldContext
         var contextId = cac.ContextIdStack[^1];
-        var requiresSubContext = hasMultipleInputFields;
-        
+        var requiresSubContext = InputNodes.Count > 1;
+
         if (requiresSubContext)
         {
             cac.SubContextCount++;
@@ -239,30 +246,20 @@ public class ShaderGraphNode
             cac.Calls.AppendLine();
             cac.AppendCall($"// {_instance.Symbol.Name}");
 
-            var subContextCount = cac.SubContextCount;
+            var subContextIndex = cac.SubContextCount;
             for (var inputFieldIndex = 0; inputFieldIndex < InputNodes.Count; inputFieldIndex++)
             {
-                var subContextId = InputNodes.Count > 1 
-                                       ? $"{subContextCount}{IntToChar(inputFieldIndex)}"
-                                       : $"{subContextCount}";
-                
-                cac.ContextIdStack.Add(subContextId);
-            
-                var inputNode = InputNodes[inputFieldIndex];
-                
-                if(inputFieldIndex>0)
-                    cac.Calls.AppendLine();
-                
-                cac.AppendCall($"float4 p{subContextId} = p{contextId};");
-                cac.AppendCall($"float4 f{subContextId};");
+                cac.PushContext(subContextIndex, 
+                                InputNodes.Count == 0 ? "" : ((char)('a' + inputFieldIndex)).ToString());
 
                 nodeOp.GetPreShaderCode(cac, inputFieldIndex);
-                
-                inputNode?.CollectEmbeddedShaderCode(cac);
-                
+
+                InputNodes[inputFieldIndex]?.CollectEmbeddedShaderCode(cac);
+
                 nodeOp.GetPostShaderCode(cac, inputFieldIndex);
 
-                cac.ContextIdStack.RemoveAt(cac.ContextIdStack.Count-1);
+                cac.PopContext();
+                cac.Calls.AppendLine();
             }
 
             cac.IndentCount--;
@@ -275,18 +272,18 @@ public class ShaderGraphNode
             {
                 InputNodes[0]?.CollectEmbeddedShaderCode(cac);
             }
-            
+
             nodeOp.GetPostShaderCode(cac, 0);
         }
     }
+
     
-    private static char IntToChar(int i) => (char)('a' + i);
-    
+
     // Keep the input slot so we can detect and handle structural changes to the graph
     private readonly MultiInputSlot<ShaderGraphNode>? _connectedNodeMultiInput;
+    private readonly InputSlot<ShaderGraphNode>[] _connectedNodeInputs;
 
     private readonly List<Slot<ShaderGraphNode>> _connectedNodeOps = [];
-    private readonly InputSlot<ShaderGraphNode>? _connectedNodeInput;
     public readonly List<ShaderGraphNode?> InputNodes = [];
     private int _lastParamGraphId;
 
@@ -333,7 +330,6 @@ public class ShaderGraphNode
         return false;
     }
 
-    
     // ReSharper disable once CollectionNeverUpdated.Global
     public List<Parameter> AdditionalParameters = [];
 
@@ -377,17 +373,46 @@ public class ShaderGraphNode
 public sealed class GraphParamAttribute : Attribute;
 
 /**
- * Needs to implemented by Symbols so provide access to its ShaderNode and code generation methods. 
+ * Needs to implemented by Symbols so provide access to its ShaderNode and code generation methods.
  */
 public interface IGraphNodeOp
 {
     ShaderGraphNode ShaderNode { get; }
-    void GetPreShaderCode(CodeAssembleContext c, int inputIndex);
-    void GetPostShaderCode(CodeAssembleContext cac, int inputIndex);
+    
+    /**
+     * Called only once for registering globals and definitions constant over the iteration of connected fields.
+     */
+    void AddDefinitions(CodeAssembleContext c)
+    {
+    }
+
+    /**
+     * Some nodes like SdfMaterial require custom handling and evaluation of connected fields.
+     * If this method is overridden GetPre/Post ShaderCode calls are omitted.
+     */
+    bool TryBuildCustomCode(CodeAssembleContext c)
+    {
+        return false;
+    }
+    
+    /**
+     * Called before iterating connected fields. Should be used for manipulating the context
+     * before evaluation (e.g. TransformSDF)
+     */
+    void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
+    {
+    }
+
+    /**
+     * Called after iterating a connected field. Should be used for manipulating the result field (e.g. offset f) 
+     */
+    void GetPostShaderCode(CodeAssembleContext cac, int inputIndex)
+    {
+    }
 }
 
 /**
- * Is passed along while collecting all connected nodes in a shader graph.  
+ * Is passed along while collecting all connected nodes in a shader graph.
  */
 public sealed class CodeAssembleContext
 {
@@ -396,13 +421,13 @@ public sealed class CodeAssembleContext
      * one or more graph nodes.
      */
     public readonly Dictionary<string, string> Globals = new();
-    
+
     /**
      * A string builder for collecting of instances specific methods containing
      * references to unique node parameters or resources.
      */
-    public readonly StringBuilder Definitions=new();
-    
+    public readonly StringBuilder Definitions = new();
+
     /**
      * A string builder for collecting the actual distance function. This is the
      * primary target CollectEmbeddedShaderCode is writing to.
@@ -410,24 +435,53 @@ public sealed class CodeAssembleContext
      */
     public readonly StringBuilder Calls = new();
 
+    public void PushContext(int subContextIndex, string fieldSuffix = "")
+    {
+        //private static char IntToChar(int i) => (char)('a' + i);
+        //var fieldSuffix = ;
+        var contextId = ContextIdStack[^1];
+        var subContextId = subContextIndex + fieldSuffix;
+
+        ContextIdStack.Add(subContextId);
+
+        AppendCall($"float4 p{subContextId} = p{contextId};");
+        AppendCall($"float4 f{subContextId} = f{contextId};");
+    }
+
+    public void PopContext()
+    {
+        ContextIdStack.RemoveAt(ContextIdStack.Count - 1);
+    }
+
     public void AppendCall(string code)
     {
-        Calls.Append(new string('\t', (IndentCount+1)));
+        Calls.Append(new string('\t', (IndentCount + 1)));
         Calls.AppendLine(code);
     }
-    
-    //public Stack<ShaderGraphNode> NodeStack = [];
+
+    public void Indent()
+    {
+        IndentCount++;
+    }
+
+    public void Unindent()
+    {
+        IndentCount--;
+    }
+
+
+//public Stack<ShaderGraphNode> NodeStack = [];
     public readonly List<string> ContextIdStack = [];
     internal int IndentCount;
     internal int SubContextCount;
-    
+
     public void Reset()
     {
         Globals.Clear();
         Definitions.Clear();
         Calls.Clear();
         ContextIdStack.Clear();
-        
+
         IndentCount = 0;
         SubContextCount = 0;
     }

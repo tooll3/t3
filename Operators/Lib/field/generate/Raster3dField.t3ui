@@ -1,0 +1,44 @@
+{
+  "Id": "edfc71fc-2d54-4226-b819-0340bb1fdd65"/*Raster3dField*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "1108ec25-8d77-4c0b-8f17-5308ea017df4"/*Feather*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 210.0
+      }
+    },
+    {
+      "InputId": "3938188b-41ba-4efe-b7e1-9720d2e58cd4"/*Offset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "606584e3-2c4a-432f-a7a4-c3093a34685e"/*LineWidth*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "9b324ca4-2116-489d-a829-8348a9984235"/*Scale*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "096ef8a1-c5bb-4cc1-a4a9-fdc8ab1214ae"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

@@ -226,7 +226,7 @@ PSOutput psMain(vsOutput input)
     if (a < 0.1)
         discard;
 
-    float4 f = float4(GetField(float4(p, 1)).rgb, 1);
+    float4 f = float4(GetField(float4(p, 0)).rgb, 1);
     float3 pObject = f.xyz;
 
     // PBR shading -------------------------------------------------------------------------
@@ -249,9 +249,9 @@ PSOutput psMain(vsOutput input)
     float2 uv = pObject.yz / TextureScale;
 #endif
 
-    //float4 albedo = BaseColorMap.Sample(texSampler, uv) *
-    float4 albedo = float4(GetField(float4(p,1)).rgb,1);
-    //float4 fieldAlbedo = GetField(float4(p,1));
+    // float4 albedo = BaseColorMap.Sample(texSampler, uv) *
+    float4 albedo = float4(GetField(float4(p, 1)).rgb, 1) * BaseColorMap.Sample(texSampler, uv);
+    // float4 fieldAlbedo = GetField(float4(p,1));
 
     float4 roughnessMetallicOcclusion = RSMOMap.Sample(texSampler, uv);
     float roughness = saturate(roughnessMetallicOcclusion.x + Roughness);
@@ -364,6 +364,6 @@ PSOutput psMain(vsOutput input)
     float viewZ = mul(float4(p, 1), WorldToCamera).z;
     // result.color.a  = 1;
     result.depth = ComputeDepthFromViewZ(viewZ);
-    // result.color.xyz = pObject.xyz;
+    // result.color.xyz = f.xyz;
     return result;
 }

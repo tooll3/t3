@@ -3,6 +3,13 @@
   "Description": "",
   "InputUis": [
     {
+      "InputId": "522a9640-ca8c-47e6-ad36-5c316a9092ae"/*Axis*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
       "InputId": "5fe2ab92-f8e5-400d-b5a3-197f20570d6f"/*Size*/,
       "Position": {
         "X": -200.0,
