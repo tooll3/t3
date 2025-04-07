@@ -310,7 +310,7 @@ internal abstract class BaseRenderWindow : Window
         if (texture == null || texture.IsDisposed)
         {
             warning = "You have selected an operator that does not render. " +
-                      "Ready to export to video.";
+                      "Ready to render.";
             return true;
         }
 
@@ -318,7 +318,7 @@ internal abstract class BaseRenderWindow : Window
         return false;
     }
 
-    protected const string PreferredInputFormatHint = "Ready to export to video.";
+    protected const string PreferredInputFormatHint = "Ready to render.";
 
     protected static double Progress => (FrameCount <= 1) ? 0 :
         (FrameIndex / (double)(FrameCount - 1)).Clamp(0, 1);
