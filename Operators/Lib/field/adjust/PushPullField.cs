@@ -50,6 +50,7 @@ internal sealed class PushPullField : Instance<PushPullField>
             ShaderNode.InputNodes[inputNodeIndex]?.CollectEmbeddedShaderCode(c);
             c.PopContext();
             c.AppendCall($"f{c}.w += f{subContextId}.r *{ShaderNode}Amount;");
+            c.AppendCall($"f{c}.w /= 1 + {ShaderNode}StepScale;");
         }
         else
         {
@@ -62,15 +63,6 @@ internal sealed class PushPullField : Instance<PushPullField>
         return true;
     }
     
-    // public void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
-    // {
-    // }
-    //
-    // public void GetPostShaderCode(CodeAssembleContext c, int inputIndex)
-    // {
-    //     c.AppendCall($"f{c}.w += {ShaderNode}Amount;");
-    // }
-    
     
     [Input(Guid = "c57d91b6-a26a-4e69-be1f-dc04f86594b6")]
     public readonly InputSlot<ShaderGraphNode> SdfField = new();
@@ -81,4 +73,8 @@ internal sealed class PushPullField : Instance<PushPullField>
     [GraphParam]
     [Input(Guid = "9cd1120d-81fa-43ab-b023-c462fe651ffb")]
     public readonly InputSlot<float> Amount = new();
+    
+    [GraphParam]
+    [Input(Guid = "463149FA-B53B-4D43-B4E7-57DCB045BBA0")]
+    public readonly InputSlot<float> StepScale = new();    
 }

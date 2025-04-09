@@ -32,7 +32,7 @@ internal sealed class TorusField : Instance<TorusField>
 
     public ShaderGraphNode ShaderNode { get; }
 
-    public void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
+    void IGraphNodeOp.AddDefinitions(CodeAssembleContext c)
     {
         c.Globals["fTorus"]
             = """
@@ -41,7 +41,10 @@ internal sealed class TorusField : Instance<TorusField>
                   return length(q) - size.y;
               }
               """;
-        
+    }
+
+    public void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
+    {
         var a = _axisCodes0[(int)_axis];
 
         c.AppendCall($"f{c}.w = fTorus(p{c}.{a} - {ShaderNode}Center.{a} , {ShaderNode}Size);");

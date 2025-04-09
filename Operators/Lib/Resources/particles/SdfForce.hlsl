@@ -8,6 +8,7 @@
 
 cbuffer Params : register(b0)
 {
+    float4x4 SpaceTransform;
     float Amount;
     float RandomizeSpeed;
     float Spin;
@@ -64,6 +65,18 @@ float4 q_from_tangentAndNormal(float3 dx, float3 dz)
     return normalize(qFromMatrix3Precise(transpose(orientationDest)));
 }
 
+float3 GetNormalNonNormalized(float3 p, float d)
+{
+    //return normalize(
+    return 
+        GetDistance(p + float3(d, -d, -d)) * float3(1, -1, -1) +
+        GetDistance(p + float3(-d, d, -d)) * float3(-1, 1, -1) +
+        GetDistance(p + float3(-d, -d, d)) * float3(-1, -1, 1) +
+        GetDistance(p + float3(d, d, d)) * float3(1, 1, 1);
+        //);
+}
+
+
 [numthreads(64, 1, 1)] void main(uint3 i : SV_DispatchThreadID)
 {
     if (i.x >= ParticleCount)
@@ -81,21 +94,18 @@ float4 q_from_tangentAndNormal(float3 dx, float3 dz)
     //                                            phase - phaseId));
     // float3 signedNoise = normalizedNoise * 2 - 1;
 
-    float3 forward = p.Velocity; // qRotateVec3( float3(1,0,0), p.Rotation);
-    float lForward = length(forward);
-    if (lForward < 0.0001)
-        return;
+    // float3 forward = p.Velocity; // qRotateVec3( float3(1,0,0), p.Rotation);
+    // float lForward = length(forward);
+    // if (lForward < 0.0001)
+    //     return;
 
-    float3 forwardDir = forward / lForward;
-    float usedSpeed = Amount * 0.01f; // * (1+signedPointHash * RandomizeSpeed);
+    // float3 forwardDir = forward / lForward;
+    // float usedSpeed = Amount * 0.01f; // * (1+signedPointHash * RandomizeSpeed);
 
     float3 pos = p.Position;
     float e = 0.0001;
 
-    float3 n = float3(
-        GetDistance(pos + float3(-e, 0, 0)) - GetDistance(pos + float3(e, 0, 0)),
-        GetDistance(pos + float3(0, -e, 0)) - GetDistance(pos + float3(0, e, 0)),
-        GetDistance(pos + float3(0, 0, -e)) - GetDistance(pos + float3(0, 0, e)));
+    float3 n = GetNormalNonNormalized(pos, e);
 
     float l = length(n);
 
@@ -104,15 +114,20 @@ float4 q_from_tangentAndNormal(float3 dx, float3 dz)
 
     n = normalize(n);
 
-    float3 side = cross(normalize(p.Velocity), n);
+    float3 rotatedForce = mul( float4(n,1), SpaceTransform ).xyz;
 
-    // qRotateVec3( float3(1,0,0), p.Rotation);
-    float4 rotateAroundSide = qFromAngleAxis(Spin, side);
-    float3 force = qRotateVec3(n, rotateAroundSide);
+    // float3 side = cross(normalize(p.Velocity), n);
+    // float4 rotateAroundSide = qFromAngleAxis(Spin, side);
+    // float3 force = qRotateVec3(n, rotateAroundSide);
 
-    p.Velocity = lerp(forwardDir, force, Amount);
+    //p.Velocity = lerp(forwardDir, force, Amount);
+
+    p.Velocity += rotatedForce * Amount;
 
     Particles[i.x] = p;
+
+
+
 
     // float3 pos2 = pos + forward * usedSpeed;
 

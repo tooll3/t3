@@ -7,11 +7,11 @@
     },
     {
       "Id": "1b53c8e9-0330-43c8-b684-54e982c9f706"/*Spin*/,
-      "DefaultValue": 0.0
+      "DefaultValue": -90.0
     },
     {
       "Id": "3fd1169e-1640-4d67-b859-70815cb3d28f"/*Amount*/,
-      "DefaultValue": 1.0
+      "DefaultValue": 0.1
     },
     {
       "Id": "43e90070-5841-441c-8658-7854b80003b9"/*Field*/,
@@ -83,7 +83,7 @@
       "Outputs": []
     },
     {
-      "Id": "39983d4f-12ea-40a9-92a8-c9a05b1828cc"/*_GetFieldShaderAttributes*/,
+      "Id": "39983d4f-12ea-40a9-92a8-c9a05b1828cc"/*GenerateShaderGraphCode*/,
       "SymbolId": "73c028d1-3de2-4269-b503-97f62bbce320",
       "InputValues": [],
       "Outputs": []

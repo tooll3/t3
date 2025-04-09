@@ -55,6 +55,9 @@ vsOutput vsMain4(uint vertexId : SV_VertexID)
     return output;
 }
 
+
+
+
 //=== Field functions ===============================================
 /*{FIELD_FUNCTIONS}*/
 
@@ -72,6 +75,19 @@ float GetDistance(float3 p3)
 }
 
 //===================================================================
+
+const static float NormalSamplingDistance = 0.01;
+
+float3 GetNormalNonNormalized(float3 p)
+{
+    //return normalize(
+    return 
+        GetDistance(p + float3(NormalSamplingDistance, -NormalSamplingDistance, -NormalSamplingDistance)) * float3(1, -1, -1) +
+        GetDistance(p + float3(-NormalSamplingDistance, NormalSamplingDistance, -NormalSamplingDistance)) * float3(-1, 1, -1) +
+        GetDistance(p + float3(-NormalSamplingDistance, -NormalSamplingDistance, NormalSamplingDistance)) * float3(-1, -1, 1) +
+        GetDistance(p + float3(NormalSamplingDistance, NormalSamplingDistance, NormalSamplingDistance)) * float3(1, 1, 1);
+        //);
+}
 
 inline float fmod(float x, float y)
 {
@@ -123,5 +139,10 @@ float4 psMain(vsOutput input) : SV_TARGET
     float3 ray = float3(0, 0, 1);
 
     float sideView = saturate(max(abs(s.x), abs(s.y)) * 1000);
+
+    float lipschitz= pow(length(GetNormalNonNormalized(input.posInWorld))-0.0,0.5);
+    //return float4( lipschitz.xxx,1);
     return DistanceMeter(dist, 0.1, ray, 15 / dToCam, 1 - sideView);
+    // + float4( lipschitz.xxx,1); 
+    //+ float4( length(lipschitz).xxx / 3,1);
 }
