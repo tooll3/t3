@@ -60,6 +60,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         return float4(0., 0., 0., 1);
     }
 
+    float lineThickness = 1.2/height/Width;
+
     float2 pOnLine = p;
     pOnLine +=  (- distanceFromCenter)  *  angle;
     pOnLine.x /= aspectRation;
@@ -67,19 +69,23 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float4 colorOnLine = inputTexture.Sample(texSampler, pOnLine);
 
     // Curves...
-    float4 curveColor = float4(0,0,0,0);
-    float lineThickness = 0.015 * width/max(width,height);
-    // float3 curveShapeRGB = smoothstep(normalizedDistance +lineThickness, normalizedDistance +lineThickness * 1.5 ,colorOnLine.rgb);
-    // float curveShapeA = smoothstep(normalizedDistance +lineThickness, normalizedDistance +lineThickness * 1.5 ,colorOnLine.a) * 0.2;
-    float4 curveShape = smoothstep(normalizedDistance +lineThickness, normalizedDistance +lineThickness * 1.5 ,colorOnLine.rgba) * float4(1,1,1, 0.2);
+    float4 curveColor = 0;
+    float4 curveShape2 = smoothstep(normalizedDistance , normalizedDistance +lineThickness, colorOnLine.rgba);
+    float channelAlpha = 0.05;
+    float4 curveShape = curveShape2.r * float4(1,0,0,channelAlpha) 
+    +curveShape2.g * float4(0,1,0,channelAlpha) 
+    +curveShape2.b * float4(0,0,1,channelAlpha) 
+    +curveShape2.a * float4(0,0,0,channelAlpha);
+
 
     float4 curveLines =smoothstep(normalizedDistance + lineThickness, normalizedDistance,colorOnLine.rgba)
                     *smoothstep(normalizedDistance - lineThickness, normalizedDistance,colorOnLine.rgba) * float4(1,1,1,0.0);
-    curveLines.a += length(curveLines.rgb) * 0.3;
-    curveLines.rgb+= curveLines.a * 0.2;
+    
+    curveLines.a += length(curveLines.rgb) * 0.5;
     if(normalizedDistance < 0) {
-        curveShape = float4(1,1,1,0.2)  - curveShape;
+        curveShape = 0;
     }
+    
     curveColor.rgba = curveLines + curveShape;
 
     if(normalizedDistance < 0)
@@ -91,12 +97,12 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float pattern = (pixelposition.x  + pixelposition.y + 0.5 + beatTime * 100)  % 8 < 2 ? 1: -1;
 
     float3 clampedAreaRGB = clamping * curveShape.rgb * ((normalizedDistance > 1 || normalizedDistance <0) ? 1:0);
-    float4 clampedArea = float4(clampedAreaRGB, length(clampedAreaRGB) * pattern * 0.2);
+    float4 clampedArea = float4(clampedAreaRGB, length(clampedAreaRGB) * pattern * 0.5);
     float heighlightExcessiveAlpha = ((normalizedDistance > 1 || normalizedDistance < 0)  && colorOnLine.a > normalizedDistance) ? 1: 0;
 
     bool isBetweenCurveRange = normalizedDistance >= 0 && normalizedDistance <= 1;
 
     return  curveColor
             + clampedArea
-            + visibleOrgColor * (isBetweenCurveRange ? 0.4 : 1);
+            + visibleOrgColor * (isBetweenCurveRange ? 0.2 : 1);
 }
