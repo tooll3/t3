@@ -9,6 +9,7 @@ cbuffer Params : register(b0)
     float UseWAsWidth;
     float UseStretch;
     float Width;
+    float UVsDirection;
 }
 
 StructuredBuffer<LegacyPoint> RailPoints : t0;
@@ -17,7 +18,7 @@ StructuredBuffer<LegacyPoint> ShapePoints : t1;
 RWStructuredBuffer<PbrVertex> Vertices : u0;
 RWStructuredBuffer<int3> TriangleIndices : u1;
 
-[numthreads(64, 1, 1)] void main(uint3 i : SV_DispatchThreadID)
+[numthreads(80, 1, 1)] void main(uint3 i : SV_DispatchThreadID)
 {
     uint triangleCount, stride;
     TriangleIndices.GetDimensions(triangleCount, stride);
@@ -45,7 +46,6 @@ RWStructuredBuffer<int3> TriangleIndices : u1;
     LegacyPoint shapePoint = ShapePoints[rowIndex];
 
     float3 scaleFactor = (UseStretch ? railPoint.Stretch : 1) * (UseWAsWidth ? railPoint.W : 1) * Width;
-    ;
 
     float4 rotation = normalize(qMul(railPoint.Rotation, shapePoint.Rotation));
     float3 position = qRotateVec3(shapePoint.Position * scaleFactor, railPoint.Rotation) + railPoint.Position;
@@ -56,8 +56,20 @@ RWStructuredBuffer<int3> TriangleIndices : u1;
     v.Normal = qRotateVec3(float3(0, 0, 1), rotation);
     v.Tangent = qRotateVec3(float3(0, 1, 0), rotation);
     v.Bitangent = qRotateVec3(float3(1, 0, 0), rotation);
-    v.TexCoord = float2((float)columnIndex / (columns - 1), (float)rowIndex / (rows - 1));
-    v.TexCoord2 = 0;
+
+    bool swapUVs = (UVsDirection > 0.5);
+    float U = (float)columnIndex / max(1, columns - 1);
+    float V = (float)rowIndex / max(1, rows - 1);
+
+    if (swapUVs) {
+        v.TexCoord = float2(V, U);
+        v.TexCoord2 = float2(1.0 - U, V);  
+    } 
+    else {
+        v.TexCoord = float2(1.0 - U, V);   
+        v.TexCoord2 = float2(V, U);       
+    }
+
     v.Selected = 1;
     v.__padding = 0;
 
