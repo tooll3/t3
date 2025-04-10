@@ -21,6 +21,7 @@
         <PackageReference Include="SharpDX.Desktop" Version="4.2.0">
             <NoWarn>NU1701</NoWarn>
         </PackageReference>
+        <PackageReference Include="System.Runtime.Serialization.Formatters" Version="9.0.4" />
     </ItemGroup>
 
     <!--This copies all files in the `dependencies` folder *directly* into the output directory-->
