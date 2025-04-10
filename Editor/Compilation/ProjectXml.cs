@@ -312,7 +312,7 @@ internal static partial class ProjectXml
 
     // Note : we are trying to stay platform-agnostic with directories, and so we use unix path separators
     private static readonly Condition _releaseConfigCondition = new(ConditionVarName: "Configuration", RequiredValue: "Release", IfEqual: true);
-    private const string IncludeAllStr = "**";
+    private const string IncludeAllStr = "**/*";
 
     private static readonly string[] _excludeFoldersFromOutput =
             [CreateIncludePath(args: ["bin", IncludeAllStr]), CreateIncludePath(args: ["obj", IncludeAllStr])];
