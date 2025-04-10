@@ -22,8 +22,8 @@ internal sealed class ExtrudeCurves : Instance<ExtrudeCurves>
     [Input(Guid = "7a2eff05-ab49-42ab-816c-86937f0ebbaf")]
     public readonly InputSlot<bool> UseExtend = new InputSlot<bool>();
 
-    [Input(Guid = "8104d7e7-0cea-4009-851d-1b0a23802ad8")]
-    public readonly InputSlot<bool> FixHoles = new InputSlot<bool>();
+        [Input(Guid = "e4591b4f-b2e7-496d-8e02-e574a0432737")]
+        public readonly InputSlot<bool> UVsDirection = new InputSlot<bool>();
 
 
     private enum SampleModes
