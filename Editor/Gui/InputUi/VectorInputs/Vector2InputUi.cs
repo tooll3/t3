@@ -127,8 +127,23 @@ internal class Vector2InputUi : FloatVectorInputValueUi<Vector2>
                     speedFactor *= 10f;
                 }
 
-                FloatComponents[0] = _valueInDragStart.X + mouseDragDelta.X * 0.005f * speedFactor;
-                FloatComponents[1] = _valueInDragStart.Y - mouseDragDelta.Y * 0.005f * speedFactor;
+                var dx = mouseDragDelta.X * 0.005f * speedFactor;
+                var dy = mouseDragDelta.Y * 0.005f * speedFactor;
+                
+                if (UseVec2Control != Vec2Controls.Range)
+                {
+                    FloatComponents[0] = _valueInDragStart.X + dx;
+                    FloatComponents[1] = _valueInDragStart.Y - dy;
+                }
+                else
+                {
+                    var zoom = MathF.Pow(4,-dy);
+                    var center = (_valueInDragStart.X + _valueInDragStart.Y) / 2 + dx*zoom * 0.1f;
+                    var width =   (_valueInDragStart.Y - _valueInDragStart.X) * zoom;
+                    
+                    FloatComponents[0] = center - width/2;
+                    FloatComponents[1] = center + width/2;
+                }
 
                 if (shouldClamp)
                 {
