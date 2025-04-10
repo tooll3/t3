@@ -20,4 +20,7 @@ internal sealed class ImageLevels : Instance<ImageLevels>
 
     [Input(Guid = "a8a4d660-7356-40de-8dc6-549a72b69973")]
     public readonly InputSlot<float> ShowOriginal = new();
+
+        [Input(Guid = "8910ac23-551b-446a-b833-98f4efce1022")]
+        public readonly InputSlot<System.Numerics.Vector2> Range = new InputSlot<System.Numerics.Vector2>();
 }
