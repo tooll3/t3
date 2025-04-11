@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.IO;
 using Newtonsoft.Json;
@@ -6,12 +7,12 @@ using T3.Core.Logging;
 
 namespace T3.Core.Model;
 
-public class JsonFileResult<T>
+public sealed class JsonFileResult<T>
 {
     public readonly JToken JToken;
     public readonly string FilePath;
 
-    public T Object;
+    public T? Object;
     public Guid Guid { get; }
 
     private JsonFileResult(JToken jToken, string filePath, Guid guid)
@@ -38,7 +39,7 @@ public class JsonFileResult<T>
                 throw new JsonException($"Guid \"{SymbolJson.JsonKeys.Id}\" not found");
             }
                 
-            var guid = Guid.Parse(keyToken.Value<string>());
+            var guid = Guid.Parse(keyToken.Value<string>()!);
             return new JsonFileResult<T>(jToken, filePath, guid);
         }
         catch (Exception e)

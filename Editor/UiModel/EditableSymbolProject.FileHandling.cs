@@ -225,7 +225,7 @@ internal sealed partial class EditableSymbolProject
         UnmarkAsSaving();
     }
 
-    public static bool IsSaving => Interlocked.Read(ref _savingCount) > 0 || CheckCompilation(out _);
+    public static bool IsSaving => Interlocked.Read(ref _savingCount) > 0 || IsCompiling(out _);
     private static long _savingCount;
     private static readonly FileStreamOptions _saveOptions = new() { Mode = FileMode.Create, Access = FileAccess.ReadWrite };
 

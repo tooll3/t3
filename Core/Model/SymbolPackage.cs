@@ -113,6 +113,12 @@ public abstract partial class SymbolPackage : IResourcePackage
         }
     }
 
+    /// <summary>
+    /// Loads symbols from the assembly and locates their symbol .t3/json files
+    /// </summary>
+    /// <param name="parallel">if true, parallel loading is used</param>
+    /// <param name="newlyRead">Newly read json files for new types</param>
+    /// <param name="allNewSymbols">All new symbols, including those for which a json file was not found</param>
     public void LoadSymbols(bool parallel, out List<SymbolJson.SymbolReadResult> newlyRead, out List<Symbol> allNewSymbols)
     {
         Log.Info($"{AssemblyInformation.Name}: Loading symbols...");
@@ -135,13 +141,13 @@ public abstract partial class SymbolPackage : IResourcePackage
         {
             AssemblyInformation.OperatorTypeInfo
                                .AsParallel()
-                               .ForAll(kvp => LoadTypes(kvp.Key, kvp.Value.Type, newTypes));
+                               .ForAll(kvp => LoadTypes(kvp.Key, kvp.Value.Type, newTypes, updatedSymbols));
         }
         else
         {
             foreach (var (guid, type) in AssemblyInformation.OperatorTypeInfo)
             {
-                LoadTypes(guid, type.Type, newTypes);
+                LoadTypes(guid, type.Type, newTypes, updatedSymbols);
             }
         }
 
@@ -183,7 +189,7 @@ public abstract partial class SymbolPackage : IResourcePackage
             foreach (var readSymbolResult in symbolsRead)
             {
                 var symbol = readSymbolResult.Result.Symbol;
-                var id = symbol.Id;
+                var id = symbol!.Id;
 
                 if (!SymbolDict.TryAdd(id, symbol))
                 {
@@ -199,7 +205,7 @@ public abstract partial class SymbolPackage : IResourcePackage
             }
         }
 
-        // these do not have a file
+        // these do not have a symbol json file but are defined in the assembly
         foreach (var (guid, newType) in newTypes)
         {
             var symbol = CreateSymbol(newType, guid);
@@ -220,19 +226,20 @@ public abstract partial class SymbolPackage : IResourcePackage
 
         return;
 
-        void LoadTypes(Guid guid, Type type, ConcurrentDictionary<Guid, Type> newTypesDict)
+        void LoadTypes(Guid guid, Type type, ConcurrentDictionary<Guid, Type> newTypesDict, ConcurrentBag<Symbol> updated)
         {
             if (SymbolDict.TryGetValue(guid, out var symbol))
             {
                 removedSymbolIds.Remove(guid);
-                if (symbol == null)
+                if (symbol == null) // this should never happen??
                 {
                     Log.Error($"Skipping update of invalid symbol {guid}.");
                     return;
                 }
 
+                // we already have this symbol, so mark it as updated
                 symbol.UpdateTypeWithoutUpdatingDefinitionsOrInstances(type, this);
-                updatedSymbols.Add(symbol);
+                updated.Add(symbol);
             }
             else
             {
@@ -271,13 +278,17 @@ public abstract partial class SymbolPackage : IResourcePackage
 
     protected static bool TryReadAndApplyChildren(SymbolJson.SymbolReadResult result)
     {
-        if (!SymbolJson.TryReadAndApplySymbolChildren(result))
+        if (SymbolJson.TryReadAndApplySymbolChildren(result)) return true;
+        
+        var symbol = result.Symbol;
+        if (symbol == null)
         {
-            Log.Error($"Problem obtaining children of {result.Symbol.Name} ({result.Symbol.Id})");
+            Log.Error($"Problem obtaining children of 'null' with {result.ChildrenJsonArray.Length} children");
             return false;
         }
+        Log.Error($"Problem obtaining children of {symbol.Name ?? "'null'"} ({symbol.Id})");
+        return false;
 
-        return true;
     }
 
     public readonly record struct SymbolJsonResult(in SymbolJson.SymbolReadResult Result, string Path);

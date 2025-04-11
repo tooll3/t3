@@ -406,7 +406,7 @@ public static class SymbolJson
         internal const string Animator = "Animator";
     }
 
-    public readonly record struct SymbolReadResult(Symbol Symbol, JsonChildResult[] ChildrenJsonArray, JArray? AnimatorJsonData);
+    public readonly record struct SymbolReadResult(Symbol? Symbol, JsonChildResult[] ChildrenJsonArray, JArray? AnimatorJsonData);
 
     public readonly struct JsonChildResult
     {

@@ -27,7 +27,7 @@ public class AddInputDialog : ModalDialog
             FormInputs.ApplyIndent();
             if (CustomComponents.DisablableButton("Add", _selectedType != null && isValid))
             {
-                InputsAndOutputs.AddInputToSymbol(_parameterName, _multiInput, _selectedType, symbol);
+                InputsAndOutputs.AddInputToSymbol(_parameterName, _multiInput, _selectedType!, symbol);
                 _parameterName = string.Empty;
             }
 

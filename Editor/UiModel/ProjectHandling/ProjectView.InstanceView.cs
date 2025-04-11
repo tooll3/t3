@@ -83,8 +83,10 @@ internal sealed partial class ProjectView
                     throw new Exception($"Could not find parent symbol with id {_parentSymbolId}");
                 }
 
-                var parent = parentSymbol.InstancesOfSelf.First(x => x.SymbolChildId == _parentSymbolChildId);
-                return parent!.Children[SymbolChildId];
+
+                return parentSymbol.InstancesOfSelf // all instances of our parent's symbol
+                                   .First(x => x.SymbolChildId == _parentSymbolChildId) // find our specific parent instance
+                                   .Children[SymbolChildId]; // find us!
             }
         }
 

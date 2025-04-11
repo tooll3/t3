@@ -67,6 +67,14 @@ internal class EditorSymbolPackage : SymbolPackage
         }
     }
 
+    /// <summary>
+    /// Loads UI files for the provided symbols. 
+    /// This method does not delete UIs that have since been deleted
+    /// </summary>
+    /// <param name="parallel">If true, load and process in parallel</param>
+    /// <param name="newlyReadSymbols">The symbols for which UI files should be loaded - just the new ones</param>
+    /// <param name="newlyReadSymbolUis">Brand spankin new symbol UIs</param>
+    /// <param name="preExistingSymbolUis">Symbol UIs that already existed at runtime - if this is the first time this package was loaded, this will be empty</param>
     public void LoadUiFiles(bool parallel, List<Symbol> newlyReadSymbols, out SymbolUi[] newlyReadSymbolUis,
                             out SymbolUi[] preExistingSymbolUis)
     {

@@ -139,9 +139,9 @@ internal partial class EditableSymbolProject
     /// <summary>
     /// this currently is primarily used when re-ordering symbol inputs and outputs
     /// </summary>
-    public static bool UpdateSymbolWithNewSource(Symbol symbol, string newSource, [NotNullWhen(false)] out string? reason)
+    private static bool UpdateSymbolWithNewSource(Symbol symbol, string newSource, [NotNullWhen(false)] out string? reason)
     {
-        if (CheckCompilation(out reason))
+        if (IsCompiling(out reason))
             return false;
 
         if (symbol.SymbolPackage.IsReadOnly)
@@ -156,7 +156,7 @@ internal partial class EditableSymbolProject
 
     public static bool RenameNameSpaces(NamespaceTreeNode node, EditableSymbolProject sourcePackage, EditableSymbolProject targetPackage, string newNamespace, out string reason)
     {
-        if (CheckCompilation(out reason))
+        if (IsCompiling(out reason))
         {
             return false;
         }
@@ -170,7 +170,7 @@ internal partial class EditableSymbolProject
 
     public static bool ChangeSymbolNamespace(Symbol symbol, string newNamespace, out string reason)
     {
-        if (CheckCompilation(out reason))
+        if (IsCompiling(out reason))
             return false;
 
         if (symbol.SymbolPackage is not EditableSymbolProject)
@@ -293,7 +293,7 @@ internal partial class EditableSymbolProject
         return false;
     }
 
-    private static bool CheckCompilation(out string reason)
+    private static bool IsCompiling(out string reason)
     {
         if (_recompiling)
         {
@@ -410,6 +410,7 @@ internal partial class EditableSymbolProject
 
     private readonly CodeFileWatcher _csFileWatcher;
     private bool _needsCompilation;
+    public bool NeedsCompilation => _needsCompilation;
     private static volatile bool _recompiling;
     private static readonly ConcurrentQueue<EditableSymbolProject> _recompiledProjects = new();
     private readonly ConcurrentDictionary<Guid, string> _pendingSource = new();
@@ -432,6 +433,7 @@ internal partial class EditableSymbolProject
         static void FlagDependentOpsAsModified(Symbol symbol)
         {
             List<SymbolUi> readOnlyDependents = [];
+            int countModified = 0;
             foreach (var dependent in Structure.CollectDependingSymbols(symbol))
             {
                 var package = (EditorSymbolPackage)dependent.SymbolPackage;
@@ -444,12 +446,15 @@ internal partial class EditableSymbolProject
                 if (!package.IsReadOnly)
                 {
                     symbolUi.FlagAsModified();
+                    countModified++;
                 }
                 else
                 {
                     readOnlyDependents.Add(symbolUi);
                 }
             }
+            
+            Log.Debug($"Modified {countModified} dependent symbols and {readOnlyDependents.Count} read-only dependent symbols.");
 
             if (readOnlyDependents.Count > 0)
             {

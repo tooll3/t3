@@ -244,7 +244,7 @@ internal static partial class ProjectSetup
                 package.RegisterUiSymbols(newlyLoadedUis, preExistingUis);
 
                 var count = package.Symbols.Sum(x => x.Value.InstancesOfSelf.Count());
-                Log.Info($"Updated symbol package {package.DisplayName} in {stopWatch.ElapsedMilliseconds}ms with {count} instances of its symbols");
+                Log.Debug($"Updated symbol package {package.DisplayName} in {stopWatch.ElapsedMilliseconds}ms with {count} instances of its symbols");
                 return;
             }
         }
