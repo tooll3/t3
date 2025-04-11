@@ -1,11 +1,14 @@
 ﻿#nullable enable
 using System;
+using System.Diagnostics.CodeAnalysis;
 using ManagedBass;
 using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Core.Resource;
 
 namespace T3.Core.Audio;
+
 
 /// <summary>
 /// Controls the playback of a <see cref="AudioClipDefinition"/> with BASS by the <see cref="AudioEngine"/>.
@@ -20,8 +23,14 @@ public sealed class AudioClipStream
     private float DefaultPlaybackFrequency { get; set; }
     internal double TargetTime { get; set; }
 
-    internal AudioClipInfo ClipInfo;
-
+    internal AudioClipResourceHandle ResourceHandle;
+    //internal AudioClipInfo ClipInfo;
+    
+    // public bool TryGetFileResource([NotNullWhen(true)] out FileResource? file)
+    // {
+    //     return FileResource.TryGetFileResource(AudioClip.FilePath, Owner, out file);
+    // }
+    
     internal void UpdatePlaybackSpeed(double newSpeed)
     {
         if (newSpeed == 0.0)
@@ -46,9 +55,9 @@ public sealed class AudioClipStream
     }
 
     /// <summary>
-    /// Creates an <see cref="AudioClipStream"/> by loading an <see cref="AudioClipInfo"/>. 
+    /// Creates an <see cref="AudioClipStream"/> by loading an <see cref="AudioClipResourceHandle"/>. 
     /// </summary>
-    internal static AudioClipStream? LoadClip(AudioClipInfo clipInfo)
+    internal static AudioClipStream? LoadClip(AudioClipResourceHandle clipInfo)
     {
         if (!clipInfo.TryGetFileResource(out var file))
         {
@@ -90,7 +99,7 @@ public sealed class AudioClipStream
 
         var stream = new AudioClipStream()
                          {
-                             ClipInfo = clipInfo,
+                             ResourceHandle = clipInfo,
                              StreamHandle = streamHandle,
                              DefaultPlaybackFrequency = defaultPlaybackFrequency,
                              Duration = duration,
@@ -117,7 +126,7 @@ public sealed class AudioClipStream
             return;
         }
 
-        var clip = ClipInfo.Clip;
+        var clip = ResourceHandle.Clip;
         var localTargetTimeInSecs = TargetTime - playback.SecondsFromBars(clip.StartTime);
         var isOutOfBounds = localTargetTimeInSecs < 0 || localTargetTimeInSecs >= clip.LengthInSeconds;
         var channelIsActive = Bass.ChannelIsActive(StreamHandle);
@@ -163,7 +172,7 @@ public sealed class AudioClipStream
     internal long UpdateTimeWhileRecording(Playback playback, double fps, bool reinitialize)
     {
         // Offset timing dependent on position in clip
-        var localTargetTimeInSecs = playback.TimeInSecs - playback.SecondsFromBars(ClipInfo.Clip.StartTime) + RecordSyncingOffset;
+        var localTargetTimeInSecs = playback.TimeInSecs - playback.SecondsFromBars(ResourceHandle.Clip.StartTime) + RecordSyncingOffset;
         var newStreamPos = localTargetTimeInSecs < 0
                                ? -Bass.ChannelSeconds2Bytes(StreamHandle, -localTargetTimeInSecs)
                                : Bass.ChannelSeconds2Bytes(StreamHandle, localTargetTimeInSecs);

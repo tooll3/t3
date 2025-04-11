@@ -147,18 +147,18 @@ internal abstract class BaseRenderWindow : Window
             }
             case TimeRanges.Soundtrack:
             {
-                if (PlaybackUtils.TryFindingSoundtrack(out var soundtrackInfo, out _))
+                if (PlaybackUtils.TryFindingSoundtrack(out var handle, out _))
                 {
                     var playback = Playback.Current; // TODO, this should be non-static eventually
-                    var soundtrack = soundtrackInfo.Value.Clip;
-                    _startTimeInBars = (float)SecondsToReferenceTime(playback.SecondsFromBars(soundtrack.StartTime), _timeReference);
-                    if (soundtrack.EndTime > 0)
+                    var soundtrackClip = handle.Clip;
+                    _startTimeInBars = (float)SecondsToReferenceTime(playback.SecondsFromBars(soundtrackClip.StartTime), _timeReference);
+                    if (soundtrackClip.EndTime > 0)
                     {
-                        _endTimeInBars = (float)SecondsToReferenceTime(playback.SecondsFromBars(soundtrack.EndTime), _timeReference);
+                        _endTimeInBars = (float)SecondsToReferenceTime(playback.SecondsFromBars(soundtrackClip.EndTime), _timeReference);
                     }
                     else
                     {
-                        _endTimeInBars = (float)SecondsToReferenceTime(soundtrack.LengthInSeconds, _timeReference);
+                        _endTimeInBars = (float)SecondsToReferenceTime(soundtrackClip.LengthInSeconds, _timeReference);
                     }
                 }
                 break;
@@ -255,7 +255,7 @@ internal abstract class BaseRenderWindow : Window
 
         // set user time in secs for audio playback
         if (settings.GetMainSoundtrack(instanceWithSettings, out var soundtrack))
-            AudioEngine.UseAudioClip(soundtrack.Value, Playback.Current.TimeInSecs);
+            AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);
 
         if (!_audioRecording)
         {

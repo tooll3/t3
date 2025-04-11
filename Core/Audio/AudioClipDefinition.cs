@@ -9,7 +9,12 @@ using T3.Serialization;
 
 namespace T3.Core.Audio;
 
-public readonly record struct AudioClipInfo(AudioClipDefinition Clip, IResourceConsumer? Owner)
+/// <summary>
+/// A wrapper that provides access to file resources of <see cref="AudioClipDefinition"/> and their
+/// and their filepath .This is then used by the <see cref="AudioEngine"/> to generate
+/// <see cref="AudioClipStream"/>s for playback.
+/// </summary>
+public sealed record AudioClipResourceHandle(AudioClipDefinition Clip, IResourceConsumer? Owner)
 {
     public bool TryGetFileResource([NotNullWhen(true)] out FileResource? file)
     {

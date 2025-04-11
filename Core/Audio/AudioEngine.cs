@@ -12,20 +12,20 @@ namespace T3.Core.Audio;
 /// </summary>
 public static class AudioEngine
 {
-    public static void UseAudioClip(AudioClipInfo info, double time)
+    public static void UseAudioClip(AudioClipResourceHandle handle, double time)
     {
-        _updatedClipTimes[info] = time;
+        _updatedClipTimes[handle] = time;
     }
 
-    public static void ReloadClip(AudioClipInfo info)
+    public static void ReloadClip(AudioClipResourceHandle handle)
     {
-        if (ClipStreams.TryGetValue(info, out var stream))
+        if (ClipStreams.TryGetValue(handle, out var stream))
         {
             Bass.StreamFree(stream.StreamHandle);
-            ClipStreams.Remove(info);
+            ClipStreams.Remove(handle);
         }
 
-        UseAudioClip(info, 0);
+        UseAudioClip(handle, 0);
     }
 
     public static void CompleteFrame(Playback playback, double frameDurationInSeconds)
@@ -40,38 +40,38 @@ public static class AudioEngine
         AudioAnalysis.CompleteFrame(playback);
 
         // Create new streams
-        foreach (var (audioClip, time) in _updatedClipTimes)
+        foreach (var (handle, time) in _updatedClipTimes)
         {
-            if (ClipStreams.TryGetValue(audioClip, out var clip))
+            if (ClipStreams.TryGetValue(handle, out var clip))
             {
                 clip.TargetTime = time;
             }
             else
             {
-                var audioClipStream = AudioClipStream.LoadClip(audioClip);
+                var audioClipStream = AudioClipStream.LoadClip(handle);
                 if (audioClipStream != null)
-                    ClipStreams[audioClip] = audioClipStream;
+                    ClipStreams[handle] = audioClipStream;
             }
         }
 
-        List<AudioClipInfo> obsoleteIds = new();
+
         var playbackSpeedChanged = Math.Abs(_lastPlaybackSpeed - playback.PlaybackSpeed) > 0.001f;
         _lastPlaybackSpeed = playback.PlaybackSpeed;
 
         var handledMainSoundtrack = false;
-        foreach (var (audioClipId, clipStream) in ClipStreams)
+        foreach (var (handle, clipStream) in ClipStreams)
         {
-            clipStream.IsInUse = _updatedClipTimes.ContainsKey(clipStream.ClipInfo);
-            if (!clipStream.IsInUse && clipStream.ClipInfo.Clip.DiscardAfterUse)
+            clipStream.IsInUse = _updatedClipTimes.ContainsKey(clipStream.ResourceHandle);
+            if (!clipStream.IsInUse && clipStream.ResourceHandle.Clip.DiscardAfterUse)
             {
-                obsoleteIds.Add(audioClipId);
+                _obsoleteHandles.Add(handle);
             }
             else
             {
                 if (!playback.IsRenderingToFile && playbackSpeedChanged)
                     clipStream.UpdatePlaybackSpeed(playback.PlaybackSpeed);
 
-                if (handledMainSoundtrack || !clipStream.ClipInfo.Clip.IsSoundtrack)
+                if (handledMainSoundtrack || !clipStream.ResourceHandle.Clip.IsSoundtrack)
                     continue;
 
                 handledMainSoundtrack = true;
@@ -88,12 +88,14 @@ public static class AudioEngine
             }
         }
 
-        foreach (var id in obsoleteIds)
+        foreach (var handle in _obsoleteHandles)
         {
-            ClipStreams[id].Disable();
-            ClipStreams.Remove(id);
+            ClipStreams[handle].Disable();
+            ClipStreams.Remove(handle);
         }
-
+        
+        // Clear after loop to avoid keeping open references
+        _obsoleteHandles.Clear();
         _updatedClipTimes.Clear();
     }
 
@@ -129,10 +131,10 @@ public static class AudioEngine
         }
     }
 
-    public static int GetClipChannelCount(AudioClipInfo? clip)
+    public static int GetClipChannelCount(AudioClipResourceHandle? handle)
     {
         // By default, use stereo
-        if (clip == null || !ClipStreams.TryGetValue(clip.Value, out var clipStream))
+        if (handle == null || !ClipStreams.TryGetValue(handle, out var clipStream))
             return 2;
 
         Bass.ChannelGetInfo(clipStream.StreamHandle, out var info);
@@ -140,9 +142,9 @@ public static class AudioEngine
     }
 
     // TODO: Rename to GetClipOrDefaultSampleRate
-    public static int GetClipSampleRate(AudioClipInfo? clip)
+    public static int GetClipSampleRate(AudioClipResourceHandle? clip)
     {
-        if (clip == null || !ClipStreams.TryGetValue(clip.Value, out var stream))
+        if (clip == null || !ClipStreams.TryGetValue(clip, out var stream))
             return 48000;
 
         Bass.ChannelGetInfo(stream.StreamHandle, out var info);
@@ -151,7 +153,9 @@ public static class AudioEngine
 
     private static double _lastPlaybackSpeed = 1;
     private static bool _bassInitialized;
-    public static readonly Dictionary<AudioClipInfo, AudioClipStream> ClipStreams = new();
-    private static readonly Dictionary<AudioClipInfo, double> _updatedClipTimes = new();
+    internal static readonly Dictionary<AudioClipResourceHandle, AudioClipStream> ClipStreams = new();
+    private static readonly Dictionary<AudioClipResourceHandle, double> _updatedClipTimes = new();
 
+    // reused list to avoid allocations
+    private static readonly List<AudioClipResourceHandle> _obsoleteHandles = [];
 }

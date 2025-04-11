@@ -42,9 +42,9 @@ public static class AudioRendering
         public static void ExportAudioFrame(Playback playback, double frameDurationInSeconds, AudioClipStream clipStream)
     {
         // Create buffer if necessary
-        if (!_fifoBuffersForClips.TryGetValue(clipStream.ClipInfo, out var buffer)) 
+        if (!_fifoBuffersForClips.TryGetValue(clipStream.ResourceHandle, out var buffer)) 
         {
-            buffer = _fifoBuffersForClips[clipStream.ClipInfo] = new byte[0];
+            buffer = _fifoBuffersForClips[clipStream.ResourceHandle] = new byte[0];
         }
         else
         {
@@ -63,7 +63,7 @@ public static class AudioRendering
                 if (streamPositionInBytes < 0)
                 {
                     // Clear the old buffer and replace with silence
-                    _fifoBuffersForClips[clipStream.ClipInfo] = new byte[0];
+                    _fifoBuffersForClips[clipStream.ResourceHandle] = new byte[0];
                     var silenceBytesToAdd = Math.Min(-streamPositionInBytes, bytes);
                     var silenceBuffer = new byte[silenceBytesToAdd];
 
@@ -106,11 +106,11 @@ public static class AudioRendering
                 }
             }
 
-            _fifoBuffersForClips[clipStream.ClipInfo] = buffer;
+            _fifoBuffersForClips[clipStream.ResourceHandle] = buffer;
         }
 
         // save to dictionary
-        _fifoBuffersForClips[clipStream.ClipInfo] = buffer;
+        _fifoBuffersForClips[clipStream.ResourceHandle] = buffer;
     }
     
     public static void EndRecording(Playback playback, double fps)
@@ -149,19 +149,19 @@ public static class AudioRendering
 
         foreach (var (_, clipStream) in AudioEngine.ClipStreams)
         {
-            if (!_fifoBuffersForClips.TryGetValue(clipStream.ClipInfo, out var buffer))
+            if (!_fifoBuffersForClips.TryGetValue(clipStream.ResourceHandle, out var buffer))
                 continue;
                     
             var bytes = (int)Bass.ChannelSeconds2Bytes(clipStream.StreamHandle, frameDurationInSeconds);
             var result = buffer.SkipLast(buffer.Length - bytes).ToArray();
-            _fifoBuffersForClips[clipStream.ClipInfo] = buffer.Skip(bytes).ToArray();
+            _fifoBuffersForClips[clipStream.ResourceHandle] = buffer.Skip(bytes).ToArray();
             return result;
         }
 
         return null;
     }
 
-    private static readonly Dictionary<AudioClipInfo, byte[]> _fifoBuffersForClips = new();
+    private static readonly Dictionary<AudioClipResourceHandle, byte[]> _fifoBuffersForClips = new();
 
     private static BassSettingsBeforeExport _settingsBeforeExport;
     private struct BassSettingsBeforeExport

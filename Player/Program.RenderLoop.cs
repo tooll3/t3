@@ -19,10 +19,10 @@ internal static partial class Program
         _playback.Update();
 
         //Log.Debug($" render at playback time {_playback.TimeInSecs:0.00}s");
-        if (_soundtrack != null)
+        if (_soundtrackHandle != null)
         {
-            AudioEngine.UseAudioClip(_soundtrack.Value, _playback.TimeInSecs);
-            if (_playback.TimeInSecs >= _soundtrack.Value.Clip.LengthInSeconds + _soundtrack.Value.Clip.StartTime)
+            AudioEngine.UseAudioClip(_soundtrackHandle, _playback.TimeInSecs);
+            if (_playback.TimeInSecs >= _soundtrackHandle.Clip.LengthInSeconds + _soundtrackHandle.Clip.StartTime)
             {
                 if (_resolvedOptions.Loop)
                 {

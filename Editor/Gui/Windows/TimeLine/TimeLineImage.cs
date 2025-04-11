@@ -1,3 +1,4 @@
+#nullable enable
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Audio;
@@ -8,19 +9,19 @@ using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace T3.Editor.Gui.Windows.TimeLine;
 
-public class TimeLineImage
+internal sealed class TimeLineImage
 {
-    public void Draw(ImDrawListPtr drawList, AudioClipInfo? soundTrackInfo)
+    internal static void Draw(ImDrawListPtr drawList, AudioClipResourceHandle? soundTrackHandle)
     {
-        if (soundTrackInfo == null)
+        if (soundTrackHandle == null)
             return;
             
-        var soundTrack = soundTrackInfo.Value;
-        UpdateSoundTexture(soundTrack);
+        //var soundTrack = soundTrackHandle.Value;
+        UpdateSoundTexture(soundTrackHandle);
         if (_loadedImagePath == null)
             return;
             
-        var clip = soundTrack.Clip;
+        var clip = soundTrackHandle.Clip;
 
         var contentRegionMin = ImGui.GetWindowContentRegionMin();
         var contentRegionMax = ImGui.GetWindowContentRegionMax();
@@ -44,7 +45,7 @@ public class TimeLineImage
         }
     }
 
-    private static void UpdateSoundTexture(AudioClipInfo soundtrack)
+    private static void UpdateSoundTexture(AudioClipResourceHandle soundtrack)
     {
         if (!AudioImageFactory.TryGetOrCreateImagePathForClip(soundtrack.Clip, soundtrack.Owner, out var imagePath))
         {
@@ -68,7 +69,7 @@ public class TimeLineImage
         _loadedImagePath = imagePath;
     }
 
-    private static string _loadedImagePath;
-    private static ShaderResourceView _srv;
-    private static Resource<Texture2D> _textureResource;
+    private static string? _loadedImagePath;
+    private static ShaderResourceView? _srv;
+    private static Resource<Texture2D>? _textureResource;
 }

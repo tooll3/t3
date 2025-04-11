@@ -385,7 +385,7 @@ internal static partial class PlayerExporter
         {
             if (PlaybackUtils.TryFindingSoundtrack(out soundtrack, out _))
             {
-                Log.Warning($"You should define soundtracks withing the exported operators. Falling back to {soundtrack.Value.Clip.FilePath} set in parent...");
+                Log.Warning($"You should define soundtracks withing the exported operators. Falling back to {soundtrack.Clip.FilePath} set in parent...");
             }
             else
             {
@@ -397,9 +397,8 @@ internal static partial class PlayerExporter
             Log.Debug("No soundtrack defined within operator.");
         }
 
-        var clipInfo = soundtrack.Value;
-        relativePath = clipInfo.Clip.FilePath;
-        return FileResource.TryGetFileResource(clipInfo.Clip.FilePath, instance, out file);
+        relativePath = soundtrack.Clip.FilePath;
+        return FileResource.TryGetFileResource(soundtrack.Clip.FilePath, instance, out file);
     }
 
     private static void CheckInputForResourcePath(ISlot inputSlot, ExportInfo exportInfo)

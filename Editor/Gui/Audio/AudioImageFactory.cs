@@ -7,12 +7,12 @@ using T3.Core.Resource;
 
 namespace T3.Editor.Gui.Audio;
 
-public static class AudioImageFactory
+internal static class AudioImageFactory
 {
     // should be a hashset, but there is no ConcurrentHashset -_-
     private static readonly ConcurrentDictionary<AudioClipDefinition, bool> LoadingClips = new();
 
-    public static bool TryGetOrCreateImagePathForClip(AudioClipDefinition audioClip, IResourceConsumer instance, [NotNullWhen(true)] out string? imagePath)
+    internal static bool TryGetOrCreateImagePathForClip(AudioClipDefinition audioClip, IResourceConsumer? instance, [NotNullWhen(true)] out string? imagePath)
     {
         ArgumentNullException.ThrowIfNull(audioClip);
             

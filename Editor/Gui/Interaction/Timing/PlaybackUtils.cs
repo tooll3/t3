@@ -29,7 +29,7 @@ public static class PlaybackUtils
         {
             if (settings.GetMainSoundtrack(audioComposition, out var soundtrack))
             {
-                AudioEngine.UseAudioClip(soundtrack.Value, Playback.Current.TimeInSecs);
+                AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);
             }
         }
 
@@ -119,7 +119,7 @@ public static class PlaybackUtils
     /// <summary>
     /// Scans the current composition path and its parents for a soundtrack 
     /// </summary>
-    internal static bool TryFindingSoundtrack([NotNullWhen(true)] out AudioClipInfo? soundtrack, 
+    internal static bool TryFindingSoundtrack([NotNullWhen(true)] out AudioClipResourceHandle? soundtrack, 
                                               out IResourceConsumer? composition)
     {
         var settings = FindPlaybackSettings(out composition);

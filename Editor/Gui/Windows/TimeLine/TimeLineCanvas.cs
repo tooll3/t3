@@ -73,7 +73,7 @@ internal sealed class TimeLineCanvas : CurveEditCanvas
             ImGui.SetCursorPosY(ImGui.GetCursorPosY()-6);
             if (PlaybackUtils.TryFindingSoundtrack(out var soundtrack, out var composition))
             {
-                _timeLineImage.Draw(Drawlist, soundtrack);
+                TimeLineImage.Draw(Drawlist, soundtrack);
             }
             _timeRasterSwitcher.Draw(Playback);
 

@@ -12,7 +12,7 @@ namespace T3.Editor.Gui.Audio;
 
 internal static class AudioImageGenerator
 {
-    public static bool TryGenerateSoundSpectrumAndVolume(AudioClipDefinition clip, IResourceConsumer instance, [NotNullWhen(true)] out string? imagePathAbsolute)
+    public static bool TryGenerateSoundSpectrumAndVolume(AudioClipDefinition clip, IResourceConsumer? instance, [NotNullWhen(true)] out string? imagePathAbsolute)
     {
         var relativePath = clip.FilePath;
         if (relativePath == null)

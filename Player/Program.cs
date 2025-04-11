@@ -210,21 +210,21 @@ internal static partial class Program
             _resolution = new Int2(_resolvedOptions.Width, _resolvedOptions.Height);
 
             // Init wasapi input if required
-            if (playbackSettings is { AudioSource: PlaybackSettings.AudioSources.ProjectSoundTrack } && playbackSettings.GetMainSoundtrack(_project, out _soundtrack))
+            if (playbackSettings is { AudioSource: PlaybackSettings.AudioSources.ProjectSoundTrack } && playbackSettings.GetMainSoundtrack(_project, out _soundtrackHandle))
             {
-                var soundtrack = _soundtrack.Value;
-                if (!soundtrack.TryGetFileResource(out var file))
+                //var soundtrack = _soundtrackHandle.Value;
+                if (!_soundtrackHandle.TryGetFileResource(out var file))
                 {
-                    _playback.Bpm = soundtrack.Clip.Bpm;
+                    _playback.Bpm = _soundtrackHandle.Clip.Bpm;
                     // Trigger loading clip
-                    AudioEngine.UseAudioClip(soundtrack, 0);
+                    AudioEngine.UseAudioClip(_soundtrackHandle, 0);
                     AudioEngine.CompleteFrame(_playback, Playback.LastFrameDuration); // Initialize
                     prerenderRequired = true;
                 }
                 else
                 {
-                    Log.Warning($"Can't find soundtrack {soundtrack.Clip.FilePath}");
-                    _soundtrack = null;
+                    Log.Warning($"Can't find soundtrack {_soundtrackHandle.Clip.FilePath}");
+                    _soundtrackHandle = null;
                 }
             }
 
@@ -275,7 +275,7 @@ internal static partial class Program
             // Sample some frames to preload all shaders and resources
             if (prerenderRequired)
             {
-                PreloadShadersAndResources(_soundtrack.Value.Clip.LengthInSeconds, _resolution, _playback, _deviceContext, _evalContext, _textureOutput, _swapChain,
+                PreloadShadersAndResources(_soundtrackHandle.Clip.LengthInSeconds, _resolution, _playback, _deviceContext, _evalContext, _textureOutput, _swapChain,
                                            _renderView);
             }
 
@@ -426,7 +426,7 @@ internal static partial class Program
     private static Instance _project;
     private static EvaluationContext _evalContext;
     private static Playback _playback;
-    private static AudioClipInfo? _soundtrack;
+    private static AudioClipResourceHandle? _soundtrackHandle;
     private static DeviceContext _deviceContext;
     private static Options _resolvedOptions;
     private static RenderForm _renderForm;

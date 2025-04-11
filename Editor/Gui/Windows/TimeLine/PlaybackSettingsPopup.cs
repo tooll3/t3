@@ -118,8 +118,7 @@ internal static class PlaybackSettingsPopup
 
         if (settings.AudioSource == PlaybackSettings.AudioSources.ProjectSoundTrack)
         {
-            //var soundtrack = ;
-            if (!settings.GetMainSoundtrack(compositionWithSettings, out var soundtrackInfo))
+            if (!settings.GetMainSoundtrack(compositionWithSettings, out var soundtrackHandle))
             {
                 if (ImGui.Button("Add soundtrack to composition"))
                 {
@@ -131,8 +130,8 @@ internal static class PlaybackSettingsPopup
             }
             else
             {
-                var soundtrack = soundtrackInfo.Value;
-                var warning = !soundtrack.TryGetFileResource(out var file)
+                //var soundtrack = soundtrackInfo.Value;
+                var warning = !soundtrackHandle.TryGetFileResource(out var file)
                                   ? "File not found?"
                                   : null;
                     
@@ -146,24 +145,24 @@ internal static class PlaybackSettingsPopup
                                                                 FileOperations.FilePickerTypes.File
                                                                );
                     
-                soundtrack.Clip.FilePath = path;
+                soundtrackHandle.Clip.FilePath = path;
                 FormInputs.ApplyIndent();
                 if (ImGui.Button("Reload"))
                 {
-                    AudioEngine.ReloadClip(soundtrack);
+                    AudioEngine.ReloadClip(soundtrackHandle);
                     filepathModified = true;
                 }
 
                 ImGui.SameLine();
                 if (ImGui.Button("Remove"))
                 {
-                    settings.AudioClips.Remove(soundtrack.Clip);
+                    settings.AudioClips.Remove(soundtrackHandle.Clip);
                 }
 
                 FormInputs.AddVerticalSpace();
 
                 if (FormInputs.AddFloat("BPM",
-                                        ref soundtrack.Clip.Bpm,
+                                        ref soundtrackHandle.Clip.Bpm,
                                         0,
                                         1000,
                                         0.02f,
@@ -171,11 +170,11 @@ internal static class PlaybackSettingsPopup
                                         "In T3 animation units are in bars.\nThe BPM rate controls the animation speed of your project.",
                                         120))
                 {
-                    Playback.Current.Bpm = soundtrack.Clip.Bpm;
-                    settings.Bpm = soundtrack.Clip.Bpm;
+                    Playback.Current.Bpm = soundtrackHandle.Clip.Bpm;
+                    settings.Bpm = soundtrackHandle.Clip.Bpm;
                 }
 
-                var soundtrackStartTime = (float)soundtrack.Clip.StartTime;
+                var soundtrackStartTime = (float)soundtrackHandle.Clip.StartTime;
 
                 if (FormInputs.AddFloat("Offset",
                                         ref soundtrackStartTime,
@@ -186,7 +185,7 @@ internal static class PlaybackSettingsPopup
                                         "Offsets the beginning of the soundtrack in seconds.",
                                         0))
                 {
-                    soundtrack.Clip.StartTime = soundtrackStartTime;
+                    soundtrackHandle.Clip.StartTime = soundtrackStartTime;
                 }
 
                 FormInputs.AddEnumDropdown(ref UserSettings.Config.TimeDisplayMode, "Display Timeline in");
@@ -214,8 +213,8 @@ internal static class PlaybackSettingsPopup
                     
                 if (filepathModified)
                 {
-                    AudioEngine.ReloadClip(soundtrack);
-                    UpdateBpmFromSoundtrackConfig(soundtrack.Clip);
+                    AudioEngine.ReloadClip(soundtrackHandle);
+                    UpdateBpmFromSoundtrackConfig(soundtrackHandle.Clip);
                     UpdatePlaybackAndTimeline(settings);
                 }
             }
