@@ -3,13 +3,10 @@ using System.IO;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SilkWindows;
-using SilkWindows.Implementations.FileManager;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Resource;
 using T3.Core.SystemUi;
-using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel.InputsAndTypes;
@@ -63,13 +60,13 @@ public sealed class StringInputUi : InputValueUi<string>
                 inputEditStateFlags = DrawMultilineTextEdit(ref value);
                 break;
             case UsageType.FilePath:
-                inputEditStateFlags = DrawTypeAheadSearch(FileOperations.FilePickerTypes.File, ref value);
+                inputEditStateFlags = FilePickingUi.DrawTypeAheadSearch(FileOperations.FilePickerTypes.File, FileFilter, ref value);
                 ImGui.SameLine();
                 if (ImGui.Button("Edit"))
                 {
                     if (value != null)
                     {
-                        ResourceManager.TryResolvePath(value, _searchResourceConsumer, out var absolutePath, out _);
+                        ResourceManager.TryResolvePath(value, FilePickingUi.SearchResourceConsumer, out var absolutePath, out _);
                         if (!File.Exists(absolutePath))
                         {
                             Log.Error("Can't open non-existing file " + absolutePath);
@@ -85,7 +82,7 @@ public sealed class StringInputUi : InputValueUi<string>
                 NormalizePathSeparators(inputEditStateFlags, ref value);
                 break;
             case UsageType.DirectoryPath:
-                inputEditStateFlags = DrawTypeAheadSearch(FileOperations.FilePickerTypes.Folder, ref value);
+                inputEditStateFlags = FilePickingUi.DrawTypeAheadSearch(FileOperations.FilePickerTypes.Folder, FileFilter, ref value);
                 
                 NormalizePathSeparators(inputEditStateFlags, ref value);
                 break;
@@ -119,149 +116,6 @@ public sealed class StringInputUi : InputValueUi<string>
         }
     }
 
-    private InputEditStateFlags DrawTypeAheadSearch(FileOperations.FilePickerTypes type, ref string? value)
-    {
-        return DrawFileInput(type, ref value, FileFilter, Draw);
-            
-        static InputResult Draw(InputRequest request)
-        {
-            var fileExtensionFilters = request.FileExtensionFilters;
-            var value = request.Value;
-                
-            var drawnItems = ResourceManager.EnumerateResources(fileExtensionFilters, request.IsFolder, request.ResourcePackageContainer.AvailableResourcePackages, ResourceManager.PathMode.Aliased);
-                
-            var args = new ResourceInputWithTypeAheadSearch.Args("##filePathSearch", drawnItems, request.ShowWarning);
-            var changed = ResourceInputWithTypeAheadSearch.Draw(args, ref value, out _);
-            return new InputResult(changed, value);
-        }
-    }
-        
-    private readonly record struct InputResult(bool Modified, string Value);
-
-    private readonly record struct InputRequest(string Value, string[] FileExtensionFilters, bool IsFolder, bool ShowWarning, IResourceConsumer ResourcePackageContainer);
-
-    private static InputEditStateFlags DrawFileInput(FileOperations.FilePickerTypes type, ref string? filePathValue, string? filter, Func<InputRequest, InputResult> draw)
-    {
-        ImGui.SetNextItemWidth(-70);
-
-        var componentsNodeSelection = ProjectView.Focused?.NodeSelection;
-        if (componentsNodeSelection == null)
-            return InputEditStateFlags.Nothing;
-        
-        var selectedInstances = componentsNodeSelection.GetSelectedInstances().ToArray();
-        var needsToGatherPackages = _searchResourceConsumer is null 
-                                    || selectedInstances.Length != _selectedInstances.Length 
-                                    || !selectedInstances.Except(_selectedInstances).Any();
-        if (needsToGatherPackages)
-        {
-            var packagesInCommon = selectedInstances.PackagesInCommon().ToArray();
-            _searchResourceConsumer = new TempResourceConsumer(packagesInCommon);
-        }
-            
-        var isFolder = type == FileOperations.FilePickerTypes.Folder;
-        var exists = ResourceManager.TryResolvePath(filePathValue, _searchResourceConsumer, out _, out _, isFolder);
-            
-        var warning = type switch
-                          {
-                              FileOperations.FilePickerTypes.File when !exists   => "File doesn't exist:\n",
-                              FileOperations.FilePickerTypes.Folder when !exists => "Directory doesn't exist:\n",
-                              _                                                  => string.Empty
-                          };
-
-        if (warning != string.Empty)
-            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusAnimated.Rgba);
-
-        var fileManagerOpen = _fileManagerOpen;
-            
-        if (fileManagerOpen)
-        {
-            ImGui.BeginDisabled();
-        }
-            
-        string[] uiFilter;
-        if(filter == null)
-            uiFilter = Array.Empty<string>();
-        else if (!filter.Contains('|'))
-            uiFilter = [filter];
-        else
-            uiFilter = filter.Split('|')[1].Split(';');
-
-        var fileFiltersInCommon = selectedInstances
-                                 .Where(x => x is IDescriptiveFilename)
-                                 .Cast<IDescriptiveFilename>()
-                                 .Select(x => x.FileFilter)
-                                 .Aggregate(Enumerable.Empty<string>(), (a, b) => a.Intersect(b))
-                                 .Concat(uiFilter)
-                                 .Where(s => !string.IsNullOrWhiteSpace(s))
-                                 .Distinct()
-                                 .ToArray();
-
-        var inputEditStateFlags = InputEditStateFlags.Nothing;
-        if(filePathValue != null && _searchResourceConsumer != null)
-        {
-            var result = draw(new InputRequest(filePathValue, fileFiltersInCommon, isFolder, ShowWarning: !exists, _searchResourceConsumer));
-            filePathValue = result.Value;
-            inputEditStateFlags = result.Modified ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
-        }
-
-        if (warning != string.Empty)
-            ImGui.PopStyleColor();
-
-        if (ImGui.IsItemHovered() && filePathValue != null && filePathValue.Length > 0 && ImGui.CalcTextSize(filePathValue).X > ImGui.GetItemRectSize().X)
-        {
-            ImGui.BeginTooltip();
-            ImGui.TextUnformatted(warning + filePathValue);
-            ImGui.EndTooltip();
-        }
-            
-        ImGui.SameLine();
-        //var modifiedByPicker = FileOperations.DrawFileSelector(type, ref value, filter);
-            
-        if (ImGui.Button("...##fileSelector"))
-        {
-            if (_searchResourceConsumer != null)
-            {
-                OpenFileManager(type, _searchResourceConsumer.AvailableResourcePackages, fileFiltersInCommon, isFolder, async: true);
-            }
-            else
-            {
-                Log.Warning("Can open file manager with undefined resource consumer");
-            }
-        }
-            
-        if (fileManagerOpen)
-        {
-            ImGui.EndDisabled();
-        }
-            
-        // refresh value because 
-            
-        string? fileManValue;
-        lock (_fileManagerResultLock)
-        {
-            fileManValue = _latestFileManagerResult;
-            _latestFileManagerResult = null;
-        }
-            
-        var valueIsUpdated = !string.IsNullOrEmpty(fileManValue) && fileManValue != filePathValue;
-            
-        if (valueIsUpdated)
-        {
-            filePathValue = fileManValue;
-            inputEditStateFlags |= InputEditStateFlags.Modified;
-        }
-            
-        if (_hasClosedFileManager)
-        {
-            _hasClosedFileManager = false;
-            inputEditStateFlags |= InputEditStateFlags.Finished;
-        }
-            
-        return inputEditStateFlags;
-    }
-        
-     
-        
     private static bool DrawDefaultTextEdit(ref string value)
     {
         return ImGui.InputText("##textEdit", ref value, MaxStringLength);
@@ -406,79 +260,6 @@ public sealed class StringInputUi : InputValueUi<string>
 
         FileFilter = inputToken[nameof(FileFilter)]?.Value<string>();
     }
-        
-    private static void OpenFileManager(FileOperations.FilePickerTypes type, IEnumerable<IResourcePackage> packagesInCommon, string[] fileFiltersInCommon, bool isFolder, bool async)
-    {
-        var managedDirectories = packagesInCommon
-                                .Concat(ResourceManager.GetSharedPackagesForFilters(fileFiltersInCommon, isFolder, out var culledFilters))
-                                .Distinct()
-                                .OrderBy(package => !package.IsReadOnly)
-                                .Select(package => new ManagedDirectory(package.ResourcesFolder, package.IsReadOnly, !package.IsReadOnly, package.Alias));
-            
-        var fileManagerMode = type == FileOperations.FilePickerTypes.File ? FileManagerMode.PickFile : FileManagerMode.PickDirectory;
-            
-        Func<string, bool> filterFunc = culledFilters.Length == 0
-                                            ? _ => true
-                                            : str =>
-                                              {
-                                                  return culledFilters.Any(filter => StringUtils.MatchesSearchFilter(str, filter, ignoreCase: true));
-                                              };
-            
-        var options = new SimpleWindowOptions(new Vector2(960, 600), 60, true, true, false);
-        if (!async)
-        {
-            StartFileManagerBlocking();
-        }
-        else
-        {
-            StartFileManagerAsync();
-        }
-            
-        return;
-            
-        void StartFileManagerAsync()
-        {
-            var fileManager = new FileManager(fileManagerMode, managedDirectories, filterFunc)
-                                  {
-                                      CloseOnResult = false,
-                                      ClosingCallback = () =>
-                                                        {
-                                                            _hasClosedFileManager = true;
-                                                            _fileManagerOpen = false;
-                                                        }
-                                  };
-            _fileManagerOpen = true;
-            _ = ImGuiWindowService.Instance.ShowAsync("Select a path", fileManager, (result) =>
-                                                                                    {
-                                                                                        lock(_fileManagerResultLock)
-                                                                                            _latestFileManagerResult = result.RelativePathWithAlias ?? result.RelativePath;
-                                                                                            
-                                                                                    }, options);
-        }
-            
-        void StartFileManagerBlocking()
-        {
-            var fileManager = new FileManager(fileManagerMode, managedDirectories, filterFunc);
-            _fileManagerOpen = true;
-            var fileManagerResult = ImGuiWindowService.Instance.Show("Select a path", fileManager, options);
-            _fileManagerOpen = false;
-                
-            if (fileManagerResult != null)
-            {
-                lock (_fileManagerResultLock) // unnecessary, but consistent
-                {
-                    _latestFileManagerResult = fileManagerResult.RelativePathWithAlias ?? fileManagerResult.RelativePath;
-                }
-            }
-                
-            _hasClosedFileManager = true;
-        }
-    }
-        
-    private static string? _latestFileManagerResult;
-    private static bool _fileManagerOpen;
-    private static readonly object _fileManagerResultLock = new();
-    private static bool _hasClosedFileManager;
+
     private static readonly Instance[] _selectedInstances = [];
-    private static TempResourceConsumer? _searchResourceConsumer;
 }
