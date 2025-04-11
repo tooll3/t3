@@ -14,11 +14,11 @@ namespace T3.Core.Operator;
 /// BPM rate and other settings.
 /// </summary>
 ///  todo - treat AudioClips the same way as timeline clips - soundtracks might be a special case
-public class PlaybackSettings
+public sealed class PlaybackSettings
 {
     public bool Enabled { get; set; }
     public float Bpm  = 120;
-    public List<AudioClip> AudioClips { get; private set; } = new();
+    public List<AudioClipDefinition> AudioClips { get; private set; } = new();
     public AudioSources AudioSource;
     public SyncModes Syncing;
         
@@ -132,14 +132,14 @@ public class PlaybackSettings
         return newSettings;
     }
 
-    private static IEnumerable<AudioClip> GetClips(JToken o)
+    private static IEnumerable<AudioClipDefinition> GetClips(JToken o)
     {
         var jAudioClipArray = (JArray)o[nameof(Symbol.PlaybackSettings.AudioClips)];
         if (jAudioClipArray != null)
         {
             foreach (var c in jAudioClipArray)
             {
-                if (AudioClip.TryFromJson(c, out var clip))
+                if (AudioClipDefinition.TryFromJson(c, out var clip))
                 {
                     yield return clip;
                 }

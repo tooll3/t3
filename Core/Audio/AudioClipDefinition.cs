@@ -9,7 +9,7 @@ using T3.Serialization;
 
 namespace T3.Core.Audio;
 
-public record struct AudioClipInfo(AudioClip Clip, IResourceConsumer? Owner)
+public readonly record struct AudioClipInfo(AudioClipDefinition Clip, IResourceConsumer? Owner)
 {
     public bool TryGetFileResource([NotNullWhen(true)] out FileResource? file)
     {
@@ -20,7 +20,7 @@ public record struct AudioClipInfo(AudioClip Clip, IResourceConsumer? Owner)
 /// <summary>
 /// Defines a single audio clip within a timeline.
 /// </summary>
-public sealed class AudioClip
+public sealed class AudioClipDefinition
 {
     #region serialized attributes
     public Guid Id;
@@ -29,7 +29,7 @@ public sealed class AudioClip
     public double EndTime;
     public float Bpm = 120;
     public bool DiscardAfterUse = true;
-    public bool IsSoundtrack = false;
+    public bool IsSoundtrack;
     public float Volume = 1.0f;
     #endregion
 
@@ -38,25 +38,17 @@ public sealed class AudioClip
     /// </summary>
     public double LengthInSeconds;
 
-    public AudioClip()
-    {
-    }
-
     #region serialization
-    internal static bool TryFromJson(JToken jToken, [NotNullWhen(true)] out AudioClip? newAudioClip)
+    internal static bool TryFromJson(JToken jToken, [NotNullWhen(true)] out AudioClipDefinition? newAudioClip)
     {
-        var idToken = jToken[nameof(Id)];
-
-        var idString = idToken?.Value<string>();
-        if (idString == null || !Guid.TryParse(idString, out var clipId))
+        if (!JsonUtils.TryGetGuid(jToken[nameof(Id)], out var clipId))
         {
             Log.Warning("Missing or malformed id in AudioClip.");
             newAudioClip = null;
             return false;
         }
-
         
-        newAudioClip = new AudioClip
+        newAudioClip = new AudioClipDefinition
                                {
                                    Id = clipId,
                                    FilePath = jToken[nameof(FilePath)]?.Value<string>(),

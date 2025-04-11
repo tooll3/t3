@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using ManagedBass;
 using T3.Core.Animation;
 using T3.Core.IO;
@@ -7,21 +8,21 @@ using T3.Core.Logging;
 namespace T3.Core.Audio;
 
 /// <summary>
-/// Controls the playback of a <see cref="AudioClip"/> with BASS.
+/// Controls the playback of a <see cref="AudioClipDefinition"/> with BASS by the <see cref="AudioEngine"/>.
 /// </summary>
 public sealed class AudioClipStream
 {
 
     public double Duration;
-    public int StreamHandle;
-    public bool IsInUse;
+    internal int StreamHandle;
+    internal bool IsInUse;
     public bool IsNew = true;
-    public float DefaultPlaybackFrequency { get; private set; }
-    public double TargetTime { get; set; }
+    private float DefaultPlaybackFrequency { get; set; }
+    internal double TargetTime { get; set; }
 
     internal AudioClipInfo ClipInfo;
 
-    public void UpdatePlaybackSpeed(double newSpeed)
+    internal void UpdatePlaybackSpeed(double newSpeed)
     {
         if (newSpeed == 0.0)
         {
@@ -44,7 +45,10 @@ public sealed class AudioClipStream
         }
     }
 
-    public static AudioClipStream LoadClip(AudioClipInfo clipInfo)
+    /// <summary>
+    /// Creates an <see cref="AudioClipStream"/> by loading an <see cref="AudioClipInfo"/>. 
+    /// </summary>
+    internal static AudioClipStream? LoadClip(AudioClipInfo clipInfo)
     {
         if (!clipInfo.TryGetFileResource(out var file))
         {
@@ -96,8 +100,7 @@ public sealed class AudioClipStream
         stream.UpdatePlaybackSpeed(1.0);
         return stream;
     }
-
-
+    
     /// <summary>
     /// We try to find a compromise between letting bass play the audio clip in the correct playback speed which
     /// eventually will drift away from Tooll's Playback time. If the delta between playback and audio-clip time exceeds
@@ -106,7 +109,7 @@ public sealed class AudioClipStream
     /// Frequent resync causes audio glitches.
     /// Too large of a threshold can disrupt syncing and increase latency.
     /// </summary>
-    public void UpdateTime(Playback playback)
+    internal void UpdateTime(Playback playback)
     {
         if (playback.PlaybackSpeed == 0 )
         {
@@ -151,13 +154,13 @@ public sealed class AudioClipStream
         // Resync
         var resyncOffset = AudioTriggerDelayOffset * playback.PlaybackSpeed + AudioSyncingOffset;
         var newStreamPos = Bass.ChannelSeconds2Bytes(StreamHandle, localTargetTimeInSecs + resyncOffset);
-        Bass.ChannelSetPosition(StreamHandle, newStreamPos, PositionFlags.Bytes);
+        Bass.ChannelSetPosition(StreamHandle, newStreamPos);
     }
 
     /// <summary>
     /// Update time when recoding, returns number of bytes of the position from the stream start
     /// </summary>
-    public long UpdateTimeWhileRecording(Playback playback, double fps, bool reinitialize)
+    internal long UpdateTimeWhileRecording(Playback playback, double fps, bool reinitialize)
     {
         // Offset timing dependent on position in clip
         var localTargetTimeInSecs = playback.TimeInSecs - playback.SecondsFromBars(ClipInfo.Clip.StartTime) + RecordSyncingOffset;
@@ -166,21 +169,21 @@ public sealed class AudioClipStream
                                : Bass.ChannelSeconds2Bytes(StreamHandle, localTargetTimeInSecs);
 
         // Re-initialize playback?
-        if (reinitialize)
-        {
-            const PositionFlags flags = PositionFlags.Bytes | PositionFlags.MixerNoRampIn | PositionFlags.Decode;
+        if (!reinitialize) 
+            return newStreamPos;
+        
+        const PositionFlags flags = PositionFlags.Bytes | PositionFlags.MixerNoRampIn | PositionFlags.Decode;
 
-            Bass.ChannelSetAttribute(StreamHandle, ChannelAttribute.NoRamp, 1);
-            Bass.ChannelSetAttribute(StreamHandle, ChannelAttribute.Volume, 1);
-            Bass.ChannelSetAttribute(StreamHandle, ChannelAttribute.ReverseDirection, 1);
-            Bass.ChannelSetAttribute(StreamHandle, ChannelAttribute.Frequency, DefaultPlaybackFrequency);
-            Bass.ChannelSetPosition(StreamHandle, Math.Max(newStreamPos, 0), flags);
-        }
+        Bass.ChannelSetAttribute(StreamHandle, ChannelAttribute.NoRamp, 1);
+        Bass.ChannelSetAttribute(StreamHandle, ChannelAttribute.Volume, 1);
+        Bass.ChannelSetAttribute(StreamHandle, ChannelAttribute.ReverseDirection, 1);
+        Bass.ChannelSetAttribute(StreamHandle, ChannelAttribute.Frequency, DefaultPlaybackFrequency);
+        Bass.ChannelSetPosition(StreamHandle, Math.Max(newStreamPos, 0), flags);
 
         return newStreamPos;
     }
 
-    public void Disable()
+    internal void Disable()
     {
         Bass.StreamFree(StreamHandle);
     }

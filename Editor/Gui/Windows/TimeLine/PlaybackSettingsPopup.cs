@@ -123,7 +123,7 @@ internal static class PlaybackSettingsPopup
             {
                 if (ImGui.Button("Add soundtrack to composition"))
                 {
-                    settings.AudioClips.Add(new AudioClip()
+                    settings.AudioClips.Add(new AudioClipDefinition()
                                                 {
                                                     IsSoundtrack = true,
                                                 });
@@ -377,7 +377,7 @@ internal static class PlaybackSettingsPopup
         }
     }
 
-    private static void UpdateBpmFromSoundtrackConfig(AudioClip? audioClip)
+    private static void UpdateBpmFromSoundtrackConfig(AudioClipDefinition? audioClip)
     {
         if (audioClip == null || string.IsNullOrEmpty(audioClip.FilePath))
         {

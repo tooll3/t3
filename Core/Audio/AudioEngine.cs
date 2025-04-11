@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using ManagedBass;
@@ -113,7 +114,7 @@ public static class AudioEngine
         }
     }
 
-    public static void UpdateFftBuffer(int soundStreamHandle, Playback playback)
+    internal static void UpdateFftBuffer(int soundStreamHandle, Playback playback)
     {
         // FIXME: This variable name is misleading or incorrect
         var get256FftValues = (int)DataFlags.FFT2048;
@@ -124,13 +125,13 @@ public static class AudioEngine
 
         if (playback.Settings != null && playback.Settings.AudioSource == PlaybackSettings.AudioSources.ProjectSoundTrack)
         {
-            Bass.ChannelGetData(soundStreamHandle, AudioAnalysis.FftGainBuffer, get256FftValues);
+            _ = Bass.ChannelGetData(soundStreamHandle, AudioAnalysis.FftGainBuffer, get256FftValues);
         }
     }
 
     public static int GetClipChannelCount(AudioClipInfo? clip)
     {
-        // By default use stereo
+        // By default, use stereo
         if (clip == null || !ClipStreams.TryGetValue(clip.Value, out var clipStream))
             return 2;
 

@@ -14,16 +14,16 @@ internal sealed class PlayAudioClip : Instance<PlayAudioClip>, IStatusProvider
     public PlayAudioClip()
     {
         Result.UpdateAction += Update;
-        _audioClipResource = new Resource<AudioClip>(Path, TryCreateClip);
+        _audioClipResource = new Resource<AudioClipDefinition>(Path, TryCreateClip);
         _audioClipResource.AddDependentSlots(Result);
     }
 
-    private bool TryCreateClip(FileResource file, AudioClip? currentValue, [NotNullWhen(true)] out AudioClip? newClip, out string failureReason)
+    private bool TryCreateClip(FileResource file, AudioClipDefinition? currentValue, [NotNullWhen(true)] out AudioClipDefinition? newClip, out string failureReason)
     {
         var fileInfo = file.FileInfo;
         if (fileInfo is { Exists: true })
         {
-            newClip = new AudioClip
+            newClip = new AudioClipDefinition
                            {
                                FilePath = Path.GetCurrentValue(),
                                StartTime = 0,
@@ -75,7 +75,7 @@ internal sealed class PlayAudioClip : Instance<PlayAudioClip>, IStatusProvider
     }
 
     private double _startRunTimeInSecs;
-    private readonly Resource<AudioClip> _audioClipResource;
+    private readonly Resource<AudioClipDefinition> _audioClipResource;
 
     IStatusProvider.StatusLevel IStatusProvider.GetStatusLevel()
     {

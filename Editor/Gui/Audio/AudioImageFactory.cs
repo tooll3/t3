@@ -10,9 +10,9 @@ namespace T3.Editor.Gui.Audio;
 public static class AudioImageFactory
 {
     // should be a hashset, but there is no ConcurrentHashset -_-
-    private static readonly ConcurrentDictionary<AudioClip, bool> LoadingClips = new();
+    private static readonly ConcurrentDictionary<AudioClipDefinition, bool> LoadingClips = new();
 
-    public static bool TryGetOrCreateImagePathForClip(AudioClip audioClip, IResourceConsumer instance, [NotNullWhen(true)] out string? imagePath)
+    public static bool TryGetOrCreateImagePathForClip(AudioClipDefinition audioClip, IResourceConsumer instance, [NotNullWhen(true)] out string? imagePath)
     {
         ArgumentNullException.ThrowIfNull(audioClip);
             
@@ -48,5 +48,5 @@ public static class AudioImageFactory
         return false;
     }
 
-    private static readonly ConcurrentDictionary<AudioClip, string> ImageForAudioFiles = new();
+    private static readonly ConcurrentDictionary<AudioClipDefinition, string> ImageForAudioFiles = new();
 }
