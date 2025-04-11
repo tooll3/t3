@@ -53,8 +53,8 @@ internal static partial class WindowManager
                 new VariationsWindow(),
                 new ExplorationWindow(),
                 new SymbolLibrary(),
-                new RenderSequenceWindow(),
-                new RenderVideoWindow(),
+               
+                new RenderWindow(),
                 new UtilitiesWindow(),
                 Program.ConsoleLogWindow,
                 new IoViewWindow(),
