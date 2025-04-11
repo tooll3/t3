@@ -20,23 +20,41 @@ internal sealed class OpenedProject
         {
             if (_rootInstance != null) return _rootInstance;
             
-            if (!Package.Symbols.TryGetValue(Package.HomeSymbolId, out var rootSymbol))
-            {
-                throw new Exception("Root symbol not found in project.");
-            }
+            _rootInstance = CreateRoot();
 
-            if (!rootSymbol.TryGetParentlessInstance(out var rootInstance))
-            {
-                throw new Exception("Root instance could not be created?");
-            }
-                
-            _rootInstance = rootInstance;
-            rootInstance.Disposing += OnRootDisposed;
-
-            return _rootInstance;
+            return _rootInstance!;
         }
     }
 
+    private Instance CreateRoot()
+    {
+        if (!Package.Symbols.TryGetValue(Package.HomeSymbolId, out var rootSymbol))
+        {
+            throw new Exception("Root symbol not found in project.");
+        }
+
+        if (!rootSymbol.TryGetParentlessInstance(out var rootInstance))
+        {
+            throw new Exception("Root instance could not be created?");
+        }
+                
+        rootInstance.Disposing += OnRootDisposed;
+        return rootInstance;
+    }
+
+    /// <summary>
+    /// A somewhat hacky way to ensure the root instance exists
+    /// when the project is reloaded mid-frame
+    /// </summary>
+    public void EnsureRootExists()
+    {
+        if (_rootInstance != null)
+            return;
+        
+        Log.Debug("Creating root instance (likely due to unexpected project reload).");
+        _ = CreateRoot();
+    }
+    
     private void OnRootDisposed()
     {
         

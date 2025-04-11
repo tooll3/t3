@@ -193,6 +193,10 @@ internal sealed class GraphWindow : Windows.Window
         if (ProjectView == null)
             return;
 
+        // we need to check again as graph canvas may have caused recompilation events above, eg when an input slot is created
+        ProjectView.CheckDisposal(); 
+        ProjectView.OpenedProject.EnsureRootExists();
+        
         if (UserSettings.Config.ShowTimeline)
         {
             const int splitterWidth = 3;
@@ -220,8 +224,6 @@ internal sealed class GraphWindow : Windows.Window
 
         if (UserSettings.Config.ShowMiniMap)
             UiElements.DrawMiniMap(ProjectView.InstView, GraphCanvas);
-
-        ProjectView.CheckDisposal();
     }
 
     private void DrawGraphContent(ImDrawListPtr drawList)
