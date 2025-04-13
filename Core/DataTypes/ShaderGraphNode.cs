@@ -126,9 +126,6 @@ public class ShaderGraphNode
     /// </remarks>
     private void UpdateInputsNodes(EvaluationContext context)
     {
-        //if (_connectedNodeMultiInput == null)
-        //    return;
-
         _connectedNodeOps.Clear();
 
         if (_connectedNodeMultiInput != null)
@@ -137,15 +134,7 @@ public class ShaderGraphNode
         }
 
         _connectedNodeOps.AddRange(_connectedNodeInputs);
-
-        // If it HAS an input field, but it's not connected, we have an error
-        var hasConnectedInputFields = _connectedNodeOps.Count > 0;
-        // if (!hasConnectedInputFields)
-        // {
-        //     CollectedChanges |= ChangedFlags.HasErrors;
-        //     return;
-        // }
-
+        
         // Align size of input nodes to connected fields
         if (_connectedNodeOps.Count != InputNodes.Count)
         {
@@ -157,33 +146,20 @@ public class ShaderGraphNode
         // Update all connected nodes
         var lastStructureHash = StructureHash;
         StructureHash = _instance.SymbolChildId.GetHashCode();
+        
+        InputNodes.Clear();
 
-        for (var index = 0; index < _connectedNodeOps.Count; index++)
+        foreach(var connectedNodeOp in _connectedNodeOps)
         {
-            // Update connected shader node...
-            var connectedNodeOp = _connectedNodeOps[index];
-            if (connectedNodeOp == null)
+            var updatedNode = connectedNodeOp?.GetValue(context);
+
+            if (updatedNode == null) 
                 continue;
             
-            var updatedNode = connectedNodeOp.GetValue(context);
-
-            if (updatedNode == null)
-            {
-                CollectedChanges |= ChangedFlags.Structural | ChangedFlags.HasErrors;
-                continue;
-            }
-
             updatedNode.OutputCounts++;
-            //Log.Debug($"Updated {updatedNode} to {updatedNode.OutputCounts}");
             StructureHash = StructureHash * 31 + updatedNode.StructureHash;
-
-            if (updatedNode != InputNodes[index])
-            {
-                CollectedChanges |= ChangedFlags.Structural;
-                InputNodes[index] = updatedNode;
-            }
-
             CollectedChanges |= updatedNode.CollectedChanges;
+            InputNodes.Add(updatedNode);
         }
 
         if (StructureHash != lastStructureHash)
@@ -196,7 +172,7 @@ public class ShaderGraphNode
 
         // Clear dirty flags for multi input to prevent ops stuck in dirty state 
         _connectedNodeMultiInput?.DirtyFlag.Clear();
-    }
+    }        
 
     /** Flags the node to trigger a recompilation. */
     public void FlagCodeChanged()
