@@ -158,17 +158,20 @@ public static class SymbolJson
             return true;
 
         var parent = symbolReadResult.Symbol;
-        var success = true;
+        if (parent == null)
+            return false;
+        
+        var result = true;
 
         foreach (var childJson in childrenJson)
         {
-            success &= TryReadSymbolChild(in childJson, symbolReadResult.Symbol);
+            result &= TryReadSymbolChild(in childJson, parent);
         }
 
         if (symbolReadResult.AnimatorJsonData != null)
             parent.Animator.Read(symbolReadResult.AnimatorJsonData, parent);
 
-        return success;
+        return result;
     }
 
     private static bool TryReadSymbolChild(in JsonChildResult childJsonResult, Symbol parent)

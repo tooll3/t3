@@ -933,6 +933,13 @@
       }
     },
     {
+      "ChildId": "d3bc7872-9a2a-4f02-8bbd-dff12eb47057"/*PlayAudioClip*/,
+      "Position": {
+        "X": 3997.8457,
+        "Y": -905.5402
+      }
+    },
+    {
       "ChildId": "d6301888-edad-45bb-b482-83a0a57b1297"/*Blend*/,
       "Position": {
         "X": 164.05127,
@@ -1117,10 +1124,10 @@
   ],
   "OutputUis": [
     {
-      "OutputId": "ef6a86c3-dc56-4972-811e-5c964444ee9d"/*Output*/,
+      "OutputId": "c181ff82-2773-4bcd-8e86-f5d386dbe361"/*Output2*/,
       "Position": {
-        "X": 3628.538,
-        "Y": -1347.6599
+        "X": 3740.9185,
+        "Y": -1236.93
       }
     }
   ],

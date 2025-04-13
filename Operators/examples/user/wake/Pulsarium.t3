@@ -3426,6 +3426,12 @@
       "Outputs": []
     },
     {
+      "Id": "d3bc7872-9a2a-4f02-8bbd-dff12eb47057"/*PlayAudioClip*/,
+      "SymbolId": "c2b2758a-5b3e-465a-87b7-c6a13d3fba48",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "d6301888-edad-45bb-b482-83a0a57b1297"/*Blend*/,
       "SymbolId": "9f43f769-d32a-4f49-92ac-e0be3ba250cf",
       "InputValues": [
@@ -3565,7 +3571,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\common\\meshes\\cube-bevelled-thin.obj"
+          "Value": "Resources/common/meshes/cube-bevelled-thin.obj"
         },
         {
           "Id": "c39a61b3-fb6b-4611-8f13-273f13c9c491"/*ScaleFactor*/,
@@ -4437,7 +4443,7 @@
       "SourceParentOrChildId": "7bf92ccf-b43c-44bf-9973-26b5fe36d177",
       "SourceSlotId": "7a4c4feb-be2f-463e-96c6-cd9a6bad77a2",
       "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
-      "TargetSlotId": "ef6a86c3-dc56-4972-811e-5c964444ee9d"
+      "TargetSlotId": "c181ff82-2773-4bcd-8e86-f5d386dbe361"
     },
     {
       "SourceParentOrChildId": "23c8a4b1-88d6-4a44-8823-4ef85ca4f5f3",
@@ -5411,12 +5417,11 @@
     "AudioClips": [
       {
         "Id": "00000000-0000-0000-0000-000000000000",
-        "StartTime": -0.04100000113248825,
+        "StartTime": 0.0,
         "EndTime": 0.0,
         "Bpm": 120.0,
         "DiscardAfterUse": true,
-        "IsSoundtrack": true,
-        "FilePath": "Resources\\user\\still\\proj-pulsarium\\soundtrack\\SlowMo.mp3"
+        "IsSoundtrack": true
       }
     ]
   },

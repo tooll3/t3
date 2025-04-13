@@ -38,7 +38,9 @@ namespace T3.Core.DataTypes;
  */
 public sealed class Color2dField : ShaderGraphNode
 {
-    public Color2dField(Instance instance, MultiInputSlot<ShaderGraphNode>? nodeMultiInputInput = null, InputSlot<ShaderGraphNode>? inputSlot = null)
+    public Color2dField(Instance instance, 
+                        MultiInputSlot<ShaderGraphNode>? nodeMultiInputInput = null, 
+                        InputSlot<ShaderGraphNode>? inputSlot = null)
         : base(instance, nodeMultiInputInput, inputSlot)
     {
     }
@@ -49,7 +51,7 @@ public class ShaderGraphNode
     #region node handling
     public ShaderGraphNode(Instance instance,
                            MultiInputSlot<ShaderGraphNode>? nodeMultiInputInput = null,
-                           params InputSlot<ShaderGraphNode>[] inputsSlots)
+                           params InputSlot<ShaderGraphNode>?[] inputsSlots)
     {
         _instance = instance;
         _connectedNodeMultiInput = nodeMultiInputInput;
@@ -159,7 +161,11 @@ public class ShaderGraphNode
         for (var index = 0; index < _connectedNodeOps.Count; index++)
         {
             // Update connected shader node...
-            var updatedNode = _connectedNodeOps[index].GetValue(context);
+            var connectedNodeOp = _connectedNodeOps[index];
+            if (connectedNodeOp == null)
+                continue;
+            
+            var updatedNode = connectedNodeOp.GetValue(context);
 
             if (updatedNode == null)
             {
@@ -203,7 +209,7 @@ public class ShaderGraphNode
     #endregion
 
     private int _lastParamUpdateFrame = -1;
-    private int _lastCodeUpdateFrame = -1;
+    //private int _lastCodeUpdateFrame = -1;
 
     public void CollectEmbeddedShaderCode(CodeAssembleContext cac)
     {
@@ -281,9 +287,9 @@ public class ShaderGraphNode
 
     // Keep the input slot so we can detect and handle structural changes to the graph
     private readonly MultiInputSlot<ShaderGraphNode>? _connectedNodeMultiInput;
-    private readonly InputSlot<ShaderGraphNode>[] _connectedNodeInputs;
+    private readonly InputSlot<ShaderGraphNode>?[] _connectedNodeInputs;
 
-    private readonly List<Slot<ShaderGraphNode>> _connectedNodeOps = [];
+    private readonly List<Slot<ShaderGraphNode>?> _connectedNodeOps = [];
     public readonly List<ShaderGraphNode?> InputNodes = [];
     private int _lastParamGraphId;
 

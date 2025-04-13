@@ -164,7 +164,7 @@ public static class PlaybackUtils
                                                                        Bpm = 120,
                                                                        AudioSource = PlaybackSettings.AudioSources.ProjectSoundTrack,
                                                                        Syncing = PlaybackSettings.SyncModes.Timeline,
-                                                                       AudioInputDeviceName = null,
+                                                                       AudioInputDeviceName = string.Empty,
                                                                        AudioGainFactor = 1,
                                                                        AudioDecayFactor = 1,
                                                                    };

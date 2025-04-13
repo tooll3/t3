@@ -63,7 +63,9 @@ internal sealed class TimeLineImage
         if (resource.Value != null)
         {
             _loadedImagePath = imagePath;
-            _textureResource.Value.CreateShaderResourceView(ref _srv, imagePath);
+
+            _textureResource.Value?.CreateShaderResourceView(ref _srv, imagePath);
+
         }
             
         _loadedImagePath = imagePath;

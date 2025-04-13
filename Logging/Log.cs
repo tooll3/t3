@@ -32,7 +32,7 @@ public static class Log
         ProcessAndLog(ILogEntry.EntryLevel.Warning, message, args);
     }  
         
-    public static void Error(string message, params object[] args)
+    public static void Error(string message, params object?[] args)
     {
         ProcessAndLog(ILogEntry.EntryLevel.Error, message, args);
     }
@@ -52,7 +52,7 @@ public static class Log
     /// <summary>
     /// A helper function to unite different method API 
     /// </summary>
-    private static void ProcessAndLog(ILogEntry.EntryLevel level, string message, object[] args)
+    private static void ProcessAndLog(ILogEntry.EntryLevel level, string message, object?[] args)
     {
         switch (args)
         {
@@ -78,7 +78,7 @@ public static class Log
 
     #endregion
 
-    private static string FormatMessageWithArguments(string messageString, object[] args)
+    private static string FormatMessageWithArguments(string messageString, object?[] args)
     {
         try
         {

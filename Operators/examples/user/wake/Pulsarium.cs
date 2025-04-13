@@ -4,8 +4,8 @@ namespace Examples.user.wake;
 public class Pulsarium : Instance<Pulsarium>
 {
 
-    [Output(Guid = "ef6a86c3-dc56-4972-811e-5c964444ee9d")]
-    public readonly Slot<SharpDX.Direct3D11.Texture2D> Output = new Slot<SharpDX.Direct3D11.Texture2D>();
+        [Output(Guid = "c181ff82-2773-4bcd-8e86-f5d386dbe361")]
+        public readonly Slot<T3.Core.DataTypes.Texture2D> Output2 = new Slot<T3.Core.DataTypes.Texture2D>();
 
 
 }

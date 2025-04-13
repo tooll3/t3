@@ -39,20 +39,28 @@ internal static class FilePickingUi
         ImGui.SetNextItemWidth(-70);
 
         var nodeSelection = ProjectView.Focused?.NodeSelection;
-        if (nodeSelection == null)
+        if (ProjectView.Focused?.CompositionInstance == null || nodeSelection == null)
             return InputEditStateFlags.Nothing;
         
         var selectedInstances = nodeSelection.GetSelectedInstances().ToArray();
-        var needsToGatherPackages = SearchResourceConsumer is null;
-            
-        // Check later...            
-        // || selectedInstances.Length != StringInputUi._selectedInstances.Length 
-        // || !selectedInstances.Except(StringInputUi._selectedInstances).Any();
-        if (needsToGatherPackages)
+        var needsToGatherPackages = true; //SearchResourceConsumer is null;
+
+        if (selectedInstances.Length == 0)
         {
-            var packagesInCommon = selectedInstances.PackagesInCommon().ToArray();
-            SearchResourceConsumer = new TempResourceConsumer(packagesInCommon);
+            SearchResourceConsumer = new TempResourceConsumer(ProjectView.Focused.CompositionInstance.AvailableResourcePackages);
         }
+        else
+        {
+            // Check later...            
+            // || selectedInstances.Length != StringInputUi._selectedInstances.Length 
+            // || !selectedInstances.Except(StringInputUi._selectedInstances).Any();
+            if (needsToGatherPackages)
+            {
+                var packagesInCommon = selectedInstances.PackagesInCommon().ToArray();
+                SearchResourceConsumer = new TempResourceConsumer(packagesInCommon);
+            }
+        }
+            
             
         var isFolder = type == FileOperations.FilePickerTypes.Folder;
         var exists = ResourceManager.TryResolvePath(filePathValue, SearchResourceConsumer, out _, out _, isFolder);
