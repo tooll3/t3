@@ -95,33 +95,29 @@ public sealed class PlaybackSettings
         writer.WriteEndObject();
     }
 
-    internal static PlaybackSettings? ReadFromJson(JToken o)
+    internal static PlaybackSettings? ReadFromJson(JToken symbolToken)
     {
-        var clips = GetClips(o).ToList(); // Support legacy json format
-        if (clips.Count == 0)
+        var jSettingsToken = symbolToken[nameof(Symbol.PlaybackSettings)];
+        if (jSettingsToken == null)
             return null;
-
-        var playbackSettingsName = nameof(Symbol.PlaybackSettings);
-        var jToken = o[playbackSettingsName];
-        if (jToken == null)
-            return null;
-
-        var settingsToken = (JObject)jToken;
+        
+        var settingsToken = (JObject)jSettingsToken;
+        
+        var clips = GetClips(symbolToken).ToList(); // Support legacy json format
+        // if (clips.Count == 0)
+        //     return null;
 
         var newSettings = new PlaybackSettings
                               {
                                   AudioClips = clips,
+                                  Enabled = JsonUtils.ReadToken(settingsToken, nameof(Enabled), false),
+                                  Bpm = JsonUtils.ReadToken(settingsToken, nameof(Bpm), 120f),
+                                  AudioSource = JsonUtils.ReadEnum<AudioSources>(settingsToken, nameof(AudioSource)),
+                                  Syncing = JsonUtils.ReadEnum<SyncModes>(settingsToken, nameof(Syncing)),
+                                  AudioDecayFactor = JsonUtils.ReadToken(settingsToken, nameof(AudioDecayFactor), 0.5f),
+                                  AudioGainFactor = JsonUtils.ReadToken(settingsToken, nameof(AudioGainFactor), 1f),
+                                  AudioInputDeviceName = JsonUtils.ReadToken<string>(settingsToken, nameof(AudioInputDeviceName), null)?? string.Empty
                               };
-
-        newSettings.Enabled = JsonUtils.ReadToken(settingsToken, nameof(Enabled), false);
-        newSettings.Bpm = JsonUtils.ReadToken(settingsToken, nameof(Bpm), 120f);
-        newSettings.AudioSource = JsonUtils.ReadEnum<AudioSources>(settingsToken, nameof(AudioSource));
-        newSettings.Syncing = JsonUtils.ReadEnum<SyncModes>(settingsToken, nameof(Syncing));
-        newSettings.AudioDecayFactor = JsonUtils.ReadToken(settingsToken, nameof(AudioDecayFactor), 0.5f);
-        newSettings.AudioGainFactor = JsonUtils.ReadToken(settingsToken, nameof(AudioGainFactor), 1f);
-        
-        
-        newSettings.AudioInputDeviceName = JsonUtils.ReadToken<string>(settingsToken, nameof(AudioInputDeviceName), null)?? string.Empty;
 
         newSettings.AudioClips.AddRange(GetClips(settingsToken)); // Support correct format
 
@@ -138,13 +134,13 @@ public sealed class PlaybackSettings
         return newSettings;
     }
 
-    private static IEnumerable<AudioClipDefinition> GetClips(JToken o)
+    private static IEnumerable<AudioClipDefinition> GetClips(JToken settingsToken)
     {
-        var jToken = o[nameof(Symbol.PlaybackSettings.AudioClips)];
-        if(jToken == null)
+        var jClipsToken = settingsToken[nameof(Symbol.PlaybackSettings.AudioClips)];
+        if(jClipsToken == null)
             yield break;
         
-        var jAudioClipArray = (JArray)jToken;
+        var jAudioClipArray = (JArray)jClipsToken;
         foreach (var c in jAudioClipArray)
         {
             if (AudioClipDefinition.TryFromJson(c, out var clip))
