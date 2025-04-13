@@ -52,13 +52,16 @@ internal static class OutputSnapper
         Debug.Assert(context.MacroCommand != null);
 
         var didSomething = false;
-        foreach (var c in context.TempConnections)
+        foreach (var tempConnection in context.TempConnections)
         {
+            var sourceParentOrChildId = BestOutputMatch.Item.Variant == MagGraphItem.Variants.Input ? Guid.Empty : BestOutputMatch.Item.Id;
+            var targetParentOrChildId = tempConnection.TargetItem.Variant == MagGraphItem.Variants.Output ? Guid.Empty : tempConnection.TargetItem.Id;
+            
             // Create connection
-            var connectionToAdd = new Symbol.Connection(BestOutputMatch.Item.Id,
+            var connectionToAdd = new Symbol.Connection(sourceParentOrChildId,
                                                         BestOutputMatch.Anchor.SlotId,
-                                                        c.TargetItem.Id,
-                                                        c.TargetInput.Id);
+                                                        targetParentOrChildId,
+                                                        tempConnection.TargetInput.Id);
 
             if (Structure.CheckForCycle(context.CompositionInstance.Symbol, connectionToAdd))
             {
@@ -68,7 +71,7 @@ internal static class OutputSnapper
             
             context.MacroCommand.AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
                                                                             connectionToAdd,
-                                                                            c.MultiInputIndex));
+                                                                            tempConnection.MultiInputIndex));
             didSomething = true;
         }
 
