@@ -33,8 +33,15 @@ internal sealed class SetSDFMaterial : Instance<SetSDFMaterial>
         // Return base distance (required for blending)
         if (SdfField.HasInputConnections)
         {
-            ShaderNode.InputNodes[inputNodeIndex]?.CollectEmbeddedShaderCode(c);
-            inputNodeIndex++;
+            if (ShaderNode.InputNodes.Count <= inputNodeIndex)
+            {
+                Log.Debug($"undefined inputField node at index {inputNodeIndex}", this);
+            }
+            else
+            {
+                ShaderNode.InputNodes[inputNodeIndex]?.CollectEmbeddedShaderCode(c);
+                inputNodeIndex++;
+            }
         }
 
         // TODO: This should be extracted into method
@@ -45,7 +52,15 @@ internal sealed class SetSDFMaterial : Instance<SetSDFMaterial>
         {
             c.PushContext(subContextIndex, "albedo");
             var subContextId = c.ToString();
-            ShaderNode.InputNodes[inputNodeIndex]?.CollectEmbeddedShaderCode(c);
+            if (ShaderNode.InputNodes.Count <= inputNodeIndex)
+            {
+                Log.Debug($"undefined inputField node at index {inputNodeIndex}", this);
+            }
+            else
+            {
+                ShaderNode.InputNodes[inputNodeIndex]?.CollectEmbeddedShaderCode(c);
+            }
+
             c.PopContext();
             c.AppendCall($"f{c}.rgb = f{subContextId}.rgb * {ShaderNode}Color.rgb;");
             //inputNodeIndex++;
