@@ -127,7 +127,7 @@ public static class ShaderParamHandling
 
     private static void AddVec4Parameter(List<float> floatValues, List<ShaderCodeParameter> codeParams, string name, Vector4 value)
     {
-        PadFloatParametersToVectorComponentCount(floatValues, codeParams, 3);
+        PadFloatParametersToVectorComponentCount(floatValues, codeParams, 4);
         floatValues.Add(value.X);
         floatValues.Add(value.Y);
         floatValues.Add(value.Z);
