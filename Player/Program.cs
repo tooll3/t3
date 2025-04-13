@@ -8,6 +8,7 @@ using System.Text;
 using CommandLine;
 using CommandLine.Text;
 using ManagedBass;
+using Newtonsoft.Json;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
@@ -123,7 +124,7 @@ internal static partial class Program
                                   Icon = icon,
                               };
 
-            var handle = _renderForm.Handle;
+            var windowHandle = _renderForm.Handle;
 
             // SwapChain description
             var desc = new SwapChainDescription
@@ -132,11 +133,11 @@ internal static partial class Program
                                ModeDescription = new ModeDescription(resolution.Width, resolution.Height,
                                                                      new Rational(60, 1), Format.R8G8B8A8_UNorm),
                                IsWindowed = _resolvedOptions.Windowed,
-                               OutputHandle = handle,
+                               OutputHandle = windowHandle,
                                SampleDescription = new SampleDescription(1, 0),
                                SwapEffect = SwapEffect.FlipDiscard,
                                Flags = SwapChainFlags.AllowModeSwitch,
-                               Usage = Usage.RenderTargetOutput
+                               Usage = Usage.RenderTargetOutput,
                            };
 
             // Create Device and SwapChain
@@ -160,7 +161,6 @@ internal static partial class Program
             var factory = _swapChain.GetParent<Factory>();
             factory.MakeWindowAssociation(_renderForm.Handle, WindowAssociationFlags.IgnoreAll);
 
-            // initialize input
             InitializeInput(_renderForm);
 
             // New RenderTargetView from the backbuffer
@@ -186,7 +186,21 @@ internal static partial class Program
                 return;
             }
 
+            Log.Debug($"Try to load playback settings for {demoSymbol}");
             var playbackSettings = demoSymbol.PlaybackSettings;
+            if (playbackSettings != null)
+            {
+                Log.Debug("Playback settings: " + JsonConvert.SerializeObject(
+                                                                              playbackSettings,
+                                                                              Formatting.Indented
+                                                                             ));
+            }
+            else
+            {
+                Log.Warning($"No playback settings defined");
+
+            }
+            
             _playback = new Playback
                             {
                                 Settings = playbackSettings
@@ -210,10 +224,11 @@ internal static partial class Program
             _resolution = new Int2(_resolvedOptions.Width, _resolvedOptions.Height);
 
             // Init wasapi input if required
-            if (playbackSettings is { AudioSource: PlaybackSettings.AudioSources.ProjectSoundTrack } && playbackSettings.GetMainSoundtrack(_project, out _soundtrackHandle))
+            if (playbackSettings is { AudioSource: PlaybackSettings.AudioSources.ProjectSoundTrack } 
+                && playbackSettings.GetMainSoundtrack(_project, out _soundtrackHandle))
             {
                 //var soundtrack = _soundtrackHandle.Value;
-                if (!_soundtrackHandle.TryGetFileResource(out var file))
+                if (_soundtrackHandle.TryGetFileResource(out var file))
                 {
                     _playback.Bpm = _soundtrackHandle.Clip.Bpm;
                     // Trigger loading clip
@@ -426,7 +441,7 @@ internal static partial class Program
     private static Instance _project;
     private static EvaluationContext _evalContext;
     private static Playback _playback;
-    private static AudioClipResourceHandle? _soundtrackHandle;
+    private static AudioClipResourceHandle _soundtrackHandle;
     private static DeviceContext _deviceContext;
     private static Options _resolvedOptions;
     private static RenderForm _renderForm;

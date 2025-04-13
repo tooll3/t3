@@ -11,11 +11,14 @@ using T3.Core.Operator;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
+using T3.Editor.UiModel.InputsAndTypes;
 
 namespace T3.Editor.Gui.Windows.TimeLine;
 
 internal static class PlaybackSettingsPopup
 {
+
     internal static void DrawPlaybackSettings(Instance? composition)
     {
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(2, 2));
@@ -114,7 +117,6 @@ internal static class PlaybackSettingsPopup
         FormInputs.AddVerticalSpace();
             
         ImGui.Separator();
-            
 
         if (settings.AudioSource == PlaybackSettings.AudioSources.ProjectSoundTrack)
         {
@@ -135,17 +137,18 @@ internal static class PlaybackSettingsPopup
                                   ? "File not found?"
                                   : null;
                     
-                var path = file?.AbsolutePath ?? string.Empty;
-                    
-                // todo - replace with StringInputUi for file selection
-                var filepathModified = FormInputs.AddFilePicker("Soundtrack",
-                                                                ref path,
-                                                                "filepath to soundtrack",
-                                                                warning,
-                                                                FileOperations.FilePickerTypes.File
-                                                               );
-                    
-                soundtrackHandle.Clip.FilePath = path;
+                //var path = file?.AbsolutePath ?? string.Empty;
+                var resourcePath = soundtrackHandle.Clip.FilePath;
+                var inputEditStateFlags = FilePickingUi.DrawTypeAheadSearch(FileOperations.FilePickerTypes.File, 
+                                                                            AllFilesAudioFilesMp3WavOggMp3WavOgg,
+                                                                            ref resourcePath);
+
+                var filepathModified = (inputEditStateFlags & InputEditStateFlags.Modified) != 0;
+                if (filepathModified)
+                {
+                    soundtrackHandle.Clip.FilePath = resourcePath;
+                }
+                
                 FormInputs.ApplyIndent();
                 if (ImGui.Button("Reload"))
                 {
@@ -213,6 +216,7 @@ internal static class PlaybackSettingsPopup
                     
                 if (filepathModified)
                 {
+                    composition.Symbol.GetSymbolUi().FlagAsModified();
                     AudioEngine.ReloadClip(soundtrackHandle);
                     UpdateBpmFromSoundtrackConfig(soundtrackHandle.Clip);
                     UpdatePlaybackAndTimeline(settings);
@@ -397,4 +401,5 @@ internal static class PlaybackSettingsPopup
     }
 
     public const string PlaybackSettingsPopupId = "##PlaybackSettings";
+    private const string AllFilesAudioFilesMp3WavOggMp3WavOgg = "All Files|*.*|Audio files (mp3,wav,ogg)|*.mp3;*.wav;*.ogg";
 }

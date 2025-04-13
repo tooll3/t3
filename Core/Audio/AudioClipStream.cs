@@ -15,7 +15,11 @@ namespace T3.Core.Audio;
 /// </summary>
 public sealed class AudioClipStream
 {
-
+    // Private constructor
+    private AudioClipStream() {} 
+    
+    
+    
     public double Duration;
     internal int StreamHandle;
     internal bool IsInUse;
@@ -23,7 +27,7 @@ public sealed class AudioClipStream
     private float DefaultPlaybackFrequency { get; set; }
     internal double TargetTime { get; set; }
 
-    internal AudioClipResourceHandle ResourceHandle;
+    internal AudioClipResourceHandle ResourceHandle = null!;
     //internal AudioClipInfo ClipInfo;
     
     // public bool TryGetFileResource([NotNullWhen(true)] out FileResource? file)
@@ -57,18 +61,18 @@ public sealed class AudioClipStream
     /// <summary>
     /// Creates an <see cref="AudioClipStream"/> by loading an <see cref="AudioClipResourceHandle"/>. 
     /// </summary>
-    internal static AudioClipStream? LoadClip(AudioClipResourceHandle clipInfo)
+    internal static AudioClipStream? LoadClip(AudioClipResourceHandle handle)
     {
-        if (!clipInfo.TryGetFileResource(out var file))
+        if (!handle.TryGetFileResource(out var file))
         {
-            Log.Error($"AudioClip file '{clipInfo.Clip.FilePath}' does not exist.");
+            Log.Error($"AudioClip file '{handle.Clip.FilePath}' does not exist.");
             return null;
         }
 
         var fileInfo = file.FileInfo;
         if(fileInfo is not {Exists: true })
         {
-            Log.Error($"AudioClip file '{clipInfo.Clip.FilePath}' does not exist.");
+            Log.Error($"AudioClip file '{handle.Clip.FilePath}' does not exist.");
             return null;
         }
 
@@ -95,11 +99,11 @@ public sealed class AudioClipStream
         }
 
         var duration = (float)Bass.ChannelBytes2Seconds(streamHandle, bytes);
-        clipInfo.Clip.LengthInSeconds = duration;
+        handle.Clip.LengthInSeconds = duration;
 
         var stream = new AudioClipStream()
                          {
-                             ResourceHandle = clipInfo,
+                             ResourceHandle = handle,
                              StreamHandle = streamHandle,
                              DefaultPlaybackFrequency = defaultPlaybackFrequency,
                              Duration = duration,
