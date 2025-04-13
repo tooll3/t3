@@ -84,7 +84,7 @@ public abstract class ModalDialog
     }
 
     private bool _shouldShowNextFrame;
-    protected Vector2 DialogSize = new(500, 250);
+    protected Vector2 DialogSize = new Vector2(500, 350) * T3Ui.UiScaleFactor;
     protected Vector2 ItemSpacing = new(4, 10);
     protected float Padding = 20;
     protected ImGuiWindowFlags Flags = ImGuiWindowFlags.None;

@@ -21,7 +21,7 @@ public static class SearchableDropDown
     
     public static bool Draw(ref int selectedIndex, string currentValue,  Func<string, bool, ItemResults> filterAndDrawItem)
     {
-        var inputId = ImGui.GetID(string.Empty);
+        var inputId = ImGui.GetID("");
         var isSearchResultWindowOpen = inputId == _activeInputId;
 
         if (!isSearchResultWindowOpen)

@@ -16,6 +16,18 @@ internal static class TypeSelector
             _typeList = TypeNameRegistry.Entries.ToArray();
             _initialized = true;
         }
+
+        if (selectedType != SelectedType)
+        {
+            for (var index = 0; index < _typeList.Length; index++)
+            {
+                if (_typeList[index].Key == selectedType)
+                {
+                    _selectedTypeIndex = index;
+                    break;
+                }
+            }
+        }
         
         using var enumerator = TypeNameRegistry.Entries.GetEnumerator();
         var typeChanged = SearchableDropDown.Draw(ref _selectedTypeIndex,
