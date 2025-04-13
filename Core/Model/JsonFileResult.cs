@@ -7,6 +7,17 @@ using T3.Core.Logging;
 
 namespace T3.Core.Model;
 
+public class FileCorruptedException : Exception
+{
+    public string FilePath { get; }
+
+    public FileCorruptedException(string filePath, string error)
+        : base($"The file '{filePath}' is corrupted and cannot be loaded.")
+    {
+        FilePath = filePath;
+    }
+}
+
 public sealed class JsonFileResult<T>
 {
     public readonly JToken JToken;
@@ -45,7 +56,7 @@ public sealed class JsonFileResult<T>
         catch (Exception e)
         {
             Log.Error($"Error reading json from {filePath}:\n{e}");
-            throw;
+            throw new FileCorruptedException(filePath, e.Message);
         }
     }
 }

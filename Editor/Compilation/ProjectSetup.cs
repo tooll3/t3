@@ -3,10 +3,12 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using Newtonsoft.Json;
 using T3.Core.Compilation;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
+using T3.Core.SystemUi;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 
@@ -252,6 +254,8 @@ internal static partial class ProjectSetup
         // do the same as above, just in several steps so we can do them in parallel
         ConcurrentDictionary<EditorSymbolPackage, List<SymbolJson.SymbolReadResult>> loadedSymbols = new();
         ConcurrentDictionary<EditorSymbolPackage, List<Symbol>> loadedOrCreatedSymbols = new();
+
+
         packages
            .AsParallel()
            .ForAll(package => //pull out for non-editable ones too
