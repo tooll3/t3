@@ -367,6 +367,13 @@ internal sealed class ParameterWindow : Window
         var compositionSymbolUi = ProjectView.Focused?.InstView?.SymbolUi;
         if (compositionSymbolUi == null)
             return;
+
+        if (compositionSymbolUi == symbolUi)
+        {
+            compositionSymbolUi = instance.Parent?.GetSymbolUi();
+            if (compositionSymbolUi == null)
+                return;
+        }
         
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
         ImGui.BeginChild("parameters", Vector2.Zero, false, ImGuiWindowFlags.AlwaysUseWindowPadding);
