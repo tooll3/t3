@@ -1,3 +1,4 @@
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using Operators.Utils;
@@ -33,11 +34,11 @@ internal sealed class OscInput : Instance<OscInput>, OscConnectionManager.IOscCo
     {
         if (Math.Abs(_lastUpdateFrame - context.LocalFxTime) < 0.001f)
             return;
-            
+
         _lastUpdateFrame = context.LocalFxTime;
-            
+
         var shouldClear = false;
-            
+
         var useKeyValuePairs = UseKeyValuePairs.GetValue(context);
         if (useKeyValuePairs != _useKeyValuePairs)
         {
@@ -114,7 +115,7 @@ internal sealed class OscInput : Instance<OscInput>, OscConnectionManager.IOscCo
         if (portChanged || isListeningChanged)
         {
             shouldClear = true;
-                
+
             if (newPort < 0 || newPort > 65535)
             {
                 SetStatus("Invalid port number", IStatusProvider.StatusLevel.Warning);
@@ -147,9 +148,9 @@ internal sealed class OscInput : Instance<OscInput>, OscConnectionManager.IOscCo
 
         lock (_valuesByKeys)
         {
-            if(shouldClear)
+            if (shouldClear)
                 _valuesByKeys.Clear();
-                
+
             Contents.Value = _valuesByKeys;
         }
 
@@ -166,10 +167,10 @@ internal sealed class OscInput : Instance<OscInput>, OscConnectionManager.IOscCo
     {
         if (Math.Abs(_lastUpdateFrame - context.LocalFxTime) < 0.001f)
             return;
-            
+
         _lastUpdateFrame = context.LocalFxTime;
         Update(context);
-            
+
         WasTrigger.Value = _wasTrigger;
         _wasTrigger = false;
     }
@@ -179,7 +180,6 @@ internal sealed class OscInput : Instance<OscInput>, OscConnectionManager.IOscCo
     private void UpdateStatusMessage()
     {
         // Update status message
-        var ipAddress = GetLocalIpAddress();
         var portIsActive = OscConnectionManager.TryGetScannedAddressesForPort(_port, out var addresses) && addresses.Count > 0;
         var addressIsDefined = !string.IsNullOrEmpty(_address);
         var addressIsActive = addressIsDefined && portIsActive && addresses.ContainsKey(_address);
@@ -202,7 +202,8 @@ internal sealed class OscInput : Instance<OscInput>, OscConnectionManager.IOscCo
             return;
         }
 
-        SetStatus($"Listening on {ipAddress}:{_port}\nNo messages received, yet.", IStatusProvider.StatusLevel.Notice);
+        var ipAddress = GetLocalIpAddress();
+        SetStatus($"Listening on port {_port} at...\n{ipAddress}\n\nNo messages received, yet.", IStatusProvider.StatusLevel.Notice);
     }
 
     # region handling async messages from other thread
@@ -290,6 +291,7 @@ internal sealed class OscInput : Instance<OscInput>, OscConnectionManager.IOscCo
                         {
                             Log.Debug($"Skipping OSC message not matching {_searchFilterKey} == {_filterPattern}", this);
                         }
+
                         return false;
                     }
                 }
@@ -315,7 +317,7 @@ internal sealed class OscInput : Instance<OscInput>, OscConnectionManager.IOscCo
                             {
                                 if (key == groupKey)
                                 {
-                                    groupingSuffix +=  m[index + 1]  + "/";
+                                    groupingSuffix += m[index + 1] + "/";
                                 }
                             }
 
@@ -379,15 +381,75 @@ internal sealed class OscInput : Instance<OscInput>, OscConnectionManager.IOscCo
 
     private static string GetLocalIpAddress()
     {
-        using var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0);
-
-        socket.Connect("8.8.8.8", 65530);
-        if (socket.LocalEndPoint is IPEndPoint endPoint)
+        var ipAddresses = GetLocalIPv4Addresses();
+        if (ipAddresses.Count == 0)
         {
-            return endPoint.Address.ToString();
+            return "unknown IP";
         }
 
-        return "unknown IP";
+        return string.Join("\n", ipAddresses);
+
+        // return Dns.GetHostEntry(Dns.GetHostName())
+        //           .AddressList
+        //           .FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork)?
+        //           .ToString();
+
+        // using var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0);
+        //
+        // socket.Connect("8.8.8.8", 65530);
+        // if (socket.LocalEndPoint is IPEndPoint endPoint)
+        // {
+        //     return endPoint.Address.ToString();
+        // }
+        //
+        // return "unknown IP";
+    }
+
+    public static List<string> GetLocalIPv4Addresses()
+    {
+        var ipAddressList = new List<string>();
+
+        if (!NetworkInterface.GetIsNetworkAvailable())
+        {
+            Console.WriteLine("Network is not available.");
+            return ipAddressList; // Return empty list if network is down
+        }
+
+        try
+        {
+            // Get all network interfaces
+            foreach (NetworkInterface networkInterface in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                // Filter for interfaces that are currently operational (Status == Up)
+                // and are not Loopback or Tunnel interfaces
+                if (networkInterface.OperationalStatus == OperationalStatus.Up &&
+                    networkInterface.NetworkInterfaceType != NetworkInterfaceType.Loopback &&
+                    networkInterface.NetworkInterfaceType != NetworkInterfaceType.Tunnel)
+                {
+                    // Get the IP properties for this interface
+                    IPInterfaceProperties ipProperties = networkInterface.GetIPProperties();
+
+                    // Iterate through all unicast addresses assigned to this interface
+                    foreach (UnicastIPAddressInformation ipInfo in ipProperties.UnicastAddresses)
+                    {
+                        // Filter for IPv4 addresses
+                        if (ipInfo.Address.AddressFamily == AddressFamily.InterNetwork)
+                        {
+                            // Add the IPv4 address string to the list
+                            ipAddressList.Add(ipInfo.Address.ToString());
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log potential exceptions (e.g., permission issues)
+            Log.Debug($"Error retrieving IP addresses: {ex.Message}");
+            // Depending on requirements, you might want to throw, return null, or just the empty list.
+        }
+
+        return ipAddressList;
     }
 
     #region implement status provider
@@ -436,7 +498,7 @@ internal sealed class OscInput : Instance<OscInput>, OscConnectionManager.IOscCo
     {
         if (string.IsNullOrEmpty(result))
             return;
-        
+
         var parts = result.Split(Separator);
         if (parts.Length > 1)
         {
@@ -448,10 +510,10 @@ internal sealed class OscInput : Instance<OscInput>, OscConnectionManager.IOscCo
         }
     }
     #endregion
-        
+
     private double _lastUpdateFrame = -1;
     private bool _isConnected;
-        
+
     private bool _useKeyValuePairs;
     private string _searchFilterKey;
     private string _filterPattern;
@@ -465,14 +527,12 @@ internal sealed class OscInput : Instance<OscInput>, OscConnectionManager.IOscCo
     private string _address;
 
     private bool _printLogMessages;
-        
 
     [Input(Guid = "87EFD3C4-F2DF-4996-924F-12C631BAD8D8")]
     public readonly InputSlot<int> Port = new();
 
     [Input(Guid = "17D1FE47-430A-4465-92AA-92A4EFFB515F")]
     public readonly InputSlot<string> Address = new();
-        
 
     [Input(Guid = "8014A7A6-CACB-4206-A5B4-87C14235A20C")]
     public readonly InputSlot<bool> UseKeyValuePairs = new();
@@ -491,9 +551,9 @@ internal sealed class OscInput : Instance<OscInput>, OscConnectionManager.IOscCo
 
     [Input(Guid = "6C15E743-9A70-47E7-A0A4-75636817E441")]
     public readonly InputSlot<bool> PrintLogMessages = new();
-        
+
     [Input(Guid = "3B179FF2-172A-4FDA-8E26-7BB3E80628D0")]
     public readonly InputSlot<bool> IsListening = new();
-        
+
     private const string Separator = " - ";
 }
