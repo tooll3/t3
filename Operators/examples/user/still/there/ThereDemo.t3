@@ -2621,7 +2621,7 @@
         "Bpm": 120.0,
         "DiscardAfterUse": true,
         "IsSoundtrack": true,
-        "FilePath": "Resources/user/still/proj-there/soundtrack/partial.mp3"
+        "FilePath": "/Examples/user/still/proj-there/soundtrack/partial.mp3"
       }
     ]
   },

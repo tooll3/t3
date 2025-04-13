@@ -1,5 +1,5 @@
 {
-  "Id": "9323e32f-078c-4156-941b-203f4c265ff5"/*RaymarchFieldWithMaterial*/,
+  "Id": "9323e32f-078c-4156-941b-203f4c265ff5"/*RaymarchField*/,
   "Inputs": [
     {
       "Id": "0b4d60de-261f-4dbf-ad44-6395cda3a496"/*MinDistance*/,
@@ -8,6 +8,10 @@
     {
       "Id": "1251368b-f8f4-4210-be1e-4d05223caf21"/*DistToColor*/,
       "DefaultValue": -0.20333333
+    },
+    {
+      "Id": "2c8ac572-d16b-4486-a10a-de85f56ca3e4"/*testBool2*/,
+      "DefaultValue": false
     },
     {
       "Id": "3148d927-8779-47ab-9e0a-fa63206f3002"/*MaxSteps*/,
@@ -234,7 +238,7 @@
       "Outputs": []
     },
     {
-      "Id": "b8773240-5218-4217-8475-975199bc0235"/*_GetFieldShaderAttributes*/,
+      "Id": "b8773240-5218-4217-8475-975199bc0235"/*GenerateShaderGraphCode*/,
       "SymbolId": "73c028d1-3de2-4269-b503-97f62bbce320",
       "InputValues": [
         {

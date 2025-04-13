@@ -1,5 +1,5 @@
 {
-  "Id": "9323e32f-078c-4156-941b-203f4c265ff5"/*RaymarchFieldWithMaterial*/,
+  "Id": "9323e32f-078c-4156-941b-203f4c265ff5"/*RaymarchField*/,
   "Description": "This operator should be renamed.",
   "InputUis": [
     {
@@ -17,6 +17,13 @@
       "Position": {
         "X": 218.2935,
         "Y": 1263.451
+      }
+    },
+    {
+      "InputId": "2c8ac572-d16b-4486-a10a-de85f56ca3e4"/*testBool2*/,
+      "Position": {
+        "X": 968.2886,
+        "Y": 1307.2611
       }
     },
     {
@@ -229,7 +236,7 @@
       }
     },
     {
-      "ChildId": "b8773240-5218-4217-8475-975199bc0235"/*_GetFieldShaderAttributes*/,
+      "ChildId": "b8773240-5218-4217-8475-975199bc0235"/*GenerateShaderGraphCode*/,
       "Position": {
         "X": 712.9934,
         "Y": 543.5422
@@ -289,8 +296,8 @@
     {
       "OutputId": "8e293517-dc6f-4b1f-9710-069420f9da09"/*ShaderCode*/,
       "Position": {
-        "X": 2066.51,
-        "Y": 610.3492
+        "X": 2065.2878,
+        "Y": 819.34204
       }
     }
   ]
