@@ -1,0 +1,25 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build
+        uses: ./.github/actions/build
+
+      - name: Package
+        uses: ./.github/actions/package
+
+      - name: Upload Installer
+        uses: actions/upload-artifact@v4
+
+        with:
+          path: Installer\Output\*.exe
