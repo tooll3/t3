@@ -12,7 +12,7 @@ public class FileCorruptedException : Exception
     public string FilePath { get; }
 
     public FileCorruptedException(string filePath, string error)
-        : base($"The file '{filePath}' is corrupted and cannot be loaded.")
+        : base($"The file '{filePath}' is corrupted and cannot be loaded.\n {error}")
     {
         FilePath = filePath;
     }

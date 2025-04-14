@@ -250,10 +250,16 @@ public abstract partial class SymbolPackage : IResourcePackage
 
         SymbolJsonResult ReadSymbolFromJsonFileResult(JsonFileResult<Symbol> jsonInfo, Type type)
         {
-            var result = SymbolJson.ReadSymbolRoot(jsonInfo.Guid, jsonInfo.JToken, type, this);
-
-            jsonInfo.Object = result.Symbol;
-            return new SymbolJsonResult(result, jsonInfo.FilePath);
+            try
+            {
+                var result = SymbolJson.ReadSymbolRoot(jsonInfo.Guid, jsonInfo.JToken, type, this);
+                jsonInfo.Object = result.Symbol;
+                return new SymbolJsonResult(result, jsonInfo.FilePath);
+            }
+            catch(Exception e)
+            {
+                throw new FileCorruptedException(jsonInfo.FilePath, e.Message);
+            }
         }
     }
 
