@@ -46,7 +46,10 @@ internal sealed class MunchingSquares2 : Instance<MunchingSquares2>
 
     private enum Methods
     {
-        FloydSteinberg,
-        Diffusion,
+        Classic,
+        Patterns,
+        Or,
+        Multiply,
+        Chaos,
     }
 }
