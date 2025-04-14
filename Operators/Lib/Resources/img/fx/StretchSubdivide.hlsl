@@ -4,42 +4,45 @@
 cbuffer ParamConstants : register(b0)
 {
     float4 GapColor;
+
     float SplitPosition;
     float SplitVariation;
-
-    float MaxSubdivisions;
     float SubdivisionThreshold;
-
     float RandomPhase;
 
     float Padding;
     float Feather;
-
-    float UseApectForSplit;
-
     float2 ScrollOffset;
-    float2 ScrollGainAndBias;
 
-    float RandomSeed;
-    float ColorMode;
+    float2 ScrollGainAndBias;
     float DirectionBias;
 
-    float UseRGSSMultiSampling;
-
+    float TextureFx;
     float IsTextureValid;
 }
 
 #define COLORMODE_DIVISIONS 0
 #define COLORMODE_RANDOM 1
 
-cbuffer Time : register(b1)
-{
-}
+// cbuffer Time : register(b1)
+// {
+// }
 
 cbuffer Resolution : register(b2)
 {
     float TargetWidth;
     float TargetHeight;
+}
+
+cbuffer IntParams : register(b4)
+{
+    int UseApectForSplit;
+    int UseRGSSMultiSampling;
+    int MaxSubdivisions;
+    int GradientMode;
+
+    int ColorMode;
+    int RandomSeed;
 }
 
 struct vsOutput
@@ -91,7 +94,7 @@ float4 ComputeSubdivision(float2 uv)
 
     [loop] for (step = 0; step < steps; ++step)
     {
-        float aspect = UseApectForSplit ? size.x / size.y : 1;
+        float aspect = UseApectForSplit == 1 ? size.x / size.y : 1;
 
         if (hash11u(seedInCell) * 2 + DirectionBias < aspect)
         {
@@ -137,12 +140,15 @@ float4 ComputeSubdivision(float2 uv)
         phaseHashForCell = (PhaseHash(mainSeed) - 0.5) * SplitVariation + SplitPosition;
 
         float4 extra = Image.Sample(texSampler, uv - uvInCell * size + size / 2);
-        if (hash < SubdivisionThreshold)
+        float extraGray = (extra.r + extra.g + extra.b) / 3 * extra.a * TextureFx;
+
+        if (hash <= SubdivisionThreshold - extraGray)
             break;
     }
 
-    float splitF = ColorMode > 0.5 ? hash11u(mainSeed) : step / (float)steps;
-    float4 imageGradient = ImageB.SampleLevel(clampedSampler, float2(splitF, 0.5), 0);
+    // float splitF = ColorMode == 0 ? hash11u(mainSeed) : step / (float)steps;
+    float gradientF = GradientMode ? step / (float)steps : hash11u(mainSeed);
+    float4 gradientColor = ImageB.SampleLevel(clampedSampler, float2(gradientF, 0.5), 0);
 
     float2 dd = (uvInCell - 0.5) * size;
     float2 d4 = (size - abs(dd * 2)) * float2(aspectRatio, 1);
@@ -151,15 +157,18 @@ float4 ComputeSubdivision(float2 uv)
     float sGap = smoothstep(Padding - Feather, Padding + Feather, d5);
 
     float2 imageUv = uv - uvInCell * size + size / 2;
-    float4 imageColor = Image.Sample(texSampler, imageUv);
-    return lerp(GapColor, imageColor * imageGradient, sGap);
+
+    float4 imageColor = lerp(Image.Sample(texSampler, imageUv), 1, ColorMode == 1) * gradientColor;
+
+    return lerp(GapColor, imageColor, sGap);
 }
 
 float4 psMain(vsOutput input) : SV_TARGET
 {
-    // float width, height;
-    // Image.GetDimensions(width, height);
-    // float imageAspect = width/height;
+    // return float4(ColorMode, 0, 0, 1);
+    //  float width, height;
+    //  Image.GetDimensions(width, height);
+    //  float imageAspect = width/height;
 
     float2 uv = input.texCoord;
 

@@ -48,12 +48,30 @@ internal sealed class SubdivisionStretch : Instance<SubdivisionStretch>
     [Input(Guid = "5cae4d6e-d441-42f7-8e17-3aeb58719f08")]
     public readonly InputSlot<Vector4> GapColor = new InputSlot<Vector4>();
 
+    [Input(Guid = "ee2bc31a-a67f-4bec-bce7-0a70db88082c", MappedType = typeof(GradientModes))]
+    public readonly InputSlot<int> GradientMode = new InputSlot<int>();
+
     [Input(Guid = "be07242e-39fc-4631-ab6e-3023c9444406")]
     public readonly InputSlot<Gradient> Gradient = new InputSlot<Gradient>();
 
-    [Input(Guid = "ee2bc31a-a67f-4bec-bce7-0a70db88082c")]
+    [Input(Guid = "DEE8B0C6-CAF4-4C23-9F9E-2B8F468476F6", MappedType = typeof(ColorModes))]
     public readonly InputSlot<int> ColorMode = new InputSlot<int>();
 
     [Input(Guid = "d90350a0-9fa8-4747-805b-ba7ab8125595")]
     public readonly InputSlot<bool> Use4xMSAA = new InputSlot<bool>();
+
+    [Input(Guid = "9606da82-7896-4312-9e0c-dd3f2c178cab")]
+    public readonly InputSlot<float> TextureFx = new InputSlot<float>();
+
+    private enum GradientModes
+    {
+        Random,
+        Subdivisions,
+    }
+
+    private enum ColorModes
+    {
+        MultiplyGradient,
+        GradientOnly,
+    }
 }
