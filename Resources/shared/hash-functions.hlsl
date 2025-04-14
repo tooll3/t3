@@ -116,7 +116,7 @@ float4 hash41u(uint x)
 float hash11u(uint x)
 {
     const uint k = 1103515245U; // GLIB C
-    x *_PRIME0;
+    x *= _PRIME0;
     x = ((x >> 8U) ^ x) * k;
     x = ((x >> 8U) ^ x) * k;
 
