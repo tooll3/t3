@@ -16,7 +16,9 @@ public static class StartUp
     {
         if (File.Exists(StartUpLockFilePath))
         {
+            #if !DEBUG
             ShowLastStartupFailedMessageBox();
+            #endif
         }
 
         File.WriteAllText(StartUpLockFilePath, "Startup " + DateTime.Now);
