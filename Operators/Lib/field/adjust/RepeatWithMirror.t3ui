@@ -1,0 +1,37 @@
+{
+  "Id": "58ff3790-5ec5-4113-8e37-a934c3a7fdcd"/*RepeatWithMirror*/,
+  "Description": "Repeats the domain along selected axis.",
+  "InputUis": [
+    {
+      "InputId": "1c437dc9-aabf-404a-b23d-99ca677b6eb7"/*Size*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "6262f448-92fb-41ed-8613-2b387f2e72f2"/*InputField*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "a1b0fb9c-1e12-480c-8cf6-6bd7ed95f02e"/*Axis*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 75.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "ef5c19ad-0226-4391-a016-f6caee2ccf40"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}
