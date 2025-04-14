@@ -316,6 +316,8 @@ internal sealed partial class MagGraphCanvas
         if (item.InputLines.Length > 0)
         {
             var inputLine = item.InputLines[0];
+            
+            // ReSharper disable once ConstantConditionalAccessQualifier
             var isMissing = inputLine.InputUi?.Relevancy == Relevancy.Required && inputLine.ConnectionIn == null;
             if (isMissing)
             {
@@ -323,15 +325,46 @@ internal sealed partial class MagGraphCanvas
             }
         }
 
+        var borderColor = ColorVariations.OperatorOutline.Apply(typeColor); 
+
         if (CanvasScale > 0.25f)
         {
             // Input labels...
             if ((customUiResult & SymbolUi.Child.CustomUiResult.PreventInputLabels) == 0)
             {
                 int inputIndex;
-                for (inputIndex = 1; inputIndex < item.InputLines.Length; inputIndex++)
+                var itemWidth = pMax.X - pMin.X;
+                
+                for (inputIndex = 0; inputIndex < item.InputLines.Length; inputIndex++)
                 {
                     var inputLine = item.InputLines[inputIndex];
+                    
+                    // Draw multi-input region
+                    if (item.Variant == MagGraphItem.Variants.Operator)
+                    {
+                        var isMultiInput = inputLine.InputUi.InputDefinition.IsMultiInput;
+                        if (isMultiInput && inputLine.MultiInputIndex == 0)
+                        {
+                            var slotCount = 1;
+                            while (inputIndex + slotCount < item.InputLines.Length && item.InputLines[inputIndex + slotCount].MultiInputIndex > 0)
+                                slotCount++;
+                            
+                            var y2 = pMin.Y + GridSizeOnScreen.Y * (inputIndex);
+                            var rMin = new Vector2(pMin.X + (isSelected ? 1:0), y2 + 0.2f * GridSizeOnScreen.Y);
+                            var size = new Vector2(pMin.X + itemWidth * 0.04f, y2 + (slotCount - 0.2f) * GridSizeOnScreen.Y) - rMin;
+                            drawList.AddQuadFilled(rMin, 
+                                                   rMin + new Vector2(size.X,size.X),
+                                                   rMin + new Vector2(size.X, size.Y - size.X),
+                                                   rMin + new Vector2(0, size.Y),
+                                                   borderColor.Fade(0.7f)
+                                                  );
+                        }
+                    }
+
+                    // Skip label for first primary input
+                    if (inputIndex == 0)
+                        continue;
+                    
                     var isMissing = inputLine.InputUi.Relevancy == Relevancy.Required && inputLine.ConnectionIn == null;
                     if (isMissing)
                     {
@@ -344,7 +377,18 @@ internal sealed partial class MagGraphCanvas
                     var label = inputLine.InputUi.InputDefinition.Name ?? "?";
                     if (inputLine.MultiInputIndex > 0)
                     {
-                        label += " +" + inputLine.MultiInputIndex;
+                        label = " +" + inputLine.MultiInputIndex;
+                        
+                        // Draw 16 byte padding borders
+                        if ( inputLine.MultiInputIndex % 4 == 0)
+                        {
+                            var y2 = pMin.Y + GridSizeOnScreen.Y * (inputIndex);
+                            
+                            drawList.AddRectFilled(new Vector2(pMin.X+itemWidth*0.04f, y2),
+                                                   new Vector2(pMin.X+itemWidth*0.20f, y2+1),
+                                                   borderColor.Fade(0.4f)
+                                                   );
+                        }
                     }
 
                     drawList.AddText(Fonts.FontSmall,
@@ -353,6 +397,7 @@ internal sealed partial class MagGraphCanvas
                                      labelColor.Fade(0.7f),
                                      label
                                     );
+
 
                     // Draw Value if possible
                     if (CanvasScale > 0.4f)
