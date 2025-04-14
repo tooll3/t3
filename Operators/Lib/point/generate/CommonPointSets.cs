@@ -7,11 +7,11 @@ namespace Lib.point.generate;
 [Guid("353f63fc-e613-43ca-b037-02d7b9f4e935")]
 internal sealed class CommonPointSets : Instance<CommonPointSets>
 {
-    [Output(Guid = "2e45df97-e5c9-454d-b6ea-569c16cc04d5")]
-    public readonly Slot<StructuredList> CpuBuffer = new();
-
     [Output(Guid = "E5DC2CD0-C57F-4E72-9452-E162FE1C37D5")]
     public readonly Slot<BufferWithViews> GpuBuffer = new();
+
+    [Output(Guid = "2e45df97-e5c9-454d-b6ea-569c16cc04d5")]
+    public readonly Slot<StructuredList> CpuBuffer = new();
 
     public CommonPointSets()
     {
