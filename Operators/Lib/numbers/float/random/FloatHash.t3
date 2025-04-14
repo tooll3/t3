@@ -1,0 +1,23 @@
+{
+  "Id": "f2b80aaa-b353-45cc-9504-48c86e69ce99"/*FloatHash*/,
+  "Inputs": [
+    {
+      "Id": "34494745-779a-4a2d-bafc-6f6470fb053e"/*Max*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "b6bc292e-b695-4f87-a132-ee011c6d3262"/*Min*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "d2f822b0-afa4-4b0e-8067-23f96d83f91e"/*Seed*/,
+      "DefaultValue": 3
+    },
+    {
+      "Id": "dbeffbd5-92b0-4a63-9d28-5592c6b42b69"/*UniqueForChild*/,
+      "DefaultValue": true
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
