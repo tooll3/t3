@@ -33,4 +33,7 @@ public sealed class _ImageFxShaderSetupStatic : Instance<_ImageFxShaderSetupStat
     [Input(Guid = "2624d563-bad7-4fcb-a201-0ee0b9b93afa")]
     public readonly InputSlot<Filter> Filter = new();
 
+        [Input(Guid = "86fe6e64-5301-4eb7-b91d-581d2f775db2")]
+        public readonly MultiInputSlot<int> IntParams = new MultiInputSlot<int>();
+
 }

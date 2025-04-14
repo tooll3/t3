@@ -29,4 +29,7 @@ internal sealed class _multiImageFxSetup : Instance<_multiImageFxSetup>
 
     [Input(Guid = "440e471b-9f67-435c-9e21-304cd57728aa")]
     public readonly InputSlot<bool> GenerateMips = new();
+
+        [Input(Guid = "46d12c19-3db7-4cb3-b7ba-a4013d0a65f9")]
+        public readonly MultiInputSlot<int> IntParams = new MultiInputSlot<int>();
 }
