@@ -2,8 +2,10 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 
-#define MyAppVersion "3.10.6"
-#define MyAppName "Tooll-v3.10.6"
+#ifndef MyAppVersion
+  #define MyAppVersion "3.10.6"
+  #define MyAppName "Tooll-v3.10.6"
+#endif
 #define MyAppPublisher "t3"
 #define MyAppURL "https://www.tooll.io//"
 #define MyAppExeName "Editor.exe"
