@@ -20,13 +20,6 @@
       }
     },
     {
-      "InputId": "2c8ac572-d16b-4486-a10a-de85f56ca3e4"/*testBool2*/,
-      "Position": {
-        "X": 968.2886,
-        "Y": 1307.2611
-      }
-    },
-    {
       "InputId": "3148d927-8779-47ab-9e0a-fa63206f3002"/*MaxSteps*/,
       "Position": {
         "X": 218.2935,

@@ -10,10 +10,6 @@
       "DefaultValue": -0.20333333
     },
     {
-      "Id": "2c8ac572-d16b-4486-a10a-de85f56ca3e4"/*testBool2*/,
-      "DefaultValue": false
-    },
-    {
       "Id": "3148d927-8779-47ab-9e0a-fa63206f3002"/*MaxSteps*/,
       "DefaultValue": 100.0
     },
@@ -52,7 +48,7 @@
         "X": 1E-06,
         "Y": 9.9999E-07,
         "Z": 9.9999E-07,
-        "W": 0.37944663
+        "W": 1.0
       }
     },
     {

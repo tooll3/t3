@@ -343,6 +343,433 @@
           "d90350a0-9fa8-4747-805b-ba7ab8125595": false
         }
       }
+    },
+    {
+      "Id": "1e76dc08-e331-4866-b47b-41d7811cbc45",
+      "IsPreset": true,
+      "ActivationIndex": 11,
+      "Title": "Masonry",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 279.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "32d082f5-d6e1-4068-bcd9-a01977ed72df": 8,
+          "71c99158-cf0e-4ceb-82ee-5ef5685441b3": 0.0,
+          "6bdb499c-1300-4fe1-8634-7d3edc4d4050": true,
+          "c8550e83-bd37-4db3-a859-4a6bcd64a63c": 0.0,
+          "7a8684c9-ee81-49c1-ad13-d91d62799efb": 29.46,
+          "819898d2-230b-4176-a1b7-a008aed9631d": 66,
+          "82a8fbb3-c1be-494e-8a8d-e7ccf5440556": 0.007,
+          "5cae4d6e-d441-42f7-8e17-3aeb58719f08": {
+            "X": 0.7671575,
+            "Y": 0.76286846,
+            "Z": 0.7625773,
+            "W": 1.0
+          },
+          "be07242e-39fc-4631-ab6e-3023c9444406": {
+            "Gradient": {
+              "Interpolation": "Linear",
+              "Steps": [
+                {
+                  "Id": "78c5b4d3-0564-4745-aa06-3a459a93c919",
+                  "NormalizedPosition": 0.0,
+                  "Color": {
+                    "R": 0.32057416,
+                    "G": 0.10205706,
+                    "B": 0.09554747,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "6fc7bfea-8e8d-4604-8d29-f176399828a3",
+                  "NormalizedPosition": 0.84918517,
+                  "Color": {
+                    "R": 0.5549284,
+                    "G": 0.26066422,
+                    "B": 0.22431472,
+                    "A": 1.0
+                  }
+                }
+              ]
+            }
+          },
+          "dee8b0c6-caf4-4c23-9f9e-2b8f468476f6": 1,
+          "d90350a0-9fa8-4747-805b-ba7ab8125595": false
+        }
+      }
+    },
+    {
+      "Id": "c8833741-f11d-428b-8bd7-a1d3417b934e",
+      "IsPreset": true,
+      "ActivationIndex": 12,
+      "Title": "Tilework",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 372.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "32d082f5-d6e1-4068-bcd9-a01977ed72df": 13,
+          "82a8fbb3-c1be-494e-8a8d-e7ccf5440556": 0.009,
+          "3e164af6-1cb3-45b3-a319-e562789d73f7": 0.107,
+          "be07242e-39fc-4631-ab6e-3023c9444406": {
+            "Gradient": {
+              "Interpolation": "Linear",
+              "Steps": [
+                {
+                  "Id": "5f72ea76-02f7-4bb5-acd9-29a426a7d059",
+                  "NormalizedPosition": 0.0,
+                  "Color": {
+                    "R": 1.0,
+                    "G": 1.0,
+                    "B": 1.0,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "a18d0394-df7b-433a-8c64-59226064ed76",
+                  "NormalizedPosition": 0.94606256,
+                  "Color": {
+                    "R": 1.0,
+                    "G": 1.0,
+                    "B": 1.0,
+                    "A": 1.0
+                  }
+                }
+              ]
+            }
+          },
+          "d90350a0-9fa8-4747-805b-ba7ab8125595": false,
+          "9606da82-7896-4312-9e0c-dd3f2c178cab": 0.07
+        }
+      }
+    },
+    {
+      "Id": "f0854156-ab32-4a43-9e02-4f5d31d86389",
+      "IsPreset": true,
+      "ActivationIndex": 13,
+      "Title": "Piet Loves it",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 372.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "32d082f5-d6e1-4068-bcd9-a01977ed72df": 5,
+          "82a8fbb3-c1be-494e-8a8d-e7ccf5440556": 0.009,
+          "be07242e-39fc-4631-ab6e-3023c9444406": {
+            "Gradient": {
+              "Interpolation": "Hold",
+              "Steps": [
+                {
+                  "Id": "4e65f2e6-08f4-4a12-9594-eaa95584cebf",
+                  "NormalizedPosition": 0.0,
+                  "Color": {
+                    "R": 1.0,
+                    "G": 1.0,
+                    "B": 1.0,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "639ff895-cfd3-4bde-b173-3272e2704ca4",
+                  "NormalizedPosition": 0.1826808,
+                  "Color": {
+                    "R": 1.0,
+                    "G": 0.0,
+                    "B": 0.09995651,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "ed40dcc7-877d-45df-bb3a-391db64c84bc",
+                  "NormalizedPosition": 0.3967406,
+                  "Color": {
+                    "R": 1.0,
+                    "G": 1.0,
+                    "B": 1.0,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "655dac87-03fc-442d-a465-bafc79bbfebf",
+                  "NormalizedPosition": 0.62053037,
+                  "Color": {
+                    "R": 0.0,
+                    "G": 0.59046316,
+                    "B": 1.0,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "55e37d20-ba03-4314-adbc-16d7582451a4",
+                  "NormalizedPosition": 0.8054002,
+                  "Color": {
+                    "R": 0.99126506,
+                    "G": 1.0,
+                    "B": 0.0,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "35682da9-fe8b-4604-9687-47ad636be35d",
+                  "NormalizedPosition": 0.94606256,
+                  "Color": {
+                    "R": 1.0,
+                    "G": 1.0,
+                    "B": 1.0,
+                    "A": 1.0
+                  }
+                }
+              ]
+            }
+          },
+          "dee8b0c6-caf4-4c23-9f9e-2b8f468476f6": 1,
+          "d90350a0-9fa8-4747-805b-ba7ab8125595": false,
+          "9606da82-7896-4312-9e0c-dd3f2c178cab": 0.05
+        }
+      }
+    },
+    {
+      "Id": "9fa82221-8eb2-4126-88cd-ed75f1ed5fdf",
+      "IsPreset": true,
+      "ActivationIndex": 14,
+      "Title": "Dataloss",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 372.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "32d082f5-d6e1-4068-bcd9-a01977ed72df": 18,
+          "71c99158-cf0e-4ceb-82ee-5ef5685441b3": 0.03,
+          "6bdb499c-1300-4fe1-8634-7d3edc4d4050": true,
+          "d30b5542-d564-46e1-9f9e-987351eb425b": 0.29,
+          "c8550e83-bd37-4db3-a859-4a6bcd64a63c": 0.01,
+          "6d3c2c76-df35-411a-8e25-450dc9cd6f4e": 1.23,
+          "819898d2-230b-4176-a1b7-a008aed9631d": 60,
+          "5cae4d6e-d441-42f7-8e17-3aeb58719f08": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 0.0
+          },
+          "ee2bc31a-a67f-4bec-bce7-0a70db88082c": 0,
+          "be07242e-39fc-4631-ab6e-3023c9444406": {
+            "Gradient": {
+              "Interpolation": "Linear",
+              "Steps": [
+                {
+                  "Id": "f80b710d-0ac0-4b5a-8350-4fd32a3f768a",
+                  "NormalizedPosition": 0.0,
+                  "Color": {
+                    "R": 0.9407046,
+                    "G": 0.97613794,
+                    "B": 1.0,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "44c406cb-bbbe-4971-a0a0-9066a54986eb",
+                  "NormalizedPosition": 1.0,
+                  "Color": {
+                    "R": 0.4365949,
+                    "G": 0.4530401,
+                    "B": 0.46411484,
+                    "A": 1.0
+                  }
+                }
+              ]
+            }
+          },
+          "d90350a0-9fa8-4747-805b-ba7ab8125595": false
+        }
+      }
+    },
+    {
+      "Id": "4c49fc29-ba50-493f-9b29-38ad464c54ed",
+      "IsPreset": true,
+      "ActivationIndex": 15,
+      "Title": "Gaploss",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 465.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "32d082f5-d6e1-4068-bcd9-a01977ed72df": 15,
+          "71c99158-cf0e-4ceb-82ee-5ef5685441b3": 0.03,
+          "6bdb499c-1300-4fe1-8634-7d3edc4d4050": true,
+          "d30b5542-d564-46e1-9f9e-987351eb425b": 0.37,
+          "c8550e83-bd37-4db3-a859-4a6bcd64a63c": 0.62,
+          "6d3c2c76-df35-411a-8e25-450dc9cd6f4e": 1.2,
+          "c6f0a794-ba0f-44cf-95cb-9ec6484f9f02": {
+            "X": -0.53,
+            "Y": 0.84
+          },
+          "819898d2-230b-4176-a1b7-a008aed9631d": 60,
+          "82a8fbb3-c1be-494e-8a8d-e7ccf5440556": 0.0,
+          "3e164af6-1cb3-45b3-a319-e562789d73f7": 0.001,
+          "5cae4d6e-d441-42f7-8e17-3aeb58719f08": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          },
+          "ee2bc31a-a67f-4bec-bce7-0a70db88082c": 0,
+          "be07242e-39fc-4631-ab6e-3023c9444406": {
+            "Gradient": {
+              "Interpolation": "Linear",
+              "Steps": [
+                {
+                  "Id": "15d93cf2-fd5f-428e-932e-e825cb8c6417",
+                  "NormalizedPosition": 0.0,
+                  "Color": {
+                    "R": 0.9407046,
+                    "G": 0.97613794,
+                    "B": 1.0,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "1be212d0-f4be-4f82-866b-b0eb464459ad",
+                  "NormalizedPosition": 1.0,
+                  "Color": {
+                    "R": 0.4365949,
+                    "G": 0.4530401,
+                    "B": 0.46411484,
+                    "A": 1.0
+                  }
+                }
+              ]
+            }
+          },
+          "dee8b0c6-caf4-4c23-9f9e-2b8f468476f6": 0,
+          "d90350a0-9fa8-4747-805b-ba7ab8125595": false,
+          "9606da82-7896-4312-9e0c-dd3f2c178cab": -0.01
+        }
+      }
+    },
+    {
+      "Id": "1b5bbcb8-70a1-481d-8627-69022473822f",
+      "IsPreset": true,
+      "ActivationIndex": 16,
+      "Title": "VerticalGlitch",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 465.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "32d082f5-d6e1-4068-bcd9-a01977ed72df": 18,
+          "71c99158-cf0e-4ceb-82ee-5ef5685441b3": 0.0,
+          "6bdb499c-1300-4fe1-8634-7d3edc4d4050": false,
+          "d30b5542-d564-46e1-9f9e-987351eb425b": 0.43,
+          "c8550e83-bd37-4db3-a859-4a6bcd64a63c": 0.17,
+          "6d3c2c76-df35-411a-8e25-450dc9cd6f4e": -0.56,
+          "c6f0a794-ba0f-44cf-95cb-9ec6484f9f02": {
+            "X": 0.33499998,
+            "Y": 0.16
+          },
+          "7a8684c9-ee81-49c1-ad13-d91d62799efb": 0.31,
+          "819898d2-230b-4176-a1b7-a008aed9631d": 50,
+          "82a8fbb3-c1be-494e-8a8d-e7ccf5440556": 0.0,
+          "3e164af6-1cb3-45b3-a319-e562789d73f7": 0.0,
+          "5cae4d6e-d441-42f7-8e17-3aeb58719f08": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 1.0
+          },
+          "ee2bc31a-a67f-4bec-bce7-0a70db88082c": -1,
+          "d90350a0-9fa8-4747-805b-ba7ab8125595": false
+        }
+      }
+    },
+    {
+      "Id": "516b6005-a099-4ae3-b1ca-de96b07402a9",
+      "IsPreset": true,
+      "ActivationIndex": 17,
+      "Title": "Are you reddy?",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 465.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "32d082f5-d6e1-4068-bcd9-a01977ed72df": 13,
+          "71c99158-cf0e-4ceb-82ee-5ef5685441b3": 0.0,
+          "6bdb499c-1300-4fe1-8634-7d3edc4d4050": false,
+          "d30b5542-d564-46e1-9f9e-987351eb425b": 0.43,
+          "c8550e83-bd37-4db3-a859-4a6bcd64a63c": 0.17,
+          "6d3c2c76-df35-411a-8e25-450dc9cd6f4e": 0.04,
+          "c6f0a794-ba0f-44cf-95cb-9ec6484f9f02": {
+            "X": 0.33499998,
+            "Y": 0.16
+          },
+          "7a8684c9-ee81-49c1-ad13-d91d62799efb": 0.31,
+          "819898d2-230b-4176-a1b7-a008aed9631d": 50,
+          "82a8fbb3-c1be-494e-8a8d-e7ccf5440556": 0.0,
+          "3e164af6-1cb3-45b3-a319-e562789d73f7": 0.0,
+          "5cae4d6e-d441-42f7-8e17-3aeb58719f08": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 1.0
+          },
+          "ee2bc31a-a67f-4bec-bce7-0a70db88082c": 0,
+          "be07242e-39fc-4631-ab6e-3023c9444406": {
+            "Gradient": {
+              "Interpolation": "Hold",
+              "Steps": [
+                {
+                  "Id": "d647f38f-4769-4368-952a-911b1054265b",
+                  "NormalizedPosition": 0.0,
+                  "Color": {
+                    "R": 1.0,
+                    "G": 1.0,
+                    "B": 1.0,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "41a60cb1-d33d-40fb-bd8f-02b261d63eec",
+                  "NormalizedPosition": 0.12430087,
+                  "Color": {
+                    "R": 1.0,
+                    "G": 0.0,
+                    "B": 0.0032372475,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "02dff285-4620-4533-a8f1-e28e9416caa0",
+                  "NormalizedPosition": 0.16322082,
+                  "Color": {
+                    "R": 1.0,
+                    "G": 0.036330163,
+                    "B": 0.5987123,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "178a2511-b96b-4436-a71e-b89d7fce2e76",
+                  "NormalizedPosition": 0.25079075,
+                  "Color": {
+                    "R": 1.0,
+                    "G": 1.0,
+                    "B": 1.0,
+                    "A": 1.0
+                  }
+                }
+              ]
+            }
+          },
+          "d90350a0-9fa8-4747-805b-ba7ab8125595": false
+        }
+      }
     }
   ]
 }
