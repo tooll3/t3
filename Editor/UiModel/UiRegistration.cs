@@ -86,14 +86,16 @@ internal static class UiRegistration
                                 typeof(ParticleSystem), 
                                 typeof(BufferWithViews),
                                 typeof(GizmoVisibility),
-                                typeof(ShaderGraphNode),
                                 // sharpDX types
                                 typeof(SharpDX.Direct3D.PrimitiveTopology));
         
-        // set colors of input and output UIs
+        RegisterTypesToProperty(UiProperties.ShaderGraph,
+                                typeof(ShaderGraphNode));
         
-        // system types
-        RegisterIOType(typeof(float), () => new FloatInputUi(), () => new FloatOutputUi());
+                                // set colors of input and output UIs
+        
+                                // system types
+                                RegisterIOType(typeof(float), () => new FloatInputUi(), () => new FloatOutputUi());
         RegisterIOType(typeof(int), () => new IntInputUi());
         RegisterIOType(typeof(bool), () => new BoolInputUi(), () => new BoolOutputUi());
         RegisterIOType(typeof(double), () => new FloatInputUi(), () => new FloatOutputUi());

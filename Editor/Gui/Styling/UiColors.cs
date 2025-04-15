@@ -91,4 +91,5 @@ public static class UiColors
     public static Color ColorForDX11 = new(0.84f, 0.46f, 0.44f, 1.000f);
     public static Color ColorForCommands = new(0.132f, 0.722f, 0.762f, 1.000f);
     public static Color ColorForGpuData = new(0.72f, 0.2f, 0.18f, 1.000f);
+    public static Color ColorForShaderGraph = new(0.62f, 0.22f, 0.18f, 1.000f);
 }
