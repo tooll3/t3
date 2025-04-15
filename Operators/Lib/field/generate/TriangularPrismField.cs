@@ -25,7 +25,7 @@ internal sealed class TriangularPrismField : Instance<TriangularPrismField>
     public void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
     {
         c.Globals["fTriangularPrism"] = """
-                                        float fTriangularPrism(float3 p, float2 h) {{
+                                        float fTriangularPrism(float3 p, float2 h) {
                                             float3 q = abs(p);
                                             return max(q.z-h.y,max(q.x*0.866025+p.y*0.5,-p.y)-h.x*0.5);
                                         }
