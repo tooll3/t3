@@ -1,0 +1,70 @@
+{
+  "Id": "f17aba3c-dafc-4cab-9513-ea6bc19bcb15"/*SubDivPattern3d*/,
+  "Inputs": [
+    {
+      "Id": "26aae979-60c6-4386-a33d-df24d223ecb9"/*Padding*/,
+      "DefaultValue": 0.02
+    },
+    {
+      "Id": "2d22184f-4b01-47fd-b5df-f7aacb77f023"/*GapColor*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0,
+        "W": 1.0
+      }
+    },
+    {
+      "Id": "381ae475-d297-4399-a50b-c9feac597c74"/*SplitPosition*/,
+      "DefaultValue": 0.5
+    },
+    {
+      "Id": "61663a1b-2476-49ed-a375-cce0a9e6fe03"/*ColorB*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
+        "W": 1.0
+      }
+    },
+    {
+      "Id": "6c9ef783-64fd-41dd-aeaa-21240bb2e811"/*MaxSubdivisions*/,
+      "DefaultValue": 8
+    },
+    {
+      "Id": "7a67075a-d63c-4a54-81fe-6510a85a7096"/*RandomSeed*/,
+      "DefaultValue": 42
+    },
+    {
+      "Id": "a4b94339-63ee-4048-afc0-88407d5c8ce3"/*Threshold*/,
+      "DefaultValue": 0.2
+    },
+    {
+      "Id": "a820d5ba-5210-4de6-979f-e619aa117dad"/*UseAspectForSplit*/,
+      "DefaultValue": 1
+    },
+    {
+      "Id": "a9dac0aa-51d3-4bcf-b532-1cfddd810675"/*SplitVariation*/,
+      "DefaultValue": 0.8
+    },
+    {
+      "Id": "b14a0607-00eb-479f-b50b-50f7f880d496"/*Feather*/,
+      "DefaultValue": 0.02
+    },
+    {
+      "Id": "d1c996e3-0f2c-45ac-9acb-52a13222cb5b"/*ColorMode*/,
+      "DefaultValue": 1
+    },
+    {
+      "Id": "e95cc5a1-3425-457e-b763-18857aba08e3"/*ColorA*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0,
+        "W": 1.0
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

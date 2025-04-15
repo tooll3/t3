@@ -1,0 +1,109 @@
+{
+  "Id": "f17aba3c-dafc-4cab-9513-ea6bc19bcb15"/*SubDivPattern3d*/,
+  "Description": "Generates a 3d pattern similar to [SubDivisionStretch].",
+  "InputUis": [
+    {
+      "InputId": "26aae979-60c6-4386-a33d-df24d223ecb9"/*Padding*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 375.0
+      }
+    },
+    {
+      "InputId": "2d22184f-4b01-47fd-b5df-f7aacb77f023"/*GapColor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "381ae475-d297-4399-a50b-c9feac597c74"/*SplitPosition*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
+    },
+    {
+      "InputId": "61663a1b-2476-49ed-a375-cce0a9e6fe03"/*ColorB*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 150.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "6c9ef783-64fd-41dd-aeaa-21240bb2e811"/*MaxSubdivisions*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 525.0
+      }
+    },
+    {
+      "InputId": "7a67075a-d63c-4a54-81fe-6510a85a7096"/*RandomSeed*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 675.0
+      }
+    },
+    {
+      "InputId": "a4b94339-63ee-4048-afc0-88407d5c8ce3"/*Threshold*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 750.0
+      }
+    },
+    {
+      "InputId": "a820d5ba-5210-4de6-979f-e619aa117dad"/*UseAspectForSplit*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 450.0
+      }
+    },
+    {
+      "InputId": "a9dac0aa-51d3-4bcf-b532-1cfddd810675"/*SplitVariation*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 300.0
+      }
+    },
+    {
+      "InputId": "b14a0607-00eb-479f-b50b-50f7f880d496"/*Feather*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 210.0
+      }
+    },
+    {
+      "InputId": "d1c996e3-0f2c-45ac-9acb-52a13222cb5b"/*ColorMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 600.0
+      }
+    },
+    {
+      "InputId": "e95cc5a1-3425-457e-b763-18857aba08e3"/*ColorA*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 75.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "51decd4e-6bd4-495e-baba-80407baff141"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}
