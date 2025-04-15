@@ -168,15 +168,13 @@ internal sealed class ParameterWindow : Window
             var package = symbol.SymbolPackage;
             if (!package.IsReadOnly)
             {
-                var args = new InputWithTypeAheadSearch.Args<string>(Label: "##namespace",
-                                                                     Items: EditorSymbolPackage.AllSymbols
-                                                                                               .Select(i => i.Namespace)
-                                                                                               .Distinct()
-                                                                                               .OrderBy(i => i),
-                                                                     GetTextInfo: i => new InputWithTypeAheadSearch.Texts(i, i, null),
-                                                                     Warning: false);
-
-                var namespaceModified = InputWithTypeAheadSearch.Draw(args, ref namespaceForEdit, out _);
+                var namespaceModified = InputWithTypeAheadSearch.Draw("##namespace", 
+                                                                      EditorSymbolPackage.AllSymbols
+                                                                                                .Select(i => i.Namespace)
+                                                                                                .Distinct()
+                                                                                                .OrderBy(i => i),
+                                                                      false,
+                                                                      ref namespaceForEdit, out _);
                 if (namespaceModified && !string.IsNullOrEmpty(namespaceForEdit) && ImGui.IsKeyPressed((ImGuiKey)Key.Return))
                 {
                     if (!EditableSymbolProject.ChangeSymbolNamespace(symbol, namespaceForEdit, out var reason))

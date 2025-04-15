@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+using ImGuiNET;
 using T3.Core.SystemUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -7,9 +8,9 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Dialogs;
 
-public class RenameNamespaceDialog : ModalDialog
+internal sealed class RenameNamespaceDialog : ModalDialog
 {
-    public void Draw(NamespaceTreeNode subtreeNodeToRename)
+    internal void Draw(NamespaceTreeNode subtreeNodeToRename)
     {
         if (BeginDialog("Move or rename namespace"))
         {
@@ -58,7 +59,6 @@ public class RenameNamespaceDialog : ModalDialog
         _ = SymbolModificationInputs.DrawNamespaceInput(ref _nameSpace, _projectToCopyTo, false, out var namespaceValid);
 
         CustomComponents.HelpText("Careful now. This operator might affect a lot of operator definitions");
-        ImGui.Spacing();
 
         if (CustomComponents.DisablableButton("Rename", namespaceValid))
         {
@@ -83,8 +83,8 @@ public class RenameNamespaceDialog : ModalDialog
         _projectToCopyFrom = null;
     }
 
-    private static NamespaceTreeNode _node;
-    private static string _nameSpace;
-    private static EditableSymbolProject _projectToCopyFrom;
-    private static EditableSymbolProject _projectToCopyTo;
+    private static NamespaceTreeNode? _node;
+    private static string? _nameSpace;
+    private static EditableSymbolProject? _projectToCopyFrom;
+    private static EditableSymbolProject? _projectToCopyTo;
 }

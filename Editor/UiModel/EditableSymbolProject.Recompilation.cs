@@ -217,7 +217,7 @@ internal partial class EditableSymbolProject
             ProjectSetup.UpdateSymbolPackage(project);
         }
 
-        bool needsRecompilation = false;
+        var needsRecompilation = false;
         foreach (var package in AllProjects)
         {
             needsRecompilation |= package._needsCompilation;

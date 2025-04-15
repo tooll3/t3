@@ -10,11 +10,19 @@ namespace T3.Editor.Gui.Graph.Dialogs;
 
 internal sealed class DuplicateSymbolDialog : ModalDialog
 {
+    internal DuplicateSymbolDialog()
+    {
+        Flags = ImGuiWindowFlags.NoScrollWithMouse;
+        DialogSize = new Vector2(500, 450) * T3Ui.UiScaleFactor;
+    }    
+    
     public event Action? Closed;
         
     /** returns true if modified */
     public bool Draw(Instance compositionOp, List<SymbolUi.Child> selectedChildUis, ref string nameSpace, ref string newTypeName, ref string description, bool isReload = false)
     {
+        //DialogSize = new Vector2(500, 450) * T3Ui.UiScaleFactor;
+        
         if(selectedChildUis.Count != 1)
             return false;
 
@@ -22,7 +30,7 @@ internal sealed class DuplicateSymbolDialog : ModalDialog
         
         if(isReload && !_completedReloadPrompt)
         {
-            DialogSize = new Vector2(400, 200);
+            //DialogSize = new Vector2(400, 200);
             if (BeginDialog("Changes made to readonly operator"))
             {
                 ImGui.TextWrapped("You've made changes to a read-only operator.\nDo you want to save your changes as a new operator?");
@@ -58,15 +66,10 @@ internal sealed class DuplicateSymbolDialog : ModalDialog
                 _ = SymbolModificationInputs.DrawSymbolNameAndNamespaceInputs(ref newTypeName, ref nameSpace, _projectToCopyTo, out var symbolNamesValid);
                 ImGui.Spacing();
 
-                // Description
-                ImGui.PushFont(Fonts.FontSmall);
-                ImGui.TextUnformatted("Description");
-                ImGui.PopFont();
-                ImGui.SetNextItemWidth(460);
+                FormInputs.DrawInputLabel("Description");
                 ImGui.InputTextMultiline("##description", ref description, 1024, new Vector2(450, 60));
                     
-                if (CustomComponents.DisablableButton("Duplicate", symbolNamesValid,
-                                                      enableTriggerWithReturn: false))
+                if (CustomComponents.DisablableButton("Duplicate", symbolNamesValid, enableTriggerWithReturn: false))
                 {
                     var compositionSymbolUi = compositionOp.GetSymbolUi();
                     var position = selectedChildUis.First().PosOnCanvas + new Vector2(0, 100);

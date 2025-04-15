@@ -137,31 +137,10 @@ public sealed class StringInputUi : InputValueUi<string>
 
             var currentValue = customValueHolder.GetValueForInput(input.InputDefinition.Id);
                 
-            // A dropdown implementation that prevents free string input
-            // if (ImGui.BeginCombo("##customDropdown", currentValue, ImGuiComboFlags.HeightLarge))
-            // {
-            //     foreach (var value2 in customValueHoder.GetOptionsForInput(input.InputDefinition.Id))
-            //     {
-            //         if (value2 == null)
-            //             continue;
-            //
-            //         var isSelected = value2 == currentValue;
-            //         if (!ImGui.Selectable($"{value2}", isSelected, ImGuiSelectableFlags.DontClosePopups))
-            //             continue;
-            //
-            //         ImGui.CloseCurrentPopup();
-            //         customValueHoder.HandleResultForInput(input.InputDefinition.Id, value2);
-            //         changed = true;
-            //     }
-            //
-            //     ImGui.EndCombo();
-            // }
-
-            var inputArgs = new InputWithTypeAheadSearch.Args<string>("##customDropdown", 
-                                                                      customValueHolder.GetOptionsForInput(input.InputDefinition.Id), 
-                                                                      GetTextInfo, 
-                                                                      false);
-            if (InputWithTypeAheadSearch.Draw(inputArgs, ref currentValue, out var selected))
+            if (InputWithTypeAheadSearch.Draw("##customDropdown", 
+                                              customValueHolder.GetOptionsForInput(input.InputDefinition.Id),
+                                              false,
+                                              ref currentValue, out var selected))
             {
                 ImGui.CloseCurrentPopup();
                 customValueHolder.HandleResultForInput(input.InputDefinition.Id, selected);
@@ -178,10 +157,10 @@ public sealed class StringInputUi : InputValueUi<string>
         }
     }
 
-    private static InputWithTypeAheadSearch.Texts GetTextInfo(string arg)
-    {
-        return new InputWithTypeAheadSearch.Texts(arg, arg, null);
-    }
+    // private static InputWithTypeAheadSearch.Texts GetTextInfo(string arg)
+    // {
+    //     return new InputWithTypeAheadSearch.Texts(arg, arg, null);
+    // }
 
     protected override void DrawReadOnlyControl(string name, ref string? value)
     {
@@ -202,9 +181,6 @@ public sealed class StringInputUi : InputValueUi<string>
         FormInputs.AddVerticalSpace();
 
         FormInputs.DrawFieldSetHeader("Usage");
-        //var tmpForRef = selectedInputUi.Relevancy;
-        //if (FormInputs.AddEnumDropdown(ref tmpForRef, null, defaultValue: Relevancy.Optional))
-        //{
         {
             var tmpForRef = Usage;
             if (FormInputs.AddEnumDropdown(ref tmpForRef, null))

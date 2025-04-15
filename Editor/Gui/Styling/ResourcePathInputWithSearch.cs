@@ -19,7 +19,7 @@ namespace T3.Editor.Gui.Styling;
 ///
 /// It should work for now, but it's likely to break with future versions of ImGui.
 /// </remarks>
-public static class ResourceInputWithTypeAheadSearch
+public static partial class ResourceInputWithTypeAheadSearch
 {
     //public readonly record struct Texts(string DisplayText, string SearchText, string? Tooltip);
     public readonly record struct Args(string Label, IEnumerable<string> Items, bool Warning);
@@ -179,10 +179,7 @@ public static class ResourceInputWithTypeAheadSearch
                     // We can't use IsItemHovered because we need to use Tooltip hack 
                     ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
 
-                    // TODO: Optimize regex to be static and better readable
-                    var testRegex = new Regex(@"^\/(.+?)\/(.*?)\/([^\/]*)$");
-                    
-                    var match = testRegex.Match(path);
+                    var match = FindProjectAndPathRegex().Match(path);
                     var project = match.Success ? match.Groups[1].Value : string.Empty;
                     var pathInProject = match.Success ? match.Groups[2].Value : path;
                     var filename = match.Success ? match.Groups[3].Value : path;
@@ -296,20 +293,19 @@ public static class ResourceInputWithTypeAheadSearch
             }
         }
 
-        if (matches.Count == 0)
+        switch (matches.Count)
         {
-            return;
+            case 0:
+                return;
+            case 1 when matches[0].Word == filter:
+                filteredItems.AddRange(allValidItems);
+                return;
+            default:
+                filteredItems.AddRange( matches.OrderBy(r => r.Relevancy)
+                                               .Select(m => m.Word)
+                                               .ToList());
+                break;
         }
-
-        if (matches.Count > 1)
-        {
-            filteredItems.AddRange( matches.OrderBy(r => r.Relevancy)
-                               .Select(m => m.Word)
-                               .ToList());
-            return;
-        }
-
-        filteredItems.AddRange(allValidItems);;
     }
 
     private sealed record ResultWithRelevancy(string Word, float Relevancy);
@@ -329,4 +325,7 @@ public static class ResourceInputWithTypeAheadSearch
     private static List<string> _lastTypeAheadResults = [];
     private static int _selectedResultIndex;
     private static uint _activeInputId;
+
+    [GeneratedRegex(@"^\/(.+?)\/(.*?)\/([^\/]*)$")]
+    private static partial Regex FindProjectAndPathRegex();
 }

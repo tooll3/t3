@@ -26,11 +26,11 @@ internal static class CustomComponents
         else
         {
             _timeSinceTooltipHover += frameDuration;
-            if(_timeSinceTooltipHover > 0.2)
+            if (_timeSinceTooltipHover > 0.2)
                 _toolTipHoverDelay = 0.6f;
         }
     }
-        
+
     public static bool JogDial(string label, ref double delta, Vector2 size)
     {
         ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1, 0.5f));
@@ -76,7 +76,7 @@ internal static class CustomComponents
         var size = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
         var contentMin = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos();
 
-        var pos = new Vector2(contentMin.X, contentMin.Y + size.Y - offsetFromBottom - thickness-1);
+        var pos = new Vector2(contentMin.X, contentMin.Y + size.Y - offsetFromBottom - thickness - 1);
         ImGui.SetCursorScreenPos(pos);
 
         ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundGaps.Rgba);
@@ -177,17 +177,18 @@ internal static class CustomComponents
         if (size == Vector2.Zero)
         {
             var h = ImGui.GetFrameHeight();
-            size = new Vector2(h,h);
+            size = new Vector2(h, h);
         }
+
         ImGui.PushFont(Icons.IconFont);
         ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.5f));
         ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
         ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Transparent.Rgba);
         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Transparent.Rgba);
-            
-        var clicked = ImGui.Button( ((char)icon).ToString(), size);
-            
+
+        var clicked = ImGui.Button(((char)icon).ToString(), size);
+
         ImGui.PopStyleColor(3);
         ImGui.PopStyleVar(2);
         ImGui.PopFont();
@@ -213,27 +214,28 @@ internal static class CustomComponents
 
         if (state != ButtonStates.Normal)
             ImGui.PopStyleColor();
-            
+
         if (state == ButtonStates.Activated)
             ImGui.PopStyleColor(2);
 
         ImGui.PopStyleColor(1);
         return clicked;
     }
-        
-    public static bool IconButton(Icon icon, Vector2 size, ButtonStates state = ButtonStates.Normal, bool triggered =false)
+
+    public static bool IconButton(Icon icon, Vector2 size, ButtonStates state = ButtonStates.Normal, bool triggered = false)
     {
         if (size == Vector2.Zero)
         {
             var h = ImGui.GetFrameHeight();
-            size = new Vector2(h,h);
+            size = new Vector2(h, h);
         }
+
         ImGui.PushFont(Icons.IconFont);
         ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.5f));
         ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-            
+
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.BackgroundButtonActivated.Rgba);
-            
+
         if (state != ButtonStates.Normal)
         {
             ImGui.PushStyleColor(ImGuiCol.Text, GetStateColor(state).Rgba);
@@ -248,7 +250,7 @@ internal static class CustomComponents
 
         if (state != ButtonStates.Normal)
             ImGui.PopStyleColor();
-            
+
         if (state == ButtonStates.Activated)
             ImGui.PopStyleColor(2);
 
@@ -258,19 +260,20 @@ internal static class CustomComponents
         return clicked;
     }
 
-    public static bool IconButton(string id, Icon icon, float width, ImDrawFlags corners= ImDrawFlags.RoundCornersNone, ButtonStates state = ButtonStates.Normal, bool triggered =false)
+    public static bool IconButton(string id, Icon icon, float width, ImDrawFlags corners = ImDrawFlags.RoundCornersNone,
+                                  ButtonStates state = ButtonStates.Normal, bool triggered = false)
     {
         var iconColor = GetStateColor(state);
 
         var size = new Vector2(width, ImGui.GetFrameHeight());
         if (width == 0)
             size.X = size.Y;
-            
+
         triggered |= ImGui.InvisibleButton(id, size);
-            
+
         var dl = ImGui.GetWindowDrawList();
-        dl.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), GetButtonStateBackgroundColor(),7, corners);            
-            
+        dl.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), GetButtonStateBackgroundColor(), 7, corners);
+
         Icons.DrawIconOnLastItem(icon, iconColor);
         return triggered;
     }
@@ -308,17 +311,17 @@ internal static class CustomComponents
     }
 
     private static Action _cachedDrawMenuItems;
+
     public static void ContextMenuForItem(Action drawMenuItems, string title = null, string id = "context_menu",
                                           ImGuiPopupFlags flags = ImGuiPopupFlags.MouseButtonRight)
     {
-
         // prevent context menu from opening when dragging
         {
             var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickThreshold;
             if (wasDraggingRight)
                 return;
         }
-            
+
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
 
         if (ImGui.BeginPopupContextItem(id, flags))
@@ -349,7 +352,7 @@ internal static class CustomComponents
         {
             if (FrameStats.Current.IsItemContextMenuOpen)
                 return;
-                
+
             var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickThreshold;
             if (wasDraggingRight)
                 return;
@@ -360,7 +363,6 @@ internal static class CustomComponents
 
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(6, 6));
-
 
         if (ImGui.BeginPopupContextWindow("windows_context_menu"))
         {
@@ -414,7 +416,7 @@ internal static class CustomComponents
         ImGui.TextWrapped(text);
         ImGui.PopStyleColor();
         ImGui.PopFont();
-        ImGui.Dummy(new Vector2(0,4 * T3Ui.DisplayScaleFactor));
+        ImGui.Dummy(new Vector2(0, 4 * T3Ui.DisplayScaleFactor));
     }
 
     public static void SmallGroupHeader(string text)
@@ -486,6 +488,7 @@ internal static class CustomComponents
                 var position = new Vector2(center.X - textSize.X / 2, y);
                 drawList.AddText(position, emptyMessageColor, line);
             }
+
             y += textLineHeight;
         }
 
@@ -506,14 +509,14 @@ internal static class CustomComponents
     {
         if (!ImGui.IsItemHovered())
             return;
-            
+
         FrameStats.Current.SomethingWithTooltipHovered = true;
         if (!useHoverDelay)
             _toolTipHoverDelay = 0;
 
         if (_toolTipHoverDelay > 0)
             return;
-        
+
         BeginTooltip();
         ImGui.TextColored(color, message);
         if (!string.IsNullOrEmpty(additionalNotes))
@@ -530,7 +533,7 @@ internal static class CustomComponents
     public static bool BeginTooltip(float wrapPos = 300)
     {
         var isHovered = false;
-        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(6,6));
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(6, 6));
         isHovered = ImGui.BeginTooltip();
         ImGui.PushTextWrapPos(wrapPos);
         return isHovered;
@@ -546,24 +549,22 @@ internal static class CustomComponents
     {
         if (!ImGui.IsItemHovered())
             return;
-            
+
         FrameStats.Current.SomethingWithTooltipHovered = true;
         if (!useHoverDelay)
             _toolTipHoverDelay = 0;
 
         if (_toolTipHoverDelay > 0)
             return;
-        
-        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(6,6));
+
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(6, 6));
         ImGui.BeginTooltip();
-        
+
         drawContent.Invoke();
-        
+
         ImGui.EndTooltip();
         ImGui.PopStyleVar();
     }
-    
-    
 
     public static void TooltipForLastItem(string message, string additionalNotes = null, bool useHoverDelay = true)
     {
@@ -613,8 +614,7 @@ internal static class CustomComponents
         var isFirst = true;
         var enums = Enum.GetValues<T>();
         //Debug.Assert(enums.Length != icons.Count,"Icon enum mismatch");
-                
-                
+
         for (var index = 0; index < enums.Length; index++)
         {
             var icon = icons[index];
@@ -626,7 +626,7 @@ internal static class CustomComponents
             }
 
             var isSelected = selectedValueString == value.ToString();
-                
+
             var clicked = DrawIconToggle(name, icon, ref isSelected);
             if (clicked)
             {
@@ -639,51 +639,53 @@ internal static class CustomComponents
                 var min = ImGui.GetItemRectMin();
                 var max = ImGui.GetItemRectMax();
                 var drawList = ImGui.GetWindowDrawList();
-                drawList.AddRectFilled(new Vector2(min.X-2, max.Y), new Vector2(max.X +2, max.Y +2) , UiColors.StatusActivated);
-                    
+                drawList.AddRectFilled(new Vector2(min.X - 2, max.Y), new Vector2(max.X + 2, max.Y + 2), UiColors.StatusActivated);
             }
-                
+
             isFirst = false;
         }
 
         return modified;
     }
 
-    public static bool DrawIconToggle(string name, Icon iconOff, Icon iconOn, ref bool isSelected, bool needsAttention = false, bool isEnabled= true)
+    public static bool DrawIconToggle(string name, Icon iconOff, Icon iconOn, ref bool isSelected, bool needsAttention = false, bool isEnabled = true)
     {
         var clicked = ImGui.InvisibleButton(name, new Vector2(17, 17));
         if (!isEnabled)
         {
-            Icons.DrawIconOnLastItem(isSelected ? iconOn : iconOff, isSelected ? (needsAttention ? UiColors.StatusAttention: UiColors.BackgroundActive) 
+            Icons.DrawIconOnLastItem(isSelected ? iconOn : iconOff, isSelected
+                                                                        ? (needsAttention ? UiColors.StatusAttention : UiColors.BackgroundActive)
                                                                         : UiColors.TextDisabled.Fade(0.5f));
             return false;
         }
-            
-        Icons.DrawIconOnLastItem(isSelected ? iconOn : iconOff, isSelected ? (needsAttention ? UiColors.StatusAttention: UiColors.BackgroundActive) : UiColors.TextMuted);
+
+        Icons.DrawIconOnLastItem(isSelected ? iconOn : iconOff,
+                                 isSelected ? (needsAttention ? UiColors.StatusAttention : UiColors.BackgroundActive) : UiColors.TextMuted);
         if (clicked)
             isSelected = !isSelected;
-            
-        return clicked;
-    }
-        
-    public static bool DrawIconToggle(string name, Icon icon, ref bool isSelected, bool needsAttention = false)
-    {
-        var clicked = ImGui.InvisibleButton(name, new Vector2(17, 17));
-        Icons.DrawIconOnLastItem(icon, isSelected ? (needsAttention ? UiColors.StatusAttention: UiColors.BackgroundActive) : UiColors.TextMuted);
-        if (clicked)
-            isSelected = !isSelected;
-            
+
         return clicked;
     }
 
-    public static bool DrawInputFieldWithPlaceholder(string placeHolderLabel, ref string value, float width = 0, bool showClear= true,  ImGuiInputTextFlags inputFlags= ImGuiInputTextFlags.None)
+    public static bool DrawIconToggle(string name, Icon icon, ref bool isSelected, bool needsAttention = false)
+    {
+        var clicked = ImGui.InvisibleButton(name, new Vector2(17, 17));
+        Icons.DrawIconOnLastItem(icon, isSelected ? (needsAttention ? UiColors.StatusAttention : UiColors.BackgroundActive) : UiColors.TextMuted);
+        if (clicked)
+            isSelected = !isSelected;
+
+        return clicked;
+    }
+
+    public static bool DrawInputFieldWithPlaceholder(string placeHolderLabel, ref string value, float width = 0, bool showClear = true,
+                                                     ImGuiInputTextFlags inputFlags = ImGuiInputTextFlags.None)
     {
         var notEmpty = !string.IsNullOrEmpty(value);
         var wasNull = value == null;
         if (wasNull)
             value = string.Empty;
 
-        ImGui.SetNextItemWidth(width - FormInputs.ParameterSpacing - (notEmpty ? ImGui.GetFrameHeight():0));
+        ImGui.SetNextItemWidth(width - FormInputs.ParameterSpacing - (notEmpty ? ImGui.GetFrameHeight() : 0));
         var modified = ImGui.InputText("##" + placeHolderLabel, ref value, 1000, inputFlags);
         if (!modified && wasNull)
             value = null;
@@ -692,7 +694,7 @@ internal static class CustomComponents
         {
             if (showClear)
             {
-                ImGui.SameLine(0,0);
+                ImGui.SameLine(0, 0);
                 if (ImGui.Button("×" + "##" + placeHolderLabel))
                 {
                     value = null;
@@ -722,9 +724,9 @@ internal static class CustomComponents
     {
         if (!ImGui.IsWindowFocused())
             return;
-            
+
         var min = ImGui.GetWindowPos();
-        ImGui.GetWindowDrawList().AddRect(min, min+ImGui.GetWindowSize() + new Vector2(0,0) , UiColors.ForegroundFull.Fade(0.2f));
+        ImGui.GetWindowDrawList().AddRect(min, min + ImGui.GetWindowSize() + new Vector2(0, 0), UiColors.ForegroundFull.Fade(0.2f));
     }
 
     public static string HumanReadablePascalCase(string f)
@@ -737,37 +739,33 @@ internal static class CustomComponents
         var size = new Vector2(width, ImGui.GetFrameHeight());
         if (width == 0)
             size.X = size.Y;
-            
-        var clicked= ImGui.InvisibleButton(id, size);
+
+        var clicked = ImGui.InvisibleButton(id, size);
         var dl = ImGui.GetWindowDrawList();
         var color = ImGui.IsItemHovered() ? ImGuiCol.ButtonHovered.GetStyleColor() : ImGuiCol.Button.GetStyleColor();
-        dl.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), color,7, roundedCorners);
+        dl.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), color, 7, roundedCorners);
         return clicked;
     }
-        
-        
+
     private static Vector2 _dragScrollStart;
+
     public static bool IsDragScrolling => _draggedWindowObject != null;
-    //private static uint _scrollingId;
     private static object _draggedWindowObject;
 
     public static bool IsAnotherWindowDragScrolling(object windowObject)
     {
         return _draggedWindowObject != null && _draggedWindowObject != windowObject;
     }
-        
+
     public static void HandleDragScrolling(object windowObject)
     {
-        //var currentId = ImGui.GetID("");
-
         if (_draggedWindowObject == windowObject)
         {
             if (ImGui.IsMouseReleased(ImGuiMouseButton.Right))
             {
-                //IsDragScrolling = false;
                 _draggedWindowObject = null;
             }
-                
+
             if (ImGui.IsMouseDragging(ImGuiMouseButton.Right))
             {
                 ImGui.SetScrollY(_dragScrollStart.Y - ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Y);
@@ -775,81 +773,21 @@ internal static class CustomComponents
 
             return;
         }
-            
-            
-        if ( ImGui.IsWindowHovered() && !T3Ui.DragFieldWasHoveredLastFrame && ImGui.IsMouseClicked(ImGuiMouseButton.Right))
+
+        if (ImGui.IsWindowHovered() && !T3Ui.DragFieldWasHoveredLastFrame && ImGui.IsMouseClicked(ImGuiMouseButton.Right))
         {
-            _dragScrollStart = new Vector2(ImGui.GetScrollX(),  ImGui.GetScrollY());
-            //IsDragScrolling = true;
+            _dragScrollStart = new Vector2(ImGui.GetScrollX(), ImGui.GetScrollY());
             _draggedWindowObject = windowObject;
         }
     }
 
-
-
-    public static bool DrawDropdown<T>(ref T selectedValue, IEnumerable<T> values, string label, Func<T, string> getDisplayTextFunc,
-                                       bool labelOnSameLine = false,
-                                       string defaultDisplayText = null, string tooltip = null)
-    {
-        if (labelOnSameLine)
-        {
-            ImGui.PushFont(Fonts.FontNormal);
-            ImGui.TextUnformatted(label);
-            ImGui.SameLine();
-        }
-        else
-        {
-            ImGui.PushFont(Fonts.FontSmall);
-            ImGui.TextUnformatted(label);
-        }
-
-        ImGui.PopFont();
-
-        const string imguiLabelFmt = "##Select{0}{1}";
-        var imguiLabel = string.Format(imguiLabelFmt, label, nameof(T));
-
-        const string defaultDisplayTextFmt = "Select {0}";
-        defaultDisplayText ??= string.Format(defaultDisplayTextFmt, label);
-
-        var modified = false;
-
-        var previewValue = selectedValue == null ? defaultDisplayText : getDisplayTextFunc(selectedValue);
-        if (ImGui.BeginCombo(imguiLabel, previewValue, ImGuiComboFlags.HeightLarge))
-        {
-            foreach (var project in values)
-            {
-                var equalityComparer = EqualityComparer<T>.Default;
-                var isSelected = equalityComparer.Equals(project, selectedValue);
-                if (!ImGui.Selectable(getDisplayTextFunc(project) ?? "Error", isSelected, ImGuiSelectableFlags.DontClosePopups))
-                    continue;
-
-                ImGui.CloseCurrentPopup();
-                selectedValue = project;
-                modified = true;
-            }
-
-            ImGui.EndCombo();
-        }
-
-        if (tooltip != null && ImGui.IsItemHovered())
-        {
-            ImGui.BeginTooltip();
-            ImGui.PushFont(Fonts.FontSmall);
-            ImGui.TextUnformatted(tooltip);
-            ImGui.PopFont();
-            ImGui.EndTooltip();
-        }
-
-        return modified;
-    }
-
-    // Todo: this needs to be resized horizontally so the label shows correctly
     internal static bool DrawProjectDropdown(ref EditableSymbolProject selectedValue)
     {
-        return DrawDropdown(ref selectedValue, EditableSymbolProject.AllProjects.OrderBy(x => x.DisplayName), "Project", x => x.DisplayName,
-                            defaultDisplayText: "Select a project",
-                            tooltip: "Select a project to edit symbols in.",
-                            labelOnSameLine: false);
+        return FormInputs.AddDropdown(ref selectedValue,
+                                      EditableSymbolProject.AllProjects.OrderBy(x => x.DisplayName),
+                                      "Project",
+                                      x => x.DisplayName,
+                                      "Project to edit symbols in.");
     }
 
     public static void DrawSymbolCodeContextMenuItem(Symbol symbol)
@@ -857,7 +795,7 @@ internal static class CustomComponents
         var symbolPackage = symbol.SymbolPackage;
         var project = symbolPackage as EditableSymbolProject;
         var enabled = project != null;
-        if(ImGui.MenuItem("Open C# code", enabled))
+        if (ImGui.MenuItem("Open C# code", enabled))
         {
             if (!project!.TryOpenCSharpInEditor(symbol))
             {

@@ -213,11 +213,10 @@ internal static class FormInputs
     {
         DrawInputLabel(label);
 
-        //var inputSize = GetAvailableInputSize(tooltip, false, true);
-        //ImGui.SetNextItemWidth(inputSize.X);
-
         var modified = false;
-        if (ImGui.BeginCombo("##SelectTheme", UserSettings.Config.ColorThemeName, ImGuiComboFlags.HeightLarge))
+        if (ImGui.BeginCombo("##SelectTheme", 
+                             "Default", 
+                             ImGuiComboFlags.HeightLarge))
         {
             foreach (var value in values)
             {
@@ -225,7 +224,9 @@ internal static class FormInputs
                     continue;
 
                 var isSelected = value == selectedValue;
-                if (!ImGui.Selectable($"{value}", isSelected, ImGuiSelectableFlags.DontClosePopups))
+                if (!ImGui.Selectable($"{value}", 
+                                      isSelected, 
+                                      ImGuiSelectableFlags.DontClosePopups))
                     continue;
 
                 ImGui.CloseCurrentPopup();
@@ -239,6 +240,54 @@ internal static class FormInputs
         AppendTooltip(tooltip);
         return modified;
     }
+    
+    public static bool AddDropdown<T>(ref T selectedValue, 
+                                      IEnumerable<T> values, 
+                                      string label,
+                                      Func<T, string> getDisplayTextFunc,
+                                      
+                                      string? tooltip = null)
+    {
+        DrawInputLabel(label);
+
+        const string imguiLabelFmt = "##Select{0}{1}";
+        var imguiLabel = string.Format(imguiLabelFmt, label, nameof(T));
+
+        // const string defaultDisplayTextFmt = "Select {0}";
+        // defaultDisplayText ??= string.Format(defaultDisplayTextFmt, selectedValue);
+
+        var previewLabel = selectedValue == null ? "please select" : getDisplayTextFunc(selectedValue);
+        
+        var modified = false;
+        if (ImGui.BeginCombo(imguiLabel, 
+                             previewLabel, 
+                             ImGuiComboFlags.HeightLarge))
+        {
+            foreach (var value in values)
+            {
+                if (value == null)
+                    continue;
+
+                var equalityComparer = EqualityComparer<T>.Default;
+                var isSelected = equalityComparer.Equals(value, selectedValue);
+                // if (!ImGui.Selectable($"{value}", isSelected, ImGuiSelectableFlags.DontClosePopups))
+                //     continue;
+                
+                if (!ImGui.Selectable(getDisplayTextFunc(value), isSelected, ImGuiSelectableFlags.DontClosePopups))
+                    continue;                
+
+                ImGui.CloseCurrentPopup();
+                selectedValue = value;
+                modified = true;
+            }
+
+            ImGui.EndCombo();
+        }
+
+        AppendTooltip(tooltip);
+        return modified;
+    }
+    
 
     public static bool AddSegmentedButtonWithLabel<T>(ref T selectedValue, string label, float columnWidth = 0) where T : struct, Enum
     {
@@ -328,7 +377,7 @@ internal static class FormInputs
         if (!modified && wasNull)
             value = null;
 
-        if (autoFocus)
+        if (autoFocus && ImGui.IsWindowAppearing())
         {
             // Todo - how the hell do you make this not select the entire text?
             ImGui.SetKeyboardFocusHere(-1);
@@ -362,6 +411,86 @@ internal static class FormInputs
         return modified;
     }
 
+    public static bool AddStringInputWithSuggestions(string label,
+                                      ref string value,
+                                      IOrderedEnumerable<string> items,
+                                      string? placeHolder = null,
+                                      string? warning = null,
+                                      string? tooltip = null,
+                                      string? defaultValue = NoDefaultString,
+                                      bool autoFocus = false)
+    {
+        if (string.IsNullOrEmpty(label))
+        {
+            Log.Error("AddStringInput() requires an id to work. Use ## prefix to hide." );
+            label = "##fallback";
+        }
+            
+        var hasDefault = defaultValue != NoDefaultString;
+        var isDefault = hasDefault && value == defaultValue;
+
+        if (isDefault)
+        {
+            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, DefaultFadeAlpha * ImGui.GetStyle().Alpha);
+        }
+
+        DrawInputLabel(label);
+        var wasNull = value == null;
+        if (wasNull)
+            value = string.Empty;
+
+        var inputSize = GetAvailableInputSize(tooltip, false, true);
+        ImGui.SetNextItemWidth(inputSize.X);
+        ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 5);
+        
+        var modified = InputWithTypeAheadSearch.Draw("##typeAheadSearch", 
+                                                     items,
+                                                     !string.IsNullOrEmpty(warning),
+                                                     ref value!, out _);
+        
+        if (!modified && wasNull)
+            value = null;
+
+        if (autoFocus)
+        {
+            // Todo - how the hell do you make this not select the entire text?
+            ImGui.SetKeyboardFocusHere(-1);
+        }
+        ImGui.PopStyleVar();
+        
+        if (string.IsNullOrEmpty(value) && !string.IsNullOrEmpty(placeHolder))
+        {
+            var drawList = ImGui.GetWindowDrawList();
+            var minPos = ImGui.GetItemRectMin();
+            var maxPos = ImGui.GetItemRectMax();
+            drawList.PushClipRect(minPos, maxPos);
+            drawList.AddText(minPos + new Vector2(8, 3)* T3Ui.UiScaleFactor, UiColors.ForegroundFull.Fade(0.25f), placeHolder);
+            drawList.PopClipRect();
+        }
+
+        AppendTooltip(tooltip);
+        if (isDefault)
+        {
+            ImGui.PopStyleVar();
+        }
+
+        if (AppendResetButton(hasDefault && !isDefault, label))
+        {
+            value = defaultValue;
+            modified = true;
+        }
+
+        DrawWarningBelowField(warning);
+
+        return modified;
+    }
+    
+    
+    
+    
+    
+    
+    
     /// <summary>
     /// Draws string input or file picker. 
     /// </summary>

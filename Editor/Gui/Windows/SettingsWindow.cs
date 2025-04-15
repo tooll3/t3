@@ -220,19 +220,16 @@ internal sealed class SettingsWindow : Window
                     CustomComponents.HelpText("These settings only when playback as executable");
                     FormInputs.AddVerticalSpace();
 
-                    FormInputs.SetIndentToLeft();
-
+                    projectSettingsChanged |= FormInputs.AddEnumDropdown(ref ProjectSettings.Config.DefaultWindowMode, 
+                                                                         "Show export as", 
+                                                                         "The default window mode when exporting an executable.",
+                                                                         WindowMode.Fullscreen);
+                    
                     projectSettingsChanged |= FormInputs.AddCheckBox("Enable Playback Control",
                                                                      ref ProjectSettings.Config.EnablePlaybackControlWithKeyboard,
                                                                      "Users can use cursor left/right to skip through time\nand space key to pause playback\nof exported executable.",
                                                                      ProjectSettings.Defaults.EnablePlaybackControlWithKeyboard);
 
-                    projectSettingsChanged |= CustomComponents.DrawDropdown(selectedValue: ref ProjectSettings.Config.DefaultWindowMode,
-                                                                            label: "Default Export Window Mode",
-                                                                            tooltip: "The default window mode when exporting an executable.",
-                                                                            getDisplayTextFunc: value => value.ToString(),
-                                                                            values: Enum.GetValues<WindowMode>(),
-                                                                            labelOnSameLine: true);
                     if (projectSettingsChanged)
                         ProjectSettings.Save();
 
