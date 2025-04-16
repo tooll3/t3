@@ -53,7 +53,6 @@ public static class DefaultRenderingStates
     }
 
     private static BlendState _defaultBlendState;
-
     public static BlendState DefaultBlendState
     {
         get
@@ -95,6 +94,34 @@ public static class DefaultRenderingStates
         }
     }
 
+    
+    private static BlendState _additiveBlendState;
+    public static BlendState AdditiveBlendState
+    {
+        get
+        {
+            if (_additiveBlendState == null && ResourceManager.Device != null)
+            {
+                var blendStateDescription = new BlendStateDescription();
+                blendStateDescription.RenderTarget[0].IsBlendEnabled = true;
+                blendStateDescription.RenderTarget[0].SourceBlend = BlendOption.SourceAlpha;
+                blendStateDescription.RenderTarget[0].DestinationBlend = BlendOption.One;
+                blendStateDescription.RenderTarget[0].BlendOperation = BlendOperation.Add;
+                
+                blendStateDescription.RenderTarget[0].SourceAlphaBlend = BlendOption.One;
+                blendStateDescription.RenderTarget[0].DestinationAlphaBlend = BlendOption.InverseSourceAlpha;
+                blendStateDescription.RenderTarget[0].AlphaBlendOperation = BlendOperation.Add;
+                
+                blendStateDescription.RenderTarget[0].RenderTargetWriteMask = ColorWriteMaskFlags.All;
+                blendStateDescription.AlphaToCoverageEnable = false;
+                _additiveBlendState = new BlendState(ResourceManager.Device, blendStateDescription);
+            }
+
+            return _additiveBlendState;
+        }
+    }
+    
+    
     public static Color4 DefaultBlendFactor { get { return new Color4(1, 1, 1, 1); } }
 
     private static RasterizerState _defaultRasterizerState;

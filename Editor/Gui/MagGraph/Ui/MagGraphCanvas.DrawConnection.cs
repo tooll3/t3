@@ -32,8 +32,10 @@ internal sealed partial class MagGraphCanvas
         var idleFadeProgress = MathUtils.RemapAndClamp(connection.SourceOutput.DirtyFlag.FramesSinceLastUpdate, 0, 100, 1, 0f);
         
         var color =  typeUiProperties.Color;
-        var selectedColor = isSelected ?  ColorVariations.OperatorLabel.Apply(color)
+        var wasHoveredLastFrame = ConnectionHovering.IsHovered(connection); 
+        var selectedColor = isSelected || wasHoveredLastFrame ?  ColorVariations.OperatorLabel.Apply(color)
                                 : ColorVariations.ConnectionLines.Apply(color);
+        
         var typeColor = ColorVariations.ConnectionLines.Apply(selectedColor).Fade(MathUtils.Lerp(0.6f, 1, idleFadeProgress));
         
         var sourcePosOnScreen = TransformPosition(connection.SourcePos);
@@ -157,7 +159,7 @@ internal sealed partial class MagGraphCanvas
                 
                 case MagGraphConnection.ConnectionStyles.RightToLeft:
                     
-                    var wasHoveredLastFrame = ConnectionHovering.IsHovered(connection); 
+                    
                     // TODO: Implement this also for vertical connections.
                     if (GraphConnectionDrawer.DrawConnection(CanvasScale,
                                                              TransformRect(connection.SourceItem.Area),
@@ -165,7 +167,7 @@ internal sealed partial class MagGraphCanvas
                                                              TransformRect(connection.TargetItem.VerticalStackArea),
                                                              targetPosOnScreen,
                                                              typeColor,
-                                                             MathUtils.Lerp(0.25f, 1f, idleFadeProgress) + (isSelected|wasHoveredLastFrame ? 1 : 0),
+                                                             MathUtils.Lerp(0.25f, 1f, idleFadeProgress) + (isSelected|wasHoveredLastFrame ? 2 : 0),
                                                              out var hoverPositionOnLine,
                                                              out var normalizedHoverPos))
                     {
