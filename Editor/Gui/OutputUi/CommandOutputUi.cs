@@ -90,6 +90,11 @@ internal sealed class CommandOutputUi : OutputUi<Command>
         // Clean up ref counts for RTVs
         for (var i = 0; i < prevTargets.Length; i++)
         {
+            if (prevTargets[i] == null)
+            {
+                Log.Warning("Can't dispose obsolete RenderTargetView after draw. This indicates corrupted a render context.");
+                continue;
+            }
             prevTargets[i].Dispose();
         }
     }
