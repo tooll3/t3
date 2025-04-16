@@ -1,0 +1,144 @@
+{
+  "Id": "9d42dbe7-34a5-4165-877d-6f9c1c675b60"/*_ExecuteBloomPasses*/,
+  "Description": "An internal operator that performs the necessary steps of the bloom effect.",
+  "InputUis": [
+    {
+      "InputId": "08c47369-295b-4638-0ae8-4967e54cf638"/*DownsamplePS*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 675.0
+      }
+    },
+    {
+      "InputId": "0f6919cd-33c9-4e99-ad72-b2a8dcb2b7a2"/*Intensity*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 150.0
+      }
+    },
+    {
+      "InputId": "19d5847a-3a6c-4749-1bf9-5a78f65d0749"/*SeparableBlurPS*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 750.0
+      }
+    },
+    {
+      "InputId": "2ae6958b-4b7d-485a-2c0a-6b89076e185a"/*UpsampleAddPS*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 825.0
+      }
+    },
+    {
+      "InputId": "388489ee-ea0c-49a3-aee8-1ae2c4dcbda2"/*Levels*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 300.0
+      }
+    },
+    {
+      "InputId": "3bf7a69c-5c8e-496b-3d1b-7c9a187f296b"/*CopyPS*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 900.0
+      }
+    },
+    {
+      "InputId": "4b1ac17b-b54c-4741-bb38-5784f6c1891a"/*BlurOffset*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
+    },
+    {
+      "InputId": "4c08b7ad-6d9f-4a7c-4e2c-8daa29803a7c"/*PointSampler*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 975.0
+      }
+    },
+    {
+      "InputId": "5d19c8be-7ea0-4b8d-5f3d-9ebb3a914b8d"/*LinearSampler*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 1050.0
+      }
+    },
+    {
+      "InputId": "692bc2f0-68f2-45ca-a0fb-cd1c5d08e982"/*SourceTexture*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "85859c09-c1e5-4452-8b79-4470cc3daaa8"/*Shape*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 375.0
+      }
+    },
+    {
+      "InputId": "98e88d02-3b78-403c-b9c9-b5ecf8565acd"/*SourceTextureSrv*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 75.0
+      }
+    },
+    {
+      "InputId": "d5914036-f628-4305-d7b5-1634b219c305"/*Clamp*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 450.0
+      }
+    },
+    {
+      "InputId": "d9576354-76f1-403c-8b28-45386f657190"/*Threshold*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 75.0
+      }
+    },
+    {
+      "InputId": "e6a25147-0739-4416-e8c6-2745c32ad416"/*FullscreenVS*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 525.0
+      }
+    },
+    {
+      "InputId": "f7b36258-184a-4527-f9d7-3856d43be527"/*BrightPassPS*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 600.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "300c319d-86e8-47ce-9597-e81c5a008c8f"/*FilteredCubeMap*/,
+      "Position": {
+        "X": 29.03888,
+        "Y": -147.24622
+      }
+    }
+  ]
+}

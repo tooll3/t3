@@ -111,6 +111,9 @@ internal sealed class OutputMergerStage : Instance<OutputMergerStage> {
     private RawColor4 _prevBlendFactor;
     private int _prevSampleMask;
 
+    [Input(Guid = "E0BC9CF8-42C8-4632-B958-7A96F6D03BA2")]
+    public readonly InputSlot<BlendState> BlendState = new();
+
     [Input(Guid = "394D374F-2125-4ECB-8A69-CC7B2C3C6CB7")]
     public readonly InputSlot<DepthStencilView> DepthStencilView = new();
 
@@ -125,9 +128,6 @@ internal sealed class OutputMergerStage : Instance<OutputMergerStage> {
 
     [Input(Guid = "6C7907D7-70F7-4DB7-83EA-22EE48610994")]
     public readonly InputSlot<int> DepthStencilReference = new();
-
-    [Input(Guid = "E0BC9CF8-42C8-4632-B958-7A96F6D03BA2")]
-    public readonly InputSlot<BlendState> BlendState = new();
 
     [Input(Guid = "CCEE2EC3-586F-4396-8B20-CC99484E1B64")]
     public readonly InputSlot<Vector4> BlendFactor = new();
