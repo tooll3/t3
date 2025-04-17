@@ -8,7 +8,7 @@ using Utilities = T3.Core.Utils.Utilities;
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable InconsistentNaming
 
-namespace Lib.image.fx.@_;
+namespace Lib.image.fx._;
 
 [Guid("9d42dbe7-34a5-4165-877d-6f9c1c675b60")]
 internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
@@ -41,9 +41,8 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
         // Get Inputs
         var sourceTexture = SourceTexture.GetValue(context);
         var vs = FullscreenVS.GetValue(context);
-        // ... (get all other shader/sampler inputs) ...
         var brightPassPS = BrightPassPS.GetValue(context);
-        var downsamplePS = DownsamplePS.GetValue(context);
+        var downSamplePS = DownsamplePS.GetValue(context);
         var blurPS = SeparableBlurPS.GetValue(context);
         var upsampleAddPS = UpsampleAddPS.GetValue(context);
         var copyPS = CopyPS.GetValue(context);
@@ -63,10 +62,9 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
             || sourceTexture.IsDisposed
             || sourceSrv == null
             || sourceSrv.IsDisposed
-            /* ... other checks ... */
             || vs == null
             || brightPassPS == null
-            || downsamplePS == null
+            || downSamplePS == null
             || blurPS == null
             || upsampleAddPS == null
             || copyPS == null
@@ -84,7 +82,6 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
                                          );
         var initialFormat = sourceTexture.Description.Format;
 
-        // --- Resource Management ---
         // This handles texture creation/recreation based on res/format/levels
         bool resourcesReady = InitializeOrUpdateResources(initialResolution, initialFormat, levels);
         if (!resourcesReady)
@@ -95,7 +92,7 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
 
         // --- Update Level Intensities if Shape or Levels changed ---
         // Check if recalculation is needed *after* InitializeOrUpdateResources ensured _lastLevels is current
-        if (shape != _lastShape || levels != _lastLevels || _levelIntensities.Count != levels) // Check count too for safety
+        if (Math.Abs(shape - _lastShape) > 0.001f || levels != _lastLevels || _levelIntensities.Count != levels) // Check count too for safety
         {
             RecalculateLevelIntensities(levels, shape);
             _lastShape = shape; // Update tracking
@@ -120,21 +117,18 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
         device.ImmediateContext.OutputMerger.BlendState = DefaultRenderingStates.DisabledBlendState;
         device.ImmediateContext.OutputMerger.DepthStencilState = DefaultRenderingStates.DisabledDepthStencilState;
         device.ImmediateContext.Rasterizer.State = DefaultRenderingStates.DefaultRasterizerState;
-        //_currentState.RasterizerState = DefaultRenderingStates.DisabledRasterizerState;
 
         device.ImmediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
 
-        //var sourceSrv = ResourceManager.GetSrv(sourceTexture);
 
         // --- Pipeline Steps ---
 
-        // 1. Bright Pass (Same as before)
+        // 1. Bright Pass
         // ... set RTV, viewport, PS, Sampler, SRV, update/set CB ... draw ... unbind ...
         {
             /* ... Bright Pass Code ... */
             deviceContext.OutputMerger.SetTargets(_brightPassTarget.RTV);
             var viewport = new RawViewportF { X = 0, Y = 0, Width = initialResolution.Width, Height = initialResolution.Height, MinDepth = 0, MaxDepth = 1 };
-            //deviceContext.Rasterizer.SetViewport(new RawViewportF(0, 0, _brightPassTarget.Resolution.Width, _brightPassTarget.Resolution.Height));
             deviceContext.Rasterizer.SetViewports([viewport]);
 
             deviceContext.PixelShader.Set(brightPassPS);
@@ -143,8 +137,6 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
             _thresholdParams.Threshold = threshold;
 
             ResourceManager.SetupConstBuffer(_thresholdParams, ref _thresholdParamsBuffer);
-            //ResourceManager.UpdateConstBuffer(ref _thresholdParamsBuffer, _thresholdParams);
-
             deviceContext.PixelShader.SetConstantBuffer(0, _thresholdParamsBuffer);
             deviceContext.Draw(3, 0);
             deviceContext.PixelShader.SetShaderResource(0, null);
@@ -164,10 +156,8 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
             // Downsample
             {
                 deviceContext.OutputMerger.SetTargets(targetSetA.RTV);
-
-                //var rawViewportF = new RawViewportF(0, 0, levelResolution.Width, levelResolution.Height);
                 deviceContext.Rasterizer.SetViewport(new RawViewportF { X = 0, Y = 0, Width = levelResolution.Width, Height = levelResolution.Height });
-                deviceContext.PixelShader.Set(downsamplePS);
+                deviceContext.PixelShader.Set(downSamplePS);
                 deviceContext.PixelShader.SetSampler(0, linearSampler);
                 deviceContext.PixelShader.SetShaderResource(0, lastLevelSrv);
                 deviceContext.Draw(3, 0);
@@ -208,7 +198,7 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
             lastLevelSrv = targetSetA.SRV; // Result for this level is in A
         }
 
-        // 3. Initial Composite (Same as before)
+        // 3. Initial Composite
         // ... copy sourceSRV -> _compositeTarget.RTV ...
         {
             /* ... Initial Composite Code ... */
@@ -223,7 +213,7 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
             deviceContext.PixelShader.SetShaderResource(0, null);
         }
 
-        // 4. Upsample and Additively Blend (Modified)
+        // 4. Upsample and Additively Blend
         {
             deviceContext.OutputMerger.SetBlendState(DefaultRenderingStates.AdditiveBlendState);
             deviceContext.PixelShader.Set(upsampleAddPS);
@@ -232,13 +222,13 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
             deviceContext.Rasterizer.SetViewport(new RawViewportF
                                                      { X = 0, Y = 0, Width = _compositeTarget.Resolution.Width, Height = _compositeTarget.Resolution.Height });
 
-            for (int level = levels - 1; level >= 0; --level)
+            for (var level = levels - 1; level >= 0; --level)
             {
                 var sourceSet = _blurTargetsA[level]; // Blurred result for this level
 
                 // Calculate final intensity for this specific pass
-                float normalizedLevelIntensity = _levelIntensities[level]; // Get precalculated value
-                float finalPassIntensity = normalizedLevelIntensity * intensity; // Combine with overall intensity
+                var normalizedLevelIntensity = _levelIntensities[level]; // Get precalculated value
+                var finalPassIntensity = normalizedLevelIntensity * intensity; // Combine with overall intensity
 
                 _compositeParamsData.PassIntensity = finalPassIntensity; // Use combined value
                 _compositeParamsData.InvTargetSize = new Vector2(1.0f / _compositeTarget.Resolution.Width, 1.0f / _compositeTarget.Resolution.Height);
@@ -260,7 +250,7 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
     }
 
     // --- Internal Resources ---
-    // RenderTargetSet struct and Lists _blurTargetsA, _blurTargetsB (Same as before)
+    // RenderTargetSet struct and Lists _blurTargetsA, _blurTargetsB
     private sealed class RenderTargetSet
     {
         public Texture2D Texture;
@@ -276,29 +266,27 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
         }
     }
 
-    private readonly List<RenderTargetSet> _blurTargetsA = new List<RenderTargetSet>();
-    private readonly List<RenderTargetSet> _blurTargetsB = new List<RenderTargetSet>();
+    private readonly List<RenderTargetSet> _blurTargetsA = new();
+    private readonly List<RenderTargetSet> _blurTargetsB = new();
     private RenderTargetSet _brightPassTarget;
     private RenderTargetSet _compositeTarget;
 
-    // Constant Buffers (CompositeParams modified)
+    // Constant Buffers
     [StructLayout(LayoutKind.Explicit, Size = 16)]
     private struct ThresholdParams
     {
         [FieldOffset(0)]
         public float Threshold;
 
-        public static readonly ThresholdParams Default = new ThresholdParams();
+        public static readonly ThresholdParams Default = new();
     }
 
     private ThresholdParams _thresholdParams;
     private Buffer _thresholdParamsBuffer;
 
-    // BlurParameters struct and buffer (Same as before)
     [StructLayout(LayoutKind.Explicit, Size = (4 * 4) + (4 * 4))]
     private struct BlurParameters
     {
-        /* ... */
         [FieldOffset(0 * 4)]
         public float DirX;
 
@@ -323,13 +311,12 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
         [FieldOffset(7 * 4)]
         public int _padding0;
 
-        public static readonly BlurParameters Default = new BlurParameters();
+        public static readonly BlurParameters Default = new();
     }
 
     private BlurParameters _blurParamsData;
     private Buffer _blurParamsBuffer;
 
-    // CompositeParams struct modified to take final per-pass intensity
     [StructLayout(LayoutKind.Explicit, Size = 32)] // Ensure size/padding matches HLSL
     private struct CompositeParams
     {
@@ -342,7 +329,7 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
         [FieldOffset(16)]
         public float PassIntensity; // Combined overall Intensity * normalized level weight
 
-        public static readonly CompositeParams Default = new CompositeParams();
+        public static readonly CompositeParams Default = new();
     }
 
     private CompositeParams _compositeParamsData;
@@ -416,9 +403,9 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
                       this);
             CleanupResources(); // Cleans textures, views, AND buffers, resets state tracking
         }
-        else if (needsBufferCreation) // Only buffers need creation, textures are fine
+        else
         {
-            Log.Debug($"Recreating Bloom constant buffers.", this);
+            Log.Debug("Recreating Bloom constant buffers.", this);
             // Only dispose buffers
             Utilities.Dispose(ref _thresholdParamsBuffer);
             Utilities.Dispose(ref _blurParamsBuffer);
@@ -445,15 +432,15 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
                 _compositeTarget = CreateRenderTargetSet(device, fullResDesc);
 
                 // Create Downsample Pyramid Targets
-                Size2 currentResolution = initialResolution;
-                for (int level = 0; level < numLevels; ++level)
+                var currentResolution = initialResolution;
+                for (var level = 0; level < numLevels; ++level)
                 {
                     currentResolution.Width = Math.Max(1, currentResolution.Width / 2);
                     currentResolution.Height = Math.Max(1, currentResolution.Height / 2);
                     var levelDesc = fullResDesc;
                     levelDesc.Width = currentResolution.Width;
                     levelDesc.Height = currentResolution.Height;
-                    _blurTargetsA.Add(CreateRenderTargetSet(device, levelDesc));
+                    _blurTargetsA?.Add(CreateRenderTargetSet(device, levelDesc));
                     _blurTargetsB.Add(CreateRenderTargetSet(device, levelDesc));
                 }
 
@@ -485,9 +472,11 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
     // Helper to create a RenderTargetSet
     private RenderTargetSet CreateRenderTargetSet(Device device, Texture2DDescription desc)
     {
-        var set = new RenderTargetSet { Resolution = new Size2(desc.Width, desc.Height) };
-        //set.Texture = new Texture2D(device, desc);
-        set.Texture = Texture2D.CreateTexture2D(desc);
+        var set = new RenderTargetSet
+                      {
+                          Resolution = new Size2(desc.Width, desc.Height),
+                          Texture = Texture2D.CreateTexture2D(desc)
+                      };
         set.RTV = new RenderTargetView(device, set.Texture);
         set.SRV = new ShaderResourceView(device, set.Texture);
         return set;
@@ -576,7 +565,6 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
         private RawColor4 _blendFactor;
         private int _sampleMask;
         private SharpDX.Direct3D11.DepthStencilState _depthStencilState;
-        private int _stencilRef;
 
         private SharpDX.Direct3D11.RenderTargetView[]
             _renderTargetViews = new RenderTargetView[OutputMergerStage.SimultaneousRenderTargetCount]; // Save max possible RTVs
@@ -613,7 +601,6 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
 
             // Output Merger
             _blendState = context.OutputMerger.GetBlendState(out _blendFactor, out _sampleMask);
-            _depthStencilState = context.OutputMerger.GetDepthStencilState(out _stencilRef);
             
             // Suggested API doesn't exist.
             //context.OutputMerger.GetRenderTargets(OutputMergerStage.SimultaneousRenderTargetCount, _renderTargetViews, out _depthStencilView);
@@ -713,50 +700,50 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
     }
 
     [Input(Guid = "692BC2F0-68F2-45CA-A0FB-CD1C5D08E982")]
-    public readonly InputSlot<T3.Core.DataTypes.Texture2D> SourceTexture = new InputSlot<T3.Core.DataTypes.Texture2D>();
+    public readonly InputSlot<T3.Core.DataTypes.Texture2D> SourceTexture = new();
 
     [Input(Guid = "98E88D02-3B78-403C-B9C9-B5ECF8565ACD")]
-    public readonly InputSlot<SharpDX.Direct3D11.ShaderResourceView> SourceTextureSrv = new InputSlot<SharpDX.Direct3D11.ShaderResourceView>();
+    public readonly InputSlot<SharpDX.Direct3D11.ShaderResourceView> SourceTextureSrv = new();
 
     [Input(Guid = "D9576354-76F1-403C-8B28-45386F657190")]
-    public readonly InputSlot<float> Threshold = new InputSlot<float>();
+    public readonly InputSlot<float> Threshold = new();
 
     [Input(Guid = "0F6919CD-33C9-4E99-AD72-B2A8DCB2B7A2")]
-    public readonly InputSlot<float> Intensity = new InputSlot<float>();
+    public readonly InputSlot<float> Intensity = new();
 
     [Input(Guid = "4B1AC17B-B54C-4741-BB38-5784F6C1891A")]
-    public readonly InputSlot<float> BlurOffset = new InputSlot<float>();
+    public readonly InputSlot<float> BlurOffset = new();
 
     [Input(Guid = "388489EE-EA0C-49A3-AEE8-1AE2C4DCBDA2")]
-    public readonly InputSlot<int> Levels = new InputSlot<int>();
+    public readonly InputSlot<int> Levels = new();
 
     [Input(Guid = "85859C09-C1E5-4452-8B79-4470CC3DAAA8")]
-    public readonly InputSlot<float> Shape = new InputSlot<float>();
+    public readonly InputSlot<float> Shape = new();
 
     [Input(Guid = "D5914036-F628-4305-D7B5-1634B219C305")]
-    public readonly InputSlot<bool> Clamp = new InputSlot<bool>();
+    public readonly InputSlot<bool> Clamp = new();
 
     [Input(Guid = "E6A25147-0739-4416-E8C6-2745C32AD416")]
-    public readonly InputSlot<T3.Core.DataTypes.VertexShader> FullscreenVS = new InputSlot<T3.Core.DataTypes.VertexShader>();
+    public readonly InputSlot<T3.Core.DataTypes.VertexShader> FullscreenVS = new();
 
     [Input(Guid = "F7B36258-184A-4527-F9D7-3856D43BE527")]
-    public readonly InputSlot<T3.Core.DataTypes.PixelShader> BrightPassPS = new InputSlot<T3.Core.DataTypes.PixelShader>();
+    public readonly InputSlot<T3.Core.DataTypes.PixelShader> BrightPassPS = new();
 
     [Input(Guid = "08C47369-295B-4638-0AE8-4967E54CF638")]
-    public readonly InputSlot<T3.Core.DataTypes.PixelShader> DownsamplePS = new InputSlot<T3.Core.DataTypes.PixelShader>();
+    public readonly InputSlot<T3.Core.DataTypes.PixelShader> DownsamplePS = new();
 
     [Input(Guid = "19D5847A-3A6C-4749-1BF9-5A78F65D0749")]
-    public readonly InputSlot<T3.Core.DataTypes.PixelShader> SeparableBlurPS = new InputSlot<T3.Core.DataTypes.PixelShader>();
+    public readonly InputSlot<T3.Core.DataTypes.PixelShader> SeparableBlurPS = new();
 
     [Input(Guid = "2AE6958B-4B7D-485A-2C0A-6B89076E185A")]
-    public readonly InputSlot<T3.Core.DataTypes.PixelShader> UpsampleAddPS = new InputSlot<T3.Core.DataTypes.PixelShader>();
+    public readonly InputSlot<T3.Core.DataTypes.PixelShader> UpsampleAddPS = new();
 
     [Input(Guid = "3BF7A69C-5C8E-496B-3D1B-7C9A187F296B")]
-    public readonly InputSlot<T3.Core.DataTypes.PixelShader> CopyPS = new InputSlot<T3.Core.DataTypes.PixelShader>();
+    public readonly InputSlot<T3.Core.DataTypes.PixelShader> CopyPS = new();
 
     [Input(Guid = "5D19C8BE-7EA0-4B8D-5F3D-9EBB3A914B8D")]
-    public readonly InputSlot<SharpDX.Direct3D11.SamplerState> LinearSampler = new InputSlot<SharpDX.Direct3D11.SamplerState>();
+    public readonly InputSlot<SharpDX.Direct3D11.SamplerState> LinearSampler = new();
 
     [Input(Guid = "4C08B7AD-6D9F-4A7C-4E2C-8DAA29803A7C")]
-    public readonly InputSlot<SharpDX.Direct3D11.SamplerState> PointSampler = new InputSlot<SharpDX.Direct3D11.SamplerState>();
+    public readonly InputSlot<SharpDX.Direct3D11.SamplerState> PointSampler = new();
 }

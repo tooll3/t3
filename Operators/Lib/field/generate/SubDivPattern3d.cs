@@ -137,9 +137,6 @@ internal sealed class SubDivPattern3d : Instance<SubDivPattern3d>
                                  
                                      float d5 = min(d4.x, d4.y);
                                      float sGap = smoothstep(p.Padding - p.Feather, p.Padding + p.Feather, d5);
-                                    //return lerp(p.ColorA, p.ColorB, splitF);
-                                    //return p.GapColor;
-                                    //return float4(sGap.xxx,1);
                                      return lerp(p.GapColor, 
                                      lerp(p.ColorA, p.ColorB, splitF), 
                                      sGap);
@@ -151,21 +148,21 @@ internal sealed class SubDivPattern3d : Instance<SubDivPattern3d>
     {
         var n = ShaderNode;
         c.AppendCall($"""
-                      SubDivParams xxx;
-                      xxx.GapColor = {n}GapColor;
-                      xxx.ColorA = {n}ColorA;
-                      xxx.ColorB = {n}ColorB;
-                      xxx.SplitPosition = {n}SplitPosition;
-                      xxx.SplitVariation = {n}SplitVariation;
-                      xxx.SubdivisionThreshold = {n}Threshold;
-                      xxx.Padding = {n}Padding;
-                      xxx.Feather = {n}Feather;
-                      xxx.UseAspectForSplit = {n}UseAspectForSplit;
-                      xxx.MaxSubdivisions = {n}MaxSubdivisions;
-                      xxx.ColorMode = {n}ColorMode;
-                      xxx.RandomSeed = {n}RandomSeed;
+                      SubDivParams param{n};
+                      param{n}.GapColor = {n}GapColor;
+                      param{n}.ColorA = {n}ColorA;
+                      param{n}.ColorB = {n}ColorB;
+                      param{n}.SplitPosition = {n}SplitPosition;
+                      param{n}.SplitVariation = {n}SplitVariation;
+                      param{n}.SubdivisionThreshold = {n}Threshold;
+                      param{n}.Padding = {n}Padding;
+                      param{n}.Feather = {n}Feather;
+                      param{n}.UseAspectForSplit = {n}UseAspectForSplit;
+                      param{n}.MaxSubdivisions = {n}MaxSubdivisions;
+                      param{n}.ColorMode = {n}ColorMode;
+                      param{n}.RandomSeed = {n}RandomSeed;
 
-                      f{c}.rgb =  ComputeSubdivision(p{c}.xy, xxx).rgb;
+                      f{c}.rgb =  ComputeSubdivision(p{c}.xy, param{n}).rgb;
                       """);
     }
 
