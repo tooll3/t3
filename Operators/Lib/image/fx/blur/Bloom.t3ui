@@ -1,120 +1,164 @@
 {
   "Id": "f634e126-8834-46ea-bd6e-5ebfdc8b0733"/*Bloom*/,
-  "Description": "A faster version of glow.",
+  "Description": "An more versatile and faster version of [Glow]. \n\nThis uses a down sampling and blurring cascade to create multiple blurred copies of the original image and then combines these layer additively while applying a gradient.\n\nPlease also try the presets and check the documentation of the parameters.",
   "InputUis": [
     {
       "InputId": "2064aba1-658e-4795-a4fc-5be1026d7064"/*MaxLevels*/,
       "Position": {
-        "X": 1283.0168,
-        "Y": 1628.9049
-      }
+        "X": 1598.7069,
+        "Y": 1636.1553
+      },
+      "Description": "The number of blur levels applied. The maximum is 12 (which should be enough for most resolutions).\n\nIn most scenarious you wouldn't adjust this, but in edges scenarios, it might help to optimize performance of craft special looks."
     },
     {
       "InputId": "28e0b719-0888-4ef6-85d9-bbd75f7a4537"/*Threshold*/,
       "Position": {
-        "X": 1283.0168,
-        "Y": 1523.9049
-      }
+        "X": 1598.7069,
+        "Y": 1531.1553
+      },
+      "Description": "Limit the glow to brighter areas.",
+      "Min": 0.0,
+      "Max": 2.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "355fa01e-b2c4-4d11-bead-18c5961d8e96"/*GainAndBias*/,
+      "Position": {
+        "X": 1598.7069,
+        "Y": 1671.1553
+      },
+      "Description": "This can be used to shape the distribution of the blur kernels\n\nLower curves focus on the core, higher curves on the blurred parts.\n\nMany settings cause artifacts, but when used suptely  can be very useful for crafting a look.",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true,
+      "Format": "{0:0.000}",
+      "UseVec2Control": "BiasAndGain"
+    },
+    {
+      "InputId": "68e5fe43-84b6-46da-8e74-0576d77d49b6"/*ColorWeights*/,
+      "Position": {
+        "X": 1598.7069,
+        "Y": 1496.1553
+      },
+      "Description": "Colors to calculate the initial luminaticy used for the glow. This can be useful for limiting the effect on certain colors.\nThe default values are the NTSC perception of color channels.\n\nReducint the alpha channel blends these colors to gray.",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "97d8f330-5957-4309-8c56-d94c1266f6cb"/*Image*/,
       "Relevancy": "Required",
       "Position": {
-        "X": 844.3822,
-        "Y": 1457.4978
-      }
-    },
-    {
-      "InputId": "b6ca6df2-9a48-437a-9bb2-1cb5b358bc47"/*Shape*/,
-      "Position": {
-        "X": 1283.0168,
-        "Y": 1663.9049
+        "X": 1200.7562,
+        "Y": 1438.292
       }
     },
     {
       "InputId": "bb706662-2555-4f3b-a81e-60e04f052f36"/*Intensity*/,
       "Position": {
-        "X": 1283.0168,
-        "Y": 1558.9049
-      }
+        "X": 1598.7069,
+        "Y": 1566.1553
+      },
+      "Description": "The overall intensity values below 1 are hardly noticable.",
+      "Min": 0.0,
+      "Max": 100.0,
+      "Scale": 0.01,
+      "Clamp": true
+    },
+    {
+      "InputId": "be4e0dba-7613-4860-96e1-fe7ea493511f"/*GlowGradient*/,
+      "Position": {
+        "X": 1598.7069,
+        "Y": 1706.1553
+      },
+      "Description": "Can be used the colorize or shape the glow. \nIts multiplied onto each blur kernel with the more blurred levels on the right.\n\nTIP:\n- You can also adjust the brightness above 1 (hold CTRL while dragging the brightness slider) so amplify levels like the core."
     },
     {
       "InputId": "c6a0cadc-9e1c-40ac-97f1-d9271b5376df"/*Blur*/,
       "Position": {
-        "X": 1283.0168,
-        "Y": 1593.9049
-      }
+        "X": 1598.7069,
+        "Y": 1601.1553
+      },
+      "Description": "Offsets the blur amount. This might be useful to craft looks (e.g. to limit the glow spread).\n\nBut it will cause noticable artifacts."
+    },
+    {
+      "InputId": "e7412f9b-b5e3-4166-8f5e-4b142ccee55a"/*Clamp*/,
+      "Position": {
+        "X": 1598.7069,
+        "Y": 1741.1553
+      },
+      "Description": "Clamp the blur kernels before combining. \nThis will give a slightly different not. It will _NOT_ clamp the results. Use [ToneMap] for that."
     }
   ],
   "SymbolChildUis": [
     {
       "ChildId": "3d023b05-0e92-4bd4-a8a8-abcd19812977"/*VertexShader*/,
       "Position": {
-        "X": 1283.0168,
-        "Y": 1733.9049
+        "X": 1598.7069,
+        "Y": 1776.1553
       }
     },
     {
       "ChildId": "4823df36-a042-49df-8473-a97e5f322b03"/*SrvFromTexture2d*/,
       "Position": {
-        "X": 1283.0168,
-        "Y": 1488.9049
+        "X": 1598.7069,
+        "Y": 1461.1553
       }
     },
     {
       "ChildId": "48c3a944-c4e0-4a56-b74d-73eaf8ac3ff8"/*PixelShader*/,
       "Position": {
-        "X": 1283.0168,
-        "Y": 1838.9049
+        "X": 1598.7069,
+        "Y": 1881.1553
       }
     },
     {
       "ChildId": "68481ea7-a7f6-4211-88c9-2a05715754e6"/*PixelShader*/,
       "Position": {
-        "X": 1283.0168,
-        "Y": 1768.9049
+        "X": 1598.7069,
+        "Y": 1811.1553
       }
     },
     {
       "ChildId": "7ce88a2d-c7b7-4b75-8469-258902a577ee"/*PixelShader*/,
       "Position": {
-        "X": 1283.0168,
-        "Y": 1803.9049
+        "X": 1598.7069,
+        "Y": 1846.1553
       }
     },
     {
       "ChildId": "858f906b-8c10-4111-988d-c0bdf8a7efe5"/*PixelShader*/,
       "Position": {
-        "X": 1164.2137,
-        "Y": 1875.9696
+        "X": 1598.7069,
+        "Y": 1916.1553
       }
     },
     {
       "ChildId": "8ccc18ff-0a66-45d4-a7b8-568739683a45"/*PointSampler*/,
       "Position": {
-        "X": 1283.0168,
-        "Y": 1978.9049
+        "X": 1598.7069,
+        "Y": 2021.1553
       }
     },
     {
       "ChildId": "cf64c29b-8dbb-4585-b671-194d17b79220"/*LinearSampler*/,
       "Position": {
-        "X": 1283.0168,
-        "Y": 1943.9049
+        "X": 1598.7069,
+        "Y": 1986.1553
       }
     },
     {
       "ChildId": "e403c2c4-3b85-4179-9670-8fff46589d6b"/*PixelShader*/,
       "Position": {
-        "X": 767.0933,
-        "Y": 1923.5902
+        "X": 1598.7069,
+        "Y": 1951.1553
       }
     },
     {
       "ChildId": "ed37e5c7-d022-4569-9961-8c9eef1631d2"/*_ExecuteBloomPasses*/,
       "Position": {
-        "X": 1423.0168,
-        "Y": 1453.9049
+        "X": 1738.7069,
+        "Y": 1426.1553
       }
     }
   ],
@@ -122,9 +166,18 @@
     {
       "OutputId": "f3fa372d-f037-48fd-8a8d-a0135b4c20cb"/*Result*/,
       "Position": {
-        "X": 1719.1486,
-        "Y": 1438.8959
+        "X": 1738.7069,
+        "Y": 2056.1553
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "a41bedb7-8d50-48f3-abf2-d8ed460115e1",
+      "Title": "Original by Kusma",
+      "Description": "This effect was heavily inspired by this effect on cables.gl.",
+      "LinkUrl": "https://cables.gl/p/wHOajs",
+      "LinkType": "Source"
     }
   ]
 }
