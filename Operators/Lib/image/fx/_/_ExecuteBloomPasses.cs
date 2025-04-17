@@ -3,6 +3,7 @@ using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
 using T3.Core.Rendering;
 using T3.Core.Utils;
+using Color = T3.Core.DataTypes.Vector.Color;
 using Utilities = T3.Core.Utils.Utilities;
 
 // ReSharper disable RedundantNameQualifier
@@ -49,12 +50,14 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
         var pointSampler = PointSampler.GetValue(context);
         var linearSampler = LinearSampler.GetValue(context);
         var sourceSrv = SourceTextureSrv.GetValue(context);
+        var colorWeights = ColorWeights.GetValue(context);
+        var colorGradient = BlurGradient.GetValue(context); 
 
         var threshold = Threshold.GetValue(context);
-        var intensity = Intensity.GetValue(context); // Overall Intensity 'b'
+        var intensity = Intensity.GetValue(context);
         var blurOffset = BlurOffset.GetValue(context);
         var levels = Levels.GetValue(context).Clamp(1, 10);
-        var shape = Shape.GetValue(context); // Shape 's'
+        var gainAndBias = GainAndBias.GetValue(context);
         var clamp = Clamp.GetValue(context);
 
         // --- Validation ---
@@ -83,7 +86,7 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
         var initialFormat = sourceTexture.Description.Format;
 
         // This handles texture creation/recreation based on res/format/levels
-        bool resourcesReady = InitializeOrUpdateResources(initialResolution, initialFormat, levels);
+        var resourcesReady = InitializeOrUpdateResources(initialResolution, initialFormat, levels);
         if (!resourcesReady)
         {
             OutputTexture.Value = sourceTexture;
@@ -91,11 +94,10 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
         }
 
         // --- Update Level Intensities if Shape or Levels changed ---
-        // Check if recalculation is needed *after* InitializeOrUpdateResources ensured _lastLevels is current
-        if (Math.Abs(shape - _lastShape) > 0.001f || levels != _lastLevels || _levelIntensities.Count != levels) // Check count too for safety
+        if (gainAndBias != _lastGainAndBias || levels != _lastLevels || _levelIntensities.Count != levels) // Check count too for safety
         {
-            RecalculateLevelIntensities(levels, shape);
-            _lastShape = shape; // Update tracking
+            CalculateDistribution(gainAndBias, levels, ref  _levelIntensities);
+            _lastGainAndBias = gainAndBias;
         }
 
         // Check if calculation failed or lists mismatch
@@ -111,7 +113,6 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
         // --- Save State & Prepare Base State ---
         var vsStage = deviceContext.VertexShader;
         vsStage.Set(vs);
-        //_currentState.VertexShader = vs;
 
         // ... (set common states) ...
         device.ImmediateContext.OutputMerger.BlendState = DefaultRenderingStates.DisabledBlendState;
@@ -135,6 +136,7 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
             deviceContext.PixelShader.SetSampler(0, linearSampler);
             deviceContext.PixelShader.SetShaderResource(0, sourceSrv);
             _thresholdParams.Threshold = threshold;
+            _thresholdParams.ColorWeights = new Vector3(colorWeights.X, colorWeights.Y,colorWeights.Z);
 
             ResourceManager.SetupConstBuffer(_thresholdParams, ref _thresholdParamsBuffer);
             deviceContext.PixelShader.SetConstantBuffer(0, _thresholdParamsBuffer);
@@ -143,8 +145,8 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
         }
 
         // 2. Downsample / Blur Pyramid (Same logic, result for level 'i' in _blurTargetsA[i].SRV)
-        ShaderResourceView lastLevelSrv = _brightPassTarget.SRV;
-        for (int level = 0; level < levels; ++level)
+        var lastLevelSrv = _brightPassTarget.SRV;
+        for (var level = 0; level < levels; ++level)
         {
             // ... (Downsample pass: lastLevelSrv -> _blurTargetsA[level]) ...
             // ... (Vertical Blur pass: _blurTargetsA[level].SRV -> _blurTargetsB[level].RTV) ...
@@ -228,9 +230,19 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
 
                 // Calculate final intensity for this specific pass
                 var normalizedLevelIntensity = _levelIntensities[level]; // Get precalculated value
-                var finalPassIntensity = normalizedLevelIntensity * intensity; // Combine with overall intensity
 
-                _compositeParamsData.PassIntensity = finalPassIntensity; // Use combined value
+                _compositeParamsData.PassIntensity = normalizedLevelIntensity * intensity;
+
+                if (colorGradient == null)
+                {
+                    _compositeParamsData.PassColor = Vector4.One;
+                }
+                else
+                {
+                    var k = levels <= 1 ? 0.5f : (float)level / (levels - 1);
+                    _compositeParamsData.PassColor = colorGradient.Sample(k);
+                }
+                
                 _compositeParamsData.InvTargetSize = new Vector2(1.0f / _compositeTarget.Resolution.Width, 1.0f / _compositeTarget.Resolution.Height);
                 _compositeParamsData.InvSourceSize = new Vector2(1.0f / sourceSet.Resolution.Width, 1.0f / sourceSet.Resolution.Height);
                 ResourceManager.SetupConstBuffer(_compositeParamsData, ref _compositeParamsBuffer);
@@ -276,6 +288,9 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
     private struct ThresholdParams
     {
         [FieldOffset(0)]
+        public Vector3 ColorWeights;
+        
+        [FieldOffset(3*4)]
         public float Threshold;
 
         public static readonly ThresholdParams Default = new();
@@ -317,17 +332,23 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
     private BlurParameters _blurParamsData;
     private Buffer _blurParamsBuffer;
 
-    [StructLayout(LayoutKind.Explicit, Size = 32)] // Ensure size/padding matches HLSL
+    [StructLayout(LayoutKind.Explicit, Size = 16*4)] // Ensure size/padding matches HLSL
     private struct CompositeParams
     {
         [FieldOffset(0)]
         public Vector2 InvTargetSize;
 
-        [FieldOffset(8)]
+        [FieldOffset(2*4)]
         public Vector2 InvSourceSize;
 
-        [FieldOffset(16)]
+        [FieldOffset(4*4)]
+        public Vector4 PassColor;
+        
+        [FieldOffset(8*4)]
         public float PassIntensity; // Combined overall Intensity * normalized level weight
+
+        [FieldOffset(12 * 4)]
+        public Vector3 __padding; // Combined overall Intensity * normalized level weight
 
         public static readonly CompositeParams Default = new();
     }
@@ -339,59 +360,32 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
     private Size2 _lastResolution = Size2.Zero;
     private Format _lastFormat = Format.Unknown;
     private int _lastLevels = -1;
-    private float _lastShape = float.NaN; // Use NaN to ensure first calculation runs
-    private readonly List<float> _levelIntensities = []; // Stores normalized intensity per level
+    private Vector2 _lastGainAndBias = new(float.NaN, float.NaN);
+    private List<float> _levelIntensities = []; // Stores normalized intensity per level
 
-    // --- Methods ---
-
-    // Calculates normalized intensities based on level count and shape parameter
-    private void RecalculateLevelIntensities(int numLevels, float shape)
-    {
-        _levelIntensities.Clear();
-        if (numLevels <= 0) return;
-
-        double sumT = 0;
-        // Calculate sum of weights (using double for intermediate sum precision)
-        for (int n = 1; n <= numLevels; ++n) // n=1 for level 0, n=2 for level 1 etc.
-        {
-            // Use System.Math.Pow for double precision power
-            sumT += Math.Pow(n, shape);
-        }
-
-        // Calculate normalized intensity for each level
-        double invSumT = (sumT > 1e-6) ? (1.0 / sumT) : 0.0; // Avoid division by zero or near-zero
-        for (int n = 1; n <= numLevels; ++n)
-        {
-            double tN = Math.Pow(n, shape);
-            float intensityN = (float)(tN * invSumT);
-            _levelIntensities.Add(intensityN); // Add intensity for level (n-1)
-        }
-
-        Log.Debug($"Recalculated bloom level intensities (Levels={numLevels}, Shape={shape}): {string.Join(", ", _levelIntensities)}", this);
-    }
 
     // Creates/updates ALL internal resources
     private bool InitializeOrUpdateResources(Size2 initialResolution, Format initialFormat, int numLevels)
     {
         // Check if general resource recreation is needed (resolution, format, levels changed, or resources missing)
-        bool needsTextureRecreation = _compositeTarget?.Texture == null ||
-                                      _compositeTarget.Texture.IsDisposed ||
-                                      _brightPassTarget?.Texture == null ||
-                                      _brightPassTarget.Texture.IsDisposed ||
-                                      _blurTargetsA?.Count != numLevels ||
-                                      _blurTargetsB.Count != numLevels ||
-                                      _lastResolution != initialResolution ||
-                                      _lastFormat != initialFormat ||
-                                      _lastLevels != numLevels ||
-                                      _blurTargetsA?.Count > 0 && (_blurTargetsA[0].Texture == null || _blurTargetsA[0].Texture.IsDisposed);
+        var needsTextureRecreation = _compositeTarget?.Texture == null ||
+                                     _compositeTarget.Texture.IsDisposed ||
+                                     _brightPassTarget?.Texture == null ||
+                                     _brightPassTarget.Texture.IsDisposed ||
+                                     _blurTargetsA?.Count != numLevels ||
+                                     _blurTargetsB.Count != numLevels ||
+                                     _lastResolution != initialResolution ||
+                                     _lastFormat != initialFormat ||
+                                     _lastLevels != numLevels ||
+                                     _blurTargetsA?.Count > 0 && (_blurTargetsA[0].Texture == null || _blurTargetsA[0].Texture.IsDisposed);
 
         // Check if constant buffers need creation (only happens once or after failure)
-        bool needsBufferCreation = _thresholdParamsBuffer == null ||
-                                   _thresholdParamsBuffer.IsDisposed ||
-                                   _blurParamsBuffer == null ||
-                                   _blurParamsBuffer.IsDisposed ||
-                                   _compositeParamsBuffer == null ||
-                                   _compositeParamsBuffer.IsDisposed;
+        var needsBufferCreation = _thresholdParamsBuffer == null ||
+                                  _thresholdParamsBuffer.IsDisposed ||
+                                  _blurParamsBuffer == null ||
+                                  _blurParamsBuffer.IsDisposed ||
+                                  _compositeParamsBuffer == null ||
+                                  _compositeParamsBuffer.IsDisposed;
 
         if (!needsTextureRecreation && !needsBufferCreation)
             return true; // Nothing to do
@@ -399,8 +393,8 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
         // --- Cleanup and Recreate ---
         if (needsTextureRecreation)
         {
-            Log.Debug($"Recreating Bloom textures/views for {initialResolution.Width}x{initialResolution.Height}, {numLevels} levels, Format: {initialFormat}",
-                      this);
+            // Log.Debug($"Recreating Bloom textures/views for {initialResolution.Width}x{initialResolution.Height}, {numLevels} levels, Format: {initialFormat}",
+            //           this);
             CleanupResources(); // Cleans textures, views, AND buffers, resets state tracking
         }
         else
@@ -514,7 +508,6 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
         _lastResolution = Size2.Zero;
         _lastFormat = Format.Unknown;
         _lastLevels = -1;
-        _lastShape = float.NaN;
         _levelIntensities.Clear();
 
     }
@@ -662,14 +655,14 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
                 Utilities.Dispose(ref _vertexShader);
                 Utilities.Dispose(ref _geometryShader);
                 Utilities.Dispose(ref _pixelShader);
-                for (int i = 0; i < _psConstantBuffers.Length; ++i)
+                for (var i = 0; i < _psConstantBuffers.Length; ++i)
                 {
                     Utilities.Dispose(ref _psConstantBuffers[i]);
                     _psConstantBuffers[i] = null;
                 }
                 // Don't dispose SRVs in _psShaderResourceViews array
 
-                for (int i = 0; i < _psSamplerStates.Length; ++i)
+                for (var i = 0; i < _psSamplerStates.Length; ++i)
                 {
                     Utilities.Dispose(ref _psSamplerStates[i]);
                     _psSamplerStates[i] = null;
@@ -679,7 +672,7 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
                 Utilities.Dispose(ref _blendState);
                 Utilities.Dispose(ref _depthStencilState);
 
-                for (int i = 0; i < _renderTargetViews.Length; ++i)
+                for (var i = 0; i < _renderTargetViews.Length; ++i)
                 {
                     Utilities.Dispose(ref _renderTargetViews[i]);
                     _renderTargetViews[i] = null;
@@ -698,12 +691,106 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
             _isSaved = false;
         }
     }
+    
+    /// <summary>
+    /// Calculates the frequency distribution for a monotonic gain/bias function,
+    /// normalizing the result so the frequencies sum to 1.0.
+    /// Assumes the function maps [0,1] to [0,1] and uses MathUtils.ApplyGainAndBias.
+    /// </summary>
+    private void CalculateDistribution(Vector2 gainAndBias, int bucketCount, ref List<float> distribution)
+    {
+        if (bucketCount <= 0)
+            throw new ArgumentOutOfRangeException(nameof(bucketCount), "Must be greater than 0.");
+        
+        distribution ??= new List<float>(bucketCount);
+        distribution.Clear(); 
+        
+        var gain = gainAndBias.X.Clamp(0.002f, 0.95f);
+        var bias = gainAndBias.Y.Clamp(0.002f, 0.95f);
+        float last = 0;
+        for (var k = 1; k < bucketCount; k++) 
+        {
+            var yTarget = (float)k / bucketCount;
+
+            if (!TryFindRootBisection(x => x.ApplyGainAndBias(gain, bias) - yTarget, out var r))
+                r = (float)k / bucketCount;
+
+            r= r.Clamp(0, 1);
+            distribution.Add(r-last);
+            last = r;
+        }
+        distribution.Add(1-last);
+    }
+
+    private  float[] _frequencyBoundaries = [];
+
+    /// <summary>
+    /// Simple Bisection method root finder for monotonic functions in [0, 1].
+    /// </summary>
+    private static bool TryFindRootBisection(Func<float, float> function, out float result)
+    {
+        result = 0;
+        const float tolerance = 0.001f;
+        const float maxIterations = 20;
+        var lowerBound = 0f;
+        var upperBound = 1f;
+        
+        var fLower = function(lowerBound);
+        if (Math.Abs(fLower) < tolerance) { 
+            result =lowerBound;
+            return true;
+        }
+
+        var fUpper = function(upperBound);
+        if (Math.Abs(fUpper) < tolerance)
+        {
+            result = upperBound;
+            return true;
+        }
+
+        // Check bracketing condition
+        if (Math.Sign(fLower) == Math.Sign(fUpper))
+        {
+            // This can happen if yTarget is outside the *actual* numerical range of f(x)
+            // due to internal clamping or precision issues in ApplyGainAndBias,
+            // even if theoretically f(0)=0 and f(1)=1.
+            return false;
+        }
+
+        for (var i = 0; i < maxIterations; i++)
+        {
+            var midpoint = lowerBound + 0.5f * (upperBound - lowerBound);
+            var fMidpoint = function(midpoint);
+
+            if (Math.Abs(fMidpoint) < tolerance)
+            {
+                result = midpoint;
+                return true;
+            }
+
+            // Narrow the interval
+            if (Math.Sign(fMidpoint) == Math.Sign(fLower))
+            {
+                lowerBound = midpoint;
+                fLower = fMidpoint;
+            }
+            else
+            {
+                upperBound = midpoint;
+            }
+        }
+        // Max iterations reached
+        return false;
+    }
 
     [Input(Guid = "692BC2F0-68F2-45CA-A0FB-CD1C5D08E982")]
     public readonly InputSlot<T3.Core.DataTypes.Texture2D> SourceTexture = new();
 
     [Input(Guid = "98E88D02-3B78-403C-B9C9-B5ECF8565ACD")]
     public readonly InputSlot<SharpDX.Direct3D11.ShaderResourceView> SourceTextureSrv = new();
+
+    [Input(Guid = "AC3B575A-DC62-48BD-955C-F945A18A2246")]
+    public readonly InputSlot<Vector4> ColorWeights = new();
 
     [Input(Guid = "D9576354-76F1-403C-8B28-45386F657190")]
     public readonly InputSlot<float> Threshold = new();
@@ -717,8 +804,12 @@ internal sealed class _ExecuteBloomPasses : Instance<_ExecuteBloomPasses>
     [Input(Guid = "388489EE-EA0C-49A3-AEE8-1AE2C4DCBDA2")]
     public readonly InputSlot<int> Levels = new();
 
-    [Input(Guid = "85859C09-C1E5-4452-8B79-4470CC3DAAA8")]
-    public readonly InputSlot<float> Shape = new();
+    [Input(Guid = "2DB8E046-B81B-43F4-B454-4EEC8FCDD4B4")]
+    public readonly InputSlot<Vector2> GainAndBias = new();
+
+    [Input(Guid = "E5548715-1CAE-4792-9E6E-8F9D8DAA9EDF")]
+    public readonly InputSlot<Gradient> BlurGradient = new();
+
 
     [Input(Guid = "D5914036-F628-4305-D7B5-1634B219C305")]
     public readonly InputSlot<bool> Clamp = new();
