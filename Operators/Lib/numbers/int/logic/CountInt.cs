@@ -13,11 +13,9 @@ internal sealed class CountInt : Instance<CountInt>
 
     private void Update(EvaluationContext context)
     {
-        if (!_initialized || TriggerReset.GetValue(context))
-        {
-            Result.Value = DefaultValue.GetValue(context);
-            _initialized = true;
-        }
+        var defaultValue =DefaultValue.GetValue(context);
+        
+
 
         var currentTime =  context.LocalFxTime;
         if (Math.Abs(currentTime - _lastEvalTime) < MinTimeElapsedBeforeEvaluation)
@@ -43,6 +41,12 @@ internal sealed class CountInt : Instance<CountInt>
         {
             Result.Value -= delta;
         }
+        
+        if (!_initialized || TriggerReset.GetValue(context))
+        {
+            Result.Value = defaultValue;
+            _initialized = true;
+        }        
 
         var modulo = Modulo.GetValue(context);
         if (modulo != 0)
