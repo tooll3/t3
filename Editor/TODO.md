@@ -38,10 +38,14 @@ Graph:
 - [ ] Split Connections
 - [ ] Rewiring of vertical connection lines
 
+General fixes:
+- [ ] Default gradients are not loaded?
+- [ ] Fix Scaling for Curve select with ALT-Key
+- [ ] Deleting last output will cause crash
 
 General UX-ideas:
-
 - [ ] StatusProvideIcon should support non-warning indicator
+- [ ] Separate Value Clamping for lower and upper values 
 
 Long-Term ideas:
 - [ ] Render-Settings should be a connection type, including texture sampling, culling, z-depth 
