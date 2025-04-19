@@ -37,6 +37,7 @@ namespace T3.Editor.Gui.Windows.RenderExport
 
             if (FindIssueWithTexture(mainTexture, MfVideoWriter.SupportedFormats, out var warning))
             {
+                _lastHelpString = warning; // Update _lastHelpString to persist the warning
                 CustomComponents.HelpText(warning);
                 return;
             }
@@ -104,16 +105,34 @@ namespace T3.Editor.Gui.Windows.RenderExport
             FormInputs.AddCheckBox("Export Audio (experimental)", ref _exportAudio);
         }
 
-        private void DrawImageSequenceSettings()
+        private static void DrawImageSequenceSettings()
         {
             FormInputs.AddEnumDropdown(ref _fileFormat, "File Format");
 
-            // FormInputs.AddStringInput(value prefix, ref string ? output, [string ? placeHolder = output]);
-
-            FormInputs.AddStringInput("File name", ref UserSettings.Config.RenderSequenceFileName);
+            // Ensure the filename is trimmed and not empty
+            if (FormInputs.AddStringInput("File name", ref UserSettings.Config.RenderSequenceFileName))
+            {
+                UserSettings.Config.RenderSequenceFileName = UserSettings.Config.RenderSequenceFileName?.Trim();
+                if (string.IsNullOrEmpty(UserSettings.Config.RenderSequenceFileName))
+                {
+                    UserSettings.Config.RenderSequenceFileName = "output";
+                }
+            }
+            // Add tooltip when hovering over the "File name" input field
+            if (ImGui.IsItemHovered())
+            {
+                CustomComponents.TooltipForLastItem("Base filename for the image sequence (e.g., 'frame' for 'frame_0000.png').\n" +
+                                 "Invalid characters (?, |, \", /, \\, :) will be replaced with underscores.\n" +
+                                 "If empty, defaults to 'output'.");
+            }
 
             // Use the existing UserSettings property for sequence path
             FormInputs.AddStringInput("Output Path", ref UserSettings.Config.RenderSequenceFilePath);
+            if (ImGui.IsItemHovered())
+            {
+                CustomComponents.TooltipForLastItem("Specify the folder where the image sequence will be saved.\n" +
+                                 "Must be a valid directory path.");
+            }
             ImGui.SameLine();
             FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.Folder, ref UserSettings.Config.RenderSequenceFilePath);
 
@@ -231,7 +250,7 @@ namespace T3.Editor.Gui.Windows.RenderExport
         private void FinishRendering(bool success, double durationSoFar)
         {
             var successful = success ? "successfully" : "unsuccessfully";
-            _lastHelpString = $"Render finished {successful} in {StringUtils.HumanReadableDurationFromSeconds(durationSoFar)}";
+            _lastHelpString = $"Render finished {successful} in {StringUtils.HumanReadableDurationFromSeconds(durationSoFar)}\n Ready to render.";
 
             if (_renderMode == RenderMode.Video)
                 TryIncrementingFileName();
@@ -288,10 +307,27 @@ namespace T3.Editor.Gui.Windows.RenderExport
                 return false;
             }
         }
-
         // Image sequence-specific methods
-        private static string _prefix = UserSettings.Config.RenderSequenceFileName ?? "output";
-        private static string GetFilePath() => Path.Combine(_targetFolder, $"{_prefix}_{FrameIndex:0000}.{_fileFormat.ToString().ToLower()}");
+
+        private static string SanitizeFilename(string filename)
+        {
+            if (string.IsNullOrEmpty(filename))
+                return "output";
+
+            var invalidChars = Path.GetInvalidFileNameChars();
+            var sanitized = filename;
+            foreach (var c in invalidChars)
+            {
+                sanitized = sanitized.Replace(c.ToString(), "_");
+            }
+            return sanitized.Trim();
+        }
+
+        private static string GetFilePath()
+        {
+            var prefix = SanitizeFilename(UserSettings.Config.RenderSequenceFileName);
+            return Path.Combine(_targetFolder, $"{prefix}_{FrameIndex:0000}.{_fileFormat.ToString().ToLower()}");
+        }
 
         private static bool SaveImageFrameAndAdvance(Texture2D mainTexture)
         {
@@ -312,6 +348,8 @@ namespace T3.Editor.Gui.Windows.RenderExport
 
         // File path utilities
         private static readonly Regex _matchFileVersionPattern = new Regex(@"\bv(\d{2,4})\b");
+
+        
 
         private static bool IsFilenameIncrementable(string path = null)
         {
@@ -432,5 +470,6 @@ namespace T3.Editor.Gui.Windows.RenderExport
         private static string _targetFolder = string.Empty;
         private static double _exportStartedTime;
         private static string _lastHelpString = string.Empty;
+
     }
 }
