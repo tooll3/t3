@@ -63,6 +63,7 @@ public sealed class AssemblyInformation
                 return _assemblyUnsafe;
 
             var loadContext = GetLoadContext();
+            Log.Debug("AssemblyInformation > loadContext.LoadFromAssemblyPath... " + Path);
             var assembly = loadContext.LoadFromAssemblyPath(Path);
 
             _assemblyUnsafe = assembly;

@@ -81,6 +81,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
 
             if (_myAssembly == null)
             {
+                Log.Debug( "T3AssemblyLoadContext > LoadFromAssemblyPath " + _path);
                 _myAssembly = LoadFromAssemblyPath(_path);
                 CollectReferencedAssembliesOf(_myAssembly, this);
                 if (nameToSearchFor == _myAssembly.GetName().Name)
@@ -134,12 +135,23 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
 
             if (assemblyLocations.Count == 0)
             {
+                if (_assemblyPaths.Values.Any(string.IsNullOrEmpty))
+                {
+                    Log.Warning($"Assembly '{this.Name}' has undefined assembly paths:");
+                    foreach (var (k, v) in _assemblyPaths)
+                    {
+                        if (string.IsNullOrEmpty(v))
+                        {
+                            Log.Warning($" -> {k}");
+                        }
+                    }
+                }
+                
                 // search directories of our explicitly added assembly paths
                 foreach (var path in _assemblyPaths.Values)
                 {
                     if (string.IsNullOrWhiteSpace(path))
                     {
-                        Log.Warning("Null path in assembly paths");
                         continue;
                     }
 

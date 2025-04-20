@@ -116,7 +116,7 @@ internal static partial class PlayerExporter
         if(!TryCopyDirectory(SharedResources.Directory, resourceDir, out reason))
             return false;
             
-        var playerDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "Player");
+        var playerDirectory = Path.Combine(AppContext.BaseDirectory, "Player");
         if(!TryCopyDirectory(playerDirectory, exportDir, out reason))
             return false;
 

@@ -325,6 +325,6 @@ internal static partial class ProjectSetup
         return projectSearchDirectories;
     }
 
-    private static readonly string CoreOperatorDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "Operators");
-    private static readonly string T3ParentDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "..", "..", "..", "..");
+    private static readonly string CoreOperatorDirectory = Path.Combine(AppContext.BaseDirectory, "Operators");
+    private static readonly string T3ParentDirectory = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..");
 }

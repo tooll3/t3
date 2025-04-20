@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -18,7 +19,7 @@ internal static partial class Program
 {
     private static void LoadOperators()
     {
-        var searchDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "Operators");
+        var searchDirectory = Path.Combine(AppContext.BaseDirectory, "Operators");
         Log.Info($"Loading operators from \"{searchDirectory}\"...");
 
         var assemblies = Directory.GetDirectories(searchDirectory, "*", SearchOption.TopDirectoryOnly)

@@ -68,7 +68,9 @@ internal static partial class Program
         CoreUi.Instance = new MsForms.MsForms();
         BlockingWindow.Instance = new SilkWindowProvider();
             
-        var settingsPath = Path.Combine(RuntimeAssemblies.CoreDirectory, "exportSettings.json");
+        var location = AppContext.BaseDirectory;
+        var settingsPath = Path.Combine(AppContext.BaseDirectory, "exportSettings.json");
+        //var settingsPath = Path.Combine(RuntimeAssemblies.CoreDirectory, "exportSettings.json");
         if (!JsonUtils.TryLoadingJson(settingsPath, out ExportSettings exportSettings))
         {
             var message = $"Failed to load export settings from \"{settingsPath}\". Exiting!";
@@ -79,7 +81,8 @@ internal static partial class Program
 
         ProjectSettings.Config = exportSettings!.ConfigData;
             
-        var logDirectory = Path.Combine(Core.UserData.UserData.SettingsFolder, exportSettings.Author, exportSettings.ApplicationTitle);
+        //var logDirectory = Path.Combine(Core.UserData.UserData.SettingsFolder, exportSettings.Author, exportSettings.ApplicationTitle);
+        var logDirectory = Path.Combine(AppContext.BaseDirectory,  "logs");
         var fileWriter = FileWriter.CreateDefault(logDirectory, out var logPath);
         try
         {

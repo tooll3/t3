@@ -137,7 +137,27 @@ public static class UserData
         User
     }
 
-    public static string ReadOnlySettingsFolder => Path.Combine(RuntimeAssemblies.CoreDirectory!, ".t3");
+    //public static string ReadOnlySettingsFolder => Path.Combine(RuntimeAssemblies.CoreDirectory!, ".t3");
+    public static string ReadOnlySettingsFolder
+    {
+        get
+        {
+            var basePath = RuntimeAssemblies.CoreDirectory 
+                           ?? (IsRunningInPlayer() ? AppContext.BaseDirectory : null);
+
+            if (string.IsNullOrEmpty(basePath))
+                throw new InvalidOperationException("Unable to resolve ReadOnlySettingsFolder base path");
+
+            return Path.Combine(basePath, ".t3");
+        }
+    }
+    
+    private static bool IsRunningInPlayer()
+    {
+        var exeName = Path.GetFileNameWithoutExtension(Environment.ProcessPath ?? "");
+        return string.Equals(exeName, "Player", StringComparison.OrdinalIgnoreCase);
+    }
+    
     public static string TempFolder => Path.Combine(SettingsFolder, "tmp");
 
     public static readonly string SettingsFolder =
