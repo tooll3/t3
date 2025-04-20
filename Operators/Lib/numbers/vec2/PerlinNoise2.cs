@@ -18,6 +18,7 @@ internal sealed class PerlinNoise2 : Instance<PerlinNoise2>
         var value = OverrideTime.HasInputConnections
                         ? OverrideTime.GetValue(context)
                         : (float)context.LocalFxTime;
+        value += Phase.GetValue(context);
             
         var seed = Seed.GetValue(context);
         var period = Frequency.GetValue(context);
@@ -42,6 +43,8 @@ internal sealed class PerlinNoise2 : Instance<PerlinNoise2>
     [Input(Guid = "f294c517-7427-4c14-a397-4605bffc52a4")]
     public readonly InputSlot<float> OverrideTime = new();
         
+    [Input(Guid = "ABA60946-8A72-4BC5-8B44-77144FB4B339")]
+    public readonly InputSlot<float> Phase = new();
 
     [Input(Guid = "463d2c27-721f-41ad-ba76-5db138d92bf4")]
     public readonly InputSlot<float> Frequency = new();
