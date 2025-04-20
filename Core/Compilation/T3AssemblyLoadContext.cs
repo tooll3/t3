@@ -1,13 +1,12 @@
 #nullable enable
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
-using Microsoft.Extensions.DependencyModel;
-using Microsoft.Extensions.DependencyModel.Resolution;
+using System.Threading;
 using T3.Core.Logging;
 
 namespace T3.Core.Compilation;
@@ -28,362 +27,208 @@ namespace T3.Core.Compilation;
 /// </summary>
 internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
 {
-    private readonly string _path;
-    private Assembly? _myAssembly;
-    
-    private readonly object _assemblyLock = new();
-    private CompositeCompilationAssemblyResolver? _assemblyResolver;
-    private readonly Dictionary<object, string> _assemblyPaths = new();
-    
+    private readonly System.Threading.Lock _assemblyLock = new();
+
     // this is an ultimate list of assemblies that have been loaded for this context
     // keeping this cache allows us to avoid stack overflows during loading, and also
     // speeds up the loading process.
-    private readonly Dictionary<string, Assembly> _loadedAssemblies = new();
 
-    internal T3AssemblyLoadContext(AssemblyName assemblyName, string path) : base(assemblyName.Name, true)
+    private AssemblyTreeNode? _root;
+
+    internal AssemblyTreeNode? Root
     {
-        _path = path;
+        get
+        {
+            lock (_assemblyLock)
+            {
+                if (_root != null)
+                    return _root;
+                
+                var path = Path.Combine(_directory, _rootName.GetNameSafe()) + ".dll";
+
+                try
+                {
+                    var asm = Assembly.LoadFile(path);
+                    _root = new AssemblyTreeNode(asm);
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Failed to load root assembly {_rootName.Name}: {e}");
+                }
+
+                return _root;
+            }
+        }
+    }
+
+    private readonly AssemblyName _rootName;
+    private static readonly AssemblyTreeNode[] _coreNodes;
+    private readonly string _directory;
+
+    static T3AssemblyLoadContext()
+    {
+        _coreNodes = RuntimeAssemblies.CoreAssemblies
+                                     .Select(x => new AssemblyTreeNode(x))
+                                     .ToArray();
+    }
+
+    internal T3AssemblyLoadContext(AssemblyName rootName, string directory) : base(nameof(T3AssemblyLoadContext), true)
+    {
+        _directory = directory;
         Resolving += OnResolving;
-        _assemblyPaths[this] = path;
+        Log.Info($"Creating new assembly load context for {rootName.Name}");
 
         lock (_assemblyLock)
         {
-            foreach (var assembly in RuntimeAssemblies.CoreAssemblies)
-            {
-                AddToLoadedAssemblies(assembly, true, debug: false);
-                //CollectReferencedAssembliesOf(assembly, Default);
-            }
+            // _coreAssemblies ??= RuntimeAssemblies.CoreAssemblies.Select(x => CreateNode(x, debug: false)).ToList();
         }
+
+        _rootName = rootName;
     }
 
-    /// <summary>
-    /// This function is used to establish dependencies between packages. 
-    /// </summary>
-    /// <param name="packageOwner"></param>
-    /// <param name="assemblyInformationPath"></param>
-    internal void AddAssemblyPath(object packageOwner, string assemblyInformationPath)
+    private Assembly? OnResolving(AssemblyLoadContext context, AssemblyName asmName)
     {
         lock (_assemblyLock)
         {
-            _assemblyPaths[packageOwner] = assemblyInformationPath;
-            _assemblyResolver = null;
-        }
-    }
+            var name = asmName.GetNameSafe();
 
-    private Assembly? OnResolving(AssemblyLoadContext context, AssemblyName name)
-    {
-        lock (_assemblyLock)
-        {
-            if (TryGetLoadedAssembly(name, context, out var alreadyLoadedAssembly))
-                return alreadyLoadedAssembly;
-
-            var nameToSearchFor = name.Name;
-
-            if (_myAssembly == null)
+            foreach (var coreRef in _coreNodes)
             {
-                _myAssembly = LoadFromAssemblyPath(_path);
-                CollectReferencedAssembliesOf(_myAssembly, this);
-                if (nameToSearchFor == _myAssembly.GetName().Name)
-                    return _myAssembly;
-            }
-
-            if (nameToSearchFor == null)
-            {
-                Log.Error("Failed to get name for assembly");
-                return null;
-            }
-
-            var allLoadedAssemblies = _loadedAssemblies.Values.Append(_myAssembly);
-            List<string> assemblyLocations = [];
-
-            foreach (var potentiallyDependentAssembly in allLoadedAssemblies.Reverse()) // reverse to start with our assembly
-            {
-                var dependencyContext = DependencyContext.Load(potentiallyDependentAssembly);
-                if (dependencyContext == null)
+                if (coreRef.TryFind(name, context, out var coreAssembly))
                 {
-                    continue;
-                }
-
-                if (!TryFindLibrary(nameToSearchFor, dependencyContext, out var library))
-                    continue;
-
-                var wrapper = new CompilationLibrary(
-                                                     library!.Type,
-                                                     library.Name,
-                                                     library.Version,
-                                                     library.Hash,
-                                                     library.RuntimeAssemblyGroups.SelectMany(g => g.AssetPaths),
-                                                     library.Dependencies,
-                                                     library.Serviceable);
-
-                _assemblyResolver ??= CreateAssemblyResolver(_assemblyPaths.Values);
-                _assemblyResolver.TryResolveAssemblyPaths(wrapper, assemblyLocations);
-            }
-
-            if (assemblyLocations.Count == 0)
-            {
-                // search on our own using the paths we have
-                foreach (var path in _assemblyPaths.Values)
-                {
-                    if (IsLikelyFile(path, nameToSearchFor))
-                    {
-                        assemblyLocations.Add(path);
-                    }
+                    return coreAssembly.Assembly;
                 }
             }
 
-            if (assemblyLocations.Count == 0)
+            // the following are performed in order of preference:
+
+            var root = Root;
+            if (root != null)
             {
-                // search directories of our explicitly added assembly paths
-                foreach (var path in _assemblyPaths.Values)
+                // first we try with the provided context
+                if (root.TryFind(name, context, out var assembly))
                 {
-                    if (string.IsNullOrWhiteSpace(path))
-                    {
-                        Log.Warning("Null path in assembly paths");
-                        continue;
-                    }
+                    return assembly.Assembly;
+                }
+                // then we check the "Default" load context - the root load context of Tooll
 
-                    var directory = Path.GetDirectoryName(path);
-                    if (directory == null)
-                    {
-                        continue;
-                    }
-
-                    var files = Directory.GetFiles(directory, "", SearchOption.TopDirectoryOnly);
-                    foreach (var file in files)
-                    {
-                        if (IsLikelyFile(file, nameToSearchFor))
-                            assemblyLocations.Add(file);
-                    }
+                if (root.TryFind(name, Default, out assembly))
+                {
+                    return assembly.Assembly;
+                }
+                
+                // then we try *this* context if it's not the one provided
+                if (context != this && root.TryFind(name, this, out assembly))
+                {
+                    return assembly.Assembly;
                 }
             }
 
-            string assemblyPath;
-            switch (assemblyLocations.Count)
+            // try other assembly contexts
+            foreach (var ctx in _dependencyContexts)
             {
-                case 0:
-                    return null;
-                case 1:
-                    assemblyPath = assemblyLocations[0];
-                    break;
-                default:
-                {
-                    var distinct = assemblyLocations.Distinct().ToArray();
-
-                    if (distinct.Length > 1)
-                    {
-                        Log.Error($"Multiple assemblies found for {name.Name}");
-                        foreach (var item in assemblyLocations)
-                            Log.Info($"\t{item}");
-                    }
-
-                    assemblyPath = distinct[0];
-                    break;
-                }
+                var asm = ctx.OnResolving(this, asmName);
+                if (asm != null)
+                    return asm;
             }
 
-            var inferredAssemblyName = Path.GetFileNameWithoutExtension(assemblyPath);
-            if (_loadedAssemblies.TryGetValue(inferredAssemblyName, out var assembly))
-            {
-                return assembly;
-            }
-
-            assembly = context.LoadFromAssemblyPath(assemblyPath);
-            AddToLoadedAssemblies(assembly, false);
-            CollectReferencedAssembliesOf(assembly, context);
-
-            return assembly;
-        }
-
-        static bool IsLikelyFile(string path, string nameToSearchFor)
-        {
-            if (string.IsNullOrWhiteSpace(path))
-            {
-                return false;
-            }
-
-            var inferredName = Path.GetFileNameWithoutExtension(path);
-            return string.Equals(inferredName, nameToSearchFor, StringComparison.OrdinalIgnoreCase);
-        }
-
-        static bool TryFindLibrary(string nameToSearchFor, DependencyContext dependencyContext, out RuntimeLibrary? library)
-        {
-            foreach (var runtime in dependencyContext.RuntimeLibraries)
-            {
-                if (TryFindInLibrary(runtime, nameToSearchFor))
-                {
-                    library = runtime;
-                    return true;
-                }
-            }
-
-            library = default;
-            return false;
-
-            static bool TryFindInLibrary(RuntimeLibrary runtime, string nameToSearchFor)
-            {
-                if (string.Equals(runtime.Name, nameToSearchFor, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-
-                foreach (var assemblyGroup in runtime.RuntimeAssemblyGroups)
-                {
-                    foreach (var runtimeFile in assemblyGroup.RuntimeFiles)
-                    {
-                        var fileName = System.IO.Path.GetFileNameWithoutExtension(runtimeFile.Path);
-                        if (string.Equals(fileName, nameToSearchFor, StringComparison.OrdinalIgnoreCase))
-                        {
-                            return true;
-                        }
-                    }
-                }
-
-                return false;
-            }
-        }
-    }
-
-    /// <summary>
-    /// Adapted from https://www.codeproject.com/Articles/1194332/Resolving-Assemblies-in-NET-Core
-    /// </summary>
-    /// <param name="assemblyResolver"></param>
-    /// <param name="directory">path to dll</param>
-    private static CompositeCompilationAssemblyResolver CreateAssemblyResolver(IEnumerable<string> paths)
-    {
-        var resolvers = paths
-                       .Select(p => new AppBaseCompilationAssemblyResolver(p))
-                       .Cast<ICompilationAssemblyResolver>()
-                       .Append(new ReferenceAssemblyPathResolver())
-                       .Append(new PackageCompilationAssemblyResolver())
-                       .ToArray();
-        return new CompositeCompilationAssemblyResolver(resolvers);
-    }
-    
-    protected override Assembly? Load(AssemblyName assemblyName)
-    {
-        var result = OnResolving(this, assemblyName);
-
-        if (result == null)
-        {
-            // https://stackoverflow.com/questions/1127431/xmlserializer-giving-filenotfoundexception-at-constructor#answer-1177040
-            var assemblyNameStr = assemblyName.Name;
-            if (assemblyNameStr != null && assemblyNameStr.EndsWith("XmlSerializers"))
-            {
-                Log.Debug($"Failed to find Xml assembly {assemblyName}. This is expected for XmlSerializers");
-                return null;
-            }
-            
-            Log.Error($"Failed to load assembly {assemblyName.Name}");
-            var sb = new System.Text.StringBuilder();
-            foreach (var kvp in _assemblyPaths)
-            {
-                var path = kvp.Value;
-                var owner = kvp.Key;
-                sb.Append(owner);
-                sb.AppendLine(path);
-            }
-
-            if (sb.Length == 0)
-                Log.Error("No assembly paths found");
-            else
-                Log.Error(sb.ToString());
+            // guess we didn't find it :(
             return null;
         }
 
-        // check versions of the assembly - if different, log a warning. todo: actually do something with this information later
-        var assemblyNameOfResult = result.GetName();
-
-        if (assemblyNameOfResult.Version != assemblyName.Version)
-        {
-            Log.Warning($"Assembly {assemblyName.Name} loaded with different version: {assemblyNameOfResult.Version} vs {assemblyName.Version}");
-        }
-
-        return result;
+        // Local Functions
     }
 
-    // warning : not thread safe, must be wrapped in a lock around _assemblyLock
-    private void AddToLoadedAssemblies(Assembly assembly, bool addPath, bool debug = true)
+    protected override Assembly? Load(AssemblyName assemblyName)
     {
-        var name = GetName(assembly);
-        if (!_loadedAssemblies.TryAdd(name, assembly))
+        // check Core assemblies for a match
+        foreach (var coreNode in _coreNodes)
         {
-            Log.Debug($"{Name}: Skipping caching duplicate assembly {name}");
-            return;
+            var name = assemblyName.GetNameSafe();
+            if (coreNode.TryFind(name, this, out var node))
+                return node.Assembly;
         }
 
-        if (addPath)
-            AddAssemblyPath(assembly, assembly.Location);
+        var result = OnResolving(this, assemblyName);
 
-        if (debug && !name.StartsWith("System")) // don't log system assemblies - too much log spam for things that are probably not error-prone
-            Log.Debug($"{Name}: Loaded assembly {name} from {assembly.Location}");
-    }
-
-    private void CollectReferencedAssembliesOf(Assembly assembly, AssemblyLoadContext context)
-    {
-        foreach (var referenced in assembly.GetReferencedAssemblies())
+        if (result != null)
         {
-            if (_loadedAssemblies.TryGetValue(GetName(referenced), out _))
-                continue;
+            var assemblyNameOfResult = result.GetName();
 
-            _ = OnResolving(context, referenced);
-        }
-    }
-
-    private static string GetName(Assembly assembly) => GetName(assembly.GetName());
-
-    private static string GetName(AssemblyName assemblyName)
-    {
-        var name = assemblyName.Name ?? assemblyName.FullName;
-        return name;
-    }
-
-    private bool TryGetLoadedAssembly(AssemblyName assemblyName, AssemblyLoadContext context, [NotNullWhen(true)] out Assembly? assembly)
-    {
-        var name = GetName(assemblyName);
-
-        // the following are performed in order of preference:
-
-        // first we check if we already have the assembly in our cache
-        if (_loadedAssemblies.TryGetValue(name, out assembly))
-            return true;
-
-        // then we check the "Default" load context - the root load context of Tooll
-        if (TryGetExistingFromLoadContext(Default, name, out assembly))
-            return true;
-
-        // then we check the context provided
-        if (TryGetExistingFromLoadContext(context, name, out assembly))
-            return true;
-
-        // then we check our own context, if the context provided is not our own
-        if (context != this && TryGetExistingFromLoadContext(this, name, out assembly))
-        {
-           return true;
-        }
-        
-        // guess we didn't find it :(
-        return false;
-
-        bool TryGetExistingFromLoadContext(AssemblyLoadContext context, string name, [NotNullWhen(true)] out Assembly? assembly)
-        {
-            assembly = context.Assemblies.FirstOrDefault(x => GetName(x) == name);
-
-            if (assembly != null)
+            if (assemblyNameOfResult.Version != assemblyName.Version)
             {
-                AddToLoadedAssemblies(assembly, false);
-                CollectReferencedAssembliesOf(assembly, context);
-                return true;
+                Log.Warning($"Assembly {assemblyName.Name} loaded with different version: {assemblyNameOfResult.Version} vs {assemblyName.Version}");
             }
 
-            return false;
+            return result;
         }
-    }
 
+        // --- Error logging ---
+        // check versions of the assembly - if different, log a warning. todo: actually do something with this information later
+        // https://stackoverflow.com/questions/1127431/xmlserializer-giving-filenotfoundexception-at-constructor#answer-1177040
+        var assemblyNameStr = assemblyName.Name;
+        if (assemblyNameStr != null && assemblyNameStr.EndsWith("XmlSerializers"))
+        {
+            Log.Debug($"Failed to find Xml assembly {assemblyName}. This is expected for XmlSerializers");
+            return null;
+        }
+
+        var sb = new System.Text.StringBuilder();
+        sb.AppendLine($"Failed to load assembly {assemblyName.Name}");
+
+        foreach (var path in Root.VisibleDirectories)
+        {
+            sb.Append('\t');
+            sb.AppendLine(path);
+        }
+
+        Log.Error(sb.ToString());
+        return null;
+    }
 
     protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
     {
         Console.WriteLine($"Attempting to load unmanaged dll: {unmanagedDllName}");
         return base.LoadUnmanagedDll(unmanagedDllName);
+    }
+
+    public void AddDependencyContext(T3AssemblyLoadContext dependencyLoadContext)
+    {
+        _dependencyContexts.Add(dependencyLoadContext);
+        dependencyLoadContext.UnloadTriggered += OnDependencyUnloaded;
+    }
+
+    private void OnDependencyUnloaded(object? sender, EventArgs e)
+    {
+        var ctx = (T3AssemblyLoadContext)sender!;
+        ctx.UnloadTriggered -= OnDependencyUnloaded;
+        BeginUnload(); // begin unloading ourself too
+    }
+
+    public void BeginUnload()
+    {
+        try
+        {
+            UnloadTriggered?.Invoke(this, EventArgs.Empty);
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Exception thrown on assembly unload: {e}");
+        }
+
+        Unload();
+    }
+
+    public event EventHandler? UnloadTriggered;
+    private readonly List<T3AssemblyLoadContext> _dependencyContexts = new();
+}
+
+internal static class AssemblyNameExtensions
+{
+    public static string GetNameSafe(this Assembly assembly) => assembly.GetName().GetNameSafe();
+
+    public static string GetNameSafe(this AssemblyName asmName)
+    {
+        return asmName.Name ?? asmName.FullName;
     }
 }

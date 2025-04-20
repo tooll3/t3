@@ -177,29 +177,41 @@ internal static partial class ProjectSetup
             package.Dispose();
     }
 
-    internal static void UpdateSymbolPackage<T>(T project) where T : EditorSymbolPackage
+    internal static void UpdateSymbolPackage(EditorSymbolPackage package)
     {
-        UpdateSymbolPackages(ActivePackages[project.GetKey()]);
+        UpdateSymbolPackages(ActivePackages[package.GetKey()]);
     }
+
+    private readonly record struct DependentPackageUpdate(AssemblyInformation Updated, AssemblyInformation Dependent);
 
     private static void UpdateSymbolPackages(params PackageWithReleaseInfo[] packages)
     {
         var stopWatch = Stopwatch.StartNew();
         
         // update all the editor ui packages in concert with the operator packages
-        var uiPackagesNeedingReload = new List<AssemblyInformation>();
+        var dependentPackagesNeedingReload = new List<DependentPackageUpdate>();
         foreach (var package in packages)
         {
+            // TODO - better organize these packages and their respective AssemblyInfos and dependencies
             var assembly = package.Package.AssemblyInformation;
             assembly.Unload();
 
-            foreach (var nonOperatorAssembly in EditorOnlyPackages)
+            foreach (var otherPackage in EditorOnlyPackages)
             {
-                if (!nonOperatorAssembly.DependsOn(package))
+                if (!otherPackage.DependsOn(package))
                     continue;
 
-                uiPackagesNeedingReload.Add(nonOperatorAssembly);
+                dependentPackagesNeedingReload.Add(new DependentPackageUpdate(package.Package.AssemblyInformation, otherPackage));
             }
+
+            foreach (var otherPackage in AllPackages)
+            {
+                if (!otherPackage.AssemblyInformation.DependsOn(package))
+                    continue;
+                
+                dependentPackagesNeedingReload.Add(new DependentPackageUpdate(otherPackage.AssemblyInformation, package.Package.AssemblyInformation));
+            }
+            
 
             if (!package.ReleaseInfo.EditorVersion.Matches(Program.Version))
             {
@@ -209,9 +221,11 @@ internal static partial class ProjectSetup
             }
         }
 
-        foreach (var uiAssembly in uiPackagesNeedingReload)
+        var nonOperatorAssemblyInfos = new List<AssemblyInformation>();
+        foreach (var update in dependentPackagesNeedingReload)
         {
-            if (_uiInitializers.TryGetValue(uiAssembly, out var initializers))
+            var dependent = update.Dependent;
+            if (_uiInitializers.TryGetValue(dependent, out var initializers))
             {
                 for (var index = initializers.Count - 1; index >= 0; index--)
                 {
@@ -219,13 +233,16 @@ internal static partial class ProjectSetup
                     initializer.Uninitialize();
                     initializers.RemoveAt(index);
                 }
+                
             }
 
-            uiAssembly.Unload();
-            uiAssembly.ReplaceResolversOf(packages);
+            dependent.Unload();
+            dependent.AddDependencyOn(update.Updated);
+            nonOperatorAssemblyInfos.Add(update.Dependent);
         }
+        
 
-        InitializeCustomUis(uiPackagesNeedingReload);
+        InitializeCustomUis(nonOperatorAssemblyInfos);
 
         // actually update the symbol packages
 

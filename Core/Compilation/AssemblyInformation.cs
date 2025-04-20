@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
@@ -26,14 +27,12 @@ public sealed class AssemblyInformation
     internal AssemblyInformation(AssemblyNameAndPath assemblyInfo)
     {
         Name = assemblyInfo.AssemblyName.Name ?? "Unknown Assembly Name";
-        Path = assemblyInfo.Path;
         _assemblyName = assemblyInfo.AssemblyName;
-        Directory = System.IO.Path.GetDirectoryName(Path)!;
+        Directory = System.IO.Path.GetDirectoryName(assemblyInfo.Path)!;
         IsEditorOnly = assemblyInfo.IsEditorOnly;
     }
 
     public readonly string Name;
-    public readonly string Path;
     public readonly string Directory;
 
     private readonly AssemblyName _assemblyName;
@@ -44,40 +43,46 @@ public sealed class AssemblyInformation
     private readonly ConcurrentDictionary<Guid, OperatorTypeInfo> _operatorTypeInfo = new();
     private Dictionary<string, Type>? _types;
     public IReadOnlySet<string> Namespaces => _namespaces;
-    private readonly HashSet<string> _namespaces = new();
+    private readonly HashSet<string> _namespaces = [];
 
     internal bool ShouldShareResources;
     public readonly bool IsEditorOnly;
 
-    private T3AssemblyLoadContext? _loadContextUnsafe; // named as such because it should not usually be referenced directly
+    private T3AssemblyLoadContext? _loadContext;
 
-    private Assembly? _assemblyUnsafe;
+    private readonly Lock _assemblyLock = new();
 
-    private readonly object _assemblyLock = new();
-
-    private Assembly GetAssembly()
-    {
-        lock (_assemblyLock)
-        {
-            if (_assemblyUnsafe != null)
-                return _assemblyUnsafe;
-
-            var loadContext = GetLoadContext();
-            var assembly = loadContext.LoadFromAssemblyPath(Path);
-
-            _assemblyUnsafe = assembly;
-            return _assemblyUnsafe;
-        }
-    }
+    private static readonly Dictionary<string, Type> _empty = new();
 
     private T3AssemblyLoadContext GetLoadContext()
     {
-        if (_loadContextUnsafe != null)
-            return _loadContextUnsafe;
+        if (_loadContext != null)
+            return _loadContext;
 
-        _loadContextUnsafe = new T3AssemblyLoadContext(_assemblyName, Path);
-        Log.Debug($"Created load context for {Directory}");
-        return _loadContextUnsafe;
+        _loadContext = new T3AssemblyLoadContext(_assemblyName, Directory);
+        _loadContext.UnloadTriggered += OnUnloadTriggered;
+        return _loadContext;
+    }
+
+    private void OnUnloadTriggered(object? sender, EventArgs e)
+    {
+        _loadContext!.UnloadTriggered -= OnUnloadTriggered;
+        _loadContext = null;
+        _operatorTypeInfo.Clear();
+        lock (_assemblyLock)
+        {
+            _types?.Clear(); // explicitly dereference all our types
+            _types = null; // set collection to null to indicate that we need to reload the types todo: do better than this null check
+            _namespaces.Clear();
+        }
+    }
+
+    private Assembly? GetAssembly()
+    {
+        lock (_assemblyLock)
+        {
+            return GetLoadContext().Root?.Assembly;
+        }
     }
 
     /// <summary>
@@ -88,22 +93,29 @@ public sealed class AssemblyInformation
     {
         lock (_assemblyLock)
         {
-            Type[] types;
             var assembly = GetAssembly();
+            
+            if (assembly == null)
+            {
+                Log.Error($"Failed to get assembly for {Name}");
+                _types = null;
+                ShouldShareResources = false;
+                return false;
+            }
+            
             try
             {
-                types = assembly.GetTypes();
+                var types = assembly.GetTypes();
+                LoadTypes(types, assembly, out ShouldShareResources, out _types);
+                return true;
             }
             catch (Exception e)
             {
                 Log.Warning($"Failed to load types from assembly {assembly.FullName}\n{e.Message}\n{e.StackTrace}");
-                _types = new Dictionary<string, Type>();
+                _types = _empty; // this non-null value indicates that we have tried to load the types and none were found
                 ShouldShareResources = false;
                 return false;
             }
-
-            LoadTypes(types, assembly, out ShouldShareResources, out _types);
-            return true;
         }
     }
 
@@ -138,15 +150,15 @@ public sealed class AssemblyInformation
                 Log.Error($"Null type in assembly {assembly.FullName}");
                 continue;
             }
-            
+
             var nsp = type.Namespace;
-            if(nsp != null)
+            if (nsp != null)
                 _namespaces.Add(nsp);
-            
+
             var name = type.FullName;
             if (name == null)
                 continue;
-            
+
             if (!typesByName.TryAdd(name, type))
             {
                 Log.Warning($"Duplicate type {name} in assembly {assembly.FullName}");
@@ -156,23 +168,24 @@ public sealed class AssemblyInformation
         ConcurrentBag<Type> nonOperatorTypes = new();
 
         typesByName.Values.AsParallel().ForAll(type =>
-                                          {
-                                              var isOperator = type.IsAssignableTo(typeof(Instance));
-                                              if (!isOperator)
-                                                  nonOperatorTypes.Add(type);
-                                              else
-                                              {
-                                                  try
-                                                  {
-                                                      SetUpOperatorType(type);
-                                                  }
-                                                  catch (Exception e)
-                                                  {
-                                                      Log.Error($"Failed to set up operator type {type.FullName}\n{e.Message}");
-                                                  }
-                                              }
-                                          });
+                                               {
+                                                   var isOperator = type.IsAssignableTo(typeof(Instance));
+                                                   if (!isOperator)
+                                                       nonOperatorTypes.Add(type);
+                                                   else
+                                                   {
+                                                       try
+                                                       {
+                                                           SetUpOperatorType(type);
+                                                       }
+                                                       catch (Exception e)
+                                                       {
+                                                           Log.Error($"Failed to set up operator type {type.FullName}\n{e.Message}");
+                                                       }
+                                                   }
+                                               });
 
+        var assemblyLocation = assembly.Location;
         shouldShareResources = nonOperatorTypes
                               .Where(type =>
                                      {
@@ -185,7 +198,7 @@ public sealed class AssemblyInformation
                                          try
                                          {
                                              var obj = Activator.CreateInstanceFrom(
-                                                                                    assemblyFile: Path,
+                                                                                    assemblyFile: assemblyLocation,
                                                                                     typeName: type.FullName!,
                                                                                     ignoreCase: false,
                                                                                     bindingAttr: ConstructorBindingFlags,
@@ -205,7 +218,7 @@ public sealed class AssemblyInformation
 
                                          return false;
                                      }).Any();
-        
+
         typeDict = typesByName;
     }
 
@@ -225,14 +238,14 @@ public sealed class AssemblyInformation
         bool isGeneric = type.IsGenericTypeDefinition;
 
         var bindFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Static;
-        
+
         var allMembers = type.GetMembers(bindFlags);
         var memberNames = new string[allMembers.Length];
 
         List<InputSlotInfo> inputFields = new();
         List<OutputSlotInfo> outputFields = new();
-        
-        for(int i = 0; i < allMembers.Length; i++)
+
+        for (int i = 0; i < allMembers.Length; i++)
         {
             var member = allMembers[i];
             var name = member.Name;
@@ -244,10 +257,10 @@ public sealed class AssemblyInformation
             }
 
             var fieldType = field.FieldType;
-            
-            if(!fieldType.IsAssignableTo(typeof(ISlot)))
+
+            if (!fieldType.IsAssignableTo(typeof(ISlot)))
                 continue;
-            
+
             if (field.IsStatic)
             {
                 Log.Error($"Static slot '{name}' in '{type.FullName}' is not allowed - please remove the static modifier");
@@ -258,7 +271,7 @@ public sealed class AssemblyInformation
             {
                 Log.Warning($"Slot '{name}' in '{type.FullName}' is not read-only - it is recommended to make slots read-only");
             }
-            
+
             var genericArguments = fieldType.GetGenericArguments();
             if (fieldType.IsAssignableTo(typeof(IInputSlot)))
             {
@@ -378,27 +391,7 @@ public sealed class AssemblyInformation
     public void Unload()
     {
         _operatorTypeInfo.Clear();
-        lock (_assemblyLock)
-        {
-            _types?.Clear();
-            _namespaces.Clear();
-            _assemblyUnsafe = null;
-
-            var context = _loadContextUnsafe;
-            if (context == null)
-                return;
-
-            // it's not on me to unload the context if it is not mine
-            if (_loadContextIsOverridden)
-            {
-                // todo - should this alert the "parent" load context that it should be unloaded?
-                _loadContextUnsafe = null;
-                return;
-            }
-
-            context.Unload();
-            _loadContextUnsafe = null;
-        }
+        _loadContext?.BeginUnload();
     }
 
     /// <summary>
@@ -432,70 +425,22 @@ public sealed class AssemblyInformation
             Log.Error($"Failed to get release info for {Name}");
             throw new InvalidOperationException($"Failed to get release info for {Name}");
         }
-        
-        foreach(var dependency in releaseInfo.OperatorPackages)
+
+        // todo: this operator packages thing probably shouldnt be here - just assemblies.
+        // UNLESS types are shared? how do we best manage this?
+        foreach (var dependency in releaseInfo.OperatorPackages)
         {
             if (Matches(dependency, package.ReleaseInfo))
                 return true;
         }
-        
-        foreach(var assemblyDependency in GetAssembly().GetReferencedAssemblies())
+
+        foreach (var assemblyDependency in GetAssembly().GetReferencedAssemblies())
         {
             if (assemblyDependency.Name == package.ReleaseInfo.AssemblyFileName)
                 return true;
         }
 
         return false;
-    }
-
-  
-    /// <summary>
-    /// This method is primarily used by the editor to ensure that editor extensions (e.g. libEditor) are reloaded/resolved based on the operator packages
-    /// they apply to.
-    ///
-    /// In general, this is where we establish dependency relationships - basically If this method finds a package that it depends on,
-    /// it will replace the load context of the dependent package with its own load context.
-    ///
-    /// This will need to be expanded upon or further refined as we grapple with multiple packages depending on the same package.
-    /// </summary>
-    /// <param name="packages"></param>
-    /// <returns></returns>
-    public bool ReplaceResolversOf(IReadOnlyList<PackageWithReleaseInfo> packages)
-    {
-        // todo - should this relationship be inverted? should the load contexts
-        // of the operator assemblies be responsible for loading the editor assemblies? that way 
-        // one operator assembly can load multiple editor assemblies
-        // probably not, editor references etc
-
-        var loadContext = GetLoadContext();
-
-        var matched = false;
-
-        foreach (var package in packages)
-        {
-            if (!DependsOn(package))
-                continue;
-
-            matched = true;
-            var assemblyInformation = package.Package.AssemblyInformation;
-
-            assemblyInformation.ReplaceLoadContextWith(loadContext);
-            loadContext.AddAssemblyPath(package.Package, assemblyInformation.Path);
-        }
-
-        return matched;
-    }
-
-    /// <summary>
-    /// This method replaces our own load context with the given one. This is used in establishing relationships between
-    /// dependent packages.
-    /// </summary>
-    /// <param name="loadContext"></param>
-    private void ReplaceLoadContextWith(T3AssemblyLoadContext loadContext)
-    {
-        Log.Debug($"Replacing load context for {Name} with {loadContext.Name}");
-        _loadContextUnsafe = loadContext;
-        _loadContextIsOverridden = true;
     }
 
     /// <summary>
@@ -505,7 +450,7 @@ public sealed class AssemblyInformation
     {
         if (reference.ResourcesOnly)
             return false;
-        
+
         var identity = reference.Identity;
         var assemblyFileName = releaseInfo.AssemblyFileName;
 
@@ -514,14 +459,32 @@ public sealed class AssemblyInformation
         return identity.SequenceEqual(assemblyFileName);
     }
 
-    private bool _loadContextIsOverridden;
-
     /// <summary>
     /// Creates an instance of the given type using this assembly via (slow) reflection.
     /// </summary>
     public object? CreateInstance(Type constructorInfoInstanceType)
     {
         var assembly = GetAssembly();
+        
+        if (assembly == null)
+        {
+            Log.Error($"Failed to get assembly for {Name}");
+            return null;
+        }
+        
         return assembly.CreateInstance(constructorInfoInstanceType.FullName!);
     }
+
+    public void AddDependencyOn(AssemblyInformation dependency)
+    {
+        if (_packageDependencyAssemblies.Contains(dependency))
+            return;
+        
+        Log.Info($"Adding dependency {dependency.Name} to {Name}");
+
+        _packageDependencyAssemblies.Add(dependency);
+        GetLoadContext().AddDependencyContext(dependency.GetLoadContext());
+    }
+
+    private readonly List<AssemblyInformation> _packageDependencyAssemblies = [];
 }
