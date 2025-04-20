@@ -45,8 +45,16 @@ internal sealed class Raster3dField : Instance<Raster3dField>
     public void GetPostShaderCode(CodeAssembleContext c, int inputIndex)
     {
         var n = ShaderNode;
-        c.AppendCall($"f{c}.rgb = fRaster3d(p{c}.xyz, {n}Offset, {n}Scale, {n}LineWidth, {n}Feather);"); 
+        c.AppendCall($"f{c}.rgb = lerp({n}ColorA.rgb, {n}ColorB.rgb, fRaster3d(p{c}.xyz, {n}Offset, {n}Scale, {n}LineWidth, {n}Feather));"); 
     }
+
+    [GraphParam]
+    [Input(Guid = "D3D51C3C-9DD7-4F9B-849D-59E94ABFF605")]
+    public readonly InputSlot<Vector4> ColorA = new();
+
+    [GraphParam]
+    [Input(Guid = "21092A7F-01B8-47B4-BA37-C0B1DC6AFFC4")]
+    public readonly InputSlot<Vector4> ColorB = new();
     
     [GraphParam]
     [Input(Guid = "3938188b-41ba-4efe-b7e1-9720d2e58cd4")]

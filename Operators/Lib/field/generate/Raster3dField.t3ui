@@ -10,6 +10,16 @@
       }
     },
     {
+      "InputId": "21092a7f-01b8-47b4-ba37-c0b1dc6affc4"/*ColorB*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 75.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
       "InputId": "3938188b-41ba-4efe-b7e1-9720d2e58cd4"/*Offset*/,
       "Position": {
         "X": -200.0,
@@ -29,6 +39,16 @@
         "X": -200.0,
         "Y": 90.0
       }
+    },
+    {
+      "InputId": "d3d51c3c-9dd7-4f9b-849d-59e94abff605"/*ColorA*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [],

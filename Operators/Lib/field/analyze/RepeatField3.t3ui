@@ -1,0 +1,46 @@
+{
+  "Id": "8d8345b5-56b6-4220-8845-510bc59db871"/*RepeatField3*/,
+  "Description": "Repeats a field along 3 axis",
+  "InputUis": [
+    {
+      "InputId": "2824c588-fb0f-4a70-8872-9d06e31109e3"/*Offset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 120.0
+      },
+      "Min": -180.0,
+      "Max": 180.0
+    },
+    {
+      "InputId": "8f9392df-5faf-4293-afb3-9bf82c303261"/*Repetitions*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "d77687f4-ea2a-4fc1-9a4e-173a95f5e56f"/*Axis*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 75.0
+      }
+    },
+    {
+      "InputId": "e264a846-934a-4821-9e85-badf8422a82b"/*InputField*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "54fdc1c9-11bd-4d14-b0c3-b25ace547c23"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

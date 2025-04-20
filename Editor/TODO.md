@@ -19,26 +19,50 @@ Graph:
 - [x] Add output parameters
 - [x] Remove input output params
 - [x] Remove output params
-- [ ] Fix background control in mag graph
 - [x] Fix fence selection for timeline and preset view
-- [ ] Add annotations
 - [x] Fix MultiInput on disconnect re-layout
-- [ ] Add options for hidden secondary outputs
 - [x] Fix overlapping outputs in RevisionPanic
 - [x] Rename children with Return
-- [ ] Fix dragging from parameter window
 - [x] Fix extracting from parameter window
+- [ ] Fix background control in mag graph
+- [ ] Add annotations
+- [x] Add options for hidden secondary outputs
+- [x] Fix dragging from parameter window
 
 - [x] Fix tab search result output type filtering
-- [ ] Improve connecting from additional (hidden) outputs
-- [ ] Fix additional output warning
+- [x] Improve connecting from additional (hidden) outputs
+- [x] Fix additional output warning
 - [ ] Allow dragging connection from horizontal input slot
 - [ ] Allow clicking vertical input slot
 - [ ] Allow dragging connections from vertical output slot
 - [ ] Split Connections
 - [ ] Rewiring of vertical connection lines
+- [ ] Dragging gradient widget handles drags canvas too
+- [ ] Snapping connecting start to output not working of ops who's output is already snapped
+
+
+Timeline
+- [ ] Soundtrack image is incorrectly scaled with playback?
+- [ ] After deleting and restart recompilation of image is triggered, but image in timeline is not updated?
+  Path not found: '/pixtur.still.Gheo/soundtrack/DARKrebooted-v1.0.mp3' (Resolved to '').
+UI-Scaling Issues (at x1.5)
+- Perlin-Noise graph cut off
+- Timeline-Clips too narrow
+- Full-Screen cuts of timeline ruler units
+- MagGraph-Labels too small
+- Panning Canvas offset is scaled
+- Pressing F12 twice does not restore the layout
+- Snapping is too fine
+- in Duplicate Symbol description field is too small
+- 
+Ops:
+- [ ] Rounded Rect should have blend parameter
+- [ ] SetEnvironment should automatically insert textureToCubemap
+- 
 
 General fixes:
+- [ ] Fix camera handling
+- [ ] 
 - [ ] Default gradients are not loaded?
 - [ ] Fix Scaling for Curve select with ALT-Key
 - [ ] Deleting last output will cause crash

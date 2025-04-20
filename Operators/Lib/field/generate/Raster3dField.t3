@@ -6,6 +6,15 @@
       "DefaultValue": 0.002
     },
     {
+      "Id": "21092a7f-01b8-47b4-ba37-c0b1dc6affc4"/*ColorB*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
+        "W": 1.0
+      }
+    },
+    {
       "Id": "3938188b-41ba-4efe-b7e1-9720d2e58cd4"/*Offset*/,
       "DefaultValue": {
         "X": 0.0,
@@ -23,6 +32,15 @@
         "X": 1.0,
         "Y": 1.0,
         "Z": 1.0
+      }
+    },
+    {
+      "Id": "d3d51c3c-9dd7-4f9b-849d-59e94abff605"/*ColorA*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0,
+        "W": 1.0
       }
     }
   ],

@@ -30,18 +30,8 @@ internal sealed class SubDivPattern3d : Instance<SubDivPattern3d>
         c.Globals["Common"] = ShaderGraphIncludes.Common;
         c.Globals["CommonHgSdf"] = ShaderGraphIncludes.CommonHgSdf;
 
-        c.Globals["fRaster3d"] = """
+        c.Globals["ComputeSubdivision"] = """
                                  #include "shared/hash-functions.hlsl"
-
-                                 float fRaster3d(float3 p, float3 center, float3 size, float lineWidth, float feather) 
-                                 {
-                                     float3 q = mod(p / size - center, 1) - 0.5;
-                                     float distanceToEdge = vmax(abs(q));
-                                     float line2 = smoothstep(lineWidth / 2 + feather, lineWidth / 2 - feather, distanceToEdge);
-                                     return line2;
-                                 }
-
-
 
                                  struct SubDivParams
                                  {
