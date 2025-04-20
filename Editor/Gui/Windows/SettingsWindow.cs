@@ -230,6 +230,12 @@ internal sealed class SettingsWindow : Window
                                                                      "Users can use cursor left/right to skip through time\nand space key to pause playback\nof exported executable.",
                                                                      ProjectSettings.Defaults.EnablePlaybackControlWithKeyboard);
 
+                    projectSettingsChanged |= FormInputs.AddCheckBox("Skip Shader Optimization",
+                                                                     ref ProjectSettings.Config.SkipOptimization,
+                                                                     "This make working with shadergraphs easier.",
+                                                                     ProjectSettings.Config.SkipOptimization);
+
+                    
                     if (projectSettingsChanged)
                         ProjectSettings.Save();
 

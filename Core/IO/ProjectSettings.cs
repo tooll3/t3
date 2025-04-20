@@ -16,6 +16,8 @@ public class ProjectSettings : Settings<ProjectSettings.ConfigData>
         public bool TimeClipSuspending = true;
         public float AudioResyncThreshold = 0.04f;
         public bool EnablePlaybackControlWithKeyboard = true;
+
+        public bool SkipOptimization;
             
         public string LimitMidiDeviceCapture = null; 
         public bool EnableMidiSnapshotIndication = false;

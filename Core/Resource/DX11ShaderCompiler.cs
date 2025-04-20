@@ -7,6 +7,7 @@ using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
+using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Model;
 using ComputeShader = SharpDX.Direct3D11.ComputeShader;
@@ -36,7 +37,17 @@ public sealed partial class DX11ShaderCompiler : ShaderCompiler
             flags |= ShaderFlags.Debug;
             #endif
 
-            compilationResult = ShaderBytecode.Compile(args.SourceCode, args.EntryPoint, profile, flags, EffectFlags.None, null, new IncludeHandler(args.Owner));
+            if (ProjectSettings.Config.SkipOptimization)
+            {
+                flags |= ShaderFlags.SkipOptimization;
+            }
+            compilationResult = ShaderBytecode.Compile(args.SourceCode, 
+                                                       args.EntryPoint, 
+                                                       profile, 
+                                                       flags, 
+                                                       EffectFlags.None, 
+                                                       null, 
+                                                       new IncludeHandler(args.Owner));
 
             success = compilationResult.ResultCode == Result.Ok;
             resultMessage = compilationResult.Message;
