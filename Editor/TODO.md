@@ -38,14 +38,15 @@
 
 General fixes:
 - [x] Fix camera handling
-- [ ] Default gradients are not loaded?
-- [ ] Fix Scaling for Curve select with ALT-Key
+- [x] Default gradients are not loaded?
+- [ ] Fix Scaling for multiple selected keyframes with ALT-Key
 - [ ] Deleting last output will cause crash
 - [ ] Shake doesn't work with 120hz
 
 General UX-ideas:
 - [ ] StatusProvideIcon should support non-warning indicator
 - [ ] Separate Value Clamping for lower and upper values 
+- [ ] Drag and drop of files (copy them to resources folder and create LoadXYZ instance...)
 
 Feats:
 - [x] Copy and Paste Values

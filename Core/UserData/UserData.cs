@@ -1,6 +1,10 @@
+#nullable enable
+
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using Newtonsoft.Json;
 using T3.Core.Compilation;
 using T3.Core.Logging;
 
@@ -20,7 +24,28 @@ public static class UserData
         Directory.CreateDirectory(SettingsFolder);
     }
 
-    public static bool TryLoadOrWriteToUser(string relativeFilePath, out string fileText)
+    public static bool TryLoadOrInitializeUserData<T>(string relativeFilePath, [NotNullWhen(true)] out T? result)
+    {
+        result = default;
+        if (!TryLoadingOrWriteDefaults(relativeFilePath, out var jsonString)) 
+            return false;
+        
+        try
+        {
+            result = JsonConvert.DeserializeObject<T>(jsonString);
+            return result != null;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+
+
+    /// <summary>
+    /// Returns the content of the settings file if it exists. Otherwise, initialize the file with content of default.
+    /// </summary>
+    public static bool TryLoadingOrWriteDefaults(string relativeFilePath, out string fileText)
     {
         var filePath = GetFilePath(relativeFilePath, UserDataLocation.User);
         if (File.Exists(filePath))
@@ -65,8 +90,8 @@ public static class UserData
         fileText = string.Empty;
         return false;
     }
-    
-    public static string GetFilePath(string relativeFilePath, UserDataLocation location)
+
+    private static string GetFilePath(string relativeFilePath, UserDataLocation location)
     {
         var filePath = Path.Combine(location == UserDataLocation.User 
                                         ? SettingsFolder 
@@ -91,7 +116,7 @@ public static class UserData
         }
     }
 
-    public static bool CanLoad(string relativeFileName, UserDataLocation location, out string filePath)
+    private static bool CanLoad(string relativeFileName, UserDataLocation location, out string filePath)
     {
         filePath = GetFilePath(relativeFileName, location);
         return File.Exists(filePath);
