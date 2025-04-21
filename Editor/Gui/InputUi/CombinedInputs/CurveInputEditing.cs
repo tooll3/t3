@@ -1,3 +1,4 @@
+#nullable enable
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
@@ -62,7 +63,7 @@ public static class CurveInputEditing
         }
             
         curveInteraction.EditState = InputEditStateFlags.Nothing;
-        curveInteraction.Draw(compositionOp, SelectionFence);
+        curveInteraction.Draw(compositionOp, _selectionFence);
 
         var modified = curveInteraction.EditState != InputEditStateFlags.Nothing;
 
@@ -80,16 +81,16 @@ public static class CurveInputEditing
     /// <summary>
     /// Implement interaction of manipulating the individual keyframes
     /// </summary>
-    public class CurveInteraction : CurveEditing
+    internal sealed class CurveInteraction : CurveEditing
     {
-        public List<Curve> Curves = new();
+        internal List<Curve> Curves = new();
         private readonly SingleCurveEditCanvas _singleCurveCanvas = new() { ImGuiTitle = "canvas" + _interactionForCurve.Count };
 
         //public ScalableCanvas Canvas => _canvas;
 
-        public InputEditStateFlags EditState { get; set; } = InputEditStateFlags.Nothing;
+        internal InputEditStateFlags EditState { get; set; } = InputEditStateFlags.Nothing;
 
-        public void Draw(Instance compositionOp, SelectionFence selectionFence)
+        internal void Draw(Instance compositionOp, SelectionFence selectionFence)
         {
             _singleCurveCanvas.Draw(Curves[0], this, compositionOp, selectionFence);
         }
@@ -215,7 +216,7 @@ public static class CurveInputEditing
         }
 
         // FIXME: This needs to be called
-        public void CompleteDragCommand()
+        private void CompleteDragCommand()
         {
             if (_changeKeyframesCommand == null)
                 return;
@@ -226,7 +227,7 @@ public static class CurveInputEditing
             EditState = InputEditStateFlags.Finished;
         }
 
-        private static ChangeKeyframesCommand _changeKeyframesCommand;
+        private static ChangeKeyframesCommand? _changeKeyframesCommand;
         #endregion
 
         #region handle selection ----------------------------------------------------------------
@@ -256,7 +257,7 @@ public static class CurveInputEditing
         /// <summary>
         /// Implement canvas for showing and manipulating curve
         /// </summary>
-        internal class SingleCurveEditCanvas : CurveEditCanvas
+        internal sealed class SingleCurveEditCanvas : CurveEditCanvas
         {
             public SingleCurveEditCanvas()
             {
@@ -286,6 +287,7 @@ public static class CurveInputEditing
 
                 var graphCanvas = ProjectView.Focused?.GraphCanvas;
                 DrawCurveCanvas(DrawCanvasContent, selectionFence, height, _interactionFlags);
+                return;
 
                 void DrawCanvasContent(InteractionState interactionState)
                 {
@@ -336,11 +338,11 @@ public static class CurveInputEditing
 
     private static readonly Dictionary<uint, CurveInteraction> _interactionForCurve = new(); 
     private static readonly Dictionary<InputValue, Curve> _clonedDefaultCurves = new();
-    private static readonly SelectionFence SelectionFence = new();
+    private static readonly SelectionFence _selectionFence = new();
 
     private static T3Ui.EditingFlags _interactionFlags;
 
-    public enum MoveDirections
+    internal enum MoveDirections
     {
         Undecided = 0,
         Vertical,
@@ -348,6 +350,6 @@ public static class CurveInputEditing
         Both
     }
 
-    public static MoveDirections MoveDirection = MoveDirections.Undecided;
-    public const float MoveDirectionThreshold = 2;
+    internal static MoveDirections MoveDirection = MoveDirections.Undecided;
+    internal const float MoveDirectionThreshold = 2;
 }

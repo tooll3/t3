@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
@@ -48,7 +49,7 @@ public abstract class CurveEditing
 
     protected void DrawContextMenu(Instance composition)
     {
-        CustomComponents.DrawContextMenuForScrollCanvas(() => ContextMenuContentAction(), ref _contextMenuIsOpen);
+        CustomComponents.DrawContextMenuForScrollCanvas(ContextMenuContentAction, ref _contextMenuIsOpen);
         return;
 
         void ContextMenuContentAction()
@@ -332,8 +333,7 @@ public abstract class CurveEditing
         }
     }
 
-
-    public static ImRect GetBoundsOnCanvas(IEnumerable<VDefinition> keyframes)
+    protected static ImRect GetBoundsOnCanvas(IEnumerable<VDefinition> keyframes)
     {
         var bounds = new ImRect(-Vector2.One, Vector2.One);
         var isFirst = true;

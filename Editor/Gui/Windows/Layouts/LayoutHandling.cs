@@ -163,7 +163,7 @@ internal static class LayoutHandling
         var isFocusMode = index == 11;
 
         var relativePath = Path.Combine(LayoutSubfolder, GetLayoutFilename(index));
-        if (!UserData.TryLoadOrWriteToUser(relativePath, out var jsonBlob))
+        if (!UserData.TryLoadingOrWriteDefaults(relativePath, out var jsonBlob))
             return;
 
         var serializer = JsonSerializer.Create();
