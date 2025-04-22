@@ -1,4 +1,4 @@
-﻿using T3.Core.Animation;
+using T3.Core.Animation;
 
 namespace T3.Editor.Gui.Interaction.Timing;
 
@@ -10,6 +10,8 @@ internal sealed class BeatTimingPlayback : Playback
 {
     public override void Update(bool idleMotionEnabled = false)
     {
+        FrameCount++;
+
         var currentRuntimeInSecs = IsRenderingToFile ?   TimeInSecs : RunTimeInSecs;
 
         LastFrameDuration = (float)(currentRuntimeInSecs - _lastFrameStart);
