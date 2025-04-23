@@ -1,3 +1,5 @@
+using T3.Core.DataTypes.ShaderGraph;
+
 namespace Lib.field.generate;
 
 [Guid("752e4358-05e0-4651-a147-f141138f5244")]

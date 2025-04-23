@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using T3.Core.Animation;
 using T3.Core.DataTypes.ShaderGraph;
 using T3.Core.Operator;
@@ -185,7 +184,6 @@ public class ShaderGraphNode
     #endregion
 
     private int _lastParamUpdateFrame = -1;
-    //private int _lastCodeUpdateFrame = -1;
 
     public void CollectEmbeddedShaderCode(CodeAssembleContext cac)
     {
@@ -258,16 +256,7 @@ public class ShaderGraphNode
             nodeOp.GetPostShaderCode(cac, 0);
         }
     }
-
     
-
-    // Keep the input slot so we can detect and handle structural changes to the graph
-    private readonly MultiInputSlot<ShaderGraphNode>? _connectedNodeMultiInput;
-    private readonly InputSlot<ShaderGraphNode>?[] _connectedNodeInputs;
-
-    private readonly List<Slot<ShaderGraphNode>?> _connectedNodeOps = [];
-    public readonly List<ShaderGraphNode?> InputNodes = [];
-    private int _lastParamGraphId;
 
     #region parameters ----------------------
     private List<ShaderParamHandling.ShaderParamInput> _shaderParameterInputs = [];
@@ -318,6 +307,14 @@ public class ShaderGraphNode
     //public IReadOnlyCollection<ShaderParamHandling.ShaderCodeParameter> AllShaderCodeParams => _allShaderCodeParams;
     #endregion
 
+    // Keep the input slot so we can detect and handle structural changes to the graph
+    private readonly MultiInputSlot<ShaderGraphNode>? _connectedNodeMultiInput;
+    private readonly InputSlot<ShaderGraphNode>?[] _connectedNodeInputs;
+
+    private readonly List<Slot<ShaderGraphNode>?> _connectedNodeOps = [];
+    public readonly List<ShaderGraphNode?> InputNodes = [];
+    private int _lastParamGraphId;
+    
     private readonly Instance _instance;
 
     public sealed class Parameter(string shaderTypeName, string name, object value)
@@ -353,123 +350,3 @@ public class ShaderGraphNode
  * Marks a field as a parameter for a shader graph node so it can be automatically checked for changes
  */
 public sealed class GraphParamAttribute : Attribute;
-
-/**
- * Needs to implemented by Symbols so provide access to its ShaderNode and code generation methods.
- */
-public interface IGraphNodeOp
-{
-    ShaderGraphNode ShaderNode { get; }
-    
-    /**
-     * Called only once for registering globals and definitions constant over the iteration of connected fields.
-     */
-    void AddDefinitions(CodeAssembleContext c)
-    {
-    }
-
-    /**
-     * Some nodes like SdfMaterial require custom handling and evaluation of connected fields.
-     * If this method is overridden GetPre/Post ShaderCode calls are omitted.
-     */
-    bool TryBuildCustomCode(CodeAssembleContext c)
-    {
-        return false;
-    }
-    
-    /**
-     * Called before iterating connected fields. Should be used for manipulating the context
-     * before evaluation (e.g. TransformSDF)
-     */
-    void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
-    {
-    }
-
-    /**
-     * Called after iterating a connected field. Should be used for manipulating the result field (e.g. offset f) 
-     */
-    void GetPostShaderCode(CodeAssembleContext cac, int inputIndex)
-    {
-    }
-}
-
-/**
- * Is passed along while collecting all connected nodes in a shader graph.
- */
-public sealed class CodeAssembleContext
-{
-    /**
-     * A dictionary containing the pure methods that can be reuses by
-     * one or more graph nodes.
-     */
-    public readonly Dictionary<string, string> Globals = new();
-
-    /**
-     * A string builder for collecting of instances specific methods containing
-     * references to unique node parameters or resources.
-     */
-    public readonly StringBuilder Definitions = new();
-
-    /**
-     * A string builder for collecting the actual distance function. This is the
-     * primary target CollectEmbeddedShaderCode is writing to.
-     * Scopes are separated by introducing new local variables for positions and field results.
-     */
-    public readonly StringBuilder Calls = new();
-
-    public void PushContext(int subContextIndex, string fieldSuffix = "")
-    {
-        //private static char IntToChar(int i) => (char)('a' + i);
-        //var fieldSuffix = ;
-        var contextId = ContextIdStack[^1];
-        var subContextId = subContextIndex + fieldSuffix;
-
-        ContextIdStack.Add(subContextId);
-
-        AppendCall($"float4 p{subContextId} = p{contextId};");
-        AppendCall($"float4 f{subContextId} = f{contextId};");
-    }
-
-    public void PopContext()
-    {
-        ContextIdStack.RemoveAt(ContextIdStack.Count - 1);
-    }
-
-    public void AppendCall(string code)
-    {
-        Calls.Append(new string('\t', (IndentCount + 1)));
-        Calls.AppendLine(code);
-    }
-
-    public void Indent()
-    {
-        IndentCount++;
-    }
-
-    public void Unindent()
-    {
-        IndentCount--;
-    }
-
-
-//public Stack<ShaderGraphNode> NodeStack = [];
-    public readonly List<string> ContextIdStack = [];
-    internal int IndentCount;
-    internal int SubContextCount;
-
-    public void Reset()
-    {
-        Globals.Clear();
-        Definitions.Clear();
-        Calls.Clear();
-        ContextIdStack.Clear();
-
-        IndentCount = 0;
-        SubContextCount = 0;
-    }
-
-    public override string ToString()
-    {
-        return ContextIdStack.Count == 0 ? "" : ContextIdStack[^1];
-    }
-}

@@ -3,23 +3,7 @@
   "Description": "Repeats a field along 3 axis",
   "InputUis": [
     {
-      "InputId": "2824c588-fb0f-4a70-8872-9d06e31109e3"/*Offset*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 120.0
-      },
-      "Min": -180.0,
-      "Max": 180.0
-    },
-    {
-      "InputId": "8f9392df-5faf-4293-afb3-9bf82c303261"/*Repetitions*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      }
-    },
-    {
-      "InputId": "d77687f4-ea2a-4fc1-9a4e-173a95f5e56f"/*Axis*/,
+      "InputId": "dd664f46-055e-4bf2-a9d4-317a4ccd2bcf"/*Size*/,
       "Position": {
         "X": -200.0,
         "Y": 75.0

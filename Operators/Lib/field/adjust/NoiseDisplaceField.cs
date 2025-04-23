@@ -1,3 +1,5 @@
+using T3.Core.DataTypes.ShaderGraph;
+
 namespace Lib.field.adjust;
 
 [Guid("54f28d0a-d367-4b59-8480-5b762b8f2a9c")]
