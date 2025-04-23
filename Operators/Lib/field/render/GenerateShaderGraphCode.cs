@@ -262,9 +262,6 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
     [Input(Guid = "FFC1C70E-B717-4337-916D-C3A13343E9CC")]
     public readonly InputSlot<ShaderGraphNode> Field = new();
     
-    // [Input(Guid = "F1E138AC-F226-43AD-BCAF-E48350FFE4B4")]
-    // public readonly InputSlot<Color2dField> ColorField = new();
-    
     [Input(Guid = "BCF6DE27-1FFD-422C-9F5B-910D89CAD1A4")]
     public readonly InputSlot<string> TemplateCode = new();
 

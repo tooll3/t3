@@ -46,5 +46,5 @@ public class Render2dField : Instance<Render2dField>
     public readonly InputSlot<float> DistToColor = new();
 
         [Input(Guid = "7e97e88d-4b66-4232-9c65-357948554fdd")]
-        public readonly InputSlot<T3.Core.DataTypes.Color2dField> ColorField = new InputSlot<T3.Core.DataTypes.Color2dField>();
+        public readonly InputSlot<T3.Core.DataTypes.ShaderGraphNode> ColorField = new InputSlot<T3.Core.DataTypes.ShaderGraphNode>();
 }

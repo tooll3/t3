@@ -35,15 +35,7 @@ namespace T3.Core.DataTypes;
  *          _graphNode.CollectAllNodeParams()
  *      to recursively collect all required code and parameter fragments.
  */
-public sealed class Color2dField : ShaderGraphNode
-{
-    public Color2dField(Instance instance, 
-                        MultiInputSlot<ShaderGraphNode>? nodeMultiInputInput = null, 
-                        InputSlot<ShaderGraphNode>? inputSlot = null)
-        : base(instance, nodeMultiInputInput, inputSlot)
-    {
-    }
-}
+
 
 public class ShaderGraphNode
 {
