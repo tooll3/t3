@@ -18,6 +18,7 @@ struct PS_INPUT
 float4 psMain(PS_INPUT input) : SV_Target
 {
     float4 color = SourceTexture.Sample(LinearSampler, input.uv);
+    color = clamp(color,0, float4(1000,1000,1000,1));
 
     // Calculate brightness (luminance)
     float brightness = dot(color.rgb, ColorWeights);
@@ -26,6 +27,10 @@ float4 psMain(PS_INPUT input) : SV_Target
     // This creates a smoother falloff than a hard step function.
     // Adjust the subtraction or use smoothstep for different falloffs.
     float contribution = saturate(brightness - Threshold);
+    if(isnan(contribution)) {
+        contribution=0;
+        color = 0;
+    }
 
     // Output the original color multiplied by its contribution factor
     // Pixels below threshold will have contribution=0 -> output black

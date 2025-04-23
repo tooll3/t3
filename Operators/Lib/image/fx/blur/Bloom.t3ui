@@ -18,7 +18,8 @@
       },
       "Description": "Limit the glow to brighter areas.",
       "Min": 0.0,
-      "Max": 2.0,
+      "Max": 5.0,
+      "Scale": 0.1,
       "Clamp": true
     },
     {
