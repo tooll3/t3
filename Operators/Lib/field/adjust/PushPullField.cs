@@ -1,3 +1,4 @@
+#nullable enable
 using T3.Core.DataTypes.ShaderGraph;
 using T3.Core.Utils;
 
@@ -27,28 +28,25 @@ internal sealed class PushPullField : Instance<PushPullField>
 
     bool IGraphNodeOp.TryBuildCustomCode(CodeAssembleContext c)
     {
-        var subContextIndex = c.ContextIdStack.Count;
-
-        var inputNodeIndex = 0;
+        var fields = ShaderNode?.InputNodes;
+        if (fields == null || fields.Count == 0)
+            return true;
         
-        // Return base distance (required for blending)
-        if (SdfField.HasInputConnections)
-        {
-            ShaderNode.InputNodes[inputNodeIndex]?.CollectEmbeddedShaderCode(c);
-            inputNodeIndex++;
-        }
-        //c.AppendCall($"f{c}.w += {ShaderNode}Offset;");
+        var inputField = fields.Count > 0 ? fields[0] : null;
+        var amountField = fields.Count > 1 ? fields[1] : null;
         
-
+        inputField?.CollectEmbeddedShaderCode(c);
+        
         c.AppendCall("{");
         c.Indent();
 
-        if (AmountField.HasInputConnections)
+        if (amountField !=null)
         {
-            c.PushContext(subContextIndex, "amount");
+            c.PushContext(c.ContextIdStack.Count, "amount");
             var subContextId = c.ToString();
-            ShaderNode.InputNodes[inputNodeIndex]?.CollectEmbeddedShaderCode(c);
+            amountField.CollectEmbeddedShaderCode(c);
             c.PopContext();
+            
             c.AppendCall($"f{c}.w += f{subContextId}.r *{ShaderNode}Amount;");
             c.AppendCall($"f{c}.w /= 1 + {ShaderNode}StepScale;");
         }
