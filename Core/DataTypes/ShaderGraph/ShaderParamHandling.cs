@@ -8,6 +8,10 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Core.DataTypes.ShaderGraph;
 
+/// <summary>
+/// Handles the collection and graph parameters and the insertion of padding params to ensure the alignment
+/// ConstantBuffers to 16byte borders.
+/// </summary>
 public static class ShaderParamHandling
 {
     internal static List<ShaderParamInput> CollectInputSlots(Instance instance, string nodePrefix)
@@ -193,7 +197,7 @@ public static class ShaderParamHandling
         IInputSlot Slot,
         string Name,
         string ShaderTypeName,
-        GetFloatDelegate GetFloat,
+        GetFloatDelegate GetAsFloatValues,
         UpdateDelegate Update);
 
     public sealed record ShaderCodeParameter(string ShaderTypeName, string Name);

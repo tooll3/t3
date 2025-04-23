@@ -1,4 +1,5 @@
 using Lib.render._dx11.api;
+using ManagedBass;
 using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes.ShaderGraph;
@@ -37,11 +38,14 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
 
     [Output(Guid = "1a9b5e15-e9a7-4ed4-aa1a-2072398921b4")]
     public readonly Slot<Buffer> FloatParams = new();
-    
+
+    [Output(Guid = "D15A6120-4DDD-4E91-8DFB-862745EF6EFD")]
+    public readonly Slot<ShaderResourceView> Resources = new();
     
     public GenerateShaderGraphCode()
     {
         ShaderCode.UpdateAction += Update;
+        _graphId = GetHashCode();
     }
 
     
@@ -51,6 +55,7 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
     private void Update(EvaluationContext context)
     {
         _lastErrorMessage = null;
+        
         var hasTemplateChanged = TemplateCode.DirtyFlag.IsDirty;
         // if(hasTemplateChanged)
         //     Log.Debug("templateChanged", this);
@@ -103,6 +108,10 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
 
         //Log.Debug("Update parameter buffer...", this);
         AssembleParams();
+
+        AssembleResources();
+        Resources.Value = _resourceViews.Count >0 ? _resourceViews[^1] : null;
+        
         var floatParams = AllFloatValues;
         if (floatParams.Count > 0)
         {
@@ -148,13 +157,30 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
         _allFloatParameterValues.Clear();
         _allShaderCodeParams.Clear();
 
-        _graphNode.CollectAllNodeParams(_allFloatParameterValues, _allShaderCodeParams, _updateCycleCount, this.GetHashCode());
+        _graphNode.CollectAllNodeParams(_allFloatParameterValues, _allShaderCodeParams, _updateCycleCount, _graphId);
     }
+
+    // Should change if resources structure changed
+    private void AssembleResources()
+    {
+        _resourceReferences.Clear();
+        _graphNode.CollectResources(_resourceReferences, _updateCycleCount,_graphId);
+        _resourceViews.Clear();
+        foreach (var r in _resourceReferences)
+        {
+            _resourceViews.Add(r.Srv);
+        }
+        Log.Debug($"Got {_resourceReferences.Count} resources");
+    }
+    
+    private readonly List<ShaderGraphNode.SrvBufferReference> _resourceReferences = [];
+    private readonly List<ShaderResourceView> _resourceViews = [];
     
     private readonly List<ShaderParamHandling.ShaderCodeParameter> _allShaderCodeParams = [];
     private IReadOnlyList<float> AllFloatValues => _allFloatParameterValues;
     private readonly List<float> _allFloatParameterValues = [];
     private int _lastStructureHash = 0;
+    private readonly int _graphId;
 
     //private readonly Dictionary<string, string> _globalFunctionDefinitions = new();
     

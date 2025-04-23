@@ -3,12 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using SharpDX.Direct3D11;
 using T3.Core.Animation;
 using T3.Core.DataTypes.ShaderGraph;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 using Log = T3.Core.Logging.Log;
+// ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+// ReSharper disable InvalidXmlDocComment
 
 namespace T3.Core.DataTypes;
 
@@ -45,19 +48,18 @@ public class ShaderGraphNode
                            params InputSlot<ShaderGraphNode>?[] inputsSlots)
     {
         _instance = instance;
+        _nodeOp = instance as IGraphNodeOp;
+        if (_nodeOp == null)
+        {
+            Log.Warning("ShaderOperator does not implement IGraphNodeOp interface", this);
+        }
+        
         _connectedNodeMultiInput = nodeMultiInputInput;
         _connectedNodeInputs = inputsSlots;
     }
 
     private int _lastUpdateFrame;
-
-    /**
-     * A counter that will be updated after op was updated by a connected output field.
-     * This can later be used to optimize embedding shader code.
-     * Because of dirty flag checking, Update() is only called once by update cycle then
-     * resets the counter.
-     */
-    public int OutputCounts;
+    
 
     public void Update(EvaluationContext context)
     {
@@ -67,7 +69,6 @@ public class ShaderGraphNode
             return;
         }
 
-        OutputCounts = 0;
 
         _lastUpdateFrame = Playback.FrameCount;
 
@@ -147,7 +148,6 @@ public class ShaderGraphNode
             if (updatedNode == null) 
                 continue;
             
-            updatedNode.OutputCounts++;
             StructureHash = StructureHash * 31 + updatedNode.StructureHash;
             CollectedChanges |= updatedNode.CollectedChanges;
             InputNodes.Add(updatedNode);
@@ -253,9 +253,14 @@ public class ShaderGraphNode
     #region parameters ----------------------
     private List<ShaderParamHandling.ShaderParamInput> _shaderParameterInputs = [];
 
+    /**
+     * Called by <see cref="GenerateShaderGraphCode"/> to collect the parameters and their current values.
+     */
     public void CollectAllNodeParams(List<float> floatValues, List<ShaderParamHandling.ShaderCodeParameter> codeParams, int frameNumber, int graphId)
     {
         // Prevent double evaluation (note that _lastUpdateFrame will be updated after getting the code)
+        // We need to check frame and the graphId, because different subsets of the graph might be used
+        // by different CodeGenerator (e.g. one of RayMarching and one of particle forces).
         if (_lastParamUpdateFrame == frameNumber && _lastParamGraphId == graphId)
             return;
 
@@ -269,7 +274,7 @@ public class ShaderGraphNode
 
         foreach (var input in _shaderParameterInputs)
         {
-            input.GetFloat(floatValues, codeParams);
+            input.GetAsFloatValues(floatValues, codeParams);
         }
 
         // Update non input parameters
@@ -295,19 +300,49 @@ public class ShaderGraphNode
 
     // ReSharper disable once CollectionNeverUpdated.Global
     public List<Parameter> AdditionalParameters = [];
-
-    //public IReadOnlyCollection<ShaderParamHandling.ShaderCodeParameter> AllShaderCodeParams => _allShaderCodeParams;
+    
     #endregion
+    
+    
+    /**
+     * Called by <see cref="GenerateShaderGraphCode"/> to collect the parameters and their current values.
+     */
+    public void CollectResources(List<SrvBufferReference> buffers, int frameNumber, int graphId)
+    {
+        if (_nodeOp == null)
+            return;
+        
+        // Prevent double evaluation (note that _lastUpdateFrame will be updated after getting the code)
+        // We need to check frame and the graphId, because different subsets of the graph might be used
+        // by different CodeGenerator (e.g. one of RayMarching and one of particle forces).
+        if (_lastBufferUpdateFrame == frameNumber && _lastBufferUpdateGraphId == graphId)
+            return;
+
+        _lastBufferUpdateFrame = frameNumber;
+        _lastBufferUpdateGraphId = graphId;
+
+        foreach (var inputNode in InputNodes)
+        {
+            inputNode?.CollectResources(buffers, frameNumber, graphId);
+        }
+
+        _nodeOp.AppendShaderResources(ref buffers);
+    }    
+    
+    public record SrvBufferReference(string Name, ShaderResourceView Srv);
 
     // Keep the input slot so we can detect and handle structural changes to the graph
     private readonly MultiInputSlot<ShaderGraphNode>? _connectedNodeMultiInput;
     private readonly InputSlot<ShaderGraphNode>?[] _connectedNodeInputs;
-
     private readonly List<Slot<ShaderGraphNode>?> _connectedNodeOps = [];
     public readonly List<ShaderGraphNode?> InputNodes = [];
+    
     private int _lastParamGraphId;
+    private int _lastBufferUpdateGraphId;
+    private int _lastBufferUpdateFrame;
     
     private readonly Instance _instance;
+    private readonly IGraphNodeOp? _nodeOp;
 
     public sealed class Parameter(string shaderTypeName, string name, object value)
     {

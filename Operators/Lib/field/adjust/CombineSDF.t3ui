@@ -1,7 +1,7 @@
 {
   "Id": "82270977-07b5-4d86-8544-5aebc638d46c"/*CombineSDF*/,
   "Description": "",
-  "SymbolTags": "1024",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "4648e514-b48c-4a98-a728-3ebf9bcfa0b7"/*CombineMethod*/,

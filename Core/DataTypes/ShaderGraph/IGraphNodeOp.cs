@@ -1,4 +1,6 @@
 ﻿#nullable enable
+using System.Collections.Generic;
+
 namespace T3.Core.DataTypes.ShaderGraph;
 
 /**
@@ -38,4 +40,11 @@ public interface IGraphNodeOp
     void GetPostShaderCode(CodeAssembleContext cac, int inputIndex)
     {
     }
+    
+    /**
+     * Get resources
+     */
+    void AppendShaderResources(ref List<ShaderGraphNode.SrvBufferReference> list)
+    {
+    }    
 }
