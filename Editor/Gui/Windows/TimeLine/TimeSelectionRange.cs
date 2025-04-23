@@ -94,6 +94,7 @@ internal sealed class TimeSelectionRange : IValueSnapAttractor
     {
         if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
         {
+            FrameStats.Current.OpenedPopupCapturedMouse = true;
             var u = _timeLineCanvas.InverseTransformX(ImGui.GetIO().MousePos.X);
 
             if (!_isDragging)

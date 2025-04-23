@@ -19,7 +19,7 @@ public static class ValueUi
         if (!(instance is Value valueInstance))
             return SymbolUi.Child.CustomUiResult.None;
 
-        var dragWidth = WidgetElements.DrawDragIndicator(area, drawList, canvasScale);
+        var dragWidth = WidgetElements.DrawOperatorDragHandle(area, drawList, canvasScale);
         area.Min.X += dragWidth;
 
         drawList.AddRectFilled(area.Min, area.Max, UiColors.BackgroundFull.Fade(0.1f));

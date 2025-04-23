@@ -10,12 +10,12 @@
 - [ ] Add annotations
 - [ ] Allow dragging connection from horizontal input slot
 - [ ] Allow clicking vertical input slot
-- [ ] Allow dragging connections from vertical output slot
+- [x] Allow dragging connections from vertical output slot
 - [ ] Split Connections
 - [ ] Rewiring of vertical connection lines
-- [ ] Dragging gradient widget handles drags canvas too
+- [x] Dragging gradient widget handles drags canvas too
 - [ ] Snapping connecting start to output not working of ops who's output is already snapped
-
+- [ ] Panning/Zooming in CurveEdit-Popup opened from SampleCurveOp is broken 
 
 ## Timeline
 - [ ] Soundtrack image is incorrectly scaled with playback?
@@ -39,7 +39,7 @@
 General fixes:
 - [x] Fix camera handling
 - [x] Default gradients are not loaded?
-- [ ] Fix Scaling for multiple selected keyframes with ALT-Key
+- [x] Fix Scaling for multiple selected keyframes with ALT-Key
 - [ ] Deleting last output will cause crash
 - [ ] Shake doesn't work with 120hz
 

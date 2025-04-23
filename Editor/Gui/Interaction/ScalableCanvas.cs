@@ -518,9 +518,11 @@ internal abstract class ScalableCanvas : IScalableCanvas
             
         if ((flags & T3Ui.EditingFlags.PreventMouseInteractions) != 0)
             return;
+
+        var isAnotherItemActive = FrameStats.Last.OpenedPopupCapturedMouse;//ImGui.IsAnyItemActive();
         
         if (
-            !isAnotherWindowPanning
+            !(isAnotherWindowPanning || isAnotherItemActive)
             && (isInteractable || isPanning)
             && (flags&T3Ui.EditingFlags.PreventPanningWithMouse) == 0
             && ((

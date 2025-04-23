@@ -161,6 +161,7 @@ internal sealed partial class MagGraphCanvas
         var isItemHovered = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup
                                                 | ImGuiHoveredFlags.AllowWhenBlockedByActiveItem);
 
+        
         if (_context.StateMachine.CurrentState == GraphStates.Default
             && isItemHovered
             && (customUiResult & SymbolUi.Child.CustomUiResult.IsActive) == 0)
@@ -324,6 +325,8 @@ internal sealed partial class MagGraphCanvas
                 DrawMissingInputIndicator(drawList, pMin, inputLine);
             }
         }
+        
+
 
         var borderColor = ColorVariations.OperatorOutline.Apply(typeColor); 
 
@@ -510,6 +513,12 @@ internal sealed partial class MagGraphCanvas
             }
         }
 
+        // Hide additional UI elements when custom ui-op is hovered with control
+        if (isItemHovered && ImGui.GetIO().KeyCtrl && customUiResult != SymbolUi.Child.CustomUiResult.None || context.ItemWithActiveCustomUi !=null)
+        {
+            return;
+        }
+        
         if (CanvasScale < 0.5f)
             return;
 
@@ -926,17 +935,16 @@ internal sealed partial class MagGraphCanvas
     {
         var type = instance.Type;
 
-        if (CustomChildUiRegistry.TryGetValue(type, out var drawFunction))
-        {
-            // Unfortunately we have to test if symbolChild of instance is still valid.
-            // This might not be the case for operators like undo/redo.
-            if (instance.Parent != null && instance.Parent.Children.TryGetValue(instance.SymbolChildId, out _))
-                return drawFunction(instance, drawList, selectableScreenRect, canvasScale);
-
+        if (!CustomChildUiRegistry.TryGetValue(type, out var drawFunction)) 
             return SymbolUi.Child.CustomUiResult.None;
-        }
+        
+        // Unfortunately we have to test if symbolChild of instance is still valid.
+        // This might not be the case for operators like undo/redo.
+        if (instance.Parent != null && instance.Parent.Children.TryGetValue(instance.SymbolChildId, out _))
+            return drawFunction(instance, drawList, selectableScreenRect, canvasScale);
 
         return SymbolUi.Child.CustomUiResult.None;
+
     }
 
     private bool TryDrawTexturePreview(MagGraphItem item, Vector2 itemMin, Vector2 itemMax, ImDrawListPtr drawList, Color typeColor)

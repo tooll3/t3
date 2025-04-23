@@ -30,7 +30,7 @@ internal static class StringUi
         if (stringInstance.InputString.HasInputConnections)
             return SymbolUi.Child.CustomUiResult.None;
 
-        var dragWidth = WidgetElements.DrawDragIndicator(screenRect, drawList, canvasScale);
+        var dragWidth = WidgetElements.DrawOperatorDragHandle(screenRect, drawList, canvasScale);
         var usableArea = screenRect;
         usableArea.Min.X += dragWidth;
 

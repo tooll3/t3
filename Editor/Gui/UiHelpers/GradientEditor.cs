@@ -201,9 +201,15 @@ public static class GradientEditor
             }
 
             var isDraggedOutside = false;
+            if (ImGui.IsItemActive())
+            {
+                stepModified |= InputEditStateFlags.Started;
+            }
+            
             if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
             {
-                if (ImGui.GetIO().KeyCtrl)
+                FrameStats.Current.OpenedPopupCapturedMouse = true;
+                if (ImGui.GetIO().KeyAlt)
                 {
                     var previousColor = step.Color;
                     ColorEditButton.VerticalColorSlider(step.Color, handleArea.GetCenter(), step.Color.W);

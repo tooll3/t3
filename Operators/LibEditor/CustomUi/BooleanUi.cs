@@ -20,7 +20,7 @@ internal static class BooleanUi
         if (!ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
             return SymbolUi.Child.CustomUiResult.None;
 
-        var dragWidth = WidgetElements.DrawDragIndicator(screenRect, drawList, canvasScale);
+        var dragWidth = WidgetElements.DrawOperatorDragHandle(screenRect, drawList, canvasScale);
         var colorAsVec4 = boolean.ColorInGraph.TypedInputValue.Value;
         var color = new Color(colorAsVec4);
 

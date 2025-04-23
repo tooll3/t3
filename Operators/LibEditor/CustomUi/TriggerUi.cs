@@ -20,7 +20,7 @@ public static class TriggerUi
             return SymbolUi.Child.CustomUiResult.None;
         }
 
-        var dragWidth = WidgetElements.DrawDragIndicator(screenRect, drawList, canvasScale);
+        var dragWidth = WidgetElements.DrawOperatorDragHandle(screenRect, drawList, canvasScale);
         var colorAsVec4 = trigger.ColorInGraph.TypedInputValue.Value;
         var color = new Color(colorAsVec4);
 

@@ -20,7 +20,7 @@ public static class SampleCurveUi
         if (!(instance is SampleCurve sampleCurve))
             return SymbolUi.Child.CustomUiResult.None;
             
-        var dragWidth = WidgetElements.DrawDragIndicator(selectableScreenRect, drawList, canvasScale);
+        var dragWidth = WidgetElements.DrawOperatorDragHandle(selectableScreenRect, drawList, canvasScale);
         var innerRect = selectableScreenRect;
         innerRect.Min.X += dragWidth;
         innerRect.Min.Y += 1;
