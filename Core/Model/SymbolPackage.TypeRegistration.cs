@@ -53,19 +53,6 @@ public partial class SymbolPackage
 {
     private static void RegisterTypes()
     {
-        // generic enum value from json function, must be local function
-        object JsonToEnumValue<T>(JToken jsonToken) where T : struct // todo: use 7.3 and replace with enum
-        {
-            var value = jsonToken.Value<string>();
-
-            if (Enum.TryParse(value, out T enumValue))
-            {
-                return enumValue;
-            }
-
-            return null;
-        }
-
         InputValue InputDefaultValueCreator<T>() => new InputValue<T>();
 
         // build-in default types
@@ -329,8 +316,12 @@ public partial class SymbolPackage
                      () => new InputValue<Point[]>());
         RegisterType(typeof(RenderTargetReference), "RenderTargetRef",
                      () => new InputValue<RenderTargetReference>());
+        
+        // An untyped object that can be used as hack to connect data of unknown type.
+        // This can be useful to avoid creating one-off ConnectionTypes for very narrow usecases. 
         RegisterType(typeof(Object), "Object",
                      () => new InputValue<Object>());
+        
         RegisterType(typeof(StructuredList), "StructuredList",
                      () => new InputValue<StructuredList>(),
                      (writer, obj) =>
@@ -500,8 +491,20 @@ public partial class SymbolPackage
         RegisterType(typeof(SharpDX.Mathematics.Interop.RawViewportF), "RawViewportF",
                      () => new InputValue<RawViewportF>(new RawViewportF
                                                             { X = 0.0f, Y = 0.0f, Width = 100.0f, Height = 100.0f, MinDepth = 0.0f, MaxDepth = 10000.0f }));
+        return;
 
-        
+        // generic enum value from json function, must be local function
+        object JsonToEnumValue<T>(JToken jsonToken) where T : struct // todo: use 7.3 and replace with enum
+        {
+            var value = jsonToken.Value<string>();
+
+            if (Enum.TryParse(value, out T enumValue))
+            {
+                return enumValue;
+            }
+
+            return null;
+        }
     }
 
     private static void RegisterType(Type type, string typeName,

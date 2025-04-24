@@ -39,8 +39,9 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
     [Output(Guid = "1a9b5e15-e9a7-4ed4-aa1a-2072398921b4")]
     public readonly Slot<Buffer> FloatParams = new();
 
-    [Output(Guid = "D15A6120-4DDD-4E91-8DFB-862745EF6EFD")]
-    public readonly Slot<ShaderResourceView> Resources = new();
+    // This is a hack so the additional resources can be shared to ops like [SetVertexAndPixelShaderStage]
+    [Output(Guid = "ADF247CD-79CC-4D4E-B3C1-6A8B2D54683D")]
+    public readonly Slot<Object> Resources = new();
     
     public GenerateShaderGraphCode()
     {
@@ -75,7 +76,6 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
         if (string.IsNullOrEmpty(templateCode))
         {
             this.LogErrorState("Missing input template code");
-            //_lastErrorMessage = "Missing input template code";
             return;
         }
 
@@ -91,7 +91,6 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
 
         if (_graphNode == null)
         {
-            //_lastErrorMessage = "Missing input field";
             _needsInvalidation = true;
             return;
         }
@@ -106,11 +105,10 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
         if (changes == ShaderGraphNode.ChangedFlags.None && !hasTemplateChanged)
             return;
 
-        //Log.Debug("Update parameter buffer...", this);
         AssembleParams();
 
         AssembleResources();
-        Resources.Value = _resourceViews.Count >0 ? _resourceViews[^1] : null;
+        Resources.Value = _resourceViews;
         
         var floatParams = AllFloatValues;
         if (floatParams.Count > 0)
@@ -130,6 +128,7 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
     {
         AssembleAndInjectParameters(ref templateCode);
         AssembleAndInjectCode(ref templateCode);
+        InjectResourcesCode(ref templateCode);
         return templateCode;
     }
 
@@ -192,22 +191,67 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
         _graphNode.CollectEmbeddedShaderCode(_codeAssembleContext);
         
         // Build and inject definitions...
-        _sb.Clear();
-        _sb.AppendLine("// --- globals -------------------");
+        _functionsBuilder.Clear();
+        _functionsBuilder.AppendLine("// --- globals -------------------");
         foreach (var code in _codeAssembleContext.Globals.Values)
         {
-            _sb.AppendLine(code);
-            _sb.AppendLine("");
+            _functionsBuilder.AppendLine(code);
+            _functionsBuilder.AppendLine("");
 
         }
         
-        _sb.AppendLine("// --- instance functions -------------------");
-        _sb.AppendLine(_codeAssembleContext.Definitions.ToString());
-        TryInject("FIELD_FUNCTIONS", ref templateCode, _sb.ToString());
+        _functionsBuilder.AppendLine("// --- instance functions -------------------");
+        _functionsBuilder.AppendLine(_codeAssembleContext.Definitions.ToString());
+        TryInject("FIELD_FUNCTIONS", ref templateCode, _functionsBuilder.ToString());
         
         // Build and inject calls...
         TryInject("FIELD_CALL", ref templateCode, _codeAssembleContext.Calls.ToString());
     }
+
+    /// <summary>
+    /// Injects resource definitions starting with the giving index defined by the look like...
+    /// <code>
+    /// /*{RESOURCES(t6)}*/
+    /// </code>
+    /// with definitions like...
+    /// <code>
+    /// StructuredBuffer&lt;Point&gt; Points : register(t6);
+    /// </code>
+    /// 
+    /// </summary>
+    /// <param name="templateCode"></param>
+    private void InjectResourcesCode(ref string templateCode)
+    {
+        const string resourcesStartHook = "/*{RESOURCES(";
+
+        var resourceHookIndex = templateCode.IndexOf(resourcesStartHook, StringComparison.Ordinal);
+        if (resourceHookIndex == -1)
+            return;
+
+        var subIndex = resourceHookIndex + resourcesStartHook.Length;
+        const string resourcesEndHook = ")}*/";
+        var resourceHookEndIndex = templateCode.IndexOf(resourcesEndHook, resourceHookIndex, StringComparison.Ordinal);
+        if (resourceHookEndIndex == -1)
+            return;
+
+        var t = templateCode[subIndex];
+        var indexSpan = templateCode.AsSpan(subIndex + 1, resourceHookEndIndex - subIndex-1);
+        var xxx = indexSpan.ToString();
+        if (!int.TryParse(xxx, out var index))
+            return;
+
+        _resourceDefinitionsBuilder.Clear();
+        foreach (var rr in _resourceReferences)
+        {
+            _resourceDefinitionsBuilder.AppendLine($"{rr.Definition}:register({t}{index});");
+            index++;
+        }
+
+        var resourceHook = templateCode.AsSpan(resourceHookIndex, resourceHookEndIndex + resourcesEndHook.Length- resourceHookIndex ).ToString();
+        templateCode = templateCode.Replace(resourceHook, _resourceDefinitionsBuilder.ToString());
+    }
+    
+
 
     private static bool TryInject(string hookId, ref string code, string insert)
     {
@@ -222,7 +266,8 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
 
     private readonly CodeAssembleContext _codeAssembleContext = new();
     private int _updateCycleCount;
-    private static readonly StringBuilder _sb = new();
+    private static readonly StringBuilder _functionsBuilder = new();
+    private static readonly StringBuilder _resourceDefinitionsBuilder = new();
     
     private static void CreateParameterBuffer(Slot<Buffer> floatSlotBuffer, IReadOnlyList<float> floatParams)
     {

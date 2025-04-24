@@ -315,8 +315,11 @@ public class ShaderGraphNode
         // Prevent double evaluation (note that _lastUpdateFrame will be updated after getting the code)
         // We need to check frame and the graphId, because different subsets of the graph might be used
         // by different CodeGenerator (e.g. one of RayMarching and one of particle forces).
+        // TODO: extract this combination into some kind of type.
         if (_lastBufferUpdateFrame == frameNumber && _lastBufferUpdateGraphId == graphId)
             return;
+        
+        // StructuredBuffer<Point> Points : register(t0);
 
         _lastBufferUpdateFrame = frameNumber;
         _lastBufferUpdateGraphId = graphId;
@@ -329,7 +332,20 @@ public class ShaderGraphNode
         _nodeOp.AppendShaderResources(ref buffers);
     }    
     
-    public record SrvBufferReference(string Name, ShaderResourceView Srv);
+    /// <summary>
+    /// A reference that can later be used to generate shader code with references like...
+    /// <code>
+    ///    StructuredBuffer&lt;Point&gt; Points : register(t123)
+    ///    \-------------|--------------/ \-----|------/
+    ///                  |                      | 
+    ///             Definition               Will be added by GenerateShaderGraphCode
+    /// </code>
+    /// </summary>
+    /// <param name="Definition">Should include type and unique name used in the shader.
+    /// E.g. "StructuredBuffer&lt;Point&gt; Points_ABC123"</param> where ABC123 is a unique id of the node.
+    /// <param name="Srv">The reference to the SRV connected to the shader node. It will be passed
+    /// from GenerateShaderGraphCode to the [SetXYZStage] operators.</param>
+    public record SrvBufferReference(string Definition, ShaderResourceView Srv);
 
     // Keep the input slot so we can detect and handle structural changes to the graph
     private readonly MultiInputSlot<ShaderGraphNode>? _connectedNodeMultiInput;

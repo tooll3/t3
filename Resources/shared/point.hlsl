@@ -3,6 +3,8 @@
 //   W -> Radius
 //   Stretch -> Velocity
 //   Selected -> BirthTime
+#ifndef __POINT__
+#define __POINT__
 
 struct LegacyPoint
 {
@@ -33,3 +35,4 @@ struct Particle
     float3 Velocity;
     float BirthTime;
 };
+#endif

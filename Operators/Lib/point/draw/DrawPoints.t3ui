@@ -6,8 +6,8 @@
     {
       "InputId": "3fbad175-6060-40f2-a675-bdae20107698"/*FadeNearest*/,
       "Position": {
-        "X": 1716.8268,
-        "Y": 3909.4236
+        "X": 2062.5884,
+        "Y": 3953.3596
       },
       "Description": "Points closer to the camera Fade out.",
       "AddPadding": "True"
@@ -15,8 +15,8 @@
     {
       "InputId": "414c8045-5086-4449-9d9a-03f28c3966b3"/*PointSize*/,
       "Position": {
-        "X": 1716.8268,
-        "Y": 3864.4236
+        "X": 2062.5884,
+        "Y": 3883.3596
       },
       "Description": "Defines the size of the Points",
       "AddPadding": "True",
@@ -27,32 +27,32 @@
       "InputId": "5df18658-ef86-4c0f-8bb4-4ac3fbbf9a33"/*GPoints*/,
       "Relevancy": "Required",
       "Position": {
-        "X": 1559.6469,
-        "Y": 4130.425
+        "X": 1560.0557,
+        "Y": 4040.2678
       },
       "Description": "Input for Points"
     },
     {
       "InputId": "64e75fea-c07f-4cb1-8ac0-0f8d05362664"/*UsePointsScale*/,
       "Position": {
-        "X": 1568.0432,
-        "Y": 4061.7695
+        "X": 1919.2306,
+        "Y": 4175.031
       },
       "AddPadding": "True"
     },
     {
       "InputId": "7acc95ad-d317-42fc-97f8-85f48d7e516f"/*EnableZTest*/,
       "Position": {
-        "X": 1957.5654,
-        "Y": 4382.058
+        "X": 2223.4253,
+        "Y": 4431.701
       },
       "Description": "Defines whether Points cover themselves or are covered by or covers other 3D elements."
     },
     {
       "InputId": "814fc516-250f-4383-8f20-c2a358bbe4e1"/*EnableZWrite*/,
       "Position": {
-        "X": 1957.5654,
-        "Y": 4427.058
+        "X": 2223.4253,
+        "Y": 4466.701
       },
       "Description": "Defines whether Points cover themselves or are covered by or covers other 3D elements.",
       "AddPadding": "True"
@@ -60,8 +60,8 @@
     {
       "InputId": "850e3a32-11ba-4ad2-a2b1-6164f077ddd6"/*Texture_*/,
       "Position": {
-        "X": 1095.4686,
-        "Y": 4097.3745
+        "X": 1184.0911,
+        "Y": 4204.8726
       },
       "Description": "Input for a Texturemap",
       "AddPadding": "True"
@@ -69,8 +69,8 @@
     {
       "InputId": "8fab9161-48d4-43b0-a18f-5942b7071a49"/*BlendMode*/,
       "Position": {
-        "X": 1957.5654,
-        "Y": 4472.058
+        "X": 2223.4253,
+        "Y": 4396.701
       },
       "GroupTitle": "Draw options",
       "Description": "Defines the Blendmode."
@@ -78,8 +78,8 @@
     {
       "InputId": "cc442161-e9ca-40ea-be3b-f87189d4e155"/*Color*/,
       "Position": {
-        "X": 1576.8268,
-        "Y": 3714.5186
+        "X": 1922.5884,
+        "Y": 3673.3596
       },
       "Description": "Defines the color of the Points.\nIf a Texture is used this color will be multiplied.",
       "AddPadding": "True"
@@ -87,8 +87,8 @@
     {
       "InputId": "cce4048d-85b7-4d82-aec1-4379d1f0de61"/*AlphaCutOff*/,
       "Position": {
-        "X": 1462.4585,
-        "Y": 3950.6685
+        "X": 2062.5884,
+        "Y": 3918.3596
       }
     },
     {
@@ -103,8 +103,8 @@
     {
       "InputId": "e40aeedd-49fe-467c-b886-064a1024cef3"/*ScaleFactor*/,
       "Position": {
-        "X": 1718.0432,
-        "Y": 3971.7693
+        "X": 2059.2305,
+        "Y": 4140.0303
       }
     }
   ],
@@ -117,50 +117,50 @@
         "Y": 1227.5889
       },
       "Position": {
-        "X": 2487.0896,
-        "Y": 3575.2437
+        "X": 2643.4253,
+        "Y": 4291.701
       }
     },
     {
       "ChildId": "0f882c2c-b1ec-420a-ac13-a2921ea624e6"/*Draw*/,
       "Position": {
-        "X": 2257.5654,
-        "Y": 4507.058
+        "X": 2455.693,
+        "Y": 4551.1772
       }
     },
     {
       "ChildId": "189f0dfa-7c6d-41e9-9aac-8676f18a4e50"/*InputAssemblerStage*/,
       "Position": {
-        "X": 2251.7976,
-        "Y": 3680.6797
+        "X": 2503.4253,
+        "Y": 4326.701
       }
     },
     {
       "ChildId": "43937000-6623-4ae7-b4c3-e4ddeabe2a71"/*GetForegroundColor*/,
       "Position": {
-        "X": 1576.8268,
-        "Y": 3749.5186
+        "X": 1922.5884,
+        "Y": 3708.3596
       }
     },
     {
       "ChildId": "4544a16b-5491-4caf-be39-ffd86ee73871"/*RasterizerState*/,
       "Position": {
-        "X": 2108.0015,
-        "Y": 4318.2803
+        "X": 2363.4253,
+        "Y": 4361.701
       }
     },
     {
       "ChildId": "5646ba88-44b3-4cc8-943f-ce8b9bb1c82c"/*Rasterizer*/,
       "Position": {
-        "X": 2258.0015,
-        "Y": 4318.2803
+        "X": 2503.4253,
+        "Y": 4361.701
       }
     },
     {
       "ChildId": "5ce3570b-ecb6-4bbf-acff-a48a4dd45a4b"/*ContextCBuffers*/,
       "Position": {
-        "X": 1945.923,
-        "Y": 4044.8171
+        "X": 2503.4253,
+        "Y": 4151.7017
       }
     },
     {
@@ -171,8 +171,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": 1918.6809,
-        "Y": 3718.1619
+        "X": 2503.4253,
+        "Y": 4046.7017
       }
     },
     {
@@ -183,8 +183,8 @@
         "Y": 141.36565
       },
       "Position": {
-        "X": 1921.7997,
-        "Y": 3775.2224
+        "X": 2202.5884,
+        "Y": 3708.3596
       }
     },
     {
@@ -195,29 +195,29 @@
         "Y": 536.0807
       },
       "Position": {
-        "X": 2256.7876,
-        "Y": 3725.1904
+        "X": 2643.4253,
+        "Y": 3976.7017
       }
     },
     {
       "ChildId": "847987c5-a576-4081-9579-a24af0f29a6b"/*DepthStencilState*/,
       "Position": {
-        "X": 2107.5654,
-        "Y": 4382.058
+        "X": 2363.4253,
+        "Y": 4431.701
       }
     },
     {
       "ChildId": "897c5510-e5d3-4852-8d65-9fb626b6d96c"/*SamplerState*/,
       "Position": {
-        "X": 1902.2495,
-        "Y": 4253.193
+        "X": 2503.4253,
+        "Y": 4256.7017
       }
     },
     {
       "ChildId": "9141d5e9-171c-4e8c-8c53-fc0d2d85e182"/*IntsToBuffer*/,
       "Position": {
-        "X": 1921.7997,
-        "Y": 3936.5881
+        "X": 2199.2307,
+        "Y": 4105.0303
       }
     },
     {
@@ -230,57 +230,57 @@
     {
       "ChildId": "b736fed6-9c87-4d4f-9b56-3f00fd9b5a80"/*PickBlendMode*/,
       "Position": {
-        "X": 2107.5654,
-        "Y": 4451.058
+        "X": 2363.4253,
+        "Y": 4396.701
       }
     },
     {
       "ChildId": "c798588d-7e91-4dda-a644-9e012191f177"/*GetBufferComponents*/,
       "Position": {
-        "X": 1709.6469,
-        "Y": 4130.425
+        "X": 1700.0557,
+        "Y": 4040.2678
       }
     },
     {
       "ChildId": "c9dc53d5-27c6-464e-8ecb-2a9b93f4a398"/*OutputMergerStage*/,
       "Position": {
-        "X": 2260.15,
-        "Y": 4391.8623
+        "X": 2503.4253,
+        "Y": 4396.701
       }
     },
     {
       "ChildId": "ce29ae17-be5c-4d16-9e3d-49971fc74167"/*LoadImage*/,
       "Position": {
-        "X": 1092.4672,
-        "Y": 4265.78
+        "X": 1184.0911,
+        "Y": 4239.8726
       }
     },
     {
       "ChildId": "d8abd2d6-a08f-4ace-861f-87998df45a5e"/*PixelShader*/,
       "Position": {
-        "X": 1921.0175,
-        "Y": 3611.2947
+        "X": 2503.4253,
+        "Y": 4011.7017
       }
     },
     {
       "ChildId": "dbc238da-63e9-4af5-9559-1c8953f202f7"/*VertexShader*/,
       "Position": {
-        "X": 1921.0175,
-        "Y": 3568.2947
+        "X": 2503.4253,
+        "Y": 3976.7017
       }
     },
     {
       "ChildId": "dfb5bcac-3a5f-425c-902b-35100f6c2281"/*BoolToInt*/,
       "Position": {
-        "X": 1729.7158,
-        "Y": 4029.9702
+        "X": 2059.2305,
+        "Y": 4175.031
       }
     },
     {
       "ChildId": "f71b2d3c-cd93-4fd6-80c4-a0edec63e9d9"/*SrvFromTexture2d*/,
       "Position": {
-        "X": 1474.0911,
-        "Y": 4204.8726
+        "X": 1324.0911,
+        "Y": 4274.8726
       }
     },
     {
@@ -291,22 +291,22 @@
         "Y": 59.905018
       },
       "Position": {
-        "X": 1716.8268,
-        "Y": 3784.5186
+        "X": 2062.5884,
+        "Y": 3743.3596
       }
     },
     {
       "ChildId": "fb23259d-cbf0-4f1c-aa57-8d6305f6bfce"/*MultiplyInt*/,
       "Position": {
-        "X": 2107.5654,
-        "Y": 4507.058
+        "X": 2315.693,
+        "Y": 4551.1772
       }
     },
     {
       "ChildId": "fd0b19bc-ffcc-436f-800b-f934f82a0423"/*BlendColors*/,
       "Position": {
-        "X": 1716.8268,
-        "Y": 3714.5186
+        "X": 2062.5884,
+        "Y": 3673.3596
       }
     }
   ],
@@ -314,8 +314,8 @@
     {
       "OutputId": "b73347d9-9d9f-4929-b9df-e2d6db722856"/*Output*/,
       "Position": {
-        "X": 2628.9512,
-        "Y": 4168.742
+        "X": 2643.4253,
+        "Y": 4466.702
       }
     }
   ],

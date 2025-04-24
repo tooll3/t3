@@ -68,6 +68,8 @@ Texture2D<float4> NormalMap : register(t3);
 Texture2D<float4> BRDFLookup : register(t4);
 TextureCube<float4> PrefilteredSpecular : register(t5);
 
+/*{RESOURCES(t6)}*/
+
 sampler texSampler : register(s0);
 sampler clampedSampler : register(s1);
 //--------------------

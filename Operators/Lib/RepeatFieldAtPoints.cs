@@ -36,6 +36,13 @@ internal sealed class RepeatFieldAtPoints : Instance<RepeatFieldAtPoints>
     private int _count;
     private ShaderResourceView? _srv;
 
+    void IGraphNodeOp.AddDefinitions(CodeAssembleContext c)
+    {
+        c.Globals["__Point__"] = """
+                                 #include "shared/point.hlsl"
+                                 """;
+    }
+
     bool IGraphNodeOp.TryBuildCustomCode(CodeAssembleContext c)
     {
         var fields = ShaderNode?.InputNodes;
@@ -69,13 +76,12 @@ internal sealed class RepeatFieldAtPoints : Instance<RepeatFieldAtPoints>
                 return;
         }
 
-        Log.Debug($"Adding point resource on {list.Count} ", this);
-        list.Add(new ShaderGraphNode.SrvBufferReference("Points", _srv));
+        list.Add(new ShaderGraphNode.SrvBufferReference($"StructuredBuffer<Point> {ShaderNode}Points", _srv));
     }
 
     [Input(Guid = "bb4e6ad8-5941-4218-9e4b-4ba402be7ed4")]
-    public readonly InputSlot<T3.Core.DataTypes.ShaderGraphNode> InputField = new InputSlot<T3.Core.DataTypes.ShaderGraphNode>();
+    public readonly InputSlot<T3.Core.DataTypes.ShaderGraphNode> InputField = new();
 
     [Input(Guid = "1E5288D2-C2AE-4A1D-AD69-FE63D32A00C6")]
-    public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
+    public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new();
 }
