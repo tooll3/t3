@@ -27,7 +27,7 @@ namespace T3.Core.Compilation;
 /// </summary>
 internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
 {
-    private readonly System.Threading.Lock _assemblyLock = new();
+    private readonly Lock _assemblyLock = new();
 
     // this is an ultimate list of assemblies that have been loaded for this context
     // keeping this cache allows us to avoid stack overflows during loading, and also
@@ -76,13 +76,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
     {
         _directory = directory;
         Resolving += OnResolving;
-        Log.Info($"Creating new assembly load context for {rootName.Name}");
-
-        lock (_assemblyLock)
-        {
-            // _coreAssemblies ??= RuntimeAssemblies.CoreAssemblies.Select(x => CreateNode(x, debug: false)).ToList();
-        }
-
+        Log.Debug($"Creating new assembly load context for {rootName.Name}");
         _rootName = rootName;
     }
 
@@ -92,6 +86,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
         {
             var name = asmName.GetNameSafe();
 
+            // check the core assemblies first - these are the ones that are always loaded
             foreach (var coreRef in _coreNodes)
             {
                 if (coreRef.TryFind(name, context, out var coreAssembly))
@@ -101,24 +96,12 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
             }
 
             // the following are performed in order of preference:
-
             var root = Root;
             if (root != null)
             {
-                // first we try with the provided context
-                if (root.TryFind(name, context, out var assembly))
-                {
-                    return assembly.Assembly;
-                }
-                // then we check the "Default" load context - the root load context of Tooll
-
-                if (root.TryFind(name, Default, out assembly))
-                {
-                    return assembly.Assembly;
-                }
-                
-                // then we try *this* context if it's not the one provided
-                if (context != this && root.TryFind(name, this, out assembly))
+                if(root.TryFind(name, context, out var assembly) || // first we try with the provided context
+                   root.TryFind(name, Default, out assembly) || // then we check the "Default" load context - the root load context of Tooll
+                   (context != this && root.TryFind(name, context, out assembly))) // then we try *this* context if it's not the one provided
                 {
                     return assembly.Assembly;
                 }
@@ -135,8 +118,6 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
             // guess we didn't find it :(
             return null;
         }
-
-        // Local Functions
     }
 
     protected override Assembly? Load(AssemblyName assemblyName)
@@ -173,10 +154,18 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
             return null;
         }
 
+        var root = Root;
+        if (root == null)
+        {
+            Log.Error($"Failed to load assembly {assemblyName.Name} - root is null");
+            return null;
+        }
+        
         var sb = new System.Text.StringBuilder();
-        sb.AppendLine($"Failed to load assembly {assemblyName.Name}");
+        sb.AppendLine($"Failed to load assembly {assemblyName.Name}")
+          .AppendLine("Search paths:");
 
-        foreach (var path in Root.VisibleDirectories)
+        foreach (var path in root.VisibleDirectories)
         {
             sb.Append('\t');
             sb.AppendLine(path);
@@ -192,16 +181,17 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
         return base.LoadUnmanagedDll(unmanagedDllName);
     }
 
-    public void AddDependencyContext(T3AssemblyLoadContext dependencyLoadContext)
+    public void AddDependencyContext(T3AssemblyLoadContext ctx)
     {
-        _dependencyContexts.Add(dependencyLoadContext);
-        dependencyLoadContext.UnloadTriggered += OnDependencyUnloaded;
+        _dependencyContexts.Add(ctx);
+        ctx.UnloadTriggered += OnDependencyUnloaded;
     }
 
     private void OnDependencyUnloaded(object? sender, EventArgs e)
     {
         var ctx = (T3AssemblyLoadContext)sender!;
         ctx.UnloadTriggered -= OnDependencyUnloaded;
+        _dependencyContexts.Remove(ctx);
         BeginUnload(); // begin unloading ourself too
     }
 
@@ -216,6 +206,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
             Log.Error($"Exception thrown on assembly unload: {e}");
         }
 
+        _root = null; // dereference our assembly as we will need to reload it 
         Unload();
     }
 

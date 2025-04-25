@@ -54,34 +54,49 @@ public sealed class AssemblyInformation
 
     private static readonly Dictionary<string, Type> _empty = new();
 
-    private T3AssemblyLoadContext GetLoadContext()
+    private T3AssemblyLoadContext LoadContext
     {
-        if (_loadContext != null)
-            return _loadContext;
+        get
+        {
+            lock (_assemblyLock)
+            {
+                if (_loadContext != null)
+                    return _loadContext;
 
-        _loadContext = new T3AssemblyLoadContext(_assemblyName, Directory);
-        _loadContext.UnloadTriggered += OnUnloadTriggered;
-        return _loadContext;
+                _loadContext = new T3AssemblyLoadContext(_assemblyName, Directory);
+                _loadContext.UnloadTriggered += OnUnloadTriggered;
+
+                foreach (var dependency in _packageDependencyAssemblies)
+                {
+                    _loadContext.AddDependencyContext(dependency.LoadContext);
+                }
+
+                return _loadContext;
+            }
+        }
     }
 
     private void OnUnloadTriggered(object? sender, EventArgs e)
     {
-        _loadContext!.UnloadTriggered -= OnUnloadTriggered;
-        _loadContext = null;
-        _operatorTypeInfo.Clear();
         lock (_assemblyLock)
         {
+            _loadContext!.UnloadTriggered -= OnUnloadTriggered;
+            _loadContext = null;
+            _operatorTypeInfo.Clear();
             _types?.Clear(); // explicitly dereference all our types
             _types = null; // set collection to null to indicate that we need to reload the types todo: do better than this null check
             _namespaces.Clear();
         }
     }
 
-    private Assembly? GetAssembly()
+    private Assembly? Assembly
     {
-        lock (_assemblyLock)
+        get
         {
-            return GetLoadContext().Root?.Assembly;
+            lock (_assemblyLock)
+            {
+                return LoadContext.Root?.Assembly;
+            }
         }
     }
 
@@ -93,8 +108,8 @@ public sealed class AssemblyInformation
     {
         lock (_assemblyLock)
         {
-            var assembly = GetAssembly();
-            
+            var assembly = Assembly;
+
             if (assembly == null)
             {
                 Log.Error($"Failed to get assembly for {Name}");
@@ -102,7 +117,7 @@ public sealed class AssemblyInformation
                 ShouldShareResources = false;
                 return false;
             }
-            
+
             try
             {
                 var types = assembly.GetTypes();
@@ -434,7 +449,16 @@ public sealed class AssemblyInformation
                 return true;
         }
 
-        foreach (var assemblyDependency in GetAssembly().GetReferencedAssemblies())
+        var assembly = Assembly;
+
+        if (assembly == null)
+        {
+            Log.Error($"Failed to get assembly for {Name}");
+            return false;
+        }
+
+        var referencedAssemblies = assembly.GetReferencedAssemblies();
+        foreach (var assemblyDependency in referencedAssemblies)
         {
             if (assemblyDependency.Name == package.ReleaseInfo.AssemblyFileName)
                 return true;
@@ -464,14 +488,14 @@ public sealed class AssemblyInformation
     /// </summary>
     public object? CreateInstance(Type constructorInfoInstanceType)
     {
-        var assembly = GetAssembly();
-        
+        var assembly = Assembly;
+
         if (assembly == null)
         {
             Log.Error($"Failed to get assembly for {Name}");
             return null;
         }
-        
+
         return assembly.CreateInstance(constructorInfoInstanceType.FullName!);
     }
 
@@ -479,11 +503,11 @@ public sealed class AssemblyInformation
     {
         if (_packageDependencyAssemblies.Contains(dependency))
             return;
-        
+
         Log.Info($"Adding dependency {dependency.Name} to {Name}");
 
         _packageDependencyAssemblies.Add(dependency);
-        GetLoadContext().AddDependencyContext(dependency.GetLoadContext());
+        LoadContext.AddDependencyContext(dependency.LoadContext);
     }
 
     private readonly List<AssemblyInformation> _packageDependencyAssemblies = [];

@@ -17,7 +17,7 @@ public static class SymbolRegistry //: IDisposable
     {
         foreach(var package in SymbolPackage.AllPackages)
         {
-            if (package.TryGetSymbol(symbolId, out symbol))
+            if (package.Symbols.TryGetValue(symbolId, out symbol))
                 return true;
         }
         symbol = null;

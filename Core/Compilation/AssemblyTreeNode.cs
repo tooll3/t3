@@ -97,7 +97,7 @@ internal sealed class AssemblyTreeNode
         }
     }
 
-    public List<string> DependencyPaths
+    private List<string> DependencyPaths
     {
         get
         {

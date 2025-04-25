@@ -257,7 +257,7 @@ internal static partial class ProjectSetup
                 var package = (EditorSymbolPackage)packages[0].Package;
                 const bool parallel = false;
                 package.LoadSymbols(parallel, out var newlyRead, out var allNewSymbols);
-                package.ApplySymbolChildren(newlyRead);
+                SymbolPackage.ApplySymbolChildren(newlyRead);
                 package.LoadUiFiles(parallel, allNewSymbols, out var newlyLoadedUis, out var preExistingUis);
                 package.LocateSourceCodeFiles();
                 package.RegisterUiSymbols(newlyLoadedUis, preExistingUis);
@@ -285,7 +285,7 @@ internal static partial class ProjectSetup
 
         loadedSymbols
            .AsParallel()
-           .ForAll(pair => pair.Key.ApplySymbolChildren(pair.Value));
+           .ForAll(pair => SymbolPackage.ApplySymbolChildren(pair.Value));
 
         ConcurrentDictionary<EditorSymbolPackage, SymbolUiLoadInfo> loadedSymbolUis = new();
         packages

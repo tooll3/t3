@@ -8,6 +8,7 @@ using T3.Core.Animation;
 using T3.Core.Compilation;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using Texture2D = T3.Core.DataTypes.Texture2D;
@@ -50,7 +51,7 @@ internal static partial class Program
 
         packageLoadInfo
            .AsParallel()
-           .ForAll(packageInfo => packageInfo.Package.ApplySymbolChildren(packageInfo.NewlyLoadedSymbols));
+           .ForAll(packageInfo => SymbolPackage.ApplySymbolChildren(packageInfo.NewlyLoadedSymbols));
     }
     
     private static void PreloadShadersAndResources(double durationSecs,
