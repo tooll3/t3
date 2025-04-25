@@ -58,7 +58,6 @@ internal sealed class SetPixelAndVertexShaderStage : Instance<SetPixelAndVertexS
             return;
         
         var collectedTypedInputs = VariousResources.GetCollectedTypedInputs();
-        Log.Debug($"Getting additional {collectedTypedInputs.Count} srvs...", this);
         
         foreach (var t in collectedTypedInputs)
         {
@@ -71,9 +70,9 @@ internal sealed class SetPixelAndVertexShaderStage : Instance<SetPixelAndVertexS
 
                     for (var srvIndex = 0; srvIndex < srvs.Count; srvIndex++)
                     {
-                        _additionalSrvs[srvIndex] = srvs[srvIndex];
+                        var srv = srvs[srvIndex];
+                        _additionalSrvs[srvIndex] = srv;
                     }
-
                     break;
                 }
             }

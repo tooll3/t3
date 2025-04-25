@@ -6,13 +6,13 @@ using T3.Core.Utils.Geometry;
 namespace Lib;
 
 [Guid("296c774b-1cf0-4e37-9c22-7ac4fd5d78e5")]
-internal sealed class RepeatFieldAtPoints : Instance<RepeatFieldAtPoints>
-                                          , IGraphNodeOp
+internal sealed class ExecuteRepeatFieldAtPoints : Instance<ExecuteRepeatFieldAtPoints>
+,IGraphNodeOp
 {
     [Output(Guid = "b246c7f7-04dd-4632-aff8-fa0a2c03af4f")]
     public readonly Slot<ShaderGraphNode> Result = new();
 
-    public RepeatFieldAtPoints()
+    public ExecuteRepeatFieldAtPoints()
     {
         ShaderNode = new ShaderGraphNode(this, null, InputField);
 
@@ -27,9 +27,15 @@ internal sealed class RepeatFieldAtPoints : Instance<RepeatFieldAtPoints>
 
         var buffer = Points.GetValue(context);
         _count = buffer?.Srv?.Description != null ? buffer.Srv.Description.Buffer.ElementCount : 0;
-        _srv = buffer?.Srv is { IsDisposed: false }
-                   ? buffer.Srv
-                   : null;
+
+        if (buffer != null && buffer.Srv != null)
+        {
+            _srv = buffer.Srv.IsDisposed ? null : buffer.Srv;
+        }
+        else
+        {
+            _srv = null;
+        }
     }
 
     public ShaderGraphNode ShaderNode { get; }
@@ -41,6 +47,14 @@ internal sealed class RepeatFieldAtPoints : Instance<RepeatFieldAtPoints>
         c.Globals["__Point__"] = """
                                  #include "shared/point.hlsl"
                                  """;
+        
+        c.Globals["PointMatrix"] = """
+                                 struct PointTransform
+                                 {
+                                     float4x4 WorldToPointObject;
+                                     float4 PointColor;
+                                 };
+                                 """;
     }
 
     bool IGraphNodeOp.TryBuildCustomCode(CodeAssembleContext c)
@@ -50,18 +64,27 @@ internal sealed class RepeatFieldAtPoints : Instance<RepeatFieldAtPoints>
             return true;
 
         var inputField = fields[0];
+        //c.PushContext(0, "for");
 
         c.AppendCall($"float4 pKeep{c} = p{c};");
-        c.AppendCall($"float4 fKeep{c} = 99999;");
-        c.AppendCall($"for(int {c}i=0; {c}i<{_count} && {c}i<100; i++) {{");
+        c.AppendCall($"float4 fKeep{c} = float4(1,1,1,999);");
+        c.AppendCall($"for(int i{c}=0; i{c}<{_count} && i{c}<100; i{c}++) {{");
         c.Indent();
         c.AppendCall($"p{c} = pKeep{c};");
-        c.AppendCall($"p{c}.x += {c}i;");
+        c.AppendCall($"f{c} = float4(1,1,1,9999);");
+        c.AppendCall($"p{c}.xyz = mul(float4(pKeep{c}.xyz,1), {ShaderNode}PointTransforms[i{c}].WorldToPointObject).xyz;");
+        //c.AppendCall($"p{c}.x += i{c};");
         inputField?.CollectEmbeddedShaderCode(c);
-        c.AppendCall($"fKeep{c}.w = min(f{c}.w, fKeep{c}.w);");
+        
+        //c.AppendCall($"f{c}.rgb *= {ShaderNode}PointTransforms[i{c}].PointColor.rgb;");
+        //c.AppendCall($"fKeep{c}.rgb = lerp(f{c}.rgb, fKeep{c}.rgb, f{c}.w < fKeep{c}.w ? 0:1);");
+        c.AppendCall($"fKeep{c}.w =   i{c} == 0 ? f{c}.w:  min(f{c}.w, fKeep{c}.w);");
         c.Unindent();
         c.AppendCall("}");
-        c.AppendCall($"f{c}.w = fKeep{c}.w;");
+        c.AppendCall($"f{c} = fKeep{c};");
+        //c.PopContext();
+        //c.AppendCall($"f{c}.r *= 0.2;");
+        
         return true;
     }
 
@@ -70,13 +93,15 @@ internal sealed class RepeatFieldAtPoints : Instance<RepeatFieldAtPoints>
         if (_srv == null)
             return;
 
+        // Skip if already added
         foreach (var x in list)
         {
             if (x.Srv == _srv)
                 return;
         }
 
-        list.Add(new ShaderGraphNode.SrvBufferReference($"StructuredBuffer<Point> {ShaderNode}Points", _srv));
+        list.Add(new ShaderGraphNode.SrvBufferReference($"StructuredBuffer<PointTransform> {ShaderNode}PointTransforms", _srv));
+        //Log.Debug($"Add with length {_srv.Description.Buffer.ElementCount}  disposed:{_srv.IsDisposed}   check: {_srv.GetHashCode()}", this);
     }
 
     [Input(Guid = "bb4e6ad8-5941-4218-9e4b-4ba402be7ed4")]

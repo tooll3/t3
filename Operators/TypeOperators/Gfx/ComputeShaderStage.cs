@@ -29,6 +29,7 @@ public sealed class ComputeShaderStage : Instance<ComputeShaderStage>, IRenderSt
         Int3 dispatchCount = Dispatch.GetValue(context);
         int count = DispatchCallCount.GetValue(context).Clamp(1, 100);
 
+        GetAdditionalResources(context);
         ConstantBuffers.GetValues(ref _constantBuffers, context);
         ShaderResources.GetValues(ref _shaderResourceViews, context);
         SamplerStates.GetValues(ref _samplerStates, context);
@@ -41,6 +42,7 @@ public sealed class ComputeShaderStage : Instance<ComputeShaderStage>, IRenderSt
         csStage.Set(_cs);
         csStage.SetConstantBuffers(0, _constantBuffers.Length, _constantBuffers);
         csStage.SetShaderResources(0, _shaderResourceViews.Length, _shaderResourceViews);
+        csStage.SetShaderResources(_shaderResourceViews.Length, _additionalSrvs.Length, _additionalSrvs);
             
         csStage.SetSamplers(0, _samplerStates);
         if (_uavs.Length == 4)
@@ -99,12 +101,41 @@ public sealed class ComputeShaderStage : Instance<ComputeShaderStage>, IRenderSt
         _statsUpdateCount++;
         _statsDispatchCount += dispatchCount.X * dispatchCount.Y * dispatchCount.Z;
     }
+    
+    private void GetAdditionalResources(EvaluationContext context)
+    {
+        if (!VariousResources.DirtyFlag.IsDirty)
+            return;
+        
+        var collectedTypedInputs = VariousResources.GetCollectedTypedInputs();
+        
+        foreach (var t in collectedTypedInputs)
+        {
+            switch (t.GetValue(context))
+            {
+                case List<ShaderResourceView> srvs:
+                {
+                    if (srvs.Count != _additionalSrvs.Length)
+                        _additionalSrvs = new ShaderResourceView[srvs.Count];
+
+                    for (var srvIndex = 0; srvIndex < srvs.Count; srvIndex++)
+                    {
+                        var srv = srvs[srvIndex];
+                        _additionalSrvs[srvIndex] = srv;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    
 
     private SharpDX.Direct3D11.ComputeShader? _cs;
-    private Buffer[] _constantBuffers = new Buffer[0];
-    private ShaderResourceView[] _shaderResourceViews = new ShaderResourceView[0];
-    private SharpDX.Direct3D11.SamplerState[] _samplerStates = new SharpDX.Direct3D11.SamplerState[0];
-    private UnorderedAccessView[] _uavs = new UnorderedAccessView[0];
+    private Buffer[] _constantBuffers = [];
+    private ShaderResourceView[] _shaderResourceViews = [];
+    private ShaderResourceView[] _additionalSrvs = [];
+    private SharpDX.Direct3D11.SamplerState[] _samplerStates = [];
+    private UnorderedAccessView[] _uavs = [];
         
         
     public IEnumerable<(string, int)> GetStats()
@@ -138,6 +169,9 @@ public sealed class ComputeShaderStage : Instance<ComputeShaderStage>, IRenderSt
     [Input(Guid = "88938b09-d5a7-437c-b6e1-48a5b375d756")]
     public readonly MultiInputSlot<ShaderResourceView> ShaderResources = new();
 
+    [Input(Guid = "2E33837E-54C0-4519-8EDA-04EEE80690A5")]
+    public readonly MultiInputSlot<Object> VariousResources = new();
+    
     [Input(Guid = "599384c2-bf6c-4953-be74-d363292ab1c7")]
     public readonly MultiInputSlot<UnorderedAccessView> Uavs = new();
 

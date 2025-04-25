@@ -68,8 +68,6 @@ Texture2D<float4> NormalMap : register(t3);
 Texture2D<float4> BRDFLookup : register(t4);
 TextureCube<float4> PrefilteredSpecular : register(t5);
 
-/*{RESOURCES(t6)}*/
-
 sampler texSampler : register(s0);
 sampler clampedSampler : register(s1);
 //--------------------
@@ -118,6 +116,12 @@ vsOutput vsMain4(uint vertexId : SV_VertexID)
     return output;
 }
 
+//=== Global functions ==============================================
+/*{GLOBALS}*/
+
+//=== Additional Resources ==========================================
+/*{RESOURCES(t6)}*/
+
 //=== Field functions ===============================================
 /*{FIELD_FUNCTIONS}*/
 
@@ -134,8 +138,7 @@ float GetDistance(float3 p3)
 {
     return GetField(float4(p3.xyz, 0)).w;
 }
-
-//=== Field functions ===============================================
+//===================================================================
 
 float3 GetNormal(float3 p, float offset)
 {
@@ -364,8 +367,6 @@ PSOutput psMain(vsOutput input)
     result.color = clamp(litColor, 0, float4(1000, 1000, 1000, 1));
 
     float viewZ = mul(float4(p, 1), WorldToCamera).z;
-    // result.color.a  = 1;
     result.depth = ComputeDepthFromViewZ(viewZ);
-    // result.color.xyz = f.xyz;
     return result;
 }

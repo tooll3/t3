@@ -34,12 +34,17 @@ cbuffer Params : register(b2)
 RWStructuredBuffer<Particle> Particles : u0;
 StructuredBuffer<PbrVertex> Vertices : t0;
 StructuredBuffer<int3> Indices : t1;
-/*{RESOURCES}*/
+
+//=== Globals =======================================================
+/*{GLOBALS}*/
+
+//=== Resources =====================================================
+/*{RESOURCES(t0)}*/
 
 //=== Field functions ===============================================
 /*{FIELD_FUNCTIONS}*/
-
 //-------------------------------------------------------------------
+
 float4 GetField(float4 p)
 {
     float4 f = 1;

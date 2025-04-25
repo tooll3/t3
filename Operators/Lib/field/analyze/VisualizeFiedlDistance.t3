@@ -122,7 +122,7 @@
       "Outputs": []
     },
     {
-      "Id": "3aac3d34-49fb-477f-a899-04e8b86fa5e9"/*_GetFieldShaderAttributes*/,
+      "Id": "3aac3d34-49fb-477f-a899-04e8b86fa5e9"/*GenerateShaderGraphCode*/,
       "SymbolId": "73c028d1-3de2-4269-b503-97f62bbce320",
       "InputValues": [],
       "Outputs": []
@@ -430,6 +430,12 @@
       "SourceSlotId": "1a9b5e15-e9a7-4ed4-aa1a-2072398921b4",
       "TargetParentOrChildId": "9e5b7321-bfe1-40e8-84df-a404b8449692",
       "TargetSlotId": "9571b16e-72d1-4544-aa98-8a08b63bb5f6"
+    },
+    {
+      "SourceParentOrChildId": "3aac3d34-49fb-477f-a899-04e8b86fa5e9",
+      "SourceSlotId": "adf247cd-79cc-4d4e-b3c1-6a8b2d54683d",
+      "TargetParentOrChildId": "9e5b7321-bfe1-40e8-84df-a404b8449692",
+      "TargetSlotId": "cc866663-5bfa-4a17-9efc-e2f381767317"
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",

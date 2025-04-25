@@ -26,6 +26,33 @@ public sealed class StructuredBufferWithViews : Instance<StructuredBufferWithVie
             return;
         }
 
+        var needsUpdate = createSrv != _createSrv
+                          || createUav != _createUav
+                          || stride != _stride
+                          || sizeInBytes != _sizeInBytes
+                          || uavBufferFlags != _uavBufferFlags
+                          || BufferWithViews.Value == null;
+
+        // if (BufferWithViews.Value?.Srv != null)
+        // {
+        //     if (BufferWithViews.Value.Srv.IsDisposed)
+        //     {
+        //         Log.Debug(" BufferWithViewsSRV: Disposed ", this);    
+        //     }
+        //     Log.Debug($" BufferWithViewsSRV: {BufferWithViews.Value?.Srv.GetHashCode()}", this);
+        // }
+        
+        if (!needsUpdate)
+            return;
+        
+        _uavBufferFlags = uavBufferFlags;
+        _stride = stride;
+        _sizeInBytes = sizeInBytes;
+        _createSrv = createSrv;
+        _createUav = createUav;
+        
+        BufferWithViews.Value?.Dispose();
+
         BufferWithViews.Value ??= new BufferWithViews();
 
         ResourceManager.SetupStructuredBuffer(sizeInBytes, stride, ref BufferWithViews.Value.Buffer);
@@ -36,6 +63,13 @@ public sealed class StructuredBufferWithViews : Instance<StructuredBufferWithVie
         if (createUav)
             ResourceManager.CreateStructuredBufferUav(BufferWithViews.Value.Buffer, uavBufferFlags, ref BufferWithViews.Value.Uav);
     }
+
+    private bool _createSrv;
+    private bool _createUav;
+    private int _stride;
+    private int _sizeInBytes;
+    private UnorderedAccessViewBufferFlags _uavBufferFlags;
+
         
     [Input(Guid = "16f98211-fe97-4235-b33a-ddbbd2b5997f")]
     public readonly InputSlot<int> Count = new();
@@ -52,4 +86,5 @@ public sealed class StructuredBufferWithViews : Instance<StructuredBufferWithVie
         
     [Input(Guid = "43c2b314-4809-4022-9b07-99965e5c1a7a")]
     public readonly InputSlot<UnorderedAccessViewBufferFlags> BufferFlags = new();
+
 }

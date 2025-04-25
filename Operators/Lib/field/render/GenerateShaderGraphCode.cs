@@ -169,7 +169,7 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
         {
             _resourceViews.Add(r.Srv);
         }
-        Log.Debug($"Got {_resourceReferences.Count} resources");
+        //Log.Debug($"Got {_resourceReferences.Count} resources");
     }
     
     private readonly List<ShaderGraphNode.SrvBufferReference> _resourceReferences = [];
@@ -190,18 +190,22 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
         // Recursively collect code from connected nodes
         _graphNode.CollectEmbeddedShaderCode(_codeAssembleContext);
         
-        // Build and inject definitions...
-        _functionsBuilder.Clear();
-        _functionsBuilder.AppendLine("// --- globals -------------------");
+        // Build and inject definitions (must be injected before resources to support custom struct type definition)
+        _definitionsBuilder.Clear();
+        
+        _definitionsBuilder.AppendLine("// --- globals -------------------");
         foreach (var code in _codeAssembleContext.Globals.Values)
         {
-            _functionsBuilder.AppendLine(code);
-            _functionsBuilder.AppendLine("");
+            _definitionsBuilder.AppendLine(code);
+            _definitionsBuilder.AppendLine("");
 
         }
+        _definitionsBuilder.AppendLine(_codeAssembleContext.Definitions.ToString());
+        TryInject("GLOBALS", ref templateCode, _definitionsBuilder.ToString());
         
+        // Build and inject functions...
+        _functionsBuilder.Clear();
         _functionsBuilder.AppendLine("// --- instance functions -------------------");
-        _functionsBuilder.AppendLine(_codeAssembleContext.Definitions.ToString());
         TryInject("FIELD_FUNCTIONS", ref templateCode, _functionsBuilder.ToString());
         
         // Build and inject calls...
@@ -266,6 +270,7 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
 
     private readonly CodeAssembleContext _codeAssembleContext = new();
     private int _updateCycleCount;
+    private static readonly StringBuilder _definitionsBuilder = new();
     private static readonly StringBuilder _functionsBuilder = new();
     private static readonly StringBuilder _resourceDefinitionsBuilder = new();
     

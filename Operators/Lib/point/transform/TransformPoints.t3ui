@@ -15,8 +15,8 @@
     {
       "InputId": "0ef7556a-950f-406c-8e1d-511d17b4ea10"/*Pivot*/,
       "Position": {
-        "X": -379.8141,
-        "Y": 1045.419
+        "X": -32.49765,
+        "Y": 937.44495
       },
       "Description": "Moves the Pivot (center point) of the incoming subgraph:\n\nX (-left / +right) \nY (-down / + up) \nZ (-forward/+backwards)\n\nThe Pivot Point determines the location of the incoming subgraph Gizmo. Transforming its location can make it easier to perform transformations around the position you want.\n",
       "AddPadding": "True"
@@ -24,8 +24,8 @@
     {
       "InputId": "1ab4671f-7977-4e7e-bb06-f828ae32e3af"/*Space*/,
       "Position": {
-        "X": -366.88867,
-        "Y": 1192.3389
+        "X": -32.16922,
+        "Y": 1087.1665
       },
       "GroupTitle": "Transform",
       "Description": "Defines the space"
@@ -33,8 +33,8 @@
     {
       "InputId": "319d71a9-b8dd-406f-a3a2-1c7508ba2ca7"/*Shearing*/,
       "Position": {
-        "X": -379.8141,
-        "Y": 1000.4183
+        "X": -32.49765,
+        "Y": 902.4449
       },
       "Description": "Shears the incoming points\n\nX (-left / +right), \nY (-down / + up), \nZ (-forward/+backwards)\n",
       "AddPadding": "True"
@@ -42,8 +42,8 @@
     {
       "InputId": "454d0150-dac4-41b2-83f8-d1ecc3ef76d4"/*Rotation*/,
       "Position": {
-        "X": -379.8141,
-        "Y": 865.41846
+        "X": -32.49765,
+        "Y": 797.4449
       },
       "Description": "Rotates the incoming subgraph around the following axes:\n\nX: Horizontal axis\nY: Vertical axis\nZ: Forward axis\n",
       "Min": -90.0,
@@ -65,8 +65,8 @@
     {
       "InputId": "523b7acd-d8e7-4473-9ec7-15eec1d795df"/*Stretch*/,
       "Position": {
-        "X": -379.8141,
-        "Y": 910.41864
+        "X": -32.49765,
+        "Y": 832.4449
       },
       "Description": "Scales the incoming subgraph in the following directions:\n\nX: Width\nY: Height\nZ: Depth\n"
     },
@@ -74,8 +74,8 @@
       "InputId": "565ff364-c3d9-4c60-a9a0-79fdd36d3477"/*Points*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -475.52475,
-        "Y": 755.82294
+        "X": -226.04128,
+        "Y": 650.6874
       }
     },
     {
@@ -89,8 +89,8 @@
     {
       "InputId": "9e803bd1-c5a3-4f6f-926d-d19f32dcbae5"/*Translation*/,
       "Position": {
-        "X": -379.8141,
-        "Y": 820.41846
+        "X": -32.49765,
+        "Y": 762.4449
       },
       "Description": "Moves the incoming points\n\nX (-left / +right), \nY (-down / + up), \nZ (-forward/+backwards)\n",
       "AddPadding": "True"
@@ -98,15 +98,15 @@
     {
       "InputId": "a2b65311-d1fd-491e-8787-2f9216f3574a"/*StrengthFactor*/,
       "Position": {
-        "X": -366.88867,
-        "Y": 1237.3389
+        "X": -32.16922,
+        "Y": 1122.1665
       }
     },
     {
       "InputId": "a6e5770b-39dc-4d7b-b92e-53302dc89395"/*Scale*/,
       "Position": {
-        "X": -379.8141,
-        "Y": 955.41846
+        "X": -32.49765,
+        "Y": 867.4449
       },
       "Description": "Uniformly scales the incoming subgraph",
       "AddPadding": "True",
@@ -125,8 +125,8 @@
     {
       "InputId": "fb2cfc5e-51d6-4efa-b936-bdb73c33549f"/*Strength*/,
       "Position": {
-        "X": -366.88867,
-        "Y": 1147.3389
+        "X": -32.49765,
+        "Y": 1007.44495
       },
       "GroupTitle": "Options"
     }
@@ -135,36 +135,36 @@
     {
       "ChildId": "2bf12c9a-9c70-4752-82a1-5a3b46516f61"/*IntsToBuffer*/,
       "Position": {
-        "X": -216.88867,
-        "Y": 1192.3389
+        "X": 107.83078,
+        "Y": 1087.1665
       }
     },
     {
       "ChildId": "3aa1f8d9-8e1f-43fb-80ba-f15ec5864e40"/*GetBufferComponents*/,
       "Position": {
-        "X": 332.13535,
-        "Y": 1230.2643
+        "X": 113.58789,
+        "Y": 657.60925
       }
     },
     {
       "ChildId": "4877c491-4278-4b27-80c5-3de432c67ce9"/*GetBufferComponents*/,
       "Position": {
-        "X": -338.51422,
-        "Y": 626.3017
+        "X": -226.04128,
+        "Y": 685.6874
       }
     },
     {
       "ChildId": "4a35fd19-11d2-49d3-9d62-d4a46933db93"/*ComputeShader*/,
       "Position": {
-        "X": 109.659775,
-        "Y": 493.5784
+        "X": 113.58789,
+        "Y": 517.60925
       }
     },
     {
       "ChildId": "597bfff4-5487-481f-a621-90890781ab32"/*StructuredBufferWithViews*/,
       "Position": {
-        "X": 171.15555,
-        "Y": 1283.6648
+        "X": 113.58789,
+        "Y": 622.60925
       }
     },
     {
@@ -177,36 +177,36 @@
     {
       "ChildId": "852d7521-22e7-4482-9ae5-0556cd78a26a"/*ComputeShaderStage*/,
       "Position": {
-        "X": 475.10886,
-        "Y": 524.0607
+        "X": 479.60776,
+        "Y": 575.34845
       }
     },
     {
       "ChildId": "b23f0e8b-faa3-4e01-9675-e33c0fbe4af6"/*GetSRVProperties*/,
       "Position": {
-        "X": -185.52144,
-        "Y": 695.17487
+        "X": 113.58789,
+        "Y": 587.60925
       }
     },
     {
       "ChildId": "c9390e2c-0150-4ec8-9738-f4a218418bc5"/*TransformMatrix*/,
       "Position": {
-        "X": -229.81409,
-        "Y": 820.41846
+        "X": 107.50235,
+        "Y": 762.4449
       }
     },
     {
       "ChildId": "d45b52bf-0959-402f-820c-8fecb68d4be3"/*FloatsToBuffer*/,
       "Position": {
-        "X": 178.24501,
-        "Y": 873.66125
+        "X": 107.50235,
+        "Y": 972.44495
       }
     },
     {
       "ChildId": "d7f0248f-a87c-46c8-890b-3a3ec5ae2c26"/*ExecuteBufferUpdate*/,
       "Position": {
-        "X": 648.0739,
-        "Y": 523.0598
+        "X": 479.6078,
+        "Y": 785.34845
       }
     }
   ],
@@ -214,8 +214,8 @@
     {
       "OutputId": "ba17981e-ef9f-46f1-a653-6d50affa8838"/*Output*/,
       "Position": {
-        "X": 812.7836,
-        "Y": 534.6297
+        "X": 479.6078,
+        "Y": 855.34845
       }
     }
   ],

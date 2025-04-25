@@ -122,7 +122,13 @@
     {
       "Id": "10b44b2f-d894-498c-bdbb-1985ee91f694"/*TransformPoints*/,
       "SymbolId": "7f6c64fe-ca2e-445e-a9b4-c70291ce354e",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "1ab4671f-7977-4e7e-bb06-f828ae32e3af"/*Space*/,
+          "Type": "System.Int32",
+          "Value": 0
+        }
+      ],
       "Outputs": []
     },
     {
@@ -326,8 +332,9 @@
       "Outputs": []
     },
     {
-      "Id": "4c22b6a0-9ead-4c44-9143-55b4108e1b12"/*Execute*/,
+      "Id": "4c22b6a0-9ead-4c44-9143-55b4108e1b12"/*Axis*/,
       "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
+      "Name": "Axis",
       "InputValues": [],
       "Outputs": []
     },
@@ -340,7 +347,13 @@
     {
       "Id": "5132d19a-e6d9-4f87-90f2-4d59ce2f171c"/*TransformPoints*/,
       "SymbolId": "7f6c64fe-ca2e-445e-a9b4-c70291ce354e",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "1ab4671f-7977-4e7e-bb06-f828ae32e3af"/*Space*/,
+          "Type": "System.Int32",
+          "Value": 0
+        }
+      ],
       "Outputs": []
     },
     {
@@ -725,7 +738,13 @@
     {
       "Id": "aa2a8b4a-bfe4-4012-9ed7-97a9c9786446"/*TransformPoints*/,
       "SymbolId": "7f6c64fe-ca2e-445e-a9b4-c70291ce354e",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "1ab4671f-7977-4e7e-bb06-f828ae32e3af"/*Space*/,
+          "Type": "System.Int32",
+          "Value": 0
+        }
+      ],
       "Outputs": []
     },
     {
