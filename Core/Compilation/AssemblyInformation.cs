@@ -89,17 +89,6 @@ public sealed class AssemblyInformation
         }
     }
 
-    private Assembly? Assembly
-    {
-        get
-        {
-            lock (_assemblyLock)
-            {
-                return LoadContext.Root?.Assembly;
-            }
-        }
-    }
-
     /// <summary>
     /// The entry point for loading the assembly and extracting information about the types within it - particularly the operators.
     /// However, loading an assembly's types in this way will also trigger the <see cref="T3AssemblyLoadContext"/> so that its dependencies are resolved.
@@ -108,9 +97,14 @@ public sealed class AssemblyInformation
     {
         lock (_assemblyLock)
         {
-            var assembly = Assembly;
-
-            if (assembly == null)
+            if (_operatorTypeInfo.Count > 0)
+            {
+                Log.Debug($"{Name}: Already loaded types");
+                return true;
+            }
+            
+            var rootNode = LoadContext.Root;
+            if (rootNode == null)
             {
                 Log.Error($"Failed to get assembly for {Name}");
                 _types = null;
@@ -120,13 +114,13 @@ public sealed class AssemblyInformation
 
             try
             {
-                var types = assembly.GetTypes();
-                LoadTypes(types, assembly, out ShouldShareResources, out _types);
+                var types = rootNode.Assembly.GetTypes();
+                LoadTypes(types, rootNode.Assembly, out ShouldShareResources, out _types);
                 return true;
             }
             catch (Exception e)
             {
-                Log.Warning($"Failed to load types from assembly {assembly.FullName}\n{e.Message}\n{e.StackTrace}");
+                Log.Warning($"Failed to load types from assembly {rootNode.Assembly.FullName}\n{e.Message}\n{e.StackTrace}");
                 _types = _empty; // this non-null value indicates that we have tried to load the types and none were found
                 ShouldShareResources = false;
                 return false;
@@ -156,6 +150,11 @@ public sealed class AssemblyInformation
     /// <param name="typeDict"></param>
     private void LoadTypes(Type[] types, Assembly assembly, out bool shouldShareResources, out Dictionary<string, Type> typeDict)
     {
+        if (!_operatorTypeInfo.IsEmpty)
+        {
+            throw new InvalidOperationException("Operator types already loaded");
+        }
+        
         var typesByName = new Dictionary<string, Type>();
         foreach (var type in types)
         {
@@ -405,7 +404,6 @@ public sealed class AssemblyInformation
     /// </summary>
     public void Unload()
     {
-        _operatorTypeInfo.Clear();
         _loadContext?.BeginUnload();
     }
 
@@ -449,7 +447,7 @@ public sealed class AssemblyInformation
                 return true;
         }
 
-        var assembly = Assembly;
+        var assembly = LoadContext.Root?.Assembly;
 
         if (assembly == null)
         {
@@ -488,7 +486,7 @@ public sealed class AssemblyInformation
     /// </summary>
     public object? CreateInstance(Type constructorInfoInstanceType)
     {
-        var assembly = Assembly;
+        var assembly = LoadContext.Root?.Assembly;
 
         if (assembly == null)
         {
