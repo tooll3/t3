@@ -644,6 +644,9 @@ internal sealed partial class MagItemMovement
     public static bool DisconnectedInputWouldCollapseLine(MagGraphConnection connection)
     {
         var inputWasNotPrimary = connection.InputLineIndex > 0;
+        if (connection.TargetItem.Variant != MagGraphItem.Variants.Operator)
+            return false;
+        
         var inputWasOptional = connection.TargetItem.InputLines[connection.InputLineIndex].InputUi.Relevancy == Relevancy.Optional;
 
         var multiInputConnectionCount = 0;
