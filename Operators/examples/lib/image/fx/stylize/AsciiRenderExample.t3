@@ -274,11 +274,6 @@
           "Value": ",03.;?\\-+ $OoT3"
         },
         {
-          "Id": "52f3be7b-c155-430a-97ca-e2cf36631089"/*Bias*/,
-          "Type": "System.Single",
-          "Value": 0.4
-        },
-        {
           "Id": "86bb9127-10fb-47cb-9aee-45be01567810"/*Resolution*/,
           "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {

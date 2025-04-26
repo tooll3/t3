@@ -24,9 +24,6 @@ internal sealed class AsciiRender : Instance<AsciiRender>
     [Input(Guid = "4623488a-cef2-4aaa-bfea-54e39e0b5653")]
     public readonly InputSlot<float> ScaleFactor = new();
 
-    [Input(Guid = "52f3be7b-c155-430a-97ca-e2cf36631089")]
-    public readonly InputSlot<float> Bias = new();
-
     [Input(Guid = "86bb9127-10fb-47cb-9aee-45be01567810")]
     public readonly InputSlot<Int2> Resolution = new();
 
