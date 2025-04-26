@@ -135,14 +135,7 @@ namespace T3.Editor.Gui.Windows.RenderExport
             }
             ImGui.SameLine();
             FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.Folder, ref UserSettings.Config.RenderSequenceFilePath);
-
-            // Add version increment option for image sequences too
-            if (IsFilenameIncrementable(UserSettings.Config.RenderSequenceFilePath))
-            {
-                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, _autoIncrementFolderVersionNumber ? 0.7f : 0.3f);
-                FormInputs.AddCheckBox("Increment version after export", ref _autoIncrementFolderVersionNumber);
-                ImGui.PopStyleVar();
-            }
+    
         }
 
         private void HandleRenderingProcess(ref Texture2D mainTexture, Int2 size)
@@ -254,9 +247,6 @@ namespace T3.Editor.Gui.Windows.RenderExport
 
             if (_renderMode == RenderMode.Video)
                 TryIncrementingFileName();
-            else if (_renderMode == RenderMode.ImageSequence && _autoIncrementFolderVersionNumber)
-                TryIncrementingFolderName();
-
             CleanupRendering();
         }
 
@@ -380,29 +370,6 @@ namespace T3.Editor.Gui.Windows.RenderExport
                 : Path.Combine(directoryName, newFilename);
         }
 
-        private static void TryIncrementingFolderName()
-        {
-            if (!_autoIncrementFolderVersionNumber) return;
-
-            var folderName = Path.GetFileName(UserSettings.Config.RenderSequenceFilePath);
-            if (string.IsNullOrEmpty(folderName)) return;
-
-            var result = _matchFileVersionPattern.Match(folderName);
-            if (!result.Success) return;
-
-            var versionString = result.Groups[1].Value;
-            if (!int.TryParse(versionString, out var versionNumber)) return;
-
-            var digits = versionString.Length.Clamp(2, 4);
-            var newVersionString = "v" + (versionNumber + 1).ToString("D" + digits);
-            var newFolderName = folderName.Replace("v" + versionString, newVersionString);
-
-            var parentDirectory = Path.GetDirectoryName(UserSettings.Config.RenderSequenceFilePath);
-            UserSettings.Config.RenderSequenceFilePath = parentDirectory == null
-                ? newFolderName
-                : Path.Combine(parentDirectory, newFolderName);
-        }
-
         // Quality level for video
         private QualityLevel GetQualityLevelFromRate(float bitsPerPixelSecond)
         {
@@ -463,7 +430,6 @@ namespace T3.Editor.Gui.Windows.RenderExport
         private static RenderMode _renderMode = RenderMode.Video;
         private static int _bitrate = 25000000;
         private static bool _autoIncrementVersionNumber = true;
-        private static bool _autoIncrementFolderVersionNumber = true;
         private static bool _exportAudio = true;
         private static Mp4VideoWriter _videoWriter;
         private static ScreenshotWriter.FileFormats _fileFormat;
