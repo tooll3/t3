@@ -879,11 +879,6 @@
           "Id": "4a300626-b562-4a5e-bfc5-9ffcd99dc0d5"/*FilterCharacters*/,
           "Type": "System.String",
           "Value": "KJLKJDLKFJLSFS"
-        },
-        {
-          "Id": "52f3be7b-c155-430a-97ca-e2cf36631089"/*Bias*/,
-          "Type": "System.Single",
-          "Value": -0.81
         }
       ],
       "Outputs": []

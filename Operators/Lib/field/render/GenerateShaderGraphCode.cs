@@ -89,6 +89,7 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
         if (_graphNode == null)
         {
             _needsInvalidation = true;
+            ShaderCode.Value = templateCode;
             return;
         }
         

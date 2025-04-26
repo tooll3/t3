@@ -508,11 +508,6 @@
           "Value": "UVuc21=-."
         },
         {
-          "Id": "52f3be7b-c155-430a-97ca-e2cf36631089"/*Bias*/,
-          "Type": "System.Single",
-          "Value": 0.36
-        },
-        {
           "Id": "68801326-950b-4675-8450-56abf64e8518"/*MixInColors*/,
           "Type": "System.Single",
           "Value": 0.98

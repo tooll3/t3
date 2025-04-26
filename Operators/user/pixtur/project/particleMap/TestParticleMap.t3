@@ -2688,11 +2688,6 @@
           "Value": 2.0
         },
         {
-          "Id": "52f3be7b-c155-430a-97ca-e2cf36631089"/*Bias*/,
-          "Type": "System.Single",
-          "Value": 1.1
-        },
-        {
           "Id": "66509dd9-372b-4351-ad18-d7713d75cc01"/*Background*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
