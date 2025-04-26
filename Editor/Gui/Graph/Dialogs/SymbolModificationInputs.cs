@@ -32,7 +32,10 @@ internal static class SymbolModificationInputs
 
     public static bool DrawFieldNameInput(Symbol symbol, ref string parameterName, out bool isValid)
     {
-        var changed = FormInputs.AddStringInput("Name", ref parameterName);
+        var tmp = parameterName;
+        var changed = FormInputs.AddStringInput("Name", ref tmp);
+        parameterName = tmp ?? string.Empty;
+        
         CustomComponents.HelpText("This is a C# field name. It must be unique and not include spaces or special characters");
 
         isValid = GraphUtils.IsNewFieldNameValid(parameterName, symbol, out var reason);
@@ -108,7 +111,7 @@ internal static class SymbolModificationInputs
         return changed;
     }
 
-    public static bool DrawProjectDropdown(ref string nameSpace, ref EditableSymbolProject projectToCopyTo)
+    public static bool DrawProjectDropdown(ref string nameSpace, ref EditableSymbolProject? projectToCopyTo)
     {
         var projectChanged = CustomComponents.DrawProjectDropdown(ref projectToCopyTo);
         if (projectChanged && projectToCopyTo != null)

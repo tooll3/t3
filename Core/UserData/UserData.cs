@@ -35,7 +35,7 @@ public static class UserData
             result = JsonConvert.DeserializeObject<T>(jsonString);
             return result != null;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return false;
         }

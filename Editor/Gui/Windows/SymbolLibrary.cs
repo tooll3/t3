@@ -32,7 +32,8 @@ internal sealed class SymbolLibrary : Window
 
     protected override void DrawContent()
     {
-        _renameNamespaceDialog.Draw(_subtreeNodeToRename);
+        if(_subtreeNodeToRename != null)
+            _renameNamespaceDialog.Draw(_subtreeNodeToRename);
 
         ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, 10);
 

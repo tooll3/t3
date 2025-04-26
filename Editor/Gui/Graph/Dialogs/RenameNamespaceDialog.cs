@@ -15,10 +15,12 @@ internal sealed class RenameNamespaceDialog : ModalDialog
         if (BeginDialog("Move or rename namespace"))
         {
             var dialogJustOpened = _node == null;
+            var nodeName = _node == null ? "undefined" : _node.GetAsString();
+            
             if (dialogJustOpened)
             {
                 _node = subtreeNodeToRename;
-                _nameSpace = _node.GetAsString();
+                _nameSpace = nodeName;
 
                 EditableSymbolProject.TryGetEditableProjectOfNamespace(_nameSpace, out _projectToCopyFrom);
                 _projectToCopyTo = _projectToCopyFrom;
@@ -37,7 +39,7 @@ internal sealed class RenameNamespaceDialog : ModalDialog
             }
             else
             {
-                ImGui.TextColored(UiColors.StatusError, $"No source project found for namespace {_node.GetAsString()}");
+                ImGui.TextColored(UiColors.StatusError, $"No source project found for namespace {nodeName}");
             }
                 
             if (ImGui.Button("Cancel"))
@@ -56,6 +58,12 @@ internal sealed class RenameNamespaceDialog : ModalDialog
         if (ImGui.IsWindowAppearing())
             ImGui.SetKeyboardFocusHere();
 
+        if (_projectToCopyTo == null || _node == null || _projectToCopyFrom == null)
+        {
+            ImGui.Text("invalid project data");
+            return;
+        }
+        
         _ = SymbolModificationInputs.DrawNamespaceInput(ref _nameSpace, _projectToCopyTo, false, out var namespaceValid);
 
         CustomComponents.HelpText("Careful now. This operator might affect a lot of operator definitions");
@@ -84,7 +92,7 @@ internal sealed class RenameNamespaceDialog : ModalDialog
     }
 
     private static NamespaceTreeNode? _node;
-    private static string? _nameSpace;
+    private static string _nameSpace= string.Empty;
     private static EditableSymbolProject? _projectToCopyFrom;
     private static EditableSymbolProject? _projectToCopyTo;
 }

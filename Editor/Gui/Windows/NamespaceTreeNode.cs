@@ -10,7 +10,7 @@ namespace T3.Editor.Gui.Windows;
 /// A nested container that can contain further instances of <see cref="NamespaceTreeNode"/>
 /// Used to structure the <see cref="SymbolLibrary"/>.
 /// </summary>
-public sealed class NamespaceTreeNode
+internal sealed class NamespaceTreeNode
 {
     internal string Name { get; private set; }
     internal List<NamespaceTreeNode> Children { get; } = new();
