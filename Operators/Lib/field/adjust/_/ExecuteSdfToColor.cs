@@ -21,12 +21,12 @@ internal sealed class ExecuteSdfToColor : Instance<ExecuteSdfToColor>
 
     private void Update(EvaluationContext context)
     {
-
+        
+        ShaderNode.Update(context);
         _srv = GradientSrv.GetValue(context);
         if (_srv == null || _srv.IsDisposed)
             _srv = null;
-        
-        ShaderNode.Update(context);
+
         
         // Get all parameters to clear operator dirty flag
         InputField.DirtyFlag.Clear();

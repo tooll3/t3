@@ -17,9 +17,16 @@ internal sealed class SrvFromTexture2d : Instance<SrvFromTexture2d>
 
     private void Update(EvaluationContext context)
     {
+        
+        var texture = Texture.GetValue(context);
+        if (texture != null && ShaderResourceView.Value != null && texture.GetHashCode() == _textureHash)
+            return;
+
+        _textureHash = texture?.GetHashCode() ?? 0;
+        
         try
         {
-            Texture2D texture = Texture.GetValue(context);
+
             if (texture != null)
             {
                 ShaderResourceView.Value?.Dispose();
@@ -63,6 +70,7 @@ internal sealed class SrvFromTexture2d : Instance<SrvFromTexture2d>
     }
 
     private bool _complainedOnce = false;
+    private int _textureHash;
 
     [Input(Guid = "{D5AFA102-2F88-431E-9CD4-AF91E41F88F6}")]
     public readonly InputSlot<Texture2D> Texture = new();
