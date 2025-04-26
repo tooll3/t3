@@ -1,7 +1,6 @@
 #nullable enable
 using T3.Core.DataTypes.ShaderGraph;
 using T3.Core.Utils;
-using T3.Core.Utils.Geometry;
 
 namespace Lib;
 
@@ -17,14 +16,18 @@ internal sealed class ExecuteRepeatFieldAtPoints : Instance<ExecuteRepeatFieldAt
         ShaderNode = new ShaderGraphNode(this, null, InputField);
 
         Result.Value = ShaderNode;
-        ShaderNode.AdditionalParameters = [new ShaderGraphNode.Parameter("float4x4", "Transform", Matrix4x4.Identity)];
         Result.UpdateAction += Update;
     }
 
     private void Update(EvaluationContext context)
     {
-        ShaderNode.Update(context);
-
+        var combineMethod = CombineMethod.GetEnumValue<CombineMethods>(context);
+        if (combineMethod != _combineMethod)
+        {
+            _combineMethod = combineMethod;
+            ShaderNode.FlagCodeChanged();
+        }
+        
         var buffer = Points.GetValue(context);
         _count = buffer?.Srv?.Description != null ? buffer.Srv.Description.Buffer.ElementCount : 0;
 
@@ -36,18 +39,20 @@ internal sealed class ExecuteRepeatFieldAtPoints : Instance<ExecuteRepeatFieldAt
         {
             _srv = null;
         }
+        
+        ShaderNode.Update(context);
+        
+        // Get all parameters to clear operator dirty flag
+        InputField.DirtyFlag.Clear();
     }
 
     public ShaderGraphNode ShaderNode { get; }
-    private int _count;
-    private ShaderResourceView? _srv;
 
     void IGraphNodeOp.AddDefinitions(CodeAssembleContext c)
     {
-        c.Globals["__Point__"] = """
-                                 #include "shared/point.hlsl"
-                                 """;
+        c.Globals[nameof(ShaderGraphIncludes.GetColorBlendFactor)] = ShaderGraphIncludes.GetColorBlendFactor;
         
+        // This is initialized in ComputePointTransformMatrix.hlsl
         c.Globals["PointMatrix"] = """
                                  struct PointTransform
                                  {
@@ -55,36 +60,80 @@ internal sealed class ExecuteRepeatFieldAtPoints : Instance<ExecuteRepeatFieldAt
                                      float4 PointColor;
                                  };
                                  """;
+        
+        // Register global method
+        switch (_combineMethod)
+        {
+
+            case CombineMethods.UnionRound:
+                c.Globals["fOpUnionRound"]
+                    = """
+                       // The "Round" variant uses a quarter-circle to join the two objects smoothly:
+                       float fOpUnionRound(float a, float b, float r) {
+                           float2 u = max(float2(r - a,r - b), 0);
+                           return max(r, min (a, b)) - length(u);
+                       }
+                      """;
+                break;
+            case CombineMethods.UnionSoft:
+                c.Globals["fOpUnionSoft"] = """
+                                            float fOpUnionSoft(float a, float b, float r) {
+                                            	float e = max(r - abs(a - b), 0);
+                                            	return min(a, b) - e*e*0.25/r;
+                                            }
+                                            """;
+                break;
+        }
     }
 
     bool IGraphNodeOp.TryBuildCustomCode(CodeAssembleContext c)
     {
-        var fields = ShaderNode?.InputNodes;
-        if (fields == null || fields.Count == 0)
+        const int maxSteps = 100;
+        
+        var fields = ShaderNode.InputNodes;
+        if (fields.Count == 0)
             return true;
 
         var inputField = fields[0];
-        //c.PushContext(0, "for");
 
-        c.AppendCall($"float4 pKeep{c} = p{c};");
-        c.AppendCall($"float4 fKeep{c} = float4(1,1,1,999);");
-        c.AppendCall($"for(int i{c}=0; i{c}<{_count} && i{c}<100; i{c}++) {{");
+        c.AppendCall($"float4 pStart{c} = p{c};");
+        c.AppendCall($"float4 fLoop{c} = float4(1,1,1,99999);");
+        //c.AppendCall($"float4 fStep{c};");
+        //c.AppendCall($"float4 p{c};");
+        c.AppendCall($"for(int i{c} = 0; i{c} < {_count} && i{c} < {maxSteps}; i{c}++) {{");
         c.Indent();
-        c.AppendCall($"p{c} = pKeep{c};");
-        c.AppendCall($"f{c} = float4(1,1,1,9999);");
-        c.AppendCall($"p{c}.xyz = mul(float4(pKeep{c}.xyz,1), {ShaderNode}PointTransforms[i{c}].WorldToPointObject).xyz;");
-        //c.AppendCall($"p{c}.x += i{c};");
-        inputField?.CollectEmbeddedShaderCode(c);
-        
-        //c.AppendCall($"f{c}.rgb *= {ShaderNode}PointTransforms[i{c}].PointColor.rgb;");
-        //c.AppendCall($"fKeep{c}.rgb = lerp(f{c}.rgb, fKeep{c}.rgb, f{c}.w < fKeep{c}.w ? 0:1);");
-        c.AppendCall($"fKeep{c}.w =   i{c} == 0 ? f{c}.w:  min(f{c}.w, fKeep{c}.w);");
+        {
+            //c.AppendCall($"p{c} = pStart{c};");
+            c.AppendCall($"f{c} = float4(1,1,1,9999);");
+            
+            c.AppendCall($"p{c}.xyz = mul(float4(pStart{c}.xyz,1), {ShaderNode}PointTransforms[i{c}].WorldToPointObject).xyz;");
+            
+            inputField?.CollectEmbeddedShaderCode(c);
+            
+            // Multiply Point color
+            c.AppendCall($"f{c}.rgb *= {ShaderNode}PointTransforms[i{c}].PointColor.rgb;");
+            c.AppendCall($"fLoop{c}.rgb = lerp(fLoop{c}.rgb, f{c}.rgb, GetColorBlendFactor(fLoop{c}.w, f{c}.w, {ShaderNode}K ));");
+            //c.AppendCall($"fLoop{c}.rgb = lerp(f{c}.rgb, fLoop{c}.rgb, f{c}.w < fLoop{c}.w ? 0:1);");
+            
+            // Combine initial value with new value...
+            switch (_combineMethod)
+            {
+                case CombineMethods.Union:
+                    c.AppendCall($"fLoop{c}.w = min(f{c}.w, fLoop{c}.w);");
+                    break;
+                
+                case CombineMethods.UnionSoft:
+                    c.AppendCall($"fLoop{c}.w = fOpUnionSoft(fLoop{c}.w, f{c}.w, {ShaderNode}K);");
+                    break;
+
+                case CombineMethods.UnionRound:
+                    c.AppendCall($"fLoop{c}.w = fOpUnionRound(fLoop{c}.w, f{c}.w, {ShaderNode}K);");
+                    break;
+            }
+        }
         c.Unindent();
         c.AppendCall("}");
-        c.AppendCall($"f{c} = fKeep{c};");
-        //c.PopContext();
-        //c.AppendCall($"f{c}.r *= 0.2;");
-        
+        c.AppendCall($"f{c} = fLoop{c};");
         return true;
     }
 
@@ -101,7 +150,17 @@ internal sealed class ExecuteRepeatFieldAtPoints : Instance<ExecuteRepeatFieldAt
         }
 
         list.Add(new ShaderGraphNode.SrvBufferReference($"StructuredBuffer<PointTransform> {ShaderNode}PointTransforms", _srv));
-        //Log.Debug($"Add with length {_srv.Description.Buffer.ElementCount}  disposed:{_srv.IsDisposed}   check: {_srv.GetHashCode()}", this);
+    }
+    
+    private int _count;
+    private ShaderResourceView? _srv; // This will later be passed on to the shader Stage by GenerateShaderCode
+    private CombineMethods _combineMethod;
+
+    private enum CombineMethods
+    {
+        Union,
+        UnionSoft,
+        UnionRound,
     }
 
     [Input(Guid = "bb4e6ad8-5941-4218-9e4b-4ba402be7ed4")]
@@ -109,4 +168,13 @@ internal sealed class ExecuteRepeatFieldAtPoints : Instance<ExecuteRepeatFieldAt
 
     [Input(Guid = "1E5288D2-C2AE-4A1D-AD69-FE63D32A00C6")]
     public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new();
+    
+    [GraphParam]
+    [Input(Guid = "9E4F5916-722D-4C4B-B1CA-814958A5B836")]
+    public readonly InputSlot<float> K = new();
+    
+    [Input(Guid = "4648E514-B48C-4A98-A728-3EBF9BCFA0B7", MappedType = typeof(CombineMethods))]
+    public readonly InputSlot<int> CombineMethod = new();
+    
+    
 }

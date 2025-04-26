@@ -1,5 +1,4 @@
 using Lib.render._dx11.api;
-using ManagedBass;
 using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes.ShaderGraph;
@@ -58,8 +57,6 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
         _lastErrorMessage = null;
         
         var hasTemplateChanged = TemplateCode.DirtyFlag.IsDirty;
-        // if(hasTemplateChanged)
-        //     Log.Debug("templateChanged", this);
 
         var definesAreDirty = AdditionalDefines.DirtyFlag.IsDirty;
         if (definesAreDirty)
@@ -135,7 +132,7 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
     private void AssembleAndInjectParameters(ref string templateCode)
     {
         var commentHook = ToHlslTemplateTag("FLOAT_PARAMS");
-        if (templateCode.IndexOf((string)commentHook, StringComparison.Ordinal) == -1)
+        if (!templateCode.Contains(commentHook))
             return;
 
         var sb = new StringBuilder();
@@ -169,7 +166,6 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
         {
             _resourceViews.Add(r.Srv);
         }
-        //Log.Debug($"Got {_resourceReferences.Count} resources");
     }
     
     private readonly List<ShaderGraphNode.SrvBufferReference> _resourceReferences = [];
@@ -178,11 +174,9 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
     private readonly List<ShaderParamHandling.ShaderCodeParameter> _allShaderCodeParams = [];
     private IReadOnlyList<float> AllFloatValues => _allFloatParameterValues;
     private readonly List<float> _allFloatParameterValues = [];
-    private int _lastStructureHash = 0;
+    private int _lastStructureHash;
     private readonly int _graphId;
 
-    //private readonly Dictionary<string, string> _globalFunctionDefinitions = new();
-    
     private void AssembleAndInjectCode(ref string templateCode)
     {
         _codeAssembleContext.Reset();
@@ -257,15 +251,15 @@ internal sealed class GenerateShaderGraphCode : Instance<GenerateShaderGraphCode
     
 
 
-    private static bool TryInject(string hookId, ref string code, string insert)
+    private static void TryInject(string hookId, ref string code, string insert)
     {
         var hookString = ToHlslTemplateTag(hookId);
-        
-        if (code.IndexOf(hookString, StringComparison.Ordinal) == -1)
-            return false;
+
+        // Avoid ArgumentException
+        if (string.IsNullOrEmpty(code))
+            return;
         
         code = code.Replace(hookString, insert);
-        return true;
     } 
 
     private readonly CodeAssembleContext _codeAssembleContext = new();

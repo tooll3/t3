@@ -3,11 +3,18 @@
   "Description": "This operator is extreme slow especially when used with [RayMarching].\nMax point count is interally clamped to 50 avoid GPU stalls. ",
   "InputUis": [
     {
+      "InputId": "08ad7bce-1161-4a43-997e-fea2e792ae36"/*K*/,
+      "Position": {
+        "X": 178.47665,
+        "Y": 322.8042
+      }
+    },
+    {
       "InputId": "9a7f3066-de71-4729-bc9e-5db0d8fd9eaa"/*Points*/,
       "Relevancy": "Required",
       "Position": {
-        "X": 178.47665,
-        "Y": 247.80421
+        "X": 180.42355,
+        "Y": 178.6905
       }
     },
     {
@@ -86,8 +93,8 @@
     {
       "ChildId": "efe4b119-12de-4b58-b48f-7e87ce0a5bfe"/*GetBufferComponents*/,
       "Position": {
-        "X": 178.47665,
-        "Y": 282.8042
+        "X": 180.42355,
+        "Y": 213.69049
       }
     }
   ],
@@ -96,7 +103,7 @@
       "OutputId": "202481ea-bf94-4fd3-ad2c-84dbf7622dea"/*Result*/,
       "Position": {
         "X": 1187.4774,
-        "Y": 212.202
+        "Y": 247.202
       }
     }
   ]
