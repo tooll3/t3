@@ -1,0 +1,32 @@
+{
+  "Id": "c0045cbb-7eaf-438e-872e-9e0ba08040a4"/*ExecuteSdfToColor*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "4a095164-ec1d-4aa6-abb8-7cca0107b45a"/*InputField*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "d4b35b39-659e-4367-a69b-ff77ca74ad5a"/*GradientSrv*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 210.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "8325c723-06f0-400a-adf2-a494ea161def"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

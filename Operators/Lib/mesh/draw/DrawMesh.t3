@@ -310,28 +310,6 @@
       "Outputs": []
     },
     {
-      "Id": "dbb07db3-4276-45a8-a424-e48a365fae70"/*PixelShader*/,
-      "SymbolId": "f7c625da-fede-4993-976c-e259e0ee4985",
-      "InputValues": [
-        {
-          "Id": "24646f06-1509-43ce-94c6-eeb608ad97cd"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources/lib/3d/mesh/mesh-Draw.hlsl"
-        },
-        {
-          "Id": "501338b3-f432-49a5-bdbd-bcf209671305"/*EntryPoint*/,
-          "Type": "System.String",
-          "Value": "psMain"
-        },
-        {
-          "Id": "be9b3dc1-7122-4b3d-b936-cccf2581b69e"/*DebugName*/,
-          "Type": "System.String",
-          "Value": ""
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "e57d129b-4621-4971-ba62-7ab87cafadcb"/*FloatsToBuffer*/,
       "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
       "InputValues": [],
@@ -595,6 +573,12 @@
       "TargetSlotId": "9571b16e-72d1-4544-aa98-8a08b63bb5f6"
     },
     {
+      "SourceParentOrChildId": "151209ef-f52b-4c88-9d9c-5a8882fb0e1d",
+      "SourceSlotId": "adf247cd-79cc-4d4e-b3c1-6a8b2d54683d",
+      "TargetParentOrChildId": "69767494-70bc-4ac8-aa51-a552037edf79",
+      "TargetSlotId": "cc866663-5bfa-4a17-9efc-e2f381767317"
+    },
+    {
       "SourceParentOrChildId": "acf51f9f-7cbb-40a2-86c4-fc5e215f774c",
       "SourceSlotId": "431b39fd-4b62-478b-bbfa-4346102c3f61",
       "TargetParentOrChildId": "818d5323-00f1-45d9-b88f-6991ba26fb81",
@@ -677,12 +661,6 @@
       "SourceSlotId": "8a65b34b-40be-4dbf-812c-d4c663464c7f",
       "TargetParentOrChildId": "ad43d468-55d5-4d7f-abac-0e30d42be56c",
       "TargetSlotId": "8716b11a-ef71-437e-9930-bb747da818a7"
-    },
-    {
-      "SourceParentOrChildId": "66154a7b-2798-464b-b39d-4b43e48a0572",
-      "SourceSlotId": "dd9d8718-addc-49b1-bd33-aac22b366f94",
-      "TargetParentOrChildId": "dbb07db3-4276-45a8-a424-e48a365fae70",
-      "TargetSlotId": "24646f06-1509-43ce-94c6-eeb608ad97cd"
     },
     {
       "SourceParentOrChildId": "0cd63020-d4dc-4de9-9ee9-db2449ab24c3",

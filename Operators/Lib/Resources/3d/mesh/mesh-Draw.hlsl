@@ -60,9 +60,9 @@ struct psInput
     float fog : VPOS;
 };
 
-sampler texSampler : register(s0);
-sampler linearSampler : register(s1);
-sampler clampedSampler : register(s2);
+sampler TexSampler : register(s0);
+sampler LinearSampler : register(s1);
+sampler ClampedSampler : register(s2);
 
 StructuredBuffer<PbrVertex> PbrVertices : register(t0);
 StructuredBuffer<int3> FaceIndices : register(t1);
@@ -128,7 +128,7 @@ static FragmentMaterial frag;
 /*{GLOBALS}*/
 
 //=== Additional Resources ==========================================
-/*{RESOURCES(t6)}*/
+/*{RESOURCES(t8)}*/
 
 //=== Field functions ===============================================
 /*{FIELD_FUNCTIONS}*/
@@ -154,13 +154,13 @@ float GetDistance(float3 p3)
 float4 psMain(psInput pin) : SV_TARGET
 {
     // Sample input textures to get shading model params.
-    float4 albedo = BaseColorMap.Sample(texSampler, pin.texCoord);
+    float4 albedo = BaseColorMap.Sample(TexSampler, pin.texCoord);
     if (AlphaCutOff > 0 && albedo.a < AlphaCutOff)
     {
         discard;
     }
 
-    float4 roughnessMetallicOcclusion = RSMOMap.Sample(texSampler, pin.texCoord);
+    float4 roughnessMetallicOcclusion = RSMOMap.Sample(TexSampler, pin.texCoord);
     frag.Roughness = saturate(roughnessMetallicOcclusion.x + Roughness);
     frag.Metalness = saturate(roughnessMetallicOcclusion.y + Metal);
     frag.Occlusion = roughnessMetallicOcclusion.z;
@@ -170,7 +170,7 @@ float4 psMain(psInput pin) : SV_TARGET
     float3 Lo = normalize(eyePosition.xyz - pin.worldPosition);
 
     // Get current fragment's normal and transform to world space.
-    float4 normalMap = NormalMap.Sample(texSampler, pin.texCoord);
+    float4 normalMap = NormalMap.Sample(TexSampler, pin.texCoord);
 
     float3 N = normalize(2.0 * normalMap.rgb - 1.0);
     N = normalize(mul(N, pin.tbnToWorld));
@@ -183,16 +183,16 @@ float4 psMain(psInput pin) : SV_TARGET
     // return float4(Lr.xyz,1);
 
     // Fresnel reflectance at normal incidence (for metals use albedo color).
-    float3 F0 = lerp(Fdielectric, albedo, frag.Metalness);
+    float3 F0 = lerp(Fdielectric, albedo.rgb, frag.Metalness);
 
     // Direct lighting calculation for analytical lights.
     float3 directLighting = 0.0;
-    for (uint i = 0; i < ActiveLightCount; ++i)
+    for (uint i = 0; i < (uint)ActiveLightCount; ++i)
     {
         float3 Li = Lights[i].position - pin.worldPosition; //- Lights[i].direction;
         float distance = length(Li);
         float intensity = Lights[i].intensity / (pow(distance / Lights[i].range, Lights[i].decay) + 1);
-        float3 Lradiance = Lights[i].color * intensity; // Lights[i].radiance;
+        float3 Lradiance = Lights[i].color.rgb * intensity; // Lights[i].radiance;
 
         // Half-vector between Li and Lo.
         float3 Lh = normalize(Li + Lo);
@@ -231,10 +231,10 @@ float4 psMain(psInput pin) : SV_TARGET
     float3 ambientLighting = 0;
     {
         // Sample diffuse irradiance at normal direction.
-        // float3 irradiance = 0;// irradianceTexture.Sample(texSampler, N).rgb;
+        // float3 irradiance = 0;// irradianceTexture.Sample(TexSampler, N).rgb;
         uint width, height, levels;
         PrefilteredSpecular.GetDimensions(0, width, height, levels);
-        float3 irradiance = PrefilteredSpecular.SampleLevel(linearSampler, N, 0.6 * levels).rgb;
+        float3 irradiance = PrefilteredSpecular.SampleLevel(LinearSampler, N, 0.6 * levels).rgb;
 
         // Calculate Fresnel term for ambient lighting.
         // Since we use pre-filtered cubemap(s) and irradiance is coming from many directions
@@ -249,10 +249,10 @@ float4 psMain(psInput pin) : SV_TARGET
         float3 diffuseIBL = kd * albedo.rgb * irradiance;
 
         // Sample pre-filtered specular reflection environment at correct mipmap level.
-        float3 specularIrradiance = PrefilteredSpecular.SampleLevel(linearSampler, Lr, frag.Roughness * levels).rgb;
+        float3 specularIrradiance = PrefilteredSpecular.SampleLevel(LinearSampler, Lr, frag.Roughness * levels).rgb;
 
         // Split-sum approximation factors for Cook-Torrance specular BRDF.
-        float2 specularBRDF = BRDFLookup.SampleLevel(clampedSampler, float2(frag.cosLo, frag.Roughness), 0).rg;
+        float2 specularBRDF = BRDFLookup.SampleLevel(ClampedSampler, float2(frag.cosLo, frag.Roughness), 0).rg;
 
         // Total specular IBL contribution.
         float3 specularIBL = (F0 * specularBRDF.x + specularBRDF.y) * specularIrradiance;
@@ -261,7 +261,7 @@ float4 psMain(psInput pin) : SV_TARGET
 
     // Final fragment color.
     float4 litColor = float4(directLighting + ambientLighting, 1.0) * BaseColor * Color;
-    litColor += float4(EmissiveColorMap.Sample(texSampler, pin.texCoord).rgb * EmissiveColor.rgb, 0);
+    litColor += float4(EmissiveColorMap.Sample(TexSampler, pin.texCoord).rgb * EmissiveColor.rgb, 0);
     litColor.rgb = lerp(litColor.rgb, FogColor.rgb, pin.fog * FogColor.a);
     litColor.a *= albedo.a;
     litColor *= GetField(float4(pin.worldPosition.xyz, 0));

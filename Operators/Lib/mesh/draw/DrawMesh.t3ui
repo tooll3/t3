@@ -7,7 +7,7 @@
       "InputId": "155c2396-0e05-4437-8171-288048b1158a"/*Filter*/,
       "Position": {
         "X": 2359.5513,
-        "Y": 3980.878
+        "Y": 4015.878
       },
       "GroupTitle": "Texture Options",
       "Description": "Defines the mode for texture filtering"
@@ -26,7 +26,8 @@
       "Position": {
         "X": 1816.4573,
         "Y": 3098.7122
-      }
+      },
+      "Description": "An optional shader graph with a color function. \n\nIt will use the world position.xyz to generate a color that is multiplied before drawing the fragment.\nTry [SphereField]->[SdfToColor]->.FragmentField."
     },
     {
       "InputId": "4748d9ab-58a4-41d7-a2ee-6f7dfed86211"/*AlphaCutOff*/,
@@ -135,7 +136,7 @@
       "ChildId": "159b164f-1700-409b-95d7-d91d82b59f13"/*texSampler*/,
       "Position": {
         "X": 2499.5513,
-        "Y": 3980.878
+        "Y": 4015.878
       }
     },
     {
@@ -194,7 +195,7 @@
       "ChildId": "6483c4a0-43f8-46c3-83b7-62cc38db958c"/*clampedSampler*/,
       "Position": {
         "X": 2499.5513,
-        "Y": 4050.878
+        "Y": 4085.878
       }
     },
     {
@@ -298,13 +299,6 @@
       "Position": {
         "X": 2091.1904,
         "Y": 4461.1104
-      }
-    },
-    {
-      "ChildId": "dbb07db3-4276-45a8-a424-e48a365fae70"/*PixelShader*/,
-      "Position": {
-        "X": 2317.2422,
-        "Y": 3447.2783
       }
     },
     {
