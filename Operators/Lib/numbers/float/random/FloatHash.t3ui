@@ -3,23 +3,9 @@
   "Description": "Generates a psydorandom integer from a float value",
   "InputUis": [
     {
-      "InputId": "34494745-779a-4a2d-bafc-6f6470fb053e"/*Max*/,
+      "InputId": "9427b1cb-da57-431f-b182-de16b7e11002"/*Seed*/,
       "Position": {
-        "X": 0.0,
-        "Y": 90.0
-      }
-    },
-    {
-      "InputId": "b6bc292e-b695-4f87-a132-ee011c6d3262"/*Min*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 45.0
-      }
-    },
-    {
-      "InputId": "d2f822b0-afa4-4b0e-8067-23f96d83f91e"/*Seed*/,
-      "Position": {
-        "X": 0.0,
+        "X": -200.0,
         "Y": 0.0
       }
     },
@@ -34,10 +20,10 @@
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "7399846d-9760-4ad6-b261-7d13ff2fc338"/*Result*/,
+      "OutputId": "4bbbd40f-3d03-4ab7-b7ce-664578efed94"/*Result*/,
       "Position": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 300.0,
+        "Y": 200.0
       }
     }
   ]

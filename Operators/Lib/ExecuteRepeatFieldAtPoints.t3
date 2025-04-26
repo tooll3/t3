@@ -6,6 +6,14 @@
       "DefaultValue": null
     },
     {
+      "Id": "4648e514-b48c-4a98-a728-3ebf9bcfa0b7"/*CombineMethod*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "9e4f5916-722d-4c4b-b1ca-814958a5b836"/*K*/,
+      "DefaultValue": 0.0
+    },
+    {
       "Id": "bb4e6ad8-5941-4218-9e4b-4ba402be7ed4"/*InputField*/,
       "DefaultValue": null
     }

@@ -373,7 +373,7 @@
           }
         },
         {
-          "Id": "ee2bc31a-a67f-4bec-bce7-0a70db88082c"/*ColorMode*/,
+          "Id": "ee2bc31a-a67f-4bec-bce7-0a70db88082c"/*GradientMode*/,
           "Type": "System.Int32",
           "Value": 1
         }
@@ -2616,7 +2616,7 @@
           "Value": 0.59983337
         },
         {
-          "Id": "ee2bc31a-a67f-4bec-bce7-0a70db88082c"/*ColorMode*/,
+          "Id": "ee2bc31a-a67f-4bec-bce7-0a70db88082c"/*GradientMode*/,
           "Type": "System.Int32",
           "Value": 1
         }

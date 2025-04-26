@@ -53,6 +53,10 @@
       }
     },
     {
+      "Id": "d8b83ca4-1f72-43da-818d-0927f15b6efb"/*Phase*/,
+      "DefaultValue": 0.0
+    },
+    {
       "Id": "deddfbee-386d-4f8f-9339-ec6c01908a11"/*OverrideTime*/,
       "DefaultValue": 0.0
     },

@@ -18,6 +18,13 @@
       "DefaultValue": null
     },
     {
+      "Id": "2db8e046-b81b-43f4-b454-4eec8fcdd4b4"/*GainAndBias*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
       "Id": "388489ee-ea0c-49a3-aee8-1ae2c4dcbda2"/*Levels*/,
       "DefaultValue": 0
     },
@@ -42,12 +49,17 @@
       "DefaultValue": null
     },
     {
-      "Id": "85859c09-c1e5-4452-8b79-4470cc3daaa8"/*Shape*/,
-      "DefaultValue": 0.0
-    },
-    {
       "Id": "98e88d02-3b78-403c-b9c9-b5ecf8565acd"/*SourceTextureSrv*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "ac3b575a-dc62-48bd-955c-f945a18a2246"/*ColorWeights*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
+        "W": 1.0
+      }
     },
     {
       "Id": "d5914036-f628-4305-d7b5-1634b219c305"/*Clamp*/,
@@ -56,6 +68,10 @@
     {
       "Id": "d9576354-76f1-403c-8b28-45386f657190"/*Threshold*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "e5548715-1cae-4792-9e6e-8f9d8daa9edf"/*BlurGradient*/,
+      "DefaultValue": {}
     },
     {
       "Id": "e6a25147-0739-4416-e8c6-2745c32ad416"/*FullscreenVS*/,

@@ -18,6 +18,10 @@
       }
     },
     {
+      "Id": "2e33837e-54c0-4519-8eda-04eee80690a5"/*VariousResources*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "34cf06fe-8f63-4f14-9c59-35a2c021b817"/*ConstantBuffers*/,
       "DefaultValue": null
     },

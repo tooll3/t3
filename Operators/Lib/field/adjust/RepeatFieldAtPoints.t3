@@ -3,7 +3,11 @@
   "Inputs": [
     {
       "Id": "08ad7bce-1161-4a43-997e-fea2e792ae36"/*K*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.0001
+    },
+    {
+      "Id": "26190514-6762-4322-87e2-393670a476a6"/*CombineMethod*/,
+      "DefaultValue": 0
     },
     {
       "Id": "9a7f3066-de71-4729-bc9e-5db0d8fd9eaa"/*Points*/,
@@ -152,6 +156,12 @@
       "SourceSlotId": "9a66687e-a834-452c-a652-ba1fc70c2c7b",
       "TargetParentOrChildId": "4290e188-0aa2-452c-b690-dae5aa3be4f6",
       "TargetSlotId": "1e5288d2-c2ae-4a1d-ad69-fe63d32a00c6"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "26190514-6762-4322-87e2-393670a476a6",
+      "TargetParentOrChildId": "4290e188-0aa2-452c-b690-dae5aa3be4f6",
+      "TargetSlotId": "4648e514-b48c-4a98-a728-3ebf9bcfa0b7"
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",

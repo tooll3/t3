@@ -1,5 +1,5 @@
 {
-  "Id": "73c028d1-3de2-4269-b503-97f62bbce320"/*_GetFieldShaderAttributes*/,
+  "Id": "73c028d1-3de2-4269-b503-97f62bbce320"/*GenerateShaderGraphCode*/,
   "Description": "",
   "InputUis": [
     {
@@ -42,6 +42,13 @@
       "Position": {
         "X": 300.0,
         "Y": 300.0
+      }
+    },
+    {
+      "OutputId": "adf247cd-79cc-4d4e-b3c1-6a8b2d54683d"/*Resources*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 400.0
       }
     }
   ]

@@ -1,5 +1,5 @@
 {
-  "Id": "27c6aa52-7b3e-4a9a-b6e5-0359f7155cee"/*LinkField*/,
+  "Id": "27c6aa52-7b3e-4a9a-b6e5-0359f7155cee"/*ChainLinkField*/,
   "Inputs": [
     {
       "Id": "02d27492-30c1-46b0-abc6-e0cd5af163d8"/*Center*/,

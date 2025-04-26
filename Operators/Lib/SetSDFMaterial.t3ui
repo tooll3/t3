@@ -3,34 +3,28 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "032161d0-6e0d-46c7-a0b2-b1ef4a6bdd7c"/*Offset*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 120.0
-      },
-      "Min": -180.0,
-      "Max": 180.0
-    },
-    {
-      "InputId": "762d68f8-1ecd-47e1-9914-9bd16aeefd2a"/*Repetitions*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      }
-    },
-    {
-      "InputId": "7c656067-ef12-4990-b094-7f8160a242d1"/*InputField*/,
+      "InputId": "7c656067-ef12-4990-b094-7f8160a242d1"/*SdfField*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
       }
     },
     {
-      "InputId": "8038789b-dc0b-44b1-9557-aae02db8f111"/*Axis*/,
+      "InputId": "93d0ee54-b2f6-41ea-bbaa-ef06bca1f1a0"/*ColorField*/,
       "Position": {
         "X": -200.0,
         "Y": 75.0
       }
+    },
+    {
+      "InputId": "d2a64234-c7ef-424b-822c-addce0b84e69"/*Color*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 150.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [],

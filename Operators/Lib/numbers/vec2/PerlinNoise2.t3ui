@@ -29,6 +29,13 @@
       "Description": "Multiplier for the intensity of the highest and lowest value split for each value"
     },
     {
+      "InputId": "aba60946-8a72-4bc5-8b44-77144fb4b339"/*Phase*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": -69.55521
+      }
+    },
+    {
       "InputId": "c1ffdc20-7c90-49f9-8deb-f0a415e130c8"/*Seed*/,
       "Position": {
         "X": -2.7436478,

@@ -90,7 +90,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "1eab1da0-07ef-4fb7-b5c4-9f8a249cb249"/*_GetFieldShaderAttributes*/,
+      "ChildId": "1eab1da0-07ef-4fb7-b5c4-9f8a249cb249"/*GenerateShaderGraphCode*/,
       "Position": {
         "X": 677.42883,
         "Y": 972.1018

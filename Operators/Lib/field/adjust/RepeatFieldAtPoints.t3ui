@@ -10,6 +10,13 @@
       }
     },
     {
+      "InputId": "26190514-6762-4322-87e2-393670a476a6"/*CombineMethod*/,
+      "Position": {
+        "X": 178.47665,
+        "Y": 397.8042
+      }
+    },
+    {
       "InputId": "9a7f3066-de71-4729-bc9e-5db0d8fd9eaa"/*Points*/,
       "Relevancy": "Required",
       "Position": {
@@ -103,7 +110,7 @@
       "OutputId": "202481ea-bf94-4fd3-ad2c-84dbf7622dea"/*Result*/,
       "Position": {
         "X": 1187.4774,
-        "Y": 247.202
+        "Y": 282.202
       }
     }
   ]
