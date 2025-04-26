@@ -27,13 +27,14 @@ internal sealed class TriangularPrismField : Instance<TriangularPrismField>
     public void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
     {
         c.Globals["fTriangularPrism"] = """
-                                        float fTriangularPrism(float3 p, float2 h) {
+                                        float fTriangularPrism(float3 p, float r, float l) {
                                             float3 q = abs(p);
-                                            return max(q.z-h.y,max(q.x*0.866025+p.y*0.5,-p.y)-h.x*0.5);
+
+                                            return max(q.z-l,max(q.x*0.866025+p.y*0.5,-p.y)-r*0.5);
                                         }
                                         """;
         var n = ShaderNode;
-        c.AppendCall($"f{c}.w = fTriangularPrism(p{c}- {n}Center, {n}RadiusLength);");
+        c.AppendCall($"f{c}.w = fTriangularPrism(p{c}- {n}Center, {n}Radius, {n}Length);");
     }
 
     public void GetPostShaderCode(CodeAssembleContext c, int inputIndex)
@@ -46,8 +47,12 @@ internal sealed class TriangularPrismField : Instance<TriangularPrismField>
     
     [GraphParam]
     [Input(Guid = "78b9be91-d1f2-4d96-ae7b-e6d2c126cc9b")]
-    public readonly InputSlot<Vector2> RadiusLength = new();
+    public readonly InputSlot<float> Radius = new();
+
+    [GraphParam]
+    [Input(Guid = "5ba66211-8f74-487b-a31f-9e014c2b7068")]
+    public readonly InputSlot<float> Length = new();
    
-   
+
 }
 

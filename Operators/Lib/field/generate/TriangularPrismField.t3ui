@@ -3,10 +3,17 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "78b9be91-d1f2-4d96-ae7b-e6d2c126cc9b"/*RadiusLength*/,
+      "InputId": "78b9be91-d1f2-4d96-ae7b-e6d2c126cc9b"/*Radius*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "5ba66211-8f74-487b-a31f-9e014c2b7068"/*Length*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 55.0
       }
     },
     {
