@@ -14,7 +14,7 @@
 - [ ] Split Connections
 - [ ] Rewiring of vertical connection lines
 - [x] Dragging gradient widget handles drags canvas too
-- [ ] Snapping connecting start to output not working of ops who's output is already snapped
+- [x] Snapping connecting start to output not working of ops who's output is already snapped
 - [ ] Panning/Zooming in CurveEdit-Popup opened from SampleCurveOp is broken 
 - [ ] Publish as input does not create connection
 
