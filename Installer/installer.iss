@@ -9,7 +9,7 @@
 #define MyAppPublisher "t3"
 #define MyAppURL "https://www.tooll.io//"
 #define MyAppExeName "Editor.exe"
-#define DotNetSdkInstaller "sdk-9.0.203-windows-x64-installer.exe"
+#define DotNetSdkInstaller "dotnet-sdk-9.0.203-win-x64.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
