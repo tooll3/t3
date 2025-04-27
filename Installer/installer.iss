@@ -3,8 +3,8 @@
 
 
 #ifndef MyAppVersion
-  #define MyAppVersion "3.10.6"
-  #define MyAppName "Tooll-v3.10.6"
+  #define MyAppVersion "3.10.8"
+  #define MyAppName "Tooll-v3.10.8"
 #endif
 #define MyAppPublisher "t3"
 #define MyAppURL "https://www.tooll.io//"
