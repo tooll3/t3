@@ -16,7 +16,8 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId=t3.tooll
 AppName={#MyAppName}
-AppVersion={#MyAppVersion}
+;AppVersion={#MyAppVersion}
+AppVersion=3.10.8
 ;AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
