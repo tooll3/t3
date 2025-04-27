@@ -9,6 +9,7 @@
 #define MyAppPublisher "t3"
 #define MyAppURL "https://www.tooll.io//"
 #define MyAppExeName "Editor.exe"
+#define DotNetSdkInstaller "sdk-9.0.203-windows-x64-installer.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -50,7 +51,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "..\Editor\bin\Release\net9.0-windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
-Source: "dependencies\downloads\dotnet-sdk-9.0.102-win-x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
+Source: "dependencies\downloads\{#DotNetSdkInstaller}"; DestDir: "{tmp}"; Flags: deleteafterinstall
 Source: "dependencies\downloads\VC_redist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 Source: "dependencies\grafiktools.bat"; DestDir: "{tmp}"; Flags: deleteafterinstall ignoreversion
 
@@ -61,7 +62,7 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 [Code]
 function GetDotNetVersion: Boolean;
 begin
-  Result := FileExists(ExpandConstant('{pf}\dotnet\sdk\9.0.102\dotnet.runtimeconfig.json'));
+  Result := FileExists(ExpandConstant('{pf}\dotnet\sdk\9.0.203\dotnet.runtimeconfig.json'));
   
 end;
 
@@ -71,7 +72,7 @@ begin
 end;
 
 [Run]
-Filename: "{tmp}\dotnet-sdk-9.0.102-win-x64.exe"; StatusMsg: "Install .Net9"; Check: not GetDotNetVersion
+Filename: "{tmp}\{#DotNetSdkInstaller}"; StatusMsg: "Install .Net9"; Check: not GetDotNetVersion
 Filename: "{tmp}\VC_redist.x64.exe"; StatusMsg: "Install Visual C++ Redistributable"; check: not GetvcruntimeVersion 
 Filename: "{tmp}\grafiktools.bat"; StatusMsg: "Start Windows Graphic Tools. This can take up to 10 minutes."; Flags: runhidden 
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent

@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SilkWindows\SilkWindows.csproj" />
+        <ProjectReference Include="..\SilkWindows\SilkWindows.csproj"/>
     </ItemGroup>
 
 </Project>
