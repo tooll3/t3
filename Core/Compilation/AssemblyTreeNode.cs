@@ -16,32 +16,34 @@ internal sealed class AssemblyTreeNode
     public readonly AssemblyName Name;
     public readonly string NameStr;
 
-
     private bool _loadedDependencies = false;
 
     private readonly List<AssemblyTreeNode> _references = [];
     private readonly List<string> _visibleDirectories = [];
     private readonly List<string> _visiblePaths = [];
 
+    private readonly string _parentName;
+    
     // warning : not thread safe, must be wrapped in a lock around _assemblyLock
-    public AssemblyTreeNode(Assembly assembly)
+    public AssemblyTreeNode(Assembly assembly, string parent)
     {
         Assembly = assembly;
         Name = assembly.GetName();
         NameStr = Name.GetNameSafe();
+        _parentName = parent;
 
         // if (debug && !node.NameStr.StartsWith("System")) // don't log system assemblies - too much log spam for things that are probably not error-prone
-        Log.Debug($"Loaded assembly {NameStr} from {assembly.Location}");
+        Log.Debug($"{parent}: Loaded assembly {NameStr} from {assembly.Location}");
     }
 
     private void LoadDependencies(AssemblyLoadContext ctx)
     {
         if(_loadedDependencies)
-            throw new InvalidOperationException("Dependencies already loaded");
+            throw new InvalidOperationException($"{_parentName}: Dependencies already loaded");
 
         var directory = Path.GetDirectoryName(Assembly.Location);
         if (directory == null)
-            throw new InvalidOperationException($"Could not get directory for {Assembly.Location}");
+            throw new InvalidOperationException($"{_parentName}: Could not get directory for {Assembly.Location}");
         
         var deps = Assembly.GetReferencedAssemblies();
 
@@ -62,16 +64,16 @@ internal sealed class AssemblyTreeNode
             }
             catch (FileNotFoundException)
             {
-                Log.Warning($"Could not find assembly `{path}`");
+                Log.Warning($"{_parentName}: Could not find assembly `{path}`");
                 continue;
             }
             catch (Exception e)
             {
-                Log.Error($"Failed to load assembly from `{path}`\n{e}");
+                Log.Error($"{_parentName}: Failed to load assembly from `{path}`\n{e}");
                 continue;
             }
 
-            AddReferenceTo(new AssemblyTreeNode(asm));
+            AddReferenceTo(new AssemblyTreeNode(asm, ctx.Name ?? "unknown context"));
         }
 
         _loadedDependencies = true;
@@ -115,16 +117,17 @@ internal sealed class AssemblyTreeNode
         }
     }
 
-    public void AddReferenceTo(AssemblyTreeNode child)
+    public bool AddReferenceTo(AssemblyTreeNode child)
     {
         if (_references.Contains(child))
         {
-            return;
+            return false;
         }
 
         _references.Add(child);
         _visiblePaths.Clear(); // invalidate path list
         _visibleDirectories.Clear(); // invalidate visible directories list
+        return true;
     }
 
     private IEnumerable<AssemblyTreeNode> GetAssemblyNodes(AssemblyLoadContext ctx)
@@ -139,7 +142,7 @@ internal sealed class AssemblyTreeNode
             }
             catch (Exception e)
             {
-                Log.Error($"Failed to load dependencies for {NameStr}\n{e}");
+                Log.Error($"{_parentName}: Failed to load dependencies for {NameStr}\n{e}");
             }
         }
 
@@ -151,6 +154,11 @@ internal sealed class AssemblyTreeNode
                 yield return node;
             }
         }
+    }
+    
+    public bool Matches(string nameToSearchFor)
+    {
+        return NameStr == nameToSearchFor;
     }
 
     public bool TryFind(string nameToSearchFor, AssemblyLoadContext ctx, [NotNullWhen(true)] out AssemblyTreeNode? assembly)
@@ -186,14 +194,14 @@ internal sealed class AssemblyTreeNode
                 var path = Path.Combine(dir, fileName);
                 try
                 {
-                    var fileInfo = new FileInfo(path);
-                    if (!fileInfo.Exists)
+                    if (!File.Exists(path))
                     {
                         continue;
                     }
 
                     var newAssembly = ctx.LoadFromAssemblyPath(path);
-                    var foundAssembly = new AssemblyTreeNode(newAssembly);
+                    var name = ctx.Name ?? "unknown context";
+                    var foundAssembly = new AssemblyTreeNode(newAssembly, $"{name} -> {node.NameStr}");
                     node.AddReferenceTo(foundAssembly);
 
                     assembly = foundAssembly;
@@ -201,7 +209,7 @@ internal sealed class AssemblyTreeNode
                 }
                 catch (Exception e)
                 {
-                    Log.Error($"Exception loading assembly: {e}");
+                    Log.Error($"{_parentName}: Exception loading assembly: {e}");
                 }
             }
         }

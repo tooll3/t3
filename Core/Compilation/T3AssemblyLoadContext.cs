@@ -1,6 +1,5 @@
 #nullable enable
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -35,6 +34,39 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
 
     private AssemblyTreeNode? _root;
 
+    private readonly AssemblyName _rootName;
+    private readonly string _rootNameStr;
+    private readonly List<T3AssemblyLoadContext> _dependencyContexts = [];
+    private static readonly AssemblyTreeNode[] _coreNodes;
+    private static readonly List<T3AssemblyLoadContext> _loadContexts = [];
+    private static readonly object _loadContextLock = new();
+    private readonly string _directory;
+
+    static T3AssemblyLoadContext()
+    {
+        _coreNodes = RuntimeAssemblies.CoreAssemblies
+                                      .Select(x => new AssemblyTreeNode(x, nameof(RuntimeAssemblies)))
+                                      .ToArray();
+    }
+
+    internal T3AssemblyLoadContext(AssemblyName rootName, string directory) : base(nameof(T3AssemblyLoadContext), true)
+    {
+        _directory = directory;
+        Resolving += (thisCtx, name) => OnResolving(name, true);
+        Unloading += (thisCtx) =>
+                     {
+                         Log.Debug($"{_rootNameStr}: Unloading assembly context");
+                     };
+        
+        _rootName = rootName;
+        _rootNameStr = rootName.GetNameSafe();
+        Log.Debug($"{_rootNameStr}: Creating new assembly load context for {rootName.Name}");
+        lock (_loadContextLock)
+        {
+            _loadContexts.Add(this);
+        }
+    }
+
     internal AssemblyTreeNode? Root
     {
         get
@@ -43,17 +75,17 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
             {
                 if (_root != null)
                     return _root;
-                
+
                 var path = Path.Combine(_directory, _rootName.GetNameSafe()) + ".dll";
 
                 try
                 {
                     var asm = Assembly.LoadFile(path);
-                    _root = new AssemblyTreeNode(asm);
+                    _root = new AssemblyTreeNode(asm, $"[[{_rootName}]] (root)");
                 }
                 catch (Exception e)
                 {
-                    Log.Error($"Failed to load root assembly {_rootName.Name}: {e}");
+                    Log.Error($"{_rootNameStr}: Failed to load root assembly {_rootName.Name}: {e}");
                 }
 
                 return _root;
@@ -61,76 +93,66 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
         }
     }
 
-    private readonly AssemblyName _rootName;
-    private static readonly AssemblyTreeNode[] _coreNodes;
-    private readonly string _directory;
-
-    static T3AssemblyLoadContext()
+    private Assembly? OnResolving(AssemblyName asmName, bool allowExternalContextSearch)
     {
-        _coreNodes = RuntimeAssemblies.CoreAssemblies
-                                     .Select(x => new AssemblyTreeNode(x))
-                                     .ToArray();
-    }
+        var name = asmName.GetNameSafe();
+        // check the core assemblies first - these are the ones that are always loaded
+        foreach (var coreRef in _coreNodes)
+        {
+            if (coreRef.TryFind(name, Default, out var coreAssembly))
+            {
+                return coreAssembly.Assembly;
+            }
+        }
 
-    internal T3AssemblyLoadContext(AssemblyName rootName, string directory) : base(nameof(T3AssemblyLoadContext), true)
-    {
-        _directory = directory;
-        Resolving += OnResolving;
-        Log.Debug($"Creating new assembly load context for {rootName.Name}");
-        _rootName = rootName;
-    }
-
-    private Assembly? OnResolving(AssemblyLoadContext context, AssemblyName asmName)
-    {
         lock (_assemblyLock)
         {
-            var name = asmName.GetNameSafe();
-
-            // check the core assemblies first - these are the ones that are always loaded
-            foreach (var coreRef in _coreNodes)
-            {
-                if (coreRef.TryFind(name, context, out var coreAssembly))
-                {
-                    return coreAssembly.Assembly;
-                }
-            }
-
             // the following are performed in order of preference:
             var root = Root;
             if (root != null)
             {
-                if(root.TryFind(name, context, out var assembly) || // first we try with the provided context
-                   root.TryFind(name, Default, out assembly) || // then we check the "Default" load context - the root load context of Tooll
-                   (context != this && root.TryFind(name, context, out assembly))) // then we try *this* context if it's not the one provided
+                if (root.TryFind(name, this, out var assembly)) //|| // first we try with the provided context
                 {
                     return assembly.Assembly;
                 }
             }
+        }
 
+        if (allowExternalContextSearch)
+        {
             // try other assembly contexts
-            foreach (var ctx in _dependencyContexts)
+            lock (_loadContextLock)
             {
-                var asm = ctx.OnResolving(this, asmName);
-                if (asm != null)
-                    return asm;
+                foreach (var ctx in _loadContexts)
+                {
+                    if (ctx == this)
+                        continue;
+
+                    var root = ctx.Root;
+
+                    if (root == null)
+                        continue;
+
+                    var asm = ctx.OnResolving(asmName, false);
+
+                    if (asm != null)
+                    {
+                        AddDependency(root, ctx);
+                        return asm;
+                    }
+                }
             }
 
             // guess we didn't find it :(
-            return null;
+            Log.Error($"{_rootNameStr}: Failed to resolve assembly '{name}'");
         }
+
+        return null;
     }
 
     protected override Assembly? Load(AssemblyName assemblyName)
     {
-        // check Core assemblies for a match
-        foreach (var coreNode in _coreNodes)
-        {
-            var name = assemblyName.GetNameSafe();
-            if (coreNode.TryFind(name, this, out var node))
-                return node.Assembly;
-        }
-
-        var result = OnResolving(this, assemblyName);
+        var result = OnResolving(assemblyName, true);
 
         if (result != null)
         {
@@ -138,7 +160,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
 
             if (assemblyNameOfResult.Version != assemblyName.Version)
             {
-                Log.Warning($"Assembly {assemblyName.Name} loaded with different version: {assemblyNameOfResult.Version} vs {assemblyName.Version}");
+                Log.Warning($"{_rootNameStr}: Assembly {assemblyName.Name} loaded with different version: {assemblyNameOfResult.Version} vs {assemblyName.Version}");
             }
 
             return result;
@@ -150,19 +172,19 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
         var assemblyNameStr = assemblyName.Name;
         if (assemblyNameStr != null && assemblyNameStr.EndsWith("XmlSerializers"))
         {
-            Log.Debug($"Failed to find Xml assembly {assemblyName}. This is expected for XmlSerializers");
+            Log.Debug($"{_rootNameStr}: Failed to find Xml assembly {assemblyName}. This is expected for XmlSerializers");
             return null;
         }
 
         var root = Root;
         if (root == null)
         {
-            Log.Error($"Failed to load assembly {assemblyName.Name} - root is null");
+            Log.Error($"{_rootNameStr}: Failed to load assembly {assemblyName.Name} - root {_rootName} is null");
             return null;
         }
-        
+
         var sb = new System.Text.StringBuilder();
-        sb.AppendLine($"Failed to load assembly {assemblyName.Name}")
+        sb.Append(_rootName).AppendLine($": Failed to load assembly {assemblyName.Name}")
           .AppendLine("Search paths:");
 
         foreach (var path in root.VisibleDirectories)
@@ -177,14 +199,21 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
 
     protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
     {
-        Console.WriteLine($"Attempting to load unmanaged dll: {unmanagedDllName}");
+        Console.WriteLine($"{_rootNameStr}: Attempting to load unmanaged dll: {unmanagedDllName}");
         return base.LoadUnmanagedDll(unmanagedDllName);
     }
 
-    public void AddDependencyContext(T3AssemblyLoadContext ctx)
+    private void AddDependency(AssemblyTreeNode rootNode, T3AssemblyLoadContext ctx)
     {
-        _dependencyContexts.Add(ctx);
-        ctx.UnloadTriggered += OnDependencyUnloaded;
+        lock (_assemblyLock)
+        {
+            if (!Root!.AddReferenceTo(rootNode)) 
+                return;
+            
+            // subscribe to the unload event of the dependency context
+            ctx.UnloadTriggered += OnDependencyUnloaded;
+            _dependencyContexts.Add(ctx);
+        }
     }
 
     private void OnDependencyUnloaded(object? sender, EventArgs e)
@@ -192,7 +221,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
         var ctx = (T3AssemblyLoadContext)sender!;
         ctx.UnloadTriggered -= OnDependencyUnloaded;
         _dependencyContexts.Remove(ctx);
-        BeginUnload(); // begin unloading ourself too
+        BeginUnload(); // begin unloading ourselves too
     }
 
     public void BeginUnload()
@@ -203,23 +232,35 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
         }
         catch (Exception e)
         {
-            Log.Error($"Exception thrown on assembly unload: {e}");
+            Log.Error($"{_rootNameStr}: Exception thrown on assembly unload: {e}");
         }
 
-        _root = null; // dereference our assembly as we will need to reload it 
+        lock (_assemblyLock)
+        {
+            // unsubscribe from all our dependencies
+            for (int i = _dependencyContexts.Count - 1; i >= 0; i--)
+            {
+                var ctx = _dependencyContexts[i];
+                ctx.UnloadTriggered -= OnDependencyUnloaded;
+                ctx.Unload();
+                _dependencyContexts.RemoveAt(i);
+            }
+
+            _root = null; // dereference our assembly as we will need to reload it 
+        }
+
+        lock (_loadContextLock)
+        {
+            _loadContexts.Remove(this);
+        }
+
         Unload();
     }
 
     public event EventHandler? UnloadTriggered;
-    private readonly List<T3AssemblyLoadContext> _dependencyContexts = new();
 }
 
 internal static class AssemblyNameExtensions
 {
-    public static string GetNameSafe(this Assembly assembly) => assembly.GetName().GetNameSafe();
-
-    public static string GetNameSafe(this AssemblyName asmName)
-    {
-        return asmName.Name ?? asmName.FullName;
-    }
+    public static string GetNameSafe(this AssemblyName asmName) => asmName.Name ?? asmName.FullName;
 }

@@ -68,6 +68,8 @@ internal static partial class ProjectSetup
                 EditorOnlyPackages.Add(assembly);
             }
         }
+        
+        InitializeCustomUis(EditorOnlyPackages);
 
         UiRegistration.RegisterUiTypes();
 
@@ -79,11 +81,11 @@ internal static partial class ProjectSetup
         {
             InitializePackageResources(package);
         }
+        
 
         ShaderLinter.AddPackage(SharedResources.ResourcePackage, ResourceManager.SharedShaderPackages);
 
         // Initialize custom UIs
-        InitializeCustomUis(EditorOnlyPackages);
 
         foreach (var package in SymbolPackage.AllPackages)
         {

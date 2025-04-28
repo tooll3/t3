@@ -3,12 +3,10 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using Newtonsoft.Json;
 using T3.Core.Compilation;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
-using T3.Core.SystemUi;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 
@@ -128,46 +126,49 @@ internal static partial class ProjectSetup
     {
         if (nonOperatorAssemblies.Count == 0)
             return;
-
-        var uiInitializerTypes = nonOperatorAssemblies
-                                .AsParallel()
-                                .SelectMany(assemblyInfo => assemblyInfo.TypesInheritingFrom(typeof(IEditorUiExtension))
-                                                                        .Select(type => new AssemblyConstructorInfo(assemblyInfo, type)))
-                                .ToList();
-
-        foreach (var constructorInfo in uiInitializerTypes)
+        
+        foreach(var assemblyInfo in nonOperatorAssemblies)
         {
-            //var assembly = Assembly.LoadFile(constructorInfo.AssemblyInformation.Path);
-            var assemblyInfo = constructorInfo.AssemblyInformation;
-            var instanceType = constructorInfo.InstanceType;
-            try
-            {
-                var activated = assemblyInfo.CreateInstance(instanceType);
-                if (activated == null)
-                {
-                    Log.Error($"Created null object for {instanceType.Name}");
-                    continue;
-                }
-
-                var initializer = (IEditorUiExtension)activated;
-                initializer.Initialize();
-
-                if (_uiInitializers.TryGetValue(assemblyInfo, out var initializers))
-                    initializers.Add(initializer);
-                else
-                    _uiInitializers[assemblyInfo] = [initializer];
-
-                Log.Info($"Initialized UI initializer for {assemblyInfo.Name}: {instanceType.Name}");
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Failed to create UI initializer for {assemblyInfo.Name}: \"{instanceType}\" - does it have a parameterless constructor?\n{e.Message}");
-                if (e is FileNotFoundException fileNotFoundException)
-                {
-                    Log.Error($"File not found: {fileNotFoundException.FileName}");
-                }
-            }
+            assemblyInfo.Unloaded += UnloadCustomUis;
+            assemblyInfo.Loaded += LoadCustomUis;
         }
+    }
+
+    private static void LoadCustomUis(AssemblyInformation obj)
+    {
+        var types = obj.TypesInheritingFrom(typeof(IEditorUiExtension));
+        List<IEditorUiExtension> extensions = new();
+        foreach (var type in types)
+        {
+            var activated = obj.CreateInstance(type);
+            if (activated == null)
+            {
+                Log.Error($"Created null object for {type.Name}");
+                continue;
+            }
+
+            var extension = (IEditorUiExtension)activated;
+            extension.Initialize();
+            Log.Info($"Loaded UI initializer for {obj.Name}: {type.Name}");
+            extensions.Add(extension);
+        }
+        
+        if(extensions.Count == 0)
+            return;
+        
+        _uiInitializers.TryAdd(obj, extensions);
+    }
+
+    private static void UnloadCustomUis(AssemblyInformation obj)
+    {
+        if(!_uiInitializers.TryRemove(obj, out var extensions))
+            return;
+        
+        foreach (var extension in extensions)
+        {
+            extension.Uninitialize();
+        }
+        
     }
 
     public static void DisposePackages()
@@ -188,62 +189,6 @@ internal static partial class ProjectSetup
     {
         var stopWatch = Stopwatch.StartNew();
         
-        // update all the editor ui packages in concert with the operator packages
-        var dependentPackagesNeedingReload = new List<DependentPackageUpdate>();
-        foreach (var package in packages)
-        {
-            // TODO - better organize these packages and their respective AssemblyInfos and dependencies
-            var assembly = package.Package.AssemblyInformation;
-            assembly.Unload();
-
-            foreach (var otherPackage in EditorOnlyPackages)
-            {
-                if (!otherPackage.DependsOn(package))
-                    continue;
-
-                dependentPackagesNeedingReload.Add(new DependentPackageUpdate(package.Package.AssemblyInformation, otherPackage));
-            }
-
-            foreach (var otherPackage in AllPackages)
-            {
-                if (!otherPackage.AssemblyInformation.DependsOn(package))
-                    continue;
-                
-                dependentPackagesNeedingReload.Add(new DependentPackageUpdate(otherPackage.AssemblyInformation, package.Package.AssemblyInformation));
-            }
-            
-
-            if (!package.ReleaseInfo.EditorVersion.Matches(Program.Version))
-            {
-                var msg = $"The T3 editor version ({Program.Version}) does not match the editor version" +
-                          $" {package.Package.DisplayName} was authored with ({package.ReleaseInfo.EditorVersion})";
-                Log.Warning(msg);
-            }
-        }
-
-        var nonOperatorAssemblyInfos = new List<AssemblyInformation>();
-        foreach (var update in dependentPackagesNeedingReload)
-        {
-            var dependent = update.Dependent;
-            if (_uiInitializers.TryGetValue(dependent, out var initializers))
-            {
-                for (var index = initializers.Count - 1; index >= 0; index--)
-                {
-                    var initializer = initializers[index];
-                    initializer.Uninitialize();
-                    initializers.RemoveAt(index);
-                }
-                
-            }
-
-            dependent.Unload();
-            dependent.AddDependencyOn(update.Updated);
-            nonOperatorAssemblyInfos.Add(update.Dependent);
-        }
-        
-
-        InitializeCustomUis(nonOperatorAssemblyInfos);
-
         // actually update the symbol packages
 
         // this switch statement exists to avoid the overhead of parallelization for a single package, e.g. when compiling changes to a single project
@@ -316,9 +261,8 @@ internal static partial class ProjectSetup
     internal static readonly IEnumerable<SymbolPackage> AllPackages = ActivePackages.Values.Select(x => x.Package);
     private static readonly List<AssemblyInformation> EditorOnlyPackages = [];
 
-    private static readonly Dictionary<AssemblyInformation, List<IEditorUiExtension>> _uiInitializers = new();
-
     private readonly record struct ProjectWithReleaseInfo(FileInfo ProjectFile, CsProjectFile? CsProject, ReleaseInfo? ReleaseInfo);
     private readonly record struct SymbolUiLoadInfo(SymbolUi[] NewlyLoaded, SymbolUi[] PreExisting);
     private readonly record struct AssemblyConstructorInfo(AssemblyInformation AssemblyInformation, Type InstanceType);
+    private static readonly ConcurrentDictionary<AssemblyInformation, IReadOnlyList<IEditorUiExtension>> _uiInitializers = new();
 }
