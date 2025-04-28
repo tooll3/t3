@@ -77,6 +77,23 @@
           "835d7f17-9de4-4612-a2f0-01c1346cdf1a": -7.6
         }
       }
+    },
+    {
+      "Id": "d8aa70a8-df8e-4c9c-bf20-33ed669d748a",
+      "IsPreset": true,
+      "ActivationIndex": 5,
+      "Title": "SmallFont",
+      "PosOnCanvas": {
+        "X": 100.33089,
+        "Y": 281.25372
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "d89c518c-a862-4f46-865b-0380350b7417": 180.0,
+          "835d7f17-9de4-4612-a2f0-01c1346cdf1a": 8.5,
+          "7a76d5aa-1f44-4238-9333-7c2951becc31": false
+        }
+      }
     }
   ]
 }
