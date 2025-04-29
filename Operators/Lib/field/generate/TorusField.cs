@@ -68,8 +68,6 @@ internal sealed class TorusField : Instance<TorusField>
         Z,
     }
     
-    [Input(Guid = "522A9640-CA8C-47E6-AD36-5C316A9092AE", MappedType = typeof(AxisTypes))]
-    public readonly InputSlot<int> Axis = new();
 
     
     [GraphParam]
@@ -79,4 +77,8 @@ internal sealed class TorusField : Instance<TorusField>
     [GraphParam]
     [Input(Guid = "5fe2ab92-f8e5-400d-b5a3-197f20570d6f")]
     public readonly InputSlot<Vector2> Size = new();
+    
+    [Input(Guid = "522A9640-CA8C-47E6-AD36-5C316A9092AE", MappedType = typeof(AxisTypes))]
+    public readonly InputSlot<int> Axis = new();
+
 }
