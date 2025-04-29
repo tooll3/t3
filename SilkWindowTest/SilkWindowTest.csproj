@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <Import Project="$(SolutionDir)/Tooll3.props" />
+    <Import Project="$(SolutionDir)/Tixl.props" />
     <PropertyGroup>
-        <TargetFramework>$(Tooll3NetCoreFrameworkVersion)</TargetFramework>
+        <TargetFramework>$(TixlNetCoreFrameworkVersion)</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <OutputType>Exe</OutputType>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SilkWindows\SilkWindows.csproj"/>
+        <ProjectReference Include="..\SilkWindows\SilkWindows.csproj" />
     </ItemGroup>
 
 </Project>

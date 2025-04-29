@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <Import Project="$(SolutionDir)/Tooll3.props" />
+  <Import Project="$(SolutionDir)/Tixl.props" />
   <PropertyGroup>
-        <TargetFramework>$(Tooll3NetCoreFrameworkVersion)</TargetFramework>
+    <TargetFramework>$(TixlNetCoreFrameworkVersion)</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>

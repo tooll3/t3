@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="$(SolutionDir)/Tooll3.props" />
+  <Import Project="$(SolutionDir)/Tixl.props" />
   <PropertyGroup>
-      <TargetFramework>$(Tooll3NetFrameworkVersion)</TargetFramework>
-      <VersionPrefix>$(Tooll3Version)</VersionPrefix>
+    <TargetFramework>$(TixlNetFrameworkVersion)</TargetFramework>
+    <VersionPrefix>$(TixlVersion)</VersionPrefix>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>

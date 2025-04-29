@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <Import Project="$(SolutionDir)/Tooll3.props" />
+    <Import Project="$(SolutionDir)/Tixl.props" />
     <PropertyGroup>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <TargetFramework>$(Tooll3NetCoreFrameworkVersion)</TargetFramework>
+        <TargetFramework>$(TixlNetCoreFrameworkVersion)</TargetFramework>
         <RootNamespace>T3.SystemUi</RootNamespace>
         <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU</Platforms>
