@@ -22,8 +22,11 @@ internal sealed partial class MagGraphCanvas
         IsHovered = ImGui.IsWindowHovered();
 
         var result = _context.DrawDialogs(_projectView);
-        
-        result |= KeyboardActions.HandleKeyboardActions(_context);
+
+        if (result == ChangeSymbol.SymbolModificationResults.Nothing)
+        {
+            result |= KeyboardActions.HandleKeyboardActions(_context);
+        }
         
         // General pre-update
         if ((result & ChangeSymbol.SymbolModificationResults.ProjectViewDiscarded) != 0)
