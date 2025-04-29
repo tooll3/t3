@@ -3,27 +3,27 @@
 
 
 #ifndef MyAppVersion
-  #define MyAppVersion "3.10.8"
-  #define MyAppName "Tooll-v3.10.8"
+  #define MyAppVersion "4.0.0"
+  #define MyAppName "TiXL-v4.0.0"
 #endif
-#define MyAppPublisher "t3"
-#define MyAppURL "https://www.tooll.io//"
-#define MyAppExeName "Editor.exe"
+#define MyAppPublisher "TiXL Community"
+#define MyAppURL "https://tixl.app//"
+#define MyAppExeName "TiXL.exe"
 #define DotNetSdkInstaller "dotnet-sdk-9.0.203-win-x64.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId=t3.tooll
+AppId=t3.tixl
 AppName={#MyAppName}
 ;AppVersion={#MyAppVersion}
-AppVersion=3.10.8
+AppVersion=4.0.0
 ;AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName=c:\Tooll\{#MyAppName}
+DefaultDirName=c:\TiXL\{#MyAppName}
 ; "ArchitecturesAllowed=x64compatible" specifies that Setup cannot run
 ; on anything but x64 and Windows 11 on Arm.
 ArchitecturesAllowed=x64compatible
@@ -38,7 +38,7 @@ DisableProgramGroupPage=yes
 ;PrivilegesRequired=lowest
 
 OutputDir=.\Output
-OutputBaseFilename=Tooll-v{#MyAppVersion}
+OutputBaseFilename=Tixl-v{#MyAppVersion}
 SetupIconFile=..\Resources\images\editor\t3.ico 
 Compression=lzma
 SolidCompression=yes

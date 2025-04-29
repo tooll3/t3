@@ -13,6 +13,15 @@
         <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
         <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU</Platforms>
+        <AssemblyName>TiXL</AssemblyName>
+        <Title>TiXL</Title>
+        <Authors>TiXL Community</Authors>
+        <Description>Open source Motion GFX</Description>
+        <Copyright>2012-2025 TiXL Community</Copyright>
+        <PackageProjectUrl>https://tixl.app</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/tooll3/t3?tab=MIT-1-ov-file#readme</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/tooll3/t3</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
         <!-- <ApplicationManifest>app.manifest</ApplicationManifest> -->
 
         <!-- <Authors>Tooll3</Authors>
