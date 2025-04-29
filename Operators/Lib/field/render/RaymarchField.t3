@@ -3,7 +3,7 @@
   "Inputs": [
     {
       "Id": "0b4d60de-261f-4dbf-ad44-6395cda3a496"/*MinDistance*/,
-      "DefaultValue": 0.013333406
+      "DefaultValue": 0.002
     },
     {
       "Id": "1251368b-f8f4-4210-be1e-4d05223caf21"/*DistToColor*/,
@@ -53,7 +53,7 @@
     },
     {
       "Id": "f14e7a2f-cd4e-4399-b137-ea0b87c7dfbd"/*NormalSamplingD*/,
-      "DefaultValue": 0.02
+      "DefaultValue": 0.002
     },
     {
       "Id": "ffb73f4d-6d24-4f4c-866b-5bdd6f876e6f"/*AoDistance*/,
