@@ -8,6 +8,7 @@ CsProjectFile and ProjectXML.cs
   <PropertyGroup>
     <Tooll3Version>3.10.8</Tooll3Version>
     <Tooll3NetFrameworkVersion>net9.0-windows</Tooll3NetFrameworkVersion>
+    <Tooll3NetCoreFrameworkVersion>net9.0</Tooll3NetCoreFrameworkVersion>
     <Tooll3IsDotNetFramework>false</Tooll3IsDotNetFramework>
 
     <Tooll3EnableUWPInTargets>False</Tooll3EnableUWPInTargets>
