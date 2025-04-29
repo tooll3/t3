@@ -54,6 +54,10 @@ General UX-ideas:
 - [ ] Separate Value Clamping for lower and upper values 
 - [ ] Drag and drop of files (copy them to resources folder and create LoadXYZ instance...)
 
+## SDF-Stuff
+- [ ] Ray marching glow
+- 
+
 Feats:
 - [x] Copy and Paste Values
 - [x] Maybe show tags in symbolBrowser / Placeholder
