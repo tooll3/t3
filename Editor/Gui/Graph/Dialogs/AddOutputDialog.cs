@@ -13,8 +13,9 @@ public sealed class AddOutputDialog : ModalDialog
         Flags = ImGuiWindowFlags.NoResize;
     }
 
-    internal void Draw(Symbol symbol)
+    internal ChangeSymbol.SymbolModificationResults Draw(Symbol symbol)
     {
+        var result = ChangeSymbol.SymbolModificationResults.Nothing;
         if (BeginDialog("Add output"))
         {
             FormInputs.SetIndent(100);
@@ -26,6 +27,7 @@ public sealed class AddOutputDialog : ModalDialog
             if (CustomComponents.DisablableButton("Add", isValid))
             {
                 InputsAndOutputs.AddOutputToSymbol(_parameterName, _isTimeClip, _selectedType, symbol);
+                result = ChangeSymbol.SymbolModificationResults.ProjectViewDiscarded;
                 _parameterName = string.Empty;
             }
 
@@ -39,6 +41,7 @@ public sealed class AddOutputDialog : ModalDialog
         }
 
         EndDialog();
+        return result;
     }
 
     private bool _isTimeClip;

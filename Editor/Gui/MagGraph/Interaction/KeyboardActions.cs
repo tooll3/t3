@@ -12,8 +12,10 @@ namespace T3.Editor.Gui.MagGraph.Interaction;
 
 internal static class KeyboardActions
 {
-    internal static void HandleKeyboardActions(GraphUiContext context)
+    internal static ChangeSymbol.SymbolModificationResults HandleKeyboardActions(GraphUiContext context)
     {
+        var result = ChangeSymbol.SymbolModificationResults.Nothing;
+        
         var compositionOp = context.CompositionInstance;
         //var compositionUi = compositionOp.GetSymbolUi();
 
@@ -29,11 +31,13 @@ internal static class KeyboardActions
             NodeActions.CopySelectedNodesToClipboard(context.Selector, compositionOp);
             NodeActions.PasteClipboard(context.Selector, context.Canvas, compositionOp);
             context.Layout.FlagAsChanged();
+            
+            result |= ChangeSymbol.SymbolModificationResults.StructureChanged;
         }
 
         if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))
         {
-            Modifications.DeleteSelectedOps(context);
+            result |= Modifications.DeleteSelectedOps(context);
         }
 
         if (KeyboardBinding.Triggered(UserActions.ToggleDisabled))
@@ -169,5 +173,7 @@ internal static class KeyboardActions
                 }
             }
         }
+
+        return result;
     }
 }

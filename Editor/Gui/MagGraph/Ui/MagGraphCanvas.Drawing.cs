@@ -8,6 +8,7 @@ using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel.InputsAndTypes;
+using T3.Editor.UiModel.Modification;
 using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.MagGraph.Ui;
@@ -16,13 +17,28 @@ internal sealed partial class MagGraphCanvas
 {
     public void DrawGraph(ImDrawListPtr drawList, float graphOpacity)
     {
+        
         IsFocused = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows);
         IsHovered = ImGui.IsWindowHovered();
 
+        var result = _context.DrawDialogs(_projectView);
+        
+        result |= KeyboardActions.HandleKeyboardActions(_context);
+        
         // General pre-update
-        _context.DrawDialogs(_projectView);
+        if ((result & ChangeSymbol.SymbolModificationResults.ProjectViewDiscarded) != 0)
+        {
+            Log.Debug("Skip graph draw after composition update...");
+            return;
+        }
 
-        KeyboardActions.HandleKeyboardActions(_context);
+        if (_context.ProjectView.InstView is not { IsValid: true })
+        {
+            Log.Warning("Failed to draw graph view without valid composition instance");
+            return;
+        }
+        
+        
         HandleSymbolDropping(_context);
 
         // Update view scope if required

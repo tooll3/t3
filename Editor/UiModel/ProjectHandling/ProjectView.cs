@@ -26,7 +26,9 @@ internal sealed partial class ProjectView
     private InstanceView? _instView;
     public InstanceView? InstView => _instView;
     public Instance? CompositionInstance => InstView?.Instance;
-    
+
+
+
     private readonly Stack<InstanceView> _compositionsAwaitingDisposal = [];
     private readonly Stack<InstanceView> _compositionReloadStack = [];
     private bool _waitingOnReload;
