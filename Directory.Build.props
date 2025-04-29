@@ -1,0 +1,6 @@
+<!-- SolutionRoot\Directory.Build.props -->
+<Project>
+  <PropertyGroup>
+    <SolutionDir>$(MSBuildThisFileDirectory)</SolutionDir>
+  </PropertyGroup>
+</Project>
