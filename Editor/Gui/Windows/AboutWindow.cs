@@ -1,23 +1,32 @@
 using ImGuiNET;
-
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-
-
 using T3.Editor.Gui.Styling;
-
 
 namespace T3.Editor.Gui.Windows;
 
 internal sealed class AboutWindow : Window
 {
+    private readonly List<(string Label, string Url)> _helpLinks =
+    [
+        ("Website", "https://tixl.app"),
+        ("Wiki", "https://github.com/tooll3/t3/wiki"),
+        ("Discord", "https://discord.gg/YmSyQdeH3S")
+    ];
+
+    private readonly List<(string Label, string Url)> _sourceLinks =
+    [
+        ("Github", "https://github.com/tooll3/t3")
+    ];
+
     internal AboutWindow()
     {
-        Config.Title = "About & help";
+        MenuTitle = "About & Help";
     }
 
     protected override void DrawContent()
     {
-
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 10));
 
         // Use a child window with proper sizing
@@ -28,91 +37,66 @@ internal sealed class AboutWindow : Window
                          | ImGuiWindowFlags.AlwaysUseWindowPadding);
 
         FormInputs.AddSectionHeader("TiXL");
-       
-        ImGui.TextColored(new Vector4(1.0f, 0.0f, 0.55f, 1.0f),"v " + Program.VersionText);
+        ImGui.TextColored(new Vector4(1.0f, 0.0f, 0.55f, 1.0f), "v " + Program.VersionText);
 
         FormInputs.AddVerticalSpace(5);
-  
         ImGui.TextWrapped("MIT license");
         FormInputs.AddVerticalSpace(5);
         ImGui.Separator();
         FormInputs.AddVerticalSpace(5);
+
         ImGui.PushFont(Fonts.FontSmall);
         ImGui.TextWrapped("Help:");
 
-        const string githubUrl = "https://github.com/tooll3/t3", wikiUrl = "https://github.com/tooll3/t3/wiki", websiteUrl = "https://tixl.app", discordURL = "https://discord.gg/cGnYbWJz";
-        
-        if (ImGui.Button("Website"))
-        {
-            try
-            {
-                Process.Start(new ProcessStartInfo(websiteUrl) { UseShellExecute = true });
-            }
-            catch (Exception e)
-            {
-                T3.Core.Logging.Log.Warning($"Failed to open link: {e.Message}");
-            }
-        }
-        if (ImGui.IsItemHovered())
-            CustomComponents.TooltipForLastItem(websiteUrl);
-
-        ImGui.SameLine();
-        if (ImGui.Button("Wiki"))
-        {
-            try
-            {
-                Process.Start(new ProcessStartInfo(wikiUrl) { UseShellExecute = true });
-            }
-            catch (Exception e)
-            {
-                T3.Core.Logging.Log.Warning($"Failed to open link: {e.Message}");
-            }
-        }
-        if (ImGui.IsItemHovered())
-            CustomComponents.TooltipForLastItem(wikiUrl);
-        
-        ImGui.SameLine();
-        if (ImGui.Button("Discord"))
-        {
-            try
-            {
-                Process.Start(new ProcessStartInfo(discordURL) { UseShellExecute = true });
-            }
-            catch (Exception e)
-            {
-                T3.Core.Logging.Log.Warning($"Failed to open link: {e.Message}");
-            }
-        }
-        if (ImGui.IsItemHovered())
-            CustomComponents.TooltipForLastItem(discordURL);
-       
+        DrawLinkButtons(_helpLinks);
 
         FormInputs.AddVerticalSpace(5);
         ImGui.Separator();
         FormInputs.AddVerticalSpace(5);
 
         ImGui.TextWrapped("Source Code:");
-        
-        if (ImGui.Button("Github"))
-        {
-            try
-            {
-                Process.Start(new ProcessStartInfo(githubUrl) { UseShellExecute = true });
-            }
-            catch (Exception e)
-            {
-                T3.Core.Logging.Log.Warning($"Failed to open link: {e.Message}");
-            }
-        }
-        if (ImGui.IsItemHovered())
-            CustomComponents.TooltipForLastItem(githubUrl);
+
+        DrawLinkButtons(_sourceLinks);
 
         ImGui.PopFont();
         ImGui.EndChild();
         ImGui.PopStyleVar();
     }
 
+    private void DrawLinkButtons(List<(string Label, string Url)> links)
+    {
+        ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(5, 0));
 
+        var isFirst = true;
+        foreach (var (label, url) in links)
+        {
+            if (!isFirst)
+            {
+                ImGui.SameLine();
+            }
+
+            if (ImGui.Button(label))
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+                }
+                catch (Exception e)
+                {
+                    T3.Core.Logging.Log.Warning($"Failed to open link: {e.Message}");
+                }
+            }
+
+            if (ImGui.IsItemHovered())
+            {
+                CustomComponents.TooltipForLastItem(url);
+            }
+
+            isFirst = false;
+        }
+
+        ImGui.PopStyleVar();
+    }
 
     internal override List<Window> GetInstances()
     {
