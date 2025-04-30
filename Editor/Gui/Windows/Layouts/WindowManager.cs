@@ -58,7 +58,8 @@ internal static partial class WindowManager
                 new UtilitiesWindow(),
                 Program.ConsoleLogWindow,
                 new IoViewWindow(),
-                new SettingsWindow()
+                new SettingsWindow(),
+                new AboutWindow()
             ];
 
 
