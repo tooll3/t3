@@ -1,6 +1,4 @@
 using ImGuiNET;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using T3.Editor.Gui.Styling;
 
@@ -63,7 +61,7 @@ internal sealed class AboutWindow : Window
         ImGui.PopStyleVar();
     }
 
-    private void DrawLinkButtons(List<(string Label, string Url)> links)
+    private static void DrawLinkButtons(List<(string Label, string Url)> links)
     {
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(5, 0));
 
@@ -83,7 +81,7 @@ internal sealed class AboutWindow : Window
                 }
                 catch (Exception e)
                 {
-                    T3.Core.Logging.Log.Warning($"Failed to open link: {e.Message}");
+                    Log.Warning($"Failed to open link: {e.Message}");
                 }
             }
 
@@ -100,6 +98,6 @@ internal sealed class AboutWindow : Window
 
     internal override List<Window> GetInstances()
     {
-        return new List<Window>();
+        return [];
     }
 }
