@@ -1,5 +1,9 @@
-﻿using T3.Editor.UiModel;
+﻿#nullable enable
+
+using System.IO;
+using T3.Editor.UiModel;
 using T3.Serialization;
+
 // ReSharper disable NotAccessedField.Local
 
 namespace T3.Editor.Gui.UiHelpers.Wiki;
@@ -7,12 +11,12 @@ namespace T3.Editor.Gui.UiHelpers.Wiki;
 /// <summary>
 /// Exports a json string for automatically review and correction. 
 /// </summary>
-public static class ExportDocumentationStrings
+internal static class ExportDocumentationStrings
 {
-
     public static void ExportDocumentationAsJson()
     {
         var results = new List<DocumentationEntry>();
+        
 
         foreach (var symbolUi in EditorSymbolPackage.AllSymbolUis)
         {
@@ -24,6 +28,20 @@ public static class ExportDocumentationStrings
                                     Text = symbolUi.Description,
                                     SymbolId = symbolUi.Symbol.Id,
                                     Id = Guid.Empty
+                                });
+            }
+
+            foreach (var param in symbolUi.InputUis.Values)
+            {
+                if (string.IsNullOrEmpty(param.Description))
+                    continue;
+
+                results.Add(new DocumentationEntry
+                                {
+                                    Type = DocumentationEntry.Types.ParameterDescription,
+                                    Text = symbolUi.Description,
+                                    SymbolId = symbolUi.Symbol.Id,
+                                    Id = param.Id
                                 });
             }
 
@@ -51,69 +69,99 @@ public static class ExportDocumentationStrings
                                     Id = childUi.Id
                                 });
             }
+        }
 
-            JsonUtils.TrySaveJson(results, DocumentationJsonFilename);
+        if (!Directory.Exists(DocumentationFolder))
+            Directory.CreateDirectory(DocumentationFolder);
+        
+        const int pageSize = 500; // Define the size of each page
+        for (var i = 0; i < results.Count; i += pageSize)
+        {
+            var currentPage = results.Skip(i).Take(pageSize).ToList();
+            var pageIndex = i / pageSize;
+
+            var filepath = Path.Combine(DocumentationFolder, $"{DocumentationBaseFilename}-{pageIndex:000}.{DocumentationFileExtension}");
+            var fullPath = Path.GetFullPath(filepath);
+            Log.Debug($"Writing {fullPath}...");
+            JsonUtils.TrySaveJson(currentPage, filepath);
         }
     }
-        
-        
+
     public static void ImportDocumentationAsJson()
     {
-        var results = JsonUtils.TryLoadingJson<List<DocumentationEntry>>(DocumentationJsonFilename);
-        if (results == null)
+        if (!Directory.Exists(DocumentationFolder))
         {
-            Log.Warning($"Failed to load or parse {DocumentationJsonFilename}");
+            Log.Warning($"{DocumentationFolder} not found");
             return;
         }
 
-        foreach (var r in results)
+        foreach (var filename in Directory.GetFiles(DocumentationFolder))
         {
-            if (SymbolUiRegistry.TryGetSymbolUi(r.SymbolId, out var symbolUi))
+            var results = JsonUtils.TryLoadingJson<List<DocumentationEntry>>(filename);
+            if (results == null)
             {
+                Log.Warning($"Failed to load or parse {filename}");
+                continue;
+            }
+
+            foreach (var r in results)
+            {
+                if (!SymbolUiRegistry.TryGetSymbolUi(r.SymbolId, out var symbolUi)) continue;
                 switch (r.Type)
                 {
                     case DocumentationEntry.Types.Description:
                         symbolUi!.Description = r.Text;
+                        break;
+
+                    case DocumentationEntry.Types.ParameterDescription:
+                        if (symbolUi.InputUis.TryGetValue(r.Id, out var inputUi))
+                        {
+                            inputUi.Description = r.Text;
+                        }
 
                         break;
-                        
+
                     case DocumentationEntry.Types.Annotation:
                         if (symbolUi!.Annotations.TryGetValue(r.Id, out var a))
                         {
                             a.Title = r.Text;
                         }
+
                         break;
-                        
+
                     case DocumentationEntry.Types.Comment:
                         if (symbolUi!.ChildUis.TryGetValue(r.Id, out var childUi))
                         {
                             childUi.Comment = r.Text;
                         }
+
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+
                 symbolUi.FlagAsModified();
             }
         }
     }
-        
-        
-    private class DocumentationEntry
+
+    private sealed class DocumentationEntry
     {
         public enum Types
         {
             Description,
+            ParameterDescription,
             Annotation,
             Comment,
         }
 
         public Types Type;
-        public string Text;
+        public string Text = string.Empty;
         public Guid SymbolId;
         public Guid Id;
     }
-        
-    private const string DocumentationJsonFilename = "documentation.json";
 
+    private const string DocumentationFolder = "docs";
+    private const string DocumentationBaseFilename = "page";
+    private const string DocumentationFileExtension = "json";
 }
