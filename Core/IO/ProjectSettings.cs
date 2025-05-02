@@ -18,6 +18,8 @@ public class ProjectSettings : Settings<ProjectSettings.ConfigData>
         public bool EnablePlaybackControlWithKeyboard = true;
 
         public bool SkipOptimization;
+        
+        public bool LogAssemblyVersionMismatches = false;
             
         public string LimitMidiDeviceCapture = null; 
         public bool EnableMidiSnapshotIndication = false;

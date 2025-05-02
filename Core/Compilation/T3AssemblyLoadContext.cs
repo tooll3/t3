@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Runtime.Loader;
 using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.DependencyModel.Resolution;
+using T3.Core.IO;
 using T3.Core.Logging;
 
 namespace T3.Core.Compilation;
@@ -291,14 +292,17 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
             return null;
         }
 
-        // check versions of the assembly - if different, log a warning. todo: actually do something with this information later
-        var assemblyNameOfResult = result.GetName();
-
-        if (assemblyNameOfResult.Version != assemblyName.Version)
+        // check versions of the assembly - if different, log a warning.
+        // todo: actually do something with this information later
+        if (ProjectSettings.Config.LogAssemblyVersionMismatches)
         {
-            Log.Warning($"Assembly {assemblyName.Name} loaded with different version: {assemblyNameOfResult.Version} vs {assemblyName.Version}");
+            var assemblyNameOfResult = result.GetName();
+            if (assemblyNameOfResult.Version != assemblyName.Version)
+            {
+                Log.Warning($"Assembly {assemblyName.Name} loaded with different version: {assemblyNameOfResult.Version} vs {assemblyName.Version}");
+            }
         }
-
+        
         return result;
     }
 
@@ -308,7 +312,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
         var name = GetName(assembly);
         if (!_loadedAssemblies.TryAdd(name, assembly))
         {
-            Log.Debug($"{Name}: Skipping caching duplicate assembly {name}");
+            Log.Debug($" {Name}: Skipping caching duplicate assembly {name}");
             return;
         }
 
@@ -316,7 +320,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
             AddAssemblyPath(assembly, assembly.Location);
 
         if (debug && !name.StartsWith("System")) // don't log system assemblies - too much log spam for things that are probably not error-prone
-            Log.Debug($"{Name}: Loaded assembly {name} from {assembly.Location}");
+            Log.Debug($" {Name}: Add assembly  {name}  from {assembly.Location}");
     }
 
     private void CollectReferencedAssembliesOf(Assembly assembly, AssemblyLoadContext context)
