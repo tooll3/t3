@@ -25,6 +25,8 @@ public sealed class ExternalLink
         Example=2,
         Reference=3,
         Source=4,
+        OriginalBy,
+        Author,
         Other = 99,
     }
 
