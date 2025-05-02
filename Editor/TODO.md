@@ -21,6 +21,7 @@
 - [ ] In Parameter window bypassable button should be disabled if not available
 
 ## Timeline
+
 - [ ] Soundtrack image is incorrectly scaled with playback?
 - [ ] After deleting and restart recompilation of image is triggered, but image in timeline is not updated?
       Path not found: '/pixtur.still.Gheo/soundtrack/DARKrebooted-v1.0.mp3' (Resolved to '').
@@ -42,7 +43,8 @@
 - [ ] SetEnvironment should automatically insert textureToCubemap
 - [ ] Remove Op from Editor
 
-General fixes:
+## General fixes:
+
 - [x] Fix camera handling
 - [x] Default gradients are not loaded?
 - [x] Fix Scaling for multiple selected keyframes with ALT-Key
@@ -52,14 +54,14 @@ General fixes:
 - [ ] Shake doesn't work with 120hz
 - 
 
-General UX-ideas:
+## General UX-ideas:
 - [ ] StatusProvideIcon should support non-warning indicator
 - [ ] Separate Value Clamping for lower and upper values 
 - [ ] Drag and drop of files (copy them to resources folder and create LoadXYZ instance...)
 
 ## SDF-Stuff
+- [ ] Changing the parameter order in the parameter window will break inputs with [GraphParam] attribute 
 - [ ] Ray marching glow
-- 
 
 Feats:
 - [x] Copy and Paste Values
