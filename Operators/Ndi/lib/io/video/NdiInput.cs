@@ -1,3 +1,4 @@
+#nullable enable
 using System.Diagnostics;
 using NewTek;
 using NewTek.NDI;
@@ -6,32 +7,26 @@ using T3.Core.Animation;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.Utils;
 
-namespace t3.ndi;
+namespace lib.io.video;
 
 [Guid("7567c3b0-9d91-40d2-899d-3a95b481d023")]
-public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDropdownHolder
+public sealed class NdiInput : Instance<NdiInput>, IStatusProvider, ICustomDropdownHolder
 {
     [Output(Guid = "85F1AF38-074E-475D-94F5-F48079979509", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-    public readonly Slot<Texture2D> Texture = new();
-
+    public readonly Slot<Texture2D?> Texture = new();
 
     public NdiInput()
     {
         InitializeNdi();
-            
+
         // Note that this example does see local sources (new Finder(true))
         // This is for ease of testing, but normally is not needed in released products.
         _ndiInputFinder = new Finder(true);
         Texture.UpdateAction += Update;
     }
 
-    // ~NdiInput()
-    // {
-    //     Dispose(false);
-    // }
-
-
     private double _lastUpdateRunTime;
+
     private void Update(EvaluationContext context)
     {
         var reconnectTriggered = MathUtils.WasTriggered(TriggerReconnect.GetValue(context), ref _reconnect);
@@ -39,7 +34,7 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
         {
             TriggerReconnect.SetTypedInputValue(false);
         }
-            
+
         _lastUpdateRunTime = Playback.RunTimeInSecs;
         if (SourceName.DirtyFlag.IsDirty || reconnectTriggered)
         {
@@ -49,42 +44,38 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
             Connect(sourceName);
             _textureMutex.ReleaseMutex();
         }
-            
+
         _isProfiling = EnableProfiling.GetValue(context);
 
-        //_textureMutex.WaitOne(Timeout.Infinite);
         _textureAction?.Invoke();
         _textureAction = null;
-        //_textureMutex.ReleaseMutex();
-            
         Texture.Value = _lastTexture;
     }
 
-    private bool InitializeNdi()
+    private void InitializeNdi()
     {
         // Not required, but "correct". (see the SDK documentation)
         if (_initialized)
-            return _initialized;
+            return;
 
         try
         {
             _initialized = NDIlib.initialize();
             if (_initialized)
-                return _initialized;
+                return;
         }
         catch (Exception e)
         {
             Log.Error("Failed to initialize NDIInput. One possible reason could be 'Processing.NDI.Lib.x64.dll' missing: " + e.Message);
-            return false;
+            return;
         }
-        
+
         // Cannot run NDI. Most likely because the CPU is not sufficient (see SDK documentation).
         // you can check this directly with a call to NDIlib.is_supported_CPU()
         // not sure why, but it's not going to run
-        SetErrorMessage(!NDIlib.is_supported_CPU() 
-                            ? "CPU unsupported." 
+        SetErrorMessage(!NDIlib.is_supported_CPU()
+                            ? "CPU unsupported."
                             : "Cannot run NDI.");
-        return false;
     }
 
     private void SetErrorMessage(string message)
@@ -92,7 +83,6 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
         Log.Error(message, this);
         _lastStatusMessage = message;
     }
-
 
     /// <summary>
     ///  connect to an NDI source in our Dictionary by name
@@ -104,8 +94,8 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
         // there's already another receiver thread running, the commands it has
         // sent to the UI won't be processed.
         var receiverId = Interlocked.Increment(ref _receiverId);
-            
-        Disconnect();  // just to be safe
+
+        Disconnect(); // just to be safe
 
         if (string.IsNullOrEmpty(sourceName))
             return;
@@ -116,8 +106,8 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
             SetErrorMessage($"NDI source {sourceName} not found");
             return;
         }
-            
-        Log.Debug($"Connecting to {sourceName}...",this);
+
+        Log.Debug($"Connecting to {sourceName}...", this);
 
         var selectedSourceT = new NDIlib.source_t
                                   {
@@ -129,7 +119,7 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
                                           source_to_connect_to = selectedSourceT,
                                           color_format = NDIlib.recv_color_format_e.recv_color_format_BGRX_BGRA,
                                           bandwidth = NDIlib.recv_bandwidth_e.recv_bandwidth_highest,
-                                          allow_video_fields = false,  // let NDIlib deinterlace for us if needed  ?
+                                          allow_video_fields = false, // let NDIlib deinterlace for us if needed  ?
 
                                           // The name of the NDI receiver to create. This is a NULL terminated UTF8 string and should be
                                           // the name of receive channel that you have. This is in many ways symetric with the name of
@@ -151,8 +141,12 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
 
         // Mark this source as being on program output for tally purposes (but not on preview)
         SetTallyIndicators(true, false);
-            
-        _receiveThread = new Thread(ReceiveThreadProc) { IsBackground = true, Name = "NdiInputReceiver" };
+
+        _receiveThread = new Thread(ReceiveThreadProc)
+                             {
+                                 IsBackground = true, Name = "NdiInputReceiver"
+                             };
+        
         _receiveThread.Start(receiverId);
     }
 
@@ -180,31 +174,40 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
         // We need to have a receive instance
         if (_receiveInstancePtr == IntPtr.Zero)
             return;
-            
+
         var tallyStateDescriptor = new NDIlib.tally_t
                                        {
                                            on_program = onProgram,
                                            on_preview = onPreview
                                        };
-            
-        if(_isProfiling)
+
+        if (_isProfiling)
             DebugDataRecording.KeepTraceData(this, "01-SetTallyIndicators", tallyStateDescriptor, ref _traceTallyChannel);
 
         NDIlib.recv_set_tally(_receiveInstancePtr, ref tallyStateDescriptor);
     }
 
+
+    
     /// <summary>
     /// Receive thread runs though this loop until told to exit
     /// </summary>
-    private void ReceiveThreadProc(object param)
+    private void ReceiveThreadProc(object? param)
     {
-
-        var device = ResourceManager.Device;
+        var currReceiverId = 0;
+        
+        if (param == null)
+        {
+            Log.Warning("NdiInput thread param is null?", this);
+        }
+        else
+        {
+            currReceiverId = (int)param;
+        }
 
         // Here we keep track of the receiver Id used for this thread.
-        var currReceiverId = (int)param;
-            
-        if(_isProfiling)
+
+        if (_isProfiling)
             DebugDataRecording.KeepTraceData(this, "02-ReceiveThreadProc", currReceiverId, ref _traceReceiveThreadProc);
 
         while (!_exitThread && _receiveInstancePtr != IntPtr.Zero)
@@ -216,7 +219,7 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
 
             var recvCaptureV2 = NDIlib.recv_capture_v2(_receiveInstancePtr, ref videoFrame, ref audioFrame, ref metadataFrame, 1000);
 
-            if(_isProfiling)
+            if (_isProfiling)
                 DebugDataRecording.KeepTraceData(this, "03-ReceiveThreadProc", recvCaptureV2, ref _traceReceive2ThreadProc);
 
             //Log.Debug("received frame " + recvCaptureV2 + " from NDI input.", this);
@@ -242,19 +245,20 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
                         Log.Warning("NDI input not enabled, skipping frame.", this);
                         break;
                     }
+
                     if (Playback.RunTimeInSecs - _lastUpdateRunTime > 1 / 30f)
                     {
                         NDIlib.recv_free_video_v2(_receiveInstancePtr, ref videoFrame);
                         // Log.Warning("Skipping frame?",this);
-                        _lastStatusMessage= "skipping frame";
+                        _lastStatusMessage = "skipping frame";
                         break;
                     }
 
                     // get all our info so that we can free the frame
-                    var xRes = videoFrame.xres;
-                    var yRes = videoFrame.yres;
-                    var stride = videoFrame.line_stride_in_bytes;
-                        
+                    _xRes = videoFrame.xres;
+                    _yRes = videoFrame.yres;
+                    _stride = videoFrame.line_stride_in_bytes;
+
                     // Try to acquire our texture mutex for some time.
                     // End processing if we shall quit
                     while (!_textureMutex.WaitOne(10))
@@ -267,8 +271,7 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
                             break;
                         }
                     }
-                        
-                        
+
                     // For now, we need to be on the UI thread to fill our bitmap
                     _textureAction = () =>
                                      {
@@ -281,7 +284,7 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
                                              return;
                                          }
 
-                                         if (xRes == 0 || yRes == 0 || stride == 0)
+                                         if (_xRes == 0 || _yRes == 0 || _stride == 0)
                                          {
                                              // always free received frames
                                              NDIlib.recv_free_video_v2(_receiveInstancePtr, ref videoFrame);
@@ -289,26 +292,26 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
                                              return;
                                          }
 
-                                             
                                          // create several textures with a given format with CPU access
                                          // to be able to read out the initial texture values
                                          const Format textureFormat = Format.B8G8R8A8_UNorm;
-                                             
+
                                          if (_imagesWithCpuAccess.Count == 0
                                              || _imagesWithCpuAccess[0].Description.Format != textureFormat
-                                             || _imagesWithCpuAccess[0].Description.Width != xRes
-                                             || _imagesWithCpuAccess[0].Description.Height != yRes
+                                             || _imagesWithCpuAccess[0].Description.Width != _xRes
+                                             || _imagesWithCpuAccess[0].Description.Height != _yRes
                                              || _imagesWithCpuAccess[0].Description.MipLevels != 1)
                                          {
-                                             DebugDataRecording.KeepTraceData(this, "07-_textureActionCreateNewTexture", currReceiverId, ref _traceTextureAction2Channel);
+                                             DebugDataRecording.KeepTraceData(this, "07-_textureActionCreateNewTexture", currReceiverId,
+                                                                              ref _traceTextureAction2Channel);
                                              //Log.Warning("resolution or format changed", this);
-                                                 
+
                                              var imageDesc = new Texture2DDescription
                                                                  {
                                                                      BindFlags = BindFlags.ShaderResource,
                                                                      Format = textureFormat,
-                                                                     Width = xRes,
-                                                                     Height = yRes,
+                                                                     Width = _xRes,
+                                                                     Height = _yRes,
                                                                      MipLevels = 1,
                                                                      SampleDescription = new SampleDescription(1, 0),
                                                                      Usage = ResourceUsage.Dynamic,
@@ -335,10 +338,10 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
                                          var immediateContext = ResourceManager.Device.ImmediateContext;
                                          var writableImage = _imagesWithCpuAccess[_currentIndex];
                                          _currentIndex = (_currentIndex + 1) % NumTextureEntries;
-                                             
+
                                          // NOTE: During profiling we can observe that this block is zero length if image index is 0 ???
                                          // We should investigate this, because there might be a bug in the code.
-                                         if(_isProfiling)
+                                         if (_isProfiling)
                                              DebugDataRecording.StartRegion(this, "08-CopyTextureToIndex", _currentIndex, ref _traceTextureCopyChannel);
 
                                          // we have to map with a stride that represents multiples of 16 pixels here
@@ -346,17 +349,17 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
                                          // map resource manually using our stride...
                                          var dataBox = immediateContext.MapSubresource(writableImage, 0, 0, MapMode.WriteDiscard,
                                                                                        SharpDX.Direct3D11.MapFlags.None, out int _);
-                                             
-                                         T3.Core.Utils.Utilities.CopyImageMemory(videoFrame.p_data, dataBox.DataPointer, yRes,
+
+                                         T3.Core.Utils.Utilities.CopyImageMemory(videoFrame.p_data, dataBox.DataPointer, _yRes,
                                                                                  videoFrame.line_stride_in_bytes, dataBox.RowPitch);
 
                                          // release our resources
                                          immediateContext.UnmapSubresource(writableImage, 0);
                                          _lastTexture = writableImage;
-                                             
-                                         if(_isProfiling)
+
+                                         if (_isProfiling)
                                              DebugDataRecording.EndRegion(_traceTextureCopyChannel);
-                                             
+
                                          // free frames that were received after use
                                          NDIlib.recv_free_video_v2(_receiveInstancePtr, ref videoFrame);
                                          _lastStatusMessage = null;
@@ -369,8 +372,7 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
                 // Ignore audio
                 case NDIlib.frame_type_e.frame_type_audio:
                     break;
-                    
-                    
+
                 // Metadata
                 case NDIlib.frame_type_e.frame_type_metadata:
 
@@ -392,32 +394,36 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
         _lastTexture = null;
 
         foreach (var image in _imagesWithCpuAccess)
-            image?.Dispose();
+        {
+            image.Dispose();
+        }
 
         _imagesWithCpuAccess.Clear();
     }
 
     #region IDisposable Support
-    protected override void Dispose(bool disposing)
+
+
+
+    protected override void Dispose(bool isDisposing)
     {
-        if (_disposed)
+
+        if (!isDisposing)
             return;
-         
-        //Log.Debug("Disposing NdiInput...", this); 
-        if (disposing)
+
+        Log.Debug("Disposing NdiInput...", this);
+        
+        // This call happens when the window is closing, so we set the id
+        // to 0 to signal we don't want to process any more frames.
+        Interlocked.Exchange(ref _receiverId, 0);
+
+        _exitThread = true;
+
+        // wait for it to exit
+        if (_receiveThread != null)
         {
-            // This call happens when the window is closing, so we set the
-            // Id to 0 to signal we don't want to process any more frames.
-            Interlocked.Exchange(ref _receiverId, 0);
-
-            _exitThread = true;
-
-            // wait for it to exit
-            if (_receiveThread != null)
-            {
-                _receiveThread.Join();
-                _receiveThread = null;
-            }
+            _receiveThread.Join();
+            _receiveThread = null;
         }
 
         // Destroy the receiver
@@ -427,19 +433,9 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
             _receiveInstancePtr = IntPtr.Zero;
         }
 
-        _disposed = true;
-    }
-
-    // TODO: clarify if this is called.
-    public void Dispose()
-    {
-        Dispose(true);
-
-        // dispose textures
         DisposeTextures();
 
-        if (_ndiInputFinder != null)
-            _ndiInputFinder.Dispose();
+        _ndiInputFinder.Dispose();
 
         if (_initialized)
         {
@@ -447,103 +443,105 @@ public sealed class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDrop
             _initialized = false;
         }
     }
+    
     #endregion
 
-    private static bool _initialized; 
+    private static bool _initialized;
     private readonly Finder _ndiInputFinder;
-    private bool _disposed;
 
     // A pointer to our unmanaged NDI receiver instance
     private IntPtr _receiveInstancePtr = IntPtr.Zero;
 
     // Thread to receive frames on so that the UI is still functional
-    private Thread _receiveThread;
+    private Thread? _receiveThread;
 
     // A way to exit the thread safely
     private bool _exitThread;
 
-
-    // should we send video to Windows or not?
+    /** should we send video to Windows or not? */
     private const bool VideoEnabled = true;
 
-    // private string _sourceName = string.Empty;
+    /// <summary>
+    /// This variable keeps track of the current Id of the receiver object. This
+    /// is a way to avoid processing frames on the UI thread when either the
+    /// connection source gets changed or the window closes.
+    /// </summary>
+    private int _receiverId;
 
-    // This variable keeps track of the current Id of the receiver object. This
-    // is a way to avoid processing frames on the UI thread when either the
-    // connection source gets changed or the window closes.
-    private int _receiverId = 0;
+    /** Hold several textures internally to speed up calculations */
+    private const int NumTextureEntries = 3;
 
-    // hold several textures internally to speed up calculations
-    private const int NumTextureEntries = 3; 
+    private readonly List<Texture2D> _imagesWithCpuAccess = [];
 
-    private readonly List<Texture2D> _imagesWithCpuAccess = new();
-
-    // current image index (used for circular access of ImagesWithCpuAccess)
+    /** Current image index (used for circular access of ImagesWithCpuAccess) */
     private int _currentIndex;
 
-    // mutex protecting changes to our images
+    /** Mutex protecting changes to our images */
     private readonly Mutex _textureMutex = new();
 
-    // action for changing the textures
-    private Action _textureAction;
-    private Texture2D _lastTexture;
-        
-        
+    /** Action for changing the textures */
+    private Action? _textureAction;
 
+    private Texture2D? _lastTexture;
+
+    #region status provider
     public IStatusProvider.StatusLevel GetStatusLevel()
     {
         return string.IsNullOrEmpty(_lastStatusMessage) ? IStatusProvider.StatusLevel.Success : IStatusProvider.StatusLevel.Warning;
     }
 
-    public string GetStatusMessage()
+    public string? GetStatusMessage()
     {
         return _lastStatusMessage;
     }
 
-    private string _lastStatusMessage;
+    private string? _lastStatusMessage;
+    #endregion
 
     #region device dropdown
     string ICustomDropdownHolder.GetValueForInput(Guid inputId)
     {
         return SourceName.Value;
     }
-        
+
     IEnumerable<string> ICustomDropdownHolder.GetOptionsForInput(Guid inputId)
     {
-        if (inputId != SourceName.Id || _ndiInputFinder == null)
+        if (inputId != SourceName.Id)
         {
             yield return "undefined";
             yield break;
         }
-        
+
         foreach (var s in _ndiInputFinder.Sources)
         {
             yield return s.Name;
         }
     }
-        
+
     void ICustomDropdownHolder.HandleResultForInput(Guid inputId, string result)
     {
         SourceName.SetTypedInputValue(result);
     }
     #endregion
 
+    private int _xRes;
+    private int _yRes;
+    private int _stride;
+    
     private bool _isProfiling;
     private bool _reconnect;
-    private DataChannel _traceTallyChannel;
-    private DataChannel _traceReceiveThreadProc;
-    private DataChannel _traceReceive2ThreadProc;
-    private DataChannel _traceTextureCopyChannel;
-    private DataChannel _traceTextureAction2Channel;
-        
+    private DataChannel? _traceTallyChannel;
+    private DataChannel? _traceReceiveThreadProc;
+    private DataChannel? _traceReceive2ThreadProc;
+    private DataChannel? _traceTextureCopyChannel;
+    private DataChannel? _traceTextureAction2Channel;
+
     [Input(Guid = "FD1FCA6B-A3BE-440B-86BA-6B7B1BBD2A8C")]
-    public InputSlot<string> SourceName = new();
-        
+    public readonly InputSlot<string> SourceName = new();
+
     [Input(Guid = "3F634E98-93F2-4B5E-A098-623B3F8E4C9C")]
-    public InputSlot<bool> EnableProfiling = new();
+    public readonly InputSlot<bool> EnableProfiling = new();
 
     [Input(Guid = "5E1EC76B-8FFE-43CA-867B-C9DDA0EAFB60")]
-    public InputSlot<bool> TriggerReconnect = new();
-
-        
+    public readonly InputSlot<bool> TriggerReconnect = new();
 }
