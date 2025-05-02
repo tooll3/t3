@@ -8,7 +8,7 @@
     <AssemblyName>$(RootNamespace)</AssemblyName>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <VersionPrefix>1.0.11</VersionPrefix>
+    <VersionPrefix>1.0.0</VersionPrefix>
     <HomeGuid>00000000-0000-0000-0000-000000000000</HomeGuid>
     <EditorVersion>4.0.0</EditorVersion>
     <IsEditorOnly>false</IsEditorOnly>
@@ -98,10 +98,11 @@
     <PackageReference Include="OpenGL.Net" Version="0.8.4">
       <NoWarn>NU1701</NoWarn>
     </PackageReference>
-    <!--
-    <PackageReference Include="SharpDX.Direct3D11" Version="4.2.0" />
-    -->
   </ItemGroup>
+  <Target Name="CopyNative" AfterTargets="AfterBuild">
+    <Copy SourceFiles="../../Dependencies/Spout.dll" DestinationFolder="$(OutputPath)" />
+    <Copy SourceFiles="../../Dependencies/SpoutDX.dll" DestinationFolder="$(OutputPath)" />
+  </Target>
   <!-- Include Resources/** into output/Resources -->
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
     <Content Include="Resources/**/*" Exclude="bin/**">
@@ -124,6 +125,13 @@
   <ItemGroup Label="OperatorPackages">
     <Operators Include="lib" Version="1.0.0" ResourcesOnly="False" />
     <Operators Include="Types" Version="1.0.0" ResourcesOnly="False" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Dependencies\Spout.dll">
+      <Visible>false</Visible>
+      <Link>bin\Debug\1.0.17\net9.0-windows\Spout.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Target Name="CreatePackageInfo" AfterTargets="AfterBuild">
     <ItemGroup Label="Define json structure of referenced operator packages">
