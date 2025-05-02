@@ -2,7 +2,7 @@
 using SharpDX.DXGI;
 using T3.Core.Utils;
 
-namespace lib.io.video;
+namespace Lib.io.video;
 
 [Guid("80032e95-90ec-486d-92a4-ff3d225e556e")]
 public sealed class ScreenCapture : Instance<ScreenCapture>

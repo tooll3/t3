@@ -7,7 +7,7 @@ using T3.Core.Animation;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.Utils;
 
-namespace lib.io.video;
+namespace Lib.io.video;
 
 [Guid("7567c3b0-9d91-40d2-899d-3a95b481d023")]
 public sealed class NdiInput : Instance<NdiInput>, IStatusProvider, ICustomDropdownHolder

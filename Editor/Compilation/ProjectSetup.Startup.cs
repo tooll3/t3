@@ -125,11 +125,13 @@ internal static partial class ProjectSetup
                     });
     }
 
+    /// <summary>
+    /// Load each project file and its associated assembly
+    /// </summary>
     [SuppressMessage("ReSharper", "OutParameterValueIsAlwaysDiscarded.Local")]
     private static void LoadProjects(FileInfo[] csProjFiles, ConcurrentBag<AssemblyInformation> nonOperatorAssemblies, bool forceRecompile,
                                      out List<ProjectWithReleaseInfo> unsatisfiedProjects, out List<ProjectWithReleaseInfo> failedProjects)
     {
-        // Load each project file and its associated assembly
         var releases = csProjFiles
                       .AsParallel()
                       .Select(fileInfo =>
@@ -170,18 +172,19 @@ internal static partial class ProjectSetup
 
         foreach (var project in failedProjects)
         {
-            Log.Error($"Failed to load {project.CsProject!.Name}");
+            Log.Error($" Failed to load {project.CsProject!.Name}");
         }
 
         foreach (var project in unsatisfiedProjects)
         {
-            Log.Error($"Unsatisfied dependencies for {project.CsProject!.Name}");
+            Log.Error($" Unsatisfied dependencies for {project.CsProject!.Name}");
         }
     }
 
     private static void LoadProjects(ConcurrentBag<AssemblyInformation> nonOperatorAssemblies, IReadOnlyCollection<ProjectWithReleaseInfo> releases,
                                      bool forceRecompile,
-                                     out List<ProjectWithReleaseInfo> failedProjects, out List<ProjectWithReleaseInfo> unsatisfiedProjects)
+                                     out List<ProjectWithReleaseInfo> failedProjects, 
+                                     out List<ProjectWithReleaseInfo> unsatisfiedProjects)
     {
         List<ProjectWithReleaseInfo> satisfied = [];
         var unsatisfied = new List<ProjectWithReleaseInfo>();
