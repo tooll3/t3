@@ -60,23 +60,22 @@ public sealed class Variation : ISelectableCanvasObject
     }
 
     internal static bool TryLoadVariationFromJson(Guid symbolId, JToken jToken, [NotNullWhen(true)] out Variation? variation)
-    //internal static Variation? FromJson(Guid symbolId, JToken jToken)
     {
         variation = null;
         if (!SymbolUiRegistry.TryGetSymbolUi(symbolId, out var compositionSymbolUi))
             return false;
         
         var compositionSymbol = compositionSymbolUi.Symbol;
-        
-        var idToken = jToken[nameof(Id)];
-        
-        var idString = idToken?.Value<string>();
-        if (idString == null)
+
+        if (!JsonUtils.TryGetGuid(jToken[nameof(Id)], out var variationId))
+        {
+            Log.Warning(" Can't find or parse variationId");
             return false;
+        }
         
         variation = new Variation
                                {
-                                   Id = Guid.Parse(idString),
+                                   Id = variationId,
                                    Title = jToken[nameof(Title)]?.Value<string>() ?? String.Empty,
                                    ActivationIndex = jToken[nameof(ActivationIndex)]?.Value<int>() ?? -1,
                                    IsPreset = jToken[nameof(IsPreset)]?.Value<bool>() ?? false,
@@ -99,23 +98,19 @@ public sealed class Variation : ISelectableCanvasObject
             if (changes2 is not JObject o)
                 continue;
 
-            if (string.IsNullOrEmpty(symbolChildIdString))
-            {
-                continue;
-            }
-
-            if (!Guid.TryParse(symbolChildIdString, out var symbolChildId))
+            if (!JsonUtils.TryGetGuid(symbolChildIdString, out var noneOrSymbolChildId))
             {
                 Log.Warning($"Can't load presets: invalid symbol ID '{symbolChildIdString}'");
+                continue;
             }
             
             Symbol symbolForChanges;
             
-            if (symbolChildId == _idWhenUsingCompositionSymbol)
+            if (noneOrSymbolChildId == _idWhenUsingCompositionSymbol)
             {
                 symbolForChanges = compositionSymbol;
             }
-            else if (compositionSymbol.Children.TryGetValue(symbolChildId, out var symbolChild))
+            else if (compositionSymbol.Children.TryGetValue(noneOrSymbolChildId, out var symbolChild))
             {
                 symbolForChanges = symbolChild.Symbol;
             }
@@ -127,10 +122,7 @@ public sealed class Variation : ISelectableCanvasObject
             
             foreach (var (inputIdString, valueToken) in o)
             {
-                if (string.IsNullOrEmpty(inputIdString))
-                    continue;
-                
-                if (!Guid.TryParse(inputIdString, out var inputId))
+                if (!JsonUtils.TryGetGuid(inputIdString, out var inputId))
                 {
                     Log.Warning($"Can't load presets: Invalid ID '{changeList}' in {symbolChildIdString}");
                     continue;
@@ -158,11 +150,11 @@ public sealed class Variation : ISelectableCanvasObject
             
             if (changeList.Count > 0)
             {
-                variation.ParameterSetsForChildIds[symbolChildId] = changeList;
+                variation.ParameterSetsForChildIds[noneOrSymbolChildId] = changeList;
             }
         }
         
-        return false;
+        return true;
     }
 
     private static readonly Guid _idWhenUsingCompositionSymbol = Guid.Empty; 
