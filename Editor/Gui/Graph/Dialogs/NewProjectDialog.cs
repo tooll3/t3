@@ -14,7 +14,7 @@ internal sealed class NewProjectDialog : ModalDialog
     protected override void OnShowNextFrame()
     {
         _shareResources = true;
-        _newName = "projectName";
+        _newName = "MyProject";
         _userName = UserSettings.Config.UserName;
         _newNamespace = "experiments";
         _needsAutoFocus = true;
@@ -94,8 +94,9 @@ internal sealed class NewProjectDialog : ModalDialog
                     ImGui.CloseCurrentPopup();
 
                     //GraphWindow.TryOpenPackage(project, false);
-                    Log.Warning("Not implemented yet.");
-                    BlockingWindow.Instance.ShowMessageBox($"Project \"{project.DisplayName}\"created successfully! It can be opened from the project list.");
+                    //Log.Warning("Not implemented yet.");
+                    //BlockingWindow.Instance.ShowMessageBox($"Project \"{project.DisplayName}\"created successfully! It can be opened from the project list.");
+                    Log.Debug($"Project \"{project.DisplayName}\"created successfully! It can be opened from the project list.");
                 }
                 else
                 {
