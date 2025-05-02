@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Management;
 using System.Globalization;
+using System;
 
 namespace T3.Editor.Gui.Windows;
 
@@ -14,7 +15,6 @@ internal sealed class AboutWindow : Window
     [
         ("Website", "https://tixl.app"),
         ("Wiki", "https://github.com/tooll3/t3/wiki"),
-        ("Discord", "https://discord.gg/YmSyQdeH3S")
     ];
 
     private readonly List<(string Label, string Url)> _sourceLinks =
@@ -22,9 +22,11 @@ internal sealed class AboutWindow : Window
         ("Github", "https://github.com/tooll3/t3")
     ];
 
+    private string _systemInfo = string.Empty; // Store system info for display
+
     internal AboutWindow()
     {
-        MenuTitle = "About & Help";
+        Config.Title = "About & Help";
     }
 
     protected override void DrawContent()
@@ -39,48 +41,65 @@ internal sealed class AboutWindow : Window
                          | ImGuiWindowFlags.AlwaysUseWindowPadding);
 
         FormInputs.AddSectionHeader("TiXL");
-        ImGui.TextColored(new Vector4(1.0f, 0.0f, 0.55f, 1.0f), "v " + Program.VersionText);
-
+        ImGui.TextColored(new Vector4(1.0f, 0.2f, 0.55f, 1.0f), "v " + Program.VersionText);
+        ImGui.PushFont(Fonts.FontSmall);
         FormInputs.AddVerticalSpace(5);
         ImGui.TextWrapped("MIT license");
         FormInputs.AddVerticalSpace(5);
         ImGui.Separator();
         FormInputs.AddVerticalSpace(5);
 
-        // System information copy button
-        if (ImGui.Button("Copy System Information"))
-        {
-            CopySystemInfoToClipboard();
-            ImGui.OpenPopup("SystemInfoCopied");
-        }
+        
 
-        // Confirmation popup
-        if (ImGui.BeginPopup("SystemInfoCopied"))
+        // Display system information in a collapsible section
+        if (ImGui.CollapsingHeader("System Information"))
         {
-            ImGui.Text("System information copied to clipboard!");
-            ImGui.EndPopup();
-        }
+            if (string.IsNullOrEmpty(_systemInfo))
+            {
+                UpdateSystemInfo(); // Populate system info if not already done
+            }
+            FormInputs.AddVerticalSpace(5);
+            ImGui.PushFont(Fonts.FontSmall);
+            ImGui.TextWrapped(_systemInfo);
+            FormInputs.AddVerticalSpace(5);
+            // System information copy button
+            if (ImGui.Button("Copy System Information"))
+            {
+                UpdateSystemInfo(); // Update system info and copy to clipboard
+                ImGui.SetClipboardText(_systemInfo);
+                ImGui.OpenPopup("SystemInfoCopied");
+            }
 
-        if (ImGui.IsItemHovered())
-        {
-            CustomComponents.TooltipForLastItem("Copy system info for bug reports");
+            // Confirmation popup
+            if (ImGui.BeginPopup("SystemInfoCopied"))
+            {
+                ImGui.Text("System information copied to clipboard!");
+                ImGui.EndPopup();
+            }
+
+            if (ImGui.IsItemHovered())
+            {
+                CustomComponents.TooltipForLastItem("Copy system info for bug reports");
+            }
+            ImGui.PopFont();
         }
 
         FormInputs.AddVerticalSpace(5);
         ImGui.Separator();
         FormInputs.AddVerticalSpace(5);
 
-        ImGui.PushFont(Fonts.FontSmall);
+        
         ImGui.TextWrapped("Help:");
-
+        ImGui.SameLine();
         DrawLinkButtons(_helpLinks);
 
         FormInputs.AddVerticalSpace(5);
         ImGui.Separator();
         FormInputs.AddVerticalSpace(5);
-
-        ImGui.TextWrapped("Source Code:");
-
+        //FormInputs.DrawInputLabel("Source Code:");
+       
+        ImGui.TextWrapped("Code:");
+        ImGui.SameLine();
         DrawLinkButtons(_sourceLinks);
 
         ImGui.PopFont();
@@ -123,11 +142,14 @@ internal sealed class AboutWindow : Window
         ImGui.PopStyleVar();
     }
 
-    private static void CopySystemInfoToClipboard()
+    private void UpdateSystemInfo()
     {
         try
         {
             var systemInfo = new StringBuilder();
+
+            // Current date
+            systemInfo.AppendLine($"Date: {DateTime.Now}");
 
             // TiXL version
             systemInfo.AppendLine($"TiXL version: {Program.VersionText}");
@@ -156,13 +178,12 @@ internal sealed class AboutWindow : Window
             var gpuInfo = GetGpuInformation();
             systemInfo.AppendLine($"GPU: {gpuInfo}");
 
-            // Copy to clipboard
-            ImGui.SetClipboardText(systemInfo.ToString());
-
+            _systemInfo = systemInfo.ToString();
         }
         catch (Exception e)
         {
-            Log.Warning($"Failed to copy system information: {e.Message}");
+            Log.Warning($"Failed to gather system information: {e.Message}");
+            _systemInfo = "Failed to gather system information.";
         }
     }
 
@@ -178,10 +199,8 @@ internal sealed class AboutWindow : Window
     {
         try
         {
-            //var appCulture = CultureInfo.CurrentCulture; // If I understand well this is TiXL culture, the result should be se same for everyone 
-            var currentCulture = CultureInfo.CurrentUICulture; // and this is the operating system culture  
-
-            return $"{currentCulture.EnglishName} | Keyboard layout:{currentCulture.KeyboardLayoutId} ({currentCulture.Parent}) ";
+            var currentCulture = CultureInfo.CurrentUICulture;
+            return $"{currentCulture.EnglishName}\nKeyboard layout:{currentCulture.KeyboardLayoutId} ({currentCulture.Parent}) ";
         }
         catch (Exception)
         {
@@ -193,8 +212,7 @@ internal sealed class AboutWindow : Window
     {
         try
         {
-            var appCulture = CultureInfo.CurrentCulture; // If I understand well this is TiXL culture, the result should be se same for everyone 
-
+            var appCulture = CultureInfo.CurrentCulture;
             return $"{appCulture.EnglishName} ";
         }
         catch (Exception)
@@ -212,23 +230,20 @@ internal sealed class AboutWindow : Window
     {
         try
         {
-            // Try to get .NET SDK version by running 'dotnet --version' command
-            using (Process process = new Process())
+            using var process = new Process();
+            process.StartInfo.FileName = "dotnet";
+            process.StartInfo.Arguments = "--version";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.CreateNoWindow = true;
+
+            process.Start();
+            var output = process.StandardOutput.ReadToEnd().Trim();
+            process.WaitForExit();
+
+            if (!string.IsNullOrEmpty(output))
             {
-                process.StartInfo.FileName = "dotnet";
-                process.StartInfo.Arguments = "--version";
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.CreateNoWindow = true;
-
-                process.Start();
-                var output = process.StandardOutput.ReadToEnd().Trim();
-                process.WaitForExit();
-
-                if (!string.IsNullOrEmpty(output))
-                {
-                    return output;
-                }
+                return output;
             }
         }
         catch (Exception)
@@ -251,10 +266,7 @@ internal sealed class AboutWindow : Window
                 {
                     var name = obj["Name"]?.ToString() ?? "Unknown";
                     var driverVersion = obj["DriverVersion"]?.ToString() ?? "Unknown";
-                                  
-                    var gpuDetails = name;
-                    gpuDetails += " (Driver version:" + $" {driverVersion})";
-
+                    var gpuDetails = $"{name}\nDriver version: {driverVersion}";
                     gpuList.Add(gpuDetails);
                 }
             }
@@ -266,7 +278,7 @@ internal sealed class AboutWindow : Window
             // Silently fail if we can't get GPU information
         }
 
-        return "Unknow";
+        return "Unknown";
     }
 
     internal override List<Window> GetInstances()
