@@ -1,7 +1,6 @@
 using ImGuiNET;
 using System.Diagnostics;
 using T3.Editor.Gui.Styling;
-using System;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Management;
@@ -133,6 +132,10 @@ internal sealed class AboutWindow : Window
             // TiXL version
             systemInfo.AppendLine($"TiXL version: {Program.VersionText}");
 
+            // System language
+            var appLanguage = GetAppLanguage();
+            systemInfo.AppendLine($"Language: {appLanguage}");
+
             // OS information
             var osVersion = GetOperatingSystemInfo();
             systemInfo.AppendLine($"OS: {osVersion}");
@@ -175,8 +178,24 @@ internal sealed class AboutWindow : Window
     {
         try
         {
-            var currentCulture = CultureInfo.CurrentCulture;
-            return $"{currentCulture.DisplayName} ({currentCulture.Name}) ({currentCulture.Parent}) ({currentCulture.KeyboardLayoutId})";
+            //var appCulture = CultureInfo.CurrentCulture; // If I understand well this is TiXL culture, the result should be se same for everyone 
+            var currentCulture = CultureInfo.CurrentUICulture; // and this is the operating system culture  
+
+            return $"{currentCulture.EnglishName} | Keyboard layout:{currentCulture.KeyboardLayoutId} ({currentCulture.Parent}) ";
+        }
+        catch (Exception)
+        {
+            return "Unknown";
+        }
+    }
+
+    private static string GetAppLanguage()
+    {
+        try
+        {
+            var appCulture = CultureInfo.CurrentCulture; // If I understand well this is TiXL culture, the result should be se same for everyone 
+
+            return $"{appCulture.EnglishName} ";
         }
         catch (Exception)
         {
@@ -234,7 +253,7 @@ internal sealed class AboutWindow : Window
                     var driverVersion = obj["DriverVersion"]?.ToString() ?? "Unknown";
                                   
                     var gpuDetails = name;
-                    gpuDetails += "(Driver version:" + $" {driverVersion})";
+                    gpuDetails += " (Driver version:" + $" {driverVersion})";
 
                     gpuList.Add(gpuDetails);
                 }
