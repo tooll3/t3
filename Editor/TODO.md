@@ -46,8 +46,11 @@ General fixes:
 - [x] Fix camera handling
 - [x] Default gradients are not loaded?
 - [x] Fix Scaling for multiple selected keyframes with ALT-Key
+- [ ] Fix Gradient editor not working as parameter window parameter
+- [ ] Make sure that TiXL is using the high performance GPU
 - [ ] Deleting last output will cause crash
 - [ ] Shake doesn't work with 120hz
+- 
 
 General UX-ideas:
 - [ ] StatusProvideIcon should support non-warning indicator
