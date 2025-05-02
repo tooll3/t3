@@ -11,6 +11,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using DeviceContext = OpenGL.DeviceContext;
 using Resource = SharpDX.DXGI.Resource;
+using DXTexture2D = SharpDX.Direct3D11.Texture2D;
 
 namespace Lib.io.video
 {
@@ -54,11 +55,11 @@ namespace Lib.io.video
             return adapter;
         }
 
-        private Texture2D CreateD3D11Texture2D(Texture2D d3d11Texture2D)
+        private DXTexture2D CreateD3D11Texture2D(DXTexture2D d3d11Texture2D)
         {
             using (var resource = d3d11Texture2D.QueryInterface<Resource>())
             {
-                return ResourceManager.Device.OpenSharedResource<Texture2D>(resource.SharedHandle);
+                return ResourceManager.Device.OpenSharedResource<DXTexture2D>(resource.SharedHandle);
             }
         }
 
@@ -182,7 +183,7 @@ namespace Lib.io.video
 
                     for (int i = 0; i < NumTextureEntries; ++i)
                     {
-                        ImagesWithGpuAccess.Add(new Texture2D(device, imageDesc));
+                        ImagesWithGpuAccess.Add(new Texture2D(new DXTexture2D(device, imageDesc)));
                     }
                     _currentIndex = 0;
                 }
@@ -259,7 +260,7 @@ namespace Lib.io.video
 
         // hold several textures internally to speed up calculations
         private const int NumTextureEntries = 2;
-        private readonly List<Texture2D> ImagesWithGpuAccess = new();
+        private readonly List<DXTexture2D> ImagesWithGpuAccess = new();
         // current image index (used for circular access of ImagesWithGpuAccess)
         private int _currentIndex;
         
