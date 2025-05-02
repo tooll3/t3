@@ -81,9 +81,9 @@
       "W": 0.8000001
     },
     "BackgroundInputField": {
-      "X": 0.15311003,
-      "Y": 0.15311003,
-      "Z": 0.15311003,
+      "X": 0.07655501,
+      "Y": 0.07655501,
+      "Z": 0.07655501,
       "W": 0.76076555
     },
     "BackgroundInputFieldHover": {
@@ -327,9 +327,9 @@
       "W": 1.0
     },
     "ColorForShaderGraph": {
-      "X": 0.62,
-      "Y": 0.23613773,
-      "Z": 0.34644336,
+      "X": 0.80382776,
+      "Y": 0.2658781,
+      "Z": 0.687517,
       "W": 1.0
     }
   },
@@ -360,19 +360,19 @@
       "Opacity": 0.2
     },
     "OperatorBackground": {
-      "Brightness": 0.6,
+      "Brightness": 0.67,
       "Saturation": 0.68,
-      "Opacity": 0.79
+      "Opacity": 0.8
     },
     "OperatorOutline": {
-      "Brightness": 0.24,
+      "Brightness": 0.2,
       "Saturation": 0.36,
-      "Opacity": 0.32
+      "Opacity": 0.8
     },
     "OperatorBackgroundIdle": {
-      "Brightness": 0.71,
-      "Saturation": 1.0,
-      "Opacity": 0.3
+      "Brightness": 0.39,
+      "Saturation": 0.52,
+      "Opacity": 0.5
     },
     "OperatorBackgroundHover": {
       "Brightness": 0.6,
