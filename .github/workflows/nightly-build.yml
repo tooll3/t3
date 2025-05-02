@@ -1,0 +1,45 @@
+name: Nightly Build
+
+on:
+  schedule:
+    - cron: '0 1 * * *'  # Runs at 1:00 AM UTC every day
+
+jobs:
+  check-commits:
+    runs-on: windows-latest
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Check for commits in last 24h
+        id: check
+        run: |
+          git fetch origin main
+          $COMMITS = git rev-list --count --since="24 hours" origin/main
+          echo "Commits in last 24h: $COMMITS"
+          if ($COMMITS -gt 0) {
+            echo "should_run=true" >> $env:GITHUB_OUTPUT
+          } else {
+            echo "should_run=false" >> $env:GITHUB_OUTPUT
+          }
+
+  build:
+    needs: check-commits
+    if: needs.check-commits.outputs.should_run == 'true'
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build
+        uses: ./.github/actions/build
+
+      - name: Package
+        uses: ./.github/actions/package
+
+      - name: Upload Installer
+        uses: actions/upload-artifact@v4
+        with:
+          path: Installer\Output\*.exe
