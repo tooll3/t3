@@ -1,0 +1,37 @@
+{
+  "Id": "1a933eb2-a89b-4694-ae04-60d86779cf28"/*ReflectField*/,
+  "Description": "Reflect space at a plane",
+  "InputUis": [
+    {
+      "InputId": "afd3834b-9ef0-4d7a-b0a3-a93cb4193d40"/*PlaneNormal*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 75.0
+      }
+    },
+    {
+      "InputId": "c617549d-b67d-454c-91f5-bc1d6e9a66b7"/*InputField*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "d184a675-a5ab-42f9-b3f9-d275b0c7bee8"/*Offset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 150.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "47166966-b53a-4b85-ac62-a6f956b7de23"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

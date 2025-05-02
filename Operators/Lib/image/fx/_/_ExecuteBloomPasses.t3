@@ -71,7 +71,12 @@
     },
     {
       "Id": "e5548715-1cae-4792-9e6e-8f9d8daa9edf"/*BlurGradient*/,
-      "DefaultValue": {}
+      "DefaultValue": {
+        "Gradient": {
+          "Interpolation": "Linear",
+          "Steps": []
+        }
+      }
     },
     {
       "Id": "e6a25147-0739-4416-e8c6-2745c32ad416"/*FullscreenVS*/,

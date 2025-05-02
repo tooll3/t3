@@ -1,6 +1,7 @@
 {
   "Id": "9323e32f-078c-4156-941b-203f4c265ff5"/*RaymarchField*/,
-  "Description": "This operator should be renamed.",
+  "Description": "Renders the connected shader graph SDF.\n\nIt uses the followed [SetMaterial], [SetFog] and [PointLight] override. \nIt will correctly initialize the depth buffer so the output can be blended with other geometry like meshes.\n\nPlease checkout the examples.",
+  "SymbolTags": "1",
   "InputUis": [
     {
       "InputId": "0b4d60de-261f-4dbf-ad44-6395cda3a496"/*MinDistance*/,
@@ -8,6 +9,7 @@
         "X": 218.2935,
         "Y": 808.45105
       },
+      "Description": "The distance threshold when the raymarchin is marked as completed.",
       "Min": 0.0,
       "Max": 0.01,
       "Scale": 0.001
@@ -17,7 +19,8 @@
       "Position": {
         "X": 218.2935,
         "Y": 1263.451
-      }
+      },
+      "Description": "An minor factor that can help to reduce edge artifacts for compositing into the scene."
     },
     {
       "InputId": "3148d927-8779-47ab-9e0a-fa63206f3002"/*MaxSteps*/,
@@ -26,6 +29,7 @@
         "Y": 738.45105
       },
       "GroupTitle": "Quality",
+      "Description": "The number of raymarching steps. This has a major impact on the quality and performance. Normal values are between 50 and 150.\n",
       "Min": 0.0,
       "Max": 150.0
     },
@@ -42,7 +46,8 @@
       "Position": {
         "X": 309.10193,
         "Y": 560.6533
-      }
+      },
+      "Description": "Provides various options to generate UVs for the field."
     },
     {
       "InputId": "561768f6-adf6-4d3d-a36a-20b6f35ff151"/*StepSize*/,
@@ -50,6 +55,7 @@
         "X": 218.2935,
         "Y": 773.45105
       },
+      "Description": "An intialia; scaling factor. Lowering this can be useful to reduce artifacts caused by invalid Lipschitz continuities (e.g. by applying noise).",
       "Min": 0.9,
       "Max": 1.1
     },
@@ -58,14 +64,16 @@
       "Position": {
         "X": 218.2935,
         "Y": 1158.4509
-      }
+      },
+      "Description": "Scale texture defined by the [SetMaterial]."
     },
     {
       "InputId": "9715075b-b02b-4290-9332-9bbfe67933f2"/*Color*/,
       "Position": {
         "X": 78.29352,
         "Y": 878.45105
-      }
+      },
+      "Description": "A color multiplier. You could also use [SetSDFMaterial] or [SetMaterial] for this."
     },
     {
       "InputId": "adeb374b-bce0-4af2-867b-efb3ce6289c9"/*MaxDistance*/,
@@ -73,6 +81,7 @@
         "X": 218.29349,
         "Y": 843.45105
       },
+      "Description": "A threshold after which the raymarching is aborted.",
       "Min": 0.0,
       "Max": 1000.0
     },
@@ -82,6 +91,7 @@
         "X": 78.29346,
         "Y": 1018.45105
       },
+      "Description": "Will apply an ambient occlusion color depending on the AO Distance parameter.\nYou can use the alpha chanel to control the intensity.\nAlso try light colors ot add some kind of inner glow effect.",
       "AddPadding": "True"
     },
     {
@@ -90,6 +100,7 @@
         "X": 218.29349,
         "Y": 1228.451
       },
+      "Description": "Defines the look-up distance when calculating the surface normal. This controls how sharp objects appear.\nToo small values will cause artifacs. Larger values wll apply some sort of smoothing effect.",
       "AddPadding": "True",
       "Min": 0.0,
       "Max": 0.1
@@ -100,7 +111,8 @@
         "X": 218.29349,
         "Y": 1193.4509
       },
-      "GroupTitle": "Appearance"
+      "GroupTitle": "Appearance",
+      "Description": "Controls the distance and intensity of the Ambient Occlusion."
     }
   ],
   "SymbolChildUis": [

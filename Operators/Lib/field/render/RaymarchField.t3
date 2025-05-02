@@ -7,7 +7,7 @@
     },
     {
       "Id": "1251368b-f8f4-4210-be1e-4d05223caf21"/*DistToColor*/,
-      "DefaultValue": -0.20333333
+      "DefaultValue": 0.15
     },
     {
       "Id": "3148d927-8779-47ab-9e0a-fa63206f3002"/*MaxSteps*/,

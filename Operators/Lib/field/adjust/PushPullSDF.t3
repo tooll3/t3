@@ -1,0 +1,23 @@
+{
+  "Id": "0ff18a32-c1e9-406d-b3e3-23700e2453a0"/*PushPullSDF*/,
+  "Inputs": [
+    {
+      "Id": "463149fa-b53b-4d43-b4e7-57dcb045bba0"/*StepScale*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "91c09fac-0b50-4f62-97ca-18461801b442"/*AmountField*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "9cd1120d-81fa-43ab-b023-c462fe651ffb"/*Amount*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "c57d91b6-a26a-4e69-be1f-dc04f86594b6"/*SdfField*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

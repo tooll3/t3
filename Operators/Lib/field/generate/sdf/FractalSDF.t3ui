@@ -1,0 +1,71 @@
+{
+  "Id": "933aec2c-e7dd-44b4-a094-14d0195f9f7a"/*FractalSDF*/,
+  "Description": "Generates a MandelBox SDF. ",
+  "InputUis": [
+    {
+      "InputId": "094637cf-9526-49d5-bb9f-19991cdcc516"/*Iterations*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      },
+      "GroupTitle": "Quality",
+      "Description": "The quality and complexity of the fractal greatly depends on the number of iterations. So does the performance.\n\nIterations above 10 might not be able to raymarch in 1080p."
+    },
+    {
+      "InputId": "482ff1b2-2383-45db-8a5a-30ef2a07c8fb"/*Clamping*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Description": "An internal parameter that shapes the fractal.\nThe x and y components only have an effect with a z-compent > 0.",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "5678312c-5c31-4b7e-9e82-4595aa8a6740"/*Scale*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "GroupTitle": "Fractal parameters",
+      "Description": "The overall detail of the fractal.",
+      "Min": 1.0,
+      "Max": 10.0,
+      "Scale": 0.01
+    },
+    {
+      "InputId": "5dc2517b-228c-45a7-abe5-b87275eb5224"/*Fold*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "ab32b4f6-dea8-4e25-b5cd-2e232273a51e"/*Minrad*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      },
+      "Description": "The complexity of the fractal.",
+      "Min": 0.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "cef65141-085c-4e09-8f16-8338b0964bc4"/*Increment*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      },
+      "Description": "And additional parameter to manipulate the fractal."
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "095c8c2a-4d5a-4aac-8ff9-b696ed14406d"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

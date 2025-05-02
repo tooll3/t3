@@ -1,0 +1,39 @@
+{
+  "Id": "a54e0946-71d0-4985-90bc-184cdb1b6b34"/*TorusSDF*/,
+  "Description": "Generates a donut shape SDF.",
+  "InputUis": [
+    {
+      "InputId": "522a9640-ca8c-47e6-ad36-5c316a9092ae"/*Axis*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "GroupTitle": "Shader Varations"
+    },
+    {
+      "InputId": "5fe2ab92-f8e5-400d-b5a3-197f20570d6f"/*Size*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "dbc72bd7-6191-4145-a69f-d17b3808b3ab"/*Center*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "14cd4d1f-0b9b-43c4-93cc-d730c137cee8"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}
