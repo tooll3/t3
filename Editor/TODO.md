@@ -73,6 +73,9 @@
 - [ ] Make sure that TiXL is using the high performance GPU
 - [ ] Deleting last output will cause crash
 
+## Documentation
+
+- [ ] Fix WIKI export does not include input descriptions
 
 ## General UX-ideas:
 - [ ] StatusProvideIcon should support non-warning indicator
