@@ -37,11 +37,21 @@ internal static class AppMenuBar
 
             ImGui.SetCursorPos(new Vector2(0, -1)); // Shift to make menu items selected when hitting top of screen
 
+            ImGui.PushStyleVar(ImGuiStyleVar.ChildBorderSize, 1);
+            ImGui.PushStyleVar(ImGuiStyleVar.PopupRounding, 3);
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
+
+            ImGui.PushStyleColor(ImGuiCol.Separator, UiColors.BackgroundFull.Fade(0.5f).Rgba);
+
             DrawMainMenu();
+
+            ImGui.PopStyleColor();
+            ImGui.PopStyleVar(3);
+
             DrawVersionIndicator();
             DrawErrorsIndicator();
             T3Metrics.DrawRenderPerformanceGraph();
-            
+
             ImGui.SameLine();
 
             Program.StatusErrorLine.Draw();
@@ -51,36 +61,36 @@ internal static class AppMenuBar
 
         ImGui.PopStyleVar(3);
     }
-    
+
     private static void DrawErrorsIndicator()
     {
-        ImGui.SameLine(0,AppBarSpacingX);
+        ImGui.SameLine(0, AppBarSpacingX);
         var isHovered = false;
         {
             var hasErrors = OperatorDiagnostics.StatusUpdates.Count > 0;
 
             if (!hasErrors)
             {
-                ImGui.PushStyleColor(ImGuiCol.Text,UiColors.TextMuted.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                 Icon.Checkmark.Draw();
                 ImGui.PopStyleColor();
             }
             else
             {
-                var timeSinceChange = (float)(ImGui.GetTime() - OperatorDiagnostics.LastChangeTime).Clamp(0,1);
-                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, MathUtils.Lerp(1,0.4f,timeSinceChange));
+                var timeSinceChange = (float)(ImGui.GetTime() - OperatorDiagnostics.LastChangeTime).Clamp(0, 1);
+                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, MathUtils.Lerp(1, 0.4f, timeSinceChange));
                 Icon.Warning.Draw();
                 isHovered = ImGui.IsItemHovered();
-                    
-                ImGui.SameLine(0,0);
+
+                ImGui.SameLine(0, 0);
                 ImGui.TextUnformatted($"{OperatorDiagnostics.StatusUpdates.Count}");
                 ImGui.PopStyleVar();
             }
 
             var isGroupHovered = isHovered || ImGui.IsItemHovered();
-            if (!isGroupHovered) 
+            if (!isGroupHovered)
                 return;
-            
+
             CustomComponents.BeginTooltip(1200);
             {
                 if (OperatorDiagnostics.StatusUpdates.Count == 0)
@@ -93,17 +103,16 @@ internal static class AppMenuBar
                     {
                         OperatorDiagnostics.StatusUpdates.Clear();
                     }
-                            
+
                     CustomComponents.HelpText("Recent Operators problems. Click to clear...");
-                            
-                            
+
                     foreach (var x in OperatorDiagnostics.StatusUpdates.Values.OrderByDescending(x => x.Time))
                     {
                         if (Structure.TryGetInstanceFromPath(x.IdPath, out _, out var readableInstancePath))
                         {
                             var timeSince = ImGui.GetTime() - x.Time;
                             var fadeLine = ((float)timeSince).RemapAndClamp(10, 100, 1, 0.4f);
-                                    
+
                             ImGui.PushFont(Fonts.FontSmall);
                             ImGui.PushStyleVar(ImGuiStyleVar.Alpha, fadeLine);
                             var notFirst = false;
@@ -111,7 +120,7 @@ internal static class AppMenuBar
                             {
                                 if (notFirst)
                                 {
-                                    ImGui.SameLine(0,4);
+                                    ImGui.SameLine(0, 4);
                                     ImGui.TextColored(UiColors.TextMuted, "/");
                                     ImGui.SameLine(0, 4);
                                 }
@@ -121,13 +130,12 @@ internal static class AppMenuBar
                                 ImGui.TextUnformatted(p);
                             }
 
-
                             ImGui.SameLine(0, 10);
                             ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                             ImGui.TextUnformatted(StringUtils.GetReadableRelativeTime(timeSince));
                             ImGui.PopStyleColor();
                             ImGui.PopFont();
-                                    
+
                             var color = x.Statuses switch
                                             {
                                                 OperatorDiagnostics.Statuses.HasWarning => UiColors.StatusAttention,
@@ -153,7 +161,7 @@ internal static class AppMenuBar
         if (!UserSettings.Config.FullScreen)
             return;
 
-        ImGui.SameLine(0,AppBarSpacingX);
+        ImGui.SameLine(0, AppBarSpacingX);
         //ImGui.Dummy(new Vector2(10, 10));
         //ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 2);
 
@@ -164,80 +172,24 @@ internal static class AppMenuBar
 
     private static void DrawMainMenu()
     {
-        if (ImGui.BeginMenu("Project"))
+        if (ImGui.BeginMenu("TiXL"))
         {
             UserSettings.Config.ShowMainMenu = true;
 
             var currentProject = ProjectView.Focused?.OpenedProject.Package;
             var showNewTemplateOption = !T3Ui.IsCurrentlySaving && currentProject != null;
 
-            if (ImGui.MenuItem("New...", KeyboardBinding.ListKeyboardShortcuts(UserActions.New, false), false, showNewTemplateOption))
-            {
-                T3Ui.CreateFromTemplateDialog.ShowNextFrame();
-            }
-
-            if (ImGui.MenuItem("New Project"))
+            if (ImGui.MenuItem("New Project..."))
             {
                 T3Ui.NewProjectDialog.ShowNextFrame();
             }
 
-            if (currentProject is { IsReadOnly: false } && currentProject is EditableSymbolProject project)
+            if (ImGui.MenuItem("New Operator...", KeyboardBinding.ListKeyboardShortcuts(UserActions.New, false), false, showNewTemplateOption))
             {
-                ImGui.Separator();
-
-                if (ImGui.BeginMenu("Open.."))
-                {
-                    if (ImGui.MenuItem("Project Folder"))
-                    {
-                        CoreUi.Instance.OpenWithDefaultApplication(project.Folder);
-                    }
-
-                    if (ImGui.MenuItem("Resource Folder"))
-                    {
-                        CoreUi.Instance.OpenWithDefaultApplication(project.ResourcesFolder);
-                    }
-
-                    if (ImGui.MenuItem("Project in IDE"))
-                    {
-                        CoreUi.Instance.OpenWithDefaultApplication(project.CsProjectFile.FullPath);
-                    }
-
-                    ImGui.EndMenu();
-                }
+                T3Ui.CreateFromTemplateDialog.ShowNextFrame();
             }
 
-            ImGui.Separator();
-
-            // Disabled, at least for now, as this is an incomplete (or not even started) operation on the Main branch atm
-            if (ImGui.MenuItem("Import Operators", null, false, !T3Ui.IsCurrentlySaving))
-            {
-                BlockingWindow.Instance.ShowMessageBox("This feature is not yet implemented on the main branch - stay tuned for updates!",
-                                                       "Not yet implemented");
-                //_importDialog.ShowNextFrame();
-            }
-
-            if (ImGui.MenuItem("Fix File references", ""))
-            {
-                BlockingWindow.Instance.ShowMessageBox("This feature is not yet implemented on the main branch - stay tuned for updates!",
-                                                       "Not yet implemented");
-                //FileReferenceOperations.FixOperatorFilepathsCommand_Executed();
-            }
-
-            ImGui.Separator();
-
-            if (ImGui.MenuItem("Save", KeyboardBinding.ListKeyboardShortcuts(UserActions.Save, false), false, !T3Ui.IsCurrentlySaving))
-            {
-                T3Ui.SaveInBackground(saveAll: false);
-            }
-
-            if (ImGui.MenuItem("Save All", !T3Ui.IsCurrentlySaving))
-            {
-                Task.Run(() => { T3Ui.Save(true); });
-            }
-
-            ImGui.Separator();
-
-            if (ImGui.BeginMenu("Load Project", !T3Ui.IsCurrentlySaving && EditableSymbolProject.AllProjects.Any(x => x.HasHome)))
+            if (ImGui.BeginMenu("Recent Projects...", !T3Ui.IsCurrentlySaving && EditableSymbolProject.AllProjects.Any(x => x.HasHome)))
             {
                 foreach (var package in EditableSymbolProject.AllProjects)
                 {
@@ -260,18 +212,80 @@ internal static class AppMenuBar
                 ImGui.EndMenu();
             }
 
+            if (currentProject is { IsReadOnly: false } && currentProject is EditableSymbolProject project)
+            {
+                //ImGui.Separator();
+
+                if (ImGui.BeginMenu("Open Project in..."))
+                {
+                    if (ImGui.MenuItem("File Explorer"))
+                    {
+                        CoreUi.Instance.OpenWithDefaultApplication(project.Folder);
+                    }
+
+                    if (ImGui.MenuItem("Resource Folder"))
+                    {
+                        CoreUi.Instance.OpenWithDefaultApplication(project.ResourcesFolder);
+                    }
+
+                    if (ImGui.MenuItem("Development IDE"))
+                    {
+                        CoreUi.Instance.OpenWithDefaultApplication(project.CsProjectFile.FullPath);
+                    }
+
+                    ImGui.EndMenu();
+                }
+            }
+
             ImGui.Separator();
 
-            if (ImGui.BeginMenu("Clear shader cache"))
+            // Disabled, at least for now, as this is an incomplete (or not even started) operation on the Main branch atm
+            if (ImGui.MenuItem("Import Operators", null, false, !T3Ui.IsCurrentlySaving))
             {
-                if (ImGui.MenuItem("Editor only"))
+                BlockingWindow.Instance.ShowMessageBox("This feature is not yet implemented on the main branch - stay tuned for updates!",
+                                                       "Not yet implemented");
+                //_importDialog.ShowNextFrame();
+            }
+
+            ImGui.Separator();
+
+            if (ImGui.MenuItem("Save Changes", KeyboardBinding.ListKeyboardShortcuts(UserActions.Save, false), false, !T3Ui.IsCurrentlySaving))
+            {
+                T3Ui.SaveInBackground(saveAll: false);
+            }
+
+            if (ImGui.MenuItem("Save All", !T3Ui.IsCurrentlySaving))
+            {
+                Task.Run(() => { T3Ui.Save(true); });
+            }
+
+            ImGui.Separator();
+
+            if (ImGui.BeginMenu("Actions"))
+            {
+                if (ImGui.BeginMenu("Clear shader cache"))
                 {
-                    ShaderCompiler.DeleteShaderCache(all: false);
+                    if (ImGui.MenuItem("Editor only"))
+                        ShaderCompiler.DeleteShaderCache(all: false);
+
+                    if (ImGui.MenuItem("All editor and player versions"))
+                        ShaderCompiler.DeleteShaderCache(all: true);
+
+                    ImGui.EndMenu();
                 }
 
-                if (ImGui.MenuItem("All editor and player versions"))
+                if (ImGui.BeginMenu("Documentation"))
                 {
-                    ShaderCompiler.DeleteShaderCache(all: true);
+                    if (ImGui.MenuItem("Export as WIKI"))
+                        ExportWikiDocumentation.ExportWiki();
+
+                    if (ImGui.MenuItem("Export to JSON"))
+                        ExportDocumentationStrings.ExportDocumentationAsJson();
+
+                    if (ImGui.MenuItem("Import from JSON"))
+                        ExportDocumentationStrings.ImportDocumentationAsJson();
+
+                    ImGui.EndMenu();
                 }
 
                 ImGui.EndMenu();
@@ -279,7 +293,7 @@ internal static class AppMenuBar
 
             ImGui.Separator();
 
-            if (ImGui.MenuItem("Quit", !T3Ui.IsCurrentlySaving))
+            if (ImGui.MenuItem("Exit", !T3Ui.IsCurrentlySaving))
             {
                 EditorUi.Instance.ExitApplication();
             }
@@ -313,33 +327,6 @@ internal static class AppMenuBar
                 ImGui.EndMenu();
             }
 
-            if (ImGui.BeginMenu("Tools"))
-            {
-                if (ImGui.MenuItem("Export Operator Descriptions"))
-                {
-                    ExportWikiDocumentation.ExportWiki();
-                }
-
-                if (ImGui.MenuItem("Export Documentation to JSON"))
-                {
-                    ExportDocumentationStrings.ExportDocumentationAsJson();
-                }
-
-                if (ImGui.MenuItem("Import documentation from JSON"))
-                {
-                    ExportDocumentationStrings.ImportDocumentationAsJson();
-                }
-
-                ImGui.EndMenu();
-            }
-
-            ImGui.EndMenu();
-        }
-
-        if (ImGui.BeginMenu("Add"))
-        {
-            UserSettings.Config.ShowMainMenu = true;
-            SymbolTreeMenu.Draw();
             ImGui.EndMenu();
         }
 
@@ -347,18 +334,22 @@ internal static class AppMenuBar
         {
             UserSettings.Config.ShowMainMenu = true;
 
-            ImGui.Separator();
-            ImGui.MenuItem("Show Main Menu", "", ref UserSettings.Config.ShowMainMenu);
-            ImGui.MenuItem("Show Title", "", ref UserSettings.Config.ShowTitleAndDescription);
-            ImGui.MenuItem("Show Timeline", "", ref UserSettings.Config.ShowTimeline);
-            ImGui.MenuItem("Show Minimap", "", ref UserSettings.Config.ShowMiniMap);
-            ImGui.MenuItem("Show Toolbar", "", ref UserSettings.Config.ShowToolbar);
-            ImGui.MenuItem("Show Interaction Overlay", "", ref UserSettings.Config.ShowInteractionOverlay);
-            if (ImGui.MenuItem("Toggle All UI Elements", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleAllUiElements, false), false,
+            CustomComponents.MenuGroupHeader("UI Elements...");
+            ImGui.MenuItem("Main Menu", "", ref UserSettings.Config.ShowMainMenu);
+            ImGui.MenuItem("Graph Title", "", ref UserSettings.Config.ShowTitleAndDescription);
+            ImGui.MenuItem("Graph Minimap", "", ref UserSettings.Config.ShowMiniMap);
+            ImGui.MenuItem("Graph Toolbar", "", ref UserSettings.Config.ShowToolbar);
+            ImGui.MenuItem("Timeline", "", ref UserSettings.Config.ShowTimeline);
+            if (ImGui.MenuItem("Toggle All", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleAllUiElements, false), false,
                                !T3Ui.IsCurrentlySaving))
             {
                 T3Ui.ToggleAllUiElements();
             }
+
+            ImGui.Separator();
+
+            ImGui.MenuItem("Interactions Overlay", "", ref UserSettings.Config.ShowInteractionOverlay);
+            ImGui.Separator();
 
             ImGui.MenuItem("Fullscreen", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFullscreen, false), ref UserSettings.Config.FullScreen);
             if (ImGui.MenuItem("Focus Mode", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFocusMode, false), UserSettings.Config.FocusMode))
@@ -374,7 +365,101 @@ internal static class AppMenuBar
             WindowManager.DrawWindowMenuContent();
             ImGui.EndMenu();
         }
+
+        if (ImGui.BeginMenu("Help"))
+        {
+            if (ImGui.BeginMenu("Documentation"))
+            {
+                foreach (var link in _helpLinks)
+                {
+                    link.DrawMenuItem();
+                }
+
+                ImGui.EndMenu();
+            }
+            
+            if (ImGui.BeginMenu("YouTube"))
+            {
+                foreach (var link in _youTubeLinks)
+                {
+                    link.DrawMenuItem();
+                }
+
+                ImGui.EndMenu();
+            }
+            ImGui.Separator();
+
+            foreach (var link in _otherLinks)
+            {
+                link.DrawMenuItem();
+            }
+            
+            ImGui.Separator();
+            
+            if (ImGui.BeginMenu("Send Feedback"))
+            {
+                foreach (var link in _feedbackLinks)
+                {
+                    link.DrawMenuItem();
+                }
+
+                ImGui.EndMenu();
+            }
+
+            if (ImGui.MenuItem("About"))
+            {
+                Log.Debug("Not implemented yet");
+            }
+
+            ImGui.EndMenu();
+        }
     }
 
-    public static float AppBarSpacingX = 20;
+    private sealed class HelpLink(string title, string url, string toolTip = "")
+    {
+        private string Title { get; } = title;
+        private string Url { get; } = url;
+        private string ToolTip { get; } = toolTip;
+        
+        public void DrawMenuItem()
+        {
+            if (ImGui.MenuItem(Title, null, false))
+            {
+                CoreUi.Instance.OpenWithDefaultApplication(Url);
+            }
+            CustomComponents.TooltipForLastItem("Open link in browser", ToolTip);
+        }
+    }
+
+    private const string WikiRootUrl = "https://github.com/tooll3/t3/wiki/";
+    private static readonly List<HelpLink> _helpLinks =
+        [
+            new("Introduction", WikiRootUrl + "help.Introduction"),
+            new("Operator Library", WikiRootUrl + "lib"),
+            new("FAQ", WikiRootUrl + "help.FAQ"),
+            new("Video Tutorials", WikiRootUrl + "help.VideoTutorials"),
+        ];
+    
+    private static readonly List<HelpLink> _youTubeLinks =
+        [
+            new("Getting Started (15min)",  "https://www.youtube.com/watch?v=_zvzX0fZ8sc"),
+            new("Tutorials (Playlist)",  "https://www.youtube.com/playlist?list=PLj-rnPROvbn3LigXGRSDvmLtgTwmNHcQs"),
+            new("Tip of the Day (Playlist)",  "https://www.youtube.com/watch?v=Jpvyg-LR3f0&list=PLj-rnPROvbn2cfnUwuyb5gRj-juOYUC7T"),
+            new("Made with TiXL", "https://www.youtube.com/playlist?list=PLj-rnPROvbn3LNU34daaRk5EiaXlwo2E0"),
+        ];
+    
+    private static readonly List<HelpLink> _otherLinks =
+        [
+            new("TiXL Web-Site",  "https://tixl.app"),
+            new("Discord Community",  "https://discord.gg/uC4hRRdp", "Join a friendly and welcoming community of enthusiasts. Ask questions, Learn from each other, share or just hang out."),
+            new("Meet Up (every 2nd week)",  "https://discord.com/invite/WX94pzKj?event=1359348185914544312", "We meet every 2nd week to share our screens answer questions and hang out."),
+        ];
+    
+    private static readonly List<HelpLink> _feedbackLinks =
+        [
+            new("Report Issue",  "https://github.com/tooll3/t3/issues/new?template=bug_report.md", "Please search for other related issues before posting..."),
+            new("Request Feature",  "https://github.com/tooll3/t3/issues/new?template=feature-request.md", "Please search for other related issues before posting..."),
+        ];
+    
+    public static readonly float AppBarSpacingX = 20;
 }

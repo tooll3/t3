@@ -13,7 +13,7 @@ public sealed class ExternalLink
     }
         
     public string Title=string.Empty;
-    public string Url ="https://tooll.io";
+    public string Url ="https://tixl.app";
     public string Description = String.Empty;
     public LinkTypes Type = LinkTypes.Other;
     public Guid Id { get; init; }

@@ -1,3 +1,4 @@
+#nullable enable
 using ImGuiNET;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
@@ -13,12 +14,6 @@ internal static class GraphBookmarkNavigation
 {
     public static void HandleForCanvas(ProjectView components)
     {
-        // var isNotFocused = !ImGui.IsWindowFocused();
-        // if (isNotFocused)
-        // {
-        //     return;
-        // }
-
         var alreadyInteracted = HasInteractedInCurrentFrame();
         if (alreadyInteracted)
         {
@@ -48,11 +43,10 @@ internal static class GraphBookmarkNavigation
         var components = ProjectView.Focused;
         if (components == null)
         {
-            Log.Warning($"Cannot draw bookmark menu. No focused graph window.");
             return;
         }
 
-        if (ImGui.BeginMenu("Load graph bookmark"))
+        if (ImGui.BeginMenu("Open Bookmark in Graph"))
         {
             for (var index = 0; index < _loadBookmarkActions.Length; index++)
             {
@@ -69,7 +63,7 @@ internal static class GraphBookmarkNavigation
                 
         }
 
-        if (ImGui.BeginMenu("Save graph bookmark"))
+        if (ImGui.BeginMenu("Save Bookmark"))
         {
             for (var index = 0; index < _saveBookmarkActions.Length; index++)
             {
@@ -109,6 +103,9 @@ internal static class GraphBookmarkNavigation
 
     private static void SaveBookmark(ProjectView window, int index)
     {
+        if (window.CompositionInstance == null)
+            return;
+        
         Log.Debug("Saving bookmark " + index);
         var bookmarks = UserSettings.Config.Bookmarks;
 
@@ -120,13 +117,12 @@ internal static class GraphBookmarkNavigation
             
         var canvas = window.GraphCanvas;
 
-        bookmarks[index] = new Bookmark()
+        bookmarks[index] = new Bookmark
                                {
                                    IdPath = window.CompositionInstance.InstancePath.ToList(),
                                    ViewScope = canvas.GetTargetScope(),
                                    SelectedChildIds = window.NodeSelection.GetSelectedNodes<SymbolUi.Child>().Select(s => s.Id).ToList()
                                };
-        ;
     }
 
     private static readonly UserActions[] _loadBookmarkActions =
@@ -162,16 +158,10 @@ internal static class GraphBookmarkNavigation
         return GetBookmarkAt(index) != null;
     }
 
-    private static Bookmark GetBookmarkAt(int index)
+    private static Bookmark? GetBookmarkAt(int index)
     {
         var bookmarks = UserSettings.Config.Bookmarks;
-        if (bookmarks != null
-            && bookmarks.Count > index)
-        {
-            return bookmarks[index];
-        }
-
-        return null;
+        return bookmarks.Count > index ? bookmarks[index] : null;
     }
 
 
@@ -184,13 +174,14 @@ internal static class GraphBookmarkNavigation
     private static int _lastInteractionFrame;
 }
 
-public class Bookmark
+// todo - include Project in this
+public sealed class Bookmark
 {
     // Fixme: Deserialization doesn't work and results into new (incorrect) random Ids
     //[JsonConverter(typeof(List<Guid>))]
-    public List<Guid> IdPath = new();
+    public List<Guid> IdPath = [];
     public CanvasScope ViewScope;
 
-    public List<Guid> SelectedChildIds = new();
-    // todo - include Project in this
+    public List<Guid> SelectedChildIds = [];
+    
 }

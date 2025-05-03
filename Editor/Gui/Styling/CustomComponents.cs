@@ -10,6 +10,10 @@ using T3.SystemUi;
 
 namespace T3.Editor.Gui.Styling;
 
+/// <summary>
+/// A set of special wrappers for ImGui components.
+/// Also, checkout the FormInputs class. 
+/// </summary>
 internal static class CustomComponents
 {
     /// <summary>
@@ -429,6 +433,19 @@ internal static class CustomComponents
         ImGui.PopStyleColor();
         ImGui.PopFont();
         FormInputs.AddVerticalSpace(2);
+    }
+    
+    
+    
+    public static void MenuGroupHeader(string text)
+    {
+        FormInputs.AddVerticalSpace(4);
+        ImGui.PushFont(Fonts.FontSmall);
+        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+        ImGui.TextUnformatted(text);
+        ImGui.PopStyleColor();
+        ImGui.PopFont();
+        
     }
 
     /// <summary>
