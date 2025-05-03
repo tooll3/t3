@@ -11,12 +11,12 @@ internal abstract class Window
 {
     internal bool AllowMultipleInstances = false;
     protected bool MayNotCloseLastInstance = false;
-    
+
     protected ImGuiWindowFlags WindowFlags;
 
     internal abstract IReadOnlyList<Window> GetInstances();
 
-    protected virtual string WindowDisplayTitle => Config.Title;
+    protected string WindowDisplayTitle => Config.Title;
 
     public void Draw()
     {
@@ -30,7 +30,7 @@ internal abstract class Window
         }
     }
 
-    internal void DrawOneInstance()
+    private void DrawOneInstance()
     {
         UpdateBeforeDraw();
 
@@ -43,20 +43,22 @@ internal abstract class Window
             _wasVisible = true;
         }
 
-        var hideFrameBorder = (WindowFlags & ImGuiWindowFlags.NoMove) != ImGuiWindowFlags.None;
-        if (hideFrameBorder)
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0);
+        var borderWithForFloatingWindows = _wasDockedLastFrame ? 0 : 2;
 
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, borderWithForFloatingWindows);
 
         var mayNotClose = MayNotCloseLastInstance && GetVisibleInstanceCount() == 1;
 
+        // Draw output window
         var isVisible = mayNotClose
                             ? ImGui.Begin(WindowDisplayTitle, WindowFlags)
                             : ImGui.Begin(WindowDisplayTitle, ref Config.Visible, WindowFlags);
-        
+
         if (isVisible)
         {
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowPaddingForWindows);
+
+            _wasDockedLastFrame = ImGui.IsWindowDocked();
 
             // Prevent window header from becoming invisible 
             var windowPos = ImGui.GetWindowPos();
@@ -71,7 +73,7 @@ internal abstract class Window
             // Draw child to prevent imgui window dragging
             {
                 ImGui.BeginChild("inner", ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin(),
-                                 false,
+                                 true,
                                  ImGuiWindowFlags.NoMove | preventMouseScrolling | WindowFlags);
 
                 var idBefore = ImGui.GetID(0);
@@ -85,7 +87,8 @@ internal abstract class Window
                 ImGui.EndChild();
             }
 
-            ImGui.PopStyleVar(); // innerWindowPadding
+            ImGui.PopStyleVar(); // WindowPadding
+
             ImGui.End();
         }
 
@@ -94,14 +97,16 @@ internal abstract class Window
             Close();
         }
 
-        if (hideFrameBorder)
-            ImGui.PopStyleVar();
+        // if (hideFrameBorder)
+        //     ImGui.PopStyleVar();
+
+        ImGui.PopStyleVar();
     }
 
     private int GetVisibleInstanceCount()
     {
         var count = 0;
-        foreach(var x in GetInstances())
+        foreach (var x in GetInstances())
         {
             if (x.Config.Visible)
                 count++;
@@ -109,7 +114,7 @@ internal abstract class Window
 
         return count;
     }
-    
+
     private bool _wasVisible;
 
     internal void DrawMenuItemToggle()
@@ -142,11 +147,11 @@ internal abstract class Window
 
     protected abstract void DrawContent();
 
-    protected virtual void UpdateBeforeDraw()
+    private void UpdateBeforeDraw()
     {
     }
 
-    protected virtual void DrawAllInstances()
+    private void DrawAllInstances()
     {
         foreach (var w in GetInstances().ToArray())
         {
@@ -172,4 +177,7 @@ internal abstract class Window
     internal WindowConfig Config = new();
 
     protected string? MenuTitle;
+
+    /** We need to set border width before drawing, but only know if docked after :/ */
+    private bool _wasDockedLastFrame;
 }

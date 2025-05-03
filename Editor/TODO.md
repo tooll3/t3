@@ -1,10 +1,10 @@
-﻿## Project handling 
+﻿
 
+## Project handling
 - [ ] unload projects from project list
 - [ ] Load last project from user settings
 
 ## Graph
-
 - [ ] Parameter window in fullscreen
 - [ ] Fix background control in mag graph
 - [ ] Add annotations
@@ -39,11 +39,27 @@
 
 - [ ] Add some kind of FIT button to show all or selected operators 
 
-## Ops:
+## High frame-rate issues 120Hz
 
+## Ops
+
+- [x] Remove Time 2nd output
+- [ ] Rename Time2 <-> Time
 - [ ] Rounded Rect should have blend parameter
+- [ ] Fix BoxGradient
 - [ ] SetEnvironment should automatically insert textureToCubemap
 - [ ] Remove Symbol from Editor
+- [ ] Fix SnapToPoints
+- [ ] Sort out obsolete pixtur examples
+
+## SDF-Stuff
+
+- [ ] Changing the parameter order in the parameter window will break inputs with [GraphParam] attribute
+- [ ] Ray marching glow
+- [ ] Some for of parameter freezing
+- [ ] Combine flood fill with 3d
+- [ ] FieldToImage
+- [ ] Flexible shader injection (e.g. DrawMesh normals, etc.)
 
 ## General fixes:
 
@@ -54,30 +70,18 @@
 - [ ] Make sure that TiXL is using the high performance GPU
 - [ ] Deleting last output will cause crash
 - [ ] Shake doesn't work with 120hz
-- 
+
 
 ## General UX-ideas:
 - [ ] StatusProvideIcon should support non-warning indicator
 - [ ] Separate Value Clamping for lower and upper values 
 - [ ] Drag and drop of files (copy them to resources folder and create LoadXYZ instance...)
 
-## SDF-Stuff
-- [ ] Changing the parameter order in the parameter window will break inputs with [GraphParam] attribute 
-- [ ] Ray marching glow
 
-Feats:
-- [x] Copy and Paste Values
-- [x] Maybe show tags in symbolBrowser / Placeholder
 
-Ops
-- [ ] Fix BoxGradient
-- [x] Remove Time 2nd output
-- [ ] Fix SnapToPoints
-- [ ] Sort out obsolete pixtur examples
-
-Refactoring
+## Refactoring
 - [ ] Remove ICanvas
 - [ ] Refactor to use Scopes
-- 
-Long-Term ideas:
+
+## Long-Term ideas:
 - [ ] Render-Settings should be a connection type, including texture sampling, culling, z-depth
