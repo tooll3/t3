@@ -287,7 +287,7 @@ internal static class AppMenuBar
 
                     ImGui.EndMenu();
                 }
-                
+
                 if (ImGui.BeginMenu("Debug"))
                 {
                     if (ImGui.MenuItem("ImGUI Demo", "", WindowManager.DemoWindowVisible))
@@ -298,14 +298,14 @@ internal static class AppMenuBar
 
                     ImGui.EndMenu();
                 }
-                
+
                 WindowManager.UtilitiesWindow.DrawMenuItemToggle();
 
                 ImGui.EndMenu();
             }
 
             ImGui.Separator();
-            
+
             WindowManager.SettingsWindow.DrawMenuItemToggle();
 
             if (ImGui.MenuItem("Exit", !T3Ui.IsCurrentlySaving))
@@ -383,14 +383,13 @@ internal static class AppMenuBar
 
                 ImGui.EndMenu();
             }
-            
+
             ImGui.Separator();
-            
+
             if (ImGui.MenuItem("Focus Mode", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFocusMode, false), UserSettings.Config.FocusMode))
             {
                 T3Ui.ToggleFocusMode();
             }
-            
 
             ImGui.EndMenu();
         }
@@ -412,7 +411,7 @@ internal static class AppMenuBar
 
                 ImGui.EndMenu();
             }
-            
+
             if (ImGui.BeginMenu("YouTube"))
             {
                 foreach (var link in _youTubeLinks)
@@ -422,15 +421,16 @@ internal static class AppMenuBar
 
                 ImGui.EndMenu();
             }
+
             ImGui.Separator();
 
             foreach (var link in _otherLinks)
             {
                 link.DrawMenuItem();
             }
-            
+
             ImGui.Separator();
-            
+
             if (ImGui.BeginMenu("Send Feedback"))
             {
                 foreach (var link in _feedbackLinks)
@@ -440,8 +440,11 @@ internal static class AppMenuBar
 
                 ImGui.EndMenu();
             }
+            ImGui.Separator();
 
-            if (ImGui.MenuItem("About"))
+            _licenseLink.DrawMenuItem();
+
+            if (ImGui.MenuItem("About TiXL"))
             {
                 T3Ui.AboutDialog.ShowNextFrame();
             }
@@ -449,24 +452,27 @@ internal static class AppMenuBar
             ImGui.EndMenu();
         }
     }
-    
+
     private sealed class HelpLink(string title, string url, string toolTip = "")
     {
         private string Title { get; } = title;
         private string Url { get; } = url;
         private string ToolTip { get; } = toolTip;
-        
+
         public void DrawMenuItem()
         {
             if (ImGui.MenuItem(Title, null, false))
             {
                 CoreUi.Instance.OpenWithDefaultApplication(Url);
             }
+
             CustomComponents.TooltipForLastItem("Open link in browser", ToolTip);
         }
     }
 
-    private const string WikiRootUrl = "https://github.com/tooll3/t3/wiki/";
+    private const string GitHubBaseUrl = "https://github.com/tooll3/t3/";
+    private const string WikiRootUrl = GitHubBaseUrl + "wiki/";
+
     private static readonly List<HelpLink> _helpLinks =
         [
             new("Introduction", WikiRootUrl + "help.Introduction"),
@@ -474,29 +480,31 @@ internal static class AppMenuBar
             new("FAQ", WikiRootUrl + "help.FAQ"),
             new("Video Tutorials", WikiRootUrl + "help.VideoTutorials"),
         ];
-    
+
     private static readonly List<HelpLink> _youTubeLinks =
         [
-            new("Getting Started (15min)",  "https://www.youtube.com/watch?v=_zvzX0fZ8sc"),
-            new("Tutorials (Playlist)",  "https://www.youtube.com/playlist?list=PLj-rnPROvbn3LigXGRSDvmLtgTwmNHcQs"),
-            new("Tip of the Day (Playlist)",  "https://www.youtube.com/watch?v=Jpvyg-LR3f0&list=PLj-rnPROvbn2cfnUwuyb5gRj-juOYUC7T"),
+            new("Getting Started (15min)", "https://www.youtube.com/watch?v=_zvzX0fZ8sc"),
+            new("Tutorials (Playlist)", "https://www.youtube.com/playlist?list=PLj-rnPROvbn3LigXGRSDvmLtgTwmNHcQs"),
+            new("Tip of the Day (Playlist)", "https://www.youtube.com/watch?v=Jpvyg-LR3f0&list=PLj-rnPROvbn2cfnUwuyb5gRj-juOYUC7T"),
             new("Made with TiXL", "https://www.youtube.com/playlist?list=PLj-rnPROvbn3LNU34daaRk5EiaXlwo2E0"),
         ];
-    
+
     private static readonly List<HelpLink> _otherLinks =
         [
-            new("TiXL Web-Site",  "https://tixl.app"),
-            new("Discord Community",  "https://discord.gg/uC4hRRdp", "Join a friendly and welcoming community of enthusiasts. Ask questions, Learn from each other, share or just hang out."),
-            new("Meet Up (every 2nd week)",  "https://discord.com/invite/WX94pzKj?event=1359348185914544312", "We meet every 2nd week to share our screens answer questions and hang out."),
+            new("TiXL Web-Site", "https://tixl.app"),
+            new("Discord Community", "https://discord.gg/uC4hRRdp",
+                "Join a friendly and welcoming community of enthusiasts. Ask questions, Learn from each other, share or just hang out."),
+            new("Meet Up (every 2nd week)", "https://discord.com/invite/WX94pzKj?event=1359348185914544312",
+                "We meet every 2nd week to share our screens answer questions and hang out."),
         ];
-    
+
     private static readonly List<HelpLink> _feedbackLinks =
         [
-            new("Report Issue",  "https://github.com/tooll3/t3/issues/new?template=bug_report.md", "Please search for other related issues before posting..."),
-            new("Request Feature",  "https://github.com/tooll3/t3/issues/new?template=feature-request.md", "Please search for other related issues before posting..."),
+            new("Report Issue", GitHubBaseUrl + "/issues/new?template=bug_report.md", "Please search for other related issues before posting..."),
+            new("Request Feature", GitHubBaseUrl + "/issues/new?template=feature-request.md", "Please search for other related issues before posting..."),
         ];
-    
 
+    private static readonly HelpLink _licenseLink = new("MIT License", GitHubBaseUrl + "?tab=MIT-1-ov-file#readme");
 
     public static readonly float AppBarSpacingX = 20;
 }

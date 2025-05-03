@@ -14,120 +14,47 @@ internal sealed class AboutDialog : ModalDialog
 {
     internal void Draw()
     {
+        DialogSize = new Vector2(500, 550) * T3Ui.UiScaleFactor;
+        
         if (BeginDialog("About TiXL"))
         {
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 10));
-
-            // Use a child window with proper sizing
-            ImGui.BeginChild("content", new Vector2(0, 0), // Auto-size both dimensions
-                             false,
-                             ImGuiWindowFlags.AlwaysAutoResize
-                             | ImGuiWindowFlags.NoBackground
-                             | ImGuiWindowFlags.AlwaysUseWindowPadding);
-
             FormInputs.AddSectionHeader("TiXL");
             ImGui.TextColored(new Vector4(1.0f, 0.2f, 0.55f, 1.0f), "v " + Program.VersionText);
-            ImGui.PushFont(Fonts.FontSmall);
-            FormInputs.AddVerticalSpace(5);
-            ImGui.TextWrapped("MIT license");
             FormInputs.AddVerticalSpace(5);
             ImGui.Separator();
-            FormInputs.AddVerticalSpace(5);
             
-            // Display system information in a collapsible section
-            if (ImGui.CollapsingHeader("System Information"))
+            FormInputs.AddSectionHeader("System Information");
+            
+            if (string.IsNullOrEmpty(_systemInfo))
             {
-                if (string.IsNullOrEmpty(_systemInfo))
-                {
-                    UpdateSystemInfo(); // Populate system info if not already done
-                }
-
-                FormInputs.AddVerticalSpace(5);
-                ImGui.PushFont(Fonts.FontSmall);
-                ImGui.TextWrapped(_systemInfo);
-                FormInputs.AddVerticalSpace(5);
-                // System information copy button
-                if (ImGui.Button("Copy System Information"))
-                {
-                    UpdateSystemInfo(); // Update system info and copy to clipboard
-                    ImGui.SetClipboardText(_systemInfo);
-                    ImGui.OpenPopup("SystemInfoCopied");
-                }
-
-                // Confirmation popup
-                if (ImGui.BeginPopup("SystemInfoCopied"))
-                {
-                    ImGui.Text("System information copied to clipboard!");
-                    ImGui.EndPopup();
-                }
-
-                CustomComponents.TooltipForLastItem("Copy system info for bug reports");
-
-                ImGui.PopFont();
+                UpdateSystemInfo(); // Populate system info if not already done
             }
 
             FormInputs.AddVerticalSpace(5);
-            ImGui.Separator();
+            ImGui.TextWrapped(_systemInfo);
             FormInputs.AddVerticalSpace(5);
-
-
-            ImGui.TextWrapped("Help:");
-            ImGui.SameLine();
-            DrawLinkButtons(_helpLinks);
-
-            FormInputs.AddVerticalSpace(5);
-            ImGui.Separator();
-            FormInputs.AddVerticalSpace(5);
-            //FormInputs.DrawInputLabel("Source Code:");
-
-            ImGui.TextWrapped("Code:");
-            ImGui.SameLine();
-            DrawLinkButtons(_sourceLinks);
-
-            ImGui.PopFont();
-            ImGui.EndChild();
-            ImGui.PopStyleVar();
             
+            
+            if (ImGui.Button("Copy System Information"))
+            {
+                UpdateSystemInfo(); // Update system info and copy to clipboard
+                ImGui.SetClipboardText(_systemInfo);
+                ImGui.OpenPopup("SystemInfoCopied");
+            }
+
+            // Confirmation popup
+            if (ImGui.BeginPopup("SystemInfoCopied"))
+            {
+                ImGui.Text("System information copied to clipboard!");
+                ImGui.EndPopup();
+            }
+
+            CustomComponents.TooltipForLastItem("Copy system info for bug reports");
             EndDialogContent();
         }
         EndDialog();
     }
-
-    private static void DrawLinkButtons(List<(string Label, string Url)> links)
-    {
-        ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(5, 0));
-
-        var isFirst = true;
-        foreach (var (label, url) in links)
-        {
-            if (!isFirst)
-            {
-                ImGui.SameLine();
-            }
-
-            if (ImGui.Button(label))
-            {
-                try
-                {
-                    Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
-                }
-                catch (Exception e)
-                {
-                    Log.Warning($"Failed to open link: {e.Message}");
-                }
-            }
-
-            if (ImGui.IsItemHovered())
-            {
-                CustomComponents.TooltipForLastItem(url);
-            }
-
-            isFirst = false;
-        }
-
-        ImGui.PopStyleVar();
-    }
-
+    
     private void UpdateSystemInfo()
     {
         try
@@ -249,17 +176,7 @@ internal sealed class AboutDialog : ModalDialog
         return "Unknown";
     }
     
-    private string _systemInfo = string.Empty; // Store system info for display
+    private string _systemInfo = string.Empty;
 
-    private readonly List<(string Label, string Url)> _helpLinks =
-        [
-            ("Website", "https://tixl.app"),
-            ("Wiki", "https://github.com/tooll3/t3/wiki"),
-        ];
-
-    private readonly List<(string Label, string Url)> _sourceLinks =
-        [
-            ("Github", "https://github.com/tooll3/t3")
-        ];
 
 }
