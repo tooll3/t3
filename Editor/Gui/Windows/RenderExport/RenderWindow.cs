@@ -19,7 +19,7 @@ namespace T3.Editor.Gui.Windows.RenderExport
     {
         internal RenderWindow()
         {
-            Config.Title = "Render";
+            Config.Title = "Render To File";
             _lastHelpString = PreferredInputFormatHint;
         }
 

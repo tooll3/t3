@@ -79,8 +79,8 @@ internal static class LayoutHandling
                         });
     }
 
-    public static string GraphPrefix => "Graph##";
-    public static string OutputPrefix => "Output##";
+    public static string GraphPrefix => "Graph View##";
+    public static string OutputPrefix => "Output View##";
     public static string ParametersPrefix => "Parameters##";
 
     private static void ApplyLayout(Layout layout)

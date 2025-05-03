@@ -122,7 +122,7 @@ internal abstract class Window
         if (AllowMultipleInstances)
         {
             var menuTitle = string.IsNullOrEmpty(MenuTitle)
-                                ? $"Open new {Config.Title} Window"
+                                ? $"New {Config.Title}"
                                 : MenuTitle;
             if (ImGui.MenuItem(menuTitle))
             {

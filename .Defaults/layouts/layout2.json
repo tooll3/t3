@@ -1,403 +1,415 @@
 {
   "WindowConfigs": [
     {
-      "Title": "Graph##1",
+      "Title": "Output View##0",
       "Visible": true
     },
     {
-      "Title": "Graph##2",
+      "Title": "Output View##1",
       "Visible": false
     },
     {
-      "Title": "Graph##3",
+      "Title": "Output View##2",
       "Visible": false
     },
     {
-      "Title": "Graph##4",
+      "Title": "Output View##3",
       "Visible": false
     },
     {
-      "Title": "Graph##5",
+      "Title": "Output View##4",
       "Visible": false
     },
     {
-      "Title": "Graph##6",
+      "Title": "Output View##5",
       "Visible": false
     },
     {
-      "Title": "Graph##7",
+      "Title": "Output View##6",
       "Visible": false
     },
     {
-      "Title": "Graph##8",
+      "Title": "Output View##7",
       "Visible": false
     },
     {
-      "Title": "Graph##9",
+      "Title": "Output View##8",
       "Visible": false
     },
     {
-      "Title": "Graph##10",
+      "Title": "Output View##9",
       "Visible": false
     },
     {
-      "Title": "Graph##11",
+      "Title": "Output View##10",
       "Visible": false
     },
     {
-      "Title": "Graph##12",
+      "Title": "Output View##11",
       "Visible": false
     },
     {
-      "Title": "Graph##13",
+      "Title": "Output View##12",
       "Visible": false
     },
     {
-      "Title": "Graph##14",
+      "Title": "Output View##13",
       "Visible": false
     },
     {
-      "Title": "Graph##15",
+      "Title": "Output View##14",
       "Visible": false
     },
     {
-      "Title": "Graph##16",
+      "Title": "Output View##15",
       "Visible": false
     },
     {
-      "Title": "Graph##17",
+      "Title": "Output View##16",
       "Visible": false
     },
     {
-      "Title": "Graph##18",
+      "Title": "Output View##17",
       "Visible": false
     },
     {
-      "Title": "Graph##19",
+      "Title": "Output View##18",
       "Visible": false
     },
     {
-      "Title": "Graph##20",
+      "Title": "Output View##19",
       "Visible": false
     },
     {
-      "Title": "Graph##21",
+      "Title": "Output View##20",
       "Visible": false
     },
     {
-      "Title": "Graph##22",
+      "Title": "Output View##21",
       "Visible": false
     },
     {
-      "Title": "Graph##23",
+      "Title": "Output View##22",
       "Visible": false
     },
     {
-      "Title": "Graph##24",
+      "Title": "Output View##23",
       "Visible": false
     },
     {
-      "Title": "Graph##25",
+      "Title": "Output View##24",
       "Visible": false
     },
     {
-      "Title": "Graph##26",
+      "Title": "Output View##25",
       "Visible": false
     },
     {
-      "Title": "Graph##27",
+      "Title": "Output View##26",
       "Visible": false
     },
     {
-      "Title": "Graph##28",
+      "Title": "Output View##27",
       "Visible": false
     },
     {
-      "Title": "Graph##29",
+      "Title": "Output View##28",
       "Visible": false
     },
     {
-      "Title": "Graph##30",
+      "Title": "Output View##29",
       "Visible": false
     },
     {
-      "Title": "Graph##31",
+      "Title": "Output View##30",
       "Visible": false
     },
     {
-      "Title": "Graph##32",
+      "Title": "Output View##31",
       "Visible": false
     },
     {
-      "Title": "Graph##33",
+      "Title": "Output View##32",
       "Visible": false
     },
     {
-      "Title": "Graph##34",
+      "Title": "Output View##33",
       "Visible": false
     },
     {
-      "Title": "Graph##35",
+      "Title": "Output View##34",
       "Visible": false
     },
     {
-      "Title": "Graph##36",
+      "Title": "Output View##35",
       "Visible": false
     },
     {
-      "Title": "Graph##37",
+      "Title": "Output View##36",
       "Visible": false
     },
     {
-      "Title": "Graph##38",
+      "Title": "Output View##37",
       "Visible": false
     },
     {
-      "Title": "Graph##39",
+      "Title": "Output View##38",
       "Visible": false
     },
     {
-      "Title": "Graph##40",
+      "Title": "Output View##39",
       "Visible": false
     },
     {
-      "Title": "Graph##41",
+      "Title": "Output View##40",
       "Visible": false
     },
     {
-      "Title": "Graph##42",
+      "Title": "Output View##41",
       "Visible": false
     },
     {
-      "Title": "Graph##43",
+      "Title": "Output View##42",
       "Visible": false
     },
     {
-      "Title": "Graph##44",
+      "Title": "Output View##43",
       "Visible": false
     },
     {
-      "Title": "Graph##45",
+      "Title": "Output View##44",
       "Visible": false
     },
     {
-      "Title": "Graph##46",
+      "Title": "Output View##45",
       "Visible": false
     },
     {
-      "Title": "Graph##47",
+      "Title": "Output View##46",
       "Visible": false
     },
     {
-      "Title": "Graph##48",
+      "Title": "Output View##47",
       "Visible": false
     },
     {
-      "Title": "Graph##49",
+      "Title": "Output View##48",
       "Visible": false
     },
     {
-      "Title": "Settings",
+      "Title": "Output View##49",
       "Visible": false
+    },
+    {
+      "Title": "Output View##50",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##51",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##52",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##53",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##54",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##55",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##56",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##57",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##58",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##59",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##60",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##61",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##62",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##63",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##64",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##65",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##66",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##67",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##68",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##69",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##70",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##71",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##72",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##73",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##74",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##75",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##76",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##77",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##78",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##79",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##80",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##81",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##82",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##83",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##84",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##85",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##86",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##87",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##88",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##89",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##90",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##91",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##92",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##93",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##94",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##95",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##96",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##97",
+      "Visible": false
+    },
+    {
+      "Title": "Output View##98",
+      "Visible": false
+    },
+    {
+      "Title": "Graph View##0",
+      "Visible": false
+    },
+    {
+      "Title": "Graph View##1",
+      "Visible": true
     },
     {
       "Title": "Parameters##1",
       "Visible": true
     },
     {
-      "Title": "Parameters##2",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##3",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##4",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##5",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##6",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##7",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##8",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##9",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##10",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##11",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##12",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##13",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##14",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##15",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##16",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##17",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##18",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##19",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##20",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##21",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##22",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##23",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##24",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##25",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##26",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##27",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##28",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##29",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##30",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##31",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##32",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##33",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##34",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##35",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##36",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##37",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##38",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##39",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##40",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##41",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##42",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##43",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##44",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##45",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##46",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##47",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##48",
-      "Visible": false
-    },
-    {
-      "Title": "Parameters##49",
-      "Visible": false
-    },
-    {
-      "Title": "Explore Variations",
+      "Title": "Symbol Library",
       "Visible": false
     },
     {
@@ -405,221 +417,37 @@
       "Visible": true
     },
     {
-      "Title": "Output##0",
-      "Visible": true
-    },
-    {
-      "Title": "Output##1",
+      "Title": "Variation Explorer",
       "Visible": false
     },
     {
-      "Title": "Output##2",
+      "Title": "Render To File",
       "Visible": false
     },
     {
-      "Title": "Output##3",
-      "Visible": false
-    },
-    {
-      "Title": "Output##4",
-      "Visible": false
-    },
-    {
-      "Title": "Output##5",
-      "Visible": false
-    },
-    {
-      "Title": "Output##6",
-      "Visible": false
-    },
-    {
-      "Title": "Output##7",
-      "Visible": false
-    },
-    {
-      "Title": "Output##8",
-      "Visible": false
-    },
-    {
-      "Title": "Output##9",
-      "Visible": false
-    },
-    {
-      "Title": "Output##10",
-      "Visible": false
-    },
-    {
-      "Title": "Output##11",
-      "Visible": false
-    },
-    {
-      "Title": "Output##12",
-      "Visible": false
-    },
-    {
-      "Title": "Output##13",
-      "Visible": false
-    },
-    {
-      "Title": "Output##14",
-      "Visible": false
-    },
-    {
-      "Title": "Output##15",
-      "Visible": false
-    },
-    {
-      "Title": "Output##16",
-      "Visible": false
-    },
-    {
-      "Title": "Output##17",
-      "Visible": false
-    },
-    {
-      "Title": "Output##18",
-      "Visible": false
-    },
-    {
-      "Title": "Output##19",
-      "Visible": false
-    },
-    {
-      "Title": "Output##20",
-      "Visible": false
-    },
-    {
-      "Title": "Output##21",
-      "Visible": false
-    },
-    {
-      "Title": "Output##22",
-      "Visible": false
-    },
-    {
-      "Title": "Output##23",
-      "Visible": false
-    },
-    {
-      "Title": "Output##24",
-      "Visible": false
-    },
-    {
-      "Title": "Output##25",
-      "Visible": false
-    },
-    {
-      "Title": "Output##26",
-      "Visible": false
-    },
-    {
-      "Title": "Output##27",
-      "Visible": false
-    },
-    {
-      "Title": "Output##28",
-      "Visible": false
-    },
-    {
-      "Title": "Output##29",
-      "Visible": false
-    },
-    {
-      "Title": "Output##30",
-      "Visible": false
-    },
-    {
-      "Title": "Output##31",
-      "Visible": false
-    },
-    {
-      "Title": "Output##32",
-      "Visible": false
-    },
-    {
-      "Title": "Output##33",
-      "Visible": false
-    },
-    {
-      "Title": "Output##34",
-      "Visible": false
-    },
-    {
-      "Title": "Output##35",
-      "Visible": false
-    },
-    {
-      "Title": "Output##36",
-      "Visible": false
-    },
-    {
-      "Title": "Output##37",
-      "Visible": false
-    },
-    {
-      "Title": "Output##38",
-      "Visible": false
-    },
-    {
-      "Title": "Output##39",
-      "Visible": false
-    },
-    {
-      "Title": "Output##40",
-      "Visible": false
-    },
-    {
-      "Title": "Output##41",
-      "Visible": false
-    },
-    {
-      "Title": "Output##42",
-      "Visible": false
-    },
-    {
-      "Title": "Output##43",
-      "Visible": false
-    },
-    {
-      "Title": "Output##44",
-      "Visible": false
-    },
-    {
-      "Title": "Output##45",
-      "Visible": false
-    },
-    {
-      "Title": "Output##46",
-      "Visible": false
-    },
-    {
-      "Title": "Output##47",
-      "Visible": false
-    },
-    {
-      "Title": "Output##48",
+      "Title": "IO Events",
       "Visible": false
     },
     {
       "Title": "Console",
+      "Visible": true
+    },
+    {
+      "Title": "Utilities",
       "Visible": false
     },
     {
-      "Title": "Symbol Library",
+      "Title": "Settings",
       "Visible": false
     },
     {
-      "Title": "Legacy Variations",
+      "Title": "Graph View##0",
       "Visible": false
     },
     {
-      "Title": "Render Sequence",
-      "Visible": false
-    },
-    {
-      "Title": "Render Video",
-      "Visible": false
+      "Title": "Graph View##1",
+      "Visible": true
     }
   ],
-  "ImGuiSettings": "[Window][DockSpaceViewport_11111111]\nPos=0,26\nSize=2560,1414\nCollapsed=0\n\n[Window][Graph##1]\nPos=0,26\nSize=1073,1414\nCollapsed=0\nDockId=0x00000001,0\n\n[Window][Parameters##1]\nPos=1075,889\nSize=615,551\nCollapsed=0\nDockId=0x00000005,0\n\n[Window][Variations]\nPos=1692,889\nSize=868,551\nCollapsed=0\nDockId=0x00000006,0\n\n[Window][Output##0]\nPos=1075,26\nSize=1485,861\nCollapsed=0\nDockId=0x00000003,0\n\n[Window][Debug##Default]\nPos=60,60\nSize=400,400\nCollapsed=0\n\n[Window][Explore Variations]\nPos=810,306\nSize=768,283\nCollapsed=0\n\n[Window][Console]\nPos=548,678\nSize=768,283\nCollapsed=0\n\n[Window][Output##1]\nPos=0,26\nSize=2304,712\nCollapsed=0\n\n[Docking][Data]\nDockSpace       ID=0x8B93E3BD Window=0xA787BDB4 Pos=0,26 Size=2560,1414 Split=X Selected=0x1F46795C\n  DockNode      ID=0x00000001 Parent=0x8B93E3BD SizeRef=1073,1391 CentralNode=1 Selected=0x1F46795C\n  DockNode      ID=0x00000002 Parent=0x8B93E3BD SizeRef=1485,1391 Split=Y Selected=0x9CE63BF6\n    DockNode    ID=0x00000003 Parent=0x00000002 SizeRef=768,861 Selected=0x75327DBA\n    DockNode    ID=0x00000004 Parent=0x00000002 SizeRef=768,551 Split=X Selected=0x9CE63BF6\n      DockNode  ID=0x00000005 Parent=0x00000004 SizeRef=615,596 Selected=0x9CE63BF6\n      DockNode  ID=0x00000006 Parent=0x00000004 SizeRef=868,596 Selected=0x3BC11B9B\n\n"
+  "ImGuiSettings": "[Window][DockSpaceViewport_11111111]\nPos=0,26\nSize=2560,1414\nCollapsed=0\n\n[Window][Graph View##1]\nPos=0,26\nSize=1433,1414\nCollapsed=0\nDockId=0x00000001,0\n\n[Window][Parameters]\nPos=1661,710\nSize=442,568\nCollapsed=0\nDockId=0x00000005,0\n\n[Window][Variations]\nPos=1435,1216\nSize=525,224\nCollapsed=0\nDockId=0x0000000A,0\n\n[Window][Output View##0]\nPos=1435,26\nSize=1125,542\nCollapsed=0\nDockId=0x00000003,0\n\n[Window][Debug##Default]\nPos=60,60\nSize=400,400\nCollapsed=0\n\n[Window][Explore Variations]\nPos=810,306\nSize=768,283\nCollapsed=0\n\n[Window][Console]\nPos=1962,570\nSize=598,870\nCollapsed=0\nDockId=0x0000000C,0\n\n[Window][Output View##1]\nPos=0,26\nSize=2304,712\nCollapsed=0\n\n[Window][Symbol Library]\nPos=0,26\nSize=185,1414\nCollapsed=0\nDockId=0x00000007,0\n\n[Window][Render as Video]\nPos=2105,710\nSize=455,568\nCollapsed=0\nDockId=0x0000000C,1\n\n[Window][##typeAheadSearchPopup]\nPos=1050,640\nSize=250,184\nCollapsed=0\n\n[Window][Combine into symbol]\nPos=1030,545\nSize=500,350\nCollapsed=0\n\n[Window][Parameters##98]\nPos=0,576\nSize=323,864\nCollapsed=0\n\n[Window][Add output]\nPos=1030,595\nSize=500,250\nCollapsed=0\n\n[Window][Duplicate as new symbol]\nPos=1030,580\nSize=500,280\nCollapsed=0\n\n[Window][Output View##97]\nPos=0,26\nSize=1728,927\nCollapsed=0\n\n[Window][Output View##98]\nPos=0,26\nSize=2304,593\nCollapsed=0\n\n[Window][Parameters##1]\nPos=1435,570\nSize=525,644\nCollapsed=0\nDockId=0x00000009,0\n\n[Window][Render To File]\nPos=1492,710\nSize=1068,730\nCollapsed=0\n\n[Docking][Data]\nDockSpace             ID=0x8B93E3BD Window=0xA787BDB4 Pos=0,26 Size=2560,1414 Split=X Selected=0x1F46795C\n  DockNode            ID=0x00000007 Parent=0x8B93E3BD SizeRef=185,1391 Selected=0xCA18E6EB\n  DockNode            ID=0x00000008 Parent=0x8B93E3BD SizeRef=1733,1391 Split=X\n    DockNode          ID=0x00000001 Parent=0x00000008 SizeRef=1433,1391 CentralNode=1 Selected=0xF7A0F8A9\n    DockNode          ID=0x00000002 Parent=0x00000008 SizeRef=1125,1391 Split=Y Selected=0x9CE63BF6\n      DockNode        ID=0x00000003 Parent=0x00000002 SizeRef=768,542 Selected=0xC11E5CAE\n      DockNode        ID=0x00000004 Parent=0x00000002 SizeRef=768,870 Split=X Selected=0x9CE63BF6\n        DockNode      ID=0x00000005 Parent=0x00000004 SizeRef=442,365 Selected=0x9CE63BF6\n        DockNode      ID=0x00000006 Parent=0x00000004 SizeRef=455,365 Split=X Selected=0x3BC11B9B\n          DockNode    ID=0x0000000B Parent=0x00000006 SizeRef=525,568 Split=Y Selected=0x9CE63BF6\n            DockNode  ID=0x00000009 Parent=0x0000000B SizeRef=525,644 Selected=0x9CE63BF6\n            DockNode  ID=0x0000000A Parent=0x0000000B SizeRef=525,224 Selected=0x3BC11B9B\n          DockNode    ID=0x0000000C Parent=0x00000006 SizeRef=598,568 Selected=0x49278EEE\n\n"
 }

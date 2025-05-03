@@ -439,7 +439,7 @@ internal static class CustomComponents
     
     public static void MenuGroupHeader(string text)
     {
-        FormInputs.AddVerticalSpace(4);
+        FormInputs.AddVerticalSpace(1);
         ImGui.PushFont(Fonts.FontSmall);
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
         ImGui.TextUnformatted(text);

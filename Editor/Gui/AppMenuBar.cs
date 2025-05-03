@@ -261,7 +261,7 @@ internal static class AppMenuBar
 
             ImGui.Separator();
 
-            if (ImGui.BeginMenu("Actions"))
+            if (ImGui.BeginMenu("Development Tools"))
             {
                 if (ImGui.BeginMenu("Clear shader cache"))
                 {
@@ -287,11 +287,26 @@ internal static class AppMenuBar
 
                     ImGui.EndMenu();
                 }
+                
+                if (ImGui.BeginMenu("Debug"))
+                {
+                    if (ImGui.MenuItem("ImGUI Demo", "", WindowManager.DemoWindowVisible))
+                        WindowManager.DemoWindowVisible = !WindowManager.DemoWindowVisible;
+
+                    if (ImGui.MenuItem("ImGUI Metrics", "", WindowManager.MetricsWindowVisible))
+                        WindowManager.MetricsWindowVisible = !WindowManager.MetricsWindowVisible;
+
+                    ImGui.EndMenu();
+                }
+                
+                WindowManager.UtilitiesWindow.DrawMenuItemToggle();
 
                 ImGui.EndMenu();
             }
 
             ImGui.Separator();
+            
+            WindowManager.SettingsWindow.DrawMenuItemToggle();
 
             if (ImGui.MenuItem("Exit", !T3Ui.IsCurrentlySaving))
             {
@@ -350,12 +365,32 @@ internal static class AppMenuBar
 
             ImGui.MenuItem("Interactions Overlay", "", ref UserSettings.Config.ShowInteractionOverlay);
             ImGui.Separator();
-
             ImGui.MenuItem("Fullscreen", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFullscreen, false), ref UserSettings.Config.FullScreen);
+
+            var screens = EditorUi.Instance.AllScreens;
+            if (ImGui.BeginMenu("Fullscreen Display"))
+            {
+                for (var index = 0; index < screens.Count; index++)
+                {
+                    var screen = screens.ElementAt(index);
+                    var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
+                                $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
+                    if (ImGui.MenuItem(label, "", index == UserSettings.Config.FullScreenIndexMain))
+                    {
+                        UserSettings.Config.FullScreenIndexMain = index;
+                    }
+                }
+
+                ImGui.EndMenu();
+            }
+            
+            ImGui.Separator();
+            
             if (ImGui.MenuItem("Focus Mode", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFocusMode, false), UserSettings.Config.FocusMode))
             {
                 T3Ui.ToggleFocusMode();
             }
+            
 
             ImGui.EndMenu();
         }
@@ -414,7 +449,7 @@ internal static class AppMenuBar
             ImGui.EndMenu();
         }
     }
-
+    
     private sealed class HelpLink(string title, string url, string toolTip = "")
     {
         private string Title { get; } = title;
@@ -461,5 +496,7 @@ internal static class AppMenuBar
             new("Request Feature",  "https://github.com/tooll3/t3/issues/new?template=feature-request.md", "Please search for other related issues before posting..."),
         ];
     
+
+
     public static readonly float AppBarSpacingX = 20;
 }

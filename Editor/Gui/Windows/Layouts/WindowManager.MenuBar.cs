@@ -1,3 +1,4 @@
+#nullable enable
 using ImGuiNET;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
@@ -8,46 +9,28 @@ internal static partial class WindowManager
 {
     public static void DrawWindowMenuContent()
     {
-        if (_windows == null)
-        {
-            Log.Warning("Can't draw window list before initialization");
-            return;
-        }
-
         foreach (var window in _windows)
         {
+            // Settings window is show in help menu...
+            if (window == SettingsWindow)
+                continue;
+
             window.DrawMenuItemToggle();
         }
 
         ImGui.Separator();
         {
             var screens = EditorUi.Instance.AllScreens;
-            if (ImGui.BeginMenu("Editor Window Fullscreen On"))
-            {
-                for (var index = 0; index < screens.Count; index++)
-                {
-                    var screen = screens.ElementAt(index);
-                    var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
-                                $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
-                    if (ImGui.MenuItem(label, "", index == UserSettings.Config.FullScreenIndexMain))
-                    {
-                        UserSettings.Config.FullScreenIndexMain = index;
-                    }
-                }
 
-                ImGui.EndMenu();
-            }
-
-            if (ImGui.MenuItem("2nd Render Window", "", ShowSecondaryRenderWindow))
+            if (ImGui.MenuItem("Output Window", "", ShowSecondaryRenderWindow))
                 ShowSecondaryRenderWindow = !ShowSecondaryRenderWindow;
 
-            if (ImGui.BeginMenu("2nd Render Window Fullscreen On"))
+            if (ImGui.BeginMenu("Output Window Display"))
             {
                 for (var index = 0; index < screens.Count; index++)
                 {
                     var screen = screens.ElementAt(index);
-                    var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
-                                $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
+                    var label = $"{screen.DeviceName.Trim('\\', '.')} ({screen.Bounds.Width}x{screen.Bounds.Height})";
                     if (ImGui.MenuItem(label, "", index == UserSettings.Config.FullScreenIndexViewer))
                     {
                         UserSettings.Config.FullScreenIndexViewer = index;
@@ -56,19 +39,6 @@ internal static partial class WindowManager
 
                 ImGui.EndMenu();
             }
-        }
-
-        ImGui.Separator();
-
-        if (ImGui.BeginMenu("Debug"))
-        {
-            if (ImGui.MenuItem("ImGUI Demo", "", _demoWindowVisible))
-                _demoWindowVisible = !_demoWindowVisible;
-
-            if (ImGui.MenuItem("ImGUI Metrics", "", _metricsWindowVisible))
-                _metricsWindowVisible = !_metricsWindowVisible;
-
-            ImGui.EndMenu();
         }
 
         ImGui.Separator();

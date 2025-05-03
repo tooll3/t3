@@ -32,33 +32,36 @@ internal static partial class WindowManager
             windowType.Draw();
         }
 
-        if (_demoWindowVisible)
-            ImGui.ShowDemoWindow(ref _demoWindowVisible);
+        if (DemoWindowVisible)
+            ImGui.ShowDemoWindow(ref DemoWindowVisible);
 
-        if (_metricsWindowVisible)
-            ImGui.ShowMetricsWindow(ref _metricsWindowVisible);
+        if (MetricsWindowVisible)
+            ImGui.ShowMetricsWindow(ref MetricsWindowVisible);
     }
+
+    internal static readonly SettingsWindow SettingsWindow = new();
+    internal static readonly UtilitiesWindow UtilitiesWindow = new();
+    
 
     private static void TryToInitialize()
     {
         // Wait first frame for ImGUI to initialize
         if (ImGui.GetTime() > 0.2f || _hasBeenInitialized)
             return;
-            
+        
         _windows =
             [
-                new ParameterWindow(),
                 new OutputWindow(),
                 new GraphWindow(),
+                new ParameterWindow(),
+                new SymbolLibrary(),
                 new VariationsWindow(),
                 new ExplorationWindow(),
-                new SymbolLibrary(),
-               
                 new RenderWindow(),
-                new UtilitiesWindow(),
-                Program.ConsoleLogWindow,
                 new IoViewWindow(),
-                new SettingsWindow()
+                Program.ConsoleLogWindow,
+                UtilitiesWindow,    // item shown in TiXL > Development menu
+                SettingsWindow, // item shown in TiXL menu
             ];
 
 
@@ -134,10 +137,16 @@ internal static partial class WindowManager
         instances[0].Config.Visible = !instances[0].Config.Visible;
     }
 
+    internal static bool DemoWindowVisible;
+    internal static bool MetricsWindowVisible;
+    
     private static Vector2 _appWindowSize;
+    
+    /// <summary>
+    /// Contains all possible window types and used for updating and layout management
+    /// </summary>
     private static List<Window> _windows = [];
-    private static bool _demoWindowVisible;
-    private static bool _metricsWindowVisible;
+    
     public static bool ShowSecondaryRenderWindow { get; private set; }
     private static bool _hasBeenInitialized;
 }
