@@ -1,21 +1,21 @@
 ﻿## Project handling
 
+- [x] Reduce size of backups
+- [x] Allow to override Project location
 - [ ] unload projects from project list
 - [ ] Load last project from user settings
-- [ ] Reduce size of backups
-- [ ] Allow to override Project location
 
 ## Graph
-- [ ] Parameter window in fullscreen
-- [ ] Fix background control in mag graph
-- [ ] Add annotations
-- [ ] Allow dragging connection from horizontal input slot
-- [ ] Allow clicking vertical input slot
 - [x] Allow dragging connections from vertical output slot
-- [ ] Split Connections
-- [ ] Rewiring of vertical connection lines
 - [x] Dragging gradient widget handles drags canvas too
 - [x] Snapping connecting start to output not working of ops who's output is already snapped
+- [ ] Add annotations
+- [ ] Parameter window in fullscreen
+- [ ] Fix background control in mag graph
+- [ ] Allow dragging connection from horizontal input slot
+- [ ] Allow clicking vertical input slot
+- [ ] Split Connections
+- [ ] Rewiring of vertical connection lines
 - [ ] Panning/Zooming in CurveEdit-Popup opened from SampleCurveOp is broken 
 - [ ] Publish as input does not create connection
 - [ ] ShaderGraphNode should be bypassable
@@ -41,6 +41,8 @@
 - [ ] Add some kind of FIT button to show all or selected operators 
 
 ## High frame-rate issues 120Hz
+
+- [ ] Shake doesn't work with 120hz
 
 ## Ops
 
@@ -70,7 +72,6 @@
 - [x] Fix Gradient editor not working as parameter window parameter
 - [ ] Make sure that TiXL is using the high performance GPU
 - [ ] Deleting last output will cause crash
-- [ ] Shake doesn't work with 120hz
 
 
 ## General UX-ideas:

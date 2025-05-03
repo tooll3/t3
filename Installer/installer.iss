@@ -3,8 +3,8 @@
 
 
 #ifndef MyAppVersion
-  #define MyAppVersion "4.0.0"
-  #define MyAppName "TiXL-v4.0.0"
+  #define MyAppVersion "4.0.1"
+  #define MyAppName "TiXL-v4.0.1"
 #endif
 #define MyAppPublisher "TiXL Community"
 #define MyAppURL "https://tixl.app//"
@@ -17,7 +17,7 @@
 AppId=t3.tixl
 AppName={#MyAppName}
 ;AppVersion={#MyAppVersion}
-AppVersion=4.0.0
+AppVersion=4.0.1
 ;AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
