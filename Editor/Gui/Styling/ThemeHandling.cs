@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿#nullable enable
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using T3.Core.DataTypes.Vector;
 using T3.Core.UserData;
 using T3.Editor.Gui.UiHelpers;
@@ -11,14 +13,14 @@ public static class ThemeHandling
     /// <summary>
     /// Requires user settings to be loaded already.
     /// </summary>
-    public static void Initialize()
+    internal static void Initialize()
     {
         InitializeFactoryDefault();
         LoadThemes();
         ApplyUserConfigTheme();
     }
 
-    public static void SetThemeAsUserTheme(ColorTheme theme)
+    internal static void SetThemeAsUserTheme(ColorTheme theme)
     {
         UserSettings.Config.ColorThemeName = theme.Name;
         UserSettings.Save();
@@ -27,7 +29,7 @@ public static class ThemeHandling
         T3Style.Apply();
     }
 
-    public static void SaveTheme(ColorTheme theme)
+    internal static void SaveTheme(ColorTheme theme)
     {
         Directory.CreateDirectory(ThemeFolder);
 
@@ -46,7 +48,7 @@ public static class ThemeHandling
         LoadThemes();
     }
 
-    public static void DeleteTheme(ColorTheme theme)
+    internal static void DeleteTheme(ColorTheme theme)
     {
         var filepath = GetThemeFilepath(theme);
         if (!File.Exists(filepath))
@@ -58,10 +60,10 @@ public static class ThemeHandling
         File.Delete(filepath);
         ApplyTheme(FactoryTheme);
         LoadThemes();
-        UserSettings.Config.ColorThemeName = null;
+        UserSettings.Config.ColorThemeName = string.Empty;
     }
 
-    public static ColorTheme GetUserOrFactoryTheme()
+    internal static ColorTheme GetUserOrFactoryTheme()
     {
         var selectedThemeName = UserSettings.Config.ColorThemeName;
         if (string.IsNullOrWhiteSpace(selectedThemeName))
@@ -207,13 +209,15 @@ public static class ThemeHandling
         }
     }
 
-    public static readonly List<ColorTheme> Themes = new();
-    public static string ThemeFolder => Path.Combine(UserData.SettingsFolder, "themes");
-    private static string DefaultThemeFolder => Path.Combine(UserData.ReadOnlySettingsFolder, "themes");
-    public static ColorTheme FactoryTheme;
+    internal static readonly List<ColorTheme> Themes = [];
+    internal static string ThemeFolder => Path.Combine(FileLocations.SettingsPath, FileLocations.ThemeSubFolder);
+    private static string DefaultThemeFolder => Path.Combine(FileLocations.ReadOnlySettingsPath, FileLocations.ThemeSubFolder);
+    internal static ColorTheme FactoryTheme = null!;
     
     
-    public class ColorTheme
+    // This public for serialization
+    [SuppressMessage("ReSharper", "MemberCanBeInternal")]
+    public sealed class ColorTheme
     {
         public string Name = "untitled";
         public string Author = "unknown";

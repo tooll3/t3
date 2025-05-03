@@ -229,13 +229,13 @@ internal static class LayoutHandling
     /// <summary>
     /// Defines a layout that can be then serialized to file  
     /// </summary>
-    private class Layout
+    private sealed class Layout
     {
-        public List<Window.WindowConfig> WindowConfigs = new();
+        public List<Window.WindowConfig> WindowConfigs = [];
         public string? ImGuiSettings;
     }
 
     private const string LayoutFileNameFormat = "layout{0}.json";
-    private static string LayoutSubfolder => "layouts";
-    public static string LayoutFolder => Path.Combine(UserData.SettingsFolder, LayoutSubfolder);
+    private static string LayoutSubfolder => "Layouts";
+    public static string LayoutFolder => Path.Combine(FileLocations.SettingsPath, LayoutSubfolder);
 }

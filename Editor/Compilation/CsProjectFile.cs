@@ -269,7 +269,7 @@ internal sealed class CsProjectFile
     /// </remarks>
     public static CsProjectFile CreateNewProject(string projectName, string nameSpace, bool shareResources, string parentDirectory)
     {
-        var defaultHomeDir = Path.Combine(UserData.ReadOnlySettingsFolder, "default-home");
+        var defaultHomeDir = Path.Combine(FileLocations.ReadOnlySettingsPath, "default-home");
         var files = System.IO.Directory.EnumerateFiles(defaultHomeDir, "*");
         string destinationDirectory = Path.Combine(parentDirectory, projectName);
         destinationDirectory = Path.GetFullPath(destinationDirectory);

@@ -1,3 +1,4 @@
+#nullable enable
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -12,7 +13,7 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.AutoBackup;
 
-public static class AutoBackup
+internal static class AutoBackup
 {
     public static int SecondsBetweenSaves { get; set; } = 3 * 60;
 
@@ -23,12 +24,12 @@ public static class AutoBackup
     /// </summary>
     public static void CheckForSave()
     {
-        if (!IsEnabled || _isSaving || Stopwatch.ElapsedMilliseconds < SecondsBetweenSaves * 1000)
+        if (!IsEnabled || _isSaving || _stopwatch.ElapsedMilliseconds < SecondsBetweenSaves * 1000)
             return;
 
         _isSaving = true;
         Task.Run(CreateBackupCallback);
-        Stopwatch.Restart();
+        _stopwatch.Restart();
     }
 
     private static void CreateBackupCallback()
@@ -169,7 +170,7 @@ public static class AutoBackup
         return index;
     }
 
-    public static string GetLatestArchiveFilePath()
+    public static string? GetLatestArchiveFilePath()
     {
         Directory.CreateDirectory(BackupDirectory);
         return Directory.EnumerateFiles(BackupDirectory, "*.zip", SearchOption.TopDirectoryOnly)
@@ -281,9 +282,9 @@ public static class AutoBackup
         return 0;
     }
 
-    private static readonly Stopwatch Stopwatch = Stopwatch.StartNew();
+    private static readonly Stopwatch _stopwatch = Stopwatch.StartNew();
     private static bool _isSaving;
-    private static string BackupDirectory => Path.Combine(UserData.SettingsFolder, "backup");
+    internal static string BackupDirectory => Path.Combine(FileLocations.SettingsPath, "backup");
 
     private static string[] SourcePaths
     {
@@ -291,12 +292,12 @@ public static class AutoBackup
         {
             return EditableSymbolProject.AllProjects
                                         .Select(x => x.Folder)
-                                        .Concat(NonProjectSourcePaths)
+                                        .Concat(_nonProjectSourcePaths)
                                         .ToArray();
         }
     }
 
-    private static readonly string[] NonProjectSourcePaths =
+    private static readonly string[] _nonProjectSourcePaths =
         {
             ThemeHandling.ThemeFolder,
             LayoutHandling.LayoutFolder

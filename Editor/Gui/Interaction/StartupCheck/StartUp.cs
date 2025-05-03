@@ -99,5 +99,5 @@ public static class StartUp
     }
 
     private const string HelpUrl = "https://github.com/tooll3/t3/wiki/installation#setup-and-installation";
-    private static string StartUpLockFilePath => Path.Combine(UserData.SettingsFolder, "startingUp");
+    private static string StartUpLockFilePath => Path.Combine(FileLocations.SettingsPath, "startingUp");
 }

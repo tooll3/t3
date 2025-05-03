@@ -1,9 +1,9 @@
-﻿
+﻿## Project handling
 
-## Project handling
 - [ ] unload projects from project list
 - [ ] Load last project from user settings
 - [ ] Reduce size of backups
+- [ ] Allow to override Project location
 
 ## Graph
 - [ ] Parameter window in fullscreen

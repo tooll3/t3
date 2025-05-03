@@ -479,6 +479,7 @@ internal static class AppMenuBar
             new("Operator Library", WikiRootUrl + "lib"),
             new("FAQ", WikiRootUrl + "help.FAQ"),
             new("Video Tutorials", WikiRootUrl + "help.VideoTutorials"),
+            new("Using Backups", WikiRootUrl + "help.Backups"),
         ];
 
     private static readonly List<HelpLink> _youTubeLinks =

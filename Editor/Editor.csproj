@@ -89,7 +89,7 @@
 
     <!-- ======================= Defaults =========================== -->
     <!--This
-    copies all files in the `.Defaults` folder into the output/.t3 folder-->
+    copies all files in the `.Defaults` folder into the output/.tixl folder-->
     <ItemGroup>
         <DefaultUserConfigs Include="../.Defaults/**/*" />
     </ItemGroup>
@@ -98,7 +98,7 @@
         <Copy SourceFiles="@(DefaultUserConfigs)"
             SkipUnchangedFiles="true"
             UseHardlinksIfPossible="true"
-            DestinationFiles="@(DefaultUserConfigs->'$(OutputPath)/.t3/%(RecursiveDir)%(Filename)%(Extension)')" />
+            DestinationFiles="@(DefaultUserConfigs->'$(OutputPath)/.tixl/%(RecursiveDir)%(Filename)%(Extension)')" />
     </Target>
     <!-- ==========================//================================ -->
 
