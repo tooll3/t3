@@ -173,7 +173,7 @@ public static class GradientEditor
                                                 }
                                             }, "Gradient", "gradientContextMenu");
 
-        if (editResult != InputEditStateFlags.Nothing && cloneIfModified)
+        if ((editResult & InputEditStateFlags.Modified) != 0 && cloneIfModified)
         {
             gradientRef = gradientForEditing;
             _hoveredGradientRef = null;

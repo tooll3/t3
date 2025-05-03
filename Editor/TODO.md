@@ -1,4 +1,4 @@
-﻿## Refactor project handling 
+﻿## Project handling 
 
 - [ ] unload projects from project list
 - [ ] Load last project from user settings
@@ -27,6 +27,7 @@
       Path not found: '/pixtur.still.Gheo/soundtrack/DARKrebooted-v1.0.mp3' (Resolved to '').
 
 ## UI-Scaling Issues (at x1.5):
+
 - [ ] Perlin-Noise graph cut off
 - [ ] Timeline-Clips too narrow
 - [ ] Full-Screen cuts of timeline ruler units
@@ -39,16 +40,17 @@
 - [ ] Add some kind of FIT button to show all or selected operators 
 
 ## Ops:
+
 - [ ] Rounded Rect should have blend parameter
 - [ ] SetEnvironment should automatically insert textureToCubemap
-- [ ] Remove Op from Editor
+- [ ] Remove Symbol from Editor
 
 ## General fixes:
 
 - [x] Fix camera handling
 - [x] Default gradients are not loaded?
 - [x] Fix Scaling for multiple selected keyframes with ALT-Key
-- [ ] Fix Gradient editor not working as parameter window parameter
+- [x] Fix Gradient editor not working as parameter window parameter
 - [ ] Make sure that TiXL is using the high performance GPU
 - [ ] Deleting last output will cause crash
 - [ ] Shake doesn't work with 120hz
