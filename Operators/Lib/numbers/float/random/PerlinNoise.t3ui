@@ -4,6 +4,13 @@
   "SymbolTags": "1",
   "InputUis": [
     {
+      "InputId": "259f1fbc-9c56-47d9-9f76-12eb3c26d276"/*Phase*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": -69.55521
+      }
+    },
+    {
       "InputId": "296d0f7f-d484-4781-b01f-48839def0324"/*BiasAndGain*/,
       "Position": {
         "X": -2.7436478,

@@ -390,6 +390,16 @@ internal sealed class SettingsWindow : Window
                                                              );
                         
                     }
+                    
+                    FormInputs.AddVerticalSpace();
+                    changed |= FormInputs.AddCheckBox("Log Assembly Version mismatches",
+                                                      ref ProjectSettings.Config.LogAssemblyVersionMismatches,
+                                                      """
+                                                      Version mismatches are frequently caused by slightly outdated 3rd party library that we depend on.
+                                                      These are only relevant in situations where you need to debug or analyse assembly loading problems. 
+                                                      """,
+                                                      ProjectSettings.Defaults.LogAssemblyVersionMismatches);                    
+                    
                     break;
                 }
             }

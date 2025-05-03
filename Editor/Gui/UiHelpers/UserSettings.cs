@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -114,6 +114,7 @@ public sealed class UserSettings : Settings<UserSettings.ConfigData>
         // Rendering (controlled from render windows)
         public string RenderVideoFilePath = "./Render/render-v01.mp4";
         public string RenderSequenceFilePath = "./ImageSequence/";
+        public string RenderSequenceFileName = "Output_";
 
         // Profiling and debugging
         public bool EnableFrameProfiling = true;

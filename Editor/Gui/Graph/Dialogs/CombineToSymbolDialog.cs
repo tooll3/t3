@@ -10,9 +10,10 @@ namespace T3.Editor.Gui.Graph.Dialogs;
 
 internal sealed class CombineToSymbolDialog : ModalDialog
 {
-    public void Draw(Instance compositionOp, ProjectView projectView, ref string nameSpace,
-                     ref string combineName, ref string description)
+    public ChangeSymbol.SymbolModificationResults Draw(Instance compositionOp, ProjectView projectView, ref string nameSpace,
+                                                 ref string combineName, ref string description)
     {
+        var result = ChangeSymbol.SymbolModificationResults.Nothing;
         DialogSize = new Vector2(500, 350);
 
         if (BeginDialog("Combine into symbol"))
@@ -42,7 +43,8 @@ internal sealed class CombineToSymbolDialog : ModalDialog
                     var compositionSymbolUi = compositionOp.GetSymbolUi();
                     Combine.CombineAsNewType(compositionSymbolUi, _projectToCopyTo, selectedChildUis, selectedAnnotations, combineName, nameSpace, description,
                                              _shouldBeTimeClip);
-                    _shouldBeTimeClip = false; // Making timeclips this is normally a one off operation
+                    _shouldBeTimeClip = false; // Making timeclips this is normally a one-off operation
+                    result = ChangeSymbol.SymbolModificationResults.StructureChanged;
                     ImGui.CloseCurrentPopup();
                 }
 
@@ -58,6 +60,7 @@ internal sealed class CombineToSymbolDialog : ModalDialog
         }
 
         EndDialog();
+        return result;
     }
 
     private static bool _shouldBeTimeClip;

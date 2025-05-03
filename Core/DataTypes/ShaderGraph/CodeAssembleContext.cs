@@ -30,8 +30,6 @@ public sealed class CodeAssembleContext
 
     public void PushContext(int subContextIndex, string fieldSuffix = "")
     {
-        //private static char IntToChar(int i) => (char)('a' + i);
-        //var fieldSuffix = ;
         var contextId = ContextIdStack[^1];
         var subContextId = subContextIndex + fieldSuffix;
 

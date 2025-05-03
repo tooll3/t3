@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿#nullable enable
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Model;
@@ -27,7 +30,7 @@ internal sealed class SymbolVariationPool
     private readonly List<Variation> _defaults;
     private readonly List<Variation> _allVariations;
 
-    public Variation ActiveVariation { get; private set; }
+    public Variation? ActiveVariation { get; private set; }
 
     public SymbolVariationPool(Guid symbolId)
     {
@@ -61,21 +64,20 @@ internal sealed class SymbolVariationPool
         try
         {
             var jToken = JToken.ReadFrom(jsonReader, SymbolJson.LoadSettings);
-            var jArray = (JArray)jToken["Variations"];
-            if (jArray != null)
+
+            if (jToken["Variations"] is JArray jArray)
             {
                 foreach (var sceneToken in jArray)
                 {
-                    if (sceneToken == null)
+                    if (!sceneToken.Any())
                     {
                         Log.Error("No variations?");
                         continue;
                     }
 
-                    var newVariation = Variation.FromJson(compositionId, sceneToken);
-                    if (newVariation == null)
+                    if (!Variation.TryLoadVariationFromJson(compositionId, sceneToken, out var newVariation))
                     {
-                        Log.Warning($"Failed to parse variation json:" + sceneToken);
+                        Log.Warning("Failed to parse variation json:" + sceneToken);
                         continue;
                     }
 
@@ -88,7 +90,7 @@ internal sealed class SymbolVariationPool
         catch (Exception e)
         {
             Log.Error($"Failed to load presets and variations for {compositionId}: {e.Message}");
-            return new List<Variation>();
+            return [];
         }
 
         return result;
@@ -98,13 +100,10 @@ internal sealed class SymbolVariationPool
     {
         // FIXME: Unclear after merge: verify if this is done implicitly by SaveVariationsToFile()
         // CreateFolderIfNotExists(UserData.UserDataLocation.User);
-        	
+
         SaveVariationsToFile(UserData.UserDataLocation.User);
 
         #if DEBUG
-            
-            
-
             SaveVariationsToFile(UserData.UserDataLocation.Defaults);
         #endif
     }
@@ -149,18 +148,27 @@ internal sealed class SymbolVariationPool
 
     private static string GetFilePathForVariationId(Guid compositionId) => Path.Combine(VariationsSubFolder, $"{compositionId}.var");
     #endregion
-        
+
     public void Apply(Instance instance, Variation variation)
     {
         StopHover();
         ActiveVariation = variation;
 
-        var command = variation.IsPreset
-                          ? CreateApplyPresetCommand(instance, variation)
-                          : CreateApplyVariationCommand(instance, variation);
-        UpdateActiveStateForVariation(variation.ActivationIndex);
+        MacroCommand? newCommand;
 
-        UndoRedoStack.AddAndExecute(command);
+        if (variation.IsPreset)
+        {
+            if (!TryCreateApplyPresetCommand(instance, variation, out newCommand))
+                return;
+        }
+        else
+        {
+            if (!TryCreateApplyVariationCommand(instance, variation, out newCommand))
+                return;
+        }
+
+        UpdateActiveStateForVariation(variation.ActivationIndex);
+        UndoRedoStack.AddAndExecute(newCommand);
     }
 
     public void UpdateActiveStateForVariation(int variationIndex)
@@ -177,17 +185,30 @@ internal sealed class SymbolVariationPool
     {
         StopHover();
 
-        _activeBlendCommand = variation.IsPreset
-                                  ? CreateApplyPresetCommand(instance, variation)
-                                  : CreateApplyVariationCommand(instance, variation);
-        _activeBlendCommand.Do();
+        MacroCommand? newCommand;
+
+        if (variation.IsPreset)
+        {
+            if (!TryCreateApplyPresetCommand(instance, variation, out newCommand))
+                return;
+        }
+        else
+        {
+            if (!TryCreateApplyVariationCommand(instance, variation, out newCommand))
+                return;
+        }
+        
+        newCommand.Do();
     }
 
     public void BeginBlendToPresent(Instance instance, Variation variation, float blend)
     {
         StopHover();
 
-        _activeBlendCommand = CreateBlendToPresetCommand(instance, variation, blend);
+        if (!TryCreateBlendToPresetCommand(instance, variation, blend, out var macroCommand))
+            return;
+
+        _activeBlendCommand = macroCommand;
         _activeBlendCommand.Do();
     }
 
@@ -195,8 +216,12 @@ internal sealed class SymbolVariationPool
     {
         StopHover();
 
-        _activeBlendCommand = CreateBlendTowardsVariationCommand(instance, variation, blend);
-        _activeBlendCommand.Do();
+        if (TryCreateBlendTowardsVariationCommand(instance, variation, blend, out var newMacroCommand))
+        {
+            _activeBlendCommand = newMacroCommand;
+            _activeBlendCommand.Do();
+        }
+
         UpdateActiveStateForVariation(variation.ActivationIndex);
     }
 
@@ -228,8 +253,15 @@ internal sealed class SymbolVariationPool
         }
         else if (countPresets == variations.Count && countSnapshots == 0)
         {
-            _activeBlendCommand = CreateWeightedBlendPresetCommand(instance, variations, weights);
-            _activeBlendCommand?.Do();
+            if (CreateWeightedBlendPresetCommand(instance, variations, weights, out var newMacroCommand))
+            {
+                _activeBlendCommand = newMacroCommand;
+                newMacroCommand.Do();
+            }
+            else
+            {
+                _activeBlendCommand = null;
+            }
         }
         else
         {
@@ -295,23 +327,26 @@ internal sealed class SymbolVariationPool
         return newVariation;
     }
 
-    public Variation CreateVariationForCompositionInstances(List<Instance> instances)
+    public bool TryCreateVariationForCompositionInstances(List<Instance> instances, [NotNullWhen(true)] out Variation? newVariation)
+        //public Variation CreateVariationForCompositionInstances(List<Instance> instances)
     {
+        newVariation = null;
+
         var changeSets = new Dictionary<Guid, Dictionary<Guid, InputValue>>();
-        if (instances == null || instances.Count == 0)
+        if (instances == null! || instances.Count == 0)
         {
             Log.Warning("No instances to create variation for");
-            return null;
+            return false;
         }
 
-        Symbol parentSymbol = null;
+        Symbol? parentSymbol = null;
 
         foreach (var instance in instances)
         {
-            if (instance.Parent.Symbol.Id != SymbolId)
+            if (instance.Parent == null || instance.Parent.Symbol.Id != SymbolId)
             {
                 Log.Error($"InstanceAccess {instance.SymbolChildId} is not a child of VariationPool operator {SymbolId}");
-                return null;
+                return false;
             }
 
             parentSymbol = instance.Parent.Symbol;
@@ -343,25 +378,25 @@ internal sealed class SymbolVariationPool
             changeSets[instance.SymbolChildId] = changeSet;
         }
 
-        var newVariation = new Variation
-                               {
-                                   Id = Guid.NewGuid(),
-                                   Title = "untitled",
-                                   ActivationIndex = AllVariations.Count + 1, //TODO: First find the highest activation index
-                                   IsPreset = false,
-                                   PublishedDate = DateTime.Now,
-                                   ParameterSetsForChildIds = changeSets,
-                               };
+        newVariation = new Variation
+                           {
+                               Id = Guid.NewGuid(),
+                               Title = "untitled",
+                               ActivationIndex = AllVariations.Count + 1, //TODO: First find the highest activation index
+                               IsPreset = false,
+                               PublishedDate = DateTime.Now,
+                               ParameterSetsForChildIds = changeSets,
+                           };
 
         var command = new AddPresetOrVariationCommand(parentSymbol, newVariation);
         UndoRedoStack.AddAndExecute(command);
         SaveVariationsToFile();
-        return newVariation;
+        return true;
     }
-        
+
     public void UpdateVariationPropertiesForInstances(Variation variation, List<Instance> instances)
     {
-        if (instances == null || instances.Count == 0)
+        if (instances == null! || instances.Count == 0)
         {
             Log.Warning("No instances to create variation for");
             return;
@@ -369,6 +404,8 @@ internal sealed class SymbolVariationPool
 
         foreach (var instance in instances)
         {
+            Debug.Assert(instance.Parent != null);
+
             if (instance.Parent.Symbol.Id != SymbolId)
             {
                 Log.Error($"Instance {instance.SymbolChildId} is not a child of VariationPool operator {SymbolId}");
@@ -402,10 +439,9 @@ internal sealed class SymbolVariationPool
             // Write new changeset
             variation.ParameterSetsForChildIds[instance.SymbolChildId] = changeSet;
         }
-            
+
         SaveVariationsToFile();
     }
-        
 
     public void DeleteVariation(Variation variation)
     {
@@ -427,8 +463,10 @@ internal sealed class SymbolVariationPool
         SaveVariationsToFile();
     }
 
-    private static MacroCommand CreateApplyVariationCommand(Instance compositionInstance, Variation variation)
+    private static bool TryCreateApplyVariationCommand(Instance compositionInstance, Variation variation, [NotNullWhen(true)] out MacroCommand? newMacroCommand)
     {
+        newMacroCommand = null;
+
         var commands = new List<ICommand>();
         var compositionSymbol = compositionInstance.Symbol;
 
@@ -439,24 +477,24 @@ internal sealed class SymbolVariationPool
                 Log.Warning("Didn't expect parent-reference id in variation");
                 continue;
             }
-                
+
             if (!compositionInstance.Children.TryGetValue(childId, out var instance))
                 continue;
-                
+
             var symbolChild = instance.SymbolChild;
-                
-            // symbolChild would only be null if the instance has no parent - this would only ever happen if the composition
+
+            // SymbolChild would only be null if the instance has no parent - this would only ever happen if the composition
             // erroneously has a non-child instance in its children list
 
             foreach (var input in symbolChild!.Inputs.Values)
             {
-                if (!ValueUtils.BlendMethods.TryGetValue(input.Value.ValueType, out var blendFunction))
+                if (!ValueUtils.BlendMethods.TryGetValue(input.Value.ValueType, out _))
                     continue;
 
                 if (parameterSets.TryGetValue(input.Id, out var param))
                 {
-                    if (param == null)
-                        continue;
+                    // if (param == null)
+                    //     continue;
 
                     var newCommand = new ChangeInputValueCommand(compositionSymbol, childId, input, param);
                     commands.Add(newCommand);
@@ -469,8 +507,8 @@ internal sealed class SymbolVariationPool
             }
         }
 
-        var command = new MacroCommand("Apply Variation Values", commands);
-        return command;
+        newMacroCommand = new MacroCommand("Apply Variation Values", commands);
+        return true;
     }
 
     private static MacroCommand CreateWeightedBlendSnapshotCommand(Instance compositionInstance, List<Variation> variations, IEnumerable<float> weights)
@@ -511,12 +549,12 @@ internal sealed class SymbolVariationPool
 
                 foreach (var parametersForInputs in variationParameterSets)
                 {
-                    if (parametersForInputs.TryGetValue(inputSlot.Id, out var parameterValue))
+                    if (parametersForInputs.TryGetValue(inputSlot.Id, out var paramValue))
                     {
-                        if (parameterValue == null)
-                            continue;
+                        // if (paramValue == null)
+                        //     continue;
 
-                        values.Add(parameterValue);
+                        values.Add(paramValue);
                         definedForSome = true;
                     }
                     else
@@ -538,11 +576,14 @@ internal sealed class SymbolVariationPool
         return activeBlendCommand;
     }
 
-    private static MacroCommand CreateBlendTowardsVariationCommand(Instance compositionInstance, Variation variation, float blend)
+    private static bool TryCreateBlendTowardsVariationCommand(Instance compositionInstance, Variation variation, float blend,
+                                                              [NotNullWhen(true)] out MacroCommand? newMacroCommand)
     {
+        newMacroCommand = null;
+
         var commands = new List<ICommand>();
         if (!variation.IsSnapshot)
-            return null;
+            return false;
 
         foreach (var child in compositionInstance.Children.Values)
         {
@@ -556,8 +597,8 @@ internal sealed class SymbolVariationPool
 
                 if (parametersForInputs.TryGetValue(inputSlot.Id, out var parameter))
                 {
-                    if (parameter == null)
-                        continue;
+                    // if (parameter == null)
+                    //     continue;
 
                     var mixed = blendFunction(inputSlot.Input.Value, parameter, blend);
                     var newCommand = new ChangeInputValueCommand(compositionInstance.Symbol, child.SymbolChildId, inputSlot.Input, mixed);
@@ -572,18 +613,23 @@ internal sealed class SymbolVariationPool
             }
         }
 
-        var activeBlendCommand = new MacroCommand("Blend towards snapshot", commands);
-        return activeBlendCommand;
+        newMacroCommand = new MacroCommand("Blend towards snapshot", commands);
+        return true;
     }
 
-    private static MacroCommand CreateApplyPresetCommand(Instance instance, Variation variation)
+    private static bool TryCreateApplyPresetCommand(Instance instance, Variation variation, [NotNullWhen(true)] out MacroCommand? newMacroCommand)
     {
+        newMacroCommand = null;
+        if (instance.Parent == null)
+            return false;
+
         const string commandName = "Apply Preset Values";
         if (!instance.Parent.Symbol.Children.ContainsKey(instance.SymbolChildId))
         {
-            return new MacroCommand(commandName, Array.Empty<ICommand>());
+            newMacroCommand = new MacroCommand(commandName, Array.Empty<ICommand>());
+            return true;
         }
-            
+
         var commands = new List<ICommand>();
 
         foreach (var (childId, parametersForInputs) in variation.ParameterSetsForChildIds)
@@ -599,12 +645,12 @@ internal sealed class SymbolVariationPool
                 if (!ValueUtils.BlendMethods.ContainsKey(inputSlot.ValueType))
                     continue;
 
-                if (parametersForInputs.TryGetValue(inputSlot.Id, out var param))
+                if (parametersForInputs.TryGetValue(inputSlot.Id, out var paramValue))
                 {
-                    if (param == null)
-                        continue;
+                    // if (paramValue == null)
+                    //     continue;
 
-                    var newCommand = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input, param);
+                    var newCommand = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input, paramValue);
                     commands.Add(newCommand);
                 }
                 else
@@ -615,13 +661,18 @@ internal sealed class SymbolVariationPool
             }
         }
 
-        var command = new MacroCommand(commandName, commands);
-        return command;
+        newMacroCommand = new MacroCommand(commandName, commands);
+        return true;
     }
 
-    private static MacroCommand CreateBlendToPresetCommand(Instance instance, Variation variation, float blend)
+    private static bool TryCreateBlendToPresetCommand(Instance instance, Variation variation, float blend,
+                                                      [NotNullWhen(true)] out MacroCommand? newMacroCommand)
     {
+        newMacroCommand = null;
         var commands = new List<ICommand>();
+        if (instance.Parent == null)
+            return false;
+
         var parentSymbol = instance.Parent.Symbol;
 
         if (parentSymbol.Children.ContainsKey(instance.SymbolChildId))
@@ -641,6 +692,7 @@ internal sealed class SymbolVariationPool
 
                     if (parametersForInputs.TryGetValue(inputSlot.Id, out var parameter))
                     {
+                        // TODO:
                         if (parameter == null)
                             continue;
 
@@ -658,13 +710,19 @@ internal sealed class SymbolVariationPool
             }
         }
 
-        var activeBlendCommand = new MacroCommand("Set Preset Values", commands);
-        return activeBlendCommand;
+        newMacroCommand = new MacroCommand("Set Preset Values", commands);
+        return true;
     }
 
-    private static MacroCommand CreateWeightedBlendPresetCommand(Instance instance, List<Variation> variations, IEnumerable<float> weights)
+    private static bool CreateWeightedBlendPresetCommand(Instance instance, List<Variation> variations, IEnumerable<float> weights,
+                                                         [NotNullWhen(true)] out MacroCommand? newMacroCommand)
     {
+        newMacroCommand = null;
+
         var commands = new List<ICommand>();
+        if (instance.Parent == null)
+            return false;
+
         var parentSymbol = instance.Parent.Symbol;
         var weightsArray = weights.ToArray();
 
@@ -698,8 +756,8 @@ internal sealed class SymbolVariationPool
                 {
                     if (parametersForInputs.TryGetValue(inputSlot.Id, out var parameterValue))
                     {
-                        if (parameterValue == null)
-                            continue;
+                        // if (parameterValue == null)
+                        //     continue;
 
                         values.Add(parameterValue);
                         definedForSome = true;
@@ -719,8 +777,8 @@ internal sealed class SymbolVariationPool
             }
         }
 
-        var activeBlendCommand = new MacroCommand("Set Blended Preset Values", commands);
-        return activeBlendCommand;
+        newMacroCommand = new MacroCommand("Set Blended Preset Values", commands);
+        return true;
     }
 
     private static MatchTypes DoesPresetVariationMatch(Variation variation, Instance instance)
@@ -739,7 +797,7 @@ internal sealed class SymbolVariationPool
                 var inputIsDefault = input.Input.IsDefault;
                 var variationIncludesInput = values.ContainsKey(input.Id);
 
-                if (!ValueUtils.CompareFunctions.ContainsKey(input.ValueType))
+                if (!ValueUtils.CompareFunctions.TryGetValue(input.ValueType, out var function))
                     continue;
 
                 if (variationIncludesInput)
@@ -752,7 +810,7 @@ internal sealed class SymbolVariationPool
                     }
                     else
                     {
-                        var inputValueMatches = ValueUtils.CompareFunctions[input.ValueType](values[input.Id], input.Input.Value);
+                        var inputValueMatches = function(values[input.Id], input.Input.Value);
                         setCorrectly &= inputValueMatches;
                     }
                 }
@@ -784,9 +842,7 @@ internal sealed class SymbolVariationPool
         PresetAndDefaultParamsMatch,
     }
 
-    private MacroCommand _activeBlendCommand;
-
-    public static bool TryGetSnapshot(int activationIndex, out Variation variation)
+    public static bool TryGetSnapshot(int activationIndex, [NotNullWhen(true)] out Variation? variation)
     {
         variation = null;
         if (VariationHandling.ActivePoolForSnapshots == null)
@@ -827,4 +883,6 @@ internal sealed class SymbolVariationPool
         _userVariations.Remove(newVariation);
         _allVariations.Remove(newVariation);
     }
+
+    private MacroCommand? _activeBlendCommand;
 }

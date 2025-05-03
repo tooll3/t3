@@ -17,6 +17,10 @@
       }
     },
     {
+      "Id": "aba60946-8a72-4bc5-8b44-77144fb4b339"/*Phase*/,
+      "DefaultValue": 0.0
+    },
+    {
       "Id": "c1ffdc20-7c90-49f9-8deb-f0a415e130c8"/*Seed*/,
       "DefaultValue": 0
     },

@@ -49,6 +49,12 @@ cbuffer FogParams : register(b3)
     float FogBias;
 }
 
+// For shader graph params
+cbuffer Params : register(b4)
+{
+    /*{FLOAT_PARAMS}*/
+}
+
 struct psInput
 {
     float4 position : SV_POSITION;
@@ -61,6 +67,30 @@ sampler texSampler : register(s0);
 
 StructuredBuffer<Point> Points : register(t0);
 Texture2D<float4> texture2 : register(t1);
+
+//=== Global functions ==============================================
+/*{GLOBALS}*/
+
+//=== Additional Resources ==========================================
+/*{RESOURCES(t6)}*/
+
+//=== Field functions ===============================================
+/*{FIELD_FUNCTIONS}*/
+
+//-------------------------------------------------------------------
+float4 GetField(float4 p)
+{
+    p.xyz = mul(float4(p.xyz, 1), WorldToObject).xyz;
+    float4 f = 1;
+    /*{FIELD_CALL}*/
+    return f;
+}
+
+float GetDistance(float3 p3)
+{
+    return GetField(float4(p3.xyz, 0)).w;
+}
+//===================================================================
 
 psInput vsMain(uint id : SV_VertexID)
 {

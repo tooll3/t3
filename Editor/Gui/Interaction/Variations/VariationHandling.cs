@@ -1,4 +1,6 @@
-﻿using T3.Core.Operator;
+﻿#nullable enable
+
+using T3.Core.Operator;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Windows.Variations;
 using T3.Editor.UiModel;
@@ -21,11 +23,11 @@ namespace T3.Editor.Gui.Interaction.Variations;
 /// </remarks>
 internal static class VariationHandling
 {
-    public static SymbolVariationPool ActivePoolForSnapshots { get; private set; }
-    public static Instance ActiveInstanceForSnapshots { get; private set; }
+    public static SymbolVariationPool? ActivePoolForSnapshots { get; private set; }
+    public static Instance? ActiveInstanceForSnapshots { get; private set; }
 
-    public static SymbolVariationPool ActivePoolForPresets { get; private set; }
-    public static Instance ActiveInstanceForPresets { get; private set; }
+    public static SymbolVariationPool? ActivePoolForPresets { get; private set; }
+    public static Instance? ActiveInstanceForPresets { get; private set; }
 
     /// <summary>
     /// Update variation handling
@@ -41,12 +43,14 @@ internal static class VariationHandling
 
         var nodeSelection = ProjectView.Focused.NodeSelection;
         var singleSelectedInstance = nodeSelection.GetSelectedInstanceWithoutComposition();
-        
+
         if (singleSelectedInstance != null)
         {
             var selectedSymbolId = singleSelectedInstance.Symbol.Id;
             ActivePoolForPresets = GetOrLoadVariations(selectedSymbolId);
-            ActivePoolForSnapshots = GetOrLoadVariations(singleSelectedInstance.Parent.Symbol.Id);
+            if (singleSelectedInstance.Parent != null)
+                ActivePoolForSnapshots = GetOrLoadVariations(singleSelectedInstance.Parent.Symbol.Id);
+
             ActiveInstanceForPresets = singleSelectedInstance;
             ActiveInstanceForSnapshots = singleSelectedInstance.Parent;
         }
@@ -55,17 +59,20 @@ internal static class VariationHandling
             ActivePoolForPresets = null;
 
             var activeCompositionInstance = ProjectView.Focused.CompositionInstance;
-            
+
             ActiveInstanceForSnapshots = activeCompositionInstance;
 
             // Prevent variations for library operators
-            if (activeCompositionInstance.Symbol.Namespace.StartsWith("Lib."))
+            if (activeCompositionInstance != null)
             {
-                ActivePoolForSnapshots = null;
-            }
-            else
-            {
-                ActivePoolForSnapshots = GetOrLoadVariations(activeCompositionInstance.Symbol.Id);
+                if (activeCompositionInstance.Symbol.Namespace.StartsWith("Lib."))
+                {
+                    ActivePoolForSnapshots = null;
+                }
+                else
+                {
+                    ActivePoolForSnapshots = GetOrLoadVariations(activeCompositionInstance.Symbol.Id);
+                }
             }
 
             if (!nodeSelection.IsAnythingSelected())
@@ -73,7 +80,7 @@ internal static class VariationHandling
                 ActiveInstanceForPresets = ActiveInstanceForSnapshots;
             }
         }
-        
+
         BlendActions.SmoothVariationBlending.UpdateBlend();
     }
 
@@ -91,7 +98,10 @@ internal static class VariationHandling
 
     private const int AutoIndex = -1;
 
-    public static Variation CreateOrUpdateSnapshotVariation(int activationIndex = AutoIndex)
+    /// <summary>
+    /// This tries to create at new variation and saves the variation file
+    /// </summary>
+    public static Variation? CreateOrUpdateSnapshotVariation(int activationIndex = AutoIndex)
     {
         // Only allow for snapshots.
         if (ActivePoolForSnapshots == null || ActiveInstanceForSnapshots == null)
@@ -109,9 +119,10 @@ internal static class VariationHandling
 
         AddSnapshotEnabledChildrenToList(ActiveInstanceForSnapshots, _affectedInstances);
 
-        var newVariation = ActivePoolForSnapshots.CreateVariationForCompositionInstances(_affectedInstances);
-        if (newVariation == null)
+        if (!ActivePoolForSnapshots.TryCreateVariationForCompositionInstances(_affectedInstances, out var newVariation))
+        {
             return null;
+        }
 
         newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(ActivePoolForSnapshots.AllVariations);
         if (activationIndex != AutoIndex)
@@ -149,7 +160,7 @@ internal static class VariationHandling
         var compositionUi = instance.GetSymbolUi();
         foreach (var childInstance in instance.Children.Values)
         {
-            var symbolChildUi = compositionUi.ChildUis[childInstance.SymbolChildId];            // Debug.Assert(symbolChildUi != null);
+            var symbolChildUi = compositionUi.ChildUis[childInstance.SymbolChildId]; // Debug.Assert(symbolChildUi != null);
 
             if (!symbolChildUi.EnabledForSnapshots)
                 continue;
@@ -172,7 +183,7 @@ internal static class VariationHandling
     //         yield return childInstance;
     //     }
     // }
-    
+
     private static readonly Dictionary<Guid, SymbolVariationPool> _variationPoolForOperators = new();
     private static readonly List<Instance> _affectedInstances = new(100);
 }

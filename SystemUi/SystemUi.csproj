@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+    <Import Project="$(SolutionDir)/Tixl.props" />
     <PropertyGroup>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>$(TixlNetCoreFrameworkVersion)</TargetFramework>
         <RootNamespace>T3.SystemUi</RootNamespace>
         <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU</Platforms>
@@ -11,7 +11,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Logging\Logging.csproj" Private="false"/>
+        <ProjectReference Include="..\Logging\Logging.csproj" Private="false" />
     </ItemGroup>
 
 </Project>

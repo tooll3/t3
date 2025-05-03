@@ -540,11 +540,6 @@
           "Id": "7c24f499-8021-4c67-9790-5cc7efb83287"/*UseWAsWidth*/,
           "Type": "System.Boolean",
           "Value": true
-        },
-        {
-          "Id": "8104d7e7-0cea-4009-851d-1b0a23802ad8"/*FixHoles*/,
-          "Type": "System.Boolean",
-          "Value": true
         }
       ],
       "Outputs": []

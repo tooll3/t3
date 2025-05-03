@@ -1,4 +1,5 @@
-﻿namespace T3.Core.Operator.Interfaces;
+﻿#nullable enable
+namespace T3.Core.Operator.Interfaces;
 
 /// <summary>
 /// Provides provide a status information about a errors and warnings. 
@@ -6,7 +7,7 @@
 public interface IStatusProvider
 {
     StatusLevel GetStatusLevel();
-    string GetStatusMessage();
+    string? GetStatusMessage();
 
     enum StatusLevel
     {

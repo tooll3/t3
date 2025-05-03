@@ -1,4 +1,6 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+
+using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -6,15 +8,17 @@ using T3.Editor.UiModel.Modification;
 
 namespace T3.Editor.Gui.Graph.Dialogs;
 
-public class AddInputDialog : ModalDialog
+internal sealed class AddInputDialog : ModalDialog
 {
-    public AddInputDialog()
+    internal AddInputDialog()
     {
         Flags = ImGuiWindowFlags.NoResize;
     }
-        
-    public void Draw(Symbol symbol)
+
+    internal ChangeSymbol.SymbolModificationResults  Draw(Symbol symbol)
     {
+        var results = ChangeSymbol.SymbolModificationResults.Nothing;
+        
         if (BeginDialog("Add parameter input"))
         {
             FormInputs.SetIndent(100);
@@ -25,10 +29,11 @@ public class AddInputDialog : ModalDialog
                 
             FormInputs.AddVerticalSpace(5);
             FormInputs.ApplyIndent();
-            if (CustomComponents.DisablableButton("Add", _selectedType != null && isValid))
+            if (CustomComponents.DisablableButton("Add", isValid))
             {
                 InputsAndOutputs.AddInputToSymbol(_parameterName, _multiInput, _selectedType!, symbol);
                 _parameterName = string.Empty;
+                results = ChangeSymbol.SymbolModificationResults.ProjectViewDiscarded;
             }
 
             ImGui.SameLine();
@@ -41,6 +46,7 @@ public class AddInputDialog : ModalDialog
         }
 
         EndDialog();
+        return results;
     }
 
     private string _parameterName = string.Empty;

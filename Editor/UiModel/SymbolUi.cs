@@ -272,4 +272,9 @@ public sealed partial class SymbolUi : ISelectionContainer
         Links = newSymbolUi.Links;
         Description = newSymbolUi.Description;
     }
+
+    public override string ToString()
+    {
+        return $"{Symbol.Name} UI";
+    }
 }

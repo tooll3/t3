@@ -57,7 +57,7 @@ internal static class ProgramWindows
 
     internal static void InitializeMainWindow(string version, out Device device)
     {
-        Main = new("T3 " + version, disableClose: false);
+        Main = new("TiXL " + version, disableClose: false);
         device = null;
 
         try

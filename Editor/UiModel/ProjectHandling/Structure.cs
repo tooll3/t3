@@ -342,7 +342,7 @@ internal sealed class Structure
         {
             if (!instance.Children.TryGetValue(childPath[i], out instance))
             {
-                Log.Error("Did not find instance in path provided.\n" + Environment.StackTrace);
+                //Log.Error("Did not find instance in path provided.\n" + Environment.StackTrace);
                 instance = null;
                 return false;
             }

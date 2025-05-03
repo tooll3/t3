@@ -37,17 +37,9 @@ internal sealed class CombineSDF : Instance<CombineSDF>
 
     public void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
     {
-        c.Globals["Common"] = ShaderGraphIncludes.Common;
-        c.Globals["CommonHgSdf"] = ShaderGraphIncludes.CommonHgSdf;
-
-        c.Globals["smoothBlendColor"]
-            = """
-              float getBlendFactor(float d2, float d1, float k) 
-              {
-                return  clamp(0.5 + 0.5 * (d2 - d1) / k, 0.0, 1.0);
-                //float d = lerp(d2, d1, h) - k * h * (1.0 - h);
-              };
-              """;
+        c.Globals[nameof(ShaderGraphIncludes.Common)] = ShaderGraphIncludes.Common;
+        c.Globals[nameof(ShaderGraphIncludes.CommonHgSdf)] = ShaderGraphIncludes.CommonHgSdf;
+        c.Globals[nameof(ShaderGraphIncludes.GetColorBlendFactor)] = ShaderGraphIncludes.GetColorBlendFactor;
         
         // Register global method
         switch (_combineMethod)
@@ -132,7 +124,7 @@ internal sealed class CombineSDF : Instance<CombineSDF>
                                             """;
                 break;
 
-            // produces a cylindical pipe that runs along the intersection.
+            // produces a cylindrical pipe that runs along the intersection.
             // No objects remain, only the pipe. This is not a boolean operator.
             case CombineMethods.Pipe:
                 c.Globals["fOpPipe"] = """
@@ -141,7 +133,7 @@ internal sealed class CombineSDF : Instance<CombineSDF>
                                        }
                                        """;
                 break;
-            // first object gets a v-shaped engraving where it intersect the second
+            // first object gets a v-shaped engraving where it intersects the second
             case CombineMethods.Engrave:
                 c.Globals["fOpEngrave"] = """
                                           float fOpEngrave(float a, float b, float r) {
@@ -171,13 +163,11 @@ internal sealed class CombineSDF : Instance<CombineSDF>
         {
             // Keep initial value
             cac.AppendCall($"f{contextId} = f{subContextId};");
-            //cac.AppendCall($"f{contextId} =  p{contextId}.w < 0.5 ? f{subContextId}: float4(1,1,1,f{subContextId}.w);");
             
         }
         else
         {
-            cac.AppendCall($"f{contextId}.xyz = lerp(f{contextId}.xyz, f{subContextId}.xyz, getBlendFactor(f{contextId}.w, f{subContextId}.w, {ShaderNode}K ));");
-            //cac.AppendCall($"f{contextId}.xyz = f{contextId}.w < f{subContextId}.w ? f{contextId}.xyz : f{subContextId}.xyz;");
+            cac.AppendCall($"f{contextId}.rgb = lerp(f{contextId}.rgb, f{subContextId}.rgb, GetColorBlendFactor(f{contextId}.w, f{subContextId}.w, {ShaderNode}K ));");
             
             // Combine initial value with new value...
             switch (_combineMethod)
@@ -201,6 +191,7 @@ internal sealed class CombineSDF : Instance<CombineSDF>
                 case CombineMethods.IntersectChamfer:
                     cac.AppendCall($"f{contextId}.w = fOpIntersectionChamfer(f{contextId}.w, f{subContextId}.w, {ShaderNode}K);");
                     break;
+                
                 case CombineMethods.IntersectRound:
                     cac.AppendCall($"f{contextId}.w = fOpIntersectionRound(f{contextId}.w, f{subContextId}.w, {ShaderNode}K);");
                     break;
@@ -225,9 +216,6 @@ internal sealed class CombineSDF : Instance<CombineSDF>
                     cac.AppendCall($"f{contextId}.w = fOpEngrave(f{contextId}.w, f{subContextId}.w, {ShaderNode}K);");
                     break;
             }
-            //cac.AppendCall($"f{contextId}.xyz = f{contextId}.w < f{subContextId}.w ?  f{contextId}.xyz : f{subContextId}.xyz;");
-            //cac.AppendCall("{ float3 v3=");
-            
         }
     }
 

@@ -19,7 +19,7 @@ internal sealed class SetPixelAndVertexShaderStage : Instance<SetPixelAndVertexS
         var vsStage = deviceContext.VertexShader;
         var psStage = deviceContext.PixelShader;
 
-        GetAdditionalResources(context);
+        
         ConstantBuffers.GetValues(ref _constantBuffers, context);
         ShaderResources.GetValues(ref _shaderResourceViews, context);
         SamplerStates.GetValues(ref _samplerStates, context);
@@ -31,7 +31,13 @@ internal sealed class SetPixelAndVertexShaderStage : Instance<SetPixelAndVertexS
         _prevVertexShader = vsStage.Get();
         _prevPixelShader = psStage.Get();
 
+        // First update Shaders -> GenerateShaderCode -> ShaderGraphNodes ...
         var vs = VertexShader.GetValue(context);
+        var ps = PixelShader.GetValue(context);
+        
+        // ... then add updated resources. 
+        GetAdditionalResources(context);
+        
         if (vs != null)
         {
             vsStage.Set(vs);
@@ -41,7 +47,6 @@ internal sealed class SetPixelAndVertexShaderStage : Instance<SetPixelAndVertexS
             vsStage.SetShaderResources(_shaderResourceViews.Length, _additionalSrvs.Length, _additionalSrvs);
         }
 
-        var ps = PixelShader.GetValue(context);
         if (ps != null)
         {
             psStage.Set(ps);
@@ -50,6 +55,7 @@ internal sealed class SetPixelAndVertexShaderStage : Instance<SetPixelAndVertexS
             psStage.SetShaderResources(0, _shaderResourceViews.Length, _shaderResourceViews);
             psStage.SetShaderResources(_shaderResourceViews.Length, _additionalSrvs.Length, _additionalSrvs);
         }
+        
     }
 
     private void GetAdditionalResources(EvaluationContext context)
@@ -58,7 +64,6 @@ internal sealed class SetPixelAndVertexShaderStage : Instance<SetPixelAndVertexS
             return;
         
         var collectedTypedInputs = VariousResources.GetCollectedTypedInputs();
-        Log.Debug($"Getting additional {collectedTypedInputs.Count} srvs...", this);
         
         foreach (var t in collectedTypedInputs)
         {
@@ -71,13 +76,14 @@ internal sealed class SetPixelAndVertexShaderStage : Instance<SetPixelAndVertexS
 
                     for (var srvIndex = 0; srvIndex < srvs.Count; srvIndex++)
                     {
-                        _additionalSrvs[srvIndex] = srvs[srvIndex];
+                        var srv = srvs[srvIndex];
+                        _additionalSrvs[srvIndex] = srv;
                     }
-
                     break;
                 }
             }
         }
+        VariousResources.DirtyFlag.Clear();
     }
 
     private void Restore(EvaluationContext context)

@@ -1,0 +1,19 @@
+
+<!-- 
+ A set of properties can are included in the various other csproj file.
+ Note: These should NOT be used for operator projects, because updating those is handled in
+CsProjectFile and ProjectXML.cs
+-->
+<Project>
+  <PropertyGroup>
+    <TixlVersion>4.0.0</TixlVersion>
+    <TixlNetFrameworkVersion>net9.0-windows</TixlNetFrameworkVersion>
+    <TixlNetCoreFrameworkVersion>net9.0</TixlNetCoreFrameworkVersion>
+    <TixlIsDotNetFramework>false</TixlIsDotNetFramework>
+
+    <TixlEnableUWPInTargets>False</TixlEnableUWPInTargets>
+    <TixlEnableAndroidInTargets>False</TixlEnableAndroidInTargets>
+
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+</Project>

@@ -17,15 +17,17 @@ internal static class Modifications
     /// Deletes the selected items and tries to collapse the gaps and patches the connection gaps is possible
     /// </summary>
     /// <param name="context"></param>
-    internal static void DeleteSelectedOps(GraphUiContext context)
+    internal static ChangeSymbol.SymbolModificationResults DeleteSelectedOps(GraphUiContext context)
     {
+        var results = ChangeSymbol.SymbolModificationResults.Nothing;
+        
         if (context.Selector.Selection.Count == 0)
-            return;
+            return results;
 
         if(!SymbolUiRegistry.TryGetSymbolUi(context.CompositionInstance.Symbol.Id, out var compositionUi))
         {
             Log.Warning("Can't find composition ui?");
-            return;
+            return results;
         }
 
         var deletedItems = new List<MagGraphItem>();
@@ -50,10 +52,12 @@ internal static class Modifications
                 if (item.Variant == MagGraphItem.Variants.Input)
                 {
                     deletedInputUis.Add(item.Selectable as IInputUi);
+                    results |= ChangeSymbol.SymbolModificationResults.ProjectViewDiscarded;
                 }
                 else if (item.Variant == MagGraphItem.Variants.Output)
                 {
                     deletedOutputUis.Add(item.Selectable as IOutputUi);
+                    results |= ChangeSymbol.SymbolModificationResults.ProjectViewDiscarded;
                 }
                 
                 continue;
@@ -88,7 +92,7 @@ internal static class Modifications
         }
         
         if (deletedChildUis.Count == 0 && deletedInputUis.Count == 0 && deletedOutputUis.Count == 0)
-            return;
+            return results;
 
         var macroCommand = new MacroCommand("Delete items");
         if (deletedChildUis.Count > 0)
@@ -140,6 +144,7 @@ internal static class Modifications
         context.Layout.FlagAsChanged();
         context.Selector.Clear();
         context.Layout.FlagAsChanged();
+        return results;
     }
 
     //private record ItemWithChildUi(MagGraphItem Item, SymbolUi.Child UiChild);

@@ -1,0 +1,47 @@
+{
+  "Id": "296c774b-1cf0-4e37-9c22-7ac4fd5d78e5"/*ExecuteRepeatFieldAtPoints*/,
+  "Description": "The internal implementation of RepeatFieldAtPoints.",
+  "SymbolTags": "16",
+  "InputUis": [
+    {
+      "InputId": "1e5288d2-c2ae-4a1d-ad69-fe63d32a00c6"/*Points*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "4648e514-b48c-4a98-a728-3ebf9bcfa0b7"/*CombineMethod*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 150.0
+      }
+    },
+    {
+      "InputId": "9e4f5916-722d-4c4b-b1ca-814958a5b836"/*K*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 75.0
+      }
+    },
+    {
+      "InputId": "bb4e6ad8-5941-4218-9e4b-4ba402be7ed4"/*InputField*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "b246c7f7-04dd-4632-aff8-fa0a2c03af4f"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

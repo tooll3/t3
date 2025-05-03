@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿#nullable enable
+using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Model;
 using T3.Core.Operator;
@@ -13,27 +15,27 @@ namespace T3.Editor.Gui.Interaction.Variations.Model;
 /// <summary>
 /// Base class for serialization of presents, snapshots and ParameterCollection-Scenes
 /// </summary>/
-public class Variation : ISelectableCanvasObject
+public sealed class Variation : ISelectableCanvasObject
 {
     // Serialized fields...
     public Guid Id { get; init; }
-    public string Title;
+    public string? Title;
     public int ActivationIndex;
     public bool IsPreset;
     
     public Vector2 PosOnCanvas { get; set; }
     public Vector2 Size { get; set; } = VariationThumbnail.ThumbnailSize;
-    public DateTime PublishedDate;
+    internal DateTime PublishedDate;
     
     // Other properties...
-    public bool IsSelected { get; set; }
-    public States State { get; set; } = States.InActive;
-    public bool IsSnapshot => !IsPreset;
+    internal bool IsSelected { get; set; }
+    internal States State { get; set; } = States.InActive;
+    internal bool IsSnapshot => !IsPreset;
     
     /// <summary>
     /// Changes by SymbolChildId
     /// </summary>
-    public Dictionary<Guid, Dictionary<Guid, InputValue>> ParameterSetsForChildIds;
+    public Dictionary<Guid, Dictionary<Guid, InputValue>> ParameterSetsForChildIds = [];
     
     public Variation Clone()
     {
@@ -56,23 +58,24 @@ public class Variation : ISelectableCanvasObject
                                                                       kv2 => kv2.Value.Clone())),
                    };
     }
-    
-    public static Variation FromJson(Guid symbolId, JToken jToken)
+
+    internal static bool TryLoadVariationFromJson(Guid symbolId, JToken jToken, [NotNullWhen(true)] out Variation? variation)
     {
+        variation = null;
         if (!SymbolUiRegistry.TryGetSymbolUi(symbolId, out var compositionSymbolUi))
-            return null;
+            return false;
         
         var compositionSymbol = compositionSymbolUi.Symbol;
+
+        if (!JsonUtils.TryGetGuid(jToken[nameof(Id)], out var variationId))
+        {
+            Log.Warning(" Can't find or parse variationId");
+            return false;
+        }
         
-        var idToken = jToken[nameof(Id)];
-        
-        var idString = idToken?.Value<string>();
-        if (idString == null)
-            return null;
-        
-        var newVariation = new Variation
+        variation = new Variation
                                {
-                                   Id = Guid.Parse(idString),
+                                   Id = variationId,
                                    Title = jToken[nameof(Title)]?.Value<string>() ?? String.Empty,
                                    ActivationIndex = jToken[nameof(ActivationIndex)]?.Value<int>() ?? -1,
                                    IsPreset = jToken[nameof(IsPreset)]?.Value<bool>() ?? false,
@@ -82,29 +85,32 @@ public class Variation : ISelectableCanvasObject
         var positionToken = jToken[nameof(PosOnCanvas)];
         if (positionToken != null)
         {
-            newVariation.PosOnCanvas = new Vector2(positionToken["X"]?.Value<float>() ?? 0,
+            variation.PosOnCanvas = new Vector2(positionToken["X"]?.Value<float>() ?? 0,
                                                    positionToken["Y"]?.Value<float>() ?? 0);
         }
-        
-        var changesToken = (JObject)jToken[nameof(ParameterSetsForChildIds)];
-        if (changesToken == null)
-            return newVariation;
+
+        if(jToken[nameof(ParameterSetsForChildIds)] is not JObject changesToken)
+            return false;
         
         foreach (var (symbolChildIdString, changes2) in changesToken)
         {
             var changeList = new Dictionary<Guid, InputValue>();
             if (changes2 is not JObject o)
                 continue;
-            
-            var symbolChildId = Guid.Parse(symbolChildIdString);
+
+            if (!JsonUtils.TryGetGuid(symbolChildIdString, out var noneOrSymbolChildId))
+            {
+                Log.Warning($"Can't load presets: invalid symbol ID '{symbolChildIdString}'");
+                continue;
+            }
             
             Symbol symbolForChanges;
             
-            if (symbolChildId == Guid.Empty)
+            if (noneOrSymbolChildId == _idWhenUsingCompositionSymbol)
             {
                 symbolForChanges = compositionSymbol;
             }
-            else if (compositionSymbol.Children.TryGetValue(symbolChildId, out var symbolChild))
+            else if (compositionSymbol.Children.TryGetValue(noneOrSymbolChildId, out var symbolChild))
             {
                 symbolForChanges = symbolChild.Symbol;
             }
@@ -116,29 +122,44 @@ public class Variation : ISelectableCanvasObject
             
             foreach (var (inputIdString, valueToken) in o)
             {
-                var inputId = Guid.Parse(inputIdString);
-                var input = symbolForChanges.InputDefinitions.SingleOrDefault(i => i.Id == inputId);
-                if (input == null && inputId != Guid.Empty)
+                if (!JsonUtils.TryGetGuid(inputIdString, out var inputId))
                 {
-                    Log.Warning($"Can't find symbol input {symbolChildIdString}/{inputId} for preset changes");
+                    Log.Warning($"Can't load presets: Invalid ID '{changeList}' in {symbolChildIdString}");
                     continue;
                 }
                 
-                var inputValue = InputValueCreators.Entries[input.DefaultValue.ValueType]();
-                inputValue.SetValueFromJson(valueToken);
-                changeList[inputId] = inputValue;
+                var input = symbolForChanges.InputDefinitions.SingleOrDefault(i => i.Id == inputId);
+                
+                if (input == null && inputId != Guid.Empty)
+                {
+                    Log.Warning($"Can't load presets: input {symbolChildIdString}/{inputId} not found");
+                    continue;
+                }
+
+                if (input != null)
+                {
+                    var inputValue = InputValueCreators.Entries[input.DefaultValue.ValueType]();
+                    inputValue.SetValueFromJson(valueToken);
+                    changeList[inputId] = inputValue;
+                }
+                else
+                {
+                    Log.Warning("Can't find input?");
+                }
             }
             
             if (changeList.Count > 0)
             {
-                newVariation.ParameterSetsForChildIds[symbolChildId] = changeList;
+                variation.ParameterSetsForChildIds[noneOrSymbolChildId] = changeList;
             }
         }
         
-        return newVariation;
+        return true;
     }
-    
-    public void ToJson(JsonTextWriter writer)
+
+    private static readonly Guid _idWhenUsingCompositionSymbol = Guid.Empty; 
+
+    internal void ToJson(JsonTextWriter writer)
     {
         var vec2Writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
         
@@ -148,7 +169,9 @@ public class Variation : ISelectableCanvasObject
             writer.WriteValue(nameof(Id), Id);
             writer.WriteValue(nameof(IsPreset), IsPreset);
             writer.WriteValue(nameof(ActivationIndex), ActivationIndex);
-            writer.WriteObject(nameof(Title), Title);
+            
+            if(!string.IsNullOrEmpty(Title))
+                writer.WriteObject(nameof(Title), Title);
             
             writer.WritePropertyName(nameof(PosOnCanvas));
             vec2Writer(writer, PosOnCanvas);
@@ -181,8 +204,8 @@ public class Variation : ISelectableCanvasObject
     {
         return $"{Title} #{ActivationIndex}";
     }
-    
-    public enum States
+
+    internal enum States
     {
         Undefined,
         InActive,

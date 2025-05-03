@@ -2,16 +2,16 @@
   "Id": "7b81d100-b5a6-4a0e-8900-0d6418146b41"/*Translate*/,
   "Inputs": [
     {
-      "Id": "10e47b63-6e4e-4f0d-adcf-6d15e72ed89c"/*Axis*/,
-      "DefaultValue": 0
-    },
-    {
-      "Id": "53f60b17-c539-4724-b52f-e74c74395d1b"/*Size*/,
-      "DefaultValue": 8.0
-    },
-    {
       "Id": "9aa6a5cd-4c0b-45c1-9a82-0f40f8aa43c2"/*InputField*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "c872228d-e9ca-4dc1-b6c2-2ca130b2330b"/*Translation*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
     }
   ],
   "Children": [],

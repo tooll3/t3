@@ -14,8 +14,11 @@
 - [ ] Split Connections
 - [ ] Rewiring of vertical connection lines
 - [x] Dragging gradient widget handles drags canvas too
-- [ ] Snapping connecting start to output not working of ops who's output is already snapped
+- [x] Snapping connecting start to output not working of ops who's output is already snapped
 - [ ] Panning/Zooming in CurveEdit-Popup opened from SampleCurveOp is broken 
+- [ ] Publish as input does not create connection
+- [ ] ShaderGraphNode should be bypassable
+- [ ] In Parameter window bypassable button should be disabled if not available
 
 ## Timeline
 - [ ] Soundtrack image is incorrectly scaled with playback?
@@ -32,21 +35,31 @@
 - [ ] Snapping is too fine
 - [ ] in Duplicate Symbol description field is too small
 
+- [ ] Add some kind of FIT button to show all or selected operators 
+
 ## Ops:
 - [ ] Rounded Rect should have blend parameter
 - [ ] SetEnvironment should automatically insert textureToCubemap
+- [ ] Remove Op from Editor
 
 General fixes:
 - [x] Fix camera handling
 - [x] Default gradients are not loaded?
 - [x] Fix Scaling for multiple selected keyframes with ALT-Key
+- [ ] Fix Gradient editor not working as parameter window parameter
+- [ ] Make sure that TiXL is using the high performance GPU
 - [ ] Deleting last output will cause crash
 - [ ] Shake doesn't work with 120hz
+- 
 
 General UX-ideas:
 - [ ] StatusProvideIcon should support non-warning indicator
 - [ ] Separate Value Clamping for lower and upper values 
 - [ ] Drag and drop of files (copy them to resources folder and create LoadXYZ instance...)
+
+## SDF-Stuff
+- [ ] Ray marching glow
+- 
 
 Feats:
 - [x] Copy and Paste Values

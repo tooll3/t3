@@ -20,6 +20,10 @@
     {
       "Id": "9571b16e-72d1-4544-aa98-8a08b63bb5f6"/*ConstantBuffers*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "cc866663-5bfa-4a17-9efc-e2f381767317"/*VariousResources*/,
+      "DefaultValue": null
     }
   ],
   "Children": [],

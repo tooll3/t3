@@ -425,6 +425,8 @@ internal static class FormInputs
             Log.Error("AddStringInput() requires an id to work. Use ## prefix to hide." );
             label = "##fallback";
         }
+
+        defaultValue ??= NoDefaultString;
             
         var hasDefault = defaultValue != NoDefaultString;
         var isDefault = hasDefault && value == defaultValue;
@@ -435,6 +437,8 @@ internal static class FormInputs
         }
 
         DrawInputLabel(label);
+        
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         var wasNull = value == null;
         if (wasNull)
             value = string.Empty;
@@ -449,7 +453,7 @@ internal static class FormInputs
                                                      ref value!, out _);
         
         if (!modified && wasNull)
-            value = null;
+            value = null!;
 
         if (autoFocus)
         {

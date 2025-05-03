@@ -35,6 +35,13 @@
       }
     },
     {
+      "InputId": "2db8e046-b81b-43f4-b454-4eec8fcdd4b4"/*GainAndBias*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 375.0
+      }
+    },
+    {
       "InputId": "388489ee-ea0c-49a3-aee8-1ae2c4dcbda2"/*Levels*/,
       "Relevancy": "Required",
       "Position": {
@@ -83,20 +90,22 @@
       }
     },
     {
-      "InputId": "85859c09-c1e5-4452-8b79-4470cc3daaa8"/*Shape*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -200.0,
-        "Y": 375.0
-      }
-    },
-    {
       "InputId": "98e88d02-3b78-403c-b9c9-b5ecf8565acd"/*SourceTextureSrv*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 75.0
       }
+    },
+    {
+      "InputId": "ac3b575a-dc62-48bd-955c-f945a18a2246"/*ColorWeights*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 150.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "d5914036-f628-4305-d7b5-1634b219c305"/*Clamp*/,
@@ -112,6 +121,13 @@
       "Position": {
         "X": -200.0,
         "Y": 75.0
+      }
+    },
+    {
+      "InputId": "e5548715-1cae-4792-9e6e-8f9d8daa9edf"/*BlurGradient*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 450.0
       }
     },
     {
@@ -134,7 +150,7 @@
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "300c319d-86e8-47ce-9597-e81c5a008c8f"/*FilteredCubeMap*/,
+      "OutputId": "300c319d-86e8-47ce-9597-e81c5a008c8f"/*OutputTexture*/,
       "Position": {
         "X": 29.03888,
         "Y": -147.24622

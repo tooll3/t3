@@ -2,6 +2,10 @@
   "Id": "436e93a8-03c0-4366-8d9a-2245e5bcaa6c"/*PerlinNoise*/,
   "Inputs": [
     {
+      "Id": "259f1fbc-9c56-47d9-9f76-12eb3c26d276"/*Phase*/,
+      "DefaultValue": 0.0
+    },
+    {
       "Id": "296d0f7f-d484-4781-b01f-48839def0324"/*BiasAndGain*/,
       "DefaultValue": {
         "X": 0.5,

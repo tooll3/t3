@@ -54,7 +54,7 @@
   ],
   "Children": [
     {
-      "Id": "1eab1da0-07ef-4fb7-b5c4-9f8a249cb249"/*_GetFieldShaderAttributes*/,
+      "Id": "1eab1da0-07ef-4fb7-b5c4-9f8a249cb249"/*GenerateShaderGraphCode*/,
       "SymbolId": "73c028d1-3de2-4269-b503-97f62bbce320",
       "InputValues": [],
       "Outputs": []

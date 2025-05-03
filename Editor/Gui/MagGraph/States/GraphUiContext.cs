@@ -7,6 +7,7 @@ using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Graph;
+using T3.Editor.UiModel.Modification;
 using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 using MagItemMovement = T3.Editor.Gui.MagGraph.Interaction.MagItemMovement;
@@ -203,10 +204,10 @@ internal sealed class GraphUiContext
     
     internal readonly List<MagGraphConnection> TempConnections = [];
 
-    public void DrawDialogs(ProjectView projectView)
+    public ChangeSymbol.SymbolModificationResults DrawDialogs(ProjectView projectView)
     {
         EditCommentDialog.Draw(Selector);
-        var modified = false;
+        var results = ChangeSymbol.SymbolModificationResults.Nothing;
         
         var compInstance = projectView.CompositionInstance;
         if (compInstance != null)
@@ -215,24 +216,28 @@ internal sealed class GraphUiContext
                 && !compInstance.Symbol.SymbolPackage.IsReadOnly)
             {
                 var symbol = compInstance.Symbol;
-                AddInputDialog.Draw(symbol);
-                AddOutputDialog.Draw(symbol);
+                results |= AddInputDialog.Draw(symbol);
+                results |= AddOutputDialog.Draw(symbol);
             }
-            modified |= DuplicateSymbolDialog.Draw(compInstance, 
-                                                projectView.NodeSelection.GetSelectedChildUis().ToList(), 
-                                                ref NameSpaceForDialogEdits,
-                                                ref SymbolNameForDialogEdits,
-                                                ref SymbolDescriptionForDialog);
-            CombineToSymbolDialog.Draw(compInstance, projectView,
-                                                ref NameSpaceForDialogEdits,
-                                                ref SymbolNameForDialogEdits,
-                                                ref SymbolDescriptionForDialog);
+            results |= DuplicateSymbolDialog.Draw(compInstance, 
+                                                  projectView.NodeSelection.GetSelectedChildUis().ToList(), 
+                                                  ref NameSpaceForDialogEdits,
+                                                  ref SymbolNameForDialogEdits,
+                                                  ref SymbolDescriptionForDialog);
+            
+            
+            results |= CombineToSymbolDialog.Draw(compInstance, projectView,
+                                                  ref NameSpaceForDialogEdits,
+                                                  ref SymbolNameForDialogEdits,
+                                                  ref SymbolDescriptionForDialog);
             
             RenameSymbolDialog.Draw(projectView.NodeSelection.GetSelectedChildUis().ToList(), 
                                              ref SymbolNameForDialogEdits);
             
-            if(modified)
+            if(results != ChangeSymbol.SymbolModificationResults.Nothing)
                 Layout.FlagAsChanged();
         }
+
+        return results;
     }
 }

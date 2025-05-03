@@ -1,0 +1,11 @@
+name: "Build"
+description: "Run common build steps"
+runs:
+  using: "composite"
+  steps:
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      
+    - name: Build Release Version
+      shell: pwsh
+      run: dotnet build --configuration Release

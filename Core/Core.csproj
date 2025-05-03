@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
+    <Import Project="$(SolutionDir)/Tixl.props" />
     <PropertyGroup>
-        <TargetFramework>net9.0-windows</TargetFramework>
+        <TargetFramework>$(TixlNetFrameworkVersion)</TargetFramework>
         <UseWindowsForms>true</UseWindowsForms>
         <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
         <RootNamespace>T3.Core</RootNamespace>
@@ -9,8 +9,8 @@
         <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
         <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU</Platforms>
-        <VersionPrefix>3.10.4</VersionPrefix>
-        <Version>3.10.4</Version>
+        <VersionPrefix>$(TixlVersion)</VersionPrefix>
+        <Version>$(TixlVersion)</Version>
     </PropertyGroup>
 
     <ItemGroup>

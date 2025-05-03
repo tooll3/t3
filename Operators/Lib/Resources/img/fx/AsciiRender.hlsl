@@ -1,7 +1,13 @@
 #include "shared/hash-functions.hlsl"
 #include "shared/bias-functions.hlsl"
 
-cbuffer ParamConstants : register(b0)
+cbuffer Resolution : register(b0)
+{
+    float TargetWidth;
+    float TargetHeight;
+}
+
+cbuffer ParamConstants : register(b1)
 {
     float4 Fill;
     float4 Background;
@@ -14,19 +20,13 @@ cbuffer ParamConstants : register(b0)
     float Scatter;
 }
 
-cbuffer TimeConstants : register(b1)
-{
-    float globalTime;
-    float time;
-    float runTime;
-    float beatTime;
-}
-
-cbuffer Resolution : register(b2)
-{
-    float TargetWidth;
-    float TargetHeight;
-}
+// cbuffer TimeConstants : register(b1)
+// {
+//     float globalTime;
+//     float time;
+//     float runTime;
+//     float beatTime;
+// }
 
 struct vsOutput
 {

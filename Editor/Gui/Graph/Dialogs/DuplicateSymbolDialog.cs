@@ -19,14 +19,14 @@ internal sealed class DuplicateSymbolDialog : ModalDialog
     public event Action? Closed;
         
     /** returns true if modified */
-    public bool Draw(Instance compositionOp, List<SymbolUi.Child> selectedChildUis, ref string nameSpace, ref string newTypeName, ref string description, bool isReload = false)
+    public ChangeSymbol.SymbolModificationResults Draw(Instance compositionOp, List<SymbolUi.Child> selectedChildUis, ref string nameSpace, ref string newTypeName, ref string description, bool isReload = false)
     {
         //DialogSize = new Vector2(500, 450) * T3Ui.UiScaleFactor;
+        var result = ChangeSymbol.SymbolModificationResults.Nothing;
         
         if(selectedChildUis.Count != 1)
-            return false;
+            return result;
 
-        var modified = false;
         
         if(isReload && !_completedReloadPrompt)
         {
@@ -52,7 +52,7 @@ internal sealed class DuplicateSymbolDialog : ModalDialog
             }
                 
             EndDialog();
-            return modified;
+            return ChangeSymbol.SymbolModificationResults.Nothing;
         }
 
         DialogSize = new Vector2(600, 400);
@@ -76,7 +76,8 @@ internal sealed class DuplicateSymbolDialog : ModalDialog
 
                     Duplicate.DuplicateAsNewType(compositionSymbolUi, _projectToCopyTo, selectedChildUis.First().SymbolChild.Symbol.Id, newTypeName, nameSpace, description,
                                                  position);
-                    modified = true;
+                    
+                    result = ChangeSymbol.SymbolModificationResults.StructureChanged;
                     T3Ui.Save(false);
                     ImGui.CloseCurrentPopup();
                     _completedReloadPrompt = false;
@@ -102,7 +103,7 @@ internal sealed class DuplicateSymbolDialog : ModalDialog
         }
 
         EndDialog();
-        return modified;
+        return result;
     }
 
     private EditableSymbolProject? _projectToCopyTo;

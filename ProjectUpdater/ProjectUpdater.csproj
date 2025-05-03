@@ -1,17 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(SolutionDir)/Tixl.props" />
+  <PropertyGroup>
+    <TargetFramework>$(TixlNetFrameworkVersion)</TargetFramework>
+    <VersionPrefix>$(TixlVersion)</VersionPrefix>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
 
-    <PropertyGroup>
-        <TargetFramework>net9.0-windows</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.CodeDom" Version="8.0.0" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="System.CodeDom" Version="8.0.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Core\Core.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj" />
+  </ItemGroup>
 
 </Project>

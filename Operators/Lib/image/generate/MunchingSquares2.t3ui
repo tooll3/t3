@@ -10,13 +10,6 @@
       }
     },
     {
-      "InputId": "2469daf6-5bdd-4c0a-bf1b-4a1fb1161dd8"/*FxConstant*/,
-      "Position": {
-        "X": 229.26743,
-        "Y": 599.64276
-      }
-    },
-    {
       "InputId": "24dd4192-a1e8-4327-ab8e-88c1a34ef9b1"/*Stretch*/,
       "Position": {
         "X": 240.32207,

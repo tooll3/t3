@@ -1,8 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
+    <Import Project="$(SolutionDir)/Tixl.props" />
     <PropertyGroup>
+        <TargetFramework>$(TixlNetFrameworkVersion)</TargetFramework>
+        <VersionPrefix>$(TixlVersion)</VersionPrefix>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net9.0-windows</TargetFramework>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <StartupObject>T3.Editor.Program</StartupObject>
         <ApplicationIcon>..\Resources\images\editor\t3.ico</ApplicationIcon>
@@ -12,10 +13,30 @@
         <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
         <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU</Platforms>
-        <VersionPrefix>3.9.1</VersionPrefix>
-        <LangVersion>default</LangVersion>
-        <Version>3.10.6</Version>
+        <AssemblyName>TiXL</AssemblyName>
+        <Title>TiXL</Title>
+        <Authors>TiXL Community</Authors>
+        <Description>Open source Motion GFX</Description>
+        <Copyright>2012-2025 TiXL Community</Copyright>
+        <PackageProjectUrl>https://tixl.app</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/tooll3/t3?tab=MIT-1-ov-file#readme</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/tooll3/t3</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
         <!-- <ApplicationManifest>app.manifest</ApplicationManifest> -->
+
+        <!-- <Authors>Tooll3</Authors>
+    <Owners>Tooll3</Owners>
+    <Company>Tooll3</Company>
+    <Copyright>Copyright (c) 2013-2025 Tooll3</Copyright>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <DefaultLanguage>en-US</DefaultLanguage> -->
+
+        <!-- <PackageIconUrl>https://tooll.io/images/T3-logo.png</PackageIconUrl>
+    <PackageLicenseUrl>https://github.com/tooll3/t3?tab=MIT-1-ov-file#readme</PackageLicenseUrl>
+    <PackageProjectUrl>http://www.tooll.io</PackageProjectUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>Tooll3</PackageTags>
+    <PackageOutputPath>$(SolutionDir)packages\$(Configuration)</PackageOutputPath> -->
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -54,7 +75,8 @@
 
 
     <!-- ======================= Native Dependencies =========================== -->
-    <!--This copies all files in the `dependencies` folder *directly* into the output directory-->
+    <!--This
+    copies all files in the `dependencies` folder *directly* into the output directory-->
     <ItemGroup>
         <Content Include="../Dependencies/**/*" Visible="false">
             <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
@@ -65,7 +87,8 @@
 
 
     <!-- ======================= Defaults =========================== -->
-    <!--This copies all files in the `.Defaults` folder into the output/.t3 folder-->
+    <!--This
+    copies all files in the `.Defaults` folder into the output/.t3 folder-->
     <ItemGroup>
         <DefaultUserConfigs Include="../.Defaults/**/*" />
     </ItemGroup>
@@ -93,7 +116,8 @@
     <!-- ===========================//=============================== -->
 
     <!-- ===================== Define build output paths ==================== -->
-    <!-- This creates a local variable for us to target the right build version based on the default paths associated with Debug/Release builds, --> 
+    <!-- This creates a local variable for us to target the right build version based on the default
+    paths associated with Debug/Release builds, -->
     <!-- along with the target framework (e.g. net8.0-windows, net8.0, etc) -->
     <PropertyGroup>
         <RelativeBuildFolder>bin/$(Configuration)/$(TargetFramework)</RelativeBuildFolder>
@@ -117,7 +141,8 @@
 
     <!-- ======================== Operator Packages ========================== -->
     <!-- This copies built-in operator projects into the output directory -->
-    <!-- There might be a better (and less manual) way to do this, but this is the best we have right now. -->
+    <!-- There might be a better (and less manual) way to do this, but this is the best we have
+    right now. -->
     <Target Name="CopyLibs" AfterTargets="AfterBuild" Condition=" '$(Configuration)' == 'Release' ">
 
         <PropertyGroup>
@@ -127,9 +152,11 @@
         </PropertyGroup>
 
         <ItemGroup>
-            <!-- This is a list of all the built-in operator projects. 'Include' refers to project directory, 'SubFolder' to export subfolder -->
+            <!-- This is a list of all the built-in operator projects. 'Include' refers to project
+            directory, 'SubFolder' to export subfolder -->
             <Lib Include="$(Ops)/lib/$(RelativeBuildFolder)/**" SubFolder="lib" />
-            <TypeOperators Include="$(Ops)/TypeOperators/$(RelativeBuildFolder)/**" SubFolder="TypeOperators"/>
+            <TypeOperators Include="$(Ops)/TypeOperators/$(RelativeBuildFolder)/**"
+                SubFolder="TypeOperators" />
             <LibEditor Include="$(Ops)/LibEditor/$(RelativeBuildFolder)/**" SubFolder="LibEditor" />
             <Examples Include="$(Ops)/examples/$(RelativeBuildFolder)/**" SubFolder="examples" />
             <Unsplash Include="$(Ops)/unsplash/$(RelativeBuildFolder)/**" SubFolder="unsplash" />
@@ -138,7 +165,8 @@
         </ItemGroup>
 
         <!-- Copy Dlls and symbols using the items and subfolders defined above -->
-        <Copy SourceFiles="@(Lib);@(TypeOperators);@(LibEditor);@(Examples);@(Unsplash);@(Ndi);@(pixtur)"
+        <Copy
+            SourceFiles="@(Lib);@(TypeOperators);@(LibEditor);@(Examples);@(Unsplash);@(Ndi);@(pixtur)"
             DestinationFolder="$(ExportFolder)/%(SubFolder)/%(RecursiveDir)"
             SkipUnchangedFiles="true"
             UseHardlinksIfPossible="true" />

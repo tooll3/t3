@@ -59,6 +59,31 @@ internal sealed partial class ProjectView
         }
 
         /// <summary>
+        /// After recompilation (e.g. after adding a new parameter) the Instance can't be
+        /// inferred from the parent because it has been discarded and the parent has no
+        /// more instances of self. This would lead to an exception in the Instance property.
+        ///
+        /// Because we want the Instance to be not-null, testing this with the try catch is
+        /// somewhat difficult. This is a work-around, but there are probably better ways to
+        /// do that. 
+        /// </summary>
+        public bool IsValid
+        {
+            get
+            {
+                try
+                {
+                    return Instance != null!;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+        
+
+        /// <summary>
         /// Returns the instance this composition refers to
         /// </summary>
         /// <exception cref="Exception"></exception>
@@ -81,6 +106,11 @@ internal sealed partial class ProjectView
                 if (!SymbolRegistry.TryGetSymbol(_parentSymbolId!.Value, out var parentSymbol))
                 {
                     throw new Exception($"Could not find parent symbol with id {_parentSymbolId}");
+                }
+
+                if (!parentSymbol.InstancesOfSelf.Any())
+                {
+                    throw new Exception($"Could not find any instances parent symbol with id {_parentSymbolId}");
                 }
 
 

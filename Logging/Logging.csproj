@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
+    <Import Project="$(SolutionDir)/Tixl.props" />
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>$(TixlNetCoreFrameworkVersion)</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>T3.Core.Logging</RootNamespace>

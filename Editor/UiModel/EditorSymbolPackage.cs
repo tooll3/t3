@@ -63,7 +63,7 @@ internal class EditorSymbolPackage : SymbolPackage
         }
         else
         {
-            Log.Error($"No file path handler found for {guid}");
+            Log.Error($"No file path handler found for {guid} / '{path}'");
         }
     }
 

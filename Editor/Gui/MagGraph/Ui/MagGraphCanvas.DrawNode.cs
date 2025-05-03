@@ -606,13 +606,13 @@ internal sealed partial class MagGraphCanvas
                     }
                 }
 
-                var isPotentialConnectionStartDropTarget = _context.StateMachine.CurrentState == GraphStates.DragConnectionEnd
+                var isPotentialConnectionEndDropTarget = _context.StateMachine.CurrentState == GraphStates.DragConnectionEnd
                                                            && _context.DraggedPrimaryOutputType == inputAnchor.ConnectionType;
 
                 if (isMultiInput)
                 {
                     var isConnected = inputAnchor.InputLine.ConnectionIn != null;
-                    if (isPotentialConnectionStartDropTarget)
+                    if (isPotentialConnectionEndDropTarget)
                     {
                         fillColor = ColorVariations.Highlight.Apply(type2UiProperties.Color);
                         DrawMultiInputIndicator(item, inputAnchor.SlotId, inputAnchor.InputLine.MultiInputIndex, drawList, inputAnchor.PositionOnCanvas,
@@ -635,7 +635,7 @@ internal sealed partial class MagGraphCanvas
                 else
                 {
                     // Register for input snapping...
-                    if (!isAlreadyUsed && isPotentialConnectionStartDropTarget && item != _context.ActiveItem)
+                    if (!isAlreadyUsed && isPotentialConnectionEndDropTarget && item != _context.ActiveItem)
                     {
                         fillColor = ColorVariations.Highlight.Apply(type2UiProperties.Color).Fade(Blink);
                         InputSnapper.RegisterAsPotentialTargetInput(item, center, inputAnchor.SlotId);
@@ -675,10 +675,22 @@ internal sealed partial class MagGraphCanvas
             // ... on the right
             else
             {
+                var hasOutputSnappedConnection = false;
+                foreach (var c in item.OutputLines[outputAnchor.OutputLineIndex].ConnectionsOut)
+                {
+                    if (c.IsSnapped && c.Style is MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal 
+                            or MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal)
+                    {
+                        hasOutputSnappedConnection = true;
+                        break;
+                    } 
+                }
+                
                 // Register for output snapping...
                 isPotentialConnectionStartDropTarget = _context.StateMachine.CurrentState == GraphStates.DragConnectionBeginning
                                                        && _context.DraggedPrimaryOutputType == outputAnchor.ConnectionType
-                                                       && outputAnchor.SnappedConnectionHash == MagGraphItem.FreeAnchor;
+                                                       && !hasOutputSnappedConnection;
+                                                       //&& outputAnchor.SnappedConnectionHash == MagGraphItem.FreeAnchor;
 
                 if (isPotentialConnectionStartDropTarget)
                 {

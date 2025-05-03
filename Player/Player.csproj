@@ -24,7 +24,8 @@
         <PackageReference Include="System.Runtime.Serialization.Formatters" Version="9.0.4" />
     </ItemGroup>
 
-    <!--This copies all files in the `dependencies` folder *directly* into the output directory-->
+    <!--This
+    copies all files in the `dependencies` folder *directly* into the output directory-->
     <ItemGroup>
         <Content Include="../Dependencies/**/*" Visible="false">
             <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>

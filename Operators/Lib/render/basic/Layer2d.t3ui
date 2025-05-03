@@ -21,7 +21,7 @@
     },
     {
       "InputId": "2a95ac54-5ef7-4d3c-a90b-ecd5b422bddc"/*Texture*/,
-      "Relevancy": "Relevant",
+      "Relevancy": "Required",
       "Position": {
         "X": -13.199188,
         "Y": 1089.728
