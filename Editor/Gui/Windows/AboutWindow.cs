@@ -11,22 +11,9 @@ namespace T3.Editor.Gui.Windows;
 
 internal sealed class AboutWindow : Window
 {
-    private readonly List<(string Label, string Url)> _helpLinks =
-    [
-        ("Website", "https://tixl.app"),
-        ("Wiki", "https://github.com/tooll3/t3/wiki"),
-    ];
-
-    private readonly List<(string Label, string Url)> _sourceLinks =
-    [
-        ("Github", "https://github.com/tooll3/t3")
-    ];
-
-    private string _systemInfo = string.Empty; // Store system info for display
-
     internal AboutWindow()
     {
-        Config.Title = "About & Help";
+        Config.Title = "About TiXL";
     }
 
     protected override void DrawContent()
@@ -40,14 +27,25 @@ internal sealed class AboutWindow : Window
                          | ImGuiWindowFlags.NoBackground
                          | ImGuiWindowFlags.AlwaysUseWindowPadding);
 
-        FormInputs.AddSectionHeader("TiXL");
-        ImGui.TextColored(new Vector4(1.0f, 0.2f, 0.55f, 1.0f), "v " + Program.VersionText);
-        ImGui.PushFont(Fonts.FontSmall);
+        FormInputs.AddSectionHeader("TiXL ");
+        ImGui.SameLine();
+        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextDisabled.Rgba);
+        
+        FormInputs.AddSectionHeader("v." + Program.VersionText);
+        ImGui.PopStyleColor();
+        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+        ImGui.TextWrapped($"{GetIdeName()}");
+        ImGui.TextWrapped($"{DateTime.Now}");
+        ImGui.PopStyleColor();
+        FormInputs.AddVerticalSpace(10);
+        ImGui.Separator();
+        FormInputs.AddVerticalSpace(10);
+        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextDisabled.Rgba);
+        FormInputs.AddSectionHeader("System Information");
+        ImGui.PopStyleColor();
         FormInputs.AddVerticalSpace(5);
         ImGui.TextWrapped("MIT license");
-        FormInputs.AddVerticalSpace(5);
-        ImGui.Separator();
-        FormInputs.AddVerticalSpace(5);
+        
 
         
 
@@ -88,8 +86,8 @@ internal sealed class AboutWindow : Window
         ImGui.Separator();
         FormInputs.AddVerticalSpace(5);
 
-        
         ImGui.TextWrapped("Help:");
+       
         ImGui.SameLine();
         DrawLinkButtons(_helpLinks);
 
@@ -102,7 +100,7 @@ internal sealed class AboutWindow : Window
         ImGui.SameLine();
         DrawLinkButtons(_sourceLinks);
 
-        ImGui.PopFont();
+       
         ImGui.EndChild();
         ImGui.PopStyleVar();
     }
@@ -154,29 +152,34 @@ internal sealed class AboutWindow : Window
             // TiXL version
             systemInfo.AppendLine($"TiXL version: {Program.VersionText}");
 
+            // IDE name (only in Debug mode)
+            #if DEBUG
+            systemInfo.AppendLine($"IDE: {GetIdeName()}");
+            #endif
+
             // System language
-            var appLanguage = GetAppLanguage();
-            systemInfo.AppendLine($"Language: {appLanguage}");
+
+            systemInfo.AppendLine($"Language: {GetAppLanguage()}");
 
             // OS information
-            var osVersion = GetOperatingSystemInfo();
-            systemInfo.AppendLine($"OS: {osVersion}");
+            
+            systemInfo.AppendLine($"OS: {GetOperatingSystemInfo()}");
 
             // System language
-            var systemLanguage = GetSystemLanguage();
-            systemInfo.AppendLine($"System language: {systemLanguage}");
+            
+            systemInfo.AppendLine($"System language: {GetSystemLanguage()}");
 
             // .NET runtime version
-            var dotNetVersion = GetDotNetRuntimeVersion();
-            systemInfo.AppendLine($".NET runtime: {dotNetVersion}");
+            
+            systemInfo.AppendLine($".NET runtime: {GetDotNetRuntimeVersion()}");
 
             // .NET SDK version
-            var dotNetSdkVersion = GetDotNetSdkVersion();
-            systemInfo.AppendLine($".NET SDK: {dotNetSdkVersion}");
+            
+            systemInfo.AppendLine($".NET SDK: {GetDotNetSdkVersion()}");
 
             // GPU information
-            var gpuInfo = GetGpuInformation();
-            systemInfo.AppendLine($"GPU: {gpuInfo}");
+            
+            systemInfo.AppendLine($"GPU: {GetGpuInformation()}");
 
             _systemInfo = systemInfo.ToString();
         }
@@ -254,7 +257,7 @@ internal sealed class AboutWindow : Window
         return "Not found";
     }
 
-    private static string GetGpuInformation()
+    private static string GetGpuInformation(string infoType = "both")
     {
         var gpuList = new List<string>();
 
@@ -266,7 +269,14 @@ internal sealed class AboutWindow : Window
                 {
                     var name = obj["Name"]?.ToString() ?? "Unknown";
                     var driverVersion = obj["DriverVersion"]?.ToString() ?? "Unknown";
-                    var gpuDetails = $"{name}\nDriver version: {driverVersion}";
+
+                    string gpuDetails = infoType.ToLower() switch
+                    {
+                        "name" => name,
+                        "driver" => driverVersion,
+                        _ => $"{name}\nDriver version: {driverVersion}" // Default/both case
+                    };
+
                     gpuList.Add(gpuDetails);
                 }
             }
@@ -280,9 +290,79 @@ internal sealed class AboutWindow : Window
 
         return "Unknown";
     }
+    private static string GetIdeName()
+    {
+        try
+        {
+            // Get the current process
+            var currentProcess = Process.GetCurrentProcess();
+
+            // Use WMI to find the parent process
+            var query = $"SELECT ParentProcessId FROM Win32_Process WHERE ProcessId = {currentProcess.Id}";
+            using var searcher = new ManagementObjectSearcher(query);
+            var result = searcher.Get().Cast<ManagementObject>().FirstOrDefault();
+
+            if (result != null)
+            {
+                var parentProcessId = Convert.ToInt32(result["ParentProcessId"]);
+                using var parentProcess = Process.GetProcessById(parentProcessId);
+                var processName = parentProcess.ProcessName.ToLower();
+
+                // Map common IDE process names to user-friendly names
+                return processName switch
+                {
+                    "devenv" => "Visual Studio",
+                    "vsdebugconsole" => "Visual Studio",
+                    "rider64" => "JetBrains Rider",
+                    "vshost" => "Visual Studio (Debug Host)",
+                    "msvsmon" => "Visual Studio Remote Debugger",
+                    _ => parentProcess.ProcessName // Fallback to the raw process name
+                };
+            }
+        }
+        catch (Exception e)
+        {
+            Log.Warning($"Failed to get IDE name: {e.Message}");
+        }
+
+        return "Unknown";
+    }
+
+    private static void DrawInformation(List<(string Label, string detail)> SystemInformation)
+    {
+
+    }
 
     internal override List<Window> GetInstances()
     {
         return [];
     }
+
+    private List<(string Label, string Detail)> _systemInformation =
+        [
+            ("OS", $"{GetOperatingSystemInfo()}"),
+            ("Language", $"{GetAppLanguage()}" ),
+            ("System language", $"{GetSystemLanguage()}"),
+            ("Keyboard layout", $"{CultureInfo.CurrentUICulture.KeyboardLayoutId}"),
+            (".NET runtime", $"{GetDotNetRuntimeVersion()}"),
+            (".NET SDK", $"{GetDotNetSdkVersion()}"),
+            ("GPU", $"{GetGpuInformation("name")}"),
+            ("Driver version", $"{GetGpuInformation("driver")}"),
+
+
+
+        ];
+
+    private readonly List<(string Label, string Url)> _helpLinks =
+    [
+        ("Website", "https://tixl.app"),
+        ("Wiki", "https://github.com/tooll3/t3/wiki"),
+    ];
+
+    private readonly List<(string Label, string Url)> _sourceLinks =
+    [
+        ("Github", "https://github.com/tooll3/t3")
+    ];
+
+    private string _systemInfo = string.Empty; // Store system info for display
 }
