@@ -35,4 +35,6 @@ public static class FileLocations
                      
                      //, Process.GetCurrentProcess().ProcessName
                      );
+    
+    public static readonly string DefaultProjectFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), AppSubFolder);
 }

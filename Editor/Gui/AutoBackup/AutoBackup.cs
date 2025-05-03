@@ -53,15 +53,28 @@ internal static class AutoBackup
 
         var zipFilePath = Path.Join(BackupDirectory, $"#{index:D5}-{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.zip");
 
+        var excludedDirs = new[] { "bin", "obj", ".git", "Render" };
         try
         {
             using var archive = ZipFile.Open(zipFilePath, ZipArchiveMode.Create);
-
+            
             foreach (var sourcePath in SourcePaths)
             {
+                if (!Directory.Exists(sourcePath))
+                    continue;
+
+                var projectRootName = Path.GetFileName(sourcePath);
+
                 foreach (var filepath in Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories))
                 {
-                    archive.CreateEntryFromFile(filepath, filepath, CompressionLevel.Fastest);
+                    var relativeUnderProject = filepath[sourcePath.Length..].TrimStart(Path.DirectorySeparatorChar);
+                    var relativePath = Path.Combine(projectRootName, relativeUnderProject);
+
+                    var parts = relativePath.Split(Path.DirectorySeparatorChar);
+                    if (parts.Any(part => excludedDirs.Contains(part, StringComparer.OrdinalIgnoreCase)))
+                        continue;
+
+                    archive.CreateEntryFromFile(filepath, relativePath, CompressionLevel.Fastest);
                 }
             }
         }
@@ -284,13 +297,14 @@ internal static class AutoBackup
 
     private static readonly Stopwatch _stopwatch = Stopwatch.StartNew();
     private static bool _isSaving;
-    internal static string BackupDirectory => Path.Combine(FileLocations.SettingsPath, "backup");
+    private static string BackupDirectory => Path.Combine(FileLocations.SettingsPath, "Backup");
 
     private static string[] SourcePaths
     {
         get
         {
             return EditableSymbolProject.AllProjects
+                                        .Where(x => x.HasHome)
                                         .Select(x => x.Folder)
                                         .Concat(_nonProjectSourcePaths)
                                         .ToArray();
@@ -299,7 +313,7 @@ internal static class AutoBackup
 
     private static readonly string[] _nonProjectSourcePaths =
         {
-            ThemeHandling.ThemeFolder,
-            LayoutHandling.LayoutFolder
+            //ThemeHandling.ThemeFolder,
+            //LayoutHandling.LayoutFolder
         };
 }
