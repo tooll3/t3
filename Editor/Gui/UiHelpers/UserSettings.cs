@@ -167,7 +167,7 @@ public sealed class UserSettings : Settings<UserSettings.ConfigData>
         return !string.IsNullOrEmpty(Config.UserName) && Config.UserName != UndefinedUserName;
     }
 
-    private const string UndefinedUserName = "unknown";
+    internal const string UndefinedUserName = "unknown";
 
     internal static Guid GetLastOpenOpForWindow(string windowTitle)
     {
