@@ -1,4 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(SolutionDir)/Tixl.props" />
   <PropertyGroup>
     <TargetFramework>net9.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -9,7 +10,7 @@
     <RootNamespace>Lib.Editor</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
     <HomeGuid>00000000-0000-0000-0000-000000000000</HomeGuid>
-    <EditorVersion>4.0.0</EditorVersion>
+    <EditorVersion>$(TixlVersion)</EditorVersion>
     <IsEditorOnly>true</IsEditorOnly>
     <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
   </PropertyGroup>
@@ -18,7 +19,8 @@
     <ProjectReference Include="..\..\Editor\Editor.csproj" Private="false" PrivateAssets="all" />
     <ProjectReference Include="..\..\SystemUi\SystemUi.csproj" />
     <ProjectReference Include="..\lib\Lib.csproj" Private="false" PrivateAssets="all" />
-    <ProjectReference Include="..\TypeOperators\TypeOperators.csproj" Private="false" PrivateAssets="all" />
+    <ProjectReference Include="..\TypeOperators\TypeOperators.csproj" Private="false"
+      PrivateAssets="all" />
     <ProjectReference Include="..\..\Logging\Logging.csproj" Private="false" PrivateAssets="all" />
   </ItemGroup>
   <!-- Include Resources/** into output/Resources -->
@@ -68,6 +70,7 @@
         }
       </OperatorPackageInfoJson>
     </PropertyGroup>
-    <WriteLinesToFile File="$(OutputPath)/OperatorPackage.json" Lines="$(OperatorPackageInfoJson)" Overwrite="True" Encoding="UTF-8" />
+    <WriteLinesToFile File="$(OutputPath)/OperatorPackage.json" Lines="$(OperatorPackageInfoJson)"
+      Overwrite="True" Encoding="UTF-8" />
   </Target>
 </Project>
