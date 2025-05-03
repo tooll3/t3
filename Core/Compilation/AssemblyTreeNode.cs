@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
+using System.Threading;
 using T3.Core.Logging;
 
 namespace T3.Core.Compilation;
@@ -16,23 +17,23 @@ internal sealed class AssemblyTreeNode
     public readonly AssemblyName Name;
     public readonly string NameStr;
 
-    private bool _loadedDependencies = false;
-
     private readonly List<AssemblyTreeNode> _references = [];
-    private readonly List<string> _visibleDirectories = [];
-    private readonly List<DllReference> _visiblePaths = [];
 
-    private readonly object _assemblyLock = new();
+    public readonly AssemblyLoadContext LoadContext;
+
+    private readonly Lock _assemblyLock = new();
 
     private readonly record struct DllReference(string Path, string Name, AssemblyName AssemblyName);
 
     private List<DllReference>? _unreferencedDlls;
+    
+    private readonly Lock _unreferencedLock = new();
 
     private List<DllReference> UnreferencedDlls
     {
         get
         {
-            lock (_assemblyLock)
+            lock (_unreferencedLock)
             {
                 if (_unreferencedDlls is not null)
                     return _unreferencedDlls;
@@ -43,12 +44,19 @@ internal sealed class AssemblyTreeNode
                 foreach (var file in Directory.GetFiles(directory!, "*.dll", SearchOption.AllDirectories))
                 {
                     bool skip = false;
-                    foreach (var dep in _visiblePaths)
+                    foreach (var dep in _references)
                     {
-                        if (file == dep.Path)
+                        try
                         {
-                            skip = true;
-                            break;
+                            if (file == dep.Assembly.Location)
+                            {
+                                skip = true;
+                                break;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error($"{_parentName}: Exception getting assembly location: {e}");
                         }
                     }
 
@@ -68,7 +76,7 @@ internal sealed class AssemblyTreeNode
                     var reference = new DllReference(file, assemblyName.GetNameSafe(), assemblyName);
                     _unreferencedDlls.Add(reference);
                 }
-                
+
                 return _unreferencedDlls;
             }
         }
@@ -77,213 +85,104 @@ internal sealed class AssemblyTreeNode
     private readonly string _parentName;
 
     // warning : not thread safe, must be wrapped in a lock around _assemblyLock
-    public AssemblyTreeNode(Assembly assembly, string parent)
+    public AssemblyTreeNode(Assembly assembly, AssemblyLoadContext parent) // todo - 2-way dependency is not pretty
     {
         Assembly = assembly;
         Name = assembly.GetName();
         NameStr = Name.GetNameSafe();
-        _parentName = parent;
+
+        _parentName = parent.Name!;
+        LoadContext = parent;
 
         // if (debug && !node.NameStr.StartsWith("System")) // don't log system assemblies - too much log spam for things that are probably not error-prone
         //Log.Debug($"{parent}: Loaded assembly {NameStr} from {assembly.Location}");
     }
 
-    private void LoadDependencies(AssemblyLoadContext ctx)
+    private DllReference Reference => new(Assembly.Location, NameStr, Name);
+
+    // this should only be called externally
+    /// <summary>
+    /// This should only be called externally or on non-root nodes of the same context
+    /// It establishes a relationship between the assemblies and returns true
+    /// if a dependency is formed between separate load contexts
+    /// </summary>
+    /// <param name="child"></param>
+    /// <returns></returns>
+    public bool AddReferenceTo(AssemblyTreeNode child)
     {
         lock (_assemblyLock)
         {
-            if (_loadedDependencies)
-                throw new InvalidOperationException($"{_parentName}: Dependencies already loaded");
-
-            var directory = Path.GetDirectoryName(Assembly.Location);
-            if (directory == null)
-                throw new InvalidOperationException($"{_parentName}: Could not get directory for {Assembly.Location}");
-
-            var deps = Assembly.GetReferencedAssemblies();
-
-            foreach (var dep in deps)
+            if (_references.Contains(child))
             {
-                var path = Path.Combine(directory, dep.GetNameSafe());
+                return false;
+            }
 
-                Assembly asm;
-
-                try
+            lock (_unreferencedLock)
+            {
+                if (UnreferencedDlls.Contains(child.Reference))
                 {
-                    if (!File.Exists(path))
-                    {
-                        continue;
-                    }
-
-                    asm = ctx.LoadFromAssemblyPath(path);
+                    UnreferencedDlls.Remove(child.Reference);
                 }
-                catch (FileNotFoundException)
-                {
-                    Log.Warning($"{_parentName}: Could not find assembly `{path}`");
-                    continue;
-                }
-                catch (Exception e)
-                {
-                    Log.Error($"{_parentName}: Failed to load assembly from `{path}`\n{e}");
-                    continue;
-                }
-
-                AddReferenceTo(new AssemblyTreeNode(asm, ctx.Name ?? "unknown context"));
             }
 
-            _loadedDependencies = true;
-        }
-    }
-
-    public IReadOnlyList<string> VisibleDirectories
-    {
-        get
-        {
-            if (_visibleDirectories.Count > 0)
-            {
-                return _visibleDirectories;
-            }
-
-            foreach (var path in DependencyPaths)
-            {
-                var directory = Path.GetDirectoryName(path.Path)!;
-                if (!_visibleDirectories.Contains(directory)) // avoid duplicates for lookups
-                    _visibleDirectories.Add(directory);
-            }
-
-            return _visibleDirectories;
-        }
-    }
-
-    private DllReference Reference => new(Assembly.Location, NameStr, Name);
-
-    private List<DllReference> DependencyPaths
-    {
-        get
-        {
-            if (_visiblePaths.Count > 0)
-                return _visiblePaths;
-
-            _visiblePaths.Add(Reference);
-
-            foreach (var r in _references)
-            {
-                _visiblePaths.Add(r.Reference);
-            }
-
-            return _visiblePaths;
-        }
-    }
-
-    public bool AddReferenceTo(AssemblyTreeNode child)
-    {
-        if (_references.Contains(child))
-        {
-            return false;
+            _references.Add(child);
         }
 
-        if (UnreferencedDlls.Contains(child.Reference))
-        {
-            UnreferencedDlls.Remove(child.Reference);
-        }
-
-        _references.Add(child);
-        _visiblePaths.Clear(); // invalidate path list
-        _visibleDirectories.Clear(); // invalidate visible directories list
         return true;
     }
 
-    private IEnumerable<AssemblyTreeNode> GetAssemblyNodes(AssemblyLoadContext ctx)
-    {
-        yield return this;
-
-        lock (_assemblyLock)
-        {
-            if (!_loadedDependencies)
-            {
-                try
-                {
-                    LoadDependencies(ctx);
-                }
-                catch (Exception e)
-                {
-                    Log.Error($"{_parentName}: Failed to load dependencies for {NameStr}\n{e}");
-                }
-            }
-        }
-
-        foreach (var reference in _references)
-        {
-            foreach (var node in reference.GetAssemblyNodes(ctx))
-            {
-                yield return node;
-            }
-        }
-    }
-
-    public bool Matches(string nameToSearchFor)
-    {
-        var files = Directory.GetFiles(Path.GetDirectoryName(Assembly.Location)!, "*.dll");
-        foreach (var file in files)
-        {
-            AssemblyName assemblyName;
-            try
-            {
-                assemblyName = AssemblyName.GetAssemblyName(file);
-            }
-            catch (Exception e)
-            {
-                //Log.Error($"{_parentName} ({NameStr}): Failed to get assembly name for {file}\n{e}");
-                continue;
-            }
-
-            Log.Debug($"{_parentName} ({NameStr}): Located assembly {assemblyName.Name} in {file}");
-
-            var reference = new DllReference(file, assemblyName.GetNameSafe(), assemblyName);
-            if (!_visiblePaths.Contains(reference))
-                _visiblePaths.Add(reference);
-        }
-
-        return NameStr == nameToSearchFor;
-    }
-
-    public bool TryFindUnreferenced(string nameToSearchFor, AssemblyLoadContext ctx, [NotNullWhen(true)] out AssemblyTreeNode? assembly)
+    public bool TryFindUnreferenced(string nameToSearchFor, [NotNullWhen(true)] out AssemblyTreeNode? assembly)
     {
         // check unreferenced dlls
-        foreach (var node in GetAssemblyNodes(ctx))
+        lock (_assemblyLock)
         {
-            foreach (var dir in node.UnreferencedDlls)
+            lock (_unreferencedLock)
             {
-                if (dir.Name != nameToSearchFor)
-                    continue;
-
-                try
+                foreach (var dll in UnreferencedDlls)
                 {
-                    if (!File.Exists(dir.Path))
-                    {
-                        Log.Warning($"{_parentName}: Could not find assembly `{dir.Path}`");
+                    if (dll.Name != nameToSearchFor)
                         continue;
+
+                    try
+                    {
+                        if (!File.Exists(dll.Path))
+                        {
+                            Log.Warning($"{_parentName}: Could not find assembly `{dll.Path}`");
+                            continue;
+                        }
+
+                        var newAssembly = LoadContext.LoadFromAssemblyPath(dll.Path);
+                        assembly = new AssemblyTreeNode(newAssembly, LoadContext);
+                        AddReferenceTo(assembly);
+                        return true;
                     }
-
-                    var newAssembly = ctx.LoadFromAssemblyPath(dir.Path);
-                    var name = ctx.Name ?? "unknown context";
-                    var newNode = new AssemblyTreeNode(newAssembly, $"{name} -> {node.NameStr}");
-                    node.AddReferenceTo(newNode);
-
-                    assembly = newNode;
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    Log.Error($"{_parentName}: Exception loading assembly: {e}");
+                    catch (Exception e)
+                    {
+                        Log.Error($"{_parentName}: Exception loading assembly: {e}");
+                    }
                 }
             }
         }
+
+        /*lock (_assemblyLock)
+        {
+            // check those of our references
+            foreach (var node in _references)
+            {
+                if (node.LoadContext != LoadContext)
+                    continue;
+
+                // search recursively
+                if (node.TryFindUnreferenced(nameToSearchFor, out assembly))
+                    return true;
+            }
+        }*/
 
         assembly = null;
         return false;
     }
 
-    public bool TryFind(string nameToSearchFor, AssemblyLoadContext ctx, [NotNullWhen(true)] out AssemblyTreeNode? assembly)
+    public bool TryFindExisting(string nameToSearchFor, [NotNullWhen(true)] out AssemblyTreeNode? assembly)
     {
         if (NameStr == nameToSearchFor)
         {
@@ -291,20 +190,32 @@ internal sealed class AssemblyTreeNode
             return true;
         }
 
-        var nodes = GetAssemblyNodes(ctx).ToArray();
-
-        foreach (var node in nodes)
+        lock (_assemblyLock)
         {
-            if (node.NameStr == nameToSearchFor)
+            foreach (var node in _references)
             {
-                assembly = node;
-                return true;
+                if (node.TryFindExisting(nameToSearchFor, out assembly))
+                    return true;
             }
         }
 
-      
-
         assembly = null;
         return false;
+    }
+
+    public void Unload()
+    {
+        Log.Debug($"{_parentName}: Unloading assembly {NameStr}");
+        lock (_assemblyLock)
+        {
+            foreach (var node in _references.Where(x => x.LoadContext == LoadContext))
+            {
+                node.Unload();
+            }
+
+            _references.Clear();
+            lock (_assemblyLock)
+                _unreferencedDlls = null;
+        }
     }
 }

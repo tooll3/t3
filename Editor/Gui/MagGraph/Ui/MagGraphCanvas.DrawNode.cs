@@ -147,7 +147,8 @@ internal sealed partial class MagGraphCanvas
         SymbolUi.Child.CustomUiResult customUiResult = SymbolUi.Child.CustomUiResult.None;
         if (item.Variant == MagGraphItem.Variants.Operator)
         {
-            customUiResult = DrawCustomUi(item.Instance, drawList, new ImRect(pMinVisible + Vector2.One, pMaxVisible - Vector2.One), Vector2.One * CanvasScale);
+            customUiResult 
+                = DrawCustomUi(item.Instance, drawList, new ImRect(pMinVisible + Vector2.One, pMaxVisible - Vector2.One), Vector2.One * CanvasScale);
             if ((customUiResult & SymbolUi.Child.CustomUiResult.IsActive) != 0)
             {
                 context.ItemWithActiveCustomUi = item;

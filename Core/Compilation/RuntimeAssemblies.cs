@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Loader;
 using T3.Core.Logging;
 using T3.Serialization;
 
@@ -25,8 +26,6 @@ public static class RuntimeAssemblies
 
     public const string NetVersion = "9.0";
     
-    public static readonly IReadOnlyList<Assembly> CoreAssemblies;
-    
     static RuntimeAssemblies()
     {
         SetEnvironmentVariable(EnvironmentVariableName, CoreDirectory);
@@ -41,8 +40,6 @@ public static class RuntimeAssemblies
                 Assembly.Load(referencedAssembly);
             }
         }
-
-        CoreAssemblies = AppDomain.CurrentDomain.GetAssemblies();
     }
 
     private static void SetEnvironmentVariable(string envVar, string envValue)
@@ -139,7 +136,6 @@ public static class RuntimeAssemblies
                                       {
                                           AssemblyName = assemblyName,
                                           Path = path,
-                                          IsEditorOnly = isEditorOnly
                                       };
 
         info = new AssemblyInformation(assemblyNameAndPath);
@@ -217,5 +213,4 @@ internal struct AssemblyNameAndPath
 {
     public AssemblyName AssemblyName;
     public string Path;
-    public bool IsEditorOnly;
 }

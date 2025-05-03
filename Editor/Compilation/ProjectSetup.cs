@@ -69,7 +69,7 @@ internal static partial class ProjectSetup
         symbolPackage.InitializeShaderLinting(ResourceManager.SharedShaderPackages);
     }
 
-    private static bool TryLoadProject(ProjectWithReleaseInfo release, bool forceRecompile, out PackageWithReleaseInfo? operatorPackage)
+    private static bool TryLoadProject(ProjectWithReleaseInfo release, bool forceRecompile, [NotNullWhen(true)] out PackageWithReleaseInfo? operatorPackage)
     {
         var csProj = release.CsProject!;
         csProj.RemoveOldBuilds(Compiler.BuildMode.Debug);
@@ -89,16 +89,8 @@ internal static partial class ProjectSetup
             return false;
         }
 
-        if (!csProj.Assembly!.IsEditorOnly)
-        {
-            var project = new EditableSymbolProject(csProj);
-            operatorPackage = new PackageWithReleaseInfo(project, release.ReleaseInfo!);
-        }
-        else
-        {
-            operatorPackage = null;
-        }
-
+        var project = new EditableSymbolProject(csProj);
+        operatorPackage = new PackageWithReleaseInfo(project, release.ReleaseInfo!);
         Log.Debug($"Loaded CSProj file {csProj.Name}");
         return true;
     }
@@ -119,58 +111,6 @@ internal static partial class ProjectSetup
         return true;
     }
 
-    #if DEBUG
-    #endif
-
-    private static void InitializeCustomUis(IReadOnlyList<AssemblyInformation> nonOperatorAssemblies)
-    {
-        if (nonOperatorAssemblies.Count == 0)
-            return;
-        
-        foreach(var assemblyInfo in nonOperatorAssemblies)
-        {
-            assemblyInfo.Unloaded += UnloadCustomUis;
-            assemblyInfo.Loaded += LoadCustomUis;
-        }
-    }
-
-    private static void LoadCustomUis(AssemblyInformation obj)
-    {
-        var types = obj.TypesInheritingFrom(typeof(IEditorUiExtension));
-        List<IEditorUiExtension> extensions = new();
-        foreach (var type in types)
-        {
-            var activated = obj.CreateInstance(type);
-            if (activated == null)
-            {
-                Log.Error($"Created null object for {type.Name}");
-                continue;
-            }
-
-            var extension = (IEditorUiExtension)activated;
-            extension.Initialize();
-            Log.Info($"Loaded UI initializer for {obj.Name}: {type.Name}");
-            extensions.Add(extension);
-        }
-        
-        if(extensions.Count == 0)
-            return;
-        
-        _uiInitializers.TryAdd(obj, extensions);
-    }
-
-    private static void UnloadCustomUis(AssemblyInformation obj)
-    {
-        if(!_uiInitializers.TryRemove(obj, out var extensions))
-            return;
-        
-        foreach (var extension in extensions)
-        {
-            extension.Uninitialize();
-        }
-        
-    }
-
     public static void DisposePackages()
     {
         var allPackages = SymbolPackage.AllPackages.ToArray();
@@ -182,8 +122,6 @@ internal static partial class ProjectSetup
     {
         UpdateSymbolPackages(ActivePackages[package.GetKey()]);
     }
-
-    private readonly record struct DependentPackageUpdate(AssemblyInformation Updated, AssemblyInformation Dependent);
 
     private static void UpdateSymbolPackages(params PackageWithReleaseInfo[] packages)
     {
@@ -259,10 +197,7 @@ internal static partial class ProjectSetup
 
     private static readonly Dictionary<string, PackageWithReleaseInfo> ActivePackages = new();
     internal static readonly IEnumerable<SymbolPackage> AllPackages = ActivePackages.Values.Select(x => x.Package);
-    private static readonly List<AssemblyInformation> EditorOnlyPackages = [];
 
     private readonly record struct ProjectWithReleaseInfo(FileInfo ProjectFile, CsProjectFile? CsProject, ReleaseInfo? ReleaseInfo);
     private readonly record struct SymbolUiLoadInfo(SymbolUi[] NewlyLoaded, SymbolUi[] PreExisting);
-    private readonly record struct AssemblyConstructorInfo(AssemblyInformation AssemblyInformation, Type InstanceType);
-    private static readonly ConcurrentDictionary<AssemblyInformation, IReadOnlyList<IEditorUiExtension>> _uiInitializers = new();
 }

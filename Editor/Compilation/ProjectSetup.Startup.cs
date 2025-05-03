@@ -44,38 +44,32 @@ internal static partial class ProjectSetup
         #endif
 
         // todo: change to load CsProj files from specific directories and specific nuget packages from a package directory
-        ConcurrentBag<AssemblyInformation> nonOperatorAssemblies = [];
 
         #if !DEBUG
         // Load pre-built built-in packages as read-only
-        LoadBuiltInPackages(nonOperatorAssemblies);
+        LoadBuiltInPackages();
         #endif
 
         // Find project files
         var csProjFiles = FindCsProjFiles();
 
         // Load projects
-        LoadProjects(csProjFiles, nonOperatorAssemblies, forceRecompile, unsatisfiedProjects: out _, failedProjects: out _);
+        LoadProjects(csProjFiles, forceRecompile, unsatisfiedProjects: out _, failedProjects: out _);
 
         // Register UI types
         var allPackages = ActivePackages.Values
                                         .ToArray();
-
-        foreach (var assembly in nonOperatorAssemblies)
-        {
-            if (assembly.IsEditorOnly)
-            {
-                EditorOnlyPackages.Add(assembly);
-            }
-        }
         
-        InitializeCustomUis(EditorOnlyPackages);
-
         UiRegistration.RegisterUiTypes();
+        
+        foreach (var package in allPackages)
+        {
+            ((EditorSymbolPackage)package.Package).InitializeCustomUis();
+        }
 
         // Update all symbol packages
         UpdateSymbolPackages(allPackages);
-
+        
         // Initialize resources and shader linting
         foreach (var package in allPackages)
         {
@@ -98,7 +92,7 @@ internal static partial class ProjectSetup
         #endif
     }
 
-    private static void LoadBuiltInPackages(ConcurrentBag<AssemblyInformation> nonOperatorAssemblies)
+    private static void LoadBuiltInPackages()
     {
         var directory = Directory.CreateDirectory(CoreOperatorDirectory);
 
@@ -116,19 +110,12 @@ internal static partial class ProjectSetup
                             return;
                         }
 
-                        if (!assembly.IsEditorOnly)
-                        {
-                            AddToLoadedPackages(new PackageWithReleaseInfo(new EditorSymbolPackage(assembly), releaseInfo));
-                        }
-                        else
-                        {
-                            nonOperatorAssemblies.Add(assembly);
-                        }
+                        AddToLoadedPackages(new PackageWithReleaseInfo(new EditorSymbolPackage(assembly), releaseInfo));
                     });
     }
 
     [SuppressMessage("ReSharper", "OutParameterValueIsAlwaysDiscarded.Local")]
-    private static void LoadProjects(FileInfo[] csProjFiles, ConcurrentBag<AssemblyInformation> nonOperatorAssemblies, bool forceRecompile,
+    private static void LoadProjects(FileInfo[] csProjFiles, bool forceRecompile,
                                      out List<ProjectWithReleaseInfo> unsatisfiedProjects, out List<ProjectWithReleaseInfo> failedProjects)
     {
         // Load each project file and its associated assembly
@@ -168,7 +155,7 @@ internal static partial class ProjectSetup
                              })
                       .ToArray();
 
-        LoadProjects(nonOperatorAssemblies, releases, forceRecompile, out failedProjects, out unsatisfiedProjects);
+        LoadProjects(releases, forceRecompile, out failedProjects, out unsatisfiedProjects);
 
         foreach (var project in failedProjects)
         {
@@ -181,7 +168,7 @@ internal static partial class ProjectSetup
         }
     }
 
-    private static void LoadProjects(ConcurrentBag<AssemblyInformation> nonOperatorAssemblies, IReadOnlyCollection<ProjectWithReleaseInfo> releases,
+    private static void LoadProjects(IReadOnlyCollection<ProjectWithReleaseInfo> releases,
                                      bool forceRecompile,
                                      out List<ProjectWithReleaseInfo> failedProjects, out List<ProjectWithReleaseInfo> unsatisfiedProjects)
     {
@@ -229,7 +216,7 @@ internal static partial class ProjectSetup
         for (var index = unsatisfied.Count - 1; index >= 0; index--)
         {
             var project = unsatisfied[index];
-            if (!TryLoad(nonOperatorAssemblies, project, loadedOperatorPackages, forceRecompile))
+            if (!TryLoad(project, loadedOperatorPackages, forceRecompile))
             {
                 failed.Add(project);
                 unsatisfied.RemoveAt(index);
@@ -240,7 +227,7 @@ internal static partial class ProjectSetup
         failedProjects = failed;
         return;
 
-        static bool TryLoad(ConcurrentBag<AssemblyInformation> nonOperatorAssemblies, ProjectWithReleaseInfo release,
+        static bool TryLoad(ProjectWithReleaseInfo release,
                             List<PackageWithReleaseInfo> loadedOperatorPackages, bool forceRecompile)
         {
             if (!TryLoadProject(release, forceRecompile, out var operatorPackage))
@@ -248,15 +235,8 @@ internal static partial class ProjectSetup
                 return false;
             }
 
-            if (operatorPackage.HasValue) // won't have value if the assembly is a non-operator assembly
-            {
-                loadedOperatorPackages.Add(operatorPackage.Value);
-                AddToLoadedPackages(operatorPackage.Value);
-                return true;
-            }
-
-            var assembly = release.CsProject!.Assembly!;
-            nonOperatorAssemblies.Add(assembly);
+            loadedOperatorPackages.Add(operatorPackage.Value);
+            AddToLoadedPackages(operatorPackage.Value);
             return true;
         }
 
@@ -266,7 +246,7 @@ internal static partial class ProjectSetup
             {
                 var release = satisfied[i];
                 satisfied.RemoveAt(i);
-                if (!TryLoad(nonOperatorAssemblies, release, loadedOperatorPackages, forceRecompile))
+                if (!TryLoad(release, loadedOperatorPackages, forceRecompile))
                     failed.Add(release);
             }
         }
@@ -277,7 +257,7 @@ internal static partial class ProjectSetup
             {
                 var release = failed[i];
                 failed.RemoveAt(i);
-                if (!TryLoad(nonOperatorAssemblies, release, loadedOperatorPackages, forceRecompile))
+                if (!TryLoad(release, loadedOperatorPackages, forceRecompile))
                     failed.Add(release);
             }
         }

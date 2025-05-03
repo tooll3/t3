@@ -262,7 +262,7 @@ internal partial class EditableSymbolProject
 
         if (updated)
         {
-            UnregisterAllCustomUi();
+            UnregisterDescriptiveUis();
             AssemblyInformation.Unload();
         }
 

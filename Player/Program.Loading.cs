@@ -34,8 +34,7 @@ internal static partial class Program
                                                                               
                                                                               RuntimeAssemblies.TryLoadAssemblyInformation(file, false, out var info);
                                                                               return info;
-                                                                          })
-                                                                  .Where(info => info is { IsEditorOnly: false });
+                                                                          });
                                               }).ToArray();
         
         Log.Debug($"Finished loading {assemblies.Length} operator assemblies. Loading symbols...");

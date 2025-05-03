@@ -7,7 +7,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using T3.Core.Logging;
-using T3.Core.Model;
 
 namespace T3.Core.Compilation;
 
@@ -23,7 +22,11 @@ public sealed partial class AssemblyInformation
         Name = assemblyInfo.AssemblyName.Name ?? "Unknown Assembly Name";
         _assemblyName = assemblyInfo.AssemblyName;
         Directory = System.IO.Path.GetDirectoryName(assemblyInfo.Path)!;
-        IsEditorOnly = assemblyInfo.IsEditorOnly;
+        var loadContext = LoadContext;
+        if (loadContext == null)
+        {
+            Log.Error($"{Name} Failed to get assembly load context in constructor");
+        }
     }
 
     public readonly string Name;
@@ -42,7 +45,6 @@ public sealed partial class AssemblyInformation
     private readonly HashSet<string> _namespaces = [];
 
     internal bool ShouldShareResources;
-    public readonly bool IsEditorOnly;
 
     private T3AssemblyLoadContext? _loadContext;
 
@@ -50,7 +52,7 @@ public sealed partial class AssemblyInformation
 
     private static readonly Dictionary<string, Type> _empty = new();
 
-    private T3AssemblyLoadContext LoadContext
+    private T3AssemblyLoadContext? LoadContext
     {
         get
         {
@@ -59,7 +61,17 @@ public sealed partial class AssemblyInformation
                 if (_loadContext != null)
                     return _loadContext;
 
-                _loadContext = new T3AssemblyLoadContext(_assemblyName, Directory);
+                try
+                {
+                    _loadContext = new T3AssemblyLoadContext(_assemblyName, Directory);
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Failed to create assembly load context for {Name}\n{e.Message}\n{e.StackTrace}");
+                    _loadContext = null;
+                    return null;
+                }
+
                 _loadContext.UnloadTriggered += OnUnloadTriggered;
 
                 try
@@ -108,13 +120,13 @@ public sealed partial class AssemblyInformation
     {
         lock (_assemblyLock)
         {
-            if (_operatorTypeInfo.Count > 0)
+            var rootNode = LoadContext!.Root;
+            if (rootNode != null && _types != null)
             {
                 Log.Debug($"{Name}: Already loaded types");
                 return true;
             }
             
-            var rootNode = LoadContext.Root;
             if (rootNode == null)
             {
                 Log.Error($"Failed to get assembly for {Name}");
@@ -186,40 +198,6 @@ public sealed partial class AssemblyInformation
         return false;
     }
 
-    public bool DependsOn(PackageWithReleaseInfo package)
-    {
-        if (!TryGetReleaseInfo(out var releaseInfo))
-        {
-            Log.Error($"Failed to get release info for {Name}");
-            throw new InvalidOperationException($"Failed to get release info for {Name}");
-        }
-
-        // todo: this operator packages thing probably shouldnt be here - just assemblies.
-        // UNLESS types are shared? how do we best manage this?
-        foreach (var dependency in releaseInfo.OperatorPackages)
-        {
-            if (Matches(dependency, package.ReleaseInfo))
-                return true;
-        }
-
-        var assembly = LoadContext.Root?.Assembly;
-
-        if (assembly == null)
-        {
-            Log.Error($"Failed to get assembly for {Name}");
-            return false;
-        }
-
-        var referencedAssemblies = assembly.GetReferencedAssemblies();
-        foreach (var assemblyDependency in referencedAssemblies)
-        {
-            if (assemblyDependency.Name == package.ReleaseInfo.AssemblyFileName)
-                return true;
-        }
-
-        return false;
-    }
-
     /// <summary>
     /// Returns true if the given package reference matches the given release info.
     /// </summary>
@@ -241,7 +219,7 @@ public sealed partial class AssemblyInformation
     /// </summary>
     public object? CreateInstance(Type constructorInfoInstanceType)
     {
-        var assembly = LoadContext.Root?.Assembly;
+        var assembly = LoadContext!.Root?.Assembly;
 
         if (assembly == null)
         {

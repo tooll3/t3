@@ -9,7 +9,7 @@
     <Platforms>AnyCPU</Platforms>
     <VersionPrefix>1.0.13</VersionPrefix>
     <HomeGuid>00000000-0000-0000-0000-000000000000</HomeGuid>
-    <EditorVersion>3.10.4</EditorVersion>
+    <EditorVersion>4.0.0</EditorVersion>
     <IsEditorOnly>false</IsEditorOnly>
     <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
   </PropertyGroup>

@@ -10,17 +10,38 @@ namespace T3.Editor.Gui.ChildUi;
 
 public static class CustomChildUiRegistry
 {
-    private static readonly ConcurrentDictionary<Type, DrawChildUiDelegate> EntriesRw = new();
+    private static readonly ConcurrentDictionary<string, DrawChildUiDelegate> EntriesRw = new();
 
     public static void Register(Type type, DrawChildUiDelegate drawChildUiDelegate, ICollection<Type> types)
     {
-        if(EntriesRw.TryAdd(type, drawChildUiDelegate))
+        var name = type.FullName;
+        if(name == null)
+            throw new ArgumentException("Type name cannot be null", nameof(type));
+        
+        if (EntriesRw.TryAdd(name, drawChildUiDelegate))
+        {
             types.Add(type);
+            Log.Debug("Registered custom child UI for type: " + type);
+        }
     }
 
-    internal static bool TryGetValue(Type type, [NotNullWhen(true)] out DrawChildUiDelegate? o) => EntriesRw.TryGetValue(type, out o);
+    internal static bool TryGetValue(Type type, [NotNullWhen(true)] out DrawChildUiDelegate? o)
+    {
+        var name = type.FullName;
+        if (name == null)
+            throw new ArgumentException("Type name cannot be null", nameof(type));
+        return EntriesRw.TryGetValue(name, out o);
+    }
 
-    public static bool Remove(Type symbolInstanceType) => EntriesRw.TryRemove(symbolInstanceType, out var _);
+    public static bool Remove(Type symbolInstanceType)
+    {
+        var name = symbolInstanceType.FullName;
+        
+        if (name == null)
+            throw new ArgumentException("Type name cannot be null", nameof(symbolInstanceType));
+        
+        return EntriesRw.TryRemove(name, out var _);
+    }
 }
 
 public delegate SymbolUi.Child.CustomUiResult DrawChildUiDelegate(Instance instance, ImDrawListPtr drawList, ImRect area, Vector2 scale);
