@@ -1,6 +1,6 @@
 {
   "Name": "DarkContrast",
-  "Author": "unknown",
+  "Author": "TiXL Community",
   "Colors": {
     "ForegroundFull": {
       "X": 1.0,
@@ -12,13 +12,13 @@
       "X": 1.0,
       "Y": 1.0,
       "Z": 1.0,
-      "W": 0.9
+      "W": 1.0
     },
     "TextMuted": {
       "X": 1.0,
       "Y": 1.0,
       "Z": 1.0,
-      "W": 0.5
+      "W": 0.50239235
     },
     "TextDisabled": {
       "X": 1.0,
@@ -45,9 +45,9 @@
       "W": 1.0
     },
     "BackgroundButton": {
-      "X": 0.16,
-      "Y": 0.16,
-      "Z": 0.16,
+      "X": 0.13875598,
+      "Y": 0.13875598,
+      "Z": 0.13875598,
       "W": 0.8
     },
     "BackgroundHover": {
@@ -81,9 +81,9 @@
       "W": 0.8000001
     },
     "BackgroundInputField": {
-      "X": 0.13333334,
-      "Y": 0.13333334,
-      "Z": 0.13333334,
+      "X": 0.12495364,
+      "Y": 0.1265477,
+      "Z": 0.12918663,
       "W": 1.0
     },
     "BackgroundInputFieldHover": {
@@ -249,9 +249,9 @@
       "W": 1.0
     },
     "WindowBackground": {
-      "X": 0.120000005,
-      "Y": 0.120000005,
-      "Z": 0.120000005,
+      "X": 0.05,
+      "Y": 0.05,
+      "Z": 0.05,
       "W": 0.98
     },
     "BackgroundPopup": {
@@ -315,15 +315,21 @@
       "W": 0.8564593
     },
     "PopupBorder": {
-      "X": 0.0,
-      "Y": 0.0,
-      "Z": 0.0,
+      "X": 0.20574164,
+      "Y": 0.20574164,
+      "Z": 0.20574164,
       "W": 1.0
     },
     "StatusControlled": {
       "X": 0.08,
       "Y": 0.7,
       "Z": 0.48,
+      "W": 1.0
+    },
+    "ColorForShaderGraph": {
+      "X": 0.74641144,
+      "Y": 0.28067955,
+      "Z": 0.46993595,
       "W": 1.0
     }
   },
@@ -344,9 +350,9 @@
       "Opacity": 1.0
     },
     "OperatorLabel": {
-      "Brightness": 1.53,
-      "Saturation": 0.53,
-      "Opacity": 1.0
+      "Brightness": 2.12,
+      "Saturation": 0.6,
+      "Opacity": 1.17
     },
     "OperatorIdle": {
       "Brightness": 1.0,
@@ -354,8 +360,8 @@
       "Opacity": 0.2
     },
     "OperatorBackground": {
-      "Brightness": 0.52,
-      "Saturation": 0.99,
+      "Brightness": 0.48,
+      "Saturation": 0.96,
       "Opacity": 1.0
     },
     "OperatorOutline": {
@@ -364,14 +370,14 @@
       "Opacity": 0.32
     },
     "ConnectionLines": {
-      "Brightness": 0.92,
+      "Brightness": 1.05,
       "Saturation": 1.0,
       "Opacity": 0.8
     },
     "OperatorBackgroundIdle": {
-      "Brightness": 0.48,
+      "Brightness": 0.65,
       "Saturation": 0.76,
-      "Opacity": -0.26
+      "Opacity": 0.25
     },
     "OperatorBackgroundHover": {
       "Brightness": 0.75,
