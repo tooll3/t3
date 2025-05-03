@@ -28,10 +28,6 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
 {
     private readonly Lock _assemblyLock = new();
 
-    // this is an ultimate list of assemblies that have been loaded for this context
-    // keeping this cache allows us to avoid stack overflows during loading, and also
-    // speeds up the loading process.
-
     private AssemblyTreeNode? _root;
 
     private readonly AssemblyName _rootName;
@@ -80,8 +76,8 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
 
                 try
                 {
-                    var asm = Assembly.LoadFile(path);
-                    _root = new AssemblyTreeNode(asm, $"[[{_rootName}]] (root)");
+                    var asm = LoadFromAssemblyPath(path);
+                    _root = new AssemblyTreeNode(asm, $"[[{_rootName}]]");
                 }
                 catch (Exception e)
                 {
@@ -105,10 +101,11 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
             }
         }
 
+        AssemblyTreeNode? root;
         lock (_assemblyLock)
         {
             // the following are performed in order of preference:
-            var root = Root;
+            root = Root;
             if (root != null)
             {
                 if (root.TryFind(name, this, out var assembly)) //|| // first we try with the provided context
@@ -116,10 +113,20 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
                     return assembly.Assembly;
                 }
             }
+            else
+            {
+                Log.Error($"Could not find root assembly for {name} - this is unexpected and indicates this should not continue to be loaded");
+                return null;
+            }
         }
 
         if (allowExternalContextSearch)
         {
+            if (root.TryFindUnreferenced(name, this, out var newlyReferenced))
+            {
+                return newlyReferenced.Assembly;
+            }
+            
             // try other assembly contexts
             lock (_loadContextLock)
             {
@@ -128,16 +135,16 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
                     if (ctx == this)
                         continue;
 
-                    var root = ctx.Root;
+                    var externalRoot = ctx.Root;
 
-                    if (root == null)
+                    if (externalRoot == null)
                         continue;
 
                     var asm = ctx.OnResolving(asmName, false);
 
                     if (asm != null)
                     {
-                        AddDependency(root, ctx);
+                        AddDependency(externalRoot, ctx);
                         return asm;
                     }
                 }
@@ -203,11 +210,11 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
         return base.LoadUnmanagedDll(unmanagedDllName);
     }
 
-    private void AddDependency(AssemblyTreeNode rootNode, T3AssemblyLoadContext ctx)
+    private void AddDependency(AssemblyTreeNode node, T3AssemblyLoadContext ctx)
     {
         lock (_assemblyLock)
         {
-            if (!Root!.AddReferenceTo(rootNode)) 
+            if (!Root!.AddReferenceTo(node)) 
                 return;
             
             // subscribe to the unload event of the dependency context
