@@ -3,7 +3,7 @@ using T3.Core.Utils;
 using NewTek;
 using SharpDX.Direct3D11;
 
-namespace lib.io.video;
+namespace Lib.io.video;
 
 [Guid("9412d0f4-dab8-4145-9719-10395e154fa7")]
 public sealed class NdiOutput : Instance<NdiOutput>, IStatusProvider

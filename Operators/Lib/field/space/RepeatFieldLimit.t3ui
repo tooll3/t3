@@ -1,0 +1,52 @@
+{
+  "Id": "409a150a-83c7-4efd-80a0-67bf0345a398"/*RepeatFieldLimit*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "06ea2b77-5c65-40b9-b9e8-6788786bd7db"/*Axis*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 75.0
+      }
+    },
+    {
+      "InputId": "073ac201-6be4-495c-9c6d-cfa26c9b1035"/*InputField*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "3ec4e97c-f653-4b80-8a8e-3292d28dff13"/*Size*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "b73fe274-cf9a-4950-a10c-88c9f22b4397"/*Start*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 120.0
+      },
+      "GroupTitle": "Extend"
+    },
+    {
+      "InputId": "c72615be-8123-4d3b-bc69-0f912b0fdc39"/*Stop*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 195.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "0aa09119-e59c-437c-beaf-fd4b2b4ee3c6"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

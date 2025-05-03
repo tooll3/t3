@@ -20,8 +20,8 @@ public static class UserData
 {
     static UserData()
     {
-        Directory.CreateDirectory(ReadOnlySettingsFolder);
-        Directory.CreateDirectory(SettingsFolder);
+        Directory.CreateDirectory(FileLocations.ReadOnlySettingsPath);
+        Directory.CreateDirectory(FileLocations.SettingsPath);
     }
 
     public static bool TryLoadOrInitializeUserData<T>(string relativeFilePath, [NotNullWhen(true)] out T? result)
@@ -94,8 +94,8 @@ public static class UserData
     private static string GetFilePath(string relativeFilePath, UserDataLocation location)
     {
         var filePath = Path.Combine(location == UserDataLocation.User 
-                                        ? SettingsFolder 
-                                        : ReadOnlySettingsFolder, relativeFilePath);
+                                        ? FileLocations.SettingsPath 
+                                        : FileLocations.ReadOnlySettingsPath, relativeFilePath);
         return filePath;
     }
 
@@ -146,13 +146,13 @@ public static class UserData
 
     public static bool CanLoad(string relativeFileName)
     {
-        var filePath = Path.Combine(SettingsFolder, relativeFileName);
+        var filePath = Path.Combine(FileLocations.SettingsPath, relativeFileName);
         if (File.Exists(filePath))
         {
             return true;
         }
 
-        var defaultsFilePath = Path.Combine(ReadOnlySettingsFolder, relativeFileName);
+        var defaultsFilePath = Path.Combine(FileLocations.ReadOnlySettingsPath, relativeFileName);
         return File.Exists(defaultsFilePath);
     }
 
@@ -161,10 +161,4 @@ public static class UserData
         Defaults,
         User
     }
-
-    public static string ReadOnlySettingsFolder => Path.Combine(RuntimeAssemblies.CoreDirectory!, ".t3");
-    public static string TempFolder => Path.Combine(SettingsFolder, "tmp");
-
-    public static readonly string SettingsFolder =
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "T3", Process.GetCurrentProcess().ProcessName);
 }

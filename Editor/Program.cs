@@ -85,7 +85,7 @@ internal static class Program
         Console.WriteLine("Initializing logging");
         Log.AddWriter(splashScreen);
         Log.AddWriter(new ConsoleWriter());
-        Log.AddWriter(FileWriter.CreateDefault(UserData.SettingsFolder, out var logPath));
+        Log.AddWriter(FileWriter.CreateDefault(FileLocations.SettingsPath, out var logPath));
         Log.AddWriter(StatusErrorLine);
         Log.AddWriter(ConsoleLogWindow);
             

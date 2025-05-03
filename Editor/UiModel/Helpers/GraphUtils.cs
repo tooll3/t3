@@ -154,6 +154,11 @@ internal static partial class GraphUtils
 
     public static bool IsNamespaceValid(string namespaceName, bool needsToBeUnique, out string[] namespaceComponents)
     {
+        if (namespaceName == "")
+        {
+            namespaceComponents = [];
+            return true;
+        }
         namespaceComponents = namespaceName.Split('.');
         return ValidTypeNameSpacePattern.IsMatch(namespaceName)
                && !namespaceComponents.Any(x => x.Length == 0

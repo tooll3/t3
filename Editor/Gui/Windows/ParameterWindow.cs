@@ -25,9 +25,8 @@ internal sealed class ParameterWindow : Window
     {
         _instanceCounter++;
         Config.Title = LayoutHandling.ParametersPrefix + _instanceCounter;
-        AllowMultipleInstances = true;
         Config.Visible = true;
-        MenuTitle = "Open New Parameter";
+        MenuTitle = "Parameters";
         WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
         _parameterWindowInstances.Add(this);
     }

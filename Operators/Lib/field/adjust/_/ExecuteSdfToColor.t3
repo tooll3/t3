@@ -6,6 +6,13 @@
       "DefaultValue": null
     },
     {
+      "Id": "bdf570a0-e8f5-4379-93d9-618b53c4ed36"/*Range*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
       "Id": "d4b35b39-659e-4367-a69b-ff77ca74ad5a"/*GradientSrv*/,
       "DefaultValue": null
     }

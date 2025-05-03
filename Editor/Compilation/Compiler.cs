@@ -24,7 +24,7 @@ internal static class Compiler
         _processLock.Exit();
     }
     
-    private static readonly string _workingDirectory = Path.Combine(T3.Core.UserData.UserData.TempFolder, "CompilationWorkingDirectory");
+    private static readonly string _workingDirectory = Path.Combine(T3.Core.UserData.FileLocations.TempFolder, "CompilationWorkingDirectory");
 
     static Compiler()
     {

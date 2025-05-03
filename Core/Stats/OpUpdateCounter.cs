@@ -7,20 +7,15 @@ namespace T3.Core.Stats;
 /// <summary>
 /// Performance profiling helper that counts slot updates per frame
 /// </summary>
-public sealed class OpUpdateCounter : IRenderStatsProvider
+internal sealed class OpUpdateCounter : IRenderStatsProvider
 {
-    public OpUpdateCounter()
+    internal OpUpdateCounter()
     {
         RenderStatsCollector.RegisterProvider(this);
     }
-        
-    public IEnumerable<(string, int)> GetStats()
-    {
-        yield return ("Slots", _updateCount);
-    }
-
+    
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void CountUp()
+    internal static void CountUp()
     {
         _updateCount++;
     }
@@ -29,6 +24,11 @@ public sealed class OpUpdateCounter : IRenderStatsProvider
     public void StartNewFrame()
     {
         _updateCount=0;
+    }
+    
+    IEnumerable<(string, int)> IRenderStatsProvider.GetStats()
+    {
+        yield return ("Slots", _updateCount);
     }
 
     private static int _updateCount;

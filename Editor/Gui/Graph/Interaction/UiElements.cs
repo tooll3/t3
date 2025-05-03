@@ -209,7 +209,7 @@ internal sealed class UiElements
         
         ImGui.Indent(30);
         FormInputs.AddVerticalSpace(20);
-        FormInputs.AddSectionHeader("Select Project");
+        FormInputs.AddSectionHeader("Project Hub");
         ImGui.SameLine();
 
         var iconSize = new Vector2(Fonts.FontLarge.FontSize);

@@ -10,8 +10,57 @@
         "X": 0.0,
         "Y": 93.0
       },
+      "ParameterSetsForChildIds": {}
+    },
+    {
+      "Id": "088055bb-93c3-4f06-ab25-da19cd8309f3",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Test",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 93.0
+      },
       "ParameterSetsForChildIds": {
-        "00000000-0000-0000-0000-000000000000": {}
+        "00000000-0000-0000-0000-000000000000": {
+          "eff10fad-cf95-4133-91db-efc41258cd1b": {
+            "Gradient": {
+              "Interpolation": "Linear",
+              "Steps": [
+                {
+                  "Id": "2454880c-61af-4e39-9aae-a81e23ae0e65",
+                  "NormalizedPosition": 0.0,
+                  "Color": {
+                    "R": 9.9999E-07,
+                    "G": 9.999968E-07,
+                    "B": 1E-06,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "a4ef7648-a6e4-41d6-9ae3-f2f95a25ccb9",
+                  "NormalizedPosition": 0.4957346,
+                  "Color": {
+                    "R": 0.3099533,
+                    "G": 0.013995051,
+                    "B": 0.0,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "93fc903f-b63d-4147-b7b3-7dbc7e345a6c",
+                  "NormalizedPosition": 1.0,
+                  "Color": {
+                    "R": 1.0,
+                    "G": 0.99999,
+                    "B": 1.0,
+                    "A": 1.0
+                  }
+                }
+              ]
+            }
+          }
+        }
       }
     }
   ]

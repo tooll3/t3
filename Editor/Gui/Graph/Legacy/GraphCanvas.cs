@@ -917,7 +917,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
     private static void CopyToTempShaderPath(string filePath, out string newFilePath)
     {
         var directory = Path.GetDirectoryName(filePath)!;
-        var destinationDirectory = Path.Combine(UserData.TempFolder, "ReadOnlyShaders");
+        var destinationDirectory = Path.Combine(FileLocations.TempFolder, "ReadOnlyShaders");
 
         if (Directory.Exists(destinationDirectory))
         {

@@ -1,0 +1,53 @@
+{
+  "Id": "67f21840-dc9a-4390-aa45-234ce81c8717"/*CylinderSDF*/,
+  "Description": "Generates a rounded cylinder SDF.",
+  "InputUis": [
+    {
+      "InputId": "04ce1364-f421-4bd1-8f45-60921c8605df"/*Radius*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "1f65cd48-caa9-4b25-925c-7cbcc12eabbc"/*Axis*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "GroupTitle": "Shader Variations"
+    },
+    {
+      "InputId": "29d6303f-34ba-4e1e-a910-3366104e26e3"/*Center*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "8780e976-ae85-43fb-a822-def6ea21b407"/*Height*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "c409c9a7-5c45-47f7-a49e-2b0fadcf7892"/*Rounding*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "e3690acf-e989-4327-8ee9-441bb48ac3a4"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

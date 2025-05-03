@@ -53,22 +53,18 @@ internal static class CrashReporting
         if (sentryEvent.Exception is AggregateException)
             return null;
 
-        // Keep once auto backup is up again
-        var timeOfLastBackup = AutoBackup.GetTimeOfLastBackup();
-        var timeSpan = StringUtils.GetReadableRelativeTime(timeOfLastBackup);
-
         var components = ProjectView.Focused;
-        
+
         sentryEvent.SetTag("Nickname", UserSettings.Config.UserName);
-        sentryEvent.Contexts["tooll3"]= new
-                                            {
-                                                UndoStack = UndoRedoStack.GetUndoStackAsString(),
-                                                Selection = components == null ? string.Empty : string.Join("\n", components.NodeSelection),
-                                                Nickname = "",
-                                                RuntimeSeconds = Playback.RunTimeInSecs,
-                                                RuntimeFrames = ImGui.GetFrameCount(),
-                                                UndoActions = UndoRedoStack.UndoStack.Count,
-                                            };
+        sentryEvent.Contexts["tooll3"] = new
+                                             {
+                                                 UndoStack = UndoRedoStack.GetUndoStackAsString(),
+                                                 Selection = components == null ? string.Empty : string.Join("\n", components.NodeSelection),
+                                                 Nickname = "",
+                                                 RuntimeSeconds = Playback.RunTimeInSecs,
+                                                 RuntimeFrames = ImGui.GetFrameCount(),
+                                                 UndoActions = UndoRedoStack.UndoStack.Count,
+                                             };
 
         string? json = null;
         try
@@ -92,33 +88,45 @@ internal static class CrashReporting
 
         // We only show crash report dialog in release mode 
         #if RELEASE
-        string message = "On noooo, how embarrassing! T3 just crashed\n" +
-                         $"Last backup was saved {timeSpan} to .t3/backups/\n" +
-                         "Please consult the Wiki on what to do next.";
-        
+        var lastBackupTime = AutoBackup.GetTimeOfLastBackup().GetReadableRelativeTime();
+
+        var message = $"""
+                       TiXL crashed. We're really sorry.
+
+                       The last backup was saved {lastBackupTime} to...
+                       {AutoBackup.BackupDirectory}
+                        
+                       Please refer to Help > Using Backups on what to do next.
+                       """;
+
         if (json != null)
         {
-            message += "\n\n" + "When this window closes, the current operator will be copied to your clipboard. " +
-                       "You can use it to troubleshoot/reproduce the issue.";
+            message += """
+                       
+                        When this window closes, the current operator will be copied to your clipboard. 
+                        """;
         }
-        
+
         message += "\n\n" + (sentryEvent.Exception?.ToString() ?? Environment.StackTrace);
-        
+
         const string confirmation = "Send crash report (it really helps!)";
-        var result = BlockingWindow.Instance.ShowMessageBox(message, @"☠🙈 Damn!", confirmation, "No thanks, I hate it when things are fixed");
-        
+        var result = BlockingWindow.Instance.ShowMessageBox(message, 
+                                                            @"☠🙈 Damn!", 
+                                                            confirmation, 
+                                                            "No thanks");
+
         if (json != null)
         {
             EditorUi.Instance.SetClipboardText(json);
         }
-        
+
         var sendingEnabled = result == confirmation;
 
         if (!string.IsNullOrWhiteSpace(LogPath))
         {
             CoreUi.Instance.OpenWithDefaultApplication(LogPath);
         }
-        
+
         return sendingEnabled ? sentryEvent : null;
         #else
         WriteReportToLog(sentryEvent, false);
@@ -126,7 +134,7 @@ internal static class CrashReporting
         return null;
         #endif
     }
-    
+
     private static void WriteReportToLog(SentryEvent sentryEvent, bool sendingEnabled)
     {
         // Write formatted stacktrace for readability
@@ -144,24 +152,24 @@ internal static class CrashReporting
 
         var eventJson = Encoding.UTF8.GetString(stream.ToArray());
         Log.Warning($"Encountered crash reported:{sendingEnabled}\n" + eventJson);
-        
+
         // Force writing
         FileWriter.Flush();
     }
-    
+
     /** Additional to logging the crash we also write a copy to a dedicated crash file. */
     private static void WriteCrashReportFile(SentryEvent? sentryEvent)
     {
         if (sentryEvent?.Exception == null || FileWriter.Instance == null)
             return;
-        
+
         var exceptionTitle = sentryEvent.Exception.GetType().Name;
-        
-        var filepath= Path.Combine(FileWriter.Instance.LogDirectory,$"crash {DateTime.Now:yyyy-MM-dd  HH-mm-ss} - {exceptionTitle}.txt");
-        
+
+        var filepath = Path.Combine(FileWriter.Instance.LogDirectory, $"crash {DateTime.Now:yyyy-MM-dd  HH-mm-ss} - {exceptionTitle}.txt");
+
         using var streamFileWriter = new StreamWriter(filepath);
         streamFileWriter.WriteLine($"{sentryEvent.Exception.Message}\n{sentryEvent.Exception}");
-        
+
         using var memoryStream = new MemoryStream();
         using var jsonWriter = new Utf8JsonWriter(memoryStream, new JsonWriterOptions { Indented = true });
 

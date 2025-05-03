@@ -1,9 +1,13 @@
 ﻿// ReSharper disable RedundantArgumentDefaultValue
 
+using System.Diagnostics.CodeAnalysis;
 using Color = T3.Core.DataTypes.Vector.Color;
 
 namespace T3.Editor.Gui.Styling;
 
+[SuppressMessage("ReSharper", "MemberCanBeInternal")]
+[SuppressMessage("Usage", "CA2211:Non-constant fields should not be visible")]
+[SuppressMessage("ReSharper", "InconsistentNaming")]
 public static class UiColors
 {
     // Text
@@ -19,14 +23,14 @@ public static class UiColors
     public static Color CheckMark = new(1,1,1,0.8f);
 
     [T3Style.Hint(GroupTitle = "Backgrounds" ,Description = "This is the primary background used for canvases and windows. Don't use transparency for this!")]
-    public static Color WindowBackground = new(0.1f, 0.1f, 0.1f, 1);
+    public static Color WindowBackground = new(0.12f, 0.12f, 0.12f, 0.98f);
     
     [T3Style.Hint(Description = "Background color for dialogs, popup windows and context menus.")]
-    public static Color BackgroundPopup = new(0.1f, 0.1f, 0.1f, 0.98f);
+    public static Color BackgroundPopup = new(0.18f, 0.18f, 0.18f, 0.98f);
     public static Color PopupBorder = new(0, 0, 0, 1f);
     
     [T3Style.Hint(Description = "Buttons and form inputs.")]
-    public static Color BackgroundButton = new(0.16f,0.16f,0.16f,0.8f);
+    public static Color BackgroundButton = new(0.3f,0.3f,0.3f,0.5f);
     public static Color BackgroundButtonActivated = new(0.10f,0.10f,0.10f,0.8f);
     public static Color BackgroundHover = new(0.26f,0.26f,0.26f,0.8f);
     
@@ -35,7 +39,7 @@ public static class UiColors
     
     public static Color BackgroundTabActive = Color.FromString("#3A3A3A");
     public static Color BackgroundTabInActive = Color.FromString("#CC282828");
-    public static Color BackgroundInputField = Color.FromString("#101010");
+    public static Color BackgroundInputField = new(0.08f,0.08f,0.08f,0.8f);
     public static Color BackgroundInputFieldHover = new(0.1f, 0.1f, 0.1f, 1f);
     public static Color BackgroundInputFieldActive = new(0f, 0f, 0f, 1f);
     
@@ -91,5 +95,5 @@ public static class UiColors
     public static Color ColorForDX11 = new(0.84f, 0.46f, 0.44f, 1.000f);
     public static Color ColorForCommands = new(0.132f, 0.722f, 0.762f, 1.000f);
     public static Color ColorForGpuData = new(0.72f, 0.2f, 0.18f, 1.000f);
-    public static Color ColorForShaderGraph = new(0.62f, 0.22f, 0.18f, 1.000f);
+    public static Color ColorForShaderGraph = new(0.82f, 0.26f, 0.7f, 1.000f);
 }

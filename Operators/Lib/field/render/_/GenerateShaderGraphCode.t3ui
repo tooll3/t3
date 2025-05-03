@@ -1,0 +1,56 @@
+{
+  "Id": "73c028d1-3de2-4269-b503-97f62bbce320"/*GenerateShaderGraphCode*/,
+  "Description": "The internal implementation for shader graph code generation.\n\nPlease refer to the documentation within the source code.",
+  "SymbolTags": "24",
+  "InputUis": [
+    {
+      "InputId": "bcf6de27-1ffd-422c-9f5b-910d89cad1a4"/*TemplateCode*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "f6fb3be8-53f2-4d68-bf0f-3f519bc09ff4"/*AdditionalDefines*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 120.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "ffc1c70e-b717-4337-916d-c3a13343e9cc"/*Field*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "a1ab0c16-ed15-4334-a529-10e3c217df1a"/*ShaderCode*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    },
+    {
+      "OutputId": "1a9b5e15-e9a7-4ed4-aa1a-2072398921b4"/*FloatParams*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 300.0
+      }
+    },
+    {
+      "OutputId": "adf247cd-79cc-4d4e-b3c1-6a8b2d54683d"/*Resources*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 400.0
+      }
+    }
+  ]
+}

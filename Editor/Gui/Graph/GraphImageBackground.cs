@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
@@ -33,13 +34,13 @@ internal sealed class GraphImageBackground
         _nodeSelection = nodeSelection;
     }
 
-    public Instance OutputInstance
+    public Instance? OutputInstance
     {
-        set => _backgroundNodePath = value.InstancePath;
+        set => _backgroundNodePath = value?.InstancePath;
         get => _structure.GetInstanceFromIdPath(_backgroundNodePath);
     }
-        
-    public void DrawResolutionSelector()
+
+    private void DrawResolutionSelector()
     {
         ResolutionHandling.DrawSelector(ref _selectedResolution, null);
     }
@@ -153,7 +154,7 @@ internal sealed class GraphImageBackground
     private readonly EvaluationContext _evaluationContext = new();
     private ResolutionHandling.Resolution _selectedResolution = ResolutionHandling.DefaultResolution;
     private readonly CameraInteraction _cameraInteraction = new();
-    private IReadOnlyList<Guid> _backgroundNodePath;
+    private IReadOnlyList<Guid>? _backgroundNodePath;
     //private readonly GraphWindow _window;
     private readonly Structure _structure;
     private readonly NodeSelection _nodeSelection;

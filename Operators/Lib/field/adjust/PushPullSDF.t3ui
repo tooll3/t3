@@ -1,0 +1,49 @@
+{
+  "Id": "0ff18a32-c1e9-406d-b3e3-23700e2453a0"/*PushPullSDF*/,
+  "Description": "Makes the incoming SDF volumens thicker or thinner by pushes or pulls the surface by adding a constant value to the distance.",
+  "InputUis": [
+    {
+      "InputId": "463149fa-b53b-4d43-b4e7-57dcb045bba0"/*StepScale*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 195.0
+      }
+    },
+    {
+      "InputId": "91c09fac-0b50-4f62-97ca-18461801b442"/*AmountField*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 75.0
+      },
+      "Description": "Add additional scale field to simulate some kind of displacement.\nThis will break the Lipschitz continuity of your field and cause artifacs when raymarching.",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "9cd1120d-81fa-43ab-b023-c462fe651ffb"/*Amount*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 120.0
+      },
+      "Min": -1.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "c57d91b6-a26a-4e69-be1f-dc04f86594b6"/*SdfField*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "ffbb6690-d57e-4dea-8aa7-fbf0101b9c96"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

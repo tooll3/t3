@@ -1,0 +1,23 @@
+{
+  "Id": "1a933eb2-a89b-4694-ae04-60d86779cf28"/*ReflectField*/,
+  "Inputs": [
+    {
+      "Id": "afd3834b-9ef0-4d7a-b0a3-a93cb4193d40"/*PlaneNormal*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 1.0
+      }
+    },
+    {
+      "Id": "c617549d-b67d-454c-91f5-bc1d6e9a66b7"/*InputField*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "d184a675-a5ab-42f9-b3f9-d275b0c7bee8"/*Offset*/,
+      "DefaultValue": 0.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

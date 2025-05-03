@@ -454,7 +454,7 @@ public static class SingleValueEdit
         }
     }
 
-    private static readonly Color _valueIndicatorColor = new(1, 1, 1, 0.06f);
+    private static readonly Color _valueIndicatorColor = new(1, 1, 1, 0.09f);
 
     private enum InputStates
     {

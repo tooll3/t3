@@ -1,0 +1,49 @@
+{
+  "Id": "54f28d0a-d367-4b59-8480-5b762b8f2a9c"/*NoiseDisplaceSDF*/,
+  "Description": "Displaces the distance of an SDF with a perlin-like noise offset.\n\nNOTE: this operator will break the Lipschitz  continuity of your field and will cause artifacts when raymaching.\nIt's sometimes possible to reduce some of these artifacts, be reducing the step-size for raymarching.\n\nPlease check the Additional documentation in [RaymarchSdf]",
+  "InputUis": [
+    {
+      "InputId": "1799f18f-92c5-4885-b6c1-6a196eee805f"/*InputField*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "285d7cd9-1057-4ea8-bd0b-20ff52adc562"/*Amount*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      },
+      "Description": "Amount of the displacemnt.",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "6cd7b3ca-323c-4a69-989b-1b10009b8a90"/*Offset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 285.0
+      },
+      "Description": "Offset to the noise field. Try to animate this with [AnimVec3]."
+    },
+    {
+      "InputId": "b7a2e12b-9e55-43a5-be79-510f4a28a1f4"/*Scale*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 210.0
+      },
+      "Description": "The scale of the noise field."
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "dbf31b38-5221-414c-83b1-800770fcfaa6"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

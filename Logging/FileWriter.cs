@@ -3,7 +3,7 @@
 /// <summary>
 /// Write Debug-Log messages to log files
 /// </summary>
-public class FileWriter : ILogWriter
+public sealed class FileWriter : ILogWriter
 {
     public ILogEntry.EntryLevel Filter { get; set; }
 
@@ -11,7 +11,7 @@ public class FileWriter : ILogWriter
     {
         LogDirectory = Path.Combine(directory, LogSubDirectory);
         _logPath = Path.Combine(LogDirectory, filename);
-            
+
         Directory.CreateDirectory(LogDirectory);
         _streamWriter = new StreamWriter(_logPath);
         //#if DEBUG
@@ -30,7 +30,7 @@ public class FileWriter : ILogWriter
     {
         if (Instance == null)
             return;
-            
+
         lock (Instance._streamWriter)
         {
             Instance._streamWriter.Flush();
@@ -52,8 +52,7 @@ public class FileWriter : ILogWriter
         }
     }
 
-
-    public static ILogWriter CreateDefault(string rootDirectory, out string path)
+    public static ILogWriter CreateDefault(string settingsFolder, out string path)
     {
         if (Instance != null)
         {
@@ -61,20 +60,19 @@ public class FileWriter : ILogWriter
             return Instance;
         }
 
-            
         var fileName = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss_fff}.log";
-        Instance = new FileWriter(rootDirectory, fileName)
+        Instance = new FileWriter(settingsFolder, fileName)
                        {
                            Filter = ILogEntry.EntryLevel.All
                        };
-            
+
         path = Instance._logPath;
         return Instance;
     }
-        
+
     private readonly StreamWriter _streamWriter;
     private readonly string _logPath;
     public readonly string LogDirectory;
     public static FileWriter? Instance { get; private set; }
-    private const string LogSubDirectory = "log";
+    private const string LogSubDirectory = "Log";
 }

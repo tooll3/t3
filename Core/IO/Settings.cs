@@ -35,5 +35,5 @@ public class Settings<T> where T : class, new()
 
     private static Settings<T> _instance;
     private readonly string _filePath;
-    private static string ConfigDirectory => UserData.UserData.SettingsFolder;
+    private static string ConfigDirectory => UserData.FileLocations.SettingsPath;
 }

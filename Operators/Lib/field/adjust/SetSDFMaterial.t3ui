@@ -1,0 +1,41 @@
+{
+  "Id": "88926602-4694-4632-9fd7-04c8d6ddd728"/*SetSDFMaterial*/,
+  "Description": "Injects a Color provider into the shader graph. \n\nThere can be multiple colors which can be mixed with [CombineSDF]",
+  "InputUis": [
+    {
+      "InputId": "7c656067-ef12-4990-b094-7f8160a242d1"/*SdfField*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "93d0ee54-b2f6-41ea-bbaa-ef06bca1f1a0"/*ColorField*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 75.0
+      }
+    },
+    {
+      "InputId": "d2a64234-c7ef-424b-822c-addce0b84e69"/*Color*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 150.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "51c8b9dd-9798-44e6-a9d0-0baecfc9c9a5"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}
