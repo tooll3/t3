@@ -3,6 +3,7 @@
 ## Project handling
 - [ ] unload projects from project list
 - [ ] Load last project from user settings
+- [ ] Reduce size of backups
 
 ## Graph
 - [ ] Parameter window in fullscreen

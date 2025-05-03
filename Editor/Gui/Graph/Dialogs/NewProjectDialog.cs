@@ -14,9 +14,9 @@ internal sealed class NewProjectDialog : ModalDialog
     protected override void OnShowNextFrame()
     {
         _shareResources = true;
-        _newName = "MyProject";
+        _newProjectName = "MyProject";
         _userName = UserSettings.Config.UserName;
-        _newNamespace = "experiments";
+        _newSubNamespace = "";
         _needsAutoFocus = true;
     }
         
@@ -26,37 +26,40 @@ internal sealed class NewProjectDialog : ModalDialog
 
         if (BeginDialog("Create new project"))
         {
-            // Name and namespace
+            // Namespace
             string namespaceWarningText = null;
             bool namespaceCorrect = true;
-            if(!GraphUtils.IsNamespaceValid(_newNamespace, true, out _))
+            if(!GraphUtils.IsNamespaceValid(_newSubNamespace, true, out _))
             {
                 namespaceCorrect = false;
                 namespaceWarningText = "Namespace must be a valid and unique C# namespace";
             }
                 
-            FormInputs.AddStringInput("Namespace", ref _newNamespace, 
+            FormInputs.AddStringInput("Namespace", ref _newSubNamespace, 
                                       warning: namespaceWarningText, 
-                                      autoFocus: _needsAutoFocus, tooltip:"Namespace is used to group your projects and should be unique to you.");
+                                      autoFocus: _needsAutoFocus, 
+                                      tooltip:"An additional namespace withing your user area that can help to further group your projects.");
             _needsAutoFocus = false;
                 
+            // ProjectName
             var warning = string.Empty;
             var nameCorrect = true;
-            if (!GraphUtils.IsIdentifierValid(_newName))
+            
+            if (!GraphUtils.IsIdentifierValid(_newProjectName))
             {
                 warning = "Name must be a valid C# identifier.";
                 nameCorrect = false;
             }   
-            else if (_newName.Contains('.'))
+            else if (_newProjectName.Contains('.'))
             {
                 warning = "Name must not contain dots.";
                 nameCorrect = false;
             }
-            else if (string.IsNullOrWhiteSpace(_newName))
+            else if (string.IsNullOrWhiteSpace(_newProjectName))
             {
                 nameCorrect = false;
             }
-            else if(DoesProjectWithNameExists(_newName))
+            else if(DoesProjectWithNameExists(_newProjectName))
             {
                 // Todo - can we actually just allow this provided the project namespaces are different?
                 warning = "A project with this name already exists.";
@@ -65,12 +68,18 @@ internal sealed class NewProjectDialog : ModalDialog
                 
             //ImGui.SetKeyboardFocusHere();
             
-            FormInputs.AddStringInput("Name", ref _newName,
+            FormInputs.AddStringInput("Name", ref _newProjectName,
                                       tooltip: "Is used to identify your project. Must not contain spaces or special characters.",
                                       warning: warning);
 
             var allValid = namespaceCorrect && nameCorrect;
-            var fullName = $"{_userName}.{_newNamespace}.{_newName}";
+
+            var subNameSpaceWithSeparator = string.IsNullOrEmpty(_newSubNamespace)
+                                                ? ""
+                                                : _newSubNamespace + ".";
+            
+            var fullName = $"{_userName}.{subNameSpaceWithSeparator}{_newProjectName}";
+            
             FormInputs.SetCursorToParameterEdit();                
             ImGui.TextColored(allValid ? UiColors.TextMuted : UiColors.StatusError, fullName);
             
@@ -100,7 +109,7 @@ internal sealed class NewProjectDialog : ModalDialog
                 }
                 else
                 {
-                    var message = $"Failed to create project \"{_newName}\" in \"{_newNamespace}\".\n\n" +
+                    var message = $"Failed to create project \"{_newProjectName}\" in \"{_newSubNamespace}\".\n\n" +
                                   "This should never happen - please file a bug report.\n" +
                                   "Currently this error is unhandled, so you will want to manually delete the project from disk.";
                         
@@ -143,8 +152,8 @@ internal sealed class NewProjectDialog : ModalDialog
         return false;
     }
 
-    private string _newName = string.Empty;
-    private string _newNamespace = string.Empty;
+    private string _newProjectName = string.Empty;
+    private string _newSubNamespace = string.Empty;
     private string _userName = string.Empty;
     private bool _shareResources = true;
     private bool _needsAutoFocus;
