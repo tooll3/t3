@@ -1,6 +1,8 @@
-﻿using ImGuiNET;
+﻿using System.IO;
+using ImGuiNET;
 using Operators.Utils;
 using T3.Core.IO;
+using T3.Core.UserData;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Midi;
 using T3.Editor.Gui.Styling;
@@ -86,7 +88,6 @@ internal sealed class SettingsWindow : Window
                     }
                     else
                     {
-
                         changed |= FormInputs.AddCheckBox("Use arc connections",
                                                           ref UserSettings.Config.UseArcConnections,
                                                           "Affects the shape of the connections between your operators",
@@ -96,7 +97,7 @@ internal sealed class SettingsWindow : Window
                                                           ref UserSettings.Config.SmartGroupDragging,
                                                           "An experimental features that will drag neighbouring snapped operators",
                                                           UserSettings.Defaults.SmartGroupDragging);
-                        
+
                         changed |= FormInputs.AddCheckBox("Show Graph thumbnails",
                                                           ref UserSettings.Config.ShowThumbnails, null,
                                                           UserSettings.Defaults.ShowThumbnails);
@@ -104,9 +105,8 @@ internal sealed class SettingsWindow : Window
                         changed |= FormInputs.AddCheckBox("Show nodes thumbnails when hovering",
                                                           ref UserSettings.Config.EditorHoverPreview, null,
                                                           UserSettings.Defaults.EditorHoverPreview);
-
                     }
-                    
+
                     FormInputs.AddVerticalSpace();
 
                     changed |= FormInputs.AddFloat("Scroll smoothing",
@@ -120,49 +120,43 @@ internal sealed class SettingsWindow : Window
                                                    0.0f, 10f, 0.1f, true,
                                                    "The threshold in pixels until a click becomes a drag. Adjusting this might be useful for stylus input",
                                                    UserSettings.Defaults.ClickThreshold);
-                    
-                                        
+
                     changed |= FormInputs.AddFloat("Gizmo size",
                                                    ref UserSettings.Config.GizmoSize,
                                                    0.0f, 200f, 0.01f, true, "Size of the transform gizmo in 3d views",
                                                    UserSettings.Defaults.GizmoSize);
-                    
+
                     FormInputs.AddVerticalSpace();
                     FormInputs.AddSectionSubHeader("Timeline");
-
 
                     changed |= FormInputs.AddFloat("Grid density",
                                                    ref UserSettings.Config.TimeRasterDensity,
                                                    0.0f, 10f, 0.01f, true,
                                                    "Density/opacity of the marks (time or beat) at the bottom of the timeline",
                                                    UserSettings.Defaults.TimeRasterDensity);
-                    
+
                     changed |= FormInputs.AddFloat("Snap strength",
                                                    ref UserSettings.Config.SnapStrength,
                                                    0.0f, 0.2f, 0.01f, true,
                                                    "Controls the distance until items such as keyframes snap in the timeline",
                                                    UserSettings.Defaults.SnapStrength);
 
-
-                    
                     changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.FrameStepAmount,
                                                           "Frame step amount",
                                                           "Controls the next rounding and step amount when jumping between frames.\nDefault shortcut is Shift+Cursor Left/Right"
-                                                          ,UserSettings.Defaults.FrameStepAmount);
+                                                        , UserSettings.Defaults.FrameStepAmount);
 
                     changed |= FormInputs.AddCheckBox("Reset time after playback",
                                                       ref UserSettings.Config.ResetTimeAfterPlayback,
                                                       "After the playback is halted, the time will reset to the moment when the playback began. This feature proves beneficial for iteratively reviewing animations without requiring manual rewinding.",
                                                       UserSettings.Defaults.ResetTimeAfterPlayback);
 
-
                     FormInputs.SetIndentToLeft();
                     FormInputs.AddVerticalSpace();
 
-
                     FormInputs.AddVerticalSpace();
                     FormInputs.AddSectionSubHeader("Advanced options");
-                    
+
                     changed |= FormInputs.AddCheckBox("Editing values with mousewheel needs CTRL key",
                                                       ref UserSettings.Config.MouseWheelEditsNeedCtrlKey,
                                                       "In parameter window you can edit numeric values by using the mouse wheel. This setting will prevent accidental modifications while scrolling because by using ctrl key for activation.",
@@ -181,13 +175,13 @@ internal sealed class SettingsWindow : Window
                     changed |= FormInputs.AddCheckBox("Balance soundtrack visualizer",
                                                       ref UserSettings.Config.ExpandSpectrumVisualizerVertically,
                                                       "If true, changes the visualized pitch's logarithmic scale from base 'e' to base 10.\nLower frequencies will become more visible, making the frequency spectrum\n appear more \"balanced\"",
-                                                      UserSettings.Defaults.ExpandSpectrumVisualizerVertically);                    
+                                                      UserSettings.Defaults.ExpandSpectrumVisualizerVertically);
                     FormInputs.AddVerticalSpace();
                     changed |= FormInputs.AddCheckBox("Middle mouse button zooms canvas",
                                                       ref UserSettings.Config.MiddleMouseButtonZooms,
                                                       "This can be useful if you're working with tablets or other input devices that lack a mouse wheel.",
                                                       UserSettings.Defaults.MiddleMouseButtonZooms);
-                    
+
                     changed |= FormInputs.AddCheckBox("Suspend invalidation of inactive time clips",
                                                       ref ProjectSettings.Config.TimeClipSuspending,
                                                       "An experimental optimization that avoids dirty flag evaluation of graph behind inactive TimeClips. This is only relevant for very complex projects and multiple parts separated by timelines.",
@@ -211,20 +205,44 @@ internal sealed class SettingsWindow : Window
 
                     ColorThemeEditor.DrawEditor();
                     break;
-                
+
                 case Categories.Project:
                 {
                     FormInputs.AddSectionHeader("Project specific settings");
+                    FormInputs.AddVerticalSpace();
 
+                    changed |= FormInputs.AddStringInput("Project Directory",
+                                                         ref UserSettings.Config.ProjectsFolder,
+                                                         "Nickname",
+                                                         Directory.Exists(UserSettings.Config.ProjectsFolder) ? null : "Folder does not exists",
+                                                         """
+                                                         A writable directory for your projects.
+                                                         Changing it will require a restart!
+                                                         """,
+                                                         FileLocations.DefaultProjectFolder);
+                    FormInputs.AddVerticalSpace();
+                    changed |= FormInputs.AddCheckBox("Enable Backup",
+                                                      ref UserSettings.Config.EnableAutoBackup,
+                                                      $"""
+                                                       Save backups of your projects every {AutoBackup.AutoBackup.SecondsBetweenSaves / 60} min. Backup files will be thinned out so fewer backups are kept the older they are.
+                                                       The total number of files stored will not exceed 40.
+
+                                                       They are saved as zip-archives to {AutoBackup.AutoBackup.BackupDirectory}.
+                                                       """,
+                                                      UserSettings.Defaults.EnableAutoBackup);
+
+                    FormInputs.AddVerticalSpace();
+                    
+                    FormInputs.AddSectionSubHeader("Export Settings");
                     var projectSettingsChanged = false;
                     CustomComponents.HelpText("These settings only when playback as executable");
                     FormInputs.AddVerticalSpace();
 
-                    projectSettingsChanged |= FormInputs.AddEnumDropdown(ref ProjectSettings.Config.DefaultWindowMode, 
-                                                                         "Show export as", 
+                    projectSettingsChanged |= FormInputs.AddEnumDropdown(ref ProjectSettings.Config.DefaultWindowMode,
+                                                                         "Show export as",
                                                                          "The default window mode when exporting an executable.",
                                                                          WindowMode.Fullscreen);
-                    
+
                     projectSettingsChanged |= FormInputs.AddCheckBox("Enable Playback Control",
                                                                      ref ProjectSettings.Config.EnablePlaybackControlWithKeyboard,
                                                                      "Users can use cursor left/right to skip through time\nand space key to pause playback\nof exported executable.",
@@ -235,7 +253,6 @@ internal sealed class SettingsWindow : Window
                                                                      "This make working with shadergraphs easier.",
                                                                      ProjectSettings.Config.SkipOptimization);
 
-                    
                     if (projectSettingsChanged)
                         ProjectSettings.Save();
 
@@ -379,7 +396,7 @@ internal sealed class SettingsWindow : Window
                                                       UserSettings.Defaults.LogCsCompilationDetails);
 
                     FormInputs.SetIndentToParameters();
-                    
+
                     if (UserSettings.Config.LogCsCompilationDetails)
                     {
                         FormInputs.SetIndentToParameters();
@@ -388,9 +405,8 @@ internal sealed class SettingsWindow : Window
                                                               null,
                                                               UserSettings.Defaults.CompileCsVerbosity
                                                              );
-                        
                     }
-                    
+
                     FormInputs.AddVerticalSpace();
                     changed |= FormInputs.AddCheckBox("Log Assembly Version mismatches",
                                                       ref ProjectSettings.Config.LogAssemblyVersionMismatches,
@@ -398,8 +414,8 @@ internal sealed class SettingsWindow : Window
                                                       Version mismatches are frequently caused by slightly outdated 3rd party library that we depend on.
                                                       These are only relevant in situations where you need to debug or analyse assembly loading problems. 
                                                       """,
-                                                      ProjectSettings.Defaults.LogAssemblyVersionMismatches);                    
-                    
+                                                      ProjectSettings.Defaults.LogAssemblyVersionMismatches);
+
                     break;
                 }
             }

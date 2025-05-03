@@ -6,6 +6,7 @@ using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
+using T3.Core.UserData;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -176,7 +177,7 @@ namespace T3.Editor.Gui.Windows.RenderExport
             }
 
             return path.StartsWith('.')
-                ? Path.Combine(UserSettings.Config.DefaultNewProjectDirectory, "Render", path)
+                ? Path.Combine(UserSettings.Config.ProjectsFolder, FileLocations.RenderSubFolder, path)
                 : path;
         }
 

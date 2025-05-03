@@ -5,6 +5,7 @@ using Newtonsoft.Json.Converters;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.IO;
+using T3.Core.UserData;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Windows;
@@ -39,7 +40,11 @@ public sealed class UserSettings : Settings<UserSettings.ConfigData>
 
         [JsonConverter(typeof(StringEnumConverter))]
         public GraphHoverModes HoverMode = GraphHoverModes.LastValue;
+        
+        // Projects
 
+        public string ProjectsFolder = FileLocations.DefaultProjectFolder;
+        
         public bool AudioMuted;
             
         // UI-Elements
@@ -128,16 +133,15 @@ public sealed class UserSettings : Settings<UserSettings.ConfigData>
         public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
             
         public readonly List<Bookmark> Bookmarks = [];
-        public List<Gradient> GradientPresets = [];
 
         public string ColorThemeName = string.Empty;
             
         public bool ExpandSpectrumVisualizerVertically = true;
             
-        private string _defaultNewProjectDirectory = _defaultProjectFolder;
-        public string DefaultNewProjectDirectory => _defaultNewProjectDirectory ??= _defaultProjectFolder;
+        //private string _defaultNewProjectDirectory = _defaultProjectFolder;
+        //public string DefaultNewProjectDirectory => _defaultNewProjectDirectory ??= _defaultProjectFolder;
 
-        private static readonly string _defaultProjectFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "T3Projects");
+        private static readonly string _defaultProjectFolder = FileLocations.DefaultProjectFolder;
     }
 
     public enum ValueEditMethods

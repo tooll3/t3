@@ -76,8 +76,6 @@ public static class T3Ui
             AudioEngine.CompleteFrame(Playback.Current, Playback.LastFrameDuration);    // Update
         }
         TextureReadAccess.Update();
-
-        AutoBackup.AutoBackup.IsEnabled = UserSettings.Config.EnableAutoBackup;
         
         ResourceManager.RaiseFileWatchingEvents();
 

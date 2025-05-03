@@ -10,8 +10,10 @@ namespace T3.Core.UserData;
 /// </summary>
 public static class FileLocations
 {
-    public static readonly string AppSubFolder = "TiXL";
-    public static readonly string ThemeSubFolder = "Themes";
+    public const string AppSubFolder = "TiXL";
+    public const string ThemeSubFolder = "Themes";
+    public const string RenderSubFolder = "RenderOutput";
+    public const string ExportFolderName = "T3Exports";
     public static string TempFolder => Path.Combine(SettingsPath, "Tmp");
 
     

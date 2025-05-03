@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using T3.Core.UserData;
 using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.UiModel;
 
@@ -16,15 +17,15 @@ namespace T3.Editor.Gui.AutoBackup;
 internal static class AutoBackup
 {
     public static int SecondsBetweenSaves { get; set; } = 3 * 60;
-
-    public static bool IsEnabled { get; set; }
-
+    
     /// <summary>
     /// Should be call after all frame operators are completed
     /// </summary>
     public static void CheckForSave()
     {
-        if (!IsEnabled || _isSaving || _stopwatch.ElapsedMilliseconds < SecondsBetweenSaves * 1000)
+        if (!UserSettings.Config.EnableAutoBackup 
+            || _isSaving 
+            || _stopwatch.ElapsedMilliseconds < SecondsBetweenSaves * 1000)
             return;
 
         _isSaving = true;
@@ -297,7 +298,7 @@ internal static class AutoBackup
 
     private static readonly Stopwatch _stopwatch = Stopwatch.StartNew();
     private static bool _isSaving;
-    private static string BackupDirectory => Path.Combine(FileLocations.SettingsPath, "Backup");
+    internal static string BackupDirectory => Path.Combine(FileLocations.SettingsPath, "Backup");
 
     private static string[] SourcePaths
     {

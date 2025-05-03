@@ -10,6 +10,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.SystemUi;
+using T3.Core.UserData;
 using T3.Editor.Gui;
 using T3.Editor.Gui.InputUi.SimpleInputUis;
 using T3.Editor.Gui.Interaction.Timing;
@@ -20,7 +21,6 @@ namespace T3.Editor.UiModel.Exporting;
 
 internal static partial class PlayerExporter
 {
-    public const string ExportFolderName = "T3Exports";
     public static bool TryExportInstance(Instance composition, SymbolUi.Child childUi, out string reason, out string exportDir)
     {
         T3Ui.Save(false);
@@ -43,7 +43,7 @@ internal static partial class PlayerExporter
         var exportInfo = new ExportInfo();
         exportInfo.TryAddSymbol(symbol);
 
-        exportDir = Path.Combine(UserSettings.Config.DefaultNewProjectDirectory, ExportFolderName, childUi.SymbolChild.ReadableName);
+        exportDir = Path.Combine(UserSettings.Config.ProjectsFolder, FileLocations.ExportFolderName, childUi.SymbolChild.ReadableName);
 
         try
         {

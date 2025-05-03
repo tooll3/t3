@@ -23,7 +23,7 @@ internal static partial class ProjectSetup
     public static bool TryCreateProject(string nameSpace, bool shareResources, [NotNullWhen(true)] out EditableSymbolProject? newProject)
     {
         var name = nameSpace.Split('.').Last();
-        var newCsProj = CsProjectFile.CreateNewProject(name, nameSpace, shareResources, UserSettings.Config.DefaultNewProjectDirectory);
+        var newCsProj = CsProjectFile.CreateNewProject(name, nameSpace, shareResources, UserSettings.Config.ProjectsFolder);
 
         if (!newCsProj.TryRecompile(out var releaseInfo, true))
         {

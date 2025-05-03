@@ -85,7 +85,7 @@ internal sealed class GraphImageBackground
         _camSelectionHandling.Update(instanceForOutput, instanceForOutput.Outputs[0].ValueType, preventCameraInteraction);
 
         var viewSymbolUi = instanceForOutput.GetSymbolUi();
-        if (!viewSymbolUi.OutputUis.TryGetValue(viewOutput.Id, out IOutputUi viewOutputUi))
+        if (!viewSymbolUi.OutputUis.TryGetValue(viewOutput.Id, out IOutputUi? viewOutputUi))
             return;
 
         _imageCanvas.SetAsCurrent();
