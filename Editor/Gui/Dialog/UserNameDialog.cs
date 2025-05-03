@@ -5,13 +5,13 @@ using GraphUtils = T3.Editor.UiModel.Helpers.GraphUtils;
 
 namespace T3.Editor.Gui.Dialog;
 
-public class UserNameDialog : ModalDialog
+internal sealed class UserNameDialog : ModalDialog
 {
     private string _userName = string.Empty;
         
     protected override void OnShowNextFrame() => _userName = UserSettings.Config.UserName;
 
-    public void Draw()
+    internal void Draw()
     {
         if (BeginDialog("Edit username"))
         {
@@ -43,12 +43,6 @@ public class UserNameDialog : ModalDialog
 
                 ImGui.CloseCurrentPopup();
             }
-
-            // ImGui.SameLine();
-            // if (ImGui.Button("Cancel"))
-            // {
-            //     ImGui.CloseCurrentPopup();
-            // }
 
             EndDialogContent();
         }

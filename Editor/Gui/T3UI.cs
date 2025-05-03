@@ -127,6 +127,7 @@ public static class T3Ui
         NewProjectDialog.Draw();
         CreateFromTemplateDialog.Draw();
         _userNameDialog.Draw();
+        AboutDialog.Draw();
 
         if (IsWindowLayoutComplete())
         {
@@ -355,6 +356,7 @@ public static class T3Ui
 
     internal static readonly CreateFromTemplateDialog CreateFromTemplateDialog = new();
     private static readonly UserNameDialog _userNameDialog = new();
+    internal static readonly AboutDialog AboutDialog = new();
     private static readonly SearchDialog _searchDialog = new();
     internal static readonly NewProjectDialog NewProjectDialog = new();
 

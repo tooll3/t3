@@ -443,7 +443,7 @@ internal static class AppMenuBar
 
             if (ImGui.MenuItem("About"))
             {
-                Log.Debug("Not implemented yet");
+                T3Ui.AboutDialog.ShowNextFrame();
             }
 
             ImGui.EndMenu();
