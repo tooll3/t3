@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 using System.Threading;
+using T3.Core.IO;
 using T3.Core.Logging;
 
 namespace T3.Core.Compilation;
@@ -163,12 +164,17 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
 
         if (result != null)
         {
-            var assemblyNameOfResult = result.GetName();
-
-            if (assemblyNameOfResult.Version != assemblyName.Version)
+            // check versions of the assembly - if different, log a warning.
+            // todo: actually do something with this information later
+            if (ProjectSettings.Config.LogAssemblyVersionMismatches)
             {
-                Log.Warning($"{_rootNameStr}: Assembly {assemblyName.Name} loaded with different version: {assemblyNameOfResult.Version} vs {assemblyName.Version}");
-            }
+                var assemblyNameOfResult = result.GetName();
+
+                if (assemblyNameOfResult.Version != assemblyName.Version)
+                {
+                    Log.Warning($"Assembly {assemblyName.Name} loaded with different version: {assemblyNameOfResult.Version} vs {assemblyName.Version}");
+                }
+            }           
 
             return result;
         }
