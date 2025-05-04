@@ -2,8 +2,10 @@
 
 - [x] Reduce size of backups
 - [x] Allow to override Project location
+- [ ] Prevent creating projects with existing names
 - [ ] unload projects from project list
 - [ ] Load last project from user settings
+- [x] Make sure that TiXL is using the high performance GPU
 
 ## Graph
 - [x] Allow dragging connections from vertical output slot
@@ -70,8 +72,7 @@
 - [x] Default gradients are not loaded?
 - [x] Fix Scaling for multiple selected keyframes with ALT-Key
 - [x] Fix Gradient editor not working as parameter window parameter
-- [ ] Make sure that TiXL is using the high performance GPU
-- [ ] Deleting last output will cause crash
+- [x] Deleting last output will cause crash
 
 ## Documentation
 

@@ -22,6 +22,7 @@
         <PackageLicenseUrl>https://github.com/tooll3/t3?tab=MIT-1-ov-file#readme</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/tooll3/t3</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
         <!-- <ApplicationManifest>app.manifest</ApplicationManifest> -->
 
         <!-- <Authors>Tooll3</Authors>
