@@ -1,6 +1,6 @@
 {
-  "Id": "5b538cf5-e3b6-4674-b23e-ab55fc59ada6"/*GetCamProperties2*/,
-  "Description": "Provides a list of all camera defined in the current composition symbol. This can ",
+  "Id": "5b538cf5-e3b6-4674-b23e-ab55fc59ada6"/*GetAllCameras*/,
+  "Description": "Provides a list of all camera defined in the current composition symbol. \n\nThis can be useful for rendering camera gizmos.",
   "SymbolTags": "208",
   "InputUis": [
     {
@@ -39,6 +39,13 @@
       "Position": {
         "X": 300.0,
         "Y": 700.0
+      }
+    },
+    {
+      "OutputId": "550afbfd-6e09-450e-9538-82e8b13eac5c"/*FramesSinceLastUpdate*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 800.0
       }
     }
   ]

@@ -1,6 +1,11 @@
 {
   "Id": "b7731197-b922-4ed8-8e22-bc7596c64f6c"/*GetPosition*/,
-  "Inputs": [],
+  "Inputs": [
+    {
+      "Id": "045ad01f-dd04-43d0-8193-5cb4c25add9b"/*Space*/,
+      "DefaultValue": 0
+    }
+  ],
   "Children": [],
   "Connections": []
 }

@@ -15,7 +15,6 @@ internal sealed class Locator : Instance<Locator>, ITransformable
     public Locator()
     {
         Output.TransformableOp = this;
-            
     }
         
     IInputSlot ITransformable.TranslationInput => Position;
@@ -38,9 +37,6 @@ internal sealed class Locator : Instance<Locator>, ITransformable
 
     [Input(Guid = "f7a4cab5-6095-4b7f-98d0-faea091dda29")]
     public readonly InputSlot<string> Label = new InputSlot<string>();
-
-    [Input(Guid = "a6c523ba-4529-4a51-b6ce-69d396490625")]
-    public readonly InputSlot<bool> EnableDepthTest = new InputSlot<bool>();
 
     [Input(Guid = "fc366e00-4980-4b3e-85a3-b83bff210458")]
     public readonly InputSlot<GizmoVisibility> Visibility = new InputSlot<GizmoVisibility>();

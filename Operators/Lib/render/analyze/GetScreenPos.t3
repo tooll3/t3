@@ -1,0 +1,19 @@
+{
+  "Id": "56779460-e3e2-401b-8836-f11917b55431"/*GetScreenPos*/,
+  "Inputs": [
+    {
+      "Id": "9e55a7ad-2cf0-414a-8d7b-7d7c63b9fbb2"/*SetDepthToZero*/,
+      "DefaultValue": true
+    },
+    {
+      "Id": "b597dc38-72bb-4929-b939-c33247ef98eb"/*LocalPosition*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
