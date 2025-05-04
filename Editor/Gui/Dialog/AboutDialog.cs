@@ -8,7 +8,7 @@ using ImGuiNET;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.App;
-using System.Drawing;
+
 
 namespace T3.Editor.Gui.Dialog;
 
@@ -22,21 +22,26 @@ internal sealed class AboutDialog : ModalDialog
         {
             FormInputs.AddSectionHeader("TiXL");
             ImGui.SameLine();
-            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextDisabled.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
 
             FormInputs.AddSectionHeader("v." + Program.VersionText);
             ImGui.PopStyleColor();
+            ImGui.TextColored(UiColors.TextMuted, $"{dateTime}");
 #if DEBUG
-            ImGui.TextColored(UiColors.TextMuted, $"{ideName}");
+            ImGui.TextColored(UiColors.TextMuted, "IDE:");
+            ImGui.SameLine();
+            ImGui.Text($"{ideName}");
 #endif
-            ImGui.TextColored(UiColors.TextMuted, $"{DateTime.Now}");
-            ImGui.TextColored(UiColors.TextMuted, $"App language: {appLanguage}");
+            
+            ImGui.TextColored(UiColors.TextMuted, $"App language:");
+            ImGui.SameLine();
+            ImGui.Text($"{appLanguage}");
             //FormInputs.AddVerticalSpace(5);
             ImGui.Separator();
             
             FormInputs.AddSectionHeader("System Information");
             
-            FormInputs.AddVerticalSpace(3);
+            FormInputs.AddVerticalSpace(0);
 
             ImGui.TextColored(UiColors.TextMuted, "OS:" );
             ImGui.SameLine();
@@ -99,7 +104,7 @@ internal sealed class AboutDialog : ModalDialog
         {
             var systemInfo = new StringBuilder();
 
-            systemInfo.AppendLine($"{DateTime.Now}");
+            systemInfo.AppendLine($"{dateTime}");
             systemInfo.AppendLine($"TiXL version: {Program.VersionText}");
             #if DEBUG
             systemInfo.AppendLine($"IDE: {GetIdeName()}");
@@ -297,6 +302,7 @@ internal sealed class AboutDialog : ModalDialog
     }
     private static readonly string ideName = GetIdeName();
     private static readonly string appLanguage = GetAppLanguage();
+    private static readonly string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
     private static readonly string operatingSystemInfo = GetOperatingSystemInfo();
     private static readonly string systemLanguage = GetSystemLanguage(englishName: true);
