@@ -79,6 +79,9 @@ internal class EditorSymbolPackage : SymbolPackage
     public void LoadUiFiles(bool parallel, List<Symbol> newlyReadSymbols, out SymbolUi[] newlyReadSymbolUis,
                             out SymbolUi[] preExistingSymbolUis)
     {
+        if(!_hasLoadedCustomUis) // hacky way to load uis after their assembly has already been loaded
+            LoadCustomUis(AssemblyInformation);
+        
         var newSymbols = newlyReadSymbols.ToDictionary(result => result.Id, symbol => symbol);
         var newSymbolsWithoutUis = new ConcurrentDictionary<Guid, Symbol>(newSymbols);
         preExistingSymbolUis = SymbolUiDict.Values.ToArray();
@@ -445,7 +448,10 @@ internal class EditorSymbolPackage : SymbolPackage
 
     private void LoadCustomUis(AssemblyInformation assemblyInformation)
     {
-        var types = assemblyInformation.TypesInheritingFrom(typeof(IEditorUiExtension));
+        _hasLoadedCustomUis = true;
+        var types = assemblyInformation.TypesInheritingFrom(typeof(IEditorUiExtension)).ToArray();
+        
+        Log.Info($"Attempting to load {types.Length} UI extensions from {assemblyInformation.Name}");
 
         foreach (var type in types)
         {
@@ -498,4 +504,5 @@ internal class EditorSymbolPackage : SymbolPackage
 
     private readonly List<Type> _descriptiveUiTypes = [];
     private readonly List<IEditorUiExtension> _extensions = [];
+    private bool _hasLoadedCustomUis; // hacky way to load uis after their assembly has already been loaded
 }
