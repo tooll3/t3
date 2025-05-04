@@ -26,6 +26,7 @@ internal sealed class AboutDialog : ModalDialog
 
             FormInputs.AddSectionHeader("v." + Program.VersionText);
             ImGui.PopStyleColor();
+            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, mySpacing);
             ImGui.TextColored(UiColors.TextMuted, $"{dateTime}");
 #if DEBUG
             ImGui.TextColored(UiColors.TextMuted, "IDE:");
@@ -36,13 +37,14 @@ internal sealed class AboutDialog : ModalDialog
             ImGui.TextColored(UiColors.TextMuted, $"App language:");
             ImGui.SameLine();
             ImGui.Text($"{appLanguage}");
-            //FormInputs.AddVerticalSpace(5);
+            ImGui.PopStyleVar();
+            FormInputs.AddVerticalSpace(1);
             ImGui.Separator();
             
             FormInputs.AddSectionHeader("System Information");
             
-            FormInputs.AddVerticalSpace(0);
-
+            //FormInputs.AddVerticalSpace(0);
+            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, mySpacing);
             ImGui.TextColored(UiColors.TextMuted, "OS:" );
             ImGui.SameLine();
             ImGui.Text($"{operatingSystemInfo}");
@@ -52,9 +54,9 @@ internal sealed class AboutDialog : ModalDialog
             ImGui.TextColored(UiColors.TextMuted, "Keyboard layout:");
             ImGui.SameLine();
             ImGui.Text($"{keyboardLayout}");
-
-            FormInputs.AddVerticalSpace(3);
-
+            
+            FormInputs.AddVerticalSpace(8);
+            
             ImGui.TextColored(UiColors.TextMuted, ".NET Runtime:");
             ImGui.SameLine();
             ImGui.Text($"{dotNetRuntime}");
@@ -62,22 +64,15 @@ internal sealed class AboutDialog : ModalDialog
             ImGui.SameLine();
             ImGui.Text($"{dotNetSdk}");
 
-            FormInputs.AddVerticalSpace(3);
+            FormInputs.AddVerticalSpace(8);
 
             ImGui.TextColored(UiColors.TextMuted, "Graphics processing unit(s):"); 
             ImGui.Text($"{gpuInformation}");
+            FormInputs.AddVerticalSpace(8);
             ImGui.Separator();
+            ImGui.PopStyleVar();
 
-            //if (string.IsNullOrEmpty(_systemInfo))
-            //{
-            //    UpdateSystemInfo(); // Populate system info if not already done
-            //}
-
-            //FormInputs.AddVerticalSpace(5);
-            //ImGui.TextWrapped(_systemInfo);
-            //FormInputs.AddVerticalSpace(5);
-
-
+            FormInputs.AddVerticalSpace(5);
             if (ImGui.Button("Copy System Information"))
             {
                 UpdateSystemInfo(); // Update system info and copy to clipboard
@@ -109,7 +104,7 @@ internal sealed class AboutDialog : ModalDialog
             #if DEBUG
             systemInfo.AppendLine($"IDE: {GetIdeName()}");
             #endif
-            systemInfo.AppendLine($"Language: {GetAppLanguage()}");
+            systemInfo.AppendLine($"App language: {GetAppLanguage()}");
             systemInfo.AppendLine($"OS: {GetOperatingSystemInfo()}");
             systemInfo.AppendLine($"System language: {GetSystemLanguage(englishName: true)}");
             systemInfo.AppendLine($"Keyboard Layout: {GetSystemLanguage(englishName: false)}");
@@ -194,74 +189,44 @@ internal sealed class AboutDialog : ModalDialog
         return "Not found";
     }
 
-    private static string GetGpuInformation()
+    private static string GetGpuInformation(string infoType = "both")
     {
+        var gpuList = new List<string>();
+        var activeGpu = ProgramWindows.ActiveGpu;
+
         try
         {
-            var sb = new StringBuilder();
-            var activeGpu = ProgramWindows.ActiveGpu;
-
             using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController"))
             {
-                foreach (var searchResult in searcher.Get())
+                foreach (ManagementObject obj in searcher.Get())
                 {
-                    if (searchResult is not ManagementObject obj)
-                        continue;
-
+                    
                     var name = obj["Name"]?.ToString() ?? "Unknown";
                     if (name == activeGpu)
-                        sb.AppendLine($"{name} (Active)");
-                    else
-                        sb.AppendLine(name);
+                        name += " (Active)";
+                    
+                    var driverVersion = obj["DriverVersion"]?.ToString() ?? "Unknown";
+
+                    string gpuDetails = infoType.ToLower() switch
+                    {
+                        "name" => name,
+                        "driver" => driverVersion,
+                        _ => $"{name}\nDriver version: {driverVersion}" // Default/both case
+                    };
+
+                    gpuList.Add(gpuDetails);
                 }
             }
 
-            return sb.ToString();
+            return string.Join(", ", gpuList);
         }
         catch (Exception)
         {
-            return !string.IsNullOrEmpty(ProgramWindows.ActiveGpu)
-                ? ProgramWindows.ActiveGpu + " (Active)"
-                : "Unknown";
+            // Silently fail if we can't get GPU information
         }
 
-
+        return "Unknown";
     }
-
-    // TODO: add DriverVersion to GetGpuInformation 
-    //private static string GetGpuList(string infoType = "both")
-    //{
-    //    var gpuList = new List<string>();
-
-    //    try
-    //    {
-    //        using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController"))
-    //        {
-    //            foreach (ManagementObject obj in searcher.Get())
-    //            {
-    //                var name = obj["Name"]?.ToString() ?? "Unknown";
-    //                var driverVersion = obj["DriverVersion"]?.ToString() ?? "Unknown";
-
-    //                string gpuDetails = infoType.ToLower() switch
-    //                {
-    //                    "name" => name,
-    //                    "driver" => driverVersion,
-    //                    _ => $"{name}\nDriver version: {driverVersion}" // Default/both case
-    //                };
-
-    //                gpuList.Add(gpuDetails);
-    //            }
-    //        }
-
-    //        return string.Join(", ", gpuList);
-    //    }
-    //    catch (Exception)
-    //    {
-    //        // Silently fail if we can't get GPU information
-    //    }
-
-    //    return "Unknown";
-    //}
 
     private static string GetIdeName()
     {
@@ -312,6 +277,8 @@ internal sealed class AboutDialog : ModalDialog
     private static readonly string gpuInformation = GetGpuInformation();
 
     private string _systemInfo = string.Empty;
+
+    private static readonly Vector2 mySpacing = new (6.0f, 3.0f);
 
 
 }
