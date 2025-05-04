@@ -295,11 +295,35 @@ internal class EditorSymbolPackage : SymbolPackage
     protected readonly ConcurrentDictionary<Guid, SymbolUi> SymbolUiDict = new();
     public IReadOnlyDictionary<Guid, SymbolUi> SymbolUis => SymbolUiDict;
 
-    protected virtual IEnumerable<string> SymbolUiSearchFiles =>
-        Directory.EnumerateFiles(Path.Combine(Folder, SymbolUiSubFolder), $"*{SymbolUiExtension}", SearchOption.AllDirectories);
+    protected virtual IEnumerable<string> SymbolUiSearchFiles
+    {
+        get
+        {
+            var dir = Path.Combine(Folder, SymbolUiSubFolder);
+            if (!Directory.Exists(dir))
+            {
+                Log.Warning($"Symbol UI folder {dir} does not exist");
+                return [];
+            }
+            
+            return Directory.EnumerateFiles(dir, $"*{SymbolUiExtension}", SearchOption.AllDirectories);
+        }
+    }
 
-    protected virtual IEnumerable<string> SourceCodeSearchFiles =>
-        Directory.EnumerateFiles(Path.Combine(Folder, SourceCodeSubFolder), $"*{SourceCodeExtension}", SearchOption.AllDirectories);
+    protected virtual IEnumerable<string> SourceCodeSearchFiles
+    {
+        get
+        {
+            var dir = Path.Combine(Folder, SourceCodeSubFolder);
+            if (!Directory.Exists(dir))
+            {
+                Log.Warning($"Source code folder {dir} does not exist");
+                return [];
+            }
+            
+            return Directory.EnumerateFiles(dir, $"*{SourceCodeExtension}", SearchOption.AllDirectories);
+        }
+    }
 
     private readonly ConcurrentDictionary<Guid, SymbolPathHandler> _filePathHandlers = new();
     protected IDictionary<Guid, SymbolPathHandler> FilePathHandlers => _filePathHandlers;

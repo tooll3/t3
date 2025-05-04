@@ -33,8 +33,16 @@ public abstract partial class SymbolPackage : IResourcePackage
     
     public virtual string DisplayName => AssemblyInformation.Name;
 
-    protected virtual IEnumerable<string> SymbolSearchFiles =>
-        Directory.EnumerateFiles(Path.Combine(Folder, SymbolsSubfolder), $"*{SymbolExtension}", SearchOption.AllDirectories);
+    protected virtual IEnumerable<string> SymbolSearchFiles
+    {
+        get
+        {
+            var dir = Path.Combine(Folder, SymbolsSubfolder);
+            if (!Directory.Exists(dir))
+                return [];
+            return Directory.EnumerateFiles(dir, $"*{SymbolExtension}", SearchOption.AllDirectories);
+        }
+    }
 
     public const string SymbolsSubfolder = "Symbols";
     protected event Action<string?, Symbol>? SymbolAdded;
