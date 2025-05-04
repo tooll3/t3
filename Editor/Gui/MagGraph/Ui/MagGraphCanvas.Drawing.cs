@@ -60,7 +60,14 @@ internal sealed partial class MagGraphCanvas
         // Keep visible canvas area to cull non-visible objects later
         _visibleCanvasArea = GetVisibleCanvasArea();
 
-        UpdateCanvas(out _);
+        var editingFlags = T3Ui.EditingFlags.None;
+        if (T3Ui.IsAnyPopupOpen)
+        {
+            if(!ImGui.IsWindowHovered())
+                editingFlags |= T3Ui.EditingFlags.PreventMouseInteractions;
+        }
+        
+        UpdateCanvas(out _, editingFlags);
 
         // Prepare UiModel for frame
         _context.Layout.ComputeLayout(_context);

@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
@@ -58,7 +59,7 @@ internal static class ParameterPopUp
 
     public static void DrawParameterPopUp(ProjectView graphWindow)
     {
-        if (!_isOpen || _selectedInstance == null)
+        if (!_isOpen || _selectedInstance == null || graphWindow.CompositionInstance == null)
             return;
 
         var symbolUi = _selectedInstance.GetSymbolUi();
@@ -76,18 +77,22 @@ internal static class ParameterPopUp
         }
 
         var nodeScreenRect = graphWindow.GraphCanvas.TransformRect(ImRect.RectWithSize(symbolChildUi.PosOnCanvas, symbolChildUi.Size));
-        var screenPos = new Vector2(nodeScreenRect.Min.X + 5, nodeScreenRect.Max.Y + 5);
+        var horizontalOffset = 25 * graphWindow.GraphCanvas.Scale.X;
+        var screenPos = new Vector2(nodeScreenRect.Min.X + horizontalOffset, nodeScreenRect.Max.Y + 5);
         var height = _lastRequiredHeight.Clamp(MinHeight, DefaultWindowSize.Y);
         ImGui.SetNextWindowPos(screenPos);
 
         var preventTabbingIntoUnfocusedStringInputs = ImGui.IsAnyItemActive() ? ImGuiWindowFlags.None : ImGuiWindowFlags.NoNavInputs;
-        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 2);
+        ImGui.PushStyleVar(ImGuiStyleVar.ChildBorderSize, 2);
+        ImGui.PushStyleVar(ImGuiStyleVar.ChildBorderSize, 2);
+        ImGui.PushStyleVar(ImGuiStyleVar.ChildRounding, 4);
         if (ImGui.BeginChild("Popup",
                              new Vector2(DefaultWindowSize.X, height),
                              true,
                              preventTabbingIntoUnfocusedStringInputs
                              | ImGuiWindowFlags.NoScrollWithMouse
-                             | ImGuiWindowFlags.NoScrollbar))
+                             | ImGuiWindowFlags.NoScrollbar ))
         {
             if (ImGui.IsKeyDown(ImGuiKey.Escape))
             {
@@ -171,13 +176,14 @@ internal static class ParameterPopUp
             {
                 case ViewModes.Parameters:
                     
-                    ImGui.BeginChild("Scrolling", new Vector2(DefaultWindowSize.X, height - 5 ), false);
+                    ImGui.BeginChild("Scrolling", new Vector2(DefaultWindowSize.X, height - 20 ), false);
                     CustomComponents.HandleDragScrolling(_parameterPopUpReference);
                     ImGui.PushFont(Fonts.FontSmall);
                     ParameterWindow.DrawParameters(_selectedInstance, symbolUi, symbolChildUi, compositionSymbolUi, hideNonEssentials: true);
                     FormInputs.AddVerticalSpace();
                     ImGui.PopFont();
-                    _lastRequiredHeight = ImGui.GetCursorPosY() + ImGui.GetFrameHeight();
+                    _lastRequiredHeight = ImGui.GetCursorPosY() + ImGui.GetFrameHeight() + 0;
+                    ImGui.Dummy(new Vector2(10,10));
                     ImGui.EndChild();
                     break;
                 
@@ -227,7 +233,7 @@ internal static class ParameterPopUp
 
         
         ImGui.EndChild();
-        ImGui.PopStyleVar();
+        ImGui.PopStyleVar(3);
     }
 
     private enum ViewModes
@@ -253,7 +259,7 @@ internal static class ParameterPopUp
     private static object _parameterPopUpReference = new();
 
     private static ViewModes _viewMode = ViewModes.Parameters;
-    private static Instance _selectedInstance;
+    private static Instance? _selectedInstance;
     private const string ParameterPopUpName = "parameterContextPopup";
     public static Guid NodeIdRequestedForParameterWindowActivation;
 }

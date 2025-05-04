@@ -19,9 +19,11 @@
 - [ ] Load last project from user settings
 
 ## Graph
+
 - [x] Allow dragging connections from vertical output slot
 - [x] Dragging gradient widget handles drags canvas too
 - [x] Snapping connecting start to output not working of ops who's output is already snapped
+- [ ] Add hint message to hold shift for keeping connections
 - [ ] Add annotations
 - [ ] Parameter window in fullscreen
 - [ ] Fix background control in mag graph

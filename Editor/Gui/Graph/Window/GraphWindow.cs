@@ -279,7 +279,8 @@ internal sealed class GraphWindow : Windows.Window
 
                 ImGui.EndGroup();
 
-                ParameterPopUp.DrawParameterPopUp(ProjectView);
+                if(ProjectView != null)
+                    ParameterPopUp.DrawParameterPopUp(ProjectView);
             }
         }
         drawList.ChannelsMerge();
