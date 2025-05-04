@@ -5,7 +5,7 @@
 - [x] Fix Scaling for multiple selected keyframes with ALT-Key
 - [x] Fix Gradient editor not working as parameter window parameter
 - [x] Deleting last output will cause crash
-- [ ] Bypassed operator are active after reload / bypassing again breaks their update
+- [x] Bypassed operator are active after reload / bypassing again breaks their update
 - [x] Modifications by BiasGain Vec2 gizmo can't be undone
 - [x] Fix thumbnails rendering breaks defaults
 
