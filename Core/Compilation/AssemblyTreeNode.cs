@@ -41,7 +41,8 @@ internal sealed class AssemblyTreeNode
                 _unreferencedDlls = [];
                 // locate "not used" dlls in the directory without loading them
                 var directory = Path.GetDirectoryName(Assembly.Location);
-                foreach (var file in Directory.GetFiles(directory!, "*.dll", SearchOption.AllDirectories))
+                var searchOption = _searchNestedFolders ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+                foreach (var file in Directory.GetFiles(directory!, "*.dll", searchOption))
                 {
                     bool skip = false;
                     foreach (var dep in _references)
@@ -83,13 +84,15 @@ internal sealed class AssemblyTreeNode
     }
 
     private readonly string _parentName;
+    private readonly bool _searchNestedFolders;
 
     // warning : not thread safe, must be wrapped in a lock around _assemblyLock
-    public AssemblyTreeNode(Assembly assembly, AssemblyLoadContext parent)
+    public AssemblyTreeNode(Assembly assembly, AssemblyLoadContext parent, bool searchNestedFolders)
     {
         Assembly = assembly;
         Name = assembly.GetName();
         NameStr = Name.GetNameSafe();
+        _searchNestedFolders = searchNestedFolders;
 
         _parentName = parent.Name!;
         LoadContext = parent;
@@ -152,7 +155,7 @@ internal sealed class AssemblyTreeNode
                         }
 
                         var newAssembly = LoadContext.LoadFromAssemblyPath(dll.Path);
-                        assembly = new AssemblyTreeNode(newAssembly, LoadContext);
+                        assembly = new AssemblyTreeNode(newAssembly, LoadContext, false);
                         AddReferenceTo(assembly);
                         return true;
                     }

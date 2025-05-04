@@ -147,7 +147,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
                     continue;
 
                 directories.Add(directory);
-                var node = new AssemblyTreeNode(assemblyDef.Assembly, ctxGroup.Context);
+                var node = new AssemblyTreeNode(assemblyDef.Assembly, ctxGroup.Context, false);
                 _coreNodes.Add(node);
             }
         }
@@ -174,7 +174,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
                                 break;
                         }
 
-                        depNode ??= new AssemblyTreeNode(asmAndName.Assembly, ctxGroup.Context);
+                        depNode ??= new AssemblyTreeNode(asmAndName.Assembly, ctxGroup.Context, false);
 
                         node.AddReferenceTo(depNode);
                     }
@@ -231,7 +231,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
         try
         {
             var asm = LoadFromAssemblyPath(path);
-            Root = new AssemblyTreeNode(asm, this);
+            Root = new AssemblyTreeNode(asm, this, true);
         }
         catch (Exception e)
         {
@@ -287,7 +287,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
                 }
             }
         }
-
+        
         // check nuget packages
         lock (_nugetLock)
         {
@@ -324,7 +324,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
                 {
                     package.Claimed = true;
                     var assembly = _nugetContext.LoadFromAssemblyPath(package.Path);
-                    var node = new AssemblyTreeNode(assembly, _nugetContext);
+                    var node = new AssemblyTreeNode(assembly, _nugetContext, true);
                     AddDependency(node);
                     _loadedNuGetAssemblies.Add(node);
                     Log.Debug($"{Name!}: Loaded assembly {asmName.FullName} from nuget package");
