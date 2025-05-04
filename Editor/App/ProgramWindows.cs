@@ -21,6 +21,7 @@ internal static class ProgramWindows
     private static Device _device;
     private static DeviceContext _deviceContext;
     private static Factory _factory;
+    public static string ActiveGpu { get; private set; } = "Unknown";
 
     internal static void SetMainWindowSize(int width, int height)
     {
@@ -76,7 +77,8 @@ internal static class ProgramWindows
             // Log used graphics card
             foreach (var a in _factory.Adapters)
             {
-                Log.Info($"Using {a.Description.Description}");
+                ActiveGpu = a.Description.Description;
+                Log.Info($"Using {ActiveGpu}");
                 break;
             }
 
