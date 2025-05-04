@@ -58,13 +58,73 @@ internal static class ProgramWindows
 
     internal static void InitializeMainWindow(string version, out Device device)
     {
-        Main = new("TiXL " + version, disableClose: false);
+        Main = new AppWindow("TiXL " + version, disableClose: false);
         device = null;
+        string[] highPerformanceKeywords = ["dedicated", "high performance", "rtx", "gtx", "radeon"];
+        string[] integratedKeywords = ["integrated", "intel(r) uhd graphics"];
 
         try
         {
-            // Create Device and SwapChain
-            Device.CreateWithSwapChain(DriverType.Hardware,
+            var selectedAdapterIndex = -1;
+            using var factory = new Factory1();
+
+            if (factory.GetAdapterCount() == 0)
+            {
+                BlockingWindow.Instance.ShowMessageBox("We unable to find any graphics adapters",
+                                                       "Oh noooo",
+                                                       "Ok... /:");
+                Environment.Exit(0);
+            }
+
+            var adapterFound = false;
+            for (var i = 0; i < factory.GetAdapterCount(); i++)
+            {
+                using var adapter = factory.GetAdapter1(i);
+                var descriptionLower = adapter.Description.Description.ToLowerInvariant();
+
+                var isIntegrated = false;
+                foreach (var keyword in integratedKeywords)
+                {
+                    if (!descriptionLower.Contains(keyword))
+                        continue;
+
+                    isIntegrated = true;
+                    break;
+                }
+
+                if (!isIntegrated)
+                {
+                    foreach (var keyword in highPerformanceKeywords)
+                    {
+                        if (!descriptionLower.Contains(keyword))
+                            continue;
+
+                        Log.Debug($"Selected high-performance GPU: {adapter.Description.Description}");
+                        selectedAdapterIndex = i;
+                        adapterFound = true;
+                        break;
+                    }
+                }
+                else
+                {
+                    Log.Debug($"Found integrated GPU: {adapter.Description.Description}");
+                }
+
+                if (adapterFound)
+                    break;
+            }
+
+            // Fallback logic remains the same
+            if (selectedAdapterIndex == -1)
+            {
+                selectedAdapterIndex = 0;
+                Log.Info("Falling back to first available adapter");
+            }
+
+            var selectedAdapter = factory.GetAdapter1(selectedAdapterIndex);
+            ActiveGpu = selectedAdapter.Description.Description;
+            // Create Device and SwapChain with the selected adapter
+            Device.CreateWithSwapChain(selectedAdapter, // Pass the selected adapter
                                        DeviceCreationFlags.Debug,
                                        Main.SwapChainDescription,
                                        out device,
@@ -74,19 +134,8 @@ internal static class ProgramWindows
             _deviceContext = device.ImmediateContext;
             _factory = swapchain.GetParent<Factory>();
 
-            // Log used graphics card
-            foreach (var a in _factory.Adapters)
-            {
-                ActiveGpu = a.Description.Description;
-                Log.Info($"Using {ActiveGpu}");
-                break;
-            }
-
             Main.SetDevice(device, _deviceContext, swapchain);
-
             Main.InitializeWindow(FormWindowState.Maximized, OnCloseMainWindow, true);
-
-            // Ignore all windows events
             _factory.MakeWindowAssociation(Main.HwndHandle, WindowAssociationFlags.IgnoreAll);
         }
         catch (Exception e)
@@ -94,8 +143,9 @@ internal static class ProgramWindows
             if (e.Message.Contains("DXGI_ERROR_SDK_COMPONENT_MISSING"))
             {
                 var result =
-                    BlockingWindow.Instance.ShowMessageBox("You need to install Windows Graphics diagnostics tools.\n\nClick Ok to download this Windows component directly from Microsoft.",
-                                                          "Windows component missing", "Ok", "Cancel");
+                    BlockingWindow.Instance
+                                  .ShowMessageBox("You need to install Windows Graphics diagnostics tools.\n\nClick Ok to download this Windows component directly from Microsoft.",
+                                                  "Windows component missing", "Ok", "Cancel");
                 if (result == "Ok")
                 {
                     CoreUi.Instance
@@ -104,8 +154,9 @@ internal static class ProgramWindows
             }
             else
             {
-                BlockingWindow.Instance.ShowMessageBox("We are sorry but your graphics hardware might not be capable of running Tooll3\n\n" + e.Message, "Oh noooo",
-                                                 "Ok... /:");
+                BlockingWindow.Instance.ShowMessageBox("We are sorry but your graphics hardware might not be capable of running Tooll3\n\n" + e.Message,
+                                                       "Oh noooo",
+                                                       "Ok... /:");
             }
 
             Environment.Exit(0);
@@ -252,30 +303,30 @@ internal static class ProgramWindows
 
         if (!needsRebuild)
             return;
-        
+
         // Create a shader resource-compatible texture
         var textureDesc = new Texture2DDescription
-                              {
-                                  Width = Main.SwapChain.Description.ModeDescription.Width,
-                                  Height = Main.SwapChain.Description.ModeDescription.Height,
-                                  MipLevels = 1,
-                                  ArraySize = 1,
-                                  Format = Main.SwapChain.Description.ModeDescription.Format,
-                                  SampleDescription = new SampleDescription(1, 0),
-                                  Usage = ResourceUsage.Default,
-                                  BindFlags = BindFlags.ShaderResource,
-                                  CpuAccessFlags = CpuAccessFlags.None,
-                                  OptionFlags = ResourceOptionFlags.None
-                              };
+        {
+            Width = Main.SwapChain.Description.ModeDescription.Width,
+            Height = Main.SwapChain.Description.ModeDescription.Height,
+            MipLevels = 1,
+            ArraySize = 1,
+            Format = Main.SwapChain.Description.ModeDescription.Format,
+            SampleDescription = new SampleDescription(1, 0),
+            Usage = ResourceUsage.Default,
+            BindFlags = BindFlags.ShaderResource,
+            CpuAccessFlags = CpuAccessFlags.None,
+            OptionFlags = ResourceOptionFlags.None
+        };
 
         if (_uiCopyTexture is { IsDisposed: false })
             _uiCopyTexture.Dispose();
-        
+
         _uiCopyTexture = new Texture2D(_device, textureDesc);
-        
+
         if (UiCopyTextureSrv is { IsDisposed: false })
             UiCopyTextureSrv.Dispose();
-        
+
         UiCopyTextureSrv = new ShaderResourceView(_device, _uiCopyTexture);
     }
 
@@ -293,12 +344,10 @@ internal static class ProgramWindows
             Log.Warning("Can't use undefined uiCopyTexture");
             return;
         }
-        
+
         _deviceContext.CopyResource(Main.BackBufferTexture, _uiCopyTexture);
     }
-    
-    private static  Texture2D _uiCopyTexture;
-    public static  ShaderResourceView UiCopyTextureSrv { get; private set; }
 
-
+    private static Texture2D _uiCopyTexture;
+    public static ShaderResourceView UiCopyTextureSrv { get; private set; }
 }
