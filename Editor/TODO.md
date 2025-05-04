@@ -7,7 +7,7 @@
 - [x] Deleting last output will cause crash
 - [ ] Bypassed operator are active after reload / bypassing again breaks their update
 - [ ] Modifications by BiasGain Vec2 gizmo can't be undone
-- [ ] Fix thumbnails rendering breaks defaults
+- [x] Fix thumbnails rendering breaks defaults
 
 ## Project handling
 
