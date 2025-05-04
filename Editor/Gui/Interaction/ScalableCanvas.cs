@@ -73,8 +73,10 @@ internal abstract class ScalableCanvas : IScalableCanvas
     {
         if (FillMode == FillModes.FillWindow)
         {
-            WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + Vector2.One;
-            WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - 2 * Vector2.One;
+            var paddingForFocusBorder = UserSettings.Config.FocusMode ? 0 : 1;
+            
+            WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + paddingForFocusBorder * Vector2.One;
+            WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - paddingForFocusBorder * 2  * Vector2.One;
         }
         else
         {

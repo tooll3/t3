@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 using T3.Serialization;
 
 namespace T3.Editor.Gui.Windows.Output;
@@ -99,10 +100,13 @@ public static class ResolutionHandling
                 return Size;
 
             var windowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
+
+            var paddingForFocusBorder = UserSettings.Config.FocusMode ? 0 : 1;
+            
             if (Size.Width <= 0 || Size.Height <= 0)
             {
-                return new Int2((int)windowSize.X - 2,
-                                (int)windowSize.Y - 2);
+                return new Int2((int)windowSize.X - paddingForFocusBorder * 2,
+                                (int)windowSize.Y - paddingForFocusBorder * 2);
             }
 
             var windowAspectRatio = windowSize.X / windowSize.Y;
