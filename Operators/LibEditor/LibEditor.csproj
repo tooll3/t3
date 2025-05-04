@@ -12,14 +12,15 @@
     <EditorVersion>4.0.0</EditorVersion>
     <IsEditorOnly>true</IsEditorOnly>
     <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Core.csproj" Private="false" PrivateAssets="all" />
-    <ProjectReference Include="..\..\Editor\Editor.csproj" Private="false" PrivateAssets="all" />
-    <ProjectReference Include="..\..\SystemUi\SystemUi.csproj" />
-    <ProjectReference Include="..\lib\Lib.csproj" Private="false" PrivateAssets="all" />
-    <ProjectReference Include="..\TypeOperators\TypeOperators.csproj" Private="false" PrivateAssets="all" />
-    <ProjectReference Include="..\..\Logging\Logging.csproj" Private="false" PrivateAssets="all" />
+    <ProjectReference Include="..\..\Core\Core.csproj" Private="false"  />
+    <ProjectReference Include="..\..\Editor\Editor.csproj" Private="false"  />
+    <ProjectReference Include="..\..\SystemUi\SystemUi.csproj" Private="false" />
+    <ProjectReference Include="..\lib\Lib.csproj" Private="false"  />
+    <ProjectReference Include="..\TypeOperators\TypeOperators.csproj" Private="false"  />
+    <ProjectReference Include="..\..\Logging\Logging.csproj" Private="false"  />
   </ItemGroup>
   <!-- Include Resources/** into output/Resources -->
   <!-- Include Resources/** into output/Resources -->

@@ -19,7 +19,7 @@ namespace T3.Core.Compilation;
 public static class RuntimeAssemblies
 {
     public const string EnvironmentVariableName = "T3_ASSEMBLY_PATH";
-    internal static readonly Assembly CoreAssembly = typeof(RuntimeAssemblies).Assembly;
+    private static readonly Assembly CoreAssembly = typeof(RuntimeAssemblies).Assembly;
     public static readonly string CorePath = CoreAssembly.Location;
     public static readonly string CoreDirectory = Path.GetDirectoryName(CorePath)!;
     public static readonly Version Version = CoreAssembly.GetName().Version!;
@@ -29,17 +29,6 @@ public static class RuntimeAssemblies
     static RuntimeAssemblies()
     {
         SetEnvironmentVariable(EnvironmentVariableName, CoreDirectory);
-
-       // var alreadyLoadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-        var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
-        foreach (var assembly in assemblies)
-        {
-            foreach (var referencedAssembly in assembly.GetReferencedAssemblies())
-            {
-                Assembly.Load(referencedAssembly);
-            }
-        }
     }
 
     private static void SetEnvironmentVariable(string envVar, string envValue)

@@ -13,6 +13,7 @@
     <EditorVersion>4.0.0</EditorVersion>
     <IsEditorOnly>false</IsEditorOnly>
     <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <ItemGroup>
     <Using Include="System" />
@@ -88,8 +89,8 @@
     <Using Alias="SampleDescription" Include="SharpDX.DXGI.SampleDescription" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Core.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\..\Logging\Logging.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\..\Core\Core.csproj" Private="false" />
+    <ProjectReference Include="..\..\Logging\Logging.csproj" Private="false" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="unsplasharp.api" Version="0.7.0" />

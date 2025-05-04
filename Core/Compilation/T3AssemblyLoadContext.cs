@@ -8,6 +8,7 @@ using System.Runtime.Loader;
 using System.Threading;
 using T3.Core.IO;
 using T3.Core.Logging;
+using NuGet.Configuration;
 
 namespace T3.Core.Compilation;
 
@@ -34,15 +35,96 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
     private readonly List<T3AssemblyLoadContext> _dependencyContexts = [];
     private static readonly List<AssemblyTreeNode> _coreNodes = [];
 
+    private static readonly AssemblyNameAndPath[] _availableNugetAssemblies;
+    private static readonly Lock _nugetLock = new();
+    private static readonly AssemblyLoadContext _nugetContext = new("NuGet", true);
+    private static readonly List<AssemblyTreeNode> _loadedNuGetAssemblies = [];
+
+    private sealed class AssemblyNameAndPath(string path, string fileBasedName)
+    {
+        private AssemblyName? _assemblyName;
+        private bool _triedToLoad;
+        public string Path { get; } = path;
+        public string FileBasedName { get; } = fileBasedName;
+        public bool Claimed;
+
+        public AssemblyName? AssemblyName
+        {
+            get
+            {
+                if (_triedToLoad)
+                    return _assemblyName;
+
+                try
+                {
+                    _assemblyName = AssemblyName.GetAssemblyName(Path);
+                }
+                catch
+                {
+                    _assemblyName = null;
+                }
+
+                _triedToLoad = true;
+                return _assemblyName;
+            }
+        }
+    }
+
     static T3AssemblyLoadContext()
     {
+        // prepare nuget assembly loading (without actually loading them)
+        var settings = Settings.LoadDefaultSettings(null, null, null);
+        var nuGetDirectory = SettingsUtility.GetGlobalPackagesFolder(settings);
+
+        var directoryInfo = new DirectoryInfo(nuGetDirectory);
+        if (directoryInfo.Exists)
+        {
+            // get all dlls in the nuget directory
+            // todo - this should be invalidated at runtime
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+            _availableNugetAssemblies = directoryInfo.EnumerateFiles("*", SearchOption.AllDirectories)
+                                                     .AsParallel()
+                                                     .Select(x =>
+                                                             {
+                                                                 const string extension = ".dll";
+                                                                 const int extensionLength = 4;
+                                                                 if (!x.Name.EndsWith(extension, StringComparison.Ordinal))
+                                                                     return null;
+
+                                                                 try
+                                                                 {
+                                                                     return new AssemblyNameAndPath(x.FullName, x.Name[..^extensionLength]);
+                                                                 }
+                                                                 catch
+                                                                 {
+                                                                     return null;
+                                                                 }
+                                                             })
+                                                      // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+                                                     .Where(x => x != null)
+                                                     .ToArray()!;
+
+            stopwatch.Stop();
+            Log.Debug($"Found {_availableNugetAssemblies.Length} nuget assemblies in {stopwatch.ElapsedMilliseconds}ms");
+
+            if (_availableNugetAssemblies.Length > 10_000)
+            {
+                Log.Warning("You have a lot of nuget packages installed - consider clearing your cache for faster load times.");
+            }
+        }
+        else
+        {
+            Log.Error($"NuGet directory {nuGetDirectory} does not exist");
+            _availableNugetAssemblies = [];
+        }
+
         (AssemblyLoadContext Context, (Assembly Assembly, AssemblyName name)[] assemblies)[]? allAssemblies = All
-                           .Select(ctx => (
-                                              ctx: ctx,
-                                              assemblies: ctx.Assemblies
-                                                             .Select(x => (asm: x, name: x.GetName()))
-                                                             .ToArray()))
-                           .ToArray();
+           .Select(ctx => (
+                              ctx: ctx,
+                              assemblies: ctx.Assemblies
+                                             .Select(x => (asm: x, name: x.GetName()))
+                                             .ToArray()))
+           .ToArray();
 
         // create "root" nodes for each assembly context - one per context and one per directory for each context
         foreach (var ctxGroup in allAssemblies)
@@ -91,9 +173,9 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
                             if (coreNode.TryFindExisting(nameStr, out depNode))
                                 break;
                         }
-                        
+
                         depNode ??= new AssemblyTreeNode(asmAndName.Assembly, ctxGroup.Context);
-                        
+
                         node.AddReferenceTo(depNode);
                     }
                 }
@@ -106,12 +188,13 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
     private static readonly List<T3AssemblyLoadContext> _loadContexts = [];
     private static readonly Lock _loadContextLock = new();
 
-    internal T3AssemblyLoadContext(AssemblyName rootName, string directory) : base(rootName.GetNameSafe(), true)
+    internal T3AssemblyLoadContext(AssemblyName rootName, string directory) :
+        base(rootName.GetNameSafe(), true)
     {
         Resolving += (_, name) =>
                      {
                          var result = OnResolving(name);
-                         
+
                          if (result != null)
                          {
                              // check versions of the assembly - if different, log a warning.
@@ -126,6 +209,13 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
                                  }
                              }
                          }
+
+                         if (result == null)
+                         {
+                             Log.Error($"{Name!}: Failed to resolve assembly '{name.Name}'");
+                             return Root!.Assembly;
+                         }
+
                          return result;
                      };
         Unloading += (_) => { Log.Debug($"{Name!}: Unloading assembly context"); };
@@ -149,6 +239,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
         }
     }
 
+    // called if Load method returns null - searches other contexts and nuget packages
     private Assembly? OnResolving(AssemblyName asmName)
     {
         var name = asmName.GetNameSafe();
@@ -197,8 +288,56 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
             }
         }
 
+        // check nuget packages
+        lock (_nugetLock)
+        {
+            foreach (var node in _loadedNuGetAssemblies)
+            {
+                if (node.TryFindExisting(name, out var asmNode))
+                {
+                    // add the dependency to our context
+                    AddDependency(asmNode);
+                    return asmNode.Assembly;
+                }
+
+                if (node.TryFindUnreferenced(name, out asmNode))
+                {
+                    // add the dependency to our context
+                    AddDependency(asmNode);
+                    return asmNode.Assembly;
+                }
+            }
+
+            foreach (var package in _availableNugetAssemblies)
+            {
+                if (package.Claimed || package.FileBasedName != name) 
+                    continue;
+
+                var potentialAssemblyName = package.AssemblyName;
+                if (potentialAssemblyName == null)
+                    continue;
+
+                if (potentialAssemblyName.FullName != asmName.FullName)
+                    continue;
+
+                try
+                {
+                    package.Claimed = true;
+                    var assembly = _nugetContext.LoadFromAssemblyPath(package.Path);
+                    var node = new AssemblyTreeNode(assembly, _nugetContext);
+                    AddDependency(node);
+                    _loadedNuGetAssemblies.Add(node);
+                    Log.Debug($"{Name!}: Loaded assembly {asmName.FullName} from nuget package");
+                    return assembly;
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"{Name!}: Failed to load assembly {asmName.FullName} from nuget package: {e}");
+                }
+            }
+        }
+
         // guess we didn't find it :(
-        Log.Error($"{Name!}: Failed to resolve assembly '{name}'");
         return null;
     }
 
@@ -238,7 +377,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
             AddDependency(node);
             return node.Assembly;
         }
-        
+
         return null;
     }
 
@@ -250,10 +389,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
 
     private void AddDependency(AssemblyTreeNode node)
     {
-        if (Root!.AddReferenceTo(node))
-        {
-            Log.Info($"{Name!}: Added reference {node.NameStr} to {Name}");
-        }
+        _ = Root!.AddReferenceTo(node);
 
         if (node.LoadContext == this || node.LoadContext is not T3AssemblyLoadContext tixlCtx)
             return;

@@ -12,6 +12,7 @@
     <EditorVersion>4.0.0</EditorVersion>
     <IsEditorOnly>false</IsEditorOnly>
     <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <ItemGroup>
     <Using Include="System" />

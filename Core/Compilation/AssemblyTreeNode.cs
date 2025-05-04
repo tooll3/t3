@@ -22,8 +22,8 @@ internal sealed class AssemblyTreeNode
     public readonly AssemblyLoadContext LoadContext;
 
     private readonly Lock _assemblyLock = new();
-
-    private readonly record struct DllReference(string Path, string Name, AssemblyName AssemblyName);
+    
+    internal readonly record struct DllReference(string Path, string Name, AssemblyName AssemblyName);
 
     private List<DllReference>? _unreferencedDlls;
     
@@ -85,7 +85,7 @@ internal sealed class AssemblyTreeNode
     private readonly string _parentName;
 
     // warning : not thread safe, must be wrapped in a lock around _assemblyLock
-    public AssemblyTreeNode(Assembly assembly, AssemblyLoadContext parent) // todo - 2-way dependency is not pretty
+    public AssemblyTreeNode(Assembly assembly, AssemblyLoadContext parent)
     {
         Assembly = assembly;
         Name = assembly.GetName();
