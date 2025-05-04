@@ -151,6 +151,16 @@ internal class Vector2InputUi : FloatVectorInputValueUi<Vector2>
                     FloatComponents[1] = FloatComponents[1].Clamp(Min, Max);
                 }
             }
+
+            if (ImGui.IsItemActivated())
+            {
+                inputEditState |= InputEditStateFlags.Started;
+            }
+
+            if (ImGui.IsItemDeactivated())
+            {
+                inputEditState = InputEditStateFlags.Finished;
+            }
         }
 
         if (readOnly)

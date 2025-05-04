@@ -6,7 +6,7 @@
 - [x] Fix Gradient editor not working as parameter window parameter
 - [x] Deleting last output will cause crash
 - [ ] Bypassed operator are active after reload / bypassing again breaks their update
-- [ ] Modifications by BiasGain Vec2 gizmo can't be undone
+- [x] Modifications by BiasGain Vec2 gizmo can't be undone
 - [x] Fix thumbnails rendering breaks defaults
 
 ## Project handling
@@ -14,7 +14,7 @@
 - [x] Reduce size of backups
 - [x] Allow to override Project location
 - [x] Make sure that TiXL is using the high performance GPU
-- [ ] Prevent creating projects with existing names
+- [x] Prevent creating projects with existing names
 - [ ] unload projects from project list
 - [ ] Load last project from user settings
 
