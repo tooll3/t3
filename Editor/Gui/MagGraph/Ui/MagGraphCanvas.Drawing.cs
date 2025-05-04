@@ -74,7 +74,10 @@ internal sealed partial class MagGraphCanvas
             _context.ActiveTargetInputId = Guid.Empty;
         }
 
-        DrawBackgroundGrids(drawList);
+        if(!UserSettings.Config.FocusMode) 
+        {
+            DrawBackgroundGrids(drawList);
+        } 
 
         // Selection fence...
         {
