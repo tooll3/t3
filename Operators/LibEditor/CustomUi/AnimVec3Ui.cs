@@ -14,15 +14,15 @@ public static class AnimVec3Ui
 {
     public static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
     {
-        if (!(instance is AnimVec3 animVec2)
+        if (!(instance is AnimVec3 animVec3)
             || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
             return SymbolUi.Child.CustomUiResult.None;
 
+        var isNodeActivated = false;
         ImGui.PushID(instance.SymbolChildId.GetHashCode());
-        if (WidgetElements.DrawRateLabelWithTitle(animVec2.RateFactor, screenRect, drawList,  "Anim3 " + (AnimMath.Shapes)animVec2.Shape.TypedInputValue.Value, canvasScale))
+        if (WidgetElements.DrawRateLabelWithTitle(animVec3.RateFactor, screenRect, drawList,  "Anim3 " + (AnimMath.Shapes)animVec3.Shape.TypedInputValue.Value, canvasScale))
         {
-            animVec2.RateFactor.Input.IsDefault = false;
-            animVec2.RateFactor.DirtyFlag.Invalidate();
+            isNodeActivated = true;
         }
 
         var h = screenRect.GetHeight();
@@ -36,16 +36,25 @@ public static class AnimVec3Ui
             
         var highlightEditable = ImGui.GetIO().KeyCtrl;
 
-        ValueLabel.Draw(drawList, graphRect, new Vector2(1, 0), animVec2.AmplitudeFactor);
+        if (h > 14)
+        {
+            isNodeActivated |= ValueLabel.Draw(drawList, graphRect, new Vector2(1, 0), animVec3.AmplitudeFactor);
+        }
 
+        
         // Graph dragging to edit Bias and Ratio
-        var isActive = false;
-
+        var isGraphActive = false;
         ImGui.SetCursorScreenPos(graphRect.Min);
         if (ImGui.GetIO().KeyCtrl)
         {
             ImGui.InvisibleButton("dragMicroGraph", graphRect.GetSize());
-            isActive = ImGui.IsItemActive();
+            
+            if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) 
+                && ImGui.IsMouseClicked(ImGuiMouseButton.Left) || ImGui.IsItemActive())
+            {
+                isGraphActive = true;
+            }
+            
 
             if (ImGui.IsItemHovered())
             {
@@ -53,39 +62,36 @@ public static class AnimVec3Ui
             }
         }
 
-        if (isActive)
+        if (isGraphActive)
         {
+            isNodeActivated = true;
             var dragDelta = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 1);
 
             if (ImGui.IsItemActivated())
             {
-                //_dragStartPosition = ImGui.GetMousePos();
-                _dragStartBias = animVec2.Bias.TypedInputValue.Value;
-                _dragStartRatio = animVec2.Ratio.TypedInputValue.Value;
+                _dragStartBias = animVec3.Bias.TypedInputValue.Value;
+                _dragStartRatio = animVec3.Ratio.TypedInputValue.Value;
             }
 
             if (Math.Abs(dragDelta.X) > 0.5f)
             {
-                animVec2.Ratio.TypedInputValue.Value = (_dragStartRatio + dragDelta.X / 100f).Clamp(0.001f, 1f);
-                animVec2.Ratio.DirtyFlag.Invalidate();
-                animVec2.Ratio.Input.IsDefault = false;
+                animVec3.Ratio.SetTypedInputValue((_dragStartRatio + dragDelta.X / 100f).Clamp(0.001f, 1f));
             }
 
             if (Math.Abs(dragDelta.Y) > 0.5f)
             {
-                animVec2.Bias.TypedInputValue.Value = (_dragStartBias - dragDelta.Y / 100f).Clamp(0.01f, 0.99f);
-                animVec2.Bias.DirtyFlag.Invalidate();
-                animVec2.Bias.Input.IsDefault = false;
+                animVec3.Bias.SetTypedInputValue((_dragStartBias - dragDelta.Y / 100f).Clamp(0.01f, 0.99f));
             }
         }
             
-        DrawCurve(drawList, graphRect, animVec2, highlightEditable);
+        DrawCurve(drawList, graphRect, animVec3, highlightEditable);
             
         ImGui.PopID();
         return SymbolUi.Child.CustomUiResult.Rendered 
                | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph 
                | SymbolUi.Child.CustomUiResult.PreventInputLabels
-               | SymbolUi.Child.CustomUiResult.PreventTooltip;
+               | SymbolUi.Child.CustomUiResult.PreventTooltip
+               | (isNodeActivated ? SymbolUi.Child.CustomUiResult.IsActive : SymbolUi.Child.CustomUiResult.None);
     }
 
     private static void DrawCurve(ImDrawListPtr drawList, ImRect graphRect, AnimVec3 animValue, bool highlightEditable)

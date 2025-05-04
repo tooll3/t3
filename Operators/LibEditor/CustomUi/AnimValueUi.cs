@@ -27,8 +27,8 @@ public static class AnimValueUi
                                                                      "Anim " + (AnimMath.Shapes)animValue.Shape.TypedInputValue.Value, canvasScale))
         {
             isNodeActivated = true;
-            animValue.Rate.Input.IsDefault = false;
-            animValue.Rate.DirtyFlag.Invalidate();
+            // animValue.Rate.Input.IsDefault = false;
+            // animValue.Rate.DirtyFlag.Invalidate();
         }
 
         // Graph dragging to edit Bias and Ratio
