@@ -559,12 +559,6 @@
       "Outputs": []
     },
     {
-      "Id": "5ba65d60-3e77-45cb-adad-3c525c597c67"/*Transform*/,
-      "SymbolId": "284d2183-197d-47fd-b130-873cced78b1c",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "5c436e54-9e14-4485-8b50-2ec2509fd972"/*IntroLogos*/,
       "SymbolId": "3036067a-a4c2-434b-b0e3-ac95c5c943f4",
       "Name": "IntroLogos",
@@ -1255,23 +1249,6 @@
       "Outputs": []
     },
     {
-      "Id": "9da7040c-2d5d-4311-bfd5-4334c61f8215"/*AudioReaction*/,
-      "SymbolId": "03477b9a-860e-4887-81c3-5fe51621122c",
-      "InputValues": [
-        {
-          "Id": "b1c43d3b-f425-4d62-9d48-07ccb5d08707"/*Amplitude*/,
-          "Type": "System.Single",
-          "Value": 1.09
-        },
-        {
-          "Id": "f3d7c7fd-4280-4fb4-9f9a-c39b28d1a72b"/*WindowCenter*/,
-          "Type": "System.Single",
-          "Value": 0.01
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "9ee1a5fa-3a5f-407e-ba3a-220c278a649a"/*DrawLinesBuildup*/,
       "SymbolId": "66f5a6af-b4a5-46ef-b1e5-4cdd035b6539",
       "InputValues": [
@@ -1354,13 +1331,6 @@
       "Outputs": []
     },
     {
-      "Id": "a6ef911f-c056-452f-8683-54afd79d33d6"/*OffsetCamRot*/,
-      "SymbolId": "15ac7153-69af-45f8-bcdd-50cdef0c9ae1",
-      "Name": "OffsetCamRot",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "a7a8dcbf-e06e-4662-b469-d8816bbee4b7"/*LoadObjAsPoints*/,
       "SymbolId": "ad651447-75e7-4491-a56a-f737d70c0522",
       "InputValues": [
@@ -1380,12 +1350,6 @@
           "Value": 1
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "a9e7f316-775c-4148-95a2-91cf427f7054"/*Transform*/,
-      "SymbolId": "284d2183-197d-47fd-b130-873cced78b1c",
-      "InputValues": [],
       "Outputs": []
     },
     {
@@ -1850,12 +1814,6 @@
       "Outputs": []
     },
     {
-      "Id": "e47d726f-690d-4bce-ae42-2a6aab938cdf"/*Transform*/,
-      "SymbolId": "284d2183-197d-47fd-b130-873cced78b1c",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "e4bd683a-87e1-4155-8827-a00ad0381a29"/*DrawLinesBuildup*/,
       "SymbolId": "66f5a6af-b4a5-46ef-b1e5-4cdd035b6539",
       "InputValues": [
@@ -1947,39 +1905,6 @@
       "Outputs": []
     },
     {
-      "Id": "ec21d6b6-403e-4e16-88b5-6e07b3106166"/*Camera*/,
-      "SymbolId": "746d886c-5ab6-44b1-bb15-f3ce2fadf7e6",
-      "InputValues": [
-        {
-          "Id": "199d4ce0-aab1-403a-ad42-216ef1061a0e"/*NearFarClip*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.1,
-            "Y": 1000.0
-          }
-        },
-        {
-          "Id": "313596cc-3854-436b-89da-5fd40164ce76"/*Position*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 0.0,
-            "Y": 4.885266,
-            "Z": 56.612343
-          }
-        },
-        {
-          "Id": "a7acb25c-d60c-43a6-b1df-2cd5c6e183f3"/*Target*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 0.0,
-            "Y": -5.000885,
-            "Z": -77.6864
-          }
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "ee624bbb-f670-4f12-9c3d-bcfc57aed159"/*LoadSvg*/,
       "SymbolId": "e8d94dd7-eb54-42fe-a7b1-b43543dd457e",
       "InputValues": [
@@ -2044,23 +1969,6 @@
         }
       ],
       "Outputs": []
-    },
-    {
-      "Id": "f87ef0d8-b699-4fe1-8bbf-0d477855d0ee"/*ScaleVector3*/,
-      "SymbolId": "646d6a5d-a1d7-471e-86ab-e1fb2542a2c2",
-      "InputValues": [
-        {
-          "Id": "4ab40aa5-b390-4042-a959-8eddf9cbc9b0"/*ScaleUniform*/,
-          "Type": "System.Single",
-          "Value": 0.0
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "956f31aa-8c84-4d2d-9fc7-e63d753f6941"/*ScaleVector3*/,
-          "IsDisabled": true
-        }
-      ]
     }
   ],
   "Connections": [
@@ -2597,12 +2505,6 @@
       "SourceSlotId": "e21e3843-7d63-4db2-9234-77664e872a0f",
       "TargetParentOrChildId": "f7c8cfc2-eb46-4ad9-a053-86efbdc58d02",
       "TargetSlotId": "82b2e8d3-40c2-4a4c-a9ad-806d5097a8fd"
-    },
-    {
-      "SourceParentOrChildId": "a6ef911f-c056-452f-8683-54afd79d33d6",
-      "SourceSlotId": "c8942be3-53cf-4764-8663-35159c8e0f6d",
-      "TargetParentOrChildId": "f87ef0d8-b699-4fe1-8bbf-0d477855d0ee",
-      "TargetSlotId": "de6bfe5a-ebcd-4da6-8c8a-79989a31dd9f"
     }
   ],
   "PlaybackSettings": {
