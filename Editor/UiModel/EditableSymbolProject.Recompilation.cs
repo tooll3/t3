@@ -404,6 +404,7 @@ internal partial class EditableSymbolProject
     private void MarkAsNeedingRecompilation()
     {
         _needsCompilation = true;
+        CsProjectFile.MarkCodeChanged();
     }
 
     private readonly record struct PackageNamespaceInfo(EditableSymbolProject Project, string? RootNamespace);
