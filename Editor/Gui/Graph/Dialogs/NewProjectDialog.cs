@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿using System.Windows.Forms;
+using ImGuiNET;
 using T3.Core.Model;
 using T3.Core.SystemUi;
 using T3.Editor.Compilation;
@@ -69,8 +70,8 @@ internal sealed class NewProjectDialog : ModalDialog
             //ImGui.SetKeyboardFocusHere();
             
             FormInputs.AddStringInput("Name", ref _newProjectName,
-                                      tooltip: "Is used to identify your project. Must not contain spaces or special characters.",
-                                      warning: warning);
+                                      "Is used to identify your project. Must not contain spaces or special characters.",
+                                      warning);
 
             var allValid = namespaceCorrect && nameCorrect;
 
@@ -138,18 +139,32 @@ internal sealed class NewProjectDialog : ModalDialog
         
     private static bool DoesProjectWithNameExists(string name)
     {
-        foreach (var package in SymbolPackage.AllPackages.Cast<EditorSymbolPackage>())
+        foreach (var package in SymbolPackage.AllPackages)
         {
-            if (!package.HasHome)
+            if (package is not EditorSymbolPackage symbolPackage)
                 continue;
-                
-            var existingProjectName = package.DisplayName;
-                
-            if (string.Equals(existingProjectName, name))
+            
+            if (!symbolPackage.HasHome)
+                continue;
+            
+            // TODO: it would be great with SymbolPackage would have a "Name" field
+            if (DoesStringMatchesLastPathItem(name, symbolPackage.AssemblyInformation.Name))
+            {
                 return true;
+            }
         }
             
         return false;
+    }
+
+    private static bool DoesStringMatchesLastPathItem(string name, ReadOnlySpan<char> path)
+    {
+        var lastDot = path.LastIndexOf('.');
+        if (lastDot < 0) 
+            return false;
+        
+        var lastSegment = path.Slice(lastDot + 1);
+        return lastSegment.Equals(name, StringComparison.OrdinalIgnoreCase);
     }
 
     private string _newProjectName = string.Empty;
