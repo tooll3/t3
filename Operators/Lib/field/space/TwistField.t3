@@ -1,0 +1,19 @@
+{
+  "Id": "D7C6E980-6766-4F83-A32C-677E3713E8A6"/*TwistField*/,
+  "Inputs": [
+    {
+      "Id": "195F4642-52F7-4C95-9127-07F6175549F5"/*Axis*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "84DD59CE-4726-4604-AFEE-92FFDEC0E3F5"/*InputField*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "4935F569-8D23-495D-BB87-9A39E5B3981E"/*Amount*/,
+      "DefaultValue": 0.5
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
