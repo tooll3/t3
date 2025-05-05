@@ -54,6 +54,9 @@ public class RaymarchField : Instance<RaymarchField>
             Local_XY,
             Local_YZ,
             Local_XZ,
+            Polar_X,
+            Polar_Y,
+            Polar_Z,
         }
         
 }

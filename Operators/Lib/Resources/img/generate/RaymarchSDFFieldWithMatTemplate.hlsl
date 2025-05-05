@@ -250,6 +250,12 @@ PSOutput psMain(vsOutput input)
     float2 uv = pObject.xy / TextureScale;
 #elif MAPPING_XZ
     float2 uv = pObject.xz / TextureScale;
+#elif POLAR_X
+    float2 uv = float2(atan2(p.y, p.z)/6.2832, -TextureScale*p.x/3.0)+.5;
+#elif POLAR_Y
+    float2 uv = float2(atan2(p.x, p.z)/6.2832, -TextureScale*p.y/3.0)+.5;
+#elif POLAR_Z
+    float2 uv = float2(atan2(p.x, p.y)/6.2832, -TextureScale*p.z/3.0)+.5;
 #else
     float2 uv = pObject.yz / TextureScale;
 #endif
