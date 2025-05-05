@@ -1,0 +1,48 @@
+{
+  "Id": "D7C6E980-6766-4F83-A32C-677E3713E8A6"/*TwistField*/,
+  "Description": "Twists the input field along the given axis.\nThis works best for small source volumes within unit range.",
+  "InputUis": [
+    {
+      "InputId": "195F4642-52F7-4C95-9127-07F6175549F5"/*Axis*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 75.0
+      }
+    },
+    {
+      "InputId": "84DD59CE-4726-4604-AFEE-92FFDEC0E3F5"/*InputField*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "4935F569-8D23-495D-BB87-9A39E5B3981E"/*Amount*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Min": -0.5,
+      "Max": 0.5
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "0125A816-2885-4E83-97F9-357E24F8AFC3"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "8f486b3a-142b-4e0a-aa41-bd6b9d4b9cea",
+      "Title": "Reference",
+      "Description": "original code by iq",
+      "LinkUrl": "https://iquilezles.org/articles/distfunctions/",
+      "LinkType": "Reference"
+    }
+  ]
+}
