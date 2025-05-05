@@ -38,7 +38,7 @@ internal sealed class TwistField : Instance<TwistField>
         {
             case AxisTypes.X:
                 c.Globals["TwistX"] = """
-                                      void opTwistX(inout float4 p, float k) {
+                                      void opTwistX(inout float3 p, float k) {
                                           float c = cos(k * p.x);
                                           float s = sin(k * p.x);
                                           float2x2  m = float2x2(c,-s,s,c);
@@ -48,7 +48,7 @@ internal sealed class TwistField : Instance<TwistField>
                 break;
             case AxisTypes.Y:
                 c.Globals["TwistY"] = """
-                                      void opTwistY(inout float4 p, float k) {
+                                      void opTwistY(inout float3 p, float k) {
                                           float c = cos(k * p.y);
                                           float s = sin(k * p.y);
                                           float2x2  m = float2x2(c,-s,s,c);
@@ -58,7 +58,7 @@ internal sealed class TwistField : Instance<TwistField>
                 break;
             case AxisTypes.Z:
                 c.Globals["TwistZ"] = """
-                                      void opTwistZ(inout float4 p, float k) {
+                                      void opTwistZ(inout float3 p, float k) {
                                           float c = cos(k * p.z);
                                           float s = sin(k * p.z);
                                           float2x2  m = float2x2(c,-s,s,c);
@@ -75,19 +75,12 @@ internal sealed class TwistField : Instance<TwistField>
                               AxisTypes.Z => "opTwistZ",
                               _           => throw new ArgumentOutOfRangeException()
                           };
-        c.AppendCall($"{twistOp}(p{c}, {ShaderNode}Amount);");
+        c.AppendCall($"{twistOp}(p{c}.xyz, {ShaderNode}Amount);");
     }
 
     public void GetPostShaderCode(CodeAssembleContext c, int inputIndex)
     {
     }
-
-    private readonly string[] _axisCodes0 =
-        [
-            "yzx",
-            "xzy",
-            "xyz",
-        ];
 
     private AxisTypes _axis;
 
