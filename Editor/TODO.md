@@ -1,14 +1,29 @@
-﻿## Project handling
+﻿## Important issues
+
+- [x] Fix camera handling
+- [x] Default gradients are not loaded?
+- [x] Fix Scaling for multiple selected keyframes with ALT-Key
+- [x] Fix Gradient editor not working as parameter window parameter
+- [x] Deleting last output will cause crash
+- [x] Bypassed operator are active after reload / bypassing again breaks their update
+- [x] Modifications by BiasGain Vec2 gizmo can't be undone
+- [x] Fix thumbnails rendering breaks defaults
+
+## Project handling
 
 - [x] Reduce size of backups
 - [x] Allow to override Project location
+- [x] Make sure that TiXL is using the high performance GPU
+- [x] Prevent creating projects with existing names
 - [ ] unload projects from project list
 - [ ] Load last project from user settings
 
 ## Graph
+
 - [x] Allow dragging connections from vertical output slot
 - [x] Dragging gradient widget handles drags canvas too
 - [x] Snapping connecting start to output not working of ops who's output is already snapped
+- [ ] Add hint message to hold shift for keeping connections
 - [ ] Add annotations
 - [ ] Parameter window in fullscreen
 - [ ] Fix background control in mag graph
@@ -64,14 +79,7 @@
 - [ ] FieldToImage
 - [ ] Flexible shader injection (e.g. DrawMesh normals, etc.)
 
-## General fixes:
 
-- [x] Fix camera handling
-- [x] Default gradients are not loaded?
-- [x] Fix Scaling for multiple selected keyframes with ALT-Key
-- [x] Fix Gradient editor not working as parameter window parameter
-- [ ] Make sure that TiXL is using the high performance GPU
-- [ ] Deleting last output will cause crash
 
 ## Documentation
 

@@ -2,7 +2,15 @@
   "Id": "b7731197-b922-4ed8-8e22-bc7596c64f6c"/*GetPosition*/,
   "Description": "Gets the current position, rotation, and scale in the world so it can be applied to other transforms.",
   "SymbolTags": "8",
-  "InputUis": [],
+  "InputUis": [
+    {
+      "InputId": "045ad01f-dd04-43d0-8193-5cb4c25add9b"/*Space*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
   "SymbolChildUis": [],
   "OutputUis": [
     {

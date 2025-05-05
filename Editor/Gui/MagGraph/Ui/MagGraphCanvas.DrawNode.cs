@@ -8,6 +8,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.ChildUi;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
@@ -171,6 +172,11 @@ internal sealed partial class MagGraphCanvas
         {
             //context.StateMachine.SetState(GraphStates.Default, context);
         }
+        
+        //if (!justOpenedChild)
+        {
+            ParameterPopUp.HandleOpenParameterPopUp(item.ChildUi, item.Instance, customUiResult, new ImRect(pMinVisible, pMaxVisible));
+        }        
 
         ImGui.PopID();
         // Todo: We eventually need to handle right clicking to select and open context menu when dragging with right mouse button. 

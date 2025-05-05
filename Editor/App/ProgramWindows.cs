@@ -113,7 +113,7 @@ internal static class ProgramWindows
                 if (adapterFound)
                     break;
             }
-
+           
             // Fallback logic remains the same
             if (selectedAdapterIndex == -1)
             {
@@ -123,6 +123,7 @@ internal static class ProgramWindows
 
             var selectedAdapter = factory.GetAdapter1(selectedAdapterIndex);
             ActiveGpu = selectedAdapter.Description.Description;
+
             // Create Device and SwapChain with the selected adapter
             Device.CreateWithSwapChain(selectedAdapter, // Pass the selected adapter
                                        DeviceCreationFlags.Debug,

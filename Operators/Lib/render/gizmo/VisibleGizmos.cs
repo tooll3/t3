@@ -64,10 +64,10 @@ internal sealed class VisibleGizmos : Instance<VisibleGizmos>
 
     private bool _updatedOnce = true;
 
+    [Input(Guid = "4d663aa5-e2d4-40e0-8901-abe09cb832c3")]
+    public readonly MultiInputSlot<Command> Commands = new();
         
     [Input(Guid = "4F52683C-F2AA-4D3F-A964-F5232FA98872")]
     public readonly InputSlot<GizmoVisibility> Visibility = new();
         
-    [Input(Guid = "4d663aa5-e2d4-40e0-8901-abe09cb832c3")]
-    public readonly MultiInputSlot<Command> Commands = new();
 }

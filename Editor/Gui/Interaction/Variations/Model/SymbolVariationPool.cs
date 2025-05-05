@@ -197,7 +197,8 @@ internal sealed class SymbolVariationPool
             if (!TryCreateApplyVariationCommand(instance, variation, out newCommand))
                 return;
         }
-        
+
+        _activeBlendCommand = newCommand;
         newCommand.Do();
     }
 
@@ -551,8 +552,6 @@ internal sealed class SymbolVariationPool
                 {
                     if (parametersForInputs.TryGetValue(inputSlot.Id, out var paramValue))
                     {
-                        // if (paramValue == null)
-                        //     continue;
 
                         values.Add(paramValue);
                         definedForSome = true;
@@ -597,8 +596,6 @@ internal sealed class SymbolVariationPool
 
                 if (parametersForInputs.TryGetValue(inputSlot.Id, out var parameter))
                 {
-                    // if (parameter == null)
-                    //     continue;
 
                     var mixed = blendFunction(inputSlot.Input.Value, parameter, blend);
                     var newCommand = new ChangeInputValueCommand(compositionInstance.Symbol, child.SymbolChildId, inputSlot.Input, mixed);
@@ -647,8 +644,6 @@ internal sealed class SymbolVariationPool
 
                 if (parametersForInputs.TryGetValue(inputSlot.Id, out var paramValue))
                 {
-                    // if (paramValue == null)
-                    //     continue;
 
                     var newCommand = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input, paramValue);
                     commands.Add(newCommand);

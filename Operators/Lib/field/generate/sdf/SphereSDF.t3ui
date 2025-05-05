@@ -1,5 +1,5 @@
 {
-  "Id": "fc2a33fc-d957-4113-8096-92d4dcbe14b5"/*SphereField*/,
+  "Id": "fc2a33fc-d957-4113-8096-92d4dcbe14b5"/*SphereSDF*/,
   "Description": "Adds a sphere to the field.",
   "InputUis": [
     {

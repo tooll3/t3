@@ -5,7 +5,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "012321a6-b3a2-43e9-8ead-13b2390ee7e7"/*ChainLinkField*/,
+      "ChildId": "012321a6-b3a2-43e9-8ead-13b2390ee7e7"/*ChainLinkSDF*/,
       "Position": {
         "X": -205.39178,
         "Y": 2617.1008
@@ -26,7 +26,7 @@
       }
     },
     {
-      "ChildId": "0530c532-0502-4d89-a06b-794680099350"/*SphereField*/,
+      "ChildId": "0530c532-0502-4d89-a06b-794680099350"/*SphereSDF*/,
       "Position": {
         "X": 945.7492,
         "Y": 2556.4854
@@ -47,7 +47,7 @@
       }
     },
     {
-      "ChildId": "06366417-905b-4e85-a909-af41ef455910"/*SphereField*/,
+      "ChildId": "06366417-905b-4e85-a909-af41ef455910"/*SphereSDF*/,
       "Position": {
         "X": 325.55664,
         "Y": 129.0
@@ -103,13 +103,6 @@
       }
     },
     {
-      "ChildId": "0efe8620-c10e-479d-9683-e84e0a54ba2f"/*RaymarchField_L1*/,
-      "Position": {
-        "X": 1062.4248,
-        "Y": 5139.298
-      }
-    },
-    {
       "ChildId": "100ba0f8-a40f-484a-ba8d-e2531a5d9af9"/*TransformField*/,
       "Position": {
         "X": 145.38129,
@@ -138,14 +131,14 @@
       }
     },
     {
-      "ChildId": "126d0f0e-522e-4c9e-9f11-fb1f924ad111"/*SphereField*/,
+      "ChildId": "126d0f0e-522e-4c9e-9f11-fb1f924ad111"/*SphereSDF*/,
       "Position": {
         "X": -74.88248,
         "Y": 397.2963
       }
     },
     {
-      "ChildId": "14b6a443-33c1-4a81-9f6c-72d9e5ebe868"/*RoundedBoxField*/,
+      "ChildId": "14b6a443-33c1-4a81-9f6c-72d9e5ebe868"/*BoxSDF*/,
       "Position": {
         "X": 290.3363,
         "Y": 5185.1646
@@ -187,14 +180,14 @@
       }
     },
     {
-      "ChildId": "1850eaac-284d-4bc6-8594-cff57a7a63e5"/*RoundedBoxField*/,
+      "ChildId": "1850eaac-284d-4bc6-8594-cff57a7a63e5"/*BoxSDF*/,
       "Position": {
         "X": 219.26056,
         "Y": 2319.5105
       }
     },
     {
-      "ChildId": "1a0674ab-45ac-45b0-8f18-0e1ef4e5ab92"/*RoundedBoxField*/,
+      "ChildId": "1a0674ab-45ac-45b0-8f18-0e1ef4e5ab92"/*BoxSDF*/,
       "Position": {
         "X": 398.38687,
         "Y": 343.01508
@@ -271,7 +264,7 @@
       }
     },
     {
-      "ChildId": "25e062cd-bd25-4b09-bf14-6db86bdd628a"/*RoundedBoxField*/,
+      "ChildId": "25e062cd-bd25-4b09-bf14-6db86bdd628a"/*BoxSDF*/,
       "Position": {
         "X": 509.55298,
         "Y": 899.67566
@@ -306,7 +299,7 @@
       }
     },
     {
-      "ChildId": "2ad93205-73e0-409f-8bf0-4d4d9a798a2f"/*RoundedBoxField*/,
+      "ChildId": "2ad93205-73e0-409f-8bf0-4d4d9a798a2f"/*BoxSDF*/,
       "Position": {
         "X": 162.46461,
         "Y": 4534.8413
@@ -355,14 +348,14 @@
       }
     },
     {
-      "ChildId": "31b21a4e-5a9d-479f-91c6-84cd82cf00e4"/*SphereField*/,
+      "ChildId": "31b21a4e-5a9d-479f-91c6-84cd82cf00e4"/*SphereSDF*/,
       "Position": {
         "X": 308.82333,
         "Y": -79.85608
       }
     },
     {
-      "ChildId": "31f8a5ed-a023-4b8f-b858-889fd14bfbd0"/*SphereField*/,
+      "ChildId": "31f8a5ed-a023-4b8f-b858-889fd14bfbd0"/*SphereSDF*/,
       "Position": {
         "X": 96.35922,
         "Y": 4424.6704
@@ -397,7 +390,7 @@
       }
     },
     {
-      "ChildId": "3babf3c7-eaf7-4733-9d91-04ea39d62b7c"/*SphereField*/,
+      "ChildId": "3babf3c7-eaf7-4733-9d91-04ea39d62b7c"/*SphereSDF*/,
       "Position": {
         "X": 308.82333,
         "Y": -122.85608
@@ -453,13 +446,6 @@
       }
     },
     {
-      "ChildId": "47a9a4c5-9b1b-4042-9402-fa41ba2dd759"/*RaymarchField_L1*/,
-      "Position": {
-        "X": 1109.553,
-        "Y": 899.67566
-      }
-    },
-    {
       "ChildId": "48e661fd-faa2-45ef-9d6b-d294c61a697c"/*DrawMesh*/,
       "Position": {
         "X": 1002.24927,
@@ -509,13 +495,6 @@
       }
     },
     {
-      "ChildId": "4f7d8349-efc7-4120-8a93-926392f938c5"/*RaymarchField_L1*/,
-      "Position": {
-        "X": 2955.3342,
-        "Y": 4665.808
-      }
-    },
-    {
       "ChildId": "51116b9f-c715-4e57-9494-a8f75ce28edb"/*FractalSDF*/,
       "Position": {
         "X": 848.14026,
@@ -530,7 +509,7 @@
       }
     },
     {
-      "ChildId": "567fe280-fc06-484a-abd0-7bdd381f6a60"/*SphereField*/,
+      "ChildId": "567fe280-fc06-484a-abd0-7bdd381f6a60"/*SphereSDF*/,
       "Position": {
         "X": 570.3363,
         "Y": 5150.1646
@@ -558,7 +537,7 @@
       }
     },
     {
-      "ChildId": "582fba26-7293-4222-9d37-72f595ffd342"/*SphereField*/,
+      "ChildId": "582fba26-7293-4222-9d37-72f595ffd342"/*SphereSDF*/,
       "Position": {
         "X": -14.689056,
         "Y": 511.554
@@ -586,14 +565,14 @@
       }
     },
     {
-      "ChildId": "5c854979-ebac-49cb-ae51-43dee548450f"/*ChainLinkField*/,
+      "ChildId": "5c854979-ebac-49cb-ae51-43dee548450f"/*ChainLinkSDF*/,
       "Position": {
         "X": -205.39178,
         "Y": 2574.1008
       }
     },
     {
-      "ChildId": "5ebfe9ed-0060-4381-9eb0-48f1bc05fd42"/*RoundedBoxField*/,
+      "ChildId": "5ebfe9ed-0060-4381-9eb0-48f1bc05fd42"/*BoxSDF*/,
       "Position": {
         "X": 22.4646,
         "Y": 4639.8413
@@ -607,7 +586,7 @@
       }
     },
     {
-      "ChildId": "61fb09ad-5f15-4fdb-9bcb-1606dda970af"/*SphereField*/,
+      "ChildId": "61fb09ad-5f15-4fdb-9bcb-1606dda970af"/*SphereSDF*/,
       "Position": {
         "X": -15.968567,
         "Y": -168.35309
@@ -712,7 +691,7 @@
       }
     },
     {
-      "ChildId": "7bb32114-68dc-4f9b-a525-c71ab6ac02b1"/*SphereField*/,
+      "ChildId": "7bb32114-68dc-4f9b-a525-c71ab6ac02b1"/*SphereSDF*/,
       "Position": {
         "X": 776.5258,
         "Y": 4980.7676
@@ -740,14 +719,14 @@
       }
     },
     {
-      "ChildId": "81b31a55-a881-4899-b524-dfdd3022038e"/*SphereField*/,
+      "ChildId": "81b31a55-a881-4899-b524-dfdd3022038e"/*SphereSDF*/,
       "Position": {
         "X": 509.7011,
         "Y": 2319.952
       }
     },
     {
-      "ChildId": "828ad049-0713-4ce1-bad0-051d5aefbd4a"/*RoundedBoxField*/,
+      "ChildId": "828ad049-0713-4ce1-bad0-051d5aefbd4a"/*BoxSDF*/,
       "Position": {
         "X": 795.7492,
         "Y": 2556.4854
@@ -824,7 +803,7 @@
       }
     },
     {
-      "ChildId": "941906d4-6c5e-4cef-8678-0a2086bb9ade"/*RoundedBoxField*/,
+      "ChildId": "941906d4-6c5e-4cef-8678-0a2086bb9ade"/*BoxSDF*/,
       "Position": {
         "X": 2639.1768,
         "Y": 4281.9717
@@ -901,14 +880,14 @@
       }
     },
     {
-      "ChildId": "a019ea80-1cec-4152-8f6f-79e2b5aa2760"/*ChainLinkField*/,
+      "ChildId": "a019ea80-1cec-4152-8f6f-79e2b5aa2760"/*ChainLinkSDF*/,
       "Position": {
         "X": -172.36627,
         "Y": 2501.888
       }
     },
     {
-      "ChildId": "a2469fc5-9a4d-437b-ab30-e4956f8c8468"/*RoundedBoxField*/,
+      "ChildId": "a2469fc5-9a4d-437b-ab30-e4956f8c8468"/*BoxSDF*/,
       "Position": {
         "X": 153.22652,
         "Y": 227.53677
@@ -943,7 +922,7 @@
       }
     },
     {
-      "ChildId": "af58acf4-af79-478b-b01d-e60530c57a24"/*HexagonalPrismField*/,
+      "ChildId": "af58acf4-af79-478b-b01d-e60530c57a24"/*PrismSDF*/,
       "Position": {
         "X": 749.684,
         "Y": 2702.2363
@@ -992,14 +971,7 @@
       }
     },
     {
-      "ChildId": "b3a1f215-feaa-403d-92bc-e8eae1e78d77"/*RaymarchField_L1*/,
-      "Position": {
-        "X": 711.8241,
-        "Y": 4453.5894
-      }
-    },
-    {
-      "ChildId": "b4548cb3-2367-4032-abff-186fefc6acaf"/*SphereField*/,
+      "ChildId": "b4548cb3-2367-4032-abff-186fefc6acaf"/*SphereSDF*/,
       "Position": {
         "X": 127.89746,
         "Y": 4781.666
@@ -1013,7 +985,7 @@
       }
     },
     {
-      "ChildId": "b72893ea-4e76-45af-a8e0-44a29852a6ea"/*RoundedBoxField*/,
+      "ChildId": "b72893ea-4e76-45af-a8e0-44a29852a6ea"/*BoxSDF*/,
       "Position": {
         "X": 130.47766,
         "Y": 2219.804
@@ -1090,7 +1062,7 @@
       }
     },
     {
-      "ChildId": "c3648cf3-a964-4064-aa29-4a1054985dcc"/*ChainLinkField*/,
+      "ChildId": "c3648cf3-a964-4064-aa29-4a1054985dcc"/*ChainLinkSDF*/,
       "Position": {
         "X": 2438.0803,
         "Y": 4704.3354
@@ -1104,7 +1076,7 @@
       }
     },
     {
-      "ChildId": "c514b638-f0d3-40ec-8f30-eed01f5aa96f"/*RoundedBoxField*/,
+      "ChildId": "c514b638-f0d3-40ec-8f30-eed01f5aa96f"/*BoxSDF*/,
       "Position": {
         "X": 509.55298,
         "Y": 962.67566
@@ -1237,7 +1209,7 @@
       }
     },
     {
-      "ChildId": "da6b9d2e-c4dd-41a1-85c7-ce3ed45e3143"/*HexagonalPrismField*/,
+      "ChildId": "da6b9d2e-c4dd-41a1-85c7-ce3ed45e3143"/*PrismSDF*/,
       "Position": {
         "X": -159.5232,
         "Y": 2366.675
@@ -1258,7 +1230,7 @@
       }
     },
     {
-      "ChildId": "dc6395b1-f409-4df0-9399-8c5434b80ac5"/*SphereField*/,
+      "ChildId": "dc6395b1-f409-4df0-9399-8c5434b80ac5"/*SphereSDF*/,
       "Position": {
         "X": 475.55664,
         "Y": 43.0
@@ -1314,7 +1286,7 @@
       }
     },
     {
-      "ChildId": "e973dbad-0e53-4ca3-9967-7515d654539c"/*SphereField*/,
+      "ChildId": "e973dbad-0e53-4ca3-9967-7515d654539c"/*SphereSDF*/,
       "Position": {
         "X": 129.749,
         "Y": 624.0496
@@ -1335,14 +1307,14 @@
       }
     },
     {
-      "ChildId": "eb3363a2-8c03-44d7-b382-8f88b5605673"/*SphereField*/,
+      "ChildId": "eb3363a2-8c03-44d7-b382-8f88b5605673"/*SphereSDF*/,
       "Position": {
         "X": 837.40717,
         "Y": 252.43533
       }
     },
     {
-      "ChildId": "eb7a89fb-3192-45b2-a324-f1f277b8ebea"/*TorusField*/,
+      "ChildId": "eb7a89fb-3192-45b2-a324-f1f277b8ebea"/*TorusSDF*/,
       "Position": {
         "X": 1105.7766,
         "Y": 3305.3284
@@ -1360,13 +1332,6 @@
       "Position": {
         "X": 1227.4584,
         "Y": 5039.242
-      }
-    },
-    {
-      "ChildId": "efaa3d9d-9f30-42f8-bfed-911a0f6a9e31"/*RaymarchField_L1*/,
-      "Position": {
-        "X": 1090.2681,
-        "Y": 1906.8595
       }
     },
     {
@@ -1388,13 +1353,6 @@
       "Position": {
         "X": 1560.5336,
         "Y": 5209.784
-      }
-    },
-    {
-      "ChildId": "f2385af7-ac95-4071-b5f4-efc0b71ca742"/*RaymarchField_L1*/,
-      "Position": {
-        "X": 1121.2103,
-        "Y": 2195.9124
       }
     },
     {
@@ -1461,7 +1419,7 @@
       }
     },
     {
-      "ChildId": "fdd729f6-fef4-423e-b764-1e1a20fa3646"/*RoundedBoxField*/,
+      "ChildId": "fdd729f6-fef4-423e-b764-1e1a20fa3646"/*BoxSDF*/,
       "Position": {
         "X": 504.6007,
         "Y": 2397.1494

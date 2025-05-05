@@ -6,16 +6,16 @@
     {
       "InputId": "2a66b445-49c2-43fd-857f-71224d8bcb39"/*Color*/,
       "Position": {
-        "X": -428.06122,
-        "Y": -139.36328
+        "X": -14.877502,
+        "Y": -425.41354
       },
       "Description": "Defines the color of the Locator"
     },
     {
       "InputId": "43f63f2d-72f0-4d73-9311-fba7e4e32b31"/*Size*/,
       "Position": {
-        "X": -428.06122,
-        "Y": -229.36328
+        "X": -14.877502,
+        "Y": -515.41345
       },
       "GroupTitle": "Visible Gizmo",
       "Description": "Scales the Locator (only visible if 'Toggle Gizmos and Floor Grid' are enabled in the Output window)"
@@ -23,33 +23,24 @@
     {
       "InputId": "53aeef4f-37f8-40a6-b552-cb35f5fb887c"/*Position*/,
       "Position": {
-        "X": -428.06122,
-        "Y": -274.36325
+        "X": 84.13989,
+        "Y": 279.4007
       },
       "Description": "Defines the position of the Locator"
     },
     {
-      "InputId": "a6c523ba-4529-4a51-b6ce-69d396490625"/*EnableDepthTest*/,
-      "Position": {
-        "X": -428.06122,
-        "Y": -32.963577
-      },
-      "Description": "Toggles whether the locator writes to the Z-buffer. Can be helpful if the locator is not visible.",
-      "AddPadding": "True"
-    },
-    {
       "InputId": "d7b88971-a4fb-4761-a2a2-0abeffd01552"/*Thickness*/,
       "Position": {
-        "X": -428.06122,
-        "Y": -184.36328
+        "X": -14.877502,
+        "Y": -470.41354
       },
       "Description": "Defines the thickness of the visible Locator"
     },
     {
       "InputId": "f7a4cab5-6095-4b7f-98d0-faea091dda29"/*Label*/,
       "Position": {
-        "X": -428.06122,
-        "Y": -94.36328
+        "X": 202.61462,
+        "Y": 62.041412
       },
       "Description": "Text field to give the locator a name that can be seen in the viewport",
       "Usage": "Default"
@@ -57,8 +48,8 @@
     {
       "InputId": "fc366e00-4980-4b3e-85a3-b83bff210458"/*Visibility*/,
       "Position": {
-        "X": -428.06122,
-        "Y": 12.036423
+        "X": 984.24615,
+        "Y": -51.569153
       },
       "Description": "Defines the settings that control the visibility of the locator\n\nOff = Locator always invisible\nOn = Locator always visible\nIfSelected = Locator becomes visible when selected in the 'Graph' Window\nInherit = Locator is visible when 'Toggle Gizmos and Floor Grid' is activated\n"
     }
@@ -67,71 +58,71 @@
     {
       "ChildId": "24e3c012-3353-4fac-bc44-b52adcdcd8b1"/*Add*/,
       "Position": {
-        "X": -69.741455,
-        "Y": 460.20276
+        "X": 408.55453,
+        "Y": -58.7258
       }
     },
     {
       "ChildId": "2a57dc55-42eb-4d2c-a83f-8e318ea193ef"/*Point*/,
       "Position": {
-        "X": 40.368927,
-        "Y": 250.95477
+        "X": 408.55453,
+        "Y": -93.7258
       }
     },
     {
       "ChildId": "2a9efde2-971e-494b-a6a7-a24cf70bb5fa"/*Vec3Distance*/,
       "Position": {
-        "X": 854.2149,
-        "Y": 162.32758
+        "X": 935.6139,
+        "Y": 411.3455
       }
     },
     {
       "ChildId": "2c566c7d-fc53-42f2-82fd-6ff409547f1f"/*GetPosition*/,
       "Position": {
-        "X": 499.13898,
-        "Y": 327.56088
+        "X": 800.97894,
+        "Y": 567.73584
       }
     },
     {
       "ChildId": "5467e2c7-c58f-4fdd-a8c6-2cd8b8902b5f"/*DrawLines*/,
       "Position": {
-        "X": 40.368927,
-        "Y": 99.95479
+        "X": 552.3097,
+        "Y": -282.30582
       }
     },
     {
       "ChildId": "5aac90da-37f2-4272-b032-2bde60b9c883"/*Transform*/,
       "Position": {
-        "X": 637.2508,
-        "Y": 0.0
+        "X": 1124.2461,
+        "Y": -191.56918
       }
     },
     {
       "ChildId": "60b07966-acbc-4618-9544-20c9e9909cac"/*Multiply*/,
       "Position": {
-        "X": -219.74146,
-        "Y": 460.20276
+        "X": 268.55453,
+        "Y": -58.7258
       }
     },
     {
       "ChildId": "6f6fb927-e326-44b9-9fc8-e98f3094742d"/*DrawLines*/,
       "Position": {
-        "X": 40.368927,
-        "Y": 17.954796
+        "X": 554.71497,
+        "Y": -419.48523
       }
     },
     {
       "ChildId": "70856336-e6a7-41dd-be49-038884c06061"/*RenderTarget*/,
       "Position": {
-        "X": 60.192017,
-        "Y": 394.06192
+        "X": 342.61462,
+        "Y": 132.04141
       }
     },
     {
       "ChildId": "729a6e0d-cb77-48b2-9af1-f3254cb6aa34"/*BlendColors*/,
       "Position": {
-        "X": -180.20476,
-        "Y": 45.16264
+        "X": 414.71497,
+        "Y": -384.48523
       }
     },
     {
@@ -144,50 +135,50 @@
     {
       "ChildId": "7bd73815-ffcd-49a6-a2c8-42941897e3dc"/*DrawBillboards*/,
       "Position": {
-        "X": 320.77377,
-        "Y": 272.80157
+        "X": 548.55457,
+        "Y": -93.7258
       }
     },
     {
       "ChildId": "83afb584-2ea6-4b14-8568-7b3422cc9bc0"/*AddVec3*/,
       "Position": {
-        "X": 705.0771,
-        "Y": 373.82727
+        "X": 940.9789,
+        "Y": 637.73584
       }
     },
     {
       "ChildId": "8ed18c9d-bfe9-483b-a3f9-7f92ff1a597e"/*CommonPointSets*/,
       "Position": {
-        "X": -180.20476,
-        "Y": 101.16264
+        "X": 183.45894,
+        "Y": -447.34372
       }
     },
     {
       "ChildId": "930c4e94-0c1d-4d7a-ba23-580b376b14a2"/*VisibleGizmos*/,
       "Position": {
-        "X": 787.2508,
-        "Y": 0.0
+        "X": 1124.2461,
+        "Y": -86.56918
       }
     },
     {
       "ChildId": "bdea751d-06b1-4f3b-a086-4a8ed37ac8d4"/*CamPosition*/,
       "Position": {
-        "X": 499.13898,
-        "Y": 284.56088
+        "X": 795.6139,
+        "Y": 376.3455
       }
     },
     {
       "ChildId": "e20c6578-4fcb-4bb7-9022-f50ee8154e13"/*Execute*/,
       "Position": {
-        "X": 487.2508,
-        "Y": 0.0
+        "X": 1124.2461,
+        "Y": -296.56915
       }
     },
     {
       "ChildId": "f2c24cc8-f965-45ee-9b5a-fc964fa84c40"/*Text*/,
       "Position": {
-        "X": 40.368927,
-        "Y": 181.95479
+        "X": 342.61462,
+        "Y": 62.041412
       }
     }
   ],
@@ -195,22 +186,22 @@
     {
       "OutputId": "357c4c25-2b08-4470-84b1-9707a3d8e56e"/*Output*/,
       "Position": {
-        "X": 1308.5125,
-        "Y": 17.498825
+        "X": 1124.2461,
+        "Y": 88.43082
       }
     },
     {
       "OutputId": "0986beb0-16ab-4836-9071-87052ab19602"/*DistanceToCamera*/,
       "Position": {
-        "X": 1309.6022,
-        "Y": 147.49603
+        "X": 935.6139,
+        "Y": 481.3455
       }
     },
     {
       "OutputId": "7599cf50-cbb6-49ce-bb41-9f709b593b0b"/*Pos*/,
       "Position": {
-        "X": 1309.6022,
-        "Y": 197.49603
+        "X": 940.9789,
+        "Y": 672.73584
       }
     }
   ]

@@ -184,19 +184,12 @@ public static class SymbolJson
         }
 
         var symbolChildJson = childJsonResult.Json;
-        var nameToken = symbolChildJson[JsonKeys.SymbolChildName]?.Value<string>();
-        string? name = null;
-        var isBypassed = false;
-        if (nameToken != null)
-        {
-            name = nameToken;
-        }
+        
+        var name = symbolChildJson[JsonKeys.SymbolChildName]?.Value<string>();
 
-        var isBypassedJson = symbolChildJson[JsonKeys.IsBypassed];
-        if (isBypassedJson != null)
-        {
-            isBypassed = isBypassedJson.Value<bool>();
-        }
+        var isBypassed = false;
+        if (symbolChildJson[JsonKeys.IsBypassed] is { } tt)
+            isBypassed = tt.Value<bool>();
 
         var modifyAction = new Action<Symbol.Child>(child =>
                                                     {

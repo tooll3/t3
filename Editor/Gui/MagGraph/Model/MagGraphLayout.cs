@@ -571,7 +571,7 @@ internal sealed class MagGraphLayout
                 || !Items.TryGetValue(c.TargetParentOrChildId, out var targetItem)
                )
             {
-                Log.Warning("Can't find items for connection line");
+                //Log.Warning("Can't find items for connection line");
                 continue;
             }
 

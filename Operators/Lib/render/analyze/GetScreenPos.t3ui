@@ -1,0 +1,39 @@
+{
+  "Id": "56779460-e3e2-401b-8836-f11917b55431"/*GetScreenPos*/,
+  "Description": "Returns the given position in screen space coordinates.\n\nThis can be useful to attach labels or annotations to objects rendered by a camera.\n\nPlease checkout the example.",
+  "InputUis": [
+    {
+      "InputId": "9e55a7ad-2cf0-414a-8d7b-7d7c63b9fbb2"/*SetDepthToZero*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 75.0
+      },
+      "Description": "Sets the z-component of the view space coordinate to z. \nIn most case, this is what you want for using directly as screen space position."
+    },
+    {
+      "InputId": "b597dc38-72bb-4929-b939-c33247ef98eb"/*LocalPosition*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Description": "Optional offset to the converted position"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "caf0c601-8462-4f33-8983-f860214e4f24"/*UpdateCommand*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    },
+    {
+      "OutputId": "b0cfdbbd-e07a-411d-9095-b774a9dd80dd"/*Position*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 300.0
+      }
+    }
+  ]
+}
