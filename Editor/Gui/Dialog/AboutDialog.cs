@@ -8,6 +8,7 @@ using ImGuiNET;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.App;
+using System.Windows.Forms;
 
 
 namespace T3.Editor.Gui.Dialog;
@@ -106,8 +107,8 @@ internal sealed class AboutDialog : ModalDialog
             #endif
             systemInfo.AppendLine($"App language: {GetAppLanguage()}");
             systemInfo.AppendLine($"OS: {GetOperatingSystemInfo()}");
-            systemInfo.AppendLine($"System language: {GetSystemLanguage(englishName: true)}");
-            systemInfo.AppendLine($"Keyboard Layout: {GetSystemLanguage(englishName: false)}");
+            systemInfo.AppendLine($"System language: {GetSystemLanguage()}");
+            systemInfo.AppendLine($"Keyboard Layout: {GetKeyboardLayout()}");
             systemInfo.AppendLine($".NET runtime: {GetDotNetRuntimeVersion()}");
             systemInfo.AppendLine($".NET SDK: {GetDotNetSdkVersion()}");
             systemInfo.AppendLine($"GPU: {GetGpuInformation()}");
@@ -128,14 +129,25 @@ internal sealed class AboutDialog : ModalDialog
         return $"{osDescription} ({osArchitecture})";
     }
 
-    private static string GetSystemLanguage(bool englishName = true)
+    private static string GetSystemLanguage()
     {
         try
         {
             var currentCulture = CultureInfo.CurrentUICulture;
-            return englishName
-                ? currentCulture.EnglishName
-                : $"{currentCulture.KeyboardLayoutId} ({currentCulture.Parent})";
+            return currentCulture.EnglishName;
+        }
+        catch (Exception)
+        {
+            return "Unknown";
+        }
+    }
+
+    private static string GetKeyboardLayout()
+    {
+        try
+        {
+            var currentInputLanguage = InputLanguage.CurrentInputLanguage;
+            return $"{currentInputLanguage.Culture.Name}";
         }
         catch (Exception)
         {
@@ -270,8 +282,8 @@ internal sealed class AboutDialog : ModalDialog
     private static readonly string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
     private static readonly string operatingSystemInfo = GetOperatingSystemInfo();
-    private static readonly string systemLanguage = GetSystemLanguage(englishName: true);
-    private static readonly string keyboardLayout = GetSystemLanguage(englishName: false);
+    private static readonly string systemLanguage = GetSystemLanguage();
+    private static readonly string keyboardLayout = GetKeyboardLayout();
     private static readonly string dotNetRuntime = GetDotNetRuntimeVersion();
     private static readonly string dotNetSdk = GetDotNetSdkVersion();
     private static readonly string gpuInformation = GetGpuInformation();
