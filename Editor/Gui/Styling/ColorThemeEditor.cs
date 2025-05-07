@@ -1,6 +1,8 @@
-﻿using System.Reflection;
+﻿#nullable enable
+using System.Reflection;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
+using T3.Core.UserData;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel.InputsAndTypes;
@@ -10,16 +12,18 @@ namespace T3.Editor.Gui.Styling;
 /// <summary>
 /// User interface switching and adjusting color themes...
 /// </summary>
-public static class ColorThemeEditor
+internal static class ColorThemeEditor
 {
     public static void DrawEditor()
     {
-        FormInputs.SetIndent(100);
-        if (_currentTheme == null)
+        if (!_initialized)
         {
             _currentTheme = ThemeHandling.GetUserOrFactoryTheme();
             _currentThemeWithoutChanges = _currentTheme.Clone();
+            _initialized = true;
+
         }
+        FormInputs.SetIndent(100);
         
         var colorFields = typeof(UiColors).GetFields();
         var colorVariationFields = typeof(ColorVariations).GetFields();
@@ -27,7 +31,11 @@ public static class ColorThemeEditor
         if (FormInputs.AddDropdown(ref UserSettings.Config.ColorThemeName, 
                                    ThemeHandling.Themes.Select(t => t.Name), 
                                    "Theme",
-                                   "Choose a color theme for editing, then apply your modifications and save them. You have the option to create new themes by altering the name, and all themes are stored in the .t3/themes folder."))
+                                   $"""
+                                   Choose a color theme for editing, then apply your modifications and save them. 
+                                   You have the option to create new themes by altering the name and save. 
+                                   Themes are saved as files in {FileLocations.SettingsPath}.
+                                   """))
         {
             var selectedTheme = ThemeHandling.Themes.FirstOrDefault(t => t.Name == UserSettings.Config.ColorThemeName);
             if (selectedTheme != null)
@@ -39,8 +47,8 @@ public static class ColorThemeEditor
         }
         
         FormInputs.AddVerticalSpace();
-        FormInputs.AddStringInput("Name", ref _currentTheme.Name);
-        FormInputs.AddStringInput("Author", ref _currentTheme.Author);
+        FormInputs.AddStringInput("Name", ref _currentTheme.Name!);
+        FormInputs.AddStringInput("Author", ref _currentTheme.Author!);
         _somethingChanged |= _currentTheme.Name != _currentThemeWithoutChanges.Name;
         _somethingChanged |= _currentTheme.Author != _currentThemeWithoutChanges.Author;
         
@@ -51,7 +59,7 @@ public static class ColorThemeEditor
         {
             ThemeHandling.SaveTheme(_currentTheme);
             UserSettings.Config.ColorThemeName = _currentTheme.Name;
-            var currentFromName = ThemeHandling.Themes.FirstOrDefault(t => t != null && t.Name == UserSettings.Config.ColorThemeName);
+            var currentFromName = ThemeHandling.Themes.FirstOrDefault(t => t.Name == UserSettings.Config.ColorThemeName);
             if (currentFromName == null)
             {
                 Log.Error("Saving theme failed");
@@ -104,8 +112,8 @@ public static class ColorThemeEditor
 
             _somethingChanged |= isChanged;
 
-            string hint = null;
-            string groupTitle = null;
+            var hint = string.Empty;
+            var groupTitle = string.Empty;
             foreach (var ca in f.GetCustomAttributes(true))
             {
                 if (ca is not T3Style.HintAttribute hintAttribute)
@@ -191,7 +199,7 @@ public static class ColorThemeEditor
 
             _somethingChanged |= isChanged;
 
-            string hint = null;
+            var hint = string.Empty;
             foreach (var ca in f.GetCustomAttributes(true))
             {
                 if (ca is not T3Style.HintAttribute hintAttribute)
@@ -247,8 +255,10 @@ public static class ColorThemeEditor
         f.SetValue(Dummy, variation.Clone());
     }
     
+    // ReSharper disable once UnusedType.Local
     private static class DevHelpers
     {
+        // ReSharper disable once UnusedMember.Local
         public static void Draw(FieldInfo[] fields)
         {
             // Debug utils for finding unused colors...
@@ -256,6 +266,7 @@ public static class ColorThemeEditor
             {
                 if (!_animatedAllColors)
                 {
+                    // ReSharper disable once NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract
                     _currentTheme ??= _currentThemeWithoutChanges.Clone();
                     ApplyBlinkToAll(fields, 0);
                 }
@@ -297,7 +308,8 @@ public static class ColorThemeEditor
     
     
     private static bool _somethingChanged;
-    private static ThemeHandling.ColorTheme _currentTheme;
-    private static ThemeHandling.ColorTheme _currentThemeWithoutChanges;
+    private static bool _initialized;
+    private static ThemeHandling.ColorTheme _currentTheme= new();
+    private static ThemeHandling.ColorTheme _currentThemeWithoutChanges = new();
     public static readonly object Dummy = new();
 }

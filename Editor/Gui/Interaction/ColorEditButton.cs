@@ -20,7 +20,7 @@ public static class ColorEditButton
             T3Ui.DragFieldHovered = true;
         }
             
-        // Don't you ImGui.IsItemActivated() to allow quick switching between color thumbnails
+        // Don't use ImGui.IsItemActivated() to allow quick switching between color thumbnails
         if (triggerOpen || ImGui.IsItemHovered( ImGuiHoveredFlags.AllowWhenBlockedByPopup)
             && ImGui.IsMouseReleased(0)
             && ImGui.GetIO().MouseDragMaxDistanceAbs[0].Length() < UserSettings.Config.ClickThreshold

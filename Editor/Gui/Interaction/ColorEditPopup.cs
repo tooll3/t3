@@ -23,9 +23,7 @@ internal static class ColorEditPopup
     public static InputEditStateFlags DrawPopup(ref Vector4 color, Vector4 previousColor)
     {
         var composition = ProjectView.Focused?.CompositionInstance;
-        if (composition == null)
-            return InputEditStateFlags.Nothing;
-        
+
         var edited = InputEditStateFlags.Nothing;
         var cColor = new Color(color);
         ImGui.SetNextWindowSize(new Vector2(257, 360));
