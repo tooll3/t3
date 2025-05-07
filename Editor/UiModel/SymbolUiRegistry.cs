@@ -42,9 +42,12 @@ internal static class SymbolUiRegistry
 
     public static bool TryGetSymbolUi(Guid symbolId, [NotNullWhen(true)] out SymbolUi? symbolUi)
     {
-        foreach(var package in SymbolPackage.AllPackages.Cast<EditorSymbolPackage>())
+        foreach(var package in SymbolPackage.AllPackages)
         {
-            if (package.TryGetSymbolUi(symbolId, out symbolUi))
+            if (package is not EditorSymbolPackage symbolPackage)
+                continue;
+            
+            if (symbolPackage.TryGetSymbolUi(symbolId, out symbolUi))
                 return true;
         }
         symbolUi = null;
