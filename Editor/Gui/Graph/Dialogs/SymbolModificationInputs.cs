@@ -87,7 +87,9 @@ internal static class SymbolModificationInputs
 
         static bool IsNamespaceCorrect(string? newNamespace, string rootNamespace, bool needsToBeUnique)
         {
-            return newNamespace != null && newNamespace.StartsWith(rootNamespace!) && GraphUtils.IsNamespaceValid(newNamespace, needsToBeUnique, out _);
+            return newNamespace != null 
+                   && newNamespace.StartsWith(rootNamespace) 
+                   && GraphUtils.IsNamespaceValid(newNamespace, needsToBeUnique, out _);
         }
     }
 

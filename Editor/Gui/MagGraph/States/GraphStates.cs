@@ -112,7 +112,7 @@ internal static class GraphStates
                                       // MagGraph scope to the legacy graph, so it's correctly saved for the Symbol in the user settings...
                                       //ProjectView.Focused?.GraphCanvas?.SetTargetScope(context.Canvas.GetTargetScope());
 
-                                      if (context.ActiveItem.Instance.Children.Count > 1)
+                                      if (context.ActiveItem.Instance.Children.Count > 0)
                                       { 
                                           ProjectView.Focused.TrySetCompositionOpToChild(context.ActiveItem.Instance.SymbolChildId);
                                       }
