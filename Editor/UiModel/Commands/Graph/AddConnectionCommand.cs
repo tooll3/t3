@@ -1,13 +1,14 @@
+#nullable enable
 using T3.Core.Operator;
 
 namespace T3.Editor.UiModel.Commands.Graph;
 
-public class AddConnectionCommand : ICommand
+internal sealed class AddConnectionCommand : ICommand
 {
     public string Name => "Add Connection";
     public bool IsUndoable => true;
 
-    public AddConnectionCommand(Symbol compositionSymbol, Symbol.Connection connectionToAdd, int multiInputIndex)
+    internal AddConnectionCommand(Symbol compositionSymbol, Symbol.Connection connectionToAdd, int multiInputIndex)
     {
         _addedConnection = connectionToAdd;
         _compositionSymbolId = compositionSymbol.Id;
@@ -22,7 +23,7 @@ public class AddConnectionCommand : ICommand
             return;
         }
             
-        compositionSymbolUi!.Symbol.AddConnection(_addedConnection, _multiInputIndex);
+        compositionSymbolUi.Symbol.AddConnection(_addedConnection, _multiInputIndex);
         compositionSymbolUi.FlagAsModified();
     }
 
@@ -34,7 +35,7 @@ public class AddConnectionCommand : ICommand
             return;
         }
             
-        compositionSymbolUi!.Symbol.RemoveConnection(_addedConnection, _multiInputIndex);
+        compositionSymbolUi.Symbol.RemoveConnection(_addedConnection, _multiInputIndex);
         compositionSymbolUi.FlagAsModified();
     }
 

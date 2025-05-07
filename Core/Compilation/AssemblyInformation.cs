@@ -200,6 +200,7 @@ public sealed class AssemblyInformation
                                          }
                                          catch (Exception e)
                                          {
+                                             // TODO: This happens in debug on every recompile. Is this intended? If so, this should not be an error message.
                                              Log.Error($"Failed to create shareable resource for {type.FullName}\n{e.Message}");
                                          }
 

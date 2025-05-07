@@ -54,7 +54,7 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
     private readonly List<IInputSlot> _inputs = [];
     public readonly IReadOnlyList<IInputSlot> Inputs;
 
-    private bool _hasDisposed = false;
+    private bool _hasDisposed;
     public bool IsDisposed => _hasDisposed;
 
     public IReadOnlyList<IResourcePackage> AvailableResourcePackages
@@ -157,7 +157,7 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
         {
             var attribute = input.Attribute;
             var inputSlot = input.GetSlotObject(this);
-            inputSlot!.Parent = this;
+            inputSlot.Parent = this;
             inputSlot.Id = attribute.Id;
             inputSlot.MappedType = attribute.MappedType;
             _inputs.Add(inputSlot);
@@ -167,7 +167,7 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
         foreach (var output in operatorTypeInfo.Outputs)
         {
             var slot = output.GetSlotObject(this);
-            slot!.Parent = this;
+            slot.Parent = this;
             slot.Id = output.Attribute.Id;
             _outputs.Add(slot);
         }
