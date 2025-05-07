@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+using ImGuiNET;
 using T3.Core.SystemUi;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Styling;
@@ -8,7 +9,7 @@ using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.Templates;
 
-public class CreateFromTemplateDialog : ModalDialog
+internal sealed class CreateFromTemplateDialog : ModalDialog
 {
     public CreateFromTemplateDialog()
     {
@@ -35,7 +36,7 @@ public class CreateFromTemplateDialog : ModalDialog
                 return;
             }
                 
-            _selectedTemplate = null;
+            //_selectedTemplate = null;
             ImGui.BeginChild("templates", new Vector2(200, -1));
             {
                 var windowMin = ImGui.GetWindowPos();
@@ -113,10 +114,10 @@ public class CreateFromTemplateDialog : ModalDialog
                 var projectChanged = CustomComponents.DrawProjectDropdown(ref _projectToCopyTo);
                 if (projectChanged && _projectToCopyTo != null)
                 {
-                    _newNameSpace = _projectToCopyTo.CsProjectFile.RootNamespace + '.';
+                    _newNameSpace = _projectToCopyTo.CsProjectFile.RootNamespace;
                 }
                     
-                _ = SymbolModificationInputs.DrawProjectDropdown(ref _newNameSpace, ref _projectToCopyTo);
+                //_ = SymbolModificationInputs.DrawProjectDropdown(ref _newNameSpace, ref _projectToCopyTo);
 
                 if (_projectToCopyTo != null)
                 {
@@ -160,9 +161,9 @@ public class CreateFromTemplateDialog : ModalDialog
     private TemplateDefinition _selectedTemplate = TemplateDefinition.TemplateDefinitions[0];
         
     private string _newSymbolName = "MyNewOp";
-    private string _newNameSpace = null;
-    private string _newDescription = null;
+    private string _newNameSpace = string.Empty;
+    private string _newDescription = string.Empty;
 
     private int _selectedTemplateIndex = -1;
-    private EditableSymbolProject _projectToCopyTo;
+    private EditableSymbolProject? _projectToCopyTo;
 }
