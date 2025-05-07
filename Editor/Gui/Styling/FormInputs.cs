@@ -342,7 +342,7 @@ internal static class FormInputs
     /// Draws string input or file picker. 
     /// </summary>
     public static bool AddStringInput(string label,
-                                      ref string? value,
+                                      ref string value,
                                       string? placeHolder = null,
                                       string? warning = null,
                                       string? tooltip = null,
@@ -364,7 +364,7 @@ internal static class FormInputs
         }
 
         DrawInputLabel(label);
-        var wasNull = value == null;
+        var wasNull = value == null!;   // Support legacy calls
         if (wasNull)
             value = string.Empty;
 
@@ -375,7 +375,7 @@ internal static class FormInputs
             
         var modified = ImGui.InputText("##" + label, ref value, 1000);
         if (!modified && wasNull)
-            value = null;
+            value = null!;  // Support legacy calls 
 
         if (autoFocus && ImGui.IsWindowAppearing())
         {
