@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using ImGuiNET;
 using T3.Core.Operator;
-using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
@@ -376,14 +375,16 @@ internal sealed class PlaceholderCreation
                 var matchingInputSlot = newInstance.Inputs.FirstOrDefault(i => i.ValueType == outputType);
                 if (matchingInputSlot != null)
                 {
-                    context.MacroCommand
-                           .AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
-                                                                       new Symbol.Connection(_snappedSourceItem.Id,
-                                                                                             _snappedSourceOutputLine.Id,
-                                                                                             newInstance.SymbolChildId,
-                                                                                             matchingInputSlot.Id
-                                                                                            ),
-                                                                       0));
+                    var sourceId = _snappedSourceItem.Variant == MagGraphItem.Variants.Input ? Guid.Empty : _snappedSourceItem.Id;
+                    var sourceOutputId = _snappedSourceItem.Variant == MagGraphItem.Variants.Input ? _snappedSourceItem.Id : _snappedSourceOutputLine.Id;
+                                             context.MacroCommand
+                                                    .AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
+                                                                                                new Symbol.Connection(sourceId,
+                                                                                                         sourceOutputId,
+                                                                                                         newInstance.SymbolChildId,
+                                                                                                         matchingInputSlot.Id
+                                                                                                    ),
+                                                                                                0));
                 }
                 else
                 {
@@ -426,7 +427,7 @@ internal sealed class PlaceholderCreation
                                                MagGraphItem.GridSize.Y * (newHeight - 1));
             }            
         }
-        else if (context.TryGetActiveOutputLine(out var outputLine))
+        else if (context.TryGetActiveOutputLine(out _))
         {
             var primaryInput = newInstance.Inputs.FirstOrDefault();
             if (primaryInput != null && primaryInput.ValueType == context.DraggedPrimaryOutputType)
