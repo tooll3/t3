@@ -21,8 +21,8 @@ public sealed partial class SymbolUi : ISelectionContainer
         if (_package == null)
             throw new ArgumentException("Symbol must have a package");
 
-        InputUis = new Dictionary<Guid, IInputUi>();
-        OutputUis = new Dictionary<Guid, IOutputUi>();
+        InputUis = new OrderedDictionary<Guid, IInputUi>();
+        OutputUis = new OrderedDictionary<Guid, IOutputUi>();
         Annotations = new OrderedDictionary<Guid, Annotation>();
         Links = new OrderedDictionary<Guid, ExternalLink>();
 
@@ -34,9 +34,9 @@ public sealed partial class SymbolUi : ISelectionContainer
 
     internal SymbolUi(Symbol symbol,
                       Func<Symbol, List<Child>> childUis,
-                      IDictionary<Guid, IInputUi> inputs,
-                      IDictionary<Guid, IOutputUi> outputs,
-                      IDictionary<Guid, Annotation> annotations,
+                      OrderedDictionary<Guid, IInputUi> inputs,
+                      OrderedDictionary<Guid, IOutputUi> outputs,
+                      OrderedDictionary<Guid, Annotation> annotations,
                       OrderedDictionary<Guid, ExternalLink> links,
                       bool updateConsistency) : this(symbol, false)
     {
@@ -258,10 +258,10 @@ public sealed partial class SymbolUi : ISelectionContainer
     internal bool NeedsSaving => _hasBeenModified && !ReadOnly;
     private Dictionary<Guid, Child> _childUis = new();
     internal IReadOnlyDictionary<Guid, Child> ChildUis => _childUis;
-    internal IDictionary<Guid, ExternalLink> Links { get; private set; }
-    internal IDictionary<Guid, IInputUi> InputUis { get; private set; }
-    internal IDictionary<Guid, IOutputUi> OutputUis { get; private set; }
-    internal IDictionary<Guid, Annotation> Annotations { get; private set; }
+    internal OrderedDictionary<Guid, ExternalLink> Links { get; private set; }
+    internal OrderedDictionary<Guid, IInputUi> InputUis { get; private set; }
+    internal OrderedDictionary<Guid, IOutputUi> OutputUis { get; private set; }
+    internal OrderedDictionary<Guid, Annotation> Annotations { get; private set; }
 
     internal void ReplaceWith(SymbolUi newSymbolUi)
     {
