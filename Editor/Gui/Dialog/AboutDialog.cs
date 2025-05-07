@@ -147,7 +147,8 @@ internal sealed class AboutDialog : ModalDialog
         try
         {
             var currentInputLanguage = InputLanguage.CurrentInputLanguage;
-            return $"{currentInputLanguage.Culture.Name}";
+
+            return $"{currentInputLanguage.Culture.Name} {currentInputLanguage.LayoutName} ";
         }
         catch (Exception)
         {
@@ -230,7 +231,7 @@ internal sealed class AboutDialog : ModalDialog
                 }
             }
 
-            return string.Join(", ", gpuList);
+            return string.Join("\n", gpuList);
         }
         catch (Exception)
         {
