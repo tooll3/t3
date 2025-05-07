@@ -29,11 +29,12 @@ public static class TemplateUse
         var newSymbol = Duplicate.DuplicateAsNewType(compositionSymbolUi, project, template.TemplateSymbolId, symbolName, nameSpace, description, freePosition);
             
         // Select instance of new symbol
-        if (!compositionSymbolUi.ChildUis.TryGetValue(newSymbol.Id, out var newChildUi))
+        if (newSymbol == null || !compositionSymbolUi.ChildUis.TryGetValue(newSymbol.Id, out var newChildUi))
         {
             Log.Debug("Creating symbol for template failed. Couldn't find child ui");
             return;
         }
+        
         T3Ui.SelectAndCenterChildIdInView(newChildUi.SymbolChild.Id);
         var newInstance = components.NodeSelection.GetSelectedInstanceWithoutComposition(); 
         template.AfterSetupAction?.Invoke(newInstance,
