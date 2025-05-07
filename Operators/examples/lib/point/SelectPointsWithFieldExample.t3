@@ -137,7 +137,7 @@
       "Outputs": []
     },
     {
-      "Id": "0990d1bf-c9ca-4d05-a245-c351bba26b71"/*VisualizeFiedlDistance*/,
+      "Id": "0990d1bf-c9ca-4d05-a245-c351bba26b71"/*VisualizeFieldDistance*/,
       "SymbolId": "89dd9ee0-8754-4e4c-abdc-74425c39dcc2",
       "InputValues": [],
       "Outputs": []
@@ -548,7 +548,7 @@
       "Outputs": []
     },
     {
-      "Id": "1f3bbb63-5b63-4991-a563-2021fd4f11c5"/*VisualizeFiedlDistance*/,
+      "Id": "1f3bbb63-5b63-4991-a563-2021fd4f11c5"/*VisualizeFieldDistance*/,
       "SymbolId": "89dd9ee0-8754-4e4c-abdc-74425c39dcc2",
       "InputValues": [
         {

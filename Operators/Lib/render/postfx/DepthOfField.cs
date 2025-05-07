@@ -7,9 +7,6 @@ internal sealed class DepthOfField : Instance<DepthOfField>
     [Output(Guid = "a54cc25b-9ea2-4012-b462-16c565718cf8")]
     public readonly Slot<Texture2D> TextureOut = new();
 
-    [Output(Guid = "07695aef-ea0d-4cdc-864f-dd2de8a947fb")]
-    public readonly Slot<Texture2D> Depth = new();
-
     [Input(Guid = "bc1685a8-0a92-460f-85ca-7f096db965f0")]
     public readonly InputSlot<Texture2D> TextureBuffer = new();
 

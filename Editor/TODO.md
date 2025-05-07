@@ -8,7 +8,8 @@
 - [x] Bypassed operator are active after reload / bypassing again breaks their update
 - [x] Modifications by BiasGain Vec2 gizmo can't be undone
 - [x] Fix thumbnails rendering breaks defaults
-
+- [ ] Connections from input are sometimes not correctly evaluated 
+- [ ] Picking video files from resource does not work.
 ## Project handling
 
 - [x] Reduce size of backups

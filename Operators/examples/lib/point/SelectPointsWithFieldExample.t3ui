@@ -61,7 +61,7 @@
       }
     },
     {
-      "ChildId": "0990d1bf-c9ca-4d05-a245-c351bba26b71"/*VisualizeFiedlDistance*/,
+      "ChildId": "0990d1bf-c9ca-4d05-a245-c351bba26b71"/*VisualizeFieldDistance*/,
       "Position": {
         "X": 1975.602,
         "Y": 5046.449
@@ -229,7 +229,7 @@
       }
     },
     {
-      "ChildId": "1f3bbb63-5b63-4991-a563-2021fd4f11c5"/*VisualizeFiedlDistance*/,
+      "ChildId": "1f3bbb63-5b63-4991-a563-2021fd4f11c5"/*VisualizeFieldDistance*/,
       "Position": {
         "X": 2718.0803,
         "Y": 4774.3354

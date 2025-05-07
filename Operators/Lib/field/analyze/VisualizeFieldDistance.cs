@@ -1,7 +1,7 @@
 namespace Lib.field.analyze;
 
 [Guid("89dd9ee0-8754-4e4c-abdc-74425c39dcc2")]
-public class VisualizeFiedlDistance : Instance<VisualizeFiedlDistance>
+public class VisualizeFieldDistance : Instance<VisualizeFieldDistance>
 {
     [Output(Guid = "a6fb7868-37ea-48c8-921a-aa097cca885c")]
     public readonly Slot<Command> DrawCommand = new();
