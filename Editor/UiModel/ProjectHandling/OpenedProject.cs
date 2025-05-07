@@ -63,7 +63,10 @@ internal sealed class OpenedProject
             view.NodeSelection.Clear();
             view.FlagChanges(ProjectView.ChangeTypes.Children|ProjectView.ChangeTypes.Composition);
         }
-        _rootInstance!.Disposing -= OnRootDisposed;
+        
+        if(_rootInstance != null)
+            _rootInstance.Disposing -= OnRootDisposed;
+        
         _rootInstance = null;
     }
 
