@@ -21,6 +21,7 @@ internal static class ProgramWindows
     private static Device _device;
     private static DeviceContext _deviceContext;
     private static Factory _factory;
+    public static string ActiveGpu { get; private set; } = "Unknown";
 
     internal static void SetMainWindowSize(int width, int height)
     {
@@ -74,7 +75,7 @@ internal static class ProgramWindows
                                                        "Ok... /:");
                 Environment.Exit(0);
             }
-            
+
             var adapterFound = false;
             for (var i = 0; i < factory.GetAdapterCount(); i++)
             {
@@ -112,16 +113,17 @@ internal static class ProgramWindows
                 if (adapterFound)
                     break;
             }
-            
+           
             // Fallback logic remains the same
             if (selectedAdapterIndex == -1)
             {
                 selectedAdapterIndex = 0;
                 Log.Info("Falling back to first available adapter");
             }
-            
+
             var selectedAdapter = factory.GetAdapter1(selectedAdapterIndex);
-            
+            ActiveGpu = selectedAdapter.Description.Description;
+
             // Create Device and SwapChain with the selected adapter
             Device.CreateWithSwapChain(selectedAdapter, // Pass the selected adapter
                                        DeviceCreationFlags.Debug,
@@ -305,18 +307,18 @@ internal static class ProgramWindows
 
         // Create a shader resource-compatible texture
         var textureDesc = new Texture2DDescription
-                              {
-                                  Width = Main.SwapChain.Description.ModeDescription.Width,
-                                  Height = Main.SwapChain.Description.ModeDescription.Height,
-                                  MipLevels = 1,
-                                  ArraySize = 1,
-                                  Format = Main.SwapChain.Description.ModeDescription.Format,
-                                  SampleDescription = new SampleDescription(1, 0),
-                                  Usage = ResourceUsage.Default,
-                                  BindFlags = BindFlags.ShaderResource,
-                                  CpuAccessFlags = CpuAccessFlags.None,
-                                  OptionFlags = ResourceOptionFlags.None
-                              };
+        {
+            Width = Main.SwapChain.Description.ModeDescription.Width,
+            Height = Main.SwapChain.Description.ModeDescription.Height,
+            MipLevels = 1,
+            ArraySize = 1,
+            Format = Main.SwapChain.Description.ModeDescription.Format,
+            SampleDescription = new SampleDescription(1, 0),
+            Usage = ResourceUsage.Default,
+            BindFlags = BindFlags.ShaderResource,
+            CpuAccessFlags = CpuAccessFlags.None,
+            OptionFlags = ResourceOptionFlags.None
+        };
 
         if (_uiCopyTexture is { IsDisposed: false })
             _uiCopyTexture.Dispose();

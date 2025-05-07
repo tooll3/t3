@@ -7,6 +7,9 @@ using System.Text;
 using ImGuiNET;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.App;
+using System.Windows.Forms;
+
 
 namespace T3.Editor.Gui.Dialog;
 
@@ -19,22 +22,58 @@ internal sealed class AboutDialog : ModalDialog
         if (BeginDialog("About TiXL"))
         {
             FormInputs.AddSectionHeader("TiXL");
-            ImGui.TextColored(new Vector4(1.0f, 0.2f, 0.55f, 1.0f), "v " + Program.VersionText);
-            FormInputs.AddVerticalSpace(5);
+            ImGui.SameLine();
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+
+            FormInputs.AddSectionHeader("v." + Program.VersionText);
+            ImGui.PopStyleColor();
+            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, mySpacing);
+            ImGui.TextColored(UiColors.TextMuted, $"{dateTime}");
+#if DEBUG
+            ImGui.TextColored(UiColors.TextMuted, "IDE:");
+            ImGui.SameLine();
+            ImGui.Text($"{ideName}");
+#endif
+            
+            ImGui.TextColored(UiColors.TextMuted, $"App language:");
+            ImGui.SameLine();
+            ImGui.Text($"{appLanguage}");
+            ImGui.PopStyleVar();
+            FormInputs.AddVerticalSpace(1);
             ImGui.Separator();
             
             FormInputs.AddSectionHeader("System Information");
             
-            if (string.IsNullOrEmpty(_systemInfo))
-            {
-                UpdateSystemInfo(); // Populate system info if not already done
-            }
+            //FormInputs.AddVerticalSpace(0);
+            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, mySpacing);
+            ImGui.TextColored(UiColors.TextMuted, "OS:" );
+            ImGui.SameLine();
+            ImGui.Text($"{operatingSystemInfo}");
+            ImGui.TextColored(UiColors.TextMuted, "System language:");
+            ImGui.SameLine();
+            ImGui.Text($"{systemLanguage}");
+            ImGui.TextColored(UiColors.TextMuted, "Keyboard layout:");
+            ImGui.SameLine();
+            ImGui.Text($"{keyboardLayout}");
+            
+            FormInputs.AddVerticalSpace(8);
+            
+            ImGui.TextColored(UiColors.TextMuted, ".NET Runtime:");
+            ImGui.SameLine();
+            ImGui.Text($"{dotNetRuntime}");
+            ImGui.TextColored(UiColors.TextMuted, ".NET SDK:");
+            ImGui.SameLine();
+            ImGui.Text($"{dotNetSdk}");
+
+            FormInputs.AddVerticalSpace(8);
+
+            ImGui.TextColored(UiColors.TextMuted, "Graphics processing unit(s):"); 
+            ImGui.Text($"{gpuInformation}");
+            FormInputs.AddVerticalSpace(8);
+            ImGui.Separator();
+            ImGui.PopStyleVar();
 
             FormInputs.AddVerticalSpace(5);
-            ImGui.TextWrapped(_systemInfo);
-            FormInputs.AddVerticalSpace(5);
-            
-            
             if (ImGui.Button("Copy System Information"))
             {
                 UpdateSystemInfo(); // Update system info and copy to clipboard
@@ -61,11 +100,15 @@ internal sealed class AboutDialog : ModalDialog
         {
             var systemInfo = new StringBuilder();
 
-            systemInfo.AppendLine($"Date: {DateTime.Now}");
+            systemInfo.AppendLine($"{dateTime}");
             systemInfo.AppendLine($"TiXL version: {Program.VersionText}");
-            systemInfo.AppendLine($"Language: {GetAppLanguage()}");
+            #if DEBUG
+            systemInfo.AppendLine($"IDE: {GetIdeName()}");
+            #endif
+            systemInfo.AppendLine($"App language: {GetAppLanguage()}");
             systemInfo.AppendLine($"OS: {GetOperatingSystemInfo()}");
             systemInfo.AppendLine($"System language: {GetSystemLanguage()}");
+            systemInfo.AppendLine($"Keyboard Layout: {GetKeyboardLayout()}");
             systemInfo.AppendLine($".NET runtime: {GetDotNetRuntimeVersion()}");
             systemInfo.AppendLine($".NET SDK: {GetDotNetSdkVersion()}");
             systemInfo.AppendLine($"GPU: {GetGpuInformation()}");
@@ -91,7 +134,20 @@ internal sealed class AboutDialog : ModalDialog
         try
         {
             var currentCulture = CultureInfo.CurrentUICulture;
-            return $"{currentCulture.EnglishName}\nKeyboard layout:{currentCulture.KeyboardLayoutId} ({currentCulture.Parent}) ";
+            return currentCulture.EnglishName;
+        }
+        catch (Exception)
+        {
+            return "Unknown";
+        }
+    }
+
+    private static string GetKeyboardLayout()
+    {
+        try
+        {
+            var currentInputLanguage = InputLanguage.CurrentInputLanguage;
+            return $"{currentInputLanguage.Culture.Name}";
         }
         catch (Exception)
         {
@@ -145,23 +201,31 @@ internal sealed class AboutDialog : ModalDialog
         return "Not found";
     }
 
-    private static string GetGpuInformation()
+    private static string GetGpuInformation(string infoType = "both")
     {
         var gpuList = new List<string>();
+        var activeGpu = ProgramWindows.ActiveGpu;
 
         try
         {
             using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController"))
             {
-                
-                foreach (var searchResult in searcher.Get())
+                foreach (ManagementObject obj in searcher.Get())
                 {
-                    if (searchResult is not ManagementObject obj)
-                        continue;
                     
                     var name = obj["Name"]?.ToString() ?? "Unknown";
+                    if (name == activeGpu)
+                        name += " (Active)";
+                    
                     var driverVersion = obj["DriverVersion"]?.ToString() ?? "Unknown";
-                    var gpuDetails = $"{name}\nDriver version: {driverVersion}";
+
+                    string gpuDetails = infoType.ToLower() switch
+                    {
+                        "name" => name,
+                        "driver" => driverVersion,
+                        _ => $"{name}\nDriver version: {driverVersion}" // Default/both case
+                    };
+
                     gpuList.Add(gpuDetails);
                 }
             }
@@ -175,8 +239,58 @@ internal sealed class AboutDialog : ModalDialog
 
         return "Unknown";
     }
-    
+
+    private static string GetIdeName()
+    {
+        try
+        {
+            // Get the current process
+            var currentProcess = Process.GetCurrentProcess();
+
+            // Use WMI to find the parent process
+            var query = $"SELECT ParentProcessId FROM Win32_Process WHERE ProcessId = {currentProcess.Id}";
+            using var searcher = new ManagementObjectSearcher(query);
+            var result = searcher.Get().Cast<ManagementObject>().FirstOrDefault();
+
+            if (result != null)
+            {
+                var parentProcessId = Convert.ToInt32(result["ParentProcessId"]);
+                using var parentProcess = Process.GetProcessById(parentProcessId);
+                var processName = parentProcess.ProcessName.ToLower();
+
+                // Map common IDE process names to user-friendly names
+                return processName switch
+                {
+                    "devenv" => "Visual Studio",
+                    "vsdebugconsole" => "Visual Studio",
+                    "rider64" => "JetBrains Rider",
+                    "vshost" => "Visual Studio (Debug Host)",
+                    "msvsmon" => "Visual Studio Remote Debugger",
+                    _ => parentProcess.ProcessName // Fallback to the raw process name
+                };
+            }
+        }
+        catch (Exception e)
+        {
+            Log.Warning($"Failed to get IDE name: {e.Message}");
+        }
+
+        return "Unknown";
+    }
+    private static readonly string ideName = GetIdeName();
+    private static readonly string appLanguage = GetAppLanguage();
+    private static readonly string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+    private static readonly string operatingSystemInfo = GetOperatingSystemInfo();
+    private static readonly string systemLanguage = GetSystemLanguage();
+    private static readonly string keyboardLayout = GetKeyboardLayout();
+    private static readonly string dotNetRuntime = GetDotNetRuntimeVersion();
+    private static readonly string dotNetSdk = GetDotNetSdkVersion();
+    private static readonly string gpuInformation = GetGpuInformation();
+
     private string _systemInfo = string.Empty;
+
+    private static readonly Vector2 mySpacing = new (6.0f, 3.0f);
 
 
 }
