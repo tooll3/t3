@@ -32,26 +32,26 @@ public class TemplateDefinition
               {
                   new TemplateDefinition
                       {
-                          Title = "Empty Project",
-                          DefaultSymbolName = "NewProject",
-                          Summary = "Creates a new project and sets up a folder structure for your resources.",
+                          Title = "Empty Scene",
+                          DefaultSymbolName = "NewScene",
+                          Summary = "Creates a new operator.",
                           Documentation =
                               "It will create a new Symbol and setup a folder structure for project related files like your soundtrack or images.",
                           TemplateSymbolId = Guid.Parse("fe8aeb9b-61ac-4a0e-97ee-4833233ac9d1"),
-                          AfterSetupAction = (newChildUi, name, nameSpace, description, resourceFolder) =>
-                                             {
-                                                 Directory.CreateDirectory(Path.Combine(resourceFolder, "soundtrack"));
-                                                 Directory.CreateDirectory(Path.Combine(resourceFolder, "images"));
-                                                 Directory.CreateDirectory(Path.Combine(resourceFolder, "geometry"));
-                                             }
+                          // AfterSetupAction = (newChildUi, name, nameSpace, description, resourceFolder) =>
+                          //                    {
+                          //                        Directory.CreateDirectory(Path.Combine(resourceFolder, "soundtrack"));
+                          //                        Directory.CreateDirectory(Path.Combine(resourceFolder, "images"));
+                          //                        Directory.CreateDirectory(Path.Combine(resourceFolder, "geometry"));
+                          //                    }
                       },
                   new TemplateDefinition
                       {
-                          Title = "3d Project",
-                          DefaultSymbolName = "New3dProject",
+                          Title = "3d Scene",
+                          DefaultSymbolName = "New3dScene",
                           Summary = "Something else",
                           Documentation =
-                              "This will create a new Symbol with a basic template to get you started. It will also setup a folder structure for project related files like soundtrack or images.",
+                              "This will create a new Symbol with a basic template to get you started.",
                           TemplateSymbolId = Guid.Parse("38fd2e32-53f6-49ce-9aa7-28f3ac433dd8"),
                       }
               };
