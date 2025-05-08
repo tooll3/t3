@@ -258,7 +258,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
     }
     
 
-    public const int FreeAnchor = 0;
+    public const int FreeAnchor = -1;
 
     //
     // public void ForOutputAnchors(Action<AnchorPoint> call)

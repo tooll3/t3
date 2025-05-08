@@ -245,7 +245,7 @@ internal sealed partial class MagGraphCanvas
 
     private void HighlightSplitInsertionPoints(ImDrawListPtr drawList, GraphUiContext context)
     {
-        foreach (var sp in context.ItemMovement.SplitInsertionPoints)
+        foreach (var sp in context.ItemMovement.SpliceSets)
         {
             var inputItem = context.ItemMovement.DraggedItems.FirstOrDefault(i => i.Id == sp.InputItemId);
             if (inputItem == null)
@@ -270,6 +270,7 @@ internal sealed partial class MagGraphCanvas
             }
             else
             {
+                center.X += sp.DragPositionWithinBlock.X * CanvasScale;
                 var offset = MagGraphItem.GridSize.Y *0.25f * CanvasScale;
                 drawList.AddRectFilled(center+ new Vector2(0, -offset),
                                        center+ new Vector2(2, offset),

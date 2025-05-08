@@ -50,9 +50,9 @@ internal sealed partial class MagGraphCanvas
             {
                 case MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal:
                 {
-                    var isPotentialSplitTarget = _context.ItemMovement.SplitInsertionPoints.Count > 0
+                    var isPotentialSplitTarget = _context.ItemMovement.SpliceSets.Count > 0
                                                  && !_context.ItemMovement.DraggedItems.Contains( connection.SourceItem)
-                                                 && _context.ItemMovement.SplitInsertionPoints
+                                                 && _context.ItemMovement.SpliceSets
                                                             .Any(sp
                                                                      => sp.Direction == MagGraphItem.Directions.Horizontal
                                                                         && sp.Type == type);
@@ -79,9 +79,9 @@ internal sealed partial class MagGraphCanvas
                     
                 case MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical:
                 {
-                    var isPotentialSplitTarget = _context.ItemMovement.SplitInsertionPoints.Count > 0
+                    var isPotentialSplitTarget = _context.ItemMovement.SpliceSets.Count > 0
                                                  && !_context.ItemMovement.DraggedItems.Contains( connection.SourceItem)
-                                                 && _context.ItemMovement.SplitInsertionPoints
+                                                 && _context.ItemMovement.SpliceSets
                                                             .Any(x
                                                                      => x.Direction == MagGraphItem.Directions.Vertical
                                                                         && x.Type == type);
