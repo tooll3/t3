@@ -24,4 +24,7 @@ internal sealed class ScreenCloseUp : Instance<ScreenCloseUp>
         [Input(Guid = "4b2ea8f2-dfe3-4e59-a140-5d5427e5c1ce")]
         public readonly InputSlot<float> Glossy = new InputSlot<float>();
 
+        [Input(Guid = "ec096545-6cc7-45b0-8eb6-2100e52d3815")]
+        public readonly InputSlot<float> DepthOfField = new InputSlot<float>();
+
 }

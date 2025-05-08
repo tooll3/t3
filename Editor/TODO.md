@@ -8,8 +8,12 @@
 - [x] Bypassed operator are active after reload / bypassing again breaks their update
 - [x] Modifications by BiasGain Vec2 gizmo can't be undone
 - [x] Fix thumbnails rendering breaks defaults
-- [ ] Connections from input are sometimes not correctly evaluated 
-- [ ] Picking video files from resource does not work.
+- [?] Connections from input are sometimes not correctly evaluated 
+- [x] Picking video files from resource does not work.
+
+- [ ] Publish as input does not create connection
+- [ ] In Parameter window bypassable button should be disabled if not available
+
 ## Project handling
 
 - [x] Reduce size of backups
@@ -26,16 +30,14 @@
 - [x] Snapping connecting start to output not working of ops who's output is already snapped
 - [ ] Add hint message to hold shift for keeping connections
 - [ ] Add annotations
-- [ ] Parameter window in fullscreen
+- [x] Parameter window in fullscreen
 - [ ] Fix background control in mag graph
 - [ ] Allow dragging connection from horizontal input slot
 - [ ] Allow clicking vertical input slot
 - [ ] Split Connections
 - [ ] Rewiring of vertical connection lines
 - [ ] Panning/Zooming in CurveEdit-Popup opened from SampleCurveOp is broken 
-- [ ] Publish as input does not create connection
 - [ ] ShaderGraphNode should be bypassable
-- [ ] In Parameter window bypassable button should be disabled if not available
 
 ## Timeline
 

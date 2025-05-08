@@ -3,7 +3,7 @@
   "Inputs": [
     {
       "Id": "4b2ea8f2-dfe3-4e59-a140-5d5427e5c1ce"/*Glossy*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.2
     },
     {
       "Id": "7b40b40e-5524-4458-8a79-1a9012fb8fcb"/*Tilt*/,
@@ -28,8 +28,12 @@
       "DefaultValue": 0.0
     },
     {
+      "Id": "ec096545-6cc7-45b0-8eb6-2100e52d3815"/*DepthOfField*/,
+      "DefaultValue": 0.3
+    },
+    {
       "Id": "f4b8ed2c-e5ba-4441-8bee-9824c9793444"/*FogStrength*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.2
     }
   ],
   "Children": [
@@ -430,7 +434,7 @@
         {
           "Id": "3655d507-96b3-4ded-9cef-886ea703ca89"/*Amount*/,
           "Type": "System.Single",
-          "Value": 1.3
+          "Value": 0.27
         },
         {
           "Id": "97b76d02-e735-4e93-88ad-5c9b8766a63c"/*FocusDistance*/,
@@ -550,6 +554,16 @@
           "Id": "155c2396-0e05-4437-8171-288048b1158a"/*Filter*/,
           "Type": "SharpDX.Direct3D11.Filter",
           "Value": "Anisotropic"
+        },
+        {
+          "Id": "8c9dee45-d165-48c8-b8dd-b7f47e77fd00"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 1.0
+          }
         }
       ],
       "Outputs": []
@@ -622,7 +636,7 @@
         {
           "Id": "155c2396-0e05-4437-8171-288048b1158a"/*Filter*/,
           "Type": "SharpDX.Direct3D11.Filter",
-          "Value": "MinLinearMagMipPoint"
+          "Value": "Anisotropic"
         }
       ],
       "Outputs": []
@@ -819,6 +833,12 @@
       "SourceSlotId": "c5e1e00e-448f-4623-a121-c1d0ba56a15f",
       "TargetParentOrChildId": "91d5c158-b528-40dc-96b4-1d8a708c3fd7",
       "TargetSlotId": "40606d4e-acaf-4f23-a845-16f0eb9b73cf"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "ec096545-6cc7-45b0-8eb6-2100e52d3815",
+      "TargetParentOrChildId": "a6635ac8-c8e9-4651-80bb-d2149f9ec25b",
+      "TargetSlotId": "3655d507-96b3-4ded-9cef-886ea703ca89"
     },
     {
       "SourceParentOrChildId": "91d5c158-b528-40dc-96b4-1d8a708c3fd7",

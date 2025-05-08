@@ -49,6 +49,13 @@
       "Clamp": true
     },
     {
+      "InputId": "ec096545-6cc7-45b0-8eb6-2100e52d3815"/*DepthOfField*/,
+      "Position": {
+        "X": 1756.526,
+        "Y": 170.16101
+      }
+    },
+    {
       "InputId": "f4b8ed2c-e5ba-4441-8bee-9824c9793444"/*FogStrength*/,
       "Position": {
         "X": 626.07587,
@@ -339,7 +346,7 @@
       "OutputId": "9cd53ad3-17f8-44eb-8b54-684b9ba4732d"/*Output*/,
       "Position": {
         "X": 1896.526,
-        "Y": 205.16101
+        "Y": 240.16101
       }
     }
   ],
