@@ -28,15 +28,15 @@
     {
       "ChildId": "061194a0-51d0-4e77-9054-63293a8923cf"/*RepeatAtGPoints*/,
       "Position": {
-        "X": -2004.0645,
-        "Y": -140.97162
+        "X": -1917.3904,
+        "Y": -180.78134
       }
     },
     {
       "ChildId": "06142067-94fa-4ea9-a226-9ef218e28702"/*RepeatAtGPoints*/,
       "Position": {
-        "X": -1690.477,
-        "Y": 794.81415
+        "X": -1684.5863,
+        "Y": 900.8483
       }
     },
     {
@@ -57,15 +57,15 @@
       "ChildId": "0d26827b-af65-4b61-8729-7fc3f3e5e087"/*RepeatAtGPoints*/,
       "Comment": "We change connection type.",
       "Position": {
-        "X": -1883.7938,
-        "Y": 1897.8767
+        "X": -1740.9424,
+        "Y": 1999.4928
       }
     },
     {
       "ChildId": "0db9c579-68c3-47ae-bc5d-e616b499a966"/*DrawLines*/,
       "Position": {
-        "X": -1981.5393,
-        "Y": 1614.1737
+        "X": -2148.0132,
+        "Y": 1659.0027
       }
     },
     {
@@ -78,30 +78,30 @@
     {
       "ChildId": "1017cc67-7174-421a-8985-fa60f1a88158"/*SetFog*/,
       "Position": {
-        "X": -1583.7938,
-        "Y": 1897.8767
+        "X": -1740.9424,
+        "Y": 2139.492
       }
     },
     {
       "ChildId": "10ed79d0-a2e4-4b70-a90d-2f50893052f1"/*Camera*/,
       "Position": {
-        "X": -1554.3737,
-        "Y": 1351.5624
+        "X": -1811.3385,
+        "Y": 1511.8535
       }
     },
     {
       "ChildId": "11de5802-3cd1-4b92-8ddc-bd99a6476198"/*AddNoise*/,
       "Comment": "We add some perlin noice driven by the Time.\n\nIf you don't see the animation, please enable IdleMotion.",
       "Position": {
-        "X": -2565.9827,
-        "Y": 1221.9922
+        "X": -2504.4746,
+        "Y": 1415.7618
       }
     },
     {
       "ChildId": "1ed9aac0-287a-484e-8531-5fd524148d3d"/*BoolToInt*/,
       "Position": {
-        "X": -2033.7949,
-        "Y": 2172.8772
+        "X": -1880.9424,
+        "Y": 2069.4927
       }
     },
     {
@@ -114,15 +114,15 @@
     {
       "ChildId": "2047e779-d502-4411-8cb8-7c3f8387d80a"/*PointTrail*/,
       "Position": {
-        "X": -1690.477,
-        "Y": 682.81415
+        "X": -1692.6863,
+        "Y": 729.20404
       }
     },
     {
       "ChildId": "219ba314-0163-457f-b824-4fb4a086c989"/*Compare*/,
       "Position": {
-        "X": -2183.796,
-        "Y": 2172.8772
+        "X": -2020.9421,
+        "Y": 2069.4927
       }
     },
     {
@@ -135,8 +135,8 @@
     {
       "ChildId": "270602f1-232c-46ac-bfe6-c274fe0d0762"/*RenderTarget*/,
       "Position": {
-        "X": -1404.3737,
-        "Y": 1351.5624
+        "X": -1811.3385,
+        "Y": 1546.8535
       }
     },
     {
@@ -177,8 +177,8 @@
     {
       "ChildId": "313c148a-8ebb-4531-a581-6dcdc748c539"/*SelectPoints*/,
       "Position": {
-        "X": -2803.4907,
-        "Y": 1214.2795
+        "X": -2504.4746,
+        "Y": 1345.7618
       }
     },
     {
@@ -189,29 +189,29 @@
         "Y": 318.23596
       },
       "Position": {
-        "X": -1700.0908,
-        "Y": 1224.2335
+        "X": -1811.3385,
+        "Y": 1266.8535
       }
     },
     {
       "ChildId": "34436d53-780d-429d-813f-dbde0fd927b9"/*RadialPoints*/,
       "Position": {
-        "X": -2465.2744,
-        "Y": 533.04083
+        "X": -2398.9954,
+        "Y": 528.1478
       }
     },
     {
       "ChildId": "34bd43c5-0661-4685-a28d-cd4284352f01"/*FilterPoints*/,
       "Position": {
         "X": -1690.477,
-        "Y": 738.81415
+        "Y": 793.3039
       }
     },
     {
       "ChildId": "3660b318-93e3-4105-b5c8-666605c6bbc3"/*PointAttributeFromNoise*/,
       "Position": {
-        "X": -1846.2559,
-        "Y": 184.34985
+        "X": -1670.4838,
+        "Y": 94.12372
       }
     },
     {
@@ -224,29 +224,29 @@
     {
       "ChildId": "3c57ecea-eda6-43f3-90e7-70aa0ede8397"/*FloatToInt*/,
       "Position": {
-        "X": -2476.5679,
-        "Y": 684.3851
+        "X": -2398.9954,
+        "Y": 633.1478
       }
     },
     {
       "ChildId": "3d327cfe-6aa3-419a-8698-ca060026d782"/*Counter*/,
       "Position": {
-        "X": -2618.8264,
-        "Y": 690.5975
+        "X": -2538.9954,
+        "Y": 633.1478
       }
     },
     {
       "ChildId": "3e6a5b7c-1487-4e46-b159-3e9d9e19ce34"/*DrawMeshAtPoints*/,
       "Position": {
-        "X": -1696.2559,
-        "Y": 184.34985
+        "X": -1670.4838,
+        "Y": 129.12372
       }
     },
     {
       "ChildId": "4104f01d-5a29-4180-8ade-086c1771c8e4"/*DrawLines*/,
       "Position": {
-        "X": -1977.7755,
-        "Y": 1335.3798
+        "X": -2144.2495,
+        "Y": 1352.9639
       }
     },
     {
@@ -259,23 +259,23 @@
     {
       "ChildId": "4720c7c2-7b7c-4838-8a13-057c6a49bd38"/*VisualizePoints*/,
       "Position": {
-        "X": -2230.9485,
-        "Y": 442.98553
+        "X": -2258.9954,
+        "Y": 668.1478
       }
     },
     {
       "ChildId": "4f16d478-fae0-4a57-b34b-1e0880ef9b3c"/*DrawPoints*/,
       "Position": {
-        "X": -1977.2651,
-        "Y": 1221.6783
+        "X": -2143.7393,
+        "Y": 1250.3076
       }
     },
     {
       "ChildId": "51f3ae0c-f82f-44af-8bd6-11d7bd79f9ad"/*RadialPoints*/,
       "Comment": "We generate 400 points...\n\n- in a radial layout\n- with 3 cycles\n- and a radius offset to form a sprial.\n\nWe also apply a gradient (1 ... 1.5) to the point's W attribute.\n\nNote how we disabled CloseCircle line.",
       "Position": {
-        "X": -3124.491,
-        "Y": 1207.9937
+        "X": -2504.4746,
+        "Y": 1275.7618
       }
     },
     {
@@ -295,15 +295,15 @@
     {
       "ChildId": "5daffb62-a330-46a0-8707-d3d3ff800082"/*PointsOnMesh*/,
       "Position": {
-        "X": -2465.2744,
-        "Y": 619.0406
+        "X": -2398.9954,
+        "Y": 598.1478
       }
     },
     {
       "ChildId": "61670bc6-3069-4d32-824b-32a8b69bf3a8"/*DrawRibbons*/,
       "Position": {
-        "X": -1977.7755,
-        "Y": 1404.3795
+        "X": -2144.2495,
+        "Y": 1433.0088
       }
     },
     {
@@ -316,8 +316,8 @@
     {
       "ChildId": "669a702a-c21d-496f-b52b-07c97c409836"/*RepeatAtGPoints*/,
       "Position": {
-        "X": -2131.5393,
-        "Y": 1612.1737
+        "X": -2504.4746,
+        "Y": 1485.7618
       }
     },
     {
@@ -337,22 +337,22 @@
     {
       "ChildId": "6c4eff06-05de-4fd9-8d73-1a8c4966713c"/*DrawBillboards*/,
       "Position": {
-        "X": -1977.7755,
-        "Y": 1460.3795
+        "X": -2144.2495,
+        "Y": 1489.0088
       }
     },
     {
       "ChildId": "6eaefeb6-27c5-4611-9efe-c08283bb4e49"/*LoadObj*/,
       "Position": {
-        "X": -2615.2742,
-        "Y": 619.0406
+        "X": -2538.9954,
+        "Y": 598.1478
       }
     },
     {
       "ChildId": "6f7da270-1103-45c3-a9d7-2c1841cb9045"/*LinePoints*/,
       "Position": {
-        "X": -2333.796,
-        "Y": 1983.8767
+        "X": -2114.151,
+        "Y": 1873.822
       }
     },
     {
@@ -372,29 +372,29 @@
     {
       "ChildId": "79ff1a48-aaff-43b8-ab31-2d3e57bdb710"/*LinePoints*/,
       "Position": {
-        "X": -2463.485,
-        "Y": 447.1026
+        "X": -2398.9954,
+        "Y": 458.14783
       }
     },
     {
       "ChildId": "7c5ae41c-94d2-44d3-9b6c-d703e386a75f"/*RadialPoints*/,
       "Position": {
-        "X": -2010.5999,
-        "Y": 8.339172
+        "X": -1813.5958,
+        "Y": 1.9195251
       }
     },
     {
       "ChildId": "7fce2ccb-998d-45ba-91ac-2188ed5c60c8"/*LoadObj*/,
       "Position": {
-        "X": -2131.5393,
-        "Y": 1545.1737
+        "X": -2288.0132,
+        "Y": 1608.803
       }
     },
     {
       "ChildId": "85505229-0ab7-4d3a-a328-46b9e2c92d66"/*PairPointsForLines*/,
       "Position": {
         "X": -1690.477,
-        "Y": 613.81415
+        "Y": 633.22284
       }
     },
     {
@@ -442,44 +442,44 @@
     {
       "ChildId": "9f16cf76-5dda-4398-a829-561dd154cad3"/*DrawMeshAtPoints*/,
       "Position": {
-        "X": -1981.5393,
-        "Y": 1545.1737
+        "X": -2148.0132,
+        "Y": 1573.803
       }
     },
     {
       "ChildId": "9f87b2da-395c-4da6-8223-b59e61a936ef"/*Time*/,
       "Position": {
-        "X": -2976.708,
-        "Y": 1300.0852
+        "X": -2644.4746,
+        "Y": 1380.7618
       }
     },
     {
       "ChildId": "a07606fd-6a79-4dea-bf5d-f4f4981ce882"/*RadialPoints*/,
       "Comment": "A half circle that is being revolved around the axis - points.",
       "Position": {
-        "X": -2333.796,
-        "Y": 1940.8767
+        "X": -2114.151,
+        "Y": 1838.822
       }
     },
     {
       "ChildId": "a079079e-7c16-45ee-bd92-4b610ebce692"/*CubeMesh*/,
       "Position": {
-        "X": -1846.256,
-        "Y": 227.34985
+        "X": -1810.4838,
+        "Y": 164.12372
       }
     },
     {
       "ChildId": "a41f2ec4-419c-47d1-8c78-16e1b27fc57f"/*Time*/,
       "Position": {
-        "X": -2715.9824,
-        "Y": 1277.9922
+        "X": -2644.4746,
+        "Y": 1450.7618
       }
     },
     {
       "ChildId": "a649b727-a62b-46e7-93fc-25cf80fc8fde"/*CountInt*/,
       "Position": {
-        "X": -2333.796,
-        "Y": 2026.8767
+        "X": -2114.151,
+        "Y": 1908.822
       }
     },
     {
@@ -492,8 +492,8 @@
     {
       "ChildId": "a88cabd8-8f70-4c98-bf0d-bdbb1307116d"/*DrawPoints*/,
       "Position": {
-        "X": -1854.0645,
-        "Y": -140.97162
+        "X": -1917.3904,
+        "Y": -110.78134
       }
     },
     {
@@ -506,8 +506,8 @@
     {
       "ChildId": "ae3364cd-e1f4-49c4-b8e4-18af7b503d9f"/*DrawLines*/,
       "Position": {
-        "X": -1733.7938,
-        "Y": 1897.8767
+        "X": -1740.9424,
+        "Y": 2104.492
       }
     },
     {
@@ -520,36 +520,36 @@
     {
       "ChildId": "b45af5a2-642e-4a0a-a44c-7459ab0fee78"/*AddNoise*/,
       "Position": {
-        "X": -2033.7949,
-        "Y": 1940.8767
+        "X": -1974.1508,
+        "Y": 1943.822
       }
     },
     {
       "ChildId": "b51b0f00-7ee5-4c68-b879-c7f93cfc0e37"/*SpherePoints*/,
       "Position": {
-        "X": -2465.2744,
-        "Y": 576.0406
+        "X": -2398.9954,
+        "Y": 563.1478
       }
     },
     {
       "ChildId": "b8e5e7ca-a1cb-4e65-b39b-32801aa99d8a"/*RadialPoints*/,
       "Position": {
-        "X": -2154.0645,
-        "Y": -140.97162
+        "X": -2057.3906,
+        "Y": -145.78134
       }
     },
     {
       "ChildId": "b97e6257-8436-4194-986e-3d149c5a26ab"/*RepeatAtGPoints*/,
       "Position": {
-        "X": -1830.1141,
-        "Y": 1.2333984
+        "X": -1673.5958,
+        "Y": -33.080475
       }
     },
     {
       "ChildId": "bf335863-f399-48e9-ae04-01d5e7d5c0a5"/*LoadImage*/,
       "Position": {
-        "X": -2143.786,
-        "Y": 1379.8724
+        "X": -2336.9546,
+        "Y": 1272.4885
       }
     },
     {
@@ -567,23 +567,23 @@
     {
       "ChildId": "c6e8c1d1-f7f6-40c8-be38-efe660f89e41"/*DrawPointsShaded*/,
       "Position": {
-        "X": -1977.2651,
-        "Y": 1277.6786
+        "X": -2143.7393,
+        "Y": 1306.3079
       }
     },
     {
       "ChildId": "c906661a-46c3-4fc1-b645-fffe4817ac42"/*GridPoints*/,
       "Position": {
-        "X": -2463.485,
-        "Y": 490.1026
+        "X": -2398.9954,
+        "Y": 493.14783
       }
     },
     {
       "ChildId": "ccb65dc9-10ca-4a9f-9a22-809e3a4e9ba4"/*TransformPoints*/,
       "Comment": "We slightly stretch to spiral to adjust it to our view's aspect ratio.",
       "Position": {
-        "X": -2974.4907,
-        "Y": 1207.9937
+        "X": -2504.4746,
+        "Y": 1310.7618
       }
     },
     {
@@ -610,8 +610,8 @@
     {
       "ChildId": "d4f5cd5a-8979-46de-bfcd-3425ccc45ddf"/*PickPointList*/,
       "Position": {
-        "X": -2183.796,
-        "Y": 1940.8767
+        "X": -1974.1508,
+        "Y": 1838.822
       }
     },
     {
@@ -622,16 +622,16 @@
         "Y": 232.07657
       },
       "Position": {
-        "X": -2313.485,
-        "Y": 447.1026
+        "X": -2258.9954,
+        "Y": 458.14783
       }
     },
     {
       "ChildId": "e57a5f2d-aa54-4df4-a367-fc53d6d1c97b"/*LinePoints*/,
       "Comment": "A set of points twisted by 360 degree along the y-axis squeezed to a length of zero into a single point.",
       "Position": {
-        "X": -2033.7949,
-        "Y": 1897.8767
+        "X": -1740.9424,
+        "Y": 1964.4928
       }
     },
     {
@@ -658,8 +658,8 @@
     {
       "ChildId": "ec2fe129-9f18-4d98-868b-a8686e247ac6"/*AnimValue*/,
       "Position": {
-        "X": -2483.796,
-        "Y": 2066.877
+        "X": -2315.1724,
+        "Y": 2073.5042
       }
     },
     {
@@ -679,22 +679,22 @@
     {
       "ChildId": "fb6ee221-e410-4ce5-bc05-43fb7d1706da"/*Time*/,
       "Position": {
-        "X": -2183.796,
-        "Y": 2109.877
+        "X": -2114.151,
+        "Y": 1978.822
       }
     },
     {
       "ChildId": "fd5f73fa-1cff-4bb8-a13f-495b05056b58"/*DrawLines*/,
       "Position": {
-        "X": -1680.1141,
-        "Y": 1.2333984
+        "X": -1673.5958,
+        "Y": 36.919525
       }
     },
     {
       "ChildId": "ff6f3b9a-6430-44f3-b7d8-b06e1ef6ed74"/*RadialPoints*/,
       "Position": {
-        "X": -2281.5393,
-        "Y": 1614.1737
+        "X": -2644.4746,
+        "Y": 1520.7618
       }
     }
   ],
@@ -702,8 +702,8 @@
     {
       "OutputId": "e4d2b739-0a14-4e52-a275-256b78b12b0f"/*Output2*/,
       "Position": {
-        "X": -1244.8522,
-        "Y": 1450.6653
+        "X": -1811.3385,
+        "Y": 1581.8535
       }
     }
   ],

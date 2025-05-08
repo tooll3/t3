@@ -35,7 +35,7 @@
     {
       "ChildId": "246ebb95-a615-44b8-bb27-5a759acac9f7"/*OrbitCamera*/,
       "Position": {
-        "X": -1642.9971,
+        "X": -1544.8748,
         "Y": 1332.2559
       }
     },
@@ -98,15 +98,15 @@
     {
       "ChildId": "3be42ef4-a02c-488d-a637-31b7219b7da0"/*CubeMesh*/,
       "Position": {
-        "X": -1920.0626,
+        "X": -1910.0626,
         "Y": 518.6839
       }
     },
     {
       "ChildId": "3ca0ec7b-492a-48be-8ad8-0a5801760ff8"/*DrawMesh*/,
       "Position": {
-        "X": -1642.9971,
-        "Y": 1276.2559
+        "X": -1553.3928,
+        "Y": 1211.1434
       }
     },
     {
@@ -127,8 +127,8 @@
       "ChildId": "408ef106-ec9b-4661-85be-99f940c2873b"/*Counter*/,
       "Comment": "We use the second \"was triggered\" output to count up an integer intex.\n\nThat's a workaround because we can't directly connect the output float value to the integer index.\n\nAn alternative solution would be to use [FloatToInt].",
       "Position": {
-        "X": -1792.9971,
-        "Y": 1388.2559
+        "X": -1725.4952,
+        "Y": 1394.2295
       }
     },
     {
@@ -225,8 +225,8 @@
     {
       "ChildId": "763490c0-ea9e-4f35-8ea8-ddda568da24c"/*SetMaterial*/,
       "Position": {
-        "X": -1614.9738,
-        "Y": 523.80347
+        "X": -1610.0626,
+        "Y": 515.98047
       }
     },
     {
@@ -253,8 +253,8 @@
     {
       "ChildId": "7bc3a385-b225-49ad-bded-781c9e549a47"/*CountInt*/,
       "Position": {
-        "X": -1642.9971,
-        "Y": 1399.2559
+        "X": -1585.4952,
+        "Y": 1429.2295
       }
     },
     {
@@ -281,8 +281,8 @@
     {
       "ChildId": "9005532a-18fc-4235-bb07-797c3b4eff94"/*PerlinNoise3*/,
       "Position": {
-        "X": -1618.6932,
-        "Y": 657.1432
+        "X": -1610.0626,
+        "Y": 585.98047
       }
     },
     {
@@ -295,8 +295,8 @@
     {
       "ChildId": "94808050-c368-45e2-a395-f408fe6f6ccb"/*Transform*/,
       "Position": {
-        "X": -1618.6932,
-        "Y": 601.1432
+        "X": -1610.0626,
+        "Y": 550.98047
       }
     },
     {
@@ -379,7 +379,7 @@
     {
       "ChildId": "c0cdfc66-21e1-4fff-b791-f812e1daeb52"/*DrawMesh*/,
       "Position": {
-        "X": -1792.9971,
+        "X": -1684.8748,
         "Y": 1332.2559
       }
     },
@@ -442,16 +442,16 @@
     {
       "ChildId": "f2d85f4d-e920-4ac7-93fd-66ee79174877"/*RenderTarget*/,
       "Position": {
-        "X": -1342.9971,
-        "Y": 1276.2559
+        "X": -1370.5378,
+        "Y": 1402.1636
       }
     },
     {
       "ChildId": "fa34d2db-546e-4e0b-8727-f7940e87c0a1"/*Switch*/,
       "Comment": "We use the connected index to pick which of the connected sub graphs should be evaluate.\n\nThere are a number interesting things here:\n\n1. If the index is positve wraps around (I.e. uses a modulo with the count of connections)\n2. If parts of the subgraph are no longer evaluated, they fade out.\n\nTip:\n\nYou can use negative indices to show none or all children.",
       "Position": {
-        "X": -1492.9971,
-        "Y": 1276.2559
+        "X": -1370.5378,
+        "Y": 1297.1636
       }
     }
   ],
