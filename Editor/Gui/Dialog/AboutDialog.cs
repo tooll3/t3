@@ -9,6 +9,10 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.App;
 using System.Windows.Forms;
+using SharpDX.DXGI;
+using SharpDX.Direct3D11;
+using T3.Core.Resource;
+using T3.Core.Animation;
 
 
 namespace T3.Editor.Gui.Dialog;
@@ -17,10 +21,21 @@ internal sealed class AboutDialog : ModalDialog
 {
     internal void Draw()
     {
-        DialogSize = new Vector2(500, 550);
+        DialogSize = new Vector2(550, 550);
         
         if (BeginDialog("About TiXL"))
         {
+            var _animate = 2.3*Math.Sin(Playback.RunTimeInSecs);
+            var rectSize = new Vector2(64, 64);
+            var rectColor = new Vector4((float)_animate * 1.0f, 0.227f,0.620f, (float)_animate); // RGBA
+         
+            ImGui.GetWindowDrawList().AddRectFilled(
+                ImGui.GetCursorScreenPos(),
+                ImGui.GetCursorScreenPos() + (rectSize),
+                ImGui.ColorConvertFloat4ToU32(rectColor)
+            );
+            ImGui.Image((IntPtr)SharedResources.t3logoAlphaTextureImageSrv, new Vector2(64,64));
+          
             FormInputs.AddSectionHeader("TiXL");
             ImGui.SameLine();
             ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
