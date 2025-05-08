@@ -475,7 +475,7 @@ internal sealed partial class MagItemMovement
                                                                                               pair.Ca.SourceOutput.Id,
                                                                                               pair.Cb.TargetItem.Id,
                                                                                               pair.Cb.TargetInput.Id),
-                                                                        0));
+                                                                        pair.Cb.MultiInputIndex));
         return true;
     }
 
