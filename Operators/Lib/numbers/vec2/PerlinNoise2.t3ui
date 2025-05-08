@@ -45,6 +45,14 @@
       "Description": "Defines the seed for the randomness. Two exactly identical copies of the operator with different seeds always create different results."
     },
     {
+      "InputId": "c4d35b3f-6d27-4088-8cc4-9a3f380f00e9"/*Offset*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": 200.4448
+      },
+      "UseVec2Control": "Position"
+    },
+    {
       "InputId": "c6e1170e-ae4f-44ae-aaab-e1aeb8f86997"/*BiasAndGain*/,
       "Position": {
         "X": -2.7436478,

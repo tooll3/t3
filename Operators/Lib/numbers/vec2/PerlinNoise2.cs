@@ -28,15 +28,29 @@ internal sealed class PerlinNoise2 : Instance<PerlinNoise2>
         var scale = Amplitude.GetValue(context);
         var scaleXY = AmplitudeXY.GetValue(context);
         var biasAndGain = BiasAndGain.GetValue(context);
-
+        var offset = Offset.GetValue(context);
+        
         var scaleToUniformFactor = 1.37f;
-        var x = ((MathUtils.PerlinNoise(value, period, octaves, seed) * scaleToUniformFactor + 1f) * 0.5f).ApplyGainAndBias(biasAndGain.X, biasAndGain.Y) 
-                * (rangeMax.X - rangeMin.X) + rangeMin.X;
 
-        var y = ((MathUtils.PerlinNoise(value, period, octaves, seed + 123) * scaleToUniformFactor + 1f) * 0.5f).ApplyGainAndBias(biasAndGain.X, biasAndGain.Y) 
-                * (rangeMax.Y - rangeMin.Y) + rangeMin.Y;
-            
-        Result.Value  = new Vector2(x, y) * scaleXY  * scale;
+        // var scaleToUniformFactor = 1.37f;
+        // var x = ((MathUtils.PerlinNoise(value, period, octaves, seed) * scaleToUniformFactor + 1f) * 0.5f).ApplyGainAndBias(biasAndGain.X, biasAndGain.Y) 
+        //         * (rangeMax.X - rangeMin.X) + rangeMin.X;
+        //
+        // var y = ((MathUtils.PerlinNoise(value, period, octaves, seed + 123) * scaleToUniformFactor + 1f) * 0.5f).ApplyGainAndBias(biasAndGain.X, biasAndGain.Y) 
+        //         * (rangeMax.Y - rangeMin.Y) + rangeMin.Y;
+        //     
+        // Result.Value  = new Vector2(x, y) * scaleXY  * scale;
+        var vec = new Vector2(ScalarNoise(0), 
+                              ScalarNoise(123));
+        
+        Result.Value = vec.Remap( Vector2.Zero, Vector2.One, rangeMin, rangeMax) * scaleXY * scale + offset; 
+        return;
+
+        float ScalarNoise(int seedOffset)
+        {
+            return (MathUtils.PerlinNoise(value,period, octaves, seed + seedOffset) * scaleToUniformFactor + 1f) 
+                   * 0.5f.ApplyGainAndBias(biasAndGain.X, biasAndGain.Y);
+        }
     }
 
         
@@ -54,7 +68,10 @@ internal sealed class PerlinNoise2 : Instance<PerlinNoise2>
         
     [Input(Guid = "A5731884-2EFC-4CFD-A098-4A0B4B6BDD6B")]
     public readonly InputSlot<Vector2> AmplitudeXY = new();
-        
+    
+    [Input(Guid = "C4D35B3F-6D27-4088-8CC4-9A3F380F00E9")]
+    public readonly InputSlot<Vector2> Offset = new();
+    
     [Input(Guid = "0abcff87-ace5-4a06-9217-b2caf831ecae")]
     public readonly InputSlot<float> Amplitude = new();
         

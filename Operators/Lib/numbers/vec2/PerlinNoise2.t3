@@ -25,6 +25,13 @@
       "DefaultValue": 0
     },
     {
+      "Id": "c4d35b3f-6d27-4088-8cc4-9a3f380f00e9"/*Offset*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
       "Id": "c6e1170e-ae4f-44ae-aaab-e1aeb8f86997"/*BiasAndGain*/,
       "DefaultValue": {
         "X": 0.5,

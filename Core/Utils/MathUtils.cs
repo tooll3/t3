@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using T3.Core.Animation;
 
 namespace T3.Core.Utils;
 
+[SuppressMessage("ReSharper", "UnusedMember.Local")]
 public static class MathUtils
 {
     public static float ToRad => (float)(Math.PI / 180.0);
@@ -109,13 +111,13 @@ public static class MathUtils
         
     public static uint XxHash(uint p)
     {
-        const uint PRIME32_2 = 2246822519U, PRIME32_3 = 3266489917U;
-        const uint PRIME32_4 = 668265263U, PRIME32_5 = 374761393U;
+        const uint prime32A = 3266489917U;
+        const uint prime32B = 668265263U, prime32C = 374761393U;
 
-        uint h32 = p + PRIME32_5;
-        h32 = PRIME32_4 * ((h32 << 17) | (h32 >> (32 - 17)));
-        h32 = PRIME32_2 * (h32 ^ (h32 >> 15));
-        h32 = PRIME32_3 * (h32 ^ (h32 >> 13));
+        uint h32 = p + prime32C;
+        h32 = prime32B * ((h32 << 17) | (h32 >> (32 - 17)));
+        h32 = 2246822519U * (h32 ^ (h32 >> 15));
+        h32 = prime32A * (h32 ^ (h32 >> 13));
 
         return h32 ^ (h32 >> 16);
     }
@@ -127,7 +129,7 @@ public static class MathUtils
         x = ((x>>8)^x)*k;
         x = ((x>>8)^x)*k;
     
-        return (float)( (x & 0x7fffffff) / 2147483648.0);;
+        return (float)( (x & 0x7fffffff) / 2147483648.0);
     }
 
     private static float Fade(float t)
@@ -176,19 +178,34 @@ public static class MathUtils
         return value.X._IsFinite() && value.Y._IsFinite() && value.Z._IsFinite();
     }        
         
-    public static Vector2 Clamp(Vector2 v, Vector2 mn, Vector2 mx)
+    public static Vector2 Clamp(this Vector2 v, Vector2 mn, Vector2 mx)
     {
-        return new Vector2((v.X < mn.X)
-                               ? mn.X
-                               : (v.X > mx.X)
-                                   ? mx.X
-                                   : v.X, (v.Y < mn.Y) ? mn.Y : (v.Y > mx.Y) ? mx.Y : v.Y);
+        return new Vector2((v.X < mn.X)? mn.X : (v.X > mx.X) ? mx.X : v.X, 
+                           (v.Y < mn.Y) ? mn.Y : (v.Y > mx.Y) ? mx.Y : v.Y);
     }
-        
-    // method with a callback that returns a double of a given item
-        
-        
-        
+
+    public static Vector3 Clamp(this Vector3 v, Vector3 mn, Vector3 mx)
+    {
+        return new Vector3((v.X < mn.X)? mn.X : (v.X > mx.X) ? mx.X : v.X, 
+                           (v.Y < mn.Y) ? mn.Y : (v.Y > mx.Y) ? mx.Y : v.Y,
+                           (v.Z < mn.Z) ? mn.Z : (v.Z > mx.Z) ? mx.Z : v.Z);
+    }
+
+    public static Vector2 Remap(this Vector2 value2, Vector2 inMin, Vector2 inMax, Vector2 outMin, Vector2 outMax)
+    {
+        var factor = (value2 - inMin) / (inMax - inMin);
+        var v = factor * (outMax - outMin) + outMin;
+        return v;
+    }    
+    
+    public static Vector3 Remap(this Vector3 value2, Vector3 inMin, Vector3 inMax, Vector3 outMin, Vector3 outMax)
+    {
+        var factor = (value2 - inMin) / (inMax - inMin);
+        var v = factor * (outMax - outMin) + outMin;
+        return v;
+    }    
+    
+    // TODO: move to another class
     public static int FindIndexForTime<T>(List<T> items, double time, Func<int, double> timeAtIndex)
     {
         if (items.Count == 0)
@@ -254,19 +271,19 @@ public static class MathUtils
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float[] ToArray(this Vector2 vec2)
     {
-        return new[] { vec2.X, vec2.Y };
+        return [vec2.X, vec2.Y];
     }
         
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float[] ToArray(this Vector3 vec3)
     {
-        return new[] { vec3.X, vec3.Y, vec3.Z };
+        return [vec3.X, vec3.Y, vec3.Z];
     }
         
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float[] ToArray(this Vector4 vec4)
     {
-        return new[] { vec4.X, vec4.Y, vec4.Z, vec4.W };
+        return [vec4.X, vec4.Y, vec4.Z, vec4.W];
     }
         
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -383,7 +400,7 @@ public static class MathUtils
 
     public static double Lerp(double a, double b, double t)
     {
-        return (double)(a + (b - a) * t);
+        return a + (b - a) * t;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
