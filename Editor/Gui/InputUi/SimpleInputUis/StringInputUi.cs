@@ -29,7 +29,7 @@ public sealed class StringInputUi : InputValueUi<string>
     }
 
     public UsageType Usage { get; private set; } = UsageType.Default;
-    public string? FileFilter { get; private set; }
+    public string FileFilter { get; private set; } = string.Empty;
 
     public override IInputUi Clone()
     {
@@ -234,8 +234,6 @@ public sealed class StringInputUi : InputValueUi<string>
             Usage = enumValue;
         }
 
-        FileFilter = inputToken[nameof(FileFilter)]?.Value<string>();
+        FileFilter = inputToken[nameof(FileFilter)]?.Value<string>() ?? string.Empty;
     }
-
-    private static readonly Instance[] _selectedInstances = [];
 }

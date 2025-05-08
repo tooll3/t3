@@ -402,7 +402,7 @@ internal static class FormInputs
 
         if (AppendResetButton(hasDefault && !isDefault, label))
         {
-            value = defaultValue;
+            value = defaultValue ?? string.Empty;
             modified = true;
         }
 
