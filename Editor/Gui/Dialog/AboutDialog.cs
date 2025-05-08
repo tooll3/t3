@@ -28,9 +28,10 @@ internal sealed class AboutDialog : ModalDialog
             FormInputs.AddSectionHeader("v." + Program.VersionText);
             ImGui.PopStyleColor();
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, mySpacing);
+           
             ImGui.TextColored(UiColors.TextMuted, $"Build Hash:");
             ImGui.SameLine();
-            ImGui.Text($"{GetGitCommitHash()}");
+            ImGui.Text($"{gitCommitHash}");
             
             ImGui.TextColored(UiColors.TextMuted, $"Date:");
             ImGui.SameLine();
@@ -319,7 +320,7 @@ internal sealed class AboutDialog : ModalDialog
     private static readonly string dotNetRuntime = GetDotNetRuntimeVersion();
     private static readonly string dotNetSdk = GetDotNetSdkVersion();
     private static readonly string gpuInformation = GetGpuInformation();
-
+    private static readonly string gitCommitHash = GetGitCommitHash();
     private string _systemInfo = string.Empty;
 
     private static readonly Vector2 mySpacing = new (6.0f, 3.0f);
