@@ -272,11 +272,11 @@ internal sealed partial class MagItemMovement
             //            context.Canvas.TransformPosition(mousePosOnCanvas) + _canvas.TransformDirection(bestSnapDelta),
             //            Color.White);
 
-            if (Vector2.Distance(snapPos, LastSnapDragPositionOnCanvas) > 2) // ugh. Magic number
+            if (Vector2.Distance(snapPos, _lastSnapDragPositionOnCanvas) > 2) // ugh. Magic number
             {
                 snapPositionChanged = true;
                 LastSnapTime = ImGui.GetTime();
-                LastSnapDragPositionOnCanvas = snapPos;
+                _lastSnapDragPositionOnCanvas = snapPos;
                 LastSnapTargetPositionOnCanvas = _snapping.Reverse
                                                      ? _snapping.InputAnchorPos
                                                      : _snapping.OutAnchorPos;
@@ -292,7 +292,7 @@ internal sealed partial class MagItemMovement
         // Unsnapped...
         else
         {
-            LastSnapDragPositionOnCanvas = Vector2.Zero;
+            _lastSnapDragPositionOnCanvas = Vector2.Zero;
             LastSnapTime = double.NegativeInfinity;
         }
 
@@ -301,13 +301,17 @@ internal sealed partial class MagItemMovement
         return snappingChanged;
     }
 
+    private Vector2 _mousePosWithinDraggedItem;
+
     public void StartDragOperation(GraphUiContext context)
     {
-        var draggedItems = DraggedItems.Select(i => i as ISelectableCanvasObject).ToList();
-
+        _draggedItems = DraggedItems.Select(i => i as ISelectableCanvasObject).ToList();
+        if (_draggedItems.Count == 0)
+            return;
+        
         var macroCommand = context.StartMacroCommand("Move nodes");
 
-        context.MoveElementsCommand = new ModifyCanvasElementsCommand(context.CompositionInstance.Symbol.Id, draggedItems, _nodeSelection);
+        context.MoveElementsCommand = new ModifyCanvasElementsCommand(context.CompositionInstance.Symbol.Id, _draggedItems, _nodeSelection);
         macroCommand.AddExecutedCommandForUndo(context.MoveElementsCommand);
 
         _lastAppliedOffset = Vector2.Zero;
@@ -317,7 +321,11 @@ internal sealed partial class MagItemMovement
         UpdateSnappedBorderConnections();
         
         var mousePosInCanvas = context.Canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
-        InitSplitInsertionPoints(DraggedItems, mousePosInCanvas);
+        
+        var firstDraggedItem = _draggedItems[0];
+        _mousePosWithinDraggedItem = mousePosInCanvas - firstDraggedItem.PosOnCanvas;
+            
+        InitSpliceLinks(DraggedItems, mousePosInCanvas);
         InitPrimaryDraggedOutput();
 
         _unsnappedBorderConnectionsBeforeDrag.Clear();
@@ -532,7 +540,7 @@ internal sealed partial class MagItemMovement
         return pairs;
     }
 
-    internal static List<SnapCollapseConnectionPair> FindVerticalCollapsableConnectionPairs(List<MagGraphConnection> unsnappedConnections)
+    private static List<SnapCollapseConnectionPair> FindVerticalCollapsableConnectionPairs(List<MagGraphConnection> unsnappedConnections)
     {
         var list = new List<SnapCollapseConnectionPair>();
 
@@ -570,7 +578,7 @@ internal sealed partial class MagItemMovement
         return list;
     }
 
-    internal static List<SnapCollapseConnectionPair> FindHorizontalCollapsableConnectionPairs(List<MagGraphConnection> unsnappedConnections)
+    private static List<SnapCollapseConnectionPair> FindHorizontalCollapsableConnectionPairs(List<MagGraphConnection> unsnappedConnections)
     {
         var list = new List<SnapCollapseConnectionPair>();
 
@@ -721,51 +729,58 @@ internal sealed partial class MagItemMovement
 
 
     ///<summary>
-    /// Iterate through gap lines and move items on the left towards the right
+    /// Try to close gap be looking for disjoint snapped set on the left and right
     /// </summary>
-    public static HashSet<MagGraphItem> MoveToCollapseHorizontalGaps(MagGraphConnection ca, MagGraphConnection cb, HashSet<MagGraphItem> movableItems,
-                                                                     bool dryRun)
+    private  HashSet<MagGraphItem> MoveToCollapseHorizontalGaps(MagGraphConnection ca, MagGraphConnection cb, HashSet<MagGraphItem> movableItems,
+                                                                      bool dryRun)
     {
-        var minX = ca.SourcePos.X;
-        var maxX = cb.TargetPos.X;
-        var lineWidth = MagGraphItem.GridSize.X;
-
-        var snapCount = (maxX - minX) / lineWidth;
-        var roundedSnapCount = (int)(snapCount + 0.5f);
-        var affectedItems = new HashSet<MagGraphItem>();
-        for (var gridIndex = roundedSnapCount - 1; gridIndex >= 0; gridIndex--)
+        var counterOffset = Vector2.Zero;
+        foreach (var ss in SpliceSets)
         {
-            var isLineBlocked = false;
-            var middleSnapLineX = minX + (0.5f + gridIndex) * lineWidth;
-
-            foreach (var item in movableItems)
+            if (ss.InputItemId == ca.TargetItem.Id && ss.Direction == MagGraphItem.Directions.Horizontal)
             {
-                if (item.Area.Min.X >= middleSnapLineX || item.Area.Max.X <= middleSnapLineX)
-                    continue;
-
-                isLineBlocked = true;
-                break;
+                counterOffset = ss.DragPositionWithinBlock;
             }
+        }
 
-            if (isLineBlocked)
-                continue;
+        var leftBatch = CollectSnappedItems(ca.SourceItem, null, true, ca.ConnectionHash);
+        var rightBatch = CollectSnappedItems(cb.TargetItem, null, true, ca.ConnectionHash);
+            
+        var onlyLeft = new HashSet<MagGraphItem>(leftBatch);
+        onlyLeft.ExceptWith(rightBatch);
 
-            // move lines below up one step
-            foreach (var item in movableItems)
-            {
-                if (item.PosOnCanvas.X < middleSnapLineX)
-                    continue;
+        var onlyRight = new HashSet<MagGraphItem>(rightBatch);
+        onlyRight.ExceptWith(leftBatch);
 
-                affectedItems.Add(item);
+        var intersection = new HashSet<MagGraphItem>(rightBatch);
+        intersection.IntersectWith(leftBatch);
 
-                if (!dryRun)
-                    item.PosOnCanvas -= new Vector2(lineWidth, 0);
-            }
+        if (intersection.Count != 0)
+        {
+            return [];
+        }
+        
+        var affectedItems = new HashSet<MagGraphItem>(onlyLeft);
+        affectedItems.UnionWith(onlyRight);
+        if (dryRun)
+            return affectedItems;
+
+        foreach (var item in onlyRight)
+        {
+            item.PosOnCanvas += new Vector2( counterOffset.X - MagGraphItem.GridSize.X, 0);
+        }
+
+        foreach (var item in onlyLeft)
+        {
+            item.PosOnCanvas += new Vector2(counterOffset.X, 0);
         }
 
         return affectedItems;
     }
 
+    /// <summary>
+    /// A pair of snapped connections that can be fused after unsnapping some items from a stack
+    /// </summary>
     internal sealed record SnapCollapseConnectionPair(MagGraphConnection Ca, MagGraphConnection Cb);
 
     ///<summary>
@@ -970,7 +985,7 @@ internal sealed partial class MagItemMovement
     /// When starting a new drag operation, we try to identify border input anchors of the dragged items,
     /// that can be used to insert them between other snapped items.
     /// </summary>
-    private void InitSplitInsertionPoints(HashSet<MagGraphItem> draggedItems, Vector2 mousePosInCanvas)
+    private void InitSpliceLinks(HashSet<MagGraphItem> draggedItems, Vector2 mousePosInCanvas)
     {
         SpliceSets.Clear();
 
@@ -1346,7 +1361,7 @@ internal sealed partial class MagItemMovement
     internal bool IsItemDragged(MagGraphItem item) => DraggedItems.Contains(item);
 
     internal double LastSnapTime = double.NegativeInfinity;
-    internal Vector2 LastSnapDragPositionOnCanvas;
+    private Vector2 _lastSnapDragPositionOnCanvas;
 
     /** for visual indication only */
     internal Vector2 LastSnapTargetPositionOnCanvas;
@@ -1388,5 +1403,6 @@ internal sealed partial class MagItemMovement
     private readonly MagGraphCanvas _canvas;
     private readonly MagGraphLayout _layout;
     private readonly NodeSelection _nodeSelection;
+    private List<ISelectableCanvasObject> _draggedItems;
     private const float SnapTolerance = 0.01f;
 }
