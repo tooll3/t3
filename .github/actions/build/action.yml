@@ -3,9 +3,20 @@ description: "Run common build steps"
 runs:
   using: "composite"
   steps:
-    - name: Setup .NET
+    - name: Setup .NET SDK
       uses: actions/setup-dotnet@v4
-      
+      with:
+        # Explicitly tells setup-dotnet to use your global.json file.
+        # Assumes global.json is at the root of your repository.
+        dotnet-version-file: './global.json'
+
+    # ADD THIS STEP FOR DEBUGGING - Helps understand what SDK is actually used
+    - name: Display .NET SDK Version
+      shell: pwsh
+      run: |
+        Write-Host "Resolved .NET SDK Version by setup-dotnet:"
+        dotnet --version
+
     - name: Build Release Version
       shell: pwsh
       run: dotnet build --configuration Release
