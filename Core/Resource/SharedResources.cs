@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using SharpDX.Direct3D11;
@@ -60,8 +60,9 @@ public static class SharedResources
                                                                                     }); 
             
         _viewWindowDefaultTexture = ResourceManager.CreateTextureResource(@"images/editor/t3-background.png", null);
+        _t3logoAlphaTexture = ResourceManager.CreateTextureResource(@"images/t3-logo-alpha.png", null);
         _colorPickerTexture = ResourceManager.CreateTextureResource(@"images/editor/t3-colorpicker.png", null);
-
+        
         if (_viewWindowDefaultTexture.Value == null)
         {
             Log.Error("Failed to load default view window background texture");
@@ -79,16 +80,25 @@ public static class SharedResources
         {
             _colorPickerTexture.Value.CreateShaderResourceView(ref ColorPickerImageSrv, "color picker image SRV");
         }
+        if (_t3logoAlphaTexture.Value == null)
+        {
+            Log.Error("Failed to load t3 logo texture");
+        }
+        else
+        {
+            _t3logoAlphaTexture.Value.CreateShaderResourceView(ref t3logoAlphaTextureImageSrv, "t3 logo image SRV");
+        }
+
     }
-        
     public static RasterizerState ViewWindowRasterizerState;
     public static ShaderResourceView ViewWindowDefaultTextureSrv;
     public static ShaderResourceView ColorPickerImageSrv;
+    public static ShaderResourceView t3logoAlphaTextureImageSrv;
     private static Resource<VertexShader> _fullScreenVertexShaderResource;
     private static Resource<PixelShader> _fullScreenPixelShaderResource;
     private static Resource<Texture2D> _viewWindowDefaultTexture;
     private static Resource<Texture2D> _colorPickerTexture;
-
+    private static Resource<Texture2D> _t3logoAlphaTexture;
     public static Resource<VertexShader> FullScreenVertexShaderResource => _fullScreenVertexShaderResource;
 
     public static Resource<PixelShader> FullScreenPixelShaderResource => _fullScreenPixelShaderResource;
