@@ -356,7 +356,8 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
     private Vector2 GridSizeOnScreen => TransformDirection(MagGraphItem.GridSize);
     private float CanvasScale => Scale.X;
 
-    public bool ShowDebug = false; // || ImGui.GetIO().KeyAlt;
+    // ReSharper disable once FieldCanBeMadeReadOnly.Global
+    public bool ShowDebug = false; //ImGui.GetIO().KeyAlt;
 
     private Guid _lastHoverId;
     private double _hoverStartTime;

@@ -76,6 +76,7 @@ internal sealed partial class MagGraphCanvas
                                 snappedBorders |= Borders.Up;
                                 break;
                             case MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal:
+                            case MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal:
                                 snappedBorders |= Borders.Left;
                                 break;
                         }
@@ -96,6 +97,7 @@ internal sealed partial class MagGraphCanvas
                                 snappedBorders |= Borders.Down;
                                 break;
                             case MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal:
+                            case MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal:
                                 snappedBorders |= Borders.Right;
                                 break;
                         }

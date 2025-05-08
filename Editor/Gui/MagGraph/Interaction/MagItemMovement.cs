@@ -233,7 +233,7 @@ internal sealed partial class MagItemMovement
 
             foreach (var otherItem in overlappingItems)
             {
-                _snapping.TestItemsForInsertion(otherItem, insertionAnchorItem, ip);
+                _snapping.TestItemsForInsertion(otherItem, insertionAnchorItem, ip, _canvas);
             }
         }
 
@@ -1069,7 +1069,7 @@ internal sealed partial class MagItemMovement
         var spliceLink = _snapping.InsertionPoint;
 
         // Split connection
-        var connection = _snapping.TargetItem.InputLines[0].ConnectionIn;
+        var connection = _snapping.TargetItem.InputLines[_snapping.InputLineIndex].ConnectionIn;
         if (connection == null)
         {
             Log.Warning("Missing connection?");
