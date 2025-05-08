@@ -13,7 +13,7 @@
 
 - [ ] Publish as input does not create connection
 - [ ] In Parameter window bypassable button should be disabled if not available
-- [ ] Prevent Keyboard Camera interaction while input field is active 
+- [x] Prevent Keyboard Camera interaction while input field is active 
 
 ## Project handling
 
