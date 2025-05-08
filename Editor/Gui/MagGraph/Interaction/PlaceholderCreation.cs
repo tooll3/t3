@@ -158,7 +158,7 @@ internal sealed class PlaceholderCreation
         {
             if (direction == MagGraphItem.Directions.Vertical)
             {
-                if(c.Style == MagGraphConnection.ConnectionStyles.AdditionalOutToMainInputSnappedVertical)
+                if(c.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical)
                     return c.SourceOutput.ValueType;
             }
             else
@@ -344,6 +344,12 @@ internal sealed class PlaceholderCreation
                     // Reroute original connections...
                     foreach (var mc in _snappedSourceOutputLine.ConnectionsOut)
                     {
+                        if (newItemOutput.ValueType != mc.Type)
+                        {
+                            Log.Warning("Skipping mismatched connection type");
+                            continue;
+                        }
+                            
                         var splitVertically = _connectionOrientation == MagGraphItem.Directions.Vertical
                                               && mc.Style == MagGraphConnection.ConnectionStyles.BottomToTop;
 
@@ -373,24 +379,27 @@ internal sealed class PlaceholderCreation
                 // Find first input with matching type
                 var outputType = _snappedSourceOutputLine.Output.ValueType;
                 var matchingInputSlot = newInstance.Inputs.FirstOrDefault(i => i.ValueType == outputType);
-                if (matchingInputSlot != null)
-                {
-                    var sourceId = _snappedSourceItem.Variant == MagGraphItem.Variants.Input ? Guid.Empty : _snappedSourceItem.Id;
-                    var sourceOutputId = _snappedSourceItem.Variant == MagGraphItem.Variants.Input ? _snappedSourceItem.Id : _snappedSourceOutputLine.Id;
-                                             context.MacroCommand
-                                                    .AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
-                                                                                                new Symbol.Connection(sourceId,
-                                                                                                         sourceOutputId,
-                                                                                                         newInstance.SymbolChildId,
-                                                                                                         matchingInputSlot.Id
-                                                                                                    ),
-                                                                                                0));
-                }
-                else
+                if (matchingInputSlot == null)
                 {
                     Log.Debug($"Can't find input with type {outputType}");
                 }
-                
+                else if (matchingInputSlot.ValueType != outputType)
+                {
+                    Log.Warning("Skipping connection with mismatching types");
+                }
+                else
+                {
+                    var sourceId = _snappedSourceItem.Variant == MagGraphItem.Variants.Input ? Guid.Empty : _snappedSourceItem.Id;
+                    var sourceOutputId = _snappedSourceItem.Variant == MagGraphItem.Variants.Input ? _snappedSourceItem.Id : _snappedSourceOutputLine.Id;
+                    context.MacroCommand
+                           .AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
+                                                                       new Symbol.Connection(sourceId,
+                                                                                             sourceOutputId,
+                                                                                             newInstance.SymbolChildId,
+                                                                                             matchingInputSlot.Id
+                                                                                            ),
+                                                                       0));
+                }
             }
 
             // Push snapped ops further down if new op exceed initial default height
