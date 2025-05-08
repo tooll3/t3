@@ -17,7 +17,7 @@ internal sealed class AboutDialog : ModalDialog
 {
     internal void Draw()
     {
-        DialogSize = new Vector2(500, 550) * T3Ui.UiScaleFactor;
+        DialogSize = new Vector2(500, 550);
         
         if (BeginDialog("About TiXL"))
         {
@@ -28,14 +28,21 @@ internal sealed class AboutDialog : ModalDialog
             FormInputs.AddSectionHeader("v." + Program.VersionText);
             ImGui.PopStyleColor();
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, mySpacing);
-            ImGui.TextColored(UiColors.TextMuted, $"{dateTime}");
+            ImGui.TextColored(UiColors.TextMuted, $"Build Hash:");
+            ImGui.SameLine();
+            ImGui.Text($"{GetGitCommitHash()}");
+            
+            ImGui.TextColored(UiColors.TextMuted, $"Date:");
+            ImGui.SameLine();
+            ImGui.Text($"{dateTime}");
+          
 #if DEBUG
             ImGui.TextColored(UiColors.TextMuted, "IDE:");
             ImGui.SameLine();
             ImGui.Text($"{ideName}");
 #endif
-            
-            ImGui.TextColored(UiColors.TextMuted, $"App language:");
+
+            ImGui.TextColored(UiColors.TextMuted, "App language:");
             ImGui.SameLine();
             ImGui.Text($"{appLanguage}");
             ImGui.PopStyleVar();
@@ -93,18 +100,41 @@ internal sealed class AboutDialog : ModalDialog
         }
         EndDialog();
     }
-    
+    private static string GetGitCommitHash()
+    {
+        try
+        {
+            using var process = new Process();
+            process.StartInfo.FileName = "git";
+            process.StartInfo.Arguments = "rev-parse --short HEAD";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.CreateNoWindow = true;
+
+            process.Start();
+            var output = process.StandardOutput.ReadToEnd().Trim();
+            process.WaitForExit();
+
+            return string.IsNullOrEmpty(output) ? "Unknown" : output;
+        }
+        catch (Exception)
+        {
+            return "Unknown";
+        }
+    }
     private void UpdateSystemInfo()
     {
         try
         {
             var systemInfo = new StringBuilder();
 
-            systemInfo.AppendLine($"{dateTime}");
+            systemInfo.AppendLine($"Date: {dateTime}");
             systemInfo.AppendLine($"TiXL version: {Program.VersionText}");
-            #if DEBUG
+            systemInfo.AppendLine($"Build Hash: {GetGitCommitHash()}");
+
+#if DEBUG
             systemInfo.AppendLine($"IDE: {GetIdeName()}");
-            #endif
+#endif
             systemInfo.AppendLine($"App language: {GetAppLanguage()}");
             systemInfo.AppendLine($"OS: {GetOperatingSystemInfo()}");
             systemInfo.AppendLine($"System language: {GetSystemLanguage()}");
@@ -112,6 +142,7 @@ internal sealed class AboutDialog : ModalDialog
             systemInfo.AppendLine($".NET runtime: {GetDotNetRuntimeVersion()}");
             systemInfo.AppendLine($".NET SDK: {GetDotNetSdkVersion()}");
             systemInfo.AppendLine($"GPU: {GetGpuInformation()}");
+            
             _systemInfo = systemInfo.ToString();
         }
         catch (Exception e)
