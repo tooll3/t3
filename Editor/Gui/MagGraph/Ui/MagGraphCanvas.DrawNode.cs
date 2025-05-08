@@ -643,14 +643,14 @@ internal sealed partial class MagGraphCanvas
                 else
                 {
                     // Register for input snapping...
-                    if (!isAlreadyUsed && isPotentialConnectionEndDropTarget && item != _context.ActiveItem)
+                    if (isPotentialConnectionEndDropTarget && item != _context.ActiveItem)
                     {
                         fillColor = ColorVariations.Highlight.Apply(type2UiProperties.Color).Fade(Blink);
                         InputSnapper.RegisterAsPotentialTargetInput(item, center, inputAnchor.SlotId);
                     }
                 }
 
-                if (!isAlreadyUsed && showTriangleAnchor)
+                if (showTriangleAnchor)
                 {
                     var pp = new Vector2(pMinVisible.X - 1, center.Y);
                     drawList.AddTriangleFilled(pp + new Vector2(1, 0) + new Vector2(-0, -anchorWidth) * CanvasScale,
