@@ -70,6 +70,9 @@ public sealed class AudioClipDefinition
 
     internal void ToJson(JsonTextWriter writer)
     {
+        if (string.IsNullOrEmpty(FilePath))
+            return;
+        
         //writer.WritePropertyName(Id.ToString());
         writer.WriteStartObject();
         {
