@@ -1,3 +1,4 @@
+#nullable enable
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Mathematics.Interop;
@@ -6,6 +7,7 @@ using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.Utils;
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace Lib.io.video;
 
@@ -18,7 +20,7 @@ namespace Lib.io.video;
 internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
 {
     [Output(Guid = "fa56b47f-1b16-45d5-80cd-32c5a872acf4", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-    public readonly Slot<Texture2D> Texture = new();
+    public readonly Slot<Texture2D?> Texture = new();
 
     [Output(Guid = "2F16BE73-226B-47E7-B7EE-BF4F3738FA13")]
     public readonly Slot<float> Duration = new();
@@ -33,7 +35,7 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
     {
         Texture.UpdateAction = Update;
         UpdateCount.UpdateAction = Update;
-        _playbackController = new(this);
+        _playbackController = new PlaybackController(this);
     }
 
     private void Update(EvaluationContext context)
@@ -43,12 +45,12 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
                                 : context.Playback.SecondsFromBars(context.LocalTime);
 
         var relativePath = Path.GetValue(context);
-        if (!ResourceManager.TryResolvePath(relativePath, null, out var absolutePath, out _))
+        if (!ResourceManager.TryResolvePath(relativePath, this, out var absolutePath, out _))
         {
             _playbackController.ErrorMessageForStatus = "Can't find video " + relativePath;
             return;
         }
-
+        
         if (_playbackController.HandleGettingFrames(absolutePath,
                                                     requestedTime,
                                                     ResyncThreshold.GetValue(context),
@@ -102,20 +104,20 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
 
     public IStatusProvider.StatusLevel GetStatusLevel()
     {
-        return string.IsNullOrEmpty(_playbackController?.ErrorMessageForStatus) ? IStatusProvider.StatusLevel.Success : IStatusProvider.StatusLevel.Error;
+        return string.IsNullOrEmpty(_playbackController.ErrorMessageForStatus) ? IStatusProvider.StatusLevel.Success : IStatusProvider.StatusLevel.Error;
     }
 
-    public string GetStatusMessage() => _playbackController?.ErrorMessageForStatus;
+    public string? GetStatusMessage() => _playbackController.ErrorMessageForStatus;
 
-    private class PlaybackController : IDisposable
+    private sealed class PlaybackController : IDisposable
     {
-        public string ErrorMessageForStatus;
+        public string? ErrorMessageForStatus;
 
         // TODO:
         public bool HasPlaybackCompleted { get; private set; }
         public float Duration { get; private set; }
-        public Texture2D Texture;
-        public bool IsReadyForRendering => Texture != null && !_isSeeking;
+        public Texture2D? Texture;
+        //public bool IsReadyForRendering => Texture != null && !_isSeeking;
 
         public bool HandleGettingFrames(string url, double requestedTime, float resyncThreshold, bool loop, float volume, bool precisePlayback)
         {
@@ -143,7 +145,6 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
             var isPlayingForward = Math.Abs(Playback.Current.PlaybackSpeed - 1) < 0.001f
                                    && !Playback.Current.IsRenderingToFile
                                    && !HasPlaybackCompleted;
-            _lastRequestedTime = requestedTime;
 
             /***
              * Mute video if audio engine is muted
@@ -230,7 +231,6 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
             {
                 Log.Debug("Starting playback", _instance);
                 _engine.Play();
-                _playbackStartTime = Playback.RunTimeInSecs;
             }
             else if (!isPlayingForward && !_engine.IsPaused)
             {
@@ -271,6 +271,9 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
 
         private bool TryTransferFrame()
         {
+            if (_engine == null)
+                return false;
+            
             try
             {
                 if (_contentReloaded || Texture == null)
@@ -292,7 +295,7 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
 
                 _engine.TransferVideoFrame(
                                            (SharpDX.Direct3D11.Texture2D)Texture,
-                                           ToVideoRect(default),
+                                           ToVideoRect(null),
                                            //new RawRectangle(0, 0, renderTarget.ViewWidth, renderTarget.ViewHeight),
                                            new RawRectangle(0, 0, _textureSize.Width, _textureSize.Height),
                                            ToRawColorBgra(default));
@@ -309,26 +312,23 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
 
         private void SetupMediaFoundation()
         {
-            using var mediaEngineAttributes = new MediaEngineAttributes
-                                                  {
-                                                      // _SRGB doesn't work :/ Getting invalid argument exception later in TransferVideoFrame
-                                                      AudioCategory = SharpDX.Multimedia.AudioStreamCategory.GameMedia,
-                                                      AudioEndpointRole = SharpDX.Multimedia.AudioEndpointRole.Multimedia,
-                                                      VideoOutputFormat = (int)Format.B8G8R8A8_UNorm
-                                                  };
+            using var mediaEngineAttributes = new MediaEngineAttributes();
+            
+            // _SRGB doesn't work :/ Getting invalid argument exception later in TransferVideoFrame
+            mediaEngineAttributes.AudioCategory = SharpDX.Multimedia.AudioStreamCategory.GameMedia;
+            mediaEngineAttributes.AudioEndpointRole = SharpDX.Multimedia.AudioEndpointRole.Multimedia;
+            mediaEngineAttributes.VideoOutputFormat = (int)Format.B8G8R8A8_UNorm;
 
             var device = ResourceManager.Device;
-            if (device != null)
-            {
-                // Add multi thread protection on device (MediaFoundation is multi-threaded)
-                using var deviceMultithread = device.QueryInterface<DeviceMultithread>();
-                deviceMultithread.SetMultithreadProtected(true);
+            
+            // Add multi thread protection on device (MediaFoundation is multithreaded)
+            using var deviceMultiThread = device.QueryInterface<DeviceMultithread>();
+            deviceMultiThread.SetMultithreadProtected(true);
 
-                // Reset device
-                using var manager = new DXGIDeviceManager();
-                manager.ResetDevice(device);
-                mediaEngineAttributes.DxgiManager = manager;
-            }
+            // Reset device
+            using var manager = new DXGIDeviceManager();
+            manager.ResetDevice(device);
+            mediaEngineAttributes.DxgiManager = manager;
 
             // Setup Media Engine attributes and create a DXGI Device Manager
             _dxgiDeviceManager = new DXGIDeviceManager();
@@ -360,7 +360,6 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
 
             Texture?.Dispose();
 
-            var device = ResourceManager.Device;
             try
             {
                 Texture = Texture2D.CreateTexture2D(new Texture2DDescription
@@ -402,6 +401,9 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
 
         private void EnginePlaybackEventHandler(MediaEngineEvent mediaEvent, long param1, int param2)
         {
+            if (_engine == null)
+                return;
+            
             Trace("04-MediaEngineEvent", mediaEvent);
 
             switch (mediaEvent)
@@ -446,6 +448,9 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
                 return;
 
             _url = url;
+            if (_engine == null)
+                return;
+            
             try
             {
                 DisposeTexture();
@@ -483,7 +488,7 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
         private static RawColorBGRA? ToRawColorBgra(Color4? color)
         {
             if (!color.HasValue)
-                return default;
+                return new RawColorBGRA(255, 255, 255, 255);
 
             color.Value.ToBgra(out var r, out var g, out var b, out var a);
             return new RawColorBGRA(b, g, r, a);
@@ -497,6 +502,7 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
         //     Stepped,
         // }
 
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private enum ReadyStates : short
         {
             /** information is available about the media resource. */
@@ -515,7 +521,7 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
             HaveEnoughData
         }
 
-        public void DisposeTexture()
+        private void DisposeTexture()
         {
             Texture?.Dispose();
             Texture = null;
@@ -529,16 +535,15 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
         }
 
         private readonly PlayVideo _instance;
-        private string _url;
+        private string? _url;
 
         private double _lastUpdateTimeInSecs;
-        private double _lastRequestedTime;
         private long _lastStreamTick;
 
         private bool _initialized;
-        private MediaEngine _engine;
+        private MediaEngine? _engine;
         private bool _contentReloaded;
-        private DXGIDeviceManager _dxgiDeviceManager;
+        private DXGIDeviceManager? _dxgiDeviceManager;
         private MediaEngineErr _lastMediaEngineError;
 
         private Int2 _textureSize = new(0, 0);
@@ -548,7 +553,6 @@ internal sealed class PlayVideo : Instance<PlayVideo>, IStatusProvider
         private double _seekOperationStartTime;
 
         private readonly Dictionary<string, DataChannel> _profilingChannels = new();
-        private double _playbackStartTime;
 
         private void Trace(string key, object o)
         {
