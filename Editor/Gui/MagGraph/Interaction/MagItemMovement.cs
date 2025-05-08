@@ -593,7 +593,8 @@ internal sealed partial class MagItemMovement
                 foreach (var cb in unsnappedConnections)
                 {
                     if (mc != cb
-                        && cb.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal
+                        && (cb.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal || 
+                            cb.Style ==MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal)
                         && cb.SourcePos.X > mc.SourcePos.X
                         && Math.Abs(cb.SourcePos.Y - mc.SourcePos.Y) < SnapTolerance
                         && cb.Type == mc.Type)
@@ -671,7 +672,8 @@ internal sealed partial class MagItemMovement
         var connectedToLeftInput =
             connection.Style == MagGraphConnection.ConnectionStyles.BottomToLeft
             || connection.Style == MagGraphConnection.ConnectionStyles.RightToLeft
-            || connection.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal;
+            || connection.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal
+            || connection.Style == MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal;
 
         if (connectedToLeftInput
             && (inputWasNotPrimary && inputWasOptional)

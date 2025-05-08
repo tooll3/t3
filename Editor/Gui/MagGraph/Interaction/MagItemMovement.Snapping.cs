@@ -161,7 +161,6 @@ internal sealed partial class MagItemMovement
                     ShowDebugLine(insertionPos, inputPos, Color.Red);
                     
                     var d = Vector2.Distance(insertionPos, inputPos);
-                    Log.Debug(" d1 " + d);
                     if (d >= BestDistance)
                         return;
 
@@ -203,7 +202,6 @@ internal sealed partial class MagItemMovement
                 ShowDebugLine(insertionPos, inputPos, Color.Cyan);
                 
                 var d = Vector2.Distance(insertionPos, inputPos) - 1;
-                Log.Debug(" d2 " + d);
 
                 if (d >= BestDistance)
                     return;
