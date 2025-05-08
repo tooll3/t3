@@ -37,7 +37,7 @@ internal static class KeyboardActions
 
         if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))
         {
-            result |= Modifications.DeleteSelectedOps(context);
+            result |= Modifications.DeleteSelection(context);
         }
 
         if (KeyboardBinding.Triggered(UserActions.ToggleDisabled))
