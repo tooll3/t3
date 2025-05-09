@@ -1,6 +1,6 @@
 {
   "Id": "a54e0946-71d0-4985-90bc-184cdb1b6b34"/*TorusSDF*/,
-  "Description": "Generates a donut shape SDF.",
+  "Description": "Generates a procedural torus field which can be rendered with [RaymarchField] and visualized with [VisualizeFieldDistance].\nAlso known as: Donut SDF\n\nFor a simple and interactive tutorial on the Tooll3 rendering pipeline, see [HowToRaymarchField].\n\nIt can be modified with [BendField] , [TransformField] , [PolarRepeat] and more.\n\nSimilar nodes: [BoxSDF], [ChainLinkSDF], [FractalSDF].\n\nTo use a Mesh made of polygons refer to [TorusMesh].",
   "InputUis": [
     {
       "InputId": "522a9640-ca8c-47e6-ad36-5c316a9092ae"/*Axis*/,
@@ -8,7 +8,8 @@
         "X": -200.0,
         "Y": 0.0
       },
-      "GroupTitle": "Shader Varations"
+      "GroupTitle": "Shader Varations",
+      "Description": "defines the axis along which the field is aligned"
     },
     {
       "InputId": "5fe2ab92-f8e5-400d-b5a3-197f20570d6f"/*Size*/,
@@ -16,6 +17,7 @@
         "X": -200.0,
         "Y": 45.0
       },
+      "Description": "Defines the size and thickness of the Torus\nX = ring size\nY = ring thickness",
       "AddPadding": "True"
     },
     {
@@ -23,7 +25,8 @@
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Transforms the center of the object"
     }
   ],
   "SymbolChildUis": [],
