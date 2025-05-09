@@ -5,12 +5,12 @@ using T3.Editor.UiModel;
 using T3.Editor.UiModel.ProjectHandling;
 using T3.SystemUi;
 
-namespace T3.Editor.Gui.Graph.Interaction;
+namespace T3.Editor.Gui.MagGraph.Interaction;
 
 /// <summary>
 /// If active renders a small input field above a symbolChildUi. Handles its state 
 /// </summary>
-internal static class RenameInstanceOverlay
+internal static class RenamingOperator
 {
     public static void OpenForChildUi(SymbolUi.Child symbolChildUi)
     {

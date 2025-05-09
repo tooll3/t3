@@ -76,7 +76,7 @@ internal static class GraphContextMenu
 
         if (ImGui.MenuItem("Rename", oneOpSelected))
         {
-            RenameInstanceOverlay.OpenForChildUi(selectedChildUis[0]);
+            RenamingOperator.OpenForChildUi(selectedChildUis[0]);
             context.StateMachine.SetState(GraphStates.RenameChild, context);
         }
 

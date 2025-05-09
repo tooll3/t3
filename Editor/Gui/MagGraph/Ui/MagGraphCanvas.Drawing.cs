@@ -128,8 +128,8 @@ internal sealed partial class MagGraphCanvas
 
         if (_context.StateMachine.CurrentState == GraphStates.RenameChild)
         {
-            RenameInstanceOverlay.Draw(_projectView);
-            if (!RenameInstanceOverlay.IsOpen)
+            RenamingOperator.Draw(_projectView);
+            if (!RenamingOperator.IsOpen)
             {
                 _context.StateMachine.SetState(GraphStates.Default, _context);
             }

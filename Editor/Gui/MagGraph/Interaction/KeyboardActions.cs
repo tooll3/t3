@@ -169,7 +169,7 @@ internal static class KeyboardActions
                 if (context.Layout.Items.TryGetValue(context.Selector.Selection[0].Id, out var item)
                                                      && item.Variant == MagGraphItem.Variants.Operator)
                 {
-                    RenameInstanceOverlay.OpenForChildUi(item.ChildUi!);
+                    RenamingOperator.OpenForChildUi(item.ChildUi!);
                     context.StateMachine.SetState(GraphStates.RenameChild, context);
                 }
             }

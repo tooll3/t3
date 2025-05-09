@@ -14,6 +14,7 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Legacy.Interaction;
 using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
 using T3.Editor.Gui.Interaction.TransformGizmos;
+using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -244,7 +245,7 @@ internal sealed class GraphNode
 
                     if (UserSettings.Config.HoverMode != UserSettings.GraphHoverModes.Disabled
                         && !ImGui.IsMouseDragging(ImGuiMouseButton.Left)
-                        && !RenameInstanceOverlay.IsOpen)
+                        && !RenamingOperator.IsOpen)
                     {
                         ImGui.BeginTooltip();
                         {
@@ -289,7 +290,7 @@ internal sealed class GraphNode
                 // A better solution would defer setting the compositionOp to the beginning of next frame.
                 var justOpenedChild = false;
                 if (hovered && ImGui.IsMouseDoubleClicked(0)
-                            && !RenameInstanceOverlay.IsOpen
+                            && !RenamingOperator.IsOpen
                             && (customUiResult & SymbolUi.Child.CustomUiResult.PreventOpenSubGraph) == 0)
                 {
                     if (ImGui.IsWindowFocused() || ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup))

@@ -652,5 +652,10 @@ internal static class GraphStates
               Exit: _ => { }
              );
     
-
+    internal static State RenameAnnotation
+        = new(
+              Enter: _ => { },
+              Update: _ => { },
+              Exit: _ => { }
+             );
 }
