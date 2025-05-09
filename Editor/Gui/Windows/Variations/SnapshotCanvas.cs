@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
@@ -11,8 +12,8 @@ namespace T3.Editor.Gui.Windows.Variations;
 
 internal class SnapshotCanvas : VariationBaseCanvas
 {
-    private protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForSnapshots;
-    private protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForSnapshots;
+    private protected override Instance? InstanceForBlendOperations => VariationHandling.ActiveInstanceForSnapshots;
+    private protected override SymbolVariationPool? PoolForBlendOperations => VariationHandling.ActivePoolForSnapshots;
 
     public virtual void DrawToolbarFunctions()
     {
@@ -33,7 +34,7 @@ internal class SnapshotCanvas : VariationBaseCanvas
 
     protected override void DrawAdditionalContextMenuContent(Instance instanceForBlendOperations)
     {
-        var oneSelected = CanvasElementSelection.SelectedElements.Count == 1;
+        //var oneSelected = CanvasElementSelection.SelectedElements.Count == 1;
         var oneOrMoreSelected = CanvasElementSelection.SelectedElements.Count > 0;
 
         var components = ProjectView.Focused;
@@ -90,13 +91,16 @@ internal class SnapshotCanvas : VariationBaseCanvas
 
     private void CreateVariation()
     {
+        if (PoolForBlendOperations == null)
+            return;
+        
         var newVariation = VariationHandling.CreateOrUpdateSnapshotVariation();
         if (newVariation == null)
             return;
 
         PoolForBlendOperations.SaveVariationsToFile();
         CanvasElementSelection.SetSelection(newVariation);
-        ResetView();
+        RequestResetView();
         TriggerThumbnailUpdate();
         VariationThumbnail.VariationForRenaming = newVariation;
     }
