@@ -11,7 +11,7 @@ namespace T3.Editor.Gui.Styling;
 /// </remarks>
 public static class T3Style
 {
-    public class HintAttribute : System.Attribute
+    public sealed class HintAttribute : System.Attribute
     {
         public string GroupTitle;
         public string Description;

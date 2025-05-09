@@ -7,7 +7,7 @@ using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Windows.TimeLine.Raster;
 
-public  class HorizontalRaster: IValueSnapAttractor
+public sealed  class HorizontalRaster: IValueSnapAttractor
 {
     public void Draw(ICanvas canvas)
     {

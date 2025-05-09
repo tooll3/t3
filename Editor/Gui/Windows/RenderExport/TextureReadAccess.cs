@@ -9,7 +9,7 @@ namespace T3.Editor.Gui.Windows.RenderExport;
 
 internal static class TextureReadAccess
 {
-    public class ReadRequestItem
+    public sealed class ReadRequestItem
     {
         public int RequestIndex;
         public string Filepath;

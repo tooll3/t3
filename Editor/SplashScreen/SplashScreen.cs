@@ -6,7 +6,7 @@ namespace T3.Editor.SplashScreen;
 
 internal class SplashScreen : ISplashScreen
 {
-    private class SplashForm : Form
+    private sealed class SplashForm : Form
     {
         public SplashForm()
         {

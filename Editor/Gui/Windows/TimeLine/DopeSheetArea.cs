@@ -17,7 +17,7 @@ using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.Windows.TimeLine;
 
-internal class DopeSheetArea : AnimationParameterEditing, ITimeObjectManipulation, IValueSnapAttractor
+internal sealed class DopeSheetArea : AnimationParameterEditing, ITimeObjectManipulation, IValueSnapAttractor
 {
     public DopeSheetArea(ValueSnapHandler snapHandler, TimeLineCanvas timeLineCanvas)
     {

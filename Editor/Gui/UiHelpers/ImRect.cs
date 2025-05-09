@@ -207,7 +207,7 @@ public struct ImRect
         Max.Y = Min.Y + (int)size.Y;
     }
 
-    bool IsInverted()
+    private bool IsInverted()
     {
         return Min.X > Max.X || Min.Y > Max.Y;
     }

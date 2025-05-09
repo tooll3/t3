@@ -3,7 +3,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Editor.UiModel.Commands.Graph;
 
-public class ResetInputToDefault : ICommand
+public sealed class ResetInputToDefault : ICommand
 {
     public string Name => "Reset Input Value to default";
     public bool IsUndoable => true;

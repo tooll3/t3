@@ -220,7 +220,7 @@ public static class FileAssetsHelper
 
     private static readonly Dictionary<string, FileResource> _resources = new();
 
-    class FileResource
+    private sealed class FileResource
     {
         public string Directory;
         public string FileName;

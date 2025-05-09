@@ -10,7 +10,7 @@ using T3.Editor.UiModel.InputsAndTypes;
 
 namespace T3.Editor.Gui.InputUi.VectorInputs;
 
-internal class IntInputUi : IntVectorInputValueUi<int>
+internal sealed class IntInputUi : IntVectorInputValueUi<int>
 {
     public override bool IsAnimatable => true;
 

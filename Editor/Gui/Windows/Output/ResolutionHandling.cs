@@ -80,7 +80,7 @@ public static class ResolutionHandling
     public static readonly Resolution DefaultResolution = Resolutions[0];
     private static Resolution _resolutionForEdit = new("untitled", 256, 256);
 
-    public class Resolution
+    public sealed class Resolution
     {
         public Resolution(string title, int width, int height, bool useAsAspectRatio = false)
         {

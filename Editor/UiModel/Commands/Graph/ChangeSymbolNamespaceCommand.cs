@@ -3,7 +3,7 @@ using T3.Core.SystemUi;
 
 namespace T3.Editor.UiModel.Commands.Graph;
 
-internal class ChangeSymbolNamespaceCommand : ICommand
+internal sealed class ChangeSymbolNamespaceCommand : ICommand
 {
     public string Name => "Change Symbol Namespace";
     public bool IsUndoable => true;

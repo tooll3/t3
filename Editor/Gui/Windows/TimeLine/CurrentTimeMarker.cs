@@ -5,7 +5,7 @@ using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.Windows.TimeLine;
 
-internal class CurrentTimeMarker: IValueSnapAttractor
+internal sealed class CurrentTimeMarker: IValueSnapAttractor
 {
     public void Draw(double timeInBars, TimeLineCanvas timelineCanvas)
     {

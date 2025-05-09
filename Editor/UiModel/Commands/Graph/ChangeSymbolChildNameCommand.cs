@@ -2,7 +2,7 @@
 
 namespace T3.Editor.UiModel.Commands.Graph;
 
-public class ChangeSymbolChildNameCommand : ICommand
+public sealed class ChangeSymbolChildNameCommand : ICommand
 {
     public string Name => "Change Symbol Name";
     public bool IsUndoable => true;

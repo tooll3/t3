@@ -10,7 +10,7 @@
 /// if the current value would snap to a new value coming from any of the registered
 /// SnapProviders.
 /// </remarks>
-public class SnapResult
+public sealed class SnapResult
 {
     public SnapResult(double target, double force)
     {

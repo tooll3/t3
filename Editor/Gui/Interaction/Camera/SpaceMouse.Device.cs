@@ -2,12 +2,12 @@
 using System.Runtime.InteropServices;
 using T3.Editor.App;
 
-// Drawn heavily from Emma Burrows codeproject sample
+// Drawn heavily from Emma Burrows code project sample
 // which closely follows the C++ MS WM_INPUT sample.
 
 namespace T3.Editor.Gui.Interaction.Camera;
 
-public partial class SpaceMouse
+public sealed partial class SpaceMouse
 {
     public sealed class SpaceMouseDevice: IWindowsFormsMessageHandler
     {
@@ -297,7 +297,7 @@ public partial class SpaceMouse
         /// <summary>
         /// ButtonMask from device
         /// </summary>
-        public class ButtonMask
+        public sealed class ButtonMask
         {
             public ButtonMask(byte b1, byte b2, byte b3, byte b4)
             {
@@ -314,7 +314,7 @@ public partial class SpaceMouse
         /// <summary>
         /// Translation Vector from device
         /// </summary>
-        public class TranslationVector
+        public sealed class TranslationVector
         {
             public TranslationVector(int x, int y, int z)
             {
@@ -342,7 +342,7 @@ public partial class SpaceMouse
         /// <summary>
         /// Rotation Vector from device
         /// </summary>
-        public class RotationVector
+        public sealed class RotationVector
         {
             public RotationVector(int x, int y, int z)
             {
@@ -407,7 +407,7 @@ public partial class SpaceMouse
         /// <summary>
         /// Arguments provided by the handler for a motion event
         /// </summary>
-        public class MotionEventArgs : EventArgs
+        public sealed class MotionEventArgs : EventArgs
         {
             private DeviceInfo _deviceInfo;
             private TranslationVector _translationVector;
@@ -446,7 +446,7 @@ public partial class SpaceMouse
         /// <summary>
         /// Arguments provided by the handler for a button event
         /// </summary>
-        public class ButtonEventArgs : EventArgs
+        public sealed class ButtonEventArgs : EventArgs
         {
             private DeviceInfo _deviceInfo;
             private ButtonMask _buttonMask;

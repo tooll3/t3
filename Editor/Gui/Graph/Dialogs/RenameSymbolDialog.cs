@@ -6,7 +6,7 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Dialogs;
 
-public class RenameSymbolDialog : ModalDialog
+public sealed class RenameSymbolDialog : ModalDialog
 {
     public void Draw(List<SymbolUi.Child> selectedChildUis, ref string name)
     {

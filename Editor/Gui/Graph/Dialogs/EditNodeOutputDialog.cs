@@ -6,7 +6,7 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Dialogs;
 
-public class EditNodeOutputDialog : ModalDialog
+public sealed class EditNodeOutputDialog : ModalDialog
 {
     public void Draw()
     {

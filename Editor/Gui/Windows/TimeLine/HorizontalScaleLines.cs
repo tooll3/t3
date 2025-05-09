@@ -168,7 +168,7 @@ public class HorizontalScaleLines : IValueSnapAttractor
         public float LabelOpacity { get; set; }
     }
 
-    readonly Dictionary<int, double> _usedPositions = new();
+    private readonly Dictionary<int, double> _usedPositions = new();
     //private List<DrawingVisual> m_Children = new List<DrawingVisual>();
     //private DrawingVisual m_DrawingVisual;
     public SnapResult CheckForSnap(double value, float canvasScale) {

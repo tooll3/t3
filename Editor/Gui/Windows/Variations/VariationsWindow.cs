@@ -8,7 +8,7 @@ using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.Windows.Variations;
 
-internal class VariationsWindow : Window
+internal sealed class VariationsWindow : Window
 {
     public VariationsWindow()
     {

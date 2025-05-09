@@ -299,12 +299,12 @@ internal sealed class AnnotationElement
         private static ChangeAnnotationTextCommand _changeAnnotationTextCommand;
     }
 
-    bool _isDragging;
-    Vector2 _dragStartDelta;
-    ModifyCanvasElementsCommand _moveCommand;
+    private bool _isDragging;
+    private Vector2 _dragStartDelta;
+    private ModifyCanvasElementsCommand _moveCommand;
     private readonly ProjectView _components;
 
-    Guid _draggedNodeId = Guid.Empty;
-    List<ISelectableCanvasObject> _draggedNodes = new();
+    private Guid _draggedNodeId = Guid.Empty;
+    private List<ISelectableCanvasObject> _draggedNodes = new();
 
 }

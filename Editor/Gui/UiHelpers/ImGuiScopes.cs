@@ -58,7 +58,7 @@ namespace T3.Editor.Gui.UiHelpers;
         private int _styleCount;
     }
 
-    public class ChildWindowScope : IDisposable
+    public sealed class ChildWindowScope : IDisposable
     {
         public ChildWindowScope(string name, Vector2 size,  ImGuiWindowFlags flags, Color backgroundColor, int padding =0, int rounding=0)
         {

@@ -4,7 +4,7 @@ using T3.Editor.UiModel.InputsAndTypes;
 
 namespace T3.Editor.Gui.InputUi.SingleControl;
 
-public class FloatDictInputUi : SingleControlInputUi<Dict<float>>
+public sealed class FloatDictInputUi : SingleControlInputUi<Dict<float>>
 {
     public override IInputUi Clone()
     {

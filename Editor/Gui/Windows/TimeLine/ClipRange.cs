@@ -6,7 +6,7 @@ using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.Windows.TimeLine;
 
-internal class ClipRange : IValueSnapAttractor
+internal sealed class ClipRange : IValueSnapAttractor
 {
     /// <summary>
     /// Visualizes the mapped time area within a <see cref="TimeClip"/> content  

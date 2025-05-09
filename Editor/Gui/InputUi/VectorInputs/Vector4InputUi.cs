@@ -7,7 +7,7 @@ using T3.Editor.UiModel.InputsAndTypes;
 
 namespace T3.Editor.Gui.InputUi.VectorInputs;
 
-internal class Vector4InputUi : FloatVectorInputValueUi<Vector4>
+internal sealed class Vector4InputUi : FloatVectorInputValueUi<Vector4>
 {
     public Vector4InputUi() : base(4)
     {

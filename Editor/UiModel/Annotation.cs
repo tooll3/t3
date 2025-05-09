@@ -4,7 +4,7 @@ using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.UiModel;
 
-public class Annotation : ISelectableCanvasObject
+public sealed class Annotation : ISelectableCanvasObject
 {
     internal string Title = "Untitled Annotation";
     internal Color Color = UiColors.Gray;

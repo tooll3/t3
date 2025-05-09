@@ -3,7 +3,7 @@ using T3.Core.Operator;
 
 namespace T3.Editor.UiModel.Commands.Animation;
 
-public class TimeClipDeleteCommand : ICommand
+public sealed class TimeClipDeleteCommand : ICommand
 {
     public string Name => "Delete time clip";
     public bool IsUndoable => true;

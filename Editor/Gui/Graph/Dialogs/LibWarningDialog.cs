@@ -6,7 +6,7 @@ using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.Graph.Dialogs;
 
-internal class LibWarningDialog : ModalDialog
+internal sealed class LibWarningDialog : ModalDialog
 {
     public void Draw(ProjectView components)
     {

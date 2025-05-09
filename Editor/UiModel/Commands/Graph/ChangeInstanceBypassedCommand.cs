@@ -2,7 +2,7 @@
 
 namespace T3.Editor.UiModel.Commands.Graph;
 
-public class ChangeInstanceBypassedCommand : ICommand
+public sealed class ChangeInstanceBypassedCommand : ICommand
 {
     public string Name => "Bypass";
     public bool IsUndoable => true;

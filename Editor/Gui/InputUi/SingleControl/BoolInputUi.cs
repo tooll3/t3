@@ -7,7 +7,7 @@ using T3.Editor.UiModel.InputsAndTypes;
 
 namespace T3.Editor.Gui.InputUi.SingleControl;
 
-public class BoolInputUi : SingleControlInputUi<bool>
+public sealed class BoolInputUi : SingleControlInputUi<bool>
 {
     public override bool IsAnimatable => true;        
         

@@ -10,7 +10,7 @@ namespace T3.Editor.Gui.Interaction.Midi.CompatibleDevices;
 
 [SuppressMessage("ReSharper", "UnusedMember.Local")]
 [MidiDeviceProduct("APC mini mk2")]
-public class ApcMiniMk2 : CompatibleMidiDevice
+public sealed class ApcMiniMk2 : CompatibleMidiDevice
 {
     public ApcMiniMk2()
     {

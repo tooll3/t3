@@ -308,7 +308,7 @@ internal static class GraphConnectionDrawer
     }
 }
 
-static class ArcConnection
+internal static class ArcConnection
 {
     private static readonly Color OutlineColor = new(0.1f, 0.1f, 0.1f, 0.6f);
 

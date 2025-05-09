@@ -13,7 +13,7 @@ namespace T3.Editor.Gui.Graph.Legacy;
 /// Draws published output parameters of a <see cref="Symbol"/> and uses <see cref="ConnectionMaker"/> 
 /// to create new connections with it.
 /// </summary>
-static class OutputNode
+internal static class OutputNode
 {
     public static void Draw(GraphCanvas canvas, ProjectView window, ImDrawListPtr drawList, Symbol.OutputDefinition outputDef, IOutputUi outputUi)
     {

@@ -1,14 +1,14 @@
 ﻿namespace T3.Editor.UiModel.Commands;
 
-public class MacroCommand : ICommand
+internal sealed class MacroCommand : ICommand
 {
-    public MacroCommand(string name, IEnumerable<ICommand> commands)
+    internal MacroCommand(string name, IEnumerable<ICommand> commands)
     {
         Name = name;
         _commands = commands.ToList();
     }
         
-    public MacroCommand(string name)
+    internal MacroCommand(string name)
     {
         Name = name;
         _commands = new List<ICommand>();
@@ -20,7 +20,7 @@ public class MacroCommand : ICommand
     /// <summary>
     /// Adds an already executed command to the marco-command so it can be undone
     /// </summary>
-    public void AddExecutedCommandForUndo(ICommand command)
+    internal void AddExecutedCommandForUndo(ICommand command)
     {
         _commands.Add(command);
     }
@@ -28,7 +28,7 @@ public class MacroCommand : ICommand
     /// <summary>
     /// For certain macro-operations it can be necessary to executed some of its sub commands early on. 
     /// </summary>
-    public void AddAndExecCommand(ICommand command)
+    internal void AddAndExecCommand(ICommand command)
     {
         _commands.Add(command);
         command.Do();
@@ -46,7 +46,7 @@ public class MacroCommand : ICommand
         tmpCommands.ForEach(c => c.Undo());
     }
 
-    public int Count => _commands.Count;
+    internal int Count => _commands.Count;
     private readonly List<ICommand> _commands;
     public override string ToString()
     {

@@ -8,7 +8,7 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster;
 /// <summary>
 /// A <see cref="AbstractTimeRaster"/> that displays Seconds, Minutes, Hours, etc. 
 /// </summary>
-public class SiTimeRaster : AbstractTimeRaster
+public sealed class SiTimeRaster : AbstractTimeRaster
 {
     public override void Draw(Playback playback, float unitsPerSeconds)
     {
@@ -70,17 +70,17 @@ public class SiTimeRaster : AbstractTimeRaster
     private const float BarsToSecs = 0.5f;
     private float _initializedDensity;
 
-    const float everyYear = 365 * 24 * 60 * 60;
-    const float every10Days = 10 * 24 * 60 * 60;
-    const float everyDay = 24 * 60 * 60;
-    const float every4Hours = 4* 60 * 60;
-    const float everyHour = 60 * 60;
-    const float every5Minute = 5 * 60;
-    const float everyMinute = 1 * 60;
-    const float every15Sec = 15;
-    const float everySec = 1;
-    const float every100Ms = 1 / 10f;
-    const float every10Ms = 1 / 100f;
+    private const float everyYear = 365 * 24 * 60 * 60;
+    private const float every10Days = 10 * 24 * 60 * 60;
+    private const float everyDay = 24 * 60 * 60;
+    private const float every4Hours = 4* 60 * 60;
+    private const float everyHour = 60 * 60;
+    private const float every5Minute = 5 * 60;
+    private const float everyMinute = 1 * 60;
+    private const float every15Sec = 15;
+    private const float everySec = 1;
+    private const float every100Ms = 1 / 10f;
+    private const float every10Ms = 1 / 100f;
         
     private static List<ScaleRange> InitializeTimeScaleDefinitions(float density)
     {

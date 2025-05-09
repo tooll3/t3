@@ -4,7 +4,7 @@ using T3.Editor.Gui.Interaction.Variations.Model;
 
 namespace T3.Editor.UiModel.Commands.Variations;
 
-public class AddPresetOrVariationCommand : ICommand
+internal sealed class AddPresetOrVariationCommand : ICommand
 {
     public string Name => "Add Preset";
     public bool IsUndoable => true;
@@ -12,7 +12,7 @@ public class AddPresetOrVariationCommand : ICommand
     private readonly Symbol _symbol;
     private readonly Variation _newVariation;
 
-    public AddPresetOrVariationCommand(Symbol symbol, Variation variation)
+    internal AddPresetOrVariationCommand(Symbol symbol, Variation variation)
     {
         _symbol = symbol;
         _newVariation = variation;

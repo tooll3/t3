@@ -1,10 +1,10 @@
 ﻿namespace T3.Editor.Gui.UiHelpers.DelaunayVoronoi;
 
-public class DelaunayTriangulator
+public sealed class DelaunayTriangulator
 {
     private double MaxX { get; set; }
     private double MaxY { get; set; }
-    private IEnumerable<Triangle> border;
+    private IEnumerable<Triangle> _border;
 
     public IEnumerable<Point> GeneratePoints(int amount, double maxX, double maxY)
     {
@@ -19,7 +19,7 @@ public class DelaunayTriangulator
         var points = new List<Point>() { point0, point1, point2, point3 };
         var tri1 = new Triangle(point0, point1, point2);
         var tri2 = new Triangle(point0, point2, point3);
-        border = new List<Triangle>() { tri1, tri2 };
+        _border = new List<Triangle>() { tri1, tri2 };
 
         var random = new Random();
         for (int i = 0; i < amount - 4; i++)
@@ -41,7 +41,7 @@ public class DelaunayTriangulator
         var point3 = new Point(min.X, max.Y);
         var tri1 = new Triangle(point0, point1, point2);
         var tri2 = new Triangle(point0, point2, point3);
-        border = new List<Triangle>() { tri1, tri2 };
+        _border = new List<Triangle>() { tri1, tri2 };
         return new List<Point>() { point0, point1, point2, point3 };
             
     }
@@ -49,7 +49,7 @@ public class DelaunayTriangulator
     public IEnumerable<Triangle> BowyerWatson(IEnumerable<Point> points)
     {
         //var supraTriangle = GenerateSupraTriangle();
-        var triangulation = new HashSet<Triangle>(border);
+        var triangulation = new HashSet<Triangle>(_border);
 
         foreach (var point in points)
         {

@@ -505,13 +505,13 @@ public sealed class WindowsUiContentDrawer : IUiContentDrawer<Device>
         return true;
     }
 
-    void DisposeObj<T>(ref T obj) where T : class, IDisposable
+    private void DisposeObj<T>(ref T obj) where T : class, IDisposable
     {
         obj?.Dispose();
         obj = null;
     }
 
-    void InvalidateDeviceObjects()
+    private void InvalidateDeviceObjects()
     {
         if (_device == null)
             return;

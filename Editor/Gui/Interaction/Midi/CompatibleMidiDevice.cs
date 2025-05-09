@@ -267,7 +267,7 @@ public abstract class CompatibleMidiDevice : MidiConnectionManager.IMidiConsumer
     protected MidiOut MidiOutConnection;
 }
 
-public class MidiDeviceProductAttribute : Attribute
+public sealed class MidiDeviceProductAttribute : Attribute
 {
     public MidiDeviceProductAttribute(string productName)
     {

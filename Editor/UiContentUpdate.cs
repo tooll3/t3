@@ -29,8 +29,8 @@ internal static class UiContentUpdate
         _lastUiScale = UserSettings.Config.UiScaleFactor;
         _hasSetScaling = true;
     }
-    
-    static void GenerateFontsWithScaleFactor(float scaleFactor)
+
+    private static void GenerateFontsWithScaleFactor(float scaleFactor)
     {
         // See https://stackoverflow.com/a/5977638
         T3Ui.DisplayScaleFactor = ProgramWindows.Main.GetDpi().X / 96f;

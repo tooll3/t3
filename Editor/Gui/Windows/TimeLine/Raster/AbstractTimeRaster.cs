@@ -103,7 +103,7 @@ public abstract class AbstractTimeRaster : IValueSnapAttractor
     protected List<ScaleRange> ScaleRanges;
     private const double Epsilon = 0.00001f;
 
-    protected class ScaleRange
+    protected sealed class ScaleRange
     {
         public double ScaleMin { get; set; }
         public double ScaleMax { get; set; }

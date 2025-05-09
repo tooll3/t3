@@ -199,16 +199,16 @@ internal sealed class AppWindow
     /// We prevent closing the secondary viewer window for now because
     /// this will cause a SwapChain related crash
     /// </summary>
-    private class NoCloseRenderForm : ImGuiDx11RenderForm
+    private sealed class NoCloseRenderForm : ImGuiDx11RenderForm
     {
-        private const int CP_NOCLOSE_BUTTON = 0x200;
+        private const int CpNocloseButton = 0x200;
 
         protected override CreateParams CreateParams
         {
             get
             {
                 CreateParams myCp = base.CreateParams;
-                myCp.ClassStyle = myCp.ClassStyle | CP_NOCLOSE_BUTTON;
+                myCp.ClassStyle = myCp.ClassStyle | CpNocloseButton;
                 return myCp;
             }
         }

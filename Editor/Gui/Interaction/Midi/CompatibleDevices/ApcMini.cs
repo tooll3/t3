@@ -9,7 +9,7 @@ namespace T3.Editor.Gui.Interaction.Midi.CompatibleDevices;
 [SuppressMessage("ReSharper", "UnusedMember.Local")]
 
 [MidiDeviceProduct("APC MINI")]
-public class ApcMini : CompatibleMidiDevice
+public sealed class ApcMini : CompatibleMidiDevice
 {
     public ApcMini()
     {

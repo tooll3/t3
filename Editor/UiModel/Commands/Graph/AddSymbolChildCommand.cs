@@ -2,7 +2,7 @@
 
 namespace T3.Editor.UiModel.Commands.Graph;
 
-public class AddSymbolChildCommand : ICommand
+public sealed class AddSymbolChildCommand : ICommand
 {
     public string Name => "Add Symbol Child";
     public bool IsUndoable => true;

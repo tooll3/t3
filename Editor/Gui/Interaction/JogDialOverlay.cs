@@ -8,9 +8,9 @@ namespace T3.Editor.Gui.Interaction;
 /// <summary>
 /// Draws a circular dial to manipulate values with various speeds
 /// </summary>
-public static class JogDialOverlay
+internal static class JogDialOverlay
 {
-    public static bool Draw(ref double value, bool restarted, Vector2 center, double min = double.NegativeInfinity,
+    internal static bool Draw(ref double value, bool restarted, Vector2 center, double min = double.NegativeInfinity,
                             double max = double.PositiveInfinity,
                             float scale = 0.1f, bool clamp = false)
     {

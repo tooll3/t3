@@ -5,7 +5,7 @@ using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Interaction.Snapping;
 
-internal class ValueSnapHandler
+internal sealed class ValueSnapHandler
 {
     private const float SnapIndicatorDuration = 1;
 

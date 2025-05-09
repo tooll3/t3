@@ -8,7 +8,7 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster;
 /// <summary>
 /// A time raster (vertical lines) that calculate required labels and spacing logarithmically. 
 /// </summary>
-public class StandardValueRaster : AbstractTimeRaster
+public sealed class StandardValueRaster : AbstractTimeRaster
 {
     public override void Draw(Playback playback, float unitsPerSeconds)
     {

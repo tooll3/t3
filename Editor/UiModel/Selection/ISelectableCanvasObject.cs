@@ -18,7 +18,7 @@ public interface ISelectableCanvasObject
     }
 }
 
-public interface ISelectionContainer
+internal interface ISelectionContainer
 {
     IEnumerable<ISelectableCanvasObject> GetSelectables();
 }

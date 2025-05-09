@@ -219,7 +219,7 @@ internal class MediaFoundationAudioWriter
     }
 }
 
-internal class Mp3AudioWriter : MediaFoundationAudioWriter
+internal sealed class Mp3AudioWriter : MediaFoundationAudioWriter
 {
     public Mp3AudioWriter(MF.SinkWriter sinkWriter, ref WaveFormatExtension waveFormat, int desiredBitRate = 192000)
         : base(sinkWriter, ref waveFormat, desiredBitRate)
@@ -229,7 +229,7 @@ internal class Mp3AudioWriter : MediaFoundationAudioWriter
     public override Guid AudioFormat => MF.AudioFormatGuids.Mp3;
 }
 
-class FlacAudioWriter : MediaFoundationAudioWriter
+internal sealed class FlacAudioWriter : MediaFoundationAudioWriter
 {
     public FlacAudioWriter(MF.SinkWriter sinkWriter, ref WaveFormatExtension waveFormat, int desiredBitRate = 192000)
         : base(sinkWriter, ref waveFormat, desiredBitRate)
@@ -239,7 +239,7 @@ class FlacAudioWriter : MediaFoundationAudioWriter
     public override Guid AudioFormat => MF.AudioFormatGuids.Flac;
 }
 
-class AacAudioWriter : MediaFoundationAudioWriter
+internal sealed class AacAudioWriter : MediaFoundationAudioWriter
 {
     public AacAudioWriter(MF.SinkWriter sinkWriter, ref WaveFormatExtension waveFormat, int desiredBitRate = 192000)
         : base(sinkWriter, ref waveFormat, desiredBitRate)

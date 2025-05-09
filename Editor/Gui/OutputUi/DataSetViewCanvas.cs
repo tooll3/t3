@@ -14,7 +14,7 @@ namespace T3.Editor.Gui.OutputUi;
 /// <summary>
 /// Provides a simple canvas to visualize a <see cref="DataSet"/>.
 /// </summary>
-public class DataSetViewCanvas
+public sealed class DataSetViewCanvas
 {
     public void Draw(DataSet dataSet)
     {

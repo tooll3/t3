@@ -3,7 +3,7 @@ using T3.Core.DataTypes;
 
 namespace T3.Editor.UiModel.Commands.Animation;
 
-public class DeleteKeyframeCommand : ICommand
+public sealed class DeleteKeyframeCommand : ICommand
 {
     public string Name => "Delete keyframe";
     public bool IsUndoable => true;

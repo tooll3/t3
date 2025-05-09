@@ -7,7 +7,7 @@ using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.Gui.InputUi.CombinedInputs;
 
-public class CurveInputUi : InputValueUi<Curve>
+public sealed class CurveInputUi : InputValueUi<Curve>
 {
     public override IInputUi Clone()
     {

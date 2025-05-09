@@ -1,6 +1,6 @@
 ﻿namespace T3.Editor.UiModel.Commands.Annotations;
 
-public class DeleteAnnotationCommand : ICommand
+public sealed class DeleteAnnotationCommand : ICommand
 {
     public string Name => "Delete Annotation";
     public bool IsUndoable => true;

@@ -8,7 +8,7 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster;
 /// A small helper class that switches the drawing of time rasters depending on the
 /// setting in <see cref="Playback"/> 
 /// </summary>
-public class TimeRasterSwitcher:IValueSnapAttractor
+public sealed class TimeRasterSwitcher:IValueSnapAttractor
 {
     public void Draw(Playback playback)
     {

@@ -14,7 +14,7 @@ namespace T3.Editor.Gui.Graph.Legacy;
 /// Draws published input parameters of a <see cref="Symbol"/> and uses <see cref="ConnectionMaker"/> 
 /// create new connections with it.
 /// </summary>
-static class InputNode
+internal static class InputNode
 {
     internal static bool Draw(ProjectView components, GraphCanvas canvas, ImDrawListPtr drawList, Symbol.InputDefinition inputDef, IInputUi inputUi, int index)
     { 

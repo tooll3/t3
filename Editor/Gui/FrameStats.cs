@@ -12,7 +12,7 @@ public static class FrameStats
         Current.Clear();
     }
             
-    public class Stats
+    public sealed class Stats
     {
         public bool HasKeyframesBeforeCurrentTime;
         public bool HasKeyframesAfterCurrentTime;

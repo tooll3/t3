@@ -13,7 +13,7 @@ using T3.Serialization;
 
 namespace T3.Editor.Gui.InputUi.VectorInputs;
 
-internal class Vector2InputUi : FloatVectorInputValueUi<Vector2>
+internal sealed class Vector2InputUi : FloatVectorInputValueUi<Vector2>
 {
     public Vector2InputUi() : base(2)
     {

@@ -16,7 +16,7 @@ namespace T3.Editor.Gui.Interaction.Midi.CompatibleDevices;
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "UnusedMember.Local")]
 [MidiDeviceProduct("APC40 mkII")]
-public class Apc40Mk2 : CompatibleMidiDevice
+public sealed class Apc40Mk2 : CompatibleMidiDevice
 {
     public Apc40Mk2()
     {
@@ -192,7 +192,7 @@ public class Apc40Mk2 : CompatibleMidiDevice
     /// - https://www.akaipro.de/sites/default/files/2018-01/APC40Mk2_Communications_Protocol_v1.2.pdf_7db83a06354c396174676105098e3a7d.pdf
     /// - https://docs.google.com/spreadsheets/d/1pCAOFYCUAilqwpT1rA5_pxA1u19Yipcy_RI4egxKy5k/edit?usp=sharing
     /// </remarks>
-    enum Apc40Colors
+    private enum Apc40Colors
     {
         Off = 0,
         Beige = 8,

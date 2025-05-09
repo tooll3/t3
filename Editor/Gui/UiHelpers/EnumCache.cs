@@ -2,7 +2,7 @@
 
 namespace T3.Editor.Gui.UiHelpers;
 
-public class EnumCache
+public sealed class EnumCache
 {
     public static EnumCache Instance { get; } = new();
 
@@ -29,7 +29,7 @@ public class EnumCache
         return entry;
     }
 
-    public class TypedEntry<T> : Entry where T : Enum
+    public sealed class TypedEntry<T> : Entry where T : Enum
     {
         public TypedEntry() : base(typeof(T))
         {

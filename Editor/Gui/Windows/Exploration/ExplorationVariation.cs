@@ -11,7 +11,7 @@ using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Editor.Gui.Windows.Exploration;
 
-internal class ExplorationVariation
+internal sealed class ExplorationVariation
 {
     public GridCell GridCell;
     public bool ThumbnailNeedsUpdate;

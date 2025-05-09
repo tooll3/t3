@@ -10,7 +10,7 @@ namespace T3.Editor.Gui.Interaction;
 /// </summary>
 internal static class SliderLadder
 {
-    private class RangeDef
+    private sealed class RangeDef
     {
         // public readonly float YMin;
         // public readonly float YMax;

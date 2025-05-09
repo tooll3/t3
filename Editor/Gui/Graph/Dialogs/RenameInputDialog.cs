@@ -6,7 +6,7 @@ using T3.Editor.UiModel.Modification;
 
 namespace T3.Editor.Gui.Graph.Dialogs;
 
-public class RenameInputDialog : ModalDialog
+public sealed class RenameInputDialog : ModalDialog
 {
     public void Draw()
     {

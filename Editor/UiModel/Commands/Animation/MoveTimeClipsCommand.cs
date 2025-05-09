@@ -4,7 +4,7 @@ using T3.Editor.UiModel.ProjectHandling;
 
 namespace T3.Editor.UiModel.Commands.Animation;
 
-public class MoveTimeClipsCommand : ICommand
+public sealed class MoveTimeClipsCommand : ICommand
 {
     public string Name => "Move Time Clip";
     public bool IsUndoable => true;
