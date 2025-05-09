@@ -126,12 +126,23 @@ internal sealed partial class MagGraphCanvas
             DrawConnection(connection, drawList, _context);
         }
 
+        // Draw special overlays
         if (_context.StateMachine.CurrentState == GraphStates.RenameChild)
         {
             RenamingOperator.Draw(_projectView);
             if (!RenamingOperator.IsOpen)
             {
                 _context.StateMachine.SetState(GraphStates.Default, _context);
+            }
+        }
+        else if (_context.StateMachine.CurrentState == GraphStates.RenameAnnotation)
+        {
+            
+            {
+                //var a = magAnnotation.Annotation;
+                //var areaOnScreen = _context.Canvas.TransformRect(ImRect.RectWithSize(a.PosOnCanvas, a.Size));
+                //RenamingAnnotation.Draw(a, areaOnScreen, false);
+                RenamingAnnotation2.Draw(_context);
             }
         }
         

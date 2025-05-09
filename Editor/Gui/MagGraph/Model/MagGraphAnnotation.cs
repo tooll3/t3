@@ -4,6 +4,9 @@ using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.MagGraph.Model;
 
+/// <summary>
+/// A wrapper to <see cref="Annotation"/> to provide damping other potential other features of the mag graph UI.
+/// </summary>
 internal sealed class MagGraphAnnotation : ISelectableCanvasObject
 {
     public required Annotation Annotation;

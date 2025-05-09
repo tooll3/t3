@@ -330,8 +330,8 @@ internal static class GraphContextMenu
                                enabled: true))
             {
                 var newAnnotation = NodeActions.AddAnnotation(nodeSelection, context.Canvas, context.CompositionInstance);
-                // TODO: Implement rename
-                //_graph.RenameAnnotation(newAnnotation);
+                context.ActiveAnnotationId = newAnnotation.Id;
+                context.StateMachine.SetState(GraphStates.RenameAnnotation, context);
             }
         
             ImGui.EndMenu();

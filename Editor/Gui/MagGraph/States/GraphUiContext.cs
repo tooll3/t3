@@ -104,6 +104,7 @@ internal sealed class GraphUiContext
     internal MagGraphItem? ActiveTargetItem;
     internal Guid ActiveTargetInputId { get; set; }
 
+    internal Guid ActiveAnnotationId { get; set; }
     
     // internal GraphImageBackground GraphImageBackground { get;private set; }
 

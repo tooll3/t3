@@ -19,7 +19,7 @@ internal static class RenamingOperator
 
     private static Guid _nextFocusedInstanceId = Guid.Empty;
 
-    public static void Draw(ProjectView components)
+    public static void Draw(ProjectView projectView)
     {
         var justOpened = false;
 
@@ -33,7 +33,7 @@ internal static class RenamingOperator
                 && (renameTriggered || ImGui.IsKeyPressed((ImGuiKey)Key.Return)) // TODO: Should be keyboard action 
                 && string.IsNullOrEmpty(FrameStats.Current.OpenedPopUpName))
             {
-                var selectedInstances = components.NodeSelection.GetSelectedNodes<SymbolUi.Child>().ToList();
+                var selectedInstances = projectView.NodeSelection.GetSelectedNodes<SymbolUi.Child>().ToList();
                 if (_nextFocusedInstanceId != Guid.Empty)
                 {
                     _focusedInstanceId = _nextFocusedInstanceId;
@@ -55,7 +55,7 @@ internal static class RenamingOperator
         if (_focusedInstanceId == Guid.Empty)
             return;
 
-        var parentSymbolUi = components.CompositionInstance?.GetSymbolUi();
+        var parentSymbolUi = projectView.CompositionInstance?.GetSymbolUi();
         if (parentSymbolUi == null || !parentSymbolUi.ChildUis.TryGetValue(_focusedInstanceId, out var symbolChildUi))
         {
             Log.Error("canceling rename overlay of no longer valid selection");
@@ -65,7 +65,7 @@ internal static class RenamingOperator
 
         var symbolChild = symbolChildUi.SymbolChild;
 
-        var positionInScreen = components.GraphCanvas.TransformPosition(symbolChildUi.PosOnCanvas);
+        var positionInScreen = projectView.GraphCanvas.TransformPosition(symbolChildUi.PosOnCanvas);
 
         ImGui.SetCursorScreenPos(positionInScreen + Vector2.One);
             

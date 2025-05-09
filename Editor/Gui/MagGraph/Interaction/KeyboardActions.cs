@@ -114,8 +114,8 @@ internal static class KeyboardActions
         if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.AddAnnotation))
         {
             var newAnnotation = NodeActions.AddAnnotation(context.Selector, context.Canvas, compositionOp);
-            // TODO: enable rename annotation state...
-            //_graph.RenameAnnotation(newAnnotation);
+            context.ActiveAnnotationId = newAnnotation.Id;
+            context.StateMachine.SetState(GraphStates.RenameAnnotation, context);
             context.Layout.FlagStructureAsChanged();
         }
 

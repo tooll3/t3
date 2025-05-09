@@ -35,6 +35,39 @@ internal sealed partial class MagGraphCanvas
                          borderColor, 
                          3 * context.Canvas.CanvasScale);
         
+        
+        // Keep height of title area at a minimum height when zooming out
+        var screenArea = new ImRect(pMin,pMax);
+        
+        var clickableArea = new ImRect(pMin,pMax);
+        clickableArea.Max.Y = clickableArea.Min.Y + MathF.Min(16 * T3Ui.UiScaleFactor, screenArea.GetHeight());
+        
+        // Header
+        ImGui.SetCursorScreenPos(clickableArea.Min);
+        ImGui.InvisibleButton("##annotationHeader", clickableArea.GetSize());
+
+        DrawUtils.DebugItemRect();
+        var isHeaderHovered = ImGui.IsItemHovered();
+        if (isHeaderHovered)
+        {
+            ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+        }
+        
+        const float backgroundAlpha = 0.2f;
+        const float headerHoverAlpha = 0.3f;
+        drawList.AddRectFilled(clickableArea.Min, clickableArea.Max, 
+                               UiColors.ForegroundFull.Fade(isHeaderHovered ? headerHoverAlpha : 0));
+
+        //HandleDragging();
+        var shouldRename = (ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left));
+        //RenamingAnnotation.Draw(annotation, screenArea, shouldRename);
+        if (shouldRename)
+        {
+            context.ActiveAnnotationId = magAnnotation.Id;
+            context.StateMachine.SetState(GraphStates.RenameAnnotation, context);
+        }
+        
+        
         // Label
         if(!string.IsNullOrEmpty(magAnnotation.Annotation.Title)) {
             var canvasScale = canvas.Scale.X;
@@ -54,6 +87,8 @@ internal sealed partial class MagGraphCanvas
                              ColorVariations.OperatorLabel.Apply(magAnnotation.Annotation.Color.Fade(fade)),
                              magAnnotation.Annotation.Title);
             drawList.PopClipRect();
-        }        
+        }       
+        
+        
     }
 }

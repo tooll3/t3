@@ -1,5 +1,6 @@
 using ImGuiNET;
 using T3.Core.Utils;
+using T3.Editor.Gui.Graph.Legacy.Interaction;
 using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
