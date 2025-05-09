@@ -1405,6 +1405,6 @@ internal sealed partial class MagItemMovement
     private readonly MagGraphCanvas _canvas;
     private readonly MagGraphLayout _layout;
     private readonly NodeSelection _nodeSelection;
-    private List<ISelectableCanvasObject> _draggedItems;
+    private List<ISelectableCanvasObject> _draggedItems = [];
     private const float SnapTolerance = 0.01f;
 }

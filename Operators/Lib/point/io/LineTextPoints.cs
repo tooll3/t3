@@ -14,7 +14,7 @@ namespace Lib.point.io;
 [Guid("3d862455-6a7b-4bf6-a159-e4f7cdba6062")]
 /**
  * This operator is a compromise: Please also review the additional documentation
- * on the wiki: https://github.com/tooll3/t3/wiki/SvgLineFonts
+ * on the wiki: https://github.com/tixl3d/tixl/wiki/SvgLineFonts
  */
 internal sealed class LineTextPoints : Instance<LineTextPoints>
 {

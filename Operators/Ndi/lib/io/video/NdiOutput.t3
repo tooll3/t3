@@ -7,7 +7,7 @@
     },
     {
       "Id": "740db4c4-4182-4743-a713-5a45855499d9"/*SenderName*/,
-      "DefaultValue": "Tooll3"
+      "DefaultValue": "TiXL"
     },
     {
       "Id": "ce0e267e-e96d-441f-86fb-bacef1f0186a"/*FrameRate*/,

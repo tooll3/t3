@@ -19,22 +19,22 @@
         <Description>Open source Motion GFX</Description>
         <Copyright>2012-2025 TiXL Community</Copyright>
         <PackageProjectUrl>https://tixl.app</PackageProjectUrl>
-        <PackageLicenseUrl>https://github.com/tooll3/t3?tab=MIT-1-ov-file#readme</PackageLicenseUrl>
-        <RepositoryUrl>https://github.com/tooll3/t3</RepositoryUrl>
+        <PackageLicenseUrl>https://github.com/tixl3d/tixl?tab=MIT-1-ov-file#readme</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/tixl3d/tixl</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
 
-        <!-- <Authors>Tooll3</Authors>
-    <Owners>Tooll3</Owners>
-    <Company>Tooll3</Company>
-    <Copyright>Copyright (c) 2013-2025 Tooll3</Copyright>
+        <!-- <Authors>TiXL</Authors>
+    <Owners>TiXL</Owners>
+    <Company>TiXL</Company>
+    <Copyright>Copyright (c) 2013-2025 TiXL</Copyright>
     <NeutralLanguage>en-US</NeutralLanguage>
     <DefaultLanguage>en-US</DefaultLanguage> -->
 
-        <!-- <PackageIconUrl>https://tooll.io/images/T3-logo.png</PackageIconUrl>
-    <PackageLicenseUrl>https://github.com/tooll3/t3?tab=MIT-1-ov-file#readme</PackageLicenseUrl>
-    <PackageProjectUrl>http://www.tooll.io</PackageProjectUrl>
+        <!-- <PackageIconUrl>https://tixl.app/images/T3-logo.png</PackageIconUrl>
+    <PackageLicenseUrl>https://github.com/tixl3d/tixl?tab=MIT-1-ov-file#readme</PackageLicenseUrl>
+    <PackageProjectUrl>http://www.tixl.app</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageTags>Tooll3</PackageTags>
+    <PackageTags>TiXL</PackageTags>
     <PackageOutputPath>$(SolutionDir)packages\$(Configuration)</PackageOutputPath> -->
     </PropertyGroup>
 

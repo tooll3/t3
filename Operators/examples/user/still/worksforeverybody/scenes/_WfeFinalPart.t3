@@ -1436,7 +1436,7 @@
         {
           "Id": "ceeae47b-d792-471d-a825-49e22749b7b9"/*InputString*/,
           "Type": "System.String",
-          "Value": "This is demo was made \nwith Tooll3 -- an open source \nsoftware for motion design \nand VJing.\n\nThis and many other\nprojects are available\nas examples.\n\n\nJoin us on discord or \ngithub and meet a friendly \ncrowd of designers and \ncoders.\n                                         \n"
+          "Value": "This is demo was made \nwith TiXL -- an open source \nsoftware for motion design \nand VJing.\n\nThis and many other\nprojects are available\nas examples.\n\n\nJoin us on discord or \ngithub and meet a friendly \ncrowd of designers and \ncoders.\n                                         \n"
         }
       ],
       "Outputs": []

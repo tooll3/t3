@@ -1,6 +1,6 @@
 {
   "Id": "1ec749af-fe7d-4728-9855-d1fa3e879751"/*HowToUseTooll*/,
-  "Description": "This interactive tutorial guides you through the user interface of Tooll3.",
+  "Description": "This interactive tutorial guides you through the user interface of TiXL.",
   "SymbolTags": "3",
   "InputUis": [],
   "SymbolChildUis": [
@@ -319,7 +319,7 @@
       "Id": "6e2b005a-8909-4e19-82aa-6727bc6d8556",
       "Title": "T3-Introduction",
       "Description": "A short video tutorial that will guide you through the user interface.",
-      "LinkUrl": "https://tooll.io",
+      "LinkUrl": "https://tixl.app",
       "LinkType": "TutorialVideo"
     }
   ]

@@ -89,6 +89,7 @@ internal sealed class MagGraphLayout
             if (Annotations.TryGetValue(annotationId, out var opItem))
             {
                 updatedCount++;
+                opItem.LastUpdateCycle = _structureUpdateCycle;
             }
             else
             {

@@ -19,7 +19,7 @@ struct vsOutput
 Texture2D<float4> Image : register(t0);
 sampler texSampler : register(s0);
 
-// The below is mostly adapted from the Cables.gl Sharpen shader and converted to Tooll3/HLSL.
+// The below is mostly adapted from the Cables.gl Sharpen shader and converted to TiXL/HLSL.
 // https://cables.gl
 // Used with permission according to the MIT license: https://opensource.org/license/MIT
 
