@@ -1,4 +1,4 @@
-//This shader is a hack of Tooll3's DrawMeshHatched, it can certainly be improved.
+//This shader is a hack of TiXL's DrawMeshHatched, it can certainly be improved.
 
 #include "shared/point.hlsl"
 #include "shared/point-light.hlsl"

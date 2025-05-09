@@ -2,7 +2,7 @@
 #include "shared/blend-functions.hlsl"
 
 // This shader is based on a ShaderToy Project by jamelouis https://www.shadertoy.com/view/3dXyRl 
-// Ported to Tooll3 by Newemka (so you know who to blame)
+// Ported to TiXL by Newemka (so you know who to blame)
 
 cbuffer ParamConstants : register(b0)
 {

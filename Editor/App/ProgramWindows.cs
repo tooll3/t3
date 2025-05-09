@@ -155,7 +155,7 @@ internal static class ProgramWindows
             }
             else
             {
-                BlockingWindow.Instance.ShowMessageBox("We are sorry but your graphics hardware might not be capable of running Tooll3\n\n" + e.Message,
+                BlockingWindow.Instance.ShowMessageBox("We are sorry but your graphics hardware might not be capable of running TiXL\n\n" + e.Message,
                                                        "Oh noooo",
                                                        "Ok... /:");
             }

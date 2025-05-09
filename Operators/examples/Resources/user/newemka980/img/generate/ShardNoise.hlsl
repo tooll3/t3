@@ -1,7 +1,7 @@
 #include "shared/bias-functions.hlsl"
 
 // This shader is based on Shard Noise by @ENDESGA https://www.shadertoy.com/view/dlKyWw
-// Ported with love to Tooll3 by Newemka
+// Ported with love to TiXL by Newemka
 
 cbuffer ParamConstants : register(b0)
 {

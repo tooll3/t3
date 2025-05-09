@@ -11,6 +11,7 @@ using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.InputsAndTypes;
+
 // ReSharper disable MergeIntoPattern
 
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
@@ -37,7 +38,10 @@ namespace T3.Editor.Gui.MagGraph.Model;
 /// </summary>
 internal sealed class MagGraphLayout
 {
-    
+    public readonly Dictionary<Guid, MagGraphItem> Items = new(127);
+    public readonly List<MagGraphConnection> MagConnections = new(127);
+    public readonly Dictionary<Guid, MagGraphAnnotation> Annotations = new(63);
+
     public void ComputeLayout(GraphUiContext context, bool forceUpdate = false)
     {
         var compositionOp = context.CompositionInstance;
@@ -67,10 +71,52 @@ internal sealed class MagGraphLayout
 
         _structureUpdateCycle++;
         CollectItemReferences(composition, parentSymbolUi);
+        CollectedAnnotations(parentSymbolUi);
         UpdateConnectionSources(composition);
         UpdateVisibleItemLines(context);
         CollectConnectionReferences(composition);
         StructureFlaggedAsChanged = false;
+    }
+
+    private void CollectedAnnotations(SymbolUi compositionSymbolUi)
+    {
+        Annotations.Clear();
+        var addedCount = 0;
+        var updatedCount = 0;
+
+        foreach (var (annotationId, annotation) in compositionSymbolUi.Annotations)
+        {
+            if (Annotations.TryGetValue(annotationId, out var opItem))
+            {
+                updatedCount++;
+                opItem.LastUpdateCycle = _structureUpdateCycle;
+            }
+            else
+            {
+                opItem = new MagGraphAnnotation
+                             {
+                                 Id = annotation.Id,
+                                 Annotation = annotation,
+                                 DampedPosOnCanvas = annotation.PosOnCanvas,
+                                 DampedSize = annotation.Size,
+                             };
+                
+                Annotations[annotationId] = opItem;
+                addedCount++;
+            }
+        }
+        
+        var hasObsoleteAnnotations = Annotations.Count > updatedCount + addedCount;
+        if (!hasObsoleteAnnotations) return;
+        
+        foreach (var a in Annotations.Values)
+        {
+            if (a.LastUpdateCycle >= _structureUpdateCycle)
+                continue;
+
+            Annotations.Remove(a.Id);
+            a.IsRemoved = true;
+        }
     }
 
     /// <remarks>
@@ -363,7 +409,7 @@ internal sealed class MagGraphLayout
                         virtualConnectionCount++;
                     }
 
-                    if (shouldInputBeVisible && multiConIndex<connectionsToInput.Count)
+                    if (shouldInputBeVisible && multiConIndex < connectionsToInput.Count)
                     {
                         inputLines.Add(new MagGraphItem.InputLine
                                            {
@@ -598,7 +644,7 @@ internal sealed class MagGraphLayout
             int outputLineIndex;
             for (outputLineIndex = 0; outputLineIndex < sourceItem.OutputLines.Length; outputLineIndex++)
             {
-                if(sourceItem.OutputLines[outputLineIndex].Output == output)
+                if (sourceItem.OutputLines[outputLineIndex].Output == output)
                     break;
             }
 
@@ -646,7 +692,7 @@ internal sealed class MagGraphLayout
                 // }
                 // Skip already connected multi-inputs slots...
                 // (This assumes ConnectionIn to be nullified before using this)
-                while (targetItem.InputLines[visibleInputIndex].ConnectionIn != null 
+                while (targetItem.InputLines[visibleInputIndex].ConnectionIn != null
                        && visibleInputIndex < targetItem.InputLines.Length)
                 {
                     visibleInputIndex++;
@@ -696,6 +742,7 @@ internal sealed class MagGraphLayout
                 previousItem = item;
             }
         }
+
         ApplyStackToItems();
 
         return;
@@ -714,7 +761,6 @@ internal sealed class MagGraphLayout
                 // Draw Debug
                 // var aOnScreen = context.Canvas.TransformRect(stackArea);
                 // dl.AddRect(aOnScreen.Min, aOnScreen.Max, Color.Green);
-                    
             }
 
             listStackedItems.Clear();
@@ -739,7 +785,9 @@ internal sealed class MagGraphLayout
                 && MathF.Abs((sourceMin.Y + sc.VisibleOutputIndex * MagGraphItem.GridSize.Y)
                              - (targetMin.Y + sc.InputLineIndex * MagGraphItem.GridSize.Y)) < 1)
             {
-                sc.Style = MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal;
+                sc.Style = sc.InputLineIndex == 0
+                               ? MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal
+                               : MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal;
 
                 var p = new Vector2(sourceMax.X, sourceMin.Y + (+sc.VisibleOutputIndex + 0.5f) * MagGraphItem.GridSize.Y);
                 sc.SourcePos = p;
@@ -824,8 +872,6 @@ internal sealed class MagGraphLayout
         return true;
     }
 
-    public readonly Dictionary<Guid, MagGraphItem> Items = new(127);
-    public readonly List<MagGraphConnection> MagConnections = new(127);
     private int _compositionModelHash;
     private bool StructureFlaggedAsChanged { get; set; }
 }

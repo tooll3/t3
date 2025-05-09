@@ -284,8 +284,8 @@
     {
       "Id": "aebb7945-b5f7-4312-a07a-be733292710c",
       "Title": "Adding fonts",
-      "Description": "How to add new fonts to Tooll3",
-      "LinkUrl": "https://github.com/tooll3/t3/wiki/help.AddingFonts",
+      "Description": "How to add new fonts to TiXL",
+      "LinkUrl": "https://github.com/tixl3d/tixl/wiki/help.AddingFonts",
       "LinkType": "Documentation"
     }
   ]

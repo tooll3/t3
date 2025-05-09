@@ -470,7 +470,7 @@ internal static class AppMenuBar
         }
     }
 
-    private const string GitHubBaseUrl = "https://github.com/tooll3/t3/";
+    private const string GitHubBaseUrl = "https://github.com/tixl3d/tixl/";
     private const string WikiRootUrl = GitHubBaseUrl + "wiki/";
 
     private static readonly List<HelpLink> _helpLinks =

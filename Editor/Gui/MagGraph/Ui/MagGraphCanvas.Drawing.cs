@@ -49,13 +49,7 @@ internal sealed partial class MagGraphCanvas
         {
             FocusViewToSelection(_context);
         }
-        //drawList.AddText( new Vector2(100,50), Color.White, $"Sca:{Scale.X:0.00} Scr:{Scroll:0.00}");
         
-        // if (_viewRequest != null)
-        // {
-        //     SetTargetViewAreaWithTransition(_viewRequest.ViewArea, _viewRequest.Transition);
-        //     _viewRequest = null;
-        // }
 
         // Keep visible canvas area to cull non-visible objects later
         _visibleCanvasArea = GetVisibleCanvasArea();
@@ -89,6 +83,12 @@ internal sealed partial class MagGraphCanvas
         // Selection fence...
         {
             HandleFenceSelection(_context, _selectionFence);
+        }
+        
+        // Draw annotations
+        foreach (var a in _context.Layout.Annotations.Values)
+        {
+            DrawAnnotation(a, drawList, _context);
         }
 
         // Draw items
@@ -239,13 +239,24 @@ internal sealed partial class MagGraphCanvas
                                  : 0.7f;
             i.DampedPosOnCanvas = Vector2.Lerp(i.PosOnCanvas, i.DampedPosOnCanvas, dampAmount);
         }
+        
+        foreach (var a in _context.Layout.Annotations.Values)
+        {
+            // var dampAmount = _context.ItemMovement.DraggedItems.Contains(i)
+            //                      ? 0.0f
+            //                      : 0.7f;
+            var dampAmount = 0.7f;
+            a.DampedPosOnCanvas = Vector2.Lerp(a.Annotation.PosOnCanvas, a.DampedPosOnCanvas, dampAmount);
+            a.DampedSize = Vector2.Lerp(a.Annotation.Size, a.DampedSize, dampAmount);
+        }
+        
     }
 
     private bool _contextMenuIsOpen;
 
     private void HighlightSplitInsertionPoints(ImDrawListPtr drawList, GraphUiContext context)
     {
-        foreach (var sp in context.ItemMovement.SplitInsertionPoints)
+        foreach (var sp in context.ItemMovement.SpliceSets)
         {
             var inputItem = context.ItemMovement.DraggedItems.FirstOrDefault(i => i.Id == sp.InputItemId);
             if (inputItem == null)
@@ -270,6 +281,7 @@ internal sealed partial class MagGraphCanvas
             }
             else
             {
+                center.X += sp.DragPositionWithinBlock.X * CanvasScale;
                 var offset = MagGraphItem.GridSize.Y *0.25f * CanvasScale;
                 drawList.AddRectFilled(center+ new Vector2(0, -offset),
                                        center+ new Vector2(2, offset),

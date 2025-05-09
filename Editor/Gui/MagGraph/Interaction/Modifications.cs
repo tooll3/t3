@@ -4,6 +4,7 @@ using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
+using T3.Editor.UiModel.Commands.Annotations;
 using T3.Editor.UiModel.Commands.Graph;
 using T3.Editor.UiModel.InputsAndTypes;
 using T3.Editor.UiModel.Modification;
@@ -17,7 +18,7 @@ internal static class Modifications
     /// Deletes the selected items and tries to collapse the gaps and patches the connection gaps is possible
     /// </summary>
     /// <param name="context"></param>
-    internal static ChangeSymbol.SymbolModificationResults DeleteSelectedOps(GraphUiContext context)
+    internal static ChangeSymbol.SymbolModificationResults DeleteSelection(GraphUiContext context)
     {
         var results = ChangeSymbol.SymbolModificationResults.Nothing;
         
@@ -34,45 +35,53 @@ internal static class Modifications
         var deletedChildUis = new List<SymbolUi.Child>();
         var deletedInputUis = new List<IInputUi>();
         var deletedOutputUis = new List<IOutputUi>();
+        var deletedAnnotations = new List<MagGraphAnnotation>();
+        
         foreach (var s in context.Selector.Selection)
         {
-            if(!context.Layout.Items.TryGetValue(s.Id, out var item))
+            if (context.Layout.Items.TryGetValue(s.Id, out var item))
+            {
+                if (item.Variant != MagGraphItem.Variants.Operator)
+                {
+                    if (compositionUi.Symbol.SymbolPackage.IsReadOnly)
+                    {
+                        Log.Warning("Can't delete inputs or outputs from a read only symbol.");
+                        continue;
+                    }
+
+                    if (item.Variant == MagGraphItem.Variants.Input)
+                    {
+                        deletedInputUis.Add(item.Selectable as IInputUi);
+                        results |= ChangeSymbol.SymbolModificationResults.ProjectViewDiscarded;
+                    }
+                    else if (item.Variant == MagGraphItem.Variants.Output)
+                    {
+                        deletedOutputUis.Add(item.Selectable as IOutputUi);
+                        results |= ChangeSymbol.SymbolModificationResults.ProjectViewDiscarded;
+                    }
+
+                    continue;
+                }
+
+                if (!compositionUi.ChildUis.TryGetValue(item.Id, out var childUi))
+                {
+                    Log.Warning("Can't find symbol child for " + item);
+                    continue;
+                }
+
+                //uiItems.Add(new ItemWithChildUi(item, childUi));
+                deletedItems.Add(item);
+                deletedChildUis.Add(childUi);
+            }
+            else if (s is MagGraphAnnotation magAnnotation)
+            {
+                deletedAnnotations.Add(magAnnotation);
+            }
+            else 
             {
                 Log.Warning("Can't find selectable item " + s);
                 continue;
             }
-
-            if (item.Variant != MagGraphItem.Variants.Operator)
-            {
-                if (compositionUi.Symbol.SymbolPackage.IsReadOnly)
-                {
-                    Log.Warning("Can't delete inputs or outputs from a read only symbol.");
-                    continue;
-                }
-                if (item.Variant == MagGraphItem.Variants.Input)
-                {
-                    deletedInputUis.Add(item.Selectable as IInputUi);
-                    results |= ChangeSymbol.SymbolModificationResults.ProjectViewDiscarded;
-                }
-                else if (item.Variant == MagGraphItem.Variants.Output)
-                {
-                    deletedOutputUis.Add(item.Selectable as IOutputUi);
-                    results |= ChangeSymbol.SymbolModificationResults.ProjectViewDiscarded;
-                }
-                
-                continue;
-            }
-
-            if (!compositionUi.ChildUis.TryGetValue(item.Id, out var childUi))
-            {
-                Log.Warning("Can't find symbol child for " + item);
-                continue;
-            }
-
-            //uiItems.Add(new ItemWithChildUi(item, childUi));
-            deletedItems.Add(item);
-            deletedChildUis.Add(childUi);
-
         }
 
         // find obsolete connections...
@@ -91,7 +100,8 @@ internal static class Modifications
             }
         }
         
-        if (deletedChildUis.Count == 0 && deletedInputUis.Count == 0 && deletedOutputUis.Count == 0)
+        if (deletedChildUis.Count == 0 && deletedInputUis.Count == 0 && deletedOutputUis.Count == 0
+            && deletedAnnotations.Count==0)
             return results;
 
         var macroCommand = new MacroCommand("Delete items");
@@ -137,7 +147,15 @@ internal static class Modifications
             InputsAndOutputs.RemoveInputsAndOutputsFromSymbol(inputIdsToRemove: deletedInputUis.Select(entry => entry.Id).ToArray(),
                                                               outputIdsToRemove: deletedOutputUis.Select(entry => entry.Id).ToArray(),
                                                               symbol: compositionUi.Symbol);
-        }            
+        }
+
+        if (deletedAnnotations.Count > 0)
+        {
+            foreach (var a in deletedAnnotations)
+            {
+                macroCommand.AddAndExecCommand(new DeleteAnnotationCommand(compositionUi, a.Annotation));
+            }
+        }
 
         UndoRedoStack.Add(macroCommand);
         

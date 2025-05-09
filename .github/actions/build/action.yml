@@ -3,20 +3,28 @@ description: "Run common build steps"
 runs:
   using: "composite"
   steps:
-    - name: Setup .NET SDK
+    - name: Setup .NET SDK for CI
       uses: actions/setup-dotnet@v4
       with:
-        # Explicitly tells setup-dotnet to use your global.json file.
-        # Assumes global.json is at the root of your repository.
-        dotnet-version-file: './global.json'
+        # Instead of reading global.json for the version,
+        # explicitly specify the version for the CI environment.
+        # Remove or comment out 'dotnet-version-file'.
+        # dotnet-version-file: './global.json' 
+        dotnet-version: '9.0.203' # Specify the exact SDK version for CI
 
-    # ADD THIS STEP FOR DEBUGGING - Helps understand what SDK is actually used
-    - name: Display .NET SDK Version
+    - name: Display .NET SDK Version used in CI
       shell: pwsh
       run: |
-        Write-Host "Resolved .NET SDK Version by setup-dotnet:"
+        Write-Host "CI is using .NET SDK Version:"
         dotnet --version
+        Write-Host "Contents of global.json (still present in checkout):"
+        # This confirms global.json is unchanged but was overridden for SDK setup
+        type ./global.json # Or 'cat ./global.json' on Linux runners 
+
+    - name: Restore dependencies
+      shell: pwsh
+      run: dotnet restore # Consider adding YourSolution.sln if not at root
 
     - name: Build Release Version
       shell: pwsh
-      run: dotnet build --configuration Release
+      run: dotnet build --configuration Release --no-restore # Consider adding YourSolution.sln

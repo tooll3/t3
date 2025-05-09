@@ -28,7 +28,7 @@ public static class StartupValidation
                                                                  @"Resources\fonts\editor\Roboto-Regular.ttf",
                                                              },
                                      Message = @"Please make sure to set the correct start up directory.\n ",
-                                     URL = "https://github.com/tooll3/t3/wiki/installation#setting-the-startup-directory-in-visual-studio",
+                                     URL = "https://github.com/tixl3d/tixl/wiki/installation#setting-the-startup-directory-in-visual-studio",
                                  },
                              new()
                                  {
@@ -39,7 +39,7 @@ public static class StartupValidation
                                                                  @"Editor\bin\Debug\net8.0-windows\bass.dll",
                                                              },
                                      Message = "Please run Install/install.bat.",
-                                     URL = "https://github.com/tooll3/t3/wiki/installation#setup-and-installation",
+                                     URL = "https://github.com/tixl3d/tixl/wiki/installation#setup-and-installation",
                                  },
                              new()
                                  {
@@ -48,7 +48,7 @@ public static class StartupValidation
                                                                  @"Player\bin\Release\net8.0-windows\Player.exe",
                                                              },
                                      Message = "This will prevent you from exporting as executable.\nPlease rebuild your solution.",
-                                     URL = "https://github.com/tooll3/t3/wiki/installation#setup-and-installation",
+                                     URL = "https://github.com/tixl3d/tixl/wiki/installation#setup-and-installation",
                                  }
                          };
         var _ = checks.Any(check => !check.Do());
@@ -81,7 +81,7 @@ public static class StartupValidation
             if (missingPaths.Count <= 0)
                 return true;
 
-            const string caption = "Tooll3 setup looks incomplete";
+            const string caption = "TiXL setup looks incomplete";
                 
             var sb = new StringBuilder();
 

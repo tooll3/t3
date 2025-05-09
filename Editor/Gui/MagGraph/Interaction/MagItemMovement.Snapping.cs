@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using System.Diagnostics.CodeAnalysis;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.Ui;
 using T3.Editor.UiModel.InputsAndTypes;
@@ -13,8 +14,8 @@ internal sealed partial class MagItemMovement
     private sealed class Snapping
     {
         public float BestDistance;
-        public MagGraphItem? BestA;
-        public MagGraphItem? BestB;
+        public MagGraphItem? TargetItem;
+        public MagGraphItem? SourceItem;
         public MagGraphItem.Directions Direction;
         public int InputLineIndex;
         public int MultiInputIndex;
@@ -24,21 +25,21 @@ internal sealed partial class MagItemMovement
         public bool Reverse;
         public bool IsSnapped => BestDistance < MagGraphItem.LineHeight * (IsInsertion ? 0.35 : 0.5f);
         public bool IsInsertion;
-        public SplitInsertionPoint? InsertionPoint;
+        public SpliceLink? InsertionPoint;
 
-        public void TestItemsForSnap(MagGraphItem a, MagGraphItem b, bool revert, MagGraphCanvas canvas)
+        public void TestItemsForSnap(MagGraphItem outputItem, MagGraphItem inputItem, bool revert, MagGraphCanvas canvas)
         {
             MagGraphConnection? inConnection;
 
             int aOutLineIndex, bInputLineIndex;
-            for (bInputLineIndex = 0; bInputLineIndex < b.InputLines.Length; bInputLineIndex++)
+            for (bInputLineIndex = 0; bInputLineIndex < inputItem.InputLines.Length; bInputLineIndex++)
             {
-                ref var bInputLine = ref b.InputLines[bInputLineIndex];
+                ref var bInputLine = ref inputItem.InputLines[bInputLineIndex];
                 inConnection = bInputLine.ConnectionIn;
 
-                for (aOutLineIndex = 0; aOutLineIndex < a.OutputLines.Length; aOutLineIndex++)
+                for (aOutLineIndex = 0; aOutLineIndex < outputItem.OutputLines.Length; aOutLineIndex++)
                 {
-                    ref var outputLine = ref a.OutputLines[aOutLineIndex]; // Avoid copying data from array
+                    ref var outputLine = ref outputItem.OutputLines[aOutLineIndex]; // Avoid copying data from array
                     if (bInputLine.Type != outputLine.Output.ValueType)
                         continue;
 
@@ -48,8 +49,8 @@ internal sealed partial class MagItemMovement
                         TestAndKeepPositionsForSnapping(ref outputLine,
                                                         0,
                                                         MagGraphItem.Directions.Vertical,
-                                                        new Vector2(a.Area.Min.X + MagGraphItem.WidthHalf, a.Area.Max.Y),
-                                                        new Vector2(b.Area.Min.X + MagGraphItem.WidthHalf, b.Area.Min.Y));
+                                                        new Vector2(outputItem.Area.Min.X + MagGraphItem.WidthHalf, outputItem.Area.Max.Y),
+                                                        new Vector2(inputItem.Area.Min.X + MagGraphItem.WidthHalf, inputItem.Area.Min.Y));
                     }
 
                     // horizontal
@@ -58,9 +59,10 @@ internal sealed partial class MagItemMovement
                         TestAndKeepPositionsForSnapping(ref outputLine,
                                                         bInputLine.MultiInputIndex,
                                                         MagGraphItem.Directions.Horizontal,
-                                                        new Vector2(a.Area.Max.X, a.Area.Min.Y + (0.5f + outputLine.VisibleIndex) * MagGraphItem.LineHeight),
-                                                        new Vector2(b.Area.Min.X, b.Area.Min.Y + (0.5f + bInputLine.VisibleIndex) * MagGraphItem.LineHeight));
-                        
+                                                        new Vector2(outputItem.Area.Max.X,
+                                                                    outputItem.Area.Min.Y + (0.5f + outputLine.VisibleIndex) * MagGraphItem.LineHeight),
+                                                        new Vector2(inputItem.Area.Min.X,
+                                                                    inputItem.Area.Min.Y + (0.5f + bInputLine.VisibleIndex) * MagGraphItem.LineHeight));
                     }
                 }
             }
@@ -82,15 +84,15 @@ internal sealed partial class MagItemMovement
                 if (d >= BestDistance)
                     return;
 
-                ShowDebugLine(outPos, inPos, a.PrimaryType);
-                
+                ShowDebugLine(outPos, inPos, outputItem.PrimaryType);
+
                 BestDistance = d;
                 OutAnchorPos = outPos;
                 InputAnchorPos = inPos;
                 OutLineIndex = aOutLineIndex;
                 InputLineIndex = bInputLineIndex;
-                BestA = a;
-                BestB = b;
+                TargetItem = outputItem;
+                SourceItem = inputItem;
                 Reverse = revert;
                 Direction = directionIfValid;
                 IsInsertion = false;
@@ -101,72 +103,134 @@ internal sealed partial class MagItemMovement
             {
                 if (!canvas.ShowDebug)
                     return;
-            
+
                 var drawList = ImGui.GetForegroundDrawList();
                 var uiPrimaryColor = TypeUiRegistry.GetPropertiesForType(connectionType).Color;
                 drawList.AddLine(canvas.TransformPosition(outPos),
                                  canvas.TransformPosition(inPos),
                                  uiPrimaryColor.Fade(0.4f));
-            
+
                 drawList.AddCircleFilled(canvas.TransformPosition(inPos), 6, uiPrimaryColor.Fade(0.4f));
             }
         }
 
-        public void TestItemsForInsertion(MagGraphItem item, MagGraphItem insertionAnchorItem, SplitInsertionPoint insertionPoint)
+        public void TestItemsForInsertion(MagGraphItem inputItem, MagGraphItem insertionAnchorItem, SpliceLink insertionPoint, MagGraphCanvas canvas)
         {
-            if (item.InputLines.Length < 1)
+            if (inputItem.InputLines.Length < 1)
                 return;
 
-            var mainInput = item.InputLines[0];
+            var mainInputLine = inputItem.InputLines[0];
+            var mainInputConnectionIn = mainInputLine.ConnectionIn;
 
-            // Vertical
-            if (mainInput.ConnectionIn == null || mainInput.Type != insertionPoint.Type)
-                return;
-
-            if (mainInput.ConnectionIn.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical && insertionPoint.Direction == MagGraphItem.Directions.Vertical)
+            // Main input
+            if (mainInputConnectionIn != null && mainInputLine.Type == insertionPoint.Type)
             {
-                var inputPos = item.PosOnCanvas + new Vector2(MagGraphItem.GridSize.X / 2, 0);
-                var insertionAnchorPos = insertionAnchorItem.PosOnCanvas + new Vector2(MagGraphItem.GridSize.X / 2, 0);
-                var d = Vector2.Distance(insertionAnchorPos, inputPos);
+                // Vertical
+                if (mainInputConnectionIn.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical &&
+                    insertionPoint.Direction == MagGraphItem.Directions.Vertical)
+                {
+                    var inputPos = inputItem.PosOnCanvas + new Vector2(MagGraphItem.GridSize.X / 2, 0);
+                    var insertionAnchorPos = insertionAnchorItem.PosOnCanvas + new Vector2(MagGraphItem.GridSize.X / 2, 0);
+                    var d = Vector2.Distance(insertionAnchorPos, inputPos);
+
+                    if (d >= BestDistance)
+                        return;
+
+                    BestDistance = d;
+                    OutAnchorPos = inputPos;
+                    InputAnchorPos = insertionAnchorPos;
+                    OutLineIndex = 0;
+                    InputLineIndex = 0;
+                    TargetItem = inputItem;
+                    SourceItem = mainInputConnectionIn.SourceItem;
+                    Reverse = false;
+                    Direction = MagGraphItem.Directions.Vertical;
+                    MultiInputIndex = 0;
+                    IsInsertion = true;
+                    InsertionPoint = insertionPoint;
+                }
+                // Horizontal
+                else if (mainInputConnectionIn.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal
+                         && insertionPoint.Direction == MagGraphItem.Directions.Horizontal)
+                {
+                    var inputAnchorOffset = new Vector2(0, MagGraphItem.GridSize.Y / 2);
+                    var inputPos = inputItem.PosOnCanvas + inputAnchorOffset;
+                    var insertionPos = insertionAnchorItem.PosOnCanvas
+                                       + new Vector2(insertionPoint.DragPositionWithinBlock.X, MagGraphItem.GridSize.Y / 2);
+                    
+                    ShowDebugLine(insertionPos, inputPos, Color.Red);
+                    
+                    var d = Vector2.Distance(insertionPos, inputPos);
+                    if (d >= BestDistance)
+                        return;
+
+                    BestDistance = d;
+                    OutAnchorPos = inputPos;
+                    InputAnchorPos = insertionPos;
+                    OutLineIndex = 0;
+                    InputLineIndex = 0;
+                    TargetItem = inputItem;
+                    SourceItem = mainInputConnectionIn.SourceItem;
+                    Reverse = false;
+                    Direction = MagGraphItem.Directions.Horizontal;
+                    MultiInputIndex = 0;
+                    IsInsertion = true;
+                    InsertionPoint = insertionPoint;
+                }
+            }
+
+            // Additional input lines
+            for (int i = 1; i < inputItem.InputLines.Length; i++)
+            {
+                var inputLine = inputItem.InputLines[i];
+                var connectionIn = inputLine.ConnectionIn;
+
+                if (connectionIn == null 
+                    || inputLine.Type != insertionPoint.Type
+                    || connectionIn.Style != MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal
+                    || insertionPoint.Direction != MagGraphItem.Directions.Horizontal) 
+                    continue;
                 
+                //var inputAnchorOffset = new Vector2(0, MagGraphItem.GridSize.Y / 2);
+                
+                var inputPos = inputItem.PosOnCanvas + new Vector2(0, MagGraphItem.GridSize.Y * (i + 0.5f));
+                
+                
+                var insertionPos = insertionAnchorItem.PosOnCanvas
+                                   + new Vector2(insertionPoint.DragPositionWithinBlock.X,  MagGraphItem.GridSize.Y * ( 0+ 0.5f));
+                
+                ShowDebugLine(insertionPos, inputPos, Color.Cyan);
+                
+                var d = Vector2.Distance(insertionPos, inputPos) - 1;
+
                 if (d >= BestDistance)
                     return;
-                
+
                 BestDistance = d;
                 OutAnchorPos = inputPos;
-                InputAnchorPos = insertionAnchorPos;
+                InputAnchorPos = insertionPos;
                 OutLineIndex = 0;
-                InputLineIndex = 0;
-                BestA = item;
-                BestB = null;
+                InputLineIndex = i;
+                TargetItem = inputItem;
+                SourceItem = connectionIn.SourceItem;
                 Reverse = false;
-                Direction = MagGraphItem.Directions.Vertical;
-                MultiInputIndex = 0;
+                Direction = MagGraphItem.Directions.Horizontal;
+                MultiInputIndex = connectionIn.MultiInputIndex;
                 IsInsertion = true;
                 InsertionPoint = insertionPoint;
             }
-            else if (mainInput.ConnectionIn.Style == MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal && insertionPoint.Direction == MagGraphItem.Directions.Horizontal)
+            void ShowDebugLine(Vector2 outPos, Vector2 inPos, Color color)
             {
-                var inputAnchorOffset = new Vector2( 0, MagGraphItem.GridSize.Y / 2);
-                var inputPos = item.PosOnCanvas + inputAnchorOffset;
-                var insertionAnchorPos = insertionAnchorItem.PosOnCanvas + inputAnchorOffset;
-                var d = Vector2.Distance(insertionAnchorPos, inputPos);
-
-                if (d >= BestDistance)
+                if (!canvas.ShowDebug)
                     return;
 
-                BestDistance = d;
-                OutAnchorPos = inputPos;
-                InputAnchorPos = insertionAnchorPos;
-                OutLineIndex = 0;
-                InputLineIndex = 0;
-                BestA = item;
-                BestB = null;
-                Reverse = false;
-                Direction = MagGraphItem.Directions.Horizontal;
-                MultiInputIndex = 0;
-                IsInsertion = true;
-                InsertionPoint = insertionPoint;
+                var drawList = ImGui.GetForegroundDrawList();
+                
+                drawList.AddLine(canvas.TransformPosition(outPos),
+                                 canvas.TransformPosition(inPos),
+                                 color.Fade(0.4f));
+
+                drawList.AddCircleFilled(canvas.TransformPosition(inPos), 6, color.Fade(0.4f));
             }
         }
 

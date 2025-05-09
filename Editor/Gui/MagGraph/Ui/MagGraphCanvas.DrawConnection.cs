@@ -49,10 +49,11 @@ internal sealed partial class MagGraphCanvas
             switch (connection.Style)
             {
                 case MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal:
+                case MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal:
                 {
-                    var isPotentialSplitTarget = _context.ItemMovement.SplitInsertionPoints.Count > 0
+                    var isPotentialSplitTarget = _context.ItemMovement.SpliceSets.Count > 0
                                                  && !_context.ItemMovement.DraggedItems.Contains( connection.SourceItem)
-                                                 && _context.ItemMovement.SplitInsertionPoints
+                                                 && _context.ItemMovement.SpliceSets
                                                             .Any(sp
                                                                      => sp.Direction == MagGraphItem.Directions.Horizontal
                                                                         && sp.Type == type);
@@ -79,9 +80,9 @@ internal sealed partial class MagGraphCanvas
                     
                 case MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical:
                 {
-                    var isPotentialSplitTarget = _context.ItemMovement.SplitInsertionPoints.Count > 0
+                    var isPotentialSplitTarget = _context.ItemMovement.SpliceSets.Count > 0
                                                  && !_context.ItemMovement.DraggedItems.Contains( connection.SourceItem)
-                                                 && _context.ItemMovement.SplitInsertionPoints
+                                                 && _context.ItemMovement.SpliceSets
                                                             .Any(x
                                                                      => x.Direction == MagGraphItem.Directions.Vertical
                                                                         && x.Type == type);
@@ -103,9 +104,7 @@ internal sealed partial class MagGraphCanvas
                                                typeColor);
                     break;
                 }
-                case MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal:
-                    drawList.AddCircleFilled(sourcePosOnScreen, anchorSize * 1.6f, typeColor, 3);
-                    break;
+
                 
                 case MagGraphConnection.ConnectionStyles.AdditionalOutToMainInputSnappedVertical:
                     drawList.AddCircleFilled(sourcePosOnScreen, anchorSize * 1.6f, Color.Red, 3);
