@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using ImGuiNET;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
@@ -490,11 +490,6 @@ internal static class FormInputs
     }
     
     
-    
-    
-    
-    
-    
     /// <summary>
     /// Draws string input or file picker. 
     /// </summary>
@@ -502,12 +497,13 @@ internal static class FormInputs
                                      ref string? value,
                                      string? placeHolder = null,
                                      string? warning = null,
+                                     string? tooltip = null,
                                      FileOperations.FilePickerTypes showFilePicker = FileOperations.FilePickerTypes.None)
     {
         DrawInputLabel(label);
 
         var isFilePickerVisible = showFilePicker != FileOperations.FilePickerTypes.None;
-        float spaceForFilePicker = isFilePickerVisible ? 30 : 0;
+        float spaceForFilePicker = isFilePickerVisible ? 40 : 0;
         var inputSize = GetAvailableInputSize(null, false, true, spaceForFilePicker);
         ImGui.SetNextItemWidth(inputSize.X);
 
@@ -533,6 +529,9 @@ internal static class FormInputs
         {
             modified |= FileOperations.DrawFileSelector(showFilePicker, ref value);
         }
+
+        AppendTooltip(tooltip);
+        
 
         DrawWarningBelowField(warning);
         return modified;
@@ -863,7 +862,7 @@ internal static class FormInputs
 
     private const int NotADefaultValue = Int32.MinValue;
 
-    private const float DefaultParameterIndent = 170;
+    private const float DefaultParameterIndent = 150;
     private static float _paramIndent = DefaultParameterIndent;
     private static float _widthRatio = 1;
     private static float LeftParameterPadding => _paramIndent * T3Ui.UiScaleFactor;

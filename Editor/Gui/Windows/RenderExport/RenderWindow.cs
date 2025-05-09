@@ -92,10 +92,16 @@ namespace T3.Editor.Gui.Windows.RenderExport
             FormInputs.AddHint($"{q.Title} quality ({_bitrate * duration / 1024 / 1024 / 8:0} MB for {duration / 60:0}:{duration % 60:00}s at {size.Width}×{size.Height})");
             CustomComponents.TooltipForLastItem(q.Description);
 
-            FormInputs.AddStringInput("Filename", ref UserSettings.Config.RenderVideoFilePath);
-            ImGui.SameLine();
-            FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.File, ref UserSettings.Config.RenderVideoFilePath);
-
+            //FormInputs.AddStringInput("File name", ref UserSettings.Config.RenderVideoFilePath);
+            //ImGui.SameLine();
+            //FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.None, ref UserSettings.Config.RenderVideoFilePath);
+            FormInputs.AddFilePicker("File name",
+                                                        ref UserSettings.Config.RenderVideoFilePath,
+                                                        ".\\Render\\Name-v01.mp4 ",
+                                                        null,
+                                                        "add v01 to the file name will enable Incrementation",
+                                                        FileOperations.FilePickerTypes.Folder
+                                                       );
             if (IsFilenameIncrementable())
             {
                 ImGui.PushStyleVar(ImGuiStyleVar.Alpha, _autoIncrementVersionNumber ? 0.7f : 0.3f);
