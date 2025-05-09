@@ -56,16 +56,23 @@ internal static class ProgramWindows
         }
     }
 
+    private sealed class  DisplayAdapterRating()
+    {
+        public string Name;
+        public int Index;
+        public float MemoryInGb =0;
+        public float Rating = 1;
+    }
+
     internal static void InitializeMainWindow(string version, out Device device)
     {
         Main = new AppWindow("TiXL " + version, disableClose: false);
         device = null;
-        string[] highPerformanceKeywords = ["dedicated", "high performance", "rtx", "gtx", "radeon"];
+        string[] highPerformanceKeywords = ["dedicated", "high performance", "rtx", "gtx"];
         string[] integratedKeywords = ["integrated", "intel(r) uhd graphics"];
 
         try
         {
-            var selectedAdapterIndex = -1;
             using var factory = new Factory1();
 
             if (factory.GetAdapterCount() == 0)
@@ -76,51 +83,60 @@ internal static class ProgramWindows
                 Environment.Exit(0);
             }
 
-            var adapterFound = false;
+            var adapterRatings = new List<DisplayAdapterRating>(8);
+
             for (var i = 0; i < factory.GetAdapterCount(); i++)
             {
                 using var adapter = factory.GetAdapter1(i);
+                const long gb = 1024 * 1024 * 1024;
+                
+                var newRating = new DisplayAdapterRating
+                                    {
+                                        Name = adapter.Description.Description,
+                                        Index = i,
+                                        MemoryInGb = (float)((double)adapter.Description.DedicatedVideoMemory/gb),
+                                    };
+                adapterRatings.Add(newRating);                
+                
                 var descriptionLower = adapter.Description.Description.ToLowerInvariant();
+                
+                // Positive keywords
+                foreach (var keyword in highPerformanceKeywords)
+                {
+                    if (!descriptionLower.Contains(keyword))
+                        continue;
 
-                var isIntegrated = false;
+                    newRating.Rating *= 2f;
+                }
+
+                // Negative keywords
                 foreach (var keyword in integratedKeywords)
                 {
                     if (!descriptionLower.Contains(keyword))
                         continue;
 
-                    isIntegrated = true;
-                    break;
+                    newRating.Rating *= 0.2f;
                 }
 
-                if (!isIntegrated)
-                {
-                    foreach (var keyword in highPerformanceKeywords)
-                    {
-                        if (!descriptionLower.Contains(keyword))
-                            continue;
-
-                        Log.Debug($"Selected high-performance GPU: {adapter.Description.Description}");
-                        selectedAdapterIndex = i;
-                        adapterFound = true;
-                        break;
-                    }
-                }
-                else
-                {
-                    Log.Debug($"Found integrated GPU: {adapter.Description.Description}");
-                }
-
-                if (adapterFound)
-                    break;
+                var memSizeFactor = newRating.MemoryInGb switch
+                                        {
+                                            < 1 => 0.1f,
+                                            < 2 => 0.5f,
+                                            < 4 => 1f,
+                                            < 8 => 2f,
+                                            > 8 => 3f,
+                                            _ => 4f
+                                        };
+                newRating.Rating *= memSizeFactor;
             }
-           
-            // Fallback logic remains the same
-            if (selectedAdapterIndex == -1)
+
+            var selectedAdapterIndex = adapterRatings.OrderByDescending(r => r.Rating).First().Index;
+            Log.Debug("Detected display adapters...");
+            foreach (var r in adapterRatings)
             {
-                selectedAdapterIndex = 0;
-                Log.Info("Falling back to first available adapter");
+                Log.Debug($"  #{r.Index}: {r.Name} / {r.MemoryInGb:0.0}GB  -> rated {r.Rating:0.0}");
             }
-
+            
             var selectedAdapter = factory.GetAdapter1(selectedAdapterIndex);
             ActiveGpu = selectedAdapter.Description.Description;
 

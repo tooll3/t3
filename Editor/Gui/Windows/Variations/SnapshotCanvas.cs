@@ -10,12 +10,12 @@ using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.Windows.Variations;
 
-internal class SnapshotCanvas : VariationBaseCanvas
+internal sealed class SnapshotCanvas : VariationBaseCanvas
 {
     private protected override Instance? InstanceForBlendOperations => VariationHandling.ActiveInstanceForSnapshots;
     private protected override SymbolVariationPool? PoolForBlendOperations => VariationHandling.ActivePoolForSnapshots;
 
-    public virtual void DrawToolbarFunctions()
+    public void DrawToolbarFunctions()
     {
         var s = ImGui.GetFrameHeight();
 
