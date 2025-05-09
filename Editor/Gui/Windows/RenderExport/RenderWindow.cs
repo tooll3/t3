@@ -97,9 +97,9 @@ namespace T3.Editor.Gui.Windows.RenderExport
             //FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.None, ref UserSettings.Config.RenderVideoFilePath);
             FormInputs.AddFilePicker("File name",
                                                         ref UserSettings.Config.RenderVideoFilePath,
-                                                        ".\\Render\\Name-v01.mp4 ",
+                                                        ".\\Render\\Title-v01.mp4 ",
                                                         null,
-                                                        "add v01 to the file name will enable Incrementation",
+                                                        "Using v01 in the file name will enable auto incrementation and don't forget the .mp4 extension, I'm serious.",
                                                         FileOperations.FilePickerTypes.Folder
                                                        );
             if (IsFilenameIncrementable())
@@ -134,15 +134,21 @@ namespace T3.Editor.Gui.Windows.RenderExport
             }
 
             // Use the existing UserSettings property for sequence path
-            FormInputs.AddStringInput("Output Path", ref UserSettings.Config.RenderSequenceFilePath);
-            if (ImGui.IsItemHovered())
-            {
-                CustomComponents.TooltipForLastItem("Specify the folder where the image sequence will be saved.\n" +
-                                 "Must be a valid directory path.");
-            }
-            ImGui.SameLine();
-            FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.Folder, ref UserSettings.Config.RenderSequenceFilePath);
-    
+            //FormInputs.AddStringInput("Output Path", ref UserSettings.Config.RenderSequenceFilePath);
+            //if (ImGui.IsItemHovered())
+            //{
+            //    CustomComponents.TooltipForLastItem("Specify the folder where the image sequence will be saved.\n" +
+            //                     "Must be a valid directory path.");
+            //}
+            //ImGui.SameLine();
+            //FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.Folder, ref UserSettings.Config.RenderSequenceFilePath);
+            FormInputs.AddFilePicker("Output Folder",
+                                                        ref UserSettings.Config.RenderSequenceFilePath,
+                                                        ".\\ImageSequence ",
+                                                        null,
+                                                        "Specify the folder where the image sequence will be saved.",
+                                                        FileOperations.FilePickerTypes.Folder
+                                                       );
         }
 
         private void HandleRenderingProcess(ref Texture2D mainTexture, Int2 size)
@@ -187,7 +193,7 @@ namespace T3.Editor.Gui.Windows.RenderExport
                 : path;
         }
 
-        private void StartRenderingProcess(string targetPath, Int2 size)
+        private static void StartRenderingProcess(string targetPath, Int2 size)
         {
             IsExporting = true;
             _exportStartedTime = Playback.RunTimeInSecs;
@@ -208,7 +214,7 @@ namespace T3.Editor.Gui.Windows.RenderExport
             TextureReadAccess.ClearQueue();
         }
 
-        private bool ProcessCurrentFrame(ref Texture2D mainTexture, Int2 size)
+        private static bool ProcessCurrentFrame(ref Texture2D mainTexture, Int2 size)
         {
             if (_renderMode == RenderMode.Video)
             {
@@ -247,7 +253,7 @@ namespace T3.Editor.Gui.Windows.RenderExport
             }
         }
 
-        private void FinishRendering(bool success, double durationSoFar)
+        private static void FinishRendering(bool success, double durationSoFar)
         {
             var successful = success ? "successfully" : "unsuccessfully";
             _lastHelpString = $"Render finished {successful} in {StringUtils.HumanReadableDurationFromSeconds(durationSoFar)}\n Ready to render.";
@@ -257,7 +263,7 @@ namespace T3.Editor.Gui.Windows.RenderExport
             CleanupRendering();
         }
 
-        private void CleanupRendering()
+        private static void CleanupRendering()
         {
             IsExporting = false;
             if (_renderMode == RenderMode.Video)
@@ -268,7 +274,7 @@ namespace T3.Editor.Gui.Windows.RenderExport
             ReleasePlaybackTime();
         }
 
-        private void UpdateProgressMessage(double durationSoFar, int currentFrame)
+        private static void UpdateProgressMessage(double durationSoFar, int currentFrame)
         {
             var estimatedTimeLeft = durationSoFar / Progress - durationSoFar;
             _lastHelpString = _renderMode == RenderMode.Video
