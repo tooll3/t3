@@ -58,7 +58,7 @@ internal sealed class MagGraphLayout
         ComputeVerticalStackBoundaries();
     }
 
-    public void FlagAsChanged()
+    public void FlagStructureAsChanged()
     {
         StructureFlaggedAsChanged = true;
     }

@@ -121,7 +121,7 @@ internal static class InputPicking
                                                        MagGraphItem.GridSize.Y);
         
         context.ItemMovement.Reset();
-        context.Layout.FlagAsChanged();
+        context.Layout.FlagStructureAsChanged();
     }
 
     public static int GetInsertionLineIndex(IReadOnlyList<IInputSlot> allInputSlots, MagGraphItem.InputLine[] visibleInputLines,

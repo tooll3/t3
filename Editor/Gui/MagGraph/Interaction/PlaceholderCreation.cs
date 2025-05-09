@@ -240,7 +240,7 @@ internal sealed class PlaceholderCreation
         context.TempConnections.Add(tempConnectionOut);
         
         context.DisconnectedInputHashes.Add(MagGraphConnection.GetItemInputHash(targetItem.Id, selectedInputId, 0)); // keep input visible until state is complete
-        context.Layout.FlagAsChanged();
+        context.Layout.FlagStructureAsChanged();
 
         PlaceHolderUi.Open(context,
                            PlaceholderItem,
@@ -278,7 +278,7 @@ internal sealed class PlaceholderCreation
         _snappedTargetItem = null;
         _snappedTargetInputId = Guid.Empty;
         context.DisconnectedInputHashes.Clear();
-        context.Layout.FlagAsChanged();
+        context.Layout.FlagStructureAsChanged();
         context.ConnectionHovering.ConnectionHoversWhenClicked.Clear();
         context.TempConnections.Clear();
 
@@ -522,7 +522,7 @@ internal sealed class PlaceholderCreation
         // TODO: add preset selection...
 
         ParameterPopUp.NodeIdRequestedForParameterWindowActivation = newSymbolChild.Id;
-        context.Layout.FlagAsChanged();
+        context.Layout.FlagStructureAsChanged();
 
         Complete(context);
     }

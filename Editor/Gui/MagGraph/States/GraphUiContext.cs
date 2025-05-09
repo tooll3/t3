@@ -235,7 +235,7 @@ internal sealed class GraphUiContext
                                              ref SymbolNameForDialogEdits);
             
             if(results != ChangeSymbol.SymbolModificationResults.Nothing)
-                Layout.FlagAsChanged();
+                Layout.FlagStructureAsChanged();
         }
 
         return results;

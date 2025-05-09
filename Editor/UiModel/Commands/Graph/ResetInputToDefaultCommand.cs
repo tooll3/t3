@@ -3,14 +3,14 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Editor.UiModel.Commands.Graph;
 
-public sealed class ResetInputToDefault : ICommand
+internal sealed class ResetInputToDefault : ICommand
 {
     public string Name => "Reset Input Value to default";
     public bool IsUndoable => true;
 
     private readonly string _creationStack;
 
-    public ResetInputToDefault(Symbol parent, Guid symbolChildId, Symbol.Child.Input input)
+    internal ResetInputToDefault(Symbol parent, Guid symbolChildId, Symbol.Child.Input input)
     {
         _inputParentSymbolId = parent.Id;
 

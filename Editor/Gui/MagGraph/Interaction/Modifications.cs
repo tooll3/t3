@@ -159,9 +159,9 @@ internal static class Modifications
 
         UndoRedoStack.Add(macroCommand);
         
-        context.Layout.FlagAsChanged();
+        context.Layout.FlagStructureAsChanged();
         context.Selector.Clear();
-        context.Layout.FlagAsChanged();
+        context.Layout.FlagStructureAsChanged();
         return results;
     }
 

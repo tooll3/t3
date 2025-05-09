@@ -30,7 +30,7 @@ internal static class KeyboardActions
         {
             NodeActions.CopySelectedNodesToClipboard(context.Selector, compositionOp);
             NodeActions.PasteClipboard(context.Selector, context.Canvas, compositionOp);
-            context.Layout.FlagAsChanged();
+            context.Layout.FlagStructureAsChanged();
             
             result |= ChangeSymbol.SymbolModificationResults.StructureChanged;
         }
@@ -97,13 +97,13 @@ internal static class KeyboardActions
         if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.PasteFromClipboard))
         {
             NodeActions.PasteClipboard(context.Selector, context.Canvas, compositionOp);
-            context.Layout.FlagAsChanged();
+            context.Layout.FlagStructureAsChanged();
         }
         
         if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.PasteValues))
         {
             NodeActions.PasteValues(context.Selector, context.Canvas, context.CompositionInstance);
-            context.Layout.FlagAsChanged();
+            context.Layout.FlagStructureAsChanged();
         }
 
         // if (KeyboardBinding.Triggered(UserActions.LayoutSelection))
@@ -111,12 +111,13 @@ internal static class KeyboardActions
         //     _nodeGraphLayouting.ArrangeOps(compositionOp);
         // }
 
-        // if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.AddAnnotation))
-        // {
-        //     var newAnnotation = NodeActions.AddAnnotation(context.Selector, context.Canvas, compositionOp);
-        //     // TODO: enable rename annotation state...
-        //     //_graph.RenameAnnotation(newAnnotation);
-        // }
+        if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.AddAnnotation))
+        {
+            var newAnnotation = NodeActions.AddAnnotation(context.Selector, context.Canvas, compositionOp);
+            // TODO: enable rename annotation state...
+            //_graph.RenameAnnotation(newAnnotation);
+            context.Layout.FlagStructureAsChanged();
+        }
 
         //IReadOnlyList<Guid>? navigationPath = null;
 

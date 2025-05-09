@@ -443,7 +443,7 @@ internal static class GraphStates
 
                           if (InputSnapper.TryToReconnect(context))
                           {
-                              context.Layout.FlagAsChanged();
+                              context.Layout.FlagStructureAsChanged();
                               context.CompleteMacroCommand();
                               context.StateMachine.SetState(Default, context);
                               return;
@@ -549,7 +549,7 @@ internal static class GraphStates
                               context.DraggedPrimaryOutputType = connection.Type;
                               context.ActiveItem = connection.SourceItem;
                               context.StateMachine.SetState(DragConnectionEnd, context);
-                              context.Layout.FlagAsChanged();
+                              context.Layout.FlagStructureAsChanged();
                           }
                       },
               Exit: _ => { }
@@ -611,7 +611,7 @@ internal static class GraphStates
                                   context.DraggedPrimaryOutputType = connection.Type;
                               }
 
-                              context.Layout.FlagAsChanged();
+                              context.Layout.FlagStructureAsChanged();
                               context.StateMachine.SetState(DragConnectionBeginning, context);
                           }
                       },
@@ -628,7 +628,7 @@ internal static class GraphStates
                           {
                               if (OutputSnapper.TryToReconnect(context))
                               {
-                                  context.Layout.FlagAsChanged();
+                                  context.Layout.FlagStructureAsChanged();
                               }
 
                               context.CompleteMacroCommand();
@@ -639,7 +639,7 @@ internal static class GraphStates
                           if (ImGui.IsKeyDown(ImGuiKey.Escape))
                           {
                               context.CancelMacroCommand();
-                              context.Layout.FlagAsChanged();
+                              context.Layout.FlagStructureAsChanged();
                               context.StateMachine.SetState(Default, context);
                           }
                       },
