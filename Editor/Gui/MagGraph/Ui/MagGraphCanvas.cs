@@ -321,19 +321,19 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
             }
         }
 
-        foreach (var annotation in _context.Layout.Annotations.Values)
+        foreach (var magAnnotation in _context.Layout.Annotations.Values)
         {
-            var rect = new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size);
-            if (!rect.Overlaps(boundsInCanvas))
+            var annotationArea = new ImRect(magAnnotation.PosOnCanvas, magAnnotation.PosOnCanvas + magAnnotation.Size);
+            if (!boundsInCanvas.Contains(annotationArea))
                 continue;
 
             if (selectMode == SelectionFence.SelectModes.Remove)
             {
-                _context.Selector.DeselectNode(annotation);
+                _context.Selector.DeselectNode(magAnnotation.Annotation);
             }
             else
             {
-                _context.Selector.AddSelection(annotation);
+                _context.Selector.AddSelection(magAnnotation.Annotation);
             }
         }
     }
