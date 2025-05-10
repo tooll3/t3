@@ -18,7 +18,7 @@ internal sealed class MagGraphAnnotation : ISelectableCanvasObject
     public Vector2 DampedPosOnCanvas;
     public Vector2 DampedSize;
     
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
     
     public int LastUpdateCycle;
     public bool IsRemoved;

@@ -658,4 +658,11 @@ internal static class GraphStates
               Update: _ => { },
               Exit: _ => { }
              );
+    
+    internal static State DragAnnotation
+        = new(
+            Enter: _ => { },
+            Update: _ => { },
+            Exit: _ => { }
+        );
 }
