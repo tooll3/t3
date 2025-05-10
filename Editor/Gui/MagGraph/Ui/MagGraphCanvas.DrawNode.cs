@@ -509,7 +509,7 @@ internal sealed partial class MagGraphCanvas
 
             if (!string.IsNullOrEmpty(item.ChildUi.Comment))
             {
-                ImGui.SetCursorScreenPos(new Vector2(pMax.X, pMin.Y) - new Vector2(3, 12) * T3Ui.UiScaleFactor * T3Ui.UiScaleFactor);
+                ImGui.SetCursorScreenPos(new Vector2(pMax.X, pMin.Y) + Vector2.Round( new Vector2(-5, -1) * (T3Ui.UiScaleFactor + CanvasScale)));
                 if (ImGui.InvisibleButton("#comment", new Vector2(15, 15)))
                 {
                     context.Selector.SetSelection(item.ChildUi, item.Instance);
