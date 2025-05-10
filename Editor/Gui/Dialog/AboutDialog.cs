@@ -13,6 +13,7 @@ using SharpDX.DXGI;
 using SharpDX.Direct3D11;
 using T3.Core.Resource;
 using T3.Core.Animation;
+using System.Media;
 
 
 namespace T3.Editor.Gui.Dialog;
@@ -22,20 +23,26 @@ internal sealed class AboutDialog : ModalDialog
     internal void Draw()
     {
         DialogSize = new Vector2(550, 550);
-        
-        if (BeginDialog("About TiXL"))
+
+        if (BeginDialog("    TiXL Loves You! <3"))
         {
-            var _animate = 2.3*Math.Sin(Playback.RunTimeInSecs);
-            var rectSize = new Vector2(64, 64);
-            var rectColor = new Vector4((float)_animate * 1.0f, 0.227f,0.620f, (float)_animate); // RGBA
-         
-            ImGui.GetWindowDrawList().AddRectFilled(
+            var anim = 7.12+Math.Sin((Playback.RunTimeInSecs))%0.19f;
+            var anim2 = 0.2 * (Math.Sin(Playback.RunTimeInSecs))%0.19;
+            var balls = Math.Sin(anim + anim2)*1.01f;
+            var mousepos = ImGui.GetMousePos(); // Get the current mouse position
+            var normalizedMouseX = Math.Clamp(mousepos.X / ImGui.GetIO().DisplaySize.X, .33f, 1f);
+            var normalizedMouseY = Math.Clamp(mousepos.Y / ImGui.GetIO().DisplaySize.Y, .33f, 1f);// Normalize X to range [.33, 1]
+            var rectColor = new Vector4(normalizedMouseX -0.1f, normalizedMouseY -.127f, 0.620f, (float)balls * 0.98f%1.0f); // Use normalizedMouseX for R normalizedMouseY for the G channel
+            var rectSize = new Vector2(64f,64f);
+   
+               ImGui.GetWindowDrawList().AddRectFilled(
                 ImGui.GetCursorScreenPos(),
                 ImGui.GetCursorScreenPos() + (rectSize),
                 ImGui.ColorConvertFloat4ToU32(rectColor)
             );
-            ImGui.Image((IntPtr)SharedResources.t3logoAlphaTextureImageSrv, new Vector2(64,64));
-          
+            
+            ImGui.Image((IntPtr)SharedResources.t3logoAlphaTextureImageSrv, new Vector2(64, 64));
+
             FormInputs.AddSectionHeader("TiXL");
             ImGui.SameLine();
             ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
@@ -44,7 +51,7 @@ internal sealed class AboutDialog : ModalDialog
             ImGui.PopStyleColor();
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, mySpacing);
            
-            ImGui.TextColored(UiColors.TextMuted, $"Build Hash:");
+            ImGui.TextColored(UiColors.TextMuted, $"Build Hash:"); // write git commit hash
             ImGui.SameLine();
             ImGui.Text($"{gitCommitHash}");
             
@@ -113,6 +120,8 @@ internal sealed class AboutDialog : ModalDialog
 
             CustomComponents.TooltipForLastItem("Copy system info for bug reports");
             EndDialogContent();
+           
+           
         }
         EndDialog();
     }
@@ -146,7 +155,7 @@ internal sealed class AboutDialog : ModalDialog
 
             systemInfo.AppendLine($"Date: {dateTime}");
             systemInfo.AppendLine($"TiXL version: {Program.VersionText}");
-            systemInfo.AppendLine($"Build Hash: {GetGitCommitHash()}");
+            systemInfo.AppendLine($"Build Hash: {GetGitCommitHash()}"); //get commit hash from git
 
 #if DEBUG
             systemInfo.AppendLine($"IDE: {GetIdeName()}");
@@ -335,7 +344,7 @@ internal sealed class AboutDialog : ModalDialog
     private static readonly string dotNetRuntime = GetDotNetRuntimeVersion();
     private static readonly string dotNetSdk = GetDotNetSdkVersion();
     private static readonly string gpuInformation = GetGpuInformation();
-    private static readonly string gitCommitHash = GetGitCommitHash();
+    private static readonly string gitCommitHash = GetGitCommitHash(); // get commit hash from git
     private string _systemInfo = string.Empty;
 
     private static readonly Vector2 mySpacing = new (6.0f, 3.0f);
