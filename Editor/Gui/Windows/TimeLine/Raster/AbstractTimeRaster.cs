@@ -93,9 +93,9 @@ public abstract class AbstractTimeRaster : IValueSnapAttractor
 
     #region implement snap attractor
 
-    public virtual SnapResult CheckForSnap(double time, float canvasScale, IValueSnapAttractor.Orientation orientation)
+    public virtual void CheckForSnap(ref SnapResult snapResult)
     {
-        return ValueSnapHandler.FindSnapResult(time, _usedPositions.Values, canvasScale);
+        snapResult.TryToImproveWithAnchorValueList(_usedPositions.Values);
     }
     #endregion
 

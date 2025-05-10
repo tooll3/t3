@@ -37,8 +37,8 @@ internal abstract class CurveEditCanvas : ScalableCanvas, ITimeObjectManipulatio
             HandleFenceUpdate(selectionFence, out _);
             drawAdditionalCanvasContent(interactionState);
 
-            SnapHandlerForU.DrawSnapIndicator(this, ValueSnapHandler.Mode.VerticalLinesForU);
-            SnapHandlerForV.DrawSnapIndicator(this, ValueSnapHandler.Mode.HorizontalLinesForV);
+            SnapHandlerForU.DrawSnapIndicator(this);
+            SnapHandlerForV.DrawSnapIndicator(this);
         }
         ImGui.EndChild();
     }
@@ -65,7 +65,10 @@ internal abstract class CurveEditCanvas : ScalableCanvas, ITimeObjectManipulatio
             return;
             
         var hoverTime = InverseTransformX(ImGui.GetIO().MousePos.X);
-        SnapHandlerForU.CheckForSnapping(ref hoverTime, Scale.X);
+        if (SnapHandlerForU.TryCheckForSnapping(hoverTime, out var snappedValue, Scale.X))
+        {
+            hoverTime = (float)snappedValue;
+        }
 
         if (ImGui.IsMouseReleased(0))
         {
@@ -207,8 +210,8 @@ internal abstract class CurveEditCanvas : ScalableCanvas, ITimeObjectManipulatio
     protected readonly List<ITimeObjectManipulation> TimeObjectManipulators = new();
     #endregion
         
-    public readonly ValueSnapHandler SnapHandlerForU = new();
-    public readonly ValueSnapHandler SnapHandlerForV = new();
+    public readonly ValueSnapHandler SnapHandlerForU = new(SnapResult.Orientations.Horizontal);
+    public readonly ValueSnapHandler SnapHandlerForV = new(SnapResult.Orientations.Vertical);
     protected ImDrawListPtr Drawlist;
     protected override ScalableCanvas Parent => null;
 }

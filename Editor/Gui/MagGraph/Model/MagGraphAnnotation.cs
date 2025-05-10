@@ -23,14 +23,13 @@ internal sealed class MagGraphAnnotation : ISelectableCanvasObject, IValueSnapAt
     
     public int LastUpdateCycle;
     public bool IsRemoved;
-    
-    SnapResult? IValueSnapAttractor.CheckForSnap(double value, float canvasScale, IValueSnapAttractor.Orientation orientation)
-    {
-        SnapResult? bestSnapResult = null;
 
-        ValueSnapHandler.CheckForBetterSnapping(value, DampedPosOnCanvas.X, canvasScale, ref bestSnapResult);
-        ValueSnapHandler.CheckForBetterSnapping(value, DampedPosOnCanvas.X + DampedSize.X, canvasScale, ref bestSnapResult);
-        
-        return bestSnapResult;
+    void IValueSnapAttractor.CheckForSnap(ref SnapResult snapResult)
+    {
+        if (snapResult.Orientation == SnapResult.Orientations.Horizontal)
+        {
+            snapResult.TryToImproveWithAnchorValue(DampedPosOnCanvas.X);
+            snapResult.TryToImproveWithAnchorValue(DampedPosOnCanvas.X + DampedSize.X);
+        }
     }
 }

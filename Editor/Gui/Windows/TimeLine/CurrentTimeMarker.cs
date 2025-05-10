@@ -18,9 +18,9 @@ internal sealed class CurrentTimeMarker: IValueSnapAttractor
         drawList.AddRectFilled(p, p + new Vector2(1, y+ windowHeight), UiColors.StatusAnimated);
     }
 
-    public SnapResult CheckForSnap(double time, float canvasScale, IValueSnapAttractor.Orientation orientation)
+    void IValueSnapAttractor.CheckForSnap(ref SnapResult snapResult)
     {
-        return ValueSnapHandler.FindSnapResult(time, _currentTimeInBars, canvasScale);
+        snapResult.TryToImproveWithAnchorValue(_currentTimeInBars);
     }
         
     private double _currentTimeInBars;

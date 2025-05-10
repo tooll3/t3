@@ -98,12 +98,17 @@ public sealed class StandardValueRaster : AbstractTimeRaster
 
         return _blendRasters;
     }
-        
-    public override  SnapResult CheckForSnap(double time, float canvasScale, IValueSnapAttractor.Orientation orientation)
+     
+    public override void CheckForSnap(ref SnapResult snapResult)
+    //public override  SnapResult CheckForSnap(double time, float canvasScale, SnapResult.Orientations orientation)
     {
-        return !EnableSnapping 
-                   ? null 
-                   : base.CheckForSnap(time, canvasScale, orientation);
+        if (EnableSnapping)
+            base.CheckForSnap(ref snapResult);
+            //snapResult.TryToImproveWithAnchorValue(time);
+        
+        // return !EnableSnapping 
+        //            ? null 
+        //            : base.CheckForSnap(time, canvasScale, orientation);
             
         //return  base.CheckForSnap(time, canvasScale);
     }

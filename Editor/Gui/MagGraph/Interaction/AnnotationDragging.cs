@@ -1,4 +1,5 @@
 ﻿using ImGuiNET;
+using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
@@ -65,10 +66,16 @@ internal static class AnnotationDragging
             var newDragPosInCanvas = context.Canvas.InverseTransformPositionFloat(newDragPos);
             var moveDeltaOnCanvas = newDragPosInCanvas - magAnnotation.PosOnCanvas;
 
+            if (_snapHandlerX.TryCheckForSnapping(newDragPos.X, out var snappedXValue, context.Canvas.Scale.X, [magAnnotation]))
+            {
+                newDragPos.X = (float)snappedXValue;
+            }
+            
             foreach (var e in _draggedNodes)
             {
                 e.PosOnCanvas += moveDeltaOnCanvas;
             }
+            
         }
 
         // Complete dragging...
@@ -136,4 +143,6 @@ internal static class AnnotationDragging
     private static Vector2 _dragStartDelta;
     private static ModifyCanvasElementsCommand _moveCommand;
     private static readonly List<ISelectableCanvasObject> _draggedNodes = [];
+    private static readonly ValueSnapHandler _snapHandlerX = new(SnapResult.Orientations.Horizontal);
+    private static ValueSnapHandler _snapHandlerY = new(SnapResult.Orientations.Vertical);
 }

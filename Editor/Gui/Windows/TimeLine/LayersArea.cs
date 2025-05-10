@@ -456,26 +456,36 @@ internal sealed class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
                 var newStartTime = currentDragTime - _timeWithinDraggedClip;
                 var dy =  _posPosYOnDragStart - mousePos.Y;
 
-                if (_snapHandler.CheckForSnapping(ref newStartTime, _timelineCanvas.Scale.X * scale))
+                if (_snapHandler.TryCheckForSnapping(newStartTime, out var snappedValue, _timelineCanvas.Scale.X * scale))
                 {
+                    newStartTime = (float)snappedValue;
                     _timelineCanvas.UpdateDragCommand(newStartTime - referenceRange.Start, dy);
                     return;
                 }
                     
                 var newEndTime = newStartTime + referenceRange.Duration;
-                _snapHandler.CheckForSnapping(ref newEndTime, _timelineCanvas.Scale.X * scale);
+                if (_snapHandler.TryCheckForSnapping(newEndTime, out var snappedValue2, _timelineCanvas.Scale.X * scale))
+                {
+                    newEndTime = (float)snappedValue2;
+                }
                 _timelineCanvas.UpdateDragCommand(newEndTime - referenceRange.End, dy);
                 break;
                 
             case HandleDragMode.Start:
                 var newDragStartTime = _timelineCanvas.InverseTransformX(mousePos.X);
-                _snapHandler.CheckForSnapping(ref newDragStartTime, _timelineCanvas.Scale.X * scale);
+                if (_snapHandler.TryCheckForSnapping(newDragStartTime, out var snappedValue3, _timelineCanvas.Scale.X * scale))
+                {
+                    newDragStartTime = (float)snappedValue3;
+                }
                 _timelineCanvas.UpdateDragAtStartPointCommand(newDragStartTime - timeClip.TimeRange.Start, 0);
                 break;
                 
             case HandleDragMode.End:
                 var newDragTime = _timelineCanvas.InverseTransformX(mousePos.X);
-                _snapHandler.CheckForSnapping(ref newDragTime, _timelineCanvas.Scale.X * scale);
+                if (_snapHandler.TryCheckForSnapping(newDragTime, out var snappedValue4, _timelineCanvas.Scale.X * scale))
+                {
+                    newDragTime = (float)snappedValue4;
+                }
                 _timelineCanvas.UpdateDragAtEndPointCommand(newDragTime - timeClip.TimeRange.End, 0);
                 break;
                 
@@ -648,29 +658,24 @@ internal sealed class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
     /// <summary>
     /// Snap to all non-selected Clips
     /// </summary>
-    SnapResult? IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale, IValueSnapAttractor.Orientation orientation)
+    void IValueSnapAttractor.CheckForSnap(ref SnapResult snapResult)
     {
         var currentComp = _getCompositionOp();
-        SnapResult? bestSnapResult = null;
-
         var allClips = Structure.GetAllTimeClips(currentComp);
 
         foreach (var clip in allClips)
         {
             if (_clipSelection.Contains(clip))
                 continue;
-                
-            ValueSnapHandler.CheckForBetterSnapping(targetTime, clip.TimeRange.Start, canvasScale, ref bestSnapResult);
-            ValueSnapHandler.CheckForBetterSnapping(targetTime, clip.TimeRange.End, canvasScale, ref bestSnapResult);
-        }
             
-        return bestSnapResult;
+            snapResult.TryToImproveWithAnchorValue(clip.TimeRange.Start);
+            snapResult.TryToImproveWithAnchorValue(clip.TimeRange.End);
+        }
     }
     #endregion
         
     private Vector2 _minScreenPos;
         
-    //public readonly HashSet<ITimeClip> SelectedTimeClips = new HashSet<ITimeClip>();
     private static MoveTimeClipsCommand? _moveClipsCommand;
     private const int LayerHeight = 28;
     private const float HandleWidth = 7;
