@@ -3,7 +3,7 @@
   "Description": "Generates a procedural capsule field by connecting two points.\nIt can be rendered with [RaymarchField] and visualized with [VisualizeFieldDistance].\n\nFor a simple and interactive tutorial on the TiXL rendering pipeline, see [HowToRaymarchField].\n\nIt can be modified with [BendField] , [TransformField] , [PolarRepeat] and more.\n\nSimilar nodes: [CapsuleSDF], [ChainLinkSDF], [FractalSDF].",
   "InputUis": [
     {
-      "InputId": "0b4fde07-5439-4dbd-af37-32e5c6dc9315"/*B*/,
+      "InputId": "0b4fde07-5439-4dbd-af37-32e5c6dc9315"/*EndPoint*/,
       "Position": {
         "X": -200.0,
         "Y": 90.0
@@ -27,7 +27,7 @@
       "Description": "Defines the thickness of the capsule"
     },
     {
-      "InputId": "ace2fa64-382c-4386-b623-5b1051f4bcf4"/*A*/,
+      "InputId": "ace2fa64-382c-4386-b623-5b1051f4bcf4"/*StartingPoint*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0

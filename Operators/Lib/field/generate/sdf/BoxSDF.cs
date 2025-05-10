@@ -36,7 +36,7 @@ internal sealed class BoxSDF : Instance<BoxSDF>
     
     public void GetPreShaderCode(CodeAssembleContext c, int inputIndex)
     {
-        c.AppendCall($"f{c}.w = fRoundedRect(p{c}.xyz, {ShaderNode}Center, {ShaderNode}Size*0.5, {ShaderNode}Radius);"); 
+        c.AppendCall($"f{c}.w = fRoundedRect(p{c}.xyz, {ShaderNode}Center, {ShaderNode}Size*0.5, {ShaderNode}EdgeRadius);"); 
         //c.AppendCall($"f{c}.xyz = p{c}.xyz;");
     }
     
@@ -50,5 +50,5 @@ internal sealed class BoxSDF : Instance<BoxSDF>
 
     [GraphParam]
     [Input(Guid = "787e5d70-0aba-400f-8616-6ece6c5895bc")]
-    public readonly InputSlot<float> Radius = new();
+    public readonly InputSlot<float> EdgeRadius = new();
 }

@@ -34,7 +34,7 @@ internal sealed class CapsuleLineSDF : Instance<CapsuleLineSDF>
                                 } 
                                 """;
 
-        c.AppendCall($"f{c}.w = fCapsule(p{c} - {ShaderNode}Center, {ShaderNode}A, {ShaderNode}B, {ShaderNode}Radius);");
+        c.AppendCall($"f{c}.w = fCapsule(p{c} - {ShaderNode}Center, {ShaderNode}StartingPoint, {ShaderNode}EndPoint, {ShaderNode}Thickness);");
     }
 
     public void GetPostShaderCode(CodeAssembleContext c, int inputIndex)
@@ -47,13 +47,13 @@ internal sealed class CapsuleLineSDF : Instance<CapsuleLineSDF>
 
     [GraphParam]
     [Input(Guid = "ace2fa64-382c-4386-b623-5b1051f4bcf4")]
-    public readonly InputSlot<Vector3> A = new();
+    public readonly InputSlot<Vector3> StartingPoint = new();
 
     [GraphParam]
     [Input(Guid = "0B4FDE07-5439-4DBD-AF37-32E5C6DC9315")]
-    public readonly InputSlot<Vector3> B = new();
+    public readonly InputSlot<Vector3> EndPoint = new();
 
     [GraphParam]
     [Input(Guid = "808C44FF-44E2-4A22-91F1-F459F298E6EB")]
-    public readonly InputSlot<float> Radius = new();
+    public readonly InputSlot<float> Thickness = new();
 }
