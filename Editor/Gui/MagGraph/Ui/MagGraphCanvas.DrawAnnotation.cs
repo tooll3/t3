@@ -26,7 +26,8 @@ internal sealed partial class MagGraphCanvas
                                UiColors.BackgroundFull.Fade(0.2f),
                                3 * context.Canvas.CanvasScale);
 
-        var borderColor = context.Selector.IsNodeSelected(magAnnotation)
+        var isNodeSelected = context.Selector.IsNodeSelected(magAnnotation.Annotation);
+        var borderColor = isNodeSelected
                               ? UiColors.ForegroundFull
                               : UiColors.ForegroundFull.Fade(0.1f);
 
@@ -55,17 +56,17 @@ internal sealed partial class MagGraphCanvas
         const float backgroundAlpha = 0.2f;
         const float headerHoverAlpha = 0.3f;
         drawList.AddRectFilled(clickableArea.Min, clickableArea.Max,
-                               UiColors.ForegroundFull.Fade(isHeaderHovered 
-                                                                ? headerHoverAlpha 
+                               UiColors.ForegroundFull.Fade(isHeaderHovered
+                                                                ? headerHoverAlpha
                                                                 : 0));
 
         // Clicked -> Drag
-        if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
+        if (ImGui.IsItemClicked(ImGuiMouseButton.Left) && !ImGui.GetIO().KeyAlt)
         {
             context.ActiveAnnotationId = magAnnotation.Id;
             context.StateMachine.SetState(GraphStates.DragAnnotation, context);
         }
-        
+
         // Double-Click -> Rename
         var shouldRename = (ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left));
         if (shouldRename)
@@ -94,6 +95,22 @@ internal sealed partial class MagGraphCanvas
                              ColorVariations.OperatorLabel.Apply(magAnnotation.Annotation.Color.Fade(fade)),
                              magAnnotation.Annotation.Title);
             drawList.PopClipRect();
+        }
+
+        // Resize
+        {
+            ImGui.PushID(magAnnotation.Id.GetHashCode());
+            ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNWSE);
+            ImGui.SetCursorScreenPos(screenArea.Max - new Vector2(10, 10) * T3Ui.UiScaleFactor);
+            ImGui.Button("##resize", new Vector2(10, 10) * T3Ui.UiScaleFactor);
+            if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+            {
+                var delta = canvas.InverseTransformDirection(ImGui.GetIO().MouseDelta);
+                magAnnotation.Annotation.Size = Vector2.Max(new Vector2(100, 30), magAnnotation.Annotation.Size + delta);
+            }
+
+            ImGui.SetMouseCursor(ImGuiMouseCursor.Arrow);
+            ImGui.PopID();
         }
     }
 }

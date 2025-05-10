@@ -83,25 +83,23 @@ internal static class AnnotationDragging
             }
             else
             {
-                if (!context.Selector.IsNodeSelected(annotation))
-                {
-                    if (!ImGui.GetIO().KeyShift)
-                    {
-                        context.Selector.Clear();
-                    }
-
-                    context.Selector.AddSelection(annotation);
-                }
-                else
+                _moveCommand.Undo();
+                if (context.Selector.IsNodeSelected(annotation))
                 {
                     if (ImGui.GetIO().KeyShift)
                     {
                         context.Selector.DeselectNode(annotation, null);
                     }
                 }
+                else
+                {
+                    if (!ImGui.GetIO().KeyShift)
+                        context.Selector.Clear();
+
+                    context.Selector.AddSelection(annotation);
+                }
             }
 
-            Log.Debug("Released -> Completed dragging");
             context.StateMachine.SetState(GraphStates.Default, context);
             _draggedNodes.Clear();
             _draggedAnnotationId = Guid.Empty;
