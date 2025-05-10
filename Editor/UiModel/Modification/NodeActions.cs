@@ -129,10 +129,11 @@ internal static class NodeActions
             area.Expand(60);
         }
 
-        var annotation = new Annotation()
+        var annotation = new Annotation
                              {
                                  Id = Guid.NewGuid(),
-                                 Title = "Untitled Annotation",
+                                 Title = "",
+                                 Label = "",
                                  Color = UiColors.Gray,
                                  PosOnCanvas = area.Min,
                                  Size = area.GetSize()

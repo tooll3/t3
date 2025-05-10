@@ -6,7 +6,8 @@ namespace T3.Editor.UiModel;
 
 public sealed class Annotation : ISelectableCanvasObject
 {
-    internal string Title = "Untitled Annotation";
+    internal string Label = "";
+    internal string Title = "";
     internal Color Color = UiColors.Gray;
     public Guid Id { get; internal init; }
     public Vector2 PosOnCanvas { get; set; }
@@ -17,6 +18,7 @@ public sealed class Annotation : ISelectableCanvasObject
         return new Annotation
                    {
                        Id = Guid.NewGuid(),
+                       Label = Label,
                        Title = Title,
                        Color = Color,
                        PosOnCanvas = PosOnCanvas,

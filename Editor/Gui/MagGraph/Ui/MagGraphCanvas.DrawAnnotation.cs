@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using T3.Core.Utils;
+using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Styling;
@@ -97,16 +98,28 @@ internal sealed partial class MagGraphCanvas
             drawList.PopClipRect();
         }
 
-        // Resize
+        {
+            if (!string.IsNullOrEmpty(magAnnotation.Annotation.Label))
+            {
+                drawList.AddText(Fonts.FontNormal,
+                                 Fonts.FontNormal.FontSize,
+                                 pMin + new Vector2(0, -Fonts.FontNormal.FontSize),
+                                 UiColors.ForegroundFull.Fade(0.5f),
+                                 magAnnotation.Annotation.Label);
+            }
+        }
+
+        // Resize handle
         {
             ImGui.PushID(magAnnotation.Id.GetHashCode());
             ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNWSE);
             ImGui.SetCursorScreenPos(screenArea.Max - new Vector2(10, 10) * T3Ui.UiScaleFactor);
             ImGui.Button("##resize", new Vector2(10, 10) * T3Ui.UiScaleFactor);
-            if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+
+            if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
             {
-                var delta = canvas.InverseTransformDirection(ImGui.GetIO().MouseDelta);
-                magAnnotation.Annotation.Size = Vector2.Max(new Vector2(100, 30), magAnnotation.Annotation.Size + delta);
+                context.ActiveAnnotationId = magAnnotation.Id;
+                context.StateMachine.SetState(GraphStates.ResizeAnnotation, context);
             }
 
             ImGui.SetMouseCursor(ImGuiMouseCursor.Arrow);

@@ -31,5 +31,11 @@ internal sealed class MagGraphAnnotation : ISelectableCanvasObject, IValueSnapAt
             snapResult.TryToImproveWithAnchorValue(DampedPosOnCanvas.X);
             snapResult.TryToImproveWithAnchorValue(DampedPosOnCanvas.X + DampedSize.X);
         }
+        else  if (snapResult.Orientation == SnapResult.Orientations.Vertical)
+        {
+            snapResult.TryToImproveWithAnchorValue(DampedPosOnCanvas.Y);
+            snapResult.TryToImproveWithAnchorValue(DampedPosOnCanvas.Y + DampedSize.Y);
+        }
+
     }
 }

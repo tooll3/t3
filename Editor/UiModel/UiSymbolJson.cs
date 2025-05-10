@@ -153,7 +153,15 @@ internal static class SymbolUiJson
         {
             writer.WriteStartObject();
             writer.WriteObject(JsonKeys.Id, annotation.Id);
-            writer.WriteObject(JsonKeys.Title, annotation.Title);
+            if (!string.IsNullOrEmpty(annotation.Title))
+            {
+                writer.WriteObject(JsonKeys.Title, annotation.Title);
+            }
+
+            if (!string.IsNullOrEmpty(annotation.Label))
+            {
+                writer.WriteObject(JsonKeys.Label, annotation.Label);
+            }
 
             writer.WritePropertyName(JsonKeys.Color);
             _vector4ToJson(writer, annotation.Color.Rgba);
@@ -418,6 +426,7 @@ internal static class SymbolUiJson
                                  {
                                      Id = id,
                                      Title = annotationEntry[JsonKeys.Title]?.Value<string>() ?? string.Empty,
+                                     Label = annotationEntry[JsonKeys.Label]?.Value<string>() ?? string.Empty,
                                      PosOnCanvas = GetVec2OrDefault(annotationEntry[JsonKeys.Position]),
                                  };
 
@@ -487,6 +496,7 @@ internal static class SymbolUiJson
         public const string Comment = nameof(Comment);
         public const string Id = nameof(Id);
         public const string Title = nameof(Title);
+        public const string Label = nameof(Label);
         public const string Color = nameof(Color);
         public const string Size = nameof(Size);
         public const string Description = nameof(Description);
