@@ -167,7 +167,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
     {
         if (index == 0)
         {
-            point.PositionOnCanvas = new Vector2(WidthHalf, Size.Y) + PosOnCanvas;
+            point.PositionOnCanvas = new Vector2(WidthHalf, Size.Y) + DampedPosOnCanvas;
             point.Direction = Directions.Vertical;
             point.ConnectionType = OutputLines[0].Output.ValueType;
             point.SnappedConnectionHash = GetSnappedConnectionHash(OutputLines[0].ConnectionsOut);
@@ -177,7 +177,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
         }
 
         var lineIndex = index - 1;
-        point.PositionOnCanvas = new Vector2(Width, (0.5f + OutputLines[lineIndex].VisibleIndex) * LineHeight) + PosOnCanvas;
+        point.PositionOnCanvas = new Vector2(Width, (0.5f + OutputLines[lineIndex].VisibleIndex) * LineHeight) + DampedPosOnCanvas;
         point.Direction = Directions.Horizontal;
         point.ConnectionType = OutputLines[lineIndex].Output.ValueType;
         point.SnappedConnectionHash = GetSnappedConnectionHash(OutputLines[lineIndex].ConnectionsOut);
@@ -199,7 +199,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
     {
         if (index == 0)
         {
-            anchorPoint.PositionOnCanvas = new Vector2(WidthHalf, 0) + PosOnCanvas;
+            anchorPoint.PositionOnCanvas = new Vector2(WidthHalf, 0) + DampedPosOnCanvas;
             anchorPoint.Direction = Directions.Vertical;
             anchorPoint.ConnectionType = InputLines[0].Type;
             anchorPoint.SnappedConnectionHash = InputLines[0].ConnectionIn?.ConnectionHash ?? FreeAnchor;
@@ -210,7 +210,7 @@ internal sealed class MagGraphItem : ISelectableCanvasObject
         }
         
         var lineIndex = index - 1;
-        anchorPoint.PositionOnCanvas = new Vector2(0, (0.5f + InputLines[lineIndex].VisibleIndex) * LineHeight) + PosOnCanvas;
+        anchorPoint.PositionOnCanvas = new Vector2(0, (0.5f + InputLines[lineIndex].VisibleIndex) * LineHeight) + DampedPosOnCanvas;
         anchorPoint.Direction = Directions.Horizontal;
         anchorPoint.ConnectionType = InputLines[lineIndex].Type;
         anchorPoint.SnappedConnectionHash = InputLines[lineIndex].ConnectionIn?.ConnectionHash ?? FreeAnchor;
