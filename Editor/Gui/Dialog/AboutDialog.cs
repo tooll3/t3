@@ -28,7 +28,6 @@ internal sealed class AboutDialog : ModalDialog
         {
             var anim = 7.12+Math.Sin((Playback.RunTimeInSecs))%0.19f;
             var anim2 = 0.2 * (Math.Sin(Playback.RunTimeInSecs))%0.19;
-            var balls = Math.Sin(anim + anim2)*1.01f;
             var mousepos = ImGui.GetMousePos(); // Get the current mouse position
             var normalizedMouseX = Math.Clamp(mousepos.X / ImGui.GetIO().DisplaySize.X, .33f, 1f);
             var normalizedMouseY = Math.Clamp(mousepos.Y / ImGui.GetIO().DisplaySize.Y, .33f, 1f);// Normalize X to range [.33, 1]
