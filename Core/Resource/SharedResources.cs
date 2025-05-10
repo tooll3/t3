@@ -60,7 +60,7 @@ public static class SharedResources
                                                                                     }); 
             
         _viewWindowDefaultTexture = ResourceManager.CreateTextureResource(@"images/editor/t3-background.png", null);
-        _t3logoAlphaTexture = ResourceManager.CreateTextureResource(@"images/t3-logo-alpha.png", null);
+        _t3logoAlphaTexture = ResourceManager.CreateTextureResource(@"images/t3-logo-alpha.png", null); //add t3logo to resources for use in about dialog
         _colorPickerTexture = ResourceManager.CreateTextureResource(@"images/editor/t3-colorpicker.png", null);
         
         if (_viewWindowDefaultTexture.Value == null)
@@ -86,7 +86,7 @@ public static class SharedResources
         }
         else
         {
-            _t3logoAlphaTexture.Value.CreateShaderResourceView(ref t3logoAlphaTextureImageSrv, "t3 logo image SRV");
+            _t3logoAlphaTexture.Value.CreateShaderResourceView(ref t3logoAlphaTextureImageSrv, "t3 logo image SRV"); // convert to shader resource view
         }
 
     }
@@ -98,7 +98,7 @@ public static class SharedResources
     private static Resource<PixelShader> _fullScreenPixelShaderResource;
     private static Resource<Texture2D> _viewWindowDefaultTexture;
     private static Resource<Texture2D> _colorPickerTexture;
-    private static Resource<Texture2D> _t3logoAlphaTexture;
+    private static Resource<Texture2D> _t3logoAlphaTexture; //create texture for t3logo for about dialog 
     public static Resource<VertexShader> FullScreenVertexShaderResource => _fullScreenVertexShaderResource;
 
     public static Resource<PixelShader> FullScreenPixelShaderResource => _fullScreenPixelShaderResource;
