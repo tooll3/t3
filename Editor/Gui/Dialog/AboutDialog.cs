@@ -26,15 +26,13 @@ internal sealed class AboutDialog : ModalDialog
 
         if (BeginDialog("    TiXL Loves You! <3"))
         {
-            var anim = 7.12+Math.Sin((Playback.RunTimeInSecs))%0.19f;
-            var anim2 = 0.2 * (Math.Sin(Playback.RunTimeInSecs))%0.19;
             var mousepos = ImGui.GetMousePos(); // Get the current mouse position
             var normalizedMouseX = Math.Clamp(mousepos.X / ImGui.GetIO().DisplaySize.X, .33f, 1f);
             var normalizedMouseY = Math.Clamp(mousepos.Y / ImGui.GetIO().DisplaySize.Y, .33f, 1f);// Normalize X to range [.33, 1]
-            var rectColor = new Vector4(normalizedMouseX -0.1f, normalizedMouseY -.127f, 0.620f, (float)balls * 0.98f%1.0f); // Use normalizedMouseX for R normalizedMouseY for the G channel
+            var rectColor = new Vector4(normalizedMouseX -0.1f, normalizedMouseY -.127f, 0.620f,10+ 1f); // Use normalizedMouseX for r normalizedMouseY for the g channel
             var rectSize = new Vector2(64f,64f);
-   
-               ImGui.GetWindowDrawList().AddRectFilled(
+    
+                ImGui.GetWindowDrawList().AddRectFilled(
                 ImGui.GetCursorScreenPos(),
                 ImGui.GetCursorScreenPos() + (rectSize),
                 ImGui.ColorConvertFloat4ToU32(rectColor)
