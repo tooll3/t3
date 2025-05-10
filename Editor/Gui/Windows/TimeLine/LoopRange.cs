@@ -103,7 +103,7 @@ internal sealed class LoopRange : IValueSnapAttractor
         
     #region implement snapping interface -----------------------------------
 
-    SnapResult? IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
+    SnapResult? IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale, IValueSnapAttractor.Orientation orientation)
     {
         if (_playback == null)
             return null;

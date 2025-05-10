@@ -139,7 +139,7 @@ public sealed  class HorizontalRaster: IValueSnapAttractor
 
     #region implement snap attractor
         
-    public SnapResult CheckForSnap(double targetPos, float canvasScale)
+    SnapResult IValueSnapAttractor.CheckForSnap(double targetPos, float canvasScale, IValueSnapAttractor.Orientation orientation)
     {
         return ValueSnapHandler.FindSnapResult(targetPos, _usedPositions.Values, canvasScale);
     }

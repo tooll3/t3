@@ -59,10 +59,10 @@ public sealed class SiTimeRaster : AbstractTimeRaster
         return output;
     }
 
-    public override SnapResult CheckForSnap(double time, float canvasScale)
+    public override SnapResult CheckForSnap(double time, float canvasScale, IValueSnapAttractor.Orientation orientation)
     {
         return ImGui.GetIO().KeyAlt 
-                   ? base.CheckForSnap(time, canvasScale) 
+                   ? base.CheckForSnap(time, canvasScale, orientation) 
                    : null;
     }
 

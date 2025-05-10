@@ -141,7 +141,7 @@ public class HorizontalScaleLines : IValueSnapAttractor
 
     private const double SnapThreshold = 8;
 
-    public SnapResult CheckForSnap(double time)
+    SnapResult IValueSnapAttractor.CheckForSnap(double time, float scale, IValueSnapAttractor.Orientation orientation)
     {
         //var TV= App.Current.MainWindow.CompositionView.XTimeView;
         //if (this.Visibility == System.Windows.Visibility.Collapsed)

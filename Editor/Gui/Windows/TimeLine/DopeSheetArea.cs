@@ -814,7 +814,7 @@ internal sealed class DopeSheetArea : AnimationParameterEditing, ITimeObjectMani
     /// <summary>
     /// Snap to all non-selected Clips
     /// </summary>
-    SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
+    SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale, IValueSnapAttractor.Orientation orientation)
     {
         SnapResult best = null;
         foreach (var vDefinition in GetAllKeyframes())

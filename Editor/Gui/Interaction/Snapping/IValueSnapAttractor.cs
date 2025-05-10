@@ -1,4 +1,5 @@
-﻿namespace T3.Editor.Gui.Interaction.Snapping;
+﻿#nullable enable
+namespace T3.Editor.Gui.Interaction.Snapping;
 
 /// <summary>
 /// Helper struct to pass return values
@@ -12,14 +13,14 @@
 /// </remarks>
 public sealed class SnapResult
 {
-    public SnapResult(double target, double force)
+    internal SnapResult(double target, double force)
     {
         SnapToValue = target;
         Force = force;
     }
-        
-    public double SnapToValue { get; set; }
-    public double Force {get; set;}
+
+    internal double SnapToValue { get; set; }
+    internal double Force {get; set;}
 }
 
     
@@ -29,5 +30,12 @@ public sealed class SnapResult
 /// <remarks>should return null if not snapping</remarks>
 public interface IValueSnapAttractor
 {
-    SnapResult CheckForSnap(double value, float canvasScale);
+    SnapResult? CheckForSnap(double value, float canvasScale, Orientation orientation = Orientation.Unknown);
+
+    public enum Orientation
+    {
+        Unknown,
+        Horizontal,
+        Vertical,
+    }
 }

@@ -423,7 +423,7 @@ internal sealed class TimelineCurveEditArea : AnimationParameterEditing, ITimeOb
     }
 
     #region implement snapping -------------------------
-    SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
+    SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale, IValueSnapAttractor.Orientation orientation)
     {
         _snapThresholdOnCanvas = SnapDistance / canvasScale;
         var maxForce = 0.0;

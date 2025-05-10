@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+using ImGuiNET;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -19,22 +20,19 @@ internal sealed class ValueSnapHandler
 
     public void RemoveSnapAttractor(IValueSnapAttractor sp)
     {
-        if (_snapAttractors.Contains(sp))
-        {
-            _snapAttractors.Remove(sp);
-        }
+        _snapAttractors.Remove(sp);
     }
 
     /// <summary>
     /// Components can bind to these events to render snap-indicators
     /// </summary>
-    public event Action<double> SnappedEvent;
+    public event Action<double>? SnappedEvent;
 
         
     /// <summary>
     /// Override to float precision 
     /// </summary>
-    public bool CheckForSnapping(ref float time, float canvasScale, List<IValueSnapAttractor> ignoreSnapAttractors = null)
+    public bool CheckForSnapping(ref float time, float canvasScale, List<IValueSnapAttractor>? ignoreSnapAttractors = null)
     {
         double d = time;
         var result = CheckForSnapping(ref d, canvasScale, ignoreSnapAttractors);
@@ -47,7 +45,7 @@ internal sealed class ValueSnapHandler
     /// <summary>
     /// Uses all registered snap providers to test for snapping
     /// </summary>
-    public bool CheckForSnapping(ref double time, float canvasScale, List<IValueSnapAttractor> ignoreSnapAttractors = null)
+    public bool CheckForSnapping(ref double time, float canvasScale, List<IValueSnapAttractor>? ignoreSnapAttractors = null)
     {
         var bestSnapValue = Double.NaN;
         double maxSnapForce = 0;
@@ -82,7 +80,7 @@ internal sealed class ValueSnapHandler
     /// <summary>
     /// This is method is called from all snapHandlers 
     /// </summary>
-    public static bool CheckForBetterSnapping(double targetTime, double anchorTime, float canvasScale, ref SnapResult bestSnapResult)
+    public static bool CheckForBetterSnapping(double targetTime, double anchorTime, float canvasScale, ref SnapResult? bestSnapResult)
     {
         var snapThresholdOnCanvas = UserSettings.Config.SnapStrength / canvasScale;
         var distance = Math.Abs(anchorTime - targetTime);
@@ -109,9 +107,9 @@ internal sealed class ValueSnapHandler
         return true;
     }
 
-    public static SnapResult FindSnapResult(double targetTime, IEnumerable<double> anchors, float canvasScale)
+    public static SnapResult? FindSnapResult(double targetTime, IEnumerable<double> anchors, float canvasScale)
     {
-        SnapResult bestMatch = null;
+        SnapResult? bestMatch = null;
         foreach (var beatTime in anchors)
         {
             CheckForBetterSnapping(targetTime, beatTime, canvasScale, ref bestMatch);
@@ -119,9 +117,9 @@ internal sealed class ValueSnapHandler
         return bestMatch;
     }
         
-    public static SnapResult FindSnapResult(double targetTime, double anchor, float canvasScale)
+    public static SnapResult? FindSnapResult(double targetTime, double anchor, float canvasScale)
     {
-        SnapResult bestMatch = null;
+        SnapResult? bestMatch = null;
         CheckForBetterSnapping(targetTime, anchor, canvasScale, ref bestMatch);
         return bestMatch;
     }

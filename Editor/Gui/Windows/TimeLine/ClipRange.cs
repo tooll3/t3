@@ -122,7 +122,7 @@ internal sealed class ClipRange : IValueSnapAttractor
     //private static Playback _playback;
     private static ITimeClip _timeClip;
     #region implement snapping interface -----------------------------------
-    SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
+    SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale, IValueSnapAttractor.Orientation orientation)
     {
         if (_timeClip == null)
             return null;

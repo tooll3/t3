@@ -53,7 +53,7 @@ internal sealed partial class MagGraphCanvas
             ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
         }
 
-        const float backgroundAlpha = 0.2f;
+        //const float backgroundAlpha = 0.2f;
         const float headerHoverAlpha = 0.3f;
         drawList.AddRectFilled(clickableArea.Min, clickableArea.Max,
                                UiColors.ForegroundFull.Fade(isHeaderHovered

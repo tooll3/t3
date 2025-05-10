@@ -648,7 +648,7 @@ internal sealed class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
     /// <summary>
     /// Snap to all non-selected Clips
     /// </summary>
-    SnapResult? IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
+    SnapResult? IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale, IValueSnapAttractor.Orientation orientation)
     {
         var currentComp = _getCompositionOp();
         SnapResult? bestSnapResult = null;

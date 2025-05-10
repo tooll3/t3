@@ -1,5 +1,4 @@
 using ImGuiNET;
-using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Styling;
 
@@ -19,13 +18,10 @@ internal sealed class CurrentTimeMarker: IValueSnapAttractor
         drawList.AddRectFilled(p, p + new Vector2(1, y+ windowHeight), UiColors.StatusAnimated);
     }
 
-    private static readonly Color _shadowColor = new(0, 0, 0, 0.4f);
-        
-    public SnapResult CheckForSnap(double time, float canvasScale)
+    public SnapResult CheckForSnap(double time, float canvasScale, IValueSnapAttractor.Orientation orientation)
     {
         return ValueSnapHandler.FindSnapResult(time, _currentTimeInBars, canvasScale);
     }
         
     private double _currentTimeInBars;
-    private const double SnapThreshold = 8;
 }

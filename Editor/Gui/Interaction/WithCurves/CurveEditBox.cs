@@ -125,7 +125,7 @@ internal class CurveEditBox : IValueSnapAttractor
     }
         
     #region implement snapping interface -----------------------------------
-    SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
+    SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale, IValueSnapAttractor.Orientation orientation)
     {
         SnapResult bestSnapResult = null;
         return bestSnapResult;
