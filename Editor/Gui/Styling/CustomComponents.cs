@@ -524,7 +524,7 @@ internal static class CustomComponents
 
     public static void TooltipForLastItem(Color color, string message, string additionalNotes = null, bool useHoverDelay = true)
     {
-        if (!ImGui.IsItemHovered())
+        if (!ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
             return;
 
         FrameStats.Current.SomethingWithTooltipHovered = true;
