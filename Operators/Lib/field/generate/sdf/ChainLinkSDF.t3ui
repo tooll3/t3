@@ -1,34 +1,38 @@
 {
   "Id": "27c6aa52-7b3e-4a9a-b6e5-0359f7155cee"/*ChainLinkSDF*/,
-  "Description": "Geneates an SDF for a chain link.",
+  "Description": "Generates a procedural chain link field which can be rendered with [RaymarchField] and visualized with [VisualizeFieldDistance].\nCan be used with [RepeatFieldLimit] to generate a chain.\n\nFor a simple and interactive tutorial on the TiXL rendering pipeline, see [HowToRaymarchField].\n\nIt can be modified with [BendField] , [TransformField] , [PolarRepeat] and more.\n\nSimilar nodes: [BoxSDF], [CapsuleLineSDF], [FractalSDF].",
   "InputUis": [
     {
       "InputId": "02d27492-30c1-46b0-abc6-e0cd5af163d8"/*Center*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Transforms the center of the object"
     },
     {
       "InputId": "4f0942b7-24ac-49e6-a9aa-21f0812c036b"/*Length*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "Description": "Defines the length"
     },
     {
-      "InputId": "6ca362c6-25d6-4bee-8e6b-37c5638414df"/*RadiusB*/,
+      "InputId": "6ca362c6-25d6-4bee-8e6b-37c5638414df"/*Thickness*/,
       "Position": {
         "X": -200.0,
         "Y": 135.0
-      }
+      },
+      "Description": "Defines the thickness"
     },
     {
-      "InputId": "f438eea9-ff20-482b-b5ba-c59fa189837b"/*RadiusA*/,
+      "InputId": "f438eea9-ff20-482b-b5ba-c59fa189837b"/*Size*/,
       "Position": {
         "X": -200.0,
         "Y": 90.0
-      }
+      },
+      "Description": "Defines the radius / size"
     }
   ],
   "SymbolChildUis": [],

@@ -34,7 +34,7 @@ internal sealed class ChainLinkSDF : Instance<ChainLinkSDF>
               """;
 
         var n = ShaderNode;
-        c.AppendCall($"f{c}.w = fChainLink(p{c}.xyz - {n}Center, {n}Length, {n}RadiusA, {n}RadiusB);");
+        c.AppendCall($"f{c}.w = fChainLink(p{c}.xyz - {n}Center, {n}Length, {n}Size, {n}Thickness);");
     }
 
     public void GetPostShaderCode(CodeAssembleContext c, int inputIndex)
@@ -51,9 +51,9 @@ internal sealed class ChainLinkSDF : Instance<ChainLinkSDF>
 
     [GraphParam]
     [Input(Guid = "f438eea9-ff20-482b-b5ba-c59fa189837b")]
-    public readonly InputSlot<float> RadiusA = new();
+    public readonly InputSlot<float> Size = new();
 
     [GraphParam]
     [Input(Guid = "6ca362c6-25d6-4bee-8e6b-37c5638414df")]
-    public readonly InputSlot<float> RadiusB = new();
+    public readonly InputSlot<float> Thickness = new();
 }
