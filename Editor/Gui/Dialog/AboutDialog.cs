@@ -14,6 +14,7 @@ using SharpDX.Direct3D11;
 using T3.Core.Resource;
 using T3.Core.Animation;
 using System.Media;
+using System.Reflection;
 
 
 namespace T3.Editor.Gui.Dialog;
@@ -126,18 +127,14 @@ internal sealed class AboutDialog : ModalDialog
     {
         try
         {
-            using var process = new Process();
-            process.StartInfo.FileName = "git";
-            process.StartInfo.Arguments = "rev-parse --short HEAD";
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.CreateNoWindow = true;
+            var assemblyLocation = Assembly.GetEntryAssembly()!.Location;
+            var productVersion = FileVersionInfo.GetVersionInfo(assemblyLocation)?.ProductVersion;
 
-            process.Start();
-            var output = process.StandardOutput.ReadToEnd().Trim();
-            process.WaitForExit();
+            if (productVersion is null || !productVersion.Contains("+"))
+                return "Unknown";
 
-            return string.IsNullOrEmpty(output) ? "Unknown" : output;
+            var commitHash = productVersion.Split("+")[1];
+            return commitHash.Substring(0, 8);
         }
         catch (Exception)
         {
