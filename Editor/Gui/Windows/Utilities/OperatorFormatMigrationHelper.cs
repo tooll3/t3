@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Editor.Gui.Styling;
@@ -61,6 +61,7 @@ internal static class OperatorFormatMigrationHelper
                                                         ref _otherOpDirectory,
                                                         "operator folder",
                                                         _warning,
+                                                        null,
                                                         FileOperations.FilePickerTypes.Folder
                                                        );
         if (filepathModified)

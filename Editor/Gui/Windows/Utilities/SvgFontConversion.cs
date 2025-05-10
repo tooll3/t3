@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -19,7 +19,7 @@ public static class SvgFontConversion
         FormInputs.SetIndent(120);
 
         var modified = false;
-        modified |= FormInputs.AddFilePicker("SvgFile", ref _svgFilePath, "not-a-font.svg", null, FileOperations.FilePickerTypes.File);
+        modified |= FormInputs.AddFilePicker("SvgFile", ref _svgFilePath, "not-a-font.svg", null, null, FileOperations.FilePickerTypes.File);
         modified |= FormInputs.AddFloat("UnitsPerEm", ref _unitsPerEm, -1000, 2000, 1);
         modified |= FormInputs.AddFloat("Ascent", ref _svgFontAscent, 0, 2000, 1);
         modified |= FormInputs.AddFloat("Descent", ref _svgFontDescent, 0, 2000, 1);

@@ -309,8 +309,7 @@ internal abstract class BaseRenderWindow : Window
     {
         if (texture == null || texture.IsDisposed)
         {
-            warning = "You have selected an operator that does not render. " +
-                      "Ready to render.";
+            warning = "You have selected an operator that does not render. ";
             return true;
         }
 
