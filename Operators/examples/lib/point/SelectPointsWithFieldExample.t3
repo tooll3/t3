@@ -2272,7 +2272,7 @@
       "SymbolId": "1e1e65cd-3564-45e1-88f8-6cb4b4b18c5a",
       "InputValues": [
         {
-          "Id": "356e85dd-bf81-4a1c-96a4-1d2983916a4b"/*Round*/,
+          "Id": "356e85dd-bf81-4a1c-96a4-1d2983916a4b"/*EdgeRadius*/,
           "Type": "System.Single",
           "Value": 0.1
         }
@@ -2894,7 +2894,7 @@
       "SymbolId": "1e1e65cd-3564-45e1-88f8-6cb4b4b18c5a",
       "InputValues": [
         {
-          "Id": "356e85dd-bf81-4a1c-96a4-1d2983916a4b"/*Round*/,
+          "Id": "356e85dd-bf81-4a1c-96a4-1d2983916a4b"/*EdgeRadius*/,
           "Type": "System.Single",
           "Value": 0.1
         }
