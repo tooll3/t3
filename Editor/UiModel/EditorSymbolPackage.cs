@@ -32,6 +32,7 @@ internal class EditorSymbolPackage : SymbolPackage
     {
         Log.Debug($"Added package {assembly.Name}");
         SymbolAdded += OnSymbolAdded;
+        
     }
 
     protected EditorSymbolPackage(AssemblyInformation assembly, string directory) : base(assembly, directory)
@@ -442,7 +443,7 @@ internal class EditorSymbolPackage : SymbolPackage
 
     public void InitializeCustomUis()
     {
-        AssemblyInformation.Unloaded += UnloadCustomUis;
+        AssemblyInformation.Unloaded +=                   UnloadCustomUis;
         AssemblyInformation.Loaded += LoadCustomUis;
     }
 
@@ -498,6 +499,11 @@ internal class EditorSymbolPackage : SymbolPackage
         }
 
         _extensions.Clear();
+    }
+
+    protected virtual void OnAssemblyUnloaded()
+    {
+        
     }
 
     private readonly List<Type> _descriptiveUiTypes = [];

@@ -143,7 +143,7 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
 
     protected void SetupInputAndOutputsFromType()
     {
-        var symbol = SymbolRegistry.SymbolsByType[Type];
+        var symbol = Symbol;
         var assemblyInfo = symbol.SymbolPackage.AssemblyInformation;
         if (!assemblyInfo.OperatorTypeInfo.TryGetValue(symbol.Id, out var operatorTypeInfo))
         {
@@ -366,13 +366,11 @@ public abstract class Instance :  IGuidPathContainer, IResourceConsumer
 
 public class Instance<T> : Instance where T : Instance
 {
-    private static readonly Type _staticType = typeof(T);
-        
     // this intended to be a different symbol per-type
     // ReSharper disable once StaticMemberInGenericType
-    private static readonly Symbol StaticSymbol = SymbolRegistry.SymbolsByType[_staticType];
+    static Symbol StaticSymbol;
         
-    public sealed override Type Type => _staticType;
+    public sealed override Type Type => typeof(T);
     public sealed override Symbol Symbol => StaticSymbol;
 
     protected Instance()

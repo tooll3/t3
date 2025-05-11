@@ -257,7 +257,8 @@ public sealed partial class Symbol
     {
         if (newSymbol == this)
         {
-            SymbolRegistry.SymbolsByType[InstanceType] = this; // todo: ugly - the other one replaced this value with itself when it was created
+            // todo: ugly - the other one replaced this value with itself when it was created
+            InstanceType = InstanceType;
             return;
         }
 
@@ -275,7 +276,8 @@ public sealed partial class Symbol
         OutputDefinitions.AddRange(newSymbol.OutputDefinitions);
         Animator = newSymbol.Animator;
         PlaybackSettings = newSymbol.PlaybackSettings;
-
-        SymbolRegistry.SymbolsByType[InstanceType] = this; // todo: ugly - the other one replaced this value with itself when it was created
+        
+        // todo: ugly - the other one replaced this value with itself when it was created
+        InstanceType = InstanceType;
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator.Slots;
@@ -47,17 +48,13 @@ public sealed partial class Symbol : IDisposable, IResource
         get => _instanceType;
         private set
         {
-            if (_instanceType != null)
-            {
-                SymbolRegistry.SymbolsByType.Remove(_instanceType, out var symbol);
-                if (symbol != this)
-                {
-                    throw new InvalidOperationException($"Symbol type was not correctly removed from registry. Was this the result of a failed compilation? Symbol found: {symbol}");
-                }
-            }
-                
             _instanceType = value;
-            SymbolRegistry.SymbolsByType[value] = this;
+            if (value == null)
+                return;
+            
+            // set type Symbol static field (TypeClass.StaticSymbol field)
+            var field = _instanceType.GetField("StaticSymbol", BindingFlags.NonPublic | BindingFlags.Static);
+            field!.SetValue(null, this);
         }
     }
 

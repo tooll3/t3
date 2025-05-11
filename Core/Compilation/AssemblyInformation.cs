@@ -19,37 +19,7 @@ namespace T3.Core.Compilation;
 /// </summary>
 public sealed partial class AssemblyInformation
 {
-    public static bool TryCreate(string path, [NotNullWhen(true)] out AssemblyInformation? info)
-    {
-        if(!File.Exists(path))
-        {
-            Log.Error($"Assembly file does not exist at \"{path}\"\n{Environment.StackTrace}");
-            info = null;
-            return false;
-        }
-        
-        AssemblyName assemblyName;
-        try
-        {
-            assemblyName = AssemblyName.GetAssemblyName(path);
-        }
-        catch (Exception e)
-        {
-            Log.Error($"Failed to get assembly name for {path}\n{e.Message}\n{e.StackTrace}");
-            info = null;
-            return false;
-        }
-
-        var assemblyNameAndPath = new AssemblyNameAndPath
-                                      {
-                                          AssemblyName = assemblyName,
-                                          Path = path,
-                                      };
-
-        info = new AssemblyInformation(assemblyNameAndPath);
-        return true;
-    }
-    
+   
     // currently used only for loading built-in packages in the release-mode editor
     public static bool TryCreateFromReleasedPackage(string directory, [NotNullWhen(true)] out AssemblyInformation? assembly, [NotNullWhen(true)] out ReleaseInfo? releaseInfo)
     {
@@ -66,6 +36,37 @@ public sealed partial class AssemblyInformation
         
         Log.Error($"Could not load assembly at \"{filePath}\"");
         return false;
+        
+        static bool TryCreate(string path, [NotNullWhen(true)] out AssemblyInformation? info)
+        {
+            if(!File.Exists(path))
+            {
+                Log.Error($"Assembly file does not exist at \"{path}\"\n{Environment.StackTrace}");
+                info = null;
+                return false;
+            }
+        
+            AssemblyName assemblyName;
+            try
+            {
+                assemblyName = AssemblyName.GetAssemblyName(path);
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to get assembly name for {path}\n{e.Message}\n{e.StackTrace}");
+                info = null;
+                return false;
+            }
+
+            var assemblyNameAndPath = new AssemblyNameAndPath
+                                          {
+                                              AssemblyName = assemblyName,
+                                              Path = path,
+                                          };
+
+            info = new AssemblyInformation(assemblyNameAndPath);
+            return true;
+        }
     }
     
     private AssemblyInformation(AssemblyNameAndPath assemblyInfo)
@@ -162,6 +163,7 @@ public sealed partial class AssemblyInformation
             _types?.Clear(); // explicitly dereference all our types
             _types = null; // set collection to null to indicate that we need to reload the types todo: do better than this null check
             _namespaces.Clear();
+            Log.Debug($"{Name}: Assembly information unloaded");
         }
     }
 
@@ -225,6 +227,7 @@ public sealed partial class AssemblyInformation
     public void Unload()
     {
         _loadContext?.BeginUnload();
+        _loadContext = null;
     }
 
     /// <summary>
