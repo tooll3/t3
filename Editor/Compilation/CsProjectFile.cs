@@ -7,6 +7,7 @@ using Microsoft.Build.Construction;
 using T3.Core.Compilation;
 using T3.Core.Resource;
 using T3.Core.UserData;
+using T3.Serialization;
 using Encoding = System.Text.Encoding;
 
 // ReSharper disable SuggestBaseTypeForParameterInConstructor
@@ -55,13 +56,8 @@ internal sealed class CsProjectFile
     /// <summary>
     /// The assembly information for the project, provided the assembly has been loaded.
     /// </summary>
-    public AssemblyInformation? Assembly { get; private set; }
+    public AssemblyInformation? AssemblyInfo { get; private set; }
     
-    /// <summary>
-    /// An event that is triggered when the assembly for this project is loaded. Currently this is largely unused.
-    /// </summary>
-    public event Action<CsProjectFile>? AssemblyLoaded;
-
     /// <summary>
     /// Returns the target dotnet framework for the project, or adds the default framework if none is found and returns that.
     /// </summary>
@@ -83,9 +79,6 @@ internal sealed class CsProjectFile
         var dir = Directory;
         _releaseRootDirectory = Path.Combine(dir, "bin", "Release");
         _debugRootDirectory = Path.Combine(dir, "bin", "Debug");
-
-        // clear the release info on recompilation
-        AssemblyLoaded += file => _cachedReleaseInfo = null;
     }
 
     /// <summary>
@@ -148,18 +141,6 @@ internal sealed class CsProjectFile
     }
 
     /// <summary>
-    /// Returns the file info for this project's primary dll. This file may or may not exist, as this is simply a "functional" way to generate the file path.
-    /// </summary>
-    private FileInfo GetBuildTargetFileInfo()
-    {
-        var directory = GetBuildTargetDirectory();
-        var defaultAssemblyName = ProjectXml.UnevaluatedVariable(PropertyType.RootNamespace.GetItemName());
-        var property = _projectRootElement.GetOrAddProperty(PropertyType.AssemblyName, defaultAssemblyName);
-        var dllName = property != defaultAssemblyName ? property + ".dll" : RootNamespace + ".dll";
-        return new FileInfo(Path.Combine(directory, dllName));
-    }
-
-    /// <summary>
     /// Returns the directory where the primary dll for this project is built. This directory may or may not exist, as this is simply a "functional"
     /// way to generate the directory path.
     /// </summary>
@@ -190,7 +171,6 @@ internal sealed class CsProjectFile
     /// <returns>True if successful</returns>
     public bool TryRecompile([NotNullWhen(true)] out ReleaseInfo? releaseInfo, bool nugetRestore)
     {
-        var previousAssembly = Assembly;
         if(_needsIncrementBuildVersion)
             ModifyBuildVersion(0, 0, 1);
         var success = Compiler.TryCompile(this, EditorBuildMode, nugetRestore);
@@ -203,27 +183,22 @@ internal sealed class CsProjectFile
             return false;
         }
 
-        previousAssembly?.Unload();
-        Stopwatch stopwatch = new();
-        stopwatch.Start();
-        var loaded = TryLoadAssembly();
-        stopwatch.Stop();
-        Log.Info($"{(loaded ? "Loading" : "Failing to load")} assembly took {stopwatch.ElapsedMilliseconds} ms");
+        AssemblyInfo?.Unload();
+        AssemblyInfo = null;
 
-        if (loaded)
+        if (TryLoadAssemblyInfo())
         {
             if (!TryGetReleaseInfo(out releaseInfo))
             {
-                loaded = false;
                 Log.Error($"{Name} successfully compiled but failed to find release info");
+                return false;
             }
-        }
-        else
-        {
-            releaseInfo = null;
+
+            return true;
         }
 
-        return loaded;
+        releaseInfo = null;
+        return false;
     }
 
     public void UpdateVersionForIOChange(int modifyAmount)
@@ -350,25 +325,66 @@ internal sealed class CsProjectFile
     /// <summary>
     /// Tries to load the assembly file provided - if none are provided, it will attempt to load the assembly from the default build directory.
     /// </summary>
-    public bool TryLoadAssembly(FileInfo? assemblyFile = null)
+    public bool TryLoadAssemblyInfo()
     {
-        assemblyFile ??= GetBuildTargetFileInfo();
+        var assemblyFile = GetBuildTargetFileInfo();
+        
         if (!assemblyFile.Exists)
         {
             Log.Error($"Could not find assembly at \"{assemblyFile.FullName}\"");
             return false;
         }
 
-        if (!RuntimeAssemblies.TryLoadAssemblyFromDirectory(assemblyFile.Directory!.FullName, out var assembly))
+        if (!TryLoadAssemblyFromDirectory(assemblyFile.Directory!.FullName, out var assembly))
         {
             Log.Error($"Could not load assembly at \"{assemblyFile.FullName}\"");
             return false;
         }
 
-        Assembly = assembly;
-
-        AssemblyLoaded?.Invoke(this);
+        AssemblyInfo = assembly;
+        _cachedReleaseInfo = null;
         return true;
+        
+
+        static bool TryLoadAssemblyFromDirectory(string directory, [NotNullWhen(true)] out AssemblyInformation? assembly)
+        {
+            var releaseInfoPath = Path.Combine(directory, RuntimeAssemblies.PackageInfoFileName);
+            if (!File.Exists(releaseInfoPath))
+            {
+                assembly = null;
+                Log.Warning($"Could not find package info at \"{releaseInfoPath}\"");
+                return false;
+            }
+        
+            if (!JsonUtils.TryLoadingJson<ReleaseInfoSerialized>(releaseInfoPath, out var releaseInfoSerialized))
+            {
+                Log.Warning($"Could not load package info from path {releaseInfoPath}");
+                assembly = null;
+                return false;
+            }
+        
+            var releaseInfo = releaseInfoSerialized.ToReleaseInfo();
+            var assemblyFilePath = Path.Combine(directory, releaseInfo.AssemblyFileName + ".dll");
+            if (!AssemblyInformation.TryCreate(assemblyFilePath, out assembly))
+            {
+                Log.Error($"Could not load assembly at \"{directory}\"");
+                return false;
+            }
+        
+            return true;
+        }
+        
+        
+
+        // Returns the file info for this project's primary dll. This file may or may not exist, as this is simply a "functional" way to generate the file path.
+        FileInfo GetBuildTargetFileInfo()
+        {
+            var directory = GetBuildTargetDirectory();
+            var defaultAssemblyName = ProjectXml.UnevaluatedVariable(PropertyType.RootNamespace.GetItemName());
+            var property = _projectRootElement.GetOrAddProperty(PropertyType.AssemblyName, defaultAssemblyName);
+            var dllName = property != defaultAssemblyName ? property + ".dll" : RootNamespace + ".dll";
+            return new FileInfo(Path.Combine(directory, dllName));
+        }
     }
 
     /// <summary>
@@ -393,16 +409,16 @@ internal sealed class CsProjectFile
             return true;
         }
 
-        if (Assembly == null)
+        if (AssemblyInfo == null)
         {
-            if (!TryLoadAssembly())
+            if (!TryLoadAssemblyInfo())
             {
                 releaseInfo = null;
                 return false;
             }
         }
 
-        var success = Assembly!.TryGetReleaseInfo(out _cachedReleaseInfo);
+        var success = AssemblyInfo!.TryGetReleaseInfo(out _cachedReleaseInfo);
         releaseInfo = _cachedReleaseInfo;
         return success;
     }

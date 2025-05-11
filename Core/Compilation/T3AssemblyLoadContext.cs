@@ -28,6 +28,7 @@ namespace T3.Core.Compilation;
 /// </summary>
 internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
 {
+    public event EventHandler? UnloadTriggered;
     private readonly Lock _dependencyLock = new();
 
     internal AssemblyTreeNode? Root { get; private set; }
@@ -39,36 +40,6 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
     private static readonly Lock _nugetLock = new();
     private static readonly AssemblyLoadContext _nugetContext = new("NuGet", true);
     private static readonly List<AssemblyTreeNode> _loadedNuGetAssemblies = [];
-
-    private sealed class AssemblyNameAndPath(string path, string fileBasedName)
-    {
-        private AssemblyName? _assemblyName;
-        private bool _triedToLoad;
-        public string Path { get; } = path;
-        public string FileBasedName { get; } = fileBasedName;
-        public bool Claimed;
-
-        public AssemblyName? AssemblyName
-        {
-            get
-            {
-                if (_triedToLoad)
-                    return _assemblyName;
-
-                try
-                {
-                    _assemblyName = AssemblyName.GetAssemblyName(Path);
-                }
-                catch
-                {
-                    _assemblyName = null;
-                }
-
-                _triedToLoad = true;
-                return _assemblyName;
-            }
-        }
-    }
 
     static T3AssemblyLoadContext()
     {
@@ -191,6 +162,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
     internal T3AssemblyLoadContext(AssemblyName rootName, string directory) :
         base(rootName.GetNameSafe(), true)
     {
+        Log.Debug($"{Name}: Creating new assembly load context for {rootName.Name}");
         Resolving += (_, name) =>
                      {
                          var result = OnResolving(name);
@@ -220,7 +192,6 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
                      };
         Unloading += (_) => { Log.Debug($"{Name!}: Unloading assembly context"); };
 
-        Log.Debug($"{Name}: Creating new assembly load context for {rootName.Name}");
         lock (_loadContextLock)
         {
             _loadContexts.Add(this);
@@ -261,7 +232,6 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
                 if (root.TryFindExisting(name, out var asmNode))
                 {
                     // add the dependency to our context
-                    ctx.AddDependency(asmNode);
                     AddDependency(asmNode);
                     return asmNode.Assembly;
                 }
@@ -281,13 +251,12 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
                 if (root.TryFindUnreferenced(name, out var asmNode))
                 {
                     // add the dependency to our context
-                    ctx.AddDependency(asmNode);
                     AddDependency(asmNode);
                     return asmNode.Assembly;
                 }
             }
         }
-        
+
         // check nuget packages
         lock (_nugetLock)
         {
@@ -310,7 +279,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
 
             foreach (var package in _availableNugetAssemblies)
             {
-                if (package.Claimed || package.FileBasedName != name) 
+                if (package.Claimed || package.FileBasedName != name)
                     continue;
 
                 var potentialAssemblyName = package.AssemblyName;
@@ -378,7 +347,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
             return node.Assembly;
         }
 
-        return null;
+        return OnResolving(assemblyName);
     }
 
     protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
@@ -393,6 +362,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
 
         if (node.LoadContext == this || node.LoadContext is not T3AssemblyLoadContext tixlCtx)
             return;
+
         lock (_dependencyLock)
         {
             if (!_dependencyContexts.Contains(node.LoadContext))
@@ -400,6 +370,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
                 // subscribe to the unload event of the dependency context
                 tixlCtx.UnloadTriggered += OnDependencyUnloaded;
                 _dependencyContexts.Add(tixlCtx);
+                Log.Debug($"{Name!}: Added dependency {node.Name} to {tixlCtx.Name}");
             }
         }
     }
@@ -450,7 +421,36 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
         Unload();
     }
 
-    public event EventHandler? UnloadTriggered;
+
+    private sealed class AssemblyNameAndPath(string path, string fileBasedName)
+    {
+        private AssemblyName? _assemblyName;
+        private bool _triedToLoad;
+        public string Path { get; } = path;
+        public string FileBasedName { get; } = fileBasedName;
+        public bool Claimed;
+
+        public AssemblyName? AssemblyName
+        {
+            get
+            {
+                if (_triedToLoad)
+                    return _assemblyName;
+
+                try
+                {
+                    _assemblyName = AssemblyName.GetAssemblyName(Path);
+                }
+                catch
+                {
+                    _assemblyName = null;
+                }
+
+                _triedToLoad = true;
+                return _assemblyName;
+            }
+        }
+    }
 }
 
 internal static class AssemblyNameExtensions

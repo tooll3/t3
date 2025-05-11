@@ -69,32 +69,6 @@ internal static partial class ProjectSetup
         symbolPackage.InitializeShaderLinting(ResourceManager.SharedShaderPackages);
     }
 
-    private static bool TryLoadProject(ProjectWithReleaseInfo release, bool forceRecompile, [NotNullWhen(true)] out PackageWithReleaseInfo? operatorPackage)
-    {
-        var csProj = release.CsProject!;
-        csProj.RemoveOldBuilds(Compiler.BuildMode.Debug);
-
-        var releaseInfo = release.ReleaseInfo;
-        forceRecompile = forceRecompile 
-                         || releaseInfo == null 
-                         || !releaseInfo.EditorVersion.Matches(Program.Version) && (!releaseInfo.RootNamespace.StartsWith("Lib") && !releaseInfo.RootNamespace.StartsWith("Types") && !releaseInfo.RootNamespace.StartsWith("Examples")); // force recompile if the project was authored with a different version of the editor
-        
-        var success = forceRecompile
-                          ? csProj.TryRecompile(out _, true) || csProj.TryLoadAssembly() // recompile - if failed, load latest
-                          : csProj.TryLoadAssembly() || csProj.TryRecompile(out _, true); // load latest - if failed, recompile
-        if (!success)
-        {
-            Log.Error($"Failed to load {csProj.Name}");
-            operatorPackage = null;
-            return false;
-        }
-
-        var project = new EditableSymbolProject(csProj);
-        operatorPackage = new PackageWithReleaseInfo(project, release.ReleaseInfo!);
-        Log.Debug($"Loaded CSProj file {csProj.Name}");
-        return true;
-    }
-
     private static bool AllDependenciesAreSatisfied(ProjectWithReleaseInfo projectWithReleaseInfo)
     {
         var releaseInfo = projectWithReleaseInfo.ReleaseInfo!;

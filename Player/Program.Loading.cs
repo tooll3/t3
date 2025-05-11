@@ -23,19 +23,14 @@ internal static partial class Program
         Log.Info($"Loading operators from \"{searchDirectory}\"...");
 
         var assemblies = Directory.GetDirectories(searchDirectory, "*", SearchOption.TopDirectoryOnly)
-                                  .SelectMany(packageDir =>
+                                  .Select(packageDir =>
                                               {
                                                   Log.Debug($"Searching for dlls in {packageDir}...");
-                                                  return Directory.GetFiles(packageDir, "*.dll", SearchOption.TopDirectoryOnly)
-                                                                  .Select(file =>
-                                                                          {
-                                                                              var relativePath = Path.GetRelativePath(searchDirectory, file);
-                                                                              Log.Debug($"Found dll: {relativePath}");
-                                                                              
-                                                                              RuntimeAssemblies.TryLoadAssemblyInformation(file, false, out var info);
-                                                                              return info;
-                                                                          });
-                                              }).ToArray();
+                                                  _ = AssemblyInformation.TryCreateFromReleasedPackage(packageDir, out var assemblyInformation, out _);
+                                                  return assemblyInformation;
+                                              })
+                                  .Where(x => x != null)
+                                  .ToArray();
         
         Log.Debug($"Finished loading {assemblies.Length} operator assemblies. Loading symbols...");
         var packageLoadInfo = assemblies

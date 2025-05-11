@@ -3,10 +3,12 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using T3.Core.Logging;
+using T3.Serialization;
 
 namespace T3.Core.Compilation;
 
@@ -17,7 +19,56 @@ namespace T3.Core.Compilation;
 /// </summary>
 public sealed partial class AssemblyInformation
 {
-    internal AssemblyInformation(AssemblyNameAndPath assemblyInfo)
+    public static bool TryCreate(string path, [NotNullWhen(true)] out AssemblyInformation? info)
+    {
+        if(!File.Exists(path))
+        {
+            Log.Error($"Assembly file does not exist at \"{path}\"\n{Environment.StackTrace}");
+            info = null;
+            return false;
+        }
+        
+        AssemblyName assemblyName;
+        try
+        {
+            assemblyName = AssemblyName.GetAssemblyName(path);
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to get assembly name for {path}\n{e.Message}\n{e.StackTrace}");
+            info = null;
+            return false;
+        }
+
+        var assemblyNameAndPath = new AssemblyNameAndPath
+                                      {
+                                          AssemblyName = assemblyName,
+                                          Path = path,
+                                      };
+
+        info = new AssemblyInformation(assemblyNameAndPath);
+        return true;
+    }
+    
+    // currently used only for loading built-in packages in the release-mode editor
+    public static bool TryCreateFromReleasedPackage(string directory, [NotNullWhen(true)] out AssemblyInformation? assembly, [NotNullWhen(true)] out ReleaseInfo? releaseInfo)
+    {
+        var filePath = Path.Combine(directory, RuntimeAssemblies.PackageInfoFileName);
+        if (!TryLoadReleaseInfo(filePath, out releaseInfo))
+        {
+            assembly = null;
+            return false;
+        }
+        
+        var assemblyFilePath = Path.Combine(directory, releaseInfo.AssemblyFileName + ".dll");
+        if (TryCreate(assemblyFilePath, out assembly)) 
+            return true;
+        
+        Log.Error($"Could not load assembly at \"{filePath}\"");
+        return false;
+    }
+    
+    private AssemblyInformation(AssemblyNameAndPath assemblyInfo)
     {
         Name = assemblyInfo.AssemblyName.Name ?? "Unknown Assembly Name";
         _assemblyName = assemblyInfo.AssemblyName;
@@ -27,6 +78,8 @@ public sealed partial class AssemblyInformation
         {
             Log.Error($"{Name} Failed to get assembly load context in constructor");
         }
+        
+        Log.Debug($"{Name}: Assembly information created");
     }
 
     public readonly string Name;
@@ -182,7 +235,7 @@ public sealed partial class AssemblyInformation
     public bool TryGetReleaseInfo([NotNullWhen(true)] out ReleaseInfo? releaseInfo)
     {
         var releaseInfoPath = System.IO.Path.Combine(Directory, RuntimeAssemblies.PackageInfoFileName);
-        if (RuntimeAssemblies.TryLoadReleaseInfo(releaseInfoPath, out releaseInfo))
+        if (TryLoadReleaseInfo(releaseInfoPath, out releaseInfo))
         {
             if (!releaseInfo.Version.Matches(_assemblyName.Version))
             {
@@ -196,6 +249,19 @@ public sealed partial class AssemblyInformation
 
         releaseInfo = null;
         return false;
+    }
+
+    private static bool TryLoadReleaseInfo(string filePath, [NotNullWhen(true)] out ReleaseInfo? releaseInfo)
+    {
+        if (!JsonUtils.TryLoadingJson<ReleaseInfoSerialized>(filePath, out var releaseInfoSerialized))
+        {
+            Log.Warning($"Could not load package info from path {filePath}");
+            releaseInfo = null;
+            return false;
+        }
+
+        releaseInfo = releaseInfoSerialized.ToReleaseInfo();
+        return true;
     }
 
     /// <summary>

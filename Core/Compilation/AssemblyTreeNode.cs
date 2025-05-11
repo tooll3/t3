@@ -122,10 +122,7 @@ internal sealed class AssemblyTreeNode
 
             lock (_unreferencedLock)
             {
-                if (UnreferencedDlls.Contains(child.Reference))
-                {
-                    UnreferencedDlls.Remove(child.Reference);
-                }
+                _ = UnreferencedDlls.Remove(child.Reference);
             }
 
             _references.Add(child);

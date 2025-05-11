@@ -15,13 +15,13 @@ namespace T3.Editor.UiModel;
 [DebuggerDisplay("{DisplayName}")]
 internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 {
-    public override AssemblyInformation AssemblyInformation => CsProjectFile.Assembly!;
+    public override AssemblyInformation AssemblyInformation => CsProjectFile.AssemblyInfo!;
     public override string DisplayName { get; }
 
     /// <summary>
     /// Create a new <see cref="EditableSymbolProject"/> using the given <see cref="CsProjectFile"/>.
     /// </summary>
-    public EditableSymbolProject(CsProjectFile csProjectFile) : base(assembly: csProjectFile.Assembly!, directory: csProjectFile.Directory)
+    public EditableSymbolProject(CsProjectFile csProjectFile) : base(assembly: csProjectFile.AssemblyInfo!, directory: csProjectFile.Directory)
     {
         CsProjectFile = csProjectFile;
         Log.Info($"Adding project {csProjectFile.Name}...");

@@ -451,8 +451,6 @@ internal class EditorSymbolPackage : SymbolPackage
         _hasLoadedCustomUis = true;
         var types = assemblyInformation.TypesInheritingFrom(typeof(IEditorUiExtension)).ToArray();
         
-        Log.Info($"Attempting to load {types.Length} UI extensions from {assemblyInformation.Name}");
-
         foreach (var type in types)
         {
             var activated = assemblyInformation.CreateInstance(type);
