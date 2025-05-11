@@ -1,13 +1,14 @@
 {
   "Id": "c7ef5f64-2654-47a8-a2ab-30b28446b934"/*BendField*/,
-  "Description": "Blends the input field along the given axis.\nThis works best for small source volumes within unit range.",
+  "Description": "Bends / curves the incoming field along the given axis.\nThis works best for small source volumes within a limited unit range.\nIt can be rendered with [RaymarchField] and visualized with [VisualizeFieldDistance].\n\nSimilar nodes: [ReflectField], [RepeatWithMirror], [TwistField].\n\nIt needs an incoming field like [BoxSDF], [ChainLinkSDF], [FractalSDF] as an input.\n\nFor a simple and interactive tutorial on the TiXL rendering pipeline, see [HowToRaymarchField].\n",
   "InputUis": [
     {
       "InputId": "4930de03-6a81-4403-bb79-5b0a14591f05"/*Axis*/,
       "Position": {
         "X": -200.0,
         "Y": 75.0
-      }
+      },
+      "Description": "Defines the axis along which the field is bent\n(If changing this value has no effect, any other value must be changed to bring the change into effect)"
     },
     {
       "InputId": "adaf8efd-47b3-4d4b-9102-d8a3c6a7e34a"/*InputField*/,
