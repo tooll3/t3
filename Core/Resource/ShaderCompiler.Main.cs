@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -46,19 +47,27 @@ public abstract partial class ShaderCompiler
                     success = true;
                     reason = "loaded from cache";
                 }
-                else if (Instance.CompileShaderFromSource<TShader>(args, out compiledBlob, out reason))
+                else
                 {
-                    success = true;
-                    CacheSuccessfulCompilation(args.OldBytecode, hash, compiledBlob);
-                    reason = "compiled successfully";
+                    Stopwatch timer = Stopwatch.StartNew();
+                    if (Instance.CompileShaderFromSource<TShader>(args, out compiledBlob, out reason))
+                    {
+                        timer.Stop();
+                        success = true;
+                        CacheSuccessfulCompilation(args.OldBytecode, hash, compiledBlob);
+                        reason = "compiled in: " + timer.Elapsed.TotalMilliseconds.ToString() + " ms";
+                    }
+                        
                 }
             }
         }
         else
-        {
+        {   
+            Stopwatch timer = Stopwatch.StartNew();
             if (Instance.CompileShaderFromSource<TShader>(args, out compiledBlob, out reason))
-            {
-                reason = "compiled successfully";
+            {   
+                timer.Stop();
+                reason = "compiled in: " +timer.Elapsed.TotalMilliseconds.ToString()+" ms";
                 success = true;
             }
         }
