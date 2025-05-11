@@ -34,33 +34,19 @@ public sealed partial class Symbol : IDisposable, IResource
         
     #endregion Saved Properties
 
-    public string Name => _instanceType.Name;
-    public string Namespace => _instanceType.Namespace ?? SymbolPackage.AssemblyInformation.Name;
+    public string Name => InstanceType.Name;
+    public string Namespace => InstanceType.Namespace ?? SymbolPackage.AssemblyInformation.Name;
     public Animator Animator { get; private set; } = new();
     public PlaybackSettings PlaybackSettings { get; set; } = new();
         
     public SymbolPackage SymbolPackage { get; set; }
     IResourcePackage IResource.OwningPackage => SymbolPackage;
-        
-    private Type _instanceType;
-    public Type InstanceType
-    {
-        get => _instanceType;
-        private set
-        {
-            _instanceType = value;
-            if (value == null)
-                return;
-            
-            // set type Symbol static field (TypeClass.StaticSymbol field)
-            var field = _instanceType.GetField("StaticSymbol", BindingFlags.NonPublic | BindingFlags.Static);
-            field!.SetValue(null, this);
-        }
-    }
 
-    public bool IsGeneric => _instanceType.IsGenericTypeDefinition;
+    public Type InstanceType { get; private set; }
 
-    public Symbol(Type instanceType, Guid symbolId, SymbolPackage symbolPackage)
+    private bool IsGeneric => InstanceType.IsGenericTypeDefinition;
+
+    internal Symbol(Type instanceType, Guid symbolId, SymbolPackage symbolPackage)
     {
         Id = symbolId;
 
@@ -78,8 +64,19 @@ public sealed partial class Symbol : IDisposable, IResource
     internal void UpdateTypeWithoutUpdatingDefinitionsOrInstances(Type instanceType, SymbolPackage symbolPackage)
     {
         SymbolPackage = symbolPackage; // we re-assign this here because symbols can be moved from one package to another
-        InstanceType = instanceType;
+        ApplyInstanceType(instanceType);
         NeedsTypeUpdate = true;
+    }
+
+    private void ApplyInstanceType(Type value)
+    {
+        InstanceType = value;
+        if (value == null)
+            return;
+            
+        // set type Symbol static field (TypeClass.StaticSymbol field)
+        var field = InstanceType.GetField("StaticSymbol", BindingFlags.NonPublic | BindingFlags.Static);
+        field!.SetValue(null, this);
     }
 
     public void Dispose()
@@ -334,7 +331,7 @@ public sealed partial class Symbol : IDisposable, IResource
         }
     }
 
-    internal bool NeedsTypeUpdate { get; set; } = true;
+    private bool NeedsTypeUpdate { get; set; } = true;
     //private IEnumerable<Instance> _instancesOfSelf => _childrenCreatedFromMe.SelectMany(x => x.Instances);
     private readonly ConcurrentDictionary<Guid, Child> _children = new();
     private readonly SynchronizedCollection<Child> _childrenCreatedFromMe = new();

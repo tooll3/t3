@@ -57,7 +57,7 @@ public sealed partial class Symbol
                     var isMultiInput = info.IsMultiInput;
                     var valueType = info.GenericArguments[0];
                     
-                    if(TryCreateInputDefinition(id, info.Name, isMultiInput, valueType, _instanceType, out var inputDef))
+                    if(TryCreateInputDefinition(id, info.Name, isMultiInput, valueType, InstanceType, out var inputDef))
                         InputDefinitions.Add(inputDef);
                 }
             }
@@ -258,7 +258,7 @@ public sealed partial class Symbol
         if (newSymbol == this)
         {
             // todo: ugly - the other one replaced this value with itself when it was created
-            InstanceType = InstanceType;
+            ApplyInstanceType(InstanceType);
             return;
         }
 
@@ -278,6 +278,6 @@ public sealed partial class Symbol
         PlaybackSettings = newSymbol.PlaybackSettings;
         
         // todo: ugly - the other one replaced this value with itself when it was created
-        InstanceType = InstanceType;
+        ApplyInstanceType(InstanceType);
     }
 }
