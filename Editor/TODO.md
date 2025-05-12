@@ -14,6 +14,7 @@
 - [ ] Publish as input does not create connection
 - [ ] In Parameter window bypassable button should be disabled if not available
 - [x] Prevent Keyboard Camera interaction while input field is active 
+- [ ] Exit should ask before quit
 
 ## Project handling
 
@@ -73,6 +74,8 @@
 - [ ] Remove Symbol from Editor
 - [ ] Fix SnapToPoints
 - [ ] Sort out obsolete pixtur examples
+- [ ] Rename PlayVideo to LoadVideo
+- [ ] Add RotateImage or add option to [TransformImage]
 
 ## SDF-Stuff
 

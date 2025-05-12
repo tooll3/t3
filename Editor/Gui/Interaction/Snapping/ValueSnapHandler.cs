@@ -86,7 +86,7 @@ internal sealed class ValueSnapHandler
             {
                 var p = new Vector2(0, canvas.TransformY((float)_lastSnapValue));
                 p.Y = (int)p.Y - 1;
-                Log.Debug("Drawing " + p);
+                //Log.Debug("Drawing " + p);
                 ImGui.GetWindowDrawList().AddRectFilled(p, p + new Vector2(4000, 1), color);
                 break;
             }
