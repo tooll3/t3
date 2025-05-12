@@ -1,20 +1,22 @@
 {
   "Id": "e77ac861-5003-4899-a5e0-83059cdde88d"/*RepeatFieldAtPoints*/,
-  "Description": "This operator is extreme slow especially when used with [RayMarching].\nMax point count is interally clamped to 50 avoid GPU stalls. ",
+  "Description": "Repeats the incoming field at the connected points.\nIt can be rendered with [RaymarchField] and visualized with [VisualizeFieldDistance].\nWarning: This operator is extreme slow especially when used with [RayMarching].\nThereforce the maximum point count is currently interally clamped to 50 avoid GPU stalls.\n\nSimilar nodes: [RepeatWithMirror], [PolarRepeat].\n\nIt needs an incoming field like [BoxSDF], [ChainLinkSDF], [FractalSDF] as an input for the field and [Point], [Radialpoints], [SpherePoints] or simlar to define where the field is repeated.\n\nFor a simple and interactive tutorial on the TiXL rendering pipeline, see [HowToRaymarchField].",
   "InputUis": [
     {
       "InputId": "08ad7bce-1161-4a43-997e-fea2e792ae36"/*K*/,
       "Position": {
         "X": 178.47665,
         "Y": 322.8042
-      }
+      },
+      "Description": "Value that changes the transitions between the field objects depending on the Combine Method"
     },
     {
       "InputId": "26190514-6762-4322-87e2-393670a476a6"/*CombineMethod*/,
       "Position": {
         "X": 178.47665,
         "Y": 397.8042
-      }
+      },
+      "Description": "Defines if and how the repeated field objects behave when they intersect"
     },
     {
       "InputId": "9a7f3066-de71-4729-bc9e-5db0d8fd9eaa"/*Points*/,
@@ -22,7 +24,8 @@
       "Position": {
         "X": 180.42355,
         "Y": 178.6905
-      }
+      },
+      "Description": "Points input"
     },
     {
       "InputId": "df588d92-76bb-407f-9042-93ddf12e8394"/*InputField*/,
@@ -30,7 +33,8 @@
       "Position": {
         "X": 1047.4774,
         "Y": 142.202
-      }
+      },
+      "Description": "SDF input"
     }
   ],
   "SymbolChildUis": [
