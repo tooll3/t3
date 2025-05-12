@@ -5,7 +5,7 @@ using T3.Editor.UiModel.InputsAndTypes;
 
 namespace T3.Editor.Gui.InputUi.SimpleInputUis;
 
-public class EnumInputUi<T> : InputValueUi<T> where T : Enum
+public sealed class EnumInputUi<T> : InputValueUi<T> where T : Enum
 {
     public override IInputUi Clone()
     {

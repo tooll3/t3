@@ -3,7 +3,7 @@ using T3.Core.DataTypes;
 
 namespace T3.Editor.UiModel.Commands.Animation;
 
-public class AddKeyframesCommand : ICommand
+public sealed class AddKeyframesCommand : ICommand
 {
     public string Name => "Add keyframe";
     public bool IsUndoable => true;

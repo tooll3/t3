@@ -25,7 +25,7 @@
       "SymbolId": "752e4358-05e0-4651-a147-f141138f5244",
       "InputValues": [
         {
-          "Id": "0b4fde07-5439-4dbd-af37-32e5c6dc9315"/*B*/,
+          "Id": "0b4fde07-5439-4dbd-af37-32e5c6dc9315"/*EndPoint*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": -1.9,
@@ -34,12 +34,12 @@
           }
         },
         {
-          "Id": "808c44ff-44e2-4a22-91f1-f459f298e6eb"/*Radius*/,
+          "Id": "808c44ff-44e2-4a22-91f1-f459f298e6eb"/*Thickness*/,
           "Type": "System.Single",
           "Value": 0.05
         },
         {
-          "Id": "ace2fa64-382c-4386-b623-5b1051f4bcf4"/*A*/,
+          "Id": "ace2fa64-382c-4386-b623-5b1051f4bcf4"/*StartingPoint*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": -0.53,
@@ -55,7 +55,7 @@
       "SymbolId": "752e4358-05e0-4651-a147-f141138f5244",
       "InputValues": [
         {
-          "Id": "0b4fde07-5439-4dbd-af37-32e5c6dc9315"/*B*/,
+          "Id": "0b4fde07-5439-4dbd-af37-32e5c6dc9315"/*EndPoint*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": -1.9,
@@ -64,12 +64,12 @@
           }
         },
         {
-          "Id": "808c44ff-44e2-4a22-91f1-f459f298e6eb"/*Radius*/,
+          "Id": "808c44ff-44e2-4a22-91f1-f459f298e6eb"/*Thickness*/,
           "Type": "System.Single",
           "Value": 0.05
         },
         {
-          "Id": "ace2fa64-382c-4386-b623-5b1051f4bcf4"/*A*/,
+          "Id": "ace2fa64-382c-4386-b623-5b1051f4bcf4"/*StartingPoint*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": -1.1,
@@ -106,7 +106,7 @@
       "SymbolId": "860da1cd-b341-4bc5-965a-4a9c295831f4",
       "InputValues": [
         {
-          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*Radius*/,
+          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*EdgeRadius*/,
           "Type": "System.Single",
           "Value": 0.04
         },
@@ -360,7 +360,7 @@
       "SymbolId": "752e4358-05e0-4651-a147-f141138f5244",
       "InputValues": [
         {
-          "Id": "0b4fde07-5439-4dbd-af37-32e5c6dc9315"/*B*/,
+          "Id": "0b4fde07-5439-4dbd-af37-32e5c6dc9315"/*EndPoint*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.07,
@@ -369,12 +369,12 @@
           }
         },
         {
-          "Id": "808c44ff-44e2-4a22-91f1-f459f298e6eb"/*Radius*/,
+          "Id": "808c44ff-44e2-4a22-91f1-f459f298e6eb"/*Thickness*/,
           "Type": "System.Single",
           "Value": 0.08
         },
         {
-          "Id": "ace2fa64-382c-4386-b623-5b1051f4bcf4"/*A*/,
+          "Id": "ace2fa64-382c-4386-b623-5b1051f4bcf4"/*StartingPoint*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": -0.98,
@@ -657,7 +657,7 @@
       "Name": "Front",
       "InputValues": [
         {
-          "Id": "0b4fde07-5439-4dbd-af37-32e5c6dc9315"/*B*/,
+          "Id": "0b4fde07-5439-4dbd-af37-32e5c6dc9315"/*EndPoint*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.16,
@@ -675,12 +675,12 @@
           }
         },
         {
-          "Id": "808c44ff-44e2-4a22-91f1-f459f298e6eb"/*Radius*/,
+          "Id": "808c44ff-44e2-4a22-91f1-f459f298e6eb"/*Thickness*/,
           "Type": "System.Single",
           "Value": 0.09
         },
         {
-          "Id": "ace2fa64-382c-4386-b623-5b1051f4bcf4"/*A*/,
+          "Id": "ace2fa64-382c-4386-b623-5b1051f4bcf4"/*StartingPoint*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.45,
@@ -702,7 +702,7 @@
       "SymbolId": "752e4358-05e0-4651-a147-f141138f5244",
       "InputValues": [
         {
-          "Id": "0b4fde07-5439-4dbd-af37-32e5c6dc9315"/*B*/,
+          "Id": "0b4fde07-5439-4dbd-af37-32e5c6dc9315"/*EndPoint*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": -0.54,
@@ -711,12 +711,12 @@
           }
         },
         {
-          "Id": "808c44ff-44e2-4a22-91f1-f459f298e6eb"/*Radius*/,
+          "Id": "808c44ff-44e2-4a22-91f1-f459f298e6eb"/*Thickness*/,
           "Type": "System.Single",
           "Value": 0.07
         },
         {
-          "Id": "ace2fa64-382c-4386-b623-5b1051f4bcf4"/*A*/,
+          "Id": "ace2fa64-382c-4386-b623-5b1051f4bcf4"/*StartingPoint*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": -1.26,
@@ -858,7 +858,7 @@
       "SymbolId": "752e4358-05e0-4651-a147-f141138f5244",
       "InputValues": [
         {
-          "Id": "0b4fde07-5439-4dbd-af37-32e5c6dc9315"/*B*/,
+          "Id": "0b4fde07-5439-4dbd-af37-32e5c6dc9315"/*EndPoint*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.98,
@@ -867,12 +867,12 @@
           }
         },
         {
-          "Id": "808c44ff-44e2-4a22-91f1-f459f298e6eb"/*Radius*/,
+          "Id": "808c44ff-44e2-4a22-91f1-f459f298e6eb"/*Thickness*/,
           "Type": "System.Single",
           "Value": 0.05
         },
         {
-          "Id": "ace2fa64-382c-4386-b623-5b1051f4bcf4"/*A*/,
+          "Id": "ace2fa64-382c-4386-b623-5b1051f4bcf4"/*StartingPoint*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.448,
@@ -993,7 +993,7 @@
       "SymbolId": "752e4358-05e0-4651-a147-f141138f5244",
       "InputValues": [
         {
-          "Id": "0b4fde07-5439-4dbd-af37-32e5c6dc9315"/*B*/,
+          "Id": "0b4fde07-5439-4dbd-af37-32e5c6dc9315"/*EndPoint*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": -0.54,
@@ -1002,12 +1002,12 @@
           }
         },
         {
-          "Id": "808c44ff-44e2-4a22-91f1-f459f298e6eb"/*Radius*/,
+          "Id": "808c44ff-44e2-4a22-91f1-f459f298e6eb"/*Thickness*/,
           "Type": "System.Single",
           "Value": 0.08
         },
         {
-          "Id": "ace2fa64-382c-4386-b623-5b1051f4bcf4"/*A*/,
+          "Id": "ace2fa64-382c-4386-b623-5b1051f4bcf4"/*StartingPoint*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.2,

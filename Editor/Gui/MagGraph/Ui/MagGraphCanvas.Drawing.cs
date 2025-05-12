@@ -126,14 +126,25 @@ internal sealed partial class MagGraphCanvas
             DrawConnection(connection, drawList, _context);
         }
 
+        // Draw special overlays
         if (_context.StateMachine.CurrentState == GraphStates.RenameChild)
         {
-            RenameInstanceOverlay.Draw(_projectView);
-            if (!RenameInstanceOverlay.IsOpen)
+            RenamingOperator.Draw(_projectView);
+            if (!RenamingOperator.IsOpen)
             {
                 _context.StateMachine.SetState(GraphStates.Default, _context);
             }
         }
+        else if (_context.StateMachine.CurrentState == GraphStates.RenameAnnotation)
+        {
+            AnnotationRenaming.Draw(_context);
+        }
+        else if (_context.StateMachine.CurrentState == GraphStates.DragAnnotation)
+        {
+            AnnotationDragging.Draw(_context);
+        }
+        
+        
         
         // Draw temp connections
         foreach (var tc in _context.TempConnections)

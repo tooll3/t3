@@ -146,7 +146,7 @@ public class DeleteSymbolChildrenCommand : ICommand
         compositionSymbolUi.FlagAsModified();
     }
         
-    private class ChildEntry
+    private sealed class ChildEntry
     {
         public Guid SymbolId { get; set; }
         public Guid ChildId { get; set; }
@@ -158,7 +158,7 @@ public class DeleteSymbolChildrenCommand : ICommand
         public Dictionary<Guid, TimeClip> TimeClipSettingsForOutputs { get; set; }
     }
 
-    private class ConnectionEntry
+    private sealed class ConnectionEntry
     {
         public Symbol.Connection Connection { get; set; }
         public int MultiInputIndex { get; set; }

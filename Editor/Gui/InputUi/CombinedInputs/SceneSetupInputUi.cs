@@ -8,7 +8,7 @@ using T3.Editor.UiModel.InputsAndTypes;
 
 namespace T3.Editor.Gui.InputUi.CombinedInputs;
 
-public class SceneSetupInputUi : InputValueUi<SceneSetup>
+public sealed class SceneSetupInputUi : InputValueUi<SceneSetup>
 {
     // public override IInputUi Clone()
     // {
@@ -227,8 +227,8 @@ public static class SceneSetupPopup
                    ? value.Substring(0, maxLength) + truncationSuffix
                    : value;
     }
-    
-    static string FormatCount(this int num)
+
+    private static string FormatCount(this int num)
     {
         return num switch
                    {

@@ -38,7 +38,7 @@ internal sealed class CappedTorusSDF : Instance<CappedTorusSDF>
                                     """;
 
         var n = ShaderNode;
-        c.AppendCall($"f{c}.w = fCappedTorus(p{c}.xyz - {n}Center, {n}Size, {n}RadiusA, {n}RadiusB);");
+        c.AppendCall($"f{c}.w = fCappedTorus(p{c}.xyz - {n}Center, {n}Fill, {n}Radius, {n}Thickness);");
     }
 
     public void GetPostShaderCode(CodeAssembleContext c, int inputIndex)
@@ -52,13 +52,13 @@ internal sealed class CappedTorusSDF : Instance<CappedTorusSDF>
 
     [GraphParam]
     [Input(Guid = "d37914dd-7bbd-47fa-ad90-9921621afb9e")]
-    public readonly InputSlot<float> Size = new();
+    public readonly InputSlot<float> Fill = new();
 
     [GraphParam]
     [Input(Guid = "00cec9de-3be4-403f-8677-dcc2ef473708")]
-    public readonly InputSlot<float> RadiusA = new();
+    public readonly InputSlot<float> Radius = new();
 
     [GraphParam]
     [Input(Guid = "e1dc5cdc-24d2-409f-9ea6-6dd14fdb70d3")]
-    public readonly InputSlot<float> RadiusB = new();
+    public readonly InputSlot<float> Thickness = new();
 }

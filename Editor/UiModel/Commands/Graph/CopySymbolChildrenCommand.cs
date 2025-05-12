@@ -5,7 +5,7 @@ using T3.Core.Operator;
 
 namespace T3.Editor.UiModel.Commands.Graph;
 
-public class CopySymbolChildrenCommand : ICommand
+public sealed class CopySymbolChildrenCommand : ICommand
 {
     public string Name => "Copy Symbol Children";
 
@@ -226,7 +226,7 @@ public class CopySymbolChildrenCommand : ICommand
     public readonly List<Guid> NewSymbolChildIds = []; //This primarily used for selecting the new children
     public List<Guid> NewSymbolAnnotationIds = []; //This primarily used for selecting the new children
 
-    struct Entry
+    private struct Entry
     {
         public Entry(Guid childId, Guid addedId, Vector2 relativePosition, Vector2 size)
         {

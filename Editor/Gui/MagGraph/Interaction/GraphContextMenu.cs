@@ -76,7 +76,7 @@ internal static class GraphContextMenu
 
         if (ImGui.MenuItem("Rename", oneOpSelected))
         {
-            RenameInstanceOverlay.OpenForChildUi(selectedChildUis[0]);
+            RenamingOperator.OpenForChildUi(selectedChildUis[0]);
             context.StateMachine.SetState(GraphStates.RenameChild, context);
         }
 
@@ -210,13 +210,13 @@ internal static class GraphContextMenu
         if (ImGui.MenuItem("Paste", KeyboardBinding.ListKeyboardShortcuts(UserActions.PasteFromClipboard, false)))
         {
             NodeActions.PasteClipboard(nodeSelection, context.Canvas, context.CompositionInstance);
-            context.Layout.FlagAsChanged();
+            context.Layout.FlagStructureAsChanged();
         }
         
         if (ImGui.MenuItem("Paste Values", KeyboardBinding.ListKeyboardShortcuts(UserActions.PasteValues, false)))
         {
             NodeActions.PasteValues(nodeSelection, context.Canvas, context.CompositionInstance);
-            context.Layout.FlagAsChanged();
+            context.Layout.FlagStructureAsChanged();
         }
 
         var selectedInputUis = nodeSelection.GetSelectedNodes<IInputUi>().ToList();
@@ -230,7 +230,7 @@ internal static class GraphContextMenu
                            enabled: (someOpsSelected || selectedInputUis.Count > 0 || selectedOutputUis.Count > 0) && !isSaving))
         {
             NodeActions.DeleteSelectedElements(nodeSelection, compositionSymbolUi, selectedChildUis, selectedInputUis, selectedOutputUis);
-            context.Layout.FlagAsChanged();
+            context.Layout.FlagStructureAsChanged();
         }
 
         if (ImGui.MenuItem("Duplicate",
@@ -240,7 +240,7 @@ internal static class GraphContextMenu
         {
             NodeActions.CopySelectedNodesToClipboard(nodeSelection, context.CompositionInstance);
             NodeActions.PasteClipboard(nodeSelection, context.Canvas, context.CompositionInstance);
-            context.Layout.FlagAsChanged();
+            context.Layout.FlagStructureAsChanged();
         }
 
         ImGui.Separator();
@@ -324,15 +324,15 @@ internal static class GraphContextMenu
                 }
             }
 
-            // TODO: implement
-            // if (ImGui.MenuItem("Add Annotation",
-            //                    shortcut: KeyboardBinding.ListKeyboardShortcuts(UserActions.AddAnnotation, false),
-            //                    selected: false,
-            //                    enabled: true))
-            // {
-            //     var newAnnotation = NodeActions.AddAnnotation(nodeSelection, this, context.CompositionOp);
-            //     _graph.RenameAnnotation(newAnnotation);
-            // }
+            if (ImGui.MenuItem("Add Annotation",
+                               shortcut: KeyboardBinding.ListKeyboardShortcuts(UserActions.AddAnnotation, false),
+                               selected: false,
+                               enabled: true))
+            {
+                var newAnnotation = NodeActions.AddAnnotation(nodeSelection, context.Canvas, context.CompositionInstance);
+                context.ActiveAnnotationId = newAnnotation.Id;
+                context.StateMachine.SetState(GraphStates.RenameAnnotation, context);
+            }
         
             ImGui.EndMenu();
         }

@@ -3,7 +3,7 @@ using T3.Editor.UiModel.InputsAndTypes;
 
 namespace T3.Editor.Gui.InputUi.SingleControl;
 
-internal class StringListInputUi : SingleControlInputUi<List<string>>
+internal sealed class StringListInputUi : SingleControlInputUi<List<string>>
 {
     public override IInputUi Clone()
     {

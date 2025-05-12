@@ -1,6 +1,6 @@
 ﻿namespace T3.Editor.Gui.UiHelpers.DelaunayVoronoi;
 
-public class Edge
+public sealed class Edge
 {
     public Point Point1 { get; }
     public Point Point2 { get; }

@@ -1,9 +1,8 @@
-﻿using System.IO;
-using T3.Core.Operator;
+﻿using T3.Core.Operator;
 
 namespace T3.Editor.Gui.Templates;
 
-public class TemplateDefinition
+public sealed class TemplateDefinition
 {
     public delegate void SetupAction(Instance newInstance, string symbolName, string nameSpace, string description, string resourceFolder);
 

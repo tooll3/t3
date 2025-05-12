@@ -6,7 +6,7 @@ using T3.Editor.UiModel.InputsAndTypes;
 
 namespace T3.Editor.Gui.InputUi.CombinedInputs;
 
-public class StructuredListInputUi : InputValueUi<StructuredList>
+public sealed class StructuredListInputUi : InputValueUi<StructuredList>
 {
 
 

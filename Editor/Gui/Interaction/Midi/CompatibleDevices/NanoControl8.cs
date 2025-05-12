@@ -5,7 +5,7 @@ namespace T3.Editor.Gui.Interaction.Midi.CompatibleDevices;
 
 //Fixme: this needs the correct product name
 [MidiDeviceProduct("Korg NanoControl")]
-public class NanoControl8 : CompatibleMidiDevice
+public sealed class NanoControl8 : CompatibleMidiDevice
 {
     public NanoControl8()
     {

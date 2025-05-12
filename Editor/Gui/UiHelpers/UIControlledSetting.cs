@@ -22,7 +22,7 @@ public class UIControlledSetting
     // Cheaper than GUIDs
     // In case we want to have the same variable be changeable with different UI controls
     // or if multiple settings have the same label
-    static ushort _countForUniqueID = ushort.MaxValue;
+    private static ushort _countForUniqueID = ushort.MaxValue;
 
     /// <summary>
     /// For the sake of simple use of the optional parameters and populating/maintaining many settings, the recommended way to call this constructor is:
@@ -72,7 +72,7 @@ public class UIControlledSetting
         return changed;
     }
 
-    bool DrawCommand(bool hideLabel)
+    private bool DrawCommand(bool hideLabel)
     {
         return _guiFunc.Invoke(hideLabel ? _hiddenUniqueLabel : _uniqueLabel);
     }

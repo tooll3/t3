@@ -1,6 +1,6 @@
 ﻿namespace T3.Editor.Gui.UiHelpers.DelaunayVoronoi;
 
-public class Triangle
+public sealed class Triangle
 {
     public Point[] Vertices { get; } = new Point[3];
     public Point Circumcenter { get; private set; }

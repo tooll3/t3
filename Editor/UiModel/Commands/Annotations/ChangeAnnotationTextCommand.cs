@@ -1,6 +1,6 @@
 ﻿namespace T3.Editor.UiModel.Commands.Annotations;
 
-public class ChangeAnnotationTextCommand : ICommand
+public sealed class ChangeAnnotationTextCommand : ICommand
 {
     public string Name => "Change Annotation text";
     public bool IsUndoable => true;

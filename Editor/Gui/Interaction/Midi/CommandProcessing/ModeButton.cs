@@ -1,6 +1,6 @@
 ﻿namespace T3.Editor.Gui.Interaction.Midi.CommandProcessing;
 
-public class ModeButton
+public sealed class ModeButton
 {
     /// <summary>
     /// While holding switches the device into an input mode 

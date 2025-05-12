@@ -104,8 +104,10 @@ internal sealed class TimeSelectionRange : IValueSnapAttractor
                 _isDragging = true;
             }
 
-            if(!ImGui.GetIO().KeyShift)
-                _snapHandler.CheckForSnapping(ref u, _timeLineCanvas.Scale.X, [this]);
+            if (!ImGui.GetIO().KeyShift && _snapHandler.TryCheckForSnapping( u, out var snappedValue, _timeLineCanvas.Scale.X, [this]))
+            {
+                u = (float)snappedValue;
+            }
                 
             var dScale = (u - origin) / (_lastDragU - origin);
             _timeLineCanvas.UpdateDragStretchCommand(scaleU: dScale, scaleV: 1, originU: origin, originV: 0);
@@ -126,13 +128,10 @@ internal sealed class TimeSelectionRange : IValueSnapAttractor
     }
 
     #region implement snapping interface -----------------------------------
-    SnapResult? IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
+    void IValueSnapAttractor.CheckForSnap(ref SnapResult snapResult)
     {
-        SnapResult? bestSnapResult = null;
-
-        ValueSnapHandler.CheckForBetterSnapping(targetTime, _selectionTimeRange.Start, canvasScale, ref bestSnapResult);
-        ValueSnapHandler.CheckForBetterSnapping(targetTime, _selectionTimeRange.End, canvasScale, ref bestSnapResult);
-        return bestSnapResult;
+        snapResult.TryToImproveWithAnchorValue( _selectionTimeRange.Start);
+        snapResult.TryToImproveWithAnchorValue( _selectionTimeRange.End);
     }
     #endregion
 

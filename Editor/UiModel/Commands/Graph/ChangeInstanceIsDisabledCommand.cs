@@ -1,6 +1,6 @@
 ﻿namespace T3.Editor.UiModel.Commands.Graph;
 
-public class ChangeInstanceIsDisabledCommand : ICommand
+public sealed class ChangeInstanceIsDisabledCommand : ICommand
 {
     public string Name => "Disable/Enable";
     public bool IsUndoable => true;

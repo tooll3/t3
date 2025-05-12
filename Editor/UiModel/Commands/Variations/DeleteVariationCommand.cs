@@ -2,7 +2,7 @@
 
 namespace T3.Editor.UiModel.Commands.Variations;
 
-internal class DeleteVariationCommand : ICommand
+internal sealed class DeleteVariationCommand : ICommand
 {
     public string Name => "Delete Variation";
     public bool IsUndoable => true;

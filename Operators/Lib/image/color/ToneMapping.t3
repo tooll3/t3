@@ -3,7 +3,7 @@
   "Inputs": [
     {
       "Id": "37d4e1e6-e5a0-40b6-ada9-9481f5a807de"/*Mode*/,
-      "DefaultValue": 0
+      "DefaultValue": 4
     },
     {
       "Id": "72e51856-bc8f-4bcf-a6d8-6c7b4f8b0583"/*Texture2d*/,

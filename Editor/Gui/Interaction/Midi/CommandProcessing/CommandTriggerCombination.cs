@@ -12,7 +12,7 @@
 /// too much logic. Ideally 
 /// 
 /// </remarks>
-public class CommandTriggerCombination
+public sealed class CommandTriggerCombination
 {
     public CommandTriggerCombination(Action<int> indexAction, CompatibleMidiDevice.InputModes requiredInputMode, ButtonRange[] keyRanges,
                                      ExecutesAt executesAt)

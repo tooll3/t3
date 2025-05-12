@@ -8,7 +8,7 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster;
 /// <summary>
 /// A time raster (vertical lines) that calculate required labels and spacing logarithmically. 
 /// </summary>
-public class StandardValueRaster : AbstractTimeRaster
+public sealed class StandardValueRaster : AbstractTimeRaster
 {
     public override void Draw(Playback playback, float unitsPerSeconds)
     {
@@ -98,12 +98,17 @@ public class StandardValueRaster : AbstractTimeRaster
 
         return _blendRasters;
     }
-        
-    public override  SnapResult CheckForSnap(double time, float canvasScale)
+     
+    public override void CheckForSnap(ref SnapResult snapResult)
+    //public override  SnapResult CheckForSnap(double time, float canvasScale, SnapResult.Orientations orientation)
     {
-        return !EnableSnapping 
-                   ? null 
-                   : base.CheckForSnap(time, canvasScale);
+        if (EnableSnapping)
+            base.CheckForSnap(ref snapResult);
+            //snapResult.TryToImproveWithAnchorValue(time);
+        
+        // return !EnableSnapping 
+        //            ? null 
+        //            : base.CheckForSnap(time, canvasScale, orientation);
             
         //return  base.CheckForSnap(time, canvasScale);
     }

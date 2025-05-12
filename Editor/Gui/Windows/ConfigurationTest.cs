@@ -371,7 +371,7 @@ Beard_Goattee_Blonde	Color	BeardColor	Beard_Goatee
 Beard_Goattee_Black	Color	BodyColor	Beard_Goatee
 Beard_Full_Brown	Color	BodyColor	Beard_Full";
 
-    private class Option
+    private sealed class Option
     {
         public string Id;
         public Category Category;
@@ -385,7 +385,7 @@ Beard_Full_Brown	Color	BodyColor	Beard_Full";
         }
     }
 
-    private class Category
+    private sealed class Category
     {
         public string Id;
 

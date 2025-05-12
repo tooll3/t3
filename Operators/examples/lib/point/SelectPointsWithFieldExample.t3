@@ -7,12 +7,12 @@
       "SymbolId": "27c6aa52-7b3e-4a9a-b6e5-0359f7155cee",
       "InputValues": [
         {
-          "Id": "6ca362c6-25d6-4bee-8e6b-37c5638414df"/*RadiusB*/,
+          "Id": "6ca362c6-25d6-4bee-8e6b-37c5638414df"/*Thickness*/,
           "Type": "System.Single",
           "Value": 0.33
         },
         {
-          "Id": "f438eea9-ff20-482b-b5ba-c59fa189837b"/*RadiusA*/,
+          "Id": "f438eea9-ff20-482b-b5ba-c59fa189837b"/*Size*/,
           "Type": "System.Single",
           "Value": 0.59
         }
@@ -295,7 +295,7 @@
       "SymbolId": "860da1cd-b341-4bc5-965a-4a9c295831f4",
       "InputValues": [
         {
-          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*Radius*/,
+          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*EdgeRadius*/,
           "Type": "System.Single",
           "Value": 0.04
         },
@@ -418,7 +418,7 @@
       "SymbolId": "860da1cd-b341-4bc5-965a-4a9c295831f4",
       "InputValues": [
         {
-          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*Radius*/,
+          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*EdgeRadius*/,
           "Type": "System.Single",
           "Value": 0.4
         },
@@ -439,7 +439,7 @@
       "SymbolId": "860da1cd-b341-4bc5-965a-4a9c295831f4",
       "InputValues": [
         {
-          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*Radius*/,
+          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*EdgeRadius*/,
           "Type": "System.Single",
           "Value": 0.3
         },
@@ -648,7 +648,7 @@
       "SymbolId": "860da1cd-b341-4bc5-965a-4a9c295831f4",
       "InputValues": [
         {
-          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*Radius*/,
+          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*EdgeRadius*/,
           "Type": "System.Single",
           "Value": 0.21
         },
@@ -733,7 +733,7 @@
       "SymbolId": "860da1cd-b341-4bc5-965a-4a9c295831f4",
       "InputValues": [
         {
-          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*Radius*/,
+          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*EdgeRadius*/,
           "Type": "System.Single",
           "Value": 0.04
         },
@@ -1388,12 +1388,12 @@
       "SymbolId": "27c6aa52-7b3e-4a9a-b6e5-0359f7155cee",
       "InputValues": [
         {
-          "Id": "6ca362c6-25d6-4bee-8e6b-37c5638414df"/*RadiusB*/,
+          "Id": "6ca362c6-25d6-4bee-8e6b-37c5638414df"/*Thickness*/,
           "Type": "System.Single",
           "Value": 0.33
         },
         {
-          "Id": "f438eea9-ff20-482b-b5ba-c59fa189837b"/*RadiusA*/,
+          "Id": "f438eea9-ff20-482b-b5ba-c59fa189837b"/*Size*/,
           "Type": "System.Single",
           "Value": 0.59
         }
@@ -1405,7 +1405,7 @@
       "SymbolId": "860da1cd-b341-4bc5-965a-4a9c295831f4",
       "InputValues": [
         {
-          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*Radius*/,
+          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*EdgeRadius*/,
           "Type": "System.Single",
           "Value": 0.27
         },
@@ -1427,7 +1427,7 @@
       "Name": "Sphere",
       "InputValues": [
         {
-          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*Radius*/,
+          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*EdgeRadius*/,
           "Type": "System.Single",
           "Value": 0.5
         },
@@ -1814,7 +1814,7 @@
       "SymbolId": "860da1cd-b341-4bc5-965a-4a9c295831f4",
       "InputValues": [
         {
-          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*Radius*/,
+          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*EdgeRadius*/,
           "Type": "System.Single",
           "Value": 0.04
         },
@@ -2020,7 +2020,7 @@
       "SymbolId": "860da1cd-b341-4bc5-965a-4a9c295831f4",
       "InputValues": [
         {
-          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*Radius*/,
+          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*EdgeRadius*/,
           "Type": "System.Single",
           "Value": -0.13
         },
@@ -2163,12 +2163,12 @@
       "SymbolId": "27c6aa52-7b3e-4a9a-b6e5-0359f7155cee",
       "InputValues": [
         {
-          "Id": "6ca362c6-25d6-4bee-8e6b-37c5638414df"/*RadiusB*/,
+          "Id": "6ca362c6-25d6-4bee-8e6b-37c5638414df"/*Thickness*/,
           "Type": "System.Single",
           "Value": 0.33
         },
         {
-          "Id": "f438eea9-ff20-482b-b5ba-c59fa189837b"/*RadiusA*/,
+          "Id": "f438eea9-ff20-482b-b5ba-c59fa189837b"/*Size*/,
           "Type": "System.Single",
           "Value": 0.59
         }
@@ -2180,7 +2180,7 @@
       "SymbolId": "860da1cd-b341-4bc5-965a-4a9c295831f4",
       "InputValues": [
         {
-          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*Radius*/,
+          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*EdgeRadius*/,
           "Type": "System.Single",
           "Value": 0.3
         },
@@ -2272,7 +2272,7 @@
       "SymbolId": "1e1e65cd-3564-45e1-88f8-6cb4b4b18c5a",
       "InputValues": [
         {
-          "Id": "356e85dd-bf81-4a1c-96a4-1d2983916a4b"/*Round*/,
+          "Id": "356e85dd-bf81-4a1c-96a4-1d2983916a4b"/*EdgeRadius*/,
           "Type": "System.Single",
           "Value": 0.1
         }
@@ -2420,7 +2420,7 @@
       "SymbolId": "860da1cd-b341-4bc5-965a-4a9c295831f4",
       "InputValues": [
         {
-          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*Radius*/,
+          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*EdgeRadius*/,
           "Type": "System.Single",
           "Value": 0.93
         },
@@ -2616,7 +2616,7 @@
       "SymbolId": "860da1cd-b341-4bc5-965a-4a9c295831f4",
       "InputValues": [
         {
-          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*Radius*/,
+          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*EdgeRadius*/,
           "Type": "System.Single",
           "Value": 0.08
         },
@@ -2894,7 +2894,7 @@
       "SymbolId": "1e1e65cd-3564-45e1-88f8-6cb4b4b18c5a",
       "InputValues": [
         {
-          "Id": "356e85dd-bf81-4a1c-96a4-1d2983916a4b"/*Round*/,
+          "Id": "356e85dd-bf81-4a1c-96a4-1d2983916a4b"/*EdgeRadius*/,
           "Type": "System.Single",
           "Value": 0.1
         }
@@ -3423,7 +3423,7 @@
       "SymbolId": "860da1cd-b341-4bc5-965a-4a9c295831f4",
       "InputValues": [
         {
-          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*Radius*/,
+          "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*EdgeRadius*/,
           "Type": "System.Single",
           "Value": 0.04
         },

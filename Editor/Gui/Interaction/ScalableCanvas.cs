@@ -610,7 +610,7 @@ internal abstract class ScalableCanvas : IScalableCanvas
         {
             var focusOnScreen = TransformPosition(focusCenterOnCanvas);
             dl.AddCircle(focusOnScreen, 30, Color.Green.Fade(0.2f));
-            dl.AddText(focusOnScreen + new Vector2(0, 0), Color.Green, $"{focusCenterOnCanvas.X:0.0} {focusCenterOnCanvas.Y:0.0} ");
+            dl.AddText(focusOnScreen + new Vector2(10, -10), Color.Green, $"{focusCenterOnCanvas.X:0.0} {focusCenterOnCanvas.Y:0.0} ");
             dl.AddRect(wp, wp + ImGui.GetWindowSize(), Color.Green.Fade(0.4f));
         }
             
@@ -627,6 +627,14 @@ internal abstract class ScalableCanvas : IScalableCanvas
         var focused = ImGui.IsWindowFocused() ? "focused" : "";
         var focusedChild = ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows) ? "focusedChildWindows" : "";
         dl.AddText(wp + new Vector2(0, 64), Color.Green, $"{focused} {focusedChild}");
+        
+        // // Test window content region:
+        // var paddingForFocusBorder = 1;
+        // var pos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + paddingForFocusBorder * Vector2.One;
+        // var size = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - paddingForFocusBorder * 2  * Vector2.One;
+        // dl.AddRect(pos, pos + size, Color.Red);
+        
+        
     }
 
     private bool IsCurveCanvas => Scale.Y < 0;

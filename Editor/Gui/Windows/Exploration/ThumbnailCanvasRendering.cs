@@ -16,7 +16,7 @@ namespace T3.Editor.Gui.Windows.Exploration;
 /// A helper class that manages the setup for copying a texture in a texture atlas.
 /// This is used to reduce exceeding resource usage for variation canvas.   
 /// </summary>
-public class ThumbnailCanvasRendering
+public sealed class ThumbnailCanvasRendering
 {
     public void InitializeCanvasTexture(Vector2 thumbnailSize)
     {

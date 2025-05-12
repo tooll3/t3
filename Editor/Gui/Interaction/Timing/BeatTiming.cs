@@ -192,5 +192,5 @@ public static class BeatTiming
     private static bool _syncMeasureTriggeredLastFrame;
     private static bool _tapTriggeredLastFrame;
 
-    const double Threshold = 0.3;
+    private const double Threshold = 0.3;
 }

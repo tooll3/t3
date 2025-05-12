@@ -7,7 +7,7 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster;
 /// <summary>
 /// A <see cref="AbstractTimeRaster"/> that displays Bars, Beats and ticks 
 /// </summary>
-public class BeatTimeRaster : AbstractTimeRaster
+public sealed class BeatTimeRaster : AbstractTimeRaster
 {
     public override void Draw(Playback playback, float unitsPerSeconds)
     {

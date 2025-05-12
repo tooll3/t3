@@ -3,7 +3,7 @@ using T3.Editor.UiModel.InputsAndTypes;
 
 namespace T3.Editor.Gui.InputUi.SingleControl;
 
-public class FloatListInputUi : SingleControlInputUi<List<float>>
+public sealed class FloatListInputUi : SingleControlInputUi<List<float>>
 {
     public override IInputUi Clone()
     {

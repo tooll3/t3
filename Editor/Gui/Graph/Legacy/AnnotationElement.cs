@@ -1,5 +1,7 @@
 using ImGuiNET;
 using T3.Core.Utils;
+using T3.Editor.Gui.Graph.Legacy.Interaction;
+using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
@@ -87,7 +89,7 @@ internal sealed class AnnotationElement
 
         HandleDragging();
         var shouldRename = (ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left)) || _requestedRenameId == annotation.Id;
-        Renaming.Draw(annotation, screenArea, shouldRename);
+        RenamingAnnotation.Draw(annotation, screenArea, shouldRename);
         if (shouldRename)
         {
             _requestedRenameId = Guid.Empty;
@@ -255,56 +257,12 @@ internal sealed class AnnotationElement
         }
     }
 
-    private static class Renaming
-    {
-        public static void Draw(Annotation annotation, ImRect screenArea, bool shouldBeOpened)
-        {
-            var justOpened = false;
-            if (_focusedAnnotationId == Guid.Empty)
-            {
-                if (shouldBeOpened)
-                {
-                    justOpened = true;
-                    ImGui.SetKeyboardFocusHere();
-                    _focusedAnnotationId = annotation.Id;
-                    _changeAnnotationTextCommand = new ChangeAnnotationTextCommand(annotation, annotation.Title);
-                }
-            }
-
-            if (_focusedAnnotationId == Guid.Empty)
-                return;
-
-            if (_focusedAnnotationId != annotation.Id)
-                return;
-
-            var positionInScreen = screenArea.Min;
-            ImGui.SetCursorScreenPos(positionInScreen);
-
-            var text = annotation.Title;
-
-            ImGui.SetNextItemWidth(150);
-            ImGui.InputTextMultiline("##renameAnnotation", ref text, 256, screenArea.GetSize(), ImGuiInputTextFlags.AutoSelectAll);
-            if (!ImGui.IsItemDeactivated())
-                annotation.Title = text;
-
-            if (!justOpened && (ImGui.IsItemDeactivated() || ImGui.IsKeyPressed((ImGuiKey)Key.Esc)))
-            {
-                _focusedAnnotationId = Guid.Empty;
-                _changeAnnotationTextCommand.NewText = annotation.Title;
-                UndoRedoStack.AddAndExecute(_changeAnnotationTextCommand);
-            }
-        }
-
-        private static Guid _focusedAnnotationId;
-        private static ChangeAnnotationTextCommand _changeAnnotationTextCommand;
-    }
-
-    bool _isDragging;
-    Vector2 _dragStartDelta;
-    ModifyCanvasElementsCommand _moveCommand;
+    private bool _isDragging;
+    private Vector2 _dragStartDelta;
+    private ModifyCanvasElementsCommand _moveCommand;
     private readonly ProjectView _components;
 
-    Guid _draggedNodeId = Guid.Empty;
-    List<ISelectableCanvasObject> _draggedNodes = new();
+    private Guid _draggedNodeId = Guid.Empty;
+    private List<ISelectableCanvasObject> _draggedNodes = new();
 
 }

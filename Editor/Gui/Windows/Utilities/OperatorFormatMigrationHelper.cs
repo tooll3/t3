@@ -52,7 +52,7 @@ namespace T3.Editor.Gui.Windows;
 //
 //     }
 // }
-static class OperatorFormatMigrationHelper
+internal static class OperatorFormatMigrationHelper
 {
     public static void Draw()
     {

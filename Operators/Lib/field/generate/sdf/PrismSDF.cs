@@ -79,7 +79,7 @@ internal sealed class PrismSDF : Instance<PrismSDF>
                 break;
             
             case 6:
-                c.AppendCall($"f{c}.w = fHexPrism(p{c}.{a} - {n}Center.{a}, {n}Radius *0.5, {n}Length * 0.5, {n}Round);");
+                c.AppendCall($"f{c}.w = fHexPrism(p{c}.{a} - {n}Center.{a}, {n}Radius *0.5, {n}Length * 0.5, {n}EdgeRadius);");
                 break;
         }
     }
@@ -122,7 +122,7 @@ internal sealed class PrismSDF : Instance<PrismSDF>
     
     [GraphParam]
     [Input(Guid = "356E85DD-BF81-4A1C-96A4-1D2983916A4B")]
-    public readonly InputSlot<float> Round = new();
+    public readonly InputSlot<float> EdgeRadius = new();
     
     [Input(Guid = "B5E445DF-88D0-4B1F-A583-3C4EA83D6526", MappedType = typeof(SidesType))]
     public readonly InputSlot<int> Sides = new();

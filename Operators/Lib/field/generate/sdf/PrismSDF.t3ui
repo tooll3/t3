@@ -3,18 +3,20 @@
   "Description": "Generates a prism SDF (I.e. a n-sided cylinder).\n\nNOTE: the tiangular prism does not support rounding.",
   "InputUis": [
     {
-      "InputId": "356e85dd-bf81-4a1c-96a4-1d2983916a4b"/*Round*/,
+      "InputId": "356e85dd-bf81-4a1c-96a4-1d2983916a4b"/*EdgeRadius*/,
       "Position": {
         "X": -200.0,
         "Y": 90.0
-      }
+      },
+      "Description": "Defines the smoothness of the edge"
     },
     {
       "InputId": "522a9640-ca8c-47e6-ad36-5c316a9092ae"/*Axis*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Defines the axis along which the field is aligned"
     },
     {
       "InputId": "b5e445df-88d0-4b1f-a583-3c4ea83d6526"/*Sides*/,
@@ -22,21 +24,24 @@
         "X": -200.0,
         "Y": 75.0
       },
-      "GroupTitle": "Shader Variations"
+      "GroupTitle": "Shader Variations",
+      "Description": "Switches between a 3 sided and 6 sided Prism \n(If changing this value has no effect, any other value must be changed to bring the change into effect)"
     },
     {
       "InputId": "cfc6f8f3-94b4-46f6-9501-11d7b7916bb7"/*Center*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Transforms the center of the object"
     },
     {
       "InputId": "dd33f05b-6c98-4740-a218-a0e8a4922ac3"/*Length*/,
       "Position": {
         "X": -200.0,
         "Y": 150.0
-      }
+      },
+      "Description": "Defines the height"
     },
     {
       "InputId": "ef023a17-cd92-47c5-b2fd-4db7ac4bebac"/*Radius*/,
@@ -44,6 +49,7 @@
         "X": -200.0,
         "Y": 75.0
       },
+      "Description": "Defines the size",
       "AddPadding": "True"
     }
   ],

@@ -175,7 +175,7 @@ public static class KeyboardAndMouseOverlay
     private static float _widgetFade = 0;
     private static double _lastMouseWheelInteractionTime;
     
-    private class KeyStatus
+    private sealed class KeyStatus
     {
         public KeyStatus(int keyIndex, string label, Icon icon = Icon.None )
         {

@@ -9,6 +9,12 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.App;
 using System.Windows.Forms;
+using SharpDX.DXGI;
+using SharpDX.Direct3D11;
+using T3.Core.Resource;
+using T3.Core.Animation;
+using System.Media;
+using System.Reflection;
 
 
 namespace T3.Editor.Gui.Dialog;
@@ -17,10 +23,24 @@ internal sealed class AboutDialog : ModalDialog
 {
     internal void Draw()
     {
-        DialogSize = new Vector2(500, 550) * T3Ui.UiScaleFactor;
-        
-        if (BeginDialog("About TiXL"))
+        DialogSize = new Vector2(550, 550);
+
+        if (BeginDialog("    TiXL Loves You! <3"))
         {
+            var mousepos = ImGui.GetMousePos(); // Get the current mouse position
+            var normalizedMouseX = Math.Clamp(mousepos.X / ImGui.GetIO().DisplaySize.X, .33f, 1f);
+            var normalizedMouseY = Math.Clamp(mousepos.Y / ImGui.GetIO().DisplaySize.Y, .33f, 1f);// Normalize X to range [.33, 1]
+            var rectColor = new Vector4(normalizedMouseX -0.1f, normalizedMouseY -.127f, 0.620f,10+ 1f); // Use normalizedMouseX for r normalizedMouseY for the g channel
+            var rectSize = new Vector2(64f,64f);
+    
+                ImGui.GetWindowDrawList().AddRectFilled(
+                ImGui.GetCursorScreenPos(),
+                ImGui.GetCursorScreenPos() + (rectSize),
+                ImGui.ColorConvertFloat4ToU32(rectColor)
+            );
+            
+            ImGui.Image((IntPtr)SharedResources.t3logoAlphaTextureImageSrv, new Vector2(64, 64));
+
             FormInputs.AddSectionHeader("TiXL");
             ImGui.SameLine();
             ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
@@ -28,14 +48,22 @@ internal sealed class AboutDialog : ModalDialog
             FormInputs.AddSectionHeader("v." + Program.VersionText);
             ImGui.PopStyleColor();
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, mySpacing);
-            ImGui.TextColored(UiColors.TextMuted, $"{dateTime}");
+           
+            ImGui.TextColored(UiColors.TextMuted, $"Build Hash:"); // write git commit hash
+            ImGui.SameLine();
+            ImGui.Text($"{gitCommitHash}");
+            
+            ImGui.TextColored(UiColors.TextMuted, $"Date:");
+            ImGui.SameLine();
+            ImGui.Text($"{dateTime}");
+          
 #if DEBUG
             ImGui.TextColored(UiColors.TextMuted, "IDE:");
             ImGui.SameLine();
             ImGui.Text($"{ideName}");
 #endif
-            
-            ImGui.TextColored(UiColors.TextMuted, $"App language:");
+
+            ImGui.TextColored(UiColors.TextMuted, "App language:");
             ImGui.SameLine();
             ImGui.Text($"{appLanguage}");
             ImGui.PopStyleVar();
@@ -90,21 +118,42 @@ internal sealed class AboutDialog : ModalDialog
 
             CustomComponents.TooltipForLastItem("Copy system info for bug reports");
             EndDialogContent();
+           
+           
         }
         EndDialog();
     }
-    
+    private static string GetGitCommitHash()
+    {
+        try
+        {
+            var assemblyLocation = Assembly.GetEntryAssembly()!.Location;
+            var productVersion = FileVersionInfo.GetVersionInfo(assemblyLocation)?.ProductVersion;
+
+            if (productVersion is null || !productVersion.Contains("+"))
+                return "Unknown";
+
+            var commitHash = productVersion.Split("+")[1];
+            return commitHash.Substring(0, 8);
+        }
+        catch (Exception)
+        {
+            return "Unknown";
+        }
+    }
     private void UpdateSystemInfo()
     {
         try
         {
             var systemInfo = new StringBuilder();
 
-            systemInfo.AppendLine($"{dateTime}");
+            systemInfo.AppendLine($"Date: {dateTime}");
             systemInfo.AppendLine($"TiXL version: {Program.VersionText}");
-            #if DEBUG
+            systemInfo.AppendLine($"Build Hash: {GetGitCommitHash()}"); //get commit hash from git
+
+#if DEBUG
             systemInfo.AppendLine($"IDE: {GetIdeName()}");
-            #endif
+#endif
             systemInfo.AppendLine($"App language: {GetAppLanguage()}");
             systemInfo.AppendLine($"OS: {GetOperatingSystemInfo()}");
             systemInfo.AppendLine($"System language: {GetSystemLanguage()}");
@@ -112,6 +161,7 @@ internal sealed class AboutDialog : ModalDialog
             systemInfo.AppendLine($".NET runtime: {GetDotNetRuntimeVersion()}");
             systemInfo.AppendLine($".NET SDK: {GetDotNetSdkVersion()}");
             systemInfo.AppendLine($"GPU: {GetGpuInformation()}");
+            
             _systemInfo = systemInfo.ToString();
         }
         catch (Exception e)
@@ -288,7 +338,7 @@ internal sealed class AboutDialog : ModalDialog
     private static readonly string dotNetRuntime = GetDotNetRuntimeVersion();
     private static readonly string dotNetSdk = GetDotNetSdkVersion();
     private static readonly string gpuInformation = GetGpuInformation();
-
+    private static readonly string gitCommitHash = GetGitCommitHash(); // get commit hash from git
     private string _systemInfo = string.Empty;
 
     private static readonly Vector2 mySpacing = new (6.0f, 3.0f);

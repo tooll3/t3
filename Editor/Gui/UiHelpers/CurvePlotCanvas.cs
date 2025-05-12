@@ -5,7 +5,7 @@ using T3.Editor.Gui.Windows.TimeLine.Raster;
 
 namespace T3.Editor.Gui.UiHelpers;
 
-public class CurvePlotCanvas
+public sealed class CurvePlotCanvas
 {
     public CurvePlotCanvas(int resolution = 500)
     {

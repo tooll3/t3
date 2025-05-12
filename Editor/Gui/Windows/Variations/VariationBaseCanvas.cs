@@ -67,7 +67,7 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
             RefreshView();
         }
 
-        if(KeyboardBinding.Triggered(UserActions.FocusSelection))
+        if(KeyboardBinding.Triggered(UserActions.FocusSelection) || _resetViewRequested)
         {
             ResetView();
         }
@@ -184,6 +184,20 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
             }
         }
     }
+
+    /// <summary>
+    /// This will trigger a reset few on next update.
+    /// </summary>
+    /// <remark>
+    /// Calling ResetView within the current update might lead to invalid view configuration, because the
+    /// use FillWindow mode might use incorrect window references for determining the current window size and position.
+    /// </remark>
+    protected void RequestResetView()
+    {
+        _resetViewRequested = true;
+    }
+
+    private bool _resetViewRequested = false;
 
     private void HandleBlendingInteraction()
     {
@@ -426,6 +440,8 @@ internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContaine
             }
             FitAreaOnCanvas(area);
         }
+        
+        _resetViewRequested = false;
     }
 
     private void HandleFenceSelection(SelectionFence selectionFence)

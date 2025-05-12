@@ -4,7 +4,7 @@ using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Windows.Output;
 
-public class EditResolutionDialog : ModalDialog
+public sealed class EditResolutionDialog : ModalDialog
 {
     public bool Draw(ResolutionHandling.Resolution resolution)
     {

@@ -7,7 +7,7 @@ using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Windows.TimeLine.Raster;
 
-public  class HorizontalRaster: IValueSnapAttractor
+public sealed  class HorizontalRaster: IValueSnapAttractor
 {
     public void Draw(ICanvas canvas)
     {
@@ -139,9 +139,9 @@ public  class HorizontalRaster: IValueSnapAttractor
 
     #region implement snap attractor
         
-    public SnapResult CheckForSnap(double targetPos, float canvasScale)
+    void IValueSnapAttractor.CheckForSnap(ref SnapResult snapResult)
     {
-        return ValueSnapHandler.FindSnapResult(targetPos, _usedPositions.Values, canvasScale);
+        snapResult.TryToImproveWithAnchorValueList(_usedPositions.Values);
     }
     #endregion
         

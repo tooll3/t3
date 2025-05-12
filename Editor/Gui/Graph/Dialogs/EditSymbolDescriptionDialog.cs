@@ -6,7 +6,7 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Dialogs;
 
-public class EditSymbolDescriptionDialog : ModalDialog
+public sealed class EditSymbolDescriptionDialog : ModalDialog
 {
     public void Draw(Symbol operatorSymbol)
     {

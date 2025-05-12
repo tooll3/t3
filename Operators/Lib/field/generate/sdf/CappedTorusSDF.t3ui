@@ -3,7 +3,7 @@
   "Description": "Generates a procedural torus field with which can be capped (with rounded edges).\nIt can be rendered with [RaymarchField] and visualized with [VisualizeFieldDistance].\nAlso known as Cube SDF.\n\nFor a simple and interactive tutorial on the TiXL rendering pipeline, see [HowToRaymarchField].\n\nIt can be modified with [BendField] , [TransformField] , [PolarRepeat] and more.\n\nSimilar nodes: [BoxSDF], [ChainLinkSDF], [FractalSDF].\n\nTo use a Mesh made of polygons refer to [TorusMesh].",
   "InputUis": [
     {
-      "InputId": "00cec9de-3be4-403f-8677-dcc2ef473708"/*RadiusA*/,
+      "InputId": "00cec9de-3be4-403f-8677-dcc2ef473708"/*Radius*/,
       "Position": {
         "X": -200.0,
         "Y": 90.0
@@ -11,7 +11,7 @@
       "Description": "Defines the size of the ring"
     },
     {
-      "InputId": "d37914dd-7bbd-47fa-ad90-9921621afb9e"/*Size*/,
+      "InputId": "d37914dd-7bbd-47fa-ad90-9921621afb9e"/*Fill*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0

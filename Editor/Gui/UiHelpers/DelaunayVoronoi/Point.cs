@@ -1,6 +1,6 @@
 ﻿namespace T3.Editor.Gui.UiHelpers.DelaunayVoronoi;
 
-public class Point
+public sealed class Point
 {
     /// <summary>
     /// Used only for generating a unique ID for each instance of this class that gets generated

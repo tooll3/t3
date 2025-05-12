@@ -93,9 +93,9 @@ public abstract class AbstractTimeRaster : IValueSnapAttractor
 
     #region implement snap attractor
 
-    public virtual SnapResult CheckForSnap(double time, float canvasScale)
+    public virtual void CheckForSnap(ref SnapResult snapResult)
     {
-        return ValueSnapHandler.FindSnapResult(time, _usedPositions.Values, canvasScale);
+        snapResult.TryToImproveWithAnchorValueList(_usedPositions.Values);
     }
     #endregion
 
@@ -103,7 +103,7 @@ public abstract class AbstractTimeRaster : IValueSnapAttractor
     protected List<ScaleRange> ScaleRanges;
     private const double Epsilon = 0.00001f;
 
-    protected class ScaleRange
+    protected sealed class ScaleRange
     {
         public double ScaleMin { get; set; }
         public double ScaleMax { get; set; }

@@ -14,11 +14,11 @@
       "DefaultValue": 0.5
     },
     {
-      "Id": "6ca362c6-25d6-4bee-8e6b-37c5638414df"/*RadiusB*/,
+      "Id": "6ca362c6-25d6-4bee-8e6b-37c5638414df"/*Thickness*/,
       "DefaultValue": 0.25
     },
     {
-      "Id": "f438eea9-ff20-482b-b5ba-c59fa189837b"/*RadiusA*/,
+      "Id": "f438eea9-ff20-482b-b5ba-c59fa189837b"/*Size*/,
       "DefaultValue": 0.5
     }
   ],

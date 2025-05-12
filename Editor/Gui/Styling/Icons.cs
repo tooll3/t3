@@ -146,7 +146,7 @@ internal static class Icons
         Draw(icon, center);
     }
 
-    public class IconSource
+    public sealed class IconSource
     {
         public IconSource(Icon icon, int slotIndex)
         {

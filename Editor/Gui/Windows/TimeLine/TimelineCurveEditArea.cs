@@ -20,7 +20,7 @@ using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.Windows.TimeLine;
 
-internal class TimelineCurveEditArea : AnimationParameterEditing, ITimeObjectManipulation, IValueSnapAttractor
+internal sealed class TimelineCurveEditArea : AnimationParameterEditing, ITimeObjectManipulation, IValueSnapAttractor
 {
     public TimelineCurveEditArea(TimeLineCanvas timeLineCanvas, ValueSnapHandler snapHandlerForU, ValueSnapHandler snapHandlerV)
     {
@@ -198,7 +198,10 @@ internal class TimelineCurveEditArea : AnimationParameterEditing, ITimeObjectMan
             return;
 
         var hoverTime = TimeLineCanvas.InverseTransformX(ImGui.GetIO().MousePos.X);
-        TimeLineCanvas.SnapHandlerForU.CheckForSnapping(ref hoverTime, TimeLineCanvas.Scale.X);
+        if (TimeLineCanvas.SnapHandlerForU.TryCheckForSnapping(hoverTime, out var snappedValue, TimeLineCanvas.Scale.X))
+        {
+            hoverTime = (float)snappedValue;
+        }
 
         if (ImGui.IsMouseReleased(0))
         {
@@ -324,15 +327,19 @@ internal class TimelineCurveEditArea : AnimationParameterEditing, ITimeObjectMan
         double u = allowHorizontal ? newDragPosition.X : vDef.U;
         if (allowHorizontal)
         {
-            if (enableSnapping)
-                _snapHandlerU.CheckForSnapping(ref u, TimeLineCanvas.Scale.X);
+            if (enableSnapping && _snapHandlerU.TryCheckForSnapping(u, out var snappedValue, TimeLineCanvas.Scale.X))
+            {
+                u = snappedValue;
+            }
         }
 
         double v = allowVertical ? newDragPosition.Y : vDef.Value;
         if (allowVertical)
         {
-            if (enableSnapping)
-                _snapHandlerV.CheckForSnapping(ref v, TimeLineCanvas.Scale.Y);
+            if (enableSnapping && _snapHandlerV.TryCheckForSnapping(v, out var snappedValue, TimeLineCanvas.Scale.Y))
+            {
+                v = snappedValue;
+            }
         }
 
         UpdateDragCommand(u - vDef.U, v - vDef.Value);
@@ -408,7 +415,7 @@ internal class TimelineCurveEditArea : AnimationParameterEditing, ITimeObjectMan
             return;
 
         CurveInputEditing.MoveDirection = CurveInputEditing.MoveDirections.Undecided;
-            
+
         // Update reference in macro command
         _changeKeyframesCommand.StoreCurrentValues();
         _changeKeyframesCommand = null;
@@ -423,23 +430,16 @@ internal class TimelineCurveEditArea : AnimationParameterEditing, ITimeObjectMan
     }
 
     #region implement snapping -------------------------
-    SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
+    void IValueSnapAttractor.CheckForSnap(ref SnapResult snapResult)
     {
-        _snapThresholdOnCanvas = SnapDistance / canvasScale;
-        var maxForce = 0.0;
-        var bestSnapTime = Double.NaN;
-
+        _snapThresholdOnCanvas = SnapDistance / snapResult.CanvasScale;
         foreach (var vDefinition in GetAllKeyframes())
         {
             if (SelectedKeyframes.Contains(vDefinition))
                 continue;
 
-            CheckForSnapping(targetTime, vDefinition.U, maxForce: ref maxForce, bestSnapTime: ref bestSnapTime);
+            snapResult.TryToImproveWithAnchorValue(vDefinition.U);
         }
-
-        return Double.IsNaN(bestSnapTime)
-                   ? null
-                   : new SnapResult(bestSnapTime, maxForce);
     }
 
     private void CheckForSnapping(double targetTime, double anchorTime, ref double maxForce, ref double bestSnapTime)

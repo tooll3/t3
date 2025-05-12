@@ -57,7 +57,7 @@ internal static class SymbolNaming
     }
 }
 
-internal class ClassRenameRewriter : CSharpSyntaxRewriter
+internal sealed class ClassRenameRewriter : CSharpSyntaxRewriter
 {
     private readonly string _newSymbolName;
 

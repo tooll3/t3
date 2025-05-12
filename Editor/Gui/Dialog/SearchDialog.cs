@@ -8,7 +8,7 @@ using T3.SystemUi;
 
 namespace T3.Editor.Gui.Dialog;
 
-public class SearchDialog : ModalDialog
+public sealed class SearchDialog : ModalDialog
 {
     public SearchDialog()
     {

@@ -1,165 +1,108 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Interaction.Snapping;
 
-internal class ValueSnapHandler
+internal sealed class ValueSnapHandler
 {
-    private const float SnapIndicatorDuration = 1;
-
+    public ValueSnapHandler(SnapResult.Orientations orientation)
+    {
+        _orientation = orientation;
+        _snapResult.Orientation = orientation;
+    }
+    
     public void AddSnapAttractor(IValueSnapAttractor sp)
     {
-        if (!_snapAttractors.Contains(sp))
-        {
-            _snapAttractors.Add(sp);
-        }
+        _snapAttractors.Add(sp);
     }
 
     public void RemoveSnapAttractor(IValueSnapAttractor sp)
     {
-        if (_snapAttractors.Contains(sp))
-        {
-            _snapAttractors.Remove(sp);
-        }
-    }
-
-    /// <summary>
-    /// Components can bind to these events to render snap-indicators
-    /// </summary>
-    public event Action<double> SnappedEvent;
-
-        
-    /// <summary>
-    /// Override to float precision 
-    /// </summary>
-    public bool CheckForSnapping(ref float time, float canvasScale, List<IValueSnapAttractor> ignoreSnapAttractors = null)
-    {
-        double d = time;
-        var result = CheckForSnapping(ref d, canvasScale, ignoreSnapAttractors);
-        if (result)
-            time = (float)d;
-
-        return result;
+        _snapAttractors.Remove(sp);
     }
 
     /// <summary>
     /// Uses all registered snap providers to test for snapping
     /// </summary>
-    public bool CheckForSnapping(ref double time, float canvasScale, List<IValueSnapAttractor> ignoreSnapAttractors = null)
+    public bool TryCheckForSnapping(double targetValue, 
+                                    out double snappedValue,
+                                    float canvasScale = 1,
+                                    List<IValueSnapAttractor>? ignoredAttractors = null,
+                                    IEnumerable<IValueSnapAttractor>? moreAttractors = null)
     {
-        var bestSnapValue = Double.NaN;
-        double maxSnapForce = 0;
-        foreach (var sp in _snapAttractors)
+        _snapResult.ResetForTargetValue(targetValue, canvasScale);
+        _snapResult.Orientation = _orientation;
+
+        foreach (var attractor in _snapAttractors)
         {
-            if (ignoreSnapAttractors != null && ignoreSnapAttractors.Contains(sp))
+            if (ignoredAttractors != null && ignoredAttractors.Contains(attractor))
                 continue;
 
-            var snapResult = sp.CheckForSnap(time, canvasScale);
-            if (snapResult != null && snapResult.Force > maxSnapForce)
+            attractor.CheckForSnap(ref _snapResult);
+        }
+
+        if (moreAttractors != null)
+        {
+            foreach (var attractor in moreAttractors)
             {
-                bestSnapValue = snapResult.SnapToValue;
-                maxSnapForce = snapResult.Force;
+                if (ignoredAttractors != null && ignoredAttractors.Contains(attractor))
+                    continue;
+
+                attractor.CheckForSnap(ref _snapResult);
             }
         }
 
-        if (!Double.IsNaN(bestSnapValue))
+        if (_snapResult.IsValid)
         {
-            SnappedEvent?.Invoke(bestSnapValue);
             _lastSnapTime = ImGui.GetTime();
-            _lastSnapPosition = bestSnapValue;
+            _lastSnapValue = _snapResult.BestAnchorValue;
+            Log.Debug($"Anchor value {_snapResult.BestAnchorValue:0.0}  {_orientation}");
+
+            snappedValue = _snapResult.BestAnchorValue;
+            return true;
         }
 
-        if (Double.IsNaN(bestSnapValue))
-            return false;
-
-        time = bestSnapValue;
-        return true;
+        snappedValue = double.NaN;
+        return false;
     }
-
-
-    /// <summary>
-    /// This is method is called from all snapHandlers 
-    /// </summary>
-    public static bool CheckForBetterSnapping(double targetTime, double anchorTime, float canvasScale, ref SnapResult bestSnapResult)
-    {
-        var snapThresholdOnCanvas = UserSettings.Config.SnapStrength / canvasScale;
-        var distance = Math.Abs(anchorTime - targetTime);
-            
-        var force = Math.Max(0, Math.Abs(snapThresholdOnCanvas) - distance);
-        if (force < 0.00001)
-            return false;
-            
-
-        if (bestSnapResult != null && bestSnapResult.Force > force)
-            return false;
-            
-
-        // Avoid allocation
-        if (bestSnapResult == null)
-        {
-            bestSnapResult = new SnapResult(anchorTime, force);
-        }
-        else
-        {
-            bestSnapResult.Force = force;
-            bestSnapResult.SnapToValue = anchorTime;
-        }
-        return true;
-    }
-
-    public static SnapResult FindSnapResult(double targetTime, IEnumerable<double> anchors, float canvasScale)
-    {
-        SnapResult bestMatch = null;
-        foreach (var beatTime in anchors)
-        {
-            CheckForBetterSnapping(targetTime, beatTime, canvasScale, ref bestMatch);
-        }
-        return bestMatch;
-    }
-        
-    public static SnapResult FindSnapResult(double targetTime, double anchor, float canvasScale)
-    {
-        SnapResult bestMatch = null;
-        CheckForBetterSnapping(targetTime, anchor, canvasScale, ref bestMatch);
-        return bestMatch;
-    }
-
-    public void DrawSnapIndicator(ICanvas canvas, Mode mode)
+    
+    public void DrawSnapIndicator(ICanvas canvas, Color colorOverride= default)
     {
         if (ImGui.GetTime() - _lastSnapTime > SnapIndicatorDuration)
             return;
 
         var opacity = (1 - ((float)(ImGui.GetTime() - _lastSnapTime) / SnapIndicatorDuration).Clamp(0, 1)) * 0.4f;
-        var color = UiColors.StatusAnimated;
-        color.Rgba.W = opacity;
+        var color = colorOverride == 0 ?  UiColors.StatusAnimated : colorOverride;
+        
+        color.Rgba.W *= opacity;
 
-        switch (mode)
+        switch (_orientation)
         {
-            case Mode.HorizontalLinesForV:
+            case SnapResult.Orientations.Vertical:
             {
-                var p = new Vector2(0, canvas.TransformY((float)_lastSnapPosition));
-                p.Y = (int)p.Y-1;
+                var p = new Vector2(0, canvas.TransformY((float)_lastSnapValue));
+                p.Y = (int)p.Y - 1;
+                Log.Debug("Drawing " + p);
                 ImGui.GetWindowDrawList().AddRectFilled(p, p + new Vector2(4000, 1), color);
                 break;
             }
-            case Mode.VerticalLinesForU:
+            case SnapResult.Orientations.Horizontal:
             {
-                var p = new Vector2(canvas.TransformX((float)_lastSnapPosition), 0);
+                var p = new Vector2(canvas.TransformX((float)_lastSnapValue), 0);
                 ImGui.GetWindowDrawList().AddRectFilled(p, p + new Vector2(1, 2000), color);
                 break;
             }
         }
     }
 
-    public enum Mode
-    {
-        HorizontalLinesForV,
-        VerticalLinesForU,
-    }
-        
-    private readonly List<IValueSnapAttractor> _snapAttractors = new();
-    private double _lastSnapPosition;
+    private const float SnapIndicatorDuration = 1;
+    private readonly SnapResult.Orientations _orientation;
+    private readonly HashSet<IValueSnapAttractor> _snapAttractors = [];
+    private double _lastSnapValue;
     private double _lastSnapTime;
+    private SnapResult _snapResult = new(0);
 }

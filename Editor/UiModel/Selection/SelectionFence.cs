@@ -89,7 +89,7 @@ public sealed class SelectionFence
         }
     }
 
-    public void Reset()
+    internal void Reset()
     {
         _state = States.Inactive;
     }
@@ -101,7 +101,7 @@ public sealed class SelectionFence
         Replace
     }
 
-    public enum States
+    internal enum States
     {
         Inactive,
         PressedButNotMoved,

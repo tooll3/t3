@@ -1,4 +1,6 @@
-﻿using ImGuiNET;
+﻿#nullable enable
+using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
@@ -28,26 +30,36 @@ internal class PresetCanvas : VariationBaseCanvas
         return $"...for {VariationHandling.ActiveInstanceForPresets?.Symbol.Name}";
     }
 
-    private protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForPresets;
-    private protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForPresets;
+    private protected override Instance? InstanceForBlendOperations => VariationHandling.ActiveInstanceForPresets;
+    private protected override SymbolVariationPool? PoolForBlendOperations => VariationHandling.ActivePoolForPresets;
 
     protected override void DrawAdditionalContextMenuContent(Instance instance)
     {
+        ImGui.GetForegroundDrawList().AddRect(_keepWindowPos, _keepWindowPos+ _keepWindowSize, Color.Red);
+        
     }
 
     private void CreatePreset()
     {
-        var nextInsertionPosition = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.AllVariations);
-        var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetForInstanceSymbol(VariationHandling.ActiveInstanceForPresets);
-        if (newVariation != null)
+        if (VariationHandling.ActivePoolForPresets == null || VariationHandling.ActiveInstanceForPresets == null)
         {
-            newVariation.PosOnCanvas = nextInsertionPosition;
-            VariationThumbnail.VariationForRenaming = newVariation;
-            VariationHandling.ActivePoolForPresets.SaveVariationsToFile();
+            Log.Warning("Can't create preset without variation pool or active instance");
+            return;
         }
+        
+        var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetForInstanceSymbol(VariationHandling.ActiveInstanceForPresets);
+        newVariation.PosOnCanvas = FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.AllVariations);
+        
+        VariationThumbnail.VariationForRenaming = newVariation;
+        VariationHandling.ActivePoolForPresets.SaveVariationsToFile();
 
         CanvasElementSelection.SetSelection(newVariation);
-        ResetView();
+        _keepWindowPos = ImGui.GetWindowContentRegionMin( ) + ImGui.GetWindowPos();
+        _keepWindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
+        RequestResetView();
         TriggerThumbnailUpdate();
     }
+
+    private Vector2 _keepWindowPos;
+    private Vector2 _keepWindowSize;
 }

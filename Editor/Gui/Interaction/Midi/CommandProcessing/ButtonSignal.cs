@@ -3,7 +3,7 @@
 /// <summary>
 /// Used to save captured note and control events from MidiInputs
 /// </summary>
-public class ButtonSignal
+public sealed class ButtonSignal
 {
     public int ButtonId;
     public float PressTime;

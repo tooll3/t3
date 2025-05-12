@@ -27,7 +27,7 @@ namespace T3.Editor.Gui.Interaction.TransformGizmos;
 /**
  * Handles the interaction with 3d-gizmos for operators selected in the graph.
  */
-static class TransformGizmoHandling
+internal static class TransformGizmoHandling
 {
     public static bool IsDragging => _draggedGizmoPart != GizmoParts.None;
 
@@ -135,7 +135,7 @@ static class TransformGizmoHandling
         isHoveringSomething |= HandleDragInScreenSpace();
     }
 
-    static void UpdateInternalState()
+    private static void UpdateInternalState()
     {
         // Terminology of the matrices:
         // objectToClipSpace means in this context the transform without application of the ITransformable values. These are
@@ -182,7 +182,7 @@ static class TransformGizmoHandling
     }
 
     // Returns true if hovered or active
-    static bool HandleDragOnAxis(Vector3 gizmoAxis, Color color, GizmoParts mode)
+    private static bool HandleDragOnAxis(Vector3 gizmoAxis, Color color, GizmoParts mode)
     {
         var axisStartInScreen = LocalPosToScreenPos(gizmoAxis * _centerPadding);
         var axisEndInScreen = LocalPosToScreenPos(gizmoAxis * _gizmoLength);
@@ -231,7 +231,7 @@ static class TransformGizmoHandling
     }
 
     // Returns true if hovered or active
-    static bool HandleDragOnPlane(Vector3 gizmoAxis1, Vector3 gizmoAxis2, Color color, GizmoParts mode)
+    private static bool HandleDragOnPlane(Vector3 gizmoAxis1, Vector3 gizmoAxis2, Color color, GizmoParts mode)
     {
         var origin = (gizmoAxis1 + gizmoAxis2) * _centerPadding;
         Vector2[] pointsOnScreen =

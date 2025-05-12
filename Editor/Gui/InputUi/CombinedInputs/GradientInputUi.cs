@@ -6,7 +6,7 @@ using T3.Editor.UiModel.InputsAndTypes;
 
 namespace T3.Editor.Gui.InputUi.CombinedInputs;
 
-public class GradientInputUi : InputValueUi<Gradient>
+public sealed class GradientInputUi : InputValueUi<Gradient>
 {
     public override IInputUi Clone()
     {

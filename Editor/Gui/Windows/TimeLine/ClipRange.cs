@@ -1,12 +1,14 @@
 ﻿using ImGuiNET;
+using SharpDX;
 using T3.Core.Animation;
-using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Styling;
+using Color = T3.Core.DataTypes.Vector.Color;
+using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Windows.TimeLine;
 
-internal class ClipRange : IValueSnapAttractor
+internal sealed class ClipRange : IValueSnapAttractor
 {
     /// <summary>
     /// Visualizes the mapped time area within a <see cref="TimeClip"/> content  
@@ -52,7 +54,11 @@ internal class ClipRange : IValueSnapAttractor
                 if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                 {
                     var newTime = canvas.InverseTransformX(ImGui.GetIO().MousePos.X);
-                    snapHandler.CheckForSnapping(ref newTime, canvas.Scale.X, new List<IValueSnapAttractor> { this });
+                    if (snapHandler.TryCheckForSnapping(newTime, out var snappedTime, canvas.Scale.X, 
+                                                            [(IValueSnapAttractor)this]))
+                    {
+                        newTime = (float)snappedTime;
+                    }
                     var delta = newTime - timeClip.SourceRange.Start;
                     var speed = timeClip.TimeRange.Duration / timeClip.SourceRange.Duration;
                     timeClip.SourceRange.Start = newTime;
@@ -94,7 +100,11 @@ internal class ClipRange : IValueSnapAttractor
                 if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                 {
                     var newTime = canvas.InverseTransformX(ImGui.GetIO().MousePos.X);
-                    snapHandler.CheckForSnapping(ref newTime, canvas.Scale.X, new List<IValueSnapAttractor> { this });
+                    if (snapHandler.TryCheckForSnapping(newTime, out var snappedTime, canvas.Scale.X, [this]))
+                    {
+                        newTime = (float)snappedTime;
+                    }
+                    
                     var delta = newTime - timeClip.SourceRange.End;
                     var speed = timeClip.TimeRange.Duration / timeClip.SourceRange.Duration;
                     timeClip.SourceRange.End = newTime;
@@ -121,17 +131,15 @@ internal class ClipRange : IValueSnapAttractor
 
     //private static Playback _playback;
     private static ITimeClip _timeClip;
+    
     #region implement snapping interface -----------------------------------
-    SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
+    void IValueSnapAttractor.CheckForSnap(ref SnapResult snapResult)
     {
         if (_timeClip == null)
-            return null;
+            return;
 
-        SnapResult bestSnapResult = null;
-
-        ValueSnapHandler.CheckForBetterSnapping(targetTime, _timeClip.SourceRange.Start, canvasScale, ref bestSnapResult);
-        ValueSnapHandler.CheckForBetterSnapping(targetTime, _timeClip.SourceRange.End, canvasScale, ref bestSnapResult);
-        return bestSnapResult;
+        snapResult.TryToImproveWithAnchorValue( _timeClip.SourceRange.Start);
+        snapResult.TryToImproveWithAnchorValue( _timeClip.SourceRange.End);
     }
     #endregion
 }

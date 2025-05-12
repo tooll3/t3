@@ -7,7 +7,7 @@ namespace T3.Editor.Gui.Interaction.Camera;
 /// <summary>
 /// Gathers update event information from SpaceMouse and apply it to a <see cref="CameraSetup"/>. 
 /// </summary>
-public partial class SpaceMouse : ICameraManipulator, IWindowsFormsMessageHandler
+public sealed partial class SpaceMouse : ICameraManipulator, IWindowsFormsMessageHandler
 {
     private readonly SpaceMouseDevice _spaceMouseDevice;
     public SpaceMouse(IntPtr windowHandle)

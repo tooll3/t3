@@ -125,7 +125,7 @@ internal sealed partial class MagItemMovement
             _shakeDetector.ResetShaking();
             if (HandleShakeDisconnect(context))
             {
-                _layout.FlagAsChanged();
+                _layout.FlagStructureAsChanged();
                 return;
             }
         }
@@ -134,7 +134,7 @@ internal sealed partial class MagItemMovement
         if (!snappingChanged)
             return;
 
-        _layout.FlagAsChanged();
+        _layout.FlagStructureAsChanged();
 
         HandleUnsnapAndCollapse(context);
 
@@ -165,7 +165,7 @@ internal sealed partial class MagItemMovement
         //     context.MacroCommand.AddAndExecCommand(new DeleteConnectionCommand(context.CompositionOp.Symbol, c.AsSymbolConnection(), 0));
         // }
 
-        _layout.FlagAsChanged();
+        _layout.FlagStructureAsChanged();
         return true;
     }
 

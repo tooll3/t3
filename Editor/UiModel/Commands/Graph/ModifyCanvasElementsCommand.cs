@@ -3,7 +3,7 @@ using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.UiModel.Commands.Graph;
 
-internal class ModifyCanvasElementsCommand : ICommand
+internal sealed class ModifyCanvasElementsCommand : ICommand
 {
     public string Name => "Move canvas elements";
     public bool IsUndoable => true;

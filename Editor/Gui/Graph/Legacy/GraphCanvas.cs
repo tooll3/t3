@@ -14,6 +14,7 @@ using T3.Editor.Gui.Graph.Legacy.Interaction;
 using T3.Editor.Gui.Graph.Legacy.Interaction.Connections;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Variations;
+using T3.Editor.Gui.MagGraph.Interaction;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -364,7 +365,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
         graphOpacity *= _preventInteractions ? 0.3f : 1;
         _graph.DrawGraph(drawList, _drawingFlags.HasFlag(GraphDrawingFlags.PreventInteractions), _projectView.CompositionInstance, graphOpacity);
 
-        RenameInstanceOverlay.Draw(_projectView);
+        RenamingOperator.Draw(_projectView);
         var tempConnections = ConnectionMaker.GetTempConnectionsFor(this);
 
         var doubleClicked = ImGui.IsMouseDoubleClicked(0);
@@ -630,7 +631,7 @@ internal sealed class GraphCanvas : ScalableCanvas, IGraphCanvas
 
         if (ImGui.MenuItem("Rename", oneOpSelected))
         {
-            RenameInstanceOverlay.OpenForChildUi(selectedChildUis[0]);
+            RenamingOperator.OpenForChildUi(selectedChildUis[0]);
         }
 
         if (ImGui.MenuItem("Add Comment",

@@ -58,7 +58,7 @@ internal sealed class MagGraphLayout
         ComputeVerticalStackBoundaries();
     }
 
-    public void FlagAsChanged()
+    public void FlagStructureAsChanged()
     {
         StructureFlaggedAsChanged = true;
     }
@@ -774,10 +774,10 @@ internal sealed class MagGraphLayout
     {
         foreach (var sc in MagConnections)
         {
-            var sourceMin = sc.SourceItem.PosOnCanvas;
+            var sourceMin = sc.SourceItem.DampedPosOnCanvas;
             var sourceMax = sourceMin + sc.SourceItem.Size;
 
-            var targetMin = sc.TargetItem.PosOnCanvas;
+            var targetMin = sc.TargetItem.DampedPosOnCanvas;
 
             // Snapped horizontally
             if (

@@ -49,7 +49,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
 
     private void CompositionChangedHandler(ProjectView arg1, Guid arg2)
     {
-        _context.Layout.FlagAsChanged();
+        _context.Layout.FlagStructureAsChanged();
     }
 
     private void CompositionContentChangedHandler(ProjectView view, ProjectView.ChangeTypes changes)
@@ -57,7 +57,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
         Debug.Assert(view == _projectView);
         if ((changes & (ProjectView.ChangeTypes.Connections | ProjectView.ChangeTypes.Children)) != 0)
         {
-            _context.Layout.FlagAsChanged();
+            _context.Layout.FlagStructureAsChanged();
         }
     }
 
@@ -150,7 +150,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
 
         // Todo: This should use undo/redo
         ParameterExtraction.ExtractAsConnectedOperator(inputSlot, symbolChildUi, input, focusedItemPosOnCanvas);
-        _context.Layout.FlagAsChanged();
+        _context.Layout.FlagStructureAsChanged();
         _context.CompleteMacroCommand();
     }
 
@@ -236,7 +236,7 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
             var childUi = GraphOperations.AddSymbolChild(symbol, compositionOpSymbolUi, posOnCanvas);
             var instance = context.CompositionInstance.Children[childUi.Id];
             context.Selector.SetSelection(childUi, instance);
-            context.Layout.FlagAsChanged();
+            context.Layout.FlagStructureAsChanged();
         }
         else
         {
@@ -321,19 +321,19 @@ internal sealed partial class MagGraphCanvas : ScalableCanvas, IGraphCanvas
             }
         }
 
-        foreach (var annotation in _context.Layout.Annotations.Values)
+        foreach (var magAnnotation in _context.Layout.Annotations.Values)
         {
-            var rect = new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size);
-            if (!rect.Overlaps(boundsInCanvas))
+            var annotationArea = new ImRect(magAnnotation.PosOnCanvas, magAnnotation.PosOnCanvas + magAnnotation.Size);
+            if (!boundsInCanvas.Contains(annotationArea))
                 continue;
 
             if (selectMode == SelectionFence.SelectModes.Remove)
             {
-                _context.Selector.DeselectNode(annotation);
+                _context.Selector.DeselectNode(magAnnotation.Annotation);
             }
             else
             {
-                _context.Selector.AddSelection(annotation);
+                _context.Selector.AddSelection(magAnnotation.Annotation);
             }
         }
     }

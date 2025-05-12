@@ -141,7 +141,8 @@ public class HorizontalScaleLines : IValueSnapAttractor
 
     private const double SnapThreshold = 8;
 
-    public SnapResult CheckForSnap(double time)
+    void IValueSnapAttractor.CheckForSnap(ref SnapResult snapResult)
+    //SnapResult IValueSnapAttractor.CheckForSnap(double time, float scale, SnapResult.Orientations orientation)
     {
         //var TV= App.Current.MainWindow.CompositionView.XTimeView;
         //if (this.Visibility == System.Windows.Visibility.Collapsed)
@@ -149,14 +150,13 @@ public class HorizontalScaleLines : IValueSnapAttractor
 
         foreach (var beatTime in _usedPositions.Values)
         {
-            double distanceToTime = Math.Abs(time - beatTime) * _canvas.WindowSize.X;
+            double distanceToTime = Math.Abs(snapResult.TargetValue - beatTime) * _canvas.WindowSize.X;
             if (distanceToTime < SnapThreshold)
             {
-                return new SnapResult(beatTime,  distanceToTime);
+                snapResult.BestAnchorValue = beatTime;
+                snapResult.BestForce = distanceToTime;
             }
         }
-
-        return null;
     }
     #endregion
 
@@ -168,7 +168,7 @@ public class HorizontalScaleLines : IValueSnapAttractor
         public float LabelOpacity { get; set; }
     }
 
-    readonly Dictionary<int, double> _usedPositions = new();
+    private readonly Dictionary<int, double> _usedPositions = new();
     //private List<DrawingVisual> m_Children = new List<DrawingVisual>();
     //private DrawingVisual m_DrawingVisual;
     public SnapResult CheckForSnap(double value, float canvasScale) {

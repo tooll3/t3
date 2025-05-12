@@ -17,7 +17,7 @@ using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.Windows.TimeLine;
 
-internal class DopeSheetArea : AnimationParameterEditing, ITimeObjectManipulation, IValueSnapAttractor
+internal sealed class DopeSheetArea : AnimationParameterEditing, ITimeObjectManipulation, IValueSnapAttractor
 {
     public DopeSheetArea(ValueSnapHandler snapHandler, TimeLineCanvas timeLineCanvas)
     {
@@ -300,7 +300,11 @@ internal class DopeSheetArea : AnimationParameterEditing, ITimeObjectManipulatio
             return false;
 
         var hoverTime = TimeLineCanvas.Current.InverseTransformX(ImGui.GetIO().MousePos.X);
-        _snapHandler.CheckForSnapping(ref hoverTime, TimeLineCanvas.Current.Scale.X);
+
+        if (_snapHandler.TryCheckForSnapping(hoverTime, out var snappedValue, TimeLineCanvas.Current.Scale.X))
+        {
+            hoverTime = (float)snappedValue;
+        }
 
         bool changed = false;
         if (ImGui.IsMouseReleased(0))
@@ -674,7 +678,10 @@ internal class DopeSheetArea : AnimationParameterEditing, ITimeObjectManipulatio
         if (!ImGui.GetIO().KeyShift)
         {
             //var ignored= new List<IValueSnapAttractor>() { vDef };
-            _snapHandler.CheckForSnapping(ref newDragTime, TimeLineCanvas.Current.Scale.X);
+            if (_snapHandler.TryCheckForSnapping(newDragTime, out var snappedValue, TimeLineCanvas.Current.Scale.X))
+            {
+                newDragTime = (float)snappedValue;
+            }
         }
 
         TimeLineCanvas.Current.UpdateDragCommand(newDragTime - vDef.U, 0);
@@ -814,9 +821,9 @@ internal class DopeSheetArea : AnimationParameterEditing, ITimeObjectManipulatio
     /// <summary>
     /// Snap to all non-selected Clips
     /// </summary>
-    SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
+    void IValueSnapAttractor.CheckForSnap(ref SnapResult snapResult)
     {
-        SnapResult best = null;
+        
         foreach (var vDefinition in GetAllKeyframes())
         {
             if (SelectedKeyframes.Contains(vDefinition))
@@ -825,10 +832,8 @@ internal class DopeSheetArea : AnimationParameterEditing, ITimeObjectManipulatio
             if(_draggedKeyframe == vDefinition)
                 continue;
 
-            ValueSnapHandler.CheckForBetterSnapping(targetTime, vDefinition.U, canvasScale, ref best);
+            snapResult.TryToImproveWithAnchorValue(vDefinition.U);
         }
-
-        return best;
     }
 
     private VDefinition _draggedKeyframe;   // ignore snapping to self

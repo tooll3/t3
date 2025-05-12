@@ -1,11 +1,10 @@
 using ImGuiNET;
-using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.Windows.TimeLine;
 
-internal class CurrentTimeMarker: IValueSnapAttractor
+internal sealed class CurrentTimeMarker: IValueSnapAttractor
 {
     public void Draw(double timeInBars, TimeLineCanvas timelineCanvas)
     {
@@ -19,13 +18,10 @@ internal class CurrentTimeMarker: IValueSnapAttractor
         drawList.AddRectFilled(p, p + new Vector2(1, y+ windowHeight), UiColors.StatusAnimated);
     }
 
-    private static readonly Color _shadowColor = new(0, 0, 0, 0.4f);
-        
-    public SnapResult CheckForSnap(double time, float canvasScale)
+    void IValueSnapAttractor.CheckForSnap(ref SnapResult snapResult)
     {
-        return ValueSnapHandler.FindSnapResult(time, _currentTimeInBars, canvasScale);
+        snapResult.TryToImproveWithAnchorValue(_currentTimeInBars);
     }
         
     private double _currentTimeInBars;
-    private const double SnapThreshold = 8;
 }

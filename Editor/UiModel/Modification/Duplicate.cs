@@ -148,13 +148,13 @@ internal static class Duplicate
         return newSource.Replace(oldGuid, newGuid);
     }
 
-    private class ConnectionEntry
+    private sealed class ConnectionEntry
     {
         public Symbol.Connection Connection { get; set; }
         public int MultiInputIndex { get; set; }
     }
 
-    private class MemberDuplicateRewriter : CSharpSyntaxRewriter
+    private sealed class MemberDuplicateRewriter : CSharpSyntaxRewriter
     {
         private readonly string _newSymbolName;
 

@@ -39,7 +39,7 @@ public static class OscBeatTiming
         Initialized = true;
     }
 
-    static void ListenLoop()
+    private static void ListenLoop()
     {
         try
         {

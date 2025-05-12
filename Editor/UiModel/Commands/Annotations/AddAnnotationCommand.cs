@@ -1,6 +1,6 @@
 ﻿namespace T3.Editor.UiModel.Commands.Annotations;
 
-public class AddAnnotationCommand : ICommand
+public sealed class AddAnnotationCommand : ICommand
 {
     public string Name => "Add Preset";
     public bool IsUndoable => true;

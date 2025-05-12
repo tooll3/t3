@@ -378,7 +378,7 @@ internal abstract class MfVideoWriter : IDisposable
     private readonly Guid _videoInputFormat;
 }
 
-internal class Mp4VideoWriter : MfVideoWriter
+internal sealed class Mp4VideoWriter : MfVideoWriter
 {
     private static readonly Guid _h264EncodingFormatId = MF.VideoFormatGuids.H264;
 

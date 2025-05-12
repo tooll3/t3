@@ -3,7 +3,7 @@ using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.UiHelpers;
 
-public class PathTreeDrawer
+public sealed class PathTreeDrawer
 {
     public void Reset()
     {
