@@ -59,7 +59,13 @@ public partial class SymbolPackage
         RegisterType(typeof(float), "float",
                      InputDefaultValueCreator<float>,
                      (writer, obj) => writer.WriteValue((float)obj),
-                     jsonToken => jsonToken.Value<float>());
+                     jsonToken =>
+                     {
+                         if (jsonToken.Type == JTokenType.Float || jsonToken.Type == JTokenType.Integer)
+                             return jsonToken.Value<float>();
+
+                         return 0;
+                     });
         RegisterType(typeof(int), "int",
                      InputDefaultValueCreator<int>,
                      (writer, obj) => writer.WriteValue((int)obj),
