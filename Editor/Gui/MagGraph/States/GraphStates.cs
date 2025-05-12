@@ -662,7 +662,17 @@ internal static class GraphStates
     internal static State DragAnnotation
         = new(
             Enter: _ => { },
-            Update: _ => { },
+            Update: _ =>
+                    {
+                        
+                    },
             Exit: _ => { }
         );
+    
+    internal static State ResizeAnnotation
+        = new(
+              Enter: _ => { },
+              Update: AnnotationResizing.Draw,
+              Exit: _ => { }
+             );
 }

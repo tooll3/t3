@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Editor.Gui.Interaction.Snapping;
@@ -8,6 +9,7 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster;
 /// <summary>
 /// A <see cref="AbstractTimeRaster"/> that displays Seconds, Minutes, Hours, etc. 
 /// </summary>
+[SuppressMessage("ReSharper", "InconsistentNaming")]
 public sealed class SiTimeRaster : AbstractTimeRaster
 {
     public override void Draw(Playback playback, float unitsPerSeconds)
@@ -59,11 +61,10 @@ public sealed class SiTimeRaster : AbstractTimeRaster
         return output;
     }
 
-    public override SnapResult CheckForSnap(double time, float canvasScale)
+    public override void CheckForSnap(ref SnapResult snapResult)
     {
-        return ImGui.GetIO().KeyAlt 
-                   ? base.CheckForSnap(time, canvasScale) 
-                   : null;
+        if(ImGui.GetIO().KeyAlt)
+            base.CheckForSnap(ref snapResult);
     }
 
         

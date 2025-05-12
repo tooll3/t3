@@ -32,11 +32,12 @@ public class LoadHFCS : Instance<LoadHFCS>
                 Log.Debug($"Reload: {filePath} with {orderedKeys.Count} keyframes");
                 _orderedKeys = orderedKeys;
                 Position.TimeClip.TimeRange.Start = (float)context.Playback.BarsFromSeconds( orderedKeys[0].TimeInSeconds);
+                Position.TimeClip.SourceRange.Start = (float)context.Playback.BarsFromSeconds( orderedKeys[0].TimeInSeconds);
                 Position.TimeClip.TimeRange.End =  (float)context.Playback.BarsFromSeconds(orderedKeys[^1].TimeInSeconds);
+                Position.TimeClip.SourceRange.End =  (float)context.Playback.BarsFromSeconds(orderedKeys[^1].TimeInSeconds);
             }
             else
             {
-                Log.Warning($"Failed to load {filePath}");
                 _orderedKeys.Clear();
             }
         }
@@ -44,7 +45,8 @@ public class LoadHFCS : Instance<LoadHFCS>
         if(_orderedKeys==null || _orderedKeys.Count==0)
             return;
             
-        var timeInBars = context.LocalFxTime;
+        //Log.Debug($"  FxTime: {context.LocalFxTime:0.00}  {context.LocalTime:0.00}", this);
+        var timeInBars = context.LocalTime;
         var timeInSecs = context.Playback.SecondsFromBars(timeInBars);
 
         var indexAtTime = MathUtils.FindIndexForTime(_orderedKeys, timeInSecs, i => _orderedKeys[i].TimeInSeconds );
@@ -54,7 +56,10 @@ public class LoadHFCS : Instance<LoadHFCS>
             var next = _orderedKeys[indexAtTime+1];
             var t = (timeInSecs - keyA.TimeInSeconds) / (next.TimeInSeconds - keyA.TimeInSeconds);
             Position.Value = Vector3.Lerp(keyA.Position, next.Position, (float)t);
-            Rotation.Value = Vector3.Lerp(keyA.Orientation, next.Orientation, (float)t);
+            
+            Rotation.Value = new Vector3(MathUtils.LerpDegreesAngle(keyA.Orientation.X, next.Orientation.X, (float)t),
+                                         MathUtils.LerpDegreesAngle(keyA.Orientation.Y, next.Orientation.Y, (float)t),
+                                         MathUtils.LerpDegreesAngle(keyA.Orientation.Z, next.Orientation.Z, (float)t));
         }
         else
         {

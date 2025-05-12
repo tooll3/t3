@@ -43,7 +43,10 @@ internal sealed class LoopRange : IValueSnapAttractor
             if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
             {
                 var newTime = canvas.InverseTransformX(ImGui.GetIO().MousePos.X);
-                snapHandler.CheckForSnapping(ref newTime, TimeLineCanvas.Current.Scale.X, [this]);
+                if(snapHandler.TryCheckForSnapping( newTime, out var snappedValue, TimeLineCanvas.Current.Scale.X, [this]))
+                {
+                    newTime = (float)snappedValue;
+                }
                 playback.LoopRange.Start = newTime;
             }
         }
@@ -79,7 +82,10 @@ internal sealed class LoopRange : IValueSnapAttractor
             if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
             {
                 var newTime = canvas.InverseTransformX(ImGui.GetIO().MousePos.X);
-                snapHandler.CheckForSnapping(ref newTime, TimeLineCanvas.Current.Scale.X, [this]);
+                if (snapHandler.TryCheckForSnapping(newTime, out var snappedValue, TimeLineCanvas.Current.Scale.X, [this]))
+                {
+                    newTime = (float)snappedValue;
+                }
                 playback.LoopRange.End = newTime;
             }
         }
@@ -102,17 +108,13 @@ internal sealed class LoopRange : IValueSnapAttractor
     private Playback? _playback;
         
     #region implement snapping interface -----------------------------------
-
-    SnapResult? IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
+    void IValueSnapAttractor.CheckForSnap(ref SnapResult snapResult)
     {
         if (_playback == null)
-            return null;
+            return;
             
-        SnapResult? bestSnapResult = null;
-
-        ValueSnapHandler.CheckForBetterSnapping(targetTime, _playback.LoopRange.Start, canvasScale, ref bestSnapResult);
-        ValueSnapHandler.CheckForBetterSnapping(targetTime, _playback.LoopRange.End, canvasScale, ref bestSnapResult);
-        return bestSnapResult;
+        snapResult.TryToImproveWithAnchorValue(_playback.LoopRange.Start);
+        snapResult.TryToImproveWithAnchorValue(_playback.LoopRange.End);
     }
     #endregion
 }

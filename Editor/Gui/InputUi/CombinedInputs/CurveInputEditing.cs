@@ -184,13 +184,17 @@ public static class CurveInputEditing
             var newDragPosition = _singleCurveCanvas.InverseTransformPositionFloat(ImGui.GetIO().MousePos);
             double u = newDragPosition.X;
             var enableSnapping = ImGui.GetIO().KeyShift;
-            if(enableSnapping)
-                _singleCurveCanvas.SnapHandlerForU.CheckForSnapping(ref u, _singleCurveCanvas.Scale.X * 1.5f);
+            if (enableSnapping && _singleCurveCanvas.SnapHandlerForU.TryCheckForSnapping(u, out var snappedUValue, _singleCurveCanvas.Scale.X * 1.5f))
+            {
+                u = snappedUValue;
+            }
 
             double v = newDragPosition.Y;
-                
-            if(enableSnapping)
-                _singleCurveCanvas.SnapHandlerForV.CheckForSnapping(ref v, _singleCurveCanvas.Scale.Y * 1.5f);
+
+            if (enableSnapping && _singleCurveCanvas.SnapHandlerForV.TryCheckForSnapping(v, out var snappedVValue, _singleCurveCanvas.Scale.Y * 1.5f))
+            {
+                v = snappedVValue;
+            }
 
             UpdateDragCommand(u - vDef.U, v - vDef.Value);
 

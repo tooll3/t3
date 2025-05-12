@@ -31,10 +31,10 @@ public sealed class TimeRasterSwitcher:IValueSnapAttractor
         }
         ActiveRaster?.Draw(playback, unitsPerSeconds);
     }
-        
-    public SnapResult CheckForSnap(double value, float canvasScale)
+    
+    void IValueSnapAttractor.CheckForSnap(ref SnapResult snapResult)
     {
-        return ActiveRaster?.CheckForSnap(value, canvasScale);
+        ActiveRaster.CheckForSnap(ref snapResult);
     }
 
     private AbstractTimeRaster ActiveRaster

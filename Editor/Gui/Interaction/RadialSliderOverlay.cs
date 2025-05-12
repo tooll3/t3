@@ -195,7 +195,7 @@ public static class RadialSliderOverlay
         {
             var dialFade = MathUtils.SmootherStep(60, 160, _dampedRadius);
             var dialAngle= (float)( (_value - roundedValue) * (2 * Math.PI) / valueRange + mouseAngle);
-            _dampedDialValueAngle = MathUtils.LerpAngle(_dampedDialValueAngle, dialAngle, 0.4f);
+            _dampedDialValueAngle = MathUtils.LerpRadianAngle(_dampedDialValueAngle, dialAngle, 0.4f);
             var direction = new Vector2(MathF.Sin(_dampedDialValueAngle), MathF.Cos(_dampedDialValueAngle));
             drawList.AddLine(direction * _dampedRadius + _center,
                              direction * (_dampedRadius + 30) + _center,

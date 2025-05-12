@@ -137,7 +137,7 @@ internal sealed partial class MagGraphCanvas
         }
         else if (_context.StateMachine.CurrentState == GraphStates.RenameAnnotation)
         {
-            RenamingAnnotation2.Draw(_context);
+            AnnotationRenaming.Draw(_context);
         }
         else if (_context.StateMachine.CurrentState == GraphStates.DragAnnotation)
         {

@@ -3,7 +3,7 @@
   "Inputs": [
     {
       "Id": "b6b5617b-dada-4a58-a4df-f8f016ecbf00"/*Path*/,
-      "DefaultValue": "D:\\Framefield Dropbox\\Thomas Mann\\_projects\\2024-07-03 ArCapture\\04-Tests-Gesundbrunnen\\Gesundbrunnen-07-ICE\\2024_07_06_1416368060.hfcs"
+      "DefaultValue": "D:/Framefield Dropbox/Thomas Mann/_projects/2024-07-03 ArCapture/04-Tests-Gesundbrunnen/Gesundbrunnen-07-ICE/2024_07_06_1416368060.hfcs"
     }
   ],
   "Children": [
@@ -190,7 +190,7 @@
             "TimeClip": {
               "TimeRange": {
                 "Start": 0.0,
-                "End": 9.325
+                "End": 7.025
               },
               "SourceRange": {
                 "Start": 0.0,

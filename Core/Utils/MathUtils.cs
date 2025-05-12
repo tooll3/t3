@@ -293,7 +293,7 @@ public static class MathUtils
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static float LerpAngle(float from, float to, float t)
+    public static float LerpRadianAngle(float from, float to, float t)
     {
         var delta = Fmod((from - to), 2* MathF.PI);
         if (delta > MathF.PI)
@@ -302,6 +302,17 @@ public static class MathUtils
         return from - delta * t;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static float LerpDegreesAngle(float from, float to, float t)
+    {
+        var delta = Fmod((from - to), 360);
+        if (delta > 180)
+            delta -= 360;
+            
+        return from - delta * t;
+    }
+
+    
         
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float Fmod(float v, float mod)

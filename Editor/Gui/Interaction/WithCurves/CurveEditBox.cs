@@ -125,10 +125,8 @@ internal class CurveEditBox : IValueSnapAttractor
     }
         
     #region implement snapping interface -----------------------------------
-    SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
+    void IValueSnapAttractor.CheckForSnap(ref SnapResult snapResult)
     {
-        SnapResult bestSnapResult = null;
-        return bestSnapResult;
     }
     #endregion
 
@@ -202,13 +200,13 @@ internal class CurveEditBox : IValueSnapAttractor
                 var newBoundsMax = totalDeltaU + _boundUMaxDragStarted;
                 var newBoundsMin = totalDeltaU + _boundUMinDragStarted;
                 
-                if (_snapHandler.CheckForSnapping(ref newBoundsMin, _canvas.Scale.X, new List<IValueSnapAttractor> { this }))
+                if (_snapHandler.TryCheckForSnapping(newBoundsMin, out var snappedMinValue, _canvas.Scale.X, new List<IValueSnapAttractor> { this }))
                 {
-                    totalDeltaU = newBoundsMin - _boundUMinDragStarted;
+                    totalDeltaU = snappedMinValue - _boundUMinDragStarted;
                 }
-                else if (_snapHandler.CheckForSnapping(ref newBoundsMax, _canvas.Scale.X, new List<IValueSnapAttractor> { this }))
+                else if (_snapHandler.TryCheckForSnapping(newBoundsMax, out var snappedMaxValue, _canvas.Scale.X, new List<IValueSnapAttractor> { this }))
                 {
-                    totalDeltaU =  newBoundsMax - _boundUMaxDragStarted;
+                    totalDeltaU =  snappedMaxValue - _boundUMaxDragStarted;
                 }
             }
 
