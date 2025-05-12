@@ -22,6 +22,8 @@
         <PackageLicenseUrl>https://github.com/tixl3d/tixl?tab=MIT-1-ov-file#readme</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/tixl3d/tixl</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
+        <!-- Ensure there's a git commit hash in the version field for the about dialog -->
+        <IncludeSourceRevisionInInformationalVersion>true</IncludeSourceRevisionInInformationalVersion>
 
         <!-- <Authors>TiXL</Authors>
     <Owners>TiXL</Owners>
@@ -94,10 +96,7 @@
     </ItemGroup>
 
     <Target Name="CopyDefaults" AfterTargets="AfterBuild">
-        <Copy SourceFiles="@(DefaultUserConfigs)"
-            SkipUnchangedFiles="true"
-            UseHardlinksIfPossible="true"
-            DestinationFiles="@(DefaultUserConfigs->'$(OutputPath)/.tixl/%(RecursiveDir)%(Filename)%(Extension)')" />
+        <Copy SourceFiles="@(DefaultUserConfigs)" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" DestinationFiles="@(DefaultUserConfigs->'$(OutputPath)/.tixl/%(RecursiveDir)%(Filename)%(Extension)')" />
     </Target>
     <!-- ==========================//================================ -->
 
@@ -108,10 +107,7 @@
     </ItemGroup>
 
     <Target Name="CopyResources" AfterTargets="AfterBuild">
-        <Copy SourceFiles="@(Resources)"
-            SkipUnchangedFiles="true"
-            UseHardlinksIfPossible="true"
-            DestinationFiles="@(Resources->'$(OutputPath)/Resources/%(RecursiveDir)%(Filename)%(Extension)')" />
+        <Copy SourceFiles="@(Resources)" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" DestinationFiles="@(Resources->'$(OutputPath)/Resources/%(RecursiveDir)%(Filename)%(Extension)')" />
     </Target>
     <!-- ===========================//=============================== -->
 
@@ -132,10 +128,7 @@
         <Player Include="../Player/$(RelativeBuildFolder)/**/*" Visible="false" />
     </ItemGroup>
     <Target Name="CopyPlayer" AfterTargets="AfterBuild">
-        <Copy SourceFiles="@(Player)"
-            SkipUnchangedFiles="true"
-            UseHardlinksIfPossible="true"
-            DestinationFiles="@(Player->'$(OutputPath)/Player/%(RecursiveDir)%(Filename)%(Extension)')" />
+        <Copy SourceFiles="@(Player)" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" DestinationFiles="@(Player->'$(OutputPath)/Player/%(RecursiveDir)%(Filename)%(Extension)')" />
     </Target>
     <!-- =========================//=============================== -->
 
@@ -155,8 +148,7 @@
             <!-- This is a list of all the built-in operator projects. 'Include' refers to project
             directory, 'SubFolder' to export subfolder -->
             <Lib Include="$(Ops)/lib/$(RelativeBuildFolder)/**" SubFolder="lib" />
-            <TypeOperators Include="$(Ops)/TypeOperators/$(RelativeBuildFolder)/**"
-                SubFolder="TypeOperators" />
+            <TypeOperators Include="$(Ops)/TypeOperators/$(RelativeBuildFolder)/**" SubFolder="TypeOperators" />
             <LibEditor Include="$(Ops)/LibEditor/$(RelativeBuildFolder)/**" SubFolder="LibEditor" />
             <Examples Include="$(Ops)/examples/$(RelativeBuildFolder)/**" SubFolder="examples" />
             <Unsplash Include="$(Ops)/unsplash/$(RelativeBuildFolder)/**" SubFolder="unsplash" />
@@ -165,11 +157,7 @@
         </ItemGroup>
 
         <!-- Copy Dlls and symbols using the items and subfolders defined above -->
-        <Copy
-            SourceFiles="@(Lib);@(TypeOperators);@(LibEditor);@(Examples);@(Unsplash);@(Ndi);@(pixtur)"
-            DestinationFolder="$(ExportFolder)/%(SubFolder)/%(RecursiveDir)"
-            SkipUnchangedFiles="true"
-            UseHardlinksIfPossible="true" />
+        <Copy SourceFiles="@(Lib);@(TypeOperators);@(LibEditor);@(Examples);@(Unsplash);@(Ndi);@(pixtur)" DestinationFolder="$(ExportFolder)/%(SubFolder)/%(RecursiveDir)" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" />
     </Target>
     <!-- ==================================//====================================== -->
 
