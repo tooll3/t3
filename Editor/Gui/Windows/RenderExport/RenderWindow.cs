@@ -20,8 +20,7 @@ namespace T3.Editor.Gui.Windows.RenderExport
     {
         internal RenderWindow()
         {
-            Config.Title = "Render To File";
-            _lastHelpString = PreferredInputFormatHint;
+            Config.Title = "Render To File";      
         }
 
         protected override void DrawContent()
@@ -34,14 +33,35 @@ namespace T3.Editor.Gui.Windows.RenderExport
 
         private void DrawInnerContent()
         {
-            var mainTexture = OutputWindow.GetPrimaryOutputWindow()?.GetCurrentTexture();
-
-            if (FindIssueWithTexture(mainTexture, MfVideoWriter.SupportedFormats, out var warning))
+            
+            var outputWindow = OutputWindow.GetPrimaryOutputWindow();
+            if (outputWindow == null)
             {
-                _lastHelpString = warning; // Update _lastHelpString to persist the warning
-                CustomComponents.HelpText(warning);
+                _lastHelpString = "No output view available";
+                CustomComponents.HelpText(_lastHelpString);
                 return;
             }
+
+            // Get both the texture and the output type
+            var mainTexture = OutputWindow.GetPrimaryOutputWindow()?.GetCurrentTexture();
+            var outputType = outputWindow.ShownInstance?.Outputs.FirstOrDefault()?.ValueType;
+            if (outputType != typeof(Texture2D))
+            {
+                _lastHelpString = outputType == null ? "The output view is empty" :
+                                 outputType != typeof(Texture2D) ? "Select or pin a Symbol with Texture2D output in order to render to file" : string.Empty;
+                FormInputs.AddVerticalSpace(5);
+                ImGui.Separator();
+                FormInputs.AddVerticalSpace(5);
+                ImGui.BeginDisabled();
+                ImGui.Button("Start Render");
+                CustomComponents.TooltipForLastItem("Only Symbols with a texture2D output can be rendered to file");
+                ImGui.EndDisabled();
+                CustomComponents.HelpText(_lastHelpString);
+                return;
+            }
+
+            // Clear warning if texture is fine
+            _lastHelpString = "Ready to render.";
 
             // Render Mode Selection
             FormInputs.AddVerticalSpace();
