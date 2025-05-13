@@ -19,7 +19,7 @@ internal sealed class ExitDialog : ModalDialog
             FormInputs.AddVerticalSpace();         
             
             ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundButton.Rgba);
-            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundButtonActivated.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundActive.Rgba);
 
             if (ImGui.Button("The show must go on"))
             {
