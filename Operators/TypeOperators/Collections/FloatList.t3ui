@@ -1,16 +1,23 @@
 {
-  "Id": "7ba0451c-9b8d-46a7-bfac-9dcb15e00023"/*FloatList*/,
-  "Description": "Creates and initialized a list of float values",
+  "Id": "db22a341-09f6-4953-b252-61b343159650"/*FloatList*/,
+  "Description": "",
   "InputUis": [
     {
-      "InputId": "2b51b0be-25d1-4b7f-832d-8bc5498e5620"/*ResetTrigger*/,
+      "InputId": "6bf87714-c2f3-41b6-899b-cb4baab7d9f1"/*ResetTrigger*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
       }
     },
     {
-      "InputId": "5f2b5280-a157-4499-b3fa-60939a9e3ddd"/*DefaultValue*/,
+      "InputId": "8d131bbb-0740-4a08-955d-d24ebe25223c"/*ListLenght*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "fbc0c7c9-e468-4a21-917d-beb05e3c1962"/*DefaultValue*/,
       "Relevancy": "Required",
       "Position": {
         "X": 0.0,
@@ -18,19 +25,12 @@
       },
       "Min": -100.0,
       "Max": 100.0
-    },
-    {
-      "InputId": "a81d55fe-60fb-453f-a6c9-f08932066213"/*ListLenght*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 45.0
-      }
     }
   ],
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "918a871a-1ed6-4d40-a73e-05dbb3399b38"/*Result*/,
+      "OutputId": "73bd6ce3-92ac-44af-b334-3f66fe31b160"/*Result*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0

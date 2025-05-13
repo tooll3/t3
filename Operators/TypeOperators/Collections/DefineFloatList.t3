@@ -1,0 +1,19 @@
+{
+  "Id": "7ba0451c-9b8d-46a7-bfac-9dcb15e00023"/*DefineFloatList*/,
+  "Inputs": [
+    {
+      "Id": "2b51b0be-25d1-4b7f-832d-8bc5498e5620"/*ResetTrigger*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "5f2b5280-a157-4499-b3fa-60939a9e3ddd"/*DefaultValue*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "a81d55fe-60fb-453f-a6c9-f08932066213"/*ListLenght*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

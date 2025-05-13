@@ -6,10 +6,8 @@ using T3.Editor.UiModel.InputsAndTypes;
 
 namespace T3.Editor.Gui.InputUi.CombinedInputs;
 
-public sealed class StructuredListInputUi : InputValueUi<StructuredList>
+internal sealed class StructuredListInputUi : InputValueUi<StructuredList>
 {
-
-
     public override IInputUi Clone()
     {
         return new StructuredListInputUi
@@ -30,7 +28,7 @@ public sealed class StructuredListInputUi : InputValueUi<StructuredList>
             ImGui.TextUnformatted(name + " is null?!");
             return InputEditStateFlags.Nothing;
         }
-            
+
         return DrawEditor(slist);
     }
 
@@ -47,8 +45,7 @@ public sealed class StructuredListInputUi : InputValueUi<StructuredList>
         var modified = TableList.Draw(slist);
         return modified ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
     }
-        
-        
+
     protected override void DrawReadOnlyControl(string name, ref StructuredList slist)
     {
         if (slist == null)
@@ -56,9 +53,10 @@ public sealed class StructuredListInputUi : InputValueUi<StructuredList>
             ImGui.TextUnformatted("NULL?");
             return;
         }
+
         //ImGui.TextUnformatted($"{value.Type.Name}[{value.GetCount()}]");
         ImGui.NewLine();
-            
+
         var modified = TableList.Draw(slist);
         //return modified ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;            var modified = TableView.TableList.Draw(slist);
         //return modified ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;

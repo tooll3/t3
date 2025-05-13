@@ -43,9 +43,7 @@ public sealed class GradientInputUi : InputValueUi<Gradient>
         } 
         return modified;
     }
-
-    // TODO: Implement proper edit flags and Undo
-
+    
     protected override void DrawReadOnlyControl(string name, ref Gradient value)
     {
         ImGui.NewLine();
