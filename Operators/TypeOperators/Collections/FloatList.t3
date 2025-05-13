@@ -1,17 +1,17 @@
 {
-  "Id": "7ba0451c-9b8d-46a7-bfac-9dcb15e00023"/*FloatList*/,
+  "Id": "db22a341-09f6-4953-b252-61b343159650"/*FloatList*/,
   "Inputs": [
     {
-      "Id": "2b51b0be-25d1-4b7f-832d-8bc5498e5620"/*ResetTrigger*/,
+      "Id": "6bf87714-c2f3-41b6-899b-cb4baab7d9f1"/*ResetTrigger*/,
       "DefaultValue": false
     },
     {
-      "Id": "5f2b5280-a157-4499-b3fa-60939a9e3ddd"/*DefaultValue*/,
-      "DefaultValue": 0.0
+      "Id": "8d131bbb-0740-4a08-955d-d24ebe25223c"/*ListLenght*/,
+      "DefaultValue": 0
     },
     {
-      "Id": "a81d55fe-60fb-453f-a6c9-f08932066213"/*ListLenght*/,
-      "DefaultValue": 0
+      "Id": "fbc0c7c9-e468-4a21-917d-beb05e3c1962"/*DefaultValue*/,
+      "DefaultValue": 0.0
     }
   ],
   "Children": [],
