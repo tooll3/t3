@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using System.Threading.Tasks;
 using ImGuiNET;
 using T3.Core.Resource;
@@ -310,7 +310,7 @@ internal static class AppMenuBar
 
             if (ImGui.MenuItem("Exit", !T3Ui.IsCurrentlySaving))
             {
-                EditorUi.Instance.ExitApplication();
+                T3Ui.ExitDialog.ShowNextFrame();
             }
 
             if (ImGui.IsItemHovered() && T3Ui.IsCurrentlySaving)
