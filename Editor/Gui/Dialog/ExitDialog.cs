@@ -35,7 +35,7 @@ internal sealed class ExitDialog : ModalDialog
                 Log.Debug("Shutting down");
                 EditorUi.Instance.ExitApplication();   
             }
-
+            ImGui.PopStyleColor();
             ImGui.PopStyleColor();
             EndDialogContent();
         }
