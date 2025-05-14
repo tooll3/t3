@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.IO;
 using T3.Serialization;
 
@@ -7,14 +9,14 @@ namespace T3.Core.IO;
 /// <summary>
 /// Implements writing and reading configuration files 
 /// </summary>
-public class Settings<T> where T : class, new()
+public class Settings<T> where T  : class, new()
 {
-    public static T Config;
-    public static T Defaults;
+    public static T Config = new();
+    public static T Defaults = new();
 
     protected Settings(string relativeFilePath, bool saveOnQuit)
     {
-        if(saveOnQuit)
+        if (saveOnQuit)
             AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
 
         Defaults = new T();
@@ -23,7 +25,7 @@ public class Settings<T> where T : class, new()
         _instance = this;
     }
 
-    private static void OnProcessExit(object sender, EventArgs e)
+    private static void OnProcessExit(object? sender, EventArgs e)
     {
         Save();
     }

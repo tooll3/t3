@@ -1,21 +1,28 @@
+#nullable enable
+
+using System.Collections.Generic;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core.DataTypes;
-using T3.Core.Resource;
+using T3.Core.Logging;
 using ComputeShader = T3.Core.DataTypes.ComputeShader;
 using Texture2D = T3.Core.DataTypes.Texture2D;
 
-namespace T3.Editor.Gui.Windows.RenderExport;
+namespace T3.Core.Resource;
 
-internal static class TextureReadAccess
+public static class TextureReadAccess
 {
     public sealed class ReadRequestItem
     {
         public int RequestIndex;
-        public string Filepath;
-        public ScreenshotWriter.FileFormats FileFormat;
-        public Texture2D CpuAccessTexture;
-        public OnReadComplete OnSuccess;
+        
+        /// <summary>
+        /// An optional filepath that can be passed along
+        /// </summary>
+        public required string? Filepath;
+        //public ScreenshotWriter.FileFormats FileFormat;
+        public required Texture2D CpuAccessTexture;
+        public required OnReadComplete OnSuccess;
 
         public bool IsReady => RequestIndex == _swapCounter - (CpuAccessTextureCount - 2);
         public bool IsObsolete => RequestIndex < _swapCounter - (CpuAccessTextureCount - 2);
@@ -41,7 +48,9 @@ internal static class TextureReadAccess
 
         var completedRequest = _readRequests[0];
         //Log.Debug($"Completed frame i{completedRequest.RequestIndex} Run:{completedRequest.RequestRunTime:0.000}s Play:{completedRequest.RequestPlayback:0.000}s   completed {Playback.RunTimeInSecs:0.000}");
+        
         completedRequest.OnSuccess(completedRequest);
+        
         _readRequests.RemoveAt(0);
     }
 
@@ -51,13 +60,9 @@ internal static class TextureReadAccess
     /// Convert into BRGA and initiate the readback process.
     /// It will take several frames, until the texture is accessible and the callback is called.
     /// </summary>
-    public static bool InitiateRead(Texture2D originalTexture, OnReadComplete onSuccess, string filepath=null)
+    public static bool InitiateRead(Texture2D originalTexture, OnReadComplete onSuccess, string? filepath=null)
     {
-        // dataBox = new DataBox();
-        // inputStream = null;
-        //cpuAccessTexture = null;
-
-        if (originalTexture == null || originalTexture.IsDisposed)
+        if (originalTexture == null! || originalTexture.IsDisposed)
             return false;
 
         PrepareCpuAccessTextures(originalTexture.Description);
@@ -75,25 +80,13 @@ internal static class TextureReadAccess
                               {
                                   RequestIndex = _swapCounter,
                                   Filepath = filepath,
-                                  FileFormat = ScreenshotWriter.FileFormats.Png, // FIXME: this is weird.
+                                  //FileFormat = ScreenshotWriter.FileFormats.Png, // FIXME: this is weird.
                                   CpuAccessTexture = cpuAccessTexture,
                                   OnSuccess = onSuccess,
                               });
 
-        // _currentIndex = (_currentIndex + 1) % CpuAccessTextureCount;
-        //
-        // // Don't return first two samples since buffering is not ready yet
-        // if (_currentUsageIndex++ < 0)
-        //     return false;
-
         return true;
     }
-
-    // public static void Release()
-    // {
-    //     // release our resources
-    //     ResourceManager.Device.ImmediateContext.UnmapSubresource(cpuAccessTexture, 0);
-    // }
 
     public static void DisposeTextures()
     {
@@ -101,7 +94,7 @@ internal static class TextureReadAccess
 
         foreach (var image in _imagesWithCpuAccess)
         {
-            image?.Dispose();
+            image.Dispose();
         }
 
         _imagesWithCpuAccess.Clear();
@@ -129,7 +122,7 @@ internal static class TextureReadAccess
         var cpuAccessDescription = new Texture2DDescription
                                        {
                                            BindFlags = BindFlags.None,
-                                           Format = SharpDX.DXGI.Format.B8G8R8A8_UNorm,
+                                           Format = Format.B8G8R8A8_UNorm,
                                            Width = currentDesc.Width,
                                            Height = currentDesc.Height,
                                            MipLevels = 1,
@@ -149,7 +142,7 @@ internal static class TextureReadAccess
         var convertTextureDescription = new Texture2DDescription
                                             {
                                                 BindFlags = BindFlags.UnorderedAccess | BindFlags.RenderTarget | BindFlags.ShaderResource,
-                                                Format = SharpDX.DXGI.Format.B8G8R8A8_UNorm,
+                                                Format = Format.B8G8R8A8_UNorm,
                                                 Width = currentDesc.Width,
                                                 Height = currentDesc.Height,
                                                 MipLevels = 1,
@@ -160,7 +153,8 @@ internal static class TextureReadAccess
                                                 ArraySize = 1
                                             };
         _conversionTexture = Texture2D.CreateTexture2D(convertTextureDescription);
-        _conversionTexture.CreateUnorderedAccessView(ref _conversionUav, "textureReadAccessUav");
+        _conversionTexture.CreateUnorderedAccessView(ref _conversionUav, 
+                                                     "textureReadAccessUav");
     }
 
     #region conversion shader
@@ -182,6 +176,9 @@ internal static class TextureReadAccess
 
     private static void ConvertTextureToRgba(Texture2D inputTexture)
     {
+        if (_convertComputeShaderResource?.Value == null)
+            return;
+        
         var device = ResourceManager.Device;
         var deviceContext = device.ImmediateContext;
         var csStage = deviceContext.ComputeShader;
@@ -209,15 +206,15 @@ internal static class TextureReadAccess
         csStage.Set(prevShader);
     }
 
-    private static Resource<ComputeShader> _convertComputeShaderResource;
+    private static Resource<ComputeShader>? _convertComputeShaderResource;
     #endregion
 
     private static readonly List<ReadRequestItem> _readRequests = new(3);
 
     private static int _swapCounter;
 
-    private static Texture2D _conversionTexture;
-    private static UnorderedAccessView _conversionUav;
+    private static Texture2D? _conversionTexture;
+    private static UnorderedAccessView? _conversionUav;
     
     private const int CpuAccessTextureCount = 3;
     private static readonly List<Texture2D> _imagesWithCpuAccess = new(CpuAccessTextureCount);

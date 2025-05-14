@@ -1,3 +1,5 @@
+#nullable enable
+
 using SharpDX;
 using SharpDX.IO;
 using SharpDX.WIC;
@@ -6,7 +8,7 @@ using T3.Core.Resource;
 
 namespace T3.Editor.Gui.Windows.RenderExport;
 
-public static class ScreenshotWriter
+internal static class ScreenshotWriter
 {
     public enum FileFormats
     {
@@ -14,10 +16,12 @@ public static class ScreenshotWriter
         Jpg,
     }
 
-    public static string LastFilename { get; private set; }
+    internal static string? LastFilename { get; private set; }
 
-    public static bool StartSavingToFile(Texture2D gpuTexture, string filepath, FileFormats format)
+
+    internal static bool StartSavingToFile(Texture2D gpuTexture, string filepath, FileFormats format)
     {
+        _useFormats = format;
         return TextureReadAccess.InitiateRead(gpuTexture, OnReadComplete, filepath);
     }
     
@@ -53,7 +57,7 @@ public static class ScreenshotWriter
         }
 
         // Initialize a Jpeg encoder with this stream
-        BitmapEncoder encoder = request.FileFormat == FileFormats.Png
+        BitmapEncoder encoder = _useFormats == FileFormats.Png
                                     ? new PngBitmapEncoder(factory)
                                     : new JpegBitmapEncoder(factory);
         encoder.Initialize(stream);
@@ -71,7 +75,7 @@ public static class ScreenshotWriter
         
         try
         {
-            if (request.FileFormat == FileFormats.Png)
+            if (_useFormats == FileFormats.Png)
             {
                 // Note: dataBox.RowPitch and outputStream.RowPitch can diverge if width is not divisible by 16.
                 for (var loopY = 0; loopY < height; loopY++)
@@ -82,6 +86,7 @@ public static class ScreenshotWriter
             }
             else
             {
+                // We need to skip bytes for alpha channel from stream... 
                 for (var y1 = 0; y1 < height; y1++)
                 {
                     imageStream.Position = (long)(y1) * dataBox.RowPitch;
@@ -114,8 +119,12 @@ public static class ScreenshotWriter
             LastFilename = request.Filepath;
         }
     }
+    
+    /// <summary>
+    /// Save the requested format for later use by callback.
+    /// This is not ideal, but beats the alternative to moving file formats to
+    /// <see cref="TextureReadAccess"/> in core.
+    /// </summary>
+    private static FileFormats _useFormats = FileFormats.Png;
 
-    // skip a certain number of images at the beginning since the
-    // final content will only appear after several buffer flips
-    public const int SkipImages = 2;
 }

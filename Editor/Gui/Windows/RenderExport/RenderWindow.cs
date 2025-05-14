@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using ImGuiNET;
@@ -6,6 +5,7 @@ using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Resource;
 using T3.Core.UserData;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
@@ -113,8 +113,8 @@ namespace T3.Editor.Gui.Windows.RenderExport
             // Ensure the filename is trimmed and not empty
             if (FormInputs.AddStringInput("File name", ref UserSettings.Config.RenderSequenceFileName))
             {
-                UserSettings.Config.RenderSequenceFileName = UserSettings.Config.RenderSequenceFileName?.Trim();
-                if (string.IsNullOrEmpty(UserSettings.Config.RenderSequenceFileName))
+                UserSettings.Config.RenderSequenceFileName = UserSettings.Config?.RenderSequenceFileName?.Trim() ?? string.Empty;
+                if (string.IsNullOrEmpty(UserSettings.Config?.RenderSequenceFileName))
                 {
                     UserSettings.Config.RenderSequenceFileName = "output";
                 }
@@ -202,7 +202,7 @@ namespace T3.Editor.Gui.Windows.RenderExport
             TextureReadAccess.ClearQueue();
         }
 
-        private bool ProcessCurrentFrame(ref Texture2D mainTexture, Int2 size)
+        private static bool ProcessCurrentFrame(ref Texture2D mainTexture, Int2 size)
         {
             if (_renderMode == RenderMode.Video)
             {
