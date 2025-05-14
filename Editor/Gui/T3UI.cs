@@ -126,6 +126,7 @@ public static class T3Ui
         CreateFromTemplateDialog.Draw();
         _userNameDialog.Draw();
         AboutDialog.Draw();
+        ExitDialog.Draw();
 
         if (IsWindowLayoutComplete())
         {
@@ -357,6 +358,7 @@ public static class T3Ui
     internal static readonly AboutDialog AboutDialog = new();
     private static readonly SearchDialog _searchDialog = new();
     internal static readonly NewProjectDialog NewProjectDialog = new();
+    internal static readonly ExitDialog ExitDialog = new();
 
     [Flags]
     public enum EditingFlags

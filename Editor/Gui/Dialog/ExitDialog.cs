@@ -10,14 +10,14 @@ internal sealed class ExitDialog : ModalDialog
 {
     internal void Draw()
     {
-        DialogSize = new Vector2(330, 200) * T3Ui.UiScaleFactor;
+        DialogSize = new Vector2(330, 200);
         
         if (BeginDialog(string.Empty))
         {
             FormInputs.AddSectionHeader("Are you leaving?");
 
-            FormInputs.AddVerticalSpace();         
-            
+            FormInputs.AddVerticalSpace();
+            ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 5.0f);
             ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundButton.Rgba);
             ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundActive.Rgba);
 
@@ -27,7 +27,7 @@ internal sealed class ExitDialog : ModalDialog
             }
 
             ImGui.SameLine();
-            ImGui.Dummy(new Vector2(50, 1));
+            ImGui.Dummy(new Vector2(40, 1));
             ImGui.SameLine();
         
             if (ImGui.Button("Exit"))
@@ -37,6 +37,7 @@ internal sealed class ExitDialog : ModalDialog
             }
             ImGui.PopStyleColor();
             ImGui.PopStyleColor();
+            ImGui.PopStyleVar();
             EndDialogContent();
         }
         EndDialog();

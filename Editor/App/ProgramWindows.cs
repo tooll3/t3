@@ -201,8 +201,12 @@ internal static class ProgramWindows
         }
         else
         {
+#if DEBUG
+            args.Cancel = false;
+#else
             args.Cancel = true;
             T3Ui.ExitDialog.ShowNextFrame();
+#endif
         }
     }
 
