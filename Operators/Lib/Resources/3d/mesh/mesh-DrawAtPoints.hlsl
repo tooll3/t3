@@ -20,9 +20,11 @@ cbuffer Transforms : register(b0)
 cbuffer Params : register(b1)
 {
     float4 Color;
+
     float Scale;
-    float UseWForSize;
     float AlphaCutOff;
+    
+    float UseWForSize;
 };
 
 cbuffer Params : register(b2)
