@@ -75,7 +75,7 @@ public static class T3Ui
             PlaybackUtils.UpdatePlaybackAndSyncing();
             AudioEngine.CompleteFrame(Playback.Current, Playback.LastFrameDuration);    // Update
         }
-        TextureReadAccess.Update();
+        TextureBgraReadAccess.Update();
         
         ResourceManager.RaiseFileWatchingEvents();
 
@@ -357,6 +357,7 @@ public static class T3Ui
     internal static readonly AboutDialog AboutDialog = new();
     private static readonly SearchDialog _searchDialog = new();
     internal static readonly NewProjectDialog NewProjectDialog = new();
+    internal static readonly TextureBgraReadAccess TextureBgraReadAccess = new();
 
     [Flags]
     public enum EditingFlags

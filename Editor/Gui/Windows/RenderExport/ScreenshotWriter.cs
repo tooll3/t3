@@ -22,10 +22,10 @@ internal static class ScreenshotWriter
     internal static bool StartSavingToFile(Texture2D gpuTexture, string filepath, FileFormats format)
     {
         _useFormats = format;
-        return TextureReadAccess.InitiateRead(gpuTexture, OnReadComplete, filepath);
+        return T3Ui.TextureBgraReadAccess.InitiateReadAndConvert(gpuTexture, OnReadComplete, filepath);
     }
     
-    private static void OnReadComplete(TextureReadAccess.ReadRequestItem request)
+    private static void OnReadComplete(TextureBgraReadAccess.ReadRequestItem request)
     {
         var immediateContext = ResourceManager.Device.ImmediateContext;
         if (request.CpuAccessTexture.IsDisposed)
@@ -123,7 +123,7 @@ internal static class ScreenshotWriter
     /// <summary>
     /// Save the requested format for later use by callback.
     /// This is not ideal, but beats the alternative to moving file formats to
-    /// <see cref="TextureReadAccess"/> in core.
+    /// <see cref="TextureBgraReadAccess"/> in core.
     /// </summary>
     private static FileFormats _useFormats = FileFormats.Png;
 

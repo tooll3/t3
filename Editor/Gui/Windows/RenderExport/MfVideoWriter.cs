@@ -24,7 +24,7 @@ internal abstract class MfVideoWriter : IDisposable
         if (!_mfInitialized)
         {
             // Initialize MF library. MUST be called before any MF related operations.
-            MF.MediaFactory.Startup(MF.MediaFactory.Version, 0);
+            MediaFactory.Startup(MediaFactory.Version, 0);
             _mfInitialized = true;
         }
 
@@ -77,13 +77,13 @@ internal abstract class MfVideoWriter : IDisposable
                 CreateMediaTarget(SinkWriter, _videoPixelSize, out _streamIndex);
 
                 // Configure media type of video
-                using (var mediaTypeIn = new MF.MediaType())
+                using (var mediaTypeIn = new MediaType())
                 {
-                    mediaTypeIn.Set(MF.MediaTypeAttributeKeys.MajorType, MF.MediaTypeGuids.Video);
-                    mediaTypeIn.Set(MF.MediaTypeAttributeKeys.Subtype, _videoInputFormat);
-                    mediaTypeIn.Set(MF.MediaTypeAttributeKeys.InterlaceMode, (int)MF.VideoInterlaceMode.Progressive);
-                    mediaTypeIn.Set(MF.MediaTypeAttributeKeys.FrameSize, MfHelper.GetMfEncodedIntsByValues(_videoPixelSize.Width, _videoPixelSize.Height));
-                    mediaTypeIn.Set(MF.MediaTypeAttributeKeys.FrameRate, MfHelper.GetMfEncodedIntsByValues(Framerate, 1));
+                    mediaTypeIn.Set(MediaTypeAttributeKeys.MajorType, MediaTypeGuids.Video);
+                    mediaTypeIn.Set(MediaTypeAttributeKeys.Subtype, _videoInputFormat);
+                    mediaTypeIn.Set(MediaTypeAttributeKeys.InterlaceMode, (int)VideoInterlaceMode.Progressive);
+                    mediaTypeIn.Set(MediaTypeAttributeKeys.FrameSize, MfHelper.GetMfEncodedIntsByValues(_videoPixelSize.Width, _videoPixelSize.Height));
+                    mediaTypeIn.Set(MediaTypeAttributeKeys.FrameRate, MfHelper.GetMfEncodedIntsByValues(Framerate, 1));
                     SinkWriter.SetInputMediaType(_streamIndex, mediaTypeIn, null);
                 }
 
@@ -162,7 +162,7 @@ internal abstract class MfVideoWriter : IDisposable
         }
 
         // Initiate reading next frame
-        if (!TextureReadAccess.InitiateRead(gpuTexture, SaveSampleAfterReadback))
+        if (!T3Ui.TextureBgraReadAccess.InitiateReadAndConvert(gpuTexture, SaveSampleAfterReadback))
         {
             Log.Warning("Can't initiate texture readback");
         }
@@ -172,7 +172,7 @@ internal abstract class MfVideoWriter : IDisposable
 
 
 
-    private void SaveSampleAfterReadback(TextureReadAccess.ReadRequestItem readRequestItem)
+    private void SaveSampleAfterReadback(TextureBgraReadAccess.ReadRequestItem readRequestItem)
     {
         if (_lastSample != null)
         {
@@ -204,7 +204,7 @@ internal abstract class MfVideoWriter : IDisposable
 
         // Write all contents to the MediaBuffer for media foundation
         var mediaBufferLength = RgbaSizeInBytes(ref cpuAccessTexture);
-        var mediaBuffer = MF.MediaFactory.CreateMemoryBuffer(mediaBufferLength);
+        var mediaBuffer = MediaFactory.CreateMemoryBuffer(mediaBufferLength);
         var mediaBufferPointer = mediaBuffer.Lock(out _, out _);
 
         // Note: dataBox.RowPitch and outputStream.RowPitch can diverge if width is not divisible by 16.
@@ -242,7 +242,7 @@ internal abstract class MfVideoWriter : IDisposable
         mediaBuffer.CurrentLength = mediaBufferLength;
 
         // Create the sample (includes image and timing information)
-        _lastSample = MF.MediaFactory.CreateSample();
+        _lastSample = MediaFactory.CreateSample();
         _lastSample.AddBuffer(mediaBuffer);
         
         mediaBuffer.Dispose();
@@ -318,7 +318,7 @@ internal abstract class MfVideoWriter : IDisposable
     /// <param name="sinkWriter">The previously created SinkWriter.</param>
     /// <param name="videoPixelSize">The pixel size of the video.</param>
     /// <param name="streamIndex">The stream index for the new target.</param>
-    protected abstract void CreateMediaTarget(MF.SinkWriter sinkWriter, Int2 videoPixelSize, out int streamIndex);
+    protected abstract void CreateMediaTarget(SinkWriter sinkWriter, Int2 videoPixelSize, out int streamIndex);
 
     /// <summary>
     /// Internal use: FlipY during rendering?
@@ -353,14 +353,14 @@ internal abstract class MfVideoWriter : IDisposable
             }
         }
 
-        TextureReadAccess.DisposeTextures();
+        T3Ui.TextureBgraReadAccess.Dispose();
     }
     #endregion
 
 
     
     #region Resources for MediaFoundation video rendering
-    private MF.Sample _lastSample;
+    private Sample _lastSample;
     // private MF.ByteStream outStream;
     private readonly Int2 _videoPixelSize;
     private int _frameIndex;
@@ -369,10 +369,10 @@ internal abstract class MfVideoWriter : IDisposable
 
     private int StreamIndex => _streamIndex;
 
-    private MF.SinkWriter SinkWriter { get; set; }
+    private SinkWriter SinkWriter { get; set; }
     private MediaFoundationAudioWriter _audioWriter;
 
-    private static readonly Guid _videoInputFormatId = MF.VideoFormatGuids.Rgb32;
+    private static readonly Guid _videoInputFormatId = VideoFormatGuids.Rgb32;
     private bool _supportAudio;
     private static bool _mfInitialized = false;
     private readonly Guid _videoInputFormat;
@@ -380,7 +380,7 @@ internal abstract class MfVideoWriter : IDisposable
 
 internal sealed class Mp4VideoWriter : MfVideoWriter
 {
-    private static readonly Guid _h264EncodingFormatId = MF.VideoFormatGuids.H264;
+    private static readonly Guid _h264EncodingFormatId = VideoFormatGuids.H264;
 
     public Mp4VideoWriter(string filePath, Int2 videoPixelSize, bool supportAudio = false)
         : base(filePath, videoPixelSize, supportAudio)
@@ -389,13 +389,13 @@ internal sealed class Mp4VideoWriter : MfVideoWriter
 
     protected override void CreateMediaTarget(SinkWriter sinkWriter, Int2 videoPixelSize, out int streamIndex)
     {
-        using var mediaTypeOut = new MF.MediaType();
-        mediaTypeOut.Set(MF.MediaTypeAttributeKeys.MajorType, MF.MediaTypeGuids.Video);
-        mediaTypeOut.Set(MF.MediaTypeAttributeKeys.Subtype, _h264EncodingFormatId);
-        mediaTypeOut.Set(MF.MediaTypeAttributeKeys.AvgBitrate, Bitrate);
-        mediaTypeOut.Set(MF.MediaTypeAttributeKeys.InterlaceMode, (int)MF.VideoInterlaceMode.Progressive);
-        mediaTypeOut.Set(MF.MediaTypeAttributeKeys.FrameSize, MfHelper.GetMfEncodedIntsByValues(videoPixelSize.Width, videoPixelSize.Height));
-        mediaTypeOut.Set(MF.MediaTypeAttributeKeys.FrameRate, MfHelper.GetMfEncodedIntsByValues(Framerate, 1));
+        using var mediaTypeOut = new MediaType();
+        mediaTypeOut.Set(MediaTypeAttributeKeys.MajorType, MediaTypeGuids.Video);
+        mediaTypeOut.Set(MediaTypeAttributeKeys.Subtype, _h264EncodingFormatId);
+        mediaTypeOut.Set(MediaTypeAttributeKeys.AvgBitrate, Bitrate);
+        mediaTypeOut.Set(MediaTypeAttributeKeys.InterlaceMode, (int)VideoInterlaceMode.Progressive);
+        mediaTypeOut.Set(MediaTypeAttributeKeys.FrameSize, MfHelper.GetMfEncodedIntsByValues(videoPixelSize.Width, videoPixelSize.Height));
+        mediaTypeOut.Set(MediaTypeAttributeKeys.FrameRate, MfHelper.GetMfEncodedIntsByValues(Framerate, 1));
         sinkWriter.AddStream(mediaTypeOut, out streamIndex);
     }
 

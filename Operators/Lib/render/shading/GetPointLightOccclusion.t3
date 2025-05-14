@@ -174,24 +174,12 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\3d\\postfx\\GetPointLightOcclusion.hlsl"
+          "Value": "Resources/lib/3d/postfx/GetPointLightOcclusion.hlsl"
         },
         {
           "Id": "c0701d0b-d37f-4570-9e9a-ec2e88b919d1"/*DebugName*/,
           "Type": "System.String",
           "Value": ""
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "eb0e18b0-c83e-40f0-b9c1-dff2d5703638"/*Damp*/,
-      "SymbolId": "af9c5db8-7144-4164-b605-b287aaf71bf6",
-      "InputValues": [
-        {
-          "Id": "f29d5426-5e31-4c7c-be77-5e45bfb9daa9"/*Damping*/,
-          "Type": "System.Single",
-          "Value": 0.48
         }
       ],
       "Outputs": []
@@ -329,18 +317,6 @@
       "SourceSlotId": "dc71f39f-3fba-4fc6-b8ef-ce57c82bf78e",
       "TargetParentOrChildId": "bf1e3f9c-0685-43a9-a335-b33f22f8ba60",
       "TargetSlotId": "88938b09-d5a7-437c-b6e1-48a5b375d756"
-    },
-    {
-      "SourceParentOrChildId": "53b60aab-39b2-4ca1-8283-87331b4d7a34",
-      "SourceSlotId": "7267b39a-bc11-450c-950e-e87701156546",
-      "TargetParentOrChildId": "eb0e18b0-c83e-40f0-b9c1-dff2d5703638",
-      "TargetSlotId": "795aca79-dd10-4f28-a290-a30e7b27b436"
-    },
-    {
-      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
-      "SourceSlotId": "ef73ef3c-ad47-48ab-abaf-aec450a8459f",
-      "TargetParentOrChildId": "eb0e18b0-c83e-40f0-b9c1-dff2d5703638",
-      "TargetSlotId": "f29d5426-5e31-4c7c-be77-5e45bfb9daa9"
     }
   ]
 }
