@@ -1,4 +1,4 @@
-﻿using System.Windows.Forms;
+using System.Windows.Forms;
 using ImGuiNET;
 using T3.Core.Model;
 using T3.Core.SystemUi;
@@ -35,12 +35,12 @@ internal sealed class NewProjectDialog : ModalDialog
                 namespaceCorrect = false;
                 namespaceWarningText = "Namespace must be a valid and unique C# namespace";
             }
-                
-            FormInputs.AddStringInput("Namespace", ref _newSubNamespace, 
-                                      warning: namespaceWarningText, 
-                                      autoFocus: _needsAutoFocus, 
-                                      tooltip:"An additional namespace withing your user area that can help to further group your projects.");
+
             _needsAutoFocus = false;
+            FormInputs.AddStringInput("Namespace", ref _newSubNamespace,"(Optional)", 
+                                      warning: namespaceWarningText, 
+                                      tooltip:"An additional namespace withing your user area that can help to further group your projects.",
+                                      autoFocus: _needsAutoFocus);
                 
             // ProjectName
             var warning = string.Empty;
@@ -69,9 +69,9 @@ internal sealed class NewProjectDialog : ModalDialog
                 
             //ImGui.SetKeyboardFocusHere();
             
-            FormInputs.AddStringInput("Name", ref _newProjectName,
+            FormInputs.AddStringInput("Name", ref _newProjectName, "(mandatory)", warning, 
                                       "Is used to identify your project. Must not contain spaces or special characters.",
-                                      warning);
+                                      autoFocus: true);
 
             var allValid = namespaceCorrect && nameCorrect;
 

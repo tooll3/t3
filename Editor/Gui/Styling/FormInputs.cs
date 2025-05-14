@@ -140,9 +140,11 @@ internal static class FormInputs
         }
 
         DrawInputLabel(label);
-        var size = GetAvailableInputSize(tooltip, hasReset);
+
+        var size = GetAvailableInputSize(tooltip, hasReset, true);
 
         ImGui.PushID(label);
+
         var result = SingleValueEdit.Draw(ref value, size, min, max, clamp, scale);
         ImGui.PopID();
 
@@ -217,8 +219,9 @@ internal static class FormInputs
             spaceForTooltip = 30f;
         }
         
-            var inputSize = GetAvailableInputSize(null, false, true, spaceForTooltip);
+        var inputSize = GetAvailableInputSize(null, false, true, spaceForTooltip);
         ImGui.SetNextItemWidth(inputSize.X);
+
         var modified = false;
         if (ImGui.BeginCombo("##SelectTheme",
                              selectedValue, 
@@ -377,7 +380,7 @@ internal static class FormInputs
         var inputSize = GetAvailableInputSize(tooltip, false, true);
         ImGui.SetNextItemWidth(inputSize.X);
         ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 5);
-            
+
             
         var modified = ImGui.InputText("##" + label, ref value, 1000);
         if (!modified && wasNull)
@@ -815,13 +818,13 @@ internal static class FormInputs
         ImGui.SameLine();
 
         ImGui.PushFont(Icons.IconFont);
-        ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.5f));
-        ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-
+        //ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 5.5f));
+        //ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
+        //ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(10, 10));
         ImGui.AlignTextToFramePadding();
-        ImGui.TextUnformatted(" " + (char)Icon.Help);
+        ImGui.TextUnformatted(""+(char)Icon.Help);
 
-        ImGui.PopStyleVar(2);
+       // ImGui.PopStyleVar();
         ImGui.PopFont();
 
         //CustomComponents.TooltipForLastItem(tooltip, null, false);
