@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using ImGuiNET;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
@@ -212,10 +212,16 @@ internal static class FormInputs
     public static bool AddDropdown(ref string selectedValue, IEnumerable<string?> values, string label, string? tooltip = null)
     {
         DrawInputLabel(label);
-
+        var spaceForTooltip = 0f;
+        if (tooltip != null) {
+            spaceForTooltip = 30f;
+        }
+        
+            var inputSize = GetAvailableInputSize(null, false, true, spaceForTooltip);
+        ImGui.SetNextItemWidth(inputSize.X);
         var modified = false;
-        if (ImGui.BeginCombo("##SelectTheme", 
-                             "Default", 
+        if (ImGui.BeginCombo("##SelectTheme",
+                             selectedValue, 
                              ImGuiComboFlags.HeightLarge))
         {
             foreach (var value in values)
