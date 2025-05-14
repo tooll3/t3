@@ -10,7 +10,7 @@
       "DefaultValue": 1.0
     },
     {
-      "Id": "e1dc5cdc-24d2-409f-9ea6-6dd14fdb70d3"/*RadiusB*/,
+      "Id": "e1dc5cdc-24d2-409f-9ea6-6dd14fdb70d3"/*Thickness*/,
       "DefaultValue": 1.0
     },
     {

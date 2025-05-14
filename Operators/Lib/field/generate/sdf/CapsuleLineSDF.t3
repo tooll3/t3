@@ -18,7 +18,7 @@
       }
     },
     {
-      "Id": "808c44ff-44e2-4a22-91f1-f459f298e6eb"/*Radius*/,
+      "Id": "808c44ff-44e2-4a22-91f1-f459f298e6eb"/*Thickness*/,
       "DefaultValue": 0.125
     },
     {

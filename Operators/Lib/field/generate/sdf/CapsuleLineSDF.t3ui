@@ -19,7 +19,7 @@
       "Description": "Transforms the center of the object"
     },
     {
-      "InputId": "808c44ff-44e2-4a22-91f1-f459f298e6eb"/*Radius*/,
+      "InputId": "808c44ff-44e2-4a22-91f1-f459f298e6eb"/*Thickness*/,
       "Position": {
         "X": -200.0,
         "Y": 135.0

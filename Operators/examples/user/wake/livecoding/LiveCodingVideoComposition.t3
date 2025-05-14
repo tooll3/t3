@@ -8266,16 +8266,7 @@
     "AudioDecayFactor": 0.85,
     "AudioGainFactor": 1.0,
     "AudioInputDeviceName": "Speakers (Realtek(R) Audio)",
-    "AudioClips": [
-      {
-        "Id": "00000000-0000-0000-0000-000000000000",
-        "StartTime": 0.0,
-        "EndTime": 0.0,
-        "Bpm": 120.0,
-        "DiscardAfterUse": true,
-        "IsSoundtrack": true
-      }
-    ]
+    "AudioClips": []
   },
   "Animator": [
     {

@@ -1201,6 +1201,12 @@
       ]
     },
     {
+      "Id": "979838c5-9ab0-4312-b6dd-af893ce420c0"/*GetPointLightOccclusion*/,
+      "SymbolId": "574d636f-64e6-4f07-ac17-49754d2c3599",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "9c90ef05-7a12-4446-b046-ddddfaf2bbda"/*PointLight*/,
       "SymbolId": "9c67a8c8-839f-4f67-a949-08cb38b9dffd",
       "InputValues": [
