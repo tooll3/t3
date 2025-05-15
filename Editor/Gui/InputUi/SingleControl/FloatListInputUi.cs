@@ -24,7 +24,6 @@ internal sealed class FloatListInputUi : InputValueUi<List<float>>
         // Handle missing or empty list
         if (list == null)
         {
-            //ImGui.TextUnformatted(name + " is null?!");
             if (ImGui.Button("Create"))
             {
                 list = [];
@@ -64,7 +63,8 @@ internal sealed class FloatListInputUi : InputValueUi<List<float>>
             return InputEditStateFlags.ModifiedAndFinished;
         }
         
-        if (!_isDragging || _listOrderWhileDragging.Count != list.Count)
+        // List...
+        if (!_isDragging && _listOrderWhileDragging.Count != list.Count)
         {
             _listOrderWhileDragging.Clear();
             for (var index = 0; index < list.Count; index++)
@@ -73,13 +73,14 @@ internal sealed class FloatListInputUi : InputValueUi<List<float>>
             }
         }
         
-        // List...
         var cloneIfModified = input.IsDefault;
         
         var modified = InputEditStateFlags.Nothing;
+        var completedDragging = false;
         for (var index = 0; index < list.Count; index++)
         {
-            var dragIndex = _listOrderWhileDragging[index];
+            var dragIndex = _isDragging ? _listOrderWhileDragging[index]
+                                : index;
             ImGui.PushID(dragIndex);
             ImGui.AlignTextToFramePadding();
             
@@ -113,15 +114,18 @@ internal sealed class FloatListInputUi : InputValueUi<List<float>>
                     }
 
                     var newIndex = index + indexDelta;
-                    if(newIndex>0 && index < list.Count && newIndex < list.Count)
-                        (list[newIndex], list[index])
-                                = (list[index], list[newIndex]);
+                    if (newIndex >= 0 && index < list.Count && newIndex < list.Count)
+                    {
+                        (list[newIndex], list[index]) = (list[index], list[newIndex]);
+                        (_listOrderWhileDragging[newIndex], _listOrderWhileDragging[index]) = (_listOrderWhileDragging[index], _listOrderWhileDragging[newIndex]);
+                        
+                    }
                 }
             }
 
             if (ImGui.IsItemDeactivated())
             {
-                _isDragging = false;
+                completedDragging = true;
             }
             
             ImGui.SameLine(30 * T3Ui.UiScaleFactor);
@@ -167,6 +171,13 @@ internal sealed class FloatListInputUi : InputValueUi<List<float>>
                 list[index] = ff;
             }
             ImGui.PopID();
+        }
+
+        if (completedDragging)
+        {
+            _isDragging = false;
+            _listOrderWhileDragging.Clear();
+
         }
         return modified;
     }
