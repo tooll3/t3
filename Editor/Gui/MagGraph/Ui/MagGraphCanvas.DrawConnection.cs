@@ -37,6 +37,7 @@ internal sealed partial class MagGraphCanvas
                                 : ColorVariations.ConnectionLines.Apply(color);
         
         var typeColor = ColorVariations.ConnectionLines.Apply(selectedColor).Fade(MathUtils.Lerp(0.6f, 1, idleFadeProgress));
+        var connectionTypeColor = ColorVariations.OperatorLabel.Apply(selectedColor).Fade(MathUtils.Lerp(0.6f, 1, idleFadeProgress));
         
         var sourcePosOnScreen = TransformPosition(connection.SourcePos);
         var targetPosOnScreen = TransformPosition(connection.TargetPos);
@@ -73,7 +74,7 @@ internal sealed partial class MagGraphCanvas
                                                sourcePosOnScreen + new Vector2(-anchorHeight/2, -anchorWidth ) * CanvasScale * 2,
                                                sourcePosOnScreen + new Vector2(anchorHeight/2,0 ) * CanvasScale * 2,
                                                sourcePosOnScreen + new Vector2(-anchorHeight/2, anchorWidth) * CanvasScale * 2,
-                                               typeColor);
+                                               connectionTypeColor);
                     break;
                 }
                 
@@ -101,7 +102,7 @@ internal sealed partial class MagGraphCanvas
                                                sourcePosOnScreen + new Vector2(-anchorWidth, -anchorHeight/2) * CanvasScale * 2,
                                                sourcePosOnScreen + new Vector2(anchorWidth, -anchorHeight/2) * CanvasScale * 2,
                                                sourcePosOnScreen + new Vector2(0, anchorHeight/2) * CanvasScale * 2,
-                                               typeColor);
+                                               connectionTypeColor);
                     break;
                 }
 
