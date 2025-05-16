@@ -774,10 +774,10 @@ internal sealed class MagGraphLayout
     {
         foreach (var sc in MagConnections)
         {
-            var sourceMin = sc.SourceItem.DampedPosOnCanvas;
+            var sourceMin = sc.SourceItem.PosOnCanvas;
             var sourceMax = sourceMin + sc.SourceItem.Size;
 
-            var targetMin = sc.TargetItem.DampedPosOnCanvas;
+            var targetMin = sc.TargetItem.PosOnCanvas;
 
             // Snapped horizontally
             if (
