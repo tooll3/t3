@@ -33,23 +33,36 @@ public sealed class TextureReadAccess : IDisposable
     {
         _swapCounter++;
 
-        // Clear obsolete items
         while (_readRequests.Count > 0 && _readRequests[0].IsObsolete)
         {
             Log.Debug("Remove obsolete");
             _readRequests.RemoveAt(0);
         }
-        
+
         if (_readRequests.Count == 0 || !_readRequests[0].IsReady)
             return;
 
         var completedRequest = _readRequests[0];
-        //Log.Debug($"Completed frame i{completedRequest.RequestIndex} Run:{completedRequest.RequestRunTime:0.000}s Play:{completedRequest.RequestPlayback:0.000}s   completed {Playback.RunTimeInSecs:0.000}");
-        
-        completedRequest.OnSuccess(completedRequest);
-        
-        _readRequests.RemoveAt(0);
+        var context = ResourceManager.Device.ImmediateContext;
+
+        var dataBox = context.MapSubresource(
+                                             completedRequest.CpuAccessTexture,
+                                             0,
+                                             MapMode.Read,
+                                             SharpDX.Direct3D11.MapFlags.None
+                                            );
+
+        try
+        {
+            completedRequest.OnSuccess(completedRequest);
+        }
+        finally
+        {
+            context.UnmapSubresource(completedRequest.CpuAccessTexture, 0);
+            _readRequests.RemoveAt(0);
+        }
     }
+
 
     public delegate void OnReadComplete(ReadRequestItem cpuAccessTexture);
     
@@ -68,7 +81,7 @@ public sealed class TextureReadAccess : IDisposable
         var immediateContext = ResourceManager.Device.ImmediateContext;
         var cpuAccessTexture = _imagesWithCpuAccess[_swapCounter % CpuAccessTextureCount];
         immediateContext.CopyResource(originalTexture, cpuAccessTexture);
-        immediateContext.UnmapSubresource(cpuAccessTexture, 0);
+        //immediateContext.UnmapSubresource(cpuAccessTexture, 0);
 
         _readRequests.Add(new ReadRequestItem
                               {
