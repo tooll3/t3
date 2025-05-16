@@ -14,7 +14,7 @@
 - [ ] Publish as input does not create connection
 - [x] In Parameter window bypassable button should be disabled if not available
 - [x] Prevent Keyboard Camera interaction while input field is active 
-- [ ] Exit should ask before quit
+- [x] Exit should ask before quit
 
 ## Project handling
 
