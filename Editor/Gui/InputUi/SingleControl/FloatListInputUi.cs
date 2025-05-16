@@ -21,9 +21,9 @@ internal sealed class FloatListInputUi : InputValueUi<List<float>>
     
     protected override InputEditStateFlags DrawEditControl(string name, Symbol.Child.Input input, ref List<float> list, bool readOnly)
     {
+        // Handle missing or empty list
         if (list == null)
         {
-            //ImGui.TextUnformatted(name + " is null?!");
             if (ImGui.Button("Create"))
             {
                 list = [];
@@ -47,6 +47,7 @@ internal sealed class FloatListInputUi : InputValueUi<List<float>>
 
             return InputEditStateFlags.Nothing;
         }
+        
         if(ImGui.Button("Clear all"))
         {
             if (input.IsDefault)
@@ -62,14 +63,71 @@ internal sealed class FloatListInputUi : InputValueUi<List<float>>
             return InputEditStateFlags.ModifiedAndFinished;
         }
         
+        // List...
+        if (!_isDragging && _listOrderWhileDragging.Count != list.Count)
+        {
+            _listOrderWhileDragging.Clear();
+            for (var index = 0; index < list.Count; index++)
+            {
+                _listOrderWhileDragging.Add(index);
+            }
+        }
+        
         var cloneIfModified = input.IsDefault;
         
         var modified = InputEditStateFlags.Nothing;
+        var completedDragging = false;
         for (var index = 0; index < list.Count; index++)
         {
-            ImGui.PushID(index);
+            var dragIndex = _isDragging ? _listOrderWhileDragging[index]
+                                : index;
+            ImGui.PushID(dragIndex);
             ImGui.AlignTextToFramePadding();
-            ImGui.TextUnformatted($"{index}.");
+            
+            //ImGui.TextUnformatted($"{index}.");
+            ImGui.Button($"{dragIndex}.");
+
+            if (ImGui.IsItemActive())
+            {
+                _isDragging = true;
+                var itemMin = ImGui.GetItemRectMin();
+                var itemMax = ImGui.GetItemRectMax();
+                var mouseY = ImGui.GetMousePos().Y;
+                var halfHeight = ImGui.GetItemRectSize().Y / 2;
+                var indexDelta = 0;
+                if (mouseY < itemMin.Y - halfHeight && index > 0)
+                {
+                    indexDelta = -1;
+                }
+                else if (mouseY > itemMax.Y + halfHeight && index < list.Count - 1)
+                {
+                    indexDelta = 1;
+                }
+                        
+                if (indexDelta != 0)
+                {
+                    if (cloneIfModified)
+                    {
+                        list = [..list];
+                        cloneIfModified = false;
+                        input.IsDefault = false;
+                    }
+
+                    var newIndex = index + indexDelta;
+                    if (newIndex >= 0 && index < list.Count && newIndex < list.Count)
+                    {
+                        (list[newIndex], list[index]) = (list[index], list[newIndex]);
+                        (_listOrderWhileDragging[newIndex], _listOrderWhileDragging[index]) = (_listOrderWhileDragging[index], _listOrderWhileDragging[newIndex]);
+                        
+                    }
+                }
+            }
+
+            if (ImGui.IsItemDeactivated())
+            {
+                completedDragging = true;
+            }
+            
             ImGui.SameLine(30 * T3Ui.UiScaleFactor);
             
             var f = list[index];
@@ -114,6 +172,13 @@ internal sealed class FloatListInputUi : InputValueUi<List<float>>
             }
             ImGui.PopID();
         }
+
+        if (completedDragging)
+        {
+            _isDragging = false;
+            _listOrderWhileDragging.Clear();
+
+        }
         return modified;
     }
     // protected override bool DrawSingleEditControl(string name, ref List<float> list)
@@ -132,6 +197,9 @@ internal sealed class FloatListInputUi : InputValueUi<List<float>>
     //     }
     //     return false;
     // }
+
+    private static readonly List<int> _listOrderWhileDragging = [];
+    private static bool _isDragging;
 
     protected override void DrawReadOnlyControl(string name, ref List<float> list)
     {

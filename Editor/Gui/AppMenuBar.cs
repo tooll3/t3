@@ -314,7 +314,7 @@ internal static class AppMenuBar
 
             if (ImGui.MenuItem("Exit", !T3Ui.IsCurrentlySaving))
             {
-                EditorUi.Instance.ExitApplication();
+                T3Ui.ExitDialog.ShowNextFrame();
             }
 
             if (ImGui.IsItemHovered() && T3Ui.IsCurrentlySaving)

@@ -321,13 +321,14 @@ internal sealed class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
 
             if (Structure.TryGetUiAndInstanceInComposition(timeClip.Id, compositionOp, out _, out var instance))
             {
-                _requestChildComposition(instance.SymbolChildId);
+                if(instance.Symbol.Children.Count > 0)
+                    _requestChildComposition(instance.SymbolChildId);
             }
         }
             
         if (ImGui.IsItemHovered())
         {
-            _timelineCanvas.NodeSelection.HoveredIds.Add(symbolChildUi.Id);
+            FrameStats.AddHoveredId(symbolChildUi.Id);
         }
             
         var notClickingOrDragging = !ImGui.IsItemActive() && !ImGui.IsMouseDragging(ImGuiMouseButton.Left);

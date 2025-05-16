@@ -1,3 +1,4 @@
+#nullable enable
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
@@ -13,6 +14,7 @@ using T3.Editor.UiModel;
 using T3.Editor.UiModel.Commands;
 using T3.Editor.UiModel.Commands.Animation;
 using T3.Editor.UiModel.InputsAndTypes;
+using T3.Editor.UiModel.ProjectHandling;
 using T3.Editor.UiModel.Selection;
 
 namespace T3.Editor.Gui.Windows.TimeLine;
@@ -113,7 +115,7 @@ internal sealed class DopeSheetArea : AnimationParameterEditing, ITimeObjectMani
         var layerHovered = ImGui.IsWindowHovered() && layerArea.Contains(mousePos);
 
         var isCurrentSelected = TimeLineCanvas.NodeSelection.GetSelectedInstanceWithoutComposition()?.SymbolChildId == parameter.Input.Parent.SymbolChildId;
-        if (TimeLineCanvas.HoveredIds.Contains(parameter.Input.Parent.SymbolChildId) || isCurrentSelected || layerHovered)
+        if (FrameStats.IsIdHovered(parameter.Input.Parent.SymbolChildId) || isCurrentSelected || layerHovered)
         {
             drawList.AddRectFilled(new Vector2(min.X, min.Y),
                                    new Vector2(max.X, max.Y), UiColors.ForegroundFull.Fade(0.04f));
@@ -124,7 +126,7 @@ internal sealed class DopeSheetArea : AnimationParameterEditing, ITimeObjectMani
 
                 ImGui.PushFont(Fonts.FontSmall);
                 ImGui.TextUnformatted(parameter.Input.Input.Name);
-                TimeLineCanvas.HoveredIds.Add(parameter.Input.Parent.SymbolChildId);
+                FrameStats.AddHoveredId(parameter.Input.Parent.SymbolChildId);
 
                 foreach (var curve in parameter.Curves)
                 {
@@ -189,8 +191,8 @@ internal sealed class DopeSheetArea : AnimationParameterEditing, ITimeObjectMani
             ImGui.TextUnformatted(parameter.Input.Input.Name);
                 
             //@pixtur: Make sure this works
-            //FrameStats.Current.HoveredIds.Add(parameter.Input.Parent.SymbolChildId);
-            TimeLineCanvas.HoveredIds.Add(parameter.Input.Parent.SymbolChildId);
+            //FrameStats.AddHoveredId(parameter.Input.Parent.SymbolChildId);
+            FrameStats.AddHoveredId(parameter.Input.Parent.SymbolChildId);
 
             foreach (var curve in parameter.Curves)
             {
@@ -207,20 +209,20 @@ internal sealed class DopeSheetArea : AnimationParameterEditing, ITimeObjectMani
             var isMouseReleased = ImGui.IsMouseReleased(ImGuiMouseButton.Left);
             var isLayerBackgroundClicked = !ImGui.IsAnyItemHovered() && isMouseReleased && !wasMouseDragging;
                 
+            
+            if (!isAnyKeysSelected && ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left))
+            {
+                if (compositionOp.Children.TryGetValue(parameter.ChildUi.SymbolChild.Id, out _))
+                {
+                    ProjectView.Focused?.NodeSelection.Clear();
+                    ProjectView.Focused?.NodeSelection.SelectCompositionChild(compositionOp, parameter.ChildUi.Id);
+                    FitViewToSelectionHandling.FitViewToSelection();
+                }
+            }
+            
             // Select and focus parameter if no keyframes are selected
             if (isLayerBackgroundClicked)
             {
-                if (!isAnyKeysSelected)
-                {
-                    if (compositionOp.Children.TryGetValue(parameter.ChildUi.SymbolChild.Id, out var instance))
-                    {
-                        Log.Warning("Focus on instance not implemented yet.");
-                        // Todo: This got broken after merge.                            
-                        // var path =OperatorUtils.BuildIdPathForInstance(instance);
-                        // GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(path);
-                    }
-                }
-                    
                 if(ImGui.GetIO().KeyShift)
                 {
                     var someKeysNotVisible = false;
@@ -272,7 +274,7 @@ internal sealed class DopeSheetArea : AnimationParameterEditing, ITimeObjectMani
             DrawCurveLines(parameter, layerArea, drawList);
         }
 
-        var changed = HandleCreateNewKeyframes(parameter, layerArea);
+        HandleCreateNewKeyframes(parameter, layerArea);
 
         foreach (var curve in parameter.Curves)
         {
@@ -306,7 +308,7 @@ internal sealed class DopeSheetArea : AnimationParameterEditing, ITimeObjectMani
             hoverTime = (float)snappedValue;
         }
 
-        bool changed = false;
+        var changed = false;
         if (ImGui.IsMouseReleased(0))
         {
             var dragDistance = ImGui.GetIO().MouseDragMaxDistanceAbs[0].Length();
@@ -344,28 +346,28 @@ internal sealed class DopeSheetArea : AnimationParameterEditing, ITimeObjectMani
             TimeLineCanvas.Current.Playback.TimeInBars = time;
     }
 
-    private static readonly Color GrayCurveColor = new(1f, 1f, 1.0f, 0.3f);
+    private static readonly Color _grayCurveColor = new(1f, 1f, 1.0f, 0.3f);
 
     internal static readonly Color[] CurveColors =
         {
             new(1f, 0.2f, 0.2f, 0.3f),
             new(0.1f, 1f, 0.2f, 0.3f),
             new(0.1f, 0.4f, 1.0f, 0.5f),
-            GrayCurveColor,
+            _grayCurveColor,
         };
 
     internal static readonly string[] CurveNames =
-        {
+        [
             "X", "Y", "Z", "W", "5", "6", "7", "8", "9", "10", "11", "12"
-        };
+        ];
     internal static readonly string[] ColorCurveNames =
-        {
+        [
             "R", "G", "B", "A"
-        };
+        ];
 
-    private static readonly List<Vector2> Positions = new(100);  // Reuse list to avoid allocations
+    private static readonly List<Vector2> _positions = new(100);  // Reuse list to avoid allocations
         
-    private void DrawCurveLines(TimeLineCanvas.AnimationParameter parameter, ImRect layerArea, ImDrawListPtr drawList)
+    private static void DrawCurveLines(TimeLineCanvas.AnimationParameter parameter, ImRect layerArea, ImDrawListPtr drawList)
     {
         const float padding = 2;
         // Lines
@@ -376,7 +378,7 @@ internal sealed class DopeSheetArea : AnimationParameterEditing, ITimeObjectMani
             if (points.Count == 0)
                 continue;
 
-            Positions.Clear();
+            _positions.Clear();
 
             // TODO: Scanning twice is expensive. We could scale the positions after initial scan 
             var minValue = float.PositiveInfinity;
@@ -389,7 +391,7 @@ internal sealed class DopeSheetArea : AnimationParameterEditing, ITimeObjectMani
                     maxValue = (float)vDef.Value;
             }
 
-            VDefinition lastVDef = null;
+            VDefinition? lastVDef = null;
             float lastValue = 0;
             float lastUOnScreen = 0;
 
@@ -401,7 +403,7 @@ internal sealed class DopeSheetArea : AnimationParameterEditing, ITimeObjectMani
                 var uOnScreen = TimeLineCanvas.Current.TransformX((float)u) - 1;
                 if (lastVDef != null && lastVDef.OutEditMode == VDefinition.EditMode.Constant)
                 {
-                    Positions.Add(new Vector2(
+                    _positions.Add(new Vector2(
                                               uOnScreen,
                                               lastValue));
                 }
@@ -415,15 +417,15 @@ internal sealed class DopeSheetArea : AnimationParameterEditing, ITimeObjectMani
                         var blendU = MathUtils.Lerp(lastVDef.U, u, (float)(stepIndex + 1) / (curveSteps + 1));
                             
                         var value1 = (float)curve.GetSampledValue(blendU);
-                        var value = MathUtils.RemapAndClamp(value1, maxValue, minValue, layerArea.Min.Y + padding, layerArea.Max.Y - padding);
+                        var value = value1.RemapAndClamp(maxValue, minValue, layerArea.Min.Y + padding, layerArea.Max.Y - padding);
                             
-                        Positions.Add(new Vector2(TimeLineCanvas.Current.TransformX((float)blendU),
+                        _positions.Add(new Vector2(TimeLineCanvas.Current.TransformX((float)blendU),
                                                   value));
                     }
                 } 
 
-                lastValue = MathUtils.RemapAndClamp((float)vDef.Value, maxValue, minValue, layerArea.Min.Y + padding, layerArea.Max.Y - padding);
-                Positions.Add(new Vector2(
+                lastValue = ((float)vDef.Value).RemapAndClamp(maxValue, minValue, layerArea.Min.Y + padding, layerArea.Max.Y - padding);
+                _positions.Add(new Vector2(
                                           TimeLineCanvas.Current.TransformX((float)u),
                                           lastValue));
 
@@ -432,9 +434,9 @@ internal sealed class DopeSheetArea : AnimationParameterEditing, ITimeObjectMani
             }
 
             drawList.AddPolyline(
-                                 ref Positions.ToArray()[0],
-                                 Positions.Count,
-                                 parameter.Curves.Count() > 1 ? CurveColors[curveIndex % 4] : GrayCurveColor,
+                                 ref _positions.ToArray()[0],
+                                 _positions.Count,
+                                 parameter.Curves.Count() > 1 ? CurveColors[curveIndex % 4] : _grayCurveColor,
                                  ImDrawFlags.None,
                                  0.5f);
 
@@ -486,7 +488,7 @@ internal sealed class DopeSheetArea : AnimationParameterEditing, ITimeObjectMani
     }
 
     private void DrawKeyframe(in Guid compositionSymbolId, VDefinition vDef, ImRect layerArea, TimeLineCanvas.AnimationParameter parameter,
-                              VDefinition nextVDef, ImDrawListPtr drawList)
+                              VDefinition? nextVDef, ImDrawListPtr drawList)
     {
         var vDefU = (float)vDef.U;
         if (vDefU < Playback.Current.TimeInBars)
@@ -513,7 +515,7 @@ internal sealed class DopeSheetArea : AnimationParameterEditing, ITimeObjectMani
                 var labelPos = new Vector2(posOnScreen.X + KeyframeIconWidth / 2 + 1,
                                            layerArea.Min.Y + 5);
 
-                var color = UiColors.StatusAnimated.Fade(MathUtils.RemapAndClamp(availableSpace, 30, 50, 0, 1).Clamp(0, 1));
+                var color = UiColors.StatusAnimated.Fade(availableSpace.RemapAndClamp(30, 50, 0, 1).Clamp(0, 1));
                 ImGui.PushFont(Fonts.FontSmall);
                 drawList.AddText(labelPos, color, $"{vDef.Value:G3}");
                 ImGui.PopFont();
@@ -836,10 +838,10 @@ internal sealed class DopeSheetArea : AnimationParameterEditing, ITimeObjectMani
         }
     }
 
-    private VDefinition _draggedKeyframe;   // ignore snapping to self
+    private VDefinition? _draggedKeyframe;   // ignore snapping to self
     private const float KeyframeIconWidth = 10;
     private Vector2 _minScreenPos;
-    private static ChangeKeyframesCommand _changeKeyframesCommand;
+    private static ChangeKeyframesCommand? _changeKeyframesCommand;
     public const int LayerHeight = 25;
     private readonly ValueSnapHandler _snapHandler;
     private int _selectionCountBeforeClick;

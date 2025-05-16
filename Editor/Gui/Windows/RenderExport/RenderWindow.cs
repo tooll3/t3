@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using ImGuiNET;
@@ -6,6 +5,7 @@ using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Resource;
 using T3.Core.UserData;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
@@ -20,8 +20,7 @@ namespace T3.Editor.Gui.Windows.RenderExport
     {
         internal RenderWindow()
         {
-            Config.Title = "Render To File";
-            _lastHelpString = PreferredInputFormatHint;
+            Config.Title = "Render To File";      
         }
 
         protected override void DrawContent()
@@ -34,14 +33,35 @@ namespace T3.Editor.Gui.Windows.RenderExport
 
         private void DrawInnerContent()
         {
-            var mainTexture = OutputWindow.GetPrimaryOutputWindow()?.GetCurrentTexture();
-
-            if (FindIssueWithTexture(mainTexture, MfVideoWriter.SupportedFormats, out var warning))
+            
+            var outputWindow = OutputWindow.GetPrimaryOutputWindow();
+            if (outputWindow == null)
             {
-                _lastHelpString = warning; // Update _lastHelpString to persist the warning
-                CustomComponents.HelpText(warning);
+                _lastHelpString = "No output view available";
+                CustomComponents.HelpText(_lastHelpString);
                 return;
             }
+
+            // Get both the texture and the output type
+            var mainTexture = OutputWindow.GetPrimaryOutputWindow()?.GetCurrentTexture();
+            var outputType = outputWindow.ShownInstance?.Outputs.FirstOrDefault()?.ValueType;
+            if (outputType != typeof(Texture2D))
+            {
+                _lastHelpString = outputType == null ? "The output view is empty" :
+                                 outputType != typeof(Texture2D) ? "Select or pin a Symbol with Texture2D output in order to render to file" : string.Empty;
+                FormInputs.AddVerticalSpace(5);
+                ImGui.Separator();
+                FormInputs.AddVerticalSpace(5);
+                ImGui.BeginDisabled();
+                ImGui.Button("Start Render");
+                CustomComponents.TooltipForLastItem("Only Symbols with a texture2D output can be rendered to file");
+                ImGui.EndDisabled();
+                CustomComponents.HelpText(_lastHelpString);
+                return;
+            }
+
+            // Clear warning if texture is fine
+            _lastHelpString = "Ready to render.";
 
             // Render Mode Selection
             FormInputs.AddVerticalSpace();
@@ -92,10 +112,16 @@ namespace T3.Editor.Gui.Windows.RenderExport
             FormInputs.AddHint($"{q.Title} quality ({_bitrate * duration / 1024 / 1024 / 8:0} MB for {duration / 60:0}:{duration % 60:00}s at {size.Width}×{size.Height})");
             CustomComponents.TooltipForLastItem(q.Description);
 
-            FormInputs.AddStringInput("Filename", ref UserSettings.Config.RenderVideoFilePath);
-            ImGui.SameLine();
-            FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.File, ref UserSettings.Config.RenderVideoFilePath);
-
+            //FormInputs.AddStringInput("File name", ref UserSettings.Config.RenderVideoFilePath);
+            //ImGui.SameLine();
+            //FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.None, ref UserSettings.Config.RenderVideoFilePath);
+            FormInputs.AddFilePicker("File name",
+                                                        ref UserSettings.Config.RenderVideoFilePath,
+                                                        ".\\Render\\Title-v01.mp4 ",
+                                                        null,
+                                                        "Using v01 in the file name will enable auto incrementation and don't forget the .mp4 extension, I'm serious.",
+                                                        FileOperations.FilePickerTypes.Folder
+                                                       );
             if (IsFilenameIncrementable())
             {
                 ImGui.PushStyleVar(ImGuiStyleVar.Alpha, _autoIncrementVersionNumber ? 0.7f : 0.3f);
@@ -113,8 +139,8 @@ namespace T3.Editor.Gui.Windows.RenderExport
             // Ensure the filename is trimmed and not empty
             if (FormInputs.AddStringInput("File name", ref UserSettings.Config.RenderSequenceFileName))
             {
-                UserSettings.Config.RenderSequenceFileName = UserSettings.Config.RenderSequenceFileName?.Trim();
-                if (string.IsNullOrEmpty(UserSettings.Config.RenderSequenceFileName))
+                UserSettings.Config.RenderSequenceFileName = UserSettings.Config?.RenderSequenceFileName?.Trim() ?? string.Empty;
+                if (string.IsNullOrEmpty(UserSettings.Config?.RenderSequenceFileName))
                 {
                     UserSettings.Config.RenderSequenceFileName = "output";
                 }
@@ -128,15 +154,21 @@ namespace T3.Editor.Gui.Windows.RenderExport
             }
 
             // Use the existing UserSettings property for sequence path
-            FormInputs.AddStringInput("Output Path", ref UserSettings.Config.RenderSequenceFilePath);
-            if (ImGui.IsItemHovered())
-            {
-                CustomComponents.TooltipForLastItem("Specify the folder where the image sequence will be saved.\n" +
-                                 "Must be a valid directory path.");
-            }
-            ImGui.SameLine();
-            FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.Folder, ref UserSettings.Config.RenderSequenceFilePath);
-    
+            //FormInputs.AddStringInput("Output Path", ref UserSettings.Config.RenderSequenceFilePath);
+            //if (ImGui.IsItemHovered())
+            //{
+            //    CustomComponents.TooltipForLastItem("Specify the folder where the image sequence will be saved.\n" +
+            //                     "Must be a valid directory path.");
+            //}
+            //ImGui.SameLine();
+            //FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.Folder, ref UserSettings.Config.RenderSequenceFilePath);
+            FormInputs.AddFilePicker("Output Folder",
+                                                        ref UserSettings.Config.RenderSequenceFilePath,
+                                                        ".\\ImageSequence ",
+                                                        null,
+                                                        "Specify the folder where the image sequence will be saved.",
+                                                        FileOperations.FilePickerTypes.Folder
+                                                       );
         }
 
         private void HandleRenderingProcess(ref Texture2D mainTexture, Int2 size)
@@ -181,7 +213,7 @@ namespace T3.Editor.Gui.Windows.RenderExport
                 : path;
         }
 
-        private void StartRenderingProcess(string targetPath, Int2 size)
+        private static void StartRenderingProcess(string targetPath, Int2 size)
         {
             IsExporting = true;
             _exportStartedTime = Playback.RunTimeInSecs;
@@ -199,10 +231,10 @@ namespace T3.Editor.Gui.Windows.RenderExport
                 _targetFolder = targetPath;
             }
 
-            TextureReadAccess.ClearQueue();
+            T3Ui.TextureBgraReadAccess.ClearQueue();
         }
 
-        private bool ProcessCurrentFrame(ref Texture2D mainTexture, Int2 size)
+        private static bool ProcessCurrentFrame(ref Texture2D mainTexture, Int2 size)
         {
             if (_renderMode == RenderMode.Video)
             {
@@ -241,7 +273,7 @@ namespace T3.Editor.Gui.Windows.RenderExport
             }
         }
 
-        private void FinishRendering(bool success, double durationSoFar)
+        private static void FinishRendering(bool success, double durationSoFar)
         {
             var successful = success ? "successfully" : "unsuccessfully";
             _lastHelpString = $"Render finished {successful} in {StringUtils.HumanReadableDurationFromSeconds(durationSoFar)}\n Ready to render.";
@@ -251,7 +283,7 @@ namespace T3.Editor.Gui.Windows.RenderExport
             CleanupRendering();
         }
 
-        private void CleanupRendering()
+        private static void CleanupRendering()
         {
             IsExporting = false;
             if (_renderMode == RenderMode.Video)
@@ -262,7 +294,7 @@ namespace T3.Editor.Gui.Windows.RenderExport
             ReleasePlaybackTime();
         }
 
-        private void UpdateProgressMessage(double durationSoFar, int currentFrame)
+        private static void UpdateProgressMessage(double durationSoFar, int currentFrame)
         {
             var estimatedTimeLeft = durationSoFar / Progress - durationSoFar;
             _lastHelpString = _renderMode == RenderMode.Video

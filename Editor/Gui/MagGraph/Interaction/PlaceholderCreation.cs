@@ -438,8 +438,8 @@ internal sealed class PlaceholderCreation
         }
         else if (context.TryGetActiveOutputLine(out _))
         {
-            var primaryInput = newInstance.Inputs.FirstOrDefault();
-            if (primaryInput != null && primaryInput.ValueType == context.DraggedPrimaryOutputType)
+            var primaryInput = newInstance.Inputs.FirstOrDefault(i => i.ValueType == context.DraggedPrimaryOutputType);
+            if (primaryInput != null)
             {
                 var connectionToAdd = new Symbol.Connection(context.ActiveSourceItem!.Id,
                                                             context.ActiveSourceOutputId,

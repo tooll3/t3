@@ -2063,15 +2063,6 @@
     "AudioDecayFactor": 0.77,
     "AudioGainFactor": 1.0,
     "AudioInputDeviceName": "Microphone Builtin (Realtek(R) Audio)",
-    "AudioClips": [
-      {
-        "Id": "00000000-0000-0000-0000-000000000000",
-        "StartTime": 0.0,
-        "EndTime": 0.0,
-        "Bpm": 120.0,
-        "DiscardAfterUse": true,
-        "IsSoundtrack": true
-      }
-    ]
+    "AudioClips": []
   }
 }

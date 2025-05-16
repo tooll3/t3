@@ -278,7 +278,7 @@ internal sealed class ExplorationWindow : Window
                         // Hover relevant operators
                         foreach (var param in _lastHoveredVariation.ValuesForParameters.Keys)
                         {
-                            nodeSelection.HoveredIds.Add(param.TargetChild.Id);
+                            FrameStats.AddHoveredId(param.TargetChild.Id);
                         }
                     }
                     else

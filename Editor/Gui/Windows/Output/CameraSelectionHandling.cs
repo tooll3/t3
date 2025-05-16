@@ -304,7 +304,7 @@ internal sealed class CameraSelectionHandling
 
             CustomComponents.TooltipForLastItem("Shows the first scene camera. For manipulation select the camera operator in graph or in the list below.");
             if (ImGui.IsItemHovered() && _firstCamInGraph is Instance camInstance && NodeSelection != null)
-                NodeSelection.HoveredIds.Add(camInstance.SymbolChildId);
+                FrameStats.AddHoveredId(camInstance.SymbolChildId);
 
             if (ImGui.MenuItem("Viewer",
                                "",
@@ -328,7 +328,7 @@ internal sealed class CameraSelectionHandling
             }
 
             if (ImGui.IsItemHovered() && _firstCamInGraph is Instance camInstance2 && NodeSelection != null)
-                NodeSelection.HoveredIds.Add(camInstance2.SymbolChildId);
+                FrameStats.AddHoveredId(camInstance2.SymbolChildId);
 
             CustomComponents
                .TooltipForLastItem("During playback the scene viewer is following the scene camera. Otherwise it can be independently manipulated without affecting the scene camera.");
@@ -359,7 +359,7 @@ internal sealed class CameraSelectionHandling
 
                         if (ImGui.IsItemHovered() && NodeSelection != null)
                         {
-                            NodeSelection.HoveredIds.Add(cameraInstance.SymbolChildId);
+                            FrameStats.AddHoveredId(cameraInstance.SymbolChildId);
                         }
                     }
                     ImGui.PopID();

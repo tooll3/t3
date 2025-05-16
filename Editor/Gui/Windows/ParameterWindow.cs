@@ -485,10 +485,24 @@ internal sealed class ParameterWindow : Window
                 }
                 else
                 {
+                    var bypassable = symbolChildUi.SymbolChild.IsBypassable();
+
                     ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+
+                    if (!bypassable)
+                    {
+                        ImGui.BeginDisabled();
+                    }
+
                     if (ImGui.Button("BYPASS", new Vector2(90, 0)))
                     {
                         UndoRedoStack.AddAndExecute(new ChangeInstanceBypassedCommand(symbolChildUi.SymbolChild, true));
+                    }
+
+                    if (!bypassable)
+                    { 
+                        CustomComponents.TooltipForLastItem("This operator cannot be bypassed");
+                        ImGui.EndDisabled();
                     }
 
                     ImGui.PopStyleColor();

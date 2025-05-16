@@ -64,7 +64,7 @@ internal static class AnnotationDragging
                 return;
         }
 
-        float padding = 50;
+        //float padding = 50;
         // Update dragging...
         {
             var newDragPos = ImGui.GetMousePos() - _dragStartDelta;
@@ -80,15 +80,15 @@ internal static class AnnotationDragging
                 var snapDelta = snappedXValue - newDragPosInCanvas.X;
                 moveDeltaOnCanvas.X += (float)snapDelta;
             }
-            else if (_snapHandlerX.TryCheckForSnapping(newDragPosInCanvas.X - padding, out var snappedXValue2,
-                                                       context.Canvas.Scale.X * 0.25f,
-                                                           [magAnnotation],
-                                                       context.Layout.Annotations.Values
-                                                      ))
-            {
-                var snapDelta = snappedXValue2 - newDragPosInCanvas.X + padding;
-                moveDeltaOnCanvas.X += (float)snapDelta;
-            }
+            // else if (_snapHandlerX.TryCheckForSnapping(newDragPosInCanvas.X - padding, out var snappedXValue2,
+            //                                            context.Canvas.Scale.X * 0.25f,
+            //                                                [magAnnotation],
+            //                                            context.Layout.Annotations.Values
+            //                                           ))
+            // {
+            //     var snapDelta = snappedXValue2 - newDragPosInCanvas.X + padding;
+            //     moveDeltaOnCanvas.X += (float)snapDelta;
+            // }
             
             
             if (_snapHandlerY.TryCheckForSnapping(newDragPosInCanvas.Y, out var snappedYValue, 
@@ -100,15 +100,15 @@ internal static class AnnotationDragging
                 var snapDelta =  snappedYValue - newDragPosInCanvas.Y;
                 moveDeltaOnCanvas.Y += (float)snapDelta;
             }
-            else if(_snapHandlerY.TryCheckForSnapping(newDragPosInCanvas.Y - padding, out var snappedYValue2, 
-                                                      context.Canvas.Scale.Y * 0.25f, 
-                                                          [magAnnotation], 
-                                                      context.Layout.Annotations.Values
-                                                     ))
-            {
-                var snapDelta =  snappedYValue2 - newDragPosInCanvas.Y + padding;
-                moveDeltaOnCanvas.Y += (float)snapDelta;
-            }
+            // else if(_snapHandlerY.TryCheckForSnapping(newDragPosInCanvas.Y - padding, out var snappedYValue2, 
+            //                                           context.Canvas.Scale.Y * 0.25f, 
+            //                                               [magAnnotation], 
+            //                                           context.Layout.Annotations.Values
+            //                                          ))
+            // {
+            //     var snapDelta =  snappedYValue2 - newDragPosInCanvas.Y + padding;
+            //     moveDeltaOnCanvas.Y += (float)snapDelta;
+            // }
 
             
             foreach (var e in _draggedNodes)

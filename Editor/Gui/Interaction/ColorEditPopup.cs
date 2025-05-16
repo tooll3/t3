@@ -619,7 +619,7 @@ internal static class ColorEditPopup
                             if (use.Instance == null)
                                 continue;
 
-                            nodeSelection.HoveredIds.Add(use.Instance.SymbolChildId);
+                            FrameStats.AddHoveredId(use.Instance.SymbolChildId);
                         }
                     }
 

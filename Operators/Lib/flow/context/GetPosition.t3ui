@@ -9,6 +9,13 @@
         "X": -200.0,
         "Y": 0.0
       }
+    },
+    {
+      "InputId": "d55285f7-9ef9-461b-ac4c-50b80872d397"/*PositionOffset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 75.0
+      }
     }
   ],
   "SymbolChildUis": [],

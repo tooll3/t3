@@ -1227,16 +1227,7 @@
     "AudioDecayFactor": 0.85,
     "AudioGainFactor": 1.0,
     "AudioInputDeviceName": "",
-    "AudioClips": [
-      {
-        "Id": "00000000-0000-0000-0000-000000000000",
-        "StartTime": 0.0,
-        "EndTime": 0.0,
-        "Bpm": 82.5,
-        "DiscardAfterUse": true,
-        "IsSoundtrack": true
-      }
-    ]
+    "AudioClips": []
   },
   "Animator": [
     {

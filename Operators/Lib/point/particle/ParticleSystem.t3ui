@@ -115,14 +115,21 @@
         "Y": -510.23334
       },
       "Description": "Clears all emitted points.\n\nTip: You can connect [HasTimeChanged] the clean up on rewind or looping. "
+    },
+    {
+      "InputId": "cab3072c-694e-4278-9b1e-e30beb95e5c8"/*Update*/,
+      "Position": {
+        "X": 737.6091,
+        "Y": -333.56708
+      }
     }
   ],
   "SymbolChildUis": [
     {
       "ChildId": "066038e0-ee67-4252-9034-c5d877f9e4a5"/*Any*/,
       "Position": {
-        "X": 976.9846,
-        "Y": -550.6649
+        "X": 788.1842,
+        "Y": -565.94006
       }
     },
     {
@@ -142,8 +149,8 @@
     {
       "ChildId": "0ea5cd85-6f28-45ba-8c87-634e8ee1148d"/*HasTimeChanged*/,
       "Position": {
-        "X": 976.9846,
-        "Y": -620.6649
+        "X": 788.18427,
+        "Y": -600.94006
       }
     },
     {
@@ -179,6 +186,13 @@
       "Position": {
         "X": 342.45206,
         "Y": -389.3761
+      }
+    },
+    {
+      "ChildId": "2f81d9b6-8709-4bd8-be99-50dbf948a597"/*All*/,
+      "Position": {
+        "X": 982.03955,
+        "Y": -493.33154
       }
     },
     {

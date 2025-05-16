@@ -4,33 +4,44 @@
 /// A helper class that collects information duration the processing of a frame,
 /// so they can be used in the next.   
 /// </summary>
-public static class FrameStats
+internal static class FrameStats
 {
-    public static void CompleteFrame()
+    internal static void CompleteFrame()
     {
         (Current, Last) = (Last, Current);
         Current.Clear();
     }
-            
-    public sealed class Stats
+
+    internal static void AddHoveredId(Guid id)
     {
-        public bool HasKeyframesBeforeCurrentTime;
-        public bool HasKeyframesAfterCurrentTime;
-        public bool HasAnimatedParameters => HasKeyframesBeforeCurrentTime || HasKeyframesAfterCurrentTime;
-        public bool IsItemContextMenuOpen;
-        public bool OpenedPopupCapturedMouse;
-        public bool OpenedPopupHovered;
-        public bool UiColorsChanged;
-        public bool SomethingWithTooltipHovered;
-        public bool UndoRedoTriggered;
+        Current.HoveredIds.Add(id);
+    }
+
+    internal static bool IsIdHovered(Guid id)
+    {
+        return Last.HoveredIds.Contains(id);
+    }
+
+    internal sealed class Stats
+    {
+        internal bool HasKeyframesBeforeCurrentTime;
+        internal bool HasKeyframesAfterCurrentTime;
+        internal bool HasAnimatedParameters => HasKeyframesBeforeCurrentTime || HasKeyframesAfterCurrentTime;
+        internal bool IsItemContextMenuOpen;
+        internal bool OpenedPopupCapturedMouse;
+        internal bool OpenedPopupHovered;
+        internal bool UiColorsChanged;
+        internal bool SomethingWithTooltipHovered;
+        internal bool UndoRedoTriggered;
+        internal readonly HashSet<Guid> HoveredIds = [];
             
         /// <summary>
         /// This is reset on Frame start and can be useful for allow context menu to stay open even if a
         /// later context menu would also be opened. There is probably some ImGui magic to do this probably. 
         /// </summary>
-        public string OpenedPopUpName;
-            
-        public void Clear()
+        internal string OpenedPopUpName;
+
+        internal void Clear()
         {
             HasKeyframesBeforeCurrentTime = false;
             HasKeyframesAfterCurrentTime = false;
@@ -41,9 +52,10 @@ public static class FrameStats
             OpenedPopupHovered = false;
             SomethingWithTooltipHovered = false;
             UndoRedoTriggered = false;
+            HoveredIds.Clear();
         }
-
     }
-    public static Stats Current = new();
-    public static Stats Last = new();
+
+    internal static Stats Current = new();
+    internal static Stats Last = new();
 }

@@ -139,7 +139,7 @@ internal sealed class GraphNode
                 var backgroundColor = typeColor;
 
                 // Background
-                var isHighlighted = _projectView.NodeSelection.HoveredIds.Contains(instance.SymbolChildId);
+                var isHighlighted = FrameStats.IsIdHovered(instance.SymbolChildId);
                 if (framesSinceLastUpdate > 2)
                 {
                     var fadeFactor = MathUtils.RemapAndClamp(framesSinceLastUpdate, 0f, 60f, 0f, 1.0f);
@@ -232,7 +232,7 @@ internal sealed class GraphNode
                 // Tooltip
                 if (!isNodeHovered)
                 {
-                    _projectView.NodeSelection.HoveredIds.Remove(childUi.SymbolChild.Id);
+                    //FrameStats.Current.HoveredIds.Remove(childUi.SymbolChild.Id);
                 }
                 else if (UserSettings.Config.EditorHoverPreview
                          && (customUiResult & SymbolUi.Child.CustomUiResult.PreventTooltip) != SymbolUi.Child.CustomUiResult.PreventTooltip)
@@ -241,7 +241,7 @@ internal sealed class GraphNode
                         _canvas.SelectableNodeMovement.HighlightSnappedNeighbours(childUi);
 
                     //ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
-                    _projectView.NodeSelection.HoveredIds.Add(childUi.SymbolChild.Id);
+                    FrameStats.AddHoveredId(childUi.SymbolChild.Id);
 
                     if (UserSettings.Config.HoverMode != UserSettings.GraphHoverModes.Disabled
                         && !ImGui.IsMouseDragging(ImGuiMouseButton.Left)
@@ -284,7 +284,7 @@ internal sealed class GraphNode
                 }
 
                 var hovered = inActiveWindow && (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) ||
-                                                 _projectView.NodeSelection.HoveredIds.Contains(instance.SymbolChildId));
+                                                 FrameStats.Current.HoveredIds.Contains(instance.SymbolChildId));
 
                 // A horrible work around to prevent exception because CompositionOp changed during drawing.
                 // A better solution would defer setting the compositionOp to the beginning of next frame.

@@ -22,52 +22,43 @@ internal sealed class _ComputeLightOcclusions : Instance<_ComputeLightOcclusions
             // This will execute the input
             UpdateCommand.GetValue(context);
         }
-
-        var lightIndex = LightIndex.GetValue(context).Clamp(0, 7);            
+        _lightIndex = LightIndex.GetValue(context).Clamp(0, 7);            
         var inputImage = InputImage.GetValue(context);
-            
         if (inputImage == null)
         {
             return;
         }
+        _textureReadAccess.InitiateReadAndConvert(inputImage, OnReadComplete);
+        _textureReadAccess.Update();
+    }
 
-        var d3DDevice = ResourceManager.Device;
-        var immediateContext = d3DDevice.ImmediateContext;
-
-        // keep a copy of the texture which can be accessed by CPU
-        // TODO: This should be a cycle buffer with 3 images that are only created once 
-        var desc = new Texture2DDescription()
-                       {
-                           BindFlags = BindFlags.None,
-                           Format = inputImage.Description.Format,
-                           Width = inputImage.Description.Width,
-                           Height = inputImage.Description.Height,
-                           MipLevels = inputImage.Description.MipLevels,
-                           SampleDescription = new SampleDescription(1, 0),
-                           Usage = ResourceUsage.Staging,
-                           OptionFlags = ResourceOptionFlags.None,
-                           CpuAccessFlags = CpuAccessFlags.Read, 
-                           ArraySize = 1
-                       };
-        Utilities.Dispose(ref _imageWithCpuAccess);
-        _imageWithCpuAccess = Texture2D.CreateTexture2D(desc);
-        immediateContext.CopyResource(inputImage, _imageWithCpuAccess);
-
-        // Gets a pointer to the image data, and denies the GPU access to that subresource.            
-        immediateContext.MapSubresource(_imageWithCpuAccess, 0, 0, MapMode.Read, MapFlags.None, out var sourceStream);
-
+    private void OnReadComplete(TextureReadAccess.ReadRequestItem request)
+    {
+        var immediateContext = ResourceManager.Device.ImmediateContext;
+        if (request.CpuAccessTexture.IsDisposed)
+        {
+            Log.Debug("Texture was disposed before readback was complete", this);
+            return;
+        }
+        
+        immediateContext.MapSubresource(request.CpuAccessTexture,
+                                        0,
+                                        0,
+                                        MapMode.Read,
+                                        MapFlags.None,
+                                        out var sourceStream);
+        
         using var stream = sourceStream;
         float result = 0;
-                
-
-        switch (inputImage.Description.Format)
+        
+        switch (request.CpuAccessTexture.Description.Format)
         {
             case Format.R32_Float:
             {
                 try
                 {
-                    sourceStream.Seek( sizeof(float) * lightIndex, SeekOrigin.Begin);
-                    result = sourceStream.Read<float>();
+                    stream.Seek( sizeof(float) * _lightIndex, SeekOrigin.Begin);
+                    result = stream.Read<float>();
                 }
                 catch (Exception e)
                 {
@@ -77,15 +68,26 @@ internal sealed class _ComputeLightOcclusions : Instance<_ComputeLightOcclusions
             }
                     
             default:
-                Log.Warning($"Can't access unknown texture format {inputImage.Description.Format}", this);
+                Log.Warning($"Can't access unknown texture format {request.CpuAccessTexture.Description.Format}", this);
                 break;
         }
 
+        //Log.Debug("Result: " + result, this);
         Output.Value = result;
-        immediateContext.UnmapSubresource(_imageWithCpuAccess, 0);
     }
 
-    private Texture2D _imageWithCpuAccess;
+    protected override void Dispose(bool isDisposing)
+    {
+        if (!isDisposing)
+            return;
+
+        _textureReadAccess.Dispose();
+    }
+
+    private int _lightIndex;
+    
+    
+    private readonly TextureReadAccess _textureReadAccess = new();
         
     [Input(Guid = "088ddcee-1407-4cd8-85bc-6704b8ea73b1")]
     public readonly InputSlot<Command> UpdateCommand = new();

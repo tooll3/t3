@@ -36,10 +36,12 @@ internal static class AnnotationRenaming
             _changeAnnotationTextCommand = new ChangeAnnotationTextCommand(annotation, annotation.Title);
         }
 
-        // Label
+        
+
+        // Edit label
         var positionInScreen = screenArea.Min;
         {
-            var labelPos = positionInScreen - new Vector2(2, Fonts.FontNormal.FontSize + 8);
+            var labelPos = positionInScreen + new Vector2(2,2);// - new Vector2(2, Fonts.FontNormal.FontSize + 8);
             ImGui.SetCursorScreenPos(labelPos);
 
             ImGui.SetNextItemWidth(200);
@@ -50,15 +52,15 @@ internal static class AnnotationRenaming
             {
                 ImGui.GetWindowDrawList().AddText(Fonts.FontNormal,
                                                   Fonts.FontNormal.FontSize,
-                                                  ImGui.GetItemRectMin() + new Vector2(7, 4),
+                                                  ImGui.GetItemRectMin() + new Vector2(7, 7),
                                                   UiColors.ForegroundFull.Fade(0.3f),
                                                   "Label...");
             }
         }
 
-        ImGui.SetCursorScreenPos(positionInScreen);
+        ImGui.SetCursorScreenPos(new Vector2( ImGui.GetItemRectMin().X,ImGui.GetItemRectMax().Y));
 
-        // Description
+        // Edit description
         {
             var text = annotation.Title;
             
@@ -68,12 +70,12 @@ internal static class AnnotationRenaming
                 annotation.Title = text;
             
             
-            // Label Placeholder
+            // Placeholder
             if (string.IsNullOrEmpty(annotation.Title))
             {
                 ImGui.GetWindowDrawList().AddText(Fonts.FontNormal,
                                                   Fonts.FontNormal.FontSize,
-                                                  ImGui.GetItemRectMin() + new Vector2(7, 4),
+                                                  ImGui.GetItemRectMin() + new Vector2(7, 7),
                                                   UiColors.ForegroundFull.Fade(0.3f),
                                                   "Description...");
             }
@@ -81,8 +83,9 @@ internal static class AnnotationRenaming
         }
         if (justOpened || _changeAnnotationTextCommand == null)
             return;
-
-        var shouldClose = ImGui.IsItemDeactivated() || ImGui.IsKeyPressed((ImGuiKey)Key.Esc);
+        
+        var clickedOutside = ImGui.IsMouseClicked(ImGuiMouseButton.Left) && !screenArea.Contains(ImGui.GetMousePos());
+        var shouldClose = ImGui.IsItemDeactivated() || ImGui.IsKeyPressed((ImGuiKey)Key.Esc) || clickedOutside;
         if (!shouldClose)
             return;
 

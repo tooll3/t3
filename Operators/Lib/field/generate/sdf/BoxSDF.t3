@@ -2,7 +2,7 @@
   "Id": "860da1cd-b341-4bc5-965a-4a9c295831f4"/*BoxSDF*/,
   "Inputs": [
     {
-      "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*Radius*/,
+      "Id": "787e5d70-0aba-400f-8616-6ece6c5895bc"/*EdgeRadius*/,
       "DefaultValue": 0.05
     },
     {

@@ -60,7 +60,6 @@ internal sealed class ValueSnapHandler
         {
             _lastSnapTime = ImGui.GetTime();
             _lastSnapValue = _snapResult.BestAnchorValue;
-            Log.Debug($"Anchor value {_snapResult.BestAnchorValue:0.0}  {_orientation}");
 
             snappedValue = _snapResult.BestAnchorValue;
             return true;

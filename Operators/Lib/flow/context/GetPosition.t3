@@ -4,6 +4,14 @@
     {
       "Id": "045ad01f-dd04-43d0-8193-5cb4c25add9b"/*Space*/,
       "DefaultValue": 0
+    },
+    {
+      "Id": "d55285f7-9ef9-461b-ac4c-50b80872d397"/*PositionOffset*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
     }
   ],
   "Children": [],

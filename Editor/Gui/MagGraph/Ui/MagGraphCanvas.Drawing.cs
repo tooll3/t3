@@ -110,7 +110,7 @@ internal sealed partial class MagGraphCanvas
                 _lastHoverId = _context.ActiveItem.Id;
             }
 
-            _context.Selector.HoveredIds.Add(_context.ActiveItem.Id);
+            FrameStats.AddHoveredId(_context.ActiveItem.Id);
         }
         else
         {
