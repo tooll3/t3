@@ -1,7 +1,6 @@
 #nullable enable
 using ImGuiNET;
 using T3.Core.Model;
-using T3.Core.Operator;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
@@ -31,17 +30,19 @@ internal sealed class ExitDialog : ModalDialog
             ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundButton.Rgba);
             ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundActive.Rgba);
 
-            if (ImGui.Button("Cancel"))
+            var buttonSize = new Vector2(100f, 40f);
+            var size = ImGui.GetContentRegionAvail();
+            var spacing = (size.X - 200f);
+            
+            if (ImGui.Button("Cancel", buttonSize))
             {
                 ImGui.CloseCurrentPopup();
             }
-
-            ImGui.SameLine(0, 4);
-            ImGui.Dummy(new Vector2(4, 1));
-            ImGui.SameLine();
+                        
+            ImGui.SameLine(0, spacing);
 
             ImGui.PushFont(Fonts.FontBold);
-            if (ImGui.Button("Exit"))
+            if (ImGui.Button("Exit", buttonSize))
             {
                 Log.Debug("Shutting down");
                 EditorUi.Instance.ExitApplication();
@@ -49,8 +50,7 @@ internal sealed class ExitDialog : ModalDialog
 
             ImGui.PopFont();
 
-            ImGui.PopStyleColor();
-            ImGui.PopStyleColor();
+            ImGui.PopStyleColor(2);
             ImGui.PopStyleVar();
             EndDialogContent();
         }

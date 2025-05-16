@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using ImGuiNET;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -14,7 +14,7 @@ internal sealed class UserNameDialog : ModalDialog
 
     internal void Draw()
     {
-        DialogSize = new Vector2(600, 300) * T3Ui.UiScaleFactor;
+        DialogSize = new Vector2(600, 300);
         
         if (BeginDialog("Edit username"))
         {

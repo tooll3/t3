@@ -9,11 +9,7 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.App;
 using System.Windows.Forms;
-using SharpDX.DXGI;
-using SharpDX.Direct3D11;
 using T3.Core.Resource;
-using T3.Core.Animation;
-using System.Media;
 using System.Reflection;
 
 
@@ -102,13 +98,15 @@ internal sealed class AboutDialog : ModalDialog
             ImGui.PopStyleVar();
 
             FormInputs.AddVerticalSpace(5);
+            ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundButton.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundActive.Rgba);
             if (ImGui.Button("Copy System Information"))
             {
                 UpdateSystemInfo(); // Update system info and copy to clipboard
                 ImGui.SetClipboardText(_systemInfo);
                 ImGui.OpenPopup("SystemInfoCopied");
             }
-
+            ImGui.PopStyleColor(2);
             // Confirmation popup
             if (ImGui.BeginPopup("SystemInfoCopied"))
             {
