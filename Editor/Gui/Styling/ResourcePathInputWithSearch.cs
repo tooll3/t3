@@ -19,15 +19,13 @@ namespace T3.Editor.Gui.Styling;
 ///
 /// It should work for now, but it's likely to break with future versions of ImGui.
 /// </remarks>
-public static partial class ResourceInputWithTypeAheadSearch
+internal static partial class ResourceInputWithTypeAheadSearch
 {
-    //public readonly record struct Texts(string DisplayText, string SearchText, string? Tooltip);
-    public readonly record struct Args(string Label, IEnumerable<string> Items, bool Warning);
-        
-    
-    public static bool Draw(Args args, ref string searchString, out string selected, bool outlineOnly=false)
+    //public readonly record struct Args(string Label, IEnumerable<string> Items, bool Warning);
+
+    internal static bool Draw(string label, IEnumerable<string> items, bool hasWarning, ref string searchString, out string selected, bool outlineOnly=false)
     {
-        var inputId = ImGui.GetID(args.Label); 
+        var inputId = ImGui.GetID(label); 
         var isSearchResultWindowOpen = inputId == _activeInputId;
         var shouldUpdateScroll = false;
         var  wasSelected= false;
@@ -85,12 +83,12 @@ public static partial class ResourceInputWithTypeAheadSearch
             ImGui.PushStyleColor(ImGuiCol.FrameBgActive, Color.Red.Rgba);
         }
             
-        var color = args.Warning ? UiColors.StatusWarning.Rgba : UiColors.Text.Rgba;
+        var color = hasWarning ? UiColors.StatusWarning.Rgba : UiColors.Text.Rgba;
         ImGui.PushStyleColor(ImGuiCol.Text, color);
             
         searchString ??= string.Empty;  // ImGui will crash if null is passed
         
-        var filterInputChanged = ImGui.InputText(args.Label, ref searchString, 256, ImGuiInputTextFlags.AutoSelectAll);
+        var filterInputChanged = ImGui.InputText(label, ref searchString, 256, ImGuiInputTextFlags.AutoSelectAll);
         
         // Sadly, ImGui will revert the searchSearch to its internal state if cursor is moved up or down.
         // To apply is as a new result we need to revert that...
@@ -151,7 +149,7 @@ public static partial class ResourceInputWithTypeAheadSearch
                 ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.Gray.Rgba);
                 
                 if(justOpened || filterInputChanged)
-                     FilterItems(args.Items, searchString, ref _lastTypeAheadResults);
+                     FilterItems(items, searchString, ref _lastTypeAheadResults);
                 
                 var index = 0;
                 var lastProjectGroup = string.Empty;

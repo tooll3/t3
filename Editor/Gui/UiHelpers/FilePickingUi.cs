@@ -19,23 +19,6 @@ internal static class FilePickingUi
 {
     public static InputEditStateFlags DrawTypeAheadSearch(FileOperations.FilePickerTypes type, string? fileFilter, ref string? value)
     {
-        return DrawFileInput(type, ref value, fileFilter, Draw);
-            
-        static InputResult Draw(InputRequest request)
-        {
-            var fileExtensionFilters = request.FileExtensionFilters;
-            var value = request.Value;
-                
-            var drawnItems = ResourceManager.EnumerateResources(fileExtensionFilters, request.IsFolder, request.ResourcePackageContainer.AvailableResourcePackages, ResourceManager.PathMode.Aliased);
-                
-            var args = new ResourceInputWithTypeAheadSearch.Args("##filePathSearch", drawnItems, request.ShowWarning);
-            var changed = ResourceInputWithTypeAheadSearch.Draw(args, ref value, out _);
-            return new InputResult(changed, value);
-        }
-    }
-
-    private static InputEditStateFlags DrawFileInput(FileOperations.FilePickerTypes type, ref string? filePathValue, string? filter, Func<InputRequest, InputResult> draw)
-    {
         ImGui.SetNextItemWidth(-70);
 
         var nodeSelection = ProjectView.Focused?.NodeSelection;
@@ -63,7 +46,7 @@ internal static class FilePickingUi
             
             
         var isFolder = type == FileOperations.FilePickerTypes.Folder;
-        var exists = ResourceManager.TryResolvePath(filePathValue, SearchResourceConsumer, out _, out _, isFolder);
+        var exists = ResourceManager.TryResolvePath(value, SearchResourceConsumer, out _, out _, isFolder);
             
         var warning = type switch
                           {
@@ -83,12 +66,12 @@ internal static class FilePickingUi
         }
             
         string[] uiFilter;
-        if(filter == null)
+        if(fileFilter == null)
             uiFilter = Array.Empty<string>();
-        else if (!filter.Contains('|'))
-            uiFilter = [filter];
+        else if (!fileFilter.Contains('|'))
+            uiFilter = [fileFilter];
         else
-            uiFilter = filter.Split('|')[1].Split(';');
+            uiFilter = fileFilter.Split('|')[1].Split(';');
 
         var fileFiltersInCommon = selectedInstances
                                  .Where(x => x is IDescriptiveFilename)
@@ -101,20 +84,28 @@ internal static class FilePickingUi
                                  .ToArray();
 
         var inputEditStateFlags = InputEditStateFlags.Nothing;
-        if(filePathValue != null && SearchResourceConsumer != null)
+        if(value != null && SearchResourceConsumer != null)
         {
-            var result = draw(new InputRequest(filePathValue, fileFiltersInCommon, isFolder, ShowWarning: !exists, SearchResourceConsumer));
-            filePathValue = result.Value;
+            InputRequest request = new InputRequest(value, fileFiltersInCommon, isFolder, ShowWarning: !exists, SearchResourceConsumer);
+            var fileExtensionFilters = request.FileExtensionFilters;
+            var value1 = request.Value;
+                
+            var drawnItems = ResourceManager.EnumerateResources(fileExtensionFilters, request.IsFolder, request.ResourcePackageContainer.AvailableResourcePackages, ResourceManager.PathMode.Aliased);
+
+            var changed = ResourceInputWithTypeAheadSearch.Draw("##filePathSearch", drawnItems, request.ShowWarning, ref value1, out _);
+            
+            var result = new InputResult(changed, value1);
+            value = result.Value;
             inputEditStateFlags = result.Modified ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
         }
 
         if (warning != string.Empty)
             ImGui.PopStyleColor();
 
-        if (ImGui.IsItemHovered() && filePathValue != null && filePathValue.Length > 0 && ImGui.CalcTextSize(filePathValue).X > ImGui.GetItemRectSize().X)
+        if (ImGui.IsItemHovered() && value != null && value.Length > 0 && ImGui.CalcTextSize(value).X > ImGui.GetItemRectSize().X)
         {
             ImGui.BeginTooltip();
-            ImGui.TextUnformatted(warning + filePathValue);
+            ImGui.TextUnformatted(warning + value);
             ImGui.EndTooltip();
         }
             
@@ -147,11 +138,11 @@ internal static class FilePickingUi
             _latestFileManagerResult = null;
         }
             
-        var valueIsUpdated = !string.IsNullOrEmpty(fileManValue) && fileManValue != filePathValue;
+        var valueIsUpdated = !string.IsNullOrEmpty(fileManValue) && fileManValue != value;
             
         if (valueIsUpdated)
         {
-            filePathValue = fileManValue;
+            value = fileManValue;
             inputEditStateFlags |= InputEditStateFlags.Modified;
         }
             
@@ -163,7 +154,6 @@ internal static class FilePickingUi
             
         return inputEditStateFlags;
     }
-
 
     private static void OpenFileManager(FileOperations.FilePickerTypes type, IEnumerable<IResourcePackage> packagesInCommon, string[] fileFiltersInCommon, bool isFolder, bool async)
     {

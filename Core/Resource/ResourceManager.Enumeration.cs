@@ -16,14 +16,14 @@ public static partial class ResourceManager
         // if the package is read-only and has no files that match any of the filters, it should not be included
         
         CullFilters(isFolder, ref fileExtensionFilters, out var filterAcceptsShaders, out var shaderFilters);
-        var packages = SharedResourcePackages
+        var packages = _sharedResourcePackages
            .Where(package => !package.IsReadOnly || AllMatchingPathsIn(package, false, PathMode.Raw, fileExtensionFilters).Any());
         
         if (filterAcceptsShaders && shaderFilters.Length > 0)
         {
             // we don't need to check for read-only packages here as any package that is in ShaderPackages but not SharedResourcePackages will be read-only
             packages = packages
-               .Concat(ShaderPackages.Except(SharedResourcePackages)
+               .Concat(_shaderPackages.Except(_sharedResourcePackages)
                                      .Where(package => AllMatchingPathsIn(package, false, PathMode.Raw, shaderFilters).Any()));
         }
         
@@ -37,13 +37,13 @@ public static partial class ResourceManager
         CullFilters(isFolder, ref fileExtensionFilters, out var filterAcceptsShaders, out var shaderFilters);
         
         var allFiles = packages
-                      .Concat(SharedResourcePackages)
+                      .Concat(_sharedResourcePackages)
                       .Distinct()
                       .SelectMany(x => AllMatchingPathsIn(x, isFolder, pathMode, fileExtensionFilters));
         
         if (filterAcceptsShaders && shaderFilters.Length > 0)
         {
-            allFiles = allFiles.Concat(ShaderPackages.Except(SharedResourcePackages)
+            allFiles = allFiles.Concat(_shaderPackages.Except(_sharedResourcePackages)
                                                      .SelectMany(x => AllMatchingPathsIn(x, isFolder, pathMode, shaderFilters)));
         }
         
@@ -51,7 +51,7 @@ public static partial class ResourceManager
         // handle always-shared shaders
         return !isFolder && filterAcceptsShaders
                    ? allFiles.Concat(SharedShaderPackages
-                                    .Except(SharedResourcePackages)
+                                    .Except(_sharedResourcePackages)
                                     .SelectMany(x => AllMatchingPathsIn(x, false, pathMode, shaderFilters)))
                    : allFiles;
     }

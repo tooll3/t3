@@ -65,7 +65,7 @@ public static partial class ResourceManager
             }
         }
             
-        var sharedResourcePackages = relativePath.EndsWith(".hlsl") ? ShaderPackages : SharedResourcePackages;
+        var sharedResourcePackages = relativePath.EndsWith(".hlsl") ? _shaderPackages : _sharedResourcePackages;
 
         if (TestPath(relativePath, sharedResourcePackages, out absolutePath, out resourceContainer, isFolder))
         {
@@ -136,7 +136,7 @@ public static partial class ResourceManager
             }
         }
             
-        var sharedResourcePackages = relativePathAliased.EndsWith(".hlsl") ? ShaderPackages : SharedResourcePackages;
+        var sharedResourcePackages = relativePathAliased.EndsWith(".hlsl") ? _shaderPackages : _sharedResourcePackages;
         foreach (var container in sharedResourcePackages)
         {
             if(TestAlias(container, alias, relativePathWithoutAlias, out absolutePath, isFolder))
@@ -178,29 +178,29 @@ public static partial class ResourceManager
     internal static void AddSharedResourceFolder(IResourcePackage resourcePackage, bool allowSharedNonCodeFiles)
     {
         if(allowSharedNonCodeFiles)
-            SharedResourcePackages.Add(resourcePackage);
+            _sharedResourcePackages.Add(resourcePackage);
             
-        ShaderPackages.Add(resourcePackage);
+        _shaderPackages.Add(resourcePackage);
         resourcePackage.ResourcesFolder.ToForwardSlashesUnsafe();
     }
         
     internal static void RemoveSharedResourceFolder(IResourcePackage resourcePackage)
     {
-        ShaderPackages.Remove(resourcePackage);
-        SharedResourcePackages.Remove(resourcePackage);
+        _shaderPackages.Remove(resourcePackage);
+        _sharedResourcePackages.Remove(resourcePackage);
     }
         
-    private static readonly List<IResourcePackage> SharedResourcePackages = new(4);
-    public static IReadOnlyList<IResourcePackage> SharedShaderPackages => ShaderPackages;
-    private static readonly List<IResourcePackage> ShaderPackages = new(4);
+    public static IReadOnlyList<IResourcePackage> SharedShaderPackages => _shaderPackages;
+    private static readonly List<IResourcePackage> _sharedResourcePackages = new(4);
+    private static readonly List<IResourcePackage> _shaderPackages = new(4);
     public enum PathMode {Absolute, Relative, Aliased, Raw}
 
     public static void RaiseFileWatchingEvents()
     {
         // dispatched to main thread
-        lock (FileWatchers)
+        lock (_fileWatchers)
         {
-            foreach (var fileWatcher in FileWatchers)
+            foreach (var fileWatcher in _fileWatchers)
             {
                 fileWatcher.RaiseQueuedFileChanges();
             }
@@ -209,15 +209,15 @@ public static partial class ResourceManager
         
     internal static void UnregisterWatcher(ResourceFileWatcher resourceFileWatcher)
     {
-        lock (FileWatchers)
-            FileWatchers.Remove(resourceFileWatcher);
+        lock (_fileWatchers)
+            _fileWatchers.Remove(resourceFileWatcher);
     }
 
     internal static void RegisterWatcher(ResourceFileWatcher resourceFileWatcher)
     {
-        lock (FileWatchers)
-            FileWatchers.Add(resourceFileWatcher);
+        lock (_fileWatchers)
+            _fileWatchers.Add(resourceFileWatcher);
     }
 
-    private static readonly List<ResourceFileWatcher> FileWatchers = [];
+    private static readonly List<ResourceFileWatcher> _fileWatchers = [];
 }
