@@ -164,7 +164,6 @@ internal sealed partial class MagGraphCanvas
         var isItemHovered = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup
                                                 | ImGuiHoveredFlags.AllowWhenBlockedByActiveItem);
 
-        
         if (_context.StateMachine.CurrentState == GraphStates.Default
             && isItemHovered
             && (customUiResult & SymbolUi.Child.CustomUiResult.IsActive) == 0)
@@ -174,11 +173,11 @@ internal sealed partial class MagGraphCanvas
         {
             //context.StateMachine.SetState(GraphStates.Default, context);
         }
-        
+
         //if (!justOpenedChild)
         {
             ParameterPopUp.HandleOpenParameterPopUp(item.ChildUi, item.Instance, customUiResult, new ImRect(pMinVisible, pMaxVisible));
-        }        
+        }
 
         ImGui.PopID();
         // Todo: We eventually need to handle right clicking to select and open context menu when dragging with right mouse button. 
@@ -325,7 +324,7 @@ internal sealed partial class MagGraphCanvas
         if (item.InputLines.Length > 0)
         {
             var inputLine = item.InputLines[0];
-            
+
             // ReSharper disable once ConstantConditionalAccessQualifier
             var isMissing = inputLine.InputUi?.Relevancy == Relevancy.Required && inputLine.ConnectionIn == null;
             if (isMissing)
@@ -333,11 +332,9 @@ internal sealed partial class MagGraphCanvas
                 DrawMissingInputIndicator(drawList, pMin, inputLine);
             }
         }
-        
 
-
-        var borderColor = ColorVariations.OperatorOutline.Apply(typeColor); 
-
+        var borderColor = ColorVariations.OperatorOutline.Apply(typeColor);
+        IReadOnlyList<ISlot> multiInputSlots = null;
         if (CanvasScale > 0.25f)
         {
             // Input labels...
@@ -345,37 +342,46 @@ internal sealed partial class MagGraphCanvas
             {
                 int inputIndex;
                 var itemWidth = pMax.X - pMin.X;
-                
+
                 for (inputIndex = 0; inputIndex < item.InputLines.Length; inputIndex++)
                 {
                     var inputLine = item.InputLines[inputIndex];
-                    
+
                     // Draw multi-input region
                     if (item.Variant == MagGraphItem.Variants.Operator)
                     {
+                        var inputSlot = item.Instance.GetInput(inputLine.Input.Id);
                         var isMultiInput = inputLine.InputUi.InputDefinition.IsMultiInput;
+
+                        // Start new multiInputGroup
                         if (isMultiInput && inputLine.MultiInputIndex == 0)
                         {
-                            var slotCount = 1;
-                            while (inputIndex + slotCount < item.InputLines.Length && item.InputLines[inputIndex + slotCount].MultiInputIndex > 0)
-                                slotCount++;
-                            
+                            multiInputSlots = inputSlot.TryGetAsMultiInput(out var multiInput) 
+                                                  ? multiInput.GetCollectedInputs() 
+                                                  : null;
+
+                            var slotCount =  multiInputSlots?.Count ?? 1;
                             var y2 = pMin.Y + GridSizeOnScreen.Y * (inputIndex);
-                            var rMin = new Vector2(pMin.X + (isSelected ? 1:0), y2 + 0.2f * GridSizeOnScreen.Y);
+                            var rMin = new Vector2(pMin.X + (isSelected ? 1 : 0), y2 + 0.2f * GridSizeOnScreen.Y);
                             var size = new Vector2(pMin.X + itemWidth * 0.04f, y2 + (slotCount - 0.2f) * GridSizeOnScreen.Y) - rMin;
-                            drawList.AddQuadFilled(rMin, 
-                                                   rMin + new Vector2(size.X,size.X),
+                            drawList.AddQuadFilled(rMin,
+                                                   rMin + new Vector2(size.X, size.X),
                                                    rMin + new Vector2(size.X, size.Y - size.X),
                                                    rMin + new Vector2(0, size.Y),
                                                    borderColor.Fade(0.7f)
                                                   );
+                        }
+
+                        if (!isMultiInput)
+                        {
+                            multiInputSlots = null;
                         }
                     }
 
                     // Skip label for first primary input
                     if (inputIndex == 0)
                         continue;
-                    
+
                     var isMissing = inputLine.InputUi.Relevancy == Relevancy.Required && inputLine.ConnectionIn == null;
                     if (isMissing)
                     {
@@ -389,16 +395,16 @@ internal sealed partial class MagGraphCanvas
                     if (inputLine.MultiInputIndex > 0)
                     {
                         label = " +" + inputLine.MultiInputIndex;
-                        
+
                         // Draw 16 byte padding borders
-                        if ( inputLine.MultiInputIndex % 4 == 0)
+                        if (inputLine.MultiInputIndex % 4 == 0)
                         {
                             var y2 = pMin.Y + GridSizeOnScreen.Y * (inputIndex);
-                            
-                            drawList.AddRectFilled(new Vector2(pMin.X+itemWidth*0.04f, y2),
-                                                   new Vector2(pMin.X+itemWidth*0.20f, y2+1),
+
+                            drawList.AddRectFilled(new Vector2(pMin.X + itemWidth * 0.04f, y2),
+                                                   new Vector2(pMin.X + itemWidth * 0.20f, y2 + 1),
                                                    borderColor.Fade(0.4f)
-                                                   );
+                                                  );
                         }
                     }
 
@@ -409,12 +415,19 @@ internal sealed partial class MagGraphCanvas
                                      label
                                     );
 
-
                     // Draw Value if possible
                     if (CanvasScale > 0.4f)
                     {
-                        var inputSlot = item.Instance.GetInput(inputLine.Input.Id);
-                        var valueAsString = ValueUtils.GetValueString(inputSlot);
+                        string valueAsString;
+                        if (multiInputSlots != null && inputLine.MultiInputIndex < multiInputSlots.Count)
+                        {
+                            var multiInputSlot = multiInputSlots[inputLine.MultiInputIndex];
+                            valueAsString = ValueUtils.GetValueString(multiInputSlot);
+                        }
+                        else
+                        {
+                            valueAsString = ValueUtils.GetValueString(item.Instance.GetInput(inputLine.Input.Id));
+                        }
 
                         if (!string.IsNullOrWhiteSpace(valueAsString))
                         {
@@ -442,7 +455,7 @@ internal sealed partial class MagGraphCanvas
                         }
                     }
                 }
-
+                
                 // Draw output labels...
                 for (var outputIndex = 1; outputIndex < item.OutputLines.Length; outputIndex++)
                 {
@@ -459,7 +472,7 @@ internal sealed partial class MagGraphCanvas
                                      Fonts.FontSmall.FontSize * smallFontScaleFactor,
                                      pMin
                                      + new Vector2(-8, 9) * CanvasScale.Clamp(0.1f, 2f)
-                                     + new Vector2(0, GridSizeOnScreen.Y * (outputIndex + inputIndex - 1))
+                                     + new Vector2(0, GridSizeOnScreen.Y * outputLine.VisibleIndex)
                                      + new Vector2(MagGraphItem.Width * CanvasScale - outputLabelSize.X, 0),
                                      labelColor.Fade(0.7f),
                                      outputDefinitionName);
@@ -509,7 +522,7 @@ internal sealed partial class MagGraphCanvas
 
             if (!string.IsNullOrEmpty(item.ChildUi.Comment))
             {
-                ImGui.SetCursorScreenPos(new Vector2(pMax.X, pMin.Y) + Vector2.Round( new Vector2(-5, -1) * (T3Ui.UiScaleFactor + CanvasScale)));
+                ImGui.SetCursorScreenPos(new Vector2(pMax.X, pMin.Y) + Vector2.Round(new Vector2(-5, -1) * (T3Ui.UiScaleFactor + CanvasScale)));
                 if (ImGui.InvisibleButton("#comment", new Vector2(15, 15)))
                 {
                     context.Selector.SetSelection(item.ChildUi, item.Instance);
@@ -522,11 +535,11 @@ internal sealed partial class MagGraphCanvas
         }
 
         // Hide additional UI elements when custom ui-op is hovered with control
-        if (isItemHovered && ImGui.GetIO().KeyCtrl && customUiResult != SymbolUi.Child.CustomUiResult.None || context.ItemWithActiveCustomUi !=null)
+        if (isItemHovered && ImGui.GetIO().KeyCtrl && customUiResult != SymbolUi.Child.CustomUiResult.None || context.ItemWithActiveCustomUi != null)
         {
             return;
         }
-        
+
         if (CanvasScale < 0.5f)
             return;
 
@@ -615,7 +628,7 @@ internal sealed partial class MagGraphCanvas
                 }
 
                 var isPotentialConnectionEndDropTarget = _context.StateMachine.CurrentState == GraphStates.DragConnectionEnd
-                                                           && _context.DraggedPrimaryOutputType == inputAnchor.ConnectionType;
+                                                         && _context.DraggedPrimaryOutputType == inputAnchor.ConnectionType;
 
                 if (isMultiInput)
                 {
@@ -686,19 +699,19 @@ internal sealed partial class MagGraphCanvas
                 var hasOutputSnappedConnection = false;
                 foreach (var c in item.OutputLines[outputAnchor.OutputLineIndex].ConnectionsOut)
                 {
-                    if (c.IsSnapped && c.Style is MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal 
+                    if (c.IsSnapped && c.Style is MagGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal
                             or MagGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal)
                     {
                         hasOutputSnappedConnection = true;
                         break;
-                    } 
+                    }
                 }
-                
+
                 // Register for output snapping...
                 isPotentialConnectionStartDropTarget = _context.StateMachine.CurrentState == GraphStates.DragConnectionBeginning
                                                        && _context.DraggedPrimaryOutputType == outputAnchor.ConnectionType
                                                        && !hasOutputSnappedConnection;
-                                                       //&& outputAnchor.SnappedConnectionHash == MagGraphItem.FreeAnchor;
+                //&& outputAnchor.SnappedConnectionHash == MagGraphItem.FreeAnchor;
 
                 if (isPotentialConnectionStartDropTarget)
                 {
@@ -826,7 +839,7 @@ internal sealed partial class MagGraphCanvas
 
                     if (isToggleHovered)
                     {
-                        ImGui.SetNextWindowPos(p- new Vector2(15,15));
+                        ImGui.SetNextWindowPos(p - new Vector2(15, 15));
                         if (CustomComponents.BeginTooltip())
                         {
                             CustomComponents.HintLabel("Show more outputs...");
@@ -887,6 +900,8 @@ internal sealed partial class MagGraphCanvas
             }
         }
     }
+
+
 
     private void DrawMissingInputIndicator(ImDrawListPtr drawList, Vector2 pMin, MagGraphItem.InputLine inputLine)
     {
@@ -955,16 +970,15 @@ internal sealed partial class MagGraphCanvas
     {
         var type = instance.Type;
 
-        if (!CustomChildUiRegistry.TryGetValue(type, out var drawFunction)) 
+        if (!CustomChildUiRegistry.TryGetValue(type, out var drawFunction))
             return SymbolUi.Child.CustomUiResult.None;
-        
+
         // Unfortunately we have to test if symbolChild of instance is still valid.
         // This might not be the case for operators like undo/redo.
         if (instance.Parent != null && instance.Parent.Children.TryGetValue(instance.SymbolChildId, out _))
             return drawFunction(instance, drawList, selectableScreenRect, canvasScale);
 
         return SymbolUi.Child.CustomUiResult.None;
-
     }
 
     private bool TryDrawTexturePreview(MagGraphItem item, Vector2 itemMin, Vector2 itemMax, ImDrawListPtr drawList, Color typeColor)

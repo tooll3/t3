@@ -459,10 +459,10 @@ public static class ValueUtils
                    };
     }
 
-    public static string GetValueString(IInputSlot outputSlot)
+    public static string GetValueString(IInputSlot inputSlot)
     {
             
-        return outputSlot switch
+        return inputSlot switch
                    {
                        InputSlot<float> f                    => $"{f.GetCurrentValue():0.000}",
                        InputSlot<int> i                      => $"{i.GetCurrentValue():G3}",
@@ -471,6 +471,22 @@ public static class ValueUtils
                        InputSlot<System.Numerics.Vector3> v3 => $"{v3.GetCurrentValue():0.0}",
                        InputSlot<System.Numerics.Vector2> v2 => $"{v2.GetCurrentValue():0.0}",
                        InputSlot<string> s                   => s.GetCurrentValue().Truncate(),
+                       _                                     => ""
+                   };
+    }
+
+    public static string GetValueString(ISlot inputSlot)
+    {
+            
+        return inputSlot switch
+                   {
+                       Slot<float> f                    => $"{f.Value:0.000}",
+                       Slot<int> i                      => $"{i.Value:G3}",
+                       Slot<Int3> i                     => $"{i.Value:G3}",
+                       Slot<bool> b                     => $"{b.Value}",
+                       Slot<System.Numerics.Vector3> v3 => $"{v3.Value:0.0}",
+                       Slot<System.Numerics.Vector2> v2 => $"{v2.Value:0.0}",
+                       Slot<string> s                   => s.Value.Truncate(),
                        _                                     => ""
                    };
     }
