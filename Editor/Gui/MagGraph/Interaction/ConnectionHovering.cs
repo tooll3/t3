@@ -220,8 +220,8 @@ internal sealed class ConnectionHovering
                 ImGui.PopFont();
 
                 var nodeSelection = context.Selector;
-                nodeSelection.HoveredIds.Add(targetOp.SymbolChildId);
-                nodeSelection.HoveredIds.Add(connection.SourceItem.Id);
+                FrameStats.AddHoveredId(targetOp.SymbolChildId);
+                FrameStats.AddHoveredId(connection.SourceItem.Id);
             }
         }
         ImGui.EndTooltip();

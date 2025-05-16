@@ -145,6 +145,18 @@ internal sealed partial class MagGraphCanvas
                              CanvasScale < 0.5 ? 0 : 6 * CanvasScale,
                              imDrawFlags);
         }
+        
+        var isHighlighted = item.Variant == MagGraphItem.Variants.Operator && 
+                            FrameStats.IsIdHovered(item.Instance.SymbolChildId);
+        if (isHighlighted)
+        {
+            drawList.AddRect(pMinVisible, pMaxVisible, UiColors.ForegroundFull.Fade(Blink),
+                             CanvasScale < 0.5 ? 0 : 6 * CanvasScale,
+                             imDrawFlags);
+        }
+
+
+        
 
         // Custom Ui
         SymbolUi.Child.CustomUiResult customUiResult = SymbolUi.Child.CustomUiResult.None;
@@ -956,9 +968,10 @@ internal sealed partial class MagGraphCanvas
         var pMin = new Vector2(s + dx,
                                s) * canvasScale + areaMin;
 
-        var pMax = pMin + new Vector2(4, 2) * canvasScale;
+        var pMax = pMin + new Vector2(4, 3) * canvasScale;
 
         drawList.AddRectFilled(pMin, pMax, color.Fade(opacity));
+        
         drawList.AddRect(pMin - Vector2.One,
                          pMax + Vector2.One,
                          UiColors.WindowBackground.Fade(0.4f * opacity));

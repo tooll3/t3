@@ -55,7 +55,7 @@ internal sealed partial class MagGraphCanvas
         }
 
         //const float backgroundAlpha = 0.2f;
-        const float headerHoverAlpha = 0.3f;
+        const float headerHoverAlpha = 0.1f;
         drawList.AddRectFilled(clickableArea.Min, clickableArea.Max,
                                UiColors.ForegroundFull.Fade(isHeaderHovered
                                                                 ? headerHoverAlpha
@@ -76,36 +76,48 @@ internal sealed partial class MagGraphCanvas
             context.StateMachine.SetState(GraphStates.RenameAnnotation, context);
         }
 
-        // Label
-        if (!string.IsNullOrEmpty(magAnnotation.Annotation.Title))
+        // Label and description
+        if (context.StateMachine.CurrentState != GraphStates.RenameAnnotation)
         {
+            var labelHeight = 0f;
             var canvasScale = canvas.Scale.X;
-            var font = magAnnotation.Annotation.Title.StartsWith("# ") ? Fonts.FontLarge : Fonts.FontNormal;
-            var fade = MathUtils.SmootherStep(0.25f, 0.6f, canvasScale);
-            drawList.PushClipRect(pMin, pMax, true);
-            var labelPos = pMin + new Vector2(8, 6) * T3Ui.DisplayScaleFactor;
-
-            var fontSize = canvasScale > 1
-                               ? font.FontSize
-                               : canvasScale > Fonts.FontSmall.Scale / Fonts.FontNormal.Scale
-                                   ? font.FontSize
-                                   : font.FontSize * canvasScale;
-            drawList.AddText(font,
-                             fontSize,
-                             labelPos,
-                             ColorVariations.OperatorLabel.Apply(magAnnotation.Annotation.Color.Fade(fade)),
-                             magAnnotation.Annotation.Title);
-            drawList.PopClipRect();
-        }
-
-        {
-            if (!string.IsNullOrEmpty(magAnnotation.Annotation.Label))
             {
-                drawList.AddText(Fonts.FontNormal,
-                                 Fonts.FontNormal.FontSize,
-                                 pMin + new Vector2(0, -Fonts.FontNormal.FontSize),
-                                 UiColors.ForegroundFull.Fade(0.5f),
-                                 magAnnotation.Annotation.Label);
+                if (!string.IsNullOrEmpty(magAnnotation.Annotation.Label))
+                {
+                    var fade = MathUtils.SmootherStep(0.1f, 0.2f, canvasScale) * 0.8f;
+                    var fontSize = canvasScale > 1
+                                       ? Fonts.FontLarge.FontSize
+                                       : canvasScale > 0.333 / Fonts.FontLarge.Scale
+                                           ? Fonts.FontLarge.FontSize
+                                           : Fonts.FontLarge.FontSize * canvasScale * 3;
+
+                    drawList.AddText(Fonts.FontLarge,
+                                     fontSize,
+                                     pMin + new Vector2(8, 3),
+                                     UiColors.ForegroundFull.Fade(fade),
+                                     magAnnotation.Annotation.Label);
+                    labelHeight = Fonts.FontLarge.FontSize;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(magAnnotation.Annotation.Title))
+            {
+                var font = magAnnotation.Annotation.Title.StartsWith("# ") ? Fonts.FontLarge : Fonts.FontNormal;
+                drawList.PushClipRect(pMin, pMax, true);
+                var labelPos = pMin + new Vector2(8, 8 + labelHeight) * T3Ui.DisplayScaleFactor;
+
+                var fade = MathUtils.SmootherStep(0.25f, 0.6f, canvasScale) * 0.8f;
+                var fontSize = canvasScale > 1
+                                   ? font.FontSize
+                                   : canvasScale > Fonts.FontSmall.Scale / Fonts.FontNormal.Scale
+                                       ? font.FontSize
+                                       : font.FontSize * canvasScale;
+                drawList.AddText(font,
+                                 fontSize,
+                                 labelPos,
+                                 ColorVariations.OperatorLabel.Apply(magAnnotation.Annotation.Color.Fade(fade)),
+                                 magAnnotation.Annotation.Title);
+                drawList.PopClipRect();
             }
         }
 
