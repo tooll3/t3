@@ -185,7 +185,7 @@ internal sealed class ConsoleLogWindow : Window, ILogWriter
         var nodeSelection = ProjectView.Focused?.NodeSelection;
         if (nodeSelection != null)
         {
-            if (nodeSelection.HoveredIds.Contains(entry.SourceId))
+            if (FrameStats.IsIdHovered(entry.SourceId))
                 opacity = 0.8f;
         }
 
@@ -248,7 +248,7 @@ internal sealed class ConsoleLogWindow : Window, ILogWriter
         if (!hasInstancePath && !hasLongMessages)
             return;
 
-        nodeSelection?.HoveredIds.Add(entry.SourceId);
+        FrameStats.AddHoveredId(entry.SourceId);
 
         CustomComponents.BeginTooltip(800);
         {

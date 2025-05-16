@@ -25,8 +25,8 @@ internal sealed class NodeSelection : ISelection
         _structure = structure;
     }
 
-    public readonly HashSet<Guid> HoveredIds = new();
-    public readonly HashSet<Guid> PinnedIds = new();
+    //public readonly HashSet<Guid> HoveredIds = [];
+    public readonly HashSet<Guid> PinnedIds = [];
 
     public void Clear()
     {

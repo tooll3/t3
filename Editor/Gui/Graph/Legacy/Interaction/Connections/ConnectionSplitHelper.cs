@@ -134,8 +134,8 @@ internal static class ConnectionSplitHelper
                         ImGui.PopFont();
                         
                         var nodeSelection = components.NodeSelection;
-                        nodeSelection.HoveredIds.Add(targetOp.Id);
-                        nodeSelection.HoveredIds.Add(sourceOp.Id);
+                        FrameStats.AddHoveredId(targetOp.Id);
+                        FrameStats.AddHoveredId(sourceOp.Id);
                     }
                 }
             }

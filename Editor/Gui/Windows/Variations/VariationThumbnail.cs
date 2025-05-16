@@ -121,7 +121,7 @@ internal static class VariationThumbnail
                     var nodeSelection = components.NodeSelection;
                     foreach (var childId in variation.ParameterSetsForChildIds.Keys)
                     {
-                        nodeSelection.HoveredIds.Add(childId);
+                        FrameStats.AddHoveredId(childId);
                     }
                 }
 
