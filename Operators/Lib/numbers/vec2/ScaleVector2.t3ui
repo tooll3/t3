@@ -1,27 +1,31 @@
 {
   "Id": "4bbc6fac-789d-496e-9833-a0af78c31c98"/*ScaleVector2*/,
-  "Description": "",
+  "Description": "Multiplies two incoming [Vector2]'s with each other",
   "InputUis": [
     {
       "InputId": "927443fe-4338-462a-bf78-90a08f77467b"/*UniformScale*/,
       "Position": {
         "X": -200.0,
         "Y": 90.0
-      }
+      },
+      "Description": "factor to multiply the incoming vectors uniformly",
+      "AddPadding": "True"
     },
     {
       "InputId": "c34ae94c-228d-45e4-9e9a-ec2799953444"/*B*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "Description": "Input for the second Vector2 (B) which will be used to multiply Vector2 (A)"
     },
     {
       "InputId": "d7bf8b1c-b654-451b-ac94-a2f71db3da35"/*A*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Input for the first Vector2 (A)"
     }
   ],
   "SymbolChildUis": [],
