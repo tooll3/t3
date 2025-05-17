@@ -1,20 +1,22 @@
 {
   "Id": "927a77d5-7bf0-477b-b288-4bb48d4980cd"/*ImageSequenceClip*/,
-  "Description": "Loads an image sequence from a folder.",
+  "Description": "Loads an image sequence from a folder and adds it as a time clip bar within the DopeView of the Timeline, similar to how Video editing apps show clips.\nThese Clips can be moved by drag and drop and arranged next to and on top of each other (classic NLE non-liniear editing).\n\nWhen the time marker is running over / playing the time clip it is activated and rendered.\n\nTo load an Operator tree into the DopeView of the Timeline [TimeClip] can be used.\n[MidiClip] can be used to load linear Midi information into the scene.",
   "InputUis": [
     {
       "InputId": "25215a7e-1e38-4370-8845-cbf422a7eb92"/*TriggerUpdate*/,
       "Position": {
         "X": -834.8699,
         "Y": 13.593903
-      }
+      },
+      "Description": "Forces update if clicked or activated via a bool"
     },
     {
       "InputId": "5c510853-f87d-4ebf-be0a-78d06d970be2"/*FrameRate*/,
       "Position": {
         "X": -834.8699,
         "Y": -31.406097
-      }
+      },
+      "Description": "Defines how many images per second are shown"
     },
     {
       "InputId": "7c4fbfe3-2cf4-4e23-9b3e-961927f20935"/*Color*/,
@@ -22,6 +24,7 @@
         "X": -834.8699,
         "Y": 58.593903
       },
+      "Description": "Color value that tints / colors the image sequence",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -32,6 +35,7 @@
         "X": -834.8699,
         "Y": -121.4061
       },
+      "Description": "Defines the storage location of the image sequence.\n",
       "Usage": "DirectoryPath"
     }
   ],
