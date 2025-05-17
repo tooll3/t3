@@ -1,6 +1,6 @@
 {
   "Id": "aaa64b7b-abe4-499e-ae29-a4d3df561c33"/*ScreenCloseUp*/,
-  "Description": "Uses the incoming 2D image and puts it on a virtual LCD / screen in a 3D scene that looks as if it is being filmed by a real camera (including depth of field etc)\n\nWorks great with [PlayVideo] or any [RenderTarget].\n\nAdditional ops can be used to emphasize the illusion of a real camera such as: [ChromaticAbberation], [ColorGrade], [Grain]",
+  "Description": "Uses the incoming 2D image and puts it on a virtual LCD / screen in a 3D scene that looks as if it is being filmed by a real camera (including depth of field etc)\n\nWorks great with [PlayVideo] or any [RenderTarget] or [ScreenCapture].\n\nAdditional ops can be used to emphasize the illusion of a real camera such as: [ChromaticAbberation], [ColorGrade], [Grain]",
   "InputUis": [
     {
       "InputId": "4b2ea8f2-dfe3-4e59-a140-5d5427e5c1ce"/*Glossy*/,
@@ -8,7 +8,8 @@
         "X": 1616.5258,
         "Y": -424.8388
       },
-      "Description": "Defines the glossiness of the screen"
+      "Description": "Defines the glossiness of the screen",
+      "AddPadding": "True"
     },
     {
       "InputId": "7b40b40e-5524-4458-8a79-1a9012fb8fcb"/*Tilt*/,
@@ -46,8 +47,8 @@
         "X": 766.07587,
         "Y": -222.7555
       },
+      "GroupTitle": "CameraPosition",
       "Description": "Defines the distance to the virtual LCD / Screen",
-      "AddPadding": "True",
       "Min": -0.5,
       "Max": 0.95,
       "Scale": 0.001,
@@ -59,7 +60,8 @@
         "X": 1756.526,
         "Y": 170.16101
       },
-      "Description": "Defines how large the depth of field range is"
+      "Description": "Defines how large the depth of field range is",
+      "AddPadding": "True"
     },
     {
       "InputId": "f4b8ed2c-e5ba-4441-8bee-9824c9793444"/*FogStrength*/,
@@ -67,6 +69,7 @@
         "X": 626.07587,
         "Y": -152.7555
       },
+      "GroupTitle": "Look",
       "Description": "Defines the intensity of the fog (looks like a vignette)",
       "Min": 0.0,
       "Max": 2.0,
