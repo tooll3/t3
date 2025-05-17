@@ -1,13 +1,14 @@
 {
   "Id": "0946c48b-85d8-4072-8f21-11d17cc6f6cf"/*Vector2Components*/,
-  "Description": "",
+  "Description": "Converts a Vector2 into two individual values\n\nOpposite of [Vector2]",
   "InputUis": [
     {
       "InputId": "36f14238-5bb8-4521-9533-f4d1e8fb802b"/*Value*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Vector 2 values"
     }
   ],
   "SymbolChildUis": [],
