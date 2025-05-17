@@ -52,6 +52,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeOperators", "Operators\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ndi", "Operators\Ndi\ndi.csproj", "{6E582F0F-903E-4B6A-A647-D19C31AA52DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "spout", "Operators\Spout\spout.csproj", "{6E582F0F-903E-4B6A-A647-D19C31AA52DB}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unsplash", "Operators\unsplash\unsplash.csproj", "{69FEE65C-7C16-49D0-A3D3-54E5353579C3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pixtur", "Operators\user\pixtur\pixtur.csproj", "{FDAEA755-DB90-4F6D-98A4-980B647A063F}"
