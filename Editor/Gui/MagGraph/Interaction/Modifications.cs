@@ -73,9 +73,15 @@ internal static class Modifications
                 deletedItems.Add(item);
                 deletedChildUis.Add(childUi);
             }
-            else if (s is MagGraphAnnotation magAnnotation)
+            else if (s is Annotation annotation)
             {
-                deletedAnnotations.Add(magAnnotation);
+                if (!context.Layout.Annotations.TryGetValue(s.Id, out var mga))
+                {
+                    Log.Warning("Can't find annotation: " + s.Id);
+                    continue;
+                }
+
+                deletedAnnotations.Add(mga);
             }
             else 
             {
