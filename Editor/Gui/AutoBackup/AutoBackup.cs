@@ -54,7 +54,7 @@ internal static class AutoBackup
 
         var zipFilePath = Path.Join(BackupDirectory, $"#{index:D5}-{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.zip");
 
-        var excludedDirs = new[] { "bin", "obj", ".git", "Render", "ImageSequence" };
+        var excludedDirs = new[] { "bin", "obj", ".git", "Render", "ImageSequence", "Screenshots" };
         try
         {
             using var archive = ZipFile.Open(zipFilePath, ZipArchiveMode.Create);
