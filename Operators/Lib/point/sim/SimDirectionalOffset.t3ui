@@ -1,6 +1,6 @@
 {
   "Id": "7a08d73e-1aea-479f-8d36-ecb119d75c3a"/*SimDirectionalOffset*/,
-  "Description": "",
+  "Description": "Linearly offsets the incoming points along the defines axis.\n\nNeeds a [DrawPoints], [DrawLines] or [DrawMeshAtPoints] or similar in order to become visible.\n\nNeeds Points as a base for example: [RadialPoints], [SpherePoints], [PointsOnMesh]",
   "SymbolTags": "1",
   "InputUis": [
     {
@@ -9,6 +9,8 @@
         "X": -417.82614,
         "Y": 574.45514
       },
+      "GroupTitle": "Settings",
+      "Description": "Defines how much the Points are offsets on the given axis",
       "Scale": 0.001
     },
     {
@@ -16,14 +18,17 @@
       "Position": {
         "X": -417.82614,
         "Y": 754.45526
-      }
+      },
+      "GroupTitle": "Advanced",
+      "Description": "Selects the mode"
     },
     {
       "InputId": "2fe652d7-92c7-4cd0-8190-78905be178f1"/*RandomAmount*/,
       "Position": {
         "X": -417.82614,
         "Y": 664.45526
-      }
+      },
+      "Description": "Randomized the force per point"
     },
     {
       "InputId": "4f9ab443-3885-4a57-9116-6be5824bd95b"/*Amount*/,
@@ -31,6 +36,8 @@
         "X": -417.82614,
         "Y": 619.45514
       },
+      "Description": "Defines the strength of the force",
+      "AddPadding": "True",
       "Scale": 0.001
     },
     {
@@ -38,14 +45,16 @@
       "Position": {
         "X": -112.90869,
         "Y": 209.04144
-      }
+      },
+      "Description": "Point input"
     },
     {
       "InputId": "a6b0a4da-2f6f-4941-b097-ed5e3dd6af0b"/*ShowGizmo*/,
       "Position": {
         "X": -417.82614,
         "Y": 799.45526
-      }
+      },
+      "Description": "Defines if and how the gizmo is shown in the Output View"
     }
   ],
   "SymbolChildUis": [
