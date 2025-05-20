@@ -86,9 +86,11 @@ public static class SingleValueEdit
 
         if (componentId == _activeJogDialId)
         {
+            var modified = false;
             switch (_state)
             {
                 case InputStates.Dialing:
+                    modified = true;
                     ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundActive.Rgba);
                     ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundActive.Rgba);
                     ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.BackgroundActive.Rgba);
@@ -144,7 +146,7 @@ public static class SingleValueEdit
                                                             ? UiColors.StatusError.Rgba
                                                             : UiColors.ForegroundFull);
                     ImGui.SetNextItemWidth(size.X);
-                    ImGui.InputText("##dialInput" + _editInteractionCounter, ref _jogDialText, 20);
+                    modified =ImGui.InputText("##dialInput" + _editInteractionCounter, ref _jogDialText, 20);
 
                     // Keep Focusing until Tab-Key released
                     if (shouldFocus)
@@ -172,6 +174,7 @@ public static class SingleValueEdit
                         // NOTE: This happens after canceling editing by closing the input
                         // and reopen the state. Sadly there doesn't appear to be a simple fix for this.
                         _tabFocusIndex = -1;
+                        modified = false;
                     }
 
                     if (completedAfterTabbing || completedAfterFocusLoss)
@@ -179,6 +182,8 @@ public static class SingleValueEdit
                         SetState(InputStates.Inactive);
                         if (double.IsNaN(_editValue))
                             _editValue = _startValue;
+                        
+                        modified = false;
                     }
 
                     var valid = Evaluate(_jogDialText, ref _editValue);
@@ -199,8 +204,8 @@ public static class SingleValueEdit
             {
                 return InputEditStateFlags.Finished;
             }
-
-            return Math.Abs(_editValue - _startValue) > 0.0001f ? InputEditStateFlags.Modified : InputEditStateFlags.Started;
+            
+            return modified ? InputEditStateFlags.Modified : InputEditStateFlags.Started;
         }
 
         ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(horizontalAlign,0.5f));
