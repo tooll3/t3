@@ -1,13 +1,14 @@
 {
   "Id": "55cc0f79-96c9-482e-9794-934dc0f87708"/*ValuesToTexture*/,
-  "Description": "",
+  "Description": "Converts a list of values into pixels of a texture in real time.\nSee the example how this can be used to create audio reactive visualizers with [PlaybackFFT] and [LinearSamplePointAttributes]",
   "InputUis": [
     {
       "InputId": "092c8d1f-a70e-4298-b5df-52c9d62f8e04"/*Values*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "GroupTitle": "Values"
     },
     {
       "InputId": "165f7e0e-6ef0-4be1-8ed3-61ed0db752ed"/*UseFullList*/,
@@ -28,21 +29,24 @@
       "Position": {
         "X": -200.0,
         "Y": 225.0
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "ca67bfaf-ede7-43ba-b279-fc1ddfbe2ffa"/*RangeStart*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "GroupTitle": "Settings"
     },
     {
       "InputId": "cc812393-f080-4e17-a525-15b09f8acdd0"/*Gain*/,
       "Position": {
         "X": -200.0,
         "Y": 135.0
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "db868176-d51c-41aa-bafe-68c3e50e725e"/*RangeEnd*/,
