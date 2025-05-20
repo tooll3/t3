@@ -1,6 +1,6 @@
 {
   "Id": "941410e5-2023-43c6-87b1-55386bb048ac"/*PolarCoordinates*/,
-  "Description": "Applies a polar coordinate transformation that converts between circular and rectangular coordinates. In other words, it wraps and unwraps round images.",
+  "Description": "Applies a polar coordinate transformation that converts between circular and rectangular coordinates. In other words, it wraps and unwraps round images.\n\nAlso see [Equirectangle], [ConvertEquirectangle]",
   "SymbolTags": "1",
   "InputUis": [
     {
@@ -16,6 +16,7 @@
         "X": 132.69783,
         "Y": 29.375793
       },
+      "GroupTitle": "Transform",
       "Min": -0.1,
       "Max": 0.1,
       "Scale": 0.001
@@ -56,7 +57,8 @@
       "Position": {
         "X": 132.69783,
         "Y": 389.3758
-      }
+      },
+      "GroupTitle": "Settings"
     },
     {
       "InputId": "d796cbc2-26b4-4805-b1b7-bd23b42d1984"/*RadialBias*/,
