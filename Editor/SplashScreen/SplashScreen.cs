@@ -4,20 +4,16 @@ using T3.SystemUi;
 
 namespace T3.Editor.SplashScreen;
 
-internal class SplashScreen : ISplashScreen
+internal sealed class SplashScreen : ISplashScreen
 {
     private sealed class SplashForm : Form
     {
-        public SplashForm()
-        {
-        }
-
         public void PreventFlickering()
         {
             SetStyle(ControlStyles.DoubleBuffer
                      | ControlStyles.UserPaint
                      | ControlStyles.AllPaintingInWmPaint, true);
-            this.UpdateStyles();
+            UpdateStyles();
         }
     }
 
@@ -43,6 +39,7 @@ internal class SplashScreen : ISplashScreen
                                        RowCount = 1,
                                        CellBorderStyle = TableLayoutPanelCellBorderStyle.None,
                                        BackColor = Color.Transparent,
+                                       Padding = new Padding(0,0,0,5),
                                    };
 
         tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
