@@ -15,21 +15,24 @@
       "Position": {
         "X": 139.79256,
         "Y": 839.41943
-      }
+      },
+      "GroupTitle": "Settings"
     },
     {
       "InputId": "894b2978-63f5-4f0f-8e15-03fc21c9532b"/*ShowGizmo*/,
       "Position": {
         "X": 1060.8087,
         "Y": 1130.0127
-      }
+      },
+      "GroupTitle": "Advanced"
     },
     {
       "InputId": "9180eb49-efae-4305-b269-04314210e1f2"/*GPoints*/,
       "Position": {
         "X": 184.23888,
         "Y": 259.54614
-      }
+      },
+      "Description": "Point input"
     },
     {
       "InputId": "93cae017-8bf6-44c8-9b45-8b9a4e64b9bd"/*DecayExponent*/,
@@ -43,7 +46,8 @@
       "Position": {
         "X": 404.14755,
         "Y": 608.3408
-      }
+      },
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
