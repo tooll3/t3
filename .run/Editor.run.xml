@@ -15,6 +15,7 @@
       <option name="Build" default="false" projectName="examples" projectPath="$PROJECT_DIR$/Operators/examples/examples.csproj" />
       <option name="Build" default="false" projectName="lib" projectPath="$PROJECT_DIR$/Operators/lib/lib.csproj" />
       <option name="Build" default="false" projectName="ndi" projectPath="$PROJECT_DIR$/Operators/Ndi/ndi.csproj" />
+      <option name="Build" default="false" projectName="spout" projectPath="$PROJECT_DIR$/Operators/Spout/spout.csproj" />
       <option name="Build" default="false" projectName="unsplash" projectPath="$PROJECT_DIR$/Operators/unsplash/unsplash.csproj" />
       <option name="Build" />
       <option name="Build" default="false" projectName="pixtur" projectPath="$PROJECT_DIR$/Operators/user/pixtur/pixtur.csproj" />

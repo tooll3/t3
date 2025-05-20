@@ -1,0 +1,32 @@
+{
+  "Id": "13be1e3f-861d-4350-a94e-e083637b3e55"/*SpoutOutput*/,
+  "Description": "Spout live video output. We recommend using the R8G8B8A8_UNorm texture format for output. You can adjust the render format by using a [RenderTarget] like in this example: [TorusMesh]->[DrawMesh]->[RenderTarget]->[SpoutOutput].",
+  "InputUis": [
+    {
+      "InputId": "7c27ebd7-3746-4b70-a252-dd0ac0445b74"/*SenderName*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "d4b5c642-9cb9-4f41-8739-edbb9c6c4857"/*Texture*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "297ea260-4486-48f8-b58f-8180acf0c2c5"/*TextureOutput*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

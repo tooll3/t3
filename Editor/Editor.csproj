@@ -153,6 +153,7 @@
             <Examples Include="$(Ops)/examples/$(RelativeBuildFolder)/**" SubFolder="examples" />
             <Unsplash Include="$(Ops)/unsplash/$(RelativeBuildFolder)/**" SubFolder="unsplash" />
             <Ndi Include="$(Ops)/Ndi/$(RelativeBuildFolder)/**" SubFolder="Ndi" />
+            <Spout Include="$(Ops)/Spout/$(RelativeBuildFolder)/**" SubFolder="Spout" />
             <pixtur Include="$(UserOps)/pixtur/$(RelativeBuildFolder)/**" SubFolder="pixtur" />
         </ItemGroup>
 
