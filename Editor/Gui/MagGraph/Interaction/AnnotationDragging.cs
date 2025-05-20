@@ -1,5 +1,7 @@
 ﻿using ImGuiNET;
+using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Snapping;
+using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -17,9 +19,9 @@ internal static class AnnotationDragging
 {
     internal static void Draw(GraphUiContext context)
     {
-        _snapHandlerY.DrawSnapIndicator(context.Canvas, UiColors.ForegroundFull.Fade(0.1f));
-        _snapHandlerX.DrawSnapIndicator(context.Canvas, UiColors.ForegroundFull.Fade(0.1f));
-        
+        _snapHandlerY.DrawSnapIndicator(context.Canvas, UiColors.StatusActivated.Fade(0.3f));
+        _snapHandlerX.DrawSnapIndicator(context.Canvas, UiColors.StatusActivated.Fade(0.3f));
+
         // Setup...
         var instViewSymbolUi = context?.ProjectView?.InstView?.SymbolUi;
         if (instViewSymbolUi == null)
@@ -64,53 +66,86 @@ internal static class AnnotationDragging
                 return;
         }
 
-        //float padding = 50;
         // Update dragging...
         {
+            var minSize = MathF.Min(MagGraphItem.GridSize.X, MagGraphItem.GridSize.Y);
+            var gridSize = Vector2.One * minSize;
+
+            _visibleAnnotationsForSnapping.Clear();
+            foreach (var snapTo in context.Layout.Annotations.Values)
+            {
+                if (context.Canvas.IsItemVisible(snapTo))
+                    _visibleAnnotationsForSnapping.Add(snapTo);
+            }
+
             var newDragPos = ImGui.GetMousePos() - _dragStartDelta;
             var newDragPosInCanvas = context.Canvas.InverseTransformPositionFloat(newDragPos);
             var moveDeltaOnCanvas = newDragPosInCanvas - magAnnotation.PosOnCanvas;
 
+            // Horizontal snapping
+            var snapFactor = 0.5f;
             if (_snapHandlerX.TryCheckForSnapping(newDragPosInCanvas.X, out var snappedXValue,
-                                                  context.Canvas.Scale.X * 0.25f,
+                                                  context.Canvas.Scale.X * snapFactor,
                                                       [magAnnotation],
-                                                  context.Layout.Annotations.Values
+                                                  _visibleAnnotationsForSnapping
                                                  ))
             {
                 var snapDelta = snappedXValue - newDragPosInCanvas.X;
                 moveDeltaOnCanvas.X += (float)snapDelta;
             }
-            // else if (_snapHandlerX.TryCheckForSnapping(newDragPosInCanvas.X - padding, out var snappedXValue2,
-            //                                            context.Canvas.Scale.X * 0.25f,
-            //                                                [magAnnotation],
-            //                                            context.Layout.Annotations.Values
-            //                                           ))
-            // {
-            //     var snapDelta = snappedXValue2 - newDragPosInCanvas.X + padding;
-            //     moveDeltaOnCanvas.X += (float)snapDelta;
-            // }
-            
-            
-            if (_snapHandlerY.TryCheckForSnapping(newDragPosInCanvas.Y, out var snappedYValue, 
-                                                  context.Canvas.Scale.Y * 0.25f, 
-                                                      [magAnnotation], 
-                                                  context.Layout.Annotations.Values
+            else if (_snapHandlerX.TryCheckForSnapping(newDragPosInCanvas.X + magAnnotation.Size.X, out var snappedXValue2,
+                                                       context.Canvas.Scale.X * snapFactor,
+                                                           [magAnnotation],
+                                                       _visibleAnnotationsForSnapping
+                                                      ))
+            {
+                var snapDelta = snappedXValue2 - newDragPosInCanvas.X - magAnnotation.Size.X;
+                moveDeltaOnCanvas.X += (float)snapDelta;
+            }
+            else if (_snapHandlerX.TryCheckForSnapping(newDragPosInCanvas.X, out var snappedXValue3,
+                                                       context.Canvas.Scale.X ,
+                                                           [],
+                                                           [new RasterSnapAttractor
+                                                                {
+                                                                    Canvas = context.Canvas,
+                                                                    GridSize = gridSize,
+                                                                    Direction = RasterSnapAttractor.Directions.Horizontal
+                                                                }]))
+            {
+                moveDeltaOnCanvas.X += (float)(snappedXValue3 - newDragPosInCanvas.X);
+            }
+
+            // Vertical snapping...
+            if (_snapHandlerY.TryCheckForSnapping(newDragPosInCanvas.Y, out var snappedYValue,
+                                                  context.Canvas.Scale.Y * snapFactor,
+                                                      [magAnnotation],
+                                                  _visibleAnnotationsForSnapping
                                                  ))
             {
-                var snapDelta =  snappedYValue - newDragPosInCanvas.Y;
+                var snapDelta = snappedYValue - newDragPosInCanvas.Y;
                 moveDeltaOnCanvas.Y += (float)snapDelta;
             }
-            // else if(_snapHandlerY.TryCheckForSnapping(newDragPosInCanvas.Y - padding, out var snappedYValue2, 
-            //                                           context.Canvas.Scale.Y * 0.25f, 
-            //                                               [magAnnotation], 
-            //                                           context.Layout.Annotations.Values
-            //                                          ))
-            // {
-            //     var snapDelta =  snappedYValue2 - newDragPosInCanvas.Y + padding;
-            //     moveDeltaOnCanvas.Y += (float)snapDelta;
-            // }
+            else if (_snapHandlerY.TryCheckForSnapping(newDragPosInCanvas.Y + magAnnotation.Size.Y, out var snappedYValue2,
+                                                       context.Canvas.Scale.Y * snapFactor,
+                                                           [magAnnotation],
+                                                       _visibleAnnotationsForSnapping
+                                                      ))
+            {
+                moveDeltaOnCanvas.Y += (float)(snappedYValue2 - newDragPosInCanvas.Y - magAnnotation.Size.Y);
+            }
+            else if (_snapHandlerY.TryCheckForSnapping(newDragPosInCanvas.Y, out var snappedYValue3,
+                                                       context.Canvas.Scale.Y ,
+                                                           [],
+                                                           [new RasterSnapAttractor
+                                                                {
+                                                                    Canvas = context.Canvas,
+                                                                    GridSize = gridSize,
+                                                                    Direction = RasterSnapAttractor.Directions.Vertical
+                                                                }]))
+            {
+                moveDeltaOnCanvas.Y += (float)(snappedYValue3 - newDragPosInCanvas.Y);
+            }
 
-            
             foreach (var e in _draggedNodes)
             {
                 e.PosOnCanvas += moveDeltaOnCanvas;
@@ -153,6 +188,8 @@ internal static class AnnotationDragging
         }
     }
 
+    private static readonly List<MagGraphAnnotation> _visibleAnnotationsForSnapping = [];
+
     private static List<ISelectableCanvasObject> FindAnnotatedOps(SymbolUi parentUi, Annotation annotation)
     {
         var matches = new List<ISelectableCanvasObject>();
@@ -184,4 +221,54 @@ internal static class AnnotationDragging
     private static readonly List<ISelectableCanvasObject> _draggedNodes = [];
     private static readonly ValueSnapHandler _snapHandlerX = new(SnapResult.Orientations.Horizontal);
     private static readonly ValueSnapHandler _snapHandlerY = new(SnapResult.Orientations.Vertical);
+}
+
+/// <summary>
+/// A simple help to snap to a grid raster of a canvas
+/// </summary>
+internal struct RasterSnapAttractor : IValueSnapAttractor
+{
+    public ScalableCanvas Canvas;
+    public required Vector2 GridSize;
+    public required Directions Direction;
+
+    public enum Directions
+    {
+        Horizontal,
+        Vertical,
+    }
+
+    public void CheckForSnap(ref SnapResult result)
+    {
+        if (Canvas == null)
+            return;
+
+        if (Canvas.Scale.X < 1f)
+            return;
+
+        var window = new ImRect(Canvas.WindowPos, Canvas.WindowPos + Canvas.WindowSize);
+        var windowInCanvas = Canvas.InverseTransformRect(window);
+
+        var alignedTopLeftCanvas = new Vector2((int)(windowInCanvas.Min.X / GridSize.X) * GridSize.X,
+                                               (int)(windowInCanvas.Min.Y / GridSize.Y) * GridSize.Y);
+
+        var count = windowInCanvas.GetSize() / GridSize;
+
+        if (Direction == Directions.Horizontal)
+        {
+            for (int ix = 0; ix < 200 && ix <= count.X + 1; ix++)
+            {
+                var x = (int)(alignedTopLeftCanvas.X + ix * GridSize.X);
+                result.TryToImproveWithAnchorValue(x);
+            }
+        }
+        else
+        {
+            for (int iy = 0; iy < 200 && iy <= count.Y + 1; iy++)
+            {
+                var y = (int)(alignedTopLeftCanvas.Y + iy * GridSize.Y);
+                result.TryToImproveWithAnchorValue(y);
+            }
+        }
+    }
 }

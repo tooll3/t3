@@ -28,6 +28,11 @@ internal static class ColorThemeEditor
         var colorFields = typeof(UiColors).GetFields();
         var colorVariationFields = typeof(ColorVariations).GetFields();
 
+        var xxx = typeof(ColorVariations);
+        var ff = xxx.UnderlyingSystemType;
+        
+        var xxx2 = ff.GetFields();
+        
         if (FormInputs.AddDropdown(ref UserSettings.Config.ColorThemeName, 
                                    ThemeHandling.Themes.Select(t => t.Name), 
                                    "Theme",
@@ -177,6 +182,15 @@ internal static class ColorThemeEditor
         ImGui.Separator();
         FormInputs.AddSectionHeader("Data type variations");
         CustomComponents.HelpText("These factors determine the Brightness, Saturation, and Opacity of each purpose. By applying them to the previously defined base colors, you can achieve a wide range of variety and contrast.");
+        
+        var vec3Width = ImGui.GetContentRegionAvail().X -200;
+
+        ImGui.Text("Luma");
+        ImGui.SameLine(vec3Width/3);
+        ImGui.Text("Sat");
+        ImGui.SameLine(2*vec3Width/3);
+        ImGui.Text("Alpha");
+        
         foreach (var f in variationFields)
         {
             var isChanged = false;
@@ -211,8 +225,8 @@ internal static class ColorThemeEditor
             var brightSaturationAlpha = new Vector3(variation.Brightness, variation.Saturation, variation.Opacity);
             
             ImGui.PushStyleColor(ImGuiCol.Text, isChanged ? UiColors.Text.Rgba : UiColors.TextMuted);
-            
-            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X -300);
+
+            ImGui.SetNextItemWidth(vec3Width);
             if(ImGui.DragFloat3(f.Name, ref brightSaturationAlpha, 0.01f))
             {
                 variation.Brightness = brightSaturationAlpha.X;

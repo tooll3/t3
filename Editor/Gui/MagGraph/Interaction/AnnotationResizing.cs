@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using T3.Editor.Gui.Interaction.Snapping;
+using T3.Editor.Gui.MagGraph.Model;
 using T3.Editor.Gui.MagGraph.States;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -47,6 +48,9 @@ internal static class AnnotationResizing
 
         // Update dragging...
         {
+            var minSize = MathF.Min(MagGraphItem.GridSize.X, MagGraphItem.GridSize.Y);
+            var gridSize = Vector2.One * minSize;
+            
             var newDragPos = ImGui.GetMousePos() - _dragStartDelta;
             var newDragPosInCanvas = context.Canvas.InverseTransformPositionFloat(newDragPos);
 
@@ -58,6 +62,18 @@ internal static class AnnotationResizing
             {
                 newDragPosInCanvas.X = (float)snappedPosX;
             }
+            else if (_snapHandlerX.TryCheckForSnapping(newDragPosInCanvas.X, out var snappedXValue3,
+                                                       context.Canvas.Scale.X * 0.25f,
+                                                           [],
+                                                           [new RasterSnapAttractor
+                                                                {
+                                                                    Canvas = context.Canvas,
+                                                                    GridSize = gridSize,
+                                                                    Direction = RasterSnapAttractor.Directions.Horizontal
+                                                                }]))
+            {
+                newDragPosInCanvas.X = (float)snappedXValue3;
+            }
 
             if (_snapHandlerY.TryCheckForSnapping(newDragPosInCanvas.Y, out var snappedPosY,
                                                   context.Canvas.Scale.Y * 0.25f,
@@ -67,6 +83,18 @@ internal static class AnnotationResizing
             {
                 newDragPosInCanvas.Y = (float)snappedPosY;
             }
+            else if (_snapHandlerY.TryCheckForSnapping(newDragPosInCanvas.Y, out var snappedYValue3,
+                                                       context.Canvas.Scale.Y * 0.25f,
+                                                           [],
+                                                           [new RasterSnapAttractor
+                                                                {
+                                                                    Canvas = context.Canvas,
+                                                                    GridSize = gridSize,
+                                                                    Direction = RasterSnapAttractor.Directions.Vertical
+                                                                }]))
+            {
+                newDragPosInCanvas.Y = (float)snappedYValue3;
+            }            
 
             annotation.Size = newDragPosInCanvas - annotation.PosOnCanvas;
         }

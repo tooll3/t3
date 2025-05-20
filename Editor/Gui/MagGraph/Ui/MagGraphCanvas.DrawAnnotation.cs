@@ -22,19 +22,20 @@ internal sealed partial class MagGraphCanvas
         var pMin = TransformPosition(magAnnotation.DampedPosOnCanvas);
         var pMax = TransformPosition(magAnnotation.DampedPosOnCanvas + magAnnotation.DampedSize);
 
-        drawList.AddRectFilled(pMin,
+        // Background
+        var backgroundColor = ColorVariations.AnnotationBackground.Apply(magAnnotation.Annotation.Color).Fade(0.4f);
+        
+        drawList.AddRectFilled(pMin + Vector2.One,
                                pMax,
-                               UiColors.BackgroundFull.Fade(0.2f),
+                               backgroundColor,
                                3 * context.Canvas.CanvasScale);
 
         var isNodeSelected = context.Selector.IsNodeSelected(magAnnotation.Annotation);
-        var borderColor = isNodeSelected
-                              ? UiColors.ForegroundFull
-                              : UiColors.ForegroundFull.Fade(0.1f);
 
+        // Outline
         drawList.AddRect(pMin,
                          pMax,
-                         borderColor,
+                         isNodeSelected ? UiColors.ForegroundFull : ColorVariations.AnnotationOutline.Apply(magAnnotation.Annotation.Color),
                          3 * context.Canvas.CanvasScale);
 
         // Keep height of title area at a minimum height when zooming out
@@ -77,7 +78,7 @@ internal sealed partial class MagGraphCanvas
         }
 
         // Label and description
-        if (context.StateMachine.CurrentState != GraphStates.RenameAnnotation)
+        if (context.ActiveAnnotationId != magAnnotation.Id || context.StateMachine.CurrentState != GraphStates.RenameAnnotation)
         {
             var labelHeight = 0f;
             var canvasScale = canvas.Scale.X;
@@ -94,7 +95,7 @@ internal sealed partial class MagGraphCanvas
                     drawList.AddText(Fonts.FontLarge,
                                      fontSize,
                                      pMin + new Vector2(8, 3),
-                                     UiColors.ForegroundFull.Fade(fade),
+                                     ColorVariations.OperatorLabel.Apply(magAnnotation.Annotation.Color.Fade(fade)),
                                      magAnnotation.Annotation.Label);
                     labelHeight = Fonts.FontLarge.FontSize;
                 }
@@ -125,8 +126,9 @@ internal sealed partial class MagGraphCanvas
         {
             ImGui.PushID(magAnnotation.Id.GetHashCode());
             ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNWSE);
-            ImGui.SetCursorScreenPos(screenArea.Max - new Vector2(10, 10) * T3Ui.UiScaleFactor);
-            ImGui.Button("##resize", new Vector2(10, 10) * T3Ui.UiScaleFactor);
+            var thumbSize = (int)10 * T3Ui.UiScaleFactor;
+            ImGui.SetCursorScreenPos(screenArea.Max - Vector2.One * (thumbSize +1));
+            ImGui.Button("##resize",  Vector2.One * (thumbSize));
 
             if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
             {

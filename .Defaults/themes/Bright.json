@@ -207,15 +207,15 @@
       "W": 0.15
     },
     "MiniMapItems": {
-      "X": 0.0,
-      "Y": 0.0,
-      "Z": 0.0,
+      "X": 1.0,
+      "Y": 1.0,
+      "Z": 1.0,
       "W": 1.0
     },
     "ColorForValues": {
-      "X": 0.9476532,
-      "Y": 0.99277955,
-      "Z": 1.0,
+      "X": 0.525,
+      "Y": 0.55,
+      "Z": 0.554,
       "W": 1.0
     },
     "ColorForString": {
@@ -249,9 +249,9 @@
       "W": 1.0
     },
     "WindowBackground": {
-      "X": 0.75598085,
-      "Y": 0.75598085,
-      "Z": 0.75598085,
+      "X": 0.67464113,
+      "Y": 0.67464113,
+      "Z": 0.67464113,
       "W": 1.0
     },
     "ModalWindowDimBg": {
@@ -335,7 +335,7 @@
   },
   "Variations": {
     "OperatorLabel": {
-      "Brightness": 0.4,
+      "Brightness": 0.42,
       "Saturation": 1.28,
       "Opacity": 1.0
     },
@@ -388,6 +388,16 @@
       "Brightness": 0.92,
       "Saturation": 1.0,
       "Opacity": 1.0
+    },
+    "AnnotationBackground": {
+      "Brightness": 2.0,
+      "Saturation": 2.0,
+      "Opacity": 0.55
+    },
+    "AnnotationOutline": {
+      "Brightness": 0.41,
+      "Saturation": 0.0,
+      "Opacity": 0.47
     }
   }
 }

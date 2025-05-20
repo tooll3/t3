@@ -36,12 +36,10 @@ internal static class AnnotationRenaming
             _changeAnnotationTextCommand = new ChangeAnnotationTextCommand(annotation, annotation.Title);
         }
 
-        
-
         // Edit label
         var positionInScreen = screenArea.Min;
         {
-            var labelPos = positionInScreen + new Vector2(2,2);// - new Vector2(2, Fonts.FontNormal.FontSize + 8);
+            var labelPos = positionInScreen + new Vector2(2, 2); // - new Vector2(2, Fonts.FontNormal.FontSize + 8);
             ImGui.SetCursorScreenPos(labelPos);
 
             ImGui.SetNextItemWidth(200);
@@ -58,18 +56,21 @@ internal static class AnnotationRenaming
             }
         }
 
-        ImGui.SetCursorScreenPos(new Vector2( ImGui.GetItemRectMin().X,ImGui.GetItemRectMax().Y));
+        ImGui.SetCursorScreenPos(new Vector2(ImGui.GetItemRectMin().X, ImGui.GetItemRectMax().Y));
 
         // Edit description
         {
             var text = annotation.Title;
-            
+
             // Note: As of imgui 1.89 AutoSelectAll might not be supported for InputTextMultiline
-            ImGui.InputTextMultiline("##renameAnnotation", ref text, 256, screenArea.GetSize(), ImGuiInputTextFlags.AutoSelectAll);
+            ImGui.InputTextMultiline("##renameAnnotation", 
+                                     ref text, 
+                                     256,
+                                     screenArea.GetSize() - new Vector2(0, ImGui.GetItemRectSize().Y) - Vector2.One *3,
+                                     ImGuiInputTextFlags.AutoSelectAll);
             if (!ImGui.IsItemDeactivated())
                 annotation.Title = text;
-            
-            
+
             // Placeholder
             if (string.IsNullOrEmpty(annotation.Title))
             {
@@ -79,11 +80,10 @@ internal static class AnnotationRenaming
                                                   UiColors.ForegroundFull.Fade(0.3f),
                                                   "Description...");
             }
-            
         }
         if (justOpened || _changeAnnotationTextCommand == null)
             return;
-        
+
         var clickedOutside = ImGui.IsMouseClicked(ImGuiMouseButton.Left) && !screenArea.Contains(ImGui.GetMousePos());
         var shouldClose = ImGui.IsItemDeactivated() || ImGui.IsKeyPressed((ImGuiKey)Key.Esc) || clickedOutside;
         if (!shouldClose)

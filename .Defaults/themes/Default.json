@@ -393,6 +393,16 @@
       "Brightness": 6.36,
       "Saturation": 1.13,
       "Opacity": 2.37
+    },
+    "AnnotationOutline": {
+      "Brightness": 0.03,
+      "Saturation": 0.0,
+      "Opacity": 0.37
+    },
+    "AnnotationBackground": {
+      "Brightness": 0.02,
+      "Saturation": 2.0,
+      "Opacity": 0.3
     }
   }
 }

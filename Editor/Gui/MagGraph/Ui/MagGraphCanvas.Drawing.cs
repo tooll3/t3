@@ -325,9 +325,9 @@ internal sealed partial class MagGraphCanvas
 
     private void DrawBackgroundGrid(ImDrawListPtr drawList, Vector2 gridSize, Color color)
     {
-        var window = new ImRect(ImGui.GetWindowPos(), ImGui.GetWindowPos() + ImGui.GetWindowSize());
+        var window = new ImRect(WindowPos, WindowPos + WindowSize);
 
-        var topLeftOnCanvas = InverseTransformPositionFloat(ImGui.GetWindowPos());
+        var topLeftOnCanvas = InverseTransformPositionFloat(WindowPos);
         var alignedTopLeftCanvas = new Vector2((int)(topLeftOnCanvas.X / gridSize.X) * gridSize.X,
                                                (int)(topLeftOnCanvas.Y / gridSize.Y) * gridSize.Y);
 
@@ -340,7 +340,7 @@ internal sealed partial class MagGraphCanvas
         {
             var x = (int)(topLeftOnScreen.X + ix * screenGridSize.X);
             drawList.AddRectFilled(new Vector2(x, window.Min.Y),
-                                   new Vector2(x + 1, window.Max.Y),
+                                   new Vector2(x+1, window.Max.Y),
                                    color);
         }
 
@@ -348,7 +348,7 @@ internal sealed partial class MagGraphCanvas
         {
             var y = (int)(topLeftOnScreen.Y + iy * screenGridSize.Y);
             drawList.AddRectFilled(new Vector2(window.Min.X, y),
-                                   new Vector2(window.Max.X, y + 1),
+                                   new Vector2(window.Max.X, y+1 ),
                                    color);
         }
     }

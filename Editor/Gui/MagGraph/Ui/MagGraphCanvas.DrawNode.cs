@@ -147,7 +147,7 @@ internal sealed partial class MagGraphCanvas
         }
         
         var isHighlighted = item.Variant == MagGraphItem.Variants.Operator && 
-                            FrameStats.IsIdHovered(item.Instance.SymbolChildId);
+                            FrameStats.IsIdHovered(item.Instance.SymbolChildId) && !IsHovered;
         if (isHighlighted)
         {
             drawList.AddRect(pMinVisible, pMaxVisible, UiColors.ForegroundFull.Fade(Blink),

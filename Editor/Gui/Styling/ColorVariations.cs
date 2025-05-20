@@ -6,7 +6,7 @@ namespace T3.Editor.Gui.Styling;
 /// Provides <see cref="ColorVariation"/>s of <see cref="Color"/>s that are used to 
 /// represent different UI-elements (e.g. <see cref="ConnectionLine"/>  and Operators) for a <see cref="Type"/>.
 /// </summary>
-public static class ColorVariations
+internal static class ColorVariations
 {
     public static ColorVariation OperatorBackground = new(brightnessFactor: 0.5f, saturationFactor: 0.7f, opacityFactor: 1);
     public static ColorVariation OperatorLabel = new(brightnessFactor: 1.3f, saturationFactor: 0.4f, opacityFactor: 1);
@@ -16,4 +16,6 @@ public static class ColorVariations
     public static ColorVariation Highlight = new(brightnessFactor: 1.2f, saturationFactor: 1.2f, opacityFactor: 1);
     public static ColorVariation ConnectionLines = new(brightnessFactor: 1f, saturationFactor: 1, opacityFactor: 0.8f);
     public static ColorVariation OperatorOutline = new(brightnessFactor: 0.1f, saturationFactor: 0.7f, opacityFactor: 0.5f);
+    public static ColorVariation AnnotationBackground = new(brightnessFactor: 0.1f, saturationFactor: 0.5f, opacityFactor: 0.2f);
+    public static ColorVariation AnnotationOutline = new(brightnessFactor: 1f, saturationFactor: 0.0f, opacityFactor: 0.0f);
 }
