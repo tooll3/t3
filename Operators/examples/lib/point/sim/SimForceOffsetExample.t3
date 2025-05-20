@@ -48,6 +48,11 @@
           "Value": 0.92
         },
         {
+          "Id": "40378b36-ab0f-4792-be80-d2354496f0a6"/*Variation*/,
+          "Type": "System.Single",
+          "Value": 0.87
+        },
+        {
           "Id": "4267c75c-35a6-4feb-9a98-92c3d676dcae"/*RadiusFallOff*/,
           "Type": "System.Single",
           "Value": 0.38
@@ -55,7 +60,7 @@
         {
           "Id": "b30b9a6e-1407-48e8-9eaa-955250f289e7"/*RadialForce*/,
           "Type": "System.Single",
-          "Value": 32.0
+          "Value": 99.0
         },
         {
           "Id": "cc7cf8dc-13f4-4442-94b5-2c7cda64776c"/*Center*/,
