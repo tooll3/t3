@@ -1,6 +1,6 @@
 {
   "Id": "0f40e5e5-e406-4f87-854b-fbdd670b5504"/*SamplePointsByCameraDistance*/,
-  "Description": "",
+  "Description": "Changes the W value / F value of existing points based on their distance to the active camera.\nFor example, to make distant points appear larger or smaller than nearby points, etc.\nNeeds a Point source such as: [GridPoints], [RadialPoints], [SpherePoints] etc.\nAnd [DrawPoints], [DrawLines] or similar in order to view the result.\n\nUseful Combinations: [GridPoints] [TransformPoints]",
   "SymbolTags": "8",
   "InputUis": [
     {
@@ -8,28 +8,34 @@
       "Position": {
         "X": -366.7629,
         "Y": 1060.177
-      }
+      },
+      "Description": "Curve that defines which value the points are assigned based on their distance",
+      "AddPadding": "True"
     },
     {
       "InputId": "57b87561-626c-44a9-ac81-393ede887c67"/*Points*/,
       "Position": {
         "X": -561.2523,
         "Y": 567.80304
-      }
+      },
+      "Description": "Point input"
     },
     {
       "InputId": "a7f46f47-4cc1-4d62-ae23-46b12aa44eea"/*FarRange*/,
       "Position": {
         "X": -368.92084,
         "Y": 1020.5403
-      }
+      },
+      "Description": "Defines the maximum distance from which points are taken into account."
     },
     {
       "InputId": "f03533f6-eec4-4cce-9736-b751322efa26"/*NearRange*/,
       "Position": {
         "X": -368.92084,
         "Y": 975.54004
-      }
+      },
+      "Description": "Defines the minimum distance from which points are taken into account.",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
