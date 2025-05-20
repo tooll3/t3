@@ -1,6 +1,6 @@
 {
   "Id": "05463270-37d4-400f-8d0d-c50f81663304"/*NGonGradient*/,
-  "Description": "",
+  "Description": "Renders a polygon shape similar to [NGon], [Blob] or [RoundedRect].\n\nSimilar Ops: [Rings] [RadialGradient] [LinearGradient]",
   "SymbolTags": "8",
   "InputUis": [
     {
@@ -9,21 +9,24 @@
         "X": -223.31189,
         "Y": -92.8365
       },
-      "GroupTitle": "Gradient"
+      "GroupTitle": "Gradient",
+      "Description": "Defines the Gradient"
     },
     {
       "InputId": "1264ebb1-f953-46f9-9915-d0fca5a72aa8"/*Curvature*/,
       "Position": {
         "X": -231.38449,
         "Y": 127.866974
-      }
+      },
+      "Description": "Defines if the outer line is convex or concave and can also invert the shape"
     },
     {
       "InputId": "134a9879-54f7-4b9c-8494-195a159d6428"/*Width*/,
       "Position": {
         "X": -229.21353,
         "Y": 313.88443
-      }
+      },
+      "Description": "Defines the size of the gradient"
     },
     {
       "InputId": "15a72217-4a3e-4e03-a767-0494ea1943f7"/*Sides*/,
@@ -31,6 +34,7 @@
         "X": -231.38449,
         "Y": 37.866974
       },
+      "Description": "Defines the amount of sides",
       "Min": 0.0,
       "Max": 42.0
     },
@@ -40,6 +44,7 @@
         "X": -231.4461,
         "Y": 221.03061
       },
+      "Description": "Defines how round / sharp the corners are",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -49,7 +54,8 @@
       "Position": {
         "X": -199.96725,
         "Y": -203.49324
-      }
+      },
+      "Description": "An optional background image. If connected allows to apply different BlendingModes."
     },
     {
       "InputId": "49066387-92a6-46b2-a471-be0104e70651"/*Rotate*/,
@@ -57,6 +63,7 @@
         "X": -229.21353,
         "Y": 268.88443
       },
+      "Description": "Rotates the object around its center",
       "Min": -180.0,
       "Max": 180.0,
       "Scale": 2.0
@@ -66,7 +73,8 @@
       "Position": {
         "X": -226.71382,
         "Y": 820.5888
-      }
+      },
+      "Description": "Output resolution in pixels. Set to 0 for dynamic resolution."
     },
     {
       "InputId": "60a0fd35-a64a-4710-b7ba-68d03887ca14"/*BlendMode*/,
@@ -74,21 +82,24 @@
         "X": -225.93282,
         "Y": 576.24677
       },
-      "GroupTitle": "Options"
+      "GroupTitle": "Options",
+      "Description": "Blend mode between the generated blob graphic and the backgrund image, if one is provided."
     },
     {
       "InputId": "94d5a7cd-99bb-4146-a556-dd893eb3ebbc"/*Repeat*/,
       "Position": {
         "X": -229.21353,
         "Y": 448.88443
-      }
+      },
+      "Description": "Repeats the Gradient outward"
     },
     {
       "InputId": "b96527a6-0392-4e50-aa17-564976141290"/*Radius*/,
       "Position": {
         "X": -231.38449,
         "Y": 82.866974
-      }
+      },
+      "Description": "Defines the radius"
     },
     {
       "InputId": "d3cf9f75-ec08-4162-bad6-514173ef974c"/*Blades*/,
@@ -96,6 +107,7 @@
         "X": -231.38449,
         "Y": 172.86697
       },
+      "Description": "Offsets every second edge to create sharp corners",
       "AddPadding": "True"
     },
     {
@@ -103,7 +115,8 @@
       "Position": {
         "X": -229.21353,
         "Y": 358.88443
-      }
+      },
+      "Description": "Offsets the gradient inward / outward"
     },
     {
       "InputId": "df44d68a-1631-4f05-a616-242fab419e57"/*BiasAndGain*/,
@@ -111,6 +124,7 @@
         "X": -229.21353,
         "Y": 493.88443
       },
+      "Description": "Bias and gain to control the gradient",
       "AddPadding": "True",
       "UseVec2Control": "BiasAndGain"
     },
@@ -119,7 +133,8 @@
       "Position": {
         "X": -229.21353,
         "Y": 403.88443
-      }
+      },
+      "Description": "Mirrors the gradient inward"
     },
     {
       "InputId": "ee415be6-d478-44a8-b6b5-f315d1fde694"/*Position*/,
@@ -127,6 +142,7 @@
         "X": -231.38449,
         "Y": -7.133026
       },
+      "Description": "X/Y position, in relative units.",
       "Min": -1.0,
       "Max": 1.0,
       "UseVec2Control": "Position"
