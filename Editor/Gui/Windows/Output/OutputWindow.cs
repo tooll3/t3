@@ -192,11 +192,13 @@ internal sealed class OutputWindow : Window
         {
             ImGui.SameLine();
 
+            var project = ProjectView.Focused?.OpenedProject;
+            var projectFolder = project.Package.Folder;
+            var folder = Path.Combine(projectFolder, "Screenshots");
+
             if (CustomComponents.IconButton(Icon.Snapshot, new Vector2(ImGui.GetFrameHeight(), ImGui.GetFrameHeight())))
             {
-                var project = ProjectView.Focused?.OpenedProject;
-                var projectFolder = project.Package.Folder;
-                var folder = Path.Combine(projectFolder, "Screenshots");
+                
                 if (!Directory.Exists(folder))
                 {
                     Directory.CreateDirectory(folder);
@@ -204,6 +206,7 @@ internal sealed class OutputWindow : Window
 
                 var filename = Path.Join(folder, $"{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.png");
                 ScreenshotWriter.StartSavingToFile(texture, filename, ScreenshotWriter.FileFormats.Png);
+                Log.Assert("Screenshot saved in: " + folder);
             }
 
             CustomComponents.TooltipForLastItem("Save screenshot");
