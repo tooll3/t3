@@ -820,4 +820,14 @@ internal static class CustomComponents
             }
         }
     }
+
+    public static void StylizedText(string text, ImFontPtr imFont, Color color)
+    {
+        ImGui.PushFont(imFont);
+        ImGui.PushStyleColor(ImGuiCol.Text, color.Rgba);
+        ImGui.TextUnformatted(text);
+        ImGui.PopStyleColor();
+        ImGui.PopFont();
+        ImGui.Dummy(new Vector2(1, 5 * T3Ui.UiScaleFactor));
+    }
 }

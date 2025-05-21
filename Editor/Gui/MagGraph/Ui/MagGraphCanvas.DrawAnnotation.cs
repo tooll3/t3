@@ -133,8 +133,6 @@ internal sealed partial class MagGraphCanvas
             ImGui.PushID(magAnnotation.Id.GetHashCode());
             
             var thumbSize = (int)10 * T3Ui.UiScaleFactor;
-          //  ImGui.SetCursorScreenPos(screenArea.Max - Vector2.One * (thumbSize +1));
-           // ImGui.Button("##resize",  Vector2.One * (thumbSize));
 
             ImGui.SetCursorScreenPos(screenArea.Max - new Vector2(11, 11) * T3Ui.UiScaleFactor);
 

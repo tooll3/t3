@@ -666,11 +666,11 @@ internal sealed class ParameterWindow : Window
             ImGui.ColorEdit4("color", ref annotation.Color.Rgba);
 
             FormInputs.AddVerticalSpace();
-            StylizedText("Label:", Fonts.FontBold, UiColors.TextMuted.Rgba);
+            CustomComponents.StylizedText("Label:", Fonts.FontBold, UiColors.TextMuted);
             ImGui.TextWrapped(annotation.Label);
 
             FormInputs.AddVerticalSpace();
-            StylizedText("Description:", Fonts.FontBold, UiColors.TextMuted.Rgba);
+            CustomComponents.StylizedText("Description:", Fonts.FontBold, UiColors.TextMuted.Rgba);
             ImGui.TextWrapped(annotation.Title);
 
             FormInputs.AddVerticalSpace();
@@ -729,11 +729,4 @@ internal sealed class ParameterWindow : Window
     private readonly ParameterSettings _parameterSettings = new();
     public static readonly RenameInputDialog RenameInputDialog = new();
 
-    private static void StylizedText(string text, ImFontPtr imFont, Color color)
-    {
-        ImGui.PushFont(imFont);
-        ImGui.TextColored(color, text);
-        ImGui.PopFont();
-        ImGui.Dummy(new Vector2(1, 5 * T3Ui.UiScaleFactor));
-    }
 }
