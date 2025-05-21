@@ -8,7 +8,8 @@
       "Position": {
         "X": 3334.151,
         "Y": 4126.0264
-      }
+      },
+      "GroupTitle": "Advanced"
     },
     {
       "InputId": "271ffc87-bf9a-4958-ab9f-387f27744aee"/*ShadowBias*/,
@@ -26,6 +27,7 @@
         "X": 3334.151,
         "Y": 4171.0264
       },
+      "AddPadding": "True",
       "Min": -0.01,
       "Max": 0.01,
       "Scale": 0.001,
@@ -51,7 +53,8 @@
       "Position": {
         "X": 3037.1492,
         "Y": 4033.53
-      }
+      },
+      "GroupTitle": "Settings"
     },
     {
       "InputId": "5ff607e0-a3db-4ece-93dc-3713669def9e"/*UseWForSize*/,
@@ -80,7 +83,8 @@
       "Position": {
         "X": 3449.5942,
         "Y": 5076.6025
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "8cdea8a6-7e39-433d-a616-2f64e5e04ed7"/*ChunkIndices*/,
@@ -88,7 +92,8 @@
       "Position": {
         "X": 854.73236,
         "Y": 3863.6565
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "93561534-b33e-4e72-9601-36216031e5d2"/*Size*/,
@@ -121,7 +126,8 @@
       "Position": {
         "X": 3449.5942,
         "Y": 5166.6025
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "f758666a-4716-446e-8ad3-a9e7b2a05ff6"/*EnableZTest*/,
@@ -135,7 +141,8 @@
       "Position": {
         "X": 2920.8623,
         "Y": 3049.6934
-      }
+      },
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
