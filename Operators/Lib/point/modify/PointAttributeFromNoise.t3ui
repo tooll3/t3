@@ -1,6 +1,6 @@
 {
   "Id": "7af59063-88d2-4697-985c-e09b8c77a43f"/*PointAttributeFromNoise*/,
-  "Description": "",
+  "Description": "Changes point attributes with a built in noise function.",
   "SymbolTags": "8",
   "InputUis": [
     {
@@ -8,7 +8,8 @@
       "Position": {
         "X": -652.73663,
         "Y": 1285.169
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "16b6db95-e71d-427e-93b5-1568d7cd249c"/*Frequency*/,
@@ -22,7 +23,8 @@
       "Position": {
         "X": -642.14026,
         "Y": 871.3795
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "47c5b5cc-e48e-4111-a9a2-4e3ccebe8964"/*GPoints*/,
@@ -79,14 +81,16 @@
       "Position": {
         "X": -642.14026,
         "Y": 466.37933
-      }
+      },
+      "GroupTitle": "Brightness"
     },
     {
       "InputId": "b0c96c9c-ae16-4781-9642-5dd84dbe9fe2"/*Center*/,
       "Position": {
         "X": -663.0569,
         "Y": 1078.8656
-      }
+      },
+      "GroupTitle": "Noise Settings"
     },
     {
       "InputId": "b640ac69-324f-4aa8-aaf5-c209c29766a0"/*RedFactor*/,
@@ -107,14 +111,16 @@
       "Position": {
         "X": -642.14026,
         "Y": 601.3795
-      }
+      },
+      "GroupTitle": "Channels"
     },
     {
       "InputId": "df65d576-6e63-4082-a8c2-159e57ac4cf5"/*Green*/,
       "Position": {
         "X": -642.14026,
         "Y": 736.3795
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "e1e841eb-edbb-407e-986a-704ce77f89d1"/*BlueOffset*/,
@@ -128,7 +134,8 @@
       "Position": {
         "X": -668.1491,
         "Y": 1373.3367
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "f6c2a790-c2b4-41b0-ade8-f39b28af2ea6"/*BrightnessOffset*/,
