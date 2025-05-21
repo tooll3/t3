@@ -36,21 +36,24 @@
       "Position": {
         "X": -200.0,
         "Y": 405.0
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "7dabd7c8-5c2b-4be2-b1b6-bf8b8fcbfd8d"/*ScrambleRatio*/,
       "Position": {
         "X": -200.0,
         "Y": 135.0
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "875cbfa9-ffa8-4204-810c-c04f5f421441"/*WrapLines*/,
       "Position": {
         "X": -200.0,
         "Y": 360.0
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "8eee8067-1a4e-4372-93d0-2dbc368aa45a"/*Separator*/,
@@ -73,6 +76,7 @@
         "X": -200.0,
         "Y": 180.0
       },
+      "GroupTitle": "Settings",
       "Usage": "Default"
     },
     {
@@ -87,7 +91,8 @@
       "Position": {
         "X": -200.0,
         "Y": 90.0
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "ce436e27-05a5-431d-9aa2-920dbff639a7"/*WriteMode*/,
