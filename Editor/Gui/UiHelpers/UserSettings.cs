@@ -64,6 +64,7 @@ public sealed class UserSettings : Settings<UserSettings.ConfigData>
         public bool EnableIdleMotion = true;
         public bool SuspendRenderingWhenHidden = true;
         public bool MirrorUiOnSecondView = false;
+        public bool EnableKeyboardShortCuts = true;
 
         public GraphStyles GraphStyle = GraphStyles.Magnetic;
         

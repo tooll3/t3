@@ -73,7 +73,13 @@ internal sealed class SettingsWindow : Window
                     changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.GraphStyle,
                                                           "Graph Style",
                                                           "Allows to switch between different graphical representations.\nThis also will affect usability and performance"
-                                                         );
+                                                          );
+                    
+                    changed |= FormInputs.AddCheckBox("Enable keyboard shortcut",
+                                                      ref UserSettings.Config.EnableKeyboardShortCuts,
+                                                      "This option might prevent unintended user interactions while live performing with [KeyInput] operators.",
+                                                      UserSettings.Defaults.EnableKeyboardShortCuts);
+                    
                     if (UserSettings.Config.GraphStyle == UserSettings.GraphStyles.Magnetic)
                     {
                         changed |= FormInputs.AddCheckBox("Disconnect on unsnap",

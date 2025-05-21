@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using ImGuiNET;
+using T3.Editor.Gui.UiHelpers;
 using T3.SystemUi;
 
 namespace T3.Editor.Gui.Interaction;
@@ -165,6 +166,9 @@ internal sealed class KeyboardBinding
     {
         // Checking all bindings is expensive, so we only do this if any keys are pressed.
         if (!_anyKeysPressed)
+            return false;
+
+        if (!UserSettings.Config.EnableKeyboardShortCuts)
             return false;
 
         // Prevent keyboard short-cuts while inputs are active

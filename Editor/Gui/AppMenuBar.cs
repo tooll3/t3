@@ -54,6 +54,16 @@ internal static class AppMenuBar
 
             ImGui.SameLine();
 
+            if (!UserSettings.Config.EnableKeyboardShortCuts)
+            {
+                ImGui.TextColored(UiColors.StatusAttention, "Keyboard Disabled!");
+                if (ImGui.IsItemClicked())
+                {
+                    UserSettings.Config.EnableKeyboardShortCuts = true;
+                }
+                ImGui.SameLine();
+            }
+
             Program.StatusErrorLine.Draw();
 
             ImGui.EndMainMenuBar();
@@ -249,6 +259,12 @@ internal static class AppMenuBar
                 //_importDialog.ShowNextFrame();
             }
 
+            ImGui.Separator();
+            if (ImGui.MenuItem("Disable Keyboard ShortCuts", KeyboardBinding.ListKeyboardShortcuts(UserActions.Save, false), !UserSettings.Config.EnableKeyboardShortCuts))
+            {
+                UserSettings.Config.EnableKeyboardShortCuts = !UserSettings.Config.EnableKeyboardShortCuts;
+            }
+            
             ImGui.Separator();
 
             if (ImGui.MenuItem("Save Changes", KeyboardBinding.ListKeyboardShortcuts(UserActions.Save, false), false, !T3Ui.IsCurrentlySaving))
