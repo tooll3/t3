@@ -417,11 +417,20 @@ internal sealed class PlaceholderCreation
         }
         else if (_snappedTargetItem != null)
         {
-            var newItemOutput = newInstance.Outputs[0];
+            var inputLine = _snappedTargetItem.InputLines.FirstOrDefault(i => i.Id == _snappedTargetInputId);
+            
+            var getMatchingOutput = newInstance.Outputs.FirstOrDefault(o2 => o2.ValueType == inputLine.Type);
+            if (getMatchingOutput == null)
+            {
+                Log.Warning("Can't find input?");
+                return;
+            }
+            
+            //var newItemOutput = newInstance.Outputs[0];
             context.MacroCommand
                    .AddAndExecCommand(new AddConnectionCommand(context.CompositionInstance.Symbol,
                                                                new Symbol.Connection(newInstance.SymbolChildId,
-                                                                                     newItemOutput.Id,
+                                                                                     getMatchingOutput.Id,
                                                                                      _snappedTargetItem.Id,
                                                                                      _snappedTargetInputId
                                                                                     ),
