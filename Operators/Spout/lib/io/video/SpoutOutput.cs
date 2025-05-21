@@ -129,8 +129,10 @@ public class SpoutOutput : Instance<SpoutOutput>
         {
             currentDesc = frame.Description;
             if (currentDesc.Format != Format.B8G8R8A8_UNorm &&
+                currentDesc.Format != Format.B8G8R8A8_Typeless &&
                 currentDesc.Format != Format.R8G8B8A8_UNorm &&
                 currentDesc.Format != Format.R16G16B16A16_UNorm &&
+                currentDesc.Format != Format.R16G16B16A16_Typeless &&
                 currentDesc.Format != Format.R16G16B16A16_Float)
             {
                 Log.Debug("Spout output supports texture formats B8G8R8A8_UNorm, R8G8B8A8_UNorm, R16G16B16A16_UNorm and R16G16B16A16_Float.", this);
