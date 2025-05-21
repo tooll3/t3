@@ -1,6 +1,5 @@
 {
   "Id": "1b149f1f-529c-4418-ac9d-3871f24a9e38"/*Displace*/,
-  "Description": "Uses two images to distort (create a bevel / emboss effect) that can look like textured glass\n\nAlso see [DistortAndShade]\n\nTIP: For the intensityGradient mode, the displacement map should have a high quality texture format like R32.\n\nFor similar effects see: [Steps] [DetectEdges] [FakeLight]",
   "SymbolTags": "1",
   "InputUis": [
     {
@@ -9,7 +8,6 @@
         "X": 24.449814,
         "Y": 541.8907
       },
-      "Description": "Shifts the direction from which image A is distorted by image B"
     },
     {
       "InputId": "0f2867ab-a65e-4bf3-b1b5-9c241690ba5f"/*Displacement*/,
@@ -17,17 +15,18 @@
         "X": 24.449814,
         "Y": 506.89072
       },
-      "Description": "Controls the intensity of the displacement",
+      "GroupTitle": "Amount",
       "Scale": 0.01
     },
     {
       "InputId": "1ff7d454-b8fb-470f-beee-ec7521db8a7f"/*DisplaceMapOffset*/,
       "Position": {
         "X": -115.55017,
-        "Y": 786.89075
+        "Y": 646.89075
       },
-      "Description": "Shifts / transforms the position of the DisplaceMap",
-      "AddPadding": "True"
+      "AddPadding": "True",
+      "Min": -2.0,
+      "Max": 2.0
     },
     {
       "InputId": "3b5b278d-fd4e-4216-9916-5cd7ffd54ab2"/*DisplaceMap*/,
@@ -38,20 +37,19 @@
       }
     },
     {
-      "InputId": "6978ceab-98a9-4258-9c67-db41173d2aae"/*SampleOffset*/,
+      "InputId": "404c8102-3a5e-45c6-a0f1-4d97a5f0db07"/*SampleRadius*/,
       "Position": {
         "X": 24.44983,
-        "Y": 751.8907
+        "Y": 716.89075
       },
-      "Description": "Controls how much and whether the displacement embosses or bevels the image"
+      "GroupTitle": "Sampling",
     },
     {
       "InputId": "6a5c120f-7c04-439b-ad2d-6f78ceb3b378"/*DisplaceMode*/,
       "Position": {
-        "X": -115.55017,
-        "Y": 856.8907
+        "X": 24.44983,
+        "Y": 821.89075
       },
-      "Description": "Selects the displacement mode / technique",
       "AddPadding": "True"
     },
     {
@@ -74,26 +72,9 @@
       "InputId": "b2f58dc7-e5c6-4c57-a704-94aaa0b1e002"/*GenerateMips*/,
       "Position": {
         "X": 24.44983,
-        "Y": 961.8907
+        "Y": 786.89075
       },
-      "Description": "Turns the generation of MipMaps on / off"
-    },
-    {
-      "InputId": "b9dd77ff-7e5a-4036-a1c9-24501f1d4d9d"/*SampleSpread*/,
-      "Position": {
-        "X": 24.44983,
-        "Y": 716.8907
-      },
-      "Description": "Controls the sample spread"
-    },
-    {
-      "InputId": "c13b83ce-7dd2-4b4e-bf19-b994493b92a3"/*DisplaceMapSampling*/,
-      "Position": {
-        "X": 24.44983,
-        "Y": 681.89075
-      },
-      "Description": "Controls the fidelity / detail of the displacement.\nLower values create a finer less deep displacement.\nHigher values lose detail but create more depth.",
-      "AddPadding": "True"
+      "GroupTitle": "Quality",
     },
     {
       "InputId": "d0508dfa-89cf-4713-8f5e-893dd5bfc3f4"/*Image*/,
@@ -104,30 +85,21 @@
       }
     },
     {
-      "InputId": "d430113e-33fd-49b7-b1c1-32cc95154a4e"/*SampleCount*/,
-      "Position": {
-        "X": -115.55017,
-        "Y": 646.8907
-      },
-      "Description": "A higher sample count increases the quality of the effect but decreases the performance",
-      "AddPadding": "True"
-    },
-    {
       "InputId": "dc8dfa33-1a49-4800-8c1f-89b29d7427f3"/*Twist*/,
       "Position": {
         "X": 24.449814,
         "Y": 576.89075
       },
-      "Description": "Twists the displacement",
-      "Scale": 1.0
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
     },
     {
       "InputId": "ea2b9f80-49b9-4c90-ba34-f0274169ece3"/*RGSS_4xAA*/,
       "Position": {
-        "X": -265.31284,
-        "Y": 915.6267
+        "X": -115.55017,
+        "Y": 856.89075
       },
-      "Description": "Enable 4× oversampling. This sometimes increases smoothness but has a significant performance overhead. "
     }
   ],
   "SymbolChildUis": [
@@ -135,21 +107,7 @@
       "ChildId": "0da95969-3de8-4603-9b0e-477c1aa6eb11"/*Vector2Components*/,
       "Position": {
         "X": 24.44983,
-        "Y": 786.89075
-      }
-    },
-    {
-      "ChildId": "3cd803bd-74ca-4c14-b147-4c1422564cd6"/*IntToFloat*/,
-      "Position": {
-        "X": 24.449814,
-        "Y": 646.8907
-      }
-    },
-    {
-      "ChildId": "3df8359a-b804-4daa-bd0a-af87bd5bd9b6"/*IntToFloat*/,
-      "Position": {
-        "X": 24.44983,
-        "Y": 856.8907
+        "Y": 646.89075
       }
     },
     {
@@ -165,10 +123,10 @@
       }
     },
     {
-      "ChildId": "ea011a23-464c-4728-a3f1-322e0460ae2f"/*BoolToFloat*/,
+      "ChildId": "defb45ad-5d5f-466f-8198-e7a7fb055698"/*BoolToInt*/,
       "Position": {
         "X": 24.44983,
-        "Y": 891.89075
+        "Y": 856.89075
       }
     }
   ],

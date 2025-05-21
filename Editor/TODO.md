@@ -40,6 +40,8 @@
 - [ ] Rewiring of vertical connection lines
 - [ ] Panning/Zooming in CurveEdit-Popup opened from SampleCurveOp is broken 
 - [ ] ShaderGraphNode should be bypassable
+- [ ] LoadImage has no thumbnail
+- 
 
 ## Timeline
 

@@ -60,11 +60,6 @@
           "Value": 0.23
         },
         {
-          "Id": "6978ceab-98a9-4258-9c67-db41173d2aae"/*SampleOffset*/,
-          "Type": "System.Single",
-          "Value": 0.0
-        },
-        {
           "Id": "6a5c120f-7c04-439b-ad2d-6f78ceb3b378"/*DisplaceMode*/,
           "Type": "System.Int32",
           "Value": 3

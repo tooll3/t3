@@ -133,6 +133,42 @@
           "0eff3a75-eafc-4a5e-8a2c-10577c12e776": 1.3
         }
       }
+    },
+    {
+      "Id": "92d6f27c-b6d2-41da-886b-336f99fd7e80",
+      "IsPreset": true,
+      "ActivationIndex": 8,
+      "Title": "Just Overlay",
+      "PosOnCanvas": {
+        "X": -1.512001,
+        "Y": 339.018
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "77673c64-918d-46a6-aa29-c362057afee6": 0.72,
+          "b2f58dc7-e5c6-4c57-a704-94aaa0b1e002": false,
+          "ea2b9f80-49b9-4c90-ba34-f0274169ece3": false
+        }
+      }
+    },
+    {
+      "Id": "e95befc3-595c-453c-8982-00ebbda3321e",
+      "IsPreset": true,
+      "ActivationIndex": 9,
+      "Title": "Scatter",
+      "PosOnCanvas": {
+        "X": 161.488,
+        "Y": 339.018
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "0eff3a75-eafc-4a5e-8a2c-10577c12e776": 0.1,
+          "77673c64-918d-46a6-aa29-c362057afee6": 0.1,
+          "404c8102-3a5e-45c6-a0f1-4d97a5f0db07": 2.5,
+          "b2f58dc7-e5c6-4c57-a704-94aaa0b1e002": false,
+          "ea2b9f80-49b9-4c90-ba34-f0274169ece3": false
+        }
+      }
     }
   ]
 }

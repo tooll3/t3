@@ -150,11 +150,6 @@
           "Value": 40.0
         },
         {
-          "Id": "c13b83ce-7dd2-4b4e-bf19-b994493b92a3"/*DisplaceMapSampling*/,
-          "Type": "System.Single",
-          "Value": 1.5136666
-        },
-        {
           "Id": "dc8dfa33-1a49-4800-8c1f-89b29d7427f3"/*Twist*/,
           "Type": "System.Single",
           "Value": -22.9

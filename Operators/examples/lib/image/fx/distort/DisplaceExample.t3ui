@@ -1,0 +1,73 @@
+{
+  "Id": "5364ffce-d804-4b1f-a2f9-3603d2a2abd4"/*DisplaceExample*/,
+  "Description": "Illustrates how the color format of an displacement texture affects the displacement quality.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "00f1ef58-f3ff-49b8-b45d-8cf3fafbfe14"/*CompareImages*/,
+      "Position": {
+        "X": 301.98102,
+        "Y": -91.78879
+      }
+    },
+    {
+      "ChildId": "113a51a8-bdf3-41e2-855f-5662f17d887a"/*AnimValue*/,
+      "Position": {
+        "X": -208.75107,
+        "Y": 8.015961
+      }
+    },
+    {
+      "ChildId": "1a5e8741-0f1f-4861-ab48-676b24ba2d38"/*Time2*/,
+      "Position": {
+        "X": -208.97418,
+        "Y": 70.243774
+      }
+    },
+    {
+      "ChildId": "37355988-0e42-4a23-842c-0d0f57f9f46e"/*Displace*/,
+      "Position": {
+        "X": 56.78714,
+        "Y": 62.029694
+      }
+    },
+    {
+      "ChildId": "4654f026-d78c-44f3-9800-1580585720d9"/*LoadImage*/,
+      "Position": {
+        "X": -297.7051,
+        "Y": -93.769226
+      }
+    },
+    {
+      "ChildId": "5396c5c7-d7ec-426e-99eb-3f8dfcff5c08"/*Displace*/,
+      "Position": {
+        "X": 62.59561,
+        "Y": -89.12567
+      }
+    },
+    {
+      "ChildId": "83a4fa11-f33c-4dbe-9dc0-2b1a8f4fa5c3"/*RadialGradient*/,
+      "Comment": "A gradient with Rgba32 color depth.",
+      "Position": {
+        "X": -145.3207,
+        "Y": 127.96655
+      }
+    },
+    {
+      "ChildId": "a09ecff3-2789-4096-aae1-9b8fec313467"/*RadialGradient*/,
+      "Position": {
+        "X": -77.40439,
+        "Y": -54.12567
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "865f0975-2581-4633-a89d-50ab84c8f64a"/*ColorBuffer*/,
+      "Position": {
+        "X": 301.98102,
+        "Y": -21.788788
+      }
+    }
+  ]
+}

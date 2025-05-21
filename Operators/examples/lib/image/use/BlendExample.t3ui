@@ -1,0 +1,158 @@
+{
+  "Id": "40c5312c-9684-4821-8b05-e8d6c40da07b"/*BlendExample*/,
+  "Description": "Uses [Loop] to illustrate the different image blend modes.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "06edaeb9-2922-4bfd-a859-311925dd72e7"/*Transform*/,
+      "Position": {
+        "X": 280.0,
+        "Y": 449.80127
+      }
+    },
+    {
+      "ChildId": "1e8230fd-07d2-4f21-b1b9-1c7f9ae3f077"/*Layer2d*/,
+      "Position": {
+        "X": 553.5449,
+        "Y": 164.85889
+      }
+    },
+    {
+      "ChildId": "1f4b29ce-ed64-48cc-9a27-7fc4dbbf6537"/*Time*/,
+      "Position": {
+        "X": 162.77539,
+        "Y": 97.27734
+      }
+    },
+    {
+      "ChildId": "2cac6302-bd70-4682-ad9d-2ab6837812aa"/*RadialGradient*/,
+      "Comment": "A moving foreground gradient/",
+      "Position": {
+        "X": 302.7754,
+        "Y": 62.277344
+      }
+    },
+    {
+      "ChildId": "691594c7-31b2-4973-8665-c1e8b60b82ea"/*GetIntVar*/,
+      "Position": {
+        "X": 94.9375,
+        "Y": 152.67383
+      }
+    },
+    {
+      "ChildId": "7c2ed0c2-6baf-417b-9b79-44711d6f8e97"/*Text*/,
+      "Position": {
+        "X": 280.0,
+        "Y": 414.80127
+      }
+    },
+    {
+      "ChildId": "8446c4ad-7697-49e0-88d0-746234b54684"/*PickStringPart*/,
+      "Position": {
+        "X": 280.0,
+        "Y": 344.80127
+      }
+    },
+    {
+      "ChildId": "8ec7f4d4-73c9-4776-b092-00cb6e0057ec"/*Loop*/,
+      "Position": {
+        "X": 553.5449,
+        "Y": 339.8589
+      }
+    },
+    {
+      "ChildId": "9b3d3398-606c-493e-bb63-6951c938d982"/*GetFloatVar*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 449.80127
+      }
+    },
+    {
+      "ChildId": "aab5c26d-ea51-4822-8391-c3df1cfb65b9"/*Blend*/,
+      "Position": {
+        "X": 544.6758,
+        "Y": 3.3588867
+      }
+    },
+    {
+      "ChildId": "ab66f7c5-5b1e-45c4-9544-6ac281303e04"/*LoadImage*/,
+      "Comment": "The Background image",
+      "Position": {
+        "X": 298.96094,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "b4270083-2a10-4d0e-bc34-e7634ed241f8"/*Remap*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 484.80127
+      }
+    },
+    {
+      "ChildId": "b5b86a26-cfe6-4163-8efb-2396d6211c80"/*SliceViewPort*/,
+      "Comment": "Some magic to draw slices for each blend mode.",
+      "Position": {
+        "X": 553.5449,
+        "Y": 199.85889
+      }
+    },
+    {
+      "ChildId": "b8850cf9-98d7-418a-81fd-51013406bbba"/*Vector3*/,
+      "Position": {
+        "X": 140.0,
+        "Y": 484.80127
+      }
+    },
+    {
+      "ChildId": "bfe24079-9817-46b3-aee5-dc7ab4a9f75c"/*RenderTarget*/,
+      "Position": {
+        "X": 553.5449,
+        "Y": 374.8589
+      }
+    },
+    {
+      "ChildId": "c3cc4844-6790-4b4b-a2e6-0666c244f7ce"/*Group*/,
+      "Position": {
+        "X": 553.5449,
+        "Y": 269.8589
+      }
+    },
+    {
+      "ChildId": "dde5510f-7e41-41db-8e96-54d4d4a78e7f"/*String*/,
+      "Position": {
+        "X": 280.0,
+        "Y": 309.80127
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "473cdfc7-7f34-4567-88f4-54e8f5120b1b"/*ColorBuffer*/,
+      "Position": {
+        "X": 553.5449,
+        "Y": 409.8589
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "8f258a4c-b6a5-4fd1-b5ae-3e37b9166503",
+      "Label": "Draw Labels",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -60.0,
+        "Y": 249.80127
+      },
+      "Size": {
+        "X": 510.0,
+        "Y": 320.0
+      }
+    }
+  ]
+}

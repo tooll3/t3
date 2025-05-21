@@ -498,21 +498,6 @@
           "Value": 0.0
         },
         {
-          "Id": "b9dd77ff-7e5a-4036-a1c9-24501f1d4d9d"/*SampleSpread*/,
-          "Type": "System.Single",
-          "Value": 0.059333336
-        },
-        {
-          "Id": "c13b83ce-7dd2-4b4e-bf19-b994493b92a3"/*DisplaceMapSampling*/,
-          "Type": "System.Single",
-          "Value": 1.13
-        },
-        {
-          "Id": "d430113e-33fd-49b7-b1c1-32cc95154a4e"/*SampleCount*/,
-          "Type": "System.Int32",
-          "Value": 1
-        },
-        {
           "Id": "dc8dfa33-1a49-4800-8c1f-89b29d7427f3"/*Twist*/,
           "Type": "System.Single",
           "Value": 8.666668
