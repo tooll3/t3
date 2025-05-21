@@ -16,6 +16,7 @@
         "X": -200.0,
         "Y": 0.0
       },
+      "GroupTitle": "Transformation",
       "Description": "Moves the incoming field\n\nX (-left / +right), \nY (-down / + up), \nZ (-forward/+backwards)\n"
     },
     {
@@ -35,7 +36,8 @@
         "X": -200.0,
         "Y": 135.0
       },
-      "Description": "Uniformly scales the incoming field"
+      "Description": "Uniformly scales the incoming field",
+      "AddPadding": "True"
     },
     {
       "InputId": "58b9dfb6-0596-4f0d-baf6-7fb3ae426c94"/*Scale*/,
@@ -59,7 +61,8 @@
         "X": -200.0,
         "Y": 180.0
       },
-      "Description": "Shears the incoming field in the following directions:\n\nX: Width\nY: Height\nZ: Depth\n"
+      "Description": "Shears the incoming field in the following directions:\n\nX: Width\nY: Height\nZ: Depth\n",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [],
