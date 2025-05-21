@@ -205,6 +205,7 @@ public class SpoutInput : Instance<SpoutInput>
              * Texture2D readTexture = new Texture2D does not perform an AddRef which nead if the resource gets GCed but SharpDX
              * or Release is called anywhere it will make it a dangled pointer
              * so we call QueryInterface which performs an AddRef
+             *           
              */
             Texture2D readTexture = new Texture2D(new DXTexture2D(_spoutDX.SenderTexture.__Instance));
             SharpDX.Direct3D11.Texture2D sdxTex = (SharpDX.Direct3D11.Texture2D)readTexture;
@@ -232,30 +233,33 @@ public class SpoutInput : Instance<SpoutInput>
             // create several textures with a given format with CPU access
             // to be able to read out the initial texture values
             if (sharedImage != null
-                || sharedImage.Description.Format != textureFormat
+                && ( sharedImage.Description.Format != textureFormat
                 || sharedImage.Description.Width != (int)width
                 || sharedImage.Description.Height != (int)height
-                || sharedImage.Description.MipLevels != 1)
+                || sharedImage.Description.MipLevels != 1))
             {
-                var imageDesc = new Texture2DDescription
-                                    {
-                                        BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
-                                        Format = textureFormat,
-                                        Width = (int)width,
-                                        Height = (int)height,
-                                        MipLevels = 1,
-                                        SampleDescription = new SampleDescription(1, 0),
-                                        Usage = ResourceUsage.Default,
-                                        OptionFlags = ResourceOptionFlags.None,
-                                        CpuAccessFlags = CpuAccessFlags.None,
-                                        ArraySize = 1
-                                    };
-
                 DisposeTextures();
 
                 Log.Debug($"Spout input wxh = {senderWidth}x{senderHeight}, " +
                           $"handle = {senderHandle}, " +
                           $"format = {textureFormat} ({directXFormat})");
+            }
+
+            if ( sharedImage== null)
+            {
+                var imageDesc = new Texture2DDescription
+                {
+                    BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
+                    Format = textureFormat,
+                    Width = (int)width,
+                    Height = (int)height,
+                    MipLevels = 1,
+                    SampleDescription = new SampleDescription(1, 0),
+                    Usage = ResourceUsage.Default,
+                    OptionFlags = ResourceOptionFlags.None,
+                    CpuAccessFlags = CpuAccessFlags.None,
+                    ArraySize = 1
+                };
 
                 sharedImage = new Texture2D(new DXTexture2D(device, imageDesc));
 
@@ -284,6 +288,7 @@ public class SpoutInput : Instance<SpoutInput>
     protected void DisposeTextures()
     {
         sharedImage?.Dispose();
+        sharedImage = null;
     }
 
     #region IDisposable Support
