@@ -1,0 +1,19 @@
+{
+  "Id": "023fa572-a3e0-4dfc-9b42-79bc1f5c353e"/*CombineFieldColor*/,
+  "Inputs": [
+    {
+      "Id": "494b16a6-320a-4197-b5ae-62dd8a697c7c"/*InputFields*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "b9a9ba6a-53b5-463d-8161-6677019e78ca"/*K*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "d17f87db-7500-4780-aece-d8400cfe4da0"/*CombineMethod*/,
+      "DefaultValue": 2
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

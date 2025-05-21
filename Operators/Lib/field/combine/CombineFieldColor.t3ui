@@ -1,0 +1,47 @@
+{
+  "Id": "023fa572-a3e0-4dfc-9b42-79bc1f5c353e"/*CombineFieldColor*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "494b16a6-320a-4197-b5ae-62dd8a697c7c"/*InputFields*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "b9a9ba6a-53b5-463d-8161-6677019e78ca"/*K*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "d17f87db-7500-4780-aece-d8400cfe4da0"/*CombineMethod*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "d3293cf6-1e83-4902-958b-b694ede26641"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "f30c5dd4-2bf0-4378-bc64-78e803c2434b",
+      "Title": "hg SDF lib by Mercury",
+      "Description": "The original code is taken from the hq SDF library",
+      "LinkUrl": "https://mercury.sexy/hg_sdf/",
+      "LinkType": "Source"
+    }
+  ]
+}
