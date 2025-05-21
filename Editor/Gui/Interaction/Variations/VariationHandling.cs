@@ -1,5 +1,6 @@
 ﻿#nullable enable
 
+using T3.Core.IO;
 using T3.Core.Operator;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Windows.Variations;
@@ -40,7 +41,8 @@ internal static class VariationHandling
         //     return;
         if (ProjectView.Focused == null)
             return;
-
+        
+        // Update user interface for current selection
         var nodeSelection = ProjectView.Focused.NodeSelection;
         var singleSelectedInstance = nodeSelection.GetSelectedInstanceWithoutComposition();
 
@@ -81,6 +83,24 @@ internal static class VariationHandling
             }
         }
 
+        // Apply blending requests 
+        foreach(var (symbolId, blending) in SnapShotBlendingData.CompositionBlendRequests)
+        {
+            if (ActiveInstanceForSnapshots == null || symbolId != ActiveInstanceForSnapshots.Symbol.Id)
+            {
+                Log.Warning("Invalid blending target");
+                continue;
+            }
+
+            if (ActivePoolForSnapshots == null)
+                return;
+
+            // TODO: Collect variations and weight
+            ActivePoolForSnapshots.BeginWeightedBlend(ActiveInstanceForSnapshots, [], []);
+        }
+        
+        SnapShotBlendingData.CompositionBlendRequests.Clear();
+        
         BlendActions.SmoothVariationBlending.UpdateBlend();
     }
 

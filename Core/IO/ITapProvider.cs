@@ -1,5 +1,8 @@
 namespace T3.Core.IO;
 
+/// <summary>
+/// Interfaces for forwarding information from lib operators to editor
+/// </summary>
 public interface ITapProvider
 {
     public bool BeatTapTriggered { get; }

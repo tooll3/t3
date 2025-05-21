@@ -1,0 +1,44 @@
+{
+  "Id": "0a8497a1-8740-4561-b258-51475c44473b"/*BlendSnapshots*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "322e332a-4b6e-40fe-a827-4728cac25d0b"/*SlideSyncTimeOffset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "51e1f6e6-c7e2-47cc-8fc6-be4c93213db0"/*TriggerResync*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "5bfede9d-6a06-44ed-922f-5c712070940c"/*TriggerBeatTap*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "7afdb921-9805-4d7d-8bcf-86099adacfe8"/*SubTree*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "7d83da79-94a9-4ac8-bb30-c1efa5a0a205"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}
