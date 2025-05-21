@@ -40,4 +40,7 @@ internal sealed class RadialGradient : Instance<RadialGradient>
 
     [Input(Guid = "cf2e1698-f996-4b83-8b59-3150e75d59c6")]
     public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
+
+        [Input(Guid = "93dd184b-8809-4746-8544-41abde6635a3")]
+        public readonly InputSlot<SharpDX.DXGI.Format> TextureFormat = new InputSlot<SharpDX.DXGI.Format>();
 }

@@ -9,7 +9,6 @@
         "X": -649.4021,
         "Y": -6.927498
       },
-      "Description": "The width of the gradient with 1 being the extend defined by the SizeMode parameter.",
       "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0,
@@ -22,7 +21,6 @@
         "Y": 127.69351
       },
       "GroupTitle": "Options",
-      "Description": "Applies bias and gain mapping. See the Wiki \"Realtime Rendering for Artists\"  for more details.",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true,
@@ -35,7 +33,6 @@
         "X": 59.731995,
         "Y": 267.6935
       },
-      "Description": "Defines how the gradient is blended onto the connected background image."
     },
     {
       "InputId": "29587763-5456-4d33-bfd4-5d47b133f1cd"/*OffsetMode*/,
@@ -43,7 +40,14 @@
         "X": -241.14078,
         "Y": 269.39484
       },
-      "Description": "Defines wether the offset delta is a factor of the screen width or the gradient width. "
+      "Description": "Renders a linear color ramp defined by a gradient. This can be very useful in combination with [Steps].\n\n\nSimilar Ops: [NGon] [RoundedRect] [Rings] [RadialGradient] [LinearGradient] [Blob]"
+    },
+    {
+      "InputId": "3a170e98-ba19-4316-a60e-2a8124900172"/*TextureFormat*/,
+      "Position": {
+        "X": -63.927643,
+        "Y": 455.79172
+      }
     },
     {
       "InputId": "53afc8d9-f417-4628-9a97-220bec62919f"/*Resolution*/,
@@ -51,7 +55,6 @@
         "X": 199.732,
         "Y": 302.6935
       },
-      "Description": "Overrides the resolution. Make sure to read to documentation on how Tooll handles resolutions."
     },
     {
       "InputId": "5774969c-ef4d-482e-ab37-b3a84b09debb"/*PingPong*/,
@@ -59,7 +62,6 @@
         "X": 59.731995,
         "Y": 57.693512
       },
-      "Description": "If enabled the gradient is mirrored resulting in a seamless image."
     },
     {
       "InputId": "7f3fe86d-f259-458a-908a-0a71d39ca678"/*Repeat*/,
@@ -67,7 +69,6 @@
         "X": 59.731995,
         "Y": 92.69351
       },
-      "Description": "Repeats the gradient. This can be effective with the Offset parameter."
     },
     {
       "InputId": "8169be8f-cb35-4900-b462-f2139b412d59"/*Rotation*/,
@@ -76,7 +77,6 @@
         "Y": 22.693512
       },
       "GroupTitle": "Position",
-      "Description": "Rotates the gradient counter-clockwise.",
       "Min": -90.0,
       "Max": 90.0,
       "Format": "{0:0.0}°"
@@ -87,7 +87,6 @@
         "X": 199.732,
         "Y": 337.6935
       },
-      "Description": "Enables generating mip maps. See the Wiki \"Realtime Rendering for Artists\"  for more details."
     },
     {
       "InputId": "abf3456d-35bc-49ec-9aa6-c5571fbb209a"/*Center*/,
@@ -95,7 +94,6 @@
         "X": 59.731995,
         "Y": -82.30649
       },
-      "Description": "Defines the center of the gradient. Sadly the y-axis points downwards.",
       "Min": -0.5,
       "Max": 0.5,
       "UseVec2Control": "Position"
@@ -106,7 +104,6 @@
         "X": -622.96606,
         "Y": 197.8114
       },
-      "Description": "Offset the gradient with the amount defined by the OffsetMode parameter.",
       "AddPadding": "True",
       "Min": -0.5,
       "Max": 0.5
@@ -117,7 +114,6 @@
         "X": 199.732,
         "Y": -152.30649
       },
-      "Description": "An optional background image. If connected allows to apply different BlendingModes."
     },
     {
       "InputId": "e4739314-4075-4d14-a80d-79e149081dac"/*SizeMode*/,
@@ -125,7 +121,6 @@
         "X": 59.731995,
         "Y": 232.69351
       },
-      "Description": "Defines what defines a unit of gradient width: The current image width or height."
     },
     {
       "InputId": "e47e9e63-9c94-4c29-9555-2452fa498d57"/*Gradient*/,
@@ -134,7 +129,6 @@
         "Y": -117.30649
       },
       "GroupTitle": "Gradient",
-      "Description": "The gradient applied over width left and right from the Center position.\nTip: You can use the context menu to change gradient interpolation to Spline, Hold or Smooth.\nTip: You can also connect this an an input and to generate procedural gradients and switch between gradietn definitions."
     }
   ],
   "SymbolChildUis": [

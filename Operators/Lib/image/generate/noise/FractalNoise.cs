@@ -42,6 +42,9 @@ internal sealed class FractalNoise : Instance<FractalNoise>
     [Input(Guid = "41fc212b-d221-4467-a955-4f8ea63a776f")]
     public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
 
+        [Input(Guid = "732c4231-ffce-4305-9835-13b4d71a7e14")]
+        public readonly InputSlot<SharpDX.DXGI.Format> OutputFormat = new InputSlot<SharpDX.DXGI.Format>();
+
 
     private enum Methods
     {

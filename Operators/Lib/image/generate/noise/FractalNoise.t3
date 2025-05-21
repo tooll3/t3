@@ -53,6 +53,10 @@
       }
     },
     {
+      "Id": "732c4231-ffce-4305-9835-13b4d71a7e14"/*OutputFormat*/,
+      "DefaultValue": "R16G16B16A16_Float"
+    },
+    {
       "Id": "751f9a41-d97f-4e04-8338-cebe9be88c5a"/*Offset*/,
       "DefaultValue": {
         "X": 0.0,
@@ -102,7 +106,7 @@
         {
           "Id": "1e4e274b-60b2-4fe8-b275-ebef80d520a7"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\generate\\FractalNoise.hlsl"
+          "Value": "Resources/lib/img/generate/FractalNoise.hlsl"
         },
         {
           "Id": "480d6c19-a33c-48b3-b9fa-aaf8bd31e6d9"/*GenerateMips*/,
@@ -299,6 +303,12 @@
       "SourceSlotId": "1d7d99e6-4306-4ebc-97b4-40fcb2abb4d0",
       "TargetParentOrChildId": "608d7478-6fe8-4d4f-b2b8-53047f122fab",
       "TargetSlotId": "9695b557-433c-474b-bf34-219cbc134bee"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "732c4231-ffce-4305-9835-13b4d71a7e14",
+      "TargetParentOrChildId": "608d7478-6fe8-4d4f-b2b8-53047f122fab",
+      "TargetSlotId": "ff7cb999-aa3a-4e11-b9c8-d027bdb55ff6"
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",

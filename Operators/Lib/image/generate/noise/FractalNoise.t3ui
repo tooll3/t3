@@ -70,6 +70,13 @@
       "UseVec2Control": "Position"
     },
     {
+      "InputId": "732c4231-ffce-4305-9835-13b4d71a7e14"/*OutputFormat*/,
+      "Position": {
+        "X": 48.41777,
+        "Y": 1098.4331
+      }
+    },
+    {
       "InputId": "751f9a41-d97f-4e04-8338-cebe9be88c5a"/*Offset*/,
       "Position": {
         "X": -167.45187,

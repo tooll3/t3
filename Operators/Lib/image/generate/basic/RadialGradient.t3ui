@@ -21,15 +21,11 @@
         "Y": 68.98285
       },
       "GroupTitle": "Gradient",
-      "Description": "The gradient from the center towards to outer edge defined by Radius.\n\nTip: You can use the context menu to change gradient interpolation to Spline, Hold or Smooth.\nTip: You can also connect this an an input and to generate procedural gradients and switch between gradietn definitions."
     },
     {
       "InputId": "54bca43c-fc2b-4a40-b991-8b76e35eee01"/*Image*/,
       "Position": {
-        "X": 419.61545,
-        "Y": -4.7734528
       },
-      "Description": "An optional background image. If connected allows to apply different BlendingModes."
     },
     {
       "InputId": "5e93ba7d-a33d-4574-a438-a13c03361c29"/*BiasAndGain*/,
@@ -37,7 +33,6 @@
         "X": -270.7163,
         "Y": 262.82593
       },
-      "Description": "Applies bias and gain mapping. See the Wiki \"Realtime Rendering for Artists\"  for more details.",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true,
@@ -50,7 +45,6 @@
         "X": -270.7163,
         "Y": 318.82593
       },
-      "Description": "If enabled the gradient is mirrored resulting in a seamless image."
     },
     {
       "InputId": "7270a7df-744e-4b66-8f85-71fbdf0848d6"/*BlendMode*/,
@@ -58,7 +52,13 @@
         "X": -263.44446,
         "Y": 616.8738
       },
-      "Description": "Defines how the gradient is blended onto the connected background image."
+    },
+    {
+      "InputId": "93dd184b-8809-4746-8544-41abde6635a3"/*TextureFormat*/,
+      "Position": {
+        "X": -265.4931,
+        "Y": 786.91315
+      }
     },
     {
       "InputId": "98314ae6-b2a9-433b-90e9-931b059ae62e"/*Offset*/,
@@ -66,7 +66,6 @@
         "X": -270.7163,
         "Y": 217.82591
       },
-      "Description": "Offsets the gradient. One 1 unit per width.",
       "Min": -0.5,
       "Max": 0.5
     },
@@ -76,7 +75,6 @@
         "X": -270.7163,
         "Y": 172.82591
       },
-      "Description": "Radius or Width of the gradient (depending wether in Polar Coordinates mode)",
       "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0
@@ -87,7 +85,7 @@
         "X": -265.4931,
         "Y": 711.91315
       },
-      "Description": "Overrides the resolution. Make sure to read to documentation on how Tooll handles resolutions."
+      "GroupTitle": "Texture Options",
     },
     {
       "InputId": "dc383dbd-9dab-4bb2-8c6e-7f094e28d8a9"/*PolarOrientation*/,
@@ -96,7 +94,6 @@
         "Y": 531.1108
       },
       "GroupTitle": "Options",
-      "Description": "If enabled the gradient will be apply in a clockwise sweep around the center."
     },
     {
       "InputId": "eab31c38-0e6f-432a-9f15-04bfb0aae28c"/*Repeat*/,
@@ -104,7 +101,6 @@
         "X": -270.7163,
         "Y": 374.82593
       },
-      "Description": "Repeats the gradient. This can be effective with the Offset parameter."
     }
   ],
   "SymbolChildUis": [
