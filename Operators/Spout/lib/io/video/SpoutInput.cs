@@ -200,7 +200,15 @@ public class SpoutInput : Instance<SpoutInput>
             if (!_spoutDX.IsFrameNew)
                 return true;
 
+            /*
+             * 
+             * Texture2D readTexture = new Texture2D does not perform an AddRef which nead if the resource gets GCed but SharpDX
+             * or Release is called anywhere it will make it a dangled pointer
+             * so we call QueryInterface which performs an AddRef
+             */
             Texture2D readTexture = new Texture2D(new DXTexture2D(_spoutDX.SenderTexture.__Instance));
+            SharpDX.Direct3D11.Texture2D sdxTex = (SharpDX.Direct3D11.Texture2D)readTexture;
+            var dummy = sdxTex.QueryInterface<SharpDX.Direct3D11.Texture2D>();
 
             // check the input format
             uint senderWidth = 0;
@@ -223,11 +231,11 @@ public class SpoutInput : Instance<SpoutInput>
 
             // create several textures with a given format with CPU access
             // to be able to read out the initial texture values
-            if (ImagesWithGpuAccess.Count == 0
-                || ImagesWithGpuAccess[0].Description.Format != textureFormat
-                || ImagesWithGpuAccess[0].Description.Width != (int)width
-                || ImagesWithGpuAccess[0].Description.Height != (int)height
-                || ImagesWithGpuAccess[0].Description.MipLevels != 1)
+            if (sharedImage != null
+                || sharedImage.Description.Format != textureFormat
+                || sharedImage.Description.Width != (int)width
+                || sharedImage.Description.Height != (int)height
+                || sharedImage.Description.MipLevels != 1)
             {
                 var imageDesc = new Texture2DDescription
                                     {
@@ -249,15 +257,10 @@ public class SpoutInput : Instance<SpoutInput>
                           $"handle = {senderHandle}, " +
                           $"format = {textureFormat} ({directXFormat})");
 
-                for (var i = 0; i < NumTextureEntries; ++i)
-                {
-                    ImagesWithGpuAccess.Add(new Texture2D(new DXTexture2D(device, imageDesc)));
-                }
+                sharedImage = new Texture2D(new DXTexture2D(device, imageDesc));
 
                 _width = width;
                 _height = height;
-
-                _currentIndex = 0;
             }
 
             // sanity check
@@ -266,11 +269,9 @@ public class SpoutInput : Instance<SpoutInput>
 
             // copy the spout texture to an internal image
             var immediateContext = device.ImmediateContext;
-            var readableImage = ImagesWithGpuAccess[_currentIndex];
-            immediateContext.CopyResource(readTexture, readableImage);
-            _currentIndex = (_currentIndex + 1) % NumTextureEntries;
+            immediateContext.CopyResource(readTexture, sharedImage);
 
-            Texture.Value = readableImage;
+            Texture.Value = sharedImage;
         }
         catch (Exception e)
         {
@@ -282,10 +283,7 @@ public class SpoutInput : Instance<SpoutInput>
 
     protected void DisposeTextures()
     {
-        foreach (var image in ImagesWithGpuAccess)
-            image?.Dispose();
-
-        ImagesWithGpuAccess.Clear();
+        sharedImage?.Dispose();
     }
 
     #region IDisposable Support
@@ -327,13 +325,7 @@ public class SpoutInput : Instance<SpoutInput>
     private uint _width; // current width of our receiver
     private uint _height; // current height of our receiver
 
-    // hold several textures internally to speed up calculations
-    private const int NumTextureEntries = 2;
-
-    private readonly List<Texture2D> ImagesWithGpuAccess = new();
-
-    // current image index (used for circular access of ImagesWithGpuAccess)
-    private int _currentIndex;
+    private Texture2D sharedImage;
 
     [Input(Guid = "F7A7A410-FB91-448C-A0FE-BA4278D82107")]
     public readonly InputSlot<Command> Command = new();
