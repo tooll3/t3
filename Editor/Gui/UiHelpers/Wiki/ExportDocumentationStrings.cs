@@ -39,7 +39,7 @@ internal static class ExportDocumentationStrings
                 results.Add(new DocumentationEntry
                                 {
                                     Type = DocumentationEntry.Types.ParameterDescription,
-                                    Text = symbolUi.Description,
+                                    Text = param.Description,
                                     SymbolId = symbolUi.Symbol.Id,
                                     Id = param.Id
                                 });
@@ -74,7 +74,7 @@ internal static class ExportDocumentationStrings
         if (!Directory.Exists(DocumentationFolder))
             Directory.CreateDirectory(DocumentationFolder);
         
-        const int pageSize = 500; // Define the size of each page
+        const int pageSize = 50; // Define the size of each page
         for (var i = 0; i < results.Count; i += pageSize)
         {
             var currentPage = results.Skip(i).Take(pageSize).ToList();
@@ -83,6 +83,17 @@ internal static class ExportDocumentationStrings
             var filepath = Path.Combine(DocumentationFolder, $"{DocumentationBaseFilename}-{pageIndex:000}.{DocumentationFileExtension}");
             var fullPath = Path.GetFullPath(filepath);
             Log.Debug($"Writing {fullPath}...");
+            if (File.Exists(filepath))
+            {
+                try
+                {
+                    File.Delete(filepath);
+                }
+                catch (Exception e)
+                {
+                    Log.Warning($"Failed to deleted {filepath} " + e.Message);
+                }
+            }
             JsonUtils.TrySaveJson(currentPage, filepath);
         }
     }
@@ -106,11 +117,13 @@ internal static class ExportDocumentationStrings
 
             foreach (var r in results)
             {
-                if (!SymbolUiRegistry.TryGetSymbolUi(r.SymbolId, out var symbolUi)) continue;
+                if (!SymbolUiRegistry.TryGetSymbolUi(r.SymbolId, out var symbolUi)) 
+                    continue;
+                
                 switch (r.Type)
                 {
                     case DocumentationEntry.Types.Description:
-                        symbolUi!.Description = r.Text;
+                        symbolUi.Description = r.Text;
                         break;
 
                     case DocumentationEntry.Types.ParameterDescription:
