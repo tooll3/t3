@@ -16,7 +16,8 @@
       "Position": {
         "X": -26.319008,
         "Y": 399.57715
-      }
+      },
+      "GroupTitle": "Image A"
     },
     {
       "InputId": "c68c887c-16f1-4fa2-89a4-4a07d44a0df6"/*ImageB*/,
@@ -24,7 +25,8 @@
       "Position": {
         "X": -26.319008,
         "Y": 489.57715
-      }
+      },
+      "GroupTitle": "Image B"
     },
     {
       "InputId": "d08813be-bd43-4229-86b7-4e53b62b8561"/*Mask*/,
@@ -32,7 +34,8 @@
       "Position": {
         "X": -26.319008,
         "Y": 669.57715
-      }
+      },
+      "GroupTitle": "Mask"
     },
     {
       "InputId": "f551d82e-bbd5-40fd-9d84-e08d97f06c46"/*ColorB*/,
