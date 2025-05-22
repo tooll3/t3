@@ -8,7 +8,8 @@
         "X": 1598.7069,
         "Y": 1636.1553
       },
-      "Description": "The number of blur levels applied. The maximum is 12 (which should be enough for most resolutions).\n\nIn most scenarious you wouldn't adjust this, but in edges scenarios, it might help to optimize performance of craft special looks."
+      "Description": "The number of blur levels applied. The maximum is 12 (which should be enough for most resolutions).\n\nIn most scenarious you wouldn't adjust this, but in edges scenarios, it might help to optimize performance of craft special looks.",
+      "AddPadding": "True"
     },
     {
       "InputId": "28e0b719-0888-4ef6-85d9-bbd75f7a4537"/*Threshold*/,
@@ -60,6 +61,7 @@
         "X": 1598.7069,
         "Y": 1566.1553
       },
+      "GroupTitle": "Settings",
       "Description": "The overall intensity values below 1 are hardly noticable.",
       "Min": 0.0,
       "Max": 100.0,
@@ -72,6 +74,7 @@
         "X": 1598.7069,
         "Y": 1706.1553
       },
+      "GroupTitle": "Advanced",
       "Description": "Can be used the colorize or shape the glow. \nIts multiplied onto each blur kernel with the more blurred levels on the right.\n\nTIP:\n- You can also adjust the brightness above 1 (hold CTRL while dragging the brightness slider) so amplify levels like the core."
     },
     {
@@ -88,7 +91,7 @@
         "X": 1598.7069,
         "Y": 1741.1553
       },
-      "Description": "Clamp the blur kernels before combining. \nThis will give a slightly different not. It will _NOT_ clamp the results. Use [ToneMap] for that."
+      "Description": "Clamp the blur kernels before combining. \nThis will give a slightly different look. It will _NOT_ clamp the results. Use [ToneMap] for that."
     }
   ],
   "SymbolChildUis": [
