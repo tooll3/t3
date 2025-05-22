@@ -20,6 +20,7 @@
         "X": 132.69783,
         "Y": 29.375793
       },
+      "GroupTitle": "Settings",
       "Description": "Controls how far the individual colors are shifted away from each other at the edges of the image.",
       "Min": 0.1,
       "Max": 20.0,
@@ -32,6 +33,7 @@
         "Y": 145.95874
       },
       "Description": "Controls the fidelity of the effect.\nHigher numbers create smoother results at the cost of rendering speed.",
+      "AddPadding": "True",
       "Min": 3,
       "Max": 60,
       "Clamp": true
