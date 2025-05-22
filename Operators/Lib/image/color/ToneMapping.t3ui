@@ -8,7 +8,8 @@
       "Position": {
         "X": 153.79459,
         "Y": 431.24347
-      }
+      },
+      "GroupTitle": "Mode"
     },
     {
       "InputId": "72e51856-bc8f-4bcf-a6d8-6c7b4f8b0583"/*Texture2d*/,
@@ -23,14 +24,16 @@
       "Position": {
         "X": 155.58875,
         "Y": 589.0668
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "be44974c-2685-40ff-86b6-bdf1cc38eee4"/*CorrectGamma*/,
       "Position": {
         "X": 153.79459,
         "Y": 476.2435
-      }
+      },
+      "GroupTitle": "Settings"
     },
     {
       "InputId": "dfd590f5-a930-42df-aecd-52f8d0195369"/*Gamma*/,
