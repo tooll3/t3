@@ -23,7 +23,8 @@
       "Position": {
         "X": -448.6706,
         "Y": 810.16473
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "8ba57792-f184-4f5f-a3c3-772e1f5fbe1d"/*MaxAmount*/,
@@ -38,7 +39,8 @@
       "Position": {
         "X": -452.71265,
         "Y": 906.453
-      }
+      },
+      "GroupTitle": "Input"
     },
     {
       "InputId": "b663670f-f805-4c2e-8f05-e4ccb644ffad"/*BlendMode*/,
