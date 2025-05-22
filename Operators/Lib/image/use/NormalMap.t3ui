@@ -40,6 +40,7 @@
         "X": -235.75668,
         "Y": 261.74847
       },
+      "GroupTitle": "Settings",
       "Min": -1.0,
       "Max": 1.0
     },
@@ -48,14 +49,16 @@
       "Position": {
         "X": -235.75668,
         "Y": 351.74847
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "cf7e6f41-cc6e-46dd-8779-1273326a5a53"/*Mode*/,
       "Position": {
         "X": -235.75668,
         "Y": 441.74847
-      }
+      },
+      "GroupTitle": "Advanced"
     }
   ],
   "SymbolChildUis": [
