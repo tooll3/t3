@@ -8,7 +8,9 @@
       "Position": {
         "X": 0.0,
         "Y": 135.0
-      }
+      },
+      "GroupTitle": "Blend Settings",
+      "Description": "BlendSettings"
     },
     {
       "InputId": "3197934e-d0ed-4a81-9dc1-2cc63d97ac6f"/*InputTextA*/,
@@ -17,6 +19,7 @@
         "X": 0.0,
         "Y": 45.0
       },
+      "GroupTitle": "String A",
       "Usage": "Multiline"
     },
     {
@@ -33,6 +36,7 @@
         "X": 0.0,
         "Y": 90.0
       },
+      "GroupTitle": "String B",
       "Usage": "Multiline"
     },
     {
@@ -40,7 +44,8 @@
       "Position": {
         "X": 0.0,
         "Y": 270.0
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "d95e112f-b89a-4aa1-954b-10521c0a3815"/*ScrambleSeed*/,
@@ -54,7 +59,8 @@
       "Position": {
         "X": 0.0,
         "Y": 180.0
-      }
+      },
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [],
