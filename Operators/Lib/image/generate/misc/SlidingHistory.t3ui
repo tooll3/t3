@@ -8,7 +8,8 @@
       "Position": {
         "X": 390.45114,
         "Y": 658.7772
-      }
+      },
+      "GroupTitle": "Settings"
     },
     {
       "InputId": "48699e66-a59b-4cbb-b131-171ce9fcade3"/*Texture2d*/,
@@ -30,7 +31,8 @@
       "Position": {
         "X": 398.9522,
         "Y": 823.56464
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "72db9342-9c07-4557-8b67-e3dc6ee55271"/*ResetTrigger*/,
@@ -44,7 +46,8 @@
       "Position": {
         "X": 384.06885,
         "Y": 1024.1395
-      }
+      },
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
