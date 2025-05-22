@@ -9,6 +9,7 @@
         "X": 51.512096,
         "Y": 46.995968
       },
+      "GroupTitle": "Gltf Scene",
       "Usage": "FilePath"
     },
     {
@@ -24,7 +25,8 @@
       "Position": {
         "X": 51.512096,
         "Y": 451.99597
-      }
+      },
+      "GroupTitle": "Settings"
     },
     {
       "InputId": "d02f41a6-1a6b-4a6e-8d6c-a28873c79f2c"/*Setup*/,
@@ -39,6 +41,7 @@
         "X": 51.512096,
         "Y": 316.99597
       },
+      "GroupTitle": "Appearance",
       "Description": "This is a temporary offset that probably will become obsolete soon."
     },
     {
@@ -54,7 +57,8 @@
         "X": 51.512096,
         "Y": 406.99597
       },
-      "Description": "Defines which visible child will be used for Mesh and Material output."
+      "Description": "Defines which visible child will be used for Mesh and Material output.",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [],
