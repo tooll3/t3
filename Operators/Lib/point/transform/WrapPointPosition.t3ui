@@ -15,7 +15,8 @@
       "Position": {
         "X": -233.76004,
         "Y": 742.2818
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "d56c770e-1cc5-4bab-8f2d-1b503e686aed"/*AddLineBreaks*/,
@@ -37,7 +38,8 @@
       "Position": {
         "X": -238.81335,
         "Y": 611.684
-      }
+      },
+      "GroupTitle": "Position"
     }
   ],
   "SymbolChildUis": [
