@@ -1,6 +1,6 @@
 {
   "Id": "0e13e34f-c07b-4ada-8c87-6b89f4ed8b41"/*CompareImages*/,
-  "Description": "A simple helper to verify an image effect before and after. It shows...",
+  "Description": "A simple helper to verify an image effect before and after. It shows both images divided by a movable border which also acts as a comparison monitor.",
   "SymbolTags": "1",
   "InputUis": [
     {
@@ -9,7 +9,8 @@
       "Position": {
         "X": -680.5391,
         "Y": -140.30246
-      }
+      },
+      "Description": "Input Image A"
     },
     {
       "InputId": "78c3486a-3a82-4e61-81fd-3da904fd7aed"/*Texture2d2*/,
@@ -17,7 +18,8 @@
       "Position": {
         "X": -680.5391,
         "Y": -95.30245
-      }
+      },
+      "Description": "Input Image B"
     },
     {
       "InputId": "99171ae6-fb07-4121-bf23-e97f30b33be5"/*IntensityRange*/,
@@ -25,6 +27,8 @@
         "X": -704.83606,
         "Y": 494.13895
       },
+      "Description": "Defines how large the border / monitor is displayed",
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -35,6 +39,7 @@
         "X": -704.83606,
         "Y": 449.13895
       },
+      "Description": "Defines the center of the border",
       "UseVec2Control": "Position"
     },
     {
@@ -43,6 +48,8 @@
         "X": -704.83606,
         "Y": 404.13895
       },
+      "GroupTitle": "Settings",
+      "Description": "Rotates the border",
       "Min": -90.0,
       "Max": 90.0,
       "Format": "{0:0.0}°"
