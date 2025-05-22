@@ -16,21 +16,24 @@
       "Position": {
         "X": 231.94124,
         "Y": -67.45227
-      }
+      },
+      "GroupTitle": "Result Settings"
     },
     {
       "InputId": "7f66aa8d-fbdd-47d6-ba38-07e257e19401"/*SampleRadius*/,
       "Position": {
         "X": 371.94125,
         "Y": 72.54773
-      }
+      },
+      "GroupTitle": "Edge Detection"
     },
     {
       "InputId": "921b8a04-d3b5-408e-ad3e-311a4c9890b1"/*OutputAsTransparent*/,
       "Position": {
         "X": 231.94124,
         "Y": 212.54773
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "9dae724d-7be8-4f82-8907-28550ddbf6e6"/*Contrast*/,
