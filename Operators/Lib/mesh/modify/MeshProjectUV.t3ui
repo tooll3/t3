@@ -8,7 +8,8 @@
       "Position": {
         "X": -1598.1094,
         "Y": 1180.2872
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "10bc1ef8-e036-4da0-9bc8-65da0ddff7f0"/*Mesh*/,
@@ -23,7 +24,8 @@
         "X": -1598.1094,
         "Y": 1105.2872
       },
-      "Description": "Uniformly scales the mapping"
+      "Description": "Uniformly scales the mapping",
+      "AddPadding": "True"
     },
     {
       "InputId": "432c3388-907b-4b7f-8c6e-73a5100bc43a"/*Stretch*/,
@@ -47,6 +49,7 @@
         "X": -1600.9688,
         "Y": 568.1786
       },
+      "GroupTitle": "UV Settings",
       "Description": "Moves the position of the planar mapping"
     }
   ],
