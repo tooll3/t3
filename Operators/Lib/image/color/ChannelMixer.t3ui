@@ -15,7 +15,8 @@
       "Position": {
         "X": -8.08049,
         "Y": 522.35626
-      }
+      },
+      "GroupTitle": "Settings"
     },
     {
       "InputId": "1f380edd-ed50-49a4-976d-cce13783851d"/*MultiplyB*/,
@@ -37,7 +38,8 @@
       "Position": {
         "X": -8.08049,
         "Y": 337.35626
-      }
+      },
+      "GroupTitle": "Channels"
     },
     {
       "InputId": "76e01cd7-15b8-4962-a96f-592e67ae51c5"/*MultiplyG*/,
@@ -51,7 +53,8 @@
       "Position": {
         "X": -8.08049,
         "Y": 567.35626
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "e68ed87b-fb06-43b2-a51f-a37a85fb6d87"/*MultiplyA*/,
