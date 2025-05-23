@@ -1,6 +1,6 @@
 {
   "Id": "592a2b6f-d4e3-43e0-9e73-034cca3b3900"/*ImageLevels*/,
-  "Description": "Visualizes the image brightness distribution of an image.",
+  "Description": "Visualizes the image brightness distribution of an image.\nSee also [CompareImages]",
   "SymbolTags": "1",
   "InputUis": [
     {
@@ -9,6 +9,7 @@
         "X": -94.813095,
         "Y": 227.14226
       },
+      "GroupTitle": "Visualizer",
       "Min": -1.0,
       "Max": 1.0,
       "Scale": 0.001,
@@ -19,7 +20,8 @@
       "Position": {
         "X": 45.18695,
         "Y": 297.14227
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "8910ac23-551b-446a-b833-98f4efce1022"/*Range*/,
@@ -34,7 +36,8 @@
       "Position": {
         "X": 45.18695,
         "Y": 437.14227
-      }
+      },
+      "GroupTitle": "Image"
     },
     {
       "InputId": "f1084d72-f8b8-4723-82be-e1e98880faf3"/*Rotation*/,
