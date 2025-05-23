@@ -16,7 +16,8 @@
       "Position": {
         "X": 236.08261,
         "Y": 552.3333
-      }
+      },
+      "GroupTitle": "Settings"
     },
     {
       "InputId": "7e308e6d-fcff-46b2-a6d7-460edb33ef80"/*ScaleFactor*/,
@@ -30,7 +31,8 @@
       "Position": {
         "X": 236.08261,
         "Y": 642.3333
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "88623684-a5e4-4415-8458-648761e834e1"/*GenerateMipMaps*/,
