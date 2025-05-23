@@ -1,6 +1,6 @@
 {
   "Id": "a1e3b8d3-3888-4e18-80e4-f6c65a136e75"/*ColorGradeDepth*/,
-  "Description": "A advanced color grade that uses a depth buffer based gradient look for additional effects.",
+  "Description": "A advanced color grade that uses a depth buffer based gradient look for additional effects.\n\nUseful combinations: [SetFog]",
   "SymbolTags": "8",
   "InputUis": [
     {
@@ -16,6 +16,7 @@
         "X": -8.08049,
         "Y": 527.35626
       },
+      "GroupTitle": "Vignette",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -26,6 +27,7 @@
         "X": -8.08049,
         "Y": 337.35626
       },
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0
     },
@@ -34,7 +36,8 @@
       "Position": {
         "X": -8.08049,
         "Y": 572.35626
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "6a4eb09f-070a-4fd2-82f5-677b7cafb1dc"/*Gamma*/,
@@ -65,7 +68,8 @@
       "Position": {
         "X": -6.2594147,
         "Y": 869.6292
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "bfb058cb-3611-441a-840f-0a1c4efd4de1"/*Lift*/,
@@ -82,7 +86,8 @@
       "Position": {
         "X": -8.08049,
         "Y": 707.35626
-      }
+      },
+      "GroupTitle": "Depth"
     },
     {
       "InputId": "c3693fbf-83d1-4780-98a0-302e7ecf7ca2"/*VignetteCenter*/,
