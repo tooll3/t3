@@ -15,14 +15,16 @@
       "Position": {
         "X": 1472.1826,
         "Y": 320.9583
-      }
+      },
+      "GroupTitle": "Advanced"
     },
     {
       "InputId": "4623488a-cef2-4aaa-bfea-54e39e0b5653"/*ScaleFactor*/,
       "Position": {
         "X": 704.9287,
         "Y": 338.65512
-      }
+      },
+      "GroupTitle": "Transform"
     },
     {
       "InputId": "4a300626-b562-4a5e-bfc5-9ffcd99dc0d5"/*FilterCharacters*/,
@@ -44,7 +46,8 @@
       "Position": {
         "X": 704.9287,
         "Y": 373.65512
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "7f35bc61-a27f-4a36-9ecc-b5944791f6f0"/*FontFilePath*/,
@@ -52,6 +55,7 @@
         "X": 1192.1825,
         "Y": -64.041855
       },
+      "GroupTitle": "Font",
       "Usage": "FilePath"
     },
     {
@@ -76,7 +80,8 @@
       "Position": {
         "X": 564.9287,
         "Y": -81.344864
-      }
+      },
+      "GroupTitle": "Colors"
     },
     {
       "InputId": "a842bd72-abb2-4207-8397-7e727aaa6c63"/*GainAndBias*/,
@@ -84,6 +89,7 @@
         "X": 564.92865,
         "Y": 408.65512
       },
+      "GroupTitle": "Balance",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true,
