@@ -16,7 +16,8 @@
       "Position": {
         "X": -434.86163,
         "Y": 1708.9337
-      }
+      },
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
