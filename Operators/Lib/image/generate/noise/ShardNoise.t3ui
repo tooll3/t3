@@ -15,7 +15,8 @@
       "Position": {
         "X": -165.24818,
         "Y": 207.82095
-      }
+      },
+      "GroupTitle": "Animate"
     },
     {
       "InputId": "1583d95b-da27-4d12-9937-8cd99a61bb18"/*GenerateMips*/,
@@ -44,6 +45,7 @@
         "X": -165.24818,
         "Y": 72.820946
       },
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 10.0
     },
@@ -70,7 +72,8 @@
       "Position": {
         "X": -165.24818,
         "Y": 162.82095
-      }
+      },
+      "GroupTitle": "Look"
     },
     {
       "InputId": "5d02399d-dcfa-41c0-bc6b-59833389b580"/*ColorB*/,
@@ -96,14 +99,16 @@
       "Position": {
         "X": -158.08998,
         "Y": 490.44922
-      }
+      },
+      "GroupTitle": "Options"
     },
     {
       "InputId": "f5233be8-dfdf-463b-af49-029f3459bbeb"/*Scale*/,
       "Position": {
         "X": -165.24818,
         "Y": 117.820946
-      }
+      },
+      "GroupTitle": "Transform"
     }
   ],
   "SymbolChildUis": [
