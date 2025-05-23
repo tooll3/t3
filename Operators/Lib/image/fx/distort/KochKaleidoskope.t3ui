@@ -9,6 +9,7 @@
         "X": -307.04523,
         "Y": 428.1638
       },
+      "GroupTitle": "Source",
       "Min": -180.0,
       "Max": 180.0,
       "Format": "{0:0.0}°"
@@ -19,6 +20,7 @@
         "X": -308.4377,
         "Y": 204.1156
       },
+      "GroupTitle": "Kaleidoskope Settings",
       "UseVec2Control": "Position"
     },
     {
@@ -40,7 +42,8 @@
       "Position": {
         "X": -319.7906,
         "Y": 576.5936
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "912cfd4d-5bef-4fdc-abfc-2f5bf8239875"/*Center*/,
@@ -55,7 +58,8 @@
       "Position": {
         "X": -307.04523,
         "Y": 338.16394
-      }
+      },
+      "GroupTitle": "Advanced"
     },
     {
       "InputId": "a1b3ae23-cb29-4e3e-93b6-fd4f1efadbf1"/*Angle*/,
