@@ -37,7 +37,8 @@
       "Position": {
         "X": -487.71606,
         "Y": 2166.2249
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "811ab837-44a7-4780-91d0-1058e6bf3557"/*NoiseVariation*/,
@@ -51,7 +52,8 @@
       "Position": {
         "X": -488.12396,
         "Y": 1969.895
-      }
+      },
+      "GroupTitle": "Noise"
     },
     {
       "InputId": "9ed2888a-b2f9-4d7d-bd6f-804459e23da2"/*AmountDistribution*/,
@@ -65,7 +67,8 @@
       "Position": {
         "X": -490.75208,
         "Y": 1602.3148
-      }
+      },
+      "GroupTitle": "Scatter Settings"
     },
     {
       "InputId": "cb0e3b52-fc4f-429b-a3c0-48138defcfe5"/*NoiseFrequency*/,
@@ -93,7 +96,8 @@
       "Position": {
         "X": -490.75208,
         "Y": 1647.3148
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "e7b6d028-1ddf-4a4e-b2ca-13a73e0d1508"/*Scatter*/,
