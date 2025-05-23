@@ -89,20 +89,18 @@ internal sealed class PlayAudioClip : Instance<PlayAudioClip>, IStatusProvider
         
     private string _errorMessageForStatus = string.Empty;
 
-        
-    [Input(Guid = "e0c927f9-5528-49c5-b457-5aea51f51628")]
-    public readonly InputSlot<string> Path = new();
-        
+        [Input(Guid = "e0c927f9-5528-49c5-b457-5aea51f51628")]
+        public readonly InputSlot<string> Path = new InputSlot<string>();
 
-    [Input(Guid = "7ABB80B8-5EA3-48F3-9F28-19DACA9B8648")]
-    public readonly InputSlot<float> TimeInSecs = new();
+        [Input(Guid = "7ABB80B8-5EA3-48F3-9F28-19DACA9B8648")]
+        public readonly InputSlot<float> TimeInSecs = new InputSlot<float>();
 
-    [Input(Guid = "B8610A84-EA18-486C-8DBE-208C19A9DB28")]
-    public readonly InputSlot<float> Volume = new();
-        
-    [Input(Guid = "86CF4C08-242D-4491-871E-EACCDB628238")]
-    public readonly InputSlot<bool> IsPlaying = new();
-        
-    [Input(Guid = "989C84C4-F085-4839-89FD-BCF0F33A04E8")]
-    public readonly InputSlot<bool> IsLooping = new();
+        [Input(Guid = "B8610A84-EA18-486C-8DBE-208C19A9DB28")]
+        public readonly InputSlot<float> Volume = new InputSlot<float>();
+
+        [Input(Guid = "989C84C4-F085-4839-89FD-BCF0F33A04E8")]
+        public readonly InputSlot<bool> IsLooping = new InputSlot<bool>();
+
+        [Input(Guid = "86CF4C08-242D-4491-871E-EACCDB628238")]
+        public readonly InputSlot<bool> IsPlaying = new InputSlot<bool>();
 }
