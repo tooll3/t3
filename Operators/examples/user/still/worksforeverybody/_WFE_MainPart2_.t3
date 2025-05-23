@@ -4418,11 +4418,6 @@
           "Id": "b2f58dc7-e5c6-4c57-a704-94aaa0b1e002"/*GenerateMips*/,
           "Type": "System.Boolean",
           "Value": true
-        },
-        {
-          "Id": "d430113e-33fd-49b7-b1c1-32cc95154a4e"/*SampleCount*/,
-          "Type": "System.Int32",
-          "Value": 1
         }
       ],
       "Outputs": []
@@ -8056,11 +8051,6 @@
           "Id": "b2f58dc7-e5c6-4c57-a704-94aaa0b1e002"/*GenerateMips*/,
           "Type": "System.Boolean",
           "Value": true
-        },
-        {
-          "Id": "d430113e-33fd-49b7-b1c1-32cc95154a4e"/*SampleCount*/,
-          "Type": "System.Int32",
-          "Value": 1
         }
       ],
       "Outputs": []
@@ -8254,11 +8244,6 @@
           "Id": "b2f58dc7-e5c6-4c57-a704-94aaa0b1e002"/*GenerateMips*/,
           "Type": "System.Boolean",
           "Value": true
-        },
-        {
-          "Id": "d430113e-33fd-49b7-b1c1-32cc95154a4e"/*SampleCount*/,
-          "Type": "System.Int32",
-          "Value": 1
         }
       ],
       "Outputs": []
@@ -8628,11 +8613,6 @@
           "Id": "b2f58dc7-e5c6-4c57-a704-94aaa0b1e002"/*GenerateMips*/,
           "Type": "System.Boolean",
           "Value": true
-        },
-        {
-          "Id": "d430113e-33fd-49b7-b1c1-32cc95154a4e"/*SampleCount*/,
-          "Type": "System.Int32",
-          "Value": 1
         }
       ],
       "Outputs": []

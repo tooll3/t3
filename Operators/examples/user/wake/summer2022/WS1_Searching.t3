@@ -403,21 +403,6 @@
           "Id": "6e772174-813d-4baa-b6b5-27e197b547ac"/*WrapMode*/,
           "Type": "SharpDX.Direct3D11.TextureAddressMode",
           "Value": "Clamp"
-        },
-        {
-          "Id": "b9dd77ff-7e5a-4036-a1c9-24501f1d4d9d"/*SampleSpread*/,
-          "Type": "System.Single",
-          "Value": 2.0
-        },
-        {
-          "Id": "c13b83ce-7dd2-4b4e-bf19-b994493b92a3"/*DisplaceMapSampling*/,
-          "Type": "System.Single",
-          "Value": 4.699985
-        },
-        {
-          "Id": "d430113e-33fd-49b7-b1c1-32cc95154a4e"/*SampleCount*/,
-          "Type": "System.Int32",
-          "Value": 27
         }
       ],
       "Outputs": []

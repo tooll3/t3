@@ -722,11 +722,6 @@
           "Id": "77673c64-918d-46a6-aa29-c362057afee6"/*Shade*/,
           "Type": "System.Single",
           "Value": -0.5
-        },
-        {
-          "Id": "d430113e-33fd-49b7-b1c1-32cc95154a4e"/*SampleCount*/,
-          "Type": "System.Int32",
-          "Value": 3
         }
       ],
       "Outputs": []

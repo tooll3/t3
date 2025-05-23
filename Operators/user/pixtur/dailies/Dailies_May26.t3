@@ -109,24 +109,9 @@
           "Value": 2.6666667
         },
         {
-          "Id": "6978ceab-98a9-4258-9c67-db41173d2aae"/*SampleOffset*/,
-          "Type": "System.Single",
-          "Value": 0.0033333465
-        },
-        {
           "Id": "77673c64-918d-46a6-aa29-c362057afee6"/*Shade*/,
           "Type": "System.Single",
           "Value": 0.18666667
-        },
-        {
-          "Id": "b9dd77ff-7e5a-4036-a1c9-24501f1d4d9d"/*SampleSpread*/,
-          "Type": "System.Single",
-          "Value": 0.123333305
-        },
-        {
-          "Id": "d430113e-33fd-49b7-b1c1-32cc95154a4e"/*SampleCount*/,
-          "Type": "System.Int32",
-          "Value": 8
         },
         {
           "Id": "dc8dfa33-1a49-4800-8c1f-89b29d7427f3"/*Twist*/,
