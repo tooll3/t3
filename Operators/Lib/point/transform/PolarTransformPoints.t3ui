@@ -23,7 +23,8 @@
       "Position": {
         "X": -463.58713,
         "Y": 1153.5818
-      }
+      },
+      "GroupTitle": "Advanced"
     },
     {
       "InputId": "c7f7e8d2-8694-4eab-9693-c3e6c1ec95e8"/*Rotation*/,
@@ -38,14 +39,16 @@
       "Position": {
         "X": -461.1681,
         "Y": 874.401
-      }
+      },
+      "GroupTitle": "Settings"
     },
     {
       "InputId": "f929e486-a49f-445b-962f-e0f3fc7d52cc"/*UniformScale*/,
       "Position": {
         "X": -461.1681,
         "Y": 1009.401
-      }
+      },
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
