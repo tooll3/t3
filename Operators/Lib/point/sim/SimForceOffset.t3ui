@@ -26,8 +26,7 @@
         "X": -162.4124,
         "Y": 875.356
       },
-      "Description": "Randomizes the amount of the force",
-      "AddPadding": "True"
+      "Description": "Randomizes the amount of the force"
     },
     {
       "InputId": "4267c75c-35a6-4feb-9a98-92c3d676dcae"/*RadiusFallOff*/,
@@ -60,8 +59,7 @@
         "X": -160.04121,
         "Y": 955.8399
       },
-      "Description": "Adds a linear force on the defined axis",
-      "AddPadding": "True"
+      "Description": "Adds a linear force on the defined axis"
     },
     {
       "InputId": "e68e305e-9e2b-4bf2-9a85-4630697a8c34"/*UseWForMass*/,
@@ -87,8 +85,7 @@
         "X": -160.04121,
         "Y": 1000.8399
       },
-      "Description": "Defines how much the force decays based on the distance",
-      "AddPadding": "True"
+      "Description": "Defines how much the force decays based on the distance"
     }
   ],
   "SymbolChildUis": [
