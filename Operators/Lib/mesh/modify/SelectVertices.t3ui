@@ -32,7 +32,8 @@
       "Position": {
         "X": -881.0754,
         "Y": 2097.72
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "a18f9440-ef80-4d7e-bf69-9e05f5825979"/*Stretch*/,
@@ -53,7 +54,8 @@
       "Position": {
         "X": -881.0754,
         "Y": 2322.7202
-      }
+      },
+      "GroupTitle": "Selection"
     },
     {
       "InputId": "b0942a49-f562-4c46-9a10-3b4de8a3c5b2"/*Phase*/,
@@ -67,21 +69,24 @@
       "Position": {
         "X": -881.0754,
         "Y": 2277.7202
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "c1223666-d19a-4fa5-96c6-3582e0a685d0"/*Strength*/,
       "Position": {
         "X": -881.0754,
         "Y": 2502.7205
-      }
+      },
+      "GroupTitle": "Noise"
     },
     {
       "InputId": "ca4fe7d8-5e78-493b-a209-3ee6be0d0a90"/*Mode*/,
       "Position": {
         "X": -881.0754,
         "Y": 2367.7205
-      }
+      },
+      "GroupTitle": "Advanced"
     },
     {
       "InputId": "f1350cb5-d7c5-43ad-9e0c-4b0aa7a8c0e4"/*InputMesh*/,
