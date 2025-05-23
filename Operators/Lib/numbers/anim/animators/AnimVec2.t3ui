@@ -8,7 +8,8 @@
       "Position": {
         "X": -200.0,
         "Y": 315.0
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "304124e6-1fa1-4f6b-86de-ef7769cde1f6"/*Offsets*/,
@@ -63,6 +64,7 @@
         "X": -200.0,
         "Y": 270.0
       },
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -73,6 +75,7 @@
         "X": -200.0,
         "Y": 270.0
       },
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 16.0
     },
