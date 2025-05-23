@@ -9,6 +9,7 @@
         "X": 1400.1576,
         "Y": 3941.12
       },
+      "GroupTitle": "Shadow Settings",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -18,14 +19,16 @@
       "Position": {
         "X": 2181.713,
         "Y": 4224.662
-      }
+      },
+      "GroupTitle": "Draw Style"
     },
     {
       "InputId": "5c4def3d-9261-4100-8136-abc552e9f547"/*Color*/,
       "Position": {
         "X": 1250.1576,
         "Y": 3837.2158
-      }
+      },
+      "GroupTitle": "Draw Mesh Options"
     },
     {
       "InputId": "734e5d0f-d319-43a9-84ab-8aee82acbb7f"/*AlphaCutOff*/,
@@ -54,7 +57,8 @@
       "Position": {
         "X": 1550.1576,
         "Y": 3973.12
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "8cea9257-8bde-46ac-9c32-8a63fea405d6"/*Culling*/,
@@ -82,7 +86,8 @@
       "Position": {
         "X": 2181.713,
         "Y": 4269.662
-      }
+      },
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
