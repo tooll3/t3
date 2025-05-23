@@ -23,6 +23,7 @@
         "X": -200.0,
         "Y": 225.0
       },
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -52,7 +53,8 @@
       "Position": {
         "X": -200.0,
         "Y": 180.0
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "a04bb5a4-a7af-493b-8509-4e9c8b6a94a9"/*Phases*/,
@@ -66,7 +68,8 @@
       "Position": {
         "X": -200.0,
         "Y": 225.0
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "c8faaeca-c153-4d7c-a66b-6916dc7750e3"/*Shape*/,
