@@ -8,21 +8,24 @@
       "Position": {
         "X": -1952.9755,
         "Y": -421.11142
-      }
+      },
+      "GroupTitle": "Shadow Settings"
     },
     {
       "InputId": "5fb309a1-f164-4fe0-95e2-3bfc37823f78"/*DepthRange*/,
       "Position": {
         "X": -1363.254,
         "Y": 216.51556
-      }
+      },
+      "GroupTitle": "Advanced"
     },
     {
       "InputId": "6196074f-4770-4e81-812a-012fcaab207b"/*LightPosition*/,
       "Position": {
         "X": -1854.0206,
         "Y": 8.640076
-      }
+      },
+      "GroupTitle": "Light Settings"
     },
     {
       "InputId": "76a6a0e4-168d-4172-9946-e843df9d0ca0"/*LightTarget*/,
@@ -36,7 +39,8 @@
       "Position": {
         "X": -1952.9755,
         "Y": -376.11142
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "be6dc055-d4c8-4c75-a084-12c22a268034"/*Command*/,
