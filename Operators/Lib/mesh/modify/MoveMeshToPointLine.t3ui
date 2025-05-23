@@ -17,7 +17,8 @@
       "Position": {
         "X": 571.6502,
         "Y": 1534.0715
-      }
+      },
+      "GroupTitle": "Input"
     },
     {
       "InputId": "413a2c30-586e-452c-8b67-b7268a32702f"/*Scale*/,
@@ -39,6 +40,7 @@
         "X": 571.6502,
         "Y": 1624.0715
       },
+      "GroupTitle": "Settings",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
