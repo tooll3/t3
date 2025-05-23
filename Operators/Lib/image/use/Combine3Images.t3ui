@@ -15,7 +15,8 @@
       "Position": {
         "X": -47.30455,
         "Y": 490.80215
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "188ab3e1-4a91-48e8-a764-6178f006069b"/*ColorB*/,
@@ -29,7 +30,8 @@
       "Position": {
         "X": -47.30455,
         "Y": 535.8021
-      }
+      },
+      "GroupTitle": "Advanced"
     },
     {
       "InputId": "81e08eab-9428-435b-a710-6cede1549834"/*ImageA*/,
@@ -37,7 +39,8 @@
       "Position": {
         "X": -48.61692,
         "Y": 46.240692
-      }
+      },
+      "GroupTitle": "Input Images"
     },
     {
       "InputId": "8950b878-944d-42e1-b106-49337fa15ffa"/*ImageC*/,
@@ -66,7 +69,8 @@
       "Position": {
         "X": -48.61692,
         "Y": 316.2407
-      }
+      },
+      "GroupTitle": "Output Channels"
     },
     {
       "InputId": "d42bf975-9789-40d8-9a7e-c83b157603fb"/*ImageB*/,
