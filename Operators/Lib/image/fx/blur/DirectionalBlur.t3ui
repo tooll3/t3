@@ -24,28 +24,32 @@
       "Position": {
         "X": -630.07056,
         "Y": 373.6601
-      }
+      },
+      "GroupTitle": "Advanced"
     },
     {
       "InputId": "815975d2-5613-4ca8-b208-f09ac07b0518"/*FxAngleFactor*/,
       "Position": {
         "X": -630.6626,
         "Y": 220.77263
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "94099125-52d7-475d-aff2-bb1bbd0bd30a"/*Resolution*/,
       "Position": {
         "X": -630.07056,
         "Y": 328.6601
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "a3af8d20-8c09-4250-b5bd-806c12ad7c05"/*RefinementSamples*/,
       "Position": {
         "X": -630.07056,
         "Y": 508.6601
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "ab3206bf-9413-4f31-9c3d-0c1fe7477862"/*Angle*/,
@@ -62,7 +66,8 @@
       "Position": {
         "X": -630.07056,
         "Y": 463.6601
-      }
+      },
+      "GroupTitle": "Detail"
     },
     {
       "InputId": "dfa5e772-0cb4-440f-8483-dcc89b40107d"/*FxSizeFactor*/,
@@ -81,6 +86,7 @@
         "X": -630.6626,
         "Y": 85.772644
       },
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 2.0,
       "Scale": 0.001,
@@ -100,7 +106,8 @@
       "Position": {
         "X": -630.07056,
         "Y": 418.6601
-      }
+      },
+      "GroupTitle": "FX"
     }
   ],
   "SymbolChildUis": [
