@@ -19,14 +19,16 @@
       "Position": {
         "X": 2047.7776,
         "Y": 578.6934
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "78566405-8dee-4661-9cb7-489c8d322f64"/*IsEnabled*/,
       "Position": {
         "X": 2047.7776,
         "Y": 533.6934
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "91459607-22c1-4536-a384-8b1f1d8ecb64"/*CollistionResolve*/,
@@ -47,7 +49,8 @@
       "Position": {
         "X": 2054.4348,
         "Y": 310.25146
-      }
+      },
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
