@@ -8,28 +8,32 @@
       "Position": {
         "X": -488.11395,
         "Y": 1920.6805
-      }
+      },
+      "GroupTitle": "Advanced"
     },
     {
       "InputId": "093a468c-c208-4caf-be4f-d5d7d9ceddeb"/*OffsetDirection*/,
       "Position": {
         "X": -488.11395,
         "Y": 2055.6807
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "357ed675-212f-4b2c-b93b-c8460867a9ae"/*Space*/,
       "Position": {
         "X": -488.11395,
         "Y": 2010.6805
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "4b1a66a4-b5e4-4bc3-97f5-bd3cda668893"/*Frequency*/,
       "Position": {
         "X": -490.75208,
         "Y": 1692.3148
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "83cb775f-c600-41c9-9435-604f77a426bd"/*UseVertexSelection*/,
@@ -50,7 +54,8 @@
       "Position": {
         "X": -490.75208,
         "Y": 1647.3148
-      }
+      },
+      "GroupTitle": "Settings"
     },
     {
       "InputId": "b89b6730-de46-4d56-b2a8-b7d6f6876620"/*Phase*/,
@@ -64,7 +69,8 @@
       "Position": {
         "X": -488.11395,
         "Y": 1875.6805
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "e5213b00-6302-45e1-a172-5a11bd91892e"/*Variation*/,
