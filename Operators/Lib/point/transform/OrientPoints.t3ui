@@ -22,21 +22,24 @@
       "Position": {
         "X": -475.48764,
         "Y": 1040.9227
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "4fec5414-16a2-4b48-9605-1bc3e7f464b5"/*Amount*/,
       "Position": {
         "X": -469.6408,
         "Y": 811.5001
-      }
+      },
+      "GroupTitle": "Settings"
     },
     {
       "InputId": "607fd90d-57f3-4a6a-b843-86c7170c854c"/*Center*/,
       "Position": {
         "X": -469.6408,
         "Y": 856.5001
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "865ad090-0fdd-4683-ba93-b6be92b55cb3"/*Points*/,
