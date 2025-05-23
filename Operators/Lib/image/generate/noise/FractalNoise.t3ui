@@ -39,6 +39,7 @@
         "X": -167.45187,
         "Y": 84.31233
       },
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 10.0,
       "UseVec2Control": "Position"
@@ -49,6 +50,7 @@
         "X": -151.8326,
         "Y": 190.49301
       },
+      "GroupTitle": "Transform",
       "Min": 0.0,
       "Max": 5.0
     },
@@ -82,7 +84,6 @@
         "X": -167.45187,
         "Y": 39.312332
       },
-      "GroupTitle": "Size",
       "Min": -0.5,
       "Max": 0.5,
       "UseVec2Control": "Position"
