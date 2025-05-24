@@ -1,4 +1,4 @@
-﻿using System.Windows.Forms;
+using System.Windows.Forms;
 using ImGuiNET;
 using SharpDX.Windows;
 using T3.SystemUi;
@@ -16,7 +16,13 @@ public class ImGuiDx11RenderForm : RenderForm
     public ImGuiDx11RenderForm(string title)
         : base(title)
     {
-        MouseMove += (o, e) => ImGui.GetIO().MousePos = new System.Numerics.Vector2(e.X, e.Y);
+        MouseMove += (o, e) =>
+        {
+            if (this != ProgramWindows.Viewer?.Form)  // Ignore mouse updates from Viewer
+            {
+                ImGui.GetIO().MousePos = new System.Numerics.Vector2(e.X, e.Y);
+            }
+        };
     }
 
     #region WM Message Ids
