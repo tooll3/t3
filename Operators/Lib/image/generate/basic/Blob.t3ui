@@ -20,6 +20,7 @@
         "X": 306.71823,
         "Y": 361.74536
       },
+      "GroupTitle": "Transform",
       "Description": "Scales the blob evenly.",
       "Min": 0.0,
       "Max": 1.0
@@ -53,6 +54,7 @@
         "Y": 281.81818
       },
       "Description": "X/Y position, in relative units.",
+      "AddPadding": "True",
       "Min": -1.0,
       "Max": 1.0,
       "UseVec2Control": "Position"
@@ -63,6 +65,7 @@
         "X": 306.71823,
         "Y": 641.74536
       },
+      "GroupTitle": "Settings",
       "Description": "Generate mipmaps (scaled-down versions of this image for use in situations where many small copies are shown on screen.)\nWill increase memory usage."
     },
     {
@@ -87,6 +90,7 @@
         "X": 166.71823,
         "Y": -58.254646
       },
+      "GroupTitle": "Color",
       "Description": "Fill color of the blob."
     },
     {
