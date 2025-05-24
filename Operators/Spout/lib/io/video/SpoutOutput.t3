@@ -1,0 +1,15 @@
+{
+  "Id": "13be1e3f-861d-4350-a94e-e083637b3e55"/*SpoutOutput*/,
+  "Inputs": [
+    {
+      "Id": "7c27ebd7-3746-4b70-a252-dd0ac0445b74"/*SenderName*/,
+      "DefaultValue": "tixl"
+    },
+    {
+      "Id": "d4b5c642-9cb9-4f41-8739-edbb9c6c4857"/*Texture*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

@@ -310,6 +310,13 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
     private void AddToLoadedAssemblies(Assembly assembly, bool addPath, bool debug = true)
     {
         var name = GetName(assembly);
+        Log.Info($" {Name}: Checking assembly  {name}  from {assembly.Location}");
+        if (assembly.Location.Contains("linux") || assembly.Location.Contains("osx"))
+        {
+            Log.Info($" {Name}: Skipped assembly  {name}  from {assembly.Location}");
+            return;
+        }
+
         if (!_loadedAssemblies.TryAdd(name, assembly))
         {
             Log.Debug($" {Name}: Skipping caching duplicate assembly {name}");
