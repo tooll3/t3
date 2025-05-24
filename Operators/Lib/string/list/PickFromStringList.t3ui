@@ -10,7 +10,8 @@
         "X": 0.0,
         "Y": 0.0
       },
-      "Description": "Index that controls which part of a string is used"
+      "Description": "Index that controls which part of a string is used",
+      "AddPadding": "True"
     },
     {
       "InputId": "8d5e77a6-1ec4-4979-ad26-f7862049bce1"/*Input*/,

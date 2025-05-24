@@ -8,7 +8,8 @@
       "Position": {
         "X": -200.0,
         "Y": 90.0
-      }
+      },
+      "GroupTitle": "Settings"
     },
     {
       "InputId": "49552a0c-2060-4f03-ad39-388293bb6871"/*Command*/,
@@ -32,6 +33,7 @@
         "X": -200.0,
         "Y": 45.0
       },
+      "AddPadding": "True",
       "Usage": "Default"
     }
   ],

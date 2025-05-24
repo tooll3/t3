@@ -9,6 +9,7 @@
         "Y": 0.0
       },
       "Description": "This parameter is equivalent to appending a [Multiply] operator. Note the animating this will probably resulting into very rapid changes. You might consider [Accumulator] to achieve smooth but non-deterministic changes in animation speed.",
+      "AddPadding": "True",
       "Min": -5.0,
       "Max": 5.0,
       "Format": "{0:0.000} ×"
