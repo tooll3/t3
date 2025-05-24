@@ -1,6 +1,6 @@
 #nullable enable
-using System.Diagnostics.CodeAnalysis;
 using ImGuiNET;
+using System.Diagnostics.CodeAnalysis;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -651,13 +651,46 @@ internal sealed class ParameterWindow : Window
         var somethingVisible = false;
         // Draw Annotation settings
         foreach (var annotation in nodeSelection.GetSelectedNodes<Annotation>())
-        {
+        {   
             ImGui.PushID(annotation.Id.GetHashCode());
+            ImGui.Indent(10f * T3Ui.UiScaleFactor);
+            //ImGui.SetCursorPosX(10f*T3Ui.UiScaleFactor);
             ImGui.PushFont(Fonts.FontLarge);
-            ImGui.TextUnformatted("Annotation settings" + annotation.Title);
+            ImGui.TextUnformatted("Annotation settings");
             ImGui.PopFont();
 
+            FormInputs.AddVerticalSpace();
+            ImGui.Separator();
+            FormInputs.AddVerticalSpace();
+
             ImGui.ColorEdit4("color", ref annotation.Color.Rgba);
+
+            FormInputs.AddVerticalSpace();
+            CustomComponents.StylizedText("Label:", Fonts.FontBold, UiColors.TextMuted);
+            ImGui.TextWrapped(annotation.Label);
+
+            FormInputs.AddVerticalSpace();
+            CustomComponents.StylizedText("Description:", Fonts.FontBold, UiColors.TextMuted.Rgba);
+            ImGui.TextWrapped(annotation.Title);
+
+            FormInputs.AddVerticalSpace();
+            ImGui.Separator();
+            FormInputs.AddVerticalSpace();
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+            CustomComponents.IconButton(Icon.Hint,new Vector2(20,20)* T3Ui.UiScaleFactor);
+            ImGui.SameLine();
+            ImGui.TextWrapped("How to create an Annotation:\n" +
+                "1.Select the operators you want to include in the annotation.\n" +
+                "2.Shift + A to add the annotation." );
+
+            FormInputs.AddVerticalSpace();
+            CustomComponents.IconButton(Icon.Hint, new Vector2(20, 20) * T3Ui.UiScaleFactor);
+            ImGui.SameLine();
+            ImGui.TextWrapped("How to edit an Annotation:\n" +
+                "1.Double click on the header.\n" +
+                "2.Type in label and/or description");
+            ImGui.PopStyleColor();
+            ImGui.Unindent();
             ImGui.PopID();
             somethingVisible = true;
         }
@@ -695,4 +728,5 @@ internal sealed class ParameterWindow : Window
 
     private readonly ParameterSettings _parameterSettings = new();
     public static readonly RenameInputDialog RenameInputDialog = new();
+
 }
